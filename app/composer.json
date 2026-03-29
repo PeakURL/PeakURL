@@ -1,0 +1,38 @@
+{
+	"name": "peakurl/self-hosted-app",
+	"description": "Self-hosted PHP application runtime for the PeakURL dashboard.",
+	"type": "project",
+	"require": {
+		"php": "^7.4 || ^8.0",
+		"ext-pdo": "*",
+		"ext-pdo_mysql": "*",
+		"maxmind-db/reader": "^1.13.1",
+		"phpmailer/phpmailer": "^6.9"
+	},
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.1",
+		"squizlabs/php_codesniffer": "^3.13",
+		"wp-coding-standards/wpcs": "^3.2"
+	},
+	"autoload": {
+		"classmap": [
+			"store.php",
+			"api/",
+			"controllers/",
+			"includes/",
+			"http/",
+			"services/",
+			"traits/",
+			"utils/"
+		]
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	},
+	"scripts": {
+		"phpcs": "phpcs --standard=../phpcs.xml",
+		"phpcbf": "phpcbf --standard=../phpcs.xml"
+	}
+}

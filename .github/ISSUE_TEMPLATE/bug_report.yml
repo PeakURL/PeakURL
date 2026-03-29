@@ -1,0 +1,71 @@
+name: Bug report
+description: Report a reproducible problem in PeakURL.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug.
+
+        Please include enough detail to reproduce the issue clearly.
+  - type: input
+    id: version
+    attributes:
+      label: PeakURL version
+      description: Which version are you running?
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: install_type
+    attributes:
+      label: Installation type
+      options:
+        - Self-hosted release package
+        - Local development stack
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Describe the bug clearly and concisely.
+      placeholder: Describe the current behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: List the exact steps needed to trigger the issue.
+      placeholder: |
+        1. Go to ...
+        2. Click ...
+        3. See ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen instead?
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment details
+      description: Include anything relevant such as PHP version, MySQL or MariaDB version, browser, hosting environment, or reverse proxy details.
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs, screenshots, or additional context
+      description: Paste any useful logs or screenshots here.
+      render: shell
+    validations:
+      required: false

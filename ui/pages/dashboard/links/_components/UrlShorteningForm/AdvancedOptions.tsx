@@ -1,0 +1,56 @@
+// @ts-nocheck
+import SecurityFields from './SecurityFields';
+import ExpirationFields from './ExpirationFields';
+import UTMFields from './UTMFields';
+
+const AdvancedOptions = ({
+	title,
+	setTitle,
+	password,
+	setPassword,
+	expirationDate,
+	setExpirationDate,
+	expirationTime,
+	setExpirationTime,
+	utmSource,
+	setUtmSource,
+	utmMedium,
+	setUtmMedium,
+	utmCampaign,
+	setUtmCampaign,
+	utmTerm,
+	setUtmTerm,
+	utmContent,
+	setUtmContent,
+}) => {
+	return (
+		<div className="mt-4 p-4 bg-surface-alt border border-stroke rounded-lg space-y-3">
+			<SecurityFields
+				title={title}
+				setTitle={setTitle}
+				password={password}
+				setPassword={setPassword}
+			/>
+			<ExpirationFields
+				expirationDate={expirationDate}
+				setExpirationDate={setExpirationDate}
+				expirationTime={expirationTime}
+				setExpirationTime={setExpirationTime}
+			/>
+			<UTMFields
+				utmSource={utmSource}
+				setUtmSource={setUtmSource}
+				utmMedium={utmMedium}
+				setUtmMedium={setUtmMedium}
+				utmCampaign={utmCampaign}
+				setUtmCampaign={setUtmCampaign}
+				utmTerm={utmTerm}
+				setUtmTerm={setUtmTerm}
+				utmContent={utmContent}
+				setUtmContent={setUtmContent}
+			/>
+		</div>
+	);
+};
+
+export default AdvancedOptions;

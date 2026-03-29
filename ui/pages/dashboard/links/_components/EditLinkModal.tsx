@@ -1,0 +1,229 @@
+// @ts-nocheck
+'use client';
+
+import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
+import { X, Save } from 'lucide-react';
+import { useState } from 'react';
+import { useUpdateUrlMutation } from '@/store/slices/api/urls';
+import {
+	buildShortUrl,
+	getDefaultShortUrlOrigin,
+	getLocalDateTimeValue,
+	isFutureLocalDateTime,
+	toIsoFromLocalDateTime,
+	toLocalDateTimeValue,
+} from '@/utils';
+
+function EditLinkModal({ open, setOpen, link }) {
+	const getInitialTitle = () => link?.title || '';
+	const getInitialStatus = () => link?.status || 'active';
+	const getInitialPassword = () => link?.password || '';
+	const getInitialExpiresAt = () => toLocalDateTimeValue(link?.expiresAt);
+
+	const [title, setTitle] = useState(link?.title || '');
+	const [status, setStatus] = useState(link?.status || 'active');
+	const [password, setPassword] = useState(link?.password || '');
+	const [expiresAt, setExpiresAt] = useState(getInitialExpiresAt);
+	const [error, setError] = useState('');
+
+	const [updateUrl, { isLoading }] = useUpdateUrlMutation();
+	const shortUrl = link
+		? buildShortUrl(
+				link,
+				getDefaultShortUrlOrigin(
+					typeof window !== 'undefined' ? window.location.origin : ''
+				)
+			)
+		: '';
+
+	const handleClose = () => setOpen(false);
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		setError('');
+
+		if (expiresAt && !isFutureLocalDateTime(expiresAt)) {
+			setError('Expiration time must be in the future.');
+			return;
+		}
+
+		try {
+			await updateUrl({
+				id: link.id,
+				title: title.trim() || undefined,
+				status,
+				password: password || '',
+				expiresAt: expiresAt ? toIsoFromLocalDateTime(expiresAt) : null,
+			}).unwrap();
+
+			handleClose();
+		} catch (err) {
+			setError(err?.data?.message || 'Failed to update link');
+		}
+	};
+
+	if (!link) return null;
+
+	return (
+		<Dialog open={open} onClose={handleClose} className="relative z-50">
+			<div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+
+			<div className="fixed inset-0 flex items-center justify-center p-4">
+				<DialogPanel className="mx-auto max-w-lg w-full bg-surface rounded-lg shadow-xl">
+					{/* Header */}
+					<div className="flex items-center justify-between p-6 border-b border-stroke">
+						<DialogTitle className="text-lg font-semibold text-heading">
+							Edit Link
+						</DialogTitle>
+						<button
+							onClick={handleClose}
+							className="rounded-lg text-text-muted hover:text-heading hover:bg-surface-alt p-2 transition-all"
+						>
+							<X className="w-5 h-5" />
+						</button>
+					</div>
+
+					{/* Content */}
+					<form onSubmit={handleSubmit} className="p-6 space-y-4">
+						{error && (
+							<div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
+								<p className="text-sm text-red-600 dark:text-red-400">
+									{error}
+								</p>
+							</div>
+						)}
+
+						{/* Short URL (Read-only) */}
+						<div>
+							<label className="block text-sm font-medium text-heading mb-2">
+								Short URL
+							</label>
+							<div className="px-3 py-2 bg-surface-alt border border-stroke rounded-lg">
+								<code className="text-sm text-text-muted font-mono">
+									{shortUrl}
+								</code>
+							</div>
+						</div>
+
+						{/* Destination URL (Read-only) */}
+						<div>
+							<label className="block text-sm font-medium text-heading mb-2">
+								Destination URL
+							</label>
+							<div className="px-3 py-2 bg-surface-alt border border-stroke rounded-lg">
+								<p className="text-sm text-text-muted break-all">
+									{link.destinationUrl}
+								</p>
+							</div>
+						</div>
+
+						{/* Title */}
+						<div>
+							<label
+								htmlFor="title"
+								className="block text-sm font-medium text-heading mb-2"
+							>
+								Title (Optional)
+							</label>
+							<input
+								type="text"
+								id="title"
+								value={title}
+								onChange={(e) => setTitle(e.target.value)}
+								placeholder="Enter a title for this link"
+								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading"
+							/>
+						</div>
+
+						{/* Password */}
+						<div>
+							<label
+								htmlFor="password"
+								className="block text-sm font-medium text-heading mb-2"
+							>
+								Password Protection (Optional)
+							</label>
+							<input
+								type="text"
+								id="password"
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+								placeholder="Set a password to protect this link"
+								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading"
+							/>
+						</div>
+
+						{/* Expiration Date */}
+						<div>
+							<label
+								htmlFor="expiresAt"
+								className="block text-sm font-medium text-heading mb-2"
+							>
+								Expiration Date (Optional)
+							</label>
+							<input
+								type="datetime-local"
+								id="expiresAt"
+								value={expiresAt}
+								onChange={(e) => setExpiresAt(e.target.value)}
+								min={getLocalDateTimeValue()}
+								step="60"
+								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading"
+							/>
+						</div>
+
+						{/* Status */}
+						<div>
+							<label
+								htmlFor="status"
+								className="block text-sm font-medium text-heading mb-2"
+							>
+								Status
+							</label>
+							<select
+								id="status"
+								value={status}
+								onChange={(e) => setStatus(e.target.value)}
+								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading cursor-pointer"
+							>
+								<option value="active">Active</option>
+								<option value="inactive">Inactive</option>
+								<option value="expired">Expired</option>
+							</select>
+						</div>
+
+						{/* Action Buttons */}
+						<div className="flex gap-3 pt-4">
+							<button
+								type="button"
+								onClick={handleClose}
+								className="flex-1 px-4 py-2.5 bg-surface border border-stroke hover:bg-surface-alt text-heading rounded-lg transition-all font-medium"
+							>
+								Cancel
+							</button>
+							<button
+								type="submit"
+								disabled={isLoading}
+								className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-accent hover:bg-accent/90 disabled:bg-gray-400 text-white rounded-lg transition-all font-medium"
+							>
+								{isLoading ? (
+									<>
+										<div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+										Saving...
+									</>
+								) : (
+									<>
+										<Save className="w-4 h-4" />
+										Save Changes
+									</>
+								)}
+							</button>
+						</div>
+					</form>
+				</DialogPanel>
+			</div>
+		</Dialog>
+	);
+}
+
+export default EditLinkModal;

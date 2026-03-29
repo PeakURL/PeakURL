@@ -1,0 +1,216 @@
+// @ts-nocheck
+'use client';
+import { useState, useRef } from 'react';
+import { useBulkCreateUrlMutation } from '@/store/slices/api/urls';
+import FileUploadArea from './FileUploadArea';
+import ProcessingStatus from './ProcessingStatus';
+import ImportSummary from '../ImportSummary';
+import ImportDetails from '../ImportDetails';
+import FormatRequirements from './FormatRequirements';
+import SampleData from './SampleData';
+
+const FileUpload = ({
+	importStatus,
+	setImportStatus,
+	importProgress,
+	sampleData,
+}) => {
+	const fileInputRef = useRef(null);
+	const [importResults, setImportResults] = useState([]);
+	const [bulkCreateUrl] = useBulkCreateUrlMutation();
+
+	const handleFileSelect = (e) => {
+		const file = e.target.files[0];
+		if (file) {
+			parseFile(file);
+		}
+	};
+
+	const parseFile = (file) => {
+		const reader = new FileReader();
+		reader.onload = (e) => {
+			const text = e.target.result;
+			let data = [];
+
+			try {
+				if (file.name.endsWith('.csv')) {
+					data = parseCsv(text);
+				} else if (file.name.endsWith('.json')) {
+					data = JSON.parse(text);
+					// Normalize JSON data if needed (e.g. map 'url' to 'destinationUrl')
+					data = data
+						.map((item) => ({
+							...item,
+							destinationUrl: item.destinationUrl || item.url,
+						}))
+						.filter((item) => item.destinationUrl);
+				} else if (file.name.endsWith('.xml')) {
+					data = parseXml(text);
+				} else {
+					alert('Unsupported file format');
+					return;
+				}
+
+				if (data.length > 0) {
+					processImport(data);
+				} else {
+					alert('No valid data found in file');
+				}
+			} catch (err) {
+				console.error('Parsing error', err);
+				alert('Failed to parse file: ' + err.message);
+			}
+		};
+		reader.readAsText(file);
+	};
+
+	const parseCsv = (text) => {
+		const lines = text.split(/\r\n|\n/).filter((line) => line.trim());
+		if (lines.length < 2) return [];
+
+		const headers = lines[0].split(',').map((h) => h.trim().toLowerCase());
+		const data = [];
+
+		for (let i = 1; i < lines.length; i++) {
+			const values = lines[i].split(',').map((v) => v.trim());
+			const entry = {};
+
+			headers.forEach((header, index) => {
+				if (values[index]) {
+					if (header === 'url' || header === 'destinationurl')
+						entry.destinationUrl = values[index];
+					else if (header === 'alias' || header === 'shortcode')
+						entry.alias = values[index];
+					else if (header === 'password')
+						entry.password = values[index];
+					else if (header === 'expires' || header === 'expiresat')
+						entry.expiresAt = values[index];
+					else if (header === 'title') entry.title = values[index];
+				}
+			});
+
+			if (entry.destinationUrl) {
+				data.push(entry);
+			}
+		}
+		return data;
+	};
+
+	const parseXml = (text) => {
+		const parser = new DOMParser();
+		const xmlDoc = parser.parseFromString(text, 'text/xml');
+		const urls = xmlDoc.getElementsByTagName('url'); // Assumes <url> item tag
+		// If not <url>, try <item>
+		const items =
+			urls.length > 0 ? urls : xmlDoc.getElementsByTagName('item');
+
+		const data = [];
+
+		for (let i = 0; i < items.length; i++) {
+			const node = items[i];
+			const getVal = (tag) =>
+				node.getElementsByTagName(tag)[0]?.textContent;
+
+			const destinationUrl = getVal('destinationUrl') || getVal('url');
+
+			if (destinationUrl) {
+				data.push({
+					destinationUrl,
+					alias: getVal('alias') || getVal('shortCode'),
+					password: getVal('password'),
+					expiresAt: getVal('expiresAt') || getVal('expires'),
+					title: getVal('title'),
+				});
+			}
+		}
+		return data;
+	};
+
+	const processImport = async (data) => {
+		setImportStatus('processing');
+		try {
+			const result = await bulkCreateUrl({ urls: data }).unwrap();
+
+			const results = [];
+
+			if (result.data) {
+				result.data.results.forEach((item) => {
+					results.push({
+						url: item.destinationUrl,
+						alias: item.alias || item.shortCode,
+						status: 'success',
+						shortUrl: `${window.location.origin}/${
+							item.alias || item.shortCode
+						}`,
+					});
+				});
+
+				result.data.errors.forEach((item) => {
+					results.push({
+						url: item.destinationUrl,
+						alias: item.alias || 'N/A',
+						status: 'error',
+						error: item.error,
+					});
+				});
+			}
+
+			setImportResults(results);
+			setImportStatus('completed');
+		} catch (err) {
+			console.error('Import failed', err);
+			setImportStatus('idle');
+			alert('Import failed: ' + (err?.data?.message || err.message));
+		}
+	};
+
+	return (
+		<div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+			<div className="space-y-5">
+				<div className="bg-surface border border-stroke rounded-lg p-5">
+					<h2 className="text-base font-semibold text-heading mb-3">
+						Upload File
+					</h2>
+					<p className="text-sm text-text-muted mb-5">
+						Upload a CSV, JSON, or XML file containing URLs and
+						their metadata.
+					</p>
+
+					{importStatus === 'idle' && (
+						<FileUploadArea
+							fileInputRef={fileInputRef}
+							handleFileSelect={handleFileSelect}
+						/>
+					)}
+
+					{(importStatus === 'uploading' ||
+						importStatus === 'processing') && (
+						<ProcessingStatus status={importStatus} />
+					)}
+
+					{importStatus === 'completed' && (
+						<ImportSummary
+							results={importResults}
+							onReset={() => {
+								setImportStatus('idle');
+								setImportResults([]);
+							}}
+						/>
+					)}
+				</div>
+
+				<FormatRequirements />
+			</div>
+
+			<div className="space-y-5">
+				{importStatus === 'completed' ? (
+					<ImportDetails results={importResults} />
+				) : (
+					<SampleData sampleData={sampleData} />
+				)}
+			</div>
+		</div>
+	);
+};
+
+export default FileUpload;

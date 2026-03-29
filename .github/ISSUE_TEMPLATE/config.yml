@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://peakurl.org/docs
+    about: Start here for installation, setup, and usage guidance.
+  - name: Security Report
+    url: mailto:security@peakurl.org
+    about: Please report vulnerabilities privately instead of opening a public issue.
+  - name: Support Guide
+    url: https://github.com/peakurl/PeakURL/blob/main/SUPPORT.md
+    about: Read the support policy before opening a new issue.

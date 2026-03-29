@@ -1,0 +1,178 @@
+name: peakurl
+
+services:
+    proxy:
+        image: caddy:2
+        container_name: peakurl-proxy
+        restart: unless-stopped
+        ports:
+            - '80:80'
+            - '443:443'
+        volumes:
+            - ./docker/proxy/Caddyfile:/etc/caddy/Caddyfile:ro
+            - ./docker/proxy/certs:/etc/caddy/certs:ro
+        depends_on:
+            ui:
+                condition: service_started
+            app:
+                condition: service_healthy
+            test:
+                condition: service_started
+            phpmyadmin:
+                condition: service_started
+
+    db:
+        image: mysql:8.4
+        container_name: peakurl-db
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: peakurl
+        ports:
+            - '3307:3306'
+        volumes:
+            - peakurl-db-data:/var/lib/mysql
+        healthcheck:
+            test: ['CMD-SHELL', 'mysqladmin ping -h 127.0.0.1 -proot --silent']
+            interval: 5s
+            timeout: 5s
+            retries: 20
+            start_period: 20s
+
+    db-init:
+        image: mysql:8.4
+        container_name: peakurl-db-init
+        restart: 'no'
+        depends_on:
+            db:
+                condition: service_healthy
+        command:
+            [
+                'sh',
+                '-c',
+                'mysql -h db -uroot -proot -e "CREATE DATABASE IF NOT EXISTS peakurl_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"',
+            ]
+
+    app:
+        build:
+            context: .
+            dockerfile: docker/app/Dockerfile
+        container_name: peakurl-app
+        restart: unless-stopped
+        working_dir: /app/app
+        environment:
+            PEAKURL_ENV: development
+            PEAKURL_DEBUG: 'true'
+            SITE_URL: https://peakurl.dev
+            DB_HOST: db
+            DB_PORT: 3306
+            DB_DATABASE: peakurl
+            DB_USERNAME: root
+            DB_PASSWORD: root
+            DB_CHARSET: utf8mb4
+            SESSION_COOKIE_NAME: peakurl_session
+            SESSION_LIFETIME: 2592000
+            SESSION_COOKIE_SAME_SITE: Strict
+            SESSION_COOKIE_SECURE: auto
+            PEAKURL_OWNER_FALLBACK: 'false'
+            PEAKURL_OWNER_FIRST_NAME: Workspace
+            PEAKURL_OWNER_LAST_NAME: Owner
+            PEAKURL_OWNER_USERNAME: admin
+            PEAKURL_OWNER_EMAIL: owner@example.com
+            PEAKURL_OWNER_PASSWORD: admin12345
+            PEAKURL_WORKSPACE_NAME: Workspace
+            PEAKURL_WORKSPACE_SLUG: workspace
+        ports:
+            - '8000:8000'
+        volumes:
+            - .:/app
+            - peakurl-app-vendor:/app/app/vendor
+        depends_on:
+            db:
+                condition: service_healthy
+        command: ['/usr/local/bin/app-dev-start']
+        healthcheck:
+            test:
+                [
+                    'CMD',
+                    'php',
+                    '-r',
+                    'exit(str_contains((string) @file_get_contents(''http://127.0.0.1:8000/api/v1/health''), ''"status": "ok"'') ? 0 : 1);',
+                ]
+            interval: 10s
+            timeout: 5s
+            retries: 10
+            start_period: 20s
+
+    ui:
+        build:
+            context: .
+            dockerfile: docker/ui/Dockerfile
+        container_name: peakurl-ui
+        restart: unless-stopped
+        working_dir: /app
+        environment:
+            VITE_DEV_PROXY_TARGET: http://app:8000
+            VITE_DEV_PUBLIC_HOST: peakurl.dev
+            VITE_DEV_USE_HTTPS_PROXY: 'true'
+            VITE_PEAKURL_URL: https://peakurl.dev
+            VITE_PEAKURL_HOST: peakurl.dev
+            CHOKIDAR_USEPOLLING: 'true'
+            WATCHPACK_POLLING: 'true'
+        ports:
+            - '5173:5173'
+        volumes:
+            - .:/app
+            - peakurl-ui-node-modules:/app/node_modules
+        depends_on:
+            app:
+                condition: service_healthy
+        command: ['/usr/local/bin/ui-dev-start']
+
+    test:
+        build:
+            context: .
+            dockerfile: docker/app/Dockerfile
+        container_name: peakurl-test
+        restart: unless-stopped
+        working_dir: /app/release/peakurl
+        environment:
+            PEAKURL_INSTALL_DB_HOST_DEFAULT: db
+            PEAKURL_INSTALL_DB_PORT_DEFAULT: '3306'
+            PEAKURL_INSTALL_DB_NAME_DEFAULT: peakurl_test
+            PEAKURL_INSTALL_DB_USER_DEFAULT: root
+            PEAKURL_INSTALL_DB_PASSWORD_DEFAULT: root
+        volumes:
+            - .:/app
+            - ./release:/app/release
+        depends_on:
+            db-init:
+                condition: service_completed_successfully
+        command: ['/bin/sh', '/app/docker/test/start.sh']
+
+    phpmyadmin:
+        image: phpmyadmin:5-apache
+        container_name: peakurl-phpmyadmin
+        restart: unless-stopped
+        environment:
+            PMA_HOST: db
+            PMA_PORT: 3306
+            PMA_ABSOLUTE_URI: http://phpmyadmin.localhost/
+            UPLOAD_LIMIT: 128M
+        ports:
+            - '8081:80'
+        depends_on:
+            db:
+                condition: service_healthy
+
+volumes:
+    peakurl-db-data:
+        name: peakurl-db-data
+    peakurl-ui-node-modules:
+        name: peakurl-ui-node-modules
+    peakurl-app-vendor:
+        name: peakurl-app-vendor
+
+networks:
+    default:
+        name: peakurl-network

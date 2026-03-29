@@ -1,0 +1,330 @@
+@import 'tailwindcss';
+
+/* Use class-based dark mode so `dark:` utilities follow the `.dark` class */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+	/* Primary scale aliasing indigo */
+	--color-primary-50: var(--color-indigo-50);
+	--color-primary-100: var(--color-indigo-100);
+	--color-primary-200: var(--color-indigo-200);
+	--color-primary-300: var(--color-indigo-300);
+	--color-primary-400: var(--color-indigo-400);
+	--color-primary-500: var(--color-indigo-500);
+	--color-primary-600: var(--color-indigo-600);
+	--color-primary-700: var(--color-indigo-700);
+	--color-primary-800: var(--color-indigo-800);
+	--color-primary-900: var(--color-indigo-900);
+	--color-primary-950: var(--color-indigo-950);
+
+	/* Status / semantic */
+	--color-success: var(--color-green-500);
+	--color-success-50: var(--color-green-50);
+	--color-success-100: var(--color-green-100);
+	--color-error: var(--color-red-500);
+	--color-error-50: var(--color-red-50);
+	--color-error-100: var(--color-red-100);
+	--color-warning: var(--color-yellow-500);
+	--color-warning-50: var(--color-yellow-50);
+	--color-warning-100: var(--color-yellow-100);
+	--color-info: var(--color-blue-500);
+	--color-info-50: var(--color-blue-50);
+	--color-info-100: var(--color-blue-100);
+
+	/* Design semantic layer */
+	--color-bg: var(--color-gray-50);
+	--color-bg-alt: var(--color-gray-950);
+	--color-text: var(--color-gray-900);
+	--color-text-muted: var(--color-gray-600);
+	--color-text-subtle: var(--color-gray-500);
+	--color-muted: var(--color-gray-600);
+	--color-accent: var(--color-primary-500);
+	--color-heading: var(--color-gray-900);
+	--color-surface: var(--color-white);
+	--color-surface-alt: var(--color-gray-100);
+	/* Divider / outline strokes (light theme) */
+	--color-stroke: var(--color-gray-200);
+	--color-stroke-strong: var(--color-gray-300);
+	--color-stroke-subtle: var(--color-gray-100);
+
+	/* Soft status backgrounds (light) */
+	--color-success-soft: var(--color-green-100);
+	--color-error-soft: var(--color-red-100);
+	--color-warning-soft: var(--color-yellow-100);
+	--color-info-soft: var(--color-blue-100);
+
+	/* Brand colors (if keeping brand-specific accents) */
+	--brand-slack: var(--color-blue-600);
+	--brand-discord: var(--color-indigo-500);
+	--brand-zapier: var(--color-orange-600);
+	--brand-google: var(--color-red-600);
+}
+
+@layer base {
+	html {
+		scroll-behavior: smooth;
+	}
+}
+
+/* Dark mode overrides for the same semantic tokens */
+.dark {
+	--color-bg: var(--color-gray-950);
+	--color-bg-alt: var(--color-gray-900);
+	--color-text: var(--color-gray-100);
+	--color-text-muted: var(--color-gray-400);
+	--color-text-subtle: var(--color-gray-500);
+	--color-muted: var(--color-gray-400);
+	--color-accent: var(--color-primary-500);
+	--color-heading: var(--color-white);
+	--color-surface: var(--color-gray-900);
+	--color-surface-alt: var(--color-gray-800);
+	/* Divider / outline strokes (dark theme) */
+	--color-stroke: var(--color-gray-800);
+	--color-stroke-strong: var(--color-gray-700);
+	--color-stroke-subtle: var(--color-gray-800);
+
+	/* Soft status backgrounds (dark) - subtle tinted surfaces */
+	--color-success-soft: color-mix(
+		in srgb,
+		var(--color-success) 25%,
+		transparent
+	);
+	--color-error-soft: color-mix(in srgb, var(--color-error) 25%, transparent);
+	--color-warning-soft: color-mix(
+		in srgb,
+		var(--color-warning) 25%,
+		transparent
+	);
+	--color-info-soft: color-mix(in srgb, var(--color-info) 25%, transparent);
+}
+
+/* ===== DOCUMENTATION (for contributors) ===== */
+/*
+Semantic tokens:
+    --color-stroke / --color-stroke-strong define global divider + outline hues.
+        Use via: border border-(--color-stroke) or dark:border-(--color-stroke-strong)
+Status tokens:
+    Foregrounds: --color-success|error|warning|info
+    Soft backgrounds: --color-*-soft (light) auto-tinted in dark mode.
+    Use via utilities: text-(--color-success) bg-(--color-success-soft)
+Brand tokens:
+    --brand-slack|discord|zapier|google centralize external brand icon coloring.
+Badge helpers:
+    Add classes: badge + badge-{success|error|warning|info} for consistent styling.
+*/
+
+/* ===== BADGE & STATUS UTILITIES ===== */
+.badge {
+	@apply inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border border-(--color-stroke) dark:border-(--color-stroke-strong) transition-colors select-none;
+}
+.badge-success {
+	@apply bg-(--color-success-soft) text-(--color-success);
+}
+.badge-error {
+	@apply bg-(--color-error-soft) text-(--color-error);
+}
+.badge-warning {
+	@apply bg-(--color-warning-soft) text-(--color-warning);
+}
+.badge-info {
+	@apply bg-(--color-info-soft) text-(--color-info);
+}
+
+/* Brand icon helper (optional) */
+.icon-brand-slack {
+	color: var(--brand-slack);
+}
+.icon-brand-discord {
+	color: var(--brand-discord);
+}
+.icon-brand-zapier {
+	color: var(--brand-zapier);
+}
+.icon-brand-google {
+	color: var(--brand-google);
+}
+
+/* ===== BASE STYLES ===== */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	font-family:
+		system-ui,
+		-apple-system,
+		BlinkMacSystemFont,
+		'Segoe UI',
+		Roboto,
+		sans-serif;
+	background-color: var(--color-bg);
+	color: var(--color-text);
+	transition:
+		background-color 0.3s ease,
+		color 0.3s ease;
+	overflow-x: hidden;
+}
+
+/* Utility helper classes (minimal) where semantic mapping isn't covered by Tailwind's generated palette */
+.glass {
+	@apply bg-surface/80 border border-(--color-stroke);
+}
+.header-modern {
+	@apply bg-surface shadow-sm ring-1 ring-(--color-stroke)/40;
+}
+.stats-card {
+	@apply rounded-2xl bg-surface p-6 shadow-sm ring-1 ring-(--color-stroke)/40 relative overflow-hidden transition;
+}
+
+/* Content wrapper to ensure clear separation from header/sidebar */
+.content-area {
+	@apply bg-bg dark:bg-bg;
+}
+
+/* ===== FOCUS RINGS ===== */
+.focus-ring {
+	@apply focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 dark:focus:ring-offset-gray-900;
+}
+
+/* ===== TEXT GRADIENTS ===== */
+.text-gradient-primary {
+	@apply bg-linear-to-r from-blue-600 via-primary-600 to-purple-600 bg-clip-text text-transparent;
+}
+
+.text-gradient-success {
+	@apply bg-linear-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent;
+}
+
+.text-gradient-warning {
+	@apply bg-linear-to-r from-amber-600 via-orange-600 to-red-600 bg-clip-text text-transparent;
+}
+
+.text-gradient-pink {
+	@apply bg-linear-to-r from-pink-600 via-rose-600 to-red-600 bg-clip-text text-transparent;
+}
+
+/* ===== ANIMATIONS ===== */
+@-webkit-keyframes slide-in-left {
+	from {
+		transform: translateX(100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+@keyframes slide-in-left {
+	from {
+		transform: translateX(100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+.animate-slide-in-left {
+	-webkit-animation: slide-in-left 0.3s ease-out forwards;
+	animation: slide-in-left 0.3s ease-out forwards;
+}
+
+/* ===== LOGIN PAGE ANIMATIONS ===== */
+/* One-shot entrance only — no infinite loops, no blur compositing */
+
+@-webkit-keyframes login-fade-up {
+	from {
+		opacity: 0;
+		transform: translateY(14px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes login-fade-up {
+	from {
+		opacity: 0;
+		transform: translateY(14px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@-webkit-keyframes login-scale-in {
+	from {
+		opacity: 0;
+		transform: scale(0.97);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+@keyframes login-scale-in {
+	from {
+		opacity: 0;
+		transform: scale(0.97);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+.login-fade-up {
+	-webkit-animation: login-fade-up 0.5s ease-out both;
+	        animation: login-fade-up 0.5s ease-out both;
+}
+
+.login-fade-up-d1 {
+	-webkit-animation: login-fade-up 0.5s ease-out 0.06s both;
+	        animation: login-fade-up 0.5s ease-out 0.06s both;
+}
+
+.login-fade-up-d2 {
+	-webkit-animation: login-fade-up 0.5s ease-out 0.12s both;
+	        animation: login-fade-up 0.5s ease-out 0.12s both;
+}
+
+.login-fade-up-d3 {
+	-webkit-animation: login-fade-up 0.5s ease-out 0.18s both;
+	        animation: login-fade-up 0.5s ease-out 0.18s both;
+}
+
+.login-fade-up-d4 {
+	-webkit-animation: login-fade-up 0.5s ease-out 0.24s both;
+	        animation: login-fade-up 0.5s ease-out 0.24s both;
+}
+
+.login-scale-in {
+	-webkit-animation: login-scale-in 0.45s ease-out 0.08s both;
+	        animation: login-scale-in 0.45s ease-out 0.08s both;
+}
+
+@-webkit-keyframes progress {
+	from {
+		transform: scaleX(1);
+	}
+	to {
+		transform: scaleX(0);
+	}
+}
+
+@keyframes progress {
+	from {
+		transform: scaleX(1);
+	}
+	to {
+		transform: scaleX(0);
+	}
+}

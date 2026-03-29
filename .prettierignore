@@ -1,0 +1,8 @@
+node_modules
+build
+dist
+release
+*.php
+core/vendor
+core/storage
+*.zip

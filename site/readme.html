@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="robots" content="noindex,nofollow" />
+		<title>PeakURL &#8250; ReadMe</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 32px 16px 48px;
+				background: #f0f0f1;
+				color: #1d2327;
+				font-family:
+					-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+				font-size: 14px;
+				line-height: 1.65;
+			}
+
+			.page {
+				max-width: 920px;
+				margin: 0 auto;
+			}
+
+			.hero,
+			.section {
+				background: #fff;
+				border: 1px solid #dcdcde;
+				border-radius: 10px;
+				padding: 28px 32px;
+			}
+
+			.section {
+				margin-top: 16px;
+			}
+
+			.eyebrow {
+				display: inline-block;
+				margin-bottom: 14px;
+				padding: 6px 10px;
+				border-radius: 999px;
+				background: #edf7f2;
+				color: #0a7b5f;
+				font-size: 12px;
+				font-weight: 700;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+			}
+
+			h1,
+			h2,
+			h3 {
+				margin: 0 0 12px;
+				color: #1d2327;
+				line-height: 1.25;
+			}
+
+			h1 {
+				font-size: 34px;
+				letter-spacing: -0.03em;
+			}
+
+			h2 {
+				font-size: 22px;
+			}
+
+			h3 {
+				font-size: 16px;
+			}
+
+			p,
+			li,
+			dt,
+			dd {
+				color: #3c434a;
+			}
+
+			p:last-child,
+			dd:last-child {
+				margin-bottom: 0;
+			}
+
+			a {
+				color: #2271b1;
+			}
+
+			code,
+			.file {
+				background: #f6f7f7;
+				border: 1px solid #dcdcde;
+				border-radius: 3px;
+				font-family: SFMono-Regular, Consolas, monospace;
+				font-size: 13px;
+				padding: 1px 5px;
+			}
+
+			.meta {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 12px 20px;
+				margin-top: 18px;
+				padding-top: 18px;
+				border-top: 1px solid #dcdcde;
+			}
+
+			.meta span {
+				color: #50575e;
+			}
+
+			.grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+				gap: 16px;
+			}
+
+			.card {
+				padding: 18px;
+				border: 1px solid #dcdcde;
+				border-radius: 8px;
+				background: #f6f7f7;
+			}
+
+			dl {
+				margin: 0;
+			}
+
+			dt {
+				font-weight: 600;
+				margin-bottom: 4px;
+			}
+
+			ol,
+			ul {
+				margin: 0;
+				padding-left: 22px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="page">
+			<div class="hero">
+				<div class="eyebrow">PeakURL</div>
+				<h1>The modern self-hosted link management platform.</h1>
+				<p>
+					PeakURL gives you branded short links, analytics, user
+					access, and API tools from one clean dashboard. This
+					package can live in the site root or in a subfolder.
+				</p>
+				<div class="meta">
+					<span><strong>Author:</strong> Abd Ur Rehman</span>
+					<span
+						><strong>Stack:</strong> React admin, PHP app runtime, MySQL or
+						MariaDB</span
+					>
+					<span
+						><strong>Install flow:</strong>
+						<code>setup-config.php</code> then
+						<code>install.php</code></span
+					>
+				</div>
+			</div>
+
+			<div class="section">
+				<h2>Getting Started</h2>
+				<ol>
+					<li>
+						Upload the package and extract it into an empty folder
+						on your hosting account.
+					</li>
+					<li>
+						Create a database and database user from your hosting
+						panel.
+					</li>
+					<li>
+						Open
+						<span class="file"
+							><a href="setup-config.php"
+								>setup-config.php</a
+							></span
+						>
+						to enter the database details and write
+						<code>config.php</code>.
+					</li>
+					<li>
+						Continue to
+						<span class="file"
+							><a href="install.php">install.php</a></span
+						>
+						to set the site title, admin username, email, password,
+						and table prefix.
+					</li>
+					<li>
+						After installation, sign in and manage your links from
+						<span class="file"
+							><a href="dashboard">/dashboard</a></span
+						>.
+					</li>
+				</ol>
+			</div>
+
+			<div class="section">
+				<h2>Before You Install</h2>
+				<div class="grid">
+					<div class="card">
+						<h3>Server Requirements</h3>
+						<ul>
+							<li>PHP <strong>7.4</strong> or newer</li>
+							<li>
+								<code>pdo</code> and
+								<code>pdo_mysql</code> enabled
+							</li>
+							<li>
+								MySQL <strong>8.0</strong> or MariaDB equivalent
+							</li>
+							<li>Apache with <code>mod_rewrite</code></li>
+						</ul>
+					</div>
+					<div class="card">
+						<h3>Write Access</h3>
+						<ul>
+							<li>
+								Site root must be able to write
+								<code>config.php</code>
+							</li>
+							<li>
+								PHP <strong>8.4</strong> is recommended for
+								current deployments
+							</li>
+							<li>
+								HTTPS is recommended for secure session cookies
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="section">
+				<h2>What Is Included</h2>
+				<div class="grid">
+					<div class="card">
+						<h3>Site Files</h3>
+						<ul>
+							<li>
+								<code>index.php</code> boots the app and routes
+								requests
+							</li>
+							<li>
+								<code>setup-config.php</code> handles database
+								configuration
+							</li>
+							<li>
+								<code>install.php</code> handles site and admin
+								setup
+							</li>
+							<li>
+								<code>config-sample.php</code> provides the
+								config template
+							</li>
+						</ul>
+					</div>
+					<div class="card">
+						<h3>Application Files</h3>
+						<ul>
+							<li>
+								<code>assets/</code> contains the built admin
+								app
+							</li>
+							<li>
+								<code>app/</code> contains the runtime, API,
+								and services
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="section">
+				<h2>Deployment Notes</h2>
+				<ul>
+					<li>
+						PeakURL runs from the installed site URL and supports
+						site-root or subfolder deployments.
+					</li>
+					<li>
+						If you want it under a sub-path, extract it into that
+						folder and run setup there.
+					</li>
+					<li>
+						Keep backups of your database and generated
+						<code>config.php</code> before upgrades.
+					</li>
+					<li>
+						Store installation credentials and API keys securely.
+					</li>
+				</ul>
+			</div>
+
+			<div class="section">
+				<h2>Resources</h2>
+				<dl>
+					<dt><a href="https://peakurl.org/">PeakURL Website</a></dt>
+					<dd>Product information and release updates.</dd>
+					<dt><a href="https://peakurl.org/test">PeakURL Demo</a></dt>
+					<dd>A live example of the installed application.</dd>
+				</dl>
+			</div>
+
+			<div class="section">
+				<h2>License</h2>
+				<p>
+					PeakURL is open-source software released under the
+					<a href="LICENSE">MIT License</a>.
+				</p>
+			</div>
+		</div>
+	</body>
+</html>

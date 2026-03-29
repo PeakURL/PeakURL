@@ -1,0 +1,70 @@
+{
+	"name": "peakurl",
+	"private": true,
+	"version": "1.0.0",
+	"type": "module",
+	"engines": {
+		"node": ">=24 <25"
+	},
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc -b && vite build",
+		"release:build": "sh scripts/build-release.sh",
+		"release:upload": "sh scripts/upload-release.sh",
+		"smoke:auth": "sh scripts/smoke-auth.sh",
+		"lint": "npm run lint:web && npm run lint:php",
+		"lint:web": "eslint ui",
+		"lint:php": "composer --working-dir=app run phpcs",
+		"lint:php:syntax": "find app site -path 'app/vendor' -prune -o -path 'site/config-sample.php' -prune -o -name '*.php' -print0 | xargs -0 -n1 php -l",
+		"format": "npm run format:web && npm run format:php",
+		"format:check": "npm run format:web:check && npm run format:php:check",
+		"format:web": "prettier . --write --ignore-unknown",
+		"format:web:check": "prettier . --check --ignore-unknown",
+		"format:php": "composer --working-dir=app run phpcbf",
+		"format:php:check": "composer --working-dir=app run phpcs",
+		"preview": "vite preview",
+		"docker:up": "docker compose up --build",
+		"docker:down": "docker compose down",
+		"docker:logs": "docker compose logs -f"
+	},
+	"dependencies": {
+		"@headlessui/react": "^2.2.9",
+		"@reduxjs/toolkit": "^2.11.0",
+		"@tailwindcss/vite": "^4.2.2",
+		"@visx/geo": "^3.12.0",
+		"@visx/zoom": "^3.12.0",
+		"chart.js": "^4.5.1",
+		"d3-scale": "^4.0.2",
+		"date-fns": "^4.1.0",
+		"lucide-react": "^1.7.0",
+		"qrcode": "^1.5.4",
+		"react": "^19.2.4",
+		"react-dom": "^19.2.4",
+		"react-redux": "^9.2.0",
+		"react-router-dom": "^7.9.5",
+		"tailwindcss": "^4.2.2",
+		"topojson-client": "^3.1.0"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.39.4",
+		"@types/node": "^24.12.0",
+		"@types/react": "^19.2.14",
+		"@types/react-dom": "^19.2.3",
+		"@vitejs/plugin-react": "^6.0.1",
+		"eslint": "^9.39.4",
+		"eslint-plugin-react-hooks": "^7.0.1",
+		"eslint-plugin-react-refresh": "^0.5.2",
+		"globals": "^17.4.0",
+		"prettier": "^3.8.1",
+		"typescript": "~5.9.3",
+		"typescript-eslint": "^8.57.0",
+		"vite": "^8.0.3"
+	},
+	"overrides": {
+		"eslint": {
+			"minimatch": {
+				"brace-expansion": "^1.1.13"
+			}
+		}
+	}
+}

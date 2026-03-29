@@ -1,0 +1,281 @@
+// @ts-nocheck
+'use client';
+
+import {
+	ExternalLink,
+	Search,
+	Share2,
+	MessageCircle,
+	Video,
+	Newspaper,
+	Code,
+	Mail,
+	ShoppingBag,
+	Sparkles,
+	Globe,
+	MousePointerClick,
+	TrendingUp,
+} from 'lucide-react';
+import DeviceStats from './DeviceStats';
+
+// Map category to icon and color
+const getCategoryInfo = (category) => {
+	const categoryMap = {
+		'Search Engine': {
+			icon: Search,
+			color: 'text-blue-500',
+			bg: 'bg-blue-500/10',
+		},
+		'Social Media': {
+			icon: Share2,
+			color: 'text-pink-500',
+			bg: 'bg-pink-500/10',
+		},
+		Messaging: {
+			icon: MessageCircle,
+			color: 'text-green-500',
+			bg: 'bg-green-500/10',
+		},
+		Video: { icon: Video, color: 'text-red-500', bg: 'bg-red-500/10' },
+		'News & Content': {
+			icon: Newspaper,
+			color: 'text-orange-500',
+			bg: 'bg-orange-500/10',
+		},
+		Developer: { icon: Code, color: 'text-gray-500', bg: 'bg-gray-500/10' },
+		Email: { icon: Mail, color: 'text-yellow-500', bg: 'bg-yellow-500/10' },
+		'Email Marketing': {
+			icon: Mail,
+			color: 'text-yellow-600',
+			bg: 'bg-yellow-600/10',
+		},
+		Shopping: {
+			icon: ShoppingBag,
+			color: 'text-emerald-500',
+			bg: 'bg-emerald-500/10',
+		},
+		AI: {
+			icon: Sparkles,
+			color: 'text-purple-500',
+			bg: 'bg-purple-500/10',
+		},
+		Productivity: {
+			icon: TrendingUp,
+			color: 'text-indigo-500',
+			bg: 'bg-indigo-500/10',
+		},
+		Website: { icon: Globe, color: 'text-cyan-500', bg: 'bg-cyan-500/10' },
+		Direct: {
+			icon: MousePointerClick,
+			color: 'text-accent',
+			bg: 'bg-accent/10',
+		},
+		Unknown: { icon: Globe, color: 'text-text-muted', bg: 'bg-surface' },
+	};
+
+	return categoryMap[category] || categoryMap['Unknown'];
+};
+
+// Get total clicks from referrers array
+const getTotalClicks = (referrers) => {
+	return referrers.reduce((sum, ref) => sum + (ref.count || 0), 0);
+};
+
+function TrafficSourcesTab({ link, stats, isLoading }) {
+	const devices = stats?.devices || [];
+	const browsers = stats?.browsers || [];
+	const operatingSystems = stats?.operatingSystems || [];
+	const referrers = stats?.referrers || [];
+	const referrerCategories = stats?.referrerCategories || [];
+	const utmCampaigns = stats?.utmCampaigns || [];
+
+	const totalClicks = getTotalClicks(referrers);
+
+	return (
+		<div className="space-y-6">
+			{/* Device & Browser Statistics */}
+			<DeviceStats
+				devices={devices}
+				browsers={browsers}
+				os={operatingSystems}
+				isLoading={isLoading}
+			/>
+
+			{/* Referrer Categories Overview */}
+			{referrerCategories.length > 0 && (
+				<div className="bg-surface-alt border border-stroke rounded-lg p-4">
+					<h3 className="text-sm font-semibold text-heading mb-4">
+						Traffic by Category
+					</h3>
+					<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+						{referrerCategories.map((cat, index) => {
+							const categoryInfo = getCategoryInfo(cat.category);
+							const Icon = categoryInfo.icon;
+							const percentage =
+								totalClicks > 0
+									? ((cat.count / totalClicks) * 100).toFixed(
+											1
+										)
+									: 0;
+
+							return (
+								<div
+									key={index}
+									className="flex items-center gap-3 p-3 bg-surface rounded-lg border border-stroke"
+								>
+									<div
+										className={`w-10 h-10 rounded-lg ${categoryInfo.bg} flex items-center justify-center shrink-0`}
+									>
+										<Icon
+											className={`w-5 h-5 ${categoryInfo.color}`}
+										/>
+									</div>
+									<div className="min-w-0">
+										<p className="text-sm font-medium text-heading truncate">
+											{cat.category}
+										</p>
+										<p className="text-xs text-text-muted">
+											{cat.count} clicks ({percentage}%)
+										</p>
+									</div>
+								</div>
+							);
+						})}
+					</div>
+				</div>
+			)}
+
+			{/* Detailed Referrer Data */}
+			<div className="bg-surface-alt border border-stroke rounded-lg p-4">
+				<h3 className="text-sm font-semibold text-heading mb-4">
+					Referrer Sources
+				</h3>
+				{isLoading ? (
+					<div className="h-64 flex items-center justify-center bg-surface rounded-lg border border-stroke animate-pulse">
+						<p className="text-sm text-text-muted">
+							Loading referrers...
+						</p>
+					</div>
+				) : referrers.length > 0 ? (
+					<div className="space-y-2">
+						{referrers.map((ref, index) => {
+							const categoryInfo = getCategoryInfo(
+								ref.category || 'Unknown'
+							);
+							const Icon = categoryInfo.icon;
+							const percentage =
+								totalClicks > 0
+									? ((ref.count / totalClicks) * 100).toFixed(
+											1
+										)
+									: 0;
+
+							return (
+								<div
+									key={index}
+									className="flex items-center justify-between p-3 bg-surface rounded-lg border border-stroke hover:border-primary-500/30 transition-colors"
+								>
+									<div className="flex items-center gap-3 min-w-0">
+										<div
+											className={`w-8 h-8 rounded-lg ${categoryInfo.bg} flex items-center justify-center shrink-0`}
+										>
+											<Icon
+												className={`w-4 h-4 ${categoryInfo.color}`}
+											/>
+										</div>
+										<div className="min-w-0">
+											<p className="text-sm font-medium text-heading truncate">
+												{ref.name || 'Direct / Unknown'}
+											</p>
+											{ref.domain &&
+												ref.domain !==
+													ref.name?.toLowerCase() && (
+													<p className="text-xs text-text-muted truncate">
+														{ref.domain}
+													</p>
+												)}
+										</div>
+									</div>
+									<div className="flex items-center gap-3 shrink-0">
+										<div className="w-24 h-2 bg-surface-alt rounded-full overflow-hidden hidden sm:block">
+											<div
+												className={`h-full ${categoryInfo.bg.replace(
+													'/10',
+													'/40'
+												)} rounded-full`}
+												style={{
+													width: `${percentage}%`,
+												}}
+											/>
+										</div>
+										<div className="text-right">
+											<span className="text-sm font-medium text-heading">
+												{ref.count}
+											</span>
+											<span className="text-xs text-text-muted ml-1 hidden sm:inline">
+												({percentage}%)
+											</span>
+										</div>
+									</div>
+								</div>
+							);
+						})}
+					</div>
+				) : (
+					<div className="h-64 flex items-center justify-center bg-surface rounded-lg border border-stroke">
+						<div className="text-center">
+							<ExternalLink className="w-12 h-12 text-text-muted mx-auto mb-2" />
+							<p className="text-sm text-text-muted">
+								No referrer data available yet
+							</p>
+							<p className="text-xs text-text-muted mt-1">
+								Referrer data will appear when visitors come
+								from external sources
+							</p>
+						</div>
+					</div>
+				)}
+			</div>
+
+			{/* UTM Campaign Tracking */}
+			{utmCampaigns && utmCampaigns.length > 0 && (
+				<div className="bg-surface-alt border border-stroke rounded-lg p-4">
+					<h3 className="text-sm font-semibold text-heading mb-4">
+						UTM Campaign Tracking
+					</h3>
+					<div className="space-y-2">
+						{utmCampaigns.map((campaign, index) => (
+							<div
+								key={index}
+								className="flex items-center justify-between p-3 bg-surface rounded-lg border border-stroke"
+							>
+								<div className="min-w-0">
+									<p className="text-sm font-medium text-heading truncate">
+										{campaign.campaign}
+									</p>
+									<div className="flex gap-2 text-xs text-text-muted mt-1">
+										{campaign.source && (
+											<span className="px-2 py-0.5 bg-surface-alt rounded">
+												source: {campaign.source}
+											</span>
+										)}
+										{campaign.medium && (
+											<span className="px-2 py-0.5 bg-surface-alt rounded">
+												medium: {campaign.medium}
+											</span>
+										)}
+									</div>
+								</div>
+								<span className="text-sm font-medium text-heading shrink-0">
+									{campaign.count} clicks
+								</span>
+							</div>
+						))}
+					</div>
+				</div>
+			)}
+		</div>
+	);
+}
+
+export default TrafficSourcesTab;

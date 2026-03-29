@@ -1,0 +1,10 @@
+node_modules
+dist
+build
+release
+.git
+.DS_Store
+core/vendor
+core/.env
+core/storage
+docker/mysql

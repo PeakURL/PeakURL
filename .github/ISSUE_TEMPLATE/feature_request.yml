@@ -1,0 +1,42 @@
+name: Feature request
+description: Suggest an improvement or new capability for PeakURL.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for sharing an idea for PeakURL.
+
+        Please focus on the user problem first, then the proposed solution.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem should this solve?
+      description: Describe the user need, workflow gap, or pain point.
+      placeholder: Describe the problem you are trying to solve.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Explain the feature or behavior you would like to see.
+      placeholder: Describe the solution you have in mind.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: List any workarounds or alternative approaches you considered.
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add screenshots, examples, or implementation notes if helpful.
+    validations:
+      required: false

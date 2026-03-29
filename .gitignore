@@ -1,0 +1,43 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+build
+release
+backup
+wordpress
+*.local
+*.local.*
+.env
+app/vendor/
+app/.env
+core/vendor/
+core/.env
+/content/uploads/geoip/*.mmdb
+/content/uploads/geoip/*.tar.gz
+/content/uploads/geoip/*.tmp
+/docker/proxy/certs/*
+!/docker/proxy/certs/.gitkeep
+
+# Editor directories and files
+.vscode/
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# AI context files
+AGENTS.md
+CONTEXT.md
+CLAUDE.md

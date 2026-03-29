@@ -1,0 +1,29 @@
+name: Documentation improvement
+description: Report a documentation issue or propose a documentation improvement.
+title: "[Docs]: "
+labels:
+  - documentation
+body:
+  - type: textarea
+    id: issue
+    attributes:
+      label: What needs to be improved?
+      description: Describe what is unclear, incorrect, missing, or outdated.
+      placeholder: Explain the documentation issue.
+    validations:
+      required: true
+  - type: input
+    id: location
+    attributes:
+      label: Where did you find it?
+      description: Link to the file, page, or section if possible.
+      placeholder: README.md, docs/dev/DEVELOPMENT.md, peakurl.org/docs, etc.
+    validations:
+      required: false
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested improvement
+      description: Explain how the documentation could be made clearer or more complete.
+    validations:
+      required: false

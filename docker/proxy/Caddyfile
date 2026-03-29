@@ -1,0 +1,48 @@
+{
+	admin off
+	auto_https off
+}
+
+(local_tls) {
+	tls /etc/caddy/certs/peakurl-local.pem /etc/caddy/certs/peakurl-local-key.pem
+	encode zstd gzip
+}
+
+http://phpmyadmin.localhost {
+	reverse_proxy phpmyadmin:80
+}
+
+http://peakurl.dev {
+	redir https://peakurl.dev{uri}
+}
+
+https://peakurl.dev {
+	import local_tls
+
+	@api path /api/*
+	handle @api {
+		reverse_proxy app:8000
+	}
+
+	handle {
+		reverse_proxy ui:5173
+	}
+}
+
+http://api.peakurl.dev {
+	redir https://api.peakurl.dev{uri}
+}
+
+https://api.peakurl.dev {
+	import local_tls
+	reverse_proxy app:8000
+}
+
+http://peakurl.test {
+	redir https://peakurl.test{uri}
+}
+
+https://peakurl.test {
+	import local_tls
+	reverse_proxy test:8080
+}

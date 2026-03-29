@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<ruleset name="PeakURL WordPress PHP Style">
+	<description>WordPress-style PHP formatting for the self-hosted PeakURL runtime.</description>
+
+	<arg name="basepath" value="."/>
+	<arg name="colors"/>
+	<arg name="extensions" value="php"/>
+	<arg name="parallel" value="4"/>
+
+	<config name="tab_width" value="4"/>
+
+	<file>app/api</file>
+	<file>app/bin</file>
+	<file>app/controllers</file>
+	<file>app/http</file>
+	<file>app/includes</file>
+	<file>app/public</file>
+	<file>app/services</file>
+	<file>app/store.php</file>
+	<file>app/traits</file>
+	<file>app/utils</file>
+	<file>site</file>
+
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/storage/*</exclude-pattern>
+	<exclude-pattern>*/config-sample.php</exclude-pattern>
+
+	<rule ref="WordPress-Core">
+		<exclude name="WordPress.Files.FileName"/>
+		<exclude name="WordPress.DB.DirectDatabaseQuery"/>
+		<exclude name="WordPress.DB.RestrictedClasses"/>
+	</rule>
+</ruleset>

@@ -1,5 +1,7 @@
 # PeakURL
 
+[![Publish Release to R2](https://github.com/PeakURL/PeakURL/actions/workflows/release-r2.yml/badge.svg)](https://github.com/PeakURL/PeakURL/actions/workflows/release-r2.yml)
+
 PeakURL is an open-source, self-hosted link management platform for teams and businesses that want full control over branded short links, analytics, and dashboard access on their own infrastructure.
 
 It is built for a straightforward self-hosted experience: install it on your domain, complete the browser-based setup, and manage everything from a clean dashboard.

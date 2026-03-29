@@ -311,7 +311,16 @@ class Database {
 		string $replacement
 	): string {
 		$pattern = sprintf(
-			'/\b(FROM|JOIN|INTO|UPDATE|TABLE|REFERENCES|DESCRIBE|DESC)(\s+)(`?)%s(`?)(?=\b|\s|\(|,)/i',
+			'/\b(' .
+			'FROM' .
+			'|JOIN' .
+			'|INTO' .
+			'|UPDATE' .
+			'|REFERENCES' .
+			'|DESCRIBE' .
+			'|DESC' .
+			'|TABLE(?:\s+IF\s+(?:NOT\s+)?EXISTS)?' .
+			')(\s+)(`?)%s(`?)(?=\b|\s|\(|,)/i',
 			preg_quote( $identifier, '/' ),
 		);
 		$result  = preg_replace_callback(

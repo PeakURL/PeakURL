@@ -3,6 +3,9 @@ name: Publish Release to R2
 on:
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 permissions:
   contents: read
 
@@ -23,10 +26,10 @@ jobs:
       R2_BUCKET: ${{ secrets.R2_BUCKET }}
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: npm
@@ -87,6 +90,34 @@ jobs:
           aws s3 cp "${{ steps.release.outputs.archive }}" "s3://${R2_BUCKET}/${{ steps.release.outputs.versioned_archive_key }}" --endpoint-url "$R2_ENDPOINT"
           aws s3 cp "${{ steps.release.outputs.archive }}" "s3://${R2_BUCKET}/latest.zip" --endpoint-url "$R2_ENDPOINT"
 
+      - name: Trigger PeakURL.org manifest update workflow
+        env:
+          PEAKURL_ORG_UPDATE_TOKEN: ${{ secrets.PEAKURL_ORG_UPDATE_TOKEN }}
+          VERSION: ${{ steps.release.outputs.version }}
+          RELEASED_AT: ${{ steps.release.outputs.generated_at }}
+          DOWNLOAD_URL: ${{ steps.release.outputs.download_url }}
+          PACKAGE_URL: ${{ steps.release.outputs.package_url }}
+          CHECKSUM: ${{ steps.release.outputs.checksum }}
+          MINIMUM_PEAKURL_VERSION: ${{ steps.release.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ -z "${PEAKURL_ORG_UPDATE_TOKEN:-}" ]; then
+            echo "Missing required secret: PEAKURL_ORG_UPDATE_TOKEN" >&2
+            exit 1
+          fi
+
+          PAYLOAD="$(node -e "const payload={ref:'main',inputs:{version:process.env.VERSION,released_at:process.env.RELEASED_AT,download_url:process.env.DOWNLOAD_URL,package_url:process.env.PACKAGE_URL,checksum_sha256:process.env.CHECKSUM,minimum_peakurl_version:process.env.MINIMUM_PEAKURL_VERSION}}; process.stdout.write(JSON.stringify(payload));" )"
+
+          curl --fail --silent --show-error \
+            --request POST \
+            --url "https://api.github.com/repos/PeakURL/PeakURL.org/actions/workflows/update-release.yml/dispatches" \
+            --header "Accept: application/vnd.github+json" \
+            --header "Authorization: Bearer ${PEAKURL_ORG_UPDATE_TOKEN}" \
+            --header "X-GitHub-Api-Version: 2022-11-28" \
+            --data "$PAYLOAD"
+
       - name: Summarize release upload
         run: |
           {
@@ -96,6 +127,7 @@ jobs:
             echo "- Versioned archive: \`s3://${{ env.R2_BUCKET }}/${{ steps.release.outputs.versioned_archive_key }}\`"
             echo "- Latest archive: \`s3://${{ env.R2_BUCKET }}/latest.zip\`"
             echo "- SHA-256: \`${{ steps.release.outputs.checksum }}\`"
+            echo "- PeakURL.org handoff: \`workflow_dispatch -> PeakURL/PeakURL.org/.github/workflows/update-release.yml\`"
             echo
             echo "## PeakURL.org update.json values"
             echo

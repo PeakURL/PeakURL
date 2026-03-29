@@ -1,0 +1,112 @@
+name: Publish Release to R2
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-release-r2
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Build and upload release package
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: auto
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: pdo, pdo_mysql, zip
+          tools: composer
+
+      - name: Install npm dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build release package
+        run: npm run release:build
+
+      - name: Resolve release paths
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          VERSION="$(tr -d '\n' < .version)"
+          ARCHIVE="release/peakurl-${VERSION}.zip"
+          METADATA="release/release-metadata.json"
+          VERSIONED_ARCHIVE_KEY="package/peakurl-${VERSION}.zip"
+
+          for path in "$ARCHIVE" "$METADATA"; do
+            if [ ! -f "$path" ]; then
+              echo "Missing expected release artifact: $path" >&2
+              exit 1
+            fi
+          done
+
+          CHECKSUM="$(node -e "const fs=require('fs'); const metadata=JSON.parse(fs.readFileSync('$METADATA','utf8')); process.stdout.write(metadata.archiveChecksumSha256);")"
+          GENERATED_AT="$(node -e "const fs=require('fs'); const metadata=JSON.parse(fs.readFileSync('$METADATA','utf8')); process.stdout.write(metadata.generatedAt);")"
+          DOWNLOAD_URL="$(node -e "const fs=require('fs'); const metadata=JSON.parse(fs.readFileSync('$METADATA','utf8')); process.stdout.write(metadata.downloadUrl);")"
+          PACKAGE_URL="$(node -e "const fs=require('fs'); const metadata=JSON.parse(fs.readFileSync('$METADATA','utf8')); process.stdout.write(metadata.packageUrl);")"
+
+          {
+            echo "version=$VERSION"
+            echo "archive=$ARCHIVE"
+            echo "checksum=$CHECKSUM"
+            echo "generated_at=$GENERATED_AT"
+            echo "download_url=$DOWNLOAD_URL"
+            echo "package_url=$PACKAGE_URL"
+            echo "versioned_archive_key=$VERSIONED_ARCHIVE_KEY"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Upload release files to R2
+        env:
+          R2_ENDPOINT: https://${{ env.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          aws s3 cp "${{ steps.release.outputs.archive }}" "s3://${R2_BUCKET}/${{ steps.release.outputs.versioned_archive_key }}" --endpoint-url "$R2_ENDPOINT"
+          aws s3 cp "${{ steps.release.outputs.archive }}" "s3://${R2_BUCKET}/latest.zip" --endpoint-url "$R2_ENDPOINT"
+
+      - name: Summarize release upload
+        run: |
+          {
+            echo "## R2 release upload"
+            echo
+            echo "- Version: \`${{ steps.release.outputs.version }}\`"
+            echo "- Versioned archive: \`s3://${{ env.R2_BUCKET }}/${{ steps.release.outputs.versioned_archive_key }}\`"
+            echo "- Latest archive: \`s3://${{ env.R2_BUCKET }}/latest.zip\`"
+            echo "- SHA-256: \`${{ steps.release.outputs.checksum }}\`"
+            echo
+            echo "## PeakURL.org update.json values"
+            echo
+            echo '```json'
+            echo '{'
+            echo '  "version": "${{ steps.release.outputs.version }}",'
+            echo '  "releasedAt": "${{ steps.release.outputs.generated_at }}",'
+            echo '  "downloadUrl": "${{ steps.release.outputs.download_url }}",'
+            echo '  "packageUrl": "${{ steps.release.outputs.package_url }}",'
+            echo '  "checksumSha256": "${{ steps.release.outputs.checksum }}",'
+            echo '  "minimumPeakurlVersion": "${{ steps.release.outputs.version }}"'
+            echo '}'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

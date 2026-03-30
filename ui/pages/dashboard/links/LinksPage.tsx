@@ -22,7 +22,11 @@ import {
 } from './_components';
 import { useGetUrlsQuery } from '@/store/slices/api/urls';
 import { useSearchParams } from 'react-router-dom';
-import { buildShortUrl, getDefaultShortUrlOrigin } from '@/utils';
+import {
+	buildShortUrl,
+	getDefaultShortUrlOrigin,
+	serializeCsv,
+} from '@/utils';
 
 function LinksPage() {
 	// State for Sorting and Pagination
@@ -158,37 +162,101 @@ function LinksPage() {
 		(link) => link.status === 'active'
 	).length;
 
-	const handleExport = () => {
-		// Simple CSV export
-		const headers = [
-			'Short URL',
-			'Destination URL',
-			'Clicks',
-			'Unique Clicks',
-			'Created At',
-		];
-		const rows = sortedLinks.map((link) => {
-			const shortUrl = buildShortUrl(link, shortUrlOrigin);
-			return [
-				shortUrl,
-				link.destinationUrl,
-				link.clicks,
-				link.uniqueClicks,
-				link.createdAt,
-			];
+	const getExportItems = () =>
+		sortedLinks.map((link) => {
+			const alias = link.alias || link.shortCode || '';
+
+			return {
+				url: link.destinationUrl || '',
+				alias,
+				title: link.title || '',
+				password: '',
+				expires: '',
+				short_url: buildShortUrl(link, shortUrlOrigin),
+				clicks: link.clicks ?? '',
+				unique_clicks: link.uniqueClicks ?? '',
+				created_at: link.createdAt || '',
+			};
 		});
 
-		const csvContent =
-			'data:text/csv;charset=utf-8,' +
-			[headers.join(','), ...rows.map((e) => e.join(','))].join('\n');
+	const buildCsvExport = (items) => {
+		const headers = [
+			'url',
+			'alias',
+			'title',
+			'password',
+			'expires',
+			'short_url',
+			'clicks',
+			'unique_clicks',
+			'created_at',
+		];
+		const rows = items.map((item) => headers.map((header) => item[header]));
 
-		const encodedUri = encodeURI(csvContent);
+		return serializeCsv(headers, rows);
+	};
+
+	const buildJsonExport = (items) => JSON.stringify(items, null, 2);
+
+	const buildXmlExport = (items) => {
+		const escapeXml = (value) =>
+			String(value ?? '')
+				.replace(/&/g, '&amp;')
+				.replace(/</g, '&lt;')
+				.replace(/>/g, '&gt;')
+				.replace(/"/g, '&quot;')
+				.replace(/'/g, '&apos;');
+
+		const itemXml = items
+			.map(
+				(item) => `  <url>
+    <destinationUrl>${escapeXml(item.url)}</destinationUrl>
+    <alias>${escapeXml(item.alias)}</alias>
+    <title>${escapeXml(item.title)}</title>
+    <password>${escapeXml(item.password)}</password>
+    <expiresAt>${escapeXml(item.expires)}</expiresAt>
+    <shortUrl>${escapeXml(item.short_url)}</shortUrl>
+    <clicks>${escapeXml(item.clicks)}</clicks>
+    <uniqueClicks>${escapeXml(item.unique_clicks)}</uniqueClicks>
+    <createdAt>${escapeXml(item.created_at)}</createdAt>
+  </url>`
+			)
+			.join('\n');
+
+		return `<urls>\n${itemXml}\n</urls>`;
+	};
+
+	const handleExport = (format = 'csv') => {
+		const exportItems = getExportItems();
+		const exporters = {
+			csv: {
+				content: buildCsvExport(exportItems),
+				type: 'text/csv;charset=utf-8;',
+				filename: 'links_export.csv',
+			},
+			json: {
+				content: buildJsonExport(exportItems),
+				type: 'application/json;charset=utf-8;',
+				filename: 'links_export.json',
+			},
+			xml: {
+				content: buildXmlExport(exportItems),
+				type: 'application/xml;charset=utf-8;',
+				filename: 'links_export.xml',
+			},
+		};
+		const selectedExport = exporters[format] || exporters.csv;
+		const blob = new Blob([selectedExport.content], {
+			type: selectedExport.type,
+		});
+		const blobUrl = window.URL.createObjectURL(blob);
 		const link = document.createElement('a');
-		link.setAttribute('href', encodedUri);
-		link.setAttribute('download', 'links_export.csv');
+		link.setAttribute('href', blobUrl);
+		link.setAttribute('download', selectedExport.filename);
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);
+		window.URL.revokeObjectURL(blobUrl);
 	};
 
 	return (

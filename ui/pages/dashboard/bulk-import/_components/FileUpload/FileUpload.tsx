@@ -2,6 +2,11 @@
 'use client';
 import { useState, useRef } from 'react';
 import { useBulkCreateUrlMutation } from '@/store/slices/api/urls';
+import {
+	extractAliasFromShortUrl,
+	normalizeCsvHeader,
+	parseCsvRows,
+} from '@/utils';
 import FileUploadArea from './FileUploadArea';
 import ProcessingStatus from './ProcessingStatus';
 import ImportSummary from '../ImportSummary';
@@ -65,27 +70,47 @@ const FileUpload = ({
 	};
 
 	const parseCsv = (text) => {
-		const lines = text.split(/\r\n|\n/).filter((line) => line.trim());
-		if (lines.length < 2) return [];
+		const rows = parseCsvRows(text);
+		if (rows.length < 2) return [];
 
-		const headers = lines[0].split(',').map((h) => h.trim().toLowerCase());
+		const headers = rows[0].map((header) => normalizeCsvHeader(header));
 		const data = [];
 
-		for (let i = 1; i < lines.length; i++) {
-			const values = lines[i].split(',').map((v) => v.trim());
+		for (let i = 1; i < rows.length; i++) {
+			const values = rows[i];
 			const entry = {};
 
 			headers.forEach((header, index) => {
-				if (values[index]) {
-					if (header === 'url' || header === 'destinationurl')
-						entry.destinationUrl = values[index];
-					else if (header === 'alias' || header === 'shortcode')
-						entry.alias = values[index];
-					else if (header === 'password')
-						entry.password = values[index];
-					else if (header === 'expires' || header === 'expiresat')
-						entry.expiresAt = values[index];
-					else if (header === 'title') entry.title = values[index];
+				const value = values[index]?.trim();
+
+				if (value) {
+					if (
+						header === 'url' ||
+						header === 'destinationurl' ||
+						header === 'destination'
+					) {
+						entry.destinationUrl = value;
+					} else if (
+						header === 'alias' ||
+						header === 'shortcode'
+					) {
+						entry.alias = value;
+					} else if (
+						header === 'shorturl' ||
+						header === 'shortlink'
+					) {
+						entry.alias =
+							entry.alias || extractAliasFromShortUrl(value);
+					} else if (header === 'password') {
+						entry.password = value;
+					} else if (
+						header === 'expires' ||
+						header === 'expiresat'
+					) {
+						entry.expiresAt = value;
+					} else if (header === 'title') {
+						entry.title = value;
+					}
 				}
 			});
 

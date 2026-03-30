@@ -12,12 +12,21 @@ function BulkImportTabPage() {
 	const [importProgress, setImportProgress] = useState(0);
 
 	const sampleData = [
-		{ url: 'https://example.com/page1', alias: 'page1' },
+		{
+			url: 'https://example.com/page1',
+			alias: 'page1',
+			title: 'Product launch',
+		},
 		{
 			url: 'https://example.com/page2',
 			alias: 'page2',
+			title: 'Help docs',
 		},
-		{ url: 'https://example.com/page3', alias: 'page3' },
+		{
+			url: 'https://example.com/page3',
+			alias: 'page3',
+			title: 'Newsletter',
+		},
 	];
 
 	return (

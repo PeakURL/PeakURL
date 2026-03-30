@@ -15,6 +15,9 @@ function SampleData({ sampleData }) {
 							<th className="text-left py-2 px-3 text-xs font-semibold text-heading bg-surface-alt">
 								alias
 							</th>
+							<th className="text-left py-2 px-3 text-xs font-semibold text-heading bg-surface-alt">
+								title
+							</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -28,6 +31,9 @@ function SampleData({ sampleData }) {
 								</td>
 								<td className="py-2 px-3 text-xs text-heading">
 									{row.alias}
+								</td>
+								<td className="py-2 px-3 text-xs text-heading">
+									{row.title}
 								</td>
 							</tr>
 						))}

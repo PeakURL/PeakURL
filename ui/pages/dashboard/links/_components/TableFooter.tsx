@@ -1,5 +1,6 @@
 // @ts-nocheck
-import { Download, Link2, MousePointerClick } from 'lucide-react';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { ChevronDown, Download, Link2, MousePointerClick } from 'lucide-react';
 
 const TableFooter = ({
 	totalLinks = 0,
@@ -89,13 +90,58 @@ const TableFooter = ({
 						/>
 					)}
 
-					<button
-						onClick={onExport}
-						className="px-3 py-1.5 text-sm font-medium text-accent hover:bg-accent/10 rounded-lg transition-colors flex items-center gap-1.5"
-					>
-						<Download className="h-3 w-3" />
-						Export
-					</button>
+					<Menu as="div" className="relative">
+						<MenuButton className="px-3 py-1.5 text-sm font-medium text-accent hover:bg-accent/10 rounded-lg transition-colors flex items-center gap-1.5">
+							<Download className="h-3 w-3" />
+							Export
+							<ChevronDown className="h-3 w-3" />
+						</MenuButton>
+
+						<MenuItems className="absolute right-0 z-20 mt-2 min-w-40 overflow-hidden rounded-xl border border-stroke bg-surface shadow-xl focus:outline-none">
+							<div className="p-1">
+								{[
+									{
+										format: 'csv',
+										label: 'Export CSV',
+										description: 'Bulk Import ready',
+									},
+									{
+										format: 'json',
+										label: 'Export JSON',
+										description: 'Structured data',
+									},
+									{
+										format: 'xml',
+										label: 'Export XML',
+										description: 'Portable feed',
+									},
+								].map((option) => (
+									<MenuItem key={option.format}>
+										{({ focus }) => (
+											<button
+												type="button"
+												onClick={() => onExport(option.format)}
+												className={`flex w-full items-start justify-between rounded-lg px-3 py-2 text-left transition-colors ${
+													focus
+														? 'bg-surface-alt'
+														: ''
+												}`}
+											>
+												<div>
+													<div className="text-sm font-medium text-heading">
+														{option.label}
+													</div>
+													<div className="text-xs text-text-muted">
+														{option.description}
+													</div>
+												</div>
+											</button>
+										)}
+									</MenuItem>
+								))}
+							</div>
+						</MenuItems>
+					</Menu>
 				</div>
 			</div>
 		</div>

@@ -10,7 +10,7 @@ function FormatRequirements() {
 
 		if (format === 'csv') {
 			content =
-				'url,alias,password,expires\nhttps://example.com,ex1,,2025-12-31';
+				'url,alias,title,password,expires\nhttps://example.com,ex1,Example page,,2025-12-31';
 			filename = 'sample.csv';
 			type = 'text/csv';
 		} else if (format === 'json') {
@@ -19,6 +19,7 @@ function FormatRequirements() {
 					{
 						url: 'https://example.com',
 						alias: 'ex1',
+						title: 'Example page',
 						password: '',
 						expires: '2025-12-31',
 					},
@@ -33,6 +34,7 @@ function FormatRequirements() {
   <url>
     <destinationUrl>https://example.com</destinationUrl>
     <alias>ex1</alias>
+    <title>Example page</title>
     <password></password>
     <expiresAt>2025-12-31</expiresAt>
   </url>
@@ -85,6 +87,13 @@ function FormatRequirements() {
 						<li>
 							•{' '}
 							<code className="px-1.5 py-0.5 bg-surface-alt rounded text-xs">
+								title
+							</code>{' '}
+							- Link title
+						</li>
+						<li>
+							•{' '}
+							<code className="px-1.5 py-0.5 bg-surface-alt rounded text-xs">
 								password
 							</code>{' '}
 							- Protection password
@@ -95,6 +104,10 @@ function FormatRequirements() {
 								expires
 							</code>{' '}
 							- Date (YYYY-MM-DD)
+						</li>
+						<li>
+							• Additional columns are ignored during import, so
+							PeakURL exports can be imported again later.
 						</li>
 					</ul>
 				</div>

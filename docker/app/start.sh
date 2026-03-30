@@ -21,4 +21,4 @@ composer dump-autoload --no-interaction >/dev/null
 
 php bin/setup-database.php
 
-exec php -S 0.0.0.0:8000 -t public
+exec php -S 0.0.0.0:8000 -t public /app/docker/app/router.php

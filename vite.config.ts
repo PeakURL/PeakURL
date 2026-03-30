@@ -45,7 +45,7 @@ export default defineConfig({
 				target: devProxyTarget,
 				changeOrigin: true,
 			},
-			'^/(?!dashboard(?:/|$)|login(?:/|$)|forgot-password(?:/|$)|reset-password(?:/|$)|api(?:/|$)|@vite(?:/|$)|@react-refresh(?:/|$)|ui(?:/|$)|src(?:/|$)|node_modules(?:/|$)|assets(?:/|$))[a-z0-9-]+/?$':
+			'^/(?!dashboard(?:/|$)|login(?:/|$)|forgot-password(?:/|$)|reset-password(?:/|$)|api(?:/|$)|@vite(?:/|$)|@react-refresh(?:/|$)|ui(?:/|$)|src(?:/|$)|node_modules(?:/|$)|assets(?:/|$))[a-z0-9-]+(?:\\+)?/?$':
 				{
 					target: devProxyTarget,
 					changeOrigin: true,

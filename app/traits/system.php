@@ -259,7 +259,19 @@ trait Store_System_Trait {
 		}
 
 		$update_service = new Update_Service( $this->config );
-		$result         = $update_service->apply_update( $manifest );
+
+		try {
+			$result = $update_service->apply_update( $manifest );
+		} catch ( Throwable $exception ) {
+			$this->upsert_setting( 'update_last_checked_at', $this->now(), false );
+			$this->upsert_setting(
+				'update_last_error',
+				$exception->getMessage(),
+				false,
+			);
+
+			throw new Api_Exception( $exception->getMessage(), 500 );
+		}
 
 		$this->upsert_setting(
 			'installed_version',

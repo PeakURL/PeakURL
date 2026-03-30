@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { useState } from 'react';
 import { PEAKURL_BASENAME } from '@constants';
+import { ConfirmDialog } from '@/components/ui';
 import {
 	useGetUserProfileQuery,
 	useUpdateUserProfileMutation,
@@ -91,6 +92,7 @@ const Content = ({ activeTab }) => {
 	const [newApiKey, setNewApiKey] = useState(null);
 	const [showKeyModal, setShowKeyModal] = useState(false);
 	const [showCreateModal, setShowCreateModal] = useState(false);
+	const [showUpdateConfirm, setShowUpdateConfirm] = useState(false);
 	const [keyLabel, setKeyLabel] = useState('');
 
 	const handleGeneralSubmit = async (generalForm) => {
@@ -257,17 +259,10 @@ const Content = ({ activeTab }) => {
 	};
 
 	const handleApplyUpdate = async () => {
-		if (
-			!window.confirm(
-				'Install the latest PeakURL release now? The dashboard will refresh after the update completes.'
-			)
-		) {
-			return;
-		}
-
 		try {
 			const result = await applyUpdate().unwrap();
 			const appliedVersion = result?.data?.currentVersion;
+			setShowUpdateConfirm(false);
 
 			notification.success(
 				'Update installed',
@@ -356,7 +351,7 @@ const Content = ({ activeTab }) => {
 					isChecking={isCheckingForUpdates}
 					isApplying={isApplyingUpdate}
 					onCheck={handleCheckForUpdates}
-					onApply={handleApplyUpdate}
+					onApply={() => setShowUpdateConfirm(true)}
 				/>
 			)}
 
@@ -371,6 +366,22 @@ const Content = ({ activeTab }) => {
 				onCreateKey={handleCreateKey}
 				copyToClipboard={copyToClipboard}
 				isGeneratingKey={isGeneratingKey}
+			/>
+			<ConfirmDialog
+				open={showUpdateConfirm}
+				onClose={() => {
+					if (!isApplyingUpdate) {
+						setShowUpdateConfirm(false);
+					}
+				}}
+				title={`Install PeakURL ${updateStatus?.data?.latestVersion || 'update'}?`}
+				description={
+					'PeakURL will download the latest release package, replace managed application files, and reload the dashboard when the update completes.\n\nOnly continue on packaged release installs.'
+				}
+				confirmText="Install update"
+				cancelText="Cancel"
+				onConfirm={handleApplyUpdate}
+				loading={isApplyingUpdate}
 			/>
 			<notification.NotificationContainer />
 		</div>

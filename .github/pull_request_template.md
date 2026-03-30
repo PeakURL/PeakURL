@@ -4,15 +4,15 @@ Describe the change clearly and briefly.
 
 ## What Changed
 
-- 
+-
 
 ## Verification
 
-- 
+-
 
 ## Notes
 
-- 
+-
 
 ## Checklist
 

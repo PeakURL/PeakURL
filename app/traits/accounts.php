@@ -359,7 +359,7 @@ trait Store_Accounts_Trait {
 		}
 
 		$request->expire_cookie(
-			(string) $this->config['SESSION_COOKIE_NAME'],
+			(string) $this->config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME ],
 			Security_Utils::session_cookie_options( $this->config, $request ),
 		);
 	}
@@ -367,27 +367,35 @@ trait Store_Accounts_Trait {
 	/**
 	 * Initiate a password reset flow.
 	 *
-	 * Generates a one-hour reset token for the given email address.
-	 * Always returns the email to avoid user-enumeration leaks.
+	 * Generates a one-hour reset token for the given email address or username.
+	 * Always returns the supplied identifier to avoid user-enumeration leaks.
 	 *
-	 * @param array<string, mixed> $payload Body with `email`.
-	 * @return array<string, string> `['email' => '…']`.
+	 * @param array<string, mixed> $payload Body with `identifier` or `email`.
+	 * @return array<string, string> `['identifier' => '…']`.
 	 *
-	 * @throws Api_Exception When email is empty (422).
+	 * @throws Api_Exception When the identifier is empty (422).
 	 * @since 1.0.0
 	 */
 	public function forgot_password( array $payload ): array {
-		$email = strtolower( trim( (string) ( $payload['email'] ?? '' ) ) );
+		$identifier = trim(
+			(string) ( $payload['identifier'] ?? ( $payload['email'] ?? '' ) )
+		);
 
-		if ( '' === $email ) {
-			throw new Api_Exception( 'Email is required.', 422 );
+		if ( '' === $identifier ) {
+			throw new Api_Exception( 'Email or username is required.', 422 );
 		}
 
-		$user        = $this->find_user_row_by_email( $email );
-		$reset_token = bin2hex( random_bytes( 20 ) );
+		$normalized_identifier = strtolower( $identifier );
+		$user                  = filter_var(
+			$normalized_identifier,
+			FILTER_VALIDATE_EMAIL
+		)
+			? $this->find_user_row_by_email( $normalized_identifier )
+			: $this->find_user_row_by_username( $identifier );
+		$reset_token           = bin2hex( random_bytes( 20 ) );
 
 		if ( ! $user ) {
-			return array( 'email' => $email );
+			return array( 'identifier' => $identifier );
 		}
 
 		$this->execute(
@@ -419,7 +427,7 @@ trait Store_Accounts_Trait {
 			);
 		}
 
-		return array( 'email' => $email );
+		return array( 'identifier' => $identifier );
 	}
 
 	/**

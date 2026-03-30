@@ -17,9 +17,18 @@ function getErrorMessage(error, fallback) {
 	return fallback;
 }
 
+const submitFormOnEnter = (event) => {
+	if ('Enter' !== event.key) {
+		return;
+	}
+
+	event.preventDefault();
+	event.currentTarget.form?.requestSubmit();
+};
+
 function ForgotPasswordPage() {
-	const [email, setEmail] = useState('');
-	const [submittedEmail, setSubmittedEmail] = useState('');
+	const [identifier, setIdentifier] = useState('');
+	const [submittedIdentifier, setSubmittedIdentifier] = useState('');
 	const [formError, setFormError] = useState('');
 	const [isSubmitted, setIsSubmitted] = useState(false);
 	const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
@@ -28,16 +37,16 @@ function ForgotPasswordPage() {
 		event.preventDefault();
 		setFormError('');
 
-		if (!email.trim()) {
-			setFormError('Email is required.');
+		if (!identifier.trim()) {
+			setFormError('Email or username is required.');
 			return;
 		}
 
 		try {
 			await forgotPassword({
-				email: email.trim(),
+				identifier: identifier.trim(),
 			}).unwrap();
-			setSubmittedEmail(email.trim());
+			setSubmittedIdentifier(identifier.trim());
 			setIsSubmitted(true);
 		} catch (error) {
 			setFormError(
@@ -63,8 +72,9 @@ function ForgotPasswordPage() {
 								Reset access without leaving your dashboard workflow.
 							</h1>
 							<p className="mt-4 max-w-lg text-base leading-7 text-slate-400">
-								Enter the email address linked to your PeakURL
-								account and we&apos;ll send a secure reset link.
+								Enter the email address or username linked to your
+								PeakURL account and we&apos;ll send a secure reset
+								link.
 							</p>
 						</div>
 
@@ -99,8 +109,8 @@ function ForgotPasswordPage() {
 							Forgot your password?
 						</h2>
 						<p className="mt-3 text-sm leading-6 text-slate-500">
-							Enter the account email and PeakURL will send a secure
-							password reset link.
+							Enter your account email or username and PeakURL will
+							send a secure password reset link.
 						</p>
 
 						{isSubmitted ? (
@@ -111,7 +121,7 @@ function ForgotPasswordPage() {
 								<p className="mt-2 leading-6 opacity-80">
 									If an account exists for{' '}
 									<span className="font-medium">
-										{submittedEmail}
+										{submittedIdentifier}
 									</span>
 									, PeakURL has sent a password reset link.
 								</p>
@@ -126,15 +136,21 @@ function ForgotPasswordPage() {
 						) : (
 							<form className="mt-8 space-y-5" onSubmit={handleSubmit}>
 								<Input
-									label="Email address"
-									type="email"
+									label="Email or username"
+									type="text"
 									icon={Mail}
-									value={email}
+									value={identifier}
+									name="identifier"
 									onChange={(event) =>
-										setEmail(event.target.value)
+										setIdentifier(event.target.value)
 									}
-									placeholder="owner@example.com"
-									autoComplete="email"
+									autoFocus
+									placeholder="owner@example.com or admin"
+									autoComplete="username"
+									autoCapitalize="none"
+									spellCheck={false}
+									enterKeyHint="go"
+									onKeyDown={submitFormOnEnter}
 									required
 									error={formError}
 								/>

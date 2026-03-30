@@ -16,6 +16,7 @@ export function VerificationCodeInput({
 	value = '',
 	onChange,
 	onComplete,
+	onEnter,
 	disabled = false,
 	className = '',
 }) {
@@ -70,6 +71,12 @@ export function VerificationCodeInput({
 	};
 
 	const handleKeyDown = (event, index) => {
+		if ('Enter' === event.key) {
+			event.preventDefault();
+			onEnter?.(event);
+			return;
+		}
+
 		if (event.key === 'Backspace') {
 			event.preventDefault();
 
@@ -131,6 +138,7 @@ export function VerificationCodeInput({
 					}}
 					type="text"
 					inputMode="numeric"
+					enterKeyHint={index === length - 1 ? 'done' : 'next'}
 					autoComplete={index === 0 ? 'one-time-code' : 'off'}
 					maxLength={1}
 					value={digit}

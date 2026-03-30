@@ -104,6 +104,15 @@ const getSafeRedirectPath = (candidate) => {
 	return value;
 };
 
+const submitFormOnEnter = (event) => {
+	if ('Enter' !== event.key) {
+		return;
+	}
+
+	event.preventDefault();
+	event.currentTarget.form?.requestSubmit();
+};
+
 function LoginPage() {
 	const location = useLocation();
 	const navigate = useNavigate();
@@ -364,10 +373,14 @@ function LoginPage() {
 								label="Email or username"
 								icon={UserRound}
 								value={identifier}
+								name="identifier"
 								onChange={(event) =>
 									setIdentifier(event.target.value)
 								}
+								autoFocus
 								autoComplete="username"
+								autoCapitalize="none"
+								spellCheck={false}
 								disabled={submitPending || twoFactorRequired}
 								placeholder="you@company.com"
 								required
@@ -379,9 +392,12 @@ function LoginPage() {
 								type="password"
 								icon={LockKeyhole}
 								value={password}
+								name="password"
 								onChange={(event) =>
 									setPassword(event.target.value)
 								}
+								onKeyDown={submitFormOnEnter}
+								enterKeyHint="go"
 								autoComplete="current-password"
 								disabled={submitPending || twoFactorRequired}
 								placeholder="••••••••"
@@ -408,11 +424,16 @@ function LoginPage() {
 											<Input
 												label="Backup code"
 												value={backupCode}
+												name="backupCode"
 												onChange={(event) =>
 													setBackupCode(
 														event.target.value
 													)
 												}
+												onKeyDown={submitFormOnEnter}
+												enterKeyHint="go"
+												autoCapitalize="none"
+												spellCheck={false}
 												autoComplete="one-time-code"
 												disabled={submitPending}
 												placeholder="xxxx-xxxx-xxxx"
@@ -437,6 +458,9 @@ function LoginPage() {
 												<VerificationCodeInput
 													value={token}
 													onChange={setToken}
+													onEnter={() =>
+														document.activeElement?.form?.requestSubmit()
+													}
 													disabled={submitPending}
 												/>
 											</div>

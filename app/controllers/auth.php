@@ -136,14 +136,14 @@ class Auth_Controller {
 	/**
 	 * Initiate a password reset (POST /api/v1/auth/forgot-password).
 	 *
-	 * @param Request $request Request with the user's email.
+	 * @param Request $request Request with the user's email address or username.
 	 * @return array<string, mixed> Confirmation response.
 	 * @since 1.0.0
 	 */
 	public function forgot_password( Request $request ): array {
 		return Json_Response::success(
 			$this->data_store->forgot_password( $request->get_body_params() ),
-			'If that email exists, a password reset link has been sent.',
+			'If that account exists, a password reset link has been sent.',
 		);
 	}
 

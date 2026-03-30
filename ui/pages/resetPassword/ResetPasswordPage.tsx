@@ -17,6 +17,15 @@ function getErrorMessage(error, fallback) {
 	return fallback;
 }
 
+const submitFormOnEnter = (event) => {
+	if ('Enter' !== event.key) {
+		return;
+	}
+
+	event.preventDefault();
+	event.currentTarget.form?.requestSubmit();
+};
+
 function ResetPasswordPage() {
 	const navigate = useNavigate();
 	const { token = '' } = useParams();
@@ -141,9 +150,11 @@ function ResetPasswordPage() {
 									type="password"
 									icon={KeyRound}
 									value={password}
+									name="password"
 									onChange={(event) =>
 										setPassword(event.target.value)
 									}
+									autoFocus
 									placeholder="Enter your new password"
 									autoComplete="new-password"
 									required
@@ -154,9 +165,12 @@ function ResetPasswordPage() {
 									type="password"
 									icon={LockKeyhole}
 									value={confirmPassword}
+									name="confirmPassword"
 									onChange={(event) =>
 										setConfirmPassword(event.target.value)
 									}
+									onKeyDown={submitFormOnEnter}
+									enterKeyHint="go"
 									placeholder="Confirm your new password"
 									autoComplete="new-password"
 									required

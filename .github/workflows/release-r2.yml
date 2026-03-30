@@ -90,6 +90,49 @@ jobs:
           aws s3 cp "${{ steps.release.outputs.archive }}" "s3://${R2_BUCKET}/${{ steps.release.outputs.versioned_archive_key }}" --endpoint-url "$R2_ENDPOINT"
           aws s3 cp "${{ steps.release.outputs.archive }}" "s3://${R2_BUCKET}/latest.zip" --endpoint-url "$R2_ENDPOINT"
 
+      - name: Verify public release archives
+        id: published
+        env:
+          EXPECTED_CHECKSUM: ${{ steps.release.outputs.checksum }}
+          DOWNLOAD_URL: ${{ steps.release.outputs.download_url }}
+          PACKAGE_URL: ${{ steps.release.outputs.package_url }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          TMP_PACKAGE="$(mktemp)"
+          TMP_LATEST="$(mktemp)"
+          trap 'rm -f "$TMP_PACKAGE" "$TMP_LATEST"' EXIT
+
+          SERVED_PACKAGE_CHECKSUM=""
+          SERVED_LATEST_CHECKSUM=""
+
+          for attempt in $(seq 1 10); do
+            curl --fail --silent --show-error --location "$PACKAGE_URL" --output "$TMP_PACKAGE"
+            curl --fail --silent --show-error --location "$DOWNLOAD_URL" --output "$TMP_LATEST"
+
+            SERVED_PACKAGE_CHECKSUM="$(shasum -a 256 "$TMP_PACKAGE" | awk '{print $1}')"
+            SERVED_LATEST_CHECKSUM="$(shasum -a 256 "$TMP_LATEST" | awk '{print $1}')"
+
+            if [ "$SERVED_PACKAGE_CHECKSUM" = "$EXPECTED_CHECKSUM" ] && [ "$SERVED_LATEST_CHECKSUM" = "$EXPECTED_CHECKSUM" ]; then
+              {
+                echo "published_checksum=$EXPECTED_CHECKSUM"
+                echo "published_attempt=$attempt"
+              } >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            if [ "$attempt" -lt 10 ]; then
+              sleep 5
+            fi
+          done
+
+          echo "Uploaded release archive is not yet being served at the expected checksum." >&2
+          echo "Expected checksum: $EXPECTED_CHECKSUM" >&2
+          echo "Package URL checksum: $SERVED_PACKAGE_CHECKSUM" >&2
+          echo "Latest URL checksum: $SERVED_LATEST_CHECKSUM" >&2
+          exit 1
+
       - name: Trigger PeakURL.org manifest update workflow
         env:
           PEAKURL_ORG_UPDATE_TOKEN: ${{ secrets.PEAKURL_ORG_UPDATE_TOKEN }}
@@ -97,7 +140,7 @@ jobs:
           RELEASED_AT: ${{ steps.release.outputs.generated_at }}
           DOWNLOAD_URL: ${{ steps.release.outputs.download_url }}
           PACKAGE_URL: ${{ steps.release.outputs.package_url }}
-          CHECKSUM: ${{ steps.release.outputs.checksum }}
+          CHECKSUM: ${{ steps.published.outputs.published_checksum }}
           MINIMUM_PEAKURL_VERSION: ${{ steps.release.outputs.version }}
         shell: bash
         run: |
@@ -126,7 +169,8 @@ jobs:
             echo "- Version: \`${{ steps.release.outputs.version }}\`"
             echo "- Versioned archive: \`s3://${{ env.R2_BUCKET }}/${{ steps.release.outputs.versioned_archive_key }}\`"
             echo "- Latest archive: \`s3://${{ env.R2_BUCKET }}/latest.zip\`"
-            echo "- SHA-256: \`${{ steps.release.outputs.checksum }}\`"
+            echo "- SHA-256: \`${{ steps.published.outputs.published_checksum }}\`"
+            echo "- Public archive verification attempts: \`${{ steps.published.outputs.published_attempt }}\`"
             echo "- PeakURL.org handoff: \`workflow_dispatch -> PeakURL/PeakURL.org/.github/workflows/update-release.yml\`"
             echo
             echo "## PeakURL.org update.json values"
@@ -137,7 +181,7 @@ jobs:
             echo '  "releasedAt": "${{ steps.release.outputs.generated_at }}",'
             echo '  "downloadUrl": "${{ steps.release.outputs.download_url }}",'
             echo '  "packageUrl": "${{ steps.release.outputs.package_url }}",'
-            echo '  "checksumSha256": "${{ steps.release.outputs.checksum }}",'
+            echo '  "checksumSha256": "${{ steps.published.outputs.published_checksum }}",'
             echo '  "minimumPeakurlVersion": "${{ steps.release.outputs.version }}"'
             echo '}'
             echo '```'

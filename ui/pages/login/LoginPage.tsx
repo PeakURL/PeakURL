@@ -90,6 +90,20 @@ const ApiErrorState = ({ onRetry }) => (
 const PEAKURL_URL =
 	'https://peakurl.org?utm_source=peakurl_login&utm_medium=login&utm_campaign=powered_by';
 
+const getSafeRedirectPath = (candidate) => {
+	if (typeof candidate !== 'string') {
+		return '';
+	}
+
+	const value = candidate.trim();
+
+	if (!value.startsWith('/') || value.startsWith('//')) {
+		return '';
+	}
+
+	return value;
+};
+
 function LoginPage() {
 	const location = useLocation();
 	const navigate = useNavigate();
@@ -114,14 +128,29 @@ function LoginPage() {
 	const isPending = isLoading || isFetching;
 	const submitPending = isLoggingIn || isVerifying;
 	const redirectTo = useMemo(() => {
+		const searchParams = new URLSearchParams(location.search || '');
+		const redirectParam = getSafeRedirectPath(
+			searchParams.get('redirect') || ''
+		);
+
+		if (redirectParam) {
+			return redirectParam;
+		}
+
 		const from = location.state?.from;
 
 		if (from?.pathname) {
-			return `${from.pathname}${from.search || ''}${from.hash || ''}`;
+			const fromPath = getSafeRedirectPath(
+				`${from.pathname}${from.search || ''}${from.hash || ''}`
+			);
+
+			if (fromPath) {
+				return fromPath;
+			}
 		}
 
 		return '/dashboard';
-	}, [location.state]);
+	}, [location.search, location.state]);
 
 	if (isPending) {
 		return <PageLoader />;

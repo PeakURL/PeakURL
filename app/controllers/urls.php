@@ -37,6 +37,57 @@ class Urls_Controller {
 	}
 
 	/**
+	 * Extract a stats-preview short code from a public route parameter.
+	 *
+	 * A trailing `+` opens the dashboard stats drawer instead of resolving the
+	 * destination URL directly.
+	 *
+	 * @param string $id Raw public route identifier.
+	 * @return string|null Sanitised short code or null when not a stats path.
+	 * @since 1.0.0
+	 */
+	private function get_stats_preview_short_code( string $id ): ?string {
+		$matches = array();
+
+		if ( 1 !== preg_match( '/^([a-z0-9-]+)\+$/i', trim( $id ), $matches ) ) {
+			return null;
+		}
+
+		$short_code = strtolower( trim( (string) ( $matches[1] ?? '' ) ) );
+
+		return '' !== $short_code ? $short_code : null;
+	}
+
+	/**
+	 * Build an app-relative URL that preserves subdirectory installs.
+	 *
+	 * @param Request $request Current request instance.
+	 * @param string  $suffix  Root-relative path to append.
+	 * @return string URL path relative to the active install root.
+	 * @since 1.0.0
+	 */
+	private function build_runtime_url( Request $request, string $suffix ): string {
+		$script_name = str_replace(
+			'\\',
+			'/',
+			(string) $request->get_server_param( 'SCRIPT_NAME', '/index.php' ),
+		);
+		$base_path   = dirname( $script_name );
+
+		if ( '.' === $base_path || '/' === $base_path ) {
+			$base_path = '';
+		} else {
+			$base_path = rtrim( $base_path, '/' );
+		}
+
+		$normalized_suffix = '/' . ltrim( $suffix, '/' );
+
+		return '' === $base_path
+			? $normalized_suffix
+			: $base_path . $normalized_suffix;
+	}
+
+	/**
 	 * List URLs with pagination and sorting (GET /api/v1/urls).
 	 *
 	 * @param Request $request Incoming HTTP request with query parameters.
@@ -187,8 +238,24 @@ class Urls_Controller {
 	 * @since 1.0.0
 	 */
 	public function redirect( Request $request ): array {
+		$route_id                 = (string) $request->get_route_param( 'id' );
+		$stats_preview_short_code = $this->get_stats_preview_short_code( $route_id );
+
+		if (
+			null !== $stats_preview_short_code &&
+			in_array( $request->get_method(), array( 'GET', 'HEAD' ), true )
+		) {
+			return Json_Response::redirect(
+				$this->build_runtime_url(
+					$request,
+					'/dashboard/links?stats=' .
+						rawurlencode( $stats_preview_short_code ),
+				),
+			);
+		}
+
 		$result = $this->data_store->resolve_public_link_access(
-			(string) $request->get_route_param( 'id' ),
+			$route_id,
 			$request,
 		);
 

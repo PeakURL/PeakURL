@@ -114,7 +114,7 @@ class Router {
 			$params = array();
 
 			foreach ( $route['params'] as $index => $name ) {
-				$params[ $name ] = urldecode( $matches[ $index + 1 ] ?? '' );
+				$params[ $name ] = rawurldecode( $matches[ $index + 1 ] ?? '' );
 			}
 
 			$request->set_route_params( $params );

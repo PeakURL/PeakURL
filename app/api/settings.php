@@ -50,7 +50,7 @@ class Settings_API {
 	 * @since 1.0.0
 	 */
 	public function get_option( string $setting_key ): ?string {
-		if ( ! $this->db->table_exists( 'settings' ) ) {
+		if ( ! $this->has_table() ) {
 			return null;
 		}
 
@@ -64,6 +64,58 @@ class Settings_API {
 		}
 
 		return (string) $row['setting_value'];
+	}
+
+	/**
+	 * Fetch multiple setting values by key.
+	 *
+	 * @param array<int, string> $setting_keys Setting keys.
+	 * @return array<string, string> Stored key-value pairs.
+	 * @since 1.0.0
+	 */
+	public function get_options( array $setting_keys ): array {
+		$setting_keys = array_values(
+			array_filter(
+				array_map(
+					static fn( $value ): string => is_string( $value ) ? trim( $value ) : '',
+					$setting_keys,
+				),
+				static fn( string $value ): bool => '' !== $value,
+			),
+		);
+
+		if ( empty( $setting_keys ) || ! $this->has_table() ) {
+			return array();
+		}
+
+		$placeholders = implode(
+			', ',
+			array_fill( 0, count( $setting_keys ), '?' ),
+		);
+		$statement    = $this->db->prepare(
+			'SELECT setting_key, setting_value FROM settings WHERE setting_key IN (' . $placeholders . ')',
+		);
+		$statement->execute( $setting_keys );
+		$rows   = $statement->fetchAll();
+		$result = array();
+
+		if ( ! is_array( $rows ) ) {
+			return $result;
+		}
+
+		foreach ( $rows as $row ) {
+			if (
+				! is_array( $row ) ||
+				! isset( $row['setting_key'] ) ||
+				! array_key_exists( 'setting_value', $row )
+			) {
+				continue;
+			}
+
+			$result[ (string) $row['setting_key'] ] = (string) $row['setting_value'];
+		}
+
+		return $result;
 	}
 
 	/**
@@ -95,7 +147,7 @@ class Settings_API {
 		string $updated_at,
 		bool $autoload = true
 	): void {
-		if ( ! $this->db->table_exists( 'settings' ) ) {
+		if ( ! $this->has_table() ) {
 			return;
 		}
 
@@ -133,7 +185,7 @@ class Settings_API {
 			),
 		);
 
-		if ( empty( $setting_keys ) || ! $this->db->table_exists( 'settings' ) ) {
+		if ( empty( $setting_keys ) || ! $this->has_table() ) {
 			return;
 		}
 
@@ -145,5 +197,15 @@ class Settings_API {
 			'DELETE FROM settings WHERE setting_key IN (' . $placeholders . ')',
 		);
 		$statement->execute( $setting_keys );
+	}
+
+	/**
+	 * Determine whether the settings table is available.
+	 *
+	 * @return bool
+	 * @since 1.0.0
+	 */
+	public function has_table(): bool {
+		return $this->db->table_exists( 'settings' );
 	}
 }

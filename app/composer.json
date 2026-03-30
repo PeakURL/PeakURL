@@ -15,6 +15,9 @@
 		"wp-coding-standards/wpcs": "^3.2"
 	},
 	"autoload": {
+		"files": [
+			"includes/functions.php"
+		],
 		"classmap": [
 			"store.php",
 			"api/",

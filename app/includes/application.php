@@ -77,6 +77,10 @@ class Application {
 				$exception->get_data(),
 			);
 		} catch ( Throwable $exception ) {
+			if ( ! empty( $this->config['PEAKURL_DEBUG'] ) ) {
+				error_log( (string) $exception );
+			}
+
 			$response = Json_Response::error(
 				'Unexpected application error.',
 				500,

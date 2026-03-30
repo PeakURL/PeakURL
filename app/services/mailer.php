@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class Mailer_Service {
+class PeakURL_Mail {
 
 	/**
 	 * Runtime configuration values.
@@ -43,15 +43,29 @@ class Mailer_Service {
 	private Settings_API $settings_api;
 
 	/**
-	 * Create a new mailer service.
+	 * Crypto helper for stored SMTP credentials.
 	 *
-	 * @param array<string, mixed> $config       Runtime configuration.
-	 * @param Settings_API         $settings_api Settings API helper.
+	 * @var Crypto_Service
 	 * @since 1.0.0
 	 */
-	public function __construct( array $config, Settings_API $settings_api ) {
-		$this->config       = $config;
-		$this->settings_api = $settings_api;
+	private Crypto_Service $crypto_service;
+
+	/**
+	 * Create a new mailer service.
+	 *
+	 * @param array<string, mixed> $config         Runtime configuration.
+	 * @param Settings_API         $settings_api   Settings API helper.
+	 * @param Crypto_Service       $crypto_service Crypto helper.
+	 * @since 1.0.0
+	 */
+	public function __construct(
+		array $config,
+		Settings_API $settings_api,
+		Crypto_Service $crypto_service
+	) {
+		$this->config         = $config;
+		$this->settings_api   = $settings_api;
+		$this->crypto_service = $crypto_service;
 	}
 
 	/**
@@ -61,30 +75,23 @@ class Mailer_Service {
 	 * @since 1.0.0
 	 */
 	public function get_status(): array {
+		$settings      = $this->get_runtime_mail_settings();
 		$configuration = $this->get_configuration_target();
-		$capability    = $this->get_dashboard_capability( $configuration );
+		$capability    = $this->get_dashboard_capability();
 
 		return array(
-			'driver'                 => $this->get_mail_driver(),
+			'driver'                 => $settings['driver'],
 			'fromEmail'              => $this->get_from_email(),
 			'fromName'               => $this->get_from_name(),
-			'smtpHost'               => trim(
-				(string) ( $this->config['PEAKURL_SMTP_HOST'] ?? '' )
-			),
-			'smtpPort'               => (int) ( $this->config['PEAKURL_SMTP_PORT'] ?? 587 ),
-			'smtpEncryption'         => '' === $this->get_smtp_encryption()
+			'smtpHost'               => $settings['smtpHost'],
+			'smtpPort'               => $settings['smtpPort'],
+			'smtpEncryption'         => '' === $settings['smtpEncryption']
 				? 'none'
-				: $this->get_smtp_encryption(),
-			'smtpAuth'               => ! empty( $this->config['PEAKURL_SMTP_AUTH'] ),
-			'smtpUsername'           => trim(
-				(string) ( $this->config['PEAKURL_SMTP_USERNAME'] ?? '' )
-			),
-			'smtpPasswordConfigured' => '' !== trim(
-				(string) ( $this->config['PEAKURL_SMTP_PASSWORD'] ?? '' )
-			),
-			'smtpPasswordHint'       => $this->mask_secret(
-				trim( (string) ( $this->config['PEAKURL_SMTP_PASSWORD'] ?? '' ) )
-			),
+				: $settings['smtpEncryption'],
+			'smtpAuth'               => $settings['smtpAuth'],
+			'smtpUsername'           => $settings['smtpUsername'],
+			'smtpPasswordConfigured' => '' !== $settings['smtpPassword'],
+			'smtpPasswordHint'       => $this->mask_secret( $settings['smtpPassword'] ),
 			'configurationLabel'     => $configuration['label'],
 			'configurationPath'      => $configuration['path'],
 			'canManageFromDashboard' => $capability['allowed'],
@@ -93,7 +100,7 @@ class Mailer_Service {
 	}
 
 	/**
-	 * Persist dashboard-managed mail settings into the active runtime target.
+	 * Persist dashboard-managed mail settings into the settings table.
 	 *
 	 * @param string               $app_path Absolute path to the app directory.
 	 * @param array<string, mixed> $config   Current runtime configuration.
@@ -108,73 +115,50 @@ class Mailer_Service {
 		array $config,
 		array $input
 	): array {
-		$configuration = $this->get_configuration_target();
-		$capability    = $this->get_dashboard_capability( $configuration );
+		$capability = $this->get_dashboard_capability();
 
 		if ( ! $capability['allowed'] ) {
 			throw new RuntimeException( (string) $capability['reason'] );
 		}
 
-		$current_driver     = trim(
-			(string) ( $config['PEAKURL_MAIL_DRIVER'] ?? 'mail' )
-		);
-		$current_smtp_host  = trim(
-			(string) ( $config['PEAKURL_SMTP_HOST'] ?? '' )
-		);
-		$current_smtp_port  = (string) ( $config['PEAKURL_SMTP_PORT'] ?? 587 );
-		$current_encryption = trim(
-			(string) ( $config['PEAKURL_SMTP_ENCRYPTION'] ?? 'tls' )
-		);
-		$current_auth       = ! empty( $config['PEAKURL_SMTP_AUTH'] );
-		$current_username   = trim(
-			(string) ( $config['PEAKURL_SMTP_USERNAME'] ?? '' )
-		);
-		$current_password   = trim(
-			(string) ( $config['PEAKURL_SMTP_PASSWORD'] ?? '' )
-		);
+		$current = $this->get_runtime_mail_settings();
 
 		$driver = $this->normalize_driver(
-			(string) ( $input['driver'] ?? $current_driver )
+			(string) ( $input['driver'] ?? $current['driver'] )
 		);
 		$values = array(
-			'PEAKURL_MAIL_DRIVER'     => $driver,
-			'PEAKURL_SMTP_HOST'       => trim(
-				(string) ( $input['smtpHost'] ?? $current_smtp_host )
+			'driver'         => $driver,
+			'smtpHost'       => trim(
+				(string) ( $input['smtpHost'] ?? $current['smtpHost'] )
 			),
-			'PEAKURL_SMTP_PORT'       => (string) (int) ( $input['smtpPort'] ?? $current_smtp_port ),
-			'PEAKURL_SMTP_ENCRYPTION' => $this->normalize_encryption(
-				(string) ( $input['smtpEncryption'] ?? $current_encryption )
+			'smtpPort'       => (string) (int) ( $input['smtpPort'] ?? $current['smtpPort'] ),
+			'smtpEncryption' => $this->normalize_encryption(
+				(string) ( $input['smtpEncryption'] ?? $current['smtpEncryption'] )
 			),
-			'PEAKURL_SMTP_AUTH'       => $this->normalize_auth_flag(
-				$input['smtpAuth'] ?? $current_auth
+			'smtpAuth'       => $this->normalize_auth_flag(
+				$input['smtpAuth'] ?? $current['smtpAuth']
 			)
 				? 'true'
 				: 'false',
-			'PEAKURL_SMTP_USERNAME'   => trim(
-				(string) ( $input['smtpUsername'] ?? $current_username )
+			'smtpUsername'   => trim(
+				(string) ( $input['smtpUsername'] ?? $current['smtpUsername'] )
 			),
-			'PEAKURL_SMTP_PASSWORD'   => trim(
+			'smtpPassword'   => trim(
 				(string) ( $input['smtpPassword'] ?? '' )
 			),
 		);
 
-		if ( '' === $values['PEAKURL_SMTP_PASSWORD'] ) {
-			$values['PEAKURL_SMTP_PASSWORD'] = $current_password;
+		if ( '' === $values['smtpPassword'] ) {
+			$values['smtpPassword'] = $current['smtpPassword'];
 		}
 
 		$this->validate_configuration( $values );
-
-		$runtime_values = Setup_Config_Service::config_values_from_runtime_config( $config );
-
-		foreach ( $values as $key => $value ) {
-			$runtime_values[ $key ] = $value;
-		}
-
-		$this->write_runtime_configuration( $app_path, $runtime_values );
+		$this->persist_settings( $app_path, $config, $values );
 
 		return ( new self(
-			$this->merge_config_values( $config, $runtime_values ),
-			$this->settings_api
+			$config,
+			$this->settings_api,
+			$this->crypto_service,
 		) )->get_status();
 	}
 
@@ -219,11 +203,34 @@ class Mailer_Service {
 			"Reset your password: {$reset_url}\n\n" .
 			"This link expires in 1 hour. If you did not request this change, you can ignore this email.\n";
 
-		$this->send_message( $email, $recipient, $subject, $html_body, $text_body );
+		$this->send( $email, $recipient, $subject, $html_body, $text_body );
 	}
 
 	/**
 	 * Send a fully composed email using the active transport.
+	 *
+	 * @param string $to_email  Recipient email address.
+	 * @param string $to_name   Recipient display name.
+	 * @param string $subject   Subject line.
+	 * @param string $html_body HTML body.
+	 * @param string $text_body Plain-text body.
+	 * @return void
+	 *
+	 * @throws RuntimeException When delivery fails.
+	 * @since 1.0.0
+	 */
+	public function send(
+		string $to_email,
+		string $to_name,
+		string $subject,
+		string $html_body,
+		string $text_body = ''
+	): void {
+		$this->send_message( $to_email, $to_name, $subject, $html_body, $text_body );
+	}
+
+	/**
+	 * Deliver a fully composed email with the active transport.
 	 *
 	 * @param string $to_email  Recipient email address.
 	 * @param string $to_name   Recipient display name.
@@ -242,7 +249,8 @@ class Mailer_Service {
 		string $html_body,
 		string $text_body
 	): void {
-		$mailer = new PHPMailer( true );
+		$mailer   = new PHPMailer( true );
+		$settings = $this->get_runtime_mail_settings();
 
 		try {
 			// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer public properties use upstream casing.
@@ -255,15 +263,13 @@ class Mailer_Service {
 			$mailer->Body    = $html_body;
 			$mailer->AltBody = $text_body;
 
-			if ( 'smtp' === $this->get_mail_driver() ) {
+			if ( 'smtp' === $settings['driver'] ) {
 				$mailer->isSMTP();
-				$mailer->Host        = trim(
-					(string) ( $this->config['PEAKURL_SMTP_HOST'] ?? '' )
-				);
-				$mailer->Port        = (int) ( $this->config['PEAKURL_SMTP_PORT'] ?? 587 );
-				$mailer->SMTPAuth    = ! empty( $this->config['PEAKURL_SMTP_AUTH'] );
+				$mailer->Host        = $settings['smtpHost'];
+				$mailer->Port        = $settings['smtpPort'];
+				$mailer->SMTPAuth    = $settings['smtpAuth'];
 				$encryption          = $this->normalize_encryption(
-					(string) ( $this->config['PEAKURL_SMTP_ENCRYPTION'] ?? 'tls' )
+					$settings['smtpEncryption']
 				);
 				$mailer->SMTPAutoTLS = 'tls' === $encryption;
 
@@ -274,12 +280,8 @@ class Mailer_Service {
 				}
 
 				if ( $mailer->SMTPAuth ) {
-					$mailer->Username = trim(
-						(string) ( $this->config['PEAKURL_SMTP_USERNAME'] ?? '' )
-					);
-					$mailer->Password = trim(
-						(string) ( $this->config['PEAKURL_SMTP_PASSWORD'] ?? '' )
-					);
+					$mailer->Username = $settings['smtpUsername'];
+					$mailer->Password = $settings['smtpPassword'];
 				}
 			} else {
 				$mailer->isMail();
@@ -306,15 +308,15 @@ class Mailer_Service {
 	 * @since 1.0.0
 	 */
 	private function validate_configuration( array $values ): void {
-		if ( 'smtp' !== $values['PEAKURL_MAIL_DRIVER'] ) {
+		if ( 'smtp' !== $values['driver'] ) {
 			return;
 		}
 
-		if ( '' === $values['PEAKURL_SMTP_HOST'] ) {
+		if ( '' === $values['smtpHost'] ) {
 			throw new RuntimeException( 'SMTP host is required when SMTP is enabled.' );
 		}
 
-		$smtp_port = (int) $values['PEAKURL_SMTP_PORT'];
+		$smtp_port = (int) $values['smtpPort'];
 
 		if ( $smtp_port < 1 || $smtp_port > 65535 ) {
 			throw new RuntimeException(
@@ -322,17 +324,17 @@ class Mailer_Service {
 			);
 		}
 
-		if ( 'true' !== $values['PEAKURL_SMTP_AUTH'] ) {
+		if ( 'true' !== $values['smtpAuth'] ) {
 			return;
 		}
 
-		if ( '' === $values['PEAKURL_SMTP_USERNAME'] ) {
+		if ( '' === $values['smtpUsername'] ) {
 			throw new RuntimeException(
 				'SMTP username is required when SMTP authentication is enabled.',
 			);
 		}
 
-		if ( '' === $values['PEAKURL_SMTP_PASSWORD'] ) {
+		if ( '' === $values['smtpPassword'] ) {
 			throw new RuntimeException(
 				'SMTP password is required when SMTP authentication is enabled.',
 			);
@@ -340,60 +342,29 @@ class Mailer_Service {
 	}
 
 	/**
-	 * Determine whether PeakURL is running from the source checkout.
-	 *
-	 * @return bool
-	 * @since 1.0.0
-	 */
-	private function is_source_checkout(): bool {
-		return file_exists( ABSPATH . 'package.json' ) || is_dir( ABSPATH . '.git' );
-	}
-
-	/**
-	 * Return the active runtime configuration target details.
+	 * Return the database-backed configuration target details.
 	 *
 	 * @return array{label: string, path: string}
 	 * @since 1.0.0
 	 */
 	private function get_configuration_target(): array {
-		if ( $this->is_source_checkout() ) {
-			return array(
-				'label' => 'app/.env',
-				'path'  => ABSPATH . 'app/.env',
-			);
-		}
-
 		return array(
-			'label' => 'config.php',
-			'path'  => Setup_Config_Service::get_config_path( ABSPATH . 'app' ),
+			'label' => 'settings table',
+			'path'  => 'settings',
 		);
 	}
 
 	/**
 	 * Determine whether the dashboard can update the mail configuration.
 	 *
-	 * @param array{label: string, path: string} $configuration Current writable target.
 	 * @return array{allowed: bool, reason: string|null}
 	 * @since 1.0.0
 	 */
-	private function get_dashboard_capability( array $configuration ): array {
-		if (
-			file_exists( $configuration['path'] ) &&
-			! is_writable( $configuration['path'] )
-		) {
+	private function get_dashboard_capability(): array {
+		if ( ! $this->settings_api->has_table() ) {
 			return array(
 				'allowed' => false,
-				'reason'  => $configuration['label'] . ' is not writable.',
-			);
-		}
-
-		if (
-			! file_exists( $configuration['path'] ) &&
-			! is_writable( dirname( $configuration['path'] ) )
-		) {
-			return array(
-				'allowed' => false,
-				'reason'  => 'The runtime configuration directory is not writable.',
+				'reason'  => 'The settings table is not available yet.',
 			);
 		}
 
@@ -404,56 +375,83 @@ class Mailer_Service {
 	}
 
 	/**
-	 * Persist the normalized runtime values into .env or config.php.
+	 * Persist the normalized runtime values into the settings table.
 	 *
-	 * @param string                $app_path Absolute path to the app directory.
-	 * @param array<string, string> $values   Flat runtime values.
+	 * @param string               $app_path Absolute path to the app directory.
+	 * @param array<string, mixed> $config   Current runtime configuration.
+	 * @param array<string, string> $values  Normalized mail settings.
 	 * @return void
+	 *
+	 * @throws RuntimeException When encrypted settings cannot be persisted.
 	 * @since 1.0.0
 	 */
-	private function write_runtime_configuration(
+	private function persist_settings(
 		string $app_path,
+		array $config,
 		array $values
 	): void {
-		if ( $this->is_source_checkout() ) {
-			Setup_Config_Service::write_env_overrides(
-				$app_path . '/.env',
-				array(
-					'PEAKURL_MAIL_DRIVER'     => $values['PEAKURL_MAIL_DRIVER'],
-					'PEAKURL_SMTP_HOST'       => $values['PEAKURL_SMTP_HOST'],
-					'PEAKURL_SMTP_PORT'       => $values['PEAKURL_SMTP_PORT'],
-					'PEAKURL_SMTP_ENCRYPTION' => $values['PEAKURL_SMTP_ENCRYPTION'],
-					'PEAKURL_SMTP_AUTH'       => $values['PEAKURL_SMTP_AUTH'],
-					'PEAKURL_SMTP_USERNAME'   => $values['PEAKURL_SMTP_USERNAME'],
-					'PEAKURL_SMTP_PASSWORD'   => $values['PEAKURL_SMTP_PASSWORD'],
-				),
-				'PeakURL could not update app/.env with the mail settings.',
-				'# PeakURL local development overrides'
-			);
-			return;
+		$updated_at = gmdate( 'Y-m-d H:i:s' );
+		$password   = $values['smtpPassword'];
+
+		if ( '' !== $password && ! $this->crypto_service->has_auth_keys() ) {
+			$this->crypto_service = new Crypto_Service( $config );
+			$this->crypto_service->ensure_persisted_auth_keys( $app_path );
 		}
 
-		Setup_Config_Service::write_config_file( $app_path, $values );
+		$this->settings_api->update_option( 'mail_driver', $values['driver'], $updated_at, false );
+		$this->settings_api->update_option( 'smtp_host', $values['smtpHost'], $updated_at, false );
+		$this->settings_api->update_option( 'smtp_port', $values['smtpPort'], $updated_at, false );
+		$this->settings_api->update_option( 'smtp_encryption', $values['smtpEncryption'], $updated_at, false );
+		$this->settings_api->update_option( 'smtp_auth', $values['smtpAuth'], $updated_at, false );
+		$this->settings_api->update_option( 'smtp_username', $values['smtpUsername'], $updated_at, false );
+		$this->settings_api->update_option(
+			'smtp_password_encrypted',
+			'' === $password ? '' : $this->crypto_service->encrypt( $password ),
+			$updated_at,
+			false,
+		);
 	}
 
 	/**
-	 * Merge normalized runtime values back into the config array shape.
+	 * Resolve the active mail settings, preferring the settings table.
 	 *
-	 * @param array<string, mixed>  $config Original runtime config.
-	 * @param array<string, string> $values Updated config values.
 	 * @return array<string, mixed>
 	 * @since 1.0.0
 	 */
-	private function merge_config_values( array $config, array $values ): array {
-		$config['PEAKURL_MAIL_DRIVER']     = $values['PEAKURL_MAIL_DRIVER'];
-		$config['PEAKURL_SMTP_HOST']       = $values['PEAKURL_SMTP_HOST'];
-		$config['PEAKURL_SMTP_PORT']       = (int) $values['PEAKURL_SMTP_PORT'];
-		$config['PEAKURL_SMTP_ENCRYPTION'] = $values['PEAKURL_SMTP_ENCRYPTION'];
-		$config['PEAKURL_SMTP_AUTH']       = 'true' === $values['PEAKURL_SMTP_AUTH'];
-		$config['PEAKURL_SMTP_USERNAME']   = $values['PEAKURL_SMTP_USERNAME'];
-		$config['PEAKURL_SMTP_PASSWORD']   = $values['PEAKURL_SMTP_PASSWORD'];
+	private function get_runtime_mail_settings(): array {
+		$options = $this->settings_api->get_options(
+			array(
+				'mail_driver',
+				'smtp_host',
+				'smtp_port',
+				'smtp_encryption',
+				'smtp_auth',
+				'smtp_username',
+				'smtp_password_encrypted',
+			),
+		);
 
-		return $config;
+		return array(
+			'driver'         => $this->normalize_driver(
+				(string) ( $options['mail_driver'] ?? 'mail' )
+			),
+			'smtpHost'       => trim(
+				(string) ( $options['smtp_host'] ?? '' )
+			),
+			'smtpPort'       => (int) ( $options['smtp_port'] ?? 587 ),
+			'smtpEncryption' => $this->normalize_encryption(
+				(string) ( $options['smtp_encryption'] ?? 'tls' )
+			),
+			'smtpAuth'       => $this->normalize_auth_flag(
+				$options['smtp_auth'] ?? false
+			),
+			'smtpUsername'   => trim(
+				(string) ( $options['smtp_username'] ?? '' )
+			),
+			'smtpPassword'   => $this->decrypt_secret_value(
+				(string) ( $options['smtp_password_encrypted'] ?? '' )
+			),
+		);
 	}
 
 	/**
@@ -510,27 +508,18 @@ class Mailer_Service {
 	}
 
 	/**
-	 * Get the currently configured mail driver.
+	 * Decrypt a stored secret value with plain-text fallback.
 	 *
+	 * @param string $value Stored value.
 	 * @return string
 	 * @since 1.0.0
 	 */
-	private function get_mail_driver(): string {
-		return $this->normalize_driver(
-			(string) ( $this->config['PEAKURL_MAIL_DRIVER'] ?? 'mail' )
-		);
-	}
-
-	/**
-	 * Get the currently configured SMTP encryption mode.
-	 *
-	 * @return string
-	 * @since 1.0.0
-	 */
-	private function get_smtp_encryption(): string {
-		return $this->normalize_encryption(
-			(string) ( $this->config['PEAKURL_SMTP_ENCRYPTION'] ?? 'tls' )
-		);
+	private function decrypt_secret_value( string $value ): string {
+		try {
+			return $this->crypto_service->decrypt( $value );
+		} catch ( RuntimeException $exception ) {
+			return '';
+		}
 	}
 
 	/**

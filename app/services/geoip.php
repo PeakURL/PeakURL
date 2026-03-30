@@ -75,6 +75,22 @@ class Geoip_Service {
 	private string $peakurl_version;
 
 	/**
+	 * Settings API for database-backed credentials.
+	 *
+	 * @var Settings_API
+	 * @since 1.0.0
+	 */
+	private Settings_API $settings_api;
+
+	/**
+	 * Crypto helper for stored credentials.
+	 *
+	 * @var Crypto_Service
+	 * @since 1.0.0
+	 */
+	private Crypto_Service $crypto_service;
+
+	/**
 	 * Cached MaxMind reader instance.
 	 *
 	 * @var Reader|null
@@ -93,25 +109,31 @@ class Geoip_Service {
 	/**
 	 * Create a GeoIP service instance.
 	 *
-	 * @param array<string, mixed> $config Runtime configuration map.
+	 * @param array<string, mixed> $config         Runtime configuration map.
+	 * @param Settings_API         $settings_api   Settings API helper.
+	 * @param Crypto_Service       $crypto_service Crypto helper.
 	 * @since 1.0.0
 	 */
-	public function __construct( array $config ) {
+	public function __construct(
+		array $config,
+		Settings_API $settings_api,
+		Crypto_Service $crypto_service
+	) {
 		$this->content_dir     = trim(
 			(string) ( $config['PEAKURL_CONTENT_DIR'] ?? ABSPATH . 'content' ),
 		);
 		$this->database_path   = trim(
 			(string) ( $config['PEAKURL_GEOIP_DB_PATH'] ?? '' ),
 		);
-		$this->account_id      = trim(
-			(string) ( $config['PEAKURL_MAXMIND_ACCOUNT_ID'] ?? '' ),
-		);
-		$this->license_key     = trim(
-			(string) ( $config['PEAKURL_MAXMIND_LICENSE_KEY'] ?? '' ),
-		);
 		$this->peakurl_version = trim(
-			(string) ( $config['PEAKURL_VERSION'] ?? '0.0.0' ),
+			(string) ( $config[ PeakURL_Constants::CONFIG_VERSION ] ?? PeakURL_Constants::DEFAULT_VERSION ),
 		);
+		$this->settings_api    = $settings_api;
+		$this->crypto_service  = $crypto_service;
+
+		$credentials       = $this->get_runtime_credentials();
+		$this->account_id  = $credentials['accountId'];
+		$this->license_key = $credentials['licenseKey'];
 	}
 
 	/**
@@ -201,7 +223,7 @@ class Geoip_Service {
 	}
 
 	/**
-	 * Persist MaxMind credentials into the active runtime configuration file.
+	 * Persist MaxMind credentials into the settings table.
 	 *
 	 * @param string               $app_path  Absolute path to the app directory.
 	 * @param array<string, mixed> $config    Current runtime configuration.
@@ -224,12 +246,9 @@ class Geoip_Service {
 
 		$account_id      = trim( (string) ( $input['accountId'] ?? '' ) );
 		$license_key     = trim( (string) ( $input['licenseKey'] ?? '' ) );
-		$current_account = trim(
-			(string) ( $config['PEAKURL_MAXMIND_ACCOUNT_ID'] ?? '' ),
-		);
-		$current_license = trim(
-			(string) ( $config['PEAKURL_MAXMIND_LICENSE_KEY'] ?? '' ),
-		);
+		$current         = $this->get_runtime_credentials();
+		$current_account = $current['accountId'];
+		$current_license = $current['licenseKey'];
 
 		if ( '' !== $account_id && ! preg_match( '/^[0-9]{1,32}$/', $account_id ) ) {
 			throw new RuntimeException( 'MaxMind account ID must contain digits only.' );
@@ -259,22 +278,26 @@ class Geoip_Service {
 			}
 		}
 
-		$values                                = Setup_Config_Service::config_values_from_runtime_config( $config );
-		$values['PEAKURL_MAXMIND_ACCOUNT_ID']  = $account_id;
-		$values['PEAKURL_MAXMIND_LICENSE_KEY'] = $license_key;
-
-		if ( '' === trim( $values['PEAKURL_CONTENT_DIR'] ) ) {
-			$values['PEAKURL_CONTENT_DIR'] = dirname( $app_path ) . '/content';
+		if ( '' !== $license_key && ! $this->crypto_service->has_auth_keys() ) {
+			$this->crypto_service = new Crypto_Service( $config );
+			$this->crypto_service->ensure_persisted_auth_keys( $app_path );
 		}
 
-		if ( '' === trim( $values['PEAKURL_GEOIP_DB_PATH'] ) ) {
-			$values['PEAKURL_GEOIP_DB_PATH'] =
-				$values['PEAKURL_CONTENT_DIR'] . '/uploads/geoip/GeoLite2-City.mmdb';
-		}
+		$updated_at = gmdate( 'Y-m-d H:i:s' );
 
-		$this->write_runtime_configuration( $app_path, $values );
+		$this->settings_api->update_option( 'maxmind_account_id', $account_id, $updated_at, false );
+		$this->settings_api->update_option(
+			'maxmind_license_key_encrypted',
+			'' === $license_key ? '' : $this->crypto_service->encrypt( $license_key ),
+			$updated_at,
+			false,
+		);
 
-		return ( new self( $this->merge_config_values( $config, $values ) ) )->get_status();
+		return ( new self(
+			$config,
+			$this->settings_api,
+			$this->crypto_service,
+		) )->get_status();
 	}
 
 	/**
@@ -389,49 +412,10 @@ class Geoip_Service {
 	 * @since 1.0.0
 	 */
 	private function get_dashboard_capability(): array {
-		$configuration = $this->get_configuration_target();
-
-		if ( $this->is_source_checkout() ) {
-			if (
-				file_exists( $configuration['path'] ) &&
-				! is_writable( $configuration['path'] )
-			) {
-				return array(
-					'allowed' => false,
-					'reason'  => $configuration['label'] . ' is not writable.',
-				);
-			}
-
-			if (
-				! file_exists( $configuration['path'] ) &&
-				! is_writable( dirname( $configuration['path'] ) )
-				) {
-					return array(
-						'allowed' => false,
-						'reason'  => 'The app directory is not writable.',
-					);
-			}
-
-			return array(
-				'allowed' => true,
-				'reason'  => null,
-			);
-		}
-
-		if ( ! is_writable( ABSPATH ) ) {
+		if ( ! $this->settings_api->has_table() ) {
 			return array(
 				'allowed' => false,
-				'reason'  => 'The release root is not writable.',
-			);
-		}
-
-		if (
-			file_exists( $configuration['path'] ) &&
-			! is_writable( $configuration['path'] )
-		) {
-			return array(
-				'allowed' => false,
-				'reason'  => $configuration['label'] . ' is not writable.',
+				'reason'  => 'The settings table is not available yet.',
 			);
 		}
 
@@ -442,84 +426,16 @@ class Geoip_Service {
 	}
 
 	/**
-	 * Determine whether PeakURL is running from the source checkout.
+	 * Return the database-backed credentials target.
 	 *
-	 * @return bool True when the repo working copy is serving the runtime.
-	 * @since 1.0.0
-	 */
-	private function is_source_checkout(): bool {
-		return file_exists( ABSPATH . 'package.json' ) || is_dir( ABSPATH . '.git' );
-	}
-
-	/**
-	 * Return the active runtime configuration file target.
-	 *
-	 * @return array{label: string, path: string} Writable target details.
+	 * @return array{label: string, path: string}
 	 * @since 1.0.0
 	 */
 	private function get_configuration_target(): array {
-		if ( $this->is_source_checkout() ) {
-			return array(
-				'label' => 'app/.env',
-				'path'  => ABSPATH . 'app/.env',
-			);
-		}
-
 		return array(
-			'label' => 'config.php',
-			'path'  => Setup_Config_Service::get_config_path( ABSPATH . 'app' ),
+			'label' => 'settings table',
+			'path'  => 'settings',
 		);
-	}
-
-	/**
-	 * Persist runtime GeoIP configuration to the correct writable target.
-	 *
-	 * @param string                $app_path Absolute path to the app directory.
-	 * @param array<string, string> $values   Flat runtime config values.
-	 * @return void
-	 * @since 1.0.0
-	 */
-	private function write_runtime_configuration(
-		string $app_path,
-		array $values
-	): void {
-		if ( $this->is_source_checkout() ) {
-			Setup_Config_Service::write_env_overrides(
-				$app_path . '/.env',
-				array(
-					'PEAKURL_CONTENT_DIR'         => $this->normalize_env_path_value(
-						$values['PEAKURL_CONTENT_DIR'],
-					),
-					'PEAKURL_GEOIP_DB_PATH'       => $this->normalize_env_path_value(
-						$values['PEAKURL_GEOIP_DB_PATH'],
-					),
-					'PEAKURL_MAXMIND_ACCOUNT_ID'  => $values['PEAKURL_MAXMIND_ACCOUNT_ID'],
-					'PEAKURL_MAXMIND_LICENSE_KEY' => $values['PEAKURL_MAXMIND_LICENSE_KEY'],
-				),
-				'PeakURL could not update app/.env with the MaxMind credentials.',
-				'# PeakURL local development overrides'
-			);
-			return;
-		}
-
-		Setup_Config_Service::write_config_file( $app_path, $values );
-	}
-
-	/**
-	 * Normalize a path value before writing it into app/.env.
-	 *
-	 * @param string $value Absolute or relative path value.
-	 * @return string Relative path when it lives under the release root.
-	 * @since 1.0.0
-	 */
-	private function normalize_env_path_value( string $value ): string {
-		$root_path = rtrim( ABSPATH, DIRECTORY_SEPARATOR ) . DIRECTORY_SEPARATOR;
-
-		if ( String_Utils::starts_with( $value, $root_path ) ) {
-			return ltrim( substr( $value, strlen( $root_path ) ), DIRECTORY_SEPARATOR );
-		}
-
-		return $value;
 	}
 
 	/**
@@ -857,24 +773,29 @@ class Geoip_Service {
 	}
 
 	/**
-	 * Merge flat config values back into a runtime config array.
+	 * Resolve the active MaxMind credentials, preferring the settings table.
 	 *
-	 * @param array<string, mixed>  $config Base runtime config.
-	 * @param array<string, string> $values Flat config values.
-	 * @return array<string, mixed> Merged runtime config.
+	 * @return array{accountId: string, licenseKey: string}
 	 * @since 1.0.0
 	 */
-	private function merge_config_values( array $config, array $values ): array {
-		$config['PEAKURL_ENV']                 = $values['PEAKURL_ENV'];
-		$config['PEAKURL_DEBUG']               = 'true' === $values['PEAKURL_DEBUG'];
-		$config['SITE_URL']                    = $values['SITE_URL'];
-		$config['PEAKURL_UPDATE_MANIFEST_URL'] = $values['PEAKURL_UPDATE_MANIFEST_URL'];
-		$config['PEAKURL_CONTENT_DIR']         = $values['PEAKURL_CONTENT_DIR'];
-		$config['PEAKURL_GEOIP_DB_PATH']       = $values['PEAKURL_GEOIP_DB_PATH'];
-		$config['PEAKURL_MAXMIND_ACCOUNT_ID']  = $values['PEAKURL_MAXMIND_ACCOUNT_ID'];
-		$config['PEAKURL_MAXMIND_LICENSE_KEY'] = $values['PEAKURL_MAXMIND_LICENSE_KEY'];
+	private function get_runtime_credentials(): array {
+		$options = $this->settings_api->get_options(
+			array(
+				'maxmind_account_id',
+				'maxmind_license_key_encrypted',
+			),
+		);
 
-		return $config;
+		return array(
+			'accountId'  => trim(
+				(string) ( $options['maxmind_account_id'] ?? '' )
+			),
+			'licenseKey' => trim(
+				$this->decrypt_secret_value(
+					(string) ( $options['maxmind_license_key_encrypted'] ?? '' )
+				)
+			),
+		);
 	}
 
 	/**
@@ -895,6 +816,21 @@ class Geoip_Service {
 		return substr( $this->license_key, 0, 4 ) .
 			str_repeat( '•', strlen( $this->license_key ) - 8 ) .
 			substr( $this->license_key, -4 );
+	}
+
+	/**
+	 * Decrypt a stored secret value with plain-text fallback.
+	 *
+	 * @param string $value Stored value.
+	 * @return string
+	 * @since 1.0.0
+	 */
+	private function decrypt_secret_value( string $value ): string {
+		try {
+			return $this->crypto_service->decrypt( $value );
+		} catch ( RuntimeException $exception ) {
+			return '';
+		}
 	}
 
 	/**

@@ -203,7 +203,10 @@ trait Store_Helpers_Trait {
 	private function session_active_since(): string {
 		return gmdate(
 			'Y-m-d H:i:s',
-			time() - max( 0, (int) $this->config['SESSION_LIFETIME'] ),
+			time() - max(
+				0,
+				(int) ( $this->config[ PeakURL_Constants::CONFIG_SESSION_LIFETIME ] ?? PeakURL_Constants::DEFAULT_SESSION_LIFETIME ),
+			),
 		);
 	}
 

@@ -92,10 +92,12 @@ trait Store_Sessions_Trait {
 	 * @since 1.0.0
 	 */
 	private function find_session_by_request( Request $request ): ?array {
-		$cookie_name = (string) $this->config['SESSION_COOKIE_NAME'];
-		$token       = trim( (string) $request->get_cookie( $cookie_name, '' ) );
+		$cookie_name = (string) $this->config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME ];
+		$token       = $this->crypto_service->verify_session_token(
+			trim( (string) $request->get_cookie( $cookie_name, '' ) )
+		);
 
-		if ( '' === $token ) {
+		if ( null === $token || '' === $token ) {
 			return null;
 		}
 
@@ -123,6 +125,12 @@ trait Store_Sessions_Trait {
 		Request $request,
 		string $user_id
 	): void {
+		if ( ! $this->crypto_service->has_auth_keys() ) {
+			$this->crypto_service->ensure_persisted_auth_keys( ABSPATH . 'app' );
+			$this->config         = Runtime_Config::bootstrap( ABSPATH . 'app' );
+			$this->crypto_service = new Crypto_Service( $this->config );
+		}
+
 		$raw_token = bin2hex( random_bytes( 32 ) );
 		$metadata  = Visitor_Utils::parse_user_agent( $request->get_user_agent() );
 		$row       = array(
@@ -166,16 +174,16 @@ trait Store_Sessions_Trait {
 		);
 
 		$request->queue_cookie(
-			(string) $this->config['SESSION_COOKIE_NAME'],
-			$raw_token,
+			(string) $this->config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME ],
+			$this->crypto_service->sign_session_token( $raw_token ),
 			Security_Utils::session_cookie_options(
 				$this->config,
 				$request,
 				array(
-					'max-age' => (int) $this->config['SESSION_LIFETIME'],
+					'max-age' => (int) $this->config[ PeakURL_Constants::CONFIG_SESSION_LIFETIME ],
 					'expires' => gmdate(
 						'D, d M Y H:i:s T',
-						time() + (int) $this->config['SESSION_LIFETIME'],
+						time() + (int) $this->config[ PeakURL_Constants::CONFIG_SESSION_LIFETIME ],
 					),
 				)
 			),

@@ -283,7 +283,7 @@ function EmailDeliveryTab({
 									helperText={
 										status?.smtpPasswordConfigured
 											? `Saved password: ${status.smtpPasswordHint}`
-											: 'PeakURL stores this password in the active runtime config.'
+											: 'PeakURL stores this password encrypted in the settings database.'
 									}
 									required={!status?.smtpPasswordConfigured}
 								/>
@@ -296,10 +296,10 @@ function EmailDeliveryTab({
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div className="rounded-lg border border-stroke bg-surface-alt p-4">
 							<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
-								Configuration file
+								Storage
 							</p>
 							<p className="mt-2 text-sm font-medium text-heading">
-								{status?.configurationLabel || 'config.php'}
+								{status?.configurationLabel || 'settings table'}
 							</p>
 							<p className="mt-1 break-all text-xs text-text-muted">
 								{status?.configurationPath || 'Not available'}

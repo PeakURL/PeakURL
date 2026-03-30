@@ -42,7 +42,7 @@ require $autoload_path;
 // ── Load config and validate database name ──────────────────────
 
 $base_path     = dirname( __DIR__ );
-$config        = Config::load( $base_path );
+$config        = Runtime_Config::bootstrap( $base_path );
 $database_name = preg_replace(
 	'/[^A-Za-z0-9_]/',
 	'',

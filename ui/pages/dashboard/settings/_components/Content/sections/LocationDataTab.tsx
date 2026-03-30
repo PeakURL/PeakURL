@@ -101,7 +101,7 @@ function LocationDataTab({
 			? effectiveStatus?.accountId || ''
 			: accountIdInput;
 	const configurationLabel =
-		effectiveStatus?.configurationLabel || 'config.php';
+		effectiveStatus?.configurationLabel || 'settings table';
 	const configurationPath =
 		effectiveStatus?.configurationPath || configurationLabel;
 	const hasSavedCredentials = Boolean(
@@ -225,11 +225,11 @@ function LocationDataTab({
 						MaxMind Credentials
 					</h3>
 					<p className="text-sm leading-6 text-text-muted">
-						PeakURL stores these values in
+						PeakURL stores these values encrypted in the
 						<code className="mx-1 rounded bg-surface-alt px-1.5 py-0.5 text-xs">
 							{configurationLabel}
 						</code>
-						file so it can refresh the GeoLite2 City database later
+						so it can refresh the GeoLite2 City database later
 						without asking again.
 					</p>
 				</div>

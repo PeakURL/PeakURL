@@ -165,7 +165,7 @@ class Setup_Config_Service {
 		$site_url  = Install_Service::normalize_site_url_for_release(
 			(string) ( $input['site_url'] ?? '' ),
 		);
-		$db_prefix = Config::normalize_db_prefix(
+		$db_prefix = Runtime_Config::normalize_db_prefix(
 			trim( (string) ( $input['db_prefix'] ?? 'peakurl_' ) ),
 		);
 		$db_port   = (string) ( (int) ( $input['db_port'] ?? 3306 ) );
@@ -193,45 +193,37 @@ class Setup_Config_Service {
 		}
 
 		return array(
-			'PEAKURL_ENV'                 => 'production',
-			'PEAKURL_DEBUG'               => 'false',
-			'SITE_URL'                    => $site_url,
-			'PEAKURL_UPDATE_MANIFEST_URL' =>
-				'https://api.peakurl.org/v1/update',
-			'PEAKURL_CONTENT_DIR'         => self::default_content_directory( $app_path ),
-			'PEAKURL_GEOIP_DB_PATH'       => self::default_geoip_database_path( $app_path ),
-			'PEAKURL_MAXMIND_ACCOUNT_ID'  => '',
-			'PEAKURL_MAXMIND_LICENSE_KEY' => '',
-			'PEAKURL_MAIL_DRIVER'         => 'mail',
-			'PEAKURL_SMTP_HOST'           => '',
-			'PEAKURL_SMTP_PORT'           => '587',
-			'PEAKURL_SMTP_ENCRYPTION'     => 'tls',
-			'PEAKURL_SMTP_AUTH'           => 'false',
-			'PEAKURL_SMTP_USERNAME'       => '',
-			'PEAKURL_SMTP_PASSWORD'       => '',
-			'DB_HOST'                     => trim( (string) $input['db_host'] ),
-			'DB_PORT'                     => $db_port,
-			'DB_DATABASE'                 => trim( (string) $input['db_name'] ),
-			'DB_USERNAME'                 => trim( (string) $input['db_user'] ),
-			'DB_PASSWORD'                 => (string) ( $input['db_password'] ?? '' ),
-			'DB_CHARSET'                  => 'utf8mb4',
-			'DB_PREFIX'                   => $db_prefix,
-			'SESSION_COOKIE_NAME'         => 'peakurl_session',
-			'SESSION_LIFETIME'            => (string) ( 60 * 60 * 24 * 30 ),
-			'SESSION_COOKIE_PATH'         => Install_Service::site_cookie_path_for_release(
+			'PEAKURL_ENV'                                 => 'production',
+			'PEAKURL_DEBUG'                               => 'false',
+			'SITE_URL'                                    => $site_url,
+			PeakURL_Constants::CONFIG_AUTH_KEY            => self::generate_auth_key(),
+			PeakURL_Constants::CONFIG_AUTH_SALT           => self::generate_auth_salt(),
+			PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL => PeakURL_Constants::DEFAULT_UPDATE_MANIFEST_URL,
+			'PEAKURL_CONTENT_DIR'                         => self::default_content_directory( $app_path ),
+			'PEAKURL_GEOIP_DB_PATH'                       => self::default_geoip_database_path( $app_path ),
+			'DB_HOST'                                     => trim( (string) $input['db_host'] ),
+			'DB_PORT'                                     => $db_port,
+			'DB_DATABASE'                                 => trim( (string) $input['db_name'] ),
+			'DB_USERNAME'                                 => trim( (string) $input['db_user'] ),
+			'DB_PASSWORD'                                 => (string) ( $input['db_password'] ?? '' ),
+			'DB_CHARSET'                                  => 'utf8mb4',
+			'DB_PREFIX'                                   => $db_prefix,
+			PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME => PeakURL_Constants::DEFAULT_SESSION_COOKIE_NAME,
+			PeakURL_Constants::CONFIG_SESSION_LIFETIME    => (string) PeakURL_Constants::DEFAULT_SESSION_LIFETIME,
+			'SESSION_COOKIE_PATH'                         => Install_Service::site_cookie_path_for_release(
 				$site_url,
 			),
-			'SESSION_COOKIE_DOMAIN'       => '',
-			'SESSION_COOKIE_SAME_SITE'    => 'Strict',
-			'SESSION_COOKIE_SECURE'       => 'auto',
-			'PEAKURL_OWNER_FALLBACK'      => 'false',
-			'PEAKURL_OWNER_FIRST_NAME'    => '',
-			'PEAKURL_OWNER_LAST_NAME'     => '',
-			'PEAKURL_OWNER_USERNAME'      => '',
-			'PEAKURL_OWNER_EMAIL'         => '',
-			'PEAKURL_OWNER_PASSWORD'      => '',
-			'PEAKURL_WORKSPACE_NAME'      => '',
-			'PEAKURL_WORKSPACE_SLUG'      => '',
+			'SESSION_COOKIE_DOMAIN'                       => '',
+			PeakURL_Constants::CONFIG_SESSION_COOKIE_SAME_SITE => PeakURL_Constants::DEFAULT_SESSION_COOKIE_SAME_SITE,
+			PeakURL_Constants::CONFIG_SESSION_COOKIE_SECURE => PeakURL_Constants::DEFAULT_SESSION_COOKIE_SECURE,
+			'PEAKURL_OWNER_FALLBACK'                      => 'false',
+			'PEAKURL_OWNER_FIRST_NAME'                    => '',
+			'PEAKURL_OWNER_LAST_NAME'                     => '',
+			'PEAKURL_OWNER_USERNAME'                      => '',
+			'PEAKURL_OWNER_EMAIL'                         => '',
+			'PEAKURL_OWNER_PASSWORD'                      => '',
+			'PEAKURL_WORKSPACE_NAME'                      => '',
+			'PEAKURL_WORKSPACE_SLUG'                      => '',
 		);
 	}
 
@@ -329,7 +321,7 @@ class Setup_Config_Service {
 		$replacements = array();
 
 		foreach ( self::config_constants_from_values( $values ) as $key => $value ) {
-			$replacements[ '{{' . $key . '}}' ] = $value;
+			$replacements[ self::template_placeholder( $key ) ] = $value;
 		}
 
 		$config_contents = strtr( $template, $replacements );
@@ -351,65 +343,57 @@ class Setup_Config_Service {
 	 */
 	private static function config_constants_from_values( array $values ): array {
 		return array(
-			'PEAKURL_ENV'                 => var_export( $values['PEAKURL_ENV'], true ),
-			'PEAKURL_DEBUG'               => 'true' === $values['PEAKURL_DEBUG'] ? 'true' : 'false',
-			'SITE_URL'                    => var_export( $values['SITE_URL'], true ),
-			'PEAKURL_UPDATE_MANIFEST_URL' => var_export(
-				$values['PEAKURL_UPDATE_MANIFEST_URL'],
+			'PEAKURL_ENV'                                 => var_export( $values['PEAKURL_ENV'], true ),
+			'PEAKURL_DEBUG'                               => 'true' === $values['PEAKURL_DEBUG'] ? 'true' : 'false',
+			'SITE_URL'                                    => var_export( $values['SITE_URL'], true ),
+			PeakURL_Constants::CONFIG_AUTH_KEY            => var_export(
+				$values[ PeakURL_Constants::CONFIG_AUTH_KEY ],
 				true,
 			),
-			'PEAKURL_CONTENT_DIR'         => var_export(
+			PeakURL_Constants::CONFIG_AUTH_SALT           => var_export(
+				$values[ PeakURL_Constants::CONFIG_AUTH_SALT ],
+				true,
+			),
+			PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL => var_export(
+				$values[ PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL ],
+				true,
+			),
+			'PEAKURL_CONTENT_DIR'                         => var_export(
 				$values['PEAKURL_CONTENT_DIR'],
 				true,
 			),
-			'PEAKURL_GEOIP_DB_PATH'       => var_export(
+			'PEAKURL_GEOIP_DB_PATH'                       => var_export(
 				$values['PEAKURL_GEOIP_DB_PATH'],
 				true,
 			),
-			'PEAKURL_MAXMIND_ACCOUNT_ID'  => var_export(
-				$values['PEAKURL_MAXMIND_ACCOUNT_ID'],
-				true,
-			),
-			'PEAKURL_MAXMIND_LICENSE_KEY' => var_export(
-				$values['PEAKURL_MAXMIND_LICENSE_KEY'],
-				true,
-			),
-			'PEAKURL_MAIL_DRIVER'         => var_export(
-				$values['PEAKURL_MAIL_DRIVER'],
-				true,
-			),
-			'PEAKURL_SMTP_HOST'           => var_export(
-				$values['PEAKURL_SMTP_HOST'],
-				true,
-			),
-			'PEAKURL_SMTP_PORT'           => (string) (int) $values['PEAKURL_SMTP_PORT'],
-			'PEAKURL_SMTP_ENCRYPTION'     => var_export(
-				$values['PEAKURL_SMTP_ENCRYPTION'],
-				true,
-			),
-			'PEAKURL_SMTP_AUTH'           => 'true' === $values['PEAKURL_SMTP_AUTH'] ? 'true' : 'false',
-			'PEAKURL_SMTP_USERNAME'       => var_export(
-				$values['PEAKURL_SMTP_USERNAME'],
-				true,
-			),
-			'PEAKURL_SMTP_PASSWORD'       => var_export(
-				$values['PEAKURL_SMTP_PASSWORD'],
-				true,
-			),
-			'DB_HOST'                     => var_export( $values['DB_HOST'], true ),
-			'DB_PORT'                     => (string) (int) $values['DB_PORT'],
-			'DB_DATABASE'                 => var_export( $values['DB_DATABASE'], true ),
-			'DB_USERNAME'                 => var_export( $values['DB_USERNAME'], true ),
-			'DB_PASSWORD'                 => var_export( $values['DB_PASSWORD'], true ),
-			'DB_CHARSET'                  => var_export( $values['DB_CHARSET'], true ),
-			'DB_PREFIX'                   => var_export( $values['DB_PREFIX'], true ),
-			'SESSION_COOKIE_NAME'         => var_export( $values['SESSION_COOKIE_NAME'], true ),
-			'SESSION_LIFETIME'            => (string) (int) $values['SESSION_LIFETIME'],
-			'SESSION_COOKIE_PATH'         => var_export( $values['SESSION_COOKIE_PATH'], true ),
-			'SESSION_COOKIE_DOMAIN'       => var_export( $values['SESSION_COOKIE_DOMAIN'], true ),
-			'SESSION_COOKIE_SAME_SITE'    => var_export( $values['SESSION_COOKIE_SAME_SITE'], true ),
-			'SESSION_COOKIE_SECURE'       => var_export( $values['SESSION_COOKIE_SECURE'], true ),
+			'DB_HOST'                                     => var_export( $values['DB_HOST'], true ),
+			'DB_PORT'                                     => (string) (int) $values['DB_PORT'],
+			'DB_DATABASE'                                 => var_export( $values['DB_DATABASE'], true ),
+			'DB_USERNAME'                                 => var_export( $values['DB_USERNAME'], true ),
+			'DB_PASSWORD'                                 => var_export( $values['DB_PASSWORD'], true ),
+			'DB_CHARSET'                                  => var_export( $values['DB_CHARSET'], true ),
+			'DB_PREFIX'                                   => var_export( $values['DB_PREFIX'], true ),
+			PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME => var_export( $values[ PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME ], true ),
+			PeakURL_Constants::CONFIG_SESSION_LIFETIME    => (string) (int) $values[ PeakURL_Constants::CONFIG_SESSION_LIFETIME ],
+			'SESSION_COOKIE_PATH'                         => var_export( $values['SESSION_COOKIE_PATH'], true ),
+			'SESSION_COOKIE_DOMAIN'                       => var_export( $values['SESSION_COOKIE_DOMAIN'], true ),
+			PeakURL_Constants::CONFIG_SESSION_COOKIE_SAME_SITE => var_export( $values[ PeakURL_Constants::CONFIG_SESSION_COOKIE_SAME_SITE ], true ),
+			PeakURL_Constants::CONFIG_SESSION_COOKIE_SECURE => var_export( $values[ PeakURL_Constants::CONFIG_SESSION_COOKIE_SECURE ], true ),
 		);
+	}
+
+	/**
+	 * Build the placeholder token used inside config-sample.php.
+	 *
+	 * The token format stays valid PHP syntax inside the template so editors
+	 * and linters do not flag config-sample.php as broken before install time.
+	 *
+	 * @param string $key Config key name.
+	 * @return string
+	 * @since 1.0.0
+	 */
+	private static function template_placeholder( string $key ): string {
+		return '__' . $key . '__';
 	}
 
 	/**
@@ -421,42 +405,35 @@ class Setup_Config_Service {
 	 */
 	public static function config_values_from_runtime_config( array $config ): array {
 		return array(
-			'PEAKURL_ENV'                 => (string) ( $config['PEAKURL_ENV'] ?? 'production' ),
-			'PEAKURL_DEBUG'               => ! empty( $config['PEAKURL_DEBUG'] ) ? 'true' : 'false',
-			'SITE_URL'                    => (string) ( $config['SITE_URL'] ?? '' ),
-			'PEAKURL_UPDATE_MANIFEST_URL' => (string) ( $config['PEAKURL_UPDATE_MANIFEST_URL'] ?? 'https://api.peakurl.org/v1/update' ),
-			'PEAKURL_CONTENT_DIR'         => (string) ( $config['PEAKURL_CONTENT_DIR'] ?? '' ),
-			'PEAKURL_GEOIP_DB_PATH'       => (string) ( $config['PEAKURL_GEOIP_DB_PATH'] ?? '' ),
-			'PEAKURL_MAXMIND_ACCOUNT_ID'  => (string) ( $config['PEAKURL_MAXMIND_ACCOUNT_ID'] ?? '' ),
-			'PEAKURL_MAXMIND_LICENSE_KEY' => (string) ( $config['PEAKURL_MAXMIND_LICENSE_KEY'] ?? '' ),
-			'PEAKURL_MAIL_DRIVER'         => (string) ( $config['PEAKURL_MAIL_DRIVER'] ?? 'mail' ),
-			'PEAKURL_SMTP_HOST'           => (string) ( $config['PEAKURL_SMTP_HOST'] ?? '' ),
-			'PEAKURL_SMTP_PORT'           => (string) ( $config['PEAKURL_SMTP_PORT'] ?? 587 ),
-			'PEAKURL_SMTP_ENCRYPTION'     => (string) ( $config['PEAKURL_SMTP_ENCRYPTION'] ?? 'tls' ),
-			'PEAKURL_SMTP_AUTH'           => ! empty( $config['PEAKURL_SMTP_AUTH'] ) ? 'true' : 'false',
-			'PEAKURL_SMTP_USERNAME'       => (string) ( $config['PEAKURL_SMTP_USERNAME'] ?? '' ),
-			'PEAKURL_SMTP_PASSWORD'       => (string) ( $config['PEAKURL_SMTP_PASSWORD'] ?? '' ),
-			'DB_HOST'                     => (string) ( $config['DB_HOST'] ?? 'localhost' ),
-			'DB_PORT'                     => (string) ( $config['DB_PORT'] ?? 3306 ),
-			'DB_DATABASE'                 => (string) ( $config['DB_DATABASE'] ?? '' ),
-			'DB_USERNAME'                 => (string) ( $config['DB_USERNAME'] ?? '' ),
-			'DB_PASSWORD'                 => (string) ( $config['DB_PASSWORD'] ?? '' ),
-			'DB_CHARSET'                  => (string) ( $config['DB_CHARSET'] ?? 'utf8mb4' ),
-			'DB_PREFIX'                   => (string) ( $config['DB_PREFIX'] ?? 'peakurl_' ),
-			'SESSION_COOKIE_NAME'         => (string) ( $config['SESSION_COOKIE_NAME'] ?? 'peakurl_session' ),
-			'SESSION_LIFETIME'            => (string) ( $config['SESSION_LIFETIME'] ?? ( 60 * 60 * 24 * 30 ) ),
-			'SESSION_COOKIE_PATH'         => (string) ( $config['SESSION_COOKIE_PATH'] ?? '/' ),
-			'SESSION_COOKIE_DOMAIN'       => (string) ( $config['SESSION_COOKIE_DOMAIN'] ?? '' ),
-			'SESSION_COOKIE_SAME_SITE'    => (string) ( $config['SESSION_COOKIE_SAME_SITE'] ?? 'Strict' ),
-			'SESSION_COOKIE_SECURE'       => (string) ( $config['SESSION_COOKIE_SECURE'] ?? 'auto' ),
-			'PEAKURL_OWNER_FALLBACK'      => ! empty( $config['PEAKURL_OWNER_FALLBACK'] ) ? 'true' : 'false',
-			'PEAKURL_OWNER_FIRST_NAME'    => (string) ( $config['PEAKURL_OWNER_FIRST_NAME'] ?? '' ),
-			'PEAKURL_OWNER_LAST_NAME'     => (string) ( $config['PEAKURL_OWNER_LAST_NAME'] ?? '' ),
-			'PEAKURL_OWNER_USERNAME'      => (string) ( $config['PEAKURL_OWNER_USERNAME'] ?? '' ),
-			'PEAKURL_OWNER_EMAIL'         => (string) ( $config['PEAKURL_OWNER_EMAIL'] ?? '' ),
-			'PEAKURL_OWNER_PASSWORD'      => (string) ( $config['PEAKURL_OWNER_PASSWORD'] ?? '' ),
-			'PEAKURL_WORKSPACE_NAME'      => (string) ( $config['PEAKURL_WORKSPACE_NAME'] ?? '' ),
-			'PEAKURL_WORKSPACE_SLUG'      => (string) ( $config['PEAKURL_WORKSPACE_SLUG'] ?? '' ),
+			'PEAKURL_ENV'                                 => (string) ( $config['PEAKURL_ENV'] ?? 'production' ),
+			'PEAKURL_DEBUG'                               => ! empty( $config['PEAKURL_DEBUG'] ) ? 'true' : 'false',
+			'SITE_URL'                                    => (string) ( $config['SITE_URL'] ?? '' ),
+			PeakURL_Constants::CONFIG_AUTH_KEY            => (string) ( $config[ PeakURL_Constants::CONFIG_AUTH_KEY ] ?? '' ),
+			PeakURL_Constants::CONFIG_AUTH_SALT           => (string) ( $config[ PeakURL_Constants::CONFIG_AUTH_SALT ] ?? '' ),
+			PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL => (string) ( $config[ PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL ] ?? PeakURL_Constants::DEFAULT_UPDATE_MANIFEST_URL ),
+			'PEAKURL_CONTENT_DIR'                         => (string) ( $config['PEAKURL_CONTENT_DIR'] ?? '' ),
+			'PEAKURL_GEOIP_DB_PATH'                       => (string) ( $config['PEAKURL_GEOIP_DB_PATH'] ?? '' ),
+			'DB_HOST'                                     => (string) ( $config['DB_HOST'] ?? 'localhost' ),
+			'DB_PORT'                                     => (string) ( $config['DB_PORT'] ?? 3306 ),
+			'DB_DATABASE'                                 => (string) ( $config['DB_DATABASE'] ?? '' ),
+			'DB_USERNAME'                                 => (string) ( $config['DB_USERNAME'] ?? '' ),
+			'DB_PASSWORD'                                 => (string) ( $config['DB_PASSWORD'] ?? '' ),
+			'DB_CHARSET'                                  => (string) ( $config['DB_CHARSET'] ?? 'utf8mb4' ),
+			'DB_PREFIX'                                   => (string) ( $config['DB_PREFIX'] ?? 'peakurl_' ),
+			PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME => (string) ( $config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME ] ?? PeakURL_Constants::DEFAULT_SESSION_COOKIE_NAME ),
+			PeakURL_Constants::CONFIG_SESSION_LIFETIME    => (string) ( $config[ PeakURL_Constants::CONFIG_SESSION_LIFETIME ] ?? PeakURL_Constants::DEFAULT_SESSION_LIFETIME ),
+			'SESSION_COOKIE_PATH'                         => (string) ( $config['SESSION_COOKIE_PATH'] ?? '/' ),
+			'SESSION_COOKIE_DOMAIN'                       => (string) ( $config['SESSION_COOKIE_DOMAIN'] ?? '' ),
+			PeakURL_Constants::CONFIG_SESSION_COOKIE_SAME_SITE => (string) ( $config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_SAME_SITE ] ?? PeakURL_Constants::DEFAULT_SESSION_COOKIE_SAME_SITE ),
+			PeakURL_Constants::CONFIG_SESSION_COOKIE_SECURE => (string) ( $config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_SECURE ] ?? PeakURL_Constants::DEFAULT_SESSION_COOKIE_SECURE ),
+			'PEAKURL_OWNER_FALLBACK'                      => ! empty( $config['PEAKURL_OWNER_FALLBACK'] ) ? 'true' : 'false',
+			'PEAKURL_OWNER_FIRST_NAME'                    => (string) ( $config['PEAKURL_OWNER_FIRST_NAME'] ?? '' ),
+			'PEAKURL_OWNER_LAST_NAME'                     => (string) ( $config['PEAKURL_OWNER_LAST_NAME'] ?? '' ),
+			'PEAKURL_OWNER_USERNAME'                      => (string) ( $config['PEAKURL_OWNER_USERNAME'] ?? '' ),
+			'PEAKURL_OWNER_EMAIL'                         => (string) ( $config['PEAKURL_OWNER_EMAIL'] ?? '' ),
+			'PEAKURL_OWNER_PASSWORD'                      => (string) ( $config['PEAKURL_OWNER_PASSWORD'] ?? '' ),
+			'PEAKURL_WORKSPACE_NAME'                      => (string) ( $config['PEAKURL_WORKSPACE_NAME'] ?? '' ),
+			'PEAKURL_WORKSPACE_SLUG'                      => (string) ( $config['PEAKURL_WORKSPACE_SLUG'] ?? '' ),
 		);
 	}
 
@@ -480,6 +457,26 @@ class Setup_Config_Service {
 	 */
 	private static function default_geoip_database_path( string $app_path ): string {
 		return self::default_content_directory( $app_path ) . '/uploads/geoip/GeoLite2-City.mmdb';
+	}
+
+	/**
+	 * Generate a random authentication key for sessions and encrypted settings.
+	 *
+	 * @return string
+	 * @since 1.0.0
+	 */
+	private static function generate_auth_key(): string {
+		return bin2hex( random_bytes( 32 ) );
+	}
+
+	/**
+	 * Generate a random authentication salt for sessions and encrypted settings.
+	 *
+	 * @return string
+	 * @since 1.0.0
+	 */
+	private static function generate_auth_salt(): string {
+		return bin2hex( random_bytes( 32 ) );
 	}
 
 	/**

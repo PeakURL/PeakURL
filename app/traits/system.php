@@ -66,10 +66,14 @@ trait Store_System_Trait {
 			throw new Api_Exception( $exception->getMessage(), 422 );
 		}
 
-		$this->config         = Config::load( ABSPATH . 'app' );
-		$this->mailer_service = new Mailer_Service(
+		$this->config = Runtime_Config::load( ABSPATH . 'app' );
+		$this->refresh_release_runtime_config();
+		$this->config         = Runtime_Config::load( ABSPATH . 'app' );
+		$this->crypto_service = new Crypto_Service( $this->config );
+		$this->mailer_service = new PeakURL_Mail(
 			$this->config,
 			$this->settings_api,
+			$this->crypto_service,
 		);
 		$status['saved']      = true;
 
@@ -119,7 +123,7 @@ trait Store_System_Trait {
 	}
 
 	/**
-	 * Save MaxMind credentials into the active runtime config target.
+	 * Save MaxMind credentials into the settings table.
 	 *
 	 * @param Request              $request Incoming HTTP request (admin-only).
 	 * @param array<string, mixed> $payload Submitted GeoIP config payload.
@@ -148,18 +152,15 @@ trait Store_System_Trait {
 			throw new Api_Exception( $exception->getMessage(), 422 );
 		}
 
-		$this->config['PEAKURL_CONTENT_DIR']        = (string) ( $status['contentDir'] ?? '' );
-		$this->config['PEAKURL_GEOIP_DB_PATH']      = (string) ( $status['databasePath'] ?? '' );
-		$this->config['PEAKURL_MAXMIND_ACCOUNT_ID'] = (string) ( $status['accountId'] ?? '' );
-
-		if ( ! empty( $payload['licenseKey'] ) ) {
-			$this->config['PEAKURL_MAXMIND_LICENSE_KEY'] =
-				(string) $payload['licenseKey'];
-		} elseif ( empty( $status['licenseKeyConfigured'] ) ) {
-			$this->config['PEAKURL_MAXMIND_LICENSE_KEY'] = '';
-		}
-
-		$this->geoip_service        = new Geoip_Service( $this->config );
+		$this->config = Runtime_Config::load( ABSPATH . 'app' );
+		$this->refresh_release_runtime_config();
+		$this->config               = Runtime_Config::load( ABSPATH . 'app' );
+		$this->crypto_service       = new Crypto_Service( $this->config );
+		$this->geoip_service        = new Geoip_Service(
+			$this->config,
+			$this->settings_api,
+			$this->crypto_service,
+		);
 		$status['installed']        = ! empty( $status['locationAnalyticsReady'] );
 		$status['lastDownloadedAt'] = $this->get_setting_value( 'geoip_last_downloaded_at' );
 		$status['lastDownloadedAt'] = $status['lastDownloadedAt']
@@ -275,7 +276,7 @@ trait Store_System_Trait {
 
 		$this->upsert_setting(
 			'installed_version',
-			(string) ( $result['version'] ?? $this->config['PEAKURL_VERSION'] ?? '0.0.0' ),
+			(string) ( $result['version'] ?? $this->config[ PeakURL_Constants::CONFIG_VERSION ] ?? PeakURL_Constants::DEFAULT_VERSION ),
 			false,
 		);
 		$this->upsert_setting( 'update_last_applied_at', $this->now(), false );
@@ -294,6 +295,26 @@ trait Store_System_Trait {
 			'packageUrl'     => (string) ( $result['packageUrl'] ?? '' ),
 			'appliedAt'      => (string) ( $result['appliedAt'] ?? gmdate( DATE_ATOM ) ),
 			'reloadRequired' => true,
+		);
+	}
+
+	/**
+	 * Rewrite the release config.php from the active runtime config.
+	 *
+	 * Keeps packaged installs on the new slim config shape while skipping the
+	 * source checkout, which persists local overrides in app/.env instead.
+	 *
+	 * @return void
+	 * @since 1.0.0
+	 */
+	private function refresh_release_runtime_config(): void {
+		if ( file_exists( ABSPATH . 'package.json' ) || is_dir( ABSPATH . '.git' ) ) {
+			return;
+		}
+
+		Setup_Config_Service::write_config_file(
+			ABSPATH . 'app',
+			Setup_Config_Service::config_values_from_runtime_config( $this->config ),
 		);
 	}
 }

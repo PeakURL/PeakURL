@@ -73,7 +73,7 @@ class Install_Service {
 		}
 
 		try {
-			$config   = Config::load( $app_path );
+			$config   = Runtime_Config::load( $app_path );
 			$database = new Database( $config );
 
 			if ( ! $database->has_required_tables() ) {
@@ -146,7 +146,7 @@ class Install_Service {
 			);
 		}
 
-		$current_config = Config::load( $app_path );
+		$current_config = Runtime_Config::load( $app_path );
 		$values         = self::normalize_input( $input, $current_config );
 
 		Setup_Config_Service::write_config_file( $app_path, $values );
@@ -434,11 +434,11 @@ class Install_Service {
 			'PEAKURL_ENV'                 => $values['PEAKURL_ENV'],
 			'SITE_URL'                    => $values['SITE_URL'],
 			'PEAKURL_DEBUG'               => 'true' === $values['PEAKURL_DEBUG'],
+			'PEAKURL_AUTH_KEY'            => $values['PEAKURL_AUTH_KEY'],
+			'PEAKURL_AUTH_SALT'           => $values['PEAKURL_AUTH_SALT'],
 			'PEAKURL_UPDATE_MANIFEST_URL' => $values['PEAKURL_UPDATE_MANIFEST_URL'],
 			'PEAKURL_CONTENT_DIR'         => $values['PEAKURL_CONTENT_DIR'],
 			'PEAKURL_GEOIP_DB_PATH'       => $values['PEAKURL_GEOIP_DB_PATH'],
-			'PEAKURL_MAXMIND_ACCOUNT_ID'  => $values['PEAKURL_MAXMIND_ACCOUNT_ID'],
-			'PEAKURL_MAXMIND_LICENSE_KEY' => $values['PEAKURL_MAXMIND_LICENSE_KEY'],
 			'DB_HOST'                     => $values['DB_HOST'],
 			'DB_PORT'                     => (int) $values['DB_PORT'],
 			'DB_DATABASE'                 => $values['DB_DATABASE'],

@@ -104,11 +104,11 @@ class Update_Service {
 	 */
 	public function get_manifest_url(): string {
 		$manifest_url = trim(
-			(string) ( $this->config['PEAKURL_UPDATE_MANIFEST_URL'] ?? '' ),
+			(string) ( $this->config[ PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL ] ?? '' ),
 		);
 
 		if ( '' === $manifest_url ) {
-			return 'https://api.peakurl.org/v1/update';
+			return PeakURL_Constants::DEFAULT_UPDATE_MANIFEST_URL;
 		}
 
 		$scheme = strtolower( (string) parse_url( $manifest_url, PHP_URL_SCHEME ) );
@@ -125,12 +125,14 @@ class Update_Service {
 	/**
 	 * Get the currently installed PeakURL version string.
 	 *
-	 * @return string Semantic version (falls back to '0.0.0').
+	 * @return string Semantic version.
 	 * @since 1.0.0
 	 */
 	public function get_current_version(): string {
-		$version = trim( (string) ( $this->config['PEAKURL_VERSION'] ?? '' ) );
-		return '' !== $version ? $version : '0.0.0';
+		$version = trim(
+			(string) ( $this->config[ PeakURL_Constants::CONFIG_VERSION ] ?? '' ),
+		);
+		return '' !== $version ? $version : PeakURL_Constants::DEFAULT_VERSION;
 	}
 
 	/**

@@ -281,7 +281,7 @@ if ( ! peakurl_should_serve_dashboard_shell( $relative_path ) ) {
 	exit();
 }
 
-$runtime_config = Config::load( $app_path );
+$runtime_config = Runtime_Config::bootstrap( $app_path );
 $database       = new Database( $runtime_config );
 $site_name      = trim(
 	(string) ( $database->get_setting_value( 'site_name' ) ?? 'PeakURL' ),
@@ -289,8 +289,8 @@ $site_name      = trim(
 $version        = trim(
 	(string) (
 		$database->get_setting_value( 'installed_version' ) ??
-		$runtime_config['PEAKURL_VERSION'] ??
-		'0.0.0'
+		$runtime_config[ PeakURL_Constants::CONFIG_VERSION ] ??
+		PeakURL_Constants::DEFAULT_VERSION
 	),
 );
 

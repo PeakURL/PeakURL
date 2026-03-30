@@ -59,7 +59,7 @@ require_once $autoload_path;
 
 // ── CORS headers ────────────────────────────────────────────────
 
-$config = Config::load( dirname( __DIR__ ) );
+$config = Runtime_Config::bootstrap( dirname( __DIR__ ) );
 $origin = Security_Utils::resolve_allowed_origin( $config, $_SERVER );
 
 if ( '' !== $origin ) {

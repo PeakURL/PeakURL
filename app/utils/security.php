@@ -69,14 +69,14 @@ class Security_Utils {
 		array $overrides = array()
 	): array {
 		$options = array(
-			'path'     => (string) ( $config['SESSION_COOKIE_PATH'] ?? '/' ),
+			'path'     => (string) ( $config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_PATH ] ?? '/' ),
 			'httponly' => true,
 			'samesite' =>
-				(string) ( $config['SESSION_COOKIE_SAME_SITE'] ?? 'Strict' ),
+				(string) ( $config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_SAME_SITE ] ?? PeakURL_Constants::DEFAULT_SESSION_COOKIE_SAME_SITE ),
 			'secure'   => self::should_use_secure_cookies( $config, $request ),
 		);
 
-		$domain = trim( (string) ( $config['SESSION_COOKIE_DOMAIN'] ?? '' ) );
+		$domain = trim( (string) ( $config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_DOMAIN ] ?? '' ) );
 
 		if ( '' !== $domain ) {
 			$options['domain'] = $domain;
@@ -101,7 +101,9 @@ class Security_Utils {
 		Request $request
 	): bool {
 		$mode = strtolower(
-			trim( (string) ( $config['SESSION_COOKIE_SECURE'] ?? 'auto' ) ),
+			trim(
+				(string) ( $config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_SECURE ] ?? PeakURL_Constants::DEFAULT_SESSION_COOKIE_SECURE ),
+			),
 		);
 
 		if ( in_array( $mode, array( 'true', '1', 'yes', 'on' ), true ) ) {

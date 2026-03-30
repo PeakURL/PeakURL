@@ -194,6 +194,14 @@ class Data_Store {
 	private Totp_Service $totp_service;
 
 	/**
+	 * Crypto helper for database-backed settings and session signing.
+	 *
+	 * @var Crypto_Service
+	 * @since 1.0.0
+	 */
+	private Crypto_Service $crypto_service;
+
+	/**
 	 * Request geolocation helper for click analytics.
 	 *
 	 * @var Geoip_Service
@@ -204,10 +212,10 @@ class Data_Store {
 	/**
 	 * Mail transport and delivery helper.
 	 *
-	 * @var Mailer_Service
+	 * @var PeakURL_Mail
 	 * @since 1.0.0
 	 */
-	private Mailer_Service $mailer_service;
+	private PeakURL_Mail $mailer_service;
 
 	/**
 	 * Whether the workspace has been bootstrapped in this request.
@@ -232,10 +240,16 @@ class Data_Store {
 		$this->config         = $config;
 		$this->roles          = new PeakURL_Roles();
 		$this->totp_service   = new Totp_Service();
-		$this->geoip_service  = new Geoip_Service( $config );
-		$this->mailer_service = new Mailer_Service(
+		$this->crypto_service = new Crypto_Service( $config );
+		$this->geoip_service  = new Geoip_Service(
 			$config,
 			$this->settings_api,
+			$this->crypto_service,
+		);
+		$this->mailer_service = new PeakURL_Mail(
+			$config,
+			$this->settings_api,
+			$this->crypto_service,
 		);
 	}
 }

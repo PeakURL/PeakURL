@@ -18,14 +18,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Immutable configuration reader.
+ * Immutable runtime configuration reader.
  *
  * Precedence (highest → lowest): runtime environment variables, .env file,
  * config.php constants, built-in defaults.
  *
  * @since 1.0.0
  */
-class Config {
+class Runtime_Config {
+
+	/**
+	 * Load runtime configuration and apply runtime-side bootstrapping.
+	 *
+	 * @param string $base_path Absolute path to the PHP runtime directory.
+	 * @return array<string, mixed>
+	 * @since 1.0.0
+	 */
+	public static function bootstrap( string $base_path ): array {
+		$config = self::load( $base_path );
+		self::bootstrap_debug_mode( $config );
+		return $config;
+	}
 
 	/**
 	 * Load the merged runtime configuration for the application.
@@ -40,177 +53,147 @@ class Config {
 			self::parse_config_file( $root_path . '/config.php' ),
 			self::parse_env_file( $base_path . '/.env' ),
 		);
+		$site_url    = self::get_value(
+			'SITE_URL',
+			$file_values,
+			'http://localhost:5173',
+		);
 
 		return array(
-			'PEAKURL_VERSION'             => self::read_version_file(
-				$root_path . '/.version',
+			PeakURL_Constants::CONFIG_VERSION             => self::read_version_file(
+				$root_path . '/' . PeakURL_Constants::VERSION_FILE,
 			),
-			'PEAKURL_ENV'                 => self::get_value(
-				'PEAKURL_ENV',
+			PeakURL_Constants::CONFIG_ENV                 => self::get_value(
+				PeakURL_Constants::CONFIG_ENV,
 				$file_values,
 				'development',
 			),
-			'SITE_URL'                    => self::get_value(
-				'SITE_URL',
+			PeakURL_Constants::CONFIG_SITE_URL            => self::get_value(
+				PeakURL_Constants::CONFIG_SITE_URL,
 				$file_values,
-				'http://localhost:5173',
+				$site_url,
 			),
-			'PEAKURL_UPDATE_MANIFEST_URL' => self::get_value(
-				'PEAKURL_UPDATE_MANIFEST_URL',
+			PeakURL_Constants::CONFIG_AUTH_KEY            => self::get_value(
+				PeakURL_Constants::CONFIG_AUTH_KEY,
 				$file_values,
-				'https://api.peakurl.org/v1/update',
+				'',
 			),
-			'PEAKURL_CONTENT_DIR'         => self::resolve_path_value(
+			PeakURL_Constants::CONFIG_AUTH_SALT           => self::get_value(
+				PeakURL_Constants::CONFIG_AUTH_SALT,
+				$file_values,
+				'',
+			),
+			PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL => self::get_value(
+				PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL,
+				$file_values,
+				PeakURL_Constants::DEFAULT_UPDATE_MANIFEST_URL,
+			),
+			PeakURL_Constants::CONFIG_CONTENT_DIR         => self::resolve_path_value(
 				self::get_value(
-					'PEAKURL_CONTENT_DIR',
+					PeakURL_Constants::CONFIG_CONTENT_DIR,
 					$file_values,
-					'content',
+					PeakURL_Constants::DEFAULT_CONTENT_DIR,
 				),
 				$root_path,
 			),
-			'PEAKURL_GEOIP_DB_PATH'       => self::resolve_path_value(
+			PeakURL_Constants::CONFIG_GEOIP_DB_PATH       => self::resolve_path_value(
 				self::get_value(
-					'PEAKURL_GEOIP_DB_PATH',
+					PeakURL_Constants::CONFIG_GEOIP_DB_PATH,
 					$file_values,
-					'content/uploads/geoip/GeoLite2-City.mmdb',
+					PeakURL_Constants::DEFAULT_GEOIP_DB_PATH,
 				),
 				$root_path,
 			),
-			'PEAKURL_MAXMIND_ACCOUNT_ID'  => self::get_value(
-				'PEAKURL_MAXMIND_ACCOUNT_ID',
-				$file_values,
-				'',
-			),
-			'PEAKURL_MAXMIND_LICENSE_KEY' => self::get_value(
-				'PEAKURL_MAXMIND_LICENSE_KEY',
-				$file_values,
-				'',
-			),
-			'PEAKURL_MAIL_DRIVER'         => self::normalize_mail_driver(
-				self::get_value(
-					'PEAKURL_MAIL_DRIVER',
-					$file_values,
-					'mail',
-				),
-			),
-			'PEAKURL_SMTP_HOST'           => self::get_value(
-				'PEAKURL_SMTP_HOST',
-				$file_values,
-				'',
-			),
-			'PEAKURL_SMTP_PORT'           => (int) self::get_value(
-				'PEAKURL_SMTP_PORT',
-				$file_values,
-				'587',
-			),
-			'PEAKURL_SMTP_ENCRYPTION'     => self::normalize_smtp_encryption(
-				self::get_value(
-					'PEAKURL_SMTP_ENCRYPTION',
-					$file_values,
-					'tls',
-				),
-			),
-			'PEAKURL_SMTP_AUTH'           => self::get_bool_value(
-				'PEAKURL_SMTP_AUTH',
+			PeakURL_Constants::CONFIG_DEBUG               => self::get_bool_value(
+				PeakURL_Constants::CONFIG_DEBUG,
 				$file_values,
 				false,
 			),
-			'PEAKURL_SMTP_USERNAME'       => self::get_value(
-				'PEAKURL_SMTP_USERNAME',
-				$file_values,
-				'',
-			),
-			'PEAKURL_SMTP_PASSWORD'       => self::get_value(
-				'PEAKURL_SMTP_PASSWORD',
-				$file_values,
-				'',
-			),
-			'PEAKURL_DEBUG'               => self::get_bool_value(
-				'PEAKURL_DEBUG',
-				$file_values,
-				true,
-			),
-			'DB_HOST'                     => self::get_value( 'DB_HOST', $file_values, '127.0.0.1' ),
-			'DB_PORT'                     => (int) self::get_value( 'DB_PORT', $file_values, '3306' ),
-			'DB_DATABASE'                 => self::get_value(
+			'DB_HOST'                                     => self::get_value( 'DB_HOST', $file_values, '127.0.0.1' ),
+			'DB_PORT'                                     => (int) self::get_value( 'DB_PORT', $file_values, '3306' ),
+			'DB_DATABASE'                                 => self::get_value(
 				'DB_DATABASE',
 				$file_values,
 				'peakurl',
 			),
-			'DB_USERNAME'                 => self::get_value( 'DB_USERNAME', $file_values, 'root' ),
-			'DB_PASSWORD'                 => self::get_value( 'DB_PASSWORD', $file_values, '' ),
-			'DB_CHARSET'                  => self::get_value(
+			'DB_USERNAME'                                 => self::get_value( 'DB_USERNAME', $file_values, 'root' ),
+			'DB_PASSWORD'                                 => self::get_value( 'DB_PASSWORD', $file_values, '' ),
+			'DB_CHARSET'                                  => self::get_value(
 				'DB_CHARSET',
 				$file_values,
 				'utf8mb4',
 			),
-			'DB_PREFIX'                   => self::normalize_db_prefix(
+			'DB_PREFIX'                                   => self::normalize_db_prefix(
 				self::get_value( 'DB_PREFIX', $file_values, '' ),
 			),
-			'SESSION_COOKIE_NAME'         => self::get_value(
-				'SESSION_COOKIE_NAME',
+			PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME => self::get_value(
+				PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME,
 				$file_values,
-				'peakurl_session',
+				PeakURL_Constants::DEFAULT_SESSION_COOKIE_NAME,
 			),
-			'SESSION_LIFETIME'            => (int) self::get_value(
-				'SESSION_LIFETIME',
+			PeakURL_Constants::CONFIG_SESSION_LIFETIME    => (int) self::get_value(
+				PeakURL_Constants::CONFIG_SESSION_LIFETIME,
 				$file_values,
-				(string) ( 60 * 60 * 24 * 30 ),
+				(string) PeakURL_Constants::DEFAULT_SESSION_LIFETIME,
 			),
-			'SESSION_COOKIE_PATH'         => self::get_value(
-				'SESSION_COOKIE_PATH',
+			PeakURL_Constants::CONFIG_SESSION_COOKIE_PATH => self::get_value(
+				PeakURL_Constants::CONFIG_SESSION_COOKIE_PATH,
 				$file_values,
-				'/',
+				self::default_session_cookie_path( $site_url ),
 			),
-			'SESSION_COOKIE_DOMAIN'       => self::sanitize_domain(
-				self::get_value( 'SESSION_COOKIE_DOMAIN', $file_values, '' ),
+			PeakURL_Constants::CONFIG_SESSION_COOKIE_DOMAIN => self::sanitize_domain(
+				self::get_value( PeakURL_Constants::CONFIG_SESSION_COOKIE_DOMAIN, $file_values, '' ),
 			),
-			'SESSION_COOKIE_SAME_SITE'    => self::normalize_same_site(
+			PeakURL_Constants::CONFIG_SESSION_COOKIE_SAME_SITE => self::normalize_same_site(
 				self::get_value(
-					'SESSION_COOKIE_SAME_SITE',
+					PeakURL_Constants::CONFIG_SESSION_COOKIE_SAME_SITE,
 					$file_values,
-					'Strict',
+					PeakURL_Constants::DEFAULT_SESSION_COOKIE_SAME_SITE,
 				),
 			),
-			'SESSION_COOKIE_SECURE'       => self::normalize_secure_mode(
-				self::get_value( 'SESSION_COOKIE_SECURE', $file_values, 'auto' ),
+			PeakURL_Constants::CONFIG_SESSION_COOKIE_SECURE => self::normalize_secure_mode(
+				self::get_value(
+					PeakURL_Constants::CONFIG_SESSION_COOKIE_SECURE,
+					$file_values,
+					PeakURL_Constants::DEFAULT_SESSION_COOKIE_SECURE,
+				),
 			),
-			'PEAKURL_OWNER_FALLBACK'      => self::get_bool_value(
+			'PEAKURL_OWNER_FALLBACK'                      => self::get_bool_value(
 				'PEAKURL_OWNER_FALLBACK',
 				$file_values,
 				false,
 			),
-			'PEAKURL_OWNER_FIRST_NAME'    => self::get_value(
+			'PEAKURL_OWNER_FIRST_NAME'                    => self::get_value(
 				'PEAKURL_OWNER_FIRST_NAME',
 				$file_values,
 				'',
 			),
-			'PEAKURL_OWNER_LAST_NAME'     => self::get_value(
+			'PEAKURL_OWNER_LAST_NAME'                     => self::get_value(
 				'PEAKURL_OWNER_LAST_NAME',
 				$file_values,
 				'',
 			),
-			'PEAKURL_OWNER_USERNAME'      => self::get_value(
+			'PEAKURL_OWNER_USERNAME'                      => self::get_value(
 				'PEAKURL_OWNER_USERNAME',
 				$file_values,
 				'',
 			),
-			'PEAKURL_OWNER_EMAIL'         => self::get_value(
+			'PEAKURL_OWNER_EMAIL'                         => self::get_value(
 				'PEAKURL_OWNER_EMAIL',
 				$file_values,
 				'',
 			),
-			'PEAKURL_OWNER_PASSWORD'      => self::get_value(
+			'PEAKURL_OWNER_PASSWORD'                      => self::get_value(
 				'PEAKURL_OWNER_PASSWORD',
 				$file_values,
 				'',
 			),
-			'PEAKURL_WORKSPACE_NAME'      => self::get_value(
+			'PEAKURL_WORKSPACE_NAME'                      => self::get_value(
 				'PEAKURL_WORKSPACE_NAME',
 				$file_values,
 				'',
 			),
-			'PEAKURL_WORKSPACE_SLUG'      => self::get_value(
+			'PEAKURL_WORKSPACE_SLUG'                      => self::get_value(
 				'PEAKURL_WORKSPACE_SLUG',
 				$file_values,
 				'',
@@ -233,38 +216,33 @@ class Config {
 			return array();
 		}
 
-		$table_prefix = '';
+		$contents = file_get_contents( $file_path );
 
-		require $file_path;
+		if ( false === $contents ) {
+			return array();
+		}
 
 		$keys   = array(
 			'PEAKURL_ENV',
 			'PEAKURL_DEBUG',
 			'SITE_URL',
-			'PEAKURL_UPDATE_MANIFEST_URL',
-			'PEAKURL_CONTENT_DIR',
-			'PEAKURL_GEOIP_DB_PATH',
-			'PEAKURL_MAXMIND_ACCOUNT_ID',
-			'PEAKURL_MAXMIND_LICENSE_KEY',
-			'PEAKURL_MAIL_DRIVER',
-			'PEAKURL_SMTP_HOST',
-			'PEAKURL_SMTP_PORT',
-			'PEAKURL_SMTP_ENCRYPTION',
-			'PEAKURL_SMTP_AUTH',
-			'PEAKURL_SMTP_USERNAME',
-			'PEAKURL_SMTP_PASSWORD',
+			PeakURL_Constants::CONFIG_AUTH_KEY,
+			PeakURL_Constants::CONFIG_AUTH_SALT,
+			PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL,
+			PeakURL_Constants::CONFIG_CONTENT_DIR,
+			PeakURL_Constants::CONFIG_GEOIP_DB_PATH,
 			'DB_HOST',
 			'DB_PORT',
 			'DB_DATABASE',
 			'DB_USERNAME',
 			'DB_PASSWORD',
 			'DB_CHARSET',
-			'SESSION_COOKIE_NAME',
-			'SESSION_LIFETIME',
-			'SESSION_COOKIE_PATH',
-			'SESSION_COOKIE_DOMAIN',
-			'SESSION_COOKIE_SAME_SITE',
-			'SESSION_COOKIE_SECURE',
+			PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME,
+			PeakURL_Constants::CONFIG_SESSION_LIFETIME,
+			PeakURL_Constants::CONFIG_SESSION_COOKIE_PATH,
+			PeakURL_Constants::CONFIG_SESSION_COOKIE_DOMAIN,
+			PeakURL_Constants::CONFIG_SESSION_COOKIE_SAME_SITE,
+			PeakURL_Constants::CONFIG_SESSION_COOKIE_SECURE,
 			'PEAKURL_OWNER_FALLBACK',
 			'PEAKURL_OWNER_FIRST_NAME',
 			'PEAKURL_OWNER_LAST_NAME',
@@ -277,16 +255,119 @@ class Config {
 		$values = array();
 
 		foreach ( $keys as $key ) {
-			if ( defined( $key ) ) {
-				$values[ $key ] = self::scalar_to_string( constant( $key ) );
+			$parsed = self::extract_defined_value( $contents, $key );
+
+			if ( null !== $parsed ) {
+				$values[ $key ] = self::scalar_to_string( $parsed );
 			}
 		}
+
+		$table_prefix = self::extract_assigned_value( $contents, 'table_prefix' );
 
 		if ( is_string( $table_prefix ) && '' !== trim( $table_prefix ) ) {
 			$values['DB_PREFIX'] = trim( $table_prefix );
 		}
 
 		return $values;
+	}
+
+	/**
+	 * Extract a scalar literal from a define( 'KEY', value ); statement.
+	 *
+	 * @param string $contents Raw config.php contents.
+	 * @param string $key      Constant name to extract.
+	 * @return bool|float|int|string|null
+	 * @since 1.0.0
+	 */
+	private static function extract_defined_value( string $contents, string $key ) {
+		$pattern = sprintf(
+			'/define\s*\(\s*[\'"]%s[\'"]\s*,\s*(.*?)\s*\)\s*;/s',
+			preg_quote( $key, '/' ),
+		);
+
+		if ( ! preg_match( $pattern, $contents, $matches ) ) {
+			return null;
+		}
+
+		return self::parse_scalar_literal( trim( (string) $matches[1] ) );
+	}
+
+	/**
+	 * Extract a scalar literal from a variable assignment.
+	 *
+	 * @param string $contents Raw config.php contents.
+	 * @param string $name     Variable name without the leading dollar sign.
+	 * @return bool|float|int|string|null
+	 * @since 1.0.0
+	 */
+	private static function extract_assigned_value( string $contents, string $name ) {
+		$pattern = sprintf(
+			'/\$%s\s*=\s*(.*?)\s*;/s',
+			preg_quote( $name, '/' ),
+		);
+
+		if ( ! preg_match( $pattern, $contents, $matches ) ) {
+			return null;
+		}
+
+		return self::parse_scalar_literal( trim( (string) $matches[1] ) );
+	}
+
+	/**
+	 * Parse a simple PHP scalar literal from generated config.php content.
+	 *
+	 * Supports booleans, integers, floats, and quoted strings. This keeps
+	 * config.php readable without executing it as runtime data input.
+	 *
+	 * @param string $literal Raw literal expression.
+	 * @return bool|float|int|string|null
+	 * @since 1.0.0
+	 */
+	private static function parse_scalar_literal( string $literal ) {
+		if ( '' === $literal ) {
+			return null;
+		}
+
+		$lower_literal = strtolower( $literal );
+
+		if ( 'true' === $lower_literal ) {
+			return true;
+		}
+
+		if ( 'false' === $lower_literal ) {
+			return false;
+		}
+
+		if ( preg_match( '/^-?\d+$/', $literal ) ) {
+			return (int) $literal;
+		}
+
+		if ( preg_match( '/^-?\d+\.\d+$/', $literal ) ) {
+			return (float) $literal;
+		}
+
+		$quote = substr( $literal, 0, 1 );
+
+		if (
+			( '\'' === $quote || '"' === $quote ) &&
+			substr( $literal, -1 ) === $quote
+		) {
+			$value = substr( $literal, 1, -1 );
+
+			if ( '\'' === $quote ) {
+				return strtr(
+					$value,
+					array(
+						'\\\\' => '\\',
+						'\\\'' => '\'',
+					),
+				);
+			}
+
+			return stripcslashes( $value );
+		}
+
+		return null;
 	}
 
 	/**
@@ -404,23 +485,23 @@ class Config {
 	 * Read the semver version string from the .version file.
 	 *
 	 * @param string $file_path Absolute path to the .version file.
-	 * @return string Trimmed version string, or '0.0.0' when missing.
+	 * @return string Trimmed version string, or the default version when missing.
 	 * @since 1.0.0
 	 */
 	private static function read_version_file( string $file_path ): string {
 		if ( ! file_exists( $file_path ) ) {
-			return '0.0.0';
+			return PeakURL_Constants::DEFAULT_VERSION;
 		}
 
 		$contents = file_get_contents( $file_path );
 
 		if ( false === $contents ) {
-			return '0.0.0';
+			return PeakURL_Constants::DEFAULT_VERSION;
 		}
 
 		$version = trim( $contents );
 
-		return '' !== $version ? $version : '0.0.0';
+		return '' !== $version ? $version : PeakURL_Constants::DEFAULT_VERSION;
 	}
 
 	/**
@@ -506,37 +587,62 @@ class Config {
 	}
 
 	/**
-	 * Normalize the configured mail driver.
+	 * Derive the default session cookie path from the configured site URL.
 	 *
-	 * @param string $value Raw mail driver value.
-	 * @return string Supported driver value.
+	 * Root installs use '/', while subdirectory installs keep the install path
+	 * so dashboard cookies do not leak to unrelated apps on the same host.
+	 *
+	 * @param string $site_url Normalized site URL.
+	 * @return string
 	 * @since 1.0.0
 	 */
-	private static function normalize_mail_driver( string $value ): string {
-		$value = strtolower( trim( $value ) );
+	private static function default_session_cookie_path( string $site_url ): string {
+		$path = parse_url( $site_url, PHP_URL_PATH );
 
-		if ( in_array( $value, array( 'mail', 'smtp' ), true ) ) {
-			return $value;
+		if ( ! is_string( $path ) || '' === $path || '/' === $path ) {
+			return '/';
 		}
 
-		return 'mail';
+		return rtrim( $path, '/' ) . '/';
 	}
 
 	/**
-	 * Normalize the SMTP encryption mode.
+	 * Enable debug logging into the persistent content directory when requested.
 	 *
-	 * @param string $value Raw encryption value.
-	 * @return string Supported encryption value.
+	 * @param array<string, mixed> $config Merged runtime configuration.
+	 * @return void
 	 * @since 1.0.0
 	 */
-	private static function normalize_smtp_encryption( string $value ): string {
-		$value = strtolower( trim( $value ) );
-
-		if ( in_array( $value, array( '', 'none', 'ssl', 'tls' ), true ) ) {
-			return 'none' === $value ? '' : $value;
+	private static function bootstrap_debug_mode( array $config ): void {
+		if ( empty( $config[ PeakURL_Constants::CONFIG_DEBUG ] ) ) {
+			return;
 		}
 
-		return 'tls';
+		error_reporting( E_ALL );
+		ini_set( 'display_errors', '0' );
+		ini_set( 'log_errors', '1' );
+
+		$content_dir = trim(
+			(string) ( $config[ PeakURL_Constants::CONFIG_CONTENT_DIR ] ?? '' ),
+		);
+
+		if ( '' === $content_dir ) {
+			return;
+		}
+
+		if ( ! is_dir( $content_dir ) ) {
+			mkdir( $content_dir, 0755, true );
+		}
+
+		if ( ! is_dir( $content_dir ) ) {
+			return;
+		}
+
+		$log_path = rtrim( $content_dir, DIRECTORY_SEPARATOR ) .
+			DIRECTORY_SEPARATOR .
+			PeakURL_Constants::DEBUG_LOG_FILE;
+
+		ini_set( 'error_log', $log_path );
 	}
 
 	/**

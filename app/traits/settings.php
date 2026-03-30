@@ -34,9 +34,11 @@ trait Store_Settings_Trait {
 		$site_slug    = trim( (string) ( $this->config['PEAKURL_WORKSPACE_SLUG'] ?? '' ) );
 		$site_url     = trim( (string) ( $this->config['SITE_URL'] ?? '' ) );
 		$admin_email  = trim( (string) ( $this->config['PEAKURL_OWNER_EMAIL'] ?? '' ) );
-		$version      = trim( (string) ( $this->config['PEAKURL_VERSION'] ?? '' ) );
+		$version      = trim(
+			(string) ( $this->config[ PeakURL_Constants::CONFIG_VERSION ] ?? '' ),
+		);
 		$manifest_url = trim(
-			(string) ( $this->config['PEAKURL_UPDATE_MANIFEST_URL'] ?? '' ),
+			(string) ( $this->config[ PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL ] ?? '' ),
 		);
 
 		if ( '' !== $site_name ) {
@@ -66,6 +68,8 @@ trait Store_Settings_Trait {
 				false,
 			);
 		}
+
+		$this->sync_runtime_managed_settings();
 
 		if ( null === $this->get_setting_value( 'installed_at' ) ) {
 			$this->upsert_setting( 'installed_at', $this->now(), false );
@@ -121,5 +125,70 @@ trait Store_Settings_Trait {
 	 */
 	private function delete_settings( array $setting_keys ): void {
 		$this->settings_api->delete_options( $setting_keys );
+	}
+
+	/**
+	 * Seed database-backed runtime settings with application defaults.
+	 *
+	 * @return void
+	 * @since 1.0.0
+	 */
+	private function sync_runtime_managed_settings(): void {
+		$this->seed_setting_if_missing(
+			'mail_driver',
+			'mail',
+			false,
+		);
+		$this->seed_setting_if_missing(
+			'smtp_host',
+			'',
+			false,
+		);
+		$this->seed_setting_if_missing(
+			'smtp_port',
+			'587',
+			false,
+		);
+		$this->seed_setting_if_missing(
+			'smtp_encryption',
+			'tls',
+			false,
+		);
+		$this->seed_setting_if_missing(
+			'smtp_auth',
+			'false',
+			false,
+		);
+		$this->seed_setting_if_missing(
+			'smtp_username',
+			'',
+			false,
+		);
+		$this->seed_setting_if_missing(
+			'maxmind_account_id',
+			'',
+			false,
+		);
+	}
+
+	/**
+	 * Seed a setting only when no row exists yet.
+	 *
+	 * @param string $setting_key   Setting key.
+	 * @param string $setting_value Setting value.
+	 * @param bool   $autoload      Whether the setting should autoload.
+	 * @return void
+	 * @since 1.0.0
+	 */
+	private function seed_setting_if_missing(
+		string $setting_key,
+		string $setting_value,
+		bool $autoload = true
+	): void {
+		if ( null !== $this->get_setting_value( $setting_key ) ) {
+			return;
+		}
+
+		$this->upsert_setting( $setting_key, $setting_value, $autoload );
 	}
 }

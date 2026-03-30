@@ -3,7 +3,7 @@
  * PeakURL command-line GeoLite2 database updater.
  *
  * Downloads or refreshes the local MaxMind GeoLite2 City database
- * using the credentials stored in config.php.
+ * using the credentials stored in PeakURL settings.
  *
  * Usage:
  *   Source checkout: php app/bin/update-geoip.php
@@ -34,8 +34,11 @@ if ( ! file_exists( $autoload_path ) ) {
 
 require $autoload_path;
 
-$config = Config::load( dirname( __DIR__ ) );
-$geoip  = new Geoip_Service( $config );
+$config   = Runtime_Config::bootstrap( dirname( __DIR__ ) );
+$database = new Database( $config );
+$settings = new Settings_API( new PeakURL_DB( $database ) );
+$crypto   = new Crypto_Service( $config );
+$geoip    = new Geoip_Service( $config, $settings, $crypto );
 
 try {
 	$status = $geoip->download_database();

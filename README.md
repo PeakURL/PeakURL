@@ -23,6 +23,10 @@ For installation, setup, usage, and product documentation, start here:
 
 - [PeakURL.org Docs](https://peakurl.org/docs)
 
+If you are migrating from YOURLS, you can export your links with the
+[`YOURLS to PeakURL` plugin](https://github.com/PeakURL/YOURLS-to-PeakURL)
+and then import them from the PeakURL dashboard through `Bulk Import`.
+
 ## Open Source
 
 PeakURL is released under the [MIT License](LICENSE).

@@ -23,7 +23,7 @@ PeakURL is designed to be installed through its built-in web installer.
 
 If you want the fastest path to a working install:
 
-1. Download the latest release from [peakurl.org/latest.zip](https://peakurl.org/latest.zip)
+1. Download the latest release from [PeakURL.org/download](https://peakurl.org/download)
 2. Extract it on your domain or subdirectory
 3. Visit your site root in the browser
 4. Complete the three-step installer

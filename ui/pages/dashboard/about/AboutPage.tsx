@@ -16,6 +16,7 @@ import {
 	Palette,
 	ChevronRight,
 	BookOpen,
+	Coffee,
 } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { PEAKURL_VERSION, PEAKURL_NAME } from '@/constants';
@@ -214,7 +215,7 @@ function AboutPage() {
 						link infrastructure on your own stack.
 					</p>
 
-					<div className="flex flex-wrap justify-center gap-3 mt-8">
+					<div className="mt-8 flex flex-wrap justify-center gap-3">
 						<a
 							href="https://peakurl.org"
 							target="_blank"
@@ -339,6 +340,45 @@ function AboutPage() {
 								</div>
 							</div>
 						))}
+					</div>
+
+					<div className="mt-8 rounded-2xl border border-accent/20 bg-accent/5 p-6">
+						<div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+							<div className="max-w-2xl">
+								<p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+									Support PeakURL
+								</p>
+								<h3 className="mt-2 text-xl font-semibold text-heading">
+									If PeakURL is useful to you, help keep it practical and actively maintained.
+								</h3>
+								<p className="mt-2 text-sm leading-6 text-text-muted">
+									Sponsorships and small contributions help fund releases, documentation,
+									infrastructure, and the maintenance work that keeps the project moving.
+								</p>
+							</div>
+							<div className="flex flex-wrap gap-3">
+								<a
+									href="https://peakurl.org/sponsor"
+									target="_blank"
+									rel="noreferrer"
+									className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:opacity-95"
+								>
+									<Heart size={16} />
+									Sponsor PeakURL
+									<ExternalLink size={14} />
+								</a>
+								<a
+									href="https://buymeacoffee.com/PeakURL"
+									target="_blank"
+									rel="noreferrer"
+									className="inline-flex items-center gap-2 rounded-lg border border-stroke bg-surface px-4 py-2.5 text-sm font-semibold text-heading transition-colors hover:border-accent/30 hover:text-accent"
+								>
+									<Coffee size={16} />
+									Buy Me a Coffee
+									<ExternalLink size={14} />
+								</a>
+							</div>
+						</div>
 					</div>
 				</section>
 

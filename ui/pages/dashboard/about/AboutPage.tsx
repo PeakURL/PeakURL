@@ -454,12 +454,12 @@ function AboutPage() {
 						</a>
 						<span className="opacity-30">•</span>
 						<a
-							href="https://peakurl.org/changelog"
+							href="https://peakurl.org/release-notes"
 							target="_blank"
 							rel="noreferrer"
 							className="inline-flex items-center gap-1 hover:text-accent transition-colors"
 						>
-							Changelog <ExternalLink size={10} />
+							Release Notes <ExternalLink size={10} />
 						</a>
 					</div>
 				</section>

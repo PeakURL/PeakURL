@@ -34,7 +34,7 @@ function UpdatesTab({
 	const canApply = Boolean(status?.canApply);
 	const showInstallAction = updateAvailable && canApply;
 	const showReleaseMeta =
-		updateAvailable && (status?.releasedAt || status?.changelogUrl);
+		updateAvailable && (status?.releasedAt || status?.releaseNotesUrl);
 
 	return (
 		<div className="space-y-5">
@@ -149,18 +149,18 @@ function UpdatesTab({
 								</p>
 							</div>
 						)}
-						{status?.changelogUrl && (
+						{status?.releaseNotesUrl && (
 							<div className="rounded-lg border border-stroke bg-bg px-4 py-3">
 								<div className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
-									Changelog
+									Release notes
 								</div>
 								<a
-									href={status.changelogUrl}
+									href={status.releaseNotesUrl}
 									target="_blank"
 									rel="noreferrer"
 									className="mt-2 inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline"
 								>
-									Review what changed
+									Read release notes
 									<ExternalLink size={14} />
 								</a>
 							</div>

@@ -214,7 +214,7 @@ class Update {
 			'downloadUrl'         => (string) ( $manifest['downloadUrl'] ?? '' ),
 			'packageUrl'          => (string) ( $manifest['packageUrl'] ?? '' ),
 			'checksumSha256'      => (string) ( $manifest['checksumSha256'] ?? '' ),
-			'changelogUrl'        => (string) ( $manifest['changelogUrl'] ?? '' ),
+			'releaseNotesUrl'     => (string) ( $manifest['releaseNotesUrl'] ?? '' ),
 			'releasedAt'          => (string) ( $manifest['releasedAt'] ?? '' ),
 			'minimumPhp'          => $minimum_php,
 			'minimumMysql'        => (string) ( $manifest['minimumMysql'] ?? '' ),
@@ -369,15 +369,15 @@ class Update {
 			$source = $payload['offers'][0];
 		}
 
-		$version       = trim( (string) ( $source['version'] ?? $source['current'] ?? '' ) );
-		$package_url   = trim( (string) ( $source['packageUrl'] ?? $source['package'] ?? '' ) );
-		$download_url  = trim( (string) ( $source['downloadUrl'] ?? $source['download'] ?? '' ) );
-		$checksum      = strtolower(
+		$version           = trim( (string) ( $source['version'] ?? $source['current'] ?? '' ) );
+		$package_url       = trim( (string) ( $source['packageUrl'] ?? $source['package'] ?? '' ) );
+		$download_url      = trim( (string) ( $source['downloadUrl'] ?? $source['download'] ?? '' ) );
+		$checksum          = strtolower(
 			trim(
 				(string) ( $source['checksumSha256'] ?? $source['checksum_sha256'] ?? '' ),
 			),
 		);
-		$changelog_url = trim( (string) ( $source['changelogUrl'] ?? $source['changelog'] ?? '' ) );
+		$release_notes_url = trim( (string) ( $source['releaseNotesUrl'] ?? '' ) );
 
 		if ( '' === $package_url ) {
 			$package_url = $download_url;
@@ -400,27 +400,27 @@ class Update {
 		}
 
 		return array(
-			'product'        => trim(
+			'product'         => trim(
 				(string) ( $payload['product'] ?? $source['product'] ?? 'peakurl' ),
 			),
-			'channel'        => trim(
+			'channel'         => trim(
 				(string) ( $payload['channel'] ?? $source['channel'] ?? 'latest' ),
 			),
-			'version'        => $version,
-			'downloadUrl'    => $download_url,
-			'packageUrl'     => $package_url,
-			'checksumSha256' => $checksum,
-			'changelogUrl'   => $changelog_url,
-			'releasedAt'     => trim(
+			'version'         => $version,
+			'downloadUrl'     => $download_url,
+			'packageUrl'      => $package_url,
+			'checksumSha256'  => $checksum,
+			'releaseNotesUrl' => $release_notes_url,
+			'releasedAt'      => trim(
 				(string) ( $source['releasedAt'] ?? $source['date'] ?? '' ),
 			),
-			'minimumPhp'     => trim(
+			'minimumPhp'      => trim(
 				(string) ( $source['minimumPhp'] ?? $source['minimum_php'] ?? '' ),
 			),
-			'minimumMysql'   => trim(
+			'minimumMysql'    => trim(
 				(string) ( $source['minimumMysql'] ?? $source['minimum_mysql'] ?? '' ),
 			),
-			'minimumMariaDb' => trim(
+			'minimumMariaDb'  => trim(
 				(string) ( $source['minimumMariaDb'] ?? $source['minimum_mariadb'] ?? '' ),
 			),
 		);

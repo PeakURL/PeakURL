@@ -264,10 +264,19 @@ class Request {
 	 * @since 1.0.0
 	 */
 	public function get_header( string $key, $fallback = null ) {
-		$normalized = 'HTTP_' . strtoupper( str_replace( '-', '_', $key ) );
+		$canonical  = strtoupper( str_replace( '-', '_', $key ) );
+		$normalized = 'HTTP_' . $canonical;
 
-		if ( 'CONTENT_TYPE' === strtoupper( str_replace( '-', '_', $key ) ) ) {
+		if ( 'CONTENT_TYPE' === $canonical ) {
 			$normalized = 'CONTENT_TYPE';
+		}
+
+		if (
+			'AUTHORIZATION' === $canonical &&
+			! isset( $this->server_params[ $normalized ] ) &&
+			isset( $this->server_params['REDIRECT_HTTP_AUTHORIZATION'] )
+		) {
+			return $this->server_params['REDIRECT_HTTP_AUTHORIZATION'];
 		}
 
 		return $this->server_params[ $normalized ] ?? $fallback;

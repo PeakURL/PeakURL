@@ -5,7 +5,7 @@
  * Presents a two-step wizard:
  *   Step 0 – Welcome checklist (prerequisites).
  *   Step 1 – Database credentials form, writes `config.php` via
- *            {@see Setup_Config_Service::setup()}.
+ *            {@see SetupConfig::setup()}.
  *
  * On success the user is redirected to `install.php` (step 3).
  *
@@ -14,6 +14,9 @@
  */
 
 declare(strict_types=1);
+
+use PeakURL\Services\Install;
+use PeakURL\Services\SetupConfig;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . DIRECTORY_SEPARATOR );
@@ -90,14 +93,14 @@ if ( ! file_exists( $autoload_path ) ) {
 
 require $autoload_path;
 
-$runtime_state = Install_Service::get_runtime_state( $app_path );
+$runtime_state = Install::get_runtime_state( $app_path );
 
-if ( Install_Service::STATE_READY === $runtime_state ) {
+if ( Install::STATE_READY === $runtime_state ) {
 	header( 'Location: ' . peakurl_setup_url( $base_path, '/dashboard' ) );
 	exit();
 }
 
-if ( Install_Service::STATE_NEEDS_INSTALL === $runtime_state ) {
+if ( Install::STATE_NEEDS_INSTALL === $runtime_state ) {
 	header( 'Location: ' . peakurl_setup_url( $base_path, '/install.php' ) );
 	exit();
 }
@@ -114,7 +117,7 @@ if (
 
 $host              = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $detected_site_url = $scheme . '://' . $host . $base_path;
-$values            = Setup_Config_Service::get_form_defaults(
+$values            = SetupConfig::get_form_defaults(
 	$app_path,
 	$detected_site_url,
 );
@@ -133,10 +136,10 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 	}
 
 	try {
-		Setup_Config_Service::setup( $app_path, $_POST );
+		SetupConfig::setup( $app_path, $_POST );
 		header( 'Location: ' . peakurl_setup_url( $base_path, '/install.php' ) );
 		exit();
-	} catch ( Throwable $exception ) {
+	} catch ( \Throwable $exception ) {
 		$error_message = $exception->getMessage();
 		$step          = 1;
 	}

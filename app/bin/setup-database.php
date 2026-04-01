@@ -4,7 +4,7 @@
  *
  * Creates the target database (if it does not exist), applies the
  * SQL schema from `database/schema.sql`, and seeds initial
- * workspace data via {@see Data_Store::bootstrap_workspace()}.
+ * workspace data via {@see Store::bootstrap_workspace()}.
  *
  * Intended for Docker/CI bootstrapping—not for production use.
  *
@@ -17,6 +17,10 @@
  */
 
 declare(strict_types=1);
+
+use PeakURL\Includes\Connection;
+use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Store;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	define(
@@ -42,7 +46,7 @@ require $autoload_path;
 // ── Load config and validate database name ──────────────────────
 
 $base_path     = dirname( __DIR__ );
-$config        = Runtime_Config::bootstrap( $base_path );
+$config        = RuntimeConfig::bootstrap( $base_path );
 $database_name = preg_replace(
 	'/[^A-Za-z0-9_]/',
 	'',
@@ -67,14 +71,14 @@ $server_dsn = sprintf(
 	(string) $config['DB_CHARSET'],
 );
 
-$server = new PDO(
+$server = new \PDO(
 	$server_dsn,
 	(string) $config['DB_USERNAME'],
 	(string) $config['DB_PASSWORD'],
 	array(
-		PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-		PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-		PDO::ATTR_EMULATE_PREPARES   => false,
+		\PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
+		\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+		\PDO::ATTR_EMULATE_PREPARES   => false,
 	),
 );
 
@@ -105,18 +109,19 @@ if ( ! file_exists( $schema_path ) ) {
 	exit( 1 );
 }
 
-$database   = new Database( $config );
-$connection = $database->get_connection();
-$schema     = file_get_contents( $schema_path );
+$connection_manager = new Connection( $config );
+$connection         = $connection_manager->get_connection();
+$schema             = file_get_contents( $schema_path );
 
 if ( false === $schema ) {
 	fwrite( STDERR, "Unable to read schema file.\n" );
 	exit( 1 );
 }
 
-$connection->exec( $database->prefix_schema( $schema ) );
+$connection->exec( $connection_manager->prefix_schema( $schema ) );
+$connection_manager->reconcile_schema();
 
-$data_store = new Data_Store( $database, $config );
+$data_store = new Store( $connection_manager, $config );
 $data_store->bootstrap_workspace();
 
 fwrite( STDOUT, "Database ready: {$database_name}\n" );

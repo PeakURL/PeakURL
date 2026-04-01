@@ -1,15 +1,16 @@
 // @ts-nocheck
 'use client';
 
+import { useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
 	PieChart,
 	Link2,
 	Plug,
-	Upload,
-	Code,
+	Wrench,
 	Users,
 	Settings,
+	ChevronDown,
 	X,
 } from 'lucide-react';
 import { useGetUrlsQuery } from '@/store/slices/api/urls';
@@ -43,16 +44,18 @@ const buildNav = (basePath = '/dashboard') => {
 			name: 'Plugins',
 			href: `${base || ''}/plugins`,
 			icon: Plug,
+			adminOnly: true,
 		},
 		{
-			name: 'Bulk Import',
-			href: `${base || ''}/bulk-import`,
-			icon: Upload,
-		},
-		{
-			name: 'API & Docs',
-			href: `${base || ''}/api-docs`,
-			icon: Code,
+			name: 'Tools',
+			icon: Wrench,
+			adminOnly: true,
+			children: [
+				{
+					name: 'Import',
+					href: `${base || ''}/tools/import/file`,
+				},
+			],
 		},
 		{
 			name: 'Settings',
@@ -73,21 +76,20 @@ export const DashboardSidebar = ({
 	const { canManageUsers } = useAdminAccess();
 	const links = urlsRes?.data?.items ?? [];
 
-	const navigation = buildNav(basePath);
+	const navigation = useMemo(() => buildNav(basePath), [basePath]);
 	const base =
 		basePath === '/'
 			? ''
 			: basePath.endsWith('/') && basePath.length > 1
 				? basePath.slice(0, -1)
 				: basePath || '';
+	const [openSections, setOpenSections] = useState({});
+
+	const getSectionBasePath = (href) =>
+		href ? href.replace(/\/[^/]+$/, '') : '';
 
 	const filteredNavigation = navigation.filter((item) => {
-		if (
-			item.name === 'Plugins' ||
-			item.name === 'Users' ||
-			item.name === 'Bulk Import' ||
-			item.name === 'API & Docs'
-		) {
+		if (item.adminOnly) {
 			return canManageUsers;
 		}
 		return true;
@@ -129,11 +131,100 @@ export const DashboardSidebar = ({
 				<nav className="flex-1 py-4 px-3 overflow-y-auto">
 					<div className="space-y-1">
 						{filteredNavigation.map((item) => {
+							const IconComponent = item.icon;
+							const childHrefBase = getSectionBasePath(
+								item.children?.[0]?.href,
+							);
+							const isChildActive = item.children?.some(
+								(child) =>
+									pathname === child.href ||
+									pathname.startsWith(`${child.href}/`),
+							);
+							const isSectionActive =
+								Boolean(isChildActive) ||
+								(Boolean(childHrefBase) &&
+									(pathname === childHrefBase ||
+										pathname.startsWith(`${childHrefBase}/`)));
+							const isOpen =
+								isSectionActive || Boolean(openSections[item.name]);
 							const isActive =
 								pathname === item.href ||
 								(pathname.startsWith(`${item.href}/`) &&
 									item.href !== base);
-							const IconComponent = item.icon;
+
+							if (item.children?.length) {
+								return (
+									<div key={item.name} className="space-y-1">
+										<button
+											type="button"
+											onClick={() =>
+												setOpenSections((current) => ({
+													...current,
+													[item.name]: !current[item.name],
+												}))
+											}
+											className={`
+												w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors
+												cursor-pointer
+												${
+													isSectionActive
+														? 'text-heading bg-surface-alt'
+														: 'text-text-muted hover:text-accent hover:bg-surface-alt'
+												}
+											`}
+										>
+											<IconComponent
+												size={18}
+												className={`mr-3 ${
+													isSectionActive
+														? 'text-accent'
+														: 'text-text-muted'
+												}`}
+											/>
+											<span className="flex-1 text-left">
+												{item.name}
+											</span>
+											<ChevronDown
+												size={16}
+												className={`transition-transform ${
+													isOpen ? 'rotate-180' : ''
+												}`}
+											/>
+										</button>
+
+										{isOpen && (
+											<div className="ml-5 space-y-1 border-l border-stroke pl-3">
+												{item.children.map((child) => {
+													const isChildLinkActive =
+														pathname === child.href ||
+														pathname.startsWith(
+															`${child.href}/`,
+														);
+
+													return (
+														<Link
+															key={child.name}
+															to={child.href}
+															onClick={onMobileClose}
+															className={`
+																block rounded-lg px-3 py-2 text-sm font-medium transition-colors
+																${
+																	isChildLinkActive
+																		? 'bg-accent text-white shadow-sm'
+																		: 'text-text-muted hover:bg-surface-alt hover:text-accent'
+																}
+															`}
+														>
+															{child.name}
+														</Link>
+													);
+												})}
+											</div>
+										)}
+									</div>
+								);
+							}
+
 							return (
 								<Link
 									key={item.name}

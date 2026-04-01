@@ -8,17 +8,32 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Traits;
+
+use PeakURL\Includes\Constants;
+use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Http\ApiException;
+use PeakURL\Http\Request;
+use PeakURL\Services\Crypto;
+use PeakURL\Services\Geoip;
+use PeakURL\Services\Mailer;
+use PeakURL\Services\SetupConfig;
+use PeakURL\Services\Update;
+use PeakURL\Utils\Query;
+use PeakURL\Utils\Security;
+use PeakURL\Utils\Visitor;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Store_Accounts_Trait — auth, users, and security methods for Data_Store.
+ * AccountsTrait — auth, users, and security methods for Store.
  *
  * @since 1.0.0
  */
-trait Store_Accounts_Trait {
+trait AccountsTrait {
 
 	/**
 	 * Register a new user account.
@@ -31,7 +46,7 @@ trait Store_Accounts_Trait {
 	 * @param array<string, mixed> $payload Body with `email`, `username`, `password`, optional `firstName`/`lastName`.
 	 * @return array<string, mixed> Hydrated user profile.
 	 *
-	 * @throws Api_Exception On validation failure or duplicate email/username (422).
+	 * @throws ApiException On validation failure or duplicate email/username (422).
 	 * @since 1.0.0
 	 */
 	public function register( Request $request, array $payload ): array {
@@ -40,60 +55,36 @@ trait Store_Accounts_Trait {
 		$password = (string) ( $payload['password'] ?? '' );
 
 		if ( '' === $email || ! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
-			throw new Api_Exception( 'A valid email address is required.', 422 );
+			throw new ApiException( 'A valid email address is required.', 422 );
 		}
 
 		if ( '' === $username ) {
-			throw new Api_Exception( 'Username is required.', 422 );
+			throw new ApiException( 'Username is required.', 422 );
 		}
 
 		if ( strlen( $password ) < 8 ) {
-			throw new Api_Exception(
+			throw new ApiException(
 				'Password must be at least 8 characters.',
 				422,
 			);
 		}
 
 		if ( $this->find_user_row_by_email( $email ) ) {
-			throw new Api_Exception(
+			throw new ApiException(
 				'Email address is already registered.',
 				422,
 			);
 		}
 
 		if ( $this->find_user_row_by_username( $username ) ) {
-			throw new Api_Exception( 'Username is already taken.', 422 );
+			throw new ApiException( 'Username is already taken.', 422 );
 		}
 
 		$now                = $this->now();
 		$verification_token = bin2hex( random_bytes( 20 ) );
 
-		$this->execute(
-			'INSERT INTO users (
-                username,
-                email,
-                first_name,
-                last_name,
-                password_hash,
-                role,
-                is_email_verified,
-                email_verification_token,
-                email_verification_expires_at,
-                created_at,
-                updated_at
-            ) VALUES (
-                :username,
-                :email,
-                :first_name,
-                :last_name,
-                :password_hash,
-                :role,
-                0,
-                :email_verification_token,
-                :email_verification_expires_at,
-                :created_at,
-                :updated_at
-            )',
+		$this->db->insert(
+			'users',
 			array(
 				'username'                      => $username,
 				'email'                         => $email,
@@ -101,6 +92,7 @@ trait Store_Accounts_Trait {
 				'last_name'                     => trim( (string) ( $payload['lastName'] ?? 'User' ) ),
 				'password_hash'                 => password_hash( $password, PASSWORD_DEFAULT ),
 				'role'                          => 'editor',
+				'is_email_verified'             => 0,
 				'email_verification_token'      => $verification_token,
 				'email_verification_expires_at' => gmdate(
 					'Y-m-d H:i:s',
@@ -128,14 +120,14 @@ trait Store_Accounts_Trait {
 	 * @param string $token Verification token from the email link.
 	 * @return bool True if the token was valid and email verified; false otherwise.
 	 *
-	 * @throws Api_Exception When the token string is empty (422).
+	 * @throws ApiException When the token string is empty (422).
 	 * @since 1.0.0
 	 */
 	public function verify_email( string $token ): bool {
 		$token = trim( $token );
 
 		if ( '' === $token ) {
-			throw new Api_Exception( 'Verification token is required.', 422 );
+			throw new ApiException( 'Verification token is required.', 422 );
 		}
 
 		$user = $this->query_one(
@@ -180,7 +172,7 @@ trait Store_Accounts_Trait {
 	 * @param array<string, mixed> $payload Body with optional `email`.
 	 * @return array<string, bool> `['resent' => true|false]`.
 	 *
-	 * @throws Api_Exception When no email can be determined (422).
+	 * @throws ApiException When no email can be determined (422).
 	 * @since 1.0.0
 	 */
 	public function resend_verification( Request $request, array $payload ): array {
@@ -192,7 +184,7 @@ trait Store_Accounts_Trait {
 		);
 
 		if ( '' === $email ) {
-			throw new Api_Exception( 'Email is required.', 422 );
+			throw new ApiException( 'Email is required.', 422 );
 		}
 
 		$user = $this->find_user_row_by_email( $email );
@@ -229,7 +221,7 @@ trait Store_Accounts_Trait {
 	 * @param array<string, mixed> $payload Body with `identifier`/`email`/`username`, `password`, optional `token`.
 	 * @return array<string, mixed> Hydrated user + `requiresTwoFactor` flag.
 	 *
-	 * @throws Api_Exception On missing credentials (422) or invalid credentials (401).
+	 * @throws ApiException On missing credentials (422) or invalid credentials (401).
 	 * @since 1.0.0
 	 */
 	public function login( Request $request, array $payload ): array {
@@ -243,7 +235,7 @@ trait Store_Accounts_Trait {
 		$token      = trim( (string) ( $payload['token'] ?? '' ) );
 
 		if ( '' === $identifier || '' === $password ) {
-			throw new Api_Exception(
+			throw new ApiException(
 				'Email or username and password are required.',
 				422,
 			);
@@ -263,7 +255,7 @@ trait Store_Accounts_Trait {
 			! $user ||
 			! password_verify( $password, (string) $user['password_hash'] )
 		) {
-			throw new Api_Exception(
+			throw new ApiException(
 				'Invalid email, username, or password.',
 				401,
 			);
@@ -284,18 +276,20 @@ trait Store_Accounts_Trait {
 				)
 			) {
 				if ( ! $this->consume_backup_code( (string) $user['id'], $token ) ) {
-					throw new Api_Exception( 'Invalid two-factor code.', 401 );
+					throw new ApiException( 'Invalid two-factor code.', 401 );
 				}
 			}
 		}
 
 		$this->create_session_for_user( $request, (string) $user['id'] );
-		$this->execute(
-			'UPDATE users SET last_login_at = :last_login_at, updated_at = :updated_at WHERE id = :id',
+		$this->db->update(
+			'users',
 			array(
 				'last_login_at' => $this->now(),
 				'updated_at'    => $this->now(),
-				'id'            => $user['id'],
+			),
+			array(
+				'id' => $user['id'],
 			),
 		);
 
@@ -317,7 +311,7 @@ trait Store_Accounts_Trait {
 	 * @param array<string, mixed> $payload Body with `identifier`, `password`, and `token`.
 	 * @return array<string, mixed> Hydrated user.
 	 *
-	 * @throws Api_Exception When the token is missing or invalid (422).
+	 * @throws ApiException When the token is missing or invalid (422).
 	 * @since 1.0.0
 	 */
 	public function verify_two_factor_login(
@@ -327,7 +321,7 @@ trait Store_Accounts_Trait {
 		$result = $this->login( $request, $payload );
 
 		if ( ! empty( $result['requiresTwoFactor'] ) ) {
-			throw new Api_Exception(
+			throw new ApiException(
 				'Two-factor authentication is still required.',
 				422,
 			);
@@ -348,19 +342,21 @@ trait Store_Accounts_Trait {
 		$session = $this->find_session_by_request( $request );
 
 		if ( $session ) {
-			$this->execute(
-				'UPDATE sessions SET revoked_at = :revoked_at, revoked_reason = :revoked_reason WHERE id = :id',
+			$this->db->update(
+				'sessions',
 				array(
 					'revoked_at'     => $this->now(),
 					'revoked_reason' => 'logout',
-					'id'             => $session['id'],
+				),
+				array(
+					'id' => $session['id'],
 				),
 			);
 		}
 
 		$request->expire_cookie(
-			(string) $this->config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME ],
-			Security_Utils::session_cookie_options( $this->config, $request ),
+			(string) $this->config[ Constants::CONFIG_SESSION_COOKIE_NAME ],
+			Security::session_cookie_options( $this->config, $request ),
 		);
 	}
 
@@ -373,7 +369,7 @@ trait Store_Accounts_Trait {
 	 * @param array<string, mixed> $payload Body with `identifier` or `email`.
 	 * @return array<string, string> `['identifier' => '…']`.
 	 *
-	 * @throws Api_Exception When the identifier is empty (422).
+	 * @throws ApiException When the identifier is empty (422).
 	 * @since 1.0.0
 	 */
 	public function forgot_password( array $payload ): array {
@@ -382,7 +378,7 @@ trait Store_Accounts_Trait {
 		);
 
 		if ( '' === $identifier ) {
-			throw new Api_Exception( 'Email or username is required.', 422 );
+			throw new ApiException( 'Email or username is required.', 422 );
 		}
 
 		$normalized_identifier = strtolower( $identifier );
@@ -417,7 +413,7 @@ trait Store_Accounts_Trait {
 				$user,
 				$reset_token,
 			);
-		} catch ( RuntimeException $exception ) {
+		} catch ( \RuntimeException $exception ) {
 			error_log(
 				sprintf(
 					'PeakURL mail error for password reset (%s): %s',
@@ -437,7 +433,7 @@ trait Store_Accounts_Trait {
 	 * @param array<string, mixed> $payload Body with `password` or `newPassword`.
 	 * @return bool True if the token was valid and password updated.
 	 *
-	 * @throws Api_Exception When the new password is too short (422).
+	 * @throws ApiException When the new password is too short (422).
 	 * @since 1.0.0
 	 */
 	public function reset_password( string $token, array $payload ): bool {
@@ -445,7 +441,7 @@ trait Store_Accounts_Trait {
 			(string) ( $payload['password'] ?? ( $payload['newPassword'] ?? '' ) );
 
 		if ( strlen( $password ) < 8 ) {
-			throw new Api_Exception(
+			throw new ApiException(
 				'Password must be at least 8 characters.',
 				422,
 			);
@@ -501,14 +497,14 @@ trait Store_Accounts_Trait {
 	 * @param Request $request Incoming HTTP request.
 	 * @return array<string, mixed> Hydrated user profile.
 	 *
-	 * @throws Api_Exception When no valid session or API key exists (401).
+	 * @throws ApiException When no valid session or API key exists (401).
 	 * @since 1.0.0
 	 */
 	public function get_current_user( Request $request ): array {
 		$user = $this->resolve_current_user( $request, true );
 
 		if ( ! $user ) {
-			throw new Api_Exception( 'Authentication required.', 401 );
+			throw new ApiException( 'Authentication required.', 401 );
 		}
 
 		return $user;
@@ -524,7 +520,7 @@ trait Store_Accounts_Trait {
 	 * @param array<string, mixed> $changes Partial profile payload.
 	 * @return array<string, mixed> Hydrated updated user profile.
 	 *
-	 * @throws Api_Exception On validation failures (422).
+	 * @throws ApiException On validation failures (422).
 	 * @since 1.0.0
 	 */
 	public function update_current_user( Request $request, array $changes ): array {
@@ -563,7 +559,7 @@ trait Store_Accounts_Trait {
 					$value !== $user_email &&
 					! filter_var( $value, FILTER_VALIDATE_EMAIL )
 				) {
-					throw new Api_Exception(
+					throw new ApiException(
 						'A valid email address is required.',
 						422,
 					);
@@ -576,7 +572,7 @@ trait Store_Accounts_Trait {
 					$existing &&
 					(string) $existing['id'] !== $user_id
 				) {
-					throw new Api_Exception(
+					throw new ApiException(
 						'Email address is already in use.',
 						422,
 					);
@@ -584,14 +580,14 @@ trait Store_Accounts_Trait {
 			}
 
 			if ( 'username' === $input_key && '' === $value ) {
-				throw new Api_Exception( 'Username cannot be empty.', 422 );
+				throw new ApiException( 'Username cannot be empty.', 422 );
 			}
 
 			if ( 'username' === $input_key ) {
 				$existing = $this->find_user_row_by_username( $value );
 
 				if ( $existing && (string) $existing['id'] !== $user_id ) {
-					throw new Api_Exception( 'Username is already taken.', 422 );
+					throw new ApiException( 'Username is already taken.', 422 );
 				}
 			}
 
@@ -606,7 +602,7 @@ trait Store_Accounts_Trait {
 			$password = (string) $changes['password'];
 
 			if ( strlen( $password ) < 8 ) {
-				throw new Api_Exception(
+				throw new ApiException(
 					'Password must be at least 8 characters.',
 					422,
 				);
@@ -669,7 +665,7 @@ trait Store_Accounts_Trait {
 	 * @param array<string, mixed> $payload User creation payload.
 	 * @return array<string, mixed> Hydrated new user.
 	 *
-	 * @throws Api_Exception On validation or uniqueness failure (422).
+	 * @throws ApiException On validation or uniqueness failure (422).
 	 * @since 1.0.0
 	 */
 	public function create_user( Request $request, array $payload ): array {
@@ -686,62 +682,40 @@ trait Store_Accounts_Trait {
 		$now        = $this->now();
 
 		if ( '' === $first_name || '' === $last_name ) {
-			throw new Api_Exception( 'First and last name are required.', 422 );
+			throw new ApiException( 'First and last name are required.', 422 );
 		}
 
 		if ( ! preg_match( '/^[A-Za-z0-9._@-]{3,120}$/', $username ) ) {
-			throw new Api_Exception(
+			throw new ApiException(
 				'Username must be 3-120 characters using letters, numbers, dots, dashes, underscores, or @.',
 				422,
 			);
 		}
 
 		if ( ! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
-			throw new Api_Exception( 'A valid email address is required.', 422 );
+			throw new ApiException( 'A valid email address is required.', 422 );
 		}
 
 		if ( strlen( $password ) < 8 ) {
-			throw new Api_Exception(
+			throw new ApiException(
 				'Password must be at least 8 characters.',
 				422,
 			);
 		}
 
 		if ( $this->find_user_row_by_email( $email ) ) {
-			throw new Api_Exception(
+			throw new ApiException(
 				'Email address is already registered.',
 				422,
 			);
 		}
 
 		if ( $this->find_user_row_by_username( $username ) ) {
-			throw new Api_Exception( 'Username is already taken.', 422 );
+			throw new ApiException( 'Username is already taken.', 422 );
 		}
 
-		$this->execute(
-			'INSERT INTO users (
-				username,
-				email,
-				first_name,
-				last_name,
-				password_hash,
-				role,
-				is_email_verified,
-				email_verified_at,
-				created_at,
-				updated_at
-			) VALUES (
-				:username,
-				:email,
-				:first_name,
-				:last_name,
-				:password_hash,
-				:role,
-				1,
-				:email_verified_at,
-				:created_at,
-				:updated_at
-			)',
+		$this->db->insert(
+			'users',
 			array(
 				'username'          => $username,
 				'email'             => $email,
@@ -749,6 +723,7 @@ trait Store_Accounts_Trait {
 				'last_name'         => $last_name,
 				'password_hash'     => password_hash( $password, PASSWORD_DEFAULT ),
 				'role'              => $role,
+				'is_email_verified' => 1,
 				'email_verified_at' => $now,
 				'created_at'        => $now,
 				'updated_at'        => $now,
@@ -770,7 +745,7 @@ trait Store_Accounts_Trait {
 	 * @param array<string, mixed> $changes  Partial update payload.
 	 * @return array<string, mixed>|null Hydrated user or null if not found.
 	 *
-	 * @throws Api_Exception On validation or role-change violation (422).
+	 * @throws ApiException On validation or role-change violation (422).
 	 * @since 1.0.0
 	 */
 	public function update_user_by_username(
@@ -813,7 +788,7 @@ trait Store_Accounts_Trait {
 			$new_username = trim( (string) $changes['username'] );
 
 			if ( ! preg_match( '/^[A-Za-z0-9._@-]{3,120}$/', $new_username ) ) {
-				throw new Api_Exception(
+				throw new ApiException(
 					'Username must be 3-120 characters using letters, numbers, dots, dashes, underscores, or @.',
 					422,
 				);
@@ -822,7 +797,7 @@ trait Store_Accounts_Trait {
 			$existing_user = $this->find_user_row_by_username( $new_username );
 
 			if ( $existing_user && (string) $existing_user['id'] !== $user_id ) {
-				throw new Api_Exception( 'Username is already taken.', 422 );
+				throw new ApiException( 'Username is already taken.', 422 );
 			}
 
 			$updates[]          = 'username = :username';
@@ -836,7 +811,7 @@ trait Store_Accounts_Trait {
 				$email !== $user_email &&
 				! filter_var( $email, FILTER_VALIDATE_EMAIL )
 			) {
-				throw new Api_Exception(
+				throw new ApiException(
 					'A valid email address is required.',
 					422,
 				);
@@ -849,7 +824,7 @@ trait Store_Accounts_Trait {
 				$existing_user &&
 				(string) $existing_user['id'] !== $user_id
 			) {
-				throw new Api_Exception(
+				throw new ApiException(
 					'Email address is already in use.',
 					422,
 				);
@@ -876,7 +851,7 @@ trait Store_Accounts_Trait {
 
 			if ( '' !== $password ) {
 				if ( strlen( $password ) < 8 ) {
-					throw new Api_Exception(
+					throw new ApiException(
 						'Password must be at least 8 characters.',
 						422,
 					);
@@ -918,7 +893,7 @@ trait Store_Accounts_Trait {
 	 * @param string  $username Target user's username.
 	 * @return bool True if deleted; false if username not found.
 	 *
-	 * @throws Api_Exception When deleting self or last admin (422).
+	 * @throws ApiException When deleting self or last admin (422).
 	 * @since 1.0.0
 	 */
 	public function delete_user_by_username(
@@ -933,7 +908,7 @@ trait Store_Accounts_Trait {
 		}
 
 		if ( (string) $user['id'] === (string) $current_user['id'] ) {
-			throw new Api_Exception( 'You cannot delete the current user.', 422 );
+			throw new ApiException( 'You cannot delete the current user.', 422 );
 		}
 
 		$this->assert_admin_role_change_is_allowed(
@@ -943,8 +918,8 @@ trait Store_Accounts_Trait {
 			(string) $current_user['id'],
 		);
 
-		$this->execute(
-			'DELETE FROM users WHERE id = :id',
+		$this->db->delete(
+			'users',
 			array(
 				'id' => $user['id'],
 			)
@@ -983,8 +958,8 @@ trait Store_Accounts_Trait {
 			'manage_api_keys',
 			'You do not have permission to manage API keys.',
 		);
-		$deleted = $this->execute_statement(
-			'DELETE FROM api_keys WHERE id = :id AND user_id = :user_id',
+		$deleted = $this->db->delete(
+			'api_keys',
 			array(
 				'id'      => $id,
 				'user_id' => $user['id'],
@@ -1041,12 +1016,14 @@ trait Store_Accounts_Trait {
 		);
 		$secret = $this->totp_service->generate_secret();
 
-		$this->execute(
-			'UPDATE users SET two_factor_pending_secret = :secret, updated_at = :updated_at WHERE id = :id',
+		$this->db->update(
+			'users',
 			array(
-				'secret'     => $secret,
-				'updated_at' => $this->now(),
-				'id'         => $user['id'],
+				'two_factor_pending_secret' => $secret,
+				'updated_at'                => $this->now(),
+			),
+			array(
+				'id' => $user['id'],
 			),
 		);
 
@@ -1072,7 +1049,7 @@ trait Store_Accounts_Trait {
 	 * @param string  $token   TOTP code from the authenticator app.
 	 * @return array<string, mixed> Confirmation with backup codes.
 	 *
-	 * @throws Api_Exception When the token is invalid (422).
+	 * @throws ApiException When the token is invalid (422).
 	 * @since 1.0.0
 	 */
 	public function verify_two_factor( Request $request, string $token ): array {
@@ -1085,14 +1062,14 @@ trait Store_Accounts_Trait {
 		$pending_secret = (string) ( $row['two_factor_pending_secret'] ?? '' );
 
 		if ( '' === $pending_secret ) {
-			throw new Api_Exception(
+			throw new ApiException(
 				'No two-factor setup is pending for this account.',
 				422,
 			);
 		}
 
 		if ( ! $this->totp_service->verify_code( $pending_secret, $token ) ) {
-			throw new Api_Exception( 'Invalid verification code.', 422 );
+			throw new ApiException( 'Invalid verification code.', 422 );
 		}
 
 		$backup_codes = $this->replace_backup_codes( (string) $user['id'] );
@@ -1198,7 +1175,7 @@ trait Store_Accounts_Trait {
 	 * @param Request $request Incoming HTTP request.
 	 * @return int Number of revoked sessions.
 	 *
-	 * @throws Api_Exception When the current session cannot be identified.
+	 * @throws ApiException When the current session cannot be identified.
 	 * @since 1.0.0
 	 */
 	public function revoke_other_sessions( Request $request ): int {
@@ -1210,7 +1187,7 @@ trait Store_Accounts_Trait {
 		$current_session = $this->find_session_by_request( $request );
 
 		if ( ! $current_session ) {
-			throw new Api_Exception(
+			throw new ApiException(
 				'PeakURL could not identify the current session.',
 				422,
 			);

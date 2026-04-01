@@ -11,17 +11,21 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Api;
+
+use PeakURL\Includes\PeakURL_DB;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Links_API — low-level URL row query helper.
+ * LinksApi — low-level URL row query helper.
  *
  * @since 1.0.0
  */
-class Links_API {
+class LinksApi {
 
 	/**
 	 * Shared database wrapper.

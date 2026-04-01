@@ -103,7 +103,7 @@ const TableFooter = ({
 									{
 										format: 'csv',
 										label: 'Export CSV',
-										description: 'Bulk Import ready',
+										description: 'Import ready',
 									},
 									{
 										format: 'json',

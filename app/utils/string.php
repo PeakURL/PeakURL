@@ -11,6 +11,8 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Utils;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -24,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class String_Utils {
+class Str {
 
 	/**
 	 * Check whether a string begins with the given prefix.

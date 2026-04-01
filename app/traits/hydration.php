@@ -8,17 +8,32 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Traits;
+
+use PeakURL\Includes\Constants;
+use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Http\ApiException;
+use PeakURL\Http\Request;
+use PeakURL\Services\Crypto;
+use PeakURL\Services\Geoip;
+use PeakURL\Services\Mailer;
+use PeakURL\Services\SetupConfig;
+use PeakURL\Services\Update;
+use PeakURL\Utils\Query;
+use PeakURL\Utils\Security;
+use PeakURL\Utils\Visitor;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Store_Hydration_Trait — API-ready row mappers for Data_Store.
+ * HydrationTrait — API-ready row mappers for Store.
  *
  * @since 1.0.0
  */
-trait Store_Hydration_Trait {
+trait HydrationTrait {
 
 	/**
 	 * Hydrate a raw user database row into an API-ready user array.
@@ -60,7 +75,7 @@ trait Store_Hydration_Trait {
 			'emailVerifiedAt' => $row['email_verified_at']
 				? $this->to_iso( (string) $row['email_verified_at'] )
 				: null,
-			'apiKey'          => $api_keys[0]['key'] ?? null,
+			'apiKey'          => null,
 			'apiKeys'         => $api_keys,
 			'createdAt'       => $this->to_iso( (string) $row['created_at'] ),
 			'updatedAt'       => $this->to_iso( (string) $row['updated_at'] ),

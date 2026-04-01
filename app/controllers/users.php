@@ -11,13 +11,19 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Controllers;
+
+use PeakURL\Http\JsonResponse;
+use PeakURL\Http\Request;
+use PeakURL\Store;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Users_Controller — REST handlers for the users resource.
+ * UsersController — REST handlers for the users resource.
  *
  * Routes registered by Application::register_routes():
  *  GET    /api/v1/users          → index
@@ -29,23 +35,23 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class Users_Controller {
+class UsersController {
 
 	/**
 	 * Persistence layer for user data.
 	 *
-	 * @var Data_Store
+	 * @var Store
 	 * @since 1.0.0
 	 */
-	private Data_Store $data_store;
+	private Store $data_store;
 
 	/**
-	 * Create a new Users_Controller instance.
+	 * Create a new UsersController instance.
 	 *
-	 * @param Data_Store $data_store Shared data-store dependency.
+	 * @param Store $data_store Shared data-store dependency.
 	 * @since 1.0.0
 	 */
-	public function __construct( Data_Store $data_store ) {
+	public function __construct( Store $data_store ) {
 		$this->data_store = $data_store;
 	}
 
@@ -60,7 +66,7 @@ class Users_Controller {
 	 * @since 1.0.0
 	 */
 	public function index( Request $request ): array {
-		return Json_Response::success(
+		return JsonResponse::success(
 			$this->data_store->get_all_users( $request ),
 			'Users loaded.',
 		);
@@ -76,7 +82,7 @@ class Users_Controller {
 	 * @since 1.0.0
 	 */
 	public function create( Request $request ): array {
-		return Json_Response::success(
+		return JsonResponse::success(
 			$this->data_store->create_user(
 				$request,
 				$request->get_body_params(),
@@ -94,7 +100,7 @@ class Users_Controller {
 	 * @since 1.0.0
 	 */
 	public function me( Request $request ): array {
-		return Json_Response::success(
+		return JsonResponse::success(
 			$this->data_store->get_current_user( $request ),
 			'Current user loaded.',
 		);
@@ -110,7 +116,7 @@ class Users_Controller {
 	 * @since 1.0.0
 	 */
 	public function update_me( Request $request ): array {
-		return Json_Response::success(
+		return JsonResponse::success(
 			$this->data_store->update_current_user(
 				$request,
 				$request->get_body_params(),
@@ -137,10 +143,10 @@ class Users_Controller {
 		);
 
 		if ( ! $user ) {
-			return Json_Response::error( 'User not found.', 404 );
+			return JsonResponse::error( 'User not found.', 404 );
 		}
 
-		return Json_Response::success( $user, 'User updated.' );
+		return JsonResponse::success( $user, 'User updated.' );
 	}
 
 	/**
@@ -159,9 +165,9 @@ class Users_Controller {
 		);
 
 		if ( ! $deleted ) {
-			return Json_Response::error( 'User not found.', 404 );
+			return JsonResponse::error( 'User not found.', 404 );
 		}
 
-		return Json_Response::success( array( 'deleted' => true ), 'User deleted.' );
+		return JsonResponse::success( array( 'deleted' => true ), 'User deleted.' );
 	}
 }

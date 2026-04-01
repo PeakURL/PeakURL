@@ -92,6 +92,7 @@ const Content = ({ activeTab }) => {
 	const [newApiKey, setNewApiKey] = useState(null);
 	const [showKeyModal, setShowKeyModal] = useState(false);
 	const [showCreateModal, setShowCreateModal] = useState(false);
+	const [apiKeyPendingDelete, setApiKeyPendingDelete] = useState(null);
 	const [showUpdateConfirm, setShowUpdateConfirm] = useState(false);
 	const [keyLabel, setKeyLabel] = useState('');
 
@@ -141,11 +142,27 @@ const Content = ({ activeTab }) => {
 	const handleCreateKey = async () => {
 		try {
 			const result = await generateApiKey({ label: keyLabel }).unwrap();
-			setNewApiKey(result.data.apiKey);
+			const plainTextKey =
+				result?.data?.apiKey || result?.data?.key?.key || '';
+
+			if (!plainTextKey) {
+				notification.error(
+					'Key created without visible token',
+					'PeakURL created the API key, but the one-time token was not returned. Revoke it and create a new key.'
+				);
+				setShowCreateModal(false);
+				setKeyLabel('');
+				return;
+			}
+
+			setNewApiKey(plainTextKey);
 			setShowCreateModal(false);
 			setShowKeyModal(true);
 			setKeyLabel('');
-			notification.success('Success', 'API Key generated successfully');
+			notification.success(
+				'API key created',
+				'Copy the token now. PeakURL will not show it again.'
+			);
 		} catch (err) {
 			notification.error(
 				'Error',
@@ -154,18 +171,15 @@ const Content = ({ activeTab }) => {
 		}
 	};
 
-	const handleDeleteKey = async (id) => {
-		if (
-			!window.confirm(
-				'Are you sure you want to delete this API key? Any applications using it will stop working.'
-			)
-		) {
+	const handleDeleteKey = async () => {
+		if (!apiKeyPendingDelete?.id) {
 			return;
 		}
 
 		try {
-			await deleteApiKey(id).unwrap();
-			notification.success('Success', 'API Key deleted successfully');
+			await deleteApiKey(apiKeyPendingDelete.id).unwrap();
+			setApiKeyPendingDelete(null);
+			notification.success('Success', 'API key deleted successfully');
 		} catch (err) {
 			notification.error(
 				'Error',
@@ -177,6 +191,11 @@ const Content = ({ activeTab }) => {
 	const copyToClipboard = (text) => {
 		navigator.clipboard.writeText(text);
 		notification.success('Copied', 'API Key copied to clipboard');
+	};
+
+	const handleCloseKeyModal = () => {
+		setShowKeyModal(false);
+		setNewApiKey(null);
 	};
 
 	const handleCheckForUpdates = async () => {
@@ -310,9 +329,8 @@ const Content = ({ activeTab }) => {
 					user={user}
 					isGeneratingKey={isGeneratingKey}
 					isDeletingKey={isDeletingKey}
-					onDeleteKey={handleDeleteKey}
+					onDeleteKey={setApiKeyPendingDelete}
 					setShowCreateModal={setShowCreateModal}
-					copyToClipboard={copyToClipboard}
 				/>
 			)}
 
@@ -359,13 +377,32 @@ const Content = ({ activeTab }) => {
 				showCreateModal={showCreateModal}
 				setShowCreateModal={setShowCreateModal}
 				showKeyModal={showKeyModal}
-				setShowKeyModal={setShowKeyModal}
+				setShowKeyModal={handleCloseKeyModal}
 				keyLabel={keyLabel}
 				setKeyLabel={setKeyLabel}
 				newApiKey={newApiKey}
 				onCreateKey={handleCreateKey}
 				copyToClipboard={copyToClipboard}
 				isGeneratingKey={isGeneratingKey}
+			/>
+			<ConfirmDialog
+				open={Boolean(apiKeyPendingDelete)}
+				onClose={() => {
+					if (!isDeletingKey) {
+						setApiKeyPendingDelete(null);
+					}
+				}}
+				title="Delete API key"
+				description={
+					apiKeyPendingDelete
+						? `Delete ${apiKeyPendingDelete.label || apiKeyPendingDelete.maskedKey || 'this API key'}? Any scripts, automations, or extensions using it will stop working immediately.`
+						: ''
+				}
+				confirmText="Delete key"
+				cancelText="Keep key"
+				confirmVariant="danger"
+				onConfirm={handleDeleteKey}
+				loading={isDeletingKey}
 			/>
 			<ConfirmDialog
 				open={showUpdateConfirm}

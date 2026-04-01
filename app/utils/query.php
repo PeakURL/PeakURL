@@ -11,19 +11,21 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Utils;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Query_Utils — stateless helpers for building safe SQL fragments.
+ * Query — stateless helpers for building safe SQL fragments.
  *
  * All methods are static; the class is never instantiated.
  *
  * @since 1.0.0
  */
-class Query_Utils {
+class Query {
 
 	/**
 	 * Derive page, limit, and offset values from a query-parameter map.

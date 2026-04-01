@@ -9,6 +9,7 @@ const baseApi = createApi({
 	}),
 
 	tagTypes: [
+		'AuthSession',
 		'Urls',
 		'Analytics',
 		'Profile',

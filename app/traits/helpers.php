@@ -8,17 +8,32 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Traits;
+
+use PeakURL\Includes\Constants;
+use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Http\ApiException;
+use PeakURL\Http\Request;
+use PeakURL\Services\Crypto;
+use PeakURL\Services\Geoip;
+use PeakURL\Services\Mailer;
+use PeakURL\Services\SetupConfig;
+use PeakURL\Services\Update;
+use PeakURL\Utils\Query;
+use PeakURL\Utils\Security;
+use PeakURL\Utils\Visitor;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Store_Helpers_Trait — low-level store helpers shared across modules.
+ * HelpersTrait — low-level store helpers shared across modules.
  *
  * @since 1.0.0
  */
-trait Store_Helpers_Trait {
+trait HelpersTrait {
 
 	/**
 	 * Normalise a URL status string to a known enum value.
@@ -133,13 +148,13 @@ trait Store_Helpers_Trait {
 			$timestamp = strtotime( $value );
 
 			if ( false === $timestamp ) {
-				throw new Api_Exception( 'Invalid date value provided.', 422 );
+				throw new ApiException( 'Invalid date value provided.', 422 );
 			}
 
 			return gmdate( 'Y-m-d H:i:s', $timestamp );
 		}
 
-		throw new Api_Exception( 'Invalid date value provided.', 422 );
+		throw new ApiException( 'Invalid date value provided.', 422 );
 	}
 
 	/**
@@ -205,7 +220,7 @@ trait Store_Helpers_Trait {
 			'Y-m-d H:i:s',
 			time() - max(
 				0,
-				(int) ( $this->config[ PeakURL_Constants::CONFIG_SESSION_LIFETIME ] ?? PeakURL_Constants::DEFAULT_SESSION_LIFETIME ),
+				(int) ( $this->config[ Constants::CONFIG_SESSION_LIFETIME ] ?? Constants::DEFAULT_SESSION_LIFETIME ),
 			),
 		);
 	}

@@ -12,13 +12,17 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Services;
+
+use PeakURL\Includes\Constants;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Update_Service — self-hosted dashboard updater.
+ * Update — self-hosted dashboard updater.
  *
  * Downloads release archives, verifies checksums, extracts packages,
  * backs up managed paths, applies file replacements, and rolls back
@@ -26,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class Update_Service {
+class Update {
 
 	/** @var int Cache time-to-live for the update manifest (12 hours). */
 	private const CACHE_TTL = 43200;
@@ -104,17 +108,17 @@ class Update_Service {
 	 */
 	public function get_manifest_url(): string {
 		$manifest_url = trim(
-			(string) ( $this->config[ PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL ] ?? '' ),
+			(string) ( $this->config[ Constants::CONFIG_UPDATE_MANIFEST_URL ] ?? '' ),
 		);
 
 		if ( '' === $manifest_url ) {
-			return PeakURL_Constants::DEFAULT_UPDATE_MANIFEST_URL;
+			return Constants::DEFAULT_UPDATE_MANIFEST_URL;
 		}
 
 		$scheme = strtolower( (string) parse_url( $manifest_url, PHP_URL_SCHEME ) );
 
 		if ( ! in_array( $scheme, array( 'http', 'https' ), true ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'The update manifest URL must use HTTP or HTTPS.',
 			);
 		}
@@ -130,9 +134,9 @@ class Update_Service {
 	 */
 	public function get_current_version(): string {
 		$version = trim(
-			(string) ( $this->config[ PeakURL_Constants::CONFIG_VERSION ] ?? '' ),
+			(string) ( $this->config[ Constants::CONFIG_VERSION ] ?? '' ),
 		);
-		return '' !== $version ? $version : PeakURL_Constants::DEFAULT_VERSION;
+		return '' !== $version ? $version : Constants::DEFAULT_VERSION;
 	}
 
 	/**
@@ -169,7 +173,7 @@ class Update_Service {
 		$payload = json_decode( $body, true );
 
 		if ( ! is_array( $payload ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'The update manifest returned invalid JSON.',
 			);
 		}
@@ -245,14 +249,14 @@ class Update_Service {
 		$capability = $this->get_apply_capability();
 
 		if ( ! $capability['allowed'] ) {
-			throw new RuntimeException( $capability['reason'] );
+			throw new \RuntimeException( $capability['reason'] );
 		}
 
 		$package_url = trim( (string) ( $manifest['packageUrl'] ?? $manifest['downloadUrl'] ?? '' ) );
 		$version     = trim( (string) ( $manifest['version'] ?? '' ) );
 
 		if ( '' === $package_url || '' === $version ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'The update manifest is missing a package URL or version.',
 			);
 		}
@@ -295,12 +299,12 @@ class Update_Service {
 				'backupPath' => $backup_dir,
 				'appliedAt'  => gmdate( DATE_ATOM ),
 			);
-		} catch ( Throwable $exception ) {
+		} catch ( \Throwable $exception ) {
 			if ( $backed_up ) {
 				try {
 					$this->restore_managed_paths( $backup_dir );
-				} catch ( Throwable $rollback_exception ) {
-					throw new RuntimeException(
+				} catch ( \Throwable $rollback_exception ) {
+					throw new \RuntimeException(
 						'PeakURL could not apply the update and the rollback failed. ' .
 						$rollback_exception->getMessage(),
 						0,
@@ -309,7 +313,7 @@ class Update_Service {
 				}
 			}
 
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not apply the update. ' . $exception->getMessage(),
 				0,
 				$exception,
@@ -384,13 +388,13 @@ class Update_Service {
 		}
 
 		if ( '' === $version ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'The update manifest did not include a version.',
 			);
 		}
 
 		if ( '' === $package_url ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'The update manifest did not include a package URL.',
 			);
 		}
@@ -425,7 +429,7 @@ class Update_Service {
 	/**
 	 * Evaluate whether this installation can apply updates in-place.
 	 *
-	 * Checks for development markers, ZipArchive extension, and write permissions.
+	 * Checks for development markers, \ZipArchive extension, and write permissions.
 	 *
 	 * @return array{allowed: bool, reason: string|null}
 	 * @since 1.0.0
@@ -438,10 +442,10 @@ class Update_Service {
 			);
 		}
 
-		if ( ! class_exists( 'ZipArchive' ) ) {
+		if ( ! class_exists( '\ZipArchive' ) ) {
 			return array(
 				'allowed' => false,
-				'reason'  => 'The ZipArchive PHP extension is required to apply updates.',
+				'reason'  => 'The \ZipArchive PHP extension is required to apply updates.',
 			);
 		}
 
@@ -496,12 +500,12 @@ class Update_Service {
 		$handle = fopen( $lock_path, 'c+' );
 
 		if ( false === $handle ) {
-			throw new RuntimeException( 'PeakURL could not create the update lock.' );
+			throw new \RuntimeException( 'PeakURL could not create the update lock.' );
 		}
 
 		if ( ! flock( $handle, LOCK_EX | LOCK_NB ) ) {
 			fclose( $handle );
-			throw new RuntimeException( 'Another PeakURL update is already running.' );
+			throw new \RuntimeException( 'Another PeakURL update is already running.' );
 		}
 
 		ftruncate( $handle, 0 );
@@ -619,7 +623,7 @@ class Update_Service {
 		$body = $this->http_get( $url, 'application/zip' );
 
 		if ( false === file_put_contents( $target_path, $body, LOCK_EX ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not store the downloaded release package.',
 			);
 		}
@@ -647,13 +651,13 @@ class Update_Service {
 		$actual_checksum = hash_file( 'sha256', $file_path );
 
 		if ( false === $actual_checksum ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not verify the downloaded release checksum.',
 			);
 		}
 
 		if ( ! hash_equals( $expected_checksum, strtolower( $actual_checksum ) ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'The downloaded release checksum did not match the manifest.',
 			);
 		}
@@ -672,17 +676,17 @@ class Update_Service {
 		string $zip_path,
 		string $extract_path
 	): void {
-		$zip = new ZipArchive();
+		$zip = new \ZipArchive();
 
 		if ( true !== $zip->open( $zip_path ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not open the downloaded release archive.',
 			);
 		}
 
 		if ( ! $zip->extractTo( $extract_path ) ) {
 			$zip->close();
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not extract the downloaded release archive.',
 			);
 		}
@@ -722,7 +726,7 @@ class Update_Service {
 		);
 
 		if ( 1 !== count( $entries ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not determine the extracted package root.',
 			);
 		}
@@ -733,7 +737,7 @@ class Update_Service {
 			return $nested_root;
 		}
 
-		throw new RuntimeException(
+		throw new \RuntimeException(
 			'PeakURL could not validate the extracted package structure.',
 		);
 	}
@@ -870,12 +874,12 @@ class Update_Service {
 		if ( is_dir( $source_path ) ) {
 			$this->ensure_directory( $target_path );
 
-			$iterator = new RecursiveIteratorIterator(
-				new RecursiveDirectoryIterator(
+			$iterator = new \RecursiveIteratorIterator(
+				new \RecursiveDirectoryIterator(
 					$source_path,
-					FilesystemIterator::SKIP_DOTS,
+					\FilesystemIterator::SKIP_DOTS,
 				),
-				RecursiveIteratorIterator::SELF_FIRST,
+				\RecursiveIteratorIterator::SELF_FIRST,
 			);
 
 			foreach ( $iterator as $item ) {
@@ -893,7 +897,7 @@ class Update_Service {
 				$this->ensure_directory( dirname( $destination ) );
 
 				if ( ! copy( $item->getPathname(), $destination ) ) {
-					throw new RuntimeException(
+					throw new \RuntimeException(
 						'PeakURL could not copy the updated release files.',
 					);
 				}
@@ -905,7 +909,7 @@ class Update_Service {
 		$this->ensure_directory( dirname( $target_path ) );
 
 		if ( ! copy( $source_path, $target_path ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not copy the updated release files.',
 			);
 		}
@@ -927,9 +931,9 @@ class Update_Service {
 			return;
 		}
 
-		$iterator = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator( $path, FilesystemIterator::SKIP_DOTS ),
-			RecursiveIteratorIterator::CHILD_FIRST,
+		$iterator = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator( $path, \FilesystemIterator::SKIP_DOTS ),
+			\RecursiveIteratorIterator::CHILD_FIRST,
 		);
 
 		foreach ( $iterator as $item ) {
@@ -958,7 +962,7 @@ class Update_Service {
 		}
 
 		if ( ! mkdir( $path, 0775, true ) && ! is_dir( $path ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not prepare the update workspace.',
 			);
 		}
@@ -1016,7 +1020,7 @@ class Update_Service {
 		$curl = curl_init( $url );
 
 		if ( false === $curl ) {
-			throw new RuntimeException( 'PeakURL could not start the update request.' );
+			throw new \RuntimeException( 'PeakURL could not start the update request.' );
 		}
 
 		curl_setopt_array(
@@ -1038,13 +1042,13 @@ class Update_Service {
 		curl_close( $curl );
 
 		if ( false === $body ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not contact the update service. ' . $curl_error,
 			);
 		}
 
 		if ( $status < 200 || $status >= 300 ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'The update service returned HTTP ' . $status . '.',
 			);
 		}
@@ -1082,7 +1086,7 @@ class Update_Service {
 		$stream  = fopen( $url, 'rb', false, $context );
 
 		if ( false === $stream ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not contact the update service.',
 			);
 		}
@@ -1092,7 +1096,7 @@ class Update_Service {
 		fclose( $stream );
 
 		if ( false === $body ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not read the update service response.',
 			);
 		}
@@ -1112,7 +1116,7 @@ class Update_Service {
 		}
 
 		if ( ! preg_match( '/\s(\d{3})\s/', $status_line, $matches ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not read the update service response.',
 			);
 		}
@@ -1120,7 +1124,7 @@ class Update_Service {
 		$status = (int) $matches[1];
 
 		if ( $status < 200 || $status >= 300 ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'The update service returned HTTP ' . $status . '.',
 			);
 		}

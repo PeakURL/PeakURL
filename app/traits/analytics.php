@@ -8,17 +8,32 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Traits;
+
+use PeakURL\Includes\Constants;
+use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Http\ApiException;
+use PeakURL\Http\Request;
+use PeakURL\Services\Crypto;
+use PeakURL\Services\Geoip;
+use PeakURL\Services\Mailer;
+use PeakURL\Services\SetupConfig;
+use PeakURL\Services\Update;
+use PeakURL\Utils\Query;
+use PeakURL\Utils\Security;
+use PeakURL\Utils\Visitor;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Store_Analytics_Trait — dashboard and link analytics methods for Data_Store.
+ * AnalyticsTrait — dashboard and link analytics methods for Store.
  *
  * @since 1.0.0
  */
-trait Store_Analytics_Trait {
+trait AnalyticsTrait {
 
 	/**
 	 * Dashboard analytics summary over a time window.
@@ -137,7 +152,7 @@ trait Store_Analytics_Trait {
 
 		if ( ! $this->roles->user_can( $user, 'view_site_analytics' ) ) {
 			if ( ! $this->roles->user_can( $user, 'view_own_analytics' ) ) {
-				throw new Api_Exception(
+				throw new ApiException(
 					'You do not have permission to view activity.',
 					403,
 				);

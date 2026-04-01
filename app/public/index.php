@@ -12,6 +12,11 @@
 
 declare(strict_types=1);
 
+use PeakURL\Includes\Application;
+use PeakURL\Includes\Connection;
+use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Utils\Security;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	define(
 		'ABSPATH',
@@ -59,8 +64,8 @@ require_once $autoload_path;
 
 // ── CORS headers ────────────────────────────────────────────────
 
-$config = Runtime_Config::bootstrap( dirname( __DIR__ ) );
-$origin = Security_Utils::resolve_allowed_origin( $config, $_SERVER );
+$config = RuntimeConfig::bootstrap( dirname( __DIR__ ) );
+$origin = Security::resolve_allowed_origin( $config, $_SERVER );
 
 if ( '' !== $origin ) {
 	header( 'Access-Control-Allow-Origin: ' . $origin );
@@ -80,6 +85,6 @@ if ( 'OPTIONS' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 
 // ── Bootstrap application ───────────────────────────────────────
 
-$database    = new Database( $config );
-$application = new Application( $database, $config );
+$connection  = new Connection( $config );
+$application = new Application( $connection, $config );
 $application->run();

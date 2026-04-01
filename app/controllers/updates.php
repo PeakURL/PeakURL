@@ -11,13 +11,19 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Controllers;
+
+use PeakURL\Http\JsonResponse;
+use PeakURL\Http\Request;
+use PeakURL\Store;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Updates_Controller — REST handlers for system updates.
+ * UpdatesController — REST handlers for system updates.
  *
  * Routes registered by Application::register_routes():
  *  GET  /api/v1/system/update       → status
@@ -26,23 +32,23 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class Updates_Controller {
+class UpdatesController {
 
 	/**
 	 * Persistence layer shared across controllers.
 	 *
-	 * @var Data_Store
+	 * @var Store
 	 * @since 1.0.0
 	 */
-	private Data_Store $data_store;
+	private Store $data_store;
 
 	/**
-	 * Create a new Updates_Controller instance.
+	 * Create a new UpdatesController instance.
 	 *
-	 * @param Data_Store $data_store Shared data-store dependency.
+	 * @param Store $data_store Shared data-store dependency.
 	 * @since 1.0.0
 	 */
-	public function __construct( Data_Store $data_store ) {
+	public function __construct( Store $data_store ) {
 		$this->data_store = $data_store;
 	}
 
@@ -57,7 +63,7 @@ class Updates_Controller {
 	 * @since 1.0.0
 	 */
 	public function status( Request $request ): array {
-		return Json_Response::success(
+		return JsonResponse::success(
 			$this->data_store->get_update_status( $request ),
 			'Update status loaded.',
 		);
@@ -74,7 +80,7 @@ class Updates_Controller {
 	 * @since 1.0.0
 	 */
 	public function check( Request $request ): array {
-		return Json_Response::success(
+		return JsonResponse::success(
 			$this->data_store->check_for_updates( $request ),
 			'Update check complete.',
 		);
@@ -91,7 +97,7 @@ class Updates_Controller {
 	 * @since 1.0.0
 	 */
 	public function apply( Request $request ): array {
-		return Json_Response::success(
+		return JsonResponse::success(
 			$this->data_store->apply_update( $request ),
 			'Update applied.',
 		);

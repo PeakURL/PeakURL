@@ -11,13 +11,19 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Controllers;
+
+use PeakURL\Http\JsonResponse;
+use PeakURL\Http\Request;
+use PeakURL\Store;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Analytics_Controller — REST handlers for analytics data.
+ * AnalyticsController — REST handlers for analytics data.
  *
  * Routes registered by Application::register_routes():
  *  GET /api/v1/analytics              → index
@@ -27,23 +33,23 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class Analytics_Controller {
+class AnalyticsController {
 
 	/**
 	 * Persistence layer for analytics queries.
 	 *
-	 * @var Data_Store
+	 * @var Store
 	 * @since 1.0.0
 	 */
-	private Data_Store $data_store;
+	private Store $data_store;
 
 	/**
-	 * Create a new Analytics_Controller instance.
+	 * Create a new AnalyticsController instance.
 	 *
-	 * @param Data_Store $data_store Shared data-store dependency.
+	 * @param Store $data_store Shared data-store dependency.
 	 * @since 1.0.0
 	 */
-	public function __construct( Data_Store $data_store ) {
+	public function __construct( Store $data_store ) {
 		$this->data_store = $data_store;
 	}
 
@@ -59,7 +65,7 @@ class Analytics_Controller {
 	 */
 	public function index( Request $request ): array {
 		$days = (int) $request->get_query_param( 'days', 7 );
-		return Json_Response::success(
+		return JsonResponse::success(
 			$this->data_store->analytics_summary( $request, $days ),
 			'Analytics loaded.',
 		);
@@ -75,7 +81,7 @@ class Analytics_Controller {
 	 * @since 1.0.0
 	 */
 	public function activity( Request $request ): array {
-		return Json_Response::success(
+		return JsonResponse::success(
 			$this->data_store->activity( $request ),
 			'Activity loaded.',
 		);
@@ -98,10 +104,10 @@ class Analytics_Controller {
 		);
 
 		if ( ! $location ) {
-			return Json_Response::error( 'Link analytics not found.', 404 );
+			return JsonResponse::error( 'Link analytics not found.', 404 );
 		}
 
-		return Json_Response::success( $location, 'Location analytics loaded.' );
+		return JsonResponse::success( $location, 'Location analytics loaded.' );
 	}
 
 	/**
@@ -123,9 +129,9 @@ class Analytics_Controller {
 		);
 
 		if ( ! $stats ) {
-			return Json_Response::error( 'Link analytics not found.', 404 );
+			return JsonResponse::error( 'Link analytics not found.', 404 );
 		}
 
-		return Json_Response::success( $stats, 'Link analytics loaded.' );
+		return JsonResponse::success( $stats, 'Link analytics loaded.' );
 	}
 }

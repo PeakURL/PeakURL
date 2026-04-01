@@ -2,7 +2,7 @@
 /**
  * Application bootstrap and route registration.
  *
- * Wires the Router, Data_Store, and all controllers together, dispatches
+ * Wires the Router, Store, and all controllers together, dispatches
  * the incoming request, and sends the final HTTP response.
  *
  * @package PeakURL\Includes
@@ -10,6 +10,22 @@
  */
 
 declare(strict_types=1);
+
+namespace PeakURL\Includes;
+
+use PeakURL\Controllers\AnalyticsController;
+use PeakURL\Controllers\AuthController;
+use PeakURL\Controllers\GeoipController;
+use PeakURL\Controllers\MailController;
+use PeakURL\Controllers\UpdatesController;
+use PeakURL\Controllers\UrlsController;
+use PeakURL\Controllers\UsersController;
+use PeakURL\Controllers\WebhooksController;
+use PeakURL\Http\ApiException;
+use PeakURL\Http\JsonResponse;
+use PeakURL\Http\Request;
+use PeakURL\Http\Router;
+use PeakURL\Store;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -29,8 +45,8 @@ class Application {
 	/** @var Router HTTP route dispatcher. */
 	private Router $router;
 
-	/** @var Data_Store Shared data access layer. */
-	private Data_Store $data_store;
+	/** @var Store Shared data access layer. */
+	private Store $data_store;
 
 	/** @var array<string, mixed> Merged runtime configuration. */
 	private array $config;
@@ -38,22 +54,22 @@ class Application {
 	/**
 	 * Bootstrap the application, create the data store, and register routes.
 	 *
-	 * @param Database             $database Database connection manager.
+	 * @param Connection           $connection Database connection manager.
 	 * @param array<string, mixed> $config   Merged runtime configuration.
 	 * @since 1.0.0
 	 */
-	public function __construct( Database $database, array $config ) {
+	public function __construct( Connection $connection, array $config ) {
 		$this->router     = new Router();
 		$this->config     = $config;
-		$this->data_store = new Data_Store( $database, $config );
+		$this->data_store = new Store( $connection, $config );
 		$this->register_routes();
 	}
 
 	/**
 	 * Dispatch the current HTTP request and send the response.
 	 *
-	 * Catches Api_Exception for structured error responses and generic
-	 * Throwable for unexpected failures.
+	 * Catches ApiException for structured error responses and generic
+	 * \Throwable for unexpected failures.
 	 *
 	 * @return void
 	 * @since 1.0.0
@@ -66,22 +82,22 @@ class Application {
 			$response = $this->router->dispatch( $request );
 
 			if ( ! is_array( $response ) ) {
-				$response = Json_Response::error(
+				$response = JsonResponse::error(
 					'Unhandled application response.',
 				);
 			}
-		} catch ( Api_Exception $exception ) {
-			$response = Json_Response::error(
+		} catch ( ApiException $exception ) {
+			$response = JsonResponse::error(
 				$exception->getMessage(),
 				$exception->get_status(),
 				$exception->get_data(),
 			);
-		} catch ( Throwable $exception ) {
+		} catch ( \Throwable $exception ) {
 			if ( ! empty( $this->config['PEAKURL_DEBUG'] ) ) {
 				error_log( (string) $exception );
 			}
 
-			$response = Json_Response::error(
+			$response = JsonResponse::error(
 				'Unexpected application error.',
 				500,
 				'development' === ( $this->config['PEAKURL_ENV'] ?? 'production' )
@@ -103,14 +119,14 @@ class Application {
 	 * @since 1.0.0
 	 */
 	private function register_routes(): void {
-		$auth      = new Auth_Controller( $this->data_store );
-		$users     = new Users_Controller( $this->data_store );
-		$urls      = new Urls_Controller( $this->data_store );
-		$analytics = new Analytics_Controller( $this->data_store );
-		$webhooks  = new Webhooks_Controller( $this->data_store );
-		$geoip     = new Geoip_Controller( $this->data_store );
-		$mail      = new Mail_Controller( $this->data_store );
-		$updates   = new Updates_Controller( $this->data_store );
+		$auth      = new AuthController( $this->data_store );
+		$users     = new UsersController( $this->data_store );
+		$urls      = new UrlsController( $this->data_store );
+		$analytics = new AnalyticsController( $this->data_store );
+		$webhooks  = new WebhooksController( $this->data_store );
+		$geoip     = new GeoipController( $this->data_store );
+		$mail      = new MailController( $this->data_store );
+		$updates   = new UpdatesController( $this->data_store );
 
 		$this->router->get( '/api/v1/health', array( $this, 'health' ) );
 
@@ -333,7 +349,7 @@ class Application {
 	public function health( Request $request ): array {
 		unset( $request );
 
-		return Json_Response::success(
+		return JsonResponse::success(
 			array(
 				'status'   => 'ok',
 				'database' => 'connected',

@@ -12,6 +12,10 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Includes;
+
+use PeakURL\Utils\Str;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -25,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class Runtime_Config {
+class RuntimeConfig {
 
 	/**
 	 * Load runtime configuration and apply runtime-side bootstrapping.
@@ -60,140 +64,140 @@ class Runtime_Config {
 		);
 
 		return array(
-			PeakURL_Constants::CONFIG_VERSION             => self::read_version_file(
-				$root_path . '/' . PeakURL_Constants::VERSION_FILE,
+			Constants::CONFIG_VERSION                  => self::read_version_file(
+				$root_path . '/' . Constants::VERSION_FILE,
 			),
-			PeakURL_Constants::CONFIG_ENV                 => self::get_value(
-				PeakURL_Constants::CONFIG_ENV,
+			Constants::CONFIG_ENV                      => self::get_value(
+				Constants::CONFIG_ENV,
 				$file_values,
 				'development',
 			),
-			PeakURL_Constants::CONFIG_SITE_URL            => self::get_value(
-				PeakURL_Constants::CONFIG_SITE_URL,
+			Constants::CONFIG_SITE_URL                 => self::get_value(
+				Constants::CONFIG_SITE_URL,
 				$file_values,
 				$site_url,
 			),
-			PeakURL_Constants::CONFIG_AUTH_KEY            => self::get_value(
-				PeakURL_Constants::CONFIG_AUTH_KEY,
+			Constants::CONFIG_AUTH_KEY                 => self::get_value(
+				Constants::CONFIG_AUTH_KEY,
 				$file_values,
 				'',
 			),
-			PeakURL_Constants::CONFIG_AUTH_SALT           => self::get_value(
-				PeakURL_Constants::CONFIG_AUTH_SALT,
+			Constants::CONFIG_AUTH_SALT                => self::get_value(
+				Constants::CONFIG_AUTH_SALT,
 				$file_values,
 				'',
 			),
-			PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL => self::get_value(
-				PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL,
+			Constants::CONFIG_UPDATE_MANIFEST_URL      => self::get_value(
+				Constants::CONFIG_UPDATE_MANIFEST_URL,
 				$file_values,
-				PeakURL_Constants::DEFAULT_UPDATE_MANIFEST_URL,
+				Constants::DEFAULT_UPDATE_MANIFEST_URL,
 			),
-			PeakURL_Constants::CONFIG_CONTENT_DIR         => self::resolve_path_value(
+			Constants::CONFIG_CONTENT_DIR              => self::resolve_path_value(
 				self::get_value(
-					PeakURL_Constants::CONFIG_CONTENT_DIR,
+					Constants::CONFIG_CONTENT_DIR,
 					$file_values,
-					PeakURL_Constants::DEFAULT_CONTENT_DIR,
+					Constants::DEFAULT_CONTENT_DIR,
 				),
 				$root_path,
 			),
-			PeakURL_Constants::CONFIG_GEOIP_DB_PATH       => self::resolve_path_value(
+			Constants::CONFIG_GEOIP_DB_PATH            => self::resolve_path_value(
 				self::get_value(
-					PeakURL_Constants::CONFIG_GEOIP_DB_PATH,
+					Constants::CONFIG_GEOIP_DB_PATH,
 					$file_values,
-					PeakURL_Constants::DEFAULT_GEOIP_DB_PATH,
+					Constants::DEFAULT_GEOIP_DB_PATH,
 				),
 				$root_path,
 			),
-			PeakURL_Constants::CONFIG_DEBUG               => self::get_bool_value(
-				PeakURL_Constants::CONFIG_DEBUG,
+			Constants::CONFIG_DEBUG                    => self::get_bool_value(
+				Constants::CONFIG_DEBUG,
 				$file_values,
 				false,
 			),
-			'DB_HOST'                                     => self::get_value( 'DB_HOST', $file_values, '127.0.0.1' ),
-			'DB_PORT'                                     => (int) self::get_value( 'DB_PORT', $file_values, '3306' ),
-			'DB_DATABASE'                                 => self::get_value(
+			'DB_HOST'                                  => self::get_value( 'DB_HOST', $file_values, '127.0.0.1' ),
+			'DB_PORT'                                  => (int) self::get_value( 'DB_PORT', $file_values, '3306' ),
+			'DB_DATABASE'                              => self::get_value(
 				'DB_DATABASE',
 				$file_values,
 				'peakurl',
 			),
-			'DB_USERNAME'                                 => self::get_value( 'DB_USERNAME', $file_values, 'root' ),
-			'DB_PASSWORD'                                 => self::get_value( 'DB_PASSWORD', $file_values, '' ),
-			'DB_CHARSET'                                  => self::get_value(
+			'DB_USERNAME'                              => self::get_value( 'DB_USERNAME', $file_values, 'root' ),
+			'DB_PASSWORD'                              => self::get_value( 'DB_PASSWORD', $file_values, '' ),
+			'DB_CHARSET'                               => self::get_value(
 				'DB_CHARSET',
 				$file_values,
 				'utf8mb4',
 			),
-			'DB_PREFIX'                                   => self::normalize_db_prefix(
+			'DB_PREFIX'                                => self::normalize_db_prefix(
 				self::get_value( 'DB_PREFIX', $file_values, '' ),
 			),
-			PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME => self::get_value(
-				PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME,
+			Constants::CONFIG_SESSION_COOKIE_NAME      => self::get_value(
+				Constants::CONFIG_SESSION_COOKIE_NAME,
 				$file_values,
-				PeakURL_Constants::DEFAULT_SESSION_COOKIE_NAME,
+				Constants::DEFAULT_SESSION_COOKIE_NAME,
 			),
-			PeakURL_Constants::CONFIG_SESSION_LIFETIME    => (int) self::get_value(
-				PeakURL_Constants::CONFIG_SESSION_LIFETIME,
+			Constants::CONFIG_SESSION_LIFETIME         => (int) self::get_value(
+				Constants::CONFIG_SESSION_LIFETIME,
 				$file_values,
-				(string) PeakURL_Constants::DEFAULT_SESSION_LIFETIME,
+				(string) Constants::DEFAULT_SESSION_LIFETIME,
 			),
-			PeakURL_Constants::CONFIG_SESSION_COOKIE_PATH => self::get_value(
-				PeakURL_Constants::CONFIG_SESSION_COOKIE_PATH,
+			Constants::CONFIG_SESSION_COOKIE_PATH      => self::get_value(
+				Constants::CONFIG_SESSION_COOKIE_PATH,
 				$file_values,
 				self::default_session_cookie_path( $site_url ),
 			),
-			PeakURL_Constants::CONFIG_SESSION_COOKIE_DOMAIN => self::sanitize_domain(
-				self::get_value( PeakURL_Constants::CONFIG_SESSION_COOKIE_DOMAIN, $file_values, '' ),
+			Constants::CONFIG_SESSION_COOKIE_DOMAIN    => self::sanitize_domain(
+				self::get_value( Constants::CONFIG_SESSION_COOKIE_DOMAIN, $file_values, '' ),
 			),
-			PeakURL_Constants::CONFIG_SESSION_COOKIE_SAME_SITE => self::normalize_same_site(
+			Constants::CONFIG_SESSION_COOKIE_SAME_SITE => self::normalize_same_site(
 				self::get_value(
-					PeakURL_Constants::CONFIG_SESSION_COOKIE_SAME_SITE,
+					Constants::CONFIG_SESSION_COOKIE_SAME_SITE,
 					$file_values,
-					PeakURL_Constants::DEFAULT_SESSION_COOKIE_SAME_SITE,
+					Constants::DEFAULT_SESSION_COOKIE_SAME_SITE,
 				),
 			),
-			PeakURL_Constants::CONFIG_SESSION_COOKIE_SECURE => self::normalize_secure_mode(
+			Constants::CONFIG_SESSION_COOKIE_SECURE    => self::normalize_secure_mode(
 				self::get_value(
-					PeakURL_Constants::CONFIG_SESSION_COOKIE_SECURE,
+					Constants::CONFIG_SESSION_COOKIE_SECURE,
 					$file_values,
-					PeakURL_Constants::DEFAULT_SESSION_COOKIE_SECURE,
+					Constants::DEFAULT_SESSION_COOKIE_SECURE,
 				),
 			),
-			'PEAKURL_OWNER_FALLBACK'                      => self::get_bool_value(
+			'PEAKURL_OWNER_FALLBACK'                   => self::get_bool_value(
 				'PEAKURL_OWNER_FALLBACK',
 				$file_values,
 				false,
 			),
-			'PEAKURL_OWNER_FIRST_NAME'                    => self::get_value(
+			'PEAKURL_OWNER_FIRST_NAME'                 => self::get_value(
 				'PEAKURL_OWNER_FIRST_NAME',
 				$file_values,
 				'',
 			),
-			'PEAKURL_OWNER_LAST_NAME'                     => self::get_value(
+			'PEAKURL_OWNER_LAST_NAME'                  => self::get_value(
 				'PEAKURL_OWNER_LAST_NAME',
 				$file_values,
 				'',
 			),
-			'PEAKURL_OWNER_USERNAME'                      => self::get_value(
+			'PEAKURL_OWNER_USERNAME'                   => self::get_value(
 				'PEAKURL_OWNER_USERNAME',
 				$file_values,
 				'',
 			),
-			'PEAKURL_OWNER_EMAIL'                         => self::get_value(
+			'PEAKURL_OWNER_EMAIL'                      => self::get_value(
 				'PEAKURL_OWNER_EMAIL',
 				$file_values,
 				'',
 			),
-			'PEAKURL_OWNER_PASSWORD'                      => self::get_value(
+			'PEAKURL_OWNER_PASSWORD'                   => self::get_value(
 				'PEAKURL_OWNER_PASSWORD',
 				$file_values,
 				'',
 			),
-			'PEAKURL_WORKSPACE_NAME'                      => self::get_value(
+			'PEAKURL_WORKSPACE_NAME'                   => self::get_value(
 				'PEAKURL_WORKSPACE_NAME',
 				$file_values,
 				'',
 			),
-			'PEAKURL_WORKSPACE_SLUG'                      => self::get_value(
+			'PEAKURL_WORKSPACE_SLUG'                   => self::get_value(
 				'PEAKURL_WORKSPACE_SLUG',
 				$file_values,
 				'',
@@ -226,23 +230,23 @@ class Runtime_Config {
 			'PEAKURL_ENV',
 			'PEAKURL_DEBUG',
 			'SITE_URL',
-			PeakURL_Constants::CONFIG_AUTH_KEY,
-			PeakURL_Constants::CONFIG_AUTH_SALT,
-			PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL,
-			PeakURL_Constants::CONFIG_CONTENT_DIR,
-			PeakURL_Constants::CONFIG_GEOIP_DB_PATH,
+			Constants::CONFIG_AUTH_KEY,
+			Constants::CONFIG_AUTH_SALT,
+			Constants::CONFIG_UPDATE_MANIFEST_URL,
+			Constants::CONFIG_CONTENT_DIR,
+			Constants::CONFIG_GEOIP_DB_PATH,
 			'DB_HOST',
 			'DB_PORT',
 			'DB_DATABASE',
 			'DB_USERNAME',
 			'DB_PASSWORD',
 			'DB_CHARSET',
-			PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME,
-			PeakURL_Constants::CONFIG_SESSION_LIFETIME,
-			PeakURL_Constants::CONFIG_SESSION_COOKIE_PATH,
-			PeakURL_Constants::CONFIG_SESSION_COOKIE_DOMAIN,
-			PeakURL_Constants::CONFIG_SESSION_COOKIE_SAME_SITE,
-			PeakURL_Constants::CONFIG_SESSION_COOKIE_SECURE,
+			Constants::CONFIG_SESSION_COOKIE_NAME,
+			Constants::CONFIG_SESSION_LIFETIME,
+			Constants::CONFIG_SESSION_COOKIE_PATH,
+			Constants::CONFIG_SESSION_COOKIE_DOMAIN,
+			Constants::CONFIG_SESSION_COOKIE_SAME_SITE,
+			Constants::CONFIG_SESSION_COOKIE_SECURE,
 			'PEAKURL_OWNER_FALLBACK',
 			'PEAKURL_OWNER_FIRST_NAME',
 			'PEAKURL_OWNER_LAST_NAME',
@@ -395,7 +399,7 @@ class Runtime_Config {
 		foreach ( $lines as $line ) {
 			$line = trim( $line );
 
-			if ( '' === $line || String_Utils::starts_with( $line, '#' ) ) {
+			if ( '' === $line || Str::starts_with( $line, '#' ) ) {
 				continue;
 			}
 
@@ -409,8 +413,8 @@ class Runtime_Config {
 			$value = trim( $parts[1] );
 
 			if (
-				( String_Utils::starts_with( $value, '"' ) && String_Utils::ends_with( $value, '"' ) ) ||
-				( String_Utils::starts_with( $value, '\'' ) && String_Utils::ends_with( $value, '\'' ) )
+				( Str::starts_with( $value, '"' ) && Str::ends_with( $value, '"' ) ) ||
+				( Str::starts_with( $value, '\'' ) && Str::ends_with( $value, '\'' ) )
 			) {
 				$value = substr( $value, 1, -1 );
 			}
@@ -490,18 +494,18 @@ class Runtime_Config {
 	 */
 	private static function read_version_file( string $file_path ): string {
 		if ( ! file_exists( $file_path ) ) {
-			return PeakURL_Constants::DEFAULT_VERSION;
+			return Constants::DEFAULT_VERSION;
 		}
 
 		$contents = file_get_contents( $file_path );
 
 		if ( false === $contents ) {
-			return PeakURL_Constants::DEFAULT_VERSION;
+			return Constants::DEFAULT_VERSION;
 		}
 
 		$version = trim( $contents );
 
-		return '' !== $version ? $version : PeakURL_Constants::DEFAULT_VERSION;
+		return '' !== $version ? $version : Constants::DEFAULT_VERSION;
 	}
 
 	/**
@@ -527,7 +531,7 @@ class Runtime_Config {
 	 * @param string $value Raw prefix input.
 	 * @return string Trimmed, validated prefix (may be empty).
 	 *
-	 * @throws RuntimeException When the prefix contains invalid characters.
+	 * @throws \RuntimeException When the prefix contains invalid characters.
 	 * @since 1.0.0
 	 */
 	public static function normalize_db_prefix( string $value ): string {
@@ -538,7 +542,7 @@ class Runtime_Config {
 		}
 
 		if ( ! preg_match( '/^[A-Za-z_][A-Za-z0-9_]{0,24}$/', $value ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'DB_PREFIX must start with a letter or underscore and use only letters, numbers, and underscores.',
 			);
 		}
@@ -614,7 +618,7 @@ class Runtime_Config {
 	 * @since 1.0.0
 	 */
 	private static function bootstrap_debug_mode( array $config ): void {
-		if ( empty( $config[ PeakURL_Constants::CONFIG_DEBUG ] ) ) {
+		if ( empty( $config[ Constants::CONFIG_DEBUG ] ) ) {
 			return;
 		}
 
@@ -623,7 +627,7 @@ class Runtime_Config {
 		ini_set( 'log_errors', '1' );
 
 		$content_dir = trim(
-			(string) ( $config[ PeakURL_Constants::CONFIG_CONTENT_DIR ] ?? '' ),
+			(string) ( $config[ Constants::CONFIG_CONTENT_DIR ] ?? '' ),
 		);
 
 		if ( '' === $content_dir ) {
@@ -640,7 +644,7 @@ class Runtime_Config {
 
 		$log_path = rtrim( $content_dir, DIRECTORY_SEPARATOR ) .
 			DIRECTORY_SEPARATOR .
-			PeakURL_Constants::DEBUG_LOG_FILE;
+			Constants::DEBUG_LOG_FILE;
 
 		ini_set( 'error_log', $log_path );
 	}
@@ -667,7 +671,7 @@ class Runtime_Config {
 		}
 
 		if (
-			String_Utils::starts_with( $path, '/' ) ||
+			Str::starts_with( $path, '/' ) ||
 			preg_match( '/^[A-Za-z]:[\\\\\\/]/', $path )
 		) {
 			return $path;

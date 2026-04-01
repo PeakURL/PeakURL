@@ -1,8 +1,8 @@
 <?php
 /**
- * PDO connection factory.
+ * \PDO connection factory.
  *
- * Provides a lazy-initialised, singleton PDO connection and table-prefix
+ * Provides a lazy-initialised, singleton \PDO connection and table-prefix
  * utilities for MySQL / MariaDB.
  *
  * @package PeakURL\Includes
@@ -11,17 +11,21 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Includes;
+
+use PeakURL\Utils\Database;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Database connection manager and schema helpers.
+ * Connection manager and schema helpers.
  *
  * @since 1.0.0
  */
-class Database {
+class Connection {
 
 	/**
 	 * Canonical list of table names managed by PeakURL.
@@ -48,11 +52,11 @@ class Database {
 	 */
 	private array $config;
 
-	/** @var PDO|null Lazy-initialised PDO instance. */
-	private ?PDO $connection = null;
+	/** @var \PDO|null Lazy-initialised \PDO instance. */
+	private ?\PDO $connection = null;
 
 	/**
-	 * Create a new Database instance.
+	 * Create a new Connection instance.
 	 *
 	 * @param array<string, mixed> $config Merged runtime configuration.
 	 * @since 1.0.0
@@ -62,16 +66,16 @@ class Database {
 	}
 
 	/**
-	 * Return the shared PDO connection, creating it on first access.
+	 * Return the shared \PDO connection, creating it on first access.
 	 *
 	 * The connection uses native prepares, UTC timezone, and exception
 	 * error mode.
 	 *
-	 * @return PDO Active database connection.
+	 * @return \PDO Active database connection.
 	 * @since 1.0.0
 	 */
-	public function get_connection(): PDO {
-		if ( $this->connection instanceof PDO ) {
+	public function get_connection(): \PDO {
+		if ( $this->connection instanceof \PDO ) {
 			return $this->connection;
 		}
 
@@ -83,14 +87,14 @@ class Database {
 			(string) $this->config['DB_CHARSET'],
 		);
 
-		$this->connection = new PDO(
+		$this->connection = new \PDO(
 			$dsn,
 			(string) $this->config['DB_USERNAME'],
 			(string) $this->config['DB_PASSWORD'],
 			array(
-				PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-				PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-				PDO::ATTR_EMULATE_PREPARES   => false,
+				\PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
+				\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+				\PDO::ATTR_EMULATE_PREPARES   => false,
 			),
 		);
 		$this->connection->exec( "SET time_zone = '+00:00'" );
@@ -126,13 +130,13 @@ class Database {
 	}
 
 	/**
-	 * Prepare a PDO statement with table-prefix substitution.
+	 * Prepare a \PDO statement with table-prefix substitution.
 	 *
 	 * @param string $sql Raw SQL with un-prefixed table names.
-	 * @return PDOStatement Ready-to-execute statement.
+	 * @return \PDOStatement Ready-to-execute statement.
 	 * @since 1.0.0
 	 */
-	public function prepare( string $sql ): PDOStatement {
+	public function prepare( string $sql ): \PDOStatement {
 		return $this->get_connection()->prepare( $this->prefix_sql( $sql ) );
 	}
 
@@ -194,6 +198,85 @@ class Database {
 	 * @since 1.0.0
 	 */
 	public function reconcile_schema(): void {
+		$this->reconcile_api_keys_schema();
+	}
+
+	/**
+	 * Check whether a column exists on a managed table.
+	 *
+	 * @param string $table_name  Base table name (without prefix).
+	 * @param string $column_name Column name.
+	 * @return bool True when the column exists.
+	 * @since 1.0.0
+	 */
+	public function column_exists(
+		string $table_name,
+		string $column_name
+	): bool {
+		return (int) $this->query_value(
+			'SELECT COUNT(*)
+			FROM information_schema.columns
+			WHERE table_schema = :table_schema
+			AND table_name = :table_name
+			AND column_name = :column_name',
+			array(
+				'table_schema' => (string) $this->config['DB_DATABASE'],
+				'table_name'   => $this->table_name( $table_name ),
+				'column_name'  => $column_name,
+			),
+		) > 0;
+	}
+
+	/**
+	 * Check whether an index exists on a managed table.
+	 *
+	 * @param string $table_name Base table name (without prefix).
+	 * @param string $index_name Index name.
+	 * @return bool True when the index exists.
+	 * @since 1.0.0
+	 */
+	public function index_exists( string $table_name, string $index_name ): bool {
+		return (int) $this->query_value(
+			'SELECT COUNT(*)
+			FROM information_schema.statistics
+			WHERE table_schema = :table_schema
+			AND table_name = :table_name
+			AND index_name = :index_name',
+			array(
+				'table_schema' => (string) $this->config['DB_DATABASE'],
+				'table_name'   => $this->table_name( $table_name ),
+				'index_name'   => $index_name,
+			),
+		) > 0;
+	}
+
+	/**
+	 * Check whether a column is currently nullable.
+	 *
+	 * @param string $table_name  Base table name (without prefix).
+	 * @param string $column_name Column name.
+	 * @return bool True when the column allows NULL values.
+	 * @since 1.0.1
+	 */
+	public function column_allows_null(
+		string $table_name,
+		string $column_name
+	): bool {
+		$result = $this->query_value(
+			'SELECT is_nullable
+			FROM information_schema.columns
+			WHERE table_schema = :table_schema
+			AND table_name = :table_name
+			AND column_name = :column_name
+			LIMIT 1',
+			array(
+				'table_schema' => (string) $this->config['DB_DATABASE'],
+				'table_name'   => $this->table_name( $table_name ),
+				'column_name'  => $column_name,
+			),
+		);
+
+		return 'YES' === strtoupper( (string) $result );
 	}
 
 	/**
@@ -347,5 +430,109 @@ class Database {
 		$statement->execute( $params );
 
 		return $statement->fetchColumn();
+	}
+
+	/**
+	 * Reconcile the `api_keys` table to the hashed-key schema.
+	 *
+	 * Existing installs are migrated in place from the older `key_value`
+	 * column so dashboard-created keys remain valid after the refactor.
+	 *
+	 * @return void
+	 * @since 1.0.1
+	 */
+	private function reconcile_api_keys_schema(): void {
+		if ( ! $this->table_exists( 'api_keys' ) ) {
+			return;
+		}
+
+		$connection = $this->get_connection();
+		$table_name = $this->quote_identifier( $this->table_name( 'api_keys' ) );
+
+		if ( ! $this->column_exists( 'api_keys', 'key_hash' ) ) {
+			$connection->exec(
+				'ALTER TABLE ' . $table_name . ' ADD COLUMN key_hash CHAR(64) DEFAULT NULL AFTER label',
+			);
+		}
+
+		if ( ! $this->column_exists( 'api_keys', 'key_prefix' ) ) {
+			$connection->exec(
+				'ALTER TABLE ' . $table_name . ' ADD COLUMN key_prefix VARCHAR(16) DEFAULT NULL AFTER key_hash',
+			);
+		}
+
+		if ( ! $this->column_exists( 'api_keys', 'key_last_four' ) ) {
+			$connection->exec(
+				'ALTER TABLE ' . $table_name . ' ADD COLUMN key_last_four CHAR(4) DEFAULT NULL AFTER key_prefix',
+			);
+		}
+
+		if ( $this->column_exists( 'api_keys', 'key_value' ) ) {
+			$connection->exec(
+				'UPDATE ' . $table_name . '
+				SET key_hash = COALESCE(NULLIF(key_hash, \'\'), SHA2(key_value, 256)),
+					key_prefix = COALESCE(NULLIF(key_prefix, \'\'), LEFT(key_value, 16)),
+					key_last_four = COALESCE(NULLIF(key_last_four, \'\'), RIGHT(key_value, 4))
+				WHERE key_value IS NOT NULL
+				AND key_value <> \'\'',
+			);
+
+			if ( $this->index_exists( 'api_keys', 'uniq_api_keys_key_value' ) ) {
+				$connection->exec(
+					'ALTER TABLE ' . $table_name . ' DROP INDEX ' . $this->quote_identifier( 'uniq_api_keys_key_value' ),
+				);
+			}
+
+			$connection->exec(
+				'ALTER TABLE ' . $table_name . ' DROP COLUMN key_value',
+			);
+		}
+
+		$missing_values = (int) $this->query_value(
+			'SELECT COUNT(*)
+			FROM api_keys
+			WHERE key_hash IS NULL
+			OR key_hash = \'\'
+			OR key_prefix IS NULL
+			OR key_prefix = \'\'
+			OR key_last_four IS NULL
+			OR key_last_four = \'\'',
+		);
+
+		if ( $missing_values > 0 ) {
+			throw new \RuntimeException(
+				'PeakURL could not reconcile the API key schema.',
+			);
+		}
+
+		if (
+			$this->column_allows_null( 'api_keys', 'key_hash' ) ||
+			$this->column_allows_null( 'api_keys', 'key_prefix' ) ||
+			$this->column_allows_null( 'api_keys', 'key_last_four' )
+		) {
+			$connection->exec(
+				'ALTER TABLE ' . $table_name . '
+				MODIFY COLUMN key_hash CHAR(64) NOT NULL,
+				MODIFY COLUMN key_prefix VARCHAR(16) NOT NULL,
+				MODIFY COLUMN key_last_four CHAR(4) NOT NULL',
+			);
+		}
+
+		if ( ! $this->index_exists( 'api_keys', 'uniq_api_keys_key_hash' ) ) {
+			$connection->exec(
+				'ALTER TABLE ' . $table_name . ' ADD UNIQUE INDEX ' . $this->quote_identifier( 'uniq_api_keys_key_hash' ) . ' (key_hash)',
+			);
+		}
+	}
+
+	/**
+	 * Quote a SQL identifier for direct DDL usage.
+	 *
+	 * @param string $identifier Raw table, column, or index name.
+	 * @return string Backtick-quoted identifier.
+	 * @since 1.0.1
+	 */
+	private function quote_identifier( string $identifier ): string {
+		return Database::quote_identifier( $identifier );
 	}
 }

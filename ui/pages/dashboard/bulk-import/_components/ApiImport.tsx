@@ -1,17 +1,15 @@
 // @ts-nocheck
 import { Button } from '@/components/ui';
-import { useGetUserProfileQuery } from '@/store/slices/api/user';
-import { Link } from 'react-router-dom';
 import { ExternalLink } from 'lucide-react';
+import { API_SERVER_BASE_URL } from '@/constants';
 
 const ApiImport = () => {
-	const { data: userData } = useGetUserProfileQuery();
-	const apiKey = userData?.data?.apiKey || 'YOUR_API_KEY';
+	const apiKey = 'YOUR_API_KEY';
 
 	return (
 		<div className="bg-surface border border-stroke rounded-lg p-5">
 			<h2 className="text-base font-semibold text-heading mb-3">
-				API Bulk Import
+				API Import
 			</h2>
 			<p className="text-sm text-text-muted mb-5">
 				Use our API to programmatically import multiple URLs. Perfect
@@ -23,7 +21,7 @@ const ApiImport = () => {
 						Example Request
 					</h3>
 					<pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs border border-gray-700">
-						<code>{`POST /v1/urls/bulk
+						<code>{`POST ${API_SERVER_BASE_URL}/urls/bulk
 Authorization: Bearer ${apiKey}
 Content-Type: application/json
 
@@ -52,8 +50,6 @@ Content-Type: application/json
 						<code>{`{
   "success": true,
   "data": {
-    "created": 2,
-    "failed": 0,
     "results": [
       {
         "destinationUrl": "https://example.com/page1",
@@ -61,7 +57,11 @@ Content-Type: application/json
         "alias": "page1",
         ...
       },
-      ...
+      {
+        "destinationUrl": "https://example.com/page2",
+        "shortCode": "page2",
+        "alias": "page2"
+      }
     ],
     "errors": []
   }
@@ -70,12 +70,16 @@ Content-Type: application/json
 				</div>
 			</div>
 			<div className="mt-5">
-				<Link to="/dashboard/api-docs">
+				<a
+					href="https://peakurl.org/docs/api/links"
+					target="_blank"
+					rel="noreferrer"
+				>
 					<Button size="sm">
 						<ExternalLink className="mr-2 h-4 w-4" />
 						View API Documentation
 					</Button>
-				</Link>
+				</a>
 			</div>
 		</div>
 	);

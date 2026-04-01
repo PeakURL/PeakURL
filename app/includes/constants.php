@@ -14,6 +14,8 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Includes;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -24,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class PeakURL_Constants {
+class Constants {
 
 	/** Runtime version array key. */
 	public const CONFIG_VERSION = 'PEAKURL_VERSION';

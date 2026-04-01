@@ -10,7 +10,7 @@ const Tabs = ({ tabs, activeTab }) => {
 				return (
 					<Link
 						key={tab.id}
-						to={`/dashboard/bulk-import/${tab.id}`}
+						to={`/dashboard/tools/import/${tab.id}`}
 						className={`flex items-center gap-2 px-5 py-2.5 text-sm font-medium transition-all border-b-2 -mb-px ${
 							activeTab === tab.id
 								? 'border-accent text-accent'

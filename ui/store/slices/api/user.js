@@ -30,7 +30,7 @@ export const userApi = baseApi.injectEndpoints({
 				method: 'POST',
 				body,
 			}),
-			invalidatesTags: ['Profile'],
+			invalidatesTags: ['AuthSession', 'Profile'],
 		}),
 		verifyTwoFactorLogin: build.mutation({
 			query: (body) => ({
@@ -38,14 +38,14 @@ export const userApi = baseApi.injectEndpoints({
 				method: 'POST',
 				body,
 			}),
-			invalidatesTags: ['Profile'],
+			invalidatesTags: ['AuthSession', 'Profile'],
 		}),
 		logout: build.mutation({
 			query: () => ({
 				url: 'auth/logout',
 				method: 'POST',
 			}),
-			invalidatesTags: ['Profile'],
+			invalidatesTags: ['AuthSession', 'Profile'],
 		}),
 		getUserProfile: build.query({
 			query: () => 'users/me',
@@ -61,7 +61,7 @@ export const userApi = baseApi.injectEndpoints({
 		}),
 		authCheck: build.query({
 			query: () => 'users/me',
-			providesTags: ['Profile'],
+			providesTags: ['AuthSession'],
 			retry: 0,
 		}),
 		forgotPassword: build.mutation({

@@ -11,7 +11,7 @@
 		"build": "tsc -b && vite build",
 		"release:build": "sh scripts/build-release.sh",
 		"release:upload": "sh scripts/upload-release.sh",
-		"smoke:auth": "sh scripts/smoke-auth.sh",
+		"smoke:auth": "sh scripts/smoke-auth.local.sh",
 		"lint": "npm run lint:web && npm run lint:php",
 		"lint:web": "eslint ui",
 		"lint:php": "composer --working-dir=app run phpcs",

@@ -11,17 +11,19 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Services;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Totp_Service — generates secrets, builds otpauth URIs, and verifies TOTP codes.
+ * Totp — generates secrets, builds otpauth URIs, and verifies TOTP codes.
  *
  * @since 1.0.0
  */
-class Totp_Service {
+class Totp {
 
 	/** @var string Base32 alphabet used for secret generation and decoding. */
 	private const BASE32_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';

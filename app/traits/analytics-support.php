@@ -8,17 +8,32 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Traits;
+
+use PeakURL\Includes\Constants;
+use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Http\ApiException;
+use PeakURL\Http\Request;
+use PeakURL\Services\Crypto;
+use PeakURL\Services\Geoip;
+use PeakURL\Services\Mailer;
+use PeakURL\Services\SetupConfig;
+use PeakURL\Services\Update;
+use PeakURL\Utils\Query;
+use PeakURL\Utils\Security;
+use PeakURL\Utils\Visitor;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Store_Analytics_Support_Trait — analytics recording helpers for Data_Store.
+ * AnalyticsSupportTrait — analytics recording helpers for Store.
  *
  * @since 1.0.0
  */
-trait Store_Analytics_Support_Trait {
+trait AnalyticsSupportTrait {
 
 	/**
 	 * Record an activity entry in the audit log.
@@ -37,9 +52,8 @@ trait Store_Analytics_Support_Trait {
 		?string $link_id = null,
 		array $metadata = array()
 	): void {
-		$this->execute(
-			'INSERT INTO audit_logs (id, user_id, type, message, link_id, metadata, created_at)
-            VALUES (:id, :user_id, :type, :message, :link_id, :metadata, :created_at)',
+		$this->db->insert(
+			'audit_logs',
 			array(
 				'id'         => $this->generate_id( 'activity' ),
 				'user_id'    => $user_id,
@@ -60,9 +74,9 @@ trait Store_Analytics_Support_Trait {
 	 * @since 1.0.0
 	 */
 	private function build_time_window( int $days ): array {
-		$timezone   = new DateTimeZone( 'UTC' );
+		$timezone   = new \DateTimeZone( 'UTC' );
 		$start_date =
-			( new DateTimeImmutable( 'now', $timezone ) )
+			( new \DateTimeImmutable( 'now', $timezone ) )
 				->setTime( 0, 0, 0 )
 				->modify( '-' . max( 0, $days - 1 ) . ' days' );
 
@@ -137,9 +151,9 @@ trait Store_Analytics_Support_Trait {
 		$labels = array();
 		$clicks = array();
 		$unique = array();
-		$cursor = new DateTimeImmutable(
+		$cursor = new \DateTimeImmutable(
 			$window['start_at'],
-			new DateTimeZone( 'UTC' ),
+			new \DateTimeZone( 'UTC' ),
 		);
 
 		for ( $index = 0; $index < $days; $index++ ) {
@@ -187,11 +201,11 @@ trait Store_Analytics_Support_Trait {
 		);
 
 		if ( ! in_array( $column, $allowed_columns, true ) ) {
-			throw new RuntimeException( 'Invalid analytics column requested.' );
+			throw new \RuntimeException( 'Invalid analytics column requested.' );
 		}
 
 		if ( null !== $code_column && ! in_array( $code_column, $allowed_columns, true ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'Invalid analytics code column requested.',
 			);
 		}
@@ -396,13 +410,13 @@ trait Store_Analytics_Support_Trait {
 		$now        = $this->now();
 
 		if (
-			Visitor_Utils::should_skip_click_tracking(
+			Visitor::should_skip_click_tracking(
 				$request,
 				$allow_non_get_hit,
 			) ||
 			$this->is_duplicate_click(
 				(string) $url['id'],
-				Visitor_Utils::build_hash( $request ),
+				Visitor::build_hash( $request ),
 				$ip_address,
 				$user_agent,
 				$now,
@@ -411,61 +425,19 @@ trait Store_Analytics_Support_Trait {
 			return;
 		}
 
-		$referrer     = Visitor_Utils::parse_referrer(
+		$referrer     = Visitor::parse_referrer(
 			$request->get_header( 'Referer', '' ),
 		);
-		$metadata     = Visitor_Utils::parse_user_agent(
+		$metadata     = Visitor::parse_user_agent(
 			(string) ( $user_agent ?? '' ),
 		);
 		$location     = $this->geoip_service->resolve_location(
 			(string) ( $ip_address ?? '' ),
 		);
-		$visitor_hash = Visitor_Utils::build_hash( $request );
+		$visitor_hash = Visitor::build_hash( $request );
 
-		$this->execute(
-			'INSERT INTO clicks (
-				id,
-				url_id,
-				clicked_at,
-				visitor_hash,
-				ip_address,
-				country_code,
-				country_name,
-				city_name,
-				device,
-				browser,
-				operating_system,
-				referrer_name,
-				referrer_domain,
-				referrer_category,
-				utm_source,
-				utm_medium,
-				utm_campaign,
-				utm_term,
-				utm_content,
-				user_agent
-			) VALUES (
-				:id,
-				:url_id,
-				:clicked_at,
-				:visitor_hash,
-				:ip_address,
-				:country_code,
-				:country_name,
-				:city_name,
-				:device,
-				:browser,
-				:operating_system,
-				:referrer_name,
-				:referrer_domain,
-				:referrer_category,
-				:utm_source,
-				:utm_medium,
-				:utm_campaign,
-				:utm_term,
-				:utm_content,
-				:user_agent
-			)',
+		$this->db->insert(
+			'clicks',
 			array(
 				'id'                => $this->generate_id( 'click' ),
 				'url_id'            => (string) $url['id'],
@@ -519,9 +491,9 @@ trait Store_Analytics_Support_Trait {
 		?string $user_agent,
 		string $clicked_at
 	): bool {
-		$threshold = ( new DateTimeImmutable(
+		$threshold = ( new \DateTimeImmutable(
 			$clicked_at,
-			new DateTimeZone( 'UTC' ),
+			new \DateTimeZone( 'UTC' ),
 		) )
 			->modify( '-2 seconds' )
 			->format( 'Y-m-d H:i:s' );

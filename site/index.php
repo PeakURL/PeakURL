@@ -16,6 +16,12 @@
 
 declare(strict_types=1);
 
+use PeakURL\Includes\Connection;
+use PeakURL\Includes\Constants;
+use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Services\Install;
+use PeakURL\Utils\Str;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . DIRECTORY_SEPARATOR );
 }
@@ -59,7 +65,7 @@ function peakurl_relative_request_path(
 ): string {
 	if (
 		'' !== $base_path &&
-		String_Utils::starts_with( $request_path, $base_path . '/' )
+		Str::starts_with( $request_path, $base_path . '/' )
 	) {
 		$relative_path = substr( $request_path, strlen( $base_path ) );
 
@@ -150,13 +156,13 @@ function peakurl_should_serve_dashboard_shell( string $relative_path ): bool {
 		'/login' === $relative_path ||
 		'/forgot-password' === $relative_path ||
 		'/reset-password' === $relative_path ||
-		String_Utils::starts_with( $relative_path, '/reset-password/' )
+		Str::starts_with( $relative_path, '/reset-password/' )
 	) {
 		return true;
 	}
 
 	return '/dashboard' === $relative_path ||
-		String_Utils::starts_with( $relative_path, '/dashboard/' );
+		Str::starts_with( $relative_path, '/dashboard/' );
 }
 
 /**
@@ -225,7 +231,7 @@ $install_path  = peakurl_runtime_url( $base_path, '/install.php' );
 
 if ( peakurl_is_under_maintenance() ) {
 	peakurl_send_maintenance_response(
-		String_Utils::starts_with( $relative_path, '/api/' ),
+		Str::starts_with( $relative_path, '/api/' ),
 	);
 }
 
@@ -238,16 +244,16 @@ if ( ! file_exists( $autoload ) ) {
 
 require_once $autoload;
 
-$runtime_state = Install_Service::get_runtime_state( $app_path );
+$runtime_state = Install::get_runtime_state( $app_path );
 
-if ( String_Utils::starts_with( $relative_path, '/api/' ) ) {
-	if ( Install_Service::STATE_READY !== $runtime_state ) {
+if ( Str::starts_with( $relative_path, '/api/' ) ) {
+	if ( Install::STATE_READY !== $runtime_state ) {
 		http_response_code( 503 );
 		header( 'Content-Type: application/json; charset=utf-8' );
 		echo json_encode(
 			array(
 				'success' => false,
-				'message' => Install_Service::STATE_NEEDS_INSTALL === $runtime_state
+				'message' => Install::STATE_NEEDS_INSTALL === $runtime_state
 					? 'PeakURL needs installation.'
 					: 'PeakURL needs database configuration.',
 				'data'    => array(
@@ -266,12 +272,12 @@ if ( String_Utils::starts_with( $relative_path, '/api/' ) ) {
 	exit();
 }
 
-if ( Install_Service::STATE_NEEDS_SETUP === $runtime_state ) {
+if ( Install::STATE_NEEDS_SETUP === $runtime_state ) {
 	header( 'Location: ' . $setup_path );
 	exit();
 }
 
-if ( Install_Service::STATE_NEEDS_INSTALL === $runtime_state ) {
+if ( Install::STATE_NEEDS_INSTALL === $runtime_state ) {
 	header( 'Location: ' . $install_path );
 	exit();
 }
@@ -281,16 +287,16 @@ if ( ! peakurl_should_serve_dashboard_shell( $relative_path ) ) {
 	exit();
 }
 
-$runtime_config = Runtime_Config::bootstrap( $app_path );
-$database       = new Database( $runtime_config );
+$runtime_config = RuntimeConfig::bootstrap( $app_path );
+$connection     = new Connection( $runtime_config );
 $site_name      = trim(
-	(string) ( $database->get_setting_value( 'site_name' ) ?? 'PeakURL' ),
+	(string) ( $connection->get_setting_value( 'site_name' ) ?? 'PeakURL' ),
 );
 $version        = trim(
 	(string) (
-		$database->get_setting_value( 'installed_version' ) ??
-		$runtime_config[ PeakURL_Constants::CONFIG_VERSION ] ??
-		PeakURL_Constants::DEFAULT_VERSION
+		$connection->get_setting_value( 'installed_version' ) ??
+		$runtime_config[ Constants::CONFIG_VERSION ] ??
+		Constants::DEFAULT_VERSION
 	),
 );
 

@@ -8,17 +8,32 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Traits;
+
+use PeakURL\Includes\Constants;
+use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Http\ApiException;
+use PeakURL\Http\Request;
+use PeakURL\Services\Crypto;
+use PeakURL\Services\Geoip;
+use PeakURL\Services\Mailer;
+use PeakURL\Services\SetupConfig;
+use PeakURL\Services\Update;
+use PeakURL\Utils\Query;
+use PeakURL\Utils\Security;
+use PeakURL\Utils\Visitor;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Store_System_Support_Trait — shared updater and GeoIP internals.
+ * SystemSupportTrait — shared updater and GeoIP internals.
  *
  * @since 1.0.0
  */
-trait Store_System_Support_Trait {
+trait SystemSupportTrait {
 
 	/**
 	 * Load (and optionally refresh) the cached update status.
@@ -28,7 +43,7 @@ trait Store_System_Support_Trait {
 	 * @since 1.0.0
 	 */
 	private function load_update_status( bool $force_check ): array {
-		$update_service  = new Update_Service( $this->config );
+		$update_service  = new Update( $this->config );
 		$manifest_url    = $update_service->get_manifest_url();
 		$last_checked    = $this->get_setting_value( 'update_last_checked_at' );
 		$last_error      = $this->get_setting_value( 'update_last_error' );
@@ -58,7 +73,7 @@ trait Store_System_Support_Trait {
 					false,
 				);
 				$this->delete_settings( array( 'update_last_error' ) );
-			} catch ( Throwable $exception ) {
+			} catch ( \Throwable $exception ) {
 				$last_checked = $this->now();
 				$last_error   = $exception->getMessage();
 				$this->upsert_setting(
@@ -84,7 +99,7 @@ trait Store_System_Support_Trait {
 	/**
 	 * Ensure GeoIP dashboard management is allowed in this runtime.
 	 *
-	 * @throws Api_Exception When the runtime config target is not writable.
+	 * @throws ApiException When the runtime config target is not writable.
 	 * @since 1.0.0
 	 */
 	private function assert_geoip_dashboard_management_allowed(): void {
@@ -94,7 +109,7 @@ trait Store_System_Support_Trait {
 			return;
 		}
 
-		throw new Api_Exception(
+		throw new ApiException(
 			(string) ( $status['manageDisabledReason'] ?? 'Location Data is unavailable in this runtime.' ),
 			422,
 		);

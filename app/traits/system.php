@@ -8,17 +8,32 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Traits;
+
+use PeakURL\Includes\Constants;
+use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Http\ApiException;
+use PeakURL\Http\Request;
+use PeakURL\Services\Crypto;
+use PeakURL\Services\Geoip;
+use PeakURL\Services\Mailer;
+use PeakURL\Services\SetupConfig;
+use PeakURL\Services\Update;
+use PeakURL\Utils\Query;
+use PeakURL\Utils\Security;
+use PeakURL\Utils\Visitor;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Store_System_Trait — updater and GeoIP methods for Data_Store.
+ * SystemTrait — updater and GeoIP methods for Store.
  *
  * @since 1.0.0
  */
-trait Store_System_Trait {
+trait SystemTrait {
 
 	/**
 	 * Return the current mail delivery configuration status.
@@ -62,15 +77,15 @@ trait Store_System_Trait {
 				$this->config,
 				$payload,
 			);
-		} catch ( RuntimeException $exception ) {
-			throw new Api_Exception( $exception->getMessage(), 422 );
+		} catch ( \RuntimeException $exception ) {
+			throw new ApiException( $exception->getMessage(), 422 );
 		}
 
-		$this->config = Runtime_Config::load( ABSPATH . 'app' );
+		$this->config = RuntimeConfig::load( ABSPATH . 'app' );
 		$this->refresh_release_runtime_config();
-		$this->config         = Runtime_Config::load( ABSPATH . 'app' );
-		$this->crypto_service = new Crypto_Service( $this->config );
-		$this->mailer_service = new PeakURL_Mail(
+		$this->config         = RuntimeConfig::load( ABSPATH . 'app' );
+		$this->crypto_service = new Crypto( $this->config );
+		$this->mailer_service = new Mailer(
 			$this->config,
 			$this->settings_api,
 			$this->crypto_service,
@@ -148,15 +163,15 @@ trait Store_System_Trait {
 				$this->config,
 				$payload,
 			);
-		} catch ( RuntimeException $exception ) {
-			throw new Api_Exception( $exception->getMessage(), 422 );
+		} catch ( \RuntimeException $exception ) {
+			throw new ApiException( $exception->getMessage(), 422 );
 		}
 
-		$this->config = Runtime_Config::load( ABSPATH . 'app' );
+		$this->config = RuntimeConfig::load( ABSPATH . 'app' );
 		$this->refresh_release_runtime_config();
-		$this->config               = Runtime_Config::load( ABSPATH . 'app' );
-		$this->crypto_service       = new Crypto_Service( $this->config );
-		$this->geoip_service        = new Geoip_Service(
+		$this->config               = RuntimeConfig::load( ABSPATH . 'app' );
+		$this->crypto_service       = new Crypto( $this->config );
+		$this->geoip_service        = new Geoip(
 			$this->config,
 			$this->settings_api,
 			$this->crypto_service,
@@ -188,8 +203,8 @@ trait Store_System_Trait {
 
 		try {
 			$status = $this->geoip_service->download_database();
-		} catch ( RuntimeException $exception ) {
-			throw new Api_Exception( $exception->getMessage(), 422 );
+		} catch ( \RuntimeException $exception ) {
+			throw new ApiException( $exception->getMessage(), 422 );
 		}
 
 		$this->upsert_setting( 'geoip_last_downloaded_at', $this->now(), false );
@@ -225,7 +240,7 @@ trait Store_System_Trait {
 	 * @param Request $request Incoming HTTP request (admin-only).
 	 * @return array<string, mixed> Result of the update operation.
 	 *
-	 * @throws Api_Exception When run from a source checkout or no update is available.
+	 * @throws ApiException When run from a source checkout or no update is available.
 	 * @since 1.0.0
 	 */
 	public function apply_update( Request $request ): array {
@@ -238,11 +253,11 @@ trait Store_System_Trait {
 		$status = $this->load_update_status( true );
 
 		if ( empty( $status['updateAvailable'] ) ) {
-			throw new Api_Exception( 'PeakURL is already up to date.', 422 );
+			throw new ApiException( 'PeakURL is already up to date.', 422 );
 		}
 
 		if ( empty( $status['canApply'] ) ) {
-			throw new Api_Exception(
+			throw new ApiException(
 				(string) ( $status['applyDisabledReason'] ?? 'PeakURL cannot apply this update.' ),
 				422,
 			);
@@ -253,17 +268,17 @@ trait Store_System_Trait {
 			: array();
 
 		if ( empty( $manifest ) ) {
-			throw new Api_Exception(
+			throw new ApiException(
 				'PeakURL could not load the update manifest.',
 				502,
 			);
 		}
 
-		$update_service = new Update_Service( $this->config );
+		$update_service = new Update( $this->config );
 
 		try {
 			$result = $update_service->apply_update( $manifest );
-		} catch ( Throwable $exception ) {
+		} catch ( \Throwable $exception ) {
 			$this->upsert_setting( 'update_last_checked_at', $this->now(), false );
 			$this->upsert_setting(
 				'update_last_error',
@@ -271,12 +286,12 @@ trait Store_System_Trait {
 				false,
 			);
 
-			throw new Api_Exception( $exception->getMessage(), 500 );
+			throw new ApiException( $exception->getMessage(), 500 );
 		}
 
 		$this->upsert_setting(
 			'installed_version',
-			(string) ( $result['version'] ?? $this->config[ PeakURL_Constants::CONFIG_VERSION ] ?? PeakURL_Constants::DEFAULT_VERSION ),
+			(string) ( $result['version'] ?? $this->config[ Constants::CONFIG_VERSION ] ?? Constants::DEFAULT_VERSION ),
 			false,
 		);
 		$this->upsert_setting( 'update_last_applied_at', $this->now(), false );
@@ -312,9 +327,9 @@ trait Store_System_Trait {
 			return;
 		}
 
-		Setup_Config_Service::write_config_file(
+		SetupConfig::write_config_file(
 			ABSPATH . 'app',
-			Setup_Config_Service::config_values_from_runtime_config( $this->config ),
+			SetupConfig::config_values_from_runtime_config( $this->config ),
 		);
 	}
 }

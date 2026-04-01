@@ -37,6 +37,7 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }) {
 							{title}
 						</h3>
 						<button
+							type="button"
 							onClick={onClose}
 							className="p-2 text-text-muted hover:text-heading rounded-lg hover:bg-surface-alt transition-colors"
 						>

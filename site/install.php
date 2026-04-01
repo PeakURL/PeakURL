@@ -3,7 +3,7 @@
  * PeakURL browser-based site installation form (installer step 3).
  *
  * Collects site name, administrator credentials, and optional
- * settings, then delegates to {@see Install_Service::install()} to
+ * settings, then delegates to {@see Install::install()} to
  * create the schema, seed initial data, and log the admin in.
  *
  * On success the user is redirected to `/dashboard/about?source=install`.
@@ -13,6 +13,9 @@
  */
 
 declare(strict_types=1);
+
+use PeakURL\Http\Request;
+use PeakURL\Services\Install;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . DIRECTORY_SEPARATOR );
@@ -89,14 +92,14 @@ if ( ! file_exists( $autoload_path ) ) {
 
 require $autoload_path;
 
-$runtime_state = Install_Service::get_runtime_state( $app_path );
+$runtime_state = Install::get_runtime_state( $app_path );
 
-if ( Install_Service::STATE_READY === $runtime_state ) {
+if ( Install::STATE_READY === $runtime_state ) {
 	header( 'Location: ' . peakurl_install_url( $base_path, '/dashboard' ) );
 	exit();
 }
 
-if ( Install_Service::STATE_NEEDS_SETUP === $runtime_state ) {
+if ( Install::STATE_NEEDS_SETUP === $runtime_state ) {
 	header( 'Location: ' . peakurl_install_url( $base_path, '/setup-config.php' ) );
 	exit();
 }
@@ -113,7 +116,7 @@ if (
 
 $host              = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $detected_site_url = $scheme . '://' . $host . $base_path;
-$values            = Install_Service::get_form_defaults( $app_path, $detected_site_url );
+$values            = Install::get_form_defaults( $app_path, $detected_site_url );
 $error_message     = '';
 $page_title        = 'Administrator Setup &mdash; PeakURL';
 
@@ -130,7 +133,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 
 	try {
 		$request = Request::from_globals();
-		Install_Service::install( $app_path, $_POST, $request );
+		Install::install( $app_path, $_POST, $request );
 
 		foreach ( $request->get_response_cookies() as $cookie_header ) {
 			header( 'Set-Cookie: ' . $cookie_header, false );
@@ -138,7 +141,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 
 		header( 'Location: ' . peakurl_install_url( $base_path, '/dashboard/about?source=install' ) );
 		exit();
-	} catch ( Throwable $exception ) {
+	} catch ( \Throwable $exception ) {
 		$error_message = $exception->getMessage();
 	}
 }

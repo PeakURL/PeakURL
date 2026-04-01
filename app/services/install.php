@@ -12,13 +12,20 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Services;
+
+use PeakURL\Includes\Connection;
+use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Http\Request;
+use PeakURL\Store;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Install_Service — orchestrates first-run self-hosted installation.
+ * Install — orchestrates first-run self-hosted installation.
  *
  * Determines the runtime install state (needs_setup / needs_install / ready)
  * and drives the final install step that writes config, seeds the database,
@@ -26,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class Install_Service {
+class Install {
 
 	/** Runtime state: config.php is missing. */
 	public const STATE_NEEDS_SETUP = 'needs_setup';
@@ -54,7 +61,7 @@ class Install_Service {
 	 * @since 1.0.0
 	 */
 	public static function has_runtime_config( string $app_path ): bool {
-		return Setup_Config_Service::has_config( $app_path );
+		return SetupConfig::has_config( $app_path );
 	}
 
 	/**
@@ -73,21 +80,21 @@ class Install_Service {
 		}
 
 		try {
-			$config   = Runtime_Config::load( $app_path );
-			$database = new Database( $config );
+			$config     = RuntimeConfig::load( $app_path );
+			$connection = new Connection( $config );
 
-			if ( ! $database->has_required_tables() ) {
+			if ( ! $connection->has_required_tables() ) {
 				return self::STATE_NEEDS_INSTALL;
 			}
 
-			if ( ! $database->setting_has_value( 'site_url' ) ) {
+			if ( ! $connection->setting_has_value( 'site_url' ) ) {
 				return self::STATE_NEEDS_INSTALL;
 			}
 
-			if ( ! $database->table_has_rows( 'users' ) ) {
+			if ( ! $connection->table_has_rows( 'users' ) ) {
 				return self::STATE_NEEDS_INSTALL;
 			}
-		} catch ( Throwable $exception ) {
+		} catch ( \Throwable $exception ) {
 			return self::STATE_NEEDS_SETUP;
 		}
 
@@ -137,26 +144,26 @@ class Install_Service {
 		Request $request
 	): array {
 		if ( self::is_installed( $app_path ) ) {
-			throw new RuntimeException( 'PeakURL is already installed.' );
+			throw new \RuntimeException( 'PeakURL is already installed.' );
 		}
 
 		if ( ! self::has_runtime_config( $app_path ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL still needs database configuration. Run setup-config.php first.',
 			);
 		}
 
-		$current_config = Runtime_Config::load( $app_path );
+		$current_config = RuntimeConfig::load( $app_path );
 		$values         = self::normalize_input( $input, $current_config );
 
-		Setup_Config_Service::write_config_file( $app_path, $values );
+		SetupConfig::write_config_file( $app_path, $values );
 
 		try {
 			$runtime_config = self::runtime_config_from_values( $values );
 			self::initialize_schema_from_config( $runtime_config, $app_path );
 
-			$database   = new Database( $runtime_config );
-			$data_store = new Data_Store( $database, $runtime_config );
+			$connection = new Connection( $runtime_config );
+			$data_store = new Store( $connection, $runtime_config );
 			$data_store->bootstrap_workspace();
 			$data_store->login(
 				$request,
@@ -166,12 +173,12 @@ class Install_Service {
 				)
 			);
 
-			Setup_Config_Service::write_config_file(
+			SetupConfig::write_config_file(
 				$app_path,
 				self::release_runtime_values( $values ),
 			);
-		} catch ( Throwable $exception ) {
-			Setup_Config_Service::write_config_file(
+		} catch ( \Throwable $exception ) {
+			SetupConfig::write_config_file(
 				$app_path,
 				self::release_runtime_values( self::config_to_values( $current_config ) ),
 			);
@@ -195,21 +202,21 @@ class Install_Service {
 		$site_url = trim( $site_url );
 
 		if ( '' === $site_url ) {
-			throw new RuntimeException( 'Site URL is required.' );
+			throw new \RuntimeException( 'Site URL is required.' );
 		}
 
 		if ( ! filter_var( $site_url, FILTER_VALIDATE_URL ) ) {
-			throw new RuntimeException( 'Site URL must be a valid URL.' );
+			throw new \RuntimeException( 'Site URL must be a valid URL.' );
 		}
 
 		$parts = parse_url( $site_url );
 
 		if ( ! is_array( $parts ) || empty( $parts['host'] ) ) {
-			throw new RuntimeException( 'Site URL must include a valid host.' );
+			throw new \RuntimeException( 'Site URL must include a valid host.' );
 		}
 
 		if ( ! empty( $parts['query'] ) || ! empty( $parts['fragment'] ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'Site URL cannot contain a query string or fragment.',
 			);
 		}
@@ -242,7 +249,7 @@ class Install_Service {
 	 * @since 1.0.0
 	 */
 	private static function config_to_values( array $config ): array {
-		return Setup_Config_Service::config_values_from_runtime_config( $config );
+		return SetupConfig::config_values_from_runtime_config( $config );
 	}
 
 	/**
@@ -292,29 +299,29 @@ class Install_Service {
 		$owner_names    = self::derive_owner_names( $owner_name, $owner_username );
 
 		if ( '' === $workspace_name ) {
-			throw new RuntimeException( 'Site title is required.' );
+			throw new \RuntimeException( 'Site title is required.' );
 		}
 
 		if ( '' === $workspace_slug ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not generate a workspace slug from the site title.',
 			);
 		}
 
 		if ( ! preg_match( '/^[A-Za-z0-9._@-]{3,120}$/', $owner_username ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'Admin username must be 3-120 characters using letters, numbers, dots, dashes, underscores, or @.',
 			);
 		}
 
 		if ( ! filter_var( $owner_email, FILTER_VALIDATE_EMAIL ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'A valid admin email address is required.',
 			);
 		}
 
 		if ( strlen( $owner_password ) < 8 ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'Admin password must be at least 8 characters.',
 			);
 		}
@@ -395,23 +402,23 @@ class Install_Service {
 		array $config,
 		string $app_path
 	): void {
-		$database    = new Database( $config );
-		$connection  = $database->get_connection();
-		$schema_path =
+		$connection_manager = new Connection( $config );
+		$connection         = $connection_manager->get_connection();
+		$schema_path        =
 			rtrim( $app_path, DIRECTORY_SEPARATOR ) . '/database/schema.sql';
-		$schema      = file_get_contents( $schema_path );
+		$schema             = file_get_contents( $schema_path );
 
 		if ( false === $schema ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'Unable to read the database schema file.',
 			);
 		}
 
 		try {
-			$connection->exec( $database->prefix_schema( $schema ) );
-			$database->reconcile_schema();
-		} catch ( Throwable $exception ) {
-			throw new RuntimeException(
+			$connection->exec( $connection_manager->prefix_schema( $schema ) );
+			$connection_manager->reconcile_schema();
+		} catch ( \Throwable $exception ) {
+			throw new \RuntimeException(
 				'Unable to connect to the database or create the PeakURL tables. ' . $exception->getMessage(),
 				0,
 				$exception,
@@ -423,7 +430,7 @@ class Install_Service {
 	 * Build a runtime config array from flat string values.
 	 *
 	 * Converts string booleans/integers to their native types for use with
-	 * Database and Data_Store constructors.
+	 * Database and Store constructors.
 	 *
 	 * @param array<string, string> $values Flat config values.
 	 * @return array<string, mixed> Typed runtime config.

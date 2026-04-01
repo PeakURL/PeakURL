@@ -13,18 +13,10 @@ const SETTINGS_TAB_TITLES: Record<string, string> = {
 	updates: 'Updates',
 };
 
-const API_DOCS_TAB_TITLES: Record<string, string> = {
-	authentication: 'API Docs: Authentication',
-	links: 'API Docs: Links',
-	analytics: 'API Docs: Analytics',
-	'qr-codes': 'API Docs: QR Codes',
-	webhooks: 'API Docs: Webhooks',
-};
-
-const BULK_IMPORT_TAB_TITLES: Record<string, string> = {
-	file: 'Bulk Import: File Upload',
-	api: 'Bulk Import: API Import',
-	paste: 'Bulk Import: Paste URLs',
+const IMPORT_TAB_TITLES: Record<string, string> = {
+	file: 'Import: File Upload',
+	api: 'Import: API',
+	paste: 'Import: Paste URLs',
 };
 
 function getSiteTitle(): string {
@@ -82,30 +74,24 @@ export function getPageTitle(pathname: string): string {
 		return withSiteTitleSuffix('Settings');
 	}
 
-	const apiDocsMatch = matchPath('/dashboard/api-docs/:tab', pathname);
+	const importMatch = matchPath('/dashboard/tools/import/:tab', pathname);
 
-	if (apiDocsMatch) {
-		const tab = apiDocsMatch.params.tab ?? 'authentication';
-		return withSiteTitleSuffix(
-			API_DOCS_TAB_TITLES[tab] ?? 'API Docs',
-		);
+	if (importMatch) {
+		const tab = importMatch.params.tab ?? 'file';
+
+		if (tab in IMPORT_TAB_TITLES) {
+			return withSiteTitleSuffix(
+				IMPORT_TAB_TITLES[tab] ?? 'Import',
+			);
+		}
 	}
 
-	if ('/dashboard/api-docs' === pathname) {
-		return withSiteTitleSuffix('API Docs');
+	if ('/dashboard/tools/import' === pathname) {
+		return withSiteTitleSuffix('Import');
 	}
 
-	const bulkImportMatch = matchPath('/dashboard/bulk-import/:tab', pathname);
-
-	if (bulkImportMatch) {
-		const tab = bulkImportMatch.params.tab ?? 'file';
-		return withSiteTitleSuffix(
-			BULK_IMPORT_TAB_TITLES[tab] ?? 'Bulk Import',
-		);
-	}
-
-	if ('/dashboard/bulk-import' === pathname) {
-		return withSiteTitleSuffix('Bulk Import');
+	if ('/dashboard/tools' === pathname) {
+		return withSiteTitleSuffix('Tools');
 	}
 
 	if (pathname.startsWith('/dashboard')) {

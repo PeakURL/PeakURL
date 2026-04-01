@@ -14,13 +14,41 @@
 
 declare(strict_types=1);
 
+namespace PeakURL;
+
+use PeakURL\Api\LinksApi;
+use PeakURL\Api\SettingsApi;
+use PeakURL\Api\UsersApi;
+use PeakURL\Includes\Connection;
+use PeakURL\Includes\PeakURL_DB;
+use PeakURL\Includes\Roles;
+use PeakURL\Services\Crypto;
+use PeakURL\Services\Geoip;
+use PeakURL\Services\Mailer;
+use PeakURL\Services\Totp;
+use PeakURL\Traits\AccountsTrait;
+use PeakURL\Traits\AnalyticsSupportTrait;
+use PeakURL\Traits\AnalyticsTrait;
+use PeakURL\Traits\AuthorizationTrait;
+use PeakURL\Traits\BootstrapTrait;
+use PeakURL\Traits\CredentialsTrait;
+use PeakURL\Traits\FindersTrait;
+use PeakURL\Traits\HelpersTrait;
+use PeakURL\Traits\HydrationTrait;
+use PeakURL\Traits\LinksTrait;
+use PeakURL\Traits\SessionsTrait;
+use PeakURL\Traits\SettingsTrait;
+use PeakURL\Traits\SystemSupportTrait;
+use PeakURL\Traits\SystemTrait;
+use PeakURL\Traits\WebhooksTrait;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Data_Store — central persistence facade for the PeakURL dashboard.
+ * Store — central persistence facade for the PeakURL dashboard.
  *
  * Public methods and shared internals are split into focused traits so
  * this class stays as the central persistence facade and dependency
@@ -30,112 +58,112 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class Data_Store {
+class Store {
 
 	/**
 	 * Bootstrap methods.
 	 *
 	 * @since 1.0.0
 	 */
-	use Store_Bootstrap_Trait;
+	use BootstrapTrait;
 
 	/**
 	 * Authorization and capability helpers.
 	 *
 	 * @since 1.0.0
 	 */
-	use Store_Authorization_Trait;
+	use AuthorizationTrait;
 
 	/**
 	 * Session and API token helpers.
 	 *
 	 * @since 1.0.0
 	 */
-	use Store_Sessions_Trait;
+	use SessionsTrait;
 
 	/**
 	 * Accounts and user-management methods.
 	 *
 	 * @since 1.0.0
 	 */
-	use Store_Accounts_Trait;
+	use AccountsTrait;
 
 	/**
 	 * API key and backup-code helpers.
 	 *
 	 * @since 1.0.0
 	 */
-	use Store_Credentials_Trait;
+	use CredentialsTrait;
 
 	/**
 	 * Settings bootstrap and options helpers.
 	 *
 	 * @since 1.0.0
 	 */
-	use Store_Settings_Trait;
+	use SettingsTrait;
 
 	/**
 	 * API hydration helpers.
 	 *
 	 * @since 1.0.0
 	 */
-	use Store_Hydration_Trait;
+	use HydrationTrait;
 
 	/**
 	 * Links CRUD methods.
 	 *
 	 * @since 1.0.0
 	 */
-	use Store_Links_Trait;
+	use LinksTrait;
 
 	/**
 	 * Analytics methods.
 	 *
 	 * @since 1.0.0
 	 */
-	use Store_Analytics_Trait;
+	use AnalyticsTrait;
 
 	/**
 	 * Analytics recording and grouping helpers.
 	 *
 	 * @since 1.0.0
 	 */
-	use Store_Analytics_Support_Trait;
+	use AnalyticsSupportTrait;
 
 	/**
 	 * Webhook methods.
 	 *
 	 * @since 1.0.0
 	 */
-	use Store_Webhooks_Trait;
+	use WebhooksTrait;
 
 	/**
 	 * System methods.
 	 *
 	 * @since 1.0.0
 	 */
-	use Store_System_Trait;
+	use SystemTrait;
 
 	/**
 	 * Shared updater and GeoIP support helpers.
 	 *
 	 * @since 1.0.0
 	 */
-	use Store_System_Support_Trait;
+	use SystemSupportTrait;
 
 	/**
 	 * Common record lookups.
 	 *
 	 * @since 1.0.0
 	 */
-	use Store_Finders_Trait;
+	use FindersTrait;
 
 	/**
 	 * Shared low-level helper methods.
 	 *
 	 * @since 1.0.0
 	 */
-	use Store_Helpers_Trait;
+	use HelpersTrait;
 
 	/**
 	 * WordPress-style database wrapper.
@@ -148,26 +176,26 @@ class Data_Store {
 	/**
 	 * Settings/options API.
 	 *
-	 * @var Settings_API
+	 * @var SettingsApi
 	 * @since 1.0.0
 	 */
-	private Settings_API $settings_api;
+	private SettingsApi $settings_api;
 
 	/**
 	 * Users data API.
 	 *
-	 * @var Users_API
+	 * @var UsersApi
 	 * @since 1.0.0
 	 */
-	private Users_API $users_api;
+	private UsersApi $users_api;
 
 	/**
 	 * Links data API.
 	 *
-	 * @var Links_API
+	 * @var LinksApi
 	 * @since 1.0.0
 	 */
-	private Links_API $links_api;
+	private LinksApi $links_api;
 
 	/**
 	 * Runtime configuration values merged from config.php and env.
@@ -180,42 +208,42 @@ class Data_Store {
 	/**
 	 * WordPress-style role and capability registry.
 	 *
-	 * @var PeakURL_Roles
+	 * @var Roles
 	 * @since 1.0.0
 	 */
-	private PeakURL_Roles $roles;
+	private Roles $roles;
 
 	/**
 	 * TOTP service for two-factor authentication.
 	 *
-	 * @var Totp_Service
+	 * @var Totp
 	 * @since 1.0.0
 	 */
-	private Totp_Service $totp_service;
+	private Totp $totp_service;
 
 	/**
 	 * Crypto helper for database-backed settings and session signing.
 	 *
-	 * @var Crypto_Service
+	 * @var Crypto
 	 * @since 1.0.0
 	 */
-	private Crypto_Service $crypto_service;
+	private Crypto $crypto_service;
 
 	/**
 	 * Request geolocation helper for click analytics.
 	 *
-	 * @var Geoip_Service
+	 * @var Geoip
 	 * @since 1.0.0
 	 */
-	private Geoip_Service $geoip_service;
+	private Geoip $geoip_service;
 
 	/**
 	 * Mail transport and delivery helper.
 	 *
-	 * @var PeakURL_Mail
+	 * @var Mailer
 	 * @since 1.0.0
 	 */
-	private PeakURL_Mail $mailer_service;
+	private Mailer $mailer_service;
 
 	/**
 	 * Whether the workspace has been bootstrapped in this request.
@@ -226,27 +254,27 @@ class Data_Store {
 	private bool $bootstrapped = false;
 
 	/**
-	 * Create a new Data_Store instance.
+	 * Create a new Store instance.
 	 *
-	 * @param Database            $database Initialized Database wrapper.
+	 * @param Connection          $connection Initialized connection manager.
 	 * @param array<string, mixed> $config   Runtime configuration map.
 	 * @since 1.0.0
 	 */
-	public function __construct( Database $database, array $config ) {
-		$this->db             = new PeakURL_DB( $database );
-		$this->settings_api   = new Settings_API( $this->db );
-		$this->users_api      = new Users_API( $this->db );
-		$this->links_api      = new Links_API( $this->db );
+	public function __construct( Connection $connection, array $config ) {
+		$this->db             = new PeakURL_DB( $connection );
+		$this->settings_api   = new SettingsApi( $this->db );
+		$this->users_api      = new UsersApi( $this->db );
+		$this->links_api      = new LinksApi( $this->db );
 		$this->config         = $config;
-		$this->roles          = new PeakURL_Roles();
-		$this->totp_service   = new Totp_Service();
-		$this->crypto_service = new Crypto_Service( $config );
-		$this->geoip_service  = new Geoip_Service(
+		$this->roles          = new Roles();
+		$this->totp_service   = new Totp();
+		$this->crypto_service = new Crypto( $config );
+		$this->geoip_service  = new Geoip(
 			$config,
 			$this->settings_api,
 			$this->crypto_service,
 		);
-		$this->mailer_service = new PeakURL_Mail(
+		$this->mailer_service = new Mailer(
 			$config,
 			$this->settings_api,
 			$this->crypto_service,

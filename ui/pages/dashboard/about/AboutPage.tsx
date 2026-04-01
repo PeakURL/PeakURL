@@ -127,7 +127,7 @@ const FEATURES = [
 		icon: Code,
 		title: 'Operations And Integrations',
 		description:
-			'Use API keys, webhooks, bulk import tools, and the built-in updater baseline to operate the service over time.',
+			'Use API keys, webhooks, import tools, and the built-in updater baseline to operate the service over time.',
 	},
 	{
 		icon: Server,

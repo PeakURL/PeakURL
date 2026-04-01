@@ -11,6 +11,8 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Http;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -122,7 +124,7 @@ class Router {
 			return (array) call_user_func( $route['handler'], $request );
 		}
 
-		return Json_Response::error(
+		return JsonResponse::error(
 			'Route not found.',
 			404,
 			array(

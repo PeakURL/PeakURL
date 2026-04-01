@@ -5,7 +5,7 @@ import {
 	Gauge,
 	ArrowLeft,
 	Link2 as Link2Icon,
-	Upload,
+	Wrench,
 	Settings,
 	FileX,
 } from 'lucide-react';
@@ -72,14 +72,14 @@ const NotFoundPage = () => {
 								All Links
 							</Link>
 							<Link
-								to="/dashboard/bulk-import"
+								to="/dashboard/tools/import/file"
 								className="flex items-center justify-center gap-2 p-3 rounded-xl border border-stroke hover:border-accent/50 hover:bg-accent/5 transition-all text-sm font-medium text-text-muted hover:text-accent group"
 							>
-								<Upload
+								<Wrench
 									size={16}
 									className="group-hover:scale-110 transition-transform"
 								/>
-								Bulk Import
+								Import
 							</Link>
 							<Link
 								to="/dashboard/settings"

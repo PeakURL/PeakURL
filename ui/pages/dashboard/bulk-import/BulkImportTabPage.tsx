@@ -2,11 +2,11 @@
 'use client';
 import { useState } from 'react';
 import { ApiImport, PasteImport, FileUpload } from './_components';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 function BulkImportTabPage() {
-	const params = useParams();
-	const activeTab = params.tab;
+	const location = useLocation();
+	const activeTab = location.pathname.split('/').filter(Boolean).pop() || 'file';
 
 	const [importStatus, setImportStatus] = useState('idle'); // idle, uploading, processing, completed
 	const [importProgress, setImportProgress] = useState(0);

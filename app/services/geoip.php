@@ -11,7 +11,11 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Services;
+
 use MaxMind\Db\Reader;
+use PeakURL\Api\SettingsApi;
+use PeakURL\Includes\Constants;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -23,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class Geoip_Service {
+class Geoip {
 
 	/**
 	 * MaxMind direct-download permalink for GeoLite2 City binary data.
@@ -77,18 +81,18 @@ class Geoip_Service {
 	/**
 	 * Settings API for database-backed credentials.
 	 *
-	 * @var Settings_API
+	 * @var SettingsApi
 	 * @since 1.0.0
 	 */
-	private Settings_API $settings_api;
+	private SettingsApi $settings_api;
 
 	/**
 	 * Crypto helper for stored credentials.
 	 *
-	 * @var Crypto_Service
+	 * @var Crypto
 	 * @since 1.0.0
 	 */
-	private Crypto_Service $crypto_service;
+	private Crypto $crypto_service;
 
 	/**
 	 * Cached MaxMind reader instance.
@@ -110,14 +114,14 @@ class Geoip_Service {
 	 * Create a GeoIP service instance.
 	 *
 	 * @param array<string, mixed> $config         Runtime configuration map.
-	 * @param Settings_API         $settings_api   Settings API helper.
-	 * @param Crypto_Service       $crypto_service Crypto helper.
+	 * @param SettingsApi         $settings_api   Settings API helper.
+	 * @param Crypto       $crypto_service Crypto helper.
 	 * @since 1.0.0
 	 */
 	public function __construct(
 		array $config,
-		Settings_API $settings_api,
-		Crypto_Service $crypto_service
+		SettingsApi $settings_api,
+		Crypto $crypto_service
 	) {
 		$this->content_dir     = trim(
 			(string) ( $config['PEAKURL_CONTENT_DIR'] ?? ABSPATH . 'content' ),
@@ -126,7 +130,7 @@ class Geoip_Service {
 			(string) ( $config['PEAKURL_GEOIP_DB_PATH'] ?? '' ),
 		);
 		$this->peakurl_version = trim(
-			(string) ( $config[ PeakURL_Constants::CONFIG_VERSION ] ?? PeakURL_Constants::DEFAULT_VERSION ),
+			(string) ( $config[ Constants::CONFIG_VERSION ] ?? Constants::DEFAULT_VERSION ),
 		);
 		$this->settings_api    = $settings_api;
 		$this->crypto_service  = $crypto_service;
@@ -156,7 +160,7 @@ class Geoip_Service {
 
 		try {
 			$record = $reader->get( $ip_address );
-		} catch ( Throwable $exception ) {
+		} catch ( \Throwable $exception ) {
 			return $this->empty_location();
 		}
 
@@ -241,7 +245,7 @@ class Geoip_Service {
 		$capability = $this->get_dashboard_capability();
 
 		if ( ! $capability['allowed'] ) {
-			throw new RuntimeException( (string) $capability['reason'] );
+			throw new \RuntimeException( (string) $capability['reason'] );
 		}
 
 		$account_id      = trim( (string) ( $input['accountId'] ?? '' ) );
@@ -251,11 +255,11 @@ class Geoip_Service {
 		$current_license = $current['licenseKey'];
 
 		if ( '' !== $account_id && ! preg_match( '/^[0-9]{1,32}$/', $account_id ) ) {
-			throw new RuntimeException( 'MaxMind account ID must contain digits only.' );
+			throw new \RuntimeException( 'MaxMind account ID must contain digits only.' );
 		}
 
 		if ( '' !== $license_key && ! preg_match( '/^[A-Za-z0-9_]{6,255}$/', $license_key ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'MaxMind license key must be 6-255 characters and may only use letters, numbers, and underscores.',
 			);
 		}
@@ -272,14 +276,14 @@ class Geoip_Service {
 			) {
 				$license_key = $current_license;
 			} else {
-				throw new RuntimeException(
+				throw new \RuntimeException(
 					'Enter both the MaxMind account ID and license key, or leave both blank.',
 				);
 			}
 		}
 
 		if ( '' !== $license_key && ! $this->crypto_service->has_auth_keys() ) {
-			$this->crypto_service = new Crypto_Service( $config );
+			$this->crypto_service = new Crypto( $config );
 			$this->crypto_service->ensure_persisted_auth_keys( $app_path );
 		}
 
@@ -310,13 +314,13 @@ class Geoip_Service {
 	 */
 	public function download_database(): array {
 		if ( ! $this->has_credentials() ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'MaxMind credentials are required before PeakURL can download the GeoLite2 City database.',
 			);
 		}
 
-		if ( ! class_exists( 'PharData' ) ) {
-			throw new RuntimeException(
+		if ( ! class_exists( '\PharData' ) ) {
+			throw new \RuntimeException(
 				'The Phar extension is required to unpack the GeoLite2 database archive.',
 			);
 		}
@@ -338,7 +342,7 @@ class Geoip_Service {
 			$source_path = $this->find_database_file( $extract_path );
 
 			if ( null === $source_path ) {
-				throw new RuntimeException(
+				throw new \RuntimeException(
 					'PeakURL downloaded the GeoLite2 archive, but it did not contain GeoLite2-City.mmdb.',
 				);
 			}
@@ -388,7 +392,7 @@ class Geoip_Service {
 
 		try {
 			$this->reader = new Reader( $this->database_path );
-		} catch ( Throwable $exception ) {
+		} catch ( \Throwable $exception ) {
 			$this->reader = null;
 		}
 
@@ -471,7 +475,7 @@ class Geoip_Service {
 		$handle = curl_init( self::DOWNLOAD_URL );
 
 		if ( false === $handle ) {
-			throw new RuntimeException( 'PeakURL could not initialize cURL for the GeoLite2 download.' );
+			throw new \RuntimeException( 'PeakURL could not initialize cURL for the GeoLite2 download.' );
 		}
 
 		curl_setopt_array(
@@ -497,19 +501,19 @@ class Geoip_Service {
 		curl_close( $handle );
 
 		if ( false === $body ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not download the GeoLite2 City database from MaxMind. ' . $curl_error,
 			);
 		}
 
 		if ( $status < 200 || $status >= 300 ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				$this->build_download_http_error_message( $status ),
 			);
 		}
 
 		if ( false === file_put_contents( $archive_path, $body, LOCK_EX ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL downloaded the GeoLite2 archive, but could not store it locally.',
 			);
 		}
@@ -545,7 +549,7 @@ class Geoip_Service {
 			$redirect = $this->extract_location_header( $result['headers'] );
 
 			if ( null === $redirect ) {
-				throw new RuntimeException(
+				throw new \RuntimeException(
 					'PeakURL could not follow the GeoLite2 download redirect from MaxMind.',
 				);
 			}
@@ -561,13 +565,13 @@ class Geoip_Service {
 		}
 
 		if ( false === $result['body'] || $result['status'] < 200 || $result['status'] >= 300 ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				$this->build_download_http_error_message( $result['status'] ),
 			);
 		}
 
 		if ( false === file_put_contents( $archive_path, $result['body'], LOCK_EX ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL downloaded the GeoLite2 archive, but could not store it locally.',
 			);
 		}
@@ -625,7 +629,7 @@ class Geoip_Service {
 		$tar_path = preg_replace( '/\.gz$/', '', $archive_path );
 
 		if ( ! is_string( $tar_path ) || '' === $tar_path ) {
-			throw new RuntimeException( 'PeakURL could not prepare the GeoLite2 archive for extraction.' );
+			throw new \RuntimeException( 'PeakURL could not prepare the GeoLite2 archive for extraction.' );
 		}
 
 		if ( file_exists( $tar_path ) ) {
@@ -633,13 +637,13 @@ class Geoip_Service {
 		}
 
 		try {
-			$archive = new PharData( $archive_path );
+			$archive = new \PharData( $archive_path );
 			$archive->decompress();
 
-			$tar = new PharData( $tar_path );
+			$tar = new \PharData( $tar_path );
 			$tar->extractTo( $extract_path, null, true );
-		} catch ( Throwable $exception ) {
-			throw new RuntimeException(
+		} catch ( \Throwable $exception ) {
+			throw new \RuntimeException(
 				'PeakURL could not unpack the GeoLite2 archive. ' . $exception->getMessage(),
 				0,
 				$exception,
@@ -659,10 +663,10 @@ class Geoip_Service {
 	 * @since 1.0.0
 	 */
 	private function find_database_file( string $extract_path ): ?string {
-		$iterator = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator(
+		$iterator = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator(
 				$extract_path,
-				RecursiveDirectoryIterator::SKIP_DOTS,
+				\RecursiveDirectoryIterator::SKIP_DOTS,
 			),
 		);
 
@@ -697,21 +701,21 @@ class Geoip_Service {
 		$temp_path = dirname( $target_path ) . '/.' . basename( $target_path ) . '.tmp';
 
 		if ( ! copy( $source_path, $temp_path ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not copy the downloaded GeoLite2 database into place.',
 			);
 		}
 
 		if ( file_exists( $target_path ) && ! unlink( $target_path ) ) {
 			@unlink( $temp_path );
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not replace the existing GeoLite2 database file.',
 			);
 		}
 
 		if ( ! rename( $temp_path, $target_path ) ) {
 			@unlink( $temp_path );
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not activate the downloaded GeoLite2 database file.',
 			);
 		}
@@ -828,7 +832,7 @@ class Geoip_Service {
 	private function decrypt_secret_value( string $value ): string {
 		try {
 			return $this->crypto_service->decrypt( $value );
-		} catch ( RuntimeException $exception ) {
+		} catch ( \RuntimeException $exception ) {
 			return '';
 		}
 	}
@@ -847,7 +851,7 @@ class Geoip_Service {
 		}
 
 		if ( ! mkdir( $path, 0755, true ) && ! is_dir( $path ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not create the required directory: ' . $path,
 			);
 		}
@@ -870,12 +874,12 @@ class Geoip_Service {
 			return;
 		}
 
-		$iterator = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator(
+		$iterator = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator(
 				$path,
-				RecursiveDirectoryIterator::SKIP_DOTS,
+				\RecursiveDirectoryIterator::SKIP_DOTS,
 			),
-			RecursiveIteratorIterator::CHILD_FIRST,
+			\RecursiveIteratorIterator::CHILD_FIRST,
 		);
 
 		foreach ( $iterator as $item ) {

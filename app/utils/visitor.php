@@ -8,6 +8,10 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Utils;
+
+use PeakURL\Http\Request;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -18,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class Visitor_Utils {
+class Visitor {
 
 	/**
 	 * Extract browser, operating system, and device type from a user-agent.
@@ -43,7 +47,7 @@ class Visitor_Utils {
 			)
 			as $needle => $label
 		) {
-			if ( String_Utils::contains( $agent, $needle ) ) {
+			if ( Str::contains( $agent, $needle ) ) {
 				$browser = $label;
 				break;
 			}
@@ -61,18 +65,18 @@ class Visitor_Utils {
 			)
 			as $needle => $label
 		) {
-			if ( String_Utils::contains( $agent, $needle ) ) {
+			if ( Str::contains( $agent, $needle ) ) {
 				$os = $label;
 				break;
 			}
 		}
 
-		if ( String_Utils::contains( $agent, 'tablet' ) || String_Utils::contains( $agent, 'ipad' ) ) {
+		if ( Str::contains( $agent, 'tablet' ) || Str::contains( $agent, 'ipad' ) ) {
 			$device = 'Tablet';
 		} elseif (
-			String_Utils::contains( $agent, 'mobile' ) ||
-			String_Utils::contains( $agent, 'iphone' ) ||
-			String_Utils::contains( $agent, 'android' )
+			Str::contains( $agent, 'mobile' ) ||
+			Str::contains( $agent, 'iphone' ) ||
+			Str::contains( $agent, 'android' )
 		) {
 			$device = 'Mobile';
 		}
@@ -116,19 +120,19 @@ class Visitor_Utils {
 		$category        = 'Website';
 
 		if (
-			String_Utils::contains( $normalized_host, 'google.' ) ||
-			String_Utils::contains( $normalized_host, 'bing.' ) ||
-			String_Utils::contains( $normalized_host, 'duckduckgo.' ) ||
-			String_Utils::contains( $normalized_host, 'search.yahoo.' )
+			Str::contains( $normalized_host, 'google.' ) ||
+			Str::contains( $normalized_host, 'bing.' ) ||
+			Str::contains( $normalized_host, 'duckduckgo.' ) ||
+			Str::contains( $normalized_host, 'search.yahoo.' )
 		) {
 			$category = 'Search';
 		} elseif (
-			String_Utils::contains( $normalized_host, 'facebook.' ) ||
-			String_Utils::contains( $normalized_host, 'instagram.' ) ||
-			String_Utils::contains( $normalized_host, 'linkedin.' ) ||
-			String_Utils::contains( $normalized_host, 'twitter.' ) ||
-			String_Utils::contains( $normalized_host, 'x.com' ) ||
-			String_Utils::contains( $normalized_host, 't.co' )
+			Str::contains( $normalized_host, 'facebook.' ) ||
+			Str::contains( $normalized_host, 'instagram.' ) ||
+			Str::contains( $normalized_host, 'linkedin.' ) ||
+			Str::contains( $normalized_host, 'twitter.' ) ||
+			Str::contains( $normalized_host, 'x.com' ) ||
+			Str::contains( $normalized_host, 't.co' )
 		) {
 			$category = 'Social';
 		}

@@ -11,6 +11,11 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Utils;
+
+use PeakURL\Includes\Constants;
+use PeakURL\Http\Request;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -21,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class Security_Utils {
+class Security {
 
 	/**
 	 * Resolve the Access-Control-Allow-Origin value for the response.
@@ -69,14 +74,14 @@ class Security_Utils {
 		array $overrides = array()
 	): array {
 		$options = array(
-			'path'     => (string) ( $config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_PATH ] ?? '/' ),
+			'path'     => (string) ( $config[ Constants::CONFIG_SESSION_COOKIE_PATH ] ?? '/' ),
 			'httponly' => true,
 			'samesite' =>
-				(string) ( $config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_SAME_SITE ] ?? PeakURL_Constants::DEFAULT_SESSION_COOKIE_SAME_SITE ),
+				(string) ( $config[ Constants::CONFIG_SESSION_COOKIE_SAME_SITE ] ?? Constants::DEFAULT_SESSION_COOKIE_SAME_SITE ),
 			'secure'   => self::should_use_secure_cookies( $config, $request ),
 		);
 
-		$domain = trim( (string) ( $config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_DOMAIN ] ?? '' ) );
+		$domain = trim( (string) ( $config[ Constants::CONFIG_SESSION_COOKIE_DOMAIN ] ?? '' ) );
 
 		if ( '' !== $domain ) {
 			$options['domain'] = $domain;
@@ -102,7 +107,7 @@ class Security_Utils {
 	): bool {
 		$mode = strtolower(
 			trim(
-				(string) ( $config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_SECURE ] ?? PeakURL_Constants::DEFAULT_SESSION_COOKIE_SECURE ),
+				(string) ( $config[ Constants::CONFIG_SESSION_COOKIE_SECURE ] ?? Constants::DEFAULT_SESSION_COOKIE_SECURE ),
 			),
 		);
 

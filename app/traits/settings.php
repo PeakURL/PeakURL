@@ -8,17 +8,32 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Traits;
+
+use PeakURL\Includes\Constants;
+use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Http\ApiException;
+use PeakURL\Http\Request;
+use PeakURL\Services\Crypto;
+use PeakURL\Services\Geoip;
+use PeakURL\Services\Mailer;
+use PeakURL\Services\SetupConfig;
+use PeakURL\Services\Update;
+use PeakURL\Utils\Query;
+use PeakURL\Utils\Security;
+use PeakURL\Utils\Visitor;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Store_Settings_Trait — install and settings-table helpers for Data_Store.
+ * SettingsTrait — install and settings-table helpers for Store.
  *
  * @since 1.0.0
  */
-trait Store_Settings_Trait {
+trait SettingsTrait {
 
 	/**
 	 * Synchronise install-time configuration values into the settings table.
@@ -35,10 +50,10 @@ trait Store_Settings_Trait {
 		$site_url     = trim( (string) ( $this->config['SITE_URL'] ?? '' ) );
 		$admin_email  = trim( (string) ( $this->config['PEAKURL_OWNER_EMAIL'] ?? '' ) );
 		$version      = trim(
-			(string) ( $this->config[ PeakURL_Constants::CONFIG_VERSION ] ?? '' ),
+			(string) ( $this->config[ Constants::CONFIG_VERSION ] ?? '' ),
 		);
 		$manifest_url = trim(
-			(string) ( $this->config[ PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL ] ?? '' ),
+			(string) ( $this->config[ Constants::CONFIG_UPDATE_MANIFEST_URL ] ?? '' ),
 		);
 
 		if ( '' !== $site_name ) {

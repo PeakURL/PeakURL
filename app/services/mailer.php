@@ -11,8 +11,12 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Services;
+
 use PHPMailer\PHPMailer\Exception as PHPMailer_Exception;
 use PHPMailer\PHPMailer\PHPMailer;
+use PeakURL\Api\SettingsApi;
+use PeakURL\Includes\Constants;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class PeakURL_Mail {
+class Mailer {
 
 	/**
 	 * Runtime configuration values.
@@ -37,31 +41,31 @@ class PeakURL_Mail {
 	/**
 	 * Settings API for site-level metadata lookups.
 	 *
-	 * @var Settings_API
+	 * @var SettingsApi
 	 * @since 1.0.0
 	 */
-	private Settings_API $settings_api;
+	private SettingsApi $settings_api;
 
 	/**
 	 * Crypto helper for stored SMTP credentials.
 	 *
-	 * @var Crypto_Service
+	 * @var Crypto
 	 * @since 1.0.0
 	 */
-	private Crypto_Service $crypto_service;
+	private Crypto $crypto_service;
 
 	/**
 	 * Create a new mailer service.
 	 *
 	 * @param array<string, mixed> $config         Runtime configuration.
-	 * @param Settings_API         $settings_api   Settings API helper.
-	 * @param Crypto_Service       $crypto_service Crypto helper.
+	 * @param SettingsApi         $settings_api   Settings API helper.
+	 * @param Crypto       $crypto_service Crypto helper.
 	 * @since 1.0.0
 	 */
 	public function __construct(
 		array $config,
-		Settings_API $settings_api,
-		Crypto_Service $crypto_service
+		SettingsApi $settings_api,
+		Crypto $crypto_service
 	) {
 		$this->config         = $config;
 		$this->settings_api   = $settings_api;
@@ -107,7 +111,7 @@ class PeakURL_Mail {
 	 * @param array<string, mixed> $input    Submitted mail settings.
 	 * @return array<string, mixed>
 	 *
-	 * @throws RuntimeException When the settings are invalid or cannot be saved.
+	 * @throws \RuntimeException When the settings are invalid or cannot be saved.
 	 * @since 1.0.0
 	 */
 	public function save_configuration(
@@ -118,7 +122,7 @@ class PeakURL_Mail {
 		$capability = $this->get_dashboard_capability();
 
 		if ( ! $capability['allowed'] ) {
-			throw new RuntimeException( (string) $capability['reason'] );
+			throw new \RuntimeException( (string) $capability['reason'] );
 		}
 
 		$current = $this->get_runtime_mail_settings();
@@ -169,14 +173,14 @@ class PeakURL_Mail {
 	 * @param string               $token Password-reset token.
 	 * @return void
 	 *
-	 * @throws RuntimeException When email delivery fails.
+	 * @throws \RuntimeException When email delivery fails.
 	 * @since 1.0.0
 	 */
 	public function send_password_reset_email( array $user, string $token ): void {
 		$email = strtolower( trim( (string) ( $user['email'] ?? '' ) ) );
 
 		if ( '' === $email || ! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not send the password reset email because the account email address is invalid.',
 			);
 		}
@@ -216,7 +220,7 @@ class PeakURL_Mail {
 	 * @param string $text_body Plain-text body.
 	 * @return void
 	 *
-	 * @throws RuntimeException When delivery fails.
+	 * @throws \RuntimeException When delivery fails.
 	 * @since 1.0.0
 	 */
 	public function send(
@@ -239,7 +243,7 @@ class PeakURL_Mail {
 	 * @param string $text_body Plain-text body.
 	 * @return void
 	 *
-	 * @throws RuntimeException When delivery fails.
+	 * @throws \RuntimeException When delivery fails.
 	 * @since 1.0.0
 	 */
 	private function send_message(
@@ -290,7 +294,7 @@ class PeakURL_Mail {
 
 			$mailer->send();
 		} catch ( PHPMailer_Exception $exception ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'PeakURL could not send the email. ' . $exception->getMessage(),
 				0,
 				$exception,
@@ -304,7 +308,7 @@ class PeakURL_Mail {
 	 * @param array<string, string> $values Normalized mail settings.
 	 * @return void
 	 *
-	 * @throws RuntimeException When the configuration is invalid.
+	 * @throws \RuntimeException When the configuration is invalid.
 	 * @since 1.0.0
 	 */
 	private function validate_configuration( array $values ): void {
@@ -313,13 +317,13 @@ class PeakURL_Mail {
 		}
 
 		if ( '' === $values['smtpHost'] ) {
-			throw new RuntimeException( 'SMTP host is required when SMTP is enabled.' );
+			throw new \RuntimeException( 'SMTP host is required when SMTP is enabled.' );
 		}
 
 		$smtp_port = (int) $values['smtpPort'];
 
 		if ( $smtp_port < 1 || $smtp_port > 65535 ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'SMTP port must be between 1 and 65535.',
 			);
 		}
@@ -329,13 +333,13 @@ class PeakURL_Mail {
 		}
 
 		if ( '' === $values['smtpUsername'] ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'SMTP username is required when SMTP authentication is enabled.',
 			);
 		}
 
 		if ( '' === $values['smtpPassword'] ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'SMTP password is required when SMTP authentication is enabled.',
 			);
 		}
@@ -382,7 +386,7 @@ class PeakURL_Mail {
 	 * @param array<string, string> $values  Normalized mail settings.
 	 * @return void
 	 *
-	 * @throws RuntimeException When encrypted settings cannot be persisted.
+	 * @throws \RuntimeException When encrypted settings cannot be persisted.
 	 * @since 1.0.0
 	 */
 	private function persist_settings(
@@ -394,7 +398,7 @@ class PeakURL_Mail {
 		$password   = $values['smtpPassword'];
 
 		if ( '' !== $password && ! $this->crypto_service->has_auth_keys() ) {
-			$this->crypto_service = new Crypto_Service( $config );
+			$this->crypto_service = new Crypto( $config );
 			$this->crypto_service->ensure_persisted_auth_keys( $app_path );
 		}
 
@@ -517,7 +521,7 @@ class PeakURL_Mail {
 	private function decrypt_secret_value( string $value ): string {
 		try {
 			return $this->crypto_service->decrypt( $value );
-		} catch ( RuntimeException $exception ) {
+		} catch ( \RuntimeException $exception ) {
 			return '';
 		}
 	}

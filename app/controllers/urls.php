@@ -11,28 +11,34 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Controllers;
+
+use PeakURL\Http\JsonResponse;
+use PeakURL\Http\Request;
+use PeakURL\Store;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * URL controller — delegates to Data_Store for persistence and analytics.
+ * URL controller — delegates to Store for persistence and analytics.
  *
  * @since 1.0.0
  */
-class Urls_Controller {
+class UrlsController {
 
-	/** @var Data_Store Shared data access layer. */
-	private Data_Store $data_store;
+	/** @var Store Shared data access layer. */
+	private Store $data_store;
 
 	/**
-	 * Create a new Urls_Controller.
+	 * Create a new UrlsController.
 	 *
-	 * @param Data_Store $data_store Data access layer instance.
+	 * @param Store $data_store Data access layer instance.
 	 * @since 1.0.0
 	 */
-	public function __construct( Data_Store $data_store ) {
+	public function __construct( Store $data_store ) {
 		$this->data_store = $data_store;
 	}
 
@@ -106,7 +112,7 @@ class Urls_Controller {
 			)
 		);
 
-		return Json_Response::success( $payload, 'URLs loaded.' );
+		return JsonResponse::success( $payload, 'URLs loaded.' );
 	}
 
 	/**
@@ -123,10 +129,10 @@ class Urls_Controller {
 		);
 
 		if ( ! $url ) {
-			return Json_Response::error( 'URL not found.', 404 );
+			return JsonResponse::error( 'URL not found.', 404 );
 		}
 
-		return Json_Response::success( $url, 'URL loaded.' );
+		return JsonResponse::success( $url, 'URL loaded.' );
 	}
 
 	/**
@@ -137,7 +143,7 @@ class Urls_Controller {
 	 * @since 1.0.0
 	 */
 	public function create( Request $request ): array {
-		return Json_Response::success(
+		return JsonResponse::success(
 			$this->data_store->create_url(
 				$request,
 				$request->get_body_params(),
@@ -155,7 +161,7 @@ class Urls_Controller {
 	 * @since 1.0.0
 	 */
 	public function bulk_create( Request $request ): array {
-		return Json_Response::success(
+		return JsonResponse::success(
 			$this->data_store->bulk_create_urls(
 				$request,
 				$request->get_body_params(),
@@ -179,10 +185,10 @@ class Urls_Controller {
 		);
 
 		if ( ! $url ) {
-			return Json_Response::error( 'URL not found.', 404 );
+			return JsonResponse::error( 'URL not found.', 404 );
 		}
 
-		return Json_Response::success( $url, 'URL updated.' );
+		return JsonResponse::success( $url, 'URL updated.' );
 	}
 
 	/**
@@ -199,10 +205,10 @@ class Urls_Controller {
 		);
 
 		if ( ! $deleted ) {
-			return Json_Response::error( 'URL not found.', 404 );
+			return JsonResponse::error( 'URL not found.', 404 );
 		}
 
-		return Json_Response::success( array( 'deleted' => true ), 'URL deleted.' );
+		return JsonResponse::success( array( 'deleted' => true ), 'URL deleted.' );
 	}
 
 	/**
@@ -219,7 +225,7 @@ class Urls_Controller {
 			is_array( $ids ) ? $ids : array(),
 		);
 
-		return Json_Response::success(
+		return JsonResponse::success(
 			array(
 				'deletedCount' => $count,
 			),
@@ -245,7 +251,7 @@ class Urls_Controller {
 			null !== $stats_preview_short_code &&
 			in_array( $request->get_method(), array( 'GET', 'HEAD' ), true )
 		) {
-			return Json_Response::redirect(
+			return JsonResponse::redirect(
 				$this->build_runtime_url(
 					$request,
 					'/dashboard/links?stats=' .
@@ -260,14 +266,14 @@ class Urls_Controller {
 		);
 
 		if ( 'redirect' === ( $result['status'] ?? '' ) ) {
-			return Json_Response::redirect( (string) $result['location'] );
+			return JsonResponse::redirect( (string) $result['location'] );
 		}
 
 		if (
 			'password_required' === ( $result['status'] ?? '' ) ||
 			'password_invalid' === ( $result['status'] ?? '' )
 		) {
-			return Json_Response::text(
+			return JsonResponse::text(
 				$this->render_password_prompt(
 					$request,
 					(string) $request->get_route_param( 'id' ),
@@ -280,7 +286,7 @@ class Urls_Controller {
 		}
 
 		if ( 'expired' === ( $result['status'] ?? '' ) ) {
-			return Json_Response::text(
+			return JsonResponse::text(
 				$this->render_public_status_page(
 					'This link has expired',
 					'The short link you requested is no longer active because its expiration date has passed.',
@@ -291,7 +297,7 @@ class Urls_Controller {
 			);
 		}
 
-		return Json_Response::text(
+		return JsonResponse::text(
 			$this->render_public_status_page(
 				'This link is unavailable',
 				'The short link you requested is not available right now.',

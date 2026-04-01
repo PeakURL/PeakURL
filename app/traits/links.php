@@ -8,17 +8,32 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Traits;
+
+use PeakURL\Includes\Constants;
+use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Http\ApiException;
+use PeakURL\Http\Request;
+use PeakURL\Services\Crypto;
+use PeakURL\Services\Geoip;
+use PeakURL\Services\Mailer;
+use PeakURL\Services\SetupConfig;
+use PeakURL\Services\Update;
+use PeakURL\Utils\Query;
+use PeakURL\Utils\Security;
+use PeakURL\Utils\Visitor;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Store_Links_Trait — short-link CRUD methods for Data_Store.
+ * LinksTrait — short-link CRUD methods for Store.
  *
  * @since 1.0.0
  */
-trait Store_Links_Trait {
+trait LinksTrait {
 
 	/**
 	 * List short URLs with pagination, sorting, and optional search.
@@ -34,7 +49,7 @@ trait Store_Links_Trait {
 		$user = $this->get_current_user( $request );
 
 		$search     = trim( (string) ( $query['search'] ?? '' ) );
-		$pagination = Query_Utils::pagination( $query );
+		$pagination = Query::pagination( $query );
 		$page       = $pagination['page'];
 		$limit      = $pagination['limit'];
 		$offset     = $pagination['offset'];
@@ -48,25 +63,29 @@ trait Store_Links_Trait {
 			'status'       => 'u.status',
 			'shortCode'    => 'u.short_code',
 		);
-		$sort_by    = Query_Utils::sort_column(
+		$sort_by    = Query::sort_column(
 			$sort_map,
 			$query['sortBy'] ?? 'createdAt',
 			'u.created_at',
 		);
-		$sort_order = Query_Utils::sort_direction(
+		$sort_order = Query::sort_direction(
 			$query['sortOrder'] ?? 'desc',
 		);
 		$conditions = array();
 		$params     = array();
 
 		if ( '' !== $search ) {
-			$conditions[]     = '(
-	                u.title LIKE :search
-	                OR u.alias LIKE :search
-	                OR u.short_code LIKE :search
-	                OR u.destination_url LIKE :search
+			$conditions[]                 = '(
+	                u.title LIKE :search_title ESCAPE \'\\\\\'
+	                OR u.alias LIKE :search_alias ESCAPE \'\\\\\'
+	                OR u.short_code LIKE :search_short_code ESCAPE \'\\\\\'
+	                OR u.destination_url LIKE :search_destination ESCAPE \'\\\\\'
 	            )';
-			$params['search'] = '%' . $search . '%';
+			$search_like                  = '%' . $this->db->esc_like( $search ) . '%';
+			$params['search_title']       = $search_like;
+			$params['search_alias']       = $search_like;
+			$params['search_short_code']  = $search_like;
+			$params['search_destination'] = $search_like;
 		}
 
 		$this->add_link_visibility_scope( $user, $conditions, $params, 'u' );
@@ -97,8 +116,8 @@ trait Store_Links_Trait {
 	            ) stats ON stats.url_id = u.id
 	            ' .
 				$where .
-				Query_Utils::order_by_clause( $sort_by, $sort_order ) .
-				Query_Utils::limit_offset_clause( $limit, $offset ),
+				Query::order_by_clause( $sort_by, $sort_order ) .
+				Query::limit_offset_clause( $limit, $offset ),
 			$params,
 		);
 
@@ -289,7 +308,7 @@ trait Store_Links_Trait {
 	 * @param array<string, mixed> $payload Creation payload.
 	 * @return array<string, mixed> Hydrated URL row.
 	 *
-	 * @throws Api_Exception On validation failure (422).
+	 * @throws ApiException On validation failure (422).
 	 * @since 1.0.0
 	 */
 	public function create_url( Request $request, array $payload ): array {
@@ -304,7 +323,7 @@ trait Store_Links_Trait {
 			'' === $destination_url ||
 			! filter_var( $destination_url, FILTER_VALIDATE_URL )
 		) {
-			throw new Api_Exception(
+			throw new ApiException(
 				'A valid destination URL is required.',
 				422,
 			);
@@ -320,14 +339,14 @@ trait Store_Links_Trait {
 		}
 
 		if ( $this->is_reserved_short_code( $alias ) ) {
-			throw new Api_Exception(
+			throw new ApiException(
 				'That short code is reserved by the application.',
 				422,
 			);
 		}
 
 		if ( $this->short_code_exists( $alias ) ) {
-			throw new Api_Exception( 'That short code is already in use.', 422 );
+			throw new ApiException( 'That short code is already in use.', 422 );
 		}
 
 		$title = trim( (string) ( $payload['title'] ?? '' ) );
@@ -339,42 +358,8 @@ trait Store_Links_Trait {
 		$id  = $this->generate_random_id();
 		$now = $this->now();
 
-		$this->execute(
-			'INSERT INTO urls (
-	                id,
-	                user_id,
-	                short_code,
-	                alias,
-	                title,
-	                destination_url,
-	                password_value,
-	                expires_at,
-	                status,
-	                utm_source,
-	                utm_medium,
-	                utm_campaign,
-	                utm_term,
-	                utm_content,
-	                created_at,
-	                updated_at
-	            ) VALUES (
-	                :id,
-	                :user_id,
-	                :short_code,
-	                :alias,
-	                :title,
-	                :destination_url,
-	                :password_value,
-	                :expires_at,
-	                :status,
-	                :utm_source,
-	                :utm_medium,
-	                :utm_campaign,
-	                :utm_term,
-	                :utm_content,
-	                :created_at,
-	                :updated_at
-	            )',
+		$this->db->insert(
+			'urls',
 			array(
 				'id'              => $id,
 				'user_id'         => $user['id'],
@@ -497,7 +482,7 @@ trait Store_Links_Trait {
 		Request $request,
 		array $url
 	): array {
-		$options = Security_Utils::session_cookie_options(
+		$options = Security::session_cookie_options(
 			$this->config,
 			$request,
 			array(
@@ -529,7 +514,7 @@ trait Store_Links_Trait {
 	 * @param array<string, mixed> $payload Body with `urls` array.
 	 * @return array<string, mixed> Result with created URLs and error count.
 	 *
-	 * @throws Api_Exception When the `urls` key is missing or empty (422).
+	 * @throws ApiException When the `urls` key is missing or empty (422).
 	 * @since 1.0.0
 	 */
 	public function bulk_create_urls( Request $request, array $payload ): array {
@@ -545,7 +530,7 @@ trait Store_Links_Trait {
 					$request,
 					is_array( $entry ) ? $entry : array(),
 				);
-			} catch ( Api_Exception $exception ) {
+			} catch ( ApiException $exception ) {
 				$errors[] = array(
 					'destinationUrl' => $entry['destinationUrl'] ?? '',
 					'alias'          => $entry['alias'] ?? null,
@@ -571,7 +556,7 @@ trait Store_Links_Trait {
 	 * @param array<string, mixed> $payload Partial update payload.
 	 * @return array<string, mixed>|null Hydrated URL or null if not found.
 	 *
-	 * @throws Api_Exception On validation failure (422).
+	 * @throws ApiException On validation failure (422).
 	 * @since 1.0.0
 	 */
 	public function update_url(
@@ -580,8 +565,8 @@ trait Store_Links_Trait {
 		array $payload
 	): ?array {
 		$user     = $this->get_current_user( $request );
-		$existing = $this->query_one(
-			'SELECT * FROM urls WHERE id = :id LIMIT 1',
+		$existing = $this->db->get_row_by(
+			'urls',
 			array( 'id' => $id ),
 		);
 
@@ -618,7 +603,7 @@ trait Store_Links_Trait {
 				$value = trim( (string) $value );
 
 				if ( '' === $value || ! filter_var( $value, FILTER_VALIDATE_URL ) ) {
-					throw new Api_Exception(
+					throw new ApiException(
 						'A valid destination URL is required.',
 						422,
 					);
@@ -647,7 +632,7 @@ trait Store_Links_Trait {
 			$alias = $this->sanitize_code( (string) $payload['alias'] );
 
 			if ( $this->is_reserved_short_code( $alias ) ) {
-				throw new Api_Exception(
+				throw new ApiException(
 					'That short code is reserved by the application.',
 					422,
 				);
@@ -657,7 +642,7 @@ trait Store_Links_Trait {
 				$alias !== $existing['alias'] &&
 				$this->short_code_exists( $alias )
 			) {
-				throw new Api_Exception(
+				throw new ApiException(
 					'That short code is already in use.',
 					422,
 				);
@@ -703,9 +688,10 @@ trait Store_Links_Trait {
 	 */
 	public function delete_url( Request $request, string $id ): bool {
 		$user = $this->get_current_user( $request );
-		$row  = $this->query_one(
-			'SELECT id, user_id FROM urls WHERE id = :id LIMIT 1',
+		$row  = $this->db->get_row_by(
+			'urls',
 			array( 'id' => $id ),
+			array( 'id', 'user_id' ),
 		);
 
 		if ( ! $row ) {
@@ -723,22 +709,22 @@ trait Store_Links_Trait {
 		$this->db->begin_transaction();
 
 		try {
-			$this->execute_statement(
-				'DELETE FROM audit_logs WHERE link_id = :id',
+			$this->db->delete(
+				'audit_logs',
 				array(
-					'id' => $id,
+					'link_id' => $id,
 				),
 			);
 
-			$deleted = $this->execute_statement(
-				'DELETE FROM urls WHERE id = :id',
+			$deleted = $this->db->delete(
+				'urls',
 				array(
 					'id' => $id,
 				),
 			) > 0;
 
 			$this->db->commit();
-		} catch ( Throwable $exception ) {
+		} catch ( \Throwable $exception ) {
 			if ( $this->db->in_transaction() ) {
 				$this->db->roll_back();
 			}
@@ -759,7 +745,7 @@ trait Store_Links_Trait {
 	 */
 	public function bulk_delete_urls( Request $request, array $ids ): int {
 		$user = $this->get_current_user( $request );
-		$ids  = Query_Utils::string_ids( $ids );
+		$ids  = Query::string_ids( $ids );
 
 		if ( empty( $ids ) ) {
 			return 0;
@@ -769,24 +755,23 @@ trait Store_Links_Trait {
 
 		if ( ! $this->roles->user_can( $user, 'delete_all_links' ) ) {
 			if ( ! $this->roles->user_can( $user, 'delete_own_links' ) ) {
-				throw new Api_Exception(
+				throw new ApiException(
 					'You do not have permission to delete links.',
 					403,
 				);
 			}
 
-			$placeholders = implode( ', ', array_fill( 0, count( $ids ), '?' ) );
-			$statement    = $this->db->prepare(
-				'SELECT id FROM urls WHERE id IN (' .
-				$placeholders .
-				') AND user_id = ?',
-			);
-			$statement->execute(
-				array_merge( $ids, array( (string) $user['id'] ) ),
-			);
 			$allowed_ids = array_map(
 				'strval',
-				$statement->fetchAll( PDO::FETCH_COLUMN ),
+				$this->db->get_col_where_in(
+					'urls',
+					'id',
+					'id',
+					$ids,
+					array(
+						'user_id' => (string) $user['id'],
+					),
+				),
 			);
 		}
 
@@ -794,28 +779,25 @@ trait Store_Links_Trait {
 			return 0;
 		}
 
-		$placeholders = implode(
-			', ',
-			array_fill( 0, count( $allowed_ids ), '?' ),
-		);
-
 		$this->db->begin_transaction();
 
 		try {
-			$statement = $this->db->prepare(
-				'DELETE FROM audit_logs WHERE link_id IN (' . $placeholders . ')',
+			$this->db->delete_where_in(
+				'audit_logs',
+				'link_id',
+				$allowed_ids,
 			);
-			$statement->execute( $allowed_ids );
 
-			$statement = $this->db->prepare(
-				'DELETE FROM urls WHERE id IN (' . $placeholders . ')',
+			$deleted_count = $this->db->delete_where_in(
+				'urls',
+				'id',
+				$allowed_ids,
 			);
-			$statement->execute( $allowed_ids );
 
 			$this->db->commit();
 
-			return $statement->rowCount();
-		} catch ( Throwable $exception ) {
+			return $deleted_count;
+		} catch ( \Throwable $exception ) {
 			if ( $this->db->in_transaction() ) {
 				$this->db->roll_back();
 			}

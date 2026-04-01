@@ -1,12 +1,12 @@
 // @ts-nocheck
 'use client';
 import { Header, Tabs } from './_components';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { ClipboardPaste, CodeXml, FileUp } from 'lucide-react';
 
 function BulkImportLayout({ children }) {
-	const params = useParams();
-	const activeTab = params.tab || 'file';
+	const location = useLocation();
+	const activeTab = location.pathname.split('/').filter(Boolean).pop() || 'file';
 
 	const tabs = [
 		{ id: 'file', name: 'File Upload', icon: FileUp },

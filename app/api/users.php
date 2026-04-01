@@ -11,17 +11,21 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Api;
+
+use PeakURL\Includes\PeakURL_DB;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Users_API — small query helper for user rows.
+ * UsersApi — small query helper for user rows.
  *
  * @since 1.0.0
  */
-class Users_API {
+class UsersApi {
 
 	/**
 	 * Shared database wrapper.
@@ -49,8 +53,8 @@ class Users_API {
 	 * @since 1.0.0
 	 */
 	public function get_user( string $id ): ?array {
-		return $this->db->get_row(
-			'SELECT * FROM users WHERE id = :id LIMIT 1',
+		return $this->db->get_row_by(
+			'users',
 			array( 'id' => $id ),
 		);
 	}
@@ -63,8 +67,8 @@ class Users_API {
 	 * @since 1.0.0
 	 */
 	public function get_user_by_email( string $email ): ?array {
-		return $this->db->get_row(
-			'SELECT * FROM users WHERE email = :email LIMIT 1',
+		return $this->db->get_row_by(
+			'users',
 			array( 'email' => strtolower( $email ) ),
 		);
 	}
@@ -77,8 +81,8 @@ class Users_API {
 	 * @since 1.0.0
 	 */
 	public function get_user_by_username( string $username ): ?array {
-		return $this->db->get_row(
-			'SELECT * FROM users WHERE username = :username LIMIT 1',
+		return $this->db->get_row_by(
+			'users',
 			array( 'username' => $username ),
 		);
 	}
@@ -102,8 +106,8 @@ class Users_API {
 	 * @since 1.0.0
 	 */
 	public function count_admin_users(): int {
-		return (int) $this->db->get_var(
-			'SELECT COUNT(*) FROM users WHERE role = :role',
+		return $this->db->count(
+			'users',
 			array( 'role' => 'admin' ),
 		);
 	}

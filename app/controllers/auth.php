@@ -11,28 +11,34 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Controllers;
+
+use PeakURL\Http\JsonResponse;
+use PeakURL\Http\Request;
+use PeakURL\Store;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Auth controller — delegates to Data_Store for business logic.
+ * Auth controller — delegates to Store for business logic.
  *
  * @since 1.0.0
  */
-class Auth_Controller {
+class AuthController {
 
-	/** @var Data_Store Shared data access layer. */
-	private Data_Store $data_store;
+	/** @var Store Shared data access layer. */
+	private Store $data_store;
 
 	/**
-	 * Create a new Auth_Controller.
+	 * Create a new AuthController.
 	 *
-	 * @param Data_Store $data_store Data access layer instance.
+	 * @param Store $data_store Data access layer instance.
 	 * @since 1.0.0
 	 */
-	public function __construct( Data_Store $data_store ) {
+	public function __construct( Store $data_store ) {
 		$this->data_store = $data_store;
 	}
 
@@ -46,7 +52,7 @@ class Auth_Controller {
 	public function register( Request $request ): array {
 		unset( $request );
 
-		return Json_Response::error(
+		return JsonResponse::error(
 			'Public registration is disabled on this self-hosted release.',
 			403,
 		);
@@ -64,13 +70,13 @@ class Auth_Controller {
 		$verified = $this->data_store->verify_email( $token );
 
 		if ( ! $verified ) {
-			return Json_Response::error(
+			return JsonResponse::error(
 				'Verification token is invalid or expired.',
 				404,
 			);
 		}
 
-		return Json_Response::success( array( 'verified' => true ), 'Email verified.' );
+		return JsonResponse::success( array( 'verified' => true ), 'Email verified.' );
 	}
 
 	/**
@@ -81,7 +87,7 @@ class Auth_Controller {
 	 * @since 1.0.0
 	 */
 	public function resend_verification( Request $request ): array {
-		return Json_Response::success(
+		return JsonResponse::success(
 			$this->data_store->resend_verification(
 				$request,
 				$request->get_body_params(),
@@ -98,7 +104,7 @@ class Auth_Controller {
 	 * @since 1.0.0
 	 */
 	public function login( Request $request ): array {
-		return Json_Response::success(
+		return JsonResponse::success(
 			$this->data_store->login( $request, $request->get_body_params() ),
 			'Signed in.',
 		);
@@ -112,7 +118,7 @@ class Auth_Controller {
 	 * @since 1.0.0
 	 */
 	public function verify_two_factor_login( Request $request ): array {
-		return Json_Response::success(
+		return JsonResponse::success(
 			$this->data_store->verify_two_factor_login(
 				$request,
 				$request->get_body_params(),
@@ -130,7 +136,7 @@ class Auth_Controller {
 	 */
 	public function logout( Request $request ): array {
 		$this->data_store->logout( $request );
-		return Json_Response::success( array( 'loggedOut' => true ), 'Signed out.' );
+		return JsonResponse::success( array( 'loggedOut' => true ), 'Signed out.' );
 	}
 
 	/**
@@ -141,7 +147,7 @@ class Auth_Controller {
 	 * @since 1.0.0
 	 */
 	public function forgot_password( Request $request ): array {
-		return Json_Response::success(
+		return JsonResponse::success(
 			$this->data_store->forgot_password( $request->get_body_params() ),
 			'If that account exists, a password reset link has been sent.',
 		);
@@ -162,13 +168,13 @@ class Auth_Controller {
 		);
 
 		if ( ! $reset ) {
-			return Json_Response::error(
+			return JsonResponse::error(
 				'Password reset token is invalid or expired.',
 				404,
 			);
 		}
 
-		return Json_Response::success(
+		return JsonResponse::success(
 			array(
 				'token' => $token,
 			),
@@ -187,7 +193,7 @@ class Auth_Controller {
 		$label = (string) $request->get_body_param( 'label', 'Generated Key' );
 		$key   = $this->data_store->add_api_key( $request, $label );
 
-		return Json_Response::success(
+		return JsonResponse::success(
 			array(
 				'apiKey' => $key['key'],
 				'key'    => $key,
@@ -210,10 +216,10 @@ class Auth_Controller {
 		);
 
 		if ( ! $deleted ) {
-			return Json_Response::error( 'API key not found.', 404 );
+			return JsonResponse::error( 'API key not found.', 404 );
 		}
 
-		return Json_Response::success( array( 'deleted' => true ), 'API key deleted.' );
+		return JsonResponse::success( array( 'deleted' => true ), 'API key deleted.' );
 	}
 
 	/**
@@ -224,7 +230,7 @@ class Auth_Controller {
 	 * @since 1.0.0
 	 */
 	public function get_security( Request $request ): array {
-		return Json_Response::success(
+		return JsonResponse::success(
 			$this->data_store->get_security_settings( $request ),
 			'Security settings loaded.',
 		);
@@ -238,7 +244,7 @@ class Auth_Controller {
 	 * @since 1.0.0
 	 */
 	public function start_two_factor_setup( Request $request ): array {
-		return Json_Response::success(
+		return JsonResponse::success(
 			$this->data_store->start_two_factor_setup( $request ),
 			'Two-factor setup started.',
 		);
@@ -255,10 +261,10 @@ class Auth_Controller {
 		$token = trim( (string) $request->get_body_param( 'token', '' ) );
 
 		if ( '' === $token ) {
-			return Json_Response::error( 'Verification token is required.', 422 );
+			return JsonResponse::error( 'Verification token is required.', 422 );
 		}
 
-		return Json_Response::success(
+		return JsonResponse::success(
 			array(
 				'backupCodes' => $this->data_store->verify_two_factor(
 					$request,
@@ -278,7 +284,7 @@ class Auth_Controller {
 	 */
 	public function disable_two_factor( Request $request ): array {
 		$this->data_store->disable_two_factor( $request );
-		return Json_Response::success(
+		return JsonResponse::success(
 			array( 'disabled' => true ),
 			'Two-factor authentication disabled.',
 		);
@@ -292,7 +298,7 @@ class Auth_Controller {
 	 * @since 1.0.0
 	 */
 	public function regenerate_backup_codes( Request $request ): array {
-		return Json_Response::success(
+		return JsonResponse::success(
 			array(
 				'backupCodes' => $this->data_store->regenerate_backup_codes(
 					$request,
@@ -328,7 +334,7 @@ class Auth_Controller {
 			),
 		);
 
-		return Json_Response::text( $body );
+		return JsonResponse::text( $body );
 	}
 
 	/**
@@ -345,10 +351,10 @@ class Auth_Controller {
 		);
 
 		if ( ! $revoked ) {
-			return Json_Response::error( 'Session not found.', 404 );
+			return JsonResponse::error( 'Session not found.', 404 );
 		}
 
-		return Json_Response::success( array( 'revoked' => true ), 'Session revoked.' );
+		return JsonResponse::success( array( 'revoked' => true ), 'Session revoked.' );
 	}
 
 	/**
@@ -361,7 +367,7 @@ class Auth_Controller {
 	public function revoke_other_sessions( Request $request ): array {
 		$revoked_count = $this->data_store->revoke_other_sessions( $request );
 
-		return Json_Response::success(
+		return JsonResponse::success(
 			array(
 				'revoked'      => true,
 				'revokedCount' => $revoked_count,

@@ -8,13 +8,15 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Includes;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * PeakURL_Roles — central role and capability definitions for site users.
+ * Roles — central role and capability definitions for site users.
  *
  * Mirrors the WordPress pattern of keeping role policy separate from the
  * persistence layer so stores, controllers, and UI payloads can all rely on a
@@ -22,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class PeakURL_Roles {
+class Roles {
 
 	/**
 	 * WordPress-style role capability map for PeakURL users.

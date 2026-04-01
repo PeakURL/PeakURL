@@ -8,6 +8,10 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Services;
+
+use PeakURL\Includes\Constants;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -18,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class Crypto_Service {
+class Crypto {
 
 	/**
 	 * Runtime configuration values.
@@ -45,8 +49,8 @@ class Crypto_Service {
 	 * @since 1.0.0
 	 */
 	public function has_auth_keys(): bool {
-		return '' !== trim( (string) ( $this->config[ PeakURL_Constants::CONFIG_AUTH_KEY ] ?? '' ) ) &&
-			'' !== trim( (string) ( $this->config[ PeakURL_Constants::CONFIG_AUTH_SALT ] ?? '' ) );
+		return '' !== trim( (string) ( $this->config[ Constants::CONFIG_AUTH_KEY ] ?? '' ) ) &&
+			'' !== trim( (string) ( $this->config[ Constants::CONFIG_AUTH_SALT ] ?? '' ) );
 	}
 
 	/**
@@ -55,12 +59,12 @@ class Crypto_Service {
 	 * @param string $app_path Absolute path to the app directory.
 	 * @return array{authKey: string, authSalt: string}
 	 *
-	 * @throws RuntimeException When the keys cannot be persisted.
+	 * @throws \RuntimeException When the keys cannot be persisted.
 	 * @since 1.0.0
 	 */
 	public function ensure_persisted_auth_keys( string $app_path ): array {
-		$auth_key  = trim( (string) ( $this->config[ PeakURL_Constants::CONFIG_AUTH_KEY ] ?? '' ) );
-		$auth_salt = trim( (string) ( $this->config[ PeakURL_Constants::CONFIG_AUTH_SALT ] ?? '' ) );
+		$auth_key  = trim( (string) ( $this->config[ Constants::CONFIG_AUTH_KEY ] ?? '' ) );
+		$auth_salt = trim( (string) ( $this->config[ Constants::CONFIG_AUTH_SALT ] ?? '' ) );
 
 		if ( '' === $auth_key ) {
 			$auth_key = bin2hex( random_bytes( 32 ) );
@@ -71,24 +75,24 @@ class Crypto_Service {
 		}
 
 		if ( $this->is_source_checkout() ) {
-			Setup_Config_Service::write_env_overrides(
+			SetupConfig::write_env_overrides(
 				$app_path . '/.env',
 				array(
-					PeakURL_Constants::CONFIG_AUTH_KEY  => $auth_key,
-					PeakURL_Constants::CONFIG_AUTH_SALT => $auth_salt,
+					Constants::CONFIG_AUTH_KEY  => $auth_key,
+					Constants::CONFIG_AUTH_SALT => $auth_salt,
 				),
 				'PeakURL could not update app/.env with the authentication keys.',
 				'# PeakURL local development overrides'
 			);
 		} else {
-			$values                                        = Setup_Config_Service::config_values_from_runtime_config( $this->config );
-			$values[ PeakURL_Constants::CONFIG_AUTH_KEY ]  = $auth_key;
-			$values[ PeakURL_Constants::CONFIG_AUTH_SALT ] = $auth_salt;
-			Setup_Config_Service::write_config_file( $app_path, $values );
+			$values                                = SetupConfig::config_values_from_runtime_config( $this->config );
+			$values[ Constants::CONFIG_AUTH_KEY ]  = $auth_key;
+			$values[ Constants::CONFIG_AUTH_SALT ] = $auth_salt;
+			SetupConfig::write_config_file( $app_path, $values );
 		}
 
-		$this->config[ PeakURL_Constants::CONFIG_AUTH_KEY ]  = $auth_key;
-		$this->config[ PeakURL_Constants::CONFIG_AUTH_SALT ] = $auth_salt;
+		$this->config[ Constants::CONFIG_AUTH_KEY ]  = $auth_key;
+		$this->config[ Constants::CONFIG_AUTH_SALT ] = $auth_salt;
 
 		return array(
 			'authKey'  => $auth_key,
@@ -102,7 +106,7 @@ class Crypto_Service {
 	 * @param string $value Raw value.
 	 * @return string
 	 *
-	 * @throws RuntimeException When encryption fails.
+	 * @throws \RuntimeException When encryption fails.
 	 * @since 1.0.0
 	 */
 	public function encrypt( string $value ): string {
@@ -111,7 +115,7 @@ class Crypto_Service {
 		}
 
 		if ( ! function_exists( 'openssl_encrypt' ) ) {
-			throw new RuntimeException( 'The OpenSSL extension is required to encrypt stored credentials.' );
+			throw new \RuntimeException( 'The OpenSSL extension is required to encrypt stored credentials.' );
 		}
 
 		$iv         = random_bytes( 12 );
@@ -126,7 +130,7 @@ class Crypto_Service {
 		);
 
 		if ( false === $ciphertext ) {
-			throw new RuntimeException( 'PeakURL could not encrypt the stored credential.' );
+			throw new \RuntimeException( 'PeakURL could not encrypt the stored credential.' );
 		}
 
 		return 'enc:v1:' . base64_encode( $iv . $tag . $ciphertext );
@@ -138,7 +142,7 @@ class Crypto_Service {
 	 * @param string $value Stored value or plain fallback value.
 	 * @return string
 	 *
-	 * @throws RuntimeException When the payload cannot be decrypted.
+	 * @throws \RuntimeException When the payload cannot be decrypted.
 	 * @since 1.0.0
 	 */
 	public function decrypt( string $value ): string {
@@ -151,13 +155,13 @@ class Crypto_Service {
 		}
 
 		if ( ! function_exists( 'openssl_decrypt' ) ) {
-			throw new RuntimeException( 'The OpenSSL extension is required to decrypt stored credentials.' );
+			throw new \RuntimeException( 'The OpenSSL extension is required to decrypt stored credentials.' );
 		}
 
 		$decoded = base64_decode( substr( $value, 7 ), true );
 
 		if ( false === $decoded || strlen( $decoded ) <= 28 ) {
-			throw new RuntimeException( 'PeakURL could not decode the stored credential payload.' );
+			throw new \RuntimeException( 'PeakURL could not decode the stored credential payload.' );
 		}
 
 		$iv         = substr( $decoded, 0, 12 );
@@ -173,7 +177,7 @@ class Crypto_Service {
 		);
 
 		if ( false === $plaintext ) {
-			throw new RuntimeException( 'PeakURL could not decrypt the stored credential.' );
+			throw new \RuntimeException( 'PeakURL could not decrypt the stored credential.' );
 		}
 
 		return $plaintext;
@@ -185,7 +189,7 @@ class Crypto_Service {
 	 * @param string $token Raw random session token.
 	 * @return string
 	 *
-	 * @throws RuntimeException When auth keys are missing.
+	 * @throws \RuntimeException When auth keys are missing.
 	 * @since 1.0.0
 	 */
 	public function sign_session_token( string $token ): string {
@@ -246,15 +250,15 @@ class Crypto_Service {
 	 * @param string $context Key-derivation context label.
 	 * @return string
 	 *
-	 * @throws RuntimeException When auth keys are missing.
+	 * @throws \RuntimeException When auth keys are missing.
 	 * @since 1.0.0
 	 */
 	private function derive_key( string $context ): string {
-		$auth_key  = trim( (string) ( $this->config[ PeakURL_Constants::CONFIG_AUTH_KEY ] ?? '' ) );
-		$auth_salt = trim( (string) ( $this->config[ PeakURL_Constants::CONFIG_AUTH_SALT ] ?? '' ) );
+		$auth_key  = trim( (string) ( $this->config[ Constants::CONFIG_AUTH_KEY ] ?? '' ) );
+		$auth_salt = trim( (string) ( $this->config[ Constants::CONFIG_AUTH_SALT ] ?? '' ) );
 
 		if ( '' === $auth_key || '' === $auth_salt ) {
-			throw new RuntimeException( 'PeakURL is missing PEAKURL_AUTH_KEY or PEAKURL_AUTH_SALT.' );
+			throw new \RuntimeException( 'PeakURL is missing PEAKURL_AUTH_KEY or PEAKURL_AUTH_SALT.' );
 		}
 
 		return hash(

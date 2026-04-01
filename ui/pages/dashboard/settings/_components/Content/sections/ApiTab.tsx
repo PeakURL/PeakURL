@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { Button } from '@/components/ui';
-import { Plus, Copy, Trash2, Info, Key, LoaderCircle } from 'lucide-react';
+import { Plus, Trash2, Info, Key, LoaderCircle, ExternalLink, BookOpen } from 'lucide-react';
 
 function ApiTab({
 	user,
@@ -8,7 +8,6 @@ function ApiTab({
 	isDeletingKey,
 	onDeleteKey,
 	setShowCreateModal,
-	copyToClipboard,
 }) {
 	return (
 		<div className="space-y-5">
@@ -47,24 +46,10 @@ function ApiTab({
 											Active
 										</span>
 									</div>
-									<div className="flex items-center gap-2">
-										<p className="text-xs text-text-muted font-mono truncate">
-											{key.key
-												? key.key.substring(0, 10) +
-													'•'.repeat(20)
-												: '••••••••••••••••••••••••••••••••'}
+								<div className="flex items-center gap-2">
+									<p className="text-xs text-text-muted font-mono truncate">
+											{key.maskedKey || '••••••••'}
 										</p>
-										{key.key && (
-											<button
-												onClick={() =>
-													copyToClipboard(key.key)
-												}
-												className="p-1 text-text-muted hover:text-heading"
-												title="Copy full key"
-											>
-												<Copy size={12} />
-											</button>
-										)}
 									</div>
 									<p className="text-xs text-text-muted mt-1">
 										Created:{' '}
@@ -75,9 +60,10 @@ function ApiTab({
 								</div>
 								<div className="flex items-center gap-1 ml-4">
 									<button
+										type="button"
 										className="p-2 text-text-muted hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
 										aria-label="Delete"
-										onClick={() => onDeleteKey(key.id)}
+										onClick={() => onDeleteKey(key)}
 										disabled={isDeletingKey}
 										title="Delete API Key"
 									>
@@ -122,11 +108,39 @@ function ApiTab({
 							Keep your API keys secure
 						</p>
 						<p className="text-xs text-blue-700 dark:text-blue-300">
-							Never share your API keys publicly or commit them to
-							version control. If a key is compromised, revoke it
-							immediately and generate a new one.
+							PeakURL only shows the full token once, at creation
+							time. Store it in a password manager or secret store,
+							and revoke it immediately if you think it has been
+							exposed.
 						</p>
 					</div>
+				</div>
+			</div>
+
+			<div className="bg-surface border border-stroke rounded-lg p-5">
+				<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+					<div className="space-y-1">
+						<div className="flex items-center gap-2 text-heading">
+							<BookOpen size={18} className="text-accent" />
+							<h3 className="text-sm font-semibold">
+								API documentation
+							</h3>
+						</div>
+						<p className="text-sm text-text-muted max-w-2xl">
+							Use the public docs for authentication, links,
+							analytics, users, webhooks, and system endpoints.
+						</p>
+					</div>
+					<a
+						href="https://peakurl.org/docs/api"
+						target="_blank"
+						rel="noreferrer"
+					>
+						<Button size="sm" variant="secondary">
+							API Overview
+							<ExternalLink size={14} className="ml-2" />
+						</Button>
+					</a>
 				</div>
 			</div>
 		</div>

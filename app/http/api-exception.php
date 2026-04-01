@@ -11,6 +11,8 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Http;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -21,11 +23,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Thrown in controllers or the data store when a request cannot be
  * fulfilled. The Application kernel catches it and converts it into
- * a Json_Response::error() result.
+ * a JsonResponse::error() result.
  *
  * @since 1.0.0
  */
-class Api_Exception extends RuntimeException {
+class ApiException extends \RuntimeException {
 
 	/** @var int HTTP status code for the error response. */
 	private int $status;

@@ -8,17 +8,32 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Traits;
+
+use PeakURL\Includes\Constants;
+use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Http\ApiException;
+use PeakURL\Http\Request;
+use PeakURL\Services\Crypto;
+use PeakURL\Services\Geoip;
+use PeakURL\Services\Mailer;
+use PeakURL\Services\SetupConfig;
+use PeakURL\Services\Update;
+use PeakURL\Utils\Query;
+use PeakURL\Utils\Security;
+use PeakURL\Utils\Visitor;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Store_Sessions_Trait — session and API-token authentication helpers.
+ * SessionsTrait — session and API-token authentication helpers.
  *
  * @since 1.0.0
  */
-trait Store_Sessions_Trait {
+trait SessionsTrait {
 
 	/**
 	 * Resolve the current user from API key or session cookie.
@@ -76,9 +91,9 @@ trait Store_Sessions_Trait {
 			'SELECT u.*
             FROM api_keys k
             INNER JOIN users u ON u.id = k.user_id
-            WHERE k.key_value = :key_value
+            WHERE k.key_hash = :key_hash
             LIMIT 1',
-			array( 'key_value' => $token ),
+			array( 'key_hash' => $this->hash_api_key( $token ) ),
 		);
 
 		return $row ? $this->hydrate_user( $row ) : null;
@@ -92,7 +107,7 @@ trait Store_Sessions_Trait {
 	 * @since 1.0.0
 	 */
 	private function find_session_by_request( Request $request ): ?array {
-		$cookie_name = (string) $this->config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME ];
+		$cookie_name = (string) $this->config[ Constants::CONFIG_SESSION_COOKIE_NAME ];
 		$token       = $this->crypto_service->verify_session_token(
 			trim( (string) $request->get_cookie( $cookie_name, '' ) )
 		);
@@ -127,12 +142,12 @@ trait Store_Sessions_Trait {
 	): void {
 		if ( ! $this->crypto_service->has_auth_keys() ) {
 			$this->crypto_service->ensure_persisted_auth_keys( ABSPATH . 'app' );
-			$this->config         = Runtime_Config::bootstrap( ABSPATH . 'app' );
-			$this->crypto_service = new Crypto_Service( $this->config );
+			$this->config         = RuntimeConfig::bootstrap( ABSPATH . 'app' );
+			$this->crypto_service = new Crypto( $this->config );
 		}
 
 		$raw_token = bin2hex( random_bytes( 32 ) );
-		$metadata  = Visitor_Utils::parse_user_agent( $request->get_user_agent() );
+		$metadata  = Visitor::parse_user_agent( $request->get_user_agent() );
 		$row       = array(
 			'id'               => $this->generate_random_id(),
 			'user_id'          => $user_id,
@@ -146,44 +161,19 @@ trait Store_Sessions_Trait {
 			'last_active_at'   => $this->now(),
 		);
 
-		$this->execute(
-			'INSERT INTO sessions (
-                id,
-                user_id,
-                token_hash,
-                user_agent,
-                ip_address,
-                browser,
-                operating_system,
-                device,
-                created_at,
-                last_active_at
-            ) VALUES (
-                :id,
-                :user_id,
-                :token_hash,
-                :user_agent,
-                :ip_address,
-                :browser,
-                :operating_system,
-                :device,
-                :created_at,
-                :last_active_at
-            )',
-			$row,
-		);
+		$this->db->insert( 'sessions', $row );
 
 		$request->queue_cookie(
-			(string) $this->config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME ],
+			(string) $this->config[ Constants::CONFIG_SESSION_COOKIE_NAME ],
 			$this->crypto_service->sign_session_token( $raw_token ),
-			Security_Utils::session_cookie_options(
+			Security::session_cookie_options(
 				$this->config,
 				$request,
 				array(
-					'max-age' => (int) $this->config[ PeakURL_Constants::CONFIG_SESSION_LIFETIME ],
+					'max-age' => (int) $this->config[ Constants::CONFIG_SESSION_LIFETIME ],
 					'expires' => gmdate(
 						'D, d M Y H:i:s T',
-						time() + (int) $this->config[ PeakURL_Constants::CONFIG_SESSION_LIFETIME ],
+						time() + (int) $this->config[ Constants::CONFIG_SESSION_LIFETIME ],
 					),
 				)
 			),
@@ -197,11 +187,13 @@ trait Store_Sessions_Trait {
 	 * @since 1.0.0
 	 */
 	private function touch_session( string $session_id ): void {
-		$this->execute(
-			'UPDATE sessions SET last_active_at = :last_active_at WHERE id = :id',
+		$this->db->update(
+			'sessions',
 			array(
 				'last_active_at' => $this->now(),
-				'id'             => $session_id,
+			),
+			array(
+				'id' => $session_id,
 			),
 		);
 	}
@@ -219,9 +211,11 @@ trait Store_Sessions_Trait {
 		Request $request
 	): array {
 		$current_session = $this->find_session_by_request( $request );
-		$rows            = $this->query_all(
-			'SELECT * FROM sessions WHERE user_id = :user_id ORDER BY last_active_at DESC',
+		$rows            = $this->db->get_results_by(
+			'sessions',
 			array( 'user_id' => $user_id ),
+			array( '*' ),
+			array( 'last_active_at' => 'DESC' ),
 		);
 
 		return array_map(

@@ -11,6 +11,10 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Http;
+
+use PeakURL\Utils\Str;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -105,7 +109,7 @@ class Request {
 
 		if (
 			'' !== $base_path &&
-			String_Utils::starts_with( $path, $base_path . '/' )
+			Str::starts_with( $path, $base_path . '/' )
 		) {
 			$trimmed_path = substr( $path, strlen( $base_path ) );
 			$path         =

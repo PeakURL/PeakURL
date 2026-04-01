@@ -11,6 +11,8 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Http;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -21,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class Json_Response {
+class JsonResponse {
 
 	/**
 	 * Build a success JSON response.

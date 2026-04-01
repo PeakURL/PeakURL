@@ -15,6 +15,13 @@
 
 declare(strict_types=1);
 
+use PeakURL\Api\SettingsApi;
+use PeakURL\Includes\Connection;
+use PeakURL\Includes\PeakURL_DB;
+use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Services\Crypto;
+use PeakURL\Services\Geoip;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	define(
 		'ABSPATH',
@@ -34,11 +41,11 @@ if ( ! file_exists( $autoload_path ) ) {
 
 require $autoload_path;
 
-$config   = Runtime_Config::bootstrap( dirname( __DIR__ ) );
-$database = new Database( $config );
-$settings = new Settings_API( new PeakURL_DB( $database ) );
-$crypto   = new Crypto_Service( $config );
-$geoip    = new Geoip_Service( $config, $settings, $crypto );
+$config     = RuntimeConfig::bootstrap( dirname( __DIR__ ) );
+$connection = new Connection( $config );
+$settings   = new SettingsApi( new PeakURL_DB( $connection ) );
+$crypto     = new Crypto( $config );
+$geoip      = new Geoip( $config, $settings, $crypto );
 
 try {
 	$status = $geoip->download_database();
@@ -50,7 +57,7 @@ try {
 		),
 	);
 	exit( 0 );
-} catch ( Throwable $exception ) {
+} catch ( \Throwable $exception ) {
 	fwrite( STDERR, $exception->getMessage() . "\n" );
 	exit( 1 );
 }

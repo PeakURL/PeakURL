@@ -14,8 +14,6 @@ import {
 	UsersPage,
 	SettingsLayout,
 	SettingsTabPage,
-	ApiDocsLayout,
-	ApiDocsTabPage,
 	BulkImportLayout,
 	BulkImportTabPage,
 	ForgotPasswordPage,
@@ -51,20 +49,16 @@ function SettingsLayoutRoute() {
 	);
 }
 
-function ApiDocsLayoutRoute() {
-	return (
-		<ApiDocsLayout>
-			<Outlet />
-		</ApiDocsLayout>
-	);
-}
-
 function BulkImportLayoutRoute() {
 	return (
 		<BulkImportLayout>
-			<Outlet />
+			<BulkImportTabPage />
 		</BulkImportLayout>
 	);
+}
+
+function ToolsLayoutRoute() {
+	return <Outlet />;
 }
 
 function AdminOnlyRoute() {
@@ -106,30 +100,28 @@ function AppRouter() {
 					<Route element={<AdminOnlyRoute />}>
 						<Route path="plugins" element={<PluginsPage />} />
 						<Route path="users" element={<UsersPage />} />
-						<Route path="api-docs" element={<ApiDocsLayoutRoute />}>
+						<Route path="tools" element={<ToolsLayoutRoute />}>
 							<Route
 								index
-								element={
-									<Navigate
-										replace
-										to="authentication"
-									/>
-								}
+								element={<Navigate replace to="import/file" />}
 							/>
-							<Route path=":tab" element={<ApiDocsTabPage />} />
-						</Route>
-						<Route
-							path="bulk-import"
-							element={<BulkImportLayoutRoute />}
-						>
 							<Route
-								index
+								path="import"
 								element={<Navigate replace to="file" />}
 							/>
 							<Route
-								path=":tab"
-								element={<BulkImportTabPage />}
+								path="import/file"
+								element={<BulkImportLayoutRoute />}
 							/>
+							<Route
+								path="import/api"
+								element={<BulkImportLayoutRoute />}
+							/>
+							<Route
+								path="import/paste"
+								element={<BulkImportLayoutRoute />}
+							/>
+							<Route path="*" element={<NotFoundPage />} />
 						</Route>
 					</Route>
 					<Route

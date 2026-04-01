@@ -8,17 +8,32 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Traits;
+
+use PeakURL\Includes\Constants;
+use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Http\ApiException;
+use PeakURL\Http\Request;
+use PeakURL\Services\Crypto;
+use PeakURL\Services\Geoip;
+use PeakURL\Services\Mailer;
+use PeakURL\Services\SetupConfig;
+use PeakURL\Services\Update;
+use PeakURL\Utils\Query;
+use PeakURL\Utils\Security;
+use PeakURL\Utils\Visitor;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Store_Credentials_Trait — API key and backup-code helpers for Data_Store.
+ * CredentialsTrait — API key and backup-code helpers for Store.
  *
  * @since 1.0.0
  */
-trait Store_Credentials_Trait {
+trait CredentialsTrait {
 
 	/**
 	 * Insert a new API key row for a user.
@@ -29,24 +44,29 @@ trait Store_Credentials_Trait {
 	 * @since 1.0.0
 	 */
 	private function insert_api_key( string $user_id, string $label ): array {
-		$row = array(
-			'id'         => $this->generate_random_id(),
-			'user_id'    => $user_id,
-			'label'      => '' !== trim( $label ) ? trim( $label ) : 'Generated Key',
-			'key_value'  => $this->generate_random_id( 16 ),
-			'created_at' => $this->now(),
+		$plain_text_key = $this->generate_api_key_token();
+		$row            = array(
+			'id'            => $this->generate_random_id(),
+			'user_id'       => $user_id,
+			'label'         => '' !== trim( $label ) ? trim( $label ) : 'Generated Key',
+			'key_hash'      => $this->hash_api_key( $plain_text_key ),
+			'key_prefix'    => substr( $plain_text_key, 0, 16 ),
+			'key_last_four' => substr( $plain_text_key, -4 ),
+			'created_at'    => $this->now(),
 		);
 
-		$this->execute(
-			'INSERT INTO api_keys (id, user_id, label, key_value, created_at)
-            VALUES (:id, :user_id, :label, :key_value, :created_at)',
-			$row,
-		);
+		$this->db->insert( 'api_keys', $row );
 
 		return array(
 			'id'        => $row['id'],
 			'label'     => $row['label'],
-			'key'       => $row['key_value'],
+			'key'       => $plain_text_key,
+			'maskedKey' => $this->mask_api_key(
+				(string) $row['key_prefix'],
+				(string) $row['key_last_four'],
+			),
+			'prefix'    => (string) $row['key_prefix'],
+			'lastFour'  => (string) $row['key_last_four'],
 			'createdAt' => $this->to_iso( $row['created_at'] ),
 		);
 	}
@@ -60,7 +80,10 @@ trait Store_Credentials_Trait {
 	 */
 	private function list_api_keys( string $user_id ): array {
 		$rows = $this->query_all(
-			'SELECT * FROM api_keys WHERE user_id = :user_id ORDER BY created_at DESC',
+			'SELECT id, label, key_prefix, key_last_four, created_at
+			FROM api_keys
+			WHERE user_id = :user_id
+			ORDER BY created_at DESC',
 			array( 'user_id' => $user_id ),
 		);
 
@@ -68,11 +91,66 @@ trait Store_Credentials_Trait {
 			fn( array $row ): array => array(
 				'id'        => (string) $row['id'],
 				'label'     => (string) $row['label'],
-				'key'       => (string) $row['key_value'],
+				'prefix'    => (string) ( $row['key_prefix'] ?? '' ),
+				'lastFour'  => (string) ( $row['key_last_four'] ?? '' ),
+				'maskedKey' => $this->mask_api_key(
+					(string) ( $row['key_prefix'] ?? '' ),
+					(string) ( $row['key_last_four'] ?? '' ),
+				),
 				'createdAt' => $this->to_iso( (string) $row['created_at'] ),
 			),
 			$rows,
 		);
+	}
+
+	/**
+	 * Generate a new API key token for bearer authentication.
+	 *
+	 * @return string High-entropy token shown only once at creation time.
+	 * @since 1.0.1
+	 */
+	private function generate_api_key_token(): string {
+		do {
+			$token = bin2hex( random_bytes( 24 ) );
+			$hash  = $this->hash_api_key( $token );
+		} while (
+			$this->db->count(
+				'api_keys',
+				array( 'key_hash' => $hash ),
+			) > 0
+		);
+
+		return $token;
+	}
+
+	/**
+	 * Hash an API key token for secure database storage.
+	 *
+	 * @param string $token Plain-text API key token.
+	 * @return string SHA-256 hex digest.
+	 * @since 1.0.1
+	 */
+	private function hash_api_key( string $token ): string {
+		return hash( 'sha256', trim( $token ) );
+	}
+
+	/**
+	 * Build a masked preview string for list views and logs.
+	 *
+	 * @param string $prefix   Visible leading characters.
+	 * @param string $last_four Visible trailing characters.
+	 * @return string Masked preview.
+	 * @since 1.0.1
+	 */
+	private function mask_api_key( string $prefix, string $last_four ): string {
+		$clean_prefix    = trim( $prefix );
+		$clean_last_four = trim( $last_four );
+
+		if ( '' === $clean_prefix && '' === $clean_last_four ) {
+			return '••••••••';
+		}
+
+		return $clean_prefix . '••••••••' . $clean_last_four;
 	}
 
 	/**
@@ -85,17 +163,15 @@ trait Store_Credentials_Trait {
 	private function replace_backup_codes( string $user_id ): array {
 		$codes = $this->generate_backup_codes();
 
-		$this->execute(
-			'UPDATE users
-			SET backup_codes_json = :backup_codes_json,
-				backup_codes_generated_at = :backup_codes_generated_at,
-				updated_at = :updated_at
-			WHERE id = :id',
+		$this->db->update(
+			'users',
 			array(
 				'backup_codes_json'         => $this->encode_json( $codes ),
 				'backup_codes_generated_at' => $this->now(),
 				'updated_at'                => $this->now(),
-				'id'                        => $user_id,
+			),
+			array(
+				'id' => $user_id,
 			),
 		);
 
@@ -110,12 +186,13 @@ trait Store_Credentials_Trait {
 	 * @since 1.0.0
 	 */
 	private function list_backup_codes( string $user_id ): array {
-		$row = $this->query_one(
-			'SELECT backup_codes_json FROM users WHERE id = :id LIMIT 1',
+		$value = $this->db->get_var_by(
+			'users',
+			'backup_codes_json',
 			array( 'id' => $user_id ),
 		);
 
-		if ( ! $row ) {
+		if ( false === $value || null === $value ) {
 			return array();
 		}
 
@@ -125,9 +202,7 @@ trait Store_Credentials_Trait {
 					static function ( $value ): string {
 						return strtoupper( trim( (string) $value ) );
 					},
-					$this->decode_json_array(
-						(string) ( $row['backup_codes_json'] ?? '[]' ),
-					),
+					$this->decode_json_array( (string) $value ),
 				),
 				static fn( string $value ): bool => '' !== $value,
 			),
@@ -162,23 +237,20 @@ trait Store_Credentials_Trait {
 
 			unset( $codes[ $index ] );
 
-			$this->execute(
-				'UPDATE users
-				SET backup_codes_json = :backup_codes_json,
-					updated_at = :updated_at
-				WHERE id = :id',
+			$this->db->update(
+				'users',
 				array(
 					'backup_codes_json' => $this->encode_json(
 						array_values( $codes ),
 					),
 					'updated_at'        => $this->now(),
-					'id'                => $user_id,
 				),
+				array( 'id' => $user_id ),
 			);
 
 			$this->db->commit();
 			return true;
-		} catch ( Throwable $exception ) {
+		} catch ( \Throwable $exception ) {
 			if ( $this->db->in_transaction() ) {
 				$this->db->roll_back();
 			}

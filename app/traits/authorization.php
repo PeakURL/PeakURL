@@ -8,20 +8,35 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Traits;
+
+use PeakURL\Includes\Constants;
+use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Http\ApiException;
+use PeakURL\Http\Request;
+use PeakURL\Services\Crypto;
+use PeakURL\Services\Geoip;
+use PeakURL\Services\Mailer;
+use PeakURL\Services\SetupConfig;
+use PeakURL\Services\Update;
+use PeakURL\Utils\Query;
+use PeakURL\Utils\Security;
+use PeakURL\Utils\Visitor;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Store_Authorization_Trait — shared permission helpers for Data_Store.
+ * AuthorizationTrait — shared permission helpers for Store.
  *
  * Keeps request-level capability checks and ownership scoping logic out of the
  * main store class so role policy stays modular and easier to reason about.
  *
  * @since 1.0.0
  */
-trait Store_Authorization_Trait {
+trait AuthorizationTrait {
 
 	/**
 	 * Enforce owner-or-admin access against a record's user_id column.
@@ -33,7 +48,7 @@ trait Store_Authorization_Trait {
 	 * @param string               $message           Error message for denied access.
 	 * @return void
 	 *
-	 * @throws Api_Exception When the user cannot access the record.
+	 * @throws ApiException When the user cannot access the record.
 	 * @since 1.0.0
 	 */
 	private function assert_record_access(
@@ -54,7 +69,7 @@ trait Store_Authorization_Trait {
 			return;
 		}
 
-		throw new Api_Exception( $message, 403 );
+		throw new ApiException( $message, 403 );
 	}
 
 	/**
@@ -66,7 +81,7 @@ trait Store_Authorization_Trait {
 	 * @param string                    $table_alias URL table alias.
 	 * @return void
 	 *
-	 * @throws Api_Exception When the user cannot view links.
+	 * @throws ApiException When the user cannot view links.
 	 * @since 1.0.0
 	 */
 	private function add_link_visibility_scope(
@@ -85,7 +100,7 @@ trait Store_Authorization_Trait {
 			return;
 		}
 
-		throw new Api_Exception(
+		throw new ApiException(
 			'You do not have permission to view links.',
 			403,
 		);
@@ -102,7 +117,7 @@ trait Store_Authorization_Trait {
 	 * @param string                    $url_alias   URLs table alias.
 	 * @return void
 	 *
-	 * @throws Api_Exception When the user cannot view analytics.
+	 * @throws ApiException When the user cannot view analytics.
 	 * @since 1.0.0
 	 */
 	private function add_click_analytics_scope(
@@ -131,7 +146,7 @@ trait Store_Authorization_Trait {
 			return;
 		}
 
-		throw new Api_Exception(
+		throw new ApiException(
 			'You do not have permission to view analytics.',
 			403,
 		);
@@ -145,7 +160,7 @@ trait Store_Authorization_Trait {
 	 * @param string  $error_message Message returned on denial.
 	 * @return array<string, mixed> Hydrated current user.
 	 *
-	 * @throws Api_Exception When the capability is missing.
+	 * @throws ApiException When the capability is missing.
 	 * @since 1.0.0
 	 */
 	private function assert_request_capability(
@@ -156,7 +171,7 @@ trait Store_Authorization_Trait {
 		$user = $this->get_current_user( $request );
 
 		if ( ! $this->roles->user_can( $user, $capability ) ) {
-			throw new Api_Exception( $error_message, 403 );
+			throw new ApiException( $error_message, 403 );
 		}
 
 		return $user;
@@ -168,7 +183,7 @@ trait Store_Authorization_Trait {
 	 * @param Request $request Incoming HTTP request.
 	 * @return array<string, mixed> The admin user's hydrated profile.
 	 *
-	 * @throws Api_Exception When the user is not an admin.
+	 * @throws ApiException When the user is not an admin.
 	 * @since 1.0.0
 	 */
 	private function assert_admin_request( Request $request ): array {
@@ -198,7 +213,7 @@ trait Store_Authorization_Trait {
 	 * @param string $acting_user_id User performing the change.
 	 * @return void
 	 *
-	 * @throws Api_Exception When the change would leave zero admins.
+	 * @throws ApiException When the change would leave zero admins.
 	 * @since 1.0.0
 	 */
 	private function assert_admin_role_change_is_allowed(
@@ -222,20 +237,20 @@ trait Store_Authorization_Trait {
 		}
 
 		if ( 'deleted' === $next_role ) {
-			throw new Api_Exception(
+			throw new ApiException(
 				'At least one admin account must remain on the site.',
 				422,
 			);
 		}
 
 		if ( $target_user_id === $acting_user_id ) {
-			throw new Api_Exception(
+			throw new ApiException(
 				'You cannot demote the only remaining admin account.',
 				422,
 			);
 		}
 
-		throw new Api_Exception(
+		throw new ApiException(
 			'At least one admin account must remain on the site.',
 			422,
 		);

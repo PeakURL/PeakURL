@@ -12,17 +12,21 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Api;
+
+use PeakURL\Includes\PeakURL_DB;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Settings_API — options-style helper for PeakURL settings rows.
+ * SettingsApi — options-style helper for PeakURL settings rows.
  *
  * @since 1.0.0
  */
-class Settings_API {
+class SettingsApi {
 
 	/**
 	 * Shared database wrapper.
@@ -54,16 +58,17 @@ class Settings_API {
 			return null;
 		}
 
-		$row = $this->db->get_row(
-			'SELECT setting_value FROM settings WHERE setting_key = :setting_key LIMIT 1',
+		$value = $this->db->get_var_by(
+			'settings',
+			'setting_value',
 			array( 'setting_key' => $setting_key ),
 		);
 
-		if ( ! $row || ! array_key_exists( 'setting_value', $row ) ) {
+		if ( false === $value || null === $value ) {
 			return null;
 		}
 
-		return (string) $row['setting_value'];
+		return (string) $value;
 	}
 
 	/**
@@ -88,20 +93,13 @@ class Settings_API {
 			return array();
 		}
 
-		$placeholders = implode(
-			', ',
-			array_fill( 0, count( $setting_keys ), '?' ),
+		$rows   = $this->db->get_results_where_in(
+			'settings',
+			'setting_key',
+			$setting_keys,
+			array( 'setting_key', 'setting_value' ),
 		);
-		$statement    = $this->db->prepare(
-			'SELECT setting_key, setting_value FROM settings WHERE setting_key IN (' . $placeholders . ')',
-		);
-		$statement->execute( $setting_keys );
-		$rows   = $statement->fetchAll();
 		$result = array();
-
-		if ( ! is_array( $rows ) ) {
-			return $result;
-		}
 
 		foreach ( $rows as $row ) {
 			if (
@@ -151,18 +149,18 @@ class Settings_API {
 			return;
 		}
 
-		$this->db->query(
-			'INSERT INTO settings (setting_key, setting_value, autoload, updated_at)
-			VALUES (:setting_key, :setting_value, :autoload, :updated_at)
-			ON DUPLICATE KEY UPDATE
-				setting_value = VALUES(setting_value),
-				autoload = VALUES(autoload),
-				updated_at = VALUES(updated_at)',
+		$this->db->upsert(
+			'settings',
 			array(
 				'setting_key'   => $setting_key,
 				'setting_value' => $setting_value,
 				'autoload'      => $autoload ? 1 : 0,
 				'updated_at'    => $updated_at,
+			),
+			array(
+				'setting_value',
+				'autoload',
+				'updated_at',
 			),
 		);
 	}
@@ -189,14 +187,11 @@ class Settings_API {
 			return;
 		}
 
-		$placeholders = implode(
-			', ',
-			array_fill( 0, count( $setting_keys ), '?' ),
+		$this->db->delete_where_in(
+			'settings',
+			'setting_key',
+			$setting_keys,
 		);
-		$statement    = $this->db->prepare(
-			'DELETE FROM settings WHERE setting_key IN (' . $placeholders . ')',
-		);
-		$statement->execute( $setting_keys );
 	}
 
 	/**

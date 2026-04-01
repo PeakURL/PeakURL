@@ -39,9 +39,11 @@ CREATE TABLE IF NOT EXISTS api_keys (
     id VARCHAR(40) NOT NULL PRIMARY KEY,
     user_id BIGINT UNSIGNED NOT NULL,
     label VARCHAR(120) NOT NULL,
-    key_value VARCHAR(255) NOT NULL,
+    key_hash CHAR(64) NOT NULL,
+    key_prefix VARCHAR(16) NOT NULL,
+    key_last_four CHAR(4) NOT NULL,
     created_at DATETIME NOT NULL,
-    UNIQUE KEY uniq_api_keys_key_value (key_value),
+    UNIQUE KEY uniq_api_keys_key_hash (key_hash),
     KEY idx_api_keys_user_created_at (user_id, created_at),
     CONSTRAINT fk_api_keys_user_id FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

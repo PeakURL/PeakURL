@@ -8,17 +8,32 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Traits;
+
+use PeakURL\Includes\Constants;
+use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Http\ApiException;
+use PeakURL\Http\Request;
+use PeakURL\Services\Crypto;
+use PeakURL\Services\Geoip;
+use PeakURL\Services\Mailer;
+use PeakURL\Services\SetupConfig;
+use PeakURL\Services\Update;
+use PeakURL\Utils\Query;
+use PeakURL\Utils\Security;
+use PeakURL\Utils\Visitor;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Store_Webhooks_Trait — webhook CRUD methods for Data_Store.
+ * WebhooksTrait — webhook CRUD methods for Store.
  *
  * @since 1.0.0
  */
-trait Store_Webhooks_Trait {
+trait WebhooksTrait {
 
 	/**
 	 * List all webhooks for the authenticated user.
@@ -33,9 +48,11 @@ trait Store_Webhooks_Trait {
 			'manage_webhooks',
 			'You do not have permission to manage webhooks.',
 		);
-		$rows = $this->query_all(
-			'SELECT * FROM webhooks WHERE user_id = :user_id ORDER BY created_at DESC',
+		$rows = $this->db->get_results_by(
+			'webhooks',
 			array( 'user_id' => $user['id'] ),
+			array( '*' ),
+			array( 'created_at' => 'DESC' ),
 		);
 
 		return array_map(
@@ -62,7 +79,7 @@ trait Store_Webhooks_Trait {
 	 * @param array<string, mixed> $payload Body with `url` and `events`.
 	 * @return array<string, mixed> Created webhook record.
 	 *
-	 * @throws Api_Exception On validation failure (422).
+	 * @throws ApiException On validation failure (422).
 	 * @since 1.0.0
 	 */
 	public function create_webhook( Request $request, array $payload ): array {
@@ -74,7 +91,7 @@ trait Store_Webhooks_Trait {
 		$url  = trim( (string) ( $payload['url'] ?? '' ) );
 
 		if ( '' === $url || ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
-			throw new Api_Exception( 'A valid webhook URL is required.', 422 );
+			throw new ApiException( 'A valid webhook URL is required.', 422 );
 		}
 
 		$events = array_values(
@@ -90,7 +107,7 @@ trait Store_Webhooks_Trait {
 		);
 
 		if ( empty( $events ) ) {
-			throw new Api_Exception( 'Select at least one webhook event.', 422 );
+			throw new ApiException( 'Select at least one webhook event.', 422 );
 		}
 
 		$row = array(
@@ -103,10 +120,14 @@ trait Store_Webhooks_Trait {
 			'updated_at' => $this->now(),
 		);
 
-		$this->execute(
-			'INSERT INTO webhooks (id, user_id, url, events, secret, is_active, created_at, updated_at)
-	            VALUES (:id, :user_id, :url, :events, :secret, 1, :created_at, :updated_at)',
-			$row,
+		$this->db->insert(
+			'webhooks',
+			array_merge(
+				$row,
+				array(
+					'is_active' => 1,
+				),
+			),
 		);
 
 		return array(
@@ -134,8 +155,8 @@ trait Store_Webhooks_Trait {
 			'You do not have permission to manage webhooks.',
 		);
 
-		return $this->execute_statement(
-			'DELETE FROM webhooks WHERE id = :id AND user_id = :user_id',
+		return $this->db->delete(
+			'webhooks',
 			array(
 				'id'      => $id,
 				'user_id' => $user['id'],

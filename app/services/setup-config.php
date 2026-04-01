@@ -11,20 +11,25 @@
 
 declare(strict_types=1);
 
+namespace PeakURL\Services;
+
+use PeakURL\Includes\Constants;
+use PeakURL\Includes\RuntimeConfig;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
 }
 
 /**
- * Setup_Config_Service — manages the database credentials installer step.
+ * SetupConfig — manages the database credentials installer step.
  *
  * Validates database connectivity, ensures the release root is writable,
  * and writes the generated config.php from the bundled sample template.
  *
  * @since 1.0.0
  */
-class Setup_Config_Service {
+class SetupConfig {
 
 	/**
 	 * Check whether config.php already exists.
@@ -162,73 +167,73 @@ class Setup_Config_Service {
 	 * @since 1.0.0
 	 */
 	private static function normalize_input( string $app_path, array $input ): array {
-		$site_url  = Install_Service::normalize_site_url_for_release(
+		$site_url  = Install::normalize_site_url_for_release(
 			(string) ( $input['site_url'] ?? '' ),
 		);
-		$db_prefix = Runtime_Config::normalize_db_prefix(
+		$db_prefix = RuntimeConfig::normalize_db_prefix(
 			trim( (string) ( $input['db_prefix'] ?? 'peakurl_' ) ),
 		);
 		$db_port   = (string) ( (int) ( $input['db_port'] ?? 3306 ) );
 
 		if ( '' === trim( (string) ( $input['db_host'] ?? '' ) ) ) {
-			throw new RuntimeException( 'Database host is required.' );
+			throw new \RuntimeException( 'Database host is required.' );
 		}
 
 		if ( '' === trim( (string) ( $input['db_name'] ?? '' ) ) ) {
-			throw new RuntimeException( 'Database name is required.' );
+			throw new \RuntimeException( 'Database name is required.' );
 		}
 
 		if ( '' === trim( (string) ( $input['db_user'] ?? '' ) ) ) {
-			throw new RuntimeException( 'Database username is required.' );
+			throw new \RuntimeException( 'Database username is required.' );
 		}
 
 		if ( '' === $db_prefix ) {
-			throw new RuntimeException( 'Database table prefix is required.' );
+			throw new \RuntimeException( 'Database table prefix is required.' );
 		}
 
 		if ( (int) $db_port < 1 || (int) $db_port > 65535 ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'Database port must be between 1 and 65535.',
 			);
 		}
 
 		return array(
-			'PEAKURL_ENV'                                 => 'production',
-			'PEAKURL_DEBUG'                               => 'false',
-			'SITE_URL'                                    => $site_url,
-			PeakURL_Constants::CONFIG_AUTH_KEY            => self::generate_auth_key(),
-			PeakURL_Constants::CONFIG_AUTH_SALT           => self::generate_auth_salt(),
-			PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL => PeakURL_Constants::DEFAULT_UPDATE_MANIFEST_URL,
-			'PEAKURL_CONTENT_DIR'                         => self::default_content_directory( $app_path ),
-			'PEAKURL_GEOIP_DB_PATH'                       => self::default_geoip_database_path( $app_path ),
-			'DB_HOST'                                     => trim( (string) $input['db_host'] ),
-			'DB_PORT'                                     => $db_port,
-			'DB_DATABASE'                                 => trim( (string) $input['db_name'] ),
-			'DB_USERNAME'                                 => trim( (string) $input['db_user'] ),
-			'DB_PASSWORD'                                 => (string) ( $input['db_password'] ?? '' ),
-			'DB_CHARSET'                                  => 'utf8mb4',
-			'DB_PREFIX'                                   => $db_prefix,
-			PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME => PeakURL_Constants::DEFAULT_SESSION_COOKIE_NAME,
-			PeakURL_Constants::CONFIG_SESSION_LIFETIME    => (string) PeakURL_Constants::DEFAULT_SESSION_LIFETIME,
-			'SESSION_COOKIE_PATH'                         => Install_Service::site_cookie_path_for_release(
+			'PEAKURL_ENV'                              => 'production',
+			'PEAKURL_DEBUG'                            => 'false',
+			'SITE_URL'                                 => $site_url,
+			Constants::CONFIG_AUTH_KEY                 => self::generate_auth_key(),
+			Constants::CONFIG_AUTH_SALT                => self::generate_auth_salt(),
+			Constants::CONFIG_UPDATE_MANIFEST_URL      => Constants::DEFAULT_UPDATE_MANIFEST_URL,
+			'PEAKURL_CONTENT_DIR'                      => self::default_content_directory( $app_path ),
+			'PEAKURL_GEOIP_DB_PATH'                    => self::default_geoip_database_path( $app_path ),
+			'DB_HOST'                                  => trim( (string) $input['db_host'] ),
+			'DB_PORT'                                  => $db_port,
+			'DB_DATABASE'                              => trim( (string) $input['db_name'] ),
+			'DB_USERNAME'                              => trim( (string) $input['db_user'] ),
+			'DB_PASSWORD'                              => (string) ( $input['db_password'] ?? '' ),
+			'DB_CHARSET'                               => 'utf8mb4',
+			'DB_PREFIX'                                => $db_prefix,
+			Constants::CONFIG_SESSION_COOKIE_NAME      => Constants::DEFAULT_SESSION_COOKIE_NAME,
+			Constants::CONFIG_SESSION_LIFETIME         => (string) Constants::DEFAULT_SESSION_LIFETIME,
+			'SESSION_COOKIE_PATH'                      => Install::site_cookie_path_for_release(
 				$site_url,
 			),
-			'SESSION_COOKIE_DOMAIN'                       => '',
-			PeakURL_Constants::CONFIG_SESSION_COOKIE_SAME_SITE => PeakURL_Constants::DEFAULT_SESSION_COOKIE_SAME_SITE,
-			PeakURL_Constants::CONFIG_SESSION_COOKIE_SECURE => PeakURL_Constants::DEFAULT_SESSION_COOKIE_SECURE,
-			'PEAKURL_OWNER_FALLBACK'                      => 'false',
-			'PEAKURL_OWNER_FIRST_NAME'                    => '',
-			'PEAKURL_OWNER_LAST_NAME'                     => '',
-			'PEAKURL_OWNER_USERNAME'                      => '',
-			'PEAKURL_OWNER_EMAIL'                         => '',
-			'PEAKURL_OWNER_PASSWORD'                      => '',
-			'PEAKURL_WORKSPACE_NAME'                      => '',
-			'PEAKURL_WORKSPACE_SLUG'                      => '',
+			'SESSION_COOKIE_DOMAIN'                    => '',
+			Constants::CONFIG_SESSION_COOKIE_SAME_SITE => Constants::DEFAULT_SESSION_COOKIE_SAME_SITE,
+			Constants::CONFIG_SESSION_COOKIE_SECURE    => Constants::DEFAULT_SESSION_COOKIE_SECURE,
+			'PEAKURL_OWNER_FALLBACK'                   => 'false',
+			'PEAKURL_OWNER_FIRST_NAME'                 => '',
+			'PEAKURL_OWNER_LAST_NAME'                  => '',
+			'PEAKURL_OWNER_USERNAME'                   => '',
+			'PEAKURL_OWNER_EMAIL'                      => '',
+			'PEAKURL_OWNER_PASSWORD'                   => '',
+			'PEAKURL_WORKSPACE_NAME'                   => '',
+			'PEAKURL_WORKSPACE_SLUG'                   => '',
 		);
 	}
 
 	/**
-	 * Verify database connectivity by opening a PDO connection.
+	 * Verify database connectivity by opening a \PDO connection.
 	 *
 	 * @param array<string, string> $values Normalised config values.
 	 *
@@ -245,19 +250,19 @@ class Setup_Config_Service {
 		);
 
 		try {
-			$connection = new PDO(
+			$connection = new \PDO(
 				$dsn,
 				$values['DB_USERNAME'],
 				$values['DB_PASSWORD'],
 				array(
-					PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-					PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-					PDO::ATTR_EMULATE_PREPARES   => false,
+					\PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
+					\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+					\PDO::ATTR_EMULATE_PREPARES   => false,
 				),
 			);
 			$connection->query( 'SELECT 1' );
-		} catch ( Throwable $exception ) {
-			throw new RuntimeException(
+		} catch ( \Throwable $exception ) {
+			throw new \RuntimeException(
 				'Unable to connect to the database with those credentials. ' . $exception->getMessage(),
 				0,
 				$exception,
@@ -277,13 +282,13 @@ class Setup_Config_Service {
 		$root_path = dirname( rtrim( $app_path, DIRECTORY_SEPARATOR ) );
 
 		if ( ! is_writable( $root_path ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'The release root directory is not writable. PeakURL could not create config.php.',
 			);
 		}
 
 		if ( ! is_writable( $app_path ) ) {
-			throw new RuntimeException( 'The app directory is not writable.' );
+			throw new \RuntimeException( 'The app directory is not writable.' );
 		}
 	}
 
@@ -305,7 +310,7 @@ class Setup_Config_Service {
 		$sample_path = self::get_sample_path( $app_path );
 
 		if ( ! file_exists( $sample_path ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'config-sample.php is missing from the release package.',
 			);
 		}
@@ -313,7 +318,7 @@ class Setup_Config_Service {
 		$template = file_get_contents( $sample_path );
 
 		if ( false === $template ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'Unable to read config-sample.php from the release package.',
 			);
 		}
@@ -328,7 +333,7 @@ class Setup_Config_Service {
 		$config_path     = self::get_config_path( $app_path );
 
 		if ( false === file_put_contents( $config_path, $config_contents, LOCK_EX ) ) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				'Unable to write config.php in the release root.',
 			);
 		}
@@ -343,42 +348,42 @@ class Setup_Config_Service {
 	 */
 	private static function config_constants_from_values( array $values ): array {
 		return array(
-			'PEAKURL_ENV'                                 => var_export( $values['PEAKURL_ENV'], true ),
-			'PEAKURL_DEBUG'                               => 'true' === $values['PEAKURL_DEBUG'] ? 'true' : 'false',
-			'SITE_URL'                                    => var_export( $values['SITE_URL'], true ),
-			PeakURL_Constants::CONFIG_AUTH_KEY            => var_export(
-				$values[ PeakURL_Constants::CONFIG_AUTH_KEY ],
+			'PEAKURL_ENV'                              => var_export( $values['PEAKURL_ENV'], true ),
+			'PEAKURL_DEBUG'                            => 'true' === $values['PEAKURL_DEBUG'] ? 'true' : 'false',
+			'SITE_URL'                                 => var_export( $values['SITE_URL'], true ),
+			Constants::CONFIG_AUTH_KEY                 => var_export(
+				$values[ Constants::CONFIG_AUTH_KEY ],
 				true,
 			),
-			PeakURL_Constants::CONFIG_AUTH_SALT           => var_export(
-				$values[ PeakURL_Constants::CONFIG_AUTH_SALT ],
+			Constants::CONFIG_AUTH_SALT                => var_export(
+				$values[ Constants::CONFIG_AUTH_SALT ],
 				true,
 			),
-			PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL => var_export(
-				$values[ PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL ],
+			Constants::CONFIG_UPDATE_MANIFEST_URL      => var_export(
+				$values[ Constants::CONFIG_UPDATE_MANIFEST_URL ],
 				true,
 			),
-			'PEAKURL_CONTENT_DIR'                         => var_export(
+			'PEAKURL_CONTENT_DIR'                      => var_export(
 				$values['PEAKURL_CONTENT_DIR'],
 				true,
 			),
-			'PEAKURL_GEOIP_DB_PATH'                       => var_export(
+			'PEAKURL_GEOIP_DB_PATH'                    => var_export(
 				$values['PEAKURL_GEOIP_DB_PATH'],
 				true,
 			),
-			'DB_HOST'                                     => var_export( $values['DB_HOST'], true ),
-			'DB_PORT'                                     => (string) (int) $values['DB_PORT'],
-			'DB_DATABASE'                                 => var_export( $values['DB_DATABASE'], true ),
-			'DB_USERNAME'                                 => var_export( $values['DB_USERNAME'], true ),
-			'DB_PASSWORD'                                 => var_export( $values['DB_PASSWORD'], true ),
-			'DB_CHARSET'                                  => var_export( $values['DB_CHARSET'], true ),
-			'DB_PREFIX'                                   => var_export( $values['DB_PREFIX'], true ),
-			PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME => var_export( $values[ PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME ], true ),
-			PeakURL_Constants::CONFIG_SESSION_LIFETIME    => (string) (int) $values[ PeakURL_Constants::CONFIG_SESSION_LIFETIME ],
-			'SESSION_COOKIE_PATH'                         => var_export( $values['SESSION_COOKIE_PATH'], true ),
-			'SESSION_COOKIE_DOMAIN'                       => var_export( $values['SESSION_COOKIE_DOMAIN'], true ),
-			PeakURL_Constants::CONFIG_SESSION_COOKIE_SAME_SITE => var_export( $values[ PeakURL_Constants::CONFIG_SESSION_COOKIE_SAME_SITE ], true ),
-			PeakURL_Constants::CONFIG_SESSION_COOKIE_SECURE => var_export( $values[ PeakURL_Constants::CONFIG_SESSION_COOKIE_SECURE ], true ),
+			'DB_HOST'                                  => var_export( $values['DB_HOST'], true ),
+			'DB_PORT'                                  => (string) (int) $values['DB_PORT'],
+			'DB_DATABASE'                              => var_export( $values['DB_DATABASE'], true ),
+			'DB_USERNAME'                              => var_export( $values['DB_USERNAME'], true ),
+			'DB_PASSWORD'                              => var_export( $values['DB_PASSWORD'], true ),
+			'DB_CHARSET'                               => var_export( $values['DB_CHARSET'], true ),
+			'DB_PREFIX'                                => var_export( $values['DB_PREFIX'], true ),
+			Constants::CONFIG_SESSION_COOKIE_NAME      => var_export( $values[ Constants::CONFIG_SESSION_COOKIE_NAME ], true ),
+			Constants::CONFIG_SESSION_LIFETIME         => (string) (int) $values[ Constants::CONFIG_SESSION_LIFETIME ],
+			'SESSION_COOKIE_PATH'                      => var_export( $values['SESSION_COOKIE_PATH'], true ),
+			'SESSION_COOKIE_DOMAIN'                    => var_export( $values['SESSION_COOKIE_DOMAIN'], true ),
+			Constants::CONFIG_SESSION_COOKIE_SAME_SITE => var_export( $values[ Constants::CONFIG_SESSION_COOKIE_SAME_SITE ], true ),
+			Constants::CONFIG_SESSION_COOKIE_SECURE    => var_export( $values[ Constants::CONFIG_SESSION_COOKIE_SECURE ], true ),
 		);
 	}
 
@@ -405,35 +410,35 @@ class Setup_Config_Service {
 	 */
 	public static function config_values_from_runtime_config( array $config ): array {
 		return array(
-			'PEAKURL_ENV'                                 => (string) ( $config['PEAKURL_ENV'] ?? 'production' ),
-			'PEAKURL_DEBUG'                               => ! empty( $config['PEAKURL_DEBUG'] ) ? 'true' : 'false',
-			'SITE_URL'                                    => (string) ( $config['SITE_URL'] ?? '' ),
-			PeakURL_Constants::CONFIG_AUTH_KEY            => (string) ( $config[ PeakURL_Constants::CONFIG_AUTH_KEY ] ?? '' ),
-			PeakURL_Constants::CONFIG_AUTH_SALT           => (string) ( $config[ PeakURL_Constants::CONFIG_AUTH_SALT ] ?? '' ),
-			PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL => (string) ( $config[ PeakURL_Constants::CONFIG_UPDATE_MANIFEST_URL ] ?? PeakURL_Constants::DEFAULT_UPDATE_MANIFEST_URL ),
-			'PEAKURL_CONTENT_DIR'                         => (string) ( $config['PEAKURL_CONTENT_DIR'] ?? '' ),
-			'PEAKURL_GEOIP_DB_PATH'                       => (string) ( $config['PEAKURL_GEOIP_DB_PATH'] ?? '' ),
-			'DB_HOST'                                     => (string) ( $config['DB_HOST'] ?? 'localhost' ),
-			'DB_PORT'                                     => (string) ( $config['DB_PORT'] ?? 3306 ),
-			'DB_DATABASE'                                 => (string) ( $config['DB_DATABASE'] ?? '' ),
-			'DB_USERNAME'                                 => (string) ( $config['DB_USERNAME'] ?? '' ),
-			'DB_PASSWORD'                                 => (string) ( $config['DB_PASSWORD'] ?? '' ),
-			'DB_CHARSET'                                  => (string) ( $config['DB_CHARSET'] ?? 'utf8mb4' ),
-			'DB_PREFIX'                                   => (string) ( $config['DB_PREFIX'] ?? 'peakurl_' ),
-			PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME => (string) ( $config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_NAME ] ?? PeakURL_Constants::DEFAULT_SESSION_COOKIE_NAME ),
-			PeakURL_Constants::CONFIG_SESSION_LIFETIME    => (string) ( $config[ PeakURL_Constants::CONFIG_SESSION_LIFETIME ] ?? PeakURL_Constants::DEFAULT_SESSION_LIFETIME ),
-			'SESSION_COOKIE_PATH'                         => (string) ( $config['SESSION_COOKIE_PATH'] ?? '/' ),
-			'SESSION_COOKIE_DOMAIN'                       => (string) ( $config['SESSION_COOKIE_DOMAIN'] ?? '' ),
-			PeakURL_Constants::CONFIG_SESSION_COOKIE_SAME_SITE => (string) ( $config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_SAME_SITE ] ?? PeakURL_Constants::DEFAULT_SESSION_COOKIE_SAME_SITE ),
-			PeakURL_Constants::CONFIG_SESSION_COOKIE_SECURE => (string) ( $config[ PeakURL_Constants::CONFIG_SESSION_COOKIE_SECURE ] ?? PeakURL_Constants::DEFAULT_SESSION_COOKIE_SECURE ),
-			'PEAKURL_OWNER_FALLBACK'                      => ! empty( $config['PEAKURL_OWNER_FALLBACK'] ) ? 'true' : 'false',
-			'PEAKURL_OWNER_FIRST_NAME'                    => (string) ( $config['PEAKURL_OWNER_FIRST_NAME'] ?? '' ),
-			'PEAKURL_OWNER_LAST_NAME'                     => (string) ( $config['PEAKURL_OWNER_LAST_NAME'] ?? '' ),
-			'PEAKURL_OWNER_USERNAME'                      => (string) ( $config['PEAKURL_OWNER_USERNAME'] ?? '' ),
-			'PEAKURL_OWNER_EMAIL'                         => (string) ( $config['PEAKURL_OWNER_EMAIL'] ?? '' ),
-			'PEAKURL_OWNER_PASSWORD'                      => (string) ( $config['PEAKURL_OWNER_PASSWORD'] ?? '' ),
-			'PEAKURL_WORKSPACE_NAME'                      => (string) ( $config['PEAKURL_WORKSPACE_NAME'] ?? '' ),
-			'PEAKURL_WORKSPACE_SLUG'                      => (string) ( $config['PEAKURL_WORKSPACE_SLUG'] ?? '' ),
+			'PEAKURL_ENV'                              => (string) ( $config['PEAKURL_ENV'] ?? 'production' ),
+			'PEAKURL_DEBUG'                            => ! empty( $config['PEAKURL_DEBUG'] ) ? 'true' : 'false',
+			'SITE_URL'                                 => (string) ( $config['SITE_URL'] ?? '' ),
+			Constants::CONFIG_AUTH_KEY                 => (string) ( $config[ Constants::CONFIG_AUTH_KEY ] ?? '' ),
+			Constants::CONFIG_AUTH_SALT                => (string) ( $config[ Constants::CONFIG_AUTH_SALT ] ?? '' ),
+			Constants::CONFIG_UPDATE_MANIFEST_URL      => (string) ( $config[ Constants::CONFIG_UPDATE_MANIFEST_URL ] ?? Constants::DEFAULT_UPDATE_MANIFEST_URL ),
+			'PEAKURL_CONTENT_DIR'                      => (string) ( $config['PEAKURL_CONTENT_DIR'] ?? '' ),
+			'PEAKURL_GEOIP_DB_PATH'                    => (string) ( $config['PEAKURL_GEOIP_DB_PATH'] ?? '' ),
+			'DB_HOST'                                  => (string) ( $config['DB_HOST'] ?? 'localhost' ),
+			'DB_PORT'                                  => (string) ( $config['DB_PORT'] ?? 3306 ),
+			'DB_DATABASE'                              => (string) ( $config['DB_DATABASE'] ?? '' ),
+			'DB_USERNAME'                              => (string) ( $config['DB_USERNAME'] ?? '' ),
+			'DB_PASSWORD'                              => (string) ( $config['DB_PASSWORD'] ?? '' ),
+			'DB_CHARSET'                               => (string) ( $config['DB_CHARSET'] ?? 'utf8mb4' ),
+			'DB_PREFIX'                                => (string) ( $config['DB_PREFIX'] ?? 'peakurl_' ),
+			Constants::CONFIG_SESSION_COOKIE_NAME      => (string) ( $config[ Constants::CONFIG_SESSION_COOKIE_NAME ] ?? Constants::DEFAULT_SESSION_COOKIE_NAME ),
+			Constants::CONFIG_SESSION_LIFETIME         => (string) ( $config[ Constants::CONFIG_SESSION_LIFETIME ] ?? Constants::DEFAULT_SESSION_LIFETIME ),
+			'SESSION_COOKIE_PATH'                      => (string) ( $config['SESSION_COOKIE_PATH'] ?? '/' ),
+			'SESSION_COOKIE_DOMAIN'                    => (string) ( $config['SESSION_COOKIE_DOMAIN'] ?? '' ),
+			Constants::CONFIG_SESSION_COOKIE_SAME_SITE => (string) ( $config[ Constants::CONFIG_SESSION_COOKIE_SAME_SITE ] ?? Constants::DEFAULT_SESSION_COOKIE_SAME_SITE ),
+			Constants::CONFIG_SESSION_COOKIE_SECURE    => (string) ( $config[ Constants::CONFIG_SESSION_COOKIE_SECURE ] ?? Constants::DEFAULT_SESSION_COOKIE_SECURE ),
+			'PEAKURL_OWNER_FALLBACK'                   => ! empty( $config['PEAKURL_OWNER_FALLBACK'] ) ? 'true' : 'false',
+			'PEAKURL_OWNER_FIRST_NAME'                 => (string) ( $config['PEAKURL_OWNER_FIRST_NAME'] ?? '' ),
+			'PEAKURL_OWNER_LAST_NAME'                  => (string) ( $config['PEAKURL_OWNER_LAST_NAME'] ?? '' ),
+			'PEAKURL_OWNER_USERNAME'                   => (string) ( $config['PEAKURL_OWNER_USERNAME'] ?? '' ),
+			'PEAKURL_OWNER_EMAIL'                      => (string) ( $config['PEAKURL_OWNER_EMAIL'] ?? '' ),
+			'PEAKURL_OWNER_PASSWORD'                   => (string) ( $config['PEAKURL_OWNER_PASSWORD'] ?? '' ),
+			'PEAKURL_WORKSPACE_NAME'                   => (string) ( $config['PEAKURL_WORKSPACE_NAME'] ?? '' ),
+			'PEAKURL_WORKSPACE_SLUG'                   => (string) ( $config['PEAKURL_WORKSPACE_SLUG'] ?? '' ),
 		);
 	}
 
@@ -498,7 +503,7 @@ class Setup_Config_Service {
 		$directory = dirname( $env_path );
 
 		if ( ! is_dir( $directory ) && ! mkdir( $directory, 0755, true ) && ! is_dir( $directory ) ) {
-			throw new RuntimeException( $error_message );
+			throw new \RuntimeException( $error_message );
 		}
 
 		$managed_keys   = array_keys( $managed_values );
@@ -508,7 +513,7 @@ class Setup_Config_Service {
 			$read_lines = file( $env_path, FILE_IGNORE_NEW_LINES );
 
 			if ( false === $read_lines ) {
-				throw new RuntimeException( $error_message );
+				throw new \RuntimeException( $error_message );
 			}
 
 			$existing_lines = $read_lines;
@@ -556,7 +561,7 @@ class Setup_Config_Service {
 		}
 
 		if ( false === file_put_contents( $env_path, $env_body, LOCK_EX ) ) {
-			throw new RuntimeException( $error_message );
+			throw new \RuntimeException( $error_message );
 		}
 	}
 

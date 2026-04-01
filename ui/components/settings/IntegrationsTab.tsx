@@ -130,7 +130,7 @@ function IntegrationsTab({ notification }) {
 						</p>
 					</div>
 					<a
-						href="https://peakurl.org/docs/api/webhooks"
+						href="https://peakurl.org/docs/integrations"
 						target="_blank"
 						rel="noreferrer"
 						className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline"
@@ -215,7 +215,9 @@ function IntegrationsTab({ notification }) {
 							onClick={handleCreate}
 							disabled={!canCreate || isCreating}
 						>
-							{isCreating ? 'Creating...' : (
+							{isCreating ? (
+								'Creating...'
+							) : (
 								<>
 									<Plus size={16} className="mr-2" />
 									Create Webhook
@@ -271,7 +273,8 @@ function IntegrationsTab({ notification }) {
 
 										<div className="mt-3 flex items-center gap-2">
 											<span className="text-xs text-muted font-mono truncate">
-												{wh.secretHint || 'Signing secret stored'}
+												{wh.secretHint ||
+													'Signing secret stored'}
 											</span>
 										</div>
 
@@ -288,7 +291,9 @@ function IntegrationsTab({ notification }) {
 									<button
 										className="p-2 text-muted hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
 										aria-label="Delete webhook"
-										onClick={() => setWebhookPendingDelete(wh)}
+										onClick={() =>
+											setWebhookPendingDelete(wh)
+										}
 										disabled={isDeleting}
 										title="Delete webhook"
 									>
@@ -313,7 +318,8 @@ function IntegrationsTab({ notification }) {
 							This signing secret will not be shown again.
 						</p>
 						<p className="mt-1 text-xs leading-5 text-blue-700 dark:text-blue-300">
-							Store it in your automation tool or secret manager before closing this window.
+							Store it in your automation tool or secret manager
+							before closing this window.
 						</p>
 					</div>
 
@@ -346,7 +352,8 @@ function IntegrationsTab({ notification }) {
 					</div>
 
 					<p className="text-sm text-text-muted">
-						If this secret is ever exposed, delete the webhook and create a new one.
+						If this secret is ever exposed, delete the webhook and
+						create a new one.
 					</p>
 
 					<div className="flex justify-end gap-2">

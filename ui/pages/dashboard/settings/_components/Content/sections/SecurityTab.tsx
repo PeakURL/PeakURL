@@ -2,7 +2,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import QRCode from 'qrcode';
-import { Button, Input } from '@/components/ui';
+import { Button, ConfirmDialog, Input } from '@/components/ui';
 import {
 	ShieldCheck,
 	ShieldOff,
@@ -56,6 +56,8 @@ function SecurityTab({
 	const [isDownloading, setIsDownloading] = useState(false);
 	const [revokingId, setRevokingId] = useState(null);
 	const [isRevokingOthers, setIsRevokingOthers] = useState(false);
+	const [showRevokeOthersConfirm, setShowRevokeOthersConfirm] =
+		useState(false);
 
 	const {
 		data: securityData,
@@ -267,12 +269,7 @@ function SecurityTab({
 	};
 
 	const handleRevokeOtherSessions = async () => {
-		if (
-			0 === otherActiveSessions.length ||
-			!window.confirm(
-				'End all other active sessions for this account?'
-			)
-		) {
+		if ( 0 === otherActiveSessions.length ) {
 			return;
 		}
 
@@ -281,6 +278,7 @@ function SecurityTab({
 		try {
 			const result = await revokeOtherSessions().unwrap();
 			const revokedCount = result?.data?.revokedCount ?? 0;
+			setShowRevokeOthersConfirm(false);
 
 			notification?.success(
 				'Other sessions ended',
@@ -579,7 +577,7 @@ function SecurityTab({
 						<Button
 							variant="outline"
 							size="sm"
-							onClick={handleRevokeOtherSessions}
+							onClick={() => setShowRevokeOthersConfirm(true)}
 							loading={isRevokingOthers}
 						>
 							End all other sessions
@@ -655,6 +653,21 @@ function SecurityTab({
 					)}
 				</div>
 			</div>
+
+			<ConfirmDialog
+				open={showRevokeOthersConfirm}
+				onClose={() => {
+					if (!isRevokingOthers) {
+						setShowRevokeOthersConfirm(false);
+					}
+				}}
+				title="End all other sessions"
+				description={`End ${otherActiveSessions.length} other active session${1 === otherActiveSessions.length ? '' : 's'} for this account? Any browsers or devices using them will be signed out immediately.`}
+				confirmText="End sessions"
+				cancelText="Keep sessions"
+				onConfirm={handleRevokeOtherSessions}
+				loading={isRevokingOthers}
+			/>
 		</div>
 	);
 }

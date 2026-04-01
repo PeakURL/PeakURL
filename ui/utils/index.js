@@ -66,6 +66,7 @@ export {
 	getInstallRecovery,
 	redirectToInstallRecovery,
 } from './installRecovery';
+export { getAvatarInitials, getGravatarUrl } from './avatar';
 
 export function getTagColor(tag) {
 	const colors = {

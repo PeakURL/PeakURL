@@ -17,7 +17,7 @@ import {
 	useGetUserProfileQuery,
 	useLogoutMutation,
 } from '@/store/slices/api/user';
-import { ThemeToggle } from '@/components';
+import { Avatar, ThemeToggle } from '@/components';
 import { useNavigate } from 'react-router-dom';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 
@@ -27,12 +27,6 @@ export const DashboardAppBar = ({ onMobileMenuToggle }) => {
 	const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
 	const navigate = useNavigate();
 	const basePath = '/dashboard';
-
-	const getInitials = (firstName, lastName) => {
-		const first = firstName?.charAt(0)?.toUpperCase() || '';
-		const last = lastName?.charAt(0)?.toUpperCase() || '';
-		return first + last || 'U';
-	};
 
 	const getRoleLabel = (role) => {
 		if (role === 'admin') return 'Admin';
@@ -86,11 +80,13 @@ export const DashboardAppBar = ({ onMobileMenuToggle }) => {
 					{/* User dropdown */}
 					<Menu as="div" className="relative">
 						<MenuButton className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-alt transition-colors">
-							<div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center text-white font-semibold text-sm">
-								{user
-									? getInitials(user.firstName, user.lastName)
-									: 'AA'}
-							</div>
+							<Avatar
+								size="sm"
+								email={user?.email}
+								firstName={user?.firstName}
+								lastName={user?.lastName}
+								fallbackName={user?.username || 'Admin'}
+							/>
 							<div className="hidden sm:block text-left">
 								<div className="text-sm font-semibold text-heading">
 									{user

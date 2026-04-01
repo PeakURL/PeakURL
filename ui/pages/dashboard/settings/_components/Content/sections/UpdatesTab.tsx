@@ -1,6 +1,13 @@
 // @ts-nocheck
 import { Button } from '@/components/ui';
-import { AlertCircle, CheckCircle2, Download, RefreshCcw } from 'lucide-react';
+import {
+	AlertCircle,
+	CheckCircle2,
+	Clock3,
+	Download,
+	ExternalLink,
+	RefreshCcw,
+} from 'lucide-react';
 
 function formatDate(value) {
 	if (!value) {
@@ -14,28 +21,6 @@ function formatDate(value) {
 	}
 }
 
-function DetailRow({ label, value, href }) {
-	return (
-		<div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
-			<span className="text-sm font-medium text-heading">{label}</span>
-			{href ? (
-				<a
-					href={href}
-					target="_blank"
-					rel="noreferrer"
-					className="max-w-full break-all text-sm text-accent hover:underline"
-				>
-					{value || href}
-				</a>
-			) : (
-				<span className="max-w-full break-all text-sm text-text-muted">
-					{value || 'Not available'}
-				</span>
-			)}
-		</div>
-	);
-}
-
 function UpdatesTab({
 	status,
 	errorMessage,
@@ -47,48 +32,49 @@ function UpdatesTab({
 }) {
 	const updateAvailable = Boolean(status?.updateAvailable);
 	const canApply = Boolean(status?.canApply);
+	const showInstallAction = updateAvailable && canApply;
+	const showReleaseMeta =
+		updateAvailable && (status?.releasedAt || status?.changelogUrl);
 
 	return (
 		<div className="space-y-5">
 			<div className="rounded-lg border border-stroke bg-surface p-5">
-				<div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+				<div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 					<div className="space-y-2">
 						<h2 className="text-base font-semibold text-heading">
 							PeakURL Updates
 						</h2>
 						<p className="max-w-2xl text-sm leading-6 text-text-muted">
-							Check the latest PeakURL release, review the package
-							details, and install updates directly from the
-							dashboard when this site is running from a packaged
-							release.
+							PeakURL can check for new releases and, on packaged
+							installs, apply them directly from the dashboard.
 						</p>
 					</div>
 
 					<div className="flex flex-wrap gap-3">
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={onCheck}
-							loading={isChecking}
-							icon={RefreshCcw}
-							disabled={isApplying}
-						>
-							Check for Updates
-						</Button>
-						<Button
-							size="sm"
-							onClick={onApply}
-							loading={isApplying}
-							icon={Download}
-							disabled={
-								isLoading ||
-								isChecking ||
-								!updateAvailable ||
-								!canApply
-							}
-						>
-							Install Update
-						</Button>
+						{showInstallAction ? (
+							<Button
+								size="sm"
+								className="min-w-[11rem] whitespace-nowrap"
+								onClick={onApply}
+								loading={isApplying}
+								icon={Download}
+								disabled={isLoading || isChecking}
+							>
+								Install Update
+							</Button>
+						) : (
+							<Button
+								variant="outline"
+								size="sm"
+								className="min-w-[11rem] whitespace-nowrap"
+								onClick={onCheck}
+								loading={isChecking}
+								icon={RefreshCcw}
+								disabled={isApplying}
+							>
+								Check for Updates
+							</Button>
+						)}
 					</div>
 				</div>
 			</div>
@@ -131,8 +117,10 @@ function UpdatesTab({
 					}
 					description={
 						updateAvailable
-							? 'Review the release summary below, then install the latest package when you are ready.'
-							: 'This site is already on the latest known PeakURL release.'
+							? canApply
+								? 'A newer PeakURL release is ready to install when you are ready.'
+								: 'A newer PeakURL release is available. This install cannot apply it automatically from the dashboard.'
+							: 'This site is already running the latest known PeakURL release.'
 					}
 					variant={updateAvailable ? 'info' : 'success'}
 				/>
@@ -144,53 +132,45 @@ function UpdatesTab({
 				</div>
 			)}
 
-			<div className="rounded-lg border border-stroke bg-surface p-5 space-y-4">
-				<h3 className="text-sm font-semibold text-heading">
-					Release Summary
-				</h3>
-				<div className="space-y-3">
-					<DetailRow
-						label="Release Channel"
-						value={status?.channel || 'latest'}
-					/>
-					<DetailRow
-						label="Package Integrity"
-						value={
-							status?.checksumSha256
-								? 'SHA-256 checksum available'
-								: 'Not available'
-						}
-					/>
-					<DetailRow
-						label="Checksum"
-						value={status?.checksumSha256 || 'Not available'}
-					/>
-					<DetailRow
-						label="Changelog"
-						value={status?.changelogUrl}
-						href={status?.changelogUrl}
-					/>
-					<DetailRow
-						label="Released"
-						value={formatDate(status?.releasedAt)}
-					/>
-					<DetailRow
-						label="Minimum PHP"
-						value={status?.minimumPhp || 'Not specified'}
-					/>
-					<DetailRow
-						label="Minimum MySQL"
-						value={status?.minimumMysql || 'Not specified'}
-					/>
-					<DetailRow
-						label="Minimum MariaDB"
-						value={status?.minimumMariaDb || 'Not specified'}
-					/>
+			{showReleaseMeta && (
+				<div className="rounded-lg border border-stroke bg-surface p-5 space-y-4">
+					<h3 className="text-sm font-semibold text-heading">
+						About this release
+					</h3>
+					<div className="grid gap-3 md:grid-cols-2">
+						{status?.releasedAt && (
+							<div className="rounded-lg border border-stroke bg-bg px-4 py-3">
+								<div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
+									<Clock3 size={14} />
+									Released
+								</div>
+								<p className="mt-2 text-sm font-medium text-heading">
+									{formatDate(status.releasedAt)}
+								</p>
+							</div>
+						)}
+						{status?.changelogUrl && (
+							<div className="rounded-lg border border-stroke bg-bg px-4 py-3">
+								<div className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
+									Changelog
+								</div>
+								<a
+									href={status.changelogUrl}
+									target="_blank"
+									rel="noreferrer"
+									className="mt-2 inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline"
+								>
+									Review what changed
+									<ExternalLink size={14} />
+								</a>
+							</div>
+						)}
+					</div>
 				</div>
-			</div>
+			)}
 
-			{!canApply && status?.applyDisabledReason && (
-				<div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
+			{updateAvailable && !canApply && status?.applyDisabledReason && (
+				<div className="rounded-lg border border-stroke bg-surface p-4 text-sm leading-6 text-text-muted">
 					{status.applyDisabledReason}
 				</div>
 			)}

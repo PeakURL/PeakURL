@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { useNotification } from '@/components';
 import { useAdminAccess } from '@/hooks';
-import { Button, ConfirmDialog, Input } from '@/components/ui';
+import { Button, ConfirmDialog, IconButton, Input } from '@/components/ui';
 import {
 	useCreateUserMutation,
 	useDeleteUserMutation,
@@ -461,25 +461,26 @@ function UsersPage() {
 										</td>
 										<td className="px-6 py-4">
 											<div className="flex justify-end gap-2">
-												<Button
+												<IconButton
+													icon={Pencil}
 													variant="outline"
 													size="sm"
-													icon={Pencil}
+													aria-label={`Edit ${ user.firstName } ${ user.lastName }`}
+													title={`Edit ${ user.firstName } ${ user.lastName }`}
 													onClick={() => openEditDialog( user )}
-												>
-													Edit
-												</Button>
-												<Button
-													variant="danger"
-													size="sm"
+												/>
+												<IconButton
 													icon={Trash2}
+													variant="outline"
+													size="sm"
+													aria-label={`Delete ${ user.firstName } ${ user.lastName }`}
+													title={`Delete ${ user.firstName } ${ user.lastName }`}
+													className="text-red-600 hover:border-red-500 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-500/10"
 													disabled={
 														user.id === currentUser?.id || isDeleting
 													}
 													onClick={() => openDeleteDialog( user )}
-												>
-													Delete
-												</Button>
+												/>
 											</div>
 										</td>
 									</tr>

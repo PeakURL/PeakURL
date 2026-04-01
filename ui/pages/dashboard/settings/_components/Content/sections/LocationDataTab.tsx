@@ -38,23 +38,6 @@ function formatBytes(value) {
 	return `${size.toFixed(size >= 10 || 0 === index ? 0 : 1)} ${units[index]}`;
 }
 
-function DetailRow({ label, value, code = false }) {
-	return (
-		<div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
-			<span className="text-sm font-medium text-heading">{label}</span>
-			<span
-				className={`max-w-full break-all text-sm ${
-					code
-						? 'font-mono text-text-muted'
-						: 'text-text-muted'
-				}`}
-			>
-				{value || 'Not available'}
-			</span>
-		</div>
-	);
-}
-
 function StateCard({ icon: Icon, title, description, variant = 'info' }) {
 	const styles = {
 		info: 'border-blue-200 bg-blue-50 text-blue-950 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200',
@@ -102,8 +85,6 @@ function LocationDataTab({
 			: accountIdInput;
 	const configurationLabel =
 		effectiveStatus?.configurationLabel || 'settings table';
-	const configurationPath =
-		effectiveStatus?.configurationPath || configurationLabel;
 	const hasSavedCredentials = Boolean(
 		effectiveStatus?.credentialsConfigured
 	);
@@ -129,7 +110,7 @@ function LocationDataTab({
 	return (
 		<div className="space-y-5">
 			<div className="rounded-lg border border-stroke bg-surface p-5">
-				<div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+				<div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 					<div className="space-y-2">
 						<div className="flex items-center gap-3">
 							<div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600 dark:bg-primary-500/20 dark:text-primary-400">
@@ -150,6 +131,7 @@ function LocationDataTab({
 
 					<Button
 						size="sm"
+						className="min-w-[10.5rem] whitespace-nowrap"
 						onClick={onDownload}
 						loading={isDownloading}
 						icon={CloudDownload}
@@ -365,34 +347,6 @@ function LocationDataTab({
 						</div>
 					</form>
 				)}
-			</div>
-
-			<div className="rounded-lg border border-stroke bg-surface p-5 space-y-4">
-				<h3 className="text-sm font-semibold text-heading">
-					Storage Details
-				</h3>
-				<div className="space-y-3">
-					<DetailRow
-						label="Content Directory"
-						value={effectiveStatus?.contentDir}
-						code
-					/>
-					<DetailRow
-						label="Database Path"
-						value={effectiveStatus?.databasePath}
-						code
-					/>
-					<DetailRow
-						label="Config Target"
-						value={configurationPath}
-						code
-					/>
-					<DetailRow
-						label="Refresh Command"
-						value={effectiveStatus?.downloadCommand}
-						code
-					/>
-				</div>
 			</div>
 		</div>
 	);

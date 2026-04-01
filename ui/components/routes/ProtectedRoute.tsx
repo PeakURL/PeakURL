@@ -50,7 +50,10 @@ const ProtectedRoute = ({ children }) => {
 	} = useAuthCheckQuery();
 	const currentUser = data?.user || data?.data;
 	const isAuthenticated = !!currentUser;
-	const isPending = isLoading || isFetching || isUninitialized;
+	const hasResolvedSession =
+		undefined !== data || undefined !== error;
+	const isPending =
+		!hasResolvedSession && (isLoading || isFetching || isUninitialized);
 	const errorStatus = typeof error?.status === 'number' ? error.status : null;
 	const isAuthError = 401 === errorStatus || 403 === errorStatus;
 	const installRecovery = getInstallRecovery(error);

@@ -134,7 +134,10 @@ function LoginPage() {
 	const isAuthError = 401 === errorStatus || 403 === errorStatus;
 	const isApiError = isError && !isAuthError;
 	const installRecovery = getInstallRecovery(error);
-	const isPending = isLoading || isFetching;
+	const hasResolvedSession =
+		undefined !== data || undefined !== error;
+	const isPending =
+		!hasResolvedSession && (isLoading || isFetching);
 	const submitPending = isLoggingIn || isVerifying;
 	const redirectTo = useMemo(() => {
 		const searchParams = new URLSearchParams(location.search || '');

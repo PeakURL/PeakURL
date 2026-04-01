@@ -40,9 +40,20 @@ const AuthErrorState = ({ onRetry }) => {
  */
 const AuthInitializer = ({ children }) => {
 	const { useAuthCheckQuery } = authApi;
-	const { error, isLoading, isFetching, isUninitialized, isError, refetch } =
+	const {
+		data,
+		error,
+		isLoading,
+		isFetching,
+		isUninitialized,
+		isError,
+		refetch,
+	} =
 		useAuthCheckQuery();
-	const isPending = isLoading || isFetching || isUninitialized;
+	const hasResolvedSession =
+		undefined !== data || undefined !== error;
+	const isPending =
+		!hasResolvedSession && (isLoading || isFetching || isUninitialized);
 	const errorStatus = typeof error?.status === 'number' ? error.status : null;
 	const isAuthError = 401 === errorStatus || 403 === errorStatus;
 	const installRecovery = getInstallRecovery(error);

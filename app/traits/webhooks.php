@@ -36,6 +36,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 trait WebhooksTrait {
 
 	/**
+	 * Build a masked signing-secret preview for dashboard display.
+	 *
+	 * @param string $secret Stored webhook signing secret.
+	 * @return string
+	 */
+	private function mask_webhook_secret( string $secret ): string {
+		$prefix = substr( $secret, 0, 10 );
+
+		if ( '' === $prefix ) {
+			return '••••••••••••••••••••••••';
+		}
+
+		return $prefix . str_repeat( '•', 18 );
+	}
+
+	/**
 	 * List all webhooks for the authenticated user.
 	 *
 	 * @param Request $request Incoming HTTP request.
@@ -57,14 +73,16 @@ trait WebhooksTrait {
 
 		return array_map(
 			fn( array $row ): array => array(
-				'id'        => (string) $row['id'],
-				'url'       => (string) $row['url'],
-				'events'    => $this->decode_json_array(
+				'id'         => (string) $row['id'],
+				'url'        => (string) $row['url'],
+				'events'     => $this->decode_json_array(
 					(string) ( $row['events'] ?? '[]' ),
 				),
-				'secret'    => (string) $row['secret'],
-				'isActive'  => ! empty( $row['is_active'] ),
-				'createdAt' => $this->to_iso( (string) $row['created_at'] ),
+				'secretHint' => $this->mask_webhook_secret(
+					(string) ( $row['secret'] ?? '' ),
+				),
+				'isActive'   => ! empty( $row['is_active'] ),
+				'createdAt'  => $this->to_iso( (string) $row['created_at'] ),
 			),
 			$rows,
 		);
@@ -131,12 +149,13 @@ trait WebhooksTrait {
 		);
 
 		return array(
-			'id'        => $row['id'],
-			'url'       => $row['url'],
-			'events'    => $this->decode_json_array( $row['events'] ),
-			'secret'    => $row['secret'],
-			'isActive'  => true,
-			'createdAt' => $this->to_iso( $row['created_at'] ),
+			'id'         => $row['id'],
+			'url'        => $row['url'],
+			'events'     => $this->decode_json_array( $row['events'] ),
+			'secret'     => $row['secret'],
+			'secretHint' => $this->mask_webhook_secret( $row['secret'] ),
+			'isActive'   => true,
+			'createdAt'  => $this->to_iso( $row['created_at'] ),
 		);
 	}
 

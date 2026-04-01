@@ -2,9 +2,10 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Button } from '@/components/ui';
+import { Button, ConfirmDialog, Modal } from '@/components/ui';
 import {
 	Copy,
+	ExternalLink,
 	Plus,
 	Trash2,
 	Webhook as WebhookIcon,
@@ -23,12 +24,6 @@ const EVENT_OPTIONS = [
 	{ id: 'link.deleted', label: 'Link Deleted' },
 ];
 
-const maskSecret = (secret) => {
-	if (!secret) return '••••••••••••••••••••••••';
-	const visible = secret.slice(0, 10);
-	return `${visible}${'•'.repeat(18)}`;
-};
-
 function IntegrationsTab({ notification }) {
 	const { data: webhooks = [], isLoading, error } = useGetWebhooksQuery();
 	const [createWebhook, { isLoading: isCreating }] =
@@ -37,6 +32,8 @@ function IntegrationsTab({ notification }) {
 		useDeleteWebhookMutation();
 
 	const [form, setForm] = useState({ url: '', events: ['link.clicked'] });
+	const [createdWebhook, setCreatedWebhook] = useState(null);
+	const [webhookPendingDelete, setWebhookPendingDelete] = useState(null);
 
 	const canCreate = useMemo(() => {
 		return form.url.trim().length > 0 && form.events.length > 0;
@@ -62,12 +59,13 @@ function IntegrationsTab({ notification }) {
 		}
 
 		try {
-			await createWebhook({
+			const result = await createWebhook({
 				url: form.url.trim(),
 				events: form.events,
 			}).unwrap();
 			notification?.success?.('Success', 'Webhook created successfully');
 			setForm({ url: '', events: ['link.clicked'] });
+			setCreatedWebhook(result?.data || null);
 		} catch (err) {
 			notification?.error?.(
 				'Error',
@@ -78,11 +76,11 @@ function IntegrationsTab({ notification }) {
 
 	const handleDelete = async (id) => {
 		if (!id) return;
-		if (!window.confirm('Delete this webhook?')) return;
 
 		try {
 			await deleteWebhook(id).unwrap();
 			notification?.success?.('Success', 'Webhook deleted');
+			setWebhookPendingDelete(null);
 		} catch (err) {
 			notification?.error?.(
 				'Error',
@@ -113,24 +111,43 @@ function IntegrationsTab({ notification }) {
 							Integrations
 						</h2>
 						<p className="text-sm text-muted mt-0.5">
-							Configure webhooks to receive real-time events.
+							Connect PeakURL to your automations with outbound
+							webhooks for link activity.
 						</p>
 					</div>
 				</div>
 			</div>
 
 			<div className="bg-surface border border-(--color-stroke) rounded-lg p-5">
-				<div className="flex items-center justify-between mb-5">
-					<h3 className="text-base font-semibold text-heading">
-						Webhooks
-					</h3>
+				<div className="mb-5 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+					<div>
+						<h3 className="text-base font-semibold text-heading">
+							Webhooks
+						</h3>
+						<p className="mt-1 max-w-2xl text-sm leading-6 text-text-muted">
+							PeakURL sends signed POST requests to your endpoint
+							when selected link events happen.
+						</p>
+					</div>
+					<a
+						href="https://peakurl.org/docs/api/webhooks"
+						target="_blank"
+						rel="noreferrer"
+						className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline"
+					>
+						Webhook docs
+						<ExternalLink size={14} />
+					</a>
 				</div>
 
-				{/* Create Webhook */}
 				<div className="bg-surface-alt rounded-lg p-4 mb-6 border border-(--color-stroke)">
 					<h4 className="text-sm font-semibold text-heading mb-3">
 						Add New Webhook
 					</h4>
+					<p className="mb-4 text-sm leading-6 text-text-muted">
+						Choose which events should trigger a delivery, then save
+						the signing secret somewhere secure when it is shown.
+					</p>
 
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 						<div>
@@ -144,7 +161,7 @@ function IntegrationsTab({ notification }) {
 								/>
 								<input
 									type="url"
-									placeholder="https://your-app.com/webhook"
+									placeholder="https://hooks.zapier.com/hooks/catch/123456/peakurl"
 									value={form.url}
 									onChange={(e) =>
 										setForm((prev) => ({
@@ -155,6 +172,15 @@ function IntegrationsTab({ notification }) {
 									className="w-full pl-10 pr-3 py-2 bg-surface border border-stroke rounded-lg text-sm text-heading focus:outline-none focus:ring-2 focus:ring-accent"
 								/>
 							</div>
+							<p className="mt-2 text-xs leading-5 text-text-muted">
+								Use a public HTTPS endpoint that can accept POST
+								requests, such as a Zapier catch hook, an n8n
+								webhook URL, or your own API route like
+								<code className="mx-1 rounded bg-surface px-1.5 py-0.5 text-[11px]">
+									https://example.com/api/webhooks/peakurl
+								</code>
+								.
+							</p>
 						</div>
 
 						<div>
@@ -189,9 +215,7 @@ function IntegrationsTab({ notification }) {
 							onClick={handleCreate}
 							disabled={!canCreate || isCreating}
 						>
-							{isCreating ? (
-								'Creating...'
-							) : (
+							{isCreating ? 'Creating...' : (
 								<>
 									<Plus size={16} className="mr-2" />
 									Create Webhook
@@ -201,7 +225,6 @@ function IntegrationsTab({ notification }) {
 					</div>
 				</div>
 
-				{/* Webhook List */}
 				{isLoading ? (
 					<div className="text-sm text-muted">Loading webhooks…</div>
 				) : error ? (
@@ -248,22 +271,8 @@ function IntegrationsTab({ notification }) {
 
 										<div className="mt-3 flex items-center gap-2">
 											<span className="text-xs text-muted font-mono truncate">
-												{maskSecret(wh.secret)}
+												{wh.secretHint || 'Signing secret stored'}
 											</span>
-											{wh.secret && (
-												<button
-													onClick={() =>
-														copyToClipboard(
-															wh.secret,
-															'Secret copied'
-														)
-													}
-													className="p-1 text-muted hover:text-heading"
-													title="Copy signing secret"
-												>
-													<Copy size={14} />
-												</button>
-											)}
 										</div>
 
 										{wh.createdAt && (
@@ -279,7 +288,7 @@ function IntegrationsTab({ notification }) {
 									<button
 										className="p-2 text-muted hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
 										aria-label="Delete webhook"
-										onClick={() => handleDelete(wh.id)}
+										onClick={() => setWebhookPendingDelete(wh)}
 										disabled={isDeleting}
 										title="Delete webhook"
 									>
@@ -291,6 +300,94 @@ function IntegrationsTab({ notification }) {
 					</div>
 				)}
 			</div>
+
+			<Modal
+				isOpen={Boolean(createdWebhook?.secret)}
+				onClose={() => setCreatedWebhook(null)}
+				title="Copy Your Webhook Secret"
+				size="md"
+			>
+				<div className="space-y-5">
+					<div className="rounded-xl border border-blue-500/20 bg-blue-500/10 px-4 py-3">
+						<p className="text-sm font-medium text-blue-700 dark:text-blue-300">
+							This signing secret will not be shown again.
+						</p>
+						<p className="mt-1 text-xs leading-5 text-blue-700 dark:text-blue-300">
+							Store it in your automation tool or secret manager before closing this window.
+						</p>
+					</div>
+
+					<div className="rounded-lg border border-stroke bg-surface-alt p-4">
+						<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
+							Endpoint URL
+						</p>
+						<p className="mt-2 text-sm font-medium text-heading break-all">
+							{createdWebhook?.url}
+						</p>
+					</div>
+
+					<div className="relative">
+						<pre className="break-all rounded-lg border border-stroke bg-surface-alt p-3 text-sm font-mono">
+							{createdWebhook?.secret}
+						</pre>
+						<button
+							type="button"
+							onClick={() =>
+								copyToClipboard(
+									createdWebhook?.secret,
+									'Secret copied'
+								)
+							}
+							className="absolute right-2 top-2 rounded bg-surface p-1.5 text-text-muted shadow-sm transition-all hover:text-heading hover:shadow"
+							title="Copy to clipboard"
+						>
+							<Copy size={14} />
+						</button>
+					</div>
+
+					<p className="text-sm text-text-muted">
+						If this secret is ever exposed, delete the webhook and create a new one.
+					</p>
+
+					<div className="flex justify-end gap-2">
+						<Button
+							variant="secondary"
+							onClick={() =>
+								copyToClipboard(
+									createdWebhook?.secret,
+									'Secret copied'
+								)
+							}
+						>
+							<Copy size={16} className="mr-2" />
+							Copy Secret
+						</Button>
+						<Button onClick={() => setCreatedWebhook(null)}>
+							I&apos;ve Stored It
+						</Button>
+					</div>
+				</div>
+			</Modal>
+
+			<ConfirmDialog
+				open={Boolean(webhookPendingDelete)}
+				onClose={() => {
+					if (!isDeleting) {
+						setWebhookPendingDelete(null);
+					}
+				}}
+				title="Delete webhook"
+				description={
+					webhookPendingDelete
+						? `Delete the webhook for ${webhookPendingDelete.url}? PeakURL will stop sending signed event requests to this endpoint immediately.`
+						: ''
+				}
+				confirmText="Delete webhook"
+				cancelText="Keep webhook"
+				confirmVariant="danger"
+				onConfirm={() => handleDelete(webhookPendingDelete?.id)}
+				loading={isDeleting}
+			/>
 		</div>
 	);
 }

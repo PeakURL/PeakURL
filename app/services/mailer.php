@@ -16,7 +16,6 @@ namespace PeakURL\Services;
 use PHPMailer\PHPMailer\Exception as PHPMailer_Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PeakURL\Api\SettingsApi;
-use PeakURL\Includes\Constants;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {

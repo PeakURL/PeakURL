@@ -2,8 +2,8 @@
 /**
  * PeakURL mail transport and delivery service.
  *
- * Handles password-reset email delivery plus dashboard-managed mail
- * transport settings for PHP mail() and SMTP.
+ * Handles dashboard-managed mail transport settings plus message
+ * delivery through PHP mail() and SMTP.
  *
  * @package PeakURL\Services
  * @since 1.0.0
@@ -163,50 +163,6 @@ class Mailer {
 			$this->settings_api,
 			$this->crypto_service,
 		) )->get_status();
-	}
-
-	/**
-	 * Send a password-reset email.
-	 *
-	 * @param array<string, mixed> $user  User database row.
-	 * @param string               $token Password-reset token.
-	 * @return void
-	 *
-	 * @throws \RuntimeException When email delivery fails.
-	 * @since 1.0.0
-	 */
-	public function send_password_reset_email( array $user, string $token ): void {
-		$email = strtolower( trim( (string) ( $user['email'] ?? '' ) ) );
-
-		if ( '' === $email || ! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
-			throw new \RuntimeException(
-				'PeakURL could not send the password reset email because the account email address is invalid.',
-			);
-		}
-
-		$site_name = $this->get_site_name();
-		$reset_url = rtrim( (string) ( $this->config['SITE_URL'] ?? '' ), '/' ) .
-			'/reset-password/' .
-			rawurlencode( trim( $token ) );
-		$full_name = trim(
-			(string) ( $user['first_name'] ?? '' ) . ' ' . (string) ( $user['last_name'] ?? '' )
-		);
-		$recipient = '' !== $full_name
-			? $full_name
-			: (string) ( $user['username'] ?? 'there' );
-		$subject   = sprintf( 'Reset your %s password', $site_name );
-		$html_body =
-			'<p>Hello ' . htmlspecialchars( $recipient, ENT_QUOTES, 'UTF-8' ) . ',</p>' .
-			'<p>We received a request to reset your password for ' . htmlspecialchars( $site_name, ENT_QUOTES, 'UTF-8' ) . '.</p>' .
-			'<p><a href="' . htmlspecialchars( $reset_url, ENT_QUOTES, 'UTF-8' ) . '">Reset your password</a></p>' .
-			'<p>This link expires in 1 hour. If you did not request this change, you can ignore this email.</p>';
-		$text_body =
-			"Hello {$recipient},\n\n" .
-			"We received a request to reset your password for {$site_name}.\n\n" .
-			"Reset your password: {$reset_url}\n\n" .
-			"This link expires in 1 hour. If you did not request this change, you can ignore this email.\n";
-
-		$this->send( $email, $recipient, $subject, $html_body, $text_body );
 	}
 
 	/**
@@ -557,18 +513,6 @@ class Mailer {
 	 */
 	private function get_from_name(): string {
 		return 'PeakURL';
-	}
-
-	/**
-	 * Get the human-readable site name for outgoing mail.
-	 *
-	 * @return string
-	 * @since 1.0.0
-	 */
-	private function get_site_name(): string {
-		$site_name = trim( (string) $this->settings_api->get_option( 'site_name' ) );
-
-		return '' !== $site_name ? $site_name : 'PeakURL';
 	}
 
 	/**

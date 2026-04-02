@@ -177,6 +177,7 @@ class Install {
 				$app_path,
 				self::release_runtime_values( $values ),
 			);
+			$data_store->send_install_welcome_email_once();
 		} catch ( \Throwable $exception ) {
 			SetupConfig::write_config_file(
 				$app_path,

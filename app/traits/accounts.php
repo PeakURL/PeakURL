@@ -409,7 +409,7 @@ trait AccountsTrait {
 		);
 
 		try {
-			$this->mailer_service->send_password_reset_email(
+			$this->notifications_service->send_password_reset_email(
 				$user,
 				$reset_token,
 			);

@@ -111,4 +111,46 @@ trait BootstrapTrait {
 			throw $exception;
 		}
 	}
+
+	/**
+	 * Send the install welcome email once for the seeded workspace owner.
+	 *
+	 * Delivery is best-effort so installation can still complete on hosts
+	 * where mail is not configured yet.
+	 *
+	 * @return void
+	 * @since 1.0.2
+	 */
+	public function send_install_welcome_email_once(): void {
+		if ( ! $this->table_exists( 'settings' ) ) {
+			return;
+		}
+
+		if ( null !== $this->get_setting_value( 'install_welcome_email_sent_at' ) ) {
+			return;
+		}
+
+		$owner = $this->get_workspace_owner_row();
+
+		if ( ! is_array( $owner ) ) {
+			return;
+		}
+
+		try {
+			$this->notifications_service->send_install_welcome_email( $owner );
+			$this->upsert_setting(
+				'install_welcome_email_sent_at',
+				$this->now(),
+				false,
+			);
+		} catch ( \Throwable $exception ) {
+			error_log(
+				sprintf(
+					'PeakURL mail error for install welcome (%s): %s',
+					(string) ( $owner['email'] ?? 'unknown-email' ),
+					$exception->getMessage(),
+				),
+			);
+		}
+	}
 }

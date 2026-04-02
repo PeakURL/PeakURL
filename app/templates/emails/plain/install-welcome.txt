@@ -1,0 +1,17 @@
+Hello {{recipient}},
+
+Your PeakURL site is installed and ready.
+
+Site: {{site_url}}
+Dashboard: {{dashboard_url}}
+Username: {{username}}
+
+Sign in here: {{login_url}}
+Getting started guide: {{docs_url}}
+API documentation: {{api_docs_url}}
+Help and support: {{support_url}}
+
+If you did not expect this email, review access to the server and the account that performed the installation.
+
+Thanks,
+The PeakURL.org Team

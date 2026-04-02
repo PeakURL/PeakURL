@@ -25,6 +25,7 @@ use PeakURL\Includes\Roles;
 use PeakURL\Services\Crypto;
 use PeakURL\Services\Geoip;
 use PeakURL\Services\Mailer;
+use PeakURL\Services\Notifications;
 use PeakURL\Services\Totp;
 use PeakURL\Traits\AccountsTrait;
 use PeakURL\Traits\AnalyticsSupportTrait;
@@ -246,6 +247,14 @@ class Store {
 	private Mailer $mailer_service;
 
 	/**
+	 * Transactional notification helper.
+	 *
+	 * @var Notifications
+	 * @since 1.0.2
+	 */
+	private Notifications $notifications_service;
+
+	/**
 	 * Whether the workspace has been bootstrapped in this request.
 	 *
 	 * @var bool
@@ -261,23 +270,24 @@ class Store {
 	 * @since 1.0.0
 	 */
 	public function __construct( Connection $connection, array $config ) {
-		$this->db             = new PeakURL_DB( $connection );
-		$this->settings_api   = new SettingsApi( $this->db );
-		$this->users_api      = new UsersApi( $this->db );
-		$this->links_api      = new LinksApi( $this->db );
-		$this->config         = $config;
-		$this->roles          = new Roles();
-		$this->totp_service   = new Totp();
-		$this->crypto_service = new Crypto( $config );
-		$this->geoip_service  = new Geoip(
+		$this->db                    = new PeakURL_DB( $connection );
+		$this->settings_api          = new SettingsApi( $this->db );
+		$this->users_api             = new UsersApi( $this->db );
+		$this->links_api             = new LinksApi( $this->db );
+		$this->config                = $config;
+		$this->roles                 = new Roles();
+		$this->totp_service          = new Totp();
+		$this->crypto_service        = new Crypto( $config );
+		$this->geoip_service         = new Geoip(
 			$config,
 			$this->settings_api,
 			$this->crypto_service,
 		);
-		$this->mailer_service = new Mailer(
+		$this->mailer_service        = new Mailer(
 			$config,
 			$this->settings_api,
 			$this->crypto_service,
 		);
+		$this->notifications_service = new Notifications();
 	}
 }

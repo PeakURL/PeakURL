@@ -143,6 +143,7 @@ export const DashboardAppBar = ({ onMobileMenuToggle }) => {
 										</button>
 									)}
 								</MenuItem>
+								<hr className="my-1 border-stroke" />
 								<MenuItem>
 									{({ focus }) => (
 										<button

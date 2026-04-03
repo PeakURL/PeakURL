@@ -119,7 +119,7 @@ trait WebhooksTrait {
 		}
 
 		$row = array(
-			'id'         => $this->generate_id( 'webhook' ),
+			'id'         => $this->generate_random_id(),
 			'user_id'    => $user['id'],
 			'url'        => $url,
 			'events'     => $this->encode_json( array_values( array_unique( $events ) ) ),

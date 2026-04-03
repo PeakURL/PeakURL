@@ -281,17 +281,6 @@ trait HelpersTrait {
 	}
 
 	/**
-	 * Generate a prefixed unique ID.
-	 *
-	 * @param string $prefix Entity type prefix.
-	 * @return string Prefixed random hex ID.
-	 * @since 1.0.0
-	 */
-	private function generate_id( string $prefix ): string {
-		return $prefix . '_' . $this->generate_random_id();
-	}
-
-	/**
 	 * Generate a random hex string.
 	 *
 	 * @param int $bytes Number of random bytes.

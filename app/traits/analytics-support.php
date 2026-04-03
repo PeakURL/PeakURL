@@ -429,7 +429,7 @@ trait AnalyticsSupportTrait {
 		$this->db->insert(
 			'clicks',
 			array(
-				'id'                => $this->generate_id( 'click' ),
+				'id'                => $this->generate_random_id(),
 				'url_id'            => (string) $url['id'],
 				'clicked_at'        => $now,
 				'visitor_hash'      => $visitor_hash,

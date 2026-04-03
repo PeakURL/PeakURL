@@ -106,6 +106,10 @@ class DatabaseSchema {
 			return false;
 		}
 
+		if ( $this->has_pending_fast_path_repairs() ) {
+			return false;
+		}
+
 		return $this->get_recorded_version() >= $this->get_target_version();
 	}
 
@@ -160,6 +164,7 @@ class DatabaseSchema {
 			$this->repair_clicks_table( $changes );
 			$this->repair_audit_logs_table( $changes );
 			$this->repair_webhooks_table( $changes );
+			$this->repair_legacy_string_ids( $changes );
 			$this->cleanup_orphans( $changes );
 			$this->repair_foreign_keys( $changes );
 
@@ -791,6 +796,102 @@ class DatabaseSchema {
 	}
 
 	/**
+	 * Normalize legacy prefixed string IDs to the unprefixed format.
+	 *
+	 * Click and webhook rows historically stored IDs like `click_<hex>` and
+	 * `webhook_<hex>`. PeakURL now uses plain opaque random IDs for all string
+	 * primary keys, so existing installs are repaired into that same format.
+	 *
+	 * @param array<int, string> $changes Applied repair labels.
+	 * @return void
+	 * @since 1.0.3
+	 */
+	private function repair_legacy_string_ids( array &$changes ): void {
+		$this->repair_legacy_prefixed_ids_for_table(
+			'clicks',
+			'click_',
+			__( 'Normalized legacy click IDs to the unprefixed format.', 'peakurl' ),
+			$changes,
+		);
+		$this->repair_legacy_prefixed_ids_for_table(
+			'webhooks',
+			'webhook_',
+			__( 'Normalized legacy webhook IDs to the unprefixed format.', 'peakurl' ),
+			$changes,
+		);
+	}
+
+	/**
+	 * Normalize prefixed row IDs for a specific table.
+	 *
+	 * @param string              $table_name Base table name.
+	 * @param string              $prefix     Legacy ID prefix including underscore.
+	 * @param string              $label      Human-readable repair label.
+	 * @param array<int, string> &$changes    Applied repair labels.
+	 * @return void
+	 * @since 1.0.3
+	 */
+	private function repair_legacy_prefixed_ids_for_table(
+		string $table_name,
+		string $prefix,
+		string $label,
+		array &$changes
+	): void {
+		if ( ! $this->connection->table_exists( $table_name ) ) {
+			return;
+		}
+
+		$legacy_ids = $this->legacy_prefixed_ids_for_table( $table_name, $prefix );
+
+		if ( empty( $legacy_ids ) ) {
+			return;
+		}
+
+		$table_identifier = $this->table_identifier( $table_name );
+		$statement        = $this->connection->get_connection()->prepare(
+			'UPDATE ' . $table_identifier . '
+			SET id = :new_id
+			WHERE id = :old_id'
+		);
+		$updated_count    = 0;
+
+		foreach ( $legacy_ids as $legacy_id ) {
+			$new_id = substr( $legacy_id, strlen( $prefix ) );
+
+			if (
+				'' === $new_id ||
+				$this->table_row_id_exists( $table_name, $new_id, $legacy_id )
+			) {
+				$new_id = $this->generate_unique_table_row_id( $table_name, $legacy_id );
+			}
+
+			if ( '' === $new_id || $new_id === $legacy_id ) {
+				continue;
+			}
+
+			$statement->execute(
+				array(
+					'new_id' => $new_id,
+					'old_id' => $legacy_id,
+				),
+			);
+
+			if ( $statement->rowCount() > 0 ) {
+				++$updated_count;
+			}
+		}
+
+		if ( $updated_count > 0 ) {
+			$changes[] = sprintf(
+				/* translators: 1: repair label, 2: number of updated rows. */
+				__( '%1$s %2$d rows were updated.', 'peakurl' ),
+				$label,
+				$updated_count,
+			);
+		}
+	}
+
+	/**
 	 * Migrate legacy api_keys data and remove obsolete artifacts.
 	 *
 	 * @param array<int, string> $changes Applied repair labels.
@@ -937,6 +1038,111 @@ class DatabaseSchema {
 				);
 			}
 		}
+	}
+
+	/**
+	 * Return the current legacy prefixed IDs for a managed table.
+	 *
+	 * @param string $table_name Base table name.
+	 * @param string $prefix     Legacy ID prefix including underscore.
+	 * @return array<int, string>
+	 * @since 1.0.3
+	 */
+	private function legacy_prefixed_ids_for_table(
+		string $table_name,
+		string $prefix
+	): array {
+		if ( ! $this->connection->table_exists( $table_name ) ) {
+			return array();
+		}
+
+		$table_identifier = $this->table_identifier( $table_name );
+		$statement        = $this->connection->get_connection()->prepare(
+			'SELECT id
+			FROM ' . $table_identifier . '
+			WHERE id LIKE :legacy_pattern ESCAPE \'\\\\\'
+			ORDER BY id ASC'
+		);
+		$statement->execute(
+			array(
+				'legacy_pattern' => $this->escape_like_pattern( $prefix ) . '%',
+			),
+		);
+		$results = $statement->fetchAll( \PDO::FETCH_COLUMN );
+
+		return array_map(
+			static fn( $value ): string => (string) $value,
+			is_array( $results ) ? $results : array(),
+		);
+	}
+
+	/**
+	 * Determine whether a table row ID already exists.
+	 *
+	 * @param string      $table_name Base table name.
+	 * @param string      $id         Candidate row ID.
+	 * @param string|null $exclude_id Existing row ID to exclude.
+	 * @return bool
+	 * @since 1.0.3
+	 */
+	private function table_row_id_exists(
+		string $table_name,
+		string $id,
+		?string $exclude_id = null
+	): bool {
+		$table_identifier = $this->table_identifier( $table_name );
+		$sql              = 'SELECT 1
+			FROM ' . $table_identifier . '
+			WHERE id = :id';
+		$params           = array(
+			'id' => $id,
+		);
+
+		if ( null !== $exclude_id ) {
+			$sql                 .= ' AND id <> :exclude_id';
+			$params['exclude_id'] = $exclude_id;
+		}
+
+		$sql .= ' LIMIT 1';
+
+		return false !== $this->query_value( $sql, $params );
+	}
+
+	/**
+	 * Generate a unique unprefixed row ID for a managed table.
+	 *
+	 * @param string      $table_name Base table name.
+	 * @param string|null $exclude_id Existing row ID to exclude.
+	 * @return string
+	 * @since 1.0.3
+	 */
+	private function generate_unique_table_row_id(
+		string $table_name,
+		?string $exclude_id = null
+	): string {
+		do {
+			$id = bin2hex( random_bytes( 10 ) );
+		} while ( $this->table_row_id_exists( $table_name, $id, $exclude_id ) );
+
+		return $id;
+	}
+
+	/**
+	 * Escape a SQL LIKE pattern for use with ESCAPE '\\'.
+	 *
+	 * @param string $value Raw pattern value.
+	 * @return string
+	 * @since 1.0.3
+	 */
+	private function escape_like_pattern( string $value ): string {
+		return strtr(
+			$value,
+			array(
+				'\\' => '\\\\',
+				'%'  => '\%',
+				'_'  => '\_',
+			),
+		);
 	}
 
 	/**
@@ -1198,6 +1404,45 @@ class DatabaseSchema {
 	}
 
 	/**
+	 * Determine whether known non-versioned repairs are still pending.
+	 *
+	 * These checks keep runtime bootstrap honest when the schema version itself
+	 * has not changed, but legacy data still needs to be normalized.
+	 *
+	 * @return bool
+	 * @since 1.0.3
+	 */
+	private function has_pending_fast_path_repairs(): bool {
+		if (
+			$this->connection->table_exists( 'api_keys' ) &&
+			$this->connection->column_exists( 'api_keys', 'key_value' )
+		) {
+			return true;
+		}
+
+		if (
+			$this->connection->table_exists( 'api_keys' ) &&
+			(
+				$this->connection->column_allows_null( 'api_keys', 'key_hash' ) ||
+				$this->connection->column_allows_null( 'api_keys', 'key_prefix' ) ||
+				$this->connection->column_allows_null( 'api_keys', 'key_last_four' )
+			)
+		) {
+			return true;
+		}
+
+		if ( ! empty( $this->legacy_prefixed_ids_for_table( 'clicks', 'click_' ) ) ) {
+			return true;
+		}
+
+		if ( ! empty( $this->legacy_prefixed_ids_for_table( 'webhooks', 'webhook_' ) ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Return the list of currently-missing managed tables.
 	 *
 	 * @return array<int, string>
@@ -1302,6 +1547,22 @@ class DatabaseSchema {
 				'nullable-api-key-hash-columns',
 				'error',
 				__( 'The hashed API key columns still allow NULL values and need to be repaired.', 'peakurl' ),
+			);
+		}
+
+		if ( ! empty( $this->legacy_prefixed_ids_for_table( 'clicks', 'click_' ) ) ) {
+			$issues[] = $this->build_issue(
+				'legacy-click-ids',
+				'warning',
+				__( 'The clicks table still contains legacy prefixed IDs and should be normalized.', 'peakurl' ),
+			);
+		}
+
+		if ( ! empty( $this->legacy_prefixed_ids_for_table( 'webhooks', 'webhook_' ) ) ) {
+			$issues[] = $this->build_issue(
+				'legacy-webhook-ids',
+				'warning',
+				__( 'The webhooks table still contains legacy prefixed IDs and should be normalized.', 'peakurl' ),
 			);
 		}
 

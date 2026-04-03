@@ -176,29 +176,29 @@ msgid "You do not have permission to view this link."
 msgstr ""
 
 #: app/traits/links.php:319
-#: app/traits/links.php:594
+#: app/traits/links.php:630
 msgid "A valid destination URL is required."
 msgstr ""
 
-#: app/traits/links.php:334
-#: app/traits/links.php:623
+#: app/traits/links.php:335
+#: app/traits/links.php:659
 msgid "That short code is reserved by the application."
 msgstr ""
 
-#: app/traits/links.php:340
-#: app/traits/links.php:633
+#: app/traits/links.php:341
+#: app/traits/links.php:669
 msgid "That short code is already in use."
 msgstr ""
 
-#: app/traits/links.php:569
+#: app/traits/links.php:605
 msgid "You do not have permission to edit this link."
 msgstr ""
 
-#: app/traits/links.php:693
+#: app/traits/links.php:729
 msgid "You do not have permission to delete this link."
 msgstr ""
 
-#: app/traits/links.php:746
+#: app/traits/links.php:782
 msgid "You do not have permission to delete links."
 msgstr ""
 
@@ -846,99 +846,119 @@ msgstr ""
 msgid "PeakURL could not create the required directory: "
 msgstr ""
 
-#: app/services/database-schema.php:170
+#: app/services/database-schema.php:175
 msgid "PeakURL could not fully repair the database schema."
 msgstr ""
 
-#: app/services/database-schema.php:272
+#: app/services/database-schema.php:277
 msgid "PeakURL could not read the bundled database schema file."
 msgstr ""
 
-#: app/services/database-schema.php:283
+#: app/services/database-schema.php:288
 msgid "Created missing tables: %s."
 msgstr ""
 
-#: app/services/database-schema.php:829
+#: app/services/database-schema.php:813
+msgid "Normalized legacy click IDs to the unprefixed format."
+msgstr ""
+
+#: app/services/database-schema.php:819
+msgid "Normalized legacy webhook IDs to the unprefixed format."
+msgstr ""
+
+#: app/services/database-schema.php:887
+msgid "%1$s %2$d rows were updated."
+msgstr ""
+
+#: app/services/database-schema.php:930
 msgid "Migrated legacy API keys to the hashed-key schema."
 msgstr ""
 
-#: app/services/database-schema.php:845
+#: app/services/database-schema.php:946
 msgid "PeakURL found API keys that could not be migrated to the hashed-key schema."
 msgstr ""
 
-#: app/services/database-schema.php:860
+#: app/services/database-schema.php:961
 msgid "Repaired hashed API key column constraints."
 msgstr ""
 
-#: app/services/database-schema.php:874
+#: app/services/database-schema.php:975
 msgid "Removed orphaned API keys."
 msgstr ""
 
-#: app/services/database-schema.php:881
+#: app/services/database-schema.php:982
 msgid "Removed orphaned sessions."
 msgstr ""
 
-#: app/services/database-schema.php:888
+#: app/services/database-schema.php:989
 msgid "Removed orphaned URLs."
 msgstr ""
 
-#: app/services/database-schema.php:895
+#: app/services/database-schema.php:996
 msgid "Removed orphaned clicks."
 msgstr ""
 
-#: app/services/database-schema.php:902
+#: app/services/database-schema.php:1003
 msgid "Cleared orphaned audit-log users."
 msgstr ""
 
-#: app/services/database-schema.php:910
+#: app/services/database-schema.php:1011
 msgid "Removed orphaned audit-log links."
 msgstr ""
 
-#: app/services/database-schema.php:918
+#: app/services/database-schema.php:1019
 msgid "Removed orphaned webhooks."
 msgstr ""
 
-#: app/services/database-schema.php:934
+#: app/services/database-schema.php:1035
 msgid "%1$s %2$d rows were affected."
 msgstr ""
 
-#: app/services/database-schema.php:970
+#: app/services/database-schema.php:1176
 msgid "Added the %2$s foreign key to the %1$s table."
 msgstr ""
 
-#: app/services/database-schema.php:1011
+#: app/services/database-schema.php:1217
 msgid "Added the %1$s column to the %2$s table."
 msgstr ""
 
-#: app/services/database-schema.php:1056
+#: app/services/database-schema.php:1262
 msgid "Added the %1$s index to the %2$s table."
 msgstr ""
 
-#: app/services/database-schema.php:1235
+#: app/services/database-schema.php:1480
 msgid "The %s table is missing."
 msgstr ""
 
-#: app/services/database-schema.php:1248
+#: app/services/database-schema.php:1493
 msgid "The %1$s table is missing the %2$s column."
 msgstr ""
 
-#: app/services/database-schema.php:1261
+#: app/services/database-schema.php:1506
 msgid "The %1$s table is missing the %2$s index."
 msgstr ""
 
-#: app/services/database-schema.php:1274
+#: app/services/database-schema.php:1519
 msgid "The %1$s table is missing the %2$s foreign key."
 msgstr ""
 
-#: app/services/database-schema.php:1289
+#: app/services/database-schema.php:1534
 msgid "The legacy api_keys.key_value column still needs to be migrated."
 msgstr ""
 
-#: app/services/database-schema.php:1304
+#: app/services/database-schema.php:1549
 msgid "The hashed API key columns still allow NULL values and need to be repaired."
 msgstr ""
 
-#: app/services/database-schema.php:1318
+#: app/services/database-schema.php:1557
+msgid "The clicks table still contains legacy prefixed IDs and should be normalized."
+msgstr ""
+
+#: app/services/database-schema.php:1565
+msgid "The webhooks table still contains legacy prefixed IDs and should be normalized."
+msgstr ""
+
+#: app/services/database-schema.php:1579
 msgid "The database schema version %1$d is behind the required version %2$d."
 msgstr ""
 
@@ -1102,7 +1122,7 @@ msgstr ""
 
 #: ui/utils/dashboardSearch.js:33
 #: ui/utils/dashboardSearch.js:36
-#: ui/pages/dashboard/about/AboutPage.tsx:421
+#: ui/pages/dashboard/about/AboutPage.tsx:504
 #: ui/pages/dashboard/_components/Header.tsx:9
 #: ui/router/pageTitle.ts:64
 msgid "Dashboard"
@@ -1931,7 +1951,7 @@ msgid "Sponsor"
 msgstr ""
 
 #: ui/pages/layout/DashboardAppBar.tsx:191
-#: ui/pages/dashboard/about/AboutPage.tsx:397
+#: ui/pages/dashboard/about/AboutPage.tsx:480
 msgid "Buy Me a Coffee"
 msgstr ""
 
@@ -1995,8 +2015,8 @@ msgstr ""
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:347
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:500
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable.tsx:63
-#: ui/pages/dashboard/about/AboutPage.tsx:219
-#: ui/pages/dashboard/about/AboutPage.tsx:416
+#: ui/pages/dashboard/about/AboutPage.tsx:280
+#: ui/pages/dashboard/about/AboutPage.tsx:499
 msgid "Version"
 msgstr ""
 
@@ -2677,7 +2697,7 @@ msgstr ""
 
 #: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:243
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:564
-#: ui/pages/dashboard/about/AboutPage.tsx:436
+#: ui/pages/dashboard/about/AboutPage.tsx:519
 msgid "Authentication"
 msgstr ""
 
@@ -2839,7 +2859,7 @@ msgid "Released"
 msgstr ""
 
 #: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:331
-#: ui/pages/dashboard/about/AboutPage.tsx:482
+#: ui/pages/dashboard/about/AboutPage.tsx:565
 msgid "Release Notes"
 msgstr ""
 
@@ -3112,7 +3132,7 @@ msgstr ""
 
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:92
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:653
-#: ui/pages/dashboard/about/AboutPage.tsx:431
+#: ui/pages/dashboard/about/AboutPage.tsx:514
 msgid "Database"
 msgstr ""
 
@@ -3622,240 +3642,240 @@ msgstr ""
 msgid "Activate"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:44
+#: ui/pages/dashboard/about/AboutPage.tsx:104
 msgid "Setup Complete"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:45
+#: ui/pages/dashboard/about/AboutPage.tsx:105
 msgid "PeakURL is ready to use."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:47
+#: ui/pages/dashboard/about/AboutPage.tsx:107
 msgid "Your administrator account is active and the dashboard is ready. Use these next steps to finish the initial configuration and start publishing links."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:51
+#: ui/pages/dashboard/about/AboutPage.tsx:111
 msgid "Create your first short link"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:52
+#: ui/pages/dashboard/about/AboutPage.tsx:112
 msgid "Review general settings"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:53
+#: ui/pages/dashboard/about/AboutPage.tsx:113
 msgid "Connect location data"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:57
+#: ui/pages/dashboard/about/AboutPage.tsx:117
 msgid "Update Complete"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:58
+#: ui/pages/dashboard/about/AboutPage.tsx:118
 msgid "PeakURL has been updated successfully."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:60
+#: ui/pages/dashboard/about/AboutPage.tsx:120
 msgid "The latest release is now running. Review the overview below, then confirm key services like email delivery, location data, and updates are configured the way you expect."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:64
+#: ui/pages/dashboard/about/AboutPage.tsx:124
 msgid "Check email configuration"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:65
+#: ui/pages/dashboard/about/AboutPage.tsx:125
 msgid "Verify update status"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:66
+#: ui/pages/dashboard/about/AboutPage.tsx:126
 msgid "Open all links"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:109
+#: ui/pages/dashboard/about/AboutPage.tsx:169
 msgid "Branded Short Links"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:111
+#: ui/pages/dashboard/about/AboutPage.tsx:171
 msgid "Create clean short links with custom aliases, generated codes, QR output, and redirect settings that stay easy to manage."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:117
+#: ui/pages/dashboard/about/AboutPage.tsx:177
 msgid "Click Analytics"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:119
+#: ui/pages/dashboard/about/AboutPage.tsx:179
 msgid "Review clicks, unique visitors, referrers, device breakdowns, and traffic trends from the same dashboard used to publish links."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:125
+#: ui/pages/dashboard/about/AboutPage.tsx:185
 msgid "Local Location Data"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:127
+#: ui/pages/dashboard/about/AboutPage.tsx:187
 msgid "Resolve visitor locations from a local MaxMind GeoLite2 database so analytics stay under your control."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:133
+#: ui/pages/dashboard/about/AboutPage.tsx:193
 msgid "Access And Security"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:135
+#: ui/pages/dashboard/about/AboutPage.tsx:195
 msgid "Run with admin and editor roles, session controls, two-factor authentication, backup codes, and API keys."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:141
+#: ui/pages/dashboard/about/AboutPage.tsx:201
 msgid "Operations And Integrations"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:143
+#: ui/pages/dashboard/about/AboutPage.tsx:203
 msgid "Use API keys, webhooks, import tools, and the built-in updater baseline to operate the service over time."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:149
+#: ui/pages/dashboard/about/AboutPage.tsx:209
 msgid "Portable Self-Hosting"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:151
+#: ui/pages/dashboard/about/AboutPage.tsx:211
 msgid "Deploy on your own domain, keep runtime configuration in your own environment, and preserve user-owned content across updates."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:171
+#: ui/pages/dashboard/about/AboutPage.tsx:231
 msgid "Use"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:172
+#: ui/pages/dashboard/about/AboutPage.tsx:232
 msgid "Run PeakURL for any purpose, personal projects, business, education, or anything in between."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:176
+#: ui/pages/dashboard/about/AboutPage.tsx:236
 msgid "Study"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:177
+#: ui/pages/dashboard/about/AboutPage.tsx:237
 msgid "Explore the source code, understand how it works, and modify it to suit your exact needs."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:181
+#: ui/pages/dashboard/about/AboutPage.tsx:241
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:73
 msgid "Share"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:182
+#: ui/pages/dashboard/about/AboutPage.tsx:242
 msgid "Redistribute copies freely so others can benefit from the same powerful link management platform."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:186
+#: ui/pages/dashboard/about/AboutPage.tsx:246
 msgid "Improve"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:187
+#: ui/pages/dashboard/about/AboutPage.tsx:247
 msgid "Enhance PeakURL and share your improvements, contributing back to the open-source community."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:229
+#: ui/pages/dashboard/about/AboutPage.tsx:290
 msgid "Welcome to"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:232
+#: ui/pages/dashboard/about/AboutPage.tsx:293
 msgid "PeakURL gives you a focused workspace for publishing short links, measuring engagement, and running branded link infrastructure on your own stack."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:245
+#: ui/pages/dashboard/about/AboutPage.tsx:306
 msgid "Documentation"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:262
+#: ui/pages/dashboard/about/AboutPage.tsx:323
 msgid "View on GitHub"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:273
+#: ui/pages/dashboard/about/AboutPage.tsx:356
 msgid "Everything you need to publish short links, review traffic, and operate the service from one focused dashboard."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:274
+#: ui/pages/dashboard/about/AboutPage.tsx:357
 msgid "What's Inside"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:288
+#: ui/pages/dashboard/about/AboutPage.tsx:371
 msgid "PeakURL is built to stay understandable in day-to-day use and dependable over time."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:289
+#: ui/pages/dashboard/about/AboutPage.tsx:372
 msgid "Product Principles"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:298
+#: ui/pages/dashboard/about/AboutPage.tsx:381
 msgid "Clear By Default"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:301
+#: ui/pages/dashboard/about/AboutPage.tsx:384
 msgid "The dashboard should stay direct and readable so routine work like publishing links, reviewing traffic, and managing users does not feel heavy."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:311
+#: ui/pages/dashboard/about/AboutPage.tsx:394
 msgid "Portable To Run"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:314
+#: ui/pages/dashboard/about/AboutPage.tsx:397
 msgid "The application should install cleanly on common PHP and MySQL hosting without depending on a managed SaaS control plane."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:324
+#: ui/pages/dashboard/about/AboutPage.tsx:407
 msgid "Open And Inspectable"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:327
+#: ui/pages/dashboard/about/AboutPage.tsx:410
 msgid "The codebase stays auditable and adaptable so operators can understand what they run, extend it carefully, and keep long-term control."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:339
+#: ui/pages/dashboard/about/AboutPage.tsx:422
 msgid "PeakURL is released under the MIT License so it can stay practical to adopt, inspect, modify, and distribute."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:340
+#: ui/pages/dashboard/about/AboutPage.tsx:423
 msgid "Open Source Terms"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:354
+#: ui/pages/dashboard/about/AboutPage.tsx:437
 msgid "Freedom to"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:368
+#: ui/pages/dashboard/about/AboutPage.tsx:451
 msgid "Support PeakURL"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:371
+#: ui/pages/dashboard/about/AboutPage.tsx:454
 msgid "If PeakURL is useful to you, help keep it practical and actively maintained."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:374
+#: ui/pages/dashboard/about/AboutPage.tsx:457
 msgid "Sponsorships and small contributions help fund releases, documentation, infrastructure, and the maintenance work that keeps the project moving."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:387
+#: ui/pages/dashboard/about/AboutPage.tsx:470
 msgid "Sponsor PeakURL"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:409
+#: ui/pages/dashboard/about/AboutPage.tsx:492
 msgid "A quick overview of the installation you are running right now."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:410
+#: ui/pages/dashboard/about/AboutPage.tsx:493
 msgid "Current Installation"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:426
+#: ui/pages/dashboard/about/AboutPage.tsx:509
 msgid "Runtime"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:441
+#: ui/pages/dashboard/about/AboutPage.tsx:524
 msgid "GeoIP"
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:455
+#: ui/pages/dashboard/about/AboutPage.tsx:538
 msgid "Self-hosted link management with clear ownership and a focused dashboard."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:464
+#: ui/pages/dashboard/about/AboutPage.tsx:547
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:92
 msgid "Website"
 msgstr ""

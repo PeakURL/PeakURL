@@ -1,0 +1,177 @@
+// @ts-nocheck
+import { useDeferredValue, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAdminAccess } from './useAdminAccess';
+import { useGetUrlsQuery } from '@/store/slices/api/urls';
+import { useGetAllUsersQuery } from '@/store/slices/api/user';
+import {
+	buildLinkStatsPath,
+	buildLinksSearchPath,
+	findDashboardRouteMatches,
+	findDashboardUserMatches,
+	getDashboardSearchValueFromLocation,
+	resolveDashboardSearchPath,
+	buildShortUrl,
+	getDefaultShortUrlOrigin,
+} from '@/utils';
+
+export const useDashboardSearch = () => {
+	const location = useLocation();
+	const navigate = useNavigate();
+	const capabilities = useAdminAccess();
+	const shortUrlOrigin = getDefaultShortUrlOrigin();
+	const [query, setQuery] = useState(() =>
+		getDashboardSearchValueFromLocation(location)
+	);
+	const [isOpen, setIsOpen] = useState(false);
+	const trimmedQuery = query.trim();
+	const deferredQuery = useDeferredValue(trimmedQuery);
+	const searchCapabilities = useMemo(
+		() => ({
+			canManageUsers: capabilities.canManageUsers,
+			canManageApiKeys: capabilities.canManageApiKeys,
+			canManageWebhooks: capabilities.canManageWebhooks,
+			canManageMailDelivery: capabilities.canManageMailDelivery,
+			canManageLocationData: capabilities.canManageLocationData,
+			canManageUpdates: capabilities.canManageUpdates,
+		}),
+		[
+			capabilities.canManageUsers,
+			capabilities.canManageApiKeys,
+			capabilities.canManageWebhooks,
+			capabilities.canManageMailDelivery,
+			capabilities.canManageLocationData,
+			capabilities.canManageUpdates,
+		]
+	);
+	const routeMatches = useMemo(
+		() => findDashboardRouteMatches(deferredQuery, searchCapabilities, 5),
+		[deferredQuery, searchCapabilities]
+	);
+	const { data: usersData, isFetching: isFetchingUsers } = useGetAllUsersQuery(
+		undefined,
+		{
+			skip:
+				!searchCapabilities.canManageUsers ||
+				deferredQuery.length < 2,
+		}
+	);
+	const { data: linksData, isFetching: isFetchingLinks } = useGetUrlsQuery(
+		{
+			page: 1,
+			limit: 5,
+			sortBy: 'updatedAt',
+			sortOrder: 'desc',
+			search: deferredQuery,
+		},
+		{
+			skip: deferredQuery.length < 2,
+		}
+	);
+	const linkMatches = useMemo(
+		() =>
+			(linksData?.data?.items || []).map((link) => {
+				const shortCode = link.alias || link.shortCode || '';
+				const shortUrl = buildShortUrl(link, shortUrlOrigin);
+
+				return {
+					id: link.id,
+					title:
+						link.title ||
+						shortCode ||
+						link.destinationUrl ||
+						__('Untitled Link'),
+					description: shortUrl,
+					meta: link.destinationUrl || '',
+					href: shortCode
+						? buildLinkStatsPath(shortCode)
+						: buildLinksSearchPath(deferredQuery),
+				};
+			}),
+		[linksData, deferredQuery, shortUrlOrigin]
+	);
+	const userMatches = useMemo(
+		() =>
+			findDashboardUserMatches(
+				deferredQuery,
+				usersData?.data || [],
+				5
+			),
+		[deferredQuery, usersData]
+	);
+
+	const handleSubmit = (event) => {
+		event.preventDefault();
+		const normalizedPath = location.pathname.replace(/\/+$/, '') || '/';
+
+		if (!trimmedQuery) {
+			if (
+				'/dashboard/links' === normalizedPath &&
+				new URLSearchParams(location.search).has('search')
+			) {
+				navigate(buildLinksSearchPath(''));
+			}
+
+			setIsOpen(false);
+			return;
+		}
+
+		handleSelect(
+			resolveDashboardSearchPath(trimmedQuery, searchCapabilities)
+		);
+	};
+
+	const handleSelect = (href) => {
+		setQuery('');
+		setIsOpen(false);
+		navigate(href);
+	};
+
+	const handleChange = (value) => {
+		setQuery(value);
+		setIsOpen(Boolean(value.trim()));
+	};
+
+	const handleFocus = () => {
+		if (trimmedQuery) {
+			setIsOpen(true);
+		}
+	};
+
+	const clearSearch = (options = {}) => {
+		const shouldResetLinksSearch = Boolean(options.resetLinksSearch);
+
+		setQuery('');
+		setIsOpen(false);
+
+		if (!shouldResetLinksSearch) {
+			return;
+		}
+
+		const normalizedPath = location.pathname.replace(/\/+$/, '') || '/';
+		const params = new URLSearchParams(location.search);
+
+		if (
+			'/dashboard/links' === normalizedPath &&
+			params.has('search')
+		) {
+			navigate(buildLinksSearchPath(''));
+		}
+	};
+
+	return {
+		query,
+		isOpen: isOpen && Boolean(trimmedQuery),
+		routeMatches,
+		userMatches,
+		linkMatches,
+		isFetchingLinks,
+		isFetchingUsers,
+		allLinksHref: buildLinksSearchPath(trimmedQuery),
+		handleChange,
+		handleFocus,
+		handleSelect,
+		clearSearch,
+		handleSubmit,
+	};
+};

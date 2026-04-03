@@ -50,6 +50,9 @@ function LinksPage() {
 		return 25;
 	});
 	const [currentPage, setCurrentPage] = useState(1);
+	const [searchParams] = useSearchParams();
+	const statsShortId = searchParams.get('stats');
+	const searchQuery = searchParams.get('search')?.trim() || '';
 
 	// No need for a load effect since initial state derives from localStorage
 
@@ -70,6 +73,7 @@ function LinksPage() {
 		limit,
 		sortBy,
 		sortOrder,
+		search: searchQuery,
 	});
 
 	const apiItems = urlsRes?.data?.items ?? [];
@@ -79,10 +83,6 @@ function LinksPage() {
 		totalItems: apiItems.length,
 		totalPages: 1,
 	};
-	const [searchParams] = useSearchParams();
-	const statsShortId = searchParams.get('stats');
-	const searchQuery = searchParams.get('search')?.toLowerCase() || '';
-
 	const {
 		data: statsLookupRes,
 		refetch: refetchStatsLookup,
@@ -100,6 +100,11 @@ function LinksPage() {
 			: null;
 	const shortUrlOrigin = getDefaultShortUrlOrigin();
 	const [isRefreshing, setIsRefreshing] = useState(false);
+
+	useEffect(() => {
+		setCurrentPage(1);
+	}, [searchQuery]);
+
 	const handleRefresh = async () => {
 		if (isRefreshing) {
 			return;
@@ -125,18 +130,7 @@ function LinksPage() {
 	};
 
 	// Filter
-	const filteredLinks = apiItems.filter((link) => {
-		if (!searchQuery) return true;
-		const shortCode = link.alias || link.shortCode || '';
-		const shortUrl = buildShortUrl(link, shortUrlOrigin);
-		return (
-			link.destinationUrl?.toLowerCase().includes(searchQuery) ||
-			shortCode.toLowerCase().includes(searchQuery) ||
-			link.title?.toLowerCase().includes(searchQuery) ||
-			link.alias?.toLowerCase().includes(searchQuery) ||
-			shortUrl.toLowerCase().includes(searchQuery)
-		);
-	});
+	const filteredLinks = apiItems;
 
 	// Sort
 	// Sorting is handled server-side

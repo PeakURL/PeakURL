@@ -2,7 +2,6 @@
 'use client';
 
 import {
-	Search,
 	Menu as MenuIcon,
 	ChevronDown,
 	User,
@@ -21,6 +20,7 @@ import { Avatar, ThemeToggle } from '@/components';
 import { useNavigate } from 'react-router-dom';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { __ } from '@/i18n';
+import { DashboardSearch } from './DashboardSearch';
 
 export const DashboardAppBar = ({ onMobileMenuToggle }) => {
 	const { data: userData } = useGetUserProfileQuery();
@@ -59,19 +59,7 @@ export const DashboardAppBar = ({ onMobileMenuToggle }) => {
 				</button>
 
 				{/* Search bar */}
-				<div className="flex-1 max-w-xl">
-					<div className="relative">
-						<Search
-							size={18}
-							className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
-						/>
-						<input
-							type="text"
-							placeholder={__('Search links, settings...')}
-							className="w-full pl-10 pr-4 py-2 bg-bg border border-stroke rounded-lg text-sm text-heading placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
-						/>
-					</div>
-				</div>
+				<DashboardSearch />
 
 				{/* Right section */}
 				<div className="flex items-center gap-2">

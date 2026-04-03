@@ -67,6 +67,14 @@ export {
 	redirectToInstallRecovery,
 } from './installRecovery';
 export { getAvatarInitials, getGravatarUrl } from './avatar';
+export {
+	buildLinkStatsPath,
+	buildLinksSearchPath,
+	findDashboardRouteMatches,
+	findDashboardUserMatches,
+	getDashboardSearchValueFromLocation,
+	resolveDashboardSearchPath,
+} from './dashboardSearch';
 
 export function getTagColor(tag) {
 	const colors = {

@@ -13,6 +13,7 @@ export const DashboardLayout = ({ children }) => {
 	const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 	const [basePath, setBasePath] = useState('/dashboard');
 	const location = useLocation();
+	const appBarKey = `${location.pathname}${location.search}`;
 	const footerLink =
 		'https://peakurl.org?utm_source=peakurl_dashboard&utm_medium=dashboard_footer&utm_campaign=app_footer';
 	const normalizedPath = location.pathname.replace(/\/+$/, '') || '/';
@@ -28,6 +29,7 @@ export const DashboardLayout = ({ children }) => {
 
 			<div className="lg:ml-64 min-h-screen">
 				<DashboardAppBar
+					key={appBarKey}
 					onMobileMenuToggle={() => setIsMobileSidebarOpen(true)}
 				/>
 

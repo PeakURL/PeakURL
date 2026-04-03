@@ -31,8 +31,8 @@ function ExportCard({
 	onExport,
 }) {
 	return (
-		<div className="rounded-xl border border-stroke bg-surface p-5">
-			<div className="mb-4 flex items-start gap-3">
+		<div className="flex h-full flex-col rounded-xl border border-stroke bg-surface p-5">
+			<div className="mb-4 flex flex-1 items-start gap-3">
 				<div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-surface-alt text-accent">
 					<Icon size={20} />
 				</div>
@@ -46,7 +46,7 @@ function ExportCard({
 				</div>
 			</div>
 
-			<div className="flex items-center justify-between gap-3 border-t border-stroke pt-4">
+			<div className="mt-auto flex items-center justify-between gap-3 border-t border-stroke pt-4">
 				<span className="text-sm font-medium text-text-muted">
 					{formatLabel}
 				</span>

@@ -24,11 +24,12 @@ const FileUpload = ({
 	const [importResults, setImportResults] = useState([]);
 	const [bulkCreateUrl] = useBulkCreateUrlMutation();
 
-	const handleFileSelect = (e) => {
-		const file = e.target.files[0];
-		if (file) {
-			parseFile(file);
+	const handleFileSelect = (file) => {
+		if (!file) {
+			return;
 		}
+
+		parseFile(file);
 	};
 
 	const parseFile = (file) => {
@@ -210,7 +211,7 @@ const FileUpload = ({
 					{importStatus === 'idle' && (
 						<FileUploadArea
 							fileInputRef={fileInputRef}
-							handleFileSelect={handleFileSelect}
+							onFileSelected={handleFileSelect}
 						/>
 					)}
 

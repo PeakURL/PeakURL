@@ -63,6 +63,7 @@ cp -R "$UI_BUILD_DIR/assets" "$RELEASE_DIR/assets"
 cp "$UI_BUILD_DIR/index.html" "$RELEASE_DIR/app.html"
 cp "$ROOT_DIR/.version" "$RELEASE_DIR/.version"
 cp "$ROOT_DIR/LICENSE" "$RELEASE_DIR/LICENSE"
+cp "$ROOT_DIR/CREDITS.txt" "$RELEASE_DIR/CREDITS.txt"
 
 cp -R app/api "$RELEASE_DIR/app/api"
 cp -R app/controllers "$RELEASE_DIR/app/controllers"

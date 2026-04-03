@@ -84,8 +84,10 @@ class Mailer {
 
 		return array(
 			'driver'                 => $settings['driver'],
-			'fromEmail'              => $this->get_from_email(),
-			'fromName'               => $this->get_from_name(),
+			'fromEmail'              => $this->get_from_email( $settings ),
+			'configuredFromEmail'    => $settings['fromEmail'],
+			'fromName'               => $this->get_from_name( $settings ),
+			'configuredFromName'     => $settings['fromName'],
 			'smtpHost'               => $settings['smtpHost'],
 			'smtpPort'               => $settings['smtpPort'],
 			'smtpEncryption'         => '' === $settings['smtpEncryption']
@@ -131,6 +133,12 @@ class Mailer {
 		);
 		$values = array(
 			'driver'         => $driver,
+			'fromEmail'      => trim(
+				(string) ( $input['fromEmail'] ?? $current['fromEmail'] )
+			),
+			'fromName'       => trim(
+				(string) ( $input['fromName'] ?? $current['fromName'] )
+			),
 			'smtpHost'       => trim(
 				(string) ( $input['smtpHost'] ?? $current['smtpHost'] )
 			),
@@ -215,7 +223,10 @@ class Mailer {
 			// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer public properties use upstream casing.
 			$mailer->CharSet = PHPMailer::CHARSET_UTF8;
 			$mailer->Timeout = 15;
-			$mailer->setFrom( $this->get_from_email(), $this->get_from_name() );
+			$mailer->setFrom(
+				$this->get_from_email( $settings ),
+				$this->get_from_name( $settings ),
+			);
 			$mailer->addAddress( $to_email, $to_name );
 			$mailer->Subject = $subject;
 			$mailer->isHTML( true );
@@ -267,6 +278,21 @@ class Mailer {
 	 * @since 1.0.0
 	 */
 	private function validate_configuration( array $values ): void {
+		if ( strlen( $values['fromName'] ) > 190 ) {
+			throw new \RuntimeException(
+				'From name must be 190 characters or fewer.',
+			);
+		}
+
+		if (
+			'' !== $values['fromEmail'] &&
+			false === filter_var( $values['fromEmail'], FILTER_VALIDATE_EMAIL )
+		) {
+			throw new \RuntimeException(
+				'From email must be a valid email address.',
+			);
+		}
+
 		if ( 'smtp' !== $values['driver'] ) {
 			return;
 		}
@@ -358,6 +384,8 @@ class Mailer {
 		}
 
 		$this->settings_api->update_option( 'mail_driver', $values['driver'], $updated_at, false );
+		$this->settings_api->update_option( 'mail_from_email', $values['fromEmail'], $updated_at, false );
+		$this->settings_api->update_option( 'mail_from_name', $values['fromName'], $updated_at, false );
 		$this->settings_api->update_option( 'smtp_host', $values['smtpHost'], $updated_at, false );
 		$this->settings_api->update_option( 'smtp_port', $values['smtpPort'], $updated_at, false );
 		$this->settings_api->update_option( 'smtp_encryption', $values['smtpEncryption'], $updated_at, false );
@@ -381,6 +409,8 @@ class Mailer {
 		$options = $this->settings_api->get_options(
 			array(
 				'mail_driver',
+				'mail_from_email',
+				'mail_from_name',
 				'smtp_host',
 				'smtp_port',
 				'smtp_encryption',
@@ -393,6 +423,12 @@ class Mailer {
 		return array(
 			'driver'         => $this->normalize_driver(
 				(string) ( $options['mail_driver'] ?? 'mail' )
+			),
+			'fromEmail'      => trim(
+				(string) ( $options['mail_from_email'] ?? '' )
+			),
+			'fromName'       => trim(
+				(string) ( $options['mail_from_name'] ?? '' )
 			),
 			'smtpHost'       => trim(
 				(string) ( $options['smtp_host'] ?? '' )
@@ -487,7 +523,29 @@ class Mailer {
 	 * @return string
 	 * @since 1.0.0
 	 */
-	private function get_from_email(): string {
+	private function get_from_email( array $settings = array() ): string {
+		if ( empty( $settings ) ) {
+			$settings = $this->get_runtime_mail_settings();
+		}
+
+		if ( 'smtp' === (string) ( $settings['driver'] ?? 'mail' ) ) {
+			$configured_from_email = trim(
+				(string) ( $settings['fromEmail'] ?? '' ),
+			);
+
+			if ( false !== filter_var( $configured_from_email, FILTER_VALIDATE_EMAIL ) ) {
+				return strtolower( $configured_from_email );
+			}
+
+			$smtp_username = trim(
+				(string) ( $settings['smtpUsername'] ?? '' ),
+			);
+
+			if ( false !== filter_var( $smtp_username, FILTER_VALIDATE_EMAIL ) ) {
+				return strtolower( $smtp_username );
+			}
+		}
+
 		$host = (string) parse_url(
 			(string) ( $this->config['SITE_URL'] ?? '' ),
 			PHP_URL_HOST
@@ -511,8 +569,24 @@ class Mailer {
 	 * @return string
 	 * @since 1.0.0
 	 */
-	private function get_from_name(): string {
-		return 'PeakURL';
+	private function get_from_name( array $settings = array() ): string {
+		if ( empty( $settings ) ) {
+			$settings = $this->get_runtime_mail_settings();
+		}
+
+		if ( 'smtp' === (string) ( $settings['driver'] ?? 'mail' ) ) {
+			$configured_from_name = trim(
+				(string) ( $settings['fromName'] ?? '' ),
+			);
+
+			if ( '' !== $configured_from_name ) {
+				return $configured_from_name;
+			}
+		}
+
+		$site_name = trim( (string) $this->settings_api->get_option( 'site_name' ) );
+
+		return '' !== $site_name ? $site_name : 'PeakURL';
 	}
 
 	/**

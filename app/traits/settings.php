@@ -144,6 +144,16 @@ trait SettingsTrait {
 			false,
 		);
 		$this->seed_setting_if_missing(
+			'mail_from_email',
+			'',
+			false,
+		);
+		$this->seed_setting_if_missing(
+			'mail_from_name',
+			'',
+			false,
+		);
+		$this->seed_setting_if_missing(
 			'smtp_host',
 			'',
 			false,

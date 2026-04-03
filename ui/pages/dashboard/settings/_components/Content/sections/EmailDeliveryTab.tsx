@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { AlertCircle, Mail, Send, Server } from 'lucide-react';
 import { Button, Input } from '@/components/ui';
+import { __, sprintf } from '@/i18n';
 
 function MethodButton({ isActive, title, description, onClick }) {
 	return (
@@ -23,6 +24,8 @@ function MethodButton({ isActive, title, description, onClick }) {
 function buildFormState(status) {
 	return {
 		driver: status?.driver || 'mail',
+		fromEmail: status?.configuredFromEmail || '',
+		fromName: status?.configuredFromName || '',
 		smtpHost: status?.smtpHost || '',
 		smtpPort: String(status?.smtpPort || 587),
 		smtpEncryption: status?.smtpEncryption || 'tls',
@@ -45,6 +48,8 @@ function EmailDeliveryTab({
 		event.preventDefault();
 		await onSave({
 			driver: form.driver,
+			fromEmail: form.fromEmail.trim(),
+			fromName: form.fromName.trim(),
 			smtpHost: form.smtpHost.trim(),
 			smtpPort: form.smtpPort.trim(),
 			smtpEncryption: form.smtpEncryption,
@@ -75,11 +80,12 @@ function EmailDeliveryTab({
 					</div>
 					<div className="space-y-1">
 						<h2 className="text-base font-semibold text-heading">
-							Email Configuration
+							{__('Email Configuration')}
 						</h2>
 						<p className="text-sm leading-6 text-text-muted">
-							PeakURL uses this mail transport for password-reset
-							emails and other account recovery notifications.
+							{__(
+								'PeakURL uses this mail transport for password-reset emails and other account recovery notifications.'
+							)}
 						</p>
 					</div>
 				</div>
@@ -91,7 +97,7 @@ function EmailDeliveryTab({
 						<AlertCircle size={18} className="mt-0.5" />
 						<div>
 							<p className="font-semibold">
-								Mail status unavailable
+								{__('Mail status unavailable')}
 							</p>
 							<p className="mt-1 leading-6 opacity-80">
 								{errorMessage}
@@ -107,7 +113,7 @@ function EmailDeliveryTab({
 						<AlertCircle size={18} className="mt-0.5" />
 						<div>
 							<p className="font-semibold">
-								Dashboard management unavailable
+								{__('Dashboard management unavailable')}
 							</p>
 							<p className="mt-1 leading-6 opacity-80">
 								{status?.manageDisabledReason}
@@ -124,13 +130,13 @@ function EmailDeliveryTab({
 				<div className="space-y-3">
 					<div className="flex items-center gap-2 text-sm font-semibold text-heading">
 						<Send size={16} />
-						Delivery method
+						{__('Delivery method')}
 					</div>
 					<div className="grid grid-cols-1 gap-3 md:grid-cols-2">
 						<MethodButton
 							isActive={'mail' === form.driver}
-							title="PHP mail()"
-							description="Use the hosting server’s built-in PHP mail transport."
+							title={__('PHP mail()')}
+							description={__('Use the hosting server’s built-in PHP mail transport.')}
 							onClick={() =>
 								setForm((current) => ({
 									...current,
@@ -140,8 +146,8 @@ function EmailDeliveryTab({
 						/>
 						<MethodButton
 							isActive={'smtp' === form.driver}
-							title="SMTP"
-							description="Send through your own SMTP server with optional authentication."
+							title={__('SMTP')}
+							description={__('Send through your own SMTP server with optional authentication.')}
 							onClick={() =>
 								setForm((current) => ({
 									...current,
@@ -156,11 +162,36 @@ function EmailDeliveryTab({
 					<div className="space-y-4 rounded-lg border border-stroke bg-surface-alt p-4">
 						<div className="flex items-center gap-2 text-sm font-semibold text-heading">
 							<Server size={16} />
-							SMTP connection
+							{__('SMTP connection')}
 						</div>
 						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 							<Input
-								label="SMTP Host"
+								label={__('From Name')}
+								value={form.fromName}
+								onChange={(event) =>
+									setForm((current) => ({
+										...current,
+										fromName: event.target.value,
+									}))
+								}
+								placeholder={status?.fromName || __('PeakURL')}
+							/>
+							<Input
+								label={__('From Email')}
+								type="email"
+								value={form.fromEmail}
+								onChange={(event) =>
+									setForm((current) => ({
+										...current,
+										fromEmail: event.target.value,
+									}))
+								}
+								placeholder={__('noreply@yourdomain.com')}
+							/>
+						</div>
+						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+							<Input
+								label={__('SMTP Host')}
 								value={form.smtpHost}
 								onChange={(event) =>
 									setForm((current) => ({
@@ -168,11 +199,11 @@ function EmailDeliveryTab({
 										smtpHost: event.target.value,
 									}))
 								}
-								placeholder="smtp.example.com"
+								placeholder={__('smtp.example.com')}
 								required
 							/>
 							<Input
-								label="SMTP Port"
+								label={__('SMTP Port')}
 								type="number"
 								value={form.smtpPort}
 								onChange={(event) =>
@@ -189,7 +220,7 @@ function EmailDeliveryTab({
 						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 							<div className="space-y-2">
 								<label className="block text-sm font-semibold text-heading">
-									Encryption
+									{__('Encryption')}
 								</label>
 								<select
 									value={form.smtpEncryption}
@@ -202,14 +233,14 @@ function EmailDeliveryTab({
 									}
 									className="w-full rounded-md border border-stroke bg-surface px-4 py-2 text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent"
 								>
-									<option value="tls">TLS / STARTTLS</option>
-									<option value="ssl">SSL</option>
-									<option value="none">None</option>
+									<option value="tls">{__('TLS / STARTTLS')}</option>
+									<option value="ssl">{__('SSL')}</option>
+									<option value="none">{__('None')}</option>
 								</select>
 							</div>
 							<div className="space-y-2">
 								<label className="block text-sm font-semibold text-heading">
-									Authentication
+									{__('Authentication')}
 								</label>
 								<button
 									type="button"
@@ -227,8 +258,8 @@ function EmailDeliveryTab({
 								>
 									<span>
 										{form.smtpAuth
-											? 'Authentication enabled'
-											: 'Authentication disabled'}
+											? __('Authentication enabled')
+											: __('Authentication disabled')}
 									</span>
 									<span
 										className={`h-5 w-10 rounded-full p-0.5 transition ${
@@ -252,7 +283,7 @@ function EmailDeliveryTab({
 						{form.smtpAuth && (
 							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 								<Input
-									label="SMTP Username"
+									label={__('SMTP Username')}
 									value={form.smtpUsername}
 									onChange={(event) =>
 										setForm((current) => ({
@@ -261,11 +292,11 @@ function EmailDeliveryTab({
 												event.target.value,
 										}))
 									}
-									placeholder="mailer@example.com"
+									placeholder={__('mailer@example.com')}
 									required
 								/>
 								<Input
-									label="SMTP Password"
+									label={__('SMTP Password')}
 									type="password"
 									value={form.smtpPassword}
 									onChange={(event) =>
@@ -277,45 +308,21 @@ function EmailDeliveryTab({
 									}
 									placeholder={
 										status?.smtpPasswordConfigured
-											? 'Leave blank to keep the saved password'
-											: 'Enter the SMTP password'
+											? __('Leave blank to keep the saved password')
+											: __('Enter the SMTP password')
 									}
 									helperText={
 										status?.smtpPasswordConfigured
-											? `Saved password: ${status.smtpPasswordHint}`
-											: 'PeakURL stores this password encrypted in the settings database.'
+											? sprintf(
+													__('Saved password: %s'),
+													status.smtpPasswordHint
+											  )
+											: __('PeakURL stores this password encrypted in the settings database.')
 									}
 									required={!status?.smtpPasswordConfigured}
 								/>
 							</div>
 						)}
-					</div>
-				)}
-
-				{usingSmtp && (
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<div className="rounded-lg border border-stroke bg-surface-alt p-4">
-							<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
-								Storage
-							</p>
-							<p className="mt-2 text-sm font-medium text-heading">
-								{status?.configurationLabel || 'settings table'}
-							</p>
-							<p className="mt-1 break-all text-xs text-text-muted">
-								{status?.configurationPath || 'Not available'}
-							</p>
-						</div>
-						<div className="rounded-lg border border-stroke bg-surface-alt p-4">
-							<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
-								Active method
-							</p>
-							<p className="mt-2 text-sm font-medium text-heading">
-								SMTP
-							</p>
-							<p className="mt-1 text-xs text-text-muted">
-								PeakURL will use your SMTP settings for account emails.
-							</p>
-						</div>
 					</div>
 				)}
 
@@ -328,8 +335,8 @@ function EmailDeliveryTab({
 							disabled={managementDisabled}
 						>
 							{usingSmtp
-								? 'Save Email Configuration'
-								: 'Use PHP mail()'}
+								? __('Save Email Configuration')
+								: __('Use PHP mail()')}
 						</Button>
 					</div>
 				)}

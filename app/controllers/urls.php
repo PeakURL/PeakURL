@@ -116,6 +116,29 @@ class UrlsController {
 	}
 
 	/**
+	 * Export accessible URLs for the current user (GET /api/v1/urls/export).
+	 *
+	 * Returns all links the current user can access, without pagination, for
+	 * dashboard export workflows.
+	 *
+	 * @param Request $request Incoming HTTP request with optional sort/search parameters.
+	 * @return array<string, mixed> Export payload with all accessible links.
+	 * @since 1.0.0
+	 */
+	public function export( Request $request ): array {
+		$payload = $this->data_store->export_urls(
+			$request,
+			array(
+				'sortBy'    => $request->get_query_param( 'sortBy', 'createdAt' ),
+				'sortOrder' => $request->get_query_param( 'sortOrder', 'desc' ),
+				'search'    => $request->get_query_param( 'search', '' ),
+			)
+		);
+
+		return JsonResponse::success( $payload, __( 'URLs export loaded.', 'peakurl' ) );
+	}
+
+	/**
 	 * Show a single URL by ID (GET /api/v1/urls/{id}).
 	 *
 	 * @param Request $request Request with route parameter 'id'.

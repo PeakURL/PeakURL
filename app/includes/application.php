@@ -254,6 +254,7 @@ class Application {
 		$this->router->delete( '/api/v1/users/{username}', array( $users, 'delete' ) );
 
 		$this->router->get( '/api/v1/urls', array( $urls, 'index' ) );
+		$this->router->get( '/api/v1/urls/export', array( $urls, 'export' ) );
 		$this->router->get( '/api/v1/urls/{id}', array( $urls, 'show' ) );
 		$this->router->post( '/api/v1/urls', array( $urls, 'create' ) );
 		$this->router->post( '/api/v1/urls/bulk', array( $urls, 'bulk_create' ) );

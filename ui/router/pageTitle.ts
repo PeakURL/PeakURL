@@ -102,6 +102,10 @@ export function getPageTitle(pathname: string): string {
 		return withSiteTitleSuffix(__('Import'));
 	}
 
+	if ('/dashboard/tools/export' === pathname) {
+		return withSiteTitleSuffix(__('Export'));
+	}
+
 	if ('/dashboard/tools/system-status' === pathname) {
 		return withSiteTitleSuffix(__('System Status'));
 	}

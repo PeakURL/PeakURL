@@ -16,6 +16,7 @@ import {
 	SettingsTabPage,
 	BulkImportLayout,
 	BulkImportTabPage,
+	ExportPage,
 	SystemStatusPage,
 	ForgotPasswordPage,
 	LoginPage,
@@ -62,6 +63,21 @@ function ToolsLayoutRoute() {
 	return <Outlet />;
 }
 
+function ToolsIndexRoute() {
+	const { canManageUsers, isLoading } = useAdminAccess();
+
+	if (isLoading) {
+		return null;
+	}
+
+	return (
+		<Navigate
+			replace
+			to={canManageUsers ? 'import/file' : 'export'}
+		/>
+	);
+}
+
 function AdminOnlyRoute() {
 	const { canManageUsers, isLoading } = useAdminAccess();
 
@@ -98,14 +114,13 @@ function AppRouter() {
 					<Route index element={<DashboardPage />} />
 					<Route path="about" element={<AboutPage />} />
 					<Route path="links" element={<LinksPage />} />
-					<Route element={<AdminOnlyRoute />}>
-						<Route path="plugins" element={<PluginsPage />} />
-						<Route path="users" element={<UsersPage />} />
-						<Route path="tools" element={<ToolsLayoutRoute />}>
-							<Route
-								index
-								element={<Navigate replace to="import/file" />}
-							/>
+					<Route path="tools" element={<ToolsLayoutRoute />}>
+						<Route index element={<ToolsIndexRoute />} />
+						<Route
+							path="export"
+							element={<ExportPage />}
+						/>
+						<Route element={<AdminOnlyRoute />}>
 							<Route
 								path="import"
 								element={<Navigate replace to="file" />}
@@ -126,8 +141,12 @@ function AppRouter() {
 								path="system-status"
 								element={<SystemStatusPage />}
 							/>
-							<Route path="*" element={<NotFoundPage />} />
 						</Route>
+						<Route path="*" element={<NotFoundPage />} />
+					</Route>
+					<Route element={<AdminOnlyRoute />}>
+						<Route path="plugins" element={<PluginsPage />} />
+						<Route path="users" element={<UsersPage />} />
 					</Route>
 					<Route
 						path="team"

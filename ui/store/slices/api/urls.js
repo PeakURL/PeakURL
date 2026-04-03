@@ -34,6 +34,20 @@ export const urlsApi = baseApi.injectEndpoints({
 			query: (id) => `urls/${id}`,
 			providesTags: (_res, _err, id) => [{ type: 'Urls', id }],
 		}),
+		getUrlsExport: build.query({
+			query: ({
+				sortBy = 'createdAt',
+				sortOrder = 'desc',
+				search = '',
+			} = {}) => {
+				const params = new URLSearchParams();
+				params.set('sortBy', sortBy);
+				params.set('sortOrder', sortOrder);
+				if (search) params.set('search', search);
+
+				return `urls/export?${params.toString()}`;
+			},
+		}),
 		createUrl: build.mutation({
 			query: (body) => ({ url: 'urls', method: 'POST', body }),
 			invalidatesTags: [{ type: 'Urls', id: 'LIST' }, 'Analytics'],
@@ -72,6 +86,7 @@ export const urlsApi = baseApi.injectEndpoints({
 export const {
 	useGetUrlsQuery,
 	useGetUrlQuery,
+	useLazyGetUrlsExportQuery,
 	useCreateUrlMutation,
 	useBulkCreateUrlMutation,
 	useUpdateUrlMutation,

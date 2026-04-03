@@ -38,91 +38,60 @@ trait LinksTrait {
 	 * @since 1.0.0
 	 */
 	public function list_urls( Request $request, array $query ): array {
-		$user = $this->get_current_user( $request );
-
-		$search     = trim( (string) ( $query['search'] ?? '' ) );
 		$pagination = Query::pagination( $query );
 		$page       = $pagination['page'];
 		$limit      = $pagination['limit'];
 		$offset     = $pagination['offset'];
-
-		$sort_map   = array(
-			'createdAt'    => 'u.created_at',
-			'updatedAt'    => 'u.updated_at',
-			'title'        => 'u.title',
-			'clicks'       => 'click_count',
-			'uniqueClicks' => 'unique_click_count',
-			'status'       => 'u.status',
-			'shortCode'    => 'u.short_code',
+		$listing    = $this->build_url_listing_query( $request, $query );
+		$count      = $this->count_url_listing_rows(
+			$listing['where'],
+			$listing['params'],
 		);
-		$sort_by    = Query::sort_column(
-			$sort_map,
-			$query['sortBy'] ?? 'createdAt',
-			'u.created_at',
-		);
-		$sort_order = Query::sort_direction(
-			$query['sortOrder'] ?? 'desc',
-		);
-		$conditions = array();
-		$params     = array();
-
-		if ( '' !== $search ) {
-			$conditions[]                 = '(
-	                u.title LIKE :search_title ESCAPE \'\\\\\'
-	                OR u.alias LIKE :search_alias ESCAPE \'\\\\\'
-	                OR u.short_code LIKE :search_short_code ESCAPE \'\\\\\'
-	                OR u.destination_url LIKE :search_destination ESCAPE \'\\\\\'
-	            )';
-			$search_like                  = '%' . $this->db->esc_like( $search ) . '%';
-			$params['search_title']       = $search_like;
-			$params['search_alias']       = $search_like;
-			$params['search_short_code']  = $search_like;
-			$params['search_destination'] = $search_like;
-		}
-
-		$this->add_link_visibility_scope( $user, $conditions, $params, 'u' );
-		$where = ! empty( $conditions )
-			? 'WHERE ' . implode( ' AND ', $conditions )
-			: '';
-
-		$count = (int) $this->query_value(
-			'SELECT COUNT(*)
-	            FROM urls u
-	            ' . $where,
-			$params,
-		);
-
-		$rows = $this->query_all(
-			'SELECT
-	                u.*,
-	                COALESCE(stats.clicks, 0) AS click_count,
-	                COALESCE(stats.unique_clicks, 0) AS unique_click_count
-	            FROM urls u
-	            LEFT JOIN (
-	                SELECT
-	                    url_id,
-	                    COUNT(*) AS clicks,
-	                    COUNT(DISTINCT COALESCE(NULLIF(visitor_hash, \'\'), id)) AS unique_clicks
-	                FROM clicks
-	                GROUP BY url_id
-	            ) stats ON stats.url_id = u.id
-	            ' .
-				$where .
-				Query::order_by_clause( $sort_by, $sort_order ) .
-				Query::limit_offset_clause( $limit, $offset ),
-			$params,
+		$rows       = $this->query_url_listing_rows(
+			$listing['where'],
+			$listing['params'],
+			$listing['sortBy'],
+			$listing['sortOrder'],
+			$limit,
+			$offset,
 		);
 
 		return array(
-			'items' => array_map(
-				fn( array $row ): array => $this->hydrate_url_row( $row ),
-				$rows,
-			),
+			'items' => $this->hydrate_url_listing_rows( $rows ),
 			'meta'  => array(
 				'page'       => $page,
 				'limit'      => $limit,
 				'totalItems' => $count,
 				'totalPages' => max( 1, (int) ceil( $count / $limit ) ),
+			),
+		);
+	}
+
+	/**
+	 * Export all accessible short URLs for the current user.
+	 *
+	 * Editors receive only their own links. Admins receive the full site
+	 * export. Sorting and search can still be applied through the query map.
+	 *
+	 * @param Request              $request Incoming HTTP request.
+	 * @param array<string, mixed> $query   Optional sort/search parameters.
+	 * @return array<string, mixed> Full accessible link export payload.
+	 * @since 1.0.0
+	 */
+	public function export_urls( Request $request, array $query = array() ): array {
+		$listing = $this->build_url_listing_query( $request, $query );
+		$rows    = $this->query_url_listing_rows(
+			$listing['where'],
+			$listing['params'],
+			$listing['sortBy'],
+			$listing['sortOrder'],
+		);
+		$items   = $this->hydrate_url_listing_rows( $rows );
+
+		return array(
+			'items' => $items,
+			'meta'  => array(
+				'totalItems' => count( $items ),
 			),
 		);
 	}
@@ -827,5 +796,146 @@ trait LinksTrait {
 
 			throw $exception;
 		}
+	}
+
+	/**
+	 * Build shared query parts for URL listing and export requests.
+	 *
+	 * @param Request              $request Incoming HTTP request.
+	 * @param array<string, mixed> $query   Raw query parameters.
+	 * @return array<string, mixed> Prepared SQL fragments and parameters.
+	 * @since 1.0.0
+	 */
+	private function build_url_listing_query( Request $request, array $query ): array {
+		$user       = $this->get_current_user( $request );
+		$search     = trim( (string) ( $query['search'] ?? '' ) );
+		$sort_by    = Query::sort_column(
+			$this->get_url_listing_sort_map(),
+			$query['sortBy'] ?? 'createdAt',
+			'u.created_at',
+		);
+		$sort_order = Query::sort_direction(
+			$query['sortOrder'] ?? 'desc',
+		);
+		$conditions = array();
+		$params     = array();
+
+		if ( '' !== $search ) {
+			$conditions[]                 = '(
+	                u.title LIKE :search_title ESCAPE \'\\\\\'
+	                OR u.alias LIKE :search_alias ESCAPE \'\\\\\'
+	                OR u.short_code LIKE :search_short_code ESCAPE \'\\\\\'
+	                OR u.destination_url LIKE :search_destination ESCAPE \'\\\\\'
+	            )';
+			$search_like                  = '%' . $this->db->esc_like( $search ) . '%';
+			$params['search_title']       = $search_like;
+			$params['search_alias']       = $search_like;
+			$params['search_short_code']  = $search_like;
+			$params['search_destination'] = $search_like;
+		}
+
+		$this->add_link_visibility_scope( $user, $conditions, $params, 'u' );
+
+		return array(
+			'where'     => ! empty( $conditions )
+				? 'WHERE ' . implode( ' AND ', $conditions )
+				: '',
+			'params'    => $params,
+			'sortBy'    => $sort_by,
+			'sortOrder' => $sort_order,
+		);
+	}
+
+	/**
+	 * Count rows for a prepared URL listing query.
+	 *
+	 * @param string               $where  Prepared WHERE clause.
+	 * @param array<string, mixed> $params Query parameters.
+	 * @return int Total matching rows.
+	 * @since 1.0.0
+	 */
+	private function count_url_listing_rows( string $where, array $params ): int {
+		return (int) $this->query_value(
+			'SELECT COUNT(*)
+	            FROM urls u
+	            ' . $where,
+			$params,
+		);
+	}
+
+	/**
+	 * Query URL rows for a prepared listing/export request.
+	 *
+	 * @param string               $where      Prepared WHERE clause.
+	 * @param array<string, mixed> $params     Query parameters.
+	 * @param string               $sort_by    Safe SQL sort column.
+	 * @param string               $sort_order Safe SQL sort direction.
+	 * @param int|null             $limit      Optional LIMIT value.
+	 * @param int|null             $offset     Optional OFFSET value.
+	 * @return array<int, array<string, mixed>> Raw URL rows with click stats.
+	 * @since 1.0.0
+	 */
+	private function query_url_listing_rows(
+		string $where,
+		array $params,
+		string $sort_by,
+		string $sort_order,
+		?int $limit = null,
+		?int $offset = null
+	): array {
+		$sql = 'SELECT
+	                u.*,
+	                COALESCE(stats.clicks, 0) AS click_count,
+	                COALESCE(stats.unique_clicks, 0) AS unique_click_count
+	            FROM urls u
+	            LEFT JOIN (
+	                SELECT
+	                    url_id,
+	                    COUNT(*) AS clicks,
+	                    COUNT(DISTINCT COALESCE(NULLIF(visitor_hash, \'\'), id)) AS unique_clicks
+	                FROM clicks
+	                GROUP BY url_id
+	            ) stats ON stats.url_id = u.id
+	            ' .
+			$where .
+			Query::order_by_clause( $sort_by, $sort_order );
+
+		if ( null !== $limit && null !== $offset ) {
+			$sql .= Query::limit_offset_clause( $limit, $offset );
+		}
+
+		return $this->query_all( $sql, $params );
+	}
+
+	/**
+	 * Hydrate a list of raw URL rows into API-ready items.
+	 *
+	 * @param array<int, array<string, mixed>> $rows Raw URL rows.
+	 * @return array<int, array<string, mixed>> Hydrated URL items.
+	 * @since 1.0.0
+	 */
+	private function hydrate_url_listing_rows( array $rows ): array {
+		return array_map(
+			fn( array $row ): array => $this->hydrate_url_row( $row ),
+			$rows,
+		);
+	}
+
+	/**
+	 * Return the allowed URL list sort keys.
+	 *
+	 * @return array<string, string> API sort keys mapped to SQL columns.
+	 * @since 1.0.0
+	 */
+	private function get_url_listing_sort_map(): array {
+		return array(
+			'createdAt'    => 'u.created_at',
+			'updatedAt'    => 'u.updated_at',
+			'title'        => 'u.title',
+			'clicks'       => 'click_count',
+			'uniqueClicks' => 'unique_click_count',
+			'status'       => 'u.status',
+			'shortCode'    => 'u.short_code',
+		);
 	}
 }

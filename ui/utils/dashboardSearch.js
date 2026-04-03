@@ -259,6 +259,27 @@ function getRouteTargets(capabilities = {}) {
 		),
 		createRouteTarget(
 			{
+			id: 'tools-export',
+			href: '/dashboard/tools/export',
+			label: __('Export'),
+			description: __('Tools'),
+			section: 'tools',
+			terms: [
+				__('Tools'),
+				__('Export'),
+				'tools',
+				'export',
+				'download',
+				'backup',
+				'csv export',
+				'json export',
+				'xml export',
+			],
+			isAllowed: Boolean(capabilities.canExportLinks),
+			}
+		),
+		createRouteTarget(
+			{
 			id: 'tools-system-status',
 			href: '/dashboard/tools/system-status',
 			label: __('System Status'),

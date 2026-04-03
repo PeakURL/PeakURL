@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
 	PieChart,
@@ -11,20 +11,24 @@ import {
 	Settings,
 	ChevronDown,
 	X,
+	Info,
+	Heart,
+	Coffee,
+	ExternalLink,
 } from 'lucide-react';
 import { useGetUrlsQuery } from '@/store/slices/api/urls';
 import { useAdminAccess } from '@/hooks';
 import { BrandLockup } from '@/components';
 import { __ } from '@/i18n';
 
-const buildNav = (basePath = '/dashboard') => {
+const buildNav = (basePath = '/dashboard', canManageUsers = false) => {
 	const base =
 		basePath === '/'
 			? ''
 			: basePath.endsWith('/') && basePath.length > 1
 				? basePath.slice(0, -1)
 				: basePath || '/dashboard';
-	return [
+	const navigation = [
 		{
 			name: __('Overview'),
 			href: base || '/',
@@ -39,6 +43,7 @@ const buildNav = (basePath = '/dashboard') => {
 			name: __('Users'),
 			href: `${base || ''}/users`,
 			icon: Users,
+			adminOnly: true,
 		},
 		{
 			name: __('Plugins'),
@@ -54,10 +59,16 @@ const buildNav = (basePath = '/dashboard') => {
 				{
 					name: __('Import'),
 					href: `${base || ''}/tools/import/file`,
+					adminOnly: true,
+				},
+				{
+					name: __('Export'),
+					href: `${base || ''}/tools/export`,
 				},
 				{
 					name: __('System Status'),
 					href: `${base || ''}/tools/system-status`,
+					adminOnly: true,
 				},
 			],
 		},
@@ -67,6 +78,27 @@ const buildNav = (basePath = '/dashboard') => {
 			icon: Settings,
 		},
 	];
+
+	return navigation
+		.map((item) => {
+			if (!item.children?.length) {
+				return item;
+			}
+
+			return {
+				...item,
+				children: item.children.filter(
+					(child) => !child.adminOnly || canManageUsers
+				),
+			};
+		})
+		.filter((item) => {
+			if (item.adminOnly && !canManageUsers) {
+				return false;
+			}
+
+			return !item.children || item.children.length > 0;
+		});
 };
 
 export const DashboardSidebar = ({
@@ -80,7 +112,10 @@ export const DashboardSidebar = ({
 	const { canManageUsers } = useAdminAccess();
 	const links = urlsRes?.data?.items ?? [];
 
-	const navigation = useMemo(() => buildNav(basePath), [basePath]);
+	const navigation = useMemo(
+		() => buildNav(basePath, canManageUsers),
+		[basePath, canManageUsers]
+	);
 	const base =
 		basePath === '/'
 			? ''
@@ -88,16 +123,23 @@ export const DashboardSidebar = ({
 				? basePath.slice(0, -1)
 				: basePath || '';
 	const [openSections, setOpenSections] = useState({});
+	const [isAboutOpen, setIsAboutOpen] = useState(false);
+	const aboutRef = useRef(null);
+
+	// Close when clicking anywhere outside the about panel
+	useEffect(() => {
+		if (!isAboutOpen) return;
+		const handler = (e) => {
+			if (aboutRef.current && !aboutRef.current.contains(e.target)) {
+				setIsAboutOpen(false);
+			}
+		};
+		document.addEventListener('mousedown', handler);
+		return () => document.removeEventListener('mousedown', handler);
+	}, [isAboutOpen]);
 
 	const getSectionBasePath = (href) =>
 		href ? href.replace(/\/[^/]+$/, '') : '';
-
-	const filteredNavigation = navigation.filter((item) => {
-		if (item.adminOnly) {
-			return canManageUsers;
-		}
-		return true;
-	});
 
 	return (
 		<>
@@ -134,23 +176,26 @@ export const DashboardSidebar = ({
 
 				<nav className="flex-1 py-4 px-3 overflow-y-auto">
 					<div className="space-y-1">
-						{filteredNavigation.map((item) => {
+						{navigation.map((item) => {
 							const IconComponent = item.icon;
 							const childHrefBase = getSectionBasePath(
-								item.children?.[0]?.href,
+								item.children?.[0]?.href
 							);
 							const isChildActive = item.children?.some(
 								(child) =>
 									pathname === child.href ||
-									pathname.startsWith(`${child.href}/`),
+									pathname.startsWith(`${child.href}/`)
 							);
 							const isSectionActive =
 								Boolean(isChildActive) ||
 								(Boolean(childHrefBase) &&
 									(pathname === childHrefBase ||
-										pathname.startsWith(`${childHrefBase}/`)));
+										pathname.startsWith(
+											`${childHrefBase}/`
+										)));
 							const isOpen =
-								isSectionActive || Boolean(openSections[item.name]);
+								isSectionActive ||
+								Boolean(openSections[item.name]);
 							const isActive =
 								pathname === item.href ||
 								(pathname.startsWith(`${item.href}/`) &&
@@ -164,7 +209,8 @@ export const DashboardSidebar = ({
 											onClick={() =>
 												setOpenSections((current) => ({
 													...current,
-													[item.name]: !current[item.name],
+													[item.name]:
+														!current[item.name],
 												}))
 											}
 											className={`
@@ -200,16 +246,19 @@ export const DashboardSidebar = ({
 											<div className="ml-5 space-y-1 border-l border-stroke pl-3">
 												{item.children.map((child) => {
 													const isChildLinkActive =
-														pathname === child.href ||
+														pathname ===
+															child.href ||
 														pathname.startsWith(
-															`${child.href}/`,
+															`${child.href}/`
 														);
 
 													return (
 														<Link
 															key={child.name}
 															to={child.href}
-															onClick={onMobileClose}
+															onClick={
+																onMobileClose
+															}
 															className={`
 																block rounded-lg px-3 py-2 text-sm font-medium transition-colors
 																${
@@ -275,6 +324,90 @@ export const DashboardSidebar = ({
 						})}
 					</div>
 				</nav>
+
+				<div
+					ref={aboutRef}
+					className="shrink-0 border-t border-stroke px-3 py-3 space-y-0.5"
+				>
+					{/* Sub-items sit above the trigger so they animate upward into view */}
+					<div
+						className={`overflow-hidden transition-[max-height,opacity] duration-200 ease-in-out ${
+							isAboutOpen
+								? 'max-h-40 opacity-100'
+								: 'max-h-0 opacity-0'
+						}`}
+					>
+						<div className="pb-1 space-y-0.5">
+							<Link
+								to={`${base || '/dashboard'}/about`}
+								onClick={onMobileClose}
+								className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+									pathname === `${base || '/dashboard'}/about`
+										? 'bg-accent text-white shadow-sm'
+										: 'text-text-muted hover:bg-surface-alt hover:text-accent'
+								}`}
+							>
+								<Info size={15} className="shrink-0" />
+								<span className="flex-1">
+									{__('About PeakURL')}
+								</span>
+							</Link>
+							<a
+								href="https://peakurl.org/sponsor"
+								target="_blank"
+								rel="noreferrer"
+								className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-text-muted hover:bg-surface-alt hover:text-accent transition-colors"
+							>
+								<Heart size={15} className="shrink-0" />
+								<span className="flex-1">{__('Sponsor')}</span>
+								<ExternalLink
+									size={12}
+									className="shrink-0 opacity-40"
+								/>
+							</a>
+							<a
+								href="https://buymeacoffee.com/PeakURL"
+								target="_blank"
+								rel="noreferrer"
+								className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-text-muted hover:bg-surface-alt hover:text-accent transition-colors"
+							>
+								<Coffee size={15} className="shrink-0" />
+								<span className="flex-1">
+									{__('Buy Me a Coffee')}
+								</span>
+								<ExternalLink
+									size={12}
+									className="shrink-0 opacity-40"
+								/>
+							</a>
+						</div>
+					</div>
+
+					{/* Trigger */}
+					<button
+						type="button"
+						onClick={() => setIsAboutOpen((prev) => !prev)}
+						className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors cursor-pointer ${
+							isAboutOpen
+								? 'text-heading bg-surface-alt'
+								: 'text-text-muted hover:text-accent hover:bg-surface-alt'
+						}`}
+					>
+						<Info
+							size={18}
+							className={`shrink-0 ${isAboutOpen ? 'text-accent' : 'text-text-muted'}`}
+						/>
+						<span className="flex-1 text-left">
+							{__('About PeakURL')}
+						</span>
+						<ChevronDown
+							size={16}
+							className={`shrink-0 transition-transform duration-200 ${
+								isAboutOpen ? 'rotate-180' : ''
+							}`}
+						/>
+					</button>
+				</div>
 			</aside>
 		</>
 	);

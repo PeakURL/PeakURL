@@ -5,10 +5,6 @@ import {
 	ChevronDown,
 	User,
 	Settings,
-	Info,
-	Heart,
-	Coffee,
-	ExternalLink,
 	LogOut,
 } from 'lucide-react';
 import {
@@ -42,9 +38,6 @@ export const DashboardAppBar = ({ onMobileMenuToggle }) => {
 			console.error('Logout failed:', error);
 		}
 	};
-
-	const externalMenuItemClass = (focus) =>
-		`${focus ? 'bg-surface-alt' : ''} group flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-heading transition-colors`;
 
 	return (
 		<div className="sticky top-0 z-30 bg-surface border-b border-stroke">
@@ -131,69 +124,6 @@ export const DashboardAppBar = ({ onMobileMenuToggle }) => {
 											/>
 											{__('Settings')}
 										</button>
-									)}
-								</MenuItem>
-								<hr className="my-1 border-stroke" />
-								<MenuItem>
-									{({ focus }) => (
-										<button
-											onClick={() =>
-												navigate(`${basePath}/about`)
-											}
-											className={`${
-												focus ? 'bg-surface-alt' : ''
-											} group flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-heading transition-colors`}
-										>
-											<Info
-												size={16}
-												className="text-text-muted"
-											/>
-											{__('About PeakURL')}
-										</button>
-									)}
-								</MenuItem>
-								<MenuItem>
-									{({ focus }) => (
-										<a
-											href="https://peakurl.org/sponsor"
-											target="_blank"
-											rel="noreferrer"
-											className={externalMenuItemClass(
-												focus
-											)}
-										>
-											<Heart
-												size={16}
-												className="text-text-muted"
-											/>
-											{__('Sponsor')}
-											<ExternalLink
-												size={14}
-												className="ml-auto text-text-muted"
-											/>
-										</a>
-									)}
-								</MenuItem>
-								<MenuItem>
-									{({ focus }) => (
-										<a
-											href="https://buymeacoffee.com/PeakURL"
-											target="_blank"
-											rel="noreferrer"
-											className={externalMenuItemClass(
-												focus
-											)}
-										>
-											<Coffee
-												size={16}
-												className="text-text-muted"
-											/>
-											{__('Buy Me a Coffee')}
-											<ExternalLink
-												size={14}
-												className="ml-auto text-text-muted"
-											/>
-										</a>
 									)}
 								</MenuItem>
 								<div className="my-1 h-px bg-stroke" />

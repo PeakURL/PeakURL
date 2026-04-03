@@ -63,6 +63,12 @@ export {
 	resolveLinkHost,
 } from './linkHelpers';
 export {
+	buildLinkExportItems,
+	downloadLinkExport,
+	getLinkExportFile,
+	serializeLinkExport,
+} from './linkExport';
+export {
 	getLinkDisplayTitle,
 	normalizeLinkTitle,
 } from './linkTitles';

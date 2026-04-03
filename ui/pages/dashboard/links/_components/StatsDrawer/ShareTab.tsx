@@ -10,6 +10,7 @@ import {
 	BriefcaseBusiness,
 	Mail,
 } from 'lucide-react';
+import { __ } from '@/i18n';
 
 function ShareTab({ link, shortUrl }) {
 	const [copied, setCopied] = useState(false);
@@ -26,7 +27,9 @@ function ShareTab({ link, shortUrl }) {
 
 	const handleShare = (platform) => {
 		const url = encodeURIComponent(shortUrl);
-		const title = encodeURIComponent(link.title || 'Check out this link');
+		const title = encodeURIComponent(
+			link.title || __('Check out this link')
+		);
 
 		const shareUrls = {
 			facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
@@ -45,7 +48,7 @@ function ShareTab({ link, shortUrl }) {
 			{/* Short URL */}
 			<div className="bg-surface-alt border border-stroke rounded-lg p-4">
 				<label className="block text-xs font-medium text-text-muted mb-2">
-					Short URL
+					{__('Short URL')}
 				</label>
 				<div className="flex items-center gap-2">
 					<code className="flex-1 font-mono text-sm text-accent bg-surface px-3 py-2 rounded-lg border border-stroke break-all">
@@ -54,7 +57,7 @@ function ShareTab({ link, shortUrl }) {
 					<button
 						onClick={handleCopy}
 						className="p-2 rounded-lg bg-accent hover:bg-accent/90 text-white transition-all shrink-0"
-						title={copied ? 'Copied!' : 'Copy'}
+						title={copied ? __('Copied!') : __('Copy')}
 					>
 						{copied ? (
 							<Check className="w-4 h-4" />
@@ -68,7 +71,7 @@ function ShareTab({ link, shortUrl }) {
 			{/* Destination URL */}
 			<div className="bg-surface-alt border border-stroke rounded-lg p-4">
 				<label className="block text-xs font-medium text-text-muted mb-2">
-					Destination URL
+					{__('Destination URL')}
 				</label>
 				<div className="text-sm text-heading break-all">
 					{link.destinationUrl}
@@ -78,7 +81,7 @@ function ShareTab({ link, shortUrl }) {
 			{/* Quick Share */}
 			<div className="bg-surface-alt border border-stroke rounded-lg p-4">
 				<h3 className="text-sm font-semibold text-heading mb-4">
-					Quick Share
+					{__('Quick Share')}
 				</h3>
 				<div className="grid grid-cols-2 gap-3">
 					<button
@@ -86,28 +89,36 @@ function ShareTab({ link, shortUrl }) {
 						className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[#1877F2] hover:bg-[#166FE5] text-white transition-all"
 					>
 						<Users className="w-5 h-5" />
-						<span className="text-sm font-medium">Facebook</span>
+						<span className="text-sm font-medium">
+							{__('Facebook')}
+						</span>
 					</button>
 					<button
 						onClick={() => handleShare('twitter')}
 						className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[#1DA1F2] hover:bg-[#1A94DA] text-white transition-all"
 					>
 						<Send className="w-5 h-5" />
-						<span className="text-sm font-medium">Twitter</span>
+						<span className="text-sm font-medium">
+							{__('Twitter')}
+						</span>
 					</button>
 					<button
 						onClick={() => handleShare('linkedin')}
 						className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[#0A66C2] hover:bg-[#095196] text-white transition-all"
 					>
 						<BriefcaseBusiness className="w-5 h-5" />
-						<span className="text-sm font-medium">LinkedIn</span>
+						<span className="text-sm font-medium">
+							{__('LinkedIn')}
+						</span>
 					</button>
 					<button
 						onClick={() => handleShare('email')}
 						className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-surface border border-stroke hover:bg-surface-alt text-heading transition-all"
 					>
 						<Mail className="w-5 h-5" />
-						<span className="text-sm font-medium">Email</span>
+						<span className="text-sm font-medium">
+							{__('Email')}
+						</span>
 					</button>
 				</div>
 			</div>

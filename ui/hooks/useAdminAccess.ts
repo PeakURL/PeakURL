@@ -7,6 +7,7 @@ export const useAdminAccess = () => {
 	const rawCapabilities = user?.capabilities || {};
 	const capabilities = {
 		manageUsers: Boolean(rawCapabilities.manage_users),
+		manageSiteSettings: Boolean(rawCapabilities.manage_site_settings),
 		manageMailDelivery: Boolean(rawCapabilities.manage_mail_delivery),
 		manageLocationData: Boolean(rawCapabilities.manage_location_data),
 		manageUpdates: Boolean(rawCapabilities.manage_updates),
@@ -25,6 +26,7 @@ export const useAdminAccess = () => {
 		capabilities,
 		isAdmin: Boolean(capabilities.manageUsers || user?.role === 'admin'),
 		canManageUsers: Boolean(capabilities.manageUsers),
+		canManageSiteSettings: Boolean(capabilities.manageSiteSettings),
 		canManageApiKeys: Boolean(capabilities.manageApiKeys),
 		canManageWebhooks: Boolean(capabilities.manageWebhooks),
 		canManageMailDelivery: Boolean(capabilities.manageMailDelivery),

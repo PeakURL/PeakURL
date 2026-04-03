@@ -1,5 +1,6 @@
 // @ts-nocheck
 import {
+	Activity,
 	Settings,
 	Shield,
 	Key,
@@ -14,6 +15,7 @@ import { Link } from 'react-router-dom';
 // Icon mapping
 const iconMap = {
 	settings: Settings,
+	activity: Activity,
 	shield: Shield,
 	key: Key,
 	mail: Mail,

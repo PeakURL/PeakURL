@@ -18,6 +18,8 @@ use PeakURL\Controllers\AdminNoticesController;
 use PeakURL\Controllers\AuthController;
 use PeakURL\Controllers\GeoipController;
 use PeakURL\Controllers\MailController;
+use PeakURL\Controllers\SettingsController;
+use PeakURL\Controllers\SystemStatusController;
 use PeakURL\Controllers\UpdatesController;
 use PeakURL\Controllers\UrlsController;
 use PeakURL\Controllers\UsersController;
@@ -128,9 +130,18 @@ class Application {
 		$geoip     = new GeoipController( $this->data_store );
 		$mail      = new MailController( $this->data_store );
 		$notices   = new AdminNoticesController( $this->data_store );
+		$settings  = new SettingsController( $this->data_store );
+		$status    = new SystemStatusController( $this->data_store );
 		$updates   = new UpdatesController( $this->data_store );
 
 		$this->router->get( '/api/v1/health', array( $this, 'health' ) );
+		$this->router->get(
+			'/api/v1/system/i18n',
+			array(
+				$settings,
+				'i18n',
+			)
+		);
 
 		$this->router->post( '/api/v1/auth/register', array( $auth, 'register' ) );
 		$this->router->post(
@@ -285,6 +296,27 @@ class Application {
 			)
 		);
 		$this->router->get(
+			'/api/v1/system/general',
+			array(
+				$settings,
+				'general',
+			)
+		);
+		$this->router->post(
+			'/api/v1/system/general',
+			array(
+				$settings,
+				'update_general',
+			)
+		);
+		$this->router->get(
+			'/api/v1/system/status',
+			array(
+				$status,
+				'status',
+			)
+		);
+		$this->router->get(
 			'/api/v1/system/geoip',
 			array(
 				$geoip,
@@ -339,6 +371,13 @@ class Application {
 			array(
 				$updates,
 				'apply',
+			)
+		);
+		$this->router->post(
+			'/api/v1/system/update/database',
+			array(
+				$updates,
+				'upgrade_database',
 			)
 		);
 

@@ -27,6 +27,7 @@ import {
 	getDefaultShortUrlOrigin,
 	serializeCsv,
 } from '@/utils';
+import { __ } from '@/i18n';
 
 function LinksPage() {
 	// State for Sorting and Pagination
@@ -280,7 +281,9 @@ function LinksPage() {
 					<div className="text-xl font-bold text-heading">
 						{linksForStats.length}
 					</div>
-					<div className="text-xs text-muted mt-0.5">Total Links</div>
+					<div className="text-xs text-muted mt-0.5">
+						{__('Total Links')}
+					</div>
 				</div>
 
 				<div className="bg-surface border border-(--color-stroke) rounded-lg p-3.5">
@@ -289,14 +292,14 @@ function LinksPage() {
 							<CircleCheckBig className="h-4 w-4 text-success" />
 						</div>
 						<span className="text-xs font-medium text-success">
-							Active
+							{__('Active')}
 						</span>
 					</div>
 					<div className="text-xl font-bold text-heading">
 						{activeLinks}
 					</div>
 					<div className="text-xs text-muted mt-0.5">
-						Active Links
+						{__('Active Links')}
 					</div>
 				</div>
 
@@ -313,7 +316,7 @@ function LinksPage() {
 						{totalClicks.toLocaleString()}
 					</div>
 					<div className="text-xs text-muted mt-0.5">
-						Total Clicks
+						{__('Total Clicks')}
 					</div>
 				</div>
 

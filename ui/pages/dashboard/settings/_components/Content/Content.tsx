@@ -9,6 +9,8 @@ import {
 	useDeleteApiKeyMutation,
 } from '@/store/slices/api/user';
 import {
+	useGetGeneralSettingsQuery,
+	useSaveGeneralSettingsMutation,
 	useGetGeoipStatusQuery,
 	useGetMailStatusQuery,
 	useSaveGeoipConfigurationMutation,
@@ -17,8 +19,10 @@ import {
 	useGetUpdateStatusQuery,
 	useCheckForUpdatesMutation,
 	useApplyUpdateMutation,
+	useUpgradeDatabaseSchemaMutation,
 } from '@/store/slices/api/system';
 import { useNotification, IntegrationsTab } from '@/components';
+import { __, sprintf } from '@/i18n';
 import GeneralTab from './sections/GeneralTab';
 import SecurityTab from './sections/SecurityTab';
 import ApiTab from './sections/ApiTab';
@@ -47,6 +51,14 @@ const Content = ({ activeTab }) => {
 		useGenerateApiKeyMutation();
 	const [deleteApiKey, { isLoading: isDeletingKey }] =
 		useDeleteApiKeyMutation();
+	const {
+		data: generalSettingsResponse,
+		isLoading: isLoadingGeneralSettings,
+	} = useGetGeneralSettingsQuery(undefined, {
+		skip: activeTab !== 'general',
+	});
+	const [saveGeneralSettings, { isLoading: isSavingGeneralSettings }] =
+		useSaveGeneralSettingsMutation();
 	const {
 		data: geoipStatusResponse,
 		error: geoipError,
@@ -80,6 +92,8 @@ const Content = ({ activeTab }) => {
 		useCheckForUpdatesMutation();
 	const [applyUpdate, { isLoading: isApplyingUpdate }] =
 		useApplyUpdateMutation();
+	const [upgradeDatabaseSchema, { isLoading: isUpgradingDatabaseSchema }] =
+		useUpgradeDatabaseSchemaMutation();
 
 	const user = userData?.data;
 
@@ -97,26 +111,64 @@ const Content = ({ activeTab }) => {
 	const [keyLabel, setKeyLabel] = useState('');
 
 	const handleGeneralSubmit = async (generalForm) => {
+		const { siteLanguage: nextSiteLanguage, ...profileForm } =
+			generalForm || {};
+		const currentSiteLanguage = generalSettingsResponse?.data?.siteLanguage;
+		const shouldSaveLanguage =
+			!!nextSiteLanguage &&
+			generalSettingsResponse?.data?.canManageSiteSettings &&
+			nextSiteLanguage !== currentSiteLanguage;
+
 		try {
-			await updateProfile(generalForm).unwrap();
-			notification.success('Success', 'Profile updated successfully');
+			await updateProfile(profileForm).unwrap();
 		} catch (err) {
 			notification.error(
-				'Error',
-				err?.data?.message || 'Failed to update profile'
+				__('Error'),
+				err?.data?.message || __('Failed to update profile')
 			);
+			return;
 		}
+
+		if (shouldSaveLanguage) {
+			try {
+				await saveGeneralSettings({
+					siteLanguage: nextSiteLanguage,
+				}).unwrap();
+				notification.success(
+					__('Language updated'),
+					__('PeakURL is reloading the dashboard now.')
+				);
+				window.setTimeout(() => {
+					window.location.reload();
+				}, 350);
+				return;
+			} catch (err) {
+				notification.error(
+					__('Save failed'),
+					err?.data?.message || __('Failed to update the site language')
+				);
+				return;
+			}
+		}
+
+		notification.success(
+			__('Success'),
+			__('Profile updated successfully')
+		);
 	};
 
 	const handleSecuritySubmit = async () => {
 		if (securityForm.newPassword !== securityForm.confirmPassword) {
-			notification.error('Error', 'Passwords do not match');
+			notification.error(
+				__('Error'),
+				__('Passwords do not match')
+			);
 			return;
 		}
 		if (securityForm.newPassword.length < 8) {
 			notification.error(
-				'Error',
-				'Password must be at least 8 characters'
+				__('Error'),
+				__('Password must be at least 8 characters')
 			);
 			return;
 		}
@@ -125,7 +177,10 @@ const Content = ({ activeTab }) => {
 			await updateProfile({
 				password: securityForm.newPassword,
 			}).unwrap();
-			notification.success('Success', 'Password updated successfully');
+			notification.success(
+				__('Success'),
+				__('Password updated successfully')
+			);
 			setSecurityForm({
 				currentPassword: '',
 				newPassword: '',
@@ -133,8 +188,8 @@ const Content = ({ activeTab }) => {
 			});
 		} catch (err) {
 			notification.error(
-				'Error',
-				err?.data?.message || 'Failed to update password'
+				__('Error'),
+				err?.data?.message || __('Failed to update password')
 			);
 		}
 	};
@@ -147,8 +202,10 @@ const Content = ({ activeTab }) => {
 
 			if (!plainTextKey) {
 				notification.error(
-					'Key created without visible token',
-					'PeakURL created the API key, but the one-time token was not returned. Revoke it and create a new key.'
+					__('Key created without visible token'),
+					__(
+						'PeakURL created the API key, but the one-time token was not returned. Revoke it and create a new key.'
+					)
 				);
 				setShowCreateModal(false);
 				setKeyLabel('');
@@ -160,13 +217,13 @@ const Content = ({ activeTab }) => {
 			setShowKeyModal(true);
 			setKeyLabel('');
 			notification.success(
-				'API key created',
-				'Copy the token now. PeakURL will not show it again.'
+				__('API key created'),
+				__('Copy the token now. PeakURL will not show it again.')
 			);
 		} catch (err) {
 			notification.error(
-				'Error',
-				err?.data?.message || 'Failed to generate API key'
+				__('Error'),
+				err?.data?.message || __('Failed to generate API key')
 			);
 		}
 	};
@@ -179,18 +236,24 @@ const Content = ({ activeTab }) => {
 		try {
 			await deleteApiKey(apiKeyPendingDelete.id).unwrap();
 			setApiKeyPendingDelete(null);
-			notification.success('Success', 'API key deleted successfully');
+			notification.success(
+				__('Success'),
+				__('API key deleted successfully')
+			);
 		} catch (err) {
 			notification.error(
-				'Error',
-				err?.data?.message || 'Failed to delete API key'
+				__('Error'),
+				err?.data?.message || __('Failed to delete API key')
 			);
 		}
 	};
 
 	const copyToClipboard = (text) => {
 		navigator.clipboard.writeText(text);
-		notification.success('Copied', 'API Key copied to clipboard');
+		notification.success(
+			__('Copied'),
+			__('API key copied to clipboard')
+		);
 	};
 
 	const handleCloseKeyModal = () => {
@@ -206,22 +269,29 @@ const Content = ({ activeTab }) => {
 
 			if (result?.data?.updateAvailable && latestVersion) {
 				notification.success(
-					'Update available',
-					`PeakURL ${latestVersion} is ready to install.`
+					__('Update available'),
+					sprintf(
+						__('PeakURL %s is ready to install.'),
+						latestVersion
+					)
 				);
 				return;
 			}
 
 			notification.success(
-				'Up to date',
+				__('Up to date'),
 				currentVersion
-					? `PeakURL ${currentVersion} is already current.`
-					: 'PeakURL is already current.'
+					? sprintf(
+						__('PeakURL %s is already current.'),
+						currentVersion
+					)
+					: __('PeakURL is already current.')
 			);
 		} catch (err) {
 			notification.error(
-				'Update check failed',
-				err?.data?.message || 'PeakURL could not reach the update service.'
+				__('Update check failed'),
+				err?.data?.message ||
+					__('PeakURL could not reach the update service.')
 			);
 		}
 	};
@@ -230,15 +300,15 @@ const Content = ({ activeTab }) => {
 		try {
 			const result = await saveGeoipConfiguration(values).unwrap();
 			notification.success(
-				'Saved',
-				'Location data settings were updated successfully.'
+				__('Saved'),
+				__('Location data settings were updated successfully.')
 			);
 			return result?.data || null;
 		} catch (err) {
 			notification.error(
-				'Save failed',
+				__('Save failed'),
 				err?.data?.message ||
-					'PeakURL could not save the MaxMind settings.'
+					__('PeakURL could not save the MaxMind settings.')
 			);
 			throw err;
 		}
@@ -248,14 +318,14 @@ const Content = ({ activeTab }) => {
 		try {
 			await downloadGeoipDatabase().unwrap();
 			notification.success(
-				'Database updated',
-				'PeakURL downloaded the latest GeoLite2 City database.'
+				__('Database updated'),
+				__('PeakURL downloaded the latest GeoLite2 City database.')
 			);
 		} catch (err) {
 			notification.error(
-				'Download failed',
+				__('Download failed'),
 				err?.data?.message ||
-					'PeakURL could not download the GeoLite2 database.'
+					__('PeakURL could not download the GeoLite2 database.')
 			);
 		}
 	};
@@ -264,14 +334,14 @@ const Content = ({ activeTab }) => {
 		try {
 			await saveMailConfiguration(values).unwrap();
 			notification.success(
-				'Saved',
-				'Email configuration was updated successfully.'
+				__('Saved'),
+				__('Email configuration was updated successfully.')
 			);
 		} catch (err) {
 			notification.error(
-				'Save failed',
+				__('Save failed'),
 				err?.data?.message ||
-					'PeakURL could not save the email configuration.'
+					__('PeakURL could not save the email configuration.')
 			);
 			throw err;
 		}
@@ -284,10 +354,15 @@ const Content = ({ activeTab }) => {
 			setShowUpdateConfirm(false);
 
 			notification.success(
-				'Update installed',
+				__('Update installed'),
 				appliedVersion
-					? `PeakURL ${appliedVersion} was installed successfully. Redirecting now.`
-					: 'PeakURL was installed successfully. Redirecting now.'
+					? sprintf(
+						__(
+							'PeakURL %s was installed successfully. Redirecting now.'
+						),
+						appliedVersion
+					)
+					: __('PeakURL was installed successfully. Redirecting now.')
 			);
 
 			window.setTimeout(() => {
@@ -297,8 +372,30 @@ const Content = ({ activeTab }) => {
 			}, 1500);
 		} catch (err) {
 			notification.error(
-				'Update failed',
-				err?.data?.message || 'PeakURL could not apply the update.'
+				__('Update failed'),
+				err?.data?.message || __('PeakURL could not apply the update.')
+			);
+		}
+	};
+
+	const handleUpgradeDatabase = async () => {
+		try {
+			const result = await upgradeDatabaseSchema().unwrap();
+			const issuesCount = Number(result?.data?.issuesCount || 0);
+
+			notification.success(
+				__('Database updated'),
+				issuesCount > 0
+					? __(
+						'PeakURL repaired the database schema. Review any remaining warnings below.'
+					  )
+					: __('The database schema is now current.')
+			);
+		} catch (err) {
+			notification.error(
+				__('Database upgrade failed'),
+				err?.data?.message ||
+					__('PeakURL could not repair the database schema.')
 			);
 		}
 	};
@@ -310,7 +407,9 @@ const Content = ({ activeTab }) => {
 					key={`${user?._id || user?.id || user?.username || 'user'}-${user?.updatedAt || 'initial'}`}
 					initialForm={buildGeneralForm(user)}
 					onSubmit={handleGeneralSubmit}
-					isUpdating={isUpdating}
+					isUpdating={isUpdating || isSavingGeneralSettings}
+					siteSettings={generalSettingsResponse?.data || null}
+					isLoadingSiteSettings={isLoadingGeneralSettings}
 				/>
 			)}
 
@@ -368,8 +467,10 @@ const Content = ({ activeTab }) => {
 					isLoading={isLoadingUpdateStatus || isFetchingUpdateStatus}
 					isChecking={isCheckingForUpdates}
 					isApplying={isApplyingUpdate}
+					isRepairing={isUpgradingDatabaseSchema}
 					onCheck={handleCheckForUpdates}
 					onApply={() => setShowUpdateConfirm(true)}
+					onRepair={handleUpgradeDatabase}
 				/>
 			)}
 
@@ -392,14 +493,21 @@ const Content = ({ activeTab }) => {
 						setApiKeyPendingDelete(null);
 					}
 				}}
-				title="Delete API key"
+				title={__('Delete API key')}
 				description={
 					apiKeyPendingDelete
-						? `Delete ${apiKeyPendingDelete.label || apiKeyPendingDelete.maskedKey || 'this API key'}? Any scripts, automations, or extensions using it will stop working immediately.`
+						? sprintf(
+							__(
+								'Delete %s? Any scripts, automations, or extensions using it will stop working immediately.'
+							),
+							apiKeyPendingDelete.label ||
+								apiKeyPendingDelete.maskedKey ||
+								__('this API key')
+						)
 						: ''
 				}
-				confirmText="Delete key"
-				cancelText="Keep key"
+				confirmText={__('Delete key')}
+				cancelText={__('Keep key')}
 				confirmVariant="danger"
 				onConfirm={handleDeleteKey}
 				loading={isDeletingKey}
@@ -411,12 +519,17 @@ const Content = ({ activeTab }) => {
 						setShowUpdateConfirm(false);
 					}
 				}}
-				title={`Install PeakURL ${updateStatus?.data?.latestVersion || 'update'}?`}
+				title={sprintf(
+					__('Install PeakURL %s?'),
+					updateStatus?.data?.latestVersion || __('update')
+				)}
 				description={
-					'PeakURL will download the latest release package, replace managed application files, and reload the dashboard when the update completes.\n\nOnly continue on packaged release installs.'
+					__(
+						'PeakURL will download the latest release package, replace managed application files, and reload the dashboard when the update completes.\n\nOnly continue on packaged release installs.'
+					)
 				}
-				confirmText="Install update"
-				cancelText="Cancel"
+				confirmText={__('Install update')}
+				cancelText={__('Cancel')}
 				onConfirm={handleApplyUpdate}
 				loading={isApplyingUpdate}
 			/>

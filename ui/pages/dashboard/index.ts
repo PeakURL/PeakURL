@@ -4,4 +4,5 @@ export * from './bulk-import';
 export * from './links';
 export * from './plugins';
 export * from './settings';
+export * from './tools';
 export * from './users';

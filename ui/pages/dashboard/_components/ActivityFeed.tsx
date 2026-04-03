@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { Button } from '@/components/ui';
+import { __, sprintf } from '@/i18n';
 import { formatDate } from '@/utils';
 import { Circle, Link2, MousePointerClick } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -9,21 +10,31 @@ const ActivityFeed = ({ recentActivities }) => {
 	const formatActivityMessage = (activity) => {
 		// Prioritize title, fallback to shortId, then "Unknown"
 		const linkName =
-			activity.link?.title || activity.link?.shortCode || 'Unknown';
+			activity.link?.title || activity.link?.shortCode || __('Unknown');
 
 		if (activity.type === 'link_created') {
-			return `Created new link <strong>${linkName}</strong>`;
+			return sprintf(
+				__('Created new link <strong>%s</strong>'),
+				linkName
+			);
 		} else if (activity.type === 'click') {
 			const location = activity.location
-				? `from ${
+				? sprintf(
+						__('from %s'),
 						activity.location.city ||
 						activity.location.country ||
-						'Unknown'
-					}`
+						__('Unknown')
+				  )
 				: '';
-			return `Link <strong>${linkName}</strong> was clicked ${location}`;
+			return location
+				? sprintf(
+						__('Link <strong>%1$s</strong> was clicked %2$s'),
+						linkName,
+						location
+				  )
+				: sprintf(__('Link <strong>%s</strong> was clicked'), linkName);
 		}
-		return activity.message || 'Unknown activity';
+		return activity.message || __('Unknown activity');
 	};
 
 	// Get activity icon
@@ -45,13 +56,13 @@ const ActivityFeed = ({ recentActivities }) => {
 	return (
 		<div className="bg-surface border border-stroke rounded-lg p-5 flex flex-col">
 			<h3 className="text-base font-semibold text-heading mb-4">
-				Recent Activity
+				{__('Recent Activity')}
 			</h3>
 			<div className="flex-1 space-y-3.5 overflow-y-auto max-h-96">
 				{recentActivities.length === 0 ? (
 					<div className="text-center py-8">
 						<p className="text-sm text-text-muted">
-							No recent activity
+							{__('No recent activity')}
 						</p>
 					</div>
 				) : (
@@ -80,7 +91,7 @@ const ActivityFeed = ({ recentActivities }) => {
 			</div>
 			<Link to="/dashboard/links" className="mt-4">
 				<Button variant="ghost" className="w-full" size="sm">
-					View All Links
+					{__('View All Links')}
 				</Button>
 			</Link>
 		</div>

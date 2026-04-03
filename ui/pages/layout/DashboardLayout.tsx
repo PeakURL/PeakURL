@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { PEAKURL_VERSION } from '@constants';
+import { __ } from '@/i18n';
 import DashboardSidebar from './DashboardSidebar';
 import { DashboardAppBar } from './DashboardAppBar';
 import { AdminNotices } from './AdminNotices';
@@ -39,7 +40,7 @@ export const DashboardLayout = ({ children }) => {
 					<footer className="px-4 py-4 text-xs text-text-muted/80 sm:px-6">
 						<div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
 							<p className="italic">
-								Thank you for choosing{' '}
+								{__('Thank you for choosing')}{' '}
 								<a
 									href={footerLink}
 									target="_blank"
@@ -56,7 +57,7 @@ export const DashboardLayout = ({ children }) => {
 								rel="noreferrer"
 								className="text-text-muted/80 transition-colors hover:text-accent"
 							>
-								Version {PEAKURL_VERSION}
+								{__('Version')} {PEAKURL_VERSION}
 							</a>
 						</div>
 					</footer>

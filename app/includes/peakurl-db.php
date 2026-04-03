@@ -632,16 +632,6 @@ class PeakURL_DB {
 	}
 
 	/**
-	 * Reconcile the managed database schema with the current runtime code.
-	 *
-	 * @return void
-	 * @since 1.0.1
-	 */
-	public function reconcile_schema(): void {
-		$this->connection_manager->reconcile_schema();
-	}
-
-	/**
 	 * Return the full prefixed table name.
 	 *
 	 * @param string $table_name Base table name.

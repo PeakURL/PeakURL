@@ -7,7 +7,8 @@
 		"ext-pdo": "*",
 		"ext-pdo_mysql": "*",
 		"maxmind-db/reader": "^1.13.1",
-		"phpmailer/phpmailer": "^6.9"
+		"phpmailer/phpmailer": "^6.9",
+		"gettext/gettext": "^5.7"
 	},
 	"require-dev": {
 		"dealerdirect/phpcodesniffer-composer-installer": "^1.1",
@@ -22,6 +23,7 @@
 			"store.php",
 			"api/",
 			"controllers/",
+			"database/",
 			"includes/",
 			"http/",
 			"services/",

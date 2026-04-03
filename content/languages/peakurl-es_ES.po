@@ -1,0 +1,4065 @@
+msgid ""
+msgstr ""
+"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: es_ES\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+"Project-Id-Version: 1.0.2\n"
+"Report-Msgid-Bugs-To: https://peakurl.org\n"
+"X-Domain: peakurl\n"
+
+#: app/traits/system.php:67
+#: app/traits/system.php:222
+#: app/traits/system.php:244
+#: app/traits/system.php:282
+#: app/traits/system.php:299
+#: app/traits/system.php:328
+#: app/traits/system.php:373
+#: app/traits/system.php:402
+#: app/traits/system.php:423
+#: app/traits/system.php:500
+msgid "Admin access is required."
+msgstr "Se requiere acceso de administrador."
+
+#: app/traits/system.php:197
+msgid "PeakURL could not find that language pack."
+msgstr "PeakURL no pudo encontrar ese paquete de idioma."
+
+#: app/traits/system-support.php:113
+msgid "PeakURL could not inspect the database schema."
+msgstr ""
+
+#: app/controllers/settings.php:76
+msgid "General settings loaded."
+msgstr "Ajustes generales cargados."
+
+#: app/controllers/settings.php:93
+msgid "General settings saved."
+msgstr "Ajustes generales guardados."
+
+#: app/controllers/admin-notices.php:62
+msgid "Admin notices loaded."
+msgstr "Avisos de administración cargados."
+
+#: app/controllers/system-status.php:60
+msgid "System status loaded."
+msgstr "Estado del sistema cargado."
+
+#: app/services/admin-notices.php:99
+msgid "PeakURL %s is available."
+msgstr "PeakURL %s está disponible."
+
+#: app/services/admin-notices.php:102
+msgid "A new PeakURL update is available."
+msgstr "Hay una nueva actualización de PeakURL disponible."
+
+#: app/services/admin-notices.php:106
+msgid "You are running PeakURL %1$s. Review the update details and install %2$s from the Updates screen."
+msgstr "Estás usando PeakURL %1$s. Revisa los detalles de la actualización e instala %2$s desde la pantalla de Actualizaciones."
+
+#: app/services/admin-notices.php:110
+msgid "Review the update details and install the latest release from the Updates screen."
+msgstr "Revisa los detalles de la actualización e instala la versión más reciente desde la pantalla de Actualizaciones."
+
+#: app/services/admin-notices.php:119
+msgid "Open Updates"
+msgstr "Abrir actualizaciones"
+
+#: app/services/admin-notices.php:157
+msgid "Location analytics is not ready yet."
+msgstr "La analítica de ubicación aún no está lista."
+
+#: app/services/admin-notices.php:158
+msgid "Add your MaxMind credentials and download the GeoLite2 City database to enable visitor country and city reporting across the dashboard."
+msgstr "Añade tus credenciales de MaxMind y descarga la base de datos GeoLite2 City para habilitar los informes de país y ciudad de los visitantes en todo el panel."
+
+#: app/services/admin-notices.php:163
+msgid "Open Location Data"
+msgstr "Abrir datos de ubicación"
+
+#: app/services/database-schema.php:170
+msgid "PeakURL could not fully repair the database schema."
+msgstr ""
+
+#: app/services/database-schema.php:272
+msgid "PeakURL could not read the bundled database schema file."
+msgstr ""
+
+#: app/services/database-schema.php:283
+msgid "Created missing tables: %s."
+msgstr ""
+
+#: app/services/database-schema.php:829
+msgid "Migrated legacy API keys to the hashed-key schema."
+msgstr ""
+
+#: app/services/database-schema.php:845
+msgid "PeakURL found API keys that could not be migrated to the hashed-key schema."
+msgstr ""
+
+#: app/services/database-schema.php:860
+msgid "Repaired hashed API key column constraints."
+msgstr ""
+
+#: app/services/database-schema.php:874
+msgid "Removed orphaned API keys."
+msgstr ""
+
+#: app/services/database-schema.php:881
+msgid "Removed orphaned sessions."
+msgstr ""
+
+#: app/services/database-schema.php:888
+msgid "Removed orphaned URLs."
+msgstr ""
+
+#: app/services/database-schema.php:895
+msgid "Removed orphaned clicks."
+msgstr ""
+
+#: app/services/database-schema.php:902
+msgid "Cleared orphaned audit-log users."
+msgstr ""
+
+#: app/services/database-schema.php:910
+msgid "Removed orphaned audit-log links."
+msgstr ""
+
+#: app/services/database-schema.php:918
+msgid "Removed orphaned webhooks."
+msgstr ""
+
+#: app/services/database-schema.php:934
+msgid "%1$s %2$d rows were affected."
+msgstr ""
+
+#: app/services/database-schema.php:970
+msgid "Added the %2$s foreign key to the %1$s table."
+msgstr ""
+
+#: app/services/database-schema.php:1011
+msgid "Added the %1$s column to the %2$s table."
+msgstr ""
+
+#: app/services/database-schema.php:1056
+msgid "Added the %1$s index to the %2$s table."
+msgstr ""
+
+#: app/services/database-schema.php:1235
+msgid "The %s table is missing."
+msgstr ""
+
+#: app/services/database-schema.php:1248
+msgid "The %1$s table is missing the %2$s column."
+msgstr ""
+
+#: app/services/database-schema.php:1261
+msgid "The %1$s table is missing the %2$s index."
+msgstr ""
+
+#: app/services/database-schema.php:1274
+msgid "The %1$s table is missing the %2$s foreign key."
+msgstr ""
+
+#: app/services/database-schema.php:1289
+msgid "The legacy api_keys.key_value column still needs to be migrated."
+msgstr ""
+
+#: app/services/database-schema.php:1304
+msgid "The hashed API key columns still allow NULL values and need to be repaired."
+msgstr ""
+
+#: app/services/database-schema.php:1318
+msgid "The database schema version %1$d is behind the required version %2$d."
+msgstr ""
+
+#: app/services/system-status.php:438
+msgid "Database connection"
+msgstr "Conexión a la base de datos"
+
+#: app/services/system-status.php:441
+msgid "PeakURL can reach the configured MySQL or MariaDB database."
+msgstr "PeakURL puede conectarse a la base de datos MySQL o MariaDB configurada."
+
+#: app/services/system-status.php:442
+msgid "PeakURL could not reach the configured database."
+msgstr "PeakURL no pudo conectarse a la base de datos configurada."
+
+#: app/services/system-status.php:446
+msgid "Database schema"
+msgstr ""
+
+#: app/services/system-status.php:451
+msgid "PeakURL found schema changes or leftovers that still need the database upgrader."
+msgstr ""
+
+#: app/services/system-status.php:452
+msgid "The PeakURL database schema matches the current release."
+msgstr ""
+
+#: app/services/system-status.php:456
+msgid "Content storage"
+msgstr "Almacenamiento de contenido"
+
+#: app/services/system-status.php:461
+msgid "The persistent content directory is present and writable."
+msgstr "El directorio de contenido persistente existe y tiene permisos de escritura."
+
+#: app/services/system-status.php:462
+msgid "The persistent content directory is missing or not writable."
+msgstr "El directorio de contenido persistente no existe o no tiene permisos de escritura."
+
+#: app/services/system-status.php:466
+msgid "Language packs"
+msgstr "Paquetes de idioma"
+
+#: app/services/system-status.php:471
+msgid "Installed dashboard and PHP translation files can be read from content/languages."
+msgstr "Los archivos de traducción instalados del panel y de PHP pueden leerse desde content/languages."
+
+#: app/services/system-status.php:472
+msgid "PeakURL cannot read the content/languages directory right now."
+msgstr "PeakURL no puede leer el directorio content/languages en este momento."
+
+#: app/services/system-status.php:476
+msgid "PHP intl extension"
+msgstr "Extensión PHP intl"
+
+#: app/services/system-status.php:481
+msgid "Server-side locale helpers can use native intl metadata."
+msgstr "Los helpers de locale del lado del servidor pueden usar los metadatos nativos de intl."
+
+#: app/services/system-status.php:482
+msgid "PeakURL can still run without intl, but server-side locale helpers use fallbacks."
+msgstr "PeakURL puede seguir funcionando sin intl, pero los helpers de locale del lado del servidor usan alternativas."
+
+#: app/services/system-status.php:486
+msgid "PHP ZipArchive"
+msgstr "PHP ZipArchive"
+
+#: app/services/system-status.php:491
+msgid "Dashboard updates can use ZipArchive when the install type allows it."
+msgstr "Las actualizaciones del panel pueden usar ZipArchive cuando el tipo de instalación lo permite."
+
+#: app/services/system-status.php:492
+msgid "Dashboard-managed updates require the PHP ZipArchive extension."
+msgstr "Las actualizaciones gestionadas desde el panel requieren la extensión PHP ZipArchive."
+
+#: app/services/system-status.php:496
+msgid "Email transport"
+msgstr "Transporte de correo"
+
+#: app/services/system-status.php:501
+msgid "PeakURL has an active mail transport configuration."
+msgstr "PeakURL tiene una configuración activa de transporte de correo."
+
+#: app/services/system-status.php:502
+msgid "PeakURL is missing part of the active mail transport configuration."
+msgstr "Falta parte de la configuración activa del transporte de correo de PeakURL."
+
+#: app/services/system-status.php:506
+msgid "Location data"
+msgstr ""
+
+#: app/services/system-status.php:511
+msgid "The GeoLite2 City database is available for visitor location analytics."
+msgstr "La base de datos GeoLite2 City está disponible para la analítica de ubicaciones de visitantes."
+
+#: app/services/system-status.php:512
+msgid "Visitor location analytics is not fully ready yet."
+msgstr "La analítica de ubicaciones de visitantes aún no está lista por completo."
+
+#: ui/components/ui/ConfirmDialog.tsx:18
+msgid "Confirm"
+msgstr ""
+
+#: ui/components/ui/ConfirmDialog.tsx:19
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:347
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:50
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:537
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:532
+#: ui/pages/dashboard/links/_components/BulkDeleteModal.tsx:77
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:122
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:203
+#: ui/pages/dashboard/users/UsersPage.tsx:228
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: ui/components/ui/ConfirmDialog.tsx:73
+msgid "Working..."
+msgstr ""
+
+#: ui/components/ui/Avatar.tsx:33
+msgid "User avatar"
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:22
+msgid "Link Created"
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:23
+msgid "Link Clicked"
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:24
+msgid "Link Updated"
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:25
+msgid "Link Deleted"
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:57
+#: ui/components/settings/IntegrationsTab.tsx:76
+#: ui/components/settings/IntegrationsTab.tsx:94
+#: ui/components/settings/IntegrationsTab.tsx:106
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:137
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:150
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:172
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:203
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:221
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:247
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:274
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:309
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:126
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:163
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:170
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:191
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:225
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:245
+msgid "Error"
+msgstr "Error"
+
+#: ui/components/settings/IntegrationsTab.tsx:58
+msgid "Enter a URL and select at least one event."
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:69
+#: ui/components/settings/IntegrationsTab.tsx:88
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:155
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:181
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:240
+msgid "Success"
+msgstr "Éxito"
+
+#: ui/components/settings/IntegrationsTab.tsx:70
+msgid "Webhook created successfully"
+msgstr "Webhook creado correctamente"
+
+#: ui/components/settings/IntegrationsTab.tsx:77
+msgid "Failed to create webhook"
+msgstr "No se pudo crear el webhook"
+
+#: ui/components/settings/IntegrationsTab.tsx:89
+msgid "Webhook deleted"
+msgstr "Webhook eliminado"
+
+#: ui/components/settings/IntegrationsTab.tsx:95
+msgid "Failed to delete webhook"
+msgstr "No se pudo eliminar el webhook"
+
+#: ui/components/settings/IntegrationsTab.tsx:100
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:254
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:701
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:873
+msgid "Copied"
+msgstr "Copiado"
+
+#: ui/components/settings/IntegrationsTab.tsx:104
+msgid "Copied to clipboard"
+msgstr "Copiado al portapapeles"
+
+#: ui/components/settings/IntegrationsTab.tsx:106
+msgid "Failed to copy"
+msgstr "No se pudo copiar"
+
+#: ui/components/settings/IntegrationsTab.tsx:119
+#: ui/pages/dashboard/settings/SettingsLayout.tsx:31
+#: ui/router/pageTitle.ts:25
+msgid "Integrations"
+msgstr "Integraciones"
+
+#: ui/components/settings/IntegrationsTab.tsx:122
+msgid "Connect PeakURL to your automations with outbound webhooks for link activity."
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:134
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:635
+msgid "Webhooks"
+msgstr "Webhooks"
+
+#: ui/components/settings/IntegrationsTab.tsx:137
+msgid "PeakURL sends signed POST requests to your endpoint when selected link events happen."
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:148
+msgid "Webhook docs"
+msgstr "Documentación de webhooks"
+
+#: ui/components/settings/IntegrationsTab.tsx:155
+msgid "Add New Webhook"
+msgstr "Añadir nuevo webhook"
+
+#: ui/components/settings/IntegrationsTab.tsx:158
+msgid "Choose which events should trigger a delivery, then save the signing secret somewhere secure when it is shown."
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:166
+#: ui/components/settings/IntegrationsTab.tsx:342
+msgid "Endpoint URL"
+msgstr "URL del endpoint"
+
+#: ui/components/settings/IntegrationsTab.tsx:187
+msgid "Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route like"
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:199
+msgid "Events"
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:230
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:56
+msgid "Creating..."
+msgstr "Creando..."
+
+#: ui/components/settings/IntegrationsTab.tsx:234
+msgid "Create Webhook"
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:243
+msgid "Loading webhooks…"
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:247
+msgid "Failed to load webhooks"
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:253
+msgid "No Webhooks Configured"
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:256
+msgid "Add a webhook to receive link events in real time."
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:282
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:191
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:32
+msgid "Inactive"
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:290
+msgid "Signing secret stored"
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:296
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:56
+msgid "Created:"
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:306
+#: ui/components/settings/IntegrationsTab.tsx:311
+#: ui/components/settings/IntegrationsTab.tsx:401
+#: ui/components/settings/IntegrationsTab.tsx:412
+msgid "Delete webhook"
+msgstr "Eliminar webhook"
+
+#: ui/components/settings/IntegrationsTab.tsx:325
+msgid "Copy Your Webhook Secret"
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:331
+msgid "This signing secret will not be shown again."
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:334
+msgid "Store it in your automation tool or secret manager before closing this window."
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:358
+#: ui/components/settings/IntegrationsTab.tsx:380
+msgid "Secret copied"
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:362
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:87
+msgid "Copy to clipboard"
+msgstr "Copiar al portapapeles"
+
+#: ui/components/settings/IntegrationsTab.tsx:369
+msgid "If this secret is ever exposed, delete the webhook and create a new one."
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:385
+msgid "Copy Secret"
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:388
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:106
+msgid "I've Stored It"
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:405
+msgid "Delete the webhook for %s? PeakURL will stop sending signed event requests to this endpoint immediately."
+msgstr ""
+
+#: ui/components/settings/IntegrationsTab.tsx:413
+msgid "Keep webhook"
+msgstr "Conservar webhook"
+
+#: ui/components/charts/TrafficChart.tsx:96
+msgid "Mon"
+msgstr ""
+
+#: ui/components/charts/TrafficChart.tsx:97
+msgid "Tue"
+msgstr ""
+
+#: ui/components/charts/TrafficChart.tsx:98
+msgid "Wed"
+msgstr ""
+
+#: ui/components/charts/TrafficChart.tsx:99
+msgid "Thu"
+msgstr ""
+
+#: ui/components/charts/TrafficChart.tsx:100
+msgid "Fri"
+msgstr ""
+
+#: ui/components/charts/TrafficChart.tsx:101
+msgid "Sat"
+msgstr ""
+
+#: ui/components/charts/TrafficChart.tsx:102
+msgid "Sun"
+msgstr ""
+
+#: ui/components/charts/TrafficChart.tsx:122
+#: ui/pages/dashboard/_components/StatsCards.tsx:17
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:96
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:12
+#: ui/pages/dashboard/links/LinksPage.tsx:319
+msgid "Total Clicks"
+msgstr "Clics totales"
+
+#: ui/components/charts/TrafficChart.tsx:145
+#: ui/pages/dashboard/_components/StatsCards.tsx:44
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:104
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:25
+msgid "Unique Visitors"
+msgstr "Visitantes únicos"
+
+#: ui/components/charts/WorldMap.tsx:28
+msgid "United States"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:29
+msgid "United Kingdom"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:30
+msgid "Canada"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:31
+msgid "Australia"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:32
+msgid "Germany"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:33
+msgid "France"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:34
+msgid "Italy"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:35
+msgid "Spain"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:36
+msgid "Netherlands"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:37
+msgid "Belgium"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:38
+msgid "Switzerland"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:39
+msgid "Austria"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:40
+msgid "Sweden"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:41
+msgid "Norway"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:42
+msgid "Denmark"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:43
+msgid "Finland"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:44
+msgid "Poland"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:45
+msgid "Czech Republic"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:46
+msgid "Hungary"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:47
+msgid "Romania"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:48
+msgid "Bulgaria"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:49
+msgid "Greece"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:50
+msgid "Portugal"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:51
+msgid "Ireland"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:52
+msgid "Japan"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:53
+msgid "China"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:54
+msgid "India"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:55
+msgid "Brazil"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:56
+msgid "Mexico"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:57
+msgid "Argentina"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:58
+msgid "South Africa"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:59
+msgid "Egypt"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:60
+msgid "Nigeria"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:61
+msgid "Kenya"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:62
+msgid "Saudi Arabia"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:63
+msgid "United Arab Emirates"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:64
+msgid "Turkey"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:65
+msgid "Russia"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:66
+msgid "Ukraine"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:67
+msgid "South Korea"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:68
+msgid "Thailand"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:69
+msgid "Vietnam"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:70
+msgid "Singapore"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:71
+msgid "Malaysia"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:72
+msgid "Indonesia"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:73
+msgid "Philippines"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:74
+msgid "New Zealand"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:75
+msgid "Chile"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:76
+msgid "Colombia"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:77
+msgid "Peru"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:78
+msgid "Venezuela"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:328
+msgid "Zoom in"
+msgstr "Acercar"
+
+#: ui/components/charts/WorldMap.tsx:347
+msgid "Zoom out"
+msgstr "Alejar"
+
+#: ui/components/charts/WorldMap.tsx:354
+msgid "Reset view"
+msgstr "Restablecer vista"
+
+#: ui/components/charts/WorldMap.tsx:368
+msgid "click"
+msgstr "clic"
+
+#: ui/components/charts/WorldMap.tsx:369
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:176
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:256
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:160
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:293
+msgid "clicks"
+msgstr "clics"
+
+#: ui/components/common/ThemeToggle.tsx:14
+msgid "Toggle theme"
+msgstr "Cambiar tema"
+
+#: ui/components/routes/ProtectedRoute.tsx:25
+msgid "Retry"
+msgstr "Reintentar"
+
+#: ui/components/routes/ProtectedRoute.tsx:74
+msgid "Unable to load your session"
+msgstr "No se pudo cargar tu sesión"
+
+#: ui/components/routes/ProtectedRoute.tsx:75
+msgid "The dashboard could not reach the PHP API. Make sure the core service is running and try again."
+msgstr "El panel no pudo conectarse a la API de PHP. Asegúrate de que el servicio principal esté en ejecución y vuelve a intentarlo."
+
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:42
+#: ui/pages/login/LoginPage.tsx:192
+msgid "Email or username is required."
+msgstr "El correo electrónico o nombre de usuario es obligatorio."
+
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:56
+msgid "PeakURL could not process the password reset request."
+msgstr "PeakURL no pudo procesar la solicitud de restablecimiento de contraseña."
+
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:70
+msgid "Account Recovery"
+msgstr "Recuperación de la cuenta"
+
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:73
+msgid "Reset access without leaving your dashboard workflow."
+msgstr ""
+
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:78
+msgid "Enter the email address or username linked to your PeakURL account and we'll send a secure reset link."
+msgstr ""
+
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:86
+msgid "Password reset links expire after 1 hour."
+msgstr ""
+
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:89
+msgid "If the account exists, PeakURL sends a single-use link and keeps your existing sessions revoked after the password is changed."
+msgstr ""
+
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:107
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:120
+msgid "Back to login"
+msgstr ""
+
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:112
+#: ui/pages/login/LoginPage.tsx:422
+msgid "Forgot your password?"
+msgstr "¿Olvidaste tu contraseña?"
+
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:115
+msgid "Enter your account email or username and PeakURL will send a secure password reset link."
+msgstr ""
+
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:123
+msgid "Check your inbox"
+msgstr ""
+
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:127
+msgid "If an account exists for %s, PeakURL has sent a password reset link."
+msgstr ""
+
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:137
+msgid "Return to login"
+msgstr ""
+
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:144
+#: ui/pages/login/LoginPage.tsx:381
+msgid "Email or username"
+msgstr ""
+
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:153
+msgid "owner@example.com or admin"
+msgstr ""
+
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:168
+msgid "Send reset link"
+msgstr ""
+
+#: ui/pages/layout/DashboardAppBar.tsx:33
+#: ui/pages/layout/DashboardAppBar.tsx:89
+#: ui/pages/layout/DashboardAppBar.tsx:100
+#: ui/pages/dashboard/users/UsersPage.tsx:38
+#: ui/pages/dashboard/users/UsersPage.tsx:210
+msgid "Admin"
+msgstr "Administrador"
+
+#: ui/pages/layout/DashboardAppBar.tsx:34
+#: ui/pages/dashboard/users/UsersPage.tsx:43
+#: ui/pages/dashboard/users/UsersPage.tsx:211
+#: ui/pages/dashboard/users/UsersPage.tsx:466
+msgid "Editor"
+msgstr "Editor"
+
+#: ui/pages/layout/DashboardAppBar.tsx:35
+#: ui/pages/dashboard/users/UsersPage.tsx:435
+msgid "User"
+msgstr "Usuario"
+
+#: ui/pages/layout/DashboardAppBar.tsx:70
+msgid "Search links, settings..."
+msgstr "Buscar enlaces, ajustes..."
+
+#: ui/pages/layout/DashboardAppBar.tsx:95
+msgid "Admin Account"
+msgstr "Cuenta de administrador"
+
+#: ui/pages/layout/DashboardAppBar.tsx:127
+msgid "Profile"
+msgstr "Perfil"
+
+#: ui/pages/layout/DashboardAppBar.tsx:145
+#: ui/pages/layout/DashboardSidebar.tsx:66
+#: ui/router/pageTitle.ts:33
+#: ui/router/pageTitle.ts:91
+msgid "Settings"
+msgstr "Ajustes"
+
+#: ui/pages/layout/DashboardAppBar.tsx:164
+msgid "About PeakURL"
+msgstr ""
+
+#: ui/pages/layout/DashboardAppBar.tsx:182
+msgid "Sponsor"
+msgstr "Patrocinar"
+
+#: ui/pages/layout/DashboardAppBar.tsx:204
+#: ui/pages/dashboard/about/AboutPage.tsx:397
+msgid "Buy Me a Coffee"
+msgstr "Invítame a un café"
+
+#: ui/pages/layout/DashboardAppBar.tsx:224
+msgid "Logging out..."
+msgstr "Cerrando sesión..."
+
+#: ui/pages/layout/DashboardAppBar.tsx:225
+msgid "Logout"
+msgstr "Cerrar sesión"
+
+#: ui/pages/layout/DashboardLayout.tsx:43
+msgid "Thank you for choosing"
+msgstr ""
+
+#: ui/pages/layout/DashboardLayout.tsx:60
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:348
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:501
+#: ui/pages/dashboard/about/AboutPage.tsx:219
+#: ui/pages/dashboard/about/AboutPage.tsx:416
+msgid "Version"
+msgstr "Versión"
+
+#: ui/pages/layout/DashboardSidebar.tsx:30
+msgid "Overview"
+msgstr "Resumen"
+
+#: ui/pages/layout/DashboardSidebar.tsx:35
+#: ui/pages/layout/DashboardSidebar.tsx:259
+msgid "All Links"
+msgstr "Todos los enlaces"
+
+#: ui/pages/layout/DashboardSidebar.tsx:40
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:627
+#: ui/pages/dashboard/users/UsersPage.tsx:363
+#: ui/router/pageTitle.ts:80
+msgid "Users"
+msgstr "Usuarios"
+
+#: ui/pages/layout/DashboardSidebar.tsx:45
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:110
+#: ui/router/pageTitle.ts:76
+msgid "Plugins"
+msgstr "Plugins"
+
+#: ui/pages/layout/DashboardSidebar.tsx:51
+#: ui/router/pageTitle.ts:110
+msgid "Tools"
+msgstr "Herramientas"
+
+#: ui/pages/layout/DashboardSidebar.tsx:56
+#: ui/router/pageTitle.ts:46
+#: ui/router/pageTitle.ts:102
+msgid "Import"
+msgstr "Importar"
+
+#: ui/pages/layout/DashboardSidebar.tsx:60
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:718
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:747
+#: ui/router/pageTitle.ts:106
+msgid "System Status"
+msgstr "Estado del sistema"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:15
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:15
+msgid "Never"
+msgstr "Nunca"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:27
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:339
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:15
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:20
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:34
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:205
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:509
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:574
+msgid "Not available"
+msgstr "No disponible"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:88
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:336
+msgid "settings table"
+msgstr "tabla de ajustes"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:122
+#: ui/pages/dashboard/settings/SettingsLayout.tsx:43
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:101
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:658
+#: ui/router/pageTitle.ts:29
+msgid "Location Data"
+msgstr "Datos de ubicación"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:125
+msgid "Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:147
+msgid "Update Database"
+msgstr "Actualizar base de datos"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:147
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:271
+msgid "Download Database"
+msgstr "Descargar base de datos"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:154
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:155
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:581
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:182
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:31
+msgid "Status"
+msgstr "Estado"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:155
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:546
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:583
+msgid "Ready"
+msgstr "Listo"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:155
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:584
+msgid "Setup Required"
+msgstr "Configuración requerida"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:158
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:587
+msgid "Database Updated"
+msgstr "Base de datos actualizada"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:165
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:594
+msgid "Database Size"
+msgstr "Tamaño de la base de datos"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:173
+msgid "Location data unavailable"
+msgstr "Datos de ubicación no disponibles"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:184
+msgid "Location analytics is enabled"
+msgstr "La analítica de ubicación está activada"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:185
+msgid "Location analytics is disabled"
+msgstr "La analítica de ubicación está desactivada"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:189
+msgid "PeakURL is using the local GeoLite2 City database for click locations."
+msgstr "PeakURL está usando la base de datos local GeoLite2 City para las ubicaciones de los clics."
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:190
+msgid "Save your MaxMind credentials, then download the GeoLite2 City database to enable visitor country and city analytics."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:199
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:116
+msgid "Dashboard management unavailable"
+msgstr "Gestión desde el panel no disponible"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:208
+msgid "MaxMind Credentials"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:226
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:606
+msgid "Account ID"
+msgstr "ID de la cuenta"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:234
+msgid "License Key"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:252
+msgid "Update Credentials"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:270
+msgid "Refresh Database"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:280
+msgid "MaxMind Account ID"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:297
+msgid "MaxMind License Key"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:308
+msgid "Enter a new MaxMind license key"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:309
+msgid "Enter your MaxMind license key"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:318
+msgid "Saved license key:"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:333
+msgid "Save New Credentials"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:334
+msgid "Save Credentials"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:30
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:94
+msgid "Create New Key"
+msgstr "Crear nueva clave"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:44
+msgid "API Key"
+msgstr "Clave API"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:47
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:190
+#: ui/pages/dashboard/links/LinksPage.tsx:295
+msgid "Active"
+msgstr "Activa"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:66
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:220
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:137
+msgid "Delete"
+msgstr "Eliminar"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:69
+msgid "Delete API Key"
+msgstr "Eliminar clave API"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:84
+msgid "No API Keys Generated"
+msgstr "No se han generado claves API"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:87
+msgid "Generate an API key to access endpoints programmatically."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:108
+msgid "Keep your API keys secure"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:111
+msgid "PeakURL only shows the full token once, at creation time. Store it in a password manager or secret store, and revoke it immediately if you think it has been exposed."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:125
+msgid "API documentation"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:129
+msgid "Use the public docs for authentication, links, analytics, users, webhooks, and system endpoints."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:140
+msgid "API Overview"
+msgstr "Resumen de la API"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:37
+msgid "Profile Information"
+msgstr "Información del perfil"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:41
+#: ui/pages/dashboard/users/UsersPage.tsx:154
+msgid "First Name"
+msgstr "Nombre"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:48
+#: ui/pages/dashboard/users/UsersPage.tsx:160
+msgid "Last Name"
+msgstr "Apellido"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:55
+#: ui/pages/dashboard/users/UsersPage.tsx:169
+msgid "Username"
+msgstr "Nombre de usuario"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:62
+msgid "Email Address"
+msgstr "Correo electrónico"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:70
+msgid "Phone Number"
+msgstr "Número de teléfono"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:76
+msgid "Company"
+msgstr "Empresa"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:82
+msgid "Job Title"
+msgstr "Cargo"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:89
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:350
+msgid "Site Language"
+msgstr "Idioma del sitio"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:108
+msgid "Loading languages..."
+msgstr "Cargando idiomas..."
+
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:129
+msgid "Bio"
+msgstr "Biografía"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:151
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:213
+msgid "Saving..."
+msgstr "Guardando..."
+
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:151
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:218
+#: ui/pages/dashboard/users/UsersPage.tsx:233
+msgid "Save Changes"
+msgstr "Guardar cambios"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:23
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:56
+msgid "Create API Key"
+msgstr "Crear clave API"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:29
+msgid "Create a dedicated token for scripts, automations, or external tools."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:34
+msgid "You can give it a label now so it is easier to recognize later in your API key list."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:40
+msgid "Label (Optional)"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:41
+msgid "e.g. Production automation"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:65
+msgid "Copy Your API Key"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:71
+msgid "This token will not be shown again."
+msgstr "Este token no volverá a mostrarse."
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:74
+msgid "Store it in a password manager, environment file, or secret store before closing this window."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:93
+msgid "If this key is ever exposed, revoke it from the API Keys list and create a replacement."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:103
+msgid "Copy Key"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:28
+msgid "PeakURL Backup Codes"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:29
+msgid "Keep these codes safe. Each code can be used once."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:33
+msgid "Generated at: %s"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:37
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:41
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:95
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:99
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:134
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:138
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:348
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:450
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:454
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:462
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:498
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:502
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:521
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:527
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:13
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:26
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:173
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:68
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:74
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:95
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:98
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:43
+msgid "Unknown"
+msgstr "Desconocido"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:73
+msgid "Set up 2FA"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:76
+msgid "Backup codes remaining: %s"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:79
+msgid "Enable to generate backup codes for account recovery."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:128
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:473
+msgid "Scan the QR code"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:129
+msgid "Scan with your authenticator app and enter the 6-digit code."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:139
+msgid "Failed to start two-factor authentication setup"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:151
+msgid "Enter the 6-digit code to verify"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:166
+msgid "Two-factor enabled"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:167
+msgid "Backup codes generated. Store them safely."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:174
+msgid "Failed to verify code. Check the code and try again."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:182
+msgid "Disable two-factor authentication and clear backup codes?"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:197
+msgid "Two-factor disabled"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:198
+msgid "Backup codes cleared for this account."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:205
+msgid "Failed to disable two-factor authentication"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:215
+msgid "Backup codes refreshed"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:216
+msgid "Save the new codes before leaving this page."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:222
+msgid "Failed to regenerate backup codes"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:248
+msgid "Failed to download backup codes"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:260
+msgid "Session ended"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:262
+msgid "Current browser session ended."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:263
+msgid "The session was revoked."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:275
+msgid "Failed to end the session"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:295
+msgid "Other sessions ended"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:298
+msgid "%1$s other session%2$s were ended."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:304
+msgid "No other active sessions were found."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:310
+msgid "Failed to end the other sessions"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:321
+msgid "Password & Security"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:325
+msgid "Current Password"
+msgstr "Contraseña actual"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:336
+#: ui/pages/dashboard/users/UsersPage.tsx:188
+msgid "New Password"
+msgstr "Nueva contraseña"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:347
+msgid "Confirm New Password"
+msgstr "Confirmar nueva contraseña"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:360
+msgid "Updating..."
+msgstr "Actualizando..."
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:360
+msgid "Update Password"
+msgstr "Actualizar contraseña"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:369
+msgid "Two-Factor Authentication"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:372
+msgid "Add an extra layer of security with an authenticator app and backup codes."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:387
+msgid "Regenerate Codes"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:396
+msgid "Disable"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:435
+msgid "2FA is enabled"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:436
+msgid "2FA is disabled"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:443
+msgid "Last generated:"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:458
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:567
+msgid "Download"
+msgstr "Descargar"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:476
+msgid "Use an authenticator app (Google Authenticator, Authy, etc.) then enter the 6-digit code."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:487
+msgid "TOTP QR code"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:495
+msgid "QR preview is unavailable in this browser. Use the secret or authenticator URI below."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:503
+msgid "Secret:"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:507
+msgid "Authenticator URI:"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:511
+msgid "6-digit code"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:516
+msgid "123456"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:525
+msgid "Verify & Enable"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:550
+msgid "New backup codes"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:553
+msgid "Save or download these codes now—they won't be shown again."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:588
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:631
+msgid "Active Sessions"
+msgstr "Sesiones activas"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:592
+msgid "%s active session(s)"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:606
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:687
+msgid "End all other sessions"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:613
+msgid "Loading security data..."
+msgstr "Cargando datos de seguridad..."
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:617
+msgid "No active sessions found."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:636
+msgid "Browser"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:637
+msgid "Unknown OS"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:640
+msgid "Unknown IP"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:641
+msgid "Last active"
+msgstr "Última actividad"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:651
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:533
+msgid "Current"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:656
+msgid "Ended"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:670
+msgid "End session"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:689
+msgid "End %s other active session(s) for this account? Any browsers or devices using them will be signed out immediately."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:694
+msgid "End sessions"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:695
+msgid "Keep sessions"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:83
+#: ui/router/pageTitle.ts:27
+msgid "Email Configuration"
+msgstr "Configuración de correo"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:86
+msgid "PeakURL uses this mail transport for password-reset emails and other account recovery notifications."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:100
+msgid "Mail status unavailable"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:133
+msgid "Delivery method"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:138
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:343
+msgid "PHP mail()"
+msgstr "PHP mail()"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:139
+msgid "Use the hosting server’s built-in PHP mail transport."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:149
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:347
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:343
+msgid "SMTP"
+msgstr "SMTP"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:150
+msgid "Send through your own SMTP server with optional authentication."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:165
+msgid "SMTP connection"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:169
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:551
+msgid "From Name"
+msgstr "Nombre del remitente"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:177
+msgid "PeakURL Notifications"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:180
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:550
+msgid "From Email"
+msgstr "Correo remitente"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:189
+msgid "noreply@example.com"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:194
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:553
+msgid "SMTP Host"
+msgstr "Host SMTP"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:202
+msgid "smtp.example.com"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:206
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:557
+msgid "SMTP Port"
+msgstr "Puerto SMTP"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:223
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:561
+msgid "Encryption"
+msgstr "Cifrado"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:236
+msgid "TLS / STARTTLS"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:237
+msgid "SSL"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:238
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:515
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:562
+msgid "None"
+msgstr "Ninguno"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:243
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:565
+#: ui/pages/dashboard/about/AboutPage.tsx:436
+msgid "Authentication"
+msgstr "Autenticación"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:261
+msgid "Authentication enabled"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:262
+msgid "Authentication disabled"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:286
+msgid "SMTP Username"
+msgstr "Nombre de usuario SMTP"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:295
+msgid "mailer@example.com"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:299
+msgid "SMTP Password"
+msgstr "Contraseña SMTP"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:311
+msgid "Leave blank to keep the saved password"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:312
+msgid "Enter the SMTP password"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:317
+msgid "Saved password: %s"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:320
+msgid "PeakURL stores this password encrypted in the settings database."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:333
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:95
+msgid "Storage"
+msgstr "Almacenamiento"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:344
+msgid "Active method"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:350
+msgid "PeakURL will use your SMTP settings for account emails."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:365
+msgid "Save Email Configuration"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:366
+msgid "Use PHP mail()"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:54
+msgid "PeakURL Updates"
+msgstr "Actualizaciones de PeakURL"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:57
+msgid "PeakURL can check for new releases and, on packaged installs, apply them directly from the dashboard."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:73
+msgid "Install Update"
+msgstr "Instalar actualización"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:85
+msgid "Check for Updates"
+msgstr "Buscar actualizaciones"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:94
+msgid "Installed Version"
+msgstr "Versión instalada"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:98
+msgid "Latest Version"
+msgstr "Última versión"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:102
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:376
+msgid "Last Checked"
+msgstr "Última comprobación"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:111
+msgid "Database Schema"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:114
+msgid "PeakURL can repair missing tables, columns, indexes, and legacy leftovers for the current release."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:127
+msgid "Run Database Upgrade"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:133
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:518
+msgid "Recorded Schema"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:137
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:524
+msgid "Required Schema"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:141
+msgid "Last Database Upgrade"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:151
+msgid "Database upgrade recommended"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:152
+msgid "Database schema is current"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:156
+msgid "The database needs attention before every runtime path is fully current."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:159
+msgid "PeakURL has no outstanding schema repairs for this release."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:167
+msgid "Last database error"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:175
+msgid "Recent database findings"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:191
+msgid "Update service unavailable"
+msgstr "Servicio de actualizaciones no disponible"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:195
+msgid "PeakURL could not reach the update manifest."
+msgstr "PeakURL no pudo acceder al manifiesto de actualizaciones."
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:207
+msgid "PeakURL %s is available"
+msgstr "PeakURL %s está disponible"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:211
+msgid "PeakURL %s is current"
+msgstr "PeakURL %s está actualizado"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:218
+msgid "A newer PeakURL release is ready to install when you are ready."
+msgstr "Una versión más reciente de PeakURL está lista para instalarse cuando quieras."
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:219
+msgid "A newer PeakURL release is available. This install cannot apply it automatically from the dashboard."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:220
+msgid "This site is already running the latest known PeakURL release."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:228
+msgid "Loading update status..."
+msgstr "Cargando estado de las actualizaciones..."
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:235
+msgid "About this release"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:242
+msgid "Released"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:252
+msgid "Release notes"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:260
+msgid "Read release notes"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:127
+msgid "Failed to update profile"
+msgstr "No se pudo actualizar el perfil"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:138
+msgid "Language updated"
+msgstr "Idioma actualizado"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:139
+msgid "PeakURL is reloading the dashboard now."
+msgstr "PeakURL está recargando el panel ahora."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:147
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:309
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:342
+msgid "Save failed"
+msgstr "Error al guardar"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:148
+msgid "Failed to update the site language"
+msgstr "No se pudo actualizar el idioma del sitio"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:156
+msgid "Profile updated successfully"
+msgstr "Perfil actualizado correctamente"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:164
+msgid "Passwords do not match"
+msgstr "Las contraseñas no coinciden"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:171
+msgid "Password must be at least 8 characters"
+msgstr "La contraseña debe tener al menos 8 caracteres"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:182
+msgid "Password updated successfully"
+msgstr "Contraseña actualizada correctamente"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:192
+msgid "Failed to update password"
+msgstr "No se pudo actualizar la contraseña"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:205
+msgid "Key created without visible token"
+msgstr "Clave creada sin token visible"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:206
+msgid "PeakURL created the API key, but the one-time token was not returned. Revoke it and create a new key."
+msgstr "PeakURL creó la clave API, pero no devolvió el token de un solo uso. Revócala y crea una nueva."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:220
+msgid "API key created"
+msgstr "Clave API creada"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:221
+msgid "Copy the token now. PeakURL will not show it again."
+msgstr "Copia el token ahora. PeakURL no lo volverá a mostrar."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:226
+msgid "Failed to generate API key"
+msgstr "No se pudo generar la clave API"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:241
+msgid "API key deleted successfully"
+msgstr "Clave API eliminada correctamente"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:246
+msgid "Failed to delete API key"
+msgstr "No se pudo eliminar la clave API"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:255
+msgid "API key copied to clipboard"
+msgstr "Clave API copiada al portapapeles"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:272
+msgid "Update available"
+msgstr "Actualización disponible"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:274
+msgid "PeakURL %s is ready to install."
+msgstr "PeakURL %s está listo para instalarse."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:282
+msgid "Up to date"
+msgstr "Actualizado"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:285
+msgid "PeakURL %s is already current."
+msgstr "PeakURL %s ya está actualizado."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:288
+msgid "PeakURL is already current."
+msgstr "PeakURL ya está actualizado."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:292
+msgid "Update check failed"
+msgstr "La comprobación de actualizaciones falló"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:294
+msgid "PeakURL could not reach the update service."
+msgstr "PeakURL no pudo contactar con el servicio de actualizaciones."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:303
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:337
+msgid "Saved"
+msgstr "Guardado"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:304
+msgid "Location data settings were updated successfully."
+msgstr "Los ajustes de datos de ubicación se actualizaron correctamente."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:311
+msgid "PeakURL could not save the MaxMind settings."
+msgstr "PeakURL no pudo guardar los ajustes de MaxMind."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:321
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:387
+msgid "Database updated"
+msgstr "Base de datos actualizada"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:322
+msgid "PeakURL downloaded the latest GeoLite2 City database."
+msgstr "PeakURL descargó la última base de datos GeoLite2 City."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:326
+msgid "Download failed"
+msgstr "La descarga falló"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:328
+msgid "PeakURL could not download the GeoLite2 database."
+msgstr "PeakURL no pudo descargar la base de datos GeoLite2."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:338
+msgid "Email configuration was updated successfully."
+msgstr "La configuración de correo se actualizó correctamente."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:344
+msgid "PeakURL could not save the email configuration."
+msgstr "PeakURL no pudo guardar la configuración de correo."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:357
+msgid "Update installed"
+msgstr "Actualización instalada"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:360
+msgid "PeakURL %s was installed successfully. Redirecting now."
+msgstr "PeakURL %s se instaló correctamente. Redirigiendo ahora."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:365
+msgid "PeakURL was installed successfully. Redirecting now."
+msgstr "PeakURL se instaló correctamente. Redirigiendo ahora."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:375
+msgid "Update failed"
+msgstr "La actualización falló"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:376
+msgid "PeakURL could not apply the update."
+msgstr "PeakURL no pudo aplicar la actualización."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:389
+msgid "PeakURL repaired the database schema. Review any remaining warnings below."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:392
+msgid "The database schema is now current."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:396
+msgid "Database upgrade failed"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:398
+msgid "PeakURL could not repair the database schema."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:496
+msgid "Delete API key"
+msgstr "Eliminar clave API"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:500
+msgid "Delete %s? Any scripts, automations, or extensions using it will stop working immediately."
+msgstr "¿Eliminar %s? Cualquier script, automatización o extensión que la use dejará de funcionar de inmediato."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:505
+msgid "this API key"
+msgstr "esta clave API"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:509
+msgid "Delete key"
+msgstr "Eliminar clave"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:510
+msgid "Keep key"
+msgstr "Conservar clave"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:523
+msgid "Install PeakURL %s?"
+msgstr "¿Instalar PeakURL %s?"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:524
+msgid "update"
+msgstr "actualización"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:527
+msgid ""
+"PeakURL will download the latest release package, replace managed application files, and reload the dashboard when the update completes.\n"
+"\n"
+"Only continue on packaged release installs."
+msgstr ""
+"PeakURL descargará el último paquete de versión, reemplazará los archivos gestionados de la aplicación y recargará el panel cuando termine la actualización.\n"
+"\n"
+"Continúa solo en instalaciones hechas desde un paquete publicado."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:531
+msgid "Install update"
+msgstr "Instalar actualización"
+
+#: ui/pages/dashboard/settings/SettingsLayout.tsx:20
+msgid "General"
+msgstr "General"
+
+#: ui/pages/dashboard/settings/SettingsLayout.tsx:21
+#: ui/pages/login/LoginPage.tsx:62
+msgid "Security"
+msgstr "Seguridad"
+
+#: ui/pages/dashboard/settings/SettingsLayout.tsx:25
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:634
+#: ui/router/pageTitle.ts:23
+msgid "API Keys"
+msgstr "Claves API"
+
+#: ui/pages/dashboard/settings/SettingsLayout.tsx:37
+msgid "Email SMTP"
+msgstr "SMTP de correo"
+
+#: ui/pages/dashboard/settings/SettingsLayout.tsx:49
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:103
+#: ui/router/pageTitle.ts:31
+msgid "Updates"
+msgstr "Actualizaciones"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:53
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:601
+msgid "Yes"
+msgstr "Sí"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:53
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:602
+msgid "No"
+msgstr "No"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:58
+msgid "Good"
+msgstr "Bien"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:58
+msgid "Should be improved"
+msgstr "Debe mejorarse"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:93
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:654
+#: ui/pages/dashboard/about/AboutPage.tsx:431
+msgid "Database"
+msgstr "Base de datos"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:97
+msgid "Translations"
+msgstr ""
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:99
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:655
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:88
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:120
+#: ui/pages/dashboard/users/UsersPage.tsx:175
+msgid "Email"
+msgstr "Correo electrónico"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:105
+msgid "System"
+msgstr "Sistema"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:132
+msgid "Loading system status..."
+msgstr "Cargando el estado del sistema..."
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:144
+msgid "System status unavailable"
+msgstr "Estado del sistema no disponible"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:156
+msgid "Info"
+msgstr ""
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:189
+msgid "Check"
+msgstr "Comprobación"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:329
+msgid "System status data is not available right now."
+msgstr "Los datos del estado del sistema no están disponibles en este momento."
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:354
+msgid "Environment"
+msgstr "Entorno"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:356
+msgid "Site URL"
+msgstr "URL del sitio"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:361
+msgid "Install Type"
+msgstr "Tipo de instalación"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:364
+msgid "Packaged Release"
+msgstr "Versión empaquetada"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:365
+msgid "Source Checkout"
+msgstr "Checkout del código fuente"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:368
+msgid "Debug Mode"
+msgstr "Modo depuración"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:371
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:568
+msgid "Enabled"
+msgstr "Activado"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:372
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:569
+msgid "Disabled"
+msgstr "Desactivado"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:383
+msgid "Content Directory"
+msgstr "Directorio de contenido"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:388
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:433
+msgid "Writable"
+msgstr "Con escritura"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:389
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:434
+msgid "Not Writable"
+msgstr "Sin escritura"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:391
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:403
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:412
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:474
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:482
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:490
+msgid "Missing"
+msgstr "Falta"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:395
+msgid "Languages Directory"
+msgstr "Directorio de idiomas"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:400
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:422
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:614
+msgid "Readable"
+msgstr "Legible"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:401
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:423
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:615
+msgid "Not Readable"
+msgstr "No legible"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:407
+msgid "Config File"
+msgstr "Archivo de configuración"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:411
+msgid "Present"
+msgstr "Presente"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:417
+msgid "Debug Log"
+msgstr "Log de depuración"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:425
+msgid "Not created yet"
+msgstr "Todavía no creado"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:429
+msgid "App Directory"
+msgstr "Directorio de la app"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:439
+msgid "Release Root"
+msgstr "Raíz de la instalación"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:446
+msgid "PHP Version"
+msgstr "Versión de PHP"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:447
+msgid "PHP SAPI"
+msgstr "PHP SAPI"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:449
+msgid "Web Server"
+msgstr "Servidor web"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:453
+msgid "Operating System"
+msgstr "Sistema operativo"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:456
+msgid "Timezone"
+msgstr "Zona horaria"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:457
+msgid "Memory Limit"
+msgstr "Límite de memoria"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:459
+msgid "Max Execution Time"
+msgstr "Tiempo máximo de ejecución"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:465
+msgid "Upload Max Filesize"
+msgstr "Tamaño máximo de subida"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:468
+msgid "POST Max Size"
+msgstr "Tamaño máximo de POST"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:470
+msgid "Intl Extension"
+msgstr "Extensión intl"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:473
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:481
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:489
+msgid "Available"
+msgstr "Disponible"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:478
+msgid "cURL Extension"
+msgstr "Extensión cURL"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:486
+msgid "ZipArchive"
+msgstr "ZipArchive"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:497
+msgid "Database Server"
+msgstr "Servidor de base de datos"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:504
+msgid "Host"
+msgstr "Host"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:506
+msgid "Port"
+msgstr "Puerto"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:511
+msgid "Database Name"
+msgstr "Nombre de la base de datos"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:512
+msgid "Charset"
+msgstr "Juego de caracteres"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:514
+msgid "Table Prefix"
+msgstr "Prefijo de tablas"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:530
+msgid "Schema Status"
+msgstr ""
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:532
+msgid "Upgrade Recommended"
+msgstr ""
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:535
+msgid "issue(s) detected"
+msgstr ""
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:541
+msgid "Driver"
+msgstr "Controlador"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:543
+msgid "Transport Ready"
+msgstr "Transporte listo"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:547
+msgid "Needs Setup"
+msgstr "Necesita configuración"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:554
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:558
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:607
+msgid "Not configured"
+msgstr "No configurado"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:573
+msgid "Settings Storage"
+msgstr "Almacenamiento de ajustes"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:598
+msgid "Credentials Saved"
+msgstr "Credenciales guardadas"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:610
+msgid "Database Path"
+msgstr "Ruta de la base de datos"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:620
+msgid "Refresh Command"
+msgstr "Comando de actualización"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:628
+msgid "Short Links"
+msgstr "Enlaces cortos"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:629
+#: ui/pages/dashboard/_components/TrafficOverview.tsx:56
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickChart.tsx:38
+msgid "Clicks"
+msgstr "Clics"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:637
+msgid "Activity Events"
+msgstr "Eventos de actividad"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:641
+msgid "Managed Tables"
+msgstr "Tablas gestionadas"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:650
+msgid "Directories and Sizes"
+msgstr "Directorios y tamaños"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:653
+msgid "Server"
+msgstr "Servidor"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:661
+msgid "Data Footprint"
+msgstr "Huella de datos"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:702
+msgid "System status info copied to clipboard"
+msgstr "La información del estado del sistema se copió al portapapeles"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:707
+msgid "Copy failed"
+msgstr "No se pudo copiar"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:708
+msgid "PeakURL could not copy the system status information."
+msgstr "PeakURL no pudo copiar la información del estado del sistema."
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:733
+msgid "Last checked: %s"
+msgstr "Última comprobación: %s"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:750
+msgid "The system status check shows information about your PeakURL configuration and items that may need your attention."
+msgstr "La comprobación del estado del sistema muestra información sobre la configuración de PeakURL y los elementos que pueden requerir tu atención."
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:760
+msgid "1 critical issue"
+msgstr "1 problema crítico"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:761
+msgid "%s critical issues"
+msgstr "%s problemas críticos"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:763
+msgid "Critical issues are items that may have a high impact on your site performance or security. Resolving these issues should be prioritized."
+msgstr "Los problemas críticos son elementos que pueden tener un alto impacto en el rendimiento o la seguridad del sitio. Resolverlos debe ser prioritario."
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:776
+msgid "1 recommended improvement"
+msgstr "1 mejora recomendada"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:777
+msgid "%s recommended improvements"
+msgstr "%s mejoras recomendadas"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:779
+msgid "Recommended improvements are beneficial for your site, though not as urgent as a critical issue. They may include improvements in areas such as security, performance, and user experience."
+msgstr "Las mejoras recomendadas son beneficiosas para tu sitio, aunque no son tan urgentes como un problema crítico. Pueden incluir mejoras en áreas como la seguridad, el rendimiento y la experiencia de usuario."
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:792
+msgid "All system status checks are currently passing."
+msgstr "Todas las comprobaciones del estado del sistema están correctas actualmente."
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:809
+msgid "Hide passed tests"
+msgstr "Ocultar comprobaciones aprobadas"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:812
+msgid "1 passed test"
+msgstr "1 comprobación aprobada"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:813
+msgid "%s passed tests"
+msgstr "%s comprobaciones aprobadas"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:851
+msgid "System Status Info"
+msgstr "Información del estado del sistema"
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:854
+msgid "This page can show you every detail about the configuration of your PeakURL install."
+msgstr "Esta página puede mostrarte todos los detalles sobre la configuración de tu instalación de PeakURL."
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:859
+msgid "If you want to export a full snapshot of this page, you can use the button below to copy it to the clipboard."
+msgstr "Si quieres exportar una instantánea completa de esta página, puedes usar el botón de abajo para copiarla al portapapeles."
+
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:874
+msgid "Copy site info to clipboard"
+msgstr "Copiar información del sitio al portapapeles"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:46
+msgid "Installed"
+msgstr "Instalado"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:47
+msgid "Browse All"
+msgstr "Explorar todo"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:48
+msgid "Featured"
+msgstr "Destacados"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:49
+msgid "Popular"
+msgstr "Populares"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:82
+#: ui/pages/dashboard/users/UsersPage.tsx:345
+msgid "Admin access required"
+msgstr "Se requiere acceso de administrador"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:85
+msgid "Only admin accounts will be able to install, update, and manage plugins."
+msgstr ""
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:113
+msgid "Extend PeakURL with plugins, install from the library, upload custom packages, and manage everything from one place."
+msgstr ""
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:123
+msgid "Upload Plugin"
+msgstr "Subir plugin"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:129
+msgid "Add New Plugin"
+msgstr "Añadir nuevo plugin"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:151
+msgid "Search plugins…"
+msgstr ""
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:216
+msgid "Featured Plugins"
+msgstr "Plugins destacados"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:219
+msgid "Hand-picked extensions recommended by the PeakURL team."
+msgstr ""
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:232
+msgid "Most Popular"
+msgstr "Más populares"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:235
+msgid "Extensions with the highest community adoption."
+msgstr ""
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:276
+msgid "Plugin System Under Development"
+msgstr "Sistema de plugins en desarrollo"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:279
+msgid "We're building a full plugin ecosystem for PeakURL. Install extensions, manage updates, and customise your experience from the dashboard. Here's what's coming:"
+msgstr ""
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:289
+msgid "One-Click Installs"
+msgstr ""
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:290
+msgid "Browse the plugin library and install ZIP packages straight from the dashboard with compatibility checks."
+msgstr ""
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:295
+msgid "Activate & Manage"
+msgstr ""
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:296
+msgid "Review plugin details, enable or disable features, and access per-plugin settings screens."
+msgstr ""
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:301
+msgid "Safe Updates"
+msgstr "Actualizaciones seguras"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:302
+msgid "Managed update checks from trusted manifests with rollback guardrails and clear notices."
+msgstr ""
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:307
+msgid "Persistent Storage"
+msgstr ""
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:308
+msgid "Plugins live in content/plugins so core releases never wipe your extensions."
+msgstr ""
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:313
+msgid "Extension APIs"
+msgstr ""
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:314
+msgid "Documented hooks for settings screens, link actions, analytics widgets, and integrations."
+msgstr ""
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:319
+msgid "Admin Review Flow"
+msgstr ""
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:320
+msgid "Every install surfaces version, author, homepage, and compatibility notes before activation."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:44
+msgid "Setup Complete"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:45
+msgid "PeakURL is ready to use."
+msgstr "PeakURL está listo para usarse."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:47
+msgid "Your administrator account is active and the dashboard is ready. Use these next steps to finish the initial configuration and start publishing links."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:51
+msgid "Create your first short link"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:52
+msgid "Review general settings"
+msgstr "Revisar ajustes generales"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:53
+msgid "Connect location data"
+msgstr "Conectar datos de ubicación"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:57
+msgid "Update Complete"
+msgstr "Actualización completada"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:58
+msgid "PeakURL has been updated successfully."
+msgstr "PeakURL se ha actualizado correctamente."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:60
+msgid "The latest release is now running. Review the overview below, then confirm key services like email delivery, location data, and updates are configured the way you expect."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:64
+msgid "Check email configuration"
+msgstr "Comprobar configuración de correo"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:65
+msgid "Verify update status"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:66
+msgid "Open all links"
+msgstr "Abrir todos los enlaces"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:109
+msgid "Branded Short Links"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:111
+msgid "Create clean short links with custom aliases, generated codes, QR output, and redirect settings that stay easy to manage."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:117
+msgid "Click Analytics"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:119
+msgid "Review clicks, unique visitors, referrers, device breakdowns, and traffic trends from the same dashboard used to publish links."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:125
+msgid "Local Location Data"
+msgstr "Datos de ubicación locales"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:127
+msgid "Resolve visitor locations from a local MaxMind GeoLite2 database so analytics stay under your control."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:133
+msgid "Access And Security"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:135
+msgid "Run with admin and editor roles, session controls, two-factor authentication, backup codes, and API keys."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:141
+msgid "Operations And Integrations"
+msgstr "Operaciones e integraciones"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:143
+msgid "Use API keys, webhooks, import tools, and the built-in updater baseline to operate the service over time."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:149
+msgid "Portable Self-Hosting"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:151
+msgid "Deploy on your own domain, keep runtime configuration in your own environment, and preserve user-owned content across updates."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:171
+msgid "Use"
+msgstr "Usar"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:172
+msgid "Run PeakURL for any purpose, personal projects, business, education, or anything in between."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:176
+msgid "Study"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:177
+msgid "Explore the source code, understand how it works, and modify it to suit your exact needs."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:181
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:74
+msgid "Share"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:182
+msgid "Redistribute copies freely so others can benefit from the same powerful link management platform."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:186
+msgid "Improve"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:187
+msgid "Enhance PeakURL and share your improvements, contributing back to the open-source community."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:229
+msgid "Welcome to"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:232
+msgid "PeakURL gives you a focused workspace for publishing short links, measuring engagement, and running branded link infrastructure on your own stack."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:245
+msgid "Documentation"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:262
+msgid "View on GitHub"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:273
+msgid "Everything you need to publish short links, review traffic, and operate the service from one focused dashboard."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:274
+msgid "What's Inside"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:288
+msgid "PeakURL is built to stay understandable in day-to-day use and dependable over time."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:289
+msgid "Product Principles"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:298
+msgid "Clear By Default"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:301
+msgid "The dashboard should stay direct and readable so routine work like publishing links, reviewing traffic, and managing users does not feel heavy."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:311
+msgid "Portable To Run"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:314
+msgid "The application should install cleanly on common PHP and MySQL hosting without depending on a managed SaaS control plane."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:324
+msgid "Open And Inspectable"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:327
+msgid "The codebase stays auditable and adaptable so operators can understand what they run, extend it carefully, and keep long-term control."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:339
+msgid "PeakURL is released under the MIT License so it can stay practical to adopt, inspect, modify, and distribute."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:340
+msgid "Open Source Terms"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:354
+msgid "Freedom to"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:368
+msgid "Support PeakURL"
+msgstr "Apoya a PeakURL"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:371
+msgid "If PeakURL is useful to you, help keep it practical and actively maintained."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:374
+msgid "Sponsorships and small contributions help fund releases, documentation, infrastructure, and the maintenance work that keeps the project moving."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:387
+msgid "Sponsor PeakURL"
+msgstr "Patrocina PeakURL"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:409
+msgid "A quick overview of the installation you are running right now."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:410
+msgid "Current Installation"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:421
+#: ui/pages/dashboard/_components/Header.tsx:9
+#: ui/router/pageTitle.ts:64
+msgid "Dashboard"
+msgstr "Panel"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:426
+msgid "Runtime"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:441
+msgid "GeoIP"
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:455
+msgid "Self-hosted link management with clear ownership and a focused dashboard."
+msgstr ""
+
+#: ui/pages/dashboard/about/AboutPage.tsx:464
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:93
+msgid "Website"
+msgstr "Sitio web"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:482
+msgid "Release Notes"
+msgstr "Notas de la versión"
+
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FormatRequirements.tsx:15
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FormatRequirements.tsx:25
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FormatRequirements.tsx:40
+msgid "Example page"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FormatRequirements.tsx:60
+msgid "File Format Requirements"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FormatRequirements.tsx:65
+msgid "Required Fields"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FormatRequirements.tsx:73
+msgid " - The destination URL (e.g. destinationUrl in JSON/XML)"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FormatRequirements.tsx:81
+msgid "Optional Fields"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FormatRequirements.tsx:89
+msgid " - Custom alias"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FormatRequirements.tsx:96
+msgid " - Link title"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FormatRequirements.tsx:103
+msgid " - Protection password"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FormatRequirements.tsx:110
+msgid " - Date (YYYY-MM-DD)"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FormatRequirements.tsx:113
+msgid "• Additional columns are ignored during import, so PeakURL exports can be imported again later."
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUpload.tsx:56
+msgid "Unsupported file format"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUpload.tsx:63
+msgid "No valid data found in file"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUpload.tsx:67
+msgid "Failed to parse file: %s"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUpload.tsx:191
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:77
+msgid "Import failed: %s"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUpload.tsx:203
+msgid "Upload File"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUpload.tsx:206
+msgid "Upload a CSV, JSON, or XML file containing URLs and their metadata."
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/ApiImport.tsx:13
+#: ui/pages/dashboard/bulk-import/BulkImportLayout.tsx:14
+msgid "API Import"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/ApiImport.tsx:16
+msgid "Use our API to programmatically import multiple URLs. Perfect for integrations and automated workflows."
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/ApiImport.tsx:23
+msgid "Example Request"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/ApiImport.tsx:49
+msgid "Response"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/ApiImport.tsx:82
+msgid "View API Documentation"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:45
+msgid "No URLs found"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:78
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:96
+msgid "Unknown error"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:89
+#: ui/pages/dashboard/bulk-import/BulkImportLayout.tsx:15
+msgid "Paste URLs"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:92
+msgid "Paste a list of URLs (one per line) to quickly create multiple short links. You can optionally add a custom alias separated by a comma or space."
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:101
+msgid "URLs (one per line)"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:118
+msgid "Create Links"
+msgstr "Crear enlaces"
+
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:124
+msgid "Tips"
+msgstr "Consejos"
+
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:131
+msgid "Format:"
+msgstr "Formato:"
+
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:131
+msgid "or"
+msgstr "o"
+
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:138
+msgid "Each entry should be on a separate line"
+msgstr "Cada entrada debe estar en una línea independiente"
+
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:144
+msgid "URLs must include http:// or https://"
+msgstr "Las URL deben incluir http:// o https://"
+
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:150
+msgid "If alias is omitted, one will be auto-generated"
+msgstr "Si se omite el alias, se generará uno automáticamente"
+
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:163
+msgid "Processing URLs..."
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/BulkImportLayout.tsx:13
+msgid "File Upload"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/BulkImportTabPage.tsx:19
+msgid "Product launch"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/BulkImportTabPage.tsx:24
+msgid "Help docs"
+msgstr ""
+
+#: ui/pages/dashboard/bulk-import/BulkImportTabPage.tsx:29
+msgid "Newsletter"
+msgstr ""
+
+#: ui/pages/dashboard/_components/StatsCards.tsx:26
+#: ui/pages/dashboard/links/LinksPage.tsx:302
+msgid "Active Links"
+msgstr "Enlaces activos"
+
+#: ui/pages/dashboard/_components/StatsCards.tsx:35
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:49
+msgid "Click Rate"
+msgstr "Tasa de clics"
+
+#: ui/pages/dashboard/_components/StatsCards.tsx:97
+msgid "vs last month"
+msgstr "vs. el mes pasado"
+
+#: ui/pages/dashboard/_components/TrafficOverview.tsx:24
+msgid "Traffic Overview"
+msgstr "Resumen del tráfico"
+
+#: ui/pages/dashboard/_components/TrafficOverview.tsx:36
+msgid "Line Chart"
+msgstr "Gráfico de líneas"
+
+#: ui/pages/dashboard/_components/TrafficOverview.tsx:47
+msgid "Bar Chart"
+msgstr "Gráfico de barras"
+
+#: ui/pages/dashboard/_components/TrafficOverview.tsx:62
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:162
+msgid "Unique"
+msgstr "Únicos"
+
+#: ui/pages/dashboard/_components/TrafficOverview.tsx:74
+msgid "No traffic data available"
+msgstr "Aún no hay datos de tráfico disponibles"
+
+#: ui/pages/dashboard/_components/Header.tsx:12
+msgid "Welcome back! Here's what's happening with your links today."
+msgstr "Bienvenido de nuevo. Esto es lo que ocurre hoy con tus enlaces."
+
+#: ui/pages/dashboard/_components/Header.tsx:23
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:20
+msgid "Last 7 days"
+msgstr "Últimos 7 días"
+
+#: ui/pages/dashboard/_components/Header.tsx:24
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:26
+msgid "Last 30 days"
+msgstr "Últimos 30 días"
+
+#: ui/pages/dashboard/_components/Header.tsx:25
+msgid "Last 90 days"
+msgstr "Últimos 90 días"
+
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:17
+msgid "Created new link <strong>%s</strong>"
+msgstr ""
+
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:23
+msgid "from %s"
+msgstr ""
+
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:31
+msgid "Link <strong>%1$s</strong> was clicked %2$s"
+msgstr ""
+
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:35
+msgid "Link <strong>%s</strong> was clicked"
+msgstr ""
+
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:37
+msgid "Unknown activity"
+msgstr ""
+
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:59
+msgid "Recent Activity"
+msgstr ""
+
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:65
+msgid "No recent activity"
+msgstr ""
+
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:94
+msgid "View All Links"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/BulkDeleteModal.tsx:22
+msgid "Failed to delete links"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/BulkDeleteModal.tsx:40
+msgid "Delete Links"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/BulkDeleteModal.tsx:62
+msgid "Are you sure you want to delete %s selected link(s)? This action cannot be undone."
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/BulkDeleteModal.tsx:87
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:132
+msgid "Deleting..."
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/BulkDeleteModal.tsx:92
+msgid "Delete (%s)"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:28
+msgid "Total Links:"
+msgstr "Total de enlaces:"
+
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:38
+msgid "Total Clicks:"
+msgstr "Total de clics:"
+
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:54
+msgid "Sort: Date Created"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:56
+msgid "Sort: Most Clicks"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:57
+msgid "Sort: Alias"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:65
+msgid "Descending"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:66
+msgid "Ascending"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:80
+msgid "Show: %s rows"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:83
+msgid "Custom…"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:95
+msgid "Custom page size"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:103
+msgid "Export"
+msgstr "Exportar"
+
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:112
+msgid "Export CSV"
+msgstr "Exportar CSV"
+
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:113
+msgid "Import ready"
+msgstr "Listo para importar"
+
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:117
+msgid "Export JSON"
+msgstr "Exportar JSON"
+
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:118
+msgid "Structured data"
+msgstr "Datos estructurados"
+
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:122
+msgid "Export XML"
+msgstr "Exportar XML"
+
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:123
+msgid "Portable feed"
+msgstr "Fuente portable"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:153
+msgid "Total"
+msgstr "Total"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:199
+msgid "QR Code"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:206
+#: ui/pages/login/LoginPage.tsx:57
+msgid "Analytics"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:213
+msgid "Edit"
+msgstr "Editar"
+
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:30
+msgid "Failed to delete link"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:48
+msgid "Delete Link"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:69
+msgid "Are you sure you want to delete this link? This action cannot be undone."
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:78
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:100
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:51
+msgid "Short URL"
+msgstr "URL corta"
+
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:86
+msgid "Destination"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:47
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:109
+msgid "Expiration time must be in the future."
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:62
+msgid "Failed to update link"
+msgstr "No se pudo actualizar el enlace"
+
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:77
+msgid "Edit Link"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:112
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/MainInputs.tsx:21
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:74
+msgid "Destination URL"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:127
+msgid "Title (Optional)"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:134
+msgid "Enter a title for this link"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:145
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:32
+msgid "Password Protection (Optional)"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:152
+msgid "Set a password to protect this link"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:163
+msgid "Expiration Date (Optional)"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:192
+msgid "Expired"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:15
+msgid "Link Title (Optional)"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:22
+msgid "My Awesome Link"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:39
+msgid "Enter password"
+msgstr "Introduce la contraseña"
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:79
+msgid "Please enter a URL"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:84
+msgid "Please enter a valid URL (must include http:// or https://)"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:122
+msgid "Link shortened successfully! %s"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:143
+msgid "Failed to create short link. Please try again."
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:182
+msgid "Advanced Options"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UTMFields.tsx:22
+msgid "UTM Parameters (Optional)"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UTMFields.tsx:29
+msgid "utm_source (e.g., google)"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UTMFields.tsx:35
+msgid "utm_medium (e.g., email)"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UTMFields.tsx:41
+msgid "utm_campaign (e.g., sale)"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UTMFields.tsx:47
+msgid "utm_term (e.g., running)"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UTMFields.tsx:53
+msgid "utm_content (e.g., banner)"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/MainInputs.tsx:28
+msgid "Enter long link here..."
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/MainInputs.tsx:38
+msgid "Alias (Optional)"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/MainInputs.tsx:45
+msgid "Alias (optional)"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/MainInputs.tsx:83
+msgid "Shortening..."
+msgstr "Acortando..."
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/MainInputs.tsx:90
+msgid "Shorten"
+msgstr "Acortar"
+
+#: ui/pages/dashboard/links/_components/Header.tsx:17
+#: ui/pages/login/LoginPage.tsx:52
+#: ui/router/pageTitle.ts:72
+msgid "Links"
+msgstr "Enlaces"
+
+#: ui/pages/dashboard/links/_components/Header.tsx:20
+msgid "Manage and track your shortened URLs"
+msgstr "Gestiona y supervisa tus URL acortadas"
+
+#: ui/pages/dashboard/links/_components/Header.tsx:31
+#: ui/pages/dashboard/links/_components/Header.tsx:32
+msgid "Refresh links"
+msgstr "Actualizar enlaces"
+
+#: ui/pages/dashboard/links/_components/Header.tsx:40
+msgid "Short links domain"
+msgstr "Dominio de enlaces cortos"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:25
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:67
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:87
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:111
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:228
+msgid "Top Countries"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:31
+msgid "No link data available"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:73
+msgid "Loading location data..."
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:93
+msgid "Failed to load location data"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:117
+msgid "No location data available yet"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:120
+msgid "Location tracking will show here once clicks are recorded with a configured GeoLite2 City database"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:126
+msgid "Note:"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:129
+msgid "• Local and private-network clicks (127.0.0.1, 172.16-31.x.x, 192.168.x.x) will not show location data"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:133
+msgid "• Add `GeoLite2-City.mmdb` under `content/uploads/geoip/`"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:137
+msgid "• VPN users will show VPN server location"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:147
+msgid "Top Cities"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:153
+msgid "No city data available yet"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:173
+msgid "Total Locations"
+msgstr "Ubicaciones totales"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:182
+msgid "Countries"
+msgstr "Países"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:196
+msgid "Geographic Distribution"
+msgstr "Distribución geográfica"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:11
+msgid "Last 24 hours"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:14
+msgid "%s per hour"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:32
+msgid "All time"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:36
+msgid "%s per day"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:48
+msgid "0 per day"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:58
+msgid "Historical click count"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:62
+msgid "Short URL created on"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:100
+msgid "hit"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:100
+msgid "hits"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickChart.tsx:100
+msgid "Click History"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickChart.tsx:108
+msgid "All"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:32
+msgid "Active & Tracking"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:40
+msgid "Engagement"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:43
+msgid "High"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:45
+msgid "Medium"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:46
+msgid "Low"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:59
+msgid "%s%% click-through rate"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:63
+msgid "Average"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:65
+msgid "%s clicks/day"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:77
+msgid "Quick Insights"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:80
+msgid "Last updated:"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:82
+msgid "Search Engine"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:83
+msgid "Social Media"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:84
+msgid "Messaging"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:85
+msgid "Video"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:86
+msgid "News & Content"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:87
+msgid "Developer"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:89
+msgid "Email Marketing"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:90
+msgid "Shopping"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:91
+msgid "AI"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:92
+msgid "Productivity"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:94
+msgid "Direct"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:130
+msgid "Traffic by Category"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:173
+msgid "Referrer Sources"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:178
+msgid "Loading referrers..."
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:210
+msgid "Direct / Unknown"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:251
+msgid "No referrer data available yet"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:254
+msgid "Referrer data will appear when visitors come from external sources"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:267
+msgid "UTM Campaign Tracking"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:282
+msgid "source:"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:287
+msgid "medium:"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:15
+msgid "Best day"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:19
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:56
+msgid "%s hits"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:21
+msgid "on"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:26
+msgid "Hide details"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:26
+msgid "View details"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:42
+msgid "Year"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:38
+#: ui/pages/dashboard/users/UsersPage.tsx:437
+msgid "Created"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:73
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:91
+msgid "Device & Browser Analytics"
+msgstr "Analítica de dispositivos y navegadores"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:77
+msgid "Loading analytics..."
+msgstr "Cargando analítica..."
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:97
+msgid "No device data available yet"
+msgstr "Aún no hay datos de dispositivos disponibles"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:100
+msgid "Device and browser information will appear here once clicks are recorded"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:31
+msgid "Check out this link"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
+msgid "Copied!"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
+msgid "Copy"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:84
+msgid "Quick Share"
+msgstr "Compartir rápidamente"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:93
+msgid "Facebook"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:102
+msgid "Twitter"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:111
+msgid "LinkedIn"
+msgstr "LinkedIn"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:71
+msgid "Traffic Statistics"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:72
+msgid "Traffic Location"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:73
+msgid "Traffic Sources"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:97
+msgid "Link Analytics"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:100
+msgid "Detailed statistics and performance metrics"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:111
+msgid "Close panel"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:216
+msgid "Close"
+msgstr ""
+
+#: ui/pages/dashboard/links/LinksPage.tsx:285
+msgid "Total Links"
+msgstr "Total de enlaces"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:39
+msgid "Can manage users, settings, and all links."
+msgstr ""
+
+#: ui/pages/dashboard/users/UsersPage.tsx:44
+msgid "Can create, edit, and delete site links without admin access."
+msgstr ""
+
+#: ui/pages/dashboard/users/UsersPage.tsx:109
+msgid "Unable to save the user."
+msgstr ""
+
+#: ui/pages/dashboard/users/UsersPage.tsx:125
+#: ui/pages/dashboard/users/UsersPage.tsx:372
+msgid "Add User"
+msgstr "Añadir usuario"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:125
+msgid "Edit User"
+msgstr "Editar usuario"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:129
+msgid "Create a new account with admin or editor access."
+msgstr ""
+
+#: ui/pages/dashboard/users/UsersPage.tsx:130
+msgid "Update the account details and role for this user."
+msgstr ""
+
+#: ui/pages/dashboard/users/UsersPage.tsx:187
+#: ui/pages/login/LoginPage.tsx:399
+msgid "Password"
+msgstr "Contraseña"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:196
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:99
+msgid "Use at least 8 characters."
+msgstr "Usa al menos 8 caracteres."
+
+#: ui/pages/dashboard/users/UsersPage.tsx:197
+msgid "Leave blank to keep the current password."
+msgstr ""
+
+#: ui/pages/dashboard/users/UsersPage.tsx:202
+#: ui/pages/dashboard/users/UsersPage.tsx:436
+msgid "Role"
+msgstr ""
+
+#: ui/pages/dashboard/users/UsersPage.tsx:216
+msgid "Your own role is locked here."
+msgstr ""
+
+#: ui/pages/dashboard/users/UsersPage.tsx:232
+msgid "Create User"
+msgstr ""
+
+#: ui/pages/dashboard/users/UsersPage.tsx:304
+msgid "User deleted"
+msgstr ""
+
+#: ui/pages/dashboard/users/UsersPage.tsx:306
+msgid "%s was removed successfully."
+msgstr "%s se eliminó correctamente."
+
+#: ui/pages/dashboard/users/UsersPage.tsx:313
+msgid "Delete failed"
+msgstr "La eliminación falló"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:314
+msgid "Unable to delete this user right now."
+msgstr ""
+
+#: ui/pages/dashboard/users/UsersPage.tsx:348
+msgid "Only admin accounts can manage other users and their roles."
+msgstr "Solo las cuentas de administrador pueden gestionar a otros usuarios y sus roles."
+
+#: ui/pages/dashboard/users/UsersPage.tsx:360
+msgid "User Access"
+msgstr "Acceso de usuarios"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:366
+msgid "Manage the people who can access this installation. Admins control site-wide settings. Editors can create and maintain links."
+msgstr ""
+
+#: ui/pages/dashboard/users/UsersPage.tsx:379
+msgid "Total Users"
+msgstr "Usuarios totales"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:387
+msgid "Admins"
+msgstr "Administradores"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:395
+msgid "Editors"
+msgstr "Editores"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:406
+msgid "Accounts"
+msgstr "Cuentas"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:416
+msgid "Unable to load users."
+msgstr ""
+
+#: ui/pages/dashboard/users/UsersPage.tsx:424
+msgid "No users yet"
+msgstr ""
+
+#: ui/pages/dashboard/users/UsersPage.tsx:427
+msgid "Add an admin or editor account to start sharing access."
+msgstr ""
+
+#: ui/pages/dashboard/users/UsersPage.tsx:438
+msgid "Actions"
+msgstr ""
+
+#: ui/pages/dashboard/users/UsersPage.tsx:479
+#: ui/pages/dashboard/users/UsersPage.tsx:483
+msgid "Edit %s"
+msgstr "Editar %s"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:493
+#: ui/pages/dashboard/users/UsersPage.tsx:497
+msgid "Delete %s"
+msgstr "Eliminar %s"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:529
+#: ui/pages/dashboard/users/UsersPage.tsx:540
+msgid "Delete User"
+msgstr "Eliminar usuario"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:533
+msgid "Delete %s? This will revoke their sessions, remove their API keys, and permanently delete their account."
+msgstr ""
+
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:44
+msgid "The password reset link is invalid."
+msgstr ""
+
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:49
+msgid "Password must be at least 8 characters."
+msgstr "La contraseña debe tener al menos 8 caracteres."
+
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:54
+msgid "Passwords do not match."
+msgstr "Las contraseñas no coinciden."
+
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:71
+msgid "PeakURL could not reset the password with that link."
+msgstr "PeakURL no pudo restablecer la contraseña con ese enlace."
+
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:85
+msgid "Secure Reset"
+msgstr "Restablecimiento seguro"
+
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:88
+msgid "Choose a new password and get back to work."
+msgstr ""
+
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:91
+msgid "Once the password changes, PeakURL revokes the old sessions so only the new login remains valid."
+msgstr ""
+
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:102
+msgid "For best results, combine uppercase, lowercase, numbers, and a unique phrase you do not reuse elsewhere."
+msgstr ""
+
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:125
+msgid "Reset your password"
+msgstr "Restablece tu contraseña"
+
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:128
+msgid "Set a new account password, then sign in again with the updated credentials."
+msgstr ""
+
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:139
+msgid "Password updated"
+msgstr "Contraseña actualizada"
+
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:142
+msgid "PeakURL updated your password and revoked the older sessions. Redirecting you to the login page now."
+msgstr ""
+
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:152
+msgid "New password"
+msgstr "Nueva contraseña"
+
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:161
+msgid "Enter your new password"
+msgstr ""
+
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:167
+msgid "Confirm new password"
+msgstr ""
+
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:177
+msgid "Confirm your new password"
+msgstr ""
+
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:187
+msgid "Reset password"
+msgstr "Restablecer contraseña"
+
+#: ui/pages/login/LoginPage.tsx:53
+msgid "Shorten, organize, and share."
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:58
+msgid "Clicks, locations, and devices."
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:63
+msgid "Sessions, 2FA, and roles."
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:75
+msgid "Could not reach the API"
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:78
+msgid "The PHP runtime did not answer the session check. Verify the API and database, then retry."
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:86
+msgid "Retry connection"
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:197
+msgid "Password is required."
+msgstr "La contraseña es obligatoria."
+
+#: ui/pages/login/LoginPage.tsx:210
+msgid "Enter your backup code."
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:211
+#: ui/pages/login/LoginPage.tsx:359
+msgid "Enter the 6-digit code from your authenticator app."
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:248
+msgid "Unable to verify the two-factor code."
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:249
+msgid "Unable to sign in with those credentials."
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:269
+msgid "Almost there."
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:272
+msgid "Verify to continue."
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:277
+msgid "Manage every link"
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:280
+msgid "from one place."
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:287
+msgid "One more verification step and you’ll be in your workspace."
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:288
+msgid "Shorten URLs, track clicks, and manage your audience, all from your own dashboard."
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:327
+msgid "Powered by"
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:352
+msgid "Verify your identity"
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:353
+msgid "Sign in to your account"
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:358
+msgid "Enter one of the backup codes you saved when setting up 2FA."
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:360
+msgid "Enter your credentials to continue to the dashboard."
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:393
+msgid "you@company.com"
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:433
+msgid "Backup code"
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:447
+msgid "xxxx-xxxx-xxxx"
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:459
+msgid "Use authenticator code instead"
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:484
+msgid "Lost your device? Use a backup code"
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:520
+msgid "Verifying…"
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:521
+msgid "Signing in…"
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:526
+msgid "Verify & continue"
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:527
+msgid "Sign in"
+msgstr ""
+
+#: ui/pages/login/LoginPage.tsx:549
+msgid "Back to sign-in"
+msgstr ""
+
+#: ui/router/pageTitle.ts:19
+msgid "General Settings"
+msgstr "Ajustes generales"
+
+#: ui/router/pageTitle.ts:21
+msgid "Security Settings"
+msgstr "Ajustes de seguridad"
+
+#: ui/router/pageTitle.ts:40
+msgid "Import: File Upload"
+msgstr "Importar: subida de archivo"
+
+#: ui/router/pageTitle.ts:42
+msgid "Import: API"
+msgstr "Importar: API"
+
+#: ui/router/pageTitle.ts:44
+msgid "Import: Paste URLs"
+msgstr "Importar: pegar URL"
+
+#: ui/router/pageTitle.ts:52
+msgid "Login"
+msgstr "Acceder"
+
+#: ui/router/pageTitle.ts:56
+msgid "Forgot Password"
+msgstr "Olvidé mi contraseña"
+
+#: ui/router/pageTitle.ts:60
+msgid "Reset Password"
+msgstr "Restablecer contraseña"
+
+#: ui/router/pageTitle.ts:68
+msgid "About"
+msgstr "Acerca de"
+
+#: ui/router/pageTitle.ts:114
+msgid "Page Not Found"
+msgstr "Página no encontrada"

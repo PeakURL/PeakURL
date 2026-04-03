@@ -29,6 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *  GET  /api/v1/system/update       → status
  *  POST /api/v1/system/update/check → check
  *  POST /api/v1/system/update/apply → apply
+ *  POST /api/v1/system/update/database → upgrade_database
  *
  * @since 1.0.0
  */
@@ -100,6 +101,20 @@ class UpdatesController {
 		return JsonResponse::success(
 			$this->data_store->apply_update( $request ),
 			'Update applied.',
+		);
+	}
+
+	/**
+	 * Apply the managed database upgrade / repair flow.
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed>
+	 * @since 1.0.3
+	 */
+	public function upgrade_database( Request $request ): array {
+		return JsonResponse::success(
+			$this->data_store->upgrade_database_schema( $request ),
+			'Database upgrade complete.',
 		);
 	}
 }

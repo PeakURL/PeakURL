@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 use PeakURL\Includes\Connection;
 use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Services\DatabaseSchema;
 use PeakURL\Store;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -110,16 +111,8 @@ if ( ! file_exists( $schema_path ) ) {
 }
 
 $connection_manager = new Connection( $config );
-$connection         = $connection_manager->get_connection();
-$schema             = file_get_contents( $schema_path );
-
-if ( false === $schema ) {
-	fwrite( STDERR, "Unable to read schema file.\n" );
-	exit( 1 );
-}
-
-$connection->exec( $connection_manager->prefix_schema( $schema ) );
-$connection_manager->reconcile_schema();
+$schema_service     = new DatabaseSchema( $connection_manager, $schema_path );
+$schema_service->upgrade();
 
 $data_store = new Store( $connection_manager, $config );
 $data_store->bootstrap_workspace();

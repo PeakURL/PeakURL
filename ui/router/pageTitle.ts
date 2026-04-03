@@ -1,23 +1,8 @@
 import { matchPath } from 'react-router-dom';
 import { PEAKURL_SITE_NAME } from '@/constants';
+import { __ } from '@/i18n';
 
 const DEFAULT_SITE_TITLE = 'PeakURL';
-
-const SETTINGS_TAB_TITLES: Record<string, string> = {
-	general: 'General Settings',
-	security: 'Security Settings',
-	api: 'API Keys',
-	integrations: 'Integrations',
-	email: 'Email Configuration',
-	location: 'Location Data',
-	updates: 'Updates',
-};
-
-const IMPORT_TAB_TITLES: Record<string, string> = {
-	file: 'Import: File Upload',
-	api: 'Import: API',
-	paste: 'Import: Paste URLs',
-};
 
 function getSiteTitle(): string {
 	const siteTitle = PEAKURL_SITE_NAME.trim();
@@ -28,74 +13,105 @@ function withSiteTitleSuffix(value: string): string {
 	return `${value} • ${getSiteTitle()}`;
 }
 
+function getSettingsTabTitle(tab: string): string {
+	switch (tab) {
+		case 'general':
+			return __('General Settings');
+		case 'security':
+			return __('Security Settings');
+		case 'api':
+			return __('API Keys');
+		case 'integrations':
+			return __('Integrations');
+		case 'email':
+			return __('Email Configuration');
+		case 'location':
+			return __('Location Data');
+		case 'updates':
+			return __('Updates');
+		default:
+			return __('Settings');
+	}
+}
+
+function getImportTabTitle(tab: string): string {
+	switch (tab) {
+		case 'file':
+			return __('Import: File Upload');
+		case 'api':
+			return __('Import: API');
+		case 'paste':
+			return __('Import: Paste URLs');
+		default:
+			return __('Import');
+	}
+}
+
 export function getPageTitle(pathname: string): string {
 	if ('/login' === pathname) {
-		return withSiteTitleSuffix('Login');
+		return withSiteTitleSuffix(__('Login'));
 	}
 
 	if ('/forgot-password' === pathname) {
-		return withSiteTitleSuffix('Forgot Password');
+		return withSiteTitleSuffix(__('Forgot Password'));
 	}
 
 	if (pathname.startsWith('/reset-password/')) {
-		return withSiteTitleSuffix('Reset Password');
+		return withSiteTitleSuffix(__('Reset Password'));
 	}
 
 	if ('/' === pathname || '/dashboard' === pathname) {
-		return withSiteTitleSuffix('Dashboard');
+		return withSiteTitleSuffix(__('Dashboard'));
 	}
 
 	if ('/dashboard/about' === pathname) {
-		return withSiteTitleSuffix('About');
+		return withSiteTitleSuffix(__('About'));
 	}
 
 	if ('/dashboard/links' === pathname) {
-		return withSiteTitleSuffix('Links');
+		return withSiteTitleSuffix(__('Links'));
 	}
 
 	if ('/dashboard/plugins' === pathname) {
-		return withSiteTitleSuffix('Plugins');
+		return withSiteTitleSuffix(__('Plugins'));
 	}
 
 	if ('/dashboard/users' === pathname) {
-		return withSiteTitleSuffix('Users');
+		return withSiteTitleSuffix(__('Users'));
 	}
 
 	const settingsMatch = matchPath('/dashboard/settings/:tab', pathname);
 
 	if (settingsMatch) {
 		const tab = settingsMatch.params.tab ?? 'general';
-		return withSiteTitleSuffix(
-			SETTINGS_TAB_TITLES[tab] ?? 'Settings',
-		);
+		return withSiteTitleSuffix(getSettingsTabTitle(tab));
 	}
 
 	if ('/dashboard/settings' === pathname) {
-		return withSiteTitleSuffix('Settings');
+		return withSiteTitleSuffix(__('Settings'));
 	}
 
 	const importMatch = matchPath('/dashboard/tools/import/:tab', pathname);
 
 	if (importMatch) {
 		const tab = importMatch.params.tab ?? 'file';
-
-		if (tab in IMPORT_TAB_TITLES) {
-			return withSiteTitleSuffix(
-				IMPORT_TAB_TITLES[tab] ?? 'Import',
-			);
-		}
+		return withSiteTitleSuffix(getImportTabTitle(tab));
 	}
 
 	if ('/dashboard/tools/import' === pathname) {
-		return withSiteTitleSuffix('Import');
+		return withSiteTitleSuffix(__('Import'));
+	}
+
+	if ('/dashboard/tools/system-status' === pathname) {
+		return withSiteTitleSuffix(__('System Status'));
 	}
 
 	if ('/dashboard/tools' === pathname) {
-		return withSiteTitleSuffix('Tools');
+		return withSiteTitleSuffix(__('Tools'));
 	}
 
 	if (pathname.startsWith('/dashboard')) {
-		return withSiteTitleSuffix('Page Not Found');
+		return withSiteTitleSuffix(__('Page Not Found'));
 	}
 
 	return getSiteTitle();

@@ -13,6 +13,7 @@ import ImportSummary from '../ImportSummary';
 import ImportDetails from '../ImportDetails';
 import FormatRequirements from './FormatRequirements';
 import SampleData from './SampleData';
+import { __, sprintf } from '@/i18n';
 
 const FileUpload = ({
 	importStatus,
@@ -52,18 +53,18 @@ const FileUpload = ({
 				} else if (file.name.endsWith('.xml')) {
 					data = parseXml(text);
 				} else {
-					alert('Unsupported file format');
+					alert(__('Unsupported file format'));
 					return;
 				}
 
 				if (data.length > 0) {
 					processImport(data);
 				} else {
-					alert('No valid data found in file');
+					alert(__('No valid data found in file'));
 				}
 			} catch (err) {
 				console.error('Parsing error', err);
-				alert('Failed to parse file: ' + err.message);
+				alert(sprintf(__('Failed to parse file: %s'), err.message));
 			}
 		};
 		reader.readAsText(file);
@@ -185,7 +186,12 @@ const FileUpload = ({
 		} catch (err) {
 			console.error('Import failed', err);
 			setImportStatus('idle');
-			alert('Import failed: ' + (err?.data?.message || err.message));
+			alert(
+				sprintf(
+					__('Import failed: %s'),
+					err?.data?.message || err.message
+				)
+			);
 		}
 	};
 
@@ -194,11 +200,12 @@ const FileUpload = ({
 			<div className="space-y-5">
 				<div className="bg-surface border border-stroke rounded-lg p-5">
 					<h2 className="text-base font-semibold text-heading mb-3">
-						Upload File
+						{__('Upload File')}
 					</h2>
 					<p className="text-sm text-text-muted mb-5">
-						Upload a CSV, JSON, or XML file containing URLs and
-						their metadata.
+						{__(
+							'Upload a CSV, JSON, or XML file containing URLs and their metadata.'
+						)}
 					</p>
 
 					{importStatus === 'idle' && (

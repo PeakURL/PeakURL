@@ -3,6 +3,7 @@
 
 import { PEAKURL_DOMAIN } from '@constants';
 import { Link2, RefreshCw } from 'lucide-react';
+import { __ } from '@/i18n';
 
 const Header = ({ onRefresh, isRefreshing = false }) => {
 	return (
@@ -12,9 +13,11 @@ const Header = ({ onRefresh, isRefreshing = false }) => {
 					<Link2 className="h-5 w-5 text-white" />
 				</div>
 				<div>
-					<h1 className="text-xl font-bold text-heading">Links</h1>
+					<h1 className="text-xl font-bold text-heading">
+						{__('Links')}
+					</h1>
 					<p className="text-xs text-text-muted">
-						Manage and track your shortened URLs
+						{__('Manage and track your shortened URLs')}
 					</p>
 				</div>
 			</div>
@@ -25,8 +28,8 @@ const Header = ({ onRefresh, isRefreshing = false }) => {
 					onClick={onRefresh}
 					disabled={isRefreshing}
 					className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-stroke bg-surface text-text-muted transition-colors hover:border-accent/30 hover:text-accent disabled:cursor-wait"
-					aria-label="Refresh links"
-					title="Refresh links"
+					aria-label={__('Refresh links')}
+					title={__('Refresh links')}
 				>
 					<RefreshCw
 						className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`}
@@ -34,7 +37,7 @@ const Header = ({ onRefresh, isRefreshing = false }) => {
 				</button>
 
 				<div className="rounded-full border border-stroke bg-surface px-4 py-3 text-xs font-medium text-text-muted">
-					Short links domain{' '}
+					{__('Short links domain')}{' '}
 					<span className="text-heading">{PEAKURL_DOMAIN}</span>
 				</div>
 			</div>

@@ -7,8 +7,14 @@
 		"node": ">=24 <25"
 	},
 	"scripts": {
+		"predev": "node scripts/ensure-rolldown-binding.js",
 		"dev": "vite",
+		"prebuild": "node scripts/ensure-rolldown-binding.js",
 		"build": "tsc -b && vite build",
+		"i18n:pot": "php scripts/i18n/build-pot.php",
+		"i18n:update-po": "php scripts/i18n/update-po.php",
+		"i18n:compile": "php scripts/i18n/compile-catalogs.php",
+		"i18n:build": "npm run i18n:pot && npm run i18n:compile",
 		"release:build": "sh scripts/build-release.sh",
 		"release:upload": "sh scripts/upload-release.sh",
 		"smoke:auth": "sh scripts/smoke-auth.local.sh",
@@ -33,6 +39,7 @@
 		"@tailwindcss/vite": "^4.2.2",
 		"@visx/geo": "^3.12.0",
 		"@visx/zoom": "^3.12.0",
+		"@wordpress/i18n": "^6.16.0",
 		"chart.js": "^4.5.1",
 		"d3-scale": "^4.0.2",
 		"date-fns": "^4.1.0",

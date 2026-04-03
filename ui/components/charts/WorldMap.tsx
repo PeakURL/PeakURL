@@ -7,6 +7,7 @@ import { Zoom } from '@visx/zoom';
 import { feature as topojsonFeature } from 'topojson-client';
 import { scaleLinear } from 'd3-scale';
 import { Plus, Minus, Maximize2 } from 'lucide-react';
+import { __ } from '@/i18n';
 
 const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
 const MAP_WIDTH = 960;
@@ -24,58 +25,57 @@ const INITIAL_TRANSFORM = {
 
 // Country code to full name mapping (ISO 3166-1 alpha-3)
 const countryNames = {
-	USA: 'United States',
-	GBR: 'United Kingdom',
-	CAN: 'Canada',
-	AUS: 'Australia',
-	DEU: 'Germany',
-	FRA: 'France',
-	ITA: 'Italy',
-	ESP: 'Spain',
-	NLD: 'Netherlands',
-	BEL: 'Belgium',
-	CHE: 'Switzerland',
-	AUT: 'Austria',
-	SWE: 'Sweden',
-	NOR: 'Norway',
-	DNK: 'Denmark',
-	FIN: 'Finland',
-	POL: 'Poland',
-	CZE: 'Czech Republic',
-	HUN: 'Hungary',
-	ROU: 'Romania',
-	BGR: 'Bulgaria',
-	GRC: 'Greece',
-	PRT: 'Portugal',
-	IRL: 'Ireland',
-	JPN: 'Japan',
-	CHN: 'China',
-	IND: 'India',
-	BRA: 'Brazil',
-	MEX: 'Mexico',
-	ARG: 'Argentina',
-	ZAF: 'South Africa',
-	EGY: 'Egypt',
-	NGA: 'Nigeria',
-	KEN: 'Kenya',
-	SAU: 'Saudi Arabia',
-	ARE: 'United Arab Emirates',
-	ISR: 'Israel',
-	TUR: 'Turkey',
-	RUS: 'Russia',
-	UKR: 'Ukraine',
-	KOR: 'South Korea',
-	THA: 'Thailand',
-	VNM: 'Vietnam',
-	SGP: 'Singapore',
-	MYS: 'Malaysia',
-	IDN: 'Indonesia',
-	PHL: 'Philippines',
-	NZL: 'New Zealand',
-	CHL: 'Chile',
-	COL: 'Colombia',
-	PER: 'Peru',
-	VEN: 'Venezuela',
+	USA: __('United States'),
+	GBR: __('United Kingdom'),
+	CAN: __('Canada'),
+	AUS: __('Australia'),
+	DEU: __('Germany'),
+	FRA: __('France'),
+	ITA: __('Italy'),
+	ESP: __('Spain'),
+	NLD: __('Netherlands'),
+	BEL: __('Belgium'),
+	CHE: __('Switzerland'),
+	AUT: __('Austria'),
+	SWE: __('Sweden'),
+	NOR: __('Norway'),
+	DNK: __('Denmark'),
+	FIN: __('Finland'),
+	POL: __('Poland'),
+	CZE: __('Czech Republic'),
+	HUN: __('Hungary'),
+	ROU: __('Romania'),
+	BGR: __('Bulgaria'),
+	GRC: __('Greece'),
+	PRT: __('Portugal'),
+	IRL: __('Ireland'),
+	JPN: __('Japan'),
+	CHN: __('China'),
+	IND: __('India'),
+	BRA: __('Brazil'),
+	MEX: __('Mexico'),
+	ARG: __('Argentina'),
+	ZAF: __('South Africa'),
+	EGY: __('Egypt'),
+	NGA: __('Nigeria'),
+	KEN: __('Kenya'),
+	SAU: __('Saudi Arabia'),
+	ARE: __('United Arab Emirates'),
+	TUR: __('Turkey'),
+	RUS: __('Russia'),
+	UKR: __('Ukraine'),
+	KOR: __('South Korea'),
+	THA: __('Thailand'),
+	VNM: __('Vietnam'),
+	SGP: __('Singapore'),
+	MYS: __('Malaysia'),
+	IDN: __('Indonesia'),
+	PHL: __('Philippines'),
+	NZL: __('New Zealand'),
+	CHL: __('Chile'),
+	COL: __('Colombia'),
+	PER: __('Peru'),
+	VEN: __('Venezuela'),
 };
 
 // Convert ISO 3166-1 alpha-2 to alpha-3 (common conversions)
@@ -116,7 +116,6 @@ const alpha2ToAlpha3 = {
 	KE: 'KEN',
 	SA: 'SAU',
 	AE: 'ARE',
-	IL: 'ISR',
 	TR: 'TUR',
 	RU: 'RUS',
 	UA: 'UKR',
@@ -172,7 +171,6 @@ const alpha3ToNumeric = {
 	KEN: '404',
 	SAU: '682',
 	ARE: '784',
-	ISR: '376',
 	TUR: '792',
 	RUS: '643',
 	UKR: '804',
@@ -327,7 +325,7 @@ const WorldMap = ({ data = [], hoveredCountry, onCountryHover }) => {
 									zoom.transformMatrix.scaleX >= MAX_ZOOM
 								}
 								className="w-10 h-10 bg-surface rounded-lg shadow-lg border border-stroke flex items-center justify-center hover:bg-surface-alt disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-								title="Zoom in"
+								title={__('Zoom in')}
 							>
 								<Plus className="w-5 h-5 text-heading" />
 							</button>
@@ -346,14 +344,14 @@ const WorldMap = ({ data = [], hoveredCountry, onCountryHover }) => {
 									zoom.transformMatrix.scaleX <= MIN_ZOOM
 								}
 								className="w-10 h-10 bg-surface rounded-lg shadow-lg border border-stroke flex items-center justify-center hover:bg-surface-alt disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-								title="Zoom out"
+								title={__('Zoom out')}
 							>
 								<Minus className="w-5 h-5 text-heading" />
 							</button>
 							<button
 								onClick={() => zoom.reset()}
 								className="w-10 h-10 bg-surface rounded-lg shadow-lg border border-stroke flex items-center justify-center hover:bg-surface-alt transition-all"
-								title="Reset view"
+								title={__('Reset view')}
 							>
 								<Maximize2 className="w-5 h-5 text-heading" />
 							</button>
@@ -367,8 +365,8 @@ const WorldMap = ({ data = [], hoveredCountry, onCountryHover }) => {
 								<p className="text-xs text-text-muted mt-1">
 									{tooltipContent.clicks}{' '}
 									{tooltipContent.clicks === 1
-										? 'click'
-										: 'clicks'}
+										? __('click')
+										: __('clicks')}
 								</p>
 							</div>
 						)}

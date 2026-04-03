@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { useState } from 'react';
 import { Button } from '@/components/ui';
+import { __ } from '@/i18n';
 import {
 	AlertCircle,
 	CheckCircle2,
@@ -11,7 +12,7 @@ import {
 
 function formatDate(value) {
 	if (!value) {
-		return 'Never';
+		return __('Never');
 	}
 
 	try {
@@ -23,7 +24,7 @@ function formatDate(value) {
 
 function formatBytes(value) {
 	if (!value) {
-		return 'Not available';
+		return __('Not available');
 	}
 
 	const units = ['B', 'KB', 'MB', 'GB'];
@@ -84,7 +85,7 @@ function LocationDataTab({
 			? effectiveStatus?.accountId || ''
 			: accountIdInput;
 	const configurationLabel =
-		effectiveStatus?.configurationLabel || 'settings table';
+		effectiveStatus?.configurationLabel || __('settings table');
 	const hasSavedCredentials = Boolean(
 		effectiveStatus?.credentialsConfigured
 	);
@@ -118,12 +119,12 @@ function LocationDataTab({
 							</div>
 							<div>
 								<h2 className="text-base font-semibold text-heading">
-									Location Data
+									{__('Location Data')}
 								</h2>
 								<p className="text-sm text-text-muted">
-									Enable country and city analytics with a
-									local MaxMind GeoLite2 City database stored
-									in your persistent content folder.
+									{__(
+										'Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder.'
+									)}
 								</p>
 							</div>
 						</div>
@@ -143,25 +144,25 @@ function LocationDataTab({
 								!effectiveStatus.canManageFromDashboard)
 						}
 					>
-						{isReady ? 'Update Database' : 'Download Database'}
+						{isReady ? __('Update Database') : __('Download Database')}
 					</Button>
 				</div>
 			</div>
 
 			<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 				<StatCard
-					label="Status"
-					value={isReady ? 'Ready' : 'Setup Required'}
+					label={__('Status')}
+					value={isReady ? __('Ready') : __('Setup Required')}
 				/>
 				<StatCard
-					label="Database Updated"
+					label={__('Database Updated')}
 					value={formatDate(
 						effectiveStatus?.lastDownloadedAt ||
 							effectiveStatus?.databaseUpdatedAt
 					)}
 				/>
 				<StatCard
-					label="Database Size"
+					label={__('Database Size')}
 					value={formatBytes(effectiveStatus?.databaseSizeBytes)}
 				/>
 			</div>
@@ -169,7 +170,7 @@ function LocationDataTab({
 			{errorMessage && (
 				<StateCard
 					icon={AlertCircle}
-					title="Location data unavailable"
+					title={__('Location data unavailable')}
 					description={errorMessage}
 					variant="error"
 				/>
@@ -180,13 +181,13 @@ function LocationDataTab({
 					icon={isReady ? CheckCircle2 : RefreshCcw}
 					title={
 						isReady
-							? 'Location analytics is enabled'
-							: 'Location analytics is disabled'
+							? __('Location analytics is enabled')
+							: __('Location analytics is disabled')
 					}
 					description={
 						isReady
-							? 'PeakURL is using the local GeoLite2 City database for click locations.'
-							: 'Save your MaxMind credentials, then download the GeoLite2 City database to enable visitor country and city analytics.'
+							? __('PeakURL is using the local GeoLite2 City database for click locations.')
+							: __('Save your MaxMind credentials, then download the GeoLite2 City database to enable visitor country and city analytics.')
 					}
 					variant={isReady ? 'success' : 'info'}
 				/>
@@ -195,7 +196,7 @@ function LocationDataTab({
 			{effectiveStatus?.manageDisabledReason && (
 				<StateCard
 					icon={AlertCircle}
-					title="Dashboard management unavailable"
+					title={__('Dashboard management unavailable')}
 					description={effectiveStatus.manageDisabledReason}
 					variant="info"
 				/>
@@ -204,7 +205,7 @@ function LocationDataTab({
 			<div className="rounded-lg border border-stroke bg-surface p-5">
 				<div className="mb-5 space-y-1">
 					<h3 className="text-sm font-semibold text-heading">
-						MaxMind Credentials
+						{__('MaxMind Credentials')}
 					</h3>
 					<p className="text-sm leading-6 text-text-muted">
 						PeakURL stores these values encrypted in the
@@ -222,7 +223,7 @@ function LocationDataTab({
 							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 								<div>
 									<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
-										Account ID
+										{__('Account ID')}
 									</p>
 									<p className="mt-2 text-sm font-medium text-heading">
 										{effectiveStatus?.accountId}
@@ -230,7 +231,7 @@ function LocationDataTab({
 								</div>
 								<div>
 									<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
-										License Key
+										{__('License Key')}
 									</p>
 									<p className="mt-2 text-sm font-medium text-heading">
 										{effectiveStatus?.licenseKeyHint}
@@ -248,7 +249,7 @@ function LocationDataTab({
 										!effectiveStatus.canManageFromDashboard
 								)}
 							>
-								Update Credentials
+								{__('Update Credentials')}
 							</Button>
 							<Button
 								type="button"
@@ -265,7 +266,9 @@ function LocationDataTab({
 								}
 								icon={CloudDownload}
 							>
-								{isReady ? 'Refresh Database' : 'Download Database'}
+								{isReady
+									? __('Refresh Database')
+									: __('Download Database')}
 							</Button>
 						</div>
 					</div>
@@ -274,7 +277,7 @@ function LocationDataTab({
 						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 							<div>
 								<label className="mb-1.5 block text-sm font-medium text-heading">
-									MaxMind Account ID
+									{__('MaxMind Account ID')}
 								</label>
 								<input
 									type="text"
@@ -291,7 +294,7 @@ function LocationDataTab({
 
 							<div>
 								<label className="mb-1.5 block text-sm font-medium text-heading">
-									MaxMind License Key
+									{__('MaxMind License Key')}
 								</label>
 								<input
 									type="password"
@@ -302,8 +305,8 @@ function LocationDataTab({
 									}
 									placeholder={
 										hasSavedCredentials
-											? 'Enter a new MaxMind license key'
-											: 'Enter your MaxMind license key'
+											? __('Enter a new MaxMind license key')
+											: __('Enter your MaxMind license key')
 									}
 									className="w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2.5 text-sm text-heading outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
 								/>
@@ -312,7 +315,7 @@ function LocationDataTab({
 
 						{hasSavedCredentials && (
 							<p className="text-xs text-text-muted">
-								Saved license key: {effectiveStatus?.licenseKeyHint}
+								{__('Saved license key:')} {effectiveStatus?.licenseKeyHint}
 							</p>
 						)}
 
@@ -327,8 +330,8 @@ function LocationDataTab({
 								)}
 							>
 								{hasSavedCredentials
-									? 'Save New Credentials'
-									: 'Save Credentials'}
+									? __('Save New Credentials')
+									: __('Save Credentials')}
 							</Button>
 							{hasSavedCredentials && (
 								<Button
@@ -341,7 +344,7 @@ function LocationDataTab({
 										setLicenseKey('');
 									}}
 								>
-									Cancel
+									{__('Cancel')}
 								</Button>
 							)}
 						</div>

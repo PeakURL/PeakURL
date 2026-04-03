@@ -9,11 +9,12 @@ import {
 	MousePointerClick,
 	Users,
 } from 'lucide-react';
+import { __ } from '@/i18n';
 
 const StatsCards = ({ stats }) => {
 	const statsData = [
 		{
-			title: 'Total Clicks',
+			title: __('Total Clicks'),
 			value: formatNumber(stats.totalClicks),
 			change: '+12.3%',
 			changeType: 'positive',
@@ -22,7 +23,7 @@ const StatsCards = ({ stats }) => {
 			iconColor: 'text-blue-600 dark:text-blue-400',
 		},
 		{
-			title: 'Active Links',
+			title: __('Active Links'),
 			value: stats.totalLinks,
 			change: `+${((stats.totalLinks || 0) % 5) + 1}`,
 			changeType: 'positive',
@@ -31,7 +32,7 @@ const StatsCards = ({ stats }) => {
 			iconColor: 'text-emerald-600 dark:text-emerald-400',
 		},
 		{
-			title: 'Click Rate',
+			title: __('Click Rate'),
 			value: `${stats.conversionRate.toFixed(1)}%`,
 			change: '+0.8%',
 			changeType: 'positive',
@@ -40,7 +41,7 @@ const StatsCards = ({ stats }) => {
 			iconColor: 'text-purple-600 dark:text-purple-400',
 		},
 		{
-			title: 'Unique Visitors',
+			title: __('Unique Visitors'),
 			value: formatNumber(stats.uniqueClicks),
 			change: '+15.2%',
 			changeType: 'positive',
@@ -93,7 +94,7 @@ const StatsCards = ({ stats }) => {
 								{stat.change}
 							</span>
 							<span className="text-xs text-text-muted">
-								vs last month
+								{__('vs last month')}
 							</span>
 						</div>
 					</div>

@@ -31,6 +31,7 @@ import {
 	useLoginMutation,
 	useVerifyTwoFactorLoginMutation,
 } from '@/store/slices/api/user';
+import { __ } from '@/i18n';
 
 const getErrorMessage = (error, fallback) => {
 	if (typeof error?.data?.message === 'string' && error.data.message) {
@@ -45,21 +46,21 @@ const getErrorMessage = (error, fallback) => {
 };
 
 /* ─── Highlights shown on the branding panel ─── */
-const highlights = [
+const getHighlights = () => [
 	{
 		icon: Link2,
-		label: 'Links',
-		desc: 'Shorten, organize, and share.',
+		label: __('Links'),
+		desc: __('Shorten, organize, and share.'),
 	},
 	{
 		icon: BarChart3,
-		label: 'Analytics',
-		desc: 'Clicks, locations, and devices.',
+		label: __('Analytics'),
+		desc: __('Clicks, locations, and devices.'),
 	},
 	{
 		icon: Shield,
-		label: 'Security',
-		desc: 'Sessions, 2FA, and roles.',
+		label: __('Security'),
+		desc: __('Sessions, 2FA, and roles.'),
 	},
 ];
 
@@ -71,17 +72,18 @@ const ApiErrorState = ({ onRetry }) => (
 				<ShieldCheck size={24} />
 			</div>
 			<h1 className="mt-5 text-xl font-semibold text-slate-900">
-				Could not reach the API
+				{__('Could not reach the API')}
 			</h1>
 			<p className="mt-2 text-sm leading-relaxed text-slate-500">
-				The PHP runtime did not answer the session check. Verify the API
-				and database, then retry.
+				{__(
+					'The PHP runtime did not answer the session check. Verify the API and database, then retry.'
+				)}
 			</p>
 			<button
 				className="mt-6 w-full rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition-colors duration-150 hover:bg-slate-800"
 				onClick={onRetry}
 			>
-				Retry connection
+				{__('Retry connection')}
 			</button>
 		</div>
 	</div>
@@ -116,6 +118,7 @@ const submitFormOnEnter = (event) => {
 function LoginPage() {
 	const location = useLocation();
 	const navigate = useNavigate();
+	const highlights = getHighlights();
 	const [identifier, setIdentifier] = useState('');
 	const [password, setPassword] = useState('');
 	const [token, setToken] = useState('');
@@ -186,12 +189,12 @@ function LoginPage() {
 		setFormError('');
 
 		if (!identifier.trim()) {
-			setFormError('Email or username is required.');
+			setFormError(__('Email or username is required.'));
 			return;
 		}
 
 		if (!password) {
-			setFormError('Password is required.');
+			setFormError(__('Password is required.'));
 			return;
 		}
 
@@ -204,8 +207,8 @@ function LoginPage() {
 			) {
 				setFormError(
 					useBackupMode
-						? 'Enter your backup code.'
-						: 'Enter the 6-digit code from your authenticator app.'
+						? __('Enter your backup code.')
+						: __('Enter the 6-digit code from your authenticator app.')
 				);
 				return;
 			}
@@ -242,8 +245,8 @@ function LoginPage() {
 				getErrorMessage(
 					submitError,
 					twoFactorRequired
-						? 'Unable to verify the two-factor code.'
-						: 'Unable to sign in with those credentials.'
+						? __('Unable to verify the two-factor code.')
+						: __('Unable to sign in with those credentials.')
 				)
 			);
 		}
@@ -263,26 +266,28 @@ function LoginPage() {
 					<h1 className="login-fade-up-d1 text-[2.5rem] font-bold leading-[1.1] tracking-tight xl:text-5xl">
 						{twoFactorRequired ? (
 							<>
-								Almost there.
+								{__('Almost there.')}
 								<br />
 								<span className="text-indigo-400">
-									Verify to continue.
+									{__('Verify to continue.')}
 								</span>
 							</>
 						) : (
 							<>
-								Manage every link
+								{__('Manage every link')}
 								<br />
 								<span className="text-indigo-400">
-									from one place.
+									{__('from one place.')}
 								</span>
 							</>
 						)}
 					</h1>
 					<p className="login-fade-up-d2 mt-5 max-w-sm text-[15px] leading-relaxed text-slate-400">
 						{twoFactorRequired
-							? 'One more verification step and you\u2019ll be in your workspace.'
-							: 'Shorten URLs, track clicks, and manage your audience — all from your own dashboard.'}
+							? __('One more verification step and you’ll be in your workspace.')
+							: __(
+									'Shorten URLs, track clicks, and manage your audience, all from your own dashboard.'
+							  )}
 					</p>
 
 					{/* Highlight chips */}
@@ -319,7 +324,7 @@ function LoginPage() {
 					rel="noopener noreferrer"
 					className="login-fade-up-d4 text-xs text-slate-600 transition-colors duration-150 hover:text-slate-400"
 				>
-					Powered by{' '}
+					{__('Powered by')}{' '}
 					<span className="font-medium text-slate-500">PeakURL</span>
 				</a>
 			</div>
@@ -344,15 +349,15 @@ function LoginPage() {
 						</div>
 						<h2 className="mt-5 text-2xl font-bold tracking-tight text-slate-900">
 							{twoFactorRequired
-								? 'Verify your identity'
-								: 'Sign in to your account'}
+								? __('Verify your identity')
+								: __('Sign in to your account')}
 						</h2>
 						<p className="mt-2 text-sm leading-relaxed text-slate-500">
 							{twoFactorRequired
 								? useBackupMode
-									? 'Enter one of the backup codes you saved when setting up 2FA.'
-									: 'Enter the 6-digit code from your authenticator app.'
-								: 'Enter your credentials to continue to the dashboard.'}
+									? __('Enter one of the backup codes you saved when setting up 2FA.')
+									: __('Enter the 6-digit code from your authenticator app.')
+								: __('Enter your credentials to continue to the dashboard.')}
 						</p>
 
 						{/* Error */}
@@ -373,7 +378,7 @@ function LoginPage() {
 							onSubmit={handleSubmit}
 						>
 							<Input
-								label="Email or username"
+								label={__('Email or username')}
 								icon={UserRound}
 								value={identifier}
 								name="identifier"
@@ -385,13 +390,13 @@ function LoginPage() {
 								autoCapitalize="none"
 								spellCheck={false}
 								disabled={submitPending || twoFactorRequired}
-								placeholder="you@company.com"
+								placeholder={__('you@company.com')}
 								required
 								className="rounded-xl border-slate-200 bg-slate-50 py-3 text-sm transition-colors duration-150 placeholder:text-slate-400 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-500/15"
 							/>
 
 							<Input
-								label="Password"
+								label={__('Password')}
 								type="password"
 								icon={LockKeyhole}
 								value={password}
@@ -414,7 +419,7 @@ function LoginPage() {
 										to="/forgot-password"
 										className="text-sm font-medium text-indigo-600 transition-colors duration-150 hover:text-indigo-700"
 									>
-										Forgot your password?
+										{__('Forgot your password?')}
 									</Link>
 								</div>
 							) : null}
@@ -425,7 +430,7 @@ function LoginPage() {
 										/* ── Backup code mode ── */
 										<div className="space-y-3">
 											<Input
-												label="Backup code"
+												label={__('Backup code')}
 												value={backupCode}
 												name="backupCode"
 												onChange={(event) =>
@@ -439,7 +444,7 @@ function LoginPage() {
 												spellCheck={false}
 												autoComplete="one-time-code"
 												disabled={submitPending}
-												placeholder="xxxx-xxxx-xxxx"
+												placeholder={__('xxxx-xxxx-xxxx')}
 												className="rounded-xl border-slate-200 bg-slate-50 py-3 text-sm transition-colors duration-150 placeholder:text-slate-400 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-500/15"
 											/>
 											<button
@@ -451,7 +456,7 @@ function LoginPage() {
 													setFormError('');
 												}}
 											>
-												Use authenticator code instead
+												{__('Use authenticator code instead')}
 											</button>
 										</div>
 									) : (
@@ -476,8 +481,7 @@ function LoginPage() {
 													setFormError('');
 												}}
 											>
-												Lost your device? Use a backup
-												code
+												{__('Lost your device? Use a backup code')}
 											</button>
 										</div>
 									)}
@@ -513,14 +517,14 @@ function LoginPage() {
 												/>
 											</svg>
 											{twoFactorRequired
-												? 'Verifying…'
-												: 'Signing in…'}
+												? __('Verifying…')
+												: __('Signing in…')}
 										</>
 									) : (
 										<>
 											{twoFactorRequired
-												? 'Verify & continue'
-												: 'Sign in'}
+												? __('Verify & continue')
+												: __('Sign in')}
 											<ArrowRight size={15} />
 										</>
 									)}
@@ -542,7 +546,7 @@ function LoginPage() {
 										}}
 									>
 										<ArrowLeft size={13} />
-										Back to sign-in
+										{__('Back to sign-in')}
 									</button>
 								</div>
 							) : null}

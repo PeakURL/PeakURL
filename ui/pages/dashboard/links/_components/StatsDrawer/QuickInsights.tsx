@@ -3,6 +3,7 @@
 
 import { TrendingUp, TrendingDown, Activity, Clock } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import { __, sprintf } from '@/i18n';
 
 function QuickInsights({ link }) {
 	// Calculate click rate trend (mock - should come from actual data)
@@ -27,8 +28,8 @@ function QuickInsights({ link }) {
 	const insights = [
 		{
 			icon: Activity,
-			label: 'Status',
-			value: isActive ? 'Active & Tracking' : 'Inactive',
+			label: __('Status'),
+			value: isActive ? __('Active & Tracking') : __('Inactive'),
 			color: isActive
 				? 'text-green-600 dark:text-green-400'
 				: 'text-gray-500',
@@ -36,8 +37,13 @@ function QuickInsights({ link }) {
 		},
 		{
 			icon: TrendingUp,
-			label: 'Engagement',
-			value: clickRate > 50 ? 'High' : clickRate > 20 ? 'Medium' : 'Low',
+			label: __('Engagement'),
+			value:
+				clickRate > 50
+					? __('High')
+					: clickRate > 20
+						? __('Medium')
+						: __('Low'),
 			color:
 				clickRate > 50
 					? 'text-green-600 dark:text-green-400'
@@ -50,12 +56,15 @@ function QuickInsights({ link }) {
 					: clickRate > 20
 						? 'bg-yellow-500/10'
 						: 'bg-orange-500/10',
-			subtext: `${clickRate}% click-through rate`,
+			subtext: sprintf(__('%s%% click-through rate'), clickRate),
 		},
 		{
 			icon: Clock,
-			label: 'Average',
-			value: `${avgClicksPerDay.toFixed(1)} clicks/day`,
+			label: __('Average'),
+			value: sprintf(
+				__('%s clicks/day'),
+				avgClicksPerDay.toFixed(1)
+			),
 			color: 'text-blue-600 dark:text-blue-400',
 			bg: 'bg-blue-500/10',
 		},
@@ -65,10 +74,10 @@ function QuickInsights({ link }) {
 		<div className="bg-linear-to-br from-accent/5 to-info/5 border border-accent/20 rounded-lg p-4">
 			<div className="flex items-center justify-between mb-3">
 				<h3 className="text-sm font-semibold text-heading">
-					Quick Insights
+					{__('Quick Insights')}
 				</h3>
 				<span className="text-xs text-text-muted">
-					Last updated:{' '}
+					{__('Last updated:')}{' '}
 					{formatDistanceToNow(new Date(), { addSuffix: true })}
 				</span>
 			</div>

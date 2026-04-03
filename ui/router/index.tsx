@@ -16,6 +16,7 @@ import {
 	SettingsTabPage,
 	BulkImportLayout,
 	BulkImportTabPage,
+	SystemStatusPage,
 	ForgotPasswordPage,
 	LoginPage,
 	ResetPasswordPage,
@@ -120,6 +121,10 @@ function AppRouter() {
 							<Route
 								path="import/paste"
 								element={<BulkImportLayoutRoute />}
+							/>
+							<Route
+								path="system-status"
+								element={<SystemStatusPage />}
 							/>
 							<Route path="*" element={<NotFoundPage />} />
 						</Route>

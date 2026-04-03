@@ -342,12 +342,8 @@ trait AccountsTrait {
 		$session = $this->find_session_by_request( $request );
 
 		if ( $session ) {
-			$this->db->update(
+			$this->db->delete(
 				'sessions',
-				array(
-					'revoked_at'     => $this->now(),
-					'revoked_reason' => 'logout',
-				),
 				array(
 					'id' => $session['id'],
 				),
@@ -1152,19 +1148,17 @@ trait AccountsTrait {
 			'manage_profile',
 			'You do not have permission to manage account security.',
 		);
+		$this->prune_stale_sessions();
 
 		return $this->execute_statement(
-			'UPDATE sessions
-            SET revoked_at = :revoked_at,
-                revoked_reason = :revoked_reason
+			'DELETE FROM sessions
             WHERE id = :id
             AND user_id = :user_id
-            AND revoked_at IS NULL',
+            AND last_active_at >= :active_since',
 			array(
-				'revoked_at'     => $this->now(),
-				'revoked_reason' => 'manual',
-				'id'             => $id,
-				'user_id'        => $user['id'],
+				'id'           => $id,
+				'user_id'      => $user['id'],
+				'active_since' => $this->session_active_since(),
 			),
 		) > 0;
 	}
@@ -1179,11 +1173,12 @@ trait AccountsTrait {
 	 * @since 1.0.0
 	 */
 	public function revoke_other_sessions( Request $request ): int {
-		$user            = $this->assert_request_capability(
+		$user = $this->assert_request_capability(
 			$request,
 			'manage_profile',
 			'You do not have permission to manage account security.',
 		);
+		$this->prune_stale_sessions();
 		$current_session = $this->find_session_by_request( $request );
 
 		if ( ! $current_session ) {
@@ -1194,17 +1189,15 @@ trait AccountsTrait {
 		}
 
 		return $this->execute_statement(
-			'UPDATE sessions
-			SET revoked_at = :revoked_at,
-				revoked_reason = :revoked_reason
+			'DELETE FROM sessions
 			WHERE user_id = :user_id
 			AND id <> :current_session_id
-			AND revoked_at IS NULL',
+			AND revoked_at IS NULL
+			AND last_active_at >= :active_since',
 			array(
-				'revoked_at'         => $this->now(),
-				'revoked_reason'     => 'manual',
 				'user_id'            => $user['id'],
 				'current_session_id' => $current_session['id'],
+				'active_since'       => $this->session_active_since(),
 			),
 		);
 	}

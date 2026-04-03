@@ -6,6 +6,22 @@ export const systemApi = baseApi.injectEndpoints({
 			query: () => 'system/notices',
 			providesTags: ['AdminNotices'],
 		}),
+		getGeneralSettings: build.query({
+			query: () => 'system/general',
+			providesTags: ['GeneralSettings'],
+		}),
+		getSystemStatus: build.query({
+			query: () => 'system/status',
+			providesTags: ['SystemStatus'],
+		}),
+		saveGeneralSettings: build.mutation({
+			query: (body) => ({
+				url: 'system/general',
+				method: 'POST',
+				body,
+			}),
+			invalidatesTags: ['GeneralSettings'],
+		}),
 		getGeoipStatus: build.query({
 			query: () => 'system/geoip',
 			providesTags: ['Geoip'],
@@ -55,11 +71,21 @@ export const systemApi = baseApi.injectEndpoints({
 			}),
 			invalidatesTags: ['Updates', 'AdminNotices'],
 		}),
+		upgradeDatabaseSchema: build.mutation({
+			query: () => ({
+				url: 'system/update/database',
+				method: 'POST',
+			}),
+			invalidatesTags: ['Updates', 'AdminNotices', 'SystemStatus'],
+		}),
 	}),
 });
 
 export const {
 	useGetAdminNoticesQuery,
+	useGetGeneralSettingsQuery,
+	useGetSystemStatusQuery,
+	useSaveGeneralSettingsMutation,
 	useGetGeoipStatusQuery,
 	useGetMailStatusQuery,
 	useSaveGeoipConfigurationMutation,
@@ -68,4 +94,5 @@ export const {
 	useGetUpdateStatusQuery,
 	useCheckForUpdatesMutation,
 	useApplyUpdateMutation,
+	useUpgradeDatabaseSchemaMutation,
 } = systemApi;

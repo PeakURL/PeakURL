@@ -5,6 +5,7 @@ import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { X, Trash2, AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
 import { useBulkDeleteUrlMutation } from '@/store/slices/api/urls';
+import { __, sprintf } from '@/i18n';
 
 function BulkDeleteModal({ open, setOpen, selectedIds, onSuccess }) {
 	const [error, setError] = useState('');
@@ -18,7 +19,7 @@ function BulkDeleteModal({ open, setOpen, selectedIds, onSuccess }) {
 			setOpen(false);
 			if (onSuccess) onSuccess();
 		} catch (err) {
-			setError(err?.data?.message || 'Failed to delete links');
+			setError(err?.data?.message || __('Failed to delete links'));
 		}
 	};
 
@@ -36,7 +37,7 @@ function BulkDeleteModal({ open, setOpen, selectedIds, onSuccess }) {
 							<div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center">
 								<AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400" />
 							</div>
-							Delete Links
+							{__('Delete Links')}
 						</DialogTitle>
 						<button
 							onClick={() => setOpen(false)}
@@ -57,10 +58,12 @@ function BulkDeleteModal({ open, setOpen, selectedIds, onSuccess }) {
 						)}
 
 						<p className="text-sm text-text-muted">
-							Are you sure you want to delete{' '}
-							<strong>{selectedIds.length}</strong> selected link
-							{selectedIds.length > 1 ? 's' : ''}? This action
-							cannot be undone.
+							{sprintf(
+								__(
+									'Are you sure you want to delete %s selected link(s)? This action cannot be undone.'
+								),
+								selectedIds.length
+							)}
 						</p>
 
 						{/* Action Buttons */}
@@ -71,7 +74,7 @@ function BulkDeleteModal({ open, setOpen, selectedIds, onSuccess }) {
 								disabled={isLoading}
 								className="flex-1 px-4 py-2.5 bg-surface border border-stroke hover:bg-surface-alt text-heading rounded-lg transition-all font-medium disabled:opacity-50"
 							>
-								Cancel
+								{__('Cancel')}
 							</button>
 							<button
 								onClick={handleDelete}
@@ -81,12 +84,12 @@ function BulkDeleteModal({ open, setOpen, selectedIds, onSuccess }) {
 								{isLoading ? (
 									<>
 										<div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-										Deleting...
+										{__('Deleting...')}
 									</>
 								) : (
 									<>
 										<Trash2 className="w-4 h-4" />
-										Delete ({selectedIds.length})
+										{sprintf(__('Delete (%s)'), selectedIds.length)}
 									</>
 								)}
 							</button>

@@ -2,6 +2,7 @@
 'use client';
 
 import { useState } from 'react';
+import { __ } from '@/i18n';
 import { cn, getAvatarInitials, getGravatarUrl } from '@/utils';
 
 const SIZE_STYLES = {
@@ -29,7 +30,7 @@ export const Avatar = ({
 	const imageUrl = getGravatarUrl(email, sizeStyle.image);
 	const initials = getAvatarInitials(firstName, lastName, fallbackName);
 	const label =
-		`${firstName} ${lastName}`.trim() || fallbackName || 'User avatar';
+		`${firstName} ${lastName}`.trim() || fallbackName || __('User avatar');
 	const [failedImageUrl, setFailedImageUrl] = useState('');
 	const showImage = Boolean(imageUrl) && failedImageUrl !== imageUrl;
 

@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDown, Download, Link2, MousePointerClick } from 'lucide-react';
+import { __, sprintf } from '@/i18n';
 
 const TableFooter = ({
 	totalLinks = 0,
@@ -23,7 +24,9 @@ const TableFooter = ({
 				<div className="flex items-center gap-4 text-sm">
 					<div className="flex items-center gap-1.5">
 						<Link2 className="h-3 w-3 text-accent" />
-						<span className="text-text-muted">Total Links:</span>
+						<span className="text-text-muted">
+							{__('Total Links:')}
+						</span>
 						<span className="font-semibold text-heading">
 							{totalLinks}
 						</span>
@@ -31,7 +34,9 @@ const TableFooter = ({
 					<div className="w-px h-4 bg-stroke"></div>
 					<div className="flex items-center gap-1.5">
 						<MousePointerClick className="h-3 w-3 text-accent" />
-						<span className="text-text-muted">Total Clicks:</span>
+						<span className="text-text-muted">
+							{__('Total Clicks:')}
+						</span>
 						<span className="font-semibold text-heading">
 							{totalClicks.toLocaleString()}
 						</span>
@@ -45,9 +50,11 @@ const TableFooter = ({
 						onChange={(e) => setSortBy(e.target.value)}
 						className="bg-surface-alt border border-stroke rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-accent focus:border-accent outline-none cursor-pointer"
 					>
-						<option value="createdAt">Sort: Date Created</option>
-						<option value="clicks">Sort: Most Clicks</option>
-						<option value="alias">Sort: Alias</option>
+						<option value="createdAt">
+							{__('Sort: Date Created')}
+						</option>
+						<option value="clicks">{__('Sort: Most Clicks')}</option>
+						<option value="alias">{__('Sort: Alias')}</option>
 					</select>
 
 					<select
@@ -55,8 +62,8 @@ const TableFooter = ({
 						onChange={(e) => setSortOrder(e.target.value)}
 						className="bg-surface-alt border border-stroke rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-accent focus:border-accent outline-none cursor-pointer"
 					>
-						<option value="desc">Descending</option>
-						<option value="asc">Ascending</option>
+						<option value="desc">{__('Descending')}</option>
+						<option value="asc">{__('Ascending')}</option>
 					</select>
 
 					<select
@@ -70,10 +77,10 @@ const TableFooter = ({
 					>
 						{pageSizeOptions.map((opt) => (
 							<option key={opt} value={String(opt)}>
-								Show: {opt} rows
+								{sprintf(__('Show: %s rows'), opt)}
 							</option>
 						))}
-						<option value="custom">Custom…</option>
+						<option value="custom">{__('Custom…')}</option>
 					</select>
 
 					{isCustom && (
@@ -85,7 +92,7 @@ const TableFooter = ({
 								const num = Number(e.target.value);
 								if (!isNaN(num) && num > 0) setLimit(num);
 							}}
-							placeholder="Custom page size"
+							placeholder={__('Custom page size')}
 							className="w-28 bg-surface-alt border border-stroke rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-accent focus:border-accent outline-none"
 						/>
 					)}
@@ -93,7 +100,7 @@ const TableFooter = ({
 					<Menu as="div" className="relative">
 						<MenuButton className="px-3 py-1.5 text-sm font-medium text-accent hover:bg-accent/10 rounded-lg transition-colors flex items-center gap-1.5">
 							<Download className="h-3 w-3" />
-							Export
+							{__('Export')}
 							<ChevronDown className="h-3 w-3" />
 						</MenuButton>
 
@@ -102,18 +109,18 @@ const TableFooter = ({
 								{[
 									{
 										format: 'csv',
-										label: 'Export CSV',
-										description: 'Import ready',
+										label: __('Export CSV'),
+										description: __('Import ready'),
 									},
 									{
 										format: 'json',
-										label: 'Export JSON',
-										description: 'Structured data',
+										label: __('Export JSON'),
+										description: __('Structured data'),
 									},
 									{
 										format: 'xml',
-										label: 'Export XML',
-										description: 'Portable feed',
+										label: __('Export XML'),
+										description: __('Portable feed'),
 									},
 								].map((option) => (
 									<MenuItem key={option.format}>

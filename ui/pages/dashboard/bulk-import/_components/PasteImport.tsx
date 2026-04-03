@@ -6,6 +6,7 @@ import { useBulkCreateUrlMutation } from '@/store/slices/api/urls';
 import ImportSummary from './ImportSummary';
 import ImportDetails from './ImportDetails';
 import { Lightbulb, LoaderCircle, WandSparkles } from 'lucide-react';
+import { __, sprintf } from '@/i18n';
 
 const PasteImport = () => {
 	const [text, setText] = useState('');
@@ -41,7 +42,7 @@ const PasteImport = () => {
 				return { destinationUrl, alias };
 			});
 
-			if (data.length === 0) throw new Error('No URLs found');
+			if (data.length === 0) throw new Error(__('No URLs found'));
 
 			const result = await bulkCreateUrl({ urls: data }).unwrap();
 
@@ -71,7 +72,12 @@ const PasteImport = () => {
 			setStatus('completed');
 		} catch (err) {
 			console.error(err);
-			alert('Import failed: ' + (err.message || 'Unknown error'));
+			alert(
+				sprintf(
+					__('Import failed: %s'),
+					err.message || __('Unknown error')
+				)
+			);
 			setStatus('idle');
 		}
 	};
@@ -80,19 +86,19 @@ const PasteImport = () => {
 		<div className="space-y-5">
 			<div className="bg-surface border border-stroke rounded-lg p-5">
 				<h2 className="text-base font-semibold text-heading mb-3">
-					Paste URLs
+					{__('Paste URLs')}
 				</h2>
 				<p className="text-sm text-text-muted mb-5">
-					Paste a list of URLs (one per line) to quickly create
-					multiple short links. You can optionally add a custom alias
-					separated by a comma or space.
+					{__(
+						'Paste a list of URLs (one per line) to quickly create multiple short links. You can optionally add a custom alias separated by a comma or space.'
+					)}
 				</p>
 
 				{status === 'idle' && (
 					<div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
 						<div>
 							<label className="block text-sm font-medium text-heading mb-2">
-								URLs (one per line)
+								{__('URLs (one per line)')}
 							</label>
 							<textarea
 								className="w-full h-64 bg-surface-alt border border-stroke rounded-lg px-4 py-3 text-sm text-heading placeholder-text-text-muted focus:ring-2 focus:ring-accent focus:border-accent outline-none resize-none font-mono transition-colors"
@@ -109,42 +115,39 @@ https://example.com/page3 custom-alias`}
 									disabled={!text.trim()}
 								>
 									<WandSparkles className="mr-2 h-4 w-4" />
-									Create Links
+									{__('Create Links')}
 								</Button>
 							</div>
 						</div>
 						<div>
 							<h3 className="font-medium text-sm text-heading mb-3">
-								Tips
+								{__('Tips')}
 							</h3>
 							<div className="bg-amber-500/10 dark:bg-amber-500/20 border border-amber-500/20 dark:border-amber-500/30 rounded-lg p-4">
 								<ul className="text-sm text-heading space-y-2.5">
 									<li className="flex items-start gap-2">
 										<Lightbulb className="mt-0.5 h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
 										<span>
-											Format: <code>URL [alias]</code> or{' '}
+											{__('Format:')} <code>URL [alias]</code> {__('or')}{' '}
 											<code>URL, alias</code>
 										</span>
 									</li>
 									<li className="flex items-start gap-2">
 										<Lightbulb className="mt-0.5 h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
 										<span>
-											Each entry should be on a separate
-											line
+											{__('Each entry should be on a separate line')}
 										</span>
 									</li>
 									<li className="flex items-start gap-2">
 										<Lightbulb className="mt-0.5 h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
 										<span>
-											URLs must include http:// or
-											https://
+											{__('URLs must include http:// or https://')}
 										</span>
 									</li>
 									<li className="flex items-start gap-2">
 										<Lightbulb className="mt-0.5 h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
 										<span>
-											If alias is omitted, one will be
-											auto-generated
+											{__('If alias is omitted, one will be auto-generated')}
 										</span>
 									</li>
 								</ul>
@@ -157,7 +160,7 @@ https://example.com/page3 custom-alias`}
 					<div className="py-8 text-center">
 						<LoaderCircle className="mx-auto mb-3 h-8 w-8 animate-spin text-accent" />
 						<p className="text-sm text-text-muted">
-							Processing URLs...
+							{__('Processing URLs...')}
 						</p>
 					</div>
 				)}

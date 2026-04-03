@@ -22,6 +22,7 @@ import {
 	useGetUserProfileQuery,
 	useUpdateUserMutation,
 } from '@/store/slices/api/user';
+import { __, sprintf } from '@/i18n';
 
 const EMPTY_FORM = {
 	firstName: '',
@@ -32,18 +33,20 @@ const EMPTY_FORM = {
 	role: 'editor',
 };
 
-const ROLE_META = {
+const getRoleMeta = () => ({
 	admin: {
-		label: 'Admin',
-		description: 'Can manage users, settings, and all links.',
+		label: __('Admin'),
+		description: __('Can manage users, settings, and all links.'),
 		badge: 'bg-red-500/10 text-red-700 dark:text-red-300 border border-red-500/20',
 	},
 	editor: {
-		label: 'Editor',
-		description: 'Can create, edit, and delete site links without admin access.',
+		label: __('Editor'),
+		description: __(
+			'Can create, edit, and delete site links without admin access.'
+		),
 		badge: 'bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20',
 	},
-};
+});
 
 const getInitialFormState = (mode, initialUser) => {
 	if ('edit' === mode && initialUser) {
@@ -69,6 +72,7 @@ function UserDialog({
 	onSubmit,
 	isSubmitting,
 }) {
+	const roleMeta = getRoleMeta();
 	const [form, setForm] = useState(() =>
 		getInitialFormState(mode, initialUser)
 	);
@@ -101,7 +105,9 @@ function UserDialog({
 			await onSubmit( payload );
 			onClose();
 		} catch ( error ) {
-			setFormError( error?.data?.message || 'Unable to save the user.' );
+			setFormError(
+				error?.data?.message || __('Unable to save the user.')
+			);
 		}
 	};
 
@@ -116,12 +122,12 @@ function UserDialog({
 					<div className="flex items-start justify-between border-b border-stroke px-6 py-5">
 						<div>
 							<DialogTitle className="text-lg font-semibold text-heading">
-								{'create' === mode ? 'Add User' : 'Edit User'}
+								{'create' === mode ? __('Add User') : __('Edit User')}
 							</DialogTitle>
 							<p className="mt-1 text-sm text-text-muted">
 								{'create' === mode
-									? 'Create a new account with admin or editor access.'
-									: 'Update the account details and role for this user.'}
+									? __('Create a new account with admin or editor access.')
+									: __('Update the account details and role for this user.')}
 							</p>
 						</div>
 						<button
@@ -145,13 +151,13 @@ function UserDialog({
 
 						<div className="grid gap-4 sm:grid-cols-2">
 							<Input
-								label="First Name"
+								label={__('First Name')}
 								value={form.firstName}
 								onChange={handleChange('firstName')}
 								required
 							/>
 							<Input
-								label="Last Name"
+								label={__('Last Name')}
 								value={form.lastName}
 								onChange={handleChange('lastName')}
 								required
@@ -160,13 +166,13 @@ function UserDialog({
 
 						<div className="grid gap-4 sm:grid-cols-2">
 							<Input
-								label="Username"
+								label={__('Username')}
 								value={form.username}
 								onChange={handleChange('username')}
 								required
 							/>
 							<Input
-								label="Email"
+								label={__('Email')}
 								type="email"
 								value={form.email}
 								onChange={handleChange('email')}
@@ -178,8 +184,8 @@ function UserDialog({
 							<Input
 								label={
 									'create' === mode
-										? 'Password'
-										: 'New Password'
+										? __('Password')
+										: __('New Password')
 								}
 								type="password"
 								value={form.password}
@@ -187,13 +193,13 @@ function UserDialog({
 								required={'create' === mode}
 								helperText={
 									'create' === mode
-										? 'Use at least 8 characters.'
-										: 'Leave blank to keep the current password.'
+										? __('Use at least 8 characters.')
+										: __('Leave blank to keep the current password.')
 								}
 							/>
 							<div className="space-y-2">
 								<label className="block text-sm font-semibold text-heading">
-									Role
+									{__('Role')}
 								</label>
 								<select
 									value={form.role}
@@ -201,13 +207,13 @@ function UserDialog({
 									disabled={isEditingSelf}
 									className="w-full rounded-md border border-stroke bg-surface px-4 py-2 text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent disabled:cursor-not-allowed disabled:opacity-60"
 								>
-									<option value="admin">Admin</option>
-									<option value="editor">Editor</option>
+									<option value="admin">{__('Admin')}</option>
+									<option value="editor">{__('Editor')}</option>
 								</select>
 								<p className="text-xs text-text-muted">
-									{ROLE_META[form.role]?.description}
+									{roleMeta[form.role]?.description}
 									{isEditingSelf
-										? ' Your own role is locked here.'
+										? ` ${__('Your own role is locked here.')}`
 										: ''}
 								</p>
 							</div>
@@ -219,12 +225,12 @@ function UserDialog({
 								variant="secondary"
 								onClick={onClose}
 							>
-								Cancel
+								{__('Cancel')}
 							</Button>
 							<Button type="submit" loading={isSubmitting}>
 								{'create' === mode
-									? 'Create User'
-									: 'Save Changes'}
+									? __('Create User')
+									: __('Save Changes')}
 							</Button>
 						</div>
 					</form>
@@ -235,6 +241,7 @@ function UserDialog({
 }
 
 function UsersPage() {
+	const roleMeta = getRoleMeta();
 	const { data: userData, isLoading: isProfileLoading } =
 		useGetUserProfileQuery();
 	const currentUser = userData?.data;
@@ -294,14 +301,17 @@ function UsersPage() {
 		try {
 			await deleteUser( userPendingDelete.username ).unwrap();
 			notification.success(
-				'User deleted',
-				`${ userPendingDelete.firstName } ${ userPendingDelete.lastName } was removed successfully.`,
+				__('User deleted'),
+				sprintf(
+					__('%s was removed successfully.'),
+					`${ userPendingDelete.firstName } ${ userPendingDelete.lastName }`
+				),
 			);
 			setUserPendingDelete( null );
 		} catch ( error ) {
 			notification.error(
-				'Delete failed',
-				error?.data?.message || 'Unable to delete this user right now.',
+				__('Delete failed'),
+				error?.data?.message || __('Unable to delete this user right now.'),
 			);
 		}
 	};
@@ -332,10 +342,10 @@ function UsersPage() {
 					<ShieldCheck size={28} />
 				</div>
 				<h2 className="text-xl font-semibold text-heading">
-					Admin access required
+					{__('Admin access required')}
 				</h2>
 				<p className="mt-2 text-sm text-text-muted">
-					Only admin accounts can manage other users and their roles.
+					{__('Only admin accounts can manage other users and their roles.')}
 				</p>
 			</div>
 		);
@@ -347,26 +357,26 @@ function UsersPage() {
 				<div>
 					<div className="mb-3 inline-flex items-center gap-2 rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
 						<UserRound size={14} />
-						User Access
+						{__('User Access')}
 					</div>
 					<h1 className="text-2xl font-semibold text-heading">
-						Users
+						{__('Users')}
 					</h1>
 					<p className="mt-2 max-w-2xl text-sm text-text-muted">
-						Manage the people who can access this installation.
-						Admins control site-wide settings. Editors can create
-						and maintain links.
+						{__(
+							'Manage the people who can access this installation. Admins control site-wide settings. Editors can create and maintain links.'
+						)}
 					</p>
 				</div>
 				<Button icon={Plus} onClick={openCreateDialog}>
-					Add User
+					{__('Add User')}
 				</Button>
 			</div>
 
 			<div className="grid gap-4 md:grid-cols-3">
 				<div className="rounded-xl border border-stroke bg-surface p-5">
 					<p className="text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">
-						Total Users
+						{__('Total Users')}
 					</p>
 					<p className="mt-3 text-3xl font-semibold text-heading">
 						{ users.length }
@@ -374,7 +384,7 @@ function UsersPage() {
 				</div>
 				<div className="rounded-xl border border-stroke bg-surface p-5">
 					<p className="text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">
-						Admins
+						{__('Admins')}
 					</p>
 					<p className="mt-3 text-3xl font-semibold text-heading">
 						{ adminCount }
@@ -382,7 +392,7 @@ function UsersPage() {
 				</div>
 				<div className="rounded-xl border border-stroke bg-surface p-5">
 					<p className="text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">
-						Editors
+						{__('Editors')}
 					</p>
 					<p className="mt-3 text-3xl font-semibold text-heading">
 						{ editorCount }
@@ -393,7 +403,7 @@ function UsersPage() {
 			<div className="overflow-hidden rounded-xl border border-stroke bg-surface">
 				<div className="border-b border-stroke px-6 py-4">
 					<h2 className="text-sm font-semibold uppercase tracking-[0.16em] text-text-muted">
-						Accounts
+						{__('Accounts')}
 					</h2>
 				</div>
 
@@ -403,7 +413,7 @@ function UsersPage() {
 					</div>
 				) : usersError ? (
 					<div className="p-6 text-sm text-red-600 dark:text-red-300">
-						{ usersError?.data?.message || 'Unable to load users.' }
+						{ usersError?.data?.message || __('Unable to load users.') }
 					</div>
 				) : users.length === 0 ? (
 					<div className="p-10 text-center">
@@ -411,10 +421,10 @@ function UsersPage() {
 							<Users size={28} />
 						</div>
 						<h3 className="text-lg font-semibold text-heading">
-							No users yet
+							{__('No users yet')}
 						</h3>
 						<p className="mt-2 text-sm text-text-muted">
-							Add an admin or editor account to start sharing access.
+							{__('Add an admin or editor account to start sharing access.')}
 						</p>
 					</div>
 				) : (
@@ -422,10 +432,10 @@ function UsersPage() {
 						<table className="min-w-full divide-y divide-stroke">
 							<thead className="bg-surface-alt">
 								<tr className="text-left text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">
-									<th className="px-6 py-4">User</th>
-									<th className="px-6 py-4">Role</th>
-									<th className="px-6 py-4">Created</th>
-									<th className="px-6 py-4 text-right">Actions</th>
+									<th className="px-6 py-4">{__('User')}</th>
+									<th className="px-6 py-4">{__('Role')}</th>
+									<th className="px-6 py-4">{__('Created')}</th>
+									<th className="px-6 py-4 text-right">{__('Actions')}</th>
 								</tr>
 							</thead>
 							<tbody className="divide-y divide-stroke">
@@ -451,9 +461,9 @@ function UsersPage() {
 										</td>
 										<td className="px-6 py-4">
 											<span
-												className={ `inline-flex rounded-full px-3 py-1 text-xs font-semibold ${ ROLE_META[ user.role ]?.badge || ROLE_META.editor.badge }` }
+												className={ `inline-flex rounded-full px-3 py-1 text-xs font-semibold ${ roleMeta[ user.role ]?.badge || roleMeta.editor.badge }` }
 											>
-												{ ROLE_META[ user.role ]?.label || 'Editor' }
+												{ roleMeta[ user.role ]?.label || __('Editor') }
 											</span>
 										</td>
 										<td className="px-6 py-4 text-sm text-text-muted">
@@ -465,16 +475,28 @@ function UsersPage() {
 													icon={Pencil}
 													variant="outline"
 													size="sm"
-													aria-label={`Edit ${ user.firstName } ${ user.lastName }`}
-													title={`Edit ${ user.firstName } ${ user.lastName }`}
+													aria-label={sprintf(
+														__('Edit %s'),
+														`${ user.firstName } ${ user.lastName }`
+													)}
+													title={sprintf(
+														__('Edit %s'),
+														`${ user.firstName } ${ user.lastName }`
+													)}
 													onClick={() => openEditDialog( user )}
 												/>
 												<IconButton
 													icon={Trash2}
 													variant="outline"
 													size="sm"
-													aria-label={`Delete ${ user.firstName } ${ user.lastName }`}
-													title={`Delete ${ user.firstName } ${ user.lastName }`}
+													aria-label={sprintf(
+														__('Delete %s'),
+														`${ user.firstName } ${ user.lastName }`
+													)}
+													title={sprintf(
+														__('Delete %s'),
+														`${ user.firstName } ${ user.lastName }`
+													)}
 													className="text-red-600 hover:border-red-500 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-500/10"
 													disabled={
 														user.id === currentUser?.id || isDeleting
@@ -504,13 +526,18 @@ function UsersPage() {
 			<ConfirmDialog
 				open={ Boolean( userPendingDelete ) }
 				onClose={() => setUserPendingDelete( null )}
-				title="Delete User"
+				title={__('Delete User')}
 				description={
 					userPendingDelete
-						? `Delete ${ userPendingDelete.firstName } ${ userPendingDelete.lastName }? This will revoke their sessions, remove their API keys, and permanently delete their account.`
+						? sprintf(
+							__(
+								'Delete %s? This will revoke their sessions, remove their API keys, and permanently delete their account.'
+							),
+							`${ userPendingDelete.firstName } ${ userPendingDelete.lastName }`
+						)
 						: ''
 				}
-				confirmText="Delete User"
+				confirmText={__('Delete User')}
 				confirmVariant="danger"
 				onConfirm={handleDelete}
 				loading={isDeleting}

@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { Globe, MapPin, Users } from 'lucide-react';
 import { WorldMap } from '@/components';
+import { __ } from '@/i18n';
 import { useGetLinkLocationQuery } from '@/store/slices/api/analytics';
 
 function TrafficLocationTab({ link, selectedTab, open }) {
@@ -21,13 +22,13 @@ function TrafficLocationTab({ link, selectedTab, open }) {
 			<div className="space-y-4">
 				<div className="bg-surface-alt border border-stroke rounded-lg p-4">
 					<h3 className="text-sm font-semibold text-heading mb-4">
-						Top Countries
+						{__('Top Countries')}
 					</h3>
 					<div className="h-64 flex items-center justify-center bg-surface rounded-lg border border-stroke">
 						<div className="text-center">
 							<Globe className="w-12 h-12 text-text-muted mx-auto mb-2" />
 							<p className="text-sm text-text-muted">
-								No link data available
+								{__('No link data available')}
 							</p>
 						</div>
 					</div>
@@ -63,13 +64,13 @@ function TrafficLocationTab({ link, selectedTab, open }) {
 			<div className="space-y-4">
 				<div className="bg-surface-alt border border-stroke rounded-lg p-4 animate-pulse">
 					<h3 className="text-sm font-semibold text-heading mb-4">
-						Top Countries
+						{__('Top Countries')}
 					</h3>
 					<div className="h-64 flex items-center justify-center bg-surface rounded-lg border border-stroke">
 						<div className="text-center px-6">
 							<Globe className="w-12 h-12 text-text-muted mx-auto mb-3" />
 							<p className="text-sm font-medium text-heading mb-2">
-								Loading location data...
+								{__('Loading location data...')}
 							</p>
 						</div>
 					</div>
@@ -83,16 +84,16 @@ function TrafficLocationTab({ link, selectedTab, open }) {
 			<div className="space-y-4">
 				<div className="bg-surface-alt border border-stroke rounded-lg p-4">
 					<h3 className="text-sm font-semibold text-heading mb-4">
-						Top Countries
+						{__('Top Countries')}
 					</h3>
 					<div className="h-64 flex items-center justify-center bg-surface rounded-lg border border-stroke">
 						<div className="text-center px-6">
 							<Globe className="w-12 h-12 text-error mx-auto mb-3" />
 							<p className="text-sm font-medium text-heading mb-2">
-								Failed to load location data
+								{__('Failed to load location data')}
 							</p>
 							<p className="text-xs text-text-muted">
-								{String(error?.message || 'Unknown error')}
+								{String(error?.message || __('Unknown error'))}
 							</p>
 						</div>
 					</div>
@@ -107,32 +108,33 @@ function TrafficLocationTab({ link, selectedTab, open }) {
 				{/* Top Countries Section */}
 				<div className="bg-surface-alt border border-stroke rounded-lg p-4">
 					<h3 className="text-sm font-semibold text-heading mb-4">
-						Top Countries
+						{__('Top Countries')}
 					</h3>
 					<div className="h-64 flex items-center justify-center bg-surface rounded-lg border border-stroke">
 						<div className="text-center px-6">
 							<Globe className="w-12 h-12 text-text-muted mx-auto mb-3" />
 							<p className="text-sm font-medium text-heading mb-2">
-								No location data available yet
+								{__('No location data available yet')}
 							</p>
 							<p className="text-xs text-text-muted max-w-md mx-auto">
-								Location tracking will show here once clicks are
-								recorded with a configured GeoLite2 City
-								database
+								{__(
+									'Location tracking will show here once clicks are recorded with a configured GeoLite2 City database'
+								)}
 							</p>
 							<div className="mt-4 p-3 bg-info/5 border border-info/20 rounded-lg text-left">
 								<p className="text-xs font-medium text-heading mb-1">
-									💡 Note:
+									{__('Note:')}
 								</p>
 								<p className="text-xs text-text-muted">
-									• Local and private-network clicks
-									(127.0.0.1, 172.16-31.x.x, 192.168.x.x)
-									won&apos;t show location data
+									{__(
+										'• Local and private-network clicks (127.0.0.1, 172.16-31.x.x, 192.168.x.x) will not show location data'
+									)}
 									<br />
-									• Add `GeoLite2-City.mmdb` under
-									`content/uploads/geoip/`
-									<br />• VPN users will show VPN server
-									location
+									{__(
+										'• Add `GeoLite2-City.mmdb` under `content/uploads/geoip/`'
+									)}
+									<br />
+									{__('• VPN users will show VPN server location')}
 								</p>
 							</div>
 						</div>
@@ -142,13 +144,13 @@ function TrafficLocationTab({ link, selectedTab, open }) {
 				{/* Top Cities Section */}
 				<div className="bg-surface-alt border border-stroke rounded-lg p-4">
 					<h3 className="text-sm font-semibold text-heading mb-4">
-						Top Cities
+						{__('Top Cities')}
 					</h3>
 					<div className="h-48 flex items-center justify-center bg-surface rounded-lg border border-stroke">
 						<div className="text-center">
 							<MapPin className="w-10 h-10 text-text-muted mx-auto mb-2" />
 							<p className="text-sm text-text-muted">
-								No city data available yet
+								{__('No city data available yet')}
 							</p>
 						</div>
 					</div>
@@ -168,15 +170,17 @@ function TrafficLocationTab({ link, selectedTab, open }) {
 						</div>
 						<div>
 							<p className="text-sm text-text-muted">
-								Total Locations
+								{__('Total Locations')}
 							</p>
 							<p className="text-xl font-bold text-heading">
-								{total} clicks
+								{total} {__('clicks')}
 							</p>
 						</div>
 					</div>
 					<div className="text-right">
-						<p className="text-sm text-text-muted">Countries</p>
+						<p className="text-sm text-text-muted">
+							{__('Countries')}
+						</p>
 						<p className="text-xl font-bold text-heading">
 							{countries.length}
 						</p>
@@ -189,7 +193,7 @@ function TrafficLocationTab({ link, selectedTab, open }) {
 				<div className="flex items-center gap-2 mb-4">
 					<Globe className="w-4 h-4 text-accent" />
 					<h3 className="text-sm font-semibold text-heading">
-						Geographic Distribution
+						{__('Geographic Distribution')}
 					</h3>
 				</div>
 				<div className="relative h-96 rounded-lg overflow-hidden border border-stroke">
@@ -221,7 +225,7 @@ function TrafficLocationTab({ link, selectedTab, open }) {
 				<div className="flex items-center gap-2 mb-4">
 					<Globe className="w-4 h-4 text-accent" />
 					<h3 className="text-sm font-semibold text-heading">
-						Top Countries
+						{__('Top Countries')}
 					</h3>
 				</div>
 				<div className="space-y-3">
@@ -249,7 +253,7 @@ function TrafficLocationTab({ link, selectedTab, open }) {
 											{percentage}%
 										</span>
 										<span className="text-sm font-semibold text-heading min-w-12 text-right">
-											{country.count} clicks
+											{country.count} {__('clicks')}
 										</span>
 									</div>
 								</div>

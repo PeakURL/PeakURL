@@ -16,6 +16,7 @@ import {
 import { useGetUrlsQuery } from '@/store/slices/api/urls';
 import { useAdminAccess } from '@/hooks';
 import { BrandLockup } from '@/components';
+import { __ } from '@/i18n';
 
 const buildNav = (basePath = '/dashboard') => {
 	const base =
@@ -26,39 +27,43 @@ const buildNav = (basePath = '/dashboard') => {
 				: basePath || '/dashboard';
 	return [
 		{
-			name: 'Overview',
+			name: __('Overview'),
 			href: base || '/',
 			icon: PieChart,
 		},
 		{
-			name: 'All Links',
+			name: __('All Links'),
 			href: `${base || ''}/links`,
 			icon: Link2,
 		},
 		{
-			name: 'Users',
+			name: __('Users'),
 			href: `${base || ''}/users`,
 			icon: Users,
 		},
 		{
-			name: 'Plugins',
+			name: __('Plugins'),
 			href: `${base || ''}/plugins`,
 			icon: Plug,
 			adminOnly: true,
 		},
 		{
-			name: 'Tools',
+			name: __('Tools'),
 			icon: Wrench,
 			adminOnly: true,
 			children: [
 				{
-					name: 'Import',
+					name: __('Import'),
 					href: `${base || ''}/tools/import/file`,
+				},
+				{
+					name: __('System Status'),
+					href: `${base || ''}/tools/system-status`,
 				},
 			],
 		},
 		{
-			name: 'Settings',
+			name: __('Settings'),
 			href: `${base || ''}/settings`,
 			icon: Settings,
 		},
@@ -251,7 +256,7 @@ export const DashboardSidebar = ({
 									<span className="flex-1 text-left">
 										{item.name}
 									</span>
-									{item.name === 'All Links' &&
+									{item.name === __('All Links') &&
 										links.length > 0 && (
 											<span
 												className={`

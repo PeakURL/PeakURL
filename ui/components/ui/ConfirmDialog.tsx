@@ -3,6 +3,7 @@
 
 import { Fragment } from 'react';
 import { Dialog, DialogPanel, Transition } from '@headlessui/react';
+import { __ } from '@/i18n';
 import { Button } from './Button';
 
 /**
@@ -14,8 +15,8 @@ export function ConfirmDialog({
 	title,
 	description,
 	children,
-	confirmText = 'Confirm',
-	cancelText = 'Cancel',
+	confirmText = __('Confirm'),
+	cancelText = __('Cancel'),
 	onConfirm,
 	confirmVariant = 'primary',
 	loading = false,
@@ -69,7 +70,7 @@ export function ConfirmDialog({
 										onClick={onConfirm}
 										disabled={loading}
 									>
-										{loading ? 'Working...' : confirmText}
+										{loading ? __('Working...') : confirmText}
 									</Button>
 								</div>
 							</DialogPanel>

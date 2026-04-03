@@ -16,15 +16,17 @@ import {
 	useDeleteWebhookMutation,
 	useGetWebhooksQuery,
 } from '@/store/slices/api/webhook';
+import { __, sprintf } from '@/i18n';
 
-const EVENT_OPTIONS = [
-	{ id: 'link.created', label: 'Link Created' },
-	{ id: 'link.clicked', label: 'Link Clicked' },
-	{ id: 'link.updated', label: 'Link Updated' },
-	{ id: 'link.deleted', label: 'Link Deleted' },
+const getEventOptions = () => [
+	{ id: 'link.created', label: __('Link Created') },
+	{ id: 'link.clicked', label: __('Link Clicked') },
+	{ id: 'link.updated', label: __('Link Updated') },
+	{ id: 'link.deleted', label: __('Link Deleted') },
 ];
 
 function IntegrationsTab({ notification }) {
+	const eventOptions = getEventOptions();
 	const { data: webhooks = [], isLoading, error } = useGetWebhooksQuery();
 	const [createWebhook, { isLoading: isCreating }] =
 		useCreateWebhookMutation();
@@ -52,8 +54,8 @@ function IntegrationsTab({ notification }) {
 	const handleCreate = async () => {
 		if (!canCreate) {
 			notification?.error?.(
-				'Error',
-				'Enter a URL and select at least one event.'
+				__('Error'),
+				__('Enter a URL and select at least one event.')
 			);
 			return;
 		}
@@ -63,13 +65,16 @@ function IntegrationsTab({ notification }) {
 				url: form.url.trim(),
 				events: form.events,
 			}).unwrap();
-			notification?.success?.('Success', 'Webhook created successfully');
+			notification?.success?.(
+				__('Success'),
+				__('Webhook created successfully')
+			);
 			setForm({ url: '', events: ['link.clicked'] });
 			setCreatedWebhook(result?.data || null);
 		} catch (err) {
 			notification?.error?.(
-				'Error',
-				err?.data?.message || 'Failed to create webhook'
+				__('Error'),
+				err?.data?.message || __('Failed to create webhook')
 			);
 		}
 	};
@@ -79,23 +84,26 @@ function IntegrationsTab({ notification }) {
 
 		try {
 			await deleteWebhook(id).unwrap();
-			notification?.success?.('Success', 'Webhook deleted');
+			notification?.success?.(
+				__('Success'),
+				__('Webhook deleted')
+			);
 			setWebhookPendingDelete(null);
 		} catch (err) {
 			notification?.error?.(
-				'Error',
-				err?.data?.message || 'Failed to delete webhook'
+				__('Error'),
+				err?.data?.message || __('Failed to delete webhook')
 			);
 		}
 	};
 
-	const copyToClipboard = async (text, label = 'Copied') => {
+	const copyToClipboard = async (text, label = __('Copied')) => {
 		if (!text) return;
 		try {
 			await navigator.clipboard.writeText(text);
-			notification?.success?.(label, 'Copied to clipboard');
+			notification?.success?.(label, __('Copied to clipboard'));
 		} catch (err) {
-			notification?.error?.('Error', 'Failed to copy');
+			notification?.error?.(__('Error'), __('Failed to copy'));
 		}
 	};
 
@@ -108,11 +116,12 @@ function IntegrationsTab({ notification }) {
 					</div>
 					<div>
 						<h2 className="text-base font-semibold text-heading">
-							Integrations
+							{__('Integrations')}
 						</h2>
 						<p className="text-sm text-muted mt-0.5">
-							Connect PeakURL to your automations with outbound
-							webhooks for link activity.
+							{__(
+								'Connect PeakURL to your automations with outbound webhooks for link activity.'
+							)}
 						</p>
 					</div>
 				</div>
@@ -122,11 +131,12 @@ function IntegrationsTab({ notification }) {
 				<div className="mb-5 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
 					<div>
 						<h3 className="text-base font-semibold text-heading">
-							Webhooks
+							{__('Webhooks')}
 						</h3>
 						<p className="mt-1 max-w-2xl text-sm leading-6 text-text-muted">
-							PeakURL sends signed POST requests to your endpoint
-							when selected link events happen.
+							{__(
+								'PeakURL sends signed POST requests to your endpoint when selected link events happen.'
+							)}
 						</p>
 					</div>
 					<a
@@ -135,24 +145,25 @@ function IntegrationsTab({ notification }) {
 						rel="noreferrer"
 						className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline"
 					>
-						Webhook docs
+						{__('Webhook docs')}
 						<ExternalLink size={14} />
 					</a>
 				</div>
 
 				<div className="bg-surface-alt rounded-lg p-4 mb-6 border border-(--color-stroke)">
 					<h4 className="text-sm font-semibold text-heading mb-3">
-						Add New Webhook
+						{__('Add New Webhook')}
 					</h4>
 					<p className="mb-4 text-sm leading-6 text-text-muted">
-						Choose which events should trigger a delivery, then save
-						the signing secret somewhere secure when it is shown.
+						{__(
+							'Choose which events should trigger a delivery, then save the signing secret somewhere secure when it is shown.'
+						)}
 					</p>
 
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 						<div>
 							<label className="block text-sm font-medium text-muted mb-1">
-								Endpoint URL
+								{__('Endpoint URL')}
 							</label>
 							<div className="relative">
 								<Link2
@@ -173,9 +184,9 @@ function IntegrationsTab({ notification }) {
 								/>
 							</div>
 							<p className="mt-2 text-xs leading-5 text-text-muted">
-								Use a public HTTPS endpoint that can accept POST
-								requests, such as a Zapier catch hook, an n8n
-								webhook URL, or your own API route like
+								{__(
+									'Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route like'
+								)}
 								<code className="mx-1 rounded bg-surface px-1.5 py-0.5 text-[11px]">
 									https://example.com/api/webhooks/peakurl
 								</code>
@@ -185,10 +196,10 @@ function IntegrationsTab({ notification }) {
 
 						<div>
 							<label className="block text-sm font-medium text-muted mb-1">
-								Events
+								{__('Events')}
 							</label>
 							<div className="grid grid-cols-2 gap-2">
-								{EVENT_OPTIONS.map((event) => (
+								{eventOptions.map((event) => (
 									<label
 										key={event.id}
 										className="flex items-center gap-2 text-sm text-muted cursor-pointer select-none"
@@ -216,11 +227,11 @@ function IntegrationsTab({ notification }) {
 							disabled={!canCreate || isCreating}
 						>
 							{isCreating ? (
-								'Creating...'
+								__('Creating...')
 							) : (
 								<>
 									<Plus size={16} className="mr-2" />
-									Create Webhook
+									{__('Create Webhook')}
 								</>
 							)}
 						</Button>
@@ -228,19 +239,21 @@ function IntegrationsTab({ notification }) {
 				</div>
 
 				{isLoading ? (
-					<div className="text-sm text-muted">Loading webhooks…</div>
+					<div className="text-sm text-muted">
+						{__('Loading webhooks…')}
+					</div>
 				) : error ? (
 					<div className="text-sm text-red-600 dark:text-red-400">
-						{error?.data?.message || 'Failed to load webhooks'}
+						{error?.data?.message || __('Failed to load webhooks')}
 					</div>
 				) : webhooks.length === 0 ? (
 					<div className="text-center py-8 bg-surface-alt rounded-lg border border-dashed border-(--color-stroke)">
 						<WebhookIcon className="w-8 h-8 mx-auto text-muted mb-3" />
 						<h4 className="text-sm font-medium text-heading mb-1">
-							No Webhooks Configured
+							{__('No Webhooks Configured')}
 						</h4>
 						<p className="text-xs text-muted">
-							Add a webhook to receive link events in real time.
+							{__('Add a webhook to receive link events in real time.')}
 						</p>
 					</div>
 				) : (
@@ -266,7 +279,7 @@ function IntegrationsTab({ notification }) {
 											))}
 											{!wh.isActive && (
 												<span className="text-xs px-2 py-0.5 rounded bg-surface-alt text-text-muted">
-													Inactive
+													{__('Inactive')}
 												</span>
 											)}
 										</div>
@@ -274,13 +287,13 @@ function IntegrationsTab({ notification }) {
 										<div className="mt-3 flex items-center gap-2">
 											<span className="text-xs text-muted font-mono truncate">
 												{wh.secretHint ||
-													'Signing secret stored'}
+													__('Signing secret stored')}
 											</span>
 										</div>
 
 										{wh.createdAt && (
 											<p className="text-xs text-muted mt-2">
-												Created:{' '}
+												{__('Created:')}{' '}
 												{new Date(
 													wh.createdAt
 												).toLocaleDateString()}
@@ -290,12 +303,12 @@ function IntegrationsTab({ notification }) {
 
 									<button
 										className="p-2 text-muted hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-										aria-label="Delete webhook"
+										aria-label={__('Delete webhook')}
 										onClick={() =>
 											setWebhookPendingDelete(wh)
 										}
 										disabled={isDeleting}
-										title="Delete webhook"
+										title={__('Delete webhook')}
 									>
 										<Trash2 size={18} />
 									</button>
@@ -309,23 +322,24 @@ function IntegrationsTab({ notification }) {
 			<Modal
 				isOpen={Boolean(createdWebhook?.secret)}
 				onClose={() => setCreatedWebhook(null)}
-				title="Copy Your Webhook Secret"
+				title={__('Copy Your Webhook Secret')}
 				size="md"
 			>
 				<div className="space-y-5">
 					<div className="rounded-xl border border-blue-500/20 bg-blue-500/10 px-4 py-3">
 						<p className="text-sm font-medium text-blue-700 dark:text-blue-300">
-							This signing secret will not be shown again.
+							{__('This signing secret will not be shown again.')}
 						</p>
 						<p className="mt-1 text-xs leading-5 text-blue-700 dark:text-blue-300">
-							Store it in your automation tool or secret manager
-							before closing this window.
+							{__(
+								'Store it in your automation tool or secret manager before closing this window.'
+							)}
 						</p>
 					</div>
 
 					<div className="rounded-lg border border-stroke bg-surface-alt p-4">
 						<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
-							Endpoint URL
+							{__('Endpoint URL')}
 						</p>
 						<p className="mt-2 text-sm font-medium text-heading break-all">
 							{createdWebhook?.url}
@@ -341,19 +355,20 @@ function IntegrationsTab({ notification }) {
 							onClick={() =>
 								copyToClipboard(
 									createdWebhook?.secret,
-									'Secret copied'
+									__('Secret copied')
 								)
 							}
 							className="absolute right-2 top-2 rounded bg-surface p-1.5 text-text-muted shadow-sm transition-all hover:text-heading hover:shadow"
-							title="Copy to clipboard"
+							title={__('Copy to clipboard')}
 						>
 							<Copy size={14} />
 						</button>
 					</div>
 
 					<p className="text-sm text-text-muted">
-						If this secret is ever exposed, delete the webhook and
-						create a new one.
+						{__(
+							'If this secret is ever exposed, delete the webhook and create a new one.'
+						)}
 					</p>
 
 					<div className="flex justify-end gap-2">
@@ -362,15 +377,15 @@ function IntegrationsTab({ notification }) {
 							onClick={() =>
 								copyToClipboard(
 									createdWebhook?.secret,
-									'Secret copied'
+									__('Secret copied')
 								)
 							}
 						>
 							<Copy size={16} className="mr-2" />
-							Copy Secret
+							{__('Copy Secret')}
 						</Button>
 						<Button onClick={() => setCreatedWebhook(null)}>
-							I&apos;ve Stored It
+							{__("I've Stored It")}
 						</Button>
 					</div>
 				</div>
@@ -383,14 +398,19 @@ function IntegrationsTab({ notification }) {
 						setWebhookPendingDelete(null);
 					}
 				}}
-				title="Delete webhook"
+				title={__('Delete webhook')}
 				description={
 					webhookPendingDelete
-						? `Delete the webhook for ${webhookPendingDelete.url}? PeakURL will stop sending signed event requests to this endpoint immediately.`
+						? sprintf(
+							__(
+								'Delete the webhook for %s? PeakURL will stop sending signed event requests to this endpoint immediately.'
+							),
+							webhookPendingDelete.url
+						)
 						: ''
 				}
-				confirmText="Delete webhook"
-				cancelText="Keep webhook"
+				confirmText={__('Delete webhook')}
+				cancelText={__('Keep webhook')}
 				confirmVariant="danger"
 				onConfirm={() => handleDelete(webhookPendingDelete?.id)}
 				loading={isDeleting}

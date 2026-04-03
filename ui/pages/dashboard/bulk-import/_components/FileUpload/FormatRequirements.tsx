@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { Button } from '@/components/ui';
 import { Download } from 'lucide-react';
+import { __ } from '@/i18n';
 
 function FormatRequirements() {
 	const handleDownloadSample = (format) => {
@@ -10,7 +11,9 @@ function FormatRequirements() {
 
 		if (format === 'csv') {
 			content =
-				'url,alias,title,password,expires\nhttps://example.com,ex1,Example page,,2025-12-31';
+				'url,alias,title,password,expires\nhttps://example.com,ex1,' +
+				__('Example page') +
+				',,2025-12-31';
 			filename = 'sample.csv';
 			type = 'text/csv';
 		} else if (format === 'json') {
@@ -19,7 +22,7 @@ function FormatRequirements() {
 					{
 						url: 'https://example.com',
 						alias: 'ex1',
-						title: 'Example page',
+						title: __('Example page'),
 						password: '',
 						expires: '2025-12-31',
 					},
@@ -34,7 +37,7 @@ function FormatRequirements() {
   <url>
     <destinationUrl>https://example.com</destinationUrl>
     <alias>ex1</alias>
-    <title>Example page</title>
+    <title>${__('Example page')}</title>
     <password></password>
     <expiresAt>2025-12-31</expiresAt>
   </url>
@@ -54,12 +57,12 @@ function FormatRequirements() {
 	return (
 		<div className="bg-surface border border-stroke rounded-lg p-5">
 			<h3 className="text-base font-semibold text-heading mb-4">
-				File Format Requirements
+				{__('File Format Requirements')}
 			</h3>
 			<div className="space-y-4">
 				<div>
 					<h4 className="font-medium text-sm text-heading mb-2">
-						Required Fields
+						{__('Required Fields')}
 					</h4>
 					<ul className="text-sm text-text-muted space-y-1">
 						<li>
@@ -67,14 +70,15 @@ function FormatRequirements() {
 							<code className="px-1.5 py-0.5 bg-surface-alt rounded text-xs">
 								url
 							</code>{' '}
-							- The destination URL (e.g. destinationUrl in
-							JSON/XML)
+							{__(
+								' - The destination URL (e.g. destinationUrl in JSON/XML)'
+							)}
 						</li>
 					</ul>
 				</div>
 				<div>
 					<h4 className="font-medium text-sm text-heading mb-2">
-						Optional Fields
+						{__('Optional Fields')}
 					</h4>
 					<ul className="text-sm text-text-muted space-y-1">
 						<li>
@@ -82,32 +86,33 @@ function FormatRequirements() {
 							<code className="px-1.5 py-0.5 bg-surface-alt rounded text-xs">
 								alias
 							</code>{' '}
-							- Custom alias
+							{__(' - Custom alias')}
 						</li>
 						<li>
 							•{' '}
 							<code className="px-1.5 py-0.5 bg-surface-alt rounded text-xs">
 								title
 							</code>{' '}
-							- Link title
+							{__(' - Link title')}
 						</li>
 						<li>
 							•{' '}
 							<code className="px-1.5 py-0.5 bg-surface-alt rounded text-xs">
 								password
 							</code>{' '}
-							- Protection password
+							{__(' - Protection password')}
 						</li>
 						<li>
 							•{' '}
 							<code className="px-1.5 py-0.5 bg-surface-alt rounded text-xs">
 								expires
 							</code>{' '}
-							- Date (YYYY-MM-DD)
+							{__(' - Date (YYYY-MM-DD)')}
 						</li>
 						<li>
-							• Additional columns are ignored during import, so
-							PeakURL exports can be imported again later.
+							{__(
+								'• Additional columns are ignored during import, so PeakURL exports can be imported again later.'
+							)}
 						</li>
 					</ul>
 				</div>

@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui';
 import { ExternalLink } from 'lucide-react';
 import { API_SERVER_BASE_URL } from '@/constants';
+import { __ } from '@/i18n';
 
 const ApiImport = () => {
 	const apiKey = 'YOUR_API_KEY';
@@ -9,16 +10,17 @@ const ApiImport = () => {
 	return (
 		<div className="bg-surface border border-stroke rounded-lg p-5">
 			<h2 className="text-base font-semibold text-heading mb-3">
-				API Import
+				{__('API Import')}
 			</h2>
 			<p className="text-sm text-text-muted mb-5">
-				Use our API to programmatically import multiple URLs. Perfect
-				for integrations and automated workflows.
+				{__(
+					'Use our API to programmatically import multiple URLs. Perfect for integrations and automated workflows.'
+				)}
 			</p>
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
 				<div>
 					<h3 className="font-medium text-sm text-heading mb-3">
-						Example Request
+						{__('Example Request')}
 					</h3>
 					<pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs border border-gray-700">
 						<code>{`POST ${API_SERVER_BASE_URL}/urls/bulk
@@ -44,7 +46,7 @@ Content-Type: application/json
 				</div>
 				<div>
 					<h3 className="font-medium text-sm text-heading mb-3">
-						Response
+						{__('Response')}
 					</h3>
 					<pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs border border-gray-700">
 						<code>{`{
@@ -77,7 +79,7 @@ Content-Type: application/json
 				>
 					<Button size="sm">
 						<ExternalLink className="mr-2 h-4 w-4" />
-						View API Documentation
+						{__('View API Documentation')}
 					</Button>
 				</a>
 			</div>

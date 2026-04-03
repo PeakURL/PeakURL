@@ -27,6 +27,7 @@ use PeakURL\Services\Geoip;
 use PeakURL\Services\Mailer;
 use PeakURL\Services\Notifications;
 use PeakURL\Services\Totp;
+use PeakURL\Services\I18n;
 use PeakURL\Traits\AccountsTrait;
 use PeakURL\Traits\AnalyticsSupportTrait;
 use PeakURL\Traits\AnalyticsTrait;
@@ -167,6 +168,14 @@ class Store {
 	use HelpersTrait;
 
 	/**
+	 * Shared connection manager.
+	 *
+	 * @var Connection
+	 * @since 1.0.3
+	 */
+	private Connection $connection;
+
+	/**
 	 * WordPress-style database wrapper.
 	 *
 	 * @var PeakURL_DB
@@ -255,6 +264,14 @@ class Store {
 	private Notifications $notifications_service;
 
 	/**
+	 * Site locale and catalog helper.
+	 *
+	 * @var I18n
+	 * @since 1.0.3
+	 */
+	private I18n $i18n_service;
+
+	/**
 	 * Whether the workspace has been bootstrapped in this request.
 	 *
 	 * @var bool
@@ -270,6 +287,7 @@ class Store {
 	 * @since 1.0.0
 	 */
 	public function __construct( Connection $connection, array $config ) {
+		$this->connection            = $connection;
 		$this->db                    = new PeakURL_DB( $connection );
 		$this->settings_api          = new SettingsApi( $this->db );
 		$this->users_api             = new UsersApi( $this->db );
@@ -289,5 +307,9 @@ class Store {
 			$this->crypto_service,
 		);
 		$this->notifications_service = new Notifications();
+		$this->i18n_service          = new I18n(
+			$config,
+			$this->settings_api,
+		);
 	}
 }

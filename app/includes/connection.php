@@ -192,16 +192,6 @@ class Connection {
 	}
 
 	/**
-	 * Placeholder for future schema migration / reconciliation logic.
-	 *
-	 * @return void
-	 * @since 1.0.0
-	 */
-	public function reconcile_schema(): void {
-		$this->reconcile_api_keys_schema();
-	}
-
-	/**
 	 * Check whether a column exists on a managed table.
 	 *
 	 * @param string $table_name  Base table name (without prefix).
@@ -430,109 +420,5 @@ class Connection {
 		$statement->execute( $params );
 
 		return $statement->fetchColumn();
-	}
-
-	/**
-	 * Reconcile the `api_keys` table to the hashed-key schema.
-	 *
-	 * Existing installs are migrated in place from the older `key_value`
-	 * column so dashboard-created keys remain valid after the refactor.
-	 *
-	 * @return void
-	 * @since 1.0.1
-	 */
-	private function reconcile_api_keys_schema(): void {
-		if ( ! $this->table_exists( 'api_keys' ) ) {
-			return;
-		}
-
-		$connection = $this->get_connection();
-		$table_name = $this->quote_identifier( $this->table_name( 'api_keys' ) );
-
-		if ( ! $this->column_exists( 'api_keys', 'key_hash' ) ) {
-			$connection->exec(
-				'ALTER TABLE ' . $table_name . ' ADD COLUMN key_hash CHAR(64) DEFAULT NULL AFTER label',
-			);
-		}
-
-		if ( ! $this->column_exists( 'api_keys', 'key_prefix' ) ) {
-			$connection->exec(
-				'ALTER TABLE ' . $table_name . ' ADD COLUMN key_prefix VARCHAR(16) DEFAULT NULL AFTER key_hash',
-			);
-		}
-
-		if ( ! $this->column_exists( 'api_keys', 'key_last_four' ) ) {
-			$connection->exec(
-				'ALTER TABLE ' . $table_name . ' ADD COLUMN key_last_four CHAR(4) DEFAULT NULL AFTER key_prefix',
-			);
-		}
-
-		if ( $this->column_exists( 'api_keys', 'key_value' ) ) {
-			$connection->exec(
-				'UPDATE ' . $table_name . '
-				SET key_hash = COALESCE(NULLIF(key_hash, \'\'), SHA2(key_value, 256)),
-					key_prefix = COALESCE(NULLIF(key_prefix, \'\'), LEFT(key_value, 16)),
-					key_last_four = COALESCE(NULLIF(key_last_four, \'\'), RIGHT(key_value, 4))
-				WHERE key_value IS NOT NULL
-				AND key_value <> \'\'',
-			);
-
-			if ( $this->index_exists( 'api_keys', 'uniq_api_keys_key_value' ) ) {
-				$connection->exec(
-					'ALTER TABLE ' . $table_name . ' DROP INDEX ' . $this->quote_identifier( 'uniq_api_keys_key_value' ),
-				);
-			}
-
-			$connection->exec(
-				'ALTER TABLE ' . $table_name . ' DROP COLUMN key_value',
-			);
-		}
-
-		$missing_values = (int) $this->query_value(
-			'SELECT COUNT(*)
-			FROM api_keys
-			WHERE key_hash IS NULL
-			OR key_hash = \'\'
-			OR key_prefix IS NULL
-			OR key_prefix = \'\'
-			OR key_last_four IS NULL
-			OR key_last_four = \'\'',
-		);
-
-		if ( $missing_values > 0 ) {
-			throw new \RuntimeException(
-				'PeakURL could not reconcile the API key schema.',
-			);
-		}
-
-		if (
-			$this->column_allows_null( 'api_keys', 'key_hash' ) ||
-			$this->column_allows_null( 'api_keys', 'key_prefix' ) ||
-			$this->column_allows_null( 'api_keys', 'key_last_four' )
-		) {
-			$connection->exec(
-				'ALTER TABLE ' . $table_name . '
-				MODIFY COLUMN key_hash CHAR(64) NOT NULL,
-				MODIFY COLUMN key_prefix VARCHAR(16) NOT NULL,
-				MODIFY COLUMN key_last_four CHAR(4) NOT NULL',
-			);
-		}
-
-		if ( ! $this->index_exists( 'api_keys', 'uniq_api_keys_key_hash' ) ) {
-			$connection->exec(
-				'ALTER TABLE ' . $table_name . ' ADD UNIQUE INDEX ' . $this->quote_identifier( 'uniq_api_keys_key_hash' ) . ' (key_hash)',
-			);
-		}
-	}
-
-	/**
-	 * Quote a SQL identifier for direct DDL usage.
-	 *
-	 * @param string $identifier Raw table, column, or index name.
-	 * @return string Backtick-quoted identifier.
-	 * @since 1.0.1
-	 */
-	private function quote_identifier( string $identifier ): string {
-		return Database::quote_identifier( $identifier );
 	}
 }

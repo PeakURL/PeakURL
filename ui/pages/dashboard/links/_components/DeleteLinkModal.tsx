@@ -6,6 +6,7 @@ import { X, Trash2, AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
 import { useDeleteUrlMutation } from '@/store/slices/api/urls';
 import { buildShortUrl, getDefaultShortUrlOrigin } from '@/utils';
+import { __ } from '@/i18n';
 
 function DeleteLinkModal({ open, setOpen, link }) {
 	const [error, setError] = useState('');
@@ -26,7 +27,7 @@ function DeleteLinkModal({ open, setOpen, link }) {
 			await deleteUrl(link.id).unwrap();
 			setOpen(false);
 		} catch (err) {
-			setError(err?.data?.message || 'Failed to delete link');
+			setError(err?.data?.message || __('Failed to delete link'));
 		}
 	};
 
@@ -44,7 +45,7 @@ function DeleteLinkModal({ open, setOpen, link }) {
 							<div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center">
 								<AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400" />
 							</div>
-							Delete Link
+							{__('Delete Link')}
 						</DialogTitle>
 						<button
 							onClick={() => setOpen(false)}
@@ -65,15 +66,16 @@ function DeleteLinkModal({ open, setOpen, link }) {
 						)}
 
 						<p className="text-sm text-text-muted">
-							Are you sure you want to delete this link? This
-							action cannot be undone.
+							{__(
+								'Are you sure you want to delete this link? This action cannot be undone.'
+							)}
 						</p>
 
 						{/* Link Info */}
 						<div className="bg-surface-alt border border-stroke rounded-lg p-4 space-y-2">
 							<div>
 								<p className="text-xs font-medium text-text-muted mb-1">
-									Short URL
+									{__('Short URL')}
 								</p>
 								<code className="text-sm text-accent font-mono">
 									{shortUrl}
@@ -81,7 +83,7 @@ function DeleteLinkModal({ open, setOpen, link }) {
 							</div>
 							<div>
 								<p className="text-xs font-medium text-text-muted mb-1">
-									Destination
+									{__('Destination')}
 								</p>
 								<p className="text-sm text-heading break-all">
 									{link.destinationUrl}
@@ -91,7 +93,7 @@ function DeleteLinkModal({ open, setOpen, link }) {
 								<div className="flex gap-4 pt-2 border-t border-stroke">
 									<div>
 										<p className="text-xs text-text-muted">
-											Total Clicks
+											{__('Total Clicks')}
 										</p>
 										<p className="text-sm font-semibold text-heading">
 											{link.clicks || 0}
@@ -99,7 +101,7 @@ function DeleteLinkModal({ open, setOpen, link }) {
 									</div>
 									<div>
 										<p className="text-xs text-text-muted">
-											Unique Visitors
+											{__('Unique Visitors')}
 										</p>
 										<p className="text-sm font-semibold text-heading">
 											{link.uniqueClicks || 0}
@@ -117,7 +119,7 @@ function DeleteLinkModal({ open, setOpen, link }) {
 								disabled={isLoading}
 								className="flex-1 px-4 py-2.5 bg-surface border border-stroke hover:bg-surface-alt text-heading rounded-lg transition-all font-medium disabled:opacity-50"
 							>
-								Cancel
+								{__('Cancel')}
 							</button>
 							<button
 								onClick={handleDelete}
@@ -127,12 +129,12 @@ function DeleteLinkModal({ open, setOpen, link }) {
 								{isLoading ? (
 									<>
 										<div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-										Deleting...
+										{__('Deleting...')}
 									</>
 								) : (
 									<>
 										<Trash2 className="w-4 h-4" />
-										Delete
+										{__('Delete')}
 									</>
 								)}
 							</button>

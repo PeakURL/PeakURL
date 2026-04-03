@@ -5,6 +5,7 @@ import { authApi } from '@/store/slices';
 import { PageLoader } from '@/components/ui';
 import { getInstallRecovery, redirectToInstallRecovery } from '@/utils';
 import { Navigate, useLocation } from 'react-router-dom';
+import { __ } from '@/i18n';
 
 const AuthRequiredState = ({ title, description, onRetry }) => {
 	return (
@@ -21,7 +22,7 @@ const AuthRequiredState = ({ title, description, onRetry }) => {
 					onClick={onRetry}
 					className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
 				>
-					Retry
+					{__('Retry')}
 				</button>
 			</div>
 		</div>
@@ -70,8 +71,10 @@ const ProtectedRoute = ({ children }) => {
 	if (isError && !isAuthError) {
 		return (
 			<AuthRequiredState
-				title="Unable to load your session"
-				description="The dashboard could not reach the PHP API. Make sure the core service is running and try again."
+				title={__('Unable to load your session')}
+				description={__(
+					'The dashboard could not reach the PHP API. Make sure the core service is running and try again.'
+				)}
 				onRetry={refetch}
 			/>
 		);

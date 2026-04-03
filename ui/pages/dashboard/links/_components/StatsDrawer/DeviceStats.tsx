@@ -11,6 +11,7 @@ import {
 	Smartphone,
 	Tablet,
 } from 'lucide-react';
+import { __ } from '@/i18n';
 
 // Browser icon mapping
 const getBrowserIcon = (browser) => {
@@ -69,10 +70,12 @@ function DeviceStats({
 		return (
 			<div className="bg-surface-alt border border-stroke rounded-lg p-4 animate-pulse">
 				<h3 className="text-sm font-semibold text-heading mb-4">
-					Device & Browser Analytics
+					{__('Device & Browser Analytics')}
 				</h3>
 				<div className="h-64 flex items-center justify-center bg-surface rounded-lg border border-stroke">
-					<p className="text-sm text-muted">Loading analytics...</p>
+					<p className="text-sm text-muted">
+						{__('Loading analytics...')}
+					</p>
 				</div>
 			</div>
 		);
@@ -85,17 +88,18 @@ function DeviceStats({
 		return (
 			<div className="bg-surface-alt border border-stroke rounded-lg p-4">
 				<h3 className="text-sm font-semibold text-heading mb-4">
-					Device & Browser Analytics
+					{__('Device & Browser Analytics')}
 				</h3>
 				<div className="h-64 flex items-center justify-center bg-surface rounded-lg border border-stroke">
 					<div className="text-center px-6">
 						<Monitor className="w-12 h-12 text-text-muted mx-auto mb-3" />
 						<p className="text-sm font-medium text-heading mb-2">
-							No device data available yet
+							{__('No device data available yet')}
 						</p>
 						<p className="text-xs text-text-muted">
-							Device and browser information will appear here once
-							clicks are recorded
+							{__(
+								'Device and browser information will appear here once clicks are recorded'
+							)}
 						</p>
 					</div>
 				</div>

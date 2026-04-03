@@ -20,6 +20,7 @@ import {
 import { Avatar, ThemeToggle } from '@/components';
 import { useNavigate } from 'react-router-dom';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { __ } from '@/i18n';
 
 export const DashboardAppBar = ({ onMobileMenuToggle }) => {
 	const { data: userData } = useGetUserProfileQuery();
@@ -29,9 +30,9 @@ export const DashboardAppBar = ({ onMobileMenuToggle }) => {
 	const basePath = '/dashboard';
 
 	const getRoleLabel = (role) => {
-		if (role === 'admin') return 'Admin';
-		if (role === 'editor') return 'Editor';
-		return 'User';
+		if (role === 'admin') return __('Admin');
+		if (role === 'editor') return __('Editor');
+		return __('User');
 	};
 
 	const handleLogout = async () => {
@@ -66,7 +67,7 @@ export const DashboardAppBar = ({ onMobileMenuToggle }) => {
 						/>
 						<input
 							type="text"
-							placeholder="Search links, settings..."
+							placeholder={__('Search links, settings...')}
 							className="w-full pl-10 pr-4 py-2 bg-bg border border-stroke rounded-lg text-sm text-heading placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
 						/>
 					</div>
@@ -85,16 +86,18 @@ export const DashboardAppBar = ({ onMobileMenuToggle }) => {
 								email={user?.email}
 								firstName={user?.firstName}
 								lastName={user?.lastName}
-								fallbackName={user?.username || 'Admin'}
+								fallbackName={user?.username || __('Admin')}
 							/>
 							<div className="hidden sm:block text-left">
 								<div className="text-sm font-semibold text-heading">
 									{user
 										? `${user.firstName} ${user.lastName}`
-										: 'Admin Account'}
+										: __('Admin Account')}
 								</div>
 								<div className="text-xs text-text-muted">
-									{user ? getRoleLabel(user.role) : 'Admin'}
+									{user
+										? getRoleLabel(user.role)
+										: __('Admin')}
 								</div>
 							</div>
 							<ChevronDown
@@ -121,7 +124,7 @@ export const DashboardAppBar = ({ onMobileMenuToggle }) => {
 												size={16}
 												className="text-text-muted"
 											/>
-											Profile
+											{__('Profile')}
 										</button>
 									)}
 								</MenuItem>
@@ -139,7 +142,7 @@ export const DashboardAppBar = ({ onMobileMenuToggle }) => {
 												size={16}
 												className="text-text-muted"
 											/>
-											Settings
+											{__('Settings')}
 										</button>
 									)}
 								</MenuItem>
@@ -158,7 +161,7 @@ export const DashboardAppBar = ({ onMobileMenuToggle }) => {
 												size={16}
 												className="text-text-muted"
 											/>
-											About
+											{__('About PeakURL')}
 										</button>
 									)}
 								</MenuItem>
@@ -168,13 +171,15 @@ export const DashboardAppBar = ({ onMobileMenuToggle }) => {
 											href="https://peakurl.org/sponsor"
 											target="_blank"
 											rel="noreferrer"
-											className={externalMenuItemClass(focus)}
+											className={externalMenuItemClass(
+												focus
+											)}
 										>
 											<Heart
 												size={16}
 												className="text-text-muted"
 											/>
-											Sponsor
+											{__('Sponsor')}
 											<ExternalLink
 												size={14}
 												className="ml-auto text-text-muted"
@@ -188,13 +193,15 @@ export const DashboardAppBar = ({ onMobileMenuToggle }) => {
 											href="https://buymeacoffee.com/PeakURL"
 											target="_blank"
 											rel="noreferrer"
-											className={externalMenuItemClass(focus)}
+											className={externalMenuItemClass(
+												focus
+											)}
 										>
 											<Coffee
 												size={16}
 												className="text-text-muted"
 											/>
-											Buy Me a Coffee
+											{__('Buy Me a Coffee')}
 											<ExternalLink
 												size={14}
 												className="ml-auto text-text-muted"
@@ -214,8 +221,8 @@ export const DashboardAppBar = ({ onMobileMenuToggle }) => {
 										>
 											<LogOut size={16} />
 											{isLoggingOut
-												? 'Logging out...'
-												: 'Logout'}
+												? __('Logging out...')
+												: __('Logout')}
 										</button>
 									)}
 								</MenuItem>

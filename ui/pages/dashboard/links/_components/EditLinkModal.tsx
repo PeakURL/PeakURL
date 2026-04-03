@@ -5,6 +5,7 @@ import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { X, Save } from 'lucide-react';
 import { useState } from 'react';
 import { useUpdateUrlMutation } from '@/store/slices/api/urls';
+import { __ } from '@/i18n';
 import {
 	buildShortUrl,
 	getDefaultShortUrlOrigin,
@@ -43,7 +44,7 @@ function EditLinkModal({ open, setOpen, link }) {
 		setError('');
 
 		if (expiresAt && !isFutureLocalDateTime(expiresAt)) {
-			setError('Expiration time must be in the future.');
+			setError(__('Expiration time must be in the future.'));
 			return;
 		}
 
@@ -58,7 +59,7 @@ function EditLinkModal({ open, setOpen, link }) {
 
 			handleClose();
 		} catch (err) {
-			setError(err?.data?.message || 'Failed to update link');
+			setError(err?.data?.message || __('Failed to update link'));
 		}
 	};
 
@@ -73,7 +74,7 @@ function EditLinkModal({ open, setOpen, link }) {
 					{/* Header */}
 					<div className="flex items-center justify-between p-6 border-b border-stroke">
 						<DialogTitle className="text-lg font-semibold text-heading">
-							Edit Link
+							{__('Edit Link')}
 						</DialogTitle>
 						<button
 							onClick={handleClose}
@@ -96,7 +97,7 @@ function EditLinkModal({ open, setOpen, link }) {
 						{/* Short URL (Read-only) */}
 						<div>
 							<label className="block text-sm font-medium text-heading mb-2">
-								Short URL
+								{__('Short URL')}
 							</label>
 							<div className="px-3 py-2 bg-surface-alt border border-stroke rounded-lg">
 								<code className="text-sm text-text-muted font-mono">
@@ -108,7 +109,7 @@ function EditLinkModal({ open, setOpen, link }) {
 						{/* Destination URL (Read-only) */}
 						<div>
 							<label className="block text-sm font-medium text-heading mb-2">
-								Destination URL
+								{__('Destination URL')}
 							</label>
 							<div className="px-3 py-2 bg-surface-alt border border-stroke rounded-lg">
 								<p className="text-sm text-text-muted break-all">
@@ -123,14 +124,14 @@ function EditLinkModal({ open, setOpen, link }) {
 								htmlFor="title"
 								className="block text-sm font-medium text-heading mb-2"
 							>
-								Title (Optional)
+								{__('Title (Optional)')}
 							</label>
 							<input
 								type="text"
 								id="title"
 								value={title}
 								onChange={(e) => setTitle(e.target.value)}
-								placeholder="Enter a title for this link"
+								placeholder={__('Enter a title for this link')}
 								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading"
 							/>
 						</div>
@@ -141,14 +142,14 @@ function EditLinkModal({ open, setOpen, link }) {
 								htmlFor="password"
 								className="block text-sm font-medium text-heading mb-2"
 							>
-								Password Protection (Optional)
+								{__('Password Protection (Optional)')}
 							</label>
 							<input
 								type="text"
 								id="password"
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
-								placeholder="Set a password to protect this link"
+								placeholder={__('Set a password to protect this link')}
 								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading"
 							/>
 						</div>
@@ -159,7 +160,7 @@ function EditLinkModal({ open, setOpen, link }) {
 								htmlFor="expiresAt"
 								className="block text-sm font-medium text-heading mb-2"
 							>
-								Expiration Date (Optional)
+								{__('Expiration Date (Optional)')}
 							</label>
 							<input
 								type="datetime-local"
@@ -178,7 +179,7 @@ function EditLinkModal({ open, setOpen, link }) {
 								htmlFor="status"
 								className="block text-sm font-medium text-heading mb-2"
 							>
-								Status
+								{__('Status')}
 							</label>
 							<select
 								id="status"
@@ -186,9 +187,9 @@ function EditLinkModal({ open, setOpen, link }) {
 								onChange={(e) => setStatus(e.target.value)}
 								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading cursor-pointer"
 							>
-								<option value="active">Active</option>
-								<option value="inactive">Inactive</option>
-								<option value="expired">Expired</option>
+								<option value="active">{__('Active')}</option>
+								<option value="inactive">{__('Inactive')}</option>
+								<option value="expired">{__('Expired')}</option>
 							</select>
 						</div>
 
@@ -199,7 +200,7 @@ function EditLinkModal({ open, setOpen, link }) {
 								onClick={handleClose}
 								className="flex-1 px-4 py-2.5 bg-surface border border-stroke hover:bg-surface-alt text-heading rounded-lg transition-all font-medium"
 							>
-								Cancel
+								{__('Cancel')}
 							</button>
 							<button
 								type="submit"
@@ -209,12 +210,12 @@ function EditLinkModal({ open, setOpen, link }) {
 								{isLoading ? (
 									<>
 										<div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-										Saving...
+										{__('Saving...')}
 									</>
 								) : (
 									<>
 										<Save className="w-4 h-4" />
-										Save Changes
+										{__('Save Changes')}
 									</>
 								)}
 							</button>

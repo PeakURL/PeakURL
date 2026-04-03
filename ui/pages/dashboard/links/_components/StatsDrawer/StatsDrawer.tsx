@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { useGetLinkStatsQuery } from '@/store/slices/api/analytics';
 import { buildShortUrl } from '@/utils';
 import { PEAKURL_URL } from '@constants';
+import { __ } from '@/i18n';
 import StatCards from './StatCards';
 import ClickChart from './ClickChart';
 import HistoricalStats from './HistoricalStats';
@@ -67,10 +68,10 @@ export default function StatsDrawer({ open, setOpen, link }) {
 	const shortUrl = buildShortUrl(link, frontendOrigin);
 
 	const tabs = [
-		{ name: 'Traffic Statistics', icon: BarChart3 },
-		{ name: 'Traffic Location', icon: Globe },
-		{ name: 'Traffic Sources', icon: ExternalLink },
-		{ name: 'Share', icon: Share2 },
+		{ name: __('Traffic Statistics'), icon: BarChart3 },
+		{ name: __('Traffic Location'), icon: Globe },
+		{ name: __('Traffic Sources'), icon: ExternalLink },
+		{ name: __('Share'), icon: Share2 },
 	];
 
 	return (
@@ -93,11 +94,12 @@ export default function StatsDrawer({ open, setOpen, link }) {
 												<div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
 													<Link2 className="w-4 h-4 text-accent" />
 												</div>
-												Link Analytics
+												{__('Link Analytics')}
 											</DialogTitle>
 											<p className="text-sm text-text-muted">
-												Detailed statistics and
-												performance metrics
+												{__(
+													'Detailed statistics and performance metrics'
+												)}
 											</p>
 										</div>
 										<button
@@ -106,7 +108,7 @@ export default function StatsDrawer({ open, setOpen, link }) {
 											className="rounded-lg text-text-muted hover:text-heading hover:bg-surface-alt p-2 transition-all"
 										>
 											<span className="sr-only">
-												Close panel
+												{__('Close panel')}
 											</span>
 											<X className="w-5 h-5" />
 										</button>
@@ -211,7 +213,7 @@ export default function StatsDrawer({ open, setOpen, link }) {
 											onClick={() => setOpen(false)}
 											className="px-4 py-2 rounded-lg bg-surface border border-stroke text-heading hover:bg-surface-alt transition-all text-sm font-medium"
 										>
-											Close
+											{__('Close')}
 										</button>
 									</div>
 								</div>

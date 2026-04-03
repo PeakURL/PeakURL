@@ -85,6 +85,8 @@ if ( 'OPTIONS' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 
 // ── Bootstrap application ───────────────────────────────────────
 
-$connection  = new Connection( $config );
+$connection = new Connection( $config );
+peakurl_bootstrap_i18n( $config, $connection );
+header( 'Content-Language: ' . peakurl_get_html_lang_attribute() );
 $application = new Application( $connection, $config );
 $application->run();

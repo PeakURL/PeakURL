@@ -13,6 +13,7 @@ import {
 	Link2,
 } from 'lucide-react';
 import { isPast } from 'date-fns';
+import { __ } from '@/i18n';
 
 function LinkRow({
 	link,
@@ -148,7 +149,9 @@ function LinkRow({
 						<div className="text-base font-bold text-heading">
 							{formatNumber(link.clicks || 0)}
 						</div>
-						<div className="text-[10px] text-text-muted">Total</div>
+						<div className="text-[10px] text-text-muted">
+							{__('Total')}
+						</div>
 					</div>
 					<div className="w-px h-8 bg-stroke"></div>
 					<div className="text-center">
@@ -156,7 +159,7 @@ function LinkRow({
 							{formatNumber(link.uniqueClicks || 0)}
 						</div>
 						<div className="text-[10px] text-text-muted">
-							Unique
+							{__('Unique')}
 						</div>
 					</div>
 				</div>
@@ -167,7 +170,7 @@ function LinkRow({
 						? formatDistanceToNow(new Date(link.createdAt), {
 								addSuffix: true,
 							})
-						: 'Unknown'}
+						: __('Unknown')}
 				</div>
 				<div className="flex items-center gap-1.5 mt-0.5">
 					<span
@@ -193,28 +196,28 @@ function LinkRow({
 					<button
 						onClick={() => onQRCode(link)}
 						className="w-7 h-7 flex items-center justify-center text-text-muted hover:text-accent hover:bg-accent/10 rounded-lg transition-all"
-						title="QR Code"
+						title={__('QR Code')}
 					>
 						<QrCode size={14} />
 					</button>
 					<button
 						onClick={() => onOpenStats(link)}
 						className="w-7 h-7 flex items-center justify-center text-text-muted hover:text-info hover:bg-info/10 rounded-lg transition-all"
-						title="Analytics"
+						title={__('Analytics')}
 					>
 						<BarChart3 size={14} />
 					</button>
 					<button
 						onClick={() => onEdit(link)}
 						className="w-7 h-7 flex items-center justify-center text-text-muted hover:text-warning hover:bg-warning/10 rounded-lg transition-all"
-						title="Edit"
+						title={__('Edit')}
 					>
 						<Pencil size={14} />
 					</button>
 					<button
 						onClick={() => onDelete(link)}
 						className="w-7 h-7 flex items-center justify-center text-text-muted hover:text-error hover:bg-error/10 rounded-lg transition-all"
-						title="Delete"
+						title={__('Delete')}
 					>
 						<Trash2 size={14} />
 					</button>

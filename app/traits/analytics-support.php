@@ -55,7 +55,7 @@ trait AnalyticsSupportTrait {
 		$this->db->insert(
 			'audit_logs',
 			array(
-				'id'         => $this->generate_id( 'activity' ),
+				'id'         => $this->generate_random_id(),
 				'user_id'    => $user_id,
 				'type'       => $type,
 				'message'    => $message,

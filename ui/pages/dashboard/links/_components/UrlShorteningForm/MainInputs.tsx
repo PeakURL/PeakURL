@@ -2,6 +2,7 @@
 import { Button, Input } from '@/components/ui';
 import { PEAKURL_DOMAIN } from '@constants';
 import { Link as LinkIcon, Tag, Scissors } from 'lucide-react';
+import { __ } from '@/i18n';
 
 const MainInputs = ({
 	destinationUrl,
@@ -17,14 +18,14 @@ const MainInputs = ({
 				{/* Long URL Input - Takes most space */}
 				<div className="lg:col-span-7">
 					<label htmlFor="long-url" className="sr-only">
-						Destination URL
+						{__('Destination URL')}
 					</label>
 					<Input
 						type="url"
 						id="long-url"
 						value={destinationUrl}
 						onChange={(e) => setDestinationUrl(e.target.value)}
-						placeholder="Enter long link here..."
+						placeholder={__('Enter long link here...')}
 						icon={LinkIcon}
 						required
 						className="h-11"
@@ -34,14 +35,14 @@ const MainInputs = ({
 				{/* Alias Input */}
 				<div className="lg:col-span-3">
 					<label htmlFor="alias" className="sr-only">
-						Alias (Optional)
+						{__('Alias (Optional)')}
 					</label>
 					<Input
 						type="text"
 						id="alias"
 						value={alias}
 						onChange={(e) => setAlias(e.target.value)}
-						placeholder="Alias (optional)"
+						placeholder={__('Alias (optional)')}
 						icon={Tag}
 						className="h-11"
 					/>
@@ -79,14 +80,14 @@ const MainInputs = ({
 									></path>
 								</svg>
 								<span className="hidden xl:inline">
-									Shortening...
+									{__('Shortening...')}
 								</span>
 							</>
 						) : (
 							<>
 								<Scissors size={16} />
 								<span className="hidden xl:inline">
-									Shorten
+									{__('Shorten')}
 								</span>
 							</>
 						)}

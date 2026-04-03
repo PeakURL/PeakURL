@@ -139,6 +139,10 @@ trait SettingsTrait {
 	 */
 	private function sync_runtime_managed_settings(): void {
 		$this->seed_setting_if_missing(
+			'site_language',
+			Constants::DEFAULT_LOCALE,
+		);
+		$this->seed_setting_if_missing(
 			'mail_driver',
 			'mail',
 			false,

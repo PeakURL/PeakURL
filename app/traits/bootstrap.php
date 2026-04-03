@@ -41,14 +41,21 @@ trait BootstrapTrait {
 			return;
 		}
 
+		try {
+			$this->get_database_schema_service()->ensure_current();
+		} catch ( \Throwable $exception ) {
+			throw new ApiException(
+				'PeakURL could not finish the database upgrade. Verify the database user can alter tables, then retry.',
+				500,
+			);
+		}
+
 		if ( ! $this->table_exists( 'users' ) ) {
 			throw new ApiException(
 				'Database tables are missing. Run the installer or `php bin/setup-database.php` inside the PHP runtime directory.',
 				500,
 			);
 		}
-
-		$this->db->reconcile_schema();
 
 		$this->db->begin_transaction();
 

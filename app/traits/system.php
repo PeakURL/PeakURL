@@ -17,6 +17,7 @@ use PeakURL\Http\Request;
 use PeakURL\Services\AdminNotices;
 use PeakURL\Services\Crypto;
 use PeakURL\Services\Geoip;
+use PeakURL\Services\SystemStatus;
 use PeakURL\Services\Mailer;
 use PeakURL\Services\SetupConfig;
 use PeakURL\Services\Update;
@@ -50,6 +51,33 @@ trait SystemTrait {
 		return $service->get_notices(
 			$this->build_admin_notice_context( $user ),
 		);
+	}
+
+	/**
+	 * Return the dashboard system-status payload.
+	 *
+	 * @param Request $request Incoming authenticated request.
+	 * @return array<string, mixed>
+	 * @since 1.0.3
+	 */
+	public function get_system_status( Request $request ): array {
+		$this->assert_request_capability(
+			$request,
+			'manage_updates',
+			__( 'Admin access is required.', 'peakurl' ),
+		);
+
+		$service = new SystemStatus(
+			$this->config,
+			$this->db,
+			$this->settings_api,
+			$this->geoip_service,
+			$this->mailer_service,
+			$this->get_database_schema_service(),
+			$this->i18n_service,
+		);
+
+		return $service->get_status();
 	}
 
 	/**
@@ -88,6 +116,99 @@ trait SystemTrait {
 	}
 
 	/**
+	 * Return the dashboard general-settings payload.
+	 *
+	 * Includes the site language plus the list of installed language packs.
+	 *
+	 * @param Request $request Incoming authenticated request.
+	 * @return array<string, mixed>
+	 * @since 1.0.3
+	 */
+	public function get_general_settings( Request $request ): array {
+		$user      = $this->get_current_user( $request );
+		$site_name = trim( (string) $this->get_setting_value( 'site_name' ) );
+		$site_url  = trim( (string) $this->get_setting_value( 'site_url' ) );
+
+		if ( '' === $site_name ) {
+			$site_name = 'PeakURL';
+		}
+
+		if ( '' === $site_url ) {
+			$site_url = trim( (string) ( $this->config['SITE_URL'] ?? '' ) );
+		}
+
+		return array(
+			'siteName'              => $site_name,
+			'siteUrl'               => $site_url,
+			'siteLanguage'          => $this->i18n_service->get_site_locale(),
+			'availableLanguages'    => $this->i18n_service->list_languages(),
+			'canManageSiteSettings' => $this->roles->user_can(
+				$user,
+				'manage_site_settings',
+			),
+		);
+	}
+
+	/**
+	 * Return the public dashboard translation payload.
+	 *
+	 * Used by Vite-served development requests that do not pass through
+	 * `site/index.php` before the React app boots.
+	 *
+	 * @return array<string, mixed>
+	 * @since 1.0.3
+	 */
+	public function get_public_i18n_payload(): array {
+		$locale = $this->i18n_service->get_site_locale();
+
+		return array(
+			'locale'        => $locale,
+			'htmlLang'      => $this->i18n_service->get_html_lang( $locale ),
+			'textDomain'    => Constants::I18N_TEXT_DOMAIN,
+			'defaultLocale' => $this->i18n_service->get_default_locale(),
+			'catalog'       => $this->i18n_service->get_dashboard_catalog( $locale ),
+		);
+	}
+
+	/**
+	 * Save the site language from the general settings screen.
+	 *
+	 * @param Request              $request Incoming authenticated request.
+	 * @param array<string, mixed> $payload Submitted general-settings payload.
+	 * @return array<string, mixed>
+	 * @since 1.0.3
+	 */
+	public function save_general_settings(
+		Request $request,
+		array $payload
+	): array {
+		$this->assert_request_capability(
+			$request,
+			'manage_site_settings',
+			'Admin access is required.',
+		);
+
+		$site_language = $this->i18n_service->normalize_locale(
+			(string) ( $payload['siteLanguage'] ?? '' ),
+		);
+
+		if ( ! $this->i18n_service->is_locale_available( $site_language ) ) {
+			throw new ApiException(
+				__( 'PeakURL could not find that language pack.', 'peakurl' ),
+				422,
+			);
+		}
+
+		$this->upsert_setting( 'site_language', $site_language );
+		$this->i18n_service->load_locale( $site_language );
+
+		$settings          = $this->get_general_settings( $request );
+		$settings['saved'] = true;
+
+		return $settings;
+	}
+
+	/**
 	 * Return the current mail delivery configuration status.
 	 *
 	 * @param Request $request Incoming HTTP request (admin-only).
@@ -98,7 +219,7 @@ trait SystemTrait {
 		$this->assert_request_capability(
 			$request,
 			'manage_mail_delivery',
-			'Admin access is required.',
+			__( 'Admin access is required.', 'peakurl' ),
 		);
 
 		$status = $this->mailer_service->get_status();
@@ -120,7 +241,7 @@ trait SystemTrait {
 		$this->assert_request_capability(
 			$request,
 			'manage_mail_delivery',
-			'Admin access is required.',
+			__( 'Admin access is required.', 'peakurl' ),
 		);
 
 		try {
@@ -158,7 +279,7 @@ trait SystemTrait {
 		$this->assert_request_capability(
 			$request,
 			'manage_updates',
-			'Admin access is required.',
+			__( 'Admin access is required.', 'peakurl' ),
 		);
 
 		return $this->load_update_status( false );
@@ -175,7 +296,7 @@ trait SystemTrait {
 		$this->assert_request_capability(
 			$request,
 			'manage_location_data',
-			'Admin access is required.',
+			__( 'Admin access is required.', 'peakurl' ),
 		);
 
 		$status                     = $this->geoip_service->get_status();
@@ -204,7 +325,7 @@ trait SystemTrait {
 		$this->assert_request_capability(
 			$request,
 			'manage_location_data',
-			'Admin access is required.',
+			__( 'Admin access is required.', 'peakurl' ),
 		);
 		$this->assert_geoip_dashboard_management_allowed();
 
@@ -249,7 +370,7 @@ trait SystemTrait {
 		$this->assert_request_capability(
 			$request,
 			'manage_location_data',
-			'Admin access is required.',
+			__( 'Admin access is required.', 'peakurl' ),
 		);
 		$this->assert_geoip_dashboard_management_allowed();
 
@@ -278,7 +399,7 @@ trait SystemTrait {
 		$this->assert_request_capability(
 			$request,
 			'manage_updates',
-			'Admin access is required.',
+			__( 'Admin access is required.', 'peakurl' ),
 		);
 
 		return $this->load_update_status( true );
@@ -299,7 +420,7 @@ trait SystemTrait {
 		$this->assert_request_capability(
 			$request,
 			'manage_updates',
-			'Admin access is required.',
+			__( 'Admin access is required.', 'peakurl' ),
 		);
 
 		$status = $this->load_update_status( true );
@@ -363,6 +484,34 @@ trait SystemTrait {
 			'appliedAt'      => (string) ( $result['appliedAt'] ?? gmdate( DATE_ATOM ) ),
 			'reloadRequired' => true,
 		);
+	}
+
+	/**
+	 * Run the managed database upgrade / repair flow on demand.
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed>
+	 * @since 1.0.3
+	 */
+	public function upgrade_database_schema( Request $request ): array {
+		$this->assert_request_capability(
+			$request,
+			'manage_updates',
+			__( 'Admin access is required.', 'peakurl' ),
+		);
+
+		try {
+			$service = $this->get_database_schema_service();
+			$status  = $service->inspect();
+
+			if ( empty( $status['upgradeRequired'] ) ) {
+				return $status;
+			}
+
+			return $service->upgrade();
+		} catch ( \Throwable $exception ) {
+			throw new ApiException( $exception->getMessage(), 500 );
+		}
 	}
 
 	/**

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ApiImport, PasteImport, FileUpload } from './_components';
 import { useLocation } from 'react-router-dom';
+import { __ } from '@/i18n';
 
 function BulkImportTabPage() {
 	const location = useLocation();
@@ -15,17 +16,17 @@ function BulkImportTabPage() {
 		{
 			url: 'https://example.com/page1',
 			alias: 'page1',
-			title: 'Product launch',
+			title: __('Product launch'),
 		},
 		{
 			url: 'https://example.com/page2',
 			alias: 'page2',
-			title: 'Help docs',
+			title: __('Help docs'),
 		},
 		{
 			url: 'https://example.com/page3',
 			alias: 'page3',
-			title: 'Newsletter',
+			title: __('Newsletter'),
 		},
 	];
 

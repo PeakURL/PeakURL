@@ -9,6 +9,7 @@ import {
 	toIsoFromLocalDateTime,
 } from '@/utils';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { __, sprintf } from '@/i18n';
 
 import Header from './Header';
 import StatusMessages from './StatusMessages';
@@ -75,14 +76,12 @@ const UrlShorteningForm = () => {
 
 		// Validation
 		if (!destinationUrl.trim()) {
-			setError('Please enter a URL');
+			setError(__('Please enter a URL'));
 			return;
 		}
 
 		if (!validateUrl(destinationUrl)) {
-			setError(
-				'Please enter a valid URL (must include http:// or https://)'
-			);
+			setError(__('Please enter a valid URL (must include http:// or https://)'));
 			return;
 		}
 
@@ -107,7 +106,7 @@ const UrlShorteningForm = () => {
 					: `${expirationDate}T23:59:59`;
 
 				if (!isFutureLocalDateTime(expDateTime)) {
-					setError('Expiration time must be in the future.');
+					setError(__('Expiration time must be in the future.'));
 					return;
 				}
 
@@ -119,7 +118,9 @@ const UrlShorteningForm = () => {
 				typeof window !== 'undefined' ? window.location.origin : ''
 			);
 			const shortUrl = buildShortUrl(result.data, shortUrlOrigin);
-			setSuccess(`Link shortened successfully! ${shortUrl}`);
+			setSuccess(
+				sprintf(__('Link shortened successfully! %s'), shortUrl)
+			);
 			// Reset form
 			setDestinationUrl('');
 			setAlias('');
@@ -139,7 +140,7 @@ const UrlShorteningForm = () => {
 		} catch (err) {
 			setError(
 				err?.data?.message ||
-					'Failed to create short link. Please try again.'
+					__('Failed to create short link. Please try again.')
 			);
 		}
 	};
@@ -178,7 +179,7 @@ const UrlShorteningForm = () => {
 							d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
 						/>
 					</svg>
-					Advanced Options
+					{__('Advanced Options')}
 					{showAdvanced ? (
 						<ChevronUp className="w-4 h-4" />
 					) : (

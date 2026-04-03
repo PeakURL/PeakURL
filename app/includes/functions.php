@@ -14,6 +14,7 @@ use PeakURL\Includes\Hooks;
 use PeakURL\Includes\PeakURL_DB;
 use PeakURL\Includes\RuntimeConfig;
 use PeakURL\Services\Crypto;
+use PeakURL\Services\I18n;
 use PeakURL\Services\Mailer;
 
 // If this file is called directly, abort.
@@ -23,6 +24,106 @@ if (
 ) {
 	exit( 'Direct access forbidden.' );
 }
+
+/**
+ * Resolve a PeakURL runtime class name to its source file.
+ *
+ * Composer's classmap is still generated for the PHP runtime, but during
+ * development a new file can exist before `composer dump-autoload` has
+ * refreshed the map. This keeps WordPress-style filenames working without
+ * blocking the whole API on a stale classmap.
+ *
+ * @param string $type Fully qualified class or trait name.
+ * @return string|null Absolute file path when the class follows the runtime layout.
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
+function peakurl_get_runtime_class_file( string $type ): ?string {
+	$namespace_prefix = 'PeakURL\\';
+
+	if ( 0 !== strpos( $type, $namespace_prefix ) ) {
+		return null;
+	}
+
+	$relative_class = substr( $type, strlen( $namespace_prefix ) );
+
+	if ( '' === $relative_class ) {
+		return null;
+	}
+
+	$app_root      = dirname( __DIR__ ) . DIRECTORY_SEPARATOR;
+	$segments      = explode( '\\', $relative_class );
+	$type_name     = array_pop( $segments );
+	$directory_map = array(
+		'Api'         => 'api/',
+		'Controllers' => 'controllers/',
+		'Database'    => 'database/',
+		'Http'        => 'http/',
+		'Includes'    => 'includes/',
+		'Services'    => 'services/',
+		'Traits'      => 'traits/',
+		'Utils'       => 'utils/',
+	);
+
+	if ( empty( $segments ) ) {
+		return 'Store' === $type_name ? $app_root . 'store.php' : null;
+	}
+
+	$group = array_shift( $segments );
+
+	if ( ! isset( $directory_map[ $group ] ) || ! empty( $segments ) ) {
+		return null;
+	}
+
+	if ( 'Controllers' === $group && 0 === substr_compare( $type_name, 'Controller', -10 ) ) {
+		$type_name = substr( $type_name, 0, -10 );
+	}
+
+	if ( 'Api' === $group && 0 === substr_compare( $type_name, 'Api', -3 ) ) {
+		$type_name = substr( $type_name, 0, -3 );
+	}
+
+	if ( 'Traits' === $group && 0 === substr_compare( $type_name, 'Trait', -5 ) ) {
+		$type_name = substr( $type_name, 0, -5 );
+	}
+
+	if ( 'PeakURL_DB' === $type_name ) {
+		$file_name = 'peakurl-db';
+	} elseif ( 'Str' === $type_name ) {
+		$file_name = 'string';
+	} else {
+		$file_name = str_replace( '_', '-', $type_name );
+		$file_name = preg_replace( '/([A-Z]+)([A-Z][a-z])/', '$1-$2', $file_name );
+		$file_name = preg_replace( '/([a-z0-9])([A-Z])/', '$1-$2', $file_name );
+		$file_name = strtolower( (string) $file_name );
+	}
+
+	if ( '' === $file_name ) {
+		return null;
+	}
+
+	return $app_root . $directory_map[ $group ] . $file_name . '.php';
+}
+
+/**
+ * Load PeakURL runtime classes from the source tree when Composer misses them.
+ *
+ * @param string $type Fully qualified class or trait name.
+ * @return void
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
+function peakurl_load_runtime_class( string $type ): void {
+	$file = peakurl_get_runtime_class_file( $type );
+
+	if ( null === $file || ! is_readable( $file ) ) {
+		return;
+	}
+
+	require_once $file;
+}
+
+spl_autoload_register( 'peakurl_load_runtime_class' );
 
 /**
  * Send an email through the active PeakURL transport.
@@ -163,6 +264,392 @@ function get_site_url( string $path = '', ?string $scheme = null ): string {
 function site_url( string $path = '', ?string $scheme = null ): string {
 	return get_site_url( $path, $scheme );
 }
+
+/**
+ * Get the shared i18n service for the current request.
+ *
+ * @param array<string, mixed>|null $config     Optional runtime config.
+ * @param Connection|null           $connection Optional reused connection.
+ * @return I18n
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
+function peakurl_get_i18n_service(
+	?array $config = null,
+	?Connection $connection = null
+): I18n {
+	static $service     = null;
+	static $config_hash = null;
+
+	$resolved_config = $config ?? RuntimeConfig::bootstrap( ABSPATH . 'app' );
+	$next_hash       = md5(
+		(string) json_encode(
+			array(
+				'content_dir' => (string) ( $resolved_config['PEAKURL_CONTENT_DIR'] ?? '' ),
+				'site_url'    => (string) ( $resolved_config['SITE_URL'] ?? '' ),
+				'db_name'     => (string) ( $resolved_config['DB_DATABASE'] ?? '' ),
+			),
+		),
+	);
+
+	if ( $service instanceof I18n && $config_hash === $next_hash ) {
+		return $service;
+	}
+
+	$resolved_connection = $connection ?? new Connection( $resolved_config );
+	$settings_api        = new SettingsApi( new PeakURL_DB( $resolved_connection ) );
+	$service             = new I18n( $resolved_config, $settings_api );
+	$config_hash         = $next_hash;
+
+	return $service;
+}
+
+/**
+ * Back-compat wrapper for the shared i18n service helper.
+ *
+ * @param array<string, mixed>|null $config     Optional runtime config.
+ * @param Connection|null           $connection Optional reused connection.
+ * @return I18n
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
+function peakurl_get_translations_service(
+	?array $config = null,
+	?Connection $connection = null
+): I18n {
+	return peakurl_get_i18n_service( $config, $connection );
+}
+
+/**
+ * Bootstrap the active locale for the current request.
+ *
+ * @param array<string, mixed>|null $config     Optional runtime config.
+ * @param Connection|null           $connection Optional reused connection.
+ * @return string Loaded locale.
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
+function peakurl_bootstrap_i18n(
+	?array $config = null,
+	?Connection $connection = null
+): string {
+	return peakurl_get_i18n_service(
+		$config,
+		$connection,
+	)->load_locale();
+}
+
+/**
+ * Back-compat wrapper for the i18n bootstrap helper.
+ *
+ * @param array<string, mixed>|null $config     Optional runtime config.
+ * @param Connection|null           $connection Optional reused connection.
+ * @return string Loaded locale.
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
+function peakurl_bootstrap_translations(
+	?array $config = null,
+	?Connection $connection = null
+): string {
+	return peakurl_bootstrap_i18n( $config, $connection );
+}
+
+/**
+ * Get the dashboard JSON catalog for the active locale.
+ *
+ * @param string|null              $locale     Optional locale override.
+ * @param array<string, mixed>|null $config     Optional runtime config.
+ * @param Connection|null          $connection Optional reused connection.
+ * @return array<string, mixed>
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
+function peakurl_get_dashboard_translation_catalog(
+	?string $locale = null,
+	?array $config = null,
+	?Connection $connection = null
+): array {
+	return peakurl_get_i18n_service(
+		$config,
+		$connection,
+	)->get_dashboard_catalog( $locale );
+}
+
+/**
+ * Get the current locale.
+ *
+ * Mirrors WordPress `get_locale()`.
+ *
+ * @return string
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function get_locale(): string {
+	return peakurl_get_i18n_service()->get_current_locale();
+}
+
+/**
+ * Determine the current locale.
+ *
+ * Mirrors WordPress `determine_locale()`.
+ *
+ * @return string
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function determine_locale(): string {
+	return get_locale();
+}
+
+/**
+ * Get the active locale as an HTML `lang` attribute.
+ *
+ * @return string
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
+function peakurl_get_html_lang_attribute(): string {
+	return peakurl_get_i18n_service()->get_html_lang();
+}
+
+/**
+ * Translate a text string.
+ *
+ * Mirrors WordPress `translate()`.
+ *
+ * @param string $text   Source text.
+ * @param string $domain Optional text domain.
+ * @return string
+ * @since 1.0.3
+ */
+// phpcs:disable WordPress.WP.I18n -- Intentional core translation helpers.
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function translate( string $text, string $domain = 'default' ): string {
+	if ( 'default' !== $domain && 'peakurl' !== $domain ) {
+		return $text;
+	}
+
+	return peakurl_get_i18n_service()->translate( $text );
+}
+
+/**
+ * Translate a text string with context.
+ *
+ * Mirrors WordPress `translate_with_gettext_context()`.
+ *
+ * @param string $text    Source text.
+ * @param string $context Gettext context.
+ * @param string $domain  Optional text domain.
+ * @return string
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function translate_with_gettext_context(
+	string $text,
+	string $context,
+	string $domain = 'default'
+): string {
+	if ( 'default' !== $domain && 'peakurl' !== $domain ) {
+		return $text;
+	}
+
+	return peakurl_get_i18n_service()->translate( $text, $context );
+}
+
+/**
+ * Retrieve the translation of a string.
+ *
+ * Mirrors WordPress `__()`.
+ *
+ * @param string $text   Source text.
+ * @param string $domain Optional text domain.
+ * @return string
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function __( string $text, string $domain = 'default' ): string {
+	return translate( $text, $domain );
+}
+
+/**
+ * Display the translated string.
+ *
+ * Mirrors WordPress `_e()`.
+ *
+ * @param string $text   Source text.
+ * @param string $domain Optional text domain.
+ * @return void
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function _e( string $text, string $domain = 'default' ): void {
+	echo __( $text, $domain );
+}
+
+/**
+ * Translate a string with context.
+ *
+ * Mirrors WordPress `_x()`.
+ *
+ * @param string $text    Source text.
+ * @param string $context Gettext context.
+ * @param string $domain  Optional text domain.
+ * @return string
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function _x(
+	string $text,
+	string $context,
+	string $domain = 'default'
+): string {
+	return translate_with_gettext_context( $text, $context, $domain );
+}
+
+/**
+ * Echo a contextual translation.
+ *
+ * Mirrors WordPress `_ex()`.
+ *
+ * @param string $text    Source text.
+ * @param string $context Gettext context.
+ * @param string $domain  Optional text domain.
+ * @return void
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function _ex(
+	string $text,
+	string $context,
+	string $domain = 'default'
+): void {
+	echo _x( $text, $context, $domain );
+}
+
+/**
+ * Translate plural strings.
+ *
+ * Mirrors WordPress `_n()`.
+ *
+ * @param string $single Singular string.
+ * @param string $plural Plural string.
+ * @param int    $number Count used for plural selection.
+ * @param string $domain Optional text domain.
+ * @return string
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function _n(
+	string $single,
+	string $plural,
+	int $number,
+	string $domain = 'default'
+): string {
+	if ( 'default' !== $domain && 'peakurl' !== $domain ) {
+		return 1 === abs( $number ) ? $single : $plural;
+	}
+
+	return peakurl_get_i18n_service()->translate_plural(
+		$single,
+		$plural,
+		$number,
+	);
+}
+
+/**
+ * Translate plural strings with context.
+ *
+ * Mirrors WordPress `_nx()`.
+ *
+ * @param string $single  Singular string.
+ * @param string $plural  Plural string.
+ * @param int    $number  Count used for plural selection.
+ * @param string $context Gettext context.
+ * @param string $domain  Optional text domain.
+ * @return string
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function _nx(
+	string $single,
+	string $plural,
+	int $number,
+	string $context,
+	string $domain = 'default'
+): string {
+	if ( 'default' !== $domain && 'peakurl' !== $domain ) {
+		return 1 === abs( $number ) ? $single : $plural;
+	}
+
+	return peakurl_get_i18n_service()->translate_plural(
+		$single,
+		$plural,
+		$number,
+		$context,
+	);
+}
+
+/**
+ * Translate and escape text for HTML output.
+ *
+ * Mirrors WordPress `esc_html__()`.
+ *
+ * @param string $text   Source text.
+ * @param string $domain Optional text domain.
+ * @return string
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function esc_html__( string $text, string $domain = 'default' ): string {
+	return htmlspecialchars( __( $text, $domain ), ENT_QUOTES, 'UTF-8' );
+}
+
+/**
+ * Echo translated and escaped HTML text.
+ *
+ * Mirrors WordPress `esc_html_e()`.
+ *
+ * @param string $text   Source text.
+ * @param string $domain Optional text domain.
+ * @return void
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function esc_html_e( string $text, string $domain = 'default' ): void {
+	echo esc_html__( $text, $domain );
+}
+
+/**
+ * Translate and escape text for HTML attributes.
+ *
+ * Mirrors WordPress `esc_attr__()`.
+ *
+ * @param string $text   Source text.
+ * @param string $domain Optional text domain.
+ * @return string
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function esc_attr__( string $text, string $domain = 'default' ): string {
+	return htmlspecialchars( __( $text, $domain ), ENT_QUOTES, 'UTF-8' );
+}
+
+/**
+ * Echo translated and escaped attribute text.
+ *
+ * Mirrors WordPress `esc_attr_e()`.
+ *
+ * @param string $text   Source text.
+ * @param string $domain Optional text domain.
+ * @return void
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function esc_attr_e( string $text, string $domain = 'default' ): void {
+	echo esc_attr__( $text, $domain );
+}
+// phpcs:enable
 
 /**
  * Build a human-readable display name from a user row.

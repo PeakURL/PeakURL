@@ -404,20 +404,15 @@ class Install {
 		string $app_path
 	): void {
 		$connection_manager = new Connection( $config );
-		$connection         = $connection_manager->get_connection();
 		$schema_path        =
 			rtrim( $app_path, DIRECTORY_SEPARATOR ) . '/database/schema.sql';
-		$schema             = file_get_contents( $schema_path );
-
-		if ( false === $schema ) {
-			throw new \RuntimeException(
-				'Unable to read the database schema file.',
-			);
-		}
+		$schema_service     = new DatabaseSchema(
+			$connection_manager,
+			$schema_path,
+		);
 
 		try {
-			$connection->exec( $connection_manager->prefix_schema( $schema ) );
-			$connection_manager->reconcile_schema();
+			$schema_service->upgrade();
 		} catch ( \Throwable $exception ) {
 			throw new \RuntimeException(
 				'Unable to connect to the database or create the PeakURL tables. ' . $exception->getMessage(),

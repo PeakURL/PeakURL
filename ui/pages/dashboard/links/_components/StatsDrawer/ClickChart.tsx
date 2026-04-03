@@ -3,6 +3,7 @@
 
 import { useEffect, useRef } from 'react';
 import { Chart } from 'chart.js/auto';
+import { __ } from '@/i18n';
 
 function ClickChart({
 	link,
@@ -34,7 +35,7 @@ function ClickChart({
 					labels: labels,
 					datasets: [
 						{
-							label: 'Clicks',
+							label: __('Clicks'),
 							data: data,
 							borderColor: 'rgb(59, 130, 246)',
 							backgroundColor: 'rgba(59, 130, 246, 0.1)',
@@ -96,7 +97,7 @@ function ClickChart({
 		<div className="bg-surface-alt border border-stroke rounded-lg p-4">
 			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0 mb-4">
 				<h3 className="text-sm font-semibold text-heading">
-					Click History
+					{__('Click History')}
 				</h3>
 				{/* Time Range Selector */}
 				<div className="flex gap-1 bg-surface rounded-lg p-1">
@@ -104,7 +105,7 @@ function ClickChart({
 						{ label: '24h', value: '24h' },
 						{ label: '7d', value: '7d' },
 						{ label: '30d', value: '30d' },
-						{ label: 'All', value: 'all' },
+						{ label: __('All'), value: 'all' },
 					].map((range) => (
 						<button
 							key={range.value}

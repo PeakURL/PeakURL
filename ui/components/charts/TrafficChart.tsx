@@ -2,6 +2,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { Chart } from 'chart.js/auto';
+import { __ } from '@/i18n';
 
 /**
  * TrafficChart Component
@@ -92,13 +93,13 @@ export function TrafficChart({ data, timeRange = '7d', type = 'line' }) {
 				? data
 				: {
 						labels: [
-							'Mon',
-							'Tue',
-							'Wed',
-							'Thu',
-							'Fri',
-							'Sat',
-							'Sun',
+							__('Mon'),
+							__('Tue'),
+							__('Wed'),
+							__('Thu'),
+							__('Fri'),
+							__('Sat'),
+							__('Sun'),
 						],
 						clicks: [420, 380, 520, 478, 589, 639, 749],
 						unique: [340, 289, 420, 390, 480, 520, 630],
@@ -118,7 +119,7 @@ export function TrafficChart({ data, timeRange = '7d', type = 'line' }) {
 					labels: chartData.labels,
 					datasets: [
 						{
-							label: 'Total Clicks',
+							label: __('Total Clicks'),
 							data: chartData.clicks,
 							borderColor: clicksColor,
 							backgroundColor:
@@ -141,7 +142,7 @@ export function TrafficChart({ data, timeRange = '7d', type = 'line' }) {
 							borderRadius: 4,
 						},
 						{
-							label: 'Unique Visitors',
+							label: __('Unique Visitors'),
 							data: chartData.unique,
 							borderColor: uniqueColor,
 							backgroundColor:

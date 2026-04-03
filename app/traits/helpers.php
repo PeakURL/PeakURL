@@ -15,6 +15,7 @@ use PeakURL\Includes\RuntimeConfig;
 use PeakURL\Http\ApiException;
 use PeakURL\Http\Request;
 use PeakURL\Services\Crypto;
+use PeakURL\Services\DatabaseSchema;
 use PeakURL\Services\Geoip;
 use PeakURL\Services\Mailer;
 use PeakURL\Services\SetupConfig;
@@ -182,6 +183,16 @@ trait HelpersTrait {
 	 */
 	private function table_exists( string $table_name ): bool {
 		return $this->db->table_exists( $table_name );
+	}
+
+	/**
+	 * Build the shared database schema service.
+	 *
+	 * @return DatabaseSchema
+	 * @since 1.0.3
+	 */
+	private function get_database_schema_service(): DatabaseSchema {
+		return new DatabaseSchema( $this->connection );
 	}
 
 	/**

@@ -21,23 +21,24 @@ import {
 	useRevokeSessionMutation,
 	useRevokeOtherSessionsMutation,
 } from '@/store/slices/api/user';
+import { __, sprintf } from '@/i18n';
 
 const buildBackupCodesFile = (codes) =>
 	[
-		'PeakURL Backup Codes',
-		'Keep these codes safe. Each code can be used once.',
+		__('PeakURL Backup Codes'),
+		__('Keep these codes safe. Each code can be used once.'),
 		'',
 		...codes.map((code) => `- ${code}`),
 		'',
-		`Generated at: ${new Date().toISOString()}`,
+		sprintf( __('Generated at: %s'), new Date().toISOString() ),
 	].join('\n');
 
 const formatTimestamp = (value) => {
-	if (!value) return 'Unknown';
+	if (!value) return __('Unknown');
 	try {
 		return new Date(value).toLocaleString();
 	} catch (error) {
-		return 'Unknown';
+		return __('Unknown');
 	}
 };
 
@@ -69,10 +70,13 @@ function SecurityTab({
 	const sessions = security.sessions || [];
 	const twoFactorEnabled = security.twoFactorEnabled;
 	const hasPendingSetup = security.hasPendingSetup;
-	const actionLabel = 'Set up 2FA';
+	const actionLabel = __('Set up 2FA');
 	const statusMessage = twoFactorEnabled
-		? `Backup codes remaining: ${security.backupCodesRemaining ?? 0}`
-		: 'Enable to generate backup codes for account recovery.';
+		? sprintf(
+				__('Backup codes remaining: %s'),
+				security.backupCodesRemaining ?? 0
+		  )
+		: __('Enable to generate backup codes for account recovery.');
 
 	useEffect(() => {
 		if (!twoFactorEnabled) {
@@ -121,16 +125,18 @@ function SecurityTab({
 			setRecentCodes([]);
 			if (!options.silent) {
 				notification?.info(
-					'Scan the QR code',
-					'Scan with your authenticator app and enter the 6-digit code.'
+					__('Scan the QR code'),
+					__(
+						'Scan with your authenticator app and enter the 6-digit code.'
+					)
 				);
 			}
 		} catch (err) {
 			if (!options.silent) {
 				notification?.error(
-					'Error',
+					__('Error'),
 					err?.data?.message ||
-						'Failed to start two-factor authentication setup'
+						__('Failed to start two-factor authentication setup')
 				);
 			}
 		}
@@ -140,7 +146,10 @@ function SecurityTab({
 
 	const handleVerify = async () => {
 		if (!verificationCode.trim()) {
-			notification?.error('Error', 'Enter the 6-digit code to verify');
+			notification?.error(
+				__('Error'),
+				__('Enter the 6-digit code to verify')
+			);
 			return;
 		}
 
@@ -154,15 +163,15 @@ function SecurityTab({
 			setOtpauthUrl(null);
 			setVerificationCode('');
 			notification?.success(
-				'Two-factor enabled',
-				'Backup codes generated. Store them safely.'
+				__('Two-factor enabled'),
+				__('Backup codes generated. Store them safely.')
 			);
 			refetchSecurity();
 		} catch (err) {
 			notification?.error(
-				'Error',
+				__('Error'),
 				err?.data?.message ||
-					'Failed to verify code. Check the code and try again.'
+					__('Failed to verify code. Check the code and try again.')
 			);
 		}
 	};
@@ -170,7 +179,9 @@ function SecurityTab({
 	const handleDisable = async () => {
 		if (
 			!window.confirm(
-				'Disable two-factor authentication and clear backup codes?'
+				__(
+					'Disable two-factor authentication and clear backup codes?'
+				)
 			)
 		) {
 			return;
@@ -183,15 +194,15 @@ function SecurityTab({
 			setOtpauthUrl(null);
 			setVerificationCode('');
 			notification?.info(
-				'Two-factor disabled',
-				'Backup codes cleared for this account.'
+				__('Two-factor disabled'),
+				__('Backup codes cleared for this account.')
 			);
 			refetchSecurity();
 		} catch (err) {
 			notification?.error(
-				'Error',
+				__('Error'),
 				err?.data?.message ||
-					'Failed to disable two-factor authentication'
+					__('Failed to disable two-factor authentication')
 			);
 		}
 	};
@@ -201,14 +212,14 @@ function SecurityTab({
 			const res = await regenerateBackupCodes().unwrap();
 			setRecentCodes(res?.data?.backupCodes || []);
 			notification?.success(
-				'Backup codes refreshed',
-				'Save the new codes before leaving this page.'
+				__('Backup codes refreshed'),
+				__('Save the new codes before leaving this page.')
 			);
 			refetchSecurity();
 		} catch (err) {
 			notification?.error(
-				'Error',
-				err?.data?.message || 'Failed to regenerate backup codes'
+				__('Error'),
+				err?.data?.message || __('Failed to regenerate backup codes')
 			);
 		}
 	};
@@ -233,8 +244,8 @@ function SecurityTab({
 			window.URL.revokeObjectURL(url);
 		} catch (err) {
 			notification?.error(
-				'Error',
-				err?.data?.message || 'Failed to download backup codes'
+				__('Error'),
+				err?.data?.message || __('Failed to download backup codes')
 			);
 		} finally {
 			setIsDownloading(false);
@@ -246,10 +257,10 @@ function SecurityTab({
 		try {
 			await revokeSession(sessionId).unwrap();
 			notification?.success(
-				'Session ended',
+				__('Session ended'),
 				isCurrent
-					? 'Current browser session ended.'
-					: 'The session was revoked.'
+					? __('Current browser session ended.')
+					: __('The session was revoked.')
 			);
 			if (isCurrent) {
 				setTimeout(() => {
@@ -260,8 +271,8 @@ function SecurityTab({
 			refetchSecurity();
 		} catch (err) {
 			notification?.error(
-				'Error',
-				err?.data?.message || 'Failed to end the session'
+				__('Error'),
+				err?.data?.message || __('Failed to end the session')
 			);
 		} finally {
 			setRevokingId(null);
@@ -281,16 +292,22 @@ function SecurityTab({
 			setShowRevokeOthersConfirm(false);
 
 			notification?.success(
-				'Other sessions ended',
+				__('Other sessions ended'),
 				revokedCount > 0
-					? `${revokedCount} other session${1 === revokedCount ? '' : 's'} were revoked.`
-					: 'No other active sessions were found.'
+					? sprintf(
+							__(
+								'%1$s other session%2$s were ended.'
+							),
+							revokedCount,
+							1 === revokedCount ? '' : 's'
+					  )
+					: __('No other active sessions were found.')
 			);
 			refetchSecurity();
 		} catch (err) {
 			notification?.error(
-				'Error',
-				err?.data?.message || 'Failed to end the other sessions'
+				__('Error'),
+				err?.data?.message || __('Failed to end the other sessions')
 			);
 		} finally {
 			setIsRevokingOthers(false);
@@ -301,11 +318,11 @@ function SecurityTab({
 		<div className="space-y-5">
 			<div className="bg-surface border border-stroke rounded-lg p-5">
 				<h2 className="text-base font-semibold text-heading mb-5">
-					Password & Security
+					{__('Password & Security')}
 				</h2>
 				<div className="space-y-4">
 					<Input
-						label="Current Password"
+						label={__('Current Password')}
 						type="password"
 						value={securityForm.currentPassword}
 						onChange={(e) =>
@@ -316,7 +333,7 @@ function SecurityTab({
 						}
 					/>
 					<Input
-						label="New Password"
+						label={__('New Password')}
 						type="password"
 						value={securityForm.newPassword}
 						onChange={(e) =>
@@ -327,7 +344,7 @@ function SecurityTab({
 						}
 					/>
 					<Input
-						label="Confirm New Password"
+						label={__('Confirm New Password')}
 						type="password"
 						value={securityForm.confirmPassword}
 						onChange={(e) =>
@@ -340,7 +357,7 @@ function SecurityTab({
 				</div>
 				<div className="flex justify-end mt-5">
 					<Button size="sm" onClick={onSubmit} disabled={isUpdating}>
-						{isUpdating ? 'Updating...' : 'Update Password'}
+						{isUpdating ? __('Updating...') : __('Update Password')}
 					</Button>
 				</div>
 			</div>
@@ -349,11 +366,12 @@ function SecurityTab({
 				<div className="flex items-center justify-between">
 					<div>
 						<h2 className="text-base font-semibold text-heading">
-							Two-Factor Authentication
+							{__('Two-Factor Authentication')}
 						</h2>
 						<p className="text-sm text-text-muted mt-1">
-							Add an extra layer of security with an authenticator
-							app and backup codes.
+							{__(
+								'Add an extra layer of security with an authenticator app and backup codes.'
+							)}
 						</p>
 					</div>
 					<div className="flex items-center gap-2">
@@ -366,7 +384,7 @@ function SecurityTab({
 									loading={isRegenerating}
 								>
 									<RefreshCw size={14} />
-									Regenerate Codes
+									{__('Regenerate Codes')}
 								</Button>
 								<Button
 									variant="ghost"
@@ -375,7 +393,7 @@ function SecurityTab({
 									loading={isDisabling}
 								>
 									<ShieldOff size={14} />
-									Disable
+									{__('Disable')}
 								</Button>
 							</>
 						) : (
@@ -414,15 +432,15 @@ function SecurityTab({
 					<div className="flex-1">
 						<p className="font-medium text-sm text-heading">
 							{twoFactorEnabled
-								? '2FA is enabled'
-								: '2FA is disabled'}
+								? __('2FA is enabled')
+								: __('2FA is disabled')}
 						</p>
 						<p className="text-xs text-text-muted mt-1">
 							{statusMessage}
 						</p>
 						{security.backupCodesLastGeneratedAt && (
 							<p className="text-xs text-text-muted mt-1">
-								Last generated:{' '}
+								{__('Last generated:')}{' '}
 								{formatTimestamp(
 									security.backupCodesLastGeneratedAt
 								)}
@@ -437,7 +455,7 @@ function SecurityTab({
 						disabled={!twoFactorEnabled}
 					>
 						<Download size={14} />
-						Download
+						{__('Download')}
 					</Button>
 				</div>
 
@@ -452,12 +470,12 @@ function SecurityTab({
 							</div>
 							<div className="flex-1">
 								<p className="font-medium text-sm text-heading">
-									Scan the QR code
+									{__('Scan the QR code')}
 								</p>
 								<p className="text-xs text-text-muted">
-									Use an authenticator app (Google
-									Authenticator, Authy, etc.) then enter the
-									6-digit code.
+									{__(
+										'Use an authenticator app (Google Authenticator, Authy, etc.) then enter the 6-digit code.'
+									)}
 								</p>
 							</div>
 						</div>
@@ -466,7 +484,7 @@ function SecurityTab({
 								{qrDataUrl ? (
 									<img
 										src={qrDataUrl}
-										alt="TOTP QR code"
+										alt={__('TOTP QR code')}
 										width={192}
 										height={192}
 										loading="lazy"
@@ -474,28 +492,28 @@ function SecurityTab({
 									/>
 								) : (
 									<div className="w-48 h-48 border border-dashed border-stroke rounded-lg bg-surface-alt flex items-center justify-center text-center text-xs text-text-muted p-4">
-										QR preview is unavailable in this
-										browser. Use the secret or authenticator
-										URI below.
+										{__(
+											'QR preview is unavailable in this browser. Use the secret or authenticator URI below.'
+										)}
 									</div>
 								)}
 							</div>
 							<div className="space-y-3">
 								<div className="text-xs text-text-muted break-all border border-dashed border-stroke rounded-lg p-3 bg-surface-alt">
-									Secret: {secret}
+									{__('Secret:')} {secret}
 								</div>
 								{otpauthUrl ? (
 									<div className="text-xs text-text-muted break-all border border-dashed border-stroke rounded-lg p-3 bg-surface-alt">
-										Authenticator URI: {otpauthUrl}
+										{__('Authenticator URI:')} {otpauthUrl}
 									</div>
 								) : null}
 								<Input
-									label="6-digit code"
+									label={__('6-digit code')}
 									value={verificationCode}
 									onChange={(e) =>
 										setVerificationCode(e.target.value)
 									}
-									placeholder="123456"
+									placeholder={__('123456')}
 								/>
 								<div className="flex gap-2">
 									<Button
@@ -504,7 +522,7 @@ function SecurityTab({
 										loading={isVerifying}
 										className="flex-1"
 									>
-										Verify & Enable
+										{__('Verify & Enable')}
 									</Button>
 									<Button
 										variant="ghost"
@@ -516,7 +534,7 @@ function SecurityTab({
 											setVerificationCode('');
 										}}
 									>
-										Cancel
+										{__('Cancel')}
 									</Button>
 								</div>
 							</div>
@@ -529,11 +547,12 @@ function SecurityTab({
 						<div className="flex items-center justify-between">
 							<div>
 								<p className="font-medium text-sm text-heading">
-									New backup codes
+									{__('New backup codes')}
 								</p>
 								<p className="text-xs text-text-muted">
-									Save or download these codes now—they
-									won&apos;t be shown again.
+									{__(
+										"Save or download these codes now—they won't be shown again."
+									)}
 								</p>
 							</div>
 							<Button
@@ -545,7 +564,7 @@ function SecurityTab({
 								}
 							>
 								<Download size={14} />
-								Download
+								{__('Download')}
 							</Button>
 						</div>
 						<div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-3">
@@ -566,11 +585,15 @@ function SecurityTab({
 				<div className="flex items-center justify-between mb-4">
 					<div>
 						<h2 className="text-base font-semibold text-heading">
-							Active Sessions
+							{__('Active Sessions')}
 						</h2>
 						<span className="text-xs text-text-muted">
-							{sessions.length} session
-							{sessions.length === 1 ? '' : 's'}
+							{sprintf(
+								__(
+									'%s active session(s)'
+								),
+								sessions.length
+							)}
 						</span>
 					</div>
 					{otherActiveSessions.length > 0 ? (
@@ -580,18 +603,18 @@ function SecurityTab({
 							onClick={() => setShowRevokeOthersConfirm(true)}
 							loading={isRevokingOthers}
 						>
-							End all other sessions
+							{__('End all other sessions')}
 						</Button>
 					) : null}
 				</div>
 				<div className="space-y-3">
 					{isSecurityLoading ? (
 						<div className="p-3 border border-dashed border-stroke rounded-lg text-sm text-text-muted">
-							Loading security data...
+							{__('Loading security data...')}
 						</div>
 					) : sessions.length === 0 ? (
 						<div className="p-3 border border-dashed border-stroke rounded-lg text-sm text-text-muted">
-							No active sessions found.
+							{__('No active sessions found.')}
 						</div>
 					) : (
 						sessions.map((session) => (
@@ -610,12 +633,12 @@ function SecurityTab({
 									</div>
 									<div>
 										<p className="font-medium text-sm text-heading">
-											{session.browser || 'Browser'} •{' '}
-											{session.os || 'Unknown OS'}
+											{session.browser || __('Browser')} •{' '}
+											{session.os || __('Unknown OS')}
 										</p>
 										<p className="text-xs text-text-muted">
-											{session.ipAddress || 'Unknown IP'}{' '}
-											• Last active{' '}
+											{session.ipAddress || __('Unknown IP')}{' '}
+											• {__('Last active')}{' '}
 											{formatTimestamp(
 												session.lastActiveAt
 											)}
@@ -625,12 +648,12 @@ function SecurityTab({
 								<div className="flex items-center gap-2">
 									{session.isCurrent && (
 										<span className="text-xs px-2 py-1 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">
-											Current
+											{__('Current')}
 										</span>
 									)}
 									{session.revokedAt ? (
 										<span className="text-xs px-2 py-1 rounded bg-surface-alt text-text-muted">
-											Ended
+											{__('Ended')}
 										</span>
 									) : session.isCurrent ? null : (
 										<Button
@@ -644,7 +667,7 @@ function SecurityTab({
 											}
 											loading={revokingId === session.id}
 										>
-											End session
+											{__('End session')}
 										</Button>
 									)}
 								</div>
@@ -661,10 +684,15 @@ function SecurityTab({
 						setShowRevokeOthersConfirm(false);
 					}
 				}}
-				title="End all other sessions"
-				description={`End ${otherActiveSessions.length} other active session${1 === otherActiveSessions.length ? '' : 's'} for this account? Any browsers or devices using them will be signed out immediately.`}
-				confirmText="End sessions"
-				cancelText="Keep sessions"
+				title={__('End all other sessions')}
+				description={sprintf(
+					__(
+						'End %s other active session(s) for this account? Any browsers or devices using them will be signed out immediately.'
+					),
+					otherActiveSessions.length
+				)}
+				confirmText={__('End sessions')}
+				cancelText={__('Keep sessions')}
 				onConfirm={handleRevokeOtherSessions}
 				loading={isRevokingOthers}
 			/>

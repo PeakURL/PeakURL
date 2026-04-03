@@ -65,10 +65,16 @@ class Constants {
 	public const DEFAULT_VERSION = '0.0.0';
 	/** Default update manifest URL. */
 	public const DEFAULT_UPDATE_MANIFEST_URL = 'https://api.peakurl.org/v1/update';
+	/** Current managed database schema version. */
+	public const DB_SCHEMA_VERSION = 3;
 	/** Default content directory. */
 	public const DEFAULT_CONTENT_DIR = 'content';
+	/** Default site locale. */
+	public const DEFAULT_LOCALE = 'en_US';
 	/** Default GeoIP database path. */
 	public const DEFAULT_GEOIP_DB_PATH = 'content/uploads/geoip/GeoLite2-City.mmdb';
+	/** Languages directory relative to the content root. */
+	public const LANGUAGES_DIRECTORY = 'languages';
 	/** Default session cookie name. */
 	public const DEFAULT_SESSION_COOKIE_NAME = 'peakurl_session';
 	/** Default session lifetime in seconds. */
@@ -79,4 +85,12 @@ class Constants {
 	public const DEFAULT_SESSION_COOKIE_SECURE = 'auto';
 	/** Debug log filename. */
 	public const DEBUG_LOG_FILE = 'debug.log';
+	/** PeakURL gettext text domain. */
+	public const I18N_TEXT_DOMAIN = 'peakurl';
+	/** Settings key storing the installed DB schema version. */
+	public const SETTING_DB_SCHEMA_VERSION = 'db_schema_version';
+	/** Settings key storing the last successful DB schema upgrade time. */
+	public const SETTING_DB_SCHEMA_LAST_UPGRADED_AT = 'db_schema_last_upgraded_at';
+	/** Settings key storing the last DB schema upgrade error. */
+	public const SETTING_DB_SCHEMA_LAST_ERROR = 'db_schema_last_error';
 }

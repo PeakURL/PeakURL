@@ -89,11 +89,40 @@ trait SystemSupportTrait {
 			}
 		}
 
-		return $update_service->build_status(
+		$status = $update_service->build_status(
 			$cached_manifest,
 			$last_checked,
 			$last_error,
 		);
+
+		try {
+			$status['database'] = $this->get_database_schema_service()->inspect();
+		} catch ( \Throwable $exception ) {
+			$status['database'] = array(
+				'currentVersion'  => 0,
+				'targetVersion'   => Constants::DB_SCHEMA_VERSION,
+				'compatible'      => false,
+				'upgradeRequired' => true,
+				'upToDate'        => false,
+				'errorCount'      => 1,
+				'warningCount'    => 0,
+				'issues'          => array(
+					array(
+						'id'       => 'schema-inspection-failed',
+						'severity' => 'error',
+						'label'    => __( 'PeakURL could not inspect the database schema.', 'peakurl' ),
+					),
+				),
+				'issuesCount'     => 1,
+				'missingTables'   => array(),
+				'lastUpgradedAt'  => null,
+				'lastError'       => $exception->getMessage(),
+				'upgraded'        => false,
+				'changes'         => array(),
+			);
+		}
+
+		return $status;
 	}
 
 	/**

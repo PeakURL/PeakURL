@@ -107,6 +107,8 @@ trait SessionsTrait {
 	 * @since 1.0.0
 	 */
 	private function find_session_by_request( Request $request ): ?array {
+		$this->prune_stale_sessions();
+
 		$cookie_name = (string) $this->config[ Constants::CONFIG_SESSION_COOKIE_NAME ];
 		$token       = $this->crypto_service->verify_session_token(
 			trim( (string) $request->get_cookie( $cookie_name, '' ) )
@@ -140,6 +142,8 @@ trait SessionsTrait {
 		Request $request,
 		string $user_id
 	): void {
+		$this->prune_stale_sessions();
+
 		if ( ! $this->crypto_service->has_auth_keys() ) {
 			$this->crypto_service->ensure_persisted_auth_keys( ABSPATH . 'app' );
 			$this->config         = RuntimeConfig::bootstrap( ABSPATH . 'app' );
@@ -210,12 +214,20 @@ trait SessionsTrait {
 		string $user_id,
 		Request $request
 	): array {
+		$this->prune_stale_sessions();
+
 		$current_session = $this->find_session_by_request( $request );
-		$rows            = $this->db->get_results_by(
-			'sessions',
-			array( 'user_id' => $user_id ),
-			array( '*' ),
-			array( 'last_active_at' => 'DESC' ),
+		$rows            = $this->query_all(
+			'SELECT *
+			FROM sessions
+			WHERE user_id = :user_id
+			AND revoked_at IS NULL
+			AND last_active_at >= :active_since
+			ORDER BY last_active_at DESC',
+			array(
+				'user_id'      => $user_id,
+				'active_since' => $this->session_active_since(),
+			),
 		);
 
 		return array_map(
@@ -229,14 +241,37 @@ trait SessionsTrait {
 					(string) $row['last_active_at'],
 				),
 				'createdAt'    => $this->to_iso( (string) $row['created_at'] ),
-				'revokedAt'    => $row['revoked_at']
-					? $this->to_iso( (string) $row['revoked_at'] )
-					: null,
+				'revokedAt'    => null,
 				'isCurrent'    => $current_session
 					? $row['id'] === $current_session['id']
 					: false,
 			),
 			$rows,
 		);
+	}
+
+	/**
+	 * Delete expired sessions and leftover revoked rows once per request.
+	 *
+	 * @return void
+	 * @since 1.0.3
+	 */
+	private function prune_stale_sessions(): void {
+		static $pruned = false;
+
+		if ( $pruned ) {
+			return;
+		}
+
+		$this->db->query(
+			'DELETE FROM sessions
+			WHERE revoked_at IS NOT NULL
+			OR last_active_at < :active_since',
+			array(
+				'active_since' => $this->session_active_since(),
+			),
+		);
+
+		$pruned = true;
 	}
 }

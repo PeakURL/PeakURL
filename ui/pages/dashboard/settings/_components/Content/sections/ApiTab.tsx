@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { Button } from '@/components/ui';
 import { Plus, Trash2, Info, Key, LoaderCircle, ExternalLink, BookOpen } from 'lucide-react';
+import { __ } from '@/i18n';
 
 function ApiTab({
 	user,
@@ -26,7 +27,7 @@ function ApiTab({
 						) : (
 							<Plus size={16} className="mr-2" />
 						)}
-						Create New Key
+						{__('Create New Key')}
 					</Button>
 				</div>
 
@@ -40,10 +41,10 @@ function ApiTab({
 								<div className="flex-1 min-w-0">
 									<div className="flex items-center gap-2 mb-1">
 										<p className="font-medium text-sm text-heading">
-											{key.label || 'API Key'}
+											{key.label || __('API Key')}
 										</p>
 										<span className="text-xs px-2 py-0.5 bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 rounded">
-											Active
+											{__('Active')}
 										</span>
 									</div>
 								<div className="flex items-center gap-2">
@@ -52,7 +53,7 @@ function ApiTab({
 										</p>
 									</div>
 									<p className="text-xs text-text-muted mt-1">
-										Created:{' '}
+										{__('Created:')}{' '}
 										{new Date(
 											key.createdAt
 										).toLocaleDateString()}
@@ -62,10 +63,10 @@ function ApiTab({
 									<button
 										type="button"
 										className="p-2 text-text-muted hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-										aria-label="Delete"
+										aria-label={__('Delete')}
 										onClick={() => onDeleteKey(key)}
 										disabled={isDeletingKey}
-										title="Delete API Key"
+										title={__('Delete API Key')}
 									>
 										<Trash2 size={16} />
 									</button>
@@ -80,18 +81,17 @@ function ApiTab({
 							className="mx-auto text-text-muted mb-3"
 						/>
 						<h3 className="text-sm font-medium text-heading mb-1">
-							No API Keys Generated
+							{__('No API Keys Generated')}
 						</h3>
 						<p className="text-xs text-text-muted mb-4">
-							Generate an API key to access endpoints
-							programmatically.
+							{__('Generate an API key to access endpoints programmatically.')}
 						</p>
 						<Button
 							size="sm"
 							onClick={() => setShowCreateModal(true)}
 							disabled={isGeneratingKey}
 						>
-							Create New Key
+							{__('Create New Key')}
 						</Button>
 					</div>
 				)}
@@ -105,13 +105,12 @@ function ApiTab({
 					/>
 					<div>
 						<p className="font-medium text-sm text-blue-700 dark:text-blue-300 mb-1">
-							Keep your API keys secure
+							{__('Keep your API keys secure')}
 						</p>
 						<p className="text-xs text-blue-700 dark:text-blue-300">
-							PeakURL only shows the full token once, at creation
-							time. Store it in a password manager or secret store,
-							and revoke it immediately if you think it has been
-							exposed.
+							{__(
+								'PeakURL only shows the full token once, at creation time. Store it in a password manager or secret store, and revoke it immediately if you think it has been exposed.'
+							)}
 						</p>
 					</div>
 				</div>
@@ -123,12 +122,13 @@ function ApiTab({
 						<div className="flex items-center gap-2 text-heading">
 							<BookOpen size={18} className="text-accent" />
 							<h3 className="text-sm font-semibold">
-								API documentation
+								{__('API documentation')}
 							</h3>
 						</div>
 						<p className="text-sm text-text-muted max-w-2xl">
-							Use the public docs for authentication, links,
-							analytics, users, webhooks, and system endpoints.
+							{__(
+								'Use the public docs for authentication, links, analytics, users, webhooks, and system endpoints.'
+							)}
 						</p>
 					</div>
 					<a
@@ -137,7 +137,7 @@ function ApiTab({
 						rel="noreferrer"
 					>
 						<Button size="sm" variant="secondary">
-							API Overview
+							{__('API Overview')}
 							<ExternalLink size={14} className="ml-2" />
 						</Button>
 					</a>

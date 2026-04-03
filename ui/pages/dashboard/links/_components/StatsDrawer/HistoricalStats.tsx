@@ -3,42 +3,49 @@
 
 import { format, formatDistanceToNow } from 'date-fns';
 import { Calendar } from 'lucide-react';
+import { __, sprintf } from '@/i18n';
 
 function HistoricalStats({ link }) {
 	const stats = [
 		{
-			period: 'Last 24 hours',
+			period: __('Last 24 hours'),
 			hits: link.clicks || 0,
-			rate: `${((link.clicks || 0) / 24).toFixed(2)} per hour`,
+			rate: sprintf(
+				__('%s per hour'),
+				((link.clicks || 0) / 24).toFixed(2)
+			),
 			highlighted: true,
 		},
 		{
-			period: 'Last 7 days',
+			period: __('Last 7 days'),
 			hits: link.clicks || 0,
 			rate: null,
 			highlighted: false,
 		},
 		{
-			period: 'Last 30 days',
+			period: __('Last 30 days'),
 			hits: link.clicks || 0,
 			rate: null,
 			highlighted: false,
 		},
 		{
-			period: 'All time',
+			period: __('All time'),
 			hits: link.clicks || 0,
 			rate: link.createdAt
-				? `${(
-						(link.clicks || 0) /
-						Math.max(
-							1,
-							Math.ceil(
-								(new Date() - new Date(link.createdAt)) /
-									(1000 * 60 * 60 * 24)
+				? sprintf(
+						__('%s per day'),
+						(
+							(link.clicks || 0) /
+							Math.max(
+								1,
+								Math.ceil(
+									(new Date() - new Date(link.createdAt)) /
+										(1000 * 60 * 60 * 24)
+								)
 							)
-						)
-					).toFixed(1)} per day`
-				: '0 per day',
+						).toFixed(1)
+				  )
+				: __('0 per day'),
 			highlighted: true,
 		},
 	];
@@ -48,23 +55,23 @@ function HistoricalStats({ link }) {
 			<div className="flex items-center gap-2 mb-1">
 				<Calendar className="w-4 h-4 text-accent" />
 				<h3 className="text-base font-semibold text-heading">
-					Historical click count
+					{__('Historical click count')}
 				</h3>
 			</div>
 			<p className="text-sm text-text-muted mb-4">
-				Short URL created on{' '}
+				{__('Short URL created on')}{' '}
 				{link.createdAt
 					? format(
 							new Date(link.createdAt),
 							"MMMM d, yyyy '@' h:mm a"
 						)
-					: 'Unknown'}{' '}
+					: __('Unknown')}{' '}
 				(
 				{link.createdAt
 					? formatDistanceToNow(new Date(link.createdAt), {
 							addSuffix: true,
 						})
-					: 'Unknown'}
+					: __('Unknown')}
 				)
 			</p>
 
@@ -89,7 +96,8 @@ function HistoricalStats({ link }) {
 							{stat.period}
 						</span>
 						<span className="text-sm font-semibold text-heading flex-1">
-							{stat.hits} {stat.hits === 1 ? 'hit' : 'hits'}
+							{stat.hits}{' '}
+							{stat.hits === 1 ? __('hit') : __('hits')}
 						</span>
 						{stat.rate && (
 							<span className="text-sm text-text-muted">

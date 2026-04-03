@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, CheckCircle2, KeyRound, LockKeyhole } from 'lucide-react';
 import { Button, Input } from '@/components/ui';
 import { useResetPasswordMutation } from '@/store/slices/api/user';
+import { __ } from '@/i18n';
 
 function getErrorMessage(error, fallback) {
 	if (typeof error?.data?.message === 'string' && error.data.message) {
@@ -40,17 +41,17 @@ function ResetPasswordPage() {
 		setFormError('');
 
 		if (!token.trim()) {
-			setFormError('The password reset link is invalid.');
+			setFormError(__('The password reset link is invalid.'));
 			return;
 		}
 
 		if (password.length < 8) {
-			setFormError('Password must be at least 8 characters.');
+			setFormError(__('Password must be at least 8 characters.'));
 			return;
 		}
 
 		if (password !== confirmPassword) {
-			setFormError('Passwords do not match.');
+			setFormError(__('Passwords do not match.'));
 			return;
 		}
 
@@ -67,7 +68,7 @@ function ResetPasswordPage() {
 			setFormError(
 				getErrorMessage(
 					error,
-					'PeakURL could not reset the password with that link.'
+					__('PeakURL could not reset the password with that link.')
 				)
 			);
 		}
@@ -81,25 +82,26 @@ function ResetPasswordPage() {
 						<div>
 							<div className="inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-300">
 								<LockKeyhole size={14} />
-								Secure Reset
+								{__('Secure Reset')}
 							</div>
 							<h1 className="mt-6 text-4xl font-semibold tracking-tight text-white">
-								Choose a new password and get back to work.
+								{__('Choose a new password and get back to work.')}
 							</h1>
 							<p className="mt-4 max-w-lg text-base leading-7 text-slate-400">
-								Once the password changes, PeakURL revokes the old
-								sessions so only the new login remains valid.
+								{__(
+									'Once the password changes, PeakURL revokes the old sessions so only the new login remains valid.'
+								)}
 							</p>
 						</div>
 
 						<div className="rounded-2xl border border-white/10 bg-slate-900/60 p-5">
 							<p className="text-sm font-medium text-white">
-								Use at least 8 characters.
+								{__('Use at least 8 characters.')}
 							</p>
 							<p className="mt-2 text-sm leading-6 text-slate-400">
-								For best results, combine uppercase, lowercase,
-								numbers, and a unique phrase you do not reuse
-								elsewhere.
+								{__(
+									'For best results, combine uppercase, lowercase, numbers, and a unique phrase you do not reuse elsewhere.'
+								)}
 							</p>
 						</div>
 					</div>
@@ -115,16 +117,17 @@ function ResetPasswordPage() {
 								className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-slate-900"
 							>
 								<ArrowLeft size={16} />
-								Back to login
+								{__('Back to login')}
 							</Link>
 						</div>
 
 						<h2 className="text-3xl font-semibold tracking-tight text-slate-950">
-							Reset your password
+							{__('Reset your password')}
 						</h2>
 						<p className="mt-3 text-sm leading-6 text-slate-500">
-							Set a new account password, then sign in again with the
-							updated credentials.
+							{__(
+								'Set a new account password, then sign in again with the updated credentials.'
+							)}
 						</p>
 
 						{isCompleted ? (
@@ -133,12 +136,12 @@ function ResetPasswordPage() {
 									<CheckCircle2 size={18} className="mt-0.5" />
 									<div>
 										<p className="font-semibold">
-											Password updated
+											{__('Password updated')}
 										</p>
 										<p className="mt-2 leading-6 opacity-80">
-											PeakURL updated your password and
-											revoked the older sessions. Redirecting
-											you to the login page now.
+											{__(
+												'PeakURL updated your password and revoked the older sessions. Redirecting you to the login page now.'
+											)}
 										</p>
 									</div>
 								</div>
@@ -146,7 +149,7 @@ function ResetPasswordPage() {
 						) : (
 							<form className="mt-8 space-y-5" onSubmit={handleSubmit}>
 								<Input
-									label="New password"
+									label={__('New password')}
 									type="password"
 									icon={KeyRound}
 									value={password}
@@ -155,13 +158,13 @@ function ResetPasswordPage() {
 										setPassword(event.target.value)
 									}
 									autoFocus
-									placeholder="Enter your new password"
+									placeholder={__('Enter your new password')}
 									autoComplete="new-password"
 									required
 									error={formError}
 								/>
 								<Input
-									label="Confirm new password"
+									label={__('Confirm new password')}
 									type="password"
 									icon={LockKeyhole}
 									value={confirmPassword}
@@ -171,7 +174,7 @@ function ResetPasswordPage() {
 									}
 									onKeyDown={submitFormOnEnter}
 									enterKeyHint="go"
-									placeholder="Confirm your new password"
+									placeholder={__('Confirm your new password')}
 									autoComplete="new-password"
 									required
 								/>
@@ -181,7 +184,7 @@ function ResetPasswordPage() {
 									loading={isLoading}
 									className="w-full"
 								>
-									Reset password
+									{__('Reset password')}
 								</Button>
 							</form>
 						)}

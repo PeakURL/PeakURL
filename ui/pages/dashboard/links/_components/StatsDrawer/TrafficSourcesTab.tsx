@@ -17,6 +17,7 @@ import {
 	TrendingUp,
 } from 'lucide-react';
 import DeviceStats from './DeviceStats';
+import { __ } from '@/i18n';
 
 // Map category to icon and color
 const getCategoryInfo = (category) => {
@@ -73,7 +74,28 @@ const getCategoryInfo = (category) => {
 		Unknown: { icon: Globe, color: 'text-text-muted', bg: 'bg-surface' },
 	};
 
-	return categoryMap[category] || categoryMap['Unknown'];
+	return categoryMap[category] || categoryMap.Unknown;
+};
+
+const getCategoryLabel = (category) => {
+	const labels = {
+		'Search Engine': __('Search Engine'),
+		'Social Media': __('Social Media'),
+		Messaging: __('Messaging'),
+		Video: __('Video'),
+		'News & Content': __('News & Content'),
+		Developer: __('Developer'),
+		Email: __('Email'),
+		'Email Marketing': __('Email Marketing'),
+		Shopping: __('Shopping'),
+		AI: __('AI'),
+		Productivity: __('Productivity'),
+		Website: __('Website'),
+		Direct: __('Direct'),
+		Unknown: __('Unknown'),
+	};
+
+	return labels[category] || category || __('Unknown');
 };
 
 // Get total clicks from referrers array
@@ -105,7 +127,7 @@ function TrafficSourcesTab({ link, stats, isLoading }) {
 			{referrerCategories.length > 0 && (
 				<div className="bg-surface-alt border border-stroke rounded-lg p-4">
 					<h3 className="text-sm font-semibold text-heading mb-4">
-						Traffic by Category
+						{__('Traffic by Category')}
 					</h3>
 					<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
 						{referrerCategories.map((cat, index) => {
@@ -132,10 +154,10 @@ function TrafficSourcesTab({ link, stats, isLoading }) {
 									</div>
 									<div className="min-w-0">
 										<p className="text-sm font-medium text-heading truncate">
-											{cat.category}
+											{getCategoryLabel(cat.category)}
 										</p>
 										<p className="text-xs text-text-muted">
-											{cat.count} clicks ({percentage}%)
+											{cat.count} {__('clicks')} ({percentage}%)
 										</p>
 									</div>
 								</div>
@@ -147,13 +169,13 @@ function TrafficSourcesTab({ link, stats, isLoading }) {
 
 			{/* Detailed Referrer Data */}
 			<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-				<h3 className="text-sm font-semibold text-heading mb-4">
-					Referrer Sources
-				</h3>
+					<h3 className="text-sm font-semibold text-heading mb-4">
+						{__('Referrer Sources')}
+					</h3>
 				{isLoading ? (
 					<div className="h-64 flex items-center justify-center bg-surface rounded-lg border border-stroke animate-pulse">
 						<p className="text-sm text-text-muted">
-							Loading referrers...
+							{__('Loading referrers...')}
 						</p>
 					</div>
 				) : referrers.length > 0 ? (
@@ -185,7 +207,7 @@ function TrafficSourcesTab({ link, stats, isLoading }) {
 										</div>
 										<div className="min-w-0">
 											<p className="text-sm font-medium text-heading truncate">
-												{ref.name || 'Direct / Unknown'}
+												{ref.name || __('Direct / Unknown')}
 											</p>
 											{ref.domain &&
 												ref.domain !==
@@ -226,11 +248,12 @@ function TrafficSourcesTab({ link, stats, isLoading }) {
 						<div className="text-center">
 							<ExternalLink className="w-12 h-12 text-text-muted mx-auto mb-2" />
 							<p className="text-sm text-text-muted">
-								No referrer data available yet
+								{__('No referrer data available yet')}
 							</p>
 							<p className="text-xs text-text-muted mt-1">
-								Referrer data will appear when visitors come
-								from external sources
+								{__(
+									'Referrer data will appear when visitors come from external sources'
+								)}
 							</p>
 						</div>
 					</div>
@@ -241,7 +264,7 @@ function TrafficSourcesTab({ link, stats, isLoading }) {
 			{utmCampaigns && utmCampaigns.length > 0 && (
 				<div className="bg-surface-alt border border-stroke rounded-lg p-4">
 					<h3 className="text-sm font-semibold text-heading mb-4">
-						UTM Campaign Tracking
+						{__('UTM Campaign Tracking')}
 					</h3>
 					<div className="space-y-2">
 						{utmCampaigns.map((campaign, index) => (
@@ -256,18 +279,18 @@ function TrafficSourcesTab({ link, stats, isLoading }) {
 									<div className="flex gap-2 text-xs text-text-muted mt-1">
 										{campaign.source && (
 											<span className="px-2 py-0.5 bg-surface-alt rounded">
-												source: {campaign.source}
+												{__('source:')} {campaign.source}
 											</span>
 										)}
 										{campaign.medium && (
 											<span className="px-2 py-0.5 bg-surface-alt rounded">
-												medium: {campaign.medium}
+												{__('medium:')} {campaign.medium}
 											</span>
 										)}
 									</div>
 								</div>
 								<span className="text-sm font-medium text-heading shrink-0">
-									{campaign.count} clicks
+									{campaign.count} {__('clicks')}
 								</span>
 							</div>
 						))}

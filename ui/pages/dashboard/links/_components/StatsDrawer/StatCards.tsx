@@ -4,11 +4,12 @@
 import { MousePointerClick, Users, Calendar, TrendingUp } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { formatNumber } from '@/utils';
+import { __ } from '@/i18n';
 
 function StatCards({ link, stats: fetchedStats, isLoading }) {
 	const displayStats = [
 		{
-			name: 'Total Clicks',
+			name: __('Total Clicks'),
 			value: isLoading
 				? '...'
 				: formatNumber(
@@ -21,7 +22,7 @@ function StatCards({ link, stats: fetchedStats, isLoading }) {
 			bg: 'bg-blue-500/10',
 		},
 		{
-			name: 'Unique Visitors',
+			name: __('Unique Visitors'),
 			value: isLoading
 				? '...'
 				: formatNumber(
@@ -34,18 +35,18 @@ function StatCards({ link, stats: fetchedStats, isLoading }) {
 			bg: 'bg-purple-500/10',
 		},
 		{
-			name: 'Created',
+			name: __('Created'),
 			value: link.createdAt
 				? formatDistanceToNow(new Date(link.createdAt), {
 						addSuffix: true,
 					})
-				: 'Unknown',
+				: __('Unknown'),
 			icon: Calendar,
 			color: 'text-green-600 dark:text-green-400',
 			bg: 'bg-green-500/10',
 		},
 		{
-			name: 'Click Rate',
+			name: __('Click Rate'),
 			value: isLoading
 				? '...'
 				: fetchedStats

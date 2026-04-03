@@ -55,6 +55,10 @@ find "$RELEASE_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 mkdir -p "$RELEASE_DIR/app/bin"
 
 cp -R site/. "$RELEASE_DIR/"
+if [ -d "$ROOT_DIR/content/languages" ]; then
+    mkdir -p "$RELEASE_DIR/content/languages"
+    cp -R "$ROOT_DIR/content/languages/." "$RELEASE_DIR/content/languages/"
+fi
 cp -R "$UI_BUILD_DIR/assets" "$RELEASE_DIR/assets"
 cp "$UI_BUILD_DIR/index.html" "$RELEASE_DIR/app.html"
 cp "$ROOT_DIR/.version" "$RELEASE_DIR/.version"

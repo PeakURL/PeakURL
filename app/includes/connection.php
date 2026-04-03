@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace PeakURL\Includes;
 
-use PeakURL\Utils\Database;
-
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );

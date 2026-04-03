@@ -10,17 +10,7 @@ declare(strict_types=1);
 
 namespace PeakURL\Traits;
 
-use PeakURL\Includes\Constants;
-use PeakURL\Includes\RuntimeConfig;
-use PeakURL\Http\ApiException;
 use PeakURL\Http\Request;
-use PeakURL\Services\Crypto;
-use PeakURL\Services\Geoip;
-use PeakURL\Services\Mailer;
-use PeakURL\Services\SetupConfig;
-use PeakURL\Services\Update;
-use PeakURL\Utils\Query;
-use PeakURL\Utils\Security;
 use PeakURL\Utils\Visitor;
 
 // If this file is called directly, abort.

@@ -21,9 +21,6 @@ use PeakURL\Services\SystemStatus;
 use PeakURL\Services\Mailer;
 use PeakURL\Services\SetupConfig;
 use PeakURL\Services\Update;
-use PeakURL\Utils\Query;
-use PeakURL\Utils\Security;
-use PeakURL\Utils\Visitor;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {

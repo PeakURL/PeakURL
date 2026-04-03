@@ -8,12 +8,11 @@
 		"types": ["vite/client"],
 		"skipLibCheck": true,
 		"allowJs": true,
-		"baseUrl": ".",
 		"paths": {
-			"@/*": ["ui/*"],
-			"@constants": ["ui/constants.js"],
-			"@store": ["ui/store/index.js"],
-			"@store/*": ["ui/store/*"]
+			"@/*": ["./ui/*"],
+			"@constants": ["./ui/constants.js"],
+			"@store": ["./ui/store/index.js"],
+			"@store/*": ["./ui/store/*"]
 		},
 
 		/* Bundler mode */

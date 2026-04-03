@@ -5,6 +5,7 @@ import { X, Download, Copy, Check } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import QRCode from 'qrcode';
 import { buildShortUrl, getDefaultShortUrlOrigin } from '@/utils';
+import { __ } from '@/i18n';
 
 function QRCodeModal({ open, setOpen, link }) {
 	const [qrDataUrl, setQrDataUrl] = useState('');
@@ -73,7 +74,7 @@ function QRCodeModal({ open, setOpen, link }) {
 					{/* Header */}
 					<div className="flex items-center justify-between p-6 border-b border-stroke">
 						<DialogTitle className="text-lg font-semibold text-heading">
-							QR Code
+							{__('QR Code')}
 						</DialogTitle>
 						<button
 							onClick={() => setOpen(false)}
@@ -106,7 +107,7 @@ function QRCodeModal({ open, setOpen, link }) {
 						{/* Link Info */}
 						<div className="bg-surface-alt border border-stroke rounded-lg p-4">
 							<p className="text-xs font-medium text-text-muted mb-1">
-								Short URL
+								{__('Short URL')}
 							</p>
 							<code className="text-sm text-accent break-all">
 								{shortUrl}
@@ -121,7 +122,7 @@ function QRCodeModal({ open, setOpen, link }) {
 								className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-accent hover:bg-accent/90 disabled:bg-gray-400 text-white rounded-lg transition-all font-medium"
 							>
 								<Download className="w-4 h-4" />
-								Download
+								{__('Download')}
 							</button>
 							<button
 								onClick={handleCopyUrl}
@@ -130,12 +131,12 @@ function QRCodeModal({ open, setOpen, link }) {
 								{copied ? (
 									<>
 										<Check className="w-4 h-4 text-success" />
-										Copied!
+										{__('Copied!')}
 									</>
 								) : (
 									<>
 										<Copy className="w-4 h-4" />
-										Copy
+										{__('Copy')}
 									</>
 								)}
 							</button>

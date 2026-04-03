@@ -57,7 +57,7 @@ class GeoipController {
 	public function status( Request $request ): array {
 		return JsonResponse::success(
 			$this->data_store->get_geoip_status( $request ),
-			'GeoIP status loaded.',
+			__( 'GeoIP status loaded.', 'peakurl' ),
 		);
 	}
 
@@ -74,7 +74,7 @@ class GeoipController {
 				$request,
 				$request->get_body_params(),
 			),
-			'GeoIP settings saved.',
+			__( 'GeoIP settings saved.', 'peakurl' ),
 		);
 	}
 
@@ -88,7 +88,7 @@ class GeoipController {
 	public function download( Request $request ): array {
 		return JsonResponse::success(
 			$this->data_store->download_geoip_database( $request ),
-			'GeoIP database updated.',
+			__( 'GeoIP database updated.', 'peakurl' ),
 		);
 	}
 }

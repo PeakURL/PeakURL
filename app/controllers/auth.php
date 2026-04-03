@@ -53,7 +53,7 @@ class AuthController {
 		unset( $request );
 
 		return JsonResponse::error(
-			'Public registration is disabled on this self-hosted release.',
+			__( 'Public registration is disabled on this self-hosted release.', 'peakurl' ),
 			403,
 		);
 	}
@@ -71,12 +71,12 @@ class AuthController {
 
 		if ( ! $verified ) {
 			return JsonResponse::error(
-				'Verification token is invalid or expired.',
+				__( 'Verification token is invalid or expired.', 'peakurl' ),
 				404,
 			);
 		}
 
-		return JsonResponse::success( array( 'verified' => true ), 'Email verified.' );
+		return JsonResponse::success( array( 'verified' => true ), __( 'Email verified.', 'peakurl' ) );
 	}
 
 	/**
@@ -92,7 +92,7 @@ class AuthController {
 				$request,
 				$request->get_body_params(),
 			),
-			'Verification email resent.',
+			__( 'Verification email resent.', 'peakurl' ),
 		);
 	}
 
@@ -106,7 +106,7 @@ class AuthController {
 	public function login( Request $request ): array {
 		return JsonResponse::success(
 			$this->data_store->login( $request, $request->get_body_params() ),
-			'Signed in.',
+			__( 'Signed in.', 'peakurl' ),
 		);
 	}
 
@@ -123,7 +123,7 @@ class AuthController {
 				$request,
 				$request->get_body_params(),
 			),
-			'Two-factor login verified.',
+			__( 'Two-factor login verified.', 'peakurl' ),
 		);
 	}
 
@@ -136,7 +136,7 @@ class AuthController {
 	 */
 	public function logout( Request $request ): array {
 		$this->data_store->logout( $request );
-		return JsonResponse::success( array( 'loggedOut' => true ), 'Signed out.' );
+		return JsonResponse::success( array( 'loggedOut' => true ), __( 'Signed out.', 'peakurl' ) );
 	}
 
 	/**
@@ -149,7 +149,7 @@ class AuthController {
 	public function forgot_password( Request $request ): array {
 		return JsonResponse::success(
 			$this->data_store->forgot_password( $request->get_body_params() ),
-			'If that account exists, a password reset link has been sent.',
+			__( 'If that account exists, a password reset link has been sent.', 'peakurl' ),
 		);
 	}
 
@@ -169,7 +169,7 @@ class AuthController {
 
 		if ( ! $reset ) {
 			return JsonResponse::error(
-				'Password reset token is invalid or expired.',
+				__( 'Password reset token is invalid or expired.', 'peakurl' ),
 				404,
 			);
 		}
@@ -178,7 +178,7 @@ class AuthController {
 			array(
 				'token' => $token,
 			),
-			'Password reset complete.',
+			__( 'Password reset complete.', 'peakurl' ),
 		);
 	}
 
@@ -190,7 +190,7 @@ class AuthController {
 	 * @since 1.0.0
 	 */
 	public function generate_api_key( Request $request ): array {
-		$label = (string) $request->get_body_param( 'label', 'Generated Key' );
+		$label = (string) $request->get_body_param( 'label', __( 'Generated Key', 'peakurl' ) );
 		$key   = $this->data_store->add_api_key( $request, $label );
 
 		return JsonResponse::success(
@@ -198,7 +198,7 @@ class AuthController {
 				'apiKey' => $key['key'],
 				'key'    => $key,
 			),
-			'API key created.',
+			__( 'API key created.', 'peakurl' ),
 		);
 	}
 
@@ -216,10 +216,10 @@ class AuthController {
 		);
 
 		if ( ! $deleted ) {
-			return JsonResponse::error( 'API key not found.', 404 );
+			return JsonResponse::error( __( 'API key not found.', 'peakurl' ), 404 );
 		}
 
-		return JsonResponse::success( array( 'deleted' => true ), 'API key deleted.' );
+		return JsonResponse::success( array( 'deleted' => true ), __( 'API key deleted.', 'peakurl' ) );
 	}
 
 	/**
@@ -232,7 +232,7 @@ class AuthController {
 	public function get_security( Request $request ): array {
 		return JsonResponse::success(
 			$this->data_store->get_security_settings( $request ),
-			'Security settings loaded.',
+			__( 'Security settings loaded.', 'peakurl' ),
 		);
 	}
 
@@ -246,7 +246,7 @@ class AuthController {
 	public function start_two_factor_setup( Request $request ): array {
 		return JsonResponse::success(
 			$this->data_store->start_two_factor_setup( $request ),
-			'Two-factor setup started.',
+			__( 'Two-factor setup started.', 'peakurl' ),
 		);
 	}
 
@@ -261,7 +261,7 @@ class AuthController {
 		$token = trim( (string) $request->get_body_param( 'token', '' ) );
 
 		if ( '' === $token ) {
-			return JsonResponse::error( 'Verification token is required.', 422 );
+			return JsonResponse::error( __( 'Verification token is required.', 'peakurl' ), 422 );
 		}
 
 		return JsonResponse::success(
@@ -271,7 +271,7 @@ class AuthController {
 					$token,
 				),
 			),
-			'Two-factor authentication enabled.',
+			__( 'Two-factor authentication enabled.', 'peakurl' ),
 		);
 	}
 
@@ -286,7 +286,7 @@ class AuthController {
 		$this->data_store->disable_two_factor( $request );
 		return JsonResponse::success(
 			array( 'disabled' => true ),
-			'Two-factor authentication disabled.',
+			__( 'Two-factor authentication disabled.', 'peakurl' ),
 		);
 	}
 
@@ -304,7 +304,7 @@ class AuthController {
 					$request,
 				),
 			),
-			'Backup codes regenerated.',
+			__( 'Backup codes regenerated.', 'peakurl' ),
 		);
 	}
 
@@ -322,15 +322,15 @@ class AuthController {
 			"\n",
 			array_merge(
 				array(
-					'PeakURL Backup Codes',
-					'Keep these codes safe. Each code can be used once.',
+					__( 'PeakURL Backup Codes', 'peakurl' ),
+					__( 'Keep these codes safe. Each code can be used once.', 'peakurl' ),
 					'',
 				),
 				array_map(
 					static fn( string $code ): string => '- ' . $code,
 					$codes,
 				),
-				array( '', 'Generated: ' . gmdate( DATE_ATOM ) ),
+				array( '', __( 'Generated:', 'peakurl' ) . ' ' . gmdate( DATE_ATOM ) ),
 			),
 		);
 
@@ -351,10 +351,10 @@ class AuthController {
 		);
 
 		if ( ! $revoked ) {
-			return JsonResponse::error( 'Session not found.', 404 );
+			return JsonResponse::error( __( 'Session not found.', 'peakurl' ), 404 );
 		}
 
-		return JsonResponse::success( array( 'revoked' => true ), 'Session revoked.' );
+		return JsonResponse::success( array( 'revoked' => true ), __( 'Session revoked.', 'peakurl' ) );
 	}
 
 	/**
@@ -372,7 +372,7 @@ class AuthController {
 				'revoked'      => true,
 				'revokedCount' => $revoked_count,
 			),
-			'Other sessions revoked.',
+			__( 'Other sessions revoked.', 'peakurl' ),
 		);
 	}
 }

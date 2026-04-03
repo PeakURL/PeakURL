@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { Link, useNavigate } from 'react-router-dom';
+import { __ } from '@/i18n';
 
 const NotFoundPage = () => {
 	const navigate = useNavigate();
@@ -27,13 +28,13 @@ const NotFoundPage = () => {
 					</div>
 
 					<h1 className="text-3xl font-bold text-heading mb-3">
-						Page Not Found
+						{__('Page Not Found')}
 					</h1>
 
 					<p className="text-lg text-text-muted mb-8 leading-relaxed max-w-md mx-auto">
-						The admin page you&rsquo;re looking for doesn&rsquo;t
-						exist. It might have been moved, deleted, or you may not
-						have permission.
+						{__(
+							"The admin page you're looking for doesn't exist. It might have been moved, deleted, or you may not have permission."
+						)}
 					</p>
 
 					<div className="flex flex-col sm:flex-row gap-3 justify-center mb-12 w-full">
@@ -43,7 +44,7 @@ const NotFoundPage = () => {
 							className="w-full sm:w-auto"
 						>
 							<ArrowLeft size={16} className="mr-2" />
-							Go Back
+							{__('Go Back')}
 						</Button>
 						<Button
 							variant="primary"
@@ -51,13 +52,13 @@ const NotFoundPage = () => {
 							className="w-full sm:w-auto"
 						>
 							<Gauge size={16} className="mr-2" />
-							Go to Dashboard
+							{__('Go to Dashboard')}
 						</Button>
 					</div>
 
 					<div className="border-t border-stroke pt-8 w-full">
 						<p className="text-sm text-text-muted font-medium mb-4 uppercase tracking-wider">
-							Popular Destinations
+							{__('Popular Destinations')}
 						</p>
 						<div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
 							<Link
@@ -68,7 +69,7 @@ const NotFoundPage = () => {
 									size={16}
 									className="group-hover:scale-110 transition-transform"
 								/>
-								All Links
+								{__('All Links')}
 							</Link>
 							<Link
 								to="/dashboard/tools/import/file"
@@ -78,7 +79,7 @@ const NotFoundPage = () => {
 									size={16}
 									className="group-hover:scale-110 transition-transform"
 								/>
-								Import
+								{__('Import')}
 							</Link>
 							<Link
 								to="/dashboard/settings"
@@ -88,7 +89,7 @@ const NotFoundPage = () => {
 									size={16}
 									className="group-hover:scale-110 transition-transform"
 								/>
-								Settings
+								{__('Settings')}
 							</Link>
 						</div>
 					</div>

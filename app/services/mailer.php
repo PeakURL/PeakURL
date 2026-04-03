@@ -261,7 +261,7 @@ class Mailer {
 			$mailer->send();
 		} catch ( PHPMailer_Exception $exception ) {
 			throw new \RuntimeException(
-				'PeakURL could not send the email. ' . $exception->getMessage(),
+				__( 'PeakURL could not send the email. ', 'peakurl' ) . $exception->getMessage(),
 				0,
 				$exception,
 			);
@@ -280,7 +280,7 @@ class Mailer {
 	private function validate_configuration( array $values ): void {
 		if ( strlen( $values['fromName'] ) > 190 ) {
 			throw new \RuntimeException(
-				'From name must be 190 characters or fewer.',
+				__( 'From name must be 190 characters or fewer.', 'peakurl' ),
 			);
 		}
 
@@ -289,7 +289,7 @@ class Mailer {
 			false === filter_var( $values['fromEmail'], FILTER_VALIDATE_EMAIL )
 		) {
 			throw new \RuntimeException(
-				'From email must be a valid email address.',
+				__( 'From email must be a valid email address.', 'peakurl' ),
 			);
 		}
 
@@ -298,14 +298,14 @@ class Mailer {
 		}
 
 		if ( '' === $values['smtpHost'] ) {
-			throw new \RuntimeException( 'SMTP host is required when SMTP is enabled.' );
+			throw new \RuntimeException( __( 'SMTP host is required when SMTP is enabled.', 'peakurl' ) );
 		}
 
 		$smtp_port = (int) $values['smtpPort'];
 
 		if ( $smtp_port < 1 || $smtp_port > 65535 ) {
 			throw new \RuntimeException(
-				'SMTP port must be between 1 and 65535.',
+				__( 'SMTP port must be between 1 and 65535.', 'peakurl' ),
 			);
 		}
 
@@ -315,13 +315,13 @@ class Mailer {
 
 		if ( '' === $values['smtpUsername'] ) {
 			throw new \RuntimeException(
-				'SMTP username is required when SMTP authentication is enabled.',
+				__( 'SMTP username is required when SMTP authentication is enabled.', 'peakurl' ),
 			);
 		}
 
 		if ( '' === $values['smtpPassword'] ) {
 			throw new \RuntimeException(
-				'SMTP password is required when SMTP authentication is enabled.',
+				__( 'SMTP password is required when SMTP authentication is enabled.', 'peakurl' ),
 			);
 		}
 	}
@@ -349,7 +349,7 @@ class Mailer {
 		if ( ! $this->settings_api->has_table() ) {
 			return array(
 				'allowed' => false,
-				'reason'  => 'The settings table is not available yet.',
+				'reason'  => __( 'The settings table is not available yet.', 'peakurl' ),
 			);
 		}
 

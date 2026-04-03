@@ -1,8 +1,8 @@
 // @ts-nocheck
 
-import { TrendingUp, TrendingDown, Activity, Clock } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
+import { TrendingUp, Activity, Clock } from 'lucide-react';
 import { __, sprintf } from '@/i18n';
+import { formatRelativeTime } from '@/utils';
 
 function QuickInsights({ link }) {
 	// Calculate click rate trend (mock - should come from actual data)
@@ -22,8 +22,6 @@ function QuickInsights({ link }) {
 		: 0;
 
 	const isActive = link.status === 'active';
-	const hasClicks = (link.clicks || 0) > 0;
-
 	const insights = [
 		{
 			icon: Activity,
@@ -77,7 +75,10 @@ function QuickInsights({ link }) {
 				</h3>
 				<span className="text-xs text-text-muted">
 					{__('Last updated:')}{' '}
-					{formatDistanceToNow(new Date(), { addSuffix: true })}
+					{formatRelativeTime(new Date(), {
+						style: 'long',
+						numeric: 'auto',
+					})}
 				</span>
 			</div>
 

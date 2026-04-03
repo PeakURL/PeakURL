@@ -63,10 +63,14 @@ class JsonResponse {
 	 * @since 1.0.0
 	 */
 	public static function error(
-		string $message = 'Something went wrong.',
+		string $message = '',
 		int $status = 500,
 		array $data = array()
 	): array {
+		if ( '' === $message ) {
+			$message = __( 'Something went wrong.', 'peakurl' );
+		}
+
 		return array(
 			'status'  => $status,
 			'headers' => array(

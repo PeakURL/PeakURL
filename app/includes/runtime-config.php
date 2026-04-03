@@ -543,7 +543,7 @@ class RuntimeConfig {
 
 		if ( ! preg_match( '/^[A-Za-z_][A-Za-z0-9_]{0,24}$/', $value ) ) {
 			throw new \RuntimeException(
-				'DB_PREFIX must start with a letter or underscore and use only letters, numbers, and underscores.',
+				__( 'DB_PREFIX must start with a letter or underscore and use only letters, numbers, and underscores.', 'peakurl' ),
 			);
 		}
 

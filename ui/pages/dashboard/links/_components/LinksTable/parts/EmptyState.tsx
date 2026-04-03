@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { Link2 } from 'lucide-react';
+import { __ } from '@/i18n';
 
 function EmptyState() {
 	return (
@@ -8,10 +9,10 @@ function EmptyState() {
 				<Link2 className="h-8 w-8 text-accent" />
 			</div>
 			<h3 className="text-base font-semibold text-heading mb-1">
-				No links yet
+				{__('No links yet')}
 			</h3>
 			<p className="text-sm text-text-muted">
-				Create your first shortened link to get started
+				{__('Create your first shortened link to get started')}
 			</p>
 		</div>
 	);

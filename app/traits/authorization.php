@@ -91,7 +91,7 @@ trait AuthorizationTrait {
 		}
 
 		throw new ApiException(
-			'You do not have permission to view links.',
+			__( 'You do not have permission to view links.', 'peakurl' ),
 			403,
 		);
 	}
@@ -137,7 +137,7 @@ trait AuthorizationTrait {
 		}
 
 		throw new ApiException(
-			'You do not have permission to view analytics.',
+			__( 'You do not have permission to view analytics.', 'peakurl' ),
 			403,
 		);
 	}
@@ -180,7 +180,7 @@ trait AuthorizationTrait {
 		return $this->assert_request_capability(
 			$request,
 			'manage_users',
-			'Admin access is required.',
+			__( 'Admin access is required.', 'peakurl' ),
 		);
 	}
 
@@ -228,20 +228,20 @@ trait AuthorizationTrait {
 
 		if ( 'deleted' === $next_role ) {
 			throw new ApiException(
-				'At least one admin account must remain on the site.',
+				__( 'At least one admin account must remain on the site.', 'peakurl' ),
 				422,
 			);
 		}
 
 		if ( $target_user_id === $acting_user_id ) {
 			throw new ApiException(
-				'You cannot demote the only remaining admin account.',
+				__( 'You cannot demote the only remaining admin account.', 'peakurl' ),
 				422,
 			);
 		}
 
 		throw new ApiException(
-			'At least one admin account must remain on the site.',
+			__( 'At least one admin account must remain on the site.', 'peakurl' ),
 			422,
 		);
 	}

@@ -68,7 +68,7 @@ class UsersController {
 	public function index( Request $request ): array {
 		return JsonResponse::success(
 			$this->data_store->get_all_users( $request ),
-			'Users loaded.',
+			__( 'Users loaded.', 'peakurl' ),
 		);
 	}
 
@@ -87,7 +87,7 @@ class UsersController {
 				$request,
 				$request->get_body_params(),
 			),
-			'User created.',
+			__( 'User created.', 'peakurl' ),
 			201,
 		);
 	}
@@ -102,7 +102,7 @@ class UsersController {
 	public function me( Request $request ): array {
 		return JsonResponse::success(
 			$this->data_store->get_current_user( $request ),
-			'Current user loaded.',
+			__( 'Current user loaded.', 'peakurl' ),
 		);
 	}
 
@@ -121,7 +121,7 @@ class UsersController {
 				$request,
 				$request->get_body_params(),
 			),
-			'Profile updated.',
+			__( 'Profile updated.', 'peakurl' ),
 		);
 	}
 
@@ -143,10 +143,10 @@ class UsersController {
 		);
 
 		if ( ! $user ) {
-			return JsonResponse::error( 'User not found.', 404 );
+			return JsonResponse::error( __( 'User not found.', 'peakurl' ), 404 );
 		}
 
-		return JsonResponse::success( $user, 'User updated.' );
+		return JsonResponse::success( $user, __( 'User updated.', 'peakurl' ) );
 	}
 
 	/**
@@ -165,9 +165,9 @@ class UsersController {
 		);
 
 		if ( ! $deleted ) {
-			return JsonResponse::error( 'User not found.', 404 );
+			return JsonResponse::error( __( 'User not found.', 'peakurl' ), 404 );
 		}
 
-		return JsonResponse::success( array( 'deleted' => true ), 'User deleted.' );
+		return JsonResponse::success( array( 'deleted' => true ), __( 'User deleted.', 'peakurl' ) );
 	}
 }

@@ -145,7 +145,7 @@ trait LinksTrait {
 				(string) ( $row['user_id'] ?? '' ),
 				'view_own_links',
 				'view_all_links',
-				'You do not have permission to view this link.',
+				__( 'You do not have permission to view this link.', 'peakurl' ),
 			);
 		}
 
@@ -316,7 +316,7 @@ trait LinksTrait {
 			! filter_var( $destination_url, FILTER_VALIDATE_URL )
 		) {
 			throw new ApiException(
-				'A valid destination URL is required.',
+				__( 'A valid destination URL is required.', 'peakurl' ),
 				422,
 			);
 		}
@@ -332,13 +332,13 @@ trait LinksTrait {
 
 		if ( $this->is_reserved_short_code( $alias ) ) {
 			throw new ApiException(
-				'That short code is reserved by the application.',
+				__( 'That short code is reserved by the application.', 'peakurl' ),
 				422,
 			);
 		}
 
 		if ( $this->short_code_exists( $alias ) ) {
-			throw new ApiException( 'That short code is already in use.', 422 );
+			throw new ApiException( __( 'That short code is already in use.', 'peakurl' ), 422 );
 		}
 
 		$title = trim( (string) ( $payload['title'] ?? '' ) );
@@ -571,7 +571,7 @@ trait LinksTrait {
 			(string) ( $existing['user_id'] ?? '' ),
 			'edit_own_links',
 			'edit_all_links',
-			'You do not have permission to edit this link.',
+			__( 'You do not have permission to edit this link.', 'peakurl' ),
 		);
 
 		$updates = array();
@@ -596,7 +596,7 @@ trait LinksTrait {
 
 				if ( '' === $value || ! filter_var( $value, FILTER_VALIDATE_URL ) ) {
 					throw new ApiException(
-						'A valid destination URL is required.',
+						__( 'A valid destination URL is required.', 'peakurl' ),
 						422,
 					);
 				}
@@ -625,7 +625,7 @@ trait LinksTrait {
 
 			if ( $this->is_reserved_short_code( $alias ) ) {
 				throw new ApiException(
-					'That short code is reserved by the application.',
+					__( 'That short code is reserved by the application.', 'peakurl' ),
 					422,
 				);
 			}
@@ -635,7 +635,7 @@ trait LinksTrait {
 				$this->short_code_exists( $alias )
 			) {
 				throw new ApiException(
-					'That short code is already in use.',
+					__( 'That short code is already in use.', 'peakurl' ),
 					422,
 				);
 			}
@@ -695,7 +695,7 @@ trait LinksTrait {
 			(string) ( $row['user_id'] ?? '' ),
 			'delete_own_links',
 			'delete_all_links',
-			'You do not have permission to delete this link.',
+			__( 'You do not have permission to delete this link.', 'peakurl' ),
 		);
 
 		$this->db->begin_transaction();
@@ -748,7 +748,7 @@ trait LinksTrait {
 		if ( ! $this->roles->user_can( $user, 'delete_all_links' ) ) {
 			if ( ! $this->roles->user_can( $user, 'delete_own_links' ) ) {
 				throw new ApiException(
-					'You do not have permission to delete links.',
+					__( 'You do not have permission to delete links.', 'peakurl' ),
 					403,
 				);
 			}

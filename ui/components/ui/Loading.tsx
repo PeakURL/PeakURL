@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { Loader2, Zap } from 'lucide-react';
+import { __ } from '@/i18n';
 
 /**
  * Modern Loading Spinner
@@ -42,7 +43,7 @@ export function PageLoader() {
 					</div>
 				</div>
 				<p className="text-sm font-medium text-text-muted">
-					Loading...
+					{__('Loading…')}
 				</p>
 			</div>
 		</div>

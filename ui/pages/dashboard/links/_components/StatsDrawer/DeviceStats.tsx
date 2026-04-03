@@ -10,7 +10,7 @@ import {
 	Smartphone,
 	Tablet,
 } from 'lucide-react';
-import { __ } from '@/i18n';
+import { __, _n, sprintf } from '@/i18n';
 
 // Browser icon mapping
 const getBrowserIcon = (browser) => {
@@ -132,7 +132,7 @@ function DeviceStats({
 						</div>
 						<div>
 							<p className="text-sm text-text-muted">
-								Total Devices
+								{__('Total Devices')}
 							</p>
 							<p className="text-xl font-bold text-heading">
 								{total}
@@ -141,7 +141,7 @@ function DeviceStats({
 					</div>
 					<div className="text-right">
 						<p className="text-sm text-text-muted">
-							Unique Browsers
+							{__('Unique Browsers')}
 						</p>
 						<p className="text-xl font-bold text-heading">
 							{displayBrowsers.length}
@@ -155,7 +155,7 @@ function DeviceStats({
 				<div className="flex items-center gap-2 mb-4">
 					<Globe className="w-4 h-4 text-accent" />
 					<h3 className="text-sm font-semibold text-heading">
-						Browsers
+						{__('Browsers')}
 					</h3>
 				</div>
 				<div className="space-y-3">
@@ -200,7 +200,7 @@ function DeviceStats({
 				<div className="flex items-center gap-2 mb-4">
 					<Monitor className="w-4 h-4 text-accent" />
 					<h3 className="text-sm font-semibold text-heading">
-						Device Types
+						{__('Device Types')}
 					</h3>
 				</div>
 				<div className="grid grid-cols-1 gap-3">
@@ -221,9 +221,11 @@ function DeviceStats({
 										</p>
 										<p className="text-xs text-text-muted">
 											{device.count}{' '}
-											{device.count === 1
-												? 'device'
-												: 'devices'}
+											{_n(
+												'device',
+												'devices',
+												device.count
+											)}
 										</p>
 									</div>
 								</div>
@@ -243,7 +245,7 @@ function DeviceStats({
 				<div className="flex items-center gap-2 mb-4">
 					<Laptop className="w-4 h-4 text-accent" />
 					<h3 className="text-sm font-semibold text-heading">
-						Operating Systems
+						{__('Operating Systems')}
 					</h3>
 				</div>
 				<div className="space-y-2">

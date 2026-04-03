@@ -491,19 +491,19 @@ const WorldMap = ({ data = [], hoveredCountry, onCountryHover }) => {
 
 						{loadError && (
 							<div className="absolute inset-0 flex items-center justify-center bg-bg/90 text-sm font-medium text-text-muted">
-								Unable to load the world map right now.
+								{__('Unable to load the world map right now.')}
 							</div>
 						)}
 
 						{!loadError && geographies.length === 0 && (
 							<div className="absolute inset-0 flex items-center justify-center bg-bg/80 text-sm font-medium text-text-muted">
-								Loading map...
+								{__('Loading map...')}
 							</div>
 						)}
 
 						<div className="absolute bottom-4 left-4 bg-surface rounded-lg shadow-lg p-3 border border-stroke">
 							<div className="text-xs font-medium text-heading mb-2">
-								Clicks
+								{__('Clicks')}
 							</div>
 							<div className="flex items-center gap-2">
 								<span className="text-xs text-text-muted">

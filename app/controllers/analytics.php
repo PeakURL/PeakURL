@@ -67,7 +67,7 @@ class AnalyticsController {
 		$days = (int) $request->get_query_param( 'days', 7 );
 		return JsonResponse::success(
 			$this->data_store->analytics_summary( $request, $days ),
-			'Analytics loaded.',
+			__( 'Analytics loaded.', 'peakurl' ),
 		);
 	}
 
@@ -83,7 +83,7 @@ class AnalyticsController {
 	public function activity( Request $request ): array {
 		return JsonResponse::success(
 			$this->data_store->activity( $request ),
-			'Activity loaded.',
+			__( 'Activity loaded.', 'peakurl' ),
 		);
 	}
 
@@ -104,10 +104,10 @@ class AnalyticsController {
 		);
 
 		if ( ! $location ) {
-			return JsonResponse::error( 'Link analytics not found.', 404 );
+			return JsonResponse::error( __( 'Link analytics not found.', 'peakurl' ), 404 );
 		}
 
-		return JsonResponse::success( $location, 'Location analytics loaded.' );
+		return JsonResponse::success( $location, __( 'Location analytics loaded.', 'peakurl' ) );
 	}
 
 	/**
@@ -129,9 +129,9 @@ class AnalyticsController {
 		);
 
 		if ( ! $stats ) {
-			return JsonResponse::error( 'Link analytics not found.', 404 );
+			return JsonResponse::error( __( 'Link analytics not found.', 'peakurl' ), 404 );
 		}
 
-		return JsonResponse::success( $stats, 'Link analytics loaded.' );
+		return JsonResponse::success( $stats, __( 'Link analytics loaded.', 'peakurl' ) );
 	}
 }

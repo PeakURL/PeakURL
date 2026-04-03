@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { Button } from '@/components/ui';
 import { CloudUpload } from 'lucide-react';
+import { __ } from '@/i18n';
 
 function FileUploadArea({ fileInputRef, handleFileSelect }) {
 	return (
@@ -11,10 +12,10 @@ function FileUploadArea({ fileInputRef, handleFileSelect }) {
 			>
 				<CloudUpload className="mx-auto mb-3 h-8 w-8 text-text-muted" />
 				<h3 className="text-base font-medium text-heading mb-1">
-					Drop your file here
+					{__('Drop your file here')}
 				</h3>
 				<p className="text-sm text-text-muted mb-4">
-					or click to browse (CSV, JSON, XML)
+					{__('or click to browse (CSV, JSON, XML)')}
 				</p>
 				<Button
 					size="sm"
@@ -23,7 +24,7 @@ function FileUploadArea({ fileInputRef, handleFileSelect }) {
 						fileInputRef.current?.click();
 					}}
 				>
-					Choose File
+					{__('Choose File')}
 				</Button>
 				<input
 					type="file"
@@ -35,8 +36,9 @@ function FileUploadArea({ fileInputRef, handleFileSelect }) {
 			</div>
 			<div className="mt-3 text-xs text-text-muted">
 				<p>
-					Supported formats: CSV, JSON, XML (max 10MB, up to 10,000
-					URLs)
+					{__(
+						'Supported formats: CSV, JSON, XML (max 10MB, up to 10,000 URLs)'
+					)}
 				</p>
 			</div>
 		</div>

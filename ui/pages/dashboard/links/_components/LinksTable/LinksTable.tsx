@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { formatDistanceToNow } from 'date-fns';
 import { buildShortUrl, formatNumber, getDefaultShortUrlOrigin } from '@/utils';
 import StatsDrawer from '../StatsDrawer';
 import QRCodeModal from '../QRCodeModal';
@@ -141,7 +140,6 @@ const LinksTable = ({ links, statsShortId, statsLink }) => {
 								onQRCode={handleQRCode}
 								revealedPasswords={revealedPasswords}
 								togglePassword={togglePassword}
-								formatDistanceToNow={formatDistanceToNow}
 								formatNumber={formatNumber}
 							/>
 						))}

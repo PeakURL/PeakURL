@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { Scissors } from 'lucide-react';
+import { __ } from '@/i18n';
 
 const Header = () => {
 	return (
@@ -9,10 +10,10 @@ const Header = () => {
 			</div>
 			<div>
 				<h3 className="text-lg font-bold text-heading">
-					Create Short Link
+					{__('Create Short Link')}
 				</h3>
 				<p className="text-sm text-text-muted">
-					Transform your long URL into a short, shareable link
+					{__('Transform your long URL into a short, shareable link')}
 				</p>
 			</div>
 		</div>

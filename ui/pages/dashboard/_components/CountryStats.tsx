@@ -1,4 +1,6 @@
 // @ts-nocheck
+import { __ } from '@/i18n';
+
 const CountryStats = ({ countryData }) => {
 	// Calculate total clicks for percentage
 	const totalClicks = countryData.reduce(
@@ -20,7 +22,7 @@ const CountryStats = ({ countryData }) => {
 		countryData.length > 0
 			? countryData.slice(0, 5).map((country) => ({
 					flag: getFlag(country.code),
-					name: country.name || 'Unknown',
+					name: country.name || __('Unknown'),
 					value:
 						totalClicks > 0
 							? Math.round((country.count / totalClicks) * 100)
@@ -32,12 +34,12 @@ const CountryStats = ({ countryData }) => {
 	return (
 		<div className="bg-surface border border-stroke rounded-lg p-5">
 			<h3 className="text-base font-semibold text-heading mb-4">
-				Top Countries
+				{__('Top Countries')}
 			</h3>
 			{countryData.length === 0 ? (
 				<div className="text-center py-8">
 					<p className="text-sm text-text-muted">
-						No country data available
+						{__('No country data available')}
 					</p>
 				</div>
 			) : (

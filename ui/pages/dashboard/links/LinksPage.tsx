@@ -255,10 +255,7 @@ function LinksPage() {
 
 	return (
 		<div className="space-y-5 pb-8">
-			<Header
-				onRefresh={handleRefresh}
-				isRefreshing={isRefreshing}
-			/>
+			<Header onRefresh={handleRefresh} isRefreshing={isRefreshing} />
 
 			{/* Quick Stats - Compact Row */}
 			<div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -326,7 +323,7 @@ function LinksPage() {
 						{totalUniqueClicks.toLocaleString()}
 					</div>
 					<div className="text-xs text-muted mt-0.5">
-						Unique Visitors
+						{__('Unique Visitors')}
 					</div>
 				</div>
 			</div>

@@ -1,4 +1,6 @@
 // @ts-nocheck
+import { __ } from '@/i18n';
+
 const DeviceBreakdown = ({ deviceData }) => {
 	// Calculate total for percentage
 	const devices = deviceData?.devices ?? [];
@@ -40,12 +42,12 @@ const DeviceBreakdown = ({ deviceData }) => {
 	return (
 		<div className="bg-surface border border-stroke rounded-lg p-5">
 			<h3 className="text-base font-semibold text-heading mb-4">
-				Device Breakdown
+				{__('Device Breakdown')}
 			</h3>
 			{noData ? (
 				<div className="text-center py-8">
 					<p className="text-sm text-text-muted">
-						No device data available
+						{__('No device data available')}
 					</p>
 				</div>
 			) : (
@@ -74,7 +76,7 @@ const DeviceBreakdown = ({ deviceData }) => {
 					{browsers.length > 0 && (
 						<div className="mt-6 pt-6 border-t border-stroke">
 							<h4 className="text-sm font-semibold text-heading mb-3">
-								Top Browsers
+								{__('Top Browsers')}
 							</h4>
 							<div className="space-y-2">
 								{browsers.slice(0, 5).map((browser, index) => (
@@ -97,7 +99,7 @@ const DeviceBreakdown = ({ deviceData }) => {
 					{operatingSystems.length > 0 && (
 						<div className="mt-6 pt-6 border-t border-stroke">
 							<h4 className="text-sm font-semibold text-heading mb-3">
-								Top Operating Systems
+								{__('Top Operating Systems')}
 							</h4>
 							<div className="space-y-2">
 								{operatingSystems

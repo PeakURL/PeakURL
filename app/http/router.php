@@ -125,7 +125,7 @@ class Router {
 		}
 
 		return JsonResponse::error(
-			'Route not found.',
+			__( 'Route not found.', 'peakurl' ),
 			404,
 			array(
 				'path'   => $request->get_path(),

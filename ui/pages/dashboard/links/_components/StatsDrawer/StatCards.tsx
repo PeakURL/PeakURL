@@ -1,8 +1,7 @@
 // @ts-nocheck
 
 import { MousePointerClick, Users, Calendar, TrendingUp } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
-import { formatNumber } from '@/utils';
+import { formatNumber, formatRelativeTime } from '@/utils';
 import { __ } from '@/i18n';
 
 function StatCards({ link, stats: fetchedStats, isLoading }) {
@@ -36,8 +35,9 @@ function StatCards({ link, stats: fetchedStats, isLoading }) {
 		{
 			name: __('Created'),
 			value: link.createdAt
-				? formatDistanceToNow(new Date(link.createdAt), {
-						addSuffix: true,
+				? formatRelativeTime(new Date(link.createdAt), {
+						style: 'long',
+						numeric: 'always',
 					})
 				: __('Unknown'),
 			icon: Calendar,

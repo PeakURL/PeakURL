@@ -59,7 +59,7 @@ class SettingsController {
 	public function i18n( Request $request ): array {
 		return JsonResponse::success(
 			$this->data_store->get_public_i18n_payload(),
-			'Dashboard translation catalog loaded.',
+			__( 'Dashboard translation catalog loaded.', 'peakurl' ),
 		);
 	}
 

@@ -190,7 +190,7 @@ trait AnalyticsTrait {
 			(string) ( $url['user_id'] ?? '' ),
 			'view_own_analytics',
 			'view_site_analytics',
-			'You do not have permission to view analytics for this link.',
+			__( 'You do not have permission to view analytics for this link.', 'peakurl' ),
 		);
 
 		$days   = max( 1, $days );
@@ -288,7 +288,7 @@ trait AnalyticsTrait {
 			(string) ( $url['user_id'] ?? '' ),
 			'view_own_analytics',
 			'view_site_analytics',
-			'You do not have permission to view analytics for this link.',
+			__( 'You do not have permission to view analytics for this link.', 'peakurl' ),
 		);
 
 		$private_network_condition = $this->private_network_ip_sql(

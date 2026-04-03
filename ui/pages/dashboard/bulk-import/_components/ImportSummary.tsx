@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { Button } from '@/components/ui';
 import { CircleCheckBig } from 'lucide-react';
+import { __, sprintf } from '@/i18n';
 
 function ImportSummary({ results, onReset }) {
 	const successCount = results.filter((r) => r.status === 'success').length;
@@ -10,14 +11,23 @@ function ImportSummary({ results, onReset }) {
 		<div className="text-center py-8">
 			<CircleCheckBig className="mb-3 h-8 w-8 text-emerald-500 mx-auto" />
 			<h3 className="text-base font-medium text-heading mb-1">
-				Import Completed!
+				{__('Import Completed!')}
 			</h3>
 			<p className="text-sm text-text-muted mb-4">
-				Successfully processed {successCount} URLs.{' '}
-				{errorCount > 0 && `${errorCount} failed.`}
+				{sprintf(
+					/* translators: %s: number of URLs processed */
+					__('Successfully processed %s URLs.'),
+					successCount
+				)}{' '}
+				{errorCount > 0 &&
+					sprintf(
+						/* translators: %s: number of failures */
+						__('%s failed.'),
+						errorCount
+					)}
 			</p>
 			<Button size="sm" onClick={onReset}>
-				Import Another File
+				{__('Import Another File')}
 			</Button>
 		</div>
 	);

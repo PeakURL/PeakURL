@@ -62,7 +62,7 @@ class WebhooksController {
 	public function index( Request $request ): array {
 		return JsonResponse::success(
 			$this->data_store->list_webhooks( $request ),
-			'Webhooks loaded.',
+			__( 'Webhooks loaded.', 'peakurl' ),
 		);
 	}
 
@@ -81,7 +81,7 @@ class WebhooksController {
 				$request,
 				$request->get_body_params(),
 			),
-			'Webhook created.',
+			__( 'Webhook created.', 'peakurl' ),
 			201,
 		);
 	}
@@ -103,9 +103,9 @@ class WebhooksController {
 		);
 
 		if ( ! $deleted ) {
-			return JsonResponse::error( 'Webhook not found.', 404 );
+			return JsonResponse::error( __( 'Webhook not found.', 'peakurl' ), 404 );
 		}
 
-		return JsonResponse::success( array( 'deleted' => true ), 'Webhook deleted.' );
+		return JsonResponse::success( array( 'deleted' => true ), __( 'Webhook deleted.', 'peakurl' ) );
 	}
 }

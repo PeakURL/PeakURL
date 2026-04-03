@@ -47,7 +47,7 @@ class Notifications {
 
 		if ( '' === $email || ! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
 			throw new \RuntimeException(
-				'PeakURL could not send the password reset email because the account email address is invalid.',
+				__( 'PeakURL could not send the password reset email because the account email address is invalid.', 'peakurl' ),
 			);
 		}
 
@@ -58,12 +58,16 @@ class Notifications {
 		$display_name = \get_user_display_name( $user );
 		$subject      = (string) \apply_filters(
 			'peakurl_password_reset_email_subject',
-			sprintf( 'Reset your %s password', $site_name ),
+			sprintf(
+				/* translators: %s: site name. */
+				__( 'Reset your %s password', 'peakurl' ),
+				$site_name,
+			),
 			$user,
 			$token,
 			$site_name,
 		);
-		$context      = $this->filter_template_context(
+		$context = $this->filter_template_context(
 			'peakurl_password_reset_email_context',
 			array(
 				'recipient' => $display_name,
@@ -73,7 +77,7 @@ class Notifications {
 			$user,
 			$token,
 		);
-		$bodies       = $this->render_template_pair(
+		$bodies  = $this->render_template_pair(
 			'password-reset',
 			$context,
 		);
@@ -112,7 +116,7 @@ class Notifications {
 
 		if ( '' === $email || ! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
 			throw new \RuntimeException(
-				'PeakURL could not send the welcome email because the account email address is invalid.',
+				__( 'PeakURL could not send the welcome email because the account email address is invalid.', 'peakurl' ),
 			);
 		}
 
@@ -127,12 +131,16 @@ class Notifications {
 		$username      = trim( (string) ( $user['username'] ?? '' ) );
 		$subject       = (string) \apply_filters(
 			'peakurl_install_welcome_email_subject',
-			sprintf( 'Welcome to %s', $site_name ),
+			sprintf(
+				/* translators: %s: site name. */
+				__( 'Welcome to %s', 'peakurl' ),
+				$site_name,
+			),
 			$user,
 			$site_name,
 			$site_url,
 		);
-		$context       = $this->filter_template_context(
+		$context = $this->filter_template_context(
 			'peakurl_install_welcome_email_context',
 			array(
 				'recipient'     => $display_name,
@@ -146,7 +154,7 @@ class Notifications {
 			),
 			$user,
 		);
-		$bodies        = $this->render_template_pair(
+		$bodies  = $this->render_template_pair(
 			'install-welcome',
 			$context,
 		);

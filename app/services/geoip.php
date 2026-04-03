@@ -255,12 +255,12 @@ class Geoip {
 		$current_license = $current['licenseKey'];
 
 		if ( '' !== $account_id && ! preg_match( '/^[0-9]{1,32}$/', $account_id ) ) {
-			throw new \RuntimeException( 'MaxMind account ID must contain digits only.' );
+			throw new \RuntimeException( __( 'MaxMind account ID must contain digits only.', 'peakurl' ) );
 		}
 
 		if ( '' !== $license_key && ! preg_match( '/^[A-Za-z0-9_]{6,255}$/', $license_key ) ) {
 			throw new \RuntimeException(
-				'MaxMind license key must be 6-255 characters and may only use letters, numbers, and underscores.',
+				__( 'MaxMind license key must be 6-255 characters and may only use letters, numbers, and underscores.', 'peakurl' ),
 			);
 		}
 
@@ -277,7 +277,7 @@ class Geoip {
 				$license_key = $current_license;
 			} else {
 				throw new \RuntimeException(
-					'Enter both the MaxMind account ID and license key, or leave both blank.',
+					__( 'Enter both the MaxMind account ID and license key, or leave both blank.', 'peakurl' ),
 				);
 			}
 		}
@@ -315,13 +315,13 @@ class Geoip {
 	public function download_database(): array {
 		if ( ! $this->has_credentials() ) {
 			throw new \RuntimeException(
-				'MaxMind credentials are required before PeakURL can download the GeoLite2 City database.',
+				__( 'MaxMind credentials are required before PeakURL can download the GeoLite2 City database.', 'peakurl' ),
 			);
 		}
 
 		if ( ! class_exists( '\PharData' ) ) {
 			throw new \RuntimeException(
-				'The Phar extension is required to unpack the GeoLite2 database archive.',
+				__( 'The Phar extension is required to unpack the GeoLite2 database archive.', 'peakurl' ),
 			);
 		}
 
@@ -343,7 +343,7 @@ class Geoip {
 
 			if ( null === $source_path ) {
 				throw new \RuntimeException(
-					'PeakURL downloaded the GeoLite2 archive, but it did not contain GeoLite2-City.mmdb.',
+					__( 'PeakURL downloaded the GeoLite2 archive, but it did not contain GeoLite2-City.mmdb.', 'peakurl' ),
 				);
 			}
 
@@ -419,7 +419,7 @@ class Geoip {
 		if ( ! $this->settings_api->has_table() ) {
 			return array(
 				'allowed' => false,
-				'reason'  => 'The settings table is not available yet.',
+				'reason'  => __( 'The settings table is not available yet.', 'peakurl' ),
 			);
 		}
 
@@ -475,7 +475,7 @@ class Geoip {
 		$handle = curl_init( self::DOWNLOAD_URL );
 
 		if ( false === $handle ) {
-			throw new \RuntimeException( 'PeakURL could not initialize cURL for the GeoLite2 download.' );
+			throw new \RuntimeException( __( 'PeakURL could not initialize cURL for the GeoLite2 download.', 'peakurl' ) );
 		}
 
 		curl_setopt_array(
@@ -502,7 +502,7 @@ class Geoip {
 
 		if ( false === $body ) {
 			throw new \RuntimeException(
-				'PeakURL could not download the GeoLite2 City database from MaxMind. ' . $curl_error,
+				__( 'PeakURL could not download the GeoLite2 City database from MaxMind. ', 'peakurl' ) . $curl_error,
 			);
 		}
 
@@ -514,7 +514,7 @@ class Geoip {
 
 		if ( false === file_put_contents( $archive_path, $body, LOCK_EX ) ) {
 			throw new \RuntimeException(
-				'PeakURL downloaded the GeoLite2 archive, but could not store it locally.',
+				__( 'PeakURL downloaded the GeoLite2 archive, but could not store it locally.', 'peakurl' ),
 			);
 		}
 	}
@@ -550,7 +550,7 @@ class Geoip {
 
 			if ( null === $redirect ) {
 				throw new \RuntimeException(
-					'PeakURL could not follow the GeoLite2 download redirect from MaxMind.',
+					__( 'PeakURL could not follow the GeoLite2 download redirect from MaxMind.', 'peakurl' ),
 				);
 			}
 
@@ -572,7 +572,7 @@ class Geoip {
 
 		if ( false === file_put_contents( $archive_path, $result['body'], LOCK_EX ) ) {
 			throw new \RuntimeException(
-				'PeakURL downloaded the GeoLite2 archive, but could not store it locally.',
+				__( 'PeakURL downloaded the GeoLite2 archive, but could not store it locally.', 'peakurl' ),
 			);
 		}
 	}
@@ -629,7 +629,7 @@ class Geoip {
 		$tar_path = preg_replace( '/\.gz$/', '', $archive_path );
 
 		if ( ! is_string( $tar_path ) || '' === $tar_path ) {
-			throw new \RuntimeException( 'PeakURL could not prepare the GeoLite2 archive for extraction.' );
+			throw new \RuntimeException( __( 'PeakURL could not prepare the GeoLite2 archive for extraction.', 'peakurl' ) );
 		}
 
 		if ( file_exists( $tar_path ) ) {
@@ -644,7 +644,7 @@ class Geoip {
 			$tar->extractTo( $extract_path, null, true );
 		} catch ( \Throwable $exception ) {
 			throw new \RuntimeException(
-				'PeakURL could not unpack the GeoLite2 archive. ' . $exception->getMessage(),
+				__( 'PeakURL could not unpack the GeoLite2 archive. ', 'peakurl' ) . $exception->getMessage(),
 				0,
 				$exception,
 			);
@@ -702,21 +702,21 @@ class Geoip {
 
 		if ( ! copy( $source_path, $temp_path ) ) {
 			throw new \RuntimeException(
-				'PeakURL could not copy the downloaded GeoLite2 database into place.',
+				__( 'PeakURL could not copy the downloaded GeoLite2 database into place.', 'peakurl' ),
 			);
 		}
 
 		if ( file_exists( $target_path ) && ! unlink( $target_path ) ) {
 			@unlink( $temp_path );
 			throw new \RuntimeException(
-				'PeakURL could not replace the existing GeoLite2 database file.',
+				__( 'PeakURL could not replace the existing GeoLite2 database file.', 'peakurl' ),
 			);
 		}
 
 		if ( ! rename( $temp_path, $target_path ) ) {
 			@unlink( $temp_path );
 			throw new \RuntimeException(
-				'PeakURL could not activate the downloaded GeoLite2 database file.',
+				__( 'PeakURL could not activate the downloaded GeoLite2 database file.', 'peakurl' ),
 			);
 		}
 	}
@@ -766,14 +766,18 @@ class Geoip {
 	 */
 	private function build_download_http_error_message( int $status ): string {
 		if ( 401 === $status || 403 === $status ) {
-			return 'MaxMind rejected the download request. Check the account ID, license key, and GeoLite download permissions.';
+			return __( 'MaxMind rejected the download request. Check the account ID, license key, and GeoLite download permissions.', 'peakurl' );
 		}
 
 		if ( 0 === $status ) {
-			return 'PeakURL could not download the GeoLite2 City database from MaxMind.';
+			return __( 'PeakURL could not download the GeoLite2 City database from MaxMind.', 'peakurl' );
 		}
 
-		return 'PeakURL could not download the GeoLite2 City database from MaxMind. HTTP ' . $status . '.';
+		return sprintf(
+			/* translators: %d: HTTP status code. */
+			__( 'PeakURL could not download the GeoLite2 City database from MaxMind. HTTP %d.', 'peakurl' ),
+			$status,
+		);
 	}
 
 	/**
@@ -852,7 +856,7 @@ class Geoip {
 
 		if ( ! mkdir( $path, 0755, true ) && ! is_dir( $path ) ) {
 			throw new \RuntimeException(
-				'PeakURL could not create the required directory: ' . $path,
+				__( 'PeakURL could not create the required directory: ', 'peakurl' ) . $path,
 			);
 		}
 	}

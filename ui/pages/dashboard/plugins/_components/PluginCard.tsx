@@ -2,6 +2,7 @@
 
 import { Star, Download, Lock } from 'lucide-react';
 import { Button } from '@/components/ui';
+import { __ } from '@/i18n';
 
 export interface PluginCardData {
 	id: string;
@@ -89,15 +90,14 @@ function PluginCard({ plugin, index }: PluginCardProps) {
 				>
 					<span className="inline-flex items-center gap-1.5 text-text-muted">
 						<Lock size={12} />
-						Coming Soon
+						{__('Coming Soon')}
 					</span>
 				</Button>
 			</div>
 
-			{/* Hover glass pill */}
 			<div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
 				<div className="rounded-full border border-white/20 bg-black/60 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-widest text-white shadow-lg backdrop-blur-md">
-					Coming Soon
+					{__('Coming Soon')}
 				</div>
 			</div>
 		</div>

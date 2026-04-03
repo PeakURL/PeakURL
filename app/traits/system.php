@@ -423,7 +423,7 @@ trait SystemTrait {
 		$status = $this->load_update_status( true );
 
 		if ( empty( $status['updateAvailable'] ) ) {
-			throw new ApiException( 'PeakURL is already up to date.', 422 );
+			throw new ApiException( __( 'PeakURL is already up to date.', 'peakurl' ), 422 );
 		}
 
 		if ( empty( $status['canApply'] ) ) {
@@ -439,7 +439,7 @@ trait SystemTrait {
 
 		if ( empty( $manifest ) ) {
 			throw new ApiException(
-				'PeakURL could not load the update manifest.',
+				__( 'PeakURL could not load the update manifest.', 'peakurl' ),
 				502,
 			);
 		}

@@ -144,12 +144,12 @@ class Install {
 		Request $request
 	): array {
 		if ( self::is_installed( $app_path ) ) {
-			throw new \RuntimeException( 'PeakURL is already installed.' );
+			throw new \RuntimeException( __( 'PeakURL is already installed.', 'peakurl' ) );
 		}
 
 		if ( ! self::has_runtime_config( $app_path ) ) {
 			throw new \RuntimeException(
-				'PeakURL still needs database configuration. Run setup-config.php first.',
+				__( 'PeakURL still needs database configuration. Run setup-config.php first.', 'peakurl' ),
 			);
 		}
 
@@ -203,22 +203,22 @@ class Install {
 		$site_url = trim( $site_url );
 
 		if ( '' === $site_url ) {
-			throw new \RuntimeException( 'Site URL is required.' );
+			throw new \RuntimeException( __( 'Site URL is required.', 'peakurl' ) );
 		}
 
 		if ( ! filter_var( $site_url, FILTER_VALIDATE_URL ) ) {
-			throw new \RuntimeException( 'Site URL must be a valid URL.' );
+			throw new \RuntimeException( __( 'Site URL must be a valid URL.', 'peakurl' ) );
 		}
 
 		$parts = parse_url( $site_url );
 
 		if ( ! is_array( $parts ) || empty( $parts['host'] ) ) {
-			throw new \RuntimeException( 'Site URL must include a valid host.' );
+			throw new \RuntimeException( __( 'Site URL must include a valid host.', 'peakurl' ) );
 		}
 
 		if ( ! empty( $parts['query'] ) || ! empty( $parts['fragment'] ) ) {
 			throw new \RuntimeException(
-				'Site URL cannot contain a query string or fragment.',
+				__( 'Site URL cannot contain a query string or fragment.', 'peakurl' ),
 			);
 		}
 
@@ -300,30 +300,30 @@ class Install {
 		$owner_names    = self::derive_owner_names( $owner_name, $owner_username );
 
 		if ( '' === $workspace_name ) {
-			throw new \RuntimeException( 'Site title is required.' );
+			throw new \RuntimeException( __( 'Site title is required.', 'peakurl' ) );
 		}
 
 		if ( '' === $workspace_slug ) {
 			throw new \RuntimeException(
-				'PeakURL could not generate a workspace slug from the site title.',
+				__( 'PeakURL could not generate a workspace slug from the site title.', 'peakurl' ),
 			);
 		}
 
 		if ( ! preg_match( '/^[A-Za-z0-9._@-]{3,120}$/', $owner_username ) ) {
 			throw new \RuntimeException(
-				'Admin username must be 3-120 characters using letters, numbers, dots, dashes, underscores, or @.',
+				__( 'Admin username must be 3-120 characters using letters, numbers, dots, dashes, underscores, or @.', 'peakurl' ),
 			);
 		}
 
 		if ( ! filter_var( $owner_email, FILTER_VALIDATE_EMAIL ) ) {
 			throw new \RuntimeException(
-				'A valid admin email address is required.',
+				__( 'A valid admin email address is required.', 'peakurl' ),
 			);
 		}
 
 		if ( strlen( $owner_password ) < 8 ) {
 			throw new \RuntimeException(
-				'Admin password must be at least 8 characters.',
+				__( 'Admin password must be at least 8 characters.', 'peakurl' ),
 			);
 		}
 
@@ -415,7 +415,7 @@ class Install {
 			$schema_service->upgrade();
 		} catch ( \Throwable $exception ) {
 			throw new \RuntimeException(
-				'Unable to connect to the database or create the PeakURL tables. ' . $exception->getMessage(),
+				__( 'Unable to connect to the database or create the PeakURL tables. ', 'peakurl' ) . $exception->getMessage(),
 				0,
 				$exception,
 			);

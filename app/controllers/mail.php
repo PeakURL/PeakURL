@@ -57,7 +57,7 @@ class MailController {
 	public function status( Request $request ): array {
 		return JsonResponse::success(
 			$this->data_store->get_mail_status( $request ),
-			'Mail delivery status loaded.',
+			__( 'Mail delivery status loaded.', 'peakurl' ),
 		);
 	}
 
@@ -74,7 +74,7 @@ class MailController {
 				$request,
 				$request->get_body_params(),
 			),
-			'Mail delivery settings saved.',
+			__( 'Mail delivery settings saved.', 'peakurl' ),
 		);
 	}
 }

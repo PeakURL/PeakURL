@@ -2,6 +2,7 @@
 
 import { MoreHorizontal, Power, PowerOff, Lock, Info } from 'lucide-react';
 import { Button } from '@/components/ui';
+import { __ } from '@/i18n';
 import type { PluginCardData } from './PluginCard';
 
 interface InstalledPluginsTableProps {
@@ -21,11 +22,11 @@ function StatusPill({ active }: { active: boolean }) {
 	return active ? (
 		<span className="inline-flex items-center rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
 			<span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500" />
-			Active
+			{__('Active')}
 		</span>
 	) : (
 		<span className="inline-flex items-center rounded-full border border-gray-500/20 bg-gray-500/10 px-2.5 py-1 text-[11px] font-semibold text-gray-600 dark:text-gray-400">
-			Inactive
+			{__('Inactive')}
 		</span>
 	);
 }
@@ -38,11 +39,12 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 					<Info size={22} />
 				</div>
 				<h3 className="text-sm font-semibold text-heading">
-					No installed plugins
+					{__('No installed plugins')}
 				</h3>
 				<p className="mt-1 text-sm text-text-muted">
-					Plugins you install will appear here once the feature is
-					live.
+					{__(
+						'Plugins you install will appear here once the feature is live.'
+					)}
 				</p>
 			</div>
 		);
@@ -55,19 +57,19 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 					<thead>
 						<tr className="border-b border-stroke bg-surface-alt/60">
 							<th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
-								Plugin
+								{__('Plugin')}
 							</th>
 							<th className="hidden px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-text-muted md:table-cell">
-								Version
+								{__('Version')}
 							</th>
 							<th className="hidden px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-text-muted sm:table-cell">
-								Status
+								{__('Status')}
 							</th>
 							<th className="hidden px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-text-muted lg:table-cell">
-								Author
+								{__('Author')}
 							</th>
 							<th className="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-text-muted">
-								Actions
+								{__('Actions')}
 							</th>
 						</tr>
 					</thead>
@@ -128,8 +130,8 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 													<Lock size={11} />
 													<span className="hidden sm:inline">
 														{isActive
-															? 'Deactivate'
-															: 'Activate'}
+															? __('Deactivate')
+															: __('Activate')}
 													</span>
 												</span>
 											</Button>

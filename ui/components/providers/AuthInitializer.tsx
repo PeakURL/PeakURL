@@ -2,6 +2,7 @@
 import { authApi } from '@/store/slices';
 import { PageLoader } from '@/components/ui';
 import { getInstallRecovery, redirectToInstallRecovery } from '@/utils';
+import { __ } from '@/i18n';
 
 const AuthErrorState = ({ onRetry }) => {
 	return (
@@ -12,11 +13,12 @@ const AuthErrorState = ({ onRetry }) => {
 				</div>
 				<div className="space-y-1">
 					<h1 className="text-lg font-semibold text-heading">
-						API unavailable
+						{__('API unavailable')}
 					</h1>
 					<p className="text-sm text-text-muted">
-						Start the PHP core service and database connection, then
-						try again.
+						{__(
+							'Start the PHP core service and database connection, then try again.'
+						)}
 					</p>
 				</div>
 				<button
@@ -24,7 +26,7 @@ const AuthErrorState = ({ onRetry }) => {
 					onClick={onRetry}
 					className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
 				>
-					Retry
+					{__('Retry')}
 				</button>
 			</div>
 		</div>

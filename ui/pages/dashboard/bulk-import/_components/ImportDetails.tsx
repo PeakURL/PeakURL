@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { Button } from '@/components/ui';
 import { CircleAlert, CircleCheckBig, Download } from 'lucide-react';
+import { __, sprintf } from '@/i18n';
 
 function ImportDetails({ results }) {
 	const successCount = results.filter((r) => r.status === 'success').length;
@@ -9,7 +10,7 @@ function ImportDetails({ results }) {
 	return (
 		<div className="bg-surface border border-stroke rounded-lg p-5">
 			<h3 className="text-base font-semibold text-heading mb-4">
-				Import Results
+				{__('Import Results')}
 			</h3>
 			<div className="space-y-2 max-h-96 overflow-y-auto">
 				{results.map((result, index) => (
@@ -45,11 +46,16 @@ function ImportDetails({ results }) {
 			</div>
 			<div className="mt-4 pt-4 border-t border-stroke flex items-center justify-between text-sm">
 				<span className="text-text-muted">
-					{successCount} successful, {errorCount} failed
+					{sprintf(
+						/* translators: 1: success count, 2: error count */
+						__('%1$s successful, %2$s failed'),
+						successCount,
+						errorCount
+					)}
 				</span>
 				<Button variant="ghost" size="sm">
 					<Download className="mr-2 h-4 w-4" />
-					Export Results
+					{__('Export Results')}
 				</Button>
 			</div>
 		</div>

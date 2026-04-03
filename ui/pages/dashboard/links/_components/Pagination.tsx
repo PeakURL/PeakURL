@@ -1,6 +1,7 @@
 // @ts-nocheck
 
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { __, sprintf } from '@/i18n';
 
 const Pagination = ({
 	currentPage,
@@ -15,15 +16,12 @@ const Pagination = ({
 			<div className="flex items-center justify-between">
 				{/* Results Info */}
 				<div className="text-sm text-text-muted">
-					Showing{' '}
-					<span className="font-semibold text-heading">
-						{startItem}–{endItem}
-					</span>{' '}
-					of{' '}
-					<span className="font-semibold text-heading">
-						{totalItems}
-					</span>{' '}
-					links
+					{sprintf(
+						__('Showing %1$s–%2$s of %3$s links'),
+						startItem,
+						endItem,
+						totalItems
+					)}
 				</div>
 
 				{/* Pagination Controls */}
@@ -34,7 +32,7 @@ const Pagination = ({
 						className="px-3 py-1.5 rounded-lg text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:bg-surface-alt text-text-muted hover:text-heading"
 					>
 						<ChevronLeft className="mr-1 h-3 w-3" />
-						Previous
+						{__('Previous')}
 					</button>
 
 					<div className="flex items-center gap-1 mx-2">
@@ -74,7 +72,7 @@ const Pagination = ({
 						disabled={currentPage === totalPages}
 						className="px-3 py-1.5 rounded-lg text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:bg-surface-alt text-text-muted hover:text-heading"
 					>
-						Next
+						{__('Next')}
 						<ChevronRight className="ml-1 h-3 w-3" />
 					</button>
 				</div>

@@ -99,7 +99,7 @@ trait WebhooksTrait {
 		$url  = trim( (string) ( $payload['url'] ?? '' ) );
 
 		if ( '' === $url || ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
-			throw new ApiException( 'A valid webhook URL is required.', 422 );
+			throw new ApiException( __( 'A valid webhook URL is required.', 'peakurl' ), 422 );
 		}
 
 		$events = array_values(
@@ -115,7 +115,7 @@ trait WebhooksTrait {
 		);
 
 		if ( empty( $events ) ) {
-			throw new ApiException( 'Select at least one webhook event.', 422 );
+			throw new ApiException( __( 'Select at least one webhook event.', 'peakurl' ), 422 );
 		}
 
 		$row = array(

@@ -47,29 +47,29 @@ trait AccountsTrait {
 		$password = (string) ( $payload['password'] ?? '' );
 
 		if ( '' === $email || ! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
-			throw new ApiException( 'A valid email address is required.', 422 );
+			throw new ApiException( __( 'A valid email address is required.', 'peakurl' ), 422 );
 		}
 
 		if ( '' === $username ) {
-			throw new ApiException( 'Username is required.', 422 );
+			throw new ApiException( __( 'Username is required.', 'peakurl' ), 422 );
 		}
 
 		if ( strlen( $password ) < 8 ) {
 			throw new ApiException(
-				'Password must be at least 8 characters.',
+				__( 'Password must be at least 8 characters.', 'peakurl' ),
 				422,
 			);
 		}
 
 		if ( $this->find_user_row_by_email( $email ) ) {
 			throw new ApiException(
-				'Email address is already registered.',
+				__( 'Email address is already registered.', 'peakurl' ),
 				422,
 			);
 		}
 
 		if ( $this->find_user_row_by_username( $username ) ) {
-			throw new ApiException( 'Username is already taken.', 422 );
+			throw new ApiException( __( 'Username is already taken.', 'peakurl' ), 422 );
 		}
 
 		$now                = $this->now();
@@ -119,7 +119,7 @@ trait AccountsTrait {
 		$token = trim( $token );
 
 		if ( '' === $token ) {
-			throw new ApiException( 'Verification token is required.', 422 );
+			throw new ApiException( __( 'Verification token is required.', 'peakurl' ), 422 );
 		}
 
 		$user = $this->query_one(
@@ -176,7 +176,7 @@ trait AccountsTrait {
 		);
 
 		if ( '' === $email ) {
-			throw new ApiException( 'Email is required.', 422 );
+			throw new ApiException( __( 'Email is required.', 'peakurl' ), 422 );
 		}
 
 		$user = $this->find_user_row_by_email( $email );
@@ -228,7 +228,7 @@ trait AccountsTrait {
 
 		if ( '' === $identifier || '' === $password ) {
 			throw new ApiException(
-				'Email or username and password are required.',
+				__( 'Email or username and password are required.', 'peakurl' ),
 				422,
 			);
 		}
@@ -248,7 +248,7 @@ trait AccountsTrait {
 			! password_verify( $password, (string) $user['password_hash'] )
 		) {
 			throw new ApiException(
-				'Invalid email, username, or password.',
+				__( 'Invalid email, username, or password.', 'peakurl' ),
 				401,
 			);
 		}
@@ -268,7 +268,7 @@ trait AccountsTrait {
 				)
 			) {
 				if ( ! $this->consume_backup_code( (string) $user['id'], $token ) ) {
-					throw new ApiException( 'Invalid two-factor code.', 401 );
+					throw new ApiException( __( 'Invalid two-factor code.', 'peakurl' ), 401 );
 				}
 			}
 		}
@@ -314,7 +314,7 @@ trait AccountsTrait {
 
 		if ( ! empty( $result['requiresTwoFactor'] ) ) {
 			throw new ApiException(
-				'Two-factor authentication is still required.',
+				__( 'Two-factor authentication is still required.', 'peakurl' ),
 				422,
 			);
 		}
@@ -366,7 +366,7 @@ trait AccountsTrait {
 		);
 
 		if ( '' === $identifier ) {
-			throw new ApiException( 'Email or username is required.', 422 );
+			throw new ApiException( __( 'Email or username is required.', 'peakurl' ), 422 );
 		}
 
 		$normalized_identifier = strtolower( $identifier );
@@ -430,7 +430,7 @@ trait AccountsTrait {
 
 		if ( strlen( $password ) < 8 ) {
 			throw new ApiException(
-				'Password must be at least 8 characters.',
+				__( 'Password must be at least 8 characters.', 'peakurl' ),
 				422,
 			);
 		}
@@ -492,7 +492,7 @@ trait AccountsTrait {
 		$user = $this->resolve_current_user( $request, true );
 
 		if ( ! $user ) {
-			throw new ApiException( 'Authentication required.', 401 );
+			throw new ApiException( __( 'Authentication required.', 'peakurl' ), 401 );
 		}
 
 		return $user;
@@ -548,7 +548,7 @@ trait AccountsTrait {
 					! filter_var( $value, FILTER_VALIDATE_EMAIL )
 				) {
 					throw new ApiException(
-						'A valid email address is required.',
+						__( 'A valid email address is required.', 'peakurl' ),
 						422,
 					);
 				}
@@ -561,21 +561,21 @@ trait AccountsTrait {
 					(string) $existing['id'] !== $user_id
 				) {
 					throw new ApiException(
-						'Email address is already in use.',
+						__( 'Email address is already in use.', 'peakurl' ),
 						422,
 					);
 				}
 			}
 
 			if ( 'username' === $input_key && '' === $value ) {
-				throw new ApiException( 'Username cannot be empty.', 422 );
+				throw new ApiException( __( 'Username cannot be empty.', 'peakurl' ), 422 );
 			}
 
 			if ( 'username' === $input_key ) {
 				$existing = $this->find_user_row_by_username( $value );
 
 				if ( $existing && (string) $existing['id'] !== $user_id ) {
-					throw new ApiException( 'Username is already taken.', 422 );
+					throw new ApiException( __( 'Username is already taken.', 'peakurl' ), 422 );
 				}
 			}
 
@@ -591,7 +591,7 @@ trait AccountsTrait {
 
 			if ( strlen( $password ) < 8 ) {
 				throw new ApiException(
-					'Password must be at least 8 characters.',
+					__( 'Password must be at least 8 characters.', 'peakurl' ),
 					422,
 				);
 			}
@@ -670,36 +670,36 @@ trait AccountsTrait {
 		$now        = $this->now();
 
 		if ( '' === $first_name || '' === $last_name ) {
-			throw new ApiException( 'First and last name are required.', 422 );
+			throw new ApiException( __( 'First and last name are required.', 'peakurl' ), 422 );
 		}
 
 		if ( ! preg_match( '/^[A-Za-z0-9._@-]{3,120}$/', $username ) ) {
 			throw new ApiException(
-				'Username must be 3-120 characters using letters, numbers, dots, dashes, underscores, or @.',
+				__( 'Username must be 3-120 characters using letters, numbers, dots, dashes, underscores, or @.', 'peakurl' ),
 				422,
 			);
 		}
 
 		if ( ! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
-			throw new ApiException( 'A valid email address is required.', 422 );
+			throw new ApiException( __( 'A valid email address is required.', 'peakurl' ), 422 );
 		}
 
 		if ( strlen( $password ) < 8 ) {
 			throw new ApiException(
-				'Password must be at least 8 characters.',
+				__( 'Password must be at least 8 characters.', 'peakurl' ),
 				422,
 			);
 		}
 
 		if ( $this->find_user_row_by_email( $email ) ) {
 			throw new ApiException(
-				'Email address is already registered.',
+				__( 'Email address is already registered.', 'peakurl' ),
 				422,
 			);
 		}
 
 		if ( $this->find_user_row_by_username( $username ) ) {
-			throw new ApiException( 'Username is already taken.', 422 );
+			throw new ApiException( __( 'Username is already taken.', 'peakurl' ), 422 );
 		}
 
 		$this->db->insert(
@@ -777,7 +777,7 @@ trait AccountsTrait {
 
 			if ( ! preg_match( '/^[A-Za-z0-9._@-]{3,120}$/', $new_username ) ) {
 				throw new ApiException(
-					'Username must be 3-120 characters using letters, numbers, dots, dashes, underscores, or @.',
+					__( 'Username must be 3-120 characters using letters, numbers, dots, dashes, underscores, or @.', 'peakurl' ),
 					422,
 				);
 			}
@@ -785,7 +785,7 @@ trait AccountsTrait {
 			$existing_user = $this->find_user_row_by_username( $new_username );
 
 			if ( $existing_user && (string) $existing_user['id'] !== $user_id ) {
-				throw new ApiException( 'Username is already taken.', 422 );
+				throw new ApiException( __( 'Username is already taken.', 'peakurl' ), 422 );
 			}
 
 			$updates[]          = 'username = :username';
@@ -800,7 +800,7 @@ trait AccountsTrait {
 				! filter_var( $email, FILTER_VALIDATE_EMAIL )
 			) {
 				throw new ApiException(
-					'A valid email address is required.',
+					__( 'A valid email address is required.', 'peakurl' ),
 					422,
 				);
 			}
@@ -813,7 +813,7 @@ trait AccountsTrait {
 				(string) $existing_user['id'] !== $user_id
 			) {
 				throw new ApiException(
-					'Email address is already in use.',
+					__( 'Email address is already in use.', 'peakurl' ),
 					422,
 				);
 			}
@@ -840,7 +840,7 @@ trait AccountsTrait {
 			if ( '' !== $password ) {
 				if ( strlen( $password ) < 8 ) {
 					throw new ApiException(
-						'Password must be at least 8 characters.',
+						__( 'Password must be at least 8 characters.', 'peakurl' ),
 						422,
 					);
 				}
@@ -896,7 +896,7 @@ trait AccountsTrait {
 		}
 
 		if ( (string) $user['id'] === (string) $current_user['id'] ) {
-			throw new ApiException( 'You cannot delete the current user.', 422 );
+			throw new ApiException( __( 'You cannot delete the current user.', 'peakurl' ), 422 );
 		}
 
 		$this->assert_admin_role_change_is_allowed(
@@ -1051,13 +1051,13 @@ trait AccountsTrait {
 
 		if ( '' === $pending_secret ) {
 			throw new ApiException(
-				'No two-factor setup is pending for this account.',
+				__( 'No two-factor setup is pending for this account.', 'peakurl' ),
 				422,
 			);
 		}
 
 		if ( ! $this->totp_service->verify_code( $pending_secret, $token ) ) {
-			throw new ApiException( 'Invalid verification code.', 422 );
+			throw new ApiException( __( 'Invalid verification code.', 'peakurl' ), 422 );
 		}
 
 		$backup_codes = $this->replace_backup_codes( (string) $user['id'] );
@@ -1175,7 +1175,7 @@ trait AccountsTrait {
 
 		if ( ! $current_session ) {
 			throw new ApiException(
-				'PeakURL could not identify the current session.',
+				__( 'PeakURL could not identify the current session.', 'peakurl' ),
 				422,
 			);
 		}

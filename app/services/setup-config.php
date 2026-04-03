@@ -176,24 +176,24 @@ class SetupConfig {
 		$db_port   = (string) ( (int) ( $input['db_port'] ?? 3306 ) );
 
 		if ( '' === trim( (string) ( $input['db_host'] ?? '' ) ) ) {
-			throw new \RuntimeException( 'Database host is required.' );
+			throw new \RuntimeException( __( 'Database host is required.', 'peakurl' ) );
 		}
 
 		if ( '' === trim( (string) ( $input['db_name'] ?? '' ) ) ) {
-			throw new \RuntimeException( 'Database name is required.' );
+			throw new \RuntimeException( __( 'Database name is required.', 'peakurl' ) );
 		}
 
 		if ( '' === trim( (string) ( $input['db_user'] ?? '' ) ) ) {
-			throw new \RuntimeException( 'Database username is required.' );
+			throw new \RuntimeException( __( 'Database username is required.', 'peakurl' ) );
 		}
 
 		if ( '' === $db_prefix ) {
-			throw new \RuntimeException( 'Database table prefix is required.' );
+			throw new \RuntimeException( __( 'Database table prefix is required.', 'peakurl' ) );
 		}
 
 		if ( (int) $db_port < 1 || (int) $db_port > 65535 ) {
 			throw new \RuntimeException(
-				'Database port must be between 1 and 65535.',
+				__( 'Database port must be between 1 and 65535.', 'peakurl' ),
 			);
 		}
 
@@ -263,7 +263,7 @@ class SetupConfig {
 			$connection->query( 'SELECT 1' );
 		} catch ( \Throwable $exception ) {
 			throw new \RuntimeException(
-				'Unable to connect to the database with those credentials. ' . $exception->getMessage(),
+				__( 'Unable to connect to the database with those credentials. ', 'peakurl' ) . $exception->getMessage(),
 				0,
 				$exception,
 			);
@@ -283,12 +283,12 @@ class SetupConfig {
 
 		if ( ! is_writable( $root_path ) ) {
 			throw new \RuntimeException(
-				'The release root directory is not writable. PeakURL could not create config.php.',
+				__( 'The release root directory is not writable. PeakURL could not create config.php.', 'peakurl' ),
 			);
 		}
 
 		if ( ! is_writable( $app_path ) ) {
-			throw new \RuntimeException( 'The app directory is not writable.' );
+			throw new \RuntimeException( __( 'The app directory is not writable.', 'peakurl' ) );
 		}
 	}
 
@@ -311,7 +311,7 @@ class SetupConfig {
 
 		if ( ! file_exists( $sample_path ) ) {
 			throw new \RuntimeException(
-				'config-sample.php is missing from the release package.',
+				__( 'config-sample.php is missing from the release package.', 'peakurl' ),
 			);
 		}
 
@@ -319,7 +319,7 @@ class SetupConfig {
 
 		if ( false === $template ) {
 			throw new \RuntimeException(
-				'Unable to read config-sample.php from the release package.',
+				__( 'Unable to read config-sample.php from the release package.', 'peakurl' ),
 			);
 		}
 
@@ -334,7 +334,7 @@ class SetupConfig {
 
 		if ( false === file_put_contents( $config_path, $config_contents, LOCK_EX ) ) {
 			throw new \RuntimeException(
-				'Unable to write config.php in the release root.',
+				__( 'Unable to write config.php in the release root.', 'peakurl' ),
 			);
 		}
 	}

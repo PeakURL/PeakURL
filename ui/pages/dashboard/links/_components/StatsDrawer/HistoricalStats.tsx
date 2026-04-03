@@ -1,8 +1,8 @@
 // @ts-nocheck
 
-import { format, formatDistanceToNow } from 'date-fns';
 import { Calendar } from 'lucide-react';
 import { __, sprintf } from '@/i18n';
+import { formatLocalizedDateTime, formatRelativeTime } from '@/utils';
 
 function HistoricalStats({ link }) {
 	const stats = [
@@ -60,15 +60,19 @@ function HistoricalStats({ link }) {
 			<p className="text-sm text-text-muted mb-4">
 				{__('Short URL created on')}{' '}
 				{link.createdAt
-					? format(
-							new Date(link.createdAt),
-							"MMMM d, yyyy '@' h:mm a"
-						)
+					? formatLocalizedDateTime(new Date(link.createdAt), {
+							year: 'numeric',
+							month: 'long',
+							day: 'numeric',
+							hour: 'numeric',
+							minute: '2-digit',
+						})
 					: __('Unknown')}{' '}
 				(
 				{link.createdAt
-					? formatDistanceToNow(new Date(link.createdAt), {
-							addSuffix: true,
+					? formatRelativeTime(new Date(link.createdAt), {
+							style: 'long',
+							numeric: 'always',
 						})
 					: __('Unknown')}
 				)

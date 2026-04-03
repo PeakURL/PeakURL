@@ -119,7 +119,7 @@ class Update {
 
 		if ( ! in_array( $scheme, array( 'http', 'https' ), true ) ) {
 			throw new \RuntimeException(
-				'The update manifest URL must use HTTP or HTTPS.',
+				__( 'The update manifest URL must use HTTP or HTTPS.', 'peakurl' ),
 			);
 		}
 
@@ -174,7 +174,7 @@ class Update {
 
 		if ( ! is_array( $payload ) ) {
 			throw new \RuntimeException(
-				'The update manifest returned invalid JSON.',
+				__( 'The update manifest returned invalid JSON.', 'peakurl' ),
 			);
 		}
 
@@ -257,7 +257,7 @@ class Update {
 
 		if ( '' === $package_url || '' === $version ) {
 			throw new \RuntimeException(
-				'The update manifest is missing a package URL or version.',
+				__( 'The update manifest is missing a package URL or version.', 'peakurl' ),
 			);
 		}
 
@@ -305,7 +305,7 @@ class Update {
 					$this->restore_managed_paths( $backup_dir );
 				} catch ( \Throwable $rollback_exception ) {
 					throw new \RuntimeException(
-						'PeakURL could not apply the update and the rollback failed. ' .
+						__( 'PeakURL could not apply the update and the rollback failed. ', 'peakurl' ) .
 						$rollback_exception->getMessage(),
 						0,
 						$rollback_exception,
@@ -314,7 +314,7 @@ class Update {
 			}
 
 			throw new \RuntimeException(
-				'PeakURL could not apply the update. ' . $exception->getMessage(),
+				__( 'PeakURL could not apply the update. ', 'peakurl' ) . $exception->getMessage(),
 				0,
 				$exception,
 			);
@@ -389,13 +389,13 @@ class Update {
 
 		if ( '' === $version ) {
 			throw new \RuntimeException(
-				'The update manifest did not include a version.',
+				__( 'The update manifest did not include a version.', 'peakurl' ),
 			);
 		}
 
 		if ( '' === $package_url ) {
 			throw new \RuntimeException(
-				'The update manifest did not include a package URL.',
+				__( 'The update manifest did not include a package URL.', 'peakurl' ),
 			);
 		}
 
@@ -438,28 +438,28 @@ class Update {
 		if ( file_exists( ABSPATH . 'package.json' ) || is_dir( ABSPATH . '.git' ) ) {
 			return array(
 				'allowed' => false,
-				'reason'  => 'Dashboard updates can only be applied from an installed release package.',
+				'reason'  => __( 'Dashboard updates can only be applied from an installed release package.', 'peakurl' ),
 			);
 		}
 
 		if ( ! class_exists( '\ZipArchive' ) ) {
 			return array(
 				'allowed' => false,
-				'reason'  => 'The \ZipArchive PHP extension is required to apply updates.',
+				'reason'  => __( 'The ZipArchive PHP extension is required to apply updates.', 'peakurl' ),
 			);
 		}
 
 		if ( ! is_writable( ABSPATH ) ) {
 			return array(
 				'allowed' => false,
-				'reason'  => 'The release root is not writable.',
+				'reason'  => __( 'The release root is not writable.', 'peakurl' ),
 			);
 		}
 
 		if ( ! is_writable( $this->build_path( ABSPATH, 'app' ) ) ) {
 			return array(
 				'allowed' => false,
-				'reason'  => 'The app directory is not writable.',
+				'reason'  => __( 'The app directory is not writable.', 'peakurl' ),
 			);
 		}
 
@@ -500,12 +500,12 @@ class Update {
 		$handle = fopen( $lock_path, 'c+' );
 
 		if ( false === $handle ) {
-			throw new \RuntimeException( 'PeakURL could not create the update lock.' );
+			throw new \RuntimeException( __( 'PeakURL could not create the update lock.', 'peakurl' ) );
 		}
 
 		if ( ! flock( $handle, LOCK_EX | LOCK_NB ) ) {
 			fclose( $handle );
-			throw new \RuntimeException( 'Another PeakURL update is already running.' );
+			throw new \RuntimeException( __( 'Another PeakURL update is already running.', 'peakurl' ) );
 		}
 
 		ftruncate( $handle, 0 );
@@ -624,7 +624,7 @@ class Update {
 
 		if ( false === file_put_contents( $target_path, $body, LOCK_EX ) ) {
 			throw new \RuntimeException(
-				'PeakURL could not store the downloaded release package.',
+				__( 'PeakURL could not store the downloaded release package.', 'peakurl' ),
 			);
 		}
 	}
@@ -652,13 +652,13 @@ class Update {
 
 		if ( false === $actual_checksum ) {
 			throw new \RuntimeException(
-				'PeakURL could not verify the downloaded release checksum.',
+				__( 'PeakURL could not verify the downloaded release checksum.', 'peakurl' ),
 			);
 		}
 
 		if ( ! hash_equals( $expected_checksum, strtolower( $actual_checksum ) ) ) {
 			throw new \RuntimeException(
-				'The downloaded release checksum did not match the manifest.',
+				__( 'The downloaded release checksum did not match the manifest.', 'peakurl' ),
 			);
 		}
 	}
@@ -680,14 +680,14 @@ class Update {
 
 		if ( true !== $zip->open( $zip_path ) ) {
 			throw new \RuntimeException(
-				'PeakURL could not open the downloaded release archive.',
+				__( 'PeakURL could not open the downloaded release archive.', 'peakurl' ),
 			);
 		}
 
 		if ( ! $zip->extractTo( $extract_path ) ) {
 			$zip->close();
 			throw new \RuntimeException(
-				'PeakURL could not extract the downloaded release archive.',
+				__( 'PeakURL could not extract the downloaded release archive.', 'peakurl' ),
 			);
 		}
 
@@ -727,7 +727,7 @@ class Update {
 
 		if ( 1 !== count( $entries ) ) {
 			throw new \RuntimeException(
-				'PeakURL could not determine the extracted package root.',
+				__( 'PeakURL could not determine the extracted package root.', 'peakurl' ),
 			);
 		}
 
@@ -738,7 +738,7 @@ class Update {
 		}
 
 		throw new \RuntimeException(
-			'PeakURL could not validate the extracted package structure.',
+			__( 'PeakURL could not validate the extracted package structure.', 'peakurl' ),
 		);
 	}
 
@@ -898,7 +898,7 @@ class Update {
 
 				if ( ! copy( $item->getPathname(), $destination ) ) {
 					throw new \RuntimeException(
-						'PeakURL could not copy the updated release files.',
+						__( 'PeakURL could not copy the updated release files.', 'peakurl' ),
 					);
 				}
 			}
@@ -910,7 +910,7 @@ class Update {
 
 		if ( ! copy( $source_path, $target_path ) ) {
 			throw new \RuntimeException(
-				'PeakURL could not copy the updated release files.',
+				__( 'PeakURL could not copy the updated release files.', 'peakurl' ),
 			);
 		}
 	}
@@ -963,7 +963,7 @@ class Update {
 
 		if ( ! mkdir( $path, 0775, true ) && ! is_dir( $path ) ) {
 			throw new \RuntimeException(
-				'PeakURL could not prepare the update workspace.',
+				__( 'PeakURL could not prepare the update workspace.', 'peakurl' ),
 			);
 		}
 	}
@@ -1020,7 +1020,7 @@ class Update {
 		$curl = curl_init( $url );
 
 		if ( false === $curl ) {
-			throw new \RuntimeException( 'PeakURL could not start the update request.' );
+			throw new \RuntimeException( __( 'PeakURL could not start the update request.', 'peakurl' ) );
 		}
 
 		curl_setopt_array(
@@ -1043,13 +1043,17 @@ class Update {
 
 		if ( false === $body ) {
 			throw new \RuntimeException(
-				'PeakURL could not contact the update service. ' . $curl_error,
+				__( 'PeakURL could not contact the update service. ', 'peakurl' ) . $curl_error,
 			);
 		}
 
 		if ( $status < 200 || $status >= 300 ) {
 			throw new \RuntimeException(
-				'The update service returned HTTP ' . $status . '.',
+				sprintf(
+					/* translators: %d: HTTP status code. */
+					__( 'The update service returned HTTP %d.', 'peakurl' ),
+					$status,
+				),
 			);
 		}
 
@@ -1087,7 +1091,7 @@ class Update {
 
 		if ( false === $stream ) {
 			throw new \RuntimeException(
-				'PeakURL could not contact the update service.',
+				__( 'PeakURL could not contact the update service.', 'peakurl' ),
 			);
 		}
 
@@ -1097,7 +1101,7 @@ class Update {
 
 		if ( false === $body ) {
 			throw new \RuntimeException(
-				'PeakURL could not read the update service response.',
+				__( 'PeakURL could not read the update service response.', 'peakurl' ),
 			);
 		}
 
@@ -1117,7 +1121,7 @@ class Update {
 
 		if ( ! preg_match( '/\s(\d{3})\s/', $status_line, $matches ) ) {
 			throw new \RuntimeException(
-				'PeakURL could not read the update service response.',
+				__( 'PeakURL could not read the update service response.', 'peakurl' ),
 			);
 		}
 
@@ -1125,7 +1129,11 @@ class Update {
 
 		if ( $status < 200 || $status >= 300 ) {
 			throw new \RuntimeException(
-				'The update service returned HTTP ' . $status . '.',
+				sprintf(
+					/* translators: %d: HTTP status code. */
+					__( 'The update service returned HTTP %d.', 'peakurl' ),
+					$status,
+				),
 			);
 		}
 

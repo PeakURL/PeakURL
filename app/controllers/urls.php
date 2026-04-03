@@ -112,7 +112,7 @@ class UrlsController {
 			)
 		);
 
-		return JsonResponse::success( $payload, 'URLs loaded.' );
+		return JsonResponse::success( $payload, __( 'URLs loaded.', 'peakurl' ) );
 	}
 
 	/**
@@ -129,10 +129,10 @@ class UrlsController {
 		);
 
 		if ( ! $url ) {
-			return JsonResponse::error( 'URL not found.', 404 );
+			return JsonResponse::error( __( 'URL not found.', 'peakurl' ), 404 );
 		}
 
-		return JsonResponse::success( $url, 'URL loaded.' );
+		return JsonResponse::success( $url, __( 'URL loaded.', 'peakurl' ) );
 	}
 
 	/**
@@ -148,7 +148,7 @@ class UrlsController {
 				$request,
 				$request->get_body_params(),
 			),
-			'Short URL created.',
+			__( 'Short URL created.', 'peakurl' ),
 			201,
 		);
 	}
@@ -166,7 +166,7 @@ class UrlsController {
 				$request,
 				$request->get_body_params(),
 			),
-			'Bulk import processed.',
+			__( 'Bulk import processed.', 'peakurl' ),
 		);
 	}
 
@@ -185,10 +185,10 @@ class UrlsController {
 		);
 
 		if ( ! $url ) {
-			return JsonResponse::error( 'URL not found.', 404 );
+			return JsonResponse::error( __( 'URL not found.', 'peakurl' ), 404 );
 		}
 
-		return JsonResponse::success( $url, 'URL updated.' );
+		return JsonResponse::success( $url, __( 'URL updated.', 'peakurl' ) );
 	}
 
 	/**
@@ -205,10 +205,10 @@ class UrlsController {
 		);
 
 		if ( ! $deleted ) {
-			return JsonResponse::error( 'URL not found.', 404 );
+			return JsonResponse::error( __( 'URL not found.', 'peakurl' ), 404 );
 		}
 
-		return JsonResponse::success( array( 'deleted' => true ), 'URL deleted.' );
+		return JsonResponse::success( array( 'deleted' => true ), __( 'URL deleted.', 'peakurl' ) );
 	}
 
 	/**
@@ -229,7 +229,7 @@ class UrlsController {
 			array(
 				'deletedCount' => $count,
 			),
-			'Bulk delete complete.',
+			__( 'Bulk delete complete.', 'peakurl' ),
 		);
 	}
 
@@ -288,8 +288,8 @@ class UrlsController {
 		if ( 'expired' === ( $result['status'] ?? '' ) ) {
 			return JsonResponse::text(
 				$this->render_public_status_page(
-					'This link has expired',
-					'The short link you requested is no longer active because its expiration date has passed.',
+					__( 'This link has expired', 'peakurl' ),
+					__( 'The short link you requested is no longer active because its expiration date has passed.', 'peakurl' ),
 					'expired',
 				),
 				410,
@@ -299,8 +299,8 @@ class UrlsController {
 
 		return JsonResponse::text(
 			$this->render_public_status_page(
-				'This link is unavailable',
-				'The short link you requested is not available right now.',
+				__( 'This link is unavailable', 'peakurl' ),
+				__( 'The short link you requested is not available right now.', 'peakurl' ),
 			),
 			404,
 			'text/html; charset=utf-8',
@@ -347,24 +347,24 @@ class UrlsController {
 
 		$content_html =
 			'<div class="hero-icon-wrap">' . $lock_icon . '</div>' .
-			'<h1 class="title">Password required</h1>' .
-			'<p class="subtitle">This link is protected. Enter the password to continue.</p>' .
+			'<h1 class="title">' . __( 'Password required', 'peakurl' ) . '</h1>' .
+			'<p class="subtitle">' . __( 'This link is protected. Enter the password to continue.', 'peakurl' ) . '</p>' .
 			$error_markup .
 			'<form method="post" action="' . $form_action . '" autocomplete="off">' .
 			'<div class="field">' .
-			'<label class="label" for="link_password">Password</label>' .
+			'<label class="label" for="link_password">' . __( 'Password', 'peakurl' ) . '</label>' .
 			'<div class="input-wrap">' .
 			'<svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' .
-			'<input class="input" id="link_password" name="link_password" type="password" autocomplete="current-password" placeholder="Enter password" required autofocus>' .
+			'<input class="input" id="link_password" name="link_password" type="password" autocomplete="current-password" placeholder="' . __( 'Enter password', 'peakurl' ) . '" required autofocus>' .
 			'</div>' .
 			'</div>' .
 			'<button class="btn" type="submit">' .
-			'<span>Continue</span>' .
+			'<span>' . __( 'Continue', 'peakurl' ) . '</span>' .
 			'<svg class="btn-arrow" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L11.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 11-1.04-1.08l3.158-2.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg>' .
 			'</button>' .
 			'</form>';
 
-		return $this->render_public_shell( 'Protected Link', $content_html );
+		return $this->render_public_shell( __( 'Protected Link', 'peakurl' ), $content_html );
 	}
 
 	/**

@@ -66,7 +66,7 @@ class UpdatesController {
 	public function status( Request $request ): array {
 		return JsonResponse::success(
 			$this->data_store->get_update_status( $request ),
-			'Update status loaded.',
+			__( 'Update status loaded.', 'peakurl' ),
 		);
 	}
 
@@ -83,7 +83,7 @@ class UpdatesController {
 	public function check( Request $request ): array {
 		return JsonResponse::success(
 			$this->data_store->check_for_updates( $request ),
-			'Update check complete.',
+			__( 'Update check complete.', 'peakurl' ),
 		);
 	}
 
@@ -100,7 +100,7 @@ class UpdatesController {
 	public function apply( Request $request ): array {
 		return JsonResponse::success(
 			$this->data_store->apply_update( $request ),
-			'Update applied.',
+			__( 'Update applied.', 'peakurl' ),
 		);
 	}
 
@@ -114,7 +114,7 @@ class UpdatesController {
 	public function upgrade_database( Request $request ): array {
 		return JsonResponse::success(
 			$this->data_store->upgrade_database_schema( $request ),
-			'Database upgrade complete.',
+			__( 'Database upgrade complete.', 'peakurl' ),
 		);
 	}
 }

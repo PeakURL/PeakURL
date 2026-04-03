@@ -273,7 +273,7 @@ function TrafficLocationTab({ link, selectedTab, open }) {
 				<div className="flex items-center gap-2 mb-4">
 					<MapPin className="w-4 h-4 text-accent" />
 					<h3 className="text-sm font-semibold text-heading">
-						Top Cities
+						{__('Top Cities')}
 					</h3>
 				</div>
 				<div className="space-y-2">

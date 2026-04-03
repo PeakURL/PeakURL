@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { isPast } from 'date-fns';
 import { __ } from '@/i18n';
+import { formatRelativeTime } from '@/utils';
 
 function LinkRow({
 	link,
@@ -27,7 +28,6 @@ function LinkRow({
 	onQRCode,
 	revealedPasswords,
 	togglePassword,
-	formatDistanceToNow,
 	formatNumber,
 }) {
 	return (
@@ -58,7 +58,9 @@ function LinkRow({
 								onClick={() => onCopy(link)}
 								className="opacity-0 group-hover:opacity-100 text-text-muted hover:text-accent transition-all"
 								title={
-									copiedId === link.id ? 'Copied!' : 'Copy'
+									copiedId === link.id
+										? __('Copied!')
+										: __('Copy')
 								}
 							>
 								{copiedId === link.id ? (
@@ -73,7 +75,7 @@ function LinkRow({
 			</td>
 			<td className="px-4 py-3">
 				<div className="text-sm text-heading font-medium truncate max-w-[150px]">
-					{link.title || 'Untitled'}
+					{link.title || __('Untitled')}
 				</div>
 			</td>
 			<td className="px-4 py-3">
@@ -92,7 +94,7 @@ function LinkRow({
 							>
 								<span className="inline-flex items-center gap-1 text-[10px] font-medium text-warning bg-warning/10 px-1.5 py-0.5 rounded">
 									<Lock size={10} />
-									Protected
+									{__('Protected')}
 								</span>
 								<div className="flex items-center gap-1">
 									<code className="text-[10px] text-text-text-muted">
@@ -124,18 +126,22 @@ function LinkRow({
 							>
 								<Clock size={10} />
 								{isPast(new Date(link.expiresAt))
-									? 'Expired ' +
-										formatDistanceToNow(
+									? __('Expired') +
+										' ' +
+										formatRelativeTime(
 											new Date(link.expiresAt),
 											{
-												addSuffix: true,
+												style: 'long',
+												numeric: 'always',
 											}
 										)
-									: 'Expires ' +
-										formatDistanceToNow(
+									: __('Expires') +
+										' ' +
+										formatRelativeTime(
 											new Date(link.expiresAt),
 											{
-												addSuffix: true,
+												style: 'long',
+												numeric: 'always',
 											}
 										)}
 							</span>
@@ -167,8 +173,9 @@ function LinkRow({
 			<td className="px-4 py-3">
 				<div className="text-sm text-text-muted">
 					{link.createdAt
-						? formatDistanceToNow(new Date(link.createdAt), {
-								addSuffix: true,
+						? formatRelativeTime(new Date(link.createdAt), {
+								style: 'compact',
+								numeric: 'always',
 							})
 						: __('Unknown')}
 				</div>

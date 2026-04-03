@@ -1,18 +1,31 @@
+import {
+	formatLocalizedDateTime,
+	formatRelativeTime,
+} from './dateFormatting';
+
 export function cn(...classes) {
 	return classes.filter(Boolean).join(' ');
 }
 
 export function formatDate(dateString) {
 	const date = new Date(dateString);
+	if (Number.isNaN(date.getTime())) {
+		return '';
+	}
+
 	const now = new Date();
-	const diffTime = Math.abs(now.getTime() - date.getTime());
-	const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+	const diffDays = Math.abs(now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
 
-	if (diffDays === 0) return 'Today';
-	if (diffDays === 1) return 'Yesterday';
-	if (diffDays < 7) return `${diffDays} days ago`;
+	if (diffDays < 7) {
+		return formatRelativeTime(date, {
+			style: 'long',
+			numeric: 'auto',
+		});
+	}
 
-	return date.toLocaleDateString();
+	return formatLocalizedDateTime(date, {
+		dateStyle: 'medium',
+	});
 }
 
 export function formatNumber(num) {
@@ -75,6 +88,10 @@ export {
 	getDashboardSearchValueFromLocation,
 	resolveDashboardSearchPath,
 } from './dashboardSearch';
+export {
+	formatLocalizedDateTime,
+	formatRelativeTime,
+} from './dateFormatting';
 
 export function getTagColor(tag) {
 	const colors = {

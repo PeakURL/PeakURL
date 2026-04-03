@@ -115,7 +115,7 @@ class Crypto {
 		}
 
 		if ( ! function_exists( 'openssl_encrypt' ) ) {
-			throw new \RuntimeException( 'The OpenSSL extension is required to encrypt stored credentials.' );
+			throw new \RuntimeException( __( 'The OpenSSL extension is required to encrypt stored credentials.', 'peakurl' ) );
 		}
 
 		$iv         = random_bytes( 12 );
@@ -130,7 +130,7 @@ class Crypto {
 		);
 
 		if ( false === $ciphertext ) {
-			throw new \RuntimeException( 'PeakURL could not encrypt the stored credential.' );
+			throw new \RuntimeException( __( 'PeakURL could not encrypt the stored credential.', 'peakurl' ) );
 		}
 
 		return 'enc:v1:' . base64_encode( $iv . $tag . $ciphertext );
@@ -155,13 +155,13 @@ class Crypto {
 		}
 
 		if ( ! function_exists( 'openssl_decrypt' ) ) {
-			throw new \RuntimeException( 'The OpenSSL extension is required to decrypt stored credentials.' );
+			throw new \RuntimeException( __( 'The OpenSSL extension is required to decrypt stored credentials.', 'peakurl' ) );
 		}
 
 		$decoded = base64_decode( substr( $value, 7 ), true );
 
 		if ( false === $decoded || strlen( $decoded ) <= 28 ) {
-			throw new \RuntimeException( 'PeakURL could not decode the stored credential payload.' );
+			throw new \RuntimeException( __( 'PeakURL could not decode the stored credential payload.', 'peakurl' ) );
 		}
 
 		$iv         = substr( $decoded, 0, 12 );
@@ -177,7 +177,7 @@ class Crypto {
 		);
 
 		if ( false === $plaintext ) {
-			throw new \RuntimeException( 'PeakURL could not decrypt the stored credential.' );
+			throw new \RuntimeException( __( 'PeakURL could not decrypt the stored credential.', 'peakurl' ) );
 		}
 
 		return $plaintext;
@@ -258,7 +258,7 @@ class Crypto {
 		$auth_salt = trim( (string) ( $this->config[ Constants::CONFIG_AUTH_SALT ] ?? '' ) );
 
 		if ( '' === $auth_key || '' === $auth_salt ) {
-			throw new \RuntimeException( 'PeakURL is missing PEAKURL_AUTH_KEY or PEAKURL_AUTH_SALT.' );
+			throw new \RuntimeException( __( 'PeakURL is missing PEAKURL_AUTH_KEY or PEAKURL_AUTH_SALT.', 'peakurl' ) );
 		}
 
 		return hash(

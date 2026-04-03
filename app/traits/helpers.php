@@ -139,13 +139,13 @@ trait HelpersTrait {
 			$timestamp = strtotime( $value );
 
 			if ( false === $timestamp ) {
-				throw new ApiException( 'Invalid date value provided.', 422 );
+				throw new ApiException( __( 'Invalid date value provided.', 'peakurl' ), 422 );
 			}
 
 			return gmdate( 'Y-m-d H:i:s', $timestamp );
 		}
 
-		throw new ApiException( 'Invalid date value provided.', 422 );
+		throw new ApiException( __( 'Invalid date value provided.', 'peakurl' ), 422 );
 	}
 
 	/**

@@ -1,9 +1,11 @@
 // @ts-nocheck
+import { __ } from '@/i18n';
+
 function SampleData({ sampleData }) {
 	return (
 		<div className="bg-surface border border-stroke rounded-lg p-5">
 			<h3 className="text-base font-semibold text-heading mb-4">
-				Sample Data Structure
+				{__('Sample Data Structure')}
 			</h3>
 			<div className="overflow-x-auto">
 				<table className="w-full text-sm">

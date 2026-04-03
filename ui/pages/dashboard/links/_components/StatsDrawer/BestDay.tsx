@@ -1,9 +1,9 @@
 // @ts-nocheck
 
-import { format } from 'date-fns';
 import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { __, sprintf } from '@/i18n';
+import { formatLocalizedDateTime } from '@/utils';
 
 function BestDay({ link }) {
 	const [showDetails, setShowDetails] = useState(true);
@@ -17,7 +17,13 @@ function BestDay({ link }) {
 				<span className="font-semibold">
 					{sprintf(__('%s hits'), link.clicks || 0)}
 				</span>{' '}
-				{__('on')} {format(new Date(), 'MMMM d, yyyy')}.{' '}
+				{__('on')}{' '}
+				{formatLocalizedDateTime(new Date(), {
+					year: 'numeric',
+					month: 'long',
+					day: 'numeric',
+				})}
+				.{ ' '}
 				<button
 					onClick={() => setShowDetails(!showDetails)}
 					className="text-accent hover:underline inline-flex items-center gap-1"
@@ -45,13 +51,17 @@ function BestDay({ link }) {
 							<div className="flex items-center gap-2">
 								<span className="w-1.5 h-1.5 rounded-full bg-text-muted"></span>
 								<span className="text-sm text-text-muted">
-									{format(new Date(), 'MMMM')}
+									{formatLocalizedDateTime(new Date(), {
+										month: 'long',
+									})}
 								</span>
 							</div>
 							<div className="ml-4 flex items-center gap-2">
 								<span className="w-1 h-1 rounded-full bg-text-muted"></span>
 								<span className="text-sm font-medium text-heading">
-									{format(new Date(), 'd')}:{' '}
+									{formatLocalizedDateTime(new Date(), {
+										day: 'numeric',
+									})}:{' '}
 									{sprintf(__('%s hits'), link.clicks || 0)}
 								</span>
 							</div>

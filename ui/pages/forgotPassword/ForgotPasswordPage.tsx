@@ -70,9 +70,7 @@ function ForgotPasswordPage() {
 								{__('Account Recovery')}
 							</div>
 							<h1 className="mt-6 text-4xl font-semibold tracking-tight text-white">
-								{__(
-									'Reset access without leaving your dashboard workflow.'
-								)}
+								{__('Reset your password')}
 							</h1>
 							<p className="mt-4 max-w-lg text-base leading-7 text-slate-400">
 								{__(
@@ -83,7 +81,9 @@ function ForgotPasswordPage() {
 
 						<div className="rounded-2xl border border-white/10 bg-slate-900/60 p-5">
 							<p className="text-sm font-medium text-white">
-								{__('Password reset links expire after 1 hour.')}
+								{__(
+									'Password reset links expire after 1 hour.'
+								)}
 							</p>
 							<p className="mt-2 text-sm leading-6 text-slate-400">
 								{__(
@@ -135,11 +135,17 @@ function ForgotPasswordPage() {
 									className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-emerald-700 transition hover:text-emerald-900"
 								>
 									{__('Return to login')}
-									<ArrowLeft size={15} className="rotate-180" />
+									<ArrowLeft
+										size={15}
+										className="rotate-180"
+									/>
 								</Link>
 							</div>
 						) : (
-							<form className="mt-8 space-y-5" onSubmit={handleSubmit}>
+							<form
+								className="mt-8 space-y-5"
+								onSubmit={handleSubmit}
+							>
 								<Input
 									label={__('Email or username')}
 									type="text"
@@ -150,7 +156,9 @@ function ForgotPasswordPage() {
 										setIdentifier(event.target.value)
 									}
 									autoFocus
-									placeholder={__('owner@example.com or admin')}
+									placeholder={__(
+										'owner@example.com or admin'
+									)}
 									autoComplete="username"
 									autoCapitalize="none"
 									spellCheck={false}

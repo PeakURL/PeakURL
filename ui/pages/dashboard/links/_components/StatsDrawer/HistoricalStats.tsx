@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 
 import { format, formatDistanceToNow } from 'date-fns';
 import { Calendar } from 'lucide-react';

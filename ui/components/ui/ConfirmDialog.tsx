@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 
 import { Fragment } from 'react';
 import { Dialog, DialogPanel, Transition } from '@headlessui/react';

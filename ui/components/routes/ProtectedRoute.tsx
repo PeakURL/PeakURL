@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 
 import { authApi } from '@/store/slices';
 import { PageLoader } from '@/components/ui';

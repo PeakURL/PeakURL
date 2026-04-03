@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 import { Header, Tabs } from './_components';
 import { useLocation } from 'react-router-dom';
 import { ClipboardPaste, CodeXml, FileUp } from 'lucide-react';

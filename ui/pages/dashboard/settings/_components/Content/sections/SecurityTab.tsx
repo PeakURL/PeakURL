@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 import { useEffect, useState } from 'react';
 import QRCode from 'qrcode';
 import { Button, ConfirmDialog, Input } from '@/components/ui';

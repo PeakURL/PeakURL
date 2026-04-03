@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 
 import { useState } from 'react';
 import { Globe, MapPin, Users } from 'lucide-react';

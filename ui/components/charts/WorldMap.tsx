@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 
 import { memo, useEffect, useState } from 'react';
 import { Mercator } from '@visx/geo';

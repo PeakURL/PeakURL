@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { X, Download, Copy, Check } from 'lucide-react';

@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 
 import { MoreHorizontal, Power, PowerOff, Lock, Info } from 'lucide-react';
 import { Button } from '@/components/ui';

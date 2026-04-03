@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 
 import { TrendingUp, TrendingDown, Activity, Clock } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';

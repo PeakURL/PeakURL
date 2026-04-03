@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 import { Content } from './_components';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAdminAccess } from '@/hooks';

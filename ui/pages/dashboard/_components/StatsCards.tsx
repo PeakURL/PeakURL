@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 import { formatNumber } from '@/utils';
 import {
 	ArrowDown,

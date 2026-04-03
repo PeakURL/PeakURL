@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 import { useEffect, useRef, useState } from 'react';
 import { Chart } from 'chart.js/auto';
 import { __ } from '@/i18n';

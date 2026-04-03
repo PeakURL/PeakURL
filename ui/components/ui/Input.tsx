@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 import { forwardRef, useId } from 'react';
 import { Info } from 'lucide-react';
 

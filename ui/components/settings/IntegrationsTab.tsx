@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 
 import { useMemo, useState } from 'react';
 import { Button, ConfirmDialog, Modal } from '@/components/ui';

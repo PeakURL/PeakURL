@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 import { useState } from 'react';
 import { ApiImport, PasteImport, FileUpload } from './_components';
 import { useLocation } from 'react-router-dom';

@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 
 import {
 	Dialog,

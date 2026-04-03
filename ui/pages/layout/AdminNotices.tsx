@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 
 import { Link } from 'react-router-dom';
 import { AlertCircle, CheckCircle2, Info, TriangleAlert } from 'lucide-react';

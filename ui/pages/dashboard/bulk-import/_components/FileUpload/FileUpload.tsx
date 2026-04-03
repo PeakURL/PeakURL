@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 import { useState, useRef } from 'react';
 import { useBulkCreateUrlMutation } from '@/store/slices/api/urls';
 import {

@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 
 import { MousePointerClick, Users, Calendar, TrendingUp } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';

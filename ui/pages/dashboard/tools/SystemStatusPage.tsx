@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 
 import { useState } from 'react';
 import { AlertCircle, CheckCircle2, ChevronDown, ChevronUp, Copy } from 'lucide-react';

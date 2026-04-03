@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 
 import { Link } from 'react-router-dom';
 import { PEAKURL_NAME } from '@constants';

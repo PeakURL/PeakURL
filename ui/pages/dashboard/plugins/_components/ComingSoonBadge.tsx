@@ -1,5 +1,5 @@
 // @ts-nocheck
-'use client';
+
 
 function ComingSoonBadge({ className = '' }) {
 	return (

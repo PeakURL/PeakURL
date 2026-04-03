@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 
 import { PEAKURL_DOMAIN } from '@constants';
 import { Link2, RefreshCw } from 'lucide-react';

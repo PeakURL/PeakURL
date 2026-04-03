@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 
 import { useState } from 'react';
 import { __ } from '@/i18n';

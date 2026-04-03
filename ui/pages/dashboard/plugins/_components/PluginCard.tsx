@@ -1,5 +1,4 @@
 // @ts-nocheck
-'use client';
 
 import { Star, Download, Lock } from 'lucide-react';
 import { Button } from '@/components/ui';

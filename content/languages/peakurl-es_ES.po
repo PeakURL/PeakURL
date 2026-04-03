@@ -1347,8 +1347,8 @@ msgstr "Exportar"
 #: ui/utils/dashboardSearch.js:285
 #: ui/utils/dashboardSearch.js:290
 #: ui/pages/layout/DashboardSidebar.tsx:69
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:717
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:746
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:718
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:750
 #: ui/router/pageTitle.ts:110
 msgid "System Status"
 msgstr "Estado del sistema"
@@ -1455,7 +1455,7 @@ msgstr "No se pudo eliminar el webhook"
 #: ui/components/settings/IntegrationsTab.tsx:99
 #: ui/pages/dashboard/settings/_components/Content/Content.tsx:254
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:700
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:872
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:876
 msgid "Copied"
 msgstr "Copiado"
 
@@ -1922,14 +1922,15 @@ msgid "Account Recovery"
 msgstr "Recuperación de la cuenta"
 
 #: ui/pages/forgotPassword/ForgotPasswordPage.tsx:73
-msgid "Reset access without leaving your dashboard workflow."
-msgstr "Restablece el acceso sin salir de tu flujo de trabajo del panel."
+#: ui/pages/resetPassword/ResetPasswordPage.tsx:125
+msgid "Reset your password"
+msgstr "Restablece tu contraseña"
 
-#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:78
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:76
 msgid "Enter the email address or username linked to your PeakURL account and we'll send a secure reset link."
 msgstr "Introduce la dirección de correo electrónico o el nombre de usuario vinculados a tu cuenta de PeakURL y te enviaremos un enlace seguro de restablecimiento."
 
-#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:86
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:84
 msgid "Password reset links expire after 1 hour."
 msgstr "Los enlaces de restablecimiento caducan después de 1 hora."
 
@@ -1963,16 +1964,16 @@ msgstr "Si existe una cuenta para %s, PeakURL ha enviado un enlace para restable
 msgid "Return to login"
 msgstr "Volver al inicio de sesión"
 
-#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:144
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:150
 #: ui/pages/login/LoginPage.tsx:381
 msgid "Email or username"
 msgstr "Correo electrónico o nombre de usuario"
 
-#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:153
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:159
 msgid "owner@example.com or admin"
 msgstr "propietario@ejemplo.com o admin"
 
-#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:168
+#: ui/pages/forgotPassword/ForgotPasswordPage.tsx:176
 msgid "Send reset link"
 msgstr "Enviar enlace de restablecimiento"
 
@@ -2259,60 +2260,60 @@ msgstr "Usa la documentación pública para autenticación, enlaces, analíticas
 msgid "API Overview"
 msgstr "Resumen de la API"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:37
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:48
 msgid "Profile Information"
 msgstr "Información del perfil"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:41
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:52
 #: ui/pages/dashboard/users/UsersPage.tsx:153
 msgid "First Name"
 msgstr "Nombre"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:48
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:59
 #: ui/pages/dashboard/users/UsersPage.tsx:159
 msgid "Last Name"
 msgstr "Apellido"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:55
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:66
 #: ui/pages/dashboard/users/UsersPage.tsx:168
 msgid "Username"
 msgstr "Nombre de usuario"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:62
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:73
 msgid "Email Address"
 msgstr "Correo electrónico"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:70
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:81
 msgid "Phone Number"
 msgstr "Número de teléfono"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:76
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:87
 msgid "Company"
 msgstr "Empresa"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:82
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:93
 msgid "Job Title"
 msgstr "Cargo"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:89
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:100
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:349
 msgid "Site Language"
 msgstr "Idioma del sitio"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:108
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:119
 msgid "Loading languages..."
 msgstr "Cargando idiomas..."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:129
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:140
 msgid "Bio"
 msgstr "Biografía"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:151
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:157
 #: ui/pages/dashboard/links/_components/EditLinkModal.tsx:253
 msgid "Saving..."
 msgstr "Guardando..."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:151
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:157
 #: ui/pages/dashboard/links/_components/EditLinkModal.tsx:258
 #: ui/pages/dashboard/users/UsersPage.tsx:232
 msgid "Save Changes"
@@ -3481,67 +3482,67 @@ msgstr "No se pudo copiar"
 msgid "PeakURL could not copy the system status information."
 msgstr "PeakURL no pudo copiar la información del estado del sistema."
 
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:732
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:734
 msgid "Last checked: %s"
 msgstr "Última comprobación: %s"
 
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:749
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:753
 msgid "The system status check shows information about your PeakURL configuration and items that may need your attention."
 msgstr "La comprobación del estado del sistema muestra información sobre la configuración de PeakURL y los elementos que pueden requerir tu atención."
 
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:759
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:763
 msgid "1 critical issue"
 msgstr "1 problema crítico"
 
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:760
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:764
 msgid "%s critical issues"
 msgstr "%s problemas críticos"
 
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:762
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:766
 msgid "Critical issues are items that may have a high impact on your site performance or security. Resolving these issues should be prioritized."
 msgstr "Los problemas críticos son elementos que pueden tener un alto impacto en el rendimiento o la seguridad del sitio. Resolverlos debe ser prioritario."
 
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:775
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:779
 msgid "1 recommended improvement"
 msgstr "1 mejora recomendada"
 
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:776
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:780
 msgid "%s recommended improvements"
 msgstr "%s mejoras recomendadas"
 
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:778
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:782
 msgid "Recommended improvements are beneficial for your site, though not as urgent as a critical issue. They may include improvements in areas such as security, performance, and user experience."
 msgstr "Las mejoras recomendadas son beneficiosas para tu sitio, aunque no son tan urgentes como un problema crítico. Pueden incluir mejoras en áreas como la seguridad, el rendimiento y la experiencia de usuario."
 
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:791
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:795
 msgid "All system status checks are currently passing."
 msgstr "Todas las comprobaciones del estado del sistema están correctas actualmente."
 
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:808
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:812
 msgid "Hide passed tests"
 msgstr "Ocultar comprobaciones aprobadas"
 
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:811
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:815
 msgid "1 passed test"
 msgstr "1 comprobación aprobada"
 
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:812
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:816
 msgid "%s passed tests"
 msgstr "%s comprobaciones aprobadas"
 
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:850
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:854
 msgid "System Status Info"
 msgstr "Información del estado del sistema"
 
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:853
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:857
 msgid "This page can show you every detail about the configuration of your PeakURL install."
 msgstr "Esta página puede mostrarte todos los detalles sobre la configuración de tu instalación de PeakURL."
 
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:858
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:862
 msgid "If you want to export a full snapshot of this page, you can use the button below to copy it to the clipboard."
 msgstr "Si quieres exportar una instantánea completa de esta página, puedes usar el botón de abajo para copiarla al portapapeles."
 
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:873
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:877
 msgid "Copy site info to clipboard"
 msgstr "Copiar información del sitio al portapapeles"
 
@@ -5171,10 +5172,6 @@ msgstr "Una vez que cambie la contraseña, PeakURL revocará las sesiones antigu
 #: ui/pages/resetPassword/ResetPasswordPage.tsx:102
 msgid "For best results, combine uppercase, lowercase, numbers, and a unique phrase you do not reuse elsewhere."
 msgstr "Para obtener mejores resultados, combina mayúsculas, minúsculas, números y una frase única que no reutilices en ningún otro sitio."
-
-#: ui/pages/resetPassword/ResetPasswordPage.tsx:125
-msgid "Reset your password"
-msgstr "Restablece tu contraseña"
 
 #: ui/pages/resetPassword/ResetPasswordPage.tsx:128
 msgid "Set a new account password, then sign in again with the updated credentials."

@@ -30,9 +30,20 @@ function GeneralTab({
 		setGeneralForm((prev) => ({ ...prev, [name]: value }));
 	};
 
+	const handleSubmit = (event) => {
+		event.preventDefault();
+		onSubmit({
+			...generalForm,
+			siteLanguage,
+		});
+	};
+
 	return (
 		<div className="space-y-5">
-			<div className="bg-surface border border-(--color-stroke) rounded-lg p-5">
+			<form
+				onSubmit={handleSubmit}
+				className="bg-surface border border-(--color-stroke) rounded-lg p-5"
+			>
 				<h2 className="text-base font-semibold text-heading mb-5">
 					{__('Profile Information')}
 				</h2>
@@ -140,18 +151,13 @@ function GeneralTab({
 				<div className="flex justify-end mt-5">
 					<Button
 						size="sm"
-						onClick={() =>
-							onSubmit({
-								...generalForm,
-								siteLanguage,
-							})
-						}
+						type="submit"
 						disabled={isUpdating}
 					>
 						{isUpdating ? __('Saving...') : __('Save Changes')}
 					</Button>
 				</div>
-			</div>
+			</form>
 		</div>
 	);
 }

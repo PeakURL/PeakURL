@@ -18,7 +18,9 @@ const normalizeBasePath = (value) => {
 const runtimeBasePath = isBrowser
 	? normalizeBasePath(window.__PEAKURL_BASE_PATH__)
 	: '';
-const runtimeOrigin = isBrowser ? window.location.origin : DEFAULT_PEAKURL_ORIGIN;
+const runtimeOrigin = isBrowser
+	? window.location.origin
+	: DEFAULT_PEAKURL_ORIGIN;
 const runtimePeakurlUrl = isBrowser
 	? window.__PEAKURL_URL__ || `${runtimeOrigin}${runtimeBasePath}`
 	: DEFAULT_PEAKURL_ORIGIN;
@@ -79,3 +81,5 @@ export const API_SERVER_BASE_URL = toAbsoluteUrl(
 export const API_ORIGIN = new URL(API_SERVER_BASE_URL).origin;
 export const INTERNAL_API_ORIGIN =
 	import.meta.env.VITE_INTERNAL_API_ORIGIN || API_ORIGIN;
+
+export const PLUGINS_WAITLIST_URL = 'https://go.peakurl.org/join-plugins-list';

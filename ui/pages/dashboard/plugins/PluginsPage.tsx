@@ -16,15 +16,12 @@ import {
 	FolderTree,
 	Eye,
 	RefreshCw,
+	ExternalLink,
+	Bell,
 } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { useAdminAccess } from '@/hooks';
-import {
-	ComingSoonBadge,
-	InstalledPluginsTable,
-	PluginCard,
-	PluginTabs,
-} from './_components';
+import { InstalledPluginsTable, PluginCard, PluginTabs } from './_components';
 import {
 	BROWSE_CARDS,
 	INSTALLED_CARDS,
@@ -32,6 +29,7 @@ import {
 	POPULAR_CARDS,
 } from './pluginData';
 import { __ } from '@/i18n';
+import { PLUGINS_WAITLIST_URL } from '@constants';
 
 type TabId = 'installed' | 'browse' | 'featured' | 'popular';
 type ViewMode = 'grid' | 'list';
@@ -42,7 +40,11 @@ function PluginsPage() {
 	const [viewMode, setViewMode] = useState<ViewMode>('grid');
 
 	const tabs = [
-		{ id: 'installed', label: __('Installed'), count: INSTALLED_CARDS.length },
+		{
+			id: 'installed',
+			label: __('Installed'),
+			count: INSTALLED_CARDS.length,
+		},
 		{ id: 'browse', label: __('Browse All'), count: BROWSE_CARDS.length },
 		{ id: 'featured', label: __('Featured') },
 		{ id: 'popular', label: __('Popular') },
@@ -81,7 +83,9 @@ function PluginsPage() {
 					{__('Admin access required')}
 				</h2>
 				<p className="mt-2 text-sm text-text-muted">
-					{__('Only admin accounts will be able to install, update, and manage plugins.')}
+					{__(
+						'Only admin accounts will be able to install, update, and manage plugins.'
+					)}
 				</p>
 			</div>
 		);
@@ -103,7 +107,6 @@ function PluginsPage() {
 							<div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-accent/10 text-accent">
 								<Plug size={21} />
 							</div>
-							<ComingSoonBadge />
 						</div>
 						<h1 className="text-2xl font-semibold tracking-tight text-heading sm:text-3xl">
 							{__('Plugins')}
@@ -115,19 +118,38 @@ function PluginsPage() {
 						</p>
 					</div>
 
-					<div className="flex flex-col gap-2.5 sm:flex-row">
-						<Button variant="secondary" disabled>
-							<span className="inline-flex items-center gap-2">
-								<Upload size={15} />
-								{__('Upload Plugin')}
-							</span>
-						</Button>
-						<Button disabled>
-							<span className="inline-flex items-center gap-2">
-								<Plug size={15} />
-								{__('Add New Plugin')}
-							</span>
-						</Button>
+					{/* Waitlist CTA */}
+					<div className="relative overflow-hidden rounded-2xl border border-accent/20 bg-gradient-to-br from-accent/10 via-accent/5 to-transparent p-5 sm:min-w-[260px]">
+						<div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-accent/10 blur-2xl" />
+						<div className="relative">
+							<div className="mb-2 flex items-center gap-2">
+								<span className="inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-accent">
+									<Sparkles size={9} />
+									{__('Coming Soon')}
+								</span>
+							</div>
+							<p className="mb-4 text-sm font-medium leading-snug text-heading">
+								{__(
+									'Be the first to know when the plugin library launches.'
+								)}
+							</p>
+							<a
+								href={PLUGINS_WAITLIST_URL}
+								target="_blank"
+								rel="noreferrer"
+								className="group inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:bg-accent/90 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm"
+							>
+								<Bell
+									size={15}
+									className="transition-transform group-hover:rotate-12"
+								/>
+								{__('Join the Waitlist')}
+								<ExternalLink
+									size={13}
+									className="opacity-60"
+								/>
+							</a>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -215,7 +237,9 @@ function PluginsPage() {
 										{__('Featured Plugins')}
 									</h3>
 									<p className="text-xs text-text-muted">
-										{__('Hand-picked extensions recommended by the PeakURL team.')}
+										{__(
+											'Hand-picked extensions recommended by the PeakURL team.'
+										)}
 									</p>
 								</div>
 							</div>
@@ -231,7 +255,9 @@ function PluginsPage() {
 										{__('Most Popular')}
 									</h3>
 									<p className="text-xs text-text-muted">
-										{__('Extensions with the highest community adoption.')}
+										{__(
+											'Extensions with the highest community adoption.'
+										)}
 									</p>
 								</div>
 							</div>
@@ -286,37 +312,49 @@ function PluginsPage() {
 						<FeatureRoadmapCard
 							icon={Rocket}
 							title={__('One-Click Installs')}
-							description={__('Browse the plugin library and install ZIP packages straight from the dashboard with compatibility checks.')}
+							description={__(
+								'Browse the plugin library and install ZIP packages straight from the dashboard with compatibility checks.'
+							)}
 							gradient="from-blue-500/10 to-indigo-500/10"
 						/>
 						<FeatureRoadmapCard
 							icon={Eye}
 							title={__('Activate & Manage')}
-							description={__('Review plugin details, enable or disable features, and access per-plugin settings screens.')}
+							description={__(
+								'Review plugin details, enable or disable features, and access per-plugin settings screens.'
+							)}
 							gradient="from-emerald-500/10 to-teal-500/10"
 						/>
 						<FeatureRoadmapCard
 							icon={RefreshCw}
 							title={__('Safe Updates')}
-							description={__('Managed update checks from trusted manifests with rollback guardrails and clear notices.')}
+							description={__(
+								'Managed update checks from trusted manifests with rollback guardrails and clear notices.'
+							)}
 							gradient="from-orange-500/10 to-red-500/10"
 						/>
 						<FeatureRoadmapCard
 							icon={FolderTree}
 							title={__('Persistent Storage')}
-							description={__('Plugins live in content/plugins so core releases never wipe your extensions.')}
+							description={__(
+								'Plugins live in content/plugins so core releases never wipe your extensions.'
+							)}
 							gradient="from-violet-500/10 to-purple-500/10"
 						/>
 						<FeatureRoadmapCard
 							icon={Code2}
 							title={__('Extension APIs')}
-							description={__('Documented hooks for settings screens, link actions, analytics widgets, and integrations.')}
+							description={__(
+								'Documented hooks for settings screens, link actions, analytics widgets, and integrations.'
+							)}
 							gradient="from-pink-500/10 to-rose-500/10"
 						/>
 						<FeatureRoadmapCard
 							icon={ShieldCheck}
 							title={__('Admin Review Flow')}
-							description={__('Every install surfaces version, author, homepage, and compatibility notes before activation.')}
+							description={__(
+								'Every install surfaces version, author, homepage, and compatibility notes before activation.'
+							)}
 							gradient="from-cyan-500/10 to-sky-500/10"
 						/>
 					</div>

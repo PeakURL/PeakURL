@@ -1,0 +1,67 @@
+PeakURL
+Credits and Third-Party Notices
+
+PeakURL
+- Copyright (c) 2026 PeakURL and Abd Ur Rehman
+- License: MIT
+- Full license text: LICENSE
+
+PeakURL is built with and distributed alongside open-source software.
+The self-hosted release package includes the following notable runtime and
+bundled frontend components. Each project remains licensed by its respective
+authors under its own terms.
+
+PHP runtime libraries shipped in the release
+- gettext/gettext 5.7.3 — MIT
+  https://github.com/php-gettext/Gettext
+- gettext/languages 2.12.2 — MIT
+  https://github.com/php-gettext/Languages
+- maxmind-db/reader 1.13.1 — Apache-2.0
+  https://github.com/maxmind/MaxMind-DB-Reader-php
+- phpmailer/phpmailer 6.12.0 — LGPL-2.1-only
+  https://github.com/PHPMailer/PHPMailer
+
+Bundled dashboard and frontend components
+- @headlessui/react 2.2.9 — MIT
+  https://github.com/tailwindlabs/headlessui
+- @reduxjs/toolkit 2.11.2 — MIT
+  https://redux-toolkit.js.org
+- @tailwindcss/vite 4.2.2 — MIT
+  https://tailwindcss.com
+- @visx/geo 3.12.0 — MIT
+  https://github.com/airbnb/visx
+- @visx/zoom 3.12.0 — MIT
+  https://github.com/airbnb/visx
+- @wordpress/i18n 6.16.0 — GPL-2.0-or-later
+  https://github.com/WordPress/gutenberg/tree/HEAD/packages/i18n
+- chart.js 4.5.1 — MIT
+  https://www.chartjs.org
+- d3-scale 4.0.2 — ISC
+  https://d3js.org/d3-scale/
+- date-fns 4.1.0 — MIT
+  https://date-fns.org
+- lucide-react 1.7.0 — ISC
+  https://lucide.dev
+- qrcode 1.5.4 — MIT
+  https://github.com/soldair/node-qrcode
+- react 19.2.4 — MIT
+  https://react.dev
+- react-dom 19.2.4 — MIT
+  https://react.dev
+- react-redux 9.2.0 — MIT
+  https://github.com/reduxjs/react-redux
+- react-router-dom 7.14.0 — MIT
+  https://github.com/remix-run/react-router
+- tailwindcss 4.2.2 — MIT
+  https://tailwindcss.com
+- topojson-client 3.1.0 — ISC
+  https://github.com/topojson/topojson-client
+
+Source and lockfile references
+- PHP package metadata: app/composer.json and app/composer.lock
+- JavaScript package metadata: package.json and package-lock.json
+
+This file is a high-level credits and notices summary for the PeakURL release.
+If you need the complete dependency graph, license details, or source package
+metadata, refer to the lockfiles and upstream project repositories listed
+above.

@@ -10,6 +10,7 @@ import {
 	findDashboardRouteMatches,
 	findDashboardUserMatches,
 	getDashboardSearchValueFromLocation,
+	getLinkDisplayTitle,
 	resolveDashboardSearchPath,
 	buildShortUrl,
 	getDefaultShortUrlOrigin,
@@ -76,11 +77,12 @@ export const useDashboardSearch = () => {
 
 				return {
 					id: link.id,
-					title:
-						link.title ||
+					title: getLinkDisplayTitle(
+						link.title,
 						shortCode ||
-						link.destinationUrl ||
-						__('Untitled Link'),
+							link.destinationUrl ||
+							__('Untitled Link')
+					),
 					description: shortUrl,
 					meta: link.destinationUrl || '',
 					href: shortCode

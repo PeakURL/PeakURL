@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { Button } from '@/components/ui';
 import { __, sprintf } from '@/i18n';
-import { formatDate } from '@/utils';
+import { formatDate, getLinkDisplayTitle } from '@/utils';
 import { Circle, Link2, MousePointerClick } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -9,8 +9,10 @@ const ActivityFeed = ({ recentActivities }) => {
 	// Format activity message
 	const formatActivityMessage = (activity) => {
 		// Prioritize title, fallback to shortId, then "Unknown"
-		const linkName =
-			activity.link?.title || activity.link?.shortCode || __('Unknown');
+		const linkName = getLinkDisplayTitle(
+			activity.link?.title,
+			activity.link?.shortCode || __('Unknown')
+		);
 
 		if (activity.type === 'link_created') {
 			return sprintf(

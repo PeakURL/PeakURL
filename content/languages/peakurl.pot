@@ -176,29 +176,29 @@ msgid "You do not have permission to view this link."
 msgstr ""
 
 #: app/traits/links.php:319
-#: app/traits/links.php:599
+#: app/traits/links.php:594
 msgid "A valid destination URL is required."
 msgstr ""
 
-#: app/traits/links.php:335
-#: app/traits/links.php:628
+#: app/traits/links.php:334
+#: app/traits/links.php:623
 msgid "That short code is reserved by the application."
 msgstr ""
 
-#: app/traits/links.php:341
-#: app/traits/links.php:638
+#: app/traits/links.php:340
+#: app/traits/links.php:633
 msgid "That short code is already in use."
 msgstr ""
 
-#: app/traits/links.php:574
+#: app/traits/links.php:569
 msgid "You do not have permission to edit this link."
 msgstr ""
 
-#: app/traits/links.php:698
+#: app/traits/links.php:693
 msgid "You do not have permission to delete this link."
 msgstr ""
 
-#: app/traits/links.php:751
+#: app/traits/links.php:746
 msgid "You do not have permission to delete links."
 msgstr ""
 
@@ -1301,7 +1301,7 @@ msgstr ""
 #: ui/pages/dashboard/settings/_components/Content/Content.tsx:532
 #: ui/pages/dashboard/links/_components/BulkDeleteModal.tsx:76
 #: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:121
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:202
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:203
 #: ui/pages/dashboard/users/UsersPage.tsx:227
 msgid "Cancel"
 msgstr ""
@@ -1463,7 +1463,7 @@ msgstr ""
 
 #: ui/components/settings/IntegrationsTab.tsx:281
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable.tsx:29
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:190
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:191
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:29
 msgid "Inactive"
 msgstr ""
@@ -1839,7 +1839,8 @@ msgstr ""
 msgid "The dashboard could not reach the PHP API. Make sure the core service is running and try again."
 msgstr ""
 
-#: ui/hooks/useDashboardSearch.ts:83
+#: ui/hooks/useDashboardSearch.ts:84
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:78
 msgid "Untitled Link"
 msgstr ""
 
@@ -2035,7 +2036,7 @@ msgstr ""
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:154
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:580
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable.tsx:66
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:181
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:182
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:28
 msgid "Status"
 msgstr ""
@@ -2146,7 +2147,7 @@ msgstr ""
 
 #: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:47
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable.tsx:25
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:189
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:190
 #: ui/pages/dashboard/links/LinksPage.tsx:285
 msgid "Active"
 msgstr ""
@@ -2238,12 +2239,12 @@ msgid "Bio"
 msgstr ""
 
 #: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:151
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:212
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:213
 msgid "Saving..."
 msgstr ""
 
 #: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:151
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:217
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:218
 #: ui/pages/dashboard/users/UsersPage.tsx:232
 msgid "Save Changes"
 msgstr ""
@@ -2309,8 +2310,8 @@ msgstr ""
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:520
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:526
 #: ui/pages/dashboard/_components/CountryStats.tsx:25
-#: ui/pages/dashboard/_components/ActivityFeed.tsx:13
-#: ui/pages/dashboard/_components/ActivityFeed.tsx:26
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:14
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:28
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:180
 #: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:70
 #: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:77
@@ -3126,7 +3127,7 @@ msgstr ""
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:98
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:654
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:87
-#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:119
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:120
 #: ui/pages/dashboard/users/UsersPage.tsx:174
 msgid "Email"
 msgstr ""
@@ -4167,35 +4168,35 @@ msgstr ""
 msgid "Last 90 days"
 msgstr ""
 
-#: ui/pages/dashboard/_components/ActivityFeed.tsx:17
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:19
 msgid "Created new link <strong>%s</strong>"
 msgstr ""
 
-#: ui/pages/dashboard/_components/ActivityFeed.tsx:23
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:25
 msgid "from %s"
 msgstr ""
 
-#: ui/pages/dashboard/_components/ActivityFeed.tsx:31
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:33
 msgid "Link <strong>%1$s</strong> was clicked %2$s"
 msgstr ""
 
-#: ui/pages/dashboard/_components/ActivityFeed.tsx:35
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:37
 msgid "Link <strong>%s</strong> was clicked"
 msgstr ""
 
-#: ui/pages/dashboard/_components/ActivityFeed.tsx:37
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:39
 msgid "Unknown activity"
 msgstr ""
 
-#: ui/pages/dashboard/_components/ActivityFeed.tsx:59
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:61
 msgid "Recent Activity"
 msgstr ""
 
-#: ui/pages/dashboard/_components/ActivityFeed.tsx:65
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:67
 msgid "No recent activity"
 msgstr ""
 
-#: ui/pages/dashboard/_components/ActivityFeed.tsx:94
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:96
 msgid "View All Links"
 msgstr ""
 
@@ -4333,18 +4334,14 @@ msgstr ""
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:62
 #: ui/pages/dashboard/links/_components/QRCodeModal.tsx:134
-#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:59
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 msgid "Copied!"
 msgstr ""
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:63
 #: ui/pages/dashboard/links/_components/QRCodeModal.tsx:139
-#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:59
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 msgid "Copy"
-msgstr ""
-
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:78
-msgid "Untitled"
 msgstr ""
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:97
@@ -4352,7 +4349,7 @@ msgid "Protected"
 msgstr ""
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:129
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:191
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:192
 msgid "Expired"
 msgstr ""
 
@@ -4399,49 +4396,49 @@ msgid "Are you sure you want to delete this link? This action cannot be undone."
 msgstr ""
 
 #: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:77
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:99
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:100
 #: ui/pages/dashboard/links/_components/QRCodeModal.tsx:110
-#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:50
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:51
 msgid "Short URL"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:46
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:47
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:108
 msgid "Expiration time must be in the future."
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:61
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:62
 msgid "Failed to update link"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:76
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:77
 msgid "Edit Link"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:111
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:112
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/MainInputs.tsx:21
-#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:73
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:74
 msgid "Destination URL"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:126
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:127
 msgid "Title (Optional)"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:133
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:134
 msgid "Enter a title for this link"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:144
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:145
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:32
 msgid "Password Protection (Optional)"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:151
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:152
 msgid "Set a password to protect this link"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:162
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:163
 msgid "Expiration Date (Optional)"
 msgstr ""
 
@@ -4827,23 +4824,23 @@ msgid_plural "devices"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:30
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:31
 msgid "Check out this link"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:83
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:84
 msgid "Quick Share"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:92
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:93
 msgid "Facebook"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:101
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:102
 msgid "Twitter"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:110
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:111
 msgid "LinkedIn"
 msgstr ""
 

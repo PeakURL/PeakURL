@@ -10,6 +10,7 @@ import {
 	Mail,
 } from 'lucide-react';
 import { __ } from '@/i18n';
+import { getLinkDisplayTitle } from '@/utils';
 
 function ShareTab({ link, shortUrl }) {
 	const [copied, setCopied] = useState(false);
@@ -27,7 +28,7 @@ function ShareTab({ link, shortUrl }) {
 	const handleShare = (platform) => {
 		const url = encodeURIComponent(shortUrl);
 		const title = encodeURIComponent(
-			link.title || __('Check out this link')
+			getLinkDisplayTitle(link.title, __('Check out this link'))
 		);
 
 		const shareUrls = {

@@ -341,11 +341,11 @@ trait LinksTrait {
 			throw new ApiException( __( 'That short code is already in use.', 'peakurl' ), 422 );
 		}
 
-		$title = trim( (string) ( $payload['title'] ?? '' ) );
-
-		if ( '' === $title ) {
-			$title = $uses_custom_alias ? ucfirst( $alias ) : 'Untitled Link';
-		}
+		$title = $this->resolve_new_url_title(
+			$payload['title'] ?? '',
+			$alias,
+			$uses_custom_alias,
+		);
 
 		$id  = $this->generate_random_id();
 		$now = $this->now();
@@ -357,7 +357,7 @@ trait LinksTrait {
 				'user_id'         => $user['id'],
 				'short_code'      => $alias,
 				'alias'           => $alias,
-				'title'           => $title,
+				'title'           => '' !== $title ? $title : null,
 				'destination_url' => $destination_url,
 				'password_value'  =>
 					'' !== trim( (string) ( $payload['password'] ?? '' ) )
@@ -396,13 +396,44 @@ trait LinksTrait {
 			$id,
 			array(
 				'link' => array(
-					'title'     => '' !== $title ? $title : 'Untitled Link',
+					'title'     => '' !== $title ? $title : null,
 					'shortCode' => $alias,
 				),
 			),
 		);
 
 		return $this->hydrate_url_row( $this->find_url_row( $id ) );
+	}
+
+	/**
+	 * Resolve the stored title for a newly created link.
+	 *
+	 * Custom aliases keep the existing PeakURL behavior of using the alias as
+	 * the default title when the user does not enter one. Auto-generated short
+	 * codes remain untitled so the UI can render the localized fallback label.
+	 *
+	 * @param mixed  $title             Raw request title value.
+	 * @param string $alias             Final stored alias / short code.
+	 * @param bool   $uses_custom_alias Whether the alias came from user input.
+	 * @return string Normalized title value.
+	 * @since 1.0.3
+	 */
+	private function resolve_new_url_title(
+		$title,
+		string $alias,
+		bool $uses_custom_alias
+	): string {
+		$normalized_title = trim( (string) $title );
+
+		if ( '' !== $normalized_title ) {
+			return $normalized_title;
+		}
+
+		if ( $uses_custom_alias ) {
+			return ucfirst( $alias );
+		}
+
+		return '';
 	}
 
 	/**

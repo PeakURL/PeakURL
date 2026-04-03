@@ -95,7 +95,7 @@ trait HydrationTrait {
 			'id'             => (string) $row['id'],
 			'shortCode'      => (string) $row['short_code'],
 			'alias'          => (string) $row['alias'],
-			'title'          => (string) ( $row['title'] ?? '' ),
+			'title'          => trim( (string) ( $row['title'] ?? '' ) ),
 			'destinationUrl' => (string) $row['destination_url'],
 			'domain'         => null,
 			'clicks'         => (int) ( $row['click_count'] ?? 0 ),

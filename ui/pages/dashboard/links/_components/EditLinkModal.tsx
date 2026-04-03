@@ -8,6 +8,7 @@ import { __ } from '@/i18n';
 import {
 	buildShortUrl,
 	getDefaultShortUrlOrigin,
+	normalizeLinkTitle,
 	getLocalDateTimeValue,
 	isFutureLocalDateTime,
 	toIsoFromLocalDateTime,
@@ -15,12 +16,12 @@ import {
 } from '@/utils';
 
 function EditLinkModal({ open, setOpen, link }) {
-	const getInitialTitle = () => link?.title || '';
+	const getInitialTitle = () => normalizeLinkTitle(link?.title);
 	const getInitialStatus = () => link?.status || 'active';
 	const getInitialPassword = () => link?.password || '';
 	const getInitialExpiresAt = () => toLocalDateTimeValue(link?.expiresAt);
 
-	const [title, setTitle] = useState(link?.title || '');
+	const [title, setTitle] = useState(getInitialTitle);
 	const [status, setStatus] = useState(link?.status || 'active');
 	const [password, setPassword] = useState(link?.password || '');
 	const [expiresAt, setExpiresAt] = useState(getInitialExpiresAt);

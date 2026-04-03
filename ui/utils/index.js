@@ -63,6 +63,10 @@ export {
 	resolveLinkHost,
 } from './linkHelpers';
 export {
+	getLinkDisplayTitle,
+	normalizeLinkTitle,
+} from './linkTitles';
+export {
 	extractAliasFromShortUrl,
 	normalizeCsvHeader,
 	parseCsvRows,

@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { isPast } from 'date-fns';
 import { __ } from '@/i18n';
-import { formatRelativeTime } from '@/utils';
+import { formatRelativeTime, getLinkDisplayTitle } from '@/utils';
 
 function LinkRow({
 	link,
@@ -75,7 +75,7 @@ function LinkRow({
 			</td>
 			<td className="px-4 py-3">
 				<div className="text-sm text-heading font-medium truncate max-w-[150px]">
-					{link.title || __('Untitled')}
+					{getLinkDisplayTitle(link.title, __('Untitled Link'))}
 				</div>
 			</td>
 			<td className="px-4 py-3">

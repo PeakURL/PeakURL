@@ -18,6 +18,7 @@ const baseApi = createApi({
 		'Security',
 		'Geoip',
 		'Mail',
+		'AdminNotices',
 		'Updates',
 	],
 	endpoints: () => ({}),

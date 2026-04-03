@@ -2,6 +2,10 @@ import baseApi from './base';
 
 export const systemApi = baseApi.injectEndpoints({
 	endpoints: (build) => ({
+		getAdminNotices: build.query({
+			query: () => 'system/notices',
+			providesTags: ['AdminNotices'],
+		}),
 		getGeoipStatus: build.query({
 			query: () => 'system/geoip',
 			providesTags: ['Geoip'],
@@ -16,7 +20,7 @@ export const systemApi = baseApi.injectEndpoints({
 				method: 'POST',
 				body,
 			}),
-			invalidatesTags: ['Geoip'],
+			invalidatesTags: ['Geoip', 'AdminNotices'],
 		}),
 		saveMailConfiguration: build.mutation({
 			query: (body) => ({
@@ -31,7 +35,7 @@ export const systemApi = baseApi.injectEndpoints({
 				url: 'system/geoip/download',
 				method: 'POST',
 			}),
-			invalidatesTags: ['Geoip'],
+			invalidatesTags: ['Geoip', 'AdminNotices'],
 		}),
 		getUpdateStatus: build.query({
 			query: () => 'system/update',
@@ -42,19 +46,20 @@ export const systemApi = baseApi.injectEndpoints({
 				url: 'system/update/check',
 				method: 'POST',
 			}),
-			invalidatesTags: ['Updates'],
+			invalidatesTags: ['Updates', 'AdminNotices'],
 		}),
 		applyUpdate: build.mutation({
 			query: () => ({
 				url: 'system/update/apply',
 				method: 'POST',
 			}),
-			invalidatesTags: ['Updates'],
+			invalidatesTags: ['Updates', 'AdminNotices'],
 		}),
 	}),
 });
 
 export const {
+	useGetAdminNoticesQuery,
 	useGetGeoipStatusQuery,
 	useGetMailStatusQuery,
 	useSaveGeoipConfigurationMutation,

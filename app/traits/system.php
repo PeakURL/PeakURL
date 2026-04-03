@@ -14,6 +14,7 @@ use PeakURL\Includes\Constants;
 use PeakURL\Includes\RuntimeConfig;
 use PeakURL\Http\ApiException;
 use PeakURL\Http\Request;
+use PeakURL\Services\AdminNotices;
 use PeakURL\Services\Crypto;
 use PeakURL\Services\Geoip;
 use PeakURL\Services\Mailer;
@@ -34,6 +35,57 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  */
 trait SystemTrait {
+
+	/**
+	 * Return the current dashboard admin notices.
+	 *
+	 * @param Request $request Incoming authenticated request.
+	 * @return array<int, array<string, mixed>>
+	 * @since 1.0.3
+	 */
+	public function get_admin_notices( Request $request ): array {
+		$user    = $this->get_current_user( $request );
+		$service = new AdminNotices();
+
+		return $service->get_notices(
+			$this->build_admin_notice_context( $user ),
+		);
+	}
+
+	/**
+	 * Build the shared dashboard notice context for the current user.
+	 *
+	 * @param array<string, mixed> $user Current authenticated user row.
+	 * @return array<string, mixed>
+	 * @since 1.0.3
+	 */
+	private function build_admin_notice_context( array $user ): array {
+		$capabilities = array(
+			'manageUpdates'      => $this->roles->user_can( $user, 'manage_updates' ),
+			'manageLocationData' => $this->roles->user_can( $user, 'manage_location_data' ),
+		);
+		$context      = array(
+			'user'         => $user,
+			'capabilities' => $capabilities,
+		);
+
+		if ( ! empty( $capabilities['manageUpdates'] ) ) {
+			$context['updateStatus'] = $this->load_update_status( false );
+		}
+
+		if ( ! empty( $capabilities['manageLocationData'] ) ) {
+			$geoip_status                     = $this->geoip_service->get_status();
+			$last_downloaded_at               = $this->get_setting_value( 'geoip_last_downloaded_at' );
+			$geoip_status['installed']        = ! empty( $geoip_status['locationAnalyticsReady'] );
+			$geoip_status['lastDownloadedAt'] =
+				$last_downloaded_at
+					? $this->to_iso( (string) $last_downloaded_at )
+					: null;
+			$context['geoipStatus']           = $geoip_status;
+		}
+
+		return $context;
+	}
 
 	/**
 	 * Return the current mail delivery configuration status.

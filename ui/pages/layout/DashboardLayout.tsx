@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { PEAKURL_VERSION } from '@constants';
 import DashboardSidebar from './DashboardSidebar';
 import { DashboardAppBar } from './DashboardAppBar';
-import { GeoipNotice } from './GeoipNotice';
+import { AdminNotices } from './AdminNotices';
 
 export const DashboardLayout = ({ children }) => {
 	const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
@@ -14,7 +14,8 @@ export const DashboardLayout = ({ children }) => {
 	const location = useLocation();
 	const footerLink =
 		'https://peakurl.org?utm_source=peakurl_dashboard&utm_medium=dashboard_footer&utm_campaign=app_footer';
-	const shouldShowGeoipNotice = '/dashboard/about' !== location.pathname;
+	const normalizedPath = location.pathname.replace(/\/+$/, '') || '/';
+	const showAdminNotices = normalizedPath !== '/dashboard/about';
 
 	return (
 		<div className="min-h-screen bg-bg">
@@ -31,7 +32,7 @@ export const DashboardLayout = ({ children }) => {
 
 				<div className="flex min-h-[calc(100vh-4rem)] flex-col">
 					<main className="flex-1 flex flex-col p-4 sm:p-6">
-						{shouldShowGeoipNotice ? <GeoipNotice /> : null}
+						{showAdminNotices ? <AdminNotices /> : null}
 						{children}
 					</main>
 

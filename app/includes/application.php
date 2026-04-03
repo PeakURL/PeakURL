@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace PeakURL\Includes;
 
 use PeakURL\Controllers\AnalyticsController;
+use PeakURL\Controllers\AdminNoticesController;
 use PeakURL\Controllers\AuthController;
 use PeakURL\Controllers\GeoipController;
 use PeakURL\Controllers\MailController;
@@ -126,6 +127,7 @@ class Application {
 		$webhooks  = new WebhooksController( $this->data_store );
 		$geoip     = new GeoipController( $this->data_store );
 		$mail      = new MailController( $this->data_store );
+		$notices   = new AdminNoticesController( $this->data_store );
 		$updates   = new UpdatesController( $this->data_store );
 
 		$this->router->get( '/api/v1/health', array( $this, 'health' ) );
@@ -275,6 +277,13 @@ class Application {
 		$this->router->post( '/api/v1/webhooks', array( $webhooks, 'create' ) );
 		$this->router->delete( '/api/v1/webhooks/{id}', array( $webhooks, 'delete' ) );
 
+		$this->router->get(
+			'/api/v1/system/notices',
+			array(
+				$notices,
+				'index',
+			)
+		);
 		$this->router->get(
 			'/api/v1/system/geoip',
 			array(

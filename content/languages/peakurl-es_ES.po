@@ -4298,7 +4298,12 @@ msgstr "Tamaño de página personalizado"
 msgid "Export"
 msgstr "Exportar"
 
+#: ui/pages/dashboard/tools/ExportPage.tsx:55
+msgid "Preparing..."
+msgstr "Preparando..."
+
 #: ui/pages/dashboard/links/_components/TableFooter.tsx:112
+#: ui/pages/dashboard/tools/ExportPage.tsx:81
 msgid "Export CSV"
 msgstr "Exportar CSV"
 
@@ -4307,6 +4312,7 @@ msgid "Import ready"
 msgstr "Listo para importar"
 
 #: ui/pages/dashboard/links/_components/TableFooter.tsx:117
+#: ui/pages/dashboard/tools/ExportPage.tsx:91
 msgid "Export JSON"
 msgstr "Exportar JSON"
 
@@ -4315,12 +4321,81 @@ msgid "Structured data"
 msgstr "Datos estructurados"
 
 #: ui/pages/dashboard/links/_components/TableFooter.tsx:122
+#: ui/pages/dashboard/tools/ExportPage.tsx:100
 msgid "Export XML"
 msgstr "Exportar XML"
 
 #: ui/pages/dashboard/links/_components/TableFooter.tsx:123
 msgid "Portable feed"
 msgstr "Fuente portable"
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:83
+msgid "Download a spreadsheet-friendly file that can also be imported back into PeakURL later."
+msgstr "Descarga un archivo compatible con hojas de cálculo que también podrás volver a importar en PeakURL más adelante."
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:86
+msgid "Comma-separated values"
+msgstr "Valores separados por comas"
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:92
+msgid "Download a structured snapshot for scripts, integrations, or backups."
+msgstr "Descarga una instantánea estructurada para scripts, integraciones o copias de seguridad."
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:95
+msgid "JavaScript Object Notation"
+msgstr "Notación de objetos de JavaScript"
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:101
+msgid "Download a portable XML feed with the full link dataset and analytics totals."
+msgstr "Descarga un feed XML portable con el conjunto completo de enlaces y los totales de analíticas."
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:104
+msgid "Extensible Markup Language"
+msgstr "Lenguaje de marcado extensible"
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:120
+msgid "Nothing to export"
+msgstr "No hay nada para exportar"
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:121
+msgid "No links are available for export yet."
+msgstr "Todavía no hay enlaces disponibles para exportar."
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:128
+msgid "Export downloaded"
+msgstr "Exportación descargada"
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:130
+msgid "Downloaded %1$s links as %2$s."
+msgstr "Se descargaron %1$s enlaces en formato %2$s."
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:137
+msgid "Export failed"
+msgstr "La exportación falló"
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:139
+msgid "PeakURL could not prepare the export right now."
+msgstr "PeakURL no pudo preparar la exportación en este momento."
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:153
+msgid "Export all links you can access from one place in CSV, JSON, or XML."
+msgstr "Exporta todos los enlaces a los que tienes acceso desde un solo lugar en CSV, JSON o XML."
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:165
+msgid "Bulk Link Export"
+msgstr "Exportación masiva de enlaces"
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:169
+msgid "Each export includes destination URLs, aliases, titles, short URLs, click totals, unique visitor totals, and created dates."
+msgstr "Cada exportación incluye las URL de destino, alias, títulos, URL cortas, totales de clics, totales de visitantes únicos y fechas de creación."
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:174
+msgid "Exports follow your current permissions. Admins can export all site links, while editors can export only their own links."
+msgstr "Las exportaciones respetan tus permisos actuales. Los administradores pueden exportar todos los enlaces del sitio, mientras que los editores solo pueden exportar los suyos."
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:182
+msgid "Exportable Links"
+msgstr "Enlaces exportables"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:21
 msgid "%s selected"

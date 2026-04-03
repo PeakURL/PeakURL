@@ -18,12 +18,13 @@ import {
 function EditLinkModal({ open, setOpen, link }) {
 	const getInitialTitle = () => normalizeLinkTitle(link?.title);
 	const getInitialStatus = () => link?.status || 'active';
-	const getInitialPassword = () => link?.password || '';
 	const getInitialExpiresAt = () => toLocalDateTimeValue(link?.expiresAt);
+	const hasExistingPassword = Boolean(link?.hasPassword);
 
 	const [title, setTitle] = useState(getInitialTitle);
 	const [status, setStatus] = useState(link?.status || 'active');
-	const [password, setPassword] = useState(link?.password || '');
+	const [password, setPassword] = useState('');
+	const [clearPassword, setClearPassword] = useState(false);
 	const [expiresAt, setExpiresAt] = useState(getInitialExpiresAt);
 	const [error, setError] = useState('');
 
@@ -49,12 +50,21 @@ function EditLinkModal({ open, setOpen, link }) {
 		}
 
 		try {
-			await updateUrl({
+			const payload = {
 				id: link.id,
 				title: title.trim() || undefined,
 				status,
-				password: password || '',
 				expiresAt: expiresAt ? toIsoFromLocalDateTime(expiresAt) : null,
+			};
+
+			if (clearPassword) {
+				payload.clearPassword = true;
+			} else if (password.trim()) {
+				payload.password = password.trim();
+			}
+
+			await updateUrl({
+				...payload,
 			}).unwrap();
 
 			handleClose();
@@ -145,13 +155,43 @@ function EditLinkModal({ open, setOpen, link }) {
 								{__('Password Protection (Optional)')}
 							</label>
 							<input
-								type="text"
+								type="password"
 								id="password"
 								value={password}
+								disabled={clearPassword}
 								onChange={(e) => setPassword(e.target.value)}
-								placeholder={__('Set a password to protect this link')}
+								placeholder={
+									hasExistingPassword
+										? __('Enter a new password to replace the current one')
+										: __('Set a password to protect this link')
+								}
 								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading"
 							/>
+							{hasExistingPassword && (
+								<div className="mt-2 space-y-2">
+									<p className="text-xs text-text-muted">
+										{__(
+											'Leave this blank to keep the current password.'
+										)}
+									</p>
+									<label className="flex items-center gap-2 text-sm text-heading">
+										<input
+											type="checkbox"
+											checked={clearPassword}
+											onChange={(e) => {
+												setClearPassword(
+													e.target.checked
+												);
+												if (e.target.checked) {
+													setPassword('');
+												}
+											}}
+											className="rounded border-stroke text-accent focus:ring-accent focus:ring-2"
+										/>
+										{__('Remove password protection')}
+									</label>
+								</div>
+							)}
 						</div>
 
 						{/* Expiration Date */}

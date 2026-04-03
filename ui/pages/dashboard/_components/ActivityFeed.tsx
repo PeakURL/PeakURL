@@ -6,7 +6,6 @@ import { Circle, Link2, MousePointerClick } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const ActivityFeed = ({ recentActivities }) => {
-	// Format activity message
 	const formatActivityMessage = (activity) => {
 		// Prioritize title, fallback to shortId, then "Unknown"
 		const linkName = getLinkDisplayTitle(
@@ -15,10 +14,7 @@ const ActivityFeed = ({ recentActivities }) => {
 		);
 
 		if (activity.type === 'link_created') {
-			return sprintf(
-				__('Created new link <strong>%s</strong>'),
-				linkName
-			);
+			return sprintf(__('Created new link %s'), linkName);
 		} else if (activity.type === 'click') {
 			const location = activity.location
 				? sprintf(
@@ -30,11 +26,11 @@ const ActivityFeed = ({ recentActivities }) => {
 				: '';
 			return location
 				? sprintf(
-						__('Link <strong>%1$s</strong> was clicked %2$s'),
+						__('Link %1$s was clicked %2$s'),
 						linkName,
 						location
 				  )
-				: sprintf(__('Link <strong>%s</strong> was clicked'), linkName);
+				: sprintf(__('Link %s was clicked'), linkName);
 		}
 		return activity.message || __('Unknown activity');
 	};
@@ -77,12 +73,9 @@ const ActivityFeed = ({ recentActivities }) => {
 								{getActivityIcon(activity.type)}
 							</div>
 							<div className="flex-1 min-w-0">
-								<p
-									className="text-sm text-heading leading-relaxed"
-									dangerouslySetInnerHTML={{
-										__html: formatActivityMessage(activity),
-									}}
-								/>
+								<p className="text-sm text-heading leading-relaxed">
+									{formatActivityMessage(activity)}
+								</p>
 								<p className="text-xs text-text-muted mt-1">
 									{formatDate(activity.timestamp)}
 								</p>

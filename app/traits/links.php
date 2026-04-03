@@ -14,6 +14,7 @@ use PeakURL\Http\ApiException;
 use PeakURL\Http\Request;
 use PeakURL\Utils\Query;
 use PeakURL\Utils\Security;
+use PeakURL\Utils\Secrets;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -213,12 +214,7 @@ trait LinksTrait {
 					);
 				}
 
-				if (
-					hash_equals(
-						(string) ( $url['password_value'] ?? '' ),
-						$password_attempt,
-					)
-				) {
+				if ( $this->public_link_password_matches( $url, $password_attempt ) ) {
 					$request->queue_cookie(
 						$cookie_name,
 						$expected_cookie,
@@ -316,8 +312,11 @@ trait LinksTrait {
 			$uses_custom_alias,
 		);
 
-		$id  = $this->generate_random_id();
-		$now = $this->now();
+		$id       = $this->generate_random_id();
+		$now      = $this->now();
+		$password = $this->normalize_link_password_input(
+			$payload['password'] ?? '',
+		);
 
 		$this->db->insert(
 			'urls',
@@ -328,10 +327,9 @@ trait LinksTrait {
 				'alias'           => $alias,
 				'title'           => '' !== $title ? $title : null,
 				'destination_url' => $destination_url,
-				'password_value'  =>
-					'' !== trim( (string) ( $payload['password'] ?? '' ) )
-						? trim( (string) $payload['password'] )
-						: null,
+				'password_value'  => '' !== $password
+					? Secrets::hash_link_password( $password )
+					: null,
 				'expires_at'      => $this->normalize_datetime_value(
 					$payload['expiresAt'] ?? null,
 				),
@@ -403,6 +401,35 @@ trait LinksTrait {
 		}
 
 		return '';
+	}
+
+	/**
+	 * Normalize raw protected-link password input.
+	 *
+	 * @param mixed $value Raw request value.
+	 * @return string
+	 * @since 1.0.3
+	 */
+	private function normalize_link_password_input( $value ): string {
+		return trim( (string) $value );
+	}
+
+	/**
+	 * Verify a public password attempt against the stored link secret.
+	 *
+	 * @param array<string, mixed> $url      Raw URL row.
+	 * @param string               $password Password attempt.
+	 * @return bool
+	 * @since 1.0.3
+	 */
+	private function public_link_password_matches(
+		array $url,
+		string $password
+	): bool {
+		return Secrets::verify_link_password(
+			$this->normalize_link_password_input( $password ),
+			(string) ( $url['password_value'] ?? '' ),
+		);
 	}
 
 	/**
@@ -580,7 +607,6 @@ trait LinksTrait {
 		$field_map = array(
 			'title'          => 'title',
 			'destinationUrl' => 'destination_url',
-			'password'       => 'password_value',
 			'status'         => 'status',
 		);
 
@@ -608,6 +634,23 @@ trait LinksTrait {
 
 			$updates[]         = $column . ' = :' . $column;
 			$params[ $column ] = is_string( $value ) ? trim( $value ) : $value;
+		}
+
+		$clear_password = ! empty( $payload['clearPassword'] );
+
+		if ( $clear_password ) {
+			$updates[] = 'password_value = NULL';
+		} elseif ( array_key_exists( 'password', $payload ) ) {
+			$password = $this->normalize_link_password_input(
+				$payload['password'],
+			);
+
+			if ( '' !== $password ) {
+				$updates[]                = 'password_value = :password_value';
+				$params['password_value'] = Secrets::hash_link_password(
+					$password,
+				);
+			}
 		}
 
 		if ( array_key_exists( 'expiresAt', $payload ) ) {

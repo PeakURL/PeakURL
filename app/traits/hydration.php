@@ -101,7 +101,9 @@ trait HydrationTrait {
 			'clicks'         => (int) ( $row['click_count'] ?? 0 ),
 			'uniqueClicks'   => (int) ( $row['unique_click_count'] ?? 0 ),
 			'status'         => (string) ( $row['status'] ?? 'active' ),
-			'password'       => (string) ( $row['password_value'] ?? '' ),
+			'hasPassword'    => '' !== trim(
+				(string) ( $row['password_value'] ?? '' ),
+			),
 			'expiresAt'      => $row['expires_at']
 				? $this->to_iso( (string) $row['expires_at'] )
 				: null,

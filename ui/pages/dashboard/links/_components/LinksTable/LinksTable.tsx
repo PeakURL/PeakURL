@@ -20,7 +20,6 @@ const LinksTable = ({ links, statsShortId, statsLink }) => {
 	const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
 	const [selectedLink, setSelectedLink] = useState(null);
 	const [selectedIds, setSelectedIds] = useState([]);
-	const [revealedPasswords, setRevealedPasswords] = useState({});
 	const [searchParams, setSearchParams] = useSearchParams();
 
 	useEffect(() => {
@@ -79,13 +78,6 @@ const LinksTable = ({ links, statsShortId, statsLink }) => {
 		setQrModalOpen(true);
 	};
 
-	const togglePassword = (id) => {
-		setRevealedPasswords((prev) => ({
-			...prev,
-			[id]: !prev[id],
-		}));
-	};
-
 	const handleSelectAll = (e) => {
 		if (e.target.checked) {
 			setSelectedIds(links.map((link) => link.id));
@@ -138,8 +130,6 @@ const LinksTable = ({ links, statsShortId, statsLink }) => {
 								onEdit={handleEdit}
 								onDelete={handleDelete}
 								onQRCode={handleQRCode}
-								revealedPasswords={revealedPasswords}
-								togglePassword={togglePassword}
 								formatNumber={formatNumber}
 							/>
 						))}

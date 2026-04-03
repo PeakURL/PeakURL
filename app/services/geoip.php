@@ -497,8 +497,7 @@ class Geoip {
 		$body       = curl_exec( $handle );
 		$status     = (int) curl_getinfo( $handle, CURLINFO_RESPONSE_CODE );
 		$curl_error = curl_error( $handle );
-
-		curl_close( $handle );
+		unset( $handle );
 
 		if ( false === $body ) {
 			throw new \RuntimeException(

@@ -103,7 +103,7 @@ class Update {
 	 *
 	 * @return string Manifest URL (defaults to api.peakurl.org).
 	 *
-	 * @throws \RuntimeException When the URL scheme is not HTTP(S).
+	 * @throws \RuntimeException When the URL is not a valid HTTPS endpoint.
 	 * @since 1.0.0
 	 */
 	public function get_manifest_url(): string {
@@ -112,18 +112,16 @@ class Update {
 		);
 
 		if ( '' === $manifest_url ) {
-			return Constants::DEFAULT_UPDATE_MANIFEST_URL;
-		}
-
-		$scheme = strtolower( (string) parse_url( $manifest_url, PHP_URL_SCHEME ) );
-
-		if ( ! in_array( $scheme, array( 'http', 'https' ), true ) ) {
-			throw new \RuntimeException(
-				__( 'The update manifest URL must use HTTP or HTTPS.', 'peakurl' ),
+			return $this->assert_https_url(
+				Constants::DEFAULT_UPDATE_MANIFEST_URL,
+				__( 'update manifest URL', 'peakurl' ),
 			);
 		}
 
-		return $manifest_url;
+		return $this->assert_https_url(
+			$manifest_url,
+			__( 'update manifest URL', 'peakurl' ),
+		);
 	}
 
 	/**
@@ -260,6 +258,11 @@ class Update {
 				__( 'The update manifest is missing a package URL or version.', 'peakurl' ),
 			);
 		}
+
+		$package_url = $this->assert_https_url(
+			$package_url,
+			__( 'release package URL', 'peakurl' ),
+		);
 
 		$lock        = $this->acquire_lock();
 		$working_dir = $this->build_path(
@@ -398,6 +401,27 @@ class Update {
 				__( 'The update manifest did not include a package URL.', 'peakurl' ),
 			);
 		}
+
+		if ( '' === $checksum ) {
+			throw new \RuntimeException(
+				__( 'The update manifest did not include a SHA-256 checksum.', 'peakurl' ),
+			);
+		}
+
+		if ( ! preg_match( '/^[a-f0-9]{64}$/', $checksum ) ) {
+			throw new \RuntimeException(
+				__( 'The update manifest included an invalid SHA-256 checksum.', 'peakurl' ),
+			);
+		}
+
+		$package_url  = $this->assert_https_url(
+			$package_url,
+			__( 'release package URL', 'peakurl' ),
+		);
+		$download_url = $this->assert_https_url(
+			$download_url,
+			__( 'release download URL', 'peakurl' ),
+		);
 
 		return array(
 			'product'         => trim(
@@ -645,7 +669,9 @@ class Update {
 		$expected_checksum = strtolower( trim( $expected_checksum ) );
 
 		if ( '' === $expected_checksum ) {
-			return;
+			throw new \RuntimeException(
+				__( 'The update manifest did not include a SHA-256 checksum.', 'peakurl' ),
+			);
 		}
 
 		$actual_checksum = hash_file( 'sha256', $file_path );
@@ -999,6 +1025,11 @@ class Update {
 	 * @since 1.0.0
 	 */
 	private function http_get( string $url, string $accept ): string {
+		$this->assert_https_url(
+			$url,
+			__( 'remote update URL', 'peakurl' ),
+		);
+
 		if ( function_exists( 'curl_init' ) ) {
 			return $this->http_get_with_curl( $url, $accept );
 		}
@@ -1028,7 +1059,10 @@ class Update {
 			array(
 				CURLOPT_RETURNTRANSFER => true,
 				CURLOPT_FOLLOWLOCATION => true,
+				CURLOPT_MAXREDIRS      => 5,
 				CURLOPT_TIMEOUT        => 30,
+				CURLOPT_SSL_VERIFYPEER => true,
+				CURLOPT_SSL_VERIFYHOST => 2,
 				CURLOPT_HTTPHEADER     => array(
 					'Accept: ' . $accept,
 					'User-Agent: ' . $this->build_user_agent(),
@@ -1036,10 +1070,18 @@ class Update {
 			),
 		);
 
+		if ( defined( 'CURLOPT_PROTOCOLS' ) && defined( 'CURLPROTO_HTTPS' ) ) {
+			curl_setopt( $curl, CURLOPT_PROTOCOLS, CURLPROTO_HTTPS );
+		}
+
+		if ( defined( 'CURLOPT_REDIR_PROTOCOLS' ) && defined( 'CURLPROTO_HTTPS' ) ) {
+			curl_setopt( $curl, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTPS );
+		}
+
 		$body       = curl_exec( $curl );
 		$status     = (int) curl_getinfo( $curl, CURLINFO_RESPONSE_CODE );
 		$curl_error = curl_error( $curl );
-		curl_close( $curl );
+		unset( $curl );
 
 		if ( false === $body ) {
 			throw new \RuntimeException(
@@ -1084,6 +1126,11 @@ class Update {
 							'User-Agent: ' . $this->build_user_agent(),
 						),
 					),
+				),
+				'ssl'  => array(
+					'verify_peer'       => true,
+					'verify_peer_name'  => true,
+					'allow_self_signed' => false,
 				),
 			),
 		);
@@ -1138,6 +1185,48 @@ class Update {
 		}
 
 		return (string) $body;
+	}
+
+	/**
+	 * Validate that an updater URL is a well-formed HTTPS endpoint.
+	 *
+	 * @param string $url   Candidate absolute URL.
+	 * @param string $label Human-readable field label.
+	 * @return string
+	 *
+	 * @throws \RuntimeException When the URL is invalid or not HTTPS.
+	 * @since 1.0.3
+	 */
+	private function assert_https_url( string $url, string $label ): string {
+		$url   = trim( $url );
+		$parts = parse_url( $url );
+
+		if (
+			'' === $url ||
+			! is_array( $parts ) ||
+			empty( $parts['scheme'] ) ||
+			empty( $parts['host'] )
+		) {
+			throw new \RuntimeException(
+				sprintf(
+					/* translators: %s: manifest field label. */
+					__( 'The %s is not a valid absolute URL.', 'peakurl' ),
+					$label,
+				),
+			);
+		}
+
+		if ( 'https' !== strtolower( (string) $parts['scheme'] ) ) {
+			throw new \RuntimeException(
+				sprintf(
+					/* translators: %s: manifest field label. */
+					__( 'The %s must use HTTPS.', 'peakurl' ),
+					$label,
+				),
+			);
+		}
+
+		return $url;
 	}
 
 	/**

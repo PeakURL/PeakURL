@@ -14,6 +14,7 @@ use PeakURL\Includes\Constants;
 use PeakURL\Http\ApiException;
 use PeakURL\Http\Request;
 use PeakURL\Utils\Security;
+use PeakURL\Utils\Secrets;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -73,7 +74,7 @@ trait AccountsTrait {
 		}
 
 		$now                = $this->now();
-		$verification_token = bin2hex( random_bytes( 20 ) );
+		$verification_token = $this->issue_lookup_token();
 
 		$this->db->insert(
 			'users',
@@ -85,7 +86,7 @@ trait AccountsTrait {
 				'password_hash'                 => password_hash( $password, PASSWORD_DEFAULT ),
 				'role'                          => 'editor',
 				'is_email_verified'             => 0,
-				'email_verification_token'      => $verification_token,
+				'email_verification_token'      => $verification_token['hash'],
 				'email_verification_expires_at' => gmdate(
 					'Y-m-d H:i:s',
 					strtotime( '+1 day' ),
@@ -122,13 +123,15 @@ trait AccountsTrait {
 			throw new ApiException( __( 'Verification token is required.', 'peakurl' ), 422 );
 		}
 
+		$token_hash = Secrets::hash_lookup_token( $token );
+
 		$user = $this->query_one(
 			'SELECT * FROM users
             WHERE email_verification_token = :token
             AND (email_verification_expires_at IS NULL OR email_verification_expires_at >= :now)
             LIMIT 1',
 			array(
-				'token' => $token,
+				'token' => $token_hash,
 				'now'   => $this->now(),
 			),
 		);
@@ -185,6 +188,8 @@ trait AccountsTrait {
 			return array( 'resent' => false );
 		}
 
+		$verification_token = $this->issue_lookup_token();
+
 		$this->execute(
 			'UPDATE users
             SET email_verification_token = :token,
@@ -192,7 +197,7 @@ trait AccountsTrait {
                 updated_at = :updated_at
             WHERE id = :id',
 			array(
-				'token'      => bin2hex( random_bytes( 20 ) ),
+				'token'      => $verification_token['hash'],
 				'expires_at' => gmdate( 'Y-m-d H:i:s', strtotime( '+1 day' ) ),
 				'updated_at' => $this->now(),
 				'id'         => $user['id'],
@@ -376,7 +381,7 @@ trait AccountsTrait {
 		)
 			? $this->find_user_row_by_email( $normalized_identifier )
 			: $this->find_user_row_by_username( $identifier );
-		$reset_token           = bin2hex( random_bytes( 20 ) );
+		$reset_token           = $this->issue_lookup_token();
 
 		if ( ! $user ) {
 			return array( 'identifier' => $identifier );
@@ -389,7 +394,7 @@ trait AccountsTrait {
                 updated_at = :updated_at
             WHERE id = :id',
 			array(
-				'token'      => $reset_token,
+				'token'      => $reset_token['hash'],
 				'expires_at' => gmdate( 'Y-m-d H:i:s', strtotime( '+1 hour' ) ),
 				'updated_at' => $this->now(),
 				'id'         => $user['id'],
@@ -399,7 +404,7 @@ trait AccountsTrait {
 		try {
 			$this->notifications_service->send_password_reset_email(
 				$user,
-				$reset_token,
+				$reset_token['raw'],
 			);
 		} catch ( \RuntimeException $exception ) {
 			error_log(
@@ -427,6 +432,7 @@ trait AccountsTrait {
 	public function reset_password( string $token, array $payload ): bool {
 		$password =
 			(string) ( $payload['password'] ?? ( $payload['newPassword'] ?? '' ) );
+		$token    = trim( $token );
 
 		if ( strlen( $password ) < 8 ) {
 			throw new ApiException(
@@ -435,13 +441,17 @@ trait AccountsTrait {
 			);
 		}
 
+		if ( '' === $token ) {
+			return false;
+		}
+
 		$user = $this->query_one(
 			'SELECT * FROM users
             WHERE password_reset_token = :token
             AND password_reset_expires_at >= :now
             LIMIT 1',
 			array(
-				'token' => trim( $token ),
+				'token' => Secrets::hash_lookup_token( $token ),
 				'now'   => $this->now(),
 			),
 		);
@@ -1191,6 +1201,24 @@ trait AccountsTrait {
 				'current_session_id' => $current_session['id'],
 				'active_since'       => $this->session_active_since(),
 			),
+		);
+	}
+
+	/**
+	 * Issue a raw + hashed lookup token pair for user account flows.
+	 *
+	 * Verification and password-reset links still send the raw token to the
+	 * browser, but the database only stores its SHA-256 hash.
+	 *
+	 * @return array{raw: string, hash: string}
+	 * @since 1.0.3
+	 */
+	private function issue_lookup_token(): array {
+		$raw_token = Secrets::generate_lookup_token();
+
+		return array(
+			'raw'  => $raw_token,
+			'hash' => Secrets::hash_lookup_token( $raw_token ),
 		);
 	}
 }

@@ -8,8 +8,6 @@ import {
 	Check,
 	Lock,
 	Clock,
-	Eye,
-	EyeOff,
 	Link2,
 } from 'lucide-react';
 import { isPast } from 'date-fns';
@@ -26,8 +24,6 @@ function LinkRow({
 	onEdit,
 	onDelete,
 	onQRCode,
-	revealedPasswords,
-	togglePassword,
 	formatNumber,
 }) {
 	return (
@@ -87,7 +83,7 @@ function LinkRow({
 						{link.destinationUrl}
 					</div>
 					<div className="flex flex-col items-start gap-1 mt-1">
-						{link.password && (
+						{link.hasPassword && (
 							<div
 								key="password"
 								className="flex items-center gap-1.5"
@@ -96,23 +92,6 @@ function LinkRow({
 									<Lock size={10} />
 									{__('Protected')}
 								</span>
-								<div className="flex items-center gap-1">
-									<code className="text-[10px] text-text-text-muted">
-										{revealedPasswords[link.id]
-											? link.password
-											: '••••••••'}
-									</code>
-									<button
-										onClick={() => togglePassword(link.id)}
-										className="text-text-muted hover:text-heading transition-colors"
-									>
-										{revealedPasswords[link.id] ? (
-											<EyeOff size={10} />
-										) : (
-											<Eye size={10} />
-										)}
-									</button>
-								</div>
 							</div>
 						)}
 						{link.expiresAt && (

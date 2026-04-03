@@ -46,104 +46,104 @@ msgstr "PeakURL no pudo cargar el manifiesto de actualización."
 msgid "PeakURL could not inspect the database schema."
 msgstr "PeakURL no pudo inspeccionar el esquema de la base de datos."
 
-#: app/traits/accounts.php:50
-#: app/traits/accounts.php:551
-#: app/traits/accounts.php:684
-#: app/traits/accounts.php:803
+#: app/traits/accounts.php:51
+#: app/traits/accounts.php:561
+#: app/traits/accounts.php:694
+#: app/traits/accounts.php:813
 msgid "A valid email address is required."
 msgstr "Se requiere una dirección de correo electrónico válida."
 
-#: app/traits/accounts.php:54
+#: app/traits/accounts.php:55
 msgid "Username is required."
 msgstr "El nombre de usuario es obligatorio."
 
-#: app/traits/accounts.php:59
-#: app/traits/accounts.php:433
-#: app/traits/accounts.php:594
-#: app/traits/accounts.php:689
-#: app/traits/accounts.php:843
+#: app/traits/accounts.php:60
+#: app/traits/accounts.php:439
+#: app/traits/accounts.php:604
+#: app/traits/accounts.php:699
+#: app/traits/accounts.php:853
 #: ui/pages/resetPassword/ResetPasswordPage.tsx:49
 msgid "Password must be at least 8 characters."
 msgstr "La contraseña debe tener al menos 8 caracteres."
 
-#: app/traits/accounts.php:66
-#: app/traits/accounts.php:696
+#: app/traits/accounts.php:67
+#: app/traits/accounts.php:706
 msgid "Email address is already registered."
 msgstr "La dirección de correo electrónico ya está registrada."
 
-#: app/traits/accounts.php:72
-#: app/traits/accounts.php:578
-#: app/traits/accounts.php:702
-#: app/traits/accounts.php:788
+#: app/traits/accounts.php:73
+#: app/traits/accounts.php:588
+#: app/traits/accounts.php:712
+#: app/traits/accounts.php:798
 msgid "Username is already taken."
 msgstr "El nombre de usuario ya está en uso."
 
-#: app/traits/accounts.php:122
+#: app/traits/accounts.php:123
 #: app/controllers/auth.php:264
 msgid "Verification token is required."
 msgstr "El token de verificación es obligatorio."
 
-#: app/traits/accounts.php:179
+#: app/traits/accounts.php:182
 msgid "Email is required."
 msgstr "El correo electrónico es obligatorio."
 
-#: app/traits/accounts.php:231
+#: app/traits/accounts.php:236
 msgid "Email or username and password are required."
 msgstr "Se requieren el correo electrónico o nombre de usuario y la contraseña."
 
-#: app/traits/accounts.php:251
+#: app/traits/accounts.php:256
 msgid "Invalid email, username, or password."
 msgstr "Correo electrónico, nombre de usuario o contraseña no válidos."
 
-#: app/traits/accounts.php:271
+#: app/traits/accounts.php:276
 msgid "Invalid two-factor code."
 msgstr "Código de autenticación en dos pasos no válido."
 
-#: app/traits/accounts.php:317
+#: app/traits/accounts.php:322
 msgid "Two-factor authentication is still required."
 msgstr "La autenticación en dos pasos sigue siendo obligatoria."
 
-#: app/traits/accounts.php:369
+#: app/traits/accounts.php:374
 #: ui/pages/forgotPassword/ForgotPasswordPage.tsx:42
 #: ui/pages/login/LoginPage.tsx:192
 msgid "Email or username is required."
 msgstr "El correo electrónico o nombre de usuario es obligatorio."
 
-#: app/traits/accounts.php:495
+#: app/traits/accounts.php:505
 msgid "Authentication required."
 msgstr "Se requiere autenticación."
 
-#: app/traits/accounts.php:564
-#: app/traits/accounts.php:816
+#: app/traits/accounts.php:574
+#: app/traits/accounts.php:826
 msgid "Email address is already in use."
 msgstr "La dirección de correo electrónico ya está en uso."
 
-#: app/traits/accounts.php:571
+#: app/traits/accounts.php:581
 msgid "Username cannot be empty."
 msgstr "El nombre de usuario no puede estar vacío."
 
-#: app/traits/accounts.php:673
+#: app/traits/accounts.php:683
 msgid "First and last name are required."
 msgstr "El nombre y los apellidos son obligatorios."
 
-#: app/traits/accounts.php:678
-#: app/traits/accounts.php:780
+#: app/traits/accounts.php:688
+#: app/traits/accounts.php:790
 msgid "Username must be 3-120 characters using letters, numbers, dots, dashes, underscores, or @."
 msgstr "El nombre de usuario debe tener entre 3 y 120 caracteres y solo puede usar letras, números, puntos, guiones, guiones bajos o @."
 
-#: app/traits/accounts.php:899
+#: app/traits/accounts.php:909
 msgid "You cannot delete the current user."
 msgstr "No puedes eliminar al usuario actual."
 
-#: app/traits/accounts.php:1054
+#: app/traits/accounts.php:1064
 msgid "No two-factor setup is pending for this account."
 msgstr "No hay ninguna configuración pendiente de autenticación en dos pasos para esta cuenta."
 
-#: app/traits/accounts.php:1060
+#: app/traits/accounts.php:1070
 msgid "Invalid verification code."
 msgstr "Código de verificación no válido."
 
-#: app/traits/accounts.php:1178
+#: app/traits/accounts.php:1188
 msgid "PeakURL could not identify the current session."
 msgstr "PeakURL no pudo identificar la sesión actual."
 
@@ -169,34 +169,34 @@ msgstr "Debe permanecer al menos una cuenta de administrador en el sitio."
 msgid "You cannot demote the only remaining admin account."
 msgstr "No puedes rebajar la única cuenta de administrador restante."
 
-#: app/traits/links.php:148
+#: app/traits/links.php:118
 msgid "You do not have permission to view this link."
 msgstr "No tienes permiso para ver este enlace."
 
-#: app/traits/links.php:319
-#: app/traits/links.php:630
+#: app/traits/links.php:284
+#: app/traits/links.php:625
 msgid "A valid destination URL is required."
 msgstr "Se requiere una URL de destino válida."
 
-#: app/traits/links.php:335
-#: app/traits/links.php:659
+#: app/traits/links.php:300
+#: app/traits/links.php:671
 msgid "That short code is reserved by the application."
 msgstr "Ese código corto está reservado por la aplicación."
 
-#: app/traits/links.php:341
-#: app/traits/links.php:669
+#: app/traits/links.php:306
+#: app/traits/links.php:681
 msgid "That short code is already in use."
 msgstr "Ese código corto ya está en uso."
 
-#: app/traits/links.php:605
+#: app/traits/links.php:601
 msgid "You do not have permission to edit this link."
 msgstr "No tienes permiso para editar este enlace."
 
-#: app/traits/links.php:729
+#: app/traits/links.php:741
 msgid "You do not have permission to delete this link."
 msgstr "No tienes permiso para eliminar este enlace."
 
-#: app/traits/links.php:782
+#: app/traits/links.php:794
 msgid "You do not have permission to delete links."
 msgstr "No tienes permiso para eliminar enlaces."
 
@@ -208,6 +208,10 @@ msgstr "Se ha proporcionado un valor de fecha no válido."
 #: app/includes/runtime-config.php:546
 msgid "DB_PREFIX must start with a letter or underscore and use only letters, numbers, and underscores."
 msgstr "DB_PREFIX debe empezar con una letra o un guion bajo y usar solo letras, números y guiones bajos."
+
+#: app/utils/secrets.php:63
+msgid "PeakURL could not hash the protected-link password."
+msgstr ""
 
 #: app/http/json-response.php:71
 msgid "Something went wrong."
@@ -375,76 +379,80 @@ msgstr "Base de datos GeoIP actualizada."
 msgid "URLs loaded."
 msgstr "URLs cargadas."
 
-#: app/controllers/urls.php:132
-#: app/controllers/urls.php:188
-#: app/controllers/urls.php:208
+#: app/controllers/urls.php:138
+msgid "URLs export loaded."
+msgstr "Exportación de enlaces cargada."
+
+#: app/controllers/urls.php:155
+#: app/controllers/urls.php:211
+#: app/controllers/urls.php:231
 msgid "URL not found."
 msgstr "URL no encontrada."
 
-#: app/controllers/urls.php:135
+#: app/controllers/urls.php:158
 msgid "URL loaded."
 msgstr "URL cargada."
 
-#: app/controllers/urls.php:151
+#: app/controllers/urls.php:174
 msgid "Short URL created."
 msgstr "URL corta creada."
 
-#: app/controllers/urls.php:169
+#: app/controllers/urls.php:192
 msgid "Bulk import processed."
 msgstr "Importación masiva procesada."
 
-#: app/controllers/urls.php:191
+#: app/controllers/urls.php:214
 msgid "URL updated."
 msgstr "URL actualizada."
 
-#: app/controllers/urls.php:211
+#: app/controllers/urls.php:234
 msgid "URL deleted."
 msgstr "URL eliminada."
 
-#: app/controllers/urls.php:232
+#: app/controllers/urls.php:255
 msgid "Bulk delete complete."
 msgstr "Eliminación masiva completada."
 
-#: app/controllers/urls.php:291
+#: app/controllers/urls.php:314
 msgid "This link has expired"
 msgstr "Este enlace ha caducado"
 
-#: app/controllers/urls.php:292
+#: app/controllers/urls.php:315
 msgid "The short link you requested is no longer active because its expiration date has passed."
 msgstr "El enlace corto que has solicitado ya no está activo porque su fecha de caducidad ha pasado."
 
-#: app/controllers/urls.php:302
+#: app/controllers/urls.php:325
 msgid "This link is unavailable"
 msgstr "Este enlace no está disponible"
 
-#: app/controllers/urls.php:303
+#: app/controllers/urls.php:326
 msgid "The short link you requested is not available right now."
 msgstr "El enlace corto que has solicitado no está disponible en este momento."
 
-#: app/controllers/urls.php:350
+#: app/controllers/urls.php:373
 msgid "Password required"
 msgstr "Contraseña obligatoria"
 
-#: app/controllers/urls.php:351
+#: app/controllers/urls.php:374
 msgid "This link is protected. Enter the password to continue."
 msgstr "Este enlace está protegido. Introduce la contraseña para continuar."
 
-#: app/controllers/urls.php:355
+#: app/controllers/urls.php:378
 #: ui/pages/dashboard/users/UsersPage.tsx:186
 #: ui/pages/login/LoginPage.tsx:399
 msgid "Password"
 msgstr "Contraseña"
 
-#: app/controllers/urls.php:358
+#: app/controllers/urls.php:381
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:39
 msgid "Enter password"
 msgstr "Introduce la contraseña"
 
-#: app/controllers/urls.php:362
+#: app/controllers/urls.php:385
 msgid "Continue"
 msgstr "Continuar"
 
-#: app/controllers/urls.php:367
+#: app/controllers/urls.php:390
 msgid "Protected Link"
 msgstr "Enlace protegido"
 
@@ -518,117 +526,148 @@ msgstr "Actualización aplicada."
 msgid "Database upgrade complete."
 msgstr "Actualización de la base de datos completada."
 
-#: app/services/update.php:122
-msgid "The update manifest URL must use HTTP or HTTPS."
-msgstr "La URL del manifiesto de actualización debe usar HTTP o HTTPS."
+#: app/services/update.php:117
+#: app/services/update.php:123
+msgid "update manifest URL"
+msgstr ""
 
-#: app/services/update.php:177
+#: app/services/update.php:175
 msgid "The update manifest returned invalid JSON."
 msgstr "El manifiesto de actualización devolvió JSON no válido."
 
-#: app/services/update.php:260
+#: app/services/update.php:258
 msgid "The update manifest is missing a package URL or version."
 msgstr "Falta la URL del paquete o la versión en el manifiesto de actualización."
 
-#: app/services/update.php:308
+#: app/services/update.php:264
+#: app/services/update.php:419
+msgid "release package URL"
+msgstr ""
+
+#: app/services/update.php:311
 msgid "PeakURL could not apply the update and the rollback failed. "
 msgstr "PeakURL no pudo aplicar la actualización y la reversión falló. "
 
-#: app/services/update.php:317
+#: app/services/update.php:320
 msgid "PeakURL could not apply the update. "
 msgstr "PeakURL no pudo aplicar la actualización. "
 
-#: app/services/update.php:392
+#: app/services/update.php:395
 msgid "The update manifest did not include a version."
 msgstr "El manifiesto de actualización no incluía una versión."
 
-#: app/services/update.php:398
+#: app/services/update.php:401
 msgid "The update manifest did not include a package URL."
 msgstr "El manifiesto de actualización no incluía una URL del paquete."
 
-#: app/services/update.php:441
+#: app/services/update.php:407
+#: app/services/update.php:673
+msgid "The update manifest did not include a SHA-256 checksum."
+msgstr ""
+
+#: app/services/update.php:413
+msgid "The update manifest included an invalid SHA-256 checksum."
+msgstr ""
+
+#: app/services/update.php:423
+msgid "release download URL"
+msgstr ""
+
+#: app/services/update.php:465
 msgid "Dashboard updates can only be applied from an installed release package."
 msgstr "Las actualizaciones desde el panel solo pueden aplicarse desde un paquete de versión instalado."
 
-#: app/services/update.php:448
+#: app/services/update.php:472
 msgid "The ZipArchive PHP extension is required to apply updates."
 msgstr "La extensión PHP ZipArchive es obligatoria para aplicar actualizaciones."
 
-#: app/services/update.php:455
+#: app/services/update.php:479
 msgid "The release root is not writable."
 msgstr "La raíz de la versión no tiene permisos de escritura."
 
-#: app/services/update.php:462
+#: app/services/update.php:486
 #: app/services/setup-config.php:291
 msgid "The app directory is not writable."
 msgstr "El directorio app no tiene permisos de escritura."
 
-#: app/services/update.php:503
+#: app/services/update.php:527
 msgid "PeakURL could not create the update lock."
 msgstr "PeakURL no pudo crear el bloqueo de actualización."
 
-#: app/services/update.php:508
+#: app/services/update.php:532
 msgid "Another PeakURL update is already running."
 msgstr "Ya hay otra actualización de PeakURL en curso."
 
-#: app/services/update.php:627
+#: app/services/update.php:651
 msgid "PeakURL could not store the downloaded release package."
 msgstr "PeakURL no pudo guardar el paquete de versión descargado."
 
-#: app/services/update.php:655
+#: app/services/update.php:681
 msgid "PeakURL could not verify the downloaded release checksum."
 msgstr "PeakURL no pudo verificar la suma de comprobación de la versión descargada."
 
-#: app/services/update.php:661
+#: app/services/update.php:687
 msgid "The downloaded release checksum did not match the manifest."
 msgstr "La suma de comprobación de la versión descargada no coincide con el manifiesto."
 
-#: app/services/update.php:683
+#: app/services/update.php:709
 msgid "PeakURL could not open the downloaded release archive."
 msgstr "PeakURL no pudo abrir el archivo de la versión descargada."
 
-#: app/services/update.php:690
+#: app/services/update.php:716
 msgid "PeakURL could not extract the downloaded release archive."
 msgstr "PeakURL no pudo extraer el archivo de la versión descargada."
 
-#: app/services/update.php:730
+#: app/services/update.php:756
 msgid "PeakURL could not determine the extracted package root."
 msgstr "PeakURL no pudo determinar la raíz del paquete extraído."
 
-#: app/services/update.php:741
+#: app/services/update.php:767
 msgid "PeakURL could not validate the extracted package structure."
 msgstr "PeakURL no pudo validar la estructura del paquete extraído."
 
-#: app/services/update.php:901
-#: app/services/update.php:913
+#: app/services/update.php:927
+#: app/services/update.php:939
 msgid "PeakURL could not copy the updated release files."
 msgstr "PeakURL no pudo copiar los archivos actualizados de la versión."
 
-#: app/services/update.php:966
+#: app/services/update.php:992
 msgid "PeakURL could not prepare the update workspace."
 msgstr "PeakURL no pudo preparar el espacio de trabajo de la actualización."
 
-#: app/services/update.php:1023
+#: app/services/update.php:1030
+msgid "remote update URL"
+msgstr ""
+
+#: app/services/update.php:1054
 msgid "PeakURL could not start the update request."
 msgstr "PeakURL no pudo iniciar la solicitud de actualización."
 
-#: app/services/update.php:1046
+#: app/services/update.php:1088
 msgid "PeakURL could not contact the update service. "
 msgstr "PeakURL no pudo contactar con el servicio de actualización. "
 
-#: app/services/update.php:1054
-#: app/services/update.php:1134
+#: app/services/update.php:1096
+#: app/services/update.php:1181
 msgid "The update service returned HTTP %d."
 msgstr "El servicio de actualización devolvió HTTP %d."
 
-#: app/services/update.php:1094
+#: app/services/update.php:1141
 msgid "PeakURL could not contact the update service."
 msgstr "PeakURL no pudo contactar con el servicio de actualización."
 
-#: app/services/update.php:1104
-#: app/services/update.php:1124
+#: app/services/update.php:1151
+#: app/services/update.php:1171
 msgid "PeakURL could not read the update service response."
 msgstr "PeakURL no pudo leer la respuesta del servicio de actualización."
+
+#: app/services/update.php:1213
+msgid "The %s is not a valid absolute URL."
+msgstr ""
+
+#: app/services/update.php:1223
+msgid "The %s must use HTTPS."
+msgstr ""
 
 #: app/services/crypto.php:118
 msgid "The OpenSSL extension is required to encrypt stored credentials."
@@ -795,52 +834,52 @@ msgstr "PeakURL descargó el archivo GeoLite2, pero no contenía GeoLite2-City.m
 msgid "PeakURL could not initialize cURL for the GeoLite2 download."
 msgstr "PeakURL no pudo inicializar cURL para la descarga de GeoLite2."
 
-#: app/services/geoip.php:505
+#: app/services/geoip.php:504
 msgid "PeakURL could not download the GeoLite2 City database from MaxMind. "
 msgstr "PeakURL no pudo descargar la base de datos GeoLite2 City desde MaxMind. "
 
-#: app/services/geoip.php:517
-#: app/services/geoip.php:575
+#: app/services/geoip.php:516
+#: app/services/geoip.php:574
 msgid "PeakURL downloaded the GeoLite2 archive, but could not store it locally."
 msgstr "PeakURL descargó el archivo GeoLite2, pero no pudo guardarlo localmente."
 
-#: app/services/geoip.php:553
+#: app/services/geoip.php:552
 msgid "PeakURL could not follow the GeoLite2 download redirect from MaxMind."
 msgstr "PeakURL no pudo seguir la redirección de descarga de GeoLite2 desde MaxMind."
 
-#: app/services/geoip.php:632
+#: app/services/geoip.php:631
 msgid "PeakURL could not prepare the GeoLite2 archive for extraction."
 msgstr "PeakURL no pudo preparar el archivo GeoLite2 para la extracción."
 
-#: app/services/geoip.php:647
+#: app/services/geoip.php:646
 msgid "PeakURL could not unpack the GeoLite2 archive. "
 msgstr "PeakURL no pudo descomprimir el archivo GeoLite2. "
 
-#: app/services/geoip.php:705
+#: app/services/geoip.php:704
 msgid "PeakURL could not copy the downloaded GeoLite2 database into place."
 msgstr "PeakURL no pudo copiar la base de datos GeoLite2 descargada a su ubicación final."
 
-#: app/services/geoip.php:712
+#: app/services/geoip.php:711
 msgid "PeakURL could not replace the existing GeoLite2 database file."
 msgstr "PeakURL no pudo reemplazar el archivo existente de la base de datos GeoLite2."
 
-#: app/services/geoip.php:719
+#: app/services/geoip.php:718
 msgid "PeakURL could not activate the downloaded GeoLite2 database file."
 msgstr "PeakURL no pudo activar el archivo de base de datos GeoLite2 descargado."
 
-#: app/services/geoip.php:769
+#: app/services/geoip.php:768
 msgid "MaxMind rejected the download request. Check the account ID, license key, and GeoLite download permissions."
 msgstr "MaxMind rechazó la solicitud de descarga. Comprueba el ID de cuenta, la clave de licencia y los permisos de descarga de GeoLite."
 
-#: app/services/geoip.php:773
+#: app/services/geoip.php:772
 msgid "PeakURL could not download the GeoLite2 City database from MaxMind."
 msgstr "PeakURL no pudo descargar la base de datos GeoLite2 City desde MaxMind."
 
-#: app/services/geoip.php:778
+#: app/services/geoip.php:777
 msgid "PeakURL could not download the GeoLite2 City database from MaxMind. HTTP %d."
 msgstr "PeakURL no pudo descargar la base de datos GeoLite2 City desde MaxMind. HTTP %d."
 
-#: app/services/geoip.php:859
+#: app/services/geoip.php:858
 msgid "PeakURL could not create the required directory: "
 msgstr "PeakURL no pudo crear el directorio requerido: "
 
@@ -858,15 +897,15 @@ msgstr "Se crearon las tablas que faltaban: %s."
 
 #: app/services/database-schema.php:813
 msgid "Normalized legacy click IDs to the unprefixed format."
-msgstr ""
+msgstr "Se normalizaron los IDs heredados de clics al formato sin prefijo."
 
 #: app/services/database-schema.php:819
 msgid "Normalized legacy webhook IDs to the unprefixed format."
-msgstr ""
+msgstr "Se normalizaron los IDs heredados de webhooks al formato sin prefijo."
 
 #: app/services/database-schema.php:887
 msgid "%1$s %2$d rows were updated."
-msgstr ""
+msgstr "%1$s Se actualizaron %2$d filas."
 
 #: app/services/database-schema.php:930
 msgid "Migrated legacy API keys to the hashed-key schema."
@@ -950,11 +989,11 @@ msgstr "Las columnas de claves API con hash todavía permiten valores NULL y deb
 
 #: app/services/database-schema.php:1557
 msgid "The clicks table still contains legacy prefixed IDs and should be normalized."
-msgstr ""
+msgstr "La tabla de clics todavía contiene IDs heredados con prefijo y debe normalizarse."
 
 #: app/services/database-schema.php:1565
 msgid "The webhooks table still contains legacy prefixed IDs and should be normalized."
-msgstr ""
+msgstr "La tabla de webhooks todavía contiene IDs heredados con prefijo y debe normalizarse."
 
 #: app/services/database-schema.php:1579
 msgid "The database schema version %1$d is behind the required version %2$d."
@@ -1114,7 +1153,7 @@ msgstr "La analítica de ubicaciones de visitantes aún no está lista por compl
 
 #: ui/utils/dashboardSearch.js:32
 #: ui/utils/dashboardSearch.js:37
-#: ui/pages/layout/DashboardSidebar.tsx:29
+#: ui/pages/layout/DashboardSidebar.tsx:33
 msgid "Overview"
 msgstr "Resumen"
 
@@ -1128,8 +1167,8 @@ msgstr "Panel"
 
 #: ui/utils/dashboardSearch.js:47
 #: ui/utils/dashboardSearch.js:52
-#: ui/pages/layout/DashboardSidebar.tsx:34
-#: ui/pages/layout/DashboardSidebar.tsx:258
+#: ui/pages/layout/DashboardSidebar.tsx:38
+#: ui/pages/layout/DashboardSidebar.tsx:307
 #: ui/pages/NotFoundPage.tsx:72
 msgid "All Links"
 msgstr "Todos los enlaces"
@@ -1145,7 +1184,8 @@ msgstr "Enlaces"
 
 #: ui/utils/dashboardSearch.js:66
 #: ui/utils/dashboardSearch.js:71
-#: ui/pages/layout/DashboardAppBar.tsx:151
+#: ui/pages/layout/DashboardSidebar.tsx:352
+#: ui/pages/layout/DashboardSidebar.tsx:401
 msgid "About PeakURL"
 msgstr "Acerca de PeakURL"
 
@@ -1169,8 +1209,8 @@ msgstr "Ajustes generales"
 #: ui/utils/dashboardSearch.js:154
 #: ui/utils/dashboardSearch.js:172
 #: ui/utils/dashboardSearch.js:190
-#: ui/pages/layout/DashboardAppBar.tsx:132
-#: ui/pages/layout/DashboardSidebar.tsx:65
+#: ui/pages/layout/DashboardAppBar.tsx:125
+#: ui/pages/layout/DashboardSidebar.tsx:76
 #: ui/pages/NotFoundPage.tsx:92
 #: ui/router/pageTitle.ts:33
 #: ui/router/pageTitle.ts:91
@@ -1183,7 +1223,7 @@ msgid "General"
 msgstr "General"
 
 #: ui/utils/dashboardSearch.js:87
-#: ui/pages/layout/DashboardAppBar.tsx:114
+#: ui/pages/layout/DashboardAppBar.tsx:107
 msgid "Profile"
 msgstr "Perfil"
 
@@ -1248,7 +1288,7 @@ msgstr "Actualizaciones"
 #: ui/utils/dashboardSearch.js:207
 #: ui/utils/dashboardSearch.js:211
 #: ui/pages/layout/DashboardSearch.tsx:204
-#: ui/pages/layout/DashboardSidebar.tsx:39
+#: ui/pages/layout/DashboardSidebar.tsx:43
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:626
 #: ui/pages/dashboard/users/UsersPage.tsx:362
 #: ui/router/pageTitle.ts:80
@@ -1262,15 +1302,15 @@ msgstr "Gestión"
 
 #: ui/utils/dashboardSearch.js:226
 #: ui/utils/dashboardSearch.js:230
-#: ui/pages/layout/DashboardSidebar.tsx:44
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:109
+#: ui/pages/layout/DashboardSidebar.tsx:49
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:112
 #: ui/router/pageTitle.ts:76
 msgid "Plugins"
 msgstr "Plugins"
 
 #: ui/utils/dashboardSearch.js:242
 #: ui/utils/dashboardSearch.js:247
-#: ui/pages/layout/DashboardSidebar.tsx:55
+#: ui/pages/layout/DashboardSidebar.tsx:60
 #: ui/pages/dashboard/bulk-import/_components/Header.tsx:8
 #: ui/pages/NotFoundPage.tsx:82
 #: ui/router/pageTitle.ts:46
@@ -1282,9 +1322,11 @@ msgstr "Importar"
 #: ui/utils/dashboardSearch.js:246
 #: ui/utils/dashboardSearch.js:265
 #: ui/utils/dashboardSearch.js:268
+#: ui/utils/dashboardSearch.js:286
+#: ui/utils/dashboardSearch.js:289
 #: ui/pages/layout/DashboardSearch.tsx:179
-#: ui/pages/layout/DashboardSidebar.tsx:50
-#: ui/router/pageTitle.ts:110
+#: ui/pages/layout/DashboardSidebar.tsx:55
+#: ui/router/pageTitle.ts:114
 msgid "Tools"
 msgstr "Herramientas"
 
@@ -1295,15 +1337,24 @@ msgstr "Importar: subida de archivo"
 
 #: ui/utils/dashboardSearch.js:264
 #: ui/utils/dashboardSearch.js:269
-#: ui/pages/layout/DashboardSidebar.tsx:59
+#: ui/pages/layout/DashboardSidebar.tsx:65
+#: ui/pages/dashboard/tools/ExportPage.tsx:60
+#: ui/pages/dashboard/tools/ExportPage.tsx:147
+#: ui/router/pageTitle.ts:106
+msgid "Export"
+msgstr "Exportar"
+
+#: ui/utils/dashboardSearch.js:285
+#: ui/utils/dashboardSearch.js:290
+#: ui/pages/layout/DashboardSidebar.tsx:69
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:717
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:746
-#: ui/router/pageTitle.ts:106
+#: ui/router/pageTitle.ts:110
 msgid "System Status"
 msgstr "Estado del sistema"
 
-#: ui/utils/dashboardSearch.js:426
-#: ui/pages/layout/DashboardAppBar.tsx:34
+#: ui/utils/dashboardSearch.js:447
+#: ui/pages/layout/DashboardAppBar.tsx:30
 #: ui/pages/dashboard/users/UsersPage.tsx:434
 msgid "User"
 msgstr "Usuario"
@@ -1319,7 +1370,7 @@ msgstr "Confirmar"
 #: ui/pages/dashboard/settings/_components/Content/Content.tsx:532
 #: ui/pages/dashboard/links/_components/BulkDeleteModal.tsx:76
 #: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:121
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:203
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:243
 #: ui/pages/dashboard/users/UsersPage.tsx:227
 msgid "Cancel"
 msgstr "Cancelar"
@@ -1481,7 +1532,7 @@ msgstr "Añade un webhook para recibir eventos de enlaces en tiempo real."
 
 #: ui/components/settings/IntegrationsTab.tsx:281
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable.tsx:29
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:191
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:231
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:29
 msgid "Inactive"
 msgstr "Inactivo"
@@ -1590,7 +1641,7 @@ msgstr "Dom"
 #: ui/pages/dashboard/_components/StatsCards.tsx:16
 #: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:95
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:10
-#: ui/pages/dashboard/links/LinksPage.tsx:309
+#: ui/pages/dashboard/links/LinksPage.tsx:206
 msgid "Total Clicks"
 msgstr "Clics totales"
 
@@ -1598,7 +1649,7 @@ msgstr "Clics totales"
 #: ui/pages/dashboard/_components/StatsCards.tsx:43
 #: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:103
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:23
-#: ui/pages/dashboard/links/LinksPage.tsx:326
+#: ui/pages/dashboard/links/LinksPage.tsx:223
 msgid "Unique Visitors"
 msgstr "Visitantes únicos"
 
@@ -1857,8 +1908,8 @@ msgstr "No se pudo cargar tu sesión"
 msgid "The dashboard could not reach the PHP API. Make sure the core service is running and try again."
 msgstr "El panel no pudo conectarse a la API de PHP. Asegúrate de que el servicio principal esté en ejecución y vuelve a intentarlo."
 
-#: ui/hooks/useDashboardSearch.ts:84
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:78
+#: ui/hooks/useDashboardSearch.ts:89
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:74
 msgid "Untitled Link"
 msgstr "Enlace sin título"
 
@@ -1925,39 +1976,30 @@ msgstr "propietario@ejemplo.com o admin"
 msgid "Send reset link"
 msgstr "Enviar enlace de restablecimiento"
 
-#: ui/pages/layout/DashboardAppBar.tsx:32
-#: ui/pages/layout/DashboardAppBar.tsx:76
-#: ui/pages/layout/DashboardAppBar.tsx:87
+#: ui/pages/layout/DashboardAppBar.tsx:28
+#: ui/pages/layout/DashboardAppBar.tsx:69
+#: ui/pages/layout/DashboardAppBar.tsx:80
 #: ui/pages/dashboard/users/UsersPage.tsx:37
 #: ui/pages/dashboard/users/UsersPage.tsx:209
 msgid "Admin"
 msgstr "Administrador"
 
-#: ui/pages/layout/DashboardAppBar.tsx:33
+#: ui/pages/layout/DashboardAppBar.tsx:29
 #: ui/pages/dashboard/users/UsersPage.tsx:42
 #: ui/pages/dashboard/users/UsersPage.tsx:210
 #: ui/pages/dashboard/users/UsersPage.tsx:465
 msgid "Editor"
 msgstr "Editor"
 
-#: ui/pages/layout/DashboardAppBar.tsx:82
+#: ui/pages/layout/DashboardAppBar.tsx:75
 msgid "Admin Account"
 msgstr "Cuenta de administrador"
 
-#: ui/pages/layout/DashboardAppBar.tsx:169
-msgid "Sponsor"
-msgstr "Patrocinar"
-
-#: ui/pages/layout/DashboardAppBar.tsx:191
-#: ui/pages/dashboard/about/AboutPage.tsx:480
-msgid "Buy Me a Coffee"
-msgstr "Invítame a un café"
-
-#: ui/pages/layout/DashboardAppBar.tsx:211
+#: ui/pages/layout/DashboardAppBar.tsx:141
 msgid "Logging out..."
 msgstr "Cerrando sesión..."
 
-#: ui/pages/layout/DashboardAppBar.tsx:212
+#: ui/pages/layout/DashboardAppBar.tsx:142
 msgid "Logout"
 msgstr "Cerrar sesión"
 
@@ -2018,6 +2060,15 @@ msgstr "Gracias por elegir"
 msgid "Version"
 msgstr "Versión"
 
+#: ui/pages/layout/DashboardSidebar.tsx:362
+msgid "Sponsor"
+msgstr "Patrocinar"
+
+#: ui/pages/layout/DashboardSidebar.tsx:376
+#: ui/pages/dashboard/about/AboutPage.tsx:480
+msgid "Buy Me a Coffee"
+msgstr "Invítame a un café"
+
 #: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:15
 #: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:15
 msgid "Never"
@@ -2054,7 +2105,7 @@ msgstr "Descargar base de datos"
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:154
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:580
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable.tsx:66
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:182
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:222
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:28
 msgid "Status"
 msgstr "Estado"
@@ -2165,13 +2216,13 @@ msgstr "Clave API"
 
 #: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:47
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable.tsx:25
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:190
-#: ui/pages/dashboard/links/LinksPage.tsx:285
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:230
+#: ui/pages/dashboard/links/LinksPage.tsx:182
 msgid "Active"
 msgstr "Activa"
 
 #: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:66
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:227
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:206
 #: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:136
 msgid "Delete"
 msgstr "Eliminar"
@@ -2257,12 +2308,12 @@ msgid "Bio"
 msgstr "Biografía"
 
 #: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:151
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:213
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:253
 msgid "Saving..."
 msgstr "Guardando..."
 
 #: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:151
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:218
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:258
 #: ui/pages/dashboard/users/UsersPage.tsx:232
 msgid "Save Changes"
 msgstr "Guardar cambios"
@@ -2328,9 +2379,9 @@ msgstr "Generado el: %s"
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:520
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:526
 #: ui/pages/dashboard/_components/CountryStats.tsx:25
-#: ui/pages/dashboard/_components/ActivityFeed.tsx:14
-#: ui/pages/dashboard/_components/ActivityFeed.tsx:28
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:180
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:13
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:24
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:159
 #: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:70
 #: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:77
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:94
@@ -3494,124 +3545,209 @@ msgstr "Si quieres exportar una instantánea completa de esta página, puedes us
 msgid "Copy site info to clipboard"
 msgstr "Copiar información del sitio al portapapeles"
 
+#: ui/pages/dashboard/tools/ExportPage.tsx:60
+msgid "Preparing..."
+msgstr "Preparando..."
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:81
+msgid "CSV Export"
+msgstr "Exportación CSV"
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:82
+msgid "Download a spreadsheet-friendly file that can also be imported back into PeakURL later."
+msgstr "Descarga un archivo compatible con hojas de cálculo que también podrás volver a importar en PeakURL más adelante."
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:85
+msgid "Comma-separated values"
+msgstr "Valores separados por comas"
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:90
+msgid "JSON Export"
+msgstr "Exportación JSON"
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:91
+msgid "Download a structured snapshot for scripts, integrations, or backups."
+msgstr "Descarga una instantánea estructurada para scripts, integraciones o copias de seguridad."
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:94
+msgid "JavaScript Object Notation"
+msgstr "Notación de objetos de JavaScript"
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:99
+msgid "XML Export"
+msgstr "Exportación XML"
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:100
+msgid "Download a portable XML feed with the full link dataset and analytics totals."
+msgstr "Descarga un feed XML portable con el conjunto completo de enlaces y los totales de analíticas."
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:103
+msgid "Extensible Markup Language"
+msgstr "Lenguaje de marcado extensible"
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:117
+msgid "Nothing to export"
+msgstr "No hay nada para exportar"
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:118
+msgid "No links are available for export yet."
+msgstr "Todavía no hay enlaces disponibles para exportar."
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:125
+msgid "Export downloaded"
+msgstr "Exportación descargada"
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:127
+msgid "Downloaded %1$s links as %2$s."
+msgstr "Se descargaron %1$s enlaces en formato %2$s."
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:134
+msgid "Export failed"
+msgstr "La exportación falló"
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:136
+msgid "PeakURL could not prepare the export right now."
+msgstr "PeakURL no pudo preparar la exportación en este momento."
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:150
+msgid "Export all links you can access from one place in CSV, JSON, or XML."
+msgstr "Exporta todos los enlaces a los que tienes acceso desde un solo lugar en CSV, JSON o XML."
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:162
+msgid "Bulk Link Export"
+msgstr "Exportación masiva de enlaces"
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:166
+msgid "Each export includes destination URLs, aliases, titles, short URLs, click totals, unique visitor totals, and created dates."
+msgstr "Cada exportación incluye las URL de destino, alias, títulos, URL cortas, totales de clics, totales de visitantes únicos y fechas de creación."
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:171
+msgid "Exports follow your current permissions. Admins can export all site links, while editors can export only their own links."
+msgstr "Las exportaciones respetan tus permisos actuales. Los administradores pueden exportar todos los enlaces del sitio, mientras que los editores solo pueden exportar los suyos."
+
+#: ui/pages/dashboard/tools/ExportPage.tsx:179
+msgid "Exportable Links"
+msgstr "Enlaces exportables"
+
 #: ui/pages/dashboard/plugins/PluginsPage.tsx:45
 msgid "Installed"
 msgstr "Instalado"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:46
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:48
 msgid "Browse All"
 msgstr "Explorar todo"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:47
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:49
 msgid "Featured"
 msgstr "Destacados"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:48
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:50
 msgid "Popular"
 msgstr "Populares"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:81
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:83
 #: ui/pages/dashboard/users/UsersPage.tsx:344
 msgid "Admin access required"
 msgstr "Se requiere acceso de administrador"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:84
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:86
 msgid "Only admin accounts will be able to install, update, and manage plugins."
 msgstr "Solo las cuentas de administrador podrán instalar, actualizar y gestionar plugins."
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:112
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:115
 msgid "Extend PeakURL with plugins, install from the library, upload custom packages, and manage everything from one place."
 msgstr "Amplía PeakURL con plugins, instálalos desde la biblioteca, sube paquetes personalizados y gestiona todo desde un solo lugar."
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:122
-msgid "Upload Plugin"
-msgstr "Subir plugin"
-
 #: ui/pages/dashboard/plugins/PluginsPage.tsx:128
-msgid "Add New Plugin"
-msgstr "Añadir nuevo plugin"
-
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:150
-msgid "Search plugins…"
-msgstr "Buscar plugins…"
-
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:215
-msgid "Featured Plugins"
-msgstr "Plugins destacados"
-
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:218
-msgid "Hand-picked extensions recommended by the PeakURL team."
-msgstr "Extensiones seleccionadas por el equipo de PeakURL."
-
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:231
-msgid "Most Popular"
-msgstr "Más populares"
-
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:234
-msgid "Extensions with the highest community adoption."
-msgstr "Extensiones con mayor adopción por la comunidad."
-
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:275
-msgid "Plugin System Under Development"
-msgstr "Sistema de plugins en desarrollo"
-
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:278
-msgid "We're building a full plugin ecosystem for PeakURL. Install extensions, manage updates, and customise your experience from the dashboard. Here's what's coming:"
-msgstr "Estamos creando un ecosistema completo de plugins para PeakURL. Instala extensiones, gestiona actualizaciones y personaliza tu experiencia desde el panel. Esto es lo que viene:"
-
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:288
-msgid "One-Click Installs"
-msgstr "Instalaciones con un clic"
-
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:289
-msgid "Browse the plugin library and install ZIP packages straight from the dashboard with compatibility checks."
-msgstr "Explora la biblioteca de plugins e instala paquetes ZIP directamente desde el panel con comprobaciones de compatibilidad."
-
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:294
-msgid "Activate & Manage"
-msgstr "Activar y gestionar"
-
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:295
-msgid "Review plugin details, enable or disable features, and access per-plugin settings screens."
-msgstr "Revisa los detalles del plugin, activa o desactiva funciones y accede a sus pantallas de ajustes."
-
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:300
-msgid "Safe Updates"
-msgstr "Actualizaciones seguras"
-
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:301
-msgid "Managed update checks from trusted manifests with rollback guardrails and clear notices."
-msgstr "Comprobaciones de actualización gestionadas desde manifiestos de confianza, con protección de reversión y avisos claros."
-
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:306
-msgid "Persistent Storage"
-msgstr "Almacenamiento persistente"
-
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:307
-msgid "Plugins live in content/plugins so core releases never wipe your extensions."
-msgstr "Los plugins viven en content/plugins, por lo que las versiones del núcleo nunca borran tus extensiones."
-
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:312
-msgid "Extension APIs"
-msgstr "APIs de extensiones"
-
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:313
-msgid "Documented hooks for settings screens, link actions, analytics widgets, and integrations."
-msgstr "Hooks documentados para pantallas de ajustes, acciones de enlaces, widgets de analíticas e integraciones."
-
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:318
-msgid "Admin Review Flow"
-msgstr "Flujo de revisión del administrador"
-
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:319
-msgid "Every install surfaces version, author, homepage, and compatibility notes before activation."
-msgstr "Cada instalación muestra la versión, el autor, la página principal y las notas de compatibilidad antes de activarla."
-
-#: ui/pages/dashboard/plugins/_components/PluginCard.tsx:93
-#: ui/pages/dashboard/plugins/_components/PluginCard.tsx:100
 #: ui/pages/dashboard/plugins/_components/ComingSoonBadge.tsx:10
 msgid "Coming Soon"
 msgstr "Próximamente"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:132
+msgid "Be the first to know when the plugin library launches."
+msgstr ""
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:146
+#: ui/pages/dashboard/plugins/_components/PluginCard.tsx:95
+#: ui/pages/dashboard/plugins/_components/PluginCard.tsx:108
+msgid "Join the Waitlist"
+msgstr ""
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:172
+msgid "Search plugins…"
+msgstr "Buscar plugins…"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:237
+msgid "Featured Plugins"
+msgstr "Plugins destacados"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:240
+msgid "Hand-picked extensions recommended by the PeakURL team."
+msgstr "Extensiones seleccionadas por el equipo de PeakURL."
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:255
+msgid "Most Popular"
+msgstr "Más populares"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:258
+msgid "Extensions with the highest community adoption."
+msgstr "Extensiones con mayor adopción por la comunidad."
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:301
+msgid "Plugin System Under Development"
+msgstr "Sistema de plugins en desarrollo"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:304
+msgid "We're building a full plugin ecosystem for PeakURL. Install extensions, manage updates, and customise your experience from the dashboard. Here's what's coming:"
+msgstr "Estamos creando un ecosistema completo de plugins para PeakURL. Instala extensiones, gestiona actualizaciones y personaliza tu experiencia desde el panel. Esto es lo que viene:"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:314
+msgid "One-Click Installs"
+msgstr "Instalaciones con un clic"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:315
+msgid "Browse the plugin library and install ZIP packages straight from the dashboard with compatibility checks."
+msgstr "Explora la biblioteca de plugins e instala paquetes ZIP directamente desde el panel con comprobaciones de compatibilidad."
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:322
+msgid "Activate & Manage"
+msgstr "Activar y gestionar"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:323
+msgid "Review plugin details, enable or disable features, and access per-plugin settings screens."
+msgstr "Revisa los detalles del plugin, activa o desactiva funciones y accede a sus pantallas de ajustes."
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:330
+msgid "Safe Updates"
+msgstr "Actualizaciones seguras"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:331
+msgid "Managed update checks from trusted manifests with rollback guardrails and clear notices."
+msgstr "Comprobaciones de actualización gestionadas desde manifiestos de confianza, con protección de reversión y avisos claros."
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:338
+msgid "Persistent Storage"
+msgstr "Almacenamiento persistente"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:339
+msgid "Plugins live in content/plugins so core releases never wipe your extensions."
+msgstr "Los plugins viven en content/plugins, por lo que las versiones del núcleo nunca borran tus extensiones."
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:346
+msgid "Extension APIs"
+msgstr "APIs de extensiones"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:347
+msgid "Documented hooks for settings screens, link actions, analytics widgets, and integrations."
+msgstr "Hooks documentados para pantallas de ajustes, acciones de enlaces, widgets de analíticas e integraciones."
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:354
+msgid "Admin Review Flow"
+msgstr "Flujo de revisión del administrador"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:355
+msgid "Every install surfaces version, author, homepage, and compatibility notes before activation."
+msgstr "Cada instalación muestra la versión, el autor, la página principal y las notas de compatibilidad antes de activarla."
 
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable.tsx:42
 msgid "No installed plugins"
@@ -4124,7 +4260,7 @@ msgid "Top Operating Systems"
 msgstr "Sistemas operativos principales"
 
 #: ui/pages/dashboard/_components/StatsCards.tsx:25
-#: ui/pages/dashboard/links/LinksPage.tsx:292
+#: ui/pages/dashboard/links/LinksPage.tsx:189
 msgid "Active Links"
 msgstr "Enlaces activos"
 
@@ -4163,7 +4299,7 @@ msgid "Bar Chart"
 msgstr "Gráfico de barras"
 
 #: ui/pages/dashboard/_components/TrafficOverview.tsx:62
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:168
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:147
 msgid "Unique"
 msgstr "Únicos"
 
@@ -4189,35 +4325,35 @@ msgstr "Últimos 30 días"
 msgid "Last 90 days"
 msgstr "Últimos 90 días"
 
-#: ui/pages/dashboard/_components/ActivityFeed.tsx:19
-msgid "Created new link <strong>%s</strong>"
-msgstr "Se creó el nuevo enlace <strong>%s</strong>"
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:17
+msgid "Created new link %s"
+msgstr ""
 
-#: ui/pages/dashboard/_components/ActivityFeed.tsx:25
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:21
 msgid "from %s"
 msgstr "desde %s"
 
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:29
+msgid "Link %1$s was clicked %2$s"
+msgstr ""
+
 #: ui/pages/dashboard/_components/ActivityFeed.tsx:33
-msgid "Link <strong>%1$s</strong> was clicked %2$s"
-msgstr "Se hizo clic en el enlace <strong>%1$s</strong> %2$s"
+msgid "Link %s was clicked"
+msgstr ""
 
-#: ui/pages/dashboard/_components/ActivityFeed.tsx:37
-msgid "Link <strong>%s</strong> was clicked"
-msgstr "Se hizo clic en el enlace <strong>%s</strong>"
-
-#: ui/pages/dashboard/_components/ActivityFeed.tsx:39
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:35
 msgid "Unknown activity"
 msgstr "Actividad desconocida"
 
-#: ui/pages/dashboard/_components/ActivityFeed.tsx:61
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:57
 msgid "Recent Activity"
 msgstr "Actividad reciente"
 
-#: ui/pages/dashboard/_components/ActivityFeed.tsx:67
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:63
 msgid "No recent activity"
 msgstr "No hay actividad reciente"
 
-#: ui/pages/dashboard/_components/ActivityFeed.tsx:96
+#: ui/pages/dashboard/_components/ActivityFeed.tsx:89
 msgid "View All Links"
 msgstr "Ver todos los enlaces"
 
@@ -4254,148 +4390,45 @@ msgstr "Anterior"
 msgid "Next"
 msgstr "Siguiente"
 
-#: ui/pages/dashboard/links/_components/TableFooter.tsx:28
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:26
 msgid "Total Links:"
 msgstr "Total de enlaces:"
 
-#: ui/pages/dashboard/links/_components/TableFooter.tsx:38
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:36
 msgid "Total Clicks:"
 msgstr "Total de clics:"
 
-#: ui/pages/dashboard/links/_components/TableFooter.tsx:54
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:52
 msgid "Sort: Date Created"
 msgstr "Ordenar: fecha de creación"
 
-#: ui/pages/dashboard/links/_components/TableFooter.tsx:56
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:54
 msgid "Sort: Most Clicks"
 msgstr "Ordenar: más clics"
 
-#: ui/pages/dashboard/links/_components/TableFooter.tsx:57
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:55
 msgid "Sort: Alias"
 msgstr "Ordenar: alias"
 
-#: ui/pages/dashboard/links/_components/TableFooter.tsx:65
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:63
 msgid "Descending"
 msgstr "Descendente"
 
-#: ui/pages/dashboard/links/_components/TableFooter.tsx:66
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:64
 msgid "Ascending"
 msgstr "Ascendente"
 
-#: ui/pages/dashboard/links/_components/TableFooter.tsx:80
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:78
 msgid "Show: %s rows"
 msgstr "Mostrar: %s filas"
 
-#: ui/pages/dashboard/links/_components/TableFooter.tsx:83
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:81
 msgid "Custom…"
 msgstr "Personalizado…"
 
-#: ui/pages/dashboard/links/_components/TableFooter.tsx:95
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:93
 msgid "Custom page size"
 msgstr "Tamaño de página personalizado"
-
-#: ui/pages/dashboard/links/_components/TableFooter.tsx:103
-msgid "Export"
-msgstr "Exportar"
-
-#: ui/pages/dashboard/tools/ExportPage.tsx:55
-msgid "Preparing..."
-msgstr "Preparando..."
-
-#: ui/pages/dashboard/links/_components/TableFooter.tsx:112
-#: ui/pages/dashboard/tools/ExportPage.tsx:81
-msgid "Export CSV"
-msgstr "Exportar CSV"
-
-#: ui/pages/dashboard/links/_components/TableFooter.tsx:113
-msgid "Import ready"
-msgstr "Listo para importar"
-
-#: ui/pages/dashboard/links/_components/TableFooter.tsx:117
-#: ui/pages/dashboard/tools/ExportPage.tsx:91
-msgid "Export JSON"
-msgstr "Exportar JSON"
-
-#: ui/pages/dashboard/links/_components/TableFooter.tsx:118
-msgid "Structured data"
-msgstr "Datos estructurados"
-
-#: ui/pages/dashboard/links/_components/TableFooter.tsx:122
-#: ui/pages/dashboard/tools/ExportPage.tsx:100
-msgid "Export XML"
-msgstr "Exportar XML"
-
-#: ui/pages/dashboard/links/_components/TableFooter.tsx:123
-msgid "Portable feed"
-msgstr "Fuente portable"
-
-#: ui/pages/dashboard/tools/ExportPage.tsx:83
-msgid "Download a spreadsheet-friendly file that can also be imported back into PeakURL later."
-msgstr "Descarga un archivo compatible con hojas de cálculo que también podrás volver a importar en PeakURL más adelante."
-
-#: ui/pages/dashboard/tools/ExportPage.tsx:86
-msgid "Comma-separated values"
-msgstr "Valores separados por comas"
-
-#: ui/pages/dashboard/tools/ExportPage.tsx:92
-msgid "Download a structured snapshot for scripts, integrations, or backups."
-msgstr "Descarga una instantánea estructurada para scripts, integraciones o copias de seguridad."
-
-#: ui/pages/dashboard/tools/ExportPage.tsx:95
-msgid "JavaScript Object Notation"
-msgstr "Notación de objetos de JavaScript"
-
-#: ui/pages/dashboard/tools/ExportPage.tsx:101
-msgid "Download a portable XML feed with the full link dataset and analytics totals."
-msgstr "Descarga un feed XML portable con el conjunto completo de enlaces y los totales de analíticas."
-
-#: ui/pages/dashboard/tools/ExportPage.tsx:104
-msgid "Extensible Markup Language"
-msgstr "Lenguaje de marcado extensible"
-
-#: ui/pages/dashboard/tools/ExportPage.tsx:120
-msgid "Nothing to export"
-msgstr "No hay nada para exportar"
-
-#: ui/pages/dashboard/tools/ExportPage.tsx:121
-msgid "No links are available for export yet."
-msgstr "Todavía no hay enlaces disponibles para exportar."
-
-#: ui/pages/dashboard/tools/ExportPage.tsx:128
-msgid "Export downloaded"
-msgstr "Exportación descargada"
-
-#: ui/pages/dashboard/tools/ExportPage.tsx:130
-msgid "Downloaded %1$s links as %2$s."
-msgstr "Se descargaron %1$s enlaces en formato %2$s."
-
-#: ui/pages/dashboard/tools/ExportPage.tsx:137
-msgid "Export failed"
-msgstr "La exportación falló"
-
-#: ui/pages/dashboard/tools/ExportPage.tsx:139
-msgid "PeakURL could not prepare the export right now."
-msgstr "PeakURL no pudo preparar la exportación en este momento."
-
-#: ui/pages/dashboard/tools/ExportPage.tsx:153
-msgid "Export all links you can access from one place in CSV, JSON, or XML."
-msgstr "Exporta todos los enlaces a los que tienes acceso desde un solo lugar en CSV, JSON o XML."
-
-#: ui/pages/dashboard/tools/ExportPage.tsx:165
-msgid "Bulk Link Export"
-msgstr "Exportación masiva de enlaces"
-
-#: ui/pages/dashboard/tools/ExportPage.tsx:169
-msgid "Each export includes destination URLs, aliases, titles, short URLs, click totals, unique visitor totals, and created dates."
-msgstr "Cada exportación incluye las URL de destino, alias, títulos, URL cortas, totales de clics, totales de visitantes únicos y fechas de creación."
-
-#: ui/pages/dashboard/tools/ExportPage.tsx:174
-msgid "Exports follow your current permissions. Admins can export all site links, while editors can export only their own links."
-msgstr "Las exportaciones respetan tus permisos actuales. Los administradores pueden exportar todos los enlaces del sitio, mientras que los editores solo pueden exportar los suyos."
-
-#: ui/pages/dashboard/tools/ExportPage.tsx:182
-msgid "Exportable Links"
-msgstr "Enlaces exportables"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:21
 msgid "%s selected"
@@ -4428,46 +4461,46 @@ msgstr "Rendimiento"
 msgid "Created"
 msgstr "Creado"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:62
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:58
 #: ui/pages/dashboard/links/_components/QRCodeModal.tsx:134
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 msgid "Copied!"
 msgstr "Copiado"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:63
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:59
 #: ui/pages/dashboard/links/_components/QRCodeModal.tsx:139
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 msgid "Copy"
 msgstr "Copiar"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:97
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:93
 msgid "Protected"
 msgstr "Protegido"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:129
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:192
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:108
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:232
 msgid "Expired"
 msgstr "Caducado"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:138
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:117
 msgid "Expires"
 msgstr "Caduca"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:159
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:138
 msgid "Total"
 msgstr "Total"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:206
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:185
 #: ui/pages/dashboard/links/_components/QRCodeModal.tsx:77
 msgid "QR Code"
 msgstr "Código QR"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:213
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:192
 #: ui/pages/login/LoginPage.tsx:57
 msgid "Analytics"
 msgstr "Analíticas"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:220
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:199
 msgid "Edit"
 msgstr "Editar"
 
@@ -4492,49 +4525,61 @@ msgid "Are you sure you want to delete this link? This action cannot be undone."
 msgstr "¿Seguro que quieres eliminar este enlace? Esta acción no se puede deshacer."
 
 #: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:77
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:100
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:110
 #: ui/pages/dashboard/links/_components/QRCodeModal.tsx:110
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:51
 msgid "Short URL"
 msgstr "URL corta"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:47
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:48
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:108
 msgid "Expiration time must be in the future."
 msgstr "La fecha y hora de caducidad deben estar en el futuro."
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:62
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:72
 msgid "Failed to update link"
 msgstr "No se pudo actualizar el enlace"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:77
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:87
 msgid "Edit Link"
 msgstr "Editar enlace"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:112
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:122
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/MainInputs.tsx:21
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:74
 msgid "Destination URL"
 msgstr "URL de destino"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:127
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:137
 msgid "Title (Optional)"
 msgstr "Título (opcional)"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:134
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:144
 msgid "Enter a title for this link"
 msgstr "Introduce un título para este enlace"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:145
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:155
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:32
 msgid "Password Protection (Optional)"
 msgstr "Protección con contraseña (opcional)"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:152
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:165
+msgid "Enter a new password to replace the current one"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:166
 msgid "Set a password to protect this link"
 msgstr "Establece una contraseña para proteger este enlace"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:163
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:173
+msgid "Leave this blank to keep the current password."
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:191
+msgid "Remove password protection"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:203
 msgid "Expiration Date (Optional)"
 msgstr "Fecha de caducidad (opcional)"
 
@@ -4917,9 +4962,9 @@ msgstr "Sistemas operativos"
 #: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:224
 msgid "device"
 msgid_plural "devices"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "dispositivo"
+msgstr[1] "dispositivos"
+msgstr[2] "dispositivos"
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:31
 msgid "Check out this link"
@@ -4969,7 +5014,7 @@ msgstr "Cerrar panel"
 msgid "Close"
 msgstr "Cerrar"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:275
+#: ui/pages/dashboard/links/LinksPage.tsx:172
 msgid "Total Links"
 msgstr "Total de enlaces"
 
@@ -5164,7 +5209,7 @@ msgid "Reset password"
 msgstr "Restablecer contraseña"
 
 #: ui/pages/NotFoundPage.tsx:31
-#: ui/router/pageTitle.ts:114
+#: ui/router/pageTitle.ts:118
 msgid "Page Not Found"
 msgstr "Página no encontrada"
 

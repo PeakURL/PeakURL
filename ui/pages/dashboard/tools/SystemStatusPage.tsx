@@ -710,182 +710,187 @@ function SystemStatusPage() {
 	};
 
 	return (
-		<div className="overflow-hidden rounded-lg border border-stroke bg-surface shadow-sm">
-			<div className="border-b border-stroke bg-surface px-5 pt-8 sm:px-8">
-				<div className="mx-auto max-w-2xl text-center">
-					<h1 className="text-3xl font-semibold tracking-tight text-heading">
-						{__('System Status')}
-					</h1>
+		<div className="space-y-4">
+			<div className="overflow-hidden rounded-lg border border-stroke bg-surface shadow-sm">
+				<div className="border-b border-stroke bg-surface px-5 pt-8 sm:px-8">
+					<div className="mx-auto max-w-2xl text-center">
+						<h1 className="text-3xl font-semibold tracking-tight text-heading">
+							{__('System Status')}
+						</h1>
 
-					<div className="mt-4 flex items-center justify-center gap-2">
-						<span
-							className={`flex h-5 w-5 items-center justify-center rounded-full border-2 ${overallTone.ring}`}
-						>
-							<span className={`h-2 w-2 rounded-full ${overallTone.dot}`} />
-						</span>
-						<span className={`text-sm font-semibold ${overallTone.text}`}>
-							{overallLabel}
-						</span>
+						<div className="mt-4 flex items-center justify-center gap-2">
+							<span
+								className={`flex h-5 w-5 items-center justify-center rounded-full border-2 ${overallTone.ring}`}
+							>
+								<span className={`h-2 w-2 rounded-full ${overallTone.dot}`} />
+							</span>
+							<span className={`text-sm font-semibold ${overallTone.text}`}>
+								{overallLabel}
+							</span>
+						</div>
+
+						<p className="mt-3 text-sm text-text-muted">
+							{sprintf(
+								__('Last checked: %s'),
+								formatDate(status?.generatedAt)
+							)}
+						</p>
 					</div>
 
-					<p className="mt-3 text-sm text-text-muted">
-						{sprintf(__('Last checked: %s'), formatDate(status?.generatedAt))}
-					</p>
+					<StatusTabs activeView={activeView} onChange={setActiveView} />
 				</div>
 
-				<StatusTabs activeView={activeView} onChange={setActiveView} />
-			</div>
+				<div className="space-y-8 bg-bg px-5 py-6 sm:px-8">
+					{errorMessage ? <ErrorState errorMessage={errorMessage} /> : null}
 
-			<div className="space-y-8 bg-bg px-5 py-6 sm:px-8">
-				{errorMessage ? <ErrorState errorMessage={errorMessage} /> : null}
-
-				{'status' === activeView ? (
-					<div className="space-y-8">
-						<section className="space-y-3">
-							<h2 className="text-2xl font-semibold text-heading">
-								{__('System Status')}
-							</h2>
-							<p className="max-w-3xl text-sm leading-6 text-text-muted">
-								{__(
-									'The system status check shows information about your PeakURL configuration and items that may need your attention.'
-								)}
-							</p>
-						</section>
-
-						{errorChecks.length > 0 ? (
-							<IssueSection
-								title={formatHeadingCount(
-									errorChecks.length,
-									__('1 critical issue'),
-									__('%s critical issues')
-								)}
-								description={__(
-									'Critical issues are items that may have a high impact on your site performance or security. Resolving these issues should be prioritized.'
-								)}
-								checks={errorChecks}
-								expandedChecks={expandedChecks}
-								onToggleCheck={toggleCheck}
-							/>
-						) : null}
-
-						{warningChecks.length > 0 ? (
-							<IssueSection
-								title={formatHeadingCount(
-									warningChecks.length,
-									__('1 recommended improvement'),
-									__('%s recommended improvements')
-								)}
-								description={__(
-									'Recommended improvements are beneficial for your site, though not as urgent as a critical issue. They may include improvements in areas such as security, performance, and user experience.'
-								)}
-								checks={warningChecks}
-								expandedChecks={expandedChecks}
-								onToggleCheck={toggleCheck}
-							/>
-						) : null}
-
-						{0 === errorChecks.length && 0 === warningChecks.length ? (
-							<div
-								className={`rounded-lg border px-4 py-3 text-sm ${getStatusTone('ok').panel}`}
-							>
-								{__('All system status checks are currently passing.')}
-							</div>
-						) : null}
-
-						{passingChecks.length > 0 ? (
-							<section className="space-y-4">
-								<div className="flex justify-center">
-									<button
-										type="button"
-										onClick={() =>
-											setShowPassedChecks((current) => !current)
-										}
-										className="inline-flex items-center gap-2 rounded-lg border border-accent/30 bg-surface px-4 py-2 text-sm font-medium text-accent transition-colors hover:bg-accent/5"
-									>
-										<CheckCircle2 size={16} />
-										<span>
-											{showPassedChecks
-												? __('Hide passed tests')
-												: formatHeadingCount(
-														passingChecks.length,
-														__('1 passed test'),
-														__('%s passed tests')
-												  )}
-										</span>
-										{showPassedChecks ? (
-											<ChevronUp size={16} />
-										) : (
-											<ChevronDown size={16} />
-										)}
-									</button>
-								</div>
-
-								{showPassedChecks ? (
-									<div className="overflow-hidden rounded-lg border border-stroke bg-surface">
-										{passingChecks.map((check, index) => {
-											const checkKey =
-												check?.id ||
-												check?.label ||
-												`passed-check-${index}`;
-
-											return (
-												<IssueRow
-													key={checkKey}
-													check={check}
-													isOpen={expandedChecks.has(checkKey)}
-													onToggle={() => toggleCheck(checkKey)}
-													showBorder={index > 0}
-												/>
-											);
-										})}
-									</div>
-								) : null}
+					{'status' === activeView ? (
+						<div className="space-y-8">
+							<section className="space-y-3">
+								<h2 className="text-2xl font-semibold text-heading">
+									{__('System Status')}
+								</h2>
+								<p className="max-w-3xl text-sm leading-6 text-text-muted">
+									{__(
+										'The system status check shows information about your PeakURL configuration and items that may need your attention.'
+									)}
+								</p>
 							</section>
-						) : null}
-					</div>
-				) : (
-					<div className="space-y-6">
-						<section className="space-y-3">
-							<h2 className="text-2xl font-semibold text-heading">
-								{__('System Status Info')}
-							</h2>
-							<p className="max-w-3xl text-sm leading-6 text-text-muted">
-								{__(
-									'This page can show you every detail about the configuration of your PeakURL install.'
-								)}
-							</p>
-							<p className="max-w-3xl text-sm leading-6 text-text-muted">
-								{__(
-									'If you want to export a full snapshot of this page, you can use the button below to copy it to the clipboard.'
-								)}
-							</p>
-						</section>
 
-						<div>
-							<button
-								type="button"
-								onClick={handleCopyInfo}
-								className="inline-flex items-center gap-2 rounded-lg border border-stroke bg-surface px-4 py-2 text-sm font-medium text-heading transition-colors hover:border-accent/30 hover:text-accent"
-							>
-								<Copy size={16} />
-								{copiedInfo
-									? __('Copied')
-									: __('Copy site info to clipboard')}
-							</button>
-						</div>
-
-						<div className="space-y-3">
-							{infoSections.map((section) => (
-								<InfoSection
-									key={section.id}
-									section={section}
-									isOpen={expandedSections.has(section.id)}
-									onToggle={() => toggleSection(section.id)}
+							{errorChecks.length > 0 ? (
+								<IssueSection
+									title={formatHeadingCount(
+										errorChecks.length,
+										__('1 critical issue'),
+										__('%s critical issues')
+									)}
+									description={__(
+										'Critical issues are items that may have a high impact on your site performance or security. Resolving these issues should be prioritized.'
+									)}
+									checks={errorChecks}
+									expandedChecks={expandedChecks}
+									onToggleCheck={toggleCheck}
 								/>
-							))}
+							) : null}
+
+							{warningChecks.length > 0 ? (
+								<IssueSection
+									title={formatHeadingCount(
+										warningChecks.length,
+										__('1 recommended improvement'),
+										__('%s recommended improvements')
+									)}
+									description={__(
+										'Recommended improvements are beneficial for your site, though not as urgent as a critical issue. They may include improvements in areas such as security, performance, and user experience.'
+									)}
+									checks={warningChecks}
+									expandedChecks={expandedChecks}
+									onToggleCheck={toggleCheck}
+								/>
+							) : null}
+
+							{0 === errorChecks.length && 0 === warningChecks.length ? (
+								<div
+									className={`rounded-lg border px-4 py-3 text-sm ${getStatusTone('ok').panel}`}
+								>
+									{__('All system status checks are currently passing.')}
+								</div>
+							) : null}
+
+							{passingChecks.length > 0 ? (
+								<section className="space-y-4">
+									<div className="flex justify-center">
+										<button
+											type="button"
+											onClick={() =>
+												setShowPassedChecks((current) => !current)
+											}
+											className="inline-flex items-center gap-2 rounded-lg border border-accent/30 bg-surface px-4 py-2 text-sm font-medium text-accent transition-colors hover:bg-accent/5"
+										>
+											<CheckCircle2 size={16} />
+											<span>
+												{showPassedChecks
+													? __('Hide passed tests')
+													: formatHeadingCount(
+															passingChecks.length,
+															__('1 passed test'),
+															__('%s passed tests')
+													  )}
+											</span>
+											{showPassedChecks ? (
+												<ChevronUp size={16} />
+											) : (
+												<ChevronDown size={16} />
+											)}
+										</button>
+									</div>
+
+									{showPassedChecks ? (
+										<div className="overflow-hidden rounded-lg border border-stroke bg-surface">
+											{passingChecks.map((check, index) => {
+												const checkKey =
+													check?.id ||
+													check?.label ||
+													`passed-check-${index}`;
+
+												return (
+													<IssueRow
+														key={checkKey}
+														check={check}
+														isOpen={expandedChecks.has(checkKey)}
+														onToggle={() => toggleCheck(checkKey)}
+														showBorder={index > 0}
+													/>
+												);
+											})}
+										</div>
+									) : null}
+								</section>
+							) : null}
 						</div>
-					</div>
-				)}
+					) : (
+						<div className="space-y-6">
+							<section className="space-y-3">
+								<h2 className="text-2xl font-semibold text-heading">
+									{__('System Status Info')}
+								</h2>
+								<p className="max-w-3xl text-sm leading-6 text-text-muted">
+									{__(
+										'This page can show you every detail about the configuration of your PeakURL install.'
+									)}
+								</p>
+								<p className="max-w-3xl text-sm leading-6 text-text-muted">
+									{__(
+										'If you want to export a full snapshot of this page, you can use the button below to copy it to the clipboard.'
+									)}
+								</p>
+							</section>
+
+							<div>
+								<button
+									type="button"
+									onClick={handleCopyInfo}
+									className="inline-flex items-center gap-2 rounded-lg border border-stroke bg-surface px-4 py-2 text-sm font-medium text-heading transition-colors hover:border-accent/30 hover:text-accent"
+								>
+									<Copy size={16} />
+									{copiedInfo
+										? __('Copied')
+										: __('Copy site info to clipboard')}
+								</button>
+							</div>
+
+							<div className="space-y-3">
+								{infoSections.map((section) => (
+									<InfoSection
+										key={section.id}
+										section={section}
+										isOpen={expandedSections.has(section.id)}
+										onToggle={() => toggleSection(section.id)}
+									/>
+								))}
+							</div>
+						</div>
+					)}
+				</div>
 			</div>
 		</div>
 	);

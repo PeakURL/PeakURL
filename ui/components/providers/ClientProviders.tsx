@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { Provider } from 'react-redux';
 import { store } from '@store';
+import { NotificationProvider } from './NotificationProvider';
 import { ThemeProvider } from './ThemeProvider';
 
 /**
@@ -12,7 +13,9 @@ import { ThemeProvider } from './ThemeProvider';
 function ClientProviders({ children }) {
 	return (
 		<Provider store={store}>
-			<ThemeProvider>{children}</ThemeProvider>
+			<ThemeProvider>
+				<NotificationProvider>{children}</NotificationProvider>
+			</ThemeProvider>
 		</Provider>
 	);
 }

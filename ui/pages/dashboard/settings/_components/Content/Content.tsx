@@ -533,7 +533,6 @@ const Content = ({ activeTab }) => {
 				onConfirm={handleApplyUpdate}
 				loading={isApplyingUpdate}
 			/>
-			<notification.NotificationContainer />
 		</div>
 	);
 };

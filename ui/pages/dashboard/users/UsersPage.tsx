@@ -541,7 +541,6 @@ function UsersPage() {
 				onConfirm={handleDelete}
 				loading={isDeleting}
 			/>
-			<notification.NotificationContainer />
 		</div>
 	);
 }

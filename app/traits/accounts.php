@@ -508,7 +508,8 @@ trait AccountsTrait {
 		return array_merge(
 			$user,
 			array(
-				'siteUrl' => \get_site_url(),
+				'siteUrl'    => \get_site_url(),
+				'baseApiUrl' => \get_api_base_url(),
 			),
 		);
 	}

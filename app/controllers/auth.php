@@ -195,8 +195,8 @@ class AuthController {
 
 		return JsonResponse::success(
 			array(
-				'apiKey' => $key['key'],
-				'key'    => $key,
+				'apiKey'     => $key['key'],
+				'baseApiUrl' => \get_api_base_url(),
 			),
 			__( 'API key created.', 'peakurl' ),
 		);

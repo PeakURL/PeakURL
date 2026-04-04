@@ -1,10 +1,12 @@
 // @ts-nocheck
 import { Button } from '@/components/ui';
-import { Plus, Trash2, Info, Key, LoaderCircle, ExternalLink, BookOpen } from 'lucide-react';
+import { Plus, Trash2, Info, Key, LoaderCircle, ExternalLink, BookOpen, Copy, Link2 } from 'lucide-react';
 import { __ } from '@/i18n';
 
 function ApiTab({
 	user,
+	baseApiUrl,
+	copyToClipboard,
 	isGeneratingKey,
 	isDeletingKey,
 	onDeleteKey,
@@ -12,6 +14,51 @@ function ApiTab({
 }) {
 	return (
 		<div className="space-y-5">
+			{baseApiUrl && (
+				<div className="rounded-lg border border-accent/20 bg-gradient-to-br from-accent/6 via-surface to-surface p-5">
+					<div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+						<div className="space-y-3">
+							<div className="flex items-center gap-2 text-heading">
+								<div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent/12 text-accent">
+									<Link2 size={18} />
+								</div>
+								<div className="space-y-1">
+									<p className="text-xs font-medium uppercase tracking-[0.18em] text-text-muted">
+										{__('Connection')}
+									</p>
+									<h2 className="text-base font-semibold">
+										{__('Base API URL')}
+									</h2>
+								</div>
+							</div>
+							<p className="max-w-2xl text-sm text-text-muted">
+								{__(
+									'Use this endpoint with WordPress, browser extensions, scripts, and other API clients.'
+								)}
+							</p>
+						</div>
+						<Button
+							size="sm"
+							variant="secondary"
+							onClick={() =>
+								copyToClipboard(
+									baseApiUrl,
+									__('Base API URL copied to clipboard')
+								)
+							}
+						>
+							<Copy size={14} className="mr-2" />
+							{__('Copy API URL')}
+						</Button>
+					</div>
+					<div className="mt-4 rounded-xl border border-accent/15 bg-surface/90 px-4 py-3 shadow-sm">
+						<p className="font-mono text-sm break-all text-heading">
+							{baseApiUrl}
+						</p>
+					</div>
+				</div>
+			)}
+
 			<div className="bg-surface border border-stroke rounded-lg p-5">
 				<div className="flex items-center justify-between mb-5">
 					<h2 className="text-base font-semibold text-heading">
@@ -47,8 +94,8 @@ function ApiTab({
 											{__('Active')}
 										</span>
 									</div>
-								<div className="flex items-center gap-2">
-									<p className="text-xs text-text-muted font-mono truncate">
+									<div className="flex items-center gap-2">
+										<p className="text-xs text-text-muted font-mono truncate">
 											{key.maskedKey || '••••••••'}
 										</p>
 									</div>

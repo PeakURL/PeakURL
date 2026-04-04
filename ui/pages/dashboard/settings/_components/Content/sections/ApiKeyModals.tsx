@@ -11,6 +11,7 @@ function ApiKeyModals({
 	keyLabel,
 	setKeyLabel,
 	newApiKey,
+	baseApiUrl,
 	onCreateKey,
 	copyToClipboard,
 	isGeneratingKey,
@@ -89,6 +90,36 @@ function ApiKeyModals({
 							<Copy size={14} />
 						</button>
 					</div>
+					{baseApiUrl && (
+						<div className="space-y-2">
+							<p className="text-sm font-medium text-heading">
+								{__('Base API URL')}
+							</p>
+							<div className="relative">
+								<pre className="p-3 bg-surface-alt rounded-lg text-sm font-mono break-all border border-stroke">
+									{baseApiUrl}
+								</pre>
+								<button
+									type="button"
+									onClick={() =>
+										copyToClipboard(
+											baseApiUrl,
+											__('Base API URL copied to clipboard')
+										)
+									}
+									className="absolute top-2 right-2 p-1.5 text-text-muted hover:text-heading bg-surface rounded shadow-sm hover:shadow transition-all"
+									title={__('Copy to clipboard')}
+								>
+									<Copy size={14} />
+								</button>
+							</div>
+							<p className="text-xs text-text-muted">
+								{__(
+									'Use this API URL with integrations that need both the endpoint and the token.'
+								)}
+							</p>
+						</div>
+					)}
 					<p className="text-sm text-text-muted">
 						{__(
 							'If this key is ever exposed, revoke it from the API Keys list and create a replacement.'

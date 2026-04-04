@@ -266,6 +266,46 @@ function site_url( string $path = '', ?string $scheme = null ): string {
 }
 
 /**
+ * Get the canonical public API base URL for this PeakURL install.
+ *
+ * @param string      $path   Optional path relative to the API base.
+ * @param string|null $scheme Optional scheme override.
+ * @return string
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function get_api_base_url( string $path = '', ?string $scheme = null ): string {
+	$api_base_url = get_site_url( 'api/v1', $scheme );
+
+	if ( '' !== $path ) {
+		$api_base_url .= '/' . ltrim( $path, '/' );
+	}
+
+	return (string) apply_filters(
+		'api_base_url',
+		$api_base_url,
+		$path,
+		$scheme,
+	);
+}
+
+/**
+ * Get the canonical public API base URL for this PeakURL install.
+ *
+ * Mirrors the role of WordPress `site_url()` as a wrapper around
+ * `get_api_base_url()`.
+ *
+ * @param string      $path   Optional path relative to the API base.
+ * @param string|null $scheme Optional scheme override.
+ * @return string
+ * @since 1.0.3
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function api_base_url( string $path = '', ?string $scheme = null ): string {
+	return get_api_base_url( $path, $scheme );
+}
+
+/**
  * Get the shared i18n service for the current request.
  *
  * @param array<string, mixed>|null $config     Optional runtime config.

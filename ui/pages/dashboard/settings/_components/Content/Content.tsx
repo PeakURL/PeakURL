@@ -42,6 +42,22 @@ const buildGeneralForm = (user) => ({
 	bio: user?.bio || '',
 });
 
+const resolveBaseApiUrl = (user, fallbackBaseApiUrl = '') => {
+	if (fallbackBaseApiUrl) {
+		return fallbackBaseApiUrl;
+	}
+
+	if (user?.baseApiUrl) {
+		return user.baseApiUrl;
+	}
+
+	if (user?.siteUrl) {
+		return `${String(user.siteUrl).replace(/\/+$/, '')}/api/v1`;
+	}
+
+	return '';
+};
+
 const Content = ({ activeTab }) => {
 	const notification = useNotification();
 	const { data: userData } = useGetUserProfileQuery();
@@ -109,6 +125,7 @@ const Content = ({ activeTab }) => {
 	const [apiKeyPendingDelete, setApiKeyPendingDelete] = useState(null);
 	const [showUpdateConfirm, setShowUpdateConfirm] = useState(false);
 	const [keyLabel, setKeyLabel] = useState('');
+	const [newApiBaseUrl, setNewApiBaseUrl] = useState('');
 
 	const handleGeneralSubmit = async (generalForm) => {
 		const { siteLanguage: nextSiteLanguage, ...profileForm } =
@@ -197,8 +214,8 @@ const Content = ({ activeTab }) => {
 	const handleCreateKey = async () => {
 		try {
 			const result = await generateApiKey({ label: keyLabel }).unwrap();
-			const plainTextKey =
-				result?.data?.apiKey || result?.data?.key?.key || '';
+			const plainTextKey = result?.data?.apiKey || '';
+			const baseApiUrl = resolveBaseApiUrl(user, result?.data?.baseApiUrl);
 
 			if (!plainTextKey) {
 				notification.error(
@@ -213,6 +230,7 @@ const Content = ({ activeTab }) => {
 			}
 
 			setNewApiKey(plainTextKey);
+			setNewApiBaseUrl(baseApiUrl);
 			setShowCreateModal(false);
 			setShowKeyModal(true);
 			setKeyLabel('');
@@ -248,17 +266,21 @@ const Content = ({ activeTab }) => {
 		}
 	};
 
-	const copyToClipboard = (text) => {
+	const copyToClipboard = (
+		text,
+		message = __('API key copied to clipboard')
+	) => {
 		navigator.clipboard.writeText(text);
 		notification.success(
 			__('Copied'),
-			__('API key copied to clipboard')
+			message
 		);
 	};
 
 	const handleCloseKeyModal = () => {
 		setShowKeyModal(false);
 		setNewApiKey(null);
+		setNewApiBaseUrl('');
 	};
 
 	const handleCheckForUpdates = async () => {
@@ -426,6 +448,8 @@ const Content = ({ activeTab }) => {
 			{activeTab === 'api' && (
 				<ApiTab
 					user={user}
+					baseApiUrl={resolveBaseApiUrl(user)}
+					copyToClipboard={copyToClipboard}
 					isGeneratingKey={isGeneratingKey}
 					isDeletingKey={isDeletingKey}
 					onDeleteKey={setApiKeyPendingDelete}
@@ -482,6 +506,7 @@ const Content = ({ activeTab }) => {
 				keyLabel={keyLabel}
 				setKeyLabel={setKeyLabel}
 				newApiKey={newApiKey}
+				baseApiUrl={newApiBaseUrl || resolveBaseApiUrl(user)}
 				onCreateKey={handleCreateKey}
 				copyToClipboard={copyToClipboard}
 				isGeneratingKey={isGeneratingKey}

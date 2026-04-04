@@ -4,7 +4,7 @@ import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { X, Trash2, AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
 import { useDeleteUrlMutation } from '@/store/slices/api/urls';
-import { buildShortUrl, getDefaultShortUrlOrigin } from '@/utils';
+import { buildShortUrl, getSiteUrl } from '@/utils';
 import { __ } from '@/i18n';
 
 function DeleteLinkModal({ open, setOpen, link }) {
@@ -13,7 +13,7 @@ function DeleteLinkModal({ open, setOpen, link }) {
 	const shortUrl = link
 		? buildShortUrl(
 				link,
-				getDefaultShortUrlOrigin(
+				getSiteUrl(
 					typeof window !== 'undefined' ? window.location.origin : ''
 				)
 			)

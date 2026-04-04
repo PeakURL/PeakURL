@@ -124,14 +124,10 @@ trait SystemTrait {
 	public function get_general_settings( Request $request ): array {
 		$user      = $this->get_current_user( $request );
 		$site_name = trim( (string) $this->get_setting_value( 'site_name' ) );
-		$site_url  = trim( (string) $this->get_setting_value( 'site_url' ) );
+		$site_url  = \get_site_url();
 
 		if ( '' === $site_name ) {
 			$site_name = 'PeakURL';
-		}
-
-		if ( '' === $site_url ) {
-			$site_url = trim( (string) ( $this->config['SITE_URL'] ?? '' ) );
 		}
 
 		return array(

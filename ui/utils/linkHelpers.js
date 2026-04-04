@@ -26,16 +26,16 @@ const normalizeBaseUrl = (value, fallback = PEAKURL_URL) => {
 	}
 };
 
-export const getDefaultShortUrlOrigin = (origin = PEAKURL_URL) => {
+export const getSiteUrl = (url = PEAKURL_URL) => {
 	const installedBaseUrl = normalizeBaseUrl(PEAKURL_URL);
 
-	if (!origin || typeof origin !== 'string') {
+	if (!url || typeof url !== 'string') {
 		return installedBaseUrl;
 	}
 
 	try {
-		const url = new URL(origin);
-		const hostname = url.hostname.toLowerCase();
+		const parsedUrl = new URL(url);
+		const hostname = parsedUrl.hostname.toLowerCase();
 
 		if (
 			hostname === PEAKURL_DOMAIN ||
@@ -44,15 +44,19 @@ export const getDefaultShortUrlOrigin = (origin = PEAKURL_URL) => {
 			return installedBaseUrl;
 		}
 
-		return normalizeBaseUrl(url.toString(), installedBaseUrl);
+		return normalizeBaseUrl(parsedUrl.toString(), installedBaseUrl);
 	} catch {
 		return installedBaseUrl;
 	}
 };
 
-export const buildShortUrl = (link, origin = '') => {
+export const buildShortUrl = (link, siteUrl = '') => {
+	if (typeof link?.shortUrl === 'string' && link.shortUrl.trim()) {
+		return link.shortUrl.trim();
+	}
+
 	const host = resolveLinkHost(link);
-	const base = host ? `https://${host}` : getDefaultShortUrlOrigin(origin);
+	const base = host ? `https://${host}` : getSiteUrl(siteUrl);
 	const code = link?.alias || link?.shortCode || '';
 	return code ? `${base}/${code}` : base;
 };

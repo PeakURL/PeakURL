@@ -6,6 +6,10 @@ import {
 	normalizeCsvHeader,
 	parseCsvRows,
 } from '@/utils';
+import {
+	buildShortUrl,
+	getSiteUrl,
+} from '@/utils/linkHelpers';
 import FileUploadArea from './FileUploadArea';
 import ProcessingStatus from './ProcessingStatus';
 import ImportSummary from '../ImportSummary';
@@ -156,6 +160,9 @@ const FileUpload = ({
 		setImportStatus('processing');
 		try {
 			const result = await bulkCreateUrl({ urls: data }).unwrap();
+			const siteUrl = getSiteUrl(
+				typeof window !== 'undefined' ? window.location.origin : ''
+			);
 
 			const results = [];
 
@@ -165,9 +172,7 @@ const FileUpload = ({
 						url: item.destinationUrl,
 						alias: item.alias || item.shortCode,
 						status: 'success',
-						shortUrl: `${window.location.origin}/${
-							item.alias || item.shortCode
-						}`,
+						shortUrl: buildShortUrl(item, siteUrl),
 					});
 				});
 

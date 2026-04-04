@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { buildShortUrl, formatNumber, getDefaultShortUrlOrigin } from '@/utils';
+import { buildShortUrl, formatNumber, getSiteUrl } from '@/utils';
 import StatsDrawer from '../StatsDrawer';
 import QRCodeModal from '../QRCodeModal';
 import EditLinkModal from '../EditLinkModal';
@@ -45,7 +45,7 @@ const LinksTable = ({ links, statsShortId, statsLink }) => {
 	const handleCopy = async (link) => {
 		const shortUrl = buildShortUrl(
 			link,
-			getDefaultShortUrlOrigin(
+			getSiteUrl(
 				typeof window !== 'undefined' ? window.location.origin : ''
 			)
 		);

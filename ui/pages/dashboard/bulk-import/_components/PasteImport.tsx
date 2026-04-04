@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui';
 import { useBulkCreateUrlMutation } from '@/store/slices/api/urls';
+import { buildShortUrl, getSiteUrl } from '@/utils/linkHelpers';
 import ImportSummary from './ImportSummary';
 import ImportDetails from './ImportDetails';
 import { Lightbulb, LoaderCircle, WandSparkles } from 'lucide-react';
@@ -44,6 +45,9 @@ const PasteImport = () => {
 			if (data.length === 0) throw new Error(__('No URLs found'));
 
 			const result = await bulkCreateUrl({ urls: data }).unwrap();
+			const siteUrl = getSiteUrl(
+				typeof window !== 'undefined' ? window.location.origin : ''
+			);
 
 			const transformResults = [];
 			if (result.data) {
@@ -52,9 +56,7 @@ const PasteImport = () => {
 						url: item.destinationUrl,
 						alias: item.alias || item.shortCode,
 						status: 'success',
-						shortUrl: `${window.location.origin}/${
-							item.alias || item.shortCode
-						}`,
+						shortUrl: buildShortUrl(item, siteUrl),
 					});
 				});
 				result.data.errors.forEach((item) => {

@@ -59,7 +59,7 @@ export function validateUrl(url) {
 
 export {
 	buildShortUrl,
-	getDefaultShortUrlOrigin,
+	getSiteUrl,
 	resolveLinkHost,
 } from './linkHelpers';
 export {

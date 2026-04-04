@@ -1,5 +1,5 @@
 import { serializeCsv } from './csv';
-import { buildShortUrl, getDefaultShortUrlOrigin } from './linkHelpers';
+import { buildShortUrl, getSiteUrl } from './linkHelpers';
 
 function escapeXml(value) {
 	return String(value ?? '')
@@ -12,7 +12,7 @@ function escapeXml(value) {
 
 export function buildLinkExportItems(
 	links = [],
-	shortUrlOrigin = getDefaultShortUrlOrigin()
+	siteUrl = getSiteUrl()
 ) {
 	return links.map((link) => {
 		const alias = link.alias || link.shortCode || '';
@@ -23,7 +23,7 @@ export function buildLinkExportItems(
 			title: link.title || '',
 			password: '',
 			expires: link.expiresAt || '',
-			short_url: buildShortUrl(link, shortUrlOrigin),
+			short_url: buildShortUrl(link, siteUrl),
 			clicks: link.clicks ?? '',
 			unique_clicks: link.uniqueClicks ?? '',
 			created_at: link.createdAt || '',
@@ -93,8 +93,8 @@ export function getLinkExportFile(format = 'csv') {
 }
 
 export function downloadLinkExport(links = [], format = 'csv', options = {}) {
-	const shortUrlOrigin = options.shortUrlOrigin || getDefaultShortUrlOrigin();
-	const items = buildLinkExportItems(links, shortUrlOrigin);
+	const siteUrl = options.siteUrl || getSiteUrl();
+	const items = buildLinkExportItems(links, siteUrl);
 	const content = serializeLinkExport(format, items);
 	const file = getLinkExportFile(format);
 	const blob = new Blob([content], { type: file.type });

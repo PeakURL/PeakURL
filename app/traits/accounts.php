@@ -505,7 +505,12 @@ trait AccountsTrait {
 			throw new ApiException( __( 'Authentication required.', 'peakurl' ), 401 );
 		}
 
-		return $user;
+		return array_merge(
+			$user,
+			array(
+				'siteUrl' => \get_site_url(),
+			),
+		);
 	}
 
 	/**

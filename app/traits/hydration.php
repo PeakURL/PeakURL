@@ -91,10 +91,27 @@ trait HydrationTrait {
 			return array();
 		}
 
+		static $site_url = null;
+
+		if ( null === $site_url ) {
+			$site_url = rtrim( \get_site_url(), '/' );
+		}
+
+		$alias     = trim( (string) ( $row['alias'] ?? '' ) );
+		$short_key = '' !== $alias
+			? $alias
+				: trim( (string) ( $row['short_code'] ?? '' ) );
+		$short_url = '';
+
+		if ( '' !== $site_url && '' !== $short_key ) {
+			$short_url = $site_url . '/' . ltrim( $short_key, '/' );
+		}
+
 		return array(
 			'id'             => (string) $row['id'],
 			'shortCode'      => (string) $row['short_code'],
 			'alias'          => (string) $row['alias'],
+			'shortUrl'       => $short_url,
 			'title'          => trim( (string) ( $row['title'] ?? '' ) ),
 			'destinationUrl' => (string) $row['destination_url'],
 			'domain'         => null,

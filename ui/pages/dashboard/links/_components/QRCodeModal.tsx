@@ -4,7 +4,7 @@ import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { X, Download, Copy, Check } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import QRCode from 'qrcode';
-import { buildShortUrl, getDefaultShortUrlOrigin } from '@/utils';
+import { buildShortUrl, getSiteUrl } from '@/utils';
 import { __ } from '@/i18n';
 
 function QRCodeModal({ open, setOpen, link }) {
@@ -13,7 +13,7 @@ function QRCodeModal({ open, setOpen, link }) {
 	const shortUrl = link
 		? buildShortUrl(
 				link,
-				getDefaultShortUrlOrigin(
+				getSiteUrl(
 					typeof window !== 'undefined' ? window.location.origin : ''
 				)
 			)

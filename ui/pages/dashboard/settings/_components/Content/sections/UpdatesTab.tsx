@@ -10,6 +10,54 @@ import {
 	RefreshCcw,
 } from 'lucide-react';
 
+function hasUpdateAvailable(status) {
+	if (status?.updateAvailable) {
+		return true;
+	}
+
+	const currentVersion = String(status?.currentVersion || '')
+		.trim()
+		.replace(/^v/i, '');
+	const latestVersion = String(status?.latestVersion || '')
+		.trim()
+		.replace(/^v/i, '');
+
+	if (!currentVersion || !latestVersion || currentVersion === latestVersion) {
+		return false;
+	}
+
+	const currentParts = currentVersion
+		.split('.')
+		.map((part) => Number.parseInt(part, 10));
+	const latestParts = latestVersion
+		.split('.')
+		.map((part) => Number.parseInt(part, 10));
+
+	if (
+		currentParts.some((part) => Number.isNaN(part)) ||
+		latestParts.some((part) => Number.isNaN(part))
+	) {
+		return latestVersion !== currentVersion;
+	}
+
+	const maxLength = Math.max(currentParts.length, latestParts.length);
+
+	for (let index = 0; index < maxLength; index += 1) {
+		const currentPart = currentParts[index] ?? 0;
+		const latestPart = latestParts[index] ?? 0;
+
+		if (latestPart > currentPart) {
+			return true;
+		}
+
+		if (latestPart < currentPart) {
+			return false;
+		}
+	}
+
+	return false;
+}
+
 function formatDate(value) {
 	if (!value) {
 		return __('Never');
@@ -23,6 +71,8 @@ function formatDate(value) {
 }
 
 function buildAppStatus(status, errorMessage) {
+	const updateAvailable = hasUpdateAvailable(status);
+
 	if (errorMessage || status?.lastError) {
 		return {
 			tone: 'error',
@@ -35,7 +85,7 @@ function buildAppStatus(status, errorMessage) {
 		};
 	}
 
-	if (status?.updateAvailable) {
+	if (updateAvailable) {
 		return {
 			tone: 'info',
 			label: __('Update Available'),
@@ -232,9 +282,10 @@ function UpdatesTab({
 	onApply,
 	onRepair,
 }) {
-	const updateAvailable = Boolean(status?.updateAvailable);
+	const updateAvailable = hasUpdateAvailable(status);
 	const canApply = Boolean(status?.canApply);
-	const showInstallAction = updateAvailable && canApply;
+	const showApplyDisabledReason =
+		updateAvailable && !canApply && Boolean(status?.applyDisabledReason);
 	const showReleaseMeta =
 		updateAvailable && (status?.releasedAt || status?.releaseNotesUrl);
 	const databaseStatus = status?.database || null;
@@ -263,31 +314,38 @@ function UpdatesTab({
 					)}
 					badge={appState}
 					primaryAction={
-						showInstallAction ? (
+						updateAvailable ? (
+							<div className="flex flex-col items-stretch gap-2 sm:items-end">
+								<Button
+									size="sm"
+									className="min-w-[11rem] whitespace-nowrap"
+									onClick={onApply}
+									loading={isApplying}
+									icon={Download}
+									disabled={!canApply || isLoading || isChecking || isRepairing}
+									title={!canApply ? status?.applyDisabledReason || '' : ''}
+								>
+									{__('Install Update')}
+								</Button>
+								{showApplyDisabledReason ? (
+									<p className="max-w-[18rem] text-xs leading-5 text-text-muted sm:text-right">
+										{status.applyDisabledReason}
+									</p>
+								) : null}
+							</div>
+						) : (
 							<Button
+								variant="outline"
 								size="sm"
 								className="min-w-[11rem] whitespace-nowrap"
-								onClick={onApply}
-								loading={isApplying}
-								icon={Download}
-								disabled={isLoading || isChecking || isRepairing}
+								onClick={onCheck}
+								loading={isChecking}
+								icon={RefreshCcw}
+								disabled={isApplying || isRepairing}
 							>
-								{__('Install Update')}
+								{__('Check for Updates')}
 							</Button>
-						) : null
-					}
-					secondaryAction={
-						<Button
-							variant={showInstallAction ? 'outline' : 'primary'}
-							size="sm"
-							className="min-w-[11rem] whitespace-nowrap"
-							onClick={onCheck}
-							loading={isChecking}
-							icon={RefreshCcw}
-							disabled={isApplying || isRepairing}
-						>
-							{__('Check for Updates')}
-						</Button>
+						)
 					}
 				/>
 
@@ -317,7 +375,7 @@ function UpdatesTab({
 					/>
 				</div>
 
-				{showReleaseMeta || (updateAvailable && !canApply && status?.applyDisabledReason) ? (
+				{showReleaseMeta ? (
 					<div className="mt-5 space-y-3 border-t border-stroke pt-5">
 						{status?.releasedAt ? (
 							<DetailRow
@@ -332,11 +390,6 @@ function UpdatesTab({
 								value={__('Read release notes')}
 								href={status.releaseNotesUrl}
 							/>
-						) : null}
-						{updateAvailable && !canApply && status?.applyDisabledReason ? (
-							<div className="rounded-lg border border-stroke bg-bg px-4 py-3 text-sm leading-6 text-text-muted">
-								{status.applyDisabledReason}
-							</div>
 						) : null}
 					</div>
 				) : null}

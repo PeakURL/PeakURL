@@ -14,7 +14,6 @@ import { X, Link2, BarChart3, Globe, Share2, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
 import { useGetLinkStatsQuery } from '@/store/slices/api/analytics';
 import { buildShortUrl } from '@/utils';
-import { PEAKURL_URL } from '@constants';
 import { __ } from '@/i18n';
 import StatCards from './StatCards';
 import ClickChart from './ClickChart';
@@ -56,15 +55,7 @@ export default function StatsDrawer({ open, setOpen, link }) {
 
 	if (!link) return null;
 
-	// Use custom domain if available. For the frontend origin use:
-	// - development: the current `window.location.origin` (localhost)
-	// - production: the configured `PEAKURL_URL` (base domain)
-	const isDev = process.env.NODE_ENV === 'development';
-	const frontendOrigin =
-		typeof window !== 'undefined' && isDev
-			? window.location.origin
-			: PEAKURL_URL;
-	const shortUrl = buildShortUrl(link, frontendOrigin);
+	const shortUrl = buildShortUrl(link);
 
 	const tabs = [
 		{ name: __('Traffic Statistics'), icon: BarChart3 },

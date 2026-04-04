@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useCreateUrlMutation } from '@/store/slices/api/urls';
 import {
 	buildShortUrl,
-	getSiteUrl,
 	isFutureLocalDateTime,
 	toIsoFromLocalDateTime,
 } from '@/utils';
@@ -113,10 +112,7 @@ const UrlShorteningForm = () => {
 			}
 
 			const result = await createUrl(payload).unwrap();
-			const siteUrl = getSiteUrl(
-				typeof window !== 'undefined' ? window.location.origin : ''
-			);
-			const shortUrl = buildShortUrl(result.data, siteUrl);
+			const shortUrl = buildShortUrl(result.data);
 			setSuccess(
 				sprintf(__('Link shortened successfully! %s'), shortUrl)
 			);

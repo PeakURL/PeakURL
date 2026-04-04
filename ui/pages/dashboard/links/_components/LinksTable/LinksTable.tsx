@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { buildShortUrl, formatNumber, getSiteUrl } from '@/utils';
+import { buildShortUrl, formatNumber } from '@/utils';
 import StatsDrawer from '../StatsDrawer';
 import QRCodeModal from '../QRCodeModal';
 import EditLinkModal from '../EditLinkModal';
@@ -43,12 +43,7 @@ const LinksTable = ({ links, statsShortId, statsLink }) => {
 	}, [statsShortId, links, statsLink, searchParams, setSearchParams]);
 
 	const handleCopy = async (link) => {
-		const shortUrl = buildShortUrl(
-			link,
-			getSiteUrl(
-				typeof window !== 'undefined' ? window.location.origin : ''
-			)
-		);
+		const shortUrl = buildShortUrl(link);
 		try {
 			await navigator.clipboard.writeText(shortUrl);
 			setCopiedId(link.id);

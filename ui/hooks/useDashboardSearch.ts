@@ -13,14 +13,12 @@ import {
 	getLinkDisplayTitle,
 	resolveDashboardSearchPath,
 	buildShortUrl,
-	getSiteUrl,
 } from '@/utils';
 
 export const useDashboardSearch = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const capabilities = useAdminAccess();
-	const siteUrl = getSiteUrl();
 	const [query, setQuery] = useState(() =>
 		getDashboardSearchValueFromLocation(location)
 	);
@@ -78,7 +76,7 @@ export const useDashboardSearch = () => {
 		() =>
 			(linksData?.data?.items || []).map((link) => {
 				const shortCode = link.alias || link.shortCode || '';
-				const shortUrl = buildShortUrl(link, siteUrl);
+				const shortUrl = buildShortUrl(link);
 
 				return {
 					id: link.id,
@@ -95,7 +93,7 @@ export const useDashboardSearch = () => {
 						: buildLinksSearchPath(deferredQuery),
 				};
 			}),
-		[linksData, deferredQuery, siteUrl]
+		[linksData, deferredQuery]
 	);
 	const userMatches = useMemo(
 		() =>

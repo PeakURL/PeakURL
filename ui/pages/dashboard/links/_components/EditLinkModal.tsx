@@ -7,7 +7,6 @@ import { useUpdateUrlMutation } from '@/store/slices/api/urls';
 import { __ } from '@/i18n';
 import {
 	buildShortUrl,
-	getSiteUrl,
 	normalizeLinkTitle,
 	getLocalDateTimeValue,
 	isFutureLocalDateTime,
@@ -29,14 +28,7 @@ function EditLinkModal({ open, setOpen, link }) {
 	const [error, setError] = useState('');
 
 	const [updateUrl, { isLoading }] = useUpdateUrlMutation();
-	const shortUrl = link
-		? buildShortUrl(
-				link,
-				getSiteUrl(
-					typeof window !== 'undefined' ? window.location.origin : ''
-				)
-			)
-		: '';
+	const shortUrl = link ? buildShortUrl(link) : '';
 
 	const handleClose = () => setOpen(false);
 

@@ -1,4 +1,4 @@
-import { PEAKURL_DOMAIN, PEAKURL_URL } from '@constants';
+import { PEAKURL_URL } from '@constants';
 
 export const resolveLinkHost = (link) => {
 	const rawDomain = link?.domain;
@@ -11,7 +11,7 @@ export const resolveLinkHost = (link) => {
 	return rawDomain.domain || rawDomain.name || '';
 };
 
-const normalizeBaseUrl = (value, fallback = PEAKURL_URL) => {
+const normalizeSiteUrl = (value, fallback = PEAKURL_URL) => {
 	if (!value || typeof value !== 'string') return fallback;
 
 	try {
@@ -26,37 +26,15 @@ const normalizeBaseUrl = (value, fallback = PEAKURL_URL) => {
 	}
 };
 
-export const getSiteUrl = (url = PEAKURL_URL) => {
-	const installedBaseUrl = normalizeBaseUrl(PEAKURL_URL);
+export const getSiteUrl = () => normalizeSiteUrl(PEAKURL_URL);
 
-	if (!url || typeof url !== 'string') {
-		return installedBaseUrl;
-	}
-
-	try {
-		const parsedUrl = new URL(url);
-		const hostname = parsedUrl.hostname.toLowerCase();
-
-		if (
-			hostname === PEAKURL_DOMAIN ||
-			hostname.endsWith(`.${PEAKURL_DOMAIN}`)
-		) {
-			return installedBaseUrl;
-		}
-
-		return normalizeBaseUrl(parsedUrl.toString(), installedBaseUrl);
-	} catch {
-		return installedBaseUrl;
-	}
-};
-
-export const buildShortUrl = (link, siteUrl = '') => {
+export const buildShortUrl = (link) => {
 	if (typeof link?.shortUrl === 'string' && link.shortUrl.trim()) {
 		return link.shortUrl.trim();
 	}
 
 	const host = resolveLinkHost(link);
-	const base = host ? `https://${host}` : getSiteUrl(siteUrl);
+	const base = host ? `https://${host}` : getSiteUrl();
 	const code = link?.alias || link?.shortCode || '';
 	return code ? `${base}/${code}` : base;
 };

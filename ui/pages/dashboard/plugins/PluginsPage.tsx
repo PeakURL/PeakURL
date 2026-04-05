@@ -119,8 +119,8 @@ function PluginsPage() {
 					</div>
 
 					{/* Waitlist CTA */}
-					<div className="relative overflow-hidden rounded-2xl border border-accent/20 bg-gradient-to-br from-accent/10 via-accent/5 to-transparent p-5 sm:min-w-[260px]">
-						<div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-accent/10 blur-2xl" />
+					<div className="relative overflow-hidden rounded-2xl border border-accent/20 bg-surface p-5 sm:min-w-65">
+						<div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full" />
 						<div className="relative">
 							<div className="mb-2 flex items-center gap-2">
 								<span className="inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-accent">

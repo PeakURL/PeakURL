@@ -1,6 +1,16 @@
 // @ts-nocheck
 import { Button } from '@/components/ui';
-import { Plus, Trash2, Info, Key, LoaderCircle, ExternalLink, BookOpen, Copy, Link2 } from 'lucide-react';
+import {
+	Plus,
+	Trash2,
+	Info,
+	Key,
+	LoaderCircle,
+	ExternalLink,
+	BookOpen,
+	Copy,
+	Link2,
+} from 'lucide-react';
 import { __ } from '@/i18n';
 
 function ApiTab({
@@ -15,7 +25,7 @@ function ApiTab({
 	return (
 		<div className="space-y-5">
 			{baseApiUrl && (
-				<div className="rounded-lg border border-accent/20 bg-gradient-to-br from-accent/6 via-surface to-surface p-5">
+				<div className="rounded-lg border border-accent/20 bg-surface p-5">
 					<div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
 						<div className="space-y-3">
 							<div className="flex items-center gap-2 text-heading">
@@ -70,7 +80,10 @@ function ApiTab({
 						disabled={isGeneratingKey}
 					>
 						{isGeneratingKey ? (
-							<LoaderCircle size={16} className="mr-2 animate-spin" />
+							<LoaderCircle
+								size={16}
+								className="mr-2 animate-spin"
+							/>
 						) : (
 							<Plus size={16} className="mr-2" />
 						)}
@@ -131,7 +144,9 @@ function ApiTab({
 							{__('No API Keys Generated')}
 						</h3>
 						<p className="text-xs text-text-muted mb-4">
-							{__('Generate an API key to access endpoints programmatically.')}
+							{__(
+								'Generate an API key to access endpoints programmatically.'
+							)}
 						</p>
 						<Button
 							size="sm"

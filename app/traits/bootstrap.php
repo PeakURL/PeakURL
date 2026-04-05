@@ -50,6 +50,8 @@ trait BootstrapTrait {
 			);
 		}
 
+		$this->i18n_service->ensure_languages_directory();
+
 		if ( ! $this->table_exists( 'users' ) ) {
 			throw new ApiException(
 				'Database tables are missing. Run the installer or `php bin/setup-database.php` inside the PHP runtime directory.',

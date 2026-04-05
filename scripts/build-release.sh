@@ -52,11 +52,10 @@ printf 'Assembling release package...\n'
 mkdir -p "$RELEASE_DIR" "$RELEASE_ROOT"
 find "$RELEASE_ROOT" -maxdepth 1 \( -name 'peakurl-*.zip' -o -name 'peakurl-*.zip.sha256' \) -exec rm -f {} +
 find "$RELEASE_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-mkdir -p "$RELEASE_DIR/app/bin"
+mkdir -p "$RELEASE_DIR/app/bin" "$RELEASE_DIR/content/languages"
 
 cp -R site/. "$RELEASE_DIR/"
 if [ -d "$ROOT_DIR/content/languages" ]; then
-    mkdir -p "$RELEASE_DIR/content/languages"
     cp -R "$ROOT_DIR/content/languages/." "$RELEASE_DIR/content/languages/"
 fi
 cp -R "$UI_BUILD_DIR/assets" "$RELEASE_DIR/assets"

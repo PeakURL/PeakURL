@@ -289,10 +289,9 @@ class SystemStatus {
 	 * @since 1.0.3
 	 */
 	private function build_storage_status(): array {
-		$content_directory   = rtrim(
-			(string) ( $this->config[ Constants::CONFIG_CONTENT_DIR ] ?? ABSPATH . 'content' ),
-			'/\\',
-		);
+		$this->i18n_service->ensure_languages_directory();
+
+		$content_directory   = $this->i18n_service->get_content_directory();
 		$languages_directory = $this->i18n_service->get_languages_directory();
 		$debug_log_path      = $content_directory .
 			DIRECTORY_SEPARATOR .
@@ -313,6 +312,8 @@ class SystemStatus {
 			'languagesDirectoryExists'   => is_dir( $languages_directory ),
 			'languagesDirectoryReadable' => is_dir( $languages_directory ) &&
 				is_readable( $languages_directory ),
+			'languagesDirectoryWritable' => is_dir( $languages_directory ) &&
+				is_writable( $languages_directory ),
 			'debugLogPath'               => $debug_log_path,
 			'debugLogExists'             => file_exists( $debug_log_path ),
 			'debugLogReadable'           => file_exists( $debug_log_path ) &&

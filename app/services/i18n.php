@@ -14,6 +14,7 @@ use Gettext\Languages\Language as GettextLanguage;
 use Gettext\Loader\MoLoader;
 use Gettext\Loader\PoLoader;
 use Gettext\Translations as GettextTranslations;
+use Locale;
 use PeakURL\Api\SettingsApi;
 use PeakURL\Includes\Constants;
 
@@ -111,6 +112,19 @@ class I18n {
 	 */
 	public function get_default_locale(): string {
 		return Constants::DEFAULT_LOCALE;
+	}
+
+	/**
+	 * Get the absolute persistent content directory path.
+	 *
+	 * @return string
+	 * @since 1.0.4
+	 */
+	public function get_content_directory(): string {
+		return rtrim(
+			(string) ( $this->config[ Constants::CONFIG_CONTENT_DIR ] ?? ABSPATH . Constants::DEFAULT_CONTENT_DIR ),
+			'/\\',
+		);
 	}
 
 	/**
@@ -421,18 +435,44 @@ class I18n {
 	}
 
 	/**
+	 * Ensure the persistent languages directory exists when the install can create it.
+	 *
+	 * @return bool True when the languages directory exists after the repair attempt.
+	 * @since 1.0.4
+	 */
+	public function ensure_languages_directory(): bool {
+		$content_directory   = $this->get_content_directory();
+		$languages_directory = $this->get_languages_directory();
+		$created_directory   = false;
+
+		if ( ! is_dir( $content_directory ) ) {
+			$created_directory = $this->create_directory_if_missing( $content_directory ) || $created_directory;
+		}
+
+		if ( is_dir( $content_directory ) && ! is_dir( $languages_directory ) ) {
+			$created_directory = $this->create_directory_if_missing( $languages_directory ) || $created_directory;
+		}
+
+		if ( $created_directory ) {
+			clearstatcache();
+			$this->catalog              = null;
+			$this->languages_cache      = null;
+			$this->language_packs_cache = null;
+		}
+
+		return is_dir( $languages_directory );
+	}
+
+	/**
 	 * Get the absolute languages directory path.
 	 *
 	 * @return string
 	 * @since 1.0.3
 	 */
 	public function get_languages_directory(): string {
-		$content_dir = rtrim(
-			(string) ( $this->config[ Constants::CONFIG_CONTENT_DIR ] ?? ABSPATH . 'content' ),
-			'/\\',
-		);
-
-		return $content_dir . DIRECTORY_SEPARATOR . Constants::LANGUAGES_DIRECTORY;
+		return $this->get_content_directory() .
+			DIRECTORY_SEPARATOR .
+			Constants::LANGUAGES_DIRECTORY;
 	}
 
 	/**
@@ -679,8 +719,8 @@ class I18n {
 		string $locale,
 		string $fallback
 	): string {
-		if ( class_exists( '\Locale' ) ) {
-			$native_name = \Locale::getDisplayLanguage( $locale, $locale );
+		if ( class_exists( Locale::class ) ) {
+			$native_name = Locale::getDisplayLanguage( $locale, $locale );
 
 			if ( is_string( $native_name ) && '' !== trim( $native_name ) ) {
 				return $this->normalize_native_label( $native_name );
@@ -702,8 +742,8 @@ class I18n {
 		string $locale,
 		?string $fallback
 	): ?string {
-		if ( class_exists( '\Locale' ) ) {
-			$native_territory = \Locale::getDisplayRegion( $locale, $locale );
+		if ( class_exists( Locale::class ) ) {
+			$native_territory = Locale::getDisplayRegion( $locale, $locale );
 
 			if ( is_string( $native_territory ) && '' !== trim( $native_territory ) ) {
 				return $this->normalize_native_label( $native_territory );
@@ -870,5 +910,36 @@ class I18n {
 			count( $language->categories ),
 			$language->buildFormula( true ),
 		);
+	}
+
+	/**
+	 * Create a directory when its immediate parent already exists and is writable.
+	 *
+	 * @param string $path Absolute directory path.
+	 * @return bool True when the directory was created.
+	 * @since 1.0.4
+	 */
+	private function create_directory_if_missing( string $path ): bool {
+		if ( '' === trim( $path ) || is_dir( $path ) ) {
+			return false;
+		}
+
+		$parent_directory = dirname( $path );
+		$last_parent      = '';
+
+		while ( '' !== $parent_directory && ! is_dir( $parent_directory ) && $parent_directory !== $last_parent ) {
+			$last_parent      = $parent_directory;
+			$parent_directory = dirname( $parent_directory );
+		}
+
+		if ( '' === $parent_directory || ! is_dir( $parent_directory ) || ! is_writable( $parent_directory ) ) {
+			return false;
+		}
+
+		if ( ! mkdir( $path, 0755, true ) && ! is_dir( $path ) ) {
+			return false;
+		}
+
+		return true;
 	}
 }

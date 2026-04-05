@@ -294,6 +294,7 @@ class Update {
 			$this->backup_managed_paths( $backup_dir );
 			$backed_up = true;
 			$this->replace_managed_paths( $source_root );
+			$this->seed_language_packs_from_package( $source_root );
 			$this->prune_old_backups();
 
 			return array(
@@ -593,6 +594,19 @@ class Update {
 		return $this->build_path( ABSPATH, 'content', 'uploads', 'updates' );
 	}
 
+	/** Get the configured persistent content directory path. */
+	private function get_content_directory(): string {
+		$content_dir = trim(
+			(string) ( $this->config[ Constants::CONFIG_CONTENT_DIR ] ?? '' ),
+		);
+
+		if ( '' === $content_dir ) {
+			return $this->build_path( ABSPATH, Constants::DEFAULT_CONTENT_DIR );
+		}
+
+		return rtrim( $content_dir, '/\\' );
+	}
+
 	/** Get the update lock file path. */
 	private function get_lock_path(): string {
 		return $this->build_path( $this->get_storage_root(), 'update.lock' );
@@ -850,6 +864,38 @@ class Update {
 				$this->build_path( $target_root, $relative_path ),
 			);
 		}
+	}
+
+	/**
+	 * Copy bundled language-pack files into the persistent content directory.
+	 *
+	 * The dashboard updater preserves `content/`, so releases that introduced
+	 * language support need an explicit sync step to seed `content/languages`
+	 * on existing installs.
+	 *
+	 * @param string $source_root Extracted release package root.
+	 * @return void
+	 * @since 1.0.4
+	 */
+	private function seed_language_packs_from_package( string $source_root ): void {
+		$source_languages = $this->build_path(
+			$source_root,
+			Constants::DEFAULT_CONTENT_DIR,
+			Constants::LANGUAGES_DIRECTORY,
+		);
+
+		if ( ! is_dir( $source_languages ) ) {
+			return;
+		}
+
+		$target_content   = $this->get_content_directory();
+		$target_languages = $this->build_path(
+			$target_content,
+			Constants::LANGUAGES_DIRECTORY,
+		);
+
+		$this->ensure_directory( $target_content );
+		$this->copy_path( $source_languages, $target_languages );
 	}
 
 	/** Remove old backup directories, keeping only the 3 most recent. */

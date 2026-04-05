@@ -16,40 +16,53 @@ msgstr "Se requiere una URL de webhook válida."
 msgid "Select at least one webhook event."
 msgstr "Selecciona al menos un evento de webhook."
 
-#: app/traits/system.php:64
-#: app/traits/system.php:219
-#: app/traits/system.php:241
-#: app/traits/system.php:279
-#: app/traits/system.php:296
-#: app/traits/system.php:325
-#: app/traits/system.php:370
-#: app/traits/system.php:399
-#: app/traits/system.php:420
-#: app/traits/system.php:497
+#: app/traits/system.php:63
+#: app/traits/system.php:214
+#: app/traits/system.php:236
+#: app/traits/system.php:274
+#: app/traits/system.php:291
+#: app/traits/system.php:320
+#: app/traits/system.php:365
+#: app/traits/system.php:394
+#: app/traits/system.php:415
+#: app/traits/system.php:440
+#: app/traits/system.php:473
 #: app/traits/authorization.php:183
 msgid "Admin access is required."
 msgstr "Se requiere acceso de administrador."
 
-#: app/traits/system.php:194
+#: app/traits/system.php:189
 msgid "PeakURL could not find that language pack."
 msgstr "PeakURL no pudo encontrar ese paquete de idioma."
 
-#: app/traits/system.php:426
+#: app/traits/system.php:421
 msgid "PeakURL is already up to date."
 msgstr "PeakURL ya está actualizado."
 
-#: app/traits/system.php:442
-msgid "PeakURL could not load the update manifest."
-msgstr "PeakURL no pudo cargar el manifiesto de actualización."
+#: app/traits/system.php:447
+msgid "A newer PeakURL release is available. Install the update instead."
+msgstr ""
+
+#: app/traits/system.php:454
+msgid "PeakURL cannot reinstall the latest release right now."
+msgstr "PeakURL no puede reinstalar la última versión en este momento."
 
 #: app/traits/system-support.php:104
 msgid "PeakURL could not inspect the database schema."
 msgstr "PeakURL no pudo inspeccionar el esquema de la base de datos."
 
+#: app/traits/system-support.php:130
+msgid "PeakURL cannot apply this release."
+msgstr ""
+
+#: app/traits/system-support.php:141
+msgid "PeakURL could not load the update manifest."
+msgstr "PeakURL no pudo cargar el manifiesto de actualización."
+
 #: app/traits/accounts.php:51
-#: app/traits/accounts.php:561
-#: app/traits/accounts.php:694
-#: app/traits/accounts.php:813
+#: app/traits/accounts.php:567
+#: app/traits/accounts.php:700
+#: app/traits/accounts.php:819
 msgid "A valid email address is required."
 msgstr "Se requiere una dirección de correo electrónico válida."
 
@@ -59,22 +72,22 @@ msgstr "El nombre de usuario es obligatorio."
 
 #: app/traits/accounts.php:60
 #: app/traits/accounts.php:439
-#: app/traits/accounts.php:604
-#: app/traits/accounts.php:699
-#: app/traits/accounts.php:853
+#: app/traits/accounts.php:610
+#: app/traits/accounts.php:705
+#: app/traits/accounts.php:859
 #: ui/pages/resetPassword/ResetPasswordPage.tsx:49
 msgid "Password must be at least 8 characters."
 msgstr "La contraseña debe tener al menos 8 caracteres."
 
 #: app/traits/accounts.php:67
-#: app/traits/accounts.php:706
+#: app/traits/accounts.php:712
 msgid "Email address is already registered."
 msgstr "La dirección de correo electrónico ya está registrada."
 
 #: app/traits/accounts.php:73
-#: app/traits/accounts.php:588
-#: app/traits/accounts.php:712
-#: app/traits/accounts.php:798
+#: app/traits/accounts.php:594
+#: app/traits/accounts.php:718
+#: app/traits/accounts.php:804
 msgid "Username is already taken."
 msgstr "El nombre de usuario ya está en uso."
 
@@ -113,37 +126,37 @@ msgstr "El correo electrónico o nombre de usuario es obligatorio."
 msgid "Authentication required."
 msgstr "Se requiere autenticación."
 
-#: app/traits/accounts.php:574
-#: app/traits/accounts.php:826
+#: app/traits/accounts.php:580
+#: app/traits/accounts.php:832
 msgid "Email address is already in use."
 msgstr "La dirección de correo electrónico ya está en uso."
 
-#: app/traits/accounts.php:581
+#: app/traits/accounts.php:587
 msgid "Username cannot be empty."
 msgstr "El nombre de usuario no puede estar vacío."
 
-#: app/traits/accounts.php:683
+#: app/traits/accounts.php:689
 msgid "First and last name are required."
 msgstr "El nombre y los apellidos son obligatorios."
 
-#: app/traits/accounts.php:688
-#: app/traits/accounts.php:790
+#: app/traits/accounts.php:694
+#: app/traits/accounts.php:796
 msgid "Username must be 3-120 characters using letters, numbers, dots, dashes, underscores, or @."
 msgstr "El nombre de usuario debe tener entre 3 y 120 caracteres y solo puede usar letras, números, puntos, guiones, guiones bajos o @."
 
-#: app/traits/accounts.php:909
+#: app/traits/accounts.php:915
 msgid "You cannot delete the current user."
 msgstr "No puedes eliminar al usuario actual."
 
-#: app/traits/accounts.php:1064
+#: app/traits/accounts.php:1070
 msgid "No two-factor setup is pending for this account."
 msgstr "No hay ninguna configuración pendiente de autenticación en dos pasos para esta cuenta."
 
-#: app/traits/accounts.php:1070
+#: app/traits/accounts.php:1076
 msgid "Invalid verification code."
 msgstr "Código de verificación no válido."
 
-#: app/traits/accounts.php:1188
+#: app/traits/accounts.php:1194
 msgid "PeakURL could not identify the current session."
 msgstr "PeakURL no pudo identificar la sesión actual."
 
@@ -510,19 +523,23 @@ msgstr "Analíticas de ubicación cargadas."
 msgid "Link analytics loaded."
 msgstr "Analíticas del enlace cargadas."
 
-#: app/controllers/updates.php:69
+#: app/controllers/updates.php:70
 msgid "Update status loaded."
 msgstr "Estado de actualización cargado."
 
-#: app/controllers/updates.php:86
+#: app/controllers/updates.php:87
 msgid "Update check complete."
 msgstr "Comprobación de actualización completada."
 
-#: app/controllers/updates.php:103
+#: app/controllers/updates.php:104
 msgid "Update applied."
 msgstr "Actualización aplicada."
 
-#: app/controllers/updates.php:117
+#: app/controllers/updates.php:121
+msgid "Release reinstalled."
+msgstr ""
+
+#: app/controllers/updates.php:135
 msgid "Database upgrade complete."
 msgstr "Actualización de la base de datos completada."
 
@@ -535,137 +552,137 @@ msgstr ""
 msgid "The update manifest returned invalid JSON."
 msgstr "El manifiesto de actualización devolvió JSON no válido."
 
-#: app/services/update.php:258
+#: app/services/update.php:259
 msgid "The update manifest is missing a package URL or version."
 msgstr "Falta la URL del paquete o la versión en el manifiesto de actualización."
 
-#: app/services/update.php:264
-#: app/services/update.php:419
+#: app/services/update.php:265
+#: app/services/update.php:421
 msgid "release package URL"
 msgstr ""
 
-#: app/services/update.php:311
+#: app/services/update.php:313
 msgid "PeakURL could not apply the update and the rollback failed. "
 msgstr "PeakURL no pudo aplicar la actualización y la reversión falló. "
 
-#: app/services/update.php:320
+#: app/services/update.php:322
 msgid "PeakURL could not apply the update. "
 msgstr "PeakURL no pudo aplicar la actualización. "
 
-#: app/services/update.php:395
+#: app/services/update.php:397
 msgid "The update manifest did not include a version."
 msgstr "El manifiesto de actualización no incluía una versión."
 
-#: app/services/update.php:401
+#: app/services/update.php:403
 msgid "The update manifest did not include a package URL."
 msgstr "El manifiesto de actualización no incluía una URL del paquete."
 
-#: app/services/update.php:407
-#: app/services/update.php:673
+#: app/services/update.php:409
+#: app/services/update.php:688
 msgid "The update manifest did not include a SHA-256 checksum."
 msgstr ""
 
-#: app/services/update.php:413
+#: app/services/update.php:415
 msgid "The update manifest included an invalid SHA-256 checksum."
 msgstr ""
 
-#: app/services/update.php:423
+#: app/services/update.php:425
 msgid "release download URL"
 msgstr ""
 
-#: app/services/update.php:465
+#: app/services/update.php:467
 msgid "Dashboard updates can only be applied from an installed release package."
 msgstr "Las actualizaciones desde el panel solo pueden aplicarse desde un paquete de versión instalado."
 
-#: app/services/update.php:472
+#: app/services/update.php:474
 msgid "The ZipArchive PHP extension is required to apply updates."
 msgstr "La extensión PHP ZipArchive es obligatoria para aplicar actualizaciones."
 
-#: app/services/update.php:479
+#: app/services/update.php:481
 msgid "The release root is not writable."
 msgstr "La raíz de la versión no tiene permisos de escritura."
 
-#: app/services/update.php:486
+#: app/services/update.php:488
 #: app/services/setup-config.php:291
 msgid "The app directory is not writable."
 msgstr "El directorio app no tiene permisos de escritura."
 
-#: app/services/update.php:527
+#: app/services/update.php:529
 msgid "PeakURL could not create the update lock."
 msgstr "PeakURL no pudo crear el bloqueo de actualización."
 
-#: app/services/update.php:532
+#: app/services/update.php:534
 msgid "Another PeakURL update is already running."
 msgstr "Ya hay otra actualización de PeakURL en curso."
 
-#: app/services/update.php:651
+#: app/services/update.php:666
 msgid "PeakURL could not store the downloaded release package."
 msgstr "PeakURL no pudo guardar el paquete de versión descargado."
 
-#: app/services/update.php:681
+#: app/services/update.php:696
 msgid "PeakURL could not verify the downloaded release checksum."
 msgstr "PeakURL no pudo verificar la suma de comprobación de la versión descargada."
 
-#: app/services/update.php:687
+#: app/services/update.php:702
 msgid "The downloaded release checksum did not match the manifest."
 msgstr "La suma de comprobación de la versión descargada no coincide con el manifiesto."
 
-#: app/services/update.php:709
+#: app/services/update.php:724
 msgid "PeakURL could not open the downloaded release archive."
 msgstr "PeakURL no pudo abrir el archivo de la versión descargada."
 
-#: app/services/update.php:716
+#: app/services/update.php:731
 msgid "PeakURL could not extract the downloaded release archive."
 msgstr "PeakURL no pudo extraer el archivo de la versión descargada."
 
-#: app/services/update.php:756
+#: app/services/update.php:771
 msgid "PeakURL could not determine the extracted package root."
 msgstr "PeakURL no pudo determinar la raíz del paquete extraído."
 
-#: app/services/update.php:767
+#: app/services/update.php:782
 msgid "PeakURL could not validate the extracted package structure."
 msgstr "PeakURL no pudo validar la estructura del paquete extraído."
 
-#: app/services/update.php:927
-#: app/services/update.php:939
+#: app/services/update.php:974
+#: app/services/update.php:986
 msgid "PeakURL could not copy the updated release files."
 msgstr "PeakURL no pudo copiar los archivos actualizados de la versión."
 
-#: app/services/update.php:992
+#: app/services/update.php:1039
 msgid "PeakURL could not prepare the update workspace."
 msgstr "PeakURL no pudo preparar el espacio de trabajo de la actualización."
 
-#: app/services/update.php:1030
+#: app/services/update.php:1077
 msgid "remote update URL"
 msgstr ""
 
-#: app/services/update.php:1054
+#: app/services/update.php:1101
 msgid "PeakURL could not start the update request."
 msgstr "PeakURL no pudo iniciar la solicitud de actualización."
 
-#: app/services/update.php:1088
+#: app/services/update.php:1135
 msgid "PeakURL could not contact the update service. "
 msgstr "PeakURL no pudo contactar con el servicio de actualización. "
 
-#: app/services/update.php:1096
-#: app/services/update.php:1181
+#: app/services/update.php:1143
+#: app/services/update.php:1228
 msgid "The update service returned HTTP %d."
 msgstr "El servicio de actualización devolvió HTTP %d."
 
-#: app/services/update.php:1141
+#: app/services/update.php:1188
 msgid "PeakURL could not contact the update service."
 msgstr "PeakURL no pudo contactar con el servicio de actualización."
 
-#: app/services/update.php:1151
-#: app/services/update.php:1171
+#: app/services/update.php:1198
+#: app/services/update.php:1218
 msgid "PeakURL could not read the update service response."
 msgstr "PeakURL no pudo leer la respuesta del servicio de actualización."
 
-#: app/services/update.php:1213
+#: app/services/update.php:1260
 msgid "The %s is not a valid absolute URL."
 msgstr ""
 
-#: app/services/update.php:1223
+#: app/services/update.php:1270
 msgid "The %s must use HTTPS."
 msgstr ""
 
@@ -1055,99 +1072,99 @@ msgstr "PeakURL no pudo enviar el correo de bienvenida porque la dirección de c
 msgid "Welcome to %s"
 msgstr "Te damos la bienvenida a %s"
 
-#: app/services/system-status.php:438
+#: app/services/system-status.php:439
 msgid "Database connection"
 msgstr "Conexión a la base de datos"
 
-#: app/services/system-status.php:441
+#: app/services/system-status.php:442
 msgid "PeakURL can reach the configured MySQL or MariaDB database."
 msgstr "PeakURL puede conectarse a la base de datos MySQL o MariaDB configurada."
 
-#: app/services/system-status.php:442
+#: app/services/system-status.php:443
 msgid "PeakURL could not reach the configured database."
 msgstr "PeakURL no pudo conectarse a la base de datos configurada."
 
-#: app/services/system-status.php:446
+#: app/services/system-status.php:447
 msgid "Database schema"
 msgstr "Esquema de la base de datos"
 
-#: app/services/system-status.php:451
+#: app/services/system-status.php:452
 msgid "PeakURL found schema changes or leftovers that still need the database upgrader."
 msgstr "PeakURL encontró cambios de esquema o restos heredados que todavía requieren el actualizador de base de datos."
 
-#: app/services/system-status.php:452
+#: app/services/system-status.php:453
 msgid "The PeakURL database schema matches the current release."
 msgstr "El esquema de la base de datos de PeakURL coincide con la versión actual."
 
-#: app/services/system-status.php:456
+#: app/services/system-status.php:457
 msgid "Content storage"
 msgstr "Almacenamiento de contenido"
 
-#: app/services/system-status.php:461
+#: app/services/system-status.php:462
 msgid "The persistent content directory is present and writable."
 msgstr "El directorio de contenido persistente existe y tiene permisos de escritura."
 
-#: app/services/system-status.php:462
+#: app/services/system-status.php:463
 msgid "The persistent content directory is missing or not writable."
 msgstr "El directorio de contenido persistente no existe o no tiene permisos de escritura."
 
-#: app/services/system-status.php:466
+#: app/services/system-status.php:467
 msgid "Language packs"
 msgstr "Paquetes de idioma"
 
-#: app/services/system-status.php:471
+#: app/services/system-status.php:472
 msgid "Installed dashboard and PHP translation files can be read from content/languages."
 msgstr "Los archivos de traducción instalados del panel y de PHP pueden leerse desde content/languages."
 
-#: app/services/system-status.php:472
+#: app/services/system-status.php:473
 msgid "PeakURL cannot read the content/languages directory right now."
 msgstr "PeakURL no puede leer el directorio content/languages en este momento."
 
-#: app/services/system-status.php:476
+#: app/services/system-status.php:477
 msgid "PHP intl extension"
 msgstr "Extensión PHP intl"
 
-#: app/services/system-status.php:481
+#: app/services/system-status.php:482
 msgid "Server-side locale helpers can use native intl metadata."
 msgstr "Los helpers de locale del lado del servidor pueden usar los metadatos nativos de intl."
 
-#: app/services/system-status.php:482
+#: app/services/system-status.php:483
 msgid "PeakURL can still run without intl, but server-side locale helpers use fallbacks."
 msgstr "PeakURL puede seguir funcionando sin intl, pero los helpers de locale del lado del servidor usan alternativas."
 
-#: app/services/system-status.php:486
+#: app/services/system-status.php:487
 msgid "PHP ZipArchive"
 msgstr "PHP ZipArchive"
 
-#: app/services/system-status.php:491
+#: app/services/system-status.php:492
 msgid "Dashboard updates can use ZipArchive when the install type allows it."
 msgstr "Las actualizaciones del panel pueden usar ZipArchive cuando el tipo de instalación lo permite."
 
-#: app/services/system-status.php:492
+#: app/services/system-status.php:493
 msgid "Dashboard-managed updates require the PHP ZipArchive extension."
 msgstr "Las actualizaciones gestionadas desde el panel requieren la extensión PHP ZipArchive."
 
-#: app/services/system-status.php:496
+#: app/services/system-status.php:497
 msgid "Email transport"
 msgstr "Transporte de correo"
 
-#: app/services/system-status.php:501
+#: app/services/system-status.php:502
 msgid "PeakURL has an active mail transport configuration."
 msgstr "PeakURL tiene una configuración activa de transporte de correo."
 
-#: app/services/system-status.php:502
+#: app/services/system-status.php:503
 msgid "PeakURL is missing part of the active mail transport configuration."
 msgstr "Falta parte de la configuración activa del transporte de correo de PeakURL."
 
-#: app/services/system-status.php:506
+#: app/services/system-status.php:507
 msgid "Location data"
 msgstr "Datos de ubicación"
 
-#: app/services/system-status.php:511
+#: app/services/system-status.php:512
 msgid "The GeoLite2 City database is available for visitor location analytics."
 msgstr "La base de datos GeoLite2 City está disponible para la analítica de ubicaciones de visitantes."
 
-#: app/services/system-status.php:512
+#: app/services/system-status.php:513
 msgid "Visitor location analytics is not fully ready yet."
 msgstr "La analítica de ubicaciones de visitantes aún no está lista por completo."
 
@@ -1365,12 +1382,12 @@ msgstr "Confirmar"
 
 #: ui/components/ui/ConfirmDialog.tsx:18
 #: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:347
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:50
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:51
 #: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:536
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:532
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:592
 #: ui/pages/dashboard/links/_components/BulkDeleteModal.tsx:76
-#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:121
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:243
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:114
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:235
 #: ui/pages/dashboard/users/UsersPage.tsx:227
 msgid "Cancel"
 msgstr "Cancelar"
@@ -1415,12 +1432,12 @@ msgstr "Enlace eliminado"
 #: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:246
 #: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:273
 #: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:308
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:126
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:163
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:170
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:191
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:225
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:245
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:148
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:185
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:192
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:213
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:248
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:268
 msgid "Error"
 msgstr "Error"
 
@@ -1430,9 +1447,9 @@ msgstr "Introduce una URL y selecciona al menos un evento."
 
 #: ui/components/settings/IntegrationsTab.tsx:68
 #: ui/components/settings/IntegrationsTab.tsx:87
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:155
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:181
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:240
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:177
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:203
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:263
 msgid "Success"
 msgstr "Éxito"
 
@@ -1453,7 +1470,7 @@ msgid "Failed to delete webhook"
 msgstr "No se pudo eliminar el webhook"
 
 #: ui/components/settings/IntegrationsTab.tsx:99
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:254
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:280
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:700
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:876
 msgid "Copied"
@@ -1506,7 +1523,7 @@ msgid "Events"
 msgstr "Eventos"
 
 #: ui/components/settings/IntegrationsTab.tsx:229
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:56
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:57
 msgid "Creating..."
 msgstr "Creando..."
 
@@ -1532,7 +1549,7 @@ msgstr "Añade un webhook para recibir eventos de enlaces en tiempo real."
 
 #: ui/components/settings/IntegrationsTab.tsx:281
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable.tsx:29
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:231
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:223
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:29
 msgid "Inactive"
 msgstr "Inactivo"
@@ -1542,7 +1559,7 @@ msgid "Signing secret stored"
 msgstr "Clave de firma guardada"
 
 #: ui/components/settings/IntegrationsTab.tsx:295
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:56
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:103
 msgid "Created:"
 msgstr "Creado:"
 
@@ -1571,7 +1588,8 @@ msgid "Secret copied"
 msgstr "Clave copiada"
 
 #: ui/components/settings/IntegrationsTab.tsx:361
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:87
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:88
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:111
 msgid "Copy to clipboard"
 msgstr "Copiar al portapapeles"
 
@@ -1584,7 +1602,7 @@ msgid "Copy Secret"
 msgstr "Copiar clave"
 
 #: ui/components/settings/IntegrationsTab.tsx:387
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:106
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:137
 msgid "I've Stored It"
 msgstr "Ya la he guardado"
 
@@ -1639,7 +1657,7 @@ msgstr "Dom"
 
 #: ui/components/charts/TrafficChart.tsx:121
 #: ui/pages/dashboard/_components/StatsCards.tsx:16
-#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:95
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:88
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:10
 #: ui/pages/dashboard/links/LinksPage.tsx:206
 msgid "Total Clicks"
@@ -1647,7 +1665,7 @@ msgstr "Clics totales"
 
 #: ui/components/charts/TrafficChart.tsx:144
 #: ui/pages/dashboard/_components/StatsCards.tsx:43
-#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:103
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:96
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:23
 #: ui/pages/dashboard/links/LinksPage.tsx:223
 msgid "Unique Visitors"
@@ -1908,7 +1926,7 @@ msgstr "No se pudo cargar tu sesión"
 msgid "The dashboard could not reach the PHP API. Make sure the core service is running and try again."
 msgstr "El panel no pudo conectarse a la API de PHP. Asegúrate de que el servicio principal esté en ejecución y vuelve a intentarlo."
 
-#: ui/hooks/useDashboardSearch.ts:89
+#: ui/hooks/useDashboardSearch.ts:87
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:74
 msgid "Untitled Link"
 msgstr "Enlace sin título"
@@ -2071,7 +2089,7 @@ msgid "Buy Me a Coffee"
 msgstr "Invítame a un café"
 
 #: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:15
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:15
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:67
 msgid "Never"
 msgstr "Nunca"
 
@@ -2106,7 +2124,7 @@ msgstr "Descargar base de datos"
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:154
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:580
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable.tsx:66
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:222
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:214
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:28
 msgid "Status"
 msgstr "Estado"
@@ -2206,57 +2224,79 @@ msgstr "Guardar nuevas credenciales"
 msgid "Save Credentials"
 msgstr "Guardar credenciales"
 
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:27
+msgid "Connection"
+msgstr ""
+
 #: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:30
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:94
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:96
+msgid "Base API URL"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:35
+msgid "Use this endpoint with WordPress, browser extensions, scripts, and other API clients."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:46
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:107
+msgid "Base API URL copied to clipboard"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:51
+msgid "Copy API URL"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:77
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:141
 msgid "Create New Key"
 msgstr "Crear nueva clave"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:44
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:91
 msgid "API Key"
 msgstr "Clave API"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:47
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:94
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable.tsx:25
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:230
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:222
 #: ui/pages/dashboard/links/LinksPage.tsx:182
 msgid "Active"
 msgstr "Activa"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:66
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:113
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:206
-#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:136
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:129
 msgid "Delete"
 msgstr "Eliminar"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:69
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:116
 msgid "Delete API Key"
 msgstr "Eliminar clave API"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:84
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:131
 msgid "No API Keys Generated"
 msgstr "No se han generado claves API"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:87
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:134
 msgid "Generate an API key to access endpoints programmatically."
 msgstr "Genera una clave API para acceder a los endpoints mediante programación."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:108
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:155
 msgid "Keep your API keys secure"
 msgstr "Mantén seguras tus claves API"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:111
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:158
 msgid "PeakURL only shows the full token once, at creation time. Store it in a password manager or secret store, and revoke it immediately if you think it has been exposed."
 msgstr "PeakURL solo muestra el token completo una vez, en el momento de su creación. Guárdalo en un gestor de contraseñas o almacén de secretos y revócalo de inmediato si crees que ha quedado expuesto."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:125
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:172
 msgid "API documentation"
 msgstr "Documentación de la API"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:129
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:176
 msgid "Use the public docs for authentication, links, analytics, users, webhooks, and system endpoints."
 msgstr "Usa la documentación pública para autenticación, enlaces, analíticas, usuarios, webhooks y endpoints del sistema."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:140
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiTab.tsx:187
 msgid "API Overview"
 msgstr "Resumen de la API"
 
@@ -2309,54 +2349,58 @@ msgid "Bio"
 msgstr "Biografía"
 
 #: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:157
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:253
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:245
 msgid "Saving..."
 msgstr "Guardando..."
 
 #: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:157
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:258
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:250
 #: ui/pages/dashboard/users/UsersPage.tsx:232
 msgid "Save Changes"
 msgstr "Guardar cambios"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:23
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:56
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:24
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:57
 msgid "Create API Key"
 msgstr "Crear clave API"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:29
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:30
 msgid "Create a dedicated token for scripts, automations, or external tools."
 msgstr "Crea un token dedicado para scripts, automatizaciones o herramientas externas."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:34
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:35
 msgid "You can give it a label now so it is easier to recognize later in your API key list."
 msgstr "Puedes ponerle una etiqueta ahora para reconocerlo más fácilmente después en tu lista de claves API."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:40
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:41
 msgid "Label (Optional)"
 msgstr "Etiqueta (opcional)"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:41
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:42
 msgid "e.g. Production automation"
 msgstr "p. ej., Automatización de producción"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:65
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:66
 msgid "Copy Your API Key"
 msgstr "Copia tu clave API"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:71
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:72
 msgid "This token will not be shown again."
 msgstr "Este token no volverá a mostrarse."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:74
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:75
 msgid "Store it in a password manager, environment file, or secret store before closing this window."
 msgstr "Guárdala en un gestor de contraseñas, archivo de entorno o almacén de secretos antes de cerrar esta ventana."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:93
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:117
+msgid "Use this API URL with integrations that need both the endpoint and the token."
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:124
 msgid "If this key is ever exposed, revoke it from the API Keys list and create a replacement."
 msgstr "Si esta clave se expone en algún momento, revócala desde la lista de claves API y crea una nueva."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:103
+#: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:134
 msgid "Copy Key"
 msgstr "Copiar clave"
 
@@ -2366,11 +2410,12 @@ msgstr "Generado el: %s"
 
 #: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:36
 #: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:40
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:57
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:298
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:302
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:370
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:374
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:113
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:126
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:448
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:452
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:515
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:519
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:347
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:449
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:453
@@ -2551,7 +2596,7 @@ msgstr "Última generación:"
 
 #: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:457
 #: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:566
-#: ui/pages/dashboard/links/_components/QRCodeModal.tsx:125
+#: ui/pages/dashboard/links/_components/QRCodeModal.tsx:118
 msgid "Download"
 msgstr "Descargar"
 
@@ -2634,8 +2679,7 @@ msgid "Last active"
 msgstr "Última actividad"
 
 #: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:650
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:54
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:86
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:155
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:532
 msgid "Current"
 msgstr "Actual"
@@ -2795,355 +2839,407 @@ msgstr "Guardar configuración de correo"
 msgid "Use PHP mail()"
 msgstr "Usar PHP mail()"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:29
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:84
 msgid "Unavailable"
 msgstr "No disponible"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:30
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:85
 msgid "Update service unavailable"
 msgstr "Servicio de actualizaciones no disponible"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:34
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:89
 msgid "PeakURL could not reach the update manifest."
 msgstr "PeakURL no pudo acceder al manifiesto de actualizaciones."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:41
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:96
 msgid "Update Available"
 msgstr "Actualización disponible"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:43
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:98
 msgid "PeakURL %s is available"
 msgstr "PeakURL %s está disponible"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:44
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:524
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:99
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:576
 msgid "update"
 msgstr "actualización"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:47
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:102
 msgid "A newer PeakURL release is ready to install when you are ready."
 msgstr "Una versión más reciente de PeakURL está lista para instalarse cuando quieras."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:48
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:103
 msgid "A newer PeakURL release is available, but this install cannot apply it automatically from the dashboard."
 msgstr "Hay una nueva versión de PeakURL disponible, pero esta instalación no puede aplicarla automáticamente desde el panel."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:56
-msgid "PeakURL %s is current"
-msgstr "PeakURL %s está actualizado"
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:110
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:123
+msgid "Latest"
+msgstr "Última"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:59
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:112
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:125
+msgid "PeakURL %s is the latest release"
+msgstr "PeakURL %s es la versión más reciente"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:116
+msgid "This site is already on the latest release. Reinstall the latest package if you need to restore packaged files."
+msgstr "Este sitio ya está en la última versión. Reinstala el paquete más reciente si necesitas restaurar archivos del paquete."
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:117
+msgid "This site is already on the latest release, but this install cannot reinstall the latest package automatically from the dashboard."
+msgstr "Este sitio ya está en la última versión, pero esta instalación no puede reinstalar automáticamente el paquete más reciente desde el panel."
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:128
 msgid "This site is already running the latest known PeakURL release."
 msgstr "Este sitio ya está ejecutando la última versión conocida de PeakURL."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:67
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:136
 msgid "Attention Needed"
 msgstr "Atención requerida"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:68
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:396
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:137
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:439
 msgid "Database upgrade failed"
 msgstr "La actualización de la base de datos falló"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:71
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:398
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:140
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:441
 msgid "PeakURL could not repair the database schema."
 msgstr "PeakURL no pudo reparar el esquema de la base de datos."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:78
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:147
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:531
 msgid "Upgrade Recommended"
 msgstr "Actualización recomendada"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:79
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:148
 msgid "Database upgrade recommended"
 msgstr "Se recomienda actualizar la base de datos"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:80
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:149
 msgid "The database needs attention before every runtime path is fully current."
 msgstr "La base de datos necesita atención antes de que todas las rutas de ejecución queden totalmente actualizadas."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:87
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:156
 msgid "Database schema is current"
 msgstr "El esquema de la base de datos está actualizado"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:88
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:157
 msgid "PeakURL has no outstanding schema repairs for this release."
 msgstr "PeakURL no tiene reparaciones pendientes del esquema para esta versión."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:251
-msgid "Loading update status..."
-msgstr "Cargando estado de las actualizaciones..."
-
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:260
-msgid "Application Updates"
-msgstr "Actualizaciones de la aplicación"
-
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:261
-msgid "Check for new PeakURL releases and install them from the dashboard when this site is running a packaged release."
-msgstr "Busca nuevas versiones de PeakURL e instálalas desde el panel cuando este sitio esté ejecutando un paquete de versión instalado."
-
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:275
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:293
 msgid "Install Update"
 msgstr "Instalar actualización"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:289
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:312
+msgid "Reinstall Latest Version"
+msgstr "Reinstalar la última versión"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:330
 msgid "Check for Updates"
 msgstr "Buscar actualizaciones"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:297
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:412
+msgid "Loading update status..."
+msgstr "Cargando estado de las actualizaciones..."
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:421
+msgid "Application Updates"
+msgstr "Actualizaciones de la aplicación"
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:422
+msgid "Check for new PeakURL releases, install updates, or reinstall the latest packaged release from the dashboard."
+msgstr "Busca nuevas versiones de PeakURL, instala actualizaciones o reinstala el paquete publicado más reciente desde el panel."
+
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:447
 msgid "Installed Version"
 msgstr "Versión instalada"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:301
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:451
 msgid "Latest Version"
 msgstr "Última versión"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:305
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:455
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:375
 msgid "Last Checked"
 msgstr "Última comprobación"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:324
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:474
 msgid "Released"
 msgstr "Publicado"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:331
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:481
 #: ui/pages/dashboard/about/AboutPage.tsx:565
 msgid "Release Notes"
 msgstr "Notas de la versión"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:332
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:482
 msgid "Read release notes"
 msgstr "Leer notas de la versión"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:347
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:492
 msgid "Database Schema"
 msgstr "Esquema de la base de datos"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:348
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:493
 msgid "PeakURL can repair missing tables, columns, indexes, and legacy leftovers so the current release runs against the expected schema."
 msgstr "PeakURL puede reparar tablas, columnas, índices y restos heredados que falten para que la versión actual se ejecute con el esquema esperado."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:361
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:506
 msgid "Run Database Upgrade"
 msgstr "Ejecutar actualización de la base de datos"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:369
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:514
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:517
 msgid "Recorded Schema"
 msgstr "Esquema registrado"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:373
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:518
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:523
 msgid "Required Schema"
 msgstr "Esquema requerido"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:377
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:522
 msgid "Last Database Upgrade"
 msgstr "Última actualización de la base de datos"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:396
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:541
 msgid "Last database error"
 msgstr "Último error de la base de datos"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:402
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:547
 msgid "Recent database findings"
 msgstr "Hallazgos recientes de la base de datos"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:127
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:149
 msgid "Failed to update profile"
 msgstr "No se pudo actualizar el perfil"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:138
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:160
 msgid "Language updated"
 msgstr "Idioma actualizado"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:139
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:161
 msgid "PeakURL is reloading the dashboard now."
 msgstr "PeakURL está recargando el panel ahora."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:147
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:309
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:342
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:169
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:336
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:369
 msgid "Save failed"
 msgstr "Error al guardar"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:148
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:170
 msgid "Failed to update the site language"
 msgstr "No se pudo actualizar el idioma del sitio"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:156
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:178
 msgid "Profile updated successfully"
 msgstr "Perfil actualizado correctamente"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:164
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:186
 msgid "Passwords do not match"
 msgstr "Las contraseñas no coinciden"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:171
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:193
 msgid "Password must be at least 8 characters"
 msgstr "La contraseña debe tener al menos 8 caracteres"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:182
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:204
 msgid "Password updated successfully"
 msgstr "Contraseña actualizada correctamente"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:192
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:214
 msgid "Failed to update password"
 msgstr "No se pudo actualizar la contraseña"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:205
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:227
 msgid "Key created without visible token"
 msgstr "Clave creada sin token visible"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:206
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:228
 msgid "PeakURL created the API key, but the one-time token was not returned. Revoke it and create a new key."
 msgstr "PeakURL creó la clave API, pero no devolvió el token de un solo uso. Revócala y crea una nueva."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:220
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:243
 msgid "API key created"
 msgstr "Clave API creada"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:221
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:244
 msgid "Copy the token now. PeakURL will not show it again."
 msgstr "Copia el token ahora. PeakURL no lo volverá a mostrar."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:226
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:249
 msgid "Failed to generate API key"
 msgstr "No se pudo generar la clave API"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:241
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:264
 msgid "API key deleted successfully"
 msgstr "Clave API eliminada correctamente"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:246
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:269
 msgid "Failed to delete API key"
 msgstr "No se pudo eliminar la clave API"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:255
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:276
 msgid "API key copied to clipboard"
 msgstr "Clave API copiada al portapapeles"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:272
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:299
 msgid "Update available"
 msgstr "Actualización disponible"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:274
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:301
 msgid "PeakURL %s is ready to install."
 msgstr "PeakURL %s está listo para instalarse."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:282
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:309
 msgid "Up to date"
 msgstr "Actualizado"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:285
-msgid "PeakURL %s is already current."
-msgstr "PeakURL %s ya está actualizado."
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:312
+msgid "PeakURL %s is already on the latest release."
+msgstr "PeakURL %s ya está en la última versión."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:288
-msgid "PeakURL is already current."
-msgstr "PeakURL ya está actualizado."
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:315
+msgid "PeakURL is already on the latest release."
+msgstr "PeakURL ya está en la última versión."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:292
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:319
 msgid "Update check failed"
 msgstr "La comprobación de actualizaciones falló"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:294
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:321
 msgid "PeakURL could not reach the update service."
 msgstr "PeakURL no pudo contactar con el servicio de actualizaciones."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:303
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:337
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:330
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:364
 msgid "Saved"
 msgstr "Guardado"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:304
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:331
 msgid "Location data settings were updated successfully."
 msgstr "Los ajustes de datos de ubicación se actualizaron correctamente."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:311
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:338
 msgid "PeakURL could not save the MaxMind settings."
 msgstr "PeakURL no pudo guardar los ajustes de MaxMind."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:321
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:387
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:348
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:430
 msgid "Database updated"
 msgstr "Base de datos actualizada"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:322
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:349
 msgid "PeakURL downloaded the latest GeoLite2 City database."
 msgstr "PeakURL descargó la última base de datos GeoLite2 City."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:326
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:353
 msgid "Download failed"
 msgstr "La descarga falló"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:328
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:355
 msgid "PeakURL could not download the GeoLite2 database."
 msgstr "PeakURL no pudo descargar la base de datos GeoLite2."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:338
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:365
 msgid "Email configuration was updated successfully."
 msgstr "La configuración de correo se actualizó correctamente."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:344
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:371
 msgid "PeakURL could not save the email configuration."
 msgstr "PeakURL no pudo guardar la configuración de correo."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:357
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:387
+msgid "Release reinstalled"
+msgstr "Versión reinstalada"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:387
 msgid "Update installed"
 msgstr "Actualización instalada"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:360
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:391
+msgid "PeakURL %s was reinstalled successfully. Redirecting now."
+msgstr "PeakURL %s se reinstaló correctamente. Redirigiendo ahora."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:394
 msgid "PeakURL %s was installed successfully. Redirecting now."
 msgstr "PeakURL %s se instaló correctamente. Redirigiendo ahora."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:365
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:400
+msgid "PeakURL was reinstalled successfully. Redirecting now."
+msgstr "PeakURL se reinstaló correctamente. Redirigiendo ahora."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:401
 msgid "PeakURL was installed successfully. Redirecting now."
 msgstr "PeakURL se instaló correctamente. Redirigiendo ahora."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:375
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:411
+msgid "Reinstall failed"
+msgstr "La reinstalación falló"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:411
 msgid "Update failed"
 msgstr "La actualización falló"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:376
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:414
+msgid "PeakURL could not reinstall the latest release."
+msgstr "PeakURL no pudo reinstalar la última versión."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:415
 msgid "PeakURL could not apply the update."
 msgstr "PeakURL no pudo aplicar la actualización."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:389
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:432
 msgid "PeakURL repaired the database schema. Review any remaining warnings below."
 msgstr "PeakURL reparó el esquema de la base de datos. Revisa cualquier advertencia restante abajo."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:392
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:435
 msgid "The database schema is now current."
 msgstr "El esquema de la base de datos ya está actualizado."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:496
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:544
 msgid "Delete API key"
 msgstr "Eliminar clave API"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:500
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:548
 msgid "Delete %s? Any scripts, automations, or extensions using it will stop working immediately."
 msgstr "¿Eliminar %s? Cualquier script, automatización o extensión que la use dejará de funcionar de inmediato."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:505
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:553
 msgid "this API key"
 msgstr "esta clave API"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:509
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:557
 msgid "Delete key"
 msgstr "Eliminar clave"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:510
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:558
 msgid "Keep key"
 msgstr "Conservar clave"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:523
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:572
+msgid "Reinstall PeakURL %s?"
+msgstr "¿Reinstalar PeakURL %s?"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:573
 msgid "Install PeakURL %s?"
 msgstr "¿Instalar PeakURL %s?"
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:527
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:580
+msgid ""
+"PeakURL will download the latest release package again, replace managed application files, and reload the dashboard when the reinstall completes.\n"
+"\n"
+"Use this when you need to restore packaged files on a release install."
+msgstr ""
+"PeakURL descargará otra vez el último paquete de versión, reemplazará los archivos gestionados de la aplicación y recargará el panel cuando termine la reinstalación.\n"
+"\n"
+"Usa esto cuando necesites restaurar archivos del paquete en una instalación publicada."
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:583
 msgid ""
 "PeakURL will download the latest release package, replace managed application files, and reload the dashboard when the update completes.\n"
 "\n"
@@ -3153,7 +3249,11 @@ msgstr ""
 "\n"
 "Continúa solo en instalaciones hechas desde un paquete publicado."
 
-#: ui/pages/dashboard/settings/_components/Content/Content.tsx:531
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:589
+msgid "Reinstall latest version"
+msgstr "Reinstalar la última versión"
+
+#: ui/pages/dashboard/settings/_components/Content/Content.tsx:590
 msgid "Install update"
 msgstr "Instalar actualización"
 
@@ -3893,7 +3993,7 @@ msgid "Explore the source code, understand how it works, and modify it to suit y
 msgstr "Explora el código fuente, entiende cómo funciona y modifícalo para adaptarlo exactamente a tus necesidades."
 
 #: ui/pages/dashboard/about/AboutPage.tsx:241
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:73
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:64
 msgid "Share"
 msgstr "Compartir"
 
@@ -4080,20 +4180,20 @@ msgstr "Procesando URLs"
 msgid "Creating short links..."
 msgstr "Creando enlaces cortos..."
 
-#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUpload.tsx:55
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUpload.tsx:57
 msgid "Unsupported file format"
 msgstr "Formato de archivo no compatible"
 
-#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUpload.tsx:62
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUpload.tsx:64
 msgid "No valid data found in file"
 msgstr "No se encontraron datos válidos en el archivo"
 
-#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUpload.tsx:66
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUpload.tsx:68
 msgid "Failed to parse file: %s"
 msgstr "No se pudo procesar el archivo: %s"
 
 #: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUpload.tsx:190
-#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:76
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:75
 msgid "Import failed: %s"
 msgstr "La importación falló: %s"
 
@@ -4105,19 +4205,19 @@ msgstr "Subir archivo"
 msgid "Upload a CSV, JSON, or XML file containing URLs and their metadata."
 msgstr "Sube un archivo CSV, JSON o XML que contenga URLs y sus metadatos."
 
-#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUploadArea.tsx:15
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUploadArea.tsx:87
 msgid "Drop your file here"
 msgstr "Suelta tu archivo aquí"
 
-#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUploadArea.tsx:18
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUploadArea.tsx:90
 msgid "or click to browse (CSV, JSON, XML)"
 msgstr "o haz clic para buscarlo (CSV, JSON, XML)"
 
-#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUploadArea.tsx:27
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUploadArea.tsx:101
 msgid "Choose File"
 msgstr "Elegir archivo"
 
-#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUploadArea.tsx:39
+#: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUploadArea.tsx:113
 msgid "Supported formats: CSV, JSON, XML (max 10MB, up to 10,000 URLs)"
 msgstr "Formatos compatibles: CSV, JSON, XML (máx. 10 MB, hasta 10.000 URLs)"
 
@@ -4158,57 +4258,57 @@ msgstr "Respuesta"
 msgid "View API Documentation"
 msgstr "Ver documentación de la API"
 
-#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:44
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:45
 msgid "No URLs found"
 msgstr "No se encontraron URLs"
 
-#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:77
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:76
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:95
 msgid "Unknown error"
 msgstr "Error desconocido"
 
-#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:88
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:87
 #: ui/pages/dashboard/bulk-import/BulkImportLayout.tsx:14
 msgid "Paste URLs"
 msgstr "Pegar URLs"
 
-#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:91
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:90
 msgid "Paste a list of URLs (one per line) to quickly create multiple short links. You can optionally add a custom alias separated by a comma or space."
 msgstr "Pega una lista de URLs (una por línea) para crear rápidamente varios enlaces cortos. También puedes añadir opcionalmente un alias personalizado separado por una coma o un espacio."
 
-#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:100
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:99
 msgid "URLs (one per line)"
 msgstr "URLs (una por línea)"
 
-#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:117
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:116
 msgid "Create Links"
 msgstr "Crear enlaces"
 
-#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:123
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:122
 msgid "Tips"
 msgstr "Consejos"
 
-#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:130
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:129
 msgid "Format:"
 msgstr "Formato:"
 
-#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:130
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:129
 msgid "or"
 msgstr "o"
 
-#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:137
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:136
 msgid "Each entry should be on a separate line"
 msgstr "Cada entrada debe estar en una línea independiente"
 
-#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:143
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:142
 msgid "URLs must include http:// or https://"
 msgstr "Las URL deben incluir http:// o https://"
 
-#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:149
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:148
 msgid "If alias is omitted, one will be auto-generated"
 msgstr "Si se omite el alias, se generará uno automáticamente"
 
-#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:162
+#: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:161
 msgid "Processing URLs..."
 msgstr "Procesando URLs..."
 
@@ -4371,7 +4471,7 @@ msgid "Are you sure you want to delete %s selected link(s)? This action cannot b
 msgstr "¿Seguro que quieres eliminar %s enlaces seleccionados? Esta acción no se puede deshacer."
 
 #: ui/pages/dashboard/links/_components/BulkDeleteModal.tsx:86
-#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:131
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:124
 msgid "Deleting..."
 msgstr "Eliminando..."
 
@@ -4448,7 +4548,7 @@ msgid "Title"
 msgstr "Título"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:52
-#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:85
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:78
 msgid "Destination"
 msgstr "Destino"
 
@@ -4463,13 +4563,13 @@ msgid "Created"
 msgstr "Creado"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:58
-#: ui/pages/dashboard/links/_components/QRCodeModal.tsx:134
+#: ui/pages/dashboard/links/_components/QRCodeModal.tsx:127
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 msgid "Copied!"
 msgstr "Copiado"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:59
-#: ui/pages/dashboard/links/_components/QRCodeModal.tsx:139
+#: ui/pages/dashboard/links/_components/QRCodeModal.tsx:132
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 msgid "Copy"
 msgstr "Copiar"
@@ -4479,7 +4579,7 @@ msgid "Protected"
 msgstr "Protegido"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:108
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:232
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:224
 msgid "Expired"
 msgstr "Caducado"
 
@@ -4492,7 +4592,7 @@ msgid "Total"
 msgstr "Total"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:185
-#: ui/pages/dashboard/links/_components/QRCodeModal.tsx:77
+#: ui/pages/dashboard/links/_components/QRCodeModal.tsx:70
 msgid "QR Code"
 msgstr "Código QR"
 
@@ -4513,74 +4613,74 @@ msgstr "Aún no hay enlaces"
 msgid "Create your first shortened link to get started"
 msgstr "Crea tu primer enlace acortado para empezar"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:29
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:22
 msgid "Failed to delete link"
 msgstr "No se pudo eliminar el enlace"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:47
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:40
 msgid "Delete Link"
 msgstr "Eliminar enlace"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:68
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:61
 msgid "Are you sure you want to delete this link? This action cannot be undone."
 msgstr "¿Seguro que quieres eliminar este enlace? Esta acción no se puede deshacer."
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:77
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:110
-#: ui/pages/dashboard/links/_components/QRCodeModal.tsx:110
+#: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:70
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:102
+#: ui/pages/dashboard/links/_components/QRCodeModal.tsx:103
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:51
 msgid "Short URL"
 msgstr "URL corta"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:48
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:108
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:40
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:107
 msgid "Expiration time must be in the future."
 msgstr "La fecha y hora de caducidad deben estar en el futuro."
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:72
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:64
 msgid "Failed to update link"
 msgstr "No se pudo actualizar el enlace"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:87
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:79
 msgid "Edit Link"
 msgstr "Editar enlace"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:122
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:114
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/MainInputs.tsx:21
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:74
 msgid "Destination URL"
 msgstr "URL de destino"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:137
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:129
 msgid "Title (Optional)"
 msgstr "Título (opcional)"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:144
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:136
 msgid "Enter a title for this link"
 msgstr "Introduce un título para este enlace"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:155
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:147
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:32
 msgid "Password Protection (Optional)"
 msgstr "Protección con contraseña (opcional)"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:165
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:157
 msgid "Enter a new password to replace the current one"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:166
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:158
 msgid "Set a password to protect this link"
 msgstr "Establece una contraseña para proteger este enlace"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:173
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:165
 msgid "Leave this blank to keep the current password."
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:191
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:183
 msgid "Remove password protection"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:203
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:195
 msgid "Expiration Date (Optional)"
 msgstr "Fecha de caducidad (opcional)"
 
@@ -4592,23 +4692,23 @@ msgstr "Título del enlace (opcional)"
 msgid "My Awesome Link"
 msgstr "Mi enlace increíble"
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:78
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:77
 msgid "Please enter a URL"
 msgstr "Introduce una URL"
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:83
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:82
 msgid "Please enter a valid URL (must include http:// or https://)"
 msgstr "Introduce una URL válida (debe incluir http:// o https://)"
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:121
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:117
 msgid "Link shortened successfully! %s"
 msgstr "Enlace acortado correctamente. %s"
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:142
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:138
 msgid "Failed to create short link. Please try again."
 msgstr "No se pudo crear el enlace corto. Inténtalo de nuevo."
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:181
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:177
 msgid "Advanced Options"
 msgstr "Opciones avanzadas"
 
@@ -4987,31 +5087,31 @@ msgstr "Twitter"
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:70
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:61
 msgid "Traffic Statistics"
 msgstr "Estadísticas de tráfico"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:71
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:62
 msgid "Traffic Location"
 msgstr "Ubicación del tráfico"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:72
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:63
 msgid "Traffic Sources"
 msgstr "Fuentes de tráfico"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:96
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:87
 msgid "Link Analytics"
 msgstr "Analíticas del enlace"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:99
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:90
 msgid "Detailed statistics and performance metrics"
 msgstr "Estadísticas detalladas y métricas de rendimiento"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:110
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:101
 msgid "Close panel"
 msgstr "Cerrar panel"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:215
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:206
 msgid "Close"
 msgstr "Cerrar"
 

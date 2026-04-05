@@ -58,6 +58,10 @@ function hasUpdateAvailable(status) {
 	return false;
 }
 
+function hasReinstallAvailable(status) {
+	return Boolean(status?.reinstallAvailable);
+}
+
 function formatDate(value) {
 	if (!value) {
 		return __('Never');
@@ -72,6 +76,7 @@ function formatDate(value) {
 
 function buildAppStatus(status, errorMessage) {
 	const updateAvailable = hasUpdateAvailable(status);
+	const reinstallAvailable = hasReinstallAvailable(status);
 
 	if (errorMessage || status?.lastError) {
 		return {
@@ -99,11 +104,25 @@ function buildAppStatus(status, errorMessage) {
 		};
 	}
 
+	if (reinstallAvailable) {
+		return {
+			tone: 'success',
+			label: __('Latest'),
+			title: sprintf(
+				__('PeakURL %s is the latest release'),
+				status?.currentVersion || __('Unknown')
+			),
+			description: status?.canApply
+				? __('This site is already on the latest release. Reinstall the latest package if you need to restore packaged files.')
+				: __('This site is already on the latest release, but this install cannot reinstall the latest package automatically from the dashboard.'),
+		};
+	}
+
 	return {
 		tone: 'success',
-		label: __('Current'),
+		label: __('Latest'),
 		title: sprintf(
-			__('PeakURL %s is current'),
+			__('PeakURL %s is the latest release'),
 			status?.currentVersion || __('Unknown')
 		),
 		description: __('This site is already running the latest known PeakURL release.'),
@@ -234,6 +253,95 @@ function InlineNotice({ icon: Icon, title, description, tone = 'info' }) {
 	);
 }
 
+function UpdateActions({
+	updateAvailable,
+	reinstallAvailable,
+	canApply,
+	isLoading,
+	isChecking,
+	isApplying,
+	isReinstalling,
+	isRepairing,
+	disabledReason,
+	onCheck,
+	onApply,
+	onReinstall,
+}) {
+	const isInstallingRelease = isApplying || isReinstalling;
+	const showDisabledReason =
+		(updateAvailable || reinstallAvailable) &&
+		!canApply &&
+		Boolean(disabledReason);
+	const primaryVariant = canApply ? 'primary' : 'outline';
+	const primaryAction = updateAvailable ? (
+		<Button
+			variant={primaryVariant}
+			size="sm"
+			className="min-w-[11rem] whitespace-nowrap"
+			onClick={onApply}
+			loading={isApplying}
+			icon={Download}
+			disabled={
+				!canApply ||
+				isLoading ||
+				isChecking ||
+				isRepairing ||
+				isReinstalling
+			}
+			title={!canApply ? disabledReason || '' : ''}
+		>
+			{__('Install Update')}
+		</Button>
+	) : reinstallAvailable ? (
+		<Button
+			variant={primaryVariant}
+			size="sm"
+			className="min-w-[13rem] whitespace-nowrap"
+			onClick={onReinstall}
+			loading={isReinstalling}
+			icon={RefreshCcw}
+			disabled={
+				!canApply ||
+				isLoading ||
+				isChecking ||
+				isRepairing ||
+				isApplying
+			}
+			title={!canApply ? disabledReason || '' : ''}
+		>
+			{__('Reinstall Latest Version')}
+		</Button>
+	) : null;
+	const showCheckButton = reinstallAvailable || !updateAvailable;
+
+	return (
+		<div className="flex w-full flex-col gap-3 lg:max-w-[26rem] lg:items-end">
+			<div className="flex flex-wrap gap-3 lg:justify-end">
+				{showCheckButton ? (
+					<Button
+						variant="outline"
+						size="sm"
+						className="min-w-[11rem] whitespace-nowrap"
+						onClick={onCheck}
+						loading={isChecking}
+						icon={RefreshCcw}
+						disabled={isInstallingRelease || isRepairing}
+					>
+						{__('Check for Updates')}
+					</Button>
+				) : null}
+				{primaryAction}
+			</div>
+
+			{showDisabledReason ? (
+				<div className="max-w-sm rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900 lg:text-right dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
+					{disabledReason}
+				</div>
+			) : null}
+		</div>
+	);
+}
+
 function DetailRow({ label, value, icon: Icon, href }) {
 	return (
 		<div className="flex flex-col gap-2 rounded-lg border border-stroke bg-bg px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
@@ -277,17 +385,19 @@ function UpdatesTab({
 	isLoading,
 	isChecking,
 	isApplying,
+	isReinstalling,
 	isRepairing,
 	onCheck,
 	onApply,
+	onReinstall,
 	onRepair,
 }) {
 	const updateAvailable = hasUpdateAvailable(status);
+	const reinstallAvailable = hasReinstallAvailable(status);
 	const canApply = Boolean(status?.canApply);
-	const showApplyDisabledReason =
-		updateAvailable && !canApply && Boolean(status?.applyDisabledReason);
 	const showReleaseMeta =
-		updateAvailable && (status?.releasedAt || status?.releaseNotesUrl);
+		(updateAvailable || reinstallAvailable) &&
+		(status?.releasedAt || status?.releaseNotesUrl);
 	const databaseStatus = status?.database || null;
 	const databaseIssues = Array.isArray(databaseStatus?.issues)
 		? databaseStatus.issues
@@ -310,42 +420,24 @@ function UpdatesTab({
 				<SectionHeader
 					title={__('Application Updates')}
 					description={__(
-						'Check for new PeakURL releases and install them from the dashboard when this site is running a packaged release.'
+						'Check for new PeakURL releases, install updates, or reinstall the latest packaged release from the dashboard.'
 					)}
 					badge={appState}
 					primaryAction={
-						updateAvailable ? (
-							<div className="flex flex-col items-stretch gap-2 sm:items-end">
-								<Button
-									size="sm"
-									className="min-w-[11rem] whitespace-nowrap"
-									onClick={onApply}
-									loading={isApplying}
-									icon={Download}
-									disabled={!canApply || isLoading || isChecking || isRepairing}
-									title={!canApply ? status?.applyDisabledReason || '' : ''}
-								>
-									{__('Install Update')}
-								</Button>
-								{showApplyDisabledReason ? (
-									<p className="max-w-[18rem] text-xs leading-5 text-text-muted sm:text-right">
-										{status.applyDisabledReason}
-									</p>
-								) : null}
-							</div>
-						) : (
-							<Button
-								variant="outline"
-								size="sm"
-								className="min-w-[11rem] whitespace-nowrap"
-								onClick={onCheck}
-								loading={isChecking}
-								icon={RefreshCcw}
-								disabled={isApplying || isRepairing}
-							>
-								{__('Check for Updates')}
-							</Button>
-						)
+						<UpdateActions
+							updateAvailable={updateAvailable}
+							reinstallAvailable={reinstallAvailable}
+							canApply={canApply}
+							isLoading={isLoading}
+							isChecking={isChecking}
+							isApplying={isApplying}
+							isReinstalling={isReinstalling}
+							isRepairing={isRepairing}
+							disabledReason={status?.applyDisabledReason || ''}
+							onCheck={onCheck}
+							onApply={onApply}
+							onReinstall={onReinstall}
+						/>
 					}
 				/>
 

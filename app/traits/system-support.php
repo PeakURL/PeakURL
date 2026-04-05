@@ -117,6 +117,79 @@ trait SystemSupportTrait {
 	}
 
 	/**
+	 * Apply a release package from the resolved update status payload.
+	 *
+	 * @param array<string, mixed> $status Resolved update status.
+	 * @param bool                 $reinstall Whether the action is a reinstall.
+	 * @return array<string, mixed> Result of the install operation.
+	 * @since 1.0.5
+	 */
+	private function install_release_from_status( array $status, bool $reinstall = false ): array {
+		if ( empty( $status['canApply'] ) ) {
+			throw new ApiException(
+				(string) ( $status['applyDisabledReason'] ?? __( 'PeakURL cannot apply this release.', 'peakurl' ) ),
+				422,
+			);
+		}
+
+		$manifest = is_array( $status['manifest'] ?? null )
+			? $status['manifest']
+			: array();
+
+		if ( empty( $manifest ) ) {
+			throw new ApiException(
+				__( 'PeakURL could not load the update manifest.', 'peakurl' ),
+				502,
+			);
+		}
+
+		$update_service = new Update( $this->config );
+
+		try {
+			$result = $update_service->apply_update( $manifest );
+		} catch ( \Throwable $exception ) {
+			$this->upsert_setting( 'update_last_checked_at', $this->now(), false );
+			$this->upsert_setting(
+				'update_last_error',
+				$exception->getMessage(),
+				false,
+			);
+
+			throw new ApiException( $exception->getMessage(), 500 );
+		}
+
+		$installed_version = (string) (
+			$result['version']
+			?? $this->config[ Constants::CONFIG_VERSION ]
+			?? Constants::DEFAULT_VERSION
+		);
+
+		$this->upsert_setting(
+			'installed_version',
+			$installed_version,
+			false,
+		);
+		$this->upsert_setting( 'update_last_applied_at', $this->now(), false );
+		$this->upsert_setting( 'update_last_checked_at', $this->now(), false );
+		$this->upsert_setting(
+			'update_last_result_json',
+			$this->encode_json( $manifest ),
+			false,
+		);
+		$this->delete_settings( array( 'update_last_error' ) );
+
+		return array(
+			'applied'        => true,
+			'reinstalled'    => $reinstall,
+			'currentVersion' => $installed_version,
+			'latestVersion'  => (string) ( $manifest['version'] ?? '' ),
+			'packageUrl'     => (string) ( $result['packageUrl'] ?? '' ),
+			'appliedAt'      => (string) ( $result['appliedAt'] ?? gmdate( DATE_ATOM ) ),
+			'reloadRequired' => true,
+		);
+	}
+
+	/**
 	 * Ensure GeoIP dashboard management is allowed in this runtime.
 	 *
 	 * @throws ApiException When the runtime config target is not writable.

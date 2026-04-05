@@ -71,6 +71,13 @@ export const systemApi = baseApi.injectEndpoints({
 			}),
 			invalidatesTags: ['Updates', 'AdminNotices'],
 		}),
+		reinstallUpdate: build.mutation({
+			query: () => ({
+				url: 'system/update/reinstall',
+				method: 'POST',
+			}),
+			invalidatesTags: ['Updates', 'AdminNotices'],
+		}),
 		upgradeDatabaseSchema: build.mutation({
 			query: () => ({
 				url: 'system/update/database',
@@ -94,5 +101,6 @@ export const {
 	useGetUpdateStatusQuery,
 	useCheckForUpdatesMutation,
 	useApplyUpdateMutation,
+	useReinstallUpdateMutation,
 	useUpgradeDatabaseSchemaMutation,
 } = systemApi;

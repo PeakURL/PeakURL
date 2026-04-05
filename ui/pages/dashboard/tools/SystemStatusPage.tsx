@@ -29,8 +29,12 @@ function formatDate(value) {
 function formatBytes(value) {
 	const size = Number(value);
 
-	if (!Number.isFinite(size) || size <= 0) {
+	if (!Number.isFinite(size) || size < 0) {
 		return __('Not available');
+	}
+
+	if (0 === size) {
+		return '0 B';
 	}
 
 	const units = ['B', 'KB', 'MB', 'GB'];
@@ -43,6 +47,14 @@ function formatBytes(value) {
 	}
 
 	return `${nextSize.toFixed(nextSize >= 10 || 0 === index ? 0 : 1)} ${units[index]}`;
+}
+
+function formatOptionalBytes(value) {
+	return hasValue(value) ? formatBytes(value) : '';
+}
+
+function joinHelperText(parts) {
+	return parts.filter((part) => hasValue(part)).join(' • ');
 }
 
 function formatCount(value) {
@@ -382,11 +394,14 @@ function SystemStatusPage() {
 			label: __('Content Directory'),
 			value: status?.storage?.contentDirectory,
 			helperText: status?.storage?.contentExists
-				? formatBoolean(
-						status?.storage?.contentWritable,
-						__('Writable'),
-						__('Not Writable')
-				  )
+				? joinHelperText([
+						formatBoolean(
+							status?.storage?.contentWritable,
+							__('Writable'),
+							__('Not Writable')
+						),
+						formatOptionalBytes(status?.storage?.contentDirectorySizeBytes),
+				  ])
 				: __('Missing'),
 			monospace: true,
 		},
@@ -394,49 +409,60 @@ function SystemStatusPage() {
 			label: __('Languages Directory'),
 			value: status?.storage?.languagesDirectory,
 			helperText: status?.storage?.languagesDirectoryExists
-				? formatBoolean(
-						status?.storage?.languagesDirectoryReadable,
-						__('Readable'),
-						__('Not Readable')
-				  )
+				? joinHelperText([
+						formatBoolean(
+							status?.storage?.languagesDirectoryReadable,
+							__('Readable'),
+							__('Not Readable')
+						),
+						formatOptionalBytes(status?.storage?.languagesDirectorySizeBytes),
+				  ])
 				: __('Missing'),
 			monospace: true,
 		},
 		{
 			label: __('Config File'),
 			value: status?.storage?.configPath,
-			helperText: formatBoolean(
-				status?.storage?.configExists,
-				__('Present'),
-				__('Missing')
-			),
+			helperText: status?.storage?.configExists
+				? joinHelperText([
+						__('Present'),
+						formatOptionalBytes(status?.storage?.configSizeBytes),
+				  ])
+				: __('Missing'),
 			monospace: true,
 		},
 		{
 			label: __('Debug Log'),
 			value: status?.storage?.debugLogPath,
 			helperText: status?.storage?.debugLogExists
-				? formatBoolean(
-						status?.storage?.debugLogReadable,
-						__('Readable'),
-						__('Not Readable')
-				  )
+				? joinHelperText([
+						formatBoolean(
+							status?.storage?.debugLogReadable,
+							__('Readable'),
+							__('Not Readable')
+						),
+						formatOptionalBytes(status?.storage?.debugLogSizeBytes),
+				  ])
 				: __('Not created yet'),
 			monospace: true,
 		},
 		{
 			label: __('App Directory'),
 			value: status?.storage?.appDirectory,
-			helperText: formatBoolean(
-				status?.storage?.appWritable,
-				__('Writable'),
-				__('Not Writable')
-			),
+			helperText: joinHelperText([
+				formatBoolean(
+					status?.storage?.appWritable,
+					__('Writable'),
+					__('Not Writable')
+				),
+				formatOptionalBytes(status?.storage?.appDirectorySizeBytes),
+			]),
 			monospace: true,
 		},
 		{
 			label: __('Release Root'),
 			value: status?.storage?.releaseRoot,
+			helperText: formatOptionalBytes(status?.storage?.releaseRootSizeBytes),
 			monospace: true,
 		},
 	];

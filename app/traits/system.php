@@ -20,7 +20,6 @@ use PeakURL\Services\Geoip;
 use PeakURL\Services\SystemStatus;
 use PeakURL\Services\Mailer;
 use PeakURL\Services\SetupConfig;
-use PeakURL\Services\Update;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -422,61 +421,42 @@ trait SystemTrait {
 			throw new ApiException( __( 'PeakURL is already up to date.', 'peakurl' ), 422 );
 		}
 
-		if ( empty( $status['canApply'] ) ) {
+		return $this->install_release_from_status( $status );
+	}
+
+	/**
+	 * Reinstall the currently installed release package.
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed> Result of the reinstall operation.
+	 *
+	 * @throws ApiException When the current release cannot be reinstalled.
+	 * @since 1.0.5
+	 */
+	public function reinstall_update( Request $request ): array {
+		$this->assert_request_capability(
+			$request,
+			'manage_updates',
+			__( 'Admin access is required.', 'peakurl' ),
+		);
+
+		$status = $this->load_update_status( true );
+
+		if ( ! empty( $status['updateAvailable'] ) ) {
 			throw new ApiException(
-				(string) ( $status['applyDisabledReason'] ?? 'PeakURL cannot apply this update.' ),
+				__( 'A newer PeakURL release is available. Install the update instead.', 'peakurl' ),
 				422,
 			);
 		}
 
-		$manifest = is_array( $status['manifest'] ?? null )
-			? $status['manifest']
-			: array();
-
-		if ( empty( $manifest ) ) {
+		if ( empty( $status['reinstallAvailable'] ) ) {
 			throw new ApiException(
-				__( 'PeakURL could not load the update manifest.', 'peakurl' ),
-				502,
+				__( 'PeakURL cannot reinstall the latest release right now.', 'peakurl' ),
+				422,
 			);
 		}
 
-		$update_service = new Update( $this->config );
-
-		try {
-			$result = $update_service->apply_update( $manifest );
-		} catch ( \Throwable $exception ) {
-			$this->upsert_setting( 'update_last_checked_at', $this->now(), false );
-			$this->upsert_setting(
-				'update_last_error',
-				$exception->getMessage(),
-				false,
-			);
-
-			throw new ApiException( $exception->getMessage(), 500 );
-		}
-
-		$this->upsert_setting(
-			'installed_version',
-			(string) ( $result['version'] ?? $this->config[ Constants::CONFIG_VERSION ] ?? Constants::DEFAULT_VERSION ),
-			false,
-		);
-		$this->upsert_setting( 'update_last_applied_at', $this->now(), false );
-		$this->upsert_setting( 'update_last_checked_at', $this->now(), false );
-		$this->upsert_setting(
-			'update_last_result_json',
-			$this->encode_json( $manifest ),
-			false,
-		);
-		$this->delete_settings( array( 'update_last_error' ) );
-
-		return array(
-			'applied'        => true,
-			'currentVersion' => (string) ( $result['version'] ?? '' ),
-			'latestVersion'  => (string) ( $manifest['version'] ?? '' ),
-			'packageUrl'     => (string) ( $result['packageUrl'] ?? '' ),
-			'appliedAt'      => (string) ( $result['appliedAt'] ?? gmdate( DATE_ATOM ) ),
-			'reloadRequired' => true,
-		);
+		return $this->install_release_from_status( $status, true );
 	}
 
 	/**

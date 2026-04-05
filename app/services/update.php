@@ -209,6 +209,7 @@ class Update {
 			'currentVersion'      => $current_version,
 			'latestVersion'       => $latest_version,
 			'updateAvailable'     => $update_available,
+			'reinstallAvailable'  => '' !== $latest_version && 0 === version_compare( $latest_version, $current_version ),
 			'downloadUrl'         => (string) ( $manifest['downloadUrl'] ?? '' ),
 			'packageUrl'          => (string) ( $manifest['packageUrl'] ?? '' ),
 			'checksumSha256'      => (string) ( $manifest['checksumSha256'] ?? '' ),

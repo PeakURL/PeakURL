@@ -375,6 +375,13 @@ class Application {
 			)
 		);
 		$this->router->post(
+			'/api/v1/system/update/reinstall',
+			array(
+				$updates,
+				'reinstall',
+			)
+		);
+		$this->router->post(
 			'/api/v1/system/update/database',
 			array(
 				$updates,

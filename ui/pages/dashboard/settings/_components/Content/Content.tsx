@@ -19,6 +19,7 @@ import {
 	useGetUpdateStatusQuery,
 	useCheckForUpdatesMutation,
 	useApplyUpdateMutation,
+	useReinstallUpdateMutation,
 	useUpgradeDatabaseSchemaMutation,
 } from '@/store/slices/api/system';
 import { useNotification, IntegrationsTab } from '@/components';
@@ -108,8 +109,12 @@ const Content = ({ activeTab }) => {
 		useCheckForUpdatesMutation();
 	const [applyUpdate, { isLoading: isApplyingUpdate }] =
 		useApplyUpdateMutation();
+	const [reinstallUpdate, { isLoading: isReinstallingUpdate }] =
+		useReinstallUpdateMutation();
 	const [upgradeDatabaseSchema, { isLoading: isUpgradingDatabaseSchema }] =
 		useUpgradeDatabaseSchemaMutation();
+	const updateStatusData = updateStatus?.data || null;
+	const isInstallingRelease = isApplyingUpdate || isReinstallingUpdate;
 
 	const user = userData?.data;
 
@@ -123,7 +128,7 @@ const Content = ({ activeTab }) => {
 	const [showKeyModal, setShowKeyModal] = useState(false);
 	const [showCreateModal, setShowCreateModal] = useState(false);
 	const [apiKeyPendingDelete, setApiKeyPendingDelete] = useState(null);
-	const [showUpdateConfirm, setShowUpdateConfirm] = useState(false);
+	const [pendingReleaseAction, setPendingReleaseAction] = useState(null);
 	const [keyLabel, setKeyLabel] = useState('');
 	const [newApiBaseUrl, setNewApiBaseUrl] = useState('');
 
@@ -304,10 +309,10 @@ const Content = ({ activeTab }) => {
 				__('Up to date'),
 				currentVersion
 					? sprintf(
-						__('PeakURL %s is already current.'),
+						__('PeakURL %s is already on the latest release.'),
 						currentVersion
 					)
-					: __('PeakURL is already current.')
+					: __('PeakURL is already on the latest release.')
 			);
 		} catch (err) {
 			notification.error(
@@ -369,36 +374,52 @@ const Content = ({ activeTab }) => {
 		}
 	};
 
-	const handleApplyUpdate = async () => {
+	const runReleaseInstall = async (action) => {
+		const isReinstall = action === 'reinstall';
+		const installRelease = isReinstall ? reinstallUpdate : applyUpdate;
+
 		try {
-			const result = await applyUpdate().unwrap();
+			const result = await installRelease().unwrap();
 			const appliedVersion = result?.data?.currentVersion;
-			setShowUpdateConfirm(false);
+			setPendingReleaseAction(null);
 
 			notification.success(
-				__('Update installed'),
+				isReinstall ? __('Release reinstalled') : __('Update installed'),
 				appliedVersion
 					? sprintf(
-						__(
-							'PeakURL %s was installed successfully. Redirecting now.'
-						),
+						isReinstall
+							? __(
+								'PeakURL %s was reinstalled successfully. Redirecting now.'
+							)
+							: __(
+								'PeakURL %s was installed successfully. Redirecting now.'
+							),
 						appliedVersion
 					)
-					: __('PeakURL was installed successfully. Redirecting now.')
+					: isReinstall
+						? __('PeakURL was reinstalled successfully. Redirecting now.')
+						: __('PeakURL was installed successfully. Redirecting now.')
 			);
 
 			window.setTimeout(() => {
 				window.location.assign(
-					`${PEAKURL_BASENAME || ''}/dashboard/about?source=update`
+					`${PEAKURL_BASENAME || ''}/dashboard/about?source=${isReinstall ? 'reinstall' : 'update'}`
 				);
 			}, 1500);
 		} catch (err) {
 			notification.error(
-				__('Update failed'),
-				err?.data?.message || __('PeakURL could not apply the update.')
+				isReinstall ? __('Reinstall failed') : __('Update failed'),
+				err?.data?.message ||
+					(isReinstall
+						? __('PeakURL could not reinstall the latest release.')
+						: __('PeakURL could not apply the update.'))
 			);
 		}
 	};
+
+	const handleApplyUpdate = async () => runReleaseInstall('install');
+
+	const handleReinstallUpdate = async () => runReleaseInstall('reinstall');
 
 	const handleUpgradeDatabase = async () => {
 		try {
@@ -486,14 +507,16 @@ const Content = ({ activeTab }) => {
 
 			{activeTab === 'updates' && (
 				<UpdatesTab
-					status={updateStatus?.data || null}
+					status={updateStatusData}
 					errorMessage={updateError?.data?.message || null}
 					isLoading={isLoadingUpdateStatus || isFetchingUpdateStatus}
 					isChecking={isCheckingForUpdates}
 					isApplying={isApplyingUpdate}
+					isReinstalling={isReinstallingUpdate}
 					isRepairing={isUpgradingDatabaseSchema}
 					onCheck={handleCheckForUpdates}
-					onApply={() => setShowUpdateConfirm(true)}
+					onApply={() => setPendingReleaseAction('install')}
+					onReinstall={() => setPendingReleaseAction('reinstall')}
 					onRepair={handleUpgradeDatabase}
 				/>
 			)}
@@ -538,25 +561,41 @@ const Content = ({ activeTab }) => {
 				loading={isDeletingKey}
 			/>
 			<ConfirmDialog
-				open={showUpdateConfirm}
+				open={Boolean(pendingReleaseAction)}
 				onClose={() => {
-					if (!isApplyingUpdate) {
-						setShowUpdateConfirm(false);
+					if (!isInstallingRelease) {
+						setPendingReleaseAction(null);
 					}
 				}}
 				title={sprintf(
-					__('Install PeakURL %s?'),
-					updateStatus?.data?.latestVersion || __('update')
+					pendingReleaseAction === 'reinstall'
+						? __('Reinstall PeakURL %s?')
+						: __('Install PeakURL %s?'),
+					updateStatusData?.latestVersion ||
+						updateStatusData?.currentVersion ||
+						__('update')
 				)}
-				description={
-					__(
-						'PeakURL will download the latest release package, replace managed application files, and reload the dashboard when the update completes.\n\nOnly continue on packaged release installs.'
-					)
+					description={
+						pendingReleaseAction === 'reinstall'
+							? __(
+								'PeakURL will download the latest release package again, replace managed application files, and reload the dashboard when the reinstall completes.\n\nUse this when you need to restore packaged files on a release install.'
+							)
+							: __(
+								'PeakURL will download the latest release package, replace managed application files, and reload the dashboard when the update completes.\n\nOnly continue on packaged release installs.'
+						)
 				}
-				confirmText={__('Install update')}
+				confirmText={
+					pendingReleaseAction === 'reinstall'
+						? __('Reinstall latest version')
+						: __('Install update')
+				}
 				cancelText={__('Cancel')}
-				onConfirm={handleApplyUpdate}
-				loading={isApplyingUpdate}
+				onConfirm={
+					pendingReleaseAction === 'reinstall'
+						? handleReinstallUpdate
+						: handleApplyUpdate
+				}
+				loading={isInstallingRelease}
 			/>
 		</div>
 	);

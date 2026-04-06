@@ -109,7 +109,8 @@ class UsersController {
 	/**
 	 * Update the authenticated user's own profile (PUT /api/v1/users/me).
 	 *
-	 * Accepts email, display name, and password change fields.
+	 * Accepts email, display name, and password change fields. Password
+	 * changes must include the current password for confirmation.
 	 *
 	 * @param Request $request Incoming HTTP request with profile payload.
 	 * @return array<string, mixed> JSON envelope with updated profile.

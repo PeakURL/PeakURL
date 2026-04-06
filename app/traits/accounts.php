@@ -485,6 +485,7 @@ trait AccountsTrait {
 				'user_id'        => $user['id'],
 			),
 		);
+		$this->send_password_changed_notification( $user );
 
 		return true;
 	}
@@ -534,9 +535,11 @@ trait AccountsTrait {
 			'You do not have permission to update this profile.',
 		);
 		$user_id    = (string) $user['id'];
+		$user_row   = $this->find_user_row_by_id( $user_id );
 		$user_email = strtolower( trim( (string) ( $user['email'] ?? '' ) ) );
 		$updates    = array();
 		$params     = array( 'id' => $user_id );
+		$password_changed = false;
 
 		$field_map = array(
 			'firstName'   => 'first_name',
@@ -601,9 +604,17 @@ trait AccountsTrait {
 
 		if (
 			array_key_exists( 'password', $changes ) &&
-			'' !== trim( (string) $changes['password'] )
+			'' !== (string) $changes['password']
 		) {
 			$password = (string) $changes['password'];
+			$this->assert_password_confirmation_for_user(
+				$user_row,
+				(string) ( $changes['currentPassword'] ?? '' ),
+				__(
+					'Current password is required to change your password.',
+					'peakurl',
+				),
+			);
 
 			if ( strlen( $password ) < 8 ) {
 				throw new ApiException(
@@ -617,6 +628,7 @@ trait AccountsTrait {
 				$password,
 				PASSWORD_DEFAULT,
 			);
+			$password_changed        = true;
 		}
 
 		if ( empty( $updates ) ) {
@@ -633,6 +645,10 @@ trait AccountsTrait {
 			'UPDATE users SET ' . implode( ', ', $updates ) . ' WHERE id = :id',
 			$params,
 		);
+
+		if ( $password_changed && $user_row ) {
+			$this->send_password_changed_notification( $user_row );
+		}
 
 		return $this->hydrate_user(
 			$this->find_user_row_by_id( $user_id ),
@@ -768,6 +784,7 @@ trait AccountsTrait {
 		$user_email = strtolower( trim( (string) ( $user['email'] ?? '' ) ) );
 		$updates    = array();
 		$params     = array( 'id' => $user_id );
+		$password_changed = false;
 
 		foreach (
 			array(
@@ -866,6 +883,7 @@ trait AccountsTrait {
 					$password,
 					PASSWORD_DEFAULT,
 				);
+				$password_changed        = true;
 			}
 		}
 
@@ -882,6 +900,10 @@ trait AccountsTrait {
 			'UPDATE users SET ' . implode( ', ', $updates ) . ' WHERE id = :id',
 			$params,
 		);
+
+		if ( ! empty( $password_changed ) ) {
+			$this->send_password_changed_notification( $user );
+		}
 
 		return $this->hydrate_user(
 			$this->find_user_row_by_id( $user_id ),
@@ -994,10 +1016,16 @@ trait AccountsTrait {
 		$row          = $this->find_user_row_by_id( (string) $user['id'] );
 
 		return array(
-			'twoFactorEnabled'     => ! empty( $row['two_factor_enabled'] ),
-			'hasPendingSetup'      => ! empty( $row['two_factor_pending_secret'] ),
-			'backupCodesRemaining' => count( $backup_codes ),
-			'backupCodes'          => $backup_codes,
+			'twoFactorEnabled'         => ! empty( $row['two_factor_enabled'] ),
+			'hasPendingSetup'          => ! empty( $row['two_factor_pending_secret'] ),
+			'backupCodesRemaining'     => count( $backup_codes ),
+			'backupCodesLastGeneratedAt' => ! empty(
+				$row['backup_codes_generated_at']
+			)
+				? $this->to_iso(
+					(string) $row['backup_codes_generated_at']
+				)
+				: null,
 			'sessions'             => $sessions,
 		);
 	}
@@ -1103,12 +1131,24 @@ trait AccountsTrait {
 	 * @param Request $request Incoming HTTP request.
 	 * @since 1.0.0
 	 */
-	public function disable_two_factor( Request $request ): void {
-		$user = $this->assert_request_capability(
+	public function disable_two_factor(
+		Request $request,
+		string $current_password
+	): void {
+		$user     = $this->assert_request_capability(
 			$request,
 			'manage_profile',
 			'You do not have permission to manage account security.',
 		);
+		$user_row = $this->assert_password_confirmation_for_user(
+			$this->find_user_row_by_id( (string) $user['id'] ),
+			$current_password,
+			__(
+				'Current password is required to disable two-factor authentication.',
+				'peakurl',
+			),
+		);
+		$this->assert_two_factor_is_enabled_for_user( $user_row );
 
 		$this->execute(
 			'UPDATE users
@@ -1121,7 +1161,7 @@ trait AccountsTrait {
             WHERE id = :id',
 			array(
 				'updated_at' => $this->now(),
-				'id'         => $user['id'],
+				'id'         => $user_row['id'],
 			),
 		);
 	}
@@ -1133,13 +1173,56 @@ trait AccountsTrait {
 	 * @return array<string, mixed> New set of backup codes.
 	 * @since 1.0.0
 	 */
-	public function regenerate_backup_codes( Request $request ): array {
-		$user = $this->assert_request_capability(
+	public function regenerate_backup_codes(
+		Request $request,
+		string $current_password
+	): array {
+		$user     = $this->assert_request_capability(
 			$request,
 			'manage_profile',
 			'You do not have permission to manage account security.',
 		);
-		return $this->replace_backup_codes( (string) $user['id'] );
+		$user_row = $this->assert_password_confirmation_for_user(
+			$this->find_user_row_by_id( (string) $user['id'] ),
+			$current_password,
+			__(
+				'Current password is required to regenerate backup codes.',
+				'peakurl',
+			),
+		);
+		$this->assert_two_factor_is_enabled_for_user( $user_row );
+
+		return $this->replace_backup_codes( (string) $user_row['id'] );
+	}
+
+	/**
+	 * Return backup codes for download after password confirmation.
+	 *
+	 * @param Request $request          Incoming HTTP request.
+	 * @param string  $current_password Current password from the request.
+	 * @return array<int, string> Plain-text backup codes.
+	 * @since 1.0.6
+	 */
+	public function get_backup_codes_for_download(
+		Request $request,
+		string $current_password
+	): array {
+		$user     = $this->assert_request_capability(
+			$request,
+			'manage_profile',
+			'You do not have permission to manage account security.',
+		);
+		$user_row = $this->assert_password_confirmation_for_user(
+			$this->find_user_row_by_id( (string) $user['id'] ),
+			$current_password,
+			__(
+				'Current password is required to download backup codes.',
+				'peakurl',
+			),
+		);
+		$this->assert_two_factor_is_enabled_for_user( $user_row );
+
+		return $this->list_backup_codes( (string) $user_row['id'] );
 	}
 
 	/**
@@ -1226,5 +1309,89 @@ trait AccountsTrait {
 			'raw'  => $raw_token,
 			'hash' => Secrets::hash_lookup_token( $raw_token ),
 		);
+	}
+
+	/**
+	 * Ensure a sensitive account action is confirmed with the current password.
+	 *
+	 * @param array<string, mixed>|null $user_row         User database row.
+	 * @param string                    $current_password Plain-text current password.
+	 * @param string                    $missing_message  Validation message for missing input.
+	 * @return array<string, mixed> Validated user row.
+	 *
+	 * @throws ApiException When the password is missing or incorrect.
+	 * @since 1.0.6
+	 */
+	private function assert_password_confirmation_for_user(
+		?array $user_row,
+		string $current_password,
+		string $missing_message
+	): array {
+		if ( ! $user_row ) {
+			throw new ApiException(
+				__( 'User account could not be loaded.', 'peakurl' ),
+				404,
+			);
+		}
+
+		if ( '' === $current_password ) {
+			throw new ApiException( $missing_message, 422 );
+		}
+
+		if (
+			! password_verify(
+				$current_password,
+				(string) ( $user_row['password_hash'] ?? '' ),
+			)
+		) {
+			throw new ApiException(
+				__( 'Current password is incorrect.', 'peakurl' ),
+				422,
+			);
+		}
+
+		return $user_row;
+	}
+
+	/**
+	 * Ensure backup-code actions only run when 2FA is enabled.
+	 *
+	 * @param array<string, mixed> $user_row User database row.
+	 * @return void
+	 *
+	 * @throws ApiException When 2FA is not enabled.
+	 * @since 1.0.6
+	 */
+	private function assert_two_factor_is_enabled_for_user( array $user_row ): void {
+		if ( empty( $user_row['two_factor_enabled'] ) ) {
+			throw new ApiException(
+				__(
+					'Two-factor authentication is not enabled for this account.',
+					'peakurl',
+				),
+				422,
+			);
+		}
+	}
+
+	/**
+	 * Send a password-changed notification without blocking the write path.
+	 *
+	 * @param array<string, mixed> $user User database row.
+	 * @return void
+	 * @since 1.0.6
+	 */
+	private function send_password_changed_notification( array $user ): void {
+		try {
+			$this->notifications_service->send_password_changed_email( $user );
+		} catch ( \RuntimeException $exception ) {
+			error_log(
+				sprintf(
+					'PeakURL mail error for password changed (%s): %s',
+					(string) ( $user['email'] ?? 'unknown-email' ),
+					$exception->getMessage(),
+				),
+			);
+		}
 	}
 }

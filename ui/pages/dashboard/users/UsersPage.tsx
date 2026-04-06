@@ -29,6 +29,7 @@ const EMPTY_FORM = {
 	username: '',
 	email: '',
 	password: '',
+	confirmPassword: '',
 	role: 'editor',
 };
 
@@ -55,6 +56,7 @@ const getInitialFormState = (mode, initialUser) => {
 			username: initialUser.username ?? '',
 			email: initialUser.email ?? '',
 			password: '',
+			confirmPassword: '',
 			role: initialUser.role ?? 'editor',
 		};
 	}
@@ -97,6 +99,16 @@ function UserDialog({
 		};
 
 		if ( 'create' === mode || '' !== form.password.trim() ) {
+			if ( form.password.length < 8 ) {
+				setFormError( __( 'Use at least 8 characters.' ) );
+				return;
+			}
+
+			if ( form.password !== form.confirmPassword ) {
+				setFormError( __( 'Passwords do not match.' ) );
+				return;
+			}
+
 			payload.password = form.password;
 		}
 
@@ -190,12 +202,36 @@ function UserDialog({
 								value={form.password}
 								onChange={handleChange('password')}
 								required={'create' === mode}
+								autoComplete="new-password"
 								helperText={
 									'create' === mode
 										? __('Use at least 8 characters.')
 										: __('Leave blank to keep the current password.')
 								}
 							/>
+							<Input
+								label={
+									'create' === mode
+										? __('Confirm Password')
+										: __('Confirm New Password')
+								}
+								type="password"
+								value={form.confirmPassword}
+								onChange={handleChange('confirmPassword')}
+								required={
+									'create' === mode ||
+									'' !== form.password.trim()
+								}
+								autoComplete="new-password"
+								helperText={
+									'create' === mode
+										? __('Re-enter the password to confirm it.')
+										: __('Re-enter the new password to confirm it.')
+								}
+							/>
+						</div>
+
+						<div className="grid gap-4 sm:grid-cols-2">
 							<div className="space-y-2">
 								<label className="block text-sm font-semibold text-heading">
 									{__('Role')}

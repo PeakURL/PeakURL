@@ -146,26 +146,28 @@ export const userApi = baseApi.injectEndpoints({
 			invalidatesTags: ['Security'],
 		}),
 		disableTwoFactor: build.mutation({
-			query: () => ({
+			query: (body) => ({
 				url: 'auth/security/two-factor/disable',
 				method: 'POST',
+				body,
 			}),
 			invalidatesTags: ['Security'],
 		}),
 		regenerateBackupCodes: build.mutation({
-			query: () => ({
+			query: (body) => ({
 				url: 'auth/security/two-factor/backup-codes',
 				method: 'POST',
+				body,
 			}),
 			invalidatesTags: ['Security'],
 		}),
-		downloadBackupCodes: build.query({
-			query: () => ({
+		downloadBackupCodes: build.mutation({
+			query: (body) => ({
 				url: 'auth/security/backup-codes/download',
-				method: 'GET',
+				method: 'POST',
+				body,
 				responseHandler: (response) => response.text(),
 			}),
-			providesTags: ['Security'],
 		}),
 		revokeSession: build.mutation({
 			query: (sessionId) => ({
@@ -207,10 +209,9 @@ export const {
 	useVerifyTwoFactorMutation,
 	useDisableTwoFactorMutation,
 	useRegenerateBackupCodesMutation,
-	useDownloadBackupCodesQuery,
+	useDownloadBackupCodesMutation,
 	useRevokeSessionMutation,
 	useRevokeOtherSessionsMutation,
-	useLazyDownloadBackupCodesQuery,
 } = userApi;
 
 export const { forgotPassword, resetPassword } = userApi.endpoints;

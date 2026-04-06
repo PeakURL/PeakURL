@@ -180,6 +180,14 @@ const Content = ({ activeTab }) => {
 	};
 
 	const handleSecuritySubmit = async () => {
+		if (!securityForm.currentPassword) {
+			notification.error(
+				__('Error'),
+				__('Enter your current password')
+			);
+			return;
+		}
+
 		if (securityForm.newPassword !== securityForm.confirmPassword) {
 			notification.error(
 				__('Error'),
@@ -197,6 +205,7 @@ const Content = ({ activeTab }) => {
 
 		try {
 			await updateProfile({
+				currentPassword: securityForm.currentPassword,
 				password: securityForm.newPassword,
 			}).unwrap();
 			notification.success(

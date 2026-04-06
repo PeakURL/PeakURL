@@ -103,6 +103,83 @@ class Notifications {
 	}
 
 	/**
+	 * Send a password-changed security notification.
+	 *
+	 * @param array<string, mixed> $user User database row.
+	 * @return void
+	 *
+	 * @throws \RuntimeException When email delivery fails.
+	 * @since 1.0.6
+	 */
+	public function send_password_changed_email( array $user ): void {
+		$email = strtolower( trim( (string) ( $user['email'] ?? '' ) ) );
+
+		if ( '' === $email || ! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
+			throw new \RuntimeException(
+				__( 'PeakURL could not send the password changed email because the account email address is invalid.', 'peakurl' ),
+			);
+		}
+
+		$site_name     = \get_site_name();
+		$site_url      = \get_site_url();
+		$login_url     = \get_site_url( 'login' );
+		$dashboard_url = \get_site_url( 'dashboard/settings?tab=security' );
+		$support_url   = 'https://peakurl.org/contact';
+		$display_name  = \get_user_display_name( $user );
+		$changed_at    = gmdate( DATE_ATOM );
+		$subject       = (string) \apply_filters(
+			'peakurl_password_changed_email_subject',
+			sprintf(
+				/* translators: %s: site name. */
+				__( 'Your %s password was changed', 'peakurl' ),
+				$site_name,
+			),
+			$user,
+			$site_name,
+			$site_url,
+		);
+		$context       = $this->filter_template_context(
+			'peakurl_password_changed_email_context',
+			array(
+				'recipient'     => $display_name,
+				'site_name'     => $site_name,
+				'site_url'      => $site_url,
+				'login_url'     => $login_url,
+				'dashboard_url' => $dashboard_url,
+				'support_url'   => $support_url,
+				'changed_at'    => $changed_at,
+			),
+			$user,
+			$site_name,
+			$site_url,
+			$changed_at,
+		);
+		$bodies        = $this->render_template_pair(
+			'password-changed',
+			$context,
+		);
+
+		\PeakURL_Mail(
+			$email,
+			$subject,
+			$bodies['html'],
+			array(
+				'to_name'   => $display_name,
+				'text_body' => $bodies['text'],
+				'html'      => true,
+			),
+		);
+
+		\do_action(
+			'peakurl_password_changed_email_sent',
+			$user,
+			$email,
+			$display_name,
+			$subject,
+		);
+	}
+
+	/**
 	 * Send the install welcome email to the first admin user.
 	 *
 	 * @param array<string, mixed> $user User database row.

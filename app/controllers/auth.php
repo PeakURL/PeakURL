@@ -283,7 +283,12 @@ class AuthController {
 	 * @since 1.0.0
 	 */
 	public function disable_two_factor( Request $request ): array {
-		$this->data_store->disable_two_factor( $request );
+		$current_password = (string) $request->get_body_param(
+			'currentPassword',
+			'',
+		);
+
+		$this->data_store->disable_two_factor( $request, $current_password );
 		return JsonResponse::success(
 			array( 'disabled' => true ),
 			__( 'Two-factor authentication disabled.', 'peakurl' ),
@@ -298,10 +303,16 @@ class AuthController {
 	 * @since 1.0.0
 	 */
 	public function regenerate_backup_codes( Request $request ): array {
+		$current_password = (string) $request->get_body_param(
+			'currentPassword',
+			'',
+		);
+
 		return JsonResponse::success(
 			array(
 				'backupCodes' => $this->data_store->regenerate_backup_codes(
 					$request,
+					$current_password,
 				),
 			),
 			__( 'Backup codes regenerated.', 'peakurl' ),
@@ -309,15 +320,21 @@ class AuthController {
 	}
 
 	/**
-	 * Download backup codes as a plain-text file (GET /api/v1/auth/security/backup-codes/download).
+	 * Download backup codes as a plain-text file (POST /api/v1/auth/security/backup-codes/download).
 	 *
 	 * @param Request $request Authenticated request.
 	 * @return array<string, mixed> Text response with codes.
-	 * @since 1.0.0
+	 * @since 1.0.6
 	 */
 	public function download_backup_codes( Request $request ): array {
-		$security = $this->data_store->get_security_settings( $request );
-		$codes    = $security['backupCodes'] ?? array();
+		$current_password = (string) $request->get_body_param(
+			'currentPassword',
+			'',
+		);
+		$codes            = $this->data_store->get_backup_codes_for_download(
+			$request,
+			$current_password,
+		);
 		$body     = implode(
 			"\n",
 			array_merge(

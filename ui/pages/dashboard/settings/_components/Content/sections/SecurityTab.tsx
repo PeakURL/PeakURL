@@ -16,7 +16,7 @@ import {
 	useVerifyTwoFactorMutation,
 	useDisableTwoFactorMutation,
 	useRegenerateBackupCodesMutation,
-	useLazyDownloadBackupCodesQuery,
+	useDownloadBackupCodesMutation,
 	useRevokeSessionMutation,
 	useRevokeOtherSessionsMutation,
 } from '@/store/slices/api/user';
@@ -29,7 +29,7 @@ const buildBackupCodesFile = (codes) =>
 		'',
 		...codes.map((code) => `- ${code}`),
 		'',
-		sprintf( __('Generated at: %s'), new Date().toISOString() ),
+		sprintf(__('Generated at: %s'), new Date().toISOString()),
 	].join('\n');
 
 const formatTimestamp = (value) => {
@@ -58,6 +58,9 @@ function SecurityTab({
 	const [isRevokingOthers, setIsRevokingOthers] = useState(false);
 	const [showRevokeOthersConfirm, setShowRevokeOthersConfirm] =
 		useState(false);
+	const [protectedAction, setProtectedAction] = useState(null);
+	const [protectedActionPassword, setProtectedActionPassword] =
+		useState('');
 
 	const {
 		data: securityData,
@@ -91,13 +94,87 @@ function SecurityTab({
 		useDisableTwoFactorMutation();
 	const [regenerateBackupCodes, { isLoading: isRegenerating }] =
 		useRegenerateBackupCodesMutation();
-	const [triggerDownload, { isFetching: isDownloadingFromApi }] =
-		useLazyDownloadBackupCodesQuery();
+	const [downloadBackupCodes, { isLoading: isDownloadingFromApi }] =
+		useDownloadBackupCodesMutation();
 	const [revokeSession] = useRevokeSessionMutation();
 	const [revokeOtherSessions] = useRevokeOtherSessionsMutation();
 	const otherActiveSessions = sessions.filter(
 		(session) => !session.isCurrent && !session.revokedAt
 	);
+	const isProtectedActionLoading =
+		'download' === protectedAction
+			? isDownloading || isDownloadingFromApi
+			: 'disable' === protectedAction
+			? isDisabling
+			: isRegenerating;
+	const protectedActionConfig =
+		'download' === protectedAction
+			? {
+					title: __('Download backup codes'),
+					description: __(
+						'Enter your current password to download the latest backup codes for this account.'
+					),
+					confirmText: __('Download'),
+			  }
+			: 'disable' === protectedAction
+			? {
+					title: __('Disable two-factor authentication'),
+					description: __(
+						'Enter your current password to disable two-factor authentication and clear the current backup codes for this account.'
+					),
+					confirmText: __('Disable'),
+					confirmVariant: 'danger',
+			  }
+			: 'regenerate' === protectedAction
+			? {
+					title: __('Regenerate backup codes'),
+					description: __(
+						'Enter your current password to replace the existing backup codes with a new set.'
+					),
+					confirmText: __('Regenerate Codes'),
+			  }
+			: null;
+
+	const closeProtectedActionDialog = () => {
+		if (isProtectedActionLoading) {
+			return;
+		}
+
+		setProtectedAction(null);
+		setProtectedActionPassword('');
+	};
+
+	const openProtectedActionDialog = (action) => {
+		if (isProtectedActionLoading) {
+			return;
+		}
+
+		setProtectedAction(action);
+		setProtectedActionPassword('');
+	};
+
+	const downloadBackupCodesFile = (content) => {
+		const blob = new Blob([content], { type: 'text/plain' });
+		const url = window.URL.createObjectURL(blob);
+		const link = document.createElement('a');
+		link.href = url;
+		link.download = 'peakurl-backup-codes.txt';
+		link.click();
+		window.URL.revokeObjectURL(url);
+	};
+
+	const handleDownloadRequest = () => {
+		if (recentCodes.length > 0) {
+			downloadBackupCodesFile(buildBackupCodesFile(recentCodes));
+			notification?.success(
+				__('Backup codes downloaded'),
+				__('PeakURL downloaded the visible backup codes for this account.')
+			);
+			return;
+		}
+
+		openProtectedActionDialog('download');
+	};
 
 	const startSetup = async (options = { silent: false }) => {
 		try {
@@ -175,76 +252,70 @@ function SecurityTab({
 		}
 	};
 
-	const handleDisable = async () => {
-		if (
-			!window.confirm(
-				__(
-					'Disable two-factor authentication and clear backup codes?'
-				)
-			)
-		) {
+	const handleProtectedAction = async () => {
+		if (!protectedAction) {
 			return;
 		}
-		try {
-			await disableTwoFactor().unwrap();
-			setRecentCodes([]);
-			setQrDataUrl(null);
-			setSecret(null);
-			setOtpauthUrl(null);
-			setVerificationCode('');
-			notification?.info(
-				__('Two-factor disabled'),
-				__('Backup codes cleared for this account.')
+
+		if (!protectedActionPassword) {
+			notification?.error(
+				__('Error'),
+				__('Enter your current password to continue')
 			);
-			refetchSecurity();
+			return;
+		}
+
+		const currentPassword = protectedActionPassword;
+		const action = protectedAction;
+
+		try {
+			if ('disable' === action) {
+				await disableTwoFactor({
+					currentPassword,
+				}).unwrap();
+				setRecentCodes([]);
+				setQrDataUrl(null);
+				setSecret(null);
+				setOtpauthUrl(null);
+				setVerificationCode('');
+				notification?.info(
+					__('Two-factor disabled'),
+					__('Backup codes cleared for this account.')
+				);
+				refetchSecurity();
+			} else if ('regenerate' === action) {
+				const res = await regenerateBackupCodes({
+					currentPassword,
+				}).unwrap();
+				setRecentCodes(res?.data?.backupCodes || []);
+				notification?.success(
+					__('Backup codes refreshed'),
+					__('Save the new codes before leaving this page.')
+				);
+				refetchSecurity();
+			} else {
+				setIsDownloading(true);
+				const content = await downloadBackupCodes({
+					currentPassword,
+				}).unwrap();
+				downloadBackupCodesFile(content);
+				notification?.success(
+					__('Backup codes downloaded'),
+					__('PeakURL downloaded the latest backup codes for this account.')
+				);
+			}
+
+			setProtectedAction(null);
+			setProtectedActionPassword('');
 		} catch (err) {
 			notification?.error(
 				__('Error'),
 				err?.data?.message ||
-					__('Failed to disable two-factor authentication')
-			);
-		}
-	};
-
-	const handleRegenerate = async () => {
-		try {
-			const res = await regenerateBackupCodes().unwrap();
-			setRecentCodes(res?.data?.backupCodes || []);
-			notification?.success(
-				__('Backup codes refreshed'),
-				__('Save the new codes before leaving this page.')
-			);
-			refetchSecurity();
-		} catch (err) {
-			notification?.error(
-				__('Error'),
-				err?.data?.message || __('Failed to regenerate backup codes')
-			);
-		}
-	};
-
-	const handleDownloadCodes = async () => {
-		setIsDownloading(true);
-		try {
-			let content = null;
-
-			if (recentCodes.length > 0) {
-				content = buildBackupCodesFile(recentCodes);
-			} else {
-				content = await triggerDownload().unwrap();
-			}
-
-			const blob = new Blob([content], { type: 'text/plain' });
-			const url = window.URL.createObjectURL(blob);
-			const link = document.createElement('a');
-			link.href = url;
-			link.download = 'peakurl-backup-codes.txt';
-			link.click();
-			window.URL.revokeObjectURL(url);
-		} catch (err) {
-			notification?.error(
-				__('Error'),
-				err?.data?.message || __('Failed to download backup codes')
+					('disable' === action
+						? __('Failed to disable two-factor authentication')
+						: 'regenerate' === action
+						? __('Failed to regenerate backup codes')
+						: __('Failed to download backup codes'))
 			);
 		} finally {
 			setIsDownloading(false);
@@ -324,6 +395,7 @@ function SecurityTab({
 						label={__('Current Password')}
 						type="password"
 						value={securityForm.currentPassword}
+						autoComplete="current-password"
 						onChange={(e) =>
 							setSecurityForm({
 								...securityForm,
@@ -379,7 +451,9 @@ function SecurityTab({
 								<Button
 									variant="secondary"
 									size="sm"
-									onClick={handleRegenerate}
+									onClick={() =>
+										openProtectedActionDialog('regenerate')
+									}
 									loading={isRegenerating}
 								>
 									<RefreshCw size={14} />
@@ -388,7 +462,9 @@ function SecurityTab({
 								<Button
 									variant="ghost"
 									size="sm"
-									onClick={handleDisable}
+									onClick={() =>
+										openProtectedActionDialog('disable')
+									}
 									loading={isDisabling}
 								>
 									<ShieldOff size={14} />
@@ -449,7 +525,7 @@ function SecurityTab({
 					<Button
 						variant="outline"
 						size="sm"
-						onClick={handleDownloadCodes}
+						onClick={handleDownloadRequest}
 						loading={isDownloading || isDownloadingFromApi}
 						disabled={!twoFactorEnabled}
 					>
@@ -557,9 +633,11 @@ function SecurityTab({
 							<Button
 								variant="outline"
 								size="sm"
-								onClick={handleDownloadCodes}
+								onClick={handleDownloadRequest}
 								disabled={
-									recentCodes.length === 0 || isDownloading
+									recentCodes.length === 0 ||
+									isDownloading ||
+									isDownloadingFromApi
 								}
 							>
 								<Download size={14} />
@@ -675,6 +753,36 @@ function SecurityTab({
 					)}
 				</div>
 			</div>
+
+			<ConfirmDialog
+				open={Boolean(protectedAction)}
+				onClose={closeProtectedActionDialog}
+				title={
+					protectedActionConfig?.title ||
+					__('Confirm your password')
+				}
+				description={protectedActionConfig?.description || ''}
+				confirmText={
+					protectedActionConfig?.confirmText || __('Continue')
+				}
+				confirmVariant={
+					protectedActionConfig?.confirmVariant || 'primary'
+				}
+				cancelText={__('Cancel')}
+				onConfirm={handleProtectedAction}
+				loading={isProtectedActionLoading}
+			>
+				<Input
+					label={__('Current Password')}
+					type="password"
+					value={protectedActionPassword}
+					onChange={(event) =>
+						setProtectedActionPassword(event.target.value)
+					}
+					autoComplete="current-password"
+					placeholder={__('Enter your current password')}
+				/>
+			</ConfirmDialog>
 
 			<ConfirmDialog
 				open={showRevokeOthersConfirm}

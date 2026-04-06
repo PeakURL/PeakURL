@@ -224,7 +224,7 @@ class Application {
 				'regenerate_backup_codes',
 			)
 		);
-		$this->router->get(
+		$this->router->post(
 			'/api/v1/auth/security/backup-codes/download',
 			array(
 				$auth,

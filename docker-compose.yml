@@ -13,7 +13,7 @@ services:
             - ./docker/proxy/certs:/etc/caddy/certs:ro
         depends_on:
             ui:
-                condition: service_started
+                condition: service_healthy
             app:
                 condition: service_healthy
             test:
@@ -40,7 +40,9 @@ services:
             start_period: 20s
 
     db-init:
-        image: mysql:8.4
+        build:
+            context: .
+            dockerfile: docker/app/Dockerfile
         container_name: peakurl-db-init
         restart: 'no'
         depends_on:
@@ -50,7 +52,7 @@ services:
             [
                 'sh',
                 '-c',
-                'mysql -h db -uroot -proot -e "CREATE DATABASE IF NOT EXISTS peakurl_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"',
+                'mysql --skip-ssl -h db -uroot -proot -e "CREATE DATABASE IF NOT EXISTS peakurl_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"',
             ]
 
     app:
@@ -128,6 +130,12 @@ services:
             app:
                 condition: service_healthy
         command: ['/usr/local/bin/ui-dev-start']
+        healthcheck:
+            test: ['CMD-SHELL', 'wget -q -O /dev/null http://127.0.0.1:5173 || exit 1']
+            interval: 5s
+            timeout: 5s
+            retries: 20
+            start_period: 20s
 
     test:
         build:

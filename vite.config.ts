@@ -18,7 +18,7 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			'@': path.resolve(__dirname, 'ui'),
-			'@constants': path.resolve(__dirname, 'ui/constants.js'),
+			'@constants': path.resolve(__dirname, 'ui/constants'),
 			'@store': path.resolve(__dirname, 'ui/store'),
 		},
 	},

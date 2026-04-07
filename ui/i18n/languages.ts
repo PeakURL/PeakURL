@@ -83,7 +83,7 @@ function resolveDisplayName(
 		!locale ||
 		!code ||
 		'undefined' === typeof Intl ||
-		!( 'DisplayNames' in Intl )
+		!('DisplayNames' in Intl)
 	) {
 		return '';
 	}

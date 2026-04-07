@@ -79,6 +79,7 @@ function SecurityTab({
 				String(security.backupCodesRemaining ?? 0)
 			)
 		: __('Enable to generate backup codes for account recovery.');
+	const hasTwoFactorSetupDetails = Boolean(qrDataUrl || secret || otpauthUrl);
 
 	useEffect(() => {
 		if (!twoFactorEnabled) {
@@ -543,7 +544,7 @@ function SecurityTab({
 					</Button>
 				</div>
 
-				{!twoFactorEnabled && qrDataUrl && (
+				{!twoFactorEnabled && hasTwoFactorSetupDetails && (
 					<div className="border border-stroke rounded-lg p-4 space-y-3">
 						<div className="flex items-start gap-3">
 							<div className="p-2 rounded-lg bg-surface shadow-sm">

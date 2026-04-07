@@ -139,3 +139,4 @@ Before opening a pull request, please read:
 - [Security Policy](SECURITY.md)
 - [Development Environment Setup](docs/dev/DEVELOPMENT.md)
 - [Linting and Formatting](docs/dev/LINTING.md)
+- [TypeScript Guide](docs/dev/TYPESCRIPT.md)

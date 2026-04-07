@@ -28,6 +28,7 @@ import type {
 	StatusView,
 	SystemCheck,
 } from './types';
+import { SystemStatusSkeleton } from './_components';
 
 function hasValue(value: unknown) {
 	return value !== undefined && value !== null && '' !== value;
@@ -119,14 +120,6 @@ function buildExportText(sections: InfoSectionData[]) {
 			return `${section.title}\n${rows.join('\n')}`;
 		}),
 	].join('\n\n');
-}
-
-function LoadingState() {
-	return (
-		<div className="rounded-lg border border-stroke bg-surface p-6 text-sm text-text-muted">
-			{__('Loading system status...')}
-		</div>
-	);
 }
 
 function ErrorState({ errorMessage }: ErrorStateProps) {
@@ -272,7 +265,7 @@ function InfoSection({ section, isOpen, onToggle }: InfoSectionProps) {
 												: ''
 										}
 									>
-										<th className="w-[34%] min-w-[180px] bg-surface-alt px-4 py-3 text-left align-top font-medium text-heading">
+										<th className="w-[34%] min-w-45 bg-surface-alt px-4 py-3 text-left align-top font-medium text-heading">
 											{item.label}
 										</th>
 										<td className="px-4 py-3 align-top text-text-muted">
@@ -322,7 +315,7 @@ function SystemStatusPage() {
 	);
 
 	if (isLoading && !status) {
-		return <LoadingState />;
+		return <SystemStatusSkeleton />;
 	}
 
 	if (!status) {
@@ -389,7 +382,10 @@ function SystemStatusPage() {
 		},
 		{
 			label: __('Last Checked'),
-			value: formatDateTimeValue(status?.generatedAt, __('Not available')),
+			value: formatDateTimeValue(
+				status?.generatedAt,
+				__('Not available')
+			),
 		},
 	];
 

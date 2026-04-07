@@ -38,8 +38,8 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 					</main>
 
 					<footer className="px-4 py-4 text-xs text-text-muted/80 sm:px-6">
-						<div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-							<p className="italic">
+						<div className="flex items-center justify-between gap-3">
+							<p className="min-w-0 italic">
 								{__('Thank you for choosing')}{' '}
 								<a
 									href={footerLink}
@@ -55,7 +55,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 								href={footerLink}
 								target="_blank"
 								rel="noreferrer"
-								className="text-text-muted/80 transition-colors hover:text-accent"
+								className="shrink-0 text-right text-text-muted/80 transition-colors hover:text-accent"
 							>
 								{__('Version')} {PEAKURL_VERSION}
 							</a>

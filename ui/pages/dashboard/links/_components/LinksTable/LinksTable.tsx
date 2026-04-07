@@ -107,8 +107,8 @@ const LinksTable = ({ links, statsShortId, statsLink }: LinksTableProps) => {
 
 	return (
 		<div className="bg-surface rounded-lg border border-(--color-stroke) overflow-hidden">
-			<div className="overflow-x-auto">
-				<table className="w-full">
+			<div className="overflow-x-auto overscroll-x-contain">
+				<table className="min-w-220 w-full">
 					<thead className="bg-surface-alt border-b border-(--color-stroke)">
 						<TableHeaderRow
 							selectedCount={selectedIds.length}

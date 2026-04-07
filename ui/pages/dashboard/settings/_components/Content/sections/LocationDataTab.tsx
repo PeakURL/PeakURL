@@ -69,8 +69,6 @@ function LocationDataTab({
 		null === accountIdInput
 			? effectiveStatus?.accountId || ''
 			: accountIdInput;
-	const configurationLabel =
-		effectiveStatus?.configurationLabel || __('settings table');
 	const hasSavedCredentials = Boolean(effectiveStatus?.credentialsConfigured);
 
 	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
@@ -115,7 +113,7 @@ function LocationDataTab({
 
 					<Button
 						size="sm"
-						className="min-w-[10.5rem] whitespace-nowrap"
+						className="min-w-42 whitespace-nowrap"
 						onClick={onDownload}
 						loading={isDownloading}
 						icon={CloudDownload}
@@ -203,12 +201,9 @@ function LocationDataTab({
 						{__('MaxMind Credentials')}
 					</h3>
 					<p className="text-sm leading-6 text-text-muted">
-						PeakURL stores these values encrypted in the
-						<code className="mx-1 rounded bg-surface-alt px-1.5 py-0.5 text-xs">
-							{configurationLabel}
-						</code>
-						so it can refresh the GeoLite2 City database later
-						without asking again.
+						{__(
+							'PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again.'
+						)}
 					</p>
 				</div>
 

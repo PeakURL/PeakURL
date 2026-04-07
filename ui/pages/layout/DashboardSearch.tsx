@@ -108,7 +108,7 @@ export const DashboardSearch = () => {
 		linkMatches.length > 0;
 
 	return (
-		<div ref={containerRef} className="relative flex-1 max-w-xl">
+		<div ref={containerRef} className="relative min-w-0 flex-1 max-w-xl">
 			<form onSubmit={handleSubmit}>
 				<div className="relative">
 					<Search
@@ -150,7 +150,7 @@ export const DashboardSearch = () => {
 
 			{isOpen ? (
 				<div className="absolute left-0 right-0 top-full z-40 mt-2 overflow-hidden rounded-xl border border-stroke bg-surface shadow-xl">
-					<div className="max-h-[28rem] overflow-y-auto p-2">
+					<div className="max-h-112 overflow-y-auto p-2">
 						{pageMatches.length > 0 ? (
 							<ResultSection title={__('Pages')}>
 								{pageMatches.map((item) => (

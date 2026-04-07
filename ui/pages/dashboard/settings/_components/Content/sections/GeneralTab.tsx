@@ -1,10 +1,11 @@
 import type { ChangeEvent, SubmitEvent } from 'react';
 import { useEffect, useState } from 'react';
-import { Input, Button } from '@/components/ui';
+import { Input, Button, Select } from '@/components/ui';
 import { __ } from '@/i18n';
 import { getInstalledLanguageLabel } from '@/i18n/languages';
 import type { GeneralFormState } from '../types';
 import type { GeneralTabProps } from './types';
+import type { SelectOption } from '@/components/ui';
 
 function GeneralTab({
 	initialForm,
@@ -45,6 +46,20 @@ function GeneralTab({
 			siteLanguage,
 		});
 	};
+	const languageOptions: SelectOption<string>[] =
+		isLoadingSiteSettings &&
+		(!siteSettings?.availableLanguages ||
+			0 === siteSettings.availableLanguages.length)
+			? [{ value: siteLanguage, label: __('Loading languages...') }]
+			: availableLanguages.length > 0
+				? availableLanguages.map((language) => ({
+						value: language.locale,
+						label: getInstalledLanguageLabel(
+							language,
+							availableLanguages
+						),
+				  }))
+				: [{ value: siteLanguage, label: siteLanguage }];
 
 	return (
 		<div className="space-y-5">
@@ -107,39 +122,17 @@ function GeneralTab({
 						<label className="block text-sm font-semibold text-heading">
 							{__('Site Language')}
 						</label>
-						<select
+						<Select
 							value={siteLanguage}
-							onChange={(event) =>
-								setSiteLanguage(event.target.value)
-							}
+							onChange={setSiteLanguage}
+							options={languageOptions}
 							disabled={
 								isLoadingSiteSettings ||
 								!siteSettings?.canManageSiteSettings ||
 								isUpdating
 							}
-							className="w-full px-4 py-2 bg-surface border border-stroke rounded-md text-heading outline-none transition-all focus:ring-2 focus:ring-accent focus:border-accent disabled:cursor-not-allowed disabled:opacity-60"
-						>
-							{isLoadingSiteSettings &&
-							(!siteSettings?.availableLanguages ||
-								0 ===
-									siteSettings.availableLanguages.length) ? (
-								<option value={siteLanguage}>
-									{__('Loading languages...')}
-								</option>
-							) : (
-								availableLanguages.map((language) => (
-									<option
-										key={language.locale}
-										value={language.locale}
-									>
-										{getInstalledLanguageLabel(
-											language,
-											availableLanguages
-										)}
-									</option>
-								))
-							)}
-						</select>
+							ariaLabel={__('Site language')}
+						/>
 					</div>
 					<div className="md:col-span-2 space-y-2">
 						<label className="block text-sm font-semibold text-heading">

@@ -2,6 +2,7 @@ import type { SubmitEvent } from 'react';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { X, Save } from 'lucide-react';
 import { useState } from 'react';
+import { Select } from '@/components/ui';
 import { useUpdateUrlMutation } from '@/store/slices/api';
 import { __ } from '@/i18n';
 import {
@@ -18,12 +19,18 @@ import type {
 	LinkStatus,
 	UpdateUrlPayload,
 } from './types';
+import type { SelectOption } from '@/components/ui';
 
 function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 	const getInitialTitle = () => normalizeLinkTitle(link?.title);
 	const getInitialStatus = (): LinkStatus => link?.status || 'active';
 	const getInitialExpiresAt = () => toLocalDateTimeValue(link?.expiresAt);
 	const hasExistingPassword = Boolean(link?.hasPassword);
+	const statusOptions: SelectOption<LinkStatus>[] = [
+		{ value: 'active', label: __('Active') },
+		{ value: 'inactive', label: __('Inactive') },
+		{ value: 'expired', label: __('Expired') },
+	];
 
 	const [title, setTitle] = useState(getInitialTitle);
 	const [status, setStatus] = useState<LinkStatus>(getInitialStatus);
@@ -226,20 +233,14 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 							>
 								{__('Status')}
 							</label>
-							<select
+							<Select
 								id="status"
 								value={status}
-								onChange={(e) =>
-									setStatus(e.target.value as LinkStatus)
-								}
-								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading cursor-pointer"
-							>
-								<option value="active">{__('Active')}</option>
-								<option value="inactive">
-									{__('Inactive')}
-								</option>
-								<option value="expired">{__('Expired')}</option>
-							</select>
+								onChange={setStatus}
+								options={statusOptions}
+								ariaLabel={__('Link status')}
+								buttonClassName="rounded-lg bg-surface-alt px-3 py-2"
+							/>
 						</div>
 
 						{/* Action Buttons */}

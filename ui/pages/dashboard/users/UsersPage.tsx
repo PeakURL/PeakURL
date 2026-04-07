@@ -12,7 +12,13 @@ import {
 } from 'lucide-react';
 import { useNotification } from '@/components';
 import { useAdminAccess } from '@/hooks';
-import { Button, ConfirmDialog, IconButton, Input } from '@/components/ui';
+import {
+	Button,
+	ConfirmDialog,
+	IconButton,
+	Input,
+	Select,
+} from '@/components/ui';
 import {
 	useCreateUserMutation,
 	useDeleteUserMutation,
@@ -31,6 +37,7 @@ import type {
 	UserRoleMeta,
 	UserSummary,
 } from './types';
+import type { SelectOption } from '@/components/ui';
 
 const EMPTY_FORM: UserDialogFormState = {
 	firstName: '',
@@ -89,6 +96,10 @@ function UserDialog({
 	isSubmitting,
 }: UserDialogProps) {
 	const roleMeta = getRoleMeta();
+	const roleOptions: SelectOption<UserRole>[] = [
+		{ value: 'admin', label: __('Admin') },
+		{ value: 'editor', label: __('Editor') },
+	];
 	const [form, setForm] = useState<UserDialogFormState>(() =>
 		getInitialFormState(mode, initialUser)
 	);
@@ -265,17 +276,18 @@ function UserDialog({
 								<label className="block text-sm font-semibold text-heading">
 									{__('Role')}
 								</label>
-								<select
+								<Select
 									value={form.role}
-									onChange={handleChange('role')}
+									onChange={(value) =>
+										setForm((previous) => ({
+											...previous,
+											role: value,
+										}))
+									}
+									options={roleOptions}
 									disabled={isEditingSelf}
-									className="w-full rounded-md border border-stroke bg-surface px-4 py-2 text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent disabled:cursor-not-allowed disabled:opacity-60"
-								>
-									<option value="admin">{__('Admin')}</option>
-									<option value="editor">
-										{__('Editor')}
-									</option>
-								</select>
+									ariaLabel={__('User role')}
+								/>
 								<p className="text-xs text-text-muted">
 									{roleMeta[form.role]?.description}
 									{isEditingSelf

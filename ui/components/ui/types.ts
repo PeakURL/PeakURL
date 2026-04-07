@@ -117,6 +117,36 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 /**
+ * Primitive values supported by the shared select component.
+ */
+export type SelectValue = string | number;
+
+/**
+ * Option shape consumed by the shared select component.
+ */
+export interface SelectOption<T extends SelectValue = SelectValue> {
+	label: ReactNode;
+	value: T;
+	disabled?: boolean;
+}
+
+/**
+ * Props for the shared anchored select component.
+ */
+export interface SelectProps<T extends SelectValue = SelectValue>
+	extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'onChange'> {
+	id?: string;
+	value: T;
+	options: SelectOption<T>[];
+	onChange: (value: T) => void;
+	disabled?: boolean;
+	ariaLabel?: string;
+	buttonClassName?: string;
+	optionsClassName?: string;
+	optionClassName?: string;
+}
+
+/**
  * Supported loading spinner size tokens.
  */
 export type LoadingSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';

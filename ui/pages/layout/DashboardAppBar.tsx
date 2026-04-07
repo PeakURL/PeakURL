@@ -42,11 +42,11 @@ export const DashboardAppBar = ({
 
 	return (
 		<div className="sticky top-0 z-30 bg-surface border-b border-stroke">
-			<div className="flex items-center justify-between h-16 px-4 gap-4">
+			<div className="flex h-16 items-center justify-between gap-2 px-3 sm:gap-4 sm:px-4">
 				{/* Mobile menu button */}
 				<button
 					onClick={onMobileMenuToggle}
-					className="lg:hidden p-2 rounded-lg hover:bg-surface-alt transition-colors"
+					className="rounded-lg p-2 transition-colors hover:bg-surface-alt lg:hidden"
 				>
 					<MenuIcon size={20} className="text-heading" />
 				</button>
@@ -55,13 +55,13 @@ export const DashboardAppBar = ({
 				<DashboardSearch />
 
 				{/* Right section */}
-				<div className="flex items-center gap-2">
+				<div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
 					{/* Theme toggle */}
 					<ThemeToggle />
 
 					{/* User dropdown */}
 					<Menu as="div" className="relative">
-						<MenuButton className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-alt transition-colors">
+						<MenuButton className="flex items-center gap-2 rounded-lg px-1.5 py-2 transition-colors hover:bg-surface-alt sm:px-3">
 							<Avatar
 								size="sm"
 								email={user?.email}

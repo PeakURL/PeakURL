@@ -155,11 +155,11 @@ function LinksPage() {
 	).length;
 
 	return (
-		<div className="space-y-5 pb-8">
+		<div className="space-y-4 pb-8 sm:space-y-5">
 			<Header onRefresh={handleRefresh} isRefreshing={isRefreshing} />
 
 			{/* Quick Stats - Compact Row */}
-			<div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+			<div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 xl:grid-cols-4">
 				<div className="bg-surface border border-(--color-stroke) rounded-lg p-3.5">
 					<div className="flex items-center gap-2.5 mb-2">
 						<div className="w-8 h-8 rounded-lg bg-primary-500/10 flex items-center justify-center shrink-0">

@@ -1,7 +1,7 @@
 import type { SubmitEvent } from 'react';
 import { useState } from 'react';
 import { AlertCircle, Mail, Send, Server } from 'lucide-react';
-import { Button, Input } from '@/components/ui';
+import { Button, Input, Select } from '@/components/ui';
 import { __, sprintf } from '@/i18n';
 import type { SmtpEncryption } from '../types';
 import type {
@@ -10,6 +10,7 @@ import type {
 	EmailStatus,
 	MethodButtonProps,
 } from './types';
+import type { SelectOption } from '@/components/ui';
 
 function MethodButton({
 	isActive,
@@ -57,6 +58,11 @@ function EmailDeliveryTab({
 	const [form, setForm] = useState<EmailFormState>(() =>
 		buildFormState(status)
 	);
+	const encryptionOptions: SelectOption<SmtpEncryption>[] = [
+		{ value: 'tls', label: __('TLS / STARTTLS') },
+		{ value: 'ssl', label: __('SSL') },
+		{ value: 'none', label: __('None') },
+	];
 
 	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -240,23 +246,17 @@ function EmailDeliveryTab({
 								<label className="block text-sm font-semibold text-heading">
 									{__('Encryption')}
 								</label>
-								<select
+								<Select
 									value={form.smtpEncryption}
-									onChange={(event) =>
+									onChange={(value) =>
 										setForm((current) => ({
 											...current,
-											smtpEncryption: event.target
-												.value as SmtpEncryption,
+											smtpEncryption: value,
 										}))
 									}
-									className="w-full rounded-md border border-stroke bg-surface px-4 py-2 text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent"
-								>
-									<option value="tls">
-										{__('TLS / STARTTLS')}
-									</option>
-									<option value="ssl">{__('SSL')}</option>
-									<option value="none">{__('None')}</option>
-								</select>
+									options={encryptionOptions}
+									ariaLabel={__('SMTP encryption')}
+								/>
 							</div>
 							<div className="space-y-2">
 								<label className="block text-sm font-semibold text-heading">
@@ -339,7 +339,7 @@ function EmailDeliveryTab({
 															''
 													)
 												: __(
-														'PeakURL stores this password encrypted in the settings database.'
+														'PeakURL stores this password encrypted in the database.'
 												)
 									}
 									required={!status?.smtpPasswordConfigured}

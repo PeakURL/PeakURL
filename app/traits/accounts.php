@@ -529,16 +529,16 @@ trait AccountsTrait {
 	 * @since 1.0.0
 	 */
 	public function update_current_user( Request $request, array $changes ): array {
-		$user       = $this->assert_request_capability(
+		$user             = $this->assert_request_capability(
 			$request,
 			'manage_profile',
 			'You do not have permission to update this profile.',
 		);
-		$user_id    = (string) $user['id'];
-		$user_row   = $this->find_user_row_by_id( $user_id );
-		$user_email = strtolower( trim( (string) ( $user['email'] ?? '' ) ) );
-		$updates    = array();
-		$params     = array( 'id' => $user_id );
+		$user_id          = (string) $user['id'];
+		$user_row         = $this->find_user_row_by_id( $user_id );
+		$user_email       = strtolower( trim( (string) ( $user['email'] ?? '' ) ) );
+		$updates          = array();
+		$params           = array( 'id' => $user_id );
 		$password_changed = false;
 
 		$field_map = array(
@@ -780,10 +780,10 @@ trait AccountsTrait {
 			return null;
 		}
 
-		$user_id    = (string) $user['id'];
-		$user_email = strtolower( trim( (string) ( $user['email'] ?? '' ) ) );
-		$updates    = array();
-		$params     = array( 'id' => $user_id );
+		$user_id          = (string) $user['id'];
+		$user_email       = strtolower( trim( (string) ( $user['email'] ?? '' ) ) );
+		$updates          = array();
+		$params           = array( 'id' => $user_id );
 		$password_changed = false;
 
 		foreach (
@@ -1016,9 +1016,9 @@ trait AccountsTrait {
 		$row          = $this->find_user_row_by_id( (string) $user['id'] );
 
 		return array(
-			'twoFactorEnabled'         => ! empty( $row['two_factor_enabled'] ),
-			'hasPendingSetup'          => ! empty( $row['two_factor_pending_secret'] ),
-			'backupCodesRemaining'     => count( $backup_codes ),
+			'twoFactorEnabled'           => ! empty( $row['two_factor_enabled'] ),
+			'hasPendingSetup'            => ! empty( $row['two_factor_pending_secret'] ),
+			'backupCodesRemaining'       => count( $backup_codes ),
 			'backupCodesLastGeneratedAt' => ! empty(
 				$row['backup_codes_generated_at']
 			)
@@ -1026,7 +1026,7 @@ trait AccountsTrait {
 					(string) $row['backup_codes_generated_at']
 				)
 				: null,
-			'sessions'             => $sessions,
+			'sessions'                   => $sessions,
 		);
 	}
 

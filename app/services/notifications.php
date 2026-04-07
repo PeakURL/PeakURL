@@ -138,7 +138,7 @@ class Notifications {
 			$site_name,
 			$site_url,
 		);
-		$context       = $this->filter_template_context(
+		$context = $this->filter_template_context(
 			'peakurl_password_changed_email_context',
 			array(
 				'recipient'     => $display_name,
@@ -154,7 +154,7 @@ class Notifications {
 			$site_url,
 			$changed_at,
 		);
-		$bodies        = $this->render_template_pair(
+		$bodies  = $this->render_template_pair(
 			'password-changed',
 			$context,
 		);

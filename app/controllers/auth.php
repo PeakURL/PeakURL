@@ -335,7 +335,7 @@ class AuthController {
 			$request,
 			$current_password,
 		);
-		$body     = implode(
+		$body             = implode(
 			"\n",
 			array_merge(
 				array(

@@ -13,7 +13,7 @@ import {
 	TableFooter,
 	Pagination,
 } from './_components';
-import { useGetUrlsQuery } from '@/store/slices/api';
+import { useGetUrlQuery, useGetUrlsQuery } from '@/store/slices/api';
 import { useSearchParams } from 'react-router-dom';
 import { __ } from '@/i18n';
 import type {
@@ -78,24 +78,11 @@ function LinksPage() {
 		totalItems: apiItems.length,
 		totalPages: 1,
 	};
-	const { data: statsLookupRes, refetch: refetchStatsLookup } =
-		useGetUrlsQuery(
-			statsShortId
-				? { page: 1, limit: 10, search: statsShortId }
-				: undefined,
-			{ skip: !statsShortId }
-		);
-	const typedStatsLookupRes = statsLookupRes as GetUrlsResponse | undefined;
-	const statsLookupItems: LinkRecord[] =
-		typedStatsLookupRes?.data?.items ?? [];
-	const statsLink =
-		statsShortId && statsLookupItems.length
-			? statsLookupItems.find(
-					(link: LinkRecord) =>
-						link.shortCode === statsShortId ||
-						link.alias === statsShortId
-				) || null
-			: null;
+	const { data: statsLinkRes, refetch: refetchStatsLookup } = useGetUrlQuery(
+		statsShortId || '',
+		{ skip: !statsShortId }
+	);
+	const statsLink = statsLinkRes?.data ?? null;
 	const [isRefreshing, setIsRefreshing] = useState(false);
 
 	useEffect(() => {

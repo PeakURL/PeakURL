@@ -59,7 +59,7 @@ class UrlsController {
 			return null;
 		}
 
-		$short_code = strtolower( trim( (string) ( $matches[1] ?? '' ) ) );
+		$short_code = trim( (string) ( $matches[1] ?? '' ) );
 
 		return '' !== $short_code ? $short_code : null;
 	}

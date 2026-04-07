@@ -375,9 +375,9 @@ trait LinksTrait {
 	/**
 	 * Resolve the stored title for a newly created link.
 	 *
-	 * Custom aliases keep the existing PeakURL behavior of using the alias as
-	 * the default title when the user does not enter one. Auto-generated short
-	 * codes remain untitled so the UI can render the localized fallback label.
+	 * Custom aliases default to the exact alias value when the user does not
+	 * enter a title. Auto-generated short codes remain untitled so the UI can
+	 * render the localized fallback label.
 	 *
 	 * @param mixed  $title             Raw request title value.
 	 * @param string $alias             Final stored alias / short code.
@@ -397,7 +397,7 @@ trait LinksTrait {
 		}
 
 		if ( $uses_custom_alias ) {
-			return ucfirst( $alias );
+			return $alias;
 		}
 
 		return '';
@@ -866,14 +866,17 @@ trait LinksTrait {
 		if ( '' !== $search ) {
 			$conditions[]                 = '(
 	                u.title LIKE :search_title ESCAPE \'\\\\\'
-	                OR u.alias LIKE :search_alias ESCAPE \'\\\\\'
-	                OR u.short_code LIKE :search_short_code ESCAPE \'\\\\\'
+	                OR LOWER(u.alias) LIKE :search_alias ESCAPE \'\\\\\'
+	                OR LOWER(u.short_code) LIKE :search_short_code ESCAPE \'\\\\\'
 	                OR u.destination_url LIKE :search_destination ESCAPE \'\\\\\'
 	            )';
 			$search_like                  = '%' . $this->db->esc_like( $search ) . '%';
+			$search_code_like             = '%' .
+				strtolower( $this->db->esc_like( $search ) ) .
+				'%';
 			$params['search_title']       = $search_like;
-			$params['search_alias']       = $search_like;
-			$params['search_short_code']  = $search_like;
+			$params['search_alias']       = $search_code_like;
+			$params['search_short_code']  = $search_code_like;
 			$params['search_destination'] = $search_like;
 		}
 

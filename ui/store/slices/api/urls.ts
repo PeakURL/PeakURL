@@ -75,7 +75,16 @@ export const urlsApi = baseApi.injectEndpoints({
 		}),
 		getUrl: build.query<UrlResponse, string>({
 			query: (id) => `urls/${id}`,
-			providesTags: (_result, _error, id) => [{ type: 'Urls', id }],
+			providesTags: (result, _error, id) => {
+				const tags = [{ type: 'Urls' as const, id }];
+				const resolvedId = result?.data?.id;
+
+				if (resolvedId) {
+					tags.push({ type: 'Urls' as const, id: resolvedId });
+				}
+
+				return tags;
+			},
 		}),
 		getUrlsExport: build.query<UrlExportResponse, GetUrlsExportQueryArgs | void>({
 			query: (args) => buildUrlsExportQueryString(args || {}),

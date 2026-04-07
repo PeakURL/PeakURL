@@ -46,19 +46,29 @@ function GeneralTab({
 			siteLanguage,
 		});
 	};
+	const availableLanguageOptions = availableLanguages.reduce<
+		SelectOption<string>[]
+	>((options, language) => {
+		const locale = language.locale?.trim();
+
+		if (!locale) {
+			return options;
+		}
+
+		options.push({
+			value: locale,
+			label: getInstalledLanguageLabel(language, availableLanguages),
+		});
+
+		return options;
+	}, []);
 	const languageOptions: SelectOption<string>[] =
 		isLoadingSiteSettings &&
 		(!siteSettings?.availableLanguages ||
 			0 === siteSettings.availableLanguages.length)
 			? [{ value: siteLanguage, label: __('Loading languages...') }]
-			: availableLanguages.length > 0
-				? availableLanguages.map((language) => ({
-						value: language.locale,
-						label: getInstalledLanguageLabel(
-							language,
-							availableLanguages
-						),
-				  }))
+			: availableLanguageOptions.length > 0
+				? availableLanguageOptions
 				: [{ value: siteLanguage, label: siteLanguage }];
 
 	return (

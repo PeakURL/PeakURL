@@ -50,7 +50,7 @@ trait HelpersTrait {
 	}
 
 	/**
-	 * Sanitise a short code or alias to lowercase alphanumeric with hyphens.
+	 * Sanitise a short code or alias while preserving letter case.
 	 *
 	 * @param string $value Raw code input.
 	 * @return string Sanitised code.
@@ -58,9 +58,9 @@ trait HelpersTrait {
 	 */
 	private function sanitize_code( string $value ): string {
 		return $this->replace_or_empty(
-			'/[^a-z0-9-]/',
+			'/[^A-Za-z0-9-]/',
 			'',
-			strtolower( trim( $value ) ),
+			trim( $value ),
 		);
 	}
 

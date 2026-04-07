@@ -10,8 +10,8 @@
 		"allowJs": true,
 		"paths": {
 			"@/*": ["./ui/*"],
-			"@constants": ["./ui/constants.js"],
-			"@store": ["./ui/store/index.js"],
+			"@constants": ["./ui/constants"],
+			"@store": ["./ui/store"],
 			"@store/*": ["./ui/store/*"]
 		},
 

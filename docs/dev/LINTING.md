@@ -53,8 +53,36 @@ npm run format:web:check
 Notes:
 
 - The dashboard UI is under `ui/`.
-- Many TSX files still use `// @ts-nocheck` as part of the ongoing migration. That is expected for now.
-- The goal is to improve typing gradually, not to loosen linting further or revert files back to JSX.
+- TypeScript files should stay type-checked through the normal lint and build flow.
+- Prefer the nearest folder-level `types.ts` for reusable or shared UI types. If a component folder needs its own prop or payload types, add that folder's own `types.ts` rather than inventing filename-specific type modules.
+- Add TSDoc comments to exported types when the shape or intent is not already obvious from the type name alone.
+- For the repo's broader TypeScript conventions, see the [TypeScript guide](TYPESCRIPT.md).
+- Web formatting is standardized through the repo-root [`.prettierrc.json`](../../.prettierrc.json), [`.prettierignore`](../../.prettierignore), and [`.editorconfig`](../../.editorconfig).
+- The goal is to improve typing gradually without loosening linting or reverting files back to JSX.
+
+## Prettier
+
+Prettier is configured for the repo and is the default formatter for web, config, JSON, YAML, CSS, and Markdown files.
+
+Format web and config files:
+
+```bash
+npm run format:web
+```
+
+Check formatting without changing files:
+
+```bash
+npm run format:web:check
+```
+
+The current Prettier conventions are:
+
+- tabs enabled
+- tab width `4`
+- single quotes
+- trailing commas where valid in ES5
+- generated/runtime paths are excluded through [`.prettierignore`](../../.prettierignore), including `build/`, `release/`, `content/`, `app/vendor/`, and `package-lock.json`
 
 ## PHP
 

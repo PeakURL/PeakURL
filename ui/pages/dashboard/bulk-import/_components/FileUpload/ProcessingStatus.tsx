@@ -1,8 +1,8 @@
-// @ts-nocheck
 import { Cog, LoaderCircle } from 'lucide-react';
 import { __ } from '@/i18n';
+import type { ProcessingStatusProps } from './types';
 
-function ProcessingStatus({ status, progress }) {
+function ProcessingStatus({ status, progress }: ProcessingStatusProps) {
 	if (status === 'uploading') {
 		return (
 			<div className="text-center py-8">
@@ -13,6 +13,11 @@ function ProcessingStatus({ status, progress }) {
 				<p className="text-sm text-text-muted">
 					{__('Please wait while we process your file')}
 				</p>
+				{progress ? (
+					<p className="mt-2 text-xs text-text-muted">
+						{`${progress}%`}
+					</p>
+				) : null}
 			</div>
 		);
 	}

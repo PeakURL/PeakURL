@@ -1,8 +1,7 @@
-// @ts-nocheck
-import { useGetUserProfileQuery } from '@/store/slices/api/user';
+import { useGetUserProfileQuery } from '@/store/slices/api';
 
 export const useAdminAccess = () => {
-	const { data, isLoading, isFetching } = useGetUserProfileQuery();
+	const { data, isLoading, isFetching } = useGetUserProfileQuery(undefined);
 	const user = data?.data ?? null;
 	const rawCapabilities = user?.capabilities || {};
 	const capabilities = {

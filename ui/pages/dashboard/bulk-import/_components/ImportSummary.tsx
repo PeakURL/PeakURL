@@ -1,9 +1,9 @@
-// @ts-nocheck
 import { Button } from '@/components/ui';
 import { CircleCheckBig } from 'lucide-react';
 import { __, sprintf } from '@/i18n';
+import type { ImportSummaryProps } from './types';
 
-function ImportSummary({ results, onReset }) {
+function ImportSummary({ results, onReset }: ImportSummaryProps) {
 	const successCount = results.filter((r) => r.status === 'success').length;
 	const errorCount = results.filter((r) => r.status === 'error').length;
 
@@ -17,13 +17,13 @@ function ImportSummary({ results, onReset }) {
 				{sprintf(
 					/* translators: %s: number of URLs processed */
 					__('Successfully processed %s URLs.'),
-					successCount
+					String(successCount)
 				)}{' '}
 				{errorCount > 0 &&
 					sprintf(
 						/* translators: %s: number of failures */
 						__('%s failed.'),
-						errorCount
+						String(errorCount)
 					)}
 			</p>
 			<Button size="sm" onClick={onReset}>

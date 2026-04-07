@@ -1,7 +1,7 @@
-// @ts-nocheck
 import { Input } from '@/components/ui';
 import { BarChart3 } from 'lucide-react';
 import { __ } from '@/i18n';
+import type { UTMFieldsProps } from '../types';
 
 const UTMFields = ({
 	utmSource,
@@ -14,7 +14,7 @@ const UTMFields = ({
 	setUtmTerm,
 	utmContent,
 	setUtmContent,
-}) => {
+}: UTMFieldsProps) => {
 	return (
 		<div>
 			<label className="block text-sm font-medium text-heading mb-1.5">

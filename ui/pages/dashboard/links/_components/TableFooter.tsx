@@ -1,6 +1,10 @@
-// @ts-nocheck
 import { Link2, MousePointerClick } from 'lucide-react';
 import { __, sprintf } from '@/i18n';
+import type {
+	LinksSortBy,
+	LinksSortOrder,
+	TableFooterProps,
+} from './types';
 
 const TableFooter = ({
 	totalLinks = 0,
@@ -11,7 +15,7 @@ const TableFooter = ({
 	setSortOrder,
 	limit = 15,
 	setLimit,
-}) => {
+}: TableFooterProps) => {
 	const pageSizeOptions = [25, 50, 100, 150];
 	const isCustom = !pageSizeOptions.includes(Number(limit));
 
@@ -45,19 +49,25 @@ const TableFooter = ({
 				<div className="flex items-center gap-2">
 					<select
 						value={sortBy}
-						onChange={(e) => setSortBy(e.target.value)}
+						onChange={(e) =>
+							setSortBy(e.target.value as LinksSortBy)
+						}
 						className="bg-surface-alt border border-stroke rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-accent focus:border-accent outline-none cursor-pointer"
 					>
 						<option value="createdAt">
 							{__('Sort: Date Created')}
 						</option>
-						<option value="clicks">{__('Sort: Most Clicks')}</option>
+						<option value="clicks">
+							{__('Sort: Most Clicks')}
+						</option>
 						<option value="alias">{__('Sort: Alias')}</option>
 					</select>
 
 					<select
 						value={sortOrder}
-						onChange={(e) => setSortOrder(e.target.value)}
+						onChange={(e) =>
+							setSortOrder(e.target.value as LinksSortOrder)
+						}
 						className="bg-surface-alt border border-stroke rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-accent focus:border-accent outline-none cursor-pointer"
 					>
 						<option value="desc">{__('Descending')}</option>
@@ -75,7 +85,7 @@ const TableFooter = ({
 					>
 						{pageSizeOptions.map((opt) => (
 							<option key={opt} value={String(opt)}>
-								{sprintf(__('Show: %s rows'), opt)}
+								{sprintf(__('Show: %s rows'), String(opt))}
 							</option>
 						))}
 						<option value="custom">{__('Custom…')}</option>

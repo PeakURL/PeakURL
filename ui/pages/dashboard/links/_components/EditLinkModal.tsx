@@ -1,27 +1,32 @@
-// @ts-nocheck
-
+import type { SubmitEvent } from 'react';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { X, Save } from 'lucide-react';
 import { useState } from 'react';
-import { useUpdateUrlMutation } from '@/store/slices/api/urls';
+import { useUpdateUrlMutation } from '@/store/slices/api';
 import { __ } from '@/i18n';
 import {
 	buildShortUrl,
+	getErrorMessage,
 	normalizeLinkTitle,
 	getLocalDateTimeValue,
 	isFutureLocalDateTime,
 	toIsoFromLocalDateTime,
 	toLocalDateTimeValue,
 } from '@/utils';
+import type {
+	EditLinkModalProps,
+	LinkStatus,
+	UpdateUrlPayload,
+} from './types';
 
-function EditLinkModal({ open, setOpen, link }) {
+function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 	const getInitialTitle = () => normalizeLinkTitle(link?.title);
-	const getInitialStatus = () => link?.status || 'active';
+	const getInitialStatus = (): LinkStatus => link?.status || 'active';
 	const getInitialExpiresAt = () => toLocalDateTimeValue(link?.expiresAt);
 	const hasExistingPassword = Boolean(link?.hasPassword);
 
 	const [title, setTitle] = useState(getInitialTitle);
-	const [status, setStatus] = useState(link?.status || 'active');
+	const [status, setStatus] = useState<LinkStatus>(getInitialStatus);
 	const [password, setPassword] = useState('');
 	const [clearPassword, setClearPassword] = useState(false);
 	const [expiresAt, setExpiresAt] = useState(getInitialExpiresAt);
@@ -32,9 +37,13 @@ function EditLinkModal({ open, setOpen, link }) {
 
 	const handleClose = () => setOpen(false);
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
+	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
+		event.preventDefault();
 		setError('');
+
+		if (!link) {
+			return;
+		}
 
 		if (expiresAt && !isFutureLocalDateTime(expiresAt)) {
 			setError(__('Expiration time must be in the future.'));
@@ -42,7 +51,7 @@ function EditLinkModal({ open, setOpen, link }) {
 		}
 
 		try {
-			const payload = {
+			const payload: UpdateUrlPayload = {
 				id: link.id,
 				title: title.trim() || undefined,
 				status,
@@ -60,8 +69,8 @@ function EditLinkModal({ open, setOpen, link }) {
 			}).unwrap();
 
 			handleClose();
-		} catch (err) {
-			setError(err?.data?.message || __('Failed to update link'));
+		} catch (error) {
+			setError(getErrorMessage(error, __('Failed to update link')));
 		}
 	};
 
@@ -154,8 +163,12 @@ function EditLinkModal({ open, setOpen, link }) {
 								onChange={(e) => setPassword(e.target.value)}
 								placeholder={
 									hasExistingPassword
-										? __('Enter a new password to replace the current one')
-										: __('Set a password to protect this link')
+										? __(
+												'Enter a new password to replace the current one'
+											)
+										: __(
+												'Set a password to protect this link'
+											)
 								}
 								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading"
 							/>
@@ -216,11 +229,15 @@ function EditLinkModal({ open, setOpen, link }) {
 							<select
 								id="status"
 								value={status}
-								onChange={(e) => setStatus(e.target.value)}
+								onChange={(e) =>
+									setStatus(e.target.value as LinkStatus)
+								}
 								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading cursor-pointer"
 							>
 								<option value="active">{__('Active')}</option>
-								<option value="inactive">{__('Inactive')}</option>
+								<option value="inactive">
+									{__('Inactive')}
+								</option>
 								<option value="expired">{__('Expired')}</option>
 							</select>
 						</div>

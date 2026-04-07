@@ -1,25 +1,30 @@
-// @ts-nocheck
-
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { X, Trash2, AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
-import { useDeleteUrlMutation } from '@/store/slices/api/urls';
-import { buildShortUrl } from '@/utils';
+import { useDeleteUrlMutation } from '@/store/slices/api';
+import { buildShortUrl, getErrorMessage } from '@/utils';
 import { __ } from '@/i18n';
+import type { DeleteLinkModalProps } from './types';
 
-function DeleteLinkModal({ open, setOpen, link }) {
+function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 	const [error, setError] = useState('');
 	const [deleteUrl, { isLoading }] = useDeleteUrlMutation();
 	const shortUrl = link ? buildShortUrl(link) : '';
+	const totalClicks = Number(link?.clicks || 0);
+	const uniqueClicks = Number(link?.uniqueClicks || 0);
 
 	const handleDelete = async () => {
+		if (!link) {
+			return;
+		}
+
 		setError('');
 
 		try {
 			await deleteUrl(link.id).unwrap();
 			setOpen(false);
 		} catch (err) {
-			setError(err?.data?.message || __('Failed to delete link'));
+			setError(getErrorMessage(err, __('Failed to delete link')));
 		}
 	};
 
@@ -81,14 +86,14 @@ function DeleteLinkModal({ open, setOpen, link }) {
 									{link.destinationUrl}
 								</p>
 							</div>
-							{(link.clicks > 0 || link.uniqueClicks > 0) && (
+							{(totalClicks > 0 || uniqueClicks > 0) && (
 								<div className="flex gap-4 pt-2 border-t border-stroke">
 									<div>
 										<p className="text-xs text-text-muted">
 											{__('Total Clicks')}
 										</p>
 										<p className="text-sm font-semibold text-heading">
-											{link.clicks || 0}
+											{totalClicks}
 										</p>
 									</div>
 									<div>
@@ -96,7 +101,7 @@ function DeleteLinkModal({ open, setOpen, link }) {
 											{__('Unique Visitors')}
 										</p>
 										<p className="text-sm font-semibold text-heading">
-											{link.uniqueClicks || 0}
+											{uniqueClicks}
 										</p>
 									</div>
 								</div>

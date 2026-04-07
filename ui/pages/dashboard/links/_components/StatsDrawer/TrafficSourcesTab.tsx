@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import {
 	ExternalLink,
 	Search,
@@ -17,10 +15,21 @@ import {
 } from 'lucide-react';
 import DeviceStats from './DeviceStats';
 import { __ } from '@/i18n';
+import type {
+	LinkStatsViewProps,
+	ReferrerCategoryItem,
+	ReferrerItem,
+	StatsMetricItem,
+	TrafficCategory,
+	UtmCampaignItem,
+} from './types';
 
 // Map category to icon and color
-const getCategoryInfo = (category) => {
-	const categoryMap = {
+const getCategoryInfo = (category: string) => {
+	const categoryMap: Record<
+		TrafficCategory,
+		{ icon: typeof Globe; color: string; bg: string }
+	> = {
 		'Search Engine': {
 			icon: Search,
 			color: 'text-blue-500',
@@ -73,11 +82,14 @@ const getCategoryInfo = (category) => {
 		Unknown: { icon: Globe, color: 'text-text-muted', bg: 'bg-surface' },
 	};
 
-	return categoryMap[category] || categoryMap.Unknown;
+	return (
+		categoryMap[(category as TrafficCategory) || 'Unknown'] ||
+		categoryMap.Unknown
+	);
 };
 
-const getCategoryLabel = (category) => {
-	const labels = {
+const getCategoryLabel = (category: string) => {
+	const labels: Record<TrafficCategory, string> = {
 		'Search Engine': __('Search Engine'),
 		'Social Media': __('Social Media'),
 		Messaging: __('Messaging'),
@@ -94,21 +106,29 @@ const getCategoryLabel = (category) => {
 		Unknown: __('Unknown'),
 	};
 
-	return labels[category] || category || __('Unknown');
+	return (
+		labels[(category as TrafficCategory) || 'Unknown'] ||
+		category ||
+		__('Unknown')
+	);
 };
 
 // Get total clicks from referrers array
-const getTotalClicks = (referrers) => {
-	return referrers.reduce((sum, ref) => sum + (ref.count || 0), 0);
+const getTotalClicks = (referrers: ReferrerItem[]) => {
+	return referrers.reduce(
+		(sum: number, ref: ReferrerItem) => sum + (ref.count || 0),
+		0
+	);
 };
 
-function TrafficSourcesTab({ link, stats, isLoading }) {
-	const devices = stats?.devices || [];
-	const browsers = stats?.browsers || [];
-	const operatingSystems = stats?.operatingSystems || [];
-	const referrers = stats?.referrers || [];
-	const referrerCategories = stats?.referrerCategories || [];
-	const utmCampaigns = stats?.utmCampaigns || [];
+function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
+	const devices: StatsMetricItem[] = stats?.devices || [];
+	const browsers: StatsMetricItem[] = stats?.browsers || [];
+	const operatingSystems: StatsMetricItem[] = stats?.operatingSystems || [];
+	const referrers: ReferrerItem[] = stats?.referrers || [];
+	const referrerCategories: ReferrerCategoryItem[] =
+		stats?.referrerCategories || [];
+	const utmCampaigns: UtmCampaignItem[] = stats?.utmCampaigns || [];
 
 	const totalClicks = getTotalClicks(referrers);
 
@@ -129,48 +149,54 @@ function TrafficSourcesTab({ link, stats, isLoading }) {
 						{__('Traffic by Category')}
 					</h3>
 					<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-						{referrerCategories.map((cat, index) => {
-							const categoryInfo = getCategoryInfo(cat.category);
-							const Icon = categoryInfo.icon;
-							const percentage =
-								totalClicks > 0
-									? ((cat.count / totalClicks) * 100).toFixed(
-											1
-										)
-									: 0;
+						{referrerCategories.map(
+							(cat: ReferrerCategoryItem, index: number) => {
+								const categoryInfo = getCategoryInfo(
+									cat.category
+								);
+								const Icon = categoryInfo.icon;
+								const percentage =
+									totalClicks > 0
+										? (
+												(cat.count / totalClicks) *
+												100
+											).toFixed(1)
+										: 0;
 
-							return (
-								<div
-									key={index}
-									className="flex items-center gap-3 p-3 bg-surface rounded-lg border border-stroke"
-								>
+								return (
 									<div
-										className={`w-10 h-10 rounded-lg ${categoryInfo.bg} flex items-center justify-center shrink-0`}
+										key={index}
+										className="flex items-center gap-3 p-3 bg-surface rounded-lg border border-stroke"
 									>
-										<Icon
-											className={`w-5 h-5 ${categoryInfo.color}`}
-										/>
+										<div
+											className={`w-10 h-10 rounded-lg ${categoryInfo.bg} flex items-center justify-center shrink-0`}
+										>
+											<Icon
+												className={`w-5 h-5 ${categoryInfo.color}`}
+											/>
+										</div>
+										<div className="min-w-0">
+											<p className="text-sm font-medium text-heading truncate">
+												{getCategoryLabel(cat.category)}
+											</p>
+											<p className="text-xs text-text-muted">
+												{cat.count} {__('clicks')} (
+												{percentage}%)
+											</p>
+										</div>
 									</div>
-									<div className="min-w-0">
-										<p className="text-sm font-medium text-heading truncate">
-											{getCategoryLabel(cat.category)}
-										</p>
-										<p className="text-xs text-text-muted">
-											{cat.count} {__('clicks')} ({percentage}%)
-										</p>
-									</div>
-								</div>
-							);
-						})}
+								);
+							}
+						)}
 					</div>
 				</div>
 			)}
 
 			{/* Detailed Referrer Data */}
 			<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-					<h3 className="text-sm font-semibold text-heading mb-4">
-						{__('Referrer Sources')}
-					</h3>
+				<h3 className="text-sm font-semibold text-heading mb-4">
+					{__('Referrer Sources')}
+				</h3>
 				{isLoading ? (
 					<div className="h-64 flex items-center justify-center bg-surface rounded-lg border border-stroke animate-pulse">
 						<p className="text-sm text-text-muted">
@@ -179,7 +205,7 @@ function TrafficSourcesTab({ link, stats, isLoading }) {
 					</div>
 				) : referrers.length > 0 ? (
 					<div className="space-y-2">
-						{referrers.map((ref, index) => {
+						{referrers.map((ref: ReferrerItem, index: number) => {
 							const categoryInfo = getCategoryInfo(
 								ref.category || 'Unknown'
 							);
@@ -206,7 +232,8 @@ function TrafficSourcesTab({ link, stats, isLoading }) {
 										</div>
 										<div className="min-w-0">
 											<p className="text-sm font-medium text-heading truncate">
-												{ref.name || __('Direct / Unknown')}
+												{ref.name ||
+													__('Direct / Unknown')}
 											</p>
 											{ref.domain &&
 												ref.domain !==
@@ -266,33 +293,37 @@ function TrafficSourcesTab({ link, stats, isLoading }) {
 						{__('UTM Campaign Tracking')}
 					</h3>
 					<div className="space-y-2">
-						{utmCampaigns.map((campaign, index) => (
-							<div
-								key={index}
-								className="flex items-center justify-between p-3 bg-surface rounded-lg border border-stroke"
-							>
-								<div className="min-w-0">
-									<p className="text-sm font-medium text-heading truncate">
-										{campaign.campaign}
-									</p>
-									<div className="flex gap-2 text-xs text-text-muted mt-1">
-										{campaign.source && (
-											<span className="px-2 py-0.5 bg-surface-alt rounded">
-												{__('source:')} {campaign.source}
-											</span>
-										)}
-										{campaign.medium && (
-											<span className="px-2 py-0.5 bg-surface-alt rounded">
-												{__('medium:')} {campaign.medium}
-											</span>
-										)}
+						{utmCampaigns.map(
+							(campaign: UtmCampaignItem, index: number) => (
+								<div
+									key={index}
+									className="flex items-center justify-between p-3 bg-surface rounded-lg border border-stroke"
+								>
+									<div className="min-w-0">
+										<p className="text-sm font-medium text-heading truncate">
+											{campaign.campaign}
+										</p>
+										<div className="flex gap-2 text-xs text-text-muted mt-1">
+											{campaign.source && (
+												<span className="px-2 py-0.5 bg-surface-alt rounded">
+													{__('source:')}{' '}
+													{campaign.source}
+												</span>
+											)}
+											{campaign.medium && (
+												<span className="px-2 py-0.5 bg-surface-alt rounded">
+													{__('medium:')}{' '}
+													{campaign.medium}
+												</span>
+											)}
+										</div>
 									</div>
+									<span className="text-sm font-medium text-heading shrink-0">
+										{campaign.count} {__('clicks')}
+									</span>
 								</div>
-								<span className="text-sm font-medium text-heading shrink-0">
-									{campaign.count} {__('clicks')}
-								</span>
-							</div>
-						))}
+							)
+						)}
 					</div>
 				</div>
 			)}

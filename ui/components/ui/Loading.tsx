@@ -1,6 +1,29 @@
-// @ts-nocheck
 import { Loader2, Zap } from 'lucide-react';
 import { __ } from '@/i18n';
+import type {
+	InlineLoaderProps,
+	LoadingSize,
+	LoadingSpinnerProps,
+	ProgressBarProps,
+	ProgressColor,
+	PulseDotColor,
+	PulseDotProps,
+	PulseDotSize,
+	SkeletonLoaderProps,
+	TableRowSkeletonProps,
+} from './types';
+export type {
+	InlineLoaderProps,
+	LoadingSize,
+	LoadingSpinnerProps,
+	ProgressBarProps,
+	ProgressColor,
+	PulseDotColor,
+	PulseDotProps,
+	PulseDotSize,
+	SkeletonLoaderProps,
+	TableRowSkeletonProps,
+} from './types';
 
 /**
  * Modern Loading Spinner
@@ -8,8 +31,11 @@ import { __ } from '@/i18n';
  * @param {('xs'|'sm'|'md'|'lg'|'xl')} [props.size='md'] - Spinner size
  * @param {string} [props.className=''] - Additional class names
  */
-export function LoadingSpinner({ size = 'md', className = '' }) {
-	const sizes = {
+export function LoadingSpinner({
+	size = 'md',
+	className = '',
+}: LoadingSpinnerProps) {
+	const sizes: Record<LoadingSize, number> = {
 		xs: 12,
 		sm: 16,
 		md: 24,
@@ -56,7 +82,10 @@ export function PageLoader() {
  * @param {Object} props
  * @param {string} [props.className=''] - Additional class names
  */
-export function SkeletonLoader({ className = '', ...props }) {
+export function SkeletonLoader({
+	className = '',
+	...props
+}: SkeletonLoaderProps) {
 	return (
 		<div
 			className={`animate-pulse bg-surface-alt rounded-lg ${className}`}
@@ -91,7 +120,7 @@ export function CardSkeleton() {
  * @param {Object} props
  * @param {number} [props.columns=4] - Number of columns to render
  */
-export function TableRowSkeleton({ columns = 4 }) {
+export function TableRowSkeleton({ columns = 4 }: TableRowSkeletonProps) {
 	return (
 		<tr className="animate-pulse">
 			{Array.from({ length: columns }).map((_, index) => (
@@ -111,8 +140,12 @@ export function TableRowSkeleton({ columns = 4 }) {
  * @param {('xs'|'sm'|'md'|'lg')} [props.size='sm'] - Dot size
  * @param {boolean} [props.animated=true] - Whether to show the pulsing animation
  */
-export function PulseDot({ color = 'green', size = 'sm', animated = true }) {
-	const colors = {
+export function PulseDot({
+	color = 'green',
+	size = 'sm',
+	animated = true,
+}: PulseDotProps) {
+	const colors: Record<PulseDotColor, string> = {
 		green: 'bg-emerald-500',
 		red: 'bg-red-500',
 		yellow: 'bg-amber-500',
@@ -120,7 +153,7 @@ export function PulseDot({ color = 'green', size = 'sm', animated = true }) {
 		purple: 'bg-purple-500',
 	};
 
-	const sizes = {
+	const sizes: Record<PulseDotSize, string> = {
 		xs: 'w-1.5 h-1.5',
 		sm: 'w-2 h-2',
 		md: 'w-3 h-3',
@@ -155,8 +188,8 @@ export function ProgressBar({
 	color = 'blue',
 	className = '',
 	showLabel = false,
-}) {
-	const colors = {
+}: ProgressBarProps) {
+	const colors: Record<ProgressColor, string> = {
 		blue: 'bg-linear-to-r from-blue-500 to-blue-600',
 		green: 'bg-linear-to-r from-emerald-500 to-emerald-600',
 		red: 'bg-linear-to-r from-red-500 to-red-600',
@@ -190,6 +223,6 @@ export function ProgressBar({
  * @param {Object} props
  * @param {string} [props.className=''] - Additional class names
  */
-export function InlineLoader({ className = '' }) {
+export function InlineLoader({ className = '' }: InlineLoaderProps) {
 	return <Loader2 size={16} className={`animate-spin ${className}`} />;
 }

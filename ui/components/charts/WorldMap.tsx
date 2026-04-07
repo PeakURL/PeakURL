@@ -1,12 +1,18 @@
-// @ts-nocheck
-
+import type { RefObject } from 'react';
 import { memo, useEffect, useState } from 'react';
 import { Mercator } from '@visx/geo';
+import type { GeoPermissibleObjects } from '@visx/geo/lib/types';
 import { Zoom } from '@visx/zoom';
 import { feature as topojsonFeature } from 'topojson-client';
 import { scaleLinear } from 'd3-scale';
 import { Plus, Minus, Maximize2 } from 'lucide-react';
 import { __ } from '@/i18n';
+import type {
+	GeographyFeature,
+	TooltipContent,
+	WorldMapDatum,
+	WorldMapProps,
+} from './types';
 
 const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
 const MAP_WIDTH = 960;
@@ -23,7 +29,7 @@ const INITIAL_TRANSFORM = {
 };
 
 // Country code to full name mapping (ISO 3166-1 alpha-3)
-const countryNames = {
+const countryNames: Record<string, string> = {
 	USA: __('United States'),
 	GBR: __('United Kingdom'),
 	CAN: __('Canada'),
@@ -78,7 +84,7 @@ const countryNames = {
 };
 
 // Convert ISO 3166-1 alpha-2 to alpha-3 (common conversions)
-const alpha2ToAlpha3 = {
+const alpha2ToAlpha3: Record<string, string> = {
 	US: 'USA',
 	GB: 'GBR',
 	CA: 'CAN',
@@ -133,7 +139,7 @@ const alpha2ToAlpha3 = {
 };
 
 // Map alpha-3 codes to numeric codes used by world-atlas
-const alpha3ToNumeric = {
+const alpha3ToNumeric: Record<string, string> = {
 	USA: '840',
 	GBR: '826',
 	CAN: '124',
@@ -197,9 +203,15 @@ const defaultCountryFill = '#e5e7eb';
  * @param {Object} props.hoveredCountry - Currently hovered country code
  * @param {Function} props.onCountryHover - Callback when a country is hovered
  */
-const WorldMap = ({ data = [], hoveredCountry, onCountryHover }) => {
-	const [tooltipContent, setTooltipContent] = useState(null);
-	const [geographies, setGeographies] = useState([]);
+const WorldMap = ({
+	data = [],
+	hoveredCountry,
+	onCountryHover,
+}: WorldMapProps) => {
+	const [tooltipContent, setTooltipContent] = useState<TooltipContent | null>(
+		null
+	);
+	const [geographies, setGeographies] = useState<GeoPermissibleObjects[]>([]);
 	const [loadError, setLoadError] = useState(false);
 
 	useEffect(() => {
@@ -224,10 +236,12 @@ const WorldMap = ({ data = [], hoveredCountry, onCountryHover }) => {
 					throw new Error('World map data is missing countries');
 				}
 
-				const world = topojsonFeature(topology, countries);
+				const world = topojsonFeature(topology, countries) as {
+					features?: GeoPermissibleObjects[];
+				};
 				setGeographies(world.features || []);
 			} catch (error) {
-				if (error.name !== 'AbortError') {
+				if (!(error instanceof Error) || error.name !== 'AbortError') {
 					setLoadError(true);
 				}
 			}
@@ -243,42 +257,50 @@ const WorldMap = ({ data = [], hoveredCountry, onCountryHover }) => {
 	const maxClicks =
 		data.length > 0 ? Math.max(...data.map((item) => item.clicks)) : 100;
 
-	const colorScale = scaleLinear()
+	const colorScale = scaleLinear<string>()
 		.domain([0, maxClicks / 2, maxClicks])
 		.range(['#e0f2fe', '#0ea5e9', '#0369a1']);
 
-	const countryClickMap = data.reduce((acc, item) => {
-		const alpha2Code = item.countryCode.toUpperCase();
-		const alpha3Code = alpha2ToAlpha3[alpha2Code] || alpha2Code;
-		const numericCode = alpha3ToNumeric[alpha3Code];
+	const countryClickMap = data.reduce<Record<string, WorldMapDatum>>(
+		(acc, item) => {
+			const alpha2Code = item.countryCode.toUpperCase();
+			const alpha3Code = alpha2ToAlpha3[alpha2Code] || alpha2Code;
+			const numericCode = alpha3ToNumeric[alpha3Code];
 
-		if (numericCode) {
-			acc[numericCode] = {
-				countryCode: alpha2Code,
-				countryName:
-					item.countryName || countryNames[alpha3Code] || alpha2Code,
-				clicks: item.clicks,
-			};
-		}
+			if (numericCode) {
+				acc[numericCode] = {
+					countryCode: alpha2Code,
+					countryName:
+						item.countryName ||
+						countryNames[alpha3Code] ||
+						alpha2Code,
+					clicks: item.clicks,
+				};
+			}
 
-		return acc;
-	}, {});
+			return acc;
+		},
+		{}
+	);
 
 	const activeCountryCode = (hoveredCountry || '').toString().toUpperCase();
 
-	const handleCountryEnter = (countryData, isDragging) => {
+	const handleCountryEnter = (
+		countryData: WorldMapDatum | null,
+		isDragging: boolean
+	) => {
 		if (isDragging || !countryData || countryData.clicks <= 0) {
 			return;
 		}
 
 		setTooltipContent({
-			name: countryData.countryName,
+			name: countryData.countryName || countryData.countryCode,
 			clicks: countryData.clicks,
 		});
 		onCountryHover?.(countryData);
 	};
 
-	const handleCountryLeave = (isDragging) => {
+	const handleCountryLeave = (isDragging: boolean) => {
 		if (isDragging) {
 			return;
 		}
@@ -377,7 +399,9 @@ const WorldMap = ({ data = [], hoveredCountry, onCountryHover }) => {
 									? 'cursor-grabbing'
 									: 'cursor-grab'
 							}`}
-							ref={zoom.containerRef}
+							ref={
+								zoom.containerRef as unknown as RefObject<SVGSVGElement>
+							}
 							style={{ touchAction: 'none' }}
 							onWheel={zoom.handleWheel}
 							onMouseDown={zoom.dragStart}
@@ -405,7 +429,12 @@ const WorldMap = ({ data = [], hoveredCountry, onCountryHover }) => {
 										center={[0, 20]}
 									>
 										{({ features }) =>
-											features.map(
+											(
+												features as Array<{
+													feature: GeographyFeature;
+													path: string | null;
+												}>
+											).map(
 												({ feature, path }, index) => {
 													const countryCode =
 														feature.id == null
@@ -439,8 +468,10 @@ const WorldMap = ({ data = [], hoveredCountry, onCountryHover }) => {
 														<path
 															key={featureKey}
 															d={
-																path ||
-																undefined
+																'string' ===
+																typeof path
+																	? path
+																	: undefined
 															}
 															fill={
 																clicks > 0

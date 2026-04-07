@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { __ } from '@/i18n';
 
 const Header = () => {

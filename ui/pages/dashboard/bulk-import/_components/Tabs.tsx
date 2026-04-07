@@ -1,10 +1,10 @@
-// @ts-nocheck
 import { Link } from 'react-router-dom';
+import type { BulkImportTab, TabsProps } from './types';
 
-const Tabs = ({ tabs, activeTab }) => {
+const Tabs = ({ tabs, activeTab }: TabsProps) => {
 	return (
 		<div className="flex items-center gap-1 border-b border-stroke">
-			{tabs.map((tab) => {
+			{tabs.map((tab: BulkImportTab) => {
 				const TabIcon = tab.icon;
 
 				return (

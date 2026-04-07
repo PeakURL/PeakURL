@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
 	QrCode,
 	BarChart3,
@@ -13,6 +12,7 @@ import {
 import { isPast } from 'date-fns';
 import { __ } from '@/i18n';
 import { formatRelativeTime, getLinkDisplayTitle } from '@/utils';
+import type { LinkRowProps } from '../types';
 
 function LinkRow({
 	link,
@@ -25,7 +25,7 @@ function LinkRow({
 	onDelete,
 	onQRCode,
 	formatNumber,
-}) {
+}: LinkRowProps) {
 	return (
 		<tr
 			className={`hover:bg-surface-alt/50 transition-colors group ${

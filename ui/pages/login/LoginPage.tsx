@@ -1,11 +1,6 @@
-// @ts-nocheck
+import type { KeyboardEvent, SubmitEvent } from 'react';
 import { useMemo, useState } from 'react';
-import {
-	Link,
-	Navigate,
-	useLocation,
-	useNavigate,
-} from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import {
 	ArrowLeft,
 	ArrowRight,
@@ -19,31 +14,26 @@ import {
 } from 'lucide-react';
 
 import {
-	Button,
 	BrandLockup,
 	Input,
 	PageLoader,
 	VerificationCodeInput,
 } from '@/components';
-import { getInstallRecovery, redirectToInstallRecovery } from '@/utils';
+import {
+	requestClosestFormSubmit,
+	requestControlFormSubmit,
+	getErrorMessage,
+	getErrorStatus,
+	getInstallRecovery,
+	redirectToInstallRecovery,
+} from '@/utils';
 import {
 	useAuthCheckQuery,
 	useLoginMutation,
 	useVerifyTwoFactorLoginMutation,
-} from '@/store/slices/api/user';
+} from '@/store/slices/api';
 import { __ } from '@/i18n';
-
-const getErrorMessage = (error, fallback) => {
-	if (typeof error?.data?.message === 'string' && error.data.message) {
-		return error.data.message;
-	}
-
-	if (typeof error?.error === 'string' && error.error) {
-		return error.error;
-	}
-
-	return fallback;
-};
+import type { ApiErrorStateProps } from './types';
 
 /* ─── Highlights shown on the branding panel ─── */
 const getHighlights = () => [
@@ -65,7 +55,7 @@ const getHighlights = () => [
 ];
 
 /* ─── API error state ─── */
-const ApiErrorState = ({ onRetry }) => (
+const ApiErrorState = ({ onRetry }: ApiErrorStateProps) => (
 	<div className="flex min-h-screen items-center justify-center bg-white px-6">
 		<div className="login-scale-in w-full max-w-sm text-center">
 			<div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-red-500">
@@ -92,7 +82,7 @@ const ApiErrorState = ({ onRetry }) => (
 const PEAKURL_URL =
 	'https://peakurl.org?utm_source=peakurl_login&utm_medium=login&utm_campaign=powered_by';
 
-const getSafeRedirectPath = (candidate) => {
+const getSafeRedirectPath = (candidate: unknown) => {
 	if (typeof candidate !== 'string') {
 		return '';
 	}
@@ -106,13 +96,21 @@ const getSafeRedirectPath = (candidate) => {
 	return value;
 };
 
-const submitFormOnEnter = (event) => {
+const submitVerificationCode = () => {
+	requestClosestFormSubmit(
+		document.activeElement instanceof Element
+			? document.activeElement
+			: null
+	);
+};
+
+const submitFormOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
 	if ('Enter' !== event.key) {
 		return;
 	}
 
 	event.preventDefault();
-	event.currentTarget.form?.requestSubmit();
+	requestControlFormSubmit(event.currentTarget);
 };
 
 function LoginPage() {
@@ -130,17 +128,15 @@ function LoginPage() {
 	const [verifyLogin, { isLoading: isVerifying }] =
 		useVerifyTwoFactorLoginMutation();
 	const { data, error, isError, isFetching, isLoading, refetch } =
-		useAuthCheckQuery();
+		useAuthCheckQuery(undefined);
 
 	const currentUser = data?.user || data?.data;
-	const errorStatus = typeof error?.status === 'number' ? error.status : null;
+	const errorStatus = getErrorStatus(error);
 	const isAuthError = 401 === errorStatus || 403 === errorStatus;
 	const isApiError = isError && !isAuthError;
 	const installRecovery = getInstallRecovery(error);
-	const hasResolvedSession =
-		undefined !== data || undefined !== error;
-	const isPending =
-		!hasResolvedSession && (isLoading || isFetching);
+	const hasResolvedSession = undefined !== data || undefined !== error;
+	const isPending = !hasResolvedSession && (isLoading || isFetching);
 	const submitPending = isLoggingIn || isVerifying;
 	const redirectTo = useMemo(() => {
 		const searchParams = new URLSearchParams(location.search || '');
@@ -184,7 +180,7 @@ function LoginPage() {
 		return <ApiErrorState onRetry={refetch} />;
 	}
 
-	const handleSubmit = async (event) => {
+	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setFormError('');
 
@@ -208,7 +204,9 @@ function LoginPage() {
 				setFormError(
 					useBackupMode
 						? __('Enter your backup code.')
-						: __('Enter the 6-digit code from your authenticator app.')
+						: __(
+								'Enter the 6-digit code from your authenticator app.'
+							)
 				);
 				return;
 			}
@@ -284,10 +282,12 @@ function LoginPage() {
 					</h1>
 					<p className="login-fade-up-d2 mt-5 max-w-sm text-[15px] leading-relaxed text-slate-400">
 						{twoFactorRequired
-							? __('One more verification step and you’ll be in your workspace.')
+							? __(
+									'One more verification step and you’ll be in your workspace.'
+								)
 							: __(
 									'Shorten URLs, track clicks, and manage your audience, all from your own dashboard.'
-							  )}
+								)}
 					</p>
 
 					{/* Highlight chips */}
@@ -355,9 +355,15 @@ function LoginPage() {
 						<p className="mt-2 text-sm leading-relaxed text-slate-500">
 							{twoFactorRequired
 								? useBackupMode
-									? __('Enter one of the backup codes you saved when setting up 2FA.')
-									: __('Enter the 6-digit code from your authenticator app.')
-								: __('Enter your credentials to continue to the dashboard.')}
+									? __(
+											'Enter one of the backup codes you saved when setting up 2FA.'
+										)
+									: __(
+											'Enter the 6-digit code from your authenticator app.'
+										)
+								: __(
+										'Enter your credentials to continue to the dashboard.'
+									)}
 						</p>
 
 						{/* Error */}
@@ -444,7 +450,9 @@ function LoginPage() {
 												spellCheck={false}
 												autoComplete="one-time-code"
 												disabled={submitPending}
-												placeholder={__('xxxx-xxxx-xxxx')}
+												placeholder={__(
+													'xxxx-xxxx-xxxx'
+												)}
 												className="rounded-xl border-slate-200 bg-slate-50 py-3 text-sm transition-colors duration-150 placeholder:text-slate-400 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-500/15"
 											/>
 											<button
@@ -456,7 +464,9 @@ function LoginPage() {
 													setFormError('');
 												}}
 											>
-												{__('Use authenticator code instead')}
+												{__(
+													'Use authenticator code instead'
+												)}
 											</button>
 										</div>
 									) : (
@@ -466,8 +476,8 @@ function LoginPage() {
 												<VerificationCodeInput
 													value={token}
 													onChange={setToken}
-													onEnter={() =>
-														document.activeElement?.form?.requestSubmit()
+													onEnter={
+														submitVerificationCode
 													}
 													disabled={submitPending}
 												/>
@@ -481,7 +491,9 @@ function LoginPage() {
 													setFormError('');
 												}}
 											>
-												{__('Lost your device? Use a backup code')}
+												{__(
+													'Lost your device? Use a backup code'
+												)}
 											</button>
 										</div>
 									)}

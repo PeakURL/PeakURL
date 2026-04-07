@@ -1,11 +1,17 @@
 import {
-	__,
-	_n,
-	_x,
+	__ as wpTranslate,
+	_n as wpTranslatePlural,
+	_x as wpTranslateWithContext,
 	setLocaleData,
 	sprintf,
 } from '@wordpress/i18n';
+
 import { API_CLIENT_BASE_URL } from '@/constants';
+import type {
+	LocaleMessageMap,
+	RuntimeI18nCatalog,
+	RuntimeI18nPayload,
+} from './types';
 
 const DEFAULT_TEXT_DOMAIN = 'peakurl';
 const DEFAULT_LOCALE = 'en_US';
@@ -20,48 +26,91 @@ const DEFAULT_LOCALE_DATA = {
 let initialized = false;
 let initializationPromise: Promise<void> | null = null;
 
+/**
+ * Default translation domain used across the dashboard UI.
+ */
 export const TEXT_DOMAIN =
 	'undefined' !== typeof window && window.__PEAKURL_TEXT_DOMAIN__
 		? window.__PEAKURL_TEXT_DOMAIN__
 		: DEFAULT_TEXT_DOMAIN;
 
+function isObjectRecord(value: unknown): value is Record<string, unknown> {
+	return 'object' === typeof value && null !== value;
+}
+
+function isLocaleMessageMap(value: unknown): value is LocaleMessageMap {
+	return isObjectRecord(value);
+}
+
+function isRuntimeI18nCatalog(value: unknown): value is RuntimeI18nCatalog {
+	return isObjectRecord(value);
+}
+
 function getLocaleDataFromCatalog(
-	runtimeCatalog: unknown
-): Record<string, string[] | Record<string, string>> {
-	if (
-		runtimeCatalog &&
-		'object' === typeof runtimeCatalog &&
-		'locale_data' in runtimeCatalog &&
-		runtimeCatalog.locale_data &&
-		'object' === typeof runtimeCatalog.locale_data &&
-		'messages' in runtimeCatalog.locale_data &&
-		runtimeCatalog.locale_data.messages &&
-		'object' === typeof runtimeCatalog.locale_data.messages
-	) {
-		return runtimeCatalog.locale_data.messages as Record<
-			string,
-			string[] | Record<string, string>
-		>;
+	runtimeCatalog: RuntimeI18nCatalog | null | undefined
+): LocaleMessageMap {
+	const messages = runtimeCatalog?.locale_data?.messages;
+	if (isLocaleMessageMap(messages)) {
+		return messages;
 	}
 
 	return DEFAULT_LOCALE_DATA;
 }
 
+/**
+ * Applies the active locale to the document root for accessibility and
+ * browser-native formatting behavior.
+ */
 function setDocumentLocale(locale?: string, htmlLang?: string): void {
 	if ('undefined' === typeof document) {
 		return;
 	}
 
-	const resolvedLang = htmlLang || locale?.replace(/_/g, '-').toLowerCase() || 'en';
+	const resolvedLang =
+		htmlLang || locale?.replace(/_/g, '-').toLowerCase() || 'en';
 	document.documentElement.lang = resolvedLang;
 }
 
-async function fetchRuntimeCatalog(): Promise<{
-	catalog?: unknown;
-	locale?: string;
-	htmlLang?: string;
-	textDomain?: string;
-} | null> {
+function readStringProperty(
+	record: Record<string, unknown>,
+	key: string
+): string | undefined {
+	const value = record[key];
+	return 'string' === typeof value ? value : undefined;
+}
+
+function readRuntimeCatalog(
+	record: Record<string, unknown>,
+	key: string
+): RuntimeI18nCatalog | undefined {
+	const value = record[key];
+	return isRuntimeI18nCatalog(value) ? value : undefined;
+}
+
+function normalizeRuntimePayload(payload: unknown): RuntimeI18nPayload | null {
+	if (!isObjectRecord(payload)) {
+		return null;
+	}
+
+	const payloadData = isObjectRecord(payload.data) ? payload.data : payload;
+	if (!isObjectRecord(payloadData)) {
+		return null;
+	}
+
+	return {
+		catalog:
+			readRuntimeCatalog(payloadData, 'catalog') ||
+			(isRuntimeI18nCatalog(payloadData) ? payloadData : undefined),
+		locale: readStringProperty(payloadData, 'locale'),
+		htmlLang: readStringProperty(payloadData, 'htmlLang'),
+		textDomain: readStringProperty(payloadData, 'textDomain'),
+	};
+}
+
+/**
+ * Fetches the runtime translation payload from the dashboard API.
+ */
+async function fetchRuntimeCatalog(): Promise<RuntimeI18nPayload | null> {
 	try {
 		const response = await fetch(`${API_CLIENT_BASE_URL}/system/i18n`, {
 			credentials: 'include',
@@ -74,36 +123,15 @@ async function fetchRuntimeCatalog(): Promise<{
 			return null;
 		}
 
-		const payload = await response.json();
-		const data =
-			payload?.data && 'object' === typeof payload.data
-				? payload.data
-				: payload;
-
-		if (!data || 'object' !== typeof data) {
-			return null;
-		}
-
-		return {
-			catalog: 'catalog' in data ? data.catalog : undefined,
-			locale:
-				'locale' in data && 'string' === typeof data.locale
-					? data.locale
-					: undefined,
-			htmlLang:
-				'htmlLang' in data && 'string' === typeof data.htmlLang
-					? data.htmlLang
-					: undefined,
-			textDomain:
-				'textDomain' in data && 'string' === typeof data.textDomain
-					? data.textDomain
-					: undefined,
-		};
+		return normalizeRuntimePayload(await response.json());
 	} catch {
 		return null;
 	}
 }
 
+/**
+ * Initializes the client-side translation runtime before the app renders.
+ */
 export function initializeI18n(): Promise<void> {
 	if ('undefined' === typeof window) {
 		return Promise.resolve();
@@ -120,26 +148,27 @@ export function initializeI18n(): Promise<void> {
 	initializationPromise = (async () => {
 		const runtimeCatalog = window.__PEAKURL_I18N__;
 		const payload =
-			runtimeCatalog && 'object' === typeof runtimeCatalog
+			isRuntimeI18nCatalog(runtimeCatalog)
 				? {
 						catalog: runtimeCatalog,
 						locale: window.__PEAKURL_LOCALE__ || DEFAULT_LOCALE,
-						textDomain: window.__PEAKURL_TEXT_DOMAIN__ || TEXT_DOMAIN,
-				  }
+						textDomain:
+							window.__PEAKURL_TEXT_DOMAIN__ || TEXT_DOMAIN,
+					}
 				: await fetchRuntimeCatalog();
 		const localeData = getLocaleDataFromCatalog(payload?.catalog);
-		const domain = payload?.textDomain || window.__PEAKURL_TEXT_DOMAIN__ || TEXT_DOMAIN;
-		const locale = payload?.locale || window.__PEAKURL_LOCALE__ || DEFAULT_LOCALE;
+		const domain =
+			payload?.textDomain ||
+			window.__PEAKURL_TEXT_DOMAIN__ ||
+			TEXT_DOMAIN;
+		const locale =
+			payload?.locale || window.__PEAKURL_LOCALE__ || DEFAULT_LOCALE;
 
-		setLocaleData(
-			localeData as Record<string, string[] | Record<string, string>>,
-			domain
-		);
+		setLocaleData(localeData, domain);
 		setDocumentLocale(locale, payload?.htmlLang);
 
 		if (payload?.catalog) {
-			window.__PEAKURL_I18N__ =
-				payload.catalog as Window['__PEAKURL_I18N__'];
+			window.__PEAKURL_I18N__ = payload.catalog;
 		}
 
 		window.__PEAKURL_LOCALE__ = locale;
@@ -152,16 +181,24 @@ export function initializeI18n(): Promise<void> {
 	return initializationPromise;
 }
 
-export const translate = (text: string): string => __(text, TEXT_DOMAIN);
-export const translateWithContext = (
-	text: string,
+/**
+ * Runtime translation helpers bound to PeakURL's active text domain.
+ */
+export const translate = <Text extends string>(text: Text): Text =>
+	wpTranslate(text, TEXT_DOMAIN) as unknown as Text;
+export const translateWithContext = <Text extends string>(
+	text: Text,
 	context: string
-): string => _x(text, context, TEXT_DOMAIN);
-export const translatePlural = (
-	single: string,
-	plural: string,
+): Text =>
+	wpTranslateWithContext(text, context, TEXT_DOMAIN) as unknown as Text;
+export const translatePlural = <Single extends string, Plural extends string>(
+	single: Single,
+	plural: Plural,
 	count: number
-): string => _n(single, plural, count, TEXT_DOMAIN);
+): Single | Plural =>
+	wpTranslatePlural(single, plural, count, TEXT_DOMAIN) as unknown as
+		| Single
+		| Plural;
 
 export {
 	sprintf,

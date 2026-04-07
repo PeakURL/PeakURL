@@ -1,6 +1,6 @@
-// @ts-nocheck
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+
 import './index.css';
 import App from './App';
 import { initializeI18n } from './i18n';

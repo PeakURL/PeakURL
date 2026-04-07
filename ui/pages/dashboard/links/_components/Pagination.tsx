@@ -1,7 +1,6 @@
-// @ts-nocheck
-
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { __, sprintf } from '@/i18n';
+import type { PaginationProps } from './types';
 
 const Pagination = ({
 	currentPage,
@@ -10,18 +9,17 @@ const Pagination = ({
 	startItem,
 	endItem,
 	totalItems,
-}) => {
+}: PaginationProps) => {
 	return (
 		<div className="bg-surface rounded-lg border border-stroke px-4 py-3">
 			<div className="flex items-center justify-between">
 				{/* Results Info */}
 				<div className="text-sm text-text-muted">
-					{sprintf(
-						__('Showing %1$s–%2$s of %3$s links'),
-						startItem,
-						endItem,
-						totalItems
-					)}
+					{sprintf(__('Showing %1$s–%2$s of %3$s links'), [
+						String(startItem),
+						String(endItem),
+						String(totalItems),
+					])}
 				</div>
 
 				{/* Pagination Controls */}

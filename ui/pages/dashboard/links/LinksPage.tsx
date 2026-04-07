@@ -1,11 +1,5 @@
-// @ts-nocheck
 import { useEffect, useState } from 'react';
-import {
-	CircleCheckBig,
-	Link2,
-	MousePointerClick,
-	Users,
-} from 'lucide-react';
+import { CircleCheckBig, Link2, MousePointerClick, Users } from 'lucide-react';
 // LocalStorage keys for persistence (defined outside component to satisfy hook deps)
 const LS_KEYS = {
 	sortBy: 'admin_links_sortBy',
@@ -19,20 +13,29 @@ import {
 	TableFooter,
 	Pagination,
 } from './_components';
-import { useGetUrlsQuery } from '@/store/slices/api/urls';
+import { useGetUrlsQuery } from '@/store/slices/api';
 import { useSearchParams } from 'react-router-dom';
 import { __ } from '@/i18n';
+import type {
+	LinkRecord,
+	LinksMeta,
+	LinksSortBy,
+	LinksSortOrder,
+} from './_components/types';
+import type { GetUrlsResponse } from './types';
 
 function LinksPage() {
 	// State for Sorting and Pagination
-	const [sortBy, setSortBy] = useState(() =>
+	const [sortBy, setSortBy] = useState<LinksSortBy>(() =>
 		typeof window !== 'undefined'
-			? localStorage.getItem(LS_KEYS.sortBy) || 'createdAt'
+			? (localStorage.getItem(LS_KEYS.sortBy) as LinksSortBy) ||
+				'createdAt'
 			: 'createdAt'
 	);
-	const [sortOrder, setSortOrder] = useState(() =>
+	const [sortOrder, setSortOrder] = useState<LinksSortOrder>(() =>
 		typeof window !== 'undefined'
-			? localStorage.getItem(LS_KEYS.sortOrder) || 'desc'
+			? (localStorage.getItem(LS_KEYS.sortOrder) as LinksSortOrder) ||
+				'desc'
 			: 'desc'
 	);
 	const [limit, setLimit] = useState(() => {
@@ -59,37 +62,38 @@ function LinksPage() {
 		} catch {}
 	}, [sortBy, sortOrder, limit]);
 
-	const {
-		data: urlsRes,
-		refetch: refetchUrls,
-	} = useGetUrlsQuery({
+	const { data: urlsRes, refetch: refetchUrls } = useGetUrlsQuery({
 		page: currentPage,
 		limit,
 		sortBy,
 		sortOrder,
 		search: searchQuery,
 	});
+	const typedUrlsRes = urlsRes as GetUrlsResponse | undefined;
 
-	const apiItems = urlsRes?.data?.items ?? [];
-	const apiMeta = urlsRes?.data?.meta ?? {
+	const apiItems: LinkRecord[] = typedUrlsRes?.data?.items ?? [];
+	const apiMeta: LinksMeta = typedUrlsRes?.data?.meta ?? {
 		page: currentPage,
 		limit,
 		totalItems: apiItems.length,
 		totalPages: 1,
 	};
-	const {
-		data: statsLookupRes,
-		refetch: refetchStatsLookup,
-	} = useGetUrlsQuery(
-		statsShortId ? { page: 1, limit: 10, search: statsShortId } : undefined,
-		{ skip: !statsShortId }
-	);
-	const statsLookupItems = statsLookupRes?.data?.items ?? [];
+	const { data: statsLookupRes, refetch: refetchStatsLookup } =
+		useGetUrlsQuery(
+			statsShortId
+				? { page: 1, limit: 10, search: statsShortId }
+				: undefined,
+			{ skip: !statsShortId }
+		);
+	const typedStatsLookupRes = statsLookupRes as GetUrlsResponse | undefined;
+	const statsLookupItems: LinkRecord[] =
+		typedStatsLookupRes?.data?.items ?? [];
 	const statsLink =
 		statsShortId && statsLookupItems.length
 			? statsLookupItems.find(
-					(l) =>
-						l.shortCode === statsShortId || l.alias === statsShortId
+					(link: LinkRecord) =>
+						link.shortCode === statsShortId ||
+						link.alias === statsShortId
 				) || null
 			: null;
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -139,15 +143,15 @@ function LinksPage() {
 	// Calculate quick stats (based on filtered links or all links? usually filtered)
 	const linksForStats = filteredLinks;
 	const totalClicks = linksForStats.reduce(
-		(sum, link) => sum + (link.clicks || 0),
+		(sum: number, link: LinkRecord) => sum + (link.clicks || 0),
 		0
 	);
 	const totalUniqueClicks = linksForStats.reduce(
-		(sum, link) => sum + (link.uniqueClicks || 0),
+		(sum: number, link: LinkRecord) => sum + (link.uniqueClicks || 0),
 		0
 	);
 	const activeLinks = linksForStats.filter(
-		(link) => link.status === 'active'
+		(link: LinkRecord) => link.status === 'active'
 	).length;
 
 	return (

@@ -1,9 +1,9 @@
-// @ts-nocheck
 import { Content } from './_components';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAdminAccess } from '@/hooks';
+import type { SettingsTabId } from './_components/types';
 
-const VALID_SETTINGS_TABS = new Set([
+const VALID_SETTINGS_TABS = new Set<SettingsTabId>([
 	'general',
 	'security',
 	'api',
@@ -15,7 +15,7 @@ const VALID_SETTINGS_TABS = new Set([
 
 function SettingsTabPage() {
 	const params = useParams();
-	const tab = params.tab;
+	const tab = params.tab as SettingsTabId | undefined;
 	const {
 		canManageApiKeys,
 		canManageWebhooks,
@@ -29,7 +29,7 @@ function SettingsTabPage() {
 		return <Navigate replace to="/dashboard/settings/general" />;
 	}
 
-	const restrictedTabs = {
+	const restrictedTabs: Partial<Record<SettingsTabId, boolean>> = {
 		api: canManageApiKeys,
 		integrations: canManageWebhooks,
 		email: canManageMailDelivery,
@@ -44,7 +44,7 @@ function SettingsTabPage() {
 	return (
 		<div className="lg:col-span-3 flex flex-col h-full">
 			<div className="flex-1 rounded-lg border border-stroke bg-surface-alt p-5">
-				<Content activeTab={tab} />
+				<Content activeTab={tab || 'general'} />
 			</div>
 		</div>
 	);

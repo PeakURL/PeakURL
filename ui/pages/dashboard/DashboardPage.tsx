@@ -1,9 +1,8 @@
-// @ts-nocheck
 import { useState } from 'react';
 import {
 	useGetAnalyticsQuery,
 	useGetActivityQuery,
-} from '@/store/slices/api/analytics';
+} from '@/store/slices/api';
 import {
 	Header,
 	StatsCards,
@@ -12,8 +11,17 @@ import {
 	DeviceBreakdown,
 	CountryStats,
 } from './_components';
+import type {
+	CountryMetric,
+	DashboardDeviceData,
+	DashboardStats,
+	RecentActivity,
+	TrafficSeries,
+} from './_components/types';
 
-function normalizeTrafficSeries(traffic) {
+function normalizeTrafficSeries(
+	traffic: Partial<TrafficSeries> | null | undefined
+): TrafficSeries {
 	const labels = Array.isArray(traffic?.labels) ? traffic.labels : [];
 	const clicks = Array.isArray(traffic?.clicks) ? traffic.clicks : [];
 	const unique = Array.isArray(traffic?.unique) ? traffic.unique : [];
@@ -48,24 +56,24 @@ function DashboardPage() {
 	const [timeRange, setTimeRange] = useState(7);
 
 	const { data: analyticsRes } = useGetAnalyticsQuery(timeRange);
-	const { data: activityRes } = useGetActivityQuery();
+	const { data: activityRes } = useGetActivityQuery(undefined);
 
-	const stats = analyticsRes?.data ?? {
+	const stats: DashboardStats = analyticsRes?.data ?? {
 		totalClicks: 0,
 		totalLinks: 0,
 		uniqueClicks: 0,
 		conversionRate: 0,
 	};
-	const activities = activityRes?.data ?? [];
+	const activities: RecentActivity[] = activityRes?.data ?? [];
 
 	const recentActivities = activities.slice(0, 6);
 
-	const deviceData = {
+	const deviceData: DashboardDeviceData = {
 		devices: analyticsRes?.data?.devices ?? [],
 		browsers: analyticsRes?.data?.browsers ?? [],
 		operatingSystems: analyticsRes?.data?.operatingSystems ?? [],
 	};
-	const countryData = analyticsRes?.data?.countries ?? [];
+	const countryData: CountryMetric[] = analyticsRes?.data?.countries ?? [];
 	const trafficData = normalizeTrafficSeries(analyticsRes?.data?.traffic);
 
 	return (

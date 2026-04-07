@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
 	Activity,
 	Settings,
@@ -11,9 +10,10 @@ import {
 	Download,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import type { SettingsTabIcon, SettingsTabItem, SidebarProps } from './types';
 
 // Icon mapping
-const iconMap = {
+const iconMap: Record<SettingsTabIcon, typeof Settings> = {
 	settings: Settings,
 	activity: Activity,
 	shield: Shield,
@@ -25,12 +25,12 @@ const iconMap = {
 	download: Download,
 };
 
-const Sidebar = ({ tabs, activeTab }) => {
+const Sidebar = ({ tabs, activeTab }: SidebarProps) => {
 	return (
 		<div className="lg:col-span-1">
 			<div className="bg-surface border border-stroke rounded-lg p-2 sticky top-6">
 				<nav className="space-y-1">
-					{tabs.map((tab) => {
+					{tabs.map((tab: SettingsTabItem) => {
 						const IconComponent = iconMap[tab.icon];
 						return (
 							<Link

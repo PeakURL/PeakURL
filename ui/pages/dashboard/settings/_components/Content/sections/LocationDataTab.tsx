@@ -1,7 +1,8 @@
-// @ts-nocheck
+import type { SubmitEvent } from 'react';
 import { useState } from 'react';
 import { Button } from '@/components/ui';
 import { __ } from '@/i18n';
+import { formatByteSize, formatDateTimeValue } from '@/utils';
 import {
 	AlertCircle,
 	CheckCircle2,
@@ -9,38 +10,21 @@ import {
 	MapPin,
 	RefreshCcw,
 } from 'lucide-react';
+import type {
+	LocationDataStatus,
+	LocationDataTabProps,
+	StateCardProps,
+	StateCardVariant,
+	StatCardProps,
+} from './types';
 
-function formatDate(value) {
-	if (!value) {
-		return __('Never');
-	}
-
-	try {
-		return new Date(value).toLocaleString();
-	} catch {
-		return value;
-	}
-}
-
-function formatBytes(value) {
-	if (!value) {
-		return __('Not available');
-	}
-
-	const units = ['B', 'KB', 'MB', 'GB'];
-	let size = Number(value);
-	let index = 0;
-
-	while (size >= 1024 && index < units.length - 1) {
-		size /= 1024;
-		index += 1;
-	}
-
-	return `${size.toFixed(size >= 10 || 0 === index ? 0 : 1)} ${units[index]}`;
-}
-
-function StateCard({ icon: Icon, title, description, variant = 'info' }) {
-	const styles = {
+function StateCard({
+	icon: Icon,
+	title,
+	description,
+	variant = 'info',
+}: StateCardProps) {
+	const styles: Record<StateCardVariant, string> = {
 		info: 'border-blue-200 bg-blue-50 text-blue-950 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200',
 		success:
 			'border-emerald-200 bg-emerald-50 text-emerald-950 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200',
@@ -70,11 +54,12 @@ function LocationDataTab({
 	isDownloading,
 	onSave,
 	onDownload,
-}) {
-	const [accountIdInput, setAccountIdInput] = useState(null);
+}: LocationDataTabProps) {
+	const [accountIdInput, setAccountIdInput] = useState<string | null>(null);
 	const [licenseKey, setLicenseKey] = useState('');
 	const [isEditingCredentials, setIsEditingCredentials] = useState(false);
-	const [savedStatusOverride, setSavedStatusOverride] = useState(null);
+	const [savedStatusOverride, setSavedStatusOverride] =
+		useState<Partial<LocationDataStatus> | null>(null);
 	const effectiveStatus = status?.credentialsConfigured
 		? status
 		: savedStatusOverride
@@ -86,11 +71,9 @@ function LocationDataTab({
 			: accountIdInput;
 	const configurationLabel =
 		effectiveStatus?.configurationLabel || __('settings table');
-	const hasSavedCredentials = Boolean(
-		effectiveStatus?.credentialsConfigured
-	);
+	const hasSavedCredentials = Boolean(effectiveStatus?.credentialsConfigured);
 
-	const handleSubmit = async (event) => {
+	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		try {
 			const nextStatus = await onSave({
@@ -140,11 +123,15 @@ function LocationDataTab({
 							isLoading ||
 							isSaving ||
 							!effectiveStatus?.credentialsConfigured ||
-							(effectiveStatus &&
-								!effectiveStatus.canManageFromDashboard)
+							Boolean(
+								effectiveStatus &&
+								!effectiveStatus.canManageFromDashboard
+							)
 						}
 					>
-						{isReady ? __('Update Database') : __('Download Database')}
+						{isReady
+							? __('Update Database')
+							: __('Download Database')}
 					</Button>
 				</div>
 			</div>
@@ -156,14 +143,18 @@ function LocationDataTab({
 				/>
 				<StatCard
 					label={__('Database Updated')}
-					value={formatDate(
+					value={formatDateTimeValue(
 						effectiveStatus?.lastDownloadedAt ||
-							effectiveStatus?.databaseUpdatedAt
+							effectiveStatus?.databaseUpdatedAt,
+						__('Never')
 					)}
 				/>
 				<StatCard
 					label={__('Database Size')}
-					value={formatBytes(effectiveStatus?.databaseSizeBytes)}
+					value={formatByteSize(
+						effectiveStatus?.databaseSizeBytes,
+						__('Not available')
+					)}
 				/>
 			</div>
 
@@ -186,8 +177,12 @@ function LocationDataTab({
 					}
 					description={
 						isReady
-							? __('PeakURL is using the local GeoLite2 City database for click locations.')
-							: __('Save your MaxMind credentials, then download the GeoLite2 City database to enable visitor country and city analytics.')
+							? __(
+									'PeakURL is using the local GeoLite2 City database for click locations.'
+								)
+							: __(
+									'Save your MaxMind credentials, then download the GeoLite2 City database to enable visitor country and city analytics.'
+								)
 					}
 					variant={isReady ? 'success' : 'info'}
 				/>
@@ -246,7 +241,7 @@ function LocationDataTab({
 								onClick={() => setIsEditingCredentials(true)}
 								disabled={Boolean(
 									effectiveStatus &&
-										!effectiveStatus.canManageFromDashboard
+									!effectiveStatus.canManageFromDashboard
 								)}
 							>
 								{__('Update Credentials')}
@@ -261,7 +256,7 @@ function LocationDataTab({
 									!effectiveStatus?.credentialsConfigured ||
 									Boolean(
 										effectiveStatus &&
-											!effectiveStatus.canManageFromDashboard
+										!effectiveStatus.canManageFromDashboard
 									)
 								}
 								icon={CloudDownload}
@@ -305,8 +300,12 @@ function LocationDataTab({
 									}
 									placeholder={
 										hasSavedCredentials
-											? __('Enter a new MaxMind license key')
-											: __('Enter your MaxMind license key')
+											? __(
+													'Enter a new MaxMind license key'
+												)
+											: __(
+													'Enter your MaxMind license key'
+												)
 									}
 									className="w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2.5 text-sm text-heading outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
 								/>
@@ -315,7 +314,8 @@ function LocationDataTab({
 
 						{hasSavedCredentials && (
 							<p className="text-xs text-text-muted">
-								{__('Saved license key:')} {effectiveStatus?.licenseKeyHint}
+								{__('Saved license key:')}{' '}
+								{effectiveStatus?.licenseKeyHint}
 							</p>
 						)}
 
@@ -326,7 +326,7 @@ function LocationDataTab({
 								loading={isSaving}
 								disabled={Boolean(
 									effectiveStatus &&
-										!effectiveStatus.canManageFromDashboard
+									!effectiveStatus.canManageFromDashboard
 								)}
 							>
 								{hasSavedCredentials
@@ -355,7 +355,7 @@ function LocationDataTab({
 	);
 }
 
-function StatCard({ label, value }) {
+function StatCard({ label, value }: StatCardProps) {
 	return (
 		<div className="rounded-lg border border-stroke bg-surface p-5">
 			<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">

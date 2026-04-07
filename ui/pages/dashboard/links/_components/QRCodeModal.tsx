@@ -1,13 +1,12 @@
-// @ts-nocheck
-
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { X, Download, Copy, Check } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import QRCode from 'qrcode';
-import { buildShortUrl } from '@/utils';
+import { buildShortUrl, copyToClipboard } from '@/utils';
 import { __ } from '@/i18n';
+import type { QRCodeModalProps } from './types';
 
-function QRCodeModal({ open, setOpen, link }) {
+function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
 	const [qrDataUrl, setQrDataUrl] = useState('');
 	const [copied, setCopied] = useState(false);
 	const shortUrl = link ? buildShortUrl(link) : '';
@@ -24,7 +23,7 @@ function QRCodeModal({ open, setOpen, link }) {
 						light: '#FFFFFF',
 					},
 				},
-				(err, url) => {
+				(err: Error | null | undefined, url: string) => {
 					if (err) {
 						console.error('QR Code generation error:', err);
 						return;
@@ -48,7 +47,7 @@ function QRCodeModal({ open, setOpen, link }) {
 
 	const handleCopyUrl = async () => {
 		try {
-			await navigator.clipboard.writeText(shortUrl);
+			await copyToClipboard(shortUrl);
 			setCopied(true);
 			setTimeout(() => setCopied(false), 2000);
 		} catch (err) {

@@ -1,19 +1,23 @@
-// @ts-nocheck
-
 import { MousePointerClick, Users, Calendar, TrendingUp } from 'lucide-react';
 import { formatNumber, formatRelativeTime } from '@/utils';
 import { __ } from '@/i18n';
+import type { LinkStatsViewProps } from './types';
 
-function StatCards({ link, stats: fetchedStats, isLoading }) {
+function StatCards({
+	link,
+	stats: fetchedStats,
+	isLoading,
+}: LinkStatsViewProps) {
+	const totalClicks = Number(link.clicks || 0);
+	const uniqueClicks = Number(link.uniqueClicks || 0);
+
 	const displayStats = [
 		{
 			name: __('Total Clicks'),
 			value: isLoading
 				? '...'
 				: formatNumber(
-						fetchedStats
-							? fetchedStats.totalClicks
-							: link.clicks || 0
+						fetchedStats ? fetchedStats.totalClicks : totalClicks
 					),
 			icon: MousePointerClick,
 			color: 'text-blue-600 dark:text-blue-400',
@@ -24,9 +28,7 @@ function StatCards({ link, stats: fetchedStats, isLoading }) {
 			value: isLoading
 				? '...'
 				: formatNumber(
-						fetchedStats
-							? fetchedStats.uniqueClicks
-							: link.uniqueClicks || 0
+						fetchedStats ? fetchedStats.uniqueClicks : uniqueClicks
 					),
 			icon: Users,
 			color: 'text-purple-600 dark:text-purple-400',
@@ -50,8 +52,8 @@ function StatCards({ link, stats: fetchedStats, isLoading }) {
 				? '...'
 				: fetchedStats
 					? `${fetchedStats.conversionRate}%`
-					: link.uniqueClicks > 0
-						? `${((link.clicks / link.uniqueClicks) * 100).toFixed(1)}%`
+					: uniqueClicks > 0
+						? `${((totalClicks / uniqueClicks) * 100).toFixed(1)}%`
 						: '0%',
 			icon: TrendingUp,
 			color: 'text-orange-600 dark:text-orange-400',

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { formatNumber } from '@/utils';
 import {
 	ArrowDown,
@@ -9,8 +8,9 @@ import {
 	Users,
 } from 'lucide-react';
 import { __ } from '@/i18n';
+import type { StatsCardsProps } from './types';
 
-const StatsCards = ({ stats }) => {
+const StatsCards = ({ stats }: StatsCardsProps) => {
 	const statsData = [
 		{
 			title: __('Total Clicks'),

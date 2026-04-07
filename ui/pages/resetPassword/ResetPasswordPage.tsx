@@ -1,30 +1,19 @@
-// @ts-nocheck
+import type { KeyboardEvent, SubmitEvent } from 'react';
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, CheckCircle2, KeyRound, LockKeyhole } from 'lucide-react';
 import { Button, Input } from '@/components/ui';
-import { useResetPasswordMutation } from '@/store/slices/api/user';
+import { useResetPasswordMutation } from '@/store/slices/api';
 import { __ } from '@/i18n';
+import { getErrorMessage, requestControlFormSubmit } from '@/utils';
 
-function getErrorMessage(error, fallback) {
-	if (typeof error?.data?.message === 'string' && error.data.message) {
-		return error.data.message;
-	}
-
-	if (typeof error?.error === 'string' && error.error) {
-		return error.error;
-	}
-
-	return fallback;
-}
-
-const submitFormOnEnter = (event) => {
+const submitFormOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
 	if ('Enter' !== event.key) {
 		return;
 	}
 
 	event.preventDefault();
-	event.currentTarget.form?.requestSubmit();
+	requestControlFormSubmit(event.currentTarget);
 };
 
 function ResetPasswordPage() {
@@ -36,7 +25,7 @@ function ResetPasswordPage() {
 	const [isCompleted, setIsCompleted] = useState(false);
 	const [resetPassword, { isLoading }] = useResetPasswordMutation();
 
-	const handleSubmit = async (event) => {
+	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setFormError('');
 
@@ -78,14 +67,16 @@ function ResetPasswordPage() {
 		<div className="min-h-screen bg-slate-950 px-6 py-10 text-white">
 			<div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-5xl items-center justify-center">
 				<div className="grid w-full gap-8 lg:grid-cols-[1.15fr_0.85fr]">
-					<div className="hidden rounded-[28px] border border-white/10 bg-white/[0.04] p-10 shadow-2xl shadow-slate-950/30 lg:flex lg:flex-col lg:justify-between">
+					<div className="hidden rounded-[28px] border border-white/10 bg-white/4 p-10 shadow-2xl shadow-slate-950/30 lg:flex lg:flex-col lg:justify-between">
 						<div>
 							<div className="inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-300">
 								<LockKeyhole size={14} />
 								{__('Secure Reset')}
 							</div>
 							<h1 className="mt-6 text-4xl font-semibold tracking-tight text-white">
-								{__('Choose a new password and get back to work.')}
+								{__(
+									'Choose a new password and get back to work.'
+								)}
 							</h1>
 							<p className="mt-4 max-w-lg text-base leading-7 text-slate-400">
 								{__(
@@ -133,7 +124,10 @@ function ResetPasswordPage() {
 						{isCompleted ? (
 							<div className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-900">
 								<div className="flex items-start gap-3">
-									<CheckCircle2 size={18} className="mt-0.5" />
+									<CheckCircle2
+										size={18}
+										className="mt-0.5"
+									/>
 									<div>
 										<p className="font-semibold">
 											{__('Password updated')}
@@ -147,7 +141,10 @@ function ResetPasswordPage() {
 								</div>
 							</div>
 						) : (
-							<form className="mt-8 space-y-5" onSubmit={handleSubmit}>
+							<form
+								className="mt-8 space-y-5"
+								onSubmit={handleSubmit}
+							>
 								<Input
 									label={__('New password')}
 									type="password"
@@ -174,7 +171,9 @@ function ResetPasswordPage() {
 									}
 									onKeyDown={submitFormOnEnter}
 									enterKeyHint="go"
-									placeholder={__('Confirm your new password')}
+									placeholder={__(
+										'Confirm your new password'
+									)}
 									autoComplete="new-password"
 									required
 								/>

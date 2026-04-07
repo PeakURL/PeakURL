@@ -1,18 +1,20 @@
-// @ts-nocheck
 import { useState } from 'react';
-import { useCreateUrlMutation } from '@/store/slices/api/urls';
+import { useCreateUrlMutation } from '@/store/slices/api';
 import {
 	buildShortUrl,
+	getErrorMessage,
 	isFutureLocalDateTime,
 	toIsoFromLocalDateTime,
 } from '@/utils';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { __, sprintf } from '@/i18n';
+import type { SubmitEvent } from 'react';
 
 import Header from './Header';
 import StatusMessages from './StatusMessages';
 import MainInputs from './MainInputs';
 import AdvancedOptions from './AdvancedOptions';
+import type { CreateUrlPayload } from './types';
 
 const UrlShorteningForm = () => {
 	const [destinationUrl, setDestinationUrl] = useState('');
@@ -34,7 +36,7 @@ const UrlShorteningForm = () => {
 
 	const [createUrl, { isLoading }] = useCreateUrlMutation();
 
-	const validateUrl = (url) => {
+	const validateUrl = (url: string) => {
 		try {
 			new URL(url);
 			return true;
@@ -43,7 +45,7 @@ const UrlShorteningForm = () => {
 		}
 	};
 
-	const buildUrlWithUtm = (url) => {
+	const buildUrlWithUtm = (url: string) => {
 		if (
 			!utmSource &&
 			!utmMedium &&
@@ -67,7 +69,7 @@ const UrlShorteningForm = () => {
 		return urlObj.toString();
 	};
 
-	const handleSubmit = async (e) => {
+	const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setError('');
 		setSuccess('');
@@ -79,14 +81,18 @@ const UrlShorteningForm = () => {
 		}
 
 		if (!validateUrl(destinationUrl)) {
-			setError(__('Please enter a valid URL (must include http:// or https://)'));
+			setError(
+				__(
+					'Please enter a valid URL (must include http:// or https://)'
+				)
+			);
 			return;
 		}
 
 		try {
 			const urlWithUtm = buildUrlWithUtm(destinationUrl.trim());
 
-			const payload = {
+			const payload: CreateUrlPayload = {
 				destinationUrl: urlWithUtm,
 				alias: alias.replace(/\s+/g, '') || undefined,
 				title: title.trim() || undefined,
@@ -112,7 +118,9 @@ const UrlShorteningForm = () => {
 			}
 
 			const result = await createUrl(payload).unwrap();
-			const shortUrl = buildShortUrl(result.data);
+			const shortUrl = result.data
+				? buildShortUrl(result.data)
+				: payload.destinationUrl;
 			setSuccess(
 				sprintf(__('Link shortened successfully! %s'), shortUrl)
 			);
@@ -134,8 +142,10 @@ const UrlShorteningForm = () => {
 			setTimeout(() => setSuccess(''), 5000);
 		} catch (err) {
 			setError(
-				err?.data?.message ||
+				getErrorMessage(
+					err,
 					__('Failed to create short link. Please try again.')
+				)
 			);
 		}
 	};

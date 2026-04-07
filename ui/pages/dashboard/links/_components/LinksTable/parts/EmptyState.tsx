@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Link2 } from 'lucide-react';
 import { __ } from '@/i18n';
 

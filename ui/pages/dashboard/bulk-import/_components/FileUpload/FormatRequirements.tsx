@@ -1,10 +1,10 @@
-// @ts-nocheck
 import { Button } from '@/components/ui';
 import { Download } from 'lucide-react';
 import { __ } from '@/i18n';
+import type { SampleFormat } from './types';
 
 function FormatRequirements() {
-	const handleDownloadSample = (format) => {
+	const handleDownloadSample = (format: SampleFormat) => {
 		let content = '';
 		let filename = '';
 		let type = '';

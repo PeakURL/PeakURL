@@ -1,15 +1,17 @@
-// @ts-nocheck
-
+import type {
+	FeatureRoadmapCardProps,
+	PluginTabItem,
+	TabId,
+	ViewMode,
+} from './types';
 import { useState } from 'react';
 import {
 	Plug,
 	ShieldCheck,
-	Upload,
 	Sparkles,
 	TrendingUp,
 	Grid3X3,
 	LayoutList,
-	Puzzle,
 	Wrench,
 	Rocket,
 	Code2,
@@ -19,7 +21,6 @@ import {
 	ExternalLink,
 	Bell,
 } from 'lucide-react';
-import { Button } from '@/components/ui';
 import { useAdminAccess } from '@/hooks';
 import { InstalledPluginsTable, PluginCard, PluginTabs } from './_components';
 import {
@@ -31,15 +32,12 @@ import {
 import { __ } from '@/i18n';
 import { PLUGINS_WAITLIST_URL } from '@constants';
 
-type TabId = 'installed' | 'browse' | 'featured' | 'popular';
-type ViewMode = 'grid' | 'list';
-
 function PluginsPage() {
 	const { canManageUsers, isLoading } = useAdminAccess();
 	const [activeTab, setActiveTab] = useState<TabId>('browse');
 	const [viewMode, setViewMode] = useState<ViewMode>('grid');
 
-	const tabs = [
+	const tabs: PluginTabItem[] = [
 		{
 			id: 'installed',
 			label: __('Installed'),
@@ -161,7 +159,7 @@ function PluginsPage() {
 				<div className="flex flex-col gap-3 px-6 sm:flex-row sm:items-center sm:justify-between sm:px-8">
 					<PluginTabs
 						activeTab={activeTab}
-						onTabChange={(t) => setActiveTab(t as TabId)}
+						onTabChange={setActiveTab}
 						tabs={tabs}
 					/>
 					{activeTab !== 'installed' && (
@@ -266,12 +264,8 @@ function PluginsPage() {
 						{/* Card grid (or list table) */}
 						{viewMode === 'grid' ? (
 							<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-								{activeCards.map((card, i) => (
-									<PluginCard
-										key={card.id}
-										plugin={card}
-										index={i}
-									/>
+								{activeCards.map((card) => (
+									<PluginCard key={card.id} plugin={card} />
 								))}
 							</div>
 						) : (
@@ -370,12 +364,7 @@ function FeatureRoadmapCard({
 	title,
 	description,
 	gradient,
-}: {
-	icon: React.ElementType;
-	title: string;
-	description: string;
-	gradient: string;
-}) {
+}: FeatureRoadmapCardProps) {
 	return (
 		<div
 			className={`rounded-xl border border-stroke bg-gradient-to-br ${gradient} p-5 transition-shadow hover:shadow-sm`}

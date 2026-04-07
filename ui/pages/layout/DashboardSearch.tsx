@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { useEffect, useRef } from 'react';
 import {
 	ArrowRight,
@@ -13,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useDashboardSearch } from '@/hooks';
 import { __, sprintf } from '@/i18n';
+import type { ResultButtonProps, ResultSectionProps } from './types';
 
 function ResultButton({
 	icon: Icon,
@@ -20,7 +19,7 @@ function ResultButton({
 	description,
 	meta,
 	onClick,
-}) {
+}: ResultButtonProps) {
 	return (
 		<button
 			type="button"
@@ -46,15 +45,12 @@ function ResultButton({
 					</p>
 				) : null}
 			</div>
-			<ArrowRight
-				size={15}
-				className="mt-1 shrink-0 text-text-muted"
-			/>
+			<ArrowRight size={15} className="mt-1 shrink-0 text-text-muted" />
 		</button>
 	);
 }
 
-function ResultSection({ title, children }) {
+function ResultSection({ title, children }: ResultSectionProps) {
 	return (
 		<div className="space-y-1">
 			<p className="px-3 pt-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-text-muted">
@@ -66,7 +62,7 @@ function ResultSection({ title, children }) {
 }
 
 export const DashboardSearch = () => {
-	const containerRef = useRef(null);
+	const containerRef = useRef<HTMLDivElement | null>(null);
 	const {
 		query,
 		isOpen,
@@ -84,10 +80,13 @@ export const DashboardSearch = () => {
 	} = useDashboardSearch();
 
 	useEffect(() => {
-		const handlePointerDown = (event) => {
+		const handlePointerDown = (event: PointerEvent) => {
+			const container = containerRef.current;
+
 			if (
-				containerRef.current &&
-				!containerRef.current.contains(event.target)
+				container &&
+				event.target instanceof Node &&
+				!container.contains(event.target)
 			) {
 				clearSearch();
 			}
@@ -120,9 +119,7 @@ export const DashboardSearch = () => {
 						type="text"
 						value={query}
 						onFocus={handleFocus}
-						onChange={(event) =>
-							handleChange(event.target.value)
-						}
+						onChange={(event) => handleChange(event.target.value)}
 						onKeyDown={(event) => {
 							if ('Escape' === event.key) {
 								clearSearch({
@@ -162,9 +159,7 @@ export const DashboardSearch = () => {
 										icon={Sparkles}
 										title={item.label}
 										description={item.description}
-										onClick={() =>
-											handleSelect(item.href)
-										}
+										onClick={() => handleSelect(item.href)}
 									/>
 								))}
 							</ResultSection>
@@ -172,9 +167,7 @@ export const DashboardSearch = () => {
 
 						{toolMatches.length > 0 ? (
 							<div
-								className={
-									pageMatches.length > 0 ? 'mt-3' : ''
-								}
+								className={pageMatches.length > 0 ? 'mt-3' : ''}
 							>
 								<ResultSection title={__('Tools')}>
 									{toolMatches.map((item) => (
@@ -289,14 +282,18 @@ export const DashboardSearch = () => {
 									__('Search all links for "%s"'),
 									query.trim()
 								)}
-								description={__('Open the links page with this search applied')}
+								description={__(
+									'Open the links page with this search applied'
+								)}
 								onClick={() => handleSelect(allLinksHref)}
 							/>
 						</div>
 
 						{!hasResults && query.trim().length < 2 ? (
 							<p className="px-3 pb-2 pt-1 text-xs text-text-muted">
-								{__('Keep typing to search links, or jump straight to a dashboard page.')}
+								{__(
+									'Keep typing to search links, or jump straight to a dashboard page.'
+								)}
 							</p>
 						) : null}
 					</div>

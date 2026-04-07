@@ -1,7 +1,7 @@
-// @ts-nocheck
 import SecurityFields from './SecurityFields';
 import ExpirationFields from './ExpirationFields';
 import UTMFields from './UTMFields';
+import type { AdvancedOptionsProps } from '../types';
 
 const AdvancedOptions = ({
 	title,
@@ -22,7 +22,7 @@ const AdvancedOptions = ({
 	setUtmTerm,
 	utmContent,
 	setUtmContent,
-}) => {
+}: AdvancedOptionsProps) => {
 	return (
 		<div className="mt-4 p-4 bg-surface-alt border border-stroke rounded-lg space-y-3">
 			<SecurityFields

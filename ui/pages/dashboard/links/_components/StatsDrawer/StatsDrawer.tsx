@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import {
 	Dialog,
 	DialogPanel,
@@ -12,7 +10,7 @@ import {
 } from '@headlessui/react';
 import { X, Link2, BarChart3, Globe, Share2, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
-import { useGetLinkStatsQuery } from '@/store/slices/api/analytics';
+import { useGetLinkStatsQuery } from '@/store/slices/api';
 import { buildShortUrl } from '@/utils';
 import { __ } from '@/i18n';
 import StatCards from './StatCards';
@@ -23,12 +21,13 @@ import ShareTab from './ShareTab';
 import TrafficLocationTab from './TrafficLocationTab';
 import TrafficSourcesTab from './TrafficSourcesTab';
 import QuickInsights from './QuickInsights';
+import type { StatsDrawerProps, StatsTimeRange } from './types';
 
-export default function StatsDrawer({ open, setOpen, link }) {
+export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 	const [selectedTab, setSelectedTab] = useState(0);
-	const [timeRange, setTimeRange] = useState('7d');
+	const [timeRange, setTimeRange] = useState<StatsTimeRange>('7d');
 
-	const getDaysFromRange = (range) => {
+	const getDaysFromRange = (range: StatsTimeRange): number => {
 		switch (range) {
 			case '24h':
 				return 1;
@@ -38,14 +37,12 @@ export default function StatsDrawer({ open, setOpen, link }) {
 				return 30;
 			case 'all':
 				return 90;
-			default:
-				return 7;
 		}
 	};
 
 	const { data: statsData, isLoading } = useGetLinkStatsQuery(
 		{
-			id: link?.id,
+			id: link?.id || '',
 			days: getDaysFromRange(timeRange),
 		},
 		{
@@ -56,6 +53,7 @@ export default function StatsDrawer({ open, setOpen, link }) {
 	if (!link) return null;
 
 	const shortUrl = buildShortUrl(link);
+	const statsPayload = statsData?.data;
 
 	const tabs = [
 		{ name: __('Traffic Statistics'), icon: BarChart3 },
@@ -141,7 +139,7 @@ export default function StatsDrawer({ open, setOpen, link }) {
 												{/* Stats Cards at the top */}
 												<StatCards
 													link={link}
-													stats={statsData?.data}
+													stats={statsPayload}
 													isLoading={isLoading}
 												/>
 
@@ -151,7 +149,7 @@ export default function StatsDrawer({ open, setOpen, link }) {
 												{/* Click Chart */}
 												<ClickChart
 													link={link}
-													stats={statsData?.data}
+													stats={statsPayload}
 													isLoading={isLoading}
 													timeRange={timeRange}
 													setTimeRange={setTimeRange}
@@ -179,7 +177,7 @@ export default function StatsDrawer({ open, setOpen, link }) {
 											<TabPanel>
 												<TrafficSourcesTab
 													link={link}
-													stats={statsData?.data}
+													stats={statsPayload}
 													isLoading={isLoading}
 												/>
 											</TabPanel>

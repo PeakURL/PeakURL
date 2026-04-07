@@ -1,9 +1,9 @@
-// @ts-nocheck
+import type { SubmitEvent } from 'react';
 import { useDeferredValue, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAdminAccess } from './useAdminAccess';
-import { useGetUrlsQuery } from '@/store/slices/api/urls';
-import { useGetAllUsersQuery } from '@/store/slices/api/user';
+import { useGetAllUsersQuery, useGetUrlsQuery } from '@/store/slices/api';
+import { __ } from '@/i18n';
 import {
 	buildLinkStatsPath,
 	buildLinksSearchPath,
@@ -14,6 +14,7 @@ import {
 	resolveDashboardSearchPath,
 	buildShortUrl,
 } from '@/utils';
+import type { ClearSearchOptions } from './types';
 
 export const useDashboardSearch = () => {
 	const location = useLocation();
@@ -52,14 +53,11 @@ export const useDashboardSearch = () => {
 		() => findDashboardRouteMatches(deferredQuery, searchCapabilities, 5),
 		[deferredQuery, searchCapabilities]
 	);
-	const { data: usersData, isFetching: isFetchingUsers } = useGetAllUsersQuery(
-		undefined,
-		{
+	const { data: usersData, isFetching: isFetchingUsers } =
+		useGetAllUsersQuery(undefined, {
 			skip:
-				!searchCapabilities.canManageUsers ||
-				deferredQuery.length < 2,
-		}
-	);
+				!searchCapabilities.canManageUsers || deferredQuery.length < 2,
+		});
 	const { data: linksData, isFetching: isFetchingLinks } = useGetUrlsQuery(
 		{
 			page: 1,
@@ -72,40 +70,33 @@ export const useDashboardSearch = () => {
 			skip: deferredQuery.length < 2,
 		}
 	);
-	const linkMatches = useMemo(
-		() =>
-			(linksData?.data?.items || []).map((link) => {
-				const shortCode = link.alias || link.shortCode || '';
-				const shortUrl = buildShortUrl(link);
+	const linkMatches = useMemo(() => {
+		const items = linksData?.data?.items || [];
 
-				return {
-					id: link.id,
-					title: getLinkDisplayTitle(
-						link.title,
-						shortCode ||
-							link.destinationUrl ||
-							__('Untitled Link')
-					),
-					description: shortUrl,
-					meta: link.destinationUrl || '',
-					href: shortCode
-						? buildLinkStatsPath(shortCode)
-						: buildLinksSearchPath(deferredQuery),
-				};
-			}),
-		[linksData, deferredQuery]
-	);
+		return items.map((link) => {
+			const shortCode = link.alias || link.shortCode || '';
+			const shortUrl = buildShortUrl(link);
+
+			return {
+				id: link.id,
+				title: getLinkDisplayTitle(
+					link.title,
+					shortCode || link.destinationUrl || __('Untitled Link')
+				),
+				description: shortUrl,
+				meta: link.destinationUrl || '',
+				href: shortCode
+					? buildLinkStatsPath(shortCode)
+					: buildLinksSearchPath(deferredQuery),
+			};
+		});
+	}, [linksData, deferredQuery]);
 	const userMatches = useMemo(
-		() =>
-			findDashboardUserMatches(
-				deferredQuery,
-				usersData?.data || [],
-				5
-			),
+		() => findDashboardUserMatches(deferredQuery, usersData?.data || [], 5),
 		[deferredQuery, usersData]
 	);
 
-	const handleSubmit = (event) => {
+	const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		const normalizedPath = location.pathname.replace(/\/+$/, '') || '/';
 
@@ -126,13 +117,13 @@ export const useDashboardSearch = () => {
 		);
 	};
 
-	const handleSelect = (href) => {
+	const handleSelect = (href: string) => {
 		setQuery('');
 		setIsOpen(false);
 		navigate(href);
 	};
 
-	const handleChange = (value) => {
+	const handleChange = (value: string) => {
 		setQuery(value);
 		setIsOpen(Boolean(value.trim()));
 	};
@@ -143,7 +134,7 @@ export const useDashboardSearch = () => {
 		}
 	};
 
-	const clearSearch = (options = {}) => {
+	const clearSearch = (options: ClearSearchOptions = {}) => {
 		const shouldResetLinksSearch = Boolean(options.resetLinksSearch);
 
 		setQuery('');
@@ -156,10 +147,7 @@ export const useDashboardSearch = () => {
 		const normalizedPath = location.pathname.replace(/\/+$/, '') || '/';
 		const params = new URLSearchParams(location.search);
 
-		if (
-			'/dashboard/links' === normalizedPath &&
-			params.has('search')
-		) {
+		if ('/dashboard/links' === normalizedPath && params.has('search')) {
 			navigate(buildLinksSearchPath(''));
 		}
 	};

@@ -1,10 +1,19 @@
-// @ts-nocheck
 import { useState } from 'react';
 import { Button } from '@/components/ui';
 import { CloudUpload } from 'lucide-react';
 import { __ } from '@/i18n';
+import type {
+	FileButtonClickHandler,
+	FileDropHandler,
+	FileInputChangeHandler,
+	FileUploadAreaProps,
+} from './types';
 
-function FileUploadArea({ fileInputRef, onFileSelected, disabled = false }) {
+function FileUploadArea({
+	fileInputRef,
+	onFileSelected,
+	disabled = false,
+}: FileUploadAreaProps) {
 	const [isDragActive, setIsDragActive] = useState(false);
 
 	const openFilePicker = () => {
@@ -15,7 +24,7 @@ function FileUploadArea({ fileInputRef, onFileSelected, disabled = false }) {
 		fileInputRef.current?.click();
 	};
 
-	const handleFileInputChange = (event) => {
+	const handleFileInputChange: FileInputChangeHandler = (event) => {
 		const file = event.target.files?.[0] || null;
 
 		if (file) {
@@ -25,12 +34,12 @@ function FileUploadArea({ fileInputRef, onFileSelected, disabled = false }) {
 		event.target.value = '';
 	};
 
-	const preventDefault = (event) => {
+	const preventDefault: FileDropHandler = (event) => {
 		event.preventDefault();
 		event.stopPropagation();
 	};
 
-	const handleDragEnter = (event) => {
+	const handleDragEnter: FileDropHandler = (event) => {
 		preventDefault(event);
 
 		if (!disabled) {
@@ -38,7 +47,7 @@ function FileUploadArea({ fileInputRef, onFileSelected, disabled = false }) {
 		}
 	};
 
-	const handleDragOver = (event) => {
+	const handleDragOver: FileDropHandler = (event) => {
 		preventDefault(event);
 
 		if (!disabled && event.dataTransfer) {
@@ -46,12 +55,12 @@ function FileUploadArea({ fileInputRef, onFileSelected, disabled = false }) {
 		}
 	};
 
-	const handleDragLeave = (event) => {
+	const handleDragLeave: FileDropHandler = (event) => {
 		preventDefault(event);
 		setIsDragActive(false);
 	};
 
-	const handleDrop = (event) => {
+	const handleDrop: FileDropHandler = (event) => {
 		preventDefault(event);
 		setIsDragActive(false);
 
@@ -93,8 +102,8 @@ function FileUploadArea({ fileInputRef, onFileSelected, disabled = false }) {
 					size="sm"
 					type="button"
 					disabled={disabled}
-					onClick={(e) => {
-						e.stopPropagation();
+					onClick={(event: Parameters<FileButtonClickHandler>[0]) => {
+						event.stopPropagation();
 						openFilePicker();
 					}}
 				>

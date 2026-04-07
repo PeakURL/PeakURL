@@ -1,25 +1,28 @@
-// @ts-nocheck
-
 import { TrendingUp, Activity, Clock } from 'lucide-react';
 import { __, sprintf } from '@/i18n';
 import { formatRelativeTime } from '@/utils';
+import type { LinkStatsViewProps } from './types';
 
-function QuickInsights({ link }) {
+function QuickInsights({ link }: Pick<LinkStatsViewProps, 'link'>) {
 	// Calculate click rate trend (mock - should come from actual data)
+	const uniqueClicks = Number(link.uniqueClicks || 0);
+	const totalClicks = Number(link.clicks || 0);
 	const clickRate =
-		link.uniqueClicks > 0
-			? ((link.clicks / link.uniqueClicks) * 100).toFixed(1)
-			: 0;
+		uniqueClicks > 0
+			? ((totalClicks / uniqueClicks) * 100).toFixed(1)
+			: '0';
 	const avgClicksPerDay = link.createdAt
-		? (link.clicks || 0) /
+		? totalClicks /
 			Math.max(
 				1,
 				Math.ceil(
-					(new Date() - new Date(link.createdAt)) /
+					(new Date().getTime() -
+						new Date(link.createdAt).getTime()) /
 						(1000 * 60 * 60 * 24)
 				)
 			)
 		: 0;
+	const clickRateValue = Number(clickRate);
 
 	const isActive = link.status === 'active';
 	const insights = [
@@ -36,21 +39,21 @@ function QuickInsights({ link }) {
 			icon: TrendingUp,
 			label: __('Engagement'),
 			value:
-				clickRate > 50
+				clickRateValue > 50
 					? __('High')
-					: clickRate > 20
+					: clickRateValue > 20
 						? __('Medium')
 						: __('Low'),
 			color:
-				clickRate > 50
+				clickRateValue > 50
 					? 'text-green-600 dark:text-green-400'
-					: clickRate > 20
+					: clickRateValue > 20
 						? 'text-yellow-600 dark:text-yellow-400'
 						: 'text-orange-600 dark:text-orange-400',
 			bg:
-				clickRate > 50
+				clickRateValue > 50
 					? 'bg-green-500/10'
-					: clickRate > 20
+					: clickRateValue > 20
 						? 'bg-yellow-500/10'
 						: 'bg-orange-500/10',
 			subtext: sprintf(__('%s%% click-through rate'), clickRate),
@@ -58,10 +61,7 @@ function QuickInsights({ link }) {
 		{
 			icon: Clock,
 			label: __('Average'),
-			value: sprintf(
-				__('%s clicks/day'),
-				avgClicksPerDay.toFixed(1)
-			),
+			value: sprintf(__('%s clicks/day'), avgClicksPerDay.toFixed(1)),
 			color: 'text-blue-600 dark:text-blue-400',
 			bg: 'bg-blue-500/10',
 		},

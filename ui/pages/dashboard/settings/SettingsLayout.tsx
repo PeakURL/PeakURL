@@ -1,12 +1,16 @@
-// @ts-nocheck
 import { Header, Sidebar } from './_components';
 import { useParams } from 'react-router-dom';
 import { useAdminAccess } from '@/hooks';
 import { __ } from '@/i18n';
+import type {
+	SettingsLayoutProps,
+	SettingsTabId,
+	SettingsTabItem,
+} from './_components/types';
 
-function SettingsLayout({ children }) {
+function SettingsLayout({ children }: SettingsLayoutProps) {
 	const params = useParams();
-	const activeTab = params.tab || 'general';
+	const activeTab = (params.tab as SettingsTabId | undefined) || 'general';
 	const {
 		canManageApiKeys,
 		canManageWebhooks,
@@ -15,7 +19,7 @@ function SettingsLayout({ children }) {
 		canManageUpdates,
 	} = useAdminAccess();
 
-	let tabs = [
+	let tabs: SettingsTabItem[] = [
 		{ id: 'general', name: __('General'), icon: 'settings' },
 		{ id: 'security', name: __('Security'), icon: 'shield' },
 	];

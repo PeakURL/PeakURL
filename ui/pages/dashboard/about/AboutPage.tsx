@@ -1,7 +1,5 @@
-// @ts-nocheck
 import {
 	Link2,
-	Zap,
 	Shield,
 	Globe,
 	BarChart3,
@@ -22,12 +20,30 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { PEAKURL_VERSION, PEAKURL_NAME } from '@/constants';
 import { BrandLockup, Logo } from '@/components';
 import { __ } from '@/i18n';
+import type {
+	AboutIconProps,
+	AddOnLink,
+	Feature,
+	Freedom,
+	LandingBannerProps,
+	LandingMetaEntry,
+	LandingSource,
+	SectionTitleProps,
+	SystemInfoRowProps,
+} from './types';
 
 /* ─── Helpers ─────────────────────────────────────────────── */
-const SectionTitle = ({ children, subtitle }: { children: React.ReactNode; subtitle?: string }) => (
+const SectionTitle = ({
+	children,
+	subtitle,
+}: SectionTitleProps) => (
 	<div className="text-center mb-10">
-		<h2 className="text-2xl sm:text-3xl font-bold text-heading">{children}</h2>
-		{subtitle && <p className="mt-2 text-text-muted max-w-2xl mx-auto">{subtitle}</p>}
+		<h2 className="text-2xl sm:text-3xl font-bold text-heading">
+			{children}
+		</h2>
+		{subtitle && (
+			<p className="mt-2 text-text-muted max-w-2xl mx-auto">{subtitle}</p>
+		)}
 	</div>
 );
 
@@ -39,7 +55,7 @@ const Divider = () => (
 	</div>
 );
 
-const WordPressIcon = ({ className = '' }) => (
+const WordPressIcon = ({ className = '' }: AboutIconProps) => (
 	<svg
 		viewBox="0 0 24 24"
 		aria-hidden="true"
@@ -53,7 +69,7 @@ const WordPressIcon = ({ className = '' }) => (
 	</svg>
 );
 
-const ChromeIcon = ({ className = '' }) => (
+const ChromeIcon = ({ className = '' }: AboutIconProps) => (
 	<svg
 		viewBox="0 0 24 24"
 		aria-hidden="true"
@@ -67,7 +83,7 @@ const ChromeIcon = ({ className = '' }) => (
 	</svg>
 );
 
-const FirefoxIcon = ({ className = '' }) => (
+const FirefoxIcon = ({ className = '' }: AboutIconProps) => (
 	<svg
 		viewBox="0 0 24 24"
 		aria-hidden="true"
@@ -81,7 +97,7 @@ const FirefoxIcon = ({ className = '' }) => (
 	</svg>
 );
 
-const getAddOnLinks = () => [
+const getAddOnLinks = (): AddOnLink[] => [
 	{
 		label: 'WordPress',
 		href: 'https://go.peakurl.org/get-wordpress-plugin',
@@ -99,41 +115,59 @@ const getAddOnLinks = () => [
 	},
 ];
 
-const getLandingMeta = () => ({
+const landingMeta: Record<LandingSource, LandingMetaEntry> = {
 	install: {
 		eyebrow: __('Setup Complete'),
 		title: __('PeakURL is ready to use.'),
-		description:
-			__(
-				'Your administrator account is active and the dashboard is ready. Use these next steps to finish the initial configuration and start publishing links.'
-			),
+		description: __(
+			'Your administrator account is active and the dashboard is ready. Use these next steps to finish the initial configuration and start publishing links.'
+		),
 		actions: [
-			{ label: __('Create your first short link'), to: '/dashboard/links' },
-			{ label: __('Review general settings'), to: '/dashboard/settings/general' },
-			{ label: __('Connect location data'), to: '/dashboard/settings/location' },
+			{
+				label: __('Create your first short link'),
+				to: '/dashboard/links',
+			},
+			{
+				label: __('Review general settings'),
+				to: '/dashboard/settings/general',
+			},
+			{
+				label: __('Connect location data'),
+				to: '/dashboard/settings/location',
+			},
 		],
 	},
 	update: {
 		eyebrow: __('Update Complete'),
 		title: __('PeakURL has been updated successfully.'),
-		description:
-			__(
-				'The latest release is now running. Review the overview below, then confirm key services like email delivery, location data, and updates are configured the way you expect.'
-			),
+		description: __(
+			'The latest release is now running. Review the overview below, then confirm key services like email delivery, location data, and updates are configured the way you expect.'
+		),
 		actions: [
-			{ label: __('Check email configuration'), to: '/dashboard/settings/email' },
-			{ label: __('Verify update status'), to: '/dashboard/settings/updates' },
+			{
+				label: __('Check email configuration'),
+				to: '/dashboard/settings/email',
+			},
+			{
+				label: __('Verify update status'),
+				to: '/dashboard/settings/updates',
+			},
 			{ label: __('Open all links'), to: '/dashboard/links' },
 		],
 	},
-});
+};
 
-const LandingBanner = ({ source }) => {
-	const meta = getLandingMeta()[source];
+const isLandingSource = (
+	source: string | null
+): source is keyof typeof landingMeta =>
+	null !== source && source in landingMeta;
 
-	if (!meta) {
+const LandingBanner = ({ source }: LandingBannerProps) => {
+	if (!isLandingSource(source)) {
 		return null;
 	}
+
+	const meta = landingMeta[source];
 
 	return (
 		<div className="mb-8 rounded-2xl border border-accent/20 bg-accent/5 p-6">
@@ -163,58 +197,52 @@ const LandingBanner = ({ source }) => {
 };
 
 /* ─── Feature cards ───────────────────────────────────────── */
-const getFeatures = () => [
+const getFeatures = (): Feature[] => [
 	{
 		icon: Link2,
 		title: __('Branded Short Links'),
-		description:
-			__(
-				'Create clean short links with custom aliases, generated codes, QR output, and redirect settings that stay easy to manage.'
-			),
+		description: __(
+			'Create clean short links with custom aliases, generated codes, QR output, and redirect settings that stay easy to manage.'
+		),
 	},
 	{
 		icon: BarChart3,
 		title: __('Click Analytics'),
-		description:
-			__(
-				'Review clicks, unique visitors, referrers, device breakdowns, and traffic trends from the same dashboard used to publish links.'
-			),
+		description: __(
+			'Review clicks, unique visitors, referrers, device breakdowns, and traffic trends from the same dashboard used to publish links.'
+		),
 	},
 	{
 		icon: Globe,
 		title: __('Local Location Data'),
-		description:
-			__(
-				'Resolve visitor locations from a local MaxMind GeoLite2 database so analytics stay under your control.'
-			),
+		description: __(
+			'Resolve visitor locations from a local MaxMind GeoLite2 database so analytics stay under your control.'
+		),
 	},
 	{
 		icon: Shield,
 		title: __('Access And Security'),
-		description:
-			__(
-				'Run with admin and editor roles, session controls, two-factor authentication, backup codes, and API keys.'
-			),
+		description: __(
+			'Run with admin and editor roles, session controls, two-factor authentication, backup codes, and API keys.'
+		),
 	},
 	{
 		icon: Code,
 		title: __('Operations And Integrations'),
-		description:
-			__(
-				'Use API keys, webhooks, import tools, and the built-in updater baseline to operate the service over time.'
-			),
+		description: __(
+			'Use API keys, webhooks, import tools, and the built-in updater baseline to operate the service over time.'
+		),
 	},
 	{
 		icon: Server,
 		title: __('Portable Self-Hosting'),
-		description:
-			__(
-				'Deploy on your own domain, keep runtime configuration in your own environment, and preserve user-owned content across updates.'
-			),
+		description: __(
+			'Deploy on your own domain, keep runtime configuration in your own environment, and preserve user-owned content across updates.'
+		),
 	},
 ];
 
-const FeatureCard = ({ icon: Icon, title, description }) => (
+const FeatureCard = ({ icon: Icon, title, description }: Feature) => (
 	<div className="group relative bg-surface border border-stroke rounded-xl p-6 transition-all duration-200 hover:border-accent/30">
 		<div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-accent/10 mb-4">
 			<Icon size={20} className="text-accent" />
@@ -225,31 +253,39 @@ const FeatureCard = ({ icon: Icon, title, description }) => (
 );
 
 /* ─── Freedom cards ───────────────────────────────────────── */
-const getFreedoms = () => [
+const getFreedoms = (): Freedom[] => [
 	{
 		number: '0',
 		title: __('Use'),
-		description: __('Run PeakURL for any purpose, personal projects, business, education, or anything in between.'),
+		description: __(
+			'Run PeakURL for any purpose, personal projects, business, education, or anything in between.'
+		),
 	},
 	{
 		number: '1',
 		title: __('Study'),
-		description: __('Explore the source code, understand how it works, and modify it to suit your exact needs.'),
+		description: __(
+			'Explore the source code, understand how it works, and modify it to suit your exact needs.'
+		),
 	},
 	{
 		number: '2',
 		title: __('Share'),
-		description: __('Redistribute copies freely so others can benefit from the same powerful link management platform.'),
+		description: __(
+			'Redistribute copies freely so others can benefit from the same powerful link management platform.'
+		),
 	},
 	{
 		number: '3',
 		title: __('Improve'),
-		description: __('Enhance PeakURL and share your improvements, contributing back to the open-source community.'),
+		description: __(
+			'Enhance PeakURL and share your improvements, contributing back to the open-source community.'
+		),
 	},
 ];
 
 /* ─── System info rows ────────────────────────────────────── */
-const SystemInfoRow = ({ icon: Icon, label, value }) => (
+const SystemInfoRow = ({ icon: Icon, label, value }: SystemInfoRowProps) => (
 	<div className="flex items-center justify-between py-3 border-b border-stroke/60 last:border-0">
 		<div className="flex items-center gap-3">
 			<Icon size={16} className="text-text-muted" />
@@ -340,7 +376,10 @@ function AboutPage() {
 										<Icon className="h-5 w-5" />
 									</span>
 									<span>{item.label}</span>
-									<ExternalLink size={13} className="text-slate-500" />
+									<ExternalLink
+										size={13}
+										className="text-slate-500"
+									/>
 								</a>
 							);
 						})}
@@ -353,7 +392,11 @@ function AboutPage() {
 
 				{/* ─── Features ───────────────────────────────────── */}
 				<section>
-					<SectionTitle subtitle={__('Everything you need to publish short links, review traffic, and operate the service from one focused dashboard.')}>
+					<SectionTitle
+						subtitle={__(
+							'Everything you need to publish short links, review traffic, and operate the service from one focused dashboard.'
+						)}
+					>
 						{__("What's Inside")}
 					</SectionTitle>
 
@@ -368,9 +411,13 @@ function AboutPage() {
 
 				{/* ─── Mission ────────────────────────────────────── */}
 				<section>
-				<SectionTitle subtitle={__('PeakURL is built to stay understandable in day-to-day use and dependable over time.')}>
-					{__('Product Principles')}
-				</SectionTitle>
+					<SectionTitle
+						subtitle={__(
+							'PeakURL is built to stay understandable in day-to-day use and dependable over time.'
+						)}
+					>
+						{__('Product Principles')}
+					</SectionTitle>
 
 					<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 						<div className="bg-surface border border-stroke rounded-xl p-6 text-center">
@@ -419,9 +466,13 @@ function AboutPage() {
 
 				{/* ─── Four Freedoms ──────────────────────────────── */}
 				<section>
-				<SectionTitle subtitle={__('PeakURL is released under the MIT License so it can stay practical to adopt, inspect, modify, and distribute.')}>
-					{__('Open Source Terms')}
-				</SectionTitle>
+					<SectionTitle
+						subtitle={__(
+							'PeakURL is released under the MIT License so it can stay practical to adopt, inspect, modify, and distribute.'
+						)}
+					>
+						{__('Open Source Terms')}
+					</SectionTitle>
 
 					<div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
 						{freedoms.map((f) => (
@@ -451,7 +502,9 @@ function AboutPage() {
 									{__('Support PeakURL')}
 								</p>
 								<h3 className="mt-2 text-xl font-semibold text-heading">
-									{__('If PeakURL is useful to you, help keep it practical and actively maintained.')}
+									{__(
+										'If PeakURL is useful to you, help keep it practical and actively maintained.'
+									)}
 								</h3>
 								<p className="mt-2 text-sm leading-6 text-text-muted">
 									{__(
@@ -489,9 +542,13 @@ function AboutPage() {
 
 				{/* ─── System At A Glance ─────────────────────────── */}
 				<section>
-				<SectionTitle subtitle={__('A quick overview of the installation you are running right now.')}>
-					{__('Current Installation')}
-				</SectionTitle>
+					<SectionTitle
+						subtitle={__(
+							'A quick overview of the installation you are running right now.'
+						)}
+					>
+						{__('Current Installation')}
+					</SectionTitle>
 
 					<div className="max-w-lg mx-auto bg-surface border border-stroke rounded-xl p-6">
 						<SystemInfoRow
@@ -530,13 +587,15 @@ function AboutPage() {
 				<Divider />
 
 				{/* ─── Footer tagline ─────────────────────────────── */}
-			<section className="text-center pt-4 pb-2">
-				<div className="mb-3 flex justify-center">
-					<BrandLockup to="/dashboard" size="md" />
-				</div>
-				<p className="text-sm italic text-text-muted tracking-wide">
-					{__('Self-hosted link management with clear ownership and a focused dashboard.')}
-				</p>
+				<section className="text-center pt-4 pb-2">
+					<div className="mb-3 flex justify-center">
+						<BrandLockup to="/dashboard" size="md" />
+					</div>
+					<p className="text-sm italic text-text-muted tracking-wide">
+						{__(
+							'Self-hosted link management with clear ownership and a focused dashboard.'
+						)}
+					</p>
 					<div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs text-text-muted">
 						<a
 							href="https://peakurl.org"

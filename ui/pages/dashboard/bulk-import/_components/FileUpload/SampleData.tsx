@@ -1,7 +1,7 @@
-// @ts-nocheck
 import { __ } from '@/i18n';
+import type { SampleDataProps } from './types';
 
-function SampleData({ sampleData }) {
+function SampleData({ sampleData }: SampleDataProps) {
 	return (
 		<div className="bg-surface border border-stroke rounded-lg p-5">
 			<h3 className="text-base font-semibold text-heading mb-4">

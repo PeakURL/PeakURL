@@ -1,6 +1,3 @@
-import { userApi as authApi } from './api/user';
-import { urlsApi } from './api/urls';
-import { analyticsApi } from './api/analytics';
-import { systemApi } from './api/system';
+import { analyticsApi, systemApi, urlsApi, userApi as authApi } from './api';
 
 export { authApi, urlsApi, analyticsApi, systemApi };

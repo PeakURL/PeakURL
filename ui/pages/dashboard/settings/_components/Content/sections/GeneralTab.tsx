@@ -1,8 +1,10 @@
-// @ts-nocheck
+import type { ChangeEvent, SubmitEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { Input, Button } from '@/components/ui';
 import { __ } from '@/i18n';
 import { getInstalledLanguageLabel } from '@/i18n/languages';
+import type { GeneralFormState } from '../types';
+import type { GeneralTabProps } from './types';
 
 function GeneralTab({
 	initialForm,
@@ -10,9 +12,10 @@ function GeneralTab({
 	isUpdating,
 	siteSettings,
 	isLoadingSiteSettings,
-}) {
+}: GeneralTabProps) {
 	const availableLanguages = siteSettings?.availableLanguages || [];
-	const [generalForm, setGeneralForm] = useState(initialForm);
+	const [generalForm, setGeneralForm] =
+		useState<GeneralFormState>(initialForm);
 	const [siteLanguage, setSiteLanguage] = useState(
 		siteSettings?.siteLanguage || 'en_US'
 	);
@@ -25,12 +28,17 @@ function GeneralTab({
 		setSiteLanguage(siteSettings?.siteLanguage || 'en_US');
 	}, [siteSettings?.siteLanguage]);
 
-	const handleChange = (e) => {
-		const { name, value } = e.target;
-		setGeneralForm((prev) => ({ ...prev, [name]: value }));
+	const handleChange = (
+		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
+		const { name, value } = event.target;
+		setGeneralForm((previous) => ({
+			...previous,
+			[name]: value,
+		}));
 	};
 
-	const handleSubmit = (event) => {
+	const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		onSubmit({
 			...generalForm,
@@ -113,25 +121,23 @@ function GeneralTab({
 						>
 							{isLoadingSiteSettings &&
 							(!siteSettings?.availableLanguages ||
-								siteSettings.availableLanguages.length ===
-									0) ? (
+								0 ===
+									siteSettings.availableLanguages.length) ? (
 								<option value={siteLanguage}>
 									{__('Loading languages...')}
 								</option>
 							) : (
-								availableLanguages.map(
-									(language) => (
-										<option
-											key={language.locale}
-											value={language.locale}
-										>
-											{getInstalledLanguageLabel(
-												language,
-												availableLanguages
-											)}
-										</option>
-									)
-								)
+								availableLanguages.map((language) => (
+									<option
+										key={language.locale}
+										value={language.locale}
+									>
+										{getInstalledLanguageLabel(
+											language,
+											availableLanguages
+										)}
+									</option>
+								))
 							)}
 						</select>
 					</div>
@@ -149,11 +155,7 @@ function GeneralTab({
 					</div>
 				</div>
 				<div className="flex justify-end mt-5">
-					<Button
-						size="sm"
-						type="submit"
-						disabled={isUpdating}
-					>
+					<Button size="sm" type="submit" disabled={isUpdating}>
 						{isUpdating ? __('Saving...') : __('Save Changes')}
 					</Button>
 				</div>

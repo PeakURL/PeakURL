@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { useState } from 'react';
 import {
 	Braces,
@@ -14,12 +12,13 @@ import { __, sprintf } from '@/i18n';
 import {
 	useGetUrlsQuery,
 	useLazyGetUrlsExportQuery,
-} from '@/store/slices/api/urls';
-import { downloadLinkExport } from '@/utils';
-
-function formatCount(value) {
-	return new Intl.NumberFormat().format(Number(value || 0));
-}
+} from '@/store/slices/api';
+import { downloadLinkExport, formatCount, getErrorMessage } from '@/utils';
+import type {
+	ExportCardProps,
+	ExportFormat,
+	ExportOption,
+} from './types';
 
 function ExportCard({
 	title,
@@ -29,7 +28,7 @@ function ExportCard({
 	isLoading,
 	isDisabled,
 	onExport,
-}) {
+}: ExportCardProps) {
 	return (
 		<div className="flex h-full flex-col rounded-xl border border-stroke bg-surface p-5">
 			<div className="mb-4 flex flex-1 items-start gap-3">
@@ -66,7 +65,7 @@ function ExportCard({
 
 function ExportPage() {
 	const notification = useNotification();
-	const [activeFormat, setActiveFormat] = useState('');
+	const [activeFormat, setActiveFormat] = useState<ExportFormat | ''>('');
 	const { data: urlsResponse, isLoading: isCountLoading } = useGetUrlsQuery({
 		page: 1,
 		limit: 1,
@@ -75,7 +74,7 @@ function ExportPage() {
 		useLazyGetUrlsExportQuery();
 	const totalLinks = urlsResponse?.data?.meta?.totalItems ?? null;
 
-	const exportOptions = [
+	const exportOptions: ExportOption[] = [
 		{
 			id: 'csv',
 			title: __('CSV Export'),
@@ -105,11 +104,11 @@ function ExportPage() {
 		},
 	];
 
-	const handleExport = async (format) => {
+	const handleExport = async (format: ExportFormat) => {
 		setActiveFormat(format);
 
 		try {
-			const response = await triggerExport().unwrap();
+			const response = await triggerExport(undefined).unwrap();
 			const links = response?.data?.items || [];
 
 			if (!links.length) {
@@ -132,8 +131,10 @@ function ExportPage() {
 		} catch (error) {
 			notification?.error(
 				__('Export failed'),
-				error?.data?.message ||
+				getErrorMessage(
+					error,
 					__('PeakURL could not prepare the export right now.')
+				)
 			);
 		} finally {
 			setActiveFormat('');

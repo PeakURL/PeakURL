@@ -1,15 +1,22 @@
-// @ts-nocheck
 import { __ } from '@/i18n';
+import type {
+	DeviceBreakdownProps,
+	DeviceColorKey,
+	MetricItem,
+} from './types';
 
-const DeviceBreakdown = ({ deviceData }) => {
+const DeviceBreakdown = ({ deviceData }: DeviceBreakdownProps) => {
 	// Calculate total for percentage
 	const devices = deviceData?.devices ?? [];
 	const browsers = deviceData?.browsers ?? [];
 	const operatingSystems = deviceData?.operatingSystems ?? [];
 
-	const totalDeviceClicks = devices.reduce((sum, d) => sum + d.count, 0);
+	const totalDeviceClicks = devices.reduce(
+		(sum: number, device: MetricItem) => sum + device.count,
+		0
+	);
 
-	const deviceColors = {
+	const deviceColors: Record<DeviceColorKey, string> = {
 		mobile: 'bg-blue-600 dark:bg-blue-500',
 		desktop: 'bg-purple-600 dark:bg-purple-500',
 		tablet: 'bg-emerald-600 dark:bg-emerald-500',
@@ -22,7 +29,7 @@ const DeviceBreakdown = ({ deviceData }) => {
 
 	const formattedDevices =
 		devices.length > 0
-			? devices.map((device) => ({
+			? devices.map((device: MetricItem) => ({
 					name:
 						device.name.charAt(0).toUpperCase() +
 						device.name.slice(1),
@@ -34,8 +41,9 @@ const DeviceBreakdown = ({ deviceData }) => {
 							: 0,
 					count: device.count,
 					color:
-						deviceColors[device.name.toLowerCase()] ||
-						'bg-gray-500',
+						deviceColors[
+							device.name.toLowerCase() as DeviceColorKey
+						] || 'bg-gray-500',
 				}))
 			: [];
 
@@ -53,7 +61,7 @@ const DeviceBreakdown = ({ deviceData }) => {
 			) : (
 				<>
 					<div className="space-y-4">
-						{formattedDevices.map((device, index) => (
+						{formattedDevices.map((device, index: number) => (
 							<div key={index}>
 								<div className="flex items-center justify-between mb-2">
 									<span className="text-sm font-medium text-heading">
@@ -79,19 +87,26 @@ const DeviceBreakdown = ({ deviceData }) => {
 								{__('Top Browsers')}
 							</h4>
 							<div className="space-y-2">
-								{browsers.slice(0, 5).map((browser, index) => (
-									<div
-										key={index}
-										className="flex items-center justify-between text-sm"
-									>
-										<span className="text-text-muted">
-											{browser.name}
-										</span>
-										<span className="font-medium text-heading">
-											{browser.count}
-										</span>
-									</div>
-								))}
+								{browsers
+									.slice(0, 5)
+									.map(
+										(
+											browser: MetricItem,
+											index: number
+										) => (
+											<div
+												key={index}
+												className="flex items-center justify-between text-sm"
+											>
+												<span className="text-text-muted">
+													{browser.name}
+												</span>
+												<span className="font-medium text-heading">
+													{browser.count}
+												</span>
+											</div>
+										)
+									)}
 							</div>
 						</div>
 					)}
@@ -104,7 +119,7 @@ const DeviceBreakdown = ({ deviceData }) => {
 							<div className="space-y-2">
 								{operatingSystems
 									.slice(0, 5)
-									.map((os, index) => (
+									.map((os: MetricItem, index: number) => (
 										<div
 											key={index}
 											className="flex items-center justify-between text-sm"

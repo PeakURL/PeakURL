@@ -1,7 +1,11 @@
-// @ts-nocheck
-
 import { Link } from 'react-router-dom';
 import { PEAKURL_NAME } from '@constants';
+import type { BrandLockupProps } from './types';
+export type {
+	BrandLockupProps,
+	BrandLockupSize,
+	BrandLockupTone,
+} from './types';
 
 const sizeMap = {
 	sm: {
@@ -22,7 +26,7 @@ const sizeMap = {
 		iconClass: 'h-[18px] w-[18px]',
 		text: 'text-[17px]',
 	},
-};
+} as const;
 
 const toneMap = {
 	light: {
@@ -33,7 +37,7 @@ const toneMap = {
 		box: 'bg-white/10 text-white ring-1 ring-white/10',
 		text: 'text-white',
 	},
-};
+} as const;
 
 export function BrandLockup({
 	size = 'md',
@@ -41,9 +45,9 @@ export function BrandLockup({
 	to,
 	className = '',
 	textClassName = '',
-}) {
-	const sizing = sizeMap[size] || sizeMap.md;
-	const colors = toneMap[tone] || toneMap.light;
+}: BrandLockupProps) {
+	const sizing = sizeMap[size];
+	const colors = toneMap[tone];
 
 	const content = (
 		<>

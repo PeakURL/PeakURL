@@ -1,11 +1,12 @@
-// @ts-nocheck
 import { useState } from 'react';
 import { TrafficChart } from '@/components';
 import { BarChart3, LineChart } from 'lucide-react';
 import { __ } from '@/i18n';
+import type { TrafficChartType } from '@/components/charts/types';
+import type { TrafficOverviewProps } from './types';
 
-const TrafficOverview = ({ trafficData }) => {
-	const [chartType, setChartType] = useState('line');
+const TrafficOverview = ({ trafficData }: TrafficOverviewProps) => {
+	const [chartType, setChartType] = useState<TrafficChartType>('line');
 
 	// Check if there's any real data
 	const hasData =
@@ -14,8 +15,8 @@ const TrafficOverview = ({ trafficData }) => {
 		Array.isArray(trafficData.clicks) &&
 		Array.isArray(trafficData.unique) &&
 		trafficData.labels.length > 0 &&
-		(trafficData.clicks.some((val) => val > 0) ||
-			trafficData.unique.some((val) => val > 0));
+		(trafficData.clicks.some((val: number) => val > 0) ||
+			trafficData.unique.some((val: number) => val > 0));
 
 	return (
 		<div className="bg-surface border border-stroke rounded-lg p-5">

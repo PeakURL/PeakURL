@@ -1,6 +1,4 @@
-// @ts-nocheck
 import {
-	AlertCircle,
 	Gauge,
 	ArrowLeft,
 	Link2 as Link2Icon,

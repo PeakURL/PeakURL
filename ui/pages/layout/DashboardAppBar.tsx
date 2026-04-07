@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import {
 	Menu as MenuIcon,
 	ChevronDown,
@@ -10,21 +8,24 @@ import {
 import {
 	useGetUserProfileQuery,
 	useLogoutMutation,
-} from '@/store/slices/api/user';
+} from '@/store/slices/api';
 import { Avatar, ThemeToggle } from '@/components';
 import { useNavigate } from 'react-router-dom';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { __ } from '@/i18n';
 import { DashboardSearch } from './DashboardSearch';
+import type { DashboardAppBarProps } from './types';
 
-export const DashboardAppBar = ({ onMobileMenuToggle }) => {
-	const { data: userData } = useGetUserProfileQuery();
+export const DashboardAppBar = ({
+	onMobileMenuToggle,
+}: DashboardAppBarProps) => {
+	const { data: userData } = useGetUserProfileQuery(undefined);
 	const user = userData?.data;
 	const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
 	const navigate = useNavigate();
 	const basePath = '/dashboard';
 
-	const getRoleLabel = (role) => {
+	const getRoleLabel = (role?: string | null) => {
 		if (role === 'admin') return __('Admin');
 		if (role === 'editor') return __('Editor');
 		return __('User');
@@ -32,7 +33,7 @@ export const DashboardAppBar = ({ onMobileMenuToggle }) => {
 
 	const handleLogout = async () => {
 		try {
-			await logout().unwrap();
+			await logout(undefined).unwrap();
 			navigate('/login', { replace: true });
 		} catch (error) {
 			console.error('Logout failed:', error);

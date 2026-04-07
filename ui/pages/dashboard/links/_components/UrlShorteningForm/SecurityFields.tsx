@@ -1,9 +1,14 @@
-// @ts-nocheck
 import { Input } from '@/components/ui';
 import { Lock, Tags } from 'lucide-react';
 import { __ } from '@/i18n';
+import type { SecurityFieldsProps } from '../types';
 
-const SecurityFields = ({ title, setTitle, password, setPassword }) => {
+const SecurityFields = ({
+	title,
+	setTitle,
+	password,
+	setPassword,
+}: SecurityFieldsProps) => {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 			<div>

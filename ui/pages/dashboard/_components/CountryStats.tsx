@@ -1,26 +1,26 @@
-// @ts-nocheck
 import { __ } from '@/i18n';
+import type { CountryStatsProps, CountryMetric } from './types';
 
-const CountryStats = ({ countryData }) => {
+const CountryStats = ({ countryData }: CountryStatsProps) => {
 	// Calculate total clicks for percentage
 	const totalClicks = countryData.reduce(
-		(sum, country) => sum + country.count,
+		(sum: number, country: CountryMetric) => sum + country.count,
 		0
 	);
 
 	// Get country flag emoji from country code
-	const getFlag = (code) => {
+	const getFlag = (code?: string | null) => {
 		if (!code || code === '??') return '🌐';
 		const codePoints = code
 			.toUpperCase()
 			.split('')
-			.map((char) => 127397 + char.charCodeAt());
+			.map((char: string) => 127397 + char.charCodeAt(0));
 		return String.fromCodePoint(...codePoints);
 	};
 
 	const formattedCountries =
 		countryData.length > 0
-			? countryData.slice(0, 5).map((country) => ({
+			? countryData.slice(0, 5).map((country: CountryMetric) => ({
 					flag: getFlag(country.code),
 					name: country.name || __('Unknown'),
 					value:
@@ -44,7 +44,7 @@ const CountryStats = ({ countryData }) => {
 				</div>
 			) : (
 				<div className="space-y-4">
-					{formattedCountries.map((country, index) => (
+					{formattedCountries.map((country, index: number) => (
 						<div
 							key={`${country.name}-${index}`}
 							className="flex items-center gap-3"

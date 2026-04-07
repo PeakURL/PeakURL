@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Scissors } from 'lucide-react';
 import { __ } from '@/i18n';
 

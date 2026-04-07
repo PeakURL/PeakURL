@@ -1,12 +1,12 @@
-// @ts-nocheck
 import { Button } from '@/components/ui';
 import { __, sprintf } from '@/i18n';
 import { formatDate, getLinkDisplayTitle } from '@/utils';
 import { Circle, Link2, MousePointerClick } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import type { ActivityFeedProps, RecentActivity } from './types';
 
-const ActivityFeed = ({ recentActivities }) => {
-	const formatActivityMessage = (activity) => {
+const ActivityFeed = ({ recentActivities }: ActivityFeedProps) => {
+	const formatActivityMessage = (activity: RecentActivity) => {
 		// Prioritize title, fallback to shortId, then "Unknown"
 		const linkName = getLinkDisplayTitle(
 			activity.link?.title,
@@ -20,23 +20,22 @@ const ActivityFeed = ({ recentActivities }) => {
 				? sprintf(
 						__('from %s'),
 						activity.location.city ||
-						activity.location.country ||
-						__('Unknown')
-				  )
+							activity.location.country ||
+							__('Unknown')
+					)
 				: '';
 			return location
-				? sprintf(
-						__('Link %1$s was clicked %2$s'),
+				? sprintf(__('Link %1$s was clicked %2$s'), [
 						linkName,
-						location
-				  )
+						location,
+					])
 				: sprintf(__('Link %s was clicked'), linkName);
 		}
 		return activity.message || __('Unknown activity');
 	};
 
 	// Get activity icon
-	const getActivityIcon = (type) => {
+	const getActivityIcon = (type?: string | null) => {
 		if (type === 'link_created') {
 			return (
 				<Link2 className="w-3 h-3 text-primary-600 dark:text-primary-400" />
@@ -64,24 +63,26 @@ const ActivityFeed = ({ recentActivities }) => {
 						</p>
 					</div>
 				) : (
-					recentActivities.map((activity, index) => (
-						<div
-							key={activity.id || index}
-							className="flex gap-2.5"
-						>
-							<div className="w-6 h-6 rounded-full bg-primary-500/10 dark:bg-primary-500/20 flex items-center justify-center shrink-0 mt-0.5">
-								{getActivityIcon(activity.type)}
+					recentActivities.map(
+						(activity: RecentActivity, index: number) => (
+							<div
+								key={activity.id || index}
+								className="flex gap-2.5"
+							>
+								<div className="w-6 h-6 rounded-full bg-primary-500/10 dark:bg-primary-500/20 flex items-center justify-center shrink-0 mt-0.5">
+									{getActivityIcon(activity.type)}
+								</div>
+								<div className="flex-1 min-w-0">
+									<p className="text-sm text-heading leading-relaxed">
+										{formatActivityMessage(activity)}
+									</p>
+									<p className="text-xs text-text-muted mt-1">
+										{formatDate(activity.timestamp)}
+									</p>
+								</div>
 							</div>
-							<div className="flex-1 min-w-0">
-								<p className="text-sm text-heading leading-relaxed">
-									{formatActivityMessage(activity)}
-								</p>
-								<p className="text-xs text-text-muted mt-1">
-									{formatDate(activity.timestamp)}
-								</p>
-							</div>
-						</div>
-					))
+						)
+					)
 				)}
 			</div>
 			<Link to="/dashboard/links" className="mt-4">

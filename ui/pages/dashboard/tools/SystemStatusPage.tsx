@@ -1,75 +1,59 @@
-// @ts-nocheck
-
 import { useState } from 'react';
-import { AlertCircle, CheckCircle2, ChevronDown, ChevronUp, Copy } from 'lucide-react';
+import {
+	AlertCircle,
+	CheckCircle2,
+	ChevronDown,
+	ChevronUp,
+	Copy,
+} from 'lucide-react';
 import { useNotification } from '@/components';
 import { __, sprintf } from '@/i18n';
-import { useGetSystemStatusQuery } from '@/store/slices/api/system';
+import { useGetSystemStatusQuery } from '@/store/slices/api';
+import {
+	copyToClipboard,
+	extractErrorMessage,
+	formatByteSize,
+	formatCount,
+	formatDateTimeValue,
+} from '@/utils';
+import type {
+	ErrorStateProps,
+	InfoItem,
+	InfoSectionData,
+	InfoSectionProps,
+	IssueRowProps,
+	IssueSectionProps,
+	StatusTabsProps,
+	StatusTone,
+	StatusView,
+	SystemCheck,
+} from './types';
 
-function hasValue(value) {
+function hasValue(value: unknown) {
 	return value !== undefined && value !== null && '' !== value;
 }
 
-function displayValue(value) {
+function displayValue(value: unknown) {
 	return hasValue(value) ? String(value) : __('Not available');
 }
 
-function formatDate(value) {
-	if (!value) {
-		return __('Not available');
-	}
-
-	try {
-		return new Date(value).toLocaleString();
-	} catch {
-		return value;
-	}
-}
-
-function formatBytes(value) {
-	const size = Number(value);
-
-	if (!Number.isFinite(size) || size < 0) {
-		return __('Not available');
-	}
-
-	if (0 === size) {
-		return '0 B';
-	}
-
-	const units = ['B', 'KB', 'MB', 'GB'];
-	let nextSize = size;
-	let index = 0;
-
-	while (nextSize >= 1024 && index < units.length - 1) {
-		nextSize /= 1024;
-		index += 1;
-	}
-
-	return `${nextSize.toFixed(nextSize >= 10 || 0 === index ? 0 : 1)} ${units[index]}`;
-}
-
-function formatOptionalBytes(value) {
-	return hasValue(value) ? formatBytes(value) : '';
-}
-
-function joinHelperText(parts) {
+function joinHelperText(parts: Array<string | undefined | null>) {
 	return parts.filter((part) => hasValue(part)).join(' • ');
 }
 
-function formatCount(value) {
-	return new Intl.NumberFormat().format(Number(value || 0));
-}
-
-function formatBoolean(value, truthy = __('Yes'), falsy = __('No')) {
+function formatBoolean(
+	value: unknown,
+	truthy: string = __('Yes'),
+	falsy: string = __('No')
+) {
 	return value ? truthy : falsy;
 }
 
-function getOverallLabel(status) {
+function getOverallLabel(status: string | undefined) {
 	return 'ok' === status ? __('Good') : __('Should be improved');
 }
 
-function getStatusTone(status) {
+function getStatusTone(status: string | undefined): StatusTone {
 	switch (status) {
 		case 'error':
 			return {
@@ -98,7 +82,7 @@ function getStatusTone(status) {
 	}
 }
 
-function getCheckCategoryLabel(checkId) {
+function getCheckCategoryLabel(checkId: string | null | undefined) {
 	switch (checkId) {
 		case 'database':
 			return __('Database');
@@ -117,15 +101,15 @@ function getCheckCategoryLabel(checkId) {
 	}
 }
 
-function formatHeadingCount(count, singular, plural) {
-	return 1 === count ? singular : sprintf(plural, formatCount(count));
+function formatHeadingCount(count: number, singular: string, plural: string) {
+	return 1 === count ? singular : plural.replace('%s', formatCount(count));
 }
 
-function buildExportText(sections) {
+function buildExportText(sections: InfoSectionData[]) {
 	return [
 		'PeakURL System Status',
-		...sections.map((section) => {
-			const rows = section.items.map((item) => {
+		...sections.map((section: InfoSectionData) => {
+			const rows = section.items.map((item: InfoItem) => {
 				const value = displayValue(item.value);
 				return item.helperText
 					? `${item.label}: ${value} (${item.helperText})`
@@ -145,7 +129,7 @@ function LoadingState() {
 	);
 }
 
-function ErrorState({ errorMessage }) {
+function ErrorState({ errorMessage }: ErrorStateProps) {
 	return (
 		<div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200">
 			<div className="flex items-start gap-3">
@@ -161,8 +145,8 @@ function ErrorState({ errorMessage }) {
 	);
 }
 
-function StatusTabs({ activeView, onChange }) {
-	const tabs = [
+function StatusTabs({ activeView, onChange }: StatusTabsProps) {
+	const tabs: Array<{ id: StatusView; label: string }> = [
 		{ id: 'status', label: __('Status') },
 		{ id: 'info', label: __('Info') },
 	];
@@ -187,7 +171,7 @@ function StatusTabs({ activeView, onChange }) {
 	);
 }
 
-function IssueRow({ check, isOpen, onToggle, showBorder }) {
+function IssueRow({ check, isOpen, onToggle, showBorder }: IssueRowProps) {
 	return (
 		<div className={showBorder ? 'border-t border-stroke' : ''}>
 			<button
@@ -226,7 +210,7 @@ function IssueSection({
 	checks,
 	expandedChecks,
 	onToggleCheck,
-}) {
+}: IssueSectionProps) {
 	return (
 		<section className="space-y-4">
 			<div className="space-y-2">
@@ -237,8 +221,9 @@ function IssueSection({
 			</div>
 
 			<div className="overflow-hidden rounded-lg border border-stroke bg-surface">
-				{checks.map((check, index) => {
-					const checkKey = check?.id || check?.label || `check-${index}`;
+				{checks.map((check: SystemCheck, index: number) => {
+					const checkKey =
+						check?.id || check?.label || `check-${index}`;
 
 					return (
 						<IssueRow
@@ -255,7 +240,7 @@ function IssueSection({
 	);
 }
 
-function InfoSection({ section, isOpen, onToggle }) {
+function InfoSection({ section, isOpen, onToggle }: InfoSectionProps) {
 	return (
 		<div className="overflow-hidden rounded-lg border border-stroke bg-surface">
 			<button
@@ -277,32 +262,38 @@ function InfoSection({ section, isOpen, onToggle }) {
 				<div className="overflow-x-auto border-t border-stroke">
 					<table className="min-w-full text-sm">
 						<tbody>
-							{section.items.map((item, index) => (
-								<tr
-									key={`${section.id}-${item.label}`}
-									className={index > 0 ? 'border-t border-stroke' : ''}
-								>
-									<th className="w-[34%] min-w-[180px] bg-surface-alt px-4 py-3 text-left align-top font-medium text-heading">
-										{item.label}
-									</th>
-									<td className="px-4 py-3 align-top text-text-muted">
-										<p
-											className={`text-heading ${
-												item.monospace
-													? 'break-all font-mono text-xs'
-													: ''
-											}`}
-										>
-											{displayValue(item.value)}
-										</p>
-										{item.helperText ? (
-											<p className="mt-1 text-xs leading-5 text-text-muted">
-												{item.helperText}
+							{section.items.map(
+								(item: InfoItem, index: number) => (
+									<tr
+										key={`${section.id}-${item.label}`}
+										className={
+											index > 0
+												? 'border-t border-stroke'
+												: ''
+										}
+									>
+										<th className="w-[34%] min-w-[180px] bg-surface-alt px-4 py-3 text-left align-top font-medium text-heading">
+											{item.label}
+										</th>
+										<td className="px-4 py-3 align-top text-text-muted">
+											<p
+												className={`text-heading ${
+													item.monospace
+														? 'break-all font-mono text-xs'
+														: ''
+												}`}
+											>
+												{displayValue(item.value)}
 											</p>
-										) : null}
-									</td>
-								</tr>
-							))}
+											{item.helperText ? (
+												<p className="mt-1 text-xs leading-5 text-text-muted">
+													{item.helperText}
+												</p>
+											) : null}
+										</td>
+									</tr>
+								)
+							)}
 						</tbody>
 					</table>
 				</div>
@@ -317,15 +308,17 @@ function SystemStatusPage() {
 		data: systemStatusResponse,
 		error: systemStatusError,
 		isLoading,
-	} = useGetSystemStatusQuery();
+	} = useGetSystemStatusQuery(undefined);
 	const status = systemStatusResponse?.data || null;
-	const errorMessage = systemStatusError?.data?.message || null;
-	const [activeView, setActiveView] = useState('status');
+	const errorMessage = extractErrorMessage(systemStatusError);
+	const [activeView, setActiveView] = useState<StatusView>('status');
 	const [showPassedChecks, setShowPassedChecks] = useState(false);
 	const [copiedInfo, setCopiedInfo] = useState(false);
-	const [expandedChecks, setExpandedChecks] = useState(new Set());
+	const [expandedChecks, setExpandedChecks] = useState<Set<string>>(
+		new Set()
+	);
 	const [expandedSections, setExpandedSections] = useState(
-		new Set(['peakurl'])
+		new Set<string>(['peakurl'])
 	);
 
 	if (isLoading && !status) {
@@ -346,14 +339,25 @@ function SystemStatusPage() {
 	const overallStatus = status?.summary?.overall || 'warning';
 	const overallTone = getStatusTone(overallStatus);
 	const overallLabel = getOverallLabel(overallStatus);
-	const checks = status?.checks || [];
-	const errorChecks = checks.filter((check) => 'error' === check.status);
-	const warningChecks = checks.filter((check) => 'warning' === check.status);
-	const passingChecks = checks.filter((check) => 'ok' === check.status);
+	const checks: SystemCheck[] = status?.checks || [];
+	const errorChecks = checks.filter(
+		(check: SystemCheck) => 'error' === check.status
+	);
+	const warningChecks = checks.filter(
+		(check: SystemCheck) => 'warning' === check.status
+	);
+	const passingChecks = checks.filter(
+		(check: SystemCheck) => 'ok' === check.status
+	);
 	const mailDriver =
 		'smtp' === status?.mail?.driver ? __('SMTP') : __('PHP mail()');
 	const languageName =
 		status?.site?.languageNativeName || status?.site?.languageLabel;
+	const maxExecutionTime = status?.server?.maxExecutionTime;
+	const databasePort = status?.database?.port;
+	const recordedSchemaVersion = status?.database?.schemaVersion;
+	const requiredSchemaVersion = status?.database?.requiredSchemaVersion;
+	const schemaIssuesCount = status?.database?.schemaIssuesCount;
 
 	const peakurlItems = [
 		{ label: __('Version'), value: status?.site?.version || __('Unknown') },
@@ -385,7 +389,7 @@ function SystemStatusPage() {
 		},
 		{
 			label: __('Last Checked'),
-			value: formatDate(status?.generatedAt),
+			value: formatDateTimeValue(status?.generatedAt, __('Not available')),
 		},
 	];
 
@@ -400,8 +404,11 @@ function SystemStatusPage() {
 							__('Writable'),
 							__('Not Writable')
 						),
-						formatOptionalBytes(status?.storage?.contentDirectorySizeBytes),
-				  ])
+						formatByteSize(
+							status?.storage?.contentDirectorySizeBytes,
+							''
+						),
+					])
 				: __('Missing'),
 			monospace: true,
 		},
@@ -415,8 +422,11 @@ function SystemStatusPage() {
 							__('Readable'),
 							__('Not Readable')
 						),
-						formatOptionalBytes(status?.storage?.languagesDirectorySizeBytes),
-				  ])
+						formatByteSize(
+							status?.storage?.languagesDirectorySizeBytes,
+							''
+						),
+					])
 				: __('Missing'),
 			monospace: true,
 		},
@@ -426,8 +436,8 @@ function SystemStatusPage() {
 			helperText: status?.storage?.configExists
 				? joinHelperText([
 						__('Present'),
-						formatOptionalBytes(status?.storage?.configSizeBytes),
-				  ])
+						formatByteSize(status?.storage?.configSizeBytes, ''),
+					])
 				: __('Missing'),
 			monospace: true,
 		},
@@ -441,8 +451,8 @@ function SystemStatusPage() {
 							__('Readable'),
 							__('Not Readable')
 						),
-						formatOptionalBytes(status?.storage?.debugLogSizeBytes),
-				  ])
+						formatByteSize(status?.storage?.debugLogSizeBytes, ''),
+					])
 				: __('Not created yet'),
 			monospace: true,
 		},
@@ -455,14 +465,17 @@ function SystemStatusPage() {
 					__('Writable'),
 					__('Not Writable')
 				),
-				formatOptionalBytes(status?.storage?.appDirectorySizeBytes),
+				formatByteSize(status?.storage?.appDirectorySizeBytes, ''),
 			]),
 			monospace: true,
 		},
 		{
 			label: __('Release Root'),
 			value: status?.storage?.releaseRoot,
-			helperText: formatOptionalBytes(status?.storage?.releaseRootSizeBytes),
+			helperText: formatByteSize(
+				status?.storage?.releaseRootSizeBytes,
+				''
+			),
 			monospace: true,
 		},
 	];
@@ -482,8 +495,8 @@ function SystemStatusPage() {
 		{ label: __('Memory Limit'), value: status?.server?.memoryLimit },
 		{
 			label: __('Max Execution Time'),
-			value: status?.server?.maxExecutionTime
-				? `${status.server.maxExecutionTime}s`
+			value: hasValue(maxExecutionTime)
+				? `${String(maxExecutionTime)}s`
 				: __('Unknown'),
 		},
 		{
@@ -529,8 +542,8 @@ function SystemStatusPage() {
 		{ label: __('Host'), value: status?.database?.host },
 		{
 			label: __('Port'),
-			value: hasValue(status?.database?.port)
-				? String(status.database.port)
+			value: hasValue(databasePort)
+				? String(databasePort)
 				: __('Not available'),
 		},
 		{ label: __('Database Name'), value: status?.database?.name },
@@ -541,14 +554,14 @@ function SystemStatusPage() {
 		},
 		{
 			label: __('Recorded Schema'),
-			value: hasValue(status?.database?.schemaVersion)
-				? String(status.database.schemaVersion)
+			value: hasValue(recordedSchemaVersion)
+				? String(recordedSchemaVersion)
 				: __('Unknown'),
 		},
 		{
 			label: __('Required Schema'),
-			value: hasValue(status?.database?.requiredSchemaVersion)
-				? String(status.database.requiredSchemaVersion)
+			value: hasValue(requiredSchemaVersion)
+				? String(requiredSchemaVersion)
 				: __('Unknown'),
 		},
 		{
@@ -556,8 +569,8 @@ function SystemStatusPage() {
 			value: status?.database?.schemaUpgradeRequired
 				? __('Upgrade Recommended')
 				: __('Current'),
-			helperText: status?.database?.schemaIssuesCount
-				? `${status.database.schemaIssuesCount} ${__('issue(s) detected')}`
+			helperText: schemaIssuesCount
+				? `${schemaIssuesCount} ${__('issue(s) detected')}`
 				: '',
 		},
 	];
@@ -610,14 +623,18 @@ function SystemStatusPage() {
 		},
 		{
 			label: __('Database Updated'),
-			value: formatDate(
+			value: formatDateTimeValue(
 				status?.location?.lastDownloadedAt ||
-					status?.location?.databaseUpdatedAt
+					status?.location?.databaseUpdatedAt,
+				__('Not available')
 			),
 		},
 		{
 			label: __('Database Size'),
-			value: formatBytes(status?.location?.databaseSizeBytes),
+			value: formatByteSize(
+				status?.location?.databaseSizeBytes,
+				__('Not available')
+			),
 		},
 		{
 			label: __('Credentials Saved'),
@@ -668,7 +685,7 @@ function SystemStatusPage() {
 		},
 	];
 
-	const infoSections = [
+	const infoSections: InfoSectionData[] = [
 		{ id: 'peakurl', title: 'PeakURL', items: peakurlItems },
 		{
 			id: 'directories',
@@ -686,7 +703,7 @@ function SystemStatusPage() {
 		{ id: 'footprint', title: __('Data Footprint'), items: dataItems },
 	];
 
-	const toggleCheck = (checkKey) => {
+	const toggleCheck = (checkKey: string) => {
 		setExpandedChecks((current) => {
 			const next = new Set(current);
 
@@ -700,7 +717,7 @@ function SystemStatusPage() {
 		});
 	};
 
-	const toggleSection = (sectionId) => {
+	const toggleSection = (sectionId: string) => {
 		setExpandedSections((current) => {
 			const next = new Set(current);
 
@@ -716,11 +733,7 @@ function SystemStatusPage() {
 
 	const handleCopyInfo = async () => {
 		try {
-			if (!navigator.clipboard?.writeText) {
-				throw new Error('clipboard-unavailable');
-			}
-
-			await navigator.clipboard.writeText(buildExportText(infoSections));
+			await copyToClipboard(buildExportText(infoSections));
 			setCopiedInfo(true);
 			notification.success(
 				__('Copied'),
@@ -748,9 +761,13 @@ function SystemStatusPage() {
 							<span
 								className={`flex h-5 w-5 items-center justify-center rounded-full border-2 ${overallTone.ring}`}
 							>
-								<span className={`h-2 w-2 rounded-full ${overallTone.dot}`} />
+								<span
+									className={`h-2 w-2 rounded-full ${overallTone.dot}`}
+								/>
 							</span>
-							<span className={`text-sm font-semibold ${overallTone.text}`}>
+							<span
+								className={`text-sm font-semibold ${overallTone.text}`}
+							>
 								{overallLabel}
 							</span>
 						</div>
@@ -758,16 +775,24 @@ function SystemStatusPage() {
 						<p className="mt-3 text-sm text-text-muted">
 							{sprintf(
 								__('Last checked: %s'),
-								formatDate(status?.generatedAt)
+								formatDateTimeValue(
+									status?.generatedAt,
+									__('Not available')
+								)
 							)}
 						</p>
 					</div>
 
-					<StatusTabs activeView={activeView} onChange={setActiveView} />
+					<StatusTabs
+						activeView={activeView}
+						onChange={setActiveView}
+					/>
 				</div>
 
 				<div className="space-y-8 bg-bg px-5 py-6 sm:px-8">
-					{errorMessage ? <ErrorState errorMessage={errorMessage} /> : null}
+					{errorMessage ? (
+						<ErrorState errorMessage={errorMessage} />
+					) : null}
 
 					{'status' === activeView ? (
 						<div className="space-y-8">
@@ -814,11 +839,14 @@ function SystemStatusPage() {
 								/>
 							) : null}
 
-							{0 === errorChecks.length && 0 === warningChecks.length ? (
+							{0 === errorChecks.length &&
+							0 === warningChecks.length ? (
 								<div
 									className={`rounded-lg border px-4 py-3 text-sm ${getStatusTone('ok').panel}`}
 								>
-									{__('All system status checks are currently passing.')}
+									{__(
+										'All system status checks are currently passing.'
+									)}
 								</div>
 							) : null}
 
@@ -828,7 +856,9 @@ function SystemStatusPage() {
 										<button
 											type="button"
 											onClick={() =>
-												setShowPassedChecks((current) => !current)
+												setShowPassedChecks(
+													(current) => !current
+												)
 											}
 											className="inline-flex items-center gap-2 rounded-lg border border-accent/30 bg-surface px-4 py-2 text-sm font-medium text-accent transition-colors hover:bg-accent/5"
 										>
@@ -839,8 +869,10 @@ function SystemStatusPage() {
 													: formatHeadingCount(
 															passingChecks.length,
 															__('1 passed test'),
-															__('%s passed tests')
-													  )}
+															__(
+																'%s passed tests'
+															)
+														)}
 											</span>
 											{showPassedChecks ? (
 												<ChevronUp size={16} />
@@ -852,22 +884,32 @@ function SystemStatusPage() {
 
 									{showPassedChecks ? (
 										<div className="overflow-hidden rounded-lg border border-stroke bg-surface">
-											{passingChecks.map((check, index) => {
-												const checkKey =
-													check?.id ||
-													check?.label ||
-													`passed-check-${index}`;
+											{passingChecks.map(
+												(check, index) => {
+													const checkKey =
+														check?.id ||
+														check?.label ||
+														`passed-check-${index}`;
 
-												return (
-													<IssueRow
-														key={checkKey}
-														check={check}
-														isOpen={expandedChecks.has(checkKey)}
-														onToggle={() => toggleCheck(checkKey)}
-														showBorder={index > 0}
-													/>
-												);
-											})}
+													return (
+														<IssueRow
+															key={checkKey}
+															check={check}
+															isOpen={expandedChecks.has(
+																checkKey
+															)}
+															onToggle={() =>
+																toggleCheck(
+																	checkKey
+																)
+															}
+															showBorder={
+																index > 0
+															}
+														/>
+													);
+												}
+											)}
 										</div>
 									) : null}
 								</section>
@@ -909,8 +951,12 @@ function SystemStatusPage() {
 									<InfoSection
 										key={section.id}
 										section={section}
-										isOpen={expandedSections.has(section.id)}
-										onToggle={() => toggleSection(section.id)}
+										isOpen={expandedSections.has(
+											section.id
+										)}
+										onToggle={() =>
+											toggleSection(section.id)
+										}
 									/>
 								))}
 							</div>

@@ -1,17 +1,18 @@
-// @ts-nocheck
 import { useState } from 'react';
 import { ApiImport, PasteImport, FileUpload } from './_components';
 import { useLocation } from 'react-router-dom';
 import { __ } from '@/i18n';
+import type { ImportStatus, SampleRow } from './_components/types';
 
 function BulkImportTabPage() {
 	const location = useLocation();
-	const activeTab = location.pathname.split('/').filter(Boolean).pop() || 'file';
+	const activeTab =
+		location.pathname.split('/').filter(Boolean).pop() || 'file';
 
-	const [importStatus, setImportStatus] = useState('idle'); // idle, uploading, processing, completed
-	const [importProgress, setImportProgress] = useState(0);
+	const [importStatus, setImportStatus] = useState<ImportStatus>('idle');
+	const importProgress = 0;
 
-	const sampleData = [
+	const sampleData: SampleRow[] = [
 		{
 			url: 'https://example.com/page1',
 			alias: 'page1',

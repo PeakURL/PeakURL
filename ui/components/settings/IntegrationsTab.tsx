@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { useMemo, useState } from 'react';
 import { Button, ConfirmDialog, Modal } from '@/components/ui';
 import {
@@ -14,33 +12,52 @@ import {
 	useCreateWebhookMutation,
 	useDeleteWebhookMutation,
 	useGetWebhooksQuery,
-} from '@/store/slices/api/webhook';
+} from '@/store/slices/api';
 import { __, sprintf } from '@/i18n';
+import { copyToClipboard as writeToClipboard, getErrorMessage } from '@/utils';
+import type {
+	CreatedWebhook,
+	IntegrationsTabProps,
+	WebhookEventOption,
+	WebhookFormState,
+	WebhookSummary,
+} from './types';
 
-const getEventOptions = () => [
+const getEventOptions = (): WebhookEventOption[] => [
 	{ id: 'link.created', label: __('Link Created') },
 	{ id: 'link.clicked', label: __('Link Clicked') },
 	{ id: 'link.updated', label: __('Link Updated') },
 	{ id: 'link.deleted', label: __('Link Deleted') },
 ];
 
-function IntegrationsTab({ notification }) {
+function IntegrationsTab({ notification }: IntegrationsTabProps) {
 	const eventOptions = getEventOptions();
-	const { data: webhooks = [], isLoading, error } = useGetWebhooksQuery();
+	const {
+		data: webhookData,
+		isLoading,
+		error,
+	} = useGetWebhooksQuery(undefined);
 	const [createWebhook, { isLoading: isCreating }] =
 		useCreateWebhookMutation();
 	const [deleteWebhook, { isLoading: isDeleting }] =
 		useDeleteWebhookMutation();
+	const webhooks = webhookData || [];
 
-	const [form, setForm] = useState({ url: '', events: ['link.clicked'] });
-	const [createdWebhook, setCreatedWebhook] = useState(null);
-	const [webhookPendingDelete, setWebhookPendingDelete] = useState(null);
+	const [form, setForm] = useState<WebhookFormState>({
+		url: '',
+		events: ['link.clicked'],
+	});
+	const [createdWebhook, setCreatedWebhook] = useState<CreatedWebhook | null>(
+		null
+	);
+	const [webhookPendingDelete, setWebhookPendingDelete] =
+		useState<WebhookSummary | null>(null);
 
 	const canCreate = useMemo(() => {
 		return form.url.trim().length > 0 && form.events.length > 0;
 	}, [form.url, form.events]);
 
-	const toggleEvent = (eventId) => {
+	const toggleEvent = (eventId: string) => {
 		setForm((prev) => {
 			const has = prev.events.includes(eventId);
 			const nextEvents = has
@@ -73,33 +90,33 @@ function IntegrationsTab({ notification }) {
 		} catch (err) {
 			notification?.error?.(
 				__('Error'),
-				err?.data?.message || __('Failed to create webhook')
+				getErrorMessage(err, __('Failed to create webhook'))
 			);
 		}
 	};
 
-	const handleDelete = async (id) => {
+	const handleDelete = async (id?: string) => {
 		if (!id) return;
 
 		try {
 			await deleteWebhook(id).unwrap();
-			notification?.success?.(
-				__('Success'),
-				__('Webhook deleted')
-			);
+			notification?.success?.(__('Success'), __('Webhook deleted'));
 			setWebhookPendingDelete(null);
 		} catch (err) {
 			notification?.error?.(
 				__('Error'),
-				err?.data?.message || __('Failed to delete webhook')
+				getErrorMessage(err, __('Failed to delete webhook'))
 			);
 		}
 	};
 
-	const copyToClipboard = async (text, label = __('Copied')) => {
+	const copyToClipboard = async (
+		text?: string | null,
+		label: string = __('Copied')
+	) => {
 		if (!text) return;
 		try {
-			await navigator.clipboard.writeText(text);
+			await writeToClipboard(text);
 			notification?.success?.(label, __('Copied to clipboard'));
 		} catch (err) {
 			notification?.error?.(__('Error'), __('Failed to copy'));
@@ -243,7 +260,7 @@ function IntegrationsTab({ notification }) {
 					</div>
 				) : error ? (
 					<div className="text-sm text-red-600 dark:text-red-400">
-						{error?.data?.message || __('Failed to load webhooks')}
+						{getErrorMessage(error, __('Failed to load webhooks'))}
 					</div>
 				) : webhooks.length === 0 ? (
 					<div className="text-center py-8 bg-surface-alt rounded-lg border border-dashed border-(--color-stroke)">
@@ -252,7 +269,9 @@ function IntegrationsTab({ notification }) {
 							{__('No Webhooks Configured')}
 						</h4>
 						<p className="text-xs text-muted">
-							{__('Add a webhook to receive link events in real time.')}
+							{__(
+								'Add a webhook to receive link events in real time.'
+							)}
 						</p>
 					</div>
 				) : (
@@ -401,11 +420,11 @@ function IntegrationsTab({ notification }) {
 				description={
 					webhookPendingDelete
 						? sprintf(
-							__(
-								'Delete the webhook for %s? PeakURL will stop sending signed event requests to this endpoint immediately.'
-							),
-							webhookPendingDelete.url
-						)
+								__(
+									'Delete the webhook for %s? PeakURL will stop sending signed event requests to this endpoint immediately.'
+								),
+								webhookPendingDelete.url
+							)
 						: ''
 				}
 				confirmText={__('Delete webhook')}

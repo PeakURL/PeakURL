@@ -5,4 +5,5 @@ export * from './Input';
 export * from './Loading';
 export * from './Modal';
 export * from './Notification';
+export * from './types';
 export * from './VerificationCodeInput';

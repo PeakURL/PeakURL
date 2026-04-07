@@ -1,7 +1,13 @@
-// @ts-nocheck
+import type { ChartData, TooltipItem } from 'chart.js';
 import { useEffect, useRef, useState } from 'react';
 import { Chart } from 'chart.js/auto';
 import { __ } from '@/i18n';
+import type {
+	TrafficChartData,
+	TrafficChartProps,
+	TrafficChartType,
+} from './types';
+export type { TrafficChartData, TrafficChartProps, TrafficChartType } from './types';
 
 /**
  * TrafficChart Component
@@ -9,11 +15,19 @@ import { __ } from '@/i18n';
  * @param {Object} props
  * @param {Object} props.data - Chart data containing labels, clicks, and unique arrays
  * @param {string} [props.timeRange="7d"] - Selected time range filter
- * @param {string} [props.type="line"] - Chart type (line or bar)
+ * @param {TrafficChartType} [props.type="line"] - Chart type (line or bar)
  */
-export function TrafficChart({ data, timeRange = '7d', type = 'line' }) {
-	const chartRef = useRef(null);
-	const chartInstanceRef = useRef(null);
+export function TrafficChart({
+	data,
+	timeRange = '7d',
+	type = 'line',
+}: TrafficChartProps) {
+	const chartRef = useRef<HTMLCanvasElement | null>(null);
+	const chartInstanceRef = useRef<Chart<
+		TrafficChartType,
+		number[],
+		string
+	> | null>(null);
 	const [isDark, setIsDark] = useState(false);
 
 	// Detect dark mode
@@ -33,14 +47,21 @@ export function TrafficChart({ data, timeRange = '7d', type = 'line' }) {
 	}, []);
 
 	useEffect(() => {
-		if (!chartRef.current) return;
-		let isCancelled = false;
+		const canvas = chartRef.current;
+
+		if (!canvas) {
+			return undefined;
+		}
 
 		const initChart = async () => {
-			const ctx = chartRef.current.getContext('2d');
+			const context = canvas.getContext('2d');
+
+			if (!context) {
+				return;
+			}
 
 			// Destroy any existing chart on this canvas
-			const existingChart = Chart.getChart(chartRef.current);
+			const existingChart = Chart.getChart(canvas);
 			if (existingChart) {
 				existingChart.destroy();
 			}
@@ -60,7 +81,7 @@ export function TrafficChart({ data, timeRange = '7d', type = 'line' }) {
 				: 'rgb(5, 150, 105)';
 
 			// Create gradients
-			const clicksGradient = ctx.createLinearGradient(0, 0, 0, 300);
+			const clicksGradient = context.createLinearGradient(0, 0, 0, 300);
 			clicksGradient.addColorStop(
 				0,
 				isDark ? 'rgba(99, 102, 241, 0.2)' : 'rgba(99, 102, 241, 0.15)'
@@ -70,7 +91,7 @@ export function TrafficChart({ data, timeRange = '7d', type = 'line' }) {
 				isDark ? 'rgba(99, 102, 241, 0)' : 'rgba(99, 102, 241, 0)'
 			);
 
-			const uniqueGradient = ctx.createLinearGradient(0, 0, 0, 300);
+			const uniqueGradient = context.createLinearGradient(0, 0, 0, 300);
 			uniqueGradient.addColorStop(
 				0,
 				isDark ? 'rgba(16, 185, 129, 0.2)' : 'rgba(16, 185, 129, 0.15)'
@@ -88,8 +109,12 @@ export function TrafficChart({ data, timeRange = '7d', type = 'line' }) {
 				Array.isArray(data.unique) &&
 				data.labels.length > 0;
 
-			const chartData = hasValidStructure
-				? data
+			const chartData: TrafficChartData = hasValidStructure
+				? {
+						labels: data?.labels || [],
+						clicks: data?.clicks || [],
+						unique: data?.unique || [],
+					}
 				: {
 						labels: [
 							__('Mon'),
@@ -112,59 +137,69 @@ export function TrafficChart({ data, timeRange = '7d', type = 'line' }) {
 				? 'rgba(75, 85, 99, 0.3)'
 				: 'rgba(229, 231, 235, 0.8)';
 
-			chartInstanceRef.current = new Chart(chartRef.current, {
-				type: type,
-				data: {
-					labels: chartData.labels,
-					datasets: [
-						{
-							label: __('Total Clicks'),
-							data: chartData.clicks,
-							borderColor: clicksColor,
-							backgroundColor:
-								type === 'bar' ? clicksColor : clicksGradient,
-							fill: true,
-							tension: 0.4,
-							borderWidth: 2,
-							pointRadius: 0,
-							pointHoverRadius: 6,
-							pointBackgroundColor: isDark
-								? 'rgb(17, 24, 39)'
-								: 'white',
-							pointBorderColor: clicksColor,
-							pointBorderWidth: 2,
-							pointHoverBackgroundColor: clicksColor,
-							pointHoverBorderColor: isDark
-								? 'rgb(17, 24, 39)'
-								: 'white',
-							pointHoverBorderWidth: 2,
-							borderRadius: 4,
-						},
-						{
-							label: __('Unique Visitors'),
-							data: chartData.unique,
-							borderColor: uniqueColor,
-							backgroundColor:
-								type === 'bar' ? uniqueColor : uniqueGradient,
-							fill: true,
-							tension: 0.4,
-							borderWidth: 2,
-							pointRadius: 0,
-							pointHoverRadius: 6,
-							pointBackgroundColor: isDark
-								? 'rgb(17, 24, 39)'
-								: 'white',
-							pointBorderColor: uniqueColor,
-							pointBorderWidth: 2,
-							pointHoverBackgroundColor: uniqueColor,
-							pointHoverBorderColor: isDark
-								? 'rgb(17, 24, 39)'
-								: 'white',
-							pointHoverBorderWidth: 2,
-							borderRadius: 4,
-						},
-					],
-				},
+			const chartDataConfig: ChartData<
+				TrafficChartType,
+				number[],
+				string
+			> = {
+				labels: chartData.labels,
+				datasets: [
+					{
+						label: __('Total Clicks'),
+						data: chartData.clicks,
+						borderColor: clicksColor,
+						backgroundColor:
+							type === 'bar' ? clicksColor : clicksGradient,
+						fill: true,
+						tension: 0.4,
+						borderWidth: 2,
+						pointRadius: 0,
+						pointHoverRadius: 6,
+						pointBackgroundColor: isDark
+							? 'rgb(17, 24, 39)'
+							: 'white',
+						pointBorderColor: clicksColor,
+						pointBorderWidth: 2,
+						pointHoverBackgroundColor: clicksColor,
+						pointHoverBorderColor: isDark
+							? 'rgb(17, 24, 39)'
+							: 'white',
+						pointHoverBorderWidth: 2,
+						borderRadius: 4,
+					},
+					{
+						label: __('Unique Visitors'),
+						data: chartData.unique,
+						borderColor: uniqueColor,
+						backgroundColor:
+							type === 'bar' ? uniqueColor : uniqueGradient,
+						fill: true,
+						tension: 0.4,
+						borderWidth: 2,
+						pointRadius: 0,
+						pointHoverRadius: 6,
+						pointBackgroundColor: isDark
+							? 'rgb(17, 24, 39)'
+							: 'white',
+						pointBorderColor: uniqueColor,
+						pointBorderWidth: 2,
+						pointHoverBackgroundColor: uniqueColor,
+						pointHoverBorderColor: isDark
+							? 'rgb(17, 24, 39)'
+							: 'white',
+						pointHoverBorderWidth: 2,
+						borderRadius: 4,
+					},
+				],
+			};
+
+			chartInstanceRef.current = new Chart<
+				TrafficChartType,
+				number[],
+				string
+			>(canvas, {
+				type,
+				data: chartDataConfig,
 				options: {
 					responsive: true,
 					maintainAspectRatio: false,
@@ -195,13 +230,21 @@ export function TrafficChart({ data, timeRange = '7d', type = 'line' }) {
 							boxPadding: 6,
 							usePointStyle: true,
 							callbacks: {
-								title: function (context) {
+								title: function (
+									context: TooltipItem<TrafficChartType>[]
+								) {
 									return context[0].label;
 								},
-								label: function (context) {
+								label: function (
+									context: TooltipItem<TrafficChartType>
+								) {
+									const parsedY =
+										'number' === typeof context.parsed.y
+											? context.parsed.y
+											: 0;
 									return ` ${
 										context.dataset.label
-									}: ${context.parsed.y.toLocaleString()}`;
+									}: ${parsedY.toLocaleString()}`;
 								},
 							},
 						},
@@ -226,7 +269,6 @@ export function TrafficChart({ data, timeRange = '7d', type = 'line' }) {
 							beginAtZero: true,
 							grid: {
 								color: gridColor,
-								drawBorder: false,
 							},
 							border: {
 								display: false,
@@ -238,9 +280,20 @@ export function TrafficChart({ data, timeRange = '7d', type = 'line' }) {
 									size: 12,
 								},
 								padding: 10,
-								callback: function (value) {
-									if (value >= 1000) {
-										return (value / 1000).toFixed(1) + 'k';
+								callback: function (value: string | number) {
+									const numericValue =
+										'number' === typeof value
+											? value
+											: Number(value);
+
+									if (
+										Number.isFinite(numericValue) &&
+										numericValue >= 1000
+									) {
+										return (
+											(numericValue / 1000).toFixed(1) +
+											'k'
+										);
 									}
 									return value;
 								},
@@ -254,7 +307,6 @@ export function TrafficChart({ data, timeRange = '7d', type = 'line' }) {
 		initChart();
 
 		return () => {
-			isCancelled = true;
 			if (chartInstanceRef.current) {
 				chartInstanceRef.current.destroy();
 				chartInstanceRef.current = null;

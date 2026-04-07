@@ -1,8 +1,14 @@
-// @ts-nocheck
-
 import { useEffect, useRef } from 'react';
 import { Chart } from 'chart.js/auto';
 import { __ } from '@/i18n';
+import type { ClickChartProps, StatsTimeRange } from './types';
+
+const timeRangeOptions: Array<{ label: string; value: StatsTimeRange }> = [
+	{ label: '24h', value: '24h' },
+	{ label: '7d', value: '7d' },
+	{ label: '30d', value: '30d' },
+	{ label: __('All'), value: 'all' },
+];
 
 function ClickChart({
 	link,
@@ -12,9 +18,11 @@ function ClickChart({
 	setTimeRange,
 	selectedTab,
 	open,
-}) {
-	const chartRef = useRef(null);
-	const chartInstanceRef = useRef(null);
+}: ClickChartProps) {
+	const chartRef = useRef<HTMLCanvasElement | null>(null);
+	const chartInstanceRef = useRef<Chart<'line', number[], string> | null>(
+		null
+	);
 
 	useEffect(() => {
 		if (selectedTab === 0 && chartRef.current && open && stats?.traffic) {
@@ -24,6 +32,10 @@ function ClickChart({
 			}
 
 			const ctx = chartRef.current.getContext('2d');
+
+			if (!ctx) {
+				return undefined;
+			}
 
 			const labels = stats.traffic.labels || [];
 			const data = stats.traffic.clicks || [];
@@ -100,14 +112,10 @@ function ClickChart({
 				</h3>
 				{/* Time Range Selector */}
 				<div className="flex gap-1 bg-surface rounded-lg p-1">
-					{[
-						{ label: '24h', value: '24h' },
-						{ label: '7d', value: '7d' },
-						{ label: '30d', value: '30d' },
-						{ label: __('All'), value: 'all' },
-					].map((range) => (
+					{timeRangeOptions.map((range) => (
 						<button
 							key={range.value}
+							type="button"
 							onClick={() => setTimeRange(range.value)}
 							className={`px-3 py-1 text-xs font-medium rounded transition-all ${
 								timeRange === range.value

@@ -1,17 +1,23 @@
-// @ts-nocheck
-
 import { useState } from 'react';
-import { Globe, MapPin, Users } from 'lucide-react';
+import { Globe, MapPin } from 'lucide-react';
 import { WorldMap } from '@/components';
 import { __ } from '@/i18n';
-import { useGetLinkLocationQuery } from '@/store/slices/api/analytics';
+import { useGetLinkLocationQuery } from '@/store/slices/api';
+import { getErrorMessage } from '@/utils';
+import type { HoveredCountry, TrafficLocationTabProps } from './types';
 
-function TrafficLocationTab({ link, selectedTab, open }) {
-	const [hoveredCountry, setHoveredCountry] = useState(null);
+function TrafficLocationTab({
+	link,
+	selectedTab,
+	open,
+}: TrafficLocationTabProps) {
+	const [hoveredCountry, setHoveredCountry] = useState<HoveredCountry | null>(
+		null
+	);
 	// RTK Query hook
 	const shouldFetch = open && selectedTab === 1 && !!link?.id;
 	const { data, isLoading, isError, error } = useGetLinkLocationQuery(
-		link?.id,
+		link?.id || '',
 		{ skip: !shouldFetch }
 	);
 
@@ -43,18 +49,18 @@ function TrafficLocationTab({ link, selectedTab, open }) {
 	const hasData = total > 0;
 
 	// Country flag emoji helper
-	const getFlagEmoji = (countryCode) => {
+	const getFlagEmoji = (countryCode?: string | null): string => {
 		if (countryCode === 'LOCAL') return '🏠';
 		if (!countryCode || countryCode === '??') return '🌍';
 		const codePoints = countryCode
 			.toUpperCase()
 			.split('')
-			.map((char) => 127397 + char.charCodeAt());
+			.map((char: string) => 127397 + char.charCodeAt(0));
 		return String.fromCodePoint(...codePoints);
 	};
 
 	// Calculate percentage
-	const getPercentage = (count) => {
+	const getPercentage = (count: number): string | number => {
 		return total > 0 ? ((count / total) * 100).toFixed(1) : 0;
 	};
 
@@ -92,7 +98,7 @@ function TrafficLocationTab({ link, selectedTab, open }) {
 								{__('Failed to load location data')}
 							</p>
 							<p className="text-xs text-text-muted">
-								{String(error?.message || __('Unknown error'))}
+								{getErrorMessage(error, __('Unknown error'))}
 							</p>
 						</div>
 					</div>
@@ -133,7 +139,9 @@ function TrafficLocationTab({ link, selectedTab, open }) {
 										'• Add `GeoLite2-City.mmdb` under `content/uploads/geoip/`'
 									)}
 									<br />
-									{__('• VPN users will show VPN server location')}
+									{__(
+										'• VPN users will show VPN server location'
+									)}
 								</p>
 							</div>
 						</div>
@@ -197,13 +205,25 @@ function TrafficLocationTab({ link, selectedTab, open }) {
 				</div>
 				<div className="relative h-96 rounded-lg overflow-hidden border border-stroke">
 					<WorldMap
-						data={countries.map((c) => ({
-							countryCode: c.code,
-							countryName: c.name,
-							clicks: c.count,
+						data={countries.map((country) => ({
+							countryCode: country.code,
+							countryName: country.name,
+							clicks: country.count,
 						}))}
 						hoveredCountry={hoveredCountry?.countryCode}
-						onCountryHover={setHoveredCountry}
+						onCountryHover={(country) =>
+							setHoveredCountry(
+								country
+									? {
+											countryCode: country.countryCode,
+											countryName:
+												country.countryName ||
+												country.countryCode,
+											clicks: country.clicks,
+										}
+									: null
+							)
+						}
 					/>
 					{hoveredCountry && (
 						<div className="absolute top-4 right-4 bg-surface rounded-lg shadow-xl p-3 border border-stroke min-w-32">
@@ -228,7 +248,7 @@ function TrafficLocationTab({ link, selectedTab, open }) {
 					</h3>
 				</div>
 				<div className="space-y-3">
-					{countries.map((country, index) => {
+					{countries.map((country) => {
 						const percentage = getPercentage(country.count);
 						return (
 							<div

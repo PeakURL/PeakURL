@@ -1,9 +1,9 @@
-// @ts-nocheck
 import { Button } from '@/components/ui';
 import { CircleAlert, CircleCheckBig, Download } from 'lucide-react';
 import { __, sprintf } from '@/i18n';
+import type { ImportDetailsProps } from './types';
 
-function ImportDetails({ results }) {
+function ImportDetails({ results }: ImportDetailsProps) {
 	const successCount = results.filter((r) => r.status === 'success').length;
 	const errorCount = results.filter((r) => r.status === 'error').length;
 
@@ -49,8 +49,7 @@ function ImportDetails({ results }) {
 					{sprintf(
 						/* translators: 1: success count, 2: error count */
 						__('%1$s successful, %2$s failed'),
-						successCount,
-						errorCount
+						[String(successCount), String(errorCount)]
 					)}
 				</span>
 				<Button variant="ghost" size="sm">

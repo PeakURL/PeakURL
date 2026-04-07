@@ -1,7 +1,11 @@
-// @ts-nocheck
 import { __, sprintf } from '@/i18n';
+import type { TableHeaderRowProps } from '../types';
 
-function TableHeaderRow({ selectedCount = 0, onSelectAll, onBulkDelete }) {
+function TableHeaderRow({
+	selectedCount = 0,
+	onSelectAll,
+	onBulkDelete,
+}: TableHeaderRowProps) {
 	const hasSelection = selectedCount > 0;
 	if (hasSelection) {
 		return (
@@ -18,7 +22,7 @@ function TableHeaderRow({ selectedCount = 0, onSelectAll, onBulkDelete }) {
 					colSpan={5}
 					className="px-4 py-3 text-sm font-medium text-accent"
 				>
-					{sprintf(__('%s selected'), selectedCount)}
+					{sprintf(__('%s selected'), String(selectedCount))}
 				</th>
 				<th className="px-4 py-3 text-right">
 					<button

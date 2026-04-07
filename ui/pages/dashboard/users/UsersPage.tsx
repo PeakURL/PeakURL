@@ -1,5 +1,4 @@
-// @ts-nocheck
-
+import type { ChangeEvent, SubmitEvent } from 'react';
 import { useMemo, useState } from 'react';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import {
@@ -20,10 +19,20 @@ import {
 	useGetAllUsersQuery,
 	useGetUserProfileQuery,
 	useUpdateUserMutation,
-} from '@/store/slices/api/user';
+} from '@/store/slices/api';
 import { __, sprintf } from '@/i18n';
+import { getErrorMessage } from '@/utils';
+import type {
+	UserDialogFormState,
+	UserDialogMode,
+	UserDialogPayload,
+	UserDialogProps,
+	UserRole,
+	UserRoleMeta,
+	UserSummary,
+} from './types';
 
-const EMPTY_FORM = {
+const EMPTY_FORM: UserDialogFormState = {
 	firstName: '',
 	lastName: '',
 	username: '',
@@ -33,7 +42,10 @@ const EMPTY_FORM = {
 	role: 'editor',
 };
 
-const getRoleMeta = () => ({
+const getRoleMeta = (): Record<
+	UserRole,
+	UserRoleMeta
+> => ({
 	admin: {
 		label: __('Admin'),
 		description: __('Can manage users, settings, and all links.'),
@@ -48,7 +60,10 @@ const getRoleMeta = () => ({
 	},
 });
 
-const getInitialFormState = (mode, initialUser) => {
+const getInitialFormState = (
+	mode: UserDialogMode,
+	initialUser?: UserSummary | null
+): UserDialogFormState => {
 	if ('edit' === mode && initialUser) {
 		return {
 			firstName: initialUser.firstName ?? '',
@@ -72,40 +87,42 @@ function UserDialog({
 	onClose,
 	onSubmit,
 	isSubmitting,
-}) {
+}: UserDialogProps) {
 	const roleMeta = getRoleMeta();
-	const [form, setForm] = useState(() =>
+	const [form, setForm] = useState<UserDialogFormState>(() =>
 		getInitialFormState(mode, initialUser)
 	);
-	const [formError, setFormError] = useState( '' );
+	const [formError, setFormError] = useState('');
 
-	const handleChange = ( key ) => ( event ) => {
-		setForm( ( previous ) => ( {
-			...previous,
-			[ key ]: event.target.value,
-		} ) );
-	};
+	const handleChange =
+		(key: keyof UserDialogFormState) =>
+		(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+			setForm((previous) => ({
+				...previous,
+				[key]: event.target.value,
+			}));
+		};
 
-	const handleSubmit = async ( event ) => {
+	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		setFormError( '' );
+		setFormError('');
 
-		const payload = {
+		const payload: UserDialogPayload = {
 			firstName: form.firstName.trim(),
 			lastName: form.lastName.trim(),
 			username: form.username.trim(),
 			email: form.email.trim(),
-			role: form.role,
+			role: form.role as UserRole,
 		};
 
-		if ( 'create' === mode || '' !== form.password.trim() ) {
-			if ( form.password.length < 8 ) {
-				setFormError( __( 'Use at least 8 characters.' ) );
+		if ('create' === mode || '' !== form.password.trim()) {
+			if (form.password.length < 8) {
+				setFormError(__('Use at least 8 characters.'));
 				return;
 			}
 
-			if ( form.password !== form.confirmPassword ) {
-				setFormError( __( 'Passwords do not match.' ) );
+			if (form.password !== form.confirmPassword) {
+				setFormError(__('Passwords do not match.'));
 				return;
 			}
 
@@ -113,11 +130,11 @@ function UserDialog({
 		}
 
 		try {
-			await onSubmit( payload );
+			await onSubmit(payload);
 			onClose();
-		} catch ( error ) {
+		} catch (error) {
 			setFormError(
-				error?.data?.message || __('Unable to save the user.')
+				getErrorMessage(error, __('Unable to save the user.'))
 			);
 		}
 	};
@@ -133,12 +150,18 @@ function UserDialog({
 					<div className="flex items-start justify-between border-b border-stroke px-6 py-5">
 						<div>
 							<DialogTitle className="text-lg font-semibold text-heading">
-								{'create' === mode ? __('Add User') : __('Edit User')}
+								{'create' === mode
+									? __('Add User')
+									: __('Edit User')}
 							</DialogTitle>
 							<p className="mt-1 text-sm text-text-muted">
 								{'create' === mode
-									? __('Create a new account with admin or editor access.')
-									: __('Update the account details and role for this user.')}
+									? __(
+											'Create a new account with admin or editor access.'
+										)
+									: __(
+											'Update the account details and role for this user.'
+										)}
 							</p>
 						</div>
 						<button
@@ -206,7 +229,9 @@ function UserDialog({
 								helperText={
 									'create' === mode
 										? __('Use at least 8 characters.')
-										: __('Leave blank to keep the current password.')
+										: __(
+												'Leave blank to keep the current password.'
+											)
 								}
 							/>
 							<Input
@@ -225,8 +250,12 @@ function UserDialog({
 								autoComplete="new-password"
 								helperText={
 									'create' === mode
-										? __('Re-enter the password to confirm it.')
-										: __('Re-enter the new password to confirm it.')
+										? __(
+												'Re-enter the password to confirm it.'
+											)
+										: __(
+												'Re-enter the new password to confirm it.'
+											)
 								}
 							/>
 						</div>
@@ -243,7 +272,9 @@ function UserDialog({
 									className="w-full rounded-md border border-stroke bg-surface px-4 py-2 text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent disabled:cursor-not-allowed disabled:opacity-60"
 								>
 									<option value="admin">{__('Admin')}</option>
-									<option value="editor">{__('Editor')}</option>
+									<option value="editor">
+										{__('Editor')}
+									</option>
 								</select>
 								<p className="text-xs text-text-muted">
 									{roleMeta[form.role]?.description}
@@ -278,91 +309,119 @@ function UserDialog({
 function UsersPage() {
 	const roleMeta = getRoleMeta();
 	const { data: userData, isLoading: isProfileLoading } =
-		useGetUserProfileQuery();
-	const currentUser = userData?.data;
+		useGetUserProfileQuery(undefined);
+	const currentUserRole: UserSummary['role'] =
+		userData?.data?.role === 'admin'
+			? 'admin'
+			: userData?.data?.role === 'editor'
+				? 'editor'
+				: undefined;
+	const currentUser: UserSummary | null = userData?.data
+		? {
+				id:
+					userData.data.id ||
+					userData.data._id ||
+					userData.data.username ||
+					userData.data.email ||
+					'current-user',
+				firstName: userData.data.firstName,
+				lastName: userData.data.lastName,
+				username: userData.data.username,
+				email: userData.data.email,
+				role: currentUserRole,
+		  }
+		: null;
 	const { canManageUsers } = useAdminAccess();
 	const {
 		data: usersData,
 		isLoading: isUsersLoading,
 		error: usersError,
-	} = useGetAllUsersQuery( undefined, { skip: ! canManageUsers } );
-	const [ createUser, { isLoading: isCreating } ] = useCreateUserMutation();
-	const [ updateUser, { isLoading: isUpdating } ] = useUpdateUserMutation();
-	const [ deleteUser, { isLoading: isDeleting } ] = useDeleteUserMutation();
-	const [ dialogMode, setDialogMode ] = useState( 'create' );
-	const [ activeUser, setActiveUser ] = useState( null );
-	const [ isDialogOpen, setIsDialogOpen ] = useState( false );
-	const [ userPendingDelete, setUserPendingDelete ] = useState( null );
+	} = useGetAllUsersQuery(undefined, { skip: !canManageUsers });
+	const [createUser, { isLoading: isCreating }] = useCreateUserMutation();
+	const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
+	const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
+	const [dialogMode, setDialogMode] = useState<UserDialogMode>('create');
+	const [activeUser, setActiveUser] = useState<UserSummary | null>(null);
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const [userPendingDelete, setUserPendingDelete] =
+		useState<UserSummary | null>(null);
 	const notification = useNotification();
 
-	const users = useMemo(
-		() => usersData?.data ?? [],
-		[ usersData?.data ],
+	const users = useMemo<UserSummary[]>(
+		() => usersData?.data || [],
+		[usersData]
 	);
 	const adminCount = useMemo(
-		() => users.filter( ( user ) => user.role === 'admin' ).length,
-		[ users ],
+		() => users.filter((user) => user.role === 'admin').length,
+		[users]
 	);
 	const editorCount = useMemo(
-		() => users.filter( ( user ) => user.role === 'editor' ).length,
-		[ users ],
+		() => users.filter((user) => user.role === 'editor').length,
+		[users]
 	);
 
 	const openCreateDialog = () => {
-		setDialogMode( 'create' );
-		setActiveUser( null );
-		setIsDialogOpen( true );
+		setDialogMode('create');
+		setActiveUser(null);
+		setIsDialogOpen(true);
 	};
 
-	const openEditDialog = ( user ) => {
-		setDialogMode( 'edit' );
-		setActiveUser( user );
-		setIsDialogOpen( true );
+	const openEditDialog = (user: UserSummary) => {
+		setDialogMode('edit');
+		setActiveUser(user);
+		setIsDialogOpen(true);
 	};
 
-	const openDeleteDialog = ( user ) => {
-		if ( user.id === currentUser?.id ) {
+	const openDeleteDialog = (user: UserSummary) => {
+		if (user.id === currentUser?.id) {
 			return;
 		}
 
-		setUserPendingDelete( user );
+		setUserPendingDelete(user);
 	};
 
 	const handleDelete = async () => {
-		if ( ! userPendingDelete || userPendingDelete.id === currentUser?.id ) {
+		if (
+			!userPendingDelete ||
+			!userPendingDelete.username ||
+			userPendingDelete.id === currentUser?.id
+		) {
 			return;
 		}
 
 		try {
-			await deleteUser( userPendingDelete.username ).unwrap();
+			await deleteUser(userPendingDelete.username).unwrap();
 			notification.success(
 				__('User deleted'),
 				sprintf(
 					__('%s was removed successfully.'),
-					`${ userPendingDelete.firstName } ${ userPendingDelete.lastName }`
-				),
+					`${userPendingDelete.firstName} ${userPendingDelete.lastName}`
+				)
 			);
-			setUserPendingDelete( null );
-		} catch ( error ) {
+			setUserPendingDelete(null);
+		} catch (error) {
 			notification.error(
 				__('Delete failed'),
-				error?.data?.message || __('Unable to delete this user right now.'),
+				getErrorMessage(
+					error,
+					__('Unable to delete this user right now.')
+				)
 			);
 		}
 	};
 
-	const handleSubmitUser = async ( payload ) => {
-		if ( 'create' === dialogMode ) {
-			return createUser( payload ).unwrap();
+	const handleSubmitUser = async (payload: UserDialogPayload) => {
+		if ('create' === dialogMode) {
+			return createUser(payload).unwrap();
 		}
 
-		return updateUser( {
-			currentUsername: activeUser.username,
+	return updateUser({
+			currentUsername: activeUser?.username ?? undefined,
 			...payload,
-		} ).unwrap();
+		}).unwrap();
 	};
 
-	if ( isProfileLoading ) {
+	if (isProfileLoading) {
 		return (
 			<div className="rounded-lg border border-stroke bg-surface p-10 text-center">
 				<div className="mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-accent" />
@@ -370,7 +429,7 @@ function UsersPage() {
 		);
 	}
 
-	if ( ! canManageUsers ) {
+	if (!canManageUsers) {
 		return (
 			<div className="rounded-xl border border-stroke bg-surface p-10 text-center">
 				<div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600">
@@ -380,7 +439,9 @@ function UsersPage() {
 					{__('Admin access required')}
 				</h2>
 				<p className="mt-2 text-sm text-text-muted">
-					{__('Only admin accounts can manage other users and their roles.')}
+					{__(
+						'Only admin accounts can manage other users and their roles.'
+					)}
 				</p>
 			</div>
 		);
@@ -414,7 +475,7 @@ function UsersPage() {
 						{__('Total Users')}
 					</p>
 					<p className="mt-3 text-3xl font-semibold text-heading">
-						{ users.length }
+						{users.length}
 					</p>
 				</div>
 				<div className="rounded-xl border border-stroke bg-surface p-5">
@@ -422,7 +483,7 @@ function UsersPage() {
 						{__('Admins')}
 					</p>
 					<p className="mt-3 text-3xl font-semibold text-heading">
-						{ adminCount }
+						{adminCount}
 					</p>
 				</div>
 				<div className="rounded-xl border border-stroke bg-surface p-5">
@@ -430,7 +491,7 @@ function UsersPage() {
 						{__('Editors')}
 					</p>
 					<p className="mt-3 text-3xl font-semibold text-heading">
-						{ editorCount }
+						{editorCount}
 					</p>
 				</div>
 			</div>
@@ -442,13 +503,16 @@ function UsersPage() {
 					</h2>
 				</div>
 
-				{ isUsersLoading ? (
+				{isUsersLoading ? (
 					<div className="p-10 text-center">
 						<div className="mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-accent" />
 					</div>
 				) : usersError ? (
 					<div className="p-6 text-sm text-red-600 dark:text-red-300">
-						{ usersError?.data?.message || __('Unable to load users.') }
+						{getErrorMessage(
+							usersError,
+							__('Unable to load users.')
+						)}
 					</div>
 				) : users.length === 0 ? (
 					<div className="p-10 text-center">
@@ -459,7 +523,9 @@ function UsersPage() {
 							{__('No users yet')}
 						</h3>
 						<p className="mt-2 text-sm text-text-muted">
-							{__('Add an admin or editor account to start sharing access.')}
+							{__(
+								'Add an admin or editor account to start sharing access.'
+							)}
 						</p>
 					</div>
 				) : (
@@ -469,40 +535,65 @@ function UsersPage() {
 								<tr className="text-left text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">
 									<th className="px-6 py-4">{__('User')}</th>
 									<th className="px-6 py-4">{__('Role')}</th>
-									<th className="px-6 py-4">{__('Created')}</th>
-									<th className="px-6 py-4 text-right">{__('Actions')}</th>
+									<th className="px-6 py-4">
+										{__('Created')}
+									</th>
+									<th className="px-6 py-4 text-right">
+										{__('Actions')}
+									</th>
 								</tr>
 							</thead>
 							<tbody className="divide-y divide-stroke">
-								{ users.map( ( user ) => (
-									<tr key={ user.id } className="hover:bg-surface-alt/60">
+								{users.map((user) => (
+									<tr
+										key={user.id}
+										className="hover:bg-surface-alt/60"
+									>
 										<td className="px-6 py-4">
 											<div className="flex items-center gap-3">
 												<div className="flex h-11 w-11 items-center justify-center rounded-full bg-accent/10 font-semibold text-accent">
-													{ `${ user.firstName?.[ 0 ] || '' }${ user.lastName?.[ 0 ] || '' }` || 'U' }
+													{`${user.firstName?.[0] || ''}${user.lastName?.[0] || ''}` ||
+														'U'}
 												</div>
 												<div>
 													<div className="font-medium text-heading">
-														{ user.firstName } { user.lastName }
+														{user.firstName}{' '}
+														{user.lastName}
 													</div>
 													<div className="text-sm text-text-muted">
-														{ user.email }
+														{user.email}
 													</div>
 													<div className="text-xs text-text-muted">
-														@{ user.username }
+														@{user.username}
 													</div>
 												</div>
 											</div>
 										</td>
 										<td className="px-6 py-4">
 											<span
-												className={ `inline-flex rounded-full px-3 py-1 text-xs font-semibold ${ roleMeta[ user.role ]?.badge || roleMeta.editor.badge }` }
+												className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
+													roleMeta[
+														user.role === 'admin'
+															? 'admin'
+															: 'editor'
+													].badge
+												}`}
 											>
-												{ roleMeta[ user.role ]?.label || __('Editor') }
+												{
+													roleMeta[
+														user.role === 'admin'
+															? 'admin'
+															: 'editor'
+													].label
+												}
 											</span>
 										</td>
 										<td className="px-6 py-4 text-sm text-text-muted">
-											{ new Date( user.createdAt ).toLocaleDateString() }
+											{user.createdAt
+												? new Date(
+														user.createdAt
+													).toLocaleDateString()
+												: __('Unknown')}
 										</td>
 										<td className="px-6 py-4">
 											<div className="flex justify-end gap-2">
@@ -512,13 +603,15 @@ function UsersPage() {
 													size="sm"
 													aria-label={sprintf(
 														__('Edit %s'),
-														`${ user.firstName } ${ user.lastName }`
+														`${user.firstName} ${user.lastName}`
 													)}
 													title={sprintf(
 														__('Edit %s'),
-														`${ user.firstName } ${ user.lastName }`
+														`${user.firstName} ${user.lastName}`
 													)}
-													onClick={() => openEditDialog( user )}
+													onClick={() =>
+														openEditDialog(user)
+													}
 												/>
 												<IconButton
 													icon={Trash2}
@@ -526,26 +619,30 @@ function UsersPage() {
 													size="sm"
 													aria-label={sprintf(
 														__('Delete %s'),
-														`${ user.firstName } ${ user.lastName }`
+														`${user.firstName} ${user.lastName}`
 													)}
 													title={sprintf(
 														__('Delete %s'),
-														`${ user.firstName } ${ user.lastName }`
+														`${user.firstName} ${user.lastName}`
 													)}
 													className="text-red-600 hover:border-red-500 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-500/10"
 													disabled={
-														user.id === currentUser?.id || isDeleting
+														user.id ===
+															currentUser?.id ||
+														isDeleting
 													}
-													onClick={() => openDeleteDialog( user )}
+													onClick={() =>
+														openDeleteDialog(user)
+													}
 												/>
 											</div>
 										</td>
 									</tr>
-								) ) }
+								))}
 							</tbody>
 						</table>
 					</div>
-				) }
+				)}
 			</div>
 
 			<UserDialog
@@ -554,22 +651,22 @@ function UsersPage() {
 				mode={dialogMode}
 				currentUser={currentUser}
 				initialUser={activeUser}
-				onClose={() => setIsDialogOpen( false )}
+				onClose={() => setIsDialogOpen(false)}
 				onSubmit={handleSubmitUser}
 				isSubmitting={isCreating || isUpdating}
 			/>
 			<ConfirmDialog
-				open={ Boolean( userPendingDelete ) }
-				onClose={() => setUserPendingDelete( null )}
+				open={Boolean(userPendingDelete)}
+				onClose={() => setUserPendingDelete(null)}
 				title={__('Delete User')}
 				description={
 					userPendingDelete
 						? sprintf(
-							__(
-								'Delete %s? This will revoke their sessions, remove their API keys, and permanently delete their account.'
-							),
-							`${ userPendingDelete.firstName } ${ userPendingDelete.lastName }`
-						)
+								__(
+									'Delete %s? This will revoke their sessions, remove their API keys, and permanently delete their account.'
+								),
+								`${userPendingDelete.firstName} ${userPendingDelete.lastName}`
+							)
 						: ''
 				}
 				confirmText={__('Delete User')}

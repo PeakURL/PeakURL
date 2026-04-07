@@ -1,6 +1,4 @@
-// @ts-nocheck
-
-import type { PluginCardData } from './_components/PluginCard';
+import type { PluginCardData } from './_components/types';
 
 /**
  * Anonymous placeholder cards for the plugins preview page.

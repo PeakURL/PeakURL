@@ -1,7 +1,7 @@
-// @ts-nocheck
 import { Modal, Button, Input } from '@/components/ui';
 import { Copy } from 'lucide-react';
 import { __ } from '@/i18n';
+import type { ApiKeyModalsProps } from './types';
 
 function ApiKeyModals({
 	showCreateModal,
@@ -15,7 +15,7 @@ function ApiKeyModals({
 	onCreateKey,
 	copyToClipboard,
 	isGeneratingKey,
-}) {
+}: ApiKeyModalsProps) {
 	return (
 		<>
 			<Modal
@@ -41,7 +41,7 @@ function ApiKeyModals({
 						label={__('Label (Optional)')}
 						placeholder={__('e.g. Production automation')}
 						value={keyLabel}
-						onChange={(e) => setKeyLabel(e.target.value)}
+						onChange={(event) => setKeyLabel(event.target.value)}
 					/>
 					<div className="flex justify-end gap-2">
 						<Button
@@ -54,7 +54,9 @@ function ApiKeyModals({
 							onClick={onCreateKey}
 							disabled={isGeneratingKey}
 						>
-							{isGeneratingKey ? __('Creating...') : __('Create API Key')}
+							{isGeneratingKey
+								? __('Creating...')
+								: __('Create API Key')}
 						</Button>
 					</div>
 				</div>
@@ -62,7 +64,7 @@ function ApiKeyModals({
 
 			<Modal
 				isOpen={showKeyModal}
-				onClose={setShowKeyModal}
+				onClose={() => setShowKeyModal(false)}
 				title={__('Copy Your API Key')}
 				size="md"
 			>
@@ -104,7 +106,9 @@ function ApiKeyModals({
 									onClick={() =>
 										copyToClipboard(
 											baseApiUrl,
-											__('Base API URL copied to clipboard')
+											__(
+												'Base API URL copied to clipboard'
+											)
 										)
 									}
 									className="absolute top-2 right-2 p-1.5 text-text-muted hover:text-heading bg-surface rounded shadow-sm hover:shadow transition-all"
@@ -133,7 +137,7 @@ function ApiKeyModals({
 							<Copy size={16} className="mr-2" />
 							{__('Copy Key')}
 						</Button>
-						<Button onClick={setShowKeyModal}>
+						<Button onClick={() => setShowKeyModal(false)}>
 							{__("I've Stored It")}
 						</Button>
 					</div>

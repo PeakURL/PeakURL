@@ -1,7 +1,7 @@
-// @ts-nocheck
 import { __ } from '@/i18n';
+import type { HeaderProps } from './types';
 
-const Header = ({ timeRange, onTimeRangeChange }) => {
+const Header = ({ timeRange, onTimeRangeChange }: HeaderProps) => {
 	return (
 		<div className="flex items-center justify-between">
 			<div>

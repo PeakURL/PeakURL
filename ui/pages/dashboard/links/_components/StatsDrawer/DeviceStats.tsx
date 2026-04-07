@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import {
 	Compass,
 	Flame,
@@ -10,10 +8,15 @@ import {
 	Smartphone,
 	Tablet,
 } from 'lucide-react';
-import { __, _n, sprintf } from '@/i18n';
+import { __, _n } from '@/i18n';
+import type {
+	BrowserIconProps,
+	DeviceStatsProps,
+	StatsMetricItem,
+} from './types';
 
 // Browser icon mapping
-const getBrowserIcon = (browser) => {
+const getBrowserIcon = (browser: string) => {
 	const browserLower = browser.toLowerCase();
 	if (browserLower.includes('chrome')) return 'chrome';
 	if (browserLower.includes('safari')) return 'safari';
@@ -22,8 +25,7 @@ const getBrowserIcon = (browser) => {
 	return 'globe';
 };
 
-// Browser icon component
-const BrowserIcon = ({ browser, className }) => {
+const BrowserIcon = ({ browser, className }: BrowserIconProps) => {
 	const iconType = getBrowserIcon(browser);
 
 	if (iconType === 'chrome') {
@@ -42,7 +44,7 @@ const BrowserIcon = ({ browser, className }) => {
 };
 
 // Device icon mapping
-const getDeviceIcon = (deviceType) => {
+const getDeviceIcon = (deviceType: string) => {
 	const typeLower = deviceType.toLowerCase();
 	if (typeLower.includes('mobile')) return Smartphone;
 	if (typeLower.includes('tablet')) return Tablet;
@@ -50,7 +52,7 @@ const getDeviceIcon = (deviceType) => {
 };
 
 // OS emoji mapping
-const getOSEmoji = (os) => {
+const getOSEmoji = (os: string) => {
 	const osLower = os.toLowerCase();
 	if (osLower.includes('windows')) return '🪟';
 	if (osLower.includes('mac') || osLower.includes('ios')) return '🍎';
@@ -64,7 +66,7 @@ function DeviceStats({
 	browsers = [],
 	os: oses = [],
 	isLoading,
-}) {
+}: DeviceStatsProps) {
 	if (isLoading) {
 		return (
 			<div className="bg-surface-alt border border-stroke rounded-lg p-4 animate-pulse">
@@ -107,13 +109,17 @@ function DeviceStats({
 	}
 
 	// Calculate total based on devices (assuming consistent data)
-	const total = devices.reduce((sum, item) => sum + item.count, 0);
+	const total = devices.reduce(
+		(sum: number, item: StatsMetricItem) => sum + item.count,
+		0
+	);
 
 	// Helper to calculate percentage
-	const formatData = (items) => {
+	const formatData = (items: StatsMetricItem[]) => {
 		return items.map((item) => ({
 			...item,
-			percentage: total > 0 ? ((item.count / total) * 100).toFixed(1) : 0,
+			percentage:
+				total > 0 ? ((item.count / total) * 100).toFixed(1) : '0.0',
 		}));
 	};
 
@@ -159,39 +165,50 @@ function DeviceStats({
 					</h3>
 				</div>
 				<div className="space-y-3">
-					{displayBrowsers.slice(0, 5).map((browser, index) => {
-						return (
-							<div key={browser.name} className="space-y-1.5">
-								<div className="flex items-center justify-between">
-									<div className="flex items-center gap-2">
-										<BrowserIcon
-											browser={browser.name}
-											className="w-4 h-4 text-accent"
-										/>
-										<span className="text-sm font-medium text-heading">
-											{browser.name}
-										</span>
-									</div>
-									<div className="flex items-center gap-3">
-										<span className="text-sm text-muted">
-											{browser.percentage}%
-										</span>
-										<span className="text-sm font-semibold text-heading min-w-12 text-right">
-											{browser.count}
-										</span>
-									</div>
-								</div>
-								<div className="w-full bg-surface rounded-full h-2 overflow-hidden">
+					{displayBrowsers
+						.slice(0, 5)
+						.map(
+							(
+								browser: StatsMetricItem & {
+									percentage: string;
+								}
+							) => {
+								return (
 									<div
-										className="bg-accent h-full rounded-full transition-all duration-500"
-										style={{
-											width: `${browser.percentage}%`,
-										}}
-									></div>
-								</div>
-							</div>
-						);
-					})}
+										key={browser.name}
+										className="space-y-1.5"
+									>
+										<div className="flex items-center justify-between">
+											<div className="flex items-center gap-2">
+												<BrowserIcon
+													browser={browser.name}
+													className="w-4 h-4 text-accent"
+												/>
+												<span className="text-sm font-medium text-heading">
+													{browser.name}
+												</span>
+											</div>
+											<div className="flex items-center gap-3">
+												<span className="text-sm text-muted">
+													{browser.percentage}%
+												</span>
+												<span className="text-sm font-semibold text-heading min-w-12 text-right">
+													{browser.count}
+												</span>
+											</div>
+										</div>
+										<div className="w-full bg-surface rounded-full h-2 overflow-hidden">
+											<div
+												className="bg-accent h-full rounded-full transition-all duration-500"
+												style={{
+													width: `${browser.percentage}%`,
+												}}
+											></div>
+										</div>
+									</div>
+								);
+							}
+						)}
 				</div>
 			</div>
 
@@ -204,39 +221,41 @@ function DeviceStats({
 					</h3>
 				</div>
 				<div className="grid grid-cols-1 gap-3">
-					{displayDevices.map((device) => {
-						const DeviceIcon = getDeviceIcon(device.name);
-						return (
-							<div
-								key={device.name}
-								className="flex items-center justify-between py-3 px-4 rounded-lg bg-surface border border-stroke hover:border-accent/50 transition-all"
-							>
-								<div className="flex items-center gap-3">
-									<div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
-										<DeviceIcon className="w-5 h-5 text-accent" />
+					{displayDevices.map(
+						(device: StatsMetricItem & { percentage: string }) => {
+							const DeviceIcon = getDeviceIcon(device.name);
+							return (
+								<div
+									key={device.name}
+									className="flex items-center justify-between py-3 px-4 rounded-lg bg-surface border border-stroke hover:border-accent/50 transition-all"
+								>
+									<div className="flex items-center gap-3">
+										<div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+											<DeviceIcon className="w-5 h-5 text-accent" />
+										</div>
+										<div>
+											<p className="text-sm font-medium text-heading">
+												{device.name}
+											</p>
+											<p className="text-xs text-text-muted">
+												{device.count}{' '}
+												{_n(
+													'device',
+													'devices',
+													device.count
+												)}
+											</p>
+										</div>
 									</div>
-									<div>
-										<p className="text-sm font-medium text-heading">
-											{device.name}
-										</p>
-										<p className="text-xs text-text-muted">
-											{device.count}{' '}
-											{_n(
-												'device',
-												'devices',
-												device.count
-											)}
+									<div className="text-right">
+										<p className="text-lg font-bold text-heading">
+											{device.percentage}%
 										</p>
 									</div>
 								</div>
-								<div className="text-right">
-									<p className="text-lg font-bold text-heading">
-										{device.percentage}%
-									</p>
-								</div>
-							</div>
-						);
-					})}
+							);
+						}
+					)}
 				</div>
 			</div>
 
@@ -249,31 +268,33 @@ function DeviceStats({
 					</h3>
 				</div>
 				<div className="space-y-2">
-					{displayOses.map((os, index) => (
-						<div
-							key={os.name}
-							className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-surface transition-all"
-						>
-							<div className="flex items-center gap-3">
-								<div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center text-lg">
-									{getOSEmoji(os.name)}
+					{displayOses.map(
+						(os: StatsMetricItem & { percentage: string }) => (
+							<div
+								key={os.name}
+								className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-surface transition-all"
+							>
+								<div className="flex items-center gap-3">
+									<div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center text-lg">
+										{getOSEmoji(os.name)}
+									</div>
+									<div>
+										<p className="text-sm font-medium text-heading">
+											{os.name}
+										</p>
+									</div>
 								</div>
-								<div>
-									<p className="text-sm font-medium text-heading">
-										{os.name}
-									</p>
+								<div className="text-right flex items-center gap-3">
+									<span className="text-sm text-muted">
+										{os.percentage}%
+									</span>
+									<span className="text-sm font-semibold text-heading min-w-12">
+										{os.count}
+									</span>
 								</div>
 							</div>
-							<div className="text-right flex items-center gap-3">
-								<span className="text-sm text-muted">
-									{os.percentage}%
-								</span>
-								<span className="text-sm font-semibold text-heading min-w-12">
-									{os.count}
-								</span>
-							</div>
-						</div>
-					))}
+						)
+					)}
 				</div>
 			</div>
 		</div>

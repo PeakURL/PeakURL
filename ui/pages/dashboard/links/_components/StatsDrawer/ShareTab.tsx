@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { useState } from 'react';
 import {
 	Copy,
@@ -10,14 +8,15 @@ import {
 	Mail,
 } from 'lucide-react';
 import { __ } from '@/i18n';
-import { getLinkDisplayTitle } from '@/utils';
+import { copyToClipboard, getLinkDisplayTitle } from '@/utils';
+import type { SharePlatform, ShareTabProps } from './types';
 
-function ShareTab({ link, shortUrl }) {
+function ShareTab({ link, shortUrl }: ShareTabProps) {
 	const [copied, setCopied] = useState(false);
 
 	const handleCopy = async () => {
 		try {
-			await navigator.clipboard.writeText(shortUrl);
+			await copyToClipboard(shortUrl);
 			setCopied(true);
 			setTimeout(() => setCopied(false), 2000);
 		} catch (err) {
@@ -25,22 +24,20 @@ function ShareTab({ link, shortUrl }) {
 		}
 	};
 
-	const handleShare = (platform) => {
+	const handleShare = (platform: SharePlatform) => {
 		const url = encodeURIComponent(shortUrl);
 		const title = encodeURIComponent(
 			getLinkDisplayTitle(link.title, __('Check out this link'))
 		);
 
-		const shareUrls = {
+		const shareUrls: Record<SharePlatform, string> = {
 			facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
 			twitter: `https://twitter.com/intent/tweet?url=${url}&text=${title}`,
 			linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
 			email: `mailto:?subject=${title}&body=${url}`,
 		};
 
-		if (shareUrls[platform]) {
-			window.open(shareUrls[platform], '_blank', 'width=600,height=400');
-		}
+		window.open(shareUrls[platform], '_blank', 'width=600,height=400');
 	};
 
 	return (

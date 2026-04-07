@@ -1,8 +1,12 @@
-// @ts-nocheck
-
+import type { ChangeEvent, ClipboardEvent, KeyboardEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
+import type { VerificationCodeInputProps } from './types';
+export type { VerificationCodeInputProps } from './types';
 
-const toDigits = (value, length) => {
+const toDigits = (
+	value: string | number | null | undefined,
+	length: number
+): string[] => {
 	const sanitized = String(value || '')
 		.replace(/\D/g, '')
 		.slice(0, length);
@@ -18,9 +22,11 @@ export function VerificationCodeInput({
 	onEnter,
 	disabled = false,
 	className = '',
-}) {
-	const [digits, setDigits] = useState(() => toDigits(value, length));
-	const inputsRef = useRef([]);
+}: VerificationCodeInputProps) {
+	const [digits, setDigits] = useState<string[]>(() =>
+		toDigits(value, length)
+	);
+	const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
 	const nextEmptyIndex = digits.findIndex((digit) => !digit);
 	const highlightedIndex =
 		nextEmptyIndex === -1 ? length - 1 : nextEmptyIndex;
@@ -35,7 +41,7 @@ export function VerificationCodeInput({
 		}
 	}, [disabled]);
 
-	const updateDigits = (nextDigits) => {
+	const updateDigits = (nextDigits: string[]) => {
 		setDigits(nextDigits);
 
 		const nextValue = nextDigits.join('');
@@ -46,7 +52,10 @@ export function VerificationCodeInput({
 		}
 	};
 
-	const handleChange = (event, index) => {
+	const handleChange = (
+		event: ChangeEvent<HTMLInputElement>,
+		index: number
+	) => {
 		const sanitized = event.target.value.replace(/\D/g, '');
 
 		if (!sanitized) {
@@ -69,7 +78,10 @@ export function VerificationCodeInput({
 		inputsRef.current[nextIndex]?.focus();
 	};
 
-	const handleKeyDown = (event, index) => {
+	const handleKeyDown = (
+		event: KeyboardEvent<HTMLInputElement>,
+		index: number
+	) => {
 		if ('Enter' === event.key) {
 			event.preventDefault();
 			onEnter?.(event);
@@ -107,7 +119,7 @@ export function VerificationCodeInput({
 		}
 	};
 
-	const handlePaste = (event) => {
+	const handlePaste = (event: ClipboardEvent<HTMLDivElement>) => {
 		event.preventDefault();
 
 		const pastedDigits = event.clipboardData
@@ -134,6 +146,7 @@ export function VerificationCodeInput({
 					key={index}
 					ref={(element) => {
 						inputsRef.current[index] = element;
+						return undefined;
 					}}
 					type="text"
 					inputMode="numeric"

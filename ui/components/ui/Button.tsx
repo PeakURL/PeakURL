@@ -1,20 +1,23 @@
-// @ts-nocheck
 import { Loader2 } from 'lucide-react';
+import type {
+	ButtonGroupProps,
+	ButtonProps,
+	ButtonSize,
+	ButtonVariant,
+	IconButtonProps,
+} from './types';
+export type {
+	ButtonGroupProps,
+	ButtonIcon,
+	ButtonProps,
+	ButtonSize,
+	ButtonVariant,
+	IconButtonProps,
+	IconPosition,
+} from './types';
 
 /**
- * Button Component
- * A customizable button with variants, sizes, and loading state.
- * @param {Object} props
- * @param {React.ReactNode} props.children - Button content
- * @param {('primary'|'secondary'|'danger'|'success'|'warning'|'ghost'|'outline')} [props.variant='primary'] - Button style variant
- * @param {('xs'|'sm'|'md'|'lg'|'xl')} [props.size='md'] - Button size
- * @param {string} [props.className=''] - Additional class names
- * @param {boolean} [props.disabled=false] - Is the button disabled?
- * @param {boolean} [props.loading=false] - Is the button in a loading state?
- * @param {Function} props.onClick - Click handler
- * @param {('button'|'submit'|'reset')} [props.type='button'] - Button type attribute
- * @param {React.ElementType} props.icon - Icon component
- * @param {('left'|'right')} [props.iconPosition='left'] - Icon position relative to text
+ * Button component with visual variants, sizing, optional icons, and loading state.
  */
 export function Button({
 	children,
@@ -25,16 +28,14 @@ export function Button({
 	loading = false,
 	onClick,
 	type = 'button',
-	icon,
+	icon: Icon,
 	iconPosition = 'left',
 	...props
-}) {
-	// Base styles
+}: ButtonProps) {
 	const baseStyles =
 		'relative inline-flex items-center justify-center font-semibold rounded-md transition-all duration-200 select-none disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent/50';
 
-	// Style variants
-	const variants = {
+	const variants: Record<ButtonVariant, string> = {
 		primary:
 			'bg-accent text-white shadow-sm hover:shadow-md hover:bg-primary-600 active:scale-[0.98]',
 		secondary:
@@ -49,7 +50,7 @@ export function Button({
 			'border border-stroke text-heading hover:border-accent hover:bg-accent/10 active:scale-[0.98]',
 	};
 
-	const sizes = {
+	const sizes: Record<ButtonSize, string> = {
 		xs: 'px-3 py-1.5 text-xs gap-1.5',
 		sm: 'px-4 py-2 text-sm gap-2',
 		md: 'px-5 py-2.5 text-sm gap-2',
@@ -57,7 +58,16 @@ export function Button({
 		xl: 'px-9 py-4 text-lg gap-3',
 	};
 
+	const iconSizes: Record<ButtonSize, number> = {
+		xs: 14,
+		sm: 16,
+		md: 16,
+		lg: 18,
+		xl: 20,
+	};
+
 	const disabledStyles = disabled || loading ? 'pointer-events-none' : '';
+	const iconNode = Icon ? <Icon size={iconSizes[size]} /> : null;
 
 	return (
 		<button
@@ -73,20 +83,24 @@ export function Button({
 					{children}
 				</>
 			) : (
-				children
+				<>
+					{'left' === iconPosition ? iconNode : null}
+					{children}
+					{'right' === iconPosition ? iconNode : null}
+				</>
 			)}
 		</button>
 	);
 }
 
 /**
- * ButtonGroup Component
- * Wraps multiple buttons in a container for related actions.
- * @param {Object} props
- * @param {React.ReactNode} props.children - Button components
- * @param {string} [props.className=''] - Additional class names
+ * ButtonGroup wraps related buttons in a single bordered inline container.
  */
-export function ButtonGroup({ children, className = '', ...props }) {
+export function ButtonGroup({
+	children,
+	className = '',
+	...props
+}: ButtonGroupProps) {
 	return (
 		<div
 			className={`inline-flex rounded-md shadow-sm overflow-hidden border border-stroke ${className}`}
@@ -99,13 +113,7 @@ export function ButtonGroup({ children, className = '', ...props }) {
 }
 
 /**
- * IconButton Component
- * A square button with only an icon.
- * @param {Object} props
- * @param {React.ElementType} props.icon - Icon component
- * @param {('xs'|'sm'|'md'|'lg'|'xl')} [props.size='md'] - Button size
- * @param {string} [props.variant='ghost'] - Button style variant
- * @param {string} [props.className=''] - Additional class names
+ * IconButton renders a square button that only contains an icon.
  */
 export function IconButton({
 	icon: IconComponent,
@@ -113,8 +121,8 @@ export function IconButton({
 	variant = 'ghost',
 	className = '',
 	...props
-}) {
-	const sizes = {
+}: IconButtonProps) {
+	const sizes: Record<ButtonSize, string> = {
 		xs: 'w-7 h-7',
 		sm: 'w-8 h-8',
 		md: 'w-9 h-9',
@@ -122,7 +130,7 @@ export function IconButton({
 		xl: 'w-12 h-12',
 	};
 
-	const iconSizes = {
+	const iconSizes: Record<ButtonSize, number> = {
 		xs: 14,
 		sm: 16,
 		md: 18,
@@ -133,6 +141,7 @@ export function IconButton({
 	return (
 		<Button
 			variant={variant}
+			size={size}
 			className={`${sizes[size]} p-0! ${className}`}
 			{...props}
 		>

@@ -1,9 +1,29 @@
-// @ts-nocheck
 import { useState, useEffect, useCallback, useRef } from 'react';
+import type { LucideIcon } from 'lucide-react';
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
+import type {
+	NotificationContainerProps,
+	NotificationProps,
+	NotificationType,
+} from './types';
+export type {
+	NotificationContainerProps,
+	NotificationItem,
+	NotificationPayload,
+	NotificationProps,
+	NotificationType,
+} from './types';
 
 // Notification types with solid colors
-const notificationTypes = {
+const notificationTypes: Record<
+	NotificationType,
+	{
+		icon: LucideIcon;
+		bgColor: string;
+		textColor: string;
+		borderColor: string;
+	}
+> = {
 	success: {
 		icon: CheckCircle,
 		bgColor: 'bg-emerald-600',
@@ -50,12 +70,12 @@ export function Notification({
 	duration = 5000,
 	onClose,
 	className = '',
-}) {
+}: NotificationProps) {
 	const [isPaused, setIsPaused] = useState(false);
 	const [isExiting, setIsExiting] = useState(false);
 
 	// Timer refs
-	const timerRef = useRef(null);
+	const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const startTimeRef = useRef(0);
 	const remainingTimeRef = useRef(duration);
 
@@ -72,7 +92,9 @@ export function Notification({
 
 	const startTimer = useCallback(() => {
 		// Clear any existing timer
-		if (timerRef.current) clearTimeout(timerRef.current);
+		if (timerRef.current) {
+			clearTimeout(timerRef.current);
+		}
 
 		timerRef.current = setTimeout(() => {
 			handleClose();
@@ -95,12 +117,18 @@ export function Notification({
 	}, []);
 
 	useEffect(() => {
+		remainingTimeRef.current = duration;
+	}, [duration]);
+
+	useEffect(() => {
 		if (duration > 0 && !isPaused) {
 			startTimer();
 		}
 
 		return () => {
-			if (timerRef.current) clearTimeout(timerRef.current);
+			if (timerRef.current) {
+				clearTimeout(timerRef.current);
+			}
 		};
 	}, [duration, isPaused, startTimer]);
 
@@ -149,6 +177,7 @@ export function Notification({
 				</div>
 
 				<button
+					type="button"
 					onClick={handleClose}
 					className="shrink-0 p-1 rounded-lg hover:bg-white/20 transition-colors duration-200"
 				>
@@ -182,7 +211,7 @@ export function Notification({
 export function NotificationContainer({
 	notifications = [],
 	onRemoveNotification,
-}) {
+}: NotificationContainerProps) {
 	return (
 		<div className="fixed top-4 right-4 z-50 space-y-3 max-w-sm w-full pointer-events-none">
 			{/* pointer-events-none on container to let clicks pass through, but pointer-events-auto on notifications */}

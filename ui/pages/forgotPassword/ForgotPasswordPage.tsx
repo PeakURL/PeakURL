@@ -1,30 +1,19 @@
-// @ts-nocheck
+import type { KeyboardEvent, SubmitEvent } from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, KeyRound, Mail } from 'lucide-react';
 import { Button, Input } from '@/components/ui';
-import { useForgotPasswordMutation } from '@/store/slices/api/user';
+import { useForgotPasswordMutation } from '@/store/slices/api';
 import { __, sprintf } from '@/i18n';
+import { getErrorMessage, requestControlFormSubmit } from '@/utils';
 
-function getErrorMessage(error, fallback) {
-	if (typeof error?.data?.message === 'string' && error.data.message) {
-		return error.data.message;
-	}
-
-	if (typeof error?.error === 'string' && error.error) {
-		return error.error;
-	}
-
-	return fallback;
-}
-
-const submitFormOnEnter = (event) => {
+const submitFormOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
 	if ('Enter' !== event.key) {
 		return;
 	}
 
 	event.preventDefault();
-	event.currentTarget.form?.requestSubmit();
+	requestControlFormSubmit(event.currentTarget);
 };
 
 function ForgotPasswordPage() {
@@ -34,7 +23,7 @@ function ForgotPasswordPage() {
 	const [isSubmitted, setIsSubmitted] = useState(false);
 	const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
 
-	const handleSubmit = async (event) => {
+	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setFormError('');
 

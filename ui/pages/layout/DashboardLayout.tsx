@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { PEAKURL_VERSION } from '@constants';
@@ -7,10 +5,11 @@ import { __ } from '@/i18n';
 import DashboardSidebar from './DashboardSidebar';
 import { DashboardAppBar } from './DashboardAppBar';
 import { AdminNotices } from './AdminNotices';
+import type { DashboardLayoutProps } from './types';
 
-export const DashboardLayout = ({ children }) => {
+export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 	const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
-	const [basePath, setBasePath] = useState('/dashboard');
+	const basePath = '/dashboard';
 	const location = useLocation();
 	const appBarKey = `${location.pathname}${location.search}`;
 	const footerLink =

@@ -1,41 +1,40 @@
-// @ts-nocheck
-
 import { Link } from 'react-router-dom';
 import { AlertCircle, CheckCircle2, Info, TriangleAlert } from 'lucide-react';
-import { useGetAdminNoticesQuery } from '@/store/slices/api/system';
+import { useGetAdminNoticesQuery } from '@/store/slices/api';
+import type {
+	AdminNoticeItem,
+	NoticeActionProps,
+	NoticeTone,
+} from './types';
 
 const NOTICE_STYLES = {
 	error: {
 		container:
 			'border-red-200 bg-red-50 text-red-900 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200',
-		button:
-			'border-red-300/50 hover:bg-red-100/70 dark:border-red-500/30 dark:hover:bg-red-500/10',
+		button: 'border-red-300/50 hover:bg-red-100/70 dark:border-red-500/30 dark:hover:bg-red-500/10',
 		icon: AlertCircle,
 	},
 	warning: {
 		container:
 			'border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200',
-		button:
-			'border-amber-300/50 hover:bg-amber-100/70 dark:border-amber-500/30 dark:hover:bg-amber-500/10',
+		button: 'border-amber-300/50 hover:bg-amber-100/70 dark:border-amber-500/30 dark:hover:bg-amber-500/10',
 		icon: TriangleAlert,
 	},
 	success: {
 		container:
 			'border-emerald-200 bg-emerald-50 text-emerald-900 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200',
-		button:
-			'border-emerald-300/50 hover:bg-emerald-100/70 dark:border-emerald-500/30 dark:hover:bg-emerald-500/10',
+		button: 'border-emerald-300/50 hover:bg-emerald-100/70 dark:border-emerald-500/30 dark:hover:bg-emerald-500/10',
 		icon: CheckCircle2,
 	},
 	info: {
 		container:
 			'border-blue-200 bg-blue-50 text-blue-900 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200',
-		button:
-			'border-blue-300/50 hover:bg-blue-100/70 dark:border-blue-500/30 dark:hover:bg-blue-500/10',
+		button: 'border-blue-300/50 hover:bg-blue-100/70 dark:border-blue-500/30 dark:hover:bg-blue-500/10',
 		icon: Info,
 	},
 };
 
-function NoticeAction({ action, buttonClasses }) {
+function NoticeAction({ action, buttonClasses }: NoticeActionProps) {
 	if (!action?.label || !action?.url) {
 		return null;
 	}
@@ -63,7 +62,7 @@ function NoticeAction({ action, buttonClasses }) {
 }
 
 export const AdminNotices = () => {
-	const { data } = useGetAdminNoticesQuery();
+	const { data } = useGetAdminNoticesQuery(undefined);
 	const notices = data?.data?.items ?? [];
 
 	if (!notices.length) {
@@ -72,8 +71,10 @@ export const AdminNotices = () => {
 
 	return (
 		<div className="mb-5 space-y-4">
-			{notices.map((notice) => {
-				const tone = NOTICE_STYLES[notice?.type] || NOTICE_STYLES.info;
+			{notices.map((notice: AdminNoticeItem) => {
+				const tone =
+					NOTICE_STYLES[(notice?.type as NoticeTone) || 'info'] ||
+					NOTICE_STYLES.info;
 				const Icon = tone.icon;
 
 				return (
@@ -88,7 +89,9 @@ export const AdminNotices = () => {
 								</div>
 								<div className="space-y-1">
 									{notice?.title ? (
-										<p className="font-semibold">{notice.title}</p>
+										<p className="font-semibold">
+											{notice.title}
+										</p>
 									) : null}
 									{notice?.message ? (
 										<p className="leading-6 opacity-80">

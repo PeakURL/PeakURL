@@ -1,17 +1,21 @@
-// @ts-nocheck
 import { useState } from 'react';
 import { Button } from '@/components/ui';
-import { useBulkCreateUrlMutation } from '@/store/slices/api/urls';
-import { buildShortUrl } from '@/utils/linkHelpers';
+import { useBulkCreateUrlMutation } from '@/store/slices/api';
+import { buildShortUrl, getErrorMessage } from '@/utils';
 import ImportSummary from './ImportSummary';
 import ImportDetails from './ImportDetails';
 import { Lightbulb, LoaderCircle, WandSparkles } from 'lucide-react';
 import { __, sprintf } from '@/i18n';
+import type {
+	ImportResult,
+	ImportStatus,
+	PasteImportRequestItem,
+} from './types';
 
 const PasteImport = () => {
 	const [text, setText] = useState('');
-	const [status, setStatus] = useState('idle');
-	const [results, setResults] = useState([]);
+	const [status, setStatus] = useState<ImportStatus>('idle');
+	const [results, setResults] = useState<ImportResult[]>([]);
 	const [bulkCreateUrl] = useBulkCreateUrlMutation();
 
 	const handleImport = async () => {
@@ -20,14 +24,14 @@ const PasteImport = () => {
 		setStatus('processing');
 		try {
 			const lines = text.split(/\r\n|\n/).filter((line) => line.trim());
-			const data = lines.map((line) => {
+			const data: PasteImportRequestItem[] = lines.map((line) => {
 				// Split by comma or space to find alias
 				// But URL might contain comma (less likely) or spaces (encoded).
 				// Let's assume: URL [comma or space] Alias
 				// If comma exists, split by comma. Else split by space.
 
 				let destinationUrl = line.trim();
-				let alias = undefined;
+				let alias: string | undefined;
 
 				if (line.includes(',')) {
 					const parts = line.split(',');
@@ -44,19 +48,24 @@ const PasteImport = () => {
 
 			if (data.length === 0) throw new Error(__('No URLs found'));
 
-			const result = await bulkCreateUrl({ urls: data }).unwrap();
+			const result = await bulkCreateUrl({
+				urls: data,
+			}).unwrap();
 
-			const transformResults = [];
+			const transformResults: ImportResult[] = [];
 			if (result.data) {
-				result.data.results.forEach((item) => {
+				(result.data.results || []).forEach((item) => {
 					transformResults.push({
 						url: item.destinationUrl,
-						alias: item.alias || item.shortCode,
+						alias:
+							item.alias ||
+							item.shortCode ||
+							__('Auto-generated'),
 						status: 'success',
 						shortUrl: buildShortUrl(item),
 					});
 				});
-				result.data.errors.forEach((item) => {
+				(result.data.errors || []).forEach((item) => {
 					transformResults.push({
 						url: item.destinationUrl,
 						alias: item.alias || 'N/A',
@@ -73,7 +82,7 @@ const PasteImport = () => {
 			alert(
 				sprintf(
 					__('Import failed: %s'),
-					err.message || __('Unknown error')
+					getErrorMessage(err, __('Unknown error'))
 				)
 			);
 			setStatus('idle');
@@ -126,26 +135,33 @@ https://example.com/page3 custom-alias`}
 									<li className="flex items-start gap-2">
 										<Lightbulb className="mt-0.5 h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
 										<span>
-											{__('Format:')} <code>URL [alias]</code> {__('or')}{' '}
+											{__('Format:')}{' '}
+											<code>URL [alias]</code> {__('or')}{' '}
 											<code>URL, alias</code>
 										</span>
 									</li>
 									<li className="flex items-start gap-2">
 										<Lightbulb className="mt-0.5 h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
 										<span>
-											{__('Each entry should be on a separate line')}
+											{__(
+												'Each entry should be on a separate line'
+											)}
 										</span>
 									</li>
 									<li className="flex items-start gap-2">
 										<Lightbulb className="mt-0.5 h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
 										<span>
-											{__('URLs must include http:// or https://')}
+											{__(
+												'URLs must include http:// or https://'
+											)}
 										</span>
 									</li>
 									<li className="flex items-start gap-2">
 										<Lightbulb className="mt-0.5 h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
 										<span>
-											{__('If alias is omitted, one will be auto-generated')}
+											{__(
+												'If alias is omitted, one will be auto-generated'
+											)}
 										</span>
 									</li>
 								</ul>

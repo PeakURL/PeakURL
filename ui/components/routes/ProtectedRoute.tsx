@@ -1,12 +1,19 @@
-// @ts-nocheck
-
 import { authApi } from '@/store/slices';
 import { PageLoader } from '@/components/ui';
-import { getInstallRecovery, redirectToInstallRecovery } from '@/utils';
+import {
+	getErrorStatus,
+	getInstallRecovery,
+	redirectToInstallRecovery,
+} from '@/utils';
 import { Navigate, useLocation } from 'react-router-dom';
 import { __ } from '@/i18n';
+import type { AuthRequiredStateProps, ProtectedRouteProps } from './types';
 
-const AuthRequiredState = ({ title, description, onRetry }) => {
+const AuthRequiredState = ({
+	title,
+	description,
+	onRetry,
+}: AuthRequiredStateProps) => {
 	return (
 		<div className="min-h-[60vh] flex items-center justify-center p-6">
 			<div className="w-full max-w-md rounded-2xl border border-stroke bg-surface shadow-sm p-6 space-y-4 text-center">
@@ -29,14 +36,12 @@ const AuthRequiredState = ({ title, description, onRetry }) => {
 };
 
 /**
- * ProtectedRoute Component
- * Higher-order component that protects routes requiring authentication.
- * Redirects unauthenticated users to the login page.
- * Also normalizes users onto the correct subdomain based on their system role.
- * @param {Object} props
- * @param {React.ReactNode} props.children - Content to render if authenticated
+ * ProtectedRoute guards authenticated dashboard routes.
+ *
+ * @param props Component props
+ * @param props.children Content to render if the session is valid
  */
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 	const location = useLocation();
 	const { useAuthCheckQuery } = authApi;
 	const {
@@ -47,14 +52,13 @@ const ProtectedRoute = ({ children }) => {
 		isUninitialized,
 		isError,
 		refetch,
-	} = useAuthCheckQuery();
+	} = useAuthCheckQuery(undefined);
 	const currentUser = data?.user || data?.data;
-	const isAuthenticated = !!currentUser;
-	const hasResolvedSession =
-		undefined !== data || undefined !== error;
+	const isAuthenticated = Boolean(currentUser);
+	const hasResolvedSession = undefined !== data || undefined !== error;
 	const isPending =
 		!hasResolvedSession && (isLoading || isFetching || isUninitialized);
-	const errorStatus = typeof error?.status === 'number' ? error.status : null;
+	const errorStatus = getErrorStatus(error);
 	const isAuthError = 401 === errorStatus || 403 === errorStatus;
 	const installRecovery = getInstallRecovery(error);
 

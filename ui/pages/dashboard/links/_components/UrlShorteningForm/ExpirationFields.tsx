@@ -1,14 +1,14 @@
-// @ts-nocheck
 import { Input } from '@/components/ui';
 import { Calendar } from 'lucide-react';
 import { getLocalDateValue } from '@/utils';
+import type { ExpirationFieldsProps } from '../types';
 
 const ExpirationFields = ({
 	expirationDate,
 	setExpirationDate,
 	expirationTime,
 	setExpirationTime,
-}) => {
+}: ExpirationFieldsProps) => {
 	return (
 		<div>
 			<label className="block text-sm font-medium text-heading mb-1.5">

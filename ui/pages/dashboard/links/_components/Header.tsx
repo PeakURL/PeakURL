@@ -1,10 +1,9 @@
-// @ts-nocheck
-
 import { PEAKURL_DOMAIN } from '@constants';
 import { Link2, RefreshCw } from 'lucide-react';
 import { __ } from '@/i18n';
+import type { LinksHeaderProps } from './types';
 
-const Header = ({ onRefresh, isRefreshing = false }) => {
+const Header = ({ onRefresh, isRefreshing = false }: LinksHeaderProps) => {
 	return (
 		<div className="flex items-center justify-between gap-4">
 			<div className="flex items-center gap-3">

@@ -1,10 +1,22 @@
-// @ts-nocheck
+import type { SubmitEvent } from 'react';
 import { useState } from 'react';
 import { AlertCircle, Mail, Send, Server } from 'lucide-react';
 import { Button, Input } from '@/components/ui';
 import { __, sprintf } from '@/i18n';
+import type { SmtpEncryption } from '../types';
+import type {
+	EmailDeliveryTabProps,
+	EmailFormState,
+	EmailStatus,
+	MethodButtonProps,
+} from './types';
 
-function MethodButton({ isActive, title, description, onClick }) {
+function MethodButton({
+	isActive,
+	title,
+	description,
+	onClick,
+}: MethodButtonProps) {
 	return (
 		<button
 			type="button"
@@ -21,7 +33,7 @@ function MethodButton({ isActive, title, description, onClick }) {
 	);
 }
 
-function buildFormState(status) {
+function buildFormState(status?: EmailStatus | null): EmailFormState {
 	return {
 		driver: status?.driver || 'mail',
 		fromEmail: status?.configuredFromEmail || '',
@@ -41,10 +53,12 @@ function EmailDeliveryTab({
 	isLoading,
 	isSaving,
 	onSave,
-}) {
-	const [form, setForm] = useState(() => buildFormState(status));
+}: EmailDeliveryTabProps) {
+	const [form, setForm] = useState<EmailFormState>(() =>
+		buildFormState(status)
+	);
 
-	const handleSubmit = async (event) => {
+	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		await onSave({
 			driver: form.driver,
@@ -136,7 +150,9 @@ function EmailDeliveryTab({
 						<MethodButton
 							isActive={'mail' === form.driver}
 							title={__('PHP mail()')}
-							description={__('Use the hosting server’s built-in PHP mail transport.')}
+							description={__(
+								'Use the hosting server’s built-in PHP mail transport.'
+							)}
 							onClick={() =>
 								setForm((current) => ({
 									...current,
@@ -147,7 +163,9 @@ function EmailDeliveryTab({
 						<MethodButton
 							isActive={'smtp' === form.driver}
 							title={__('SMTP')}
-							description={__('Send through your own SMTP server with optional authentication.')}
+							description={__(
+								'Send through your own SMTP server with optional authentication.'
+							)}
 							onClick={() =>
 								setForm((current) => ({
 									...current,
@@ -227,13 +245,15 @@ function EmailDeliveryTab({
 									onChange={(event) =>
 										setForm((current) => ({
 											...current,
-											smtpEncryption:
-												event.target.value,
+											smtpEncryption: event.target
+												.value as SmtpEncryption,
 										}))
 									}
 									className="w-full rounded-md border border-stroke bg-surface px-4 py-2 text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent"
 								>
-									<option value="tls">{__('TLS / STARTTLS')}</option>
+									<option value="tls">
+										{__('TLS / STARTTLS')}
+									</option>
 									<option value="ssl">{__('SSL')}</option>
 									<option value="none">{__('None')}</option>
 								</select>
@@ -288,8 +308,7 @@ function EmailDeliveryTab({
 									onChange={(event) =>
 										setForm((current) => ({
 											...current,
-											smtpUsername:
-												event.target.value,
+											smtpUsername: event.target.value,
 										}))
 									}
 									placeholder={__('mailer@example.com')}
@@ -302,22 +321,26 @@ function EmailDeliveryTab({
 									onChange={(event) =>
 										setForm((current) => ({
 											...current,
-											smtpPassword:
-												event.target.value,
+											smtpPassword: event.target.value,
 										}))
 									}
 									placeholder={
 										status?.smtpPasswordConfigured
-											? __('Leave blank to keep the saved password')
+											? __(
+													'Leave blank to keep the saved password'
+												)
 											: __('Enter the SMTP password')
 									}
-									helperText={
-										status?.smtpPasswordConfigured
-											? sprintf(
-													__('Saved password: %s'),
-													status.smtpPasswordHint
-											  )
-											: __('PeakURL stores this password encrypted in the settings database.')
+										helperText={
+											status?.smtpPasswordConfigured
+												? sprintf(
+														__('Saved password: %s'),
+														status.smtpPasswordHint ||
+															''
+													)
+												: __(
+														'PeakURL stores this password encrypted in the settings database.'
+												)
 									}
 									required={!status?.smtpPasswordConfigured}
 								/>

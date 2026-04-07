@@ -1,23 +1,10 @@
-// @ts-nocheck
-
 import { Star, Download, Bell, ExternalLink } from 'lucide-react';
 import { __ } from '@/i18n';
 import { PLUGINS_WAITLIST_URL } from '@constants';
-
-export interface PluginCardData {
-	id: string;
-	gradient: string;
-	/** Width classes for the skeleton bars so every card looks unique */
-	barWidths: [string, string, string];
-}
-
-interface PluginCardProps {
-	plugin: PluginCardData;
-	index: number;
-}
+import type { PluginCardProps, PluginPreviewSkeletonProps } from './types';
 
 /* Faint shimmer skeleton bar */
-function Skeleton({ className = '' }: { className?: string }) {
+function Skeleton({ className = '' }: PluginPreviewSkeletonProps) {
 	return (
 		<div
 			className={`animate-pulse rounded-md bg-stroke/60 dark:bg-stroke/40 ${className}`}
@@ -25,7 +12,7 @@ function Skeleton({ className = '' }: { className?: string }) {
 	);
 }
 
-function PluginCard({ plugin, index }: PluginCardProps) {
+function PluginCard({ plugin }: PluginCardProps) {
 	return (
 		<div className="group relative flex flex-col overflow-hidden rounded-xl border border-stroke bg-surface shadow-sm transition-all duration-200 hover:shadow-md hover:border-stroke-strong">
 			{/* ── Banner ── */}

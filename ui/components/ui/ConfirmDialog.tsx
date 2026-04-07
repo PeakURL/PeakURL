@@ -1,12 +1,23 @@
-// @ts-nocheck
-
 import { Fragment } from 'react';
-import { Dialog, DialogPanel, Transition } from '@headlessui/react';
+import {
+	Dialog,
+	DialogPanel,
+	DialogTitle,
+	Transition,
+	TransitionChild,
+} from '@headlessui/react';
 import { __ } from '@/i18n';
 import { Button } from './Button';
+import type { ConfirmDialogProps } from './types';
+export type { ConfirmDialogProps, ConfirmVariant } from './types';
 
 /**
- * Reusable confirmation dialog using Headless UI Dialog.
+ * Reusable confirmation dialog using Headless UI.
+ *
+ * @param props Dialog props
+ * @param props.open Whether the dialog is visible
+ * @param props.onClose Callback used to close the dialog
+ * @param props.onConfirm Confirmation callback
  */
 export function ConfirmDialog({
 	open,
@@ -19,11 +30,11 @@ export function ConfirmDialog({
 	onConfirm,
 	confirmVariant = 'primary',
 	loading = false,
-}) {
+}: ConfirmDialogProps) {
 	return (
 		<Transition appear show={open} as={Fragment}>
 			<Dialog as="div" className="relative z-50" onClose={onClose}>
-				<Transition.Child
+				<TransitionChild
 					as={Fragment}
 					enter="ease-out duration-200"
 					enterFrom="opacity-0"
@@ -33,11 +44,11 @@ export function ConfirmDialog({
 					leaveTo="opacity-0"
 				>
 					<div className="fixed inset-0 bg-black/30" />
-				</Transition.Child>
+				</TransitionChild>
 
 				<div className="fixed inset-0 overflow-y-auto">
 					<div className="flex min-h-full items-center justify-center p-4 text-center">
-						<Transition.Child
+						<TransitionChild
 							as={Fragment}
 							enter="ease-out duration-200"
 							enterFrom="opacity-0 scale-95"
@@ -47,16 +58,16 @@ export function ConfirmDialog({
 							leaveTo="opacity-0 scale-95"
 						>
 							<DialogPanel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-surface p-6 text-left shadow-xl transition-all border border-stroke">
-								<Dialog.Title className="text-lg font-semibold text-heading mb-2">
+								<DialogTitle className="mb-2 text-lg font-semibold text-heading">
 									{title}
-								</Dialog.Title>
+								</DialogTitle>
 								{description && (
-									<p className="text-sm text-text-muted mb-4 whitespace-pre-line">
+									<p className="mb-4 whitespace-pre-line text-sm text-text-muted">
 										{description}
 									</p>
 								)}
 								{children}
-								<div className="flex justify-end gap-2 mt-6">
+								<div className="mt-6 flex justify-end gap-2">
 									<Button
 										variant="secondary"
 										onClick={onClose}
@@ -69,11 +80,13 @@ export function ConfirmDialog({
 										onClick={onConfirm}
 										disabled={loading}
 									>
-										{loading ? __('Working...') : confirmText}
+										{loading
+											? __('Working...')
+											: confirmText}
 									</Button>
 								</div>
 							</DialogPanel>
-						</Transition.Child>
+						</TransitionChild>
 					</div>
 				</div>
 			</Dialog>

@@ -1,20 +1,27 @@
-// @ts-nocheck
 import { X } from 'lucide-react';
+import type { ModalProps, ModalSize } from './types';
+export type { ModalProps, ModalSize } from './types';
 
 /**
- * Modal Component
- * A customizable modal dialog with backdrop.
- * @param {Object} props
- * @param {boolean} props.isOpen - Whether the modal is visible
- * @param {Function} props.onClose - Callback to close the modal
- * @param {string} props.title - Modal title
- * @param {React.ReactNode} props.children - Modal content
- * @param {('sm'|'md'|'lg'|'xl')} [props.size='md'] - Modal width
+ * Modal dialog with a backdrop and configurable width.
+ *
+ * @param props Modal props
+ * @param props.isOpen Whether the modal is visible
+ * @param props.onClose Callback used to close the modal
+ * @param props.title Optional modal title
+ * @param props.children Modal content
+ * @param props.size Width preset
  */
-export function Modal({ isOpen, onClose, title, children, size = 'md' }) {
+export function Modal({
+	isOpen,
+	onClose,
+	title,
+	children,
+	size = 'md',
+}: ModalProps) {
 	if (!isOpen) return null;
 
-	const sizes = {
+	const sizes: Record<ModalSize, string> = {
 		sm: 'max-w-md',
 		md: 'max-w-2xl',
 		lg: 'max-w-4xl',
@@ -23,10 +30,11 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }) {
 
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-			{/* Backdrop */}
-			<div className="absolute inset-0 bg-black/50" onClick={onClose} />
+			<div
+				className="absolute inset-0 bg-black/50"
+				onClick={() => onClose()}
+			/>
 
-			{/* Modal */}
 			<div
 				className={`relative bg-surface rounded-2xl shadow-2xl w-full ${sizes[size]} max-h-[90vh] overflow-hidden border border-stroke`}
 			>
@@ -37,7 +45,7 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }) {
 						</h3>
 						<button
 							type="button"
-							onClick={onClose}
+							onClick={() => onClose()}
 							className="p-2 text-text-muted hover:text-heading rounded-lg hover:bg-surface-alt transition-colors"
 						>
 							<X size={20} />

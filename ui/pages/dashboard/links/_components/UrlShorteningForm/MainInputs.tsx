@@ -1,8 +1,7 @@
-// @ts-nocheck
 import { Button, Input } from '@/components/ui';
-import { PEAKURL_DOMAIN } from '@constants';
 import { Link as LinkIcon, Tag, Scissors } from 'lucide-react';
 import { __ } from '@/i18n';
+import type { MainInputsProps } from '../types';
 
 const MainInputs = ({
 	destinationUrl,
@@ -10,7 +9,7 @@ const MainInputs = ({
 	alias,
 	setAlias,
 	isLoading,
-}) => {
+}: MainInputsProps) => {
 	return (
 		<div className="space-y-4">
 			{/* All inputs in one line on desktop */}
@@ -46,7 +45,6 @@ const MainInputs = ({
 						icon={Tag}
 						className="h-11"
 					/>
-					
 				</div>
 
 				{/* Shorten Button */}

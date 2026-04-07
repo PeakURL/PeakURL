@@ -1,12 +1,17 @@
-// @ts-nocheck
-
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { X, Trash2, AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
-import { useBulkDeleteUrlMutation } from '@/store/slices/api/urls';
+import { useBulkDeleteUrlMutation } from '@/store/slices/api';
 import { __, sprintf } from '@/i18n';
+import { getErrorMessage } from '@/utils';
+import type { BulkDeleteModalProps } from './types';
 
-function BulkDeleteModal({ open, setOpen, selectedIds, onSuccess }) {
+function BulkDeleteModal({
+	open,
+	setOpen,
+	selectedIds,
+	onSuccess,
+}: BulkDeleteModalProps) {
 	const [error, setError] = useState('');
 	const [bulkDeleteUrl, { isLoading }] = useBulkDeleteUrlMutation();
 
@@ -18,7 +23,7 @@ function BulkDeleteModal({ open, setOpen, selectedIds, onSuccess }) {
 			setOpen(false);
 			if (onSuccess) onSuccess();
 		} catch (err) {
-			setError(err?.data?.message || __('Failed to delete links'));
+			setError(getErrorMessage(err, __('Failed to delete links')));
 		}
 	};
 
@@ -61,7 +66,7 @@ function BulkDeleteModal({ open, setOpen, selectedIds, onSuccess }) {
 								__(
 									'Are you sure you want to delete %s selected link(s)? This action cannot be undone.'
 								),
-								selectedIds.length
+								String(selectedIds.length)
 							)}
 						</p>
 
@@ -88,7 +93,10 @@ function BulkDeleteModal({ open, setOpen, selectedIds, onSuccess }) {
 								) : (
 									<>
 										<Trash2 className="w-4 h-4" />
-										{sprintf(__('Delete (%s)'), selectedIds.length)}
+										{sprintf(
+											__('Delete (%s)'),
+											String(selectedIds.length)
+										)}
 									</>
 								)}
 							</button>

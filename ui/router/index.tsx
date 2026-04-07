@@ -1,9 +1,7 @@
-// @ts-nocheck
 import { useEffect } from 'react';
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
-import { useAdminAccess } from '@/hooks';
 
-import { useScrollToTop } from '@/hooks';
+import { useScrollToTop, useAdminAccess } from '@/hooks';
 import {
 	AppLayout,
 	NotFoundPage,
@@ -70,12 +68,7 @@ function ToolsIndexRoute() {
 		return null;
 	}
 
-	return (
-		<Navigate
-			replace
-			to={canManageUsers ? 'import/file' : 'export'}
-		/>
-	);
+	return <Navigate replace to={canManageUsers ? 'import/file' : 'export'} />;
 }
 
 function AdminOnlyRoute() {
@@ -116,10 +109,7 @@ function AppRouter() {
 					<Route path="links" element={<LinksPage />} />
 					<Route path="tools" element={<ToolsLayoutRoute />}>
 						<Route index element={<ToolsIndexRoute />} />
-						<Route
-							path="export"
-							element={<ExportPage />}
-						/>
+						<Route path="export" element={<ExportPage />} />
 						<Route element={<AdminOnlyRoute />}>
 							<Route
 								path="import"

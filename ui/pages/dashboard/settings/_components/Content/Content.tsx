@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from 'react';
 import { PEAKURL_BASENAME } from '@constants';
 import { ConfirmDialog } from '@/components/ui';
@@ -7,7 +6,7 @@ import {
 	useUpdateUserProfileMutation,
 	useGenerateApiKeyMutation,
 	useDeleteApiKeyMutation,
-} from '@/store/slices/api/user';
+} from '@/store/slices/api';
 import {
 	useGetGeneralSettingsQuery,
 	useSaveGeneralSettingsMutation,
@@ -21,9 +20,25 @@ import {
 	useApplyUpdateMutation,
 	useReinstallUpdateMutation,
 	useUpgradeDatabaseSchemaMutation,
-} from '@/store/slices/api/system';
+} from '@/store/slices/api';
 import { useNotification, IntegrationsTab } from '@/components';
 import { __, sprintf } from '@/i18n';
+import {
+	copyToClipboard as writeToClipboard,
+	extractErrorMessage,
+	getErrorMessage,
+} from '@/utils';
+import type {
+	ApiKeySummary,
+	ContentProps,
+	GeneralFormPayload,
+	GeneralFormState,
+	GeoipConfigurationPayload,
+	MailConfigurationPayload,
+	ProfileUser,
+	ReleaseAction,
+} from './types';
+import type { SecurityFormState } from './sections/types';
 import GeneralTab from './sections/GeneralTab';
 import SecurityTab from './sections/SecurityTab';
 import ApiTab from './sections/ApiTab';
@@ -32,7 +47,7 @@ import LocationDataTab from './sections/LocationDataTab';
 import EmailDeliveryTab from './sections/EmailDeliveryTab';
 import UpdatesTab from './sections/UpdatesTab';
 
-const buildGeneralForm = (user) => ({
+const buildGeneralForm = (user?: ProfileUser | null): GeneralFormState => ({
 	firstName: user?.firstName || '',
 	lastName: user?.lastName || '',
 	username: user?.username || '',
@@ -43,7 +58,10 @@ const buildGeneralForm = (user) => ({
 	bio: user?.bio || '',
 });
 
-const resolveBaseApiUrl = (user, fallbackBaseApiUrl = '') => {
+const resolveBaseApiUrl = (
+	user?: ProfileUser | null,
+	fallbackBaseApiUrl: string | null | undefined = ''
+): string => {
 	if (fallbackBaseApiUrl) {
 		return fallbackBaseApiUrl;
 	}
@@ -59,9 +77,9 @@ const resolveBaseApiUrl = (user, fallbackBaseApiUrl = '') => {
 	return '';
 };
 
-const Content = ({ activeTab }) => {
+const Content = ({ activeTab }: ContentProps) => {
 	const notification = useNotification();
-	const { data: userData } = useGetUserProfileQuery();
+	const { data: userData } = useGetUserProfileQuery(undefined);
 	const [updateProfile, { isLoading: isUpdating }] =
 		useUpdateUserProfileMutation();
 	const [generateApiKey, { isLoading: isGeneratingKey }] =
@@ -116,23 +134,25 @@ const Content = ({ activeTab }) => {
 	const updateStatusData = updateStatus?.data || null;
 	const isInstallingRelease = isApplyingUpdate || isReinstallingUpdate;
 
-	const user = userData?.data;
+	const user = userData?.data || null;
 
-	const [securityForm, setSecurityForm] = useState({
+	const [securityForm, setSecurityForm] = useState<SecurityFormState>({
 		currentPassword: '',
 		newPassword: '',
 		confirmPassword: '',
 	});
 
-	const [newApiKey, setNewApiKey] = useState(null);
+	const [newApiKey, setNewApiKey] = useState('');
 	const [showKeyModal, setShowKeyModal] = useState(false);
 	const [showCreateModal, setShowCreateModal] = useState(false);
-	const [apiKeyPendingDelete, setApiKeyPendingDelete] = useState(null);
-	const [pendingReleaseAction, setPendingReleaseAction] = useState(null);
+	const [apiKeyPendingDelete, setApiKeyPendingDelete] =
+		useState<ApiKeySummary | null>(null);
+	const [pendingReleaseAction, setPendingReleaseAction] =
+		useState<ReleaseAction | null>(null);
 	const [keyLabel, setKeyLabel] = useState('');
 	const [newApiBaseUrl, setNewApiBaseUrl] = useState('');
 
-	const handleGeneralSubmit = async (generalForm) => {
+	const handleGeneralSubmit = async (generalForm: GeneralFormPayload) => {
 		const { siteLanguage: nextSiteLanguage, ...profileForm } =
 			generalForm || {};
 		const currentSiteLanguage = generalSettingsResponse?.data?.siteLanguage;
@@ -146,7 +166,7 @@ const Content = ({ activeTab }) => {
 		} catch (err) {
 			notification.error(
 				__('Error'),
-				err?.data?.message || __('Failed to update profile')
+				getErrorMessage(err, __('Failed to update profile'))
 			);
 			return;
 		}
@@ -167,7 +187,10 @@ const Content = ({ activeTab }) => {
 			} catch (err) {
 				notification.error(
 					__('Save failed'),
-					err?.data?.message || __('Failed to update the site language')
+					getErrorMessage(
+						err,
+						__('Failed to update the site language')
+					)
 				);
 				return;
 			}
@@ -220,7 +243,7 @@ const Content = ({ activeTab }) => {
 		} catch (err) {
 			notification.error(
 				__('Error'),
-				err?.data?.message || __('Failed to update password')
+				getErrorMessage(err, __('Failed to update password'))
 			);
 		}
 	};
@@ -255,7 +278,7 @@ const Content = ({ activeTab }) => {
 		} catch (err) {
 			notification.error(
 				__('Error'),
-				err?.data?.message || __('Failed to generate API key')
+				getErrorMessage(err, __('Failed to generate API key'))
 			);
 		}
 	};
@@ -275,31 +298,35 @@ const Content = ({ activeTab }) => {
 		} catch (err) {
 			notification.error(
 				__('Error'),
-				err?.data?.message || __('Failed to delete API key')
+				getErrorMessage(err, __('Failed to delete API key'))
 			);
 		}
 	};
 
-	const copyToClipboard = (
-		text,
-		message = __('API key copied to clipboard')
-	) => {
-		navigator.clipboard.writeText(text);
-		notification.success(
-			__('Copied'),
-			message
-		);
+	const copyToClipboard = async (
+		text: string,
+		message: string = __('API key copied to clipboard')
+	): Promise<void> => {
+		try {
+			await writeToClipboard(text);
+			notification.success(__('Copied'), message);
+		} catch {
+			notification.error(
+				__('Copy failed'),
+				__('PeakURL could not copy that value to the clipboard.')
+			);
+		}
 	};
 
 	const handleCloseKeyModal = () => {
 		setShowKeyModal(false);
-		setNewApiKey(null);
+		setNewApiKey('');
 		setNewApiBaseUrl('');
 	};
 
 	const handleCheckForUpdates = async () => {
 		try {
-			const result = await checkForUpdates().unwrap();
+			const result = await checkForUpdates(undefined).unwrap();
 			const latestVersion = result?.data?.latestVersion;
 			const currentVersion = result?.data?.currentVersion;
 
@@ -326,25 +353,31 @@ const Content = ({ activeTab }) => {
 		} catch (err) {
 			notification.error(
 				__('Update check failed'),
-				err?.data?.message ||
+				getErrorMessage(
+					err,
 					__('PeakURL could not reach the update service.')
+				)
 			);
 		}
 	};
 
-	const handleSaveGeoipConfiguration = async (values) => {
+	const handleSaveGeoipConfiguration = async (
+		values: GeoipConfigurationPayload
+	) => {
 		try {
 			const result = await saveGeoipConfiguration(values).unwrap();
 			notification.success(
 				__('Saved'),
 				__('Location data settings were updated successfully.')
 			);
-			return result?.data || null;
+			return result?.data || undefined;
 		} catch (err) {
 			notification.error(
 				__('Save failed'),
-				err?.data?.message ||
+				getErrorMessage(
+					err,
 					__('PeakURL could not save the MaxMind settings.')
+				)
 			);
 			throw err;
 		}
@@ -352,7 +385,7 @@ const Content = ({ activeTab }) => {
 
 	const handleDownloadGeoipDatabase = async () => {
 		try {
-			await downloadGeoipDatabase().unwrap();
+			await downloadGeoipDatabase(undefined).unwrap();
 			notification.success(
 				__('Database updated'),
 				__('PeakURL downloaded the latest GeoLite2 City database.')
@@ -360,13 +393,17 @@ const Content = ({ activeTab }) => {
 		} catch (err) {
 			notification.error(
 				__('Download failed'),
-				err?.data?.message ||
+				getErrorMessage(
+					err,
 					__('PeakURL could not download the GeoLite2 database.')
+				)
 			);
 		}
 	};
 
-	const handleSaveMailConfiguration = async (values) => {
+	const handleSaveMailConfiguration = async (
+		values: MailConfigurationPayload
+	) => {
 		try {
 			await saveMailConfiguration(values).unwrap();
 			notification.success(
@@ -376,19 +413,21 @@ const Content = ({ activeTab }) => {
 		} catch (err) {
 			notification.error(
 				__('Save failed'),
-				err?.data?.message ||
+				getErrorMessage(
+					err,
 					__('PeakURL could not save the email configuration.')
+				)
 			);
 			throw err;
 		}
 	};
 
-	const runReleaseInstall = async (action) => {
+	const runReleaseInstall = async (action: ReleaseAction) => {
 		const isReinstall = action === 'reinstall';
 		const installRelease = isReinstall ? reinstallUpdate : applyUpdate;
 
 		try {
-			const result = await installRelease().unwrap();
+			const result = await installRelease(undefined).unwrap();
 			const appliedVersion = result?.data?.currentVersion;
 			setPendingReleaseAction(null);
 
@@ -418,10 +457,12 @@ const Content = ({ activeTab }) => {
 		} catch (err) {
 			notification.error(
 				isReinstall ? __('Reinstall failed') : __('Update failed'),
-				err?.data?.message ||
-					(isReinstall
+				getErrorMessage(
+					err,
+					isReinstall
 						? __('PeakURL could not reinstall the latest release.')
-						: __('PeakURL could not apply the update.'))
+						: __('PeakURL could not apply the update.')
+				)
 			);
 		}
 	};
@@ -432,7 +473,7 @@ const Content = ({ activeTab }) => {
 
 	const handleUpgradeDatabase = async () => {
 		try {
-			const result = await upgradeDatabaseSchema().unwrap();
+			const result = await upgradeDatabaseSchema(undefined).unwrap();
 			const issuesCount = Number(result?.data?.issuesCount || 0);
 
 			notification.success(
@@ -446,8 +487,10 @@ const Content = ({ activeTab }) => {
 		} catch (err) {
 			notification.error(
 				__('Database upgrade failed'),
-				err?.data?.message ||
+				getErrorMessage(
+					err,
 					__('PeakURL could not repair the database schema.')
+				)
 			);
 		}
 	};
@@ -482,8 +525,8 @@ const Content = ({ activeTab }) => {
 					copyToClipboard={copyToClipboard}
 					isGeneratingKey={isGeneratingKey}
 					isDeletingKey={isDeletingKey}
-					onDeleteKey={setApiKeyPendingDelete}
-					setShowCreateModal={setShowCreateModal}
+					onDeleteKey={(key) => setApiKeyPendingDelete(key)}
+					setShowCreateModal={(open) => setShowCreateModal(open)}
 				/>
 			)}
 
@@ -495,7 +538,7 @@ const Content = ({ activeTab }) => {
 				<EmailDeliveryTab
 					key={JSON.stringify(mailStatusResponse?.data || {})}
 					status={mailStatusResponse?.data || null}
-					errorMessage={mailError?.data?.message || null}
+					errorMessage={extractErrorMessage(mailError)}
 					isLoading={isLoadingMailStatus}
 					isSaving={isSavingMailConfiguration}
 					onSave={handleSaveMailConfiguration}
@@ -505,7 +548,7 @@ const Content = ({ activeTab }) => {
 			{activeTab === 'location' && (
 				<LocationDataTab
 					status={geoipStatusResponse?.data || null}
-					errorMessage={geoipError?.data?.message || null}
+					errorMessage={extractErrorMessage(geoipError)}
 					isLoading={isLoadingGeoipStatus || isFetchingGeoipStatus}
 					isSaving={isSavingGeoipConfiguration}
 					isDownloading={isDownloadingGeoipDatabase}
@@ -517,7 +560,7 @@ const Content = ({ activeTab }) => {
 			{activeTab === 'updates' && (
 				<UpdatesTab
 					status={updateStatusData}
-					errorMessage={updateError?.data?.message || null}
+					errorMessage={extractErrorMessage(updateError)}
 					isLoading={isLoadingUpdateStatus || isFetchingUpdateStatus}
 					isChecking={isCheckingForUpdates}
 					isApplying={isApplyingUpdate}

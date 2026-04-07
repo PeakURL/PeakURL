@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
@@ -16,12 +14,16 @@ import {
 	Coffee,
 	ExternalLink,
 } from 'lucide-react';
-import { useGetUrlsQuery } from '@/store/slices/api/urls';
+import { useGetUrlsQuery } from '@/store/slices/api';
 import { useAdminAccess } from '@/hooks';
 import { BrandLockup } from '@/components';
 import { __ } from '@/i18n';
+import type { DashboardSidebarProps, NavItem } from './types';
 
-const buildNav = (basePath = '/dashboard', canManageUsers = false) => {
+const buildNav = (
+	basePath = '/dashboard',
+	canManageUsers = false
+): NavItem[] => {
 	const base =
 		basePath === '/'
 			? ''
@@ -105,12 +107,12 @@ export const DashboardSidebar = ({
 	basePath = '',
 	isMobileOpen,
 	onMobileClose,
-}) => {
+}: DashboardSidebarProps) => {
 	const location = useLocation();
 	const pathname = location.pathname;
-	const { data: urlsRes } = useGetUrlsQuery();
+	const { data: urlsRes } = useGetUrlsQuery(undefined);
 	const { canManageUsers } = useAdminAccess();
-	const links = urlsRes?.data?.items ?? [];
+	const links = Array.isArray(urlsRes?.data?.items) ? urlsRes.data.items : [];
 
 	const navigation = useMemo(
 		() => buildNav(basePath, canManageUsers),
@@ -122,15 +124,21 @@ export const DashboardSidebar = ({
 			: basePath.endsWith('/') && basePath.length > 1
 				? basePath.slice(0, -1)
 				: basePath || '';
-	const [openSections, setOpenSections] = useState({});
+	const [openSections, setOpenSections] = useState<Record<string, boolean>>(
+		{}
+	);
 	const [isAboutOpen, setIsAboutOpen] = useState(false);
-	const aboutRef = useRef(null);
+	const aboutRef = useRef<HTMLDivElement | null>(null);
 
 	// Close when clicking anywhere outside the about panel
 	useEffect(() => {
 		if (!isAboutOpen) return;
-		const handler = (e) => {
-			if (aboutRef.current && !aboutRef.current.contains(e.target)) {
+		const handler = (event: MouseEvent) => {
+			if (
+				aboutRef.current &&
+				event.target instanceof Node &&
+				!aboutRef.current.contains(event.target)
+			) {
 				setIsAboutOpen(false);
 			}
 		};
@@ -138,7 +146,7 @@ export const DashboardSidebar = ({
 		return () => document.removeEventListener('mousedown', handler);
 	}, [isAboutOpen]);
 
-	const getSectionBasePath = (href) =>
+	const getSectionBasePath = (href?: string) =>
 		href ? href.replace(/\/[^/]+$/, '') : '';
 
 	return (
@@ -281,7 +289,7 @@ export const DashboardSidebar = ({
 							return (
 								<Link
 									key={item.name}
-									to={item.href}
+									to={item.href || base || '/dashboard'}
 									onClick={onMobileClose}
 									className={`
                                         relative w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors

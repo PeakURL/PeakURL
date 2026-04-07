@@ -1,12 +1,12 @@
-// @ts-nocheck
-
 import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { __, sprintf } from '@/i18n';
 import { formatLocalizedDateTime } from '@/utils';
+import type { LinkStatsViewProps } from './types';
 
-function BestDay({ link }) {
+function BestDay({ link }: Pick<LinkStatsViewProps, 'link'>) {
 	const [showDetails, setShowDetails] = useState(true);
+	const totalClicks = Number(link.clicks || 0);
 
 	return (
 		<div className="bg-surface-alt border border-stroke rounded-lg p-4">
@@ -15,7 +15,7 @@ function BestDay({ link }) {
 			</h3>
 			<p className="text-sm text-heading mb-2">
 				<span className="font-semibold">
-					{sprintf(__('%s hits'), link.clicks || 0)}
+					{sprintf(__('%s hits'), String(totalClicks))}
 				</span>{' '}
 				{__('on')}{' '}
 				{formatLocalizedDateTime(new Date(), {
@@ -23,7 +23,7 @@ function BestDay({ link }) {
 					month: 'long',
 					day: 'numeric',
 				})}
-				.{ ' '}
+				.{' '}
 				<button
 					onClick={() => setShowDetails(!showDetails)}
 					className="text-accent hover:underline inline-flex items-center gap-1"
@@ -61,8 +61,12 @@ function BestDay({ link }) {
 								<span className="text-sm font-medium text-heading">
 									{formatLocalizedDateTime(new Date(), {
 										day: 'numeric',
-									})}:{' '}
-									{sprintf(__('%s hits'), link.clicks || 0)}
+									})}
+									:{' '}
+									{sprintf(
+										__('%s hits'),
+										String(totalClicks)
+									)}
 								</span>
 							</div>
 						</div>

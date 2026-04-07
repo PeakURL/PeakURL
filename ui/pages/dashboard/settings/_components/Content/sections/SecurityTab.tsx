@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useState } from 'react';
 import QRCode from 'qrcode';
 import { Button, ConfirmDialog, Input } from '@/components/ui';
@@ -19,10 +18,17 @@ import {
 	useDownloadBackupCodesMutation,
 	useRevokeSessionMutation,
 	useRevokeOtherSessionsMutation,
-} from '@/store/slices/api/user';
+} from '@/store/slices/api';
 import { __, sprintf } from '@/i18n';
+import { formatDateTimeValue, getErrorMessage } from '@/utils';
+import type {
+	ProtectedAction,
+	ProtectedActionConfig,
+	SecuritySession,
+	SecurityTabProps,
+} from './types';
 
-const buildBackupCodesFile = (codes) =>
+const buildBackupCodesFile = (codes: string[]) =>
 	[
 		__('PeakURL Backup Codes'),
 		__('Keep these codes safe. Each code can be used once.'),
@@ -32,33 +38,25 @@ const buildBackupCodesFile = (codes) =>
 		sprintf(__('Generated at: %s'), new Date().toISOString()),
 	].join('\n');
 
-const formatTimestamp = (value) => {
-	if (!value) return __('Unknown');
-	try {
-		return new Date(value).toLocaleString();
-	} catch (error) {
-		return __('Unknown');
-	}
-};
-
 function SecurityTab({
 	securityForm,
 	setSecurityForm,
 	onSubmit,
 	isUpdating,
 	notification,
-}) {
-	const [recentCodes, setRecentCodes] = useState([]);
-	const [qrDataUrl, setQrDataUrl] = useState(null);
-	const [secret, setSecret] = useState(null);
-	const [otpauthUrl, setOtpauthUrl] = useState(null);
+}: SecurityTabProps) {
+	const [recentCodes, setRecentCodes] = useState<string[]>([]);
+	const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
+	const [secret, setSecret] = useState<string | null>(null);
+	const [otpauthUrl, setOtpauthUrl] = useState<string | null>(null);
 	const [verificationCode, setVerificationCode] = useState('');
 	const [isDownloading, setIsDownloading] = useState(false);
-	const [revokingId, setRevokingId] = useState(null);
+	const [revokingId, setRevokingId] = useState<string | null>(null);
 	const [isRevokingOthers, setIsRevokingOthers] = useState(false);
 	const [showRevokeOthersConfirm, setShowRevokeOthersConfirm] =
 		useState(false);
-	const [protectedAction, setProtectedAction] = useState(null);
+	const [protectedAction, setProtectedAction] =
+		useState<ProtectedAction | null>(null);
 	const [protectedActionPassword, setProtectedActionPassword] =
 		useState('');
 
@@ -66,18 +64,20 @@ function SecurityTab({
 		data: securityData,
 		isFetching: isSecurityLoading,
 		refetch: refetchSecurity,
-	} = useGetSecuritySettingsQuery();
+	} = useGetSecuritySettingsQuery(undefined);
 
 	const security = securityData?.data || {};
-	const sessions = security.sessions || [];
+	const sessions: SecuritySession[] = security.sessions || [];
 	const twoFactorEnabled = security.twoFactorEnabled;
 	const hasPendingSetup = security.hasPendingSetup;
-	const actionLabel = __('Set up 2FA');
+	const actionLabel = hasPendingSetup
+		? __('Continue 2FA setup')
+		: __('Set up 2FA');
 	const statusMessage = twoFactorEnabled
 		? sprintf(
 				__('Backup codes remaining: %s'),
-				security.backupCodesRemaining ?? 0
-		  )
+				String(security.backupCodesRemaining ?? 0)
+			)
 		: __('Enable to generate backup codes for account recovery.');
 
 	useEffect(() => {
@@ -99,7 +99,7 @@ function SecurityTab({
 	const [revokeSession] = useRevokeSessionMutation();
 	const [revokeOtherSessions] = useRevokeOtherSessionsMutation();
 	const otherActiveSessions = sessions.filter(
-		(session) => !session.isCurrent && !session.revokedAt
+		(session: SecuritySession) => !session.isCurrent && !session.revokedAt
 	);
 	const isProtectedActionLoading =
 		'download' === protectedAction
@@ -107,7 +107,7 @@ function SecurityTab({
 			: 'disable' === protectedAction
 			? isDisabling
 			: isRegenerating;
-	const protectedActionConfig =
+	const protectedActionConfig: ProtectedActionConfig | null =
 		'download' === protectedAction
 			? {
 					title: __('Download backup codes'),
@@ -144,7 +144,7 @@ function SecurityTab({
 		setProtectedActionPassword('');
 	};
 
-	const openProtectedActionDialog = (action) => {
+	const openProtectedActionDialog = (action: ProtectedAction) => {
 		if (isProtectedActionLoading) {
 			return;
 		}
@@ -153,7 +153,7 @@ function SecurityTab({
 		setProtectedActionPassword('');
 	};
 
-	const downloadBackupCodesFile = (content) => {
+	const downloadBackupCodesFile = (content: string) => {
 		const blob = new Blob([content], { type: 'text/plain' });
 		const url = window.URL.createObjectURL(blob);
 		const link = document.createElement('a');
@@ -176,9 +176,9 @@ function SecurityTab({
 		openProtectedActionDialog('download');
 	};
 
-	const startSetup = async (options = { silent: false }) => {
+	const startSetup = async (options: { silent: boolean } = { silent: false }) => {
 		try {
-			const res = await startTwoFactor().unwrap();
+			const res = await startTwoFactor(undefined).unwrap();
 			const setupSecret = res?.data?.secret || null;
 			const setupOtpauthUrl = res?.data?.otpauthUrl || null;
 			let nextQrDataUrl = res?.data?.qrDataUrl || null;
@@ -211,8 +211,10 @@ function SecurityTab({
 			if (!options.silent) {
 				notification?.error(
 					__('Error'),
-					err?.data?.message ||
+					getErrorMessage(
+						err,
 						__('Failed to start two-factor authentication setup')
+					)
 				);
 			}
 		}
@@ -246,8 +248,10 @@ function SecurityTab({
 		} catch (err) {
 			notification?.error(
 				__('Error'),
-				err?.data?.message ||
+				getErrorMessage(
+					err,
 					__('Failed to verify code. Check the code and try again.')
+				)
 			);
 		}
 	};
@@ -310,19 +314,24 @@ function SecurityTab({
 		} catch (err) {
 			notification?.error(
 				__('Error'),
-				err?.data?.message ||
-					('disable' === action
+				getErrorMessage(
+					err,
+					'disable' === action
 						? __('Failed to disable two-factor authentication')
 						: 'regenerate' === action
 						? __('Failed to regenerate backup codes')
-						: __('Failed to download backup codes'))
+						: __('Failed to download backup codes')
+				)
 			);
 		} finally {
 			setIsDownloading(false);
 		}
 	};
 
-	const handleRevokeSession = async (sessionId, isCurrent) => {
+	const handleRevokeSession = async (
+		sessionId: string,
+		isCurrent?: boolean
+	) => {
 		setRevokingId(sessionId);
 		try {
 			await revokeSession(sessionId).unwrap();
@@ -342,7 +351,7 @@ function SecurityTab({
 		} catch (err) {
 			notification?.error(
 				__('Error'),
-				err?.data?.message || __('Failed to end the session')
+				getErrorMessage(err, __('Failed to end the session'))
 			);
 		} finally {
 			setRevokingId(null);
@@ -350,14 +359,14 @@ function SecurityTab({
 	};
 
 	const handleRevokeOtherSessions = async () => {
-		if ( 0 === otherActiveSessions.length ) {
+		if (0 === otherActiveSessions.length) {
 			return;
 		}
 
 		setIsRevokingOthers(true);
 
 		try {
-			const result = await revokeOtherSessions().unwrap();
+			const result = await revokeOtherSessions(undefined).unwrap();
 			const revokedCount = result?.data?.revokedCount ?? 0;
 			setShowRevokeOthersConfirm(false);
 
@@ -368,16 +377,15 @@ function SecurityTab({
 							__(
 								'%1$s other session%2$s were ended.'
 							),
-							revokedCount,
-							1 === revokedCount ? '' : 's'
-					  )
+							[String(revokedCount), 1 === revokedCount ? '' : 's']
+						)
 					: __('No other active sessions were found.')
 			);
 			refetchSecurity();
 		} catch (err) {
 			notification?.error(
 				__('Error'),
-				err?.data?.message || __('Failed to end the other sessions')
+				getErrorMessage(err, __('Failed to end the other sessions'))
 			);
 		} finally {
 			setIsRevokingOthers(false);
@@ -516,8 +524,9 @@ function SecurityTab({
 						{security.backupCodesLastGeneratedAt && (
 							<p className="text-xs text-text-muted mt-1">
 								{__('Last generated:')}{' '}
-								{formatTimestamp(
-									security.backupCodesLastGeneratedAt
+								{formatDateTimeValue(
+									security.backupCodesLastGeneratedAt,
+									__('Unknown')
 								)}
 							</p>
 						)}
@@ -669,7 +678,7 @@ function SecurityTab({
 								__(
 									'%s active session(s)'
 								),
-								sessions.length
+								String(sessions.length)
 							)}
 						</span>
 					</div>
@@ -694,7 +703,7 @@ function SecurityTab({
 							{__('No active sessions found.')}
 						</div>
 					) : (
-						sessions.map((session) => (
+						sessions.map((session: SecuritySession) => (
 							<div
 								key={session.id}
 								className={`flex items-center justify-between p-3 border border-stroke rounded-lg ${
@@ -716,8 +725,9 @@ function SecurityTab({
 										<p className="text-xs text-text-muted">
 											{session.ipAddress || __('Unknown IP')}{' '}
 											• {__('Last active')}{' '}
-											{formatTimestamp(
-												session.lastActiveAt
+											{formatDateTimeValue(
+												session.lastActiveAt,
+												__('Unknown')
 											)}
 										</p>
 									</div>
@@ -796,7 +806,7 @@ function SecurityTab({
 					__(
 						'End %s other active session(s) for this account? Any browsers or devices using them will be signed out immediately.'
 					),
-					otherActiveSessions.length
+					String(otherActiveSessions.length)
 				)}
 				confirmText={__('End sessions')}
 				cancelText={__('Keep sessions')}

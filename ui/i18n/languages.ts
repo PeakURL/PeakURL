@@ -1,8 +1,4 @@
-type InstalledLanguage = {
-	locale?: string;
-	label?: string;
-	englishLabel?: string;
-};
+import type { InstalledLanguage } from './types';
 
 function normalizeLocale(locale?: string): string {
 	return typeof locale === 'string' ? locale.replace(/_/g, '-') : '';

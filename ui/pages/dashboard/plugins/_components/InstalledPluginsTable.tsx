@@ -1,16 +1,14 @@
-// @ts-nocheck
-
-import { MoreHorizontal, Power, PowerOff, Lock, Info } from 'lucide-react';
+import { MoreHorizontal, Lock, Info } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { __ } from '@/i18n';
-import type { PluginCardData } from './PluginCard';
-
-interface InstalledPluginsTableProps {
-	plugins: PluginCardData[];
-}
+import type {
+	InstalledPluginsTableProps,
+	PluginPreviewSkeletonProps,
+	PluginStatusPillProps,
+} from './types';
 
 /* Faint shimmer skeleton bar */
-function Skeleton({ className = '' }: { className?: string }) {
+function Skeleton({ className = '' }: PluginPreviewSkeletonProps) {
 	return (
 		<div
 			className={`animate-pulse rounded-md bg-stroke/60 dark:bg-stroke/40 ${className}`}
@@ -18,7 +16,7 @@ function Skeleton({ className = '' }: { className?: string }) {
 	);
 }
 
-function StatusPill({ active }: { active: boolean }) {
+function StatusPill({ active }: PluginStatusPillProps) {
 	return active ? (
 		<span className="inline-flex items-center rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
 			<span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500" />

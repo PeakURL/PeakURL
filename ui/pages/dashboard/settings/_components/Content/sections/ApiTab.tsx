@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Button } from '@/components/ui';
 import {
 	Plus,
@@ -12,6 +11,7 @@ import {
 	Link2,
 } from 'lucide-react';
 import { __ } from '@/i18n';
+import type { ApiTabProps } from './types';
 
 function ApiTab({
 	user,
@@ -21,7 +21,7 @@ function ApiTab({
 	isDeletingKey,
 	onDeleteKey,
 	setShowCreateModal,
-}) {
+}: ApiTabProps) {
 	return (
 		<div className="space-y-5">
 			{baseApiUrl && (
@@ -114,9 +114,11 @@ function ApiTab({
 									</div>
 									<p className="text-xs text-text-muted mt-1">
 										{__('Created:')}{' '}
-										{new Date(
-											key.createdAt
-										).toLocaleDateString()}
+										{key.createdAt
+											? new Date(
+													key.createdAt
+												).toLocaleDateString()
+											: __('Unknown')}
 									</p>
 								</div>
 								<div className="flex items-center gap-1 ml-4">

@@ -1,6 +1,6 @@
-// @ts-nocheck
 import { Button } from '@/components/ui';
 import { __, sprintf } from '@/i18n';
+import { formatDateTimeValue } from '@/utils';
 import {
 	AlertCircle,
 	CheckCircle2,
@@ -9,8 +9,26 @@ import {
 	ExternalLink,
 	RefreshCcw,
 } from 'lucide-react';
+import type { ButtonVariant } from '@/components/ui';
+import type {
+	BadgeState,
+	DatabaseStatus,
+	DetailRowProps,
+	InlineNoticeProps,
+	IssueListProps,
+	MetricGridProps,
+	MetricItem,
+	SectionCardProps,
+	SectionHeaderProps,
+	StatusBadgeProps,
+	StatusTone,
+	UpdateActionsProps,
+	UpdateIssue,
+	UpdateStatusPayload,
+	UpdatesTabProps,
+} from './types';
 
-function hasUpdateAvailable(status) {
+function hasUpdateAvailable(status?: UpdateStatusPayload | null) {
 	if (status?.updateAvailable) {
 		return true;
 	}
@@ -58,23 +76,14 @@ function hasUpdateAvailable(status) {
 	return false;
 }
 
-function hasReinstallAvailable(status) {
+function hasReinstallAvailable(status?: UpdateStatusPayload | null) {
 	return Boolean(status?.reinstallAvailable);
 }
 
-function formatDate(value) {
-	if (!value) {
-		return __('Never');
-	}
-
-	try {
-		return new Date(value).toLocaleString();
-	} catch {
-		return value;
-	}
-}
-
-function buildAppStatus(status, errorMessage) {
+function buildAppStatus(
+	status: UpdateStatusPayload | null | undefined,
+	errorMessage?: string | null
+): BadgeState {
 	const updateAvailable = hasUpdateAvailable(status);
 	const reinstallAvailable = hasReinstallAvailable(status);
 
@@ -129,7 +138,9 @@ function buildAppStatus(status, errorMessage) {
 	};
 }
 
-function buildDatabaseStatus(databaseStatus) {
+function buildDatabaseStatus(
+	databaseStatus: DatabaseStatus | null | undefined
+): BadgeState {
 	if (databaseStatus?.lastError) {
 		return {
 			tone: 'error',
@@ -158,8 +169,8 @@ function buildDatabaseStatus(databaseStatus) {
 	};
 }
 
-function StatusBadge({ tone = 'info', label }) {
-	const styles = {
+function StatusBadge({ tone = 'info', label }: StatusBadgeProps) {
+	const styles: Record<StatusTone, string> = {
 		info: 'border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200',
 		success:
 			'border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200',
@@ -175,7 +186,7 @@ function StatusBadge({ tone = 'info', label }) {
 	);
 }
 
-function SectionCard({ children }) {
+function SectionCard({ children }: SectionCardProps) {
 	return (
 		<div className="rounded-xl border border-stroke bg-surface p-5 sm:p-6">
 			{children}
@@ -189,7 +200,7 @@ function SectionHeader({
 	badge,
 	primaryAction,
 	secondaryAction,
-}) {
+}: SectionHeaderProps) {
 	return (
 		<div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
 			<div className="space-y-2">
@@ -212,10 +223,10 @@ function SectionHeader({
 	);
 }
 
-function MetricGrid({ items }) {
+function MetricGrid({ items }: MetricGridProps) {
 	return (
 		<div className="mt-5 grid grid-cols-1 gap-3 md:grid-cols-3">
-			{items.map((item) => (
+			{items.map((item: MetricItem) => (
 				<div
 					key={item.label}
 					className="rounded-lg border border-stroke bg-bg px-4 py-4"
@@ -232,8 +243,13 @@ function MetricGrid({ items }) {
 	);
 }
 
-function InlineNotice({ icon: Icon, title, description, tone = 'info' }) {
-	const styles = {
+function InlineNotice({
+	icon: Icon,
+	title,
+	description,
+	tone = 'info',
+}: InlineNoticeProps) {
+	const styles: Record<StatusTone, string> = {
 		info: 'border-blue-200 bg-blue-50 text-blue-900 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200',
 		success:
 			'border-emerald-200 bg-emerald-50 text-emerald-900 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200',
@@ -266,13 +282,13 @@ function UpdateActions({
 	onCheck,
 	onApply,
 	onReinstall,
-}) {
+}: UpdateActionsProps) {
 	const isInstallingRelease = isApplying || isReinstalling;
 	const showDisabledReason =
 		(updateAvailable || reinstallAvailable) &&
 		!canApply &&
 		Boolean(disabledReason);
-	const primaryVariant = canApply ? 'primary' : 'outline';
+	const primaryVariant: ButtonVariant = canApply ? 'primary' : 'outline';
 	const primaryAction = updateAvailable ? (
 		<Button
 			variant={primaryVariant}
@@ -342,7 +358,7 @@ function UpdateActions({
 	);
 }
 
-function DetailRow({ label, value, icon: Icon, href }) {
+function DetailRow({ label, value, icon: Icon, href }: DetailRowProps) {
 	return (
 		<div className="flex flex-col gap-2 rounded-lg border border-stroke bg-bg px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
 			<div className="flex items-center gap-2 text-sm text-text-muted">
@@ -366,12 +382,12 @@ function DetailRow({ label, value, icon: Icon, href }) {
 	);
 }
 
-function IssueList({ title, issues }) {
+function IssueList({ title, issues }: IssueListProps) {
 	return (
 		<div className="rounded-lg border border-stroke bg-bg p-4">
 			<p className="text-sm font-semibold text-heading">{title}</p>
 			<ul className="mt-3 space-y-2 text-sm leading-6 text-text-muted">
-				{issues.map((issue) => (
+				{issues.map((issue: UpdateIssue) => (
 					<li key={issue.id || issue.label}>{issue.label}</li>
 				))}
 			</ul>
@@ -391,7 +407,7 @@ function UpdatesTab({
 	onApply,
 	onReinstall,
 	onRepair,
-}) {
+}: UpdatesTabProps) {
 	const updateAvailable = hasUpdateAvailable(status);
 	const reinstallAvailable = hasReinstallAvailable(status);
 	const canApply = Boolean(status?.canApply);
@@ -402,7 +418,7 @@ function UpdatesTab({
 	const databaseIssues = Array.isArray(databaseStatus?.issues)
 		? databaseStatus.issues
 		: [];
-	const visibleDatabaseIssues = databaseIssues.slice(0, 6);
+	const visibleDatabaseIssues: UpdateIssue[] = databaseIssues.slice(0, 6);
 	const appState = buildAppStatus(status, errorMessage);
 	const databaseState = buildDatabaseStatus(databaseStatus);
 
@@ -453,7 +469,10 @@ function UpdatesTab({
 						},
 						{
 							label: __('Last Checked'),
-							value: formatDate(status?.lastCheckedAt),
+							value: formatDateTimeValue(
+								status?.lastCheckedAt,
+								__('Never')
+							),
 						},
 					]}
 				/>
@@ -472,7 +491,10 @@ function UpdatesTab({
 						{status?.releasedAt ? (
 							<DetailRow
 								label={__('Released')}
-								value={formatDate(status.releasedAt)}
+								value={formatDateTimeValue(
+									status.releasedAt,
+									__('Never')
+								)}
 								icon={Clock3}
 							/>
 						) : null}
@@ -520,7 +542,10 @@ function UpdatesTab({
 						},
 						{
 							label: __('Last Database Upgrade'),
-							value: formatDate(databaseStatus?.lastUpgradedAt),
+							value: formatDateTimeValue(
+								databaseStatus?.lastUpgradedAt,
+								__('Never')
+							),
 						},
 					]}
 				/>

@@ -1,10 +1,14 @@
-// @ts-nocheck
 import { authApi } from '@/store/slices';
 import { PageLoader } from '@/components/ui';
-import { getInstallRecovery, redirectToInstallRecovery } from '@/utils';
+import {
+	getErrorStatus,
+	getInstallRecovery,
+	redirectToInstallRecovery,
+} from '@/utils';
 import { __ } from '@/i18n';
+import type { AuthErrorStateProps, AuthInitializerProps } from './types';
 
-const AuthErrorState = ({ onRetry }) => {
+const AuthErrorState = ({ onRetry }: AuthErrorStateProps) => {
 	return (
 		<div className="min-h-screen bg-bg flex items-center justify-center p-6">
 			<div className="w-full max-w-md rounded-2xl border border-stroke bg-surface shadow-sm p-6 space-y-4 text-center">
@@ -34,13 +38,12 @@ const AuthErrorState = ({ onRetry }) => {
 };
 
 /**
- * AuthInitializer Component
- * Handles initial authentication check before rendering the application.
- * Shows a loading spinner while checking auth status.
- * @param {Object} props
- * @param {React.ReactNode} props.children - Application content
+ * AuthInitializer performs the initial session check before rendering the app.
+ *
+ * @param props Component props
+ * @param props.children Application content
  */
-const AuthInitializer = ({ children }) => {
+const AuthInitializer = ({ children }: AuthInitializerProps) => {
 	const { useAuthCheckQuery } = authApi;
 	const {
 		data,
@@ -50,13 +53,11 @@ const AuthInitializer = ({ children }) => {
 		isUninitialized,
 		isError,
 		refetch,
-	} =
-		useAuthCheckQuery();
-	const hasResolvedSession =
-		undefined !== data || undefined !== error;
+	} = useAuthCheckQuery(undefined);
+	const hasResolvedSession = undefined !== data || undefined !== error;
 	const isPending =
 		!hasResolvedSession && (isLoading || isFetching || isUninitialized);
-	const errorStatus = typeof error?.status === 'number' ? error.status : null;
+	const errorStatus = getErrorStatus(error);
 	const isAuthError = 401 === errorStatus || 403 === errorStatus;
 	const installRecovery = getInstallRecovery(error);
 
@@ -73,7 +74,7 @@ const AuthInitializer = ({ children }) => {
 		return <AuthErrorState onRetry={refetch} />;
 	}
 
-	return children;
+	return <>{children}</>;
 };
 
 export default AuthInitializer;

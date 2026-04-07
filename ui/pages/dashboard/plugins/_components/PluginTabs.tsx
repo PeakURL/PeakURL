@@ -1,10 +1,4 @@
-// @ts-nocheck
-
-interface PluginTabsProps {
-	activeTab: string;
-	onTabChange: (tab: string) => void;
-	tabs: { id: string; label: string; count?: number }[];
-}
+import type { PluginTabsProps } from './types';
 
 function PluginTabs({ activeTab, onTabChange, tabs }: PluginTabsProps) {
 	return (

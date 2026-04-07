@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { BrowserRouter } from 'react-router-dom';
 
 import { PEAKURL_BASENAME } from './constants';

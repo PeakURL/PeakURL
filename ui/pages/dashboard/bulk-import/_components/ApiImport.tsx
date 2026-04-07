@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Button } from '@/components/ui';
 import { ExternalLink } from 'lucide-react';
 import { API_SERVER_BASE_URL } from '@/constants';

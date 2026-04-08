@@ -62,12 +62,8 @@ function ApiTab({
 							{__('Copy API URL')}
 						</Button>
 					</div>
-						<div className="mt-4 rounded-xl border border-accent/15 bg-surface/90 px-4 py-3 shadow-sm">
-							<p
-								dir="ltr"
-								className="font-mono text-sm break-all text-heading"
-								style={{ textAlign: isRtl ? 'right' : 'left' }}
-							>
+					<div className="mt-4 rounded-xl border border-accent/15 bg-surface/90 px-4 py-3 shadow-sm">
+						<p className="ltr-literal-value break-all font-mono text-sm text-heading">
 								{baseApiUrl}
 							</p>
 					</div>
@@ -97,10 +93,7 @@ function ApiTab({
 								dir={isRtl ? 'rtl' : 'ltr'}
 								className="flex items-center justify-between p-4 border border-stroke rounded-lg hover:border-accent/50 transition-colors"
 							>
-								<div
-									className="flex-1 min-w-0"
-									style={{ textAlign: 'start' }}
-								>
+								<div className="logical-text-start min-w-0 flex-1">
 									<div className="flex items-center gap-2 mb-1">
 										<p className="font-medium text-sm text-heading">
 											{key.label || __('API Key')}
@@ -111,13 +104,7 @@ function ApiTab({
 									</div>
 										<div className="flex items-center gap-2">
 											<p
-												dir="ltr"
-												className="text-xs text-text-muted font-mono truncate"
-												style={{
-													textAlign: isRtl
-														? 'right'
-														: 'left',
-												}}
+												className="ltr-literal-value text-xs text-text-muted font-mono truncate"
 											>
 												{key.maskedKey || '••••••••'}
 											</p>
@@ -133,10 +120,7 @@ function ApiTab({
 										</bdi>
 									</p>
 								</div>
-								<div
-									className="flex shrink-0 items-center gap-1"
-									style={{ marginInlineStart: '1rem' }}
-								>
+								<div className="flex shrink-0 items-center gap-1">
 									<button
 										type="button"
 										className="p-2 text-text-muted hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"

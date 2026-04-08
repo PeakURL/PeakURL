@@ -209,10 +209,7 @@ export function ProgressBar({
 				></div>
 			</div>
 			{showLabel && (
-				<div
-					className="mt-1 text-xs text-muted"
-					style={{ textAlign: 'end' }}
-				>
+				<div className="logical-text-end mt-1 text-xs text-muted">
 					{normalizedProgress}%
 				</div>
 			)}

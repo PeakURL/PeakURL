@@ -115,8 +115,9 @@ const TableFooter = ({
 								if (!isNaN(num) && num > 0) setLimit(num);
 							}}
 							placeholder={__('Custom page size')}
-							className="col-span-2 w-full min-w-0 bg-surface-alt border border-stroke rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-accent focus:border-accent outline-none sm:col-span-1 sm:w-28"
-							style={{ textAlign: isRtl ? 'right' : 'left' }}
+							className={`col-span-2 w-full min-w-0 rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent sm:col-span-1 sm:w-28 ${
+								isRtl ? 'text-right' : 'text-left'
+							}`}
 						/>
 					)}
 				</div>

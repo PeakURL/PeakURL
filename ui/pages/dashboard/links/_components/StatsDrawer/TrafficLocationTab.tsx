@@ -131,33 +131,29 @@ function TrafficLocationTab({
 							<div className="mx-auto mt-4 w-full max-w-lg rounded-lg border border-info/20 bg-info/5 px-4 py-3">
 								<p
 									dir="auto"
-									className="text-xs font-medium text-heading"
-									style={{ textAlign: 'start' }}
+									className="mixed-direction-text text-xs font-medium text-heading"
 								>
 									{__('Note:')}
 								</p>
-								<div className="mt-2 space-y-1.5 text-xs leading-5 text-text-muted">
+								<div className="mt-2 space-y-2 text-xs leading-5 text-text-muted">
 									<div
 										dir={isRtl ? 'rtl' : 'ltr'}
 										className="flex items-start gap-2"
 									>
 										<span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-info/60" />
-										<div
-											className="min-w-0 flex-1 space-y-1"
-											style={{ textAlign: 'start' }}
-										>
-											<p dir="auto">
+										<div className="min-w-0 flex-1 space-y-1">
+											<p dir="auto" className="mixed-direction-text">
 												{__(
 													'Local and private-network clicks do not include location data.'
 												)}
 											</p>
-											<code
-												dir="ltr"
-												className="block w-fit max-w-full rounded bg-surface px-1.5 py-0.5 font-mono text-[11px] text-heading break-all"
-												style={{ textAlign: 'left' }}
-											>
-												127.0.0.1, 172.16-31.x.x, 192.168.x.x
-											</code>
+											<div className="mixed-direction-text">
+												<code
+													className="ltr-literal-value inline-block max-w-full rounded bg-surface px-1.5 py-0.5 font-mono text-[11px] text-heading break-all"
+												>
+													127.0.0.1, 172.16-31.x.x, 192.168.x.x
+												</code>
+											</div>
 										</div>
 									</div>
 									<div
@@ -165,22 +161,19 @@ function TrafficLocationTab({
 										className="flex items-start gap-2"
 									>
 										<span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-info/60" />
-										<div
-											className="min-w-0 flex-1 space-y-1"
-											style={{ textAlign: 'start' }}
-										>
-											<p dir="auto">
+										<div className="min-w-0 flex-1 space-y-1">
+											<p dir="auto" className="mixed-direction-text">
 												{__(
 													'Store the GeoLite2 City database here:'
 												)}
 											</p>
-											<code
-												dir="ltr"
-												className="block w-fit max-w-full rounded bg-surface px-1.5 py-0.5 font-mono text-[11px] text-heading break-all"
-												style={{ textAlign: 'left' }}
-											>
-												content/uploads/geoip/GeoLite2-City.mmdb
-											</code>
+											<div className="mixed-direction-text">
+												<code
+													className="ltr-literal-value inline-block max-w-full rounded bg-surface px-1.5 py-0.5 font-mono text-[11px] text-heading break-all"
+												>
+													content/uploads/geoip/GeoLite2-City.mmdb
+												</code>
+											</div>
 										</div>
 									</div>
 									<div
@@ -188,15 +181,14 @@ function TrafficLocationTab({
 										className="flex items-start gap-2"
 									>
 										<span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-info/60" />
-										<div
+										<p
 											dir="auto"
-											className="min-w-0 flex-1"
-											style={{ textAlign: 'start' }}
+											className="mixed-direction-text min-w-0 flex-1"
 										>
 											{__(
 												'VPN users may show the location of the VPN server.'
 											)}
-										</div>
+										</p>
 									</div>
 								</div>
 							</div>
@@ -284,7 +276,7 @@ function TrafficLocationTab({
 					{hoveredCountry && (
 						<div
 							className={`absolute top-4 min-w-32 rounded-lg border border-stroke bg-surface p-3 shadow-xl ${
-								isRtl ? 'left-4 text-left' : 'right-4 text-right'
+								isRtl ? 'right-4 text-right' : 'left-4 text-left'
 							}`}
 						>
 							<p className="text-sm font-semibold text-heading">

@@ -40,7 +40,7 @@ function StateCard({
 				className="flex items-start gap-3"
 			>
 				<Icon size={18} className="mt-0.5 shrink-0" />
-				<div className="space-y-1" style={{ textAlign: 'start' }}>
+				<div className="logical-text-start space-y-1">
 					<h3 className="text-sm font-semibold">{title}</h3>
 					<p className="text-sm leading-6 opacity-80">
 						{description}
@@ -102,7 +102,7 @@ function LocationDataTab({
 					dir={isRtl ? 'rtl' : 'ltr'}
 					className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
 				>
-					<div className="space-y-2" style={{ textAlign: 'start' }}>
+					<div className="logical-text-start space-y-2">
 						<div dir={isRtl ? 'rtl' : 'ltr'} className="flex items-center gap-3">
 							<div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600 dark:bg-primary-500/20 dark:text-primary-400">
 								<MapPin size={18} />
@@ -225,13 +225,7 @@ function LocationDataTab({
 										{__('Account ID')}
 									</p>
 										<p
-											dir="ltr"
-											className="mt-2 text-sm font-medium text-heading"
-											style={{
-												textAlign: isRtl
-													? 'right'
-													: 'left',
-											}}
+											className="ltr-literal-value mt-2 text-sm font-medium text-heading"
 										>
 											{effectiveStatus?.accountId}
 										</p>
@@ -241,13 +235,7 @@ function LocationDataTab({
 										{__('License Key')}
 									</p>
 										<p
-											dir="ltr"
-											className="mt-2 text-sm font-medium text-heading"
-											style={{
-												textAlign: isRtl
-													? 'right'
-													: 'left',
-											}}
+											className="ltr-literal-value mt-2 text-sm font-medium text-heading"
 										>
 											{effectiveStatus?.licenseKeyHint}
 										</p>
@@ -332,7 +320,7 @@ function LocationDataTab({
 						{hasSavedCredentials && (
 							<p className="text-xs text-text-muted">
 								{__('Saved license key:')}{' '}
-								<span dir="ltr">
+								<span className="ltr-literal-value">
 									{effectiveStatus?.licenseKeyHint}
 								</span>
 							</p>
@@ -383,8 +371,7 @@ function StatCard({ label, value }: StatCardProps) {
 	return (
 		<div
 			dir={isRtl ? 'rtl' : 'ltr'}
-			className="rounded-lg border border-stroke bg-surface p-5"
-			style={{ textAlign: 'start' }}
+			className="logical-text-start rounded-lg border border-stroke bg-surface p-5"
 		>
 			<p className="text-xs font-semibold tracking-[0.14em] text-text-muted">
 				{label}

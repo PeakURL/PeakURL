@@ -61,8 +61,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 			{label && (
 				<label
 					htmlFor={inputId}
-					className="block text-sm font-semibold text-heading"
-					style={{ textAlign: 'start' }}
+					className="logical-text-start block text-sm font-semibold text-heading"
 				>
 					{label}
 					{props.required && (
@@ -100,22 +99,19 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 								: 'pl-11'
 							: ''
 					} ${
+						'rtl' === chromeDirection ? 'text-right' : 'text-left'
+					} ${
 						error
 							? 'border-red-500 focus:ring-red-500 focus:border-red-500'
 							: ''
 					} ${className}`}
-					style={{
-						textAlign:
-							'rtl' === chromeDirection ? 'right' : 'left',
-					}}
 					{...props}
 				/>
 			</div>
 			{error && (
 				<p
 					id={errorId}
-					className="text-sm text-red-600 dark:text-red-400 font-medium flex items-center gap-1.5"
-					style={{ textAlign: 'start' }}
+					className="logical-text-start text-sm text-red-600 dark:text-red-400 font-medium flex items-center gap-1.5"
 				>
 					<Info size={14} />
 					{error}
@@ -124,8 +120,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 			{helperText && !error && (
 				<p
 					id={helperId}
-					className="text-xs text-muted"
-					style={{ textAlign: 'start' }}
+					className="logical-text-start text-xs text-muted"
 				>
 					{helperText}
 				</p>

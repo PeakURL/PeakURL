@@ -209,7 +209,7 @@ function SectionHeader({
 			dir={isRtl ? 'rtl' : 'ltr'}
 			className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between"
 		>
-			<div className="space-y-2" style={{ textAlign: 'start' }}>
+			<div className="logical-text-start space-y-2">
 				<div className="flex flex-wrap items-center gap-3">
 					<h2 className="text-base font-semibold text-heading">
 						{title}
@@ -238,8 +238,7 @@ function MetricGrid({ items }: MetricGridProps) {
 				<div
 					key={item.label}
 					dir={isRtl ? 'rtl' : 'ltr'}
-					className="rounded-lg border border-stroke bg-bg px-4 py-4"
-					style={{ textAlign: 'start' }}
+					className="logical-text-start rounded-lg border border-stroke bg-bg px-4 py-4"
 				>
 					<p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-text-muted">
 						{item.label}
@@ -274,7 +273,7 @@ function InlineNotice({
 				className="flex items-start gap-3"
 			>
 				<Icon size={18} className="mt-0.5 shrink-0" />
-				<div className="space-y-1" style={{ textAlign: 'start' }}>
+				<div className="logical-text-start space-y-1">
 					<p className="text-sm font-semibold">{title}</p>
 					<p className="text-sm leading-6 opacity-80">{description}</p>
 				</div>
@@ -375,8 +374,7 @@ function UpdateActions({
 			{showDisabledReason ? (
 				<div
 					dir={isRtl ? 'rtl' : 'ltr'}
-					className="max-w-sm rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200"
-					style={{ textAlign: 'start' }}
+					className="logical-text-start max-w-sm rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200"
 				>
 					{disabledReason}
 				</div>
@@ -409,10 +407,7 @@ function DetailRow({ label, value, icon: Icon, href }: DetailRowProps) {
 					<ExternalLink size={14} />
 				</a>
 			) : (
-				<span
-					className="text-sm font-medium text-heading"
-					style={{ textAlign: 'start' }}
-				>
+				<span className="logical-text-start text-sm font-medium text-heading">
 					<bdi dir="auto">{value}</bdi>
 				</span>
 			)}
@@ -426,8 +421,7 @@ function IssueList({ title, issues }: IssueListProps) {
 	return (
 		<div
 			dir={isRtl ? 'rtl' : 'ltr'}
-			className="rounded-lg border border-stroke bg-bg p-4"
-			style={{ textAlign: 'start' }}
+			className="logical-text-start rounded-lg border border-stroke bg-bg p-4"
 		>
 			<p className="text-sm font-semibold text-heading">{title}</p>
 			<ul className="mt-3 list-disc space-y-2 ps-5 text-sm leading-6 text-text-muted">

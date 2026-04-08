@@ -109,10 +109,7 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 											>
 												<div className="h-5 w-5 rounded bg-white/30" />
 											</div>
-											<div
-												className="min-w-0 flex-1 space-y-1.5"
-												style={{ textAlign: 'start' }}
-											>
+											<div className="logical-text-start min-w-0 flex-1 space-y-1.5">
 												<Skeleton
 													className={`h-4 ${plugin.barWidths[0]}`}
 												/>

@@ -125,10 +125,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 								{__('Short URL')}
 							</label>
 							<div className="px-3 py-2 bg-surface-alt border border-stroke rounded-lg">
-								<code
-									dir="ltr"
-									className="text-sm text-text-muted font-mono"
-								>
+								<code className="ltr-literal-value text-sm font-mono text-text-muted">
 									{shortUrl}
 								</code>
 							</div>
@@ -141,9 +138,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 							</label>
 							<div className="px-3 py-2 bg-surface-alt border border-stroke rounded-lg">
 								<p
-									dir="ltr"
-									className="text-sm text-text-muted break-all"
-									style={{ textAlign: isRtl ? 'right' : 'left' }}
+									className="ltr-literal-value text-sm text-text-muted break-all"
 								>
 									{link.destinationUrl}
 								</p>
@@ -168,8 +163,9 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 								value={title}
 								onChange={(e) => setTitle(e.target.value)}
 								placeholder={__('Enter a title for this link')}
-								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading"
-								style={{ textAlign: isRtl ? 'right' : 'left' }}
+								className={`w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent ${
+									isRtl ? 'text-right' : 'text-left'
+								}`}
 							/>
 						</div>
 
@@ -200,8 +196,9 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 												'Set a password to protect this link'
 											)
 								}
-								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading"
-								style={{ textAlign: isRtl ? 'right' : 'left' }}
+								className={`w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent ${
+									isRtl ? 'text-right' : 'text-left'
+								}`}
 							/>
 							{hasExistingPassword && (
 								<div className="mt-2 space-y-2">
@@ -250,8 +247,9 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 								onChange={(e) => setExpiresAt(e.target.value)}
 								min={getLocalDateTimeValue()}
 								step="60"
-								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading"
-								style={{ textAlign: isRtl ? 'right' : 'left' }}
+								className={`w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent ${
+									isRtl ? 'text-right' : 'text-left'
+								}`}
 							/>
 						</div>
 

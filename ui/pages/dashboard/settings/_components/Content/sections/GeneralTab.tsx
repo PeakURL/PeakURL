@@ -159,8 +159,7 @@ function GeneralTab({
 						<textarea
 							name="bio"
 							rows={3}
-							className="w-full px-4 py-2 bg-surface border border-stroke rounded-md text-heading placeholder:text-text-muted outline-none transition-all focus:ring-2 focus:ring-accent focus:border-accent"
-							style={{ textAlign: 'start' }}
+							className="logical-text-start w-full rounded-md border border-stroke bg-surface px-4 py-2 text-heading placeholder:text-text-muted outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent"
 							value={generalForm.bio}
 							onChange={handleChange}
 						/>

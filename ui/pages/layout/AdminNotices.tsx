@@ -92,10 +92,7 @@ export const AdminNotices = () => {
 								<div className="mt-0.5 shrink-0">
 									<Icon size={18} />
 								</div>
-								<div
-									className="space-y-1"
-									style={{ textAlign: 'start' }}
-								>
+								<div className="logical-text-start space-y-1">
 									{notice?.title ? (
 										<p className="font-semibold">
 											{notice.title}

@@ -78,6 +78,7 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 						}`}
 					>
 						<DialogPanel
+							dir={isRtl ? 'rtl' : 'ltr'}
 							transition
 							className={`pointer-events-auto w-screen max-w-4xl transform transition duration-500 ease-in-out sm:duration-700 ${
 								isRtl

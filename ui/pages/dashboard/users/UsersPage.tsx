@@ -600,10 +600,7 @@ function UsersPage() {
 													}
 													className="mt-0.5 rounded-full"
 												/>
-												<div
-													className="min-w-0 flex-1"
-													style={{ textAlign: 'start' }}
-												>
+												<div className="logical-text-start min-w-0 flex-1">
 													<div className="font-medium text-heading">
 														<bdi dir="auto">
 															{user.firstName}{' '}
@@ -611,18 +608,12 @@ function UsersPage() {
 														</bdi>
 													</div>
 													<div className="text-sm text-text-muted">
-														<bdi
-															dir="ltr"
-															className="inline-block"
-														>
+														<bdi className="ltr-literal-value inline-block">
 															{user.email}
 														</bdi>
 													</div>
 													<div className="text-xs text-text-muted">
-														<bdi
-															dir="ltr"
-															className="inline-block"
-														>
+														<bdi className="ltr-literal-value inline-block">
 															@{user.username}
 														</bdi>
 													</div>

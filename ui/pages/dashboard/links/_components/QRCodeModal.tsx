@@ -65,9 +65,8 @@ function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
 
 			<div className="fixed inset-0 flex items-center justify-center p-4">
 				<DialogPanel
-					className={`mx-auto max-w-md w-full bg-surface rounded-lg shadow-xl ${
-						isRtl ? 'text-right' : 'text-left'
-					}`}
+					dir={isRtl ? 'rtl' : 'ltr'}
+					className="logical-text-start mx-auto max-w-md w-full rounded-lg bg-surface shadow-xl"
 				>
 					{/* Header */}
 					<div className="flex items-center justify-between p-6 border-b border-stroke">
@@ -108,9 +107,7 @@ function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
 								{__('Short URL')}
 							</p>
 							<code
-								dir="ltr"
-								className="text-sm text-accent break-all"
-								style={{ textAlign: isRtl ? 'right' : 'left' }}
+								className="ltr-literal-value text-sm text-accent break-all"
 							>
 								{shortUrl}
 							</code>

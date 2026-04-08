@@ -1,4 +1,5 @@
 import { X } from 'lucide-react';
+import { isDocumentRtl } from '@/i18n/direction';
 import type { ModalProps, ModalSize } from './types';
 export type { ModalProps, ModalSize } from './types';
 
@@ -20,6 +21,7 @@ export function Modal({
 	size = 'md',
 }: ModalProps) {
 	if (!isOpen) return null;
+	const isRtl = isDocumentRtl();
 
 	const sizes: Record<ModalSize, string> = {
 		sm: 'max-w-md',
@@ -36,6 +38,7 @@ export function Modal({
 			/>
 
 			<div
+				dir={isRtl ? 'rtl' : 'ltr'}
 				className={`relative bg-surface rounded-2xl shadow-2xl w-full ${sizes[size]} max-h-[90vh] overflow-hidden border border-stroke`}
 			>
 				{title && (

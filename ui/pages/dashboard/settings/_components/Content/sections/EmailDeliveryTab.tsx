@@ -26,12 +26,11 @@ function MethodButton({
 			type="button"
 			onClick={onClick}
 			dir={isRtl ? 'rtl' : 'ltr'}
-			className={`rounded-lg border p-4 transition ${
+			className={`logical-text-start rounded-lg border p-4 transition ${
 				isActive
 					? 'border-accent bg-accent/10 text-heading'
 					: 'border-stroke bg-surface-alt text-text-muted hover:border-accent/40 hover:text-heading'
 			}`}
-			style={{ textAlign: 'start' }}
 		>
 			<p className="text-sm font-semibold">{title}</p>
 			<p className="mt-1 text-sm leading-6">{description}</p>
@@ -107,7 +106,7 @@ function EmailDeliveryTab({
 					<div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600 dark:bg-primary-500/20 dark:text-primary-400">
 						<Mail size={18} />
 					</div>
-					<div className="space-y-1" style={{ textAlign: 'start' }}>
+					<div className="logical-text-start space-y-1">
 						<h2 className="text-base font-semibold text-heading">
 							{__('Email Configuration')}
 						</h2>
@@ -127,7 +126,7 @@ function EmailDeliveryTab({
 						className="flex items-start gap-3"
 					>
 						<AlertCircle size={18} className="mt-0.5" />
-						<div style={{ textAlign: 'start' }}>
+						<div className="logical-text-start">
 							<p className="font-semibold">
 								{__('Mail status unavailable')}
 							</p>
@@ -146,7 +145,7 @@ function EmailDeliveryTab({
 						className="flex items-start gap-3"
 					>
 						<AlertCircle size={18} className="mt-0.5" />
-						<div style={{ textAlign: 'start' }}>
+						<div className="logical-text-start">
 							<p className="font-semibold">
 								{__('Dashboard management unavailable')}
 							</p>

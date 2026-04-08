@@ -147,7 +147,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 
 			<div className="bg-surface border border-(--color-stroke) rounded-lg p-5">
 				<div className="mb-5 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-					<div style={{ textAlign: 'start' }}>
+					<div className="logical-text-start">
 						<h3 className="text-base font-semibold text-heading">
 							{__('Webhooks')}
 						</h3>
@@ -204,9 +204,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 									)}
 								</p>
 								<code
-									dir="ltr"
-									className="block w-fit max-w-full rounded bg-surface px-1.5 py-0.5 text-[11px]"
-									style={{ textAlign: 'left' }}
+									className="ltr-literal-value block w-fit max-w-full rounded bg-surface px-1.5 py-0.5 text-[11px]"
 								>
 									https://example.com/api/webhooks/peakurl
 								</code>
@@ -223,7 +221,6 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 										key={event.id}
 										dir={isRtl ? 'rtl' : 'ltr'}
 										className="flex items-center gap-2 text-sm text-muted cursor-pointer select-none"
-										style={{ textAlign: 'start' }}
 									>
 										<input
 											type="checkbox"
@@ -291,14 +288,9 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 									dir={isRtl ? 'rtl' : 'ltr'}
 									className="flex items-start justify-between gap-4"
 								>
-									<div
-										className="min-w-0 flex-1"
-										style={{ textAlign: 'start' }}
-									>
+									<div className="logical-text-start min-w-0 flex-1">
 										<p
-											dir="ltr"
-											className="truncate text-sm font-medium text-heading"
-											style={{ textAlign: isRtl ? 'right' : 'left' }}
+											className="ltr-literal-value truncate text-sm font-medium text-heading"
 										>
 											{wh.url}
 										</p>
@@ -321,8 +313,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 										<div className="mt-3 flex items-center gap-2">
 											{wh.secretHint ? (
 												<span
-													dir="ltr"
-													className="text-xs text-muted font-mono truncate"
+													className="ltr-literal-value text-xs text-muted font-mono truncate"
 												>
 													{wh.secretHint}
 												</span>
@@ -385,16 +376,14 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 						<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
 							{__('Endpoint URL')}
 						</p>
-						<p className="mt-2 text-sm font-medium text-heading break-all">
-							<bdi dir="ltr">{createdWebhook?.url}</bdi>
+						<p className="ltr-literal-value mt-2 break-all text-sm font-medium text-heading">
+							{createdWebhook?.url}
 						</p>
 					</div>
 
 					<div className="relative">
 							<pre
-								dir="ltr"
-								className="break-all rounded-lg border border-stroke bg-surface-alt p-3 text-sm font-mono"
-								style={{ textAlign: isRtl ? 'right' : 'left' }}
+								className="ltr-literal-value break-all rounded-lg border border-stroke bg-surface-alt p-3 text-sm font-mono"
 							>
 								{createdWebhook?.secret}
 							</pre>
@@ -406,8 +395,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 									__('Secret copied')
 								)
 							}
-							className="absolute top-2 rounded bg-surface p-1.5 text-text-muted shadow-sm transition-all hover:text-heading hover:shadow"
-							style={{ insetInlineEnd: '0.5rem' }}
+							className="logical-inset-inline-end-2 absolute top-2 rounded bg-surface p-1.5 text-text-muted shadow-sm transition-all hover:text-heading hover:shadow"
 							title={__('Copy to clipboard')}
 						>
 							<Copy size={14} />

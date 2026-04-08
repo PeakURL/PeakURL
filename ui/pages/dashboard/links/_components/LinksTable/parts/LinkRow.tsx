@@ -71,8 +71,7 @@ function LinkRow({
 					<div className="min-w-0">
 						<div className="flex items-center gap-1.5">
 							<code
-								dir="ltr"
-								className="font-mono font-semibold text-accent text-sm"
+								className="ltr-literal-value text-sm font-mono font-semibold text-accent"
 							>
 								/{link.alias || link.shortCode}
 							</code>
@@ -103,9 +102,7 @@ function LinkRow({
 			<td className="px-4 py-3">
 				<div className="max-w-xs">
 					<div
-						dir="ltr"
-						className="text-sm text-text-muted truncate"
-						style={{ textAlign: isRtl ? 'right' : 'left' }}
+						className="ltr-literal-value truncate text-sm text-text-muted"
 						title={link.destinationUrl}
 					>
 						{link.destinationUrl}

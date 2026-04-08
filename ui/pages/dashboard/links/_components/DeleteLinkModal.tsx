@@ -38,9 +38,8 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 
 			<div className="fixed inset-0 flex items-center justify-center p-4">
 				<DialogPanel
-					className={`mx-auto w-full max-w-md rounded-lg bg-surface shadow-xl ${
-						isRtl ? 'text-right' : 'text-left'
-					}`}
+					dir={isRtl ? 'rtl' : 'ltr'}
+					className="logical-text-start mx-auto w-full max-w-md rounded-lg bg-surface shadow-xl"
 				>
 					{/* Header */}
 					<div className="flex items-center justify-between p-6 border-b border-stroke">
@@ -81,9 +80,7 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 									{__('Short URL')}
 								</p>
 								<code
-									dir="ltr"
-									className="text-sm text-accent font-mono"
-									style={{ textAlign: isRtl ? 'right' : 'left' }}
+									className="ltr-literal-value text-sm text-accent font-mono"
 								>
 									{shortUrl}
 								</code>
@@ -93,9 +90,7 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 									{__('Destination')}
 								</p>
 								<p
-									dir="ltr"
-									className="text-sm text-heading break-all"
-									style={{ textAlign: isRtl ? 'right' : 'left' }}
+									className="ltr-literal-value text-sm text-heading break-all"
 								>
 									{link.destinationUrl}
 								</p>

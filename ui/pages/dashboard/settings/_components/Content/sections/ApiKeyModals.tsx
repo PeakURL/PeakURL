@@ -87,17 +87,14 @@ function ApiKeyModals({
 					</div>
 					<div className="relative">
 						<pre
-							dir="ltr"
-							className="p-3 bg-surface-alt rounded-lg text-sm font-mono break-all border border-stroke"
-							style={{ textAlign: isRtl ? 'right' : 'left' }}
+							className="ltr-literal-value p-3 bg-surface-alt rounded-lg text-sm font-mono break-all border border-stroke"
 						>
 							{newApiKey}
 						</pre>
 						<button
 							type="button"
 							onClick={() => copyToClipboard(newApiKey)}
-							className="absolute top-2 p-1.5 text-text-muted hover:text-heading bg-surface rounded shadow-sm hover:shadow transition-all"
-							style={{ insetInlineEnd: '0.5rem' }}
+							className="logical-inset-inline-end-2 absolute top-2 rounded bg-surface p-1.5 text-text-muted shadow-sm transition-all hover:text-heading hover:shadow"
 							title={__('Copy to clipboard')}
 						>
 							<Copy size={14} />
@@ -110,9 +107,7 @@ function ApiKeyModals({
 							</p>
 							<div className="relative">
 								<pre
-									dir="ltr"
-									className="p-3 bg-surface-alt rounded-lg text-sm font-mono break-all border border-stroke"
-									style={{ textAlign: isRtl ? 'right' : 'left' }}
+									className="ltr-literal-value p-3 bg-surface-alt rounded-lg text-sm font-mono break-all border border-stroke"
 								>
 									{baseApiUrl}
 								</pre>
@@ -126,8 +121,7 @@ function ApiKeyModals({
 											)
 										)
 									}
-									className="absolute top-2 p-1.5 text-text-muted hover:text-heading bg-surface rounded shadow-sm hover:shadow transition-all"
-									style={{ insetInlineEnd: '0.5rem' }}
+									className="logical-inset-inline-end-2 absolute top-2 rounded bg-surface p-1.5 text-text-muted shadow-sm transition-all hover:text-heading hover:shadow"
 									title={__('Copy to clipboard')}
 								>
 									<Copy size={14} />

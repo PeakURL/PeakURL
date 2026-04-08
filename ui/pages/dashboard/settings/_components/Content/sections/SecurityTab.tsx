@@ -523,7 +523,7 @@ function SecurityTab({
 							/>
 						)}
 					</div>
-					<div className="flex-1" style={{ textAlign: 'start' }}>
+					<div className="logical-text-start flex-1">
 						<p className="font-medium text-sm text-heading">
 							{twoFactorEnabled
 								? __('2FA is enabled')
@@ -598,17 +598,13 @@ function SecurityTab({
 							</div>
 							<div className="space-y-3">
 								<div
-									dir="ltr"
-									className="text-xs text-text-muted break-all border border-dashed border-stroke rounded-lg p-3 bg-surface-alt"
-									style={{ textAlign: isRtl ? 'right' : 'left' }}
+									className="ltr-literal-value rounded-lg border border-dashed border-stroke bg-surface-alt p-3 text-xs text-text-muted break-all"
 								>
 									{__('Secret:')} {secret}
 								</div>
 								{otpauthUrl ? (
 									<div
-										dir="ltr"
-										className="text-xs text-text-muted break-all border border-dashed border-stroke rounded-lg p-3 bg-surface-alt"
-										style={{ textAlign: isRtl ? 'right' : 'left' }}
+										className="ltr-literal-value rounded-lg border border-dashed border-stroke bg-surface-alt p-3 text-xs text-text-muted break-all"
 									>
 										{__('Authenticator URI:')} {otpauthUrl}
 									</div>
@@ -747,7 +743,7 @@ function SecurityTab({
 											className="text-text-muted"
 										/>
 									</div>
-									<div style={{ textAlign: 'start' }}>
+									<div className="logical-text-start">
 										<p className="font-medium text-sm text-heading">
 											{session.browser || __('Browser')} •{' '}
 											{session.os || __('Unknown OS')}

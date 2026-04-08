@@ -128,35 +128,44 @@ Badge helpers:
     Add classes: badge + badge-{success|error|warning|info} for consistent styling.
 */
 
-/* ===== BADGE & STATUS UTILITIES ===== */
-.badge {
-	@apply inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border border-(--color-stroke) dark:border-(--color-stroke-strong) transition-colors select-none;
-}
-.badge-success {
-	@apply bg-(--color-success-soft) text-(--color-success);
-}
-.badge-error {
-	@apply bg-(--color-error-soft) text-(--color-error);
-}
-.badge-warning {
-	@apply bg-(--color-warning-soft) text-(--color-warning);
-}
-.badge-info {
-	@apply bg-(--color-info-soft) text-(--color-info);
-}
+@layer components {
+	/* ===== BADGE & STATUS UTILITIES ===== */
+	.badge {
+		@apply inline-flex items-center gap-1 rounded-full border border-(--color-stroke) px-2 py-1 text-xs font-medium transition-colors select-none dark:border-(--color-stroke-strong);
+	}
 
-/* Brand icon helper (optional) */
-.icon-brand-slack {
-	color: var(--brand-slack);
-}
-.icon-brand-discord {
-	color: var(--brand-discord);
-}
-.icon-brand-zapier {
-	color: var(--brand-zapier);
-}
-.icon-brand-google {
-	color: var(--brand-google);
+	.badge-success {
+		@apply bg-(--color-success-soft) text-(--color-success);
+	}
+
+	.badge-error {
+		@apply bg-(--color-error-soft) text-(--color-error);
+	}
+
+	.badge-warning {
+		@apply bg-(--color-warning-soft) text-(--color-warning);
+	}
+
+	.badge-info {
+		@apply bg-(--color-info-soft) text-(--color-info);
+	}
+
+	/* Brand icon helper (optional) */
+	.icon-brand-slack {
+		color: var(--brand-slack);
+	}
+
+	.icon-brand-discord {
+		color: var(--brand-discord);
+	}
+
+	.icon-brand-zapier {
+		color: var(--brand-zapier);
+	}
+
+	.icon-brand-google {
+		color: var(--brand-google);
+	}
 }
 
 /* ===== BASE STYLES ===== */
@@ -184,42 +193,71 @@ body {
 	overflow-x: hidden;
 }
 
-/* Utility helper classes (minimal) where semantic mapping isn't covered by Tailwind's generated palette */
-.glass {
-	@apply bg-surface/80 border border-(--color-stroke);
-}
-.header-modern {
-	@apply bg-surface shadow-sm ring-1 ring-(--color-stroke)/40;
-}
-.stats-card {
-	@apply rounded-2xl bg-surface p-6 shadow-sm ring-1 ring-(--color-stroke)/40 relative overflow-hidden transition;
+@layer components {
+	/* Utility helper classes (minimal) where semantic mapping isn't covered by Tailwind's generated palette */
+	.glass {
+		@apply border border-(--color-stroke) bg-surface/80;
+	}
+
+	.header-modern {
+		@apply bg-surface shadow-sm ring-1 ring-(--color-stroke)/40;
+	}
+
+	.stats-card {
+		@apply relative overflow-hidden rounded-2xl bg-surface p-6 shadow-sm ring-1 ring-(--color-stroke)/40 transition;
+	}
+
+	/* Content wrapper to ensure clear separation from header/sidebar */
+	.content-area {
+		@apply bg-bg dark:bg-bg;
+	}
+
+	/* ===== FOCUS RINGS ===== */
+	.focus-ring {
+		@apply focus:ring-accent focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900;
+	}
+
+	/* ===== TEXT GRADIENTS ===== */
+	.text-gradient-primary {
+		@apply bg-linear-to-r from-blue-600 via-primary-600 to-purple-600 bg-clip-text text-transparent;
+	}
+
+	.text-gradient-success {
+		@apply bg-linear-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent;
+	}
+
+	.text-gradient-warning {
+		@apply bg-linear-to-r from-amber-600 via-orange-600 to-red-600 bg-clip-text text-transparent;
+	}
+
+	.text-gradient-pink {
+		@apply bg-linear-to-r from-pink-600 via-rose-600 to-red-600 bg-clip-text text-transparent;
+	}
 }
 
-/* Content wrapper to ensure clear separation from header/sidebar */
-.content-area {
-	@apply bg-bg dark:bg-bg;
-}
+@layer utilities {
+	.mixed-direction-text {
+		text-align: start;
+		unicode-bidi: plaintext;
+	}
 
-/* ===== FOCUS RINGS ===== */
-.focus-ring {
-	@apply focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 dark:focus:ring-offset-gray-900;
-}
+	.logical-text-start {
+		text-align: start;
+	}
 
-/* ===== TEXT GRADIENTS ===== */
-.text-gradient-primary {
-	@apply bg-linear-to-r from-blue-600 via-primary-600 to-purple-600 bg-clip-text text-transparent;
-}
+	.logical-text-end {
+		text-align: end;
+	}
 
-.text-gradient-success {
-	@apply bg-linear-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent;
-}
+	.logical-inset-inline-end-2 {
+		inset-inline-end: 0.5rem;
+	}
 
-.text-gradient-warning {
-	@apply bg-linear-to-r from-amber-600 via-orange-600 to-red-600 bg-clip-text text-transparent;
-}
-
-.text-gradient-pink {
-	@apply bg-linear-to-r from-pink-600 via-rose-600 to-red-600 bg-clip-text text-transparent;
+	.ltr-literal-value {
+		direction: ltr;
+		text-align: left;
+		unicode-bidi: plaintext;
+	}
 }
 
 /* ===== ANIMATIONS ===== */

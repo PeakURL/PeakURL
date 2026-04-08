@@ -259,6 +259,22 @@ body {
 		text-align: end;
 	}
 
+	.text-page-start {
+		text-align: left;
+	}
+
+	html[dir='rtl'] .text-page-start {
+		text-align: right;
+	}
+
+	.text-page-end {
+		text-align: right;
+	}
+
+	html[dir='rtl'] .text-page-end {
+		text-align: left;
+	}
+
 	.inset-inline-end-2 {
 		inset-inline-end: 0.5rem;
 	}
@@ -297,6 +313,16 @@ body {
 
 	.margin-inline-start-4 {
 		margin-inline-start: 1rem;
+	}
+
+	.field-required-indicator {
+		margin-inline-start: 0.25rem;
+	}
+
+	.sidebar-submenu-rail {
+		margin-inline-start: 1.25rem;
+		padding-inline-start: 0.75rem;
+		border-inline-start: 1px solid var(--color-stroke);
 	}
 
 	.origin-top-inline-end {

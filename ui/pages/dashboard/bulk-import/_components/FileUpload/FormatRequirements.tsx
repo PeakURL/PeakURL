@@ -1,12 +1,9 @@
 import { Button } from '@/components/ui';
 import { Download } from 'lucide-react';
 import { __ } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
 import type { SampleFormat } from './types';
 
 function FormatRequirements() {
-	const isRtl = isDocumentRtl();
-
 	const handleDownloadSample = (format: SampleFormat) => {
 		let content = '';
 		let filename = '';
@@ -126,7 +123,7 @@ function FormatRequirements() {
 					size="sm"
 					onClick={() => handleDownloadSample('csv')}
 				>
-					<Download className={`${isRtl ? 'ml-2' : 'mr-2'} h-4 w-4`} />
+					<Download className="h-4 w-4" />
 					CSV
 				</Button>
 				<Button
@@ -134,7 +131,7 @@ function FormatRequirements() {
 					size="sm"
 					onClick={() => handleDownloadSample('json')}
 				>
-					<Download className={`${isRtl ? 'ml-2' : 'mr-2'} h-4 w-4`} />
+					<Download className="h-4 w-4" />
 					JSON
 				</Button>
 				<Button
@@ -142,7 +139,7 @@ function FormatRequirements() {
 					size="sm"
 					onClick={() => handleDownloadSample('xml')}
 				>
-					<Download className={`${isRtl ? 'ml-2' : 'mr-2'} h-4 w-4`} />
+					<Download className="h-4 w-4" />
 					XML
 				</Button>
 			</div>

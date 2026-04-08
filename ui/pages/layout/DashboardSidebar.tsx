@@ -260,13 +260,7 @@ export const DashboardSidebar = ({
 										</button>
 
 										{isOpen && (
-											<div
-												className={`space-y-1 ${
-													isRtl
-														? 'mr-5 border-r border-stroke pr-3'
-														: 'ml-5 border-l border-stroke pl-3'
-												}`}
-											>
+											<div className="sidebar-submenu-rail space-y-1">
 												{item.children.map((child) => {
 													const isChildLinkActive =
 														pathname ===

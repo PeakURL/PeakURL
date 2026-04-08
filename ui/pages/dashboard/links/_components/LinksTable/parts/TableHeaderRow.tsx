@@ -27,7 +27,7 @@ function TableHeaderRow({
 				<th className="text-inline-end px-4 py-3">
 					<button
 						onClick={onBulkDelete}
-						className="ml-auto flex items-center gap-1 text-xs font-medium text-error hover:text-red-700"
+						className="inline-flex items-center gap-1 text-xs font-medium text-error hover:text-red-700"
 					>
 						{__('Delete Selected')}
 					</button>

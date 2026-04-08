@@ -32,11 +32,9 @@ const Pagination = ({
 					<button
 						onClick={() => onPageChange(currentPage - 1)}
 						disabled={currentPage === 1}
-						className="px-3 py-1.5 rounded-lg text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:bg-surface-alt text-text-muted hover:text-heading"
+						className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:bg-surface-alt text-text-muted hover:text-heading"
 					>
-						<PreviousIcon
-							className={`${isRtl ? 'ml-1' : 'mr-1'} h-3 w-3`}
-						/>
+						<PreviousIcon className="h-3 w-3" />
 						{__('Previous')}
 					</button>
 
@@ -75,12 +73,10 @@ const Pagination = ({
 					<button
 						onClick={() => onPageChange(currentPage + 1)}
 						disabled={currentPage === totalPages}
-						className="px-3 py-1.5 rounded-lg text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:bg-surface-alt text-text-muted hover:text-heading"
+						className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:bg-surface-alt text-text-muted hover:text-heading"
 					>
 						{__('Next')}
-						<NextIcon
-							className={`${isRtl ? 'mr-1' : 'ml-1'} h-3 w-3`}
-						/>
+						<NextIcon className="h-3 w-3" />
 					</button>
 				</div>
 			</div>

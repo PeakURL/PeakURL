@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui';
-import { isDocumentRtl } from '@/i18n/direction';
 import { useBulkCreateUrlMutation } from '@/store/slices/api';
 import { buildShortUrl, getErrorMessage } from '@/utils';
 import ImportSummary from './ImportSummary';
@@ -14,7 +13,6 @@ import type {
 } from './types';
 
 const PasteImport = () => {
-	const isRtl = isDocumentRtl();
 	const [text, setText] = useState('');
 	const [status, setStatus] = useState<ImportStatus>('idle');
 	const [results, setResults] = useState<ImportResult[]>([]);
@@ -124,9 +122,7 @@ https://example.com/page3 custom-alias`}
 									onClick={handleImport}
 									disabled={!text.trim()}
 								>
-									<WandSparkles
-										className={`${isRtl ? 'ml-2' : 'mr-2'} h-4 w-4`}
-									/>
+									<WandSparkles className="h-4 w-4" />
 									{__('Create Links')}
 								</Button>
 							</div>

@@ -1,9 +1,7 @@
 import { __ } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
 import type { CountryStatsProps, CountryMetric } from './types';
 
 const CountryStats = ({ countryData }: CountryStatsProps) => {
-	const isRtl = isDocumentRtl();
 	// Calculate total clicks for percentage
 	const totalClicks = countryData.reduce(
 		(sum: number, country: CountryMetric) => sum + country.count,
@@ -58,9 +56,7 @@ const CountryStats = ({ countryData }: CountryStatsProps) => {
 										{country.name}
 									</span>
 									<span
-										className={`text-sm font-semibold text-text-muted ${
-											isRtl ? 'mr-2' : 'ml-2'
-										}`}
+										className="text-sm font-semibold text-text-muted"
 									>
 										{country.value}% ({country.count})
 									</span>

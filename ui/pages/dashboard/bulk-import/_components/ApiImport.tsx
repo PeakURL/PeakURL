@@ -2,10 +2,8 @@ import { Button } from '@/components/ui';
 import { ExternalLink } from 'lucide-react';
 import { API_SERVER_BASE_URL } from '@/constants';
 import { __ } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
 
 const ApiImport = () => {
-	const isRtl = isDocumentRtl();
 	const apiKey = 'YOUR_API_KEY';
 
 	return (
@@ -79,9 +77,7 @@ Content-Type: application/json
 					rel="noreferrer"
 				>
 					<Button size="sm">
-						<ExternalLink
-							className={`${isRtl ? 'ml-2' : 'mr-2'} h-4 w-4`}
-						/>
+						<ExternalLink className="h-4 w-4" />
 						{__('View API Documentation')}
 					</Button>
 				</a>

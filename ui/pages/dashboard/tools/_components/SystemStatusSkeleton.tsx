@@ -1,5 +1,4 @@
 import { SkeletonLoader } from '@/components/ui';
-import { isDocumentRtl } from '@/i18n/direction';
 
 type InfoSectionSkeletonProps = {
 	isOpen?: boolean;
@@ -12,8 +11,6 @@ function InfoSectionSkeleton({
 	rowCount = 4,
 	titleWidthClassName = 'w-40',
 }: InfoSectionSkeletonProps) {
-	const isRtl = isDocumentRtl();
-
 	return (
 		<div className="overflow-hidden rounded-lg border border-stroke bg-surface">
 			<div className="flex items-center justify-between gap-4 px-4 py-3.5">
@@ -36,9 +33,7 @@ function InfoSectionSkeleton({
 										}
 									>
 										<th
-											className={`w-[34%] min-w-45 bg-surface-alt px-4 py-3 align-top ${
-												isRtl ? 'text-right' : 'text-left'
-											}`}
+											className="text-inline-start w-[34%] min-w-45 bg-surface-alt px-4 py-3 align-top"
 										>
 											<SkeletonLoader className="h-4 w-24" />
 										</th>

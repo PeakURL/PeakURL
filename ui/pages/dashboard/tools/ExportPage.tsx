@@ -9,7 +9,6 @@ import {
 import { useNotification } from '@/components';
 import { Button } from '@/components/ui';
 import { __, sprintf } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
 import {
 	useGetUrlsQuery,
 	useLazyGetUrlsExportQuery,
@@ -30,8 +29,6 @@ function ExportCard({
 	isDisabled,
 	onExport,
 }: ExportCardProps) {
-	const isRtl = isDocumentRtl();
-
 	return (
 		<div className="flex h-full flex-col rounded-xl border border-stroke bg-surface p-5">
 			<div className="mb-4 flex flex-1 items-start gap-3">
@@ -58,10 +55,7 @@ function ExportCard({
 					onClick={onExport}
 					disabled={isDisabled || isLoading}
 				>
-					<Download
-						size={16}
-						className={isRtl ? 'ml-2' : 'mr-2'}
-					/>
+					<Download size={16} />
 					{isLoading ? __('Preparing...') : __('Export')}
 				</Button>
 			</div>
@@ -70,7 +64,6 @@ function ExportCard({
 }
 
 function ExportPage() {
-	const isRtl = isDocumentRtl();
 	const notification = useNotification();
 	const [activeFormat, setActiveFormat] = useState<ExportFormat | ''>('');
 	const { data: urlsResponse, isLoading: isCountLoading } = useGetUrlsQuery({
@@ -182,11 +175,7 @@ function ExportPage() {
 						</p>
 					</div>
 
-					<div
-						className={`rounded-lg border border-stroke bg-surface-alt px-4 py-3 ${
-							isRtl ? 'text-left' : 'text-right'
-						}`}
-					>
+					<div className="text-page-end rounded-lg border border-stroke bg-surface-alt px-4 py-3">
 						<div className="text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
 							{__('Exportable Links')}
 						</div>

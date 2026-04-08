@@ -22,7 +22,7 @@ function LocationNoteItem({
 		<div dir={direction} className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-2">
 			<span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-info/60" />
 			<div className="min-w-0 space-y-1">
-				<p dir="auto" className="direction-safe-text">
+				<p dir={direction} className="text-inline-start">
 					{text}
 				</p>
 				{example ? (
@@ -159,8 +159,8 @@ function TrafficLocationTab({
 							</p>
 							<div className="mx-auto mt-4 w-full max-w-lg rounded-lg border border-info/20 bg-info/5 px-4 py-3">
 								<p
-									dir="auto"
-									className="direction-safe-text text-xs font-medium text-heading"
+									dir={direction}
+									className="text-inline-start text-xs font-medium text-heading"
 								>
 									{__('Note:')}
 								</p>

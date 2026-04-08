@@ -1,11 +1,9 @@
 import { Button } from '@/components/ui';
 import { CircleAlert, CircleCheckBig, Download } from 'lucide-react';
 import { __, sprintf } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
 import type { ImportDetailsProps } from './types';
 
 function ImportDetails({ results }: ImportDetailsProps) {
-	const isRtl = isDocumentRtl();
 	const successCount = results.filter((r) => r.status === 'success').length;
 	const errorCount = results.filter((r) => r.status === 'error').length;
 
@@ -59,7 +57,7 @@ function ImportDetails({ results }: ImportDetailsProps) {
 					)}
 				</span>
 				<Button variant="ghost" size="sm">
-					<Download className={`${isRtl ? 'ml-2' : 'mr-2'} h-4 w-4`} />
+					<Download className="h-4 w-4" />
 					{__('Export Results')}
 				</Button>
 			</div>

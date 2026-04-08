@@ -1,6 +1,5 @@
 import { Star, Download, Bell, ExternalLink } from 'lucide-react';
 import { __ } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
 import { PLUGINS_WAITLIST_URL } from '@constants';
 import type { PluginCardProps, PluginPreviewSkeletonProps } from './types';
 
@@ -14,8 +13,6 @@ function Skeleton({ className = '' }: PluginPreviewSkeletonProps) {
 }
 
 function PluginCard({ plugin }: PluginCardProps) {
-	const isRtl = isDocumentRtl();
-
 	return (
 		<div className="group relative flex flex-col overflow-hidden rounded-xl border border-stroke bg-surface shadow-sm transition-all duration-200 hover:shadow-md hover:border-stroke-strong">
 			{/* ── Banner ── */}
@@ -54,7 +51,7 @@ function PluginCard({ plugin }: PluginCardProps) {
 
 				{/* Rating / installs placeholder row */}
 				<div className="mb-3 flex items-center justify-between border-t border-stroke pt-3">
-					<div className="flex items-center gap-0.5">
+					<div className="flex items-center gap-1.5">
 						{[1, 2, 3, 4, 5].map((s) => (
 							<Star
 								key={s}
@@ -63,9 +60,7 @@ function PluginCard({ plugin }: PluginCardProps) {
 								fill="currentColor"
 							/>
 						))}
-						<Skeleton
-							className={`${isRtl ? 'mr-1.5' : 'ml-1.5'} h-3 w-6`}
-						/>
+						<Skeleton className="h-3 w-6" />
 					</div>
 					<div className="flex items-center gap-1 text-stroke-strong dark:text-stroke">
 						<Download size={11} />
@@ -85,10 +80,7 @@ function PluginCard({ plugin }: PluginCardProps) {
 						className="transition-transform group-hover/btn:rotate-12"
 					/>
 					{__('Join the Waitlist')}
-					<ExternalLink
-						size={11}
-						className={`${isRtl ? 'mr-auto' : 'ml-auto'} opacity-60`}
-					/>
+					<ExternalLink size={11} className="opacity-60" />
 				</a>
 			</div>
 

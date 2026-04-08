@@ -64,6 +64,7 @@ function NoticeAction({ action, buttonClasses }: NoticeActionProps) {
 
 export const AdminNotices = () => {
 	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const { data } = useGetAdminNoticesQuery(undefined);
 	const notices = data?.data?.items ?? [];
 
@@ -85,7 +86,7 @@ export const AdminNotices = () => {
 						className={`rounded-lg border p-4 text-sm ${tone.container}`}
 					>
 						<div
-							dir={isRtl ? 'rtl' : 'ltr'}
+							dir={direction}
 							className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"
 						>
 							<div className="flex items-start gap-3">

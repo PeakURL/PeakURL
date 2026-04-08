@@ -1,5 +1,4 @@
 import { __, sprintf } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
 import type { TableHeaderRowProps } from '../types';
 
 function TableHeaderRow({
@@ -7,11 +6,10 @@ function TableHeaderRow({
 	onSelectAll,
 	onBulkDelete,
 }: TableHeaderRowProps) {
-	const isRtl = isDocumentRtl();
 	const hasSelection = selectedCount > 0;
 	if (hasSelection) {
 		return (
-			<tr className={`${isRtl ? 'text-right' : 'text-left'} bg-accent/5`}>
+			<tr className="logical-text-start bg-accent/5">
 				<th className="px-4 py-3 text-xs font-semibold text-text-muted uppercase tracking-wide w-[40px]">
 					<input
 						type="checkbox"
@@ -26,14 +24,10 @@ function TableHeaderRow({
 				>
 					{sprintf(__('%s selected'), String(selectedCount))}
 				</th>
-				<th className={`px-4 py-3 ${isRtl ? 'text-left' : 'text-right'}`}>
+				<th className="logical-text-end px-4 py-3">
 					<button
 						onClick={onBulkDelete}
-						className={`text-error hover:text-red-700 font-medium text-xs flex items-center gap-1 ${
-							isRtl
-								? 'justify-start mr-auto'
-								: 'justify-end ml-auto'
-						}`}
+						className="ml-auto flex items-center gap-1 text-xs font-medium text-error hover:text-red-700"
 					>
 						{__('Delete Selected')}
 					</button>
@@ -43,7 +37,7 @@ function TableHeaderRow({
 	}
 
 	return (
-		<tr className={isRtl ? 'text-right' : 'text-left'}>
+		<tr className="logical-text-start">
 			<th className="px-4 py-3 text-xs font-semibold text-text-muted uppercase tracking-wide w-[40px]">
 				<input
 					type="checkbox"
@@ -68,9 +62,7 @@ function TableHeaderRow({
 				{__('Created')}
 			</th>
 			<th
-				className={`px-4 py-3 text-xs font-semibold text-text-muted uppercase tracking-wide ${
-					isRtl ? 'text-left' : 'text-right'
-				}`}
+				className="logical-text-end px-4 py-3 text-xs font-semibold text-text-muted uppercase tracking-wide"
 			>
 				{__('Actions')}
 			</th>

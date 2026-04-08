@@ -203,10 +203,11 @@ function SectionHeader({
 	secondaryAction,
 }: SectionHeaderProps) {
 	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 
 	return (
 		<div
-			dir={isRtl ? 'rtl' : 'ltr'}
+			dir={direction}
 			className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between"
 		>
 			<div className="logical-text-start space-y-2">
@@ -231,13 +232,14 @@ function SectionHeader({
 
 function MetricGrid({ items }: MetricGridProps) {
 	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 
 	return (
 		<div className="mt-5 grid grid-cols-1 gap-3 md:grid-cols-3">
 			{items.map((item: MetricItem) => (
 				<div
 					key={item.label}
-					dir={isRtl ? 'rtl' : 'ltr'}
+					dir={direction}
 					className="logical-text-start rounded-lg border border-stroke bg-bg px-4 py-4"
 				>
 					<p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-text-muted">
@@ -259,6 +261,7 @@ function InlineNotice({
 	tone = 'info',
 }: InlineNoticeProps) {
 	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const styles: Record<StatusTone, string> = {
 		info: 'border-blue-200 bg-blue-50 text-blue-900 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200',
 		success:
@@ -269,7 +272,7 @@ function InlineNotice({
 	return (
 		<div className={`rounded-lg border p-4 ${styles[tone]}`}>
 			<div
-				dir={isRtl ? 'rtl' : 'ltr'}
+				dir={direction}
 				className="flex items-start gap-3"
 			>
 				<Icon size={18} className="mt-0.5 shrink-0" />
@@ -297,6 +300,7 @@ function UpdateActions({
 	onReinstall,
 }: UpdateActionsProps) {
 	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const isInstallingRelease = isApplying || isReinstalling;
 	const showDisabledReason =
 		(updateAvailable || reinstallAvailable) &&
@@ -373,7 +377,7 @@ function UpdateActions({
 
 			{showDisabledReason ? (
 				<div
-					dir={isRtl ? 'rtl' : 'ltr'}
+					dir={direction}
 					className="logical-text-start max-w-sm rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200"
 				>
 					{disabledReason}
@@ -385,10 +389,11 @@ function UpdateActions({
 
 function DetailRow({ label, value, icon: Icon, href }: DetailRowProps) {
 	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 
 	return (
 		<div
-			dir={isRtl ? 'rtl' : 'ltr'}
+			dir={direction}
 			className="flex flex-col gap-2 rounded-lg border border-stroke bg-bg px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
 		>
 			<div className="flex items-center gap-2 text-sm text-text-muted">
@@ -400,7 +405,7 @@ function DetailRow({ label, value, icon: Icon, href }: DetailRowProps) {
 					href={href}
 					target="_blank"
 					rel="noreferrer"
-					dir={isRtl ? 'rtl' : 'ltr'}
+					dir={direction}
 					className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline"
 				>
 					<bdi dir="auto">{value}</bdi>
@@ -417,10 +422,11 @@ function DetailRow({ label, value, icon: Icon, href }: DetailRowProps) {
 
 function IssueList({ title, issues }: IssueListProps) {
 	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 
 	return (
 		<div
-			dir={isRtl ? 'rtl' : 'ltr'}
+			dir={direction}
 			className="logical-text-start rounded-lg border border-stroke bg-bg p-4"
 		>
 			<p className="text-sm font-semibold text-heading">{title}</p>

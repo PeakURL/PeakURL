@@ -2,7 +2,7 @@ import type { SubmitEvent } from 'react';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { X, Save } from 'lucide-react';
 import { useState } from 'react';
-import { Select } from '@/components/ui';
+import { LiteralValueBlock, Select } from '@/components/ui';
 import { useUpdateUrlMutation } from '@/store/slices/api';
 import { __ } from '@/i18n';
 import { isDocumentRtl, resolveFieldDirection } from '@/i18n/direction';
@@ -124,10 +124,12 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 							<label className="block text-sm font-medium text-heading mb-2">
 								{__('Short URL')}
 							</label>
-							<div className="px-3 py-2 bg-surface-alt border border-stroke rounded-lg">
-								<code className="ltr-literal-value text-sm font-mono text-text-muted">
-									{shortUrl}
-								</code>
+							<div className="bg-surface-alt border border-stroke rounded-lg px-3 py-2">
+								<LiteralValueBlock
+									value={shortUrl}
+									className="border-0 bg-transparent p-0"
+									valueClassName="text-text-muted"
+								/>
 							</div>
 						</div>
 
@@ -136,12 +138,13 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 							<label className="block text-sm font-medium text-heading mb-2">
 								{__('Destination URL')}
 							</label>
-							<div className="px-3 py-2 bg-surface-alt border border-stroke rounded-lg">
-								<p
-									className="ltr-literal-value text-sm text-text-muted break-all"
-								>
-									{link.destinationUrl}
-								</p>
+							<div className="bg-surface-alt border border-stroke rounded-lg px-3 py-2">
+								<LiteralValueBlock
+									value={link.destinationUrl}
+									className="border-0 bg-transparent p-0"
+									monospace={false}
+									valueClassName="text-text-muted"
+								/>
 							</div>
 						</div>
 

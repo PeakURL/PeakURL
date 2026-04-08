@@ -555,21 +555,13 @@ function UsersPage() {
 					<div className="overflow-x-auto">
 						<table className="min-w-full divide-y divide-stroke">
 							<thead className="bg-surface-alt">
-								<tr
-									className={`text-xs font-semibold uppercase tracking-[0.16em] text-text-muted ${
-										isRtl ? 'text-right' : 'text-left'
-									}`}
-								>
+								<tr className="logical-text-start text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">
 									<th className="px-6 py-4">{__('User')}</th>
 									<th className="px-6 py-4">{__('Role')}</th>
 									<th className="px-6 py-4">
 										{__('Created')}
 									</th>
-									<th
-										className={`px-6 py-4 ${
-											isRtl ? 'text-left' : 'text-right'
-										}`}
-									>
+									<th className="logical-text-end px-6 py-4">
 										{__('Actions')}
 									</th>
 								</tr>
@@ -580,11 +572,7 @@ function UsersPage() {
 										key={user.id}
 										className="hover:bg-surface-alt/60"
 									>
-										<td
-											className={`px-6 py-4 ${
-												isRtl ? 'text-right' : 'text-left'
-											}`}
-										>
+										<td className="logical-text-start px-6 py-4">
 											<div
 												dir={isRtl ? 'rtl' : 'ltr'}
 												className="flex w-full items-start justify-start gap-3"
@@ -620,11 +608,7 @@ function UsersPage() {
 												</div>
 											</div>
 										</td>
-										<td
-											className={`px-6 py-4 ${
-												isRtl ? 'text-right' : 'text-left'
-											}`}
-										>
+										<td className="logical-text-start px-6 py-4">
 											<span
 												className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
 													roleMeta[
@@ -643,11 +627,7 @@ function UsersPage() {
 												}
 											</span>
 										</td>
-										<td
-											className={`px-6 py-4 text-sm text-text-muted ${
-												isRtl ? 'text-right' : 'text-left'
-											}`}
-										>
+										<td className="logical-text-start px-6 py-4 text-sm text-text-muted">
 											{user.createdAt
 												? new Date(
 														user.createdAt

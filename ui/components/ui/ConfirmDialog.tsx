@@ -7,7 +7,7 @@ import {
 	TransitionChild,
 } from '@headlessui/react';
 import { __ } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
+import { getDocumentDirection } from '@/i18n/direction';
 import { Button } from './Button';
 import type { ConfirmDialogProps } from './types';
 export type { ConfirmDialogProps, ConfirmVariant } from './types';
@@ -32,7 +32,7 @@ export function ConfirmDialog({
 	confirmVariant = 'primary',
 	loading = false,
 }: ConfirmDialogProps) {
-	const isRtl = isDocumentRtl();
+	const direction = getDocumentDirection();
 
 	return (
 		<Transition appear show={open} as={Fragment}>
@@ -61,9 +61,8 @@ export function ConfirmDialog({
 							leaveTo="opacity-0 scale-95"
 						>
 							<DialogPanel
-								className={`w-full max-w-lg transform overflow-hidden rounded-2xl border border-stroke bg-surface p-6 shadow-xl transition-all ${
-									isRtl ? 'text-right' : 'text-left'
-								}`}
+								dir={direction}
+								className="logical-text-start w-full max-w-lg transform overflow-hidden rounded-2xl border border-stroke bg-surface p-6 shadow-xl transition-all"
 							>
 								<DialogTitle className="mb-2 text-lg font-semibold text-heading">
 									{title}
@@ -74,11 +73,7 @@ export function ConfirmDialog({
 									</p>
 								)}
 								{children}
-								<div
-									className={`mt-6 flex gap-2 ${
-										isRtl ? 'justify-start' : 'justify-end'
-									}`}
-								>
+								<div dir={direction} className="mt-6 flex justify-end gap-2">
 									<Button
 										variant="secondary"
 										onClick={onClose}

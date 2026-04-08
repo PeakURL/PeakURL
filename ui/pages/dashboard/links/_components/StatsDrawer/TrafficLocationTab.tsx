@@ -7,12 +7,41 @@ import { useGetLinkLocationQuery } from '@/store/slices/api';
 import { getErrorMessage } from '@/utils';
 import type { HoveredCountry, TrafficLocationTabProps } from './types';
 
+interface LocationNoteItemProps {
+	text: string;
+	example?: string;
+	direction: 'rtl' | 'ltr';
+}
+
+function LocationNoteItem({
+	text,
+	example,
+	direction,
+}: LocationNoteItemProps) {
+	return (
+		<div dir={direction} className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-2">
+			<span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-info/60" />
+			<div className="min-w-0 space-y-1">
+				<p dir="auto" className="mixed-direction-text">
+					{text}
+				</p>
+				{example ? (
+					<code className="ltr-literal-value inline-block max-w-full break-all rounded bg-surface px-1.5 py-0.5 font-mono text-[11px] text-heading">
+						{example}
+					</code>
+				) : null}
+			</div>
+		</div>
+	);
+}
+
 function TrafficLocationTab({
 	link,
 	selectedTab,
 	open,
 }: TrafficLocationTabProps) {
 	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const [hoveredCountry, setHoveredCountry] = useState<HoveredCountry | null>(
 		null
 	);
@@ -136,60 +165,26 @@ function TrafficLocationTab({
 									{__('Note:')}
 								</p>
 								<div className="mt-2 space-y-2 text-xs leading-5 text-text-muted">
-									<div
-										dir={isRtl ? 'rtl' : 'ltr'}
-										className="flex items-start gap-2"
-									>
-										<span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-info/60" />
-										<div className="min-w-0 flex-1 space-y-1">
-											<p dir="auto" className="mixed-direction-text">
-												{__(
-													'Local and private-network clicks do not include location data.'
-												)}
-											</p>
-											<div className="mixed-direction-text">
-												<code
-													className="ltr-literal-value inline-block max-w-full rounded bg-surface px-1.5 py-0.5 font-mono text-[11px] text-heading break-all"
-												>
-													127.0.0.1, 172.16-31.x.x, 192.168.x.x
-												</code>
-											</div>
-										</div>
-									</div>
-									<div
-										dir={isRtl ? 'rtl' : 'ltr'}
-										className="flex items-start gap-2"
-									>
-										<span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-info/60" />
-										<div className="min-w-0 flex-1 space-y-1">
-											<p dir="auto" className="mixed-direction-text">
-												{__(
-													'Store the GeoLite2 City database here:'
-												)}
-											</p>
-											<div className="mixed-direction-text">
-												<code
-													className="ltr-literal-value inline-block max-w-full rounded bg-surface px-1.5 py-0.5 font-mono text-[11px] text-heading break-all"
-												>
-													content/uploads/geoip/GeoLite2-City.mmdb
-												</code>
-											</div>
-										</div>
-									</div>
-									<div
-										dir={isRtl ? 'rtl' : 'ltr'}
-										className="flex items-start gap-2"
-									>
-										<span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-info/60" />
-										<p
-											dir="auto"
-											className="mixed-direction-text min-w-0 flex-1"
-										>
-											{__(
-												'VPN users may show the location of the VPN server.'
-											)}
-										</p>
-									</div>
+									<LocationNoteItem
+										direction={direction}
+										text={__(
+											'Local and private-network clicks do not include location data.'
+										)}
+										example="127.0.0.1, 172.16-31.x.x, 192.168.x.x"
+									/>
+									<LocationNoteItem
+										direction={direction}
+										text={__(
+											'Store the GeoLite2 City database here:'
+										)}
+										example="content/uploads/geoip/GeoLite2-City.mmdb"
+									/>
+									<LocationNoteItem
+										direction={direction}
+										text={__(
+											'VPN users may show the location of the VPN server.'
+										)}
+									/>
 								</div>
 							</div>
 						</div>

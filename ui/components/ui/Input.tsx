@@ -1,6 +1,6 @@
 import { forwardRef, useId } from 'react';
 import { Info } from 'lucide-react';
-import { getDocumentDirection, isDocumentRtl, resolveFieldDirection } from '@/i18n/direction';
+import { getDocumentDirection, resolveFieldDirection } from '@/i18n/direction';
 import type { InputProps } from './types';
 export type { InputIcon, InputProps } from './types';
 
@@ -39,7 +39,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 	ref
 ) {
 	const generatedId = useId();
-	const isRtl = isDocumentRtl();
 	const chromeDirection = getDocumentDirection();
 	const preferredValueDirection =
 		valueDirection || (LTR_INPUT_TYPES.has(type) ? 'ltr' : undefined);
@@ -67,7 +66,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 					{props.required && (
 						<span
 							className={`text-red-500 ${
-								isRtl ? 'mr-1' : 'ml-1'
+								'rtl' === chromeDirection ? 'mr-1' : 'ml-1'
 							}`}
 						>
 							*

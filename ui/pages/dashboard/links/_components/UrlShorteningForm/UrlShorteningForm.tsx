@@ -19,6 +19,7 @@ import type { CreateUrlPayload } from './types';
 
 const UrlShorteningForm = () => {
 	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const [destinationUrl, setDestinationUrl] = useState('');
 	const [alias, setAlias] = useState('');
 	const [title, setTitle] = useState('');
@@ -171,7 +172,7 @@ const UrlShorteningForm = () => {
 				<button
 					type="button"
 					onClick={() => setShowAdvanced(!showAdvanced)}
-					dir={isRtl ? 'rtl' : 'ltr'}
+					dir={direction}
 					className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
 				>
 					<svg

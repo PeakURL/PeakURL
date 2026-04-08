@@ -1,0 +1,58 @@
+import type { ReactNode } from 'react';
+import { Copy } from 'lucide-react';
+import { getDocumentDirection } from '@/i18n/direction';
+
+interface LiteralValueBlockProps {
+	value?: string | null;
+	className?: string;
+	valueClassName?: string;
+	monospace?: boolean;
+	onCopy?: () => void;
+	copyButtonLabel?: string;
+	copyButtonClassName?: string;
+	copyButtonContent?: ReactNode;
+}
+
+export function LiteralValueBlock({
+	value,
+	className = '',
+	valueClassName = '',
+	monospace = true,
+	onCopy,
+	copyButtonLabel,
+	copyButtonClassName = '',
+	copyButtonContent,
+}: LiteralValueBlockProps) {
+	const direction = getDocumentDirection();
+	const copyButtonStyles =
+		copyButtonClassName ||
+		'bg-surface text-text-muted shadow-sm hover:text-heading hover:shadow';
+
+	return (
+		<div
+			dir={direction}
+			className={`flex items-start gap-2 rounded-lg border border-stroke bg-surface-alt px-3 py-3 ${className}`}
+		>
+			<div className="logical-text-start min-w-0 flex-1">
+				<span
+					className={`ltr-literal-value inline-block max-w-full break-all text-sm text-heading ${
+						monospace ? 'font-mono' : ''
+					} ${valueClassName}`}
+				>
+					{value || ''}
+				</span>
+			</div>
+			{onCopy ? (
+				<button
+					type="button"
+					onClick={onCopy}
+					aria-label={copyButtonLabel}
+					title={copyButtonLabel}
+					className={`shrink-0 rounded p-1.5 transition-all ${copyButtonStyles}`}
+				>
+					{copyButtonContent || <Copy size={14} />}
+				</button>
+			) : null}
+		</div>
+	);
+}

@@ -11,7 +11,7 @@ import {
 	X,
 } from 'lucide-react';
 import { useDashboardSearch } from '@/hooks';
-import { isDocumentRtl } from '@/i18n/direction';
+import { getDocumentDirection, isDocumentRtl } from '@/i18n/direction';
 import { __, sprintf } from '@/i18n';
 import type { ResultButtonProps, ResultSectionProps } from './types';
 
@@ -30,9 +30,7 @@ function ResultButton({
 			type="button"
 			onMouseDown={(event) => event.preventDefault()}
 			onClick={onClick}
-			className={`flex w-full items-start gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-surface-alt ${
-				isRtl ? 'text-right' : 'text-left'
-			}`}
+			className="logical-text-start flex w-full items-start gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-surface-alt"
 		>
 			<div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-stroke bg-surface text-text-muted">
 				<Icon size={16} />
@@ -72,6 +70,7 @@ function ResultSection({ title, children }: ResultSectionProps) {
 }
 
 export const DashboardSearch = () => {
+	const direction = getDocumentDirection();
 	const isRtl = isDocumentRtl();
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const {
@@ -124,13 +123,11 @@ export const DashboardSearch = () => {
 				<div className="relative">
 					<Search
 						size={18}
-						className={`absolute top-1/2 -translate-y-1/2 text-text-muted ${
-							isRtl ? 'right-3' : 'left-3'
-						}`}
+						className="logical-inset-inline-start-3 absolute top-1/2 -translate-y-1/2 text-text-muted"
 					/>
 					<input
 						type="text"
-						dir={query ? 'auto' : isRtl ? 'rtl' : 'ltr'}
+						dir={query ? 'auto' : direction}
 						value={query}
 						onFocus={handleFocus}
 						onChange={(event) => handleChange(event.target.value)}
@@ -143,8 +140,8 @@ export const DashboardSearch = () => {
 						}}
 						placeholder={__('Search links, settings...')}
 						aria-label={__('Search the dashboard')}
-						className={`w-full rounded-lg border border-stroke bg-bg py-2 text-sm text-heading placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 ${
-							isRtl ? 'pr-10 pl-10 text-right' : 'pl-10 pr-10 text-left'
+						className={`w-full rounded-lg border border-stroke bg-bg px-10 py-2 text-sm text-heading placeholder:text-text-muted focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 ${
+							isRtl ? 'text-right' : 'text-left'
 						}`}
 					/>
 					{query ? (
@@ -155,9 +152,7 @@ export const DashboardSearch = () => {
 									resetLinksSearch: true,
 								})
 							}
-							className={`absolute top-1/2 -translate-y-1/2 rounded-full p-1 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading ${
-								isRtl ? 'left-3' : 'right-3'
-							}`}
+							className="logical-inset-inline-end-3 absolute top-1/2 -translate-y-1/2 rounded-full p-1 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading"
 							aria-label={__('Clear search')}
 						>
 							<X size={15} />

@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui';
+import { Button, LiteralValueBlock } from '@/components/ui';
 import {
 	Plus,
 	Trash2,
@@ -62,11 +62,10 @@ function ApiTab({
 							{__('Copy API URL')}
 						</Button>
 					</div>
-					<div className="mt-4 rounded-xl border border-accent/15 bg-surface/90 px-4 py-3 shadow-sm">
-						<p className="ltr-literal-value break-all font-mono text-sm text-heading">
-								{baseApiUrl}
-							</p>
-					</div>
+					<LiteralValueBlock
+						value={baseApiUrl}
+						className="mt-4 border-accent/15 bg-surface/90 shadow-sm"
+					/>
 				</div>
 			)}
 

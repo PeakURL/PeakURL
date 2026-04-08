@@ -110,6 +110,7 @@ export const DashboardSidebar = ({
 	onMobileClose,
 }: DashboardSidebarProps) => {
 	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const location = useLocation();
 	const pathname = location.pathname;
 	const { data: urlsRes } = useGetUrlsQuery(undefined);
@@ -229,7 +230,7 @@ export const DashboardSidebar = ({
 												}))
 											}
 											className={`
-												w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors
+												w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors
 												cursor-pointer
 												${
 													isSectionActive
@@ -237,24 +238,17 @@ export const DashboardSidebar = ({
 														: 'text-text-muted hover:text-accent hover:bg-surface-alt'
 												}
 											`}
+											dir={direction}
 										>
 											<IconComponent
 												size={18}
-												className={`${
-													isRtl ? 'ml-3' : 'mr-3'
-												} ${
+												className={`shrink-0 ${
 													isSectionActive
 														? 'text-accent'
 														: 'text-text-muted'
 												}`}
 											/>
-											<span
-												className={`flex-1 ${
-													isRtl
-														? 'text-right'
-														: 'text-left'
-												}`}
-											>
+											<span className="logical-text-start flex-1">
 												{item.name}
 											</span>
 											<ChevronDown
@@ -288,8 +282,8 @@ export const DashboardSidebar = ({
 															onClick={
 																onMobileClose
 															}
-															className={`
-																block rounded-lg px-3 py-2 text-sm font-medium transition-colors
+													className={`
+																logical-text-start block rounded-lg px-3 py-2 text-sm font-medium transition-colors
 																${
 																	isChildLinkActive
 																		? 'bg-accent text-white shadow-sm'
@@ -313,7 +307,7 @@ export const DashboardSidebar = ({
 									to={item.href || base || '/dashboard'}
 									onClick={onMobileClose}
 									className={`
-                                        relative w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors
+                                        relative w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors
                                         cursor-pointer
                                         ${
 											isActive
@@ -321,22 +315,17 @@ export const DashboardSidebar = ({
 												: 'text-text-muted hover:text-accent hover:bg-surface-alt'
 										}
                                     `}
+									dir={direction}
 								>
 									<IconComponent
 										size={18}
-										className={`${
-											isRtl ? 'ml-3' : 'mr-3'
-										} ${
+										className={`shrink-0 ${
 											isActive
 												? 'text-white'
 												: 'text-text-muted'
 										}`}
 									/>
-									<span
-										className={`flex-1 ${
-											isRtl ? 'text-right' : 'text-left'
-										}`}
-									>
+									<span className="logical-text-start flex-1">
 										{item.name}
 									</span>
 									{item.name === __('All Links') &&
@@ -392,6 +381,7 @@ export const DashboardSidebar = ({
 								target="_blank"
 								rel="noreferrer"
 								className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-text-muted hover:bg-surface-alt hover:text-accent transition-colors"
+								dir={direction}
 							>
 								<Heart size={15} className="shrink-0" />
 								<span className="flex-1">{__('Sponsor')}</span>
@@ -405,6 +395,7 @@ export const DashboardSidebar = ({
 								target="_blank"
 								rel="noreferrer"
 								className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-text-muted hover:bg-surface-alt hover:text-accent transition-colors"
+								dir={direction}
 							>
 								<Coffee size={15} className="shrink-0" />
 								<span className="flex-1">
@@ -427,16 +418,13 @@ export const DashboardSidebar = ({
 								? 'text-heading bg-surface-alt'
 								: 'text-text-muted hover:text-accent hover:bg-surface-alt'
 						}`}
+						dir={direction}
 					>
 						<Info
 							size={18}
 							className={`shrink-0 ${isAboutOpen ? 'text-accent' : 'text-text-muted'}`}
 						/>
-						<span
-							className={`flex-1 ${
-								isRtl ? 'text-right' : 'text-left'
-							}`}
-						>
+						<span className="logical-text-start flex-1">
 							{__('About PeakURL')}
 						</span>
 						<ChevronDown

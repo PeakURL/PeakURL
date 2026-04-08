@@ -60,11 +60,7 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 			<div className="overflow-x-auto">
 				<table className="min-w-full">
 					<thead>
-						<tr
-							className={`border-b border-stroke bg-surface-alt/60 ${
-								isRtl ? 'text-right' : 'text-left'
-							}`}
-						>
+						<tr className="logical-text-start border-b border-stroke bg-surface-alt/60">
 							<th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted">
 								{__('Plugin')}
 							</th>
@@ -77,11 +73,7 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 							<th className="hidden px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted lg:table-cell">
 								{__('Author')}
 							</th>
-							<th
-								className={`px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted ${
-									isRtl ? 'text-left' : 'text-right'
-								}`}
-							>
+							<th className="logical-text-end px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted">
 								{__('Actions')}
 							</th>
 						</tr>
@@ -95,11 +87,7 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 									className="group transition-colors hover:bg-surface-alt/40"
 								>
 									{/* Plugin name + desc (blurred) */}
-									<td
-										className={`px-5 py-4 ${
-											isRtl ? 'text-right' : 'text-left'
-										}`}
-									>
+									<td className="logical-text-start px-5 py-4">
 										<div
 											dir={isRtl ? 'rtl' : 'ltr'}
 											className="flex items-center justify-start gap-3"
@@ -126,27 +114,15 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 										</div>
 									</td>
 									{/* Version (blurred) */}
-									<td
-										className={`hidden px-5 py-4 md:table-cell ${
-											isRtl ? 'text-right' : 'text-left'
-										}`}
-									>
+									<td className="logical-text-start hidden px-5 py-4 md:table-cell">
 										<Skeleton className="h-3.5 w-10" />
 									</td>
 									{/* Status */}
-									<td
-										className={`hidden px-5 py-4 sm:table-cell ${
-											isRtl ? 'text-right' : 'text-left'
-										}`}
-									>
+									<td className="logical-text-start hidden px-5 py-4 sm:table-cell">
 										<StatusPill active={isActive} />
 									</td>
 									{/* Author (blurred) */}
-									<td
-										className={`hidden px-5 py-4 lg:table-cell ${
-											isRtl ? 'text-right' : 'text-left'
-										}`}
-									>
+									<td className="logical-text-start hidden px-5 py-4 lg:table-cell">
 										<Skeleton className="h-3.5 w-16" />
 									</td>
 									{/* Actions (disabled) */}

@@ -1,6 +1,6 @@
 import type { SubmitEvent } from 'react';
 import { useState } from 'react';
-import { Button, Input } from '@/components/ui';
+import { Button, Input, LiteralValueBlock } from '@/components/ui';
 import { __ } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
 import { formatByteSize, formatDateTimeValue } from '@/utils';
@@ -26,6 +26,7 @@ function StateCard({
 	variant = 'info',
 }: StateCardProps) {
 	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const styles: Record<StateCardVariant, string> = {
 		info: 'border-blue-200 bg-blue-50 text-blue-950 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200',
 		success:
@@ -36,7 +37,7 @@ function StateCard({
 	return (
 		<div className={`rounded-lg border p-4 ${styles[variant]}`}>
 			<div
-				dir={isRtl ? 'rtl' : 'ltr'}
+				dir={direction}
 				className="flex items-start gap-3"
 			>
 				<Icon size={18} className="mt-0.5 shrink-0" />
@@ -61,6 +62,7 @@ function LocationDataTab({
 	onDownload,
 }: LocationDataTabProps) {
 	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const [accountIdInput, setAccountIdInput] = useState<string | null>(null);
 	const [licenseKey, setLicenseKey] = useState('');
 	const [isEditingCredentials, setIsEditingCredentials] = useState(false);
@@ -99,11 +101,11 @@ function LocationDataTab({
 		<div className="space-y-5">
 			<div className="rounded-lg border border-stroke bg-surface p-5">
 				<div
-					dir={isRtl ? 'rtl' : 'ltr'}
+					dir={direction}
 					className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
 				>
 					<div className="logical-text-start space-y-2">
-						<div dir={isRtl ? 'rtl' : 'ltr'} className="flex items-center gap-3">
+						<div dir={direction} className="flex items-center gap-3">
 							<div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600 dark:bg-primary-500/20 dark:text-primary-400">
 								<MapPin size={18} />
 							</div>
@@ -224,26 +226,28 @@ function LocationDataTab({
 									<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
 										{__('Account ID')}
 									</p>
-										<p
-											className="ltr-literal-value mt-2 text-sm font-medium text-heading"
-										>
-											{effectiveStatus?.accountId}
-										</p>
+									<LiteralValueBlock
+										value={effectiveStatus?.accountId}
+										className="mt-2 border-0 bg-transparent p-0"
+										monospace={false}
+										valueClassName="text-sm font-medium"
+									/>
 								</div>
 								<div>
 									<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
 										{__('License Key')}
 									</p>
-										<p
-											className="ltr-literal-value mt-2 text-sm font-medium text-heading"
-										>
-											{effectiveStatus?.licenseKeyHint}
-										</p>
+									<LiteralValueBlock
+										value={effectiveStatus?.licenseKeyHint}
+										className="mt-2 border-0 bg-transparent p-0"
+										monospace={false}
+										valueClassName="text-sm font-medium"
+									/>
 								</div>
 							</div>
 						</div>
 						<div
-							dir={isRtl ? 'rtl' : 'ltr'}
+							dir={direction}
 							className="flex flex-wrap gap-3"
 						>
 							<Button
@@ -327,7 +331,7 @@ function LocationDataTab({
 						)}
 
 						<div
-							dir={isRtl ? 'rtl' : 'ltr'}
+							dir={direction}
 							className="flex flex-wrap gap-3"
 						>
 							<Button
@@ -366,11 +370,11 @@ function LocationDataTab({
 }
 
 function StatCard({ label, value }: StatCardProps) {
-	const isRtl = isDocumentRtl();
+	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
 
 	return (
 		<div
-			dir={isRtl ? 'rtl' : 'ltr'}
+			dir={direction}
 			className="logical-text-start rounded-lg border border-stroke bg-surface p-5"
 		>
 			<p className="text-xs font-semibold tracking-[0.14em] text-text-muted">

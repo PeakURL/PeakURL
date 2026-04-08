@@ -20,12 +20,13 @@ function MethodButton({
 	onClick,
 }: MethodButtonProps) {
 	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 
 	return (
 		<button
 			type="button"
 			onClick={onClick}
-			dir={isRtl ? 'rtl' : 'ltr'}
+			dir={direction}
 			className={`logical-text-start rounded-lg border p-4 transition ${
 				isActive
 					? 'border-accent bg-accent/10 text-heading'
@@ -60,6 +61,7 @@ function EmailDeliveryTab({
 	onSave,
 }: EmailDeliveryTabProps) {
 	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const [form, setForm] = useState<EmailFormState>(() =>
 		buildFormState(status)
 	);
@@ -100,7 +102,7 @@ function EmailDeliveryTab({
 		<div className="space-y-5">
 			<div className="rounded-lg border border-stroke bg-surface p-5">
 				<div
-					dir={isRtl ? 'rtl' : 'ltr'}
+					dir={direction}
 					className="flex items-start gap-3"
 				>
 					<div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600 dark:bg-primary-500/20 dark:text-primary-400">
@@ -122,7 +124,7 @@ function EmailDeliveryTab({
 			{errorMessage && (
 				<div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-900 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200">
 					<div
-						dir={isRtl ? 'rtl' : 'ltr'}
+						dir={direction}
 						className="flex items-start gap-3"
 					>
 						<AlertCircle size={18} className="mt-0.5" />
@@ -141,7 +143,7 @@ function EmailDeliveryTab({
 			{managementDisabled && (
 				<div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
 					<div
-						dir={isRtl ? 'rtl' : 'ltr'}
+						dir={direction}
 						className="flex items-start gap-3"
 					>
 						<AlertCircle size={18} className="mt-0.5" />

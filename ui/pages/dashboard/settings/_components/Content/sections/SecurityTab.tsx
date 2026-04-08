@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import QRCode from 'qrcode';
-import { Button, ConfirmDialog, Input } from '@/components/ui';
+import { Button, ConfirmDialog, Input, LiteralValueBlock } from '@/components/ui';
 import {
 	ShieldCheck,
 	ShieldOff,
@@ -597,16 +597,26 @@ function SecurityTab({
 								)}
 							</div>
 							<div className="space-y-3">
-								<div
-									className="ltr-literal-value rounded-lg border border-dashed border-stroke bg-surface-alt p-3 text-xs text-text-muted break-all"
-								>
-									{__('Secret:')} {secret}
+								<div className="rounded-lg border border-dashed border-stroke bg-surface-alt p-3">
+									<p className="mb-2 text-xs font-semibold text-text-muted">
+										{__('Secret')}
+									</p>
+									<LiteralValueBlock
+										value={secret}
+										className="border-0 bg-transparent p-0"
+										valueClassName="text-xs text-text-muted"
+									/>
 								</div>
 								{otpauthUrl ? (
-									<div
-										className="ltr-literal-value rounded-lg border border-dashed border-stroke bg-surface-alt p-3 text-xs text-text-muted break-all"
-									>
-										{__('Authenticator URI:')} {otpauthUrl}
+									<div className="rounded-lg border border-dashed border-stroke bg-surface-alt p-3">
+										<p className="mb-2 text-xs font-semibold text-text-muted">
+											{__('Authenticator URI')}
+										</p>
+										<LiteralValueBlock
+											value={otpauthUrl}
+											className="border-0 bg-transparent p-0"
+											valueClassName="text-xs text-text-muted"
+										/>
 									</div>
 								) : null}
 								<Input

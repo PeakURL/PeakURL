@@ -1,6 +1,7 @@
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { X, Trash2, AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
+import { LiteralValueBlock } from '@/components/ui';
 import { useDeleteUrlMutation } from '@/store/slices/api';
 import { buildShortUrl, getErrorMessage } from '@/utils';
 import { __ } from '@/i18n';
@@ -9,6 +10,7 @@ import type { DeleteLinkModalProps } from './types';
 
 function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const [error, setError] = useState('');
 	const [deleteUrl, { isLoading }] = useDeleteUrlMutation();
 	const shortUrl = link ? buildShortUrl(link) : '';
@@ -38,7 +40,7 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 
 			<div className="fixed inset-0 flex items-center justify-center p-4">
 				<DialogPanel
-					dir={isRtl ? 'rtl' : 'ltr'}
+					dir={direction}
 					className="logical-text-start mx-auto w-full max-w-md rounded-lg bg-surface shadow-xl"
 				>
 					{/* Header */}
@@ -79,21 +81,22 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 								<p className="text-xs font-medium text-text-muted mb-1">
 									{__('Short URL')}
 								</p>
-								<code
-									className="ltr-literal-value text-sm text-accent font-mono"
-								>
-									{shortUrl}
-								</code>
+								<LiteralValueBlock
+									value={shortUrl}
+									className="border-0 bg-transparent p-0"
+									valueClassName="text-accent"
+								/>
 							</div>
 							<div>
 								<p className="text-xs font-medium text-text-muted mb-1">
 									{__('Destination')}
 								</p>
-								<p
-									className="ltr-literal-value text-sm text-heading break-all"
-								>
-									{link.destinationUrl}
-								</p>
+								<LiteralValueBlock
+									value={link.destinationUrl}
+									className="border-0 bg-transparent p-0"
+									monospace={false}
+									valueClassName="text-heading"
+								/>
 							</div>
 							{(totalClicks > 0 || uniqueClicks > 0) && (
 								<div

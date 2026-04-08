@@ -1,5 +1,11 @@
 import { useMemo, useState } from 'react';
-import { Button, ConfirmDialog, Input, Modal } from '@/components/ui';
+import {
+	Button,
+	ConfirmDialog,
+	Input,
+	LiteralValueBlock,
+	Modal,
+} from '@/components/ui';
 import {
 	Copy,
 	ExternalLink,
@@ -33,6 +39,7 @@ const getEventOptions = (): WebhookEventOption[] => [
 
 function IntegrationsTab({ notification }: IntegrationsTabProps) {
 	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const eventOptions = getEventOptions();
 	const {
 		data: webhookData,
@@ -161,7 +168,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 						href="https://peakurl.org/docs/integrations"
 						target="_blank"
 						rel="noreferrer"
-						dir={isRtl ? 'rtl' : 'ltr'}
+						dir={direction}
 						className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline"
 					>
 						{__('Webhook docs')}
@@ -219,7 +226,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 								{eventOptions.map((event) => (
 									<label
 										key={event.id}
-										dir={isRtl ? 'rtl' : 'ltr'}
+										dir={direction}
 										className="flex items-center gap-2 text-sm text-muted cursor-pointer select-none"
 									>
 										<input
@@ -285,7 +292,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 								className="p-4 border border-(--color-stroke) rounded-lg"
 							>
 								<div
-									dir={isRtl ? 'rtl' : 'ltr'}
+									dir={direction}
 									className="flex items-start justify-between gap-4"
 								>
 									<div className="logical-text-start min-w-0 flex-1">
@@ -376,31 +383,24 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 						<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
 							{__('Endpoint URL')}
 						</p>
-						<p className="ltr-literal-value mt-2 break-all text-sm font-medium text-heading">
-							{createdWebhook?.url}
-						</p>
+						<LiteralValueBlock
+							value={createdWebhook?.url}
+							className="mt-2 border-0 bg-transparent p-0 shadow-none"
+							monospace={false}
+							valueClassName="text-sm font-medium"
+						/>
 					</div>
 
-					<div className="relative">
-							<pre
-								className="ltr-literal-value break-all rounded-lg border border-stroke bg-surface-alt p-3 text-sm font-mono"
-							>
-								{createdWebhook?.secret}
-							</pre>
-						<button
-							type="button"
-							onClick={() =>
-								copyToClipboard(
-									createdWebhook?.secret,
-									__('Secret copied')
-								)
-							}
-							className="logical-inset-inline-end-2 absolute top-2 rounded bg-surface p-1.5 text-text-muted shadow-sm transition-all hover:text-heading hover:shadow"
-							title={__('Copy to clipboard')}
-						>
-							<Copy size={14} />
-						</button>
-					</div>
+					<LiteralValueBlock
+						value={createdWebhook?.secret}
+						onCopy={() =>
+							copyToClipboard(
+								createdWebhook?.secret,
+								__('Secret copied')
+							)
+						}
+						copyButtonLabel={__('Copy to clipboard')}
+					/>
 
 					<p className="text-sm text-text-muted">
 						{__(

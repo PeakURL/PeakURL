@@ -1,4 +1,4 @@
-import { Modal, Button, Input } from '@/components/ui';
+import { Modal, Button, Input, LiteralValueBlock } from '@/components/ui';
 import { Copy } from 'lucide-react';
 import { __ } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
@@ -85,48 +85,26 @@ function ApiKeyModals({
 							)}
 						</p>
 					</div>
-					<div className="relative">
-						<pre
-							className="ltr-literal-value p-3 bg-surface-alt rounded-lg text-sm font-mono break-all border border-stroke"
-						>
-							{newApiKey}
-						</pre>
-						<button
-							type="button"
-							onClick={() => copyToClipboard(newApiKey)}
-							className="logical-inset-inline-end-2 absolute top-2 rounded bg-surface p-1.5 text-text-muted shadow-sm transition-all hover:text-heading hover:shadow"
-							title={__('Copy to clipboard')}
-						>
-							<Copy size={14} />
-						</button>
-					</div>
+					<LiteralValueBlock
+						value={newApiKey}
+						onCopy={() => copyToClipboard(newApiKey)}
+						copyButtonLabel={__('Copy to clipboard')}
+					/>
 					{baseApiUrl && (
 						<div className="space-y-2">
 							<p className="text-sm font-medium text-heading">
 								{__('Base API URL')}
 							</p>
-							<div className="relative">
-								<pre
-									className="ltr-literal-value p-3 bg-surface-alt rounded-lg text-sm font-mono break-all border border-stroke"
-								>
-									{baseApiUrl}
-								</pre>
-								<button
-									type="button"
-									onClick={() =>
-										copyToClipboard(
-											baseApiUrl,
-											__(
-												'Base API URL copied to clipboard'
-											)
-										)
-									}
-									className="logical-inset-inline-end-2 absolute top-2 rounded bg-surface p-1.5 text-text-muted shadow-sm transition-all hover:text-heading hover:shadow"
-									title={__('Copy to clipboard')}
-								>
-									<Copy size={14} />
-								</button>
-							</div>
+							<LiteralValueBlock
+								value={baseApiUrl}
+								onCopy={() =>
+									copyToClipboard(
+										baseApiUrl,
+										__('Base API URL copied to clipboard')
+									)
+								}
+								copyButtonLabel={__('Copy to clipboard')}
+							/>
 							<p className="text-xs text-text-muted">
 								{__(
 									'Use this API URL with integrations that need both the endpoint and the token.'

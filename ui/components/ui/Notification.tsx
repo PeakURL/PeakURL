@@ -224,13 +224,9 @@ export function NotificationContainer({
 	notifications = [],
 	onRemoveNotification,
 }: NotificationContainerProps) {
-	const isRtl = isDocumentRtl();
-
 	return (
 		<div
-			className={`fixed top-4 z-50 max-w-sm w-full space-y-3 pointer-events-none ${
-				isRtl ? 'left-4' : 'right-4'
-			}`}
+			className="logical-inset-inline-end-4 fixed top-4 z-50 w-full max-w-sm space-y-3 pointer-events-none"
 		>
 			{/* pointer-events-none on container to let clicks pass through, but pointer-events-auto on notifications */}
 			{notifications.map((notification) => (

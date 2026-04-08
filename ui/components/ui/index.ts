@@ -2,6 +2,7 @@ export * from './Avatar';
 export * from './Button';
 export * from './ConfirmDialog';
 export * from './Input';
+export * from './LiteralValueBlock';
 export * from './Loading';
 export * from './Modal';
 export * from './Notification';

@@ -12,7 +12,7 @@ import {
 import { Avatar, ThemeToggle } from '@/components';
 import { useNavigate } from 'react-router-dom';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { isDocumentRtl } from '@/i18n/direction';
+import { getDocumentDirection } from '@/i18n/direction';
 import { __ } from '@/i18n';
 import { DashboardSearch } from './DashboardSearch';
 import type { DashboardAppBarProps } from './types';
@@ -20,7 +20,7 @@ import type { DashboardAppBarProps } from './types';
 export const DashboardAppBar = ({
 	onMobileMenuToggle,
 }: DashboardAppBarProps) => {
-	const isRtl = isDocumentRtl();
+	const direction = getDocumentDirection();
 	const { data: userData } = useGetUserProfileQuery(undefined);
 	const user = userData?.data;
 	const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
@@ -72,9 +72,7 @@ export const DashboardAppBar = ({
 								fallbackName={user?.username || __('Admin')}
 							/>
 							<div
-								className={`hidden sm:block ${
-									isRtl ? 'text-right' : 'text-left'
-								}`}
+								className="logical-text-start hidden sm:block"
 							>
 								<div className="text-sm font-semibold text-heading">
 									{user
@@ -94,11 +92,8 @@ export const DashboardAppBar = ({
 						</MenuButton>
 
 						<MenuItems
-							className={`absolute mt-2 z-50 w-56 rounded-lg border border-stroke bg-surface shadow-lg focus:outline-none ${
-								isRtl
-									? 'left-0 origin-top-left'
-									: 'right-0 origin-top-right'
-							}`}
+							dir={direction}
+							className="logical-inset-inline-end-0 logical-origin-top-inline-end absolute z-50 mt-2 w-56 rounded-lg border border-stroke bg-surface shadow-lg focus:outline-none"
 						>
 							<div className="p-1">
 								<MenuItem>

@@ -3,7 +3,7 @@ import { X, Trash2, AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
 import { useBulkDeleteUrlMutation } from '@/store/slices/api';
 import { __, sprintf } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
+import { getDocumentDirection } from '@/i18n/direction';
 import { getErrorMessage } from '@/utils';
 import type { BulkDeleteModalProps } from './types';
 
@@ -13,7 +13,7 @@ function BulkDeleteModal({
 	selectedIds,
 	onSuccess,
 }: BulkDeleteModalProps) {
-	const isRtl = isDocumentRtl();
+	const direction = getDocumentDirection();
 	const [error, setError] = useState('');
 	const [bulkDeleteUrl, { isLoading }] = useBulkDeleteUrlMutation();
 
@@ -37,9 +37,8 @@ function BulkDeleteModal({
 
 			<div className="fixed inset-0 flex items-center justify-center p-4">
 				<DialogPanel
-					className={`mx-auto w-full max-w-md rounded-lg bg-surface shadow-xl ${
-						isRtl ? 'text-right' : 'text-left'
-					}`}
+					dir={direction}
+					className="logical-text-start mx-auto w-full max-w-md rounded-lg bg-surface shadow-xl"
 				>
 					{/* Header */}
 					<div className="flex items-center justify-between p-6 border-b border-stroke">

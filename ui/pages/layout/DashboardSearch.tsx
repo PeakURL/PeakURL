@@ -30,7 +30,7 @@ function ResultButton({
 			type="button"
 			onMouseDown={(event) => event.preventDefault()}
 			onClick={onClick}
-			className="logical-text-start flex w-full items-start gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-surface-alt"
+			className="text-inline-start flex w-full items-start gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-surface-alt"
 		>
 			<div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-stroke bg-surface text-text-muted">
 				<Icon size={16} />
@@ -123,7 +123,7 @@ export const DashboardSearch = () => {
 				<div className="relative">
 					<Search
 						size={18}
-						className="logical-inset-inline-start-3 absolute top-1/2 -translate-y-1/2 text-text-muted"
+						className="inset-inline-start-3 absolute top-1/2 -translate-y-1/2 text-text-muted"
 					/>
 					<input
 						type="text"
@@ -152,7 +152,7 @@ export const DashboardSearch = () => {
 									resetLinksSearch: true,
 								})
 							}
-							className="logical-inset-inline-end-3 absolute top-1/2 -translate-y-1/2 rounded-full p-1 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading"
+							className="inset-inline-end-3 absolute top-1/2 -translate-y-1/2 rounded-full p-1 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading"
 							aria-label={__('Clear search')}
 						>
 							<X size={15} />

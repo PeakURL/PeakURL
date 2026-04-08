@@ -39,7 +39,7 @@ export function Modal({
 
 			<div
 				dir={direction}
-				className={`logical-text-start relative w-full overflow-hidden rounded-2xl border border-stroke bg-surface shadow-2xl ${sizes[size]} max-h-[90vh]`}
+				className={`text-inline-start relative w-full overflow-hidden rounded-2xl border border-stroke bg-surface shadow-2xl ${sizes[size]} max-h-[90vh]`}
 			>
 				{title && (
 					<div className="px-6 py-4 border-b border-stroke flex items-center justify-between">

@@ -1,7 +1,7 @@
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { X, Trash2, AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
-import { LiteralValueBlock } from '@/components/ui';
+import { ReadOnlyValueBlock } from '@/components/ui';
 import { useDeleteUrlMutation } from '@/store/slices/api';
 import { buildShortUrl, getErrorMessage } from '@/utils';
 import { __ } from '@/i18n';
@@ -41,7 +41,7 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 			<div className="fixed inset-0 flex items-center justify-center p-4">
 				<DialogPanel
 					dir={direction}
-					className="logical-text-start mx-auto w-full max-w-md rounded-lg bg-surface shadow-xl"
+					className="text-inline-start mx-auto w-full max-w-md rounded-lg bg-surface shadow-xl"
 				>
 					{/* Header */}
 					<div className="flex items-center justify-between p-6 border-b border-stroke">
@@ -81,7 +81,7 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 								<p className="text-xs font-medium text-text-muted mb-1">
 									{__('Short URL')}
 								</p>
-								<LiteralValueBlock
+								<ReadOnlyValueBlock
 									value={shortUrl}
 									className="border-0 bg-transparent p-0"
 									valueClassName="text-accent"
@@ -91,7 +91,7 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 								<p className="text-xs font-medium text-text-muted mb-1">
 									{__('Destination')}
 								</p>
-								<LiteralValueBlock
+								<ReadOnlyValueBlock
 									value={link.destinationUrl}
 									className="border-0 bg-transparent p-0"
 									monospace={false}

@@ -2,7 +2,7 @@ import type { SubmitEvent } from 'react';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { X, Save } from 'lucide-react';
 import { useState } from 'react';
-import { LiteralValueBlock, Select } from '@/components/ui';
+import { ReadOnlyValueBlock, Select } from '@/components/ui';
 import { useUpdateUrlMutation } from '@/store/slices/api';
 import { __ } from '@/i18n';
 import { isDocumentRtl, resolveFieldDirection } from '@/i18n/direction';
@@ -125,7 +125,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 								{__('Short URL')}
 							</label>
 							<div className="bg-surface-alt border border-stroke rounded-lg px-3 py-2">
-								<LiteralValueBlock
+								<ReadOnlyValueBlock
 									value={shortUrl}
 									className="border-0 bg-transparent p-0"
 									valueClassName="text-text-muted"
@@ -139,7 +139,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 								{__('Destination URL')}
 							</label>
 							<div className="bg-surface-alt border border-stroke rounded-lg px-3 py-2">
-								<LiteralValueBlock
+								<ReadOnlyValueBlock
 									value={link.destinationUrl}
 									className="border-0 bg-transparent p-0"
 									monospace={false}

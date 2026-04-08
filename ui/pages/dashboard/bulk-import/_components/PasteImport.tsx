@@ -142,7 +142,7 @@ https://example.com/page3 custom-alias`}
 										<div className="space-y-1">
 											<p>{__('Format:')}</p>
 											<div
-												className="ltr-literal-value flex flex-wrap items-center gap-2 text-xs"
+												className="preserve-ltr-value flex flex-wrap items-center gap-2 text-xs"
 											>
 												<code>URL [alias]</code>
 												<span>{__('or')}</span>

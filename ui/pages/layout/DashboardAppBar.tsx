@@ -72,7 +72,7 @@ export const DashboardAppBar = ({
 								fallbackName={user?.username || __('Admin')}
 							/>
 							<div
-								className="logical-text-start hidden sm:block"
+								className="text-inline-start hidden sm:block"
 							>
 								<div className="text-sm font-semibold text-heading">
 									{user
@@ -93,7 +93,7 @@ export const DashboardAppBar = ({
 
 						<MenuItems
 							dir={direction}
-							className="logical-inset-inline-end-0 logical-origin-top-inline-end absolute z-50 mt-2 w-56 rounded-lg border border-stroke bg-surface shadow-lg focus:outline-none"
+							className="inset-inline-end-0 origin-top-inline-end absolute z-50 mt-2 w-56 rounded-lg border border-stroke bg-surface shadow-lg focus:outline-none"
 						>
 							<div className="p-1">
 								<MenuItem>

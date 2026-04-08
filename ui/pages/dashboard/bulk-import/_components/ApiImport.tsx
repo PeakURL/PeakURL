@@ -23,7 +23,7 @@ const ApiImport = () => {
 					<h3 className="font-medium text-sm text-heading mb-3">
 						{__('Example Request')}
 					</h3>
-					<pre className="ltr-literal-value overflow-x-auto rounded-lg border border-gray-700 bg-gray-900 p-4 text-xs text-gray-100">
+					<pre className="preserve-ltr-value overflow-x-auto rounded-lg border border-gray-700 bg-gray-900 p-4 text-xs text-gray-100">
 						<code>{`POST ${API_SERVER_BASE_URL}/urls/bulk
 Authorization: Bearer ${apiKey}
 Content-Type: application/json
@@ -49,7 +49,7 @@ Content-Type: application/json
 					<h3 className="font-medium text-sm text-heading mb-3">
 						{__('Response')}
 					</h3>
-					<pre className="ltr-literal-value overflow-x-auto rounded-lg border border-gray-700 bg-gray-900 p-4 text-xs text-gray-100">
+					<pre className="preserve-ltr-value overflow-x-auto rounded-lg border border-gray-700 bg-gray-900 p-4 text-xs text-gray-100">
 						<code>{`{
   "success": true,
   "data": {

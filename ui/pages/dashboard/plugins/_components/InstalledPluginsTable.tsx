@@ -60,7 +60,7 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 			<div className="overflow-x-auto">
 				<table className="min-w-full">
 					<thead>
-						<tr className="logical-text-start border-b border-stroke bg-surface-alt/60">
+						<tr className="text-inline-start border-b border-stroke bg-surface-alt/60">
 							<th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted">
 								{__('Plugin')}
 							</th>
@@ -73,7 +73,7 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 							<th className="hidden px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted lg:table-cell">
 								{__('Author')}
 							</th>
-							<th className="logical-text-end px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted">
+							<th className="text-inline-end px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted">
 								{__('Actions')}
 							</th>
 						</tr>
@@ -87,7 +87,7 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 									className="group transition-colors hover:bg-surface-alt/40"
 								>
 									{/* Plugin name + desc (blurred) */}
-									<td className="logical-text-start px-5 py-4">
+									<td className="text-inline-start px-5 py-4">
 										<div
 											dir={isRtl ? 'rtl' : 'ltr'}
 											className="flex items-center justify-start gap-3"
@@ -97,7 +97,7 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 											>
 												<div className="h-5 w-5 rounded bg-white/30" />
 											</div>
-											<div className="logical-text-start min-w-0 flex-1 space-y-1.5">
+											<div className="text-inline-start min-w-0 flex-1 space-y-1.5">
 												<Skeleton
 													className={`h-4 ${plugin.barWidths[0]}`}
 												/>
@@ -114,15 +114,15 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 										</div>
 									</td>
 									{/* Version (blurred) */}
-									<td className="logical-text-start hidden px-5 py-4 md:table-cell">
+									<td className="text-inline-start hidden px-5 py-4 md:table-cell">
 										<Skeleton className="h-3.5 w-10" />
 									</td>
 									{/* Status */}
-									<td className="logical-text-start hidden px-5 py-4 sm:table-cell">
+									<td className="text-inline-start hidden px-5 py-4 sm:table-cell">
 										<StatusPill active={isActive} />
 									</td>
 									{/* Author (blurred) */}
-									<td className="logical-text-start hidden px-5 py-4 lg:table-cell">
+									<td className="text-inline-start hidden px-5 py-4 lg:table-cell">
 										<Skeleton className="h-3.5 w-16" />
 									</td>
 									{/* Actions (disabled) */}

@@ -60,7 +60,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 			{label && (
 				<label
 					htmlFor={inputId}
-					className="logical-text-start block text-sm font-semibold text-heading"
+					className="text-inline-start block text-sm font-semibold text-heading"
 				>
 					{label}
 					{props.required && (
@@ -110,7 +110,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 			{error && (
 				<p
 					id={errorId}
-					className="logical-text-start text-sm text-red-600 dark:text-red-400 font-medium flex items-center gap-1.5"
+					className="text-inline-start text-sm text-red-600 dark:text-red-400 font-medium flex items-center gap-1.5"
 				>
 					<Info size={14} />
 					{error}
@@ -119,7 +119,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 			{helperText && !error && (
 				<p
 					id={helperId}
-					className="logical-text-start text-xs text-muted"
+					className="text-inline-start text-xs text-muted"
 				>
 					{helperText}
 				</p>

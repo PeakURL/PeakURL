@@ -38,7 +38,7 @@ function BulkDeleteModal({
 			<div className="fixed inset-0 flex items-center justify-center p-4">
 				<DialogPanel
 					dir={direction}
-					className="logical-text-start mx-auto w-full max-w-md rounded-lg bg-surface shadow-xl"
+					className="text-inline-start mx-auto w-full max-w-md rounded-lg bg-surface shadow-xl"
 				>
 					{/* Header */}
 					<div className="flex items-center justify-between p-6 border-b border-stroke">

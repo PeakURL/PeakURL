@@ -7,7 +7,7 @@ import {
 	BriefcaseBusiness,
 	Mail,
 } from 'lucide-react';
-import { LiteralValueBlock } from '@/components/ui';
+import { ReadOnlyValueBlock } from '@/components/ui';
 import { __ } from '@/i18n';
 import { copyToClipboard, getLinkDisplayTitle } from '@/utils';
 import type { SharePlatform, ShareTabProps } from './types';
@@ -48,7 +48,7 @@ function ShareTab({ link, shortUrl }: ShareTabProps) {
 				<label className="block text-xs font-medium text-text-muted mb-2">
 					{__('Short URL')}
 				</label>
-				<LiteralValueBlock
+				<ReadOnlyValueBlock
 					value={shortUrl}
 					onCopy={handleCopy}
 					copyButtonLabel={copied ? __('Copied!') : __('Copy')}
@@ -70,7 +70,7 @@ function ShareTab({ link, shortUrl }: ShareTabProps) {
 				<label className="block text-xs font-medium text-text-muted mb-2">
 					{__('Destination URL')}
 				</label>
-				<LiteralValueBlock
+				<ReadOnlyValueBlock
 					value={link.destinationUrl}
 					className="border-0 bg-transparent p-0"
 					monospace={false}

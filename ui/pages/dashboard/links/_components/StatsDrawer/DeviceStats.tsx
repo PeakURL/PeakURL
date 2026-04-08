@@ -9,7 +9,6 @@ import {
 	Tablet,
 } from 'lucide-react';
 import { __, _n } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
 import type {
 	BrowserIconProps,
 	DeviceStatsProps,
@@ -68,8 +67,6 @@ function DeviceStats({
 	os: oses = [],
 	isLoading,
 }: DeviceStatsProps) {
-	const isRtl = isDocumentRtl();
-
 	if (isLoading) {
 		return (
 			<div className="bg-surface-alt border border-stroke rounded-lg p-4 animate-pulse">
@@ -148,7 +145,7 @@ function DeviceStats({
 							</p>
 						</div>
 					</div>
-					<div className={isRtl ? 'text-left' : 'text-right'}>
+					<div className="text-inline-end">
 						<p className="text-sm text-text-muted">
 							{__('Unique Browsers')}
 						</p>
@@ -195,13 +192,7 @@ function DeviceStats({
 												<span className="text-sm text-muted">
 													{browser.percentage}%
 												</span>
-												<span
-													className={`min-w-12 text-sm font-semibold text-heading ${
-														isRtl
-															? 'text-left'
-															: 'text-right'
-													}`}
-												>
+												<span className="text-inline-end min-w-12 text-sm font-semibold text-heading">
 													{browser.count}
 												</span>
 											</div>
@@ -256,7 +247,7 @@ function DeviceStats({
 											</p>
 										</div>
 									</div>
-									<div className={isRtl ? 'text-left' : 'text-right'}>
+									<div className="text-inline-end">
 										<p className="text-lg font-bold text-heading">
 											{device.percentage}%
 										</p>
@@ -293,11 +284,7 @@ function DeviceStats({
 										</p>
 									</div>
 								</div>
-								<div
-									className={`flex items-center gap-3 ${
-										isRtl ? 'text-left' : 'text-right'
-									}`}
-								>
+								<div className="text-inline-end flex items-center gap-3">
 									<span className="text-sm text-muted">
 										{os.percentage}%
 									</span>

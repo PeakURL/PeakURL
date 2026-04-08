@@ -1,6 +1,6 @@
 import type { SubmitEvent } from 'react';
 import { useState } from 'react';
-import { Button, Input, LiteralValueBlock } from '@/components/ui';
+import { Button, Input, ReadOnlyValueBlock } from '@/components/ui';
 import { __ } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
 import { formatByteSize, formatDateTimeValue } from '@/utils';
@@ -41,7 +41,7 @@ function StateCard({
 				className="flex items-start gap-3"
 			>
 				<Icon size={18} className="mt-0.5 shrink-0" />
-				<div className="logical-text-start space-y-1">
+				<div className="text-inline-start space-y-1">
 					<h3 className="text-sm font-semibold">{title}</h3>
 					<p className="text-sm leading-6 opacity-80">
 						{description}
@@ -104,7 +104,7 @@ function LocationDataTab({
 					dir={direction}
 					className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
 				>
-					<div className="logical-text-start space-y-2">
+					<div className="text-inline-start space-y-2">
 						<div dir={direction} className="flex items-center gap-3">
 							<div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600 dark:bg-primary-500/20 dark:text-primary-400">
 								<MapPin size={18} />
@@ -226,7 +226,7 @@ function LocationDataTab({
 									<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
 										{__('Account ID')}
 									</p>
-									<LiteralValueBlock
+									<ReadOnlyValueBlock
 										value={effectiveStatus?.accountId}
 										className="mt-2 border-0 bg-transparent p-0"
 										monospace={false}
@@ -237,7 +237,7 @@ function LocationDataTab({
 									<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
 										{__('License Key')}
 									</p>
-									<LiteralValueBlock
+									<ReadOnlyValueBlock
 										value={effectiveStatus?.licenseKeyHint}
 										className="mt-2 border-0 bg-transparent p-0"
 										monospace={false}
@@ -324,7 +324,7 @@ function LocationDataTab({
 						{hasSavedCredentials && (
 							<p className="text-xs text-text-muted">
 								{__('Saved license key:')}{' '}
-								<span className="ltr-literal-value">
+								<span className="preserve-ltr-value">
 									{effectiveStatus?.licenseKeyHint}
 								</span>
 							</p>
@@ -375,7 +375,7 @@ function StatCard({ label, value }: StatCardProps) {
 	return (
 		<div
 			dir={direction}
-			className="logical-text-start rounded-lg border border-stroke bg-surface p-5"
+			className="text-inline-start rounded-lg border border-stroke bg-surface p-5"
 		>
 			<p className="text-xs font-semibold tracking-[0.14em] text-text-muted">
 				{label}

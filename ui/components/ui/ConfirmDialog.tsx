@@ -62,7 +62,7 @@ export function ConfirmDialog({
 						>
 							<DialogPanel
 								dir={direction}
-								className="logical-text-start w-full max-w-lg transform overflow-hidden rounded-2xl border border-stroke bg-surface p-6 shadow-xl transition-all"
+								className="text-inline-start w-full max-w-lg transform overflow-hidden rounded-2xl border border-stroke bg-surface p-6 shadow-xl transition-all"
 							>
 								<DialogTitle className="mb-2 text-lg font-semibold text-heading">
 									{title}

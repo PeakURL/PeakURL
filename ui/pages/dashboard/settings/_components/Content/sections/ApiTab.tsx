@@ -1,4 +1,4 @@
-import { Button, LiteralValueBlock } from '@/components/ui';
+import { Button, ReadOnlyValueBlock } from '@/components/ui';
 import {
 	Plus,
 	Trash2,
@@ -62,7 +62,7 @@ function ApiTab({
 							{__('Copy API URL')}
 						</Button>
 					</div>
-					<LiteralValueBlock
+					<ReadOnlyValueBlock
 						value={baseApiUrl}
 						className="mt-4 border-accent/15 bg-surface/90 shadow-sm"
 					/>
@@ -92,7 +92,7 @@ function ApiTab({
 								dir={isRtl ? 'rtl' : 'ltr'}
 								className="flex items-center justify-between p-4 border border-stroke rounded-lg hover:border-accent/50 transition-colors"
 							>
-								<div className="logical-text-start min-w-0 flex-1">
+								<div className="text-inline-start min-w-0 flex-1">
 									<div className="flex items-center gap-2 mb-1">
 										<p className="font-medium text-sm text-heading">
 											{key.label || __('API Key')}
@@ -103,7 +103,7 @@ function ApiTab({
 									</div>
 										<div className="flex items-center gap-2">
 											<p
-												className="ltr-literal-value text-xs text-text-muted font-mono truncate"
+												className="preserve-ltr-value text-xs text-text-muted font-mono truncate"
 											>
 												{key.maskedKey || '••••••••'}
 											</p>

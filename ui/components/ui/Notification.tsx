@@ -226,7 +226,7 @@ export function NotificationContainer({
 }: NotificationContainerProps) {
 	return (
 		<div
-			className="logical-inset-inline-end-4 fixed top-4 z-50 w-full max-w-sm space-y-3 pointer-events-none"
+			className="inset-inline-end-4 fixed top-4 z-50 w-full max-w-sm space-y-3 pointer-events-none"
 		>
 			{/* pointer-events-none on container to let clicks pass through, but pointer-events-auto on notifications */}
 			{notifications.map((notification) => (

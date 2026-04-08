@@ -1,4 +1,4 @@
-import { Modal, Button, Input, LiteralValueBlock } from '@/components/ui';
+import { Modal, Button, Input, ReadOnlyValueBlock } from '@/components/ui';
 import { Copy } from 'lucide-react';
 import { __ } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
@@ -85,7 +85,7 @@ function ApiKeyModals({
 							)}
 						</p>
 					</div>
-					<LiteralValueBlock
+					<ReadOnlyValueBlock
 						value={newApiKey}
 						onCopy={() => copyToClipboard(newApiKey)}
 						copyButtonLabel={__('Copy to clipboard')}
@@ -95,7 +95,7 @@ function ApiKeyModals({
 							<p className="text-sm font-medium text-heading">
 								{__('Base API URL')}
 							</p>
-							<LiteralValueBlock
+							<ReadOnlyValueBlock
 								value={baseApiUrl}
 								onCopy={() =>
 									copyToClipboard(

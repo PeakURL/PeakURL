@@ -22,11 +22,11 @@ function LocationNoteItem({
 		<div dir={direction} className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-2">
 			<span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-info/60" />
 			<div className="min-w-0 space-y-1">
-				<p dir="auto" className="mixed-direction-text">
+				<p dir="auto" className="direction-safe-text">
 					{text}
 				</p>
 				{example ? (
-					<code className="ltr-literal-value inline-block max-w-full break-all rounded bg-surface px-1.5 py-0.5 font-mono text-[11px] text-heading">
+					<code className="preserve-ltr-value inline-block max-w-full break-all rounded bg-surface px-1.5 py-0.5 font-mono text-[11px] text-heading">
 						{example}
 					</code>
 				) : null}
@@ -160,7 +160,7 @@ function TrafficLocationTab({
 							<div className="mx-auto mt-4 w-full max-w-lg rounded-lg border border-info/20 bg-info/5 px-4 py-3">
 								<p
 									dir="auto"
-									className="mixed-direction-text text-xs font-medium text-heading"
+									className="direction-safe-text text-xs font-medium text-heading"
 								>
 									{__('Note:')}
 								</p>
@@ -227,7 +227,7 @@ function TrafficLocationTab({
 							</p>
 						</div>
 					</div>
-					<div className={isRtl ? 'text-left' : 'text-right'}>
+					<div className="text-inline-end">
 						<p className="text-sm text-text-muted">
 							{__('Countries')}
 						</p>
@@ -269,11 +269,7 @@ function TrafficLocationTab({
 						}
 					/>
 					{hoveredCountry && (
-						<div
-							className={`absolute top-4 min-w-32 rounded-lg border border-stroke bg-surface p-3 shadow-xl ${
-								isRtl ? 'right-4 text-right' : 'left-4 text-left'
-							}`}
-						>
+						<div className="inset-inline-start-4 text-inline-start absolute top-4 min-w-32 rounded-lg border border-stroke bg-surface p-3 shadow-xl">
 							<p className="text-sm font-semibold text-heading">
 								{hoveredCountry.countryName}
 							</p>
@@ -318,11 +314,7 @@ function TrafficLocationTab({
 										<span className="text-sm text-text-muted">
 											{percentage}%
 										</span>
-										<span
-											className={`min-w-12 text-sm font-semibold text-heading ${
-												isRtl ? 'text-left' : 'text-right'
-											}`}
-										>
+										<span className="text-inline-end min-w-12 text-sm font-semibold text-heading">
 											{country.count} {__('clicks')}
 										</span>
 									</div>
@@ -368,7 +360,7 @@ function TrafficLocationTab({
 										</p>
 									</div>
 								</div>
-								<div className={isRtl ? 'text-left' : 'text-right'}>
+								<div className="text-inline-end">
 									<p className="text-sm font-semibold text-heading">
 										{city.count}
 									</p>

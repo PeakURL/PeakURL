@@ -555,13 +555,13 @@ function UsersPage() {
 					<div className="overflow-x-auto">
 						<table className="min-w-full divide-y divide-stroke">
 							<thead className="bg-surface-alt">
-								<tr className="logical-text-start text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">
+								<tr className="text-inline-start text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">
 									<th className="px-6 py-4">{__('User')}</th>
 									<th className="px-6 py-4">{__('Role')}</th>
 									<th className="px-6 py-4">
 										{__('Created')}
 									</th>
-									<th className="logical-text-end px-6 py-4">
+									<th className="text-inline-end px-6 py-4">
 										{__('Actions')}
 									</th>
 								</tr>
@@ -572,7 +572,7 @@ function UsersPage() {
 										key={user.id}
 										className="hover:bg-surface-alt/60"
 									>
-										<td className="logical-text-start px-6 py-4">
+										<td className="text-inline-start px-6 py-4">
 											<div
 												dir={isRtl ? 'rtl' : 'ltr'}
 												className="flex w-full items-start justify-start gap-3"
@@ -588,7 +588,7 @@ function UsersPage() {
 													}
 													className="mt-0.5 rounded-full"
 												/>
-												<div className="logical-text-start min-w-0 flex-1">
+												<div className="text-inline-start min-w-0 flex-1">
 													<div className="font-medium text-heading">
 														<bdi dir="auto">
 															{user.firstName}{' '}
@@ -596,19 +596,19 @@ function UsersPage() {
 														</bdi>
 													</div>
 													<div className="text-sm text-text-muted">
-														<bdi className="ltr-literal-value inline-block">
+														<bdi className="preserve-ltr-value inline-block">
 															{user.email}
 														</bdi>
 													</div>
 													<div className="text-xs text-text-muted">
-														<bdi className="ltr-literal-value inline-block">
+														<bdi className="preserve-ltr-value inline-block">
 															@{user.username}
 														</bdi>
 													</div>
 												</div>
 											</div>
 										</td>
-										<td className="logical-text-start px-6 py-4">
+										<td className="text-inline-start px-6 py-4">
 											<span
 												className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
 													roleMeta[
@@ -627,7 +627,7 @@ function UsersPage() {
 												}
 											</span>
 										</td>
-										<td className="logical-text-start px-6 py-4 text-sm text-text-muted">
+										<td className="text-inline-start px-6 py-4 text-sm text-text-muted">
 											{user.createdAt
 												? new Date(
 														user.createdAt

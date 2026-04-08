@@ -40,7 +40,7 @@ const Sidebar = ({ tabs, activeTab }: SidebarProps) => {
 								key={tab.id}
 								to={`/dashboard/settings/${tab.id}`}
 								dir={direction}
-								className={`logical-text-start w-full flex items-center justify-start gap-2.5 px-3 py-2.5 text-sm rounded-lg transition-all ${
+								className={`text-inline-start w-full flex items-center justify-start gap-2.5 px-3 py-2.5 text-sm rounded-lg transition-all ${
 									activeTab === tab.id
 										? 'bg-accent/10 dark:bg-accent/20 text-accent font-medium'
 										: 'text-text-muted hover:bg-surface-alt hover:text-heading'

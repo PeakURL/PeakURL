@@ -57,7 +57,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 								href={footerLink}
 								target="_blank"
 								rel="noreferrer"
-								className="logical-text-end shrink-0 text-text-muted/80 transition-colors hover:text-accent"
+								className="text-inline-end shrink-0 text-text-muted/80 transition-colors hover:text-accent"
 							>
 								{__('Version')} {PEAKURL_VERSION}
 							</a>

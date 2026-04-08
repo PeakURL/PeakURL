@@ -31,13 +31,13 @@ function ImportDetails({ results }: ImportDetailsProps) {
 						)}
 						<div className="flex-1 min-w-0">
 							<div
-								className="ltr-literal-value truncate text-sm font-medium text-heading"
+								className="preserve-ltr-value truncate text-sm font-medium text-heading"
 							>
 								<bdi>{result.url}</bdi>
 							</div>
 							{result.status === 'success' ? (
 								<div
-									className="ltr-literal-value text-xs text-emerald-600 dark:text-emerald-400"
+									className="preserve-ltr-value text-xs text-emerald-600 dark:text-emerald-400"
 								>
 									<bdi>{result.shortUrl}</bdi>
 								</div>

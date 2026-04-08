@@ -93,7 +93,7 @@ export const AdminNotices = () => {
 								<div className="mt-0.5 shrink-0">
 									<Icon size={18} />
 								</div>
-								<div className="logical-text-start space-y-1">
+								<div className="text-inline-start space-y-1">
 									{notice?.title ? (
 										<p className="font-semibold">
 											{notice.title}

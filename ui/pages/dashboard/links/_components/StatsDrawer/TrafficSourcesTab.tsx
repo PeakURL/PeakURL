@@ -15,7 +15,6 @@ import {
 } from 'lucide-react';
 import DeviceStats from './DeviceStats';
 import { __ } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
 import type {
 	LinkStatsViewProps,
 	ReferrerCategoryItem,
@@ -123,7 +122,6 @@ const getTotalClicks = (referrers: ReferrerItem[]) => {
 };
 
 function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
-	const isRtl = isDocumentRtl();
 	const devices: StatsMetricItem[] = stats?.devices || [];
 	const browsers: StatsMetricItem[] = stats?.browsers || [];
 	const operatingSystems: StatsMetricItem[] = stats?.operatingSystems || [];
@@ -258,15 +256,12 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 												}}
 											/>
 										</div>
-										<div className={isRtl ? 'text-left' : 'text-right'}>
+										<div className="text-inline-end">
 											<span className="text-sm font-medium text-heading">
 												{ref.count}
 											</span>
-											<span
-												className={`hidden text-xs text-text-muted sm:inline ${
-													isRtl ? 'mr-1' : 'ml-1'
-												}`}
-											>
+											<span className="hidden text-xs text-text-muted sm:inline">
+												{' '}
 												({percentage}%)
 											</span>
 										</div>

@@ -3,7 +3,7 @@ import {
 	Button,
 	ConfirmDialog,
 	Input,
-	LiteralValueBlock,
+	ReadOnlyValueBlock,
 	Modal,
 } from '@/components/ui';
 import {
@@ -154,7 +154,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 
 			<div className="bg-surface border border-(--color-stroke) rounded-lg p-5">
 				<div className="mb-5 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-					<div className="logical-text-start">
+					<div className="text-inline-start">
 						<h3 className="text-base font-semibold text-heading">
 							{__('Webhooks')}
 						</h3>
@@ -211,7 +211,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 									)}
 								</p>
 								<code
-									className="ltr-literal-value block w-fit max-w-full rounded bg-surface px-1.5 py-0.5 text-[11px]"
+									className="preserve-ltr-value block w-fit max-w-full rounded bg-surface px-1.5 py-0.5 text-[11px]"
 								>
 									https://example.com/api/webhooks/peakurl
 								</code>
@@ -295,9 +295,9 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 									dir={direction}
 									className="flex items-start justify-between gap-4"
 								>
-									<div className="logical-text-start min-w-0 flex-1">
+									<div className="text-inline-start min-w-0 flex-1">
 										<p
-											className="ltr-literal-value truncate text-sm font-medium text-heading"
+											className="preserve-ltr-value truncate text-sm font-medium text-heading"
 										>
 											{wh.url}
 										</p>
@@ -320,7 +320,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 										<div className="mt-3 flex items-center gap-2">
 											{wh.secretHint ? (
 												<span
-													className="ltr-literal-value text-xs text-muted font-mono truncate"
+													className="preserve-ltr-value text-xs text-muted font-mono truncate"
 												>
 													{wh.secretHint}
 												</span>
@@ -383,7 +383,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 						<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
 							{__('Endpoint URL')}
 						</p>
-						<LiteralValueBlock
+						<ReadOnlyValueBlock
 							value={createdWebhook?.url}
 							className="mt-2 border-0 bg-transparent p-0 shadow-none"
 							monospace={false}
@@ -391,7 +391,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 						/>
 					</div>
 
-					<LiteralValueBlock
+					<ReadOnlyValueBlock
 						value={createdWebhook?.secret}
 						onCopy={() =>
 							copyToClipboard(

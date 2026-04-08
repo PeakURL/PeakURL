@@ -9,7 +9,7 @@ function TableHeaderRow({
 	const hasSelection = selectedCount > 0;
 	if (hasSelection) {
 		return (
-			<tr className="logical-text-start bg-accent/5">
+			<tr className="text-inline-start bg-accent/5">
 				<th className="px-4 py-3 text-xs font-semibold text-text-muted uppercase tracking-wide w-[40px]">
 					<input
 						type="checkbox"
@@ -24,7 +24,7 @@ function TableHeaderRow({
 				>
 					{sprintf(__('%s selected'), String(selectedCount))}
 				</th>
-				<th className="logical-text-end px-4 py-3">
+				<th className="text-inline-end px-4 py-3">
 					<button
 						onClick={onBulkDelete}
 						className="ml-auto flex items-center gap-1 text-xs font-medium text-error hover:text-red-700"
@@ -37,7 +37,7 @@ function TableHeaderRow({
 	}
 
 	return (
-		<tr className="logical-text-start">
+		<tr className="text-inline-start">
 			<th className="px-4 py-3 text-xs font-semibold text-text-muted uppercase tracking-wide w-[40px]">
 				<input
 					type="checkbox"
@@ -62,7 +62,7 @@ function TableHeaderRow({
 				{__('Created')}
 			</th>
 			<th
-				className="logical-text-end px-4 py-3 text-xs font-semibold text-text-muted uppercase tracking-wide"
+				className="text-inline-end px-4 py-3 text-xs font-semibold text-text-muted uppercase tracking-wide"
 			>
 				{__('Actions')}
 			</th>

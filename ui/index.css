@@ -236,60 +236,76 @@ body {
 }
 
 @layer utilities {
-	.mixed-direction-text {
+	.direction-safe-text {
 		text-align: start;
 		unicode-bidi: plaintext;
 	}
 
-	.logical-text-start {
+	.text-inline-start {
 		text-align: start;
 	}
 
-	.logical-text-end {
+	.text-inline-end {
 		text-align: end;
 	}
 
-	.logical-inset-inline-end-2 {
+	.inset-inline-end-2 {
 		inset-inline-end: 0.5rem;
 	}
 
-	.logical-inset-inline-start-0 {
+	.inset-inline-start-0 {
 		inset-inline-start: 0;
 	}
 
-	.logical-inset-inline-end-0 {
+	.inset-inline-end-0 {
 		inset-inline-end: 0;
 	}
 
-	.logical-inset-inline-start-3 {
+	.inset-inline-start-3 {
 		inset-inline-start: 0.75rem;
 	}
 
-	.logical-inset-inline-end-3 {
+	.inset-inline-start-4 {
+		inset-inline-start: 1rem;
+	}
+
+	.inset-inline-end-3 {
 		inset-inline-end: 0.75rem;
 	}
 
-	.logical-inset-inline-end-4 {
+	.inset-inline-end-4 {
 		inset-inline-end: 1rem;
 	}
 
-	.logical-origin-top-inline-end {
+	.border-inline-start-2 {
+		border-inline-start-width: 2px;
+	}
+
+	.padding-inline-start-4 {
+		padding-inline-start: 1rem;
+	}
+
+	.margin-inline-start-4 {
+		margin-inline-start: 1rem;
+	}
+
+	.origin-top-inline-end {
 		transform-origin: top right;
 	}
 
-	html[dir='rtl'] .logical-origin-top-inline-end {
+	html[dir='rtl'] .origin-top-inline-end {
 		transform-origin: top left;
 	}
 
-	.logical-origin-inline-start {
+	.origin-inline-start {
 		transform-origin: left;
 	}
 
-	html[dir='rtl'] .logical-origin-inline-start {
+	html[dir='rtl'] .origin-inline-start {
 		transform-origin: right;
 	}
 
-	.ltr-literal-value {
+	.preserve-ltr-value {
 		direction: ltr;
 		text-align: left;
 		unicode-bidi: plaintext;

@@ -10,7 +10,7 @@ function SampleData({ sampleData }: SampleDataProps) {
 			<div className="overflow-x-auto">
 				<table className="w-full text-sm">
 					<thead>
-						<tr className="logical-text-start border-b border-stroke">
+						<tr className="text-inline-start border-b border-stroke">
 							<th className="py-2 px-3 text-xs font-semibold text-heading bg-surface-alt">
 								url
 							</th>

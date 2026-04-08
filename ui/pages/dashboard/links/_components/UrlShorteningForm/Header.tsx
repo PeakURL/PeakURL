@@ -13,7 +13,7 @@ const Header = () => {
 			<div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center shrink-0 shadow-md">
 				<Scissors className="text-white" size={20} />
 			</div>
-			<div className="logical-text-start">
+			<div className="text-inline-start">
 				<h3 className="text-lg font-bold text-heading">
 					{__('Create Short Link')}
 				</h3>

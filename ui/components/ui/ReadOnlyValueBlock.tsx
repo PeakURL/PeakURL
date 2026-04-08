@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { Copy } from 'lucide-react';
 import { getDocumentDirection } from '@/i18n/direction';
 
-interface LiteralValueBlockProps {
+interface ReadOnlyValueBlockProps {
 	value?: string | null;
 	className?: string;
 	valueClassName?: string;
@@ -13,7 +13,7 @@ interface LiteralValueBlockProps {
 	copyButtonContent?: ReactNode;
 }
 
-export function LiteralValueBlock({
+export function ReadOnlyValueBlock({
 	value,
 	className = '',
 	valueClassName = '',
@@ -22,7 +22,7 @@ export function LiteralValueBlock({
 	copyButtonLabel,
 	copyButtonClassName = '',
 	copyButtonContent,
-}: LiteralValueBlockProps) {
+}: ReadOnlyValueBlockProps) {
 	const direction = getDocumentDirection();
 	const copyButtonStyles =
 		copyButtonClassName ||
@@ -33,9 +33,9 @@ export function LiteralValueBlock({
 			dir={direction}
 			className={`flex items-start gap-2 rounded-lg border border-stroke bg-surface-alt px-3 py-3 ${className}`}
 		>
-			<div className="logical-text-start min-w-0 flex-1">
+			<div className="text-inline-start min-w-0 flex-1">
 				<span
-					className={`ltr-literal-value inline-block max-w-full break-all text-sm text-heading ${
+					className={`preserve-ltr-value inline-block max-w-full break-all text-sm text-heading ${
 						monospace ? 'font-mono' : ''
 					} ${valueClassName}`}
 				>

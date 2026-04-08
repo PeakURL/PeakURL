@@ -248,7 +248,7 @@ export const DashboardSidebar = ({
 														: 'text-text-muted'
 												}`}
 											/>
-											<span className="logical-text-start flex-1">
+											<span className="text-inline-start flex-1">
 												{item.name}
 											</span>
 											<ChevronDown
@@ -283,7 +283,7 @@ export const DashboardSidebar = ({
 																onMobileClose
 															}
 													className={`
-																logical-text-start block rounded-lg px-3 py-2 text-sm font-medium transition-colors
+																text-inline-start block rounded-lg px-3 py-2 text-sm font-medium transition-colors
 																${
 																	isChildLinkActive
 																		? 'bg-accent text-white shadow-sm'
@@ -325,7 +325,7 @@ export const DashboardSidebar = ({
 												: 'text-text-muted'
 										}`}
 									/>
-									<span className="logical-text-start flex-1">
+									<span className="text-inline-start flex-1">
 										{item.name}
 									</span>
 									{item.name === __('All Links') &&
@@ -424,7 +424,7 @@ export const DashboardSidebar = ({
 							size={18}
 							className={`shrink-0 ${isAboutOpen ? 'text-accent' : 'text-text-muted'}`}
 						/>
-						<span className="logical-text-start flex-1">
+						<span className="text-inline-start flex-1">
 							{__('About PeakURL')}
 						</span>
 						<ChevronDown

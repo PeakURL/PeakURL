@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import QRCode from 'qrcode';
-import { Button, ConfirmDialog, Input, LiteralValueBlock } from '@/components/ui';
+import { Button, ConfirmDialog, Input, ReadOnlyValueBlock } from '@/components/ui';
 import {
 	ShieldCheck,
 	ShieldOff,
@@ -523,7 +523,7 @@ function SecurityTab({
 							/>
 						)}
 					</div>
-					<div className="logical-text-start flex-1">
+					<div className="text-inline-start flex-1">
 						<p className="font-medium text-sm text-heading">
 							{twoFactorEnabled
 								? __('2FA is enabled')
@@ -601,7 +601,7 @@ function SecurityTab({
 									<p className="mb-2 text-xs font-semibold text-text-muted">
 										{__('Secret')}
 									</p>
-									<LiteralValueBlock
+									<ReadOnlyValueBlock
 										value={secret}
 										className="border-0 bg-transparent p-0"
 										valueClassName="text-xs text-text-muted"
@@ -612,7 +612,7 @@ function SecurityTab({
 										<p className="mb-2 text-xs font-semibold text-text-muted">
 											{__('Authenticator URI')}
 										</p>
-										<LiteralValueBlock
+										<ReadOnlyValueBlock
 											value={otpauthUrl}
 											className="border-0 bg-transparent p-0"
 											valueClassName="text-xs text-text-muted"
@@ -753,7 +753,7 @@ function SecurityTab({
 											className="text-text-muted"
 										/>
 									</div>
-									<div className="logical-text-start">
+									<div className="text-inline-start">
 										<p className="font-medium text-sm text-heading">
 											{session.browser || __('Browser')} •{' '}
 											{session.os || __('Unknown OS')}

@@ -56,16 +56,6 @@ class I18n {
 	);
 
 	/**
-	 * Locale aliases normalized to PeakURL's canonical locale codes.
-	 *
-	 * @var array<string, string>
-	 * @since 1.0.7
-	 */
-	private const LOCALE_ALIASES = array(
-		'ur_PK' => 'ur',
-	);
-
-	/**
 	 * Runtime configuration map.
 	 *
 	 * @var array<string, mixed>
@@ -195,10 +185,6 @@ class I18n {
 		}
 
 		$normalized_locale = implode( '_', $parts );
-
-		if ( isset( self::LOCALE_ALIASES[ $normalized_locale ] ) ) {
-			return self::LOCALE_ALIASES[ $normalized_locale ];
-		}
 
 		return $normalized_locale;
 	}

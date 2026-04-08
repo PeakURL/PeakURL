@@ -18,12 +18,13 @@ const SecurityFields = ({
 					htmlFor="title"
 					className="block text-sm font-medium text-heading mb-1.5"
 				>
-					<Tags
-						className={`inline h-4 w-4 text-text-muted ${
-							isRtl ? 'ml-2' : 'mr-2'
-						}`}
-					/>
-					{__('Link Title (Optional)')}
+					<span
+						dir={isRtl ? 'rtl' : 'ltr'}
+						className="inline-flex items-center gap-2"
+					>
+						<Tags className="h-4 w-4 text-text-muted" />
+						{__('Link Title (Optional)')}
+					</span>
 				</label>
 				<Input
 					type="text"
@@ -39,12 +40,13 @@ const SecurityFields = ({
 					htmlFor="password"
 					className="block text-sm font-medium text-heading mb-1.5"
 				>
-					<Lock
-						className={`inline h-4 w-4 text-text-muted ${
-							isRtl ? 'ml-2' : 'mr-2'
-						}`}
-					/>
-					{__('Password Protection (Optional)')}
+					<span
+						dir={isRtl ? 'rtl' : 'ltr'}
+						className="inline-flex items-center gap-2"
+					>
+						<Lock className="h-4 w-4 text-text-muted" />
+						{__('Password Protection (Optional)')}
+					</span>
 				</label>
 				<Input
 					type="password"

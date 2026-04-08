@@ -15,12 +15,13 @@ const ExpirationFields = ({
 	return (
 		<div>
 			<label className="block text-sm font-medium text-heading mb-1.5">
-				<Calendar
-					className={`inline h-4 w-4 text-text-muted ${
-						isRtl ? 'ml-2' : 'mr-2'
-					}`}
-				/>
-				{__('Expiration Date (Optional)')}
+				<span
+					dir={isRtl ? 'rtl' : 'ltr'}
+					className="inline-flex items-center gap-2"
+				>
+					<Calendar className="h-4 w-4 text-text-muted" />
+					{__('Expiration Date (Optional)')}
+				</span>
 			</label>
 			<div className="grid grid-cols-2 gap-3">
 				<Input

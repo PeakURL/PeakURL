@@ -390,6 +390,7 @@ function LoginPage() {
 							<Input
 								label={__('Email or username')}
 								icon={UserRound}
+								valueDirection="ltr"
 								value={identifier}
 								name="identifier"
 								onChange={(event) =>
@@ -424,7 +425,11 @@ function LoginPage() {
 							/>
 
 							{!twoFactorRequired ? (
-								<div className="-mt-1 flex justify-end">
+								<div
+									className={`-mt-1 flex ${
+										isRtl ? 'justify-start' : 'justify-end'
+									}`}
+								>
 									<Link
 										to="/forgot-password"
 										className="text-sm font-medium text-indigo-600 transition-colors duration-150 hover:text-indigo-700"
@@ -441,6 +446,7 @@ function LoginPage() {
 										<div className="space-y-3">
 											<Input
 												label={__('Backup code')}
+												valueDirection="ltr"
 												value={backupCode}
 												name="backupCode"
 												onChange={(event) =>

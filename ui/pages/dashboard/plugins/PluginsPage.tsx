@@ -197,7 +197,9 @@ function PluginsPage() {
 							<div className="flex rounded-lg border border-stroke">
 								<button
 									onClick={() => setViewMode('grid')}
-									className={`flex h-9 w-9 items-center justify-center rounded-l-lg transition-colors ${
+									className={`flex h-9 w-9 items-center justify-center transition-colors ${
+										isRtl ? 'rounded-r-lg' : 'rounded-l-lg'
+									} ${
 										viewMode === 'grid'
 											? 'bg-accent/10 text-accent'
 											: 'text-text-muted hover:bg-surface-alt'
@@ -207,7 +209,11 @@ function PluginsPage() {
 								</button>
 								<button
 									onClick={() => setViewMode('list')}
-									className={`flex h-9 w-9 items-center justify-center rounded-r-lg border-l border-stroke transition-colors ${
+									className={`flex h-9 w-9 items-center justify-center transition-colors ${
+										isRtl
+											? 'rounded-l-lg border-r'
+											: 'rounded-r-lg border-l'
+									} border-stroke ${
 										viewMode === 'list'
 											? 'bg-accent/10 text-accent'
 											: 'text-text-muted hover:bg-surface-alt'

@@ -202,9 +202,14 @@ function SectionHeader({
 	primaryAction,
 	secondaryAction,
 }: SectionHeaderProps) {
+	const isRtl = isDocumentRtl();
+
 	return (
-		<div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-			<div className="space-y-2">
+		<div
+			dir={isRtl ? 'rtl' : 'ltr'}
+			className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between"
+		>
+			<div className="space-y-2" style={{ textAlign: 'start' }}>
 				<div className="flex flex-wrap items-center gap-3">
 					<h2 className="text-base font-semibold text-heading">
 						{title}
@@ -225,18 +230,22 @@ function SectionHeader({
 }
 
 function MetricGrid({ items }: MetricGridProps) {
+	const isRtl = isDocumentRtl();
+
 	return (
 		<div className="mt-5 grid grid-cols-1 gap-3 md:grid-cols-3">
 			{items.map((item: MetricItem) => (
 				<div
 					key={item.label}
+					dir={isRtl ? 'rtl' : 'ltr'}
 					className="rounded-lg border border-stroke bg-bg px-4 py-4"
+					style={{ textAlign: 'start' }}
 				>
 					<p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-text-muted">
 						{item.label}
 					</p>
 					<p className="mt-2 text-lg font-semibold text-heading">
-						{item.value}
+						<bdi dir="auto">{item.value}</bdi>
 					</p>
 				</div>
 			))}
@@ -250,6 +259,7 @@ function InlineNotice({
 	description,
 	tone = 'info',
 }: InlineNoticeProps) {
+	const isRtl = isDocumentRtl();
 	const styles: Record<StatusTone, string> = {
 		info: 'border-blue-200 bg-blue-50 text-blue-900 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200',
 		success:
@@ -259,9 +269,12 @@ function InlineNotice({
 
 	return (
 		<div className={`rounded-lg border p-4 ${styles[tone]}`}>
-			<div className="flex items-start gap-3">
+			<div
+				dir={isRtl ? 'rtl' : 'ltr'}
+				className="flex items-start gap-3"
+			>
 				<Icon size={18} className="mt-0.5 shrink-0" />
-				<div className="space-y-1">
+				<div className="space-y-1" style={{ textAlign: 'start' }}>
 					<p className="text-sm font-semibold">{title}</p>
 					<p className="text-sm leading-6 opacity-80">{description}</p>
 				</div>
@@ -361,9 +374,9 @@ function UpdateActions({
 
 			{showDisabledReason ? (
 				<div
-					className={`max-w-sm rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200 ${
-						isRtl ? 'lg:text-right' : 'lg:text-left'
-					}`}
+					dir={isRtl ? 'rtl' : 'ltr'}
+					className="max-w-sm rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200"
+					style={{ textAlign: 'start' }}
 				>
 					{disabledReason}
 				</div>
@@ -373,8 +386,13 @@ function UpdateActions({
 }
 
 function DetailRow({ label, value, icon: Icon, href }: DetailRowProps) {
+	const isRtl = isDocumentRtl();
+
 	return (
-		<div className="flex flex-col gap-2 rounded-lg border border-stroke bg-bg px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+		<div
+			dir={isRtl ? 'rtl' : 'ltr'}
+			className="flex flex-col gap-2 rounded-lg border border-stroke bg-bg px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+		>
 			<div className="flex items-center gap-2 text-sm text-text-muted">
 				{Icon ? <Icon size={15} /> : null}
 				<span>{label}</span>
@@ -384,25 +402,39 @@ function DetailRow({ label, value, icon: Icon, href }: DetailRowProps) {
 					href={href}
 					target="_blank"
 					rel="noreferrer"
+					dir={isRtl ? 'rtl' : 'ltr'}
 					className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline"
 				>
-					{value}
+					<bdi dir="auto">{value}</bdi>
 					<ExternalLink size={14} />
 				</a>
 			) : (
-				<span className="text-sm font-medium text-heading">{value}</span>
+				<span
+					className="text-sm font-medium text-heading"
+					style={{ textAlign: 'start' }}
+				>
+					<bdi dir="auto">{value}</bdi>
+				</span>
 			)}
 		</div>
 	);
 }
 
 function IssueList({ title, issues }: IssueListProps) {
+	const isRtl = isDocumentRtl();
+
 	return (
-		<div className="rounded-lg border border-stroke bg-bg p-4">
+		<div
+			dir={isRtl ? 'rtl' : 'ltr'}
+			className="rounded-lg border border-stroke bg-bg p-4"
+			style={{ textAlign: 'start' }}
+		>
 			<p className="text-sm font-semibold text-heading">{title}</p>
-			<ul className="mt-3 space-y-2 text-sm leading-6 text-text-muted">
+			<ul className="mt-3 list-disc space-y-2 ps-5 text-sm leading-6 text-text-muted">
 				{issues.map((issue: UpdateIssue) => (
-					<li key={issue.id || issue.label}>{issue.label}</li>
+					<li key={issue.id || issue.label}>
+						<bdi dir="auto">{issue.label}</bdi>
+					</li>
 				))}
 			</ul>
 		</div>

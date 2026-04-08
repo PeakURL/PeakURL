@@ -1,6 +1,6 @@
 import type { SubmitEvent } from 'react';
 import { useState } from 'react';
-import { Button } from '@/components/ui';
+import { Button, Input } from '@/components/ui';
 import { __ } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
 import { formatByteSize, formatDateTimeValue } from '@/utils';
@@ -36,12 +36,11 @@ function StateCard({
 	return (
 		<div className={`rounded-lg border p-4 ${styles[variant]}`}>
 			<div
-				className={`flex items-start gap-3 ${
-					isRtl ? 'flex-row-reverse text-right' : 'text-left'
-				}`}
+				dir={isRtl ? 'rtl' : 'ltr'}
+				className="flex items-start gap-3"
 			>
 				<Icon size={18} className="mt-0.5 shrink-0" />
-				<div className="space-y-1">
+				<div className="space-y-1" style={{ textAlign: 'start' }}>
 					<h3 className="text-sm font-semibold">{title}</h3>
 					<p className="text-sm leading-6 opacity-80">
 						{description}
@@ -100,16 +99,11 @@ function LocationDataTab({
 		<div className="space-y-5">
 			<div className="rounded-lg border border-stroke bg-surface p-5">
 				<div
-					className={`flex flex-col gap-4 lg:items-center lg:justify-between ${
-						isRtl ? 'lg:flex-row-reverse' : 'lg:flex-row'
-					}`}
+					dir={isRtl ? 'rtl' : 'ltr'}
+					className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
 				>
-					<div className="space-y-2">
-						<div
-							className={`flex items-center gap-3 ${
-								isRtl ? 'flex-row-reverse text-right' : 'text-left'
-							}`}
-						>
+					<div className="space-y-2" style={{ textAlign: 'start' }}>
+						<div dir={isRtl ? 'rtl' : 'ltr'} className="flex items-center gap-3">
 							<div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600 dark:bg-primary-500/20 dark:text-primary-400">
 								<MapPin size={18} />
 							</div>
@@ -230,21 +224,40 @@ function LocationDataTab({
 									<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
 										{__('Account ID')}
 									</p>
-									<p className="mt-2 text-sm font-medium text-heading">
-										{effectiveStatus?.accountId}
-									</p>
+										<p
+											dir="ltr"
+											className="mt-2 text-sm font-medium text-heading"
+											style={{
+												textAlign: isRtl
+													? 'right'
+													: 'left',
+											}}
+										>
+											{effectiveStatus?.accountId}
+										</p>
 								</div>
 								<div>
 									<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
 										{__('License Key')}
 									</p>
-									<p className="mt-2 text-sm font-medium text-heading">
-										{effectiveStatus?.licenseKeyHint}
-									</p>
+										<p
+											dir="ltr"
+											className="mt-2 text-sm font-medium text-heading"
+											style={{
+												textAlign: isRtl
+													? 'right'
+													: 'left',
+											}}
+										>
+											{effectiveStatus?.licenseKeyHint}
+										</p>
 								</div>
 							</div>
 						</div>
-						<div className="flex flex-wrap gap-3">
+						<div
+							dir={isRtl ? 'rtl' : 'ltr'}
+							className="flex flex-wrap gap-3"
+						>
 							<Button
 								type="button"
 								size="sm"
@@ -280,48 +293,40 @@ function LocationDataTab({
 				) : (
 					<form className="space-y-4" onSubmit={handleSubmit}>
 						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-							<div>
-								<label className="mb-1.5 block text-sm font-medium text-heading">
-									{__('MaxMind Account ID')}
-								</label>
-								<input
-									type="text"
-									inputMode="numeric"
-									autoComplete="off"
-									dir="ltr"
-									value={accountId}
-									onChange={(event) =>
-										setAccountIdInput(event.target.value)
-									}
-									placeholder="123456"
-									className="w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2.5 text-left text-sm text-heading outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
-								/>
-							</div>
+							<Input
+								label={__('MaxMind Account ID')}
+								type="text"
+								inputMode="numeric"
+								autoComplete="off"
+								valueDirection="ltr"
+								value={accountId}
+								onChange={(event) =>
+									setAccountIdInput(event.target.value)
+								}
+								placeholder="123456"
+								className="bg-surface-alt"
+							/>
 
-							<div>
-								<label className="mb-1.5 block text-sm font-medium text-heading">
-									{__('MaxMind License Key')}
-								</label>
-								<input
-									type="password"
-									autoComplete="new-password"
-									dir="ltr"
-									value={licenseKey}
-									onChange={(event) =>
-										setLicenseKey(event.target.value)
-									}
-									placeholder={
-										hasSavedCredentials
-											? __(
-													'Enter a new MaxMind license key'
-												)
-											: __(
-													'Enter your MaxMind license key'
-												)
-									}
-									className="w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2.5 text-left text-sm text-heading outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
-								/>
-							</div>
+							<Input
+								label={__('MaxMind License Key')}
+								type="password"
+								autoComplete="new-password"
+								valueDirection="ltr"
+								value={licenseKey}
+								onChange={(event) =>
+									setLicenseKey(event.target.value)
+								}
+								placeholder={
+									hasSavedCredentials
+										? __(
+												'Enter a new MaxMind license key'
+											)
+										: __(
+												'Enter your MaxMind license key'
+											)
+								}
+								className="bg-surface-alt"
+							/>
 						</div>
 
 						{hasSavedCredentials && (
@@ -333,7 +338,10 @@ function LocationDataTab({
 							</p>
 						)}
 
-						<div className="flex flex-wrap gap-3">
+						<div
+							dir={isRtl ? 'rtl' : 'ltr'}
+							className="flex flex-wrap gap-3"
+						>
 							<Button
 								type="submit"
 								size="sm"
@@ -374,9 +382,9 @@ function StatCard({ label, value }: StatCardProps) {
 
 	return (
 		<div
-			className={`rounded-lg border border-stroke bg-surface p-5 ${
-				isRtl ? 'text-right' : 'text-left'
-			}`}
+			dir={isRtl ? 'rtl' : 'ltr'}
+			className="rounded-lg border border-stroke bg-surface p-5"
+			style={{ textAlign: 'start' }}
 		>
 			<p className="text-xs font-semibold tracking-[0.14em] text-text-muted">
 				{label}

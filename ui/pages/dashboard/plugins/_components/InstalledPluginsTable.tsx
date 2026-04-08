@@ -18,9 +18,13 @@ function Skeleton({ className = '' }: PluginPreviewSkeletonProps) {
 }
 
 function StatusPill({ active }: PluginStatusPillProps) {
+	const isRtl = isDocumentRtl();
+
 	return active ? (
 		<span className="inline-flex items-center rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
-			<span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500" />
+			<span
+				className={`${isRtl ? 'ml-1.5' : 'mr-1.5'} h-1.5 w-1.5 rounded-full bg-emerald-500`}
+			/>
 			{__('Active')}
 		</span>
 	) : (
@@ -91,20 +95,24 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 									className="group transition-colors hover:bg-surface-alt/40"
 								>
 									{/* Plugin name + desc (blurred) */}
-									<td className="px-5 py-4">
+									<td
+										className={`px-5 py-4 ${
+											isRtl ? 'text-right' : 'text-left'
+										}`}
+									>
 										<div
-											className={`flex items-center gap-3 ${
-												isRtl
-													? 'flex-row-reverse text-right'
-													: ''
-											}`}
+											dir={isRtl ? 'rtl' : 'ltr'}
+											className="flex items-center justify-start gap-3"
 										>
 											<div
 												className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${plugin.gradient} opacity-80`}
 											>
 												<div className="h-5 w-5 rounded bg-white/30" />
 											</div>
-											<div className="min-w-0 space-y-1.5">
+											<div
+												className="min-w-0 flex-1 space-y-1.5"
+												style={{ textAlign: 'start' }}
+											>
 												<Skeleton
 													className={`h-4 ${plugin.barWidths[0]}`}
 												/>
@@ -121,15 +129,27 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 										</div>
 									</td>
 									{/* Version (blurred) */}
-									<td className="hidden px-5 py-4 md:table-cell">
+									<td
+										className={`hidden px-5 py-4 md:table-cell ${
+											isRtl ? 'text-right' : 'text-left'
+										}`}
+									>
 										<Skeleton className="h-3.5 w-10" />
 									</td>
 									{/* Status */}
-									<td className="hidden px-5 py-4 sm:table-cell">
+									<td
+										className={`hidden px-5 py-4 sm:table-cell ${
+											isRtl ? 'text-right' : 'text-left'
+										}`}
+									>
 										<StatusPill active={isActive} />
 									</td>
 									{/* Author (blurred) */}
-									<td className="hidden px-5 py-4 lg:table-cell">
+									<td
+										className={`hidden px-5 py-4 lg:table-cell ${
+											isRtl ? 'text-right' : 'text-left'
+										}`}
+									>
 										<Skeleton className="h-3.5 w-16" />
 									</td>
 									{/* Actions (disabled) */}

@@ -25,11 +25,13 @@ function MethodButton({
 		<button
 			type="button"
 			onClick={onClick}
+			dir={isRtl ? 'rtl' : 'ltr'}
 			className={`rounded-lg border p-4 transition ${
 				isActive
 					? 'border-accent bg-accent/10 text-heading'
 					: 'border-stroke bg-surface-alt text-text-muted hover:border-accent/40 hover:text-heading'
-			} ${isRtl ? 'text-right' : 'text-left'}`}
+			}`}
+			style={{ textAlign: 'start' }}
 		>
 			<p className="text-sm font-semibold">{title}</p>
 			<p className="mt-1 text-sm leading-6">{description}</p>
@@ -58,6 +60,7 @@ function EmailDeliveryTab({
 	isSaving,
 	onSave,
 }: EmailDeliveryTabProps) {
+	const isRtl = isDocumentRtl();
 	const [form, setForm] = useState<EmailFormState>(() =>
 		buildFormState(status)
 	);
@@ -97,11 +100,14 @@ function EmailDeliveryTab({
 	return (
 		<div className="space-y-5">
 			<div className="rounded-lg border border-stroke bg-surface p-5">
-				<div className="flex items-start gap-3">
+				<div
+					dir={isRtl ? 'rtl' : 'ltr'}
+					className="flex items-start gap-3"
+				>
 					<div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600 dark:bg-primary-500/20 dark:text-primary-400">
 						<Mail size={18} />
 					</div>
-					<div className="space-y-1">
+					<div className="space-y-1" style={{ textAlign: 'start' }}>
 						<h2 className="text-base font-semibold text-heading">
 							{__('Email Configuration')}
 						</h2>
@@ -116,9 +122,12 @@ function EmailDeliveryTab({
 
 			{errorMessage && (
 				<div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-900 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200">
-					<div className="flex items-start gap-3">
+					<div
+						dir={isRtl ? 'rtl' : 'ltr'}
+						className="flex items-start gap-3"
+					>
 						<AlertCircle size={18} className="mt-0.5" />
-						<div>
+						<div style={{ textAlign: 'start' }}>
 							<p className="font-semibold">
 								{__('Mail status unavailable')}
 							</p>
@@ -132,9 +141,12 @@ function EmailDeliveryTab({
 
 			{managementDisabled && (
 				<div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
-					<div className="flex items-start gap-3">
+					<div
+						dir={isRtl ? 'rtl' : 'ltr'}
+						className="flex items-start gap-3"
+					>
 						<AlertCircle size={18} className="mt-0.5" />
-						<div>
+						<div style={{ textAlign: 'start' }}>
 							<p className="font-semibold">
 								{__('Dashboard management unavailable')}
 							</p>
@@ -203,9 +215,11 @@ function EmailDeliveryTab({
 								}
 								placeholder={status?.fromName || __('PeakURL')}
 							/>
-							<Input
-								label={__('From Email')}
-								type="email"
+								<Input
+									label={__('From Email')}
+									type="email"
+									autoCapitalize="off"
+									spellCheck={false}
 								value={form.fromEmail}
 								onChange={(event) =>
 									setForm((current) => ({
@@ -217,8 +231,11 @@ function EmailDeliveryTab({
 							/>
 						</div>
 						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-							<Input
-								label={__('SMTP Host')}
+								<Input
+									label={__('SMTP Host')}
+									valueDirection="ltr"
+									autoCapitalize="off"
+									spellCheck={false}
 								value={form.smtpHost}
 								onChange={(event) =>
 									setForm((current) => ({
@@ -273,6 +290,7 @@ function EmailDeliveryTab({
 											smtpAuth: !current.smtpAuth,
 										}))
 									}
+									dir={isRtl ? 'rtl' : 'ltr'}
 									className={`inline-flex w-full items-center justify-between rounded-md border px-4 py-2 text-sm font-medium transition ${
 										form.smtpAuth
 											? 'border-accent bg-accent/10 text-heading'
@@ -294,7 +312,9 @@ function EmailDeliveryTab({
 										<span
 											className={`block h-4 w-4 rounded-full bg-white transition ${
 												form.smtpAuth
-													? 'translate-x-5'
+													? isRtl
+														? '-translate-x-5'
+														: 'translate-x-5'
 													: 'translate-x-0'
 											}`}
 										/>
@@ -305,8 +325,11 @@ function EmailDeliveryTab({
 
 						{form.smtpAuth && (
 							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-								<Input
-									label={__('SMTP Username')}
+									<Input
+										label={__('SMTP Username')}
+										valueDirection="ltr"
+										autoCapitalize="off"
+										spellCheck={false}
 									value={form.smtpUsername}
 									onChange={(event) =>
 										setForm((current) => ({
@@ -353,7 +376,11 @@ function EmailDeliveryTab({
 				)}
 
 				{showSubmitButton && (
-					<div className="flex justify-end">
+					<div
+						className={`flex ${
+							isRtl ? 'justify-start' : 'justify-end'
+						}`}
+					>
 						<Button
 							type="submit"
 							size="sm"

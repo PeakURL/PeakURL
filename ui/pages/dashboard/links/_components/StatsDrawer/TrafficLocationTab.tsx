@@ -143,16 +143,18 @@ function TrafficLocationTab({
 									>
 										<span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-info/60" />
 										<div
-											dir="auto"
-											className="min-w-0 flex-1"
+											className="min-w-0 flex-1 space-y-1"
 											style={{ textAlign: 'start' }}
 										>
-											{__(
-												'Local and private-network clicks do not include location data.'
-											)}{' '}
+											<p dir="auto">
+												{__(
+													'Local and private-network clicks do not include location data.'
+												)}
+											</p>
 											<code
 												dir="ltr"
-												className="font-mono text-[11px] text-heading break-all"
+												className="block w-fit max-w-full rounded bg-surface px-1.5 py-0.5 font-mono text-[11px] text-heading break-all"
+												style={{ textAlign: 'left' }}
 											>
 												127.0.0.1, 172.16-31.x.x, 192.168.x.x
 											</code>
@@ -164,14 +166,18 @@ function TrafficLocationTab({
 									>
 										<span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-info/60" />
 										<div
-											dir="auto"
-											className="min-w-0 flex-1"
+											className="min-w-0 flex-1 space-y-1"
 											style={{ textAlign: 'start' }}
 										>
-											{__('Store the GeoLite2 City database here:')}{' '}
+											<p dir="auto">
+												{__(
+													'Store the GeoLite2 City database here:'
+												)}
+											</p>
 											<code
 												dir="ltr"
-												className="inline-block max-w-full break-all rounded bg-surface px-1.5 py-0.5 font-mono text-[11px] text-heading"
+												className="block w-fit max-w-full rounded bg-surface px-1.5 py-0.5 font-mono text-[11px] text-heading break-all"
+												style={{ textAlign: 'left' }}
 											>
 												content/uploads/geoip/GeoLite2-City.mmdb
 											</code>

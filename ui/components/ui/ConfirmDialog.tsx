@@ -74,7 +74,11 @@ export function ConfirmDialog({
 									</p>
 								)}
 								{children}
-								<div className="mt-6 flex justify-end gap-2">
+								<div
+									className={`mt-6 flex gap-2 ${
+										isRtl ? 'justify-start' : 'justify-end'
+									}`}
+								>
 									<Button
 										variant="secondary"
 										onClick={onClose}

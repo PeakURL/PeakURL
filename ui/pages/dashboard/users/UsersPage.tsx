@@ -97,6 +97,7 @@ function UserDialog({
 	onSubmit,
 	isSubmitting,
 }: UserDialogProps) {
+	const isRtl = isDocumentRtl();
 	const roleMeta = getRoleMeta();
 	const roleOptions: SelectOption<UserRole>[] = [
 		{ value: 'admin', label: __('Admin') },
@@ -214,6 +215,9 @@ function UserDialog({
 						<div className="grid gap-4 sm:grid-cols-2">
 							<Input
 								label={__('Username')}
+								valueDirection="ltr"
+								autoCapitalize="off"
+								spellCheck={false}
 								value={form.username}
 								onChange={handleChange('username')}
 								required
@@ -299,7 +303,11 @@ function UserDialog({
 							</div>
 						</div>
 
-						<div className="flex justify-end gap-3 border-t border-stroke pt-4">
+						<div
+							className={`flex gap-3 border-t border-stroke pt-4 ${
+								isRtl ? 'justify-start' : 'justify-end'
+							}`}
+						>
 							<Button
 								type="button"
 								variant="secondary"

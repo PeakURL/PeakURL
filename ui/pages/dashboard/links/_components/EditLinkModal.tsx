@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Select } from '@/components/ui';
 import { useUpdateUrlMutation } from '@/store/slices/api';
 import { __ } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
+import { isDocumentRtl, resolveFieldDirection } from '@/i18n/direction';
 import {
 	buildShortUrl,
 	getErrorMessage,
@@ -24,6 +24,7 @@ import type { SelectOption } from '@/components/ui';
 
 function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 	const isRtl = isDocumentRtl();
+	const pageDirection = isRtl ? 'rtl' : 'ltr';
 	const getInitialTitle = () => normalizeLinkTitle(link?.title);
 	const getInitialStatus = (): LinkStatus => link?.status || 'active';
 	const getInitialExpiresAt = () => toLocalDateTimeValue(link?.expiresAt);
@@ -139,7 +140,11 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 								{__('Destination URL')}
 							</label>
 							<div className="px-3 py-2 bg-surface-alt border border-stroke rounded-lg">
-								<p className="text-sm text-text-muted break-all">
+								<p
+									dir="ltr"
+									className="text-sm text-text-muted break-all"
+									style={{ textAlign: isRtl ? 'right' : 'left' }}
+								>
 									{link.destinationUrl}
 								</p>
 							</div>
@@ -156,10 +161,15 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 							<input
 								type="text"
 								id="title"
+								dir={resolveFieldDirection({
+									value: title,
+									fallbackDirection: pageDirection,
+								})}
 								value={title}
 								onChange={(e) => setTitle(e.target.value)}
 								placeholder={__('Enter a title for this link')}
 								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading"
+								style={{ textAlign: isRtl ? 'right' : 'left' }}
 							/>
 						</div>
 
@@ -174,6 +184,10 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 							<input
 								type="password"
 								id="password"
+								dir={resolveFieldDirection({
+									value: password,
+									fallbackDirection: pageDirection,
+								})}
 								value={password}
 								disabled={clearPassword}
 								onChange={(e) => setPassword(e.target.value)}
@@ -187,6 +201,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 											)
 								}
 								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading"
+								style={{ textAlign: isRtl ? 'right' : 'left' }}
 							/>
 							{hasExistingPassword && (
 								<div className="mt-2 space-y-2">
@@ -226,11 +241,17 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 							<input
 								type="datetime-local"
 								id="expiresAt"
+								dir={resolveFieldDirection({
+									value: expiresAt,
+									fallbackDirection: pageDirection,
+									valueDirection: 'ltr',
+								})}
 								value={expiresAt}
 								onChange={(e) => setExpiresAt(e.target.value)}
 								min={getLocalDateTimeValue()}
 								step="60"
 								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading"
+								style={{ textAlign: isRtl ? 'right' : 'left' }}
 							/>
 						</div>
 

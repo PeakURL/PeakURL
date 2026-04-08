@@ -60,3 +60,34 @@ export function getDocumentDirection(): TextDirection {
 export function isDocumentRtl(): boolean {
 	return 'rtl' === getDocumentDirection();
 }
+
+interface ResolveFieldDirectionOptions {
+	value?: unknown;
+	defaultValue?: unknown;
+	fallbackDirection?: TextDirection;
+	valueDirection?: TextDirection;
+	explicitDirection?: string;
+}
+
+export function resolveFieldDirection({
+	value,
+	defaultValue,
+	fallbackDirection = getDocumentDirection(),
+	valueDirection,
+	explicitDirection,
+}: ResolveFieldDirectionOptions): TextDirection {
+	if ('rtl' === explicitDirection || 'ltr' === explicitDirection) {
+		return explicitDirection;
+	}
+
+	const renderedValue =
+		null !== value && undefined !== value ? value : defaultValue;
+	const hasRenderedValue =
+		null !== renderedValue &&
+		undefined !== renderedValue &&
+		'' !== String(renderedValue);
+
+	return valueDirection && hasRenderedValue
+		? valueDirection
+		: fallbackDirection;
+}

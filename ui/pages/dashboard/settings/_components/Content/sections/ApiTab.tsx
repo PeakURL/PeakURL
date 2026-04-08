@@ -4,7 +4,6 @@ import {
 	Trash2,
 	Info,
 	Key,
-	LoaderCircle,
 	ExternalLink,
 	BookOpen,
 	Copy,
@@ -52,6 +51,7 @@ function ApiTab({
 						<Button
 							size="sm"
 							variant="secondary"
+							icon={Copy}
 							onClick={() =>
 								copyToClipboard(
 									baseApiUrl,
@@ -59,17 +59,17 @@ function ApiTab({
 								)
 							}
 						>
-							<Copy
-								size={14}
-								className={isRtl ? 'ml-2' : 'mr-2'}
-							/>
 							{__('Copy API URL')}
 						</Button>
 					</div>
-					<div className="mt-4 rounded-xl border border-accent/15 bg-surface/90 px-4 py-3 shadow-sm">
-						<p className="font-mono text-sm break-all text-heading">
-							{baseApiUrl}
-						</p>
+						<div className="mt-4 rounded-xl border border-accent/15 bg-surface/90 px-4 py-3 shadow-sm">
+							<p
+								dir="ltr"
+								className="font-mono text-sm break-all text-heading"
+								style={{ textAlign: isRtl ? 'right' : 'left' }}
+							>
+								{baseApiUrl}
+							</p>
 					</div>
 				</div>
 			)}
@@ -81,22 +81,10 @@ function ApiTab({
 					</h2>
 					<Button
 						size="sm"
+						icon={Plus}
+						loading={isGeneratingKey}
 						onClick={() => setShowCreateModal(true)}
-						disabled={isGeneratingKey}
 					>
-						{isGeneratingKey ? (
-							<LoaderCircle
-								size={16}
-								className={`animate-spin ${
-									isRtl ? 'ml-2' : 'mr-2'
-								}`}
-							/>
-						) : (
-							<Plus
-								size={16}
-								className={isRtl ? 'ml-2' : 'mr-2'}
-							/>
-						)}
 						{__('Create New Key')}
 					</Button>
 				</div>
@@ -106,9 +94,13 @@ function ApiTab({
 						{user.apiKeys.map((key) => (
 							<div
 								key={key.id}
+								dir={isRtl ? 'rtl' : 'ltr'}
 								className="flex items-center justify-between p-4 border border-stroke rounded-lg hover:border-accent/50 transition-colors"
 							>
-								<div className="flex-1 min-w-0">
+								<div
+									className="flex-1 min-w-0"
+									style={{ textAlign: 'start' }}
+								>
 									<div className="flex items-center gap-2 mb-1">
 										<p className="font-medium text-sm text-heading">
 											{key.label || __('API Key')}
@@ -117,24 +109,33 @@ function ApiTab({
 											{__('Active')}
 										</span>
 									</div>
-									<div className="flex items-center gap-2">
-										<p className="text-xs text-text-muted font-mono truncate">
-											{key.maskedKey || '••••••••'}
-										</p>
+										<div className="flex items-center gap-2">
+											<p
+												dir="ltr"
+												className="text-xs text-text-muted font-mono truncate"
+												style={{
+													textAlign: isRtl
+														? 'right'
+														: 'left',
+												}}
+											>
+												{key.maskedKey || '••••••••'}
+											</p>
 									</div>
 									<p className="text-xs text-text-muted mt-1">
 										{__('Created:')}{' '}
-										{key.createdAt
-											? new Date(
-													key.createdAt
-												).toLocaleDateString()
-											: __('Unknown')}
+										<bdi dir="auto">
+											{key.createdAt
+												? new Date(
+														key.createdAt
+													).toLocaleDateString()
+												: __('Unknown')}
+										</bdi>
 									</p>
 								</div>
 								<div
-									className={`flex items-center gap-1 ${
-										isRtl ? 'mr-4' : 'ml-4'
-									}`}
+									className="flex shrink-0 items-center gap-1"
+									style={{ marginInlineStart: '1rem' }}
 								>
 									<button
 										type="button"
@@ -214,12 +215,13 @@ function ApiTab({
 						target="_blank"
 						rel="noreferrer"
 					>
-						<Button size="sm" variant="secondary">
+						<Button
+							size="sm"
+							variant="secondary"
+							icon={ExternalLink}
+							iconPosition="right"
+						>
 							{__('API Overview')}
-							<ExternalLink
-								size={14}
-								className={isRtl ? 'mr-2' : 'ml-2'}
-							/>
 						</Button>
 					</a>
 				</div>

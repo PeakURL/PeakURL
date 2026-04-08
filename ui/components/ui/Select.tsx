@@ -35,6 +35,7 @@ export function Select<T extends SelectValue>({
 						<ListboxButton
 							id={id}
 							aria-label={ariaLabel}
+							dir={isRtl ? 'rtl' : 'ltr'}
 							className={`flex w-full items-center justify-between gap-3 rounded-md border bg-surface px-4 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20 disabled:cursor-not-allowed disabled:opacity-60 ${
 								open
 									? 'border-accent ring-2 ring-accent/20'
@@ -48,6 +49,7 @@ export function Select<T extends SelectValue>({
 						</ListboxButton>
 
 						<ListboxOptions
+							dir={isRtl ? 'rtl' : 'ltr'}
 							anchor={{ to: 'bottom start', gap: 6, padding: 12 }}
 							modal={false}
 							transition
@@ -76,7 +78,7 @@ export function Select<T extends SelectValue>({
 												optionDisabled
 													? 'cursor-not-allowed opacity-50'
 													: 'cursor-pointer'
-											} ${optionClassName}`}
+											} ${isRtl ? 'text-right' : 'text-left'} ${optionClassName}`}
 										>
 											<span className="truncate">
 												{option.label}

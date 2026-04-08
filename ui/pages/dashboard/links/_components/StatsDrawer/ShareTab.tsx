@@ -8,10 +8,12 @@ import {
 	Mail,
 } from 'lucide-react';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import { copyToClipboard, getLinkDisplayTitle } from '@/utils';
 import type { SharePlatform, ShareTabProps } from './types';
 
 function ShareTab({ link, shortUrl }: ShareTabProps) {
+	const isRtl = isDocumentRtl();
 	const [copied, setCopied] = useState(false);
 
 	const handleCopy = async () => {
@@ -48,7 +50,11 @@ function ShareTab({ link, shortUrl }: ShareTabProps) {
 					{__('Short URL')}
 				</label>
 				<div className="flex items-center gap-2">
-					<code className="flex-1 font-mono text-sm text-accent bg-surface px-3 py-2 rounded-lg border border-stroke break-all">
+					<code
+						dir="ltr"
+						className="flex-1 font-mono text-sm text-accent bg-surface px-3 py-2 rounded-lg border border-stroke break-all"
+						style={{ textAlign: isRtl ? 'right' : 'left' }}
+					>
 						{shortUrl}
 					</code>
 					<button
@@ -70,7 +76,11 @@ function ShareTab({ link, shortUrl }: ShareTabProps) {
 				<label className="block text-xs font-medium text-text-muted mb-2">
 					{__('Destination URL')}
 				</label>
-				<div className="text-sm text-heading break-all">
+				<div
+					dir="ltr"
+					className="text-sm text-heading break-all"
+					style={{ textAlign: isRtl ? 'right' : 'left' }}
+				>
 					{link.destinationUrl}
 				</div>
 			</div>

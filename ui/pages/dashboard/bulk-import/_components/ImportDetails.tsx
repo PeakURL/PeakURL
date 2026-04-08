@@ -32,14 +32,16 @@ function ImportDetails({ results }: ImportDetailsProps) {
 						<div className="flex-1 min-w-0">
 							<div
 								dir="ltr"
-								className="truncate text-left text-sm font-medium text-heading"
+								className="truncate text-sm font-medium text-heading"
+								style={{ textAlign: isRtl ? 'right' : 'left' }}
 							>
 								<bdi>{result.url}</bdi>
 							</div>
 							{result.status === 'success' ? (
 								<div
 									dir="ltr"
-									className="text-left text-xs text-emerald-600 dark:text-emerald-400"
+									className="text-xs text-emerald-600 dark:text-emerald-400"
+									style={{ textAlign: isRtl ? 'right' : 'left' }}
 								>
 									<bdi>{result.shortUrl}</bdi>
 								</div>

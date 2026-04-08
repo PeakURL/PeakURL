@@ -130,6 +130,7 @@ export const DashboardSearch = () => {
 					/>
 					<input
 						type="text"
+						dir={query ? 'auto' : isRtl ? 'rtl' : 'ltr'}
 						value={query}
 						onFocus={handleFocus}
 						onChange={(event) => handleChange(event.target.value)}
@@ -143,8 +144,9 @@ export const DashboardSearch = () => {
 						placeholder={__('Search links, settings...')}
 						aria-label={__('Search the dashboard')}
 						className={`w-full rounded-lg border border-stroke bg-bg py-2 text-sm text-heading placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 ${
-							isRtl ? 'pr-10 pl-10 text-right' : 'pl-10 pr-10 text-left'
+							isRtl ? 'pr-10 pl-10' : 'pl-10 pr-10'
 						}`}
+						style={{ textAlign: isRtl ? 'right' : 'left' }}
 					/>
 					{query ? (
 						<button

@@ -45,7 +45,11 @@ function ApiKeyModals({
 						value={keyLabel}
 						onChange={(event) => setKeyLabel(event.target.value)}
 					/>
-					<div className="flex justify-end gap-2">
+					<div
+						className={`flex gap-2 ${
+							isRtl ? 'justify-start' : 'justify-end'
+						}`}
+					>
 						<Button
 							variant="secondary"
 							onClick={() => setShowCreateModal(false)}
@@ -82,15 +86,18 @@ function ApiKeyModals({
 						</p>
 					</div>
 					<div className="relative">
-						<pre className="p-3 bg-surface-alt rounded-lg text-sm font-mono break-all border border-stroke">
+						<pre
+							dir="ltr"
+							className="p-3 bg-surface-alt rounded-lg text-sm font-mono break-all border border-stroke"
+							style={{ textAlign: isRtl ? 'right' : 'left' }}
+						>
 							{newApiKey}
 						</pre>
 						<button
 							type="button"
 							onClick={() => copyToClipboard(newApiKey)}
-							className={`absolute top-2 p-1.5 text-text-muted hover:text-heading bg-surface rounded shadow-sm hover:shadow transition-all ${
-								isRtl ? 'left-2' : 'right-2'
-							}`}
+							className="absolute top-2 p-1.5 text-text-muted hover:text-heading bg-surface rounded shadow-sm hover:shadow transition-all"
+							style={{ insetInlineEnd: '0.5rem' }}
 							title={__('Copy to clipboard')}
 						>
 							<Copy size={14} />
@@ -102,7 +109,11 @@ function ApiKeyModals({
 								{__('Base API URL')}
 							</p>
 							<div className="relative">
-								<pre className="p-3 bg-surface-alt rounded-lg text-sm font-mono break-all border border-stroke">
+								<pre
+									dir="ltr"
+									className="p-3 bg-surface-alt rounded-lg text-sm font-mono break-all border border-stroke"
+									style={{ textAlign: isRtl ? 'right' : 'left' }}
+								>
 									{baseApiUrl}
 								</pre>
 								<button
@@ -115,9 +126,8 @@ function ApiKeyModals({
 											)
 										)
 									}
-									className={`absolute top-2 p-1.5 text-text-muted hover:text-heading bg-surface rounded shadow-sm hover:shadow transition-all ${
-										isRtl ? 'left-2' : 'right-2'
-									}`}
+									className="absolute top-2 p-1.5 text-text-muted hover:text-heading bg-surface rounded shadow-sm hover:shadow transition-all"
+									style={{ insetInlineEnd: '0.5rem' }}
 									title={__('Copy to clipboard')}
 								>
 									<Copy size={14} />
@@ -135,15 +145,16 @@ function ApiKeyModals({
 							'If this key is ever exposed, revoke it from the API Keys list and create a replacement.'
 						)}
 					</p>
-					<div className="flex justify-end gap-2">
+					<div
+						className={`flex gap-2 ${
+							isRtl ? 'justify-start' : 'justify-end'
+						}`}
+					>
 						<Button
 							variant="secondary"
+							icon={Copy}
 							onClick={() => copyToClipboard(newApiKey)}
 						>
-							<Copy
-								size={16}
-								className={isRtl ? 'ml-2' : 'mr-2'}
-							/>
 							{__('Copy Key')}
 						</Button>
 						<Button onClick={() => setShowKeyModal(false)}>

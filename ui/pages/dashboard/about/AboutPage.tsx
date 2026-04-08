@@ -33,10 +33,7 @@ import type {
 } from './types';
 
 /* ─── Helpers ─────────────────────────────────────────────── */
-const SectionTitle = ({
-	children,
-	subtitle,
-}: SectionTitleProps) => (
+const SectionTitle = ({ children, subtitle }: SectionTitleProps) => (
 	<div className="text-center mb-10">
 		<h2 className="text-2xl sm:text-3xl font-bold text-heading">
 			{children}
@@ -607,7 +604,7 @@ function AboutPage() {
 						</a>
 						<span className="opacity-30">•</span>
 						<a
-							href="https://github.com/Abd-Ur-Rehman/PeakURL"
+							href="https://github.com/PeakURL/PeakURL"
 							target="_blank"
 							rel="noreferrer"
 							className="inline-flex items-center gap-1 hover:text-accent transition-colors"

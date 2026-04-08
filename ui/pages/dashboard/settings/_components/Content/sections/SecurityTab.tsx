@@ -20,6 +20,7 @@ import {
 	useRevokeOtherSessionsMutation,
 } from '@/store/slices/api';
 import { __, sprintf } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import { formatDateTimeValue, getErrorMessage } from '@/utils';
 import type {
 	ProtectedAction,
@@ -45,6 +46,7 @@ function SecurityTab({
 	isUpdating,
 	notification,
 }: SecurityTabProps) {
+	const isRtl = isDocumentRtl();
 	const [recentCodes, setRecentCodes] = useState<string[]>([]);
 	const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
 	const [secret, setSecret] = useState<string | null>(null);
@@ -435,7 +437,11 @@ function SecurityTab({
 						}
 					/>
 				</div>
-				<div className="flex justify-end mt-5">
+				<div
+					className={`mt-5 flex ${
+						isRtl ? 'justify-start' : 'justify-end'
+					}`}
+				>
 					<Button size="sm" onClick={onSubmit} disabled={isUpdating}>
 						{isUpdating ? __('Updating...') : __('Update Password')}
 					</Button>
@@ -443,7 +449,10 @@ function SecurityTab({
 			</div>
 
 			<div className="bg-surface border border-stroke rounded-lg p-5 space-y-4">
-				<div className="flex items-center justify-between">
+				<div
+					dir={isRtl ? 'rtl' : 'ltr'}
+					className="flex items-center justify-between"
+				>
 					<div>
 						<h2 className="text-base font-semibold text-heading">
 							{__('Two-Factor Authentication')}
@@ -494,7 +503,8 @@ function SecurityTab({
 				</div>
 
 				<div
-					className={`flex items-start gap-3 p-3 rounded-lg border ${
+					dir={isRtl ? 'rtl' : 'ltr'}
+					className={`flex items-start gap-3 rounded-lg border p-3 ${
 						twoFactorEnabled
 							? 'border-emerald-200 bg-emerald-50 dark:border-emerald-500/30 dark:bg-emerald-500/10'
 							: 'border-amber-200 bg-amber-50 dark:border-amber-500/30 dark:bg-amber-500/10'
@@ -513,7 +523,7 @@ function SecurityTab({
 							/>
 						)}
 					</div>
-					<div className="flex-1">
+					<div className="flex-1" style={{ textAlign: 'start' }}>
 						<p className="font-medium text-sm text-heading">
 							{twoFactorEnabled
 								? __('2FA is enabled')
@@ -546,7 +556,10 @@ function SecurityTab({
 
 				{!twoFactorEnabled && hasTwoFactorSetupDetails && (
 					<div className="border border-stroke rounded-lg p-4 space-y-3">
-						<div className="flex items-start gap-3">
+						<div
+							dir={isRtl ? 'rtl' : 'ltr'}
+							className="flex items-start gap-3"
+						>
 							<div className="p-2 rounded-lg bg-surface shadow-sm">
 								<ShieldCheck
 									size={18}
@@ -584,16 +597,25 @@ function SecurityTab({
 								)}
 							</div>
 							<div className="space-y-3">
-								<div className="text-xs text-text-muted break-all border border-dashed border-stroke rounded-lg p-3 bg-surface-alt">
+								<div
+									dir="ltr"
+									className="text-xs text-text-muted break-all border border-dashed border-stroke rounded-lg p-3 bg-surface-alt"
+									style={{ textAlign: isRtl ? 'right' : 'left' }}
+								>
 									{__('Secret:')} {secret}
 								</div>
 								{otpauthUrl ? (
-									<div className="text-xs text-text-muted break-all border border-dashed border-stroke rounded-lg p-3 bg-surface-alt">
+									<div
+										dir="ltr"
+										className="text-xs text-text-muted break-all border border-dashed border-stroke rounded-lg p-3 bg-surface-alt"
+										style={{ textAlign: isRtl ? 'right' : 'left' }}
+									>
 										{__('Authenticator URI:')} {otpauthUrl}
 									</div>
 								) : null}
 								<Input
 									label={__('6-digit code')}
+									valueDirection="ltr"
 									value={verificationCode}
 									onChange={(e) =>
 										setVerificationCode(e.target.value)
@@ -629,7 +651,10 @@ function SecurityTab({
 
 				{twoFactorEnabled && recentCodes.length > 0 && (
 					<div className="border border-dashed border-stroke rounded-lg p-4">
-						<div className="flex items-center justify-between">
+						<div
+							dir={isRtl ? 'rtl' : 'ltr'}
+							className="flex items-center justify-between"
+						>
 							<div>
 								<p className="font-medium text-sm text-heading">
 									{__('New backup codes')}
@@ -668,8 +693,11 @@ function SecurityTab({
 				)}
 			</div>
 
-			<div className="bg-surface border border-stroke rounded-lg p-5">
-				<div className="flex items-center justify-between mb-4">
+				<div className="bg-surface border border-stroke rounded-lg p-5">
+				<div
+					dir={isRtl ? 'rtl' : 'ltr'}
+					className="mb-4 flex items-center justify-between"
+				>
 					<div>
 						<h2 className="text-base font-semibold text-heading">
 							{__('Active Sessions')}
@@ -707,6 +735,7 @@ function SecurityTab({
 						sessions.map((session: SecuritySession) => (
 							<div
 								key={session.id}
+								dir={isRtl ? 'rtl' : 'ltr'}
 								className={`flex items-center justify-between p-3 border border-stroke rounded-lg ${
 									session.revokedAt ? 'opacity-70' : ''
 								}`}
@@ -718,7 +747,7 @@ function SecurityTab({
 											className="text-text-muted"
 										/>
 									</div>
-									<div>
+									<div style={{ textAlign: 'start' }}>
 										<p className="font-medium text-sm text-heading">
 											{session.browser || __('Browser')} •{' '}
 											{session.os || __('Unknown OS')}

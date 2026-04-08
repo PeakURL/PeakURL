@@ -139,11 +139,18 @@ https://example.com/page3 custom-alias`}
 								<ul className="text-sm text-heading space-y-2.5">
 									<li className="flex items-start gap-2">
 										<Lightbulb className="mt-0.5 h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
-										<span>
-											{__('Format:')}{' '}
-											<code>URL [alias]</code> {__('or')}{' '}
-											<code>URL, alias</code>
-										</span>
+										<div className="space-y-1">
+											<p>{__('Format:')}</p>
+											<div
+												dir="ltr"
+												className="flex flex-wrap items-center gap-2 text-xs"
+												style={{ textAlign: 'left' }}
+											>
+												<code>URL [alias]</code>
+												<span>{__('or')}</span>
+												<code>URL, alias</code>
+											</div>
+										</div>
 									</li>
 									<li className="flex items-start gap-2">
 										<Lightbulb className="mt-0.5 h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />

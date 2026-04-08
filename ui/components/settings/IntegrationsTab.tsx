@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Button, ConfirmDialog, Modal } from '@/components/ui';
+import { Button, ConfirmDialog, Input, Modal } from '@/components/ui';
 import {
 	Copy,
 	ExternalLink,
@@ -147,7 +147,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 
 			<div className="bg-surface border border-(--color-stroke) rounded-lg p-5">
 				<div className="mb-5 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-					<div>
+					<div style={{ textAlign: 'start' }}>
 						<h3 className="text-base font-semibold text-heading">
 							{__('Webhooks')}
 						</h3>
@@ -161,6 +161,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 						href="https://peakurl.org/docs/integrations"
 						target="_blank"
 						rel="noreferrer"
+						dir={isRtl ? 'rtl' : 'ltr'}
 						className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline"
 					>
 						{__('Webhook docs')}
@@ -180,42 +181,36 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 						<div>
-							<label className="block text-sm font-medium text-muted mb-1">
-								{__('Endpoint URL')}
-							</label>
-							<div className="relative">
-								<Link2
-									className={`absolute top-1/2 -translate-y-1/2 text-muted ${
-										isRtl ? 'right-3' : 'left-3'
-									}`}
-									size={16}
-								/>
-								<input
-									type="url"
-									placeholder="https://hooks.zapier.com/hooks/catch/123456/peakurl"
-									value={form.url}
-									onChange={(e) =>
-										setForm((prev) => ({
-											...prev,
-											url: e.target.value,
-										}))
-									}
-									className={`w-full bg-surface border border-stroke rounded-lg py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-accent ${
-										isRtl
-											? 'pr-10 pl-3 text-right'
-											: 'pl-10 pr-3 text-left'
-									}`}
-								/>
-							</div>
-							<p className="mt-2 text-xs leading-5 text-text-muted">
-								{__(
-									'Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route like'
-								)}
-								<code className="mx-1 rounded bg-surface px-1.5 py-0.5 text-[11px]">
+							<Input
+								label={__('Endpoint URL')}
+								type="url"
+								valueDirection="ltr"
+								icon={Link2}
+								placeholder="https://hooks.zapier.com/hooks/catch/123456/peakurl"
+								value={form.url}
+								autoCapitalize="off"
+								spellCheck={false}
+								onChange={(event) =>
+									setForm((prev) => ({
+										...prev,
+										url: event.target.value,
+									}))
+								}
+							/>
+							<div className="mt-2 space-y-1.5 text-xs leading-5 text-text-muted">
+								<p>
+									{__(
+										'Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route like'
+									)}
+								</p>
+								<code
+									dir="ltr"
+									className="block w-fit max-w-full rounded bg-surface px-1.5 py-0.5 text-[11px]"
+									style={{ textAlign: 'left' }}
+								>
 									https://example.com/api/webhooks/peakurl
 								</code>
-								.
-							</p>
+							</div>
 						</div>
 
 						<div>
@@ -226,7 +221,9 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 								{eventOptions.map((event) => (
 									<label
 										key={event.id}
+										dir={isRtl ? 'rtl' : 'ltr'}
 										className="flex items-center gap-2 text-sm text-muted cursor-pointer select-none"
+										style={{ textAlign: 'start' }}
 									>
 										<input
 											type="checkbox"
@@ -244,20 +241,21 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 						</div>
 					</div>
 
-					<div className="flex justify-end mt-4">
+					<div
+						className={`mt-4 flex ${
+							isRtl ? 'justify-start' : 'justify-end'
+						}`}
+					>
 						<Button
 							size="sm"
+							icon={Plus}
+							loading={isCreating}
 							onClick={handleCreate}
-							disabled={!canCreate || isCreating}
+							disabled={!canCreate}
 						>
-							{isCreating ? (
-								__('Creating...')
-							) : (
-								<>
-									<Plus size={16} className="mr-2" />
-									{__('Create Webhook')}
-								</>
-							)}
+							{isCreating
+								? __('Creating...')
+								: __('Create Webhook')}
 						</Button>
 					</div>
 				</div>
@@ -289,9 +287,19 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 								key={wh.id}
 								className="p-4 border border-(--color-stroke) rounded-lg"
 							>
-								<div className="flex items-start justify-between gap-4">
-									<div className="min-w-0 flex-1">
-										<p className="text-sm font-medium text-heading truncate">
+								<div
+									dir={isRtl ? 'rtl' : 'ltr'}
+									className="flex items-start justify-between gap-4"
+								>
+									<div
+										className="min-w-0 flex-1"
+										style={{ textAlign: 'start' }}
+									>
+										<p
+											dir="ltr"
+											className="truncate text-sm font-medium text-heading"
+											style={{ textAlign: isRtl ? 'right' : 'left' }}
+										>
 											{wh.url}
 										</p>
 										<div className="flex flex-wrap gap-1.5 mt-2">
@@ -311,18 +319,28 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 										</div>
 
 										<div className="mt-3 flex items-center gap-2">
-											<span className="text-xs text-muted font-mono truncate">
-												{wh.secretHint ||
-													__('Signing secret stored')}
-											</span>
+											{wh.secretHint ? (
+												<span
+													dir="ltr"
+													className="text-xs text-muted font-mono truncate"
+												>
+													{wh.secretHint}
+												</span>
+											) : (
+												<span className="text-xs text-muted">
+													{__('Signing secret stored')}
+												</span>
+											)}
 										</div>
 
 										{wh.createdAt && (
 											<p className="text-xs text-muted mt-2">
 												{__('Created:')}{' '}
-												{new Date(
-													wh.createdAt
-												).toLocaleDateString()}
+												<bdi dir="auto">
+													{new Date(
+														wh.createdAt
+													).toLocaleDateString()}
+												</bdi>
 											</p>
 										)}
 									</div>
@@ -368,14 +386,18 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 							{__('Endpoint URL')}
 						</p>
 						<p className="mt-2 text-sm font-medium text-heading break-all">
-							{createdWebhook?.url}
+							<bdi dir="ltr">{createdWebhook?.url}</bdi>
 						</p>
 					</div>
 
 					<div className="relative">
-						<pre className="break-all rounded-lg border border-stroke bg-surface-alt p-3 text-sm font-mono">
-							{createdWebhook?.secret}
-						</pre>
+							<pre
+								dir="ltr"
+								className="break-all rounded-lg border border-stroke bg-surface-alt p-3 text-sm font-mono"
+								style={{ textAlign: isRtl ? 'right' : 'left' }}
+							>
+								{createdWebhook?.secret}
+							</pre>
 						<button
 							type="button"
 							onClick={() =>
@@ -384,7 +406,8 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 									__('Secret copied')
 								)
 							}
-							className="absolute right-2 top-2 rounded bg-surface p-1.5 text-text-muted shadow-sm transition-all hover:text-heading hover:shadow"
+							className="absolute top-2 rounded bg-surface p-1.5 text-text-muted shadow-sm transition-all hover:text-heading hover:shadow"
+							style={{ insetInlineEnd: '0.5rem' }}
 							title={__('Copy to clipboard')}
 						>
 							<Copy size={14} />
@@ -397,9 +420,14 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 						)}
 					</p>
 
-					<div className="flex justify-end gap-2">
+					<div
+						className={`flex gap-2 ${
+							isRtl ? 'justify-start' : 'justify-end'
+						}`}
+					>
 						<Button
 							variant="secondary"
+							icon={Copy}
 							onClick={() =>
 								copyToClipboard(
 									createdWebhook?.secret,
@@ -407,7 +435,6 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 								)
 							}
 						>
-							<Copy size={16} className="mr-2" />
 							{__('Copy Secret')}
 						</Button>
 						<Button onClick={() => setCreatedWebhook(null)}>

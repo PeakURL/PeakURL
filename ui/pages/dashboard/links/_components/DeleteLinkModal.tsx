@@ -83,6 +83,7 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 								<code
 									dir="ltr"
 									className="text-sm text-accent font-mono"
+									style={{ textAlign: isRtl ? 'right' : 'left' }}
 								>
 									{shortUrl}
 								</code>
@@ -91,7 +92,11 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 								<p className="text-xs font-medium text-text-muted mb-1">
 									{__('Destination')}
 								</p>
-								<p className="text-sm text-heading break-all">
+								<p
+									dir="ltr"
+									className="text-sm text-heading break-all"
+									style={{ textAlign: isRtl ? 'right' : 'left' }}
+								>
 									{link.destinationUrl}
 								</p>
 							</div>

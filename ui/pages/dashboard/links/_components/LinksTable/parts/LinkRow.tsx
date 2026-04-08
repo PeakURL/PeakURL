@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { isPast } from 'date-fns';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import { formatRelativeTime, getLinkDisplayTitle } from '@/utils';
 import type { LinkRowProps } from '../types';
 
@@ -26,6 +27,7 @@ function LinkRow({
 	onQRCode,
 	formatNumber,
 }: LinkRowProps) {
+	const isRtl = isDocumentRtl();
 	const statusLabel =
 		'active' === link.status
 			? __('Active')
@@ -68,7 +70,10 @@ function LinkRow({
 					</div>
 					<div className="min-w-0">
 						<div className="flex items-center gap-1.5">
-							<code className="font-mono font-semibold text-accent text-sm">
+							<code
+								dir="ltr"
+								className="font-mono font-semibold text-accent text-sm"
+							>
 								/{link.alias || link.shortCode}
 							</code>
 							<button
@@ -98,7 +103,9 @@ function LinkRow({
 			<td className="px-4 py-3">
 				<div className="max-w-xs">
 					<div
+						dir="ltr"
 						className="text-sm text-text-muted truncate"
+						style={{ textAlign: isRtl ? 'right' : 'left' }}
 						title={link.destinationUrl}
 					>
 						{link.destinationUrl}
@@ -191,7 +198,11 @@ function LinkRow({
 				</div>
 			</td>
 			<td className="px-4 py-3">
-				<div className="flex items-center justify-end gap-1">
+				<div
+					className={`flex items-center gap-1 ${
+						isRtl ? 'justify-start' : 'justify-end'
+					}`}
+				>
 					<button
 						onClick={() => onQRCode(link)}
 						className="w-7 h-7 flex items-center justify-center text-text-muted hover:text-accent hover:bg-accent/10 rounded-lg transition-all"

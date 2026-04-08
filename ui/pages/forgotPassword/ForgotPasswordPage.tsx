@@ -140,6 +140,7 @@ function ForgotPasswordPage() {
 									label={__('Email or username')}
 									type="text"
 									icon={Mail}
+									valueDirection="ltr"
 									value={identifier}
 									name="identifier"
 									onChange={(event) =>

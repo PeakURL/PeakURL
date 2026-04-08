@@ -39,7 +39,8 @@ const Sidebar = ({ tabs, activeTab }: SidebarProps) => {
 							<Link
 								key={tab.id}
 								to={`/dashboard/settings/${tab.id}`}
-								className={`w-full flex items-center gap-2.5 px-3 py-2.5 text-sm rounded-lg transition-all ${
+								dir={isRtl ? 'rtl' : 'ltr'}
+								className={`w-full flex items-center justify-start gap-2.5 px-3 py-2.5 text-sm rounded-lg transition-all ${
 									activeTab === tab.id
 										? 'bg-accent/10 dark:bg-accent/20 text-accent font-medium'
 										: 'text-text-muted hover:bg-surface-alt hover:text-heading'

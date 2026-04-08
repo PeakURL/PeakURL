@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react';
 import QRCode from 'qrcode';
 import { buildShortUrl, copyToClipboard } from '@/utils';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import type { QRCodeModalProps } from './types';
 
 function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
+	const isRtl = isDocumentRtl();
 	const [qrDataUrl, setQrDataUrl] = useState('');
 	const [copied, setCopied] = useState(false);
 	const shortUrl = link ? buildShortUrl(link) : '';
@@ -62,7 +64,11 @@ function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
 			<div className="fixed inset-0 bg-black/30" aria-hidden="true" />
 
 			<div className="fixed inset-0 flex items-center justify-center p-4">
-				<DialogPanel className="mx-auto max-w-md w-full bg-surface rounded-lg shadow-xl">
+				<DialogPanel
+					className={`mx-auto max-w-md w-full bg-surface rounded-lg shadow-xl ${
+						isRtl ? 'text-right' : 'text-left'
+					}`}
+				>
 					{/* Header */}
 					<div className="flex items-center justify-between p-6 border-b border-stroke">
 						<DialogTitle className="text-lg font-semibold text-heading">
@@ -101,7 +107,11 @@ function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
 							<p className="text-xs font-medium text-text-muted mb-1">
 								{__('Short URL')}
 							</p>
-							<code className="text-sm text-accent break-all">
+							<code
+								dir="ltr"
+								className="text-sm text-accent break-all"
+								style={{ textAlign: isRtl ? 'right' : 'left' }}
+							>
 								{shortUrl}
 							</code>
 						</div>

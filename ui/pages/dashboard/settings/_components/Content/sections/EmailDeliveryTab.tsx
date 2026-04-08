@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { AlertCircle, Mail, Send, Server } from 'lucide-react';
 import { Button, Input, Select } from '@/components/ui';
 import { __, sprintf } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import type { SmtpEncryption } from '../types';
 import type {
 	EmailDeliveryTabProps,
@@ -18,15 +19,17 @@ function MethodButton({
 	description,
 	onClick,
 }: MethodButtonProps) {
+	const isRtl = isDocumentRtl();
+
 	return (
 		<button
 			type="button"
 			onClick={onClick}
-			className={`rounded-lg border p-4 text-left transition ${
+			className={`rounded-lg border p-4 transition ${
 				isActive
 					? 'border-accent bg-accent/10 text-heading'
 					: 'border-stroke bg-surface-alt text-text-muted hover:border-accent/40 hover:text-heading'
-			}`}
+			} ${isRtl ? 'text-right' : 'text-left'}`}
 		>
 			<p className="text-sm font-semibold">{title}</p>
 			<p className="mt-1 text-sm leading-6">{description}</p>

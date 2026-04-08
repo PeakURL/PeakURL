@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Select } from '@/components/ui';
 import { useUpdateUrlMutation } from '@/store/slices/api';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import {
 	buildShortUrl,
 	getErrorMessage,
@@ -22,6 +23,7 @@ import type {
 import type { SelectOption } from '@/components/ui';
 
 function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
+	const isRtl = isDocumentRtl();
 	const getInitialTitle = () => normalizeLinkTitle(link?.title);
 	const getInitialStatus = (): LinkStatus => link?.status || 'active';
 	const getInitialExpiresAt = () => toLocalDateTimeValue(link?.expiresAt);
@@ -88,7 +90,11 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 			<div className="fixed inset-0 bg-black/30" aria-hidden="true" />
 
 			<div className="fixed inset-0 flex items-center justify-center p-4">
-				<DialogPanel className="mx-auto max-w-lg w-full bg-surface rounded-lg shadow-xl">
+				<DialogPanel
+					className={`mx-auto w-full max-w-lg rounded-lg bg-surface shadow-xl ${
+						isRtl ? 'text-right' : 'text-left'
+					}`}
+				>
 					{/* Header */}
 					<div className="flex items-center justify-between p-6 border-b border-stroke">
 						<DialogTitle className="text-lg font-semibold text-heading">
@@ -118,7 +124,10 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 								{__('Short URL')}
 							</label>
 							<div className="px-3 py-2 bg-surface-alt border border-stroke rounded-lg">
-								<code className="text-sm text-text-muted font-mono">
+								<code
+									dir="ltr"
+									className="text-sm text-text-muted font-mono"
+								>
 									{shortUrl}
 								</code>
 							</div>

@@ -2,6 +2,7 @@ import type { SubmitEvent } from 'react';
 import { useState } from 'react';
 import { Button } from '@/components/ui';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import { formatByteSize, formatDateTimeValue } from '@/utils';
 import {
 	AlertCircle,
@@ -24,6 +25,7 @@ function StateCard({
 	description,
 	variant = 'info',
 }: StateCardProps) {
+	const isRtl = isDocumentRtl();
 	const styles: Record<StateCardVariant, string> = {
 		info: 'border-blue-200 bg-blue-50 text-blue-950 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200',
 		success:
@@ -33,7 +35,11 @@ function StateCard({
 
 	return (
 		<div className={`rounded-lg border p-4 ${styles[variant]}`}>
-			<div className="flex items-start gap-3">
+			<div
+				className={`flex items-start gap-3 ${
+					isRtl ? 'flex-row-reverse text-right' : 'text-left'
+				}`}
+			>
 				<Icon size={18} className="mt-0.5 shrink-0" />
 				<div className="space-y-1">
 					<h3 className="text-sm font-semibold">{title}</h3>
@@ -55,6 +61,7 @@ function LocationDataTab({
 	onSave,
 	onDownload,
 }: LocationDataTabProps) {
+	const isRtl = isDocumentRtl();
 	const [accountIdInput, setAccountIdInput] = useState<string | null>(null);
 	const [licenseKey, setLicenseKey] = useState('');
 	const [isEditingCredentials, setIsEditingCredentials] = useState(false);
@@ -92,9 +99,17 @@ function LocationDataTab({
 	return (
 		<div className="space-y-5">
 			<div className="rounded-lg border border-stroke bg-surface p-5">
-				<div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+				<div
+					className={`flex flex-col gap-4 lg:items-center lg:justify-between ${
+						isRtl ? 'lg:flex-row-reverse' : 'lg:flex-row'
+					}`}
+				>
 					<div className="space-y-2">
-						<div className="flex items-center gap-3">
+						<div
+							className={`flex items-center gap-3 ${
+								isRtl ? 'flex-row-reverse text-right' : 'text-left'
+							}`}
+						>
 							<div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600 dark:bg-primary-500/20 dark:text-primary-400">
 								<MapPin size={18} />
 							</div>
@@ -273,12 +288,13 @@ function LocationDataTab({
 									type="text"
 									inputMode="numeric"
 									autoComplete="off"
+									dir="ltr"
 									value={accountId}
 									onChange={(event) =>
 										setAccountIdInput(event.target.value)
 									}
 									placeholder="123456"
-									className="w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2.5 text-sm text-heading outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+									className="w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2.5 text-left text-sm text-heading outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
 								/>
 							</div>
 
@@ -289,6 +305,7 @@ function LocationDataTab({
 								<input
 									type="password"
 									autoComplete="new-password"
+									dir="ltr"
 									value={licenseKey}
 									onChange={(event) =>
 										setLicenseKey(event.target.value)
@@ -302,7 +319,7 @@ function LocationDataTab({
 													'Enter your MaxMind license key'
 												)
 									}
-									className="w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2.5 text-sm text-heading outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+									className="w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2.5 text-left text-sm text-heading outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
 								/>
 							</div>
 						</div>
@@ -310,7 +327,9 @@ function LocationDataTab({
 						{hasSavedCredentials && (
 							<p className="text-xs text-text-muted">
 								{__('Saved license key:')}{' '}
-								{effectiveStatus?.licenseKeyHint}
+								<span dir="ltr">
+									{effectiveStatus?.licenseKeyHint}
+								</span>
 							</p>
 						)}
 
@@ -351,12 +370,20 @@ function LocationDataTab({
 }
 
 function StatCard({ label, value }: StatCardProps) {
+	const isRtl = isDocumentRtl();
+
 	return (
-		<div className="rounded-lg border border-stroke bg-surface p-5">
-			<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
+		<div
+			className={`rounded-lg border border-stroke bg-surface p-5 ${
+				isRtl ? 'text-right' : 'text-left'
+			}`}
+		>
+			<p className="text-xs font-semibold tracking-[0.14em] text-text-muted">
 				{label}
 			</p>
-			<p className="mt-3 text-lg font-semibold text-heading">{value}</p>
+			<p className="mt-3 text-lg font-semibold text-heading">
+				<bdi dir="auto">{value}</bdi>
+			</p>
 		</div>
 	);
 }

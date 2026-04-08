@@ -10,6 +10,7 @@ import {
 	Download,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { isDocumentRtl } from '@/i18n/direction';
 import type { SettingsTabIcon, SettingsTabItem, SidebarProps } from './types';
 
 // Icon mapping
@@ -26,6 +27,8 @@ const iconMap: Record<SettingsTabIcon, typeof Settings> = {
 };
 
 const Sidebar = ({ tabs, activeTab }: SidebarProps) => {
+	const isRtl = isDocumentRtl();
+
 	return (
 		<div className="lg:col-span-1">
 			<div className="bg-surface border border-stroke rounded-lg p-2 sticky top-6">
@@ -36,11 +39,11 @@ const Sidebar = ({ tabs, activeTab }: SidebarProps) => {
 							<Link
 								key={tab.id}
 								to={`/dashboard/settings/${tab.id}`}
-								className={`w-full flex items-center gap-2.5 px-3 py-2.5 text-sm text-left rounded-lg transition-all ${
+								className={`w-full flex items-center gap-2.5 px-3 py-2.5 text-sm rounded-lg transition-all ${
 									activeTab === tab.id
 										? 'bg-accent/10 dark:bg-accent/20 text-accent font-medium'
 										: 'text-text-muted hover:bg-surface-alt hover:text-heading'
-								}`}
+								} ${isRtl ? 'text-right' : 'text-left'}`}
 							>
 								{IconComponent && (
 									<IconComponent

@@ -2,8 +2,10 @@ import { Button } from '@/components/ui';
 import { ExternalLink } from 'lucide-react';
 import { API_SERVER_BASE_URL } from '@/constants';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 
 const ApiImport = () => {
+	const isRtl = isDocumentRtl();
 	const apiKey = 'YOUR_API_KEY';
 
 	return (
@@ -21,7 +23,10 @@ const ApiImport = () => {
 					<h3 className="font-medium text-sm text-heading mb-3">
 						{__('Example Request')}
 					</h3>
-					<pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs border border-gray-700">
+					<pre
+						dir="ltr"
+						className="bg-gray-900 p-4 rounded-lg border border-gray-700 text-left text-xs text-gray-100 overflow-x-auto"
+					>
 						<code>{`POST ${API_SERVER_BASE_URL}/urls/bulk
 Authorization: Bearer ${apiKey}
 Content-Type: application/json
@@ -47,7 +52,10 @@ Content-Type: application/json
 					<h3 className="font-medium text-sm text-heading mb-3">
 						{__('Response')}
 					</h3>
-					<pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs border border-gray-700">
+					<pre
+						dir="ltr"
+						className="bg-gray-900 p-4 rounded-lg border border-gray-700 text-left text-xs text-gray-100 overflow-x-auto"
+					>
 						<code>{`{
   "success": true,
   "data": {
@@ -77,7 +85,9 @@ Content-Type: application/json
 					rel="noreferrer"
 				>
 					<Button size="sm">
-						<ExternalLink className="mr-2 h-4 w-4" />
+						<ExternalLink
+							className={`${isRtl ? 'ml-2' : 'mr-2'} h-4 w-4`}
+						/>
 						{__('View API Documentation')}
 					</Button>
 				</a>

@@ -1,6 +1,7 @@
 import { MoreHorizontal, Lock, Info } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import type {
 	InstalledPluginsTableProps,
 	PluginPreviewSkeletonProps,
@@ -30,6 +31,8 @@ function StatusPill({ active }: PluginStatusPillProps) {
 }
 
 function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
+	const isRtl = isDocumentRtl();
+
 	if (plugins.length === 0) {
 		return (
 			<div className="rounded-xl border border-dashed border-stroke bg-surface-alt/30 px-6 py-12 text-center">
@@ -53,20 +56,28 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 			<div className="overflow-x-auto">
 				<table className="min-w-full">
 					<thead>
-						<tr className="border-b border-stroke bg-surface-alt/60">
-							<th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+						<tr
+							className={`border-b border-stroke bg-surface-alt/60 ${
+								isRtl ? 'text-right' : 'text-left'
+							}`}
+						>
+							<th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted">
 								{__('Plugin')}
 							</th>
-							<th className="hidden px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-text-muted md:table-cell">
+							<th className="hidden px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted md:table-cell">
 								{__('Version')}
 							</th>
-							<th className="hidden px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-text-muted sm:table-cell">
+							<th className="hidden px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted sm:table-cell">
 								{__('Status')}
 							</th>
-							<th className="hidden px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-text-muted lg:table-cell">
+							<th className="hidden px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted lg:table-cell">
 								{__('Author')}
 							</th>
-							<th className="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-text-muted">
+							<th
+								className={`px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted ${
+									isRtl ? 'text-left' : 'text-right'
+								}`}
+							>
 								{__('Actions')}
 							</th>
 						</tr>
@@ -81,7 +92,13 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 								>
 									{/* Plugin name + desc (blurred) */}
 									<td className="px-5 py-4">
-										<div className="flex items-center gap-3">
+										<div
+											className={`flex items-center gap-3 ${
+												isRtl
+													? 'flex-row-reverse text-right'
+													: ''
+											}`}
+										>
 											<div
 												className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${plugin.gradient} opacity-80`}
 											>
@@ -117,7 +134,13 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 									</td>
 									{/* Actions (disabled) */}
 									<td className="px-5 py-4">
-										<div className="flex items-center justify-end gap-1">
+										<div
+											className={`flex items-center gap-1 ${
+												isRtl
+													? 'justify-start'
+													: 'justify-end'
+											}`}
+										>
 											<Button
 												variant="secondary"
 												size="xs"

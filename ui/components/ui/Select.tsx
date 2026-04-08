@@ -5,6 +5,7 @@ import {
 	ListboxOptions,
 } from '@headlessui/react';
 import { Check, ChevronDown } from 'lucide-react';
+import { isDocumentRtl } from '@/i18n/direction';
 import type { SelectProps, SelectValue } from './types';
 
 export type { SelectOption, SelectProps, SelectValue } from './types';
@@ -22,6 +23,7 @@ export function Select<T extends SelectValue>({
 	optionClassName = '',
 	...props
 }: SelectProps<T>) {
+	const isRtl = isDocumentRtl();
 	const selectedOption =
 		options.find((option) => option.value === value) ?? options[0];
 
@@ -33,11 +35,11 @@ export function Select<T extends SelectValue>({
 						<ListboxButton
 							id={id}
 							aria-label={ariaLabel}
-							className={`flex w-full items-center justify-between gap-3 rounded-md border bg-surface px-4 py-2 text-left text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20 disabled:cursor-not-allowed disabled:opacity-60 ${
+							className={`flex w-full items-center justify-between gap-3 rounded-md border bg-surface px-4 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20 disabled:cursor-not-allowed disabled:opacity-60 ${
 								open
 									? 'border-accent ring-2 ring-accent/20'
 									: 'border-stroke'
-							} ${buttonClassName}`}
+							} ${isRtl ? 'text-right' : 'text-left'} ${buttonClassName}`}
 						>
 							<span className="truncate">
 								{selectedOption?.label}

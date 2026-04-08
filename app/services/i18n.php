@@ -35,6 +35,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 class I18n {
 
 	/**
+	 * Base locale codes that use right-to-left text direction.
+	 *
+	 * @var array<int, string>
+	 * @since 1.0.7
+	 */
+	private const RTL_BASE_LOCALES = array(
+		'ar',
+		'arc',
+		'azb',
+		'ckb',
+		'dv',
+		'fa',
+		'he',
+		'ps',
+		'sd',
+		'ug',
+		'ur',
+		'yi',
+	);
+
+	/**
+	 * Locale aliases normalized to PeakURL's canonical locale codes.
+	 *
+	 * @var array<string, string>
+	 * @since 1.0.7
+	 */
+	private const LOCALE_ALIASES = array(
+		'ur_PK' => 'ur',
+	);
+
+	/**
 	 * Runtime configuration map.
 	 *
 	 * @var array<string, mixed>
@@ -163,7 +194,13 @@ class I18n {
 				: ucfirst( strtolower( $part ) );
 		}
 
-		return implode( '_', $parts );
+		$normalized_locale = implode( '_', $parts );
+
+		if ( isset( self::LOCALE_ALIASES[ $normalized_locale ] ) ) {
+			return self::LOCALE_ALIASES[ $normalized_locale ];
+		}
+
+		return $normalized_locale;
 	}
 
 	/**
@@ -435,6 +472,36 @@ class I18n {
 	}
 
 	/**
+	 * Determine whether a locale should render right-to-left.
+	 *
+	 * @param string|null $locale Optional locale override.
+	 * @return bool
+	 * @since 1.0.7
+	 */
+	public function is_locale_rtl( ?string $locale = null ): bool {
+		$resolved_locale = null === $locale
+			? $this->get_current_locale()
+			: $this->normalize_locale( $locale );
+
+		return in_array(
+			$this->get_base_locale( $resolved_locale ),
+			self::RTL_BASE_LOCALES,
+			true,
+		);
+	}
+
+	/**
+	 * Get the document text direction for a locale.
+	 *
+	 * @param string|null $locale Optional locale override.
+	 * @return string
+	 * @since 1.0.7
+	 */
+	public function get_text_direction( ?string $locale = null ): string {
+		return $this->is_locale_rtl( $locale ) ? 'rtl' : 'ltr';
+	}
+
+	/**
 	 * Ensure the persistent languages directory exists when the install can create it.
 	 *
 	 * @return bool True when the languages directory exists after the repair attempt.
@@ -579,6 +646,8 @@ class I18n {
 			'englishName'        => $english_name,
 			'englishLabel'       => $english_label,
 			'territory'          => $territory,
+			'textDirection'      => $this->get_text_direction( $locale ),
+			'isRtl'              => $this->is_locale_rtl( $locale ),
 			'hasPhpTranslations' => ! empty( $flags['php'] ),
 			'hasJsTranslations'  => ! empty( $flags['js'] ),
 			'isDefault'          => $locale === $this->get_default_locale(),

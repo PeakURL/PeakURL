@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui';
+import { isDocumentRtl } from '@/i18n/direction';
 import { useBulkCreateUrlMutation } from '@/store/slices/api';
 import { buildShortUrl, getErrorMessage } from '@/utils';
 import ImportSummary from './ImportSummary';
@@ -13,6 +14,7 @@ import type {
 } from './types';
 
 const PasteImport = () => {
+	const isRtl = isDocumentRtl();
 	const [text, setText] = useState('');
 	const [status, setStatus] = useState<ImportStatus>('idle');
 	const [results, setResults] = useState<ImportResult[]>([]);
@@ -108,6 +110,7 @@ const PasteImport = () => {
 								{__('URLs (one per line)')}
 							</label>
 							<textarea
+								dir="ltr"
 								className="w-full h-64 bg-surface-alt border border-stroke rounded-lg px-4 py-3 text-sm text-heading placeholder-text-text-muted focus:ring-2 focus:ring-accent focus:border-accent outline-none resize-none font-mono transition-colors"
 								placeholder={`https://example.com/page1
 https://example.com/page2, my-alias
@@ -121,7 +124,9 @@ https://example.com/page3 custom-alias`}
 									onClick={handleImport}
 									disabled={!text.trim()}
 								>
-									<WandSparkles className="mr-2 h-4 w-4" />
+									<WandSparkles
+										className={`${isRtl ? 'ml-2' : 'mr-2'} h-4 w-4`}
+									/>
 									{__('Create Links')}
 								</Button>
 							</div>

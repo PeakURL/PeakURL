@@ -1,6 +1,7 @@
 import { Modal, Button, Input } from '@/components/ui';
 import { Copy } from 'lucide-react';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import type { ApiKeyModalsProps } from './types';
 
 function ApiKeyModals({
@@ -16,6 +17,7 @@ function ApiKeyModals({
 	copyToClipboard,
 	isGeneratingKey,
 }: ApiKeyModalsProps) {
+	const isRtl = isDocumentRtl();
 	return (
 		<>
 			<Modal
@@ -86,7 +88,9 @@ function ApiKeyModals({
 						<button
 							type="button"
 							onClick={() => copyToClipboard(newApiKey)}
-							className="absolute top-2 right-2 p-1.5 text-text-muted hover:text-heading bg-surface rounded shadow-sm hover:shadow transition-all"
+							className={`absolute top-2 p-1.5 text-text-muted hover:text-heading bg-surface rounded shadow-sm hover:shadow transition-all ${
+								isRtl ? 'left-2' : 'right-2'
+							}`}
 							title={__('Copy to clipboard')}
 						>
 							<Copy size={14} />
@@ -111,7 +115,9 @@ function ApiKeyModals({
 											)
 										)
 									}
-									className="absolute top-2 right-2 p-1.5 text-text-muted hover:text-heading bg-surface rounded shadow-sm hover:shadow transition-all"
+									className={`absolute top-2 p-1.5 text-text-muted hover:text-heading bg-surface rounded shadow-sm hover:shadow transition-all ${
+										isRtl ? 'left-2' : 'right-2'
+									}`}
 									title={__('Copy to clipboard')}
 								>
 									<Copy size={14} />
@@ -134,7 +140,10 @@ function ApiKeyModals({
 							variant="secondary"
 							onClick={() => copyToClipboard(newApiKey)}
 						>
-							<Copy size={16} className="mr-2" />
+							<Copy
+								size={16}
+								className={isRtl ? 'ml-2' : 'mr-2'}
+							/>
 							{__('Copy Key')}
 						</Button>
 						<Button onClick={() => setShowKeyModal(false)}>

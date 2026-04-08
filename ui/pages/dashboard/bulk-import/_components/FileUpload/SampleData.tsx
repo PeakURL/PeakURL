@@ -1,7 +1,10 @@
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import type { SampleDataProps } from './types';
 
 function SampleData({ sampleData }: SampleDataProps) {
+	const isRtl = isDocumentRtl();
+
 	return (
 		<div className="bg-surface border border-stroke rounded-lg p-5">
 			<h3 className="text-base font-semibold text-heading mb-4">
@@ -10,14 +13,18 @@ function SampleData({ sampleData }: SampleDataProps) {
 			<div className="overflow-x-auto">
 				<table className="w-full text-sm">
 					<thead>
-						<tr className="border-b border-stroke">
-							<th className="text-left py-2 px-3 text-xs font-semibold text-heading bg-surface-alt">
+						<tr
+							className={`border-b border-stroke ${
+								isRtl ? 'text-right' : 'text-left'
+							}`}
+						>
+							<th className="py-2 px-3 text-xs font-semibold text-heading bg-surface-alt">
 								url
 							</th>
-							<th className="text-left py-2 px-3 text-xs font-semibold text-heading bg-surface-alt">
+							<th className="py-2 px-3 text-xs font-semibold text-heading bg-surface-alt">
 								alias
 							</th>
-							<th className="text-left py-2 px-3 text-xs font-semibold text-heading bg-surface-alt">
+							<th className="py-2 px-3 text-xs font-semibold text-heading bg-surface-alt">
 								title
 							</th>
 						</tr>

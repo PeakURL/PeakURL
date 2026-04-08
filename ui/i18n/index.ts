@@ -7,10 +7,12 @@ import {
 } from '@wordpress/i18n';
 
 import { API_CLIENT_BASE_URL } from '@/constants';
+import { getLocaleDirection } from './direction';
 import type {
 	LocaleMessageMap,
 	RuntimeI18nCatalog,
 	RuntimeI18nPayload,
+	TextDirection,
 } from './types';
 
 const DEFAULT_TEXT_DOMAIN = 'peakurl';
@@ -61,14 +63,27 @@ function getLocaleDataFromCatalog(
  * Applies the active locale to the document root for accessibility and
  * browser-native formatting behavior.
  */
-function setDocumentLocale(locale?: string, htmlLang?: string): void {
+function setDocumentLocale(
+	locale?: string,
+	htmlLang?: string,
+	textDirection?: TextDirection
+): TextDirection {
 	if ('undefined' === typeof document) {
-		return;
+		return textDirection || getLocaleDirection(locale || htmlLang);
 	}
 
 	const resolvedLang =
 		htmlLang || locale?.replace(/_/g, '-').toLowerCase() || 'en';
+	const resolvedDirection =
+		textDirection || getLocaleDirection(locale || resolvedLang);
 	document.documentElement.lang = resolvedLang;
+	document.documentElement.dir = resolvedDirection;
+
+	if (document.body) {
+		document.body.dir = resolvedDirection;
+	}
+
+	return resolvedDirection;
 }
 
 function readStringProperty(
@@ -87,6 +102,23 @@ function readRuntimeCatalog(
 	return isRuntimeI18nCatalog(value) ? value : undefined;
 }
 
+function readTextDirectionProperty(
+	record: Record<string, unknown>,
+	key: string
+): TextDirection | undefined {
+	const value = record[key];
+
+	return 'rtl' === value || 'ltr' === value ? value : undefined;
+}
+
+function readBooleanProperty(
+	record: Record<string, unknown>,
+	key: string
+): boolean | undefined {
+	const value = record[key];
+	return 'boolean' === typeof value ? value : undefined;
+}
+
 function normalizeRuntimePayload(payload: unknown): RuntimeI18nPayload | null {
 	if (!isObjectRecord(payload)) {
 		return null;
@@ -103,6 +135,8 @@ function normalizeRuntimePayload(payload: unknown): RuntimeI18nPayload | null {
 			(isRuntimeI18nCatalog(payloadData) ? payloadData : undefined),
 		locale: readStringProperty(payloadData, 'locale'),
 		htmlLang: readStringProperty(payloadData, 'htmlLang'),
+		textDirection: readTextDirectionProperty(payloadData, 'textDirection'),
+		isRtl: readBooleanProperty(payloadData, 'isRtl'),
 		textDomain: readStringProperty(payloadData, 'textDomain'),
 	};
 }
@@ -152,6 +186,11 @@ export function initializeI18n(): Promise<void> {
 				? {
 						catalog: runtimeCatalog,
 						locale: window.__PEAKURL_LOCALE__ || DEFAULT_LOCALE,
+						textDirection:
+							window.__PEAKURL_TEXT_DIRECTION__ ||
+							getLocaleDirection(
+								window.__PEAKURL_LOCALE__ || DEFAULT_LOCALE
+							),
 						textDomain:
 							window.__PEAKURL_TEXT_DOMAIN__ || TEXT_DOMAIN,
 					}
@@ -163,9 +202,18 @@ export function initializeI18n(): Promise<void> {
 			TEXT_DOMAIN;
 		const locale =
 			payload?.locale || window.__PEAKURL_LOCALE__ || DEFAULT_LOCALE;
+		const textDirection =
+			payload?.textDirection ||
+			(payload?.isRtl ? 'rtl' : undefined) ||
+			window.__PEAKURL_TEXT_DIRECTION__ ||
+			getLocaleDirection(locale);
 
 		setLocaleData(localeData, domain);
-		setDocumentLocale(locale, payload?.htmlLang);
+		window.__PEAKURL_TEXT_DIRECTION__ = setDocumentLocale(
+			locale,
+			payload?.htmlLang,
+			textDirection
+		);
 
 		if (payload?.catalog) {
 			window.__PEAKURL_I18N__ = payload.catalog;

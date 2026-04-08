@@ -1,4 +1,4 @@
-import type { RuntimeI18nCatalog } from './i18n/types';
+import type { RuntimeI18nCatalog, TextDirection } from './i18n/types';
 
 export {};
 
@@ -19,6 +19,11 @@ declare global {
 		 * Current active locale (e.g. "en", "fr", "de").
 		 */
 		__PEAKURL_LOCALE__?: string;
+
+		/**
+		 * Current document text direction derived from the active locale.
+		 */
+		__PEAKURL_TEXT_DIRECTION__?: TextDirection;
 
 		/**
 		 * Base path where the dashboard is mounted when served from a subdirectory.

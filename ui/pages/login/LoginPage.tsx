@@ -19,6 +19,7 @@ import {
 	PageLoader,
 	VerificationCodeInput,
 } from '@/components';
+import { isDocumentRtl } from '@/i18n/direction';
 import {
 	requestClosestFormSubmit,
 	requestControlFormSubmit,
@@ -114,6 +115,9 @@ const submitFormOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
 };
 
 function LoginPage() {
+	const isRtl = isDocumentRtl();
+	const ForwardArrow = isRtl ? ArrowLeft : ArrowRight;
+	const BackArrow = isRtl ? ArrowRight : ArrowLeft;
 	const location = useLocation();
 	const navigate = useNavigate();
 	const highlights = getHighlights();
@@ -537,7 +541,7 @@ function LoginPage() {
 											{twoFactorRequired
 												? __('Verify & continue')
 												: __('Sign in')}
-											<ArrowRight size={15} />
+											<ForwardArrow size={15} />
 										</>
 									)}
 								</span>
@@ -557,7 +561,7 @@ function LoginPage() {
 											setFormError('');
 										}}
 									>
-										<ArrowLeft size={13} />
+										<BackArrow size={13} />
 										{__('Back to sign-in')}
 									</button>
 								</div>

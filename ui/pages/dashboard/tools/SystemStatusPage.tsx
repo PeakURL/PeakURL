@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { useNotification } from '@/components';
 import { __, sprintf } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import { useGetSystemStatusQuery } from '@/store/slices/api';
 import {
 	copyToClipboard,
@@ -165,12 +166,16 @@ function StatusTabs({ activeView, onChange }: StatusTabsProps) {
 }
 
 function IssueRow({ check, isOpen, onToggle, showBorder }: IssueRowProps) {
+	const isRtl = isDocumentRtl();
+
 	return (
 		<div className={showBorder ? 'border-t border-stroke' : ''}>
 			<button
 				type="button"
 				onClick={onToggle}
-				className="flex w-full items-center justify-between gap-4 px-4 py-4 text-left transition-colors hover:bg-surface-alt/60"
+				className={`flex w-full items-center justify-between gap-4 px-4 py-4 transition-colors hover:bg-surface-alt/60 ${
+					isRtl ? 'text-right' : 'text-left'
+				}`}
 			>
 				<div className="min-w-0">
 					<p className="text-sm font-semibold text-heading">
@@ -234,12 +239,16 @@ function IssueSection({
 }
 
 function InfoSection({ section, isOpen, onToggle }: InfoSectionProps) {
+	const isRtl = isDocumentRtl();
+
 	return (
 		<div className="overflow-hidden rounded-lg border border-stroke bg-surface">
 			<button
 				type="button"
 				onClick={onToggle}
-				className="flex w-full items-center justify-between gap-4 px-4 py-3.5 text-left transition-colors hover:bg-surface-alt/60"
+				className={`flex w-full items-center justify-between gap-4 px-4 py-3.5 transition-colors hover:bg-surface-alt/60 ${
+					isRtl ? 'text-right' : 'text-left'
+				}`}
 			>
 				<span className="text-sm font-semibold text-heading">
 					{section.title}
@@ -265,10 +274,18 @@ function InfoSection({ section, isOpen, onToggle }: InfoSectionProps) {
 												: ''
 										}
 									>
-										<th className="w-[34%] min-w-45 bg-surface-alt px-4 py-3 text-left align-top font-medium text-heading">
+										<th
+											className={`w-[34%] min-w-45 bg-surface-alt px-4 py-3 align-top font-medium text-heading ${
+												isRtl ? 'text-right' : 'text-left'
+											}`}
+										>
 											{item.label}
 										</th>
-										<td className="px-4 py-3 align-top text-text-muted">
+										<td
+											className={`px-4 py-3 align-top text-text-muted ${
+												isRtl ? 'text-right' : 'text-left'
+											}`}
+										>
 											<p
 												className={`text-heading ${
 													item.monospace

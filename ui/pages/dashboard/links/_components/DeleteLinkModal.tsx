@@ -4,9 +4,11 @@ import { useState } from 'react';
 import { useDeleteUrlMutation } from '@/store/slices/api';
 import { buildShortUrl, getErrorMessage } from '@/utils';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import type { DeleteLinkModalProps } from './types';
 
 function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
+	const isRtl = isDocumentRtl();
 	const [error, setError] = useState('');
 	const [deleteUrl, { isLoading }] = useDeleteUrlMutation();
 	const shortUrl = link ? buildShortUrl(link) : '';
@@ -35,7 +37,11 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 			<div className="fixed inset-0 bg-black/30" aria-hidden="true" />
 
 			<div className="fixed inset-0 flex items-center justify-center p-4">
-				<DialogPanel className="mx-auto max-w-md w-full bg-surface rounded-lg shadow-xl">
+				<DialogPanel
+					className={`mx-auto w-full max-w-md rounded-lg bg-surface shadow-xl ${
+						isRtl ? 'text-right' : 'text-left'
+					}`}
+				>
 					{/* Header */}
 					<div className="flex items-center justify-between p-6 border-b border-stroke">
 						<DialogTitle className="text-lg font-semibold text-heading flex items-center gap-2">
@@ -74,7 +80,10 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 								<p className="text-xs font-medium text-text-muted mb-1">
 									{__('Short URL')}
 								</p>
-								<code className="text-sm text-accent font-mono">
+								<code
+									dir="ltr"
+									className="text-sm text-accent font-mono"
+								>
 									{shortUrl}
 								</code>
 							</div>
@@ -87,7 +96,11 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 								</p>
 							</div>
 							{(totalClicks > 0 || uniqueClicks > 0) && (
-								<div className="flex gap-4 pt-2 border-t border-stroke">
+								<div
+									className={`flex gap-4 border-t border-stroke pt-2 ${
+										isRtl ? 'justify-end' : 'justify-start'
+									}`}
+								>
 									<div>
 										<p className="text-xs text-text-muted">
 											{__('Total Clicks')}

@@ -1,6 +1,7 @@
 import { Input } from '@/components/ui';
 import { BarChart3 } from 'lucide-react';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import type { UTMFieldsProps } from '../types';
 
 const UTMFields = ({
@@ -15,10 +16,15 @@ const UTMFields = ({
 	utmContent,
 	setUtmContent,
 }: UTMFieldsProps) => {
+	const isRtl = isDocumentRtl();
 	return (
 		<div>
 			<label className="block text-sm font-medium text-heading mb-1.5">
-				<BarChart3 className="w-4 h-4 inline mr-2 text-text-muted" />
+				<BarChart3
+					className={`inline h-4 w-4 text-text-muted ${
+						isRtl ? 'ml-2' : 'mr-2'
+					}`}
+				/>
 				{__('UTM Parameters (Optional)')}
 			</label>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-3">

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { PEAKURL_VERSION } from '@constants';
+import { isDocumentRtl } from '@/i18n/direction';
 import { __ } from '@/i18n';
 import DashboardSidebar from './DashboardSidebar';
 import { DashboardAppBar } from './DashboardAppBar';
@@ -9,6 +10,7 @@ import type { DashboardLayoutProps } from './types';
 
 export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 	const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+	const isRtl = isDocumentRtl();
 	const basePath = '/dashboard';
 	const location = useLocation();
 	const appBarKey = `${location.pathname}${location.search}`;
@@ -25,7 +27,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 				onMobileClose={() => setIsMobileSidebarOpen(false)}
 			/>
 
-			<div className="lg:ml-64 min-h-screen">
+			<div className={`${isRtl ? 'lg:mr-64' : 'lg:ml-64'} min-h-screen`}>
 				<DashboardAppBar
 					key={appBarKey}
 					onMobileMenuToggle={() => setIsMobileSidebarOpen(true)}
@@ -55,7 +57,9 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 								href={footerLink}
 								target="_blank"
 								rel="noreferrer"
-								className="shrink-0 text-right text-text-muted/80 transition-colors hover:text-accent"
+								className={`shrink-0 text-text-muted/80 transition-colors hover:text-accent ${
+									isRtl ? 'text-left' : 'text-right'
+								}`}
 							>
 								{__('Version')} {PEAKURL_VERSION}
 							</a>

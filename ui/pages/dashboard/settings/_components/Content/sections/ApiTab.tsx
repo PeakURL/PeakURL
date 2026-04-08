@@ -11,6 +11,7 @@ import {
 	Link2,
 } from 'lucide-react';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import type { ApiTabProps } from './types';
 
 function ApiTab({
@@ -22,6 +23,7 @@ function ApiTab({
 	onDeleteKey,
 	setShowCreateModal,
 }: ApiTabProps) {
+	const isRtl = isDocumentRtl();
 	return (
 		<div className="space-y-5">
 			{baseApiUrl && (
@@ -57,7 +59,10 @@ function ApiTab({
 								)
 							}
 						>
-							<Copy size={14} className="mr-2" />
+							<Copy
+								size={14}
+								className={isRtl ? 'ml-2' : 'mr-2'}
+							/>
 							{__('Copy API URL')}
 						</Button>
 					</div>
@@ -72,7 +77,7 @@ function ApiTab({
 			<div className="bg-surface border border-stroke rounded-lg p-5">
 				<div className="flex items-center justify-between mb-5">
 					<h2 className="text-base font-semibold text-heading">
-						API Keys
+						{__('API Keys')}
 					</h2>
 					<Button
 						size="sm"
@@ -82,10 +87,15 @@ function ApiTab({
 						{isGeneratingKey ? (
 							<LoaderCircle
 								size={16}
-								className="mr-2 animate-spin"
+								className={`animate-spin ${
+									isRtl ? 'ml-2' : 'mr-2'
+								}`}
 							/>
 						) : (
-							<Plus size={16} className="mr-2" />
+							<Plus
+								size={16}
+								className={isRtl ? 'ml-2' : 'mr-2'}
+							/>
 						)}
 						{__('Create New Key')}
 					</Button>
@@ -121,7 +131,11 @@ function ApiTab({
 											: __('Unknown')}
 									</p>
 								</div>
-								<div className="flex items-center gap-1 ml-4">
+								<div
+									className={`flex items-center gap-1 ${
+										isRtl ? 'mr-4' : 'ml-4'
+									}`}
+								>
 									<button
 										type="button"
 										className="p-2 text-text-muted hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
@@ -202,7 +216,10 @@ function ApiTab({
 					>
 						<Button size="sm" variant="secondary">
 							{__('API Overview')}
-							<ExternalLink size={14} className="ml-2" />
+							<ExternalLink
+								size={14}
+								className={isRtl ? 'mr-2' : 'ml-2'}
+							/>
 						</Button>
 					</a>
 				</div>

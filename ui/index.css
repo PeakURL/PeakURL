@@ -66,6 +66,21 @@
 	}
 }
 
+html[dir='rtl'],
+html[dir='rtl'] body {
+	direction: rtl;
+}
+
+html[dir='rtl'] .ml-auto {
+	margin-left: 0;
+	margin-right: auto;
+}
+
+html[dir='rtl'] .mr-auto {
+	margin-right: 0;
+	margin-left: auto;
+}
+
 /* Dark mode overrides for the same semantic tokens */
 .dark {
 	--color-bg: var(--color-gray-950);
@@ -232,6 +247,33 @@ body {
 .animate-slide-in-left {
 	-webkit-animation: slide-in-left 0.3s ease-out forwards;
 	animation: slide-in-left 0.3s ease-out forwards;
+}
+
+@-webkit-keyframes slide-in-right {
+	from {
+		transform: translateX(-100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+@keyframes slide-in-right {
+	from {
+		transform: translateX(-100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+.animate-slide-in-right {
+	-webkit-animation: slide-in-right 0.3s ease-out forwards;
+	animation: slide-in-right 0.3s ease-out forwards;
 }
 
 /* ===== LOGIN PAGE ANIMATIONS ===== */

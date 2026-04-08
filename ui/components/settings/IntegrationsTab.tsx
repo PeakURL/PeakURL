@@ -13,6 +13,7 @@ import {
 	useDeleteWebhookMutation,
 	useGetWebhooksQuery,
 } from '@/store/slices/api';
+import { isDocumentRtl } from '@/i18n/direction';
 import { __, sprintf } from '@/i18n';
 import { copyToClipboard as writeToClipboard, getErrorMessage } from '@/utils';
 import type {
@@ -31,6 +32,7 @@ const getEventOptions = (): WebhookEventOption[] => [
 ];
 
 function IntegrationsTab({ notification }: IntegrationsTabProps) {
+	const isRtl = isDocumentRtl();
 	const eventOptions = getEventOptions();
 	const {
 		data: webhookData,
@@ -183,7 +185,9 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 							</label>
 							<div className="relative">
 								<Link2
-									className="absolute left-3 top-1/2 -translate-y-1/2 text-muted"
+									className={`absolute top-1/2 -translate-y-1/2 text-muted ${
+										isRtl ? 'right-3' : 'left-3'
+									}`}
 									size={16}
 								/>
 								<input
@@ -196,7 +200,11 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 											url: e.target.value,
 										}))
 									}
-									className="w-full pl-10 pr-3 py-2 bg-surface border border-stroke rounded-lg text-sm text-heading focus:outline-none focus:ring-2 focus:ring-accent"
+									className={`w-full bg-surface border border-stroke rounded-lg py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-accent ${
+										isRtl
+											? 'pr-10 pl-3 text-right'
+											: 'pl-10 pr-3 text-left'
+									}`}
 								/>
 							</div>
 							<p className="mt-2 text-xs leading-5 text-text-muted">

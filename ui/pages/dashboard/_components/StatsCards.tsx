@@ -8,9 +8,11 @@ import {
 	Users,
 } from 'lucide-react';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import type { StatsCardsProps } from './types';
 
 const StatsCards = ({ stats }: StatsCardsProps) => {
+	const isRtl = isDocumentRtl();
 	const statsData = [
 		{
 			title: __('Total Clicks'),
@@ -86,9 +88,13 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
 								}`}
 							>
 								{stat.changeType === 'positive' ? (
-									<ArrowUp className="mr-1 h-3 w-3" />
+									<ArrowUp
+										className={`${isRtl ? 'ml-1' : 'mr-1'} h-3 w-3`}
+									/>
 								) : (
-									<ArrowDown className="mr-1 h-3 w-3" />
+									<ArrowDown
+										className={`${isRtl ? 'ml-1' : 'mr-1'} h-3 w-3`}
+									/>
 								)}
 								{stat.change}
 							</span>

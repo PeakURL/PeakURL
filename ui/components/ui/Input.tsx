@@ -1,5 +1,6 @@
 import { forwardRef, useId } from 'react';
 import { Info } from 'lucide-react';
+import { isDocumentRtl } from '@/i18n/direction';
 import type { InputProps } from './types';
 export type { InputIcon, InputProps } from './types';
 
@@ -25,6 +26,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 	ref
 ) {
 	const generatedId = useId();
+	const isRtl = isDocumentRtl();
 	const inputId = props.id || generatedId;
 	const helperId = helperText ? `${inputId}-helper` : undefined;
 	const errorId = error ? `${inputId}-error` : undefined;
@@ -40,13 +42,23 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 				>
 					{label}
 					{props.required && (
-						<span className="text-red-500 ml-1">*</span>
+						<span
+							className={`text-red-500 ${
+								isRtl ? 'mr-1' : 'ml-1'
+							}`}
+						>
+							*
+						</span>
 					)}
 				</label>
 			)}
 			<div className="relative">
 				{IconComponent && (
-					<div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted pointer-events-none">
+					<div
+						className={`absolute top-1/2 -translate-y-1/2 text-muted pointer-events-none ${
+							isRtl ? 'right-4' : 'left-4'
+						}`}
+					>
 						<IconComponent size={18} />
 					</div>
 				)}
@@ -57,7 +69,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 					aria-invalid={Boolean(error)}
 					aria-describedby={describedBy}
 					className={`w-full px-4 py-2 bg-surface border border-stroke rounded-md text-heading placeholder:text-muted outline-none transition-all focus:ring-2 focus:ring-accent focus:border-accent ${
-						IconComponent ? 'pl-11' : ''
+						IconComponent ? (isRtl ? 'pr-11' : 'pl-11') : ''
 					} ${
 						error
 							? 'border-red-500 focus:ring-red-500 focus:border-red-500'

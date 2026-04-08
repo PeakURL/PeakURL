@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui';
 import { __, sprintf } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import { formatDateTimeValue } from '@/utils';
 import {
 	AlertCircle,
@@ -283,6 +284,7 @@ function UpdateActions({
 	onApply,
 	onReinstall,
 }: UpdateActionsProps) {
+	const isRtl = isDocumentRtl();
 	const isInstallingRelease = isApplying || isReinstalling;
 	const showDisabledReason =
 		(updateAvailable || reinstallAvailable) &&
@@ -331,8 +333,16 @@ function UpdateActions({
 	const showCheckButton = reinstallAvailable || !updateAvailable;
 
 	return (
-		<div className="flex w-full flex-col gap-3 lg:max-w-104 lg:items-end">
-			<div className="flex flex-wrap gap-3 lg:justify-end">
+		<div
+			className={`flex w-full flex-col gap-3 lg:max-w-104 ${
+				isRtl ? 'lg:items-start' : 'lg:items-end'
+			}`}
+		>
+			<div
+				className={`flex flex-wrap gap-3 ${
+					isRtl ? 'lg:justify-start' : 'lg:justify-end'
+				}`}
+			>
 				{showCheckButton ? (
 					<Button
 						variant="outline"
@@ -350,7 +360,11 @@ function UpdateActions({
 			</div>
 
 			{showDisabledReason ? (
-				<div className="max-w-sm rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900 lg:text-right dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
+				<div
+					className={`max-w-sm rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200 ${
+						isRtl ? 'lg:text-right' : 'lg:text-left'
+					}`}
+				>
 					{disabledReason}
 				</div>
 			) : null}

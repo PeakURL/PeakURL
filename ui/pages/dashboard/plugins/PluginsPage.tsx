@@ -29,10 +29,12 @@ import {
 	FEATURED_CARDS,
 	POPULAR_CARDS,
 } from './pluginData';
+import { isDocumentRtl } from '@/i18n/direction';
 import { __ } from '@/i18n';
 import { PLUGINS_WAITLIST_URL } from '@constants';
 
 function PluginsPage() {
+	const isRtl = isDocumentRtl();
 	const { canManageUsers, isLoading } = useAdminAccess();
 	const [activeTab, setActiveTab] = useState<TabId>('browse');
 	const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -166,10 +168,20 @@ function PluginsPage() {
 						<div className="flex items-center gap-2 pb-3 sm:pb-0">
 							{/* Disabled search placeholder */}
 							<div className="relative max-w-55 flex-1">
-								<div className="pointer-events-none w-full rounded-lg border border-stroke bg-surface-alt/50 py-2 pl-8 pr-3 text-sm text-text-muted/40">
+								<div
+									className={`pointer-events-none w-full rounded-lg border border-stroke bg-surface-alt/50 py-2 text-sm text-text-muted/40 ${
+										isRtl
+											? 'pr-8 pl-3 text-right'
+											: 'pl-8 pr-3 text-left'
+									}`}
+								>
 									{__('Search plugins…')}
 								</div>
-								<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5 text-text-muted/40">
+								<div
+									className={`pointer-events-none absolute inset-y-0 flex items-center text-text-muted/40 ${
+										isRtl ? 'right-0 pr-2.5' : 'left-0 pl-2.5'
+									}`}
+								>
 									<svg
 										className="h-4 w-4"
 										fill="none"

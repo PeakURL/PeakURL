@@ -177,6 +177,7 @@ function peakurl_should_serve_dashboard_shell( string $relative_path ): bool {
  * @param string               $site_name           Site name from settings.
  * @param string               $version             Installed PeakURL version.
  * @param string               $locale              Active site locale.
+ * @param string               $text_direction      Active document text direction.
  * @param array<string, mixed> $translation_catalog Dashboard JSON catalog.
  * @return string Modified HTML.
  * @since 1.0.0
@@ -187,6 +188,7 @@ function peakurl_inject_runtime_shell(
 	string $site_name,
 	string $version,
 	string $locale,
+	string $text_direction,
 	array $translation_catalog
 ): string {
 	$base_href = '' === $base_path ? '/' : $base_path . '/';
@@ -195,6 +197,7 @@ function peakurl_inject_runtime_shell(
 		ENT_QUOTES,
 		'UTF-8',
 	);
+	$html_dir  = 'rtl' === strtolower( $text_direction ) ? 'rtl' : 'ltr';
 	$runtime   =
 		'<base href="' .
 		htmlspecialchars( $base_href, ENT_QUOTES, 'UTF-8' ) .
@@ -212,6 +215,8 @@ function peakurl_inject_runtime_shell(
 		json_encode( $version ) .
 		';window.__PEAKURL_LOCALE__=' .
 		json_encode( $locale ) .
+		';window.__PEAKURL_TEXT_DIRECTION__=' .
+		json_encode( $html_dir ) .
 		';window.__PEAKURL_TEXT_DOMAIN__=' .
 		json_encode( Constants::I18N_TEXT_DOMAIN ) .
 		';window.__PEAKURL_I18N__=' .
@@ -222,9 +227,20 @@ function peakurl_inject_runtime_shell(
 		';</script>';
 
 	$updated_html   = str_replace( '<head>', "<head>\n\t\t" . $runtime, $html );
-	$html_with_lang = preg_replace(
-		'/<html([^>]*)lang=(["\']).*?\2/i',
-		'<html$1lang="' . $html_lang . '"',
+	$html_with_lang = preg_replace_callback(
+		'/<html\b([^>]*)>/i',
+		static function ( array $matches ) use ( $html_lang, $html_dir ): string {
+			$attributes = preg_replace(
+				'/\s(?:lang|dir)=(["\']).*?\1/i',
+				'',
+				(string) ( $matches[1] ?? '' ),
+			);
+			$attributes = is_string( $attributes ) ? trim( $attributes ) : '';
+
+			return '<html' .
+				( '' !== $attributes ? ' ' . $attributes : '' ) .
+				' lang="' . $html_lang . '" dir="' . $html_dir . '">';
+		},
 		$updated_html,
 		1,
 	);
@@ -319,16 +335,17 @@ if ( ! peakurl_should_serve_dashboard_shell( $relative_path ) ) {
 $runtime_config = RuntimeConfig::bootstrap( $app_path );
 $connection     = new Connection( $runtime_config );
 peakurl_bootstrap_i18n( $runtime_config, $connection );
-$site_name = trim(
+$site_name      = trim(
 	(string) ( $connection->get_setting_value( 'site_name' ) ?? 'PeakURL' ),
 );
-$locale    = get_locale();
-$catalog   = peakurl_get_dashboard_translation_catalog(
+$locale         = get_locale();
+$text_direction = peakurl_get_text_direction();
+$catalog        = peakurl_get_dashboard_translation_catalog(
 	$locale,
 	$runtime_config,
 	$connection,
 );
-$version   = trim(
+$version        = trim(
 	(string) (
 		$connection->get_setting_value( 'installed_version' ) ??
 		$runtime_config[ Constants::CONFIG_VERSION ] ??
@@ -362,5 +379,6 @@ echo peakurl_inject_runtime_shell(
 	$site_name,
 	$version,
 	$locale,
+	$text_direction,
 	$catalog,
 );

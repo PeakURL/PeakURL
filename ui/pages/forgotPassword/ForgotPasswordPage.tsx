@@ -1,7 +1,8 @@
 import type { KeyboardEvent, SubmitEvent } from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, KeyRound, Mail } from 'lucide-react';
+import { ArrowLeft, ArrowRight, KeyRound, Mail } from 'lucide-react';
+import { isDocumentRtl } from '@/i18n/direction';
 import { Button, Input } from '@/components/ui';
 import { useForgotPasswordMutation } from '@/store/slices/api';
 import { __, sprintf } from '@/i18n';
@@ -17,6 +18,9 @@ const submitFormOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
 };
 
 function ForgotPasswordPage() {
+	const isRtl = isDocumentRtl();
+	const BackArrow = isRtl ? ArrowRight : ArrowLeft;
+	const ReturnArrow = isRtl ? ArrowLeft : ArrowRight;
 	const [identifier, setIdentifier] = useState('');
 	const [submittedIdentifier, setSubmittedIdentifier] = useState('');
 	const [formError, setFormError] = useState('');
@@ -92,7 +96,7 @@ function ForgotPasswordPage() {
 								to="/login"
 								className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-slate-900"
 							>
-								<ArrowLeft size={16} />
+								<BackArrow size={16} />
 								{__('Back to login')}
 							</Link>
 						</div>
@@ -124,10 +128,7 @@ function ForgotPasswordPage() {
 									className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-emerald-700 transition hover:text-emerald-900"
 								>
 									{__('Return to login')}
-									<ArrowLeft
-										size={15}
-										className="rotate-180"
-									/>
+									<ReturnArrow size={15} />
 								</Link>
 							</div>
 						) : (

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import {
+	ArrowLeft,
 	ArrowRight,
 	Link2,
 	LoaderCircle,
@@ -10,6 +11,7 @@ import {
 	X,
 } from 'lucide-react';
 import { useDashboardSearch } from '@/hooks';
+import { isDocumentRtl } from '@/i18n/direction';
 import { __, sprintf } from '@/i18n';
 import type { ResultButtonProps, ResultSectionProps } from './types';
 
@@ -20,12 +22,17 @@ function ResultButton({
 	meta,
 	onClick,
 }: ResultButtonProps) {
+	const isRtl = isDocumentRtl();
+	const DirectionArrow = isRtl ? ArrowLeft : ArrowRight;
+
 	return (
 		<button
 			type="button"
 			onMouseDown={(event) => event.preventDefault()}
 			onClick={onClick}
-			className="flex w-full items-start gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-surface-alt"
+			className={`flex w-full items-start gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-surface-alt ${
+				isRtl ? 'text-right' : 'text-left'
+			}`}
 		>
 			<div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-stroke bg-surface text-text-muted">
 				<Icon size={16} />
@@ -45,7 +52,10 @@ function ResultButton({
 					</p>
 				) : null}
 			</div>
-			<ArrowRight size={15} className="mt-1 shrink-0 text-text-muted" />
+			<DirectionArrow
+				size={15}
+				className="mt-1 shrink-0 text-text-muted"
+			/>
 		</button>
 	);
 }
@@ -62,6 +72,7 @@ function ResultSection({ title, children }: ResultSectionProps) {
 }
 
 export const DashboardSearch = () => {
+	const isRtl = isDocumentRtl();
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const {
 		query,
@@ -113,7 +124,9 @@ export const DashboardSearch = () => {
 				<div className="relative">
 					<Search
 						size={18}
-						className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
+						className={`absolute top-1/2 -translate-y-1/2 text-text-muted ${
+							isRtl ? 'right-3' : 'left-3'
+						}`}
 					/>
 					<input
 						type="text"
@@ -129,7 +142,9 @@ export const DashboardSearch = () => {
 						}}
 						placeholder={__('Search links, settings...')}
 						aria-label={__('Search the dashboard')}
-						className="w-full rounded-lg border border-stroke bg-bg py-2 pl-10 pr-10 text-sm text-heading placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+						className={`w-full rounded-lg border border-stroke bg-bg py-2 text-sm text-heading placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 ${
+							isRtl ? 'pr-10 pl-10 text-right' : 'pl-10 pr-10 text-left'
+						}`}
 					/>
 					{query ? (
 						<button
@@ -139,7 +154,9 @@ export const DashboardSearch = () => {
 									resetLinksSearch: true,
 								})
 							}
-							className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading"
+							className={`absolute top-1/2 -translate-y-1/2 rounded-full p-1 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading ${
+								isRtl ? 'left-3' : 'right-3'
+							}`}
 							aria-label={__('Clear search')}
 						>
 							<X size={15} />

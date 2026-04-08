@@ -7,6 +7,7 @@ import { feature as topojsonFeature } from 'topojson-client';
 import { scaleLinear } from 'd3-scale';
 import { Plus, Minus, Maximize2 } from 'lucide-react';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import type {
 	GeographyFeature,
 	TooltipContent,
@@ -208,6 +209,7 @@ const WorldMap = ({
 	hoveredCountry,
 	onCountryHover,
 }: WorldMapProps) => {
+	const isRtl = isDocumentRtl();
 	const [tooltipContent, setTooltipContent] = useState<TooltipContent | null>(
 		null
 	);
@@ -330,7 +332,11 @@ const WorldMap = ({
 			>
 				{(zoom) => (
 					<>
-						<div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
+						<div
+							className={`absolute top-4 z-10 flex flex-col gap-2 ${
+								isRtl ? 'left-4' : 'right-4'
+							}`}
+						>
 							<button
 								onClick={() =>
 									zoom.scale({
@@ -379,7 +385,11 @@ const WorldMap = ({
 						</div>
 
 						{tooltipContent && (
-							<div className="absolute top-4 left-4 bg-surface rounded-lg shadow-xl p-3 border border-stroke z-10 pointer-events-none">
+							<div
+								className={`absolute top-4 z-10 rounded-lg border border-stroke bg-surface p-3 shadow-xl pointer-events-none ${
+									isRtl ? 'right-4 text-right' : 'left-4 text-left'
+								}`}
+							>
 								<p className="text-sm font-semibold text-heading">
 									{tooltipContent.name}
 								</p>
@@ -532,7 +542,11 @@ const WorldMap = ({
 							</div>
 						)}
 
-						<div className="absolute bottom-4 left-4 bg-surface rounded-lg shadow-lg p-3 border border-stroke">
+						<div
+							className={`absolute bottom-4 rounded-lg border border-stroke bg-surface p-3 shadow-lg ${
+								isRtl ? 'right-4 text-right' : 'left-4 text-left'
+							}`}
+						>
 							<div className="text-xs font-medium text-heading mb-2">
 								{__('Clicks')}
 							</div>

@@ -26,6 +26,27 @@ function LinkRow({
 	onQRCode,
 	formatNumber,
 }: LinkRowProps) {
+	const statusLabel =
+		'active' === link.status
+			? __('Active')
+			: 'inactive' === link.status
+				? __('Inactive')
+				: 'expired' === link.status
+					? __('Expired')
+					: __('Unknown');
+	const statusColorClass =
+		'active' === link.status
+			? 'text-success'
+			: 'expired' === link.status
+				? 'text-error'
+				: 'text-text-muted';
+	const statusDotClass =
+		'active' === link.status
+			? 'bg-success'
+			: 'expired' === link.status
+				? 'bg-error'
+				: 'bg-stroke';
+
 	return (
 		<tr
 			className={`hover:bg-surface-alt/50 transition-colors group ${
@@ -160,20 +181,12 @@ function LinkRow({
 				</div>
 				<div className="flex items-center gap-1.5 mt-0.5">
 					<span
-						className={`w-1.5 h-1.5 rounded-full ${
-							link.status === 'active'
-								? 'bg-success'
-								: 'bg-stroke'
-						}`}
+						className={`w-1.5 h-1.5 rounded-full ${statusDotClass}`}
 					></span>
 					<span
-						className={`text-xs font-medium capitalize ${
-							link.status === 'active'
-								? 'text-success'
-								: 'text-text-muted'
-						}`}
+						className={`text-xs font-medium ${statusColorClass}`}
 					>
-						{link.status}
+						{statusLabel}
 					</span>
 				</div>
 			</td>

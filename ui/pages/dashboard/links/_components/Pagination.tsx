@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { __, sprintf } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import type { PaginationProps } from './types';
 
 const Pagination = ({
@@ -10,6 +11,10 @@ const Pagination = ({
 	endItem,
 	totalItems,
 }: PaginationProps) => {
+	const isRtl = isDocumentRtl();
+	const PreviousIcon = isRtl ? ChevronRight : ChevronLeft;
+	const NextIcon = isRtl ? ChevronLeft : ChevronRight;
+
 	return (
 		<div className="bg-surface rounded-lg border border-stroke px-4 py-3">
 			<div className="flex items-center justify-between">
@@ -29,7 +34,9 @@ const Pagination = ({
 						disabled={currentPage === 1}
 						className="px-3 py-1.5 rounded-lg text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:bg-surface-alt text-text-muted hover:text-heading"
 					>
-						<ChevronLeft className="mr-1 h-3 w-3" />
+						<PreviousIcon
+							className={`${isRtl ? 'ml-1' : 'mr-1'} h-3 w-3`}
+						/>
 						{__('Previous')}
 					</button>
 
@@ -71,7 +78,9 @@ const Pagination = ({
 						className="px-3 py-1.5 rounded-lg text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:bg-surface-alt text-text-muted hover:text-heading"
 					>
 						{__('Next')}
-						<ChevronRight className="ml-1 h-3 w-3" />
+						<NextIcon
+							className={`${isRtl ? 'mr-1' : 'ml-1'} h-3 w-3`}
+						/>
 					</button>
 				</div>
 			</div>

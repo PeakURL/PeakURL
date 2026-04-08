@@ -7,6 +7,7 @@ import {
 	TransitionChild,
 } from '@headlessui/react';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import { Button } from './Button';
 import type { ConfirmDialogProps } from './types';
 export type { ConfirmDialogProps, ConfirmVariant } from './types';
@@ -31,6 +32,8 @@ export function ConfirmDialog({
 	confirmVariant = 'primary',
 	loading = false,
 }: ConfirmDialogProps) {
+	const isRtl = isDocumentRtl();
+
 	return (
 		<Transition appear show={open} as={Fragment}>
 			<Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -57,7 +60,11 @@ export function ConfirmDialog({
 							leaveFrom="opacity-100 scale-100"
 							leaveTo="opacity-0 scale-95"
 						>
-							<DialogPanel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-surface p-6 text-left shadow-xl transition-all border border-stroke">
+							<DialogPanel
+								className={`w-full max-w-lg transform overflow-hidden rounded-2xl border border-stroke bg-surface p-6 shadow-xl transition-all ${
+									isRtl ? 'text-right' : 'text-left'
+								}`}
+							>
 								<DialogTitle className="mb-2 text-lg font-semibold text-heading">
 									{title}
 								</DialogTitle>

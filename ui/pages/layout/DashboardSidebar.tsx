@@ -17,6 +17,7 @@ import {
 import { useGetUrlsQuery } from '@/store/slices/api';
 import { useAdminAccess } from '@/hooks';
 import { BrandLockup } from '@/components';
+import { isDocumentRtl } from '@/i18n/direction';
 import { __ } from '@/i18n';
 import type { DashboardSidebarProps, NavItem } from './types';
 
@@ -108,6 +109,7 @@ export const DashboardSidebar = ({
 	isMobileOpen,
 	onMobileClose,
 }: DashboardSidebarProps) => {
+	const isRtl = isDocumentRtl();
 	const location = useLocation();
 	const pathname = location.pathname;
 	const { data: urlsRes } = useGetUrlsQuery(undefined);
@@ -160,9 +162,14 @@ export const DashboardSidebar = ({
 
 			<aside
 				className={`
-                    fixed inset-y-0 left-0 w-64 bg-surface border-r border-stroke
+                    fixed inset-y-0 w-64 bg-surface border-stroke
+                    ${isRtl ? 'right-0 border-l' : 'left-0 border-r'}
                     transform ${
-						isMobileOpen ? 'translate-x-0' : '-translate-x-full'
+						isMobileOpen
+							? 'translate-x-0'
+							: isRtl
+								? 'translate-x-full'
+								: '-translate-x-full'
 					} lg:translate-x-0
                     transition-transform duration-300 ease-in-out z-50 lg:z-30
                     flex flex-col
@@ -233,13 +240,21 @@ export const DashboardSidebar = ({
 										>
 											<IconComponent
 												size={18}
-												className={`mr-3 ${
+												className={`${
+													isRtl ? 'ml-3' : 'mr-3'
+												} ${
 													isSectionActive
 														? 'text-accent'
 														: 'text-text-muted'
 												}`}
 											/>
-											<span className="flex-1 text-left">
+											<span
+												className={`flex-1 ${
+													isRtl
+														? 'text-right'
+														: 'text-left'
+												}`}
+											>
 												{item.name}
 											</span>
 											<ChevronDown
@@ -251,7 +266,13 @@ export const DashboardSidebar = ({
 										</button>
 
 										{isOpen && (
-											<div className="ml-5 space-y-1 border-l border-stroke pl-3">
+											<div
+												className={`space-y-1 ${
+													isRtl
+														? 'mr-5 border-r border-stroke pr-3'
+														: 'ml-5 border-l border-stroke pl-3'
+												}`}
+											>
 												{item.children.map((child) => {
 													const isChildLinkActive =
 														pathname ===
@@ -303,13 +324,19 @@ export const DashboardSidebar = ({
 								>
 									<IconComponent
 										size={18}
-										className={`mr-3 ${
+										className={`${
+											isRtl ? 'ml-3' : 'mr-3'
+										} ${
 											isActive
 												? 'text-white'
 												: 'text-text-muted'
 										}`}
 									/>
-									<span className="flex-1 text-left">
+									<span
+										className={`flex-1 ${
+											isRtl ? 'text-right' : 'text-left'
+										}`}
+									>
 										{item.name}
 									</span>
 									{item.name === __('All Links') &&
@@ -405,7 +432,11 @@ export const DashboardSidebar = ({
 							size={18}
 							className={`shrink-0 ${isAboutOpen ? 'text-accent' : 'text-text-muted'}`}
 						/>
-						<span className="flex-1 text-left">
+						<span
+							className={`flex-1 ${
+								isRtl ? 'text-right' : 'text-left'
+							}`}
+						>
 							{__('About PeakURL')}
 						</span>
 						<ChevronDown

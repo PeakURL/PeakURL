@@ -1,6 +1,7 @@
 import { Input } from '@/components/ui';
 import { Lock, Tags } from 'lucide-react';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import type { SecurityFieldsProps } from '../types';
 
 const SecurityFields = ({
@@ -9,6 +10,7 @@ const SecurityFields = ({
 	password,
 	setPassword,
 }: SecurityFieldsProps) => {
+	const isRtl = isDocumentRtl();
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 			<div>
@@ -16,7 +18,11 @@ const SecurityFields = ({
 					htmlFor="title"
 					className="block text-sm font-medium text-heading mb-1.5"
 				>
-					<Tags className="mr-2 inline h-4 w-4 text-text-muted" />
+					<Tags
+						className={`inline h-4 w-4 text-text-muted ${
+							isRtl ? 'ml-2' : 'mr-2'
+						}`}
+					/>
 					{__('Link Title (Optional)')}
 				</label>
 				<Input
@@ -33,7 +39,11 @@ const SecurityFields = ({
 					htmlFor="password"
 					className="block text-sm font-medium text-heading mb-1.5"
 				>
-					<Lock className="w-4 h-4 inline mr-2 text-text-muted" />
+					<Lock
+						className={`inline h-4 w-4 text-text-muted ${
+							isRtl ? 'ml-2' : 'mr-2'
+						}`}
+					/>
 					{__('Password Protection (Optional)')}
 				</label>
 				<Input

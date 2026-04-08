@@ -454,6 +454,30 @@ function peakurl_get_html_lang_attribute(): string {
 }
 
 /**
+ * Get the active locale as an HTML `dir` attribute.
+ *
+ * @return string
+ * @since 1.0.7
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
+function peakurl_get_text_direction(): string {
+	return peakurl_get_i18n_service()->get_text_direction();
+}
+
+/**
+ * Determine whether the active locale uses right-to-left layout.
+ *
+ * Mirrors WordPress `is_rtl()`.
+ *
+ * @return bool
+ * @since 1.0.7
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function is_rtl(): bool {
+	return peakurl_get_i18n_service()->is_locale_rtl();
+}
+
+/**
  * Translate a text string.
  *
  * Mirrors WordPress `translate()`.

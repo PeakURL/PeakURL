@@ -1,7 +1,14 @@
 import type { KeyboardEvent, SubmitEvent } from 'react';
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, CheckCircle2, KeyRound, LockKeyhole } from 'lucide-react';
+import {
+	ArrowLeft,
+	ArrowRight,
+	CheckCircle2,
+	KeyRound,
+	LockKeyhole,
+} from 'lucide-react';
+import { isDocumentRtl } from '@/i18n/direction';
 import { Button, Input } from '@/components/ui';
 import { useResetPasswordMutation } from '@/store/slices/api';
 import { __ } from '@/i18n';
@@ -17,6 +24,8 @@ const submitFormOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
 };
 
 function ResetPasswordPage() {
+	const isRtl = isDocumentRtl();
+	const BackArrow = isRtl ? ArrowRight : ArrowLeft;
 	const navigate = useNavigate();
 	const { token = '' } = useParams();
 	const [password, setPassword] = useState('');
@@ -107,7 +116,7 @@ function ResetPasswordPage() {
 								to="/login"
 								className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-slate-900"
 							>
-								<ArrowLeft size={16} />
+								<BackArrow size={16} />
 								{__('Back to login')}
 							</Link>
 						</div>

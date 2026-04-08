@@ -19,8 +19,7 @@ function MethodButton({
 	description,
 	onClick,
 }: MethodButtonProps) {
-	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
 
 	return (
 		<button
@@ -291,7 +290,7 @@ function EmailDeliveryTab({
 											smtpAuth: !current.smtpAuth,
 										}))
 									}
-									dir={isRtl ? 'rtl' : 'ltr'}
+									dir={direction}
 									className={`inline-flex w-full items-center justify-between rounded-md border px-4 py-2 text-sm font-medium transition ${
 										form.smtpAuth
 											? 'border-accent bg-accent/10 text-heading'

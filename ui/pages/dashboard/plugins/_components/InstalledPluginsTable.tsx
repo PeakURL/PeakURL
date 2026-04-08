@@ -18,13 +18,9 @@ function Skeleton({ className = '' }: PluginPreviewSkeletonProps) {
 }
 
 function StatusPill({ active }: PluginStatusPillProps) {
-	const isRtl = isDocumentRtl();
-
 	return active ? (
-		<span className="inline-flex items-center rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
-			<span
-				className={`${isRtl ? 'ml-1.5' : 'mr-1.5'} h-1.5 w-1.5 rounded-full bg-emerald-500`}
-			/>
+		<span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+			<span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
 			{__('Active')}
 		</span>
 	) : (
@@ -35,7 +31,7 @@ function StatusPill({ active }: PluginStatusPillProps) {
 }
 
 function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
-	const isRtl = isDocumentRtl();
+	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
 
 	if (plugins.length === 0) {
 		return (
@@ -89,7 +85,7 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 									{/* Plugin name + desc (blurred) */}
 									<td className="text-inline-start px-5 py-4">
 										<div
-											dir={isRtl ? 'rtl' : 'ltr'}
+											dir={direction}
 											className="flex items-center justify-start gap-3"
 										>
 											<div
@@ -127,13 +123,7 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 									</td>
 									{/* Actions (disabled) */}
 									<td className="px-5 py-4">
-										<div
-											className={`flex items-center gap-1 ${
-												isRtl
-													? 'justify-start'
-													: 'justify-end'
-											}`}
-										>
+										<div className="flex items-center justify-end gap-1">
 											<Button
 												variant="secondary"
 												size="xs"

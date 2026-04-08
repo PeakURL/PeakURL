@@ -47,6 +47,7 @@ function SecurityTab({
 	notification,
 }: SecurityTabProps) {
 	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const [recentCodes, setRecentCodes] = useState<string[]>([]);
 	const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
 	const [secret, setSecret] = useState<string | null>(null);
@@ -450,7 +451,7 @@ function SecurityTab({
 
 			<div className="bg-surface border border-stroke rounded-lg p-5 space-y-4">
 				<div
-					dir={isRtl ? 'rtl' : 'ltr'}
+					dir={direction}
 					className="flex items-center justify-between"
 				>
 					<div>
@@ -503,7 +504,7 @@ function SecurityTab({
 				</div>
 
 				<div
-					dir={isRtl ? 'rtl' : 'ltr'}
+					dir={direction}
 					className={`flex items-start gap-3 rounded-lg border p-3 ${
 						twoFactorEnabled
 							? 'border-emerald-200 bg-emerald-50 dark:border-emerald-500/30 dark:bg-emerald-500/10'
@@ -557,7 +558,7 @@ function SecurityTab({
 				{!twoFactorEnabled && hasTwoFactorSetupDetails && (
 					<div className="border border-stroke rounded-lg p-4 space-y-3">
 						<div
-							dir={isRtl ? 'rtl' : 'ltr'}
+							dir={direction}
 							className="flex items-start gap-3"
 						>
 							<div className="p-2 rounded-lg bg-surface shadow-sm">
@@ -658,7 +659,7 @@ function SecurityTab({
 				{twoFactorEnabled && recentCodes.length > 0 && (
 					<div className="border border-dashed border-stroke rounded-lg p-4">
 						<div
-							dir={isRtl ? 'rtl' : 'ltr'}
+							dir={direction}
 							className="flex items-center justify-between"
 						>
 							<div>
@@ -701,7 +702,7 @@ function SecurityTab({
 
 				<div className="bg-surface border border-stroke rounded-lg p-5">
 				<div
-					dir={isRtl ? 'rtl' : 'ltr'}
+					dir={direction}
 					className="mb-4 flex items-center justify-between"
 				>
 					<div>
@@ -741,7 +742,7 @@ function SecurityTab({
 						sessions.map((session: SecuritySession) => (
 							<div
 								key={session.id}
-								dir={isRtl ? 'rtl' : 'ltr'}
+								dir={direction}
 								className={`flex items-center justify-between p-3 border border-stroke rounded-lg ${
 									session.revokedAt ? 'opacity-70' : ''
 								}`}

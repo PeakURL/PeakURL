@@ -28,6 +28,7 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [timeRange, setTimeRange] = useState<StatsTimeRange>('7d');
 	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 
 	const getDaysFromRange = (range: StatsTimeRange): number => {
 		switch (range) {
@@ -78,7 +79,7 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 						}`}
 					>
 						<DialogPanel
-							dir={isRtl ? 'rtl' : 'ltr'}
+							dir={direction}
 							transition
 							className={`pointer-events-auto w-screen max-w-4xl transform transition duration-500 ease-in-out sm:duration-700 ${
 								isRtl

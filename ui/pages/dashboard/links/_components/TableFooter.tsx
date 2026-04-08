@@ -15,7 +15,7 @@ const TableFooter = ({
 	limit = 15,
 	setLimit,
 }: TableFooterProps) => {
-	const isRtl = isDocumentRtl();
+	const pageDirection = isDocumentRtl() ? 'rtl' : 'ltr';
 	const pageSizeOptions = [25, 50, 100, 150];
 	const isCustom = !pageSizeOptions.includes(Number(limit));
 	const sortOptions: SelectOption<LinksSortBy>[] = [
@@ -64,7 +64,9 @@ const TableFooter = ({
 				{/* Filters */}
 				<div
 					className={`grid grid-cols-2 gap-2 sm:flex sm:flex-wrap ${
-						isRtl ? 'sm:justify-start' : 'sm:justify-end'
+						'rtl' === pageDirection
+							? 'sm:justify-start'
+							: 'sm:justify-end'
 					}`}
 				>
 					<Select
@@ -105,7 +107,7 @@ const TableFooter = ({
 							type="number"
 							dir={resolveFieldDirection({
 								value: limit,
-								fallbackDirection: isRtl ? 'rtl' : 'ltr',
+								fallbackDirection: pageDirection,
 								valueDirection: 'ltr',
 							})}
 							min={1}
@@ -115,9 +117,7 @@ const TableFooter = ({
 								if (!isNaN(num) && num > 0) setLimit(num);
 							}}
 							placeholder={__('Custom page size')}
-							className={`col-span-2 w-full min-w-0 rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent sm:col-span-1 sm:w-28 ${
-								isRtl ? 'text-right' : 'text-left'
-							}`}
+							className="text-inline-start col-span-2 w-full min-w-0 rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent sm:col-span-1 sm:w-28"
 						/>
 					)}
 				</div>

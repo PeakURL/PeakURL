@@ -16,14 +16,11 @@ const UTMFields = ({
 	utmContent,
 	setUtmContent,
 }: UTMFieldsProps) => {
-	const isRtl = isDocumentRtl();
+	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
 	return (
 		<div>
 			<label className="block text-sm font-medium text-heading mb-1.5">
-				<span
-					dir={isRtl ? 'rtl' : 'ltr'}
-					className="inline-flex items-center gap-2"
-				>
+				<span dir={direction} className="inline-flex items-center gap-2">
 					<BarChart3 className="h-4 w-4 text-text-muted" />
 					{__('UTM Parameters (Optional)')}
 				</span>

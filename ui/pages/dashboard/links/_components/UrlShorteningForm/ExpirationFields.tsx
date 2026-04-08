@@ -11,14 +11,11 @@ const ExpirationFields = ({
 	expirationTime,
 	setExpirationTime,
 }: ExpirationFieldsProps) => {
-	const isRtl = isDocumentRtl();
+	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
 	return (
 		<div>
 			<label className="block text-sm font-medium text-heading mb-1.5">
-				<span
-					dir={isRtl ? 'rtl' : 'ltr'}
-					className="inline-flex items-center gap-2"
-				>
+				<span dir={direction} className="inline-flex items-center gap-2">
 					<Calendar className="h-4 w-4 text-text-muted" />
 					{__('Expiration Date (Optional)')}
 				</span>

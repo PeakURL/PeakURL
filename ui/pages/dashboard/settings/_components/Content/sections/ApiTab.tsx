@@ -22,7 +22,7 @@ function ApiTab({
 	onDeleteKey,
 	setShowCreateModal,
 }: ApiTabProps) {
-	const isRtl = isDocumentRtl();
+	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
 	return (
 		<div className="space-y-5">
 			{baseApiUrl && (
@@ -89,7 +89,7 @@ function ApiTab({
 						{user.apiKeys.map((key) => (
 							<div
 								key={key.id}
-								dir={isRtl ? 'rtl' : 'ltr'}
+								dir={direction}
 								className="flex items-center justify-between p-4 border border-stroke rounded-lg hover:border-accent/50 transition-colors"
 							>
 								<div className="text-inline-start min-w-0 flex-1">

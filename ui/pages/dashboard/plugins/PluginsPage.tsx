@@ -169,18 +169,12 @@ function PluginsPage() {
 							{/* Disabled search placeholder */}
 							<div className="relative max-w-55 flex-1">
 								<div
-									className={`pointer-events-none w-full rounded-lg border border-stroke bg-surface-alt/50 py-2 text-sm text-text-muted/40 ${
-										isRtl
-											? 'pr-8 pl-3 text-right'
-											: 'pl-8 pr-3 text-left'
-									}`}
+									className="field-with-inline-start-icon text-inline-start pointer-events-none w-full rounded-lg border border-stroke bg-surface-alt/50 py-2 text-sm text-text-muted/40"
 								>
 									{__('Search plugins…')}
 								</div>
 								<div
-									className={`pointer-events-none absolute inset-y-0 flex items-center text-text-muted/40 ${
-										isRtl ? 'right-0 pr-2.5' : 'left-0 pl-2.5'
-									}`}
+									className="inline-start-icon-slot pointer-events-none absolute inset-y-0 flex items-center text-text-muted/40"
 								>
 									<svg
 										className="h-4 w-4"

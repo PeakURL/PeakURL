@@ -330,6 +330,7 @@ function UserDialog({
 
 function UsersPage() {
 	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const roleMeta = getRoleMeta();
 	const { data: userData, isLoading: isProfileLoading } =
 		useGetUserProfileQuery(undefined);
@@ -574,7 +575,7 @@ function UsersPage() {
 									>
 										<td className="text-inline-start px-6 py-4">
 											<div
-												dir={isRtl ? 'rtl' : 'ltr'}
+												dir={direction}
 												className="flex w-full items-start justify-start gap-3"
 											>
 												<Avatar
@@ -635,13 +636,7 @@ function UsersPage() {
 												: __('Unknown')}
 										</td>
 										<td className="px-6 py-4">
-											<div
-												className={`flex gap-2 ${
-													isRtl
-														? 'justify-start'
-														: 'justify-end'
-												}`}
-											>
+											<div className="flex justify-end gap-2">
 												<IconButton
 													icon={Pencil}
 													variant="outline"

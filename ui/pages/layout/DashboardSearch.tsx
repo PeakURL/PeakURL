@@ -71,7 +71,6 @@ function ResultSection({ title, children }: ResultSectionProps) {
 
 export const DashboardSearch = () => {
 	const direction = getDocumentDirection();
-	const isRtl = isDocumentRtl();
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const {
 		query,
@@ -140,9 +139,7 @@ export const DashboardSearch = () => {
 						}}
 						placeholder={__('Search links, settings...')}
 						aria-label={__('Search the dashboard')}
-						className={`w-full rounded-lg border border-stroke bg-bg px-10 py-2 text-sm text-heading placeholder:text-text-muted focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 ${
-							isRtl ? 'text-right' : 'text-left'
-						}`}
+						className="text-inline-start w-full rounded-lg border border-stroke bg-bg px-10 py-2 text-sm text-heading placeholder:text-text-muted focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
 					/>
 					{query ? (
 						<button

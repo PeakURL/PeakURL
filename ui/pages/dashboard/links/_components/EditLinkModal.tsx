@@ -23,8 +23,7 @@ import type {
 import type { SelectOption } from '@/components/ui';
 
 function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
-	const isRtl = isDocumentRtl();
-	const pageDirection = isRtl ? 'rtl' : 'ltr';
+	const pageDirection = isDocumentRtl() ? 'rtl' : 'ltr';
 	const getInitialTitle = () => normalizeLinkTitle(link?.title);
 	const getInitialStatus = (): LinkStatus => link?.status || 'active';
 	const getInitialExpiresAt = () => toLocalDateTimeValue(link?.expiresAt);
@@ -92,9 +91,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 
 			<div className="fixed inset-0 flex items-center justify-center p-4">
 				<DialogPanel
-					className={`mx-auto w-full max-w-lg rounded-lg bg-surface shadow-xl ${
-						isRtl ? 'text-right' : 'text-left'
-					}`}
+					className="text-inline-start mx-auto w-full max-w-lg rounded-lg bg-surface shadow-xl"
 				>
 					{/* Header */}
 					<div className="flex items-center justify-between p-6 border-b border-stroke">
@@ -166,9 +163,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 								value={title}
 								onChange={(e) => setTitle(e.target.value)}
 								placeholder={__('Enter a title for this link')}
-								className={`w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent ${
-									isRtl ? 'text-right' : 'text-left'
-								}`}
+								className="text-inline-start w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent"
 							/>
 						</div>
 
@@ -199,9 +194,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 												'Set a password to protect this link'
 											)
 								}
-								className={`w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent ${
-									isRtl ? 'text-right' : 'text-left'
-								}`}
+								className="text-inline-start w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent"
 							/>
 							{hasExistingPassword && (
 								<div className="mt-2 space-y-2">
@@ -250,9 +243,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 								onChange={(e) => setExpiresAt(e.target.value)}
 								min={getLocalDateTimeValue()}
 								step="60"
-								className={`w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent ${
-									isRtl ? 'text-right' : 'text-left'
-								}`}
+								className="text-inline-start w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent"
 							/>
 						</div>
 

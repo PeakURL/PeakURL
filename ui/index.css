@@ -207,6 +207,16 @@ body {
 		@apply relative overflow-hidden rounded-2xl bg-surface p-6 shadow-sm ring-1 ring-(--color-stroke)/40 transition;
 	}
 
+	.field-with-inline-start-icon {
+		padding-inline-start: 2rem;
+		padding-inline-end: 0.75rem;
+	}
+
+	.inline-start-icon-slot {
+		inset-inline-start: 0;
+		padding-inline-start: 0.625rem;
+	}
+
 	/* Content wrapper to ensure clear separation from header/sidebar */
 	.content-area {
 		@apply bg-bg dark:bg-bg;

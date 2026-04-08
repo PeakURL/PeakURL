@@ -28,7 +28,7 @@ const Header = ({ timeRange, onTimeRangeChange }: HeaderProps) => {
 					onChange={onTimeRangeChange}
 					options={timeRangeOptions}
 					ariaLabel={__('Dashboard time range')}
-					className="min-w-[10rem]"
+					className="min-w-40"
 					buttonClassName="rounded-lg border-stroke bg-surface focus:border-primary-500 focus:ring-primary-500/20"
 				/>
 			</div>

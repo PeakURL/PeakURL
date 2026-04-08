@@ -165,7 +165,7 @@ function PluginsPage() {
 					{activeTab !== 'installed' && (
 						<div className="flex items-center gap-2 pb-3 sm:pb-0">
 							{/* Disabled search placeholder */}
-							<div className="relative max-w-[220px] flex-1">
+							<div className="relative max-w-55 flex-1">
 								<div className="pointer-events-none w-full rounded-lg border border-stroke bg-surface-alt/50 py-2 pl-8 pr-3 text-sm text-text-muted/40">
 									{__('Search plugins…')}
 								</div>
@@ -225,7 +225,7 @@ function PluginsPage() {
 					<div className="px-6 pb-6 pt-5 sm:px-8">
 						{/* Tab context banner */}
 						{activeTab === 'featured' && (
-							<div className="mb-5 flex items-center gap-3 rounded-xl bg-gradient-to-r from-accent/10 via-purple-500/10 to-pink-500/10 px-5 py-4">
+							<div className="mb-5 flex items-center gap-3 rounded-xl bg-linear-to-r from-accent/10 via-purple-500/10 to-pink-500/10 px-5 py-4">
 								<Sparkles
 									size={18}
 									className="shrink-0 text-accent"
@@ -243,7 +243,7 @@ function PluginsPage() {
 							</div>
 						)}
 						{activeTab === 'popular' && (
-							<div className="mb-5 flex items-center gap-3 rounded-xl bg-gradient-to-r from-orange-500/10 via-red-500/10 to-pink-500/10 px-5 py-4">
+							<div className="mb-5 flex items-center gap-3 rounded-xl bg-linear-to-r from-orange-500/10 via-red-500/10 to-pink-500/10 px-5 py-4">
 								<TrendingUp
 									size={18}
 									className="shrink-0 text-orange-500"
@@ -275,7 +275,7 @@ function PluginsPage() {
 				)}
 
 				{/* ── Floating "under construction" overlay ── */}
-				<div className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-surface via-surface/80 to-transparent" />
+				<div className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-linear-to-t from-surface via-surface/80 to-transparent" />
 			</div>
 
 			{/* ════════════════════════════════════
@@ -367,7 +367,7 @@ function FeatureRoadmapCard({
 }: FeatureRoadmapCardProps) {
 	return (
 		<div
-			className={`rounded-xl border border-stroke bg-gradient-to-br ${gradient} p-5 transition-shadow hover:shadow-sm`}
+			className={`rounded-xl border border-stroke bg-linear-to-br ${gradient} p-5 transition-shadow hover:shadow-sm`}
 		>
 			<div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-surface text-accent shadow-sm">
 				<Icon size={17} />

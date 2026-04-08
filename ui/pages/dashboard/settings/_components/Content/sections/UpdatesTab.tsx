@@ -163,7 +163,7 @@ function buildDatabaseStatus(
 
 	return {
 		tone: 'success',
-		label: __('Current'),
+		label: __('Up to Date'),
 		title: __('Database schema is current'),
 		description: __('PeakURL has no outstanding schema repairs for this release.'),
 	};
@@ -293,7 +293,7 @@ function UpdateActions({
 		<Button
 			variant={primaryVariant}
 			size="sm"
-			className="min-w-[11rem] whitespace-nowrap"
+			className="min-w-44 whitespace-nowrap"
 			onClick={onApply}
 			loading={isApplying}
 			icon={Download}
@@ -312,7 +312,7 @@ function UpdateActions({
 		<Button
 			variant={primaryVariant}
 			size="sm"
-			className="min-w-[13rem] whitespace-nowrap"
+			className="min-w-52 whitespace-nowrap"
 			onClick={onReinstall}
 			loading={isReinstalling}
 			icon={RefreshCcw}
@@ -331,13 +331,13 @@ function UpdateActions({
 	const showCheckButton = reinstallAvailable || !updateAvailable;
 
 	return (
-		<div className="flex w-full flex-col gap-3 lg:max-w-[26rem] lg:items-end">
+		<div className="flex w-full flex-col gap-3 lg:max-w-104 lg:items-end">
 			<div className="flex flex-wrap gap-3 lg:justify-end">
 				{showCheckButton ? (
 					<Button
 						variant="outline"
 						size="sm"
-						className="min-w-[11rem] whitespace-nowrap"
+						className="min-w-44 whitespace-nowrap"
 						onClick={onCheck}
 						loading={isChecking}
 						icon={RefreshCcw}
@@ -520,7 +520,7 @@ function UpdatesTab({
 						<Button
 							variant={databaseStatus?.upgradeRequired ? 'primary' : 'outline'}
 							size="sm"
-							className="min-w-[13rem] whitespace-nowrap"
+							className="min-w-52 whitespace-nowrap"
 							onClick={onRepair}
 							loading={isRepairing}
 							disabled={isLoading || isChecking || isApplying}

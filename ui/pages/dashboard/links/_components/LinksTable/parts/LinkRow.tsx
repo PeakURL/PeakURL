@@ -70,7 +70,7 @@ function LinkRow({
 				</div>
 			</td>
 			<td className="px-4 py-3">
-				<div className="text-sm text-heading font-medium truncate max-w-[150px]">
+				<div className="text-sm text-heading font-medium truncate max-w-37.5">
 					{getLinkDisplayTitle(link.title, __('Untitled Link'))}
 				</div>
 			</td>

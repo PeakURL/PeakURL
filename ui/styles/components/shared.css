@@ -1,0 +1,91 @@
+@layer components {
+	.badge {
+		@apply inline-flex items-center gap-1 rounded-full border border-(--color-stroke) px-2 py-1 text-xs font-medium transition-colors select-none dark:border-(--color-stroke-strong);
+	}
+
+	.badge-success {
+		@apply bg-(--color-success-soft) text-(--color-success);
+	}
+
+	.badge-error {
+		@apply bg-(--color-error-soft) text-(--color-error);
+	}
+
+	.badge-warning {
+		@apply bg-(--color-warning-soft) text-(--color-warning);
+	}
+
+	.badge-info {
+		@apply bg-(--color-info-soft) text-(--color-info);
+	}
+
+	.icon-brand-slack {
+		color: var(--brand-slack);
+	}
+
+	.icon-brand-discord {
+		color: var(--brand-discord);
+	}
+
+	.icon-brand-zapier {
+		color: var(--brand-zapier);
+	}
+
+	.icon-brand-google {
+		color: var(--brand-google);
+	}
+
+	.glass {
+		@apply border border-(--color-stroke) bg-surface/80;
+	}
+
+	.header-modern {
+		@apply bg-surface shadow-sm ring-1 ring-(--color-stroke)/40;
+	}
+
+	.stats-card {
+		@apply relative overflow-hidden rounded-2xl bg-surface p-6 shadow-sm ring-1 ring-(--color-stroke)/40 transition;
+	}
+
+	.field-with-inline-start-icon {
+		@apply pl-8 pr-3;
+	}
+
+	html[dir='rtl'] .field-with-inline-start-icon {
+		@apply pl-3 pr-8;
+	}
+
+	.inline-start-icon-slot {
+		@apply left-0 pl-2.5 pr-0;
+		right: auto;
+	}
+
+	html[dir='rtl'] .inline-start-icon-slot {
+		@apply right-0 pl-0 pr-2.5;
+		left: auto;
+	}
+
+	.content-area {
+		@apply bg-bg dark:bg-bg;
+	}
+
+	.focus-ring {
+		@apply focus:ring-accent focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900;
+	}
+
+	.text-gradient-primary {
+		@apply bg-linear-to-r from-blue-600 via-primary-600 to-purple-600 bg-clip-text text-transparent;
+	}
+
+	.text-gradient-success {
+		@apply bg-linear-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent;
+	}
+
+	.text-gradient-warning {
+		@apply bg-linear-to-r from-amber-600 via-orange-600 to-red-600 bg-clip-text text-transparent;
+	}
+
+	.text-gradient-pink {
+		@apply bg-linear-to-r from-pink-600 via-rose-600 to-red-600 bg-clip-text text-transparent;
+	}
+}

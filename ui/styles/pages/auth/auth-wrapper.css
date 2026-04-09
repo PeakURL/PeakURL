@@ -1,0 +1,176 @@
+@-webkit-keyframes auth-page-fade-up {
+	from {
+		opacity: 0;
+		transform: translateY(14px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes auth-page-fade-up {
+	from {
+		opacity: 0;
+		transform: translateY(14px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@-webkit-keyframes auth-page-scale-in {
+	from {
+		opacity: 0;
+		transform: scale(0.97);
+	}
+
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+@keyframes auth-page-scale-in {
+	from {
+		opacity: 0;
+		transform: scale(0.97);
+	}
+
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+@layer components {
+	.auth-page {
+		@apply min-h-screen text-white;
+		background:
+			radial-gradient(
+				circle at top left,
+				rgb(99 102 241 / 0.18),
+				transparent 32%
+			),
+			radial-gradient(
+				circle at bottom right,
+				rgb(16 185 129 / 0.12),
+				transparent 28%
+			),
+			linear-gradient(180deg, #020617 0%, #0f172a 48%, #111827 100%);
+	}
+
+	.auth-page-recovery {
+		@apply px-6 py-10 sm:px-8;
+	}
+
+	.auth-page-container {
+		@apply mx-auto flex min-h-[calc(100vh-5rem)] w-full items-center justify-center;
+	}
+
+	.auth-page-container-compact {
+		@apply max-w-5xl;
+	}
+
+	.auth-page-layout {
+		@apply grid w-full gap-8 lg:grid-cols-[1.15fr_0.85fr];
+	}
+
+	.auth-page-showcase {
+		@apply hidden rounded-[28px] border border-white/10 p-10 shadow-2xl shadow-slate-950/30 lg:flex lg:flex-col lg:justify-between;
+		background: rgb(255 255 255 / 0.04);
+		backdrop-filter: blur(18px);
+	}
+
+	.auth-page-showcase-header {
+		-webkit-animation: auth-page-fade-up 0.5s ease-out both;
+		animation: auth-page-fade-up 0.5s ease-out both;
+	}
+
+	.auth-page-badge {
+		@apply inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-300;
+	}
+
+	.auth-page-showcase-title {
+		@apply mt-6 text-4xl font-semibold tracking-tight text-white;
+	}
+
+	.auth-page-showcase-copy {
+		@apply mt-4 max-w-lg text-base leading-7 text-slate-400;
+	}
+
+	.auth-page-note {
+		@apply rounded-2xl border border-white/10 bg-slate-900/60 p-5;
+		-webkit-animation: auth-page-fade-up 0.5s ease-out 0.14s both;
+		animation: auth-page-fade-up 0.5s ease-out 0.14s both;
+	}
+
+	.auth-page-note-title {
+		@apply text-sm font-medium text-white;
+	}
+
+	.auth-page-note-copy {
+		@apply mt-2 text-sm leading-6 text-slate-400;
+	}
+
+	.auth-page-card {
+		@apply rounded-[28px] border border-slate-200/80 bg-white p-8 text-slate-950 shadow-2xl shadow-slate-950/10;
+		-webkit-animation: auth-page-scale-in 0.45s ease-out 0.08s both;
+		animation: auth-page-scale-in 0.45s ease-out 0.08s both;
+	}
+
+	.auth-page-card-header {
+		@apply mb-6 flex items-center justify-between gap-4;
+	}
+
+	.auth-page-brand {
+		@apply inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700;
+	}
+
+	.auth-page-brand-dot {
+		@apply h-2 w-2 rounded-full bg-emerald-500;
+	}
+
+	.auth-page-back-link {
+		@apply inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-slate-900;
+	}
+
+	.auth-page-card-title {
+		@apply text-3xl font-semibold tracking-tight text-slate-950;
+	}
+
+	.auth-page-card-copy {
+		@apply mt-3 text-sm leading-6 text-slate-500;
+	}
+
+	.auth-page-form {
+		@apply mt-8 space-y-5;
+	}
+
+	.auth-page-input {
+		@apply rounded-xl! border-slate-200! bg-slate-50! py-3! text-sm! transition-colors duration-150 placeholder:text-slate-400 focus:border-indigo-400! focus:bg-white! focus:ring-2! focus:ring-indigo-500/15!;
+	}
+
+	.auth-page-submit {
+		@apply w-full rounded-xl! bg-slate-900! py-3.5! text-sm! font-semibold! text-white! shadow-none! hover:bg-slate-800! focus:ring-slate-900/10! focus:ring-offset-0!;
+	}
+
+	.auth-page-status {
+		@apply mt-8 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-900;
+	}
+
+	.auth-page-status-title {
+		@apply font-semibold;
+	}
+
+	.auth-page-status-copy {
+		@apply mt-2 leading-6 opacity-80;
+	}
+
+	.auth-page-status-link {
+		@apply mt-4 inline-flex items-center gap-2 text-sm font-medium text-emerald-700 transition hover:text-emerald-900;
+	}
+}

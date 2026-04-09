@@ -1,0 +1,39 @@
+@layer components {
+	.dashboard-layout {
+		@apply min-h-screen bg-bg;
+	}
+
+	.dashboard-layout-wrapper {
+		@apply min-h-screen lg:ml-64;
+	}
+
+	.dashboard-layout-wrapper-rtl {
+		@apply lg:ml-0 lg:mr-64;
+	}
+
+	.dashboard-layout-content {
+		@apply flex min-h-[calc(100vh-4rem)] flex-col;
+	}
+
+	.dashboard-layout-main {
+		@apply flex flex-1 flex-col p-4 sm:p-6;
+	}
+
+	.dashboard-layout-footer {
+		@apply px-4 py-4 text-xs text-text-muted/80 sm:px-6;
+	}
+
+	.dashboard-layout-footer-inner {
+		@apply flex items-center justify-between gap-3;
+	}
+
+	.dashboard-layout-footer-link {
+		@apply min-w-0 italic text-text-muted/80 transition-colors hover:text-accent;
+		text-align: start;
+	}
+
+	.dashboard-layout-footer-link-version {
+		@apply shrink-0 not-italic;
+		text-align: end;
+	}
+}

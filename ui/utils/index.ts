@@ -1,12 +1,11 @@
-import {
-	formatLocalizedDateTime,
-	formatRelativeTime,
-} from './dateFormatting';
+import { formatLocalizedDateTime, formatRelativeTime } from './dateFormatting';
 
 /**
  * Joins class names while dropping falsy entries.
  */
-export function cn(...classes: Array<string | false | null | undefined>): string {
+export function cn(
+	...classes: Array<string | false | null | undefined>
+): string {
 	return classes.filter(Boolean).join(' ');
 }
 
@@ -82,21 +81,15 @@ export function validateUrl(url: string): boolean {
 	}
 }
 
-export {
-	buildShortUrl,
-	getSiteUrl,
-	resolveLinkHost,
-} from './linkHelpers';
+export { addFilter, applyFilters, removeFilter } from './hooks';
+export { buildShortUrl, getSiteUrl, resolveLinkHost } from './linkHelpers';
 export {
 	buildLinkExportItems,
 	downloadLinkExport,
 	getLinkExportFile,
 	serializeLinkExport,
 } from './linkExport';
-export {
-	getLinkDisplayTitle,
-	normalizeLinkTitle,
-} from './linkTitles';
+export { getLinkDisplayTitle, normalizeLinkTitle } from './linkTitles';
 export {
 	extractAliasFromShortUrl,
 	normalizeCsvHeader,
@@ -120,11 +113,7 @@ export {
 	requestControlFormSubmit,
 	requestFormSubmit,
 } from './dom';
-export {
-	extractErrorMessage,
-	getErrorMessage,
-	getErrorStatus,
-} from './errors';
+export { extractErrorMessage, getErrorMessage, getErrorStatus } from './errors';
 export { getAvatarInitials, getGravatarUrl } from './avatar';
 export {
 	buildLinkStatsPath,
@@ -134,15 +123,8 @@ export {
 	getDashboardSearchValueFromLocation,
 	resolveDashboardSearchPath,
 } from './dashboardSearch';
-export {
-	formatLocalizedDateTime,
-	formatRelativeTime,
-} from './dateFormatting';
-export {
-	formatByteSize,
-	formatCount,
-	formatDateTimeValue,
-} from './formatters';
+export { formatLocalizedDateTime, formatRelativeTime } from './dateFormatting';
+export { formatByteSize, formatCount, formatDateTimeValue } from './formatters';
 
 /**
  * Resolves the theme color classes associated with a link tag.

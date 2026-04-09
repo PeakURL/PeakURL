@@ -1,0 +1,61 @@
+@layer components {
+	.not-found-page {
+		@apply flex min-h-[calc(100vh-80px)] flex-col items-center justify-center p-4;
+	}
+
+	.not-found-page-inner {
+		@apply w-full max-w-lg text-center;
+	}
+
+	.not-found-page-layout {
+		@apply flex flex-col items-center justify-center;
+	}
+
+	.not-found-page-graphic {
+		@apply mb-6 flex h-24 w-24 items-center justify-center rounded-3xl border border-error/20 bg-error/10 shadow-sm;
+	}
+
+	.not-found-page-graphic-icon {
+		@apply text-error;
+	}
+
+	.not-found-page-title {
+		@apply mb-3 text-3xl font-bold text-heading;
+	}
+
+	.not-found-page-summary {
+		@apply mx-auto mb-8 max-w-md text-lg leading-relaxed text-text-muted;
+	}
+
+	.not-found-page-actions {
+		@apply mb-12 flex w-full flex-col justify-center gap-3 sm:flex-row;
+	}
+
+	.not-found-page-action {
+		@apply w-full sm:w-auto;
+	}
+
+	.not-found-page-links {
+		@apply w-full border-t border-stroke pt-8;
+	}
+
+	.not-found-page-links-title {
+		@apply mb-4 text-sm font-medium uppercase tracking-wider text-text-muted;
+	}
+
+	.not-found-page-link-grid {
+		@apply grid grid-cols-1 gap-3 sm:grid-cols-3;
+	}
+
+	.not-found-page-link {
+		@apply flex items-center justify-center gap-2 rounded-xl border border-stroke p-3 text-sm font-medium text-text-muted transition-all hover:border-accent/50 hover:bg-accent/5 hover:text-accent;
+	}
+
+	.not-found-page-link-icon {
+		@apply transition-transform;
+	}
+
+	.not-found-page-link:hover .not-found-page-link-icon {
+		transform: scale(1.1);
+	}
+}

@@ -53,14 +53,14 @@ export interface NoticeActionProps {
 	/** Action payload attached to the notice. */
 	action?: NoticeActionLink | null;
 
-	/** Tone-specific button classes. */
-	buttonClasses: string;
+	/** Tone-specific action classes. */
+	actionClassName: string;
 }
 
 /**
- * Props for the dashboard app bar.
+ * Props for the dashboard header.
  */
-export interface DashboardAppBarProps {
+export interface HeaderProps {
 	/** Opens the mobile navigation drawer. */
 	onMobileMenuToggle: () => void;
 }
@@ -68,7 +68,7 @@ export interface DashboardAppBarProps {
 /**
  * Props for the main dashboard layout wrapper.
  */
-export interface DashboardLayoutProps {
+export interface LayoutProps {
 	/** Page content rendered inside the dashboard shell. */
 	children: ReactNode;
 }
@@ -141,7 +141,7 @@ export interface NavItem {
 /**
  * Props for the responsive dashboard sidebar.
  */
-export interface DashboardSidebarProps {
+export interface SidebarProps {
 	/** Base path used when the dashboard is mounted below root. */
 	basePath?: string;
 

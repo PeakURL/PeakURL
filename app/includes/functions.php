@@ -307,6 +307,124 @@ function api_base_url( string $path = '', ?string $scheme = null ): string {
 }
 
 /**
+ * Normalize a raw body class value into a sanitized class token.
+ *
+ * @param string $class_name Raw class token.
+ * @return string
+ * @since 1.0.11
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
+function sanitize_body_class( string $class_name ): string {
+	$sanitized = strtolower( trim( $class_name ) );
+	$sanitized = preg_replace( '/[^a-z0-9-]+/', '-', $sanitized );
+	$sanitized = is_string( $sanitized ) ? $sanitized : '';
+	$sanitized = preg_replace( '/-{2,}/', '-', $sanitized );
+	$sanitized = is_string( $sanitized ) ? $sanitized : '';
+
+	return trim( $sanitized, '-' );
+}
+
+/**
+ * Normalize body class input into a unique list of sanitized class names.
+ *
+ * @param array|string $css_class Optional body classes.
+ * @return array<int, string>
+ * @since 1.0.11
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
+function sanitize_body_class_list( array|string $css_class = array() ): array {
+	$raw_classes = is_array( $css_class )
+		? $css_class
+		: preg_split( '/\s+/', trim( $css_class ) );
+	$raw_classes = is_array( $raw_classes ) ? $raw_classes : array();
+	$classes     = array();
+	$seen        = array();
+
+	foreach ( $raw_classes as $class_name ) {
+		if ( ! is_scalar( $class_name ) ) {
+			continue;
+		}
+
+		$sanitized = sanitize_body_class( (string) $class_name );
+
+		if ( '' === $sanitized || isset( $seen[ $sanitized ] ) ) {
+			continue;
+		}
+
+		$seen[ $sanitized ] = true;
+		$classes[]          = $sanitized;
+	}
+
+	return $classes;
+}
+
+/**
+ * Get the current document body classes.
+ *
+ * Mirrors WordPress `get_body_class()` so runtime code and future plugins
+ * can extend one shared class list from PHP.
+ *
+ * @param array|string         $css_class Optional body classes.
+ * @param array<string, mixed> $context   Optional runtime context passed to filters.
+ * @return array<int, string>
+ * @since 1.0.11
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function get_body_class(
+	array|string $css_class = array(),
+	array $context = array()
+): array {
+	$class_names = sanitize_body_class_list(
+		array_merge(
+			array( 'peakurl-app' ),
+			sanitize_body_class_list( $css_class ),
+		)
+	);
+	$filtered    = apply_filters(
+		'body_class',
+		$class_names,
+		$css_class,
+		$context,
+	);
+
+	if ( ! is_array( $filtered ) && ! is_string( $filtered ) ) {
+		return $class_names;
+	}
+
+	return sanitize_body_class_list( $filtered );
+}
+
+/**
+ * Echo the current document body classes as a `class` attribute.
+ *
+ * Mirrors WordPress `body_class()`.
+ *
+ * @param array|string         $css_class Optional body classes.
+ * @param array<string, mixed> $context   Optional runtime context passed to filters.
+ * @return void
+ * @since 1.0.11
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function body_class(
+	array|string $css_class = array(),
+	array $context = array()
+): void {
+	$class_names = get_body_class( $css_class, $context );
+
+	if ( empty( $class_names ) ) {
+		return;
+	}
+
+	echo 'class="' .
+		htmlspecialchars(
+			implode( ' ', $class_names ),
+			ENT_QUOTES,
+			'UTF-8',
+		) .
+		'"';
+}
+
+/**
  * Get the shared i18n service for the current request.
  *
  * @param array<string, mixed>|null $config     Optional runtime config.

@@ -14,12 +14,13 @@ import { useNavigate } from 'react-router-dom';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { getDocumentDirection } from '@/i18n/direction';
 import { __ } from '@/i18n';
-import { DashboardSearch } from './DashboardSearch';
-import type { DashboardAppBarProps } from './types';
+import { cn } from '@/utils';
+import { Search } from './Search';
+import type { HeaderProps } from './types';
 
-export const DashboardAppBar = ({
+export const Header = ({
 	onMobileMenuToggle,
-}: DashboardAppBarProps) => {
+}: HeaderProps) => {
 	const direction = getDocumentDirection();
 	const { data: userData } = useGetUserProfileQuery(undefined);
 	const user = userData?.data;
@@ -43,27 +44,25 @@ export const DashboardAppBar = ({
 	};
 
 	return (
-		<div className="sticky top-0 z-30 bg-surface border-b border-stroke">
-			<div className="flex h-16 items-center justify-between gap-2 px-3 sm:gap-4 sm:px-4">
-				{/* Mobile menu button */}
+		<div className="dashboard-header">
+			<div className="dashboard-header-inner">
 				<button
 					onClick={onMobileMenuToggle}
-					className="rounded-lg p-2 transition-colors hover:bg-surface-alt lg:hidden"
+					className="dashboard-header-menu-button"
 				>
-					<MenuIcon size={20} className="text-heading" />
+					<MenuIcon
+						size={20}
+						className="dashboard-header-menu-icon"
+					/>
 				</button>
 
-				{/* Search bar */}
-				<DashboardSearch />
+				<Search />
 
-				{/* Right section */}
-				<div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-					{/* Theme toggle */}
+				<div className="dashboard-header-actions">
 					<ThemeToggle />
 
-					{/* User dropdown */}
-					<Menu as="div" className="relative">
-						<MenuButton className="flex items-center gap-2 rounded-lg px-1.5 py-2 transition-colors hover:bg-surface-alt sm:px-3">
+					<Menu as="div" className="dashboard-header-user-menu">
+						<MenuButton className="dashboard-header-user-trigger">
 							<Avatar
 								size="sm"
 								email={user?.email}
@@ -71,15 +70,13 @@ export const DashboardAppBar = ({
 								lastName={user?.lastName}
 								fallbackName={user?.username || __('Admin')}
 							/>
-							<div
-								className="text-inline-start hidden sm:block"
-							>
-								<div className="text-sm font-semibold text-heading">
+							<div className="dashboard-header-user-details">
+								<div className="dashboard-header-user-name">
 									{user
 										? `${user.firstName} ${user.lastName}`
 										: __('Admin Account')}
 								</div>
-								<div className="text-xs text-text-muted">
+								<div className="dashboard-header-user-role">
 									{user
 										? getRoleLabel(user.role)
 										: __('Admin')}
@@ -87,15 +84,15 @@ export const DashboardAppBar = ({
 							</div>
 							<ChevronDown
 								size={16}
-								className="text-text-muted hidden sm:block"
+								className="dashboard-header-user-caret"
 							/>
 						</MenuButton>
 
 						<MenuItems
 							dir={direction}
-							className="inset-inline-end-0 origin-top-inline-end absolute z-50 mt-2 w-56 rounded-lg border border-stroke bg-surface shadow-lg focus:outline-none"
+							className="dashboard-header-user-panel"
 						>
-							<div className="p-1">
+							<div className="dashboard-header-user-panel-inner">
 								<MenuItem>
 									{({ focus }) => (
 										<button
@@ -104,13 +101,15 @@ export const DashboardAppBar = ({
 													`${basePath}/settings/general`
 												)
 											}
-											className={`${
-												focus ? 'bg-surface-alt' : ''
-											} group flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-heading transition-colors`}
+											className={cn(
+												'dashboard-header-user-item',
+												focus &&
+													'dashboard-header-user-item-active'
+											)}
 										>
 											<User
 												size={16}
-												className="text-text-muted"
+												className="dashboard-header-user-item-icon"
 											/>
 											{__('Profile')}
 										</button>
@@ -122,27 +121,32 @@ export const DashboardAppBar = ({
 											onClick={() =>
 												navigate(`${basePath}/settings`)
 											}
-											className={`${
-												focus ? 'bg-surface-alt' : ''
-											} group flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-heading transition-colors`}
+											className={cn(
+												'dashboard-header-user-item',
+												focus &&
+													'dashboard-header-user-item-active'
+											)}
 										>
 											<Settings
 												size={16}
-												className="text-text-muted"
+												className="dashboard-header-user-item-icon"
 											/>
 											{__('Settings')}
 										</button>
 									)}
 								</MenuItem>
-								<div className="my-1 h-px bg-stroke" />
+								<div className="dashboard-header-user-divider" />
 								<MenuItem>
 									{({ focus }) => (
 										<button
 											onClick={handleLogout}
 											disabled={isLoggingOut}
-											className={`${
-												focus ? 'bg-error/10' : ''
-											} group flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-error transition-colors disabled:opacity-50`}
+											className={cn(
+												'dashboard-header-user-item',
+												'dashboard-header-user-item-danger',
+												focus &&
+													'dashboard-header-user-item-danger-active'
+											)}
 										>
 											<LogOut size={16} />
 											{isLoggingOut
@@ -159,3 +163,5 @@ export const DashboardAppBar = ({
 		</div>
 	);
 };
+
+export default Header;

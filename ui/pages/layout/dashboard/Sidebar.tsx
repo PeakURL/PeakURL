@@ -19,7 +19,8 @@ import { useAdminAccess } from '@/hooks';
 import { BrandLockup } from '@/components';
 import { isDocumentRtl } from '@/i18n/direction';
 import { __ } from '@/i18n';
-import type { DashboardSidebarProps, NavItem } from './types';
+import { cn } from '@/utils';
+import type { NavItem, SidebarProps } from './types';
 
 const buildNav = (
 	basePath = '/dashboard',
@@ -104,11 +105,65 @@ const buildNav = (
 		});
 };
 
-export const DashboardSidebar = ({
+const getSectionToggleClassName = (isActive: boolean): string =>
+	cn(
+		'dashboard-sidebar-section-toggle',
+		isActive && 'dashboard-sidebar-section-toggle-active'
+	);
+
+const getSectionIconClassName = (isActive: boolean): string =>
+	cn(
+		'dashboard-sidebar-section-icon',
+		isActive && 'dashboard-sidebar-section-icon-active'
+	);
+
+const getSectionCaretClassName = (isOpen: boolean): string =>
+	cn(
+		'dashboard-sidebar-section-caret',
+		isOpen && 'dashboard-sidebar-section-caret-open'
+	);
+
+const getSubmenuClassName = (isOpen: boolean): string =>
+	cn('dashboard-sidebar-submenu', isOpen && 'dashboard-sidebar-submenu-open');
+
+const getSubmenuLinkClassName = (isActive: boolean): string =>
+	cn(
+		'dashboard-sidebar-submenu-link',
+		isActive && 'dashboard-sidebar-submenu-link-active'
+	);
+
+const getLinkClassName = (isActive: boolean): string =>
+	cn('dashboard-sidebar-link', isActive && 'dashboard-sidebar-link-active');
+
+const getLinkIconClassName = (isActive: boolean): string =>
+	cn(
+		'dashboard-sidebar-link-icon',
+		isActive && 'dashboard-sidebar-link-icon-active'
+	);
+
+const getLinkBadgeClassName = (isActive: boolean): string =>
+	cn(
+		'dashboard-sidebar-link-badge',
+		isActive && 'dashboard-sidebar-link-badge-active'
+	);
+
+const getAboutPanelClassName = (isOpen: boolean): string =>
+	cn(
+		'dashboard-sidebar-about-panel',
+		isOpen && 'dashboard-sidebar-about-panel-open'
+	);
+
+const getAboutLinkClassName = (isActive: boolean): string =>
+	cn(
+		'dashboard-sidebar-about-link',
+		isActive && 'dashboard-sidebar-about-link-active'
+	);
+
+export const Sidebar = ({
 	basePath = '',
 	isMobileOpen,
 	onMobileClose,
-}: DashboardSidebarProps) => {
+}: SidebarProps) => {
 	const isRtl = isDocumentRtl();
 	const direction = isRtl ? 'rtl' : 'ltr';
 	const location = useLocation();
@@ -156,42 +211,34 @@ export const DashboardSidebar = ({
 		<>
 			{isMobileOpen && (
 				<div
-					className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+					className="dashboard-sidebar-overlay"
 					onClick={onMobileClose}
 				/>
 			)}
 
 			<aside
-				className={`
-                    fixed inset-y-0 w-64 bg-surface border-stroke
-                    ${isRtl ? 'right-0 border-l' : 'left-0 border-r'}
-                    transform ${
-						isMobileOpen
-							? 'translate-x-0'
-							: isRtl
-								? 'translate-x-full'
-								: '-translate-x-full'
-					} lg:translate-x-0
-                    transition-transform duration-300 ease-in-out z-50 lg:z-30
-                    flex flex-col
-                `}
+				className={cn(
+					'dashboard-sidebar',
+					isRtl && 'dashboard-sidebar-rtl',
+					isMobileOpen && 'dashboard-sidebar-open'
+				)}
 			>
-				<div className="h-16 flex items-center px-5 border-b border-stroke shrink-0">
+				<div className="dashboard-sidebar-header">
 					<BrandLockup
 						to={base || '/dashboard'}
 						size="md"
-						className="flex-1"
+						className="dashboard-sidebar-brand"
 					/>
 					<button
 						onClick={onMobileClose}
-						className="lg:hidden p-2 text-text-muted hover:text-heading rounded-lg hover:bg-surface-alt transition-colors"
+						className="dashboard-sidebar-close"
 					>
 						<X size={20} />
 					</button>
 				</div>
 
-				<nav className="flex-1 py-4 px-3 overflow-y-auto">
-					<div className="space-y-1">
+				<nav className="dashboard-sidebar-nav">
+					<div className="dashboard-sidebar-list">
 						{navigation.map((item) => {
 							const IconComponent = item.icon;
 							const childHrefBase = getSectionBasePath(
@@ -219,7 +266,10 @@ export const DashboardSidebar = ({
 
 							if (item.children?.length) {
 								return (
-									<div key={item.name} className="space-y-1">
+									<div
+										key={item.name}
+										className="dashboard-sidebar-section"
+									>
 										<button
 											type="button"
 											onClick={() =>
@@ -229,38 +279,30 @@ export const DashboardSidebar = ({
 														!current[item.name],
 												}))
 											}
-											className={`
-												w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors
-												cursor-pointer
-												${
-													isSectionActive
-														? 'text-heading bg-surface-alt'
-														: 'text-text-muted hover:text-accent hover:bg-surface-alt'
-												}
-											`}
+											className={getSectionToggleClassName(
+												isSectionActive
+											)}
 											dir={direction}
 										>
 											<IconComponent
 												size={18}
-												className={`shrink-0 ${
+												className={getSectionIconClassName(
 													isSectionActive
-														? 'text-accent'
-														: 'text-text-muted'
-												}`}
+												)}
 											/>
-											<span className="text-inline-start flex-1">
+											<span className="dashboard-sidebar-section-label">
 												{item.name}
 											</span>
 											<ChevronDown
 												size={16}
-												className={`transition-transform ${
-													isOpen ? 'rotate-180' : ''
-												}`}
+												className={getSectionCaretClassName(
+													isOpen
+												)}
 											/>
 										</button>
 
-										{isOpen && (
-											<div className="sidebar-submenu-rail space-y-1">
+										<div className={getSubmenuClassName(isOpen)}>
+											<div className="dashboard-sidebar-submenu-list">
 												{item.children.map((child) => {
 													const isChildLinkActive =
 														pathname ===
@@ -276,21 +318,16 @@ export const DashboardSidebar = ({
 															onClick={
 																onMobileClose
 															}
-													className={`
-																text-inline-start block rounded-lg px-3 py-2 text-sm font-medium transition-colors
-																${
-																	isChildLinkActive
-																		? 'bg-accent text-white shadow-sm'
-																		: 'text-text-muted hover:bg-surface-alt hover:text-accent'
-																}
-															`}
+															className={getSubmenuLinkClassName(
+																isChildLinkActive
+															)}
 														>
 															{child.name}
 														</Link>
 													);
 												})}
 											</div>
-										)}
+										</div>
 									</div>
 								);
 							}
@@ -300,39 +337,22 @@ export const DashboardSidebar = ({
 									key={item.name}
 									to={item.href || base || '/dashboard'}
 									onClick={onMobileClose}
-									className={`
-                                        relative w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors
-                                        cursor-pointer
-                                        ${
-											isActive
-												? 'text-white bg-accent shadow-sm'
-												: 'text-text-muted hover:text-accent hover:bg-surface-alt'
-										}
-                                    `}
+									className={getLinkClassName(isActive)}
 									dir={direction}
 								>
 									<IconComponent
 										size={18}
-										className={`shrink-0 ${
-											isActive
-												? 'text-white'
-												: 'text-text-muted'
-										}`}
+										className={getLinkIconClassName(isActive)}
 									/>
-									<span className="text-inline-start flex-1">
+									<span className="dashboard-sidebar-link-label">
 										{item.name}
 									</span>
 									{item.name === __('All Links') &&
 										links.length > 0 && (
 											<span
-												className={`
-                                                text-xs font-semibold px-2 py-0.5 rounded-md
-                                                ${
+												className={getLinkBadgeClassName(
 													isActive
-														? 'bg-white/20 text-white'
-														: 'bg-surface-alt text-text-muted'
-												}
-                                            `}
+												)}
 											>
 												{links.length}
 											</span>
@@ -345,28 +365,22 @@ export const DashboardSidebar = ({
 
 				<div
 					ref={aboutRef}
-					className="shrink-0 border-t border-stroke px-3 py-3 space-y-0.5"
+					className="dashboard-sidebar-footer"
 				>
-					{/* Sub-items sit above the trigger so they animate upward into view */}
-					<div
-						className={`overflow-hidden transition-[max-height,opacity] duration-200 ease-in-out ${
-							isAboutOpen
-								? 'max-h-40 opacity-100'
-								: 'max-h-0 opacity-0'
-						}`}
-					>
-						<div className="pb-1 space-y-0.5">
+					<div className={getAboutPanelClassName(isAboutOpen)}>
+						<div className="dashboard-sidebar-about-panel-list">
 							<Link
 								to={`${base || '/dashboard'}/about`}
 								onClick={onMobileClose}
-								className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+								className={getAboutLinkClassName(
 									pathname === `${base || '/dashboard'}/about`
-										? 'bg-accent text-white shadow-sm'
-										: 'text-text-muted hover:bg-surface-alt hover:text-accent'
-								}`}
+								)}
 							>
-								<Info size={15} className="shrink-0" />
-								<span className="flex-1">
+								<Info
+									size={15}
+									className="dashboard-sidebar-about-link-icon"
+								/>
+								<span className="dashboard-sidebar-about-link-label">
 									{__('About PeakURL')}
 								</span>
 							</Link>
@@ -374,58 +388,59 @@ export const DashboardSidebar = ({
 								href="https://peakurl.org/sponsor"
 								target="_blank"
 								rel="noreferrer"
-								className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-text-muted hover:bg-surface-alt hover:text-accent transition-colors"
+								className="dashboard-sidebar-about-link"
 								dir={direction}
 							>
-								<Heart size={15} className="shrink-0" />
-								<span className="flex-1">{__('Sponsor')}</span>
+								<Heart
+									size={15}
+									className="dashboard-sidebar-about-link-icon"
+								/>
+								<span className="dashboard-sidebar-about-link-label">
+									{__('Sponsor')}
+								</span>
 								<ExternalLink
 									size={12}
-									className="shrink-0 opacity-40"
+									className="dashboard-sidebar-about-link-meta"
 								/>
 							</a>
 							<a
 								href="https://buymeacoffee.com/PeakURL"
 								target="_blank"
 								rel="noreferrer"
-								className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-text-muted hover:bg-surface-alt hover:text-accent transition-colors"
+								className="dashboard-sidebar-about-link"
 								dir={direction}
 							>
-								<Coffee size={15} className="shrink-0" />
-								<span className="flex-1">
+								<Coffee
+									size={15}
+									className="dashboard-sidebar-about-link-icon"
+								/>
+								<span className="dashboard-sidebar-about-link-label">
 									{__('Buy Me a Coffee')}
 								</span>
 								<ExternalLink
 									size={12}
-									className="shrink-0 opacity-40"
+									className="dashboard-sidebar-about-link-meta"
 								/>
 							</a>
 						</div>
 					</div>
 
-					{/* Trigger */}
 					<button
 						type="button"
 						onClick={() => setIsAboutOpen((prev) => !prev)}
-						className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors cursor-pointer ${
-							isAboutOpen
-								? 'text-heading bg-surface-alt'
-								: 'text-text-muted hover:text-accent hover:bg-surface-alt'
-						}`}
+						className={getSectionToggleClassName(isAboutOpen)}
 						dir={direction}
 					>
 						<Info
 							size={18}
-							className={`shrink-0 ${isAboutOpen ? 'text-accent' : 'text-text-muted'}`}
+							className={getSectionIconClassName(isAboutOpen)}
 						/>
-						<span className="text-inline-start flex-1">
+						<span className="dashboard-sidebar-section-label">
 							{__('About PeakURL')}
 						</span>
 						<ChevronDown
 							size={16}
-							className={`shrink-0 transition-transform duration-200 ${
-								isAboutOpen ? 'rotate-180' : ''
-							}`}
+							className={getSectionCaretClassName(isAboutOpen)}
 						/>
 					</button>
 				</div>
@@ -434,4 +449,4 @@ export const DashboardSidebar = ({
 	);
 };
 
-export default DashboardSidebar;
+export default Sidebar;

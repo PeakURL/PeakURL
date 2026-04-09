@@ -15,18 +15,19 @@ import {
 
 import {
 	BrandLockup,
+	Button,
 	Input,
 	PageLoader,
 	VerificationCodeInput,
 } from '@/components';
 import { isDocumentRtl } from '@/i18n/direction';
 import {
-	requestClosestFormSubmit,
-	requestControlFormSubmit,
 	getErrorMessage,
 	getErrorStatus,
 	getInstallRecovery,
 	redirectToInstallRecovery,
+	requestClosestFormSubmit,
+	requestControlFormSubmit,
 } from '@/utils';
 import {
 	useAuthCheckQuery,
@@ -36,7 +37,6 @@ import {
 import { __, sprintf } from '@/i18n';
 import type { ApiErrorStateProps } from './types';
 
-/* ─── Highlights shown on the branding panel ─── */
 const getHighlights = () => [
 	{
 		icon: Link2,
@@ -55,29 +55,28 @@ const getHighlights = () => [
 	},
 ];
 
-/* ─── API error state ─── */
 const ApiErrorState = ({ onRetry }: ApiErrorStateProps) => (
-	<div className="flex min-h-screen items-center justify-center bg-white px-6">
-		<div className="login-scale-in w-full max-w-sm text-center">
-			<div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-red-500">
+	<main id="page-container" className="login-page-error-state">
+		<section
+			className="login-page-error-card"
+			aria-labelledby="page-heading"
+		>
+			<div className="login-page-error-icon">
 				<ShieldCheck size={24} />
 			</div>
-			<h1 className="mt-5 text-xl font-semibold text-slate-900">
+			<h1 id="page-heading" className="login-page-error-title">
 				{__('Could not reach the API')}
 			</h1>
-			<p className="mt-2 text-sm leading-relaxed text-slate-500">
+			<p className="login-page-error-copy">
 				{__(
 					'The PHP runtime did not answer the session check. Verify the API and database, then retry.'
 				)}
 			</p>
-			<button
-				className="mt-6 w-full rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition-colors duration-150 hover:bg-slate-800"
-				onClick={onRetry}
-			>
+			<Button className="login-page-error-button" onClick={onRetry}>
 				{__('Retry connection')}
-			</button>
-		</div>
-	</div>
+			</Button>
+		</section>
+	</main>
 );
 
 const PEAKURL_URL =
@@ -202,9 +201,8 @@ function LoginPage() {
 			const activeToken = useBackupMode
 				? backupCode.trim()
 				: token.trim();
-			if (
-				useBackupMode ? activeToken.length < 6 : activeToken.length < 6
-			) {
+
+			if (activeToken.length < 6) {
 				setFormError(
 					useBackupMode
 						? __('Enter your backup code.')
@@ -221,6 +219,7 @@ function LoginPage() {
 				const activeToken = useBackupMode
 					? backupCode.trim()
 					: token.trim();
+
 				await verifyLogin({
 					identifier: identifier.trim(),
 					password,
@@ -255,22 +254,19 @@ function LoginPage() {
 	};
 
 	return (
-		<div className="flex min-h-screen">
-			{/* ─── Left: branding panel ─── */}
-			<div className="hidden flex-col justify-between bg-slate-950 px-10 py-10 text-white lg:flex lg:w-[54%] xl:px-16">
-				{/* Top: logo */}
-				<div className="login-fade-up">
+		<main id="page-container" className="login-page-layout">
+			<aside className="login-page-aside">
+				<div className="login-page-brand">
 					<BrandLockup tone="dark" size="md" />
 				</div>
 
-				{/* Middle: headline + highlights */}
-				<div>
-					<h1 className="login-fade-up-d1 text-[2.5rem] font-bold leading-[1.1] tracking-tight xl:text-5xl">
+				<div className="login-page-content">
+					<h1 className="login-page-heading">
 						{twoFactorRequired ? (
 							<>
 								{__('Almost there.')}
 								<br />
-								<span className="text-indigo-400">
+								<span className="login-page-heading-accent">
 									{__('Verify to continue.')}
 								</span>
 							</>
@@ -278,13 +274,13 @@ function LoginPage() {
 							<>
 								{__('Manage every link')}
 								<br />
-								<span className="text-indigo-400">
+								<span className="login-page-heading-accent">
 									{__('from one place.')}
 								</span>
 							</>
 						)}
 					</h1>
-					<p className="login-fade-up-d2 mt-5 max-w-sm text-[15px] leading-relaxed text-slate-400">
+					<p className="login-page-summary">
 						{twoFactorRequired
 							? __(
 									'One more verification step and you’ll be in your workspace.'
@@ -294,25 +290,25 @@ function LoginPage() {
 								)}
 					</p>
 
-					{/* Highlight chips */}
-					<div className="login-fade-up-d3 mt-8 flex flex-wrap gap-3">
-						{highlights.map((h) => {
-							const Icon = h.icon;
+					<div className="login-page-highlight-list">
+						{highlights.map((highlight) => {
+							const Icon = highlight.icon;
+
 							return (
 								<div
-									key={h.label}
-									className="flex items-center gap-3 rounded-xl bg-white/6 px-4 py-3"
+									key={highlight.label}
+									className="login-page-highlight"
 								>
 									<Icon
 										size={16}
-										className="shrink-0 text-indigo-400"
+										className="login-page-highlight-icon"
 									/>
 									<div>
-										<p className="text-[13px] font-medium text-white">
-											{h.label}
+										<p className="login-page-highlight-title">
+											{highlight.label}
 										</p>
-										<p className="text-[12px] text-slate-500">
-											{h.desc}
+										<p className="login-page-highlight-copy">
+											{highlight.desc}
 										</p>
 									</div>
 								</div>
@@ -321,42 +317,40 @@ function LoginPage() {
 					</div>
 				</div>
 
-				{/* Bottom: powered by */}
 				<a
 					href={PEAKURL_URL}
 					target="_blank"
 					rel="noopener noreferrer"
 					dir={isRtl ? 'rtl' : 'ltr'}
-					className="login-fade-up-d4 text-xs text-slate-600 transition-colors duration-150 hover:text-slate-400"
+					className="login-page-meta"
 				>
 					{sprintf(__('Powered by %s'), 'PeakURL')}
 				</a>
-			</div>
+			</aside>
 
-			{/* ─── Right: form column ─── */}
-			<div className="flex flex-1 flex-col bg-white">
-				{/* Mobile top bar */}
-				<div className="flex items-center justify-between px-6 py-5 lg:hidden">
+			<section
+				className="login-page-panel"
+				aria-labelledby="page-heading"
+			>
+				<div className="login-page-mobile-header">
 					<BrandLockup size="sm" />
 				</div>
 
-				{/* Centered form */}
-				<div className="flex flex-1 items-center justify-center px-6 py-8 sm:px-10">
-					<div className="login-scale-in w-full max-w-xs sm:max-w-sm">
-						{/* Header */}
-						<div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-700">
+				<div className="login-page-panel-content">
+					<div className="login-page-card">
+						<div className="login-page-card-icon">
 							{twoFactorRequired ? (
 								<KeyRound size={20} />
 							) : (
 								<UserRound size={20} />
 							)}
 						</div>
-						<h2 className="mt-5 text-2xl font-bold tracking-tight text-slate-900">
+						<h2 id="page-heading" className="login-page-card-title">
 							{twoFactorRequired
 								? __('Verify your identity')
 								: __('Sign in to your account')}
 						</h2>
-						<p className="mt-2 text-sm leading-relaxed text-slate-500">
+						<p className="login-page-card-copy">
 							{twoFactorRequired
 								? useBackupMode
 									? __(
@@ -370,21 +364,19 @@ function LoginPage() {
 									)}
 						</p>
 
-						{/* Error */}
 						{formError ? (
-							<div className="mt-5 flex items-start gap-2.5 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
-								<span className="mt-px text-xs font-bold text-red-500">
+							<div className="login-page-alert">
+								<span className="login-page-alert-marker">
 									!
 								</span>
-								<p className="text-sm leading-relaxed text-red-700">
+								<p className="login-page-alert-text">
 									{formError}
 								</p>
 							</div>
 						) : null}
 
-						{/* Form */}
 						<form
-							className="mt-7 space-y-5"
+							className="login-page-form"
 							onSubmit={handleSubmit}
 						>
 							<Input
@@ -403,7 +395,7 @@ function LoginPage() {
 								disabled={submitPending || twoFactorRequired}
 								placeholder={__('you@company.com')}
 								required
-								className="rounded-xl border-slate-200 bg-slate-50 py-3 text-sm transition-colors duration-150 placeholder:text-slate-400 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-500/15"
+								className="login-page-input"
 							/>
 
 							<Input
@@ -421,18 +413,18 @@ function LoginPage() {
 								disabled={submitPending || twoFactorRequired}
 								placeholder="••••••••"
 								required
-								className="rounded-xl border-slate-200 bg-slate-50 py-3 text-sm transition-colors duration-150 placeholder:text-slate-400 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-500/15"
+								className="login-page-input"
 							/>
 
 							{!twoFactorRequired ? (
 								<div
-									className={`-mt-1 flex ${
-										isRtl ? 'justify-start' : 'justify-end'
+									className={`login-page-link-row ${
+										isRtl ? 'login-page-link-row-rtl' : ''
 									}`}
 								>
 									<Link
 										to="/forgot-password"
-										className="text-sm font-medium text-indigo-600 transition-colors duration-150 hover:text-indigo-700"
+										className="login-page-link"
 									>
 										{__('Forgot your password?')}
 									</Link>
@@ -440,10 +432,9 @@ function LoginPage() {
 							) : null}
 
 							{twoFactorRequired ? (
-								<div className="space-y-4">
+								<div className="login-page-two-factor">
 									{useBackupMode ? (
-										/* ── Backup code mode ── */
-										<div className="space-y-3">
+										<div className="login-page-two-factor-panel">
 											<Input
 												label={__('Backup code')}
 												valueDirection="ltr"
@@ -463,11 +454,11 @@ function LoginPage() {
 												placeholder={__(
 													'xxxx-xxxx-xxxx'
 												)}
-												className="rounded-xl border-slate-200 bg-slate-50 py-3 text-sm transition-colors duration-150 placeholder:text-slate-400 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-500/15"
+												className="login-page-input"
 											/>
 											<button
 												type="button"
-												className="text-xs font-medium text-indigo-600 transition-colors duration-150 hover:text-indigo-700"
+												className="login-page-secondary-link"
 												onClick={() => {
 													setUseBackupMode(false);
 													setBackupCode('');
@@ -480,9 +471,8 @@ function LoginPage() {
 											</button>
 										</div>
 									) : (
-										/* ── TOTP code mode ── */
-										<div className="space-y-3">
-											<div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
+										<div className="login-page-two-factor-panel">
+											<div className="login-page-code-panel">
 												<VerificationCodeInput
 													value={token}
 													onChange={setToken}
@@ -494,7 +484,7 @@ function LoginPage() {
 											</div>
 											<button
 												type="button"
-												className="text-xs font-medium text-slate-500 transition-colors duration-150 hover:text-slate-700"
+												className="login-page-muted-link"
 												onClick={() => {
 													setUseBackupMode(true);
 													setToken('');
@@ -510,17 +500,16 @@ function LoginPage() {
 								</div>
 							) : null}
 
-							{/* Submit */}
 							<button
 								type="submit"
 								disabled={submitPending}
-								className="w-full rounded-xl bg-slate-900 px-5 py-3.5 text-sm font-semibold text-white transition-colors duration-150 hover:bg-slate-800 disabled:opacity-60 disabled:pointer-events-none"
+								className="login-page-submit"
 							>
-								<span className="inline-flex items-center justify-center gap-2">
+								<span className="login-page-submit-content">
 									{submitPending ? (
 										<>
 											<svg
-												className="h-4 w-4 animate-spin"
+												className="login-page-spinner"
 												fill="none"
 												viewBox="0 0 24 24"
 											>
@@ -553,12 +542,11 @@ function LoginPage() {
 								</span>
 							</button>
 
-							{/* Footer */}
 							{twoFactorRequired ? (
-								<div className="pt-1 text-center">
+								<div className="login-page-actions">
 									<button
 										type="button"
-										className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 transition-colors duration-150 hover:text-slate-700"
+										className="login-page-back-action"
 										onClick={() => {
 											setTwoFactorRequired(false);
 											setToken('');
@@ -575,8 +563,8 @@ function LoginPage() {
 						</form>
 					</div>
 				</div>
-			</div>
-		</div>
+			</section>
+		</main>
 	);
 }
 

@@ -51,6 +51,11 @@ declare global {
 		__PEAKURL_VERSION__?: string;
 
 		/**
+		 * Initial body classes supplied by the PHP runtime before the SPA boots.
+		 */
+		__PEAKURL_BODY_CLASSES__?: string[];
+
+		/**
 		 * Text domain used for translation lookup.
 		 * Typically aligns with the application's i18n domain.
 		 */

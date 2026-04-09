@@ -1,0 +1,84 @@
+@layer components {
+	.dashboard-header {
+		@apply sticky top-0 z-30 border-b border-stroke bg-surface;
+	}
+
+	.dashboard-header-inner {
+		@apply flex h-16 items-center justify-between gap-2 px-3 sm:gap-4 sm:px-4;
+	}
+
+	.dashboard-header-menu-button {
+		@apply rounded-lg p-2 transition-colors hover:bg-surface-alt lg:hidden;
+	}
+
+	.dashboard-header-menu-icon {
+		@apply text-heading;
+	}
+
+	.dashboard-header-actions {
+		@apply flex shrink-0 items-center gap-1.5 sm:gap-2;
+	}
+
+	.dashboard-header-user-menu {
+		@apply relative;
+	}
+
+	.dashboard-header-user-trigger {
+		@apply flex items-center gap-2 rounded-lg px-1.5 py-2 transition-colors hover:bg-surface-alt sm:px-3;
+	}
+
+	.dashboard-header-user-details {
+		@apply hidden sm:block;
+		text-align: start;
+	}
+
+	.dashboard-header-user-name {
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.dashboard-header-user-role {
+		@apply text-xs text-text-muted;
+	}
+
+	.dashboard-header-user-caret {
+		@apply hidden text-text-muted sm:block;
+	}
+
+	.dashboard-header-user-panel {
+		@apply absolute z-50 mt-2 w-56 rounded-lg border border-stroke bg-surface shadow-lg focus:outline-none;
+		inset-inline-end: 0;
+		transform-origin: top right;
+	}
+
+	html[dir='rtl'] .dashboard-header-user-panel {
+		transform-origin: top left;
+	}
+
+	.dashboard-header-user-panel-inner {
+		@apply p-1;
+	}
+
+	.dashboard-header-user-item {
+		@apply flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-heading transition-colors;
+	}
+
+	.dashboard-header-user-item-active {
+		@apply bg-surface-alt;
+	}
+
+	.dashboard-header-user-item-icon {
+		@apply text-text-muted;
+	}
+
+	.dashboard-header-user-divider {
+		@apply my-1 h-px bg-stroke;
+	}
+
+	.dashboard-header-user-item-danger {
+		@apply text-error disabled:opacity-50;
+	}
+
+	.dashboard-header-user-item-danger-active {
+		@apply bg-error/10;
+	}
+}

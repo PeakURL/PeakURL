@@ -193,13 +193,14 @@ function peakurl_should_serve_dashboard_shell( string $relative_path ): bool {
  * Inject runtime configuration into the dashboard HTML shell.
  *
  * Inserts a `<base>` tag and a `<script>` block carrying the base path,
- * API base, site name, version, locale, and dashboard translation catalog
- * into the `<head>` element.
+ * API base, site name, version, backend body classes, locale, and dashboard
+ * translation catalog into the `<head>` element.
  *
  * @param string               $html                Raw app.html content.
  * @param string               $base_path           URL base path.
  * @param string               $site_name           Site name from settings.
  * @param string               $version             Installed PeakURL version.
+ * @param array<int, string>   $body_classes        Initial body classes from PHP runtime hooks.
  * @param string               $locale              Active site locale.
  * @param string               $text_direction      Active document text direction.
  * @param array<string, mixed> $translation_catalog Dashboard JSON catalog.
@@ -211,6 +212,7 @@ function peakurl_inject_runtime_shell(
 	string $base_path,
 	string $site_name,
 	string $version,
+	array $body_classes,
 	string $locale,
 	string $text_direction,
 	array $translation_catalog
@@ -237,6 +239,8 @@ function peakurl_inject_runtime_shell(
 		json_encode( $site_name ) .
 		';window.__PEAKURL_VERSION__=' .
 		json_encode( $version ) .
+		';window.__PEAKURL_BODY_CLASSES__=' .
+		json_encode( $body_classes ) .
 		';window.__PEAKURL_LOCALE__=' .
 		json_encode( $locale ) .
 		';window.__PEAKURL_TEXT_DIRECTION__=' .
@@ -271,6 +275,51 @@ function peakurl_inject_runtime_shell(
 
 	if ( null !== $html_with_lang ) {
 		$updated_html = $html_with_lang;
+	}
+
+	if ( ! empty( $body_classes ) ) {
+		$body_class_string = implode( ' ', $body_classes );
+		$html_with_body    = preg_replace_callback(
+			'/<body\b([^>]*)>/i',
+			static function ( array $matches ) use ( $body_class_string ): string {
+				$attributes         = (string) ( $matches[1] ?? '' );
+				$existing_classes   = '';
+				$updated_attributes = preg_replace_callback(
+					'/\sclass=(["\'])(.*?)\1/i',
+					static function ( array $class_matches ) use ( &$existing_classes ): string {
+						$existing_classes = (string) ( $class_matches[2] ?? '' );
+						return '';
+					},
+					$attributes,
+					1,
+				);
+				$updated_attributes = is_string( $updated_attributes )
+					? trim( $updated_attributes )
+					: trim( $attributes );
+				$combined_classes   = trim(
+					$existing_classes . ' ' . $body_class_string,
+				);
+
+				return '<body' .
+					( '' !== $updated_attributes ? ' ' . $updated_attributes : '' ) .
+					( '' !== $combined_classes
+						? ' class="' .
+							htmlspecialchars(
+								$combined_classes,
+								ENT_QUOTES,
+								'UTF-8',
+							) .
+							'"'
+						: '' ) .
+					'>';
+			},
+			$updated_html,
+			1,
+		);
+
+		if ( null !== $html_with_body ) {
+			$updated_html = $html_with_body;
+		}
 	}
 
 	return $updated_html !== $html ? $updated_html : $runtime . $html;
@@ -391,6 +440,15 @@ $version        = trim(
 		Constants::DEFAULT_VERSION
 	),
 );
+$body_classes   = get_body_class(
+	array(),
+	array(
+		'base_path'     => $base_path,
+		'relative_path' => $relative_path,
+		'request_path'  => $path,
+		'is_spa_shell'  => true,
+	),
+);
 
 $dashboard_shell_path = $root_path . '/app.html';
 
@@ -417,6 +475,7 @@ echo peakurl_inject_runtime_shell(
 	$base_path,
 	$site_name,
 	$version,
+	$body_classes,
 	$locale,
 	$text_direction,
 	$catalog,

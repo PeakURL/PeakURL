@@ -52,7 +52,7 @@ import type {
 	UserDialogPayload,
 	UserSummary,
 } from '@/pages/dashboard/users/types';
-import type { AdminNoticesResponse } from '@/pages/layout/types';
+import type { AdminNoticesResponse } from '@/pages/layout/dashboard/types';
 
 /**
  * Cache tag names shared by the dashboard RTK Query API slices.

@@ -20,6 +20,11 @@ import {
 	LoginPage,
 	ResetPasswordPage,
 } from '@/pages';
+import {
+	clearBodyClassNames,
+	getBodyClassNames,
+	syncBodyClassNames,
+} from './bodyClasses';
 import { getPageTitle } from './pageTitle';
 
 function RouteEffects() {
@@ -29,6 +34,12 @@ function RouteEffects() {
 	useEffect(() => {
 		document.title = getPageTitle(location.pathname);
 	}, [location.pathname]);
+
+	useEffect(() => {
+		syncBodyClassNames(getBodyClassNames(location.pathname));
+	}, [location.pathname]);
+
+	useEffect(() => clearBodyClassNames, []);
 
 	return null;
 }

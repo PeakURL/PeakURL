@@ -22,6 +22,17 @@ require_command composer
 require_command zip
 require_command php
 
+copy_release_language_packs() {
+	source_dir=$1
+	destination_dir=$2
+
+	if [ ! -d "$source_dir" ]; then
+		return
+	fi
+
+	find "$source_dir" -maxdepth 1 -type f \( -name '*.json' -o -name '*.mo' -o -name '*.pot' \) -exec cp {} "$destination_dir/" \;
+}
+
 restore_composer_dependencies() {
 	if [ "$RESTORE_COMPOSER_DEPS" -ne 1 ]; then
 		return
@@ -55,9 +66,7 @@ find "$RELEASE_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 mkdir -p "$RELEASE_DIR/app/bin" "$RELEASE_DIR/content/languages"
 
 cp -R site/. "$RELEASE_DIR/"
-if [ -d "$ROOT_DIR/content/languages" ]; then
-    cp -R "$ROOT_DIR/content/languages/." "$RELEASE_DIR/content/languages/"
-fi
+copy_release_language_packs "$ROOT_DIR/content/languages" "$RELEASE_DIR/content/languages"
 cp -R "$UI_BUILD_DIR/assets" "$RELEASE_DIR/assets"
 cp "$UI_BUILD_DIR/index.html" "$RELEASE_DIR/app.html"
 cp "$ROOT_DIR/.version" "$RELEASE_DIR/.version"

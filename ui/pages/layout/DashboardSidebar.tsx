@@ -17,6 +17,7 @@ import {
 import { useGetUrlsQuery } from '@/store/slices/api';
 import { useAdminAccess } from '@/hooks';
 import { BrandLockup } from '@/components';
+import { isDocumentRtl } from '@/i18n/direction';
 import { __ } from '@/i18n';
 import type { DashboardSidebarProps, NavItem } from './types';
 
@@ -108,6 +109,8 @@ export const DashboardSidebar = ({
 	isMobileOpen,
 	onMobileClose,
 }: DashboardSidebarProps) => {
+	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const location = useLocation();
 	const pathname = location.pathname;
 	const { data: urlsRes } = useGetUrlsQuery(undefined);
@@ -160,9 +163,14 @@ export const DashboardSidebar = ({
 
 			<aside
 				className={`
-                    fixed inset-y-0 left-0 w-64 bg-surface border-r border-stroke
+                    fixed inset-y-0 w-64 bg-surface border-stroke
+                    ${isRtl ? 'right-0 border-l' : 'left-0 border-r'}
                     transform ${
-						isMobileOpen ? 'translate-x-0' : '-translate-x-full'
+						isMobileOpen
+							? 'translate-x-0'
+							: isRtl
+								? 'translate-x-full'
+								: '-translate-x-full'
 					} lg:translate-x-0
                     transition-transform duration-300 ease-in-out z-50 lg:z-30
                     flex flex-col
@@ -222,7 +230,7 @@ export const DashboardSidebar = ({
 												}))
 											}
 											className={`
-												w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors
+												w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors
 												cursor-pointer
 												${
 													isSectionActive
@@ -230,16 +238,17 @@ export const DashboardSidebar = ({
 														: 'text-text-muted hover:text-accent hover:bg-surface-alt'
 												}
 											`}
+											dir={direction}
 										>
 											<IconComponent
 												size={18}
-												className={`mr-3 ${
+												className={`shrink-0 ${
 													isSectionActive
 														? 'text-accent'
 														: 'text-text-muted'
 												}`}
 											/>
-											<span className="flex-1 text-left">
+											<span className="text-inline-start flex-1">
 												{item.name}
 											</span>
 											<ChevronDown
@@ -251,7 +260,7 @@ export const DashboardSidebar = ({
 										</button>
 
 										{isOpen && (
-											<div className="ml-5 space-y-1 border-l border-stroke pl-3">
+											<div className="sidebar-submenu-rail space-y-1">
 												{item.children.map((child) => {
 													const isChildLinkActive =
 														pathname ===
@@ -267,8 +276,8 @@ export const DashboardSidebar = ({
 															onClick={
 																onMobileClose
 															}
-															className={`
-																block rounded-lg px-3 py-2 text-sm font-medium transition-colors
+													className={`
+																text-inline-start block rounded-lg px-3 py-2 text-sm font-medium transition-colors
 																${
 																	isChildLinkActive
 																		? 'bg-accent text-white shadow-sm'
@@ -292,7 +301,7 @@ export const DashboardSidebar = ({
 									to={item.href || base || '/dashboard'}
 									onClick={onMobileClose}
 									className={`
-                                        relative w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors
+                                        relative w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors
                                         cursor-pointer
                                         ${
 											isActive
@@ -300,16 +309,17 @@ export const DashboardSidebar = ({
 												: 'text-text-muted hover:text-accent hover:bg-surface-alt'
 										}
                                     `}
+									dir={direction}
 								>
 									<IconComponent
 										size={18}
-										className={`mr-3 ${
+										className={`shrink-0 ${
 											isActive
 												? 'text-white'
 												: 'text-text-muted'
 										}`}
 									/>
-									<span className="flex-1 text-left">
+									<span className="text-inline-start flex-1">
 										{item.name}
 									</span>
 									{item.name === __('All Links') &&
@@ -365,6 +375,7 @@ export const DashboardSidebar = ({
 								target="_blank"
 								rel="noreferrer"
 								className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-text-muted hover:bg-surface-alt hover:text-accent transition-colors"
+								dir={direction}
 							>
 								<Heart size={15} className="shrink-0" />
 								<span className="flex-1">{__('Sponsor')}</span>
@@ -378,6 +389,7 @@ export const DashboardSidebar = ({
 								target="_blank"
 								rel="noreferrer"
 								className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-text-muted hover:bg-surface-alt hover:text-accent transition-colors"
+								dir={direction}
 							>
 								<Coffee size={15} className="shrink-0" />
 								<span className="flex-1">
@@ -400,12 +412,13 @@ export const DashboardSidebar = ({
 								? 'text-heading bg-surface-alt'
 								: 'text-text-muted hover:text-accent hover:bg-surface-alt'
 						}`}
+						dir={direction}
 					>
 						<Info
 							size={18}
 							className={`shrink-0 ${isAboutOpen ? 'text-accent' : 'text-text-muted'}`}
 						/>
-						<span className="flex-1 text-left">
+						<span className="text-inline-start flex-1">
 							{__('About PeakURL')}
 						</span>
 						<ChevronDown

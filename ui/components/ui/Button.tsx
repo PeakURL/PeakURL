@@ -1,4 +1,5 @@
 import { Loader2 } from 'lucide-react';
+import { isDocumentRtl } from '@/i18n/direction';
 import type {
 	ButtonGroupProps,
 	ButtonProps,
@@ -32,6 +33,7 @@ export function Button({
 	iconPosition = 'left',
 	...props
 }: ButtonProps) {
+	const isRtl = isDocumentRtl();
 	const baseStyles =
 		'relative inline-flex items-center justify-center font-semibold rounded-md transition-all duration-200 select-none disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent/50';
 
@@ -67,7 +69,18 @@ export function Button({
 	};
 
 	const disabledStyles = disabled || loading ? 'pointer-events-none' : '';
-	const iconNode = Icon ? <Icon size={iconSizes[size]} /> : null;
+	const resolvedIconPosition = isRtl
+		? 'left' === iconPosition
+			? 'right'
+			: 'right' === iconPosition
+			? 'left'
+			: iconPosition
+		: iconPosition;
+	const iconNode = loading ? (
+		<Loader2 size={16} className="animate-spin" />
+	) : Icon ? (
+		<Icon size={iconSizes[size]} />
+	) : null;
 
 	return (
 		<button
@@ -77,18 +90,11 @@ export function Button({
 			onClick={onClick}
 			{...props}
 		>
-			{loading ? (
-				<>
-					<Loader2 size={16} className="animate-spin" />
-					{children}
-				</>
-			) : (
-				<>
-					{'left' === iconPosition ? iconNode : null}
-					{children}
-					{'right' === iconPosition ? iconNode : null}
-				</>
-			)}
+			<>
+				{'left' === resolvedIconPosition ? iconNode : null}
+				{children}
+				{'right' === resolvedIconPosition ? iconNode : null}
+			</>
 		</button>
 	);
 }

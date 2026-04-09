@@ -1,4 +1,5 @@
 import { X } from 'lucide-react';
+import { getDocumentDirection } from '@/i18n/direction';
 import type { ModalProps, ModalSize } from './types';
 export type { ModalProps, ModalSize } from './types';
 
@@ -20,6 +21,7 @@ export function Modal({
 	size = 'md',
 }: ModalProps) {
 	if (!isOpen) return null;
+	const direction = getDocumentDirection();
 
 	const sizes: Record<ModalSize, string> = {
 		sm: 'max-w-md',
@@ -36,7 +38,8 @@ export function Modal({
 			/>
 
 			<div
-				className={`relative bg-surface rounded-2xl shadow-2xl w-full ${sizes[size]} max-h-[90vh] overflow-hidden border border-stroke`}
+				dir={direction}
+				className={`text-inline-start relative w-full overflow-hidden rounded-2xl border border-stroke bg-surface shadow-2xl ${sizes[size]} max-h-[90vh]`}
 			>
 				{title && (
 					<div className="px-6 py-4 border-b border-stroke flex items-center justify-between">

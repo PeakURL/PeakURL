@@ -55,7 +55,7 @@ function ExportCard({
 					onClick={onExport}
 					disabled={isDisabled || isLoading}
 				>
-					<Download size={16} className="mr-2" />
+					<Download size={16} />
 					{isLoading ? __('Preparing...') : __('Export')}
 				</Button>
 			</div>
@@ -175,7 +175,7 @@ function ExportPage() {
 						</p>
 					</div>
 
-					<div className="rounded-lg border border-stroke bg-surface-alt px-4 py-3 text-right">
+					<div className="text-page-end rounded-lg border border-stroke bg-surface-alt px-4 py-3">
 						<div className="text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
 							{__('Exportable Links')}
 						</div>

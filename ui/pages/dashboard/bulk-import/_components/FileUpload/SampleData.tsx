@@ -10,14 +10,14 @@ function SampleData({ sampleData }: SampleDataProps) {
 			<div className="overflow-x-auto">
 				<table className="w-full text-sm">
 					<thead>
-						<tr className="border-b border-stroke">
-							<th className="text-left py-2 px-3 text-xs font-semibold text-heading bg-surface-alt">
+						<tr className="text-inline-start border-b border-stroke">
+							<th className="py-2 px-3 text-xs font-semibold text-heading bg-surface-alt">
 								url
 							</th>
-							<th className="text-left py-2 px-3 text-xs font-semibold text-heading bg-surface-alt">
+							<th className="py-2 px-3 text-xs font-semibold text-heading bg-surface-alt">
 								alias
 							</th>
-							<th className="text-left py-2 px-3 text-xs font-semibold text-heading bg-surface-alt">
+							<th className="py-2 px-3 text-xs font-semibold text-heading bg-surface-alt">
 								title
 							</th>
 						</tr>

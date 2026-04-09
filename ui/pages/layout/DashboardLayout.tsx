@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { PEAKURL_VERSION } from '@constants';
-import { __ } from '@/i18n';
+import { PEAKURL_NAME, PEAKURL_VERSION } from '@constants';
+import { isDocumentRtl } from '@/i18n/direction';
+import { __, sprintf } from '@/i18n';
 import DashboardSidebar from './DashboardSidebar';
 import { DashboardAppBar } from './DashboardAppBar';
 import { AdminNotices } from './AdminNotices';
@@ -9,6 +10,7 @@ import type { DashboardLayoutProps } from './types';
 
 export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 	const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+	const isRtl = isDocumentRtl();
 	const basePath = '/dashboard';
 	const location = useLocation();
 	const appBarKey = `${location.pathname}${location.search}`;
@@ -25,7 +27,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 				onMobileClose={() => setIsMobileSidebarOpen(false)}
 			/>
 
-			<div className="lg:ml-64 min-h-screen">
+			<div className={`${isRtl ? 'lg:mr-64' : 'lg:ml-64'} min-h-screen`}>
 				<DashboardAppBar
 					key={appBarKey}
 					onMobileMenuToggle={() => setIsMobileSidebarOpen(true)}
@@ -39,23 +41,23 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
 					<footer className="px-4 py-4 text-xs text-text-muted/80 sm:px-6">
 						<div className="flex items-center justify-between gap-3">
-							<p className="min-w-0 italic">
-								{__('Thank you for choosing')}{' '}
-								<a
-									href={footerLink}
-									target="_blank"
-									rel="noreferrer"
-									className="text-text-muted/80 transition-colors hover:text-accent"
-								>
-									PeakURL
-								</a>
-								.
-							</p>
 							<a
 								href={footerLink}
 								target="_blank"
 								rel="noreferrer"
-								className="shrink-0 text-right text-text-muted/80 transition-colors hover:text-accent"
+								dir={isRtl ? 'rtl' : 'ltr'}
+								className="text-inline-start min-w-0 italic text-text-muted/80 transition-colors hover:text-accent"
+							>
+								{sprintf(
+									__('Thank you for choosing %s.'),
+									PEAKURL_NAME
+								)}
+							</a>
+							<a
+								href={footerLink}
+								target="_blank"
+								rel="noreferrer"
+								className="text-inline-end shrink-0 text-text-muted/80 transition-colors hover:text-accent"
 							>
 								{__('Version')} {PEAKURL_VERSION}
 							</a>

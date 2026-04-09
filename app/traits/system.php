@@ -133,6 +133,8 @@ trait SystemTrait {
 			'siteName'              => $site_name,
 			'siteUrl'               => $site_url,
 			'siteLanguage'          => $this->i18n_service->get_site_locale(),
+			'textDirection'         => $this->i18n_service->get_text_direction(),
+			'isRtl'                 => $this->i18n_service->is_locale_rtl(),
 			'availableLanguages'    => $this->i18n_service->list_languages(),
 			'canManageSiteSettings' => $this->roles->user_can(
 				$user,
@@ -156,6 +158,8 @@ trait SystemTrait {
 		return array(
 			'locale'        => $locale,
 			'htmlLang'      => $this->i18n_service->get_html_lang( $locale ),
+			'textDirection' => $this->i18n_service->get_text_direction( $locale ),
+			'isRtl'         => $this->i18n_service->is_locale_rtl( $locale ),
 			'textDomain'    => Constants::I18N_TEXT_DOMAIN,
 			'defaultLocale' => $this->i18n_service->get_default_locale(),
 			'catalog'       => $this->i18n_service->get_dashboard_catalog( $locale ),

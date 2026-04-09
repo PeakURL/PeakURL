@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
+import { isDocumentRtl } from '@/i18n/direction';
 import type {
 	NotificationContainerProps,
 	NotificationProps,
@@ -73,6 +74,7 @@ export function Notification({
 }: NotificationProps) {
 	const [isPaused, setIsPaused] = useState(false);
 	const [isExiting, setIsExiting] = useState(false);
+	const isRtl = isDocumentRtl();
 
 	// Timer refs
 	const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -149,11 +151,19 @@ export function Notification({
 			className={`
                 relative overflow-hidden rounded-2xl shadow-xl border
                 ${config.bgColor} ${config.textColor} ${config.borderColor}
-                transform transition-all duration-500 ease-out
+				transform transition-all duration-500 ease-out
                 ${
 					isExiting
-						? 'translate-x-full opacity-0 scale-95'
-						: 'translate-x-0 opacity-100 scale-100 animate-slide-in-left'
+						? `${
+								isRtl
+									? '-translate-x-full'
+									: 'translate-x-full'
+							} opacity-0 scale-95`
+						: `translate-x-0 opacity-100 scale-100 ${
+								isRtl
+									? 'animate-slide-in-right'
+									: 'animate-slide-in-left'
+							}`
 				}
                 ${className}
             `}
@@ -186,9 +196,11 @@ export function Notification({
 			</div>
 
 			{duration > 0 && (
-				<div className="absolute bottom-0 left-0 w-full h-1 bg-black/10">
+				<div className="absolute inset-x-0 bottom-0 h-1 bg-black/10">
 					<div
-						className="h-full bg-white/40 origin-left"
+						className={`h-full bg-white/40 ${
+							isRtl ? 'origin-right' : 'origin-left'
+						}`}
 						style={{
 							width: '100%',
 							animation: `progress ${duration}ms linear forwards`,
@@ -213,7 +225,9 @@ export function NotificationContainer({
 	onRemoveNotification,
 }: NotificationContainerProps) {
 	return (
-		<div className="fixed top-4 right-4 z-50 space-y-3 max-w-sm w-full pointer-events-none">
+		<div
+			className="inset-inline-end-4 fixed top-4 z-50 w-full max-w-sm space-y-3 pointer-events-none"
+		>
 			{/* pointer-events-none on container to let clicks pass through, but pointer-events-auto on notifications */}
 			{notifications.map((notification) => (
 				<div key={notification.id} className="pointer-events-auto">

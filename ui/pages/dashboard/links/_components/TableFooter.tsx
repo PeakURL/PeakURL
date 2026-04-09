@@ -1,6 +1,7 @@
 import { Link2, MousePointerClick } from 'lucide-react';
 import { Select } from '@/components/ui';
 import { __, sprintf } from '@/i18n';
+import { getFieldDirection, isDocumentRtl } from '@/i18n/direction';
 import type { LinksSortBy, LinksSortOrder, TableFooterProps } from './types';
 import type { SelectOption } from '@/components/ui';
 
@@ -14,6 +15,7 @@ const TableFooter = ({
 	limit = 15,
 	setLimit,
 }: TableFooterProps) => {
+	const pageDirection = isDocumentRtl() ? 'rtl' : 'ltr';
 	const pageSizeOptions = [25, 50, 100, 150];
 	const isCustom = !pageSizeOptions.includes(Number(limit));
 	const sortOptions: SelectOption<LinksSortBy>[] = [
@@ -60,7 +62,13 @@ const TableFooter = ({
 				</div>
 
 				{/* Filters */}
-				<div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:justify-end">
+				<div
+					className={`grid grid-cols-2 gap-2 sm:flex sm:flex-wrap ${
+						'rtl' === pageDirection
+							? 'sm:justify-start'
+							: 'sm:justify-end'
+					}`}
+				>
 					<Select
 						value={sortBy}
 						onChange={setSortBy}
@@ -97,6 +105,10 @@ const TableFooter = ({
 					{isCustom && (
 						<input
 							type="number"
+							dir={getFieldDirection({
+								fallbackDirection: pageDirection,
+								valueDirection: 'ltr',
+							})}
 							min={1}
 							value={limit}
 							onChange={(e) => {
@@ -104,7 +116,7 @@ const TableFooter = ({
 								if (!isNaN(num) && num > 0) setLimit(num);
 							}}
 							placeholder={__('Custom page size')}
-							className="col-span-2 w-full min-w-0 bg-surface-alt border border-stroke rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-accent focus:border-accent outline-none sm:col-span-1 sm:w-28"
+							className="placeholder-follow-page-direction text-page-start col-span-2 w-full min-w-0 rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent sm:col-span-1 sm:w-28"
 						/>
 					)}
 				</div>

@@ -114,6 +114,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 	error?: string;
 	icon?: InputIcon;
 	helperText?: string;
+	valueDirection?: 'ltr' | 'rtl';
 }
 
 /**

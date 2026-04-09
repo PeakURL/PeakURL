@@ -5,6 +5,7 @@ import {
 	ListboxOptions,
 } from '@headlessui/react';
 import { Check, ChevronDown } from 'lucide-react';
+import { getDocumentDirection } from '@/i18n/direction';
 import type { SelectProps, SelectValue } from './types';
 
 export type { SelectOption, SelectProps, SelectValue } from './types';
@@ -22,6 +23,7 @@ export function Select<T extends SelectValue>({
 	optionClassName = '',
 	...props
 }: SelectProps<T>) {
+	const direction = getDocumentDirection();
 	const selectedOption =
 		options.find((option) => option.value === value) ?? options[0];
 
@@ -33,7 +35,8 @@ export function Select<T extends SelectValue>({
 						<ListboxButton
 							id={id}
 							aria-label={ariaLabel}
-							className={`flex w-full items-center justify-between gap-3 rounded-md border bg-surface px-4 py-2 text-left text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20 disabled:cursor-not-allowed disabled:opacity-60 ${
+							dir={direction}
+							className={`text-inline-start flex w-full items-center justify-between gap-3 rounded-md border bg-surface px-4 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20 disabled:cursor-not-allowed disabled:opacity-60 ${
 								open
 									? 'border-accent ring-2 ring-accent/20'
 									: 'border-stroke'
@@ -46,6 +49,7 @@ export function Select<T extends SelectValue>({
 						</ListboxButton>
 
 						<ListboxOptions
+							dir={direction}
 							anchor={{ to: 'bottom start', gap: 6, padding: 12 }}
 							modal={false}
 							transition
@@ -64,7 +68,7 @@ export function Select<T extends SelectValue>({
 										disabled: optionDisabled,
 									}) => (
 										<div
-											className={`flex items-center justify-between gap-3 rounded-md px-3 py-2 text-sm ${
+											className={`text-inline-start flex items-center justify-between gap-3 rounded-md px-3 py-2 text-sm ${
 												focus ? 'bg-surface-alt' : ''
 											} ${
 												selected

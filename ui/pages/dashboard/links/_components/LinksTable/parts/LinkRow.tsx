@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { isPast } from 'date-fns';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import { formatRelativeTime, getLinkDisplayTitle } from '@/utils';
 import type { LinkRowProps } from '../types';
 
@@ -26,6 +27,28 @@ function LinkRow({
 	onQRCode,
 	formatNumber,
 }: LinkRowProps) {
+	const isRtl = isDocumentRtl();
+	const statusLabel =
+		'active' === link.status
+			? __('Active')
+			: 'inactive' === link.status
+				? __('Inactive')
+				: 'expired' === link.status
+					? __('Expired')
+					: __('Unknown');
+	const statusColorClass =
+		'active' === link.status
+			? 'text-success'
+			: 'expired' === link.status
+				? 'text-error'
+				: 'text-text-muted';
+	const statusDotClass =
+		'active' === link.status
+			? 'bg-success'
+			: 'expired' === link.status
+				? 'bg-error'
+				: 'bg-stroke';
+
 	return (
 		<tr
 			className={`hover:bg-surface-alt/50 transition-colors group ${
@@ -47,7 +70,9 @@ function LinkRow({
 					</div>
 					<div className="min-w-0">
 						<div className="flex items-center gap-1.5">
-							<code className="font-mono font-semibold text-accent text-sm">
+							<code
+								className="preserve-ltr-value text-sm font-mono font-semibold text-accent"
+							>
 								/{link.alias || link.shortCode}
 							</code>
 							<button
@@ -77,7 +102,7 @@ function LinkRow({
 			<td className="px-4 py-3">
 				<div className="max-w-xs">
 					<div
-						className="text-sm text-text-muted truncate"
+						className="preserve-ltr-value truncate text-sm text-text-muted"
 						title={link.destinationUrl}
 					>
 						{link.destinationUrl}
@@ -160,25 +185,21 @@ function LinkRow({
 				</div>
 				<div className="flex items-center gap-1.5 mt-0.5">
 					<span
-						className={`w-1.5 h-1.5 rounded-full ${
-							link.status === 'active'
-								? 'bg-success'
-								: 'bg-stroke'
-						}`}
+						className={`w-1.5 h-1.5 rounded-full ${statusDotClass}`}
 					></span>
 					<span
-						className={`text-xs font-medium capitalize ${
-							link.status === 'active'
-								? 'text-success'
-								: 'text-text-muted'
-						}`}
+						className={`text-xs font-medium ${statusColorClass}`}
 					>
-						{link.status}
+						{statusLabel}
 					</span>
 				</div>
 			</td>
 			<td className="px-4 py-3">
-				<div className="flex items-center justify-end gap-1">
+				<div
+					className={`flex items-center gap-1 ${
+						isRtl ? 'justify-start' : 'justify-end'
+					}`}
+				>
 					<button
 						onClick={() => onQRCode(link)}
 						className="w-7 h-7 flex items-center justify-center text-text-muted hover:text-accent hover:bg-accent/10 rounded-lg transition-all"

@@ -1,6 +1,7 @@
 import { MoreHorizontal, Lock, Info } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import type {
 	InstalledPluginsTableProps,
 	PluginPreviewSkeletonProps,
@@ -18,8 +19,8 @@ function Skeleton({ className = '' }: PluginPreviewSkeletonProps) {
 
 function StatusPill({ active }: PluginStatusPillProps) {
 	return active ? (
-		<span className="inline-flex items-center rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
-			<span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500" />
+		<span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+			<span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
 			{__('Active')}
 		</span>
 	) : (
@@ -30,6 +31,8 @@ function StatusPill({ active }: PluginStatusPillProps) {
 }
 
 function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
+	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
+
 	if (plugins.length === 0) {
 		return (
 			<div className="rounded-xl border border-dashed border-stroke bg-surface-alt/30 px-6 py-12 text-center">
@@ -53,20 +56,20 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 			<div className="overflow-x-auto">
 				<table className="min-w-full">
 					<thead>
-						<tr className="border-b border-stroke bg-surface-alt/60">
-							<th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+						<tr className="text-inline-start border-b border-stroke bg-surface-alt/60">
+							<th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted">
 								{__('Plugin')}
 							</th>
-							<th className="hidden px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-text-muted md:table-cell">
+							<th className="hidden px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted md:table-cell">
 								{__('Version')}
 							</th>
-							<th className="hidden px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-text-muted sm:table-cell">
+							<th className="hidden px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted sm:table-cell">
 								{__('Status')}
 							</th>
-							<th className="hidden px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-text-muted lg:table-cell">
+							<th className="hidden px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted lg:table-cell">
 								{__('Author')}
 							</th>
-							<th className="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-text-muted">
+							<th className="text-inline-end px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted">
 								{__('Actions')}
 							</th>
 						</tr>
@@ -80,14 +83,17 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 									className="group transition-colors hover:bg-surface-alt/40"
 								>
 									{/* Plugin name + desc (blurred) */}
-									<td className="px-5 py-4">
-										<div className="flex items-center gap-3">
+									<td className="text-inline-start px-5 py-4">
+										<div
+											dir={direction}
+											className="flex items-center justify-start gap-3"
+										>
 											<div
 												className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${plugin.gradient} opacity-80`}
 											>
 												<div className="h-5 w-5 rounded bg-white/30" />
 											</div>
-											<div className="min-w-0 space-y-1.5">
+											<div className="text-inline-start min-w-0 flex-1 space-y-1.5">
 												<Skeleton
 													className={`h-4 ${plugin.barWidths[0]}`}
 												/>
@@ -104,15 +110,15 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 										</div>
 									</td>
 									{/* Version (blurred) */}
-									<td className="hidden px-5 py-4 md:table-cell">
+									<td className="text-inline-start hidden px-5 py-4 md:table-cell">
 										<Skeleton className="h-3.5 w-10" />
 									</td>
 									{/* Status */}
-									<td className="hidden px-5 py-4 sm:table-cell">
+									<td className="text-inline-start hidden px-5 py-4 sm:table-cell">
 										<StatusPill active={isActive} />
 									</td>
 									{/* Author (blurred) */}
-									<td className="hidden px-5 py-4 lg:table-cell">
+									<td className="text-inline-start hidden px-5 py-4 lg:table-cell">
 										<Skeleton className="h-3.5 w-16" />
 									</td>
 									{/* Actions (disabled) */}

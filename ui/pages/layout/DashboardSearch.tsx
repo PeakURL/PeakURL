@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import {
+	ArrowLeft,
 	ArrowRight,
 	Link2,
 	LoaderCircle,
@@ -10,6 +11,7 @@ import {
 	X,
 } from 'lucide-react';
 import { useDashboardSearch } from '@/hooks';
+import { getDocumentDirection, isDocumentRtl } from '@/i18n/direction';
 import { __, sprintf } from '@/i18n';
 import type { ResultButtonProps, ResultSectionProps } from './types';
 
@@ -20,12 +22,15 @@ function ResultButton({
 	meta,
 	onClick,
 }: ResultButtonProps) {
+	const isRtl = isDocumentRtl();
+	const DirectionArrow = isRtl ? ArrowLeft : ArrowRight;
+
 	return (
 		<button
 			type="button"
 			onMouseDown={(event) => event.preventDefault()}
 			onClick={onClick}
-			className="flex w-full items-start gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-surface-alt"
+			className="text-inline-start flex w-full items-start gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-surface-alt"
 		>
 			<div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-stroke bg-surface text-text-muted">
 				<Icon size={16} />
@@ -45,7 +50,10 @@ function ResultButton({
 					</p>
 				) : null}
 			</div>
-			<ArrowRight size={15} className="mt-1 shrink-0 text-text-muted" />
+			<DirectionArrow
+				size={15}
+				className="mt-1 shrink-0 text-text-muted"
+			/>
 		</button>
 	);
 }
@@ -62,6 +70,7 @@ function ResultSection({ title, children }: ResultSectionProps) {
 }
 
 export const DashboardSearch = () => {
+	const direction = getDocumentDirection();
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const {
 		query,
@@ -113,10 +122,11 @@ export const DashboardSearch = () => {
 				<div className="relative">
 					<Search
 						size={18}
-						className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
+						className="inset-inline-start-3 absolute top-1/2 -translate-y-1/2 text-text-muted"
 					/>
 					<input
 						type="text"
+						dir={query ? 'auto' : direction}
 						value={query}
 						onFocus={handleFocus}
 						onChange={(event) => handleChange(event.target.value)}
@@ -129,7 +139,7 @@ export const DashboardSearch = () => {
 						}}
 						placeholder={__('Search links, settings...')}
 						aria-label={__('Search the dashboard')}
-						className="w-full rounded-lg border border-stroke bg-bg py-2 pl-10 pr-10 text-sm text-heading placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+						className="text-inline-start w-full rounded-lg border border-stroke bg-bg px-10 py-2 text-sm text-heading placeholder:text-text-muted focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
 					/>
 					{query ? (
 						<button
@@ -139,7 +149,7 @@ export const DashboardSearch = () => {
 									resetLinksSearch: true,
 								})
 							}
-							className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading"
+							className="inset-inline-end-3 absolute top-1/2 -translate-y-1/2 rounded-full p-1 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading"
 							aria-label={__('Clear search')}
 						>
 							<X size={15} />

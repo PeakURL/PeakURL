@@ -12,6 +12,7 @@ import {
 import { Avatar, ThemeToggle } from '@/components';
 import { useNavigate } from 'react-router-dom';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { getDocumentDirection } from '@/i18n/direction';
 import { __ } from '@/i18n';
 import { DashboardSearch } from './DashboardSearch';
 import type { DashboardAppBarProps } from './types';
@@ -19,6 +20,7 @@ import type { DashboardAppBarProps } from './types';
 export const DashboardAppBar = ({
 	onMobileMenuToggle,
 }: DashboardAppBarProps) => {
+	const direction = getDocumentDirection();
 	const { data: userData } = useGetUserProfileQuery(undefined);
 	const user = userData?.data;
 	const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
@@ -69,7 +71,9 @@ export const DashboardAppBar = ({
 								lastName={user?.lastName}
 								fallbackName={user?.username || __('Admin')}
 							/>
-							<div className="hidden sm:block text-left">
+							<div
+								className="text-inline-start hidden sm:block"
+							>
 								<div className="text-sm font-semibold text-heading">
 									{user
 										? `${user.firstName} ${user.lastName}`
@@ -87,7 +91,10 @@ export const DashboardAppBar = ({
 							/>
 						</MenuButton>
 
-						<MenuItems className="absolute right-0 mt-2 w-56 origin-top-right bg-surface border border-stroke rounded-lg shadow-lg focus:outline-none z-50">
+						<MenuItems
+							dir={direction}
+							className="inset-inline-end-0 origin-top-inline-end absolute z-50 mt-2 w-56 rounded-lg border border-stroke bg-surface shadow-lg focus:outline-none"
+						>
 							<div className="p-1">
 								<MenuItem>
 									{({ focus }) => (

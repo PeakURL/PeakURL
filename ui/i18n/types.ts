@@ -1,4 +1,9 @@
 /**
+ * Supported document text directions.
+ */
+export type TextDirection = 'ltr' | 'rtl';
+
+/**
  * Installed language metadata returned by the language discovery flow.
  */
 export interface InstalledLanguage {
@@ -10,6 +15,12 @@ export interface InstalledLanguage {
 
 	/** English display label for the language. */
 	englishLabel?: string;
+
+	/** Active text direction for the locale. */
+	textDirection?: TextDirection;
+
+	/** Whether the locale uses right-to-left layout. */
+	isRtl?: boolean;
 }
 
 /**
@@ -53,6 +64,12 @@ export interface RuntimeI18nPayload {
 
 	/** HTML language attribute to apply to the document root. */
 	htmlLang?: string;
+
+	/** Text direction that should be applied to the document root. */
+	textDirection?: TextDirection;
+
+	/** Whether the active locale uses right-to-left layout. */
+	isRtl?: boolean;
 
 	/** Translation domain used for runtime lookups. */
 	textDomain?: string;

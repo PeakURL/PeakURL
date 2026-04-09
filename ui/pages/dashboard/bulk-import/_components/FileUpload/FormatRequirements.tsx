@@ -123,7 +123,7 @@ function FormatRequirements() {
 					size="sm"
 					onClick={() => handleDownloadSample('csv')}
 				>
-					<Download className="mr-2 h-4 w-4" />
+					<Download className="h-4 w-4" />
 					CSV
 				</Button>
 				<Button
@@ -131,7 +131,7 @@ function FormatRequirements() {
 					size="sm"
 					onClick={() => handleDownloadSample('json')}
 				>
-					<Download className="mr-2 h-4 w-4" />
+					<Download className="h-4 w-4" />
 					JSON
 				</Button>
 				<Button
@@ -139,7 +139,7 @@ function FormatRequirements() {
 					size="sm"
 					onClick={() => handleDownloadSample('xml')}
 				>
-					<Download className="mr-2 h-4 w-4" />
+					<Download className="h-4 w-4" />
 					XML
 				</Button>
 			</div>

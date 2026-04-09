@@ -62,9 +62,9 @@ export function PageLoader() {
 					{/* Outer ring */}
 					<div className="w-16 h-16 border-4 border-stroke rounded-full"></div>
 					{/* Spinning gradient ring */}
-					<div className="absolute top-0 left-0 w-16 h-16 border-4 border-transparent border-t-accent rounded-full animate-spin"></div>
+					<div className="absolute inset-0 h-16 w-16 rounded-full border-4 border-transparent border-t-accent animate-spin"></div>
 					{/* Inner icon */}
-					<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+					<div className="absolute inset-0 flex items-center justify-center">
 						<Zap size={24} className="text-accent" />
 					</div>
 				</div>
@@ -209,7 +209,7 @@ export function ProgressBar({
 				></div>
 			</div>
 			{showLabel && (
-				<div className="mt-1 text-xs text-muted text-right">
+				<div className="text-inline-end mt-1 text-xs text-muted">
 					{normalizedProgress}%
 				</div>
 			)}

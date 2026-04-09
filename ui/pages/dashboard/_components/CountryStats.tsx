@@ -55,7 +55,9 @@ const CountryStats = ({ countryData }: CountryStatsProps) => {
 									<span className="text-sm font-medium text-heading truncate">
 										{country.name}
 									</span>
-									<span className="text-sm font-semibold text-text-muted ml-2">
+									<span
+										className="text-sm font-semibold text-text-muted"
+									>
 										{country.value}% ({country.count})
 									</span>
 								</div>

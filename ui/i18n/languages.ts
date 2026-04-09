@@ -1,13 +1,5 @@
 import type { InstalledLanguage } from './types';
-
-function normalizeLocale(locale?: string): string {
-	return typeof locale === 'string' ? locale.replace(/_/g, '-') : '';
-}
-
-function getBaseLocale(locale?: string): string {
-	const normalizedLocale = normalizeLocale(locale);
-	return normalizedLocale.split('-')[0]?.toLowerCase() || '';
-}
+import { getBaseLocale, normalizeLocale } from './direction';
 
 function getVariantCount(
 	locale: string,

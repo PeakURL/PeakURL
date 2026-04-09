@@ -13,6 +13,7 @@ import {
 import { useNotification } from '@/components';
 import { useAdminAccess } from '@/hooks';
 import {
+	Avatar,
 	Button,
 	ConfirmDialog,
 	IconButton,
@@ -27,6 +28,7 @@ import {
 	useUpdateUserMutation,
 } from '@/store/slices/api';
 import { __, sprintf } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import { getErrorMessage } from '@/utils';
 import type {
 	UserDialogFormState,
@@ -95,6 +97,7 @@ function UserDialog({
 	onSubmit,
 	isSubmitting,
 }: UserDialogProps) {
+	const isRtl = isDocumentRtl();
 	const roleMeta = getRoleMeta();
 	const roleOptions: SelectOption<UserRole>[] = [
 		{ value: 'admin', label: __('Admin') },
@@ -212,6 +215,9 @@ function UserDialog({
 						<div className="grid gap-4 sm:grid-cols-2">
 							<Input
 								label={__('Username')}
+								valueDirection="ltr"
+								autoCapitalize="off"
+								spellCheck={false}
 								value={form.username}
 								onChange={handleChange('username')}
 								required
@@ -297,7 +303,11 @@ function UserDialog({
 							</div>
 						</div>
 
-						<div className="flex justify-end gap-3 border-t border-stroke pt-4">
+						<div
+							className={`flex gap-3 border-t border-stroke pt-4 ${
+								isRtl ? 'justify-start' : 'justify-end'
+							}`}
+						>
 							<Button
 								type="button"
 								variant="secondary"
@@ -319,6 +329,8 @@ function UserDialog({
 }
 
 function UsersPage() {
+	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const roleMeta = getRoleMeta();
 	const { data: userData, isLoading: isProfileLoading } =
 		useGetUserProfileQuery(undefined);
@@ -544,13 +556,13 @@ function UsersPage() {
 					<div className="overflow-x-auto">
 						<table className="min-w-full divide-y divide-stroke">
 							<thead className="bg-surface-alt">
-								<tr className="text-left text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">
+								<tr className="text-inline-start text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">
 									<th className="px-6 py-4">{__('User')}</th>
 									<th className="px-6 py-4">{__('Role')}</th>
 									<th className="px-6 py-4">
 										{__('Created')}
 									</th>
-									<th className="px-6 py-4 text-right">
+									<th className="text-inline-end px-6 py-4">
 										{__('Actions')}
 									</th>
 								</tr>
@@ -561,27 +573,43 @@ function UsersPage() {
 										key={user.id}
 										className="hover:bg-surface-alt/60"
 									>
-										<td className="px-6 py-4">
-											<div className="flex items-center gap-3">
-												<div className="flex h-11 w-11 items-center justify-center rounded-full bg-accent/10 font-semibold text-accent">
-													{`${user.firstName?.[0] || ''}${user.lastName?.[0] || ''}` ||
-														'U'}
-												</div>
-												<div>
+										<td className="text-inline-start px-6 py-4">
+											<div
+												dir={direction}
+												className="flex w-full items-start justify-start gap-3"
+											>
+												<Avatar
+													size="md"
+													email={user.email}
+													firstName={user.firstName}
+													lastName={user.lastName}
+													fallbackName={
+														user.username ||
+														__('User')
+													}
+													className="mt-0.5 rounded-full"
+												/>
+												<div className="text-inline-start min-w-0 flex-1">
 													<div className="font-medium text-heading">
-														{user.firstName}{' '}
-														{user.lastName}
+														<bdi dir="auto">
+															{user.firstName}{' '}
+															{user.lastName}
+														</bdi>
 													</div>
 													<div className="text-sm text-text-muted">
-														{user.email}
+														<bdi className="preserve-ltr-value inline-block">
+															{user.email}
+														</bdi>
 													</div>
 													<div className="text-xs text-text-muted">
-														@{user.username}
+														<bdi className="preserve-ltr-value inline-block">
+															@{user.username}
+														</bdi>
 													</div>
 												</div>
 											</div>
 										</td>
-										<td className="px-6 py-4">
+										<td className="text-inline-start px-6 py-4">
 											<span
 												className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
 													roleMeta[
@@ -600,7 +628,7 @@ function UsersPage() {
 												}
 											</span>
 										</td>
-										<td className="px-6 py-4 text-sm text-text-muted">
+										<td className="text-inline-start px-6 py-4 text-sm text-text-muted">
 											{user.createdAt
 												? new Date(
 														user.createdAt

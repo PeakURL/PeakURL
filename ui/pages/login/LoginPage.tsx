@@ -19,6 +19,7 @@ import {
 	PageLoader,
 	VerificationCodeInput,
 } from '@/components';
+import { isDocumentRtl } from '@/i18n/direction';
 import {
 	requestClosestFormSubmit,
 	requestControlFormSubmit,
@@ -32,7 +33,7 @@ import {
 	useLoginMutation,
 	useVerifyTwoFactorLoginMutation,
 } from '@/store/slices/api';
-import { __ } from '@/i18n';
+import { __, sprintf } from '@/i18n';
 import type { ApiErrorStateProps } from './types';
 
 /* ─── Highlights shown on the branding panel ─── */
@@ -114,6 +115,9 @@ const submitFormOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
 };
 
 function LoginPage() {
+	const isRtl = isDocumentRtl();
+	const ForwardArrow = isRtl ? ArrowLeft : ArrowRight;
+	const BackArrow = isRtl ? ArrowRight : ArrowLeft;
 	const location = useLocation();
 	const navigate = useNavigate();
 	const highlights = getHighlights();
@@ -322,10 +326,10 @@ function LoginPage() {
 					href={PEAKURL_URL}
 					target="_blank"
 					rel="noopener noreferrer"
+					dir={isRtl ? 'rtl' : 'ltr'}
 					className="login-fade-up-d4 text-xs text-slate-600 transition-colors duration-150 hover:text-slate-400"
 				>
-					{__('Powered by')}{' '}
-					<span className="font-medium text-slate-500">PeakURL</span>
+					{sprintf(__('Powered by %s'), 'PeakURL')}
 				</a>
 			</div>
 
@@ -386,6 +390,7 @@ function LoginPage() {
 							<Input
 								label={__('Email or username')}
 								icon={UserRound}
+								valueDirection="ltr"
 								value={identifier}
 								name="identifier"
 								onChange={(event) =>
@@ -420,7 +425,11 @@ function LoginPage() {
 							/>
 
 							{!twoFactorRequired ? (
-								<div className="-mt-1 flex justify-end">
+								<div
+									className={`-mt-1 flex ${
+										isRtl ? 'justify-start' : 'justify-end'
+									}`}
+								>
 									<Link
 										to="/forgot-password"
 										className="text-sm font-medium text-indigo-600 transition-colors duration-150 hover:text-indigo-700"
@@ -437,6 +446,7 @@ function LoginPage() {
 										<div className="space-y-3">
 											<Input
 												label={__('Backup code')}
+												valueDirection="ltr"
 												value={backupCode}
 												name="backupCode"
 												onChange={(event) =>
@@ -537,7 +547,7 @@ function LoginPage() {
 											{twoFactorRequired
 												? __('Verify & continue')
 												: __('Sign in')}
-											<ArrowRight size={15} />
+											<ForwardArrow size={15} />
 										</>
 									)}
 								</span>
@@ -557,7 +567,7 @@ function LoginPage() {
 											setFormError('');
 										}}
 									>
-										<ArrowLeft size={13} />
+										<BackArrow size={13} />
 										{__('Back to sign-in')}
 									</button>
 								</div>

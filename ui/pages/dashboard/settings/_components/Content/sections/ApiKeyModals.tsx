@@ -1,6 +1,7 @@
-import { Modal, Button, Input } from '@/components/ui';
+import { Modal, Button, Input, ReadOnlyValueBlock } from '@/components/ui';
 import { Copy } from 'lucide-react';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import type { ApiKeyModalsProps } from './types';
 
 function ApiKeyModals({
@@ -16,6 +17,7 @@ function ApiKeyModals({
 	copyToClipboard,
 	isGeneratingKey,
 }: ApiKeyModalsProps) {
+	const isRtl = isDocumentRtl();
 	return (
 		<>
 			<Modal
@@ -43,7 +45,11 @@ function ApiKeyModals({
 						value={keyLabel}
 						onChange={(event) => setKeyLabel(event.target.value)}
 					/>
-					<div className="flex justify-end gap-2">
+					<div
+						className={`flex gap-2 ${
+							isRtl ? 'justify-start' : 'justify-end'
+						}`}
+					>
 						<Button
 							variant="secondary"
 							onClick={() => setShowCreateModal(false)}
@@ -79,44 +85,26 @@ function ApiKeyModals({
 							)}
 						</p>
 					</div>
-					<div className="relative">
-						<pre className="p-3 bg-surface-alt rounded-lg text-sm font-mono break-all border border-stroke">
-							{newApiKey}
-						</pre>
-						<button
-							type="button"
-							onClick={() => copyToClipboard(newApiKey)}
-							className="absolute top-2 right-2 p-1.5 text-text-muted hover:text-heading bg-surface rounded shadow-sm hover:shadow transition-all"
-							title={__('Copy to clipboard')}
-						>
-							<Copy size={14} />
-						</button>
-					</div>
+					<ReadOnlyValueBlock
+						value={newApiKey}
+						onCopy={() => copyToClipboard(newApiKey)}
+						copyButtonLabel={__('Copy to clipboard')}
+					/>
 					{baseApiUrl && (
 						<div className="space-y-2">
 							<p className="text-sm font-medium text-heading">
 								{__('Base API URL')}
 							</p>
-							<div className="relative">
-								<pre className="p-3 bg-surface-alt rounded-lg text-sm font-mono break-all border border-stroke">
-									{baseApiUrl}
-								</pre>
-								<button
-									type="button"
-									onClick={() =>
-										copyToClipboard(
-											baseApiUrl,
-											__(
-												'Base API URL copied to clipboard'
-											)
-										)
-									}
-									className="absolute top-2 right-2 p-1.5 text-text-muted hover:text-heading bg-surface rounded shadow-sm hover:shadow transition-all"
-									title={__('Copy to clipboard')}
-								>
-									<Copy size={14} />
-								</button>
-							</div>
+							<ReadOnlyValueBlock
+								value={baseApiUrl}
+								onCopy={() =>
+									copyToClipboard(
+										baseApiUrl,
+										__('Base API URL copied to clipboard')
+									)
+								}
+								copyButtonLabel={__('Copy to clipboard')}
+							/>
 							<p className="text-xs text-text-muted">
 								{__(
 									'Use this API URL with integrations that need both the endpoint and the token.'
@@ -129,12 +117,16 @@ function ApiKeyModals({
 							'If this key is ever exposed, revoke it from the API Keys list and create a replacement.'
 						)}
 					</p>
-					<div className="flex justify-end gap-2">
+					<div
+						className={`flex gap-2 ${
+							isRtl ? 'justify-start' : 'justify-end'
+						}`}
+					>
 						<Button
 							variant="secondary"
+							icon={Copy}
 							onClick={() => copyToClipboard(newApiKey)}
 						>
-							<Copy size={16} className="mr-2" />
 							{__('Copy Key')}
 						</Button>
 						<Button onClick={() => setShowKeyModal(false)}>

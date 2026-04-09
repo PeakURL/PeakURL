@@ -1,13 +1,16 @@
 import { Scissors } from 'lucide-react';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 
 const Header = () => {
+	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
+
 	return (
-		<div className="flex items-center gap-4 mb-6">
+		<div dir={direction} className="mb-6 flex items-center gap-4">
 			<div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center shrink-0 shadow-md">
 				<Scissors className="text-white" size={20} />
 			</div>
-			<div>
+			<div className="text-inline-start">
 				<h3 className="text-lg font-bold text-heading">
 					{__('Create Short Link')}
 				</h3>

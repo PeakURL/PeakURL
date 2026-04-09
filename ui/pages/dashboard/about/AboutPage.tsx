@@ -19,7 +19,7 @@ import {
 import { Link, useSearchParams } from 'react-router-dom';
 import { PEAKURL_VERSION, PEAKURL_NAME } from '@/constants';
 import { BrandLockup, Logo } from '@/components';
-import { __ } from '@/i18n';
+import { __, sprintf } from '@/i18n';
 import type {
 	AboutIconProps,
 	AddOnLink,
@@ -33,10 +33,7 @@ import type {
 } from './types';
 
 /* ─── Helpers ─────────────────────────────────────────────── */
-const SectionTitle = ({
-	children,
-	subtitle,
-}: SectionTitleProps) => (
+const SectionTitle = ({ children, subtitle }: SectionTitleProps) => (
 	<div className="text-center mb-10">
 		<h2 className="text-2xl sm:text-3xl font-bold text-heading">
 			{children}
@@ -323,7 +320,7 @@ function AboutPage() {
 					</div>
 
 					<h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4 text-white">
-						{__('Welcome to')} {PEAKURL_NAME}
+						{sprintf(__('Welcome to %s'), PEAKURL_NAME)}
 					</h1>
 					<p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
 						{__(
@@ -607,7 +604,7 @@ function AboutPage() {
 						</a>
 						<span className="opacity-30">•</span>
 						<a
-							href="https://github.com/Abd-Ur-Rehman/PeakURL"
+							href="https://github.com/PeakURL/PeakURL"
 							target="_blank"
 							rel="noreferrer"
 							className="inline-flex items-center gap-1 hover:text-accent transition-colors"

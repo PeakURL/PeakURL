@@ -7,6 +7,7 @@ import {
 	BriefcaseBusiness,
 	Mail,
 } from 'lucide-react';
+import { ReadOnlyValueBlock } from '@/components/ui';
 import { __ } from '@/i18n';
 import { copyToClipboard, getLinkDisplayTitle } from '@/utils';
 import type { SharePlatform, ShareTabProps } from './types';
@@ -47,22 +48,21 @@ function ShareTab({ link, shortUrl }: ShareTabProps) {
 				<label className="block text-xs font-medium text-text-muted mb-2">
 					{__('Short URL')}
 				</label>
-				<div className="flex items-center gap-2">
-					<code className="flex-1 font-mono text-sm text-accent bg-surface px-3 py-2 rounded-lg border border-stroke break-all">
-						{shortUrl}
-					</code>
-					<button
-						onClick={handleCopy}
-						className="p-2 rounded-lg bg-accent hover:bg-accent/90 text-white transition-all shrink-0"
-						title={copied ? __('Copied!') : __('Copy')}
-					>
-						{copied ? (
-							<Check className="w-4 h-4" />
+				<ReadOnlyValueBlock
+					value={shortUrl}
+					onCopy={handleCopy}
+					copyButtonLabel={copied ? __('Copied!') : __('Copy')}
+					copyButtonClassName="rounded-lg bg-accent p-2 text-white hover:bg-accent/90 hover:text-white"
+					copyButtonContent={
+						copied ? (
+							<Check className="h-4 w-4" />
 						) : (
-							<Copy className="w-4 h-4" />
-						)}
-					</button>
-				</div>
+							<Copy className="h-4 w-4" />
+						)
+					}
+					className="bg-surface px-2 py-2"
+					valueClassName="text-accent"
+				/>
 			</div>
 
 			{/* Destination URL */}
@@ -70,9 +70,12 @@ function ShareTab({ link, shortUrl }: ShareTabProps) {
 				<label className="block text-xs font-medium text-text-muted mb-2">
 					{__('Destination URL')}
 				</label>
-				<div className="text-sm text-heading break-all">
-					{link.destinationUrl}
-				</div>
+				<ReadOnlyValueBlock
+					value={link.destinationUrl}
+					className="border-0 bg-transparent p-0"
+					monospace={false}
+					valueClassName="text-heading"
+				/>
 			</div>
 
 			{/* Quick Share */}

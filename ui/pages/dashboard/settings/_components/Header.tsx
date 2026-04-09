@@ -2,7 +2,7 @@ import { __ } from '@/i18n';
 
 const Header = () => {
 	return (
-		<div>
+		<div className="text-inline-start">
 			<h1 className="text-2xl font-bold text-heading mb-1">
 				{__('Account Settings')}
 			</h1>

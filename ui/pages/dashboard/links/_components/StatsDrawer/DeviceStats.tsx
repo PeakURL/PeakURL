@@ -145,7 +145,7 @@ function DeviceStats({
 							</p>
 						</div>
 					</div>
-					<div className="text-right">
+					<div className="text-inline-end">
 						<p className="text-sm text-text-muted">
 							{__('Unique Browsers')}
 						</p>
@@ -192,7 +192,7 @@ function DeviceStats({
 												<span className="text-sm text-muted">
 													{browser.percentage}%
 												</span>
-												<span className="text-sm font-semibold text-heading min-w-12 text-right">
+												<span className="text-inline-end min-w-12 text-sm font-semibold text-heading">
 													{browser.count}
 												</span>
 											</div>
@@ -247,7 +247,7 @@ function DeviceStats({
 											</p>
 										</div>
 									</div>
-									<div className="text-right">
+									<div className="text-inline-end">
 										<p className="text-lg font-bold text-heading">
 											{device.percentage}%
 										</p>
@@ -284,7 +284,7 @@ function DeviceStats({
 										</p>
 									</div>
 								</div>
-								<div className="text-right flex items-center gap-3">
+								<div className="text-inline-end flex items-center gap-3">
 									<span className="text-sm text-muted">
 										{os.percentage}%
 									</span>

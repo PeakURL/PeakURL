@@ -29,10 +29,12 @@ import {
 	FEATURED_CARDS,
 	POPULAR_CARDS,
 } from './pluginData';
+import { isDocumentRtl } from '@/i18n/direction';
 import { __ } from '@/i18n';
 import { PLUGINS_WAITLIST_URL } from '@constants';
 
 function PluginsPage() {
+	const isRtl = isDocumentRtl();
 	const { canManageUsers, isLoading } = useAdminAccess();
 	const [activeTab, setActiveTab] = useState<TabId>('browse');
 	const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -166,10 +168,14 @@ function PluginsPage() {
 						<div className="flex items-center gap-2 pb-3 sm:pb-0">
 							{/* Disabled search placeholder */}
 							<div className="relative max-w-55 flex-1">
-								<div className="pointer-events-none w-full rounded-lg border border-stroke bg-surface-alt/50 py-2 pl-8 pr-3 text-sm text-text-muted/40">
+								<div
+									className="field-with-inline-start-icon text-inline-start pointer-events-none w-full rounded-lg border border-stroke bg-surface-alt/50 py-2 text-sm text-text-muted/40"
+								>
 									{__('Search plugins…')}
 								</div>
-								<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5 text-text-muted/40">
+								<div
+									className="inline-start-icon-slot pointer-events-none absolute inset-y-0 flex items-center text-text-muted/40"
+								>
 									<svg
 										className="h-4 w-4"
 										fill="none"
@@ -185,7 +191,9 @@ function PluginsPage() {
 							<div className="flex rounded-lg border border-stroke">
 								<button
 									onClick={() => setViewMode('grid')}
-									className={`flex h-9 w-9 items-center justify-center rounded-l-lg transition-colors ${
+									className={`flex h-9 w-9 items-center justify-center transition-colors ${
+										isRtl ? 'rounded-r-lg' : 'rounded-l-lg'
+									} ${
 										viewMode === 'grid'
 											? 'bg-accent/10 text-accent'
 											: 'text-text-muted hover:bg-surface-alt'
@@ -195,7 +203,11 @@ function PluginsPage() {
 								</button>
 								<button
 									onClick={() => setViewMode('list')}
-									className={`flex h-9 w-9 items-center justify-center rounded-r-lg border-l border-stroke transition-colors ${
+									className={`flex h-9 w-9 items-center justify-center transition-colors ${
+										isRtl
+											? 'rounded-l-lg border-r'
+											: 'rounded-r-lg border-l'
+									} border-stroke ${
 										viewMode === 'list'
 											? 'bg-accent/10 text-accent'
 											: 'text-text-muted hover:bg-surface-alt'

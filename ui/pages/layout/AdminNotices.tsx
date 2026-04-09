@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { AlertCircle, CheckCircle2, Info, TriangleAlert } from 'lucide-react';
 import { useGetAdminNoticesQuery } from '@/store/slices/api';
+import { isDocumentRtl } from '@/i18n/direction';
 import type {
 	AdminNoticeItem,
 	NoticeActionProps,
@@ -62,6 +63,8 @@ function NoticeAction({ action, buttonClasses }: NoticeActionProps) {
 }
 
 export const AdminNotices = () => {
+	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const { data } = useGetAdminNoticesQuery(undefined);
 	const notices = data?.data?.items ?? [];
 
@@ -82,12 +85,15 @@ export const AdminNotices = () => {
 						key={notice?.id || notice?.title}
 						className={`rounded-lg border p-4 text-sm ${tone.container}`}
 					>
-						<div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+						<div
+							dir={direction}
+							className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"
+						>
 							<div className="flex items-start gap-3">
 								<div className="mt-0.5 shrink-0">
 									<Icon size={18} />
 								</div>
-								<div className="space-y-1">
+								<div className="text-inline-start space-y-1">
 									{notice?.title ? (
 										<p className="font-semibold">
 											{notice.title}

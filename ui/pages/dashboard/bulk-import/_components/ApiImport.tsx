@@ -21,7 +21,7 @@ const ApiImport = () => {
 					<h3 className="font-medium text-sm text-heading mb-3">
 						{__('Example Request')}
 					</h3>
-					<pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs border border-gray-700">
+					<pre className="preserve-ltr-value overflow-x-auto rounded-lg border border-gray-700 bg-gray-900 p-4 text-xs text-gray-100">
 						<code>{`POST ${API_SERVER_BASE_URL}/urls/bulk
 Authorization: Bearer ${apiKey}
 Content-Type: application/json
@@ -47,7 +47,7 @@ Content-Type: application/json
 					<h3 className="font-medium text-sm text-heading mb-3">
 						{__('Response')}
 					</h3>
-					<pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs border border-gray-700">
+					<pre className="preserve-ltr-value overflow-x-auto rounded-lg border border-gray-700 bg-gray-900 p-4 text-xs text-gray-100">
 						<code>{`{
   "success": true,
   "data": {
@@ -77,7 +77,7 @@ Content-Type: application/json
 					rel="noreferrer"
 				>
 					<Button size="sm">
-						<ExternalLink className="mr-2 h-4 w-4" />
+						<ExternalLink className="h-4 w-4" />
 						{__('View API Documentation')}
 					</Button>
 				</a>

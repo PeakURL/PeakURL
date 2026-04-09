@@ -51,7 +51,7 @@ function PluginCard({ plugin }: PluginCardProps) {
 
 				{/* Rating / installs placeholder row */}
 				<div className="mb-3 flex items-center justify-between border-t border-stroke pt-3">
-					<div className="flex items-center gap-0.5">
+					<div className="flex items-center gap-1.5">
 						{[1, 2, 3, 4, 5].map((s) => (
 							<Star
 								key={s}
@@ -60,7 +60,7 @@ function PluginCard({ plugin }: PluginCardProps) {
 								fill="currentColor"
 							/>
 						))}
-						<Skeleton className="ml-1.5 h-3 w-6" />
+						<Skeleton className="h-3 w-6" />
 					</div>
 					<div className="flex items-center gap-1 text-stroke-strong dark:text-stroke">
 						<Download size={11} />
@@ -80,7 +80,7 @@ function PluginCard({ plugin }: PluginCardProps) {
 						className="transition-transform group-hover/btn:rotate-12"
 					/>
 					{__('Join the Waitlist')}
-					<ExternalLink size={11} className="ml-auto opacity-60" />
+					<ExternalLink size={11} className="opacity-60" />
 				</a>
 			</div>
 

@@ -7,6 +7,7 @@ import {
 	TransitionChild,
 } from '@headlessui/react';
 import { __ } from '@/i18n';
+import { getDocumentDirection } from '@/i18n/direction';
 import { Button } from './Button';
 import type { ConfirmDialogProps } from './types';
 export type { ConfirmDialogProps, ConfirmVariant } from './types';
@@ -31,6 +32,8 @@ export function ConfirmDialog({
 	confirmVariant = 'primary',
 	loading = false,
 }: ConfirmDialogProps) {
+	const direction = getDocumentDirection();
+
 	return (
 		<Transition appear show={open} as={Fragment}>
 			<Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -57,7 +60,10 @@ export function ConfirmDialog({
 							leaveFrom="opacity-100 scale-100"
 							leaveTo="opacity-0 scale-95"
 						>
-							<DialogPanel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-surface p-6 text-left shadow-xl transition-all border border-stroke">
+							<DialogPanel
+								dir={direction}
+								className="text-inline-start w-full max-w-lg transform overflow-hidden rounded-2xl border border-stroke bg-surface p-6 shadow-xl transition-all"
+							>
 								<DialogTitle className="mb-2 text-lg font-semibold text-heading">
 									{title}
 								</DialogTitle>
@@ -67,7 +73,7 @@ export function ConfirmDialog({
 									</p>
 								)}
 								{children}
-								<div className="mt-6 flex justify-end gap-2">
+								<div dir={direction} className="mt-6 flex justify-end gap-2">
 									<Button
 										variant="secondary"
 										onClick={onClose}

@@ -39,7 +39,7 @@ function BestDay({ link }: Pick<LinkStatsViewProps, 'link'>) {
 
 			{/* Year/Month/Day Breakdown */}
 			{showDetails && (
-				<div className="mt-4 pl-4 border-l-2 border-accent/20 animate-in slide-in-from-top-2 duration-200">
+				<div className="border-inline-start-2 padding-inline-start-4 text-inline-start mt-4 animate-in border-accent/20 slide-in-from-top-2 duration-200">
 					<div className="space-y-2">
 						<div className="flex items-center gap-2">
 							<span className="w-2 h-2 rounded-full bg-accent"></span>
@@ -47,7 +47,7 @@ function BestDay({ link }: Pick<LinkStatsViewProps, 'link'>) {
 								{__('Year')} {new Date().getFullYear()}
 							</span>
 						</div>
-						<div className="ml-4 space-y-2">
+						<div className="margin-inline-start-4 space-y-2">
 							<div className="flex items-center gap-2">
 								<span className="w-1.5 h-1.5 rounded-full bg-text-muted"></span>
 								<span className="text-sm text-text-muted">
@@ -56,7 +56,7 @@ function BestDay({ link }: Pick<LinkStatsViewProps, 'link'>) {
 									})}
 								</span>
 							</div>
-							<div className="ml-4 flex items-center gap-2">
+							<div className="margin-inline-start-4 flex items-center gap-2">
 								<span className="w-1 h-1 rounded-full bg-text-muted"></span>
 								<span className="text-sm font-medium text-heading">
 									{formatLocalizedDateTime(new Date(), {

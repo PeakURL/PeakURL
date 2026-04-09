@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import type { NotificationContextValue } from '@/components/providers';
 import type { ButtonVariant } from '@/components/ui';
-import type { InstalledLanguage } from '@/i18n/types';
+import type { InstalledLanguage, TextDirection } from '@/i18n/types';
 import type {
 	ApiKeySummary,
 	GeneralFormState,
@@ -15,6 +15,8 @@ import type {
  */
 export interface SiteSettings {
 	siteLanguage?: string | null;
+	textDirection?: TextDirection;
+	isRtl?: boolean;
 	canManageSiteSettings?: boolean;
 	availableLanguages?: InstalledLanguage[];
 }
@@ -188,6 +190,7 @@ export interface StateCardProps {
 export interface StatCardProps {
 	label: string;
 	value: string;
+	valueDirection?: 'auto' | 'ltr' | 'rtl';
 }
 
 /**
@@ -377,6 +380,7 @@ export interface SectionHeaderProps {
 export interface MetricItem {
 	label: string;
 	value: string;
+	valueDirection?: 'auto' | 'ltr' | 'rtl';
 }
 
 /**
@@ -422,6 +426,7 @@ export interface DetailRowProps {
 	value: string;
 	icon?: IconComponent;
 	href?: string;
+	valueDirection?: 'auto' | 'ltr' | 'rtl';
 }
 
 /**

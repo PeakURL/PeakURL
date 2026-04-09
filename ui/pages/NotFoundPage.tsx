@@ -1,6 +1,7 @@
 import {
 	Gauge,
 	ArrowLeft,
+	ArrowRight,
 	Link2 as Link2Icon,
 	Wrench,
 	Settings,
@@ -8,10 +9,13 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { Link, useNavigate } from 'react-router-dom';
+import { isDocumentRtl } from '@/i18n/direction';
 import { __ } from '@/i18n';
 
 const NotFoundPage = () => {
 	const navigate = useNavigate();
+	const isRtl = isDocumentRtl();
+	const BackArrow = isRtl ? ArrowRight : ArrowLeft;
 
 	return (
 		<div className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center p-4">
@@ -41,7 +45,7 @@ const NotFoundPage = () => {
 							onClick={() => navigate(-1)}
 							className="w-full sm:w-auto"
 						>
-							<ArrowLeft size={16} className="mr-2" />
+							<BackArrow size={16} />
 							{__('Go Back')}
 						</Button>
 						<Button
@@ -49,7 +53,7 @@ const NotFoundPage = () => {
 							onClick={() => navigate('/dashboard')}
 							className="w-full sm:w-auto"
 						>
-							<Gauge size={16} className="mr-2" />
+							<Gauge size={16} />
 							{__('Go to Dashboard')}
 						</Button>
 					</div>

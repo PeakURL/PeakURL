@@ -32,7 +32,9 @@ function InfoSectionSkeleton({
 												: ''
 										}
 									>
-										<th className="w-[34%] min-w-45 bg-surface-alt px-4 py-3 text-left align-top">
+										<th
+											className="text-inline-start w-[34%] min-w-45 bg-surface-alt px-4 py-3 align-top"
+										>
 											<SkeletonLoader className="h-4 w-24" />
 										</th>
 										<td className="px-4 py-3 align-top">

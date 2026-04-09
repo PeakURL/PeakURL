@@ -1,7 +1,8 @@
 import type { SubmitEvent } from 'react';
 import { useState } from 'react';
-import { Button } from '@/components/ui';
+import { Button, Input, ReadOnlyValueBlock } from '@/components/ui';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import { formatByteSize, formatDateTimeValue } from '@/utils';
 import {
 	AlertCircle,
@@ -24,6 +25,8 @@ function StateCard({
 	description,
 	variant = 'info',
 }: StateCardProps) {
+	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const styles: Record<StateCardVariant, string> = {
 		info: 'border-blue-200 bg-blue-50 text-blue-950 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200',
 		success:
@@ -33,9 +36,12 @@ function StateCard({
 
 	return (
 		<div className={`rounded-lg border p-4 ${styles[variant]}`}>
-			<div className="flex items-start gap-3">
+			<div
+				dir={direction}
+				className="flex items-start gap-3"
+			>
 				<Icon size={18} className="mt-0.5 shrink-0" />
-				<div className="space-y-1">
+				<div className="text-inline-start space-y-1">
 					<h3 className="text-sm font-semibold">{title}</h3>
 					<p className="text-sm leading-6 opacity-80">
 						{description}
@@ -55,6 +61,8 @@ function LocationDataTab({
 	onSave,
 	onDownload,
 }: LocationDataTabProps) {
+	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const [accountIdInput, setAccountIdInput] = useState<string | null>(null);
 	const [licenseKey, setLicenseKey] = useState('');
 	const [isEditingCredentials, setIsEditingCredentials] = useState(false);
@@ -92,9 +100,12 @@ function LocationDataTab({
 	return (
 		<div className="space-y-5">
 			<div className="rounded-lg border border-stroke bg-surface p-5">
-				<div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-					<div className="space-y-2">
-						<div className="flex items-center gap-3">
+				<div
+					dir={direction}
+					className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
+				>
+					<div className="text-inline-start space-y-2">
+						<div dir={direction} className="flex items-center gap-3">
 							<div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600 dark:bg-primary-500/20 dark:text-primary-400">
 								<MapPin size={18} />
 							</div>
@@ -146,6 +157,7 @@ function LocationDataTab({
 							effectiveStatus?.databaseUpdatedAt,
 						__('Never')
 					)}
+					valueDirection="ltr"
 				/>
 				<StatCard
 					label={__('Database Size')}
@@ -153,6 +165,7 @@ function LocationDataTab({
 						effectiveStatus?.databaseSizeBytes,
 						__('Not available')
 					)}
+					valueDirection="ltr"
 				/>
 			</div>
 
@@ -215,21 +228,30 @@ function LocationDataTab({
 									<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
 										{__('Account ID')}
 									</p>
-									<p className="mt-2 text-sm font-medium text-heading">
-										{effectiveStatus?.accountId}
-									</p>
+									<ReadOnlyValueBlock
+										value={effectiveStatus?.accountId}
+										className="mt-2 border-0 bg-transparent p-0"
+										monospace={false}
+										valueClassName="text-sm font-medium"
+									/>
 								</div>
 								<div>
 									<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
 										{__('License Key')}
 									</p>
-									<p className="mt-2 text-sm font-medium text-heading">
-										{effectiveStatus?.licenseKeyHint}
-									</p>
+									<ReadOnlyValueBlock
+										value={effectiveStatus?.licenseKeyHint}
+										className="mt-2 border-0 bg-transparent p-0"
+										monospace={false}
+										valueClassName="text-sm font-medium"
+									/>
 								</div>
 							</div>
 						</div>
-						<div className="flex flex-wrap gap-3">
+						<div
+							dir={direction}
+							className="flex flex-wrap gap-3"
+						>
 							<Button
 								type="button"
 								size="sm"
@@ -265,56 +287,55 @@ function LocationDataTab({
 				) : (
 					<form className="space-y-4" onSubmit={handleSubmit}>
 						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-							<div>
-								<label className="mb-1.5 block text-sm font-medium text-heading">
-									{__('MaxMind Account ID')}
-								</label>
-								<input
-									type="text"
-									inputMode="numeric"
-									autoComplete="off"
-									value={accountId}
-									onChange={(event) =>
-										setAccountIdInput(event.target.value)
-									}
-									placeholder="123456"
-									className="w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2.5 text-sm text-heading outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
-								/>
-							</div>
+							<Input
+								label={__('MaxMind Account ID')}
+								type="text"
+								inputMode="numeric"
+								autoComplete="off"
+								valueDirection="ltr"
+								value={accountId}
+								onChange={(event) =>
+									setAccountIdInput(event.target.value)
+								}
+								placeholder="123456"
+								className="bg-surface-alt"
+							/>
 
-							<div>
-								<label className="mb-1.5 block text-sm font-medium text-heading">
-									{__('MaxMind License Key')}
-								</label>
-								<input
-									type="password"
-									autoComplete="new-password"
-									value={licenseKey}
-									onChange={(event) =>
-										setLicenseKey(event.target.value)
-									}
-									placeholder={
-										hasSavedCredentials
-											? __(
-													'Enter a new MaxMind license key'
-												)
-											: __(
-													'Enter your MaxMind license key'
-												)
-									}
-									className="w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2.5 text-sm text-heading outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
-								/>
-							</div>
+							<Input
+								label={__('MaxMind License Key')}
+								type="password"
+								autoComplete="new-password"
+								valueDirection="ltr"
+								value={licenseKey}
+								onChange={(event) =>
+									setLicenseKey(event.target.value)
+								}
+								placeholder={
+									hasSavedCredentials
+										? __(
+												'Enter a new MaxMind license key'
+											)
+										: __(
+												'Enter your MaxMind license key'
+											)
+								}
+								className="bg-surface-alt"
+							/>
 						</div>
 
 						{hasSavedCredentials && (
 							<p className="text-xs text-text-muted">
 								{__('Saved license key:')}{' '}
-								{effectiveStatus?.licenseKeyHint}
+								<span className="preserve-ltr-value">
+									{effectiveStatus?.licenseKeyHint}
+								</span>
 							</p>
 						)}
 
-						<div className="flex flex-wrap gap-3">
+						<div
+							dir={direction}
+							className="flex flex-wrap gap-3"
+						>
 							<Button
 								type="submit"
 								size="sm"
@@ -350,13 +371,34 @@ function LocationDataTab({
 	);
 }
 
-function StatCard({ label, value }: StatCardProps) {
+function StatCard({
+	label,
+	value,
+	valueDirection = 'auto',
+}: StatCardProps) {
+	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
+
 	return (
-		<div className="rounded-lg border border-stroke bg-surface p-5">
-			<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
+		<div
+			dir={direction}
+			className="text-inline-start rounded-lg border border-stroke bg-surface p-5"
+		>
+			<p className="text-xs font-semibold tracking-[0.14em] text-text-muted">
 				{label}
 			</p>
-			<p className="mt-3 text-lg font-semibold text-heading">{value}</p>
+			<p className="mt-3 text-lg font-semibold text-heading">
+				{'ltr' === valueDirection ? (
+					<span className="preserve-ltr-value inline-block">
+						{value}
+					</span>
+				) : 'rtl' === valueDirection ? (
+					<span dir="rtl" className="inline-block">
+						{value}
+					</span>
+				) : (
+					<bdi dir="auto">{value}</bdi>
+				)}
+			</p>
 		</div>
 	);
 }

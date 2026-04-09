@@ -2,6 +2,7 @@ import type { ChangeEvent, SubmitEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { Input, Button, Select } from '@/components/ui';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import { getInstalledLanguageLabel } from '@/i18n/languages';
 import type { GeneralFormState } from '../types';
 import type { GeneralTabProps } from './types';
@@ -14,6 +15,7 @@ function GeneralTab({
 	siteSettings,
 	isLoadingSiteSettings,
 }: GeneralTabProps) {
+	const isRtl = isDocumentRtl();
 	const availableLanguages = siteSettings?.availableLanguages || [];
 	const [generalForm, setGeneralForm] =
 		useState<GeneralFormState>(initialForm);
@@ -98,6 +100,9 @@ function GeneralTab({
 					<Input
 						label={__('Username')}
 						name="username"
+						valueDirection="ltr"
+						autoCapitalize="off"
+						spellCheck={false}
 						value={generalForm.username}
 						onChange={handleChange}
 						required
@@ -106,12 +111,15 @@ function GeneralTab({
 						label={__('Email Address')}
 						type="email"
 						name="email"
+						autoCapitalize="off"
+						spellCheck={false}
 						value={generalForm.email}
 						onChange={handleChange}
 						required
 					/>
 					<Input
 						label={__('Phone Number')}
+						type="tel"
 						name="phoneNumber"
 						value={generalForm.phoneNumber}
 						onChange={handleChange}
@@ -151,13 +159,17 @@ function GeneralTab({
 						<textarea
 							name="bio"
 							rows={3}
-							className="w-full px-4 py-2 bg-surface border border-stroke rounded-md text-heading placeholder:text-text-muted outline-none transition-all focus:ring-2 focus:ring-accent focus:border-accent"
+							className="text-page-start w-full rounded-md border border-stroke bg-surface px-4 py-2 text-heading placeholder:text-text-muted outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent"
 							value={generalForm.bio}
 							onChange={handleChange}
 						/>
 					</div>
 				</div>
-				<div className="flex justify-end mt-5">
+				<div
+					className={`mt-5 flex ${
+						isRtl ? 'justify-start' : 'justify-end'
+					}`}
+				>
 					<Button size="sm" type="submit" disabled={isUpdating}>
 						{isUpdating ? __('Saving...') : __('Save Changes')}
 					</Button>

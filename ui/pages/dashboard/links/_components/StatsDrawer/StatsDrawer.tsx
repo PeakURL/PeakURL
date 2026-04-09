@@ -11,6 +11,7 @@ import {
 import { X, Link2, BarChart3, Globe, Share2, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
 import { useGetLinkStatsQuery } from '@/store/slices/api';
+import { isDocumentRtl } from '@/i18n/direction';
 import { buildShortUrl } from '@/utils';
 import { __ } from '@/i18n';
 import StatCards from './StatCards';
@@ -26,6 +27,8 @@ import type { StatsDrawerProps, StatsTimeRange } from './types';
 export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [timeRange, setTimeRange] = useState<StatsTimeRange>('7d');
+	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 
 	const getDaysFromRange = (range: StatsTimeRange): number => {
 		switch (range) {
@@ -68,10 +71,21 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 
 			<div className="fixed inset-0 overflow-hidden">
 				<div className="absolute inset-0 overflow-hidden">
-					<div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-0 sm:pl-16">
+					<div
+						className={`pointer-events-none fixed inset-y-0 flex max-w-full ${
+							isRtl
+								? 'left-0 pr-0 sm:pr-16'
+								: 'right-0 pl-0 sm:pl-16'
+						}`}
+					>
 						<DialogPanel
+							dir={direction}
 							transition
-							className="pointer-events-auto w-screen max-w-4xl transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700"
+							className={`pointer-events-auto w-screen max-w-4xl transform transition duration-500 ease-in-out sm:duration-700 ${
+								isRtl
+									? 'data-closed:-translate-x-full'
+									: 'data-closed:translate-x-full'
+							}`}
 						>
 							<div className="flex h-full flex-col overflow-y-auto bg-surface shadow-xl">
 								{/* Header */}
@@ -195,7 +209,11 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 
 								{/* Footer */}
 								<div className="border-t border-stroke px-4 py-4 bg-surface-alt sm:px-6">
-									<div className="flex justify-end gap-3">
+									<div
+										className={`flex gap-3 ${
+											isRtl ? 'justify-start' : 'justify-end'
+										}`}
+									>
 										<button
 											type="button"
 											onClick={() => setOpen(false)}

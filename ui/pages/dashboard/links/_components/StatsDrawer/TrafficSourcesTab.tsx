@@ -256,11 +256,12 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 												}}
 											/>
 										</div>
-										<div className="text-right">
+										<div className="text-inline-end">
 											<span className="text-sm font-medium text-heading">
 												{ref.count}
 											</span>
-											<span className="text-xs text-text-muted ml-1 hidden sm:inline">
+											<span className="hidden text-xs text-text-muted sm:inline">
+												{' '}
 												({percentage}%)
 											</span>
 										</div>

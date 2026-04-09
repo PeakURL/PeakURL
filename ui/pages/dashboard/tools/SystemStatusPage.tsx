@@ -170,7 +170,7 @@ function IssueRow({ check, isOpen, onToggle, showBorder }: IssueRowProps) {
 			<button
 				type="button"
 				onClick={onToggle}
-				className="flex w-full items-center justify-between gap-4 px-4 py-4 text-left transition-colors hover:bg-surface-alt/60"
+				className="text-inline-start flex w-full items-center justify-between gap-4 px-4 py-4 transition-colors hover:bg-surface-alt/60"
 			>
 				<div className="min-w-0">
 					<p className="text-sm font-semibold text-heading">
@@ -239,7 +239,7 @@ function InfoSection({ section, isOpen, onToggle }: InfoSectionProps) {
 			<button
 				type="button"
 				onClick={onToggle}
-				className="flex w-full items-center justify-between gap-4 px-4 py-3.5 text-left transition-colors hover:bg-surface-alt/60"
+				className="text-inline-start flex w-full items-center justify-between gap-4 px-4 py-3.5 transition-colors hover:bg-surface-alt/60"
 			>
 				<span className="text-sm font-semibold text-heading">
 					{section.title}
@@ -265,10 +265,14 @@ function InfoSection({ section, isOpen, onToggle }: InfoSectionProps) {
 												: ''
 										}
 									>
-										<th className="w-[34%] min-w-45 bg-surface-alt px-4 py-3 text-left align-top font-medium text-heading">
+										<th
+											className="text-inline-start w-[34%] min-w-45 bg-surface-alt px-4 py-3 align-top font-medium text-heading"
+										>
 											{item.label}
 										</th>
-										<td className="px-4 py-3 align-top text-text-muted">
+										<td
+											className="text-inline-start px-4 py-3 align-top text-text-muted"
+										>
 											<p
 												className={`text-heading ${
 													item.monospace

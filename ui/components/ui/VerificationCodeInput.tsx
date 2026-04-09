@@ -149,6 +149,7 @@ export function VerificationCodeInput({
 						return undefined;
 					}}
 					type="text"
+					dir="ltr"
 					inputMode="numeric"
 					enterKeyHint={index === length - 1 ? 'done' : 'next'}
 					autoComplete={index === 0 ? 'one-time-code' : 'off'}

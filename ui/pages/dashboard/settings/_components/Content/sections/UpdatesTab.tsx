@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui';
 import { __, sprintf } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import { formatDateTimeValue } from '@/utils';
 import {
 	AlertCircle,
@@ -201,9 +202,15 @@ function SectionHeader({
 	primaryAction,
 	secondaryAction,
 }: SectionHeaderProps) {
+	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
+
 	return (
-		<div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-			<div className="space-y-2">
+		<div
+			dir={direction}
+			className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between"
+		>
+			<div className="text-inline-start space-y-2">
 				<div className="flex flex-wrap items-center gap-3">
 					<h2 className="text-base font-semibold text-heading">
 						{title}
@@ -224,18 +231,32 @@ function SectionHeader({
 }
 
 function MetricGrid({ items }: MetricGridProps) {
+	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
+
 	return (
 		<div className="mt-5 grid grid-cols-1 gap-3 md:grid-cols-3">
 			{items.map((item: MetricItem) => (
 				<div
 					key={item.label}
-					className="rounded-lg border border-stroke bg-bg px-4 py-4"
+					dir={direction}
+					className="text-inline-start rounded-lg border border-stroke bg-bg px-4 py-4"
 				>
 					<p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-text-muted">
 						{item.label}
 					</p>
 					<p className="mt-2 text-lg font-semibold text-heading">
-						{item.value}
+						{'ltr' === item.valueDirection ? (
+							<span className="preserve-ltr-value inline-block">
+								{item.value}
+							</span>
+						) : 'rtl' === item.valueDirection ? (
+							<span dir="rtl" className="inline-block">
+								{item.value}
+							</span>
+						) : (
+							<bdi dir="auto">{item.value}</bdi>
+						)}
 					</p>
 				</div>
 			))}
@@ -249,6 +270,8 @@ function InlineNotice({
 	description,
 	tone = 'info',
 }: InlineNoticeProps) {
+	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const styles: Record<StatusTone, string> = {
 		info: 'border-blue-200 bg-blue-50 text-blue-900 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200',
 		success:
@@ -258,9 +281,12 @@ function InlineNotice({
 
 	return (
 		<div className={`rounded-lg border p-4 ${styles[tone]}`}>
-			<div className="flex items-start gap-3">
+			<div
+				dir={direction}
+				className="flex items-start gap-3"
+			>
 				<Icon size={18} className="mt-0.5 shrink-0" />
-				<div className="space-y-1">
+				<div className="text-inline-start space-y-1">
 					<p className="text-sm font-semibold">{title}</p>
 					<p className="text-sm leading-6 opacity-80">{description}</p>
 				</div>
@@ -283,6 +309,8 @@ function UpdateActions({
 	onApply,
 	onReinstall,
 }: UpdateActionsProps) {
+	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const isInstallingRelease = isApplying || isReinstalling;
 	const showDisabledReason =
 		(updateAvailable || reinstallAvailable) &&
@@ -331,8 +359,16 @@ function UpdateActions({
 	const showCheckButton = reinstallAvailable || !updateAvailable;
 
 	return (
-		<div className="flex w-full flex-col gap-3 lg:max-w-104 lg:items-end">
-			<div className="flex flex-wrap gap-3 lg:justify-end">
+		<div
+			className={`flex w-full flex-col gap-3 lg:max-w-104 ${
+				isRtl ? 'lg:items-start' : 'lg:items-end'
+			}`}
+		>
+			<div
+				className={`flex flex-wrap gap-3 ${
+					isRtl ? 'lg:justify-start' : 'lg:justify-end'
+				}`}
+			>
 				{showCheckButton ? (
 					<Button
 						variant="outline"
@@ -350,7 +386,10 @@ function UpdateActions({
 			</div>
 
 			{showDisabledReason ? (
-				<div className="max-w-sm rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900 lg:text-right dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
+				<div
+					dir={direction}
+					className="text-inline-start max-w-sm rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200"
+				>
 					{disabledReason}
 				</div>
 			) : null}
@@ -358,9 +397,31 @@ function UpdateActions({
 	);
 }
 
-function DetailRow({ label, value, icon: Icon, href }: DetailRowProps) {
+function DetailRow({
+	label,
+	value,
+	icon: Icon,
+	href,
+	valueDirection = 'auto',
+}: DetailRowProps) {
+	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
+	const valueNode =
+		'ltr' === valueDirection ? (
+			<span className="preserve-ltr-value inline-block">{value}</span>
+		) : 'rtl' === valueDirection ? (
+			<span dir="rtl" className="inline-block">
+				{value}
+			</span>
+		) : (
+			<bdi dir="auto">{value}</bdi>
+		);
+
 	return (
-		<div className="flex flex-col gap-2 rounded-lg border border-stroke bg-bg px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+		<div
+			dir={direction}
+			className="flex flex-col gap-2 rounded-lg border border-stroke bg-bg px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+		>
 			<div className="flex items-center gap-2 text-sm text-text-muted">
 				{Icon ? <Icon size={15} /> : null}
 				<span>{label}</span>
@@ -370,25 +431,36 @@ function DetailRow({ label, value, icon: Icon, href }: DetailRowProps) {
 					href={href}
 					target="_blank"
 					rel="noreferrer"
+					dir={direction}
 					className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline"
 				>
-					{value}
+					{valueNode}
 					<ExternalLink size={14} />
 				</a>
 			) : (
-				<span className="text-sm font-medium text-heading">{value}</span>
+				<span className="text-inline-start text-sm font-medium text-heading">
+					{valueNode}
+				</span>
 			)}
 		</div>
 	);
 }
 
 function IssueList({ title, issues }: IssueListProps) {
+	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
+
 	return (
-		<div className="rounded-lg border border-stroke bg-bg p-4">
+		<div
+			dir={direction}
+			className="text-inline-start rounded-lg border border-stroke bg-bg p-4"
+		>
 			<p className="text-sm font-semibold text-heading">{title}</p>
-			<ul className="mt-3 space-y-2 text-sm leading-6 text-text-muted">
+			<ul className="mt-3 list-disc space-y-2 ps-5 text-sm leading-6 text-text-muted">
 				{issues.map((issue: UpdateIssue) => (
-					<li key={issue.id || issue.label}>{issue.label}</li>
+					<li key={issue.id || issue.label}>
+						<bdi dir="auto">{issue.label}</bdi>
+					</li>
 				))}
 			</ul>
 		</div>
@@ -462,10 +534,12 @@ function UpdatesTab({
 						{
 							label: __('Installed Version'),
 							value: status?.currentVersion || __('Unknown'),
+							valueDirection: 'ltr',
 						},
 						{
 							label: __('Latest Version'),
 							value: status?.latestVersion || __('Unknown'),
+							valueDirection: 'ltr',
 						},
 						{
 							label: __('Last Checked'),
@@ -473,6 +547,7 @@ function UpdatesTab({
 								status?.lastCheckedAt,
 								__('Never')
 							),
+							valueDirection: 'ltr',
 						},
 					]}
 				/>
@@ -496,6 +571,7 @@ function UpdatesTab({
 									__('Never')
 								)}
 								icon={Clock3}
+								valueDirection="ltr"
 							/>
 						) : null}
 						{status?.releaseNotesUrl ? (
@@ -535,10 +611,12 @@ function UpdatesTab({
 						{
 							label: __('Recorded Schema'),
 							value: String(databaseStatus?.currentVersion ?? __('Unknown')),
+							valueDirection: 'ltr',
 						},
 						{
 							label: __('Required Schema'),
 							value: String(databaseStatus?.targetVersion ?? __('Unknown')),
+							valueDirection: 'ltr',
 						},
 						{
 							label: __('Last Database Upgrade'),
@@ -546,6 +624,7 @@ function UpdatesTab({
 								databaseStatus?.lastUpgradedAt,
 								__('Never')
 							),
+							valueDirection: 'ltr',
 						},
 					]}
 				/>

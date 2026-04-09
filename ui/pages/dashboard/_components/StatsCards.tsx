@@ -79,16 +79,16 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
 						</div>
 						<div className="flex items-center gap-2">
 							<span
-								className={`inline-flex items-center text-xs font-semibold px-2 py-0.5 rounded ${
+								className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded ${
 									stat.changeType === 'positive'
 										? 'text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/30'
 										: 'text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-900/30'
 								}`}
 							>
 								{stat.changeType === 'positive' ? (
-									<ArrowUp className="mr-1 h-3 w-3" />
+									<ArrowUp className="h-3 w-3" />
 								) : (
-									<ArrowDown className="mr-1 h-3 w-3" />
+									<ArrowDown className="h-3 w-3" />
 								)}
 								{stat.change}
 							</span>

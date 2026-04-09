@@ -2,9 +2,10 @@ import type { SubmitEvent } from 'react';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { X, Save } from 'lucide-react';
 import { useState } from 'react';
-import { Select } from '@/components/ui';
+import { ReadOnlyValueBlock, Select } from '@/components/ui';
 import { useUpdateUrlMutation } from '@/store/slices/api';
 import { __ } from '@/i18n';
+import { getFieldDirection, isDocumentRtl } from '@/i18n/direction';
 import {
 	buildShortUrl,
 	getErrorMessage,
@@ -22,6 +23,7 @@ import type {
 import type { SelectOption } from '@/components/ui';
 
 function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
+	const pageDirection = isDocumentRtl() ? 'rtl' : 'ltr';
 	const getInitialTitle = () => normalizeLinkTitle(link?.title);
 	const getInitialStatus = (): LinkStatus => link?.status || 'active';
 	const getInitialExpiresAt = () => toLocalDateTimeValue(link?.expiresAt);
@@ -88,7 +90,9 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 			<div className="fixed inset-0 bg-black/30" aria-hidden="true" />
 
 			<div className="fixed inset-0 flex items-center justify-center p-4">
-				<DialogPanel className="mx-auto max-w-lg w-full bg-surface rounded-lg shadow-xl">
+				<DialogPanel
+					className="text-inline-start mx-auto w-full max-w-lg rounded-lg bg-surface shadow-xl"
+				>
 					{/* Header */}
 					<div className="flex items-center justify-between p-6 border-b border-stroke">
 						<DialogTitle className="text-lg font-semibold text-heading">
@@ -117,10 +121,12 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 							<label className="block text-sm font-medium text-heading mb-2">
 								{__('Short URL')}
 							</label>
-							<div className="px-3 py-2 bg-surface-alt border border-stroke rounded-lg">
-								<code className="text-sm text-text-muted font-mono">
-									{shortUrl}
-								</code>
+							<div className="bg-surface-alt border border-stroke rounded-lg px-3 py-2">
+								<ReadOnlyValueBlock
+									value={shortUrl}
+									className="border-0 bg-transparent p-0"
+									valueClassName="text-text-muted"
+								/>
 							</div>
 						</div>
 
@@ -129,10 +135,13 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 							<label className="block text-sm font-medium text-heading mb-2">
 								{__('Destination URL')}
 							</label>
-							<div className="px-3 py-2 bg-surface-alt border border-stroke rounded-lg">
-								<p className="text-sm text-text-muted break-all">
-									{link.destinationUrl}
-								</p>
+							<div className="bg-surface-alt border border-stroke rounded-lg px-3 py-2">
+								<ReadOnlyValueBlock
+									value={link.destinationUrl}
+									className="border-0 bg-transparent p-0"
+									monospace={false}
+									valueClassName="text-text-muted"
+								/>
 							</div>
 						</div>
 
@@ -147,10 +156,13 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 							<input
 								type="text"
 								id="title"
+								dir={getFieldDirection({
+									fallbackDirection: pageDirection,
+								})}
 								value={title}
 								onChange={(e) => setTitle(e.target.value)}
 								placeholder={__('Enter a title for this link')}
-								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading"
+								className="text-page-start w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent"
 							/>
 						</div>
 
@@ -165,6 +177,9 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 							<input
 								type="password"
 								id="password"
+								dir={getFieldDirection({
+									fallbackDirection: pageDirection,
+								})}
 								value={password}
 								disabled={clearPassword}
 								onChange={(e) => setPassword(e.target.value)}
@@ -177,7 +192,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 												'Set a password to protect this link'
 											)
 								}
-								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading"
+								className="text-page-start w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent"
 							/>
 							{hasExistingPassword && (
 								<div className="mt-2 space-y-2">
@@ -217,11 +232,15 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 							<input
 								type="datetime-local"
 								id="expiresAt"
+								dir={getFieldDirection({
+									fallbackDirection: pageDirection,
+									valueDirection: 'ltr',
+								})}
 								value={expiresAt}
 								onChange={(e) => setExpiresAt(e.target.value)}
 								min={getLocalDateTimeValue()}
 								step="60"
-								className="w-full px-3 py-2 bg-surface-alt border border-stroke rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all text-sm text-heading"
+								className="text-page-start w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent"
 							/>
 						</div>
 

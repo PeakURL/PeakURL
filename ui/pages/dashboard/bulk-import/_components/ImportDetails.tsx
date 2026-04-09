@@ -28,12 +28,16 @@ function ImportDetails({ results }: ImportDetailsProps) {
 							<CircleAlert className="h-4 w-4 text-red-600 dark:text-red-400" />
 						)}
 						<div className="flex-1 min-w-0">
-							<div className="text-sm font-medium text-heading truncate">
-								{result.url}
+							<div
+								className="preserve-ltr-value truncate text-sm font-medium text-heading"
+							>
+								<bdi>{result.url}</bdi>
 							</div>
 							{result.status === 'success' ? (
-								<div className="text-xs text-emerald-600 dark:text-emerald-400">
-									{result.shortUrl}
+								<div
+									className="preserve-ltr-value text-xs text-emerald-600 dark:text-emerald-400"
+								>
+									<bdi>{result.shortUrl}</bdi>
 								</div>
 							) : (
 								<div className="text-xs text-red-600 dark:text-red-400">
@@ -53,7 +57,7 @@ function ImportDetails({ results }: ImportDetailsProps) {
 					)}
 				</span>
 				<Button variant="ghost" size="sm">
-					<Download className="mr-2 h-4 w-4" />
+					<Download className="h-4 w-4" />
 					{__('Export Results')}
 				</Button>
 			</div>

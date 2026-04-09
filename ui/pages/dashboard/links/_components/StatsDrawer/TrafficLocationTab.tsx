@@ -2,15 +2,52 @@ import { useState } from 'react';
 import { Globe, MapPin } from 'lucide-react';
 import { WorldMap } from '@/components';
 import { __ } from '@/i18n';
+import { isDocumentRtl } from '@/i18n/direction';
 import { useGetLinkLocationQuery } from '@/store/slices/api';
 import { getErrorMessage } from '@/utils';
 import type { HoveredCountry, TrafficLocationTabProps } from './types';
+
+interface LocationNoteItemProps {
+	text: string;
+	example?: string;
+	direction: 'rtl' | 'ltr';
+}
+
+function LocationNoteItem({
+	text,
+	example,
+	direction,
+}: LocationNoteItemProps) {
+	return (
+		<div
+			dir={direction}
+			className="text-inline-start flex items-start gap-2"
+		>
+			<span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-info/60" />
+			<div className="text-inline-start min-w-0 flex-1 space-y-1">
+				<p dir={direction} className="text-inline-start">
+					{text}
+				</p>
+				{example ? (
+					<code
+						dir="ltr"
+						className="preserve-ltr-value mr-auto block w-fit max-w-full break-all rounded bg-surface px-1.5 py-0.5 font-mono text-[11px] text-heading"
+					>
+						{example}
+					</code>
+				) : null}
+			</div>
+		</div>
+	);
+}
 
 function TrafficLocationTab({
 	link,
 	selectedTab,
 	open,
 }: TrafficLocationTabProps) {
+	const isRtl = isDocumentRtl();
+	const direction = isRtl ? 'rtl' : 'ltr';
 	const [hoveredCountry, setHoveredCountry] = useState<HoveredCountry | null>(
 		null
 	);
@@ -115,8 +152,8 @@ function TrafficLocationTab({
 					<h3 className="text-sm font-semibold text-heading mb-4">
 						{__('Top Countries')}
 					</h3>
-					<div className="h-64 flex items-center justify-center bg-surface rounded-lg border border-stroke">
-						<div className="text-center px-6">
+					<div className="min-h-[22rem] bg-surface rounded-lg border border-stroke px-4 py-6 sm:px-6">
+						<div className="mx-auto flex min-h-full w-full max-w-xl flex-col items-center justify-center text-center">
 							<Globe className="w-12 h-12 text-text-muted mx-auto mb-3" />
 							<p className="text-sm font-medium text-heading mb-2">
 								{__('No location data available yet')}
@@ -126,23 +163,38 @@ function TrafficLocationTab({
 									'Location tracking will show here once clicks are recorded with a configured GeoLite2 City database'
 								)}
 							</p>
-							<div className="mt-4 p-3 bg-info/5 border border-info/20 rounded-lg text-left">
-								<p className="text-xs font-medium text-heading mb-1">
+							<div
+								dir={direction}
+								className="text-inline-start mx-auto mt-4 w-full max-w-lg rounded-lg border border-info/20 bg-info/5 px-4 py-3"
+							>
+								<p
+									dir={direction}
+									className="text-inline-start text-xs font-medium text-heading"
+								>
 									{__('Note:')}
 								</p>
-								<p className="text-xs text-text-muted">
-									{__(
-										'• Local and private-network clicks (127.0.0.1, 172.16-31.x.x, 192.168.x.x) will not show location data'
-									)}
-									<br />
-									{__(
-										'• Add `GeoLite2-City.mmdb` under `content/uploads/geoip/`'
-									)}
-									<br />
-									{__(
-										'• VPN users will show VPN server location'
-									)}
-								</p>
+								<div className="mt-2 space-y-2 text-xs leading-5 text-text-muted">
+									<LocationNoteItem
+										direction={direction}
+										text={__(
+											'Local and private-network clicks do not include location data.'
+										)}
+										example="127.0.0.1, 172.16-31.x.x, 192.168.x.x"
+									/>
+									<LocationNoteItem
+										direction={direction}
+										text={__(
+											'Store the GeoLite2 City database here:'
+										)}
+										example="content/uploads/geoip/GeoLite2-City.mmdb"
+									/>
+									<LocationNoteItem
+										direction={direction}
+										text={__(
+											'VPN users may show the location of the VPN server.'
+										)}
+									/>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -184,7 +236,7 @@ function TrafficLocationTab({
 							</p>
 						</div>
 					</div>
-					<div className="text-right">
+					<div className="text-inline-end">
 						<p className="text-sm text-text-muted">
 							{__('Countries')}
 						</p>
@@ -226,12 +278,12 @@ function TrafficLocationTab({
 						}
 					/>
 					{hoveredCountry && (
-						<div className="absolute top-4 right-4 bg-surface rounded-lg shadow-xl p-3 border border-stroke min-w-32">
+						<div className="inset-inline-start-4 text-inline-start absolute top-4 min-w-32 rounded-lg border border-stroke bg-surface p-3 shadow-xl">
 							<p className="text-sm font-semibold text-heading">
 								{hoveredCountry.countryName}
 							</p>
 							<p className="text-xs text-text-muted mt-1">
-								{hoveredCountry.clicks} clicks (
+								{hoveredCountry.clicks} {__('clicks')} (
 								{getPercentage(hoveredCountry.clicks)}%)
 							</p>
 						</div>
@@ -271,7 +323,7 @@ function TrafficLocationTab({
 										<span className="text-sm text-text-muted">
 											{percentage}%
 										</span>
-										<span className="text-sm font-semibold text-heading min-w-12 text-right">
+										<span className="text-inline-end min-w-12 text-sm font-semibold text-heading">
 											{country.count} {__('clicks')}
 										</span>
 									</div>
@@ -317,7 +369,7 @@ function TrafficLocationTab({
 										</p>
 									</div>
 								</div>
-								<div className="text-right">
+								<div className="text-inline-end">
 									<p className="text-sm font-semibold text-heading">
 										{city.count}
 									</p>

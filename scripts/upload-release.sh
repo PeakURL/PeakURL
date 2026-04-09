@@ -3,8 +3,10 @@ set -eu
 
 ROOT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 ENV_FILE="$ROOT_DIR/.env"
-RELEASE_DIR="$ROOT_DIR/release/peakurl"
-REMOTE_PATH="."
+RELEASE_ROOT="$ROOT_DIR/release"
+VERSION=$(tr -d '\n' < "$ROOT_DIR/.version" 2>/dev/null || node -e "console.log(JSON.parse(require('fs').readFileSync('package.json', 'utf8')).version)" 2>/dev/null || printf "0.0.0")
+ARCHIVE_PATH="$RELEASE_ROOT/peakurl-$VERSION.zip"
+REMOTE_ARCHIVE_NAME=".peakurl-release-$VERSION.zip"
 
 require_command() {
 	if ! command -v "$1" >/dev/null 2>&1; then
@@ -23,168 +25,94 @@ require_env() {
 	fi
 }
 
+validate_ssh_destination() {
+	value=$1
+
+	case "$value" in
+		ssh\ *)
+			printf 'SSH_DESTINATION must be the SSH alias only, for example `peakurl-user`, not `ssh peakurl-user`.\n' >&2
+			exit 1
+			;;
+		*" "*|*"	"*)
+			printf 'SSH_DESTINATION must not contain spaces. Use the SSH alias only, for example `peakurl-user`.\n' >&2
+			exit 1
+			;;
+	esac
+}
+
+quote_for_sh() {
+	printf "'%s'" "$(printf '%s' "$1" | sed "s/'/'\\\\''/g")"
+}
+
 if [ ! -f "$ENV_FILE" ]; then
 	printf 'Missing .env file at %s\n' "$ENV_FILE" >&2
 	exit 1
 fi
 
-if [ ! -d "$RELEASE_DIR" ]; then
-	printf 'Missing release folder at %s\nRun `npm run release:build` first.\n' "$RELEASE_DIR" >&2
+if [ ! -f "$ARCHIVE_PATH" ]; then
+	printf 'Missing release archive at %s\nRun `npm run release:build` first.\n' "$ARCHIVE_PATH" >&2
 	exit 1
 fi
 
-if [ -f "$RELEASE_DIR/config.php" ]; then
-	printf 'Refusing to upload release/peakurl/config.php.\nRemove the generated file and rebuild the release first.\n' >&2
-	exit 1
-fi
-
-require_command sshpass
-require_command sftp
+require_command ssh
+require_command scp
 
 set -a
 . "$ENV_FILE"
 set +a
 
-require_env SFTP_HOST
-require_env SFTP_PORT
-require_env SFTP_USERNAME
-require_env SFTP_PASSWORD
+require_env SSH_DESTINATION
+require_env SSH_REMOTE_PATH
 
-if [ -n "${SFTP_REMOTE_PATH:-}" ]; then
-	REMOTE_PATH=$SFTP_REMOTE_PATH
+validate_ssh_destination "$SSH_DESTINATION"
+
+SSH_TARGET="$SSH_DESTINATION"
+REMOTE_ARCHIVE_PATH="$SSH_REMOTE_PATH/$REMOTE_ARCHIVE_NAME"
+
+REMOTE_PREPARE_SCRIPT=$(cat <<EOF
+set -eu
+mkdir -p $(quote_for_sh "$SSH_REMOTE_PATH")
+EOF
+)
+
+REMOTE_DEPLOY_SCRIPT=$(cat <<EOF
+set -eu
+cd $(quote_for_sh "$SSH_REMOTE_PATH")
+
+if ! command -v unzip >/dev/null 2>&1; then
+	printf 'Missing required remote command: unzip\n' >&2
+	exit 1
 fi
 
-BATCH_FILE=$(mktemp)
+find . -mindepth 1 -maxdepth 1 \\
+	! -name config.php \\
+	! -name content \\
+	! -name $(quote_for_sh "$REMOTE_ARCHIVE_NAME") \\
+	-exec rm -rf {} +
 
-cleanup() {
-	rm -f "$BATCH_FILE"
-}
+unzip -oq $(quote_for_sh "$REMOTE_ARCHIVE_NAME")
+rm -f $(quote_for_sh "$REMOTE_ARCHIVE_NAME")
+EOF
+)
 
-trap cleanup EXIT HUP INT TERM
+printf 'Uploading %s to %s:%s\n' "$ARCHIVE_PATH" "$SSH_TARGET" "$SSH_REMOTE_PATH"
 
-{
-	printf 'cd %s\n' "$REMOTE_PATH"
-	printf 'lcd %s\n' "$RELEASE_DIR"
-
-	find "$RELEASE_DIR" -type d | LC_ALL=C awk '
-		BEGIN {
-			root = "";
-		}
-		NR == 1 {
-			root = $0;
-			next;
-		}
-		{
-			relative_path = substr( $0, length( root ) + 2 );
-			depth = gsub( /\//, "/", relative_path );
-			printf "%06d %s\n", depth, relative_path;
-		}
-	' | LC_ALL=C sort -r | while IFS= read -r line; do
-		relative_path=${line#* }
-
-		case "$relative_path" in
-			content|content/*|app|app/vendor)
-				continue
-				;;
-		esac
-
-		printf -- '-rm %s/*\n' "$relative_path"
-	done
-
-	find "$RELEASE_DIR/app" -maxdepth 1 -type f | LC_ALL=C sort | while IFS= read -r file_path; do
-		relative_path=${file_path#"$RELEASE_DIR"/}
-		printf -- '-rm %s\n' "$relative_path"
-	done
-
-	find "$RELEASE_DIR/app" -type d | LC_ALL=C awk '
-		BEGIN {
-			root = "";
-		}
-		NR == 1 {
-			root = $0;
-			next;
-		}
-		{
-			relative_path = substr( $0, length( root ) + 2 );
-			depth = gsub( /\//, "/", relative_path );
-			printf "%06d %s\n", depth, relative_path;
-		}
-	' | LC_ALL=C sort -r | while IFS= read -r line; do
-		relative_path=${line#* }
-		legacy_path=${relative_path/app/core}
-
-		case "$legacy_path" in
-			core|core/vendor)
-				continue
-				;;
-		esac
-
-		printf -- '-rm %s/*\n' "$legacy_path"
-	done
-
-	find "$RELEASE_DIR/app" -maxdepth 1 -type f | LC_ALL=C sort | while IFS= read -r file_path; do
-		relative_path=${file_path#"$RELEASE_DIR"/}
-		legacy_path=${relative_path/app/core}
-		printf -- '-rm %s\n' "$legacy_path"
-	done
-
-	printf -- '-rm %s\n' 'core/.env'
-
-	find "$RELEASE_DIR/app" -type d | LC_ALL=C awk '
-		BEGIN {
-			root = "";
-		}
-		NR == 1 {
-			root = $0;
-			next;
-		}
-		{
-			relative_path = substr( $0, length( root ) + 2 );
-			depth = gsub( /\//, "/", relative_path );
-			printf "%06d %s\n", depth, relative_path;
-		}
-	' | LC_ALL=C sort -r | while IFS= read -r line; do
-		relative_path=${line#* }
-		legacy_path=${relative_path/app/core}
-		printf -- '-rmdir %s\n' "$legacy_path"
-	done
-
-	printf -- '-rmdir %s\n' 'core/vendor'
-	printf -- '-rmdir %s\n' 'core'
-
-	find "$RELEASE_DIR" -maxdepth 1 -type f | LC_ALL=C sort | while IFS= read -r file_path; do
-		relative_path=${file_path#"$RELEASE_DIR"/}
-
-		if [ "$relative_path" = "config.php" ]; then
-			continue
-		fi
-
-		printf -- '-rm %s\n' "$relative_path"
-	done
-
-	find "$RELEASE_DIR" -type d | LC_ALL=C sort | while IFS= read -r directory; do
-		relative_path=${directory#"$RELEASE_DIR"/}
-
-		if [ "$directory" = "$RELEASE_DIR" ]; then
-			continue
-		fi
-
-		printf -- '-mkdir %s\n' "$relative_path"
-	done
-
-	find "$RELEASE_DIR" -type f | LC_ALL=C sort | while IFS= read -r file_path; do
-		relative_path=${file_path#"$RELEASE_DIR"/}
-		printf 'put %s %s\n' "$relative_path" "$relative_path"
-	done
-} > "$BATCH_FILE"
-
-printf 'Uploading %s to %s@%s:%s\n' "$RELEASE_DIR" "$SFTP_USERNAME" "$SFTP_HOST" "$REMOTE_PATH"
-
-SSHPASS=$SFTP_PASSWORD sshpass -e sftp \
-	-oBatchMode=no \
+ssh \
+	-oBatchMode=yes \
 	-oStrictHostKeyChecking=accept-new \
-	-P "$SFTP_PORT" \
-	-b "$BATCH_FILE" \
-	"$SFTP_USERNAME@$SFTP_HOST"
+	"$SSH_TARGET" \
+	"sh -lc $(quote_for_sh "$REMOTE_PREPARE_SCRIPT")"
+
+scp \
+	-oBatchMode=yes \
+	-oStrictHostKeyChecking=accept-new \
+	"$ARCHIVE_PATH" \
+	"$SSH_TARGET:$REMOTE_ARCHIVE_PATH"
+
+ssh \
+	-oBatchMode=yes \
+	-oStrictHostKeyChecking=accept-new \
+	"$SSH_TARGET" \
+	"sh -lc $(quote_for_sh "$REMOTE_DEPLOY_SCRIPT")"
 
 printf 'Release upload completed.\n'

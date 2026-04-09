@@ -243,6 +243,7 @@ class Update {
 		$package_content_root_paths = array();
 
 		try {
+			$this->delete_legacy_storage_root();
 			$this->ensure_directory( $working_dir );
 			$this->ensure_directory( $extract_dir );
 			$this->enable_maintenance_mode( $version );
@@ -273,7 +274,7 @@ class Update {
 				$package_content_root_paths,
 				$source_root,
 			);
-			$this->prune_old_backups();
+			$this->delete_path( $backup_dir );
 
 			return array(
 				'version'    => $version,
@@ -286,6 +287,7 @@ class Update {
 				try {
 					$this->restore_release_root_paths( $rollback_root_paths, $backup_dir );
 					$this->restore_packaged_content_root_paths( $package_content_root_paths, $backup_dir );
+					$this->delete_path( $backup_dir );
 				} catch ( \Throwable $rollback_exception ) {
 					throw new \RuntimeException(
 						__( 'PeakURL could not apply the update and the rollback failed. ', 'peakurl' ) .
@@ -305,6 +307,7 @@ class Update {
 			$this->disable_maintenance_mode();
 			$this->delete_path( $working_dir );
 			$this->release_lock( $lock );
+			$this->delete_storage_root_if_empty();
 		}
 	}
 
@@ -570,7 +573,28 @@ class Update {
 
 	/** Get the base storage directory for update working files. */
 	private function get_storage_root(): string {
-		return $this->build_path( ABSPATH, 'content', 'uploads', 'updates' );
+		return $this->build_path( $this->get_content_directory(), 'updates' );
+	}
+
+	/** Get the obsolete pre-1.0.9 update workspace path under uploads/. */
+	private function get_legacy_storage_root(): string {
+		return $this->build_path( $this->get_content_directory(), 'uploads', 'updates' );
+	}
+
+	/**
+	 * Remove the obsolete update workspace from older packaged installs.
+	 *
+	 * @return void
+	 * @since 1.0.9
+	 */
+	private function delete_legacy_storage_root(): void {
+		$legacy_storage_root = $this->get_legacy_storage_root();
+
+		if ( $legacy_storage_root === $this->get_storage_root() ) {
+			return;
+		}
+
+		$this->delete_path( $legacy_storage_root );
 	}
 
 	/** Get the configured persistent content directory path. */
@@ -1168,18 +1192,27 @@ class Update {
 		}
 	}
 
-	/** Remove old backup directories, keeping only the 3 most recent. */
-	private function prune_old_backups(): void {
-		$backups_root = $this->build_path( $this->get_storage_root(), 'backups' );
+	/** Remove the update workspace tree when the update run leaves it empty. */
+	private function delete_storage_root_if_empty(): void {
+		$this->delete_empty_directory_tree( $this->get_storage_root() );
+	}
 
-		if ( ! is_dir( $backups_root ) ) {
+	/**
+	 * Recursively remove a directory tree, but only where every directory is empty.
+	 *
+	 * @param string $path Directory path to inspect.
+	 * @return void
+	 * @since 1.0.9
+	 */
+	private function delete_empty_directory_tree( string $path ): void {
+		if ( ! is_dir( $path ) ) {
 			return;
 		}
 
-		$scan_results = scandir( $backups_root );
+		$scan_results = scandir( $path );
 
 		if ( false === $scan_results ) {
-			$scan_results = array();
+			return;
 		}
 
 		$entries = array_values(
@@ -1191,16 +1224,27 @@ class Update {
 			),
 		);
 
-		if ( count( $entries ) <= 3 ) {
+		foreach ( $entries as $entry ) {
+			$entry_path = $this->build_path( $path, $entry );
+
+			if ( ! is_dir( $entry_path ) ) {
+				return;
+			}
+
+			$this->delete_empty_directory_tree( $entry_path );
+		}
+
+		$remaining_entries = scandir( $path );
+
+		if ( false === $remaining_entries ) {
 			return;
 		}
 
-		sort( $entries );
-		$stale_entries = array_slice( $entries, 0, count( $entries ) - 3 );
-
-		foreach ( $stale_entries as $entry ) {
-			$this->delete_path( $this->build_path( $backups_root, $entry ) );
+		if ( count( $remaining_entries ) > 2 ) {
+			return;
 		}
+
+		rmdir( $path );
 	}
 
 	/**
@@ -1216,11 +1260,29 @@ class Update {
 		if ( is_dir( $source_path ) ) {
 			$this->ensure_directory( $target_path );
 
+			$source_root                 = $this->normalize_path( $source_path );
+			$target_root                 = $this->normalize_path( $target_path );
+			$directory_iterator          = new \RecursiveDirectoryIterator(
+				$source_path,
+				\FilesystemIterator::SKIP_DOTS,
+			);
+			$recursive_source_iterator   = $directory_iterator;
+			$target_nested_inside_source = $this->path_matches_or_is_within( $target_root, $source_root );
+
+			if ( $target_nested_inside_source ) {
+				$recursive_source_iterator = new \RecursiveCallbackFilterIterator(
+					$directory_iterator,
+					function ( \SplFileInfo $item ) use ( $target_root ): bool {
+						return ! $this->path_matches_or_is_within(
+							$this->normalize_path( $item->getPathname() ),
+							$target_root,
+						);
+					},
+				);
+			}
+
 			$iterator = new \RecursiveIteratorIterator(
-				new \RecursiveDirectoryIterator(
-					$source_path,
-					\FilesystemIterator::SKIP_DOTS,
-				),
+				$recursive_source_iterator,
 				\RecursiveIteratorIterator::SELF_FIRST,
 			);
 
@@ -1255,6 +1317,44 @@ class Update {
 				__( 'PeakURL could not copy the updated release files.', 'peakurl' ),
 			);
 		}
+	}
+
+	/**
+	 * Normalize a filesystem path for safe path-prefix comparisons.
+	 *
+	 * @param string $path Absolute or relative filesystem path.
+	 * @return string
+	 * @since 1.0.9
+	 */
+	private function normalize_path( string $path ): string {
+		$normalized_path = str_replace( '\\', '/', $path );
+		$normalized_path = preg_replace( '#/+#', '/', $normalized_path );
+
+		if ( null === $normalized_path ) {
+			$normalized_path = str_replace( '\\', '/', $path );
+		}
+
+		return rtrim( $normalized_path, '/' );
+	}
+
+	/**
+	 * Check whether a path matches or lives inside another path.
+	 *
+	 * @param string $candidate_path Candidate path to inspect.
+	 * @param string $base_path      Base path that may contain the candidate.
+	 * @return bool
+	 * @since 1.0.9
+	 */
+	private function path_matches_or_is_within(
+		string $candidate_path,
+		string $base_path
+	): bool {
+		if ( '' === $base_path ) {
+			return false;
+		}
+
+		return $candidate_path === $base_path ||
+			str_starts_with( $candidate_path, $base_path . '/' );
 	}
 
 	/**

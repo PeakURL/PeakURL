@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( file_exists( ABSPATH . '.maintenance' ) ) {
 	$maintenance_view_data = array(
 		'htmlLang'   => 'en-US',
-		'apiMessage' => 'PeakURL is updating. Please try again in a moment.',
+		'apiMessage' => 'PeakURL is briefly unavailable right now. Please try again in a moment.',
 	);
 	$autoload_path         = __DIR__ . '/../vendor/autoload.php';
 
@@ -42,7 +42,7 @@ if ( file_exists( ABSPATH . '.maintenance' ) ) {
 			} catch ( Throwable $exception ) {
 				$maintenance_view_data = array(
 					'htmlLang'   => 'en-US',
-					'apiMessage' => 'PeakURL is updating. Please try again in a moment.',
+					'apiMessage' => 'PeakURL is briefly unavailable right now. Please try again in a moment.',
 				);
 			}
 		}
@@ -63,7 +63,7 @@ if ( file_exists( ABSPATH . '.maintenance' ) ) {
 		: json_encode(
 			array(
 				'success' => false,
-				'message' => (string) ( $maintenance_view_data['apiMessage'] ?? 'PeakURL is updating. Please try again in a moment.' ),
+				'message' => (string) ( $maintenance_view_data['apiMessage'] ?? 'PeakURL is briefly unavailable right now. Please try again in a moment.' ),
 				'data'    => array(
 					'maintenance' => true,
 				),

@@ -560,7 +560,7 @@ function peakurl_get_maintenance_view_data(
 
 	$maintenance_api_message = sprintf(
 		/* translators: %s: configured site name. */
-		__( '%s is briefly unavailable while an update finishes. Please try again in a moment.', 'peakurl' ),
+		__( '%s is briefly unavailable right now. Please try again in a moment.', 'peakurl' ),
 		$site_name,
 	);
 
@@ -570,10 +570,10 @@ function peakurl_get_maintenance_view_data(
 		'htmlLang'          => $html_lang,
 		'textDirection'     => $text_direction,
 		'title'             => $maintenance_title,
-		'statusLabel'       => __( 'Update in progress', 'peakurl' ),
+		'statusLabel'       => __( 'Temporarily unavailable', 'peakurl' ),
 		'heading'           => __( 'Briefly unavailable', 'peakurl' ),
-		'message'           => __( 'We are finishing an update right now. Please refresh this page in a moment.', 'peakurl' ),
-		'supportingMessage' => __( 'Your dashboard and short links will be back shortly.', 'peakurl' ),
+		'message'           => __( 'We are making a few improvements right now. Please refresh this page in a moment.', 'peakurl' ),
+		'supportingMessage' => __( 'Thanks for your patience.', 'peakurl' ),
 		'loadingLabel'      => __( 'Loading', 'peakurl' ),
 		'apiMessage'        => $maintenance_api_message,
 	);

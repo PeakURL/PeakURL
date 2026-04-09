@@ -127,7 +127,7 @@ function peakurl_send_maintenance_response(
 		: array(
 			'htmlLang'      => 'en-US',
 			'textDirection' => 'ltr',
-			'apiMessage'    => 'PeakURL is updating. Please try again in a moment.',
+			'apiMessage'    => 'PeakURL is briefly unavailable right now. Please try again in a moment.',
 		);
 
 	http_response_code( 503 );
@@ -147,7 +147,7 @@ function peakurl_send_maintenance_response(
 			: json_encode(
 				array(
 					'success' => false,
-					'message' => (string) ( $maintenance_view_data['apiMessage'] ?? 'PeakURL is updating. Please try again in a moment.' ),
+					'message' => (string) ( $maintenance_view_data['apiMessage'] ?? 'PeakURL is briefly unavailable right now. Please try again in a moment.' ),
 					'data'    => array(
 						'maintenance' => true,
 					),
@@ -160,7 +160,7 @@ function peakurl_send_maintenance_response(
 	header( 'Content-Type: text/html; charset=utf-8' );
 	echo function_exists( 'peakurl_render_maintenance_page' )
 		? peakurl_render_maintenance_page( $maintenance_view_data )
-		: '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>PeakURL is updating</title><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><p>PeakURL is updating. Please try again in a moment.</p></body></html>';
+		: '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>PeakURL is briefly unavailable</title><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><p>PeakURL is briefly unavailable right now. Please try again in a moment.</p></body></html>';
 	exit();
 }
 

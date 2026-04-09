@@ -19,7 +19,7 @@ import {
 import { Link, useSearchParams } from 'react-router-dom';
 import { PEAKURL_VERSION, PEAKURL_NAME } from '@/constants';
 import { BrandLockup, Logo } from '@/components';
-import { __ } from '@/i18n';
+import { __, sprintf } from '@/i18n';
 import type {
 	AboutIconProps,
 	AddOnLink,
@@ -320,7 +320,7 @@ function AboutPage() {
 					</div>
 
 					<h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4 text-white">
-						{__('Welcome to')} {PEAKURL_NAME}
+						{sprintf(__('Welcome to %s'), PEAKURL_NAME)}
 					</h1>
 					<p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
 						{__(

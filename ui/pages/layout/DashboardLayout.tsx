@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { PEAKURL_VERSION } from '@constants';
+import { PEAKURL_NAME, PEAKURL_VERSION } from '@constants';
 import { isDocumentRtl } from '@/i18n/direction';
-import { __ } from '@/i18n';
+import { __, sprintf } from '@/i18n';
 import DashboardSidebar from './DashboardSidebar';
 import { DashboardAppBar } from './DashboardAppBar';
 import { AdminNotices } from './AdminNotices';
@@ -41,18 +41,18 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
 					<footer className="px-4 py-4 text-xs text-text-muted/80 sm:px-6">
 						<div className="flex items-center justify-between gap-3">
-							<p className="min-w-0 italic">
-								{__('Thank you for choosing')}{' '}
-								<a
-									href={footerLink}
-									target="_blank"
-									rel="noreferrer"
-									className="text-text-muted/80 transition-colors hover:text-accent"
-								>
-									PeakURL
-								</a>
-								.
-							</p>
+							<a
+								href={footerLink}
+								target="_blank"
+								rel="noreferrer"
+								dir={isRtl ? 'rtl' : 'ltr'}
+								className="text-inline-start min-w-0 italic text-text-muted/80 transition-colors hover:text-accent"
+							>
+								{sprintf(
+									__('Thank you for choosing %s.'),
+									PEAKURL_NAME
+								)}
+							</a>
 							<a
 								href={footerLink}
 								target="_blank"

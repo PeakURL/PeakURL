@@ -246,11 +246,6 @@ body {
 }
 
 @layer utilities {
-	.direction-safe-text {
-		text-align: start;
-		unicode-bidi: plaintext;
-	}
-
 	.text-inline-start {
 		text-align: start;
 	}

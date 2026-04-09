@@ -19,14 +19,20 @@ function LocationNoteItem({
 	direction,
 }: LocationNoteItemProps) {
 	return (
-		<div dir={direction} className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-2">
+		<div
+			dir={direction}
+			className="text-inline-start flex items-start gap-2"
+		>
 			<span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-info/60" />
-			<div className="min-w-0 space-y-1">
+			<div className="text-inline-start min-w-0 flex-1 space-y-1">
 				<p dir={direction} className="text-inline-start">
 					{text}
 				</p>
 				{example ? (
-					<code className="preserve-ltr-value inline-block max-w-full break-all rounded bg-surface px-1.5 py-0.5 font-mono text-[11px] text-heading">
+					<code
+						dir="ltr"
+						className="preserve-ltr-value mr-auto block w-fit max-w-full break-all rounded bg-surface px-1.5 py-0.5 font-mono text-[11px] text-heading"
+					>
 						{example}
 					</code>
 				) : null}
@@ -157,7 +163,10 @@ function TrafficLocationTab({
 									'Location tracking will show here once clicks are recorded with a configured GeoLite2 City database'
 								)}
 							</p>
-							<div className="mx-auto mt-4 w-full max-w-lg rounded-lg border border-info/20 bg-info/5 px-4 py-3">
+							<div
+								dir={direction}
+								className="text-inline-start mx-auto mt-4 w-full max-w-lg rounded-lg border border-info/20 bg-info/5 px-4 py-3"
+							>
 								<p
 									dir={direction}
 									className="text-inline-start text-xs font-medium text-heading"

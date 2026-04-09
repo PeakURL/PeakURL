@@ -1915,9 +1915,9 @@ msgid "click"
 msgstr ""
 
 #: ui/components/charts/WorldMap.tsx:390
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:226
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:277
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:318
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:235
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:286
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:327
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:183
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:323
 msgid "clicks"
@@ -4291,7 +4291,7 @@ msgstr ""
 #: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUpload.tsx:86
 #: ui/pages/dashboard/bulk-import/_components/FileUpload/FileUpload.tsx:213
 #: ui/pages/dashboard/bulk-import/_components/PasteImport.tsx:85
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:132
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:138
 msgid "Unknown error"
 msgstr ""
 
@@ -4478,11 +4478,11 @@ msgid "vs last month"
 msgstr ""
 
 #: ui/pages/dashboard/_components/CountryStats.tsx:37
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:61
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:103
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:123
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:147
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:290
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:67
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:109
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:129
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:153
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:299
 msgid "Top Countries"
 msgstr ""
 
@@ -4902,60 +4902,60 @@ msgstr ""
 msgid "Short links domain"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:67
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:73
 msgid "No link data available"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:109
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:115
 msgid "Loading location data..."
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:129
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:135
 msgid "Failed to load location data"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:153
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:159
 msgid "No location data available yet"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:156
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:162
 msgid "Location tracking will show here once clicks are recorded with a configured GeoLite2 City database"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:165
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:174
 msgid "Note:"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:170
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:179
 msgid "Local and private-network clicks do not include location data."
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:177
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:186
 msgid "Store the GeoLite2 City database here:"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:184
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:193
 msgid "VPN users may show the location of the VPN server."
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:197
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:339
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:206
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:348
 msgid "Top Cities"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:203
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:212
 msgid "No city data available yet"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:223
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:232
 msgid "Total Locations"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:232
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:241
 msgid "Countries"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:246
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:255
 msgid "Geographic Distribution"
 msgstr ""
 

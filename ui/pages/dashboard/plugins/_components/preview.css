@@ -1,0 +1,5 @@
+@layer components {
+	.plugins-skeleton {
+		@apply animate-pulse rounded-md bg-stroke/60 dark:bg-stroke/40;
+	}
+}

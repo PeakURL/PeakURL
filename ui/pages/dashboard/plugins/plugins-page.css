@@ -1,0 +1,270 @@
+@layer components {
+	.plugins-page {
+		@apply space-y-0 pb-8;
+	}
+
+	.plugins-page-loading {
+		@apply rounded-lg border border-stroke bg-surface p-10 text-center;
+	}
+
+	.plugins-page-loading-spinner {
+		@apply mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-accent;
+	}
+
+	.plugins-page-gate {
+		@apply rounded-xl border border-stroke bg-surface p-10 text-center;
+	}
+
+	.plugins-page-gate-icon {
+		@apply mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600;
+	}
+
+	.plugins-page-gate-title {
+		@apply text-xl font-semibold text-heading;
+	}
+
+	.plugins-page-gate-copy {
+		@apply mt-2 text-sm text-text-muted;
+	}
+
+	.plugins-page-header {
+		@apply relative overflow-hidden rounded-t-2xl border border-stroke bg-surface px-6 py-6 shadow-sm sm:px-8;
+	}
+
+	.plugins-page-header-glow-end {
+		@apply pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-accent/5 blur-3xl;
+	}
+
+	.plugins-page-header-glow-start {
+		@apply pointer-events-none absolute -left-16 bottom-0 h-48 w-48 rounded-full bg-purple-500/5 blur-3xl;
+	}
+
+	.plugins-page-header-layout {
+		@apply relative flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between;
+	}
+
+	.plugins-page-header-copy {
+		@apply max-w-3xl;
+	}
+
+	.plugins-page-header-icon-row {
+		@apply mb-3 flex flex-wrap items-center gap-3;
+	}
+
+	.plugins-page-header-icon {
+		@apply inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-accent/10 text-accent;
+	}
+
+	.plugins-page-header-title {
+		@apply text-2xl font-semibold tracking-tight text-heading sm:text-3xl;
+	}
+
+	.plugins-page-header-summary {
+		@apply mt-2 max-w-2xl text-sm leading-relaxed text-text-muted sm:text-base;
+	}
+
+	.plugins-page-header-waitlist {
+		@apply relative overflow-hidden rounded-2xl border border-accent/20 bg-surface p-5;
+	}
+
+	.plugins-page-header-waitlist-inner {
+		@apply relative;
+	}
+
+	.plugins-page-header-waitlist-badge-row {
+		@apply mb-2 flex items-center gap-2;
+	}
+
+	.plugins-page-header-waitlist-badge {
+		@apply inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-accent;
+	}
+
+	.plugins-page-header-waitlist-badge-icon {
+		@apply shrink-0;
+	}
+
+	.plugins-page-header-waitlist-copy {
+		@apply mb-4 text-sm font-medium leading-snug text-heading;
+	}
+
+	.plugins-page-header-waitlist-button {
+		@apply inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-accent/90 hover:shadow-lg active:translate-y-0 active:shadow-sm;
+	}
+
+	.plugins-page-header-waitlist-button-icon {
+		@apply transition-transform;
+	}
+
+	.plugins-page-toolbar {
+		@apply overflow-hidden border-x border-stroke bg-surface shadow-sm;
+	}
+
+	.plugins-page-toolbar-inner {
+		@apply flex flex-col gap-3 px-6 sm:flex-row sm:items-center sm:justify-between sm:px-8;
+	}
+
+	.plugins-page-toolbar-controls {
+		@apply flex items-center gap-2 pb-3 sm:pb-0;
+	}
+
+	.plugins-page-search {
+		@apply relative max-w-55 flex-1;
+	}
+
+	.plugins-page-search-field {
+		@apply pointer-events-none w-full rounded-lg border border-stroke bg-surface-alt/50 py-2 text-sm text-text-muted/40;
+		padding-inline-start: 2rem;
+		padding-inline-end: 0.75rem;
+		text-align: start;
+	}
+
+	.plugins-page-search-icon {
+		@apply pointer-events-none absolute inset-y-0 flex items-center text-text-muted/40;
+		inset-inline-start: 0;
+		padding-inline-start: 0.625rem;
+		padding-inline-end: 0;
+	}
+
+	.plugins-page-view-toggle {
+		@apply flex rounded-lg border border-stroke;
+	}
+
+	.plugins-page-view-button {
+		@apply flex h-9 w-9 items-center justify-center transition-colors;
+	}
+
+	.plugins-page-view-button-grid {
+		border-start-start-radius: 0.5rem;
+		border-end-start-radius: 0.5rem;
+	}
+
+	.plugins-page-view-button-list {
+		border-inline-start: 1px solid var(--color-stroke);
+		border-start-end-radius: 0.5rem;
+		border-end-end-radius: 0.5rem;
+	}
+
+	.plugins-page-view-button-active {
+		@apply bg-accent/10 text-accent;
+	}
+
+	.plugins-page-view-button-inactive {
+		@apply text-text-muted hover:bg-surface-alt;
+	}
+
+	.plugins-page-content {
+		@apply relative overflow-hidden rounded-b-2xl border-x border-b border-stroke bg-surface shadow-sm;
+	}
+
+	.plugins-page-content-panel {
+		@apply px-6 pb-6 pt-5 sm:px-8;
+	}
+
+	.plugins-page-banner {
+		@apply mb-5 flex items-center gap-3 rounded-xl px-5 py-4;
+	}
+
+	.plugins-page-banner-featured {
+		background-image: linear-gradient(
+			to right,
+			rgba(99, 102, 241, 0.1),
+			rgba(168, 85, 247, 0.1),
+			rgba(236, 72, 153, 0.1)
+		);
+	}
+
+	.plugins-page-banner-popular {
+		background-image: linear-gradient(
+			to right,
+			rgba(249, 115, 22, 0.1),
+			rgba(239, 68, 68, 0.1),
+			rgba(236, 72, 153, 0.1)
+		);
+	}
+
+	.plugins-page-banner-icon {
+		@apply shrink-0;
+	}
+
+	.plugins-page-banner-icon-featured {
+		@apply text-accent;
+	}
+
+	.plugins-page-banner-icon-popular {
+		@apply text-orange-500;
+	}
+
+	.plugins-page-banner-title {
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.plugins-page-banner-copy {
+		@apply text-xs text-text-muted;
+	}
+
+	.plugins-page-grid {
+		@apply grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+	}
+
+	.plugins-page-content-overlay {
+		@apply pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-linear-to-t from-surface via-surface/80 to-transparent;
+	}
+
+	.plugins-page-roadmap {
+		@apply mt-5 overflow-hidden rounded-2xl border border-stroke bg-surface shadow-sm;
+	}
+
+	.plugins-page-roadmap-inner {
+		@apply relative px-6 py-8 sm:px-10 sm:py-10;
+	}
+
+	.plugins-page-roadmap-glow-end {
+		@apply pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-accent/5 blur-3xl;
+	}
+
+	.plugins-page-roadmap-glow-start {
+		@apply pointer-events-none absolute -left-12 bottom-0 h-48 w-48 rounded-full bg-purple-500/5 blur-3xl;
+	}
+
+	.plugins-page-roadmap-copy {
+		@apply relative mx-auto max-w-2xl text-center;
+	}
+
+	.plugins-page-roadmap-icon {
+		@apply mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-accent/10 text-accent;
+	}
+
+	.plugins-page-roadmap-title {
+		@apply text-xl font-semibold tracking-tight text-heading sm:text-2xl;
+	}
+
+	.plugins-page-roadmap-description {
+		@apply mx-auto mt-3 max-w-lg text-sm leading-relaxed text-text-muted;
+	}
+
+	.plugins-page-roadmap-grid {
+		@apply relative mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3;
+	}
+
+	.plugins-page-roadmap-card {
+		@apply rounded-xl border border-stroke p-5 transition-shadow hover:shadow-sm;
+	}
+
+	.plugins-page-roadmap-card-icon {
+		@apply mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-surface text-accent shadow-sm;
+	}
+
+	.plugins-page-roadmap-card-title {
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.plugins-page-roadmap-card-copy {
+		@apply mt-1.5 text-xs leading-relaxed text-text-muted;
+	}
+
+	@media (min-width: 640px) {
+		.plugins-page-header-waitlist {
+			min-width: 16.25rem;
+		}
+	}
+}

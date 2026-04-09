@@ -6,52 +6,48 @@ import type { PluginCardProps, PluginPreviewSkeletonProps } from './types';
 /* Faint shimmer skeleton bar */
 function Skeleton({ className = '' }: PluginPreviewSkeletonProps) {
 	return (
-		<div
-			className={`animate-pulse rounded-md bg-stroke/60 dark:bg-stroke/40 ${className}`}
-		/>
+		<div className={`plugins-skeleton ${className}`} />
 	);
 }
 
 function PluginCard({ plugin }: PluginCardProps) {
 	return (
-		<div className="group relative flex flex-col overflow-hidden rounded-xl border border-stroke bg-surface shadow-sm transition-all duration-200 hover:shadow-md hover:border-stroke-strong">
+		<div className="plugins-card group">
 			{/* ── Banner ── */}
-			<div
-				className={`relative h-28 overflow-hidden bg-gradient-to-br ${plugin.gradient}`}
-			>
+			<div className={`plugins-card-banner bg-gradient-to-br ${plugin.gradient}`}>
 				{/* Decorative blurred circles inside the banner */}
-				<div className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/10 blur-xl" />
-				<div className="absolute -bottom-4 -left-4 h-16 w-16 rounded-full bg-black/10 blur-lg" />
+				<div className="plugins-card-banner-glow-end" />
+				<div className="plugins-card-banner-glow-start" />
 
 				{/* Plugin icon placeholder */}
-				<div className="absolute -bottom-5 left-4">
-					<div className="flex h-12 w-12 items-center justify-center rounded-xl border-2 border-surface bg-surface shadow-md">
-						<div className="h-6 w-6 rounded-lg bg-gradient-to-br from-stroke to-stroke-strong opacity-60" />
+				<div className="plugins-card-banner-icon-wrap">
+					<div className="plugins-card-banner-icon">
+						<div className="plugins-card-banner-icon-placeholder" />
 					</div>
 				</div>
 			</div>
 
 			{/* ── Content area ── */}
-			<div className="flex flex-1 flex-col px-4 pb-4 pt-8">
+			<div className="plugins-card-body">
 				{/* Blurred plugin name */}
-				<div className="mb-2 flex items-center justify-between gap-2">
+				<div className="plugins-card-header">
 					<Skeleton className={`h-4 ${plugin.barWidths[0]}`} />
 					<Skeleton className="h-3.5 w-10 shrink-0" />
 				</div>
 
 				{/* Blurred author */}
-				<Skeleton className="mb-3 h-3 w-20" />
+				<Skeleton className="plugins-card-author" />
 
 				{/* Blurred description lines */}
-				<div className="mb-4 flex-1 space-y-2">
+				<div className="plugins-card-copy">
 					<Skeleton className={`h-3 ${plugin.barWidths[1]}`} />
 					<Skeleton className={`h-3 ${plugin.barWidths[2]}`} />
 					<Skeleton className="h-3 w-1/3" />
 				</div>
 
 				{/* Rating / installs placeholder row */}
-				<div className="mb-3 flex items-center justify-between border-t border-stroke pt-3">
-					<div className="flex items-center gap-1.5">
+				<div className="plugins-card-meta">
+					<div className="plugins-card-meta-stars">
 						{[1, 2, 3, 4, 5].map((s) => (
 							<Star
 								key={s}
@@ -62,7 +58,7 @@ function PluginCard({ plugin }: PluginCardProps) {
 						))}
 						<Skeleton className="h-3 w-6" />
 					</div>
-					<div className="flex items-center gap-1 text-stroke-strong dark:text-stroke">
+					<div className="plugins-card-meta-downloads">
 						<Download size={11} />
 						<Skeleton className="h-3 w-8" />
 					</div>
@@ -73,11 +69,11 @@ function PluginCard({ plugin }: PluginCardProps) {
 					href={PLUGINS_WAITLIST_URL}
 					target="_blank"
 					rel="noreferrer"
-					className="group/btn flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent/80 px-3 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:shadow-md hover:from-accent/95 hover:to-accent/75 hover:-translate-y-px active:translate-y-0"
+					className="plugins-card-button group/btn"
 				>
 					<Bell
 						size={13}
-						className="transition-transform group-hover/btn:rotate-12"
+						className="plugins-card-button-icon group-hover/btn:rotate-12"
 					/>
 					{__('Join the Waitlist')}
 					<ExternalLink size={11} className="opacity-60" />
@@ -88,9 +84,9 @@ function PluginCard({ plugin }: PluginCardProps) {
 				href={PLUGINS_WAITLIST_URL}
 				target="_blank"
 				rel="noreferrer"
-				className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+				className="plugins-card-overlay group-hover:opacity-100"
 			>
-				<span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/60 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-widest text-white shadow-lg backdrop-blur-md">
+				<span className="plugins-card-overlay-pill">
 					<Bell size={11} />
 					{__('Join the Waitlist')}
 				</span>

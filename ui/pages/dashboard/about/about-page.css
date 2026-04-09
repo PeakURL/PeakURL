@@ -1,0 +1,288 @@
+@layer components {
+	.about-page {
+		@apply pb-12;
+	}
+
+	.about-page-hero {
+		@apply relative -mx-4 -mt-4 mb-12 overflow-hidden bg-slate-950 px-4 py-12 text-white sm:-mx-6 sm:-mt-6 sm:px-6 sm:py-16;
+	}
+
+	.about-page-hero-glow {
+		@apply pointer-events-none absolute inset-0;
+		background-image: radial-gradient(
+			ellipse at center,
+			rgba(99, 102, 241, 0.08),
+			transparent 70%
+		);
+	}
+
+	.about-page-hero-content {
+		@apply relative z-10 mx-auto max-w-3xl text-center;
+	}
+
+	.about-page-hero-version {
+		@apply mb-6 inline-flex items-center gap-2 rounded-full border border-slate-700/60 bg-slate-800/80 px-4 py-1.5 text-sm font-medium text-slate-300;
+	}
+
+	.about-page-hero-version-icon {
+		@apply text-indigo-400;
+	}
+
+	.about-page-hero-mark {
+		@apply mb-6 flex justify-center;
+	}
+
+	.about-page-hero-mark-panel {
+		@apply flex h-16 w-16 items-center justify-center rounded-2xl border border-slate-700/50 bg-slate-800/80;
+	}
+
+	.about-page-hero-mark-icon {
+		@apply text-indigo-400;
+	}
+
+	.about-page-hero-title {
+		@apply mb-4 text-3xl font-extrabold tracking-tight text-white sm:text-5xl;
+	}
+
+	.about-page-hero-summary {
+		@apply mx-auto max-w-2xl text-lg leading-relaxed text-slate-400 sm:text-xl;
+	}
+
+	.about-page-hero-actions {
+		@apply mt-8 flex flex-wrap justify-center gap-3;
+	}
+
+	.about-page-hero-link {
+		@apply inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-colors;
+	}
+
+	.about-page-hero-link-primary {
+		@apply bg-indigo-600 text-white hover:bg-indigo-500;
+	}
+
+	.about-page-hero-link-secondary {
+		@apply border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700;
+	}
+
+	.about-page-hero-addons {
+		@apply mt-6 flex flex-wrap justify-center gap-3;
+	}
+
+	.about-page-hero-addon {
+		@apply inline-flex items-center gap-2 rounded-full border border-slate-700/70 bg-slate-900/70 px-3.5 py-2 text-sm font-medium text-slate-200 transition-colors hover:border-slate-500 hover:bg-slate-800;
+	}
+
+	.about-page-hero-addon-icon {
+		@apply flex h-5 w-5 items-center justify-center;
+	}
+
+	.about-page-hero-addon-link-icon {
+		@apply text-slate-500;
+	}
+
+	.about-page-body {
+		@apply mx-auto max-w-5xl space-y-0;
+	}
+
+	.about-page-landing {
+		@apply mb-8 rounded-2xl border border-accent/20 bg-accent/5 p-6;
+	}
+
+	.about-page-landing-eyebrow {
+		@apply text-xs font-semibold uppercase text-accent;
+		letter-spacing: 0.18em;
+	}
+
+	.about-page-landing-title {
+		@apply mt-3 text-2xl font-semibold text-heading;
+	}
+
+	.about-page-landing-copy {
+		@apply mt-3 max-w-3xl text-sm leading-6 text-text-muted;
+	}
+
+	.about-page-landing-actions {
+		@apply mt-5 flex flex-wrap gap-3;
+	}
+
+	.about-page-landing-action {
+		@apply inline-flex items-center gap-2 rounded-lg border border-stroke bg-surface px-4 py-2 text-sm font-medium text-heading transition-colors hover:border-accent/30 hover:text-accent;
+	}
+
+	.about-page-section-heading {
+		@apply mb-10 text-center;
+	}
+
+	.about-page-section-title {
+		@apply text-2xl font-bold text-heading sm:text-3xl;
+	}
+
+	.about-page-section-summary {
+		@apply mx-auto mt-2 max-w-2xl text-text-muted;
+	}
+
+	.about-page-divider {
+		@apply my-16 flex items-center gap-4;
+	}
+
+	.about-page-divider-line {
+		@apply h-px flex-1 bg-stroke;
+	}
+
+	.about-page-divider-logo {
+		@apply opacity-30;
+	}
+
+	.about-page-features-grid {
+		@apply grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3;
+	}
+
+	.about-page-feature-card {
+		@apply relative rounded-xl border border-stroke bg-surface p-6 transition-all duration-200 hover:border-accent/30;
+	}
+
+	.about-page-feature-icon {
+		@apply mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10;
+	}
+
+	.about-page-feature-title {
+		@apply mb-1.5 text-base font-semibold text-heading;
+	}
+
+	.about-page-feature-copy {
+		@apply text-sm leading-relaxed text-text-muted;
+	}
+
+	.about-page-principles-grid {
+		@apply grid grid-cols-1 gap-6 md:grid-cols-3;
+	}
+
+	.about-page-principle-card {
+		@apply rounded-xl border border-stroke bg-surface p-6 text-center;
+	}
+
+	.about-page-principle-icon {
+		@apply mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10;
+	}
+
+	.about-page-principle-title {
+		@apply mb-2 text-base font-semibold text-heading;
+	}
+
+	.about-page-principle-copy {
+		@apply text-sm leading-relaxed text-text-muted;
+	}
+
+	.about-page-freedoms-grid {
+		@apply grid grid-cols-1 gap-5 sm:grid-cols-2;
+	}
+
+	.about-page-freedom-card {
+		@apply relative flex items-start gap-5 rounded-xl border border-stroke bg-surface p-6 transition-all duration-200 hover:border-accent/30;
+	}
+
+	.about-page-freedom-number {
+		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-lg font-bold text-accent;
+	}
+
+	.about-page-freedom-copy {
+		@apply min-w-0;
+	}
+
+	.about-page-freedom-title {
+		@apply mb-1 text-base font-semibold text-heading;
+	}
+
+	.about-page-freedom-description {
+		@apply text-sm leading-relaxed text-text-muted;
+	}
+
+	.about-page-support {
+		@apply mt-8 rounded-2xl border border-accent/20 bg-accent/5 p-6;
+	}
+
+	.about-page-support-layout {
+		@apply flex flex-col gap-5 md:flex-row md:items-center md:justify-between;
+	}
+
+	.about-page-support-copy {
+		@apply max-w-2xl;
+	}
+
+	.about-page-support-eyebrow {
+		@apply text-xs font-semibold uppercase text-accent;
+		letter-spacing: 0.18em;
+	}
+
+	.about-page-support-title {
+		@apply mt-2 text-xl font-semibold text-heading;
+	}
+
+	.about-page-support-description {
+		@apply mt-2 text-sm leading-6 text-text-muted;
+	}
+
+	.about-page-support-actions {
+		@apply flex flex-wrap gap-3;
+	}
+
+	.about-page-support-link {
+		@apply inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors;
+	}
+
+	.about-page-support-link-primary {
+		@apply bg-accent text-white hover:opacity-95;
+	}
+
+	.about-page-support-link-secondary {
+		@apply border border-stroke bg-surface text-heading hover:border-accent/30 hover:text-accent;
+	}
+
+	.about-page-installation-card {
+		@apply mx-auto max-w-lg rounded-xl border border-stroke bg-surface p-6;
+	}
+
+	.about-page-system-row {
+		@apply flex items-center justify-between border-b border-stroke/60 py-3 last:border-0;
+	}
+
+	.about-page-system-label {
+		@apply flex items-center gap-3;
+	}
+
+	.about-page-system-icon {
+		@apply text-text-muted;
+	}
+
+	.about-page-system-label-copy {
+		@apply text-sm text-text-muted;
+	}
+
+	.about-page-system-value {
+		@apply text-sm font-medium text-heading;
+	}
+
+	.about-page-footer {
+		@apply pb-2 pt-4 text-center;
+	}
+
+	.about-page-footer-brand {
+		@apply mb-3 flex justify-center;
+	}
+
+	.about-page-footer-tagline {
+		@apply text-sm italic tracking-wide text-text-muted;
+	}
+
+	.about-page-footer-links {
+		@apply mt-6 flex flex-wrap items-center justify-center gap-4 text-xs text-text-muted;
+	}
+
+	.about-page-footer-link {
+		@apply inline-flex items-center gap-1 transition-colors hover:text-accent;
+	}
+
+	.about-page-footer-separator {
+		@apply opacity-30;
+	}
+}

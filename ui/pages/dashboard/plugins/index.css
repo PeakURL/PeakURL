@@ -1,0 +1,5 @@
+@import './plugins-page.css';
+@import './_components/preview.css';
+@import './_components/plugin-tabs.css';
+@import './_components/plugin-card.css';
+@import './_components/installed-plugins-table.css';

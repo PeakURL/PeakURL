@@ -1,0 +1,73 @@
+@layer components {
+	.plugins-card {
+		@apply relative flex flex-col overflow-hidden rounded-xl border border-stroke bg-surface shadow-sm transition-all duration-200 hover:border-stroke-strong hover:shadow-md;
+	}
+
+	.plugins-card-banner {
+		@apply relative h-28 overflow-hidden;
+	}
+
+	.plugins-card-banner-glow-end {
+		@apply absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/10 blur-xl;
+	}
+
+	.plugins-card-banner-glow-start {
+		@apply absolute -bottom-4 -left-4 h-16 w-16 rounded-full bg-black/10 blur-lg;
+	}
+
+	.plugins-card-banner-icon-wrap {
+		@apply absolute -bottom-5 left-4;
+	}
+
+	.plugins-card-banner-icon {
+		@apply flex h-12 w-12 items-center justify-center rounded-xl border-2 border-surface bg-surface shadow-md;
+	}
+
+	.plugins-card-banner-icon-placeholder {
+		@apply h-6 w-6 rounded-lg bg-gradient-to-br from-stroke to-stroke-strong opacity-60;
+	}
+
+	.plugins-card-body {
+		@apply flex flex-1 flex-col px-4 pb-4 pt-8;
+	}
+
+	.plugins-card-header {
+		@apply mb-2 flex items-center justify-between gap-2;
+	}
+
+	.plugins-card-author {
+		@apply mb-3 h-3 w-20;
+	}
+
+	.plugins-card-copy {
+		@apply mb-4 flex-1 space-y-2;
+	}
+
+	.plugins-card-meta {
+		@apply mb-3 flex items-center justify-between border-t border-stroke pt-3;
+	}
+
+	.plugins-card-meta-stars {
+		@apply flex items-center gap-1.5;
+	}
+
+	.plugins-card-meta-downloads {
+		@apply flex items-center gap-1 text-stroke-strong dark:text-stroke;
+	}
+
+	.plugins-card-button {
+		@apply flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent/80 px-3 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:-translate-y-px hover:from-accent/95 hover:to-accent/75 hover:shadow-md active:translate-y-0;
+	}
+
+	.plugins-card-button-icon {
+		@apply transition-transform;
+	}
+
+	.plugins-card-overlay {
+		@apply absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200;
+	}
+
+	.plugins-card-overlay-pill {
+		@apply inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/60 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-widest text-white shadow-lg backdrop-blur-md;
+	}
+}

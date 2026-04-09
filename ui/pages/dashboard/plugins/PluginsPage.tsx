@@ -29,12 +29,11 @@ import {
 	FEATURED_CARDS,
 	POPULAR_CARDS,
 } from './pluginData';
-import { isDocumentRtl } from '@/i18n/direction';
 import { __ } from '@/i18n';
+import { cn } from '@/utils';
 import { PLUGINS_WAITLIST_URL } from '@constants';
 
 function PluginsPage() {
-	const isRtl = isDocumentRtl();
 	const { canManageUsers, isLoading } = useAdminAccess();
 	const [activeTab, setActiveTab] = useState<TabId>('browse');
 	const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -63,11 +62,20 @@ function PluginsPage() {
 		}
 	})();
 
+	const getViewButtonClassName = (mode: ViewMode) =>
+		cn(
+			'plugins-page-view-button',
+			`plugins-page-view-button-${mode}`,
+			viewMode === mode
+				? 'plugins-page-view-button-active'
+				: 'plugins-page-view-button-inactive'
+		);
+
 	/* ─── Loading ─── */
 	if (isLoading) {
 		return (
-			<div className="rounded-lg border border-stroke bg-surface p-10 text-center">
-				<div className="mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-accent" />
+			<div className="plugins-page-loading">
+				<div className="plugins-page-loading-spinner" />
 			</div>
 		);
 	}
@@ -75,14 +83,14 @@ function PluginsPage() {
 	/* ─── Non-admin gate ─── */
 	if (!canManageUsers) {
 		return (
-			<div className="rounded-xl border border-stroke bg-surface p-10 text-center">
-				<div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600">
+			<div className="plugins-page-gate">
+				<div className="plugins-page-gate-icon">
 					<ShieldCheck size={28} />
 				</div>
-				<h2 className="text-xl font-semibold text-heading">
+				<h2 className="plugins-page-gate-title">
 					{__('Admin access required')}
 				</h2>
-				<p className="mt-2 text-sm text-text-muted">
+				<p className="plugins-page-gate-copy">
 					{__(
 						'Only admin accounts will be able to install, update, and manage plugins.'
 					)}
@@ -92,26 +100,26 @@ function PluginsPage() {
 	}
 
 	return (
-		<div className="space-y-0 pb-8">
+		<div className="plugins-page">
 			{/* ════════════════════════════════════
 			    PAGE HEADER
 			   ════════════════════════════════════ */}
-			<div className="relative overflow-hidden rounded-t-2xl border border-stroke bg-surface px-6 py-6 shadow-sm sm:px-8">
+			<div className="plugins-page-header">
 				{/* Decorative blobs */}
-				<div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-accent/5 blur-3xl" />
-				<div className="pointer-events-none absolute -left-16 bottom-0 h-48 w-48 rounded-full bg-purple-500/5 blur-3xl" />
+				<div className="plugins-page-header-glow-end" />
+				<div className="plugins-page-header-glow-start" />
 
-				<div className="relative flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-					<div className="max-w-3xl">
-						<div className="mb-3 flex flex-wrap items-center gap-3">
-							<div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-accent/10 text-accent">
+				<div className="plugins-page-header-layout">
+					<div className="plugins-page-header-copy">
+						<div className="plugins-page-header-icon-row">
+							<div className="plugins-page-header-icon">
 								<Plug size={21} />
 							</div>
 						</div>
-						<h1 className="text-2xl font-semibold tracking-tight text-heading sm:text-3xl">
+						<h1 className="plugins-page-header-title">
 							{__('Plugins')}
 						</h1>
-						<p className="mt-2 max-w-2xl text-sm leading-relaxed text-text-muted sm:text-base">
+						<p className="plugins-page-header-summary">
 							{__(
 								'Extend PeakURL with plugins, install from the library, upload custom packages, and manage everything from one place.'
 							)}
@@ -119,16 +127,18 @@ function PluginsPage() {
 					</div>
 
 					{/* Waitlist CTA */}
-					<div className="relative overflow-hidden rounded-2xl border border-accent/20 bg-surface p-5 sm:min-w-65">
-						<div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full" />
-						<div className="relative">
-							<div className="mb-2 flex items-center gap-2">
-								<span className="inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-accent">
-									<Sparkles size={9} />
+					<div className="plugins-page-header-waitlist">
+						<div className="plugins-page-header-waitlist-inner">
+							<div className="plugins-page-header-waitlist-badge-row">
+								<span className="plugins-page-header-waitlist-badge">
+									<Sparkles
+										size={9}
+										className="plugins-page-header-waitlist-badge-icon"
+									/>
 									{__('Coming Soon')}
 								</span>
 							</div>
-							<p className="mb-4 text-sm font-medium leading-snug text-heading">
+							<p className="plugins-page-header-waitlist-copy">
 								{__(
 									'Be the first to know when the plugin library launches.'
 								)}
@@ -137,11 +147,11 @@ function PluginsPage() {
 								href={PLUGINS_WAITLIST_URL}
 								target="_blank"
 								rel="noreferrer"
-								className="group inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:bg-accent/90 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm"
+								className="plugins-page-header-waitlist-button group"
 							>
 								<Bell
 									size={15}
-									className="transition-transform group-hover:rotate-12"
+									className="plugins-page-header-waitlist-button-icon group-hover:rotate-12"
 								/>
 								{__('Join the Waitlist')}
 								<ExternalLink
@@ -157,25 +167,21 @@ function PluginsPage() {
 			{/* ════════════════════════════════════
 			    TAB BAR + VIEW TOGGLE
 			   ════════════════════════════════════ */}
-			<div className="overflow-hidden border-x border-stroke bg-surface shadow-sm">
-				<div className="flex flex-col gap-3 px-6 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+			<div className="plugins-page-toolbar">
+				<div className="plugins-page-toolbar-inner">
 					<PluginTabs
 						activeTab={activeTab}
 						onTabChange={setActiveTab}
 						tabs={tabs}
 					/>
 					{activeTab !== 'installed' && (
-						<div className="flex items-center gap-2 pb-3 sm:pb-0">
+						<div className="plugins-page-toolbar-controls">
 							{/* Disabled search placeholder */}
-							<div className="relative max-w-55 flex-1">
-								<div
-									className="field-with-inline-start-icon text-inline-start pointer-events-none w-full rounded-lg border border-stroke bg-surface-alt/50 py-2 text-sm text-text-muted/40"
-								>
+							<div className="plugins-page-search">
+								<div className="plugins-page-search-field">
 									{__('Search plugins…')}
 								</div>
-								<div
-									className="inline-start-icon-slot pointer-events-none absolute inset-y-0 flex items-center text-text-muted/40"
-								>
+								<div className="plugins-page-search-icon">
 									<svg
 										className="h-4 w-4"
 										fill="none"
@@ -188,30 +194,16 @@ function PluginsPage() {
 									</svg>
 								</div>
 							</div>
-							<div className="flex rounded-lg border border-stroke">
+							<div className="plugins-page-view-toggle">
 								<button
 									onClick={() => setViewMode('grid')}
-									className={`flex h-9 w-9 items-center justify-center transition-colors ${
-										isRtl ? 'rounded-r-lg' : 'rounded-l-lg'
-									} ${
-										viewMode === 'grid'
-											? 'bg-accent/10 text-accent'
-											: 'text-text-muted hover:bg-surface-alt'
-									}`}
+									className={getViewButtonClassName('grid')}
 								>
 									<Grid3X3 size={15} />
 								</button>
 								<button
 									onClick={() => setViewMode('list')}
-									className={`flex h-9 w-9 items-center justify-center transition-colors ${
-										isRtl
-											? 'rounded-l-lg border-r'
-											: 'rounded-r-lg border-l'
-									} border-stroke ${
-										viewMode === 'list'
-											? 'bg-accent/10 text-accent'
-											: 'text-text-muted hover:bg-surface-alt'
-									}`}
+									className={getViewButtonClassName('list')}
 								>
 									<LayoutList size={15} />
 								</button>
@@ -224,29 +216,29 @@ function PluginsPage() {
 			{/* ════════════════════════════════════
 			    CONTENT AREA — BLURRED CARDS
 			   ════════════════════════════════════ */}
-			<div className="relative overflow-hidden rounded-b-2xl border-x border-b border-stroke bg-surface shadow-sm">
+			<div className="plugins-page-content">
 				{/* ── Installed tab: table ── */}
 				{activeTab === 'installed' && (
-					<div className="px-6 pb-6 pt-5 sm:px-8">
+					<div className="plugins-page-content-panel">
 						<InstalledPluginsTable plugins={activeCards} />
 					</div>
 				)}
 
 				{/* ── Browse / Featured / Popular: card grid ── */}
 				{activeTab !== 'installed' && (
-					<div className="px-6 pb-6 pt-5 sm:px-8">
+					<div className="plugins-page-content-panel">
 						{/* Tab context banner */}
 						{activeTab === 'featured' && (
-							<div className="mb-5 flex items-center gap-3 rounded-xl bg-linear-to-r from-accent/10 via-purple-500/10 to-pink-500/10 px-5 py-4">
+							<div className="plugins-page-banner plugins-page-banner-featured">
 								<Sparkles
 									size={18}
-									className="shrink-0 text-accent"
+									className="plugins-page-banner-icon plugins-page-banner-icon-featured"
 								/>
 								<div>
-									<h3 className="text-sm font-semibold text-heading">
+									<h3 className="plugins-page-banner-title">
 										{__('Featured Plugins')}
 									</h3>
-									<p className="text-xs text-text-muted">
+									<p className="plugins-page-banner-copy">
 										{__(
 											'Hand-picked extensions recommended by the PeakURL team.'
 										)}
@@ -255,16 +247,16 @@ function PluginsPage() {
 							</div>
 						)}
 						{activeTab === 'popular' && (
-							<div className="mb-5 flex items-center gap-3 rounded-xl bg-linear-to-r from-orange-500/10 via-red-500/10 to-pink-500/10 px-5 py-4">
+							<div className="plugins-page-banner plugins-page-banner-popular">
 								<TrendingUp
 									size={18}
-									className="shrink-0 text-orange-500"
+									className="plugins-page-banner-icon plugins-page-banner-icon-popular"
 								/>
 								<div>
-									<h3 className="text-sm font-semibold text-heading">
+									<h3 className="plugins-page-banner-title">
 										{__('Most Popular')}
 									</h3>
-									<p className="text-xs text-text-muted">
+									<p className="plugins-page-banner-copy">
 										{__(
 											'Extensions with the highest community adoption.'
 										)}
@@ -275,7 +267,7 @@ function PluginsPage() {
 
 						{/* Card grid (or list table) */}
 						{viewMode === 'grid' ? (
-							<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+							<div className="plugins-page-grid">
 								{activeCards.map((card) => (
 									<PluginCard key={card.id} plugin={card} />
 								))}
@@ -287,26 +279,26 @@ function PluginsPage() {
 				)}
 
 				{/* ── Floating "under construction" overlay ── */}
-				<div className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-linear-to-t from-surface via-surface/80 to-transparent" />
+				<div className="plugins-page-content-overlay" />
 			</div>
 
 			{/* ════════════════════════════════════
 			    WORK IN PROGRESS HERO
 			   ════════════════════════════════════ */}
-			<div className="mt-5 overflow-hidden rounded-2xl border border-stroke bg-surface shadow-sm">
-				<div className="relative px-6 py-8 sm:px-10 sm:py-10">
+			<div className="plugins-page-roadmap">
+				<div className="plugins-page-roadmap-inner">
 					{/* Background decoration */}
-					<div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-accent/5 blur-3xl" />
-					<div className="pointer-events-none absolute -left-12 bottom-0 h-48 w-48 rounded-full bg-purple-500/5 blur-3xl" />
+					<div className="plugins-page-roadmap-glow-end" />
+					<div className="plugins-page-roadmap-glow-start" />
 
-					<div className="relative mx-auto max-w-2xl text-center">
-						<div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-accent/10 text-accent">
+					<div className="plugins-page-roadmap-copy">
+						<div className="plugins-page-roadmap-icon">
 							<Wrench size={24} />
 						</div>
-						<h2 className="text-xl font-semibold tracking-tight text-heading sm:text-2xl">
+						<h2 className="plugins-page-roadmap-title">
 							{__('Plugin System Under Development')}
 						</h2>
-						<p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-text-muted">
+						<p className="plugins-page-roadmap-description">
 							{__(
 								"We're building a full plugin ecosystem for PeakURL. Install extensions, manage updates, and customise your experience from the dashboard. Here's what's coming:"
 							)}
@@ -314,7 +306,7 @@ function PluginsPage() {
 					</div>
 
 					{/* Feature roadmap cards */}
-					<div className="relative mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+					<div className="plugins-page-roadmap-grid">
 						<FeatureRoadmapCard
 							icon={Rocket}
 							title={__('One-Click Installs')}
@@ -379,13 +371,17 @@ function FeatureRoadmapCard({
 }: FeatureRoadmapCardProps) {
 	return (
 		<div
-			className={`rounded-xl border border-stroke bg-linear-to-br ${gradient} p-5 transition-shadow hover:shadow-sm`}
+			className={cn(
+				'plugins-page-roadmap-card',
+				'bg-linear-to-br',
+				gradient
+			)}
 		>
-			<div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-surface text-accent shadow-sm">
+			<div className="plugins-page-roadmap-card-icon">
 				<Icon size={17} />
 			</div>
-			<h3 className="text-sm font-semibold text-heading">{title}</h3>
-			<p className="mt-1.5 text-xs leading-relaxed text-text-muted">
+			<h3 className="plugins-page-roadmap-card-title">{title}</h3>
+			<p className="plugins-page-roadmap-card-copy">
 				{description}
 			</p>
 		</div>

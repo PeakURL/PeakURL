@@ -19,6 +19,12 @@ export const Layout = ({ children }: LayoutProps) => {
 		'https://peakurl.org?utm_source=peakurl_dashboard&utm_medium=dashboard_footer&utm_campaign=app_footer';
 	const normalizedPath = location.pathname.replace(/\/+$/, '') || '/';
 	const showAdminNotices = normalizedPath !== '/dashboard/about';
+	const footerCopy = sprintf(
+		__('Thank you for choosing %s.'),
+		'__PEAKURL_NAME__'
+	);
+	const [footerCopyBeforeLink, footerCopyAfterLink = ''] =
+		footerCopy.split('__PEAKURL_NAME__');
 
 	return (
 		<div className="dashboard-layout">
@@ -47,18 +53,21 @@ export const Layout = ({ children }: LayoutProps) => {
 
 					<footer className="dashboard-layout-footer">
 						<div className="dashboard-layout-footer-inner">
-							<a
-								href={footerLink}
-								target="_blank"
-								rel="noreferrer"
+							<p
 								dir={isRtl ? 'rtl' : 'ltr'}
-								className="dashboard-layout-footer-link"
+								className="dashboard-layout-footer-copy"
 							>
-								{sprintf(
-									__('Thank you for choosing %s.'),
-									PEAKURL_NAME
-								)}
-							</a>
+								{footerCopyBeforeLink}
+								<a
+									href={footerLink}
+									target="_blank"
+									rel="noreferrer"
+									className="dashboard-layout-footer-link"
+								>
+									{PEAKURL_NAME}
+								</a>
+								{footerCopyAfterLink}
+							</p>
 							<a
 								href={footerLink}
 								target="_blank"

@@ -34,21 +34,21 @@ import type {
 
 /* ─── Helpers ─────────────────────────────────────────────── */
 const SectionTitle = ({ children, subtitle }: SectionTitleProps) => (
-	<div className="text-center mb-10">
-		<h2 className="text-2xl sm:text-3xl font-bold text-heading">
+	<div className="about-page-section-heading">
+		<h2 className="about-page-section-title">
 			{children}
 		</h2>
 		{subtitle && (
-			<p className="mt-2 text-text-muted max-w-2xl mx-auto">{subtitle}</p>
+			<p className="about-page-section-summary">{subtitle}</p>
 		)}
 	</div>
 );
 
 const Divider = () => (
-	<div className="my-16 flex items-center gap-4">
-		<div className="flex-1 h-px bg-stroke" />
-		<Logo size="sm" className="opacity-30" />
-		<div className="flex-1 h-px bg-stroke" />
+	<div className="about-page-divider">
+		<div className="about-page-divider-line" />
+		<Logo size="sm" className="about-page-divider-logo" />
+		<div className="about-page-divider-line" />
 	</div>
 );
 
@@ -185,22 +185,22 @@ const LandingBanner = ({ source }: LandingBannerProps) => {
 	const meta = getLandingMeta()[source];
 
 	return (
-		<div className="mb-8 rounded-2xl border border-accent/20 bg-accent/5 p-6">
-			<p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+		<div className="about-page-landing">
+			<p className="about-page-landing-eyebrow">
 				{meta.eyebrow}
 			</p>
-			<h2 className="mt-3 text-2xl font-semibold text-heading">
+			<h2 className="about-page-landing-title">
 				{meta.title}
 			</h2>
-			<p className="mt-3 max-w-3xl text-sm leading-6 text-text-muted">
+			<p className="about-page-landing-copy">
 				{meta.description}
 			</p>
-			<div className="mt-5 flex flex-wrap gap-3">
+			<div className="about-page-landing-actions">
 				{meta.actions.map((action) => (
 					<Link
 						key={action.to}
 						to={action.to}
-						className="inline-flex items-center gap-2 rounded-lg border border-stroke bg-surface px-4 py-2 text-sm font-medium text-heading transition-colors hover:border-accent/30 hover:text-accent"
+						className="about-page-landing-action"
 					>
 						{action.label}
 						<ChevronRight size={15} />
@@ -258,12 +258,12 @@ const getFeatures = (): Feature[] => [
 ];
 
 const FeatureCard = ({ icon: Icon, title, description }: Feature) => (
-	<div className="group relative bg-surface border border-stroke rounded-xl p-6 transition-all duration-200 hover:border-accent/30">
-		<div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-accent/10 mb-4">
+	<div className="about-page-feature-card">
+		<div className="about-page-feature-icon">
 			<Icon size={20} className="text-accent" />
 		</div>
-		<h3 className="text-base font-semibold text-heading mb-1.5">{title}</h3>
-		<p className="text-sm text-text-muted leading-relaxed">{description}</p>
+		<h3 className="about-page-feature-title">{title}</h3>
+		<p className="about-page-feature-copy">{description}</p>
 	</div>
 );
 
@@ -301,12 +301,12 @@ const getFreedoms = (): Freedom[] => [
 
 /* ─── System info rows ────────────────────────────────────── */
 const SystemInfoRow = ({ icon: Icon, label, value }: SystemInfoRowProps) => (
-	<div className="flex items-center justify-between py-3 border-b border-stroke/60 last:border-0">
-		<div className="flex items-center gap-3">
-			<Icon size={16} className="text-text-muted" />
-			<span className="text-sm text-text-muted">{label}</span>
+	<div className="about-page-system-row">
+		<div className="about-page-system-label">
+			<Icon size={16} className="about-page-system-icon" />
+			<span className="about-page-system-label-copy">{label}</span>
 		</div>
-		<span className="text-sm font-medium text-heading">{value}</span>
+		<span className="about-page-system-value">{value}</span>
 	</div>
 );
 
@@ -319,39 +319,45 @@ function AboutPage() {
 	const addOnLinks = getAddOnLinks();
 
 	return (
-		<div className="pb-12">
+		<div className="about-page">
 			{/* ─── Hero (full-width breakout) ─────────────────── */}
-			<section className="relative overflow-hidden bg-slate-950 -mx-4 sm:-mx-6 -mt-4 sm:-mt-6 px-4 sm:px-6 py-12 sm:py-16 text-white mb-12">
+			<section className="about-page-hero">
 				{/* Subtle glow */}
-				<div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.08),transparent_70%)] pointer-events-none" />
+				<div className="about-page-hero-glow" />
 
-				<div className="relative z-10 text-center max-w-3xl mx-auto">
-					<div className="inline-flex items-center gap-2 bg-slate-800/80 border border-slate-700/60 rounded-full px-4 py-1.5 mb-6 text-sm font-medium text-slate-300">
-						<Sparkles size={14} className="text-indigo-400" />
+				<div className="about-page-hero-content">
+					<div className="about-page-hero-version">
+						<Sparkles
+							size={14}
+							className="about-page-hero-version-icon"
+						/>
 						{__('Version')} {PEAKURL_VERSION}
 					</div>
 
-					<div className="flex justify-center mb-6">
-						<div className="w-16 h-16 bg-slate-800/80 border border-slate-700/50 rounded-2xl flex items-center justify-center">
-							<Link2 size={32} className="text-indigo-400" />
+					<div className="about-page-hero-mark">
+						<div className="about-page-hero-mark-panel">
+							<Link2
+								size={32}
+								className="about-page-hero-mark-icon"
+							/>
 						</div>
 					</div>
 
-					<h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4 text-white">
+					<h1 className="about-page-hero-title">
 						{sprintf(__('Welcome to %s'), PEAKURL_NAME)}
 					</h1>
-					<p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+					<p className="about-page-hero-summary">
 						{__(
 							'PeakURL gives you a focused workspace for publishing short links, measuring engagement, and running branded link infrastructure on your own stack.'
 						)}
 					</p>
 
-					<div className="mt-8 flex flex-wrap justify-center gap-3">
+					<div className="about-page-hero-actions">
 						<a
 							href="https://peakurl.org"
 							target="_blank"
 							rel="noreferrer"
-							className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors"
+							className="about-page-hero-link about-page-hero-link-primary"
 						>
 							<BookOpen size={16} />
 							{__('Documentation')}
@@ -360,7 +366,7 @@ function AboutPage() {
 							href="https://github.com/PeakURL/PeakURL"
 							target="_blank"
 							rel="noreferrer"
-							className="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors"
+							className="about-page-hero-link about-page-hero-link-secondary"
 						>
 							<svg
 								viewBox="0 0 24 24"
@@ -375,7 +381,7 @@ function AboutPage() {
 						</a>
 					</div>
 
-					<div className="mt-6 flex flex-wrap justify-center gap-3">
+					<div className="about-page-hero-addons">
 						{addOnLinks.map((item) => {
 							const Icon = item.icon;
 
@@ -385,15 +391,15 @@ function AboutPage() {
 									href={item.href}
 									target="_blank"
 									rel="noreferrer"
-									className="inline-flex items-center gap-2 rounded-full border border-slate-700/70 bg-slate-900/70 px-3.5 py-2 text-sm font-medium text-slate-200 transition-colors hover:border-slate-500 hover:bg-slate-800"
+									className="about-page-hero-addon"
 								>
-									<span className="flex h-5 w-5 items-center justify-center">
+									<span className="about-page-hero-addon-icon">
 										<Icon className="h-5 w-5" />
 									</span>
 									<span>{item.label}</span>
 									<ExternalLink
 										size={13}
-										className="text-slate-500"
+										className="about-page-hero-addon-link-icon"
 									/>
 								</a>
 							);
@@ -402,7 +408,7 @@ function AboutPage() {
 				</div>
 			</section>
 
-			<div className="max-w-5xl mx-auto space-y-0">
+			<div className="about-page-body">
 				<LandingBanner source={source} />
 
 				{/* ─── Features ───────────────────────────────────── */}
@@ -415,7 +421,7 @@ function AboutPage() {
 						{__("What's Inside")}
 					</SectionTitle>
 
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+					<div className="about-page-features-grid">
 						{features.map((f) => (
 							<FeatureCard key={f.title} {...f} />
 						))}
@@ -434,41 +440,41 @@ function AboutPage() {
 						{__('Product Principles')}
 					</SectionTitle>
 
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-						<div className="bg-surface border border-stroke rounded-xl p-6 text-center">
-							<div className="w-12 h-12 mx-auto mb-4 rounded-lg bg-accent/10 flex items-center justify-center">
+					<div className="about-page-principles-grid">
+						<div className="about-page-principle-card">
+							<div className="about-page-principle-icon">
 								<Monitor size={22} className="text-accent" />
 							</div>
-							<h3 className="text-base font-semibold text-heading mb-2">
+							<h3 className="about-page-principle-title">
 								{__('Clear By Default')}
 							</h3>
-							<p className="text-sm text-text-muted leading-relaxed">
+							<p className="about-page-principle-copy">
 								{__(
 									'The dashboard should stay direct and readable so routine work like publishing links, reviewing traffic, and managing users does not feel heavy.'
 								)}
 							</p>
 						</div>
-						<div className="bg-surface border border-stroke rounded-xl p-6 text-center">
-							<div className="w-12 h-12 mx-auto mb-4 rounded-lg bg-accent/10 flex items-center justify-center">
+						<div className="about-page-principle-card">
+							<div className="about-page-principle-icon">
 								<Code size={22} className="text-accent" />
 							</div>
-							<h3 className="text-base font-semibold text-heading mb-2">
+							<h3 className="about-page-principle-title">
 								{__('Portable To Run')}
 							</h3>
-							<p className="text-sm text-text-muted leading-relaxed">
+							<p className="about-page-principle-copy">
 								{__(
 									'The application should install cleanly on common PHP and MySQL hosting without depending on a managed SaaS control plane.'
 								)}
 							</p>
 						</div>
-						<div className="bg-surface border border-stroke rounded-xl p-6 text-center">
-							<div className="w-12 h-12 mx-auto mb-4 rounded-lg bg-accent/10 flex items-center justify-center">
+						<div className="about-page-principle-card">
+							<div className="about-page-principle-icon">
 								<Heart size={22} className="text-accent" />
 							</div>
-							<h3 className="text-base font-semibold text-heading mb-2">
+							<h3 className="about-page-principle-title">
 								{__('Open And Inspectable')}
 							</h3>
-							<p className="text-sm text-text-muted leading-relaxed">
+							<p className="about-page-principle-copy">
 								{__(
 									'The codebase stays auditable and adaptable so operators can understand what they run, extend it carefully, and keep long-term control.'
 								)}
@@ -489,20 +495,20 @@ function AboutPage() {
 						{__('Open Source Terms')}
 					</SectionTitle>
 
-					<div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+					<div className="about-page-freedoms-grid">
 						{freedoms.map((f) => (
 							<div
 								key={f.number}
-								className="group relative bg-surface border border-stroke rounded-xl p-6 flex gap-5 items-start transition-all duration-200 hover:border-accent/30"
+								className="about-page-freedom-card"
 							>
-								<div className="shrink-0 w-10 h-10 rounded-lg bg-accent/10 text-accent flex items-center justify-center font-bold text-lg">
+								<div className="about-page-freedom-number">
 									{f.number}
 								</div>
-								<div>
-									<h3 className="text-base font-semibold text-heading mb-1">
+								<div className="about-page-freedom-copy">
+									<h3 className="about-page-freedom-title">
 										{__('Freedom to')} {f.title}
 									</h3>
-									<p className="text-sm text-text-muted leading-relaxed">
+									<p className="about-page-freedom-description">
 										{f.description}
 									</p>
 								</div>
@@ -510,29 +516,29 @@ function AboutPage() {
 						))}
 					</div>
 
-					<div className="mt-8 rounded-2xl border border-accent/20 bg-accent/5 p-6">
-						<div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-							<div className="max-w-2xl">
-								<p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+					<div className="about-page-support">
+						<div className="about-page-support-layout">
+							<div className="about-page-support-copy">
+								<p className="about-page-support-eyebrow">
 									{__('Support PeakURL')}
 								</p>
-								<h3 className="mt-2 text-xl font-semibold text-heading">
+								<h3 className="about-page-support-title">
 									{__(
 										'If PeakURL is useful to you, help keep it practical and actively maintained.'
 									)}
 								</h3>
-								<p className="mt-2 text-sm leading-6 text-text-muted">
+								<p className="about-page-support-description">
 									{__(
 										'Sponsorships and small contributions help fund releases, documentation, infrastructure, and the maintenance work that keeps the project moving.'
 									)}
 								</p>
 							</div>
-							<div className="flex flex-wrap gap-3">
+							<div className="about-page-support-actions">
 								<a
 									href="https://peakurl.org/sponsor"
 									target="_blank"
 									rel="noreferrer"
-									className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:opacity-95"
+									className="about-page-support-link about-page-support-link-primary"
 								>
 									<Heart size={16} />
 									{__('Sponsor PeakURL')}
@@ -542,7 +548,7 @@ function AboutPage() {
 									href="https://buymeacoffee.com/PeakURL"
 									target="_blank"
 									rel="noreferrer"
-									className="inline-flex items-center gap-2 rounded-lg border border-stroke bg-surface px-4 py-2.5 text-sm font-semibold text-heading transition-colors hover:border-accent/30 hover:text-accent"
+									className="about-page-support-link about-page-support-link-secondary"
 								>
 									<Coffee size={16} />
 									{__('Buy Me a Coffee')}
@@ -565,7 +571,7 @@ function AboutPage() {
 						{__('Current Installation')}
 					</SectionTitle>
 
-					<div className="max-w-lg mx-auto bg-surface border border-stroke rounded-xl p-6">
+					<div className="about-page-installation-card">
 						<SystemInfoRow
 							icon={Sparkles}
 							label={__('Version')}
@@ -602,39 +608,39 @@ function AboutPage() {
 				<Divider />
 
 				{/* ─── Footer tagline ─────────────────────────────── */}
-				<section className="text-center pt-4 pb-2">
-					<div className="mb-3 flex justify-center">
+				<section className="about-page-footer">
+					<div className="about-page-footer-brand">
 						<BrandLockup to="/dashboard" size="md" />
 					</div>
-					<p className="text-sm italic text-text-muted tracking-wide">
+					<p className="about-page-footer-tagline">
 						{__(
 							'Self-hosted link management with clear ownership and a focused dashboard.'
 						)}
 					</p>
-					<div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs text-text-muted">
+					<div className="about-page-footer-links">
 						<a
 							href="https://peakurl.org"
 							target="_blank"
 							rel="noreferrer"
-							className="inline-flex items-center gap-1 hover:text-accent transition-colors"
+							className="about-page-footer-link"
 						>
 							{__('Website')} <ExternalLink size={10} />
 						</a>
-						<span className="opacity-30">•</span>
+						<span className="about-page-footer-separator">•</span>
 						<a
 							href="https://github.com/PeakURL/PeakURL"
 							target="_blank"
 							rel="noreferrer"
-							className="inline-flex items-center gap-1 hover:text-accent transition-colors"
+							className="about-page-footer-link"
 						>
 							GitHub <ExternalLink size={10} />
 						</a>
-						<span className="opacity-30">•</span>
+						<span className="about-page-footer-separator">•</span>
 						<a
 							href="https://peakurl.org/release-notes"
 							target="_blank"
 							rel="noreferrer"
-							className="inline-flex items-center gap-1 hover:text-accent transition-colors"
+							className="about-page-footer-link"
 						>
 							{__('Release Notes')} <ExternalLink size={10} />
 						</a>

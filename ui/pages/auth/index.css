@@ -1,0 +1,4 @@
+@import '../../styles/pages/auth/auth-wrapper.css';
+@import './login/login-page.css';
+@import './forgot-password/forgot-password-page.css';
+@import './reset-password/reset-password-page.css';

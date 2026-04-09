@@ -1,0 +1,92 @@
+@layer components {
+	.plugins-status-pill {
+		@apply inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold;
+	}
+
+	.plugins-status-pill-active {
+		@apply gap-1.5 border border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400;
+	}
+
+	.plugins-status-pill-inactive {
+		@apply border border-gray-500/20 bg-gray-500/10 text-gray-600 dark:text-gray-400;
+	}
+
+	.plugins-status-pill-dot {
+		@apply h-1.5 w-1.5 rounded-full bg-emerald-500;
+	}
+
+	.plugins-table-empty {
+		@apply rounded-xl border border-dashed border-stroke bg-surface-alt/30 px-6 py-12 text-center;
+	}
+
+	.plugins-table-empty-icon {
+		@apply mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-surface-alt text-text-muted;
+	}
+
+	.plugins-table-empty-title {
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.plugins-table-empty-copy {
+		@apply mt-1 text-sm text-text-muted;
+	}
+
+	.plugins-table {
+		@apply overflow-hidden rounded-xl border border-stroke bg-surface shadow-sm;
+	}
+
+	.plugins-table-wrap {
+		@apply overflow-x-auto;
+	}
+
+	.plugins-table-grid {
+		@apply min-w-full;
+	}
+
+	.plugins-table-head-row {
+		@apply border-b border-stroke bg-surface-alt/60;
+		text-align: start;
+	}
+
+	.plugins-table-head-cell {
+		@apply px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted;
+	}
+
+	.plugins-table-head-cell-end {
+		text-align: end;
+	}
+
+	.plugins-table-row {
+		@apply transition-colors hover:bg-surface-alt/40;
+	}
+
+	.plugins-table-cell {
+		@apply px-5 py-4;
+		text-align: start;
+	}
+
+	.plugins-table-main {
+		@apply flex items-center justify-start gap-3;
+	}
+
+	.plugins-table-icon {
+		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl opacity-80;
+	}
+
+	.plugins-table-icon-fill {
+		@apply h-5 w-5 rounded bg-white/30;
+	}
+
+	.plugins-table-copy {
+		@apply min-w-0 flex-1 space-y-1.5;
+		text-align: start;
+	}
+
+	.plugins-table-actions {
+		@apply flex items-center justify-end gap-1;
+	}
+
+	.plugins-table-more {
+		@apply flex h-8 w-8 items-center justify-center rounded-lg text-text-muted opacity-50;
+	}
+}

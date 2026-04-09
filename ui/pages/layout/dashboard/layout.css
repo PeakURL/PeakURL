@@ -27,9 +27,13 @@
 		@apply flex items-center justify-between gap-3;
 	}
 
-	.dashboard-layout-footer-link {
-		@apply min-w-0 italic text-text-muted/80 transition-colors hover:text-accent;
+	.dashboard-layout-footer-copy {
+		@apply min-w-0 italic text-text-muted/80;
 		text-align: start;
+	}
+
+	.dashboard-layout-footer-link {
+		@apply transition-colors hover:text-accent;
 	}
 
 	.dashboard-layout-footer-link-version {

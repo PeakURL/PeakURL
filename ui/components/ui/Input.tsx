@@ -1,6 +1,6 @@
 import { forwardRef, useId } from 'react';
 import { Info } from 'lucide-react';
-import { getDocumentDirection, resolveFieldDirection } from '@/i18n/direction';
+import { getDocumentDirection, getFieldDirection } from '@/i18n/direction';
 import type { InputProps } from './types';
 export type { InputIcon, InputProps } from './types';
 
@@ -42,9 +42,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 	const chromeDirection = getDocumentDirection();
 	const preferredValueDirection =
 		valueDirection || (LTR_INPUT_TYPES.has(type) ? 'ltr' : undefined);
-	const contentDirection = resolveFieldDirection({
-		value: props.value,
-		defaultValue: props.defaultValue,
+	const contentDirection = getFieldDirection({
 		fallbackDirection: chromeDirection,
 		valueDirection: preferredValueDirection,
 		explicitDirection: props.dir,
@@ -55,6 +53,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 	const describedBy =
 		[errorId, helperId].filter(Boolean).join(' ') || undefined;
 	const hasInlineStartIcon = Boolean(IconComponent);
+	const placeholderFollowsPageDirection =
+		Boolean(preferredValueDirection) &&
+		preferredValueDirection !== chromeDirection;
 
 	return (
 		<div className="space-y-2">
@@ -88,6 +89,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 						hasInlineStartIcon
 							? 'field-with-inline-start-icon'
 							: 'px-4'
+					} ${
+						placeholderFollowsPageDirection
+							? 'placeholder-follow-page-direction'
+							: ''
 					} ${
 						error
 							? 'border-red-500 focus:ring-red-500 focus:border-red-500'

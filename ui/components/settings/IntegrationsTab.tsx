@@ -334,7 +334,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 										{wh.createdAt && (
 											<p className="text-xs text-muted mt-2">
 												{__('Created:')}{' '}
-												<bdi dir="auto">
+												<bdi className="preserve-ltr-value inline-block">
 													{new Date(
 														wh.createdAt
 													).toLocaleDateString()}

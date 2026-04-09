@@ -33,7 +33,7 @@ import {
 	useLoginMutation,
 	useVerifyTwoFactorLoginMutation,
 } from '@/store/slices/api';
-import { __ } from '@/i18n';
+import { __, sprintf } from '@/i18n';
 import type { ApiErrorStateProps } from './types';
 
 /* ─── Highlights shown on the branding panel ─── */
@@ -326,10 +326,10 @@ function LoginPage() {
 					href={PEAKURL_URL}
 					target="_blank"
 					rel="noopener noreferrer"
+					dir={isRtl ? 'rtl' : 'ltr'}
 					className="login-fade-up-d4 text-xs text-slate-600 transition-colors duration-150 hover:text-slate-400"
 				>
-					{__('Powered by')}{' '}
-					<span className="font-medium text-slate-500">PeakURL</span>
+					{sprintf(__('Powered by %s'), 'PeakURL')}
 				</a>
 			</div>
 

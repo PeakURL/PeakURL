@@ -208,13 +208,21 @@ body {
 	}
 
 	.field-with-inline-start-icon {
-		padding-inline-start: 2rem;
-		padding-inline-end: 0.75rem;
+		@apply pl-8 pr-3;
+	}
+
+	html[dir='rtl'] .field-with-inline-start-icon {
+		@apply pl-3 pr-8;
 	}
 
 	.inline-start-icon-slot {
-		inset-inline-start: 0;
-		padding-inline-start: 0.625rem;
+		@apply left-0 pl-2.5 pr-0;
+		right: auto;
+	}
+
+	html[dir='rtl'] .inline-start-icon-slot {
+		@apply right-0 pl-0 pr-2.5;
+		left: auto;
 	}
 
 	/* Content wrapper to ensure clear separation from header/sidebar */
@@ -255,19 +263,30 @@ body {
 	}
 
 	.text-page-start {
-		text-align: left;
+		@apply text-left;
 	}
 
 	html[dir='rtl'] .text-page-start {
+		@apply text-right;
+	}
+
+	.placeholder-follow-page-direction::placeholder {
+		direction: ltr;
+		text-align: left;
+		unicode-bidi: plaintext;
+	}
+
+	html[dir='rtl'] .placeholder-follow-page-direction::placeholder {
+		direction: rtl;
 		text-align: right;
 	}
 
 	.text-page-end {
-		text-align: right;
+		@apply text-right;
 	}
 
 	html[dir='rtl'] .text-page-end {
-		text-align: left;
+		@apply text-left;
 	}
 
 	.inset-inline-end-2 {
@@ -303,21 +322,20 @@ body {
 	}
 
 	.padding-inline-start-4 {
-		padding-inline-start: 1rem;
+		@apply ps-4;
 	}
 
 	.margin-inline-start-4 {
-		margin-inline-start: 1rem;
+		@apply ms-4;
 	}
 
 	.field-required-indicator {
-		margin-inline-start: 0.25rem;
+		@apply ms-1;
 	}
 
 	.sidebar-submenu-rail {
-		margin-inline-start: 1.25rem;
-		padding-inline-start: 0.75rem;
-		border-inline-start: 1px solid var(--color-stroke);
+		@apply ms-5 border-s ps-3;
+		border-color: var(--color-stroke);
 	}
 
 	.origin-top-inline-end {

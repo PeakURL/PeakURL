@@ -1,7 +1,7 @@
 import { Link2, MousePointerClick } from 'lucide-react';
 import { Select } from '@/components/ui';
 import { __, sprintf } from '@/i18n';
-import { isDocumentRtl, resolveFieldDirection } from '@/i18n/direction';
+import { getFieldDirection, isDocumentRtl } from '@/i18n/direction';
 import type { LinksSortBy, LinksSortOrder, TableFooterProps } from './types';
 import type { SelectOption } from '@/components/ui';
 
@@ -105,8 +105,7 @@ const TableFooter = ({
 					{isCustom && (
 						<input
 							type="number"
-							dir={resolveFieldDirection({
-								value: limit,
+							dir={getFieldDirection({
 								fallbackDirection: pageDirection,
 								valueDirection: 'ltr',
 							})}
@@ -117,7 +116,7 @@ const TableFooter = ({
 								if (!isNaN(num) && num > 0) setLimit(num);
 							}}
 							placeholder={__('Custom page size')}
-							className="text-inline-start col-span-2 w-full min-w-0 rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent sm:col-span-1 sm:w-28"
+							className="placeholder-follow-page-direction text-page-start col-span-2 w-full min-w-0 rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent sm:col-span-1 sm:w-28"
 						/>
 					)}
 				</div>

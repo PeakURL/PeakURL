@@ -190,6 +190,7 @@ export interface StateCardProps {
 export interface StatCardProps {
 	label: string;
 	value: string;
+	valueDirection?: 'auto' | 'ltr' | 'rtl';
 }
 
 /**
@@ -379,6 +380,7 @@ export interface SectionHeaderProps {
 export interface MetricItem {
 	label: string;
 	value: string;
+	valueDirection?: 'auto' | 'ltr' | 'rtl';
 }
 
 /**
@@ -424,6 +426,7 @@ export interface DetailRowProps {
 	value: string;
 	icon?: IconComponent;
 	href?: string;
+	valueDirection?: 'auto' | 'ltr' | 'rtl';
 }
 
 /**

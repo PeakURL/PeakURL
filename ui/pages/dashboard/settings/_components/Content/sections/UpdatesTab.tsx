@@ -246,7 +246,17 @@ function MetricGrid({ items }: MetricGridProps) {
 						{item.label}
 					</p>
 					<p className="mt-2 text-lg font-semibold text-heading">
-						<bdi dir="auto">{item.value}</bdi>
+						{'ltr' === item.valueDirection ? (
+							<span className="preserve-ltr-value inline-block">
+								{item.value}
+							</span>
+						) : 'rtl' === item.valueDirection ? (
+							<span dir="rtl" className="inline-block">
+								{item.value}
+							</span>
+						) : (
+							<bdi dir="auto">{item.value}</bdi>
+						)}
 					</p>
 				</div>
 			))}
@@ -387,9 +397,25 @@ function UpdateActions({
 	);
 }
 
-function DetailRow({ label, value, icon: Icon, href }: DetailRowProps) {
+function DetailRow({
+	label,
+	value,
+	icon: Icon,
+	href,
+	valueDirection = 'auto',
+}: DetailRowProps) {
 	const isRtl = isDocumentRtl();
 	const direction = isRtl ? 'rtl' : 'ltr';
+	const valueNode =
+		'ltr' === valueDirection ? (
+			<span className="preserve-ltr-value inline-block">{value}</span>
+		) : 'rtl' === valueDirection ? (
+			<span dir="rtl" className="inline-block">
+				{value}
+			</span>
+		) : (
+			<bdi dir="auto">{value}</bdi>
+		);
 
 	return (
 		<div
@@ -408,12 +434,12 @@ function DetailRow({ label, value, icon: Icon, href }: DetailRowProps) {
 					dir={direction}
 					className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline"
 				>
-					<bdi dir="auto">{value}</bdi>
+					{valueNode}
 					<ExternalLink size={14} />
 				</a>
 			) : (
 				<span className="text-inline-start text-sm font-medium text-heading">
-					<bdi dir="auto">{value}</bdi>
+					{valueNode}
 				</span>
 			)}
 		</div>
@@ -508,10 +534,12 @@ function UpdatesTab({
 						{
 							label: __('Installed Version'),
 							value: status?.currentVersion || __('Unknown'),
+							valueDirection: 'ltr',
 						},
 						{
 							label: __('Latest Version'),
 							value: status?.latestVersion || __('Unknown'),
+							valueDirection: 'ltr',
 						},
 						{
 							label: __('Last Checked'),
@@ -519,6 +547,7 @@ function UpdatesTab({
 								status?.lastCheckedAt,
 								__('Never')
 							),
+							valueDirection: 'ltr',
 						},
 					]}
 				/>
@@ -542,6 +571,7 @@ function UpdatesTab({
 									__('Never')
 								)}
 								icon={Clock3}
+								valueDirection="ltr"
 							/>
 						) : null}
 						{status?.releaseNotesUrl ? (
@@ -581,10 +611,12 @@ function UpdatesTab({
 						{
 							label: __('Recorded Schema'),
 							value: String(databaseStatus?.currentVersion ?? __('Unknown')),
+							valueDirection: 'ltr',
 						},
 						{
 							label: __('Required Schema'),
 							value: String(databaseStatus?.targetVersion ?? __('Unknown')),
+							valueDirection: 'ltr',
 						},
 						{
 							label: __('Last Database Upgrade'),
@@ -592,6 +624,7 @@ function UpdatesTab({
 								databaseStatus?.lastUpgradedAt,
 								__('Never')
 							),
+							valueDirection: 'ltr',
 						},
 					]}
 				/>

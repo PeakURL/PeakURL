@@ -110,7 +110,7 @@ function ApiTab({
 									</div>
 									<p className="text-xs text-text-muted mt-1">
 										{__('Created:')}{' '}
-										<bdi dir="auto">
+										<bdi className="preserve-ltr-value inline-block">
 											{key.createdAt
 												? new Date(
 														key.createdAt

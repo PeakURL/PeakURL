@@ -157,6 +157,7 @@ function LocationDataTab({
 							effectiveStatus?.databaseUpdatedAt,
 						__('Never')
 					)}
+					valueDirection="ltr"
 				/>
 				<StatCard
 					label={__('Database Size')}
@@ -164,6 +165,7 @@ function LocationDataTab({
 						effectiveStatus?.databaseSizeBytes,
 						__('Not available')
 					)}
+					valueDirection="ltr"
 				/>
 			</div>
 
@@ -369,7 +371,11 @@ function LocationDataTab({
 	);
 }
 
-function StatCard({ label, value }: StatCardProps) {
+function StatCard({
+	label,
+	value,
+	valueDirection = 'auto',
+}: StatCardProps) {
 	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
 
 	return (
@@ -381,7 +387,17 @@ function StatCard({ label, value }: StatCardProps) {
 				{label}
 			</p>
 			<p className="mt-3 text-lg font-semibold text-heading">
-				<bdi dir="auto">{value}</bdi>
+				{'ltr' === valueDirection ? (
+					<span className="preserve-ltr-value inline-block">
+						{value}
+					</span>
+				) : 'rtl' === valueDirection ? (
+					<span dir="rtl" className="inline-block">
+						{value}
+					</span>
+				) : (
+					<bdi dir="auto">{value}</bdi>
+				)}
 			</p>
 		</div>
 	);

@@ -1086,6 +1086,7 @@ msgid "PeakURL could not send the welcome email because the account email addres
 msgstr "PeakURL no pudo enviar el correo de bienvenida porque la dirección de correo de la cuenta no es válida."
 
 #: app/services/notifications.php:213
+#: ui/pages/dashboard/about/AboutPage.tsx:323
 msgid "Welcome to %s"
 msgstr "Te damos la bienvenida a %s"
 
@@ -1400,14 +1401,14 @@ msgid "Confirm"
 msgstr "Confirmar"
 
 #: ui/components/ui/ConfirmDialog.tsx:30
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:361
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:363
 #: ui/pages/dashboard/settings/_components/Content/sections/ApiKeyModals.tsx:57
 #: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:651
 #: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:818
 #: ui/pages/dashboard/settings/_components/Content/Content.tsx:644
 #: ui/pages/dashboard/links/_components/BulkDeleteModal.tsx:86
 #: ui/pages/dashboard/links/_components/DeleteLinkModal.tsx:135
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:275
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:272
 #: ui/pages/dashboard/users/UsersPage.tsx:316
 msgid "Cancel"
 msgstr "Cancelar"
@@ -2087,9 +2088,9 @@ msgstr "Abrir la página de enlaces con esta búsqueda aplicada"
 msgid "Keep typing to search links, or jump straight to a dashboard page."
 msgstr "Sigue escribiendo para buscar enlaces o salta directamente a una página del panel."
 
-#: ui/pages/layout/DashboardLayout.tsx:45
-msgid "Thank you for choosing"
-msgstr "Gracias por elegir"
+#: ui/pages/layout/DashboardLayout.tsx:52
+msgid "Thank you for choosing %s."
+msgstr ""
 
 #: ui/pages/layout/DashboardLayout.tsx:62
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:360
@@ -2118,7 +2119,7 @@ msgid "Update Database"
 msgstr "Actualizar base de datos"
 
 #: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:143
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:281
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:283
 msgid "Download Database"
 msgstr "Descargar base de datos"
 
@@ -2126,7 +2127,7 @@ msgstr "Descargar base de datos"
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:143
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:619
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable.tsx:67
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:256
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:253
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:31
 msgid "Status"
 msgstr "Estado"
@@ -2148,18 +2149,18 @@ msgid "Database Updated"
 msgstr "Base de datos actualizada"
 
 #: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:158
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:520
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:542
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:593
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:548
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:571
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:625
 msgid "Never"
 msgstr "Nunca"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:162
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:163
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:633
 msgid "Database Size"
 msgstr "Tamaño de la base de datos"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:165
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:166
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:38
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:193
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:391
@@ -2171,81 +2172,81 @@ msgstr "Tamaño de la base de datos"
 msgid "Not available"
 msgstr "No disponible"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:173
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:175
 msgid "Location data unavailable"
 msgstr "Datos de ubicación no disponibles"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:184
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:186
 msgid "Location analytics is enabled"
 msgstr "La analítica de ubicación está activada"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:185
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:187
 msgid "Location analytics is disabled"
 msgstr "La analítica de ubicación está desactivada"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:189
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:191
 msgid "PeakURL is using the local GeoLite2 City database for click locations."
 msgstr "PeakURL está usando la base de datos local GeoLite2 City para las ubicaciones de los clics."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:192
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:194
 msgid "Save your MaxMind credentials, then download the GeoLite2 City database to enable visitor country and city analytics."
 msgstr "Guarda tus credenciales de MaxMind y luego descarga la base de datos GeoLite2 City para activar las analíticas de país y ciudad de los visitantes."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:203
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:205
 #: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:151
 msgid "Dashboard management unavailable"
 msgstr "Gestión desde el panel no disponible"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:212
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:214
 msgid "MaxMind Credentials"
 msgstr "Credenciales de MaxMind"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:215
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:217
 msgid "PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
 msgstr "PeakURL almacena estos valores cifrados en la base de datos para poder actualizar más tarde la base de datos GeoLite2 City sin volver a pedirlos."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:227
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:229
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:648
 msgid "Account ID"
 msgstr "ID de la cuenta"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:238
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:240
 msgid "License Key"
 msgstr "Clave de licencia"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:262
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:264
 msgid "Update Credentials"
 msgstr "Actualizar credenciales"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:280
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:282
 msgid "Refresh Database"
 msgstr "Actualizar base de datos"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:289
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:291
 msgid "MaxMind Account ID"
 msgstr "ID de cuenta de MaxMind"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:303
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:305
 msgid "MaxMind License Key"
 msgstr "Clave de licencia de MaxMind"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:313
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:315
 msgid "Enter a new MaxMind license key"
 msgstr "Introduce una nueva clave de licencia de MaxMind"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:316
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:318
 msgid "Enter your MaxMind license key"
 msgstr "Introduce tu clave de licencia de MaxMind"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:326
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:328
 msgid "Saved license key:"
 msgstr "Clave de licencia guardada:"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:347
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:349
 msgid "Save New Credentials"
 msgstr "Guardar nuevas credenciales"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:348
+#: ui/pages/dashboard/settings/_components/Content/sections/LocationDataTab.tsx:350
 msgid "Save Credentials"
 msgstr "Guardar credenciales"
 
@@ -2293,10 +2294,10 @@ msgstr "Activa"
 #: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:767
 #: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:123
 #: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:136
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:510
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:514
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:583
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:587
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:536
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:541
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:613
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:618
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:360
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:488
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:492
@@ -2410,12 +2411,12 @@ msgid "Bio"
 msgstr "Biografía"
 
 #: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:174
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:285
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:282
 msgid "Saving..."
 msgstr "Guardando..."
 
 #: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:174
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:290
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:287
 #: ui/pages/dashboard/users/UsersPage.tsx:321
 msgid "Save Changes"
 msgstr "Guardar cambios"
@@ -3024,87 +3025,87 @@ msgstr "El esquema de la base de datos está actualizado"
 msgid "PeakURL has no outstanding schema repairs for this release."
 msgstr "PeakURL no tiene reparaciones pendientes del esquema para esta versión."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:327
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:337
 msgid "Install Update"
 msgstr "Instalar actualización"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:346
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:356
 msgid "Reinstall Latest Version"
 msgstr "Reinstalar la última versión"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:372
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:382
 msgid "Check for Updates"
 msgstr "Buscar actualizaciones"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:474
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:500
 msgid "Loading update status..."
 msgstr "Cargando estado de las actualizaciones..."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:483
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:509
 msgid "Application Updates"
 msgstr "Actualizaciones de la aplicación"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:484
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:510
 msgid "Check for new PeakURL releases, install updates, or reinstall the latest packaged release from the dashboard."
 msgstr "Busca nuevas versiones de PeakURL, instala actualizaciones o reinstala el paquete publicado más reciente desde el panel."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:509
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:535
 msgid "Installed Version"
 msgstr "Versión instalada"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:513
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:540
 msgid "Latest Version"
 msgstr "Última versión"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:517
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:545
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:388
 msgid "Last Checked"
 msgstr "Última comprobación"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:539
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:568
 msgid "Released"
 msgstr "Publicado"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:549
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:579
 #: ui/pages/dashboard/about/AboutPage.tsx:621
 msgid "Release Notes"
 msgstr "Notas de la versión"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:550
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:580
 msgid "Read release notes"
 msgstr "Leer notas de la versión"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:560
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:590
 msgid "Database Schema"
 msgstr "Esquema de la base de datos"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:561
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:591
 msgid "PeakURL can repair missing tables, columns, indexes, and legacy leftovers so the current release runs against the expected schema."
 msgstr "PeakURL puede reparar tablas, columnas, índices y restos heredados que falten para que la versión actual se ejecute con el esquema esperado."
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:574
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:604
 msgid "Run Database Upgrade"
 msgstr "Ejecutar actualización de la base de datos"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:582
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:612
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:556
 msgid "Recorded Schema"
 msgstr "Esquema registrado"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:586
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:617
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:562
 msgid "Required Schema"
 msgstr "Esquema requerido"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:590
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:622
 msgid "Last Database Upgrade"
 msgstr "Última actualización de la base de datos"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:612
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:645
 msgid "Last database error"
 msgstr "Último error de la base de datos"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:618
+#: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:651
 msgid "Recent database findings"
 msgstr "Hallazgos recientes de la base de datos"
 
@@ -4105,10 +4106,6 @@ msgstr "Mejorar"
 msgid "Enhance PeakURL and share your improvements, contributing back to the open-source community."
 msgstr "Mejora PeakURL y comparte tus cambios para contribuir de vuelta a la comunidad de código abierto."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:323
-msgid "Welcome to"
-msgstr "Bienvenido a"
-
 #: ui/pages/dashboard/about/AboutPage.tsx:326
 msgid "PeakURL gives you a focused workspace for publishing short links, measuring engagement, and running branded link infrastructure on your own stack."
 msgstr "PeakURL te ofrece un espacio de trabajo centrado en publicar enlaces cortos, medir la interacción y operar infraestructura de enlaces con marca en tu propia plataforma."
@@ -4650,7 +4647,7 @@ msgstr ""
 msgid "Rows per page"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/TableFooter.tsx:119
+#: ui/pages/dashboard/links/_components/TableFooter.tsx:118
 msgid "Custom page size"
 msgstr "Tamaño de página personalizado"
 
@@ -4779,37 +4776,37 @@ msgstr "URL de destino"
 msgid "Title (Optional)"
 msgstr "Título (opcional)"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:165
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:164
 msgid "Enter a title for this link"
 msgstr "Introduce un título para este enlace"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:176
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:175
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:42
 msgid "Password Protection (Optional)"
 msgstr "Protección con contraseña (opcional)"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:190
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:188
 msgid "Enter a new password to replace the current one"
 msgstr "Introduce una contraseña nueva para reemplazar la actual"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:193
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:191
 msgid "Set a password to protect this link"
 msgstr "Establece una contraseña para proteger este enlace"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:202
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:200
 msgid "Leave this blank to keep the current password."
 msgstr "Déjalo en blanco para mantener la contraseña actual."
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:220
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:218
 msgid "Remove password protection"
 msgstr "Eliminar la protección con contraseña"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:232
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:230
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/ExpirationFields.tsx:20
 msgid "Expiration Date (Optional)"
 msgstr "Fecha de caducidad (opcional)"
 
-#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:263
+#: ui/pages/dashboard/links/_components/EditLinkModal.tsx:260
 msgid "Link status"
 msgstr ""
 
@@ -5542,9 +5539,9 @@ msgstr "Un paso más de verificación y entrarás en tu espacio de trabajo."
 msgid "Shorten URLs, track clicks, and manage your audience, all from your own dashboard."
 msgstr "Acorta URLs, sigue los clics y gestiona tu audiencia, todo desde tu propio panel."
 
-#: ui/pages/login/LoginPage.tsx:331
-msgid "Powered by"
-msgstr "Impulsado por"
+#: ui/pages/login/LoginPage.tsx:332
+msgid "Powered by %s"
+msgstr ""
 
 #: ui/pages/login/LoginPage.tsx:356
 msgid "Verify your identity"

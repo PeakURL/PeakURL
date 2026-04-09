@@ -69,7 +69,7 @@ class I18n {
 	 * @var SettingsApi
 	 * @since 1.0.3
 	 */
-	private SettingsApi $settings_api;
+	private ?SettingsApi $settings_api;
 
 	/**
 	 * Currently-loaded locale.
@@ -110,7 +110,7 @@ class I18n {
 	 * @param SettingsApi          $settings_api Settings API dependency.
 	 * @since 1.0.3
 	 */
-	public function __construct( array $config, SettingsApi $settings_api ) {
+	public function __construct( array $config, ?SettingsApi $settings_api = null ) {
 		$this->config       = $config;
 		$this->settings_api = $settings_api;
 	}
@@ -196,9 +196,27 @@ class I18n {
 	 * @since 1.0.3
 	 */
 	public function get_site_locale(): string {
-		return $this->normalize_locale(
-			(string) $this->settings_api->get_option( 'site_language' ),
+		if ( null !== $this->settings_api ) {
+			return $this->normalize_locale(
+				(string) $this->settings_api->get_option( 'site_language' ),
+			);
+		}
+
+		$configured_locale = trim(
+			(string) ( $this->config['PEAKURL_SITE_LANGUAGE'] ?? '' ),
 		);
+
+		if ( '' === $configured_locale ) {
+			return $this->get_default_locale();
+		}
+
+		$configured_locale = $this->normalize_locale( $configured_locale );
+
+		if ( ! $this->is_locale_available( $configured_locale ) ) {
+			return $this->get_default_locale();
+		}
+
+		return $configured_locale;
 	}
 
 	/**

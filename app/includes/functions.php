@@ -321,6 +321,14 @@ function peakurl_get_i18n_service(
 	static $service     = null;
 	static $config_hash = null;
 
+	if ( isset( $GLOBALS['peakurl_i18n_service_override'] ) ) {
+		$override = $GLOBALS['peakurl_i18n_service_override'];
+
+		if ( $override instanceof I18n ) {
+			return $override;
+		}
+	}
+
 	$resolved_config = $config ?? RuntimeConfig::bootstrap( ABSPATH . 'app' );
 	$next_hash       = md5(
 		(string) json_encode(
@@ -342,6 +350,26 @@ function peakurl_get_i18n_service(
 	$config_hash         = $next_hash;
 
 	return $service;
+}
+
+/**
+ * Override the shared i18n service for the current request lifecycle.
+ *
+ * Used by early installer screens that need translations before the normal
+ * runtime database-backed locale flow is available.
+ *
+ * @param I18n|null $service Override service or null to clear it.
+ * @return void
+ * @since 1.0.8
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
+function peakurl_override_i18n_service( ?I18n $service ): void {
+	if ( null === $service ) {
+		unset( $GLOBALS['peakurl_i18n_service_override'] );
+		return;
+	}
+
+	$GLOBALS['peakurl_i18n_service_override'] = $service;
 }
 
 /**

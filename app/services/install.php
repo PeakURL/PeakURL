@@ -117,6 +117,7 @@ class Install {
 
 		return array(
 			'site_url'       => rtrim( $site_url, '/' ),
+			'site_language'  => 'en_US',
 			'workspace_name' => '',
 			'owner_username' => '',
 			'owner_email'    => '',
@@ -268,6 +269,7 @@ class Install {
 			$values['PEAKURL_OWNER_USERNAME'],
 			$values['PEAKURL_OWNER_EMAIL'],
 			$values['PEAKURL_OWNER_PASSWORD'],
+			$values['PEAKURL_SITE_LANGUAGE'],
 			$values['PEAKURL_WORKSPACE_NAME'],
 			$values['PEAKURL_WORKSPACE_SLUG'],
 		);
@@ -298,6 +300,14 @@ class Install {
 		$owner_password = (string) ( $input['owner_password'] ?? '' );
 		$owner_name     = trim( (string) ( $input['owner_name'] ?? '' ) );
 		$owner_names    = self::derive_owner_names( $owner_name, $owner_username );
+		$i18n_service   = new I18n( $config, null );
+		$site_language  = $i18n_service->normalize_locale(
+			(string) ( $input['site_language'] ?? '' ),
+		);
+
+		if ( ! $i18n_service->is_locale_available( $site_language ) ) {
+			$site_language = $i18n_service->get_default_locale();
+		}
 
 		if ( '' === $workspace_name ) {
 			throw new \RuntimeException( __( 'Site title is required.', 'peakurl' ) );
@@ -337,6 +347,7 @@ class Install {
 		$values['PEAKURL_OWNER_USERNAME']   = $owner_username;
 		$values['PEAKURL_OWNER_EMAIL']      = $owner_email;
 		$values['PEAKURL_OWNER_PASSWORD']   = $owner_password;
+		$values['PEAKURL_SITE_LANGUAGE']    = $site_language;
 		$values['PEAKURL_OWNER_FALLBACK']   = 'false';
 
 		return $values;
@@ -461,6 +472,7 @@ class Install {
 			'PEAKURL_OWNER_USERNAME'      => $values['PEAKURL_OWNER_USERNAME'],
 			'PEAKURL_OWNER_EMAIL'         => $values['PEAKURL_OWNER_EMAIL'],
 			'PEAKURL_OWNER_PASSWORD'      => $values['PEAKURL_OWNER_PASSWORD'],
+			'PEAKURL_SITE_LANGUAGE'       => $values['PEAKURL_SITE_LANGUAGE'],
 			'PEAKURL_WORKSPACE_NAME'      => $values['PEAKURL_WORKSPACE_NAME'],
 			'PEAKURL_WORKSPACE_SLUG'      => $values['PEAKURL_WORKSPACE_SLUG'],
 		);

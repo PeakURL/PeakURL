@@ -1,0 +1,19 @@
+{{recipient}}، السلام علیکم
+
+آپ کی PeakURL سائٹ انسٹال ہو چکی ہے اور اب استعمال کے لیے تیار ہے۔
+
+سائٹ: {{site_url}}
+Dashboard: {{dashboard_url}}
+Username: {{username}}
+
+آپ کسی بھی وقت login page سے sign in کر سکتے ہیں اور short links، API keys اور integrations بنانا شروع کر سکتے ہیں۔
+
+login page کھولیں: {{login_url}}
+getting started guide پڑھیں: {{docs_url}}
+API documentation دیکھیں: {{api_docs_url}}
+مدد اور support حاصل کریں: {{support_url}}
+
+اگر آپ کو یہ ای میل متوقع نہیں تھی تو سرور تک رسائی اور اس اکاؤنٹ کا جائزہ لیں جس نے انسٹالیشن کی تھی۔
+
+شکریہ،
+PeakURL.org ٹیم

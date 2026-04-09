@@ -459,6 +459,8 @@ msgid "This link is protected. Enter the password to continue."
 msgstr "Este enlace está protegido. Introduce la contraseña para continuar."
 
 #: app/controllers/urls.php:378
+#: site/install.php:646
+#: site/setup-config.php:872
 #: ui/pages/dashboard/users/UsersPage.tsx:238
 #: ui/pages/login/LoginPage.tsx:410
 msgid "Password"
@@ -752,51 +754,51 @@ msgstr "La contraseña SMTP es obligatoria cuando la autenticación SMTP está a
 msgid "The settings table is not available yet."
 msgstr "La tabla de ajustes todavía no está disponible."
 
-#: app/services/install.php:147
+#: app/services/install.php:148
 msgid "PeakURL is already installed."
 msgstr "PeakURL ya está instalado."
 
-#: app/services/install.php:152
+#: app/services/install.php:153
 msgid "PeakURL still needs database configuration. Run setup-config.php first."
 msgstr "PeakURL todavía necesita la configuración de la base de datos. Ejecuta primero setup-config.php."
 
-#: app/services/install.php:206
+#: app/services/install.php:207
 msgid "Site URL is required."
 msgstr "La URL del sitio es obligatoria."
 
-#: app/services/install.php:210
+#: app/services/install.php:211
 msgid "Site URL must be a valid URL."
 msgstr "La URL del sitio debe ser válida."
 
-#: app/services/install.php:216
+#: app/services/install.php:217
 msgid "Site URL must include a valid host."
 msgstr "La URL del sitio debe incluir un host válido."
 
-#: app/services/install.php:221
+#: app/services/install.php:222
 msgid "Site URL cannot contain a query string or fragment."
 msgstr "La URL del sitio no puede contener una cadena de consulta ni un fragmento."
 
-#: app/services/install.php:303
+#: app/services/install.php:313
 msgid "Site title is required."
 msgstr "El título del sitio es obligatorio."
 
-#: app/services/install.php:308
+#: app/services/install.php:318
 msgid "PeakURL could not generate a workspace slug from the site title."
 msgstr "PeakURL no pudo generar el slug del espacio de trabajo a partir del título del sitio."
 
-#: app/services/install.php:314
+#: app/services/install.php:324
 msgid "Admin username must be 3-120 characters using letters, numbers, dots, dashes, underscores, or @."
 msgstr "El nombre de usuario del administrador debe tener entre 3 y 120 caracteres y solo puede usar letras, números, puntos, guiones, guiones bajos o @."
 
-#: app/services/install.php:320
+#: app/services/install.php:330
 msgid "A valid admin email address is required."
 msgstr "Se requiere una dirección de correo electrónico de administrador válida."
 
-#: app/services/install.php:326
+#: app/services/install.php:336
 msgid "Admin password must be at least 8 characters."
 msgstr "La contraseña del administrador debe tener al menos 8 caracteres."
 
-#: app/services/install.php:418
+#: app/services/install.php:429
 msgid "Unable to connect to the database or create the PeakURL tables. "
 msgstr "No se pudo conectar a la base de datos ni crear las tablas de PeakURL. "
 
@@ -1086,11 +1088,13 @@ msgid "PeakURL could not send the welcome email because the account email addres
 msgstr "PeakURL no pudo enviar el correo de bienvenida porque la dirección de correo de la cuenta no es válida."
 
 #: app/services/notifications.php:213
+#: site/setup-config.php:757
 #: ui/pages/dashboard/about/AboutPage.tsx:323
 msgid "Welcome to %s"
 msgstr "Te damos la bienvenida a %s"
 
 #: app/services/system-status.php:504
+#: site/setup-config.php:827
 msgid "Database connection"
 msgstr "Conexión a la base de datos"
 
@@ -1185,6 +1189,176 @@ msgstr "La base de datos GeoLite2 City está disponible para la analítica de ub
 #: app/services/system-status.php:578
 msgid "Visitor location analytics is not fully ready yet."
 msgstr "La analítica de ubicaciones de visitantes aún no está lista por completo."
+
+#: site/install.php:147
+msgid "Administrator Setup - %s"
+msgstr "Configuración del administrador - %s"
+
+#: site/install.php:583
+#: site/setup-config.php:729
+msgid "Welcome"
+msgstr "Bienvenido"
+
+#: site/install.php:590
+#: site/setup-config.php:736
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:89
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:696
+#: ui/pages/dashboard/about/AboutPage.tsx:568
+msgid "Database"
+msgstr "Base de datos"
+
+#: site/install.php:597
+#: site/setup-config.php:743
+msgid "Admin account"
+msgstr "Cuenta de administrador"
+
+#: site/install.php:608
+msgid "Create your account"
+msgstr "Crea tu cuenta"
+
+#: site/install.php:610
+msgid "Name your site and set up the first administrator. You will be signed in automatically once the install completes."
+msgstr "Asigna un nombre a tu sitio y configura la primera cuenta de administrador. Iniciarás sesión automáticamente cuando termine la instalación."
+
+#: site/install.php:626
+msgid "Site info"
+msgstr "Información del sitio"
+
+#: site/install.php:629
+msgid "Site title"
+msgstr "Título del sitio"
+
+#: site/install.php:630
+msgid "My Link Hub"
+msgstr "Mi centro de enlaces"
+
+#: site/install.php:634
+msgid "Administrator"
+msgstr "Administrador"
+
+#: site/install.php:637
+#: site/setup-config.php:868
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:101
+#: ui/pages/dashboard/users/UsersPage.tsx:217
+msgid "Username"
+msgstr "Nombre de usuario"
+
+#: site/install.php:639
+msgid "Letters, numbers, dots, dashes, underscores, or @."
+msgstr "Usa letras, números, puntos, guiones, guiones bajos o @."
+
+#: site/install.php:642
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:95
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:697
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:120
+#: ui/pages/dashboard/users/UsersPage.tsx:226
+msgid "Email"
+msgstr "Correo electrónico"
+
+#: site/install.php:643
+#: ui/pages/login/LoginPage.tsx:404
+msgid "you@company.com"
+msgstr "tu@empresa.com"
+
+#: site/install.php:648
+msgid "At least 8 characters. You will be signed in right after installation."
+msgstr "Al menos 8 caracteres. Iniciarás sesión justo después de la instalación."
+
+#: site/install.php:652
+msgid "Database configuration is already saved."
+msgstr "La configuración de la base de datos ya está guardada."
+
+#: site/install.php:654
+msgid "Install %s"
+msgstr "Instalar %s"
+
+#: site/install.php:664
+#: site/setup-config.php:912
+#: ui/pages/login/LoginPage.tsx:332
+msgid "Powered by %s"
+msgstr "Impulsado por %s"
+
+#: site/setup-config.php:154
+msgid "Database Setup - %s"
+msgstr "Configuración de la base de datos - %s"
+
+#: site/setup-config.php:155
+msgid "Welcome - %s"
+msgstr "Bienvenido a %s"
+
+#: site/setup-config.php:707
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:152
+msgid "Site language"
+msgstr "Idioma del sitio"
+
+#: site/setup-config.php:759
+msgid "Before getting started, you'll need your database connection details. PeakURL will use them to create config.php and set up the required tables."
+msgstr "Antes de empezar, necesitarás los datos de conexión de tu base de datos. PeakURL los usará para crear config.php y configurar las tablas necesarias."
+
+#: site/setup-config.php:771
+#: site/setup-config.php:864
+msgid "Database name"
+msgstr "Nombre de la base de datos"
+
+#: site/setup-config.php:777
+msgid "Username and password"
+msgstr "Nombre de usuario y contraseña"
+
+#: site/setup-config.php:783
+msgid "Host and port"
+msgstr "Host y puerto"
+
+#: site/setup-config.php:789
+#: site/setup-config.php:888
+msgid "Table prefix"
+msgstr "Prefijo de tabla"
+
+#: site/setup-config.php:789
+msgid "optional"
+msgstr "opcional"
+
+#: site/setup-config.php:795
+msgid "These details are usually available in your hosting control panel or from your database administrator."
+msgstr "Normalmente encontrarás estos datos en el panel de control de tu hosting o con el administrador de la base de datos."
+
+#: site/setup-config.php:815
+msgid "Let's go"
+msgstr "Empecemos"
+
+#: site/setup-config.php:829
+msgid "Enter the credentials for your MySQL or MariaDB database. PeakURL will write them to config.php in the site root."
+msgstr "Introduce las credenciales de tu base de datos MySQL o MariaDB. PeakURL las escribirá en config.php, en la raíz del sitio."
+
+#: site/setup-config.php:861
+msgid "Connection details"
+msgstr "Detalles de la conexión"
+
+#: site/setup-config.php:876
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:542
+msgid "Host"
+msgstr "Host"
+
+#: site/setup-config.php:881
+msgid "Advanced"
+msgstr "Avanzado"
+
+#: site/setup-config.php:884
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:544
+msgid "Port"
+msgstr "Puerto"
+
+#: site/setup-config.php:890
+msgid "Letters, numbers, underscores. Example: peakurl_"
+msgstr "Usa letras, números y guiones bajos. Ejemplo: peakurl_"
+
+#: site/setup-config.php:896
+msgid "Back"
+msgstr "Atrás"
+
+#: site/setup-config.php:899
+msgid "Save and continue"
+msgstr "Guardar y continuar"
 
 #: ui/utils/dashboardSearch.ts:57
 #: ui/utils/dashboardSearch.ts:62
@@ -1693,227 +1867,235 @@ msgstr "Clics totales"
 msgid "Unique Visitors"
 msgstr "Visitantes únicos"
 
-#: ui/components/charts/WorldMap.tsx:33
+#: ui/components/charts/WorldMap.tsx:34
 msgid "United States"
 msgstr "Estados Unidos"
 
-#: ui/components/charts/WorldMap.tsx:34
+#: ui/components/charts/WorldMap.tsx:36
 msgid "United Kingdom"
 msgstr "Reino Unido"
 
-#: ui/components/charts/WorldMap.tsx:35
+#: ui/components/charts/WorldMap.tsx:38
 msgid "Canada"
 msgstr "Canadá"
 
-#: ui/components/charts/WorldMap.tsx:36
+#: ui/components/charts/WorldMap.tsx:40
 msgid "Australia"
 msgstr "Australia"
 
-#: ui/components/charts/WorldMap.tsx:37
+#: ui/components/charts/WorldMap.tsx:42
 msgid "Germany"
 msgstr "Alemania"
 
-#: ui/components/charts/WorldMap.tsx:38
+#: ui/components/charts/WorldMap.tsx:44
 msgid "France"
 msgstr "Francia"
 
-#: ui/components/charts/WorldMap.tsx:39
+#: ui/components/charts/WorldMap.tsx:46
 msgid "Italy"
 msgstr "Italia"
 
-#: ui/components/charts/WorldMap.tsx:40
+#: ui/components/charts/WorldMap.tsx:48
 msgid "Spain"
 msgstr "España"
 
-#: ui/components/charts/WorldMap.tsx:41
+#: ui/components/charts/WorldMap.tsx:50
 msgid "Netherlands"
 msgstr "Países Bajos"
 
-#: ui/components/charts/WorldMap.tsx:42
+#: ui/components/charts/WorldMap.tsx:52
 msgid "Belgium"
 msgstr "Bélgica"
 
-#: ui/components/charts/WorldMap.tsx:43
+#: ui/components/charts/WorldMap.tsx:54
 msgid "Switzerland"
 msgstr "Suiza"
 
-#: ui/components/charts/WorldMap.tsx:44
+#: ui/components/charts/WorldMap.tsx:56
 msgid "Austria"
 msgstr "Austria"
 
-#: ui/components/charts/WorldMap.tsx:45
+#: ui/components/charts/WorldMap.tsx:58
 msgid "Sweden"
 msgstr "Suecia"
 
-#: ui/components/charts/WorldMap.tsx:46
+#: ui/components/charts/WorldMap.tsx:60
 msgid "Norway"
 msgstr "Noruega"
 
-#: ui/components/charts/WorldMap.tsx:47
+#: ui/components/charts/WorldMap.tsx:62
 msgid "Denmark"
 msgstr "Dinamarca"
 
-#: ui/components/charts/WorldMap.tsx:48
+#: ui/components/charts/WorldMap.tsx:64
 msgid "Finland"
 msgstr "Finlandia"
 
-#: ui/components/charts/WorldMap.tsx:49
+#: ui/components/charts/WorldMap.tsx:66
 msgid "Poland"
 msgstr "Polonia"
 
-#: ui/components/charts/WorldMap.tsx:50
+#: ui/components/charts/WorldMap.tsx:68
 msgid "Czech Republic"
 msgstr "República Checa"
 
-#: ui/components/charts/WorldMap.tsx:51
+#: ui/components/charts/WorldMap.tsx:70
 msgid "Hungary"
 msgstr "Hungría"
 
-#: ui/components/charts/WorldMap.tsx:52
+#: ui/components/charts/WorldMap.tsx:72
 msgid "Romania"
 msgstr "Rumanía"
 
-#: ui/components/charts/WorldMap.tsx:53
+#: ui/components/charts/WorldMap.tsx:74
 msgid "Bulgaria"
 msgstr "Bulgaria"
 
-#: ui/components/charts/WorldMap.tsx:54
+#: ui/components/charts/WorldMap.tsx:76
 msgid "Greece"
 msgstr "Grecia"
 
-#: ui/components/charts/WorldMap.tsx:55
+#: ui/components/charts/WorldMap.tsx:78
 msgid "Portugal"
 msgstr "Portugal"
 
-#: ui/components/charts/WorldMap.tsx:56
+#: ui/components/charts/WorldMap.tsx:80
 msgid "Ireland"
 msgstr "Irlanda"
 
-#: ui/components/charts/WorldMap.tsx:57
+#: ui/components/charts/WorldMap.tsx:82
 msgid "Japan"
 msgstr "Japón"
 
-#: ui/components/charts/WorldMap.tsx:58
+#: ui/components/charts/WorldMap.tsx:84
 msgid "China"
 msgstr "China"
 
-#: ui/components/charts/WorldMap.tsx:59
+#: ui/components/charts/WorldMap.tsx:86
 msgid "India"
 msgstr "India"
 
-#: ui/components/charts/WorldMap.tsx:60
+#: ui/components/charts/WorldMap.tsx:88
+msgid "Pakistan"
+msgstr "Pakistán"
+
+#: ui/components/charts/WorldMap.tsx:90
 msgid "Brazil"
 msgstr "Brasil"
 
-#: ui/components/charts/WorldMap.tsx:61
+#: ui/components/charts/WorldMap.tsx:92
 msgid "Mexico"
 msgstr "México"
 
-#: ui/components/charts/WorldMap.tsx:62
+#: ui/components/charts/WorldMap.tsx:94
 msgid "Argentina"
 msgstr "Argentina"
 
-#: ui/components/charts/WorldMap.tsx:63
+#: ui/components/charts/WorldMap.tsx:96
 msgid "South Africa"
 msgstr "Sudáfrica"
 
-#: ui/components/charts/WorldMap.tsx:64
+#: ui/components/charts/WorldMap.tsx:98
 msgid "Egypt"
 msgstr "Egipto"
 
-#: ui/components/charts/WorldMap.tsx:65
+#: ui/components/charts/WorldMap.tsx:100
 msgid "Nigeria"
 msgstr "Nigeria"
 
-#: ui/components/charts/WorldMap.tsx:66
+#: ui/components/charts/WorldMap.tsx:102
 msgid "Kenya"
 msgstr "Kenia"
 
-#: ui/components/charts/WorldMap.tsx:67
+#: ui/components/charts/WorldMap.tsx:104
 msgid "Saudi Arabia"
 msgstr "Arabia Saudí"
 
-#: ui/components/charts/WorldMap.tsx:68
+#: ui/components/charts/WorldMap.tsx:106
 msgid "United Arab Emirates"
 msgstr "Emiratos Árabes Unidos"
 
-#: ui/components/charts/WorldMap.tsx:69
+#: ui/components/charts/WorldMap.tsx:108
 msgid "Turkey"
 msgstr "Turquía"
 
-#: ui/components/charts/WorldMap.tsx:70
+#: ui/components/charts/WorldMap.tsx:110
 msgid "Russia"
 msgstr "Rusia"
 
-#: ui/components/charts/WorldMap.tsx:71
+#: ui/components/charts/WorldMap.tsx:112
 msgid "Ukraine"
 msgstr "Ucrania"
 
-#: ui/components/charts/WorldMap.tsx:72
+#: ui/components/charts/WorldMap.tsx:114
 msgid "South Korea"
 msgstr "Corea del Sur"
 
-#: ui/components/charts/WorldMap.tsx:73
+#: ui/components/charts/WorldMap.tsx:116
 msgid "Thailand"
 msgstr "Tailandia"
 
-#: ui/components/charts/WorldMap.tsx:74
+#: ui/components/charts/WorldMap.tsx:118
 msgid "Vietnam"
 msgstr "Vietnam"
 
-#: ui/components/charts/WorldMap.tsx:75
+#: ui/components/charts/WorldMap.tsx:120
 msgid "Singapore"
 msgstr "Singapur"
 
-#: ui/components/charts/WorldMap.tsx:76
+#: ui/components/charts/WorldMap.tsx:122
 msgid "Malaysia"
 msgstr "Malasia"
 
-#: ui/components/charts/WorldMap.tsx:77
+#: ui/components/charts/WorldMap.tsx:124
 msgid "Indonesia"
 msgstr "Indonesia"
 
-#: ui/components/charts/WorldMap.tsx:78
+#: ui/components/charts/WorldMap.tsx:126
 msgid "Philippines"
 msgstr "Filipinas"
 
-#: ui/components/charts/WorldMap.tsx:79
+#: ui/components/charts/WorldMap.tsx:128
+msgid "Palestine"
+msgstr "Palestina"
+
+#: ui/components/charts/WorldMap.tsx:130
 msgid "New Zealand"
 msgstr "Nueva Zelanda"
 
-#: ui/components/charts/WorldMap.tsx:80
+#: ui/components/charts/WorldMap.tsx:132
 msgid "Chile"
 msgstr "Chile"
 
-#: ui/components/charts/WorldMap.tsx:81
+#: ui/components/charts/WorldMap.tsx:134
 msgid "Colombia"
 msgstr "Colombia"
 
-#: ui/components/charts/WorldMap.tsx:82
+#: ui/components/charts/WorldMap.tsx:136
 msgid "Peru"
 msgstr "Perú"
 
-#: ui/components/charts/WorldMap.tsx:83
+#: ui/components/charts/WorldMap.tsx:138
 msgid "Venezuela"
 msgstr "Venezuela"
 
-#: ui/components/charts/WorldMap.tsx:349
+#: ui/components/charts/WorldMap.tsx:411
 msgid "Zoom in"
 msgstr "Acercar"
 
-#: ui/components/charts/WorldMap.tsx:368
+#: ui/components/charts/WorldMap.tsx:430
 msgid "Zoom out"
 msgstr "Alejar"
 
-#: ui/components/charts/WorldMap.tsx:375
+#: ui/components/charts/WorldMap.tsx:437
 msgid "Reset view"
 msgstr "Restablecer vista"
 
-#: ui/components/charts/WorldMap.tsx:389
+#: ui/components/charts/WorldMap.tsx:451
 msgid "click"
 msgstr "clic"
 
-#: ui/components/charts/WorldMap.tsx:390
+#: ui/components/charts/WorldMap.tsx:452
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:235
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:286
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:327
@@ -1922,15 +2104,15 @@ msgstr "clic"
 msgid "clicks"
 msgstr "clics"
 
-#: ui/components/charts/WorldMap.tsx:525
+#: ui/components/charts/WorldMap.tsx:587
 msgid "Unable to load the world map right now."
 msgstr "No se puede cargar el mapa mundial en este momento."
 
-#: ui/components/charts/WorldMap.tsx:531
+#: ui/components/charts/WorldMap.tsx:593
 msgid "Loading map..."
 msgstr "Cargando mapa..."
 
-#: ui/components/charts/WorldMap.tsx:537
+#: ui/components/charts/WorldMap.tsx:599
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:671
 #: ui/pages/dashboard/_components/TrafficOverview.tsx:57
 #: ui/pages/dashboard/links/_components/StatsDrawer/ClickChart.tsx:49
@@ -2090,7 +2272,7 @@ msgstr "Sigue escribiendo para buscar enlaces o salta directamente a una página
 
 #: ui/pages/layout/DashboardLayout.tsx:52
 msgid "Thank you for choosing %s."
-msgstr ""
+msgstr "Gracias por elegir %s."
 
 #: ui/pages/layout/DashboardLayout.tsx:62
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:360
@@ -2376,11 +2558,6 @@ msgstr "Nombre"
 msgid "Last Name"
 msgstr "Apellido"
 
-#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:101
-#: ui/pages/dashboard/users/UsersPage.tsx:217
-msgid "Username"
-msgstr "Nombre de usuario"
-
 #: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:111
 msgid "Email Address"
 msgstr "Correo electrónico"
@@ -2401,10 +2578,6 @@ msgstr "Cargo"
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:362
 msgid "Site Language"
 msgstr "Idioma del sitio"
-
-#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:152
-msgid "Site language"
-msgstr ""
 
 #: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:157
 msgid "Bio"
@@ -2694,11 +2867,11 @@ msgstr "La vista previa del QR no está disponible en este navegador. Usa la cla
 
 #: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:603
 msgid "Secret"
-msgstr ""
+msgstr "Secreto"
 
 #: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:614
 msgid "Authenticator URI"
-msgstr ""
+msgstr "URI del autenticador"
 
 #: ui/pages/dashboard/settings/_components/Content/sections/SecurityTab.tsx:624
 msgid "6-digit code"
@@ -2879,7 +3052,7 @@ msgstr "Cifrado"
 
 #: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:278
 msgid "SMTP encryption"
-msgstr ""
+msgstr "Cifrado SMTP"
 
 #: ui/pages/dashboard/settings/_components/Content/sections/EmailDeliveryTab.tsx:283
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:603
@@ -3015,7 +3188,7 @@ msgstr "La base de datos necesita atención antes de que todas las rutas de ejec
 
 #: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:167
 msgid "Up to Date"
-msgstr ""
+msgstr "Actualizado"
 
 #: ui/pages/dashboard/settings/_components/Content/sections/UpdatesTab.tsx:168
 msgid "Database schema is current"
@@ -3388,12 +3561,6 @@ msgstr "Bien"
 msgid "Should be improved"
 msgstr "Debe mejorarse"
 
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:89
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:696
-#: ui/pages/dashboard/about/AboutPage.tsx:568
-msgid "Database"
-msgstr "Base de datos"
-
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:91
 msgid "Storage"
 msgstr "Almacenamiento"
@@ -3401,14 +3568,6 @@ msgstr "Almacenamiento"
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:93
 msgid "Translations"
 msgstr "Traducciones"
-
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:95
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:697
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
-#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:120
-#: ui/pages/dashboard/users/UsersPage.tsx:226
-msgid "Email"
-msgstr "Correo electrónico"
 
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:101
 msgid "System"
@@ -3584,14 +3743,6 @@ msgstr "ZipArchive"
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:535
 msgid "Database Server"
 msgstr "Servidor de base de datos"
-
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:542
-msgid "Host"
-msgstr "Host"
-
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:544
-msgid "Port"
-msgstr "Puerto"
 
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:549
 msgid "Database Name"
@@ -4532,7 +4683,7 @@ msgstr "Te damos la bienvenida de nuevo. Esto es lo que está ocurriendo con tus
 
 #: ui/pages/dashboard/_components/Header.tsx:30
 msgid "Dashboard time range"
-msgstr ""
+msgstr "Rango de tiempo del panel"
 
 #: ui/pages/dashboard/_components/ActivityFeed.tsx:17
 msgid "Created new link %s"
@@ -4637,15 +4788,15 @@ msgstr "Total de clics:"
 
 #: ui/pages/dashboard/links/_components/TableFooter.tsx:77
 msgid "Sort links"
-msgstr ""
+msgstr "Ordenar enlaces"
 
 #: ui/pages/dashboard/links/_components/TableFooter.tsx:86
 msgid "Sort order"
-msgstr ""
+msgstr "Orden de clasificación"
 
 #: ui/pages/dashboard/links/_components/TableFooter.tsx:101
 msgid "Rows per page"
-msgstr ""
+msgstr "Filas por página"
 
 #: ui/pages/dashboard/links/_components/TableFooter.tsx:118
 msgid "Custom page size"
@@ -4808,7 +4959,7 @@ msgstr "Fecha de caducidad (opcional)"
 
 #: ui/pages/dashboard/links/_components/EditLinkModal.tsx:260
 msgid "Link status"
-msgstr ""
+msgstr "Estado del enlace"
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:23
 msgid "Link Title (Optional)"
@@ -4929,15 +5080,15 @@ msgstr "Nota:"
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:179
 msgid "Local and private-network clicks do not include location data."
-msgstr ""
+msgstr "Los clics de redes locales o privadas no incluyen datos de ubicación."
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:186
 msgid "Store the GeoLite2 City database here:"
-msgstr ""
+msgstr "Guarda aquí la base de datos GeoLite2 City:"
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:193
 msgid "VPN users may show the location of the VPN server."
-msgstr ""
+msgstr "Los usuarios de VPN pueden mostrar la ubicación del servidor VPN."
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:206
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:348
@@ -5308,7 +5459,7 @@ msgstr "Rol"
 
 #: ui/pages/dashboard/users/UsersPage.tsx:295
 msgid "User role"
-msgstr ""
+msgstr "Rol de usuario"
 
 #: ui/pages/dashboard/users/UsersPage.tsx:300
 msgid "Your own role is locked here."
@@ -5539,10 +5690,6 @@ msgstr "Un paso más de verificación y entrarás en tu espacio de trabajo."
 msgid "Shorten URLs, track clicks, and manage your audience, all from your own dashboard."
 msgstr "Acorta URLs, sigue los clics y gestiona tu audiencia, todo desde tu propio panel."
 
-#: ui/pages/login/LoginPage.tsx:332
-msgid "Powered by %s"
-msgstr ""
-
 #: ui/pages/login/LoginPage.tsx:356
 msgid "Verify your identity"
 msgstr "Verifica tu identidad"
@@ -5558,10 +5705,6 @@ msgstr "Introduce uno de los códigos de respaldo que guardaste al configurar la
 #: ui/pages/login/LoginPage.tsx:368
 msgid "Enter your credentials to continue to the dashboard."
 msgstr "Introduce tus credenciales para continuar al panel."
-
-#: ui/pages/login/LoginPage.tsx:404
-msgid "you@company.com"
-msgstr "tu@empresa.com"
 
 #: ui/pages/login/LoginPage.tsx:448
 msgid "Backup code"

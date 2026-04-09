@@ -1,0 +1,19 @@
+Hola {{recipient}},
+
+Tu sitio de PeakURL está instalado y listo.
+
+Sitio: {{site_url}}
+Panel: {{dashboard_url}}
+Nombre de usuario: {{username}}
+
+Puedes iniciar sesión en cualquier momento desde la página de acceso y empezar a crear enlaces cortos, API keys e integraciones.
+
+Abrir la página de inicio de sesión: {{login_url}}
+Leer la guía de primeros pasos: {{docs_url}}
+Ver la documentación de la API: {{api_docs_url}}
+Obtener ayuda y soporte: {{support_url}}
+
+Si no esperabas este correo, revisa el acceso al servidor y la cuenta que realizó la instalación.
+
+Gracias,
+El equipo de PeakURL.org

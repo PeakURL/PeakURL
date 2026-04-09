@@ -461,6 +461,8 @@ msgid "This link is protected. Enter the password to continue."
 msgstr ""
 
 #: app/controllers/urls.php:378
+#: site/install.php:646
+#: site/setup-config.php:872
 #: ui/pages/dashboard/users/UsersPage.tsx:238
 #: ui/pages/login/LoginPage.tsx:410
 msgid "Password"
@@ -754,51 +756,51 @@ msgstr ""
 msgid "The settings table is not available yet."
 msgstr ""
 
-#: app/services/install.php:147
+#: app/services/install.php:148
 msgid "PeakURL is already installed."
 msgstr ""
 
-#: app/services/install.php:152
+#: app/services/install.php:153
 msgid "PeakURL still needs database configuration. Run setup-config.php first."
 msgstr ""
 
-#: app/services/install.php:206
+#: app/services/install.php:207
 msgid "Site URL is required."
 msgstr ""
 
-#: app/services/install.php:210
+#: app/services/install.php:211
 msgid "Site URL must be a valid URL."
 msgstr ""
 
-#: app/services/install.php:216
+#: app/services/install.php:217
 msgid "Site URL must include a valid host."
 msgstr ""
 
-#: app/services/install.php:221
+#: app/services/install.php:222
 msgid "Site URL cannot contain a query string or fragment."
 msgstr ""
 
-#: app/services/install.php:303
+#: app/services/install.php:313
 msgid "Site title is required."
 msgstr ""
 
-#: app/services/install.php:308
+#: app/services/install.php:318
 msgid "PeakURL could not generate a workspace slug from the site title."
 msgstr ""
 
-#: app/services/install.php:314
+#: app/services/install.php:324
 msgid "Admin username must be 3-120 characters using letters, numbers, dots, dashes, underscores, or @."
 msgstr ""
 
-#: app/services/install.php:320
+#: app/services/install.php:330
 msgid "A valid admin email address is required."
 msgstr ""
 
-#: app/services/install.php:326
+#: app/services/install.php:336
 msgid "Admin password must be at least 8 characters."
 msgstr ""
 
-#: app/services/install.php:418
+#: app/services/install.php:429
 msgid "Unable to connect to the database or create the PeakURL tables. "
 msgstr ""
 
@@ -1088,11 +1090,13 @@ msgid "PeakURL could not send the welcome email because the account email addres
 msgstr ""
 
 #: app/services/notifications.php:213
+#: site/setup-config.php:757
 #: ui/pages/dashboard/about/AboutPage.tsx:323
 msgid "Welcome to %s"
 msgstr ""
 
 #: app/services/system-status.php:504
+#: site/setup-config.php:827
 msgid "Database connection"
 msgstr ""
 
@@ -1186,6 +1190,176 @@ msgstr ""
 
 #: app/services/system-status.php:578
 msgid "Visitor location analytics is not fully ready yet."
+msgstr ""
+
+#: site/install.php:147
+msgid "Administrator Setup - %s"
+msgstr ""
+
+#: site/install.php:583
+#: site/setup-config.php:729
+msgid "Welcome"
+msgstr ""
+
+#: site/install.php:590
+#: site/setup-config.php:736
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:89
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:696
+#: ui/pages/dashboard/about/AboutPage.tsx:568
+msgid "Database"
+msgstr ""
+
+#: site/install.php:597
+#: site/setup-config.php:743
+msgid "Admin account"
+msgstr ""
+
+#: site/install.php:608
+msgid "Create your account"
+msgstr ""
+
+#: site/install.php:610
+msgid "Name your site and set up the first administrator. You will be signed in automatically once the install completes."
+msgstr ""
+
+#: site/install.php:626
+msgid "Site info"
+msgstr ""
+
+#: site/install.php:629
+msgid "Site title"
+msgstr ""
+
+#: site/install.php:630
+msgid "My Link Hub"
+msgstr ""
+
+#: site/install.php:634
+msgid "Administrator"
+msgstr ""
+
+#: site/install.php:637
+#: site/setup-config.php:868
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:101
+#: ui/pages/dashboard/users/UsersPage.tsx:217
+msgid "Username"
+msgstr ""
+
+#: site/install.php:639
+msgid "Letters, numbers, dots, dashes, underscores, or @."
+msgstr ""
+
+#: site/install.php:642
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:95
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:697
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:120
+#: ui/pages/dashboard/users/UsersPage.tsx:226
+msgid "Email"
+msgstr ""
+
+#: site/install.php:643
+#: ui/pages/login/LoginPage.tsx:404
+msgid "you@company.com"
+msgstr ""
+
+#: site/install.php:648
+msgid "At least 8 characters. You will be signed in right after installation."
+msgstr ""
+
+#: site/install.php:652
+msgid "Database configuration is already saved."
+msgstr ""
+
+#: site/install.php:654
+msgid "Install %s"
+msgstr ""
+
+#: site/install.php:664
+#: site/setup-config.php:912
+#: ui/pages/login/LoginPage.tsx:332
+msgid "Powered by %s"
+msgstr ""
+
+#: site/setup-config.php:154
+msgid "Database Setup - %s"
+msgstr ""
+
+#: site/setup-config.php:155
+msgid "Welcome - %s"
+msgstr ""
+
+#: site/setup-config.php:707
+#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:152
+msgid "Site language"
+msgstr ""
+
+#: site/setup-config.php:759
+msgid "Before getting started, you'll need your database connection details. PeakURL will use them to create config.php and set up the required tables."
+msgstr ""
+
+#: site/setup-config.php:771
+#: site/setup-config.php:864
+msgid "Database name"
+msgstr ""
+
+#: site/setup-config.php:777
+msgid "Username and password"
+msgstr ""
+
+#: site/setup-config.php:783
+msgid "Host and port"
+msgstr ""
+
+#: site/setup-config.php:789
+#: site/setup-config.php:888
+msgid "Table prefix"
+msgstr ""
+
+#: site/setup-config.php:789
+msgid "optional"
+msgstr ""
+
+#: site/setup-config.php:795
+msgid "These details are usually available in your hosting control panel or from your database administrator."
+msgstr ""
+
+#: site/setup-config.php:815
+msgid "Let's go"
+msgstr ""
+
+#: site/setup-config.php:829
+msgid "Enter the credentials for your MySQL or MariaDB database. PeakURL will write them to config.php in the site root."
+msgstr ""
+
+#: site/setup-config.php:861
+msgid "Connection details"
+msgstr ""
+
+#: site/setup-config.php:876
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:542
+msgid "Host"
+msgstr ""
+
+#: site/setup-config.php:881
+msgid "Advanced"
+msgstr ""
+
+#: site/setup-config.php:884
+#: ui/pages/dashboard/tools/SystemStatusPage.tsx:544
+msgid "Port"
+msgstr ""
+
+#: site/setup-config.php:890
+msgid "Letters, numbers, underscores. Example: peakurl_"
+msgstr ""
+
+#: site/setup-config.php:896
+msgid "Back"
+msgstr ""
+
+#: site/setup-config.php:899
+msgid "Save and continue"
 msgstr ""
 
 #: ui/utils/dashboardSearch.ts:57
@@ -1695,227 +1869,235 @@ msgstr ""
 msgid "Unique Visitors"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:33
+#: ui/components/charts/WorldMap.tsx:34
 msgid "United States"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:34
+#: ui/components/charts/WorldMap.tsx:36
 msgid "United Kingdom"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:35
+#: ui/components/charts/WorldMap.tsx:38
 msgid "Canada"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:36
+#: ui/components/charts/WorldMap.tsx:40
 msgid "Australia"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:37
+#: ui/components/charts/WorldMap.tsx:42
 msgid "Germany"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:38
+#: ui/components/charts/WorldMap.tsx:44
 msgid "France"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:39
+#: ui/components/charts/WorldMap.tsx:46
 msgid "Italy"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:40
+#: ui/components/charts/WorldMap.tsx:48
 msgid "Spain"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:41
+#: ui/components/charts/WorldMap.tsx:50
 msgid "Netherlands"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:42
+#: ui/components/charts/WorldMap.tsx:52
 msgid "Belgium"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:43
+#: ui/components/charts/WorldMap.tsx:54
 msgid "Switzerland"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:44
+#: ui/components/charts/WorldMap.tsx:56
 msgid "Austria"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:45
+#: ui/components/charts/WorldMap.tsx:58
 msgid "Sweden"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:46
+#: ui/components/charts/WorldMap.tsx:60
 msgid "Norway"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:47
+#: ui/components/charts/WorldMap.tsx:62
 msgid "Denmark"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:48
+#: ui/components/charts/WorldMap.tsx:64
 msgid "Finland"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:49
+#: ui/components/charts/WorldMap.tsx:66
 msgid "Poland"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:50
+#: ui/components/charts/WorldMap.tsx:68
 msgid "Czech Republic"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:51
+#: ui/components/charts/WorldMap.tsx:70
 msgid "Hungary"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:52
+#: ui/components/charts/WorldMap.tsx:72
 msgid "Romania"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:53
+#: ui/components/charts/WorldMap.tsx:74
 msgid "Bulgaria"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:54
+#: ui/components/charts/WorldMap.tsx:76
 msgid "Greece"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:55
+#: ui/components/charts/WorldMap.tsx:78
 msgid "Portugal"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:56
+#: ui/components/charts/WorldMap.tsx:80
 msgid "Ireland"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:57
+#: ui/components/charts/WorldMap.tsx:82
 msgid "Japan"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:58
+#: ui/components/charts/WorldMap.tsx:84
 msgid "China"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:59
+#: ui/components/charts/WorldMap.tsx:86
 msgid "India"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:60
+#: ui/components/charts/WorldMap.tsx:88
+msgid "Pakistan"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:90
 msgid "Brazil"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:61
+#: ui/components/charts/WorldMap.tsx:92
 msgid "Mexico"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:62
+#: ui/components/charts/WorldMap.tsx:94
 msgid "Argentina"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:63
+#: ui/components/charts/WorldMap.tsx:96
 msgid "South Africa"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:64
+#: ui/components/charts/WorldMap.tsx:98
 msgid "Egypt"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:65
+#: ui/components/charts/WorldMap.tsx:100
 msgid "Nigeria"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:66
+#: ui/components/charts/WorldMap.tsx:102
 msgid "Kenya"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:67
+#: ui/components/charts/WorldMap.tsx:104
 msgid "Saudi Arabia"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:68
+#: ui/components/charts/WorldMap.tsx:106
 msgid "United Arab Emirates"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:69
+#: ui/components/charts/WorldMap.tsx:108
 msgid "Turkey"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:70
+#: ui/components/charts/WorldMap.tsx:110
 msgid "Russia"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:71
+#: ui/components/charts/WorldMap.tsx:112
 msgid "Ukraine"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:72
+#: ui/components/charts/WorldMap.tsx:114
 msgid "South Korea"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:73
+#: ui/components/charts/WorldMap.tsx:116
 msgid "Thailand"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:74
+#: ui/components/charts/WorldMap.tsx:118
 msgid "Vietnam"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:75
+#: ui/components/charts/WorldMap.tsx:120
 msgid "Singapore"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:76
+#: ui/components/charts/WorldMap.tsx:122
 msgid "Malaysia"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:77
+#: ui/components/charts/WorldMap.tsx:124
 msgid "Indonesia"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:78
+#: ui/components/charts/WorldMap.tsx:126
 msgid "Philippines"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:79
+#: ui/components/charts/WorldMap.tsx:128
+msgid "Palestine"
+msgstr ""
+
+#: ui/components/charts/WorldMap.tsx:130
 msgid "New Zealand"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:80
+#: ui/components/charts/WorldMap.tsx:132
 msgid "Chile"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:81
+#: ui/components/charts/WorldMap.tsx:134
 msgid "Colombia"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:82
+#: ui/components/charts/WorldMap.tsx:136
 msgid "Peru"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:83
+#: ui/components/charts/WorldMap.tsx:138
 msgid "Venezuela"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:349
+#: ui/components/charts/WorldMap.tsx:411
 msgid "Zoom in"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:368
+#: ui/components/charts/WorldMap.tsx:430
 msgid "Zoom out"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:375
+#: ui/components/charts/WorldMap.tsx:437
 msgid "Reset view"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:389
+#: ui/components/charts/WorldMap.tsx:451
 msgid "click"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:390
+#: ui/components/charts/WorldMap.tsx:452
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:235
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:286
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:327
@@ -1924,15 +2106,15 @@ msgstr ""
 msgid "clicks"
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:525
+#: ui/components/charts/WorldMap.tsx:587
 msgid "Unable to load the world map right now."
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:531
+#: ui/components/charts/WorldMap.tsx:593
 msgid "Loading map..."
 msgstr ""
 
-#: ui/components/charts/WorldMap.tsx:537
+#: ui/components/charts/WorldMap.tsx:599
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:671
 #: ui/pages/dashboard/_components/TrafficOverview.tsx:57
 #: ui/pages/dashboard/links/_components/StatsDrawer/ClickChart.tsx:49
@@ -2378,11 +2560,6 @@ msgstr ""
 msgid "Last Name"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:101
-#: ui/pages/dashboard/users/UsersPage.tsx:217
-msgid "Username"
-msgstr ""
-
 #: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:111
 msgid "Email Address"
 msgstr ""
@@ -2402,10 +2579,6 @@ msgstr ""
 #: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:141
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:362
 msgid "Site Language"
-msgstr ""
-
-#: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:152
-msgid "Site language"
 msgstr ""
 
 #: ui/pages/dashboard/settings/_components/Content/sections/GeneralTab.tsx:157
@@ -3384,26 +3557,12 @@ msgstr ""
 msgid "Should be improved"
 msgstr ""
 
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:89
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:696
-#: ui/pages/dashboard/about/AboutPage.tsx:568
-msgid "Database"
-msgstr ""
-
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:91
 msgid "Storage"
 msgstr ""
 
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:93
 msgid "Translations"
-msgstr ""
-
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:95
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:697
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
-#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:120
-#: ui/pages/dashboard/users/UsersPage.tsx:226
-msgid "Email"
 msgstr ""
 
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:101
@@ -3579,14 +3738,6 @@ msgstr ""
 
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:535
 msgid "Database Server"
-msgstr ""
-
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:542
-msgid "Host"
-msgstr ""
-
-#: ui/pages/dashboard/tools/SystemStatusPage.tsx:544
-msgid "Port"
 msgstr ""
 
 #: ui/pages/dashboard/tools/SystemStatusPage.tsx:549
@@ -5534,10 +5685,6 @@ msgstr ""
 msgid "Shorten URLs, track clicks, and manage your audience, all from your own dashboard."
 msgstr ""
 
-#: ui/pages/login/LoginPage.tsx:332
-msgid "Powered by %s"
-msgstr ""
-
 #: ui/pages/login/LoginPage.tsx:356
 msgid "Verify your identity"
 msgstr ""
@@ -5552,10 +5699,6 @@ msgstr ""
 
 #: ui/pages/login/LoginPage.tsx:368
 msgid "Enter your credentials to continue to the dashboard."
-msgstr ""
-
-#: ui/pages/login/LoginPage.tsx:404
-msgid "you@company.com"
 msgstr ""
 
 #: ui/pages/login/LoginPage.tsx:448

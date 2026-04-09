@@ -294,13 +294,11 @@ class Notifications {
 		string $extension,
 		array $context
 	): string {
-		$template_path = $this->get_template_base_directory() .
-			'/' .
-			$directory .
-			'/' .
-			$template_name .
-			'.' .
-			$extension;
+		$template_path = $this->get_email_template_path(
+			$template_name,
+			$directory,
+			$extension,
+		);
 		$template      = file_get_contents( $template_path );
 
 		if ( false === $template ) {
@@ -316,6 +314,45 @@ class Notifications {
 			$template,
 			$this->build_template_placeholders( $context, 'html' === $extension ),
 		);
+	}
+
+	/**
+	 * Get the locale-specific or default email template path.
+	 *
+	 * @param string $template_name Template base filename.
+	 * @param string $directory     Template subdirectory.
+	 * @param string $extension     File extension.
+	 * @return string
+	 * @since 1.0.8
+	 */
+	private function get_email_template_path(
+		string $template_name,
+		string $directory,
+		string $extension
+	): string {
+		$email_templates_directory = $this->get_email_templates_directory();
+		$site_locale               = \peakurl_get_i18n_service()->get_site_locale();
+		$localized_template_path   = $email_templates_directory .
+			'/locales/' .
+			$site_locale .
+			'/' .
+			$directory .
+			'/' .
+			$template_name .
+			'.' .
+			$extension;
+
+		if ( '' !== $site_locale && is_readable( $localized_template_path ) ) {
+			return $localized_template_path;
+		}
+
+		return $email_templates_directory .
+			'/' .
+			$directory .
+			'/' .
+			$template_name .
+			'.' .
+			$extension;
 	}
 
 	/**
@@ -355,7 +392,7 @@ class Notifications {
 	 * @return string
 	 * @since 1.0.2
 	 */
-	private function get_template_base_directory(): string {
+	private function get_email_templates_directory(): string {
 		return dirname( __DIR__ ) . '/templates/emails';
 	}
 

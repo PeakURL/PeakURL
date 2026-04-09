@@ -138,9 +138,21 @@ trait SettingsTrait {
 	 * @since 1.0.0
 	 */
 	private function sync_runtime_managed_settings(): void {
+		$site_language = trim( (string) ( $this->config['PEAKURL_SITE_LANGUAGE'] ?? '' ) );
+
+		if ( '' === $site_language ) {
+			$site_language = Constants::DEFAULT_LOCALE;
+		} else {
+			$site_language = $this->i18n_service->normalize_locale( $site_language );
+
+			if ( ! $this->i18n_service->is_locale_available( $site_language ) ) {
+				$site_language = Constants::DEFAULT_LOCALE;
+			}
+		}
+
 		$this->seed_setting_if_missing(
 			'site_language',
-			Constants::DEFAULT_LOCALE,
+			$site_language,
 		);
 		$this->seed_setting_if_missing(
 			'mail_driver',

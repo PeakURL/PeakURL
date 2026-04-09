@@ -28,59 +28,117 @@ const INITIAL_TRANSFORM = {
 	skewY: 0,
 };
 
-// Country code to full name mapping (ISO 3166-1 alpha-3)
-const countryNames: Record<string, string> = {
-	USA: __('United States'),
-	GBR: __('United Kingdom'),
-	CAN: __('Canada'),
-	AUS: __('Australia'),
-	DEU: __('Germany'),
-	FRA: __('France'),
-	ITA: __('Italy'),
-	ESP: __('Spain'),
-	NLD: __('Netherlands'),
-	BEL: __('Belgium'),
-	CHE: __('Switzerland'),
-	AUT: __('Austria'),
-	SWE: __('Sweden'),
-	NOR: __('Norway'),
-	DNK: __('Denmark'),
-	FIN: __('Finland'),
-	POL: __('Poland'),
-	CZE: __('Czech Republic'),
-	HUN: __('Hungary'),
-	ROU: __('Romania'),
-	BGR: __('Bulgaria'),
-	GRC: __('Greece'),
-	PRT: __('Portugal'),
-	IRL: __('Ireland'),
-	JPN: __('Japan'),
-	CHN: __('China'),
-	IND: __('India'),
-	BRA: __('Brazil'),
-	MEX: __('Mexico'),
-	ARG: __('Argentina'),
-	ZAF: __('South Africa'),
-	EGY: __('Egypt'),
-	NGA: __('Nigeria'),
-	KEN: __('Kenya'),
-	SAU: __('Saudi Arabia'),
-	ARE: __('United Arab Emirates'),
-	TUR: __('Turkey'),
-	RUS: __('Russia'),
-	UKR: __('Ukraine'),
-	KOR: __('South Korea'),
-	THA: __('Thailand'),
-	VNM: __('Vietnam'),
-	SGP: __('Singapore'),
-	MYS: __('Malaysia'),
-	IDN: __('Indonesia'),
-	PHL: __('Philippines'),
-	NZL: __('New Zealand'),
-	CHL: __('Chile'),
-	COL: __('Colombia'),
-	PER: __('Peru'),
-	VEN: __('Venezuela'),
+const getTranslatedCountryName = (alpha3Code: string): string => {
+	switch (alpha3Code) {
+		case 'USA':
+			return __('United States');
+		case 'GBR':
+			return __('United Kingdom');
+		case 'CAN':
+			return __('Canada');
+		case 'AUS':
+			return __('Australia');
+		case 'DEU':
+			return __('Germany');
+		case 'FRA':
+			return __('France');
+		case 'ITA':
+			return __('Italy');
+		case 'ESP':
+			return __('Spain');
+		case 'NLD':
+			return __('Netherlands');
+		case 'BEL':
+			return __('Belgium');
+		case 'CHE':
+			return __('Switzerland');
+		case 'AUT':
+			return __('Austria');
+		case 'SWE':
+			return __('Sweden');
+		case 'NOR':
+			return __('Norway');
+		case 'DNK':
+			return __('Denmark');
+		case 'FIN':
+			return __('Finland');
+		case 'POL':
+			return __('Poland');
+		case 'CZE':
+			return __('Czech Republic');
+		case 'HUN':
+			return __('Hungary');
+		case 'ROU':
+			return __('Romania');
+		case 'BGR':
+			return __('Bulgaria');
+		case 'GRC':
+			return __('Greece');
+		case 'PRT':
+			return __('Portugal');
+		case 'IRL':
+			return __('Ireland');
+		case 'JPN':
+			return __('Japan');
+		case 'CHN':
+			return __('China');
+		case 'IND':
+			return __('India');
+		case 'PAK':
+			return __('Pakistan');
+		case 'BRA':
+			return __('Brazil');
+		case 'MEX':
+			return __('Mexico');
+		case 'ARG':
+			return __('Argentina');
+		case 'ZAF':
+			return __('South Africa');
+		case 'EGY':
+			return __('Egypt');
+		case 'NGA':
+			return __('Nigeria');
+		case 'KEN':
+			return __('Kenya');
+		case 'SAU':
+			return __('Saudi Arabia');
+		case 'ARE':
+			return __('United Arab Emirates');
+		case 'TUR':
+			return __('Turkey');
+		case 'RUS':
+			return __('Russia');
+		case 'UKR':
+			return __('Ukraine');
+		case 'KOR':
+			return __('South Korea');
+		case 'THA':
+			return __('Thailand');
+		case 'VNM':
+			return __('Vietnam');
+		case 'SGP':
+			return __('Singapore');
+		case 'MYS':
+			return __('Malaysia');
+		case 'IDN':
+			return __('Indonesia');
+		case 'PHL':
+			return __('Philippines');
+		case 'PSE':
+			return __('Palestine');
+		case 'NZL':
+			return __('New Zealand');
+		case 'CHL':
+			return __('Chile');
+		case 'COL':
+			return __('Colombia');
+		case 'PER':
+			return __('Peru');
+		case 'VEN':
+			return __('Venezuela');
+		default:
+			return '';
+	}
 };
 
 // Convert ISO 3166-1 alpha-2 to alpha-3 (common conversions)
@@ -112,6 +170,7 @@ const alpha2ToAlpha3: Record<string, string> = {
 	JP: 'JPN',
 	CN: 'CHN',
 	IN: 'IND',
+	PK: 'PAK',
 	BR: 'BRA',
 	MX: 'MEX',
 	AR: 'ARG',
@@ -131,6 +190,7 @@ const alpha2ToAlpha3: Record<string, string> = {
 	MY: 'MYS',
 	ID: 'IDN',
 	PH: 'PHL',
+	PS: 'PSE',
 	NZ: 'NZL',
 	CL: 'CHL',
 	CO: 'COL',
@@ -167,6 +227,7 @@ const alpha3ToNumeric: Record<string, string> = {
 	JPN: '392',
 	CHN: '156',
 	IND: '356',
+	PAK: '586',
 	BRA: '076',
 	MEX: '484',
 	ARG: '032',
@@ -186,6 +247,7 @@ const alpha3ToNumeric: Record<string, string> = {
 	MYS: '458',
 	IDN: '360',
 	PHL: '608',
+	PSE: '275',
 	NZL: '554',
 	CHL: '152',
 	COL: '170',
@@ -272,7 +334,7 @@ const WorldMap = ({
 					countryCode: alpha2Code,
 					countryName:
 						item.countryName ||
-						countryNames[alpha3Code] ||
+						getTranslatedCountryName(alpha3Code) ||
 						alpha2Code,
 					clicks: item.clicks,
 				};

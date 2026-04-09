@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 use PeakURL\Http\Request;
 use PeakURL\Services\Install;
+use PeakURL\Services\InstallerI18n;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . DIRECTORY_SEPARATOR );
@@ -50,14 +51,27 @@ function peakurl_install_base_path( string $script_name ): string {
  * @return string Combined URL path.
  * @since 1.0.0
  */
-function peakurl_install_url( string $base_path, string $suffix ): string {
+function peakurl_install_url( string $base_path, string $suffix, array $query = array() ): string {
 	$normalized_suffix = '/' . ltrim( $suffix, '/' );
 
 	if ( '' === $base_path ) {
-		return $normalized_suffix;
+		$url = $normalized_suffix;
+	} else {
+		$url = $base_path . $normalized_suffix;
 	}
 
-	return $base_path . $normalized_suffix;
+	$query = array_filter(
+		$query,
+		static function ( $value ): bool {
+			return '' !== trim( (string) $value );
+		},
+	);
+
+	if ( empty( $query ) ) {
+		return $url;
+	}
+
+	return $url . '?' . http_build_query( $query );
 }
 
 /**
@@ -76,7 +90,7 @@ function peakurl_install_value( array $values, string $key ): string {
 	);
 }
 
-$root_path     = __DIR__;
+$root_path     = file_exists( __DIR__ . '/app/vendor/autoload.php' ) ? __DIR__ : dirname( __DIR__ );
 $app_path      = $root_path . '/app';
 $autoload_path = $app_path . '/vendor/autoload.php';
 $base_path     = peakurl_install_base_path(
@@ -91,6 +105,17 @@ if ( ! file_exists( $autoload_path ) ) {
 }
 
 require $autoload_path;
+
+$requested_locale = trim(
+	(string) ( $_POST['site_language'] ?? $_GET['site_language'] ?? '' ),
+);
+$installer_i18n   = new InstallerI18n(
+	$root_path,
+	$requested_locale,
+	(string) ( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? '' ),
+);
+
+peakurl_override_i18n_service( $installer_i18n->get_service() );
 
 $runtime_state = Install::get_runtime_state( $app_path );
 
@@ -117,8 +142,9 @@ if (
 $host              = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $detected_site_url = $scheme . '://' . $host . $base_path;
 $values            = Install::get_form_defaults( $app_path, $detected_site_url );
+$values['site_language'] = $installer_i18n->get_locale();
 $error_message     = '';
-$page_title        = 'Administrator Setup &mdash; PeakURL';
+$page_title        = sprintf( __( 'Administrator Setup - %s', 'peakurl' ), 'PeakURL' );
 
 if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 	foreach ( array_keys( $values ) as $key ) {
@@ -147,7 +173,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 }
 ?>
 <!doctype html>
-<html lang="en">
+<html lang="<?php echo htmlspecialchars( $installer_i18n->get_html_lang(), ENT_QUOTES, 'UTF-8' ); ?>" dir="<?php echo htmlspecialchars( $installer_i18n->get_text_direction(), ENT_QUOTES, 'UTF-8' ); ?>">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -554,21 +580,21 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 		<div class="stepper">
 			<div class="stepper-step is-done">
 				<div class="stepper-dot done">&#10003;</div>
-				<span class="stepper-label">Welcome</span>
+				<span class="stepper-label"><?php echo esc_html__( 'Welcome', 'peakurl' ); ?></span>
 			</div>
 
 			<div class="stepper-line done"></div>
 
 			<div class="stepper-step is-done">
 				<div class="stepper-dot done">&#10003;</div>
-				<span class="stepper-label">Database</span>
+				<span class="stepper-label"><?php echo esc_html__( 'Database', 'peakurl' ); ?></span>
 			</div>
 
 			<div class="stepper-line done"></div>
 
 			<div class="stepper-step is-active">
 				<div class="stepper-dot active">3</div>
-				<span class="stepper-label">Admin account</span>
+				<span class="stepper-label"><?php echo esc_html__( 'Admin account', 'peakurl' ); ?></span>
 			</div>
 		</div>
 
@@ -579,9 +605,9 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
 				</div>
 				<div class="card-header-text">
-					<h1>Create your account</h1>
+					<h1><?php echo esc_html__( 'Create your account', 'peakurl' ); ?></h1>
 					<p class="desc">
-						Name your site and set up the first administrator. You'll be signed in automatically once the install completes.
+						<?php echo esc_html__( 'Name your site and set up the first administrator. You will be signed in automatically once the install completes.', 'peakurl' ); ?>
 					</p>
 				</div>
 			</div>
@@ -594,37 +620,38 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 			<?php endif; ?>
 
 			<form method="post" action="<?php echo htmlspecialchars( peakurl_install_url( $base_path, '/install.php' ), ENT_QUOTES, 'UTF-8' ); ?>" novalidate>
+				<input type="hidden" name="site_language" value="<?php echo peakurl_install_value( $values, 'site_language' ); ?>">
 				<div class="form-body">
 					<div class="divider" style="margin: 0;"></div>
-					<p class="form-section-label">Site info</p>
+					<p class="form-section-label"><?php echo esc_html__( 'Site info', 'peakurl' ); ?></p>
 					<div class="grid">
 						<div class="field full">
-							<label for="workspace_name">Site Title</label>
-							<input id="workspace_name" name="workspace_name" type="text" value="<?php echo peakurl_install_value( $values, 'workspace_name' ); ?>" placeholder="My Link Hub" required>
+							<label for="workspace_name"><?php echo esc_html__( 'Site title', 'peakurl' ); ?></label>
+							<input id="workspace_name" name="workspace_name" type="text" value="<?php echo peakurl_install_value( $values, 'workspace_name' ); ?>" placeholder="<?php echo esc_attr__( 'My Link Hub', 'peakurl' ); ?>" required>
 						</div>
 					</div>
 					<div class="divider" style="margin: 4px 0;"></div>
-					<p class="form-section-label">Administrator</p>
+					<p class="form-section-label"><?php echo esc_html__( 'Administrator', 'peakurl' ); ?></p>
 					<div class="grid">
 						<div class="field">
-							<label for="owner_username">Username</label>
+							<label for="owner_username"><?php echo esc_html__( 'Username', 'peakurl' ); ?></label>
 							<input id="owner_username" name="owner_username" type="text" value="<?php echo peakurl_install_value( $values, 'owner_username' ); ?>" placeholder="admin" required>
-							<p class="hint">Letters, numbers, dots, dashes, underscores, or @.</p>
+							<p class="hint"><?php echo esc_html__( 'Letters, numbers, dots, dashes, underscores, or @.', 'peakurl' ); ?></p>
 						</div>
 						<div class="field">
-							<label for="owner_email">Email</label>
-							<input id="owner_email" name="owner_email" type="email" value="<?php echo peakurl_install_value( $values, 'owner_email' ); ?>" placeholder="you@company.com" required>
+							<label for="owner_email"><?php echo esc_html__( 'Email', 'peakurl' ); ?></label>
+							<input id="owner_email" name="owner_email" type="email" value="<?php echo peakurl_install_value( $values, 'owner_email' ); ?>" placeholder="<?php echo esc_attr__( 'you@company.com', 'peakurl' ); ?>" required>
 						</div>
 						<div class="field full">
-							<label for="owner_password">Password</label>
+							<label for="owner_password"><?php echo esc_html__( 'Password', 'peakurl' ); ?></label>
 							<input id="owner_password" name="owner_password" type="password" value="<?php echo peakurl_install_value( $values, 'owner_password' ); ?>" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" required>
-							<p class="hint">At least 8 characters. You'll be signed in right after installation.</p>
+							<p class="hint"><?php echo esc_html__( 'At least 8 characters. You will be signed in right after installation.', 'peakurl' ); ?></p>
 						</div>
 					</div>
 					<div class="actions">
-						<p class="actions-note">Database configuration is already saved.</p>
+						<p class="actions-note"><?php echo esc_html__( 'Database configuration is already saved.', 'peakurl' ); ?></p>
 						<button class="btn btn-primary" type="submit">
-							Install PeakURL
+							<?php echo sprintf( esc_html__( 'Install %s', 'peakurl' ), 'PeakURL' ); ?>
 							<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
 						</button>
 					</div>
@@ -634,7 +661,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 
 		<!-- Footer -->
 		<div class="footer">
-			Powered by <a href="https://peakurl.org?utm_source=peakurl_install&utm_medium=installer&utm_campaign=powered_by" target="_blank" rel="noopener noreferrer">PeakURL</a>
+			<?php echo sprintf( esc_html__( 'Powered by %s', 'peakurl' ), '<a href="https://peakurl.org?utm_source=peakurl_install&utm_medium=installer&utm_campaign=powered_by" target="_blank" rel="noopener noreferrer">PeakURL</a>' ); ?>
 		</div>
 	</div>
 </body>

@@ -112,7 +112,7 @@ const getAddOnLinks = (): AddOnLink[] => [
 	},
 ];
 
-const landingMeta: Record<LandingSource, LandingMetaEntry> = {
+const getLandingMeta = (): Record<LandingSource, LandingMetaEntry> => ({
 	install: {
 		eyebrow: __('Setup Complete'),
 		title: __('PeakURL is ready to use.'),
@@ -152,19 +152,19 @@ const landingMeta: Record<LandingSource, LandingMetaEntry> = {
 			{ label: __('Open all links'), to: '/dashboard/links' },
 		],
 	},
-};
+});
 
-const isLandingSource = (
-	source: string | null
-): source is keyof typeof landingMeta =>
-	null !== source && source in landingMeta;
+const LANDING_SOURCES: LandingSource[] = ['install', 'update'];
+
+const isLandingSource = (source: string | null): source is LandingSource =>
+	null !== source && LANDING_SOURCES.includes(source as LandingSource);
 
 const LandingBanner = ({ source }: LandingBannerProps) => {
 	if (!isLandingSource(source)) {
 		return null;
 	}
 
-	const meta = landingMeta[source];
+	const meta = getLandingMeta()[source];
 
 	return (
 		<div className="mb-8 rounded-2xl border border-accent/20 bg-accent/5 p-6">

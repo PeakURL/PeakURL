@@ -310,6 +310,33 @@ export interface UpdateIssue {
 }
 
 /**
+ * Human-friendly release-install progress stages shown in the dashboard.
+ */
+export type ReleaseInstallStage =
+	| 'preparing'
+	| 'downloading'
+	| 'installing'
+	| 'finishing';
+
+/**
+ * Single progress step shown while applying or reinstalling a release.
+ */
+export interface ReleaseInstallProgressStep {
+	id: ReleaseInstallStage;
+	label: string;
+	state: 'complete' | 'current' | 'upcoming';
+}
+
+/**
+ * Render-ready progress state for a release install action.
+ */
+export interface ReleaseInstallProgressState {
+	title: string;
+	description: string;
+	steps: ReleaseInstallProgressStep[];
+}
+
+/**
  * Database repair status returned by the updater status API.
  */
 export interface DatabaseStatus {
@@ -443,6 +470,7 @@ export interface IssueListProps {
 export interface UpdatesTabProps {
 	status?: UpdateStatusPayload | null;
 	errorMessage?: string | null;
+	releaseInstallProgress?: ReleaseInstallProgressState | null;
 	isLoading: boolean;
 	isChecking: boolean;
 	isApplying: boolean;

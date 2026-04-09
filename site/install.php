@@ -139,12 +139,12 @@ if (
 	$scheme = 'https';
 }
 
-$host              = $_SERVER['HTTP_HOST'] ?? 'localhost';
-$detected_site_url = $scheme . '://' . $host . $base_path;
-$values            = Install::get_form_defaults( $app_path, $detected_site_url );
+$host                    = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$detected_site_url       = $scheme . '://' . $host . $base_path;
+$values                  = Install::get_form_defaults( $app_path, $detected_site_url );
 $values['site_language'] = $installer_i18n->get_locale();
-$error_message     = '';
-$page_title        = sprintf( __( 'Administrator Setup - %s', 'peakurl' ), 'PeakURL' );
+$error_message           = '';
+$page_title              = sprintf( __( 'Administrator Setup - %s', 'peakurl' ), 'PeakURL' );
 
 if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 	foreach ( array_keys( $values ) as $key ) {

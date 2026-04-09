@@ -3,7 +3,7 @@
  * Dashboard updater service.
  *
  * Handles update manifest fetching, version comparison, package
- * download / verification / extraction, managed-path backup and
+ * download / verification / extraction, package-root backup and
  * restore, and automatic rollback on failure.
  *
  * @package PeakURL\Services
@@ -25,8 +25,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Update — self-hosted dashboard updater.
  *
  * Downloads release archives, verifies checksums, extracts packages,
- * backs up managed paths, applies file replacements, and rolls back
- * on failure. Only available from installed release packages.
+ * backs up release-managed paths, applies file replacements, syncs
+ * package-provided content files, and rolls back on failure. Only
+ * available from installed release packages.
  *
  * @since 1.0.0
  */
@@ -36,52 +37,11 @@ class Update {
 	private const CACHE_TTL = 43200;
 	/** @var int Lock time-to-live for stale lock cleanup (30 minutes). */
 	private const LOCK_TTL = 1800;
-	/** @var array<int, string> Relative paths managed by the updater. */
-	private const MANAGED_PATHS = array(
-		'.htaccess',
-		'.version',
-		'VERSION',
-		'app.html',
-		'assets',
-		'app/.env.example',
-		'app/bin',
-		'app/api',
-		'app/composer.json',
-		'app/composer.lock',
-		'app/controllers',
-		'app/database',
-		'app/http',
-		'app/includes',
-		'app/public',
-		'app/services',
-		'app/store.php',
-		'app/traits',
-		'app/utils',
-		'app/vendor',
-		'config-sample.php',
-		'core/.env',
-		'core/.env.example',
-		'core/bin',
-		'core/api',
-		'core/bootstrap',
-		'core/composer.json',
-		'core/composer.lock',
-		'core/controllers',
-		'core/database',
-		'core/http',
-		'core/includes',
-		'core/public',
-		'core/runtime',
-		'core/services',
-		'core/store.php',
-		'core/traits',
-		'core/utils',
-		'core/vendor',
-		'index.php',
-		'install.php',
-		'LICENSE',
-		'readme.html',
-		'setup-config.php',
+	/** @var array<int, string> Root entries that must survive updates. */
+	private const PRESERVED_ROOT_PATHS = array(
+		'config.php',
+		'content',
+		'.maintenance',
 	);
 
 	/**
@@ -265,20 +225,22 @@ class Update {
 			__( 'release package URL', 'peakurl' ),
 		);
 
-		$lock        = $this->acquire_lock();
-		$working_dir = $this->build_path(
+		$lock                       = $this->acquire_lock();
+		$working_dir                = $this->build_path(
 			$this->get_storage_root(),
 			'tmp',
 			gmdate( 'Ymd-His' ) . '-' . bin2hex( random_bytes( 4 ) ),
 		);
-		$extract_dir = $this->build_path( $working_dir, 'package' );
-		$zip_path    = $this->build_path( $working_dir, 'package.zip' );
-		$backup_dir  = $this->build_path(
+		$extract_dir                = $this->build_path( $working_dir, 'package' );
+		$zip_path                   = $this->build_path( $working_dir, 'package.zip' );
+		$backup_dir                 = $this->build_path(
 			$this->get_storage_root(),
 			'backups',
 			gmdate( 'Ymd-His' ) . '-' . preg_replace( '/[^0-9A-Za-z.\-_]/', '-', $version ),
 		);
-		$backed_up   = false;
+		$backed_up                  = false;
+		$rollback_root_paths        = array();
+		$package_content_root_paths = array();
 
 		try {
 			$this->ensure_directory( $working_dir );
@@ -291,11 +253,26 @@ class Update {
 			);
 			$this->extract_package( $zip_path, $extract_dir );
 
-			$source_root = $this->resolve_package_root( $extract_dir );
-			$this->backup_managed_paths( $backup_dir );
+			$source_root                  = $this->resolve_package_root( $extract_dir );
+			$installed_release_root_paths = $this->get_release_root_paths( ABSPATH );
+			$package_release_root_paths   = $this->get_release_root_paths( $source_root );
+			$rollback_root_paths          = $this->merge_release_root_paths(
+				$installed_release_root_paths,
+				$package_release_root_paths,
+			);
+			$package_content_root_paths   = $this->get_packaged_content_root_paths( $source_root );
+			$this->backup_release_root_paths( $installed_release_root_paths, $backup_dir );
+			$this->backup_packaged_content_root_paths( $package_content_root_paths, $backup_dir );
 			$backed_up = true;
-			$this->replace_managed_paths( $source_root );
-			$this->seed_language_packs_from_package( $source_root );
+			$this->replace_release_root_paths(
+				$installed_release_root_paths,
+				$package_release_root_paths,
+				$source_root,
+			);
+			$this->sync_packaged_content_root_paths(
+				$package_content_root_paths,
+				$source_root,
+			);
 			$this->prune_old_backups();
 
 			return array(
@@ -307,7 +284,8 @@ class Update {
 		} catch ( \Throwable $exception ) {
 			if ( $backed_up ) {
 				try {
-					$this->restore_managed_paths( $backup_dir );
+					$this->restore_release_root_paths( $rollback_root_paths, $backup_dir );
+					$this->restore_packaged_content_root_paths( $package_content_root_paths, $backup_dir );
 				} catch ( \Throwable $rollback_exception ) {
 					throw new \RuntimeException(
 						__( 'PeakURL could not apply the update and the rollback failed. ', 'peakurl' ) .
@@ -803,13 +781,79 @@ class Update {
 	}
 
 	/**
-	 * Copy all managed paths from the site root to a backup directory.
+	 * Get release-managed root paths from a package or installed release root.
 	 *
-	 * @param string $backup_root Backup destination directory.
-	 * @since 1.0.0
+	 * Scans only the first level of the release root and excludes persistent
+	 * paths that must survive updates.
+	 *
+	 * @param string $root_path Release root path.
+	 * @return array<int, string>
+	 * @since 1.0.8
 	 */
-	private function backup_managed_paths( string $backup_root ): void {
-		foreach ( self::MANAGED_PATHS as $relative_path ) {
+	private function get_release_root_paths( string $root_path ): array {
+		$scan_results = scandir( $root_path );
+
+		if ( false === $scan_results ) {
+			throw new \RuntimeException(
+				__( 'PeakURL could not read the release package contents.', 'peakurl' ),
+			);
+		}
+
+		$release_root_paths = array();
+
+		foreach ( $scan_results as $entry ) {
+			if ( '.' === $entry || '..' === $entry ) {
+				continue;
+			}
+
+			if ( in_array( $entry, self::PRESERVED_ROOT_PATHS, true ) ) {
+				continue;
+			}
+
+			$release_root_paths[ $entry ] = $entry;
+		}
+
+		ksort( $release_root_paths, SORT_STRING );
+
+		return array_values( $release_root_paths );
+	}
+
+	/**
+	 * Merge two release root path lists into a stable unique list.
+	 *
+	 * @param array<int, string> $left_paths  First release root path list.
+	 * @param array<int, string> $right_paths Second release root path list.
+	 * @return array<int, string>
+	 * @since 1.0.8
+	 */
+	private function merge_release_root_paths(
+		array $left_paths,
+		array $right_paths
+	): array {
+		$merged_paths = array();
+
+		foreach ( array_merge( $left_paths, $right_paths ) as $path ) {
+			$merged_paths[ $path ] = $path;
+		}
+
+		ksort( $merged_paths, SORT_STRING );
+
+		return array_values( $merged_paths );
+	}
+
+	/**
+	 * Back up the currently installed release-managed root paths.
+	 *
+	 * @param array<int, string> $release_root_paths Release-managed root paths.
+	 * @param string             $backup_root        Backup destination directory.
+	 * @return void
+	 * @since 1.0.8
+	 */
+	private function backup_release_root_paths(
+		array $release_root_paths,
+		string $backup_root
+	): void {
+		foreach ( $release_root_paths as $relative_path ) {
 			$source_path = $this->build_path( ABSPATH, $relative_path );
 
 			if ( ! file_exists( $source_path ) ) {
@@ -823,37 +867,80 @@ class Update {
 		}
 	}
 
-	/** Restore managed paths from a backup directory (rollback). */
-	private function restore_managed_paths( string $backup_root ): void {
-		$this->delete_managed_paths( ABSPATH );
-		$this->copy_managed_paths_from_root( $backup_root, ABSPATH );
+	/**
+	 * Restore the previous release root after a failed update.
+	 *
+	 * @param array<int, string> $rollback_root_paths Root paths to remove before restore.
+	 * @param string             $backup_root         Backup directory to restore from.
+	 * @return void
+	 * @since 1.0.8
+	 */
+	private function restore_release_root_paths(
+		array $rollback_root_paths,
+		string $backup_root
+	): void {
+		$this->delete_release_root_paths( $rollback_root_paths, ABSPATH );
+		$this->copy_release_root_paths(
+			$this->get_release_root_paths( $backup_root ),
+			$backup_root,
+			ABSPATH,
+		);
 	}
 
-	/** Delete old managed paths and copy new ones from the update source. */
-	private function replace_managed_paths( string $source_root ): void {
-		$this->delete_managed_paths( ABSPATH );
-		$this->copy_managed_paths_from_root( $source_root, ABSPATH );
+	/**
+	 * Replace the installed release-managed root paths with the package contents.
+	 *
+	 * @param array<int, string> $installed_release_root_paths Installed release root paths.
+	 * @param array<int, string> $package_release_root_paths   Package release root paths.
+	 * @param string             $source_root                  Extracted package root.
+	 * @return void
+	 * @since 1.0.8
+	 */
+	private function replace_release_root_paths(
+		array $installed_release_root_paths,
+		array $package_release_root_paths,
+		string $source_root
+	): void {
+		$this->delete_release_root_paths( $installed_release_root_paths, ABSPATH );
+		$this->copy_release_root_paths(
+			$package_release_root_paths,
+			$source_root,
+			ABSPATH,
+		);
 	}
 
-	/** Delete all managed paths under a given root directory. */
-	private function delete_managed_paths( string $root_path ): void {
-		foreach ( self::MANAGED_PATHS as $relative_path ) {
+	/**
+	 * Delete release-managed root paths under a given root directory.
+	 *
+	 * @param array<int, string> $release_root_paths Release-managed root paths.
+	 * @param string             $root_path          Root directory.
+	 * @return void
+	 * @since 1.0.8
+	 */
+	private function delete_release_root_paths(
+		array $release_root_paths,
+		string $root_path
+	): void {
+		foreach ( $release_root_paths as $relative_path ) {
 			$this->delete_path( $this->build_path( $root_path, $relative_path ) );
 		}
 	}
 
 	/**
-	 * Copy managed paths from a source root to a target root.
+	 * Copy release-managed root paths from a source root to a target root.
 	 *
-	 * @param string $source_root Source directory.
-	 * @param string $target_root Target directory.
-	 * @since 1.0.0
+	 * @param array<int, string> $release_root_paths Release-managed root paths.
+	 * @param string             $source_root        Source root.
+	 * @param string             $target_root        Target root.
+	 * @return void
+	 * @since 1.0.8
 	 */
-	private function copy_managed_paths_from_root(
+	private function copy_release_root_paths(
+		array $release_root_paths,
 		string $source_root,
 		string $target_root
 	): void {
-		foreach ( self::MANAGED_PATHS as $relative_path ) {
+		foreach ( $release_root_paths as $relative_path ) {
 			$source_path = $this->build_path( $source_root, $relative_path );
 
 			if ( ! file_exists( $source_path ) ) {
@@ -868,35 +955,217 @@ class Update {
 	}
 
 	/**
-	 * Copy bundled language-pack files into the persistent content directory.
-	 *
-	 * The dashboard updater preserves `content/`, so releases that introduced
-	 * language support need an explicit sync step to seed `content/languages`
-	 * on existing installs.
+	 * Get the packaged top-level content entries that should sync on update.
 	 *
 	 * @param string $source_root Extracted release package root.
-	 * @return void
-	 * @since 1.0.4
+	 * @return array<int, string>
+	 * @since 1.0.8
 	 */
-	private function seed_language_packs_from_package( string $source_root ): void {
-		$source_languages = $this->build_path(
+	private function get_packaged_content_root_paths( string $source_root ): array {
+		$package_content_directory = $this->build_path(
 			$source_root,
 			Constants::DEFAULT_CONTENT_DIR,
-			Constants::LANGUAGES_DIRECTORY,
 		);
 
-		if ( ! is_dir( $source_languages ) ) {
+		if ( ! is_dir( $package_content_directory ) ) {
+			return array();
+		}
+
+		$scan_results = scandir( $package_content_directory );
+
+		if ( false === $scan_results ) {
+			throw new \RuntimeException(
+				__( 'PeakURL could not read the packaged content directory.', 'peakurl' ),
+			);
+		}
+
+		$content_root_paths = array();
+
+		foreach ( $scan_results as $entry ) {
+			if ( '.' === $entry || '..' === $entry ) {
+				continue;
+			}
+
+			if ( ! $this->content_path_contains_release_payload( $this->build_path( $package_content_directory, $entry ) ) ) {
+				continue;
+			}
+
+			$content_root_paths[ $entry ] = $entry;
+		}
+
+		ksort( $content_root_paths, SORT_STRING );
+
+		return array_values( $content_root_paths );
+	}
+
+	/**
+	 * Check whether a packaged content path contains releasable payload files.
+	 *
+	 * Placeholder files such as `.gitkeep` should not turn an entire content
+	 * root into a managed sync target during updates.
+	 *
+	 * @param string $path Packaged content path.
+	 * @return bool
+	 * @since 1.0.8
+	 */
+	private function content_path_contains_release_payload( string $path ): bool {
+		if ( is_file( $path ) ) {
+			return ! $this->is_ignored_content_placeholder_file( basename( $path ) );
+		}
+
+		if ( ! is_dir( $path ) ) {
+			return false;
+		}
+
+		$iterator = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator(
+				$path,
+				\FilesystemIterator::SKIP_DOTS,
+			),
+		);
+
+		foreach ( $iterator as $item ) {
+			if ( ! $item->isFile() ) {
+				continue;
+			}
+
+			if ( $this->is_ignored_content_placeholder_file( $item->getFilename() ) ) {
+				continue;
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check whether a file should be ignored as packaged content filler.
+	 *
+	 * @param string $file_name File name to inspect.
+	 * @return bool
+	 * @since 1.0.8
+	 */
+	private function is_ignored_content_placeholder_file( string $file_name ): bool {
+		return in_array(
+			$file_name,
+			array(
+				'.gitkeep',
+				'.DS_Store',
+			),
+			true,
+		);
+	}
+
+	/**
+	 * Back up the installed content entries that will be replaced by the package.
+	 *
+	 * @param array<int, string> $package_content_root_paths Packaged content root paths.
+	 * @param string             $backup_root               Backup destination directory.
+	 * @return void
+	 * @since 1.0.8
+	 */
+	private function backup_packaged_content_root_paths(
+		array $package_content_root_paths,
+		string $backup_root
+	): void {
+		$content_directory = $this->get_content_directory();
+
+		foreach ( $package_content_root_paths as $relative_path ) {
+			$source_path = $this->build_path( $content_directory, $relative_path );
+
+			if ( ! file_exists( $source_path ) ) {
+				continue;
+			}
+
+			$this->copy_path(
+				$source_path,
+				$this->build_path(
+					$backup_root,
+					Constants::DEFAULT_CONTENT_DIR,
+					$relative_path,
+				),
+			);
+		}
+	}
+
+	/**
+	 * Sync package-provided content entries into the installed content directory.
+	 *
+	 * Packaged files replace matching installed files, but unrelated user content
+	 * is left untouched because only the packaged top-level entries are copied.
+	 *
+	 * @param array<int, string> $package_content_root_paths Packaged content root paths.
+	 * @param string             $source_root               Extracted release package root.
+	 * @return void
+	 * @since 1.0.8
+	 */
+	private function sync_packaged_content_root_paths(
+		array $package_content_root_paths,
+		string $source_root
+	): void {
+		if ( empty( $package_content_root_paths ) ) {
 			return;
 		}
 
-		$target_content   = $this->get_content_directory();
-		$target_languages = $this->build_path(
-			$target_content,
-			Constants::LANGUAGES_DIRECTORY,
-		);
+		$content_directory = $this->get_content_directory();
 
-		$this->ensure_directory( $target_content );
-		$this->copy_path( $source_languages, $target_languages );
+		$this->ensure_directory( $content_directory );
+
+		foreach ( $package_content_root_paths as $relative_path ) {
+			$source_path = $this->build_path(
+				$source_root,
+				Constants::DEFAULT_CONTENT_DIR,
+				$relative_path,
+			);
+
+			if ( ! file_exists( $source_path ) ) {
+				continue;
+			}
+
+			$this->copy_path(
+				$source_path,
+				$this->build_path( $content_directory, $relative_path ),
+			);
+		}
+	}
+
+	/**
+	 * Restore packaged content entries after a failed update.
+	 *
+	 * @param array<int, string> $package_content_root_paths Packaged content root paths.
+	 * @param string             $backup_root               Backup directory to restore from.
+	 * @return void
+	 * @since 1.0.8
+	 */
+	private function restore_packaged_content_root_paths(
+		array $package_content_root_paths,
+		string $backup_root
+	): void {
+		if ( empty( $package_content_root_paths ) ) {
+			return;
+		}
+
+		$content_directory = $this->get_content_directory();
+
+		foreach ( $package_content_root_paths as $relative_path ) {
+			$this->delete_path( $this->build_path( $content_directory, $relative_path ) );
+
+			$backup_path = $this->build_path(
+				$backup_root,
+				Constants::DEFAULT_CONTENT_DIR,
+				$relative_path,
+			);
+
+			if ( ! file_exists( $backup_path ) ) {
+				continue;
+			}
+
+			$this->copy_path(
+				$backup_path,
+				$this->build_path( $content_directory, $relative_path ),
+			);
+		}
 	}
 
 	/** Remove old backup directories, keeping only the 3 most recent. */

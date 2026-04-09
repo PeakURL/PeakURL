@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { PEAKURL_BASENAME } from '@constants';
 import { ConfirmDialog } from '@/components/ui';
 import {
@@ -38,13 +38,17 @@ import type {
 	ProfileUser,
 	ReleaseAction,
 } from './types';
-import type { SecurityFormState } from './sections/types';
+import type {
+	ReleaseInstallProgressState,
+	SecurityFormState,
+} from './sections/types';
 import GeneralTab from './sections/GeneralTab';
 import SecurityTab from './sections/SecurityTab';
 import ApiTab from './sections/ApiTab';
 import ApiKeyModals from './sections/ApiKeyModals';
 import LocationDataTab from './sections/LocationDataTab';
 import EmailDeliveryTab from './sections/EmailDeliveryTab';
+import ReleaseInstallProgress from './sections/ReleaseInstallProgress';
 import UpdatesTab from './sections/UpdatesTab';
 
 const buildGeneralForm = (user?: ProfileUser | null): GeneralFormState => ({
@@ -75,6 +79,60 @@ const resolveBaseApiUrl = (
 	}
 
 	return '';
+};
+
+type ReleaseInstallProgressStage =
+	| 'preparing'
+	| 'downloading'
+	| 'installing'
+	| 'finishing';
+
+const releaseInstallStageOrder: ReleaseInstallProgressStage[] = [
+	'preparing',
+	'downloading',
+	'installing',
+	'finishing',
+];
+
+const buildReleaseInstallProgressState = (
+	action: ReleaseAction,
+	stage: ReleaseInstallProgressStage
+): ReleaseInstallProgressState => {
+	const isReinstall = action === 'reinstall';
+	const currentStepIndex = releaseInstallStageOrder.indexOf(stage);
+
+	return {
+		title: isReinstall
+			? __('Restoring the latest release')
+			: __('Installing the latest release'),
+		description:
+			stage === 'preparing'
+				? __('PeakURL is getting everything ready.')
+				: stage === 'downloading'
+					? __('PeakURL is downloading the release.')
+					: stage === 'installing'
+						? __('PeakURL is applying the included files and content updates.')
+						: __('PeakURL is finishing up and getting the dashboard ready.'),
+		steps: releaseInstallStageOrder.map((step, index) => ({
+			id: step,
+			label:
+				step === 'preparing'
+					? __('Getting ready')
+					: step === 'downloading'
+						? __('Downloading release')
+						: step === 'installing'
+							? isReinstall
+								? __('Restoring included files')
+								: __('Installing update')
+							: __('Finishing up'),
+			state:
+				index < currentStepIndex
+					? 'complete'
+					: index === currentStepIndex
+						? 'current'
+						: 'upcoming',
+		})),
+	};
 };
 
 const Content = ({ activeTab }: ContentProps) => {
@@ -149,8 +207,49 @@ const Content = ({ activeTab }: ContentProps) => {
 		useState<ApiKeySummary | null>(null);
 	const [pendingReleaseAction, setPendingReleaseAction] =
 		useState<ReleaseAction | null>(null);
+	const [releaseInstallProgress, setReleaseInstallProgress] =
+		useState<ReleaseInstallProgressState | null>(null);
 	const [keyLabel, setKeyLabel] = useState('');
 	const [newApiBaseUrl, setNewApiBaseUrl] = useState('');
+	const releaseInstallProgressTimerIds = useRef<number[]>([]);
+
+	const clearReleaseInstallProgressTimers = () => {
+		releaseInstallProgressTimerIds.current.forEach((timerId) => {
+			window.clearTimeout(timerId);
+		});
+		releaseInstallProgressTimerIds.current = [];
+	};
+
+	const startReleaseInstallProgress = (action: ReleaseAction) => {
+		clearReleaseInstallProgressTimers();
+		setReleaseInstallProgress(
+			buildReleaseInstallProgressState(action, 'preparing')
+		);
+
+		const stageTransitions: Array<{
+			afterMs: number;
+			stage: ReleaseInstallProgressStage;
+		}> = [
+			{ afterMs: 700, stage: 'downloading' },
+			{ afterMs: 1900, stage: 'installing' },
+			{ afterMs: 3600, stage: 'finishing' },
+		];
+
+		releaseInstallProgressTimerIds.current = stageTransitions.map(
+			({ afterMs, stage }) =>
+				window.setTimeout(() => {
+					setReleaseInstallProgress(
+						buildReleaseInstallProgressState(action, stage)
+					);
+				}, afterMs)
+		);
+	};
+
+	useEffect(() => {
+		return () => {
+			clearReleaseInstallProgressTimers();
+		};
+	}, []);
 
 	const handleGeneralSubmit = async (generalForm: GeneralFormPayload) => {
 		const { siteLanguage: nextSiteLanguage, ...profileForm } =
@@ -425,10 +524,15 @@ const Content = ({ activeTab }: ContentProps) => {
 	const runReleaseInstall = async (action: ReleaseAction) => {
 		const isReinstall = action === 'reinstall';
 		const installRelease = isReinstall ? reinstallUpdate : applyUpdate;
+		startReleaseInstallProgress(action);
 
 		try {
 			const result = await installRelease(undefined).unwrap();
 			const appliedVersion = result?.data?.currentVersion;
+			clearReleaseInstallProgressTimers();
+			setReleaseInstallProgress(
+				buildReleaseInstallProgressState(action, 'finishing')
+			);
 			setPendingReleaseAction(null);
 
 			notification.success(
@@ -464,6 +568,8 @@ const Content = ({ activeTab }: ContentProps) => {
 						: __('PeakURL could not apply the update.')
 				)
 			);
+			clearReleaseInstallProgressTimers();
+			setReleaseInstallProgress(null);
 		}
 	};
 
@@ -561,6 +667,7 @@ const Content = ({ activeTab }: ContentProps) => {
 				<UpdatesTab
 					status={updateStatusData}
 					errorMessage={extractErrorMessage(updateError)}
+					releaseInstallProgress={releaseInstallProgress}
 					isLoading={isLoadingUpdateStatus || isFetchingUpdateStatus}
 					isChecking={isCheckingForUpdates}
 					isApplying={isApplyingUpdate}
@@ -617,6 +724,7 @@ const Content = ({ activeTab }: ContentProps) => {
 				onClose={() => {
 					if (!isInstallingRelease) {
 						setPendingReleaseAction(null);
+						setReleaseInstallProgress(null);
 					}
 				}}
 				title={sprintf(
@@ -627,13 +735,13 @@ const Content = ({ activeTab }: ContentProps) => {
 						updateStatusData?.currentVersion ||
 						__('update')
 				)}
-					description={
-						pendingReleaseAction === 'reinstall'
-							? __(
-								'PeakURL will download the latest release package again, replace managed application files, and reload the dashboard when the reinstall completes.\n\nUse this when you need to restore packaged files on a release install.'
-							)
-							: __(
-								'PeakURL will download the latest release package, replace managed application files, and reload the dashboard when the update completes.\n\nOnly continue on packaged release installs.'
+				description={
+					pendingReleaseAction === 'reinstall'
+						? __(
+							'PeakURL will download the latest release again, restore the included files, refresh any included content files, and reload the dashboard when it is ready.'
+						)
+						: __(
+							'PeakURL will download the latest release, install the included files, refresh any included content files, and reload the dashboard when it is ready.'
 						)
 				}
 				confirmText={
@@ -648,7 +756,14 @@ const Content = ({ activeTab }: ContentProps) => {
 						: handleApplyUpdate
 				}
 				loading={isInstallingRelease}
-			/>
+			>
+				{releaseInstallProgress && isInstallingRelease ? (
+					<ReleaseInstallProgress
+						progress={releaseInstallProgress}
+						compact
+					/>
+				) : null}
+			</ConfirmDialog>
 		</div>
 	);
 };

@@ -27,18 +27,49 @@ if ( ! defined( 'ABSPATH' ) ) {
 // ── Maintenance-mode guard ──────────────────────────────────────
 
 if ( file_exists( ABSPATH . '.maintenance' ) ) {
+	$maintenance_view_data = array(
+		'htmlLang'   => 'en-US',
+		'apiMessage' => 'PeakURL is updating. Please try again in a moment.',
+	);
+	$autoload_path         = __DIR__ . '/../vendor/autoload.php';
+
+	if ( file_exists( $autoload_path ) ) {
+		require_once $autoload_path;
+
+		if ( function_exists( 'peakurl_get_maintenance_view_data' ) ) {
+			try {
+				$maintenance_view_data = peakurl_get_maintenance_view_data();
+			} catch ( Throwable $exception ) {
+				$maintenance_view_data = array(
+					'htmlLang'   => 'en-US',
+					'apiMessage' => 'PeakURL is updating. Please try again in a moment.',
+				);
+			}
+		}
+	}
+
 	http_response_code( 503 );
 	header( 'Content-Type: application/json; charset=utf-8' );
-	echo json_encode(
-		array(
-			'success' => false,
-			'message' => 'PeakURL is updating. Please try again in a moment.',
-			'data'    => array(
-				'maintenance' => true,
-			),
-		),
-		JSON_PRETTY_PRINT,
+	header(
+		'Content-Language: ' .
+		(string) ( $maintenance_view_data['htmlLang'] ?? 'en-US' ),
 	);
+	header( 'Retry-After: 60' );
+	echo function_exists( 'peakurl_get_maintenance_api_payload' )
+		? json_encode(
+			peakurl_get_maintenance_api_payload( $maintenance_view_data ),
+			JSON_PRETTY_PRINT,
+		)
+		: json_encode(
+			array(
+				'success' => false,
+				'message' => (string) ( $maintenance_view_data['apiMessage'] ?? 'PeakURL is updating. Please try again in a moment.' ),
+				'data'    => array(
+					'maintenance' => true,
+				),
+			),
+			JSON_PRETTY_PRINT,
+		);
 	exit();
 }
 

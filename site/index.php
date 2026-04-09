@@ -114,29 +114,53 @@ function peakurl_is_under_maintenance(): bool {
  *
  * API requests receive JSON; browser requests receive an HTML page.
  *
- * @param bool $is_api_request Whether the inbound request targets /api/*.
+ * @param bool                       $is_api_request        Whether the inbound request targets /api/*.
+ * @param array<string, string>|null $maintenance_view_data Optional localized maintenance data.
  * @since 1.0.0
  */
-function peakurl_send_maintenance_response( bool $is_api_request ): void {
+function peakurl_send_maintenance_response(
+	bool $is_api_request,
+	?array $maintenance_view_data = null
+): void {
+	$maintenance_view_data = is_array( $maintenance_view_data )
+		? $maintenance_view_data
+		: array(
+			'htmlLang'      => 'en-US',
+			'textDirection' => 'ltr',
+			'apiMessage'    => 'PeakURL is updating. Please try again in a moment.',
+		);
+
 	http_response_code( 503 );
+	header( 'Retry-After: 60' );
+	header(
+		'Content-Language: ' .
+		(string) ( $maintenance_view_data['htmlLang'] ?? 'en-US' ),
+	);
 
 	if ( $is_api_request ) {
 		header( 'Content-Type: application/json; charset=utf-8' );
-		echo json_encode(
-			array(
-				'success' => false,
-				'message' => 'PeakURL is updating. Please try again in a moment.',
-				'data'    => array(
-					'maintenance' => true,
+		echo function_exists( 'peakurl_get_maintenance_api_payload' )
+			? json_encode(
+				peakurl_get_maintenance_api_payload( $maintenance_view_data ),
+				JSON_PRETTY_PRINT,
+			)
+			: json_encode(
+				array(
+					'success' => false,
+					'message' => (string) ( $maintenance_view_data['apiMessage'] ?? 'PeakURL is updating. Please try again in a moment.' ),
+					'data'    => array(
+						'maintenance' => true,
+					),
 				),
-			),
-			JSON_PRETTY_PRINT,
-		);
+				JSON_PRETTY_PRINT,
+			);
 		exit();
 	}
 
 	header( 'Content-Type: text/html; charset=utf-8' );
-	echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>PeakURL is updating</title><meta name="viewport" content="width=device-width, initial-scale=1"><style>body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f0f0f1;color:#111827;display:grid;place-items:center;min-height:100vh;padding:24px}.card{max-width:420px;width:100%;background:#fff;border:1px solid #dcdcde;border-radius:18px;padding:32px;box-shadow:0 12px 36px rgba(17,24,39,.08)}h1{margin:0 0 12px;font-size:28px;line-height:1.1}p{margin:0;color:#4b5563;line-height:1.6}</style></head><body><div class="card"><h1>PeakURL is updating</h1><p>Please wait a moment and refresh the page. The update should finish shortly.</p></div></body></html>';
+	echo function_exists( 'peakurl_render_maintenance_page' )
+		? peakurl_render_maintenance_page( $maintenance_view_data )
+		: '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>PeakURL is updating</title><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><p>PeakURL is updating. Please try again in a moment.</p></body></html>';
 	exit();
 }
 
@@ -275,8 +299,23 @@ $setup_path    = peakurl_runtime_url( $base_path, '/setup-config.php' );
 $install_path  = peakurl_runtime_url( $base_path, '/install.php' );
 
 if ( peakurl_is_under_maintenance() ) {
+	$maintenance_view_data = null;
+
+	if ( file_exists( $autoload ) ) {
+		require_once $autoload;
+
+		if ( function_exists( 'peakurl_get_maintenance_view_data' ) ) {
+			try {
+				$maintenance_view_data = peakurl_get_maintenance_view_data();
+			} catch ( \Throwable $exception ) {
+				$maintenance_view_data = null;
+			}
+		}
+	}
+
 	peakurl_send_maintenance_response(
 		Str::starts_with( $relative_path, '/api/' ),
+		$maintenance_view_data,
 	);
 }
 

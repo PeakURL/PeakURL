@@ -28,6 +28,7 @@ import type {
 	UpdateStatusPayload,
 	UpdatesTabProps,
 } from './types';
+import ReleaseInstallProgress from './ReleaseInstallProgress';
 
 function hasUpdateAvailable(status?: UpdateStatusPayload | null) {
 	if (status?.updateAvailable) {
@@ -470,6 +471,7 @@ function IssueList({ title, issues }: IssueListProps) {
 function UpdatesTab({
 	status,
 	errorMessage,
+	releaseInstallProgress,
 	isLoading,
 	isChecking,
 	isApplying,
@@ -560,6 +562,12 @@ function UpdatesTab({
 						tone={appState.tone}
 					/>
 				</div>
+
+				{releaseInstallProgress && (isApplying || isReinstalling) ? (
+					<div className="mt-5">
+						<ReleaseInstallProgress progress={releaseInstallProgress} />
+					</div>
+				) : null}
 
 				{showReleaseMeta ? (
 					<div className="mt-5 space-y-3 border-t border-stroke pt-5">

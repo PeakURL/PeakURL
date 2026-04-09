@@ -33,6 +33,12 @@ copy_release_language_packs() {
 	find "$source_dir" -maxdepth 1 -type f \( -name '*.json' -o -name '*.mo' -o -name '*.pot' \) -exec cp {} "$destination_dir/" \;
 }
 
+remove_release_system_files() {
+	release_dir=$1
+
+	find "$release_dir" -name '.DS_Store' -type f -delete
+}
+
 restore_composer_dependencies() {
 	if [ "$RESTORE_COMPOSER_DEPS" -ne 1 ]; then
 		return
@@ -92,6 +98,7 @@ cp app/composer.lock "$RELEASE_DIR/app/composer.lock"
 cp app/.env.example "$RELEASE_DIR/app/.env.example"
 
 rm -f "$RELEASE_DIR/app/.env"
+remove_release_system_files "$RELEASE_DIR"
 
 printf 'Creating zip archive...\n'
 rm -f "$ARCHIVE_PATH"

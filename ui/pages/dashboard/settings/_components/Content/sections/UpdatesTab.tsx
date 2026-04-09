@@ -110,8 +110,8 @@ function buildAppStatus(
 				status?.latestVersion || __('update')
 			),
 			description: status?.canApply
-				? __('A newer PeakURL release is ready to install when you are ready.')
-				: __('A newer PeakURL release is available, but this install cannot apply it automatically from the dashboard.'),
+				? __('A newer PeakURL version is ready to install when you are ready.')
+				: __('A newer PeakURL version is available, but this install cannot apply it automatically from the dashboard.'),
 		};
 	}
 
@@ -120,12 +120,12 @@ function buildAppStatus(
 			tone: 'success',
 			label: __('Latest'),
 			title: sprintf(
-				__('PeakURL %s is the latest release'),
+				__('PeakURL %s is the latest version'),
 				status?.currentVersion || __('Unknown')
 			),
 			description: status?.canApply
-				? __('This site is already on the latest release. Reinstall the latest package if you need to restore packaged files.')
-				: __('This site is already on the latest release, but this install cannot reinstall the latest package automatically from the dashboard.'),
+				? __('This site is already on the latest version. Reinstall the latest package if you need to restore packaged files.')
+				: __('This site is already on the latest version, but this install cannot reinstall the latest package automatically from the dashboard.'),
 		};
 	}
 
@@ -133,10 +133,10 @@ function buildAppStatus(
 		tone: 'success',
 		label: __('Latest'),
 		title: sprintf(
-			__('PeakURL %s is the latest release'),
+			__('PeakURL %s is the latest version'),
 			status?.currentVersion || __('Unknown')
 		),
-		description: __('This site is already running the latest known PeakURL release.'),
+		description: __('This site is already running the latest known PeakURL version.'),
 	};
 }
 

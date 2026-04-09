@@ -39,6 +39,7 @@ import type {
 	ReleaseAction,
 } from './types';
 import type {
+	ReleaseInstallStage,
 	ReleaseInstallProgressState,
 	SecurityFormState,
 } from './sections/types';
@@ -81,56 +82,111 @@ const resolveBaseApiUrl = (
 	return '';
 };
 
-type ReleaseInstallProgressStage =
-	| 'preparing'
-	| 'downloading'
-	| 'installing'
-	| 'finishing';
-
-const releaseInstallStageOrder: ReleaseInstallProgressStage[] = [
+const releaseInstallStageOrder: ReleaseInstallStage[] = [
 	'preparing',
 	'downloading',
 	'installing',
 	'finishing',
 ];
 
+const releaseInstallRedirectDelayMs = 2400;
+
+const getReleaseInstallTitle = (action: ReleaseAction): string =>
+	action === 'reinstall'
+		? __('Restoring the latest version')
+		: __('Installing the latest version');
+
+const getReleaseInstallStepLabel = (
+	action: ReleaseAction,
+	stage: ReleaseInstallStage
+): string => {
+	if ('preparing' === stage) {
+		return __('Getting ready');
+	}
+
+	if ('downloading' === stage) {
+		return __('Downloading update');
+	}
+
+	if ('installing' === stage) {
+		return action === 'reinstall'
+			? __('Restoring included files')
+			: __('Installing update');
+	}
+
+	return __('Finishing up');
+};
+
+const getReleaseInstallActiveStageIndex = (
+	progress: ReleaseInstallProgressState | null
+): number => {
+	const currentStageIndex =
+		progress?.steps.findIndex(({ state }) => 'current' === state) ?? -1;
+
+	if (currentStageIndex >= 0) {
+		return currentStageIndex;
+	}
+
+	const completedStepCount =
+		progress?.steps.filter(({ state }) => 'complete' === state).length ?? 0;
+
+	return Math.min(
+		Math.max(completedStepCount, 0),
+		releaseInstallStageOrder.length - 1
+	);
+};
+
 const buildReleaseInstallProgressState = (
 	action: ReleaseAction,
-	stage: ReleaseInstallProgressStage
+	stage: ReleaseInstallStage
 ): ReleaseInstallProgressState => {
-	const isReinstall = action === 'reinstall';
 	const currentStepIndex = releaseInstallStageOrder.indexOf(stage);
 
 	return {
-		title: isReinstall
-			? __('Restoring the latest release')
-			: __('Installing the latest release'),
+		title: getReleaseInstallTitle(action),
 		description:
 			stage === 'preparing'
 				? __('PeakURL is getting everything ready.')
 				: stage === 'downloading'
-					? __('PeakURL is downloading the release.')
+					? __('PeakURL is downloading the update.')
 					: stage === 'installing'
 						? __('PeakURL is applying the included files and content updates.')
 						: __('PeakURL is finishing up and getting the dashboard ready.'),
 		steps: releaseInstallStageOrder.map((step, index) => ({
 			id: step,
-			label:
-				step === 'preparing'
-					? __('Getting ready')
-					: step === 'downloading'
-						? __('Downloading release')
-						: step === 'installing'
-							? isReinstall
-								? __('Restoring included files')
-								: __('Installing update')
-							: __('Finishing up'),
+			label: getReleaseInstallStepLabel(action, step),
 			state:
 				index < currentStepIndex
 					? 'complete'
 					: index === currentStepIndex
 						? 'current'
 						: 'upcoming',
+		})),
+	};
+};
+
+const buildCompletedReleaseInstallProgressState = (
+	action: ReleaseAction,
+	appliedVersion?: string | null
+): ReleaseInstallProgressState => {
+	const isReinstall = action === 'reinstall';
+
+	return {
+		title: getReleaseInstallTitle(action),
+		description: appliedVersion
+			? sprintf(
+					isReinstall
+						? __('PeakURL %s has been restored.')
+						: __('PeakURL %s is now installed.'),
+					appliedVersion
+				)
+			: isReinstall
+				? __('The latest version has been restored.')
+				: __('The latest version is now installed.'),
+		steps: releaseInstallStageOrder.map((step) => ({
+			id: step,
+			label: getReleaseInstallStepLabel(action, step),
+			state: 'complete',
 		})),
 	};
 };
@@ -207,11 +263,23 @@ const Content = ({ activeTab }: ContentProps) => {
 		useState<ApiKeySummary | null>(null);
 	const [pendingReleaseAction, setPendingReleaseAction] =
 		useState<ReleaseAction | null>(null);
+	const [activeReleaseInstallAction, setActiveReleaseInstallAction] =
+		useState<ReleaseAction | null>(null);
 	const [releaseInstallProgress, setReleaseInstallProgress] =
 		useState<ReleaseInstallProgressState | null>(null);
 	const [keyLabel, setKeyLabel] = useState('');
 	const [newApiBaseUrl, setNewApiBaseUrl] = useState('');
 	const releaseInstallProgressTimerIds = useRef<number[]>([]);
+	const releaseInstallProgressStateRef =
+		useRef<ReleaseInstallProgressState | null>(null);
+	const releaseInstallRedirectTimerId = useRef<number | null>(null);
+
+	const setReleaseInstallProgressState = (
+		progress: ReleaseInstallProgressState | null
+	) => {
+		releaseInstallProgressStateRef.current = progress;
+		setReleaseInstallProgress(progress);
+	};
 
 	const clearReleaseInstallProgressTimers = () => {
 		releaseInstallProgressTimerIds.current.forEach((timerId) => {
@@ -220,15 +288,24 @@ const Content = ({ activeTab }: ContentProps) => {
 		releaseInstallProgressTimerIds.current = [];
 	};
 
+	const clearReleaseInstallRedirectTimer = () => {
+		if (null !== releaseInstallRedirectTimerId.current) {
+			window.clearTimeout(releaseInstallRedirectTimerId.current);
+			releaseInstallRedirectTimerId.current = null;
+		}
+	};
+
 	const startReleaseInstallProgress = (action: ReleaseAction) => {
 		clearReleaseInstallProgressTimers();
-		setReleaseInstallProgress(
+		clearReleaseInstallRedirectTimer();
+		setActiveReleaseInstallAction(action);
+		setReleaseInstallProgressState(
 			buildReleaseInstallProgressState(action, 'preparing')
 		);
 
 		const stageTransitions: Array<{
 			afterMs: number;
-			stage: ReleaseInstallProgressStage;
+			stage: ReleaseInstallStage;
 		}> = [
 			{ afterMs: 700, stage: 'downloading' },
 			{ afterMs: 1900, stage: 'installing' },
@@ -238,16 +315,59 @@ const Content = ({ activeTab }: ContentProps) => {
 		releaseInstallProgressTimerIds.current = stageTransitions.map(
 			({ afterMs, stage }) =>
 				window.setTimeout(() => {
-					setReleaseInstallProgress(
+					setReleaseInstallProgressState(
 						buildReleaseInstallProgressState(action, stage)
 					);
 				}, afterMs)
 		);
 	};
 
+	const startReleaseInstallCompletion = (
+		action: ReleaseAction,
+		appliedVersion?: string | null
+	) => {
+		const activeStageIndex = getReleaseInstallActiveStageIndex(
+			releaseInstallProgressStateRef.current
+		);
+		const remainingStageSequence = releaseInstallStageOrder.slice(
+			activeStageIndex + 1
+		);
+		const completionTransitionCount = remainingStageSequence.length + 1;
+		const completionSegmentDuration =
+			releaseInstallRedirectDelayMs / (completionTransitionCount + 1);
+
+		clearReleaseInstallProgressTimers();
+		clearReleaseInstallRedirectTimer();
+
+		releaseInstallProgressTimerIds.current = [
+			...remainingStageSequence.map((stage, index) =>
+				window.setTimeout(() => {
+					setReleaseInstallProgressState(
+						buildReleaseInstallProgressState(action, stage)
+					);
+				}, completionSegmentDuration * (index + 1))
+			),
+			window.setTimeout(() => {
+				setReleaseInstallProgressState(
+					buildCompletedReleaseInstallProgressState(action, appliedVersion)
+				);
+			}, completionSegmentDuration * completionTransitionCount),
+		];
+
+		releaseInstallRedirectTimerId.current = window.setTimeout(() => {
+			setPendingReleaseAction(null);
+			setActiveReleaseInstallAction(null);
+			setReleaseInstallProgressState(null);
+			window.location.assign(
+				`${PEAKURL_BASENAME || ''}/dashboard/about?source=${action === 'reinstall' ? 'reinstall' : 'update'}`
+			);
+		}, releaseInstallRedirectDelayMs);
+	};
+
 	useEffect(() => {
 		return () => {
 			clearReleaseInstallProgressTimers();
+			clearReleaseInstallRedirectTimer();
 		};
 	}, []);
 
@@ -444,10 +564,10 @@ const Content = ({ activeTab }: ContentProps) => {
 				__('Up to date'),
 				currentVersion
 					? sprintf(
-						__('PeakURL %s is already on the latest release.'),
+						__('PeakURL %s is already on the latest version.'),
 						currentVersion
 					)
-					: __('PeakURL is already on the latest release.')
+					: __('PeakURL is already on the latest version.')
 			);
 		} catch (err) {
 			notification.error(
@@ -529,53 +649,47 @@ const Content = ({ activeTab }: ContentProps) => {
 		try {
 			const result = await installRelease(undefined).unwrap();
 			const appliedVersion = result?.data?.currentVersion;
-			clearReleaseInstallProgressTimers();
-			setReleaseInstallProgress(
-				buildReleaseInstallProgressState(action, 'finishing')
-			);
-			setPendingReleaseAction(null);
+			startReleaseInstallCompletion(action, appliedVersion);
 
 			notification.success(
 				isReinstall ? __('Release reinstalled') : __('Update installed'),
 				appliedVersion
 					? sprintf(
 						isReinstall
-							? __(
-								'PeakURL %s was reinstalled successfully. Redirecting now.'
-							)
-							: __(
-								'PeakURL %s was installed successfully. Redirecting now.'
-							),
+							? __('PeakURL %s has been restored.')
+							: __('PeakURL %s is now installed.'),
 						appliedVersion
 					)
 					: isReinstall
-						? __('PeakURL was reinstalled successfully. Redirecting now.')
-						: __('PeakURL was installed successfully. Redirecting now.')
+						? __('The latest version has been restored.')
+						: __('The latest version is now installed.')
 			);
-
-			window.setTimeout(() => {
-				window.location.assign(
-					`${PEAKURL_BASENAME || ''}/dashboard/about?source=${isReinstall ? 'reinstall' : 'update'}`
-				);
-			}, 1500);
 		} catch (err) {
 			notification.error(
 				isReinstall ? __('Reinstall failed') : __('Update failed'),
 				getErrorMessage(
 					err,
 					isReinstall
-						? __('PeakURL could not reinstall the latest release.')
+						? __('PeakURL could not reinstall the latest version.')
 						: __('PeakURL could not apply the update.')
 				)
 			);
 			clearReleaseInstallProgressTimers();
-			setReleaseInstallProgress(null);
+			clearReleaseInstallRedirectTimer();
+			setActiveReleaseInstallAction(null);
+			setReleaseInstallProgressState(null);
 		}
 	};
 
-	const handleApplyUpdate = async () => runReleaseInstall('install');
+	const handleApplyUpdate = async () => {
+		setPendingReleaseAction(null);
+		await runReleaseInstall('install');
+	};
 
-	const handleReinstallUpdate = async () => runReleaseInstall('reinstall');
+	const handleReinstallUpdate = async () => {
+		setPendingReleaseAction(null);
+		await runReleaseInstall('reinstall');
+	};
 
 	const handleUpgradeDatabase = async () => {
 		try {
@@ -722,9 +836,9 @@ const Content = ({ activeTab }: ContentProps) => {
 			<ConfirmDialog
 				open={Boolean(pendingReleaseAction)}
 				onClose={() => {
-					if (!isInstallingRelease) {
+					if (!activeReleaseInstallAction) {
 						setPendingReleaseAction(null);
-						setReleaseInstallProgress(null);
+						setReleaseInstallProgressState(null);
 					}
 				}}
 				title={sprintf(
@@ -736,13 +850,15 @@ const Content = ({ activeTab }: ContentProps) => {
 						__('update')
 				)}
 				description={
-					pendingReleaseAction === 'reinstall'
-						? __(
-							'PeakURL will download the latest release again, restore the included files, refresh any included content files, and reload the dashboard when it is ready.'
-						)
-						: __(
-							'PeakURL will download the latest release, install the included files, refresh any included content files, and reload the dashboard when it is ready.'
-						)
+					releaseInstallProgress
+						? ''
+						: pendingReleaseAction === 'reinstall'
+							? __(
+								'PeakURL will restore the latest version and refresh the included files.'
+							)
+							: __(
+								'PeakURL will install the latest version and refresh the included files.'
+							)
 				}
 				confirmText={
 					pendingReleaseAction === 'reinstall'
@@ -756,8 +872,15 @@ const Content = ({ activeTab }: ContentProps) => {
 						: handleApplyUpdate
 				}
 				loading={isInstallingRelease}
+			/>
+			<ConfirmDialog
+				open={Boolean(activeReleaseInstallAction && releaseInstallProgress)}
+				onClose={() => {}}
+				title=""
+				onConfirm={() => {}}
+				hideActions
 			>
-				{releaseInstallProgress && isInstallingRelease ? (
+				{releaseInstallProgress ? (
 					<ReleaseInstallProgress
 						progress={releaseInstallProgress}
 						compact

@@ -136,9 +136,27 @@ const getLandingMeta = (): Record<LandingSource, LandingMetaEntry> => ({
 	},
 	update: {
 		eyebrow: __('Update Complete'),
-		title: __('PeakURL has been updated successfully.'),
+		title: __('PeakURL is up to date.'),
 		description: __(
-			'The latest release is now running. Review the overview below, then confirm key services like email delivery, location data, and updates are configured the way you expect.'
+			'The latest version is now installed. Review the essentials below and confirm services like email delivery, location data, and updates are set the way you expect.'
+		),
+		actions: [
+			{
+				label: __('Check email configuration'),
+				to: '/dashboard/settings/email',
+			},
+			{
+				label: __('Verify update status'),
+				to: '/dashboard/settings/updates',
+			},
+			{ label: __('Open all links'), to: '/dashboard/links' },
+		],
+	},
+	reinstall: {
+		eyebrow: __('Reinstall Complete'),
+		title: __('PeakURL has been restored.'),
+		description: __(
+			'The latest version has been restored. Review the essentials below and confirm services like email delivery, location data, and updates are set the way you expect.'
 		),
 		actions: [
 			{
@@ -154,7 +172,7 @@ const getLandingMeta = (): Record<LandingSource, LandingMetaEntry> => ({
 	},
 });
 
-const LANDING_SOURCES: LandingSource[] = ['install', 'update'];
+const LANDING_SOURCES: LandingSource[] = ['install', 'update', 'reinstall'];
 
 const isLandingSource = (source: string | null): source is LandingSource =>
 	null !== source && LANDING_SOURCES.includes(source as LandingSource);

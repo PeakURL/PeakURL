@@ -31,6 +31,7 @@ export function ConfirmDialog({
 	onConfirm,
 	confirmVariant = 'primary',
 	loading = false,
+	hideActions = false,
 }: ConfirmDialogProps) {
 	const direction = getDocumentDirection();
 
@@ -64,33 +65,37 @@ export function ConfirmDialog({
 								dir={direction}
 								className="text-inline-start w-full max-w-lg transform overflow-hidden rounded-2xl border border-stroke bg-surface p-6 shadow-xl transition-all"
 							>
-								<DialogTitle className="mb-2 text-lg font-semibold text-heading">
-									{title}
-								</DialogTitle>
+								{title ? (
+									<DialogTitle className="mb-2 text-lg font-semibold text-heading">
+										{title}
+									</DialogTitle>
+								) : null}
 								{description && (
 									<p className="mb-4 whitespace-pre-line text-sm text-text-muted">
 										{description}
 									</p>
 								)}
 								{children}
-								<div dir={direction} className="mt-6 flex justify-end gap-2">
-									<Button
-										variant="secondary"
-										onClick={onClose}
-										disabled={loading}
-									>
-										{cancelText}
-									</Button>
-									<Button
-										variant={confirmVariant}
-										onClick={onConfirm}
-										disabled={loading}
-									>
-										{loading
-											? __('Working...')
-											: confirmText}
-									</Button>
-								</div>
+								{!hideActions ? (
+									<div dir={direction} className="mt-6 flex justify-end gap-2">
+										<Button
+											variant="secondary"
+											onClick={onClose}
+											disabled={loading}
+										>
+											{cancelText}
+										</Button>
+										<Button
+											variant={confirmVariant}
+											onClick={onConfirm}
+											disabled={loading}
+										>
+											{loading
+												? __('Working...')
+												: confirmText}
+										</Button>
+									</div>
+								) : null}
 							</DialogPanel>
 						</TransitionChild>
 					</div>

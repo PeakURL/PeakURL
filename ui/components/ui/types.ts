@@ -91,7 +91,7 @@ export type ConfirmVariant = ButtonVariant;
 export interface ConfirmDialogProps {
 	open: boolean;
 	onClose: () => void;
-	title: string;
+	title?: string;
 	description?: string;
 	children?: ReactNode;
 	confirmText?: string;
@@ -99,6 +99,7 @@ export interface ConfirmDialogProps {
 	onConfirm: () => void | Promise<void>;
 	confirmVariant?: ConfirmVariant;
 	loading?: boolean;
+	hideActions?: boolean;
 }
 
 /**

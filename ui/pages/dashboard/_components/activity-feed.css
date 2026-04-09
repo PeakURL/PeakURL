@@ -1,0 +1,63 @@
+@layer components {
+	.dashboard-activity {
+		@apply flex flex-col rounded-lg border border-stroke bg-surface p-5;
+	}
+
+	.dashboard-activity-title {
+		@apply mb-4 text-base font-semibold text-heading;
+	}
+
+	.dashboard-activity-list {
+		@apply max-h-96 flex-1 space-y-3.5 overflow-y-auto;
+	}
+
+	.dashboard-activity-empty {
+		@apply py-8 text-center;
+	}
+
+	.dashboard-activity-empty-text {
+		@apply text-sm text-text-muted;
+	}
+
+	.dashboard-activity-item {
+		@apply flex gap-2.5;
+	}
+
+	.dashboard-activity-item-icon {
+		@apply mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full;
+	}
+
+	.dashboard-activity-item-icon-link,
+	.dashboard-activity-item-icon-click,
+	.dashboard-activity-item-icon-default {
+		@apply bg-primary-500/10 dark:bg-primary-500/20;
+	}
+
+	.dashboard-activity-item-icon-glyph {
+		@apply h-3 w-3 text-primary-600 dark:text-primary-400;
+	}
+
+	.dashboard-activity-item-icon-dot {
+		@apply h-2 w-2 fill-current stroke-0 text-primary-600 dark:text-primary-400;
+	}
+
+	.dashboard-activity-item-copy {
+		@apply min-w-0 flex-1;
+	}
+
+	.dashboard-activity-item-title {
+		@apply text-sm leading-relaxed text-heading;
+	}
+
+	.dashboard-activity-item-meta {
+		@apply mt-1 text-xs text-text-muted;
+	}
+
+	.dashboard-activity-link {
+		@apply mt-4;
+	}
+
+	.dashboard-activity-button {
+		@apply w-full;
+	}
+}

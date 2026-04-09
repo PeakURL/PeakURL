@@ -11,25 +11,25 @@ const Header = ({ timeRange, onTimeRangeChange }: HeaderProps) => {
 	];
 
 	return (
-		<div className="flex items-center justify-between">
-			<div>
-				<h1 className="text-2xl font-bold text-heading">
+		<div className="dashboard-overview-header">
+			<div className="dashboard-overview-header-copy">
+				<h1 className="dashboard-overview-header-title">
 					{__('Dashboard')}
 				</h1>
-				<p className="text-sm text-text-muted mt-0.5">
+				<p className="dashboard-overview-header-summary">
 					{__(
 						"Welcome back! Here's what's happening with your links."
 					)}
 				</p>
 			</div>
-			<div className="flex items-center gap-2">
+			<div className="dashboard-overview-header-actions">
 				<Select
 					value={timeRange}
 					onChange={onTimeRangeChange}
 					options={timeRangeOptions}
 					ariaLabel={__('Dashboard time range')}
-					className="min-w-40"
-					buttonClassName="rounded-lg border-stroke bg-surface focus:border-primary-500 focus:ring-primary-500/20"
+					className="dashboard-overview-header-select"
+					buttonClassName="dashboard-overview-header-select-button"
 				/>
 			</div>
 		</div>

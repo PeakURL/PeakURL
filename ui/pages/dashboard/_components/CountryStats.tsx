@@ -32,38 +32,40 @@ const CountryStats = ({ countryData }: CountryStatsProps) => {
 			: [];
 
 	return (
-		<div className="bg-surface border border-stroke rounded-lg p-5">
-			<h3 className="text-base font-semibold text-heading mb-4">
+		<div className="dashboard-countries">
+			<h3 className="dashboard-countries-title">
 				{__('Top Countries')}
 			</h3>
+
 			{countryData.length === 0 ? (
-				<div className="text-center py-8">
-					<p className="text-sm text-text-muted">
+				<div className="dashboard-countries-empty">
+					<p className="dashboard-countries-empty-text">
 						{__('No country data available')}
 					</p>
 				</div>
 			) : (
-				<div className="space-y-4">
+				<div className="dashboard-countries-list">
 					{formattedCountries.map((country, index: number) => (
 						<div
 							key={`${country.name}-${index}`}
-							className="flex items-center gap-3"
+							className="dashboard-countries-row"
 						>
-							<span className="text-xl">{country.flag}</span>
-							<div className="flex-1 min-w-0">
-								<div className="flex items-center justify-between mb-2">
-									<span className="text-sm font-medium text-heading truncate">
+							<span className="dashboard-countries-row-flag">
+								{country.flag}
+							</span>
+							<div className="dashboard-countries-row-copy">
+								<div className="dashboard-countries-row-header">
+									<span className="dashboard-countries-row-name">
 										{country.name}
 									</span>
-									<span
-										className="text-sm font-semibold text-text-muted"
-									>
+									<span className="dashboard-countries-row-value">
 										{country.value}% ({country.count})
 									</span>
 								</div>
-								<div className="w-full bg-surface-alt rounded-full h-2">
+
+								<div className="dashboard-countries-row-track">
 									<div
-										className="bg-linear-to-r from-primary-600 to-purple-600 dark:from-primary-500 dark:to-purple-500 h-2 rounded-full transition-all duration-300"
+										className="dashboard-countries-row-bar"
 										style={{ width: `${country.value}%` }}
 									></div>
 								</div>

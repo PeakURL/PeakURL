@@ -1,0 +1,81 @@
+@layer components {
+	.dashboard-devices {
+		@apply rounded-lg border border-stroke bg-surface p-5;
+	}
+
+	.dashboard-devices-title {
+		@apply mb-4 text-base font-semibold text-heading;
+	}
+
+	.dashboard-devices-empty {
+		@apply py-8 text-center;
+	}
+
+	.dashboard-devices-empty-text {
+		@apply text-sm text-text-muted;
+	}
+
+	.dashboard-devices-list {
+		@apply space-y-4;
+	}
+
+	.dashboard-devices-item-header {
+		@apply mb-2 flex items-center justify-between;
+	}
+
+	.dashboard-devices-item-name {
+		@apply text-sm font-medium text-heading;
+	}
+
+	.dashboard-devices-item-value {
+		@apply text-sm font-semibold text-text-muted;
+	}
+
+	.dashboard-devices-item-track {
+		@apply h-2 w-full rounded-full bg-surface-alt;
+	}
+
+	.dashboard-devices-item-bar {
+		@apply h-2 rounded-full transition-all duration-300;
+	}
+
+	.dashboard-devices-item-bar-mobile {
+		@apply bg-blue-600 dark:bg-blue-500;
+	}
+
+	.dashboard-devices-item-bar-desktop {
+		@apply bg-purple-600 dark:bg-purple-500;
+	}
+
+	.dashboard-devices-item-bar-tablet {
+		@apply bg-emerald-600 dark:bg-emerald-500;
+	}
+
+	.dashboard-devices-item-bar-default {
+		@apply bg-gray-500;
+	}
+
+	.dashboard-devices-section {
+		@apply mt-6 border-t border-stroke pt-6;
+	}
+
+	.dashboard-devices-section-title {
+		@apply mb-3 text-sm font-semibold text-heading;
+	}
+
+	.dashboard-devices-section-list {
+		@apply space-y-2;
+	}
+
+	.dashboard-devices-section-row {
+		@apply flex items-center justify-between text-sm;
+	}
+
+	.dashboard-devices-section-label {
+		@apply text-text-muted;
+	}
+
+	.dashboard-devices-section-count {
+		@apply font-medium text-heading;
+	}
+}

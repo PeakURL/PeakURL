@@ -1,0 +1,89 @@
+@layer components {
+	.dashboard-stats-grid {
+		@apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4;
+	}
+
+	.dashboard-stats-card {
+		@apply rounded-lg border border-stroke bg-surface p-4 transition-shadow hover:shadow-md;
+	}
+
+	.dashboard-stats-card-header {
+		@apply mb-3 flex items-start justify-between;
+	}
+
+	.dashboard-stats-card-copy {
+		@apply flex-1;
+	}
+
+	.dashboard-stats-card-title {
+		@apply mb-2 text-xs font-medium uppercase tracking-wide text-text-muted;
+	}
+
+	.dashboard-stats-card-value {
+		@apply text-2xl font-bold text-heading;
+	}
+
+	.dashboard-stats-card-icon {
+		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-lg;
+	}
+
+	.dashboard-stats-card-icon-clicks {
+		@apply bg-blue-500/10 dark:bg-blue-500/20;
+	}
+
+	.dashboard-stats-card-icon-links {
+		@apply bg-emerald-500/10 dark:bg-emerald-500/20;
+	}
+
+	.dashboard-stats-card-icon-rate {
+		@apply bg-purple-500/10 dark:bg-purple-500/20;
+	}
+
+	.dashboard-stats-card-icon-users {
+		@apply bg-orange-500/10 dark:bg-orange-500/20;
+	}
+
+	.dashboard-stats-card-icon-glyph {
+		@apply h-4 w-4;
+	}
+
+	.dashboard-stats-card-icon-glyph-clicks {
+		@apply text-blue-600 dark:text-blue-400;
+	}
+
+	.dashboard-stats-card-icon-glyph-links {
+		@apply text-emerald-600 dark:text-emerald-400;
+	}
+
+	.dashboard-stats-card-icon-glyph-rate {
+		@apply text-purple-600 dark:text-purple-400;
+	}
+
+	.dashboard-stats-card-icon-glyph-users {
+		@apply text-orange-600 dark:text-orange-400;
+	}
+
+	.dashboard-stats-card-change {
+		@apply flex items-center gap-2;
+	}
+
+	.dashboard-stats-card-change-badge {
+		@apply inline-flex items-center gap-1 rounded px-2 py-0.5 text-xs font-semibold;
+	}
+
+	.dashboard-stats-card-change-badge-positive {
+		@apply bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300;
+	}
+
+	.dashboard-stats-card-change-badge-negative {
+		@apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300;
+	}
+
+	.dashboard-stats-card-change-icon {
+		@apply h-3 w-3;
+	}
+
+	.dashboard-stats-card-change-note {
+		@apply text-xs text-text-muted;
+	}
+}

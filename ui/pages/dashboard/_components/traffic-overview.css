@@ -1,0 +1,65 @@
+@layer components {
+	.dashboard-traffic {
+		@apply rounded-lg border border-stroke bg-surface p-5;
+	}
+
+	.dashboard-traffic-header {
+		@apply mb-5 flex items-center justify-between gap-4;
+	}
+
+	.dashboard-traffic-title {
+		@apply text-base font-semibold text-heading;
+	}
+
+	.dashboard-traffic-toolbar {
+		@apply flex items-center gap-6;
+	}
+
+	.dashboard-traffic-chart-toggle {
+		@apply flex rounded-lg bg-surface-alt p-1;
+	}
+
+	.dashboard-traffic-chart-button {
+		@apply rounded-md p-1.5 transition-all;
+	}
+
+	.dashboard-traffic-chart-button-active {
+		@apply bg-surface text-primary-600 shadow-sm dark:text-primary-400;
+	}
+
+	.dashboard-traffic-chart-button-inactive {
+		@apply text-text-muted hover:text-heading;
+	}
+
+	.dashboard-traffic-legend {
+		@apply flex items-center gap-4;
+	}
+
+	.dashboard-traffic-legend-item {
+		@apply flex items-center gap-2 text-sm;
+	}
+
+	.dashboard-traffic-legend-dot {
+		@apply h-2.5 w-2.5 rounded-full;
+	}
+
+	.dashboard-traffic-legend-dot-clicks {
+		@apply bg-primary-600 dark:bg-primary-400;
+	}
+
+	.dashboard-traffic-legend-dot-unique {
+		@apply bg-emerald-600 dark:bg-emerald-500;
+	}
+
+	.dashboard-traffic-legend-text {
+		@apply text-text-muted;
+	}
+
+	.dashboard-traffic-empty {
+		@apply py-8 text-center;
+	}
+
+	.dashboard-traffic-empty-text {
+		@apply text-sm text-text-muted;
+	}
+}

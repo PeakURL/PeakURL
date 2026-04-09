@@ -1,0 +1,66 @@
+@layer components {
+	.dashboard-countries {
+		@apply rounded-lg border border-stroke bg-surface p-5;
+	}
+
+	.dashboard-countries-title {
+		@apply mb-4 text-base font-semibold text-heading;
+	}
+
+	.dashboard-countries-empty {
+		@apply py-8 text-center;
+	}
+
+	.dashboard-countries-empty-text {
+		@apply text-sm text-text-muted;
+	}
+
+	.dashboard-countries-list {
+		@apply space-y-4;
+	}
+
+	.dashboard-countries-row {
+		@apply flex items-center gap-3;
+	}
+
+	.dashboard-countries-row-flag {
+		@apply text-xl;
+	}
+
+	.dashboard-countries-row-copy {
+		@apply min-w-0 flex-1;
+	}
+
+	.dashboard-countries-row-header {
+		@apply mb-2 flex items-center justify-between gap-3;
+	}
+
+	.dashboard-countries-row-name {
+		@apply truncate text-sm font-medium text-heading;
+	}
+
+	.dashboard-countries-row-value {
+		@apply text-sm font-semibold text-text-muted;
+	}
+
+	.dashboard-countries-row-track {
+		@apply h-2 w-full rounded-full bg-surface-alt;
+	}
+
+	.dashboard-countries-row-bar {
+		@apply h-2 rounded-full transition-all duration-300;
+		background-image: linear-gradient(
+			to right,
+			var(--color-primary-600),
+			var(--color-purple-600)
+		);
+	}
+
+	.dark .dashboard-countries-row-bar {
+		background-image: linear-gradient(
+			to right,
+			var(--color-primary-500),
+			var(--color-purple-500)
+		);
+	}
+}

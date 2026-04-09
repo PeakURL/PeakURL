@@ -8,7 +8,10 @@ import {
 	Users,
 } from 'lucide-react';
 import { __ } from '@/i18n';
+import { cn } from '@/utils';
 import type { StatsCardsProps } from './types';
+
+type DashboardStatTone = 'clicks' | 'links' | 'rate' | 'users';
 
 const StatsCards = ({ stats }: StatsCardsProps) => {
 	const statsData = [
@@ -18,8 +21,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
 			change: '+12.3%',
 			changeType: 'positive',
 			icon: MousePointerClick,
-			bgColor: 'bg-blue-500/10 dark:bg-blue-500/20',
-			iconColor: 'text-blue-600 dark:text-blue-400',
+			tone: 'clicks' as DashboardStatTone,
 		},
 		{
 			title: __('Active Links'),
@@ -27,8 +29,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
 			change: `+${((stats.totalLinks || 0) % 5) + 1}`,
 			changeType: 'positive',
 			icon: Link2,
-			bgColor: 'bg-emerald-500/10 dark:bg-emerald-500/20',
-			iconColor: 'text-emerald-600 dark:text-emerald-400',
+			tone: 'links' as DashboardStatTone,
 		},
 		{
 			title: __('Click Rate'),
@@ -36,8 +37,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
 			change: '+0.8%',
 			changeType: 'positive',
 			icon: ChartLine,
-			bgColor: 'bg-purple-500/10 dark:bg-purple-500/20',
-			iconColor: 'text-purple-600 dark:text-purple-400',
+			tone: 'rate' as DashboardStatTone,
 		},
 		{
 			title: __('Unique Visitors'),
@@ -45,54 +45,61 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
 			change: '+15.2%',
 			changeType: 'positive',
 			icon: Users,
-			bgColor: 'bg-orange-500/10 dark:bg-orange-500/20',
-			iconColor: 'text-orange-600 dark:text-orange-400',
+			tone: 'users' as DashboardStatTone,
 		},
 	];
 
+	const getIconClassName = (tone: DashboardStatTone) =>
+		cn(
+			'dashboard-stats-card-icon',
+			`dashboard-stats-card-icon-${tone}`
+		);
+
+	const getIconGlyphClassName = (tone: DashboardStatTone) =>
+		cn(
+			'dashboard-stats-card-icon-glyph',
+			`dashboard-stats-card-icon-glyph-${tone}`
+		);
+
+	const getChangeBadgeClassName = (changeType: string) =>
+		cn(
+			'dashboard-stats-card-change-badge',
+			'positive' === changeType
+				? 'dashboard-stats-card-change-badge-positive'
+				: 'dashboard-stats-card-change-badge-negative'
+		);
+
 	return (
-		<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+		<div className="dashboard-stats-grid">
 			{statsData.map((stat) => {
 				const StatIcon = stat.icon;
 
 				return (
-					<div
-						key={stat.title}
-						className="bg-surface border border-stroke rounded-lg p-4 hover:shadow-md transition-shadow"
-					>
-						<div className="flex items-start justify-between mb-3">
-							<div className="flex-1">
-								<p className="text-xs font-medium text-text-muted uppercase tracking-wide mb-2">
+					<div key={stat.title} className="dashboard-stats-card">
+						<div className="dashboard-stats-card-header">
+							<div className="dashboard-stats-card-copy">
+								<p className="dashboard-stats-card-title">
 									{stat.title}
 								</p>
-								<p className="text-2xl font-bold text-heading">
+								<p className="dashboard-stats-card-value">
 									{stat.value}
 								</p>
 							</div>
-							<div
-								className={`w-10 h-10 rounded-lg ${stat.bgColor} flex items-center justify-center shrink-0`}
-							>
-								<StatIcon
-									className={`h-4 w-4 ${stat.iconColor}`}
-								/>
+							<div className={getIconClassName(stat.tone)}>
+								<StatIcon className={getIconGlyphClassName(stat.tone)} />
 							</div>
 						</div>
-						<div className="flex items-center gap-2">
-							<span
-								className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded ${
-									stat.changeType === 'positive'
-										? 'text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/30'
-										: 'text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-900/30'
-								}`}
-							>
+
+						<div className="dashboard-stats-card-change">
+							<span className={getChangeBadgeClassName(stat.changeType)}>
 								{stat.changeType === 'positive' ? (
-									<ArrowUp className="h-3 w-3" />
+									<ArrowUp className="dashboard-stats-card-change-icon" />
 								) : (
-									<ArrowDown className="h-3 w-3" />
+									<ArrowDown className="dashboard-stats-card-change-icon" />
 								)}
 								{stat.change}
 							</span>
-							<span className="text-xs text-text-muted">
+							<span className="dashboard-stats-card-change-note">
 								{__('vs last month')}
 							</span>
 						</div>

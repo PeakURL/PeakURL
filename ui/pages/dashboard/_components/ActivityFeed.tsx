@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui';
 import { __, sprintf } from '@/i18n';
-import { formatDate, getLinkDisplayTitle } from '@/utils';
+import { cn, formatDate, getLinkDisplayTitle } from '@/utils';
 import { Circle, Link2, MousePointerClick } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { ActivityFeedProps, RecentActivity } from './types';
@@ -34,31 +34,43 @@ const ActivityFeed = ({ recentActivities }: ActivityFeedProps) => {
 		return activity.message || __('Unknown activity');
 	};
 
+	const getActivityIconWrapperClassName = (type?: string | null) =>
+		cn(
+			'dashboard-activity-item-icon',
+			'link_created' === type &&
+				'dashboard-activity-item-icon-link',
+			'click' === type && 'dashboard-activity-item-icon-click',
+			'link_created' !== type &&
+				'click' !== type &&
+				'dashboard-activity-item-icon-default'
+		);
+
 	// Get activity icon
 	const getActivityIcon = (type?: string | null) => {
 		if (type === 'link_created') {
 			return (
-				<Link2 className="w-3 h-3 text-primary-600 dark:text-primary-400" />
+				<Link2 className="dashboard-activity-item-icon-glyph" />
 			);
 		} else if (type === 'click') {
 			return (
-				<MousePointerClick className="w-3 h-3 text-primary-600 dark:text-primary-400" />
+				<MousePointerClick className="dashboard-activity-item-icon-glyph" />
 			);
 		}
 		return (
-			<Circle className="h-2 w-2 fill-current stroke-0 text-primary-600 dark:text-primary-400" />
+			<Circle className="dashboard-activity-item-icon-dot" />
 		);
 	};
 
 	return (
-		<div className="bg-surface border border-stroke rounded-lg p-5 flex flex-col">
-			<h3 className="text-base font-semibold text-heading mb-4">
+		<div className="dashboard-activity">
+			<h3 className="dashboard-activity-title">
 				{__('Recent Activity')}
 			</h3>
-			<div className="flex-1 space-y-3.5 overflow-y-auto max-h-96">
+
+			<div className="dashboard-activity-list">
 				{recentActivities.length === 0 ? (
-					<div className="text-center py-8">
-						<p className="text-sm text-text-muted">
+					<div className="dashboard-activity-empty">
+						<p className="dashboard-activity-empty-text">
 							{__('No recent activity')}
 						</p>
 					</div>
@@ -67,16 +79,21 @@ const ActivityFeed = ({ recentActivities }: ActivityFeedProps) => {
 						(activity: RecentActivity, index: number) => (
 							<div
 								key={activity.id || index}
-								className="flex gap-2.5"
+								className="dashboard-activity-item"
 							>
-								<div className="w-6 h-6 rounded-full bg-primary-500/10 dark:bg-primary-500/20 flex items-center justify-center shrink-0 mt-0.5">
+								<div
+									className={getActivityIconWrapperClassName(
+										activity.type
+									)}
+								>
 									{getActivityIcon(activity.type)}
 								</div>
-								<div className="flex-1 min-w-0">
-									<p className="text-sm text-heading leading-relaxed">
+
+								<div className="dashboard-activity-item-copy">
+									<p className="dashboard-activity-item-title">
 										{formatActivityMessage(activity)}
 									</p>
-									<p className="text-xs text-text-muted mt-1">
+									<p className="dashboard-activity-item-meta">
 										{formatDate(activity.timestamp)}
 									</p>
 								</div>
@@ -85,8 +102,13 @@ const ActivityFeed = ({ recentActivities }: ActivityFeedProps) => {
 					)
 				)}
 			</div>
-			<Link to="/dashboard/links" className="mt-4">
-				<Button variant="ghost" className="w-full" size="sm">
+
+			<Link to="/dashboard/links" className="dashboard-activity-link">
+				<Button
+					variant="ghost"
+					className="dashboard-activity-button"
+					size="sm"
+				>
 					{__('View All Links')}
 				</Button>
 			</Link>

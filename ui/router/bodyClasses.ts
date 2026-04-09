@@ -140,12 +140,18 @@ function getDashboardBodyClassNames(pathname: string): string[] {
 		return classes;
 	}
 
-	classes.push('dashboard-route-page');
+	classes.push('dashboard-not-found-page', 'not-found-page');
 	return classes;
 }
 
 function getPageSlug(classes: string[]): string {
-	const pageClass = classes.find((className) => className.endsWith('-page'));
+	const pageClass = classes.find(
+		(className) =>
+			className.endsWith('-page') &&
+			!['app-page', 'public-page', 'auth-page', 'dashboard-page'].includes(
+				className
+			)
+	);
 	return pageClass || 'default-page';
 }
 

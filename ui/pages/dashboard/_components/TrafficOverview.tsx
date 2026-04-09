@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { TrafficChart } from '@/components';
 import { BarChart3, LineChart } from 'lucide-react';
 import { __ } from '@/i18n';
+import { cn } from '@/utils';
 import type { TrafficChartType } from '@/components/charts/types';
 import type { TrafficOverviewProps } from './types';
 
@@ -18,48 +19,53 @@ const TrafficOverview = ({ trafficData }: TrafficOverviewProps) => {
 		(trafficData.clicks.some((val: number) => val > 0) ||
 			trafficData.unique.some((val: number) => val > 0));
 
+	const getChartButtonClassName = (isActive: boolean) =>
+		cn(
+			'dashboard-traffic-chart-button',
+			isActive
+				? 'dashboard-traffic-chart-button-active'
+				: 'dashboard-traffic-chart-button-inactive'
+		);
+
 	return (
-		<div className="bg-surface border border-stroke rounded-lg p-5">
-			<div className="flex items-center justify-between mb-5">
-				<h3 className="text-base font-semibold text-heading">
+		<div className="dashboard-traffic">
+			<div className="dashboard-traffic-header">
+				<h3 className="dashboard-traffic-title">
 					{__('Traffic Overview')}
 				</h3>
 				{hasData && (
-					<div className="flex items-center gap-6">
-						<div className="flex bg-surface-alt rounded-lg p-1">
+					<div className="dashboard-traffic-toolbar">
+						<div className="dashboard-traffic-chart-toggle">
 							<button
 								onClick={() => setChartType('line')}
-								className={`p-1.5 rounded-md transition-all ${
-									chartType === 'line'
-										? 'bg-surface shadow-sm text-primary-600 dark:text-primary-400'
-										: 'text-text-muted hover:text-heading'
-								}`}
+								className={getChartButtonClassName(
+									'line' === chartType
+								)}
 								title={__('Line Chart')}
 							>
 								<LineChart size={16} />
 							</button>
 							<button
 								onClick={() => setChartType('bar')}
-								className={`p-1.5 rounded-md transition-all ${
-									chartType === 'bar'
-										? 'bg-surface shadow-sm text-primary-600 dark:text-primary-400'
-										: 'text-text-muted hover:text-heading'
-								}`}
+								className={getChartButtonClassName(
+									'bar' === chartType
+								)}
 								title={__('Bar Chart')}
 							>
 								<BarChart3 size={16} />
 							</button>
 						</div>
-						<div className="flex items-center gap-4">
-							<div className="flex items-center gap-2 text-sm">
-								<div className="w-2.5 h-2.5 rounded-full bg-primary-600 dark:bg-primary-400"></div>
-								<span className="text-text-muted">
+
+						<div className="dashboard-traffic-legend">
+							<div className="dashboard-traffic-legend-item">
+								<div className="dashboard-traffic-legend-dot dashboard-traffic-legend-dot-clicks"></div>
+								<span className="dashboard-traffic-legend-text">
 									{__('Clicks')}
 								</span>
 							</div>
-							<div className="flex items-center gap-2 text-sm">
-								<div className="w-2.5 h-2.5 rounded-full bg-emerald-600 dark:bg-emerald-500"></div>
-								<span className="text-text-muted">
+							<div className="dashboard-traffic-legend-item">
+								<div className="dashboard-traffic-legend-dot dashboard-traffic-legend-dot-unique"></div>
+								<span className="dashboard-traffic-legend-text">
 									{__('Unique')}
 								</span>
 							</div>
@@ -67,11 +73,12 @@ const TrafficOverview = ({ trafficData }: TrafficOverviewProps) => {
 					</div>
 				)}
 			</div>
+
 			{hasData ? (
 				<TrafficChart data={trafficData} type={chartType} />
 			) : (
-				<div className="text-center py-8">
-					<p className="text-sm text-text-muted">
+				<div className="dashboard-traffic-empty">
+					<p className="dashboard-traffic-empty-text">
 						{__('No traffic data available')}
 					</p>
 				</div>

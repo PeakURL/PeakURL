@@ -1,0 +1,17 @@
+@layer components {
+	.dashboard-page {
+		@apply space-y-6 pb-8;
+	}
+
+	.dashboard-page-traffic-grid {
+		@apply grid grid-cols-1 gap-5 xl:grid-cols-3;
+	}
+
+	.dashboard-page-traffic-main {
+		@apply xl:col-span-2;
+	}
+
+	.dashboard-page-summary-grid {
+		@apply grid grid-cols-1 gap-5 md:grid-cols-2;
+	}
+}

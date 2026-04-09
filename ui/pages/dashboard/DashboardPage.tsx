@@ -77,19 +77,19 @@ function DashboardPage() {
 	const trafficData = normalizeTrafficSeries(analyticsRes?.data?.traffic);
 
 	return (
-		<div className="space-y-6 pb-8">
+		<div className="dashboard-page">
 			<Header timeRange={timeRange} onTimeRangeChange={setTimeRange} />
 
 			<StatsCards stats={stats} />
 
-			<div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
-				<div className="xl:col-span-2">
+			<div className="dashboard-page-traffic-grid">
+				<div className="dashboard-page-traffic-main">
 					<TrafficOverview trafficData={trafficData} />
 				</div>
 				<ActivityFeed recentActivities={recentActivities} />
 			</div>
 
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+			<div className="dashboard-page-summary-grid">
 				<DeviceBreakdown deviceData={deviceData} />
 				<CountryStats countryData={countryData} />
 			</div>

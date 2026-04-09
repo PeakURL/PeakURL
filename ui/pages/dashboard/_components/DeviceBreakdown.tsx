@@ -1,4 +1,5 @@
 import { __ } from '@/i18n';
+import { cn } from '@/utils';
 import type {
 	DeviceBreakdownProps,
 	DeviceColorKey,
@@ -17,9 +18,9 @@ const DeviceBreakdown = ({ deviceData }: DeviceBreakdownProps) => {
 	);
 
 	const deviceColors: Record<DeviceColorKey, string> = {
-		mobile: 'bg-blue-600 dark:bg-blue-500',
-		desktop: 'bg-purple-600 dark:bg-purple-500',
-		tablet: 'bg-emerald-600 dark:bg-emerald-500',
+		mobile: 'mobile',
+		desktop: 'desktop',
+		tablet: 'tablet',
 	};
 
 	const noData =
@@ -43,37 +44,44 @@ const DeviceBreakdown = ({ deviceData }: DeviceBreakdownProps) => {
 					color:
 						deviceColors[
 							device.name.toLowerCase() as DeviceColorKey
-						] || 'bg-gray-500',
+						] || 'default',
 				}))
 			: [];
 
+	const getDeviceBarClassName = (color: string) =>
+		cn('dashboard-devices-item-bar', `dashboard-devices-item-bar-${color}`);
+
 	return (
-		<div className="bg-surface border border-stroke rounded-lg p-5">
-			<h3 className="text-base font-semibold text-heading mb-4">
+		<div className="dashboard-devices">
+			<h3 className="dashboard-devices-title">
 				{__('Device Breakdown')}
 			</h3>
+
 			{noData ? (
-				<div className="text-center py-8">
-					<p className="text-sm text-text-muted">
+				<div className="dashboard-devices-empty">
+					<p className="dashboard-devices-empty-text">
 						{__('No device data available')}
 					</p>
 				</div>
 			) : (
 				<>
-					<div className="space-y-4">
+					<div className="dashboard-devices-list">
 						{formattedDevices.map((device, index: number) => (
-							<div key={index}>
-								<div className="flex items-center justify-between mb-2">
-									<span className="text-sm font-medium text-heading">
+							<div key={index} className="dashboard-devices-item">
+								<div className="dashboard-devices-item-header">
+									<span className="dashboard-devices-item-name">
 										{device.name}
 									</span>
-									<span className="text-sm font-semibold text-text-muted">
+									<span className="dashboard-devices-item-value">
 										{device.value}% ({device.count})
 									</span>
 								</div>
-								<div className="w-full bg-surface-alt rounded-full h-2">
+
+								<div className="dashboard-devices-item-track">
 									<div
-										className={`${device.color} h-2 rounded-full transition-all duration-300`}
+										className={getDeviceBarClassName(
+											device.color
+										)}
 										style={{ width: `${device.value}%` }}
 									></div>
 								</div>
@@ -82,11 +90,12 @@ const DeviceBreakdown = ({ deviceData }: DeviceBreakdownProps) => {
 					</div>
 
 					{browsers.length > 0 && (
-						<div className="mt-6 pt-6 border-t border-stroke">
-							<h4 className="text-sm font-semibold text-heading mb-3">
+						<div className="dashboard-devices-section">
+							<h4 className="dashboard-devices-section-title">
 								{__('Top Browsers')}
 							</h4>
-							<div className="space-y-2">
+
+							<div className="dashboard-devices-section-list">
 								{browsers
 									.slice(0, 5)
 									.map(
@@ -96,12 +105,12 @@ const DeviceBreakdown = ({ deviceData }: DeviceBreakdownProps) => {
 										) => (
 											<div
 												key={index}
-												className="flex items-center justify-between text-sm"
+												className="dashboard-devices-section-row"
 											>
-												<span className="text-text-muted">
+												<span className="dashboard-devices-section-label">
 													{browser.name}
 												</span>
-												<span className="font-medium text-heading">
+												<span className="dashboard-devices-section-count">
 													{browser.count}
 												</span>
 											</div>
@@ -112,22 +121,23 @@ const DeviceBreakdown = ({ deviceData }: DeviceBreakdownProps) => {
 					)}
 
 					{operatingSystems.length > 0 && (
-						<div className="mt-6 pt-6 border-t border-stroke">
-							<h4 className="text-sm font-semibold text-heading mb-3">
+						<div className="dashboard-devices-section">
+							<h4 className="dashboard-devices-section-title">
 								{__('Top Operating Systems')}
 							</h4>
-							<div className="space-y-2">
+
+							<div className="dashboard-devices-section-list">
 								{operatingSystems
 									.slice(0, 5)
 									.map((os: MetricItem, index: number) => (
 										<div
 											key={index}
-											className="flex items-center justify-between text-sm"
+											className="dashboard-devices-section-row"
 										>
-											<span className="text-text-muted">
+											<span className="dashboard-devices-section-label">
 												{os.name}
 											</span>
-											<span className="font-medium text-heading">
+											<span className="dashboard-devices-section-count">
 												{os.count}
 											</span>
 										</div>

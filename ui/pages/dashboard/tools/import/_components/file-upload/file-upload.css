@@ -1,0 +1,17 @@
+@layer components {
+	.import-file-grid {
+		@apply grid grid-cols-1 gap-5 xl:grid-cols-2;
+	}
+
+	.import-file-main {
+		@apply space-y-5;
+	}
+
+	.import-file-panel {
+		@apply min-w-0;
+	}
+
+	.import-file-sidebar {
+		@apply space-y-5;
+	}
+}

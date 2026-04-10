@@ -1,0 +1,5 @@
+@layer components {
+	.import-page {
+		@apply min-w-0;
+	}
+}

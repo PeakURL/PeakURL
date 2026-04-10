@@ -1,0 +1,17 @@
+@layer components {
+	.import-layout-tabs {
+		@apply flex items-center gap-1 border-b border-stroke;
+	}
+
+	.import-layout-tab {
+		@apply -mb-px flex items-center gap-2 border-b-2 border-transparent px-5 py-2.5 text-sm font-medium text-text-muted transition-all hover:border-stroke hover:text-heading;
+	}
+
+	.import-layout-tab-active {
+		@apply border-accent text-accent;
+	}
+
+	.import-layout-tab-icon {
+		@apply h-4 w-4;
+	}
+}

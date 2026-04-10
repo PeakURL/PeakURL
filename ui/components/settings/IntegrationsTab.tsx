@@ -21,7 +21,11 @@ import {
 } from '@/store/slices/api';
 import { isDocumentRtl } from '@/i18n/direction';
 import { __, sprintf } from '@/i18n';
-import { copyToClipboard as writeToClipboard, getErrorMessage } from '@/utils';
+import {
+	cn,
+	copyToClipboard as writeToClipboard,
+	getErrorMessage,
+} from '@/utils';
 import type {
 	CreatedWebhook,
 	IntegrationsTabProps,
@@ -133,17 +137,17 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 	};
 
 	return (
-		<div className="space-y-5">
-			<div className="bg-surface border border-(--color-stroke) rounded-lg p-5">
-				<div className="flex items-center gap-3">
-					<div className="w-10 h-10 rounded-xl bg-primary-500/10 flex items-center justify-center">
-						<WebhookIcon className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+		<div className="integrations-tab">
+			<div className="integrations-tab-intro">
+				<div className="integrations-tab-intro-row">
+					<div className="integrations-tab-intro-icon">
+						<WebhookIcon className="integrations-tab-intro-icon-glyph" />
 					</div>
-					<div>
-						<h2 className="text-base font-semibold text-heading">
+					<div className="integrations-tab-intro-copy">
+						<h2 className="integrations-tab-intro-title">
 							{__('Integrations')}
 						</h2>
-						<p className="text-sm text-muted mt-0.5">
+						<p className="integrations-tab-intro-description">
 							{__(
 								'Connect PeakURL to your automations with outbound webhooks for link activity.'
 							)}
@@ -152,13 +156,13 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 				</div>
 			</div>
 
-			<div className="bg-surface border border-(--color-stroke) rounded-lg p-5">
-				<div className="mb-5 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-					<div className="text-inline-start">
-						<h3 className="text-base font-semibold text-heading">
+			<div className="integrations-tab-panel">
+				<div className="integrations-tab-panel-header">
+					<div className="integrations-tab-panel-copy">
+						<h3 className="integrations-tab-panel-title">
 							{__('Webhooks')}
 						</h3>
-						<p className="mt-1 max-w-2xl text-sm leading-6 text-text-muted">
+						<p className="integrations-tab-panel-description">
 							{__(
 								'PeakURL sends signed POST requests to your endpoint when selected link events happen.'
 							)}
@@ -169,24 +173,24 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 						target="_blank"
 						rel="noreferrer"
 						dir={direction}
-						className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline"
+						className="integrations-tab-docs-link"
 					>
 						{__('Webhook docs')}
 						<ExternalLink size={14} />
 					</a>
 				</div>
 
-				<div className="bg-surface-alt rounded-lg p-4 mb-6 border border-(--color-stroke)">
-					<h4 className="text-sm font-semibold text-heading mb-3">
+				<div className="integrations-tab-form">
+					<h4 className="integrations-tab-form-title">
 						{__('Add New Webhook')}
 					</h4>
-					<p className="mb-4 text-sm leading-6 text-text-muted">
+					<p className="integrations-tab-form-description">
 						{__(
 							'Choose which events should trigger a delivery, then save the signing secret somewhere secure when it is shown.'
 						)}
 					</p>
 
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+					<div className="integrations-tab-form-grid">
 						<div>
 							<Input
 								label={__('Endpoint URL')}
@@ -204,30 +208,28 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 									}))
 								}
 							/>
-							<div className="mt-2 space-y-1.5 text-xs leading-5 text-text-muted">
+							<div className="integrations-tab-endpoint-help">
 								<p>
 									{__(
 										'Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route like'
 									)}
 								</p>
-								<code
-									className="preserve-ltr-value block w-fit max-w-full rounded bg-surface px-1.5 py-0.5 text-[11px]"
-								>
+								<code className="integrations-tab-endpoint-code">
 									https://example.com/api/webhooks/peakurl
 								</code>
 							</div>
 						</div>
 
 						<div>
-							<label className="block text-sm font-medium text-muted mb-1">
+							<label className="integrations-tab-field-label">
 								{__('Events')}
 							</label>
-							<div className="grid grid-cols-2 gap-2">
+							<div className="integrations-tab-events-grid">
 								{eventOptions.map((event) => (
 									<label
 										key={event.id}
 										dir={direction}
-										className="flex items-center gap-2 text-sm text-muted cursor-pointer select-none"
+										className="integrations-tab-event-option"
 									>
 										<input
 											type="checkbox"
@@ -246,9 +248,10 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 					</div>
 
 					<div
-						className={`mt-4 flex ${
-							isRtl ? 'justify-start' : 'justify-end'
-						}`}
+						className={cn(
+							'integrations-tab-form-actions',
+							isRtl && 'integrations-tab-form-actions-rtl'
+						)}
 					>
 						<Button
 							size="sm"
@@ -265,76 +268,74 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 				</div>
 
 				{isLoading ? (
-					<div className="text-sm text-muted">
+					<div className="integrations-tab-status-copy">
 						{__('Loading webhooks…')}
 					</div>
 				) : error ? (
-					<div className="text-sm text-red-600 dark:text-red-400">
+					<div className="integrations-tab-status-copy integrations-tab-status-copy-error">
 						{getErrorMessage(error, __('Failed to load webhooks'))}
 					</div>
 				) : webhooks.length === 0 ? (
-					<div className="text-center py-8 bg-surface-alt rounded-lg border border-dashed border-(--color-stroke)">
-						<WebhookIcon className="w-8 h-8 mx-auto text-muted mb-3" />
-						<h4 className="text-sm font-medium text-heading mb-1">
+					<div className="integrations-tab-empty">
+						<WebhookIcon className="integrations-tab-empty-icon" />
+						<h4 className="integrations-tab-empty-title">
 							{__('No Webhooks Configured')}
 						</h4>
-						<p className="text-xs text-muted">
+						<p className="integrations-tab-empty-copy">
 							{__(
 								'Add a webhook to receive link events in real time.'
 							)}
 						</p>
 					</div>
 				) : (
-					<div className="space-y-3">
+					<div className="integrations-tab-list">
 						{webhooks.map((wh) => (
 							<div
 								key={wh.id}
-								className="p-4 border border-(--color-stroke) rounded-lg"
+								className="integrations-tab-item"
 							>
 								<div
 									dir={direction}
-									className="flex items-start justify-between gap-4"
+									className="integrations-tab-item-row"
 								>
-									<div className="text-inline-start min-w-0 flex-1">
-										<p
-											className="preserve-ltr-value truncate text-sm font-medium text-heading"
-										>
+									<div className="integrations-tab-item-content">
+										<p className="integrations-tab-item-url">
 											{wh.url}
 										</p>
-										<div className="flex flex-wrap gap-1.5 mt-2">
+										<div className="integrations-tab-item-events">
 											{(wh.events || []).map((evt) => (
 												<span
 													key={evt}
-													className="text-xs px-2 py-0.5 rounded bg-accent/10 dark:bg-accent/20 text-accent"
+													className="integrations-tab-item-event-pill"
 												>
 													{evt}
 												</span>
 											))}
 											{!wh.isActive && (
-												<span className="text-xs px-2 py-0.5 rounded bg-surface-alt text-text-muted">
+												<span className="integrations-tab-item-state-pill">
 													{__('Inactive')}
 												</span>
 											)}
 										</div>
 
-										<div className="mt-3 flex items-center gap-2">
+										<div className="integrations-tab-item-secret">
 											{wh.secretHint ? (
 												<span
-													className="preserve-ltr-value text-xs text-muted font-mono truncate"
+													className="integrations-tab-item-secret-value"
 												>
 													{wh.secretHint}
 												</span>
 											) : (
-												<span className="text-xs text-muted">
+												<span className="integrations-tab-item-secret-copy">
 													{__('Signing secret stored')}
 												</span>
 											)}
 										</div>
 
 										{wh.createdAt && (
-											<p className="text-xs text-muted mt-2">
+											<p className="integrations-tab-item-created">
 												{__('Created:')}{' '}
-												<bdi className="preserve-ltr-value inline-block">
+												<bdi className="integrations-tab-item-created-value">
 													{new Date(
 														wh.createdAt
 													).toLocaleDateString()}
@@ -344,7 +345,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 									</div>
 
 									<button
-										className="p-2 text-muted hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+										className="integrations-tab-item-delete"
 										aria-label={__('Delete webhook')}
 										onClick={() =>
 											setWebhookPendingDelete(wh)
@@ -367,27 +368,27 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 				title={__('Copy Your Webhook Secret')}
 				size="md"
 			>
-				<div className="space-y-5">
-					<div className="rounded-xl border border-blue-500/20 bg-blue-500/10 px-4 py-3">
-						<p className="text-sm font-medium text-blue-700 dark:text-blue-300">
+				<div className="integrations-tab-secret-modal">
+					<div className="integrations-tab-secret-notice">
+						<p className="integrations-tab-secret-notice-title">
 							{__('This signing secret will not be shown again.')}
 						</p>
-						<p className="mt-1 text-xs leading-5 text-blue-700 dark:text-blue-300">
+						<p className="integrations-tab-secret-notice-copy">
 							{__(
 								'Store it in your automation tool or secret manager before closing this window.'
 							)}
 						</p>
 					</div>
 
-					<div className="rounded-lg border border-stroke bg-surface-alt p-4">
-						<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
+					<div className="integrations-tab-secret-endpoint">
+						<p className="integrations-tab-secret-endpoint-label">
 							{__('Endpoint URL')}
 						</p>
 						<ReadOnlyValueBlock
 							value={createdWebhook?.url}
-							className="mt-2 border-0 bg-transparent p-0 shadow-none"
+							className="integrations-tab-secret-endpoint-value"
 							monospace={false}
-							valueClassName="text-sm font-medium"
+							valueClassName="integrations-tab-secret-endpoint-text"
 						/>
 					</div>
 
@@ -402,16 +403,17 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 						copyButtonLabel={__('Copy to clipboard')}
 					/>
 
-					<p className="text-sm text-text-muted">
+					<p className="integrations-tab-secret-copy">
 						{__(
 							'If this secret is ever exposed, delete the webhook and create a new one.'
 						)}
 					</p>
 
 					<div
-						className={`flex gap-2 ${
-							isRtl ? 'justify-start' : 'justify-end'
-						}`}
+						className={cn(
+							'integrations-tab-secret-actions',
+							isRtl && 'integrations-tab-secret-actions-rtl'
+						)}
 					>
 						<Button
 							variant="secondary"

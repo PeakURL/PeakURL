@@ -1,0 +1,13 @@
+@layer components {
+	.import-layout-header {
+		@apply space-y-1;
+	}
+
+	.import-layout-title {
+		@apply text-2xl font-bold text-heading;
+	}
+
+	.import-layout-copy {
+		@apply text-sm text-text-muted;
+	}
+}

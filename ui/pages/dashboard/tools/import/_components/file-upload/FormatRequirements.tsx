@@ -55,19 +55,19 @@ function FormatRequirements() {
 	};
 
 	return (
-		<div className="bg-surface border border-stroke rounded-lg p-5">
-			<h3 className="text-base font-semibold text-heading mb-4">
+		<div className="import-panel import-format-panel">
+			<h3 className="import-panel-title import-format-title">
 				{__('File Format Requirements')}
 			</h3>
-			<div className="space-y-4">
-				<div>
-					<h4 className="font-medium text-sm text-heading mb-2">
+			<div className="import-format-sections">
+				<div className="import-format-section">
+					<h4 className="import-format-section-title">
 						{__('Required Fields')}
 					</h4>
-					<ul className="text-sm text-text-muted space-y-1">
-						<li>
+					<ul className="import-format-list">
+						<li className="import-format-item">
 							•{' '}
-							<code className="px-1.5 py-0.5 bg-surface-alt rounded text-xs">
+							<code className="import-inline-code">
 								url
 							</code>{' '}
 							{__(
@@ -76,40 +76,40 @@ function FormatRequirements() {
 						</li>
 					</ul>
 				</div>
-				<div>
-					<h4 className="font-medium text-sm text-heading mb-2">
+				<div className="import-format-section">
+					<h4 className="import-format-section-title">
 						{__('Optional Fields')}
 					</h4>
-					<ul className="text-sm text-text-muted space-y-1">
-						<li>
+					<ul className="import-format-list">
+						<li className="import-format-item">
 							•{' '}
-							<code className="px-1.5 py-0.5 bg-surface-alt rounded text-xs">
+							<code className="import-inline-code">
 								alias
 							</code>{' '}
 							{__(' - Custom alias')}
 						</li>
-						<li>
+						<li className="import-format-item">
 							•{' '}
-							<code className="px-1.5 py-0.5 bg-surface-alt rounded text-xs">
+							<code className="import-inline-code">
 								title
 							</code>{' '}
 							{__(' - Link title')}
 						</li>
-						<li>
+						<li className="import-format-item">
 							•{' '}
-							<code className="px-1.5 py-0.5 bg-surface-alt rounded text-xs">
+							<code className="import-inline-code">
 								password
 							</code>{' '}
 							{__(' - Protection password')}
 						</li>
-						<li>
+						<li className="import-format-item">
 							•{' '}
-							<code className="px-1.5 py-0.5 bg-surface-alt rounded text-xs">
+							<code className="import-inline-code">
 								expires
 							</code>{' '}
 							{__(' - Date (YYYY-MM-DD)')}
 						</li>
-						<li>
+						<li className="import-format-item">
 							{__(
 								'• Additional columns are ignored during import, so PeakURL exports can be imported again later.'
 							)}
@@ -117,13 +117,13 @@ function FormatRequirements() {
 					</ul>
 				</div>
 			</div>
-			<div className="mt-4 flex flex-wrap gap-2">
+			<div className="import-format-actions">
 				<Button
 					variant="secondary"
 					size="sm"
 					onClick={() => handleDownloadSample('csv')}
 				>
-					<Download className="h-4 w-4" />
+					<Download className="import-format-button-icon" />
 					CSV
 				</Button>
 				<Button
@@ -131,7 +131,7 @@ function FormatRequirements() {
 					size="sm"
 					onClick={() => handleDownloadSample('json')}
 				>
-					<Download className="h-4 w-4" />
+					<Download className="import-format-button-icon" />
 					JSON
 				</Button>
 				<Button
@@ -139,7 +139,7 @@ function FormatRequirements() {
 					size="sm"
 					onClick={() => handleDownloadSample('xml')}
 				>
-					<Download className="h-4 w-4" />
+					<Download className="import-format-button-icon" />
 					XML
 				</Button>
 			</div>

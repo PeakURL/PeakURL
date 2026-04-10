@@ -1,0 +1,41 @@
+@layer components {
+	.import-layout {
+		@apply space-y-5;
+	}
+
+	.import-panel {
+		@apply rounded-lg border border-stroke bg-surface p-5;
+	}
+
+	.import-panel-title {
+		@apply mb-3 text-base font-semibold text-heading;
+	}
+
+	.import-panel-copy {
+		@apply mb-5 text-sm text-text-muted;
+	}
+
+	.import-section-title {
+		@apply mb-3 text-sm font-medium text-heading;
+	}
+
+	.import-field-label {
+		@apply mb-2 block text-sm font-medium text-heading;
+	}
+
+	.import-inline-code {
+		@apply rounded bg-surface-alt px-1.5 py-0.5 text-xs text-heading;
+	}
+
+	.import-status-panel {
+		@apply py-8 text-center;
+	}
+
+	.import-status-icon {
+		@apply mx-auto mb-3 h-8 w-8 animate-spin text-accent;
+	}
+
+	.import-status-copy {
+		@apply text-sm text-text-muted;
+	}
+}

@@ -7,21 +7,21 @@ const ApiImport = () => {
 	const apiKey = 'YOUR_API_KEY';
 
 	return (
-		<div className="bg-surface border border-stroke rounded-lg p-5">
-			<h2 className="text-base font-semibold text-heading mb-3">
+		<div className="import-panel import-api-panel">
+			<h2 className="import-panel-title">
 				{__('API Import')}
 			</h2>
-			<p className="text-sm text-text-muted mb-5">
+			<p className="import-panel-copy">
 				{__(
 					'Use our API to programmatically import multiple URLs. Perfect for integrations and automated workflows.'
 				)}
 			</p>
-			<div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-				<div>
-					<h3 className="font-medium text-sm text-heading mb-3">
+			<div className="import-api-grid">
+				<div className="import-api-column">
+					<h3 className="import-section-title">
 						{__('Example Request')}
 					</h3>
-					<pre className="preserve-ltr-value overflow-x-auto rounded-lg border border-gray-700 bg-gray-900 p-4 text-xs text-gray-100">
+					<pre className="import-api-code-block">
 						<code>{`POST ${API_SERVER_BASE_URL}/urls/bulk
 Authorization: Bearer ${apiKey}
 Content-Type: application/json
@@ -43,11 +43,11 @@ Content-Type: application/json
 }`}</code>
 					</pre>
 				</div>
-				<div>
-					<h3 className="font-medium text-sm text-heading mb-3">
+				<div className="import-api-column">
+					<h3 className="import-section-title">
 						{__('Response')}
 					</h3>
-					<pre className="preserve-ltr-value overflow-x-auto rounded-lg border border-gray-700 bg-gray-900 p-4 text-xs text-gray-100">
+					<pre className="import-api-code-block">
 						<code>{`{
   "success": true,
   "data": {
@@ -70,14 +70,14 @@ Content-Type: application/json
 					</pre>
 				</div>
 			</div>
-			<div className="mt-5">
+			<div className="import-api-actions">
 				<a
 					href="https://peakurl.org/docs/api/links"
 					target="_blank"
 					rel="noreferrer"
 				>
 					<Button size="sm">
-						<ExternalLink className="h-4 w-4" />
+						<ExternalLink className="import-api-button-icon" />
 						{__('View API Documentation')}
 					</Button>
 				</a>

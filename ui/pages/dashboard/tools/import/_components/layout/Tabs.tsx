@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
+import { cn } from '@/utils';
 import type { ImportTab, TabsProps } from '../types';
 
 const Tabs = ({ tabs, activeTab }: TabsProps) => {
 	return (
-		<div className="flex items-center gap-1 border-b border-stroke">
+		<div className="import-layout-tabs">
 			{tabs.map((tab: ImportTab) => {
 				const TabIcon = tab.icon;
 
@@ -11,13 +12,12 @@ const Tabs = ({ tabs, activeTab }: TabsProps) => {
 					<Link
 						key={tab.id}
 						to={`/dashboard/tools/import/${tab.id}`}
-						className={`flex items-center gap-2 px-5 py-2.5 text-sm font-medium transition-all border-b-2 -mb-px ${
-							activeTab === tab.id
-								? 'border-accent text-accent'
-								: 'border-transparent text-text-muted hover:text-heading hover:border-stroke'
-						}`}
+						className={cn(
+							'import-layout-tab',
+							activeTab === tab.id && 'import-layout-tab-active'
+						)}
 					>
-						<TabIcon className="h-4 w-4" />
+						<TabIcon className="import-layout-tab-icon" />
 						{tab.name}
 					</Link>
 				);

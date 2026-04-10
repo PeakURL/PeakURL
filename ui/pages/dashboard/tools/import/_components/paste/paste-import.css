@@ -1,0 +1,60 @@
+@layer components {
+	.import-paste {
+		@apply space-y-5;
+	}
+
+	.import-paste-panel {
+		@apply min-w-0;
+	}
+
+	.import-paste-grid {
+		@apply grid grid-cols-1 gap-5 lg:grid-cols-2;
+	}
+
+	.import-paste-textarea {
+		@apply h-64 w-full resize-none rounded-lg border border-stroke bg-surface-alt px-4 py-3 font-mono text-sm text-heading outline-none transition-colors;
+	}
+
+	.import-paste-textarea::placeholder {
+		color: var(--color-text-muted);
+	}
+
+	.import-paste-textarea:focus {
+		@apply border-accent ring-2 ring-accent;
+	}
+
+	.import-paste-actions {
+		@apply mt-4 flex items-end;
+	}
+
+	.import-paste-action-icon {
+		@apply h-4 w-4;
+	}
+
+	.import-paste-tips {
+		@apply rounded-lg border border-amber-500/20 bg-amber-500/10 p-4 dark:border-amber-500/30 dark:bg-amber-500/20;
+	}
+
+	.import-paste-tips-list {
+		@apply space-y-2.5 text-sm text-heading;
+	}
+
+	.import-paste-tip {
+		@apply flex items-start gap-2;
+	}
+
+	.import-paste-tip-icon {
+		@apply mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400;
+	}
+
+	.import-paste-tip-content {
+		@apply space-y-1;
+	}
+
+	.import-paste-tip-format {
+		@apply flex flex-wrap items-center gap-2 text-xs;
+		direction: ltr;
+		text-align: start;
+		unicode-bidi: plaintext;
+	}
+}

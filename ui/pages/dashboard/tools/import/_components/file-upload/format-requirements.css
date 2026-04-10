@@ -1,0 +1,33 @@
+@layer components {
+	.import-format-panel {
+		@apply min-w-0;
+	}
+
+	.import-format-title {
+		@apply mb-4;
+	}
+
+	.import-format-sections {
+		@apply space-y-4;
+	}
+
+	.import-format-section-title {
+		@apply mb-2 text-sm font-medium text-heading;
+	}
+
+	.import-format-list {
+		@apply space-y-1 text-sm text-text-muted;
+	}
+
+	.import-format-item {
+		@apply leading-6;
+	}
+
+	.import-format-actions {
+		@apply mt-4 flex flex-wrap gap-2;
+	}
+
+	.import-format-button-icon {
+		@apply h-4 w-4;
+	}
+}

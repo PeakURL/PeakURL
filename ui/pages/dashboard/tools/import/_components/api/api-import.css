@@ -1,0 +1,28 @@
+@layer components {
+	.import-api-panel {
+		@apply min-w-0;
+	}
+
+	.import-api-grid {
+		@apply grid grid-cols-1 gap-5 lg:grid-cols-2;
+	}
+
+	.import-api-column {
+		@apply min-w-0;
+	}
+
+	.import-api-code-block {
+		@apply overflow-x-auto rounded-lg border border-gray-700 bg-gray-900 p-4 text-xs text-gray-100;
+		direction: ltr;
+		text-align: start;
+		unicode-bidi: plaintext;
+	}
+
+	.import-api-actions {
+		@apply mt-5;
+	}
+
+	.import-api-button-icon {
+		@apply h-4 w-4;
+	}
+}

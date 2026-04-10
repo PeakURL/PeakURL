@@ -1,0 +1,37 @@
+@layer components {
+	.import-file-dropzone-wrapper {
+		@apply min-w-0;
+	}
+
+	.import-file-dropzone {
+		@apply rounded-lg border-2 border-dashed p-8 text-center transition-colors;
+	}
+
+	.import-file-dropzone-idle {
+		@apply cursor-pointer border-stroke hover:border-accent;
+	}
+
+	.import-file-dropzone-active {
+		@apply cursor-pointer border-accent bg-accent/5;
+	}
+
+	.import-file-dropzone-disabled {
+		@apply cursor-not-allowed border-stroke/70 opacity-60;
+	}
+
+	.import-file-dropzone-icon {
+		@apply mx-auto mb-3 h-8 w-8 text-text-muted;
+	}
+
+	.import-file-dropzone-title {
+		@apply mb-1 text-base font-medium text-heading;
+	}
+
+	.import-file-dropzone-copy {
+		@apply mb-4 text-sm text-text-muted;
+	}
+
+	.import-file-dropzone-note {
+		@apply mt-3 text-xs text-text-muted;
+	}
+}

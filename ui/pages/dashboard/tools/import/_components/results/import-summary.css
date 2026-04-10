@@ -1,0 +1,17 @@
+@layer components {
+	.import-summary {
+		@apply py-8 text-center;
+	}
+
+	.import-summary-icon {
+		@apply mx-auto mb-3 h-8 w-8 text-emerald-500;
+	}
+
+	.import-summary-title {
+		@apply mb-1 text-base font-medium text-heading;
+	}
+
+	.import-summary-copy {
+		@apply mb-4 text-sm text-text-muted;
+	}
+}

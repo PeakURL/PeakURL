@@ -3,21 +3,21 @@ import type { SampleDataProps } from './types';
 
 function SampleData({ sampleData }: SampleDataProps) {
 	return (
-		<div className="bg-surface border border-stroke rounded-lg p-5">
-			<h3 className="text-base font-semibold text-heading mb-4">
+		<div className="import-panel import-sample-panel">
+			<h3 className="import-panel-title import-sample-title">
 				{__('Sample Data Structure')}
 			</h3>
-			<div className="overflow-x-auto">
-				<table className="w-full text-sm">
+			<div className="import-sample-table-wrapper">
+				<table className="import-sample-table">
 					<thead>
-						<tr className="text-inline-start border-b border-stroke">
-							<th className="py-2 px-3 text-xs font-semibold text-heading bg-surface-alt">
+						<tr className="import-sample-header-row">
+							<th className="import-sample-header-cell">
 								url
 							</th>
-							<th className="py-2 px-3 text-xs font-semibold text-heading bg-surface-alt">
+							<th className="import-sample-header-cell">
 								alias
 							</th>
-							<th className="py-2 px-3 text-xs font-semibold text-heading bg-surface-alt">
+							<th className="import-sample-header-cell">
 								title
 							</th>
 						</tr>
@@ -26,15 +26,15 @@ function SampleData({ sampleData }: SampleDataProps) {
 						{sampleData.map((row, index) => (
 							<tr
 								key={index}
-								className="border-b border-stroke last:border-b-0"
+								className="import-sample-row"
 							>
-								<td className="py-2 px-3 font-mono text-xs text-heading">
+								<td className="import-sample-code">
 									{row.url}
 								</td>
-								<td className="py-2 px-3 text-xs text-heading">
+								<td className="import-sample-cell">
 									{row.alias}
 								</td>
-								<td className="py-2 px-3 text-xs text-heading">
+								<td className="import-sample-cell">
 									{row.title}
 								</td>
 							</tr>

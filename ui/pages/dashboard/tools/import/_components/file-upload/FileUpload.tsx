@@ -216,13 +216,13 @@ const FileUpload = ({
 	};
 
 	return (
-		<div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
-			<div className="space-y-5">
-				<div className="bg-surface border border-stroke rounded-lg p-5">
-					<h2 className="text-base font-semibold text-heading mb-3">
+		<div className="import-file-grid">
+			<div className="import-file-main">
+				<div className="import-panel import-file-panel">
+					<h2 className="import-panel-title">
 						{__('Upload File')}
 					</h2>
-					<p className="text-sm text-text-muted mb-5">
+					<p className="import-panel-copy">
 						{__(
 							'Upload a CSV, JSON, or XML file containing URLs and their metadata.'
 						)}
@@ -257,7 +257,7 @@ const FileUpload = ({
 				<FormatRequirements />
 			</div>
 
-			<div className="space-y-5">
+			<div className="import-file-sidebar">
 				{importStatus === 'completed' ? (
 					<ImportDetails results={importResults} />
 				) : (

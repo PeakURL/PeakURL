@@ -8,12 +8,12 @@ function ImportSummary({ results, onReset }: ImportSummaryProps) {
 	const errorCount = results.filter((r) => r.status === 'error').length;
 
 	return (
-		<div className="text-center py-8">
-			<CircleCheckBig className="mb-3 h-8 w-8 text-emerald-500 mx-auto" />
-			<h3 className="text-base font-medium text-heading mb-1">
+		<div className="import-summary">
+			<CircleCheckBig className="import-summary-icon" />
+			<h3 className="import-summary-title">
 				{__('Import Completed!')}
 			</h3>
-			<p className="text-sm text-text-muted mb-4">
+			<p className="import-summary-copy">
 				{sprintf(
 					/* translators: %s: number of URLs processed */
 					__('Successfully processed %s URLs.'),

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui';
 import { CloudUpload } from 'lucide-react';
 import { __ } from '@/i18n';
+import { cn } from '@/utils';
 import type {
 	FileButtonClickHandler,
 	FileDropHandler,
@@ -76,26 +77,29 @@ function FileUploadArea({
 	};
 
 	return (
-		<div>
+		<div className="import-file-dropzone-wrapper">
 			<div
-				className={`rounded-lg border-2 border-dashed p-8 text-center transition-colors ${
-					disabled
-						? 'cursor-not-allowed border-stroke/70 opacity-60'
-						: isDragActive
-							? 'cursor-pointer border-accent bg-accent/5'
-							: 'cursor-pointer border-stroke hover:border-accent'
-				}`}
+				className={cn(
+					'import-file-dropzone',
+					disabled && 'import-file-dropzone-disabled',
+					!disabled &&
+						isDragActive &&
+						'import-file-dropzone-active',
+					!disabled &&
+						!isDragActive &&
+						'import-file-dropzone-idle'
+				)}
 				onClick={openFilePicker}
 				onDragEnter={handleDragEnter}
 				onDragOver={handleDragOver}
 				onDragLeave={handleDragLeave}
 				onDrop={handleDrop}
 			>
-				<CloudUpload className="mx-auto mb-3 h-8 w-8 text-text-muted" />
-				<h3 className="text-base font-medium text-heading mb-1">
+				<CloudUpload className="import-file-dropzone-icon" />
+				<h3 className="import-file-dropzone-title">
 					{__('Drop your file here')}
 				</h3>
-				<p className="text-sm text-text-muted mb-4">
+				<p className="import-file-dropzone-copy">
 					{__('or click to browse (CSV, JSON, XML)')}
 				</p>
 				<Button
@@ -117,7 +121,7 @@ function FileUploadArea({
 					onChange={handleFileInputChange}
 				/>
 			</div>
-			<div className="mt-3 text-xs text-text-muted">
+			<div className="import-file-dropzone-note">
 				<p>
 					{__(
 						'Supported formats: CSV, JSON, XML (max 10MB, up to 10,000 URLs)'

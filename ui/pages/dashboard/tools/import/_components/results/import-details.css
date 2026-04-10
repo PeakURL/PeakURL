@@ -1,0 +1,67 @@
+@layer components {
+	.import-results-panel {
+		@apply min-w-0;
+	}
+
+	.import-results-list {
+		@apply max-h-96 space-y-2 overflow-y-auto;
+	}
+
+	.import-results-item {
+		@apply flex items-center gap-3 rounded-lg p-3;
+	}
+
+	.import-results-item-success {
+		@apply bg-emerald-500/10 dark:bg-emerald-500/20;
+	}
+
+	.import-results-item-error {
+		@apply bg-red-500/10 dark:bg-red-500/20;
+	}
+
+	.import-results-item-icon {
+		@apply h-4 w-4 shrink-0;
+	}
+
+	.import-results-item-icon-success {
+		@apply text-emerald-600 dark:text-emerald-400;
+	}
+
+	.import-results-item-icon-error {
+		@apply text-red-600 dark:text-red-400;
+	}
+
+	.import-results-item-body {
+		@apply min-w-0 flex-1;
+	}
+
+	.import-results-item-url {
+		@apply truncate text-sm font-medium text-heading;
+		direction: ltr;
+		text-align: start;
+		unicode-bidi: plaintext;
+	}
+
+	.import-results-item-short-url {
+		@apply text-xs text-emerald-600 dark:text-emerald-400;
+		direction: ltr;
+		text-align: start;
+		unicode-bidi: plaintext;
+	}
+
+	.import-results-item-error-text {
+		@apply text-xs text-red-600 dark:text-red-400;
+	}
+
+	.import-results-footer {
+		@apply mt-4 flex items-center justify-between gap-4 border-t border-stroke pt-4 text-sm;
+	}
+
+	.import-results-footer-summary {
+		@apply text-text-muted;
+	}
+
+	.import-results-footer-icon {
+		@apply h-4 w-4;
+	}
+}

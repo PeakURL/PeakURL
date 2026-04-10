@@ -1,0 +1,41 @@
+@layer components {
+	.import-processing {
+		@apply py-8;
+	}
+
+	.import-processing-upload {
+		@apply text-center;
+	}
+
+	.import-processing-upload-icon {
+		@apply mx-auto mb-3 h-10 w-10 animate-spin text-accent;
+	}
+
+	.import-processing-header {
+		@apply mb-5 text-center;
+	}
+
+	.import-processing-icon {
+		@apply mx-auto mb-3 h-8 w-8 text-primary-500;
+	}
+
+	.import-processing-title {
+		@apply mb-1 text-base font-medium text-heading;
+	}
+
+	.import-processing-copy {
+		@apply text-sm text-text-muted;
+	}
+
+	.import-processing-progress-copy {
+		@apply mt-2 text-xs text-text-muted;
+	}
+
+	.import-processing-bar {
+		@apply h-2 w-full animate-pulse rounded-full bg-surface-alt;
+	}
+
+	.import-processing-bar-fill {
+		@apply h-2 w-full rounded-full bg-accent;
+	}
+}

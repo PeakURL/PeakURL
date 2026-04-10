@@ -19,7 +19,7 @@ function Layout({ children }: ImportLayoutProps) {
 	];
 
 	return (
-		<div className="space-y-5">
+		<div className="import-layout">
 			<Header />
 
 			<Tabs tabs={tabs} activeTab={activeTab} />

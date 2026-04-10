@@ -31,7 +31,7 @@ function TabPage() {
 	];
 
 	return (
-		<div>
+		<div className="import-page">
 			{activeTab === 'file' && (
 				<FileUpload
 					importStatus={importStatus}

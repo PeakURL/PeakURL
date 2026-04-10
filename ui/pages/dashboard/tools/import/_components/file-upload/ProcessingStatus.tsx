@@ -5,16 +5,16 @@ import type { ProcessingStatusProps } from './types';
 function ProcessingStatus({ status, progress }: ProcessingStatusProps) {
 	if (status === 'uploading') {
 		return (
-			<div className="text-center py-8">
-				<LoaderCircle className="mx-auto mb-3 h-10 w-10 animate-spin text-accent" />
-				<h3 className="text-base font-medium text-heading mb-1">
+			<div className="import-processing import-processing-upload">
+				<LoaderCircle className="import-processing-upload-icon" />
+				<h3 className="import-processing-title">
 					{__('Uploading file...')}
 				</h3>
-				<p className="text-sm text-text-muted">
+				<p className="import-processing-copy">
 					{__('Please wait while we process your file')}
 				</p>
 				{progress ? (
-					<p className="mt-2 text-xs text-text-muted">
+					<p className="import-processing-progress-copy">
 						{`${progress}%`}
 					</p>
 				) : null}
@@ -23,18 +23,18 @@ function ProcessingStatus({ status, progress }: ProcessingStatusProps) {
 	}
 	if (status === 'processing') {
 		return (
-			<div className="py-8">
-				<div className="text-center mb-5">
-					<Cog className="mx-auto mb-3 h-8 w-8 text-primary-500" />
-					<h3 className="text-base font-medium text-heading mb-1">
+			<div className="import-processing">
+				<div className="import-processing-header">
+					<Cog className="import-processing-icon" />
+					<h3 className="import-processing-title">
 						{__('Processing URLs')}
 					</h3>
-					<p className="text-sm text-text-muted">
+					<p className="import-processing-copy">
 						{__('Creating short links...')}
 					</p>
 				</div>
-				<div className="w-full bg-surface-alt rounded-full h-2 animate-pulse">
-					<div className="bg-accent h-2 rounded-full w-full"></div>
+				<div className="import-processing-bar">
+					<div className="import-processing-bar-fill" />
 				</div>
 			</div>
 		);

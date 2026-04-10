@@ -89,80 +89,78 @@ const PasteImport = () => {
 	};
 
 	return (
-		<div className="space-y-5">
-			<div className="bg-surface border border-stroke rounded-lg p-5">
-				<h2 className="text-base font-semibold text-heading mb-3">
+		<div className="import-paste">
+			<div className="import-panel import-paste-panel">
+				<h2 className="import-panel-title">
 					{__('Paste URLs')}
 				</h2>
-				<p className="text-sm text-text-muted mb-5">
+				<p className="import-panel-copy">
 					{__(
 						'Paste a list of URLs (one per line) to quickly create multiple short links. You can optionally add a custom alias separated by a comma or space.'
 					)}
 				</p>
 
 				{status === 'idle' && (
-					<div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+					<div className="import-paste-grid">
 						<div>
-							<label className="block text-sm font-medium text-heading mb-2">
+							<label className="import-field-label">
 								{__('URLs (one per line)')}
 							</label>
 							<textarea
 								dir="ltr"
-								className="w-full h-64 bg-surface-alt border border-stroke rounded-lg px-4 py-3 text-sm text-heading placeholder-text-text-muted focus:ring-2 focus:ring-accent focus:border-accent outline-none resize-none font-mono transition-colors"
+								className="import-paste-textarea"
 								placeholder={`https://example.com/page1
 https://example.com/page2, my-alias
 https://example.com/page3 custom-alias`}
 								value={text}
 								onChange={(e) => setText(e.target.value)}
 							/>
-							<div className="mt-4 flex items-end">
+							<div className="import-paste-actions">
 								<Button
 									size="sm"
 									onClick={handleImport}
 									disabled={!text.trim()}
 								>
-									<WandSparkles className="h-4 w-4" />
+									<WandSparkles className="import-paste-action-icon" />
 									{__('Create Links')}
 								</Button>
 							</div>
 						</div>
 						<div>
-							<h3 className="font-medium text-sm text-heading mb-3">
+							<h3 className="import-section-title">
 								{__('Tips')}
 							</h3>
-							<div className="bg-amber-500/10 dark:bg-amber-500/20 border border-amber-500/20 dark:border-amber-500/30 rounded-lg p-4">
-								<ul className="text-sm text-heading space-y-2.5">
-									<li className="flex items-start gap-2">
-										<Lightbulb className="mt-0.5 h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
-										<div className="space-y-1">
+							<div className="import-paste-tips">
+								<ul className="import-paste-tips-list">
+									<li className="import-paste-tip">
+										<Lightbulb className="import-paste-tip-icon" />
+										<div className="import-paste-tip-content">
 											<p>{__('Format:')}</p>
-											<div
-												className="preserve-ltr-value flex flex-wrap items-center gap-2 text-xs"
-											>
+											<div className="import-paste-tip-format">
 												<code>URL [alias]</code>
 												<span>{__('or')}</span>
 												<code>URL, alias</code>
 											</div>
 										</div>
 									</li>
-									<li className="flex items-start gap-2">
-										<Lightbulb className="mt-0.5 h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
+									<li className="import-paste-tip">
+										<Lightbulb className="import-paste-tip-icon" />
 										<span>
 											{__(
 												'Each entry should be on a separate line'
 											)}
 										</span>
 									</li>
-									<li className="flex items-start gap-2">
-										<Lightbulb className="mt-0.5 h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
+									<li className="import-paste-tip">
+										<Lightbulb className="import-paste-tip-icon" />
 										<span>
 											{__(
 												'URLs must include http:// or https://'
 											)}
 										</span>
 									</li>
-									<li className="flex items-start gap-2">
-										<Lightbulb className="mt-0.5 h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
+									<li className="import-paste-tip">
+										<Lightbulb className="import-paste-tip-icon" />
 										<span>
 											{__(
 												'If alias is omitted, one will be auto-generated'
@@ -176,9 +174,9 @@ https://example.com/page3 custom-alias`}
 				)}
 
 				{status === 'processing' && (
-					<div className="py-8 text-center">
-						<LoaderCircle className="mx-auto mb-3 h-8 w-8 animate-spin text-accent" />
-						<p className="text-sm text-text-muted">
+					<div className="import-status-panel">
+						<LoaderCircle className="import-status-icon" />
+						<p className="import-status-copy">
 							{__('Processing URLs...')}
 						</p>
 					</div>

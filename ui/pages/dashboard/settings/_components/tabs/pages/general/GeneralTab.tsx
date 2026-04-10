@@ -1,6 +1,6 @@
 import type { ChangeEvent, SubmitEvent } from 'react';
 import { useEffect, useState } from 'react';
-import { Input, Button, Select } from '@/components/ui';
+import { Input, Button, Select, TextArea } from '@/components/ui';
 import { __ } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
 import { getInstalledLanguageLabel } from '@/i18n/languages';
@@ -155,13 +155,11 @@ function GeneralTab({
 						/>
 					</div>
 					<div className="settings-general-bio-field">
-						<label className="settings-section-label">
-							{__('Bio')}
-						</label>
-						<textarea
+						<TextArea
+							label={__('Bio')}
 							name="bio"
 							rows={3}
-							className="form-control-base form-control-accent-focus settings-general-bio-input"
+							className="settings-general-bio-input"
 							value={generalForm.bio}
 							onChange={handleChange}
 						/>

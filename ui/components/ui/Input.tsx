@@ -94,9 +94,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 							? 'placeholder-follow-page-direction'
 							: ''
 					} ${
-						error
-							? 'form-field-input-error'
-							: ''
+						error ? 'form-field-control-error' : ''
 					} ${className}`}
 					{...props}
 				/>

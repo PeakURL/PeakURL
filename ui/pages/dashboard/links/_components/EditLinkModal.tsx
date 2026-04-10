@@ -2,10 +2,9 @@ import type { SubmitEvent } from 'react';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { X, Save } from 'lucide-react';
 import { useState } from 'react';
-import { ReadOnlyValueBlock, Select } from '@/components/ui';
+import { Input, ReadOnlyValueBlock, Select } from '@/components/ui';
 import { useUpdateUrlMutation } from '@/store/slices/api';
 import { __ } from '@/i18n';
-import { getFieldDirection, isDocumentRtl } from '@/i18n/direction';
 import {
 	buildShortUrl,
 	getErrorMessage,
@@ -23,7 +22,6 @@ import type {
 import type { SelectOption } from '@/components/ui';
 
 function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
-	const pageDirection = isDocumentRtl() ? 'rtl' : 'ltr';
 	const getInitialTitle = () => normalizeLinkTitle(link?.title);
 	const getInitialStatus = (): LinkStatus => link?.status || 'active';
 	const getInitialExpiresAt = () => toLocalDateTimeValue(link?.expiresAt);
@@ -148,16 +146,13 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 							<label htmlFor="title" className="links-modal-field-label">
 								{__('Title (Optional)')}
 							</label>
-							<input
+							<Input
 								type="text"
 								id="title"
-								dir={getFieldDirection({
-									fallbackDirection: pageDirection,
-								})}
 								value={title}
-								onChange={(e) => setTitle(e.target.value)}
+								onChange={(event) => setTitle(event.target.value)}
 								placeholder={__('Enter a title for this link')}
-								className="links-edit-modal-input"
+								className="form-control-surface-alt form-control-compact form-control-strong-focus"
 							/>
 						</div>
 
@@ -166,15 +161,12 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 							<label htmlFor="password" className="links-modal-field-label">
 								{__('Password Protection (Optional)')}
 							</label>
-							<input
+							<Input
 								type="password"
 								id="password"
-								dir={getFieldDirection({
-									fallbackDirection: pageDirection,
-								})}
 								value={password}
 								disabled={clearPassword}
-								onChange={(e) => setPassword(e.target.value)}
+								onChange={(event) => setPassword(event.target.value)}
 								placeholder={
 									hasExistingPassword
 										? __(
@@ -184,7 +176,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 										'Set a password to protect this link'
 									)
 								}
-								className="links-edit-modal-input"
+								className="form-control-surface-alt form-control-compact form-control-strong-focus"
 							/>
 							{hasExistingPassword && (
 								<div className="links-edit-modal-password-options">
@@ -218,18 +210,14 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 							<label htmlFor="expiresAt" className="links-modal-field-label">
 								{__('Expiration Date (Optional)')}
 							</label>
-							<input
+							<Input
 								type="datetime-local"
 								id="expiresAt"
-								dir={getFieldDirection({
-									fallbackDirection: pageDirection,
-									valueDirection: 'ltr',
-								})}
 								value={expiresAt}
-								onChange={(e) => setExpiresAt(e.target.value)}
+								onChange={(event) => setExpiresAt(event.target.value)}
 								min={getLocalDateTimeValue()}
 								step="60"
-								className="links-edit-modal-input"
+								className="form-control-surface-alt form-control-compact form-control-strong-focus"
 							/>
 						</div>
 
@@ -244,7 +232,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 								onChange={setStatus}
 								options={statusOptions}
 								ariaLabel={__('Link status')}
-								buttonClassName="rounded-lg bg-surface-alt px-3 py-2"
+								buttonClassName="form-control-surface-alt form-control-compact"
 							/>
 						</div>
 

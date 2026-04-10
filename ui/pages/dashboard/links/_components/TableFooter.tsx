@@ -1,7 +1,7 @@
 import { Link2, MousePointerClick } from 'lucide-react';
-import { Select } from '@/components/ui';
+import { Input, Select } from '@/components/ui';
 import { __, sprintf } from '@/i18n';
-import { getFieldDirection, isDocumentRtl } from '@/i18n/direction';
+import { isDocumentRtl } from '@/i18n/direction';
 import type { LinksSortBy, LinksSortOrder, TableFooterProps } from './types';
 import type { SelectOption } from '@/components/ui';
 
@@ -75,7 +75,7 @@ const TableFooter = ({
 						options={sortOptions}
 						className="links-table-footer-select-wide"
 						ariaLabel={__('Sort links')}
-						buttonClassName="rounded-lg bg-surface-alt px-3 py-2"
+						buttonClassName="form-control-surface-alt form-control-compact"
 					/>
 
 					<Select
@@ -84,7 +84,7 @@ const TableFooter = ({
 						options={sortOrderOptions}
 						className="links-table-footer-select"
 						ariaLabel={__('Sort order')}
-						buttonClassName="rounded-lg bg-surface-alt px-3 py-2"
+						buttonClassName="form-control-surface-alt form-control-compact"
 					/>
 
 					<Select
@@ -99,25 +99,24 @@ const TableFooter = ({
 						options={pageSizeSelectOptions}
 						className="links-table-footer-select"
 						ariaLabel={__('Rows per page')}
-						buttonClassName="rounded-lg bg-surface-alt px-3 py-2"
+						buttonClassName="form-control-surface-alt form-control-compact"
 					/>
 
 					{isCustom && (
-						<input
-							type="number"
-							dir={getFieldDirection({
-								fallbackDirection: pageDirection,
-								valueDirection: 'ltr',
-							})}
-							min={1}
-							value={limit}
-							onChange={(e) => {
-								const num = Number(e.target.value);
-								if (!isNaN(num) && num > 0) setLimit(num);
-							}}
-							placeholder={__('Custom page size')}
-							className="links-table-footer-input placeholder-follow-page-direction"
-						/>
+						<div className="links-table-footer-input">
+							<Input
+								type="number"
+								min={1}
+								valueDirection="ltr"
+								value={limit}
+								onChange={(event) => {
+									const num = Number(event.target.value);
+									if (!isNaN(num) && num > 0) setLimit(num);
+								}}
+								placeholder={__('Custom page size')}
+								className="form-control-surface-alt form-control-compact form-control-strong-focus"
+							/>
+						</div>
 					)}
 				</div>
 			</div>

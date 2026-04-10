@@ -1,0 +1,5 @@
+@layer components {
+	.form-field-textarea {
+		@apply min-h-24 resize-y;
+	}
+}

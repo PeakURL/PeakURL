@@ -6,6 +6,7 @@ import type {
 	KeyboardEvent,
 	InputHTMLAttributes,
 	ReactNode,
+	TextareaHTMLAttributes,
 } from 'react';
 
 /**
@@ -114,6 +115,17 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
 	error?: string;
 	icon?: InputIcon;
+	helperText?: string;
+	valueDirection?: 'ltr' | 'rtl';
+}
+
+/**
+ * Props for the shared textarea component.
+ */
+export interface TextAreaProps
+	extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+	label?: string;
+	error?: string;
 	helperText?: string;
 	valueDirection?: 'ltr' | 'rtl';
 }

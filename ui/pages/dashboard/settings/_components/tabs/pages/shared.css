@@ -57,7 +57,7 @@
 	.settings-api-modal-actions-end,
 	.settings-email-actions-end,
 	.settings-security-password-actions-end {
-		@apply justify-end;
+		@apply justify-end py-2;
 	}
 
 	.settings-stat-grid {

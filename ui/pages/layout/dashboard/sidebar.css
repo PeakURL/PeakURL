@@ -78,8 +78,11 @@
 
 	.dashboard-sidebar-submenu-list {
 		@apply mt-1 space-y-1;
+		-webkit-margin-start: 1.75rem;
 		margin-inline-start: 1.75rem;
+		-webkit-padding-start: 0.875rem;
 		padding-inline-start: 0.875rem;
+		-webkit-border-start: 1px solid var(--color-stroke);
 		border-inline-start: 1px solid var(--color-stroke);
 	}
 
@@ -130,7 +133,7 @@
 	}
 
 	.dashboard-sidebar-footer {
-		@apply shrink-0 space-y-0.5 border-t border-stroke px-3 py-3;
+		@apply shrink-0 space-y-0.5 border-t border-stroke px-3 py-1.5;
 	}
 
 	.dashboard-sidebar-about-panel {

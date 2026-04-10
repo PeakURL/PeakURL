@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui';
+import { Button, TextArea } from '@/components/ui';
 import { useBulkCreateUrlMutation } from '@/store/slices/api';
 import { buildShortUrl, getErrorMessage } from '@/utils';
 import { ImportDetails, ImportSummary } from '../results';
@@ -106,14 +106,14 @@ const PasteImport = () => {
 							<label className="import-field-label">
 								{__('URLs (one per line)')}
 							</label>
-							<textarea
-								dir="ltr"
-								className="import-paste-textarea"
+							<TextArea
+								valueDirection="ltr"
+								className="form-control-surface-alt form-control-roomy form-control-strong-focus import-paste-textarea font-mono"
 								placeholder={`https://example.com/page1
 https://example.com/page2, my-alias
 https://example.com/page3 custom-alias`}
 								value={text}
-								onChange={(e) => setText(e.target.value)}
+								onChange={(event) => setText(event.target.value)}
 							/>
 							<div className="import-paste-actions">
 								<Button

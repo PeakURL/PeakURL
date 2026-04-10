@@ -68,14 +68,15 @@ export const Layout = ({ children }: LayoutProps) => {
 								</a>
 								{footerCopyAfterLink}
 							</p>
-							<a
-								href={footerLink}
-								target="_blank"
-								rel="noreferrer"
-								className="dashboard-layout-footer-link dashboard-layout-footer-link-version"
+							<p
+								dir={isRtl ? 'rtl' : 'ltr'}
+								className="dashboard-layout-footer-version"
 							>
-								{__('Version')} {PEAKURL_VERSION}
-							</a>
+								{__('Version')}{' '}
+								<bdi className="dashboard-layout-footer-version-value">
+									{PEAKURL_VERSION}
+								</bdi>
+							</p>
 						</div>
 					</footer>
 				</div>

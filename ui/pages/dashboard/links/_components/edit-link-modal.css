@@ -1,13 +1,4 @@
 @layer components {
-	.links-edit-modal-input {
-		@apply w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent;
-		text-align: left;
-	}
-
-	html[dir='rtl'] .links-edit-modal-input {
-		text-align: right;
-	}
-
 	.links-edit-modal-password-options {
 		@apply mt-2 space-y-2;
 	}

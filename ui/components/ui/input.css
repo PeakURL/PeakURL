@@ -16,10 +16,12 @@
 		@apply pointer-events-none absolute inset-y-0 flex items-center text-muted;
 	}
 
+	.form-field-control-error,
 	.form-field-input-error {
 		@apply border-red-500;
 	}
 
+	.form-field-control-error:focus,
 	.form-field-input-error:focus {
 		border-color: var(--color-error);
 		box-shadow: 0 0 0 1px

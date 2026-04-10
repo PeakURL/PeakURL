@@ -16,11 +16,6 @@
 	}
 
 	.settings-general-bio-input {
-		@apply min-h-24 resize-y;
-		text-align: left;
-	}
-
-	html[dir='rtl'] .settings-general-bio-input {
-		text-align: right;
+		@apply min-h-24;
 	}
 }

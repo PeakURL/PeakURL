@@ -61,6 +61,22 @@
 			color-mix(in srgb, var(--color-accent) 28%, transparent);
 	}
 
+	.form-control-strong-focus:focus {
+		@apply border-accent ring-2 ring-accent;
+	}
+
+	.form-control-surface-alt {
+		@apply rounded-lg bg-surface-alt;
+	}
+
+	.form-control-compact {
+		@apply px-3 py-2;
+	}
+
+	.form-control-roomy {
+		@apply px-4 py-3;
+	}
+
 	.field-with-inline-start-icon {
 		@apply pl-8 pr-3;
 	}

@@ -12,15 +12,7 @@
 	}
 
 	.import-paste-textarea {
-		@apply h-64 w-full resize-none rounded-lg border border-stroke bg-surface-alt px-4 py-3 font-mono text-sm text-heading outline-none transition-colors;
-	}
-
-	.import-paste-textarea::placeholder {
-		color: var(--color-text-muted);
-	}
-
-	.import-paste-textarea:focus {
-		@apply border-accent ring-2 ring-accent;
+		@apply h-64 resize-none;
 	}
 
 	.import-paste-actions {

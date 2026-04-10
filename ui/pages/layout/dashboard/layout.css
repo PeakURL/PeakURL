@@ -36,8 +36,13 @@
 		@apply transition-colors hover:text-accent;
 	}
 
-	.dashboard-layout-footer-link-version {
+	.dashboard-layout-footer-version {
 		@apply shrink-0 not-italic;
 		text-align: end;
+	}
+
+	.dashboard-layout-footer-version-value {
+		direction: ltr;
+		unicode-bidi: plaintext;
 	}
 }

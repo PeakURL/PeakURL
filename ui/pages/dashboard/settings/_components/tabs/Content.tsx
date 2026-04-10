@@ -183,12 +183,12 @@ const buildCompletedReleaseInstallProgressState = (
 		description: appliedVersion
 			? sprintf(
 					isReinstall
-						? __('PeakURL %s has been restored.')
+						? __('PeakURL %s has been reinstalled.')
 						: __('PeakURL %s is now installed.'),
 					appliedVersion
 				)
 			: isReinstall
-				? __('The latest version has been restored.')
+				? __('The latest version has been reinstalled.')
 				: __('The latest version is now installed.'),
 		steps: releaseInstallStageOrder.map((step) => ({
 			id: step,
@@ -678,12 +678,12 @@ const Content = ({ activeTab }: ContentProps) => {
 				appliedVersion
 					? sprintf(
 							isReinstall
-								? __('PeakURL %s has been restored.')
+								? __('PeakURL %s has been reinstalled.')
 								: __('PeakURL %s is now installed.'),
 							appliedVersion
 						)
 					: isReinstall
-						? __('The latest version has been restored.')
+						? __('The latest version has been reinstalled.')
 						: __('The latest version is now installed.')
 			);
 		} catch (err) {

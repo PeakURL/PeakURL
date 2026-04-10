@@ -136,7 +136,7 @@ const getLandingMeta = (): Record<LandingSource, LandingMetaEntry> => ({
 	},
 	update: {
 		eyebrow: __('Update Complete'),
-		title: __('PeakURL is up to date.'),
+		title: __('PeakURL has been updated to the latest version.'),
 		description: __(
 			'The latest version is now installed. Review the essentials below and confirm services like email delivery, location data, and updates are set the way you expect.'
 		),
@@ -154,9 +154,9 @@ const getLandingMeta = (): Record<LandingSource, LandingMetaEntry> => ({
 	},
 	reinstall: {
 		eyebrow: __('Reinstall Complete'),
-		title: __('PeakURL has been restored.'),
+		title: __('PeakURL has been reinstalled.'),
 		description: __(
-			'The latest version has been restored. Review the essentials below and confirm services like email delivery, location data, and updates are set the way you expect.'
+			'The latest version has been reinstalled. Review the essentials below and confirm services like email delivery, location data, and updates are set the way you expect.'
 		),
 		actions: [
 			{

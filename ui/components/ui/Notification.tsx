@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
 import { isDocumentRtl } from '@/i18n/direction';
+import { cn } from '@/utils';
 import type {
 	NotificationContainerProps,
 	NotificationProps,
@@ -138,19 +139,18 @@ export function Notification({
 
 	return (
 		<div
-			className={`notification-card ${config.className} ${
-					isExiting
-						? `${
-								isRtl
-									? 'notification-card-exiting-rtl'
-									: 'notification-card-exiting-ltr'
-							}`
-						: `${
-								isRtl
-									? 'notification-card-entering-rtl'
-									: 'notification-card-entering-ltr'
-							}`
-				} ${className}`}
+			className={cn(
+				'notification-card',
+				config.className,
+				isExiting
+					? isRtl
+						? 'notification-card-exiting-rtl'
+						: 'notification-card-exiting-ltr'
+					: isRtl
+						? 'notification-card-entering-rtl'
+						: 'notification-card-entering-ltr',
+				className
+			)}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 		>
@@ -182,11 +182,12 @@ export function Notification({
 			{duration > 0 && (
 				<div className="notification-progress">
 					<div
-						className={`notification-progress-bar ${
+						className={cn(
+							'notification-progress-bar',
 							isRtl
 								? 'notification-progress-rtl'
 								: 'notification-progress-ltr'
-						}`}
+						)}
 						style={{
 							width: '100%',
 							animation: `progress ${duration}ms linear forwards`,

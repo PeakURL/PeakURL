@@ -1,6 +1,7 @@
 import { forwardRef, useId } from 'react';
 import { Info } from 'lucide-react';
 import { getDocumentDirection, getFieldDirection } from '@/i18n/direction';
+import { cn } from '@/utils';
 import type { TextAreaProps } from './types';
 
 export type { TextAreaProps } from './types';
@@ -53,13 +54,16 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 						dir={contentDirection}
 						aria-invalid={Boolean(error)}
 						aria-describedby={describedBy}
-						className={`form-control-base form-control-accent-focus text-page-start form-field-textarea ${
-							placeholderFollowsPageDirection
-								? 'placeholder-follow-page-direction'
-								: ''
-						} ${
-							error ? 'form-field-control-error' : ''
-						} ${className}`}
+						className={cn(
+							'form-control-base',
+							'form-control-accent-focus',
+							'text-page-start',
+							'form-field-textarea',
+							placeholderFollowsPageDirection &&
+								'placeholder-follow-page-direction',
+							error && 'form-field-control-error',
+							className
+						)}
 						{...props}
 					/>
 				</div>

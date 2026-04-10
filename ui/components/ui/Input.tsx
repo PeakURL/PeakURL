@@ -1,6 +1,7 @@
 import { forwardRef, useId } from 'react';
 import { Info } from 'lucide-react';
 import { getDocumentDirection, getFieldDirection } from '@/i18n/direction';
+import { cn } from '@/utils';
 import type { InputProps } from './types';
 export type { InputIcon, InputProps } from './types';
 
@@ -85,17 +86,19 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 					dir={contentDirection}
 					aria-invalid={Boolean(error)}
 					aria-describedby={describedBy}
-					className={`form-control-base form-control-accent-focus text-page-start form-field-input ${
+					className={cn(
+						'form-control-base',
+						'form-control-accent-focus',
+						'text-page-start',
+						'form-field-input',
 						hasInlineStartIcon
 							? 'field-with-inline-start-icon'
-							: 'px-4'
-					} ${
-						placeholderFollowsPageDirection
-							? 'placeholder-follow-page-direction'
-							: ''
-					} ${
-						error ? 'form-field-control-error' : ''
-					} ${className}`}
+							: 'form-field-input-no-icon',
+						placeholderFollowsPageDirection &&
+							'placeholder-follow-page-direction',
+						error && 'form-field-control-error',
+						className
+					)}
 					{...props}
 				/>
 			</div>

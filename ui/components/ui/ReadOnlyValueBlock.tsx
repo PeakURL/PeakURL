@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Copy } from 'lucide-react';
 import { getDocumentDirection } from '@/i18n/direction';
+import { cn } from '@/utils';
 
 interface ReadOnlyValueBlockProps {
 	value?: string | null;
@@ -25,19 +26,21 @@ export function ReadOnlyValueBlock({
 }: ReadOnlyValueBlockProps) {
 	const direction = getDocumentDirection();
 	const copyButtonStyles =
-		copyButtonClassName ||
-		'bg-surface text-text-muted shadow-sm hover:text-heading hover:shadow';
+		copyButtonClassName || 'readonly-value-block-copy-default';
 
 	return (
 		<div
 			dir={direction}
-			className={`readonly-value-block ${className}`}
+			className={cn('readonly-value-block', className)}
 		>
 			<div className="readonly-value-block-value">
 				<span
-					className={`readonly-value-block-text preserve-ltr-value ${
-						monospace ? 'font-mono' : ''
-					} ${valueClassName}`}
+					className={cn(
+						'readonly-value-block-text',
+						'preserve-ltr-value',
+						monospace && 'font-mono',
+						valueClassName
+					)}
 				>
 					{value || ''}
 				</span>
@@ -48,7 +51,10 @@ export function ReadOnlyValueBlock({
 					onClick={onCopy}
 					aria-label={copyButtonLabel}
 					title={copyButtonLabel}
-					className={`readonly-value-block-copy ${copyButtonStyles}`}
+					className={cn(
+						'readonly-value-block-copy',
+						copyButtonStyles
+					)}
 				>
 					{copyButtonContent || <Copy size={14} />}
 				</button>

@@ -6,13 +6,13 @@ export type { AvatarProps, AvatarSize } from './types';
 
 const SIZE_STYLES = {
 	sm: {
-		wrapper: 'h-8 w-8 rounded-lg',
-		text: 'text-sm',
+		wrapper: 'avatar-sm',
+		text: 'avatar-text-sm',
 		image: 64,
 	},
 	md: {
-		wrapper: 'h-11 w-11 rounded-xl',
-		text: 'text-base',
+		wrapper: 'avatar-md',
+		text: 'avatar-text-md',
 		image: 96,
 	},
 };
@@ -46,7 +46,7 @@ export const Avatar = ({
 	return (
 		<div
 			className={cn(
-				'relative inline-flex shrink-0 items-center justify-center overflow-hidden bg-primary-600 font-semibold text-white',
+				'avatar',
 				sizeStyle.wrapper,
 				className
 			)}
@@ -55,12 +55,12 @@ export const Avatar = ({
 				<img
 					src={imageUrl}
 					alt={label}
-					className="h-full w-full object-cover"
+					className="avatar-image"
 					onError={() => setFailedImageUrl(imageUrl)}
 					referrerPolicy="no-referrer"
 				/>
 			) : (
-				<span className={cn('select-none', sizeStyle.text)}>
+				<span className={cn('avatar-text', sizeStyle.text)}>
 					{initials}
 				</span>
 			)}

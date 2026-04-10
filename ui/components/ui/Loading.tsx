@@ -1,5 +1,6 @@
 import { Loader2, Zap } from 'lucide-react';
 import { __ } from '@/i18n';
+import { cn } from '@/utils';
 import type {
 	InlineLoaderProps,
 	LoadingSize,
@@ -44,7 +45,7 @@ export function LoadingSpinner({
 	};
 
 	return (
-		<div className={`loading-spinner ${className}`}>
+		<div className={cn('loading-spinner', className)}>
 			<Loader2 size={sizes[size]} className="loading-spinner-icon" />
 		</div>
 	);
@@ -85,7 +86,7 @@ export function SkeletonLoader({
 }: SkeletonLoaderProps) {
 	return (
 		<div
-			className={`skeleton-loader ${className}`}
+			className={cn('skeleton-loader', className)}
 			{...props}
 		/>
 	);
@@ -143,28 +144,28 @@ export function PulseDot({
 	animated = true,
 }: PulseDotProps) {
 	const colors: Record<PulseDotColor, string> = {
-		green: 'bg-emerald-500',
-		red: 'bg-red-500',
-		yellow: 'bg-amber-500',
-		blue: 'bg-blue-500',
-		purple: 'bg-purple-500',
+		green: 'pulse-dot-color-green',
+		red: 'pulse-dot-color-red',
+		yellow: 'pulse-dot-color-yellow',
+		blue: 'pulse-dot-color-blue',
+		purple: 'pulse-dot-color-purple',
 	};
 
 	const sizes: Record<PulseDotSize, string> = {
-		xs: 'w-1.5 h-1.5',
-		sm: 'w-2 h-2',
-		md: 'w-3 h-3',
-		lg: 'w-4 h-4',
+		xs: 'pulse-dot-size-xs',
+		sm: 'pulse-dot-size-sm',
+		md: 'pulse-dot-size-md',
+		lg: 'pulse-dot-size-lg',
 	};
 
 	return (
 		<span className="pulse-dot">
 			<span
-				className={`pulse-dot-core ${sizes[size]} ${colors[color]}`}
+				className={cn('pulse-dot-core', sizes[size], colors[color])}
 			></span>
 			{animated && (
 				<span
-					className={`pulse-dot-ping ${sizes[size]} ${colors[color]}`}
+					className={cn('pulse-dot-ping', sizes[size], colors[color])}
 				></span>
 			)}
 		</span>
@@ -187,12 +188,12 @@ export function ProgressBar({
 	showLabel = false,
 }: ProgressBarProps) {
 	const colors: Record<ProgressColor, string> = {
-		blue: 'bg-linear-to-r from-blue-500 to-blue-600',
-		green: 'bg-linear-to-r from-emerald-500 to-emerald-600',
-		red: 'bg-linear-to-r from-red-500 to-red-600',
-		yellow: 'bg-linear-to-r from-amber-500 to-orange-600',
-		purple: 'bg-linear-to-r from-purple-500 to-pink-600',
-		accent: 'bg-linear-to-r from-accent to-primary-600',
+		blue: 'progress-bar-fill-blue',
+		green: 'progress-bar-fill-green',
+		red: 'progress-bar-fill-red',
+		yellow: 'progress-bar-fill-yellow',
+		purple: 'progress-bar-fill-purple',
+		accent: 'progress-bar-fill-accent',
 	};
 
 	const normalizedProgress = Math.min(100, Math.max(0, progress));
@@ -201,7 +202,7 @@ export function ProgressBar({
 		<div className={className}>
 			<div className="progress-bar-track">
 				<div
-					className={`progress-bar-fill ${colors[color]}`}
+					className={cn('progress-bar-fill', colors[color])}
 					style={{ width: `${normalizedProgress}%` }}
 				></div>
 			</div>
@@ -221,5 +222,5 @@ export function ProgressBar({
  * @param {string} [props.className=''] - Additional class names
  */
 export function InlineLoader({ className = '' }: InlineLoaderProps) {
-	return <Loader2 size={16} className={`inline-loader ${className}`} />;
+	return <Loader2 size={16} className={cn('inline-loader', className)} />;
 }

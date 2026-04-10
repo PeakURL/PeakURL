@@ -15,4 +15,8 @@
 	.readonly-value-block-copy {
 		@apply shrink-0 rounded p-1.5 transition-all;
 	}
+
+	.readonly-value-block-copy-default {
+		@apply bg-surface text-text-muted shadow-sm hover:text-heading hover:shadow;
+	}
 }

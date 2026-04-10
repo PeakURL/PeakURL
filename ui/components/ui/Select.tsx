@@ -6,6 +6,7 @@ import {
 } from '@headlessui/react';
 import { Check, ChevronDown } from 'lucide-react';
 import { getDocumentDirection } from '@/i18n/direction';
+import { cn } from '@/utils';
 import type { SelectProps, SelectValue } from './types';
 
 export type { SelectOption, SelectProps, SelectValue } from './types';
@@ -28,7 +29,7 @@ export function Select<T extends SelectValue>({
 		options.find((option) => option.value === value) ?? options[0];
 
 	return (
-		<div className={className} {...props}>
+		<div className={cn(className)} {...props}>
 			<Listbox value={value} onChange={onChange} disabled={disabled}>
 				{({ open }) => (
 					<>
@@ -36,11 +37,14 @@ export function Select<T extends SelectValue>({
 							id={id}
 							aria-label={ariaLabel}
 							dir={direction}
-							className={`form-control-base select-trigger ${
+							className={cn(
+								'form-control-base',
+								'select-trigger',
 								open
 									? 'select-trigger-open'
-									: 'form-control-accent-focus'
-							} ${buttonClassName}`}
+									: 'form-control-accent-focus',
+								buttonClassName
+							)}
 						>
 							<span className="select-label">
 								{selectedOption?.label}
@@ -53,7 +57,7 @@ export function Select<T extends SelectValue>({
 							anchor={{ to: 'bottom start', gap: 6, padding: 12 }}
 							modal={false}
 							transition
-							className={`select-options ${optionsClassName}`}
+							className={cn('select-options', optionsClassName)}
 						>
 							{options.map((option) => (
 								<ListboxOption
@@ -68,27 +72,28 @@ export function Select<T extends SelectValue>({
 										disabled: optionDisabled,
 									}) => (
 										<div
-											className={`select-option ${
-												focus ? 'select-option-focus' : ''
-											} ${
+											className={cn(
+												'select-option',
+												focus && 'select-option-focus',
 												selected
 													? 'select-option-selected'
-													: 'select-option-default'
-											} ${
+													: 'select-option-default',
 												optionDisabled
 													? 'select-option-disabled'
-													: 'select-option-enabled'
-											} ${optionClassName}`}
+													: 'select-option-enabled',
+												optionClassName
+											)}
 										>
 											<span className="select-label">
 												{option.label}
 											</span>
 											<Check
-												className={`select-option-check ${
+												className={cn(
+													'select-option-check',
 													selected
 														? 'opacity-100'
 														: 'opacity-0'
-												}`}
+												)}
 											/>
 										</div>
 									)}

@@ -1,0 +1,90 @@
+@layer components {
+	.button {
+		@apply relative inline-flex items-center justify-center rounded-md font-semibold transition-all duration-200 select-none focus:outline-none focus:ring-2 focus:ring-accent/50 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60;
+	}
+
+	.button-disabled {
+		@apply pointer-events-none;
+	}
+
+	.button-primary {
+		@apply bg-accent text-white shadow-sm hover:bg-primary-600 hover:shadow-md active:scale-[0.98];
+	}
+
+	.button-secondary {
+		@apply border border-stroke bg-surface text-heading hover:bg-surface-alt hover:shadow-sm active:scale-[0.98];
+	}
+
+	.button-danger {
+		@apply bg-red-600 text-white shadow-sm hover:bg-red-700 hover:shadow-md active:scale-[0.98];
+	}
+
+	.button-success {
+		@apply bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 hover:shadow-md active:scale-[0.98];
+	}
+
+	.button-warning {
+		@apply bg-amber-600 text-white shadow-sm hover:bg-amber-700 hover:shadow-md active:scale-[0.98];
+	}
+
+	.button-ghost {
+		@apply text-heading hover:bg-surface-alt active:scale-[0.98];
+	}
+
+	.button-outline {
+		@apply border border-stroke text-heading hover:border-accent hover:bg-accent/10 active:scale-[0.98];
+	}
+
+	.button-xs {
+		@apply gap-1.5 px-3 py-1.5 text-xs;
+	}
+
+	.button-sm {
+		@apply gap-2 px-4 py-2 text-sm;
+	}
+
+	.button-md {
+		@apply gap-2 px-5 py-2.5 text-sm;
+	}
+
+	.button-lg {
+		@apply gap-2.5 px-7 py-3.5 text-base;
+	}
+
+	.button-xl {
+		@apply gap-3 px-9 py-4 text-lg;
+	}
+
+	.button-loading-icon {
+		@apply animate-spin;
+	}
+
+	.button-group {
+		@apply inline-flex overflow-hidden rounded-md border border-stroke shadow-sm;
+	}
+
+	.button-icon-only {
+		gap: 0;
+		padding: 0 !important;
+	}
+
+	.button-icon-only-xs {
+		@apply h-7 w-7;
+	}
+
+	.button-icon-only-sm {
+		@apply h-8 w-8;
+	}
+
+	.button-icon-only-md {
+		@apply h-9 w-9;
+	}
+
+	.button-icon-only-lg {
+		@apply h-10 w-10;
+	}
+
+	.button-icon-only-xl {
+		@apply h-12 w-12;
+	}
+}

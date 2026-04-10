@@ -1,0 +1,29 @@
+@layer components {
+	.avatar {
+		@apply relative inline-flex shrink-0 items-center justify-center overflow-hidden bg-primary-600 font-semibold text-white;
+	}
+
+	.avatar-sm {
+		@apply h-8 w-8 rounded-lg;
+	}
+
+	.avatar-md {
+		@apply h-11 w-11 rounded-xl;
+	}
+
+	.avatar-image {
+		@apply h-full w-full object-cover;
+	}
+
+	.avatar-text {
+		@apply select-none;
+	}
+
+	.avatar-text-sm {
+		@apply text-sm;
+	}
+
+	.avatar-text-md {
+		@apply text-base;
+	}
+}

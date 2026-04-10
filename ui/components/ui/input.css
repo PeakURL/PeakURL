@@ -28,6 +28,10 @@
 			color-mix(in srgb, var(--color-error) 35%, transparent);
 	}
 
+	.form-field-input-no-icon {
+		@apply px-4;
+	}
+
 	.form-field-error {
 		@apply flex items-center gap-1.5 text-sm font-medium text-red-600 dark:text-red-400;
 		text-align: start;

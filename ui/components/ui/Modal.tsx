@@ -1,5 +1,6 @@
 import { X } from 'lucide-react';
 import { getDocumentDirection } from '@/i18n/direction';
+import { cn } from '@/utils';
 import type { ModalProps, ModalSize } from './types';
 export type { ModalProps, ModalSize } from './types';
 
@@ -39,7 +40,7 @@ export function Modal({
 
 			<div
 				dir={direction}
-				className={`modal-panel ${sizes[size]}`}
+				className={cn('modal-panel', sizes[size])}
 			>
 				{title && (
 					<div className="modal-header">

@@ -79,12 +79,72 @@
 		@apply absolute inline-flex animate-ping rounded-full opacity-75;
 	}
 
+	.pulse-dot-size-xs {
+		@apply h-1.5 w-1.5;
+	}
+
+	.pulse-dot-size-sm {
+		@apply h-2 w-2;
+	}
+
+	.pulse-dot-size-md {
+		@apply h-3 w-3;
+	}
+
+	.pulse-dot-size-lg {
+		@apply h-4 w-4;
+	}
+
+	.pulse-dot-color-green {
+		@apply bg-emerald-500;
+	}
+
+	.pulse-dot-color-red {
+		@apply bg-red-500;
+	}
+
+	.pulse-dot-color-yellow {
+		@apply bg-amber-500;
+	}
+
+	.pulse-dot-color-blue {
+		@apply bg-blue-500;
+	}
+
+	.pulse-dot-color-purple {
+		@apply bg-purple-500;
+	}
+
 	.progress-bar-track {
 		@apply h-2 w-full overflow-hidden rounded-full bg-surface-alt;
 	}
 
 	.progress-bar-fill {
 		@apply h-2 rounded-full transition-all duration-500 ease-out;
+	}
+
+	.progress-bar-fill-blue {
+		@apply bg-linear-to-r from-blue-500 to-blue-600;
+	}
+
+	.progress-bar-fill-green {
+		@apply bg-linear-to-r from-emerald-500 to-emerald-600;
+	}
+
+	.progress-bar-fill-red {
+		@apply bg-linear-to-r from-red-500 to-red-600;
+	}
+
+	.progress-bar-fill-yellow {
+		@apply bg-linear-to-r from-amber-500 to-orange-600;
+	}
+
+	.progress-bar-fill-purple {
+		@apply bg-linear-to-r from-purple-500 to-pink-600;
+	}
+
+	.progress-bar-fill-accent {
+		@apply bg-linear-to-r from-accent to-primary-600;
 	}
 
 	.progress-bar-label {

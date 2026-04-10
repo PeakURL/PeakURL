@@ -1,6 +1,4 @@
-@import './settings-layout.css';
-@import './settings-tab-page.css';
-@import './_components/header.css';
-@import './_components/sidebar.css';
-@import './_components/content.css';
-@import './_components/Content/sections/index.css';
+@import './layout.css';
+@import './tab-page.css';
+@import './_components/layout/index.css';
+@import './_components/tabs/index.css';

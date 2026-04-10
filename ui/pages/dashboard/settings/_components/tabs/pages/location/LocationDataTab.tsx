@@ -17,7 +17,7 @@ import type {
 	StateCardProps,
 	StateCardVariant,
 	StatCardProps,
-} from './types';
+} from '../types';
 
 function StateCard({
 	icon: Icon,

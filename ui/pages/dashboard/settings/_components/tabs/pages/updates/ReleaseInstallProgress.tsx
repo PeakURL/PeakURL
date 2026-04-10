@@ -1,7 +1,7 @@
 import { CheckCircle2, Clock3, LoaderCircle } from 'lucide-react';
 import { getDocumentDirection } from '@/i18n/direction';
 import { cn } from '@/utils';
-import type { ReleaseInstallProgressState } from './types';
+import type { ReleaseInstallProgressState } from '../types';
 
 interface ReleaseInstallProgressProps {
 	progress: ReleaseInstallProgressState;

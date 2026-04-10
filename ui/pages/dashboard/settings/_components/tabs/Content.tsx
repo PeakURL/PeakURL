@@ -21,7 +21,7 @@ import {
 	useReinstallUpdateMutation,
 	useUpgradeDatabaseSchemaMutation,
 } from '@/store/slices/api';
-import { useNotification, IntegrationsTab } from '@/components';
+import { useNotification } from '@/components';
 import { __, sprintf } from '@/i18n';
 import {
 	copyToClipboard as writeToClipboard,
@@ -42,15 +42,18 @@ import type {
 	ReleaseInstallStage,
 	ReleaseInstallProgressState,
 	SecurityFormState,
-} from './sections/types';
-import GeneralTab from './sections/GeneralTab';
-import SecurityTab from './sections/SecurityTab';
-import ApiTab from './sections/ApiTab';
-import ApiKeyModals from './sections/ApiKeyModals';
-import LocationDataTab from './sections/LocationDataTab';
-import EmailDeliveryTab from './sections/EmailDeliveryTab';
-import ReleaseInstallProgress from './sections/ReleaseInstallProgress';
-import UpdatesTab from './sections/UpdatesTab';
+} from './pages/types';
+import {
+	ApiKeyModals,
+	ApiTab,
+	EmailDeliveryTab,
+	GeneralTab,
+	IntegrationsTab,
+	LocationDataTab,
+	ReleaseInstallProgress,
+	SecurityTab,
+	UpdatesTab,
+} from './pages';
 
 const buildGeneralForm = (user?: ProfileUser | null): GeneralFormState => ({
 	firstName: user?.firstName || '',

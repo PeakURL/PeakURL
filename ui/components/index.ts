@@ -3,5 +3,4 @@ export * from './charts';
 export * from './common';
 export * from './providers';
 export * from './routes';
-export * from './settings';
 export * from './ui';

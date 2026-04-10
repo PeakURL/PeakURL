@@ -3,7 +3,7 @@ import { Copy } from 'lucide-react';
 import { __ } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
 import { cn } from '@/utils';
-import type { ApiKeyModalsProps } from './types';
+import type { ApiKeyModalsProps } from '../types';
 
 function ApiKeyModals({
 	showCreateModal,

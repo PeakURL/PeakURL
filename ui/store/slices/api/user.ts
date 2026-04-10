@@ -19,7 +19,7 @@ import type {
 	UserSummary,
 	VerifyTwoFactorPayload,
 } from './types';
-import type { ProfileUser } from '@/pages/dashboard/settings/_components/Content/types';
+import type { ProfileUser } from '@/pages/dashboard/settings/_components/tabs/types';
 
 /**
  * Generic object payload used by auth endpoints that do not yet have a stable

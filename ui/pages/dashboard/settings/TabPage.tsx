@@ -1,7 +1,7 @@
 import { Content } from './_components';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAdminAccess } from '@/hooks';
-import type { SettingsTabId } from './_components/types';
+import type { SettingsTabId } from './_components/layout/types';
 
 const VALID_SETTINGS_TABS = new Set<SettingsTabId>([
 	'general',
@@ -13,7 +13,7 @@ const VALID_SETTINGS_TABS = new Set<SettingsTabId>([
 	'updates',
 ]);
 
-function SettingsTabPage() {
+function TabPage() {
 	const params = useParams();
 	const tab = params.tab as SettingsTabId | undefined;
 	const {
@@ -50,4 +50,4 @@ function SettingsTabPage() {
 	);
 }
 
-export default SettingsTabPage;
+export default TabPage;

@@ -27,7 +27,7 @@ import type {
 	UpdateIssue,
 	UpdateStatusPayload,
 	UpdatesTabProps,
-} from './types';
+} from '../types';
 import ReleaseInstallProgress from './ReleaseInstallProgress';
 
 function hasUpdateAvailable(status?: UpdateStatusPayload | null) {

@@ -1,6 +1,6 @@
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import type { SettingsTabId } from '../types';
+import type { SettingsTabId } from '../layout/types';
 
 /**
  * Supported release actions exposed by the updater UI.

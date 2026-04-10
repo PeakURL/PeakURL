@@ -6,9 +6,9 @@ import type {
 	SettingsLayoutProps,
 	SettingsTabId,
 	SettingsTabItem,
-} from './_components/types';
+} from './_components/layout/types';
 
-function SettingsLayout({ children }: SettingsLayoutProps) {
+function Layout({ children }: SettingsLayoutProps) {
 	const params = useParams();
 	const activeTab = (params.tab as SettingsTabId | undefined) || 'general';
 	const {
@@ -69,4 +69,4 @@ function SettingsLayout({ children }: SettingsLayoutProps) {
 	);
 }
 
-export default SettingsLayout;
+export default Layout;

@@ -1,7 +1,7 @@
 import type {
 	CreatedWebhook,
 	WebhookSummary,
-} from '@/components/settings/types';
+} from '@/pages/dashboard/settings/_components/tabs/pages/integrations/types';
 import type {
 	CountryMetric,
 	DashboardDeviceData,
@@ -33,7 +33,7 @@ import type {
 	GeoipConfigurationPayload,
 	MailConfigurationPayload,
 	ProfileUser,
-} from '@/pages/dashboard/settings/_components/Content/types';
+} from '@/pages/dashboard/settings/_components/tabs/types';
 import type {
 	BackupCodesResponse,
 	EmailStatus,
@@ -43,7 +43,7 @@ import type {
 	SiteSettings,
 	TwoFactorSetupResponse,
 	UpdateStatusPayload,
-} from '@/pages/dashboard/settings/_components/Content/sections/types';
+} from '@/pages/dashboard/settings/_components/tabs/pages/types';
 import type {
 	SystemStatusResponse,
 	UrlExportResponse,

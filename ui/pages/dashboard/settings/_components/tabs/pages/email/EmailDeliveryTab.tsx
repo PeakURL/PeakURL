@@ -5,14 +5,14 @@ import { Button, Input, Select } from '@/components/ui';
 import { __, sprintf } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
 import { cn } from '@/utils';
-import type { SmtpEncryption } from '../types';
 import type {
 	EmailDeliveryTabProps,
 	EmailFormState,
 	EmailStatus,
 	MethodButtonProps,
-} from './types';
+} from '../types';
 import type { SelectOption } from '@/components/ui';
+import type { SmtpEncryption } from '../../types';
 
 function MethodButton({
 	isActive,

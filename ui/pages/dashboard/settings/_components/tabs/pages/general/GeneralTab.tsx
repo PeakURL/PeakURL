@@ -5,9 +5,9 @@ import { __ } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
 import { getInstalledLanguageLabel } from '@/i18n/languages';
 import { cn } from '@/utils';
-import type { GeneralFormState } from '../types';
-import type { GeneralTabProps } from './types';
 import type { SelectOption } from '@/components/ui';
+import type { GeneralFormState } from '../../types';
+import type { GeneralTabProps } from '../types';
 
 function GeneralTab({
 	initialForm,

@@ -27,7 +27,7 @@ import type {
 	ProtectedActionConfig,
 	SecuritySession,
 	SecurityTabProps,
-} from './types';
+} from '../types';
 
 const buildBackupCodesFile = (codes: string[]) =>
 	[

@@ -14,6 +14,24 @@ export default defineConfig({
 	plugins: [react({ include: /\.[jt]sx?$/ }), tailwindcss()],
 	build: {
 		outDir: 'build',
+		cssCodeSplit: false,
+		chunkSizeWarningLimit: 1500,
+		rollupOptions: {
+			output: {
+				entryFileNames: 'assets/app-[hash].js',
+				chunkFileNames: 'assets/chunk-[hash].js',
+				assetFileNames: (assetInfo) => {
+					const assetName = assetInfo.names[0] || '';
+					const extension = path.extname(assetName);
+
+					if ('.css' === extension) {
+						return 'assets/style-[hash][extname]';
+					}
+
+					return 'assets/asset-[hash][extname]';
+				},
+			},
+		},
 	},
 	resolve: {
 		alias: {

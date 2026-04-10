@@ -1,0 +1,29 @@
+@layer components {
+	.links-form-status {
+		@apply mb-4 rounded-lg border p-3;
+	}
+
+	.links-form-status-row {
+		@apply flex items-center gap-2 text-sm;
+	}
+
+	.links-form-status-icon {
+		@apply h-4 w-4;
+	}
+
+	.links-form-status-error {
+		@apply border-error/20 bg-error/10;
+	}
+
+	.links-form-status-error-text {
+		@apply text-error;
+	}
+
+	.links-form-status-success {
+		@apply border-success/20 bg-success/10;
+	}
+
+	.links-form-status-success-text {
+		@apply text-success;
+	}
+}

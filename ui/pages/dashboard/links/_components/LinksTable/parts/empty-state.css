@@ -1,0 +1,17 @@
+@layer components {
+	.links-empty-state {
+		@apply rounded-lg border border-stroke bg-surface p-16 text-center;
+	}
+
+	.links-empty-state-icon-wrap {
+		@apply mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent/10;
+	}
+
+	.links-empty-state-title {
+		@apply mb-1 text-base font-semibold text-heading;
+	}
+
+	.links-empty-state-description {
+		@apply text-sm text-text-muted;
+	}
+}

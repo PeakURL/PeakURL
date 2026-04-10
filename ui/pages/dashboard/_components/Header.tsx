@@ -1,9 +1,15 @@
+import { RefreshCw } from 'lucide-react';
 import { Select } from '@/components/ui';
 import { __ } from '@/i18n';
 import type { SelectOption } from '@/components/ui';
 import type { HeaderProps } from './types';
 
-const Header = ({ timeRange, onTimeRangeChange }: HeaderProps) => {
+const Header = ({
+	timeRange,
+	onTimeRangeChange,
+	onRefresh,
+	isRefreshing = false,
+}: HeaderProps) => {
 	const timeRangeOptions: SelectOption<number>[] = [
 		{ value: 7, label: __('Last 7 days') },
 		{ value: 30, label: __('Last 30 days') },
@@ -23,6 +29,20 @@ const Header = ({ timeRange, onTimeRangeChange }: HeaderProps) => {
 				</p>
 			</div>
 			<div className="dashboard-overview-header-actions">
+				<button
+					type="button"
+					onClick={onRefresh}
+					disabled={isRefreshing}
+					className="dashboard-page-refresh"
+					aria-label={__('Refresh dashboard data')}
+					title={__('Refresh dashboard data')}
+				>
+					<RefreshCw
+						className={`dashboard-page-refresh-icon ${
+							isRefreshing ? 'animate-spin' : ''
+						}`}
+					/>
+				</button>
 				<Select
 					value={timeRange}
 					onChange={onTimeRangeChange}

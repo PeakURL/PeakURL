@@ -1,0 +1,11 @@
+@layer components {
+	.dashboard-page-refresh,
+	.links-header-refresh {
+		@apply inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-stroke bg-surface text-text-muted transition-colors hover:border-accent/30 hover:text-accent disabled:cursor-wait;
+	}
+
+	.dashboard-page-refresh-icon,
+	.links-header-refresh-icon {
+		@apply h-5 w-5;
+	}
+}

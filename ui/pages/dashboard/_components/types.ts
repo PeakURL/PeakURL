@@ -132,6 +132,12 @@ export interface HeaderProps {
 
 	/** Updates the active time range. */
 	onTimeRangeChange: (value: number) => void;
+
+	/** Refreshes the overview data. */
+	onRefresh?: () => void | Promise<unknown>;
+
+	/** Marks the overview refresh action as busy. */
+	isRefreshing?: boolean;
 }
 
 /**

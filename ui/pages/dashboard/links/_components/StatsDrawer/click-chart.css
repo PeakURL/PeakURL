@@ -1,0 +1,41 @@
+@layer components {
+	.links-click-chart {
+		@apply rounded-lg border border-stroke bg-surface-alt p-4;
+	}
+
+	.links-click-chart-header {
+		@apply mb-4 flex flex-col justify-between gap-3 sm:flex-row sm:items-center sm:gap-0;
+	}
+
+	.links-click-chart-title {
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.links-click-chart-ranges {
+		@apply flex gap-1 rounded-lg bg-surface p-1;
+	}
+
+	.links-click-chart-range {
+		@apply rounded px-3 py-1 text-xs font-medium transition-all;
+	}
+
+	.links-click-chart-range-current {
+		@apply bg-accent text-white;
+	}
+
+	.links-click-chart-range-idle {
+		@apply text-text-muted hover:text-heading;
+	}
+
+	.links-click-chart-canvas-wrap {
+		@apply relative h-64;
+	}
+
+	.links-click-chart-loading {
+		@apply absolute inset-0 z-10 flex items-center justify-center bg-surface-alt/50;
+	}
+
+	.links-click-chart-spinner {
+		@apply h-6 w-6 animate-spin rounded-full border-2 border-accent border-t-transparent;
+	}
+}

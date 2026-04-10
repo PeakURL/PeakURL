@@ -1,0 +1,73 @@
+@layer components {
+	.links-sources-tab {
+		@apply space-y-6;
+	}
+
+	.links-sources-category-grid {
+		@apply grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4;
+	}
+
+	.links-sources-category-card {
+		@apply flex items-center gap-3 rounded-lg border border-stroke bg-surface p-3;
+	}
+
+	.links-sources-category-icon {
+		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-lg;
+	}
+
+	.links-sources-category-copy {
+		@apply min-w-0;
+	}
+
+	.links-sources-referrer-list {
+		@apply space-y-2;
+	}
+
+	.links-sources-referrer-item {
+		@apply flex items-center justify-between rounded-lg border border-stroke bg-surface p-3 transition-colors hover:border-primary-500/30;
+	}
+
+	.links-sources-referrer-main {
+		@apply flex min-w-0 items-center gap-3;
+	}
+
+	.links-sources-referrer-icon {
+		@apply flex h-8 w-8 shrink-0 items-center justify-center rounded-lg;
+	}
+
+	.links-sources-referrer-copy {
+		@apply min-w-0;
+	}
+
+	.links-sources-referrer-meta {
+		@apply flex shrink-0 items-center gap-3;
+	}
+
+	.links-sources-referrer-bar {
+		@apply hidden h-2 w-24 overflow-hidden rounded-full bg-surface-alt sm:block;
+	}
+
+	.links-sources-referrer-count {
+		text-align: end;
+	}
+
+	.links-sources-utm-list {
+		@apply space-y-2;
+	}
+
+	.links-sources-utm-item {
+		@apply flex items-center justify-between rounded-lg border border-stroke bg-surface p-3;
+	}
+
+	.links-sources-utm-copy {
+		@apply min-w-0;
+	}
+
+	.links-sources-utm-tags {
+		@apply mt-1 flex gap-2 text-xs text-text-muted;
+	}
+
+	.links-sources-utm-tag {
+		@apply rounded bg-surface-alt px-2 py-0.5;
+	}
+}

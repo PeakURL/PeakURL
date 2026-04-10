@@ -9,8 +9,7 @@ import { isDocumentRtl } from '@/i18n/direction';
 import type { DeleteLinkModalProps } from './types';
 
 function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
-	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
 	const [error, setError] = useState('');
 	const [deleteUrl, { isLoading }] = useDeleteUrlMutation();
 	const shortUrl = link ? buildShortUrl(link) : '';
@@ -36,87 +35,83 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 
 	return (
 		<Dialog open={open} onClose={setOpen} className="relative z-50">
-			<div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+			<div className="links-modal-backdrop" aria-hidden="true" />
 
-			<div className="fixed inset-0 flex items-center justify-center p-4">
+			<div className="links-modal-shell">
 				<DialogPanel
 					dir={direction}
-					className="text-inline-start mx-auto w-full max-w-md rounded-lg bg-surface shadow-xl"
+					className="links-modal-panel links-modal-panel-medium"
 				>
 					{/* Header */}
-					<div className="flex items-center justify-between p-6 border-b border-stroke">
-						<DialogTitle className="text-lg font-semibold text-heading flex items-center gap-2">
-							<div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center">
-								<AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400" />
+					<div className="links-modal-header">
+						<DialogTitle className="links-modal-title links-modal-title-with-icon">
+							<div className="links-modal-title-icon links-delete-modal-title-icon">
+								<AlertTriangle className="links-delete-modal-title-icon-svg" />
 							</div>
 							{__('Delete Link')}
 						</DialogTitle>
 						<button
 							onClick={() => setOpen(false)}
-							className="rounded-lg text-text-muted hover:text-heading hover:bg-surface-alt p-2 transition-all"
+							className="links-modal-close"
 						>
-							<X className="w-5 h-5" />
+							<X className="links-modal-close-icon" />
 						</button>
 					</div>
 
 					{/* Content */}
-					<div className="p-6 space-y-4">
+					<div className="links-modal-content">
 						{error && (
-							<div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
-								<p className="text-sm text-red-600 dark:text-red-400">
+							<div className="links-modal-alert links-modal-alert-error">
+								<p className="links-modal-alert-error-text">
 									{error}
 								</p>
 							</div>
 						)}
 
-						<p className="text-sm text-text-muted">
+						<p className="links-delete-modal-copy">
 							{__(
 								'Are you sure you want to delete this link? This action cannot be undone.'
 							)}
 						</p>
 
 						{/* Link Info */}
-						<div className="bg-surface-alt border border-stroke rounded-lg p-4 space-y-2">
+						<div className="links-delete-modal-summary">
 							<div>
-								<p className="text-xs font-medium text-text-muted mb-1">
+								<p className="links-delete-modal-summary-label">
 									{__('Short URL')}
 								</p>
 								<ReadOnlyValueBlock
 									value={shortUrl}
-									className="border-0 bg-transparent p-0"
+									className="links-readonly-reset"
 									valueClassName="text-accent"
 								/>
 							</div>
 							<div>
-								<p className="text-xs font-medium text-text-muted mb-1">
+								<p className="links-delete-modal-summary-label">
 									{__('Destination')}
 								</p>
 								<ReadOnlyValueBlock
 									value={link.destinationUrl}
-									className="border-0 bg-transparent p-0"
+									className="links-readonly-reset"
 									monospace={false}
 									valueClassName="text-heading"
 								/>
 							</div>
 							{(totalClicks > 0 || uniqueClicks > 0) && (
-								<div
-									className={`flex gap-4 border-t border-stroke pt-2 ${
-										isRtl ? 'justify-end' : 'justify-start'
-									}`}
-								>
+								<div className="links-delete-modal-metrics">
 									<div>
-										<p className="text-xs text-text-muted">
+										<p className="links-delete-modal-metric-label">
 											{__('Total Clicks')}
 										</p>
-										<p className="text-sm font-semibold text-heading">
+										<p className="links-delete-modal-metric-value">
 											{totalClicks}
 										</p>
 									</div>
 									<div>
-										<p className="text-xs text-text-muted">
+										<p className="links-delete-modal-metric-label">
 											{__('Unique Visitors')}
 										</p>
-										<p className="text-sm font-semibold text-heading">
+										<p className="links-delete-modal-metric-value">
 											{uniqueClicks}
 										</p>
 									</div>
@@ -125,30 +120,30 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 						</div>
 
 						{/* Action Buttons */}
-						<div className="flex gap-3 pt-2">
+						<div className="links-modal-actions">
 							<button
 								type="button"
 								onClick={() => setOpen(false)}
 								disabled={isLoading}
-								className="flex-1 px-4 py-2.5 bg-surface border border-stroke hover:bg-surface-alt text-heading rounded-lg transition-all font-medium disabled:opacity-50"
+								className="links-modal-button links-modal-button-secondary"
 							>
 								{__('Cancel')}
 							</button>
 							<button
 								onClick={handleDelete}
 								disabled={isLoading}
-								className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white rounded-lg transition-all font-medium"
+								className="links-modal-button links-modal-button-danger"
 							>
 								{isLoading ? (
-									<>
-										<div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+									<span className="links-modal-button-content">
+										<div className="links-modal-spinner"></div>
 										{__('Deleting...')}
-									</>
+									</span>
 								) : (
-									<>
-										<Trash2 className="w-4 h-4" />
+									<span className="links-modal-button-content">
+										<Trash2 className="links-modal-button-icon" />
 										{__('Delete')}
-									</>
+									</span>
 								)}
 							</button>
 						</div>

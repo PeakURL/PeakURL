@@ -6,17 +6,17 @@ const StatusMessages = ({ error, success }: StatusMessagesProps) => {
 	return (
 		<>
 			{error && (
-				<div className="mb-4 p-3 bg-error/10 border border-error/20 rounded-lg">
-					<p className="text-sm text-error flex items-center gap-2">
-						<CircleAlert className="h-4 w-4" />
+				<div className="links-form-status links-form-status-error">
+					<p className="links-form-status-row links-form-status-error-text">
+						<CircleAlert className="links-form-status-icon" />
 						{error}
 					</p>
 				</div>
 			)}
 			{success && (
-				<div className="mb-4 p-3 bg-success/10 border border-success/20 rounded-lg">
-					<p className="text-sm text-success flex items-center gap-2">
-						<CircleCheckBig className="h-4 w-4" />
+				<div className="links-form-status links-form-status-success">
+					<p className="links-form-status-row links-form-status-success-text">
+						<CircleCheckBig className="links-form-status-icon" />
 						{success}
 					</p>
 				</div>

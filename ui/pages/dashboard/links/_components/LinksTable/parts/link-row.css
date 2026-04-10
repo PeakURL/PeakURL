@@ -1,0 +1,129 @@
+@layer components {
+	.links-row {
+		@apply transition-colors hover:bg-surface-alt/50;
+	}
+
+	.links-row-selected {
+		@apply bg-accent/5;
+	}
+
+	.links-row-cell {
+		@apply px-4 py-3;
+	}
+
+	.links-row-link {
+		@apply flex items-center gap-2;
+	}
+
+	.links-row-link-icon {
+		@apply flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10;
+	}
+
+	.links-row-link-copy {
+		@apply text-text-muted transition-all hover:text-accent opacity-0;
+	}
+
+	.group:hover .links-row-link-copy {
+		@apply opacity-100;
+	}
+
+	.links-row-title {
+		@apply max-w-37.5 truncate text-sm font-medium text-heading;
+	}
+
+	.links-row-destination {
+		@apply max-w-xs;
+	}
+
+	.links-row-destination-value {
+		@apply truncate text-sm text-text-muted;
+	}
+
+	.links-row-meta {
+		@apply mt-1 flex flex-col items-start gap-1;
+	}
+
+	.links-row-badge {
+		@apply inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-medium;
+	}
+
+	.links-row-badge-warning {
+		@apply bg-warning/10 text-warning;
+	}
+
+	.links-row-badge-info {
+		@apply bg-info/10 text-info;
+	}
+
+	.links-row-badge-error {
+		@apply bg-error/10 text-error;
+	}
+
+	.links-row-performance {
+		@apply flex items-center justify-center gap-3;
+	}
+
+	.links-row-performance-block {
+		@apply text-center;
+	}
+
+	.links-row-performance-value {
+		@apply text-base font-bold text-heading;
+	}
+
+	.links-row-performance-value-accent {
+		@apply text-base font-bold text-accent;
+	}
+
+	.links-row-performance-label {
+		@apply text-[10px] text-text-muted;
+	}
+
+	.links-row-performance-divider {
+		@apply h-8 w-px bg-stroke;
+	}
+
+	.links-row-created {
+		@apply text-sm text-text-muted;
+	}
+
+	.links-row-status {
+		@apply mt-0.5 flex items-center gap-1.5;
+	}
+
+	.links-row-status-dot {
+		@apply h-1.5 w-1.5 rounded-full;
+	}
+
+	.links-row-status-label {
+		@apply text-xs font-medium;
+	}
+
+	.links-row-actions {
+		@apply flex items-center gap-1 justify-end;
+	}
+
+	html[dir='rtl'] .links-row-actions {
+		@apply justify-start;
+	}
+
+	.links-row-action {
+		@apply flex h-7 w-7 items-center justify-center rounded-lg text-text-muted transition-all;
+	}
+
+	.links-row-action-qr {
+		@apply hover:bg-accent/10 hover:text-accent;
+	}
+
+	.links-row-action-stats {
+		@apply hover:bg-info/10 hover:text-info;
+	}
+
+	.links-row-action-edit {
+		@apply hover:bg-warning/10 hover:text-warning;
+	}
+
+	.links-row-action-delete {
+		@apply hover:bg-error/10 hover:text-error;
+	}
+}

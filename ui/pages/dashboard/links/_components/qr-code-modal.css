@@ -1,0 +1,33 @@
+@layer components {
+	.links-qr-modal-code-wrap {
+		@apply flex justify-center rounded-lg bg-white p-6;
+	}
+
+	.links-qr-modal-code {
+		@apply h-64 w-64;
+	}
+
+	.links-qr-modal-loading {
+		@apply flex h-64 w-64 items-center justify-center;
+	}
+
+	.links-qr-modal-spinner {
+		@apply h-12 w-12 animate-spin rounded-full border-b-2 border-accent;
+	}
+
+	.links-qr-modal-summary {
+		@apply rounded-lg border border-stroke bg-surface-alt p-4;
+	}
+
+	.links-qr-modal-summary-label {
+		@apply mb-1 text-xs font-medium text-text-muted;
+	}
+
+	.links-qr-modal-actions {
+		@apply flex gap-3;
+	}
+
+	.links-qr-modal-copy-success {
+		@apply text-success;
+	}
+}

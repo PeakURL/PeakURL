@@ -142,75 +142,75 @@ function LinksPage() {
 	).length;
 
 	return (
-		<div className="space-y-4 pb-8 sm:space-y-5">
+		<div className="links-page">
 			<Header onRefresh={handleRefresh} isRefreshing={isRefreshing} />
 
 			{/* Quick Stats - Compact Row */}
-			<div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 xl:grid-cols-4">
-				<div className="bg-surface border border-(--color-stroke) rounded-lg p-3.5">
-					<div className="flex items-center gap-2.5 mb-2">
-						<div className="w-8 h-8 rounded-lg bg-primary-500/10 flex items-center justify-center shrink-0">
+			<div className="links-page-stats">
+				<div className="links-page-stat-card">
+					<div className="links-page-stat-header">
+						<div className="links-page-stat-icon links-page-stat-icon-links">
 							<Link2 className="h-4 w-4 text-primary-600 dark:text-primary-400" />
 						</div>
-						<span className="text-xs font-medium text-success">
+						<span className="links-page-stat-trend">
 							+12%
 						</span>
 					</div>
-					<div className="text-xl font-bold text-heading">
+					<div className="links-page-stat-value">
 						{linksForStats.length}
 					</div>
-					<div className="text-xs text-muted mt-0.5">
+					<div className="links-page-stat-label">
 						{__('Total Links')}
 					</div>
 				</div>
 
-				<div className="bg-surface border border-(--color-stroke) rounded-lg p-3.5">
-					<div className="flex items-center gap-2.5 mb-2">
-						<div className="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center shrink-0">
+				<div className="links-page-stat-card">
+					<div className="links-page-stat-header">
+						<div className="links-page-stat-icon links-page-stat-icon-active">
 							<CircleCheckBig className="h-4 w-4 text-success" />
 						</div>
-						<span className="text-xs font-medium text-success">
+						<span className="links-page-stat-trend">
 							{__('Active')}
 						</span>
 					</div>
-					<div className="text-xl font-bold text-heading">
+					<div className="links-page-stat-value">
 						{activeLinks}
 					</div>
-					<div className="text-xs text-muted mt-0.5">
+					<div className="links-page-stat-label">
 						{__('Active Links')}
 					</div>
 				</div>
 
-				<div className="bg-surface border border-(--color-stroke) rounded-lg p-3.5">
-					<div className="flex items-center gap-2.5 mb-2">
-						<div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0">
+				<div className="links-page-stat-card">
+					<div className="links-page-stat-header">
+						<div className="links-page-stat-icon links-page-stat-icon-clicks">
 							<MousePointerClick className="h-4 w-4 text-blue-600 dark:text-blue-400" />
 						</div>
-						<span className="text-xs font-medium text-success">
+						<span className="links-page-stat-trend">
 							+28%
 						</span>
 					</div>
-					<div className="text-xl font-bold text-heading">
+					<div className="links-page-stat-value">
 						{totalClicks.toLocaleString()}
 					</div>
-					<div className="text-xs text-muted mt-0.5">
+					<div className="links-page-stat-label">
 						{__('Total Clicks')}
 					</div>
 				</div>
 
-				<div className="bg-surface border border-(--color-stroke) rounded-lg p-3.5">
-					<div className="flex items-center gap-2.5 mb-2">
-						<div className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0">
+				<div className="links-page-stat-card">
+					<div className="links-page-stat-header">
+						<div className="links-page-stat-icon links-page-stat-icon-visitors">
 							<Users className="h-4 w-4 text-purple-600 dark:text-purple-400" />
 						</div>
-						<span className="text-xs font-medium text-success">
+						<span className="links-page-stat-trend">
 							+35%
 						</span>
 					</div>
-					<div className="text-xl font-bold text-heading">
+					<div className="links-page-stat-value">
 						{totalUniqueClicks.toLocaleString()}
 					</div>
-					<div className="text-xs text-muted mt-0.5">
+					<div className="links-page-stat-label">
 						{__('Unique Visitors')}
 					</div>
 				</div>

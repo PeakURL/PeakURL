@@ -105,22 +105,22 @@ function ClickChart({
 	}, [selectedTab, timeRange, open, link, stats]);
 
 	return (
-		<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0 mb-4">
-				<h3 className="text-sm font-semibold text-heading">
+		<div className="links-click-chart">
+			<div className="links-click-chart-header">
+				<h3 className="links-click-chart-title">
 					{__('Click History')}
 				</h3>
 				{/* Time Range Selector */}
-				<div className="flex gap-1 bg-surface rounded-lg p-1">
+				<div className="links-click-chart-ranges">
 					{timeRangeOptions.map((range) => (
 						<button
 							key={range.value}
 							type="button"
 							onClick={() => setTimeRange(range.value)}
-							className={`px-3 py-1 text-xs font-medium rounded transition-all ${
+							className={`links-click-chart-range ${
 								timeRange === range.value
-									? 'bg-accent text-white'
-									: 'text-text-muted hover:text-heading'
+									? 'links-click-chart-range-current'
+									: 'links-click-chart-range-idle'
 							}`}
 						>
 							{range.label}
@@ -128,10 +128,10 @@ function ClickChart({
 					))}
 				</div>
 			</div>
-			<div className="h-64 relative">
+			<div className="links-click-chart-canvas-wrap">
 				{isLoading ? (
-					<div className="absolute inset-0 flex items-center justify-center bg-surface-alt/50 z-10">
-						<div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+					<div className="links-click-chart-loading">
+						<div className="links-click-chart-spinner" />
 					</div>
 				) : null}
 				<canvas ref={chartRef}></canvas>

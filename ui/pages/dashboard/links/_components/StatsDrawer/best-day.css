@@ -1,0 +1,66 @@
+@layer components {
+	.links-best-day {
+		@apply rounded-lg border border-stroke bg-surface-alt p-4;
+	}
+
+	.links-best-day-title {
+		@apply mb-3 text-base font-semibold text-heading;
+	}
+
+	.links-best-day-copy {
+		@apply mb-2 text-sm text-heading;
+	}
+
+	.links-best-day-value {
+		@apply font-semibold;
+	}
+
+	.links-best-day-toggle {
+		@apply inline-flex items-center gap-1 text-accent hover:underline;
+	}
+
+	.links-best-day-details {
+		@apply mt-4 border-accent/20;
+		animation: links-best-day-enter 0.2s ease-out;
+		border-inline-start-width: 2px;
+		padding-inline-start: 1rem;
+		text-align: start;
+	}
+
+	.links-best-day-tree {
+		@apply space-y-2;
+	}
+
+	.links-best-day-tree-row {
+		@apply flex items-center gap-2;
+	}
+
+	.links-best-day-tree-dot-large {
+		@apply h-2 w-2 rounded-full bg-accent;
+	}
+
+	.links-best-day-tree-dot-medium {
+		@apply h-1.5 w-1.5 rounded-full bg-text-muted;
+	}
+
+	.links-best-day-tree-dot-small {
+		@apply h-1 w-1 rounded-full bg-text-muted;
+	}
+
+	.links-best-day-tree-branch {
+		@apply space-y-2;
+		margin-inline-start: 1rem;
+	}
+}
+
+@keyframes links-best-day-enter {
+	from {
+		opacity: 0;
+		transform: translateY(-0.5rem);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

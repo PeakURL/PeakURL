@@ -1,0 +1,49 @@
+@layer components {
+	.links-share-tab {
+		@apply space-y-6;
+	}
+
+	.links-share-panel {
+		@apply rounded-lg border border-stroke bg-surface-alt p-4;
+	}
+
+	.links-share-label {
+		@apply mb-2 block text-xs font-medium text-text-muted;
+	}
+
+	.links-share-readonly {
+		@apply bg-surface px-2 py-2;
+	}
+
+	.links-share-title {
+		@apply mb-4 text-sm font-semibold text-heading;
+	}
+
+	.links-share-grid {
+		@apply grid grid-cols-2 gap-3;
+	}
+
+	.links-share-button {
+		@apply flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-white transition-all;
+	}
+
+	.links-share-button-facebook {
+		@apply bg-[#1877F2] hover:bg-[#166FE5];
+	}
+
+	.links-share-button-twitter {
+		@apply bg-[#1DA1F2] hover:bg-[#1A94DA];
+	}
+
+	.links-share-button-linkedin {
+		@apply bg-[#0A66C2] hover:bg-[#095196];
+	}
+
+	.links-share-button-email {
+		@apply border border-stroke bg-surface text-heading hover:bg-surface-alt;
+	}
+
+	.links-share-button-label {
+		@apply text-sm font-medium;
+	}
+}

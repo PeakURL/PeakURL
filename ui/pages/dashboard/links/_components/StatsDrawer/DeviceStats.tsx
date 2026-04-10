@@ -69,12 +69,12 @@ function DeviceStats({
 }: DeviceStatsProps) {
 	if (isLoading) {
 		return (
-			<div className="bg-surface-alt border border-stroke rounded-lg p-4 animate-pulse">
-				<h3 className="text-sm font-semibold text-heading mb-4">
+			<div className="links-device-section animate-pulse">
+				<h3 className="links-drawer-section-title mb-4">
 					{__('Device & Browser Analytics')}
 				</h3>
-				<div className="h-64 flex items-center justify-center bg-surface rounded-lg border border-stroke">
-					<p className="text-sm text-muted">
+				<div className="links-device-empty">
+					<p className="links-device-empty-copy">
 						{__('Loading analytics...')}
 					</p>
 				</div>
@@ -87,17 +87,17 @@ function DeviceStats({
 
 	if (!hasData) {
 		return (
-			<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-				<h3 className="text-sm font-semibold text-heading mb-4">
+			<div className="links-device-section">
+				<h3 className="links-drawer-section-title mb-4">
 					{__('Device & Browser Analytics')}
 				</h3>
-				<div className="h-64 flex items-center justify-center bg-surface rounded-lg border border-stroke">
-					<div className="text-center px-6">
-						<Monitor className="w-12 h-12 text-text-muted mx-auto mb-3" />
-						<p className="text-sm font-medium text-heading mb-2">
+				<div className="links-device-empty">
+					<div className="links-device-empty-content">
+						<Monitor className="links-drawer-empty-icon-spaced" />
+						<p className="links-device-empty-title">
 							{__('No device data available yet')}
 						</p>
-						<p className="text-xs text-text-muted">
+						<p className="links-device-empty-copy-small">
 							{__(
 								'Device and browser information will appear here once clicks are recorded'
 							)}
@@ -128,28 +128,28 @@ function DeviceStats({
 	const displayOses = formatData(oses);
 
 	return (
-		<div className="space-y-4">
+		<div className="links-device-stats">
 			{/* Summary Card */}
-			<div className="bg-linear-to-br from-accent/5 to-info/5 border border-accent/20 rounded-lg p-4">
-				<div className="flex items-center justify-between">
-					<div className="flex items-center gap-3">
-						<div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+			<div className="links-device-summary">
+				<div className="links-drawer-summary-inner">
+					<div className="links-drawer-summary-main">
+						<div className="links-drawer-summary-icon">
 							<Monitor className="w-5 h-5 text-accent" />
 						</div>
 						<div>
-							<p className="text-sm text-text-muted">
+							<p className="links-drawer-summary-label">
 								{__('Total Devices')}
 							</p>
-							<p className="text-xl font-bold text-heading">
+							<p className="links-drawer-summary-value">
 								{total}
 							</p>
 						</div>
 					</div>
-					<div className="text-inline-end">
-						<p className="text-sm text-text-muted">
+					<div className="links-drawer-summary-meta">
+						<p className="links-drawer-summary-label">
 							{__('Unique Browsers')}
 						</p>
-						<p className="text-xl font-bold text-heading">
+						<p className="links-drawer-summary-value">
 							{displayBrowsers.length}
 						</p>
 					</div>
@@ -157,14 +157,14 @@ function DeviceStats({
 			</div>
 
 			{/* Browsers */}
-			<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-				<div className="flex items-center gap-2 mb-4">
-					<Globe className="w-4 h-4 text-accent" />
-					<h3 className="text-sm font-semibold text-heading">
+			<div className="links-device-section">
+				<div className="links-drawer-section-header">
+					<Globe className="links-drawer-section-icon" />
+					<h3 className="links-drawer-section-title">
 						{__('Browsers')}
 					</h3>
 				</div>
-				<div className="space-y-3">
+				<div className="links-device-list">
 					{displayBrowsers
 						.slice(0, 5)
 						.map(
@@ -176,10 +176,10 @@ function DeviceStats({
 								return (
 									<div
 										key={browser.name}
-										className="space-y-1.5"
+										className="links-device-list-row"
 									>
-										<div className="flex items-center justify-between">
-											<div className="flex items-center gap-2">
+										<div className="links-device-list-row-header">
+											<div className="links-device-list-main">
 												<BrowserIcon
 													browser={browser.name}
 													className="w-4 h-4 text-accent"
@@ -188,18 +188,18 @@ function DeviceStats({
 													{browser.name}
 												</span>
 											</div>
-											<div className="flex items-center gap-3">
-												<span className="text-sm text-muted">
+											<div className="links-device-list-meta">
+												<span className="links-device-list-percentage">
 													{browser.percentage}%
 												</span>
-												<span className="text-inline-end min-w-12 text-sm font-semibold text-heading">
+												<span className="links-device-list-count">
 													{browser.count}
 												</span>
 											</div>
 										</div>
-										<div className="w-full bg-surface rounded-full h-2 overflow-hidden">
+										<div className="links-drawer-bar-track">
 											<div
-												className="bg-accent h-full rounded-full transition-all duration-500"
+												className="links-drawer-bar-fill bg-accent"
 												style={{
 													width: `${browser.percentage}%`,
 												}}
@@ -213,24 +213,24 @@ function DeviceStats({
 			</div>
 
 			{/* Device Types */}
-			<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-				<div className="flex items-center gap-2 mb-4">
-					<Monitor className="w-4 h-4 text-accent" />
-					<h3 className="text-sm font-semibold text-heading">
+			<div className="links-device-section">
+				<div className="links-drawer-section-header">
+					<Monitor className="links-drawer-section-icon" />
+					<h3 className="links-drawer-section-title">
 						{__('Device Types')}
 					</h3>
 				</div>
-				<div className="grid grid-cols-1 gap-3">
+				<div className="links-device-types">
 					{displayDevices.map(
 						(device: StatsMetricItem & { percentage: string }) => {
 							const DeviceIcon = getDeviceIcon(device.name);
 							return (
 								<div
 									key={device.name}
-									className="flex items-center justify-between py-3 px-4 rounded-lg bg-surface border border-stroke hover:border-accent/50 transition-all"
+									className="links-device-type-card"
 								>
-									<div className="flex items-center gap-3">
-										<div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+									<div className="links-device-type-main">
+										<div className="links-device-type-icon">
 											<DeviceIcon className="w-5 h-5 text-accent" />
 										</div>
 										<div>
@@ -247,7 +247,7 @@ function DeviceStats({
 											</p>
 										</div>
 									</div>
-									<div className="text-inline-end">
+									<div className="links-device-type-value">
 										<p className="text-lg font-bold text-heading">
 											{device.percentage}%
 										</p>
@@ -260,22 +260,22 @@ function DeviceStats({
 			</div>
 
 			{/* Operating Systems */}
-			<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-				<div className="flex items-center gap-2 mb-4">
-					<Laptop className="w-4 h-4 text-accent" />
-					<h3 className="text-sm font-semibold text-heading">
+			<div className="links-device-section">
+				<div className="links-drawer-section-header">
+					<Laptop className="links-drawer-section-icon" />
+					<h3 className="links-drawer-section-title">
 						{__('Operating Systems')}
 					</h3>
 				</div>
-				<div className="space-y-2">
+				<div className="links-device-os-list">
 					{displayOses.map(
 						(os: StatsMetricItem & { percentage: string }) => (
 							<div
 								key={os.name}
-								className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-surface transition-all"
+								className="links-device-os-item"
 							>
-								<div className="flex items-center gap-3">
-									<div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center text-lg">
+								<div className="links-device-os-main">
+									<div className="links-device-os-icon">
 										{getOSEmoji(os.name)}
 									</div>
 									<div>
@@ -284,11 +284,11 @@ function DeviceStats({
 										</p>
 									</div>
 								</div>
-								<div className="text-inline-end flex items-center gap-3">
-									<span className="text-sm text-muted">
+								<div className="links-device-os-stats">
+									<span className="links-device-list-percentage">
 										{os.percentage}%
 									</span>
-									<span className="text-sm font-semibold text-heading min-w-12">
+									<span className="links-device-os-count">
 										{os.count}
 									</span>
 								</div>

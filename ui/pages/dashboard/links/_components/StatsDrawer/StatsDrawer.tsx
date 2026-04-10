@@ -67,21 +67,21 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 
 	return (
 		<Dialog open={open} onClose={setOpen} className="relative z-50">
-			<div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+			<div className="links-modal-backdrop" aria-hidden="true" />
 
 			<div className="fixed inset-0 overflow-hidden">
 				<div className="absolute inset-0 overflow-hidden">
 					<div
-						className={`pointer-events-none fixed inset-y-0 flex max-w-full ${
+						className={`links-drawer-shell ${
 							isRtl
-								? 'left-0 pr-0 sm:pr-16'
-								: 'right-0 pl-0 sm:pl-16'
+								? 'links-drawer-shell-rtl'
+								: 'links-drawer-shell-ltr'
 						}`}
 					>
 						<DialogPanel
 							dir={direction}
 							transition
-							className={`pointer-events-auto w-screen max-w-4xl transform transition duration-500 ease-in-out sm:duration-700 ${
+							className={`links-drawer-panel ${
 								isRtl
 									? 'data-closed:-translate-x-full'
 									: 'data-closed:translate-x-full'
@@ -89,16 +89,16 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 						>
 							<div className="flex h-full flex-col overflow-y-auto bg-surface shadow-xl">
 								{/* Header */}
-								<div className="bg-surface-alt px-4 py-6 sm:px-6">
-									<div className="flex items-start justify-between">
-										<div className="space-y-1">
-											<DialogTitle className="text-lg font-semibold text-heading flex items-center gap-2">
-												<div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+								<div className="links-drawer-header">
+									<div className="links-drawer-header-inner">
+										<div className="links-drawer-header-copy">
+											<DialogTitle className="links-drawer-title">
+												<div className="links-drawer-title-icon">
 													<Link2 className="w-4 h-4 text-accent" />
 												</div>
 												{__('Link Analytics')}
 											</DialogTitle>
-											<p className="text-sm text-text-muted">
+											<p className="links-drawer-description">
 												{__(
 													'Detailed statistics and performance metrics'
 												)}
@@ -107,7 +107,7 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 										<button
 											type="button"
 											onClick={() => setOpen(false)}
-											className="rounded-lg text-text-muted hover:text-heading hover:bg-surface-alt p-2 transition-all"
+											className="links-drawer-close"
 										>
 											<span className="sr-only">
 												{__('Close panel')}
@@ -118,13 +118,13 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 								</div>
 
 								{/* Content */}
-								<div className="flex-1 px-4 py-6 sm:px-6">
+								<div className="links-drawer-content">
 									{/* Tabs */}
 									<TabGroup
 										selectedIndex={selectedTab}
 										onChange={setSelectedTab}
 									>
-										<TabList className="flex gap-2 border-b border-stroke mb-6 overflow-x-auto no-scrollbar">
+										<TabList className="links-drawer-tabs">
 											{tabs.map((tab) => {
 												const Icon = tab.icon;
 												return (
@@ -133,14 +133,14 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 														className={({
 															selected,
 														}) =>
-															`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all outline-none border-b-2 -mb-px whitespace-nowrap ${
+															`links-drawer-tab ${
 																selected
-																	? 'border-accent text-accent'
-																	: 'border-transparent text-text-muted hover:text-heading'
+																	? 'links-drawer-tab-active'
+																	: 'links-drawer-tab-inactive'
 															}`
 														}
 													>
-														<Icon className="w-4 h-4 shrink-0" />
+														<Icon className="links-drawer-tab-icon" />
 														{tab.name}
 													</Tab>
 												);
@@ -149,7 +149,7 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 
 										<TabPanels>
 											{/* Traffic Statistics Tab */}
-											<TabPanel className="space-y-4">
+											<TabPanel className="links-drawer-panel-stack">
 												{/* Stats Cards at the top */}
 												<StatCards
 													link={link}
@@ -208,16 +208,12 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 								</div>
 
 								{/* Footer */}
-								<div className="border-t border-stroke px-4 py-4 bg-surface-alt sm:px-6">
-									<div
-										className={`flex gap-3 ${
-											isRtl ? 'justify-start' : 'justify-end'
-										}`}
-									>
+								<div className="links-drawer-footer">
+									<div className="links-drawer-footer-actions">
 										<button
 											type="button"
 											onClick={() => setOpen(false)}
-											className="px-4 py-2 rounded-lg bg-surface border border-stroke text-heading hover:bg-surface-alt transition-all text-sm font-medium"
+											className="links-drawer-footer-button"
 										>
 											{__('Close')}
 										</button>

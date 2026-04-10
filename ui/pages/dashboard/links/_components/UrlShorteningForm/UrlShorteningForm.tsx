@@ -18,8 +18,7 @@ import AdvancedOptions from './AdvancedOptions';
 import type { CreateUrlPayload } from './types';
 
 const UrlShorteningForm = () => {
-	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
 	const [destinationUrl, setDestinationUrl] = useState('');
 	const [alias, setAlias] = useState('');
 	const [title, setTitle] = useState('');
@@ -154,12 +153,12 @@ const UrlShorteningForm = () => {
 	};
 
 	return (
-		<div className="bg-surface rounded-xl border border-stroke shadow-sm p-6">
+		<div className="links-form">
 			<Header />
 
 			<StatusMessages error={error} success={success} />
 
-			<form onSubmit={handleSubmit}>
+			<form onSubmit={handleSubmit} className="links-form-element">
 				<MainInputs
 					destinationUrl={destinationUrl}
 					setDestinationUrl={setDestinationUrl}
@@ -173,10 +172,10 @@ const UrlShorteningForm = () => {
 					type="button"
 					onClick={() => setShowAdvanced(!showAdvanced)}
 					dir={direction}
-					className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+					className="links-form-advanced-toggle"
 				>
 					<svg
-						className="w-4 h-4"
+						className="links-form-advanced-toggle-icon"
 						fill="none"
 						stroke="currentColor"
 						viewBox="0 0 24 24"
@@ -190,9 +189,9 @@ const UrlShorteningForm = () => {
 					</svg>
 					{__('Advanced Options')}
 					{showAdvanced ? (
-						<ChevronUp className="w-4 h-4" />
+						<ChevronUp className="links-form-advanced-toggle-icon" />
 					) : (
-						<ChevronDown className="w-4 h-4" />
+						<ChevronDown className="links-form-advanced-toggle-icon" />
 					)}
 				</button>
 

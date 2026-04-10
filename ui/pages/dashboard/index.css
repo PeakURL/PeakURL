@@ -1,4 +1,5 @@
 @import './dashboard-page.css';
+@import './_components/shared.css';
 @import './_components/header.css';
 @import './_components/stats-cards.css';
 @import './_components/traffic-overview.css';
@@ -6,5 +7,8 @@
 @import './_components/device-breakdown.css';
 @import './_components/country-stats.css';
 @import './about/index.css';
+@import './links/index.css';
 @import './plugins/index.css';
 @import './settings/index.css';
+@import './users/index.css';
+@import './tools/index.css';

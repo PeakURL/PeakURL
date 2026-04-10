@@ -1,0 +1,224 @@
+@layer components {
+	.system-status-page {
+		@apply space-y-4;
+	}
+
+	.system-status-page-panel {
+		@apply overflow-hidden rounded-lg border border-stroke bg-surface shadow-sm;
+	}
+
+	.system-status-page-header {
+		@apply border-b border-stroke bg-surface px-5 pt-8 sm:px-8;
+	}
+
+	.system-status-page-summary {
+		@apply mx-auto max-w-2xl text-center;
+	}
+
+	.system-status-page-title {
+		@apply text-3xl font-semibold tracking-tight text-heading;
+	}
+
+	.system-status-page-status {
+		@apply mt-4 flex items-center justify-center gap-2;
+	}
+
+	.system-status-page-status-indicator {
+		@apply flex h-5 w-5 items-center justify-center rounded-full border-2;
+	}
+
+	.system-status-page-status-dot {
+		@apply h-2 w-2 rounded-full;
+	}
+
+	.system-status-page-status-label {
+		@apply text-sm font-semibold;
+	}
+
+	.system-status-page-status-time {
+		@apply mt-3 text-sm text-text-muted;
+	}
+
+	.system-status-page-tabs {
+		@apply mt-6 flex items-center justify-center gap-6;
+	}
+
+	.system-status-page-tab {
+		@apply border-b-2 px-1 pb-3 text-sm font-medium transition-colors;
+	}
+
+	.system-status-page-tab-active {
+		@apply border-accent text-heading;
+	}
+
+	.system-status-page-tab-inactive {
+		@apply border-transparent text-text-muted hover:text-heading;
+	}
+
+	.system-status-page-content {
+		@apply space-y-8 bg-bg px-5 py-6 sm:px-8;
+	}
+
+	.system-status-page-view {
+		@apply space-y-8;
+	}
+
+	.system-status-page-view-compact {
+		@apply space-y-6;
+	}
+
+	.system-status-page-section {
+		@apply space-y-4;
+	}
+
+	.system-status-page-section-compact {
+		@apply space-y-3;
+	}
+
+	.system-status-page-section-header {
+		@apply space-y-2;
+	}
+
+	.system-status-page-section-title {
+		@apply text-2xl font-semibold text-heading;
+	}
+
+	.system-status-page-section-summary {
+		@apply max-w-3xl text-sm leading-6 text-text-muted;
+	}
+
+	.system-status-page-error {
+		@apply rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200;
+	}
+
+	.system-status-page-error-layout {
+		@apply flex items-start gap-3;
+	}
+
+	.system-status-page-error-icon {
+		@apply mt-0.5 shrink-0;
+	}
+
+	.system-status-page-error-copy {
+		@apply space-y-1;
+	}
+
+	.system-status-page-error-title {
+		@apply font-semibold;
+	}
+
+	.system-status-page-error-summary {
+		@apply leading-6;
+	}
+
+	.system-status-page-issue-list,
+	.system-status-page-info-panel,
+	.system-status-page-passed-list {
+		@apply overflow-hidden rounded-lg border border-stroke bg-surface;
+	}
+
+	.system-status-page-issue-row-bordered,
+	.system-status-page-info-row-bordered {
+		@apply border-t border-stroke;
+	}
+
+	.system-status-page-issue-toggle,
+	.system-status-page-info-toggle {
+		@apply flex w-full items-center justify-between gap-4 px-4 transition-colors hover:bg-surface-alt/60;
+		text-align: start;
+	}
+
+	.system-status-page-issue-toggle {
+		@apply py-4;
+	}
+
+	.system-status-page-info-toggle {
+		@apply py-3.5;
+	}
+
+	.system-status-page-issue-copy {
+		@apply min-w-0;
+	}
+
+	.system-status-page-issue-label,
+	.system-status-page-info-title {
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.system-status-page-issue-meta {
+		@apply flex shrink-0 items-center gap-3;
+	}
+
+	.system-status-page-issue-badge {
+		@apply rounded-md border border-accent/20 bg-accent/5 px-2.5 py-1 text-xs font-semibold text-accent;
+	}
+
+	.system-status-page-icon-muted {
+		@apply text-text-muted;
+	}
+
+	.system-status-page-issue-body {
+		@apply border-t border-stroke bg-surface-alt/40 px-4 py-4 text-sm leading-6 text-text-muted;
+	}
+
+	.system-status-page-info-table-wrap {
+		@apply overflow-x-auto border-t border-stroke;
+	}
+
+	.system-status-page-info-table {
+		@apply min-w-full text-sm;
+	}
+
+	.system-status-page-info-heading {
+		@apply bg-surface-alt px-4 py-3 align-top font-medium text-heading;
+		text-align: start;
+		width: 34%;
+		min-width: 11.25rem;
+	}
+
+	.system-status-page-info-value-cell {
+		@apply px-4 py-3 align-top text-text-muted;
+		text-align: start;
+	}
+
+	.system-status-page-info-value {
+		@apply text-heading;
+	}
+
+	.system-status-page-info-value-monospace {
+		@apply break-all font-mono text-xs;
+	}
+
+	.system-status-page-info-helper {
+		@apply mt-1 text-xs leading-5 text-text-muted;
+	}
+
+	.system-status-page-ok-panel {
+		@apply rounded-lg border px-4 py-3 text-sm;
+	}
+
+	.system-status-page-passed-actions {
+		@apply flex justify-center;
+	}
+
+	.system-status-page-passed-toggle,
+	.system-status-page-copy-button {
+		@apply inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors;
+	}
+
+	.system-status-page-passed-toggle {
+		@apply border-accent/30 bg-surface text-accent hover:bg-accent/5;
+	}
+
+	.system-status-page-copy-row {
+		@apply block;
+	}
+
+	.system-status-page-info-list {
+		@apply space-y-3;
+	}
+
+	.system-status-page-copy-button {
+		@apply border-stroke bg-surface text-heading hover:border-accent/30 hover:text-accent;
+	}
+}

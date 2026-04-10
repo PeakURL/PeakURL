@@ -11,7 +11,6 @@ import {
 } from 'lucide-react';
 import { isPast } from 'date-fns';
 import { __ } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
 import { formatRelativeTime, getLinkDisplayTitle } from '@/utils';
 import type { LinkRowProps } from '../types';
 
@@ -27,7 +26,6 @@ function LinkRow({
 	onQRCode,
 	formatNumber,
 }: LinkRowProps) {
-	const isRtl = isDocumentRtl();
 	const statusLabel =
 		'active' === link.status
 			? __('Active')
@@ -51,21 +49,21 @@ function LinkRow({
 
 	return (
 		<tr
-			className={`hover:bg-surface-alt/50 transition-colors group ${
-				selected ? 'bg-accent/5' : ''
+			className={`links-row group ${
+				selected ? 'links-row-selected' : ''
 			}`}
 		>
-			<td className="px-4 py-3">
+			<td className="links-row-cell">
 				<input
 					type="checkbox"
 					checked={selected}
 					onChange={() => onSelectRow(link.id)}
-					className="rounded border-stroke text-accent focus:ring-accent focus:ring-2"
+					className="links-checkbox"
 				/>
 			</td>
-			<td className="px-4 py-3">
-				<div className="flex items-center gap-2">
-					<div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
+			<td className="links-row-cell">
+				<div className="links-row-link">
+					<div className="links-row-link-icon">
 						<Link2 className="h-3 w-3 text-accent" />
 					</div>
 					<div className="min-w-0">
@@ -77,7 +75,7 @@ function LinkRow({
 							</code>
 							<button
 								onClick={() => onCopy(link)}
-								className="opacity-0 group-hover:opacity-100 text-text-muted hover:text-accent transition-all"
+								className="links-row-link-copy"
 								title={
 									copiedId === link.id
 										? __('Copied!')
@@ -94,26 +92,23 @@ function LinkRow({
 					</div>
 				</div>
 			</td>
-			<td className="px-4 py-3">
-				<div className="text-sm text-heading font-medium truncate max-w-37.5">
+			<td className="links-row-cell">
+				<div className="links-row-title">
 					{getLinkDisplayTitle(link.title, __('Untitled Link'))}
 				</div>
 			</td>
-			<td className="px-4 py-3">
-				<div className="max-w-xs">
+			<td className="links-row-cell">
+				<div className="links-row-destination">
 					<div
-						className="preserve-ltr-value truncate text-sm text-text-muted"
+						className="links-row-destination-value preserve-ltr-value"
 						title={link.destinationUrl}
 					>
 						{link.destinationUrl}
 					</div>
-					<div className="flex flex-col items-start gap-1 mt-1">
+					<div className="links-row-meta">
 						{link.hasPassword && (
-							<div
-								key="password"
-								className="flex items-center gap-1.5"
-							>
-								<span className="inline-flex items-center gap-1 text-[10px] font-medium text-warning bg-warning/10 px-1.5 py-0.5 rounded">
+							<div key="password" className="flex items-center gap-1.5">
+								<span className="links-row-badge links-row-badge-warning">
 									<Lock size={10} />
 									{__('Protected')}
 								</span>
@@ -122,10 +117,10 @@ function LinkRow({
 						{link.expiresAt && (
 							<span
 								key="expires"
-								className={`inline-flex items-center gap-1 text-[10px] font-medium px-1.5 py-0.5 rounded ${
+								className={`links-row-badge ${
 									isPast(new Date(link.expiresAt))
-										? 'text-error bg-error/10'
-										: 'text-info bg-info/10'
+										? 'links-row-badge-error'
+										: 'links-row-badge-info'
 								}`}
 							>
 								<Clock size={10} />
@@ -153,29 +148,29 @@ function LinkRow({
 					</div>
 				</div>
 			</td>
-			<td className="px-4 py-3">
-				<div className="flex items-center justify-center gap-3">
-					<div className="text-center">
-						<div className="text-base font-bold text-heading">
+			<td className="links-row-cell">
+				<div className="links-row-performance">
+					<div className="links-row-performance-block">
+						<div className="links-row-performance-value">
 							{formatNumber(link.clicks || 0)}
 						</div>
-						<div className="text-[10px] text-text-muted">
+						<div className="links-row-performance-label">
 							{__('Total')}
 						</div>
 					</div>
-					<div className="w-px h-8 bg-stroke"></div>
-					<div className="text-center">
-						<div className="text-base font-bold text-accent">
+					<div className="links-row-performance-divider"></div>
+					<div className="links-row-performance-block">
+						<div className="links-row-performance-value-accent">
 							{formatNumber(link.uniqueClicks || 0)}
 						</div>
-						<div className="text-[10px] text-text-muted">
+						<div className="links-row-performance-label">
 							{__('Unique')}
 						</div>
 					</div>
 				</div>
 			</td>
-			<td className="px-4 py-3">
-				<div className="text-sm text-text-muted">
+			<td className="links-row-cell">
+				<div className="links-row-created">
 					{link.createdAt
 						? formatRelativeTime(new Date(link.createdAt), {
 								style: 'compact',
@@ -183,47 +178,43 @@ function LinkRow({
 							})
 						: __('Unknown')}
 				</div>
-				<div className="flex items-center gap-1.5 mt-0.5">
+				<div className="links-row-status">
 					<span
-						className={`w-1.5 h-1.5 rounded-full ${statusDotClass}`}
+						className={`links-row-status-dot ${statusDotClass}`}
 					></span>
 					<span
-						className={`text-xs font-medium ${statusColorClass}`}
+						className={`links-row-status-label ${statusColorClass}`}
 					>
 						{statusLabel}
 					</span>
 				</div>
 			</td>
-			<td className="px-4 py-3">
-				<div
-					className={`flex items-center gap-1 ${
-						isRtl ? 'justify-start' : 'justify-end'
-					}`}
-				>
+			<td className="links-row-cell">
+				<div className="links-row-actions">
 					<button
 						onClick={() => onQRCode(link)}
-						className="w-7 h-7 flex items-center justify-center text-text-muted hover:text-accent hover:bg-accent/10 rounded-lg transition-all"
+						className="links-row-action links-row-action-qr"
 						title={__('QR Code')}
 					>
 						<QrCode size={14} />
 					</button>
 					<button
 						onClick={() => onOpenStats(link)}
-						className="w-7 h-7 flex items-center justify-center text-text-muted hover:text-info hover:bg-info/10 rounded-lg transition-all"
+						className="links-row-action links-row-action-stats"
 						title={__('Analytics')}
 					>
 						<BarChart3 size={14} />
 					</button>
 					<button
 						onClick={() => onEdit(link)}
-						className="w-7 h-7 flex items-center justify-center text-text-muted hover:text-warning hover:bg-warning/10 rounded-lg transition-all"
+						className="links-row-action links-row-action-edit"
 						title={__('Edit')}
 					>
 						<Pencil size={14} />
 					</button>
 					<button
 						onClick={() => onDelete(link)}
-						className="w-7 h-7 flex items-center justify-center text-text-muted hover:text-error hover:bg-error/10 rounded-lg transition-all"
+						className="links-row-action links-row-action-delete"
 						title={__('Delete')}
 					>
 						<Trash2 size={14} />

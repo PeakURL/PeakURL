@@ -9,25 +9,22 @@ function TableHeaderRow({
 	const hasSelection = selectedCount > 0;
 	if (hasSelection) {
 		return (
-			<tr className="text-inline-start bg-accent/5">
-				<th className="px-4 py-3 text-xs font-semibold text-text-muted uppercase tracking-wide w-[40px]">
+			<tr className="links-table-header-row links-table-header-row-selected">
+				<th className="links-table-header-cell links-table-header-cell-select">
 					<input
 						type="checkbox"
 						checked
 						onChange={onSelectAll}
-						className="rounded border-stroke text-accent focus:ring-accent focus:ring-2"
+						className="links-checkbox"
 					/>
 				</th>
-				<th
-					colSpan={5}
-					className="px-4 py-3 text-sm font-medium text-accent"
-				>
+				<th colSpan={5} className="links-table-header-cell-count">
 					{sprintf(__('%s selected'), String(selectedCount))}
 				</th>
-				<th className="text-inline-end px-4 py-3">
+				<th className="links-table-header-cell-actions">
 					<button
 						onClick={onBulkDelete}
-						className="inline-flex items-center gap-1 text-xs font-medium text-error hover:text-red-700"
+						className="links-table-header-delete"
 					>
 						{__('Delete Selected')}
 					</button>
@@ -37,33 +34,31 @@ function TableHeaderRow({
 	}
 
 	return (
-		<tr className="text-inline-start">
-			<th className="px-4 py-3 text-xs font-semibold text-text-muted uppercase tracking-wide w-[40px]">
+		<tr className="links-table-header-row">
+			<th className="links-table-header-cell links-table-header-cell-select">
 				<input
 					type="checkbox"
 					checked={false}
 					onChange={onSelectAll}
-					className="rounded border-stroke text-accent focus:ring-accent focus:ring-2"
+					className="links-checkbox"
 				/>
 			</th>
-			<th className="px-4 py-3 text-xs font-semibold text-text-muted uppercase tracking-wide">
+			<th className="links-table-header-cell">
 				{__('Link')}
 			</th>
-			<th className="px-4 py-3 text-xs font-semibold text-text-muted uppercase tracking-wide">
+			<th className="links-table-header-cell">
 				{__('Title')}
 			</th>
-			<th className="px-4 py-3 text-xs font-semibold text-text-muted uppercase tracking-wide">
+			<th className="links-table-header-cell">
 				{__('Destination')}
 			</th>
-			<th className="px-4 py-3 text-xs font-semibold text-text-muted uppercase tracking-wide text-center">
+			<th className="links-table-header-cell links-table-header-cell-performance">
 				{__('Performance')}
 			</th>
-			<th className="px-4 py-3 text-xs font-semibold text-text-muted uppercase tracking-wide">
+			<th className="links-table-header-cell">
 				{__('Created')}
 			</th>
-			<th
-				className="text-inline-end px-4 py-3 text-xs font-semibold text-text-muted uppercase tracking-wide"
-			>
+			<th className="links-table-header-cell links-table-header-cell-actions">
 				{__('Actions')}
 			</th>
 		</tr>

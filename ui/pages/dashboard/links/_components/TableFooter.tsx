@@ -36,26 +36,26 @@ const TableFooter = ({
 	];
 
 	return (
-		<div className="bg-surface rounded-lg border border-stroke px-4 py-3 mb-4">
-			<div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+		<div className="links-table-footer">
+			<div className="links-table-footer-inner">
 				{/* Stats */}
-				<div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
-					<div className="flex items-center gap-1.5">
+				<div className="links-table-footer-stats">
+					<div className="links-table-footer-stat">
 						<Link2 className="h-3 w-3 text-accent" />
-						<span className="text-text-muted">
+						<span className="links-table-footer-label">
 							{__('Total Links:')}
 						</span>
-						<span className="font-semibold text-heading">
+						<span className="links-table-footer-value">
 							{totalLinks}
 						</span>
 					</div>
-					<div className="hidden h-4 w-px bg-stroke sm:block"></div>
-					<div className="flex items-center gap-1.5">
+					<div className="links-table-footer-divider"></div>
+					<div className="links-table-footer-stat">
 						<MousePointerClick className="h-3 w-3 text-accent" />
-						<span className="text-text-muted">
+						<span className="links-table-footer-label">
 							{__('Total Clicks:')}
 						</span>
-						<span className="font-semibold text-heading">
+						<span className="links-table-footer-value">
 							{totalClicks.toLocaleString()}
 						</span>
 					</div>
@@ -63,17 +63,17 @@ const TableFooter = ({
 
 				{/* Filters */}
 				<div
-					className={`grid grid-cols-2 gap-2 sm:flex sm:flex-wrap ${
+					className={`links-table-footer-filters ${
 						'rtl' === pageDirection
-							? 'sm:justify-start'
-							: 'sm:justify-end'
+							? 'links-table-footer-filters-start'
+							: 'links-table-footer-filters-end'
 					}`}
 				>
 					<Select
 						value={sortBy}
 						onChange={setSortBy}
 						options={sortOptions}
-						className="col-span-2 sm:col-span-1 sm:min-w-52"
+						className="links-table-footer-select-wide"
 						ariaLabel={__('Sort links')}
 						buttonClassName="rounded-lg bg-surface-alt px-3 py-2"
 					/>
@@ -82,7 +82,7 @@ const TableFooter = ({
 						value={sortOrder}
 						onChange={setSortOrder}
 						options={sortOrderOptions}
-						className="sm:min-w-44"
+						className="links-table-footer-select"
 						ariaLabel={__('Sort order')}
 						buttonClassName="rounded-lg bg-surface-alt px-3 py-2"
 					/>
@@ -97,7 +97,7 @@ const TableFooter = ({
 							setLimit(Number(value));
 						}}
 						options={pageSizeSelectOptions}
-						className="sm:min-w-44"
+						className="links-table-footer-select"
 						ariaLabel={__('Rows per page')}
 						buttonClassName="rounded-lg bg-surface-alt px-3 py-2"
 					/>
@@ -116,7 +116,7 @@ const TableFooter = ({
 								if (!isNaN(num) && num > 0) setLimit(num);
 							}}
 							placeholder={__('Custom page size')}
-							className="placeholder-follow-page-direction text-page-start col-span-2 w-full min-w-0 rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent sm:col-span-1 sm:w-28"
+							className="links-table-footer-input placeholder-follow-page-direction"
 						/>
 					)}
 				</div>

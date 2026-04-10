@@ -1,0 +1,45 @@
+@layer components {
+	.links-header {
+		@apply flex items-start justify-between gap-4;
+	}
+
+	.links-header-brand {
+		@apply flex min-w-0 items-center gap-3;
+	}
+
+	.links-header-brand-icon {
+		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-600;
+	}
+
+	.links-header-brand-copy {
+		@apply min-w-0;
+	}
+
+	.links-header-title {
+		@apply text-xl font-bold text-heading;
+	}
+
+	.links-header-description {
+		@apply text-xs text-text-muted;
+	}
+
+	.links-header-actions {
+		@apply flex shrink-0 items-center gap-2;
+	}
+
+	.links-header-actions-mobile {
+		@apply sm:hidden;
+	}
+
+	.links-header-actions-desktop {
+		@apply hidden items-center gap-2 sm:flex;
+	}
+
+	.links-header-domain {
+		@apply rounded-full border border-stroke bg-surface px-4 py-3 text-xs font-medium text-text-muted;
+	}
+
+	.links-header-domain-value {
+		@apply text-heading;
+	}
+}

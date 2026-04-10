@@ -62,25 +62,22 @@ function StatCards({
 	];
 
 	return (
-		<div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+		<div className="links-stat-cards">
 			{displayStats.map((stat) => {
 				const Icon = stat.icon;
 				return (
-					<div
-						key={stat.name}
-						className="bg-surface-alt border border-stroke rounded-lg p-2.5 hover:shadow-md hover:border-accent/30 transition-all duration-200 group"
-					>
-						<div className="flex items-center gap-1.5 mb-1.5">
+					<div key={stat.name} className="links-stat-card">
+						<div className="links-stat-card-row">
 							<div
-								className={`w-7 h-7 rounded-lg ${stat.bg} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-200`}
+								className={`links-stat-card-icon ${stat.bg}`}
 							>
 								<Icon className={`w-3.5 h-3.5 ${stat.color}`} />
 							</div>
-							<span className="text-xs text-text-muted">
+							<span className="links-stat-card-label">
 								{stat.name}
 							</span>
 						</div>
-						<div className="text-lg font-bold text-heading">
+						<div className="links-stat-card-value">
 							{stat.value}
 						</div>
 					</div>

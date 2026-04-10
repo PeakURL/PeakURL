@@ -1,8 +1,9 @@
-import { useGetUserProfileQuery } from '@/store/slices/api';
+import { authApi } from '@/store/slices';
 
 export const useAdminAccess = () => {
-	const { data, isLoading, isFetching } = useGetUserProfileQuery(undefined);
-	const user = data?.data ?? null;
+	const { useAuthCheckQuery } = authApi;
+	const { data, isLoading, isFetching } = useAuthCheckQuery(undefined);
+	const user = data?.data ?? data?.user ?? null;
 	const rawCapabilities = user?.capabilities || {};
 	const capabilities = {
 		manageUsers: Boolean(rawCapabilities.manage_users),

@@ -1,0 +1,259 @@
+@layer components {
+	.users-page {
+		@apply space-y-5;
+	}
+
+	.users-page-loading-state,
+	.users-page-access-state {
+		@apply rounded-xl border border-stroke bg-surface p-10 text-center;
+	}
+
+	.users-page-loading-state {
+		@apply rounded-lg;
+	}
+
+	.users-page-spinner {
+		@apply mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-accent;
+	}
+
+	.users-page-access-icon {
+		@apply mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600;
+	}
+
+	.users-page-access-title {
+		@apply text-xl font-semibold text-heading;
+	}
+
+	.users-page-access-summary {
+		@apply mt-2 text-sm text-text-muted;
+	}
+
+	.users-page-hero {
+		@apply flex flex-col gap-4 rounded-xl border border-stroke bg-surface px-6 py-5 sm:flex-row sm:items-end sm:justify-between;
+	}
+
+	.users-page-hero-badge {
+		@apply mb-3 inline-flex items-center gap-2 rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold uppercase text-accent;
+		letter-spacing: 0.18em;
+	}
+
+	.users-page-hero-title {
+		@apply text-2xl font-semibold text-heading;
+	}
+
+	.users-page-hero-summary {
+		@apply mt-2 max-w-2xl text-sm text-text-muted;
+	}
+
+	.users-page-stats {
+		@apply grid gap-4 md:grid-cols-3;
+	}
+
+	.users-page-stat-card {
+		@apply rounded-xl border border-stroke bg-surface p-5;
+	}
+
+	.users-page-stat-label {
+		@apply text-xs font-semibold uppercase text-text-muted;
+		letter-spacing: 0.16em;
+	}
+
+	.users-page-stat-value {
+		@apply mt-3 text-3xl font-semibold text-heading;
+	}
+
+	.users-page-panel {
+		@apply overflow-hidden rounded-xl border border-stroke bg-surface;
+	}
+
+	.users-page-panel-header {
+		@apply border-b border-stroke px-6 py-4;
+	}
+
+	.users-page-panel-title {
+		@apply text-sm font-semibold uppercase text-text-muted;
+		letter-spacing: 0.16em;
+	}
+
+	.users-page-panel-state {
+		@apply p-10 text-center;
+	}
+
+	.users-page-panel-error {
+		@apply p-6 text-sm text-red-600 dark:text-red-300;
+	}
+
+	.users-page-empty-icon {
+		@apply mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-surface-alt text-text-muted;
+	}
+
+	.users-page-empty-title {
+		@apply text-lg font-semibold text-heading;
+	}
+
+	.users-page-empty-summary {
+		@apply mt-2 text-sm text-text-muted;
+	}
+
+	.users-page-table-scroll {
+		@apply overflow-x-auto;
+	}
+
+	.users-page-table {
+		@apply min-w-full divide-y divide-stroke;
+	}
+
+	.users-page-table-head {
+		@apply bg-surface-alt;
+	}
+
+	.users-page-table-head-row {
+		@apply text-xs font-semibold uppercase text-text-muted;
+		text-align: start;
+		letter-spacing: 0.16em;
+	}
+
+	.users-page-table-heading {
+		@apply px-6 py-4;
+	}
+
+	.users-page-table-heading-end {
+		@apply px-6 py-4;
+		text-align: end;
+	}
+
+	.users-page-table-body {
+		@apply divide-y divide-stroke;
+	}
+
+	.users-page-table-row {
+		@apply hover:bg-surface-alt/60;
+	}
+
+	.users-page-table-cell {
+		@apply px-6 py-4;
+		text-align: start;
+	}
+
+	.users-page-table-cell-meta {
+		@apply px-6 py-4 text-sm text-text-muted;
+		text-align: start;
+	}
+
+	.users-page-table-cell-actions {
+		@apply px-6 py-4;
+	}
+
+	.users-page-user {
+		@apply flex w-full items-start justify-start gap-3;
+	}
+
+	.users-page-avatar {
+		@apply mt-0.5 rounded-full;
+	}
+
+	.users-page-user-copy {
+		@apply min-w-0 flex-1;
+		text-align: start;
+	}
+
+	.users-page-user-name {
+		@apply font-medium text-heading;
+	}
+
+	.users-page-user-email {
+		@apply text-sm text-text-muted;
+	}
+
+	.users-page-user-username {
+		@apply text-xs text-text-muted;
+	}
+
+	.users-page-role-badge {
+		@apply inline-flex rounded-full border px-3 py-1 text-xs font-semibold;
+	}
+
+	.users-page-role-badge-admin {
+		@apply border-red-500/20 bg-red-500/10 text-red-700 dark:text-red-300;
+	}
+
+	.users-page-role-badge-editor {
+		@apply border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-300;
+	}
+
+	.users-page-actions {
+		@apply flex justify-end gap-2;
+	}
+
+	.users-page-action-delete {
+		@apply text-red-600 hover:border-red-500 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-500/10;
+	}
+
+	.users-page-dialog {
+		@apply relative z-50;
+	}
+
+	.users-page-dialog-backdrop {
+		@apply fixed inset-0 bg-black/40;
+	}
+
+	.users-page-dialog-wrapper {
+		@apply fixed inset-0 flex items-center justify-center p-4;
+	}
+
+	.users-page-dialog-panel {
+		@apply w-full max-w-2xl rounded-2xl border border-stroke bg-surface shadow-2xl;
+	}
+
+	.users-page-dialog-header {
+		@apply flex items-start justify-between border-b border-stroke px-6 py-5;
+	}
+
+	.users-page-dialog-title {
+		@apply text-lg font-semibold text-heading;
+	}
+
+	.users-page-dialog-summary {
+		@apply mt-1 text-sm text-text-muted;
+	}
+
+	.users-page-dialog-close {
+		@apply rounded-lg p-2 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading;
+	}
+
+	.users-page-dialog-form {
+		@apply space-y-5 px-6 py-6;
+	}
+
+	.users-page-dialog-error {
+		@apply rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-300;
+	}
+
+	.users-page-dialog-grid {
+		@apply grid gap-4 sm:grid-cols-2;
+	}
+
+	.users-page-dialog-field {
+		@apply space-y-2;
+	}
+
+	.users-page-dialog-label {
+		@apply block text-sm font-semibold text-heading;
+	}
+
+	.users-page-dialog-help {
+		@apply text-xs text-text-muted;
+	}
+
+	.users-page-dialog-actions {
+		@apply flex gap-3 border-t border-stroke pt-4;
+	}
+
+	.users-page-dialog-actions-start {
+		@apply justify-start;
+	}
+
+	.users-page-dialog-actions-end {
+		@apply justify-end;
+	}
+}

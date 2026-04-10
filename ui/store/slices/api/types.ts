@@ -12,8 +12,8 @@ import type {
 import type {
 	BulkCreateResponse,
 	PasteImportRequestItem,
-} from '@/pages/dashboard/bulk-import/_components/types';
-import type { ImportRecord } from '@/pages/dashboard/bulk-import/_components/FileUpload/types';
+} from '@/pages/dashboard/tools/import/_components/types';
+import type { ImportRecord } from '@/pages/dashboard/tools/import/_components/file-upload/types';
 import type {
 	LinkLocationPayload,
 	LinkStatsResponse,

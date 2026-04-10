@@ -1,0 +1,33 @@
+@layer components {
+	.links-form-main {
+		@apply space-y-4;
+	}
+
+	.links-form-main-grid {
+		@apply grid grid-cols-1 gap-3 lg:grid-cols-12;
+	}
+
+	.links-form-main-destination {
+		@apply lg:col-span-7;
+	}
+
+	.links-form-main-alias {
+		@apply lg:col-span-3;
+	}
+
+	.links-form-main-submit {
+		@apply lg:col-span-2;
+	}
+
+	.links-form-main-input {
+		@apply h-11;
+	}
+
+	.links-form-main-button {
+		@apply h-11 w-full bg-accent font-medium text-white shadow-sm hover:bg-accent/90;
+	}
+
+	.links-form-main-button-label {
+		@apply hidden xl:inline;
+	}
+}

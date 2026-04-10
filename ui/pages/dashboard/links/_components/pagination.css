@@ -1,0 +1,33 @@
+@layer components {
+	.links-pagination {
+		@apply rounded-lg border border-stroke bg-surface px-4 py-3;
+	}
+
+	.links-pagination-inner {
+		@apply flex items-center justify-between;
+	}
+
+	.links-pagination-summary {
+		@apply text-sm text-text-muted;
+	}
+
+	.links-pagination-controls {
+		@apply flex items-center gap-1;
+	}
+
+	.links-pagination-nav {
+		@apply inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium text-text-muted transition-all hover:bg-surface-alt hover:text-heading disabled:cursor-not-allowed disabled:opacity-40;
+	}
+
+	.links-pagination-pages {
+		@apply mx-2 flex items-center gap-1;
+	}
+
+	.links-pagination-page {
+		@apply h-8 w-8 rounded-lg text-sm font-medium transition-all text-text-muted hover:bg-surface-alt hover:text-heading;
+	}
+
+	.links-pagination-page-current {
+		@apply bg-accent text-white hover:bg-accent hover:text-white;
+	}
+}

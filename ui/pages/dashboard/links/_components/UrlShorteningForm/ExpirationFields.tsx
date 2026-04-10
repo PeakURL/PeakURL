@@ -14,13 +14,16 @@ const ExpirationFields = ({
 	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
 	return (
 		<div>
-			<label className="block text-sm font-medium text-heading mb-1.5">
-				<span dir={direction} className="inline-flex items-center gap-2">
-					<Calendar className="h-4 w-4 text-text-muted" />
+			<label className="links-form-section-label">
+				<span
+					dir={direction}
+					className="links-form-section-label-content"
+				>
+					<Calendar className="links-form-section-label-icon" />
 					{__('Expiration Date (Optional)')}
 				</span>
 			</label>
-			<div className="grid grid-cols-2 gap-3">
+			<div className="links-form-expiration-grid">
 				<Input
 					type="date"
 					value={expirationDate}

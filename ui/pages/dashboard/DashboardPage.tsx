@@ -55,8 +55,20 @@ function normalizeTrafficSeries(
 function DashboardPage() {
 	const [timeRange, setTimeRange] = useState(7);
 
-	const { data: analyticsRes } = useGetAnalyticsQuery(timeRange);
-	const { data: activityRes } = useGetActivityQuery(undefined);
+	const {
+		data: analyticsRes,
+		refetch: refetchAnalytics,
+		isFetching: isAnalyticsFetching,
+	} = useGetAnalyticsQuery(timeRange);
+	const {
+		data: activityRes,
+		refetch: refetchActivity,
+		isFetching: isActivityFetching,
+	} = useGetActivityQuery(undefined);
+
+	const handleRefresh = async () => {
+		await Promise.allSettled([refetchAnalytics(), refetchActivity()]);
+	};
 
 	const stats: DashboardStats = analyticsRes?.data ?? {
 		totalClicks: 0,
@@ -78,7 +90,12 @@ function DashboardPage() {
 
 	return (
 		<div className="dashboard-page">
-			<Header timeRange={timeRange} onTimeRangeChange={setTimeRange} />
+			<Header
+				timeRange={timeRange}
+				onTimeRangeChange={setTimeRange}
+				onRefresh={handleRefresh}
+				isRefreshing={isAnalyticsFetching || isActivityFetching}
+			/>
 
 			<StatsCards stats={stats} />
 

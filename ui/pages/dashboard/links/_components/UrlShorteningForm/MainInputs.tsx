@@ -11,11 +11,11 @@ const MainInputs = ({
 	isLoading,
 }: MainInputsProps) => {
 	return (
-		<div className="space-y-4">
+		<div className="links-form-main">
 			{/* All inputs in one line on desktop */}
-			<div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+			<div className="links-form-main-grid">
 				{/* Long URL Input - Takes most space */}
-				<div className="lg:col-span-7">
+				<div className="links-form-main-destination">
 					<label htmlFor="long-url" className="sr-only">
 						{__('Destination URL')}
 					</label>
@@ -29,12 +29,12 @@ const MainInputs = ({
 						autoCapitalize="off"
 						spellCheck={false}
 						required
-						className="h-11"
+						className="links-form-main-input"
 					/>
 				</div>
 
 				{/* Alias Input */}
-				<div className="lg:col-span-3">
+				<div className="links-form-main-alias">
 					<label htmlFor="alias" className="sr-only">
 						{__('Alias (Optional)')}
 					</label>
@@ -48,20 +48,20 @@ const MainInputs = ({
 						icon={Tag}
 						autoCapitalize="off"
 						spellCheck={false}
-						className="h-11"
+						className="links-form-main-input"
 					/>
 				</div>
 
 				{/* Shorten Button */}
-				<div className="lg:col-span-2">
+				<div className="links-form-main-submit">
 					<Button
 						type="submit"
 						size="md"
 						icon={Scissors}
 						loading={isLoading}
-						className="w-full h-11 bg-accent hover:bg-accent/90 text-white font-medium shadow-sm"
+						className="links-form-main-button"
 					>
-						<span className="hidden xl:inline">
+						<span className="links-form-main-button-label">
 							{isLoading ? __('Shortening...') : __('Shorten')}
 						</span>
 					</Button>

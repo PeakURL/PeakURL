@@ -19,19 +19,16 @@ function LocationNoteItem({
 	direction,
 }: LocationNoteItemProps) {
 	return (
-		<div
-			dir={direction}
-			className="text-inline-start flex items-start gap-2"
-		>
-			<span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-info/60" />
-			<div className="text-inline-start min-w-0 flex-1 space-y-1">
-				<p dir={direction} className="text-inline-start">
+		<div dir={direction} className="links-location-note-item">
+			<span className="links-location-note-bullet" />
+			<div className="links-location-note-content">
+				<p dir={direction}>
 					{text}
 				</p>
 				{example ? (
 					<code
 						dir="ltr"
-						className="preserve-ltr-value mr-auto block w-fit max-w-full break-all rounded bg-surface px-1.5 py-0.5 font-mono text-[11px] text-heading"
+						className="links-location-note-code preserve-ltr-value"
 					>
 						{example}
 					</code>
@@ -46,8 +43,7 @@ function TrafficLocationTab({
 	selectedTab,
 	open,
 }: TrafficLocationTabProps) {
-	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
 	const [hoveredCountry, setHoveredCountry] = useState<HoveredCountry | null>(
 		null
 	);
@@ -61,15 +57,15 @@ function TrafficLocationTab({
 	// Add safety check
 	if (!link) {
 		return (
-			<div className="space-y-4">
-				<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-					<h3 className="text-sm font-semibold text-heading mb-4">
+			<div className="links-location-tab">
+				<div className="links-drawer-section">
+					<h3 className="links-drawer-section-title mb-4">
 						{__('Top Countries')}
 					</h3>
-					<div className="h-64 flex items-center justify-center bg-surface rounded-lg border border-stroke">
+					<div className="links-drawer-empty-panel links-drawer-empty-panel-large">
 						<div className="text-center">
-							<Globe className="w-12 h-12 text-text-muted mx-auto mb-2" />
-							<p className="text-sm text-text-muted">
+							<Globe className="links-drawer-empty-icon" />
+							<p className="links-drawer-empty-copy">
 								{__('No link data available')}
 							</p>
 						</div>
@@ -103,15 +99,15 @@ function TrafficLocationTab({
 
 	if (isLoading) {
 		return (
-			<div className="space-y-4">
-				<div className="bg-surface-alt border border-stroke rounded-lg p-4 animate-pulse">
-					<h3 className="text-sm font-semibold text-heading mb-4">
+			<div className="links-location-tab">
+				<div className="links-drawer-section animate-pulse">
+					<h3 className="links-drawer-section-title mb-4">
 						{__('Top Countries')}
 					</h3>
-					<div className="h-64 flex items-center justify-center bg-surface rounded-lg border border-stroke">
-						<div className="text-center px-6">
-							<Globe className="w-12 h-12 text-text-muted mx-auto mb-3" />
-							<p className="text-sm font-medium text-heading mb-2">
+					<div className="links-drawer-empty-panel links-drawer-empty-panel-large">
+						<div className="links-drawer-empty-content">
+							<Globe className="links-drawer-empty-icon-spaced" />
+							<p className="links-drawer-empty-title">
 								{__('Loading location data...')}
 							</p>
 						</div>
@@ -123,18 +119,18 @@ function TrafficLocationTab({
 
 	if (isError) {
 		return (
-			<div className="space-y-4">
-				<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-					<h3 className="text-sm font-semibold text-heading mb-4">
+			<div className="links-location-tab">
+				<div className="links-drawer-section">
+					<h3 className="links-drawer-section-title mb-4">
 						{__('Top Countries')}
 					</h3>
-					<div className="h-64 flex items-center justify-center bg-surface rounded-lg border border-stroke">
-						<div className="text-center px-6">
-							<Globe className="w-12 h-12 text-error mx-auto mb-3" />
-							<p className="text-sm font-medium text-heading mb-2">
+					<div className="links-drawer-empty-panel links-drawer-empty-panel-large">
+						<div className="links-drawer-empty-content">
+							<Globe className="mx-auto mb-3 h-12 w-12 text-error" />
+							<p className="links-drawer-empty-title">
 								{__('Failed to load location data')}
 							</p>
-							<p className="text-xs text-text-muted">
+							<p className="links-drawer-empty-copy-small">
 								{getErrorMessage(error, __('Unknown error'))}
 							</p>
 						</div>
@@ -146,34 +142,28 @@ function TrafficLocationTab({
 
 	if (!hasData) {
 		return (
-			<div className="space-y-4">
+			<div className="links-location-tab">
 				{/* Top Countries Section */}
-				<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-					<h3 className="text-sm font-semibold text-heading mb-4">
+				<div className="links-drawer-section">
+					<h3 className="links-drawer-section-title mb-4">
 						{__('Top Countries')}
 					</h3>
-					<div className="min-h-[22rem] bg-surface rounded-lg border border-stroke px-4 py-6 sm:px-6">
-						<div className="mx-auto flex min-h-full w-full max-w-xl flex-col items-center justify-center text-center">
-							<Globe className="w-12 h-12 text-text-muted mx-auto mb-3" />
-							<p className="text-sm font-medium text-heading mb-2">
+					<div className="links-location-empty-map">
+						<div className="links-location-empty-map-inner">
+							<Globe className="links-drawer-empty-icon-spaced" />
+							<p className="links-drawer-empty-title">
 								{__('No location data available yet')}
 							</p>
-							<p className="text-xs text-text-muted max-w-md mx-auto">
+							<p className="mx-auto max-w-md text-xs text-text-muted">
 								{__(
 									'Location tracking will show here once clicks are recorded with a configured GeoLite2 City database'
 								)}
 							</p>
-							<div
-								dir={direction}
-								className="text-inline-start mx-auto mt-4 w-full max-w-lg rounded-lg border border-info/20 bg-info/5 px-4 py-3"
-							>
-								<p
-									dir={direction}
-									className="text-inline-start text-xs font-medium text-heading"
-								>
+							<div dir={direction} className="links-location-note">
+								<p dir={direction} className="links-location-note-title">
 									{__('Note:')}
 								</p>
-								<div className="mt-2 space-y-2 text-xs leading-5 text-text-muted">
+								<div className="links-location-note-list">
 									<LocationNoteItem
 										direction={direction}
 										text={__(
@@ -201,14 +191,14 @@ function TrafficLocationTab({
 				</div>
 
 				{/* Top Cities Section */}
-				<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-					<h3 className="text-sm font-semibold text-heading mb-4">
+				<div className="links-drawer-section">
+					<h3 className="links-drawer-section-title mb-4">
 						{__('Top Cities')}
 					</h3>
-					<div className="h-48 flex items-center justify-center bg-surface rounded-lg border border-stroke">
+					<div className="links-drawer-empty-panel links-drawer-empty-panel-medium">
 						<div className="text-center">
-							<MapPin className="w-10 h-10 text-text-muted mx-auto mb-2" />
-							<p className="text-sm text-text-muted">
+							<MapPin className="mx-auto mb-2 h-10 w-10 text-text-muted" />
+							<p className="links-drawer-empty-copy">
 								{__('No city data available yet')}
 							</p>
 						</div>
@@ -219,28 +209,28 @@ function TrafficLocationTab({
 	}
 
 	return (
-		<div className="space-y-4">
+		<div className="links-location-tab">
 			{/* Summary Card */}
-			<div className="bg-linear-to-br from-blue-500/5 to-green-500/5 border border-info/20 rounded-lg p-4">
-				<div className="flex items-center justify-between">
-					<div className="flex items-center gap-3">
-						<div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+			<div className="links-drawer-summary-alt">
+				<div className="links-drawer-summary-inner">
+					<div className="links-drawer-summary-main">
+						<div className="links-drawer-summary-icon">
 							<Globe className="w-5 h-5 text-accent" />
 						</div>
 						<div>
-							<p className="text-sm text-text-muted">
+							<p className="links-drawer-summary-label">
 								{__('Total Locations')}
 							</p>
-							<p className="text-xl font-bold text-heading">
+							<p className="links-drawer-summary-value">
 								{total} {__('clicks')}
 							</p>
 						</div>
 					</div>
-					<div className="text-inline-end">
-						<p className="text-sm text-text-muted">
+					<div className="links-drawer-summary-meta">
+						<p className="links-drawer-summary-label">
 							{__('Countries')}
 						</p>
-						<p className="text-xl font-bold text-heading">
+						<p className="links-drawer-summary-value">
 							{countries.length}
 						</p>
 					</div>
@@ -248,14 +238,14 @@ function TrafficLocationTab({
 			</div>
 
 			{/* World Map */}
-			<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-				<div className="flex items-center gap-2 mb-4">
-					<Globe className="w-4 h-4 text-accent" />
-					<h3 className="text-sm font-semibold text-heading">
+			<div className="links-drawer-section">
+				<div className="links-drawer-section-header">
+					<Globe className="links-drawer-section-icon" />
+					<h3 className="links-drawer-section-title">
 						{__('Geographic Distribution')}
 					</h3>
 				</div>
-				<div className="relative h-96 rounded-lg overflow-hidden border border-stroke">
+				<div className="links-location-map-wrap">
 					<WorldMap
 						data={countries.map((country) => ({
 							countryCode: country.code,
@@ -278,11 +268,11 @@ function TrafficLocationTab({
 						}
 					/>
 					{hoveredCountry && (
-						<div className="inset-inline-start-4 text-inline-start absolute top-4 min-w-32 rounded-lg border border-stroke bg-surface p-3 shadow-xl">
-							<p className="text-sm font-semibold text-heading">
+						<div className="links-location-tooltip">
+							<p className="links-location-tooltip-title">
 								{hoveredCountry.countryName}
 							</p>
-							<p className="text-xs text-text-muted mt-1">
+							<p className="links-location-tooltip-copy">
 								{hoveredCountry.clicks} {__('clicks')} (
 								{getPercentage(hoveredCountry.clicks)}%)
 							</p>
@@ -292,23 +282,23 @@ function TrafficLocationTab({
 			</div>
 
 			{/* Top Countries */}
-			<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-				<div className="flex items-center gap-2 mb-4">
-					<Globe className="w-4 h-4 text-accent" />
-					<h3 className="text-sm font-semibold text-heading">
+			<div className="links-drawer-section">
+				<div className="links-drawer-section-header">
+					<Globe className="links-drawer-section-icon" />
+					<h3 className="links-drawer-section-title">
 						{__('Top Countries')}
 					</h3>
 				</div>
-				<div className="space-y-3">
+				<div className="links-location-list">
 					{countries.map((country) => {
 						const percentage = getPercentage(country.count);
 						return (
 							<div
 								key={`${country.code}-${country.name}`}
-								className="space-y-1.5"
+								className="links-location-list-item"
 							>
-								<div className="flex items-center justify-between">
-									<div className="flex items-center gap-2">
+								<div className="links-location-list-row">
+									<div className="links-location-list-main">
 										<span className="text-2xl">
 											{getFlagEmoji(country.code)}
 										</span>
@@ -319,18 +309,18 @@ function TrafficLocationTab({
 											({country.code})
 										</span>
 									</div>
-									<div className="flex items-center gap-3">
+									<div className="links-location-list-meta">
 										<span className="text-sm text-text-muted">
 											{percentage}%
 										</span>
-										<span className="text-inline-end min-w-12 text-sm font-semibold text-heading">
+										<span className="links-location-list-count">
 											{country.count} {__('clicks')}
 										</span>
 									</div>
 								</div>
-								<div className="w-full bg-surface rounded-full h-2 overflow-hidden">
+								<div className="links-drawer-bar-track">
 									<div
-										className="bg-primary-600 h-full rounded-full transition-all duration-500"
+										className="links-drawer-bar-fill bg-primary-600"
 										style={{ width: `${percentage}%` }}
 									></div>
 								</div>
@@ -341,23 +331,23 @@ function TrafficLocationTab({
 			</div>
 
 			{/* Top Cities */}
-			<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-				<div className="flex items-center gap-2 mb-4">
-					<MapPin className="w-4 h-4 text-accent" />
-					<h3 className="text-sm font-semibold text-heading">
+			<div className="links-drawer-section">
+				<div className="links-drawer-section-header">
+					<MapPin className="links-drawer-section-icon" />
+					<h3 className="links-drawer-section-title">
 						{__('Top Cities')}
 					</h3>
 				</div>
-				<div className="space-y-2">
+				<div className="links-location-city-list">
 					{cities.map((city, index) => {
 						const percentage = getPercentage(city.count);
 						return (
 							<div
 								key={`${city.name}-${city.country}`}
-								className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-surface transition-all"
+								className="links-location-city-item"
 							>
-								<div className="flex items-center gap-3">
-									<div className="w-8 h-8 rounded-full bg-primary-500/10 flex items-center justify-center text-xs font-semibold text-accent">
+								<div className="links-location-city-main">
+									<div className="links-location-city-rank">
 										#{index + 1}
 									</div>
 									<div>
@@ -369,7 +359,7 @@ function TrafficLocationTab({
 										</p>
 									</div>
 								</div>
-								<div className="text-inline-end">
+								<div className="links-location-city-meta">
 									<p className="text-sm font-semibold text-heading">
 										{city.count}
 									</p>

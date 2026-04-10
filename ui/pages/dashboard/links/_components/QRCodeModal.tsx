@@ -9,8 +9,7 @@ import { isDocumentRtl } from '@/i18n/direction';
 import type { QRCodeModalProps } from './types';
 
 function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
-	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
 	const [qrDataUrl, setQrDataUrl] = useState('');
 	const [copied, setCopied] = useState(false);
 	const shortUrl = link ? buildShortUrl(link) : '';
@@ -63,30 +62,30 @@ function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
 
 	return (
 		<Dialog open={open} onClose={setOpen} className="relative z-50">
-			<div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+			<div className="links-modal-backdrop" aria-hidden="true" />
 
-			<div className="fixed inset-0 flex items-center justify-center p-4">
+			<div className="links-modal-shell">
 				<DialogPanel
 					dir={direction}
-					className="text-inline-start mx-auto max-w-md w-full rounded-lg bg-surface shadow-xl"
+					className="links-modal-panel links-modal-panel-medium"
 				>
 					{/* Header */}
-					<div className="flex items-center justify-between p-6 border-b border-stroke">
-						<DialogTitle className="text-lg font-semibold text-heading">
+					<div className="links-modal-header">
+						<DialogTitle className="links-modal-title">
 							{__('QR Code')}
 						</DialogTitle>
 						<button
 							onClick={() => setOpen(false)}
-							className="rounded-lg text-text-muted hover:text-heading hover:bg-surface-alt p-2 transition-all"
+							className="links-modal-close"
 						>
-							<X className="w-5 h-5" />
+							<X className="links-modal-close-icon" />
 						</button>
 					</div>
 
 					{/* Content */}
-					<div className="p-6 space-y-4">
+					<div className="links-modal-content">
 						{/* QR Code Display */}
-						<div className="flex justify-center bg-white rounded-lg p-6">
+						<div className="links-qr-modal-code-wrap">
 							{qrDataUrl ? (
 								<img
 									src={qrDataUrl}
@@ -94,51 +93,53 @@ function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
 									width={256}
 									height={256}
 									loading="lazy"
-									className="w-64 h-64"
+									className="links-qr-modal-code"
 								/>
 							) : (
-								<div className="w-64 h-64 flex items-center justify-center">
-									<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
+								<div className="links-qr-modal-loading">
+									<div className="links-qr-modal-spinner"></div>
 								</div>
 							)}
 						</div>
 
 						{/* Link Info */}
-						<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-							<p className="text-xs font-medium text-text-muted mb-1">
+						<div className="links-qr-modal-summary">
+							<p className="links-qr-modal-summary-label">
 								{__('Short URL')}
 							</p>
 							<ReadOnlyValueBlock
 								value={shortUrl}
-								className="border-0 bg-transparent p-0"
+								className="links-readonly-reset"
 								valueClassName="text-accent"
 							/>
 						</div>
 
 						{/* Action Buttons */}
-						<div className="flex gap-3">
+						<div className="links-qr-modal-actions">
 							<button
 								onClick={handleDownload}
 								disabled={!qrDataUrl}
-								className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-accent hover:bg-accent/90 disabled:bg-gray-400 text-white rounded-lg transition-all font-medium"
+								className="links-modal-button links-modal-button-primary"
 							>
-								<Download className="w-4 h-4" />
-								{__('Download')}
+								<span className="links-modal-button-content">
+									<Download className="links-modal-button-icon" />
+									{__('Download')}
+								</span>
 							</button>
 							<button
 								onClick={handleCopyUrl}
-								className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-surface border border-stroke hover:bg-surface-alt text-heading rounded-lg transition-all font-medium"
+								className="links-modal-button links-modal-button-secondary"
 							>
 								{copied ? (
-									<>
-										<Check className="w-4 h-4 text-success" />
+									<span className="links-modal-button-content">
+										<Check className="links-modal-button-icon links-qr-modal-copy-success" />
 										{__('Copied!')}
-									</>
+									</span>
 								) : (
-									<>
-										<Copy className="w-4 h-4" />
+									<span className="links-modal-button-content">
+										<Copy className="links-modal-button-icon" />
 										{__('Copy')}
-									</>
+									</span>
 								)}
 							</button>
 						</div>

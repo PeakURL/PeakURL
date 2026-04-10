@@ -1,0 +1,17 @@
+@layer components {
+	.links-form-section-label {
+		@apply mb-1.5 block text-sm font-medium text-heading;
+	}
+
+	.links-form-section-label-content {
+		@apply inline-flex items-center gap-2;
+	}
+
+	.links-form-section-label-icon {
+		@apply h-4 w-4 text-text-muted;
+	}
+
+	.links-form-section-grid {
+		@apply grid grid-cols-1 gap-3 md:grid-cols-2;
+	}
+}

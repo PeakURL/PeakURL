@@ -1,0 +1,49 @@
+@layer components {
+	.links-page {
+		@apply space-y-4 pb-8 sm:space-y-5;
+	}
+
+	.links-page-stats {
+		@apply grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 xl:grid-cols-4;
+	}
+
+	.links-page-stat-card {
+		@apply rounded-lg border border-stroke bg-surface p-3.5;
+	}
+
+	.links-page-stat-header {
+		@apply mb-2 flex items-center gap-2.5;
+	}
+
+	.links-page-stat-icon {
+		@apply flex h-8 w-8 shrink-0 items-center justify-center rounded-lg;
+	}
+
+	.links-page-stat-icon-links {
+		@apply bg-primary-500/10;
+	}
+
+	.links-page-stat-icon-active {
+		@apply bg-success/10;
+	}
+
+	.links-page-stat-icon-clicks {
+		@apply bg-blue-500/10;
+	}
+
+	.links-page-stat-icon-visitors {
+		@apply bg-purple-500/10;
+	}
+
+	.links-page-stat-trend {
+		@apply text-xs font-medium text-success;
+	}
+
+	.links-page-stat-value {
+		@apply text-xl font-bold text-heading;
+	}
+
+	.links-page-stat-label {
+		@apply mt-0.5 text-xs text-muted;
+	}
+}

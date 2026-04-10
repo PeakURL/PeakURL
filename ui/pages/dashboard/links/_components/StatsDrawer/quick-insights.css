@@ -1,0 +1,45 @@
+@layer components {
+	.links-quick-insights {
+		@apply rounded-lg border border-accent/20 bg-linear-to-br from-accent/5 to-info/5 p-4;
+	}
+
+	.links-quick-insights-header {
+		@apply mb-3 flex items-center justify-between;
+	}
+
+	.links-quick-insights-title {
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.links-quick-insights-updated {
+		@apply text-xs text-text-muted;
+	}
+
+	.links-quick-insights-grid {
+		@apply grid grid-cols-1 gap-3 sm:grid-cols-3;
+	}
+
+	.links-quick-insight-card {
+		@apply rounded-lg border border-stroke bg-surface p-3;
+	}
+
+	.links-quick-insight-row {
+		@apply mb-2 flex items-center gap-2;
+	}
+
+	.links-quick-insight-icon {
+		@apply flex h-7 w-7 items-center justify-center rounded-lg;
+	}
+
+	.links-quick-insight-label {
+		@apply text-xs text-text-muted;
+	}
+
+	.links-quick-insight-value {
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.links-quick-insight-subtext {
+		@apply mt-1 text-xs text-muted;
+	}
+}

@@ -106,17 +106,17 @@ const LinksTable = ({ links, statsShortId, statsLink }: LinksTableProps) => {
 	}
 
 	return (
-		<div className="bg-surface rounded-lg border border-(--color-stroke) overflow-hidden">
-			<div className="overflow-x-auto overscroll-x-contain">
-				<table className="min-w-220 w-full">
-					<thead className="bg-surface-alt border-b border-(--color-stroke)">
+		<div className="links-table">
+			<div className="links-table-scroll">
+				<table className="links-table-element">
+					<thead className="links-table-head">
 						<TableHeaderRow
 							selectedCount={selectedIds.length}
 							onSelectAll={handleSelectAll}
 							onBulkDelete={handleBulkDelete}
 						/>
 					</thead>
-					<tbody className="divide-y divide-(--color-stroke)">
+					<tbody className="links-table-body">
 						{links.map((link: LinkRecord) => (
 							<LinkRow
 								key={link.id}

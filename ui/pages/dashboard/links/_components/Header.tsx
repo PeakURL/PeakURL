@@ -9,39 +9,45 @@ const Header = ({ onRefresh, isRefreshing = false }: LinksHeaderProps) => {
 			type="button"
 			onClick={onRefresh}
 			disabled={isRefreshing}
-			className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-stroke bg-surface text-text-muted transition-colors hover:border-accent/30 hover:text-accent disabled:cursor-wait"
+			className="links-header-refresh"
 			aria-label={__('Refresh links')}
 			title={__('Refresh links')}
 		>
 			<RefreshCw
-				className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`}
+				className={`links-header-refresh-icon ${
+					isRefreshing ? 'animate-spin' : ''
+				}`}
 			/>
 		</button>
 	);
 
 	return (
-		<div className="flex items-start justify-between gap-4">
-			<div className="flex min-w-0 items-center gap-3">
-				<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-600">
+		<div className="links-header">
+			<div className="links-header-brand">
+				<div className="links-header-brand-icon">
 					<Link2 className="h-5 w-5 text-white" />
 				</div>
-				<div className="min-w-0">
-					<h1 className="text-xl font-bold text-heading">
+				<div className="links-header-brand-copy">
+					<h1 className="links-header-title">
 						{__('Links')}
 					</h1>
-					<p className="text-xs text-text-muted">
+					<p className="links-header-description">
 						{__('Manage and track your shortened URLs')}
 					</p>
 				</div>
 			</div>
 
-			<div className="flex shrink-0 items-center gap-2">
-				<div className="sm:hidden">{refreshButton}</div>
-				<div className="hidden items-center gap-2 sm:flex">
+			<div className="links-header-actions">
+				<div className="links-header-actions-mobile">
 					{refreshButton}
-					<p className="rounded-full border border-stroke bg-surface px-4 py-3 text-xs font-medium text-text-muted">
+				</div>
+				<div className="links-header-actions-desktop">
+					{refreshButton}
+					<p className="links-header-domain">
 						{__('Short links domain')}{' '}
-						<span className="text-heading">{PEAKURL_DOMAIN}</span>
+						<span className="links-header-domain-value">
+							{PEAKURL_DOMAIN}
+						</span>
 					</p>
 				</div>
 			</div>

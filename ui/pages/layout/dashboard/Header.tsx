@@ -5,10 +5,8 @@ import {
 	Settings,
 	LogOut,
 } from 'lucide-react';
-import {
-	useGetUserProfileQuery,
-	useLogoutMutation,
-} from '@/store/slices/api';
+import { useLogoutMutation } from '@/store/slices/api';
+import { authApi } from '@/store/slices';
 import { Avatar, ThemeToggle } from '@/components';
 import { useNavigate } from 'react-router-dom';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
@@ -22,8 +20,9 @@ export const Header = ({
 	onMobileMenuToggle,
 }: HeaderProps) => {
 	const direction = getDocumentDirection();
-	const { data: userData } = useGetUserProfileQuery(undefined);
-	const user = userData?.data;
+	const { useAuthCheckQuery } = authApi;
+	const { data: sessionData } = useAuthCheckQuery(undefined);
+	const user = sessionData?.data ?? sessionData?.user;
 	const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
 	const navigate = useNavigate();
 	const basePath = '/dashboard';

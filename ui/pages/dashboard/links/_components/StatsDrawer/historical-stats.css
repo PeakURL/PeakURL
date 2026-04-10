@@ -1,0 +1,49 @@
+@layer components {
+	.links-historical-stats {
+		@apply rounded-lg border border-stroke bg-surface-alt p-4;
+	}
+
+	.links-historical-stats-header {
+		@apply mb-1 flex items-center gap-2;
+	}
+
+	.links-historical-stats-title {
+		@apply text-base font-semibold text-heading;
+	}
+
+	.links-historical-stats-copy {
+		@apply mb-4 text-sm text-text-muted;
+	}
+
+	.links-historical-stats-list {
+		@apply space-y-1;
+	}
+
+	.links-historical-stats-item {
+		@apply flex items-center rounded px-3 py-2.5 transition-all hover:bg-accent/10;
+	}
+
+	.links-historical-stats-item-highlighted {
+		@apply border border-accent/20 bg-accent/5;
+	}
+
+	.links-historical-stats-period {
+		@apply w-24 text-sm sm:w-32;
+	}
+
+	.links-historical-stats-period-highlighted {
+		@apply font-medium text-accent;
+	}
+
+	.links-historical-stats-period-muted {
+		@apply text-text-muted;
+	}
+
+	.links-historical-stats-value {
+		@apply flex-1 text-sm font-semibold text-heading;
+	}
+
+	.links-historical-stats-rate {
+		@apply text-sm text-text-muted;
+	}
+}

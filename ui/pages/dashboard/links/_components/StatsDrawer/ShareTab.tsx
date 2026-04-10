@@ -42,10 +42,10 @@ function ShareTab({ link, shortUrl }: ShareTabProps) {
 	};
 
 	return (
-		<div className="space-y-6">
+		<div className="links-share-tab">
 			{/* Short URL */}
-			<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-				<label className="block text-xs font-medium text-text-muted mb-2">
+			<div className="links-share-panel">
+				<label className="links-share-label">
 					{__('Short URL')}
 				</label>
 				<ReadOnlyValueBlock
@@ -60,63 +60,63 @@ function ShareTab({ link, shortUrl }: ShareTabProps) {
 							<Copy className="h-4 w-4" />
 						)
 					}
-					className="bg-surface px-2 py-2"
+					className="links-share-readonly"
 					valueClassName="text-accent"
 				/>
 			</div>
 
 			{/* Destination URL */}
-			<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-				<label className="block text-xs font-medium text-text-muted mb-2">
+			<div className="links-share-panel">
+				<label className="links-share-label">
 					{__('Destination URL')}
 				</label>
 				<ReadOnlyValueBlock
 					value={link.destinationUrl}
-					className="border-0 bg-transparent p-0"
+					className="links-readonly-reset"
 					monospace={false}
 					valueClassName="text-heading"
 				/>
 			</div>
 
 			{/* Quick Share */}
-			<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-				<h3 className="text-sm font-semibold text-heading mb-4">
+			<div className="links-share-panel">
+				<h3 className="links-share-title">
 					{__('Quick Share')}
 				</h3>
-				<div className="grid grid-cols-2 gap-3">
+				<div className="links-share-grid">
 					<button
 						onClick={() => handleShare('facebook')}
-						className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[#1877F2] hover:bg-[#166FE5] text-white transition-all"
+						className="links-share-button links-share-button-facebook"
 					>
 						<Users className="w-5 h-5" />
-						<span className="text-sm font-medium">
+						<span className="links-share-button-label">
 							{__('Facebook')}
 						</span>
 					</button>
 					<button
 						onClick={() => handleShare('twitter')}
-						className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[#1DA1F2] hover:bg-[#1A94DA] text-white transition-all"
+						className="links-share-button links-share-button-twitter"
 					>
 						<Send className="w-5 h-5" />
-						<span className="text-sm font-medium">
+						<span className="links-share-button-label">
 							{__('Twitter')}
 						</span>
 					</button>
 					<button
 						onClick={() => handleShare('linkedin')}
-						className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[#0A66C2] hover:bg-[#095196] text-white transition-all"
+						className="links-share-button links-share-button-linkedin"
 					>
 						<BriefcaseBusiness className="w-5 h-5" />
-						<span className="text-sm font-medium">
+						<span className="links-share-button-label">
 							{__('LinkedIn')}
 						</span>
 					</button>
 					<button
 						onClick={() => handleShare('email')}
-						className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-surface border border-stroke hover:bg-surface-alt text-heading transition-all"
+						className="links-share-button links-share-button-email"
 					>
 						<Mail className="w-5 h-5" />
-						<span className="text-sm font-medium">
+						<span className="links-share-button-label">
 							{__('Email')}
 						</span>
 					</button>

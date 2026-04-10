@@ -1,0 +1,17 @@
+@layer components {
+	.links-form-advanced-panel {
+		@apply mt-4 space-y-3 rounded-lg border border-stroke bg-surface-alt p-4;
+	}
+
+	.links-form-expiration-grid {
+		@apply grid grid-cols-2 gap-3;
+	}
+
+	.links-form-utm-grid {
+		@apply grid grid-cols-1 gap-3 md:grid-cols-2;
+	}
+
+	.links-form-utm-wide {
+		@apply md:col-span-2;
+	}
+}

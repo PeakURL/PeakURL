@@ -133,7 +133,7 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 	const totalClicks = getTotalClicks(referrers);
 
 	return (
-		<div className="space-y-6">
+		<div className="links-sources-tab">
 			{/* Device & Browser Statistics */}
 			<DeviceStats
 				devices={devices}
@@ -144,11 +144,11 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 
 			{/* Referrer Categories Overview */}
 			{referrerCategories.length > 0 && (
-				<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-					<h3 className="text-sm font-semibold text-heading mb-4">
+				<div className="links-drawer-section">
+					<h3 className="links-drawer-section-title mb-4">
 						{__('Traffic by Category')}
 					</h3>
-					<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+					<div className="links-sources-category-grid">
 						{referrerCategories.map(
 							(cat: ReferrerCategoryItem, index: number) => {
 								const categoryInfo = getCategoryInfo(
@@ -166,16 +166,16 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 								return (
 									<div
 										key={index}
-										className="flex items-center gap-3 p-3 bg-surface rounded-lg border border-stroke"
+										className="links-sources-category-card"
 									>
 										<div
-											className={`w-10 h-10 rounded-lg ${categoryInfo.bg} flex items-center justify-center shrink-0`}
+											className={`links-sources-category-icon ${categoryInfo.bg}`}
 										>
 											<Icon
 												className={`w-5 h-5 ${categoryInfo.color}`}
 											/>
 										</div>
-										<div className="min-w-0">
+										<div className="links-sources-category-copy">
 											<p className="text-sm font-medium text-heading truncate">
 												{getCategoryLabel(cat.category)}
 											</p>
@@ -193,18 +193,18 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 			)}
 
 			{/* Detailed Referrer Data */}
-			<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-				<h3 className="text-sm font-semibold text-heading mb-4">
+			<div className="links-drawer-section">
+				<h3 className="links-drawer-section-title mb-4">
 					{__('Referrer Sources')}
 				</h3>
 				{isLoading ? (
-					<div className="h-64 flex items-center justify-center bg-surface rounded-lg border border-stroke animate-pulse">
-						<p className="text-sm text-text-muted">
+					<div className="links-drawer-empty-panel links-drawer-empty-panel-large animate-pulse">
+						<p className="links-drawer-empty-copy">
 							{__('Loading referrers...')}
 						</p>
 					</div>
 				) : referrers.length > 0 ? (
-					<div className="space-y-2">
+					<div className="links-sources-referrer-list">
 						{referrers.map((ref: ReferrerItem, index: number) => {
 							const categoryInfo = getCategoryInfo(
 								ref.category || 'Unknown'
@@ -220,17 +220,17 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 							return (
 								<div
 									key={index}
-									className="flex items-center justify-between p-3 bg-surface rounded-lg border border-stroke hover:border-primary-500/30 transition-colors"
+									className="links-sources-referrer-item"
 								>
-									<div className="flex items-center gap-3 min-w-0">
+									<div className="links-sources-referrer-main">
 										<div
-											className={`w-8 h-8 rounded-lg ${categoryInfo.bg} flex items-center justify-center shrink-0`}
+											className={`links-sources-referrer-icon ${categoryInfo.bg}`}
 										>
 											<Icon
 												className={`w-4 h-4 ${categoryInfo.color}`}
 											/>
 										</div>
-										<div className="min-w-0">
+										<div className="links-sources-referrer-copy">
 											<p className="text-sm font-medium text-heading truncate">
 												{ref.name ||
 													__('Direct / Unknown')}
@@ -244,8 +244,8 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 												)}
 										</div>
 									</div>
-									<div className="flex items-center gap-3 shrink-0">
-										<div className="w-24 h-2 bg-surface-alt rounded-full overflow-hidden hidden sm:block">
+									<div className="links-sources-referrer-meta">
+										<div className="links-sources-referrer-bar">
 											<div
 												className={`h-full ${categoryInfo.bg.replace(
 													'/10',
@@ -256,7 +256,7 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 												}}
 											/>
 										</div>
-										<div className="text-inline-end">
+										<div className="links-sources-referrer-count">
 											<span className="text-sm font-medium text-heading">
 												{ref.count}
 											</span>
@@ -271,13 +271,13 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 						})}
 					</div>
 				) : (
-					<div className="h-64 flex items-center justify-center bg-surface rounded-lg border border-stroke">
+					<div className="links-drawer-empty-panel links-drawer-empty-panel-large">
 						<div className="text-center">
-							<ExternalLink className="w-12 h-12 text-text-muted mx-auto mb-2" />
-							<p className="text-sm text-text-muted">
+							<ExternalLink className="links-drawer-empty-icon" />
+							<p className="links-drawer-empty-copy">
 								{__('No referrer data available yet')}
 							</p>
-							<p className="text-xs text-text-muted mt-1">
+							<p className="mt-1 text-xs text-text-muted">
 								{__(
 									'Referrer data will appear when visitors come from external sources'
 								)}
@@ -289,30 +289,30 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 
 			{/* UTM Campaign Tracking */}
 			{utmCampaigns && utmCampaigns.length > 0 && (
-				<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-					<h3 className="text-sm font-semibold text-heading mb-4">
+				<div className="links-drawer-section">
+					<h3 className="links-drawer-section-title mb-4">
 						{__('UTM Campaign Tracking')}
 					</h3>
-					<div className="space-y-2">
+					<div className="links-sources-utm-list">
 						{utmCampaigns.map(
 							(campaign: UtmCampaignItem, index: number) => (
 								<div
 									key={index}
-									className="flex items-center justify-between p-3 bg-surface rounded-lg border border-stroke"
+									className="links-sources-utm-item"
 								>
-									<div className="min-w-0">
+									<div className="links-sources-utm-copy">
 										<p className="text-sm font-medium text-heading truncate">
 											{campaign.campaign}
 										</p>
-										<div className="flex gap-2 text-xs text-text-muted mt-1">
+										<div className="links-sources-utm-tags">
 											{campaign.source && (
-												<span className="px-2 py-0.5 bg-surface-alt rounded">
+												<span className="links-sources-utm-tag">
 													{__('source:')}{' '}
 													{campaign.source}
 												</span>
 											)}
 											{campaign.medium && (
-												<span className="px-2 py-0.5 bg-surface-alt rounded">
+												<span className="links-sources-utm-tag">
 													{__('medium:')}{' '}
 													{campaign.medium}
 												</span>

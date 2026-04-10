@@ -1,0 +1,17 @@
+@layer components {
+	.links-form {
+		@apply rounded-xl border border-stroke bg-surface p-6 shadow-sm;
+	}
+
+	.links-form-element {
+		@apply space-y-4;
+	}
+
+	.links-form-advanced-toggle {
+		@apply mt-5 inline-flex items-center gap-2 text-sm font-medium text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300;
+	}
+
+	.links-form-advanced-toggle-icon {
+		@apply h-4 w-4;
+	}
+}

@@ -87,30 +87,28 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 
 	return (
 		<Dialog open={open} onClose={handleClose} className="relative z-50">
-			<div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+			<div className="links-modal-backdrop" aria-hidden="true" />
 
-			<div className="fixed inset-0 flex items-center justify-center p-4">
-				<DialogPanel
-					className="text-inline-start mx-auto w-full max-w-lg rounded-lg bg-surface shadow-xl"
-				>
+			<div className="links-modal-shell">
+				<DialogPanel className="links-modal-panel links-modal-panel-large">
 					{/* Header */}
-					<div className="flex items-center justify-between p-6 border-b border-stroke">
-						<DialogTitle className="text-lg font-semibold text-heading">
+					<div className="links-modal-header">
+						<DialogTitle className="links-modal-title">
 							{__('Edit Link')}
 						</DialogTitle>
 						<button
 							onClick={handleClose}
-							className="rounded-lg text-text-muted hover:text-heading hover:bg-surface-alt p-2 transition-all"
+							className="links-modal-close"
 						>
-							<X className="w-5 h-5" />
+							<X className="links-modal-close-icon" />
 						</button>
 					</div>
 
 					{/* Content */}
-					<form onSubmit={handleSubmit} className="p-6 space-y-4">
+					<form onSubmit={handleSubmit} className="links-modal-form">
 						{error && (
-							<div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
-								<p className="text-sm text-red-600 dark:text-red-400">
+							<div className="links-modal-alert links-modal-alert-error">
+								<p className="links-modal-alert-error-text">
 									{error}
 								</p>
 							</div>
@@ -118,13 +116,13 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 
 						{/* Short URL (Read-only) */}
 						<div>
-							<label className="block text-sm font-medium text-heading mb-2">
+							<label className="links-modal-field-label">
 								{__('Short URL')}
 							</label>
-							<div className="bg-surface-alt border border-stroke rounded-lg px-3 py-2">
+							<div className="links-modal-static-field">
 								<ReadOnlyValueBlock
 									value={shortUrl}
-									className="border-0 bg-transparent p-0"
+									className="links-readonly-reset"
 									valueClassName="text-text-muted"
 								/>
 							</div>
@@ -132,13 +130,13 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 
 						{/* Destination URL (Read-only) */}
 						<div>
-							<label className="block text-sm font-medium text-heading mb-2">
+							<label className="links-modal-field-label">
 								{__('Destination URL')}
 							</label>
-							<div className="bg-surface-alt border border-stroke rounded-lg px-3 py-2">
+							<div className="links-modal-static-field">
 								<ReadOnlyValueBlock
 									value={link.destinationUrl}
-									className="border-0 bg-transparent p-0"
+									className="links-readonly-reset"
 									monospace={false}
 									valueClassName="text-text-muted"
 								/>
@@ -147,10 +145,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 
 						{/* Title */}
 						<div>
-							<label
-								htmlFor="title"
-								className="block text-sm font-medium text-heading mb-2"
-							>
+							<label htmlFor="title" className="links-modal-field-label">
 								{__('Title (Optional)')}
 							</label>
 							<input
@@ -162,16 +157,13 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 								value={title}
 								onChange={(e) => setTitle(e.target.value)}
 								placeholder={__('Enter a title for this link')}
-								className="text-page-start w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent"
+								className="links-edit-modal-input"
 							/>
 						</div>
 
 						{/* Password */}
 						<div>
-							<label
-								htmlFor="password"
-								className="block text-sm font-medium text-heading mb-2"
-							>
+							<label htmlFor="password" className="links-modal-field-label">
 								{__('Password Protection (Optional)')}
 							</label>
 							<input
@@ -189,19 +181,19 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 												'Enter a new password to replace the current one'
 											)
 										: __(
-												'Set a password to protect this link'
-											)
+										'Set a password to protect this link'
+									)
 								}
-								className="text-page-start w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent"
+								className="links-edit-modal-input"
 							/>
 							{hasExistingPassword && (
-								<div className="mt-2 space-y-2">
-									<p className="text-xs text-text-muted">
+								<div className="links-edit-modal-password-options">
+									<p className="links-edit-modal-help">
 										{__(
 											'Leave this blank to keep the current password.'
 										)}
 									</p>
-									<label className="flex items-center gap-2 text-sm text-heading">
+									<label className="links-edit-modal-checkbox-label">
 										<input
 											type="checkbox"
 											checked={clearPassword}
@@ -213,7 +205,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 													setPassword('');
 												}
 											}}
-											className="rounded border-stroke text-accent focus:ring-accent focus:ring-2"
+											className="links-checkbox"
 										/>
 										{__('Remove password protection')}
 									</label>
@@ -223,10 +215,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 
 						{/* Expiration Date */}
 						<div>
-							<label
-								htmlFor="expiresAt"
-								className="block text-sm font-medium text-heading mb-2"
-							>
+							<label htmlFor="expiresAt" className="links-modal-field-label">
 								{__('Expiration Date (Optional)')}
 							</label>
 							<input
@@ -240,16 +229,13 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 								onChange={(e) => setExpiresAt(e.target.value)}
 								min={getLocalDateTimeValue()}
 								step="60"
-								className="text-page-start w-full rounded-lg border border-stroke bg-surface-alt px-3 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent"
+								className="links-edit-modal-input"
 							/>
 						</div>
 
 						{/* Status */}
 						<div>
-							<label
-								htmlFor="status"
-								className="block text-sm font-medium text-heading mb-2"
-							>
+							<label htmlFor="status" className="links-modal-field-label">
 								{__('Status')}
 							</label>
 							<Select
@@ -263,29 +249,29 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 						</div>
 
 						{/* Action Buttons */}
-						<div className="flex gap-3 pt-4">
+						<div className="links-modal-actions-spacious">
 							<button
 								type="button"
 								onClick={handleClose}
-								className="flex-1 px-4 py-2.5 bg-surface border border-stroke hover:bg-surface-alt text-heading rounded-lg transition-all font-medium"
+								className="links-modal-button links-modal-button-secondary"
 							>
 								{__('Cancel')}
 							</button>
 							<button
 								type="submit"
 								disabled={isLoading}
-								className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-accent hover:bg-accent/90 disabled:bg-gray-400 text-white rounded-lg transition-all font-medium"
+								className="links-modal-button links-modal-button-primary"
 							>
 								{isLoading ? (
-									<>
-										<div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+									<span className="links-modal-button-content">
+										<div className="links-modal-spinner"></div>
 										{__('Saving...')}
-									</>
+									</span>
 								) : (
-									<>
-										<Save className="w-4 h-4" />
+									<span className="links-modal-button-content">
+										<Save className="links-modal-button-icon" />
 										{__('Save Changes')}
-									</>
+									</span>
 								)}
 							</button>
 						</div>

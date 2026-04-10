@@ -6,15 +6,15 @@ const Header = () => {
 	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
 
 	return (
-		<div dir={direction} className="mb-6 flex items-center gap-4">
-			<div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center shrink-0 shadow-md">
+		<div dir={direction} className="links-form-header">
+			<div className="links-form-header-icon">
 				<Scissors className="text-white" size={20} />
 			</div>
-			<div className="text-inline-start">
-				<h3 className="text-lg font-bold text-heading">
+			<div className="links-form-header-copy">
+				<h3 className="links-form-header-title">
 					{__('Create Short Link')}
 				</h3>
-				<p className="text-sm text-text-muted">
+				<p className="links-form-header-description">
 					{__('Transform your long URL into a short, shareable link')}
 				</p>
 			</div>

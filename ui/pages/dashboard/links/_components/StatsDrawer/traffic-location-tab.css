@@ -1,0 +1,107 @@
+@layer components {
+	.links-location-tab {
+		@apply space-y-4;
+	}
+
+	.links-location-empty-map {
+		@apply min-h-[22rem] rounded-lg border border-stroke bg-surface px-4 py-6 sm:px-6;
+	}
+
+	.links-location-empty-map-inner {
+		@apply mx-auto flex min-h-full w-full max-w-xl flex-col items-center justify-center text-center;
+	}
+
+	.links-location-note {
+		@apply mx-auto mt-4 w-full max-w-lg rounded-lg border border-info/20 bg-info/5 px-4 py-3;
+		text-align: start;
+	}
+
+	.links-location-note-title {
+		@apply text-xs font-medium text-heading;
+	}
+
+	.links-location-note-list {
+		@apply mt-2 space-y-2 text-xs leading-5 text-text-muted;
+	}
+
+	.links-location-note-item {
+		@apply flex items-start gap-2;
+		text-align: start;
+	}
+
+	.links-location-note-bullet {
+		@apply mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-info/60;
+	}
+
+	.links-location-note-content {
+		@apply min-w-0 flex-1 space-y-1;
+		text-align: start;
+	}
+
+	.links-location-note-code {
+		@apply mr-auto block w-fit max-w-full break-all rounded bg-surface px-1.5 py-0.5 font-mono text-[11px] text-heading;
+	}
+
+	.links-location-map-wrap {
+		@apply relative h-96 overflow-hidden rounded-lg border border-stroke;
+	}
+
+	.links-location-tooltip {
+		@apply absolute top-4 min-w-32 rounded-lg border border-stroke bg-surface p-3 shadow-xl;
+		inset-inline-start: 1rem;
+		text-align: start;
+	}
+
+	.links-location-tooltip-title {
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.links-location-tooltip-copy {
+		@apply mt-1 text-xs text-text-muted;
+	}
+
+	.links-location-list {
+		@apply space-y-3;
+	}
+
+	.links-location-list-item {
+		@apply space-y-1.5;
+	}
+
+	.links-location-list-row {
+		@apply flex items-center justify-between;
+	}
+
+	.links-location-list-main {
+		@apply flex items-center gap-2;
+	}
+
+	.links-location-list-meta {
+		@apply flex items-center gap-3;
+	}
+
+	.links-location-list-count {
+		@apply min-w-12 text-sm font-semibold text-heading;
+		text-align: end;
+	}
+
+	.links-location-city-list {
+		@apply space-y-2;
+	}
+
+	.links-location-city-item {
+		@apply flex items-center justify-between rounded-lg px-3 py-2 transition-all hover:bg-surface;
+	}
+
+	.links-location-city-rank {
+		@apply flex h-8 w-8 items-center justify-center rounded-full bg-primary-500/10 text-xs font-semibold text-accent;
+	}
+
+	.links-location-city-main {
+		@apply flex items-center gap-3;
+	}
+
+	.links-location-city-meta {
+		text-align: end;
+	}
+}

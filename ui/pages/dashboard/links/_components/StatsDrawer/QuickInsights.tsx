@@ -68,12 +68,12 @@ function QuickInsights({ link }: Pick<LinkStatsViewProps, 'link'>) {
 	];
 
 	return (
-		<div className="bg-linear-to-br from-accent/5 to-info/5 border border-accent/20 rounded-lg p-4">
-			<div className="flex items-center justify-between mb-3">
-				<h3 className="text-sm font-semibold text-heading">
+		<div className="links-quick-insights">
+			<div className="links-quick-insights-header">
+				<h3 className="links-quick-insights-title">
 					{__('Quick Insights')}
 				</h3>
-				<span className="text-xs text-text-muted">
+				<span className="links-quick-insights-updated">
 					{__('Last updated:')}{' '}
 					{formatRelativeTime(new Date(), {
 						style: 'long',
@@ -82,31 +82,28 @@ function QuickInsights({ link }: Pick<LinkStatsViewProps, 'link'>) {
 				</span>
 			</div>
 
-			<div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+			<div className="links-quick-insights-grid">
 				{insights.map((insight, index) => {
 					const Icon = insight.icon;
 					return (
-						<div
-							key={index}
-							className="bg-surface border border-stroke rounded-lg p-3"
-						>
-							<div className="flex items-center gap-2 mb-2">
+						<div key={index} className="links-quick-insight-card">
+							<div className="links-quick-insight-row">
 								<div
-									className={`w-7 h-7 rounded-lg ${insight.bg} flex items-center justify-center`}
+									className={`links-quick-insight-icon ${insight.bg}`}
 								>
 									<Icon
 										className={`w-3.5 h-3.5 ${insight.color}`}
 									/>
 								</div>
-								<span className="text-xs text-text-muted">
+								<span className="links-quick-insight-label">
 									{insight.label}
 								</span>
 							</div>
-							<div className="text-sm font-semibold text-heading">
+							<div className="links-quick-insight-value">
 								{insight.value}
 							</div>
 							{insight.subtext && (
-								<div className="text-xs text-muted mt-1">
+								<div className="links-quick-insight-subtext">
 									{insight.subtext}
 								</div>
 							)}

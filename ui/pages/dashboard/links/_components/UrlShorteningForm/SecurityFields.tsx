@@ -12,14 +12,14 @@ const SecurityFields = ({
 }: SecurityFieldsProps) => {
 	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
 	return (
-		<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+		<div className="links-form-section-grid">
 			<div>
-				<label
-					htmlFor="title"
-					className="block text-sm font-medium text-heading mb-1.5"
-				>
-					<span dir={direction} className="inline-flex items-center gap-2">
-						<Tags className="h-4 w-4 text-text-muted" />
+				<label htmlFor="title" className="links-form-section-label">
+					<span
+						dir={direction}
+						className="links-form-section-label-content"
+					>
+						<Tags className="links-form-section-label-icon" />
 						{__('Link Title (Optional)')}
 					</span>
 				</label>
@@ -33,12 +33,12 @@ const SecurityFields = ({
 			</div>
 
 			<div>
-				<label
-					htmlFor="password"
-					className="block text-sm font-medium text-heading mb-1.5"
-				>
-					<span dir={direction} className="inline-flex items-center gap-2">
-						<Lock className="h-4 w-4 text-text-muted" />
+				<label htmlFor="password" className="links-form-section-label">
+					<span
+						dir={direction}
+						className="links-form-section-label-content"
+					>
+						<Lock className="links-form-section-label-icon" />
 						{__('Password Protection (Optional)')}
 					</span>
 				</label>

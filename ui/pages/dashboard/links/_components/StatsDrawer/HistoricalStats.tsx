@@ -49,14 +49,14 @@ function HistoricalStats({ link }: Pick<LinkStatsViewProps, 'link'>) {
 	];
 
 	return (
-		<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-			<div className="flex items-center gap-2 mb-1">
-				<Calendar className="w-4 h-4 text-accent" />
-				<h3 className="text-base font-semibold text-heading">
+		<div className="links-historical-stats">
+			<div className="links-historical-stats-header">
+				<Calendar className="links-drawer-section-icon" />
+				<h3 className="links-historical-stats-title">
 					{__('Historical click count')}
 				</h3>
 			</div>
-			<p className="text-sm text-text-muted mb-4">
+			<p className="links-historical-stats-copy">
 				{__('Short URL created on')}{' '}
 				{link.createdAt
 					? formatLocalizedDateTime(new Date(link.createdAt), {
@@ -78,31 +78,31 @@ function HistoricalStats({ link }: Pick<LinkStatsViewProps, 'link'>) {
 			</p>
 
 			{/* Time Range Stats Table */}
-			<div className="space-y-1">
+			<div className="links-historical-stats-list">
 				{stats.map((stat, index) => (
 					<div
 						key={index}
-						className={`flex items-center py-2.5 px-3 rounded transition-all hover:bg-accent/10 ${
+						className={`links-historical-stats-item ${
 							stat.highlighted
-								? 'bg-accent/5 border border-accent/20'
+								? 'links-historical-stats-item-highlighted'
 								: ''
 						}`}
 					>
 						<span
-							className={`text-sm w-24 sm:w-32 ${
+							className={`links-historical-stats-period ${
 								stat.highlighted
-									? 'font-medium text-accent'
-									: 'text-text-muted'
+									? 'links-historical-stats-period-highlighted'
+									: 'links-historical-stats-period-muted'
 							}`}
 						>
 							{stat.period}
 						</span>
-						<span className="text-sm font-semibold text-heading flex-1">
+						<span className="links-historical-stats-value">
 							{stat.hits}{' '}
 							{stat.hits === 1 ? __('hit') : __('hits')}
 						</span>
 						{stat.rate && (
-							<span className="text-sm text-text-muted">
+							<span className="links-historical-stats-rate">
 								{stat.rate}
 							</span>
 						)}

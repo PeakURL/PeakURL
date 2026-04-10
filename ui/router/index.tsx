@@ -12,8 +12,8 @@ import {
 	UsersPage,
 	SettingsLayout,
 	SettingsTabPage,
-	BulkImportLayout,
-	BulkImportTabPage,
+	ImportLayout,
+	ImportTabPage,
 	ExportPage,
 	SystemStatusPage,
 	ForgotPasswordPage,
@@ -60,11 +60,11 @@ function SettingsLayoutRoute() {
 	);
 }
 
-function BulkImportLayoutRoute() {
+function ImportLayoutRoute() {
 	return (
-		<BulkImportLayout>
-			<BulkImportTabPage />
-		</BulkImportLayout>
+		<ImportLayout>
+			<ImportTabPage />
+		</ImportLayout>
 	);
 }
 
@@ -128,15 +128,15 @@ function AppRouter() {
 							/>
 							<Route
 								path="import/file"
-								element={<BulkImportLayoutRoute />}
+								element={<ImportLayoutRoute />}
 							/>
 							<Route
 								path="import/api"
-								element={<BulkImportLayoutRoute />}
+								element={<ImportLayoutRoute />}
 							/>
 							<Route
 								path="import/paste"
-								element={<BulkImportLayoutRoute />}
+								element={<ImportLayoutRoute />}
 							/>
 							<Route
 								path="system-status"

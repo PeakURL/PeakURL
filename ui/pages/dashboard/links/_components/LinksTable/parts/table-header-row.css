@@ -1,0 +1,34 @@
+@layer components {
+	.links-table-header-row {
+		text-align: start;
+	}
+
+	.links-table-header-row-selected {
+		@apply bg-accent/5;
+	}
+
+	.links-table-header-cell {
+		@apply px-4 py-3 text-xs font-semibold uppercase tracking-wide text-text-muted;
+	}
+
+	.links-table-header-cell-select {
+		@apply w-[40px];
+	}
+
+	.links-table-header-cell-performance {
+		@apply text-center;
+	}
+
+	.links-table-header-cell-count {
+		@apply px-4 py-3 text-sm font-medium text-accent;
+	}
+
+	.links-table-header-cell-actions {
+		@apply px-4 py-3;
+		text-align: end;
+	}
+
+	.links-table-header-delete {
+		@apply inline-flex items-center gap-1 text-xs font-medium text-error hover:text-red-700;
+	}
+}

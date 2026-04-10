@@ -19,13 +19,16 @@ const UTMFields = ({
 	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
 	return (
 		<div>
-			<label className="block text-sm font-medium text-heading mb-1.5">
-				<span dir={direction} className="inline-flex items-center gap-2">
-					<BarChart3 className="h-4 w-4 text-text-muted" />
+			<label className="links-form-section-label">
+				<span
+					dir={direction}
+					className="links-form-section-label-content"
+				>
+					<BarChart3 className="links-form-section-label-icon" />
 					{__('UTM Parameters (Optional)')}
 				</span>
 			</label>
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+			<div className="links-form-utm-grid">
 				<Input
 					type="text"
 					valueDirection="ltr"
@@ -70,7 +73,7 @@ const UTMFields = ({
 					placeholder={__('utm_content (e.g., banner)')}
 					autoCapitalize="off"
 					spellCheck={false}
-					className="md:col-span-2"
+					className="links-form-utm-wide"
 				/>
 			</div>
 		</div>

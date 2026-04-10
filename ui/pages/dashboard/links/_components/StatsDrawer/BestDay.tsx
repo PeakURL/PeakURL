@@ -9,12 +9,12 @@ function BestDay({ link }: Pick<LinkStatsViewProps, 'link'>) {
 	const totalClicks = Number(link.clicks || 0);
 
 	return (
-		<div className="bg-surface-alt border border-stroke rounded-lg p-4">
-			<h3 className="text-base font-semibold text-heading mb-3">
+		<div className="links-best-day">
+			<h3 className="links-best-day-title">
 				{__('Best day')}
 			</h3>
-			<p className="text-sm text-heading mb-2">
-				<span className="font-semibold">
+			<p className="links-best-day-copy">
+				<span className="links-best-day-value">
 					{sprintf(__('%s hits'), String(totalClicks))}
 				</span>{' '}
 				{__('on')}{' '}
@@ -26,7 +26,7 @@ function BestDay({ link }: Pick<LinkStatsViewProps, 'link'>) {
 				.{' '}
 				<button
 					onClick={() => setShowDetails(!showDetails)}
-					className="text-accent hover:underline inline-flex items-center gap-1"
+					className="links-best-day-toggle"
 				>
 					{showDetails ? __('Hide details') : __('View details')}
 					{showDetails ? (
@@ -39,25 +39,25 @@ function BestDay({ link }: Pick<LinkStatsViewProps, 'link'>) {
 
 			{/* Year/Month/Day Breakdown */}
 			{showDetails && (
-				<div className="border-inline-start-2 padding-inline-start-4 text-inline-start mt-4 animate-in border-accent/20 slide-in-from-top-2 duration-200">
-					<div className="space-y-2">
-						<div className="flex items-center gap-2">
-							<span className="w-2 h-2 rounded-full bg-accent"></span>
+				<div className="links-best-day-details">
+					<div className="links-best-day-tree">
+						<div className="links-best-day-tree-row">
+							<span className="links-best-day-tree-dot-large"></span>
 							<span className="text-sm font-medium text-heading">
 								{__('Year')} {new Date().getFullYear()}
 							</span>
 						</div>
-						<div className="margin-inline-start-4 space-y-2">
-							<div className="flex items-center gap-2">
-								<span className="w-1.5 h-1.5 rounded-full bg-text-muted"></span>
+						<div className="links-best-day-tree-branch">
+							<div className="links-best-day-tree-row">
+								<span className="links-best-day-tree-dot-medium"></span>
 								<span className="text-sm text-text-muted">
 									{formatLocalizedDateTime(new Date(), {
 										month: 'long',
 									})}
 								</span>
 							</div>
-							<div className="margin-inline-start-4 flex items-center gap-2">
-								<span className="w-1 h-1 rounded-full bg-text-muted"></span>
+							<div className="links-best-day-tree-row links-best-day-tree-branch">
+								<span className="links-best-day-tree-dot-small"></span>
 								<span className="text-sm font-medium text-heading">
 									{formatLocalizedDateTime(new Date(), {
 										day: 'numeric',

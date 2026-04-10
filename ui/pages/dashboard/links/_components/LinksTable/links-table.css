@@ -1,0 +1,21 @@
+@layer components {
+	.links-table {
+		@apply overflow-hidden rounded-lg border border-stroke bg-surface;
+	}
+
+	.links-table-scroll {
+		@apply overflow-x-auto overscroll-x-contain;
+	}
+
+	.links-table-element {
+		@apply min-w-220 w-full;
+	}
+
+	.links-table-head {
+		@apply border-b border-stroke bg-surface-alt;
+	}
+
+	.links-table-body {
+		@apply divide-y divide-stroke;
+	}
+}

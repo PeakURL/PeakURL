@@ -1,0 +1,13 @@
+@layer components {
+	.links-bulk-delete-modal-title-icon {
+		@apply bg-red-500/10;
+	}
+
+	.links-bulk-delete-modal-title-icon-svg {
+		@apply h-4 w-4 text-red-600 dark:text-red-400;
+	}
+
+	.links-bulk-delete-modal-copy {
+		@apply text-sm text-text-muted;
+	}
+}

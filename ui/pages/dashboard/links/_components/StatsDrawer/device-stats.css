@@ -1,0 +1,112 @@
+@layer components {
+	.links-device-stats {
+		@apply space-y-4;
+	}
+
+	.links-device-summary {
+		@apply rounded-lg border border-accent/20 bg-linear-to-br from-accent/5 to-info/5 p-4;
+	}
+
+	.links-device-section {
+		@apply rounded-lg border border-stroke bg-surface-alt p-4;
+	}
+
+	.links-device-empty {
+		@apply flex h-64 items-center justify-center rounded-lg border border-stroke bg-surface;
+	}
+
+	.links-device-empty-content {
+		@apply px-6 text-center;
+	}
+
+	.links-device-empty-title {
+		@apply mb-2 text-sm font-medium text-heading;
+	}
+
+	.links-device-empty-copy {
+		@apply text-sm text-muted;
+	}
+
+	.links-device-empty-copy-small {
+		@apply text-xs text-text-muted;
+	}
+
+	.links-device-list {
+		@apply space-y-3;
+	}
+
+	.links-device-list-row {
+		@apply space-y-1.5;
+	}
+
+	.links-device-list-row-header {
+		@apply flex items-center justify-between;
+	}
+
+	.links-device-list-main {
+		@apply flex items-center gap-2;
+	}
+
+	.links-device-list-meta {
+		@apply flex items-center gap-3;
+	}
+
+	.links-device-list-percentage {
+		@apply text-sm text-muted;
+	}
+
+	.links-device-list-count {
+		@apply min-w-12 text-sm font-semibold text-heading;
+		text-align: end;
+	}
+
+	.links-device-types {
+		@apply grid grid-cols-1 gap-3;
+	}
+
+	.links-device-type-card {
+		@apply flex items-center justify-between rounded-lg border border-stroke bg-surface px-4 py-3 transition-all hover:border-accent/50;
+	}
+
+	.links-device-type-main {
+		@apply flex items-center gap-3;
+	}
+
+	.links-device-type-icon {
+		@apply flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10;
+	}
+
+	.links-device-type-copy {
+		@apply text-xs text-text-muted;
+	}
+
+	.links-device-type-value {
+		@apply text-lg font-bold text-heading;
+		text-align: end;
+	}
+
+	.links-device-os-list {
+		@apply space-y-2;
+	}
+
+	.links-device-os-item {
+		@apply flex items-center justify-between rounded-lg px-3 py-2 transition-all hover:bg-surface;
+	}
+
+	.links-device-os-main {
+		@apply flex items-center gap-3;
+	}
+
+	.links-device-os-icon {
+		@apply flex h-8 w-8 items-center justify-center rounded-full bg-accent/10 text-lg;
+	}
+
+	.links-device-os-stats {
+		@apply flex items-center gap-3;
+		text-align: end;
+	}
+
+	.links-device-os-count {
+		@apply min-w-12 text-sm font-semibold text-heading;
+	}
+}

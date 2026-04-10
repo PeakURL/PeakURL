@@ -1,0 +1,95 @@
+@layer components {
+	.links-drawer-shell {
+		@apply pointer-events-none fixed inset-y-0 flex max-w-full;
+	}
+
+	.links-drawer-shell-ltr {
+		@apply right-0 pl-0 sm:pl-16;
+	}
+
+	.links-drawer-shell-rtl {
+		@apply left-0 pr-0 sm:pr-16;
+	}
+
+	.links-drawer-panel {
+		@apply pointer-events-auto flex h-full w-screen max-w-4xl transform flex-col overflow-y-auto bg-surface shadow-xl transition duration-500 ease-in-out sm:duration-700;
+	}
+
+	.links-drawer-header {
+		@apply bg-surface-alt px-4 py-6 sm:px-6;
+	}
+
+	.links-drawer-header-inner {
+		@apply flex items-start justify-between;
+	}
+
+	.links-drawer-header-copy {
+		@apply space-y-1;
+	}
+
+	.links-drawer-title {
+		@apply flex items-center gap-2 text-lg font-semibold text-heading;
+	}
+
+	.links-drawer-title-icon {
+		@apply flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10;
+	}
+
+	.links-drawer-description {
+		@apply text-sm text-text-muted;
+	}
+
+	.links-drawer-close {
+		@apply rounded-lg p-2 text-text-muted transition-all hover:bg-surface-alt hover:text-heading;
+	}
+
+	.links-drawer-content {
+		@apply flex-1 px-4 py-6 sm:px-6;
+	}
+
+	.links-drawer-tabs {
+		@apply mb-6 flex gap-2 overflow-x-auto border-b border-stroke;
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
+
+	.links-drawer-tabs::-webkit-scrollbar {
+		display: none;
+	}
+
+	.links-drawer-tab {
+		@apply -mb-px flex items-center gap-2 whitespace-nowrap border-b-2 px-4 py-3 text-sm font-medium outline-none transition-all;
+	}
+
+	.links-drawer-tab-active {
+		@apply border-accent text-accent;
+	}
+
+	.links-drawer-tab-inactive {
+		@apply border-transparent text-text-muted hover:text-heading;
+	}
+
+	.links-drawer-tab-icon {
+		@apply h-4 w-4 shrink-0;
+	}
+
+	.links-drawer-panel-stack {
+		@apply space-y-4;
+	}
+
+	.links-drawer-footer {
+		@apply border-t border-stroke bg-surface-alt px-4 py-4 sm:px-6;
+	}
+
+	.links-drawer-footer-actions {
+		@apply flex justify-end gap-3;
+	}
+
+	html[dir='rtl'] .links-drawer-footer-actions {
+		@apply justify-start;
+	}
+
+	.links-drawer-footer-button {
+		@apply rounded-lg border border-stroke bg-surface px-4 py-2 text-sm font-medium text-heading transition-all hover:bg-surface-alt;
+	}
+}

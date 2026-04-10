@@ -58,14 +58,14 @@ const getRoleMeta = (): Record<
 	admin: {
 		label: __('Admin'),
 		description: __('Can manage users, settings, and all links.'),
-		badge: 'bg-red-500/10 text-red-700 dark:text-red-300 border border-red-500/20',
+		badge: 'users-page-role-badge-admin',
 	},
 	editor: {
 		label: __('Editor'),
 		description: __(
 			'Can create, edit, and delete site links without admin access.'
 		),
-		badge: 'bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20',
+		badge: 'users-page-role-badge-editor',
 	},
 });
 
@@ -157,18 +157,25 @@ function UserDialog({
 		'edit' === mode && initialUser?.id === currentUser?.id;
 
 	return (
-		<Dialog open={open} onClose={onClose} className="relative z-50">
-			<div className="fixed inset-0 bg-black/40" aria-hidden="true" />
-			<div className="fixed inset-0 flex items-center justify-center p-4">
-				<DialogPanel className="w-full max-w-2xl rounded-2xl border border-stroke bg-surface shadow-2xl">
-					<div className="flex items-start justify-between border-b border-stroke px-6 py-5">
+		<Dialog
+			open={open}
+			onClose={onClose}
+			className="users-page-dialog"
+		>
+			<div
+				className="users-page-dialog-backdrop"
+				aria-hidden="true"
+			/>
+			<div className="users-page-dialog-wrapper">
+				<DialogPanel className="users-page-dialog-panel">
+					<div className="users-page-dialog-header">
 						<div>
-							<DialogTitle className="text-lg font-semibold text-heading">
+							<DialogTitle className="users-page-dialog-title">
 								{'create' === mode
 									? __('Add User')
 									: __('Edit User')}
 							</DialogTitle>
-							<p className="mt-1 text-sm text-text-muted">
+							<p className="users-page-dialog-summary">
 								{'create' === mode
 									? __(
 											'Create a new account with admin or editor access.'
@@ -181,7 +188,7 @@ function UserDialog({
 						<button
 							type="button"
 							onClick={onClose}
-							className="rounded-lg p-2 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading"
+							className="users-page-dialog-close"
 						>
 							<X size={18} />
 						</button>
@@ -189,15 +196,15 @@ function UserDialog({
 
 					<form
 						onSubmit={handleSubmit}
-						className="space-y-5 px-6 py-6"
+						className="users-page-dialog-form"
 					>
 						{formError && (
-							<div className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-300">
+							<div className="users-page-dialog-error">
 								{formError}
 							</div>
 						)}
 
-						<div className="grid gap-4 sm:grid-cols-2">
+						<div className="users-page-dialog-grid">
 							<Input
 								label={__('First Name')}
 								value={form.firstName}
@@ -212,7 +219,7 @@ function UserDialog({
 							/>
 						</div>
 
-						<div className="grid gap-4 sm:grid-cols-2">
+						<div className="users-page-dialog-grid">
 							<Input
 								label={__('Username')}
 								valueDirection="ltr"
@@ -231,7 +238,7 @@ function UserDialog({
 							/>
 						</div>
 
-						<div className="grid gap-4 sm:grid-cols-2">
+						<div className="users-page-dialog-grid">
 							<Input
 								label={
 									'create' === mode
@@ -277,9 +284,9 @@ function UserDialog({
 							/>
 						</div>
 
-						<div className="grid gap-4 sm:grid-cols-2">
-							<div className="space-y-2">
-								<label className="block text-sm font-semibold text-heading">
+						<div className="users-page-dialog-grid">
+							<div className="users-page-dialog-field">
+								<label className="users-page-dialog-label">
 									{__('Role')}
 								</label>
 								<Select
@@ -294,7 +301,7 @@ function UserDialog({
 									disabled={isEditingSelf}
 									ariaLabel={__('User role')}
 								/>
-								<p className="text-xs text-text-muted">
+								<p className="users-page-dialog-help">
 									{roleMeta[form.role]?.description}
 									{isEditingSelf
 										? ` ${__('Your own role is locked here.')}`
@@ -304,8 +311,10 @@ function UserDialog({
 						</div>
 
 						<div
-							className={`flex gap-3 border-t border-stroke pt-4 ${
-								isRtl ? 'justify-start' : 'justify-end'
+							className={`users-page-dialog-actions ${
+								isRtl
+									? 'users-page-dialog-actions-start'
+									: 'users-page-dialog-actions-end'
 							}`}
 						>
 							<Button
@@ -439,7 +448,7 @@ function UsersPage() {
 			return createUser(payload).unwrap();
 		}
 
-	return updateUser({
+		return updateUser({
 			currentUsername: activeUser?.username ?? undefined,
 			...payload,
 		}).unwrap();
@@ -447,22 +456,22 @@ function UsersPage() {
 
 	if (isProfileLoading) {
 		return (
-			<div className="rounded-lg border border-stroke bg-surface p-10 text-center">
-				<div className="mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-accent" />
+			<div className="users-page-loading-state">
+				<div className="users-page-spinner" />
 			</div>
 		);
 	}
 
 	if (!canManageUsers) {
 		return (
-			<div className="rounded-xl border border-stroke bg-surface p-10 text-center">
-				<div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600">
+			<div className="users-page-access-state">
+				<div className="users-page-access-icon">
 					<ShieldCheck size={28} />
 				</div>
-				<h2 className="text-xl font-semibold text-heading">
+				<h2 className="users-page-access-title">
 					{__('Admin access required')}
 				</h2>
-				<p className="mt-2 text-sm text-text-muted">
+				<p className="users-page-access-summary">
 					{__(
 						'Only admin accounts can manage other users and their roles.'
 					)}
@@ -472,17 +481,17 @@ function UsersPage() {
 	}
 
 	return (
-		<div className="space-y-5">
-			<div className="flex flex-col gap-4 rounded-xl border border-stroke bg-surface px-6 py-5 sm:flex-row sm:items-end sm:justify-between">
+		<div className="users-page">
+			<div className="users-page-hero">
 				<div>
-					<div className="mb-3 inline-flex items-center gap-2 rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+					<div className="users-page-hero-badge">
 						<UserRound size={14} />
 						{__('User Access')}
 					</div>
-					<h1 className="text-2xl font-semibold text-heading">
+					<h1 className="users-page-hero-title">
 						{__('Users')}
 					</h1>
-					<p className="mt-2 max-w-2xl text-sm text-text-muted">
+					<p className="users-page-hero-summary">
 						{__(
 							'Manage the people who can access this installation. Admins control site-wide settings. Editors can create and maintain links.'
 						)}
@@ -493,90 +502,94 @@ function UsersPage() {
 				</Button>
 			</div>
 
-			<div className="grid gap-4 md:grid-cols-3">
-				<div className="rounded-xl border border-stroke bg-surface p-5">
-					<p className="text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">
+			<div className="users-page-stats">
+				<div className="users-page-stat-card">
+					<p className="users-page-stat-label">
 						{__('Total Users')}
 					</p>
-					<p className="mt-3 text-3xl font-semibold text-heading">
+					<p className="users-page-stat-value">
 						{users.length}
 					</p>
 				</div>
-				<div className="rounded-xl border border-stroke bg-surface p-5">
-					<p className="text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">
+				<div className="users-page-stat-card">
+					<p className="users-page-stat-label">
 						{__('Admins')}
 					</p>
-					<p className="mt-3 text-3xl font-semibold text-heading">
+					<p className="users-page-stat-value">
 						{adminCount}
 					</p>
 				</div>
-				<div className="rounded-xl border border-stroke bg-surface p-5">
-					<p className="text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">
+				<div className="users-page-stat-card">
+					<p className="users-page-stat-label">
 						{__('Editors')}
 					</p>
-					<p className="mt-3 text-3xl font-semibold text-heading">
+					<p className="users-page-stat-value">
 						{editorCount}
 					</p>
 				</div>
 			</div>
 
-			<div className="overflow-hidden rounded-xl border border-stroke bg-surface">
-				<div className="border-b border-stroke px-6 py-4">
-					<h2 className="text-sm font-semibold uppercase tracking-[0.16em] text-text-muted">
+			<div className="users-page-panel">
+				<div className="users-page-panel-header">
+					<h2 className="users-page-panel-title">
 						{__('Accounts')}
 					</h2>
 				</div>
 
 				{isUsersLoading ? (
-					<div className="p-10 text-center">
-						<div className="mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-accent" />
+					<div className="users-page-panel-state">
+						<div className="users-page-spinner" />
 					</div>
 				) : usersError ? (
-					<div className="p-6 text-sm text-red-600 dark:text-red-300">
+					<div className="users-page-panel-error">
 						{getErrorMessage(
 							usersError,
 							__('Unable to load users.')
 						)}
 					</div>
 				) : users.length === 0 ? (
-					<div className="p-10 text-center">
-						<div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-surface-alt text-text-muted">
+					<div className="users-page-panel-state">
+						<div className="users-page-empty-icon">
 							<Users size={28} />
 						</div>
-						<h3 className="text-lg font-semibold text-heading">
+						<h3 className="users-page-empty-title">
 							{__('No users yet')}
 						</h3>
-						<p className="mt-2 text-sm text-text-muted">
+						<p className="users-page-empty-summary">
 							{__(
 								'Add an admin or editor account to start sharing access.'
 							)}
 						</p>
 					</div>
 				) : (
-					<div className="overflow-x-auto">
-						<table className="min-w-full divide-y divide-stroke">
-							<thead className="bg-surface-alt">
-								<tr className="text-inline-start text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">
-									<th className="px-6 py-4">{__('User')}</th>
-									<th className="px-6 py-4">{__('Role')}</th>
-									<th className="px-6 py-4">
+					<div className="users-page-table-scroll">
+						<table className="users-page-table">
+							<thead className="users-page-table-head">
+								<tr className="users-page-table-head-row">
+									<th className="users-page-table-heading">
+										{__('User')}
+									</th>
+									<th className="users-page-table-heading">
+										{__('Role')}
+									</th>
+									<th className="users-page-table-heading">
 										{__('Created')}
 									</th>
-									<th className="text-inline-end px-6 py-4">
+									<th className="users-page-table-heading-end">
 										{__('Actions')}
 									</th>
 								</tr>
 							</thead>
-							<tbody className="divide-y divide-stroke">
+							<tbody className="users-page-table-body">
 								{users.map((user) => (
 									<tr
 										key={user.id}
-										className="hover:bg-surface-alt/60"
+										className="users-page-table-row"
 									>
-										<td className="text-inline-start px-6 py-4">
+										<td className="users-page-table-cell">
 											<div
 												dir={direction}
-												className="flex w-full items-start justify-start gap-3"
+												className="users-page-user"
 											>
 												<Avatar
 													size="md"
@@ -587,21 +600,21 @@ function UsersPage() {
 														user.username ||
 														__('User')
 													}
-													className="mt-0.5 rounded-full"
+													className="users-page-avatar"
 												/>
-												<div className="text-inline-start min-w-0 flex-1">
-													<div className="font-medium text-heading">
+												<div className="users-page-user-copy">
+													<div className="users-page-user-name">
 														<bdi dir="auto">
 															{user.firstName}{' '}
 															{user.lastName}
 														</bdi>
 													</div>
-													<div className="text-sm text-text-muted">
+													<div className="users-page-user-email">
 														<bdi className="preserve-ltr-value inline-block">
 															{user.email}
 														</bdi>
 													</div>
-													<div className="text-xs text-text-muted">
+													<div className="users-page-user-username">
 														<bdi className="preserve-ltr-value inline-block">
 															@{user.username}
 														</bdi>
@@ -609,9 +622,9 @@ function UsersPage() {
 												</div>
 											</div>
 										</td>
-										<td className="text-inline-start px-6 py-4">
+										<td className="users-page-table-cell">
 											<span
-												className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
+												className={`users-page-role-badge ${
 													roleMeta[
 														user.role === 'admin'
 															? 'admin'
@@ -628,15 +641,15 @@ function UsersPage() {
 												}
 											</span>
 										</td>
-										<td className="text-inline-start px-6 py-4 text-sm text-text-muted">
+										<td className="users-page-table-cell-meta">
 											{user.createdAt
 												? new Date(
 														user.createdAt
 													).toLocaleDateString()
 												: __('Unknown')}
 										</td>
-										<td className="px-6 py-4">
-											<div className="flex justify-end gap-2">
+										<td className="users-page-table-cell-actions">
+											<div className="users-page-actions">
 												<IconButton
 													icon={Pencil}
 													variant="outline"
@@ -665,7 +678,7 @@ function UsersPage() {
 														__('Delete %s'),
 														`${user.firstName} ${user.lastName}`
 													)}
-													className="text-red-600 hover:border-red-500 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-500/10"
+													className="users-page-action-delete"
 													disabled={
 														user.id ===
 															currentUser?.id ||

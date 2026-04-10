@@ -24,7 +24,7 @@ const AdvancedOptions = ({
 	setUtmContent,
 }: AdvancedOptionsProps) => {
 	return (
-		<div className="mt-4 p-4 bg-surface-alt border border-stroke rounded-lg space-y-3">
+		<div className="links-form-advanced-panel">
 			<SecurityFields
 				title={title}
 				setTitle={setTitle}

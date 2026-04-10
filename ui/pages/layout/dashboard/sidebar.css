@@ -77,16 +77,23 @@
 	}
 
 	.dashboard-sidebar-submenu-list {
-		@apply space-y-1;
+		@apply mt-1 space-y-1;
+		margin-inline-start: 1.75rem;
+		padding-inline-start: 0.875rem;
+		border-inline-start: 1px solid var(--color-stroke);
 	}
 
 	.dashboard-sidebar-submenu-link {
-		@apply block rounded-lg px-3 py-2 text-sm font-medium text-text-muted transition-colors hover:bg-surface-alt hover:text-accent;
+		@apply block rounded-md px-3 py-2 text-sm font-medium text-text-muted transition-colors hover:bg-surface-alt hover:text-accent;
 		text-align: start;
 	}
 
 	.dashboard-sidebar-submenu-link-active {
 		@apply bg-accent text-white shadow-sm;
+	}
+
+	.dashboard-sidebar-submenu-link-active:hover {
+		@apply bg-accent text-white;
 	}
 
 	.dashboard-sidebar-link {
@@ -95,6 +102,10 @@
 
 	.dashboard-sidebar-link-active {
 		@apply bg-accent text-white shadow-sm;
+	}
+
+	.dashboard-sidebar-link-active:hover {
+		@apply bg-accent text-white;
 	}
 
 	.dashboard-sidebar-link-icon {
@@ -140,6 +151,10 @@
 
 	.dashboard-sidebar-about-link-active {
 		@apply bg-accent text-white shadow-sm;
+	}
+
+	.dashboard-sidebar-about-link-active:hover {
+		@apply bg-accent text-white;
 	}
 
 	.dashboard-sidebar-about-link-icon {

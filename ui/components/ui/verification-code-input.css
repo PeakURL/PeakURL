@@ -1,0 +1,33 @@
+@layer components {
+	.verification-code-input {
+		@apply flex w-full items-center justify-center gap-2 sm:gap-2.5;
+	}
+
+	.verification-code-input-field {
+		@apply h-12 w-0 min-w-0 flex-1 rounded-xl border text-center text-lg font-semibold tabular-nums text-heading outline-none transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60 sm:h-14 sm:text-xl;
+	}
+
+	.verification-code-input-field:focus {
+		border-color: var(--color-accent);
+		background-color: var(--color-surface);
+		box-shadow:
+			0 0 0 4px rgba(99, 102, 241, 0.12),
+			0 14px 28px rgba(99, 102, 241, 0.16);
+	}
+
+	.verification-code-input-field-filled {
+		border-color: rgb(99 102 241 / 0.3);
+		background-color: rgb(99 102 241 / 0.08);
+		box-shadow: 0 10px 24px rgba(99, 102, 241, 0.12);
+	}
+
+	.verification-code-input-field-highlighted {
+		border-color: rgb(99 102 241 / 0.25);
+		background-color: var(--color-surface);
+		box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+	}
+
+	.verification-code-input-field-idle {
+		@apply border-stroke bg-surface;
+	}
+}

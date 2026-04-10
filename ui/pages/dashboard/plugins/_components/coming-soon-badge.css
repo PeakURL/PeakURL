@@ -1,0 +1,5 @@
+@layer components {
+	.plugins-coming-soon-badge {
+		@apply inline-flex items-center rounded-full border border-amber-500/20 bg-amber-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700 dark:text-amber-300;
+	}
+}

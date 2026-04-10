@@ -1,0 +1,87 @@
+@layer components {
+	.settings-general,
+	.settings-api,
+	.settings-email,
+	.settings-location,
+	.settings-security,
+	.settings-updates {
+		@apply space-y-5;
+	}
+
+	.settings-general-form,
+	.settings-api-endpoint-card,
+	.settings-api-keys-card,
+	.settings-api-docs-card,
+	.settings-email-intro,
+	.settings-email-form,
+	.settings-location-intro,
+	.settings-location-credentials-card,
+	.settings-security-password-card,
+	.settings-security-two-factor-card,
+	.settings-security-sessions-card {
+		@apply rounded-lg border border-stroke bg-surface p-5;
+	}
+
+	.settings-updates-card {
+		@apply rounded-xl border border-stroke bg-surface p-5 sm:p-6;
+	}
+
+	.settings-section-label {
+		@apply block text-sm font-semibold text-heading;
+	}
+
+	.settings-general-title,
+	.settings-security-card-title,
+	.settings-api-keys-title,
+	.settings-location-intro-title,
+	.settings-location-credentials-title {
+		@apply text-base font-semibold text-heading;
+	}
+
+	.settings-general-actions,
+	.settings-api-modal-actions,
+	.settings-email-actions,
+	.settings-location-actions,
+	.settings-security-password-actions {
+		@apply flex flex-wrap gap-3;
+	}
+
+	.settings-general-actions-start,
+	.settings-api-modal-actions-start,
+	.settings-email-actions-start,
+	.settings-security-password-actions-start {
+		@apply justify-start;
+	}
+
+	.settings-general-actions-end,
+	.settings-api-modal-actions-end,
+	.settings-email-actions-end,
+	.settings-security-password-actions-end {
+		@apply justify-end;
+	}
+
+	.settings-stat-grid {
+		@apply grid grid-cols-1 gap-4 md:grid-cols-3;
+	}
+
+	.settings-stat-card {
+		text-align: start;
+		@apply rounded-lg border border-stroke bg-surface p-5;
+	}
+
+	.settings-stat-label {
+		@apply text-xs font-semibold tracking-[0.14em] text-text-muted;
+	}
+
+	.settings-stat-value {
+		@apply mt-3 text-lg font-semibold text-heading;
+	}
+
+	.settings-updates-block {
+		@apply mt-5;
+	}
+
+	.settings-updates-divider {
+		@apply mt-5 space-y-3 border-t border-stroke pt-5;
+	}
+}

@@ -21,7 +21,7 @@ import {
 } from '@/store/slices/api';
 import { __, sprintf } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
-import { formatDateTimeValue, getErrorMessage } from '@/utils';
+import { cn, formatDateTimeValue, getErrorMessage } from '@/utils';
 import type {
 	ProtectedAction,
 	ProtectedActionConfig,
@@ -397,12 +397,12 @@ function SecurityTab({
 	};
 
 	return (
-		<div className="space-y-5">
-			<div className="bg-surface border border-stroke rounded-lg p-5">
-				<h2 className="text-base font-semibold text-heading mb-5">
+		<div className="settings-security">
+			<div className="settings-security-password-card">
+				<h2 className="settings-security-card-title">
 					{__('Password & Security')}
 				</h2>
-				<div className="space-y-4">
+				<div className="settings-security-password-fields">
 					<Input
 						label={__('Current Password')}
 						type="password"
@@ -439,9 +439,12 @@ function SecurityTab({
 					/>
 				</div>
 				<div
-					className={`mt-5 flex ${
-						isRtl ? 'justify-start' : 'justify-end'
-					}`}
+					className={cn(
+						'settings-security-password-actions',
+						isRtl
+							? 'settings-security-password-actions-start'
+							: 'settings-security-password-actions-end'
+					)}
 				>
 					<Button size="sm" onClick={onSubmit} disabled={isUpdating}>
 						{isUpdating ? __('Updating...') : __('Update Password')}
@@ -449,22 +452,22 @@ function SecurityTab({
 				</div>
 			</div>
 
-			<div className="bg-surface border border-stroke rounded-lg p-5 space-y-4">
+			<div className="settings-security-two-factor-card">
 				<div
 					dir={direction}
-					className="flex items-center justify-between"
+					className="settings-security-two-factor-header"
 				>
-					<div>
-						<h2 className="text-base font-semibold text-heading">
+					<div className="settings-security-two-factor-copy">
+						<h2 className="settings-security-card-title">
 							{__('Two-Factor Authentication')}
 						</h2>
-						<p className="text-sm text-text-muted mt-1">
+						<p className="settings-security-two-factor-description">
 							{__(
 								'Add an extra layer of security with an authenticator app and backup codes.'
 							)}
 						</p>
 					</div>
-					<div className="flex items-center gap-2">
+					<div className="settings-security-two-factor-actions">
 						{twoFactorEnabled ? (
 							<>
 								<Button
@@ -505,36 +508,37 @@ function SecurityTab({
 
 				<div
 					dir={direction}
-					className={`flex items-start gap-3 rounded-lg border p-3 ${
+					className={cn(
+						'settings-security-two-factor-status',
 						twoFactorEnabled
-							? 'border-emerald-200 bg-emerald-50 dark:border-emerald-500/30 dark:bg-emerald-500/10'
-							: 'border-amber-200 bg-amber-50 dark:border-amber-500/30 dark:bg-amber-500/10'
-					}`}
+							? 'settings-security-two-factor-status-active'
+							: 'settings-security-two-factor-status-inactive'
+					)}
 				>
-					<div className="p-2 rounded-lg bg-surface shadow-sm">
+					<div className="settings-security-two-factor-status-icon-panel">
 						{twoFactorEnabled ? (
 							<ShieldCheck
 								size={18}
-								className="text-emerald-600 dark:text-emerald-400"
+								className="settings-security-two-factor-status-icon-active"
 							/>
 						) : (
 							<AlertCircle
 								size={18}
-								className="text-amber-600 dark:text-amber-400"
+								className="settings-security-two-factor-status-icon-inactive"
 							/>
 						)}
 					</div>
-					<div className="text-inline-start flex-1">
-						<p className="font-medium text-sm text-heading">
+					<div className="settings-security-two-factor-status-content">
+						<p className="settings-security-two-factor-status-title">
 							{twoFactorEnabled
 								? __('2FA is enabled')
 								: __('2FA is disabled')}
 						</p>
-						<p className="text-xs text-text-muted mt-1">
+						<p className="settings-security-two-factor-status-text">
 							{statusMessage}
 						</p>
 						{security.backupCodesLastGeneratedAt && (
-							<p className="text-xs text-text-muted mt-1">
+							<p className="settings-security-two-factor-status-text">
 								{__('Last generated:')}{' '}
 								{formatDateTimeValue(
 									security.backupCodesLastGeneratedAt,
@@ -556,30 +560,30 @@ function SecurityTab({
 				</div>
 
 				{!twoFactorEnabled && hasTwoFactorSetupDetails && (
-					<div className="border border-stroke rounded-lg p-4 space-y-3">
+					<div className="settings-security-two-factor-setup">
 						<div
 							dir={direction}
-							className="flex items-start gap-3"
+							className="settings-security-two-factor-setup-header"
 						>
-							<div className="p-2 rounded-lg bg-surface shadow-sm">
+							<div className="settings-security-two-factor-setup-icon-panel">
 								<ShieldCheck
 									size={18}
-									className="text-accent"
+									className="settings-security-two-factor-setup-icon"
 								/>
 							</div>
-							<div className="flex-1">
-								<p className="font-medium text-sm text-heading">
+							<div className="settings-security-two-factor-setup-copy">
+								<p className="settings-security-two-factor-setup-title">
 									{__('Scan the QR code')}
 								</p>
-								<p className="text-xs text-text-muted">
+								<p className="settings-security-two-factor-setup-description">
 									{__(
 										'Use an authenticator app (Google Authenticator, Authy, etc.) then enter the 6-digit code.'
 									)}
 								</p>
 							</div>
 						</div>
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-							<div className="flex justify-center">
+						<div className="settings-security-two-factor-setup-grid">
+							<div className="settings-security-two-factor-qr">
 								{qrDataUrl ? (
 									<img
 										src={qrDataUrl}
@@ -587,36 +591,36 @@ function SecurityTab({
 										width={192}
 										height={192}
 										loading="lazy"
-										className="w-48 h-48 border border-stroke rounded-lg bg-white"
+										className="settings-security-two-factor-qr-image"
 									/>
 								) : (
-									<div className="w-48 h-48 border border-dashed border-stroke rounded-lg bg-surface-alt flex items-center justify-center text-center text-xs text-text-muted p-4">
+									<div className="settings-security-two-factor-qr-fallback">
 										{__(
 											'QR preview is unavailable in this browser. Use the secret or authenticator URI below.'
 										)}
 									</div>
 								)}
 							</div>
-							<div className="space-y-3">
-								<div className="rounded-lg border border-dashed border-stroke bg-surface-alt p-3">
-									<p className="mb-2 text-xs font-semibold text-text-muted">
+							<div className="settings-security-two-factor-secret-stack">
+								<div className="settings-security-two-factor-secret-card">
+									<p className="settings-security-two-factor-secret-label">
 										{__('Secret')}
 									</p>
 									<ReadOnlyValueBlock
 										value={secret}
-										className="border-0 bg-transparent p-0"
-										valueClassName="text-xs text-text-muted"
+										className="settings-security-two-factor-secret-value"
+										valueClassName="settings-security-two-factor-secret-value-text"
 									/>
 								</div>
 								{otpauthUrl ? (
-									<div className="rounded-lg border border-dashed border-stroke bg-surface-alt p-3">
-										<p className="mb-2 text-xs font-semibold text-text-muted">
+									<div className="settings-security-two-factor-secret-card">
+										<p className="settings-security-two-factor-secret-label">
 											{__('Authenticator URI')}
 										</p>
 										<ReadOnlyValueBlock
 											value={otpauthUrl}
-											className="border-0 bg-transparent p-0"
-											valueClassName="text-xs text-text-muted"
+											className="settings-security-two-factor-secret-value"
+											valueClassName="settings-security-two-factor-secret-value-text"
 										/>
 									</div>
 								) : null}
@@ -629,12 +633,12 @@ function SecurityTab({
 									}
 									placeholder={__('123456')}
 								/>
-								<div className="flex gap-2">
+								<div className="settings-security-two-factor-verify-actions">
 									<Button
 										size="sm"
 										onClick={handleVerify}
 										loading={isVerifying}
-										className="flex-1"
+										className="settings-security-two-factor-verify-submit"
 									>
 										{__('Verify & Enable')}
 									</Button>
@@ -657,16 +661,16 @@ function SecurityTab({
 				)}
 
 				{twoFactorEnabled && recentCodes.length > 0 && (
-					<div className="border border-dashed border-stroke rounded-lg p-4">
+					<div className="settings-security-backup-codes">
 						<div
 							dir={direction}
-							className="flex items-center justify-between"
+							className="settings-security-backup-codes-header"
 						>
 							<div>
-								<p className="font-medium text-sm text-heading">
+								<p className="settings-security-backup-codes-title">
 									{__('New backup codes')}
 								</p>
-								<p className="text-xs text-text-muted">
+								<p className="settings-security-backup-codes-description">
 									{__(
 										"Save or download these codes now—they won't be shown again."
 									)}
@@ -686,11 +690,11 @@ function SecurityTab({
 								{__('Download')}
 							</Button>
 						</div>
-						<div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-3">
+						<div className="settings-security-backup-codes-grid">
 							{recentCodes.map((code) => (
 								<div
 									key={code}
-									className="px-3 py-2 rounded-md bg-surface-alt text-sm font-mono text-heading border border-stroke"
+									className="settings-security-backup-code"
 								>
 									{code}
 								</div>
@@ -700,16 +704,16 @@ function SecurityTab({
 				)}
 			</div>
 
-				<div className="bg-surface border border-stroke rounded-lg p-5">
+			<div className="settings-security-sessions-card">
 				<div
 					dir={direction}
-					className="mb-4 flex items-center justify-between"
+					className="settings-security-sessions-header"
 				>
 					<div>
-						<h2 className="text-base font-semibold text-heading">
+						<h2 className="settings-security-card-title">
 							{__('Active Sessions')}
 						</h2>
-						<span className="text-xs text-text-muted">
+						<span className="settings-security-sessions-count">
 							{sprintf(
 								__(
 									'%s active session(s)'
@@ -727,15 +731,15 @@ function SecurityTab({
 						>
 							{__('End all other sessions')}
 						</Button>
-					) : null}
+						) : null}
 				</div>
-				<div className="space-y-3">
+				<div className="settings-security-sessions-list">
 					{isSecurityLoading ? (
-						<div className="p-3 border border-dashed border-stroke rounded-lg text-sm text-text-muted">
+						<div className="settings-security-sessions-empty">
 							{__('Loading security data...')}
 						</div>
 					) : sessions.length === 0 ? (
-						<div className="p-3 border border-dashed border-stroke rounded-lg text-sm text-text-muted">
+						<div className="settings-security-sessions-empty">
 							{__('No active sessions found.')}
 						</div>
 					) : (
@@ -743,23 +747,26 @@ function SecurityTab({
 							<div
 								key={session.id}
 								dir={direction}
-								className={`flex items-center justify-between p-3 border border-stroke rounded-lg ${
-									session.revokedAt ? 'opacity-70' : ''
-								}`}
+								className={cn(
+									'settings-security-session-row',
+									session.revokedAt
+										? 'settings-security-session-row-ended'
+										: ''
+								)}
 							>
-								<div className="flex items-center gap-3">
-									<div className="p-2 rounded-md bg-surface-alt">
+								<div className="settings-security-session-meta">
+									<div className="settings-security-session-icon-panel">
 										<Monitor
 											size={18}
-											className="text-text-muted"
+											className="settings-security-session-icon"
 										/>
 									</div>
-									<div className="text-inline-start">
-										<p className="font-medium text-sm text-heading">
+									<div className="settings-security-session-copy">
+										<p className="settings-security-session-title">
 											{session.browser || __('Browser')} •{' '}
 											{session.os || __('Unknown OS')}
 										</p>
-										<p className="text-xs text-text-muted">
+										<p className="settings-security-session-description">
 											{session.ipAddress || __('Unknown IP')}{' '}
 											• {__('Last active')}{' '}
 											{formatDateTimeValue(
@@ -769,14 +776,14 @@ function SecurityTab({
 										</p>
 									</div>
 								</div>
-								<div className="flex items-center gap-2">
+								<div className="settings-security-session-actions">
 									{session.isCurrent && (
-										<span className="text-xs px-2 py-1 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">
+										<span className="settings-security-session-badge-current">
 											{__('Current')}
 										</span>
 									)}
 									{session.revokedAt ? (
-										<span className="text-xs px-2 py-1 rounded bg-surface-alt text-text-muted">
+										<span className="settings-security-session-badge-ended">
 											{__('Ended')}
 										</span>
 									) : session.isCurrent ? null : (

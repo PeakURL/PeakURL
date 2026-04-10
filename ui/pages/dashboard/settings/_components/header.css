@@ -1,0 +1,13 @@
+@layer components {
+	.settings-page-header {
+		text-align: start;
+	}
+
+	.settings-page-title {
+		@apply mb-1 text-2xl font-bold text-heading;
+	}
+
+	.settings-page-description {
+		@apply text-sm text-text-muted;
+	}
+}

@@ -1,0 +1,90 @@
+@layer components {
+	.settings-release-progress {
+		text-align: start;
+		@apply rounded-lg border border-stroke bg-bg;
+	}
+
+	.settings-release-progress-default {
+		@apply p-5;
+	}
+
+	.settings-release-progress-compact {
+		@apply p-4;
+	}
+
+	.settings-release-progress-header {
+		text-align: start;
+	}
+
+	.settings-release-progress-header-default {
+		@apply space-y-2;
+	}
+
+	.settings-release-progress-header-compact {
+		@apply space-y-1.5;
+	}
+
+	.settings-release-progress-title {
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.settings-release-progress-description {
+		@apply text-sm leading-6 text-text-muted;
+	}
+
+	.settings-release-progress-list {
+		text-align: start;
+	}
+
+	.settings-release-progress-list-default {
+		@apply mt-4 space-y-3;
+	}
+
+	.settings-release-progress-list-compact {
+		@apply mt-4 space-y-2.5;
+	}
+
+	.settings-release-progress-item {
+		@apply flex items-center gap-3;
+	}
+
+	.settings-release-progress-badge {
+		@apply inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border;
+	}
+
+	.settings-release-progress-badge-complete {
+		@apply border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200;
+	}
+
+	.settings-release-progress-badge-current {
+		@apply border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200;
+	}
+
+	.settings-release-progress-badge-upcoming {
+		@apply border-stroke bg-bg text-text-muted;
+	}
+
+	.settings-release-progress-icon {
+		@apply shrink-0;
+	}
+
+	.settings-release-progress-icon-spin {
+		@apply animate-spin;
+	}
+
+	.settings-release-progress-label {
+		@apply text-sm;
+	}
+
+	.settings-release-progress-label-complete {
+		@apply text-emerald-800 dark:text-emerald-200;
+	}
+
+	.settings-release-progress-label-current {
+		@apply text-heading;
+	}
+
+	.settings-release-progress-label-upcoming {
+		@apply text-text-muted;
+	}
+}

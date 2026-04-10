@@ -4,6 +4,7 @@ import { AlertCircle, Mail, Send, Server } from 'lucide-react';
 import { Button, Input, Select } from '@/components/ui';
 import { __, sprintf } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
+import { cn } from '@/utils';
 import type { SmtpEncryption } from '../types';
 import type {
 	EmailDeliveryTabProps,
@@ -26,14 +27,15 @@ function MethodButton({
 			type="button"
 			onClick={onClick}
 			dir={direction}
-			className={`text-inline-start rounded-lg border p-4 transition ${
+			className={cn(
+				'settings-email-method-button',
 				isActive
-					? 'border-accent bg-accent/10 text-heading'
-					: 'border-stroke bg-surface-alt text-text-muted hover:border-accent/40 hover:text-heading'
-			}`}
+					? 'settings-email-method-button-active'
+					: 'settings-email-method-button-inactive'
+			)}
 		>
-			<p className="text-sm font-semibold">{title}</p>
-			<p className="mt-1 text-sm leading-6">{description}</p>
+			<p className="settings-email-method-title">{title}</p>
+			<p className="settings-email-method-description">{description}</p>
 		</button>
 	);
 }
@@ -98,20 +100,20 @@ function EmailDeliveryTab({
 	const showSubmitButton = usingSmtp || form.driver !== savedDriver;
 
 	return (
-		<div className="space-y-5">
-			<div className="rounded-lg border border-stroke bg-surface p-5">
+		<div className="settings-email">
+			<div className="settings-email-intro">
 				<div
 					dir={direction}
-					className="flex items-start gap-3"
+					className="settings-email-intro-layout"
 				>
-					<div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600 dark:bg-primary-500/20 dark:text-primary-400">
+					<div className="settings-email-intro-icon">
 						<Mail size={18} />
 					</div>
-					<div className="text-inline-start space-y-1">
-						<h2 className="text-base font-semibold text-heading">
+					<div className="settings-email-intro-content">
+						<h2 className="settings-email-intro-title">
 							{__('Email Configuration')}
 						</h2>
-						<p className="text-sm leading-6 text-text-muted">
+						<p className="settings-email-intro-description">
 							{__(
 								'PeakURL uses this mail transport for password-reset emails and other account recovery notifications.'
 							)}
@@ -121,17 +123,17 @@ function EmailDeliveryTab({
 			</div>
 
 			{errorMessage && (
-				<div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-900 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200">
+				<div className="settings-email-alert settings-email-alert-error">
 					<div
 						dir={direction}
-						className="flex items-start gap-3"
+						className="settings-email-alert-layout"
 					>
-						<AlertCircle size={18} className="mt-0.5" />
-						<div className="text-inline-start">
-							<p className="font-semibold">
+						<AlertCircle size={18} className="settings-email-alert-icon" />
+						<div className="settings-email-alert-content">
+							<p className="settings-email-alert-title">
 								{__('Mail status unavailable')}
 							</p>
-							<p className="mt-1 leading-6 opacity-80">
+							<p className="settings-email-alert-text">
 								{errorMessage}
 							</p>
 						</div>
@@ -140,17 +142,17 @@ function EmailDeliveryTab({
 			)}
 
 			{managementDisabled && (
-				<div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
+				<div className="settings-email-alert settings-email-alert-warning">
 					<div
 						dir={direction}
-						className="flex items-start gap-3"
+						className="settings-email-alert-layout"
 					>
-						<AlertCircle size={18} className="mt-0.5" />
-						<div className="text-inline-start">
-							<p className="font-semibold">
+						<AlertCircle size={18} className="settings-email-alert-icon" />
+						<div className="settings-email-alert-content">
+							<p className="settings-email-alert-title">
 								{__('Dashboard management unavailable')}
 							</p>
-							<p className="mt-1 leading-6 opacity-80">
+							<p className="settings-email-alert-text">
 								{status?.manageDisabledReason}
 							</p>
 						</div>
@@ -160,14 +162,14 @@ function EmailDeliveryTab({
 
 			<form
 				onSubmit={handleSubmit}
-				className="rounded-lg border border-stroke bg-surface p-5 space-y-5"
+				className="settings-email-form"
 			>
-				<div className="space-y-3">
-					<div className="flex items-center gap-2 text-sm font-semibold text-heading">
+				<div className="settings-email-section">
+					<div className="settings-email-section-title">
 						<Send size={16} />
 						{__('Delivery method')}
 					</div>
-					<div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+					<div className="settings-email-method-grid">
 						<MethodButton
 							isActive={'mail' === form.driver}
 							title={__('PHP mail()')}
@@ -198,12 +200,12 @@ function EmailDeliveryTab({
 				</div>
 
 				{usingSmtp && (
-					<div className="space-y-4 rounded-lg border border-stroke bg-surface-alt p-4">
-						<div className="flex items-center gap-2 text-sm font-semibold text-heading">
+					<div className="settings-email-connection-panel">
+						<div className="settings-email-section-title">
 							<Server size={16} />
 							{__('SMTP connection')}
 						</div>
-						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+						<div className="settings-email-fields-grid">
 							<Input
 								label={__('From Name')}
 								value={form.fromName}
@@ -215,11 +217,11 @@ function EmailDeliveryTab({
 								}
 								placeholder={status?.fromName || __('PeakURL')}
 							/>
-								<Input
-									label={__('From Email')}
-									type="email"
-									autoCapitalize="off"
-									spellCheck={false}
+							<Input
+								label={__('From Email')}
+								type="email"
+								autoCapitalize="off"
+								spellCheck={false}
 								value={form.fromEmail}
 								onChange={(event) =>
 									setForm((current) => ({
@@ -230,12 +232,12 @@ function EmailDeliveryTab({
 								placeholder={__('noreply@yourdomain.com')}
 							/>
 						</div>
-						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-								<Input
-									label={__('SMTP Host')}
-									valueDirection="ltr"
-									autoCapitalize="off"
-									spellCheck={false}
+						<div className="settings-email-fields-grid">
+							<Input
+								label={__('SMTP Host')}
+								valueDirection="ltr"
+								autoCapitalize="off"
+								spellCheck={false}
 								value={form.smtpHost}
 								onChange={(event) =>
 									setForm((current) => ({
@@ -261,9 +263,9 @@ function EmailDeliveryTab({
 							/>
 						</div>
 
-						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-							<div className="space-y-2">
-								<label className="block text-sm font-semibold text-heading">
+						<div className="settings-email-fields-grid">
+							<div className="settings-email-field">
+								<label className="settings-section-label">
 									{__('Encryption')}
 								</label>
 								<Select
@@ -278,8 +280,8 @@ function EmailDeliveryTab({
 									ariaLabel={__('SMTP encryption')}
 								/>
 							</div>
-							<div className="space-y-2">
-								<label className="block text-sm font-semibold text-heading">
+							<div className="settings-email-field">
+								<label className="settings-section-label">
 									{__('Authentication')}
 								</label>
 								<button
@@ -291,11 +293,12 @@ function EmailDeliveryTab({
 										}))
 									}
 									dir={direction}
-									className={`inline-flex w-full items-center justify-between rounded-md border px-4 py-2 text-sm font-medium transition ${
+									className={cn(
+										'settings-email-auth-toggle',
 										form.smtpAuth
-											? 'border-accent bg-accent/10 text-heading'
-											: 'border-stroke bg-surface text-text-muted'
-									}`}
+											? 'settings-email-auth-toggle-active'
+											: 'settings-email-auth-toggle-inactive'
+									)}
 								>
 									<span>
 										{form.smtpAuth
@@ -303,20 +306,22 @@ function EmailDeliveryTab({
 											: __('Authentication disabled')}
 									</span>
 									<span
-										className={`h-5 w-10 rounded-full p-0.5 transition ${
+										className={cn(
+											'settings-email-auth-switch',
 											form.smtpAuth
-												? 'bg-accent'
-												: 'bg-surface-alt'
-										}`}
+												? 'settings-email-auth-switch-active'
+												: 'settings-email-auth-switch-inactive'
+										)}
 									>
 										<span
-											className={`block h-4 w-4 rounded-full bg-white transition ${
+											className={cn(
+												'settings-email-auth-knob',
 												form.smtpAuth
 													? isRtl
-														? '-translate-x-5'
-														: 'translate-x-5'
-													: 'translate-x-0'
-											}`}
+														? 'settings-email-auth-knob-active-rtl'
+														: 'settings-email-auth-knob-active-ltr'
+													: 'settings-email-auth-knob-inactive'
+											)}
 										/>
 									</span>
 								</button>
@@ -324,12 +329,12 @@ function EmailDeliveryTab({
 						</div>
 
 						{form.smtpAuth && (
-							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-									<Input
-										label={__('SMTP Username')}
-										valueDirection="ltr"
-										autoCapitalize="off"
-										spellCheck={false}
+							<div className="settings-email-fields-grid">
+								<Input
+									label={__('SMTP Username')}
+									valueDirection="ltr"
+									autoCapitalize="off"
+									spellCheck={false}
 									value={form.smtpUsername}
 									onChange={(event) =>
 										setForm((current) => ({
@@ -377,9 +382,12 @@ function EmailDeliveryTab({
 
 				{showSubmitButton && (
 					<div
-						className={`flex ${
-							isRtl ? 'justify-start' : 'justify-end'
-						}`}
+						className={cn(
+							'settings-email-actions',
+							isRtl
+								? 'settings-email-actions-start'
+								: 'settings-email-actions-end'
+						)}
 					>
 						<Button
 							type="submit"

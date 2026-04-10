@@ -1,0 +1,9 @@
+@layer components {
+	.settings-layout {
+		@apply flex flex-1 flex-col gap-5;
+	}
+
+	.settings-layout-grid {
+		@apply grid flex-1 grid-cols-1 gap-5 lg:grid-cols-4;
+	}
+}

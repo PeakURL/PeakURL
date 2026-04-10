@@ -53,10 +53,10 @@ function SettingsLayout({ children }: SettingsLayoutProps) {
 	}
 
 	return (
-		<div className="flex flex-1 flex-col gap-5">
+		<div className="settings-layout">
 			<Header />
 
-			<div className="grid flex-1 grid-cols-1 gap-5 lg:grid-cols-4">
+			<div className="settings-layout-grid">
 				<Sidebar
 					tabs={tabs}
 					activeTab={activeTab}

@@ -1,0 +1,181 @@
+@layer components {
+	.settings-updates-status-badge {
+		@apply inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold;
+	}
+
+	.settings-updates-status-badge-info {
+		@apply border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200;
+	}
+
+	.settings-updates-status-badge-success {
+		@apply border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200;
+	}
+
+	.settings-updates-status-badge-error {
+		@apply border-red-200 bg-red-50 text-red-800 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200;
+	}
+
+	.settings-updates-card-header {
+		@apply flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between;
+	}
+
+	.settings-updates-card-copy {
+		text-align: start;
+		@apply space-y-2;
+	}
+
+	.settings-updates-card-title-row {
+		@apply flex flex-wrap items-center gap-3;
+	}
+
+	.settings-updates-card-title {
+		@apply text-base font-semibold text-heading;
+	}
+
+	.settings-updates-card-description {
+		@apply max-w-2xl text-sm leading-6 text-text-muted;
+	}
+
+	.settings-updates-card-actions {
+		@apply flex flex-wrap gap-3;
+	}
+
+	.settings-updates-metric-grid {
+		@apply mt-5 grid grid-cols-1 gap-3 md:grid-cols-3;
+	}
+
+	.settings-updates-metric-item {
+		text-align: start;
+		@apply rounded-lg border border-stroke bg-bg px-4 py-4;
+	}
+
+	.settings-updates-metric-label {
+		@apply text-[11px] font-semibold uppercase tracking-[0.16em] text-text-muted;
+	}
+
+	.settings-updates-metric-value {
+		@apply mt-2 text-lg font-semibold text-heading;
+	}
+
+	.settings-updates-notice {
+		@apply rounded-lg border p-4;
+	}
+
+	.settings-updates-notice-info {
+		@apply border-blue-200 bg-blue-50 text-blue-900 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200;
+	}
+
+	.settings-updates-notice-success {
+		@apply border-emerald-200 bg-emerald-50 text-emerald-900 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200;
+	}
+
+	.settings-updates-notice-error {
+		@apply border-red-200 bg-red-50 text-red-900 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200;
+	}
+
+	.settings-updates-notice-layout {
+		@apply flex items-start gap-3;
+	}
+
+	.settings-updates-notice-icon {
+		@apply mt-0.5 shrink-0;
+	}
+
+	.settings-updates-notice-content {
+		text-align: start;
+		@apply space-y-1;
+	}
+
+	.settings-updates-notice-title {
+		@apply text-sm font-semibold;
+	}
+
+	.settings-updates-notice-text {
+		@apply text-sm leading-6 opacity-80;
+	}
+
+	.settings-updates-actions {
+		@apply flex w-full flex-col gap-3 lg:max-w-104;
+	}
+
+	.settings-updates-actions-start {
+		@apply lg:items-start;
+	}
+
+	.settings-updates-actions-end {
+		@apply lg:items-end;
+	}
+
+	.settings-updates-actions-row {
+		@apply flex flex-wrap gap-3;
+	}
+
+	.settings-updates-actions-row-start {
+		@apply lg:justify-start;
+	}
+
+	.settings-updates-actions-row-end {
+		@apply lg:justify-end;
+	}
+
+	.settings-updates-check-button,
+	.settings-updates-install-button {
+		@apply min-w-44 whitespace-nowrap;
+	}
+
+	.settings-updates-reinstall-button,
+	.settings-updates-repair-button {
+		@apply min-w-52 whitespace-nowrap;
+	}
+
+	.settings-updates-disabled-reason {
+		text-align: start;
+		@apply max-w-sm rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200;
+	}
+
+	.settings-updates-detail-row {
+		@apply flex flex-col gap-2 rounded-lg border border-stroke bg-bg px-4 py-3 sm:flex-row sm:items-center sm:justify-between;
+	}
+
+	.settings-updates-detail-label {
+		@apply flex items-center gap-2 text-sm text-text-muted;
+	}
+
+	.settings-updates-detail-link {
+		@apply inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline;
+	}
+
+	.settings-updates-detail-value {
+		text-align: start;
+		@apply text-sm font-medium text-heading;
+	}
+
+	.settings-updates-issues {
+		text-align: start;
+		@apply rounded-lg border border-stroke bg-bg p-4;
+	}
+
+	.settings-updates-issues-title {
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.settings-updates-issues-list {
+		@apply mt-3 list-disc space-y-2 ps-5 text-sm leading-6 text-text-muted;
+	}
+
+	.settings-updates-loading {
+		@apply rounded-xl border border-stroke bg-surface p-5 text-sm text-text-muted;
+	}
+
+	.settings-updates-error-card {
+		@apply rounded-lg border border-red-200 bg-red-50 p-4 text-sm leading-6 text-red-900 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200;
+	}
+
+	.settings-updates-error-title {
+		@apply font-semibold;
+	}
+
+	.settings-updates-error-text {
+		@apply mt-1 opacity-80;
+	}
+}

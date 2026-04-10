@@ -24,25 +24,25 @@ function ApiTab({
 }: ApiTabProps) {
 	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
 	return (
-		<div className="space-y-5">
+		<div className="settings-api">
 			{baseApiUrl && (
-				<div className="rounded-lg border border-accent/20 bg-surface p-5">
-					<div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-						<div className="space-y-3">
-							<div className="flex items-center gap-2 text-heading">
-								<div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent/12 text-accent">
+				<div className="settings-api-endpoint-card">
+					<div className="settings-api-endpoint-header">
+						<div className="settings-api-endpoint-summary">
+							<div className="settings-api-endpoint-title-row">
+								<div className="settings-api-endpoint-icon">
 									<Link2 size={18} />
 								</div>
-								<div className="space-y-1">
-									<p className="text-xs font-medium uppercase tracking-[0.18em] text-text-muted">
+								<div className="settings-api-endpoint-copy">
+									<p className="settings-api-endpoint-kicker">
 										{__('Connection')}
 									</p>
-									<h2 className="text-base font-semibold">
+									<h2 className="settings-api-endpoint-title">
 										{__('Base API URL')}
 									</h2>
 								</div>
 							</div>
-							<p className="max-w-2xl text-sm text-text-muted">
+							<p className="settings-api-endpoint-description">
 								{__(
 									'Use this endpoint with WordPress, browser extensions, scripts, and other API clients.'
 								)}
@@ -52,6 +52,7 @@ function ApiTab({
 							size="sm"
 							variant="secondary"
 							icon={Copy}
+							className="settings-api-endpoint-copy-button"
 							onClick={() =>
 								copyToClipboard(
 									baseApiUrl,
@@ -64,14 +65,14 @@ function ApiTab({
 					</div>
 					<ReadOnlyValueBlock
 						value={baseApiUrl}
-						className="mt-4 border-accent/15 bg-surface/90 shadow-sm"
+						className="settings-api-endpoint-value"
 					/>
 				</div>
 			)}
 
-			<div className="bg-surface border border-stroke rounded-lg p-5">
-				<div className="flex items-center justify-between mb-5">
-					<h2 className="text-base font-semibold text-heading">
+			<div className="settings-api-keys-card">
+				<div className="settings-api-keys-header">
+					<h2 className="settings-api-keys-title">
 						{__('API Keys')}
 					</h2>
 					<Button
@@ -85,30 +86,28 @@ function ApiTab({
 				</div>
 
 				{user?.apiKeys && user.apiKeys.length > 0 ? (
-					<div className="space-y-3">
+					<div className="settings-api-keys-list">
 						{user.apiKeys.map((key) => (
 							<div
 								key={key.id}
 								dir={direction}
-								className="flex items-center justify-between p-4 border border-stroke rounded-lg hover:border-accent/50 transition-colors"
+								className="settings-api-key-row"
 							>
-								<div className="text-inline-start min-w-0 flex-1">
-									<div className="flex items-center gap-2 mb-1">
-										<p className="font-medium text-sm text-heading">
+								<div className="settings-api-key-details">
+									<div className="settings-api-key-title-row">
+										<p className="settings-api-key-title">
 											{key.label || __('API Key')}
 										</p>
-										<span className="text-xs px-2 py-0.5 bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 rounded">
+										<span className="settings-api-key-status">
 											{__('Active')}
 										</span>
 									</div>
-										<div className="flex items-center gap-2">
-											<p
-												className="preserve-ltr-value text-xs text-text-muted font-mono truncate"
-											>
-												{key.maskedKey || '••••••••'}
-											</p>
+									<div className="settings-api-key-value-row">
+										<p className="settings-api-key-value preserve-ltr-value">
+											{key.maskedKey || '••••••••'}
+										</p>
 									</div>
-									<p className="text-xs text-text-muted mt-1">
+									<p className="settings-api-key-meta">
 										{__('Created:')}{' '}
 										<bdi className="preserve-ltr-value inline-block">
 											{key.createdAt
@@ -119,10 +118,10 @@ function ApiTab({
 										</bdi>
 									</p>
 								</div>
-								<div className="flex shrink-0 items-center gap-1">
+								<div className="settings-api-key-actions">
 									<button
 										type="button"
-										className="p-2 text-text-muted hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+										className="settings-api-key-delete-button"
 										aria-label={__('Delete')}
 										onClick={() => onDeleteKey(key)}
 										disabled={isDeletingKey}
@@ -135,15 +134,12 @@ function ApiTab({
 						))}
 					</div>
 				) : (
-					<div className="text-center py-8 bg-surface-alt rounded-lg border border-dashed border-stroke">
-						<Key
-							size={32}
-							className="mx-auto text-text-muted mb-3"
-						/>
-						<h3 className="text-sm font-medium text-heading mb-1">
+					<div className="settings-api-empty">
+						<Key size={32} className="settings-api-empty-icon" />
+						<h3 className="settings-api-empty-title">
 							{__('No API Keys Generated')}
 						</h3>
-						<p className="text-xs text-text-muted mb-4">
+						<p className="settings-api-empty-text">
 							{__(
 								'Generate an API key to access endpoints programmatically.'
 							)}
@@ -159,17 +155,14 @@ function ApiTab({
 				)}
 			</div>
 
-			<div className="bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/20 dark:border-blue-500/30 rounded-lg p-4">
-				<div className="flex items-start gap-3">
-					<Info
-						size={18}
-						className="text-blue-600 dark:text-blue-400 mt-0.5"
-					/>
-					<div>
-						<p className="font-medium text-sm text-blue-700 dark:text-blue-300 mb-1">
+			<div className="settings-api-note">
+				<div className="settings-api-note-layout">
+					<Info size={18} className="settings-api-note-icon" />
+					<div className="settings-api-note-content">
+						<p className="settings-api-note-title">
 							{__('Keep your API keys secure')}
 						</p>
-						<p className="text-xs text-blue-700 dark:text-blue-300">
+						<p className="settings-api-note-text">
 							{__(
 								'PeakURL only shows the full token once, at creation time. Store it in a password manager or secret store, and revoke it immediately if you think it has been exposed.'
 							)}
@@ -178,16 +171,16 @@ function ApiTab({
 				</div>
 			</div>
 
-			<div className="bg-surface border border-stroke rounded-lg p-5">
-				<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-					<div className="space-y-1">
-						<div className="flex items-center gap-2 text-heading">
-							<BookOpen size={18} className="text-accent" />
-							<h3 className="text-sm font-semibold">
+			<div className="settings-api-docs-card">
+				<div className="settings-api-docs-header">
+					<div className="settings-api-docs-summary">
+						<div className="settings-api-docs-title-row">
+							<BookOpen size={18} className="settings-api-docs-icon" />
+							<h3 className="settings-api-docs-title">
 								{__('API documentation')}
 							</h3>
 						</div>
-						<p className="text-sm text-text-muted max-w-2xl">
+						<p className="settings-api-docs-description">
 							{__(
 								'Use the public docs for authentication, links, analytics, users, webhooks, and system endpoints.'
 							)}

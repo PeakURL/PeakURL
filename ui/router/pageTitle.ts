@@ -88,7 +88,7 @@ export function getPageTitle(pathname: string): string {
 	}
 
 	if ('/dashboard/settings' === pathname) {
-		return withSiteTitleSuffix(__('Settings'));
+		return withSiteTitleSuffix(getSettingsTabTitle('general'));
 	}
 
 	const importMatch = matchPath('/dashboard/tools/import/:tab', pathname);

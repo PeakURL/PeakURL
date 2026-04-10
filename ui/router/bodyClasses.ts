@@ -103,6 +103,14 @@ function getDashboardBodyClassNames(pathname: string): string[] {
 		return classes;
 	}
 
+	if ('/dashboard/settings' === pathname) {
+		classes.push(
+			'dashboard-settings-page',
+			'dashboard-settings-general'
+		);
+		return classes;
+	}
+
 	const settingsMatch = matchPath('/dashboard/settings/:tab', pathname);
 
 	if (settingsMatch) {

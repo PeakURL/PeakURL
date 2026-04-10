@@ -1,0 +1,116 @@
+@layer components {
+	.settings-location-state-card {
+		@apply rounded-lg border p-4;
+	}
+
+	.settings-location-state-card-info {
+		@apply border-blue-200 bg-blue-50 text-blue-950 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200;
+	}
+
+	.settings-location-state-card-success {
+		@apply border-emerald-200 bg-emerald-50 text-emerald-950 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200;
+	}
+
+	.settings-location-state-card-error {
+		@apply border-red-200 bg-red-50 text-red-950 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200;
+	}
+
+	.settings-location-state-card-layout {
+		@apply flex items-start gap-3;
+	}
+
+	.settings-location-state-card-icon {
+		@apply mt-0.5 shrink-0;
+	}
+
+	.settings-location-state-card-content {
+		text-align: start;
+		@apply space-y-1;
+	}
+
+	.settings-location-state-card-title {
+		@apply text-sm font-semibold;
+	}
+
+	.settings-location-state-card-text {
+		@apply text-sm leading-6 opacity-80;
+	}
+
+	.settings-location-intro-layout {
+		@apply flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between;
+	}
+
+	.settings-location-intro-copy {
+		text-align: start;
+		@apply space-y-2;
+	}
+
+	.settings-location-intro-title-row {
+		@apply flex items-center gap-3;
+	}
+
+	.settings-location-intro-icon {
+		@apply flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600 dark:bg-primary-500/20 dark:text-primary-400;
+	}
+
+	.settings-location-intro-description {
+		@apply text-sm text-text-muted;
+	}
+
+	.settings-location-download-button {
+		@apply min-w-42 whitespace-nowrap;
+	}
+
+	.settings-location-credentials-header {
+		@apply mb-5 space-y-1;
+	}
+
+	.settings-location-credentials-title {
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.settings-location-credentials-description {
+		@apply text-sm leading-6 text-text-muted;
+	}
+
+	.settings-location-credentials-view {
+		@apply space-y-4;
+	}
+
+	.settings-location-credentials-panel {
+		@apply rounded-lg border border-stroke bg-surface-alt p-4;
+	}
+
+	.settings-location-credentials-grid,
+	.settings-location-form-grid {
+		@apply grid grid-cols-1 gap-4 md:grid-cols-2;
+	}
+
+	.settings-location-credentials-label {
+		@apply text-xs font-semibold uppercase tracking-[0.14em] text-text-muted;
+	}
+
+	.settings-location-credentials-value {
+		@apply mt-2 border-0 bg-transparent p-0;
+	}
+
+	.settings-location-credentials-value-text {
+		@apply text-sm font-medium;
+	}
+
+	.settings-location-actions {
+		@apply flex flex-wrap gap-3;
+	}
+
+	.settings-location-form {
+		@apply space-y-4;
+	}
+
+	.settings-location-input {
+		@apply bg-surface-alt;
+	}
+
+	.settings-location-saved-key {
+		@apply text-xs text-text-muted;
+	}
+}

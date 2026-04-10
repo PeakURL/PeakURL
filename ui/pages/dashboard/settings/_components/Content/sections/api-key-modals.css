@@ -1,0 +1,33 @@
+@layer components {
+	.settings-api-modal-content {
+		@apply space-y-5;
+	}
+
+	.settings-api-modal-section {
+		@apply space-y-2;
+	}
+
+	.settings-api-modal-label {
+		@apply text-sm font-medium text-heading;
+	}
+
+	.settings-api-modal-text {
+		@apply text-sm text-text-muted;
+	}
+
+	.settings-api-modal-copy-notice {
+		@apply rounded-xl border border-blue-500/20 bg-blue-500/10 px-4 py-3;
+	}
+
+	.settings-api-modal-copy-title {
+		@apply text-sm font-medium text-blue-700 dark:text-blue-300;
+	}
+
+	.settings-api-modal-copy-text {
+		@apply mt-1 text-xs leading-5 text-blue-700 dark:text-blue-300;
+	}
+
+	.settings-api-modal-hint {
+		@apply text-xs text-text-muted;
+	}
+}

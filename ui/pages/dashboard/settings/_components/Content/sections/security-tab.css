@@ -1,0 +1,188 @@
+@layer components {
+	.settings-security-password-fields {
+		@apply space-y-4;
+	}
+
+	.settings-security-two-factor-card {
+		@apply space-y-4;
+	}
+
+	.settings-security-two-factor-header,
+	.settings-security-sessions-header {
+		@apply flex items-center justify-between;
+	}
+
+	.settings-security-two-factor-copy {
+		text-align: start;
+	}
+
+	.settings-security-two-factor-description {
+		@apply mt-1 text-sm text-text-muted;
+	}
+
+	.settings-security-two-factor-actions,
+	.settings-security-session-actions {
+		@apply flex items-center gap-2;
+	}
+
+	.settings-security-two-factor-status {
+		@apply flex items-start gap-3 rounded-lg border p-3;
+	}
+
+	.settings-security-two-factor-status-active {
+		@apply border-emerald-200 bg-emerald-50 dark:border-emerald-500/30 dark:bg-emerald-500/10;
+	}
+
+	.settings-security-two-factor-status-inactive {
+		@apply border-amber-200 bg-amber-50 dark:border-amber-500/30 dark:bg-amber-500/10;
+	}
+
+	.settings-security-two-factor-status-icon-panel,
+	.settings-security-two-factor-setup-icon-panel {
+		@apply rounded-lg bg-surface p-2 shadow-sm;
+	}
+
+	.settings-security-two-factor-status-icon-active {
+		@apply text-emerald-600 dark:text-emerald-400;
+	}
+
+	.settings-security-two-factor-status-icon-inactive {
+		@apply text-amber-600 dark:text-amber-400;
+	}
+
+	.settings-security-two-factor-status-content {
+		text-align: start;
+		@apply flex-1;
+	}
+
+	.settings-security-two-factor-status-title,
+	.settings-security-two-factor-setup-title,
+	.settings-security-backup-codes-title,
+	.settings-security-session-title {
+		@apply text-sm font-medium text-heading;
+	}
+
+	.settings-security-two-factor-status-text,
+	.settings-security-two-factor-setup-description,
+	.settings-security-backup-codes-description,
+	.settings-security-session-description,
+	.settings-security-sessions-count {
+		@apply mt-1 text-xs text-text-muted;
+	}
+
+	.settings-security-two-factor-setup {
+		@apply space-y-3 rounded-lg border border-stroke p-4;
+	}
+
+	.settings-security-two-factor-setup-header {
+		@apply flex items-start gap-3;
+	}
+
+	.settings-security-two-factor-setup-copy {
+		@apply flex-1;
+	}
+
+	.settings-security-two-factor-setup-icon {
+		@apply text-accent;
+	}
+
+	.settings-security-two-factor-setup-grid {
+		@apply grid grid-cols-1 items-center gap-4 md:grid-cols-2;
+	}
+
+	.settings-security-two-factor-qr {
+		@apply flex justify-center;
+	}
+
+	.settings-security-two-factor-qr-image {
+		@apply h-48 w-48 rounded-lg border border-stroke bg-white;
+	}
+
+	.settings-security-two-factor-qr-fallback {
+		@apply flex h-48 w-48 items-center justify-center rounded-lg border border-dashed border-stroke bg-surface-alt p-4 text-center text-xs text-text-muted;
+	}
+
+	.settings-security-two-factor-secret-stack {
+		@apply space-y-3;
+	}
+
+	.settings-security-two-factor-secret-card {
+		@apply rounded-lg border border-dashed border-stroke bg-surface-alt p-3;
+	}
+
+	.settings-security-two-factor-secret-label {
+		@apply mb-2 text-xs font-semibold text-text-muted;
+	}
+
+	.settings-security-two-factor-secret-value {
+		@apply border-0 bg-transparent p-0;
+	}
+
+	.settings-security-two-factor-secret-value-text {
+		@apply text-xs text-text-muted;
+	}
+
+	.settings-security-two-factor-verify-actions {
+		@apply flex gap-2;
+	}
+
+	.settings-security-two-factor-verify-submit {
+		@apply flex-1;
+	}
+
+	.settings-security-backup-codes {
+		@apply rounded-lg border border-dashed border-stroke p-4;
+	}
+
+	.settings-security-backup-codes-header {
+		@apply flex items-center justify-between;
+	}
+
+	.settings-security-backup-codes-grid {
+		@apply mt-3 grid grid-cols-2 gap-2 md:grid-cols-3;
+	}
+
+	.settings-security-backup-code {
+		@apply rounded-md border border-stroke bg-surface-alt px-3 py-2 font-mono text-sm text-heading;
+	}
+
+	.settings-security-sessions-list {
+		@apply space-y-3;
+	}
+
+	.settings-security-sessions-empty {
+		@apply rounded-lg border border-dashed border-stroke p-3 text-sm text-text-muted;
+	}
+
+	.settings-security-session-row {
+		@apply flex items-center justify-between rounded-lg border border-stroke p-3;
+	}
+
+	.settings-security-session-row-ended {
+		@apply opacity-70;
+	}
+
+	.settings-security-session-meta {
+		@apply flex items-center gap-3;
+	}
+
+	.settings-security-session-icon-panel {
+		@apply rounded-md bg-surface-alt p-2;
+	}
+
+	.settings-security-session-icon {
+		@apply text-text-muted;
+	}
+
+	.settings-security-session-copy {
+		text-align: start;
+	}
+
+	.settings-security-session-badge-current {
+		@apply rounded bg-emerald-500/10 px-2 py-1 text-xs text-emerald-700 dark:text-emerald-300;
+	}
+
+	.settings-security-session-badge-ended {
+		@apply rounded bg-surface-alt px-2 py-1 text-xs text-text-muted;
+	}
+}

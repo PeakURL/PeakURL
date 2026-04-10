@@ -1,0 +1,5 @@
+@layer components {
+	.settings-content {
+		@apply space-y-5;
+	}
+}

@@ -1,0 +1,9 @@
+@layer components {
+	.settings-tab-page {
+		@apply flex h-full flex-col lg:col-span-3;
+	}
+
+	.settings-tab-page-panel {
+		@apply flex-1 rounded-lg border border-stroke bg-surface-alt p-5;
+	}
+}

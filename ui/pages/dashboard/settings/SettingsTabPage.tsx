@@ -42,8 +42,8 @@ function SettingsTabPage() {
 	}
 
 	return (
-		<div className="lg:col-span-3 flex flex-col h-full">
-			<div className="flex-1 rounded-lg border border-stroke bg-surface-alt p-5">
+		<div className="settings-tab-page">
+			<div className="settings-tab-page-panel">
 				<Content activeTab={tab || 'general'} />
 			</div>
 		</div>

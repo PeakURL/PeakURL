@@ -4,6 +4,7 @@ import { Input, Button, Select } from '@/components/ui';
 import { __ } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
 import { getInstalledLanguageLabel } from '@/i18n/languages';
+import { cn } from '@/utils';
 import type { GeneralFormState } from '../types';
 import type { GeneralTabProps } from './types';
 import type { SelectOption } from '@/components/ui';
@@ -74,15 +75,15 @@ function GeneralTab({
 				: [{ value: siteLanguage, label: siteLanguage }];
 
 	return (
-		<div className="space-y-5">
+		<div className="settings-general">
 			<form
 				onSubmit={handleSubmit}
-				className="bg-surface border border-(--color-stroke) rounded-lg p-5"
+				className="settings-general-form"
 			>
-				<h2 className="text-base font-semibold text-heading mb-5">
+				<h2 className="settings-general-title">
 					{__('Profile Information')}
 				</h2>
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+				<div className="settings-general-grid">
 					<Input
 						label={__('First Name')}
 						name="firstName"
@@ -136,8 +137,8 @@ function GeneralTab({
 						value={generalForm.jobTitle}
 						onChange={handleChange}
 					/>
-					<div className="space-y-2">
-						<label className="block text-sm font-semibold text-heading">
+					<div className="settings-general-field">
+						<label className="settings-section-label">
 							{__('Site Language')}
 						</label>
 						<Select
@@ -152,23 +153,26 @@ function GeneralTab({
 							ariaLabel={__('Site language')}
 						/>
 					</div>
-					<div className="md:col-span-2 space-y-2">
-						<label className="block text-sm font-semibold text-heading">
+					<div className="settings-general-bio-field">
+						<label className="settings-section-label">
 							{__('Bio')}
 						</label>
 						<textarea
 							name="bio"
 							rows={3}
-							className="text-page-start w-full rounded-md border border-stroke bg-surface px-4 py-2 text-heading placeholder:text-text-muted outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent"
+							className="settings-general-bio-input"
 							value={generalForm.bio}
 							onChange={handleChange}
 						/>
 					</div>
 				</div>
 				<div
-					className={`mt-5 flex ${
-						isRtl ? 'justify-start' : 'justify-end'
-					}`}
+					className={cn(
+						'settings-general-actions',
+						isRtl
+							? 'settings-general-actions-start'
+							: 'settings-general-actions-end'
+					)}
 				>
 					<Button size="sm" type="submit" disabled={isUpdating}>
 						{isUpdating ? __('Saving...') : __('Save Changes')}

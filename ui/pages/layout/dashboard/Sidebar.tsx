@@ -78,7 +78,7 @@ const buildNav = (
 		},
 		{
 			name: __('Settings'),
-			href: `${base || ''}/settings`,
+			href: `${base || ''}/settings/general`,
 			icon: Settings,
 		},
 	];

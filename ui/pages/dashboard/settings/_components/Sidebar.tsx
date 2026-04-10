@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getDocumentDirection } from '@/i18n/direction';
+import { cn } from '@/utils';
 import type { SettingsTabIcon, SettingsTabItem, SidebarProps } from './types';
 
 // Icon mapping
@@ -28,32 +29,39 @@ const iconMap: Record<SettingsTabIcon, typeof Settings> = {
 
 const Sidebar = ({ tabs, activeTab }: SidebarProps) => {
 	const direction = getDocumentDirection();
+	const getLinkClassName = (isActive: boolean) =>
+		cn(
+			'settings-sidebar-link',
+			isActive
+				? 'settings-sidebar-link-active'
+				: 'settings-sidebar-link-inactive'
+		);
+	const getIconClassName = (isActive: boolean) =>
+		cn(
+			'settings-sidebar-icon',
+			isActive
+				? 'settings-sidebar-icon-active'
+				: 'settings-sidebar-icon-inactive'
+		);
 
 	return (
-		<div className="lg:col-span-1">
-			<div className="bg-surface border border-stroke rounded-lg p-2 sticky top-6">
-				<nav className="space-y-1">
+		<div className="settings-sidebar">
+			<div className="settings-sidebar-panel">
+				<nav className="settings-sidebar-nav">
 					{tabs.map((tab: SettingsTabItem) => {
 						const IconComponent = iconMap[tab.icon];
+						const isActive = activeTab === tab.id;
 						return (
 							<Link
 								key={tab.id}
 								to={`/dashboard/settings/${tab.id}`}
 								dir={direction}
-								className={`text-inline-start w-full flex items-center justify-start gap-2.5 px-3 py-2.5 text-sm rounded-lg transition-all ${
-									activeTab === tab.id
-										? 'bg-accent/10 dark:bg-accent/20 text-accent font-medium'
-										: 'text-text-muted hover:bg-surface-alt hover:text-heading'
-								}`}
+								className={getLinkClassName(isActive)}
 							>
 								{IconComponent && (
 									<IconComponent
 										size={16}
-										className={
-											activeTab === tab.id
-												? 'text-accent'
-												: 'text-text-muted'
-										}
+										className={getIconClassName(isActive)}
 									/>
 								)}
 								{tab.name}

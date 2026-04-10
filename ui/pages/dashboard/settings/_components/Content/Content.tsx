@@ -716,7 +716,7 @@ const Content = ({ activeTab }: ContentProps) => {
 	};
 
 	return (
-		<div className="space-y-5">
+		<div className="settings-content">
 			{activeTab === 'general' && (
 				<GeneralTab
 					key={`${user?._id || user?.id || user?.username || 'user'}-${user?.updatedAt || 'initial'}`}

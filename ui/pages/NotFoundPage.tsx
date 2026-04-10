@@ -84,7 +84,7 @@ const NotFoundPage = () => {
 								{__('Import')}
 							</Link>
 							<Link
-								to="/dashboard/settings"
+								to="/dashboard/settings/general"
 								className="not-found-page-link"
 							>
 								<Settings

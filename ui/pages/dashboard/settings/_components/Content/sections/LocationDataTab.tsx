@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button, Input, ReadOnlyValueBlock } from '@/components/ui';
 import { __ } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
-import { formatByteSize, formatDateTimeValue } from '@/utils';
+import { cn, formatByteSize, formatDateTimeValue } from '@/utils';
 import {
 	AlertCircle,
 	CheckCircle2,
@@ -28,22 +28,21 @@ function StateCard({
 	const isRtl = isDocumentRtl();
 	const direction = isRtl ? 'rtl' : 'ltr';
 	const styles: Record<StateCardVariant, string> = {
-		info: 'border-blue-200 bg-blue-50 text-blue-950 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200',
-		success:
-			'border-emerald-200 bg-emerald-50 text-emerald-950 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200',
-		error: 'border-red-200 bg-red-50 text-red-950 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200',
+		info: 'settings-location-state-card-info',
+		success: 'settings-location-state-card-success',
+		error: 'settings-location-state-card-error',
 	};
 
 	return (
-		<div className={`rounded-lg border p-4 ${styles[variant]}`}>
+		<div className={cn('settings-location-state-card', styles[variant])}>
 			<div
 				dir={direction}
-				className="flex items-start gap-3"
+				className="settings-location-state-card-layout"
 			>
-				<Icon size={18} className="mt-0.5 shrink-0" />
-				<div className="text-inline-start space-y-1">
-					<h3 className="text-sm font-semibold">{title}</h3>
-					<p className="text-sm leading-6 opacity-80">
+				<Icon size={18} className="settings-location-state-card-icon" />
+				<div className="settings-location-state-card-content">
+					<h3 className="settings-location-state-card-title">{title}</h3>
+					<p className="settings-location-state-card-text">
 						{description}
 					</p>
 				</div>
@@ -98,22 +97,25 @@ function LocationDataTab({
 	const isReady = Boolean(effectiveStatus?.locationAnalyticsReady);
 
 	return (
-		<div className="space-y-5">
-			<div className="rounded-lg border border-stroke bg-surface p-5">
+		<div className="settings-location">
+			<div className="settings-location-intro">
 				<div
 					dir={direction}
-					className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
+					className="settings-location-intro-layout"
 				>
-					<div className="text-inline-start space-y-2">
-						<div dir={direction} className="flex items-center gap-3">
-							<div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600 dark:bg-primary-500/20 dark:text-primary-400">
+					<div className="settings-location-intro-copy">
+						<div
+							dir={direction}
+							className="settings-location-intro-title-row"
+						>
+							<div className="settings-location-intro-icon">
 								<MapPin size={18} />
 							</div>
 							<div>
-								<h2 className="text-base font-semibold text-heading">
+								<h2 className="settings-location-intro-title">
 									{__('Location Data')}
 								</h2>
-								<p className="text-sm text-text-muted">
+								<p className="settings-location-intro-description">
 									{__(
 										'Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder.'
 									)}
@@ -124,7 +126,7 @@ function LocationDataTab({
 
 					<Button
 						size="sm"
-						className="min-w-42 whitespace-nowrap"
+						className="settings-location-download-button"
 						onClick={onDownload}
 						loading={isDownloading}
 						icon={CloudDownload}
@@ -145,7 +147,7 @@ function LocationDataTab({
 				</div>
 			</div>
 
-			<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+			<div className="settings-stat-grid">
 				<StatCard
 					label={__('Status')}
 					value={isReady ? __('Ready') : __('Setup Required')}
@@ -208,12 +210,12 @@ function LocationDataTab({
 				/>
 			)}
 
-			<div className="rounded-lg border border-stroke bg-surface p-5">
-				<div className="mb-5 space-y-1">
-					<h3 className="text-sm font-semibold text-heading">
+			<div className="settings-location-credentials-card">
+				<div className="settings-location-credentials-header">
+					<h3 className="settings-location-credentials-title">
 						{__('MaxMind Credentials')}
 					</h3>
-					<p className="text-sm leading-6 text-text-muted">
+					<p className="settings-location-credentials-description">
 						{__(
 							'PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again.'
 						)}
@@ -221,36 +223,36 @@ function LocationDataTab({
 				</div>
 
 				{hasSavedCredentials && !isEditingCredentials ? (
-					<div className="space-y-4">
-						<div className="rounded-lg border border-stroke bg-surface-alt p-4">
-							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+					<div className="settings-location-credentials-view">
+						<div className="settings-location-credentials-panel">
+							<div className="settings-location-credentials-grid">
 								<div>
-									<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
+									<p className="settings-location-credentials-label">
 										{__('Account ID')}
 									</p>
 									<ReadOnlyValueBlock
 										value={effectiveStatus?.accountId}
-										className="mt-2 border-0 bg-transparent p-0"
+										className="settings-location-credentials-value"
 										monospace={false}
-										valueClassName="text-sm font-medium"
+										valueClassName="settings-location-credentials-value-text"
 									/>
 								</div>
 								<div>
-									<p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
+									<p className="settings-location-credentials-label">
 										{__('License Key')}
 									</p>
 									<ReadOnlyValueBlock
 										value={effectiveStatus?.licenseKeyHint}
-										className="mt-2 border-0 bg-transparent p-0"
+										className="settings-location-credentials-value"
 										monospace={false}
-										valueClassName="text-sm font-medium"
+										valueClassName="settings-location-credentials-value-text"
 									/>
 								</div>
 							</div>
 						</div>
 						<div
 							dir={direction}
-							className="flex flex-wrap gap-3"
+							className="settings-location-actions"
 						>
 							<Button
 								type="button"
@@ -285,8 +287,8 @@ function LocationDataTab({
 						</div>
 					</div>
 				) : (
-					<form className="space-y-4" onSubmit={handleSubmit}>
-						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+					<form className="settings-location-form" onSubmit={handleSubmit}>
+						<div className="settings-location-form-grid">
 							<Input
 								label={__('MaxMind Account ID')}
 								type="text"
@@ -298,7 +300,7 @@ function LocationDataTab({
 									setAccountIdInput(event.target.value)
 								}
 								placeholder="123456"
-								className="bg-surface-alt"
+								className="settings-location-input"
 							/>
 
 							<Input
@@ -317,14 +319,14 @@ function LocationDataTab({
 											)
 										: __(
 												'Enter your MaxMind license key'
-											)
+										)
 								}
-								className="bg-surface-alt"
+								className="settings-location-input"
 							/>
 						</div>
 
 						{hasSavedCredentials && (
-							<p className="text-xs text-text-muted">
+							<p className="settings-location-saved-key">
 								{__('Saved license key:')}{' '}
 								<span className="preserve-ltr-value">
 									{effectiveStatus?.licenseKeyHint}
@@ -334,7 +336,7 @@ function LocationDataTab({
 
 						<div
 							dir={direction}
-							className="flex flex-wrap gap-3"
+							className="settings-location-actions"
 						>
 							<Button
 								type="submit"
@@ -381,12 +383,12 @@ function StatCard({
 	return (
 		<div
 			dir={direction}
-			className="text-inline-start rounded-lg border border-stroke bg-surface p-5"
+			className="settings-stat-card"
 		>
-			<p className="text-xs font-semibold tracking-[0.14em] text-text-muted">
+			<p className="settings-stat-label">
 				{label}
 			</p>
-			<p className="mt-3 text-lg font-semibold text-heading">
+			<p className="settings-stat-value">
 				{'ltr' === valueDirection ? (
 					<span className="preserve-ltr-value inline-block">
 						{value}

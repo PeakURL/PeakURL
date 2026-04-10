@@ -1,0 +1,38 @@
+@layer components {
+	.settings-sidebar {
+		@apply lg:col-span-1;
+	}
+
+	.settings-sidebar-panel {
+		@apply sticky top-6 rounded-lg border border-stroke bg-surface p-2;
+	}
+
+	.settings-sidebar-nav {
+		@apply space-y-1;
+	}
+
+	.settings-sidebar-link {
+		text-align: start;
+		@apply flex w-full items-center justify-start gap-2.5 rounded-lg px-3 py-2.5 text-sm transition-all;
+	}
+
+	.settings-sidebar-link-active {
+		@apply bg-accent/10 font-medium text-accent dark:bg-accent/20;
+	}
+
+	.settings-sidebar-link-inactive {
+		@apply text-text-muted hover:bg-surface-alt hover:text-heading;
+	}
+
+	.settings-sidebar-icon {
+		@apply shrink-0;
+	}
+
+	.settings-sidebar-icon-active {
+		@apply text-accent;
+	}
+
+	.settings-sidebar-icon-inactive {
+		@apply text-text-muted;
+	}
+}

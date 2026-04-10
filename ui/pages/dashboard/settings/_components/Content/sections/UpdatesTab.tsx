@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui';
 import { __, sprintf } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
-import { formatDateTimeValue } from '@/utils';
+import { cn, formatDateTimeValue } from '@/utils';
 import {
 	AlertCircle,
 	CheckCircle2,
@@ -173,27 +173,20 @@ function buildDatabaseStatus(
 
 function StatusBadge({ tone = 'info', label }: StatusBadgeProps) {
 	const styles: Record<StatusTone, string> = {
-		info: 'border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200',
-		success:
-			'border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200',
-		error: 'border-red-200 bg-red-50 text-red-800 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200',
+		info: 'settings-updates-status-badge-info',
+		success: 'settings-updates-status-badge-success',
+		error: 'settings-updates-status-badge-error',
 	};
 
 	return (
-		<span
-			className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${styles[tone]}`}
-		>
+		<span className={cn('settings-updates-status-badge', styles[tone])}>
 			{label}
 		</span>
 	);
 }
 
 function SectionCard({ children }: SectionCardProps) {
-	return (
-		<div className="rounded-xl border border-stroke bg-surface p-5 sm:p-6">
-			{children}
-		</div>
-	);
+	return <div className="settings-updates-card">{children}</div>;
 }
 
 function SectionHeader({
@@ -209,21 +202,21 @@ function SectionHeader({
 	return (
 		<div
 			dir={direction}
-			className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between"
+			className="settings-updates-card-header"
 		>
-			<div className="text-inline-start space-y-2">
-				<div className="flex flex-wrap items-center gap-3">
-					<h2 className="text-base font-semibold text-heading">
+			<div className="settings-updates-card-copy">
+				<div className="settings-updates-card-title-row">
+					<h2 className="settings-updates-card-title">
 						{title}
 					</h2>
 					{badge ? <StatusBadge tone={badge.tone} label={badge.label} /> : null}
 				</div>
-				<p className="max-w-2xl text-sm leading-6 text-text-muted">
+				<p className="settings-updates-card-description">
 					{description}
 				</p>
 			</div>
 
-			<div className="flex flex-wrap gap-3">
+			<div className="settings-updates-card-actions">
 				{secondaryAction}
 				{primaryAction}
 			</div>
@@ -236,17 +229,17 @@ function MetricGrid({ items }: MetricGridProps) {
 	const direction = isRtl ? 'rtl' : 'ltr';
 
 	return (
-		<div className="mt-5 grid grid-cols-1 gap-3 md:grid-cols-3">
+		<div className="settings-updates-metric-grid">
 			{items.map((item: MetricItem) => (
 				<div
 					key={item.label}
 					dir={direction}
-					className="text-inline-start rounded-lg border border-stroke bg-bg px-4 py-4"
+					className="settings-updates-metric-item"
 				>
-					<p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-text-muted">
+					<p className="settings-updates-metric-label">
 						{item.label}
 					</p>
-					<p className="mt-2 text-lg font-semibold text-heading">
+					<p className="settings-updates-metric-value">
 						{'ltr' === item.valueDirection ? (
 							<span className="preserve-ltr-value inline-block">
 								{item.value}
@@ -274,22 +267,21 @@ function InlineNotice({
 	const isRtl = isDocumentRtl();
 	const direction = isRtl ? 'rtl' : 'ltr';
 	const styles: Record<StatusTone, string> = {
-		info: 'border-blue-200 bg-blue-50 text-blue-900 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200',
-		success:
-			'border-emerald-200 bg-emerald-50 text-emerald-900 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200',
-		error: 'border-red-200 bg-red-50 text-red-900 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200',
+		info: 'settings-updates-notice-info',
+		success: 'settings-updates-notice-success',
+		error: 'settings-updates-notice-error',
 	};
 
 	return (
-		<div className={`rounded-lg border p-4 ${styles[tone]}`}>
+		<div className={cn('settings-updates-notice', styles[tone])}>
 			<div
 				dir={direction}
-				className="flex items-start gap-3"
+				className="settings-updates-notice-layout"
 			>
-				<Icon size={18} className="mt-0.5 shrink-0" />
-				<div className="text-inline-start space-y-1">
-					<p className="text-sm font-semibold">{title}</p>
-					<p className="text-sm leading-6 opacity-80">{description}</p>
+				<Icon size={18} className="settings-updates-notice-icon" />
+				<div className="settings-updates-notice-content">
+					<p className="settings-updates-notice-title">{title}</p>
+					<p className="settings-updates-notice-text">{description}</p>
 				</div>
 			</div>
 		</div>
@@ -322,7 +314,7 @@ function UpdateActions({
 		<Button
 			variant={primaryVariant}
 			size="sm"
-			className="min-w-44 whitespace-nowrap"
+			className="settings-updates-install-button"
 			onClick={onApply}
 			loading={isApplying}
 			icon={Download}
@@ -341,7 +333,7 @@ function UpdateActions({
 		<Button
 			variant={primaryVariant}
 			size="sm"
-			className="min-w-52 whitespace-nowrap"
+			className="settings-updates-reinstall-button"
 			onClick={onReinstall}
 			loading={isReinstalling}
 			icon={RefreshCcw}
@@ -361,20 +353,26 @@ function UpdateActions({
 
 	return (
 		<div
-			className={`flex w-full flex-col gap-3 lg:max-w-104 ${
-				isRtl ? 'lg:items-start' : 'lg:items-end'
-			}`}
+			className={cn(
+				'settings-updates-actions',
+				isRtl
+					? 'settings-updates-actions-start'
+					: 'settings-updates-actions-end'
+			)}
 		>
 			<div
-				className={`flex flex-wrap gap-3 ${
-					isRtl ? 'lg:justify-start' : 'lg:justify-end'
-				}`}
+				className={cn(
+					'settings-updates-actions-row',
+					isRtl
+						? 'settings-updates-actions-row-start'
+						: 'settings-updates-actions-row-end'
+				)}
 			>
 				{showCheckButton ? (
 					<Button
 						variant="outline"
 						size="sm"
-						className="min-w-44 whitespace-nowrap"
+						className="settings-updates-check-button"
 						onClick={onCheck}
 						loading={isChecking}
 						icon={RefreshCcw}
@@ -389,7 +387,7 @@ function UpdateActions({
 			{showDisabledReason ? (
 				<div
 					dir={direction}
-					className="text-inline-start max-w-sm rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200"
+					className="settings-updates-disabled-reason"
 				>
 					{disabledReason}
 				</div>
@@ -421,9 +419,9 @@ function DetailRow({
 	return (
 		<div
 			dir={direction}
-			className="flex flex-col gap-2 rounded-lg border border-stroke bg-bg px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+			className="settings-updates-detail-row"
 		>
-			<div className="flex items-center gap-2 text-sm text-text-muted">
+			<div className="settings-updates-detail-label">
 				{Icon ? <Icon size={15} /> : null}
 				<span>{label}</span>
 			</div>
@@ -433,13 +431,13 @@ function DetailRow({
 					target="_blank"
 					rel="noreferrer"
 					dir={direction}
-					className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline"
+					className="settings-updates-detail-link"
 				>
 					{valueNode}
 					<ExternalLink size={14} />
 				</a>
 			) : (
-				<span className="text-inline-start text-sm font-medium text-heading">
+				<span className="settings-updates-detail-value">
 					{valueNode}
 				</span>
 			)}
@@ -454,10 +452,10 @@ function IssueList({ title, issues }: IssueListProps) {
 	return (
 		<div
 			dir={direction}
-			className="text-inline-start rounded-lg border border-stroke bg-bg p-4"
+			className="settings-updates-issues"
 		>
-			<p className="text-sm font-semibold text-heading">{title}</p>
-			<ul className="mt-3 list-disc space-y-2 ps-5 text-sm leading-6 text-text-muted">
+			<p className="settings-updates-issues-title">{title}</p>
+			<ul className="settings-updates-issues-list">
 				{issues.map((issue: UpdateIssue) => (
 					<li key={issue.id || issue.label}>
 						<bdi dir="auto">{issue.label}</bdi>
@@ -498,14 +496,14 @@ function UpdatesTab({
 
 	if (isLoading && !status && !errorMessage) {
 		return (
-			<div className="rounded-xl border border-stroke bg-surface p-5 text-sm text-text-muted">
+			<div className="settings-updates-loading">
 				{__('Loading update status...')}
 			</div>
 		);
 	}
 
 	return (
-		<div className="space-y-5">
+		<div className="settings-updates">
 			<SectionCard>
 				<SectionHeader
 					title={__('Application Updates')}
@@ -554,7 +552,7 @@ function UpdatesTab({
 					]}
 				/>
 
-				<div className="mt-5">
+				<div className="settings-updates-block">
 					<InlineNotice
 						icon={errorMessage || status?.lastError ? AlertCircle : updateAvailable ? Download : CheckCircle2}
 						title={appState.title}
@@ -564,13 +562,13 @@ function UpdatesTab({
 				</div>
 
 				{releaseInstallProgress && (isApplying || isReinstalling) ? (
-					<div className="mt-5">
+					<div className="settings-updates-block">
 						<ReleaseInstallProgress progress={releaseInstallProgress} />
 					</div>
 				) : null}
 
 				{showReleaseMeta ? (
-					<div className="mt-5 space-y-3 border-t border-stroke pt-5">
+					<div className="settings-updates-divider">
 						{status?.releasedAt ? (
 							<DetailRow
 								label={__('Released')}
@@ -604,7 +602,7 @@ function UpdatesTab({
 						<Button
 							variant={databaseStatus?.upgradeRequired ? 'primary' : 'outline'}
 							size="sm"
-							className="min-w-52 whitespace-nowrap"
+							className="settings-updates-repair-button"
 							onClick={onRepair}
 							loading={isRepairing}
 							disabled={isLoading || isChecking || isApplying}
@@ -637,7 +635,7 @@ function UpdatesTab({
 					]}
 				/>
 
-				<div className="mt-5">
+				<div className="settings-updates-block">
 					<InlineNotice
 						icon={databaseStatus?.lastError ? AlertCircle : databaseStatus?.upgradeRequired ? AlertCircle : CheckCircle2}
 						title={databaseState.title}
@@ -647,11 +645,15 @@ function UpdatesTab({
 				</div>
 
 				{visibleDatabaseIssues.length > 0 || databaseStatus?.lastError ? (
-					<div className="mt-5 space-y-3 border-t border-stroke pt-5">
+					<div className="settings-updates-divider">
 						{databaseStatus?.lastError ? (
-							<div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm leading-6 text-red-900 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200">
-								<p className="font-semibold">{__('Last database error')}</p>
-								<p className="mt-1 opacity-80">{databaseStatus.lastError}</p>
+							<div className="settings-updates-error-card">
+								<p className="settings-updates-error-title">
+									{__('Last database error')}
+								</p>
+								<p className="settings-updates-error-text">
+									{databaseStatus.lastError}
+								</p>
 							</div>
 						) : null}
 						{visibleDatabaseIssues.length > 0 ? (

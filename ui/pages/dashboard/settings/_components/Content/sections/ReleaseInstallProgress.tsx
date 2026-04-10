@@ -1,5 +1,6 @@
 import { CheckCircle2, Clock3, LoaderCircle } from 'lucide-react';
 import { getDocumentDirection } from '@/i18n/direction';
+import { cn } from '@/utils';
 import type { ReleaseInstallProgressState } from './types';
 
 interface ReleaseInstallProgressProps {
@@ -8,18 +9,15 @@ interface ReleaseInstallProgressProps {
 }
 
 const stepStateStyles = {
-	complete:
-		'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200',
-	current:
-		'border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200',
-	upcoming:
-		'border-stroke bg-bg text-text-muted',
+	complete: 'settings-release-progress-badge-complete',
+	current: 'settings-release-progress-badge-current',
+	upcoming: 'settings-release-progress-badge-upcoming',
 } as const;
 
 const stepTextStyles = {
-	complete: 'text-emerald-800 dark:text-emerald-200',
-	current: 'text-heading',
-	upcoming: 'text-text-muted',
+	complete: 'settings-release-progress-label-complete',
+	current: 'settings-release-progress-label-current',
+	upcoming: 'settings-release-progress-label-upcoming',
 } as const;
 
 function ReleaseInstallProgress({
@@ -31,18 +29,35 @@ function ReleaseInstallProgress({
 	return (
 		<div
 			dir={direction}
-			className={`text-inline-start rounded-lg border border-stroke bg-bg ${
-				compact ? 'p-4' : 'p-5'
-			}`}
+			className={cn(
+				'settings-release-progress',
+				compact
+					? 'settings-release-progress-compact'
+					: 'settings-release-progress-default'
+			)}
 		>
-			<div className={compact ? 'space-y-1.5' : 'space-y-2'}>
-				<p className="text-sm font-semibold text-heading">{progress.title}</p>
-				<p className="text-sm leading-6 text-text-muted">
+			<div
+				className={cn(
+					'settings-release-progress-header',
+					compact
+						? 'settings-release-progress-header-compact'
+						: 'settings-release-progress-header-default'
+				)}
+			>
+				<p className="settings-release-progress-title">{progress.title}</p>
+				<p className="settings-release-progress-description">
 					{progress.description}
 				</p>
 			</div>
 
-			<ol className={compact ? 'mt-4 space-y-2.5' : 'mt-4 space-y-3'}>
+			<ol
+				className={cn(
+					'settings-release-progress-list',
+					compact
+						? 'settings-release-progress-list-compact'
+						: 'settings-release-progress-list-default'
+				)}
+			>
 				{progress.steps.map((step) => {
 					const Icon =
 						'complete' === step.state
@@ -52,18 +67,29 @@ function ReleaseInstallProgress({
 								: Clock3;
 
 					return (
-						<li key={step.id} className="flex items-center gap-3">
+						<li key={step.id} className="settings-release-progress-item">
 							<span
-								className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border ${stepStateStyles[step.state]}`}
+								className={cn(
+									'settings-release-progress-badge',
+									stepStateStyles[step.state]
+								)}
 							>
 								<Icon
 									size={16}
-									className={
-										'current' === step.state ? 'animate-spin' : ''
-									}
+									className={cn(
+										'settings-release-progress-icon',
+										'current' === step.state
+											? 'settings-release-progress-icon-spin'
+											: ''
+									)}
 								/>
 							</span>
-							<span className={`text-sm ${stepTextStyles[step.state]}`}>
+							<span
+								className={cn(
+									'settings-release-progress-label',
+									stepTextStyles[step.state]
+								)}
+							>
 								{step.label}
 							</span>
 						</li>

@@ -51,14 +51,14 @@
 		@apply w-full rounded-md border border-stroke bg-surface px-4 py-2 text-sm text-heading placeholder:text-muted outline-none transition-colors;
 	}
 
-	.form-control-neutral-focus {
+	.form-control-accent-focus {
 		@apply focus:outline-none;
 	}
 
-	.form-control-neutral-focus:focus {
-		border-color: var(--color-stroke-strong);
+	.form-control-accent-focus:focus {
+		border-color: var(--color-accent);
 		box-shadow: 0 0 0 1px
-			color-mix(in srgb, var(--color-stroke-strong) 55%, transparent);
+			color-mix(in srgb, var(--color-accent) 28%, transparent);
 	}
 
 	.field-with-inline-start-icon {

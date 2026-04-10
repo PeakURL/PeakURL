@@ -1,0 +1,38 @@
+@layer components {
+	.form-field {
+		@apply space-y-2;
+	}
+
+	.form-field-label {
+		@apply block text-sm font-semibold text-heading;
+		text-align: start;
+	}
+
+	.form-field-control {
+		@apply relative;
+	}
+
+	.form-field-icon {
+		@apply pointer-events-none absolute inset-y-0 flex items-center text-muted;
+	}
+
+	.form-field-input-error {
+		@apply border-red-500;
+	}
+
+	.form-field-input-error:focus {
+		border-color: var(--color-error);
+		box-shadow: 0 0 0 1px
+			color-mix(in srgb, var(--color-error) 35%, transparent);
+	}
+
+	.form-field-error {
+		@apply flex items-center gap-1.5 text-sm font-medium text-red-600 dark:text-red-400;
+		text-align: start;
+	}
+
+	.form-field-helper {
+		@apply text-xs text-muted;
+		text-align: start;
+	}
+}

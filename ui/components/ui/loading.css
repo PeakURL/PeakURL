@@ -1,0 +1,98 @@
+@layer components {
+	.loading-spinner {
+		@apply inline-flex items-center justify-center;
+	}
+
+	.loading-spinner-icon {
+		@apply animate-spin text-accent;
+	}
+
+	.page-loader {
+		@apply fixed inset-0 z-50 flex items-center justify-center bg-bg/80;
+	}
+
+	.page-loader-content {
+		@apply text-center;
+	}
+
+	.page-loader-visual {
+		@apply relative mb-6;
+	}
+
+	.page-loader-ring {
+		@apply h-16 w-16 rounded-full border-4 border-stroke;
+	}
+
+	.page-loader-ring-active {
+		@apply absolute inset-0 h-16 w-16 animate-spin rounded-full border-4 border-transparent border-t-accent;
+	}
+
+	.page-loader-icon {
+		@apply absolute inset-0 flex items-center justify-center text-accent;
+	}
+
+	.page-loader-label {
+		@apply text-sm font-medium text-text-muted;
+	}
+
+	.skeleton-loader {
+		@apply animate-pulse rounded-lg bg-surface-alt;
+	}
+
+	.card-skeleton {
+		@apply animate-pulse rounded-2xl border border-stroke bg-surface p-6;
+	}
+
+	.card-skeleton-header {
+		@apply mb-4 flex items-start justify-between;
+	}
+
+	.card-skeleton-body {
+		@apply flex-1;
+	}
+
+	.card-skeleton-icon {
+		@apply h-14 w-14 rounded-2xl;
+	}
+
+	.card-skeleton-progress {
+		@apply h-2 w-full rounded-full;
+	}
+
+	.table-row-skeleton {
+		@apply animate-pulse;
+	}
+
+	.table-row-skeleton-cell {
+		@apply px-6 py-4;
+	}
+
+	.pulse-dot {
+		@apply relative inline-flex;
+	}
+
+	.pulse-dot-core {
+		@apply rounded-full;
+	}
+
+	.pulse-dot-ping {
+		@apply absolute inline-flex animate-ping rounded-full opacity-75;
+	}
+
+	.progress-bar-track {
+		@apply h-2 w-full overflow-hidden rounded-full bg-surface-alt;
+	}
+
+	.progress-bar-fill {
+		@apply h-2 rounded-full transition-all duration-500 ease-out;
+	}
+
+	.progress-bar-label {
+		@apply mt-1 text-xs text-muted;
+		text-align: end;
+	}
+
+	.inline-loader {
+		@apply animate-spin;
+	}
+}

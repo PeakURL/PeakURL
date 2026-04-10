@@ -44,8 +44,8 @@ export function LoadingSpinner({
 	};
 
 	return (
-		<div className={`inline-flex items-center justify-center ${className}`}>
-			<Loader2 size={sizes[size]} className="text-accent animate-spin" />
+		<div className={`loading-spinner ${className}`}>
+			<Loader2 size={sizes[size]} className="loading-spinner-icon" />
 		</div>
 	);
 }
@@ -56,19 +56,16 @@ export function LoadingSpinner({
  */
 export function PageLoader() {
 	return (
-		<div className="fixed inset-0 bg-bg/80 z-50 flex items-center justify-center">
-			<div className="text-center">
-				<div className="relative mb-6">
-					{/* Outer ring */}
-					<div className="w-16 h-16 border-4 border-stroke rounded-full"></div>
-					{/* Spinning gradient ring */}
-					<div className="absolute inset-0 h-16 w-16 rounded-full border-4 border-transparent border-t-accent animate-spin"></div>
-					{/* Inner icon */}
-					<div className="absolute inset-0 flex items-center justify-center">
-						<Zap size={24} className="text-accent" />
+		<div className="page-loader">
+			<div className="page-loader-content">
+				<div className="page-loader-visual">
+					<div className="page-loader-ring"></div>
+					<div className="page-loader-ring-active"></div>
+					<div className="page-loader-icon">
+						<Zap size={24} />
 					</div>
 				</div>
-				<p className="text-sm font-medium text-text-muted">
+				<p className="page-loader-label">
 					{__('Loading…')}
 				</p>
 			</div>
@@ -88,7 +85,7 @@ export function SkeletonLoader({
 }: SkeletonLoaderProps) {
 	return (
 		<div
-			className={`animate-pulse bg-surface-alt rounded-lg ${className}`}
+			className={`skeleton-loader ${className}`}
 			{...props}
 		/>
 	);
@@ -100,16 +97,16 @@ export function SkeletonLoader({
  */
 export function CardSkeleton() {
 	return (
-		<div className="bg-surface border border-stroke rounded-2xl p-6 animate-pulse">
-			<div className="flex items-start justify-between mb-4">
-				<div className="flex-1">
+		<div className="card-skeleton">
+			<div className="card-skeleton-header">
+				<div className="card-skeleton-body">
 					<SkeletonLoader className="h-4 w-24 mb-3" />
 					<SkeletonLoader className="h-8 w-16 mb-3" />
 					<SkeletonLoader className="h-5 w-20" />
 				</div>
-				<SkeletonLoader className="w-14 h-14 rounded-2xl" />
+				<SkeletonLoader className="card-skeleton-icon" />
 			</div>
-			<SkeletonLoader className="h-2 w-full rounded-full" />
+			<SkeletonLoader className="card-skeleton-progress" />
 		</div>
 	);
 }
@@ -122,9 +119,9 @@ export function CardSkeleton() {
  */
 export function TableRowSkeleton({ columns = 4 }: TableRowSkeletonProps) {
 	return (
-		<tr className="animate-pulse">
+		<tr className="table-row-skeleton">
 			{Array.from({ length: columns }).map((_, index) => (
-				<td key={index} className="px-6 py-4">
+				<td key={index} className="table-row-skeleton-cell">
 					<SkeletonLoader className="h-4 w-full" />
 				</td>
 			))}
@@ -161,13 +158,13 @@ export function PulseDot({
 	};
 
 	return (
-		<span className="relative inline-flex">
+		<span className="pulse-dot">
 			<span
-				className={`${sizes[size]} ${colors[color]} rounded-full`}
+				className={`pulse-dot-core ${sizes[size]} ${colors[color]}`}
 			></span>
 			{animated && (
 				<span
-					className={`absolute inline-flex ${sizes[size]} ${colors[color]} rounded-full opacity-75 animate-ping`}
+					className={`pulse-dot-ping ${sizes[size]} ${colors[color]}`}
 				></span>
 			)}
 		</span>
@@ -202,14 +199,14 @@ export function ProgressBar({
 
 	return (
 		<div className={className}>
-			<div className="w-full bg-surface-alt rounded-full h-2 overflow-hidden">
+			<div className="progress-bar-track">
 				<div
-					className={`h-2 ${colors[color]} rounded-full transition-all duration-500 ease-out`}
+					className={`progress-bar-fill ${colors[color]}`}
 					style={{ width: `${normalizedProgress}%` }}
 				></div>
 			</div>
 			{showLabel && (
-				<div className="text-inline-end mt-1 text-xs text-muted">
+				<div className="progress-bar-label">
 					{normalizedProgress}%
 				</div>
 			)}
@@ -224,5 +221,5 @@ export function ProgressBar({
  * @param {string} [props.className=''] - Additional class names
  */
 export function InlineLoader({ className = '' }: InlineLoaderProps) {
-	return <Loader2 size={16} className={`animate-spin ${className}`} />;
+	return <Loader2 size={16} className={`inline-loader ${className}`} />;
 }

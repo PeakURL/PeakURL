@@ -112,6 +112,7 @@ function GeneralTab({
 						label={__('Email Address')}
 						type="email"
 						name="email"
+						valueDirection="ltr"
 						autoCapitalize="off"
 						spellCheck={false}
 						value={generalForm.email}
@@ -160,7 +161,7 @@ function GeneralTab({
 						<textarea
 							name="bio"
 							rows={3}
-							className="form-control-base form-control-neutral-focus settings-general-bio-input"
+							className="form-control-base form-control-accent-focus settings-general-bio-input"
 							value={generalForm.bio}
 							onChange={handleChange}
 						/>

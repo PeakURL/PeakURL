@@ -20,34 +20,24 @@ const notificationTypes: Record<
 	NotificationType,
 	{
 		icon: LucideIcon;
-		bgColor: string;
-		textColor: string;
-		borderColor: string;
+		className: string;
 	}
 > = {
 	success: {
 		icon: CheckCircle,
-		bgColor: 'bg-emerald-600',
-		textColor: 'text-white',
-		borderColor: 'border-emerald-500',
+		className: 'notification-card-success',
 	},
 	error: {
 		icon: AlertCircle,
-		bgColor: 'bg-red-600',
-		textColor: 'text-white',
-		borderColor: 'border-red-500',
+		className: 'notification-card-error',
 	},
 	warning: {
 		icon: AlertTriangle,
-		bgColor: 'bg-amber-500',
-		textColor: 'text-white',
-		borderColor: 'border-amber-400',
+		className: 'notification-card-warning',
 	},
 	info: {
 		icon: Info,
-		bgColor: 'bg-blue-600',
-		textColor: 'text-white',
-		borderColor: 'border-blue-500',
+		className: 'notification-card-info',
 	},
 };
 
@@ -148,39 +138,33 @@ export function Notification({
 
 	return (
 		<div
-			className={`
-                relative overflow-hidden rounded-2xl shadow-xl border
-                ${config.bgColor} ${config.textColor} ${config.borderColor}
-				transform transition-all duration-500 ease-out
-                ${
+			className={`notification-card ${config.className} ${
 					isExiting
 						? `${
 								isRtl
-									? '-translate-x-full'
-									: 'translate-x-full'
-							} opacity-0 scale-95`
-						: `translate-x-0 opacity-100 scale-100 ${
-								isRtl
-									? 'animate-slide-in-right'
-									: 'animate-slide-in-left'
+									? 'notification-card-exiting-rtl'
+									: 'notification-card-exiting-ltr'
 							}`
-				}
-                ${className}
-            `}
+						: `${
+								isRtl
+									? 'notification-card-entering-rtl'
+									: 'notification-card-entering-ltr'
+							}`
+				} ${className}`}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 		>
-			<div className="relative p-4 flex items-start gap-3">
-				<IconComponent className="w-6 h-6 mt-0.5 shrink-0" />
+			<div className="notification-content">
+				<IconComponent className="notification-icon" />
 
-				<div className="flex-1 min-w-0">
+				<div className="notification-body">
 					{title && (
-						<h4 className="font-semibold text-sm mb-1 truncate">
+						<h4 className="notification-title">
 							{title}
 						</h4>
 					)}
 					{message && (
-						<p className="text-sm opacity-90 leading-relaxed">
+						<p className="notification-message">
 							{message}
 						</p>
 					)}
@@ -189,17 +173,19 @@ export function Notification({
 				<button
 					type="button"
 					onClick={handleClose}
-					className="shrink-0 p-1 rounded-lg hover:bg-white/20 transition-colors duration-200"
+					className="notification-close"
 				>
-					<X className="w-4 h-4" />
+					<X className="notification-close-icon" />
 				</button>
 			</div>
 
 			{duration > 0 && (
-				<div className="absolute inset-x-0 bottom-0 h-1 bg-black/10">
+				<div className="notification-progress">
 					<div
-						className={`h-full bg-white/40 ${
-							isRtl ? 'origin-right' : 'origin-left'
+						className={`notification-progress-bar ${
+							isRtl
+								? 'notification-progress-rtl'
+								: 'notification-progress-ltr'
 						}`}
 						style={{
 							width: '100%',
@@ -225,12 +211,10 @@ export function NotificationContainer({
 	onRemoveNotification,
 }: NotificationContainerProps) {
 	return (
-		<div
-			className="inset-inline-end-4 fixed top-4 z-50 w-full max-w-sm space-y-3 pointer-events-none"
-		>
+		<div className="notification-container">
 			{/* pointer-events-none on container to let clicks pass through, but pointer-events-auto on notifications */}
 			{notifications.map((notification) => (
-				<div key={notification.id} className="pointer-events-auto">
+				<div key={notification.id} className="notification-item">
 					<Notification
 						{...notification}
 						onClose={onRemoveNotification}

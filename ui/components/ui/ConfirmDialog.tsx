@@ -37,7 +37,7 @@ export function ConfirmDialog({
 
 	return (
 		<Transition appear show={open} as={Fragment}>
-			<Dialog as="div" className="relative z-50" onClose={onClose}>
+			<Dialog as="div" className="confirm-dialog-root" onClose={onClose}>
 				<TransitionChild
 					as={Fragment}
 					enter="ease-out duration-200"
@@ -47,11 +47,11 @@ export function ConfirmDialog({
 					leaveFrom="opacity-100"
 					leaveTo="opacity-0"
 				>
-					<div className="fixed inset-0 bg-black/30" />
+					<div className="confirm-dialog-backdrop" />
 				</TransitionChild>
 
-				<div className="fixed inset-0 overflow-y-auto">
-					<div className="flex min-h-full items-center justify-center p-4 text-center">
+				<div className="confirm-dialog-viewport">
+					<div className="confirm-dialog-shell">
 						<TransitionChild
 							as={Fragment}
 							enter="ease-out duration-200"
@@ -63,21 +63,21 @@ export function ConfirmDialog({
 						>
 							<DialogPanel
 								dir={direction}
-								className="text-inline-start w-full max-w-lg transform overflow-hidden rounded-2xl border border-stroke bg-surface p-6 shadow-xl transition-all"
+								className="confirm-dialog-panel"
 							>
 								{title ? (
-									<DialogTitle className="mb-2 text-lg font-semibold text-heading">
+									<DialogTitle className="confirm-dialog-title">
 										{title}
 									</DialogTitle>
 								) : null}
 								{description && (
-									<p className="mb-4 whitespace-pre-line text-sm text-text-muted">
+									<p className="confirm-dialog-description">
 										{description}
 									</p>
 								)}
 								{children}
 								{!hideActions ? (
-									<div dir={direction} className="mt-6 flex justify-end gap-2">
+									<div dir={direction} className="confirm-dialog-actions">
 										<Button
 											variant="secondary"
 											onClick={onClose}

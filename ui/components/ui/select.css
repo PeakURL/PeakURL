@@ -1,0 +1,55 @@
+@layer components {
+	.select-trigger {
+		@apply flex items-center justify-between gap-3 disabled:cursor-not-allowed disabled:opacity-60;
+		text-align: start;
+	}
+
+	.select-trigger-open {
+		@apply border-accent ring-2 ring-accent/20;
+	}
+
+	.select-label {
+		@apply truncate;
+	}
+
+	.select-chevron {
+		@apply h-4 w-4 shrink-0 text-text-muted;
+	}
+
+	.select-options {
+		@apply z-50 max-h-64 w-(--button-width) overflow-auto rounded-lg border border-stroke bg-surface p-1 shadow-xl transition duration-150 ease-out focus:outline-none data-closed:scale-95 data-closed:opacity-0;
+	}
+
+	.select-option-reset {
+		@apply focus:outline-none;
+	}
+
+	.select-option {
+		@apply flex items-center justify-between gap-3 rounded-md px-3 py-2 text-sm;
+		text-align: start;
+	}
+
+	.select-option-focus {
+		@apply bg-surface-alt;
+	}
+
+	.select-option-selected {
+		@apply text-accent;
+	}
+
+	.select-option-default {
+		@apply text-heading;
+	}
+
+	.select-option-disabled {
+		@apply cursor-not-allowed opacity-50;
+	}
+
+	.select-option-enabled {
+		@apply cursor-pointer;
+	}
+
+	.select-option-check {
+		@apply h-4 w-4 shrink-0;
+	}
+}

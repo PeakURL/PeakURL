@@ -24,38 +24,38 @@ export function Modal({
 	const direction = getDocumentDirection();
 
 	const sizes: Record<ModalSize, string> = {
-		sm: 'max-w-md',
-		md: 'max-w-2xl',
-		lg: 'max-w-4xl',
-		xl: 'max-w-6xl',
+		sm: 'modal-panel-sm',
+		md: 'modal-panel-md',
+		lg: 'modal-panel-lg',
+		xl: 'modal-panel-xl',
 	};
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+		<div className="modal-shell">
 			<div
-				className="absolute inset-0 bg-black/50"
+				className="modal-backdrop"
 				onClick={() => onClose()}
 			/>
 
 			<div
 				dir={direction}
-				className={`text-inline-start relative w-full overflow-hidden rounded-2xl border border-stroke bg-surface shadow-2xl ${sizes[size]} max-h-[90vh]`}
+				className={`modal-panel ${sizes[size]}`}
 			>
 				{title && (
-					<div className="px-6 py-4 border-b border-stroke flex items-center justify-between">
-						<h3 className="text-xl font-bold text-heading">
+					<div className="modal-header">
+						<h3 className="modal-title">
 							{title}
 						</h3>
 						<button
 							type="button"
 							onClick={() => onClose()}
-							className="p-2 text-text-muted hover:text-heading rounded-lg hover:bg-surface-alt transition-colors"
+							className="modal-close"
 						>
 							<X size={20} />
 						</button>
 					</div>
 				)}
-				<div className="overflow-y-auto max-h-[70vh] p-6">
+				<div className="modal-content">
 					{children}
 				</div>
 			</div>

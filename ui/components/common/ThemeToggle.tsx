@@ -9,22 +9,22 @@ export const ThemeToggle = () => {
 		<button
 			type="button"
 			onClick={toggleTheme}
-			className="relative p-2.5 rounded-xl bg-surface-alt hover:bg-stroke transition-all duration-200 active:scale-95"
+			className="theme-toggle"
 			aria-label={__('Toggle theme')}
 		>
-			<div className="relative w-5 h-5">
+			<div className="theme-toggle-icon-wrapper">
 				<Sun
-					className={`absolute inset-0 w-5 h-5 text-heading transition-all duration-300 ${
+					className={`theme-toggle-icon ${
 						'dark' === theme
-							? 'opacity-0 rotate-90 scale-0'
-							: 'opacity-100 rotate-0 scale-100'
+							? 'theme-toggle-icon-hidden theme-toggle-icon-hidden-sun'
+							: 'theme-toggle-icon-visible'
 					}`}
 				/>
 				<Moon
-					className={`absolute inset-0 w-5 h-5 text-heading transition-all duration-300 ${
+					className={`theme-toggle-icon ${
 						'dark' === theme
-							? 'opacity-100 rotate-0 scale-100'
-							: 'opacity-0 -rotate-90 scale-0'
+							? 'theme-toggle-icon-visible'
+							: 'theme-toggle-icon-hidden theme-toggle-icon-hidden-moon'
 					}`}
 				/>
 			</div>

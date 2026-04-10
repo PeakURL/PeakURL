@@ -46,6 +46,14 @@ function LinkRow({
 			: 'expired' === link.status
 				? 'bg-error'
 				: 'bg-stroke';
+	const expiresAtDate = link.expiresAt ? new Date(link.expiresAt) : null;
+	const isExpiredLink = expiresAtDate ? isPast(expiresAtDate) : false;
+	const expirationRelativeTime = expiresAtDate
+		? formatRelativeTime(expiresAtDate, {
+				style: 'long',
+				numeric: 'always',
+			})
+		: '';
 
 	return (
 		<tr
@@ -118,31 +126,18 @@ function LinkRow({
 							<span
 								key="expires"
 								className={`links-row-badge ${
-									isPast(new Date(link.expiresAt))
+									isExpiredLink
 										? 'links-row-badge-error'
 										: 'links-row-badge-info'
 								}`}
 							>
 								<Clock size={10} />
-								{isPast(new Date(link.expiresAt))
-									? __('Expired') +
-										' ' +
-										formatRelativeTime(
-											new Date(link.expiresAt),
-											{
-												style: 'long',
-												numeric: 'always',
-											}
-										)
-									: __('Expires') +
-										' ' +
-										formatRelativeTime(
-											new Date(link.expiresAt),
-											{
-												style: 'long',
-												numeric: 'always',
-											}
-										)}
+								<span className="links-row-badge-copy" dir="auto">
+									{isExpiredLink ? __('Expired') : __('Expires')}{' '}
+									<bdi className="links-row-badge-time">
+										{expirationRelativeTime}
+									</bdi>
+								</span>
 							</span>
 						)}
 					</div>

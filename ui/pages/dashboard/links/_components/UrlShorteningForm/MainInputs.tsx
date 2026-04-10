@@ -22,6 +22,7 @@ const MainInputs = ({
 					<Input
 						type="url"
 						id="long-url"
+						valueDirection="ltr"
 						value={destinationUrl}
 						onChange={(e) => setDestinationUrl(e.target.value)}
 						placeholder={__('Enter long link here...')}

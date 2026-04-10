@@ -58,11 +58,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 		preferredValueDirection !== chromeDirection;
 
 	return (
-		<div className="space-y-2">
+		<div className="form-field">
 			{label && (
 				<label
 					htmlFor={inputId}
-					className="text-inline-start block text-sm font-semibold text-heading"
+					className="form-field-label"
 				>
 					{label}
 					{props.required && (
@@ -72,9 +72,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 					)}
 				</label>
 			)}
-			<div className="relative">
+			<div className="form-field-control">
 				{IconComponent && (
-					<div className="inline-start-icon-slot pointer-events-none absolute inset-y-0 flex items-center text-muted">
+					<div className="form-field-icon inline-start-icon-slot">
 						<IconComponent size={18} />
 					</div>
 				)}
@@ -85,7 +85,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 					dir={contentDirection}
 					aria-invalid={Boolean(error)}
 					aria-describedby={describedBy}
-					className={`text-page-start form-control-base form-control-neutral-focus ${
+					className={`form-control-base form-control-accent-focus text-page-start form-field-input ${
 						hasInlineStartIcon
 							? 'field-with-inline-start-icon'
 							: 'px-4'
@@ -95,7 +95,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 							: ''
 					} ${
 						error
-							? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500/35'
+							? 'form-field-input-error'
 							: ''
 					} ${className}`}
 					{...props}
@@ -104,7 +104,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 			{error && (
 				<p
 					id={errorId}
-					className="text-inline-start text-sm text-red-600 dark:text-red-400 font-medium flex items-center gap-1.5"
+					className="form-field-error"
 				>
 					<Info size={14} />
 					{error}
@@ -113,7 +113,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 			{helperText && !error && (
 				<p
 					id={helperId}
-					className="text-inline-start text-xs text-muted"
+					className="form-field-helper"
 				>
 					{helperText}
 				</p>

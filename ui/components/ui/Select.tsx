@@ -36,16 +36,16 @@ export function Select<T extends SelectValue>({
 							id={id}
 							aria-label={ariaLabel}
 							dir={direction}
-							className={`text-inline-start form-control-base flex items-center justify-between gap-3 disabled:cursor-not-allowed disabled:opacity-60 ${
+							className={`form-control-base select-trigger ${
 								open
-									? 'border-accent ring-2 ring-accent/20'
-									: 'focus:border-accent focus:ring-2 focus:ring-accent/20'
+									? 'select-trigger-open'
+									: 'form-control-accent-focus'
 							} ${buttonClassName}`}
 						>
-							<span className="truncate">
+							<span className="select-label">
 								{selectedOption?.label}
 							</span>
-							<ChevronDown className="h-4 w-4 shrink-0 text-text-muted" />
+							<ChevronDown className="select-chevron" />
 						</ListboxButton>
 
 						<ListboxOptions
@@ -53,14 +53,14 @@ export function Select<T extends SelectValue>({
 							anchor={{ to: 'bottom start', gap: 6, padding: 12 }}
 							modal={false}
 							transition
-							className={`z-50 max-h-64 w-(--button-width) overflow-auto rounded-lg border border-stroke bg-surface p-1 shadow-xl transition duration-150 ease-out focus:outline-none data-closed:scale-95 data-closed:opacity-0 ${optionsClassName}`}
+							className={`select-options ${optionsClassName}`}
 						>
 							{options.map((option) => (
 								<ListboxOption
 									key={String(option.value)}
 									value={option.value}
 									disabled={option.disabled}
-									className="focus:outline-none"
+									className="select-option-reset"
 								>
 									{({
 										focus,
@@ -68,23 +68,23 @@ export function Select<T extends SelectValue>({
 										disabled: optionDisabled,
 									}) => (
 										<div
-											className={`text-inline-start flex items-center justify-between gap-3 rounded-md px-3 py-2 text-sm ${
-												focus ? 'bg-surface-alt' : ''
+											className={`select-option ${
+												focus ? 'select-option-focus' : ''
 											} ${
 												selected
-													? 'text-accent'
-													: 'text-heading'
+													? 'select-option-selected'
+													: 'select-option-default'
 											} ${
 												optionDisabled
-													? 'cursor-not-allowed opacity-50'
-													: 'cursor-pointer'
+													? 'select-option-disabled'
+													: 'select-option-enabled'
 											} ${optionClassName}`}
 										>
-											<span className="truncate">
+											<span className="select-label">
 												{option.label}
 											</span>
 											<Check
-												className={`h-4 w-4 shrink-0 ${
+												className={`select-option-check ${
 													selected
 														? 'opacity-100'
 														: 'opacity-0'

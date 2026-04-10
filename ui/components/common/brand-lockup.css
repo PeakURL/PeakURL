@@ -1,0 +1,82 @@
+@layer components {
+	.brand-lockup {
+		@apply inline-flex items-center;
+	}
+
+	.brand-lockup-sm {
+		@apply gap-2;
+	}
+
+	.brand-lockup-md {
+		@apply gap-2.5;
+	}
+
+	.brand-lockup-lg {
+		@apply gap-3;
+	}
+
+	.brand-lockup-mark {
+		@apply flex items-center justify-center;
+	}
+
+	.brand-lockup-mark-sm {
+		@apply h-7 w-7 rounded-md;
+	}
+
+	.brand-lockup-mark-md {
+		@apply h-8 w-8 rounded-lg;
+	}
+
+	.brand-lockup-mark-lg {
+		@apply h-10 w-10 rounded-xl;
+	}
+
+	.brand-lockup-mark-light {
+		@apply bg-accent text-white shadow-sm dark:bg-white/10 dark:ring-1 dark:ring-white/10;
+	}
+
+	.brand-lockup-mark-dark {
+		@apply bg-white/10 text-white ring-1 ring-white/10;
+	}
+
+	.brand-lockup-icon {
+		@apply shrink-0;
+	}
+
+	.brand-lockup-icon-sm {
+		@apply h-3.5 w-3.5;
+	}
+
+	.brand-lockup-icon-md {
+		@apply h-4 w-4;
+	}
+
+	.brand-lockup-icon-lg {
+		height: 18px;
+		width: 18px;
+	}
+
+	.brand-lockup-text {
+		@apply font-semibold tracking-tight;
+	}
+
+	.brand-lockup-text-sm {
+		@apply text-sm;
+	}
+
+	.brand-lockup-text-md {
+		@apply text-base;
+	}
+
+	.brand-lockup-text-lg {
+		font-size: 17px;
+	}
+
+	.brand-lockup-text-light {
+		@apply text-slate-900 dark:text-white;
+	}
+
+	.brand-lockup-text-dark {
+		@apply text-white;
+	}
+}

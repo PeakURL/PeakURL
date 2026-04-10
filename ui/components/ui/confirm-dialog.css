@@ -1,0 +1,34 @@
+@layer components {
+	.confirm-dialog-root {
+		@apply relative z-50;
+	}
+
+	.confirm-dialog-backdrop {
+		@apply fixed inset-0 bg-black/30;
+	}
+
+	.confirm-dialog-viewport {
+		@apply fixed inset-0 overflow-y-auto;
+	}
+
+	.confirm-dialog-shell {
+		@apply flex min-h-full items-center justify-center p-4 text-center;
+	}
+
+	.confirm-dialog-panel {
+		@apply w-full max-w-lg transform overflow-hidden rounded-2xl border border-stroke bg-surface p-6 shadow-xl transition-all;
+		text-align: start;
+	}
+
+	.confirm-dialog-title {
+		@apply mb-2 text-lg font-semibold text-heading;
+	}
+
+	.confirm-dialog-description {
+		@apply mb-4 whitespace-pre-line text-sm text-text-muted;
+	}
+
+	.confirm-dialog-actions {
+		@apply mt-6 flex justify-end gap-2;
+	}
+}

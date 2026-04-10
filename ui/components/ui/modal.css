@@ -1,0 +1,46 @@
+@layer components {
+	.modal-shell {
+		@apply fixed inset-0 z-50 flex items-center justify-center p-4;
+	}
+
+	.modal-backdrop {
+		@apply absolute inset-0 bg-black/50;
+	}
+
+	.modal-panel {
+		@apply relative w-full max-h-[90vh] overflow-hidden rounded-2xl border border-stroke bg-surface shadow-2xl;
+		text-align: start;
+	}
+
+	.modal-panel-sm {
+		@apply max-w-md;
+	}
+
+	.modal-panel-md {
+		@apply max-w-2xl;
+	}
+
+	.modal-panel-lg {
+		@apply max-w-4xl;
+	}
+
+	.modal-panel-xl {
+		@apply max-w-6xl;
+	}
+
+	.modal-header {
+		@apply flex items-center justify-between border-b border-stroke px-6 py-4;
+	}
+
+	.modal-title {
+		@apply text-xl font-bold text-heading;
+	}
+
+	.modal-close {
+		@apply rounded-lg p-2 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading;
+	}
+
+	.modal-content {
+		@apply max-h-[70vh] overflow-y-auto p-6;
+	}
+}

@@ -1,0 +1,42 @@
+@layer components {
+	.logo-mark {
+		@apply flex items-center justify-center bg-linear-to-br from-primary-600 to-purple-600 text-white shadow-sm;
+	}
+
+	.logo-mark-xs {
+		@apply h-7 w-7 rounded-lg;
+	}
+
+	.logo-mark-sm {
+		@apply h-8 w-8 rounded-lg;
+	}
+
+	.logo-mark-md {
+		@apply h-9 w-9 rounded-xl;
+	}
+
+	.logo-mark-lg {
+		@apply h-10 w-10 rounded-xl;
+	}
+
+	.logo-mark-icon {
+		@apply shrink-0;
+	}
+
+	.logo-mark-icon-xs {
+		@apply h-3.5 w-3.5;
+	}
+
+	.logo-mark-icon-sm {
+		@apply h-4 w-4;
+	}
+
+	.logo-mark-icon-md {
+		height: 18px;
+		width: 18px;
+	}
+
+	.logo-mark-icon-lg {
+		@apply h-5 w-5;
+	}
+}

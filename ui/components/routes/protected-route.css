@@ -1,0 +1,25 @@
+@layer components {
+	.protected-route-state {
+		@apply flex min-h-[60vh] items-center justify-center p-6;
+	}
+
+	.protected-route-card {
+		@apply w-full max-w-md space-y-4 rounded-2xl border border-stroke bg-surface p-6 text-center shadow-sm;
+	}
+
+	.protected-route-copy {
+		@apply space-y-1;
+	}
+
+	.protected-route-title {
+		@apply text-lg font-semibold text-heading;
+	}
+
+	.protected-route-description {
+		@apply text-sm text-text-muted;
+	}
+
+	.protected-route-retry {
+		@apply inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700;
+	}
+}

@@ -1,0 +1,33 @@
+@layer components {
+	.auth-status-page {
+		@apply flex min-h-screen items-center justify-center bg-bg p-6;
+	}
+
+	.auth-status-card {
+		@apply w-full max-w-md space-y-4 rounded-2xl border border-stroke bg-surface p-6 text-center shadow-sm;
+	}
+
+	.auth-status-icon {
+		@apply mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600 dark:bg-red-950/60 dark:text-red-400;
+	}
+
+	.auth-status-icon-label {
+		@apply text-xl font-semibold;
+	}
+
+	.auth-status-copy {
+		@apply space-y-1;
+	}
+
+	.auth-status-title {
+		@apply text-lg font-semibold text-heading;
+	}
+
+	.auth-status-description {
+		@apply text-sm text-text-muted;
+	}
+
+	.auth-status-retry {
+		@apply inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700;
+	}
+}

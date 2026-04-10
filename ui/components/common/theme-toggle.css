@@ -1,0 +1,29 @@
+@layer components {
+	.theme-toggle {
+		@apply relative rounded-xl bg-surface-alt p-2.5 transition-all duration-200 active:scale-95 hover:bg-stroke;
+	}
+
+	.theme-toggle-icon-wrapper {
+		@apply relative h-5 w-5;
+	}
+
+	.theme-toggle-icon {
+		@apply absolute inset-0 h-5 w-5 text-heading transition-all duration-300;
+	}
+
+	.theme-toggle-icon-visible {
+		@apply rotate-0 scale-100 opacity-100;
+	}
+
+	.theme-toggle-icon-hidden {
+		@apply scale-0 opacity-0;
+	}
+
+	.theme-toggle-icon-hidden-sun {
+		@apply rotate-90;
+	}
+
+	.theme-toggle-icon-hidden-moon {
+		@apply -rotate-90;
+	}
+}

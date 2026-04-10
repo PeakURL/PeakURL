@@ -15,18 +15,18 @@ const AuthRequiredState = ({
 	onRetry,
 }: AuthRequiredStateProps) => {
 	return (
-		<div className="min-h-[60vh] flex items-center justify-center p-6">
-			<div className="w-full max-w-md rounded-2xl border border-stroke bg-surface shadow-sm p-6 space-y-4 text-center">
-				<div className="space-y-1">
-					<h1 className="text-lg font-semibold text-heading">
+		<div className="protected-route-state">
+			<div className="protected-route-card">
+				<div className="protected-route-copy">
+					<h1 className="protected-route-title">
 						{title}
 					</h1>
-					<p className="text-sm text-text-muted">{description}</p>
+					<p className="protected-route-description">{description}</p>
 				</div>
 				<button
 					type="button"
 					onClick={onRetry}
-					className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+					className="protected-route-retry"
 				>
 					{__('Retry')}
 				</button>

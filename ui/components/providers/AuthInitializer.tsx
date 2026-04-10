@@ -10,16 +10,16 @@ import type { AuthErrorStateProps, AuthInitializerProps } from './types';
 
 const AuthErrorState = ({ onRetry }: AuthErrorStateProps) => {
 	return (
-		<div className="min-h-screen bg-bg flex items-center justify-center p-6">
-			<div className="w-full max-w-md rounded-2xl border border-stroke bg-surface shadow-sm p-6 space-y-4 text-center">
-				<div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600 dark:bg-red-950/60 dark:text-red-400">
-					<span className="text-xl font-semibold">!</span>
+		<div className="auth-status-page">
+			<div className="auth-status-card">
+				<div className="auth-status-icon">
+					<span className="auth-status-icon-label">!</span>
 				</div>
-				<div className="space-y-1">
-					<h1 className="text-lg font-semibold text-heading">
+				<div className="auth-status-copy">
+					<h1 className="auth-status-title">
 						{__('API unavailable')}
 					</h1>
-					<p className="text-sm text-text-muted">
+					<p className="auth-status-description">
 						{__(
 							'Start the PHP core service and database connection, then try again.'
 						)}
@@ -28,7 +28,7 @@ const AuthErrorState = ({ onRetry }: AuthErrorStateProps) => {
 				<button
 					type="button"
 					onClick={onRetry}
-					className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+					className="auth-status-retry"
 				>
 					{__('Retry')}
 				</button>

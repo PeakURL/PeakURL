@@ -91,16 +91,6 @@ export function TrafficChart({
 				isDark ? 'rgba(99, 102, 241, 0)' : 'rgba(99, 102, 241, 0)'
 			);
 
-			const uniqueGradient = context.createLinearGradient(0, 0, 0, 300);
-			uniqueGradient.addColorStop(
-				0,
-				isDark ? 'rgba(16, 185, 129, 0.2)' : 'rgba(16, 185, 129, 0.15)'
-			);
-			uniqueGradient.addColorStop(
-				1,
-				isDark ? 'rgba(16, 185, 129, 0)' : 'rgba(16, 185, 129, 0)'
-			);
-
 			// Use provided data if it exists and has the right structure, otherwise use demo data
 			const hasValidStructure =
 				data &&
@@ -136,6 +126,24 @@ export function TrafficChart({
 			const gridColor = isDark
 				? 'rgba(75, 85, 99, 0.3)'
 				: 'rgba(229, 231, 235, 0.8)';
+			const isLineChart = type === 'line';
+			const maxTrafficValue = Math.max(
+				...chartData.clicks,
+				...chartData.unique,
+				0
+			);
+			const overlapOffset = Math.min(
+				Math.max(maxTrafficValue * 0.015, 0.02),
+				0.35
+			);
+			const renderedUniqueData = isLineChart
+				? chartData.unique.map((value, index) => {
+						const clickValue = chartData.clicks[index] ?? 0;
+						return value > 0 && value === clickValue
+							? Math.max(value - overlapOffset, 0)
+							: value;
+					})
+				: chartData.unique;
 
 			const chartDataConfig: ChartData<
 				TrafficChartType,
@@ -150,7 +158,7 @@ export function TrafficChart({
 						borderColor: clicksColor,
 						backgroundColor:
 							type === 'bar' ? clicksColor : clicksGradient,
-						fill: true,
+						fill: isLineChart,
 						tension: 0.4,
 						borderWidth: 2,
 						pointRadius: 0,
@@ -166,14 +174,15 @@ export function TrafficChart({
 							: 'white',
 						pointHoverBorderWidth: 2,
 						borderRadius: 4,
+						order: 1,
 					},
 					{
 						label: __('Unique Visitors'),
-						data: chartData.unique,
+						data: renderedUniqueData,
 						borderColor: uniqueColor,
 						backgroundColor:
-							type === 'bar' ? uniqueColor : uniqueGradient,
-						fill: true,
+							type === 'bar' ? uniqueColor : 'transparent',
+						fill: type === 'bar',
 						tension: 0.4,
 						borderWidth: 2,
 						pointRadius: 0,
@@ -189,6 +198,7 @@ export function TrafficChart({
 							: 'white',
 						pointHoverBorderWidth: 2,
 						borderRadius: 4,
+						order: 2,
 					},
 				],
 			};
@@ -238,13 +248,15 @@ export function TrafficChart({
 								label: function (
 									context: TooltipItem<TrafficChartType>
 								) {
-									const parsedY =
-										'number' === typeof context.parsed.y
-											? context.parsed.y
-											: 0;
+									const dataIndex = context.dataIndex;
+									const rawSeries =
+										context.datasetIndex === 0
+											? chartData.clicks
+											: chartData.unique;
+									const rawValue = Number(rawSeries[dataIndex] || 0);
 									return ` ${
 										context.dataset.label
-									}: ${parsedY.toLocaleString()}`;
+									}: ${rawValue.toLocaleString()}`;
 								},
 							},
 						},

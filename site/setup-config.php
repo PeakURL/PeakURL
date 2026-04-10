@@ -151,7 +151,9 @@ $error_message           = '';
 $step                    = isset( $_GET['step'] ) ? max( 0, (int) $_GET['step'] ) : 0;
 $page_title              =
 	$step >= 1
+		/* translators: %s: Application name. */
 		? sprintf( __( 'Database Setup - %s', 'peakurl' ), 'PeakURL' )
+		/* translators: %s: Application name. */
 		: sprintf( __( 'Welcome - %s', 'peakurl' ), 'PeakURL' );
 
 if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
@@ -754,6 +756,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>
 				</div>
 				<div class="card-header-text">
+					<?php /* translators: %s: Application name. */ ?>
 					<h1><?php echo sprintf( esc_html__( 'Welcome to %s', 'peakurl' ), 'PeakURL' ); ?></h1>
 					<p class="desc">
 						<?php echo esc_html__( 'Before getting started, you\'ll need your database connection details. PeakURL will use them to create config.php and set up the required tables.', 'peakurl' ); ?>
@@ -909,6 +912,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 
 		<!-- Footer -->
 		<div class="footer">
+			<?php /* translators: %s: PeakURL website link. */ ?>
 			<?php echo sprintf( esc_html__( 'Powered by %s', 'peakurl' ), '<a href="https://peakurl.org?utm_source=peakurl_setup_config&utm_medium=installer&utm_campaign=powered_by" target="_blank" rel="noopener noreferrer">PeakURL</a>' ); ?>
 		</div>
 	</div>

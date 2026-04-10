@@ -144,7 +144,8 @@ $detected_site_url       = $scheme . '://' . $host . $base_path;
 $values                  = Install::get_form_defaults( $app_path, $detected_site_url );
 $values['site_language'] = $installer_i18n->get_locale();
 $error_message           = '';
-$page_title              = sprintf( __( 'Administrator Setup - %s', 'peakurl' ), 'PeakURL' );
+/* translators: %s: Application name. */
+$page_title = sprintf( __( 'Administrator Setup - %s', 'peakurl' ), 'PeakURL' );
 
 if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 	foreach ( array_keys( $values ) as $key ) {
@@ -651,6 +652,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 					<div class="actions">
 						<p class="actions-note"><?php echo esc_html__( 'Database configuration is already saved.', 'peakurl' ); ?></p>
 						<button class="btn btn-primary" type="submit">
+							<?php /* translators: %s: Application name. */ ?>
 							<?php echo sprintf( esc_html__( 'Install %s', 'peakurl' ), 'PeakURL' ); ?>
 							<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
 						</button>
@@ -661,6 +663,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 
 		<!-- Footer -->
 		<div class="footer">
+			<?php /* translators: %s: PeakURL website link. */ ?>
 			<?php echo sprintf( esc_html__( 'Powered by %s', 'peakurl' ), '<a href="https://peakurl.org?utm_source=peakurl_install&utm_medium=installer&utm_campaign=powered_by" target="_blank" rel="noopener noreferrer">PeakURL</a>' ); ?>
 		</div>
 	</div>

@@ -95,6 +95,10 @@
 		@apply transition-transform;
 	}
 
+	.plugins-page-header-waitlist-button-link {
+		@apply opacity-60;
+	}
+
 	.plugins-page-toolbar {
 		@apply overflow-hidden border-x border-stroke bg-surface shadow-sm;
 	}

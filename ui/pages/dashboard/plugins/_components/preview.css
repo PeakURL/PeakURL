@@ -2,4 +2,36 @@
 	.plugins-skeleton {
 		@apply animate-pulse rounded-md bg-stroke/60 dark:bg-stroke/40;
 	}
+
+	.plugins-preview-skeleton-label {
+		@apply h-3.5 w-10 shrink-0;
+	}
+
+	.plugins-preview-skeleton-stat {
+		@apply h-3 w-6;
+	}
+
+	.plugins-preview-skeleton-stat-wide {
+		@apply h-3 w-8;
+	}
+
+	.plugins-preview-meta-icon {
+		@apply text-stroke-strong dark:text-stroke;
+	}
+
+	.plugins-preview-link-icon {
+		@apply opacity-60;
+	}
+
+	.plugins-preview-mobile-status {
+		@apply mt-1.5 sm:hidden;
+	}
+
+	.plugins-preview-action-copy {
+		@apply inline-flex items-center gap-1.5 text-text-muted;
+	}
+
+	.plugins-preview-action-button {
+		@apply text-xs;
+	}
 }

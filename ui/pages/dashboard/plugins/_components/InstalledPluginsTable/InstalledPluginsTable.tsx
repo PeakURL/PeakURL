@@ -3,16 +3,11 @@ import { Button } from '@/components';
 import { __ } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
 import { cn } from '@/utils';
+import PluginPreviewSkeleton from '../PluginPreviewSkeleton';
 import type {
 	InstalledPluginsTableProps,
-	PluginPreviewSkeletonProps,
 	PluginStatusPillProps,
 } from '../types';
-
-/* Faint shimmer skeleton bar */
-function Skeleton({ className = '' }: PluginPreviewSkeletonProps) {
-	return <div className={`plugins-skeleton ${className}`} />;
-}
 
 function StatusPill({ active }: PluginStatusPillProps) {
 	const statusPillClassName = cn(
@@ -96,14 +91,14 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 												<div className="plugins-table-icon-fill" />
 											</div>
 											<div className="plugins-table-copy">
-												<Skeleton
+												<PluginPreviewSkeleton
 													className={`h-4 ${plugin.barWidths[0]}`}
 												/>
-												<Skeleton
+												<PluginPreviewSkeleton
 													className={`h-3 ${plugin.barWidths[1]}`}
 												/>
 												{/* Mobile-only status */}
-												<div className="mt-1.5 sm:hidden">
+												<div className="plugins-preview-mobile-status">
 													<StatusPill
 														active={isActive}
 													/>
@@ -113,7 +108,7 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 									</td>
 									{/* Version (blurred) */}
 									<td className="plugins-table-cell hidden md:table-cell">
-										<Skeleton className="h-3.5 w-10" />
+										<PluginPreviewSkeleton className="plugins-preview-skeleton-label" />
 									</td>
 									{/* Status */}
 									<td className="plugins-table-cell hidden sm:table-cell">
@@ -121,7 +116,7 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 									</td>
 									{/* Author (blurred) */}
 									<td className="plugins-table-cell hidden lg:table-cell">
-										<Skeleton className="h-3.5 w-16" />
+										<PluginPreviewSkeleton className="h-3.5 w-16" />
 									</td>
 									{/* Actions (disabled) */}
 									<td className="plugins-table-cell">
@@ -129,10 +124,10 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 											<Button
 												variant="secondary"
 												size="xs"
-												className="text-xs"
+												className="plugins-preview-action-button"
 												disabled
 											>
-												<span className="inline-flex items-center gap-1.5 text-text-muted">
+												<span className="plugins-preview-action-copy">
 													<Lock size={11} />
 													<span className="hidden sm:inline">
 														{isActive

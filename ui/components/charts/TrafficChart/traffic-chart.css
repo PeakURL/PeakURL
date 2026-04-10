@@ -1,0 +1,5 @@
+@layer components {
+	.traffic-chart {
+		@apply h-80 w-full;
+	}
+}

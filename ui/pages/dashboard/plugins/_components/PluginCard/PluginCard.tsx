@@ -1,23 +1,16 @@
 import { Star, Download, Bell, ExternalLink } from 'lucide-react';
 import { __ } from '@/i18n';
 import { PLUGINS_WAITLIST_URL } from '@constants';
-import type {
-	PluginCardProps,
-	PluginPreviewSkeletonProps,
-} from '../types';
-
-/* Faint shimmer skeleton bar */
-function Skeleton({ className = '' }: PluginPreviewSkeletonProps) {
-	return (
-		<div className={`plugins-skeleton ${className}`} />
-	);
-}
+import PluginPreviewSkeleton from '../PluginPreviewSkeleton';
+import type { PluginCardProps } from '../types';
 
 function PluginCard({ plugin }: PluginCardProps) {
 	return (
 		<div className="plugins-card group">
 			{/* ── Banner ── */}
-			<div className={`plugins-card-banner bg-gradient-to-br ${plugin.gradient}`}>
+			<div
+				className={`plugins-card-banner bg-linear-to-br ${plugin.gradient}`}
+			>
 				{/* Decorative blurred circles inside the banner */}
 				<div className="plugins-card-banner-glow-end" />
 				<div className="plugins-card-banner-glow-start" />
@@ -34,18 +27,24 @@ function PluginCard({ plugin }: PluginCardProps) {
 			<div className="plugins-card-body">
 				{/* Blurred plugin name */}
 				<div className="plugins-card-header">
-					<Skeleton className={`h-4 ${plugin.barWidths[0]}`} />
-					<Skeleton className="h-3.5 w-10 shrink-0" />
+					<PluginPreviewSkeleton
+						className={`h-4 ${plugin.barWidths[0]}`}
+					/>
+					<PluginPreviewSkeleton className="plugins-preview-skeleton-label" />
 				</div>
 
 				{/* Blurred author */}
-				<Skeleton className="plugins-card-author" />
+				<PluginPreviewSkeleton className="plugins-card-author" />
 
 				{/* Blurred description lines */}
 				<div className="plugins-card-copy">
-					<Skeleton className={`h-3 ${plugin.barWidths[1]}`} />
-					<Skeleton className={`h-3 ${plugin.barWidths[2]}`} />
-					<Skeleton className="h-3 w-1/3" />
+					<PluginPreviewSkeleton
+						className={`h-3 ${plugin.barWidths[1]}`}
+					/>
+					<PluginPreviewSkeleton
+						className={`h-3 ${plugin.barWidths[2]}`}
+					/>
+					<PluginPreviewSkeleton className="h-3 w-1/3" />
 				</div>
 
 				{/* Rating / installs placeholder row */}
@@ -55,15 +54,15 @@ function PluginCard({ plugin }: PluginCardProps) {
 							<Star
 								key={s}
 								size={11}
-								className="text-stroke-strong dark:text-stroke"
+								className="plugins-preview-meta-icon"
 								fill="currentColor"
 							/>
 						))}
-						<Skeleton className="h-3 w-6" />
+						<PluginPreviewSkeleton className="plugins-preview-skeleton-stat" />
 					</div>
 					<div className="plugins-card-meta-downloads">
 						<Download size={11} />
-						<Skeleton className="h-3 w-8" />
+						<PluginPreviewSkeleton className="plugins-preview-skeleton-stat-wide" />
 					</div>
 				</div>
 
@@ -79,7 +78,10 @@ function PluginCard({ plugin }: PluginCardProps) {
 						className="plugins-card-button-icon group-hover/btn:rotate-12"
 					/>
 					{__('Join the Waitlist')}
-					<ExternalLink size={11} className="opacity-60" />
+					<ExternalLink
+						size={11}
+						className="plugins-preview-link-icon"
+					/>
 				</a>
 			</div>
 

@@ -40,7 +40,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 					<label htmlFor={textAreaId} className="form-field-label">
 						{label}
 						{props.required && (
-							<span className="field-required-indicator text-red-500">
+							<span className="field-required-indicator">
 								*
 							</span>
 						)}

@@ -8,6 +8,10 @@
 		text-align: start;
 	}
 
+	.field-required-indicator {
+		@apply text-red-500;
+	}
+
 	.form-field-control {
 		@apply relative;
 	}

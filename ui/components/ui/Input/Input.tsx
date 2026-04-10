@@ -67,7 +67,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 				>
 					{label}
 					{props.required && (
-						<span className="field-required-indicator text-red-500">
+						<span className="field-required-indicator">
 							*
 						</span>
 					)}

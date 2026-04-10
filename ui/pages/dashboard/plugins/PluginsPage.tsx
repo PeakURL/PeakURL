@@ -156,7 +156,7 @@ function PluginsPage() {
 								{__('Join the Waitlist')}
 								<ExternalLink
 									size={13}
-									className="opacity-60"
+									className="plugins-page-header-waitlist-button-link"
 								/>
 							</a>
 						</div>

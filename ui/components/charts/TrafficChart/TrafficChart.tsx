@@ -331,7 +331,7 @@ export function TrafficChart({
 	}, [data, timeRange, isDark, type]);
 
 	return (
-		<div className="h-80 w-full">
+		<div className="traffic-chart">
 			<canvas ref={chartRef} />
 		</div>
 	);

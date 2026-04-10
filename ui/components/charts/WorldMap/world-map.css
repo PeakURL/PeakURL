@@ -1,0 +1,86 @@
+@layer components {
+	.world-map {
+		@apply relative h-full w-full overflow-hidden rounded-lg bg-surface;
+	}
+
+	.world-map-controls {
+		@apply absolute top-4 z-10 flex flex-col gap-2;
+		inset-inline-end: 1rem;
+	}
+
+	.world-map-control {
+		@apply flex h-10 w-10 items-center justify-center rounded-lg border border-stroke bg-surface shadow-lg transition-all hover:bg-surface-alt disabled:cursor-not-allowed disabled:opacity-50;
+	}
+
+	.world-map-control-icon {
+		@apply h-5 w-5 text-heading;
+	}
+
+	.world-map-tooltip {
+		@apply pointer-events-none absolute top-4 z-10 rounded-lg border border-stroke bg-surface p-3 shadow-xl;
+		inset-inline-start: 1rem;
+		text-align: start;
+	}
+
+	.world-map-tooltip-title {
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.world-map-tooltip-copy {
+		@apply mt-1 text-xs text-text-muted;
+	}
+
+	.world-map-svg {
+		@apply h-full w-full cursor-grab;
+		touch-action: none;
+	}
+
+	.world-map-svg-dragging {
+		@apply cursor-grabbing;
+	}
+
+	.world-map-country {
+		transition:
+			fill 0.2s ease-in-out,
+			stroke 0.2s ease-in-out,
+			stroke-width 0.2s ease-in-out;
+	}
+
+	.world-map-overlay {
+		@apply absolute inset-0 flex items-center justify-center text-sm font-medium text-text-muted;
+	}
+
+	.world-map-overlay-error {
+		@apply bg-bg/90;
+	}
+
+	.world-map-overlay-loading {
+		@apply bg-bg/80;
+	}
+
+	.world-map-legend {
+		@apply absolute bottom-4 rounded-lg border border-stroke bg-surface p-3 shadow-lg;
+		inset-inline-start: 1rem;
+		text-align: start;
+	}
+
+	.world-map-legend-title {
+		@apply mb-2 text-xs font-medium text-heading;
+	}
+
+	.world-map-legend-scale {
+		@apply flex items-center gap-2;
+	}
+
+	.world-map-legend-value {
+		@apply text-xs text-text-muted;
+	}
+
+	.world-map-legend-gradient {
+		@apply flex h-4 w-32 overflow-hidden rounded;
+	}
+
+	.world-map-legend-gradient-stop {
+		@apply flex-1;
+	}
+}

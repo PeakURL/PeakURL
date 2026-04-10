@@ -1,3 +1,10 @@
+@import '../../pages/not-found-page.css';
 @import '../../pages/auth/index.css';
 @import '../../pages/dashboard/index.css';
-@import '../../pages/not-found-page.css';
+@import '../../pages/dashboard/about/index.css';
+@import '../../pages/dashboard/links/index.css';
+@import '../../pages/dashboard/plugins/index.css';
+@import '../../pages/dashboard/settings/layout-entry.css';
+@import '../../pages/dashboard/settings/index.css';
+@import '../../pages/dashboard/tools/index.css';
+@import '../../pages/dashboard/users/index.css';

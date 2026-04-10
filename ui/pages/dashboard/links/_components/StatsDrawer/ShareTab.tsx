@@ -7,7 +7,7 @@ import {
 	BriefcaseBusiness,
 	Mail,
 } from 'lucide-react';
-import { ReadOnlyValueBlock } from '@/components/ui';
+import { ReadOnlyValueBlock } from '@/components';
 import { __ } from '@/i18n';
 import { copyToClipboard, getLinkDisplayTitle } from '@/utils';
 import type { SharePlatform, ShareTabProps } from './types';

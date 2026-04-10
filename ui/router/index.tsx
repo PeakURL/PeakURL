@@ -3,22 +3,22 @@ import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 
 import { useScrollToTop, useAdminAccess } from '@/hooks';
 import {
-	AppLayout,
-	NotFoundPage,
 	AboutPage,
+	AppLayout,
 	DashboardPage,
-	LinksPage,
-	PluginsPage,
-	UsersPage,
-	SettingsLayout,
-	SettingsTabPage,
+	ExportPage,
+	ForgotPasswordPage,
 	ImportLayout,
 	ImportTabPage,
-	ExportPage,
-	SystemStatusPage,
-	ForgotPasswordPage,
+	LinksPage,
 	LoginPage,
+	NotFoundPage,
+	PluginsPage,
 	ResetPasswordPage,
+	SettingsLayout,
+	SettingsTabPage,
+	SystemStatusPage,
+	UsersPage,
 } from '@/pages';
 import {
 	clearBodyClassNames,

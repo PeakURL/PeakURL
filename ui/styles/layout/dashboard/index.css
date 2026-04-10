@@ -1,5 +1,5 @@
-@import '../../../pages/layout/dashboard/layout.css';
-@import '../../../pages/layout/dashboard/header.css';
-@import '../../../pages/layout/dashboard/sidebar.css';
-@import '../../../pages/layout/dashboard/search.css';
-@import '../../../pages/layout/dashboard/admin-notices.css';
+@import '../../../pages/layout/dashboard/Layout/layout.css';
+@import '../../../pages/layout/dashboard/Header/header.css';
+@import '../../../pages/layout/dashboard/Sidebar/sidebar.css';
+@import '../../../pages/layout/dashboard/Search/search.css';
+@import '../../../pages/layout/dashboard/AdminNotices/admin-notices.css';

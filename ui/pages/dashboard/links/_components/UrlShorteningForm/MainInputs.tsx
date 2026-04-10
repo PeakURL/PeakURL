@@ -1,4 +1,4 @@
-import { Button, Input } from '@/components/ui';
+import { Button, Input } from '@/components';
 import { Link as LinkIcon, Tag, Scissors } from 'lucide-react';
 import { __ } from '@/i18n';
 import type { MainInputsProps } from '../types';

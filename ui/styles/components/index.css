@@ -1,4 +1,5 @@
 @import './shared.css';
+@import '../../components/charts/index.css';
 @import '../../components/common/index.css';
 @import '../../components/providers/index.css';
 @import '../../components/routes/index.css';

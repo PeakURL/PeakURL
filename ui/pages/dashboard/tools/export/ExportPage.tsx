@@ -6,8 +6,7 @@ import {
 	FileSpreadsheet,
 	Link2,
 } from 'lucide-react';
-import { useNotification } from '@/components';
-import { Button } from '@/components/ui';
+import { Button, useNotification } from '@/components';
 import { __, sprintf } from '@/i18n';
 import {
 	useGetUrlsQuery,

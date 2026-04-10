@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui';
+import { Button } from '@/components';
 import { ExternalLink } from 'lucide-react';
 import { API_SERVER_BASE_URL } from '@/constants';
 import { __ } from '@/i18n';

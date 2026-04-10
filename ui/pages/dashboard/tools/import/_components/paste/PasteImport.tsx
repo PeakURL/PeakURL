@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, TextArea } from '@/components/ui';
+import { Button, TextArea } from '@/components';
 import { useBulkCreateUrlMutation } from '@/store/slices/api';
 import { buildShortUrl, getErrorMessage } from '@/utils';
 import { ImportDetails, ImportSummary } from '../results';

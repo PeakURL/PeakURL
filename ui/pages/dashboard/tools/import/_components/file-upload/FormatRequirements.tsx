@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui';
+import { Button } from '@/components';
 import { Download } from 'lucide-react';
 import { __ } from '@/i18n';
 import type { SampleFormat } from './types';

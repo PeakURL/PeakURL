@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui';
+import { Button } from '@/components';
 import { CircleCheckBig } from 'lucide-react';
 import { __, sprintf } from '@/i18n';
 import type { ImportSummaryProps } from '../types';

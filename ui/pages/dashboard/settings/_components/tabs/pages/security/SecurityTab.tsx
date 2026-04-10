@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import QRCode from 'qrcode';
-import { Button, ConfirmDialog, Input, ReadOnlyValueBlock } from '@/components/ui';
+import { Button, ConfirmDialog, Input, ReadOnlyValueBlock } from '@/components';
 import {
 	ShieldCheck,
 	ShieldOff,

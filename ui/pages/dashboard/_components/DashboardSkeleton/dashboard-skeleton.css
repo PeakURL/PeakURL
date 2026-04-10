@@ -1,0 +1,101 @@
+@layer components {
+	.dashboard-skeleton-stat-copy {
+		@apply flex-1;
+	}
+
+	.dashboard-skeleton-stat-label {
+		@apply mb-2 h-3 w-20;
+	}
+
+	.dashboard-skeleton-stat-value {
+		@apply h-8 w-24;
+	}
+
+	.dashboard-skeleton-stat-icon {
+		@apply h-10 w-10;
+	}
+
+	.dashboard-skeleton-stat-meta {
+		@apply flex items-center gap-2;
+	}
+
+	.dashboard-skeleton-stat-trend {
+		@apply h-5 w-16;
+	}
+
+	.dashboard-skeleton-stat-note {
+		@apply h-3 w-24;
+	}
+
+	.dashboard-skeleton-toolbar {
+		@apply flex gap-2;
+	}
+
+	.dashboard-skeleton-toolbar-button {
+		@apply h-8 w-8;
+	}
+
+	.dashboard-skeleton-chart {
+		@apply flex h-75 items-end justify-between gap-2 pt-4;
+	}
+
+	.dashboard-skeleton-chart-bar {
+		@apply w-full rounded-t-sm rounded-b-none opacity-50;
+	}
+
+	.dashboard-skeleton-section-title {
+		@apply mb-6 h-6 w-32;
+	}
+
+	.dashboard-skeleton-section-title-wide {
+		@apply mb-6 h-6 w-40;
+	}
+
+	.dashboard-skeleton-activity-list {
+		@apply space-y-6;
+	}
+
+	.dashboard-skeleton-activity-item {
+		@apply flex gap-3;
+	}
+
+	.dashboard-skeleton-activity-avatar {
+		@apply h-8 w-8 shrink-0 rounded-full;
+	}
+
+	.dashboard-skeleton-activity-copy {
+		@apply flex-1 space-y-2;
+	}
+
+	.dashboard-skeleton-activity-title {
+		@apply h-4 w-3/4;
+	}
+
+	.dashboard-skeleton-activity-time {
+		@apply h-3 w-1/4;
+	}
+
+	.dashboard-skeleton-summary-list {
+		@apply space-y-4;
+	}
+
+	.dashboard-skeleton-summary-item {
+		@apply space-y-2;
+	}
+
+	.dashboard-skeleton-summary-row {
+		@apply flex justify-between;
+	}
+
+	.dashboard-skeleton-summary-label {
+		@apply h-4 w-20;
+	}
+
+	.dashboard-skeleton-summary-value {
+		@apply h-4 w-12;
+	}
+
+	.dashboard-skeleton-summary-bar {
+		@apply h-2 w-full;
+	}
+}

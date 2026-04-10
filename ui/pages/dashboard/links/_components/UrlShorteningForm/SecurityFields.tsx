@@ -1,4 +1,4 @@
-import { Input } from '@/components/ui';
+import { Input } from '@/components';
 import { Lock, Tags } from 'lucide-react';
 import { __ } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';

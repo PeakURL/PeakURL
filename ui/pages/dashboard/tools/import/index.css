@@ -1,7 +1,4 @@
 @import './import-page.css';
-@import './_components/shared.css';
-@import './_components/layout/header.css';
-@import './_components/layout/tabs.css';
 @import './_components/api/api-import.css';
 @import './_components/paste/paste-import.css';
 @import './_components/results/import-summary.css';

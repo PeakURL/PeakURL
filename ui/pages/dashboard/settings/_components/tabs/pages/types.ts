@@ -1,7 +1,9 @@
 import type { ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
-import type { NotificationContextValue } from '@/components/providers';
-import type { ButtonVariant } from '@/components/ui';
+import type {
+	ButtonVariant,
+	NotificationContextValue,
+} from '@/components';
 import type { InstalledLanguage, TextDirection } from '@/i18n/types';
 import type {
 	ApiKeySummary,

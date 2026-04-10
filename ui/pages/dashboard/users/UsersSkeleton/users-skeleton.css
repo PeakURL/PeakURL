@@ -1,0 +1,97 @@
+@layer components {
+	.users-skeleton-stat-card {
+		@apply flex flex-col justify-center;
+	}
+
+	.users-skeleton-stat-label {
+		@apply mb-2 h-3 w-16;
+	}
+
+	.users-skeleton-stat-value {
+		@apply h-8 w-12;
+	}
+
+	.users-skeleton-row {
+		@apply border-b border-stroke last:border-0;
+	}
+
+	.users-skeleton-cell {
+		@apply p-4;
+	}
+
+	.users-skeleton-user {
+		@apply flex items-center gap-3;
+	}
+
+	.users-skeleton-user-avatar {
+		@apply h-10 w-10 shrink-0 rounded-full;
+	}
+
+	.users-skeleton-user-copy {
+		@apply flex-1 space-y-1.5;
+	}
+
+	.users-skeleton-user-name {
+		@apply h-4 w-32;
+	}
+
+	.users-skeleton-user-email {
+		@apply h-3 w-40;
+	}
+
+	.users-skeleton-user-role {
+		@apply h-3 w-24;
+	}
+
+	.users-skeleton-badge {
+		@apply h-6 w-16 rounded-full;
+	}
+
+	.users-skeleton-date {
+		@apply h-4 w-24;
+	}
+
+	.users-skeleton-actions {
+		@apply flex justify-end gap-2;
+	}
+
+	.users-skeleton-action {
+		@apply h-8 w-8 rounded-md;
+	}
+
+	.users-skeleton-hero-copy {
+		@apply flex-1 space-y-2;
+	}
+
+	.users-skeleton-kicker {
+		@apply h-6 w-32;
+	}
+
+	.users-skeleton-title {
+		@apply h-8 w-48;
+	}
+
+	.users-skeleton-copy-wide {
+		@apply h-4 w-3/4 max-w-[600px];
+	}
+
+	.users-skeleton-copy {
+		@apply h-4 w-1/2 max-w-[400px];
+	}
+
+	.users-skeleton-button {
+		@apply h-10 w-32 rounded-md;
+	}
+
+	.users-skeleton-table {
+		@apply mt-6;
+	}
+
+	.users-skeleton-table-header {
+		@apply h-14 rounded-none border-b border-stroke bg-surface;
+	}
+
+	.users-skeleton-table-inner {
+		@apply w-full text-left;
+	}
+}

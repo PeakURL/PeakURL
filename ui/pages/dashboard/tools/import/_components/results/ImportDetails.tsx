@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui';
+import { Button } from '@/components';
 import { CircleAlert, CircleCheckBig, Download } from 'lucide-react';
 import { __, sprintf } from '@/i18n';
 import { cn } from '@/utils';

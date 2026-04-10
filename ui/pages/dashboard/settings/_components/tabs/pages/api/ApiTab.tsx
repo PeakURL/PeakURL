@@ -1,4 +1,4 @@
-import { Button, ReadOnlyValueBlock } from '@/components/ui';
+import { Button, ReadOnlyValueBlock } from '@/components';
 import {
 	Plus,
 	Trash2,

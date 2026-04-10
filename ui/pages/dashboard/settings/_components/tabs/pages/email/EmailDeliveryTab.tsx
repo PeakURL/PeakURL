@@ -1,7 +1,7 @@
 import type { SubmitEvent } from 'react';
 import { useState } from 'react';
 import { AlertCircle, Mail, Send, Server } from 'lucide-react';
-import { Button, Input, Select } from '@/components/ui';
+import { Button, Input, Select, type SelectOption } from '@/components';
 import { __, sprintf } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
 import { cn } from '@/utils';
@@ -11,7 +11,6 @@ import type {
 	EmailStatus,
 	MethodButtonProps,
 } from '../types';
-import type { SelectOption } from '@/components/ui';
 import type { SmtpEncryption } from '../../types';
 
 function MethodButton({

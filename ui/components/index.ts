@@ -1,4 +1,4 @@
-// Export all components from subdirectories
+// Export shared component groups used across the app shell.
 export * from './charts';
 export * from './common';
 export * from './providers';

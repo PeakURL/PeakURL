@@ -1,11 +1,16 @@
 import type { ChangeEvent, SubmitEvent } from 'react';
 import { useEffect, useState } from 'react';
-import { Input, Button, Select, TextArea } from '@/components/ui';
+import {
+	Button,
+	Input,
+	Select,
+	TextArea,
+	type SelectOption,
+} from '@/components';
 import { __ } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
 import { getInstalledLanguageLabel } from '@/i18n/languages';
 import { cn } from '@/utils';
-import type { SelectOption } from '@/components/ui';
 import type { GeneralFormState } from '../../types';
 import type { GeneralTabProps } from '../types';
 

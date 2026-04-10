@@ -5,6 +5,7 @@ export * from './Input';
 export * from './TextArea';
 export * from './ReadOnlyValueBlock';
 export * from './Loading';
+export * from './Skeleton';
 export * from './Modal';
 export * from './Notification';
 export * from './Select';

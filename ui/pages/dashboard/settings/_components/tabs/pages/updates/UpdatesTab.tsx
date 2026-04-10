@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui';
+import { Button, type ButtonVariant } from '@/components';
 import { __, sprintf } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
 import { cn, formatDateTimeValue } from '@/utils';
@@ -10,7 +10,6 @@ import {
 	ExternalLink,
 	RefreshCcw,
 } from 'lucide-react';
-import type { ButtonVariant } from '@/components/ui';
 import type {
 	BadgeState,
 	DatabaseStatus,

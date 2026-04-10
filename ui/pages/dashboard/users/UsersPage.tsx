@@ -10,7 +10,6 @@ import {
 	Users,
 	X,
 } from 'lucide-react';
-import { useNotification } from '@/components';
 import { useAdminAccess } from '@/hooks';
 import {
 	Avatar,
@@ -19,7 +18,9 @@ import {
 	IconButton,
 	Input,
 	Select,
-} from '@/components/ui';
+	type SelectOption,
+	useNotification,
+} from '@/components';
 import {
 	useCreateUserMutation,
 	useDeleteUserMutation,
@@ -30,6 +31,7 @@ import {
 import { __, sprintf } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
 import { getErrorMessage } from '@/utils';
+import { UsersTableSkeletonRows } from './UsersSkeleton';
 import type {
 	UserDialogFormState,
 	UserDialogMode,
@@ -39,7 +41,6 @@ import type {
 	UserRoleMeta,
 	UserSummary,
 } from './types';
-import type { SelectOption } from '@/components/ui';
 
 const EMPTY_FORM: UserDialogFormState = {
 	firstName: '',
@@ -51,10 +52,7 @@ const EMPTY_FORM: UserDialogFormState = {
 	role: 'editor',
 };
 
-const getRoleMeta = (): Record<
-	UserRole,
-	UserRoleMeta
-> => ({
+const getRoleMeta = (): Record<UserRole, UserRoleMeta> => ({
 	admin: {
 		label: __('Admin'),
 		description: __('Can manage users, settings, and all links.'),
@@ -157,15 +155,8 @@ function UserDialog({
 		'edit' === mode && initialUser?.id === currentUser?.id;
 
 	return (
-		<Dialog
-			open={open}
-			onClose={onClose}
-			className="users-page-dialog"
-		>
-			<div
-				className="users-page-dialog-backdrop"
-				aria-hidden="true"
-			/>
+		<Dialog open={open} onClose={onClose} className="users-page-dialog">
+			<div className="users-page-dialog-backdrop" aria-hidden="true" />
 			<div className="users-page-dialog-wrapper">
 				<DialogPanel className="users-page-dialog-panel">
 					<div className="users-page-dialog-header">
@@ -341,30 +332,30 @@ function UsersPage() {
 	const isRtl = isDocumentRtl();
 	const direction = isRtl ? 'rtl' : 'ltr';
 	const roleMeta = getRoleMeta();
-	const { data: userData, isLoading: isProfileLoading } =
-		useGetUserProfileQuery(undefined);
+	const { data: userData } = useGetUserProfileQuery(undefined);
+	const { canManageUsers, user: authUser } = useAdminAccess();
+	const resolvedCurrentUser = userData?.data ?? authUser ?? null;
 	const currentUserRole: UserSummary['role'] =
-		userData?.data?.role === 'admin'
+		resolvedCurrentUser?.role === 'admin'
 			? 'admin'
-			: userData?.data?.role === 'editor'
+			: resolvedCurrentUser?.role === 'editor'
 				? 'editor'
 				: undefined;
-	const currentUser: UserSummary | null = userData?.data
+	const currentUser: UserSummary | null = resolvedCurrentUser
 		? {
 				id:
-					userData.data.id ||
-					userData.data._id ||
-					userData.data.username ||
-					userData.data.email ||
+					resolvedCurrentUser.id ||
+					resolvedCurrentUser._id ||
+					resolvedCurrentUser.username ||
+					resolvedCurrentUser.email ||
 					'current-user',
-				firstName: userData.data.firstName,
-				lastName: userData.data.lastName,
-				username: userData.data.username,
-				email: userData.data.email,
+				firstName: resolvedCurrentUser.firstName,
+				lastName: resolvedCurrentUser.lastName,
+				username: resolvedCurrentUser.username,
+				email: resolvedCurrentUser.email,
 				role: currentUserRole,
-		  }
+			}
 		: null;
-	const { canManageUsers } = useAdminAccess();
 	const {
 		data: usersData,
 		isLoading: isUsersLoading,
@@ -454,14 +445,6 @@ function UsersPage() {
 		}).unwrap();
 	};
 
-	if (isProfileLoading) {
-		return (
-			<div className="users-page-loading-state">
-				<div className="users-page-spinner" />
-			</div>
-		);
-	}
-
 	if (!canManageUsers) {
 		return (
 			<div className="users-page-access-state">
@@ -488,9 +471,7 @@ function UsersPage() {
 						<UserRound size={14} />
 						{__('User Access')}
 					</div>
-					<h1 className="users-page-hero-title">
-						{__('Users')}
-					</h1>
+					<h1 className="users-page-hero-title">{__('Users')}</h1>
 					<p className="users-page-hero-summary">
 						{__(
 							'Manage the people who can access this installation. Admins control site-wide settings. Editors can create and maintain links.'
@@ -504,50 +485,38 @@ function UsersPage() {
 
 			<div className="users-page-stats">
 				<div className="users-page-stat-card">
-					<p className="users-page-stat-label">
-						{__('Total Users')}
-					</p>
+					<p className="users-page-stat-label">{__('Total Users')}</p>
 					<p className="users-page-stat-value">
-						{users.length}
+						{isUsersLoading ? '...' : users.length}
 					</p>
 				</div>
 				<div className="users-page-stat-card">
-					<p className="users-page-stat-label">
-						{__('Admins')}
-					</p>
+					<p className="users-page-stat-label">{__('Admins')}</p>
 					<p className="users-page-stat-value">
-						{adminCount}
+						{isUsersLoading ? '...' : adminCount}
 					</p>
 				</div>
 				<div className="users-page-stat-card">
-					<p className="users-page-stat-label">
-						{__('Editors')}
-					</p>
+					<p className="users-page-stat-label">{__('Editors')}</p>
 					<p className="users-page-stat-value">
-						{editorCount}
+						{isUsersLoading ? '...' : editorCount}
 					</p>
 				</div>
 			</div>
 
 			<div className="users-page-panel">
 				<div className="users-page-panel-header">
-					<h2 className="users-page-panel-title">
-						{__('Accounts')}
-					</h2>
+					<h2 className="users-page-panel-title">{__('Accounts')}</h2>
 				</div>
 
-				{isUsersLoading ? (
-					<div className="users-page-panel-state">
-						<div className="users-page-spinner" />
-					</div>
-				) : usersError ? (
+				{usersError ? (
 					<div className="users-page-panel-error">
 						{getErrorMessage(
 							usersError,
 							__('Unable to load users.')
 						)}
 					</div>
-				) : users.length === 0 ? (
+				) : !isUsersLoading && users.length === 0 ? (
 					<div className="users-page-panel-state">
 						<div className="users-page-empty-icon">
 							<Users size={28} />
@@ -581,117 +550,128 @@ function UsersPage() {
 								</tr>
 							</thead>
 							<tbody className="users-page-table-body">
-								{users.map((user) => (
-									<tr
-										key={user.id}
-										className="users-page-table-row"
-									>
-										<td className="users-page-table-cell">
-											<div
-												dir={direction}
-												className="users-page-user"
-											>
-												<Avatar
-													size="md"
-													email={user.email}
-													firstName={user.firstName}
-													lastName={user.lastName}
-													fallbackName={
-														user.username ||
-														__('User')
-													}
-													className="users-page-avatar"
-												/>
-												<div className="users-page-user-copy">
-													<div className="users-page-user-name">
-														<bdi dir="auto">
-															{user.firstName}{' '}
-															{user.lastName}
-														</bdi>
-													</div>
-													<div className="users-page-user-email">
-														<bdi className="preserve-ltr-value inline-block">
-															{user.email}
-														</bdi>
-													</div>
-													<div className="users-page-user-username">
-														<bdi className="preserve-ltr-value inline-block">
-															@{user.username}
-														</bdi>
+								{isUsersLoading ? (
+									<UsersTableSkeletonRows />
+								) : (
+									users.map((user) => (
+										<tr
+											key={user.id}
+											className="users-page-table-row"
+										>
+											<td className="users-page-table-cell">
+												<div
+													dir={direction}
+													className="users-page-user"
+												>
+													<Avatar
+														size="md"
+														email={user.email}
+														firstName={
+															user.firstName
+														}
+														lastName={user.lastName}
+														fallbackName={
+															user.username ||
+															__('User')
+														}
+														className="users-page-avatar"
+													/>
+													<div className="users-page-user-copy">
+														<div className="users-page-user-name">
+															<bdi dir="auto">
+																{user.firstName}{' '}
+																{user.lastName}
+															</bdi>
+														</div>
+														<div className="users-page-user-email">
+															<bdi className="preserve-ltr-value inline-block">
+																{user.email}
+															</bdi>
+														</div>
+														<div className="users-page-user-username">
+															<bdi className="preserve-ltr-value inline-block">
+																@{user.username}
+															</bdi>
+														</div>
 													</div>
 												</div>
-											</div>
-										</td>
-										<td className="users-page-table-cell">
-											<span
-												className={`users-page-role-badge ${
-													roleMeta[
-														user.role === 'admin'
-															? 'admin'
-															: 'editor'
-													].badge
-												}`}
-											>
-												{
-													roleMeta[
-														user.role === 'admin'
-															? 'admin'
-															: 'editor'
-													].label
-												}
-											</span>
-										</td>
-										<td className="users-page-table-cell-meta">
-											{user.createdAt
-												? new Date(
-														user.createdAt
-													).toLocaleDateString()
-												: __('Unknown')}
-										</td>
-										<td className="users-page-table-cell-actions">
-											<div className="users-page-actions">
-												<IconButton
-													icon={Pencil}
-													variant="outline"
-													size="sm"
-													aria-label={sprintf(
-														__('Edit %s'),
-														`${user.firstName} ${user.lastName}`
-													)}
-													title={sprintf(
-														__('Edit %s'),
-														`${user.firstName} ${user.lastName}`
-													)}
-													onClick={() =>
-														openEditDialog(user)
+											</td>
+											<td className="users-page-table-cell">
+												<span
+													className={`users-page-role-badge ${
+														roleMeta[
+															user.role ===
+															'admin'
+																? 'admin'
+																: 'editor'
+														].badge
+													}`}
+												>
+													{
+														roleMeta[
+															user.role ===
+															'admin'
+																? 'admin'
+																: 'editor'
+														].label
 													}
-												/>
-												<IconButton
-													icon={Trash2}
-													variant="outline"
-													size="sm"
-													aria-label={sprintf(
-														__('Delete %s'),
-														`${user.firstName} ${user.lastName}`
-													)}
-													title={sprintf(
-														__('Delete %s'),
-														`${user.firstName} ${user.lastName}`
-													)}
-													className="users-page-action-delete"
-													disabled={
-														user.id ===
-															currentUser?.id ||
-														isDeleting
-													}
-													onClick={() =>
-														openDeleteDialog(user)
-													}
-												/>
-											</div>
-										</td>
-									</tr>
-								))}
+												</span>
+											</td>
+											<td className="users-page-table-cell-meta">
+												{user.createdAt
+													? new Date(
+															user.createdAt
+														).toLocaleDateString()
+													: __('Unknown')}
+											</td>
+											<td className="users-page-table-cell-actions">
+												<div className="users-page-actions">
+													<IconButton
+														icon={Pencil}
+														variant="outline"
+														size="sm"
+														aria-label={sprintf(
+															__('Edit %s'),
+															`${user.firstName} ${user.lastName}`
+														)}
+														title={sprintf(
+															__('Edit %s'),
+															`${user.firstName} ${user.lastName}`
+														)}
+														onClick={() =>
+															openEditDialog(user)
+														}
+													/>
+													<IconButton
+														icon={Trash2}
+														variant="outline"
+														size="sm"
+														aria-label={sprintf(
+															__('Delete %s'),
+															`${user.firstName} ${user.lastName}`
+														)}
+														title={sprintf(
+															__('Delete %s'),
+															`${user.firstName} ${user.lastName}`
+														)}
+														className="users-page-action-delete"
+														disabled={
+															!currentUser?.id ||
+															user.id ===
+																currentUser?.id ||
+															isDeleting
+														}
+														onClick={() =>
+															openDeleteDialog(
+																user
+															)
+														}
+													/>
+												</div>
+											</td>
+										</tr>
+									))
+								)}
 							</tbody>
 						</table>
 					</div>

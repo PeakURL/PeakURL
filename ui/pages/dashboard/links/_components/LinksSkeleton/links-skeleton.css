@@ -1,0 +1,57 @@
+@layer components {
+	.links-skeleton-stat-icon {
+		@apply h-8 w-8;
+	}
+
+	.links-skeleton-stat-trend {
+		@apply h-3 w-8;
+	}
+
+	.links-skeleton-stat-value {
+		@apply h-6 w-16;
+	}
+
+	.links-skeleton-stat-label {
+		@apply mt-1 h-3 w-20;
+	}
+
+	.links-skeleton-form-title {
+		@apply mb-4 h-6 w-48;
+	}
+
+	.links-skeleton-form-field {
+		@apply h-12 w-full opacity-50;
+	}
+
+	.links-skeleton-table-header {
+		@apply h-12 rounded-none border-b border-stroke bg-surface;
+	}
+
+	.links-skeleton-row-avatar {
+		@apply h-10 w-10 shrink-0;
+	}
+
+	.links-skeleton-row-copy {
+		@apply flex-1 space-y-2;
+	}
+
+	.links-skeleton-row-title {
+		@apply h-4 w-1/3;
+	}
+
+	.links-skeleton-row-meta {
+		@apply h-3 w-1/4;
+	}
+
+	.links-skeleton-row-metrics {
+		@apply hidden gap-6 md:flex;
+	}
+
+	.links-skeleton-row-metric {
+		@apply h-4 w-12;
+	}
+
+	.links-skeleton-row-action {
+		@apply h-8 w-8;
+	}
+}

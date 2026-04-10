@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui';
+import { Button } from '@/components';
 import { CloudUpload } from 'lucide-react';
 import { __ } from '@/i18n';
 import { cn } from '@/utils';

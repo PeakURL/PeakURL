@@ -1,3 +1,3 @@
-@import './logo.css';
-@import './brand-lockup.css';
-@import './theme-toggle.css';
+@import './Logo/logo.css';
+@import './BrandLockup/brand-lockup.css';
+@import './ThemeToggle/theme-toggle.css';

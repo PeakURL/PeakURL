@@ -12,7 +12,9 @@ import {
 	LinksTable,
 	TableFooter,
 	Pagination,
+	LinksSkeleton,
 } from './_components';
+
 import { useGetUrlQuery, useGetUrlsQuery } from '@/store/slices/api';
 import { useSearchParams } from 'react-router-dom';
 import { __ } from '@/i18n';
@@ -62,7 +64,11 @@ function LinksPage() {
 		} catch {}
 	}, [sortBy, sortOrder, limit]);
 
-	const { data: urlsRes, refetch: refetchUrls } = useGetUrlsQuery({
+	const {
+		data: urlsRes,
+		refetch: refetchUrls,
+		isLoading: isUrlsLoading,
+	} = useGetUrlsQuery({
 		page: currentPage,
 		limit,
 		sortBy,
@@ -127,6 +133,17 @@ function LinksPage() {
 	const endItem = Math.min(apiMeta.page * apiMeta.limit, totalItems);
 	const paginatedLinks = sortedLinks;
 
+	const isLoading = isUrlsLoading;
+
+	if (isLoading) {
+		return (
+			<div className="links-page">
+				<Header onRefresh={handleRefresh} isRefreshing={true} />
+				<LinksSkeleton />
+			</div>
+		);
+	}
+
 	// Calculate quick stats (based on filtered links or all links? usually filtered)
 	const linksForStats = filteredLinks;
 	const totalClicks = linksForStats.reduce(
@@ -152,9 +169,7 @@ function LinksPage() {
 						<div className="links-page-stat-icon links-page-stat-icon-links">
 							<Link2 className="h-4 w-4 text-primary-600 dark:text-primary-400" />
 						</div>
-						<span className="links-page-stat-trend">
-							+12%
-						</span>
+						<span className="links-page-stat-trend">+12%</span>
 					</div>
 					<div className="links-page-stat-value">
 						{linksForStats.length}
@@ -173,9 +188,7 @@ function LinksPage() {
 							{__('Active')}
 						</span>
 					</div>
-					<div className="links-page-stat-value">
-						{activeLinks}
-					</div>
+					<div className="links-page-stat-value">{activeLinks}</div>
 					<div className="links-page-stat-label">
 						{__('Active Links')}
 					</div>
@@ -186,9 +199,7 @@ function LinksPage() {
 						<div className="links-page-stat-icon links-page-stat-icon-clicks">
 							<MousePointerClick className="h-4 w-4 text-blue-600 dark:text-blue-400" />
 						</div>
-						<span className="links-page-stat-trend">
-							+28%
-						</span>
+						<span className="links-page-stat-trend">+28%</span>
 					</div>
 					<div className="links-page-stat-value">
 						{totalClicks.toLocaleString()}
@@ -203,9 +214,7 @@ function LinksPage() {
 						<div className="links-page-stat-icon links-page-stat-icon-visitors">
 							<Users className="h-4 w-4 text-purple-600 dark:text-purple-400" />
 						</div>
-						<span className="links-page-stat-trend">
-							+35%
-						</span>
+						<span className="links-page-stat-trend">+35%</span>
 					</div>
 					<div className="links-page-stat-value">
 						{totalUniqueClicks.toLocaleString()}

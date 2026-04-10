@@ -1,4 +1,4 @@
-import type { NotificationContextValue } from '@/components/providers';
+import type { NotificationContextValue } from '@/components';
 
 /**
  * Webhook event option shown in the integrations form.

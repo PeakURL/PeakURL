@@ -1,0 +1,33 @@
+@layer components {
+	.skeleton {
+		@apply animate-pulse rounded-md bg-stroke/80 dark:bg-stroke/40;
+	}
+
+	.skeleton-card {
+		@apply rounded-lg border border-stroke bg-surface p-4;
+	}
+
+	.skeleton-form {
+		@apply rounded-xl border border-stroke bg-surface p-4 shadow-sm sm:p-6;
+	}
+
+	.skeleton-table-container {
+		@apply overflow-hidden rounded-xl border border-stroke bg-surface shadow-sm;
+	}
+
+	.skeleton-table-header {
+		@apply h-12 border-b border-stroke bg-surface;
+	}
+
+	.skeleton-table-row {
+		@apply flex items-center gap-4 border-b border-stroke p-4 last:border-0;
+	}
+
+	.skeleton-card-header {
+		@apply mb-3 flex items-start justify-between;
+	}
+
+	.skeleton-card-sm {
+		@apply rounded-lg border border-stroke bg-surface p-3.5;
+	}
+}

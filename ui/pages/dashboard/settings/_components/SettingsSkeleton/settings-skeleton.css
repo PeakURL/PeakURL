@@ -1,0 +1,49 @@
+@layer components {
+	.settings-skeleton {
+		@apply w-full min-w-0 flex-1;
+	}
+
+	.settings-skeleton-header {
+		@apply mb-6 space-y-2;
+	}
+
+	.settings-skeleton-title {
+		@apply h-7 w-40;
+	}
+
+	.settings-skeleton-copy {
+		@apply h-4 w-2/3 max-w-100;
+	}
+
+	.settings-skeleton-panel {
+		@apply space-y-0;
+	}
+
+	.settings-skeleton-row {
+		@apply flex flex-col gap-4 border-b border-stroke py-6 first:pt-4 last:border-0 last:pb-4 sm:flex-row sm:items-start sm:gap-6;
+	}
+
+	.settings-skeleton-row-copy {
+		@apply flex-1 space-y-2;
+	}
+
+	.settings-skeleton-row-title {
+		@apply h-5 w-48;
+	}
+
+	.settings-skeleton-row-description {
+		@apply h-4 w-3/4 max-w-125;
+	}
+
+	.settings-skeleton-row-description-mobile {
+		@apply h-4 w-1/2 max-w-75 sm:hidden;
+	}
+
+	.settings-skeleton-row-control {
+		@apply w-full shrink-0 sm:w-[320px];
+	}
+
+	.settings-skeleton-row-input {
+		@apply h-10 w-full;
+	}
+}

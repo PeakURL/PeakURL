@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CheckCircle2, KeyRound, LockKeyhole } from 'lucide-react';
 import { AuthLayout } from '@/pages/layout';
-import { Button, Input } from '@/components/ui';
+import { Button, Input } from '@/components';
 import { useResetPasswordMutation } from '@/store/slices/api';
 import { __ } from '@/i18n';
 import { getErrorMessage, requestControlFormSubmit } from '@/utils';

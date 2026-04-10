@@ -1,0 +1,191 @@
+@layer components {
+	.loading-spinner {
+		@apply inline-flex items-center justify-center;
+	}
+
+	.loading-spinner-icon {
+		@apply animate-spin text-accent;
+	}
+
+	.page-loader {
+		@apply fixed inset-0 z-50 flex items-center justify-center bg-bg/80;
+	}
+
+	.page-loader-content {
+		@apply text-center;
+	}
+
+	.page-loader-visual {
+		@apply relative mb-6;
+	}
+
+	.page-loader-ring {
+		@apply h-16 w-16 rounded-full border-4 border-stroke;
+	}
+
+	.page-loader-ring-active {
+		@apply absolute inset-0 h-16 w-16 animate-spin rounded-full;
+		background: conic-gradient(
+			from 0deg,
+			transparent 0%,
+			var(--color-accent) 30%,
+			transparent 65%,
+			transparent 100%
+		);
+		-webkit-mask: radial-gradient(
+			farthest-side,
+			transparent calc(100% - 4px),
+			white calc(100% - 4px)
+		);
+		mask: radial-gradient(
+			farthest-side,
+			transparent calc(100% - 4px),
+			white calc(100% - 4px)
+		);
+	}
+
+	.page-loader-icon {
+		@apply absolute inset-0 flex items-center justify-center text-accent;
+	}
+
+	.page-loader-label {
+		@apply text-sm font-medium text-text-muted;
+	}
+
+	.skeleton-loader {
+		@apply animate-pulse rounded-lg bg-surface-alt;
+	}
+
+	.card-skeleton {
+		@apply animate-pulse rounded-2xl border border-stroke bg-surface p-6;
+	}
+
+	.card-skeleton-header {
+		@apply mb-4 flex items-start justify-between;
+	}
+
+	.card-skeleton-body {
+		@apply flex-1;
+	}
+
+	.card-skeleton-label {
+		@apply mb-3 h-4 w-24;
+	}
+
+	.card-skeleton-value {
+		@apply mb-3 h-8 w-16;
+	}
+
+	.card-skeleton-meta {
+		@apply h-5 w-20;
+	}
+
+	.card-skeleton-icon {
+		@apply h-14 w-14 rounded-2xl;
+	}
+
+	.card-skeleton-progress {
+		@apply h-2 w-full rounded-full;
+	}
+
+	.table-row-skeleton {
+		@apply animate-pulse;
+	}
+
+	.table-row-skeleton-cell {
+		@apply px-6 py-4;
+	}
+
+	.table-row-skeleton-line {
+		@apply h-4 w-full;
+	}
+
+	.pulse-dot {
+		@apply relative inline-flex;
+	}
+
+	.pulse-dot-core {
+		@apply rounded-full;
+	}
+
+	.pulse-dot-ping {
+		@apply absolute inline-flex animate-ping rounded-full opacity-75;
+	}
+
+	.pulse-dot-size-xs {
+		@apply h-1.5 w-1.5;
+	}
+
+	.pulse-dot-size-sm {
+		@apply h-2 w-2;
+	}
+
+	.pulse-dot-size-md {
+		@apply h-3 w-3;
+	}
+
+	.pulse-dot-size-lg {
+		@apply h-4 w-4;
+	}
+
+	.pulse-dot-color-green {
+		@apply bg-emerald-500;
+	}
+
+	.pulse-dot-color-red {
+		@apply bg-red-500;
+	}
+
+	.pulse-dot-color-yellow {
+		@apply bg-amber-500;
+	}
+
+	.pulse-dot-color-blue {
+		@apply bg-blue-500;
+	}
+
+	.pulse-dot-color-purple {
+		@apply bg-purple-500;
+	}
+
+	.progress-bar-track {
+		@apply h-2 w-full overflow-hidden rounded-full bg-surface-alt;
+	}
+
+	.progress-bar-fill {
+		@apply h-2 rounded-full transition-all duration-500 ease-out;
+	}
+
+	.progress-bar-fill-blue {
+		@apply bg-linear-to-r from-blue-500 to-blue-600;
+	}
+
+	.progress-bar-fill-green {
+		@apply bg-linear-to-r from-emerald-500 to-emerald-600;
+	}
+
+	.progress-bar-fill-red {
+		@apply bg-linear-to-r from-red-500 to-red-600;
+	}
+
+	.progress-bar-fill-yellow {
+		@apply bg-linear-to-r from-amber-500 to-orange-600;
+	}
+
+	.progress-bar-fill-purple {
+		@apply bg-linear-to-r from-purple-500 to-pink-600;
+	}
+
+	.progress-bar-fill-accent {
+		@apply bg-linear-to-r from-accent to-primary-600;
+	}
+
+	.progress-bar-label {
+		@apply mt-1 text-xs text-muted;
+		text-align: end;
+	}
+
+	.inline-loader {
+		@apply animate-spin;
+	}
+}

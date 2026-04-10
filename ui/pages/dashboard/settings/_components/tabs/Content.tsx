@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { PEAKURL_BASENAME } from '@constants';
-import { ConfirmDialog } from '@/components/ui';
+import { ConfirmDialog, useNotification } from '@/components';
 import {
 	useGetUserProfileQuery,
 	useUpdateUserProfileMutation,
@@ -21,7 +21,6 @@ import {
 	useReinstallUpdateMutation,
 	useUpgradeDatabaseSchemaMutation,
 } from '@/store/slices/api';
-import { useNotification } from '@/components';
 import { __, sprintf } from '@/i18n';
 import {
 	copyToClipboard as writeToClipboard,
@@ -54,6 +53,7 @@ import {
 	SecurityTab,
 	UpdatesTab,
 } from './pages';
+import SettingsSkeleton from '../SettingsSkeleton';
 
 const buildGeneralForm = (user?: ProfileUser | null): GeneralFormState => ({
 	firstName: user?.firstName || '',
@@ -153,8 +153,12 @@ const buildReleaseInstallProgressState = (
 				: stage === 'downloading'
 					? __('PeakURL is downloading the update.')
 					: stage === 'installing'
-						? __('PeakURL is applying the included files and content updates.')
-						: __('PeakURL is finishing up and getting the dashboard ready.'),
+						? __(
+								'PeakURL is applying the included files and content updates.'
+							)
+						: __(
+								'PeakURL is finishing up and getting the dashboard ready.'
+							),
 		steps: releaseInstallStageOrder.map((step, index) => ({
 			id: step,
 			label: getReleaseInstallStepLabel(action, step),
@@ -344,15 +348,21 @@ const Content = ({ activeTab }: ContentProps) => {
 
 		releaseInstallProgressTimerIds.current = [
 			...remainingStageSequence.map((stage, index) =>
-				window.setTimeout(() => {
-					setReleaseInstallProgressState(
-						buildReleaseInstallProgressState(action, stage)
-					);
-				}, completionSegmentDuration * (index + 1))
+				window.setTimeout(
+					() => {
+						setReleaseInstallProgressState(
+							buildReleaseInstallProgressState(action, stage)
+						);
+					},
+					completionSegmentDuration * (index + 1)
+				)
 			),
 			window.setTimeout(() => {
 				setReleaseInstallProgressState(
-					buildCompletedReleaseInstallProgressState(action, appliedVersion)
+					buildCompletedReleaseInstallProgressState(
+						action,
+						appliedVersion
+					)
 				);
 			}, completionSegmentDuration * completionTransitionCount),
 		];
@@ -418,26 +428,17 @@ const Content = ({ activeTab }: ContentProps) => {
 			}
 		}
 
-		notification.success(
-			__('Success'),
-			__('Profile updated successfully')
-		);
+		notification.success(__('Success'), __('Profile updated successfully'));
 	};
 
 	const handleSecuritySubmit = async () => {
 		if (!securityForm.currentPassword) {
-			notification.error(
-				__('Error'),
-				__('Enter your current password')
-			);
+			notification.error(__('Error'), __('Enter your current password'));
 			return;
 		}
 
 		if (securityForm.newPassword !== securityForm.confirmPassword) {
-			notification.error(
-				__('Error'),
-				__('Passwords do not match')
-			);
+			notification.error(__('Error'), __('Passwords do not match'));
 			return;
 		}
 		if (securityForm.newPassword.length < 8) {
@@ -474,7 +475,10 @@ const Content = ({ activeTab }: ContentProps) => {
 		try {
 			const result = await generateApiKey({ label: keyLabel }).unwrap();
 			const plainTextKey = result?.data?.apiKey || '';
-			const baseApiUrl = resolveBaseApiUrl(user, result?.data?.baseApiUrl);
+			const baseApiUrl = resolveBaseApiUrl(
+				user,
+				result?.data?.baseApiUrl
+			);
 
 			if (!plainTextKey) {
 				notification.error(
@@ -567,9 +571,9 @@ const Content = ({ activeTab }: ContentProps) => {
 				__('Up to date'),
 				currentVersion
 					? sprintf(
-						__('PeakURL %s is already on the latest version.'),
-						currentVersion
-					)
+							__('PeakURL %s is already on the latest version.'),
+							currentVersion
+						)
 					: __('PeakURL is already on the latest version.')
 			);
 		} catch (err) {
@@ -644,6 +648,19 @@ const Content = ({ activeTab }: ContentProps) => {
 		}
 	};
 
+	if (
+		isLoadingGeneralSettings ||
+		isLoadingGeoipStatus ||
+		isLoadingMailStatus ||
+		isLoadingUpdateStatus
+	) {
+		return (
+			<div className="settings-content">
+				<SettingsSkeleton />
+			</div>
+		);
+	}
+
 	const runReleaseInstall = async (action: ReleaseAction) => {
 		const isReinstall = action === 'reinstall';
 		const installRelease = isReinstall ? reinstallUpdate : applyUpdate;
@@ -655,14 +672,16 @@ const Content = ({ activeTab }: ContentProps) => {
 			startReleaseInstallCompletion(action, appliedVersion);
 
 			notification.success(
-				isReinstall ? __('Release reinstalled') : __('Update installed'),
+				isReinstall
+					? __('Release reinstalled')
+					: __('Update installed'),
 				appliedVersion
 					? sprintf(
-						isReinstall
-							? __('PeakURL %s has been restored.')
-							: __('PeakURL %s is now installed.'),
-						appliedVersion
-					)
+							isReinstall
+								? __('PeakURL %s has been restored.')
+								: __('PeakURL %s is now installed.'),
+							appliedVersion
+						)
 					: isReinstall
 						? __('The latest version has been restored.')
 						: __('The latest version is now installed.')
@@ -703,8 +722,8 @@ const Content = ({ activeTab }: ContentProps) => {
 				__('Database updated'),
 				issuesCount > 0
 					? __(
-						'PeakURL repaired the database schema. Review any remaining warnings below.'
-					  )
+							'PeakURL repaired the database schema. Review any remaining warnings below.'
+						)
 					: __('The database schema is now current.')
 			);
 		} catch (err) {
@@ -821,13 +840,13 @@ const Content = ({ activeTab }: ContentProps) => {
 				description={
 					apiKeyPendingDelete
 						? sprintf(
-							__(
-								'Delete %s? Any scripts, automations, or extensions using it will stop working immediately.'
-							),
-							apiKeyPendingDelete.label ||
-								apiKeyPendingDelete.maskedKey ||
-								__('this API key')
-						)
+								__(
+									'Delete %s? Any scripts, automations, or extensions using it will stop working immediately.'
+								),
+								apiKeyPendingDelete.label ||
+									apiKeyPendingDelete.maskedKey ||
+									__('this API key')
+							)
 						: ''
 				}
 				confirmText={__('Delete key')}
@@ -857,11 +876,11 @@ const Content = ({ activeTab }: ContentProps) => {
 						? ''
 						: pendingReleaseAction === 'reinstall'
 							? __(
-								'PeakURL will restore the latest version and refresh the included files.'
-							)
+									'PeakURL will restore the latest version and refresh the included files.'
+								)
 							: __(
-								'PeakURL will install the latest version and refresh the included files.'
-							)
+									'PeakURL will install the latest version and refresh the included files.'
+								)
 				}
 				confirmText={
 					pendingReleaseAction === 'reinstall'
@@ -877,7 +896,9 @@ const Content = ({ activeTab }: ContentProps) => {
 				loading={isInstallingRelease}
 			/>
 			<ConfirmDialog
-				open={Boolean(activeReleaseInstallAction && releaseInstallProgress)}
+				open={Boolean(
+					activeReleaseInstallAction && releaseInstallProgress
+				)}
 				onClose={() => {}}
 				title=""
 				onConfirm={() => {}}

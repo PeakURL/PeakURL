@@ -1,4 +1,4 @@
-import { Modal, Button, Input, ReadOnlyValueBlock } from '@/components/ui';
+import { Modal, Button, Input, ReadOnlyValueBlock } from '@/components';
 import { Copy } from 'lucide-react';
 import { __ } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';

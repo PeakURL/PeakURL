@@ -1,8 +1,5 @@
 import { useState } from 'react';
-import {
-	useGetAnalyticsQuery,
-	useGetActivityQuery,
-} from '@/store/slices/api';
+import { useGetAnalyticsQuery, useGetActivityQuery } from '@/store/slices/api';
 import {
 	Header,
 	StatsCards,
@@ -10,7 +7,9 @@ import {
 	ActivityFeed,
 	DeviceBreakdown,
 	CountryStats,
+	DashboardSkeleton,
 } from './_components';
+
 import type {
 	CountryMetric,
 	DashboardDeviceData,
@@ -54,20 +53,40 @@ function normalizeTrafficSeries(
 
 function DashboardPage() {
 	const [timeRange, setTimeRange] = useState(7);
+	const [isRefreshing, setIsRefreshing] = useState(false);
 
 	const {
 		data: analyticsRes,
 		refetch: refetchAnalytics,
 		isFetching: isAnalyticsFetching,
+		isLoading: isAnalyticsLoading,
 	} = useGetAnalyticsQuery(timeRange);
 	const {
 		data: activityRes,
 		refetch: refetchActivity,
 		isFetching: isActivityFetching,
+		isLoading: isActivityLoading,
 	} = useGetActivityQuery(undefined);
 
 	const handleRefresh = async () => {
-		await Promise.allSettled([refetchAnalytics(), refetchActivity()]);
+		if (isRefreshing) {
+			return;
+		}
+
+		setIsRefreshing(true);
+		const startedAt = Date.now();
+
+		try {
+			await Promise.allSettled([refetchAnalytics(), refetchActivity()]);
+		} finally {
+			const remaining = 700 - (Date.now() - startedAt);
+
+			if (remaining > 0) {
+				window.setTimeout(() => setIsRefreshing(false), remaining);
+			} else {
+				setIsRefreshing(false);
+			}
+		}
 	};
 
 	const stats: DashboardStats = analyticsRes?.data ?? {
@@ -88,13 +107,31 @@ function DashboardPage() {
 	const countryData: CountryMetric[] = analyticsRes?.data?.countries ?? [];
 	const trafficData = normalizeTrafficSeries(analyticsRes?.data?.traffic);
 
+	const isLoading = isAnalyticsLoading || isActivityLoading;
+
+	if (isLoading) {
+		return (
+			<div className="dashboard-page">
+				<Header
+					timeRange={timeRange}
+					onTimeRangeChange={setTimeRange}
+					onRefresh={handleRefresh}
+					isRefreshing={true}
+				/>
+				<DashboardSkeleton />
+			</div>
+		);
+	}
+
 	return (
 		<div className="dashboard-page">
 			<Header
 				timeRange={timeRange}
 				onTimeRangeChange={setTimeRange}
 				onRefresh={handleRefresh}
-				isRefreshing={isAnalyticsFetching || isActivityFetching}
+				isRefreshing={
+					isRefreshing || isAnalyticsFetching || isActivityFetching
+				}
 			/>
 
 			<StatsCards stats={stats} />

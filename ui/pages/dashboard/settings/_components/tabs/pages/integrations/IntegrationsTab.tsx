@@ -5,7 +5,7 @@ import {
 	Input,
 	ReadOnlyValueBlock,
 	Modal,
-} from '@/components/ui';
+} from '@/components';
 import {
 	Copy,
 	ExternalLink,

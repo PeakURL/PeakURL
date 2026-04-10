@@ -49,7 +49,7 @@ Examples:
 - `ui/components/ui/types.ts`
 - `ui/components/providers/types.ts`
 - `ui/pages/dashboard/links/_components/types.ts`
-- `ui/pages/dashboard/settings/_components/Content/sections/types.ts`
+- `ui/pages/dashboard/settings/_components/tabs/pages/types.ts`
 
 ### Component-folder `types.ts`
 

@@ -47,6 +47,20 @@
 		@apply relative overflow-hidden rounded-2xl bg-surface p-6 shadow-sm ring-1 ring-(--color-stroke)/40 transition;
 	}
 
+	.form-control-base {
+		@apply w-full rounded-md border border-stroke bg-surface px-4 py-2 text-sm text-heading placeholder:text-muted outline-none transition-colors;
+	}
+
+	.form-control-neutral-focus {
+		@apply focus:outline-none;
+	}
+
+	.form-control-neutral-focus:focus {
+		border-color: var(--color-stroke-strong);
+		box-shadow: 0 0 0 1px
+			color-mix(in srgb, var(--color-stroke-strong) 55%, transparent);
+	}
+
 	.field-with-inline-start-icon {
 		@apply pl-8 pr-3;
 	}

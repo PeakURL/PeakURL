@@ -160,7 +160,7 @@ function GeneralTab({
 						<textarea
 							name="bio"
 							rows={3}
-							className="settings-general-bio-input"
+							className="form-control-base form-control-neutral-focus settings-general-bio-input"
 							value={generalForm.bio}
 							onChange={handleChange}
 						/>

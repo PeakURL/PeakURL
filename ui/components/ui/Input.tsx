@@ -85,7 +85,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 					dir={contentDirection}
 					aria-invalid={Boolean(error)}
 					aria-describedby={describedBy}
-					className={`text-page-start w-full rounded-md border border-stroke bg-surface py-2 text-heading placeholder:text-muted outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent ${
+					className={`text-page-start form-control-base form-control-neutral-focus ${
 						hasInlineStartIcon
 							? 'field-with-inline-start-icon'
 							: 'px-4'
@@ -95,7 +95,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 							: ''
 					} ${
 						error
-							? 'border-red-500 focus:ring-red-500 focus:border-red-500'
+							? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500/35'
 							: ''
 					} ${className}`}
 					{...props}

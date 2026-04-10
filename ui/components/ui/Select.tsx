@@ -36,10 +36,10 @@ export function Select<T extends SelectValue>({
 							id={id}
 							aria-label={ariaLabel}
 							dir={direction}
-							className={`text-inline-start flex w-full items-center justify-between gap-3 rounded-md border bg-surface px-4 py-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20 disabled:cursor-not-allowed disabled:opacity-60 ${
+							className={`text-inline-start form-control-base flex items-center justify-between gap-3 disabled:cursor-not-allowed disabled:opacity-60 ${
 								open
 									? 'border-accent ring-2 ring-accent/20'
-									: 'border-stroke'
+									: 'focus:border-accent focus:ring-2 focus:ring-accent/20'
 							} ${buttonClassName}`}
 						>
 							<span className="truncate">

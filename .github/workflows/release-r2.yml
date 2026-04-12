@@ -1,310 +1,310 @@
-name: Publish Release to R2
+name: Release
 
 on:
-  push:
-    tags:
-      - 'v*'
-  workflow_dispatch:
+    push:
+        tags:
+            - "v*"
+    workflow_dispatch:
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+    FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 permissions:
-  contents: write
+    contents: write
 
 concurrency:
-  group: publish-release-r2
-  cancel-in-progress: false
+    group: publish-release-r2
+    cancel-in-progress: false
 
 jobs:
-  publish:
-    name: Build and upload release package
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION: auto
-      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-      R2_BUCKET: ${{ secrets.R2_BUCKET }}
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          cache: npm
-
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.4'
-          extensions: pdo, pdo_mysql, zip
-          tools: composer
-
-      - name: Install npm dependencies
-        run: npm ci --legacy-peer-deps
-
-      - name: Build release package
-        run: npm run release:build
-
-      - name: Resolve release paths
-        id: release
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          VERSION="$(tr -d '\n' < .version)"
-          EXPECTED_TAG="v${VERSION}"
-          ARCHIVE="release/peakurl-${VERSION}.zip"
-          METADATA="release/release-metadata.json"
-          VERSIONED_ARCHIVE_KEY="package/peakurl-${VERSION}.zip"
-
-          for path in "$ARCHIVE" "$METADATA"; do
-            if [ ! -f "$path" ]; then
-              echo "Missing expected release artifact: $path" >&2
-              exit 1
-            fi
-          done
-
-          CHECKSUM="$(node -e "const fs=require('fs'); const metadata=JSON.parse(fs.readFileSync('$METADATA','utf8')); process.stdout.write(metadata.archiveChecksumSha256);")"
-          GENERATED_AT="$(node -e "const fs=require('fs'); const metadata=JSON.parse(fs.readFileSync('$METADATA','utf8')); process.stdout.write(metadata.generatedAt);")"
-          DOWNLOAD_URL="$(node -e "const fs=require('fs'); const metadata=JSON.parse(fs.readFileSync('$METADATA','utf8')); process.stdout.write(metadata.downloadUrl);")"
-          PACKAGE_URL="$(node -e "const fs=require('fs'); const metadata=JSON.parse(fs.readFileSync('$METADATA','utf8')); process.stdout.write(metadata.packageUrl);")"
-
-          if [ "${GITHUB_EVENT_NAME}" = "push" ]; then
-            if [ "${GITHUB_REF_TYPE}" != "tag" ]; then
-              echo "Expected a tag ref for push-triggered release runs." >&2
-              exit 1
-            fi
-
-            if [ "${GITHUB_REF_NAME}" != "${EXPECTED_TAG}" ]; then
-              echo "Tag ${GITHUB_REF_NAME} does not match .version (${EXPECTED_TAG})." >&2
-              exit 1
-            fi
-          fi
-
-          {
-            echo "version=$VERSION"
-            echo "tag=$EXPECTED_TAG"
-            echo "archive=$ARCHIVE"
-            echo "checksum=$CHECKSUM"
-            echo "generated_at=$GENERATED_AT"
-            echo "download_url=$DOWNLOAD_URL"
-            echo "package_url=$PACKAGE_URL"
-            echo "versioned_archive_key=$VERSIONED_ARCHIVE_KEY"
-          } >> "$GITHUB_OUTPUT"
-
-      - name: Upload release files to R2
+    publish:
+        name: Build and upload release package
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
         env:
-          R2_ENDPOINT: https://${{ env.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
-        shell: bash
-        run: |
-          set -euo pipefail
+            AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+            AWS_DEFAULT_REGION: auto
+            R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+            R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        steps:
+            - name: Check out repository
+              uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
 
-          aws s3 cp "${{ steps.release.outputs.archive }}" "s3://${R2_BUCKET}/${{ steps.release.outputs.versioned_archive_key }}" --endpoint-url "$R2_ENDPOINT"
-          aws s3 cp "${{ steps.release.outputs.archive }}" "s3://${R2_BUCKET}/latest.zip" --endpoint-url "$R2_ENDPOINT"
+            - name: Set up Node.js
+              uses: actions/setup-node@v6
+              with:
+                  node-version: 24
+                  cache: npm
 
-      - name: Purge Cloudflare latest.zip cache
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
-        shell: bash
-        run: |
-          set -euo pipefail
+            - name: Set up PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "8.4"
+                  extensions: pdo, pdo_mysql, zip
+                  tools: composer
 
-          if [ -z "${CLOUDFLARE_API_TOKEN:-}" ] || [ -z "${CLOUDFLARE_ZONE_ID:-}" ]; then
-            echo "Missing required Cloudflare purge secrets in PeakURL/PeakURL." >&2
-            echo "Add CLOUDFLARE_API_TOKEN and CLOUDFLARE_ZONE_ID to the repository secrets." >&2
-            exit 1
-          fi
+            - name: Install npm dependencies
+              run: npm ci --legacy-peer-deps
 
-          curl --fail --silent --show-error \
-            --request POST \
-            --url "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/purge_cache" \
-            --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
-            --header "Content-Type: application/json" \
-            --data '{
-              "files": [
-                "https://releases.peakurl.org/latest.zip",
-                "https://peakurl.org/latest.zip"
-              ]
-            }'
+            - name: Build release package
+              run: npm run release:build
 
-      - name: Verify public release archives
-        id: published
-        env:
-          EXPECTED_CHECKSUM: ${{ steps.release.outputs.checksum }}
-          DOWNLOAD_URL: ${{ steps.release.outputs.download_url }}
-          PACKAGE_URL: ${{ steps.release.outputs.package_url }}
-        shell: bash
-        run: |
-          set -euo pipefail
+            - name: Resolve release paths
+              id: release
+              shell: bash
+              run: |
+                  set -euo pipefail
 
-          TMP_PACKAGE="$(mktemp)"
-          TMP_LATEST="$(mktemp)"
-          trap 'rm -f "$TMP_PACKAGE" "$TMP_LATEST"' EXIT
+                  VERSION="$(tr -d '\n' < .version)"
+                  EXPECTED_TAG="v${VERSION}"
+                  ARCHIVE="release/peakurl-${VERSION}.zip"
+                  METADATA="release/release-metadata.json"
+                  VERSIONED_ARCHIVE_KEY="package/peakurl-${VERSION}.zip"
 
-          SERVED_PACKAGE_CHECKSUM=""
-          SERVED_LATEST_CHECKSUM=""
+                  for path in "$ARCHIVE" "$METADATA"; do
+                    if [ ! -f "$path" ]; then
+                      echo "Missing expected release artifact: $path" >&2
+                      exit 1
+                    fi
+                  done
 
-          for attempt in $(seq 1 10); do
-            curl --fail --silent --show-error --location "$PACKAGE_URL" --output "$TMP_PACKAGE"
-            curl --fail --silent --show-error --location "$DOWNLOAD_URL" --output "$TMP_LATEST"
+                  CHECKSUM="$(node -e "const fs=require('fs'); const metadata=JSON.parse(fs.readFileSync('$METADATA','utf8')); process.stdout.write(metadata.archiveChecksumSha256);")"
+                  GENERATED_AT="$(node -e "const fs=require('fs'); const metadata=JSON.parse(fs.readFileSync('$METADATA','utf8')); process.stdout.write(metadata.generatedAt);")"
+                  DOWNLOAD_URL="$(node -e "const fs=require('fs'); const metadata=JSON.parse(fs.readFileSync('$METADATA','utf8')); process.stdout.write(metadata.downloadUrl);")"
+                  PACKAGE_URL="$(node -e "const fs=require('fs'); const metadata=JSON.parse(fs.readFileSync('$METADATA','utf8')); process.stdout.write(metadata.packageUrl);")"
 
-            SERVED_PACKAGE_CHECKSUM="$(shasum -a 256 "$TMP_PACKAGE" | awk '{print $1}')"
-            SERVED_LATEST_CHECKSUM="$(shasum -a 256 "$TMP_LATEST" | awk '{print $1}')"
+                  if [ "${GITHUB_EVENT_NAME}" = "push" ]; then
+                    if [ "${GITHUB_REF_TYPE}" != "tag" ]; then
+                      echo "Expected a tag ref for push-triggered release runs." >&2
+                      exit 1
+                    fi
 
-            if [ "$SERVED_PACKAGE_CHECKSUM" = "$EXPECTED_CHECKSUM" ] && [ "$SERVED_LATEST_CHECKSUM" = "$EXPECTED_CHECKSUM" ]; then
-              {
-                echo "published_checksum=$EXPECTED_CHECKSUM"
-                echo "published_attempt=$attempt"
-              } >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
+                    if [ "${GITHUB_REF_NAME}" != "${EXPECTED_TAG}" ]; then
+                      echo "Tag ${GITHUB_REF_NAME} does not match .version (${EXPECTED_TAG})." >&2
+                      exit 1
+                    fi
+                  fi
 
-            if [ "$attempt" -lt 10 ]; then
-              sleep 5
-            fi
-          done
+                  {
+                    echo "version=$VERSION"
+                    echo "tag=$EXPECTED_TAG"
+                    echo "archive=$ARCHIVE"
+                    echo "checksum=$CHECKSUM"
+                    echo "generated_at=$GENERATED_AT"
+                    echo "download_url=$DOWNLOAD_URL"
+                    echo "package_url=$PACKAGE_URL"
+                    echo "versioned_archive_key=$VERSIONED_ARCHIVE_KEY"
+                  } >> "$GITHUB_OUTPUT"
 
-          echo "Uploaded release archive is not yet being served at the expected checksum." >&2
-          echo "Expected checksum: $EXPECTED_CHECKSUM" >&2
-          echo "Package URL checksum: $SERVED_PACKAGE_CHECKSUM" >&2
-          echo "Latest URL checksum: $SERVED_LATEST_CHECKSUM" >&2
-          exit 1
+            - name: Upload release files to R2
+              env:
+                  R2_ENDPOINT: https://${{ env.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+              shell: bash
+              run: |
+                  set -euo pipefail
 
-      - name: Trigger PeakURL.org manifest update workflow
-        env:
-          PEAKURL_ORG_UPDATE_TOKEN: ${{ secrets.PEAKURL_ORG_UPDATE_TOKEN }}
-          VERSION: ${{ steps.release.outputs.version }}
-          RELEASED_AT: ${{ steps.release.outputs.generated_at }}
-          DOWNLOAD_URL: ${{ steps.release.outputs.download_url }}
-          PACKAGE_URL: ${{ steps.release.outputs.package_url }}
-          CHECKSUM: ${{ steps.published.outputs.published_checksum }}
-          MINIMUM_PEAKURL_VERSION: ${{ steps.release.outputs.version }}
-        shell: bash
-        run: |
-          set -euo pipefail
+                  aws s3 cp "${{ steps.release.outputs.archive }}" "s3://${R2_BUCKET}/${{ steps.release.outputs.versioned_archive_key }}" --endpoint-url "$R2_ENDPOINT"
+                  aws s3 cp "${{ steps.release.outputs.archive }}" "s3://${R2_BUCKET}/latest.zip" --endpoint-url "$R2_ENDPOINT"
 
-          if [ -z "${PEAKURL_ORG_UPDATE_TOKEN:-}" ]; then
-            echo "Missing required secret: PEAKURL_ORG_UPDATE_TOKEN" >&2
-            exit 1
-          fi
+            - name: Purge Cloudflare latest.zip cache
+              env:
+                  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                  CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+              shell: bash
+              run: |
+                  set -euo pipefail
 
-          PAYLOAD="$(node -e "const payload={ref:'main',inputs:{version:process.env.VERSION,released_at:process.env.RELEASED_AT,download_url:process.env.DOWNLOAD_URL,package_url:process.env.PACKAGE_URL,checksum_sha256:process.env.CHECKSUM,minimum_peakurl_version:process.env.MINIMUM_PEAKURL_VERSION}}; process.stdout.write(JSON.stringify(payload));" )"
+                  if [ -z "${CLOUDFLARE_API_TOKEN:-}" ] || [ -z "${CLOUDFLARE_ZONE_ID:-}" ]; then
+                    echo "Missing required Cloudflare purge secrets in PeakURL/PeakURL." >&2
+                    echo "Add CLOUDFLARE_API_TOKEN and CLOUDFLARE_ZONE_ID to the repository secrets." >&2
+                    exit 1
+                  fi
 
-          curl --fail --silent --show-error \
-            --request POST \
-            --url "https://api.github.com/repos/PeakURL/PeakURL.org/actions/workflows/update-release.yml/dispatches" \
-            --header "Accept: application/vnd.github+json" \
-            --header "Authorization: Bearer ${PEAKURL_ORG_UPDATE_TOKEN}" \
-            --header "X-GitHub-Api-Version: 2022-11-28" \
-            --data "$PAYLOAD"
+                  curl --fail --silent --show-error \
+                    --request POST \
+                    --url "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/purge_cache" \
+                    --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+                    --header "Content-Type: application/json" \
+                    --data '{
+                      "files": [
+                        "https://releases.peakurl.org/latest.zip",
+                        "https://peakurl.org/latest.zip"
+                      ]
+                    }'
 
-      - name: Trigger containers image publish workflow
-        id: containers_publish
-        env:
-          PEAKURL_CONTAINERS_TRIGGER_TOKEN: ${{ secrets.PEAKURL_CONTAINERS_TRIGGER_TOKEN }}
-          VERSION: ${{ steps.release.outputs.version }}
-          PACKAGE_URL: ${{ steps.release.outputs.package_url }}
-          CHECKSUM: ${{ steps.published.outputs.published_checksum }}
-        shell: bash
-        run: |
-          set -euo pipefail
+            - name: Verify public release archives
+              id: published
+              env:
+                  EXPECTED_CHECKSUM: ${{ steps.release.outputs.checksum }}
+                  DOWNLOAD_URL: ${{ steps.release.outputs.download_url }}
+                  PACKAGE_URL: ${{ steps.release.outputs.package_url }}
+              shell: bash
+              run: |
+                  set -euo pipefail
 
-          if [ -z "${PEAKURL_CONTAINERS_TRIGGER_TOKEN:-}" ]; then
-            echo "status=skipped" >> "$GITHUB_OUTPUT"
-            echo "message=Missing PEAKURL_CONTAINERS_TRIGGER_TOKEN secret in PeakURL/PeakURL." >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
+                  TMP_PACKAGE="$(mktemp)"
+                  TMP_LATEST="$(mktemp)"
+                  trap 'rm -f "$TMP_PACKAGE" "$TMP_LATEST"' EXIT
 
-          PAYLOAD="$(node -e "const payload={ref:'main',inputs:{image_tag:process.env.VERSION,release_url:process.env.PACKAGE_URL,release_sha256:process.env.CHECKSUM}}; process.stdout.write(JSON.stringify(payload));" )"
+                  SERVED_PACKAGE_CHECKSUM=""
+                  SERVED_LATEST_CHECKSUM=""
 
-          curl --fail --silent --show-error \
-            --request POST \
-            --url "https://api.github.com/repos/PeakURL/containers/actions/workflows/publish-image.yml/dispatches" \
-            --header "Accept: application/vnd.github+json" \
-            --header "Authorization: Bearer ${PEAKURL_CONTAINERS_TRIGGER_TOKEN}" \
-            --header "X-GitHub-Api-Version: 2022-11-28" \
-            --data "$PAYLOAD"
+                  for attempt in $(seq 1 10); do
+                    curl --fail --silent --show-error --location "$PACKAGE_URL" --output "$TMP_PACKAGE"
+                    curl --fail --silent --show-error --location "$DOWNLOAD_URL" --output "$TMP_LATEST"
 
-          echo "status=dispatched" >> "$GITHUB_OUTPUT"
-          echo "message=Triggered PeakURL/containers publish-image.yml for ${VERSION}." >> "$GITHUB_OUTPUT"
+                    SERVED_PACKAGE_CHECKSUM="$(shasum -a 256 "$TMP_PACKAGE" | awk '{print $1}')"
+                    SERVED_LATEST_CHECKSUM="$(shasum -a 256 "$TMP_LATEST" | awk '{print $1}')"
 
-      - name: Publish GitHub release from tag
-        if: github.event_name == 'push' && github.ref_type == 'tag'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          VERSION: ${{ steps.release.outputs.version }}
-          TAG_NAME: ${{ steps.release.outputs.tag }}
-          ARCHIVE_PATH: ${{ steps.release.outputs.archive }}
-        shell: bash
-        run: |
-          set -euo pipefail
+                    if [ "$SERVED_PACKAGE_CHECKSUM" = "$EXPECTED_CHECKSUM" ] && [ "$SERVED_LATEST_CHECKSUM" = "$EXPECTED_CHECKSUM" ]; then
+                      {
+                        echo "published_checksum=$EXPECTED_CHECKSUM"
+                        echo "published_attempt=$attempt"
+                      } >> "$GITHUB_OUTPUT"
+                      exit 0
+                    fi
 
-          NOTES_FILE="$(mktemp)"
-          trap 'rm -f "$NOTES_FILE"' EXIT
+                    if [ "$attempt" -lt 10 ]; then
+                      sleep 5
+                    fi
+                  done
 
-          cat > "$NOTES_FILE" <<EOF
-          ## Install
+                  echo "Uploaded release archive is not yet being served at the expected checksum." >&2
+                  echo "Expected checksum: $EXPECTED_CHECKSUM" >&2
+                  echo "Package URL checksum: $SERVED_PACKAGE_CHECKSUM" >&2
+                  echo "Latest URL checksum: $SERVED_LATEST_CHECKSUM" >&2
+                  exit 1
 
-          - Download the latest release: https://peakurl.org/latest.zip
-          - Read the getting started guide: https://peakurl.org/docs/getting-started
-          - View installation steps: https://peakurl.org/docs/getting-started#installation
+            - name: Trigger PeakURL.org manifest update workflow
+              env:
+                  PEAKURL_ORG_UPDATE_TOKEN: ${{ secrets.PEAKURL_ORG_UPDATE_TOKEN }}
+                  VERSION: ${{ steps.release.outputs.version }}
+                  RELEASED_AT: ${{ steps.release.outputs.generated_at }}
+                  DOWNLOAD_URL: ${{ steps.release.outputs.download_url }}
+                  PACKAGE_URL: ${{ steps.release.outputs.package_url }}
+                  CHECKSUM: ${{ steps.published.outputs.published_checksum }}
+                  MINIMUM_PEAKURL_VERSION: ${{ steps.release.outputs.version }}
+              shell: bash
+              run: |
+                  set -euo pipefail
 
-          ## Notes
+                  if [ -z "${PEAKURL_ORG_UPDATE_TOKEN:-}" ]; then
+                    echo "Missing required secret: PEAKURL_ORG_UPDATE_TOKEN" >&2
+                    exit 1
+                  fi
 
-          - This GitHub release includes a versioned release asset for project history and GitHub downloads.
-          - For the latest public install package, use https://peakurl.org/latest.zip.
+                  PAYLOAD="$(node -e "const payload={ref:'main',inputs:{version:process.env.VERSION,released_at:process.env.RELEASED_AT,download_url:process.env.DOWNLOAD_URL,package_url:process.env.PACKAGE_URL,checksum_sha256:process.env.CHECKSUM,minimum_peakurl_version:process.env.MINIMUM_PEAKURL_VERSION}}; process.stdout.write(JSON.stringify(payload));" )"
 
-          **Full Changelog**: https://github.com/PeakURL/PeakURL/commits/${TAG_NAME}
-          EOF
+                  curl --fail --silent --show-error \
+                    --request POST \
+                    --url "https://api.github.com/repos/PeakURL/PeakURL.org/actions/workflows/update-release.yml/dispatches" \
+                    --header "Accept: application/vnd.github+json" \
+                    --header "Authorization: Bearer ${PEAKURL_ORG_UPDATE_TOKEN}" \
+                    --header "X-GitHub-Api-Version: 2022-11-28" \
+                    --data "$PAYLOAD"
 
-          if gh release view "$TAG_NAME" --repo PeakURL/PeakURL > /dev/null 2>&1; then
-            gh release upload "$TAG_NAME" "$ARCHIVE_PATH" --repo PeakURL/PeakURL --clobber
-            gh release edit "$TAG_NAME" \
-              --repo PeakURL/PeakURL \
-              --title "PeakURL ${VERSION}" \
-              --notes-file "$NOTES_FILE"
-            exit 0
-          fi
+            - name: Trigger containers image publish workflow
+              id: containers_publish
+              env:
+                  PEAKURL_CONTAINERS_TRIGGER_TOKEN: ${{ secrets.PEAKURL_CONTAINERS_TRIGGER_TOKEN }}
+                  VERSION: ${{ steps.release.outputs.version }}
+                  PACKAGE_URL: ${{ steps.release.outputs.package_url }}
+                  CHECKSUM: ${{ steps.published.outputs.published_checksum }}
+              shell: bash
+              run: |
+                  set -euo pipefail
 
-          gh release create "$TAG_NAME" "$ARCHIVE_PATH" \
-            --repo PeakURL/PeakURL \
-            --verify-tag \
-            --title "PeakURL ${VERSION}" \
-            --notes-file "$NOTES_FILE"
+                  if [ -z "${PEAKURL_CONTAINERS_TRIGGER_TOKEN:-}" ]; then
+                    echo "status=skipped" >> "$GITHUB_OUTPUT"
+                    echo "message=Missing PEAKURL_CONTAINERS_TRIGGER_TOKEN secret in PeakURL/PeakURL." >> "$GITHUB_OUTPUT"
+                    exit 0
+                  fi
 
-      - name: Summarize release upload
-        run: |
-          {
-            echo "## R2 release upload"
-            echo
-            echo "- Version: \`${{ steps.release.outputs.version }}\`"
-            echo "- Tag: \`${{ steps.release.outputs.tag }}\`"
-            echo "- Versioned archive: \`s3://${{ env.R2_BUCKET }}/${{ steps.release.outputs.versioned_archive_key }}\`"
-            echo "- Latest archive: \`s3://${{ env.R2_BUCKET }}/latest.zip\`"
-            echo "- SHA-256: \`${{ steps.published.outputs.published_checksum }}\`"
-            echo "- Public archive verification attempts: \`${{ steps.published.outputs.published_attempt }}\`"
-            echo "- PeakURL.org handoff: \`workflow_dispatch -> PeakURL/PeakURL.org/.github/workflows/update-release.yml\`"
-            echo "- Containers handoff: \`${{ steps.containers_publish.outputs.status || 'unknown' }}\`"
-            echo "- GitHub release publishing: \`${{ github.event_name == 'push' && github.ref_type == 'tag' && 'automatic from tag push' || 'skipped in workflow_dispatch mode' }}\`"
-            echo
-            echo "## PeakURL.org update.json values"
-            echo
-            echo '```json'
-            echo '{'
-            echo '  "version": "${{ steps.release.outputs.version }}",'
-            echo '  "releasedAt": "${{ steps.release.outputs.generated_at }}",'
-            echo '  "downloadUrl": "${{ steps.release.outputs.download_url }}",'
-            echo '  "packageUrl": "${{ steps.release.outputs.package_url }}",'
-            echo '  "checksumSha256": "${{ steps.published.outputs.published_checksum }}",'
-            echo '  "minimumPeakurlVersion": "${{ steps.release.outputs.version }}"'
-            echo '}'
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
+                  PAYLOAD="$(node -e "const payload={ref:'main',inputs:{image_tag:process.env.VERSION,release_url:process.env.PACKAGE_URL,release_sha256:process.env.CHECKSUM}}; process.stdout.write(JSON.stringify(payload));" )"
+
+                  curl --fail --silent --show-error \
+                    --request POST \
+                    --url "https://api.github.com/repos/PeakURL/containers/actions/workflows/publish-image.yml/dispatches" \
+                    --header "Accept: application/vnd.github+json" \
+                    --header "Authorization: Bearer ${PEAKURL_CONTAINERS_TRIGGER_TOKEN}" \
+                    --header "X-GitHub-Api-Version: 2022-11-28" \
+                    --data "$PAYLOAD"
+
+                  echo "status=dispatched" >> "$GITHUB_OUTPUT"
+                  echo "message=Triggered PeakURL/containers publish-image.yml for ${VERSION}." >> "$GITHUB_OUTPUT"
+
+            - name: Publish GitHub release from tag
+              if: github.event_name == 'push' && github.ref_type == 'tag'
+              env:
+                  GH_TOKEN: ${{ github.token }}
+                  VERSION: ${{ steps.release.outputs.version }}
+                  TAG_NAME: ${{ steps.release.outputs.tag }}
+                  ARCHIVE_PATH: ${{ steps.release.outputs.archive }}
+              shell: bash
+              run: |
+                  set -euo pipefail
+
+                  NOTES_FILE="$(mktemp)"
+                  trap 'rm -f "$NOTES_FILE"' EXIT
+
+                  cat > "$NOTES_FILE" <<EOF
+                  ## Install
+
+                  - Download the latest release: https://peakurl.org/latest.zip
+                  - Read the getting started guide: https://peakurl.org/docs/getting-started
+                  - View installation steps: https://peakurl.org/docs/getting-started#installation
+
+                  ## Notes
+
+                  - This GitHub release includes a versioned release asset for project history and GitHub downloads.
+                  - For the latest public install package, use https://peakurl.org/latest.zip.
+
+                  **Full Changelog**: https://github.com/PeakURL/PeakURL/commits/${TAG_NAME}
+                  EOF
+
+                  if gh release view "$TAG_NAME" --repo PeakURL/PeakURL > /dev/null 2>&1; then
+                    gh release upload "$TAG_NAME" "$ARCHIVE_PATH" --repo PeakURL/PeakURL --clobber
+                    gh release edit "$TAG_NAME" \
+                      --repo PeakURL/PeakURL \
+                      --title "PeakURL ${VERSION}" \
+                      --notes-file "$NOTES_FILE"
+                    exit 0
+                  fi
+
+                  gh release create "$TAG_NAME" "$ARCHIVE_PATH" \
+                    --repo PeakURL/PeakURL \
+                    --verify-tag \
+                    --title "PeakURL ${VERSION}" \
+                    --notes-file "$NOTES_FILE"
+
+            - name: Summarize release upload
+              run: |
+                  {
+                    echo "## R2 release upload"
+                    echo
+                    echo "- Version: \`${{ steps.release.outputs.version }}\`"
+                    echo "- Tag: \`${{ steps.release.outputs.tag }}\`"
+                    echo "- Versioned archive: \`s3://${{ env.R2_BUCKET }}/${{ steps.release.outputs.versioned_archive_key }}\`"
+                    echo "- Latest archive: \`s3://${{ env.R2_BUCKET }}/latest.zip\`"
+                    echo "- SHA-256: \`${{ steps.published.outputs.published_checksum }}\`"
+                    echo "- Public archive verification attempts: \`${{ steps.published.outputs.published_attempt }}\`"
+                    echo "- PeakURL.org handoff: \`workflow_dispatch -> PeakURL/PeakURL.org/.github/workflows/update-release.yml\`"
+                    echo "- Containers handoff: \`${{ steps.containers_publish.outputs.status || 'unknown' }}\`"
+                    echo "- GitHub release publishing: \`${{ github.event_name == 'push' && github.ref_type == 'tag' && 'automatic from tag push' || 'skipped in workflow_dispatch mode' }}\`"
+                    echo
+                    echo "## PeakURL.org update.json values"
+                    echo
+                    echo '```json'
+                    echo '{'
+                    echo '  "version": "${{ steps.release.outputs.version }}",'
+                    echo '  "releasedAt": "${{ steps.release.outputs.generated_at }}",'
+                    echo '  "downloadUrl": "${{ steps.release.outputs.download_url }}",'
+                    echo '  "packageUrl": "${{ steps.release.outputs.package_url }}",'
+                    echo '  "checksumSha256": "${{ steps.published.outputs.published_checksum }}",'
+                    echo '  "minimumPeakurlVersion": "${{ steps.release.outputs.version }}"'
+                    echo '}'
+                    echo '```'
+                  } >> "$GITHUB_STEP_SUMMARY"

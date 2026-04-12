@@ -128,6 +128,9 @@ export interface NavItem {
 	/** Optional direct destination when the item is not a section. */
 	href?: string;
 
+	/** Optional parent route prefix used to mark nested routes as active. */
+	activeBasePath?: string;
+
 	/** Lucide icon rendered beside the item label. */
 	icon: LucideIcon;
 

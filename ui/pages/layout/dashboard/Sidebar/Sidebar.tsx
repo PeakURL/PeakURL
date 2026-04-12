@@ -79,6 +79,7 @@ const buildNav = (
 		{
 			name: __('Settings'),
 			href: `${base || ''}/settings/general`,
+			activeBasePath: `${base || ''}/settings`,
 			icon: Settings,
 		},
 	];
@@ -259,8 +260,14 @@ export const Sidebar = ({
 							const isOpen =
 								isSectionActive ||
 								Boolean(openSections[item.name]);
+							const activeBasePath = item.activeBasePath;
 							const isActive =
 								pathname === item.href ||
+								(Boolean(activeBasePath) &&
+									(pathname === activeBasePath ||
+										pathname.startsWith(
+											`${activeBasePath}/`
+										))) ||
 								(pathname.startsWith(`${item.href}/`) &&
 									item.href !== base);
 
@@ -301,7 +308,11 @@ export const Sidebar = ({
 											/>
 										</button>
 
-										<div className={getSubmenuClassName(isOpen)}>
+										<div
+											className={getSubmenuClassName(
+												isOpen
+											)}
+										>
 											<div className="dashboard-sidebar-submenu-list">
 												{item.children.map((child) => {
 													const isChildLinkActive =
@@ -342,7 +353,9 @@ export const Sidebar = ({
 								>
 									<IconComponent
 										size={18}
-										className={getLinkIconClassName(isActive)}
+										className={getLinkIconClassName(
+											isActive
+										)}
 									/>
 									<span className="dashboard-sidebar-link-label">
 										{item.name}
@@ -363,10 +376,7 @@ export const Sidebar = ({
 					</div>
 				</nav>
 
-				<div
-					ref={aboutRef}
-					className="dashboard-sidebar-footer"
-				>
+				<div ref={aboutRef} className="dashboard-sidebar-footer">
 					<div className={getAboutPanelClassName(isAboutOpen)}>
 						<div className="dashboard-sidebar-about-panel-list">
 							<Link

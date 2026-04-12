@@ -206,6 +206,36 @@ jobs:
             --header "X-GitHub-Api-Version: 2022-11-28" \
             --data "$PAYLOAD"
 
+      - name: Trigger containers image publish workflow
+        id: containers_publish
+        env:
+          PEAKURL_CONTAINERS_TRIGGER_TOKEN: ${{ secrets.PEAKURL_CONTAINERS_TRIGGER_TOKEN }}
+          VERSION: ${{ steps.release.outputs.version }}
+          PACKAGE_URL: ${{ steps.release.outputs.package_url }}
+          CHECKSUM: ${{ steps.published.outputs.published_checksum }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ -z "${PEAKURL_CONTAINERS_TRIGGER_TOKEN:-}" ]; then
+            echo "status=skipped" >> "$GITHUB_OUTPUT"
+            echo "message=Missing PEAKURL_CONTAINERS_TRIGGER_TOKEN secret in PeakURL/PeakURL." >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          PAYLOAD="$(node -e "const payload={ref:'main',inputs:{image_tag:process.env.VERSION,release_url:process.env.PACKAGE_URL,release_sha256:process.env.CHECKSUM}}; process.stdout.write(JSON.stringify(payload));" )"
+
+          curl --fail --silent --show-error \
+            --request POST \
+            --url "https://api.github.com/repos/PeakURL/containers/actions/workflows/publish-image.yml/dispatches" \
+            --header "Accept: application/vnd.github+json" \
+            --header "Authorization: Bearer ${PEAKURL_CONTAINERS_TRIGGER_TOKEN}" \
+            --header "X-GitHub-Api-Version: 2022-11-28" \
+            --data "$PAYLOAD"
+
+          echo "status=dispatched" >> "$GITHUB_OUTPUT"
+          echo "message=Triggered PeakURL/containers publish-image.yml for ${VERSION}." >> "$GITHUB_OUTPUT"
+
       - name: Publish GitHub release from tag
         if: github.event_name == 'push' && github.ref_type == 'tag'
         env:
@@ -262,6 +292,7 @@ jobs:
             echo "- SHA-256: \`${{ steps.published.outputs.published_checksum }}\`"
             echo "- Public archive verification attempts: \`${{ steps.published.outputs.published_attempt }}\`"
             echo "- PeakURL.org handoff: \`workflow_dispatch -> PeakURL/PeakURL.org/.github/workflows/update-release.yml\`"
+            echo "- Containers handoff: \`${{ steps.containers_publish.outputs.status || 'unknown' }}\`"
             echo "- GitHub release publishing: \`${{ github.event_name == 'push' && github.ref_type == 'tag' && 'automatic from tag push' || 'skipped in workflow_dispatch mode' }}\`"
             echo
             echo "## PeakURL.org update.json values"

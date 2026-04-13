@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
 import { CircleCheckBig, Link2, MousePointerClick, Users } from 'lucide-react';
+import {
+	DEFAULT_PAGE_SIZE_MAX,
+	DEFAULT_PAGE_SIZE_OPTIONS,
+	normalizePageSize,
+} from '@/components';
 // LocalStorage keys for persistence (defined outside component to satisfy hook deps)
 const LS_KEYS = {
 	sortBy: 'admin_links_sortBy',
@@ -42,11 +47,14 @@ function LinksPage() {
 	);
 	const [limit, setLimit] = useState(() => {
 		if (typeof window !== 'undefined') {
-			const saved = localStorage.getItem(LS_KEYS.limit);
-			const num = Number(saved);
-			return !isNaN(num) && num > 0 ? num : 25;
+			return normalizePageSize(
+				localStorage.getItem(LS_KEYS.limit),
+				DEFAULT_PAGE_SIZE_OPTIONS[0],
+				DEFAULT_PAGE_SIZE_MAX
+			);
 		}
-		return 25;
+
+		return DEFAULT_PAGE_SIZE_OPTIONS[0];
 	});
 	const [currentPage, setCurrentPage] = useState(1);
 	const [searchParams] = useSearchParams();
@@ -94,6 +102,10 @@ function LinksPage() {
 	useEffect(() => {
 		setCurrentPage(1);
 	}, [searchQuery]);
+
+	useEffect(() => {
+		setCurrentPage(1);
+	}, [limit, sortBy, sortOrder]);
 
 	const handleRefresh = async () => {
 		if (isRefreshing) {

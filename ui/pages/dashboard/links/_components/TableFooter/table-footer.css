@@ -46,8 +46,4 @@
 	.links-table-footer-select {
 		@apply sm:min-w-44;
 	}
-
-	.links-table-footer-input {
-		@apply col-span-2 w-full min-w-0 sm:col-span-1 sm:w-28;
-	}
 }

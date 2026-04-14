@@ -7,6 +7,26 @@ const devProxyTarget =
 	process.env.VITE_DEV_PROXY_TARGET || 'http://127.0.0.1:8000';
 const devPublicHost = process.env.VITE_DEV_PUBLIC_HOST || '';
 const useHttpsProxy = 'true' === process.env.VITE_DEV_USE_HTTPS_PROXY;
+const excludedProxyPaths = [
+	'dashboard',
+	'login',
+	'forgot-password',
+	'reset-password',
+	'api',
+	'@vite',
+	'@react-refresh',
+	'ui',
+	'src',
+	'node_modules',
+	'assets',
+];
+
+const escapeRegexSegment = (value: string): string =>
+	value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const fallbackProxyPattern = `^/(?!${excludedProxyPaths
+	.map((segment) => `${escapeRegexSegment(segment)}(?:/|$)`)
+	.join('|')})[a-z0-9-]+(?:\\+)?/?$`;
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -21,7 +41,7 @@ export default defineConfig({
 				entryFileNames: 'assets/app-[hash].js',
 				chunkFileNames: 'assets/chunk-[hash].js',
 				assetFileNames: (assetInfo) => {
-					const assetName = assetInfo.names[0] || '';
+					const assetName = assetInfo.name || '';
 					const extension = path.extname(assetName);
 
 					if ('.css' === extension) {
@@ -63,11 +83,10 @@ export default defineConfig({
 				target: devProxyTarget,
 				changeOrigin: true,
 			},
-			'^/(?!dashboard(?:/|$)|login(?:/|$)|forgot-password(?:/|$)|reset-password(?:/|$)|api(?:/|$)|@vite(?:/|$)|@react-refresh(?:/|$)|ui(?:/|$)|src(?:/|$)|node_modules(?:/|$)|assets(?:/|$))[a-z0-9-]+(?:\\+)?/?$':
-				{
-					target: devProxyTarget,
-					changeOrigin: true,
-				},
+			[fallbackProxyPattern]: {
+				target: devProxyTarget,
+				changeOrigin: true,
+			},
 		},
 	},
 });

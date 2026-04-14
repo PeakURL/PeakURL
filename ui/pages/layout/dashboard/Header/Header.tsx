@@ -1,6 +1,7 @@
 import {
 	Menu as MenuIcon,
 	ChevronDown,
+	Clock3,
 	User,
 	Settings,
 	LogOut,
@@ -16,9 +17,7 @@ import { cn } from '@/utils';
 import { Search } from '../Search';
 import type { HeaderProps } from '../types';
 
-export const Header = ({
-	onMobileMenuToggle,
-}: HeaderProps) => {
+export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 	const direction = getDocumentDirection();
 	const { useAuthCheckQuery } = authApi;
 	const { data: sessionData } = useAuthCheckQuery(undefined);
@@ -92,6 +91,26 @@ export const Header = ({
 							className="dashboard-header-user-panel"
 						>
 							<div className="dashboard-header-user-panel-inner">
+								<MenuItem>
+									{({ focus }) => (
+										<button
+											onClick={() =>
+												navigate(`${basePath}/activity`)
+											}
+											className={cn(
+												'dashboard-header-user-item',
+												focus &&
+													'dashboard-header-user-item-active'
+											)}
+										>
+											<Clock3
+												size={16}
+												className="dashboard-header-user-item-icon"
+											/>
+											{__('Activity')}
+										</button>
+									)}
+								</MenuItem>
 								<MenuItem>
 									{({ focus }) => (
 										<button

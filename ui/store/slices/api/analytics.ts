@@ -1,11 +1,30 @@
 import baseApi from './base';
 import type {
+	ApiDataResponse,
+	ActivityHistoryResponse,
 	ActivityResponse,
 	DashboardAnalyticsResponse,
+	GetActivityHistoryQueryArgs,
 	LinkAnalyticsArgs,
 	LinkLocationPayload,
 	LinkStatsResponse,
 } from './types';
+
+function buildActivityHistoryQueryString({
+	page = 1,
+	limit = 25,
+	category = 'all',
+}: GetActivityHistoryQueryArgs = {}): string {
+	const params = new URLSearchParams();
+	params.set('page', String(page));
+	params.set('limit', String(limit));
+
+	if (category && 'all' !== category) {
+		params.set('category', category);
+	}
+
+	return `analytics/activity/history?${params.toString()}`;
+}
 
 /**
  * RTK Query analytics endpoints used by the dashboard overview and stats UI.
@@ -19,6 +38,34 @@ export const analyticsApi = baseApi.injectEndpoints({
 		getActivity: build.query<ActivityResponse, void>({
 			query: () => 'analytics/activity',
 			providesTags: ['Analytics'],
+		}),
+		getActivityHistory: build.query<
+			ActivityHistoryResponse,
+			GetActivityHistoryQueryArgs | void
+		>({
+			query: (args) => buildActivityHistoryQueryString(args || {}),
+			providesTags: ['Analytics'],
+		}),
+		deleteActivityLog: build.mutation<
+			ApiDataResponse<{ deleted: boolean }>,
+			string
+		>({
+			query: (id) => ({
+				url: `analytics/activity/${id}`,
+				method: 'DELETE',
+			}),
+			invalidatesTags: ['Analytics'],
+		}),
+		bulkDeleteActivityLogs: build.mutation<
+			ApiDataResponse<{ deletedCount: number }>,
+			string[]
+		>({
+			query: (ids) => ({
+				url: 'analytics/activity/bulk',
+				method: 'DELETE',
+				body: { ids },
+			}),
+			invalidatesTags: ['Analytics'],
 		}),
 		getLinkLocation: build.query<
 			{ data?: LinkLocationPayload },
@@ -42,6 +89,9 @@ export const analyticsApi = baseApi.injectEndpoints({
 export const {
 	useGetAnalyticsQuery,
 	useGetActivityQuery,
+	useGetActivityHistoryQuery,
+	useDeleteActivityLogMutation,
+	useBulkDeleteActivityLogsMutation,
 	useGetLinkLocationQuery,
 	useGetLinkStatsQuery,
 } = analyticsApi;

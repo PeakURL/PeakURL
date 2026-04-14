@@ -66,7 +66,7 @@ class Constants {
 	/** Default update manifest URL. */
 	public const DEFAULT_UPDATE_MANIFEST_URL = 'https://api.peakurl.org/v1/update';
 	/** Current managed database schema version. */
-	public const DB_SCHEMA_VERSION = 3;
+	public const DB_SCHEMA_VERSION = 4;
 	/** Default content directory. */
 	public const DEFAULT_CONTENT_DIR = 'content';
 	/** Default site locale. */

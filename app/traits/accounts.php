@@ -689,7 +689,7 @@ trait AccountsTrait {
 	 * @since 1.0.0
 	 */
 	public function create_user( Request $request, array $payload ): array {
-		$this->assert_admin_request( $request );
+		$current_user = $this->assert_admin_request( $request );
 
 		$email      = strtolower( trim( (string) ( $payload['email'] ?? '' ) ) );
 		$username   = trim( (string) ( $payload['username'] ?? '' ) );
@@ -750,8 +750,21 @@ trait AccountsTrait {
 			),
 		);
 		$user_id = $this->last_insert_id();
+		$user    = $this->find_user_row_by_id( $user_id );
 
-		return $this->hydrate_user( $this->find_user_row_by_id( $user_id ) );
+		if ( $user ) {
+			$this->record_activity(
+				'user_created',
+				'Created user ' . (string) ( $user['username'] ?? $username ) . '.',
+				(string) $current_user['id'],
+				null,
+				array(
+					'user' => $this->build_activity_user_metadata( $user ),
+				),
+			);
+		}
+
+		return $this->hydrate_user( $user );
 	}
 
 	/**
@@ -905,9 +918,21 @@ trait AccountsTrait {
 			$this->send_password_changed_notification( $user );
 		}
 
-		return $this->hydrate_user(
-			$this->find_user_row_by_id( $user_id ),
-		);
+		$updated_user = $this->find_user_row_by_id( $user_id );
+
+		if ( $updated_user ) {
+			$this->record_activity(
+				'user_updated',
+				'Updated user ' . (string) ( $updated_user['username'] ?? $username ) . '.',
+				(string) $current_user['id'],
+				null,
+				array(
+					'user' => $this->build_activity_user_metadata( $updated_user ),
+				),
+			);
+		}
+
+		return $this->hydrate_user( $updated_user );
 	}
 
 	/**
@@ -944,13 +969,82 @@ trait AccountsTrait {
 			(string) $current_user['id'],
 		);
 
-		$this->db->delete(
-			'users',
-			array(
-				'id' => $user['id'],
-			)
-		);
+		$this->db->begin_transaction();
+
+		try {
+			$this->prune_activity_logs_for_user( (string) $user['id'] );
+
+			$this->record_activity(
+				'user_deleted',
+				'Deleted user ' . (string) ( $user['username'] ?? $username ) . '.',
+				(string) $current_user['id'],
+				null,
+				array(
+					'user' => $this->build_activity_user_metadata( $user ),
+				),
+			);
+			$this->db->delete(
+				'users',
+				array(
+					'id' => $user['id'],
+				)
+			);
+			$this->db->commit();
+		} catch ( \Throwable $exception ) {
+			if ( $this->db->in_transaction() ) {
+				$this->db->roll_back();
+			}
+
+			throw $exception;
+		}
+
 		return true;
+	}
+
+	/**
+	 * Remove historical audit rows that belong to a soon-to-be-deleted user.
+	 *
+	 * Keeps the final `user_deleted` entry intact by running before that
+	 * terminal event is recorded.
+	 *
+	 * @param string $user_id Target user ID.
+	 * @return void
+	 * @since 1.0.6
+	 */
+	private function prune_activity_logs_for_user( string $user_id ): void {
+		$this->execute(
+			"DELETE FROM audit_logs
+			WHERE user_id = :user_id
+			OR metadata LIKE :metadata_user_pattern ESCAPE '\\\\'",
+			array(
+				'user_id'               => $user_id,
+				'metadata_user_pattern' => '%"user":{"id":"' . $this->db->esc_like( $user_id ) . '"%',
+			),
+		);
+	}
+
+	/**
+	 * Build lightweight user metadata for audit-log payloads.
+	 *
+	 * @param array<string, mixed> $user Raw user row.
+	 * @return array<string, string|null>
+	 * @since 1.0.4
+	 */
+	private function build_activity_user_metadata( array $user ): array {
+		$first_name = trim( (string) ( $user['first_name'] ?? '' ) );
+		$last_name  = trim( (string) ( $user['last_name'] ?? '' ) );
+		$username   = trim( (string) ( $user['username'] ?? '' ) );
+		$email      = strtolower( trim( (string) ( $user['email'] ?? '' ) ) );
+		$role       = trim( (string) ( $user['role'] ?? '' ) );
+
+		return array(
+			'id'        => (string) ( $user['id'] ?? '' ),
+			'firstName' => '' !== $first_name ? $first_name : null,
+			'lastName'  => '' !== $last_name ? $last_name : null,
+			'username'  => '' !== $username ? $username : null,
+			'email'     => '' !== $email ? $email : null,
+			'role'      => '' !== $role ? $role : null,
+		);
 	}
 
 	/**

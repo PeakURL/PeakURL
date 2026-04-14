@@ -452,7 +452,7 @@ class SchemaSpecs {
 			'audit_logs' => array(
 				array(
 					'name'       => 'fk_audit_logs_user_id',
-					'definition' => 'FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL',
+					'definition' => 'FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE',
 				),
 				array(
 					'name'       => 'fk_audit_logs_link_id',

@@ -1,0 +1,40 @@
+@layer components {
+	.page-size-control {
+		@apply min-w-44;
+	}
+
+	.page-size-control-select {
+		@apply min-w-44;
+	}
+
+	.page-size-control-editor {
+		@apply flex min-w-44 items-center gap-1 rounded-lg border border-stroke bg-surface-alt p-1;
+	}
+
+	.page-size-control-editor:focus-within {
+		border-color: var(--color-accent);
+		box-shadow: 0 0 0 1px
+			color-mix(in srgb, var(--color-accent) 28%, transparent);
+	}
+
+	.page-size-control-input {
+		@apply min-w-0 flex-1 bg-transparent px-2 py-1.5 text-sm text-heading placeholder:text-muted outline-none;
+	}
+
+	.page-size-control-input::-webkit-inner-spin-button,
+	.page-size-control-input::-webkit-outer-spin-button {
+		margin: 0;
+	}
+
+	.page-size-control-action {
+		@apply inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-surface hover:text-heading;
+	}
+
+	.page-size-control-action-apply {
+		@apply text-accent hover:bg-accent/10 hover:text-accent;
+	}
+
+	.page-size-control-action-cancel {
+		@apply hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-900/20 dark:hover:text-red-300;
+	}
+}

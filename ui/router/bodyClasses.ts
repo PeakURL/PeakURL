@@ -88,6 +88,11 @@ function getDashboardBodyClassNames(pathname: string): string[] {
 		return classes;
 	}
 
+	if ('/dashboard/activity' === pathname) {
+		classes.push('dashboard-activity-page');
+		return classes;
+	}
+
 	if ('/dashboard/links' === pathname) {
 		classes.push('dashboard-links-page');
 		return classes;

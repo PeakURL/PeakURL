@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     KEY idx_audit_logs_created_at (created_at),
     KEY idx_audit_logs_user_created_at (user_id, created_at),
     KEY idx_audit_logs_link_id (link_id),
-    CONSTRAINT fk_audit_logs_user_id FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL,
+    CONSTRAINT fk_audit_logs_user_id FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
     CONSTRAINT fk_audit_logs_link_id FOREIGN KEY (link_id) REFERENCES urls (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

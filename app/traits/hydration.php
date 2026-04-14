@@ -138,11 +138,27 @@ trait HydrationTrait {
 	 */
 	private function hydrate_activity_row( array $row ): array {
 		$metadata = $this->decode_json( (string) ( $row['metadata'] ?? '{}' ) );
+		$actor    = $this->normalize_activity_person(
+			array(
+				'id'        => (string) ( $row['user_id'] ?? '' ),
+				'firstName' => (string) ( $row['actor_first_name'] ?? '' ),
+				'lastName'  => (string) ( $row['actor_last_name'] ?? '' ),
+				'username'  => (string) ( $row['actor_username'] ?? '' ),
+				'email'     => (string) ( $row['actor_email'] ?? '' ),
+				'role'      => (string) ( $row['actor_role'] ?? '' ),
+			),
+		);
 
 		return array(
 			'id'        => (string) $row['id'],
 			'type'      => (string) $row['type'],
 			'message'   => (string) ( $row['message'] ?? '' ),
+			'actor'     => $actor,
+			'user'      => $this->normalize_activity_person(
+				is_array( $metadata['user'] ?? null )
+					? $metadata['user']
+					: null,
+			),
 			'link'      => is_array( $metadata['link'] ?? null )
 				? $metadata['link']
 				: null,
@@ -150,6 +166,46 @@ trait HydrationTrait {
 				? $metadata['location']
 				: null,
 			'timestamp' => $this->to_iso( (string) $row['created_at'] ),
+		);
+	}
+
+	/**
+	 * Normalize lightweight activity person metadata for the UI.
+	 *
+	 * @param array<string, mixed>|null $person Raw person metadata.
+	 * @return array<string, string|null>|null
+	 * @since 1.0.4
+	 */
+	private function normalize_activity_person( ?array $person ): ?array {
+		if ( ! is_array( $person ) ) {
+			return null;
+		}
+
+		$id         = trim( (string) ( $person['id'] ?? '' ) );
+		$first_name = trim( (string) ( $person['firstName'] ?? '' ) );
+		$last_name  = trim( (string) ( $person['lastName'] ?? '' ) );
+		$username   = trim( (string) ( $person['username'] ?? '' ) );
+		$email      = trim( (string) ( $person['email'] ?? '' ) );
+		$role       = trim( (string) ( $person['role'] ?? '' ) );
+
+		if (
+			'' === $id &&
+			'' === $first_name &&
+			'' === $last_name &&
+			'' === $username &&
+			'' === $email &&
+			'' === $role
+		) {
+			return null;
+		}
+
+		return array(
+			'id'        => '' !== $id ? $id : null,
+			'firstName' => '' !== $first_name ? $first_name : null,
+			'lastName'  => '' !== $last_name ? $last_name : null,
+			'username'  => '' !== $username ? $username : null,
+			'email'     => '' !== $email ? $email : null,
+			'role'      => '' !== $role ? $role : null,
 		);
 	}
 }

@@ -8,5 +8,6 @@
 @import './Modal/modal.css';
 @import './ConfirmDialog/confirm-dialog.css';
 @import './Notification/notification.css';
+@import './PageSizeControl/page-size-control.css';
 @import './VerificationCodeInput/verification-code-input.css';
 @import './Skeleton/skeleton.css';

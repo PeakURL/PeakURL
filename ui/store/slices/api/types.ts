@@ -140,6 +140,56 @@ export interface ActivityResponse {
 }
 
 /**
+ * Pagination metadata returned by the activity history endpoint.
+ */
+export interface ActivityHistoryMeta {
+	/** Current page number. */
+	page: number;
+
+	/** Number of activity rows included per page. */
+	limit: number;
+
+	/** Total number of activity rows that match the scope. */
+	totalItems: number;
+
+	/** Total number of available pages. */
+	totalPages: number;
+}
+
+/**
+ * Paginated activity payload returned by the activity history endpoint.
+ */
+export interface ActivityHistoryPayload {
+	/** Activity feed items ordered from newest to oldest. */
+	items?: RecentActivity[];
+
+	/** Pagination metadata for the result set. */
+	meta?: ActivityHistoryMeta;
+}
+
+/**
+ * Response wrapper returned by the paginated activity history endpoint.
+ */
+export interface ActivityHistoryResponse {
+	/** Paginated activity payload. */
+	data?: ActivityHistoryPayload;
+}
+
+/**
+ * Query arguments accepted by the activity history endpoint.
+ */
+export interface GetActivityHistoryQueryArgs {
+	/** Requested page number. */
+	page?: number;
+
+	/** Number of activity rows to request. */
+	limit?: number;
+
+	/** Optional server-side category filter. */
+	category?: 'all' | 'links' | 'users';
+}
+
+/**
  * Arguments accepted by the link-specific analytics endpoints.
  */
 export interface LinkAnalyticsArgs {

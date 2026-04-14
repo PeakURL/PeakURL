@@ -1155,9 +1155,48 @@ class DatabaseSchema {
 	private function repair_foreign_keys( array &$changes ): void {
 		foreach ( $this->foreign_key_specs() as $table_name => $specs ) {
 			foreach ( $specs as $spec ) {
-				$constraint_name = (string) $spec['name'];
+				$constraint_name      = (string) $spec['name'];
+				$expected_delete_rule = $this->expected_delete_rule_from_definition(
+					(string) $spec['definition'],
+				);
 
 				if ( $this->constraint_exists( $table_name, $constraint_name ) ) {
+					$current_delete_rule = $this->constraint_delete_rule(
+						$table_name,
+						$constraint_name,
+					);
+
+					if (
+						null === $expected_delete_rule ||
+						$expected_delete_rule === $current_delete_rule
+					) {
+						continue;
+					}
+
+					$this->connection->get_connection()->exec(
+						'ALTER TABLE ' . $this->table_identifier( $table_name ) .
+						' DROP FOREIGN KEY ' .
+						Database::quote_identifier(
+							$this->prefixed_constraint_name( $constraint_name )
+						),
+					);
+					$this->connection->get_connection()->exec(
+						'ALTER TABLE ' . $this->table_identifier( $table_name ) .
+						' ADD CONSTRAINT ' .
+						Database::quote_identifier(
+							$this->prefixed_constraint_name( $constraint_name )
+						) .
+						' ' .
+						$this->connection->prefix_sql( (string) $spec['definition'] ),
+					);
+
+					$changes[] = sprintf(
+						/* translators: 1: prefixed table name, 2: foreign key name. */
+						__( 'Updated the %2$s foreign key on the %1$s table.', 'peakurl' ),
+						$this->table_label( $table_name ),
+						$this->prefixed_constraint_name( $constraint_name ),
+					);
+
 					continue;
 				}
 
@@ -1683,6 +1722,70 @@ class DatabaseSchema {
 	}
 
 	/**
+	 * Return the current ON DELETE rule for a foreign key when available.
+	 *
+	 * @param string $table_name      Base table name.
+	 * @param string $constraint_name Un-prefixed constraint name.
+	 * @return string|null
+	 * @since 1.0.4
+	 */
+	private function constraint_delete_rule(
+		string $table_name,
+		string $constraint_name
+	): ?string {
+		$rule = $this->query_value(
+			'SELECT delete_rule
+			FROM information_schema.referential_constraints
+			WHERE constraint_schema = :table_schema
+			AND table_name = :table_name
+			AND constraint_name = :constraint_name
+			LIMIT 1',
+			array(
+				'table_schema'    => (string) $this->connection->get_config()['DB_DATABASE'],
+				'table_name'      => $this->connection->table_name( $table_name ),
+				'constraint_name' => $this->prefixed_constraint_name( $constraint_name ),
+			),
+		);
+
+		if ( ! is_string( $rule ) || '' === trim( $rule ) ) {
+			return null;
+		}
+
+		$normalized_rule = preg_replace( '/\s+/', ' ', trim( $rule ) );
+
+		return strtoupper(
+			is_string( $normalized_rule ) ? $normalized_rule : trim( $rule ),
+		);
+	}
+
+	/**
+	 * Parse the expected ON DELETE rule from a foreign-key definition.
+	 *
+	 * @param string $definition Raw foreign-key SQL definition.
+	 * @return string|null
+	 * @since 1.0.4
+	 */
+	private function expected_delete_rule_from_definition( string $definition ): ?string {
+		$matches = array();
+
+		if ( 1 !== preg_match( '/ON DELETE\s+([A-Z ]+)/i', $definition, $matches ) ) {
+			return null;
+		}
+
+		$normalized_rule = preg_replace(
+			'/\s+/',
+			' ',
+			trim( (string) ( $matches[1] ?? '' ) ),
+		);
+
+		return strtoupper(
+			is_string( $normalized_rule )
+				? $normalized_rule
+				: trim( (string) ( $matches[1] ?? '' ) ),
+		);
+	}
+
+	/**
 	 * Prefix a foreign key constraint name like schema.sql does.
 	 *
 	 * @param string $constraint_name Un-prefixed constraint name.
@@ -2122,7 +2225,7 @@ class DatabaseSchema {
 			'audit_logs' => array(
 				array(
 					'name'       => 'fk_audit_logs_user_id',
-					'definition' => 'FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL',
+					'definition' => 'FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE',
 				),
 				array(
 					'name'       => 'fk_audit_logs_link_id',

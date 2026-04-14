@@ -62,7 +62,7 @@ msgstr "PeakURL no pudo cargar el manifiesto de actualización."
 #: app/traits/accounts.php:51
 #: app/traits/accounts.php:570
 #: app/traits/accounts.php:716
-#: app/traits/accounts.php:836
+#: app/traits/accounts.php:849
 msgid "A valid email address is required."
 msgstr "Se requiere una dirección de correo electrónico válida."
 
@@ -74,7 +74,7 @@ msgstr "El nombre de usuario es obligatorio."
 #: app/traits/accounts.php:439
 #: app/traits/accounts.php:621
 #: app/traits/accounts.php:721
-#: app/traits/accounts.php:876
+#: app/traits/accounts.php:889
 #: ui/pages/auth/reset-password/ResetPasswordPage.tsx:39
 msgid "Password must be at least 8 characters."
 msgstr "La contraseña debe tener al menos 8 caracteres."
@@ -87,7 +87,7 @@ msgstr "La dirección de correo electrónico ya está registrada."
 #: app/traits/accounts.php:73
 #: app/traits/accounts.php:597
 #: app/traits/accounts.php:734
-#: app/traits/accounts.php:821
+#: app/traits/accounts.php:834
 msgid "Username is already taken."
 msgstr "El nombre de usuario ya está en uso."
 
@@ -127,7 +127,7 @@ msgid "Authentication required."
 msgstr "Se requiere autenticación."
 
 #: app/traits/accounts.php:583
-#: app/traits/accounts.php:849
+#: app/traits/accounts.php:862
 msgid "Email address is already in use."
 msgstr "La dirección de correo electrónico ya está en uso."
 
@@ -140,36 +140,40 @@ msgid "First and last name are required."
 msgstr "El nombre y los apellidos son obligatorios."
 
 #: app/traits/accounts.php:710
-#: app/traits/accounts.php:813
+#: app/traits/accounts.php:826
 msgid "Username must be 3-120 characters using letters, numbers, dots, dashes, underscores, or @."
 msgstr "El nombre de usuario debe tener entre 3 y 120 caracteres y solo puede usar letras, números, puntos, guiones, guiones bajos o @."
 
-#: app/traits/accounts.php:937
+#: app/traits/accounts.php:962
 msgid "You cannot delete the current user."
 msgstr "No puedes eliminar al usuario actual."
 
-#: app/traits/accounts.php:1098
+#: app/traits/accounts.php:1192
 msgid "No two-factor setup is pending for this account."
 msgstr "No hay ninguna configuración pendiente de autenticación en dos pasos para esta cuenta."
 
-#: app/traits/accounts.php:1104
+#: app/traits/accounts.php:1198
 msgid "Invalid verification code."
 msgstr "Código de verificación no válido."
 
-#: app/traits/accounts.php:1277
+#: app/traits/accounts.php:1371
 msgid "PeakURL could not identify the current session."
 msgstr "PeakURL no pudo identificar la sesión actual."
 
-#: app/traits/accounts.php:1332
+#: app/traits/accounts.php:1426
 msgid "User account could not be loaded."
 msgstr "No se pudo cargar la cuenta de usuario."
 
-#: app/traits/accounts.php:1348
+#: app/traits/accounts.php:1442
 msgid "Current password is incorrect."
 msgstr "La contraseña actual es incorrecta."
 
-#: app/traits/analytics.php:193
-#: app/traits/analytics.php:291
+#: app/traits/analytics.php:212
+msgid "Activity log ID is required."
+msgstr "Se requiere el ID del registro de actividad."
+
+#: app/traits/analytics.php:347
+#: app/traits/analytics.php:445
 msgid "You do not have permission to view analytics for this link."
 msgstr "No tienes permiso para ver las analíticas de este enlace."
 
@@ -195,29 +199,29 @@ msgid "You do not have permission to view this link."
 msgstr "No tienes permiso para ver este enlace."
 
 #: app/traits/links.php:284
-#: app/traits/links.php:625
+#: app/traits/links.php:629
 msgid "A valid destination URL is required."
 msgstr "Se requiere una URL de destino válida."
 
 #: app/traits/links.php:300
-#: app/traits/links.php:671
+#: app/traits/links.php:675
 msgid "That short code is reserved by the application."
 msgstr "Ese código corto está reservado por la aplicación."
 
 #: app/traits/links.php:306
-#: app/traits/links.php:681
+#: app/traits/links.php:685
 msgid "That short code is already in use."
 msgstr "Ese código corto ya está en uso."
 
-#: app/traits/links.php:601
+#: app/traits/links.php:605
 msgid "You do not have permission to edit this link."
 msgstr "No tienes permiso para editar este enlace."
 
-#: app/traits/links.php:741
+#: app/traits/links.php:752
 msgid "You do not have permission to delete this link."
 msgstr "No tienes permiso para eliminar este enlace."
 
-#: app/traits/links.php:794
+#: app/traits/links.php:815
 msgid "You do not have permission to delete links."
 msgstr "No tienes permiso para eliminar enlaces."
 
@@ -541,24 +545,40 @@ msgstr "Usuario eliminado."
 msgid "System status loaded."
 msgstr "Estado del sistema cargado."
 
-#: app/controllers/analytics.php:70
+#: app/controllers/analytics.php:73
 msgid "Analytics loaded."
 msgstr "Analíticas cargadas."
 
-#: app/controllers/analytics.php:86
+#: app/controllers/analytics.php:89
 msgid "Activity loaded."
 msgstr "Actividad cargada."
 
-#: app/controllers/analytics.php:107
-#: app/controllers/analytics.php:132
+#: app/controllers/analytics.php:113
+msgid "Activity history loaded."
+msgstr "El historial de actividad se ha cargado."
+
+#: app/controllers/analytics.php:133
+msgid "Activity log not found."
+msgstr "No se encontró el registro de actividad."
+
+#: app/controllers/analytics.php:138
+msgid "Activity log deleted."
+msgstr "Se eliminó el registro de actividad."
+
+#: app/controllers/analytics.php:162
+msgid "Bulk activity delete complete."
+msgstr "La eliminación masiva de actividad se completó."
+
+#: app/controllers/analytics.php:183
+#: app/controllers/analytics.php:208
 msgid "Link analytics not found."
 msgstr "Analíticas del enlace no encontradas."
 
-#: app/controllers/analytics.php:110
+#: app/controllers/analytics.php:186
 msgid "Location analytics loaded."
 msgstr "Analíticas de ubicación cargadas."
 
-#: app/controllers/analytics.php:135
+#: app/controllers/analytics.php:211
 msgid "Link analytics loaded."
 msgstr "Analíticas del enlace cargadas."
 
@@ -1015,51 +1035,55 @@ msgstr "Se eliminaron los webhooks huérfanos."
 msgid "%1$s %2$d rows were affected."
 msgstr "%1$s Se vieron afectadas %2$d filas."
 
-#: app/services/database-schema.php:1176
+#: app/services/database-schema.php:1195
+msgid "Updated the %2$s foreign key on the %1$s table."
+msgstr "Se actualizó la clave foránea %2$s en la tabla %1$s."
+
+#: app/services/database-schema.php:1215
 msgid "Added the %2$s foreign key to the %1$s table."
 msgstr "Se añadió la clave foránea %2$s a la tabla %1$s."
 
-#: app/services/database-schema.php:1217
+#: app/services/database-schema.php:1256
 msgid "Added the %1$s column to the %2$s table."
 msgstr "Se añadió la columna %1$s a la tabla %2$s."
 
-#: app/services/database-schema.php:1262
+#: app/services/database-schema.php:1301
 msgid "Added the %1$s index to the %2$s table."
 msgstr "Se añadió el índice %1$s a la tabla %2$s."
 
-#: app/services/database-schema.php:1480
+#: app/services/database-schema.php:1519
 msgid "The %s table is missing."
 msgstr "Falta la tabla %s."
 
-#: app/services/database-schema.php:1493
+#: app/services/database-schema.php:1532
 msgid "The %1$s table is missing the %2$s column."
 msgstr "A la tabla %1$s le falta la columna %2$s."
 
-#: app/services/database-schema.php:1506
+#: app/services/database-schema.php:1545
 msgid "The %1$s table is missing the %2$s index."
 msgstr "A la tabla %1$s le falta el índice %2$s."
 
-#: app/services/database-schema.php:1519
+#: app/services/database-schema.php:1558
 msgid "The %1$s table is missing the %2$s foreign key."
 msgstr "A la tabla %1$s le falta la clave foránea %2$s."
 
-#: app/services/database-schema.php:1534
+#: app/services/database-schema.php:1573
 msgid "The legacy api_keys.key_value column still needs to be migrated."
 msgstr "La columna heredada api_keys.key_value todavía debe migrarse."
 
-#: app/services/database-schema.php:1549
+#: app/services/database-schema.php:1588
 msgid "The hashed API key columns still allow NULL values and need to be repaired."
 msgstr "Las columnas de claves API con hash todavía permiten valores NULL y deben repararse."
 
-#: app/services/database-schema.php:1557
+#: app/services/database-schema.php:1596
 msgid "The clicks table still contains legacy prefixed IDs and should be normalized."
 msgstr "La tabla de clics todavía contiene IDs heredados con prefijo y debe normalizarse."
 
-#: app/services/database-schema.php:1565
+#: app/services/database-schema.php:1604
 msgid "The webhooks table still contains legacy prefixed IDs and should be normalized."
 msgstr "La tabla de webhooks todavía contiene IDs heredados con prefijo y debe normalizarse."
 
-#: app/services/database-schema.php:1579
+#: app/services/database-schema.php:1618
 msgid "The database schema version %1$d is behind the required version %2$d."
 msgstr "La versión %1$d del esquema de la base de datos está por detrás de la versión requerida %2$d."
 
@@ -1404,6 +1428,7 @@ msgstr "Resumen"
 
 #: ui/utils/dashboardSearch.ts:58
 #: ui/utils/dashboardSearch.ts:61
+#: ui/utils/dashboardSearch.ts:92
 #: ui/pages/dashboard/about/AboutPage.tsx:582
 #: ui/pages/dashboard/_components/Header/Header.tsx:23
 #: ui/router/pageTitle.ts:64
@@ -1413,7 +1438,7 @@ msgstr "Panel"
 #: ui/utils/dashboardSearch.ts:72
 #: ui/utils/dashboardSearch.ts:77
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:42
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:350
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:363
 #: ui/pages/NotFoundPage.tsx:74
 msgid "All Links"
 msgstr "Todos los enlaces"
@@ -1422,69 +1447,84 @@ msgstr "Todos los enlaces"
 #: ui/utils/dashboardSearch.ts:76
 #: ui/pages/auth/login/LoginPage.tsx:43
 #: ui/pages/layout/dashboard/Search/Search.tsx:255
+#: ui/pages/dashboard/activity/ActivityPage.tsx:607
 #: ui/pages/dashboard/links/_components/Header/Header.tsx:32
-#: ui/router/pageTitle.ts:72
+#: ui/router/pageTitle.ts:76
 msgid "Links"
 msgstr "Enlaces"
 
 #: ui/utils/dashboardSearch.ts:91
+#: ui/utils/dashboardSearch.ts:95
+#: ui/pages/layout/dashboard/Header/Header.tsx:110
+#: ui/pages/dashboard/activity/ActivityPage.tsx:138
+#: ui/pages/dashboard/activity/ActivityPage.tsx:653
+#: ui/router/pageTitle.ts:72
+msgid "Activity"
+msgstr "Actividad"
+
 #: ui/utils/dashboardSearch.ts:96
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:384
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:439
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:23
+msgid "Recent Activity"
+msgstr "Actividad reciente"
+
+#: ui/utils/dashboardSearch.ts:107
+#: ui/utils/dashboardSearch.ts:112
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:394
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:449
 msgid "About PeakURL"
 msgstr "Acerca de PeakURL"
 
-#: ui/utils/dashboardSearch.ts:92
-#: ui/utils/dashboardSearch.ts:95
+#: ui/utils/dashboardSearch.ts:108
+#: ui/utils/dashboardSearch.ts:111
 #: ui/router/pageTitle.ts:68
 msgid "About"
 msgstr "Acerca de"
 
-#: ui/utils/dashboardSearch.ts:105
-#: ui/utils/dashboardSearch.ts:111
+#: ui/utils/dashboardSearch.ts:121
+#: ui/utils/dashboardSearch.ts:127
 #: ui/router/pageTitle.ts:19
 msgid "General Settings"
 msgstr "Ajustes generales"
 
-#: ui/utils/dashboardSearch.ts:106
-#: ui/utils/dashboardSearch.ts:109
-#: ui/utils/dashboardSearch.ts:126
-#: ui/utils/dashboardSearch.ts:144
+#: ui/utils/dashboardSearch.ts:122
+#: ui/utils/dashboardSearch.ts:125
+#: ui/utils/dashboardSearch.ts:142
 #: ui/utils/dashboardSearch.ts:160
-#: ui/utils/dashboardSearch.ts:174
+#: ui/utils/dashboardSearch.ts:176
 #: ui/utils/dashboardSearch.ts:190
 #: ui/utils/dashboardSearch.ts:206
+#: ui/utils/dashboardSearch.ts:222
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:80
-#: ui/pages/layout/dashboard/Header/Header.tsx:133
+#: ui/pages/layout/dashboard/Header/Header.tsx:152
 #: ui/pages/NotFoundPage.tsx:94
 #: ui/router/pageTitle.ts:33
 msgid "Settings"
 msgstr "Ajustes"
 
-#: ui/utils/dashboardSearch.ts:110
+#: ui/utils/dashboardSearch.ts:126
 #: ui/pages/dashboard/settings/Layout.tsx:23
 msgid "General"
 msgstr "General"
 
-#: ui/utils/dashboardSearch.ts:112
-#: ui/pages/layout/dashboard/Header/Header.tsx:113
+#: ui/utils/dashboardSearch.ts:128
+#: ui/pages/layout/dashboard/Header/Header.tsx:132
 msgid "Profile"
 msgstr "Perfil"
 
-#: ui/utils/dashboardSearch.ts:125
-#: ui/utils/dashboardSearch.ts:130
+#: ui/utils/dashboardSearch.ts:141
+#: ui/utils/dashboardSearch.ts:146
 #: ui/router/pageTitle.ts:21
 msgid "Security Settings"
 msgstr "Ajustes de seguridad"
 
-#: ui/utils/dashboardSearch.ts:129
+#: ui/utils/dashboardSearch.ts:145
 #: ui/pages/auth/login/LoginPage.tsx:53
 #: ui/pages/dashboard/settings/Layout.tsx:24
 msgid "Security"
 msgstr "Seguridad"
 
-#: ui/utils/dashboardSearch.ts:143
-#: ui/utils/dashboardSearch.ts:147
+#: ui/utils/dashboardSearch.ts:159
+#: ui/utils/dashboardSearch.ts:163
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:76
 #: ui/pages/dashboard/settings/Layout.tsx:28
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:693
@@ -1492,28 +1532,28 @@ msgstr "Seguridad"
 msgid "API Keys"
 msgstr "Claves API"
 
-#: ui/utils/dashboardSearch.ts:159
-#: ui/utils/dashboardSearch.ts:163
+#: ui/utils/dashboardSearch.ts:175
+#: ui/utils/dashboardSearch.ts:179
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:148
 #: ui/pages/dashboard/settings/Layout.tsx:34
 #: ui/router/pageTitle.ts:25
 msgid "Integrations"
 msgstr "Integraciones"
 
-#: ui/utils/dashboardSearch.ts:173
-#: ui/utils/dashboardSearch.ts:178
+#: ui/utils/dashboardSearch.ts:189
+#: ui/utils/dashboardSearch.ts:194
 #: ui/pages/dashboard/settings/Layout.tsx:40
 msgid "Email SMTP"
 msgstr "SMTP de correo"
 
-#: ui/utils/dashboardSearch.ts:177
+#: ui/utils/dashboardSearch.ts:193
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:113
 #: ui/router/pageTitle.ts:27
 msgid "Email Configuration"
 msgstr "Configuración de correo"
 
-#: ui/utils/dashboardSearch.ts:189
-#: ui/utils/dashboardSearch.ts:193
+#: ui/utils/dashboardSearch.ts:205
+#: ui/utils/dashboardSearch.ts:209
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:116
 #: ui/pages/dashboard/settings/Layout.tsx:46
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:97
@@ -1522,84 +1562,87 @@ msgstr "Configuración de correo"
 msgid "Location Data"
 msgstr "Datos de ubicación"
 
-#: ui/utils/dashboardSearch.ts:205
-#: ui/utils/dashboardSearch.ts:209
+#: ui/utils/dashboardSearch.ts:221
+#: ui/utils/dashboardSearch.ts:225
 #: ui/pages/dashboard/settings/Layout.tsx:52
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:99
 #: ui/router/pageTitle.ts:31
 msgid "Updates"
 msgstr "Actualizaciones"
 
-#: ui/utils/dashboardSearch.ts:221
-#: ui/utils/dashboardSearch.ts:225
+#: ui/utils/dashboardSearch.ts:237
+#: ui/utils/dashboardSearch.ts:241
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:47
 #: ui/pages/layout/dashboard/Search/Search.tsx:216
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:686
+#: ui/pages/dashboard/activity/ActivityPage.tsx:613
 #: ui/pages/dashboard/users/UsersPage.tsx:474
-#: ui/router/pageTitle.ts:80
+#: ui/router/pageTitle.ts:84
 msgid "Users"
 msgstr "Usuarios"
 
-#: ui/utils/dashboardSearch.ts:222
-#: ui/utils/dashboardSearch.ts:239
+#: ui/utils/dashboardSearch.ts:238
+#: ui/utils/dashboardSearch.ts:255
 msgid "Management"
 msgstr "Gestión"
 
-#: ui/utils/dashboardSearch.ts:238
-#: ui/utils/dashboardSearch.ts:241
+#: ui/utils/dashboardSearch.ts:254
+#: ui/utils/dashboardSearch.ts:257
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:53
 #: ui/pages/dashboard/plugins/PluginsPage.tsx:120
-#: ui/router/pageTitle.ts:76
+#: ui/router/pageTitle.ts:80
 msgid "Plugins"
 msgstr "Plugins"
 
-#: ui/utils/dashboardSearch.ts:247
-#: ui/utils/dashboardSearch.ts:252
+#: ui/utils/dashboardSearch.ts:263
+#: ui/utils/dashboardSearch.ts:268
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:64
 #: ui/pages/dashboard/tools/import/_components/layout/Header.tsx:7
 #: ui/pages/NotFoundPage.tsx:84
 #: ui/router/pageTitle.ts:46
-#: ui/router/pageTitle.ts:102
+#: ui/router/pageTitle.ts:106
 msgid "Import"
 msgstr "Importar"
 
-#: ui/utils/dashboardSearch.ts:248
-#: ui/utils/dashboardSearch.ts:251
-#: ui/utils/dashboardSearch.ts:268
-#: ui/utils/dashboardSearch.ts:271
+#: ui/utils/dashboardSearch.ts:264
+#: ui/utils/dashboardSearch.ts:267
+#: ui/utils/dashboardSearch.ts:284
 #: ui/utils/dashboardSearch.ts:287
-#: ui/utils/dashboardSearch.ts:290
+#: ui/utils/dashboardSearch.ts:303
+#: ui/utils/dashboardSearch.ts:306
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:59
 #: ui/pages/layout/dashboard/Search/Search.tsx:193
-#: ui/router/pageTitle.ts:114
+#: ui/router/pageTitle.ts:118
 msgid "Tools"
 msgstr "Herramientas"
 
-#: ui/utils/dashboardSearch.ts:253
+#: ui/utils/dashboardSearch.ts:269
 #: ui/router/pageTitle.ts:40
 msgid "Import: File Upload"
 msgstr "Importar: subida de archivo"
 
-#: ui/utils/dashboardSearch.ts:267
-#: ui/utils/dashboardSearch.ts:272
+#: ui/utils/dashboardSearch.ts:283
+#: ui/utils/dashboardSearch.ts:288
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:69
 #: ui/pages/dashboard/tools/export/ExportPage.tsx:58
 #: ui/pages/dashboard/tools/export/ExportPage.tsx:147
-#: ui/router/pageTitle.ts:106
+#: ui/router/pageTitle.ts:110
 msgid "Export"
 msgstr "Exportar"
 
-#: ui/utils/dashboardSearch.ts:286
-#: ui/utils/dashboardSearch.ts:291
+#: ui/utils/dashboardSearch.ts:302
+#: ui/utils/dashboardSearch.ts:307
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:73
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:774
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:818
-#: ui/router/pageTitle.ts:110
+#: ui/router/pageTitle.ts:114
 msgid "System Status"
 msgstr "Estado del sistema"
 
-#: ui/utils/dashboardSearch.ts:481
-#: ui/pages/layout/dashboard/Header/Header.tsx:33
+#: ui/utils/dashboardSearch.ts:497
+#: ui/pages/layout/dashboard/Header/Header.tsx:32
+#: ui/pages/dashboard/activity/ActivityPage.tsx:118
+#: ui/pages/dashboard/activity/ActivityPage.tsx:921
 #: ui/pages/dashboard/users/UsersPage.tsx:539
 #: ui/pages/dashboard/users/UsersPage.tsx:575
 msgid "User"
@@ -1633,6 +1676,35 @@ msgstr "Procesando..."
 #: ui/components/ui/Avatar/Avatar.tsx:42
 msgid "User avatar"
 msgstr "Avatar del usuario"
+
+#: ui/components/ui/PageSizeControl/PageSizeControl.tsx:50
+#: ui/pages/dashboard/activity/ActivityPage.tsx:761
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:92
+msgid "Rows per page"
+msgstr "Filas por página"
+
+#: ui/components/ui/PageSizeControl/PageSizeControl.tsx:71
+#: ui/components/ui/PageSizeControl/PageSizeControl.tsx:78
+msgid "Show: %s rows"
+msgstr "Mostrar: %s filas"
+
+#: ui/components/ui/PageSizeControl/PageSizeControl.tsx:82
+msgid "Custom…"
+msgstr "Personalizado…"
+
+#: ui/components/ui/PageSizeControl/PageSizeControl.tsx:150
+msgid "Rows"
+msgstr "Filas"
+
+#: ui/components/ui/PageSizeControl/PageSizeControl.tsx:157
+#: ui/components/ui/PageSizeControl/PageSizeControl.tsx:158
+msgid "Apply custom page size"
+msgstr "Aplicar tamaño de página personalizado"
+
+#: ui/components/ui/PageSizeControl/PageSizeControl.tsx:166
+#: ui/components/ui/PageSizeControl/PageSizeControl.tsx:167
+msgid "Cancel custom page size"
+msgstr "Cancelar tamaño de página personalizado"
 
 #: ui/components/providers/AuthInitializer/AuthInitializer.tsx:20
 msgid "API unavailable"
@@ -1679,7 +1751,7 @@ msgstr "Dom"
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:19
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:16
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:104
-#: ui/pages/dashboard/links/LinksPage.tsx:208
+#: ui/pages/dashboard/links/LinksPage.tsx:220
 msgid "Total Clicks"
 msgstr "Clics totales"
 
@@ -1687,7 +1759,7 @@ msgstr "Clics totales"
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:43
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:27
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:112
-#: ui/pages/dashboard/links/LinksPage.tsx:223
+#: ui/pages/dashboard/links/LinksPage.tsx:235
 msgid "Unique Visitors"
 msgstr "Visitantes únicos"
 
@@ -2212,11 +2284,11 @@ msgstr "Iniciar sesión"
 msgid "Back to sign-in"
 msgstr "Volver al inicio de sesión"
 
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:399
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:409
 msgid "Sponsor"
 msgstr "Patrocinar"
 
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:418
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:428
 #: ui/pages/dashboard/about/AboutPage.tsx:554
 msgid "Buy Me a Coffee"
 msgstr "Invítame a un café"
@@ -2278,29 +2350,31 @@ msgstr "Abrir la página de enlaces con esta búsqueda aplicada"
 msgid "Keep typing to search links, or jump straight to a dashboard page."
 msgstr "Sigue escribiendo para buscar enlaces o salta directamente a una página del panel."
 
-#: ui/pages/layout/dashboard/Header/Header.tsx:31
-#: ui/pages/layout/dashboard/Header/Header.tsx:70
-#: ui/pages/layout/dashboard/Header/Header.tsx:81
+#: ui/pages/layout/dashboard/Header/Header.tsx:30
+#: ui/pages/layout/dashboard/Header/Header.tsx:69
+#: ui/pages/layout/dashboard/Header/Header.tsx:80
+#: ui/pages/dashboard/activity/ActivityPage.tsx:111
 #: ui/pages/dashboard/users/UsersPage.tsx:57
 #: ui/pages/dashboard/users/UsersPage.tsx:101
 msgid "Admin"
 msgstr "Administrador"
 
-#: ui/pages/layout/dashboard/Header/Header.tsx:32
+#: ui/pages/layout/dashboard/Header/Header.tsx:31
+#: ui/pages/dashboard/activity/ActivityPage.tsx:115
 #: ui/pages/dashboard/users/UsersPage.tsx:62
 #: ui/pages/dashboard/users/UsersPage.tsx:102
 msgid "Editor"
 msgstr "Editor"
 
-#: ui/pages/layout/dashboard/Header/Header.tsx:76
+#: ui/pages/layout/dashboard/Header/Header.tsx:75
 msgid "Admin Account"
 msgstr "Cuenta de administrador"
 
-#: ui/pages/layout/dashboard/Header/Header.tsx:152
+#: ui/pages/layout/dashboard/Header/Header.tsx:171
 msgid "Logging out..."
 msgstr "Cerrando sesión..."
 
-#: ui/pages/layout/dashboard/Header/Header.tsx:153
+#: ui/pages/layout/dashboard/Header/Header.tsx:172
 msgid "Logout"
 msgstr "Cerrar sesión"
 
@@ -2884,8 +2958,11 @@ msgstr "Última generación:"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:557
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:576
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:582
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:13
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:24
+#: ui/pages/dashboard/activity/ActivityPage.tsx:145
+#: ui/pages/dashboard/activity/ActivityPage.tsx:169
+#: ui/pages/dashboard/activity/ActivityPage.tsx:888
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:52
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:75
 #: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:25
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:36
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:174
@@ -3572,7 +3649,7 @@ msgstr "Clave API"
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:21
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:31
 #: ui/pages/dashboard/links/_components/EditLinkModal/EditLinkModal.tsx:34
-#: ui/pages/dashboard/links/LinksPage.tsx:188
+#: ui/pages/dashboard/links/LinksPage.tsx:200
 msgid "Active"
 msgstr "Activa"
 
@@ -4615,6 +4692,7 @@ msgid "Author"
 msgstr "Autor"
 
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
+#: ui/pages/dashboard/activity/ActivityPage.tsx:805
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:62
 #: ui/pages/dashboard/users/UsersPage.tsx:548
 msgid "Actions"
@@ -4627,6 +4705,270 @@ msgstr "Desactivar"
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:135
 msgid "Activate"
 msgstr "Activar"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:124
+msgid "Link created"
+msgstr "Enlace creado"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:126
+msgid "Link updated"
+msgstr "Enlace actualizado"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:128
+msgid "Link deleted"
+msgstr "Enlace eliminado"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:130
+msgid "User created"
+msgstr "Usuario creado"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:132
+msgid "User updated"
+msgstr "Usuario actualizado"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:134
+#: ui/pages/dashboard/users/UsersPage.tsx:419
+msgid "User deleted"
+msgstr "Usuario eliminado"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:136
+msgid "Link click"
+msgstr "Clic en el enlace"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:148
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:55
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:190
+msgid "Unknown user"
+msgstr "Usuario desconocido"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:152
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:58
+msgid "Created new link %s"
+msgstr "Se creó un enlace nuevo %s"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:154
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:60
+msgid "Updated link %s"
+msgstr "Se actualizó el enlace %s"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:156
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:62
+msgid "Deleted link %s"
+msgstr "Se eliminó el enlace %s"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:158
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:64
+msgid "Created user %s"
+msgstr "Se creó el usuario %s"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:160
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:66
+msgid "Updated user %s"
+msgstr "Se actualizó el usuario %s"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:162
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:68
+msgid "Deleted user %s"
+msgstr "Se eliminó el usuario %s"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:166
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:72
+msgid "from %s"
+msgstr "desde %s"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:174
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:79
+msgid "Link %1$s was clicked %2$s"
+msgstr "Se hizo clic en el enlace %1$s %2$s"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:178
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:83
+msgid "Link %s was clicked"
+msgstr "Se hizo clic en el enlace %s"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:181
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:85
+msgid "Unknown activity"
+msgstr "Actividad desconocida"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:215
+#: ui/pages/dashboard/activity/ActivityPage.tsx:224
+msgid "Unknown date"
+msgstr "Fecha desconocida"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:237
+msgid "Today"
+msgstr "Hoy"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:241
+msgid "Yesterday"
+msgstr "Ayer"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:542
+#: ui/pages/dashboard/activity/ActivityPage.tsx:565
+msgid "Activity deleted"
+msgstr "Actividad eliminada"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:543
+msgid "The activity log entry has been removed."
+msgstr "La entrada del registro de actividad se ha eliminado."
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:551
+#: ui/pages/dashboard/activity/ActivityPage.tsx:575
+msgid "Unable to delete activity"
+msgstr "No se pudo eliminar la actividad"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:552
+msgid "The activity log entry could not be removed."
+msgstr "No se pudo eliminar la entrada del registro de actividad."
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:567
+msgid "Deleted %s activity log entries."
+msgstr "Se eliminaron %s entradas del registro de actividad."
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:576
+msgid "The selected activity log entries could not be removed."
+msgstr "No se pudieron eliminar las entradas seleccionadas del registro de actividad."
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:601
+msgid "All activity"
+msgstr "Toda la actividad"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:626
+msgid "Total events"
+msgstr "Eventos totales"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:632
+msgid "Link events"
+msgstr "Eventos de enlaces"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:638
+msgid "User events"
+msgstr "Eventos de usuarios"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:650
+msgid "Audit Log"
+msgstr "Registro de auditoría"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:656
+msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
+msgstr "Revisa los cambios en enlaces y los eventos de gestión de usuarios en un solo lugar, con filtros, marcas de tiempo y detalles del autor."
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:666
+#: ui/pages/dashboard/activity/ActivityPage.tsx:667
+msgid "Refresh activity history"
+msgstr "Actualizar historial de actividad"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:706
+msgid "Latest event"
+msgstr "Último evento"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:714
+msgid "No recent events"
+msgstr "No hay eventos recientes"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:772
+msgid "Activity history"
+msgstr "Historial de actividad"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:779
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:22
+msgid "%s selected"
+msgstr "%s seleccionados"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:788
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1183
+msgid "Delete selected"
+msgstr "Eliminar seleccionados"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:800
+msgid "Event"
+msgstr "Evento"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:801
+msgid "Details"
+msgstr "Detalles"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:802
+msgid "When"
+msgstr "Cuándo"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:856
+msgid "Select %s events"
+msgstr "Seleccionar los eventos de %s"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:907
+msgid "By"
+msgstr "Por"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:914
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:47
+msgid "Link"
+msgstr "Enlace"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:928
+msgid "From"
+msgstr "Desde"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1032
+msgid "No additional details"
+msgstr "Sin detalles adicionales"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1066
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1069
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1191
+msgid "Delete activity log"
+msgstr "Eliminar registro de actividad"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1093
+msgid "No user activity yet"
+msgstr "Aún no hay actividad de usuarios"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1095
+msgid "No link activity yet"
+msgstr "Aún no hay actividad de enlaces"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1096
+msgid "No activity recorded yet"
+msgstr "Aún no se ha registrado actividad"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1099
+msgid "Once users manage accounts or links change, the audit log will appear here."
+msgstr "Cuando los usuarios gestionen cuentas o cambien los enlaces, el registro de auditoría aparecerá aquí."
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1112
+msgid "Showing %1$s-%2$s of %3$s events"
+msgstr "Mostrando %1$s-%2$s de %3$s eventos"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1119
+msgid "Page %1$s of %2$s"
+msgstr "Página %1$s de %2$s"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1135
+#: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:38
+msgid "Previous"
+msgstr "Anterior"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1161
+#: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:75
+msgid "Next"
+msgstr "Siguiente"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1172
+msgid "Delete activity logs"
+msgstr "Eliminar registros de actividad"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1176
+msgid "Delete %s selected activity log entries? This action cannot be undone."
+msgstr "¿Eliminar %s entradas seleccionadas del registro de actividad? Esta acción no se puede deshacer."
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1195
+msgid "Delete the activity entry \"%s\"? This action cannot be undone."
+msgstr "¿Eliminar la entrada de actividad \"%s\"? Esta acción no se puede deshacer."
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1202
+msgid "Delete activity"
+msgstr "Eliminar actividad"
 
 #: ui/pages/dashboard/about/AboutPage.tsx:117
 msgid "Setup Complete"
@@ -4877,37 +5219,17 @@ msgstr "Gestión de enlaces autoalojada con propiedad clara y un panel centrado.
 msgid "Website"
 msgstr "Sitio web"
 
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:17
-msgid "Created new link %s"
-msgstr "Se creó un enlace nuevo %s"
-
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:21
-msgid "from %s"
-msgstr "desde %s"
-
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:28
-msgid "Link %1$s was clicked %2$s"
-msgstr "Se hizo clic en el enlace %1$s %2$s"
-
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:32
-msgid "Link %s was clicked"
-msgstr "Se hizo clic en el enlace %s"
-
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:34
-msgid "Unknown activity"
-msgstr "Actividad desconocida"
-
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:67
-msgid "Recent Activity"
-msgstr "Actividad reciente"
-
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:74
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:24
 msgid "No recent activity"
 msgstr "No hay actividad reciente"
 
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:112
-msgid "View All Links"
-msgstr "Ver todos los enlaces"
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:25
+msgid "View All Activity"
+msgstr "Ver toda la actividad"
+
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:186
+msgid "By %1$s • %2$s"
+msgstr "Por %1$s • %2$s"
 
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:57
 msgid "Device Breakdown"
@@ -4947,7 +5269,7 @@ msgid "No traffic data available"
 msgstr "Aún no hay datos de tráfico disponibles"
 
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:27
-#: ui/pages/dashboard/links/LinksPage.tsx:193
+#: ui/pages/dashboard/links/LinksPage.tsx:205
 msgid "Active Links"
 msgstr "Enlaces activos"
 
@@ -4981,7 +5303,7 @@ msgstr "Te damos la bienvenida de nuevo. Esto es lo que está ocurriendo con tus
 #: ui/pages/dashboard/_components/Header/Header.tsx:37
 #: ui/pages/dashboard/_components/Header/Header.tsx:38
 msgid "Refresh dashboard data"
-msgstr ""
+msgstr "Actualizar datos del panel"
 
 #: ui/pages/dashboard/_components/Header/Header.tsx:51
 msgid "Dashboard time range"
@@ -5021,81 +5343,49 @@ msgstr "Eliminando..."
 msgid "Delete (%s)"
 msgstr "Eliminar (%s)"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:25
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:27
 msgid "Sort: Date Created"
 msgstr "Ordenar: fecha de creación"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:26
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:28
 msgid "Sort: Most Clicks"
 msgstr "Ordenar: más clics"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:27
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:29
 msgid "Sort: Alias"
 msgstr "Ordenar: alias"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:30
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:32
 msgid "Descending"
 msgstr "Descendente"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:31
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:33
 msgid "Ascending"
 msgstr "Ascendente"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:36
-msgid "Show: %s rows"
-msgstr "Mostrar: %s filas"
-
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:38
-msgid "Custom…"
-msgstr "Personalizado…"
-
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:49
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:44
 msgid "Total Links:"
 msgstr "Total de enlaces:"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:59
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:54
 msgid "Total Clicks:"
 msgstr "Total de clics:"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:80
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:75
 msgid "Sort links"
 msgstr "Ordenar enlaces"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:89
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:84
 msgid "Sort order"
 msgstr "Orden de clasificación"
-
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:104
-msgid "Rows per page"
-msgstr "Filas por página"
-
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:119
-msgid "Custom page size"
-msgstr "Tamaño de página personalizado"
 
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:23
 msgid "Showing %1$s–%2$s of %3$s links"
 msgstr "Mostrando %1$s–%2$s de %3$s enlaces"
 
-#: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:38
-msgid "Previous"
-msgstr "Anterior"
-
-#: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:75
-msgid "Next"
-msgstr "Siguiente"
-
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:22
-msgid "%s selected"
-msgstr "%s seleccionados"
-
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:29
 msgid "Delete Selected"
 msgstr "Eliminar seleccionados"
-
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:47
-msgid "Link"
-msgstr "Enlace"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:50
 msgid "Title"
@@ -5670,7 +5960,7 @@ msgstr "Gestiona y supervisa tus URL acortadas"
 msgid "Short links domain"
 msgstr "Dominio de enlaces cortos"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:178
+#: ui/pages/dashboard/links/LinksPage.tsx:190
 msgid "Total Links"
 msgstr "Total de enlaces"
 
@@ -5735,10 +6025,6 @@ msgstr "Tu propio rol está bloqueado aquí."
 #: ui/pages/dashboard/users/UsersPage.tsx:320
 msgid "Create User"
 msgstr "Crear usuario"
-
-#: ui/pages/dashboard/users/UsersPage.tsx:419
-msgid "User deleted"
-msgstr "Usuario eliminado"
 
 #: ui/pages/dashboard/users/UsersPage.tsx:421
 msgid "%s was removed successfully."
@@ -5812,7 +6098,7 @@ msgid "Delete %s? This will revoke their sessions, remove their API keys, and pe
 msgstr "¿Eliminar a %s? Esto revocará sus sesiones, eliminará sus claves API y borrará permanentemente su cuenta."
 
 #: ui/pages/NotFoundPage.tsx:33
-#: ui/router/pageTitle.ts:118
+#: ui/router/pageTitle.ts:122
 msgid "Page Not Found"
 msgstr "Página no encontrada"
 

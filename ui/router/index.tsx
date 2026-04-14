@@ -3,6 +3,7 @@ import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 
 import { useScrollToTop, useAdminAccess } from '@/hooks';
 import {
+	ActivityPage,
 	AboutPage,
 	AppLayout,
 	DashboardPage,
@@ -116,6 +117,7 @@ function AppRouter() {
 				/>
 				<Route path="/dashboard" element={<AppLayoutRoute />}>
 					<Route index element={<DashboardPage />} />
+					<Route path="activity" element={<ActivityPage />} />
 					<Route path="about" element={<AboutPage />} />
 					<Route path="links" element={<LinksPage />} />
 					<Route path="tools" element={<ToolsLayoutRoute />}>

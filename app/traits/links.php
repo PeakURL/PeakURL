@@ -39,7 +39,7 @@ trait LinksTrait {
 	 * @since 1.0.0
 	 */
 	public function list_urls( Request $request, array $query ): array {
-		$pagination = Query::pagination( $query );
+		$pagination = Query::pagination( $query, 25, 250 );
 		$page       = $pagination['page'];
 		$limit      = $pagination['limit'];
 		$offset     = $pagination['offset'];
@@ -362,9 +362,13 @@ trait LinksTrait {
 			(string) $user['id'],
 			$id,
 			array(
-				'link' => array(
-					'title'     => '' !== $title ? $title : null,
-					'shortCode' => $alias,
+				'link' => $this->build_activity_link_metadata(
+					array(
+						'id'         => $id,
+						'title'      => $title,
+						'alias'      => $alias,
+						'short_code' => $alias,
+					),
 				),
 			),
 		);
@@ -701,14 +705,21 @@ trait LinksTrait {
 			$params,
 		);
 
+		$updated_row = $this->find_url_row( $id );
+
 		$this->record_activity(
 			'link_updated',
 			'Updated link ' . ( $params['alias'] ?? $existing['alias'] ) . '.',
 			(string) $user['id'],
 			$id,
+			array(
+				'link' => $this->build_activity_link_metadata(
+					$updated_row ? $updated_row : $existing,
+				),
+			),
 		);
 
-		return $this->hydrate_url_row( $this->find_url_row( $id ) );
+		return $this->hydrate_url_row( $updated_row );
 	}
 
 	/**
@@ -726,7 +737,7 @@ trait LinksTrait {
 		$row  = $this->db->get_row_by(
 			'urls',
 			array( 'id' => $id ),
-			array( 'id', 'user_id' ),
+			array( 'id', 'user_id', 'title', 'alias', 'short_code' ),
 		);
 
 		if ( ! $row ) {
@@ -744,6 +755,16 @@ trait LinksTrait {
 		$this->db->begin_transaction();
 
 		try {
+			$this->record_activity(
+				'link_deleted',
+				'Deleted link ' . (string) ( $row['alias'] ?? $row['short_code'] ?? $id ) . '.',
+				(string) $user['id'],
+				null,
+				array(
+					'link' => $this->build_activity_link_metadata( $row ),
+				),
+			);
+
 			$this->db->delete(
 				'audit_logs',
 				array(
@@ -817,6 +838,25 @@ trait LinksTrait {
 		$this->db->begin_transaction();
 
 		try {
+			$deleted_rows = $this->db->get_results_where_in(
+				'urls',
+				'id',
+				$allowed_ids,
+				array( 'id', 'title', 'alias', 'short_code' ),
+			);
+
+			foreach ( $deleted_rows as $deleted_row ) {
+				$this->record_activity(
+					'link_deleted',
+					'Deleted link ' . (string) ( $deleted_row['alias'] ?? $deleted_row['short_code'] ?? $deleted_row['id'] ) . '.',
+					(string) $user['id'],
+					null,
+					array(
+						'link' => $this->build_activity_link_metadata( $deleted_row ),
+					),
+				);
+			}
+
 			$this->db->delete_where_in(
 				'audit_logs',
 				'link_id',
@@ -889,6 +929,26 @@ trait LinksTrait {
 			'params'    => $params,
 			'sortBy'    => $sort_by,
 			'sortOrder' => $sort_order,
+		);
+	}
+
+	/**
+	 * Build lightweight link metadata for audit-log payloads.
+	 *
+	 * @param array<string, mixed> $link Raw link row or partial row.
+	 * @return array<string, string|null>
+	 * @since 1.0.4
+	 */
+	private function build_activity_link_metadata( array $link ): array {
+		$title = trim( (string) ( $link['title'] ?? '' ) );
+		$code  = trim(
+			(string) ( $link['alias'] ?? ( $link['short_code'] ?? '' ) ),
+		);
+
+		return array(
+			'id'        => (string) ( $link['id'] ?? '' ),
+			'title'     => '' !== $title ? $title : null,
+			'shortCode' => '' !== $code ? $code : null,
 		);
 	}
 

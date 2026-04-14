@@ -271,6 +271,27 @@ class Application {
 			)
 		);
 		$this->router->get(
+			'/api/v1/analytics/activity/history',
+			array(
+				$analytics,
+				'history',
+			)
+		);
+		$this->router->delete(
+			'/api/v1/analytics/activity/bulk',
+			array(
+				$analytics,
+				'bulk_delete',
+			)
+		);
+		$this->router->delete(
+			'/api/v1/analytics/activity/{id}',
+			array(
+				$analytics,
+				'delete',
+			)
+		);
+		$this->router->get(
 			'/api/v1/analytics/url/{id}/location',
 			array(
 				$analytics,

@@ -1,6 +1,9 @@
 export { analyticsApi } from './analytics';
 export {
+	useBulkDeleteActivityLogsMutation,
+	useDeleteActivityLogMutation,
 	useGetActivityQuery,
+	useGetActivityHistoryQuery,
 	useGetAnalyticsQuery,
 	useGetLinkLocationQuery,
 	useGetLinkStatsQuery,

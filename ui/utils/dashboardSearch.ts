@@ -86,6 +86,22 @@ function getRouteTargets(
 			],
 		}),
 		createRouteTarget({
+			id: 'activity',
+			href: '/dashboard/activity',
+			label: __('Activity'),
+			description: __('Dashboard'),
+			section: 'pages',
+			terms: [
+				__('Activity'),
+				__('Recent Activity'),
+				'activity',
+				'recent activity',
+				'audit log',
+				'history',
+				'events',
+			],
+		}),
+		createRouteTarget({
 			id: 'about',
 			href: '/dashboard/about',
 			label: __('About PeakURL'),

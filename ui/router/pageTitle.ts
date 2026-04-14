@@ -68,6 +68,10 @@ export function getPageTitle(pathname: string): string {
 		return withSiteTitleSuffix(__('About'));
 	}
 
+	if ('/dashboard/activity' === pathname) {
+		return withSiteTitleSuffix(__('Activity'));
+	}
+
 	if ('/dashboard/links' === pathname) {
 		return withSiteTitleSuffix(__('Links'));
 	}

@@ -1,0 +1,454 @@
+@layer components {
+	.activity-page {
+		@apply space-y-4 pb-8 sm:space-y-5;
+	}
+
+	/* Hero Section - Clean, no borders, SaaS style */
+	.activity-page-hero {
+		@apply flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between px-2 pt-2;
+	}
+
+	.activity-page-hero-copy {
+		@apply min-w-0 flex flex-col;
+		text-align: start;
+	}
+
+	.activity-page-hero-badge {
+		@apply mb-2 w-max inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-accent;
+	}
+
+	.activity-page-title {
+		@apply text-2xl font-bold tracking-tight text-heading sm:text-3xl;
+	}
+
+	.activity-page-summary {
+		@apply mt-1.5 max-w-2xl text-[15px] leading-relaxed text-text-muted;
+		text-align: start;
+	}
+
+	/* Overview Cards - Modern metrics layout */
+	.activity-page-overview {
+		@apply grid gap-3 lg:grid-cols-[minmax(0,1fr)_15rem] lg:items-stretch;
+	}
+
+	.activity-page-overview-items {
+		@apply grid gap-3 sm:grid-cols-2 xl:grid-cols-3;
+	}
+
+	.activity-page-overview-item {
+		@apply relative flex min-h-full flex-col gap-0.5 rounded-lg border border-stroke bg-surface p-3.5;
+		-webkit-padding-end: 3.75rem;
+		padding-inline-end: 3.75rem;
+		text-align: start;
+	}
+
+	.activity-page-overview-icon {
+		@apply absolute top-3.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-surface-alt text-text-muted;
+		inset-inline-end: 0.875rem;
+	}
+
+	.activity-page-overview-copy {
+		@apply min-w-0 flex flex-col;
+	}
+
+	.activity-page-overview-label {
+		@apply text-xs font-medium text-text-muted;
+	}
+
+	.activity-page-overview-value {
+		@apply mt-1 text-xl font-bold text-heading;
+	}
+
+	.activity-page-overview-status {
+		@apply flex flex-col justify-center rounded-lg border border-stroke bg-surface px-4 py-3.5;
+		align-items: flex-start;
+		text-align: start;
+	}
+
+	.activity-page-overview-status-label {
+		@apply text-xs font-medium text-text-muted;
+	}
+
+	.activity-page-overview-status-value {
+		@apply mt-1 text-sm font-semibold text-heading;
+		unicode-bidi: -moz-plaintext;
+		unicode-bidi: plaintext;
+	}
+
+	.activity-page-overview-status-note {
+		@apply mt-1 text-xs text-text-muted;
+		unicode-bidi: -moz-plaintext;
+		unicode-bidi: plaintext;
+	}
+
+	/* Toolbar & Filters - Segmented control / Pill style */
+	.activity-page-toolbar {
+		@apply flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-2;
+	}
+
+	.activity-page-filters {
+		@apply inline-flex items-center gap-1 rounded-lg bg-surface-alt p-1 ring-1 ring-stroke/60;
+	}
+
+	.activity-page-filter {
+		@apply inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium text-text-muted transition-colors hover:text-heading focus:outline-none focus:ring-2 focus:ring-accent/20;
+	}
+
+	.activity-page-filter-active {
+		@apply bg-surface text-heading shadow-sm ring-1 ring-stroke/50;
+	}
+
+	.activity-page-filter-count {
+		@apply inline-flex items-center justify-center rounded-full bg-surface-alt px-1.5 py-0.5 text-[10px] font-bold text-text-muted;
+		-webkit-margin-start: 0.375rem;
+		margin-inline-start: 0.375rem;
+	}
+
+	.activity-page-page-size {
+		@apply lg:justify-self-end;
+	}
+
+	/* Main Panel - Minimal list style */
+	.activity-page-panel {
+		@apply overflow-hidden rounded-lg border border-stroke bg-surface;
+	}
+
+	.activity-page-panel-header {
+		@apply flex flex-col gap-2.5 border-b border-stroke bg-surface-alt px-4 py-3 sm:flex-row sm:items-center sm:justify-between;
+	}
+
+	.activity-page-panel-eyebrow {
+		@apply text-[10px] font-semibold uppercase tracking-widest text-text-muted;
+	}
+
+	.activity-page-panel-title {
+		@apply text-base font-semibold text-heading;
+	}
+
+	.activity-page-panel-actions {
+		@apply flex items-center gap-3 self-start sm:self-auto;
+	}
+
+	.activity-page-panel-selection-count {
+		@apply text-sm font-medium text-accent;
+	}
+
+	.activity-page-selection-delete {
+		@apply inline-flex items-center gap-1 text-sm font-medium text-error transition-colors hover:text-red-700 dark:hover:text-red-300;
+	}
+
+	.activity-page-table-head {
+		@apply hidden border-b border-stroke bg-surface-alt px-4 py-3 text-xs font-semibold uppercase tracking-wide text-text-muted lg:grid;
+		grid-template-columns: 48px minmax(0, 1.8fr) minmax(0, 1.4fr) minmax(
+				130px,
+				auto
+			);
+		-moz-column-gap: 1.5rem;
+		column-gap: 1.5rem;
+		text-align: start;
+	}
+
+	.activity-page-table-head-admin {
+		grid-template-columns:
+			48px minmax(0, 1.8fr) minmax(0, 1.4fr) minmax(130px, auto)
+			48px;
+	}
+
+	.activity-page-table-head-actions {
+		@apply text-end;
+	}
+
+	.activity-page-day-groups {
+		@apply divide-y divide-stroke;
+	}
+
+	.activity-page-day-header {
+		@apply sticky top-0 z-10 flex items-center gap-2 border-b border-stroke bg-surface px-4 py-2 text-xs font-semibold uppercase tracking-wide text-text-muted;
+		text-align: start;
+	}
+
+	.activity-page-events {
+		@apply divide-y divide-stroke;
+	}
+
+	/* Activity Events - Modern Feed List */
+	.activity-page-event {
+		@apply grid gap-y-2.5 px-4 py-3 transition-colors hover:bg-surface-alt/50;
+		grid-template-columns: auto minmax(0, 1fr);
+		-moz-column-gap: 1rem;
+		column-gap: 1rem;
+	}
+
+	.activity-page-event-selected {
+		@apply bg-accent/5;
+	}
+
+	.activity-page-event-identity {
+		@apply flex items-start gap-2;
+	}
+
+	.activity-page-event-icon {
+		@apply flex h-8 w-8 shrink-0 items-center justify-center rounded-lg;
+	}
+
+	.activity-page-event-icon-neutral {
+		@apply bg-accent/10 text-accent;
+	}
+
+	.activity-page-event-icon-success {
+		@apply bg-green-500/10 text-green-700 dark:text-green-300;
+	}
+
+	.activity-page-event-icon-info {
+		@apply bg-blue-500/10 text-blue-700 dark:text-blue-300;
+	}
+
+	.activity-page-event-icon-danger {
+		@apply bg-red-500/10 text-red-700 dark:text-red-300;
+	}
+
+	.activity-page-event-icon-user {
+		@apply bg-orange-500/10 text-orange-700 dark:text-orange-300;
+	}
+
+	.activity-page-event-primary {
+		@apply min-w-0 flex flex-col justify-center;
+		text-align: start;
+	}
+
+	.activity-page-event-title {
+		@apply text-sm font-medium text-heading;
+		unicode-bidi: -moz-plaintext;
+		unicode-bidi: plaintext;
+	}
+
+	.activity-page-event-badges {
+		@apply mt-1 flex flex-wrap items-center gap-1;
+	}
+
+	.activity-page-event-badge {
+		@apply inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-medium;
+	}
+
+	.activity-page-event-badge-neutral {
+		@apply bg-surface-alt text-text-muted;
+	}
+
+	.activity-page-event-badge-success {
+		@apply bg-green-500/10 text-green-700 dark:text-green-400;
+	}
+
+	.activity-page-event-badge-info {
+		@apply bg-blue-500/10 text-blue-700 dark:text-blue-400;
+	}
+
+	.activity-page-event-badge-danger {
+		@apply bg-red-500/10 text-red-700 dark:text-red-400;
+	}
+
+	.activity-page-event-badge-user {
+		@apply bg-orange-500/10 text-orange-700 dark:text-orange-400;
+	}
+
+	.activity-page-event-context {
+		@apply flex flex-wrap items-center gap-2;
+		grid-column: 2;
+	}
+
+	.activity-page-event-detail {
+		@apply inline-flex items-center gap-1 rounded-md border border-stroke bg-surface-alt px-2 py-0.5 text-xs font-medium text-text-muted;
+	}
+
+	.activity-page-event-detail-label {
+		@apply text-text-muted/70;
+	}
+
+	.activity-page-event-detail-value {
+		@apply max-w-48 truncate text-heading;
+		unicode-bidi: -moz-plaintext;
+		unicode-bidi: plaintext;
+	}
+
+	.activity-page-event-detail-empty {
+		@apply text-xs text-text-muted;
+	}
+
+	.activity-page-event-time {
+		@apply text-xs text-text-muted flex flex-col justify-center;
+		grid-column: 2;
+	}
+
+	.activity-page-event-time-relative {
+		@apply text-sm font-medium text-heading;
+		unicode-bidi: -moz-plaintext;
+		unicode-bidi: plaintext;
+	}
+
+	.activity-page-event-time-exact {
+		@apply mt-0.5 text-xs text-text-muted;
+		unicode-bidi: -moz-plaintext;
+		unicode-bidi: plaintext;
+	}
+
+	.activity-page-event-actions {
+		@apply flex items-center justify-start;
+		grid-column: 2;
+	}
+
+	.activity-page-event-action {
+		@apply inline-flex h-7 w-7 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:hover:bg-red-900/20 dark:hover:text-red-400;
+	}
+
+	.activity-page-empty {
+		@apply px-6 py-16 text-center;
+	}
+
+	.activity-page-empty-icon {
+		@apply mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-surface-alt text-text-muted ring-1 ring-stroke;
+	}
+
+	.activity-page-empty-title {
+		@apply text-lg font-semibold text-heading;
+	}
+
+	.activity-page-empty-summary {
+		@apply mt-2 text-sm text-text-muted;
+	}
+
+	/* Pagination - sleek row style */
+	.activity-page-pagination {
+		@apply flex flex-col gap-3 rounded-lg border border-stroke bg-surface px-4 py-3 lg:flex-row lg:items-center lg:justify-between;
+	}
+
+	.activity-page-pagination-summary-group {
+		@apply flex flex-col gap-1;
+		text-align: start;
+	}
+
+	.activity-page-pagination-summary {
+		@apply text-sm text-text-muted;
+	}
+
+	.activity-page-pagination-page-note {
+		@apply text-xs text-text-muted;
+	}
+
+	.activity-page-pagination-controls {
+		@apply flex items-center gap-1;
+	}
+
+	.activity-page-pagination-pages {
+		@apply mx-2 flex items-center gap-1;
+	}
+
+	.activity-page-pagination-nav {
+		@apply inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium text-text-muted transition-colors hover:bg-surface-alt hover:text-heading disabled:cursor-not-allowed disabled:opacity-40;
+	}
+
+	.activity-page-pagination-page {
+		@apply h-8 w-8 rounded-lg text-sm font-medium text-text-muted transition-colors hover:bg-surface-alt hover:text-heading;
+	}
+
+	.activity-page-pagination-page-current {
+		@apply bg-accent text-white hover:bg-accent hover:text-white;
+	}
+
+	.activity-page-skeleton-heading {
+		@apply h-3 w-24;
+	}
+
+	.activity-page-skeleton-copy {
+		@apply mt-2 h-5 w-44;
+	}
+
+	.activity-page-skeleton-day {
+		@apply h-3 w-32;
+	}
+
+	.activity-page-skeleton-icon {
+		@apply h-8 w-8 rounded-lg;
+	}
+
+	.activity-page-skeleton-primary,
+	.activity-page-skeleton-context {
+		@apply min-w-0;
+	}
+
+	.activity-page-skeleton-title {
+		@apply h-4 w-72 max-w-full;
+	}
+
+	.activity-page-skeleton-badges {
+		@apply mt-2 flex flex-wrap gap-1.5;
+	}
+
+	.activity-page-skeleton-badge {
+		@apply h-5 w-20 rounded-md;
+	}
+
+	.activity-page-skeleton-details {
+		@apply flex flex-wrap gap-1.5;
+	}
+
+	.activity-page-skeleton-chip {
+		@apply h-6 w-20 rounded-lg;
+	}
+
+	.activity-page-skeleton-time-group {
+		@apply flex flex-col gap-1;
+	}
+
+	.activity-page-skeleton-time {
+		@apply h-3 w-20;
+	}
+
+	.activity-page-skeleton-time-secondary {
+		@apply h-3 w-28;
+	}
+
+	@media (min-width: 1024px) {
+		.activity-page-event {
+			align-items: center;
+			grid-template-columns:
+				48px minmax(0, 1.8fr) minmax(0, 1.4fr)
+				minmax(130px, auto);
+		}
+
+		.activity-page-event-admin {
+			grid-template-columns:
+				48px minmax(0, 1.8fr) minmax(0, 1.4fr)
+				minmax(130px, auto) 48px;
+		}
+
+		.activity-page-event-primary {
+			grid-column: 2;
+		}
+
+		.activity-page-event-context {
+			grid-column: 3;
+		}
+
+		.activity-page-event-time {
+			@apply text-end;
+			grid-column: 4;
+			justify-self: end;
+		}
+
+		.activity-page-event-actions {
+			@apply justify-end;
+			grid-column: 5;
+		}
+	}
+
+	html[dir='rtl'] .activity-page-panel-actions {
+		flex-direction: row-reverse;
+	}
+
+	html[dir='rtl'] .activity-page-event-time {
+		justify-self: start;
+	}
+
+	html[dir='rtl'] .activity-page-event-actions {
+		justify-content: flex-start;
+	}
+}

@@ -33,11 +33,37 @@ export interface TrafficSeries {
  * Basic information about a link associated with an activity event.
  */
 export interface ActivityLink {
+	/** Stable link identifier when available. */
+	id?: string | null;
+
 	/** Title of the link */
 	title?: string | null;
 
 	/** Short code or identifier for the link */
 	shortCode?: string | null;
+}
+
+/**
+ * Basic person metadata associated with an activity event.
+ */
+export interface ActivityPerson {
+	/** Stable user identifier when available. */
+	id?: string | null;
+
+	/** User first name. */
+	firstName?: string | null;
+
+	/** User last name. */
+	lastName?: string | null;
+
+	/** Username for fallback display. */
+	username?: string | null;
+
+	/** Email address when available. */
+	email?: string | null;
+
+	/** Canonical role slug. */
+	role?: string | null;
 }
 
 /**
@@ -69,6 +95,12 @@ export interface RecentActivity {
 
 	/** Associated link data */
 	link?: ActivityLink | null;
+
+	/** Actor responsible for the event. */
+	actor?: ActivityPerson | null;
+
+	/** Target user associated with the event. */
+	user?: ActivityPerson | null;
 
 	/** Associated location data */
 	location?: ActivityLocation | null;
@@ -113,6 +145,21 @@ export interface DashboardDeviceData {
 export interface ActivityFeedProps {
 	/** Activity items rendered in the feed. */
 	recentActivities: RecentActivity[];
+
+	/** Optional custom heading rendered above the list. */
+	title?: string;
+
+	/** Empty-state copy shown when no activity exists. */
+	emptyText?: string;
+
+	/** Optional CTA label rendered below the list. */
+	actionLabel?: string | null;
+
+	/** Optional CTA destination rendered below the list. */
+	actionTo?: string | null;
+
+	/** Whether the list should stay vertically scrollable. */
+	isScrollable?: boolean;
 }
 
 /**

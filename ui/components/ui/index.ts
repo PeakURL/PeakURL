@@ -8,6 +8,7 @@ export * from './Loading';
 export * from './Skeleton';
 export * from './Modal';
 export * from './Notification';
+export * from './PageSizeControl';
 export * from './Select';
 export * from './types';
 export * from './VerificationCodeInput';

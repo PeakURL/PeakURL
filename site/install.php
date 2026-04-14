@@ -22,6 +22,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . DIRECTORY_SEPARATOR );
 }
 
+/**
+ * Installer surface width in pixels.
+ *
+ * @since 1.0.0
+ */
+const PEAKURL_INSTALLER_SURFACE_WIDTH_PX = 580;
+
 // ────────────────────────────────────────────────────────────────
 // Helper functions
 // ────────────────────────────────────────────────────────────────
@@ -46,8 +53,9 @@ function peakurl_install_base_path( string $script_name ): string {
 /**
  * Build a full URL path by combining the base path and a suffix.
  *
- * @param string $base_path Base path (may be empty).
- * @param string $suffix    Suffix to append.
+ * @param string              $base_path Base path (may be empty).
+ * @param string              $suffix    Suffix to append.
+ * @param array<string, mixed> $query    Query parameters appended to the URL; empty-string values are filtered out.
  * @return string Combined URL path.
  * @since 1.0.0
  */
@@ -178,7 +186,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title><?php echo $page_title; ?></title>
+	<title><?php echo htmlspecialchars( $page_title, ENT_QUOTES, 'UTF-8' ); ?></title>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -329,7 +337,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 		/* ── Card ── */
 		.card {
 			width: 100%;
-			max-width: 580px;
+			max-width: <?php echo htmlspecialchars( (string) PEAKURL_INSTALLER_SURFACE_WIDTH_PX, ENT_QUOTES, 'UTF-8' ); ?>px;
 			background: var(--white);
 			border: 1px solid var(--gray-200);
 			border-radius: var(--radius-lg);

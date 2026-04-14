@@ -160,6 +160,16 @@ const getAboutLinkClassName = (isActive: boolean): string =>
 		isActive && 'dashboard-sidebar-about-link-active'
 	);
 
+const resolveSidebarTargetHref = (
+	href: string | undefined,
+	base: string
+): string => href || base || '/dashboard';
+
+const resolveSidebarSectionStateKey = (
+	item: NavItem,
+	index: number
+): string => item.href || item.children?.[0]?.href || `section-${index}`;
+
 export const Sidebar = ({
 	basePath = '',
 	isMobileOpen,
@@ -240,11 +250,17 @@ export const Sidebar = ({
 
 				<nav className="dashboard-sidebar-nav">
 					<div className="dashboard-sidebar-list">
-						{navigation.map((item) => {
+						{navigation.map((item, index) => {
 							const IconComponent = item.icon;
 							const childHrefBase = getSectionBasePath(
 								item.children?.[0]?.href
 							);
+							const resolvedHref = resolveSidebarTargetHref(
+								item.href,
+								base
+							);
+							const sectionStateKey =
+								resolveSidebarSectionStateKey(item, index);
 							const isChildActive = item.children?.some(
 								(child) =>
 									pathname === child.href ||
@@ -259,22 +275,22 @@ export const Sidebar = ({
 										)));
 							const isOpen =
 								isSectionActive ||
-								Boolean(openSections[item.name]);
+								Boolean(openSections[sectionStateKey]);
 							const activeBasePath = item.activeBasePath;
 							const isActive =
-								pathname === item.href ||
+								pathname === resolvedHref ||
 								(Boolean(activeBasePath) &&
 									(pathname === activeBasePath ||
 										pathname.startsWith(
 											`${activeBasePath}/`
 										))) ||
-								(pathname.startsWith(`${item.href}/`) &&
-									item.href !== base);
+								(resolvedHref !== base &&
+									pathname.startsWith(`${resolvedHref}/`));
 
 							if (item.children?.length) {
 								return (
 									<div
-										key={item.name}
+										key={sectionStateKey}
 										className="dashboard-sidebar-section"
 									>
 										<button
@@ -282,8 +298,8 @@ export const Sidebar = ({
 											onClick={() =>
 												setOpenSections((current) => ({
 													...current,
-													[item.name]:
-														!current[item.name],
+													[sectionStateKey]:
+														!current[sectionStateKey],
 												}))
 											}
 											className={getSectionToggleClassName(
@@ -324,7 +340,7 @@ export const Sidebar = ({
 
 													return (
 														<Link
-															key={child.name}
+															key={child.href}
 															to={child.href}
 															onClick={
 																onMobileClose
@@ -345,8 +361,8 @@ export const Sidebar = ({
 
 							return (
 								<Link
-									key={item.name}
-									to={item.href || base || '/dashboard'}
+									key={resolvedHref}
+									to={resolvedHref}
 									onClick={onMobileClose}
 									className={getLinkClassName(isActive)}
 									dir={direction}

@@ -171,6 +171,9 @@ export interface DashboardSearchCapabilities {
 	/** Whether the current user can manage other users. */
 	canManageUsers?: boolean;
 
+	/** Whether the current user can manage dashboard plugins. */
+	canManagePlugins?: boolean;
+
 	/** Whether the current user can manage API keys. */
 	canManageApiKeys?: boolean;
 
@@ -186,8 +189,14 @@ export interface DashboardSearchCapabilities {
 	/** Whether the current user can manage application updates. */
 	canManageUpdates?: boolean;
 
+	/** Whether the current user can access bulk import tools. */
+	canImportLinks?: boolean;
+
 	/** Whether the current user can export links. */
 	canExportLinks?: boolean;
+
+	/** Whether the current user can view system status diagnostics. */
+	canViewSystemStatus?: boolean;
 }
 
 /**

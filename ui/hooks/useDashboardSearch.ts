@@ -29,14 +29,17 @@ export const useDashboardSearch = () => {
 	const searchCapabilities = useMemo(
 		() => ({
 			canManageUsers: capabilities.canManageUsers,
+			canManagePlugins: capabilities.canManageUsers,
 			canManageApiKeys: capabilities.canManageApiKeys,
 			canManageWebhooks: capabilities.canManageWebhooks,
 			canManageMailDelivery: capabilities.canManageMailDelivery,
 			canManageLocationData: capabilities.canManageLocationData,
 			canManageUpdates: capabilities.canManageUpdates,
+			canImportLinks: capabilities.canManageUsers,
 			canExportLinks:
 				capabilities.capabilities.viewAllLinks ||
 				capabilities.capabilities.viewOwnLinks,
+			canViewSystemStatus: capabilities.canManageUsers,
 		}),
 		[
 			capabilities.canManageUsers,

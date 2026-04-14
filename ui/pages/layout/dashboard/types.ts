@@ -25,7 +25,7 @@ export interface AdminNoticeItem {
 	id?: string | null;
 
 	/** Visual tone used to style the notice. */
-	type?: NoticeTone | string | null;
+	type?: NoticeTone | null;
 
 	/** Short notice heading. */
 	title?: string | null;

@@ -255,7 +255,7 @@ function getRouteTargets(
 			description: __('Management'),
 			section: 'pages',
 			terms: [__('Plugins'), 'plugin', 'plugins', 'extensions'],
-			isAllowed: Boolean(capabilities.canManageUsers),
+			isAllowed: Boolean(capabilities.canManagePlugins),
 		}),
 		createRouteTarget({
 			id: 'tools-import',
@@ -275,7 +275,7 @@ function getRouteTargets(
 				'paste import',
 				'api import',
 			],
-			isAllowed: Boolean(capabilities.canManageUsers),
+			isAllowed: Boolean(capabilities.canImportLinks),
 		}),
 		createRouteTarget({
 			id: 'tools-export',
@@ -311,7 +311,7 @@ function getRouteTargets(
 				'server',
 				'database',
 			],
-			isAllowed: Boolean(capabilities.canManageUsers),
+			isAllowed: Boolean(capabilities.canViewSystemStatus),
 		}),
 	].filter((target) => target.isAllowed);
 }

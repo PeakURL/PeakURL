@@ -331,7 +331,8 @@ const Content = ({ activeTab }: ContentProps) => {
 
 	const startReleaseInstallCompletion = (
 		action: ReleaseAction,
-		appliedVersion?: string | null
+		appliedVersion?: string | null,
+		onReachFinishingStage?: (() => void) | null
 	) => {
 		const activeStageIndex = getReleaseInstallActiveStageIndex(
 			releaseInstallProgressStateRef.current
@@ -342,6 +343,13 @@ const Content = ({ activeTab }: ContentProps) => {
 		const completionTransitionCount = remainingStageSequence.length + 1;
 		const completionSegmentDuration =
 			releaseInstallRedirectDelayMs / (completionTransitionCount + 1);
+		const finishingStageOffset = remainingStageSequence.indexOf(
+			'finishing'
+		);
+		const finishingStageDelay =
+			-1 === finishingStageOffset
+				? 0
+				: completionSegmentDuration * (finishingStageOffset + 1);
 
 		clearReleaseInstallProgressTimers();
 		clearReleaseInstallRedirectTimer();
@@ -357,6 +365,13 @@ const Content = ({ activeTab }: ContentProps) => {
 					completionSegmentDuration * (index + 1)
 				)
 			),
+			...(onReachFinishingStage && finishingStageDelay > 0
+				? [
+						window.setTimeout(() => {
+							onReachFinishingStage();
+						}, finishingStageDelay),
+					]
+				: []),
 			window.setTimeout(() => {
 				setReleaseInstallProgressState(
 					buildCompletedReleaseInstallProgressState(
@@ -366,6 +381,10 @@ const Content = ({ activeTab }: ContentProps) => {
 				);
 			}, completionSegmentDuration * completionTransitionCount),
 		];
+
+		if (onReachFinishingStage && 0 === finishingStageDelay) {
+			onReachFinishingStage();
+		}
 
 		releaseInstallRedirectTimerId.current = window.setTimeout(() => {
 			setPendingReleaseAction(null);
@@ -669,23 +688,23 @@ const Content = ({ activeTab }: ContentProps) => {
 		try {
 			const result = await installRelease(undefined).unwrap();
 			const appliedVersion = result?.data?.currentVersion;
-			startReleaseInstallCompletion(action, appliedVersion);
-
-			notification.success(
-				isReinstall
-					? __('Release reinstalled')
-					: __('Update installed'),
-				appliedVersion
-					? sprintf(
-							isReinstall
-								? __('PeakURL %s has been reinstalled.')
-								: __('PeakURL %s is now installed.'),
-							appliedVersion
-						)
-					: isReinstall
-						? __('The latest version has been reinstalled.')
-						: __('The latest version is now installed.')
-			);
+			startReleaseInstallCompletion(action, appliedVersion, () => {
+				notification.success(
+					isReinstall
+						? __('Release reinstalled')
+						: __('Update installed'),
+					appliedVersion
+						? sprintf(
+								isReinstall
+									? __('PeakURL %s has been reinstalled.')
+									: __('PeakURL %s is now installed.'),
+								appliedVersion
+							)
+						: isReinstall
+							? __('The latest version has been reinstalled.')
+							: __('The latest version is now installed.')
+				);
+			});
 		} catch (err) {
 			notification.error(
 				isReinstall ? __('Reinstall failed') : __('Update failed'),
@@ -791,7 +810,7 @@ const Content = ({ activeTab }: ContentProps) => {
 				<LocationDataTab
 					status={geoipStatusResponse?.data || null}
 					errorMessage={extractErrorMessage(geoipError)}
-					isLoading={isLoadingGeoipStatus || isFetchingGeoipStatus}
+					isLoading={isFetchingGeoipStatus}
 					isSaving={isSavingGeoipConfiguration}
 					isDownloading={isDownloadingGeoipDatabase}
 					onSave={handleSaveGeoipConfiguration}
@@ -804,7 +823,7 @@ const Content = ({ activeTab }: ContentProps) => {
 					status={updateStatusData}
 					errorMessage={extractErrorMessage(updateError)}
 					releaseInstallProgress={releaseInstallProgress}
-					isLoading={isLoadingUpdateStatus || isFetchingUpdateStatus}
+					isLoading={isFetchingUpdateStatus}
 					isChecking={isCheckingForUpdates}
 					isApplying={isApplyingUpdate}
 					isReinstalling={isReinstallingUpdate}

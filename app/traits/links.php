@@ -379,9 +379,9 @@ trait LinksTrait {
 	/**
 	 * Resolve the stored title for a newly created link.
 	 *
-	 * Custom aliases default to the exact alias value when the user does not
-	 * enter a title. Auto-generated short codes remain untitled so the UI can
-	 * render the localized fallback label.
+	 * Custom aliases default to a human-friendlier alias-derived title when the
+	 * user does not enter a title. Auto-generated short codes remain untitled so
+	 * the UI can render the localized fallback label.
 	 *
 	 * @param mixed  $title             Raw request title value.
 	 * @param string $alias             Final stored alias / short code.
@@ -401,10 +401,38 @@ trait LinksTrait {
 		}
 
 		if ( $uses_custom_alias ) {
-			return $alias;
+			return $this->format_alias_default_title( $alias );
 		}
 
 		return '';
+	}
+
+	/**
+	 * Build a default title from a custom alias.
+	 *
+	 * Keeps the alias readable while matching the dashboard convention of
+	 * presenting untitled user-created aliases with a capitalized first letter.
+	 *
+	 * @param string $alias Final stored alias / short code.
+	 * @return string
+	 * @since 1.0.14
+	 */
+	private function format_alias_default_title( string $alias ): string {
+		if ( '' === $alias ) {
+			return '';
+		}
+
+		if (
+			function_exists( 'mb_substr' ) &&
+			function_exists( 'mb_strtoupper' )
+		) {
+			return mb_strtoupper(
+				mb_substr( $alias, 0, 1, 'UTF-8' ),
+				'UTF-8'
+			) . mb_substr( $alias, 1, null, 'UTF-8' );
+		}
+
+		return strtoupper( substr( $alias, 0, 1 ) ) . substr( $alias, 1 );
 	}
 
 	/**

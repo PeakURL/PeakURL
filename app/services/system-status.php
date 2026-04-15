@@ -12,8 +12,10 @@ namespace PeakURL\Services;
 
 use FilesystemIterator;
 use PeakURL\Api\SettingsApi;
+use PeakURL\Database\SchemaSpecs;
 use PeakURL\Includes\Constants;
 use PeakURL\Includes\PeakURL_DB;
+use PeakURL\Services\Database\Schema as DatabaseSchema;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -33,23 +35,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.3
  */
 class SystemStatus {
-
-	/**
-	 * PeakURL-managed database tables.
-	 *
-	 * @var array<int, string>
-	 * @since 1.0.3
-	 */
-	private const MANAGED_TABLES = array(
-		'settings',
-		'users',
-		'api_keys',
-		'sessions',
-		'urls',
-		'clicks',
-		'audit_logs',
-		'webhooks',
-	);
 
 	/**
 	 * Runtime configuration.
@@ -115,8 +100,8 @@ class SystemStatus {
 	 * @param SettingsApi          $settings_api   Settings API dependency.
 	 * @param Geoip                $geoip_service  GeoIP service dependency.
 	 * @param Mailer               $mailer_service Mail transport dependency.
-	 * @param DatabaseSchema       $database_schema Database schema dependency.
-	 * @param I18n                 $i18n_service   I18n service dependency.
+	 * @param DatabaseSchema $database_schema Database schema dependency.
+	 * @param I18n           $i18n_service    I18n service dependency.
 	 * @since 1.0.3
 	 */
 	public function __construct(
@@ -469,7 +454,7 @@ class SystemStatus {
 	 */
 	private function build_data_status(): array {
 		return array(
-			'managedTables' => count( self::MANAGED_TABLES ),
+			'managedTables' => count( SchemaSpecs::managed_tables() ),
 			'users'         => $this->safe_table_count( 'users' ),
 			'links'         => $this->safe_table_count( 'urls' ),
 			'clicks'        => $this->safe_table_count( 'clicks' ),

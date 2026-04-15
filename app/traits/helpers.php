@@ -12,7 +12,7 @@ namespace PeakURL\Traits;
 
 use PeakURL\Includes\Constants;
 use PeakURL\Http\ApiException;
-use PeakURL\Services\DatabaseSchema;
+use PeakURL\Services\Database\Schema as DatabaseSchema;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {

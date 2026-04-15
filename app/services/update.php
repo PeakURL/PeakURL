@@ -180,7 +180,7 @@ class Update {
 			'minimumMariaDb'      => (string) ( $manifest['minimumMariaDb'] ?? '' ),
 			'product'             => (string) ( $manifest['product'] ?? 'peakurl' ),
 			'channel'             => (string) ( $manifest['channel'] ?? 'latest' ),
-			'lastCheckedAt'       => $this->to_iso_or_null( $last_checked_at ),
+			'lastCheckedAt'       => \peakurl_mysql_to_rfc3339( $last_checked_at ),
 			'lastError'           => '' !== trim( (string) $last_error ) ? trim( (string) $last_error ) : null,
 			'phpVersion'          => PHP_VERSION,
 			'phpCompatible'       => $php_compatible,
@@ -309,27 +309,6 @@ class Update {
 			$this->release_lock( $lock );
 			$this->delete_storage_root_if_empty();
 		}
-	}
-
-	/**
-	 * Convert a MySQL datetime string to ISO 8601 or null.
-	 *
-	 * @param string|null $value Datetime string.
-	 * @return string|null ISO 8601 datetime or null.
-	 * @since 1.0.0
-	 */
-	private function to_iso_or_null( ?string $value ): ?string {
-		if ( empty( $value ) ) {
-			return null;
-		}
-
-		$timestamp = strtotime( $value . ' UTC' );
-
-		if ( false === $timestamp ) {
-			return null;
-		}
-
-		return gmdate( DATE_ATOM, $timestamp );
 	}
 
 	/**

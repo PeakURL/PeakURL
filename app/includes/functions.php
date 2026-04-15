@@ -27,6 +27,30 @@ if (
 }
 
 /**
+ * Normalize a runtime namespace segment into a kebab-case path segment.
+ *
+ * @param string $value Raw class or namespace segment.
+ * @return string
+ * @since 1.0.14
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
+function peakurl_get_runtime_path_segment( string $value ): string {
+	if ( 'PeakURL_DB' === $value ) {
+		return 'peakurl-db';
+	}
+
+	if ( 'Str' === $value ) {
+		return 'string';
+	}
+
+	$value = str_replace( '_', '-', $value );
+	$value = preg_replace( '/([A-Z]+)([A-Z][a-z])/', '$1-$2', $value );
+	$value = preg_replace( '/([a-z0-9])([A-Z])/', '$1-$2', (string) $value );
+
+	return strtolower( trim( (string) $value ) );
+}
+
+/**
  * Resolve a PeakURL runtime class name to its source file.
  *
  * Composer's classmap is still generated for the PHP runtime, but during
@@ -72,7 +96,7 @@ function peakurl_get_runtime_class_file( string $type ): ?string {
 
 	$group = array_shift( $segments );
 
-	if ( ! isset( $directory_map[ $group ] ) || ! empty( $segments ) ) {
+	if ( ! isset( $directory_map[ $group ] ) ) {
 		return null;
 	}
 
@@ -88,22 +112,25 @@ function peakurl_get_runtime_class_file( string $type ): ?string {
 		$type_name = substr( $type_name, 0, -5 );
 	}
 
-	if ( 'PeakURL_DB' === $type_name ) {
-		$file_name = 'peakurl-db';
-	} elseif ( 'Str' === $type_name ) {
-		$file_name = 'string';
-	} else {
-		$file_name = str_replace( '_', '-', $type_name );
-		$file_name = preg_replace( '/([A-Z]+)([A-Z][a-z])/', '$1-$2', $file_name );
-		$file_name = preg_replace( '/([a-z0-9])([A-Z])/', '$1-$2', $file_name );
-		$file_name = strtolower( (string) $file_name );
+	$sub_path = '';
+
+	foreach ( $segments as $segment ) {
+		$segment_name = peakurl_get_runtime_path_segment( $segment );
+
+		if ( '' === $segment_name ) {
+			return null;
+		}
+
+		$sub_path .= $segment_name . DIRECTORY_SEPARATOR;
 	}
+
+	$file_name = peakurl_get_runtime_path_segment( $type_name );
 
 	if ( '' === $file_name ) {
 		return null;
 	}
 
-	return $app_root . $directory_map[ $group ] . $file_name . '.php';
+	return $app_root . $directory_map[ $group ] . $sub_path . $file_name . '.php';
 }
 
 /**
@@ -125,6 +152,28 @@ function peakurl_load_runtime_class( string $type ): void {
 }
 
 spl_autoload_register( 'peakurl_load_runtime_class' );
+
+/**
+ * Convert a MySQL datetime string to an RFC 3339 timestamp or null.
+ *
+ * @param string|null $value Datetime string.
+ * @return string|null RFC 3339 datetime or null.
+ * @since 1.0.14
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
+function peakurl_mysql_to_rfc3339( ?string $value ): ?string {
+	if ( ! is_string( $value ) || '' === trim( $value ) ) {
+		return null;
+	}
+
+	$timestamp = strtotime( $value . ' UTC' );
+
+	if ( false === $timestamp ) {
+		return null;
+	}
+
+	return gmdate( DATE_ATOM, $timestamp );
+}
 
 /**
  * Send an email through the active PeakURL transport.

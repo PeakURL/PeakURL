@@ -20,7 +20,7 @@ declare(strict_types=1);
 
 use PeakURL\Includes\Connection;
 use PeakURL\Includes\RuntimeConfig;
-use PeakURL\Services\DatabaseSchema;
+use PeakURL\Services\Database\Schema as DatabaseSchema;
 use PeakURL\Store;
 
 if ( ! defined( 'ABSPATH' ) ) {

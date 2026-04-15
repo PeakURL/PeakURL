@@ -17,6 +17,7 @@ namespace PeakURL\Services;
 use PeakURL\Includes\Connection;
 use PeakURL\Includes\RuntimeConfig;
 use PeakURL\Http\Request;
+use PeakURL\Services\Database\Schema as DatabaseSchema;
 use PeakURL\Store;
 
 // If this file is called directly, abort.

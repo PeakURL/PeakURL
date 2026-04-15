@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace PeakURL\Includes;
 
+use PeakURL\Database\SchemaSpecs;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -24,23 +26,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  */
 class Connection {
-
-	/**
-	 * Canonical list of table names managed by PeakURL.
-	 *
-	 * @var array<int, string>
-	 * @since 1.0.0
-	 */
-	private const TABLE_NAMES = array(
-		'settings',
-		'users',
-		'api_keys',
-		'sessions',
-		'urls',
-		'clicks',
-		'audit_logs',
-		'webhooks',
-	);
 
 	/**
 	 * Merged runtime configuration map.
@@ -57,9 +42,14 @@ class Connection {
 	 * Create a new Connection instance.
 	 *
 	 * @param array<string, mixed> $config Merged runtime configuration.
-	 * @since 1.0.0
+	 * @throws \RuntimeException When the configured DB prefix is invalid.
+	 * @since 1.0.14
 	 */
 	public function __construct( array $config ) {
+		$config['DB_PREFIX'] = RuntimeConfig::normalize_db_prefix(
+			(string) ( $config['DB_PREFIX'] ?? '' ),
+		);
+
 		$this->config = $config;
 	}
 
@@ -152,7 +142,7 @@ class Connection {
 			return $sql;
 		}
 
-		foreach ( self::TABLE_NAMES as $table_name ) {
+		foreach ( SchemaSpecs::managed_tables() as $table_name ) {
 			$sql = $this->replace_table_identifier(
 				$sql,
 				$table_name,
@@ -294,7 +284,7 @@ class Connection {
 	 * @since 1.0.0
 	 */
 	public function has_required_tables(): bool {
-		foreach ( self::TABLE_NAMES as $table_name ) {
+		foreach ( SchemaSpecs::managed_tables() as $table_name ) {
 			if ( ! $this->table_exists( $table_name ) ) {
 				return false;
 			}

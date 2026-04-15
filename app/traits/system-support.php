@@ -12,7 +12,7 @@ namespace PeakURL\Traits;
 
 use PeakURL\Includes\Constants;
 use PeakURL\Http\ApiException;
-use PeakURL\Services\Update;
+use PeakURL\Services\Update\Manager as UpdateManager;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -34,7 +34,7 @@ trait SystemSupportTrait {
 	 * @since 1.0.0
 	 */
 	private function load_update_status( bool $force_check ): array {
-		$update_service  = new Update( $this->config );
+		$update_service  = new UpdateManager( $this->config );
 		$manifest_url    = $update_service->get_manifest_url();
 		$last_checked    = $this->get_setting_value( 'update_last_checked_at' );
 		$last_error      = $this->get_setting_value( 'update_last_error' );
@@ -143,7 +143,7 @@ trait SystemSupportTrait {
 			);
 		}
 
-		$update_service = new Update( $this->config );
+		$update_service = new UpdateManager( $this->config );
 
 		try {
 			$result = $update_service->apply_update( $manifest );

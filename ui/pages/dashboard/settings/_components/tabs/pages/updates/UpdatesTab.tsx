@@ -109,8 +109,12 @@ function buildAppStatus(
 				status?.latestVersion || __('update')
 			),
 			description: status?.canApply
-				? __('A newer PeakURL version is ready to install when you are ready.')
-				: __('A newer PeakURL version is available, but this install cannot apply it automatically from the dashboard.'),
+				? __(
+						'A newer PeakURL version is ready to install when you are ready.'
+					)
+				: __(
+						'A newer PeakURL version is available, but this install cannot apply it automatically from the dashboard.'
+					),
 		};
 	}
 
@@ -123,8 +127,12 @@ function buildAppStatus(
 				status?.currentVersion || __('Unknown')
 			),
 			description: status?.canApply
-				? __('This site is already on the latest version. Reinstall the latest package if you need to restore packaged files.')
-				: __('This site is already on the latest version, but this install cannot reinstall the latest package automatically from the dashboard.'),
+				? __(
+						'This site is already on the latest version. Reinstall the latest package if you need to restore packaged files.'
+					)
+				: __(
+						'This site is already on the latest version, but this install cannot reinstall the latest package automatically from the dashboard.'
+					),
 		};
 	}
 
@@ -135,7 +143,9 @@ function buildAppStatus(
 			__('PeakURL %s is the latest version'),
 			status?.currentVersion || __('Unknown')
 		),
-		description: __('This site is already running the latest known PeakURL version.'),
+		description: __(
+			'This site is already running the latest known PeakURL version.'
+		),
 	};
 }
 
@@ -158,15 +168,19 @@ function buildDatabaseStatus(
 			tone: 'info',
 			label: __('Upgrade Recommended'),
 			title: __('Database upgrade recommended'),
-			description: __('The database needs attention before every runtime path is fully current.'),
+			description: __(
+				'The database needs attention before every runtime path is fully current.'
+			),
 		};
 	}
 
 	return {
 		tone: 'success',
 		label: __('Up to Date'),
-		title: __('Database schema is current'),
-		description: __('PeakURL has no outstanding schema repairs for this release.'),
+		title: __('Database schema is up to date'),
+		description: __(
+			'PeakURL has no outstanding schema repairs for this release.'
+		),
 	};
 }
 
@@ -199,16 +213,13 @@ function SectionHeader({
 	const direction = isRtl ? 'rtl' : 'ltr';
 
 	return (
-		<div
-			dir={direction}
-			className="settings-updates-card-header"
-		>
+		<div dir={direction} className="settings-updates-card-header">
 			<div className="settings-updates-card-copy">
 				<div className="settings-updates-card-title-row">
-					<h2 className="settings-updates-card-title">
-						{title}
-					</h2>
-					{badge ? <StatusBadge tone={badge.tone} label={badge.label} /> : null}
+					<h2 className="settings-updates-card-title">{title}</h2>
+					{badge ? (
+						<StatusBadge tone={badge.tone} label={badge.label} />
+					) : null}
 				</div>
 				<p className="settings-updates-card-description">
 					{description}
@@ -273,14 +284,13 @@ function InlineNotice({
 
 	return (
 		<div className={cn('settings-updates-notice', styles[tone])}>
-			<div
-				dir={direction}
-				className="settings-updates-notice-layout"
-			>
+			<div dir={direction} className="settings-updates-notice-layout">
 				<Icon size={18} className="settings-updates-notice-icon" />
 				<div className="settings-updates-notice-content">
 					<p className="settings-updates-notice-title">{title}</p>
-					<p className="settings-updates-notice-text">{description}</p>
+					<p className="settings-updates-notice-text">
+						{description}
+					</p>
 				</div>
 			</div>
 		</div>
@@ -416,10 +426,7 @@ function DetailRow({
 		);
 
 	return (
-		<div
-			dir={direction}
-			className="settings-updates-detail-row"
-		>
+		<div dir={direction} className="settings-updates-detail-row">
 			<div className="settings-updates-detail-label">
 				{Icon ? <Icon size={15} /> : null}
 				<span>{label}</span>
@@ -449,10 +456,7 @@ function IssueList({ title, issues }: IssueListProps) {
 	const direction = isRtl ? 'rtl' : 'ltr';
 
 	return (
-		<div
-			dir={direction}
-			className="settings-updates-issues"
-		>
+		<div dir={direction} className="settings-updates-issues">
 			<p className="settings-updates-issues-title">{title}</p>
 			<ul className="settings-updates-issues-list">
 				{issues.map((issue: UpdateIssue) => (
@@ -553,7 +557,13 @@ function UpdatesTab({
 
 				<div className="settings-updates-block">
 					<InlineNotice
-						icon={errorMessage || status?.lastError ? AlertCircle : updateAvailable ? Download : CheckCircle2}
+						icon={
+							errorMessage || status?.lastError
+								? AlertCircle
+								: updateAvailable
+									? Download
+									: CheckCircle2
+						}
 						title={appState.title}
 						description={appState.description}
 						tone={appState.tone}
@@ -562,7 +572,9 @@ function UpdatesTab({
 
 				{releaseInstallProgress && (isApplying || isReinstalling) ? (
 					<div className="settings-updates-block">
-						<ReleaseInstallProgress progress={releaseInstallProgress} />
+						<ReleaseInstallProgress
+							progress={releaseInstallProgress}
+						/>
 					</div>
 				) : null}
 
@@ -599,7 +611,11 @@ function UpdatesTab({
 					badge={databaseState}
 					primaryAction={
 						<Button
-							variant={databaseStatus?.upgradeRequired ? 'primary' : 'outline'}
+							variant={
+								databaseStatus?.upgradeRequired
+									? 'primary'
+									: 'outline'
+							}
 							size="sm"
 							className="settings-updates-repair-button"
 							onClick={onRepair}
@@ -615,12 +631,16 @@ function UpdatesTab({
 					items={[
 						{
 							label: __('Recorded Schema'),
-							value: String(databaseStatus?.currentVersion ?? __('Unknown')),
+							value: String(
+								databaseStatus?.currentVersion ?? __('Unknown')
+							),
 							valueDirection: 'ltr',
 						},
 						{
 							label: __('Required Schema'),
-							value: String(databaseStatus?.targetVersion ?? __('Unknown')),
+							value: String(
+								databaseStatus?.targetVersion ?? __('Unknown')
+							),
 							valueDirection: 'ltr',
 						},
 						{
@@ -636,14 +656,21 @@ function UpdatesTab({
 
 				<div className="settings-updates-block">
 					<InlineNotice
-						icon={databaseStatus?.lastError ? AlertCircle : databaseStatus?.upgradeRequired ? AlertCircle : CheckCircle2}
+						icon={
+							databaseStatus?.lastError
+								? AlertCircle
+								: databaseStatus?.upgradeRequired
+									? AlertCircle
+									: CheckCircle2
+						}
 						title={databaseState.title}
 						description={databaseState.description}
 						tone={databaseState.tone}
 					/>
 				</div>
 
-				{visibleDatabaseIssues.length > 0 || databaseStatus?.lastError ? (
+				{visibleDatabaseIssues.length > 0 ||
+				databaseStatus?.lastError ? (
 					<div className="settings-updates-divider">
 						{databaseStatus?.lastError ? (
 							<div className="settings-updates-error-card">

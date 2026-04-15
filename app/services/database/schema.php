@@ -95,7 +95,7 @@ class Schema {
 	}
 
 	/**
-	 * Ensure the database schema is current for the active codebase.
+	 * Ensure the database schema is up to date for the active codebase.
 	 *
 	 * @return array<string, mixed>
 	 * @since 1.0.14

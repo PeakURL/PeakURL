@@ -105,22 +105,22 @@ trait HelpersTrait {
 	}
 
 	/**
-	 * Calculate a simple click-to-unique conversion rate percentage.
+	 * Calculate the percentage of clicks attributable to unique visitors.
 	 *
 	 * @param int $clicks        Total click count.
 	 * @param int $unique_clicks Unique click count.
-	 * @return float Conversion rate rounded to one decimal.
-	 * @since 1.0.0
+	 * @return float Unique click rate rounded to one decimal.
+	 * @since 1.0.14
 	 */
-	private function calculate_conversion_rate(
+	private function calculate_unique_click_rate(
 		int $clicks,
 		int $unique_clicks
 	): float {
-		if ( $unique_clicks <= 0 ) {
+		if ( $clicks <= 0 ) {
 			return 0.0;
 		}
 
-		return round( ( $clicks / $unique_clicks ) * 100, 1 );
+		return round( ( $unique_clicks / $clicks ) * 100, 1 );
 	}
 
 	/**

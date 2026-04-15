@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace PeakURL\Services;
 
 use PeakURL\Includes\Constants;
+use PeakURL\Services\Install\Writer as InstallWriter;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -75,7 +76,7 @@ class Crypto {
 		}
 
 		if ( $this->is_source_checkout() ) {
-			SetupConfig::write_env_overrides(
+			InstallWriter::write_env_overrides(
 				$app_path . '/.env',
 				array(
 					Constants::CONFIG_AUTH_KEY  => $auth_key,
@@ -85,10 +86,10 @@ class Crypto {
 				'# PeakURL local development overrides'
 			);
 		} else {
-			$values                                = SetupConfig::config_values_from_runtime_config( $this->config );
+			$values                                = InstallWriter::build_config_values( $this->config );
 			$values[ Constants::CONFIG_AUTH_KEY ]  = $auth_key;
 			$values[ Constants::CONFIG_AUTH_SALT ] = $auth_salt;
-			SetupConfig::write_config_file( $app_path, $values );
+			InstallWriter::write_config_file( $app_path, $values );
 		}
 
 		$this->config[ Constants::CONFIG_AUTH_KEY ]  = $auth_key;

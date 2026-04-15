@@ -17,9 +17,9 @@ use PeakURL\Http\Request;
 use PeakURL\Services\AdminNotices;
 use PeakURL\Services\Crypto;
 use PeakURL\Services\Geoip;
-use PeakURL\Services\SystemStatus;
+use PeakURL\Services\Install\Writer as InstallWriter;
 use PeakURL\Services\Mailer;
-use PeakURL\Services\SetupConfig;
+use PeakURL\Services\SystemStatus;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -505,9 +505,9 @@ trait SystemTrait {
 			return;
 		}
 
-		SetupConfig::write_config_file(
+		InstallWriter::write_config_file(
 			ABSPATH . 'app',
-			SetupConfig::config_values_from_runtime_config( $this->config ),
+			InstallWriter::build_config_values( $this->config ),
 		);
 	}
 }

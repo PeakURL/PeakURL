@@ -19,7 +19,7 @@ declare(strict_types=1);
 use PeakURL\Includes\Connection;
 use PeakURL\Includes\Constants;
 use PeakURL\Includes\RuntimeConfig;
-use PeakURL\Services\Install;
+use PeakURL\Services\Install\State as InstallState;
 use PeakURL\Utils\Str;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -377,16 +377,16 @@ if ( ! file_exists( $autoload ) ) {
 
 require_once $autoload;
 
-$runtime_state = Install::get_runtime_state( $app_path );
+$runtime_state = InstallState::get_runtime_state( $app_path );
 
 if ( Str::starts_with( $relative_path, '/api/' ) ) {
-	if ( Install::STATE_READY !== $runtime_state ) {
+	if ( InstallState::READY !== $runtime_state ) {
 		http_response_code( 503 );
 		header( 'Content-Type: application/json; charset=utf-8' );
 		echo json_encode(
 			array(
 				'success' => false,
-				'message' => Install::STATE_NEEDS_INSTALL === $runtime_state
+				'message' => InstallState::NEEDS_INSTALL === $runtime_state
 					? 'PeakURL needs installation.'
 					: 'PeakURL needs database configuration.',
 				'data'    => array(
@@ -405,12 +405,12 @@ if ( Str::starts_with( $relative_path, '/api/' ) ) {
 	exit();
 }
 
-if ( Install::STATE_NEEDS_SETUP === $runtime_state ) {
+if ( InstallState::NEEDS_SETUP === $runtime_state ) {
 	header( 'Location: ' . $setup_path );
 	exit();
 }
 
-if ( Install::STATE_NEEDS_INSTALL === $runtime_state ) {
+if ( InstallState::NEEDS_INSTALL === $runtime_state ) {
 	header( 'Location: ' . $install_path );
 	exit();
 }

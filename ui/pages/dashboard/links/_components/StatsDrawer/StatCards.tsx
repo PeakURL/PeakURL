@@ -47,13 +47,13 @@ function StatCards({
 			bg: 'bg-green-500/10',
 		},
 		{
-			name: __('Click Rate'),
+			name: __('Unique Click Rate'),
 			value: isLoading
 				? '...'
 				: fetchedStats
 					? `${fetchedStats.conversionRate}%`
-					: uniqueClicks > 0
-						? `${((totalClicks / uniqueClicks) * 100).toFixed(1)}%`
+					: totalClicks > 0
+						? `${((uniqueClicks / totalClicks) * 100).toFixed(1)}%`
 						: '0%',
 			icon: TrendingUp,
 			color: 'text-orange-600 dark:text-orange-400',

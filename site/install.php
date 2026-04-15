@@ -3,7 +3,7 @@
  * PeakURL browser-based site installation form (installer step 3).
  *
  * Collects site name, administrator credentials, and optional
- * settings, then delegates to {@see Install::install()} to
+ * settings, then delegates to {@see \PeakURL\Services\Install\Manager::install()} to
  * create the schema, seed initial data, and log the admin in.
  *
  * On success the user is redirected to `/dashboard/about?source=install`.
@@ -15,8 +15,10 @@
 declare(strict_types=1);
 
 use PeakURL\Http\Request;
-use PeakURL\Services\Install;
-use PeakURL\Services\InstallerI18n;
+use PeakURL\Services\Install\Locale as InstallLocale;
+use PeakURL\Services\Install\Manager as InstallManager;
+use PeakURL\Services\Install\Page as InstallPage;
+use PeakURL\Services\Install\State as InstallState;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . DIRECTORY_SEPARATOR );
@@ -29,81 +31,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 const PEAKURL_INSTALLER_SURFACE_WIDTH_PX = 580;
 
-// ────────────────────────────────────────────────────────────────
-// Helper functions
-// ────────────────────────────────────────────────────────────────
-
-/**
- * Derive the URL base path from the PHP SCRIPT_NAME.
- *
- * @param string $script_name Value of $_SERVER['SCRIPT_NAME'].
- * @return string Base path without trailing slash, or ''.
- * @since 1.0.0
- */
-function peakurl_install_base_path( string $script_name ): string {
-	$base_path = str_replace( '\\', '/', dirname( $script_name ) );
-
-	if ( '.' === $base_path || '/' === $base_path ) {
-		return '';
-	}
-
-	return rtrim( $base_path, '/' );
-}
-
-/**
- * Build a full URL path by combining the base path and a suffix.
- *
- * @param string              $base_path Base path (may be empty).
- * @param string              $suffix    Suffix to append.
- * @param array<string, mixed> $query    Query parameters appended to the URL; empty-string values are filtered out.
- * @return string Combined URL path.
- * @since 1.0.0
- */
-function peakurl_install_url( string $base_path, string $suffix, array $query = array() ): string {
-	$normalized_suffix = '/' . ltrim( $suffix, '/' );
-
-	if ( '' === $base_path ) {
-		$url = $normalized_suffix;
-	} else {
-		$url = $base_path . $normalized_suffix;
-	}
-
-	$query = array_filter(
-		$query,
-		static function ( $value ): bool {
-			return '' !== trim( (string) $value );
-		},
-	);
-
-	if ( empty( $query ) ) {
-		return $url;
-	}
-
-	return $url . '?' . http_build_query( $query );
-}
-
-/**
- * Retrieve a form value and HTML-escape it for safe output.
- *
- * @param array<string,string> $values Current form values.
- * @param string               $key    Field name.
- * @return string Escaped value.
- * @since 1.0.0
- */
-function peakurl_install_value( array $values, string $key ): string {
-	return htmlspecialchars(
-		(string) ( $values[ $key ] ?? '' ),
-		ENT_QUOTES,
-		'UTF-8',
-	);
-}
-
 $root_path     = file_exists( __DIR__ . '/app/vendor/autoload.php' ) ? __DIR__ : dirname( __DIR__ );
 $app_path      = $root_path . '/app';
 $autoload_path = $app_path . '/vendor/autoload.php';
-$base_path     = peakurl_install_base_path(
-	(string) ( $_SERVER['SCRIPT_NAME'] ?? '/install.php' ),
-);
 
 if ( ! file_exists( $autoload_path ) ) {
 	http_response_code( 500 );
@@ -114,43 +44,36 @@ if ( ! file_exists( $autoload_path ) ) {
 
 require $autoload_path;
 
+$base_path = InstallPage::get_base_path(
+	(string) ( $_SERVER['SCRIPT_NAME'] ?? '/install.php' ),
+);
+
 $requested_locale = trim(
 	(string) ( $_POST['site_language'] ?? $_GET['site_language'] ?? '' ),
 );
-$installer_i18n   = new InstallerI18n(
+$installer_locale = new InstallLocale(
 	$root_path,
 	$requested_locale,
 	(string) ( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? '' ),
 );
 
-peakurl_override_i18n_service( $installer_i18n->get_service() );
+peakurl_override_i18n_service( $installer_locale->get_i18n_service() );
 
-$runtime_state = Install::get_runtime_state( $app_path );
+$runtime_state = InstallState::get_runtime_state( $app_path );
 
-if ( Install::STATE_READY === $runtime_state ) {
-	header( 'Location: ' . peakurl_install_url( $base_path, '/dashboard' ) );
+if ( InstallState::READY === $runtime_state ) {
+	header( 'Location: ' . InstallPage::build_url( $base_path, '/dashboard' ) );
 	exit();
 }
 
-if ( Install::STATE_NEEDS_SETUP === $runtime_state ) {
-	header( 'Location: ' . peakurl_install_url( $base_path, '/setup-config.php' ) );
+if ( InstallState::NEEDS_SETUP === $runtime_state ) {
+	header( 'Location: ' . InstallPage::build_url( $base_path, '/setup-config.php' ) );
 	exit();
 }
 
-$scheme = 'http';
-
-if (
-	( ! empty( $_SERVER['HTTPS'] ) &&
-		'off' !== strtolower( (string) $_SERVER['HTTPS'] ) ) ||
-	'https' === strtolower( (string) ( $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '' ) )
-) {
-	$scheme = 'https';
-}
-
-$host                    = $_SERVER['HTTP_HOST'] ?? 'localhost';
-$detected_site_url       = $scheme . '://' . $host . $base_path;
-$values                  = Install::get_form_defaults( $app_path, $detected_site_url );
-$values['site_language'] = $installer_i18n->get_locale();
+$detected_site_url       = InstallPage::detect_site_url( $base_path, $_SERVER );
+$values                  = InstallManager::get_form_defaults( $detected_site_url );
+$values['site_language'] = $installer_locale->get_locale();
 $error_message           = '';
 /* translators: %s: Application name. */
 $page_title = sprintf( __( 'Administrator Setup - %s', 'peakurl' ), 'PeakURL' );
@@ -168,13 +91,13 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 
 	try {
 		$request = Request::from_globals();
-		Install::install( $app_path, $_POST, $request );
+		InstallManager::install( $app_path, $_POST, $request );
 
 		foreach ( $request->get_response_cookies() as $cookie_header ) {
 			header( 'Set-Cookie: ' . $cookie_header, false );
 		}
 
-		header( 'Location: ' . peakurl_install_url( $base_path, '/dashboard/about?source=install' ) );
+		header( 'Location: ' . InstallPage::build_url( $base_path, '/dashboard/about?source=install' ) );
 		exit();
 	} catch ( \Throwable $exception ) {
 		$error_message = $exception->getMessage();
@@ -182,7 +105,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 }
 ?>
 <!doctype html>
-<html lang="<?php echo htmlspecialchars( $installer_i18n->get_html_lang(), ENT_QUOTES, 'UTF-8' ); ?>" dir="<?php echo htmlspecialchars( $installer_i18n->get_text_direction(), ENT_QUOTES, 'UTF-8' ); ?>">
+<html lang="<?php echo htmlspecialchars( $installer_locale->get_html_lang(), ENT_QUOTES, 'UTF-8' ); ?>" dir="<?php echo htmlspecialchars( $installer_locale->get_text_direction(), ENT_QUOTES, 'UTF-8' ); ?>">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -628,15 +551,15 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 				</div>
 			<?php endif; ?>
 
-			<form method="post" action="<?php echo htmlspecialchars( peakurl_install_url( $base_path, '/install.php' ), ENT_QUOTES, 'UTF-8' ); ?>" novalidate>
-				<input type="hidden" name="site_language" value="<?php echo peakurl_install_value( $values, 'site_language' ); ?>">
+			<form method="post" action="<?php echo htmlspecialchars( InstallPage::build_url( $base_path, '/install.php' ), ENT_QUOTES, 'UTF-8' ); ?>" novalidate>
+				<input type="hidden" name="site_language" value="<?php echo InstallPage::get_escaped_value( $values, 'site_language' ); ?>">
 				<div class="form-body">
 					<div class="divider" style="margin: 0;"></div>
 					<p class="form-section-label"><?php echo esc_html__( 'Site info', 'peakurl' ); ?></p>
 					<div class="grid">
 						<div class="field full">
 							<label for="workspace_name"><?php echo esc_html__( 'Site title', 'peakurl' ); ?></label>
-							<input id="workspace_name" name="workspace_name" type="text" value="<?php echo peakurl_install_value( $values, 'workspace_name' ); ?>" placeholder="<?php echo esc_attr__( 'My Link Hub', 'peakurl' ); ?>" required>
+							<input id="workspace_name" name="workspace_name" type="text" value="<?php echo InstallPage::get_escaped_value( $values, 'workspace_name' ); ?>" placeholder="<?php echo esc_attr__( 'My Link Hub', 'peakurl' ); ?>" required>
 						</div>
 					</div>
 					<div class="divider" style="margin: 4px 0;"></div>
@@ -644,16 +567,16 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 					<div class="grid">
 						<div class="field">
 							<label for="owner_username"><?php echo esc_html__( 'Username', 'peakurl' ); ?></label>
-							<input id="owner_username" name="owner_username" type="text" value="<?php echo peakurl_install_value( $values, 'owner_username' ); ?>" placeholder="admin" required>
+							<input id="owner_username" name="owner_username" type="text" value="<?php echo InstallPage::get_escaped_value( $values, 'owner_username' ); ?>" placeholder="admin" required>
 							<p class="hint"><?php echo esc_html__( 'Letters, numbers, dots, dashes, underscores, or @.', 'peakurl' ); ?></p>
 						</div>
 						<div class="field">
 							<label for="owner_email"><?php echo esc_html__( 'Email', 'peakurl' ); ?></label>
-							<input id="owner_email" name="owner_email" type="email" value="<?php echo peakurl_install_value( $values, 'owner_email' ); ?>" placeholder="<?php echo esc_attr__( 'you@company.com', 'peakurl' ); ?>" required>
+							<input id="owner_email" name="owner_email" type="email" value="<?php echo InstallPage::get_escaped_value( $values, 'owner_email' ); ?>" placeholder="<?php echo esc_attr__( 'you@company.com', 'peakurl' ); ?>" required>
 						</div>
 						<div class="field full">
 							<label for="owner_password"><?php echo esc_html__( 'Password', 'peakurl' ); ?></label>
-							<input id="owner_password" name="owner_password" type="password" value="<?php echo peakurl_install_value( $values, 'owner_password' ); ?>" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" required>
+							<input id="owner_password" name="owner_password" type="password" value="<?php echo InstallPage::get_escaped_value( $values, 'owner_password' ); ?>" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" required>
 							<p class="hint"><?php echo esc_html__( 'At least 8 characters. You will be signed in right after installation.', 'peakurl' ); ?></p>
 						</div>
 					</div>

@@ -1,16 +1,17 @@
 <?php
 /**
- * Installer-only translation bootstrap.
+ * Release installer locale bootstrap.
  *
- * @package PeakURL\Services
- * @since 1.0.8
+ * @package PeakURL\Services\Install
+ * @since 1.0.14
  */
 
 declare(strict_types=1);
 
-namespace PeakURL\Services;
+namespace PeakURL\Services\Install;
 
 use PeakURL\Includes\Constants;
+use PeakURL\Services\I18n;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,20 +19,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * InstallerI18n — locale bootstrap for setup-config.php and install.php.
+ * Locale — installer translation bootstrap for setup and install screens.
  *
  * Loads bundled language packs directly from `content/languages` before the
  * database-backed runtime locale is available.
  *
- * @since 1.0.8
+ * @since 1.0.14
  */
-class InstallerI18n {
+class Locale {
 
 	/**
-	 * Shared i18n service configured for installer use.
+	 * Shared i18n service configured for the installer.
 	 *
 	 * @var I18n
-	 * @since 1.0.8
+	 * @since 1.0.14
 	 */
 	private I18n $i18n_service;
 
@@ -39,17 +40,17 @@ class InstallerI18n {
 	 * Active installer locale.
 	 *
 	 * @var string
-	 * @since 1.0.8
+	 * @since 1.0.14
 	 */
 	private string $locale;
 
 	/**
-	 * Create a new installer i18n helper.
+	 * Create a new installer locale service.
 	 *
 	 * @param string      $root_path              Absolute release-root path.
 	 * @param string|null $requested_locale       Requested locale from the installer.
 	 * @param string|null $accept_language_header Browser language header.
-	 * @since 1.0.8
+	 * @since 1.0.14
 	 */
 	public function __construct(
 		string $root_path,
@@ -57,7 +58,7 @@ class InstallerI18n {
 		?string $accept_language_header = null
 	) {
 		$this->i18n_service = new I18n(
-			$this->build_service_config( $root_path ),
+			$this->get_service_config( $root_path ),
 			null,
 		);
 		$this->locale       = $this->resolve_locale(
@@ -65,57 +66,57 @@ class InstallerI18n {
 			$accept_language_header,
 		);
 		$this->i18n_service = new I18n(
-			$this->build_service_config( $root_path, $this->locale ),
+			$this->get_service_config( $root_path, $this->locale ),
 			null,
 		);
 		$this->i18n_service->load_locale( $this->locale );
 	}
 
 	/**
-	 * Get the active installer locale.
+	 * Return the active installer locale.
 	 *
 	 * @return string
-	 * @since 1.0.8
+	 * @since 1.0.14
 	 */
 	public function get_locale(): string {
 		return $this->locale;
 	}
 
 	/**
-	 * Get the shared installer i18n service.
+	 * Return the configured installer i18n service.
 	 *
 	 * @return I18n
-	 * @since 1.0.8
+	 * @since 1.0.14
 	 */
-	public function get_service(): I18n {
+	public function get_i18n_service(): I18n {
 		return $this->i18n_service;
 	}
 
 	/**
-	 * Get the installer HTML lang attribute.
+	 * Return the installer HTML lang attribute.
 	 *
 	 * @return string
-	 * @since 1.0.8
+	 * @since 1.0.14
 	 */
 	public function get_html_lang(): string {
 		return $this->i18n_service->get_html_lang( $this->locale );
 	}
 
 	/**
-	 * Get the installer text direction.
+	 * Return the installer text direction.
 	 *
 	 * @return string
-	 * @since 1.0.8
+	 * @since 1.0.14
 	 */
 	public function get_text_direction(): string {
 		return $this->i18n_service->get_text_direction( $this->locale );
 	}
 
 	/**
-	 * Return the installed language options for the installer.
+	 * Return the installed language choices available to the installer.
 	 *
 	 * @return array<int, array<string, mixed>>
-	 * @since 1.0.8
+	 * @since 1.0.14
 	 */
 	public function list_languages(): array {
 		return $this->i18n_service->list_languages();
@@ -124,15 +125,10 @@ class InstallerI18n {
 	/**
 	 * Resolve the requested installer locale.
 	 *
-	 * Explicit user selection takes precedence. When no selection is
-	 * provided, the installer uses the first available language that matches
-	 * the browser preferences. If nothing matches, it falls back to the
-	 * default locale.
-	 *
 	 * @param string|null $requested_locale       Requested installer locale.
 	 * @param string|null $accept_language_header Browser language header.
 	 * @return string
-	 * @since 1.0.8
+	 * @since 1.0.14
 	 */
 	private function resolve_locale(
 		?string $requested_locale,
@@ -162,7 +158,7 @@ class InstallerI18n {
 	 *
 	 * @param string $accept_language_header Browser language header.
 	 * @return string
-	 * @since 1.0.8
+	 * @since 1.0.14
 	 */
 	private function match_browser_locale( string $accept_language_header ): string {
 		$accept_language_header = trim( $accept_language_header );
@@ -201,7 +197,7 @@ class InstallerI18n {
 	 *
 	 * @param string $accept_language_header Browser language header.
 	 * @return array<int, string>
-	 * @since 1.0.8
+	 * @since 1.0.14
 	 */
 	private function parse_browser_language_preferences( string $accept_language_header ): array {
 		$preferences = array();
@@ -273,7 +269,7 @@ class InstallerI18n {
 	 * @param array<int, string> $installed_locales Installed locale codes.
 	 * @param string             $preferred_locale  Browser-preferred locale.
 	 * @return string
-	 * @since 1.0.8
+	 * @since 1.0.14
 	 */
 	private function find_available_locale(
 		array $installed_locales,
@@ -295,11 +291,11 @@ class InstallerI18n {
 	}
 
 	/**
-	 * Get the base language portion of a locale.
+	 * Return the base language portion of a locale code.
 	 *
 	 * @param string $locale Locale identifier.
 	 * @return string
-	 * @since 1.0.8
+	 * @since 1.0.14
 	 */
 	private function get_base_locale( string $locale ): string {
 		$base_locale = strstr( $locale, '_', true );
@@ -312,14 +308,14 @@ class InstallerI18n {
 	}
 
 	/**
-	 * Build the runtime configuration map used by the installer i18n service.
+	 * Return the runtime configuration map used by installer i18n.
 	 *
 	 * @param string $root_path Absolute release-root path.
 	 * @param string $locale    Active installer locale.
 	 * @return array<string, string>
-	 * @since 1.0.8
+	 * @since 1.0.14
 	 */
-	private function build_service_config(
+	private function get_service_config(
 		string $root_path,
 		string $locale = ''
 	): array {

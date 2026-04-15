@@ -83,7 +83,7 @@ trait AnalyticsTrait {
 			'totalClicks'      => (int) ( $stats['total_clicks'] ?? 0 ),
 			'totalLinks'       => $total_links,
 			'uniqueClicks'     => (int) ( $stats['unique_clicks'] ?? 0 ),
-			'conversionRate'   => $this->calculate_conversion_rate(
+			'conversionRate'   => $this->calculate_unique_click_rate(
 				(int) ( $stats['total_clicks'] ?? 0 ),
 				(int) ( $stats['unique_clicks'] ?? 0 ),
 			),
@@ -366,7 +366,7 @@ trait AnalyticsTrait {
 		return array(
 			'totalClicks'        => (int) ( $totals['total_clicks'] ?? 0 ),
 			'uniqueClicks'       => (int) ( $totals['unique_clicks'] ?? 0 ),
-			'conversionRate'     => $this->calculate_conversion_rate(
+			'conversionRate'     => $this->calculate_unique_click_rate(
 				(int) ( $totals['total_clicks'] ?? 0 ),
 				(int) ( $totals['unique_clicks'] ?? 0 ),
 			),

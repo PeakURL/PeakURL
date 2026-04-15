@@ -32,7 +32,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
 			tone: 'links' as DashboardStatTone,
 		},
 		{
-			title: __('Click Rate'),
+			title: __('Unique Click Rate'),
 			value: `${stats.conversionRate.toFixed(1)}%`,
 			change: '+0.8%',
 			changeType: 'positive',

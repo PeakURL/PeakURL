@@ -87,7 +87,7 @@ export interface LinkStatsPayload {
 	/** Total number of unique clicks */
 	uniqueClicks: number;
 
-	/** Conversion rate (e.g. percentage or ratio) */
+	/** Unique click rate percentage. */
 	conversionRate: number;
 
 	/** Time-series traffic data */

@@ -79,14 +79,17 @@ trait AnalyticsTrait {
 				$click_params,
 			) ?? array();
 
+		$unique_click_rate = $this->calculate_unique_click_rate(
+			(int) ( $stats['total_clicks'] ?? 0 ),
+			(int) ( $stats['unique_clicks'] ?? 0 ),
+		);
+
 		return array(
 			'totalClicks'      => (int) ( $stats['total_clicks'] ?? 0 ),
 			'totalLinks'       => $total_links,
 			'uniqueClicks'     => (int) ( $stats['unique_clicks'] ?? 0 ),
-			'conversionRate'   => $this->calculate_unique_click_rate(
-				(int) ( $stats['total_clicks'] ?? 0 ),
-				(int) ( $stats['unique_clicks'] ?? 0 ),
-			),
+			'uniqueClickRate'  => $unique_click_rate,
+			'conversionRate'   => $unique_click_rate,
 			'devices'          => $this->group_click_metrics(
 				'device',
 				'name',
@@ -363,13 +366,16 @@ trait AnalyticsTrait {
 				),
 			) ?? array();
 
+		$unique_click_rate = $this->calculate_unique_click_rate(
+			(int) ( $totals['total_clicks'] ?? 0 ),
+			(int) ( $totals['unique_clicks'] ?? 0 ),
+		);
+
 		return array(
 			'totalClicks'        => (int) ( $totals['total_clicks'] ?? 0 ),
 			'uniqueClicks'       => (int) ( $totals['unique_clicks'] ?? 0 ),
-			'conversionRate'     => $this->calculate_unique_click_rate(
-				(int) ( $totals['total_clicks'] ?? 0 ),
-				(int) ( $totals['unique_clicks'] ?? 0 ),
-			),
+			'uniqueClickRate'    => $unique_click_rate,
+			'conversionRate'     => $unique_click_rate,
 			'traffic'            => $this->build_traffic_series(
 				(string) $url['id'],
 				$days,

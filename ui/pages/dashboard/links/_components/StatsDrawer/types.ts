@@ -88,7 +88,10 @@ export interface LinkStatsPayload {
 	uniqueClicks: number;
 
 	/** Unique click rate percentage. */
-	conversionRate: number;
+	uniqueClickRate: number;
+
+	/** Deprecated compatibility alias for the unique click rate percentage. */
+	conversionRate?: number;
 
 	/** Time-series traffic data */
 	traffic?: StatsTrafficSeries | null;

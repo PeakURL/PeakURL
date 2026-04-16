@@ -19,7 +19,7 @@ use PeakURL\Services\Crypto;
 use PeakURL\Services\Geoip;
 use PeakURL\Services\Install\Writer as InstallWriter;
 use PeakURL\Services\Mailer;
-use PeakURL\Services\SystemStatus;
+use PeakURL\Services\SystemStatus\Manager as SystemStatusManager;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -63,7 +63,7 @@ trait SystemTrait {
 			__( 'Admin access is required.', 'peakurl' ),
 		);
 
-		$service = new SystemStatus(
+		$service = new SystemStatusManager(
 			$this->config,
 			$this->db,
 			$this->settings_api,

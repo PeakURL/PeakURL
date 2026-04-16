@@ -105,10 +105,6 @@ function PluginsPage() {
 			    PAGE HEADER
 			   ════════════════════════════════════ */}
 			<div className="plugins-page-header">
-				{/* Decorative blobs */}
-				<div className="plugins-page-header-glow-end" />
-				<div className="plugins-page-header-glow-start" />
-
 				<div className="plugins-page-header-layout">
 					<div className="plugins-page-header-copy">
 						<div className="plugins-page-header-icon-row">
@@ -381,9 +377,7 @@ function FeatureRoadmapCard({
 				<Icon size={17} />
 			</div>
 			<h3 className="plugins-page-roadmap-card-title">{title}</h3>
-			<p className="plugins-page-roadmap-card-copy">
-				{description}
-			</p>
+			<p className="plugins-page-roadmap-card-copy">{description}</p>
 		</div>
 	);
 }

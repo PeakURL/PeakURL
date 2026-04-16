@@ -31,14 +31,6 @@
 		@apply relative overflow-hidden rounded-t-2xl border border-stroke bg-surface px-6 py-6 shadow-sm sm:px-8;
 	}
 
-	.plugins-page-header-glow-end {
-		@apply pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-accent/5 blur-3xl;
-	}
-
-	.plugins-page-header-glow-start {
-		@apply pointer-events-none absolute -left-16 bottom-0 h-48 w-48 rounded-full bg-purple-500/5 blur-3xl;
-	}
-
 	.plugins-page-header-layout {
 		@apply relative flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between;
 	}
@@ -117,7 +109,9 @@
 
 	.plugins-page-search-field {
 		@apply pointer-events-none w-full rounded-lg border border-stroke bg-surface-alt/50 py-2 text-sm text-text-muted/40;
+		-webkit-padding-start: 2rem;
 		padding-inline-start: 2rem;
+		-webkit-padding-end: 0.75rem;
 		padding-inline-end: 0.75rem;
 		text-align: start;
 	}
@@ -125,7 +119,9 @@
 	.plugins-page-search-icon {
 		@apply pointer-events-none absolute inset-y-0 flex items-center text-text-muted/40;
 		inset-inline-start: 0;
+		-webkit-padding-start: 0.625rem;
 		padding-inline-start: 0.625rem;
+		-webkit-padding-end: 0;
 		padding-inline-end: 0;
 	}
 
@@ -143,6 +139,7 @@
 	}
 
 	.plugins-page-view-button-list {
+		-webkit-border-start: 1px solid var(--color-stroke);
 		border-inline-start: 1px solid var(--color-stroke);
 		border-start-end-radius: 0.5rem;
 		border-end-end-radius: 0.5rem;

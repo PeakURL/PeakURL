@@ -10,6 +10,13 @@ function StatCards({
 }: LinkStatsViewProps) {
 	const totalClicks = Number(link.clicks || 0);
 	const uniqueClicks = Number(link.uniqueClicks || 0);
+	const uniqueClickRate = fetchedStats
+		? Number(
+				fetchedStats.uniqueClickRate ?? fetchedStats.conversionRate ?? 0
+			)
+		: totalClicks > 0
+			? Number(((uniqueClicks / totalClicks) * 100).toFixed(1))
+			: 0;
 
 	const displayStats = [
 		{
@@ -50,11 +57,7 @@ function StatCards({
 			name: __('Unique Click Rate'),
 			value: isLoading
 				? '...'
-				: fetchedStats
-					? `${fetchedStats.conversionRate}%`
-					: totalClicks > 0
-						? `${((uniqueClicks / totalClicks) * 100).toFixed(1)}%`
-						: '0%',
+				: `${uniqueClickRate}%`,
 			icon: TrendingUp,
 			color: 'text-orange-600 dark:text-orange-400',
 			bg: 'bg-orange-500/10',

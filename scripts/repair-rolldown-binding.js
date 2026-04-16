@@ -101,7 +101,7 @@ function resolveNativeBindingName() {
 	return '@rolldown/binding-wasm32-wasi';
 }
 
-function ensurePackage(name, version) {
+function repairPackage(name, version) {
 	const existingVersion = packageVersion(name);
 
 	if (existingVersion === version) {
@@ -141,11 +141,11 @@ const rolldownVersion = getRolldownVersion();
 const nativeBinding = resolveNativeBindingName();
 const wasiBinding = '@rolldown/binding-wasm32-wasi';
 
-if (ensurePackage(nativeBinding, rolldownVersion)) {
+if (repairPackage(nativeBinding, rolldownVersion)) {
 	process.exit(0);
 }
 
-if (nativeBinding !== wasiBinding && ensurePackage(wasiBinding, rolldownVersion)) {
+if (nativeBinding !== wasiBinding && repairPackage(wasiBinding, rolldownVersion)) {
 	process.exit(0);
 }
 

@@ -7,9 +7,9 @@
 		"node": ">=24 <25"
 	},
 	"scripts": {
-		"predev": "node scripts/ensure-rolldown-binding.js",
+		"predev": "node scripts/repair-rolldown-binding.js",
 		"dev": "vite",
-		"prebuild": "node scripts/ensure-rolldown-binding.js",
+		"prebuild": "node scripts/repair-rolldown-binding.js",
 		"build": "tsc -b && vite build",
 		"i18n:pot": "php scripts/i18n/build-pot.php",
 		"i18n:update-po": "php scripts/i18n/update-po.php",

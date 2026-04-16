@@ -81,7 +81,7 @@ class Config {
 	): array {
 		$values = self::normalize_input( $app_path, $input );
 
-		self::ensure_writable_root( $app_path );
+		self::assert_writable_root( $app_path );
 		self::assert_database_connection( $values );
 		Writer::write_config_file( $app_path, $values );
 
@@ -225,14 +225,14 @@ class Config {
 	}
 
 	/**
-	 * Ensure the release root and app directories are writable.
+	 * Assert that the release root and app directories are writable.
 	 *
 	 * @param string $app_path Absolute path to the app directory.
 	 *
 	 * @throws \RuntimeException When the release cannot write config.php.
 	 * @since 1.0.14
 	 */
-	private static function ensure_writable_root( string $app_path ): void {
+	private static function assert_writable_root( string $app_path ): void {
 		$root_path = Writer::get_release_root_path( $app_path );
 
 		if ( ! is_writable( $root_path ) ) {

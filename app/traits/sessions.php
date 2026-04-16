@@ -139,7 +139,7 @@ trait SessionsTrait {
 		$this->prune_stale_sessions();
 
 		if ( ! $this->crypto_service->has_auth_keys() ) {
-			$this->crypto_service->ensure_persisted_auth_keys( ABSPATH . 'app' );
+			$this->crypto_service->persist_auth_keys( ABSPATH . 'app' );
 			$this->config         = RuntimeConfig::bootstrap( ABSPATH . 'app' );
 			$this->crypto_service = new Crypto( $this->config );
 		}

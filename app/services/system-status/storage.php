@@ -55,7 +55,7 @@ class Storage {
 	public function build(): array {
 		$i18n_service = $this->context->get_i18n_service();
 
-		$i18n_service->ensure_languages_directory();
+		$i18n_service->prepare_languages_directory();
 
 		$content_directory   = $i18n_service->get_content_directory();
 		$languages_directory = $i18n_service->get_languages_directory();

@@ -23,8 +23,8 @@ use PeakURL\Includes\Connection;
 use PeakURL\Includes\PeakURL_DB;
 use PeakURL\Includes\Roles;
 use PeakURL\Services\Crypto;
-use PeakURL\Services\Geoip;
-use PeakURL\Services\I18n\Manager as I18nManager;
+use PeakURL\Services\Geoip\Manager as GeoipManager;
+use PeakURL\Services\I18n\Localization as I18nLocalization;
 use PeakURL\Services\Mailer;
 use PeakURL\Services\Notifications;
 use PeakURL\Services\Totp;
@@ -242,10 +242,10 @@ class Store {
 	/**
 	 * Request geolocation helper for click analytics.
 	 *
-	 * @var Geoip
+	 * @var GeoipManager
 	 * @since 1.0.0
 	 */
-	private Geoip $geoip_service;
+	private GeoipManager $geoip_service;
 
 	/**
 	 * Mail transport and delivery helper.
@@ -266,10 +266,10 @@ class Store {
 	/**
 	 * Site locale and catalog helper.
 	 *
-	 * @var I18nManager
+	 * @var I18nLocalization
 	 * @since 1.0.3
 	 */
-	private I18nManager $i18n_service;
+	private I18nLocalization $i18n_service;
 
 	/**
 	 * Whether the workspace has been bootstrapped in this request.
@@ -296,7 +296,7 @@ class Store {
 		$this->roles                 = new Roles();
 		$this->totp_service          = new Totp();
 		$this->crypto_service        = new Crypto( $config );
-		$this->geoip_service         = new Geoip(
+		$this->geoip_service         = new GeoipManager(
 			$config,
 			$this->settings_api,
 			$this->crypto_service,
@@ -307,7 +307,7 @@ class Store {
 			$this->crypto_service,
 		);
 		$this->notifications_service = new Notifications();
-		$this->i18n_service          = new I18nManager(
+		$this->i18n_service          = new I18nLocalization(
 			$config,
 			$this->settings_api,
 		);

@@ -13,8 +13,8 @@ namespace PeakURL\Services\SystemStatus;
 use PeakURL\Api\SettingsApi;
 use PeakURL\Includes\PeakURL_DB;
 use PeakURL\Services\Database\Schema as DatabaseSchema;
-use PeakURL\Services\Geoip;
-use PeakURL\Services\I18n\Manager as I18nManager;
+use PeakURL\Services\Geoip\Manager as GeoipManager;
+use PeakURL\Services\I18n\Localization as I18nLocalization;
 use PeakURL\Services\Mailer;
 
 // If this file is called directly, abort.
@@ -88,10 +88,10 @@ class Manager {
 	/**
 	 * Data counts helper.
 	 *
-	 * @var Data
+	 * @var Counts
 	 * @since 1.0.14
 	 */
-	private Data $data;
+	private Counts $counts;
 
 	/**
 	 * Health checks helper.
@@ -107,20 +107,20 @@ class Manager {
 	 * @param array<string, mixed> $config          Runtime configuration.
 	 * @param PeakURL_DB           $db              Shared database wrapper.
 	 * @param SettingsApi          $settings_api    Settings API dependency.
-	 * @param Geoip                $geoip_service   GeoIP service dependency.
+	 * @param GeoipManager         $geoip_service   GeoIP service dependency.
 	 * @param Mailer               $mailer_service  Mail transport dependency.
 	 * @param DatabaseSchema       $database_schema Database schema dependency.
-	 * @param I18nManager          $i18n_service    I18n service dependency.
+	 * @param I18nLocalization     $i18n_service    I18n service dependency.
 	 * @since 1.0.14
 	 */
 	public function __construct(
 		array $config,
 		PeakURL_DB $db,
 		SettingsApi $settings_api,
-		Geoip $geoip_service,
+		GeoipManager $geoip_service,
 		Mailer $mailer_service,
 		DatabaseSchema $database_schema,
-		I18nManager $i18n_service
+		I18nLocalization $i18n_service
 	) {
 		$this->context  = new Context(
 			$config,
@@ -137,7 +137,7 @@ class Manager {
 		$this->storage  = new Storage( $this->context );
 		$this->mail     = new Mail( $this->context );
 		$this->location = new Location( $this->context );
-		$this->data     = new Data( $this->context );
+		$this->counts   = new Counts( $this->context );
 		$this->checks   = new Checks();
 	}
 
@@ -154,7 +154,7 @@ class Manager {
 		$storage  = $this->storage->build();
 		$mail     = $this->mail->build();
 		$location = $this->location->build();
-		$data     = $this->data->build();
+		$data     = $this->counts->build();
 		$checks   = $this->checks->build(
 			$server,
 			$database,

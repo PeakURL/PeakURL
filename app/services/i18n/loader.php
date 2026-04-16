@@ -1,6 +1,6 @@
 <?php
 /**
- * Catalog loading helpers for PeakURL i18n.
+ * Translation catalog loading helpers for PeakURL i18n.
  *
  * @package PeakURL\Services\I18n
  * @since 1.0.14
@@ -20,11 +20,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Catalog — load gettext catalogs and dashboard JSON translation packs.
+ * Loader — load gettext catalogs and dashboard JSON translation packs.
  *
  * @since 1.0.14
  */
-class Catalog {
+class Loader {
 
 	/**
 	 * Filesystem paths helper.

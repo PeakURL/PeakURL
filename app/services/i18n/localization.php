@@ -1,6 +1,6 @@
 <?php
 /**
- * PeakURL i18n and dashboard-catalog helper.
+ * PeakURL localization and dashboard-catalog helper.
  *
  * @package PeakURL\Services\I18n
  * @since 1.0.14
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Manager — WordPress-style i18n helper for PeakURL.
+ * Localization — WordPress-style i18n helper for PeakURL.
  *
  * Loads PHP gettext catalogs from `content/languages`, exposes the active
  * locale, lists available language packs, and provides the matching
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.14
  */
-class Manager {
+class Localization {
 
 	/**
 	 * Runtime configuration map.
@@ -72,10 +72,10 @@ class Manager {
 	/**
 	 * Catalog loader helper.
 	 *
-	 * @var Catalog
+	 * @var Loader
 	 * @since 1.0.14
 	 */
-	private Catalog $catalog_loader;
+	private Loader $loader;
 
 	/**
 	 * Browser locale sync helper.
@@ -102,20 +102,20 @@ class Manager {
 	private ?GettextTranslations $catalog = null;
 
 	/**
-	 * Create a new i18n helper.
+	 * Create a new localization helper.
 	 *
 	 * @param array<string, mixed> $config       Runtime configuration map.
 	 * @param SettingsApi|null     $settings_api Settings API dependency.
 	 * @since 1.0.14
 	 */
 	public function __construct( array $config, ?SettingsApi $settings_api = null ) {
-		$this->config         = $config;
-		$this->settings_api   = $settings_api;
-		$this->locale_helper  = new Locale();
-		$this->paths          = new Paths( $config );
-		$this->languages      = new Languages( $this->locale_helper, $this->paths );
-		$this->catalog_loader = new Catalog( $this->paths );
-		$this->sync           = new Sync( $this->locale_helper );
+		$this->config        = $config;
+		$this->settings_api  = $settings_api;
+		$this->locale_helper = new Locale();
+		$this->paths         = new Paths( $config );
+		$this->languages     = new Languages( $this->locale_helper, $this->paths );
+		$this->loader        = new Loader( $this->paths );
+		$this->sync          = new Sync( $this->locale_helper );
 	}
 
 	/**
@@ -206,7 +206,7 @@ class Manager {
 		}
 
 		$this->locale  = $resolved_locale;
-		$this->catalog = $this->catalog_loader->load_php_catalog( $resolved_locale );
+		$this->catalog = $this->loader->load_php_catalog( $resolved_locale );
 
 		return $resolved_locale;
 	}
@@ -374,7 +374,7 @@ class Manager {
 			? $this->get_current_locale()
 			: $this->normalize_locale( $locale );
 
-		return $this->catalog_loader->get_dashboard_catalog(
+		return $this->loader->get_dashboard_catalog(
 			$resolved_locale,
 			$this->languages->get_plural_forms_header( $resolved_locale ),
 		);
@@ -426,13 +426,13 @@ class Manager {
 	}
 
 	/**
-	 * Ensure the persistent languages directory exists when the install can create it.
+	 * Prepare the persistent languages directory when the install can create it.
 	 *
 	 * @return bool
 	 * @since 1.0.14
 	 */
-	public function ensure_languages_directory(): bool {
-		$directory_status = $this->paths->ensure_languages_directory();
+	public function prepare_languages_directory(): bool {
+		$directory_status = $this->paths->prepare_languages_directory();
 
 		if ( ! empty( $directory_status['created'] ) ) {
 			$this->catalog = null;

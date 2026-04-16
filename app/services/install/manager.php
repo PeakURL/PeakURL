@@ -13,7 +13,7 @@ namespace PeakURL\Services\Install;
 use PeakURL\Includes\Connection;
 use PeakURL\Includes\RuntimeConfig;
 use PeakURL\Http\Request;
-use PeakURL\Services\I18n\Manager as I18nManager;
+use PeakURL\Services\I18n\Localization as I18nLocalization;
 use PeakURL\Store;
 
 // If this file is called directly, abort.
@@ -138,7 +138,7 @@ class Manager {
 		$owner_password = (string) ( $input['owner_password'] ?? '' );
 		$owner_name     = trim( (string) ( $input['owner_name'] ?? '' ) );
 		$owner_names    = self::get_owner_names( $owner_name, $owner_username );
-		$i18n_service   = new I18nManager( $config, null );
+		$i18n_service   = new I18nLocalization( $config, null );
 		$site_language  = $i18n_service->normalize_locale(
 			(string) ( $input['site_language'] ?? '' ),
 		);

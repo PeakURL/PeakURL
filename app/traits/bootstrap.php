@@ -42,7 +42,7 @@ trait BootstrapTrait {
 		}
 
 		try {
-			$this->get_database_schema_service()->ensure_current();
+			$this->get_database_schema_service()->repair_schema();
 		} catch ( \Throwable $exception ) {
 			throw new ApiException(
 				'PeakURL could not finish the database upgrade. Verify the database user can alter tables, then retry.',
@@ -50,7 +50,7 @@ trait BootstrapTrait {
 			);
 		}
 
-		$this->i18n_service->ensure_languages_directory();
+		$this->i18n_service->prepare_languages_directory();
 
 		if ( ! $this->table_exists( 'users' ) ) {
 			throw new ApiException(

@@ -78,9 +78,9 @@ class Mailer {
 	 * @since 1.0.0
 	 */
 	public function get_status(): array {
-		$settings      = $this->get_runtime_mail_settings();
-		$configuration = $this->get_configuration_target();
-		$capability    = $this->get_dashboard_capability();
+		$settings        = $this->get_runtime_mail_settings();
+		$settings_target = $this->get_settings_target();
+		$capability      = $this->get_management_capability();
 
 		return array(
 			'driver'                 => $settings['driver'],
@@ -97,8 +97,8 @@ class Mailer {
 			'smtpUsername'           => $settings['smtpUsername'],
 			'smtpPasswordConfigured' => '' !== $settings['smtpPassword'],
 			'smtpPasswordHint'       => $this->mask_secret( $settings['smtpPassword'] ),
-			'configurationLabel'     => $configuration['label'],
-			'configurationPath'      => $configuration['path'],
+			'configurationLabel'     => $settings_target['label'],
+			'configurationPath'      => $settings_target['path'],
 			'canManageFromDashboard' => $capability['allowed'],
 			'manageDisabledReason'   => $capability['reason'],
 		);
@@ -115,12 +115,12 @@ class Mailer {
 	 * @throws \RuntimeException When the settings are invalid or cannot be saved.
 	 * @since 1.0.0
 	 */
-	public function save_configuration(
+	public function save_settings(
 		string $app_path,
 		array $config,
 		array $input
 	): array {
-		$capability = $this->get_dashboard_capability();
+		$capability = $this->get_management_capability();
 
 		if ( ! $capability['allowed'] ) {
 			throw new \RuntimeException( (string) $capability['reason'] );
@@ -163,7 +163,7 @@ class Mailer {
 			$values['smtpPassword'] = $current['smtpPassword'];
 		}
 
-		$this->validate_configuration( $values );
+		$this->validate_settings( $values );
 		$this->persist_settings( $app_path, $config, $values );
 
 		return ( new self(
@@ -274,10 +274,10 @@ class Mailer {
 	 * @param array<string, string> $values Normalized mail settings.
 	 * @return void
 	 *
-	 * @throws \RuntimeException When the configuration is invalid.
+	 * @throws \RuntimeException When the mail settings are invalid.
 	 * @since 1.0.0
 	 */
-	private function validate_configuration( array $values ): void {
+	private function validate_settings( array $values ): void {
 		if ( strlen( $values['fromName'] ) > 190 ) {
 			throw new \RuntimeException(
 				__( 'From name must be 190 characters or fewer.', 'peakurl' ),
@@ -332,7 +332,7 @@ class Mailer {
 	 * @return array{label: string, path: string}
 	 * @since 1.0.0
 	 */
-	private function get_configuration_target(): array {
+	private function get_settings_target(): array {
 		return array(
 			'label' => 'settings table',
 			'path'  => 'settings',
@@ -345,7 +345,7 @@ class Mailer {
 	 * @return array{allowed: bool, reason: string|null}
 	 * @since 1.0.0
 	 */
-	private function get_dashboard_capability(): array {
+	private function get_management_capability(): array {
 		if ( ! $this->settings_api->has_table() ) {
 			return array(
 				'allowed' => false,
@@ -380,7 +380,7 @@ class Mailer {
 
 		if ( '' !== $password && ! $this->crypto_service->has_auth_keys() ) {
 			$this->crypto_service = new Crypto( $config );
-			$this->crypto_service->ensure_persisted_auth_keys( $app_path );
+			$this->crypto_service->persist_auth_keys( $app_path );
 		}
 
 		$this->settings_api->update_option( 'mail_driver', $values['driver'], $updated_at, false );

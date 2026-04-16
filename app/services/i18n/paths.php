@@ -1,6 +1,6 @@
 <?php
 /**
- * Filesystem paths for PeakURL i18n catalogs.
+ * Filesystem paths for PeakURL translation catalogs.
  *
  * @package PeakURL\Services\I18n
  * @since 1.0.14
@@ -117,12 +117,12 @@ class Paths {
 	}
 
 	/**
-	 * Ensure the persistent languages directory exists when the install can create it.
+	 * Prepare the persistent languages directory when the install can create it.
 	 *
 	 * @return array{created: bool, exists: bool}
 	 * @since 1.0.14
 	 */
-	public function ensure_languages_directory(): array {
+	public function prepare_languages_directory(): array {
 		$content_directory   = $this->get_content_directory();
 		$languages_directory = $this->get_languages_directory();
 		$created_directory   = false;

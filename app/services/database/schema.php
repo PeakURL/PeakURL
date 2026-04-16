@@ -95,12 +95,12 @@ class Schema {
 	}
 
 	/**
-	 * Ensure the database schema is up to date for the active codebase.
+	 * Repair the database schema so it matches the active codebase.
 	 *
 	 * @return array<string, mixed>
 	 * @since 1.0.14
 	 */
-	public function ensure_current(): array {
+	public function repair_schema(): array {
 		if ( $this->is_current() ) {
 			return $this->status->get_payload(
 				$this->get_target_version(),

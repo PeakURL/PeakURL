@@ -81,7 +81,7 @@ class Workspace {
 	public function acquire_lock(): array {
 		$lock_path = $this->context->get_lock_path();
 
-		$this->filesystem->ensure_directory( dirname( $lock_path ) );
+		$this->filesystem->create_directory( dirname( $lock_path ) );
 		$this->remove_stale_lock( $lock_path );
 
 		$handle = fopen( $lock_path, 'c+' );

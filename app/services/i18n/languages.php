@@ -1,6 +1,6 @@
 <?php
 /**
- * Installed language-pack discovery and locale metadata helpers.
+ * Installed language discovery and locale metadata helpers.
  *
  * @package PeakURL\Services\I18n
  * @since 1.0.14
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Languages — scan installed packs and build locale metadata.
+ * Languages — scan installed language packs and build locale metadata.
  *
  * @since 1.0.14
  */

@@ -421,7 +421,7 @@ trait AnalyticsSupportTrait {
 		$metadata     = Visitor::parse_user_agent(
 			(string) ( $user_agent ?? '' ),
 		);
-		$location     = $this->geoip_service->resolve_location(
+		$location     = $this->geoip_service->lookup_location(
 			(string) ( $ip_address ?? '' ),
 		);
 		$visitor_hash = Visitor::build_hash( $request );

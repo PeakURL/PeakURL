@@ -1,6 +1,6 @@
 <?php
 /**
- * Data counts builder for system status.
+ * Site data counts builder for system status.
  *
  * @package PeakURL\Services\SystemStatus
  * @since 1.0.14
@@ -19,11 +19,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Data — build the site data counts section of the system-status payload.
+ * Counts — build the site data counts section of the system-status payload.
  *
  * @since 1.0.14
  */
-class Data {
+class Counts {
 
 	/**
 	 * Shared system-status context.

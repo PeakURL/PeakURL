@@ -298,7 +298,7 @@ class ReleaseFiles {
 
 		$content_directory = $this->context->get_content_directory();
 
-		$this->filesystem->ensure_directory( $content_directory );
+		$this->filesystem->create_directory( $content_directory );
 
 		foreach ( $package_content_root_paths as $relative_path ) {
 			$source_path = $this->filesystem->build_path(

@@ -55,7 +55,7 @@ class Crypto {
 	}
 
 	/**
-	 * Ensure the auth key and salt exist and are persisted to runtime config.
+	 * Persist the auth key and salt to runtime config.
 	 *
 	 * @param string $app_path Absolute path to the app directory.
 	 * @return array{authKey: string, authSalt: string}
@@ -63,7 +63,7 @@ class Crypto {
 	 * @throws \RuntimeException When the keys cannot be persisted.
 	 * @since 1.0.0
 	 */
-	public function ensure_persisted_auth_keys( string $app_path ): array {
+	public function persist_auth_keys( string $app_path ): array {
 		$auth_key  = trim( (string) ( $this->config[ Constants::CONFIG_AUTH_KEY ] ?? '' ) );
 		$auth_salt = trim( (string) ( $this->config[ Constants::CONFIG_AUTH_SALT ] ?? '' ) );
 

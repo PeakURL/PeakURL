@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Filesystem {
 
 	/**
-	 * Ensure a directory exists, creating it recursively if needed.
+	 * Create a directory, including any missing parent directories.
 	 *
 	 * @param string $path Directory path.
 	 * @return void
@@ -34,7 +34,7 @@ class Filesystem {
 	 * @throws \RuntimeException When directory creation fails.
 	 * @since 1.0.14
 	 */
-	public function ensure_directory( string $path ): void {
+	public function create_directory( string $path ): void {
 		if ( is_dir( $path ) ) {
 			return;
 		}
@@ -167,7 +167,7 @@ class Filesystem {
 	 */
 	public function copy_path( string $source_path, string $target_path ): void {
 		if ( is_dir( $source_path ) ) {
-			$this->ensure_directory( $target_path );
+			$this->create_directory( $target_path );
 
 			$source_root                 = $this->normalize_path( $source_path );
 			$target_root                 = $this->normalize_path( $target_path );
@@ -206,11 +206,11 @@ class Filesystem {
 				$destination   = $this->build_path( $target_path, $relative_path );
 
 				if ( $item->isDir() ) {
-					$this->ensure_directory( $destination );
+					$this->create_directory( $destination );
 					continue;
 				}
 
-				$this->ensure_directory( dirname( $destination ) );
+				$this->create_directory( dirname( $destination ) );
 
 				if ( ! copy( $item->getPathname(), $destination ) ) {
 					throw new \RuntimeException(
@@ -222,7 +222,7 @@ class Filesystem {
 			return;
 		}
 
-		$this->ensure_directory( dirname( $target_path ) );
+		$this->create_directory( dirname( $target_path ) );
 
 		if ( ! copy( $source_path, $target_path ) ) {
 			throw new \RuntimeException(

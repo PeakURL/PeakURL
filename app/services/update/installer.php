@@ -140,8 +140,8 @@ class Installer {
 
 		try {
 			$this->workspace->remove_legacy_storage_root();
-			$this->filesystem->ensure_directory( $working_dir );
-			$this->filesystem->ensure_directory( $extract_dir );
+			$this->filesystem->create_directory( $working_dir );
+			$this->filesystem->create_directory( $extract_dir );
 			$this->workspace->enable_maintenance_mode( $version );
 			$this->download( $package_url, $zip_path );
 			$this->verify_checksum(

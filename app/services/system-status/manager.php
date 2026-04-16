@@ -14,7 +14,7 @@ use PeakURL\Api\SettingsApi;
 use PeakURL\Includes\PeakURL_DB;
 use PeakURL\Services\Database\Schema as DatabaseSchema;
 use PeakURL\Services\Geoip;
-use PeakURL\Services\I18n;
+use PeakURL\Services\I18n\Manager as I18nManager;
 use PeakURL\Services\Mailer;
 
 // If this file is called directly, abort.
@@ -110,7 +110,7 @@ class Manager {
 	 * @param Geoip                $geoip_service   GeoIP service dependency.
 	 * @param Mailer               $mailer_service  Mail transport dependency.
 	 * @param DatabaseSchema       $database_schema Database schema dependency.
-	 * @param I18n                 $i18n_service    I18n service dependency.
+	 * @param I18nManager          $i18n_service    I18n service dependency.
 	 * @since 1.0.14
 	 */
 	public function __construct(
@@ -120,7 +120,7 @@ class Manager {
 		Geoip $geoip_service,
 		Mailer $mailer_service,
 		DatabaseSchema $database_schema,
-		I18n $i18n_service
+		I18nManager $i18n_service
 	) {
 		$this->context  = new Context(
 			$config,

@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace PeakURL\Services\Install;
 
 use PeakURL\Includes\Constants;
-use PeakURL\Services\I18n;
+use PeakURL\Services\I18n\Manager as I18nManager;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -31,10 +31,10 @@ class Locale {
 	/**
 	 * Shared i18n service configured for the installer.
 	 *
-	 * @var I18n
+	 * @var I18nManager
 	 * @since 1.0.14
 	 */
-	private I18n $i18n_service;
+	private I18nManager $i18n_service;
 
 	/**
 	 * Active installer locale.
@@ -57,7 +57,7 @@ class Locale {
 		?string $requested_locale = null,
 		?string $accept_language_header = null
 	) {
-		$this->i18n_service = new I18n(
+		$this->i18n_service = new I18nManager(
 			$this->get_service_config( $root_path ),
 			null,
 		);
@@ -65,7 +65,7 @@ class Locale {
 			$requested_locale,
 			$accept_language_header,
 		);
-		$this->i18n_service = new I18n(
+		$this->i18n_service = new I18nManager(
 			$this->get_service_config( $root_path, $this->locale ),
 			null,
 		);
@@ -85,10 +85,10 @@ class Locale {
 	/**
 	 * Return the configured installer i18n service.
 	 *
-	 * @return I18n
+	 * @return I18nManager
 	 * @since 1.0.14
 	 */
-	public function get_i18n_service(): I18n {
+	public function get_i18n_service(): I18nManager {
 		return $this->i18n_service;
 	}
 
@@ -161,150 +161,7 @@ class Locale {
 	 * @since 1.0.14
 	 */
 	private function match_browser_locale( string $accept_language_header ): string {
-		$accept_language_header = trim( $accept_language_header );
-
-		if ( '' === $accept_language_header ) {
-			return '';
-		}
-
-		$installed_locales = array_values(
-			array_filter(
-				array_map(
-					static function ( array $language ): string {
-						return (string) ( $language['locale'] ?? '' );
-					},
-					$this->i18n_service->list_languages(),
-				),
-			),
-		);
-
-		foreach ( $this->parse_browser_language_preferences( $accept_language_header ) as $preferred_locale ) {
-			$matched_locale = $this->find_available_locale(
-				$installed_locales,
-				$preferred_locale,
-			);
-
-			if ( '' !== $matched_locale ) {
-				return $matched_locale;
-			}
-		}
-
-		return '';
-	}
-
-	/**
-	 * Parse the browser Accept-Language header into normalized locale codes.
-	 *
-	 * @param string $accept_language_header Browser language header.
-	 * @return array<int, string>
-	 * @since 1.0.14
-	 */
-	private function parse_browser_language_preferences( string $accept_language_header ): array {
-		$preferences = array();
-
-		foreach ( explode( ',', $accept_language_header ) as $index => $segment ) {
-			$segment = trim( $segment );
-
-			if ( '' === $segment || '*' === $segment ) {
-				continue;
-			}
-
-			$language_tag = $segment;
-			$quality      = 1.0;
-
-			if ( false !== strpos( $segment, ';' ) ) {
-				$parts        = explode( ';', $segment );
-				$language_tag = trim( (string) array_shift( $parts ) );
-
-				foreach ( $parts as $parameter ) {
-					if ( preg_match( '/^\s*q=([0-9.]+)\s*$/i', trim( $parameter ), $matches ) ) {
-						$quality = (float) $matches[1];
-						break;
-					}
-				}
-			}
-
-			if ( '' === $language_tag || '*' === $language_tag ) {
-				continue;
-			}
-
-			$normalized_locale = $this->i18n_service->normalize_locale( $language_tag );
-
-			$preferences[] = array(
-				'locale'  => $normalized_locale,
-				'quality' => $quality,
-				'index'   => $index,
-			);
-		}
-
-		usort(
-			$preferences,
-			static function ( array $left, array $right ): int {
-				if ( $left['quality'] === $right['quality'] ) {
-					return $left['index'] <=> $right['index'];
-				}
-
-				return $right['quality'] <=> $left['quality'];
-			},
-		);
-
-		$locales = array();
-
-		foreach ( $preferences as $preference ) {
-			$locale = (string) ( $preference['locale'] ?? '' );
-
-			if ( '' === $locale || in_array( $locale, $locales, true ) ) {
-				continue;
-			}
-
-			$locales[] = $locale;
-		}
-
-		return $locales;
-	}
-
-	/**
-	 * Find the installed locale that best matches the requested locale.
-	 *
-	 * @param array<int, string> $installed_locales Installed locale codes.
-	 * @param string             $preferred_locale  Browser-preferred locale.
-	 * @return string
-	 * @since 1.0.14
-	 */
-	private function find_available_locale(
-		array $installed_locales,
-		string $preferred_locale
-	): string {
-		if ( in_array( $preferred_locale, $installed_locales, true ) ) {
-			return $preferred_locale;
-		}
-
-		$preferred_base_locale = $this->get_base_locale( $preferred_locale );
-
-		foreach ( $installed_locales as $installed_locale ) {
-			if ( $preferred_base_locale === $this->get_base_locale( $installed_locale ) ) {
-				return $installed_locale;
-			}
-		}
-
-		return '';
-	}
-
-	/**
-	 * Return the base language portion of a locale code.
-	 *
-	 * @param string $locale Locale identifier.
-	 * @return string
-	 * @since 1.0.14
-	 */
-	private function get_base_locale( string $locale ): string {
-		$base_locale = strstr( $locale, '_', true );
-
-		if ( false === $base_locale || '' === $base_locale ) {
-			return strtolower( $locale );
-		}
-
-		return strtolower( $base_locale );
+		return $this->i18n_service->match_browser_locale( $accept_language_header );
 	}
 
 	/**

@@ -15,7 +15,7 @@ use PeakURL\Includes\Hooks;
 use PeakURL\Includes\PeakURL_DB;
 use PeakURL\Includes\RuntimeConfig;
 use PeakURL\Services\Crypto;
-use PeakURL\Services\I18n;
+use PeakURL\Services\I18n\Manager as I18nManager;
 use PeakURL\Services\Mailer;
 
 // If this file is called directly, abort.
@@ -478,21 +478,21 @@ function body_class(
  *
  * @param array<string, mixed>|null $config     Optional runtime config.
  * @param Connection|null           $connection Optional reused connection.
- * @return I18n
+ * @return I18nManager
  * @since 1.0.3
  */
 // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
 function peakurl_get_i18n_service(
 	?array $config = null,
 	?Connection $connection = null
-): I18n {
+): I18nManager {
 	static $service     = null;
 	static $config_hash = null;
 
 	if ( isset( $GLOBALS['peakurl_i18n_service_override'] ) ) {
 		$override = $GLOBALS['peakurl_i18n_service_override'];
 
-		if ( $override instanceof I18n ) {
+		if ( $override instanceof I18nManager ) {
 			return $override;
 		}
 	}
@@ -508,13 +508,13 @@ function peakurl_get_i18n_service(
 		),
 	);
 
-	if ( $service instanceof I18n && $config_hash === $next_hash ) {
+	if ( $service instanceof I18nManager && $config_hash === $next_hash ) {
 		return $service;
 	}
 
 	$resolved_connection = $connection ?? new Connection( $resolved_config );
 	$settings_api        = new SettingsApi( new PeakURL_DB( $resolved_connection ) );
-	$service             = new I18n( $resolved_config, $settings_api );
+	$service             = new I18nManager( $resolved_config, $settings_api );
 	$config_hash         = $next_hash;
 
 	return $service;
@@ -526,34 +526,18 @@ function peakurl_get_i18n_service(
  * Used by early installer screens that need translations before the normal
  * runtime database-backed locale flow is available.
  *
- * @param I18n|null $service Override service or null to clear it.
+ * @param I18nManager|null $service Override service or null to clear it.
  * @return void
  * @since 1.0.8
  */
 // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
-function peakurl_override_i18n_service( ?I18n $service ): void {
+function peakurl_override_i18n_service( ?I18nManager $service ): void {
 	if ( null === $service ) {
 		unset( $GLOBALS['peakurl_i18n_service_override'] );
 		return;
 	}
 
 	$GLOBALS['peakurl_i18n_service_override'] = $service;
-}
-
-/**
- * Back-compat wrapper for the shared i18n service helper.
- *
- * @param array<string, mixed>|null $config     Optional runtime config.
- * @param Connection|null           $connection Optional reused connection.
- * @return I18n
- * @since 1.0.3
- */
-// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
-function peakurl_get_translations_service(
-	?array $config = null,
-	?Connection $connection = null
-): I18n {
-	return peakurl_get_i18n_service( $config, $connection );
 }
 
 /**
@@ -573,22 +557,6 @@ function peakurl_bootstrap_i18n(
 		$config,
 		$connection,
 	)->load_locale();
-}
-
-/**
- * Back-compat wrapper for the i18n bootstrap helper.
- *
- * @param array<string, mixed>|null $config     Optional runtime config.
- * @param Connection|null           $connection Optional reused connection.
- * @return string Loaded locale.
- * @since 1.0.3
- */
-// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
-function peakurl_bootstrap_translations(
-	?array $config = null,
-	?Connection $connection = null
-): string {
-	return peakurl_bootstrap_i18n( $config, $connection );
 }
 
 /**
@@ -689,7 +657,7 @@ function peakurl_get_maintenance_view_data(
 			$resolved_connection = new Connection( $resolved_config );
 		}
 
-		$i18n_service   = new I18n(
+		$i18n_service   = new I18nManager(
 			$resolved_config,
 			null !== $resolved_connection
 				? new SettingsApi( new PeakURL_DB( $resolved_connection ) )
@@ -715,7 +683,7 @@ function peakurl_get_maintenance_view_data(
 		$text_direction = 'ltr';
 	}
 
-	if ( $i18n_service instanceof I18n ) {
+	if ( $i18n_service instanceof I18nManager ) {
 		peakurl_override_i18n_service( $i18n_service );
 	}
 

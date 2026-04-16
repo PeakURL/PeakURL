@@ -251,7 +251,7 @@ trait SystemTrait {
 		}
 
 		$this->config = RuntimeConfig::load( ABSPATH . 'app' );
-		$this->refresh_release_runtime_config();
+		$this->refresh_release_config();
 		$this->config         = RuntimeConfig::load( ABSPATH . 'app' );
 		$this->crypto_service = new Crypto( $this->config );
 		$this->mailer_service = new Mailer(
@@ -336,7 +336,7 @@ trait SystemTrait {
 		}
 
 		$this->config = RuntimeConfig::load( ABSPATH . 'app' );
-		$this->refresh_release_runtime_config();
+		$this->refresh_release_config();
 		$this->config               = RuntimeConfig::load( ABSPATH . 'app' );
 		$this->crypto_service       = new Crypto( $this->config );
 		$this->geoip_service        = new GeoipManager(
@@ -499,7 +499,7 @@ trait SystemTrait {
 	 * @return void
 	 * @since 1.0.0
 	 */
-	private function refresh_release_runtime_config(): void {
+	private function refresh_release_config(): void {
 		if ( file_exists( ABSPATH . 'package.json' ) || is_dir( ABSPATH . '.git' ) ) {
 			return;
 		}

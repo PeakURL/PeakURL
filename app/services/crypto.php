@@ -49,7 +49,7 @@ class Crypto {
 	 * @return bool
 	 * @since 1.0.0
 	 */
-	public function has_auth_keys(): bool {
+	public function is_configured(): bool {
 		return '' !== trim( (string) ( $this->config[ Constants::CONFIG_AUTH_KEY ] ?? '' ) ) &&
 			'' !== trim( (string) ( $this->config[ Constants::CONFIG_AUTH_SALT ] ?? '' ) );
 	}
@@ -215,7 +215,7 @@ class Crypto {
 	 * @since 1.0.0
 	 */
 	public function verify_session_token( string $value ): ?string {
-		if ( '' === $value || ! $this->has_auth_keys() ) {
+		if ( '' === $value || ! $this->is_configured() ) {
 			return null;
 		}
 

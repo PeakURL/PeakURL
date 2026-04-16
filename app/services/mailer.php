@@ -78,9 +78,8 @@ class Mailer {
 	 * @since 1.0.0
 	 */
 	public function get_status(): array {
-		$settings        = $this->get_runtime_mail_settings();
-		$settings_target = $this->get_settings_target();
-		$capability      = $this->get_management_capability();
+		$settings   = $this->get_settings();
+		$capability = $this->get_capability();
 
 		return array(
 			'driver'                 => $settings['driver'],
@@ -97,8 +96,8 @@ class Mailer {
 			'smtpUsername'           => $settings['smtpUsername'],
 			'smtpPasswordConfigured' => '' !== $settings['smtpPassword'],
 			'smtpPasswordHint'       => $this->mask_secret( $settings['smtpPassword'] ),
-			'configurationLabel'     => $settings_target['label'],
-			'configurationPath'      => $settings_target['path'],
+			'configurationLabel'     => 'settings table',
+			'configurationPath'      => 'settings',
 			'canManageFromDashboard' => $capability['allowed'],
 			'manageDisabledReason'   => $capability['reason'],
 		);
@@ -120,13 +119,13 @@ class Mailer {
 		array $config,
 		array $input
 	): array {
-		$capability = $this->get_management_capability();
+		$capability = $this->get_capability();
 
 		if ( ! $capability['allowed'] ) {
 			throw new \RuntimeException( (string) $capability['reason'] );
 		}
 
-		$current = $this->get_runtime_mail_settings();
+		$current = $this->get_settings();
 
 		$driver = $this->normalize_driver(
 			(string) ( $input['driver'] ?? $current['driver'] )
@@ -217,7 +216,7 @@ class Mailer {
 		string $text_body
 	): void {
 		$mailer   = new PHPMailer( true );
-		$settings = $this->get_runtime_mail_settings();
+		$settings = $this->get_settings();
 
 		try {
 			// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer public properties use upstream casing.
@@ -327,26 +326,13 @@ class Mailer {
 	}
 
 	/**
-	 * Return the database-backed configuration target details.
-	 *
-	 * @return array{label: string, path: string}
-	 * @since 1.0.0
-	 */
-	private function get_settings_target(): array {
-		return array(
-			'label' => 'settings table',
-			'path'  => 'settings',
-		);
-	}
-
-	/**
 	 * Determine whether the dashboard can update the mail configuration.
 	 *
 	 * @return array{allowed: bool, reason: string|null}
 	 * @since 1.0.0
 	 */
-	private function get_management_capability(): array {
-		if ( ! $this->settings_api->has_table() ) {
+	private function get_capability(): array {
+		if ( ! $this->settings_api->table_exists() ) {
 			return array(
 				'allowed' => false,
 				'reason'  => __( 'The settings table is not available yet.', 'peakurl' ),
@@ -378,7 +364,7 @@ class Mailer {
 		$updated_at = gmdate( 'Y-m-d H:i:s' );
 		$password   = $values['smtpPassword'];
 
-		if ( '' !== $password && ! $this->crypto_service->has_auth_keys() ) {
+		if ( '' !== $password && ! $this->crypto_service->is_configured() ) {
 			$this->crypto_service = new Crypto( $config );
 			$this->crypto_service->persist_auth_keys( $app_path );
 		}
@@ -405,7 +391,7 @@ class Mailer {
 	 * @return array<string, mixed>
 	 * @since 1.0.0
 	 */
-	private function get_runtime_mail_settings(): array {
+	private function get_settings(): array {
 		$options = $this->settings_api->get_options(
 			array(
 				'mail_driver',
@@ -525,7 +511,7 @@ class Mailer {
 	 */
 	private function get_from_email( array $settings = array() ): string {
 		if ( empty( $settings ) ) {
-			$settings = $this->get_runtime_mail_settings();
+			$settings = $this->get_settings();
 		}
 
 		if ( 'smtp' === (string) ( $settings['driver'] ?? 'mail' ) ) {
@@ -571,7 +557,7 @@ class Mailer {
 	 */
 	private function get_from_name( array $settings = array() ): string {
 		if ( empty( $settings ) ) {
-			$settings = $this->get_runtime_mail_settings();
+			$settings = $this->get_settings();
 		}
 
 		if ( 'smtp' === (string) ( $settings['driver'] ?? 'mail' ) ) {

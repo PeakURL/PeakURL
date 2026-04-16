@@ -100,7 +100,7 @@ class Lookup {
 		}
 
 		$this->context->set_reader_initialized( true );
-		$database_path = $this->context->get_database_path();
+		$database_path = $this->context->get_db_path();
 
 		if ( '' === $database_path || ! file_exists( $database_path ) || ! is_readable( $database_path ) ) {
 			return null;

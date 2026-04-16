@@ -54,7 +54,7 @@ class SettingsApi {
 	 * @since 1.0.0
 	 */
 	public function get_option( string $setting_key ): ?string {
-		if ( ! $this->has_table() ) {
+		if ( ! $this->table_exists() ) {
 			return null;
 		}
 
@@ -89,7 +89,7 @@ class SettingsApi {
 			),
 		);
 
-		if ( empty( $setting_keys ) || ! $this->has_table() ) {
+		if ( empty( $setting_keys ) || ! $this->table_exists() ) {
 			return array();
 		}
 
@@ -117,19 +117,6 @@ class SettingsApi {
 	}
 
 	/**
-	 * Determine whether a setting has a non-empty value.
-	 *
-	 * @param string $setting_key Setting key.
-	 * @return bool True when the setting exists and is not blank.
-	 * @since 1.0.0
-	 */
-	public function has_option( string $setting_key ): bool {
-		$value = $this->get_option( $setting_key );
-
-		return is_string( $value ) ? '' !== trim( $value ) : ! empty( $value );
-	}
-
-	/**
 	 * Insert or update a setting row.
 	 *
 	 * @param string $setting_key   Setting key.
@@ -145,7 +132,7 @@ class SettingsApi {
 		string $updated_at,
 		bool $autoload = true
 	): void {
-		if ( ! $this->has_table() ) {
+		if ( ! $this->table_exists() ) {
 			return;
 		}
 
@@ -183,7 +170,7 @@ class SettingsApi {
 			),
 		);
 
-		if ( empty( $setting_keys ) || ! $this->has_table() ) {
+		if ( empty( $setting_keys ) || ! $this->table_exists() ) {
 			return;
 		}
 
@@ -200,7 +187,7 @@ class SettingsApi {
 	 * @return bool
 	 * @since 1.0.0
 	 */
-	public function has_table(): bool {
+	public function table_exists(): bool {
 		return $this->db->table_exists( 'settings' );
 	}
 }

@@ -52,8 +52,8 @@ class Loader {
 	 * @since 1.0.14
 	 */
 	public function load_php_catalog( string $locale ): ?GettextTranslations {
-		$mo_path = $this->paths->build_php_catalog_path( $locale, 'mo' );
-		$po_path = $this->paths->build_php_catalog_path( $locale, 'po' );
+		$mo_path = $this->paths->get_php_catalog_path( $locale, 'mo' );
+		$po_path = $this->paths->get_php_catalog_path( $locale, 'po' );
 
 		try {
 			if ( file_exists( $mo_path ) ) {
@@ -88,7 +88,7 @@ class Loader {
 		string $locale,
 		string $plural_forms_header
 	): array {
-		$catalog_path = $this->paths->build_dashboard_catalog_path( $locale );
+		$catalog_path = $this->paths->get_dashboard_catalog_path( $locale );
 
 		if ( file_exists( $catalog_path ) ) {
 			$contents = file_get_contents( $catalog_path );

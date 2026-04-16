@@ -267,7 +267,7 @@ class Upgrade {
 
 			if (
 				'' === $new_id ||
-				$this->context->has_row_id( $table_name, $new_id, $old_id )
+				$this->context->row_id_exists( $table_name, $new_id, $old_id )
 			) {
 				$new_id = $this->context->generate_row_id( $table_name, $old_id );
 			}
@@ -337,7 +337,7 @@ class Upgrade {
 					(string) $spec['definition'],
 				);
 
-				if ( $this->context->has_constraint( $table_name, $constraint_name ) ) {
+				if ( $this->context->constraint_exists( $table_name, $constraint_name ) ) {
 					$current_delete_rule = $this->context->get_delete_rule(
 						$table_name,
 						$constraint_name,

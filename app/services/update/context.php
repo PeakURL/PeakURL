@@ -102,7 +102,7 @@ class Context {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	public function get_content_directory(): string {
+	public function get_content_dir(): string {
 		$content_dir = trim(
 			(string) ( $this->config[ Constants::CONFIG_CONTENT_DIR ] ?? '' ),
 		);
@@ -123,9 +123,9 @@ class Context {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	public function get_storage_root(): string {
+	public function get_storage_dir(): string {
 		return $this->filesystem->build_path(
-			$this->get_content_directory(),
+			$this->get_content_dir(),
 			'updates',
 		);
 	}
@@ -136,9 +136,9 @@ class Context {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	public function get_legacy_storage_root(): string {
+	public function get_legacy_storage_dir(): string {
 		return $this->filesystem->build_path(
-			$this->get_content_directory(),
+			$this->get_content_dir(),
 			'uploads',
 			'updates',
 		);
@@ -152,7 +152,7 @@ class Context {
 	 */
 	public function get_lock_path(): string {
 		return $this->filesystem->build_path(
-			$this->get_storage_root(),
+			$this->get_storage_dir(),
 			'update.lock',
 		);
 	}
@@ -175,7 +175,7 @@ class Context {
 	 * @return array{allowed: bool, reason: string|null}
 	 * @since 1.0.14
 	 */
-	public function get_apply_availability(): array {
+	public function get_availability(): array {
 		if ( file_exists( ABSPATH . 'package.json' ) || is_dir( ABSPATH . '.git' ) ) {
 			return array(
 				'allowed' => false,

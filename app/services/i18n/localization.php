@@ -144,8 +144,8 @@ class Localization {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	public function get_content_directory(): string {
-		return $this->paths->get_content_directory();
+	public function get_content_dir(): string {
+		return $this->paths->get_content_dir();
 	}
 
 	/**
@@ -448,7 +448,7 @@ class Localization {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	public function get_languages_directory(): string {
-		return $this->paths->get_languages_directory();
+	public function get_languages_dir(): string {
+		return $this->paths->get_languages_dir();
 	}
 }

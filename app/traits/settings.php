@@ -73,7 +73,7 @@ trait SettingsTrait {
 			);
 		}
 
-		$this->sync_runtime_managed_settings();
+		$this->sync_managed_settings();
 
 		if ( null === $this->get_setting_value( 'installed_at' ) ) {
 			$this->upsert_setting( 'installed_at', $this->now(), false );
@@ -137,7 +137,7 @@ trait SettingsTrait {
 	 * @return void
 	 * @since 1.0.0
 	 */
-	private function sync_runtime_managed_settings(): void {
+	private function sync_managed_settings(): void {
 		$site_language = trim( (string) ( $this->config['PEAKURL_SITE_LANGUAGE'] ?? '' ) );
 
 		if ( '' === $site_language ) {

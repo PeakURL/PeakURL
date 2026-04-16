@@ -210,7 +210,7 @@ class Context {
 	 * @return bool
 	 * @since 1.0.14
 	 */
-	public function has_constraint(
+	public function constraint_exists(
 		string $table_name,
 		string $constraint_name
 	): bool {
@@ -321,7 +321,7 @@ class Context {
 	 * @return bool
 	 * @since 1.0.14
 	 */
-	public function has_row_id(
+	public function row_id_exists(
 		string $table_name,
 		string $id,
 		?string $exclude_id = null
@@ -358,7 +358,7 @@ class Context {
 	): string {
 		do {
 			$id = bin2hex( random_bytes( 10 ) );
-		} while ( $this->has_row_id( $table_name, $id, $exclude_id ) );
+		} while ( $this->row_id_exists( $table_name, $id, $exclude_id ) );
 
 		return $id;
 	}

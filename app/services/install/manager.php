@@ -66,11 +66,11 @@ class Manager {
 		array $input,
 		Request $request
 	): array {
-		if ( State::is_ready( $app_path ) ) {
+		if ( State::is_installed( $app_path ) ) {
 			throw new \RuntimeException( __( 'PeakURL is already installed.', 'peakurl' ) );
 		}
 
-		if ( ! State::has_runtime_config( $app_path ) ) {
+		if ( ! State::config_exists( $app_path ) ) {
 			throw new \RuntimeException(
 				__( 'PeakURL still needs database configuration. Run setup-config.php first.', 'peakurl' ),
 			);
@@ -82,7 +82,7 @@ class Manager {
 		Writer::write_config_file( $app_path, $values );
 
 		try {
-			$runtime_config = Bootstrap::build_runtime_config( $values );
+			$runtime_config = Bootstrap::build_config( $values );
 			Bootstrap::initialize_schema( $runtime_config, $app_path );
 
 			$connection = new Connection( $runtime_config );

@@ -62,7 +62,7 @@ class Workspace {
 	 * @return bool
 	 * @since 1.0.14
 	 */
-	public function has_active_lock(): bool {
+	public function is_locked(): bool {
 		$lock_path = $this->context->get_lock_path();
 
 		$this->remove_stale_lock( $lock_path );
@@ -142,10 +142,10 @@ class Workspace {
 	 * @return void
 	 * @since 1.0.14
 	 */
-	public function remove_legacy_storage_root(): void {
-		$legacy_storage_root = $this->context->get_legacy_storage_root();
+	public function cleanup_legacy_storage(): void {
+		$legacy_storage_root = $this->context->get_legacy_storage_dir();
 
-		if ( $legacy_storage_root === $this->context->get_storage_root() ) {
+		if ( $legacy_storage_root === $this->context->get_storage_dir() ) {
 			return;
 		}
 
@@ -158,9 +158,9 @@ class Workspace {
 	 * @return void
 	 * @since 1.0.14
 	 */
-	public function cleanup_storage_root(): void {
+	public function cleanup_storage(): void {
 		$this->filesystem->delete_empty_directory_tree(
-			$this->context->get_storage_root(),
+			$this->context->get_storage_dir(),
 		);
 	}
 

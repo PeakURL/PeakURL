@@ -62,7 +62,7 @@ class Status {
 			return false;
 		}
 
-		if ( $this->has_pending_repairs() ) {
+		if ( $this->repairs_pending() ) {
 			return false;
 		}
 
@@ -310,7 +310,7 @@ class Status {
 	 * @return bool
 	 * @since 1.0.14
 	 */
-	private function has_pending_repairs(): bool {
+	private function repairs_pending(): bool {
 		$connection = $this->context->get_connection();
 
 		if (
@@ -405,7 +405,7 @@ class Status {
 		foreach ( SchemaSpecs::foreign_key_specs()[ $table_name ] ?? array() as $spec ) {
 			$constraint_name = (string) ( $spec['name'] ?? '' );
 
-			if ( '' === $constraint_name || $this->context->has_constraint( $table_name, $constraint_name ) ) {
+			if ( '' === $constraint_name || $this->context->constraint_exists( $table_name, $constraint_name ) ) {
 				continue;
 			}
 

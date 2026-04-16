@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 use PeakURL\Services\Install\Config as InstallConfig;
 use PeakURL\Services\Install\Locale as InstallLocale;
-use PeakURL\Services\Install\Page as InstallPage;
+use PeakURL\Services\Install\Screen as InstallScreen;
 use PeakURL\Services\Install\State as InstallState;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -44,7 +44,7 @@ if ( ! file_exists( $autoload_path ) ) {
 
 require $autoload_path;
 
-$base_path = InstallPage::get_base_path(
+$base_path = InstallScreen::get_base_path(
 	(string) ( $_SERVER['SCRIPT_NAME'] ?? '/setup-config.php' ),
 );
 
@@ -62,16 +62,16 @@ peakurl_override_i18n_service( $installer_locale->get_i18n_service() );
 $runtime_state = InstallState::get_runtime_state( $app_path );
 
 if ( InstallState::READY === $runtime_state ) {
-	header( 'Location: ' . InstallPage::build_url( $base_path, '/dashboard' ) );
+	header( 'Location: ' . InstallScreen::build_url( $base_path, '/dashboard' ) );
 	exit();
 }
 
 if ( InstallState::NEEDS_INSTALL === $runtime_state ) {
-	header( 'Location: ' . InstallPage::build_url( $base_path, '/install.php' ) );
+	header( 'Location: ' . InstallScreen::build_url( $base_path, '/install.php' ) );
 	exit();
 }
 
-$detected_site_url       = InstallPage::detect_site_url( $base_path, $_SERVER );
+$detected_site_url       = InstallScreen::detect_site_url( $base_path, $_SERVER );
 $values                  = InstallConfig::get_form_defaults( $detected_site_url );
 $values['site_language'] = $installer_locale->get_locale();
 $error_message           = '';
@@ -93,7 +93,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 	try {
 		InstallConfig::configure( $app_path, $_POST );
 		header(
-			'Location: ' . InstallPage::build_url(
+			'Location: ' . InstallScreen::build_url(
 				$base_path,
 				'/install.php',
 				array( 'site_language' => $values['site_language'] ),
@@ -632,7 +632,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 
 		<?php if ( 0 === $step ) : ?>
 			<div class="language-picker">
-				<form method="get" action="<?php echo htmlspecialchars( InstallPage::build_url( $base_path, '/setup-config.php' ), ENT_QUOTES, 'UTF-8' ); ?>" class="language-picker-form">
+				<form method="get" action="<?php echo htmlspecialchars( InstallScreen::build_url( $base_path, '/setup-config.php' ), ENT_QUOTES, 'UTF-8' ); ?>" class="language-picker-form">
 					<label class="language-picker-label" for="site_language"><?php echo esc_html__( 'Site language', 'peakurl' ); ?></label>
 					<select id="site_language" name="site_language" class="language-picker-select" onchange="this.form.submit()">
 						<?php foreach ( $installer_locale->list_languages() as $language ) : ?>
@@ -729,7 +729,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 				<a class="btn btn-primary" href="
 				<?php
 				echo htmlspecialchars(
-					InstallPage::build_url(
+					InstallScreen::build_url(
 						$base_path,
 						'/setup-config.php',
 						array(
@@ -771,7 +771,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 			<form method="post" action="
 			<?php
 			echo htmlspecialchars(
-				InstallPage::build_url(
+				InstallScreen::build_url(
 					$base_path,
 					'/setup-config.php',
 					array(
@@ -784,27 +784,27 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 			);
 			?>
 										">
-				<input type="hidden" name="site_url" value="<?php echo InstallPage::get_escaped_value( $values, 'site_url' ); ?>">
-				<input type="hidden" name="site_language" value="<?php echo InstallPage::get_escaped_value( $values, 'site_language' ); ?>">
+				<input type="hidden" name="site_url" value="<?php echo InstallScreen::get_escaped_value( $values, 'site_url' ); ?>">
+				<input type="hidden" name="site_language" value="<?php echo InstallScreen::get_escaped_value( $values, 'site_language' ); ?>">
 				<div class="form-body">
 					<div class="divider" style="margin: 0;"></div>
 					<p class="form-section-label"><?php echo esc_html__( 'Connection details', 'peakurl' ); ?></p>
 					<div class="grid">
 						<div class="field">
 							<label for="db_name"><?php echo esc_html__( 'Database name', 'peakurl' ); ?></label>
-							<input id="db_name" name="db_name" type="text" value="<?php echo InstallPage::get_escaped_value( $values, 'db_name' ); ?>" placeholder="peakurl" required>
+							<input id="db_name" name="db_name" type="text" value="<?php echo InstallScreen::get_escaped_value( $values, 'db_name' ); ?>" placeholder="peakurl" required>
 						</div>
 						<div class="field">
 							<label for="db_user"><?php echo esc_html__( 'Username', 'peakurl' ); ?></label>
-							<input id="db_user" name="db_user" type="text" value="<?php echo InstallPage::get_escaped_value( $values, 'db_user' ); ?>" placeholder="db_user" required>
+							<input id="db_user" name="db_user" type="text" value="<?php echo InstallScreen::get_escaped_value( $values, 'db_user' ); ?>" placeholder="db_user" required>
 						</div>
 						<div class="field">
 							<label for="db_password"><?php echo esc_html__( 'Password', 'peakurl' ); ?></label>
-							<input id="db_password" name="db_password" type="password" value="<?php echo InstallPage::get_escaped_value( $values, 'db_password' ); ?>" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;">
+							<input id="db_password" name="db_password" type="password" value="<?php echo InstallScreen::get_escaped_value( $values, 'db_password' ); ?>" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;">
 						</div>
 						<div class="field">
 							<label for="db_host"><?php echo esc_html__( 'Host', 'peakurl' ); ?></label>
-							<input id="db_host" name="db_host" type="text" value="<?php echo InstallPage::get_escaped_value( $values, 'db_host' ); ?>" placeholder="localhost" required>
+							<input id="db_host" name="db_host" type="text" value="<?php echo InstallScreen::get_escaped_value( $values, 'db_host' ); ?>" placeholder="localhost" required>
 						</div>
 					</div>
 					<div class="divider" style="margin: 4px 0;"></div>
@@ -812,16 +812,16 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 					<div class="grid">
 						<div class="field">
 							<label for="db_port"><?php echo esc_html__( 'Port', 'peakurl' ); ?></label>
-							<input id="db_port" name="db_port" type="number" min="1" max="65535" value="<?php echo InstallPage::get_escaped_value( $values, 'db_port' ); ?>" required>
+							<input id="db_port" name="db_port" type="number" min="1" max="65535" value="<?php echo InstallScreen::get_escaped_value( $values, 'db_port' ); ?>" required>
 						</div>
 						<div class="field">
 							<label for="db_prefix"><?php echo esc_html__( 'Table prefix', 'peakurl' ); ?></label>
-							<input id="db_prefix" name="db_prefix" type="text" value="<?php echo InstallPage::get_escaped_value( $values, 'db_prefix' ); ?>" required>
+							<input id="db_prefix" name="db_prefix" type="text" value="<?php echo InstallScreen::get_escaped_value( $values, 'db_prefix' ); ?>" required>
 							<p class="hint"><?php echo esc_html__( 'Letters, numbers, underscores. Example: peakurl_', 'peakurl' ); ?></p>
 						</div>
 					</div>
 					<div class="actions">
-						<a class="btn btn-ghost" href="<?php echo htmlspecialchars( InstallPage::build_url( $base_path, '/setup-config.php', array( 'site_language' => $values['site_language'] ) ), ENT_QUOTES, 'UTF-8' ); ?>">
+						<a class="btn btn-ghost" href="<?php echo htmlspecialchars( InstallScreen::build_url( $base_path, '/setup-config.php', array( 'site_language' => $values['site_language'] ) ), ENT_QUOTES, 'UTF-8' ); ?>">
 							<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
 							<?php echo esc_html__( 'Back', 'peakurl' ); ?>
 						</a>

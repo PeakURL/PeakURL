@@ -278,22 +278,6 @@ class Connection {
 	}
 
 	/**
-	 * Verify that every table in TABLE_NAMES exists in the database.
-	 *
-	 * @return bool True when all required tables are present.
-	 * @since 1.0.0
-	 */
-	public function has_required_tables(): bool {
-		foreach ( SchemaSpecs::managed_tables() as $table_name ) {
-			if ( ! $this->table_exists( $table_name ) ) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	/**
 	 * Check whether a table contains at least one row.
 	 *
 	 * @param string $table_name Base table name (without prefix).
@@ -312,19 +296,6 @@ class Connection {
 		);
 
 		return (int) $this->query_value( $sql ) > 0;
-	}
-
-	/**
-	 * Check whether a settings row has a non-empty value.
-	 *
-	 * @param string $setting_key The setting_key column value.
-	 * @return bool True when the setting exists and is non-blank.
-	 * @since 1.0.0
-	 */
-	public function setting_has_value( string $setting_key ): bool {
-		$value = $this->get_setting_value( $setting_key );
-
-		return is_string( $value ) ? '' !== trim( $value ) : ! empty( $value );
 	}
 
 	/**

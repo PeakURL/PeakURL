@@ -192,7 +192,7 @@ class Context {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	public function get_peakurl_version(): string {
+	public function get_version(): string {
 		$version = trim(
 			(string) ( $this->config[ Constants::CONFIG_VERSION ] ?? '' ),
 		);

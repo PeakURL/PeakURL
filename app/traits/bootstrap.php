@@ -65,7 +65,7 @@ trait BootstrapTrait {
 			$owner = $this->get_workspace_owner_row();
 
 			if ( ! $owner ) {
-				if ( ! $this->has_install_seed_values() ) {
+				if ( ! $this->has_install_data() ) {
 					throw new ApiException(
 						'PeakURL is not installed yet. Run install.php to finish setup.',
 						503,

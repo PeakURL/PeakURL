@@ -1,6 +1,6 @@
 <?php
 /**
- * Dashboard updater installer helpers.
+ * Dashboard update installer helpers.
  *
  * @package PeakURL\Services\Update
  * @since 1.0.14
@@ -99,7 +99,7 @@ class Installer {
 	 * @since 1.0.14
 	 */
 	public function apply( array $manifest ): array {
-		$availability = $this->context->get_apply_availability();
+		$availability = $this->context->get_availability();
 
 		if ( ! $availability['allowed'] ) {
 			throw new \RuntimeException( (string) $availability['reason'] );
@@ -123,14 +123,14 @@ class Installer {
 
 		$lock                       = $this->workspace->acquire_lock();
 		$working_dir                = $this->filesystem->build_path(
-			$this->context->get_storage_root(),
+			$this->context->get_storage_dir(),
 			'tmp',
 			gmdate( 'Ymd-His' ) . '-' . bin2hex( random_bytes( 4 ) ),
 		);
 		$extract_dir                = $this->filesystem->build_path( $working_dir, 'package' );
 		$zip_path                   = $this->filesystem->build_path( $working_dir, 'package.zip' );
 		$backup_dir                 = $this->filesystem->build_path(
-			$this->context->get_storage_root(),
+			$this->context->get_storage_dir(),
 			'backups',
 			gmdate( 'Ymd-His' ) . '-' . preg_replace( '/[^0-9A-Za-z.\-_]/', '-', $version ),
 		);
@@ -139,7 +139,7 @@ class Installer {
 		$package_content_root_paths = array();
 
 		try {
-			$this->workspace->remove_legacy_storage_root();
+			$this->workspace->cleanup_legacy_storage();
 			$this->filesystem->create_directory( $working_dir );
 			$this->filesystem->create_directory( $extract_dir );
 			$this->workspace->enable_maintenance_mode( $version );
@@ -216,7 +216,7 @@ class Installer {
 			$this->workspace->disable_maintenance_mode();
 			$this->filesystem->delete_path( $working_dir );
 			$this->workspace->release_lock( $lock );
-			$this->workspace->cleanup_storage_root();
+			$this->workspace->cleanup_storage();
 		}
 	}
 
@@ -316,7 +316,7 @@ class Installer {
 	 * @since 1.0.14
 	 */
 	private function resolve_package_root( string $extract_path ): string {
-		if ( $this->has_runtime_directory( $extract_path ) ) {
+		if ( $this->is_runtime_root( $extract_path ) ) {
 			return $extract_path;
 		}
 
@@ -343,7 +343,7 @@ class Installer {
 
 		$nested_root = $this->filesystem->build_path( $extract_path, $entries[0] );
 
-		if ( is_dir( $nested_root ) && $this->has_runtime_directory( $nested_root ) ) {
+		if ( is_dir( $nested_root ) && $this->is_runtime_root( $nested_root ) ) {
 			return $nested_root;
 		}
 
@@ -359,7 +359,7 @@ class Installer {
 	 * @return bool
 	 * @since 1.0.14
 	 */
-	private function has_runtime_directory( string $root_path ): bool {
+	private function is_runtime_root( string $root_path ): bool {
 		if ( ! file_exists( $this->filesystem->build_path( $root_path, 'index.php' ) ) ) {
 			return false;
 		}

@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\Install;
 
+use PeakURL\Database\SchemaSpecs;
 use PeakURL\Includes\Connection;
 use PeakURL\Includes\RuntimeConfig;
 
@@ -41,7 +42,7 @@ class State {
 	 * @return bool
 	 * @since 1.0.14
 	 */
-	public static function is_ready( string $app_path ): bool {
+	public static function is_installed( string $app_path ): bool {
 		return self::READY === self::get_runtime_state( $app_path );
 	}
 
@@ -52,7 +53,7 @@ class State {
 	 * @return bool
 	 * @since 1.0.14
 	 */
-	public static function has_runtime_config( string $app_path ): bool {
+	public static function config_exists( string $app_path ): bool {
 		return Writer::config_exists( $app_path );
 	}
 
@@ -64,7 +65,7 @@ class State {
 	 * @since 1.0.14
 	 */
 	public static function get_runtime_state( string $app_path ): string {
-		if ( ! self::has_runtime_config( $app_path ) ) {
+		if ( ! self::config_exists( $app_path ) ) {
 			return self::NEEDS_SETUP;
 		}
 
@@ -72,11 +73,15 @@ class State {
 			$config     = RuntimeConfig::load( $app_path );
 			$connection = new Connection( $config );
 
-			if ( ! $connection->has_required_tables() ) {
-				return self::NEEDS_INSTALL;
+			foreach ( SchemaSpecs::managed_tables() as $table_name ) {
+				if ( ! $connection->table_exists( $table_name ) ) {
+					return self::NEEDS_INSTALL;
+				}
 			}
 
-			if ( ! $connection->setting_has_value( 'site_url' ) ) {
+			$site_url = $connection->get_setting_value( 'site_url' );
+
+			if ( ! is_string( $site_url ) || '' === trim( $site_url ) ) {
 				return self::NEEDS_INSTALL;
 			}
 

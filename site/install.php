@@ -17,7 +17,7 @@ declare(strict_types=1);
 use PeakURL\Http\Request;
 use PeakURL\Services\Install\Locale as InstallLocale;
 use PeakURL\Services\Install\Manager as InstallManager;
-use PeakURL\Services\Install\Page as InstallPage;
+use PeakURL\Services\Install\Screen as InstallScreen;
 use PeakURL\Services\Install\State as InstallState;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -44,7 +44,7 @@ if ( ! file_exists( $autoload_path ) ) {
 
 require $autoload_path;
 
-$base_path = InstallPage::get_base_path(
+$base_path = InstallScreen::get_base_path(
 	(string) ( $_SERVER['SCRIPT_NAME'] ?? '/install.php' ),
 );
 
@@ -62,16 +62,16 @@ peakurl_override_i18n_service( $installer_locale->get_i18n_service() );
 $runtime_state = InstallState::get_runtime_state( $app_path );
 
 if ( InstallState::READY === $runtime_state ) {
-	header( 'Location: ' . InstallPage::build_url( $base_path, '/dashboard' ) );
+	header( 'Location: ' . InstallScreen::build_url( $base_path, '/dashboard' ) );
 	exit();
 }
 
 if ( InstallState::NEEDS_SETUP === $runtime_state ) {
-	header( 'Location: ' . InstallPage::build_url( $base_path, '/setup-config.php' ) );
+	header( 'Location: ' . InstallScreen::build_url( $base_path, '/setup-config.php' ) );
 	exit();
 }
 
-$detected_site_url       = InstallPage::detect_site_url( $base_path, $_SERVER );
+$detected_site_url       = InstallScreen::detect_site_url( $base_path, $_SERVER );
 $values                  = InstallManager::get_form_defaults( $detected_site_url );
 $values['site_language'] = $installer_locale->get_locale();
 $error_message           = '';
@@ -97,7 +97,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 			header( 'Set-Cookie: ' . $cookie_header, false );
 		}
 
-		header( 'Location: ' . InstallPage::build_url( $base_path, '/dashboard/about?source=install' ) );
+		header( 'Location: ' . InstallScreen::build_url( $base_path, '/dashboard/about?source=install' ) );
 		exit();
 	} catch ( \Throwable $exception ) {
 		$error_message = $exception->getMessage();
@@ -551,15 +551,15 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 				</div>
 			<?php endif; ?>
 
-			<form method="post" action="<?php echo htmlspecialchars( InstallPage::build_url( $base_path, '/install.php' ), ENT_QUOTES, 'UTF-8' ); ?>" novalidate>
-				<input type="hidden" name="site_language" value="<?php echo InstallPage::get_escaped_value( $values, 'site_language' ); ?>">
+			<form method="post" action="<?php echo htmlspecialchars( InstallScreen::build_url( $base_path, '/install.php' ), ENT_QUOTES, 'UTF-8' ); ?>" novalidate>
+				<input type="hidden" name="site_language" value="<?php echo InstallScreen::get_escaped_value( $values, 'site_language' ); ?>">
 				<div class="form-body">
 					<div class="divider" style="margin: 0;"></div>
 					<p class="form-section-label"><?php echo esc_html__( 'Site info', 'peakurl' ); ?></p>
 					<div class="grid">
 						<div class="field full">
 							<label for="workspace_name"><?php echo esc_html__( 'Site title', 'peakurl' ); ?></label>
-							<input id="workspace_name" name="workspace_name" type="text" value="<?php echo InstallPage::get_escaped_value( $values, 'workspace_name' ); ?>" placeholder="<?php echo esc_attr__( 'My Link Hub', 'peakurl' ); ?>" required>
+							<input id="workspace_name" name="workspace_name" type="text" value="<?php echo InstallScreen::get_escaped_value( $values, 'workspace_name' ); ?>" placeholder="<?php echo esc_attr__( 'My Link Hub', 'peakurl' ); ?>" required>
 						</div>
 					</div>
 					<div class="divider" style="margin: 4px 0;"></div>
@@ -567,16 +567,16 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 					<div class="grid">
 						<div class="field">
 							<label for="owner_username"><?php echo esc_html__( 'Username', 'peakurl' ); ?></label>
-							<input id="owner_username" name="owner_username" type="text" value="<?php echo InstallPage::get_escaped_value( $values, 'owner_username' ); ?>" placeholder="admin" required>
+							<input id="owner_username" name="owner_username" type="text" value="<?php echo InstallScreen::get_escaped_value( $values, 'owner_username' ); ?>" placeholder="admin" required>
 							<p class="hint"><?php echo esc_html__( 'Letters, numbers, dots, dashes, underscores, or @.', 'peakurl' ); ?></p>
 						</div>
 						<div class="field">
 							<label for="owner_email"><?php echo esc_html__( 'Email', 'peakurl' ); ?></label>
-							<input id="owner_email" name="owner_email" type="email" value="<?php echo InstallPage::get_escaped_value( $values, 'owner_email' ); ?>" placeholder="<?php echo esc_attr__( 'you@company.com', 'peakurl' ); ?>" required>
+							<input id="owner_email" name="owner_email" type="email" value="<?php echo InstallScreen::get_escaped_value( $values, 'owner_email' ); ?>" placeholder="<?php echo esc_attr__( 'you@company.com', 'peakurl' ); ?>" required>
 						</div>
 						<div class="field full">
 							<label for="owner_password"><?php echo esc_html__( 'Password', 'peakurl' ); ?></label>
-							<input id="owner_password" name="owner_password" type="password" value="<?php echo InstallPage::get_escaped_value( $values, 'owner_password' ); ?>" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" required>
+							<input id="owner_password" name="owner_password" type="password" value="<?php echo InstallScreen::get_escaped_value( $values, 'owner_password' ); ?>" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" required>
 							<p class="hint"><?php echo esc_html__( 'At least 8 characters. You will be signed in right after installation.', 'peakurl' ); ?></p>
 						</div>
 					</div>

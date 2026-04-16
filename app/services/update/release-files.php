@@ -260,7 +260,7 @@ class ReleaseFiles {
 		array $package_content_root_paths,
 		string $backup_root
 	): void {
-		$content_directory = $this->context->get_content_directory();
+		$content_directory = $this->context->get_content_dir();
 
 		foreach ( $package_content_root_paths as $relative_path ) {
 			$source_path = $this->filesystem->build_path( $content_directory, $relative_path );
@@ -296,7 +296,7 @@ class ReleaseFiles {
 			return;
 		}
 
-		$content_directory = $this->context->get_content_directory();
+		$content_directory = $this->context->get_content_dir();
 
 		$this->filesystem->create_directory( $content_directory );
 
@@ -334,7 +334,7 @@ class ReleaseFiles {
 			return;
 		}
 
-		$content_directory = $this->context->get_content_directory();
+		$content_directory = $this->context->get_content_dir();
 
 		foreach ( $package_content_root_paths as $relative_path ) {
 			$this->filesystem->delete_path(

@@ -58,7 +58,7 @@ class Paths {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	public function get_content_directory(): string {
+	public function get_content_dir(): string {
 		return rtrim(
 			(string) ( $this->config[ Constants::CONFIG_CONTENT_DIR ] ?? ABSPATH . Constants::DEFAULT_CONTENT_DIR ),
 			'/\\',
@@ -71,8 +71,8 @@ class Paths {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	public function get_languages_directory(): string {
-		return $this->get_content_directory() .
+	public function get_languages_dir(): string {
+		return $this->get_content_dir() .
 			DIRECTORY_SEPARATOR .
 			Constants::LANGUAGES_DIRECTORY;
 	}
@@ -85,11 +85,11 @@ class Paths {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	public function build_php_catalog_path(
+	public function get_php_catalog_path(
 		string $locale,
 		string $type
 	): string {
-		return $this->get_languages_directory() .
+		return $this->get_languages_dir() .
 			DIRECTORY_SEPARATOR .
 			sprintf(
 				'%s-%s.%s',
@@ -106,8 +106,8 @@ class Paths {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	public function build_dashboard_catalog_path( string $locale ): string {
-		return $this->get_languages_directory() .
+	public function get_dashboard_catalog_path( string $locale ): string {
+		return $this->get_languages_dir() .
 			DIRECTORY_SEPARATOR .
 			sprintf(
 				'%s-%s.json',
@@ -123,8 +123,8 @@ class Paths {
 	 * @since 1.0.14
 	 */
 	public function prepare_languages_directory(): array {
-		$content_directory   = $this->get_content_directory();
-		$languages_directory = $this->get_languages_directory();
+		$content_directory   = $this->get_content_dir();
+		$languages_directory = $this->get_languages_dir();
 		$created_directory   = false;
 
 		if ( ! is_dir( $content_directory ) ) {

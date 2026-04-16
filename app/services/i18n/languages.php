@@ -435,7 +435,7 @@ class Languages {
 			return $this->language_packs_cache;
 		}
 
-		$directory = $this->paths->get_languages_directory();
+		$directory = $this->paths->get_languages_dir();
 		$available = array();
 
 		if ( ! is_dir( $directory ) ) {

@@ -181,7 +181,7 @@ class Context {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	public function get_content_directory(): string {
+	public function get_content_dir(): string {
 		return $this->content_directory;
 	}
 
@@ -191,7 +191,7 @@ class Context {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	public function get_database_path(): string {
+	public function get_db_path(): string {
 		return $this->database_path;
 	}
 
@@ -201,7 +201,7 @@ class Context {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	public function get_peakurl_version(): string {
+	public function get_version(): string {
 		return $this->peakurl_version;
 	}
 

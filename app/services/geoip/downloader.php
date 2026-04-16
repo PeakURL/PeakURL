@@ -84,7 +84,7 @@ class Downloader {
 	 * @since 1.0.14
 	 */
 	public function download_database(): void {
-		if ( ! $this->credentials->has_credentials() ) {
+		if ( ! $this->credentials->is_configured() ) {
 			throw new \RuntimeException(
 				__( 'MaxMind credentials are required before PeakURL can download the GeoLite2 City database.', 'peakurl' ),
 			);
@@ -96,13 +96,13 @@ class Downloader {
 			);
 		}
 
-		$database_directory = dirname( $this->context->get_database_path() );
+		$database_directory = dirname( $this->context->get_db_path() );
 		$working_directory  = $database_directory . '/.tmp-' . bin2hex( random_bytes( 4 ) );
 		$archive_path       = $working_directory . '/GeoLite2-City.tar.gz';
 		$extract_path       = $working_directory . '/extract';
 
 		try {
-			$this->filesystem->create_directory( $this->context->get_content_directory() );
+			$this->filesystem->create_directory( $this->context->get_content_dir() );
 			$this->filesystem->create_directory( $database_directory );
 			$this->filesystem->create_directory( $working_directory );
 			$this->filesystem->create_directory( $extract_path );
@@ -120,7 +120,7 @@ class Downloader {
 
 			$this->filesystem->replace_database_file(
 				$source_path,
-				$this->context->get_database_path(),
+				$this->context->get_db_path(),
 			);
 			$this->context->reset_reader();
 		} finally {

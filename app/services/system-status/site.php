@@ -74,7 +74,7 @@ class Site {
 		return array(
 			'name'                    => $site_name,
 			'url'                     => $site_url,
-			'version'                 => $this->context->get_peakurl_version(),
+			'version'                 => $this->context->get_version(),
 			'environment'             => trim(
 				(string) ( $config[ Constants::CONFIG_ENV ] ?? 'production' ),
 			),

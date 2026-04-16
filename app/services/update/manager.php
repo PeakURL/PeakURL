@@ -58,7 +58,7 @@ class Manager {
 	private Workspace $workspace;
 
 	/**
-	 * Shared updater install helper.
+	 * Shared updater installer helper.
 	 *
 	 * @var Installer
 	 * @since 1.0.14

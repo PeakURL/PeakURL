@@ -64,7 +64,7 @@ class Bootstrap {
 	 * @return array<string, mixed>
 	 * @since 1.0.14
 	 */
-	public static function build_runtime_config( array $values ): array {
+	public static function build_config( array $values ): array {
 		return array(
 			'PEAKURL_ENV'                 => $values['PEAKURL_ENV'],
 			'SITE_URL'                    => $values['SITE_URL'],

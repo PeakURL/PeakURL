@@ -84,7 +84,7 @@ class Status {
 		$minimum_php      = trim( (string) ( $manifest_data['minimumPhp'] ?? '' ) );
 		$php_compatible   = '' === $minimum_php || version_compare( PHP_VERSION, $minimum_php, '>=' );
 		$update_available = '' !== $latest_version && version_compare( $latest_version, $current_version, '>' );
-		$availability     = $this->context->get_apply_availability();
+		$availability     = $this->context->get_availability();
 
 		return array(
 			'manifestUrl'         => $this->manifest->get_manifest_url(),
@@ -108,7 +108,7 @@ class Status {
 			'phpCompatible'       => $php_compatible,
 			'canApply'            => $availability['allowed'],
 			'applyDisabledReason' => $availability['reason'],
-			'isLocked'            => $this->workspace->has_active_lock(),
+			'isLocked'            => $this->workspace->is_locked(),
 			'manifest'            => $manifest_data,
 		);
 	}

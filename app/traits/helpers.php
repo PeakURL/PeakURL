@@ -191,7 +191,7 @@ trait HelpersTrait {
 	 * @return bool True when every required seed value is set.
 	 * @since 1.0.0
 	 */
-	private function has_install_seed_values(): bool {
+	private function has_install_data(): bool {
 		return '' !== trim( (string) ( $this->config['PEAKURL_OWNER_USERNAME'] ?? '' ) ) &&
 			'' !== trim( (string) ( $this->config['PEAKURL_OWNER_EMAIL'] ?? '' ) ) &&
 			'' !== trim( (string) ( $this->config['PEAKURL_OWNER_PASSWORD'] ?? '' ) ) &&

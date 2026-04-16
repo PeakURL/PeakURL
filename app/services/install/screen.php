@@ -1,6 +1,6 @@
 <?php
 /**
- * Release installer page helpers.
+ * Release installer screen helpers.
  *
  * @package PeakURL\Services\Install
  * @since 1.0.14
@@ -16,11 +16,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Page — shared URL, request, and escaping helpers for installer screens.
+ * Screen — shared URL, request, and escaping helpers for installer screens.
  *
  * @since 1.0.14
  */
-class Page {
+class Screen {
 
 	/**
 	 * Derive the URL base path from SCRIPT_NAME.

@@ -57,8 +57,8 @@ class Storage {
 
 		$i18n_service->prepare_languages_directory();
 
-		$content_directory   = $i18n_service->get_content_directory();
-		$languages_directory = $i18n_service->get_languages_directory();
+		$content_directory   = $i18n_service->get_content_dir();
+		$languages_directory = $i18n_service->get_languages_dir();
 		$debug_log_path      = $content_directory .
 			DIRECTORY_SEPARATOR .
 			Constants::DEBUG_LOG_FILE;

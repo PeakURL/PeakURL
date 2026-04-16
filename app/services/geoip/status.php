@@ -57,23 +57,22 @@ class Status {
 	 * @since 1.0.14
 	 */
 	public function get_status(): array {
-		$database_path   = $this->context->get_database_path();
+		$database_path   = $this->context->get_db_path();
 		$database_exists = file_exists( $database_path );
 		$database_ready  = $database_exists && is_readable( $database_path );
 		$modified_at     = $database_exists ? filemtime( $database_path ) : false;
 		$size_bytes      = $database_exists ? filesize( $database_path ) : false;
-		$capability      = $this->credentials->get_management_capability();
-		$settings_target = $this->credentials->get_settings_target();
+		$capability      = $this->credentials->get_capability();
 
 		return array(
-			'contentDir'             => $this->context->get_content_directory(),
+			'contentDir'             => $this->context->get_content_dir(),
 			'databasePath'           => $database_path,
 			'databaseExists'         => $database_exists,
 			'databaseReadable'       => $database_ready,
 			'locationAnalyticsReady' => $database_ready,
 			'accountIdConfigured'    => '' !== $this->context->get_account_id(),
 			'licenseKeyConfigured'   => '' !== $this->context->get_license_key(),
-			'credentialsConfigured'  => $this->credentials->has_credentials(),
+			'credentialsConfigured'  => $this->credentials->is_configured(),
 			'accountId'              => $this->context->get_account_id(),
 			'licenseKeyHint'         => $this->credentials->get_license_key_hint(),
 			'databaseUpdatedAt'      => false !== $modified_at
@@ -84,8 +83,8 @@ class Status {
 				: 0,
 			'canManageFromDashboard' => $capability['allowed'],
 			'manageDisabledReason'   => $capability['reason'],
-			'configurationLabel'     => $settings_target['label'],
-			'configurationPath'      => $settings_target['path'],
+			'configurationLabel'     => 'settings table',
+			'configurationPath'      => 'settings',
 			'downloadCommand'        => 'php app/bin/update-geoip.php',
 			'downloadUrl'            => Manager::DOWNLOAD_URL,
 		);

@@ -63,7 +63,7 @@ class Credentials {
 	 * @return bool
 	 * @since 1.0.14
 	 */
-	public function has_credentials(): bool {
+	public function is_configured(): bool {
 		return '' !== $this->context->get_account_id() && '' !== $this->context->get_license_key();
 	}
 
@@ -95,8 +95,8 @@ class Credentials {
 	 * @return array{allowed: bool, reason: string|null}
 	 * @since 1.0.14
 	 */
-	public function get_management_capability(): array {
-		if ( ! $this->context->get_settings_api()->has_table() ) {
+	public function get_capability(): array {
+		if ( ! $this->context->get_settings_api()->table_exists() ) {
 			return array(
 				'allowed' => false,
 				'reason'  => __( 'The settings table is not available yet.', 'peakurl' ),
@@ -106,19 +106,6 @@ class Credentials {
 		return array(
 			'allowed' => true,
 			'reason'  => null,
-		);
-	}
-
-	/**
-	 * Return the credential storage target metadata.
-	 *
-	 * @return array{label: string, path: string}
-	 * @since 1.0.14
-	 */
-	public function get_settings_target(): array {
-		return array(
-			'label' => 'settings table',
-			'path'  => 'settings',
 		);
 	}
 
@@ -133,7 +120,7 @@ class Credentials {
 	 * @since 1.0.14
 	 */
 	public function save( string $app_path, array $input ): void {
-		$capability = $this->get_management_capability();
+		$capability = $this->get_capability();
 
 		if ( ! $capability['allowed'] ) {
 			throw new \RuntimeException( (string) $capability['reason'] );
@@ -174,7 +161,7 @@ class Credentials {
 
 		$crypto_service = $this->context->get_crypto_service();
 
-		if ( '' !== $license_key && ! $crypto_service->has_auth_keys() ) {
+		if ( '' !== $license_key && ! $crypto_service->is_configured() ) {
 			$crypto_service = new Crypto( $this->context->get_config() );
 			$crypto_service->persist_auth_keys( $app_path );
 			$this->context->set_crypto_service( $crypto_service );

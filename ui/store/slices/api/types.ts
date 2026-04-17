@@ -411,8 +411,17 @@ export interface CreateWebhookPayload {
  * Save payload used by the general-settings API route.
  */
 export interface SaveGeneralSettingsPayload {
+	/** Site title used across the dashboard shell and runtime metadata. */
+	siteName?: string;
+
 	/** Locale code for the selected dashboard language. */
 	siteLanguage: string;
+
+	/** Optional PNG favicon file uploaded from the General settings tab. */
+	faviconFile?: File | null;
+
+	/** Whether the stored favicon should be removed. */
+	removeFavicon?: boolean;
 }
 
 /**

@@ -18,4 +18,163 @@
 	.settings-general-bio-input {
 		@apply min-h-24;
 	}
+
+	.settings-general-favicon {
+		@apply mt-6 space-y-5 rounded-2xl border border-stroke bg-surface p-5;
+	}
+
+	.settings-general-favicon-header {
+		@apply grid gap-5 lg:w-fit lg:max-w-full lg:grid-cols-[minmax(0,28rem)_22rem] lg:items-start lg:justify-start;
+	}
+
+	.settings-general-favicon-content {
+		@apply space-y-5;
+	}
+
+	.settings-general-favicon-copy {
+		@apply space-y-2;
+	}
+
+	.settings-general-favicon-title {
+		@apply text-lg font-semibold text-heading;
+	}
+
+	.settings-general-favicon-summary {
+		@apply text-sm leading-6 text-text-muted;
+	}
+
+	.settings-general-favicon-preview {
+		@apply relative overflow-hidden rounded-2xl border border-stroke bg-bg;
+	}
+
+	.settings-general-favicon-preview-filled {
+		@apply w-full shrink-0 self-start;
+		min-height: 8rem;
+	}
+
+	.settings-general-favicon-preview-empty-state {
+		@apply flex h-16 w-16 shrink-0 items-center justify-center;
+	}
+
+	.settings-general-favicon-empty {
+		@apply flex h-full w-full items-center justify-center rounded-xl bg-bg text-text-muted;
+	}
+
+	.settings-general-favicon-placeholder {
+		@apply h-7 w-7;
+	}
+
+	.settings-general-favicon-browser {
+		@apply relative h-full w-full;
+	}
+
+	.settings-general-favicon-remove {
+		@apply absolute bottom-0 z-10 flex h-8.5 w-8.5 items-center justify-center rounded-full border border-white/15 bg-surface/95 text-heading shadow-sm transition;
+		inset-inline-start: 0.75rem;
+	}
+
+	.settings-general-favicon-remove-icon {
+		@apply h-4 w-4;
+	}
+
+	.settings-general-favicon-remove:hover {
+		border-color: rgb(220 38 38 / 1);
+		background-color: rgb(220 38 38 / 1);
+		color: rgb(255 255 255 / 1);
+	}
+
+	.settings-general-favicon-glow {
+		@apply absolute inset-0 opacity-40;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: 165%;
+		-webkit-filter: blur(9px);
+		filter: blur(9px);
+		transform: scale(1.05);
+	}
+
+	.settings-general-favicon-browser-body {
+		@apply relative flex h-full items-start gap-3 p-3;
+	}
+
+	.settings-general-favicon-app-icon {
+		@apply h-14 w-14 shrink-0 rounded-2xl border border-white/10 bg-[#232738] object-contain p-2.5 shadow-lg;
+	}
+
+	.settings-general-favicon-browser-window {
+		@apply flex min-w-0 flex-1 flex-col overflow-hidden rounded-t-2xl border border-white/10 bg-[#15171d] shadow-xl;
+		min-height: 5.75rem;
+	}
+
+	.settings-general-favicon-browser-top {
+		@apply flex items-center gap-2.5 px-3.5 pt-3.5;
+	}
+
+	.settings-general-favicon-browser-bar {
+		@apply flex shrink-0 items-center gap-1.5;
+	}
+
+	.settings-general-favicon-browser-dot {
+		@apply h-2 w-2 rounded-full;
+	}
+
+	.settings-general-favicon-browser-dot:first-child {
+		background-color: rgb(255 95 86 / 1);
+	}
+
+	.settings-general-favicon-browser-dot:nth-child(2) {
+		background-color: rgb(255 189 46 / 1);
+	}
+
+	.settings-general-favicon-browser-dot:nth-child(3) {
+		background-color: rgb(39 201 63 / 1);
+	}
+
+	.settings-general-favicon-browser-tab {
+		@apply grid min-w-0 flex-1 grid-cols-[1.25rem_minmax(0,1fr)_1rem] items-center gap-2.5 rounded-t-xl bg-[#2f3640] px-3.5 py-2.5 text-white shadow-sm;
+	}
+
+	.settings-general-favicon-browser-icon {
+		@apply h-5 w-5 rounded-md bg-[#202631] object-contain p-1;
+	}
+
+	.settings-general-favicon-browser-title {
+		@apply overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold text-white;
+	}
+
+	.settings-general-favicon-browser-close {
+		@apply h-4 w-4 text-white/85;
+	}
+
+	.settings-general-favicon-browser-panel {
+		@apply flex-1 bg-[#15171d];
+	}
+
+	.settings-general-favicon-field {
+		@apply space-y-2;
+	}
+
+	.settings-general-favicon-input-native {
+		@apply sr-only;
+	}
+
+	.settings-general-favicon-picker {
+		@apply flex flex-wrap items-center gap-2.5;
+	}
+
+	.settings-general-favicon-filename {
+		@apply text-sm font-medium text-heading;
+	}
+
+	.settings-general-favicon-note {
+		@apply max-w-xl text-sm text-text-muted;
+	}
+
+	[dir='rtl'] .settings-general-favicon-browser-body {
+		direction: rtl;
+	}
+
+	[dir='rtl'] .settings-general-favicon-browser-tab {
+		grid-template-columns: 1.25rem minmax(0, 1fr) 1.5rem;
+	}
 }

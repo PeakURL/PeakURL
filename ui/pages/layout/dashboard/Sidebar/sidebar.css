@@ -1,6 +1,6 @@
 @layer components {
 	.dashboard-sidebar-overlay {
-		@apply fixed inset-0 z-40 bg-black/50 lg:hidden;
+		@apply fixed inset-0 z-40 bg-transparent lg:hidden;
 	}
 
 	.dashboard-sidebar {

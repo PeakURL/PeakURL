@@ -136,6 +136,7 @@ trait SystemTrait {
 			'textDirection'         => $this->i18n_service->get_text_direction(),
 			'isRtl'                 => $this->i18n_service->is_locale_rtl(),
 			'availableLanguages'    => $this->i18n_service->list_languages(),
+			'favicon'               => $this->favicon_service->get_settings( $site_name ),
 			'canManageSiteSettings' => $this->roles->user_can(
 				$user,
 				'manage_site_settings',
@@ -153,7 +154,12 @@ trait SystemTrait {
 	 * @since 1.0.3
 	 */
 	public function get_public_i18n_payload(): array {
-		$locale = $this->i18n_service->get_site_locale();
+		$locale    = $this->i18n_service->get_site_locale();
+		$site_name = trim( (string) $this->get_setting_value( 'site_name' ) );
+
+		if ( '' === $site_name ) {
+			$site_name = 'PeakURL';
+		}
 
 		return array(
 			'locale'        => $locale,
@@ -161,6 +167,7 @@ trait SystemTrait {
 			'textDirection' => $this->i18n_service->get_text_direction( $locale ),
 			'isRtl'         => $this->i18n_service->is_locale_rtl( $locale ),
 			'textDomain'    => Constants::I18N_TEXT_DOMAIN,
+			'favicon'       => $this->favicon_service->get_settings( $site_name ),
 			'defaultLocale' => $this->i18n_service->get_default_locale(),
 			'catalog'       => $this->i18n_service->get_dashboard_catalog( $locale ),
 		);
@@ -197,6 +204,31 @@ trait SystemTrait {
 
 		$this->upsert_setting( 'site_language', $site_language );
 		$this->i18n_service->load_locale( $site_language );
+
+		$current_site_name = trim(
+			(string) $this->get_setting_value( 'site_name' ),
+		);
+		$site_name         = trim(
+			(string) ( $payload['siteName'] ?? $current_site_name ),
+		);
+
+		if ( '' === $site_name ) {
+			$site_name = '' !== $current_site_name ? $current_site_name : 'PeakURL';
+		}
+
+		if ( $site_name !== $current_site_name ) {
+			$this->upsert_setting( 'site_name', $site_name );
+		}
+
+		try {
+			$this->favicon_service->save(
+				$request->get_file( 'favicon' ),
+				! empty( $payload['removeFavicon'] ),
+				$site_name,
+			);
+		} catch ( \RuntimeException $exception ) {
+			throw new ApiException( $exception->getMessage(), 422 );
+		}
 
 		$settings          = $this->get_general_settings( $request );
 		$settings['saved'] = true;

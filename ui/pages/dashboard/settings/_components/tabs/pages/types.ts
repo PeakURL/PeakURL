@@ -13,14 +13,34 @@ import type {
 } from '../types';
 
 /**
+ * Configured site favicon metadata shown in the General settings tab.
+ */
+export interface SiteFavicon {
+	configured?: boolean;
+	url?: string | null;
+	iconUrl?: string | null;
+	appleTouchUrl?: string | null;
+	manifestUrl?: string | null;
+	mimeType?: string | null;
+	width?: number | string | null;
+	height?: number | string | null;
+	sizes?: string | null;
+	updatedAt?: string | null;
+	recommendedSize?: string | null;
+}
+
+/**
  * Site-level settings required by the general settings tab.
  */
 export interface SiteSettings {
+	siteName?: string | null;
+	siteUrl?: string | null;
 	siteLanguage?: string | null;
 	textDirection?: TextDirection;
 	isRtl?: boolean;
 	canManageSiteSettings?: boolean;
 	availableLanguages?: InstalledLanguage[];
+	favicon?: SiteFavicon | null;
 }
 
 /**
@@ -28,7 +48,14 @@ export interface SiteSettings {
  */
 export interface GeneralTabProps {
 	initialForm: GeneralFormState;
-	onSubmit: (payload: GeneralFormState & { siteLanguage: string }) => void;
+	onSubmit: (
+		payload: GeneralFormState & {
+			siteName: string;
+			siteLanguage: string;
+			faviconFile?: File | null;
+			removeFavicon?: boolean;
+		}
+	) => void;
 	isUpdating: boolean;
 	siteSettings?: SiteSettings | null;
 	isLoadingSiteSettings: boolean;

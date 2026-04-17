@@ -1,4 +1,8 @@
-import type { RuntimeI18nCatalog, TextDirection } from './i18n/types';
+import type {
+	RuntimeFaviconPayload,
+	RuntimeI18nCatalog,
+	TextDirection,
+} from './i18n/types';
 
 export {};
 
@@ -49,6 +53,11 @@ declare global {
 		 * Runtime application version exposed to the dashboard shell.
 		 */
 		__PEAKURL_VERSION__?: string;
+
+		/**
+		 * Public favicon metadata injected by the PHP runtime.
+		 */
+		__PEAKURL_FAVICON__?: RuntimeFaviconPayload;
 
 		/**
 		 * Initial body classes supplied by the PHP runtime before the SPA boots.

@@ -93,4 +93,6 @@ class Constants {
 	public const SETTING_DB_SCHEMA_LAST_UPGRADED_AT = 'db_schema_last_upgraded_at';
 	/** Settings key storing the last DB schema upgrade error. */
 	public const SETTING_DB_SCHEMA_LAST_ERROR = 'db_schema_last_error';
+	/** Settings key storing the site favicon metadata payload. */
+	public const SETTING_SITE_FAVICON = 'site_favicon_json';
 }

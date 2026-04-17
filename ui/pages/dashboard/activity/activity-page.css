@@ -28,11 +28,11 @@
 
 	/* Overview Cards - Modern metrics layout */
 	.activity-page-overview {
-		@apply grid gap-3 lg:grid-cols-[minmax(0,1fr)_15rem] lg:items-stretch;
+		@apply grid grid-cols-2 gap-3 lg:grid-cols-[minmax(0,1fr)_15rem] lg:items-stretch;
 	}
 
 	.activity-page-overview-items {
-		@apply grid gap-3 sm:grid-cols-2 xl:grid-cols-3;
+		@apply contents lg:grid lg:gap-3 lg:grid-cols-2 xl:grid-cols-3;
 	}
 
 	.activity-page-overview-item {

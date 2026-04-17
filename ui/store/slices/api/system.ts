@@ -34,11 +34,36 @@ export const systemApi = baseApi.injectEndpoints({
 			ApiDataResponse<SiteSettings>,
 			SaveGeneralSettingsPayload
 		>({
-			query: (body) => ({
-				url: 'system/general',
-				method: 'POST',
-				body,
-			}),
+			query: ({ siteName, siteLanguage, faviconFile, removeFavicon }) => {
+				if (faviconFile || removeFavicon) {
+					const formData = new FormData();
+					formData.append('siteName', siteName || '');
+					formData.append('siteLanguage', siteLanguage);
+
+					if (faviconFile) {
+						formData.append('favicon', faviconFile);
+					}
+
+					if (removeFavicon) {
+						formData.append('removeFavicon', '1');
+					}
+
+					return {
+						url: 'system/general',
+						method: 'POST',
+						body: formData,
+					};
+				}
+
+				return {
+					url: 'system/general',
+					method: 'POST',
+					body: {
+						siteName,
+						siteLanguage,
+					},
+				};
+			},
 			invalidatesTags: ['GeneralSettings'],
 		}),
 		getGeoipStatus: build.query<ApiDataResponse<LocationDataStatus>, void>({

@@ -23,6 +23,7 @@ use PeakURL\Includes\Connection;
 use PeakURL\Includes\PeakURL_DB;
 use PeakURL\Includes\Roles;
 use PeakURL\Services\Crypto;
+use PeakURL\Services\Favicon;
 use PeakURL\Services\Geoip;
 use PeakURL\Services\I18n;
 use PeakURL\Services\Mailer;
@@ -240,6 +241,14 @@ class Store {
 	private Crypto $crypto_service;
 
 	/**
+	 * Site favicon management helper.
+	 *
+	 * @var Favicon
+	 * @since 1.0.14
+	 */
+	private Favicon $favicon_service;
+
+	/**
 	 * Request geolocation helper for click analytics.
 	 *
 	 * @var Geoip
@@ -296,6 +305,10 @@ class Store {
 		$this->roles                 = new Roles();
 		$this->totp_service          = new Totp();
 		$this->crypto_service        = new Crypto( $config );
+		$this->favicon_service       = new Favicon(
+			$config,
+			$this->settings_api,
+		);
 		$this->geoip_service         = new Geoip(
 			$config,
 			$this->settings_api,

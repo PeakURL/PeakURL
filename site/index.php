@@ -16,9 +16,12 @@
 
 declare(strict_types=1);
 
+use PeakURL\Api\SettingsApi;
 use PeakURL\Includes\Connection;
 use PeakURL\Includes\Constants;
+use PeakURL\Includes\PeakURL_DB;
 use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Services\Favicon;
 use PeakURL\Services\Install\State as InstallState;
 use PeakURL\Utils\Str;
 
@@ -165,6 +168,128 @@ function peakurl_send_maintenance_response(
 }
 
 /**
+ * Determine whether the current request targets a favicon alias route.
+ *
+ * @param string $relative_path Root-relative request path.
+ * @return bool
+ * @since 1.0.14
+ */
+function peakurl_is_favicon_request( string $relative_path ): bool {
+	return in_array(
+		$relative_path,
+		array(
+			'/favicon.ico',
+			'/favicon.png',
+			'/apple-touch-icon.png',
+			'/site.webmanifest',
+		),
+		true,
+	);
+}
+
+/**
+ * Send a static file response and terminate the request.
+ *
+ * @param string $file_path    Absolute file path.
+ * @param string $content_type Content-Type header value.
+ * @param int    $max_age      Cache lifetime in seconds.
+ * @return void
+ * @since 1.0.14
+ */
+function peakurl_send_file_response(
+	string $file_path,
+	string $content_type,
+	int $max_age = 3600
+): void {
+	if ( ! is_readable( $file_path ) ) {
+		http_response_code( 404 );
+		exit();
+	}
+
+	$modified_at = filemtime( $file_path );
+	$file_size   = filesize( $file_path );
+
+	header( 'Content-Type: ' . $content_type );
+	header(
+		'Cache-Control: public, max-age=' . $max_age .
+		( $max_age >= 86400 ? ', immutable' : '' )
+	);
+
+	if ( false !== $modified_at ) {
+		header(
+			'Last-Modified: ' .
+			gmdate( 'D, d M Y H:i:s', (int) $modified_at ) .
+			' GMT',
+		);
+	}
+
+	if ( false !== $file_size ) {
+		header( 'Content-Length: ' . (string) $file_size );
+	}
+
+	readfile( $file_path );
+	exit();
+}
+
+/**
+ * Build the favicon and manifest markup for the dashboard shell.
+ *
+ * @param string               $site_name Configured site name.
+ * @param array<string, mixed> $favicon   Favicon settings payload.
+ * @return string
+ * @since 1.0.14
+ */
+function peakurl_get_favicon_head_markup(
+	string $site_name,
+	array $favicon
+): string {
+	if ( empty( $favicon['configured'] ) ) {
+		return '';
+	}
+
+	$icon_url        = trim( (string) ( $favicon['url'] ?? '' ) );
+	$shortcut_url    = trim( (string) ( $favicon['iconUrl'] ?? $icon_url ) );
+	$apple_touch_url = trim( (string) ( $favicon['appleTouchUrl'] ?? $icon_url ) );
+	$manifest_url    = trim( (string) ( $favicon['manifestUrl'] ?? '' ) );
+	$sizes           = trim( (string) ( $favicon['sizes'] ?? '' ) );
+
+	if ( '' === $icon_url ) {
+		return '';
+	}
+
+	$icon_url       = htmlspecialchars( $icon_url, ENT_QUOTES, 'UTF-8' );
+	$shortcut_url   = htmlspecialchars( $shortcut_url, ENT_QUOTES, 'UTF-8' );
+	$site_name_attr = htmlspecialchars( $site_name, ENT_QUOTES, 'UTF-8' );
+	$sizes_attr     = '' !== $sizes
+		? ' sizes="' . htmlspecialchars( $sizes, ENT_QUOTES, 'UTF-8' ) . '"'
+		: '';
+
+	$markup = '<link rel="icon" type="image/png" href="' . $icon_url . '"' . $sizes_attr . '>' .
+		"\n" .
+		'<link rel="shortcut icon" type="image/png" href="' . $shortcut_url . '">';
+
+	if ( '' !== $apple_touch_url ) {
+		$markup .=
+			"\n" .
+			'<link rel="apple-touch-icon" href="' .
+			htmlspecialchars( $apple_touch_url, ENT_QUOTES, 'UTF-8' ) .
+			'">';
+	}
+
+	if ( '' !== $manifest_url ) {
+		$markup .=
+			"\n" .
+			'<link rel="manifest" href="' .
+			htmlspecialchars( $manifest_url, ENT_QUOTES, 'UTF-8' ) .
+			'">';
+	}
+
+	return $markup .
+		"\n" .
+		'<meta name="apple-mobile-web-app-title" content="' . $site_name_attr . '">';
+}
+
+/**
  * Decide whether a request path should serve the React dashboard shell.
  *
  * Matches `/`, `/login`, `/forgot-password`, `/reset-password/*`,
@@ -204,6 +329,7 @@ function peakurl_should_serve_dashboard_shell( string $relative_path ): bool {
  * @param string               $locale              Active site locale.
  * @param string               $text_direction      Active document text direction.
  * @param array<string, mixed> $translation_catalog Dashboard JSON catalog.
+ * @param array<string, mixed> $favicon             Public favicon settings payload.
  * @return string Modified HTML.
  * @since 1.0.0
  */
@@ -215,20 +341,26 @@ function peakurl_inject_runtime_shell(
 	array $body_classes,
 	string $locale,
 	string $text_direction,
-	array $translation_catalog
+	array $translation_catalog,
+	array $favicon
 ): string {
-	$base_href = '' === $base_path ? '/' : $base_path . '/';
-	$html_lang = htmlspecialchars(
+	$base_href    = '' === $base_path ? '/' : $base_path . '/';
+	$html_lang    = htmlspecialchars(
 		strtolower( str_replace( '_', '-', $locale ) ),
 		ENT_QUOTES,
 		'UTF-8',
 	);
-	$html_dir  = 'rtl' === strtolower( $text_direction ) ? 'rtl' : 'ltr';
-	$runtime   =
+	$html_dir     = 'rtl' === strtolower( $text_direction ) ? 'rtl' : 'ltr';
+	$favicon_head = peakurl_get_favicon_head_markup(
+		$site_name,
+		$favicon,
+	);
+	$runtime      =
 		'<base href="' .
 		htmlspecialchars( $base_href, ENT_QUOTES, 'UTF-8' ) .
 		'">' .
 		"\n" .
+		( '' !== $favicon_head ? $favicon_head . "\n" : '' ) .
 		'<script>window.__PEAKURL_BASE_PATH__=' .
 		json_encode( $base_path ) .
 		';window.__PEAKURL_API_BASE__=' .
@@ -239,6 +371,11 @@ function peakurl_inject_runtime_shell(
 		json_encode( $site_name ) .
 		';window.__PEAKURL_VERSION__=' .
 		json_encode( $version ) .
+		';window.__PEAKURL_FAVICON__=' .
+		json_encode(
+			$favicon,
+			JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
+		) .
 		';window.__PEAKURL_BODY_CLASSES__=' .
 		json_encode( $body_classes ) .
 		';window.__PEAKURL_LOCALE__=' .
@@ -379,6 +516,43 @@ require_once $autoload;
 
 $runtime_state = InstallState::get_runtime_state( $app_path );
 
+if ( peakurl_is_favicon_request( $relative_path ) ) {
+	if ( InstallState::READY !== $runtime_state ) {
+		http_response_code( 404 );
+		exit();
+	}
+
+	$runtime_config  = RuntimeConfig::bootstrap( $app_path );
+	$connection      = new Connection( $runtime_config );
+	$settings_api    = new SettingsApi( new PeakURL_DB( $connection ) );
+	$site_name       = trim(
+		(string) ( $connection->get_setting_value( 'site_name' ) ?? 'PeakURL' ),
+	);
+	$favicon_service = new Favicon( $runtime_config, $settings_api );
+	$favicon_assets  = $favicon_service->get_assets(
+		'' !== $site_name ? $site_name : 'PeakURL'
+	);
+
+	if ( empty( $favicon_assets['configured'] ) ) {
+		http_response_code( 404 );
+		exit();
+	}
+
+	if ( '/site.webmanifest' === $relative_path ) {
+		peakurl_send_file_response(
+			(string) $favicon_assets['manifestPath'],
+			'application/manifest+json; charset=utf-8',
+			3600,
+		);
+	}
+
+	peakurl_send_file_response(
+		(string) $favicon_assets['iconPath'],
+		'image/png',
+		31536000,
+	);
+}
+
 if ( Str::starts_with( $relative_path, '/api/' ) ) {
 	if ( InstallState::READY !== $runtime_state ) {
 		http_response_code( 503 );
@@ -440,6 +614,10 @@ $version        = trim(
 		Constants::DEFAULT_VERSION
 	),
 );
+$favicon        = ( new Favicon(
+	$runtime_config,
+	new SettingsApi( new PeakURL_DB( $connection ) ),
+) )->get_settings( $site_name );
 $body_classes   = get_body_class(
 	array(),
 	array(
@@ -479,4 +657,5 @@ echo peakurl_inject_runtime_shell(
 	$locale,
 	$text_direction,
 	$catalog,
+	$favicon,
 );

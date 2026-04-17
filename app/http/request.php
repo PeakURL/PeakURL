@@ -42,6 +42,9 @@ class Request {
 	/** @var array<string, string> Cookie values from the request. */
 	private array $cookie_params;
 
+	/** @var array<string, mixed> Uploaded file payloads from the request. */
+	private array $file_params;
+
 	/** @var array<string, string> $_SERVER super-global snapshot. */
 	private array $server_params;
 
@@ -59,6 +62,7 @@ class Request {
 	 * @param array<string, mixed> $query_params  Query-string parameters.
 	 * @param array<string, mixed> $body_params   Parsed body parameters.
 	 * @param array<string, string> $cookie_params Cookie values.
+	 * @param array<string, mixed>  $file_params   Uploaded file payloads.
 	 * @param array<string, string> $server_params Server super-global.
 	 * @since 1.0.0
 	 */
@@ -68,6 +72,7 @@ class Request {
 		array $query_params,
 		array $body_params,
 		array $cookie_params = array(),
+		array $file_params = array(),
 		array $server_params = array()
 	) {
 		$this->method        = strtoupper( $method );
@@ -75,6 +80,7 @@ class Request {
 		$this->query_params  = $query_params;
 		$this->body_params   = $body_params;
 		$this->cookie_params = $cookie_params;
+		$this->file_params   = $file_params;
 		$this->server_params = $server_params;
 	}
 
@@ -128,8 +134,12 @@ class Request {
 
 		$content_type = $_SERVER['CONTENT_TYPE'] ?? '';
 		$body_params  = array();
+		$file_params  = array();
 
-		if ( '' !== $body ) {
+		if ( false !== stripos( $content_type, 'multipart/form-data' ) ) {
+			$body_params = is_array( $_POST ) ? $_POST : array();
+			$file_params = is_array( $_FILES ) ? $_FILES : array();
+		} elseif ( '' !== $body ) {
 			if ( false !== stripos( $content_type, 'application/json' ) ) {
 				$decoded     = json_decode( $body, true );
 				$body_params = is_array( $decoded ) ? $decoded : array();
@@ -147,6 +157,7 @@ class Request {
 			$query_params,
 			$body_params,
 			$_COOKIE,
+			$file_params,
 			$_SERVER,
 		);
 	}
@@ -203,6 +214,29 @@ class Request {
 	 */
 	public function get_body_params(): array {
 		return $this->body_params;
+	}
+
+	/**
+	 * Retrieve a single uploaded file payload.
+	 *
+	 * @param string $key Uploaded field name.
+	 * @return array<string, mixed>|null
+	 * @since 1.0.14
+	 */
+	public function get_file( string $key ): ?array {
+		$file = $this->file_params[ $key ] ?? null;
+
+		return is_array( $file ) ? $file : null;
+	}
+
+	/**
+	 * Get all uploaded file payloads.
+	 *
+	 * @return array<string, mixed>
+	 * @since 1.0.14
+	 */
+	public function get_files(): array {
+		return $this->file_params;
 	}
 
 	/**

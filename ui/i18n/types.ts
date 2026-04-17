@@ -53,6 +53,32 @@ export interface RuntimeI18nCatalog {
 }
 
 /**
+ * Public favicon metadata exposed to the runtime shell and bootstrap API.
+ */
+export interface RuntimeFaviconPayload {
+	/** Whether a site favicon is currently configured. */
+	configured?: boolean;
+
+	/** Primary PNG favicon URL. */
+	url?: string | null;
+
+	/** Legacy favicon route URL. */
+	iconUrl?: string | null;
+
+	/** Apple touch icon URL. */
+	appleTouchUrl?: string | null;
+
+	/** Web manifest URL. */
+	manifestUrl?: string | null;
+
+	/** MIME type for the favicon asset. */
+	mimeType?: string | null;
+
+	/** Declared icon size string such as `512x512`. */
+	sizes?: string | null;
+}
+
+/**
  * Normalized payload returned by the dashboard i18n bootstrap endpoint.
  */
 export interface RuntimeI18nPayload {
@@ -73,4 +99,7 @@ export interface RuntimeI18nPayload {
 
 	/** Translation domain used for runtime lookups. */
 	textDomain?: string;
+
+	/** Public favicon metadata for the current install. */
+	favicon?: RuntimeFaviconPayload;
 }

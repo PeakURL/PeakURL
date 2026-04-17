@@ -9,6 +9,7 @@ import {
 import { API_CLIENT_BASE_URL } from '@/constants';
 import { getLocaleDirection } from './direction';
 import type {
+	RuntimeFaviconPayload,
 	LocaleMessageMap,
 	RuntimeI18nCatalog,
 	RuntimeI18nPayload,
@@ -45,6 +46,12 @@ function isLocaleMessageMap(value: unknown): value is LocaleMessageMap {
 }
 
 function isRuntimeI18nCatalog(value: unknown): value is RuntimeI18nCatalog {
+	return isObjectRecord(value);
+}
+
+function isRuntimeFaviconPayload(
+	value: unknown
+): value is RuntimeFaviconPayload {
 	return isObjectRecord(value);
 }
 
@@ -102,6 +109,14 @@ function readRuntimeCatalog(
 	return isRuntimeI18nCatalog(value) ? value : undefined;
 }
 
+function readRuntimeFavicon(
+	record: Record<string, unknown>,
+	key: string
+): RuntimeFaviconPayload | undefined {
+	const value = record[key];
+	return isRuntimeFaviconPayload(value) ? value : undefined;
+}
+
 function readTextDirectionProperty(
 	record: Record<string, unknown>,
 	key: string
@@ -138,7 +153,90 @@ function normalizeRuntimePayload(payload: unknown): RuntimeI18nPayload | null {
 		textDirection: readTextDirectionProperty(payloadData, 'textDirection'),
 		isRtl: readBooleanProperty(payloadData, 'isRtl'),
 		textDomain: readStringProperty(payloadData, 'textDomain'),
+		favicon: readRuntimeFavicon(payloadData, 'favicon'),
 	};
+}
+
+function removeManagedFaviconTags(): void {
+	if ('undefined' === typeof document) {
+		return;
+	}
+
+	document.head
+		.querySelectorAll('[data-peakurl-favicon]')
+		.forEach((node) => node.remove());
+}
+
+function appendManagedHeadTag(
+	tagName: 'link' | 'meta',
+	attributes: Record<string, string>
+): void {
+	const element = document.createElement(tagName);
+	element.setAttribute('data-peakurl-favicon', '1');
+
+	Object.entries(attributes).forEach(([key, value]) => {
+		if (value) {
+			element.setAttribute(key, value);
+		}
+	});
+
+	document.head.appendChild(element);
+}
+
+/**
+ * Applies the current site favicon metadata to the document head.
+ */
+export function applyDocumentFavicon(
+	favicon?: RuntimeFaviconPayload | null
+): void {
+	if ('undefined' === typeof document) {
+		return;
+	}
+
+	removeManagedFaviconTags();
+
+	if (!favicon?.configured || !favicon.url) {
+		return;
+	}
+
+	const sizes =
+		'string' === typeof favicon.sizes && favicon.sizes.trim()
+			? favicon.sizes.trim()
+			: '';
+
+	appendManagedHeadTag('link', {
+		rel: 'icon',
+		type: 'image/png',
+		href: favicon.url,
+		...(sizes ? { sizes } : {}),
+	});
+
+	appendManagedHeadTag('link', {
+		rel: 'shortcut icon',
+		type: 'image/png',
+		href: favicon.iconUrl || favicon.url,
+	});
+
+	if (favicon.appleTouchUrl) {
+		appendManagedHeadTag('link', {
+			rel: 'apple-touch-icon',
+			href: favicon.appleTouchUrl,
+		});
+	}
+
+	if (favicon.manifestUrl) {
+		appendManagedHeadTag('link', {
+			rel: 'manifest',
+			href: favicon.manifestUrl,
+		});
+	}
+
+	if (window.__PEAKURL_SITE_NAME__) {
+		appendManagedHeadTag('meta', {
+			name: 'apple-mobile-web-app-title',
+			content: window.__PEAKURL_SITE_NAME__,
+		});
+	}
 }
 
 /**
@@ -214,6 +312,9 @@ export function initializeI18n(): Promise<void> {
 			payload?.htmlLang,
 			textDirection
 		);
+		window.__PEAKURL_FAVICON__ =
+			payload?.favicon || window.__PEAKURL_FAVICON__;
+		applyDocumentFavicon(window.__PEAKURL_FAVICON__);
 
 		if (payload?.catalog) {
 			window.__PEAKURL_I18N__ = payload.catalog;

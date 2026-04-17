@@ -81,7 +81,10 @@ export interface GeneralFormState {
  * Profile form payload extended with the selected dashboard language.
  */
 export interface GeneralFormPayload extends GeneralFormState {
+	siteName: string;
 	siteLanguage: string;
+	faviconFile?: File | null;
+	removeFavicon?: boolean;
 }
 
 /**

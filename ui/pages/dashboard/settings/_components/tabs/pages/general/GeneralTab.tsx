@@ -1,13 +1,9 @@
 import type { ChangeEvent, SubmitEvent } from 'react';
-import { useEffect, useState } from 'react';
-import {
-	Button,
-	Input,
-	Select,
-	TextArea,
-	type SelectOption,
-} from '@/components';
-import { __ } from '@/i18n';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { ImageOff, Trash2, X } from 'lucide-react';
+import { PEAKURL_SITE_NAME } from '@constants';
+import { Button, Input, Select, TextArea, type SelectOption } from '@/components';
+import { __, sprintf } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
 import { getInstalledLanguageLabel } from '@/i18n/languages';
 import { cn } from '@/utils';
@@ -25,9 +21,15 @@ function GeneralTab({
 	const availableLanguages = siteSettings?.availableLanguages || [];
 	const [generalForm, setGeneralForm] =
 		useState<GeneralFormState>(initialForm);
+	const [siteName, setSiteName] = useState(
+		siteSettings?.siteName || PEAKURL_SITE_NAME || 'PeakURL'
+	);
 	const [siteLanguage, setSiteLanguage] = useState(
 		siteSettings?.siteLanguage || 'en_US'
 	);
+	const [faviconFile, setFaviconFile] = useState<File | null>(null);
+	const [removeFavicon, setRemoveFavicon] = useState(false);
+	const fileInputRef = useRef<HTMLInputElement | null>(null);
 
 	useEffect(() => {
 		setGeneralForm(initialForm);
@@ -36,6 +38,19 @@ function GeneralTab({
 	useEffect(() => {
 		setSiteLanguage(siteSettings?.siteLanguage || 'en_US');
 	}, [siteSettings?.siteLanguage]);
+
+	useEffect(() => {
+		setSiteName(siteSettings?.siteName || PEAKURL_SITE_NAME || 'PeakURL');
+	}, [siteSettings?.siteName]);
+
+	useEffect(() => {
+		setFaviconFile(null);
+		setRemoveFavicon(false);
+
+		if (fileInputRef.current) {
+			fileInputRef.current.value = '';
+		}
+	}, [siteSettings?.favicon?.updatedAt]);
 
 	const handleChange = (
 		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -51,7 +66,10 @@ function GeneralTab({
 		event.preventDefault();
 		onSubmit({
 			...generalForm,
+			siteName,
 			siteLanguage,
+			faviconFile,
+			removeFavicon,
 		});
 	};
 	const availableLanguageOptions = availableLanguages.reduce<
@@ -78,13 +96,58 @@ function GeneralTab({
 			: availableLanguageOptions.length > 0
 				? availableLanguageOptions
 				: [{ value: siteLanguage, label: siteLanguage }];
+	const previewUrl = useMemo(() => {
+		if (faviconFile) {
+			return URL.createObjectURL(faviconFile);
+		}
+
+		if (removeFavicon) {
+			return '';
+		}
+
+		return siteSettings?.favicon?.url || '';
+	}, [faviconFile, removeFavicon, siteSettings?.favicon?.url]);
+
+	useEffect(() => {
+		return () => {
+			if (faviconFile && previewUrl) {
+				URL.revokeObjectURL(previewUrl);
+			}
+		};
+	}, [faviconFile, previewUrl]);
+
+	const handleFaviconChange = (event: ChangeEvent<HTMLInputElement>) => {
+		const nextFile = event.target.files?.[0] || null;
+		setFaviconFile(nextFile);
+		setRemoveFavicon(false);
+	};
+
+	const handleRemoveFavicon = () => {
+		setFaviconFile(null);
+		setRemoveFavicon(true);
+
+		if (fileInputRef.current) {
+			fileInputRef.current.value = '';
+		}
+	};
+
+	const canManageSiteSettings =
+		siteSettings?.canManageSiteSettings && !isLoadingSiteSettings;
+	const hasConfiguredFavicon = Boolean(siteSettings?.favicon?.configured);
+	const showPreview = Boolean(previewUrl);
+	const previewSiteName =
+		siteName.trim() ||
+		PEAKURL_SITE_NAME ||
+		siteSettings?.siteName ||
+		'PeakURL';
+	const chooserLabel =
+		showPreview || hasConfiguredFavicon
+			? __('Replace Favicon')
+			: __('Choose Favicon');
 
 	return (
 		<div className="settings-general">
-			<form
-				onSubmit={handleSubmit}
-				className="settings-general-form"
-			>
+			<form onSubmit={handleSubmit} className="settings-general-form">
 				<h2 className="settings-general-title">
 					{__('Profile Information')}
 				</h2>
@@ -143,6 +206,12 @@ function GeneralTab({
 						value={generalForm.jobTitle}
 						onChange={handleChange}
 					/>
+					<Input
+						label={__('Site title')}
+						value={siteName}
+						onChange={(event) => setSiteName(event.target.value)}
+						disabled={!canManageSiteSettings || isUpdating}
+					/>
 					<div className="settings-general-field">
 						<label className="settings-section-label">
 							{__('Site Language')}
@@ -168,6 +237,146 @@ function GeneralTab({
 							value={generalForm.bio}
 							onChange={handleChange}
 						/>
+					</div>
+				</div>
+				<div className="settings-general-favicon">
+					<div className="settings-general-favicon-header">
+						<div className="settings-general-favicon-content">
+							<div className="settings-general-favicon-copy">
+								<h3 className="settings-general-favicon-title">
+									{__('Site Favicon')}
+								</h3>
+								<p className="settings-general-favicon-summary">
+									{__(
+										'Upload a square PNG favicon. PeakURL will use it for browser tabs, Apple touch icons, and the site web manifest.'
+									)}
+								</p>
+							</div>
+							<div className="settings-general-favicon-field">
+								<label
+									htmlFor="settings-favicon-upload"
+									className="settings-section-label"
+								>
+									{__('Favicon PNG')}
+								</label>
+								<input
+									ref={fileInputRef}
+									id="settings-favicon-upload"
+									type="file"
+									accept="image/png"
+									onChange={handleFaviconChange}
+									disabled={!canManageSiteSettings || isUpdating}
+									className="settings-general-favicon-input-native"
+								/>
+								<div className="settings-general-favicon-picker">
+									<Button
+										type="button"
+										size="sm"
+										variant="outline"
+										onClick={() => fileInputRef.current?.click()}
+										disabled={!canManageSiteSettings || isUpdating}
+									>
+										{chooserLabel}
+									</Button>
+									{faviconFile ? (
+										<span className="settings-general-favicon-filename">
+											{faviconFile.name}
+										</span>
+									) : null}
+								</div>
+								<p className="settings-general-favicon-note">
+									{sprintf(
+										__(
+											'Use a square PNG, ideally %s. The minimum supported size is 180 x 180.'
+										),
+										siteSettings?.favicon?.recommendedSize || '512x512'
+									)}
+								</p>
+							</div>
+						</div>
+						<div
+							className={cn(
+								'settings-general-favicon-preview',
+								showPreview
+									? 'settings-general-favicon-preview-filled'
+									: 'settings-general-favicon-preview-empty-state'
+							)}
+						>
+							{showPreview ? (
+								<div className="settings-general-favicon-browser">
+									<button
+										type="button"
+										onClick={handleRemoveFavicon}
+										disabled={!canManageSiteSettings || isUpdating}
+										className="settings-general-favicon-remove"
+										aria-label={__('Remove Favicon')}
+									>
+										<Trash2
+											aria-hidden="true"
+											className="settings-general-favicon-remove-icon"
+										/>
+									</button>
+									<div
+										aria-hidden="true"
+										className="settings-general-favicon-glow"
+										style={{
+											backgroundImage: `url("${previewUrl}")`,
+										}}
+									/>
+									<div className="settings-general-favicon-browser-body">
+										<img
+											src={previewUrl}
+											alt={__('Current favicon preview')}
+											className="settings-general-favicon-app-icon"
+										/>
+										<div className="settings-general-favicon-browser-window">
+											<div className="settings-general-favicon-browser-top">
+												<div
+													aria-hidden="true"
+													className="settings-general-favicon-browser-bar"
+												>
+													<span className="settings-general-favicon-browser-dot" />
+													<span className="settings-general-favicon-browser-dot" />
+													<span className="settings-general-favicon-browser-dot" />
+												</div>
+												<div className="settings-general-favicon-browser-tab">
+													<img
+														src={previewUrl}
+														alt=""
+														aria-hidden="true"
+														className="settings-general-favicon-browser-icon"
+													/>
+													<span
+														aria-hidden="true"
+														className="settings-general-favicon-browser-title"
+													>
+														{previewSiteName}
+													</span>
+													<X
+														aria-hidden="true"
+														className="settings-general-favicon-browser-close"
+													/>
+												</div>
+											</div>
+											<div
+												aria-hidden="true"
+												className="settings-general-favicon-browser-panel"
+											/>
+										</div>
+									</div>
+								</div>
+							) : (
+								<div className="settings-general-favicon-empty">
+									<ImageOff
+										aria-hidden="true"
+										className="settings-general-favicon-placeholder"
+									/>
+									<span className="sr-only">
+										{__('No favicon configured')}
+									</span>
+								</div>
+							)}
+						</div>
 					</div>
 				</div>
 				<div

@@ -21,7 +21,7 @@ import {
 	useReinstallUpdateMutation,
 	useUpgradeDatabaseSchemaMutation,
 } from '@/store/slices/api';
-import { __, sprintf } from '@/i18n';
+import { __, applyDocumentFavicon, sprintf } from '@/i18n';
 import {
 	copyToClipboard as writeToClipboard,
 	extractErrorMessage,
@@ -65,6 +65,26 @@ const buildGeneralForm = (user?: ProfileUser | null): GeneralFormState => ({
 	jobTitle: user?.jobTitle || '',
 	bio: user?.bio || '',
 });
+
+const profileFormKeys: Array<keyof GeneralFormState> = [
+	'firstName',
+	'lastName',
+	'username',
+	'email',
+	'phoneNumber',
+	'company',
+	'jobTitle',
+	'bio',
+];
+
+const hasProfileChanges = (
+	user: ProfileUser | null | undefined,
+	profileForm: GeneralFormState
+): boolean => {
+	const currentProfile = buildGeneralForm(user);
+
+	return profileFormKeys.some((key) => currentProfile[key] !== profileForm[key]);
+};
 
 const resolveBaseApiUrl = (
 	user?: ProfileUser | null,
@@ -404,43 +424,88 @@ const Content = ({ activeTab }: ContentProps) => {
 	}, []);
 
 	const handleGeneralSubmit = async (generalForm: GeneralFormPayload) => {
-		const { siteLanguage: nextSiteLanguage, ...profileForm } =
+		const {
+			siteName: nextSiteName,
+			siteLanguage: nextSiteLanguage,
+			faviconFile,
+			removeFavicon,
+			...profileForm
+		} =
 			generalForm || {};
+		const currentSiteName = (generalSettingsResponse?.data?.siteName || '').trim();
 		const currentSiteLanguage = generalSettingsResponse?.data?.siteLanguage;
+		const shouldSaveProfile = hasProfileChanges(user, profileForm);
+		const shouldSaveSiteName =
+			(generalSettingsResponse?.data?.canManageSiteSettings ?? false) &&
+			nextSiteName.trim() !== currentSiteName;
 		const shouldSaveLanguage =
 			!!nextSiteLanguage &&
 			generalSettingsResponse?.data?.canManageSiteSettings &&
 			nextSiteLanguage !== currentSiteLanguage;
+		const shouldSaveGeneralSettings =
+			shouldSaveSiteName ||
+			shouldSaveLanguage ||
+			Boolean(faviconFile) ||
+			Boolean(removeFavicon);
 
-		try {
-			await updateProfile(profileForm).unwrap();
-		} catch (err) {
-			notification.error(
-				__('Error'),
-				getErrorMessage(err, __('Failed to update profile'))
-			);
+		if (!shouldSaveProfile && !shouldSaveGeneralSettings) {
 			return;
 		}
 
-		if (shouldSaveLanguage) {
+		if (shouldSaveProfile) {
 			try {
-				await saveGeneralSettings({
-					siteLanguage: nextSiteLanguage,
-				}).unwrap();
-				notification.success(
-					__('Language updated'),
-					__('PeakURL is reloading the dashboard now.')
+				await updateProfile(profileForm).unwrap();
+			} catch (err) {
+				notification.error(
+					__('Error'),
+					getErrorMessage(err, __('Failed to update profile'))
 				);
-				window.setTimeout(() => {
-					window.location.reload();
-				}, 350);
+				return;
+			}
+		}
+
+		if (shouldSaveGeneralSettings) {
+			try {
+				const response = await saveGeneralSettings({
+					siteName: nextSiteName,
+					siteLanguage: nextSiteLanguage,
+					faviconFile,
+					removeFavicon,
+				}).unwrap();
+
+				if (response?.data?.siteName) {
+					window.__PEAKURL_SITE_NAME__ = response.data.siteName;
+				}
+
+				if (response?.data?.favicon) {
+					window.__PEAKURL_FAVICON__ = response.data.favicon;
+					applyDocumentFavicon(response.data.favicon);
+				}
+
+				if (shouldSaveLanguage) {
+					notification.success(
+						__('Language updated'),
+						__('PeakURL is reloading the dashboard now.')
+					);
+					window.setTimeout(() => {
+						window.location.reload();
+					}, 350);
+					return;
+				}
+
+				notification.success(
+					__('Success'),
+					shouldSaveProfile
+						? __('Profile and general settings updated successfully')
+						: __('General settings updated successfully')
+				);
 				return;
 			} catch (err) {
 				notification.error(
 					__('Save failed'),
 					getErrorMessage(
 						err,
-						__('Failed to update the site language')
+						__('Failed to update the general settings')
 					)
 				);
 				return;

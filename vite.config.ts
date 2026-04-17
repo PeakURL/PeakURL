@@ -83,6 +83,22 @@ export default defineConfig({
 				target: devProxyTarget,
 				changeOrigin: true,
 			},
+			'/favicon.png': {
+				target: devProxyTarget,
+				changeOrigin: true,
+			},
+			'/favicon.ico': {
+				target: devProxyTarget,
+				changeOrigin: true,
+			},
+			'/apple-touch-icon.png': {
+				target: devProxyTarget,
+				changeOrigin: true,
+			},
+			'/site.webmanifest': {
+				target: devProxyTarget,
+				changeOrigin: true,
+			},
 			[fallbackProxyPattern]: {
 				target: devProxyTarget,
 				changeOrigin: true,

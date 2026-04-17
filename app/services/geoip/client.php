@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\Geoip;
 
+use PeakURL\Services\Geoip as GeoipService;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -68,7 +70,7 @@ class Client {
 	 * @since 1.0.14
 	 */
 	private function download_with_curl( string $archive_path ): void {
-		$handle = curl_init( Manager::DOWNLOAD_URL );
+		$handle = curl_init( GeoipService::DOWNLOAD_URL );
 
 		if ( false === $handle ) {
 			throw new \RuntimeException( __( 'PeakURL could not initialize cURL for the GeoLite2 download.', 'peakurl' ) );
@@ -130,7 +132,7 @@ class Client {
 			'User-Agent: PeakURL/' . $this->context->get_version(),
 		);
 		$result  = $this->send_stream_request(
-			Manager::DOWNLOAD_URL,
+			GeoipService::DOWNLOAD_URL,
 			$headers,
 			false,
 		);

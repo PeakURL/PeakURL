@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\Geoip;
 
+use PeakURL\Services\Geoip as GeoipService;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -86,7 +88,7 @@ class Status {
 			'configurationLabel'     => 'settings table',
 			'configurationPath'      => 'settings',
 			'downloadCommand'        => 'php app/bin/update-geoip.php',
-			'downloadUrl'            => Manager::DOWNLOAD_URL,
+			'downloadUrl'            => GeoipService::DOWNLOAD_URL,
 		);
 	}
 }

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { AlertCircle, CheckCircle2, Info, TriangleAlert } from 'lucide-react';
 import { useGetAdminNoticesQuery } from '@/store/slices/api';
 import { isDocumentRtl } from '@/i18n/direction';
-import { cn } from '@/utils';
+import { cn, escUrl, isRelativeUrl } from '@/utils';
 import type {
 	AdminNoticeItem,
 	NoticeActionProps,
@@ -42,7 +42,9 @@ function isNoticeTone(value: unknown): value is NoticeTone {
 }
 
 function NoticeAction({ action, actionClassName }: NoticeActionProps) {
-	if (!action?.label || !action?.url) {
+	const safeUrl = escUrl(action?.url);
+
+	if (!action?.label || !safeUrl) {
 		return null;
 	}
 
@@ -51,9 +53,9 @@ function NoticeAction({ action, actionClassName }: NoticeActionProps) {
 		actionClassName
 	);
 
-	if (action.url.startsWith('/')) {
+	if (isRelativeUrl(safeUrl)) {
 		return (
-			<Link to={action.url} className={actionClasses}>
+			<Link to={safeUrl} className={actionClasses}>
 				{action.label}
 			</Link>
 		);
@@ -61,7 +63,7 @@ function NoticeAction({ action, actionClassName }: NoticeActionProps) {
 
 	return (
 		<a
-			href={action.url}
+			href={safeUrl}
 			className={actionClasses}
 			target="_blank"
 			rel="noreferrer"

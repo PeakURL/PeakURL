@@ -1,7 +1,7 @@
 import { Button, type ButtonVariant } from '@/components';
 import { __, sprintf } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
-import { cn, formatDateTimeValue } from '@/utils';
+import { cn, escUrl, formatDateTimeValue } from '@/utils';
 import {
 	AlertCircle,
 	CheckCircle2,
@@ -414,6 +414,7 @@ function DetailRow({
 }: DetailRowProps) {
 	const isRtl = isDocumentRtl();
 	const direction = isRtl ? 'rtl' : 'ltr';
+	const safeHref = escUrl(href);
 	const valueNode =
 		'ltr' === valueDirection ? (
 			<span className="preserve-ltr-value inline-block">{value}</span>
@@ -431,9 +432,9 @@ function DetailRow({
 				{Icon ? <Icon size={15} /> : null}
 				<span>{label}</span>
 			</div>
-			{href ? (
+			{safeHref ? (
 				<a
-					href={href}
+					href={safeHref}
 					target="_blank"
 					rel="noreferrer"
 					dir={direction}

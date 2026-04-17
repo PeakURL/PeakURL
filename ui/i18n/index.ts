@@ -7,6 +7,7 @@ import {
 } from '@wordpress/i18n';
 
 import { API_CLIENT_BASE_URL } from '@/constants';
+import { buildManagedFaviconUrl } from '@/utils';
 import { getLocaleDirection } from './direction';
 import type {
 	RuntimeFaviconPayload,
@@ -195,7 +196,7 @@ export function applyDocumentFavicon(
 
 	removeManagedFaviconTags();
 
-	if (!favicon?.configured || !favicon.url) {
+	if (!favicon?.configured) {
 		return;
 	}
 
@@ -203,31 +204,48 @@ export function applyDocumentFavicon(
 		'string' === typeof favicon.sizes && favicon.sizes.trim()
 			? favicon.sizes.trim()
 			: '';
+	const iconUrl = buildManagedFaviconUrl('favicon.png', favicon.updatedAt);
+	const shortcutIconUrl = buildManagedFaviconUrl(
+		'favicon.ico',
+		favicon.updatedAt
+	);
+	const appleTouchUrl = buildManagedFaviconUrl(
+		'apple-touch-icon.png',
+		favicon.updatedAt
+	);
+	const manifestUrl = buildManagedFaviconUrl(
+		'site.webmanifest',
+		favicon.updatedAt
+	);
+
+	if (!iconUrl) {
+		return;
+	}
 
 	appendManagedHeadTag('link', {
 		rel: 'icon',
 		type: 'image/png',
-		href: favicon.url,
+		href: iconUrl,
 		...(sizes ? { sizes } : {}),
 	});
 
 	appendManagedHeadTag('link', {
 		rel: 'shortcut icon',
 		type: 'image/png',
-		href: favicon.iconUrl || favicon.url,
+		href: shortcutIconUrl || iconUrl,
 	});
 
-	if (favicon.appleTouchUrl) {
+	if (appleTouchUrl) {
 		appendManagedHeadTag('link', {
 			rel: 'apple-touch-icon',
-			href: favicon.appleTouchUrl,
+			href: appleTouchUrl,
 		});
 	}
 
-	if (favicon.manifestUrl) {
+	if (manifestUrl) {
 		appendManagedHeadTag('link', {
 			rel: 'manifest',
-			href: favicon.manifestUrl,
+			href: manifestUrl,
 		});
 	}
 

@@ -51,7 +51,7 @@ class Client {
 	 * @since 1.0.14
 	 */
 	public function get( string $url, string $accept ): string {
-		$this->assert_https_url(
+		$url = $this->get_https_url(
 			$url,
 			__( 'remote update URL', 'peakurl' ),
 		);
@@ -64,7 +64,7 @@ class Client {
 	}
 
 	/**
-	 * Validate that an updater URL is a well-formed HTTPS endpoint.
+	 * Return an updater URL normalized to a required HTTPS endpoint.
 	 *
 	 * @param string $url   Candidate absolute URL.
 	 * @param string $label Human-readable field label.
@@ -73,7 +73,13 @@ class Client {
 	 * @throws \RuntimeException When the URL is invalid or not HTTPS.
 	 * @since 1.0.14
 	 */
-	public function assert_https_url( string $url, string $label ): string {
+	public function get_https_url( string $url, string $label ): string {
+		$sanitized_url = sanitize_url( $url, array( 'https' ) );
+
+		if ( '' !== $sanitized_url ) {
+			return $sanitized_url;
+		}
+
 		$url   = trim( $url );
 		$parts = parse_url( $url );
 
@@ -102,7 +108,13 @@ class Client {
 			);
 		}
 
-		return $url;
+		throw new \RuntimeException(
+			sprintf(
+				/* translators: %s: manifest field label. */
+				__( 'The %s is not a valid absolute URL.', 'peakurl' ),
+				$label,
+			),
+		);
 	}
 
 	/**

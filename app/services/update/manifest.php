@@ -75,13 +75,13 @@ class Manifest {
 		);
 
 		if ( '' === $manifest_url ) {
-			return $this->client->assert_https_url(
+			return $this->client->get_https_url(
 				Constants::DEFAULT_UPDATE_MANIFEST_URL,
 				__( 'update manifest URL', 'peakurl' ),
 			);
 		}
 
-		return $this->client->assert_https_url(
+		return $this->client->get_https_url(
 			$manifest_url,
 			__( 'update manifest URL', 'peakurl' ),
 		);
@@ -205,14 +205,15 @@ class Manifest {
 			);
 		}
 
-		$package_url  = $this->client->assert_https_url(
+		$package_url       = $this->client->get_https_url(
 			$package_url,
 			__( 'release package URL', 'peakurl' ),
 		);
-		$download_url = $this->client->assert_https_url(
+		$download_url      = $this->client->get_https_url(
 			$download_url,
 			__( 'release download URL', 'peakurl' ),
 		);
+		$release_notes_url = sanitize_url( $release_notes_url, array( 'https' ) );
 
 		return array(
 			'product'         => trim(

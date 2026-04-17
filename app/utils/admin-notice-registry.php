@@ -119,7 +119,11 @@ class AdminNoticeRegistry {
 		}
 
 		$label = trim( (string) ( $action['label'] ?? '' ) );
-		$url   = trim( (string) ( $action['url'] ?? '' ) );
+		$url   = sanitize_url(
+			(string) ( $action['url'] ?? '' ),
+			array( 'http', 'https' ),
+			true,
+		);
 
 		if ( '' === $label || '' === $url ) {
 			return null;

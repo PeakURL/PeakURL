@@ -79,6 +79,9 @@ export interface RuntimeFaviconPayload {
 
 	/** Declared icon size string such as `512x512`. */
 	sizes?: string | null;
+
+	/** Last updated timestamp used for cache-busting managed asset URLs. */
+	updatedAt?: string | null;
 }
 
 /**

@@ -1051,6 +1051,88 @@ function esc_html__( string $text, string $domain = 'default' ): string {
 }
 
 /**
+ * Sanitize a URL for storage or internal validation.
+ *
+ * Mirrors the role of WordPress `sanitize_url()` with optional protocol
+ * allow-listing and support for root-relative paths when requested.
+ *
+ * @param string             $url            Candidate URL value.
+ * @param array<int, string> $protocols      Allowed URL protocols.
+ * @param bool               $allow_relative Whether a single-slash relative path is allowed.
+ * @return string
+ * @since 1.0.14
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function sanitize_url(
+	string $url,
+	array $protocols = array( 'http', 'https' ),
+	bool $allow_relative = false
+): string {
+	$url = trim( $url );
+
+	if ( '' === $url ) {
+		return '';
+	}
+
+	if ( $allow_relative && 0 === strpos( $url, '/' ) ) {
+		return 0 === strpos( $url, '//' ) ? '' : $url;
+	}
+
+	$sanitized = filter_var( $url, FILTER_SANITIZE_URL );
+
+	if ( ! is_string( $sanitized ) || '' === $sanitized ) {
+		return '';
+	}
+
+	if ( false === filter_var( $sanitized, FILTER_VALIDATE_URL ) ) {
+		return '';
+	}
+
+	$parts = parse_url( $sanitized );
+
+	if (
+		! is_array( $parts ) ||
+		empty( $parts['scheme'] ) ||
+		empty( $parts['host'] )
+	) {
+		return '';
+	}
+
+	$allowed_protocols = array_map( 'strtolower', $protocols );
+	$scheme            = strtolower( (string) $parts['scheme'] );
+
+	if ( ! in_array( $scheme, $allowed_protocols, true ) ) {
+		return '';
+	}
+
+	return $sanitized;
+}
+
+/**
+ * Escape a URL for HTML output.
+ *
+ * Mirrors WordPress `esc_url()`.
+ *
+ * @param string             $url            Candidate URL value.
+ * @param array<int, string> $protocols      Allowed URL protocols.
+ * @param bool               $allow_relative Whether a single-slash relative path is allowed.
+ * @return string
+ * @since 1.0.14
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function esc_url(
+	string $url,
+	array $protocols = array( 'http', 'https' ),
+	bool $allow_relative = false
+): string {
+	return htmlspecialchars(
+		sanitize_url( $url, $protocols, $allow_relative ),
+		ENT_QUOTES,
+		'UTF-8',
+	);
+}
+
+/**
  * Echo translated and escaped HTML text.
  *
  * Mirrors WordPress `esc_html_e()`.

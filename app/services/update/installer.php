@@ -116,7 +116,7 @@ class Installer {
 			);
 		}
 
-		$package_url = $this->client->assert_https_url(
+		$package_url = $this->client->get_https_url(
 			$package_url,
 			__( 'release package URL', 'peakurl' ),
 		);

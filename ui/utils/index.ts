@@ -86,6 +86,10 @@ export {
 	buildFaviconPreviewUrl,
 	buildManagedFaviconUrl,
 } from './favicon';
+export {
+	escUrl,
+	isRelativeUrl,
+} from './url';
 export { buildShortUrl, getSiteUrl, resolveLinkHost } from './linkHelpers';
 export {
 	buildLinkExportItems,

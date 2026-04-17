@@ -5,16 +5,23 @@
  * Resolves click locations from a local MaxMind database and manages
  * the optional GeoLite2 City download flow for self-hosted installs.
  *
- * @package PeakURL\Services\Geoip
+ * @package PeakURL\Services
  * @since 1.0.14
  */
 
 declare(strict_types=1);
 
-namespace PeakURL\Services\Geoip;
+namespace PeakURL\Services;
 
 use PeakURL\Api\SettingsApi;
 use PeakURL\Services\Crypto;
+use PeakURL\Services\Geoip\Client;
+use PeakURL\Services\Geoip\Context;
+use PeakURL\Services\Geoip\Credentials;
+use PeakURL\Services\Geoip\Downloader;
+use PeakURL\Services\Geoip\Filesystem;
+use PeakURL\Services\Geoip\Lookup;
+use PeakURL\Services\Geoip\Status;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -22,11 +29,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Manager — public GeoIP service facade for lookup, status, and downloads.
+ * Geoip — public GeoIP service facade for lookup, status, and downloads.
  *
  * @since 1.0.14
  */
-class Manager {
+class Geoip {
 
 	/**
 	 * MaxMind direct-download permalink for GeoLite2 City binary data.

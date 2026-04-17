@@ -2,16 +2,21 @@
 /**
  * PeakURL localization and dashboard-catalog helper.
  *
- * @package PeakURL\Services\I18n
+ * @package PeakURL\Services
  * @since 1.0.14
  */
 
 declare(strict_types=1);
 
-namespace PeakURL\Services\I18n;
+namespace PeakURL\Services;
 
 use Gettext\Translations as GettextTranslations;
 use PeakURL\Api\SettingsApi;
+use PeakURL\Services\I18n\Languages;
+use PeakURL\Services\I18n\Loader;
+use PeakURL\Services\I18n\Locale;
+use PeakURL\Services\I18n\Paths;
+use PeakURL\Services\I18n\Sync;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -19,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Localization — WordPress-style i18n helper for PeakURL.
+ * I18n — WordPress-style i18n helper for PeakURL.
  *
  * Loads PHP gettext catalogs from `content/languages`, exposes the active
  * locale, lists available language packs, and provides the matching
@@ -27,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.14
  */
-class Localization {
+class I18n {
 
 	/**
 	 * Runtime configuration map.

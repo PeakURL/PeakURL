@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace PeakURL\Services\Install;
 
 use PeakURL\Includes\Constants;
-use PeakURL\Services\I18n\Localization as I18nLocalization;
+use PeakURL\Services\I18n;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -31,10 +31,10 @@ class Locale {
 	/**
 	 * Shared i18n service configured for the installer.
 	 *
-	 * @var I18nLocalization
+	 * @var I18n
 	 * @since 1.0.14
 	 */
-	private I18nLocalization $i18n_service;
+	private I18n $i18n_service;
 
 	/**
 	 * Active installer locale.
@@ -57,7 +57,7 @@ class Locale {
 		?string $requested_locale = null,
 		?string $accept_language_header = null
 	) {
-		$this->i18n_service = new I18nLocalization(
+		$this->i18n_service = new I18n(
 			$this->get_service_config( $root_path ),
 			null,
 		);
@@ -65,7 +65,7 @@ class Locale {
 			$requested_locale,
 			$accept_language_header,
 		);
-		$this->i18n_service = new I18nLocalization(
+		$this->i18n_service = new I18n(
 			$this->get_service_config( $root_path, $this->locale ),
 			null,
 		);
@@ -85,10 +85,10 @@ class Locale {
 	/**
 	 * Return the configured installer i18n service.
 	 *
-	 * @return I18nLocalization
+	 * @return I18n
 	 * @since 1.0.14
 	 */
-	public function get_i18n_service(): I18nLocalization {
+	public function get_i18n_service(): I18n {
 		return $this->i18n_service;
 	}
 

@@ -20,7 +20,7 @@ use PeakURL\Includes\Connection;
 use PeakURL\Includes\PeakURL_DB;
 use PeakURL\Includes\RuntimeConfig;
 use PeakURL\Services\Crypto;
-use PeakURL\Services\Geoip\Manager as GeoipManager;
+use PeakURL\Services\Geoip;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	define(
@@ -45,7 +45,7 @@ $config     = RuntimeConfig::bootstrap( dirname( __DIR__ ) );
 $connection = new Connection( $config );
 $settings   = new SettingsApi( new PeakURL_DB( $connection ) );
 $crypto     = new Crypto( $config );
-$geoip      = new GeoipManager( $config, $settings, $crypto );
+$geoip      = new Geoip( $config, $settings, $crypto );
 
 try {
 	$status = $geoip->download_database();

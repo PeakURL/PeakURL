@@ -23,12 +23,12 @@ use PeakURL\Includes\Connection;
 use PeakURL\Includes\PeakURL_DB;
 use PeakURL\Includes\Roles;
 use PeakURL\Services\Crypto;
-use PeakURL\Services\Geoip\Manager as GeoipManager;
-use PeakURL\Services\I18n\Localization as I18nLocalization;
+use PeakURL\Services\Geoip;
+use PeakURL\Services\I18n;
 use PeakURL\Services\Mailer;
 use PeakURL\Services\Notifications;
 use PeakURL\Services\Totp;
-use PeakURL\Traits\AccountsTrait;
+use PeakURL\Traits\Accounts\AccountsTrait;
 use PeakURL\Traits\AnalyticsSupportTrait;
 use PeakURL\Traits\AnalyticsTrait;
 use PeakURL\Traits\AuthorizationTrait;
@@ -242,10 +242,10 @@ class Store {
 	/**
 	 * Request geolocation helper for click analytics.
 	 *
-	 * @var GeoipManager
+	 * @var Geoip
 	 * @since 1.0.0
 	 */
-	private GeoipManager $geoip_service;
+	private Geoip $geoip_service;
 
 	/**
 	 * Mail transport and delivery helper.
@@ -266,10 +266,10 @@ class Store {
 	/**
 	 * Site locale and catalog helper.
 	 *
-	 * @var I18nLocalization
+	 * @var I18n
 	 * @since 1.0.3
 	 */
-	private I18nLocalization $i18n_service;
+	private I18n $i18n_service;
 
 	/**
 	 * Whether the workspace has been bootstrapped in this request.
@@ -296,7 +296,7 @@ class Store {
 		$this->roles                 = new Roles();
 		$this->totp_service          = new Totp();
 		$this->crypto_service        = new Crypto( $config );
-		$this->geoip_service         = new GeoipManager(
+		$this->geoip_service         = new Geoip(
 			$config,
 			$this->settings_api,
 			$this->crypto_service,
@@ -307,7 +307,7 @@ class Store {
 			$this->crypto_service,
 		);
 		$this->notifications_service = new Notifications();
-		$this->i18n_service          = new I18nLocalization(
+		$this->i18n_service          = new I18n(
 			$config,
 			$this->settings_api,
 		);

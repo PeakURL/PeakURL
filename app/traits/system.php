@@ -16,7 +16,7 @@ use PeakURL\Http\ApiException;
 use PeakURL\Http\Request;
 use PeakURL\Services\AdminNotices;
 use PeakURL\Services\Crypto;
-use PeakURL\Services\Geoip\Manager as GeoipManager;
+use PeakURL\Services\Geoip;
 use PeakURL\Services\Install\Writer as InstallWriter;
 use PeakURL\Services\Mailer;
 use PeakURL\Services\SystemStatus\Manager as SystemStatusManager;
@@ -339,7 +339,7 @@ trait SystemTrait {
 		$this->refresh_release_config();
 		$this->config               = RuntimeConfig::load( ABSPATH . 'app' );
 		$this->crypto_service       = new Crypto( $this->config );
-		$this->geoip_service        = new GeoipManager(
+		$this->geoip_service        = new Geoip(
 			$this->config,
 			$this->settings_api,
 			$this->crypto_service,

@@ -14,8 +14,8 @@ use PeakURL\Api\SettingsApi;
 use PeakURL\Includes\Constants;
 use PeakURL\Includes\PeakURL_DB;
 use PeakURL\Services\Database\Schema as DatabaseSchema;
-use PeakURL\Services\Geoip\Manager as GeoipManager;
-use PeakURL\Services\I18n\Localization as I18nLocalization;
+use PeakURL\Services\Geoip;
+use PeakURL\Services\I18n;
 use PeakURL\Services\Mailer;
 
 // If this file is called directly, abort.
@@ -57,10 +57,10 @@ class Context {
 	/**
 	 * GeoIP service dependency.
 	 *
-	 * @var GeoipManager
+	 * @var Geoip
 	 * @since 1.0.14
 	 */
-	private GeoipManager $geoip_service;
+	private Geoip $geoip_service;
 
 	/**
 	 * Mail transport dependency.
@@ -81,10 +81,10 @@ class Context {
 	/**
 	 * I18n service dependency.
 	 *
-	 * @var I18nLocalization
+	 * @var I18n
 	 * @since 1.0.14
 	 */
-	private I18nLocalization $i18n_service;
+	private I18n $i18n_service;
 
 	/**
 	 * Create a new system-status context.
@@ -92,20 +92,20 @@ class Context {
 	 * @param array<string, mixed> $config          Runtime configuration.
 	 * @param PeakURL_DB           $db              Shared database wrapper.
 	 * @param SettingsApi          $settings_api    Settings API dependency.
-	 * @param GeoipManager         $geoip_service   GeoIP service dependency.
+	 * @param Geoip                $geoip_service   GeoIP service dependency.
 	 * @param Mailer               $mailer_service  Mail transport dependency.
 	 * @param DatabaseSchema       $database_schema Database schema dependency.
-	 * @param I18nLocalization     $i18n_service    I18n service dependency.
+	 * @param I18n                 $i18n_service    I18n service dependency.
 	 * @since 1.0.14
 	 */
 	public function __construct(
 		array $config,
 		PeakURL_DB $db,
 		SettingsApi $settings_api,
-		GeoipManager $geoip_service,
+		Geoip $geoip_service,
 		Mailer $mailer_service,
 		DatabaseSchema $database_schema,
-		I18nLocalization $i18n_service
+		I18n $i18n_service
 	) {
 		$this->config          = $config;
 		$this->db              = $db;
@@ -149,10 +149,10 @@ class Context {
 	/**
 	 * Return the GeoIP service dependency.
 	 *
-	 * @return GeoipManager
+	 * @return Geoip
 	 * @since 1.0.14
 	 */
-	public function get_geoip_service(): GeoipManager {
+	public function get_geoip_service(): Geoip {
 		return $this->geoip_service;
 	}
 
@@ -179,10 +179,10 @@ class Context {
 	/**
 	 * Return the i18n service dependency.
 	 *
-	 * @return I18nLocalization
+	 * @return I18n
 	 * @since 1.0.14
 	 */
-	public function get_i18n_service(): I18nLocalization {
+	public function get_i18n_service(): I18n {
 		return $this->i18n_service;
 	}
 

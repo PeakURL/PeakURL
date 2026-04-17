@@ -15,7 +15,7 @@ use PeakURL\Includes\Hooks;
 use PeakURL\Includes\PeakURL_DB;
 use PeakURL\Includes\RuntimeConfig;
 use PeakURL\Services\Crypto;
-use PeakURL\Services\I18n\Localization as I18nLocalization;
+use PeakURL\Services\I18n;
 use PeakURL\Services\Mailer;
 
 // If this file is called directly, abort.
@@ -130,7 +130,35 @@ function peakurl_get_runtime_class_file( string $type ): ?string {
 		return null;
 	}
 
-	return $app_root . $directory_map[ $group ] . $sub_path . $file_name . '.php';
+	$file = $app_root . $directory_map[ $group ] . $sub_path . $file_name . '.php';
+
+	if ( is_readable( $file ) ) {
+		return $file;
+	}
+
+	$nested_file = substr( $file, 0, -4 ) . DIRECTORY_SEPARATOR . basename( $file );
+
+	if ( is_readable( $nested_file ) ) {
+		return $nested_file;
+	}
+
+	$index_name = '';
+
+	if ( ! empty( $segments ) ) {
+		$index_name = peakurl_get_runtime_path_segment(
+			(string) end( $segments )
+		);
+	}
+
+	if ( 'base' === $file_name || $file_name === $index_name ) {
+		$index_file = $app_root . $directory_map[ $group ] . $sub_path . 'index.php';
+
+		if ( is_readable( $index_file ) ) {
+			return $index_file;
+		}
+	}
+
+	return $file;
 }
 
 /**
@@ -478,21 +506,21 @@ function body_class(
  *
  * @param array<string, mixed>|null $config     Optional runtime config.
  * @param Connection|null           $connection Optional reused connection.
- * @return I18nLocalization
+ * @return I18n
  * @since 1.0.3
  */
 // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
 function peakurl_get_i18n_service(
 	?array $config = null,
 	?Connection $connection = null
-): I18nLocalization {
+): I18n {
 	static $service     = null;
 	static $config_hash = null;
 
 	if ( isset( $GLOBALS['peakurl_i18n_service_override'] ) ) {
 		$override = $GLOBALS['peakurl_i18n_service_override'];
 
-		if ( $override instanceof I18nLocalization ) {
+		if ( $override instanceof I18n ) {
 			return $override;
 		}
 	}
@@ -508,13 +536,13 @@ function peakurl_get_i18n_service(
 		),
 	);
 
-	if ( $service instanceof I18nLocalization && $config_hash === $next_hash ) {
+	if ( $service instanceof I18n && $config_hash === $next_hash ) {
 		return $service;
 	}
 
 	$resolved_connection = $connection ?? new Connection( $resolved_config );
 	$settings_api        = new SettingsApi( new PeakURL_DB( $resolved_connection ) );
-	$service             = new I18nLocalization( $resolved_config, $settings_api );
+	$service             = new I18n( $resolved_config, $settings_api );
 	$config_hash         = $next_hash;
 
 	return $service;
@@ -526,12 +554,12 @@ function peakurl_get_i18n_service(
  * Used by early installer screens that need translations before the normal
  * runtime database-backed locale flow is available.
  *
- * @param I18nLocalization|null $service Override service or null to clear it.
+ * @param I18n|null $service Override service or null to clear it.
  * @return void
  * @since 1.0.8
  */
 // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
-function peakurl_override_i18n_service( ?I18nLocalization $service ): void {
+function peakurl_override_i18n_service( ?I18n $service ): void {
 	if ( null === $service ) {
 		unset( $GLOBALS['peakurl_i18n_service_override'] );
 		return;
@@ -657,7 +685,7 @@ function peakurl_get_maintenance_view_data(
 			$resolved_connection = new Connection( $resolved_config );
 		}
 
-		$i18n_service   = new I18nLocalization(
+		$i18n_service   = new I18n(
 			$resolved_config,
 			null !== $resolved_connection
 				? new SettingsApi( new PeakURL_DB( $resolved_connection ) )
@@ -683,7 +711,7 @@ function peakurl_get_maintenance_view_data(
 		$text_direction = 'ltr';
 	}
 
-	if ( $i18n_service instanceof I18nLocalization ) {
+	if ( $i18n_service instanceof I18n ) {
 		peakurl_override_i18n_service( $i18n_service );
 	}
 

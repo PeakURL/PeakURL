@@ -6,20 +6,24 @@ $request_uri  = $_SERVER['REQUEST_URI'] ?? '/';
 $request_path = rawurldecode( (string) parse_url( $request_uri, PHP_URL_PATH ) );
 $favicon_map  = array(
 	'/favicon.png'          => array(
-		'path'         => '/app/content/uploads/favicon/favicon.png',
-		'content_type' => 'image/png',
+		'path'          => '/app/content/uploads/favicon/favicon.png',
+		'fallback_path' => '/app/app/public/default-favicon.png',
+		'content_type'  => 'image/png',
 	),
 	'/favicon.ico'          => array(
-		'path'         => '/app/content/uploads/favicon/favicon.png',
-		'content_type' => 'image/png',
+		'path'          => '/app/content/uploads/favicon/favicon.png',
+		'fallback_path' => '/app/app/public/default-favicon.png',
+		'content_type'  => 'image/png',
 	),
 	'/apple-touch-icon.png' => array(
-		'path'         => '/app/content/uploads/favicon/favicon.png',
-		'content_type' => 'image/png',
+		'path'          => '/app/content/uploads/favicon/favicon.png',
+		'fallback_path' => '/app/app/public/default-favicon.png',
+		'content_type'  => 'image/png',
 	),
 	'/site.webmanifest'     => array(
-		'path'         => '/app/content/uploads/favicon/site.webmanifest',
-		'content_type' => 'application/manifest+json; charset=utf-8',
+		'path'          => '/app/content/uploads/favicon/site.webmanifest',
+		'fallback_path' => '/app/app/public/default-site.webmanifest',
+		'content_type'  => 'application/manifest+json; charset=utf-8',
 	),
 );
 
@@ -30,8 +34,13 @@ if ( ! is_dir( $public_dir ) || ! is_file( $public_dir . '/index.php' ) ) {
 }
 
 if ( isset( $favicon_map[ $request_path ] ) ) {
-	$file      = (string) $favicon_map[ $request_path ]['path'];
-	$file_type = (string) $favicon_map[ $request_path ]['content_type'];
+	$file          = (string) $favicon_map[ $request_path ]['path'];
+	$fallback_file = (string) ( $favicon_map[ $request_path ]['fallback_path'] ?? '' );
+	$file_type     = (string) $favicon_map[ $request_path ]['content_type'];
+
+	if ( ! is_file( $file ) && '' !== $fallback_file && is_file( $fallback_file ) ) {
+		$file = $fallback_file;
+	}
 
 	if ( ! is_file( $file ) ) {
 		http_response_code( 404 );

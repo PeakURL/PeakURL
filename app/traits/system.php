@@ -99,7 +99,7 @@ trait SystemTrait {
 
 		if ( ! empty( $capabilities['manageLocationData'] ) ) {
 			$geoip_status                     = $this->geoip_service->get_status();
-			$last_downloaded_at               = $this->get_setting_value( 'geoip_last_downloaded_at' );
+			$last_downloaded_at               = $this->get_option( 'geoip_last_downloaded_at' );
 			$geoip_status['installed']        = ! empty( $geoip_status['locationAnalyticsReady'] );
 			$geoip_status['lastDownloadedAt'] =
 				$last_downloaded_at
@@ -122,7 +122,7 @@ trait SystemTrait {
 	 */
 	public function get_general_settings( Request $request ): array {
 		$user      = $this->get_current_user( $request );
-		$site_name = trim( (string) $this->get_setting_value( 'site_name' ) );
+		$site_name = trim( (string) $this->get_option( 'site_name' ) );
 		$site_url  = \get_site_url();
 
 		if ( '' === $site_name ) {
@@ -155,7 +155,7 @@ trait SystemTrait {
 	 */
 	public function get_public_i18n_payload(): array {
 		$locale    = $this->i18n_service->get_site_locale();
-		$site_name = trim( (string) $this->get_setting_value( 'site_name' ) );
+		$site_name = trim( (string) $this->get_option( 'site_name' ) );
 
 		if ( '' === $site_name ) {
 			$site_name = 'PeakURL';
@@ -202,11 +202,11 @@ trait SystemTrait {
 			);
 		}
 
-		$this->upsert_setting( 'site_language', $site_language );
+		$this->update_option( 'site_language', $site_language );
 		$this->i18n_service->load_locale( $site_language );
 
 		$current_site_name = trim(
-			(string) $this->get_setting_value( 'site_name' ),
+			(string) $this->get_option( 'site_name' ),
 		);
 		$site_name         = trim(
 			(string) ( $payload['siteName'] ?? $current_site_name ),
@@ -217,7 +217,7 @@ trait SystemTrait {
 		}
 
 		if ( $site_name !== $current_site_name ) {
-			$this->upsert_setting( 'site_name', $site_name );
+			$this->update_option( 'site_name', $site_name );
 		}
 
 		try {
@@ -328,7 +328,7 @@ trait SystemTrait {
 		);
 
 		$status                     = $this->geoip_service->get_status();
-		$last_downloaded_at         = $this->get_setting_value( 'geoip_last_downloaded_at' );
+		$last_downloaded_at         = $this->get_option( 'geoip_last_downloaded_at' );
 		$status['installed']        = ! empty( $status['locationAnalyticsReady'] );
 		$status['lastDownloadedAt'] =
 			$last_downloaded_at
@@ -377,7 +377,7 @@ trait SystemTrait {
 			$this->crypto_service,
 		);
 		$status['installed']        = ! empty( $status['locationAnalyticsReady'] );
-		$status['lastDownloadedAt'] = $this->get_setting_value( 'geoip_last_downloaded_at' );
+		$status['lastDownloadedAt'] = $this->get_option( 'geoip_last_downloaded_at' );
 		$status['lastDownloadedAt'] = $status['lastDownloadedAt']
 			? $this->to_iso( (string) $status['lastDownloadedAt'] )
 			: null;
@@ -407,7 +407,7 @@ trait SystemTrait {
 			throw new ApiException( $exception->getMessage(), 422 );
 		}
 
-		$this->upsert_setting( 'geoip_last_downloaded_at', $this->now(), false );
+		$this->update_option( 'geoip_last_downloaded_at', $this->now(), false );
 		$status['installed']        = ! empty( $status['locationAnalyticsReady'] );
 		$status['lastDownloadedAt'] = $this->to_iso( $this->now() );
 		$status['downloaded']       = true;

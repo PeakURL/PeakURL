@@ -59,6 +59,9 @@ export interface RuntimeFaviconPayload {
 	/** Whether a site favicon is currently configured. */
 	configured?: boolean;
 
+	/** Whether the active favicon comes from a user-uploaded override. */
+	isCustom?: boolean;
+
 	/** Primary PNG favicon URL. */
 	url?: string | null;
 

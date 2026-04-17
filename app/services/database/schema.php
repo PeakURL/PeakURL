@@ -147,17 +147,17 @@ class Schema {
 			}
 
 			$upgraded_at = gmdate( 'Y-m-d H:i:s' );
-			$this->context->update_setting(
+			$this->context->update_option(
 				Constants::SETTING_DB_SCHEMA_VERSION,
 				(string) $this->get_target_version(),
 				false,
 			);
-			$this->context->update_setting(
+			$this->context->update_option(
 				Constants::SETTING_DB_SCHEMA_LAST_UPGRADED_AT,
 				$upgraded_at,
 				false,
 			);
-			$this->context->delete_setting( Constants::SETTING_DB_SCHEMA_LAST_ERROR );
+			$this->context->delete_option( Constants::SETTING_DB_SCHEMA_LAST_ERROR );
 
 			$status = $this->inspect();
 
@@ -167,7 +167,7 @@ class Schema {
 
 			return $status;
 		} catch ( \Throwable $exception ) {
-			$this->context->update_setting(
+			$this->context->update_option(
 				Constants::SETTING_DB_SCHEMA_LAST_ERROR,
 				$exception->getMessage(),
 				false,

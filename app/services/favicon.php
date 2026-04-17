@@ -40,6 +40,12 @@ class Favicon {
 	/** @var string Stored web manifest filename. */
 	private const MANIFEST_FILE = 'site.webmanifest';
 
+	/** @var string Bundled fallback favicon asset path relative to the app root. */
+	private const BUNDLED_ICON_FILE = 'app/public/default-favicon.png';
+
+	/** @var string Bundled fallback manifest path relative to the app root. */
+	private const BUNDLED_MANIFEST_FILE = 'app/public/default-site.webmanifest';
+
 	/** @var int Minimum favicon width/height in pixels. */
 	private const MIN_SIZE = 180;
 
@@ -95,30 +101,43 @@ class Favicon {
 	 */
 	public function get_settings( string $site_name = 'PeakURL' ): array {
 		$this->maybe_migrate_legacy_directory();
-		$metadata = $this->get_metadata();
+		$active_icon = $this->resolve_active_icon();
 
-		if ( ! $this->metadata_exists( $metadata ) ) {
-			$this->remove_generated_files();
+		if ( array() === $active_icon ) {
 			$this->delete_metadata();
 
 			return $this->get_empty_settings();
 		}
 
-		$version = $this->get_version_token( $metadata );
-		$sizes   = $this->get_icon_sizes( $metadata );
+		if ( ! empty( $active_icon['isCustom'] ) ) {
+			try {
+				$this->write_manifest(
+					$site_name,
+					$active_icon,
+					(string) ( $active_icon['iconPath'] ?? '' ),
+				);
+			} catch ( \RuntimeException $exception ) {
+				// Keep icon delivery working even when the manifest cannot be rewritten.
+			}
+		}
+
+		$icon_path = (string) ( $active_icon['iconPath'] ?? '' );
+		$version   = $this->get_version_token( $active_icon, $icon_path );
+		$sizes     = $this->get_icon_sizes( $active_icon );
 
 		return array(
 			'configured'      => true,
+			'isCustom'        => ! empty( $active_icon['isCustom'] ),
 			'url'             => $this->build_public_url( 'favicon.png', $version ),
 			'iconUrl'         => $this->build_public_url( 'favicon.ico', $version ),
 			'appleTouchUrl'   => $this->build_public_url( 'apple-touch-icon.png', $version ),
 			'manifestUrl'     => $this->build_public_url( 'site.webmanifest', $version ),
 			'mimeType'        => 'image/png',
-			'width'           => (int) ( $metadata['width'] ?? 0 ),
-			'height'          => (int) ( $metadata['height'] ?? 0 ),
+			'width'           => (int) ( $active_icon['width'] ?? 0 ),
+			'height'          => (int) ( $active_icon['height'] ?? 0 ),
 			'sizes'           => $sizes,
 			'updatedAt'       => peakurl_mysql_to_rfc3339(
-				(string) ( $metadata['updatedAt'] ?? '' ),
+				(string) ( $active_icon['updatedAt'] ?? '' ),
 			),
 			'canUpload'       => true,
 			'recommendedSize' => '512x512',
@@ -134,28 +153,44 @@ class Favicon {
 	 */
 	public function get_assets( string $site_name = 'PeakURL' ): array {
 		$this->maybe_migrate_legacy_directory();
-		$metadata = $this->get_metadata();
-		$settings = $this->get_settings( $site_name );
+		$active_icon = $this->resolve_active_icon();
 
-		if ( empty( $settings['configured'] ) ) {
+		if ( array() === $active_icon ) {
 			return array(
 				'configured' => false,
+				'isCustom'   => false,
 			);
 		}
 
-		try {
-			$this->write_manifest( $site_name, $metadata );
-		} catch ( \RuntimeException $exception ) {
-			// Keep icon delivery working even when the manifest cannot be rewritten.
+		$icon_path = trim( (string) ( $active_icon['iconPath'] ?? '' ) );
+
+		if ( '' === $icon_path || ! is_readable( $icon_path ) ) {
+			return array(
+				'configured' => false,
+				'isCustom'   => false,
+			);
 		}
+
+		if ( ! empty( $active_icon['isCustom'] ) ) {
+			try {
+				$this->write_manifest( $site_name, $active_icon, $icon_path );
+			} catch ( \RuntimeException $exception ) {
+				// Keep icon delivery working even when the manifest cannot be rewritten.
+			}
+		}
+
+		$manifest_path = $this->resolve_manifest_path(
+			! empty( $active_icon['isCustom'] ),
+		);
 
 		return array(
 			'configured'   => true,
-			'iconPath'     => $this->get_icon_path(),
-			'manifestPath' => $this->get_manifest_path(),
+			'isCustom'     => ! empty( $active_icon['isCustom'] ),
+			'iconPath'     => $icon_path,
+			'manifestPath' => $manifest_path,
 			'mimeType'     => 'image/png',
-			'sizes'        => (string) ( $settings['sizes'] ?? '' ),
-			'version'      => $this->get_version_token( $metadata ),
+			'sizes'        => $this->get_icon_sizes( $active_icon ),
+			'version'      => $this->get_version_token( $active_icon, $icon_path ),
 		);
 	}
 
@@ -189,13 +224,12 @@ class Favicon {
 			$this->remove_generated_files();
 			$this->delete_metadata();
 
-			return $this->get_empty_settings();
+			return $this->get_settings( $site_name );
 		}
 
 		$settings = $this->get_settings( $site_name );
 
 		if ( ! empty( $settings['configured'] ) ) {
-			$this->write_manifest( $site_name, $this->get_metadata() );
 			return $settings;
 		}
 
@@ -380,13 +414,22 @@ class Favicon {
 	 *
 	 * @param string               $site_name Configured site name.
 	 * @param array<string, mixed> $metadata  Stored favicon metadata.
+	 * @param string               $icon_path Absolute icon file path backing the current favicon.
 	 * @return void
 	 *
 	 * @throws \RuntimeException When the manifest cannot be written.
 	 * @since 1.0.14
 	 */
-	private function write_manifest( string $site_name, array $metadata ): void {
-		if ( ! $this->metadata_exists( $metadata ) ) {
+	private function write_manifest(
+		string $site_name,
+		array $metadata,
+		string $icon_path = ''
+	): void {
+		$resolved_icon_path = '' !== $icon_path ? $icon_path : $this->get_icon_path();
+		$width              = (int) ( $metadata['width'] ?? 0 );
+		$height             = (int) ( $metadata['height'] ?? 0 );
+
+		if ( $width <= 0 || $height <= 0 || ! is_readable( $resolved_icon_path ) ) {
 			$manifest_path = $this->get_manifest_path();
 
 			if ( file_exists( $manifest_path ) ) {
@@ -398,7 +441,7 @@ class Favicon {
 
 		$this->create_directory( $this->get_directory_path() );
 
-		$version  = $this->get_version_token( $metadata );
+		$version  = $this->get_version_token( $metadata, $resolved_icon_path );
 		$manifest = array(
 			'name'             => $site_name,
 			'short_name'       => $site_name,
@@ -524,14 +567,16 @@ class Favicon {
 	 * Return the version token used for cache busting.
 	 *
 	 * @param array<string, mixed> $metadata Stored metadata payload.
+	 * @param string               $icon_path Absolute icon file path.
 	 * @return string
 	 * @since 1.0.14
 	 */
-	private function get_version_token( array $metadata ): string {
+	private function get_version_token( array $metadata, string $icon_path = '' ): string {
 		$updated_at = trim( (string) ( $metadata['updatedAt'] ?? '' ) );
+		$path       = '' !== $icon_path ? $icon_path : $this->get_icon_path();
 
 		if ( '' === $updated_at ) {
-			$modified_at = filemtime( $this->get_icon_path() );
+			$modified_at = filemtime( $path );
 
 			if ( false === $modified_at ) {
 				$modified_at = time();
@@ -653,6 +698,26 @@ class Favicon {
 	}
 
 	/**
+	 * Return the bundled fallback favicon asset path.
+	 *
+	 * @return string
+	 * @since 1.0.14
+	 */
+	private function get_bundled_icon_path(): string {
+		return rtrim( ABSPATH, '/\\' ) . '/' . self::BUNDLED_ICON_FILE;
+	}
+
+	/**
+	 * Return the bundled fallback manifest asset path.
+	 *
+	 * @return string
+	 * @since 1.0.14
+	 */
+	private function get_bundled_manifest_path(): string {
+		return rtrim( ABSPATH, '/\\' ) . '/' . self::BUNDLED_MANIFEST_FILE;
+	}
+
+	/**
 	 * Return the previous manifest file path.
 	 *
 	 * @return string
@@ -703,6 +768,117 @@ class Favicon {
 		}
 
 		$this->remove_directory( $legacy_directory );
+	}
+
+	/**
+	 * Resolve the current active favicon payload.
+	 *
+	 * Prefers the saved custom upload when metadata is present and falls back
+	 * to the bundled default favicon when no custom icon is configured.
+	 *
+	 * @return array<string, mixed>
+	 * @since 1.0.14
+	 */
+	private function resolve_active_icon(): array {
+		$metadata = $this->get_metadata();
+
+		if ( $this->metadata_exists( $metadata ) ) {
+			$metadata['isCustom'] = true;
+			$metadata['iconPath'] = $this->get_icon_path();
+
+			return $metadata;
+		}
+
+		if ( array() !== $metadata ) {
+			$this->delete_metadata();
+		}
+
+		$this->remove_generated_files();
+
+		$fallback_path = $this->resolve_fallback_icon_path();
+
+		if ( '' === $fallback_path ) {
+			return array();
+		}
+
+		$fallback_metadata = $this->read_icon_metadata( $fallback_path );
+
+		if ( array() === $fallback_metadata ) {
+			return array();
+		}
+
+		$fallback_metadata['isCustom'] = false;
+		$fallback_metadata['iconPath'] = $fallback_path;
+
+		return $fallback_metadata;
+	}
+
+	/**
+	 * Resolve the current fallback favicon file path.
+	 *
+	 * @return string
+	 * @since 1.0.14
+	 */
+	private function resolve_fallback_icon_path(): string {
+		$path = $this->get_bundled_icon_path();
+
+		return is_readable( $path ) ? $path : '';
+	}
+
+	/**
+	 * Resolve the current manifest file path.
+	 *
+	 * @param bool $is_custom Whether the active favicon is a custom upload.
+	 * @return string
+	 * @since 1.0.14
+	 */
+	private function resolve_manifest_path( bool $is_custom = false ): string {
+		$generated_manifest = $this->get_manifest_path();
+
+		if ( $is_custom && is_readable( $generated_manifest ) ) {
+			return $generated_manifest;
+		}
+
+		$bundled_manifest = $this->get_bundled_manifest_path();
+
+		if ( is_readable( $bundled_manifest ) ) {
+			return $bundled_manifest;
+		}
+
+		return $generated_manifest;
+	}
+
+	/**
+	 * Read icon metadata for an arbitrary favicon path.
+	 *
+	 * @param string $path Absolute favicon file path.
+	 * @return array<string, mixed>
+	 * @since 1.0.14
+	 */
+	private function read_icon_metadata( string $path ): array {
+		$info = $this->get_image_size( $path );
+
+		if ( ! is_array( $info ) || IMAGETYPE_PNG !== (int) ( $info[2] ?? 0 ) ) {
+			return array();
+		}
+
+		$width  = (int) ( $info[0] ?? 0 );
+		$height = (int) ( $info[1] ?? 0 );
+
+		if ( $width <= 0 || $height <= 0 ) {
+			return array();
+		}
+
+		$modified_at = filemtime( $path );
+		$updated_at  = false !== $modified_at
+			? gmdate( 'Y-m-d H:i:s', (int) $modified_at )
+			: gmdate( 'Y-m-d H:i:s' );
+
+		return array(
+			'width'     => $width,
+			'height'    => $height,
+			'updatedAt' => $updated_at,
+		);
 	}
 
 	/**
@@ -800,6 +976,7 @@ class Favicon {
 	private function get_empty_settings(): array {
 		return array(
 			'configured'      => false,
+			'isCustom'        => false,
 			'url'             => null,
 			'iconUrl'         => null,
 			'appleTouchUrl'   => null,

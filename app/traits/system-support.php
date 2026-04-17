@@ -36,13 +36,13 @@ trait SystemSupportTrait {
 	private function load_update_status( bool $force_check ): array {
 		$update_service  = new UpdateManager( $this->config );
 		$manifest_url    = $update_service->get_manifest_url();
-		$last_checked    = $this->get_setting_value( 'update_last_checked_at' );
-		$last_error      = $this->get_setting_value( 'update_last_error' );
+		$last_checked    = $this->get_option( 'update_last_checked_at' );
+		$last_error      = $this->get_option( 'update_last_error' );
 		$cached_manifest = $this->decode_update_manifest(
-			$this->get_setting_value( 'update_last_result_json' ),
+			$this->get_option( 'update_last_result_json' ),
 		);
 
-		$this->upsert_setting( 'update_manifest_url', $manifest_url, false );
+		$this->update_option( 'update_manifest_url', $manifest_url, false );
 
 		if (
 			$force_check ||
@@ -53,26 +53,26 @@ trait SystemSupportTrait {
 				$cached_manifest = $update_service->fetch_manifest();
 				$last_checked    = $this->now();
 				$last_error      = null;
-				$this->upsert_setting(
+				$this->update_option(
 					'update_last_result_json',
 					$this->encode_json( $cached_manifest ),
 					false,
 				);
-				$this->upsert_setting(
+				$this->update_option(
 					'update_last_checked_at',
 					$last_checked,
 					false,
 				);
-				$this->delete_settings( array( 'update_last_error' ) );
+				$this->delete_options( array( 'update_last_error' ) );
 			} catch ( \Throwable $exception ) {
 				$last_checked = $this->now();
 				$last_error   = $exception->getMessage();
-				$this->upsert_setting(
+				$this->update_option(
 					'update_last_checked_at',
 					$last_checked,
 					false,
 				);
-				$this->upsert_setting(
+				$this->update_option(
 					'update_last_error',
 					$last_error,
 					false,
@@ -148,8 +148,8 @@ trait SystemSupportTrait {
 		try {
 			$result = $update_service->apply_update( $manifest );
 		} catch ( \Throwable $exception ) {
-			$this->upsert_setting( 'update_last_checked_at', $this->now(), false );
-			$this->upsert_setting(
+			$this->update_option( 'update_last_checked_at', $this->now(), false );
+			$this->update_option(
 				'update_last_error',
 				$exception->getMessage(),
 				false,
@@ -164,19 +164,19 @@ trait SystemSupportTrait {
 			?? Constants::DEFAULT_VERSION
 		);
 
-		$this->upsert_setting(
+		$this->update_option(
 			'installed_version',
 			$installed_version,
 			false,
 		);
-		$this->upsert_setting( 'update_last_applied_at', $this->now(), false );
-		$this->upsert_setting( 'update_last_checked_at', $this->now(), false );
-		$this->upsert_setting(
+		$this->update_option( 'update_last_applied_at', $this->now(), false );
+		$this->update_option( 'update_last_checked_at', $this->now(), false );
+		$this->update_option(
 			'update_last_result_json',
 			$this->encode_json( $manifest ),
 			false,
 		);
-		$this->delete_settings( array( 'update_last_error' ) );
+		$this->delete_options( array( 'update_last_error' ) );
 
 		return array(
 			'applied'        => true,

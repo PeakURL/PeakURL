@@ -526,7 +526,7 @@ if ( peakurl_is_favicon_request( $relative_path ) ) {
 	$connection      = new Connection( $runtime_config );
 	$settings_api    = new SettingsApi( new PeakURL_DB( $connection ) );
 	$site_name       = trim(
-		(string) ( $connection->get_setting_value( 'site_name' ) ?? 'PeakURL' ),
+		(string) ( $connection->get_option( 'site_name' ) ?? 'PeakURL' ),
 	);
 	$favicon_service = new Favicon( $runtime_config, $settings_api );
 	$favicon_assets  = $favicon_service->get_assets(
@@ -598,7 +598,7 @@ $runtime_config = RuntimeConfig::bootstrap( $app_path );
 $connection     = new Connection( $runtime_config );
 peakurl_bootstrap_i18n( $runtime_config, $connection );
 $site_name      = trim(
-	(string) ( $connection->get_setting_value( 'site_name' ) ?? 'PeakURL' ),
+	(string) ( $connection->get_option( 'site_name' ) ?? 'PeakURL' ),
 );
 $locale         = get_locale();
 $text_direction = peakurl_get_text_direction();
@@ -609,7 +609,7 @@ $catalog        = peakurl_get_dashboard_translation_catalog(
 );
 $version        = trim(
 	(string) (
-		$connection->get_setting_value( 'installed_version' ) ??
+		$connection->get_option( 'installed_version' ) ??
 		$runtime_config[ Constants::CONFIG_VERSION ] ??
 		Constants::DEFAULT_VERSION
 	),

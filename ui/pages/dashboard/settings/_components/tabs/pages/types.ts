@@ -17,6 +17,7 @@ import type {
  */
 export interface SiteFavicon {
 	configured?: boolean;
+	isCustom?: boolean;
 	url?: string | null;
 	iconUrl?: string | null;
 	appleTouchUrl?: string | null;

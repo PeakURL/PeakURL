@@ -82,6 +82,10 @@ export function validateUrl(url: string): boolean {
 }
 
 export { addFilter, applyFilters, removeFilter } from './hooks';
+export {
+	buildFaviconPreviewUrl,
+	buildManagedFaviconUrl,
+} from './favicon';
 export { buildShortUrl, getSiteUrl, resolveLinkHost } from './linkHelpers';
 export {
 	buildLinkExportItems,

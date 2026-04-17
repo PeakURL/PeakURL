@@ -46,27 +46,27 @@ trait SettingsTrait {
 		);
 
 		if ( '' !== $site_name ) {
-			$this->upsert_setting( 'site_name', $site_name );
+			$this->add_option( 'site_name', $site_name );
 		}
 
 		if ( '' !== $site_slug ) {
-			$this->upsert_setting( 'site_slug', $site_slug );
+			$this->add_option( 'site_slug', $site_slug );
 		}
 
 		if ( '' !== $site_url ) {
-			$this->upsert_setting( 'site_url', $site_url );
+			$this->update_option( 'site_url', $site_url );
 		}
 
 		if ( '' !== $admin_email ) {
-			$this->upsert_setting( 'admin_email', $admin_email, false );
+			$this->add_option( 'admin_email', $admin_email, false );
 		}
 
 		if ( '' !== $version ) {
-			$this->upsert_setting( 'installed_version', $version, false );
+			$this->update_option( 'installed_version', $version, false );
 		}
 
 		if ( '' !== $manifest_url ) {
-			$this->upsert_setting(
+			$this->update_option(
 				'update_manifest_url',
 				$manifest_url,
 				false,
@@ -75,11 +75,11 @@ trait SettingsTrait {
 
 		$this->sync_managed_settings();
 
-		if ( null === $this->get_setting_value( 'installed_at' ) ) {
-			$this->upsert_setting( 'installed_at', $this->now(), false );
+		if ( null === $this->get_option( 'installed_at' ) ) {
+			$this->update_option( 'installed_at', $this->now(), false );
 		}
 
-		$this->delete_settings(
+		$this->delete_options(
 			array(
 				'site_title',
 				'workspace_name',
@@ -90,49 +90,49 @@ trait SettingsTrait {
 	}
 
 	/**
-	 * Retrieve a single setting value by its key.
+	 * Retrieve a single option value by its key.
 	 *
-	 * @param string $setting_key Setting key to look up.
+	 * @param string $option_name Option key to look up.
 	 * @return string|null The stored value or null when missing.
 	 * @since 1.0.0
 	 */
-	private function get_setting_value( string $setting_key ): ?string {
-		return $this->settings_api->get_option( $setting_key );
+	private function get_option( string $option_name ): ?string {
+		return $this->settings_api->get_option( $option_name );
 	}
 
 	/**
-	 * Insert or update a setting row.
+	 * Insert or update an option row.
 	 *
-	 * @param string $setting_key   Setting key.
-	 * @param string $setting_value Setting value to persist.
-	 * @param bool   $autoload      Whether the setting should autoload.
+	 * @param string $option_name  Option key.
+	 * @param string $option_value Option value to persist.
+	 * @param bool   $autoload      Whether the option should autoload.
 	 * @since 1.0.0
 	 */
-	private function upsert_setting(
-		string $setting_key,
-		string $setting_value,
+	private function update_option(
+		string $option_name,
+		string $option_value,
 		bool $autoload = true
 	): void {
 		$this->settings_api->update_option(
-			$setting_key,
-			$setting_value,
+			$option_name,
+			$option_value,
 			$this->now(),
 			$autoload,
 		);
 	}
 
 	/**
-	 * Delete one or more settings.
+	 * Delete one or more options.
 	 *
-	 * @param array<int, string> $setting_keys Setting keys to remove.
+	 * @param array<int, string> $option_names Option keys to remove.
 	 * @since 1.0.0
 	 */
-	private function delete_settings( array $setting_keys ): void {
-		$this->settings_api->delete_options( $setting_keys );
+	private function delete_options( array $option_names ): void {
+		$this->settings_api->delete_options( $option_names );
 	}
 
 	/**
-	 * Seed database-backed runtime settings with application defaults.
+	 * Initialize default database-backed runtime options.
 	 *
 	 * @return void
 	 * @since 1.0.0
@@ -150,51 +150,51 @@ trait SettingsTrait {
 			}
 		}
 
-		$this->seed_setting_if_missing(
+		$this->add_option(
 			'site_language',
 			$site_language,
 		);
-		$this->seed_setting_if_missing(
+		$this->add_option(
 			'mail_driver',
 			'mail',
 			false,
 		);
-		$this->seed_setting_if_missing(
+		$this->add_option(
 			'mail_from_email',
 			'',
 			false,
 		);
-		$this->seed_setting_if_missing(
+		$this->add_option(
 			'mail_from_name',
 			'',
 			false,
 		);
-		$this->seed_setting_if_missing(
+		$this->add_option(
 			'smtp_host',
 			'',
 			false,
 		);
-		$this->seed_setting_if_missing(
+		$this->add_option(
 			'smtp_port',
 			'587',
 			false,
 		);
-		$this->seed_setting_if_missing(
+		$this->add_option(
 			'smtp_encryption',
 			'tls',
 			false,
 		);
-		$this->seed_setting_if_missing(
+		$this->add_option(
 			'smtp_auth',
 			'false',
 			false,
 		);
-		$this->seed_setting_if_missing(
+		$this->add_option(
 			'smtp_username',
 			'',
 			false,
 		);
-		$this->seed_setting_if_missing(
+		$this->add_option(
 			'maxmind_account_id',
 			'',
 			false,
@@ -202,23 +202,23 @@ trait SettingsTrait {
 	}
 
 	/**
-	 * Seed a setting only when no row exists yet.
+	 * Add an option only when no row exists yet.
 	 *
-	 * @param string $setting_key   Setting key.
-	 * @param string $setting_value Setting value.
-	 * @param bool   $autoload      Whether the setting should autoload.
+	 * @param string $option_name  Option key.
+	 * @param string $option_value Option value.
+	 * @param bool   $autoload      Whether the option should autoload.
 	 * @return void
 	 * @since 1.0.0
 	 */
-	private function seed_setting_if_missing(
-		string $setting_key,
-		string $setting_value,
+	private function add_option(
+		string $option_name,
+		string $option_value,
 		bool $autoload = true
 	): void {
-		if ( null !== $this->get_setting_value( $setting_key ) ) {
+		if ( null !== $this->get_option( $option_name ) ) {
 			return;
 		}
 
-		$this->upsert_setting( $setting_key, $setting_value, $autoload );
+		$this->update_option( $option_name, $option_value, $autoload );
 	}
 }

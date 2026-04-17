@@ -79,7 +79,7 @@ class State {
 				}
 			}
 
-			$site_url = $connection->get_setting_value( 'site_url' );
+			$site_url = $connection->get_option( 'site_url' );
 
 			if ( ! is_string( $site_url ) || '' === trim( $site_url ) ) {
 				return self::NEEDS_INSTALL;

@@ -6,7 +6,7 @@ import { Button, Input, Select, TextArea, type SelectOption } from '@/components
 import { __, sprintf } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
 import { getInstalledLanguageLabel } from '@/i18n/languages';
-import { cn } from '@/utils';
+import { buildFaviconPreviewUrl, cn } from '@/utils';
 import type { GeneralFormState } from '../../types';
 import type { GeneralTabProps } from '../types';
 
@@ -96,6 +96,14 @@ function GeneralTab({
 			: availableLanguageOptions.length > 0
 				? availableLanguageOptions
 				: [{ value: siteLanguage, label: siteLanguage }];
+	const hasCustomFavicon = Boolean(siteSettings?.favicon?.isCustom);
+	const storedPreviewUrl = useMemo(
+		() =>
+			hasCustomFavicon
+				? buildFaviconPreviewUrl(siteSettings?.favicon?.updatedAt)
+				: '',
+		[hasCustomFavicon, siteSettings?.favicon?.updatedAt]
+	);
 	const previewUrl = useMemo(() => {
 		if (faviconFile) {
 			return URL.createObjectURL(faviconFile);
@@ -105,8 +113,8 @@ function GeneralTab({
 			return '';
 		}
 
-		return siteSettings?.favicon?.url || '';
-	}, [faviconFile, removeFavicon, siteSettings?.favicon?.url]);
+		return storedPreviewUrl;
+	}, [faviconFile, removeFavicon, storedPreviewUrl]);
 
 	useEffect(() => {
 		return () => {
@@ -123,8 +131,10 @@ function GeneralTab({
 	};
 
 	const handleRemoveFavicon = () => {
+		const hasPendingUpload = Boolean(faviconFile);
+
 		setFaviconFile(null);
-		setRemoveFavicon(true);
+		setRemoveFavicon(!hasPendingUpload && hasCustomFavicon);
 
 		if (fileInputRef.current) {
 			fileInputRef.current.value = '';
@@ -133,8 +143,10 @@ function GeneralTab({
 
 	const canManageSiteSettings =
 		siteSettings?.canManageSiteSettings && !isLoadingSiteSettings;
-	const hasConfiguredFavicon = Boolean(siteSettings?.favicon?.configured);
+	const hasConfiguredFavicon = hasCustomFavicon;
 	const showPreview = Boolean(previewUrl);
+	const showRemoveButton =
+		Boolean(faviconFile) || (!removeFavicon && hasCustomFavicon);
 	const previewSiteName =
 		siteName.trim() ||
 		PEAKURL_SITE_NAME ||
@@ -304,18 +316,20 @@ function GeneralTab({
 						>
 							{showPreview ? (
 								<div className="settings-general-favicon-browser">
-									<button
-										type="button"
-										onClick={handleRemoveFavicon}
-										disabled={!canManageSiteSettings || isUpdating}
-										className="settings-general-favicon-remove"
-										aria-label={__('Remove Favicon')}
-									>
-										<Trash2
-											aria-hidden="true"
-											className="settings-general-favicon-remove-icon"
-										/>
-									</button>
+									{showRemoveButton ? (
+										<button
+											type="button"
+											onClick={handleRemoveFavicon}
+											disabled={!canManageSiteSettings || isUpdating}
+											className="settings-general-favicon-remove"
+											aria-label={__('Remove Favicon')}
+										>
+											<Trash2
+												aria-hidden="true"
+												className="settings-general-favicon-remove-icon"
+											/>
+										</button>
+									) : null}
 									<div
 										aria-hidden="true"
 										className="settings-general-favicon-glow"

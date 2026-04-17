@@ -697,7 +697,7 @@ function peakurl_get_maintenance_view_data(
 
 		if ( null !== $resolved_connection ) {
 			$configured_site_name = trim(
-				(string) ( $resolved_connection->get_setting_value( 'site_name' ) ?? '' ),
+				(string) ( $resolved_connection->get_option( 'site_name' ) ?? '' ),
 			);
 
 			if ( '' !== $configured_site_name ) {

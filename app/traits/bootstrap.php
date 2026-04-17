@@ -135,7 +135,7 @@ trait BootstrapTrait {
 			return;
 		}
 
-		if ( null !== $this->get_setting_value( 'install_welcome_email_sent_at' ) ) {
+		if ( null !== $this->get_option( 'install_welcome_email_sent_at' ) ) {
 			return;
 		}
 
@@ -147,7 +147,7 @@ trait BootstrapTrait {
 
 		try {
 			$this->notifications_service->send_install_welcome_email( $owner );
-			$this->upsert_setting(
+			$this->update_option(
 				'install_welcome_email_sent_at',
 				$this->now(),
 				false,

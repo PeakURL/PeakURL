@@ -58,7 +58,7 @@ class Status {
 			return false;
 		}
 
-		if ( '' !== trim( (string) $this->context->get_setting( Constants::SETTING_DB_SCHEMA_LAST_ERROR ) ) ) {
+		if ( '' !== trim( (string) $this->context->get_option( Constants::SETTING_DB_SCHEMA_LAST_ERROR ) ) ) {
 			return false;
 		}
 
@@ -133,9 +133,9 @@ class Status {
 			'issuesCount'     => count( $issues ),
 			'missingTables'   => $this->get_missing_tables(),
 			'lastUpgradedAt'  => \peakurl_mysql_to_rfc3339(
-				$this->context->get_setting( Constants::SETTING_DB_SCHEMA_LAST_UPGRADED_AT )
+				$this->context->get_option( Constants::SETTING_DB_SCHEMA_LAST_UPGRADED_AT )
 			),
-			'lastError'       => $this->context->get_setting(
+			'lastError'       => $this->context->get_option(
 				Constants::SETTING_DB_SCHEMA_LAST_ERROR
 			),
 			'upgraded'        => $upgraded,

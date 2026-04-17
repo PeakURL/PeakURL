@@ -115,7 +115,7 @@ class Context {
 	 * @since 1.0.14
 	 */
 	public function get_recorded_version(): int {
-		$value = $this->get_setting( Constants::SETTING_DB_SCHEMA_VERSION );
+		$value = $this->get_option( Constants::SETTING_DB_SCHEMA_VERSION );
 
 		return is_string( $value ) && ctype_digit( $value )
 			? (int) $value
@@ -123,28 +123,28 @@ class Context {
 	}
 
 	/**
-	 * Read a settings value directly from the settings table.
+	 * Read an option value directly from the settings table.
 	 *
-	 * @param string $setting_key Settings key.
+	 * @param string $option_name Option key.
 	 * @return string|null
 	 * @since 1.0.14
 	 */
-	public function get_setting( string $setting_key ): ?string {
-		return $this->connection->get_setting_value( $setting_key );
+	public function get_option( string $option_name ): ?string {
+		return $this->connection->get_option( $option_name );
 	}
 
 	/**
-	 * Insert or update a setting row directly.
+	 * Insert or update an option row directly.
 	 *
-	 * @param string $setting_key   Settings key.
-	 * @param string $setting_value Settings value.
+	 * @param string $option_name  Option key.
+	 * @param string $option_value Option value.
 	 * @param bool   $autoload      Whether the row should autoload.
 	 * @return void
 	 * @since 1.0.14
 	 */
-	public function update_setting(
-		string $setting_key,
-		string $setting_value,
+	public function update_option(
+		string $option_name,
+		string $option_value,
 		bool $autoload = false
 	): void {
 		if ( ! $this->connection->table_exists( 'settings' ) ) {
@@ -161,8 +161,8 @@ class Context {
 		);
 		$statement->execute(
 			array(
-				'setting_key'   => $setting_key,
-				'setting_value' => $setting_value,
+				'setting_key'   => $option_name,
+				'setting_value' => $option_value,
 				'autoload'      => $autoload ? 1 : 0,
 				'updated_at'    => gmdate( 'Y-m-d H:i:s' ),
 			),
@@ -170,13 +170,13 @@ class Context {
 	}
 
 	/**
-	 * Delete a single settings row when present.
+	 * Delete a single option row when present.
 	 *
-	 * @param string $setting_key Settings key.
+	 * @param string $option_name Option key.
 	 * @return void
 	 * @since 1.0.14
 	 */
-	public function delete_setting( string $setting_key ): void {
+	public function delete_option( string $option_name ): void {
 		if ( ! $this->connection->table_exists( 'settings' ) ) {
 			return;
 		}
@@ -184,7 +184,7 @@ class Context {
 		$statement = $this->connection->prepare(
 			'DELETE FROM settings WHERE setting_key = :setting_key'
 		);
-		$statement->execute( array( 'setting_key' => $setting_key ) );
+		$statement->execute( array( 'setting_key' => $option_name ) );
 	}
 
 	/**

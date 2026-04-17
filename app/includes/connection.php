@@ -299,20 +299,20 @@ class Connection {
 	}
 
 	/**
-	 * Retrieve a single setting value from the settings table.
+	 * Retrieve a single option value from the settings table.
 	 *
-	 * @param string $setting_key The setting_key column value.
-	 * @return string|null The setting value, or null when not found.
+	 * @param string $option_name The setting_key column value.
+	 * @return string|null The option value, or null when not found.
 	 * @since 1.0.0
 	 */
-	public function get_setting_value( string $setting_key ): ?string {
+	public function get_option( string $option_name ): ?string {
 		if ( ! $this->table_exists( 'settings' ) ) {
 			return null;
 		}
 
 		$value = $this->query_value(
 			'SELECT setting_value FROM settings WHERE setting_key = :setting_key LIMIT 1',
-			array( 'setting_key' => $setting_key ),
+			array( 'setting_key' => $option_name ),
 		);
 
 		return is_string( $value ) ? $value : null;

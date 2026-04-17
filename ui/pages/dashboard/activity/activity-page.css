@@ -114,7 +114,7 @@
 	}
 
 	.activity-page-panel-header {
-		@apply flex flex-col gap-2.5 border-b border-stroke bg-surface-alt px-4 py-3 sm:flex-row sm:items-center sm:justify-between;
+		@apply flex flex-col gap-3 border-b border-stroke bg-surface-alt px-5 py-4 sm:flex-row sm:items-center sm:justify-between;
 	}
 
 	.activity-page-panel-eyebrow {
@@ -126,32 +126,36 @@
 	}
 
 	.activity-page-panel-actions {
-		@apply flex items-center gap-3 self-start sm:self-auto;
+		@apply flex items-center gap-2.5 self-start sm:self-auto;
 	}
 
 	.activity-page-panel-selection-count {
-		@apply text-sm font-medium text-accent;
+		@apply inline-flex items-center rounded-full border border-accent/15 bg-accent/10 px-2.5 py-1 text-xs font-semibold text-accent;
 	}
 
 	.activity-page-selection-delete {
-		@apply inline-flex items-center gap-1 text-sm font-medium text-error transition-colors hover:text-red-700 dark:hover:text-red-300;
+		@apply inline-flex items-center gap-1 rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-sm font-medium text-error transition-colors hover:border-red-300 hover:bg-red-100 dark:border-red-500/20 dark:bg-red-500/10 dark:hover:border-red-500/30 dark:hover:bg-red-500/15;
+	}
+
+	.activity-page-table {
+		@apply overflow-hidden bg-surface;
 	}
 
 	.activity-page-table-head {
-		@apply hidden border-b border-stroke bg-surface-alt px-4 py-3 text-xs font-semibold uppercase tracking-wide text-text-muted lg:grid;
-		grid-template-columns: 48px minmax(0, 1.8fr) minmax(0, 1.4fr) minmax(
-				130px,
+		@apply hidden border-b border-stroke bg-surface-alt/90 px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-text-muted lg:grid;
+		grid-template-columns: 52px minmax(0, 1.9fr) minmax(0, 1.45fr) minmax(
+				150px,
 				auto
 			);
-		-moz-column-gap: 1.5rem;
-		column-gap: 1.5rem;
+		-moz-column-gap: 1.75rem;
+		column-gap: 1.75rem;
 		text-align: start;
 	}
 
 	.activity-page-table-head-admin {
 		grid-template-columns:
-			48px minmax(0, 1.8fr) minmax(0, 1.4fr) minmax(130px, auto)
-			48px;
+			52px minmax(0, 1.9fr) minmax(0, 1.45fr) minmax(150px, auto)
+			56px;
 	}
 
 	.activity-page-table-head-actions {
@@ -159,24 +163,42 @@
 	}
 
 	.activity-page-day-groups {
-		@apply divide-y divide-stroke;
+		@apply divide-y divide-stroke bg-surface;
+	}
+
+	.activity-page-day-group {
+		@apply bg-transparent;
 	}
 
 	.activity-page-day-header {
-		@apply sticky top-0 z-10 flex items-center gap-2 border-b border-stroke bg-surface px-4 py-2 text-xs font-semibold uppercase tracking-wide text-text-muted;
+		@apply sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-stroke bg-surface-alt/90 px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-text-muted;
+		-webkit-backdrop-filter: blur(8px);
+		backdrop-filter: blur(8px);
 		text-align: start;
+	}
+
+	.activity-page-day-header-main {
+		@apply flex min-w-0 items-center gap-2;
+	}
+
+	.activity-page-day-header-label {
+		@apply min-w-0 truncate;
+	}
+
+	.activity-page-day-header-count {
+		@apply inline-flex min-w-7 items-center justify-center rounded-full border border-stroke bg-surface px-2 py-0.5 text-[10px] font-semibold text-text-muted;
 	}
 
 	.activity-page-events {
 		@apply divide-y divide-stroke;
 	}
 
-	/* Activity Events - Modern Feed List */
+	/* Activity Events - table-like cards */
 	.activity-page-event {
-		@apply grid gap-y-2.5 px-4 py-3 transition-colors hover:bg-surface-alt/50;
+		@apply relative grid gap-y-2.5 bg-transparent px-5 py-3.5 transition-colors hover:bg-surface-alt/45;
 		grid-template-columns: auto minmax(0, 1fr);
-		-moz-column-gap: 1rem;
-		column-gap: 1rem;
+		-moz-column-gap: 1.25rem;
+		column-gap: 1.25rem;
 	}
 
 	.activity-page-event-selected {
@@ -188,7 +210,7 @@
 	}
 
 	.activity-page-event-icon {
-		@apply flex h-8 w-8 shrink-0 items-center justify-center rounded-lg;
+		@apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ring-1 ring-black/5 dark:ring-white/10;
 	}
 
 	.activity-page-event-icon-neutral {
@@ -217,17 +239,17 @@
 	}
 
 	.activity-page-event-title {
-		@apply text-sm font-medium text-heading;
+		@apply text-[15px] font-semibold leading-6 text-heading;
 		unicode-bidi: -moz-plaintext;
 		unicode-bidi: plaintext;
 	}
 
 	.activity-page-event-badges {
-		@apply mt-1 flex flex-wrap items-center gap-1;
+		@apply mt-1 flex flex-wrap items-center gap-1.5;
 	}
 
 	.activity-page-event-badge {
-		@apply inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-medium;
+		@apply inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold;
 	}
 
 	.activity-page-event-badge-neutral {
@@ -256,7 +278,7 @@
 	}
 
 	.activity-page-event-detail {
-		@apply inline-flex items-center gap-1 rounded-md border border-stroke bg-surface-alt px-2 py-0.5 text-xs font-medium text-text-muted;
+		@apply inline-flex items-center gap-1 rounded-full border border-stroke bg-surface-alt px-2.5 py-0.5 text-xs font-medium text-text-muted;
 	}
 
 	.activity-page-event-detail-label {
@@ -264,7 +286,7 @@
 	}
 
 	.activity-page-event-detail-value {
-		@apply max-w-48 truncate text-heading;
+		@apply max-w-56 truncate text-heading;
 		unicode-bidi: -moz-plaintext;
 		unicode-bidi: plaintext;
 	}
@@ -274,7 +296,7 @@
 	}
 
 	.activity-page-event-time {
-		@apply text-xs text-text-muted flex flex-col justify-center;
+		@apply flex flex-col justify-center gap-0.5 text-xs text-text-muted;
 		grid-column: 2;
 	}
 
@@ -296,7 +318,7 @@
 	}
 
 	.activity-page-event-action {
-		@apply inline-flex h-7 w-7 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:hover:bg-red-900/20 dark:hover:text-red-400;
+		@apply inline-flex h-8 w-8 items-center justify-center rounded-lg border border-transparent bg-transparent text-text-muted transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:hover:border-red-500/20 dark:hover:bg-red-900/20 dark:hover:text-red-400;
 	}
 
 	.activity-page-empty {
@@ -410,14 +432,14 @@
 		.activity-page-event {
 			align-items: center;
 			grid-template-columns:
-				48px minmax(0, 1.8fr) minmax(0, 1.4fr)
-				minmax(130px, auto);
+				52px minmax(0, 1.9fr) minmax(0, 1.45fr)
+				minmax(150px, auto);
 		}
 
 		.activity-page-event-admin {
 			grid-template-columns:
-				48px minmax(0, 1.8fr) minmax(0, 1.4fr)
-				minmax(130px, auto) 48px;
+				52px minmax(0, 1.9fr) minmax(0, 1.45fr)
+				minmax(150px, auto) 56px;
 		}
 
 		.activity-page-event-primary {
@@ -431,7 +453,8 @@
 		.activity-page-event-time {
 			@apply text-end;
 			grid-column: 4;
-			justify-self: end;
+			justify-self: stretch;
+			align-items: flex-end;
 		}
 
 		.activity-page-event-actions {

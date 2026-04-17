@@ -790,25 +790,26 @@ function ActivityPage() {
 							</div>
 						) : null}
 					</div>
-					<div
-						className={cn(
-							'activity-page-table-head',
-							isAdmin && 'activity-page-table-head-admin'
-						)}
-					>
-						<span aria-hidden="true"></span>
-						<span>{__('Event')}</span>
-						<span>{__('Details')}</span>
-						<span>{__('When')}</span>
-						{isAdmin ? (
-							<span className="activity-page-table-head-actions">
-								{__('Actions')}
-							</span>
-						) : null}
-					</div>
+					<div className="activity-page-table">
+						<div
+							className={cn(
+								'activity-page-table-head',
+								isAdmin && 'activity-page-table-head-admin'
+							)}
+						>
+							<span aria-hidden="true"></span>
+							<span>{__('Event')}</span>
+							<span>{__('Details')}</span>
+							<span>{__('When')}</span>
+							{isAdmin ? (
+								<span className="activity-page-table-head-actions">
+									{__('Actions')}
+								</span>
+							) : null}
+						</div>
 
-					{dayGroups.length > 0 ? (
-						<div className="activity-page-day-groups">
+						{dayGroups.length > 0 ? (
+							<div className="activity-page-day-groups">
 							{dayGroups.map((group) => {
 								const groupSelectableIds = group.items
 									.map((item) => item.id)
@@ -835,32 +836,42 @@ function ActivityPage() {
 										className="activity-page-day-group"
 									>
 										<div className="activity-page-day-header">
-											{isAdmin &&
-											groupSelectableIds.length > 0 ? (
-												<input
-													type="checkbox"
-													checked={isGroupSelected}
-													onChange={() =>
-														handleToggleSelectGroup(
-															groupSelectableIds
-														)
-													}
-													ref={(node) => {
-														if (node) {
-															node.indeterminate =
-																isGroupIndeterminate;
+											<div className="activity-page-day-header-main">
+												{isAdmin &&
+												groupSelectableIds.length > 0 ? (
+													<input
+														type="checkbox"
+														checked={isGroupSelected}
+														onChange={() =>
+															handleToggleSelectGroup(
+																groupSelectableIds
+															)
 														}
-													}}
-													className="links-checkbox"
-													aria-label={sprintf(
-														__(
-															'Select %s events'
-														),
-														group.label
-													)}
-												/>
-											) : null}
-											<span dir="auto">{group.label}</span>
+														ref={(node) => {
+															if (node) {
+																node.indeterminate =
+																	isGroupIndeterminate;
+															}
+														}}
+														className="links-checkbox"
+														aria-label={sprintf(
+															__(
+																'Select %s events'
+															),
+															group.label
+														)}
+													/>
+												) : null}
+												<span
+													className="activity-page-day-header-label"
+													dir="auto"
+												>
+													{group.label}
+												</span>
+											</div>
+											<span className="activity-page-day-header-count">
+												{group.items.length.toLocaleString()}
+											</span>
 										</div>
 
 										<div className="activity-page-events">
@@ -1082,26 +1093,27 @@ function ActivityPage() {
 									</section>
 								);
 							})}
-						</div>
-					) : (
-						<div className="activity-page-empty">
-							<div className="activity-page-empty-icon">
-								<Shield size={24} />
 							</div>
-							<h3 className="activity-page-empty-title">
-								{'users' === currentCategory
-									? __('No user activity yet')
-									: 'links' === currentCategory
-										? __('No link activity yet')
-										: __('No activity recorded yet')}
-							</h3>
-							<p className="activity-page-empty-summary">
-								{__(
-									'Once users manage accounts or links change, the audit log will appear here.'
-								)}
-							</p>
-						</div>
-					)}
+						) : (
+							<div className="activity-page-empty">
+								<div className="activity-page-empty-icon">
+									<Shield size={24} />
+								</div>
+								<h3 className="activity-page-empty-title">
+									{'users' === currentCategory
+										? __('No user activity yet')
+										: 'links' === currentCategory
+											? __('No link activity yet')
+											: __('No activity recorded yet')}
+								</h3>
+								<p className="activity-page-empty-summary">
+									{__(
+										'Once users manage accounts or links change, the audit log will appear here.'
+									)}
+								</p>
+							</div>
+						)}
+					</div>
 				</div>
 			)}
 

@@ -17,10 +17,29 @@ require_command() {
     fi
 }
 
+require_file() {
+	file_path=$1
+
+	if [ ! -f "$file_path" ]; then
+		printf 'Missing required file: %s\n' "$file_path" >&2
+		exit 1
+	fi
+}
+
 require_command npm
 require_command composer
 require_command zip
 require_command php
+require_command rsync
+
+sync_release_tree() {
+	source_dir=$1
+	destination_dir=$2
+	shift 2
+
+	mkdir -p "$destination_dir"
+	rsync -a "$@" "$source_dir"/ "$destination_dir"/
+}
 
 copy_release_language_packs() {
 	source_dir=$1
@@ -30,7 +49,15 @@ copy_release_language_packs() {
 		return
 	fi
 
-	find "$source_dir" -maxdepth 1 -type f \( -name '*.json' -o -name '*.mo' -o -name '*.pot' \) -exec cp {} "$destination_dir/" \;
+	sync_release_tree \
+		"$source_dir" \
+		"$destination_dir" \
+		--prune-empty-dirs \
+		--include='*/' \
+		--include='*.json' \
+		--include='*.mo' \
+		--include='*.pot' \
+		--exclude='*'
 }
 
 remove_release_placeholder_files() {
@@ -56,6 +83,9 @@ trap restore_composer_dependencies EXIT HUP INT TERM
 
 cd "$ROOT_DIR"
 
+require_file "$ROOT_DIR/app/public/default-favicon.png"
+require_file "$ROOT_DIR/app/public/default-site.webmanifest"
+
 printf 'Building React dashboard UI...\n'
 npm run build
 
@@ -70,33 +100,25 @@ printf 'Assembling release package...\n'
 mkdir -p "$RELEASE_DIR" "$RELEASE_ROOT"
 find "$RELEASE_ROOT" -maxdepth 1 \( -name 'peakurl-*.zip' -o -name 'peakurl-*.zip.sha256' \) -exec rm -f {} +
 find "$RELEASE_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-mkdir -p "$RELEASE_DIR/app/bin" "$RELEASE_DIR/content/languages"
 
-cp -R site/. "$RELEASE_DIR/"
+sync_release_tree "$ROOT_DIR/site" "$RELEASE_DIR" \
+	--exclude='.DS_Store' \
+	--exclude='.gitkeep'
 copy_release_language_packs "$ROOT_DIR/content/languages" "$RELEASE_DIR/content/languages"
-cp -R "$UI_BUILD_DIR/assets" "$RELEASE_DIR/assets"
+
+sync_release_tree "$UI_BUILD_DIR" "$RELEASE_DIR" \
+	--exclude='index.html' \
+	--exclude='.DS_Store'
 cp "$UI_BUILD_DIR/index.html" "$RELEASE_DIR/app.html"
+
 cp "$ROOT_DIR/.version" "$RELEASE_DIR/.version"
 cp "$ROOT_DIR/LICENSE" "$RELEASE_DIR/LICENSE"
 cp "$ROOT_DIR/CREDITS.txt" "$RELEASE_DIR/CREDITS.txt"
 
-cp -R app/api "$RELEASE_DIR/app/api"
-cp -R app/controllers "$RELEASE_DIR/app/controllers"
-cp -R app/http "$RELEASE_DIR/app/http"
-cp -R app/includes "$RELEASE_DIR/app/includes"
-cp -R app/public "$RELEASE_DIR/app/public"
-cp -R app/database "$RELEASE_DIR/app/database"
-cp -R app/services "$RELEASE_DIR/app/services"
-cp -R app/templates "$RELEASE_DIR/app/templates"
-cp -R app/traits "$RELEASE_DIR/app/traits"
-cp -R app/utils "$RELEASE_DIR/app/utils"
-cp -R app/vendor "$RELEASE_DIR/app/vendor"
-cp app/store.php "$RELEASE_DIR/app/store.php"
-cp app/bin/setup-database.php "$RELEASE_DIR/app/bin/setup-database.php"
-cp app/bin/update-geoip.php "$RELEASE_DIR/app/bin/update-geoip.php"
-cp app/composer.json "$RELEASE_DIR/app/composer.json"
-cp app/composer.lock "$RELEASE_DIR/app/composer.lock"
-cp app/.env.example "$RELEASE_DIR/app/.env.example"
+sync_release_tree "$ROOT_DIR/app" "$RELEASE_DIR/app" \
+	--exclude='.DS_Store' \
+	--exclude='.gitkeep' \
+	--exclude='.env'
 
 rm -f "$RELEASE_DIR/app/.env"
 remove_release_placeholder_files "$RELEASE_DIR"

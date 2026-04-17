@@ -26,7 +26,6 @@ core/.env
 /content/uploads/geoip/*.mmdb
 /content/uploads/geoip/*.tar.gz
 /content/uploads/geoip/*.tmp
-/content/uploads/favicon/*
 /content/debug.log
 /docker/proxy/certs/*
 !/docker/proxy/certs/.gitkeep

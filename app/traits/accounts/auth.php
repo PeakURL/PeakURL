@@ -161,7 +161,7 @@ trait AuthTrait {
 	 */
 	public function resend_verification( Request $request, array $payload ): array {
 		$current_user = $this->resolve_current_user( $request, false );
-		$email        = $this->normalize_email(
+		$email        = sanitize_email(
 			(string) ( $payload['email'] ?? ( $current_user['email'] ?? '' ) )
 		);
 
@@ -209,7 +209,7 @@ trait AuthTrait {
 	 * @since 1.0.0
 	 */
 	public function login( Request $request, array $payload ): array {
-		$identifier = $this->normalize_email(
+		$identifier = sanitize_email(
 			(string) ( $payload['identifier'] ??
 				( $payload['email'] ?? ( $payload['username'] ?? '' ) ) )
 		);
@@ -359,11 +359,8 @@ trait AuthTrait {
 			throw new ApiException( __( 'Email or username is required.', 'peakurl' ), 422 );
 		}
 
-		$normalized_identifier = $this->normalize_email( $identifier );
-		$user                  = filter_var(
-			$normalized_identifier,
-			FILTER_VALIDATE_EMAIL
-		)
+		$normalized_identifier = sanitize_email( $identifier );
+		$user                  = false !== is_email( $normalized_identifier )
 			? $this->find_user_row_by_email( $normalized_identifier )
 			: $this->find_user_row_by_username( $identifier );
 		$reset_token           = $this->issue_lookup_token();

@@ -43,13 +43,10 @@ class Notifications {
 	 * @since 1.0.2
 	 */
 	public function send_password_reset_email( array $user, string $token ): void {
-		$email = strtolower( trim( (string) ( $user['email'] ?? '' ) ) );
-
-		if ( '' === $email || ! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
-			throw new \RuntimeException(
-				__( 'PeakURL could not send the password reset email because the account email address is invalid.', 'peakurl' ),
-			);
-		}
+		$email = $this->get_user_email(
+			$user,
+			__( 'PeakURL could not send the password reset email because the account email address is invalid.', 'peakurl' ),
+		);
 
 		$site_name    = \get_site_name();
 		$reset_url    = \get_site_url(
@@ -112,13 +109,10 @@ class Notifications {
 	 * @since 1.0.6
 	 */
 	public function send_password_changed_email( array $user ): void {
-		$email = strtolower( trim( (string) ( $user['email'] ?? '' ) ) );
-
-		if ( '' === $email || ! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
-			throw new \RuntimeException(
-				__( 'PeakURL could not send the password changed email because the account email address is invalid.', 'peakurl' ),
-			);
-		}
+		$email = $this->get_user_email(
+			$user,
+			__( 'PeakURL could not send the password changed email because the account email address is invalid.', 'peakurl' ),
+		);
 
 		$site_name     = \get_site_name();
 		$site_url      = \get_site_url();
@@ -189,13 +183,10 @@ class Notifications {
 	 * @since 1.0.2
 	 */
 	public function send_install_welcome_email( array $user ): void {
-		$email = strtolower( trim( (string) ( $user['email'] ?? '' ) ) );
-
-		if ( '' === $email || ! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
-			throw new \RuntimeException(
-				__( 'PeakURL could not send the welcome email because the account email address is invalid.', 'peakurl' ),
-			);
-		}
+		$email = $this->get_user_email(
+			$user,
+			__( 'PeakURL could not send the welcome email because the account email address is invalid.', 'peakurl' ),
+		);
 
 		$site_name     = \get_site_name();
 		$site_url      = \get_site_url();
@@ -394,6 +385,26 @@ class Notifications {
 	 */
 	private function get_email_templates_directory(): string {
 		return dirname( __DIR__ ) . '/templates/emails';
+	}
+
+	/**
+	 * Return a normalized account email address for notification delivery.
+	 *
+	 * @param array<string, mixed> $user            User database row.
+	 * @param string               $invalid_message Error message for invalid addresses.
+	 * @return string
+	 *
+	 * @throws \RuntimeException When the email address is missing or invalid.
+	 * @since 1.0.14
+	 */
+	private function get_user_email( array $user, string $invalid_message ): string {
+		$email = is_email( (string) ( $user['email'] ?? '' ) );
+
+		if ( false === $email ) {
+			throw new \RuntimeException( $invalid_message );
+		}
+
+		return $email;
 	}
 
 	/**

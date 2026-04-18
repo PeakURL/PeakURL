@@ -15,6 +15,7 @@ namespace PeakURL\Services;
 
 use PeakURL\Api\SettingsApi;
 use PeakURL\Includes\Constants;
+use PeakURL\Utils\Date;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -136,7 +137,7 @@ class Favicon {
 			'width'           => (int) ( $active_icon['width'] ?? 0 ),
 			'height'          => (int) ( $active_icon['height'] ?? 0 ),
 			'sizes'           => $sizes,
-			'updatedAt'       => peakurl_mysql_to_rfc3339(
+			'updatedAt'       => Date::mysql_to_rfc3339(
 				(string) ( $active_icon['updatedAt'] ?? '' ),
 			),
 			'canUpload'       => true,
@@ -704,7 +705,7 @@ class Favicon {
 	 * @since 1.0.14
 	 */
 	private function get_bundled_icon_path(): string {
-		return rtrim( ABSPATH, '/\\' ) . '/' . self::BUNDLED_ICON_FILE;
+		return untrailingslashit( ABSPATH ) . '/' . self::BUNDLED_ICON_FILE;
 	}
 
 	/**
@@ -714,7 +715,7 @@ class Favicon {
 	 * @since 1.0.14
 	 */
 	private function get_bundled_manifest_path(): string {
-		return rtrim( ABSPATH, '/\\' ) . '/' . self::BUNDLED_MANIFEST_FILE;
+		return untrailingslashit( ABSPATH ) . '/' . self::BUNDLED_MANIFEST_FILE;
 	}
 
 	/**

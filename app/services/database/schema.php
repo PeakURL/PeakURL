@@ -12,6 +12,7 @@ namespace PeakURL\Services\Database;
 
 use PeakURL\Includes\Connection;
 use PeakURL\Includes\Constants;
+use PeakURL\Utils\Date;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -162,7 +163,7 @@ class Schema {
 			$status = $this->inspect();
 
 			$status['upgraded']  = true;
-			$status['appliedAt'] = \peakurl_mysql_to_rfc3339( $upgraded_at );
+			$status['appliedAt'] = Date::mysql_to_rfc3339( $upgraded_at );
 			$status['changes']   = $changes;
 
 			return $status;

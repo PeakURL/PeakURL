@@ -26,17 +26,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 trait SupportTrait {
 
 	/**
-	 * Normalize an email address for account lookups and writes.
-	 *
-	 * @param string $email Raw email input.
-	 * @return string
-	 * @since 1.0.14
-	 */
-	private function normalize_email( string $email ): string {
-		return strtolower( trim( $email ) );
-	}
-
-	/**
 	 * Validate an email address and return its normalized value.
 	 *
 	 * @param string $email Raw email input.
@@ -46,9 +35,9 @@ trait SupportTrait {
 	 * @since 1.0.14
 	 */
 	private function validate_email( string $email ): string {
-		$email = $this->normalize_email( $email );
+		$email = sanitize_email( $email );
 
-		if ( ! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
+		if ( false === is_email( $email ) ) {
 			throw new ApiException( __( 'A valid email address is required.', 'peakurl' ), 422 );
 		}
 

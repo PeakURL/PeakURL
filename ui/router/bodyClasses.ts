@@ -23,10 +23,10 @@ function uniqueBodyClassNames(
 ): string[] {
 	return Array.from(
 		new Set(
-			classes
-				.map((className) =>
-					className ? sanitizeBodyClassName(className) : ''
-				)
+				classes
+					.map((className) =>
+						className ? sanitizeBodyClassName(className) : ''
+					)
 				.filter(Boolean)
 		)
 	);

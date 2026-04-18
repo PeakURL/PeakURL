@@ -285,7 +285,7 @@ class Mailer {
 
 		if (
 			'' !== $values['fromEmail'] &&
-			false === filter_var( $values['fromEmail'], FILTER_VALIDATE_EMAIL )
+			false === is_email( $values['fromEmail'] )
 		) {
 			throw new \RuntimeException(
 				__( 'From email must be a valid email address.', 'peakurl' ),
@@ -443,7 +443,7 @@ class Mailer {
 	 * @since 1.0.0
 	 */
 	private function normalize_driver( string $value ): string {
-		$value = strtolower( trim( $value ) );
+		$value = sanitize_key( $value );
 
 		if ( in_array( $value, array( 'mail', 'smtp' ), true ) ) {
 			return $value;
@@ -460,7 +460,7 @@ class Mailer {
 	 * @since 1.0.0
 	 */
 	private function normalize_encryption( string $value ): string {
-		$value = strtolower( trim( $value ) );
+		$value = sanitize_key( $value );
 
 		if ( in_array( $value, array( '', 'none', 'ssl', 'tls' ), true ) ) {
 			return 'none' === $value ? '' : $value;
@@ -482,7 +482,7 @@ class Mailer {
 		}
 
 		return in_array(
-			strtolower( trim( (string) $value ) ),
+			sanitize_key( (string) $value ),
 			array( '1', 'true', 'yes', 'on' ),
 			true,
 		);
@@ -515,20 +515,20 @@ class Mailer {
 		}
 
 		if ( 'smtp' === (string) ( $settings['driver'] ?? 'mail' ) ) {
-			$configured_from_email = trim(
+			$configured_from_email = sanitize_email(
 				(string) ( $settings['fromEmail'] ?? '' ),
 			);
 
-			if ( false !== filter_var( $configured_from_email, FILTER_VALIDATE_EMAIL ) ) {
-				return strtolower( $configured_from_email );
+			if ( false !== is_email( $configured_from_email ) ) {
+				return $configured_from_email;
 			}
 
-			$smtp_username = trim(
+			$smtp_username = sanitize_email(
 				(string) ( $settings['smtpUsername'] ?? '' ),
 			);
 
-			if ( false !== filter_var( $smtp_username, FILTER_VALIDATE_EMAIL ) ) {
-				return strtolower( $smtp_username );
+			if ( false !== is_email( $smtp_username ) ) {
+				return $smtp_username;
 			}
 		}
 

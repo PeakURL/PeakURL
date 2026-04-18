@@ -71,7 +71,7 @@ trait UsersTrait {
 		);
 		$user_id          = (string) $user['id'];
 		$user_row         = $this->find_user_row_by_id( $user_id );
-		$user_email       = $this->normalize_email( (string) ( $user['email'] ?? '' ) );
+		$user_email       = sanitize_email( (string) ( $user['email'] ?? '' ) );
 		$updates          = array();
 		$params           = array( 'id' => $user_id );
 		$password_changed = false;
@@ -95,7 +95,7 @@ trait UsersTrait {
 			$value = trim( (string) $changes[ $input_key ] );
 
 			if ( 'email' === $input_key ) {
-				$value = $this->normalize_email( $value );
+				$value = sanitize_email( $value );
 
 				if ( $value !== $user_email ) {
 					$value = $this->validate_email( $value );
@@ -296,7 +296,7 @@ trait UsersTrait {
 		}
 
 		$user_id          = (string) $user['id'];
-		$user_email       = $this->normalize_email( (string) ( $user['email'] ?? '' ) );
+		$user_email       = sanitize_email( (string) ( $user['email'] ?? '' ) );
 		$updates          = array();
 		$params           = array( 'id' => $user_id );
 		$password_changed = false;
@@ -334,7 +334,7 @@ trait UsersTrait {
 		}
 
 		if ( array_key_exists( 'email', $changes ) ) {
-			$email = $this->normalize_email( (string) $changes['email'] );
+			$email = sanitize_email( (string) $changes['email'] );
 
 			if ( $email !== $user_email ) {
 				$email = $this->validate_email( $email );
@@ -511,7 +511,7 @@ trait UsersTrait {
 		$first_name = trim( (string) ( $user['first_name'] ?? '' ) );
 		$last_name  = trim( (string) ( $user['last_name'] ?? '' ) );
 		$username   = trim( (string) ( $user['username'] ?? '' ) );
-		$email      = $this->normalize_email( (string) ( $user['email'] ?? '' ) );
+		$email      = sanitize_email( (string) ( $user['email'] ?? '' ) );
 		$role       = trim( (string) ( $user['role'] ?? '' ) );
 
 		return array(

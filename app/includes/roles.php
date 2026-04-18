@@ -73,7 +73,7 @@ class Roles {
 	 * @since 1.0.0
 	 */
 	public function normalize_role( string $role ): string {
-		$role = strtolower( trim( $role ) );
+		$role = sanitize_key( $role );
 
 		if ( in_array( $role, array( 'admin', 'editor' ), true ) ) {
 			return $role;

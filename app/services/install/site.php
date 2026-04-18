@@ -38,7 +38,9 @@ class Site {
 			throw new \RuntimeException( __( 'Site URL is required.', 'peakurl' ) );
 		}
 
-		if ( ! filter_var( $site_url, FILTER_VALIDATE_URL ) ) {
+		$site_url = sanitize_url( $site_url );
+
+		if ( '' === $site_url ) {
 			throw new \RuntimeException( __( 'Site URL must be a valid URL.', 'peakurl' ) );
 		}
 
@@ -54,7 +56,7 @@ class Site {
 			);
 		}
 
-		return rtrim( $site_url, '/' );
+		return untrailingslashit( $site_url );
 	}
 
 	/**
@@ -71,6 +73,6 @@ class Site {
 			return '/';
 		}
 
-		return rtrim( $path, '/' ) . '/';
+		return trailingslashit( $path );
 	}
 }

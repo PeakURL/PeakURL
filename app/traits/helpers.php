@@ -34,7 +34,7 @@ trait HelpersTrait {
 	 * @since 1.0.0
 	 */
 	private function normalize_url_status( string $status ): string {
-		$status = strtolower( trim( $status ) );
+		$status = sanitize_key( $status );
 
 		if (
 			! in_array(
@@ -72,7 +72,7 @@ trait HelpersTrait {
 	 */
 	private function generate_short_code(): string {
 		do {
-			$code = strtolower( substr( bin2hex( random_bytes( 4 ) ), 0, 6 ) );
+			$code = substr( bin2hex( random_bytes( 4 ) ), 0, 6 );
 		} while ( $this->short_code_exists( $code ) );
 
 		return $code;

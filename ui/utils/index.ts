@@ -69,18 +69,6 @@ export function generateRandomAlias(): string {
 	return result;
 }
 
-/**
- * Validates whether a string can be parsed as a URL.
- */
-export function validateUrl(url: string): boolean {
-	try {
-		new URL(url);
-		return true;
-	} catch {
-		return false;
-	}
-}
-
 export { addFilter, applyFilters, removeFilter } from './hooks';
 export {
 	buildFaviconPreviewUrl,

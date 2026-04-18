@@ -182,28 +182,6 @@ function peakurl_load_runtime_class( string $type ): void {
 spl_autoload_register( 'peakurl_load_runtime_class' );
 
 /**
- * Convert a MySQL datetime string to an RFC 3339 timestamp or null.
- *
- * @param string|null $value Datetime string.
- * @return string|null RFC 3339 datetime or null.
- * @since 1.0.14
- */
-// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
-function peakurl_mysql_to_rfc3339( ?string $value ): ?string {
-	if ( ! is_string( $value ) || '' === trim( $value ) ) {
-		return null;
-	}
-
-	$timestamp = strtotime( $value . ' UTC' );
-
-	if ( false === $timestamp ) {
-		return null;
-	}
-
-	return gmdate( DATE_ATOM, $timestamp );
-}
-
-/**
  * Send an email through the active PeakURL transport.
  *
  * Mirrors the role of WordPress `wp_mail()` while keeping PeakURL's
@@ -269,6 +247,34 @@ function get_site_name(): string {
 }
 
 /**
+ * Remove trailing forward and backslashes from a string.
+ *
+ * Mirrors WordPress `untrailingslashit()`.
+ *
+ * @param string $value Raw string value.
+ * @return string
+ * @since 1.0.14
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function untrailingslashit( string $value ): string {
+	return rtrim( $value, '/\\' );
+}
+
+/**
+ * Append one trailing forward slash to a string.
+ *
+ * Mirrors WordPress `trailingslashit()`.
+ *
+ * @param string $value Raw string value.
+ * @return string
+ * @since 1.0.14
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function trailingslashit( string $value ): string {
+	return untrailingslashit( $value ) . '/';
+}
+
+/**
  * Get the configured PeakURL site URL.
  *
  * Mirrors the role of WordPress `get_site_url()` and accepts an optional
@@ -290,7 +296,7 @@ function get_site_url( string $path = '', ?string $scheme = null ): string {
 		$site_url = trim( (string) ( $config['SITE_URL'] ?? '' ) );
 	}
 
-	$site_url = rtrim( $site_url, '/' );
+	$site_url = untrailingslashit( $site_url );
 
 	if ( null !== $scheme ) {
 		$normalized_scheme = strtolower( trim( $scheme ) );
@@ -306,12 +312,12 @@ function get_site_url( string $path = '', ?string $scheme = null ): string {
 				}
 
 				if ( ! empty( $parts['path'] ) ) {
-					$site_url .= rtrim( (string) $parts['path'], '/' );
+					$site_url .= untrailingslashit( (string) $parts['path'] );
 				}
 			}
 		} elseif ( 'relative' === $normalized_scheme ) {
 			$path_only = (string) parse_url( $site_url, PHP_URL_PATH );
-			$site_url  = '' !== $path_only ? rtrim( $path_only, '/' ) : '';
+			$site_url  = '' !== $path_only ? untrailingslashit( $path_only ) : '';
 		}
 	}
 
@@ -381,6 +387,77 @@ function get_api_base_url( string $path = '', ?string $scheme = null ): string {
 // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
 function api_base_url( string $path = '', ?string $scheme = null ): string {
 	return get_api_base_url( $path, $scheme );
+}
+
+/**
+ * Sanitize a string key for internal comparisons.
+ *
+ * Mirrors WordPress `sanitize_key()`.
+ *
+ * @param string $key Raw key input.
+ * @return string
+ * @since 1.0.14
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function sanitize_key( string $key ): string {
+	$key = strtolower( trim( $key ) );
+	$key = preg_replace( '/[^a-z0-9_-]/', '', $key );
+
+	return is_string( $key ) ? $key : '';
+}
+
+/**
+ * Sanitize a string into a URL-safe title slug.
+ *
+ * Mirrors the role of WordPress `sanitize_title()`.
+ *
+ * @param string $title Raw title input.
+ * @return string
+ * @since 1.0.14
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function sanitize_title( string $title ): string {
+	$title  = strtolower( trim( $title ) );
+	$result = preg_replace( '/[^a-z0-9]+/', '-', $title );
+	$title  = is_string( $result ) ? $result : '';
+
+	return trim( $title, '-' );
+}
+
+/**
+ * Sanitize an email address for storage or comparisons.
+ *
+ * Mirrors the role of WordPress `sanitize_email()`.
+ *
+ * @param string $email Raw email input.
+ * @return string
+ * @since 1.0.14
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function sanitize_email( string $email ): string {
+	return strtolower( trim( $email ) );
+}
+
+/**
+ * Validate an email address and return its sanitized value.
+ *
+ * Mirrors the role of WordPress `is_email()`.
+ *
+ * @param string $email Raw email input.
+ * @return string|false
+ * @since 1.0.14
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function is_email( string $email ): string|false {
+	$email = sanitize_email( $email );
+
+	if ( '' === $email ) {
+		return false;
+	}
+
+	return false === filter_var( $email, FILTER_VALIDATE_EMAIL )
+		? false
+		: $email;
 }
 
 /**

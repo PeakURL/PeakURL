@@ -66,7 +66,7 @@ class Storage {
 		$app_directory       = ABSPATH . 'app';
 
 		return array(
-			'releaseRoot'                 => rtrim( ABSPATH, '/\\' ),
+			'releaseRoot'                 => untrailingslashit( ABSPATH ),
 			'releaseRootSizeBytes'        => $this->get_path_size_bytes( ABSPATH ),
 			'appDirectory'                => $app_directory,
 			'appWritable'                 => is_dir( $app_directory ) && is_writable( $app_directory ),

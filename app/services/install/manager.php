@@ -41,7 +41,7 @@ class Manager {
 	 */
 	public static function get_form_defaults( string $site_url ): array {
 		return array(
-			'site_url'       => rtrim( $site_url, '/' ),
+			'site_url'       => untrailingslashit( $site_url ),
 			'site_language'  => 'en_US',
 			'workspace_name' => '',
 			'owner_username' => '',
@@ -130,11 +130,11 @@ class Manager {
 			(string) ( $config['SITE_URL'] ?? '' ),
 		);
 		$workspace_name = trim( (string) ( $input['workspace_name'] ?? '' ) );
-		$workspace_slug = self::get_slug(
+		$workspace_slug = sanitize_title(
 			trim( (string) ( $input['workspace_slug'] ?? $workspace_name ) ),
 		);
 		$owner_username = trim( (string) ( $input['owner_username'] ?? '' ) );
-		$owner_email    = strtolower( trim( (string) ( $input['owner_email'] ?? '' ) ) );
+		$owner_email    = sanitize_email( (string) ( $input['owner_email'] ?? '' ) );
 		$owner_password = (string) ( $input['owner_password'] ?? '' );
 		$owner_name     = trim( (string) ( $input['owner_name'] ?? '' ) );
 		$owner_names    = self::get_owner_names( $owner_name, $owner_username );
@@ -163,7 +163,7 @@ class Manager {
 			);
 		}
 
-		if ( ! filter_var( $owner_email, FILTER_VALIDATE_EMAIL ) ) {
+		if ( false === is_email( $owner_email ) ) {
 			throw new \RuntimeException(
 				__( 'A valid admin email address is required.', 'peakurl' ),
 			);
@@ -223,20 +223,5 @@ class Manager {
 			'first_name' => $first_name,
 			'last_name'  => $last_name,
 		);
-	}
-
-	/**
-	 * Convert a site title or requested slug into a URL-safe slug.
-	 *
-	 * @param string $value Raw slug source.
-	 * @return string
-	 * @since 1.0.14
-	 */
-	private static function get_slug( string $value ): string {
-		$value  = strtolower( trim( $value ) );
-		$result = preg_replace( '/[^a-z0-9]+/', '-', $value );
-		$value  = is_string( $result ) ? $result : '';
-
-		return trim( $value, '-' );
 	}
 }

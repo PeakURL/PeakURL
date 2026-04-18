@@ -22,9 +22,11 @@ import {
 } from '@/components';
 import { isDocumentRtl } from '@/i18n/direction';
 import {
+	escUrl,
 	getErrorMessage,
 	getErrorStatus,
 	getInstallRecovery,
+	isRelativeUrl,
 	redirectToInstallRecovery,
 	requestClosestFormSubmit,
 	requestControlFormSubmit,
@@ -82,20 +84,6 @@ const ApiErrorState = ({ onRetry }: ApiErrorStateProps) => (
 const PEAKURL_URL =
 	'https://peakurl.org?utm_source=peakurl_login&utm_medium=login&utm_campaign=powered_by';
 
-const getSafeRedirectPath = (candidate: unknown) => {
-	if (typeof candidate !== 'string') {
-		return '';
-	}
-
-	const value = candidate.trim();
-
-	if (!value.startsWith('/') || value.startsWith('//')) {
-		return '';
-	}
-
-	return value;
-};
-
 const submitVerificationCode = () => {
 	requestClosestFormSubmit(
 		document.activeElement instanceof Element
@@ -143,22 +131,20 @@ function LoginPage() {
 	const submitPending = isLoggingIn || isVerifying;
 	const redirectTo = useMemo(() => {
 		const searchParams = new URLSearchParams(location.search || '');
-		const redirectParam = getSafeRedirectPath(
-			searchParams.get('redirect') || ''
-		);
+		const redirectParam = escUrl(searchParams.get('redirect') || '');
 
-		if (redirectParam) {
+		if (redirectParam && isRelativeUrl(redirectParam)) {
 			return redirectParam;
 		}
 
 		const from = location.state?.from;
 
 		if (from?.pathname) {
-			const fromPath = getSafeRedirectPath(
+			const fromPath = escUrl(
 				`${from.pathname}${from.search || ''}${from.hash || ''}`
 			);
 
-			if (fromPath) {
+			if (fromPath && isRelativeUrl(fromPath)) {
 				return fromPath;
 			}
 		}

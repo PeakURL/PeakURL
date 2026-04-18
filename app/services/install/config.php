@@ -37,7 +37,7 @@ class Config {
 	 */
 	public static function get_form_defaults( string $site_url ): array {
 		return array(
-			'site_url'    => rtrim( $site_url, '/' ),
+			'site_url'    => untrailingslashit( $site_url ),
 			'db_host'     => self::get_default_value(
 				'PEAKURL_INSTALL_DB_HOST_DEFAULT',
 				'localhost',

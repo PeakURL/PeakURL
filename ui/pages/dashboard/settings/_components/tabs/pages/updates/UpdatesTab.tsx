@@ -1,7 +1,7 @@
 import { Button, type ButtonVariant } from '@/components';
 import { __, sprintf } from '@/i18n';
 import { isDocumentRtl } from '@/i18n/direction';
-import { cn, escUrl, formatDateTimeValue } from '@/utils';
+import { cn, escUrl, formatDateTimeValue, isRelativeUrl } from '@/utils';
 import {
 	AlertCircle,
 	CheckCircle2,
@@ -432,7 +432,7 @@ function DetailRow({
 				{Icon ? <Icon size={15} /> : null}
 				<span>{label}</span>
 			</div>
-			{safeHref ? (
+			{safeHref && !isRelativeUrl(safeHref) ? (
 				<a
 					href={safeHref}
 					target="_blank"

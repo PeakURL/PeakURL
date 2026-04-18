@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\Update;
 
+use PeakURL\Utils\Date;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -102,7 +104,7 @@ class Status {
 			'minimumMariaDb'      => (string) ( $manifest_data['minimumMariaDb'] ?? '' ),
 			'product'             => (string) ( $manifest_data['product'] ?? 'peakurl' ),
 			'channel'             => (string) ( $manifest_data['channel'] ?? 'latest' ),
-			'lastCheckedAt'       => \peakurl_mysql_to_rfc3339( $last_checked_at ),
+			'lastCheckedAt'       => Date::mysql_to_rfc3339( $last_checked_at ),
 			'lastError'           => '' !== trim( (string) $last_error ) ? trim( (string) $last_error ) : null,
 			'phpVersion'          => PHP_VERSION,
 			'phpCompatible'       => $php_compatible,

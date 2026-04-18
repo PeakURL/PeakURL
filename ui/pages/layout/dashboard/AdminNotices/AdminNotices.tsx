@@ -42,9 +42,9 @@ function isNoticeTone(value: unknown): value is NoticeTone {
 }
 
 function NoticeAction({ action, actionClassName }: NoticeActionProps) {
-	const safeUrl = escUrl(action?.url);
+	const url = escUrl(action?.url);
 
-	if (!action?.label || !safeUrl) {
+	if (!action?.label || !url) {
 		return null;
 	}
 
@@ -53,9 +53,9 @@ function NoticeAction({ action, actionClassName }: NoticeActionProps) {
 		actionClassName
 	);
 
-	if (isRelativeUrl(safeUrl)) {
+	if (isRelativeUrl(url)) {
 		return (
-			<Link to={safeUrl} className={actionClasses}>
+			<Link to={url} className={actionClasses}>
 				{action.label}
 			</Link>
 		);
@@ -63,7 +63,7 @@ function NoticeAction({ action, actionClassName }: NoticeActionProps) {
 
 	return (
 		<a
-			href={safeUrl}
+			href={url}
 			className={actionClasses}
 			target="_blank"
 			rel="noreferrer"

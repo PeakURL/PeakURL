@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { useCreateUrlMutation } from '@/store/slices/api';
 import {
 	buildShortUrl,
+	escUrl,
 	getErrorMessage,
+	isRelativeUrl,
 	isFutureLocalDateTime,
 	toIsoFromLocalDateTime,
 } from '@/utils';
@@ -37,15 +39,6 @@ const UrlShorteningForm = () => {
 	const [utmContent, setUtmContent] = useState('');
 
 	const [createUrl, { isLoading }] = useCreateUrlMutation();
-
-	const validateUrl = (url: string) => {
-		try {
-			new URL(url);
-			return true;
-		} catch {
-			return false;
-		}
-	};
 
 	const buildUrlWithUtm = (url: string) => {
 		if (
@@ -82,7 +75,12 @@ const UrlShorteningForm = () => {
 			return;
 		}
 
-		if (!validateUrl(destinationUrl)) {
+		const normalizedDestinationUrl = escUrl(destinationUrl);
+
+		if (
+			!normalizedDestinationUrl ||
+			isRelativeUrl(normalizedDestinationUrl)
+		) {
 			setError(
 				__(
 					'Please enter a valid URL (must include http:// or https://)'
@@ -92,7 +90,7 @@ const UrlShorteningForm = () => {
 		}
 
 		try {
-			const urlWithUtm = buildUrlWithUtm(destinationUrl.trim());
+			const urlWithUtm = buildUrlWithUtm(normalizedDestinationUrl);
 
 			const payload: CreateUrlPayload = {
 				destinationUrl: urlWithUtm,

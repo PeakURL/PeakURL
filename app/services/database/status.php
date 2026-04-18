@@ -13,6 +13,7 @@ namespace PeakURL\Services\Database;
 use PeakURL\Database\RepairSpecs;
 use PeakURL\Database\SchemaSpecs;
 use PeakURL\Includes\Constants;
+use PeakURL\Utils\Date;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -132,7 +133,7 @@ class Status {
 			'issues'          => array_values( $issues ),
 			'issuesCount'     => count( $issues ),
 			'missingTables'   => $this->get_missing_tables(),
-			'lastUpgradedAt'  => \peakurl_mysql_to_rfc3339(
+			'lastUpgradedAt'  => Date::mysql_to_rfc3339(
 				$this->context->get_option( Constants::SETTING_DB_SCHEMA_LAST_UPGRADED_AT )
 			),
 			'lastError'       => $this->context->get_option(

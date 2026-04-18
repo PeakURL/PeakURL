@@ -97,7 +97,7 @@ class AdminNoticeRegistry {
 	 * @since 1.0.3
 	 */
 	private function normalize_type( string $type ): string {
-		$normalized = strtolower( trim( $type ) );
+		$normalized = sanitize_key( $type );
 
 		if ( in_array( $normalized, array( 'success', 'warning', 'error', 'info' ), true ) ) {
 			return $normalized;

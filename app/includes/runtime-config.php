@@ -558,7 +558,7 @@ class RuntimeConfig {
 	 * @since 1.0.0
 	 */
 	private static function normalize_same_site( string $value ): string {
-		$value = ucfirst( strtolower( trim( $value ) ) );
+		$value = ucfirst( sanitize_key( $value ) );
 
 		if ( in_array( $value, array( 'Lax', 'Strict', 'None' ), true ) ) {
 			return $value;
@@ -575,7 +575,7 @@ class RuntimeConfig {
 	 * @since 1.0.0
 	 */
 	private static function normalize_secure_mode( string $value ): string {
-		$value = strtolower( trim( $value ) );
+		$value = sanitize_key( $value );
 
 		if (
 			in_array(
@@ -607,7 +607,7 @@ class RuntimeConfig {
 			return '/';
 		}
 
-		return rtrim( $path, '/' ) . '/';
+		return trailingslashit( $path );
 	}
 
 	/**

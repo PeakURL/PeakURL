@@ -250,6 +250,14 @@ jobs:
                   NOTES_FILE="$(mktemp)"
                   trap 'rm -f "$NOTES_FILE"' EXIT
 
+                  PREVIOUS_TAG="$(git tag --sort=version:refname --list 'v*' | awk -v current="$TAG_NAME" '$0 == current { print previous; exit } { previous = $0 }')"
+                  FULL_CHANGELOG_URL="https://github.com/PeakURL/PeakURL/commits/${TAG_NAME}"
+                  RELEASE_NOTES_URL="https://peakurl.org/release-notes#${TAG_NAME}"
+
+                  if [ -n "$PREVIOUS_TAG" ]; then
+                    FULL_CHANGELOG_URL="https://github.com/PeakURL/PeakURL/compare/${PREVIOUS_TAG}...${TAG_NAME}"
+                  fi
+
                   cat > "$NOTES_FILE" <<EOF
                   ## Install
 
@@ -262,7 +270,8 @@ jobs:
                   - This GitHub release includes a versioned release asset for project history and GitHub downloads.
                   - For the latest public install package, use https://peakurl.org/latest.zip.
 
-                  **Full Changelog**: https://github.com/PeakURL/PeakURL/commits/${TAG_NAME}
+                  **Release Notes**: ${RELEASE_NOTES_URL}
+                  **Full Changelog**: ${FULL_CHANGELOG_URL}
                   EOF
 
                   if gh release view "$TAG_NAME" --repo PeakURL/PeakURL > /dev/null 2>&1; then

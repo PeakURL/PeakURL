@@ -72,13 +72,13 @@ Content-Type: application/json
 			</div>
 			<div className="import-api-actions">
 				<a
-					href="https://peakurl.org/docs/api/links"
+					href="https://peakurl.org/docs/import-and-export#api-import"
 					target="_blank"
 					rel="noreferrer"
 				>
 					<Button size="sm">
 						<ExternalLink className="import-api-button-icon" />
-						{__('View API Documentation')}
+						{__('Read Import Guide')}
 					</Button>
 				</a>
 			</div>

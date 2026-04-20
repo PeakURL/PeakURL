@@ -2,11 +2,13 @@ import { useState } from 'react';
 import {
 	Braces,
 	Download,
+	ExternalLink,
 	FileCode2,
 	FileSpreadsheet,
 	Link2,
 } from 'lucide-react';
 import { Button, useNotification } from '@/components';
+import { API_SERVER_BASE_URL } from '@/constants';
 import { __, sprintf } from '@/i18n';
 import {
 	useGetUrlsQuery,
@@ -203,6 +205,70 @@ function ExportPage() {
 						onExport={() => handleExport(option.id)}
 					/>
 				))}
+			</div>
+
+			<div className="export-page-api">
+				<h2 className="export-page-api-title">
+					{__('API Export')}
+				</h2>
+				<p className="export-page-api-copy">
+					{__(
+						'Use the export route when you want to back up links or feed another tool without opening the dashboard.'
+					)}
+				</p>
+
+				<div className="export-page-api-grid">
+					<div className="export-page-api-column">
+						<h3 className="export-page-api-heading">
+							{__('Example Request')}
+						</h3>
+						<pre className="export-page-api-code-block">
+							<code>{`GET ${API_SERVER_BASE_URL}/urls/export?sortBy=createdAt&sortOrder=desc
+Authorization: Bearer YOUR_API_KEY
+Accept: application/json`}</code>
+						</pre>
+					</div>
+
+					<div className="export-page-api-column">
+						<h3 className="export-page-api-heading">
+							{__('Response')}
+						</h3>
+						<pre className="export-page-api-code-block">
+							<code>{`{
+  "success": true,
+  "message": "URLs export loaded.",
+  "data": {
+    "items": [
+      {
+        "id": "URL_ID",
+        "shortUrl": "https://example.com/docs",
+        "destinationUrl": "https://docs.example.com",
+        "alias": "docs",
+        "clicks": 42,
+        "uniqueClicks": 31
+      }
+    ],
+    "meta": {
+      "totalItems": 1
+    }
+  }
+}`}</code>
+						</pre>
+					</div>
+				</div>
+
+				<div className="export-page-api-actions">
+					<a
+						href="https://peakurl.org/docs/import-and-export#api-export"
+						target="_blank"
+						rel="noreferrer"
+					>
+						<Button size="sm">
+							<ExternalLink className="export-page-api-button-icon" />
+							{__('Read Export Guide')}
+						</Button>
+					</a>
+				</div>
 			</div>
 		</div>
 	);

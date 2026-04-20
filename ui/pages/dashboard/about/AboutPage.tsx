@@ -15,6 +15,7 @@ import {
 	ChevronRight,
 	BookOpen,
 	Coffee,
+	SquareTerminal,
 } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { PEAKURL_VERSION, PEAKURL_NAME } from '@/constants';
@@ -35,12 +36,8 @@ import type {
 /* ─── Helpers ─────────────────────────────────────────────── */
 const SectionTitle = ({ children, subtitle }: SectionTitleProps) => (
 	<div className="about-page-section-heading">
-		<h2 className="about-page-section-title">
-			{children}
-		</h2>
-		{subtitle && (
-			<p className="about-page-section-summary">{subtitle}</p>
-		)}
+		<h2 className="about-page-section-title">{children}</h2>
+		{subtitle && <p className="about-page-section-summary">{subtitle}</p>}
 	</div>
 );
 
@@ -61,7 +58,26 @@ const WordPressIcon = ({ className = '' }: AboutIconProps) => (
 	>
 		<path
 			fill="#21759B"
-			d="M21.469 6.825c.84 1.537 1.318 3.3 1.318 5.175 0 3.979-2.156 7.456-5.363 9.325l3.295-9.527c.615-1.54.82-2.771.82-3.864 0-.405-.026-.78-.07-1.11m-7.981.105c.647-.03 1.232-.105 1.232-.105.582-.075.514-.93-.067-.899 0 0-1.755.135-2.88.135-1.064 0-2.85-.15-2.85-.15-.585-.03-.661.855-.075.885 0 0 .54.061 1.125.09l1.68 4.605-2.37 7.08L5.354 6.9c.649-.03 1.234-.1 1.234-.1.585-.075.516-.93-.065-.896 0 0-1.746.138-2.874.138-.2 0-.438-.008-.69-.015C4.911 3.15 8.235 1.215 12 1.215c2.809 0 5.365 1.072 7.286 2.833-.046-.003-.091-.009-.141-.009-1.06 0-1.812.923-1.812 1.914 0 .89.513 1.643 1.06 2.531.411.72.89 1.643.89 2.977 0 .915-.354 1.994-.821 3.479l-1.075 3.585-3.9-11.61.001.014zM12 22.784c-1.059 0-2.081-.153-3.048-.437l3.237-9.406 3.315 9.087c.024.053.05.101.078.149-1.12.393-2.325.609-3.582.609M1.211 12c0-1.564.336-3.05.935-4.39L7.29 21.709C3.694 19.96 1.212 16.271 1.211 12M12 0C5.385 0 0 5.385 0 12s5.385 12 12 12 12-5.385 12-12S18.615 0 12 0"
+			d="M21.469 6.825c.84 1.537 1.318 3.3 1.318 5.175 0 3.979-2.156 7.456-5.363 9.325l3.295-9.527c.615-1.54.82-2.771.82-3.864 0-.405-.026-.78-.07-1.11m-7.981.105c.647-.03 1.232-.105 1.232-.105.582-.075.514-.93-.067-.899 0 0-1.755.135-2.88.135-1.064 0-2.85-.15-2.85-.15-.585-.03-.661.855-.075.885 0 0 .54.061 1.125.09l1.68 4.605-2.37 7.08L5.354 6.9c.649-.03 1.234-.1-1.234-.1.585-.075.516-.93-.065-.896 0 0-1.746.138-2.874.138-.2 0-.438-.008-.69-.015C4.911 3.15 8.235 1.215 12 1.215c2.809 0 5.365 1.072 7.286 2.833-.046-.003-.091-.009-.141-.009-1.06 0-1.812.923-1.812 1.914 0 .89.513 1.643 1.06 2.531.411.72.89 1.643.89 2.977 0 .915-.354 1.994-.821 3.479l-1.075 3.585-3.9-11.61.001.014zM12 22.784c-1.059 0-2.081-.153-3.048-.437l3.237-9.406 3.315 9.087c.024.053.05.101.078.149-1.12.393-2.325.609-3.582.609M1.211 12c0-1.564.336-3.05.935-4.39L7.29 21.709C3.694 19.96 1.212 16.271 1.211 12M12 0C5.385 0 0 5.385 0 12s5.385 12 12 12 12-5.385 12-12S18.615 0 12 0"
+		/>
+	</svg>
+);
+
+const DockerIcon = ({ className = '' }: AboutIconProps) => (
+	<svg
+		viewBox="0 0 439 309"
+		aria-hidden="true"
+		className={className}
+		fill="none"
+	>
+		<path
+			fill="currentColor"
+			d="M379.6,111.7c-2.3-16.7-11.5-31.2-28.1-44.3l-9.6-6.5l-6.4,9.7c-8.2,12.5-12.3,29.9-11,46.6
+	c0.6,5.8,2.5,16.4,8.4,25.5c-5.9,3.3-17.6,7.7-33.2,7.4H1.7l-0.6,3.5c-2.8,16.7-2.8,69,30.7,109.1c25.5,30.5,63.6,46,113.4,46
+	c108,0,187.8-50.3,225.3-141.9c14.7,0.3,46.4,0.1,62.7-31.4c0.4-0.7,1.4-2.6,4.2-8.6l1.6-3.3l-9.1-6.2
+	C419.9,110.8,397.2,108.3,379.6,111.7L379.6,111.7z M240,0h-45.3v41.7H240V0z M240,50.1h-45.3v41.7H240V50.1z M186.4,50.1h-45.3
+	v41.7h45.3V50.1z M132.9,50.1H87.6v41.7h45.3V50.1z M79.3,100.2H34v41.7h45.3V100.2z M132.9,100.2H87.6v41.7h45.3V100.2z
+	 M186.4,100.2h-45.3v41.7h45.3V100.2z M240,100.2h-45.3v41.7H240V100.2z M293.6,100.2h-45.3v41.7h45.3V100.2z"
 		/>
 	</svg>
 );
@@ -109,6 +125,16 @@ const getAddOnLinks = (): AddOnLink[] => [
 		label: 'Firefox',
 		href: 'https://go.peakurl.org/get-firefox-addon',
 		icon: FirefoxIcon,
+	},
+	{
+		label: 'Docker',
+		href: 'https://go.peakurl.org/docker',
+		icon: DockerIcon,
+	},
+	{
+		label: 'CLI',
+		href: 'https://go.peakurl.org/cli',
+		icon: SquareTerminal,
 	},
 ];
 
@@ -186,15 +212,9 @@ const LandingBanner = ({ source }: LandingBannerProps) => {
 
 	return (
 		<div className="about-page-landing">
-			<p className="about-page-landing-eyebrow">
-				{meta.eyebrow}
-			</p>
-			<h2 className="about-page-landing-title">
-				{meta.title}
-			</h2>
-			<p className="about-page-landing-copy">
-				{meta.description}
-			</p>
+			<p className="about-page-landing-eyebrow">{meta.eyebrow}</p>
+			<h2 className="about-page-landing-title">{meta.title}</h2>
+			<p className="about-page-landing-copy">{meta.description}</p>
 			<div className="about-page-landing-actions">
 				{meta.actions.map((action) => (
 					<Link

@@ -89,11 +89,16 @@ function ApiKeyModals({
 							)}
 						</p>
 					</div>
-					<ReadOnlyValueBlock
-						value={newApiKey}
-						onCopy={() => copyToClipboard(newApiKey)}
-						copyButtonLabel={__('Copy to clipboard')}
-					/>
+					<div className="settings-api-modal-section">
+						<p className="settings-api-modal-label">
+							{__('API Key')}
+						</p>
+						<ReadOnlyValueBlock
+							value={newApiKey}
+							onCopy={() => copyToClipboard(newApiKey)}
+							copyButtonLabel={__('Copy to clipboard')}
+						/>
+					</div>
 					{baseApiUrl && (
 						<div className="settings-api-modal-section">
 							<p className="settings-api-modal-label">

@@ -15,13 +15,15 @@ import { getInstalledLanguageLabel } from "@/i18n/languages";
 import {
 	buildFaviconPreviewUrl,
 	cn,
-	escUrl,
 	getTimeZoneOptions,
 	normalizeSiteTimeFormat,
 	type SiteTimeFormat,
 } from "@/utils";
 import type { GeneralFormState } from "../../types";
 import type { GeneralTabProps } from "../types";
+
+const isPngFaviconFile = (file: File | null): file is File =>
+	Boolean(file && "image/png" === file.type && /\.png$/i.test(file.name));
 
 function GeneralTab({
 	initialForm,
@@ -49,6 +51,7 @@ function GeneralTab({
 	);
 	const [faviconFile, setFaviconFile] = useState<File | null>(null);
 	const [removeFavicon, setRemoveFavicon] = useState(false);
+	const [uploadedPreviewUrl, setUploadedPreviewUrl] = useState("");
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 
 	useEffect(() => {
@@ -137,35 +140,35 @@ function GeneralTab({
 	const storedPreviewUrl = useMemo(
 		() =>
 			hasCustomFavicon
-				? escUrl(
-						buildFaviconPreviewUrl(siteSettings?.favicon?.updatedAt)
-					)
+				? buildFaviconPreviewUrl(siteSettings?.favicon?.updatedAt)
 				: "",
 		[hasCustomFavicon, siteSettings?.favicon?.updatedAt]
 	);
 	const previewUrl = useMemo(() => {
-		if (faviconFile) {
-			return escUrl(URL.createObjectURL(faviconFile));
-		}
-
 		if (removeFavicon) {
 			return "";
 		}
 
-		return storedPreviewUrl;
-	}, [faviconFile, removeFavicon, storedPreviewUrl]);
+		return uploadedPreviewUrl || storedPreviewUrl;
+	}, [removeFavicon, storedPreviewUrl, uploadedPreviewUrl]);
 
 	useEffect(() => {
+		if (!isPngFaviconFile(faviconFile)) {
+			setUploadedPreviewUrl("");
+			return;
+		}
+
+		const nextPreviewUrl = URL.createObjectURL(faviconFile);
+		setUploadedPreviewUrl(nextPreviewUrl);
+
 		return () => {
-			if (faviconFile && previewUrl) {
-				URL.revokeObjectURL(previewUrl);
-			}
+			URL.revokeObjectURL(nextPreviewUrl);
 		};
-	}, [faviconFile, previewUrl]);
+	}, [faviconFile]);
 
 	const handleFaviconChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const nextFile = event.target.files?.[0] || null;
-		setFaviconFile(nextFile);
+		setFaviconFile(isPngFaviconFile(nextFile) ? nextFile : null);
 		setRemoveFavicon(false);
 	};
 
@@ -428,9 +431,6 @@ function GeneralTab({
 									<div
 										aria-hidden="true"
 										className="settings-general-favicon-glow"
-										style={{
-											backgroundImage: `url("${previewUrl}")`,
-										}}
 									/>
 									<div className="settings-general-favicon-browser-body">
 										<img

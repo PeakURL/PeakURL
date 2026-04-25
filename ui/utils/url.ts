@@ -1,5 +1,5 @@
 function normalizeUrlInput(value: string | null | undefined): string {
-	return "string" === typeof value ? value.trim() : "";
+	return typeof value === "string" ? value.trim() : "";
 }
 
 /**
@@ -16,7 +16,7 @@ export function escUrl(value: string | null | undefined): string {
 		return normalizedValue;
 	}
 
-	if (normalizedValue.startsWith("/")) {
+	if (normalizedValue.startsWith("//")) {
 		return "";
 	}
 
@@ -24,9 +24,9 @@ export function escUrl(value: string | null | undefined): string {
 		const url = new URL(normalizedValue);
 
 		if (
-			"http:" !== url.protocol &&
-			"https:" !== url.protocol &&
-			"blob:" !== url.protocol
+			url.protocol !== "http:" &&
+			url.protocol !== "https:" &&
+			url.protocol !== "blob:"
 		) {
 			return "";
 		}

@@ -30,7 +30,7 @@ function getSupportedTimeZoneValues(): string[] {
 		}
 	).supportedValuesOf;
 
-	if ("function" === typeof supportedValuesOf) {
+	if (typeof supportedValuesOf === "function") {
 		try {
 			return supportedValuesOf("timeZone");
 		} catch {
@@ -51,7 +51,7 @@ function getTimeZoneOffsetLabel(timeZone: string, locale: string): string {
 		});
 		const timeZoneName = formatter
 			.formatToParts(new Date())
-			.find((part) => "timeZoneName" === part.type)?.value;
+			.find((part) => part.type === "timeZoneName")?.value;
 
 		return timeZoneName || timeZone;
 	} catch {
@@ -79,5 +79,5 @@ export function getTimeZoneOptions(): SelectOption<string>[] {
 }
 
 export function normalizeSiteTimeFormat(value?: string | null): SiteTimeFormat {
-	return "24" === value ? "24" : "12";
+	return value === "24" ? "24" : "12";
 }

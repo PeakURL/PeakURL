@@ -1,10 +1,66 @@
-import { PEAKURL_URL } from "@constants";
+import { PEAKURL_BASENAME } from "@constants";
 
 export type ManagedFaviconAsset =
 	| "favicon.png"
 	| "favicon.ico"
 	| "apple-touch-icon.png"
 	| "site.webmanifest";
+
+function decodePathSegment(segment: string): string {
+	let decodedSegment = segment;
+
+	for (let attempts = 0; attempts < 3; attempts += 1) {
+		const nextSegment = decodeURIComponent(decodedSegment);
+
+		if (nextSegment === decodedSegment) {
+			return decodedSegment;
+		}
+
+		decodedSegment = nextSegment;
+	}
+
+	return decodedSegment;
+}
+
+function getManagedFaviconBasePath(): string {
+	const segments: string[] = [];
+
+	for (const segment of PEAKURL_BASENAME.split("/")) {
+		let decodedSegment = "";
+
+		try {
+			decodedSegment = decodePathSegment(segment);
+		} catch {
+			return "";
+		}
+
+		if (!decodedSegment || decodedSegment === ".") {
+			continue;
+		}
+
+		if (
+			decodedSegment === ".." ||
+			decodedSegment.includes("/") ||
+			decodedSegment.includes("\\")
+		) {
+			return "";
+		}
+
+		segments.push(encodeURIComponent(decodedSegment));
+	}
+
+	return segments.length > 0 ? `/${segments.join("/")}` : "";
+}
+
+function getUpdatedTimestamp(updatedAt?: string | null): number | undefined {
+	if (typeof updatedAt !== "string" || updatedAt.trim().length === 0) {
+		return undefined;
+	}
+
+	const updatedTimestamp = Date.parse(updatedAt);
+
+	return Number.isFinite(updatedTimestamp) ? updatedTimestamp : undefined;
+}
 
 /**
  * Builds a same-origin URL for a managed favicon asset.
@@ -13,22 +69,15 @@ export function buildManagedFaviconUrl(
 	asset: ManagedFaviconAsset,
 	updatedAt?: string | null
 ): string {
-	try {
-		const siteUrl = new URL(
-			"./",
-			PEAKURL_URL.endsWith("/") ? PEAKURL_URL : `${PEAKURL_URL}/`
-		);
-		const assetUrl = new URL(asset, siteUrl);
-		const updatedTimestamp = Date.parse(updatedAt || "");
+	const basePath = getManagedFaviconBasePath();
+	const assetPath = `${basePath}/${asset}`;
+	const updatedTimestamp = getUpdatedTimestamp(updatedAt);
 
-		if (Number.isFinite(updatedTimestamp)) {
-			assetUrl.searchParams.set("v", `${updatedTimestamp}`);
-		}
-
-		return assetUrl.toString();
-	} catch {
-		return "";
+	if (updatedTimestamp !== undefined) {
+		return `${assetPath}?v=${encodeURIComponent(String(updatedTimestamp))}`;
 	}
+
+	return assetPath;
 }
 
 /**

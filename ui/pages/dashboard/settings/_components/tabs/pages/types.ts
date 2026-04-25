@@ -119,6 +119,8 @@ export interface EmailStatus {
 	smtpPasswordHint?: string | null;
 	canManageFromDashboard?: boolean;
 	manageDisabledReason?: string | null;
+	canSendTestEmail?: boolean;
+	testDisabledReason?: string | null;
 }
 
 /**
@@ -144,7 +146,9 @@ export interface EmailDeliveryTabProps {
 	errorMessage?: string | null;
 	isLoading: boolean;
 	isSaving: boolean;
+	isTesting: boolean;
 	onSave: (payload: EmailFormState) => Promise<unknown> | unknown;
+	onSendTest: () => Promise<unknown> | unknown;
 }
 
 /**

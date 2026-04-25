@@ -1,0 +1,12 @@
+Hola {{recipient}},
+
+Este es un correo de prueba de {{site_name}}.
+
+El transporte de correo de PeakURL puede enviar mensajes usando {{mail_driver}}.
+
+Volver a la configuración de correo: {{dashboard_url}}
+
+Enviado el {{sent_at}}.
+
+Gracias,
+El equipo de PeakURL.org

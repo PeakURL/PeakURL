@@ -248,6 +248,120 @@ class Notifications {
 	}
 
 	/**
+	 * Send a dashboard-triggered mail transport test email.
+	 *
+	 * @param array<string, mixed> $user        Current admin user row.
+	 * @param array<string, mixed> $mail_status Current mail status payload.
+	 * @return array{recipient: string, driver: string}
+	 *
+	 * @throws \RuntimeException When email delivery fails.
+	 * @since 1.0.16
+	 */
+	public function send_test_email(
+		array $user,
+		array $mail_status = array()
+	): array {
+		$email = $this->get_user_email(
+			$user,
+			__( 'PeakURL could not send the test email because your account email address is invalid.', 'peakurl' ),
+		);
+
+		$site_name     = \get_site_name();
+		$site_url      = \get_site_url();
+		$dashboard_url = \get_site_url( 'dashboard/settings?tab=email' );
+		$display_name  = \get_user_display_name( $user );
+		$driver        = (string) ( $mail_status['driver'] ?? 'mail' );
+		$mail_driver   = 'smtp' === $driver
+			? __( 'SMTP', 'peakurl' )
+			: __( 'PHP mail()', 'peakurl' );
+		$sent_at       = $this->format_email_sent_at( time() );
+		$subject       = (string) \apply_filters(
+			'peakurl_test_email_subject',
+			sprintf(
+				/* translators: %s: site name. */
+				__( 'Test email from %s', 'peakurl' ),
+				$site_name,
+			),
+			$user,
+			$site_name,
+			$mail_status,
+		);
+		$context = $this->filter_template_context(
+			'peakurl_test_email_context',
+			array(
+				'recipient'     => $display_name,
+				'site_name'     => $site_name,
+				'site_url'      => $site_url,
+				'dashboard_url' => $dashboard_url,
+				'mail_driver'   => $mail_driver,
+				'sent_at'       => $sent_at,
+			),
+			$user,
+			$mail_status,
+		);
+		$bodies  = $this->render_template_pair(
+			'test-email',
+			$context,
+		);
+
+		\PeakURL_Mail(
+			$email,
+			$subject,
+			$bodies['html'],
+			array(
+				'to_name'   => $display_name,
+				'text_body' => $bodies['text'],
+				'html'      => true,
+			),
+		);
+
+		\do_action(
+			'peakurl_test_email_sent',
+			$user,
+			$email,
+			$display_name,
+			$subject,
+			$mail_status,
+		);
+
+		return array(
+			'recipient' => $email,
+			'driver'    => $driver,
+		);
+	}
+
+	/**
+	 * Format a timestamp for human-readable email output.
+	 *
+	 * @param int $timestamp Unix timestamp.
+	 * @return string
+	 * @since 1.0.16
+	 */
+	private function format_email_sent_at( int $timestamp ): string {
+		$timezone = new \DateTimeZone( 'UTC' );
+		$date     = ( new \DateTimeImmutable( '@' . $timestamp ) )->setTimezone(
+			$timezone,
+		);
+		$locale   = str_replace( '_', '-', \get_locale() );
+
+		if ( class_exists( \IntlDateFormatter::class ) ) {
+			$formatter = new \IntlDateFormatter(
+				'' !== $locale ? $locale : 'en-US',
+				\IntlDateFormatter::LONG,
+				\IntlDateFormatter::SHORT,
+				'UTC',
+			);
+			$formatted = $formatter->format( $date );
+
+			if ( is_string( $formatted ) && '' !== trim( $formatted ) ) {
+				return $formatted . ' UTC';
+			}
+		}
+
+		return gmdate( 'F j, Y \a\t g:i A T', $timestamp );
+	}
+
+	/**
 	 * Render the HTML and text versions of a named email template.
 	 *
 	 * @param string               $template_name Template base filename.

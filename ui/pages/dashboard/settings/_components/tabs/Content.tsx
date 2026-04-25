@@ -14,6 +14,7 @@ import {
 	useGetMailStatusQuery,
 	useSaveGeoipConfigurationMutation,
 	useSaveMailConfigurationMutation,
+	useSendTestEmailMutation,
 	useDownloadGeoipDatabaseMutation,
 	useGetUpdateStatusQuery,
 	useCheckForUpdatesMutation,
@@ -256,6 +257,8 @@ const Content = ({ activeTab }: ContentProps) => {
 	});
 	const [saveMailConfiguration, { isLoading: isSavingMailConfiguration }] =
 		useSaveMailConfigurationMutation();
+	const [sendTestEmail, { isLoading: isSendingTestEmail }] =
+		useSendTestEmailMutation();
 	const [downloadGeoipDatabase, { isLoading: isDownloadingGeoipDatabase }] =
 		useDownloadGeoipDatabaseMutation();
 	const {
@@ -736,6 +739,31 @@ const Content = ({ activeTab }: ContentProps) => {
 		}
 	};
 
+	const handleSendTestEmail = async () => {
+		try {
+			const result = await sendTestEmail(undefined).unwrap();
+			const recipient = result?.data?.recipient;
+
+			notification.success(
+				__("Test email sent"),
+				recipient
+					? sprintf(
+							__("PeakURL sent a test email to %s."),
+							recipient
+						)
+					: __("PeakURL sent a test email to your account email.")
+			);
+		} catch (err) {
+			notification.error(
+				__("Test email failed"),
+				getErrorMessage(
+					err,
+					__("PeakURL could not send the test email.")
+				)
+			);
+		}
+	};
+
 	if (
 		isLoadingGeneralSettings ||
 		isLoadingGeoipStatus ||
@@ -871,7 +899,9 @@ const Content = ({ activeTab }: ContentProps) => {
 					errorMessage={extractErrorMessage(mailError)}
 					isLoading={isLoadingMailStatus}
 					isSaving={isSavingMailConfiguration}
+					isTesting={isSendingTestEmail}
 					onSave={handleSaveMailConfiguration}
+					onSendTest={handleSendTestEmail}
 				/>
 			)}
 

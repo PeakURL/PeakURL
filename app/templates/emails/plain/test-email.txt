@@ -1,0 +1,12 @@
+Hello {{recipient}},
+
+This is a test email from {{site_name}}.
+
+Your PeakURL mail transport is able to send messages using {{mail_driver}}.
+
+Return to Email Configuration: {{dashboard_url}}
+
+Sent at {{sent_at}}.
+
+Thanks,
+The PeakURL.org Team

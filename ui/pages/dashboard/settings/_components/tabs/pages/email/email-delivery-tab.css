@@ -140,4 +140,9 @@
 	.settings-email-auth-knob-inactive {
 		@apply translate-x-0;
 	}
+
+	.settings-email-test-note {
+		text-align: start;
+		@apply text-sm leading-6 text-text-muted;
+	}
 }

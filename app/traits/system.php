@@ -297,6 +297,48 @@ trait SystemTrait {
 	}
 
 	/**
+	 * Send a test email through the active mail transport.
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed>
+	 * @since 1.0.16
+	 */
+	public function send_test_email( Request $request ): array {
+		$user = $this->assert_request_capability(
+			$request,
+			'manage_mail_delivery',
+			__( 'Admin access is required.', 'peakurl' ),
+		);
+
+		$status = $this->mailer_service->get_status();
+
+		if ( empty( $status['canSendTestEmail'] ) ) {
+			throw new ApiException(
+				(string) (
+					$status['testDisabledReason'] ??
+					__( 'Save a complete mail configuration before sending a test email.', 'peakurl' )
+				),
+				422,
+			);
+		}
+
+		try {
+			$result = $this->notifications_service->send_test_email(
+				$user,
+				$status,
+			);
+		} catch ( \RuntimeException $exception ) {
+			throw new ApiException( $exception->getMessage(), 422 );
+		}
+
+		return array(
+			'sent'      => true,
+			'recipient' => $result['recipient'],
+			'driver'    => $result['driver'],
+		);
+	}
+
+	/**
 	 * Return the cached update status.
 	 *
 	 * @param Request $request Incoming HTTP request (admin-only).

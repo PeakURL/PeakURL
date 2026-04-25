@@ -32,6 +32,7 @@ import type { GetUrlsResponse } from "@/pages/dashboard/links/types";
 import type {
 	GeoipConfigurationPayload,
 	MailConfigurationPayload,
+	MailTestResult,
 	ProfileUser,
 } from "@/pages/dashboard/settings/_components/tabs/types";
 import type {
@@ -451,6 +452,7 @@ export type {
 	LinkStatsResponse,
 	LocationDataStatus,
 	MailConfigurationPayload,
+	MailTestResult,
 	RevokeOtherSessionsResponse,
 	SecuritySettingsResponse,
 	SiteSettings,

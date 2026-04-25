@@ -1,6 +1,6 @@
 import type { SubmitEvent } from "react";
 import { useState } from "react";
-import { AlertCircle, Mail, Send, Server } from "lucide-react";
+import { AlertCircle, Mail, MailCheck, Send, Server } from "lucide-react";
 import { Button, Input, Select, type SelectOption } from "@/components";
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
@@ -53,12 +53,59 @@ function buildFormState(status?: EmailStatus | null): EmailFormState {
 	};
 }
 
+function buildMailPayload(form: EmailFormState): EmailFormState {
+	return {
+		driver: form.driver,
+		fromEmail: form.fromEmail.trim(),
+		fromName: form.fromName.trim(),
+		smtpHost: form.smtpHost.trim(),
+		smtpPort: form.smtpPort.trim(),
+		smtpEncryption: form.smtpEncryption,
+		smtpAuth: form.smtpAuth,
+		smtpUsername: form.smtpUsername.trim(),
+		smtpPassword: form.smtpPassword,
+	};
+}
+
+function buildComparableState(form: EmailFormState) {
+	return {
+		driver: form.driver,
+		fromEmail: form.fromEmail.trim(),
+		fromName: form.fromName.trim(),
+		smtpHost: form.smtpHost.trim(),
+		smtpPort: form.smtpPort.trim(),
+		smtpEncryption: form.smtpEncryption,
+		smtpAuth: form.smtpAuth,
+		smtpUsername: form.smtpUsername.trim(),
+	};
+}
+
+function hasUnsavedMailChanges(
+	form: EmailFormState,
+	status?: EmailStatus | null
+): boolean {
+	if (!status) {
+		return false;
+	}
+
+	if ("" !== form.smtpPassword) {
+		return true;
+	}
+
+	return (
+		JSON.stringify(buildComparableState(form)) !==
+		JSON.stringify(buildComparableState(buildFormState(status)))
+	);
+}
+
 function EmailDeliveryTab({
 	status,
 	errorMessage,
 	isLoading,
 	isSaving,
+	isTesting,
 	onSave,
+	onSendTest,
 }: EmailDeliveryTabProps) {
 	const isRtl = isDocumentRtl();
 	const direction = isRtl ? "rtl" : "ltr";
@@ -73,17 +120,7 @@ function EmailDeliveryTab({
 
 	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		await onSave({
-			driver: form.driver,
-			fromEmail: form.fromEmail.trim(),
-			fromName: form.fromName.trim(),
-			smtpHost: form.smtpHost.trim(),
-			smtpPort: form.smtpPort.trim(),
-			smtpEncryption: form.smtpEncryption,
-			smtpAuth: form.smtpAuth,
-			smtpUsername: form.smtpUsername.trim(),
-			smtpPassword: form.smtpPassword,
-		});
+		await onSave(buildMailPayload(form));
 
 		setForm((current) => ({
 			...current,
@@ -94,9 +131,20 @@ function EmailDeliveryTab({
 	const managementDisabled = Boolean(
 		status && !status.canManageFromDashboard
 	);
-	const savedDriver = status?.driver || "mail";
 	const usingSmtp = "smtp" === form.driver;
-	const showSubmitButton = usingSmtp || form.driver !== savedDriver;
+	const hasUnsavedChanges = hasUnsavedMailChanges(form, status);
+	const showSubmitButton = status ? hasUnsavedChanges : usingSmtp;
+	const testDisabledReason = hasUnsavedChanges
+		? __("Save the current email settings before sending a test email.")
+		: status?.testDisabledReason || null;
+	const canSendTestEmail = Boolean(
+		status?.canSendTestEmail &&
+			!testDisabledReason &&
+			!managementDisabled &&
+			!isLoading &&
+			!isSaving
+	);
+	const showTestButton = Boolean(status);
 
 	return (
 		<div className="settings-email">
@@ -379,7 +427,7 @@ function EmailDeliveryTab({
 					</div>
 				)}
 
-				{showSubmitButton && (
+				{(showSubmitButton || showTestButton) && (
 					<div
 						className={cn(
 							"settings-email-actions",
@@ -388,17 +436,37 @@ function EmailDeliveryTab({
 								: "settings-email-actions-end"
 						)}
 					>
-						<Button
-							type="submit"
-							size="sm"
-							loading={isSaving || isLoading}
-							disabled={managementDisabled}
-						>
-							{usingSmtp
-								? __("Save Email Configuration")
-								: __("Use PHP mail()")}
-						</Button>
+						{showTestButton && (
+							<Button
+								type="button"
+								variant="secondary"
+								size="sm"
+								icon={MailCheck}
+								loading={isTesting}
+								disabled={!canSendTestEmail}
+								onClick={onSendTest}
+							>
+								{__("Send Test Email")}
+							</Button>
+						)}
+						{showSubmitButton && (
+							<Button
+								type="submit"
+								size="sm"
+								loading={isSaving || isLoading}
+								disabled={managementDisabled || isTesting}
+							>
+								{usingSmtp
+									? __("Save Email Configuration")
+									: __("Use PHP mail()")}
+							</Button>
+						)}
 					</div>
+				)}
+				{showTestButton && testDisabledReason && (
+					<p className="settings-email-test-note">
+						{testDisabledReason}
+					</p>
 				)}
 			</form>
 		</div>

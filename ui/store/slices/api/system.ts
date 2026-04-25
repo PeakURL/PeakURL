@@ -6,6 +6,7 @@ import type {
 	GeoipConfigurationPayload,
 	LocationDataStatus,
 	MailConfigurationPayload,
+	MailTestResult,
 	SaveGeneralSettingsPayload,
 	SiteSettings,
 	SystemStatusResponse,
@@ -96,6 +97,13 @@ export const systemApi = baseApi.injectEndpoints({
 			}),
 			invalidatesTags: ["Mail"],
 		}),
+		sendTestEmail: build.mutation<ApiDataResponse<MailTestResult>, void>({
+			query: () => ({
+				url: "system/mail/test",
+				method: "POST",
+			}),
+			invalidatesTags: ["Mail"],
+		}),
 		downloadGeoipDatabase: build.mutation<void, void>({
 			query: () => ({
 				url: "system/geoip/download",
@@ -158,6 +166,7 @@ export const {
 	useGetMailStatusQuery,
 	useSaveGeoipConfigurationMutation,
 	useSaveMailConfigurationMutation,
+	useSendTestEmailMutation,
 	useDownloadGeoipDatabaseMutation,
 	useGetUpdateStatusQuery,
 	useCheckForUpdatesMutation,

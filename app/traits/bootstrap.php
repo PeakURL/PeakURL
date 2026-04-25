@@ -93,7 +93,7 @@ trait BootstrapTrait {
 						'is_email_verified' => 1,
 						'email_verified_at' => $now,
 						'company'           => 'PeakURL',
-						'bio'               => 'Self-hosted workspace owner.',
+						'bio'               => 'PeakURL workspace owner.',
 						'created_at'        => $now,
 						'updated_at'        => $now,
 					),

@@ -77,4 +77,18 @@ class MailController {
 			__( 'Mail delivery settings saved.', 'peakurl' ),
 		);
 	}
+
+	/**
+	 * Send a test email through the active mail transport.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed>
+	 * @since 1.0.16
+	 */
+	public function test( Request $request ): array {
+		return JsonResponse::success(
+			$this->data_store->send_test_email( $request ),
+			__( 'Test email sent.', 'peakurl' ),
+		);
+	}
 }

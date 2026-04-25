@@ -121,6 +121,15 @@ export interface MailConfigurationPayload {
 }
 
 /**
+ * Result returned after sending a dashboard test email.
+ */
+export interface MailTestResult {
+	sent?: boolean;
+	recipient?: string | null;
+	driver?: MailDriver | null;
+}
+
+/**
  * Props for the settings content router component.
  */
 export interface ContentProps {

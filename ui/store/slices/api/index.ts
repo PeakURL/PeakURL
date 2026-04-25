@@ -24,6 +24,7 @@ export {
 	useSaveGeneralSettingsMutation,
 	useSaveGeoipConfigurationMutation,
 	useSaveMailConfigurationMutation,
+	useSendTestEmailMutation,
 	useUpgradeDatabaseSchemaMutation,
 } from "./system";
 export * from "./types";

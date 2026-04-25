@@ -78,8 +78,12 @@ class Mailer {
 	 * @since 1.0.0
 	 */
 	public function get_status(): array {
-		$settings   = $this->get_settings();
-		$capability = $this->get_capability();
+		$settings             = $this->get_settings();
+		$capability           = $this->get_capability();
+		$test_disabled_reason = $this->get_test_disabled_reason(
+			$settings,
+			$capability,
+		);
 
 		return array(
 			'driver'                 => $settings['driver'],
@@ -100,6 +104,8 @@ class Mailer {
 			'configurationPath'      => 'settings',
 			'canManageFromDashboard' => $capability['allowed'],
 			'manageDisabledReason'   => $capability['reason'],
+			'canSendTestEmail'       => null === $test_disabled_reason,
+			'testDisabledReason'     => $test_disabled_reason,
 		);
 	}
 
@@ -343,6 +349,51 @@ class Mailer {
 			'allowed' => true,
 			'reason'  => null,
 		);
+	}
+
+	/**
+	 * Return why a test email cannot be sent with the current settings.
+	 *
+	 * @param array<string, mixed>        $settings   Active mail settings.
+	 * @param array{allowed: bool, reason: string|null} $capability Dashboard management capability.
+	 * @return string|null Reason when disabled, otherwise null.
+	 * @since 1.0.16
+	 */
+	private function get_test_disabled_reason(
+		array $settings,
+		array $capability
+	): ?string {
+		if ( ! $capability['allowed'] ) {
+			return $capability['reason'];
+		}
+
+		if ( 'smtp' !== (string) ( $settings['driver'] ?? 'mail' ) ) {
+			return null;
+		}
+
+		if ( '' === trim( (string) ( $settings['smtpHost'] ?? '' ) ) ) {
+			return __( 'Save the SMTP host before sending a test email.', 'peakurl' );
+		}
+
+		$smtp_port = (int) ( $settings['smtpPort'] ?? 0 );
+
+		if ( $smtp_port < 1 || $smtp_port > 65535 ) {
+			return __( 'Save a valid SMTP port before sending a test email.', 'peakurl' );
+		}
+
+		if ( empty( $settings['smtpAuth'] ) ) {
+			return null;
+		}
+
+		if ( '' === trim( (string) ( $settings['smtpUsername'] ?? '' ) ) ) {
+			return __( 'Save the SMTP username before sending a test email.', 'peakurl' );
+		}
+
+		if ( '' === trim( (string) ( $settings['smtpPassword'] ?? '' ) ) ) {
+			return __( 'Save the SMTP password before sending a test email.', 'peakurl' );
+		}
+
+		return null;
 	}
 
 	/**

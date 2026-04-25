@@ -373,6 +373,13 @@ class Application {
 				'update',
 			)
 		);
+		$this->router->post(
+			'/api/v1/system/mail/test',
+			array(
+				$mail,
+				'test',
+			)
+		);
 
 		$this->router->get(
 			'/api/v1/system/update',

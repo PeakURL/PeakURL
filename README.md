@@ -120,7 +120,7 @@ From there you can:
 - review analytics and visitor insights
 - import existing links
 - manage users, API access, and integrations
-- configure email delivery, updates, and location data
+- configure email delivery, send a test email, manage updates, and refresh location data
 
 If you want the latest public install package, use
 [peakurl.org/latest.zip](https://peakurl.org/latest.zip).

@@ -23,7 +23,11 @@ export function escUrl(value: string | null | undefined): string {
 	try {
 		const url = new URL(normalizedValue);
 
-		if ("http:" !== url.protocol && "https:" !== url.protocol) {
+		if (
+			"http:" !== url.protocol &&
+			"https:" !== url.protocol &&
+			"blob:" !== url.protocol
+		) {
 			return "";
 		}
 

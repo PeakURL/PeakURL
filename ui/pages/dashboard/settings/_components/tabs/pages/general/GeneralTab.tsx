@@ -12,7 +12,7 @@ import {
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { getInstalledLanguageLabel } from "@/i18n/languages";
-import { buildFaviconPreviewUrl, cn } from "@/utils";
+import { buildFaviconPreviewUrl, cn, escUrl } from "@/utils";
 import type { GeneralFormState } from "../../types";
 import type { GeneralTabProps } from "../types";
 
@@ -106,13 +106,15 @@ function GeneralTab({
 	const storedPreviewUrl = useMemo(
 		() =>
 			hasCustomFavicon
-				? buildFaviconPreviewUrl(siteSettings?.favicon?.updatedAt)
+				? escUrl(
+						buildFaviconPreviewUrl(siteSettings?.favicon?.updatedAt)
+					)
 				: "",
 		[hasCustomFavicon, siteSettings?.favicon?.updatedAt]
 	);
 	const previewUrl = useMemo(() => {
 		if (faviconFile) {
-			return URL.createObjectURL(faviconFile);
+			return escUrl(URL.createObjectURL(faviconFile));
 		}
 
 		if (removeFavicon) {

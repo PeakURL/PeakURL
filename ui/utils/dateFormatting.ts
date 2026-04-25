@@ -109,13 +109,22 @@ function buildDateTimeOptions(
 		timeZone: getActiveTimeZone(),
 		...(hasDateTimeDisplayOption(options)
 			? options
-			: { dateStyle: "medium", timeStyle: "short" }),
+			: { dateStyle: "medium", timeStyle: "medium" }),
 	};
+	const shouldIncludeSeconds =
+		!("second" in resolvedOptions) &&
+		!("fractionalSecondDigits" in resolvedOptions) &&
+		!("timeStyle" in resolvedOptions) &&
+		("hour" in resolvedOptions || "minute" in resolvedOptions);
 
 	if ("12" === timeFormat) {
 		resolvedOptions.hour12 = true;
 	} else if ("24" === timeFormat) {
 		resolvedOptions.hour12 = false;
+	}
+
+	if (shouldIncludeSeconds) {
+		resolvedOptions.second = "2-digit";
 	}
 
 	return resolvedOptions;

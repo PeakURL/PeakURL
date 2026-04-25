@@ -272,7 +272,7 @@ function formatExactTimestamp(timestamp?: string | null): string {
 
 	return formatLocalizedDateTime(date, {
 		dateStyle: "medium",
-		timeStyle: "short",
+		timeStyle: "medium",
 	});
 }
 

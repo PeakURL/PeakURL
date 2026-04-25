@@ -203,15 +203,15 @@ msgstr ""
 msgid "You cannot delete the current user."
 msgstr ""
 
-#: app/traits/accounts/security.php:170
+#: app/traits/accounts/security.php:174
 msgid "No two-factor setup is pending for this account."
 msgstr ""
 
-#: app/traits/accounts/security.php:176
+#: app/traits/accounts/security.php:180
 msgid "Invalid verification code."
 msgstr ""
 
-#: app/traits/accounts/security.php:349
+#: app/traits/accounts/security.php:353
 msgid "PeakURL could not identify the current session."
 msgstr ""
 
@@ -398,12 +398,12 @@ msgid "Backup codes regenerated."
 msgstr ""
 
 #: app/controllers/auth.php:342
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:34
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:35
 msgid "PeakURL Backup Codes"
 msgstr ""
 
 #: app/controllers/auth.php:343
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:35
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:36
 msgid "Keep these codes safe. Each code can be used once."
 msgstr ""
 
@@ -555,7 +555,7 @@ msgid "Enter password"
 msgstr ""
 
 #: app/controllers/urls.php:385
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:821
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:863
 msgid "Continue"
 msgstr ""
 
@@ -1764,8 +1764,8 @@ msgstr ""
 
 #: ui/components/ui/ConfirmDialog/ConfirmDialog.tsx:30
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:1032
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:658
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:826
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:678
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:868
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:363
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:61
 #: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:86
@@ -2606,13 +2606,13 @@ msgstr ""
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:586
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:624
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:644
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:220
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:235
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:257
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:273
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:325
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:362
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:394
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:240
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:255
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:277
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:293
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:345
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:382
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:414
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:87
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:106
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:121
@@ -2664,7 +2664,7 @@ msgid "Profile updated successfully"
 msgstr ""
 
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:554
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:838
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:880
 msgid "Enter your current password"
 msgstr ""
 
@@ -2909,222 +2909,230 @@ msgstr ""
 msgid "Install update"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:39
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:40
 msgid "Generated at: %s"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:76
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:56
+msgid "Private network"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:59
+msgid "Location unavailable"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:96
 msgid "Continue 2FA setup"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:77
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:97
 msgid "Set up 2FA"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:80
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:100
 msgid "Backup codes remaining: %s"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:83
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:103
 msgid "Enable to generate backup codes for account recovery."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:116
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:136
 msgid "Download backup codes"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:117
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:137
 msgid "Enter your current password to download the latest backup codes for this account."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:120
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:561
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:693
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:140
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:581
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:713
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:126
 msgid "Download"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:124
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:144
 msgid "Disable two-factor authentication"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:125
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:145
 msgid "Enter your current password to disable two-factor authentication and clear the current backup codes for this account."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:128
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:496
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:148
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:516
 msgid "Disable"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:133
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:153
 msgid "Regenerate backup codes"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:134
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:154
 msgid "Enter your current password to replace the existing backup codes with a new set."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:137
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:485
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:157
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:505
 msgid "Regenerate Codes"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:173
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:314
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:193
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:334
 msgid "Backup codes downloaded"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:174
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:194
 msgid "PeakURL downloaded the visible backup codes for this account."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:211
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:579
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:231
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:599
 msgid "Scan the QR code"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:212
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:232
 msgid "Scan with your authenticator app and enter the 6-digit code."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:223
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:243
 msgid "Failed to start two-factor authentication setup"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:236
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:256
 msgid "Enter the 6-digit code to verify"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:251
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:271
 msgid "Two-factor enabled"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:252
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:272
 msgid "Backup codes generated. Store them safely."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:260
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:280
 msgid "Failed to verify code. Check the code and try again."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:274
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:294
 msgid "Enter your current password to continue"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:293
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:313
 msgid "Two-factor disabled"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:294
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:314
 msgid "Backup codes cleared for this account."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:303
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:323
 msgid "Backup codes refreshed"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:304
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:324
 msgid "Save the new codes before leaving this page."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:315
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:335
 msgid "PeakURL downloaded the latest backup codes for this account."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:329
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:349
 msgid "Failed to disable two-factor authentication"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:331
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:351
 msgid "Failed to regenerate backup codes"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:332
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:352
 msgid "Failed to download backup codes"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:348
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:368
 msgid "Session ended"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:350
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:370
 msgid "Current browser session ended."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:351
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:371
 msgid "The session was revoked."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:363
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:383
 msgid "Failed to end the session"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:383
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:403
 msgid "Other sessions ended"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:385
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:405
 msgid "%1$s other session%2$s were ended."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:389
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:409
 msgid "No other active sessions were found."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:395
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:415
 msgid "Failed to end the other sessions"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:406
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:426
 msgid "Password & Security"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:410
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:831
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:430
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:873
 msgid "Current Password"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:422
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:442
 #: ui/pages/dashboard/users/UsersPage.tsx:237
 msgid "New Password"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:433
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:453
 #: ui/pages/dashboard/users/UsersPage.tsx:256
 msgid "Confirm New Password"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:453
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:473
 msgid "Updating..."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:453
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:473
 msgid "Update Password"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:465
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:485
 msgid "Two-Factor Authentication"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:468
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:488
 msgid "Add an extra layer of security with an authenticator app and backup codes."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:537
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:557
 msgid "2FA is enabled"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:538
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:558
 msgid "2FA is disabled"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:545
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:565
 msgid "Last generated:"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:548
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:776
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:568
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:814
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/UpdatesTab.tsx:127
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/UpdatesTab.tsx:144
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/UpdatesTab.tsx:540
@@ -3157,110 +3165,110 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:582
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:602
 msgid "Use an authenticator app (Google Authenticator, Authy, etc.) then enter the 6-digit code."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:593
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:613
 msgid "TOTP QR code"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:601
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:621
 msgid "QR preview is unavailable in this browser. Use the secret or authenticator URI below."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:610
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:630
 msgid "Secret"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:621
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:641
 msgid "Authenticator URI"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:631
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:651
 msgid "6-digit code"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:637
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:657
 msgid "123456"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:646
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:666
 msgid "Verify & Enable"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:674
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:694
 msgid "New backup codes"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:677
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:697
 msgid "Save or download these codes now—they won't be shown again."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:717
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:737
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:690
 msgid "Active Sessions"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:721
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:741
 msgid "%s active session(s)"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:733
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:849
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:753
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:891
 msgid "End all other sessions"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:740
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:760
 msgid "Loading security data..."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:744
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:764
 msgid "No active sessions found."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:767
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:792
 msgid "Browser"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:768
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:795
 msgid "Unknown OS"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:772
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:808
 msgid "Unknown IP"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:773
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:811
 msgid "Last active"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:784
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:823
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:588
 msgid "Current"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:789
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:828
 msgid "Ended"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:803
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:844
 msgid "End session"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:817
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:859
 msgid "Confirm your password"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:851
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:893
 msgid "End %s other active session(s) for this account? Any browsers or devices using them will be signed out immediately."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:856
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:898
 msgid "End sessions"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:857
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:899
 msgid "Keep sessions"
 msgstr ""
 

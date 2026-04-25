@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace PeakURL\Traits;
 
+use PeakURL\Includes\Constants;
 use PeakURL\Http\Request;
 use PeakURL\Utils\Visitor;
 
@@ -60,19 +61,42 @@ trait AnalyticsSupportTrait {
 	 * Build the start-at timestamp for a given time window.
 	 *
 	 * @param int $days Number of days to look back.
-	 * @return array<string, string> Map with a single `start_at` key.
+	 * @return array<string, string> Window metadata using UTC start time.
 	 * @since 1.0.0
 	 */
 	private function build_time_window( int $days ): array {
-		$timezone   = new \DateTimeZone( 'UTC' );
+		$timezone   = $this->get_analytics_timezone();
 		$start_date =
 			( new \DateTimeImmutable( 'now', $timezone ) )
 				->setTime( 0, 0, 0 )
 				->modify( '-' . max( 0, $days - 1 ) . ' days' );
+		$utc_start  = $start_date->setTimezone( new \DateTimeZone( 'UTC' ) );
 
 		return array(
-			'start_at' => $start_date->format( 'Y-m-d H:i:s' ),
+			'start_at'   => $utc_start->format( 'Y-m-d H:i:s' ),
+			'start_date' => $start_date->format( 'Y-m-d' ),
+			'timezone'   => $timezone->getName(),
 		);
+	}
+
+	/**
+	 * Return the configured analytics timezone.
+	 *
+	 * @return \DateTimeZone
+	 * @since 1.1.0
+	 */
+	private function get_analytics_timezone(): \DateTimeZone {
+		$timezone = trim( (string) $this->get_option( 'site_timezone' ) );
+
+		if ( '' === $timezone ) {
+			$timezone = Constants::DEFAULT_TIMEZONE;
+		}
+
+		try {
+			return new \DateTimeZone( $timezone );
+		} catch ( \Exception $exception ) {
+			return new \DateTimeZone( Constants::DEFAULT_TIMEZONE );
+		}
 	}
 
 	/**
@@ -90,6 +114,7 @@ trait AnalyticsSupportTrait {
 		?array $user = null
 	): array {
 		$window     = $this->build_time_window( $days );
+		$timezone   = new \DateTimeZone( $window['timezone'] );
 		$join_sql   = '';
 		$conditions = array( 'c.clicked_at >= :start_at' );
 		$params     = array( 'start_at' => $window['start_at'] );
@@ -110,49 +135,70 @@ trait AnalyticsSupportTrait {
 
 		$rows = $this->query_all(
 			'SELECT
-                DATE(c.clicked_at) AS bucket_date,
-                COUNT(*) AS clicks,
-                COUNT(DISTINCT COALESCE(NULLIF(c.visitor_hash, \'\'), c.id)) AS unique_clicks
+                c.clicked_at,
+                COALESCE(NULLIF(c.visitor_hash, \'\'), c.id) AS visitor_key
             FROM clicks c' .
 				$join_sql .
 				' WHERE ' .
 				implode( ' AND ', $conditions ) .
-				'
-            GROUP BY bucket_date
-            ORDER BY bucket_date ASC',
+				' ORDER BY c.clicked_at ASC',
 			$params,
 		);
 
 		$lookup = array();
 
-		foreach ( $rows as $row ) {
-			$click_count  = (int) $row['clicks'];
-			$unique_count = min(
-				(int) $row['unique_clicks'],
-				$click_count,
-			);
+		$cursor = new \DateTimeImmutable(
+			$window['start_date'],
+			$timezone,
+		);
 
-			$lookup[ $row['bucket_date'] ] = array(
-				'clicks' => $click_count,
-				'unique' => $unique_count,
+		for ( $index = 0; $index < $days; $index++ ) {
+			$date            = $cursor->format( 'Y-m-d' );
+			$lookup[ $date ] = array(
+				'clicks' => 0,
+				'unique' => array(),
 			);
+			$cursor          = $cursor->modify( '+1 day' );
+		}
+
+		foreach ( $rows as $row ) {
+			try {
+				$clicked_at = new \DateTimeImmutable(
+					(string) $row['clicked_at'],
+					new \DateTimeZone( 'UTC' ),
+				);
+			} catch ( \Exception $exception ) {
+				continue;
+			}
+
+			$bucket_date = $clicked_at->setTimezone( $timezone )->format( 'Y-m-d' );
+
+			if ( ! isset( $lookup[ $bucket_date ] ) ) {
+				continue;
+			}
+
+			$visitor_key = (string) ( $row['visitor_key'] ?? '' );
+
+			++$lookup[ $bucket_date ]['clicks'];
+
+			if ( '' !== $visitor_key ) {
+				$lookup[ $bucket_date ]['unique'][ $visitor_key ] = true;
+			}
 		}
 
 		$labels = array();
 		$clicks = array();
 		$unique = array();
-		$cursor = new \DateTimeImmutable(
-			$window['start_at'],
-			new \DateTimeZone( 'UTC' ),
-		);
 
-		for ( $index = 0; $index < $days; $index++ ) {
-			$date     = $cursor->format( 'Y-m-d' );
-			$labels[] =
-				$days <= 7 ? $cursor->format( 'D' ) : $cursor->format( 'M j' );
-			$clicks[] = (int) ( $lookup[ $date ]['clicks'] ?? 0 );
-			$unique[] = (int) ( $lookup[ $date ]['unique'] ?? 0 );
-			$cursor   = $cursor->modify( '+1 day' );
+		foreach ( $lookup as $date => $bucket ) {
+			$click_count = (int) ( $bucket['clicks'] ?? 0 );
+
+			$labels[] = $date;
+			$clicks[] = $click_count;
+			$unique[] = min(
+				count( (array) ( $bucket['unique'] ?? array() ) ),
+				$click_count,
+			);
 		}
 
 		return array(

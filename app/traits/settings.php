@@ -25,11 +25,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 trait SettingsTrait {
 
 	/**
-	 * Synchronise install-time configuration values into the settings table.
+	 * Save install-time configuration values into the settings table.
 	 *
 	 * @since 1.0.0
 	 */
-	private function sync_install_settings(): void {
+	private function save_install_options(): void {
 		if ( ! $this->table_exists( 'settings' ) ) {
 			return;
 		}
@@ -73,7 +73,7 @@ trait SettingsTrait {
 			);
 		}
 
-		$this->sync_managed_settings();
+		$this->add_default_options();
 
 		if ( null === $this->get_option( 'installed_at' ) ) {
 			$this->update_option( 'installed_at', $this->now(), false );
@@ -132,12 +132,12 @@ trait SettingsTrait {
 	}
 
 	/**
-	 * Initialize default database-backed runtime options.
+	 * Add default database-backed runtime options when they are missing.
 	 *
 	 * @return void
 	 * @since 1.0.0
 	 */
-	private function sync_managed_settings(): void {
+	private function add_default_options(): void {
 		$site_language = trim( (string) ( $this->config['PEAKURL_SITE_LANGUAGE'] ?? '' ) );
 
 		if ( '' === $site_language ) {
@@ -153,6 +153,14 @@ trait SettingsTrait {
 		$this->add_option(
 			'site_language',
 			$site_language,
+		);
+		$this->add_option(
+			'site_timezone',
+			Constants::DEFAULT_TIMEZONE,
+		);
+		$this->add_option(
+			'site_time_format',
+			Constants::DEFAULT_TIME_FORMAT,
 		);
 		$this->add_option(
 			'mail_driver',

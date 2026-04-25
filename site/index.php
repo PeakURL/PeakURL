@@ -328,6 +328,8 @@ function peakurl_should_serve_dashboard_shell( string $relative_path ): bool {
  * @param array<int, string>   $body_classes        Initial body classes from PHP runtime hooks.
  * @param string               $locale              Active site locale.
  * @param string               $text_direction      Active document text direction.
+ * @param string               $timezone            Active site timezone.
+ * @param string               $time_format         Active dashboard time format.
  * @param array<string, mixed> $translation_catalog Dashboard JSON catalog.
  * @param array<string, mixed> $favicon             Public favicon settings payload.
  * @param bool                 $debug_enabled       Whether runtime debug mode is enabled.
@@ -342,6 +344,8 @@ function peakurl_inject_runtime_shell(
 	array $body_classes,
 	string $locale,
 	string $text_direction,
+	string $timezone,
+	string $time_format,
 	array $translation_catalog,
 	array $favicon,
 	bool $debug_enabled
@@ -386,6 +390,10 @@ function peakurl_inject_runtime_shell(
 		json_encode( $locale ) .
 		';window.__PEAKURL_TEXT_DIRECTION__=' .
 		json_encode( $html_dir ) .
+		';window.__PEAKURL_TIMEZONE__=' .
+		json_encode( $timezone ) .
+		';window.__PEAKURL_TIME_FORMAT__=' .
+		json_encode( $time_format ) .
 		';window.__PEAKURL_TEXT_DOMAIN__=' .
 		json_encode( Constants::I18N_TEXT_DOMAIN ) .
 		';window.__PEAKURL_I18N__=' .
@@ -606,23 +614,47 @@ $site_name      = trim(
 );
 $locale         = get_locale();
 $text_direction = peakurl_get_text_direction();
-$catalog        = peakurl_get_dashboard_translation_catalog(
+$timezone       = trim(
+	(string) (
+		$connection->get_option( 'site_timezone' ) ??
+		Constants::DEFAULT_TIMEZONE
+	),
+);
+$time_format    = trim(
+	(string) (
+		$connection->get_option( 'site_time_format' ) ??
+		Constants::DEFAULT_TIME_FORMAT
+	),
+);
+
+if (
+	Constants::DEFAULT_TIMEZONE !== $timezone &&
+	! in_array( $timezone, \DateTimeZone::listIdentifiers(), true )
+) {
+	$timezone = Constants::DEFAULT_TIMEZONE;
+}
+
+if ( ! in_array( $time_format, array( '12', '24' ), true ) ) {
+	$time_format = Constants::DEFAULT_TIME_FORMAT;
+}
+
+$catalog       = peakurl_get_dashboard_translation_catalog(
 	$locale,
 	$runtime_config,
 	$connection,
 );
-$version        = trim(
+$version       = trim(
 	(string) (
 		$connection->get_option( 'installed_version' ) ??
 		$runtime_config[ Constants::CONFIG_VERSION ] ??
 		Constants::DEFAULT_VERSION
 	),
 );
-$favicon        = ( new Favicon(
+$favicon       = ( new Favicon(
 	$runtime_config,
 	new SettingsApi( new PeakURL_DB( $connection ) ),
 ) )->get_settings( $site_name );
-$body_classes   = get_body_class(
+$body_classes  = get_body_class(
 	array(),
 	array(
 		'base_path'     => $base_path,
@@ -631,10 +663,10 @@ $body_classes   = get_body_class(
 		'is_spa_shell'  => true,
 	),
 );
-$runtime_env    = strtolower(
+$runtime_env   = strtolower(
 	(string) ( $runtime_config[ Constants::CONFIG_ENV ] ?? 'production' ),
 );
-$debug_enabled  =
+$debug_enabled =
 	! empty( $runtime_config[ Constants::CONFIG_DEBUG ] ) ||
 	'development' === $runtime_env;
 
@@ -666,6 +698,8 @@ echo peakurl_inject_runtime_shell(
 	$body_classes,
 	$locale,
 	$text_direction,
+	$timezone,
+	$time_format,
 	$catalog,
 	$favicon,
 	$debug_enabled,

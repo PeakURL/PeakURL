@@ -12,7 +12,14 @@ import {
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { getInstalledLanguageLabel } from "@/i18n/languages";
-import { buildFaviconPreviewUrl, cn, escUrl } from "@/utils";
+import {
+	buildFaviconPreviewUrl,
+	cn,
+	escUrl,
+	getTimeZoneOptions,
+	normalizeSiteTimeFormat,
+	type SiteTimeFormat,
+} from "@/utils";
 import type { GeneralFormState } from "../../types";
 import type { GeneralTabProps } from "../types";
 
@@ -33,6 +40,12 @@ function GeneralTab({
 	const [siteLanguage, setSiteLanguage] = useState(
 		siteSettings?.siteLanguage || "en_US"
 	);
+	const [siteTimezone, setSiteTimezone] = useState(
+		siteSettings?.siteTimezone || "UTC"
+	);
+	const [siteTimeFormat, setSiteTimeFormat] = useState<SiteTimeFormat>(
+		normalizeSiteTimeFormat(siteSettings?.siteTimeFormat)
+	);
 	const [faviconFile, setFaviconFile] = useState<File | null>(null);
 	const [removeFavicon, setRemoveFavicon] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -44,6 +57,16 @@ function GeneralTab({
 	useEffect(() => {
 		setSiteLanguage(siteSettings?.siteLanguage || "en_US");
 	}, [siteSettings?.siteLanguage]);
+
+	useEffect(() => {
+		setSiteTimezone(siteSettings?.siteTimezone || "UTC");
+	}, [siteSettings?.siteTimezone]);
+
+	useEffect(() => {
+		setSiteTimeFormat(
+			normalizeSiteTimeFormat(siteSettings?.siteTimeFormat)
+		);
+	}, [siteSettings?.siteTimeFormat]);
 
 	useEffect(() => {
 		setSiteName(siteSettings?.siteName || PEAKURL_SITE_NAME || "PeakURL");
@@ -74,6 +97,8 @@ function GeneralTab({
 			...generalForm,
 			siteName,
 			siteLanguage,
+			siteTimezone,
+			siteTimeFormat,
 			faviconFile,
 			removeFavicon,
 		});
@@ -102,6 +127,11 @@ function GeneralTab({
 			: availableLanguageOptions.length > 0
 				? availableLanguageOptions
 				: [{ value: siteLanguage, label: siteLanguage }];
+	const timezoneOptions = useMemo(() => getTimeZoneOptions(), []);
+	const timeFormatOptions: SelectOption<SiteTimeFormat>[] = [
+		{ value: "12", label: __("12-hour (AM/PM)") },
+		{ value: "24", label: __("24-hour") },
+	];
 	const hasCustomFavicon = Boolean(siteSettings?.favicon?.isCustom);
 	const storedPreviewUrl = useMemo(
 		() =>
@@ -246,6 +276,39 @@ function GeneralTab({
 								isUpdating
 							}
 							ariaLabel={__("Site language")}
+						/>
+					</div>
+					<div className="settings-general-field">
+						<label className="settings-section-label">
+							{__("Site Timezone")}
+						</label>
+						<Select
+							value={siteTimezone}
+							onChange={setSiteTimezone}
+							options={timezoneOptions}
+							disabled={
+								isLoadingSiteSettings ||
+								!siteSettings?.canManageSiteSettings ||
+								isUpdating
+							}
+							ariaLabel={__("Site timezone")}
+							optionsClassName="settings-general-timezone-options"
+						/>
+					</div>
+					<div className="settings-general-field">
+						<label className="settings-section-label">
+							{__("Time Format")}
+						</label>
+						<Select
+							value={siteTimeFormat}
+							onChange={setSiteTimeFormat}
+							options={timeFormatOptions}
+							disabled={
+								isLoadingSiteSettings ||
+								!siteSettings?.canManageSiteSettings ||
+								isUpdating
+							}
+							ariaLabel={__("Time format")}
 						/>
 					</div>
 					<div className="settings-general-bio-field">

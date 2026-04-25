@@ -30,7 +30,7 @@ import {
 } from "@/store/slices/api";
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
-import { getErrorMessage } from "@/utils";
+import { formatLocalizedDateTime, getErrorMessage } from "@/utils";
 import { UsersTableSkeletonRows } from "./UsersSkeleton";
 import type {
 	UserDialogFormState,
@@ -619,9 +619,13 @@ function UsersPage() {
 											</td>
 											<td className="users-page-table-cell-meta">
 												{user.createdAt
-													? new Date(
-															user.createdAt
-														).toLocaleDateString()
+													? formatLocalizedDateTime(
+															user.createdAt,
+															{
+																dateStyle:
+																	"medium",
+															}
+														)
 													: __("Unknown")}
 											</td>
 											<td className="users-page-table-cell-actions">

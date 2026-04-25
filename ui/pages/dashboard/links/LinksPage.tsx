@@ -23,6 +23,7 @@ import {
 import { useGetUrlQuery, useGetUrlsQuery } from "@/store/slices/api";
 import { useSearchParams } from "react-router-dom";
 import { __ } from "@/i18n";
+import { formatCount } from "@/utils";
 import type {
 	LinkRecord,
 	LinksMeta,
@@ -214,7 +215,7 @@ function LinksPage() {
 						<span className="links-page-stat-trend">+28%</span>
 					</div>
 					<div className="links-page-stat-value">
-						{totalClicks.toLocaleString()}
+						{formatCount(totalClicks)}
 					</div>
 					<div className="links-page-stat-label">
 						{__("Total Clicks")}
@@ -229,7 +230,7 @@ function LinksPage() {
 						<span className="links-page-stat-trend">+35%</span>
 					</div>
 					<div className="links-page-stat-value">
-						{totalUniqueClicks.toLocaleString()}
+						{formatCount(totalUniqueClicks)}
 					</div>
 					<div className="links-page-stat-label">
 						{__("Unique Visitors")}

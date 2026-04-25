@@ -281,14 +281,14 @@ class ReleaseFiles {
 	}
 
 	/**
-	 * Sync package-provided content entries into the installed content directory.
+	 * Copy package-provided content entries into the installed content directory.
 	 *
 	 * @param array<int, string> $package_content_root_paths Packaged content root paths.
 	 * @param string             $source_root               Extracted release package root.
 	 * @return void
 	 * @since 1.0.14
 	 */
-	public function sync_packaged_content_root_paths(
+	public function copy_packaged_content_root_paths(
 		array $package_content_root_paths,
 		string $source_root
 	): void {

@@ -83,7 +83,7 @@ class MailController {
 	 *
 	 * @param Request $request Incoming HTTP request.
 	 * @return array<string, mixed>
-	 * @since 1.0.16
+	 * @since 1.1.0
 	 */
 	public function test( Request $request ): array {
 		return JsonResponse::success(

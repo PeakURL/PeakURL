@@ -34,6 +34,7 @@ import type {
 	MailConfigurationPayload,
 	MailTestResult,
 	ProfileUser,
+	SiteTimeFormat,
 } from "@/pages/dashboard/settings/_components/tabs/types";
 import type {
 	BackupCodesResponse,
@@ -418,6 +419,12 @@ export interface SaveGeneralSettingsPayload {
 	/** Locale code for the selected dashboard language. */
 	siteLanguage: string;
 
+	/** IANA timezone identifier used for dashboard date/time display. */
+	siteTimezone?: string;
+
+	/** Time display preference for dashboard timestamps. */
+	siteTimeFormat?: SiteTimeFormat;
+
 	/** Optional PNG favicon file uploaded from the General settings tab. */
 	faviconFile?: File | null;
 
@@ -456,6 +463,7 @@ export type {
 	RevokeOtherSessionsResponse,
 	SecuritySettingsResponse,
 	SiteSettings,
+	SiteTimeFormat,
 	SystemStatusResponse,
 	TwoFactorSetupResponse,
 	UpdateStatusPayload,

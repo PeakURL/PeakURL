@@ -2,6 +2,7 @@ import { Link2, MousePointerClick } from "lucide-react";
 import { PageSizeControl, Select, type SelectOption } from "@/components";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
+import { formatCount } from "@/utils";
 import type { LinksSortBy, LinksSortOrder, TableFooterProps } from "../types";
 
 const TableFooter = ({
@@ -36,7 +37,7 @@ const TableFooter = ({
 							{__("Total Links:")}
 						</span>
 						<span className="links-table-footer-value">
-							{totalLinks}
+							{formatCount(totalLinks)}
 						</span>
 					</div>
 					<div className="links-table-footer-divider"></div>
@@ -46,7 +47,7 @@ const TableFooter = ({
 							{__("Total Clicks:")}
 						</span>
 						<span className="links-table-footer-value">
-							{totalClicks.toLocaleString()}
+							{formatCount(totalClicks)}
 						</span>
 					</div>
 				</div>

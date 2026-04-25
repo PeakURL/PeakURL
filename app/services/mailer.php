@@ -357,7 +357,7 @@ class Mailer {
 	 * @param array<string, mixed>        $settings   Active mail settings.
 	 * @param array{allowed: bool, reason: string|null} $capability Dashboard management capability.
 	 * @return string|null Reason when disabled, otherwise null.
-	 * @since 1.0.16
+	 * @since 1.1.0
 	 */
 	private function get_test_disabled_reason(
 		array $settings,

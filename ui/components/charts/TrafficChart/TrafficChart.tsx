@@ -2,6 +2,7 @@ import type { ChartData, TooltipItem } from "chart.js";
 import { useEffect, useRef, useState } from "react";
 import { Chart } from "chart.js/auto";
 import { __ } from "@/i18n";
+import { formatCount, formatDateOnly } from "@/utils";
 import type {
 	TrafficChartData,
 	TrafficChartProps,
@@ -12,6 +13,19 @@ export type {
 	TrafficChartProps,
 	TrafficChartType,
 } from "../types";
+
+function formatTrafficLabel(label: string, totalLabels: number): string {
+	if (totalLabels <= 7) {
+		return formatDateOnly(label, { weekday: "short" }) || label;
+	}
+
+	return (
+		formatDateOnly(label, {
+			month: "short",
+			day: "numeric",
+		}) || label
+	);
+}
 
 /**
  * TrafficChart Component
@@ -105,7 +119,9 @@ export function TrafficChart({
 
 			const chartData: TrafficChartData = hasValidStructure
 				? {
-						labels: data?.labels || [],
+						labels: (data?.labels || []).map((label) =>
+							formatTrafficLabel(label, data?.labels?.length || 0)
+						),
 						clicks: data?.clicks || [],
 						unique: data?.unique || [],
 					}
@@ -262,7 +278,7 @@ export function TrafficChart({
 									);
 									return ` ${
 										context.dataset.label
-									}: ${rawValue.toLocaleString()}`;
+									}: ${formatCount(rawValue)}`;
 								},
 							},
 						},

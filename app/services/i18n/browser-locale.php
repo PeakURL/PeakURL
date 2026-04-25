@@ -1,6 +1,6 @@
 <?php
 /**
- * Browser locale sync helpers.
+ * Browser locale matching helpers.
  *
  * @package PeakURL\Services\I18n
  * @since 1.0.14
@@ -16,11 +16,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Sync — match browser language preferences against installed locales.
+ * BrowserLocale - match browser language preferences against installed locales.
  *
  * @since 1.0.14
  */
-class Sync {
+class BrowserLocale {
 
 	/**
 	 * Locale normalization helper.
@@ -31,7 +31,7 @@ class Sync {
 	private Locale $locale_helper;
 
 	/**
-	 * Create a new locale sync helper.
+	 * Create a new browser locale helper.
 	 *
 	 * @param Locale $locale_helper Locale normalization helper.
 	 * @since 1.0.14

@@ -1,4 +1,4 @@
-import { formatLocalizedDateTime } from "./dateFormatting";
+import { formatLocalizedDateTime, getActiveLocale } from "./dateFormatting";
 
 /**
  * Formats a value as a localized full count.
@@ -9,7 +9,7 @@ import { formatLocalizedDateTime } from "./dateFormatting";
 export function formatCount(value: unknown): string {
 	const parsedValue = Number(value || 0);
 
-	return new Intl.NumberFormat().format(
+	return new Intl.NumberFormat(getActiveLocale()).format(
 		Number.isFinite(parsedValue) ? parsedValue : 0
 	);
 }

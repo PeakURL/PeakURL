@@ -139,10 +139,10 @@ function EmailDeliveryTab({
 		: status?.testDisabledReason || null;
 	const canSendTestEmail = Boolean(
 		status?.canSendTestEmail &&
-			!testDisabledReason &&
-			!managementDisabled &&
-			!isLoading &&
-			!isSaving
+		!testDisabledReason &&
+		!managementDisabled &&
+		!isLoading &&
+		!isSaving
 	);
 	const showTestButton = Boolean(status);
 

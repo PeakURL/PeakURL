@@ -35,11 +35,20 @@ export const systemApi = baseApi.injectEndpoints({
 			ApiDataResponse<SiteSettings>,
 			SaveGeneralSettingsPayload
 		>({
-			query: ({ siteName, siteLanguage, faviconFile, removeFavicon }) => {
+			query: ({
+				siteName,
+				siteLanguage,
+				siteTimezone,
+				siteTimeFormat,
+				faviconFile,
+				removeFavicon,
+			}) => {
 				if (faviconFile || removeFavicon) {
 					const formData = new FormData();
 					formData.append("siteName", siteName || "");
 					formData.append("siteLanguage", siteLanguage);
+					formData.append("siteTimezone", siteTimezone || "");
+					formData.append("siteTimeFormat", siteTimeFormat || "");
 
 					if (faviconFile) {
 						formData.append("favicon", faviconFile);
@@ -62,6 +71,8 @@ export const systemApi = baseApi.injectEndpoints({
 					body: {
 						siteName,
 						siteLanguage,
+						siteTimezone,
+						siteTimeFormat,
 					},
 				};
 			},

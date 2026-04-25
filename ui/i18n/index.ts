@@ -135,6 +135,15 @@ function readBooleanProperty(
 	return "boolean" === typeof value ? value : undefined;
 }
 
+function readTimeFormatProperty(
+	record: Record<string, unknown>,
+	key: string
+): "12" | "24" | undefined {
+	const value = readStringProperty(record, key);
+
+	return "12" === value || "24" === value ? value : undefined;
+}
+
 function normalizeRuntimePayload(payload: unknown): RuntimeI18nPayload | null {
 	if (!isObjectRecord(payload)) {
 		return null;
@@ -154,6 +163,8 @@ function normalizeRuntimePayload(payload: unknown): RuntimeI18nPayload | null {
 		textDirection: readTextDirectionProperty(payloadData, "textDirection"),
 		isRtl: readBooleanProperty(payloadData, "isRtl"),
 		textDomain: readStringProperty(payloadData, "textDomain"),
+		timezone: readStringProperty(payloadData, "timezone"),
+		timeFormat: readTimeFormatProperty(payloadData, "timeFormat"),
 		favicon: readRuntimeFavicon(payloadData, "favicon"),
 	};
 }
@@ -330,6 +341,10 @@ export function initializeI18n(): Promise<void> {
 		);
 		window.__PEAKURL_FAVICON__ =
 			payload?.favicon || window.__PEAKURL_FAVICON__;
+		window.__PEAKURL_TIMEZONE__ =
+			payload?.timezone || window.__PEAKURL_TIMEZONE__;
+		window.__PEAKURL_TIME_FORMAT__ =
+			payload?.timeFormat || window.__PEAKURL_TIME_FORMAT__;
 		applyDocumentFavicon(window.__PEAKURL_FAVICON__);
 
 		if (payload?.catalog) {

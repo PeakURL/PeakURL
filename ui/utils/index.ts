@@ -1,4 +1,8 @@
-import { formatLocalizedDateTime, formatRelativeTime } from "./dateFormatting";
+import {
+	formatLocalizedDateTime,
+	formatRelativeTime,
+	getActiveLocale,
+} from "./dateFormatting";
 
 /**
  * Joins class names while dropping falsy entries.
@@ -47,13 +51,10 @@ export function formatDate(
  * Formats large metric counts into compact dashboard-friendly labels.
  */
 export function formatNumber(num: number): string {
-	if (num >= 1000000) {
-		return (num / 1000000).toFixed(1) + "M";
-	}
-	if (num >= 1000) {
-		return (num / 1000).toFixed(1) + "K";
-	}
-	return num.toString();
+	return new Intl.NumberFormat(getActiveLocale(), {
+		notation: "compact",
+		maximumFractionDigits: 1,
+	}).format(num);
 }
 
 /**
@@ -113,8 +114,17 @@ export {
 	getDashboardSearchValueFromLocation,
 	resolveDashboardSearchPath,
 } from "./dashboardSearch";
-export { formatLocalizedDateTime, formatRelativeTime } from "./dateFormatting";
+export {
+	formatDateOnly,
+	formatLocalizedDateTime,
+	formatRelativeTime,
+	getActiveLocale,
+	getActiveTimeZone,
+	getZonedDateKey,
+} from "./dateFormatting";
 export { formatByteSize, formatCount, formatDateTimeValue } from "./formatters";
+export { getTimeZoneOptions, normalizeSiteTimeFormat } from "./timezones";
+export type { SiteTimeFormat } from "./timezones";
 
 /**
  * Resolves the theme color classes associated with a link tag.

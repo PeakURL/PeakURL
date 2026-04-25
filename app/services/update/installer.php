@@ -173,7 +173,7 @@ class Installer {
 				$package_release_root_paths,
 				$source_root,
 			);
-			$this->files->sync_packaged_content_root_paths(
+			$this->files->copy_packaged_content_root_paths(
 				$package_content_root_paths,
 				$source_root,
 			);

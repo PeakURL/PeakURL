@@ -431,6 +431,8 @@ const Content = ({ activeTab }: ContentProps) => {
 		const {
 			siteName: nextSiteName,
 			siteLanguage: nextSiteLanguage,
+			siteTimezone: nextSiteTimezone,
+			siteTimeFormat: nextSiteTimeFormat,
 			faviconFile,
 			removeFavicon,
 			...profileForm
@@ -439,6 +441,10 @@ const Content = ({ activeTab }: ContentProps) => {
 			generalSettingsResponse?.data?.siteName || ""
 		).trim();
 		const currentSiteLanguage = generalSettingsResponse?.data?.siteLanguage;
+		const currentSiteTimezone =
+			generalSettingsResponse?.data?.siteTimezone || "UTC";
+		const currentSiteTimeFormat =
+			generalSettingsResponse?.data?.siteTimeFormat || "12";
 		const shouldSaveProfile = hasProfileChanges(user, profileForm);
 		const shouldSaveSiteName =
 			(generalSettingsResponse?.data?.canManageSiteSettings ?? false) &&
@@ -447,9 +453,19 @@ const Content = ({ activeTab }: ContentProps) => {
 			!!nextSiteLanguage &&
 			generalSettingsResponse?.data?.canManageSiteSettings &&
 			nextSiteLanguage !== currentSiteLanguage;
+		const shouldSaveTimezone =
+			!!nextSiteTimezone &&
+			generalSettingsResponse?.data?.canManageSiteSettings &&
+			nextSiteTimezone !== currentSiteTimezone;
+		const shouldSaveTimeFormat =
+			!!nextSiteTimeFormat &&
+			generalSettingsResponse?.data?.canManageSiteSettings &&
+			nextSiteTimeFormat !== currentSiteTimeFormat;
 		const shouldSaveGeneralSettings =
 			shouldSaveSiteName ||
 			shouldSaveLanguage ||
+			shouldSaveTimezone ||
+			shouldSaveTimeFormat ||
 			Boolean(faviconFile) ||
 			Boolean(removeFavicon);
 
@@ -474,6 +490,8 @@ const Content = ({ activeTab }: ContentProps) => {
 				const response = await saveGeneralSettings({
 					siteName: nextSiteName,
 					siteLanguage: nextSiteLanguage,
+					siteTimezone: nextSiteTimezone,
+					siteTimeFormat: nextSiteTimeFormat,
 					faviconFile,
 					removeFavicon,
 				}).unwrap();
@@ -485,6 +503,15 @@ const Content = ({ activeTab }: ContentProps) => {
 				if (response?.data?.favicon) {
 					window.__PEAKURL_FAVICON__ = response.data.favicon;
 					applyDocumentFavicon(response.data.favicon);
+				}
+
+				if (response?.data?.siteTimezone) {
+					window.__PEAKURL_TIMEZONE__ = response.data.siteTimezone;
+				}
+
+				if (response?.data?.siteTimeFormat) {
+					window.__PEAKURL_TIME_FORMAT__ =
+						response.data.siteTimeFormat;
 				}
 
 				if (shouldSaveLanguage) {
@@ -747,10 +774,7 @@ const Content = ({ activeTab }: ContentProps) => {
 			notification.success(
 				__("Test email sent"),
 				recipient
-					? sprintf(
-							__("PeakURL sent a test email to %s."),
-							recipient
-						)
+					? sprintf(__("PeakURL sent a test email to %s."), recipient)
 					: __("PeakURL sent a test email to your account email.")
 			);
 		} catch (err) {

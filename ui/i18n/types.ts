@@ -106,6 +106,12 @@ export interface RuntimeI18nPayload {
 	/** Translation domain used for runtime lookups. */
 	textDomain?: string;
 
+	/** Site timezone used for dashboard date/time formatting. */
+	timezone?: string;
+
+	/** Dashboard time display preference. */
+	timeFormat?: "12" | "24";
+
 	/** Public favicon metadata for the current install. */
 	favicon?: RuntimeFaviconPayload;
 }

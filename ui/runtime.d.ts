@@ -60,6 +60,16 @@ declare global {
 		__PEAKURL_DEBUG__?: boolean;
 
 		/**
+		 * Site timezone used when formatting dashboard dates and times.
+		 */
+		__PEAKURL_TIMEZONE__?: string;
+
+		/**
+		 * Dashboard time display preference: 12-hour or 24-hour.
+		 */
+		__PEAKURL_TIME_FORMAT__?: "12" | "24";
+
+		/**
 		 * Public favicon metadata injected by the PHP runtime.
 		 */
 		__PEAKURL_FAVICON__?: RuntimeFaviconPayload;

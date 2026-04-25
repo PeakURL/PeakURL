@@ -108,7 +108,7 @@ trait BootstrapTrait {
 				);
 			}
 
-			$this->sync_install_settings();
+			$this->save_install_options();
 
 			$this->db->commit();
 			$this->bootstrapped = true;

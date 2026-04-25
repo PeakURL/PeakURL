@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
+import { formatLocalizedDateTime } from "@/utils";
 import type { ApiTabProps } from "../types";
 
 function ApiTab({
@@ -111,9 +112,12 @@ function ApiTab({
 										{__("Created:")}{" "}
 										<bdi className="preserve-ltr-value inline-block">
 											{key.createdAt
-												? new Date(
-														key.createdAt
-													).toLocaleDateString()
+												? formatLocalizedDateTime(
+														key.createdAt,
+														{
+															dateStyle: "medium",
+														}
+													)
 												: __("Unknown")}
 										</bdi>
 									</p>

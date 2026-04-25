@@ -22,9 +22,9 @@ import {
 	UsersPage,
 } from "@/pages";
 import {
+	applyBodyClassNames,
 	clearBodyClassNames,
 	getBodyClassNames,
-	syncBodyClassNames,
 } from "./bodyClasses";
 import { getPageTitle } from "./pageTitle";
 
@@ -37,7 +37,7 @@ function RouteEffects() {
 	}, [location.pathname]);
 
 	useEffect(() => {
-		syncBodyClassNames(getBodyClassNames(location.pathname));
+		applyBodyClassNames(getBodyClassNames(location.pathname));
 	}, [location.pathname]);
 
 	useEffect(() => clearBodyClassNames, []);

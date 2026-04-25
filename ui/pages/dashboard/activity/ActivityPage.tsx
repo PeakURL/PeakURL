@@ -33,8 +33,10 @@ import {
 } from "@/store/slices/api";
 import {
 	cn,
+	formatCount,
 	formatDate,
 	formatLocalizedDateTime,
+	getZonedDateKey,
 	getLinkDisplayTitle,
 } from "@/utils";
 import { useSearchParams } from "react-router-dom";
@@ -211,19 +213,17 @@ function getActivityDayGroupLabel(timestamp?: string | null): {
 		};
 	}
 
-	const key = date.toISOString().slice(0, 10);
-	const today = new Date();
-	today.setHours(0, 0, 0, 0);
-	const yesterday = new Date(today);
+	const key = getZonedDateKey(date) || date.toISOString().slice(0, 10);
+	const todayKey = getZonedDateKey(new Date());
+	const yesterday = new Date();
 	yesterday.setDate(yesterday.getDate() - 1);
-	const dayStart = new Date(date);
-	dayStart.setHours(0, 0, 0, 0);
+	const yesterdayKey = getZonedDateKey(yesterday);
 
-	if (dayStart.getTime() === today.getTime()) {
+	if (key === todayKey) {
 		return { key, label: __("Today") };
 	}
 
-	if (dayStart.getTime() === yesterday.getTime()) {
+	if (key === yesterdayKey) {
 		return { key, label: __("Yesterday") };
 	}
 
@@ -597,19 +597,19 @@ function ActivityPage() {
 		{
 			key: "all",
 			label: __("Total events"),
-			value: allEventsCount.toLocaleString(),
+			value: formatCount(allEventsCount),
 			icon: History,
 		},
 		{
 			key: "links",
 			label: __("Link events"),
-			value: linkEventsCount.toLocaleString(),
+			value: formatCount(linkEventsCount),
 			icon: Link2,
 		},
 		{
 			key: "users",
 			label: __("User events"),
-			value: userEventsCount.toLocaleString(),
+			value: formatCount(userEventsCount),
 			icon: Users,
 		},
 	];
@@ -716,7 +716,7 @@ function ActivityPage() {
 								<Icon size={15} />
 								<span>{option.label}</span>
 								<span className="activity-page-filter-count">
-									{option.count.toLocaleString()}
+									{formatCount(option.count)}
 								</span>
 							</button>
 						);
@@ -848,7 +848,9 @@ function ActivityPage() {
 													</span>
 												</div>
 												<span className="activity-page-day-header-count">
-													{group.items.length.toLocaleString()}
+													{formatCount(
+														group.items.length
+													)}
 												</span>
 											</div>
 
@@ -1145,9 +1147,9 @@ function ActivityPage() {
 					<div className="activity-page-pagination-summary-group">
 						<p className="activity-page-pagination-summary">
 							{sprintf(__("Showing %1$s-%2$s of %3$s events"), [
-								startItem.toLocaleString(),
-								endItem.toLocaleString(),
-								totalItems.toLocaleString(),
+								formatCount(startItem),
+								formatCount(endItem),
+								formatCount(totalItems),
 							])}
 						</p>
 						<p className="activity-page-pagination-page-note">

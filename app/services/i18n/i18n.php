@@ -12,11 +12,11 @@ namespace PeakURL\Services;
 
 use Gettext\Translations as GettextTranslations;
 use PeakURL\Api\SettingsApi;
+use PeakURL\Services\I18n\BrowserLocale;
 use PeakURL\Services\I18n\Languages;
 use PeakURL\Services\I18n\Loader;
 use PeakURL\Services\I18n\Locale;
 use PeakURL\Services\I18n\Paths;
-use PeakURL\Services\I18n\Sync;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -83,12 +83,12 @@ class I18n {
 	private Loader $loader;
 
 	/**
-	 * Browser locale sync helper.
+	 * Browser locale matching helper.
 	 *
-	 * @var Sync
+	 * @var BrowserLocale
 	 * @since 1.0.14
 	 */
-	private Sync $sync;
+	private BrowserLocale $browser_locale;
 
 	/**
 	 * Currently-loaded locale.
@@ -114,13 +114,13 @@ class I18n {
 	 * @since 1.0.14
 	 */
 	public function __construct( array $config, ?SettingsApi $settings_api = null ) {
-		$this->config        = $config;
-		$this->settings_api  = $settings_api;
-		$this->locale_helper = new Locale();
-		$this->paths         = new Paths( $config );
-		$this->languages     = new Languages( $this->locale_helper, $this->paths );
-		$this->loader        = new Loader( $this->paths );
-		$this->sync          = new Sync( $this->locale_helper );
+		$this->config         = $config;
+		$this->settings_api   = $settings_api;
+		$this->locale_helper  = new Locale();
+		$this->paths          = new Paths( $config );
+		$this->languages      = new Languages( $this->locale_helper, $this->paths );
+		$this->loader         = new Loader( $this->paths );
+		$this->browser_locale = new BrowserLocale( $this->locale_helper );
 	}
 
 	/**
@@ -361,7 +361,7 @@ class I18n {
 			),
 		);
 
-		return $this->sync->match_browser_locale(
+		return $this->browser_locale->match_browser_locale(
 			$accept_language_header,
 			$installed_locales,
 		);

@@ -133,6 +133,8 @@ trait SystemTrait {
 			'siteName'              => $site_name,
 			'siteUrl'               => $site_url,
 			'siteLanguage'          => $this->i18n_service->get_site_locale(),
+			'siteTimezone'          => $this->get_site_timezone(),
+			'siteTimeFormat'        => $this->get_site_time_format(),
 			'textDirection'         => $this->i18n_service->get_text_direction(),
 			'isRtl'                 => $this->i18n_service->is_locale_rtl(),
 			'availableLanguages'    => $this->i18n_service->list_languages(),
@@ -167,6 +169,8 @@ trait SystemTrait {
 			'textDirection' => $this->i18n_service->get_text_direction( $locale ),
 			'isRtl'         => $this->i18n_service->is_locale_rtl( $locale ),
 			'textDomain'    => Constants::I18N_TEXT_DOMAIN,
+			'timezone'      => $this->get_site_timezone(),
+			'timeFormat'    => $this->get_site_time_format(),
 			'favicon'       => $this->favicon_service->get_settings( $site_name ),
 			'defaultLocale' => $this->i18n_service->get_default_locale(),
 			'catalog'       => $this->i18n_service->get_dashboard_catalog( $locale ),
@@ -202,8 +206,17 @@ trait SystemTrait {
 			);
 		}
 
+		$site_timezone    = $this->normalize_site_timezone(
+			(string) ( $payload['siteTimezone'] ?? $this->get_site_timezone() ),
+		);
+		$site_time_format = $this->normalize_site_time_format(
+			(string) ( $payload['siteTimeFormat'] ?? $this->get_site_time_format() ),
+		);
+
 		$this->update_option( 'site_language', $site_language );
 		$this->i18n_service->load_locale( $site_language );
+		$this->update_option( 'site_timezone', $site_timezone );
+		$this->update_option( 'site_time_format', $site_time_format );
 
 		$current_site_name = trim(
 			(string) $this->get_option( 'site_name' ),
@@ -234,6 +247,85 @@ trait SystemTrait {
 		$settings['saved'] = true;
 
 		return $settings;
+	}
+
+	/**
+	 * Return the configured site timezone.
+	 *
+	 * @return string
+	 * @since 1.1.0
+	 */
+	private function get_site_timezone(): string {
+		return $this->normalize_site_timezone(
+			(string) $this->get_option( 'site_timezone' ),
+			true,
+		);
+	}
+
+	/**
+	 * Return the configured dashboard time format.
+	 *
+	 * @return string
+	 * @since 1.1.0
+	 */
+	private function get_site_time_format(): string {
+		return $this->normalize_site_time_format(
+			(string) $this->get_option( 'site_time_format' ),
+		);
+	}
+
+	/**
+	 * Normalize a dashboard timezone setting.
+	 *
+	 * @param string $timezone            Submitted timezone identifier.
+	 * @param bool   $fallback_on_invalid Whether invalid stored values should fall back.
+	 * @return string
+	 * @since 1.1.0
+	 */
+	private function normalize_site_timezone(
+		string $timezone,
+		bool $fallback_on_invalid = false
+	): string {
+		$timezone = trim( $timezone );
+
+		if ( '' === $timezone ) {
+			return Constants::DEFAULT_TIMEZONE;
+		}
+
+		$valid_timezones = \DateTimeZone::listIdentifiers();
+
+		if (
+			Constants::DEFAULT_TIMEZONE === $timezone ||
+			in_array( $timezone, $valid_timezones, true )
+		) {
+			return $timezone;
+		}
+
+		if ( $fallback_on_invalid ) {
+			return Constants::DEFAULT_TIMEZONE;
+		}
+
+		throw new ApiException(
+			__( 'PeakURL could not find that timezone.', 'peakurl' ),
+			422,
+		);
+	}
+
+	/**
+	 * Normalize the dashboard time-format preference.
+	 *
+	 * @param string $time_format Submitted time format.
+	 * @return string
+	 * @since 1.1.0
+	 */
+	private function normalize_site_time_format( string $time_format ): string {
+		$time_format = sanitize_key( $time_format );
+
+		if ( in_array( $time_format, array( '12', '24' ), true ) ) {
+			return $time_format;
+		}
+
+		return Constants::DEFAULT_TIME_FORMAT;
 	}
 
 	/**
@@ -301,7 +393,7 @@ trait SystemTrait {
 	 *
 	 * @param Request $request Incoming HTTP request (admin-only).
 	 * @return array<string, mixed>
-	 * @since 1.0.16
+	 * @since 1.1.0
 	 */
 	public function send_test_email( Request $request ): array {
 		$user = $this->assert_request_capability(

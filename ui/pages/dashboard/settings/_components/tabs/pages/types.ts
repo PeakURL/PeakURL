@@ -7,6 +7,7 @@ import type {
 	GeneralFormState,
 	MailDriver,
 	SmtpEncryption,
+	SiteTimeFormat,
 } from "../types";
 
 /**
@@ -34,6 +35,8 @@ export interface SiteSettings {
 	siteName?: string | null;
 	siteUrl?: string | null;
 	siteLanguage?: string | null;
+	siteTimezone?: string | null;
+	siteTimeFormat?: SiteTimeFormat | null;
 	textDirection?: TextDirection;
 	isRtl?: boolean;
 	canManageSiteSettings?: boolean;
@@ -50,6 +53,8 @@ export interface GeneralTabProps {
 		payload: GeneralFormState & {
 			siteName: string;
 			siteLanguage: string;
+			siteTimezone: string;
+			siteTimeFormat: SiteTimeFormat;
 			faviconFile?: File | null;
 			removeFavicon?: boolean;
 		}

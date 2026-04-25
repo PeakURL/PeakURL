@@ -24,6 +24,7 @@ import { __, sprintf } from "@/i18n";
 import {
 	cn,
 	copyToClipboard as writeToClipboard,
+	formatLocalizedDateTime,
 	getErrorMessage,
 } from "@/utils";
 import type {
@@ -333,9 +334,12 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 											<p className="integrations-tab-item-created">
 												{__("Created:")}{" "}
 												<bdi className="integrations-tab-item-created-value">
-													{new Date(
-														wh.createdAt
-													).toLocaleDateString()}
+													{formatLocalizedDateTime(
+														wh.createdAt,
+														{
+															dateStyle: "medium",
+														}
+													)}
 												</bdi>
 											</p>
 										)}

@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
+import type { TooltipItem } from "chart.js";
 import { Chart } from "chart.js/auto";
 import { __ } from "@/i18n";
+import { formatCount, formatDateOnly } from "@/utils";
 import type { ClickChartProps, StatsTimeRange } from "./types";
 
 const timeRangeOptions: Array<{ label: string; value: StatsTimeRange }> = [
@@ -9,6 +11,19 @@ const timeRangeOptions: Array<{ label: string; value: StatsTimeRange }> = [
 	{ label: "30d", value: "30d" },
 	{ label: __("All"), value: "all" },
 ];
+
+function formatClickChartLabel(label: string, totalLabels: number): string {
+	if (totalLabels <= 7) {
+		return formatDateOnly(label, { weekday: "short" }) || label;
+	}
+
+	return (
+		formatDateOnly(label, {
+			month: "short",
+			day: "numeric",
+		}) || label
+	);
+}
 
 function ClickChart({
 	link,
@@ -37,7 +52,9 @@ function ClickChart({
 				return undefined;
 			}
 
-			const labels = stats.traffic.labels || [];
+			const labels = (stats.traffic.labels || []).map((label) =>
+				formatClickChartLabel(label, stats.traffic?.labels?.length || 0)
+			);
 			const data = stats.traffic.clicks || [];
 
 			chartInstanceRef.current = new Chart(ctx, {
@@ -71,6 +88,13 @@ function ClickChart({
 							padding: 12,
 							borderColor: "rgba(255, 255, 255, 0.1)",
 							borderWidth: 1,
+							callbacks: {
+								label(context: TooltipItem<"line">) {
+									return ` ${context.dataset.label}: ${formatCount(
+										context.parsed.y
+									)}`;
+								},
+							},
 						},
 					},
 					scales: {

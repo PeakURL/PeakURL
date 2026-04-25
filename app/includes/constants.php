@@ -71,6 +71,10 @@ class Constants {
 	public const DEFAULT_CONTENT_DIR = 'content';
 	/** Default site locale. */
 	public const DEFAULT_LOCALE = 'en_US';
+	/** Default site timezone. */
+	public const DEFAULT_TIMEZONE = 'UTC';
+	/** Default dashboard time format. */
+	public const DEFAULT_TIME_FORMAT = '12';
 	/** Default GeoIP database path. */
 	public const DEFAULT_GEOIP_DB_PATH = 'content/uploads/geoip/GeoLite2-City.mmdb';
 	/** Languages directory relative to the content root. */

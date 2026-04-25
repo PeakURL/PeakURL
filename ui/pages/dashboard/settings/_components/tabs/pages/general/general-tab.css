@@ -19,6 +19,10 @@
 		@apply min-h-24;
 	}
 
+	.settings-general-timezone-options {
+		@apply max-h-72;
+	}
+
 	.settings-general-favicon {
 		@apply mt-6 space-y-5 rounded-2xl border border-stroke bg-surface p-5;
 	}

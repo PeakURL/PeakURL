@@ -83,6 +83,8 @@ export interface GeneralFormState {
 export interface GeneralFormPayload extends GeneralFormState {
 	siteName: string;
 	siteLanguage: string;
+	siteTimezone: string;
+	siteTimeFormat: SiteTimeFormat;
 	faviconFile?: File | null;
 	removeFavicon?: boolean;
 }
@@ -104,6 +106,11 @@ export type MailDriver = "mail" | "smtp";
  * Supported SMTP encryption modes.
  */
 export type SmtpEncryption = "tls" | "ssl" | "none";
+
+/**
+ * Supported dashboard time display preferences.
+ */
+export type SiteTimeFormat = "12" | "24";
 
 /**
  * Persisted email delivery settings saved from the dashboard.

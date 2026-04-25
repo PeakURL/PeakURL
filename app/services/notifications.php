@@ -255,7 +255,7 @@ class Notifications {
 	 * @return array{recipient: string, driver: string}
 	 *
 	 * @throws \RuntimeException When email delivery fails.
-	 * @since 1.0.16
+	 * @since 1.1.0
 	 */
 	public function send_test_email(
 		array $user,
@@ -335,7 +335,7 @@ class Notifications {
 	 *
 	 * @param int $timestamp Unix timestamp.
 	 * @return string
-	 * @since 1.0.16
+	 * @since 1.1.0
 	 */
 	private function format_email_sent_at( int $timestamp ): string {
 		$timezone = new \DateTimeZone( 'UTC' );

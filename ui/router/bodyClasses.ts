@@ -235,10 +235,10 @@ export function getBodyClassNames(
 }
 
 /**
- * Synchronizes route-managed classes on the document body while leaving any
+ * Applies route-managed classes on the document body while leaving any
  * unrelated classes untouched.
  */
-export function syncBodyClassNames(nextClasses: string[]): void {
+export function applyBodyClassNames(nextClasses: string[]): void {
 	if ("undefined" === typeof document || !document.body) {
 		return;
 	}

@@ -6,6 +6,7 @@ const WEEK_MS = 7 * DAY_MS;
 const MONTH_MS = 30 * DAY_MS;
 const YEAR_MS = 365 * DAY_MS;
 const DEFAULT_LOCALE = "en-US";
+const DEFAULT_TIMEZONE = "UTC";
 
 function toDate(value: string | number | Date | null | undefined): Date | null {
 	if (value instanceof Date) {
@@ -20,7 +21,22 @@ function toDate(value: string | number | Date | null | undefined): Date | null {
 	return null;
 }
 
-function getActiveLocale(): string {
+function toDateOnly(value: string | null | undefined): Date | null {
+	const match = value?.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+	if (!match) {
+		return null;
+	}
+
+	const year = Number(match[1]);
+	const month = Number(match[2]);
+	const day = Number(match[3]);
+	const date = new Date(Date.UTC(year, month - 1, day));
+
+	return Number.isNaN(date.getTime()) ? null : date;
+}
+
+export function getActiveLocale(): string {
 	if (
 		"undefined" !== typeof window &&
 		"string" === typeof window.__PEAKURL_LOCALE__ &&
@@ -38,6 +54,120 @@ function getActiveLocale(): string {
 	}
 
 	return DEFAULT_LOCALE;
+}
+
+export function getActiveTimeZone(): string {
+	if (
+		"undefined" !== typeof window &&
+		"string" === typeof window.__PEAKURL_TIMEZONE__ &&
+		window.__PEAKURL_TIMEZONE__
+	) {
+		return window.__PEAKURL_TIMEZONE__;
+	}
+
+	return DEFAULT_TIMEZONE;
+}
+
+function getActiveTimeFormat(): "12" | "24" {
+	if (
+		"undefined" !== typeof window &&
+		"string" === typeof window.__PEAKURL_TIME_FORMAT__
+	) {
+		if ("24" === window.__PEAKURL_TIME_FORMAT__) {
+			return "24";
+		}
+	}
+
+	return "12";
+}
+
+function hasDateTimeDisplayOption(
+	options: Intl.DateTimeFormatOptions
+): boolean {
+	return [
+		"weekday",
+		"era",
+		"year",
+		"month",
+		"day",
+		"dayPeriod",
+		"hour",
+		"minute",
+		"second",
+		"fractionalSecondDigits",
+		"timeZoneName",
+		"dateStyle",
+		"timeStyle",
+	].some((key) => key in options);
+}
+
+function buildDateTimeOptions(
+	options: Intl.DateTimeFormatOptions
+): Intl.DateTimeFormatOptions {
+	const timeFormat = getActiveTimeFormat();
+	const resolvedOptions: Intl.DateTimeFormatOptions = {
+		timeZone: getActiveTimeZone(),
+		...(hasDateTimeDisplayOption(options)
+			? options
+			: { dateStyle: "medium", timeStyle: "short" }),
+	};
+
+	if ("12" === timeFormat) {
+		resolvedOptions.hour12 = true;
+	} else if ("24" === timeFormat) {
+		resolvedOptions.hour12 = false;
+	}
+
+	return resolvedOptions;
+}
+
+export function getZonedDateKey(
+	value: string | number | Date | null | undefined
+): string {
+	const targetDate = toDate(value);
+
+	if (!targetDate) {
+		return "";
+	}
+
+	try {
+		const parts = new Intl.DateTimeFormat("en-US", {
+			timeZone: getActiveTimeZone(),
+			year: "numeric",
+			month: "2-digit",
+			day: "2-digit",
+		}).formatToParts(targetDate);
+		const year = parts.find((part) => "year" === part.type)?.value;
+		const month = parts.find((part) => "month" === part.type)?.value;
+		const day = parts.find((part) => "day" === part.type)?.value;
+
+		return year && month && day ? `${year}-${month}-${day}` : "";
+	} catch {
+		return targetDate.toISOString().slice(0, 10);
+	}
+}
+
+/**
+ * Formats a date-only `YYYY-MM-DD` value without shifting it across zones.
+ */
+export function formatDateOnly(
+	value: string | null | undefined,
+	options: Intl.DateTimeFormatOptions = { dateStyle: "medium" }
+): string {
+	const date = toDateOnly(value);
+
+	if (!date) {
+		return value || "";
+	}
+
+	try {
+		return new Intl.DateTimeFormat(getActiveLocale(), {
+			timeZone: "UTC",
+			...options,
+		}).format(date);
+	} catch {
+		return value || "";
+	}
 }
 
 function resolveRelativeUnit(targetDate: Date, nowDate: Date) {
@@ -174,10 +304,14 @@ export function formatLocalizedDateTime(
 	}
 
 	try {
-		return new Intl.DateTimeFormat(getActiveLocale(), options).format(
-			targetDate
-		);
+		return new Intl.DateTimeFormat(
+			getActiveLocale(),
+			buildDateTimeOptions(options)
+		).format(targetDate);
 	} catch {
-		return targetDate.toLocaleString();
+		return targetDate.toLocaleString(getActiveLocale(), {
+			...buildDateTimeOptions({}),
+			timeZone: undefined,
+		});
 	}
 }

@@ -114,14 +114,15 @@ links, reviewing traffic, and managing settings without SaaS clutter.
 
 ![PeakURL dashboard after install](.github/images/PeakURL_Dashboard.jpg)
 
-From there you can:
+Dashboard highlights include:
 
-- create your first short link
-- review analytics and visitor insights
-- import existing links
-- manage users, API access, and integrations
-- set the dashboard language, timezone, and time format
-- configure email delivery, send a test email, manage updates, and refresh location data
+- short-link publishing and bulk import tools
+- analytics for traffic, devices, referrers, and locations
+- user, session, API-key, and integration management
+- self-hosted operations for settings, mail delivery, updates, and location data
+
+For the full product guide and current feature details, visit
+[peakurl.org/docs](https://peakurl.org/docs).
 
 If you want the latest public install package, use
 [peakurl.org/latest.zip](https://peakurl.org/latest.zip).

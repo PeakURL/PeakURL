@@ -36,7 +36,7 @@
 	}
 
 	.activity-page-overview-item {
-		@apply relative flex min-h-full flex-col gap-0.5 rounded-lg border border-stroke bg-surface p-3.5;
+		@apply relative flex min-h-full flex-col gap-0.5 rounded-lg border border-stroke bg-surface p-3.5 transition-all duration-200 hover:-translate-y-1 hover:border-stroke-strong hover:shadow-md;
 		-webkit-padding-end: 3.75rem;
 		padding-inline-end: 3.75rem;
 		text-align: start;
@@ -60,7 +60,7 @@
 	}
 
 	.activity-page-overview-status {
-		@apply flex flex-col justify-center rounded-lg border border-stroke bg-surface px-4 py-3.5;
+		@apply flex flex-col justify-center rounded-lg border border-stroke bg-surface px-4 py-3.5 transition-all duration-200 hover:-translate-y-1 hover:border-stroke-strong hover:shadow-md;
 		align-items: flex-start;
 		text-align: start;
 	}

@@ -50,7 +50,7 @@
 	}
 
 	.users-page-stat-card {
-		@apply rounded-xl border border-stroke bg-surface p-5;
+		@apply rounded-xl border border-stroke bg-surface p-5 transition-all duration-200 hover:-translate-y-1 hover:border-stroke-strong hover:shadow-md;
 	}
 
 	.users-page-stat-label {

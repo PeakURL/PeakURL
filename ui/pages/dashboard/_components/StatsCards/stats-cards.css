@@ -4,7 +4,7 @@
 	}
 
 	.dashboard-stats-card {
-		@apply rounded-lg border border-stroke bg-surface p-4 transition-shadow hover:shadow-md;
+		@apply rounded-lg border border-stroke bg-surface p-4 transition-all duration-200 hover:-translate-y-1 hover:border-stroke-strong hover:shadow-md;
 	}
 
 	.dashboard-stats-card-header {

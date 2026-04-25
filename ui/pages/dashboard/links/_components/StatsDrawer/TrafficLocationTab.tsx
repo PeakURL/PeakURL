@@ -6,6 +6,7 @@ import { isDocumentRtl } from "@/i18n/direction";
 import { useGetLinkLocationQuery } from "@/store/slices/api";
 import { getErrorMessage } from "@/utils";
 import type { HoveredCountry, TrafficLocationTabProps } from "./types";
+import { LocalIcon, UnknownLocationIcon } from "./Icons";
 
 interface LocationNoteItemProps {
 	text: string;
@@ -76,14 +77,22 @@ function TrafficLocationTab({
 	const hasData = total > 0;
 
 	// Country flag emoji helper
-	const getFlagEmoji = (countryCode?: string | null): string => {
-		if (countryCode === "LOCAL") return "🏠";
-		if (!countryCode || countryCode === "??") return "🌍";
+	const getFlagEmoji = (countryCode?: string | null) => {
+		if (countryCode === "LOCAL") {
+			return <LocalIcon className="w-6 h-6" />;
+		}
+		if (!countryCode || countryCode === "??") {
+			return <UnknownLocationIcon className="w-6 h-6" />;
+		}
 		const codePoints = countryCode
 			.toUpperCase()
 			.split("")
 			.map((char: string) => 127397 + char.charCodeAt(0));
-		return String.fromCodePoint(...codePoints);
+		return (
+			<span className="text-2xl">
+				{String.fromCodePoint(...codePoints)}
+			</span>
+		);
 	};
 
 	// Calculate percentage
@@ -299,9 +308,7 @@ function TrafficLocationTab({
 							>
 								<div className="links-location-list-row">
 									<div className="links-location-list-main">
-										<span className="text-2xl">
-											{getFlagEmoji(country.code)}
-										</span>
+										{getFlagEmoji(country.code)}
 										<span className="text-sm font-medium text-heading">
 											{country.name}
 										</span>

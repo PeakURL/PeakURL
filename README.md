@@ -120,6 +120,7 @@ From there you can:
 - review analytics and visitor insights
 - import existing links
 - manage users, API access, and integrations
+- set the dashboard language, timezone, and time format
 - configure email delivery, send a test email, manage updates, and refresh location data
 
 If you want the latest public install package, use

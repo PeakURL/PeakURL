@@ -32,7 +32,7 @@ require_command zip
 require_command php
 require_command rsync
 
-sync_release_tree() {
+copy_release_tree() {
 	source_dir=$1
 	destination_dir=$2
 	shift 2
@@ -49,7 +49,7 @@ copy_release_language_packs() {
 		return
 	fi
 
-	sync_release_tree \
+	copy_release_tree \
 		"$source_dir" \
 		"$destination_dir" \
 		--prune-empty-dirs \
@@ -101,12 +101,12 @@ mkdir -p "$RELEASE_DIR" "$RELEASE_ROOT"
 find "$RELEASE_ROOT" -maxdepth 1 \( -name 'peakurl-*.zip' -o -name 'peakurl-*.zip.sha256' \) -exec rm -f {} +
 find "$RELEASE_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 
-sync_release_tree "$ROOT_DIR/site" "$RELEASE_DIR" \
+copy_release_tree "$ROOT_DIR/site" "$RELEASE_DIR" \
 	--exclude='.DS_Store' \
 	--exclude='.gitkeep'
 copy_release_language_packs "$ROOT_DIR/content/languages" "$RELEASE_DIR/content/languages"
 
-sync_release_tree "$UI_BUILD_DIR" "$RELEASE_DIR" \
+copy_release_tree "$UI_BUILD_DIR" "$RELEASE_DIR" \
 	--exclude='index.html' \
 	--exclude='.DS_Store'
 cp "$UI_BUILD_DIR/index.html" "$RELEASE_DIR/app.html"
@@ -115,7 +115,7 @@ cp "$ROOT_DIR/.version" "$RELEASE_DIR/.version"
 cp "$ROOT_DIR/LICENSE" "$RELEASE_DIR/LICENSE"
 cp "$ROOT_DIR/CREDITS.txt" "$RELEASE_DIR/CREDITS.txt"
 
-sync_release_tree "$ROOT_DIR/app" "$RELEASE_DIR/app" \
+copy_release_tree "$ROOT_DIR/app" "$RELEASE_DIR/app" \
 	--exclude='.DS_Store' \
 	--exclude='.gitkeep' \
 	--exclude='.env'

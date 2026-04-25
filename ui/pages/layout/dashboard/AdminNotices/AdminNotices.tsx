@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { AlertCircle, CheckCircle2, Info, TriangleAlert } from "lucide-react";
 import { useGetAdminNoticesQuery } from "@/store/slices/api";
 import { isDocumentRtl } from "@/i18n/direction";
-import { cn, escUrl, isRelativeUrl } from "@/utils";
+import { cn, isRelativeUrl, sanitizeUrl } from "@/utils";
 import type { AdminNoticeItem, NoticeActionProps, NoticeTone } from "../types";
 
 const NOTICE_STYLES = {
@@ -38,7 +38,7 @@ function isNoticeTone(value: unknown): value is NoticeTone {
 }
 
 function NoticeAction({ action, actionClassName }: NoticeActionProps) {
-	const url = escUrl(action?.url);
+	const url = sanitizeUrl(action?.url);
 
 	if (!action?.label || !url) {
 		return null;

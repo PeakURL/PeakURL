@@ -441,12 +441,12 @@ export function findDashboardRouteMatches(
 			score: getTargetScore(normalizedQuery, target),
 		}))
 		.filter((target) => target.score > 0)
-		.sort((left, right) => {
-			if (right.score !== left.score) {
-				return right.score - left.score;
+		.sort((a, b) => {
+			if (b.score !== a.score) {
+				return b.score - a.score;
 			}
 
-			return left.label.localeCompare(right.label);
+			return a.label.localeCompare(b.label);
 		})
 		.slice(0, limit)
 		.map((target) => ({
@@ -500,12 +500,12 @@ export function findDashboardUserMatches(
 			};
 		})
 		.filter((user) => user.score > 0)
-		.sort((left, right) => {
-			if (right.score !== left.score) {
-				return right.score - left.score;
+		.sort((a, b) => {
+			if (b.score !== a.score) {
+				return b.score - a.score;
 			}
 
-			return left.title.localeCompare(right.title);
+			return a.title.localeCompare(b.title);
 		})
 		.slice(0, limit)
 		.map(({ score, ...user }) => user);
@@ -530,7 +530,7 @@ export function resolveDashboardSearchPath(
 			score: getTargetScore(normalizedQuery, target),
 		}))
 		.filter((target) => target.score > 0)
-		.sort((left, right) => right.score - left.score);
+		.sort((a, b) => b.score - a.score);
 
 	if (bestTarget && bestTarget.score >= 70) {
 		return bestTarget.href;

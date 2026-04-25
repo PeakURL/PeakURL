@@ -70,7 +70,7 @@ export function getTimeZoneOptions(): SelectOption<string>[] {
 	const locale = getActiveLocale();
 	const timeZones = Array.from(
 		new Set([DEFAULT_TIMEZONE, ...getSupportedTimeZoneValues()])
-	).sort((left, right) => left.localeCompare(right));
+	).sort((a, b) => a.localeCompare(b));
 
 	return timeZones.map((timeZone) => ({
 		value: timeZone,

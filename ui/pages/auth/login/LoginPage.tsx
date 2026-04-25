@@ -21,7 +21,6 @@ import {
 } from "@/components";
 import { isDocumentRtl } from "@/i18n/direction";
 import {
-	escUrl,
 	getErrorMessage,
 	getErrorStatus,
 	getInstallRecovery,
@@ -29,6 +28,7 @@ import {
 	redirectToInstallRecovery,
 	requestClosestFormSubmit,
 	requestControlFormSubmit,
+	sanitizeUrl,
 } from "@/utils";
 import {
 	useAuthCheckQuery,
@@ -107,7 +107,7 @@ function LoginPage() {
 	const submitPending = isLoggingIn || isVerifying;
 	const redirectTo = useMemo(() => {
 		const searchParams = new URLSearchParams(location.search || "");
-		const redirectParam = escUrl(searchParams.get("redirect") || "");
+		const redirectParam = sanitizeUrl(searchParams.get("redirect") || "");
 
 		if (redirectParam && isRelativeUrl(redirectParam)) {
 			return redirectParam;
@@ -116,7 +116,7 @@ function LoginPage() {
 		const from = location.state?.from;
 
 		if (from?.pathname) {
-			const fromPath = escUrl(
+			const fromPath = sanitizeUrl(
 				`${from.pathname}${from.search || ""}${from.hash || ""}`
 			);
 

@@ -72,7 +72,7 @@ export function generateRandomAlias(): string {
 
 export { addFilter, applyFilters, removeFilter } from "./hooks";
 export { buildFaviconPreviewUrl, buildManagedFaviconUrl } from "./favicon";
-export { escUrl, isRelativeUrl } from "./url";
+export { isRelativeUrl, sanitizeUrl } from "./url";
 export { buildShortUrl, getSiteUrl, resolveLinkHost } from "./linkHelpers";
 export {
 	buildLinkExportItems,

@@ -5,7 +5,7 @@ function normalizeUrlInput(value: string | null | undefined): string {
 /**
  * Sanitize a dashboard URL for internal navigation or external linking.
  */
-export function escUrl(value: string | null | undefined): string {
+export function sanitizeUrl(value: string | null | undefined): string {
 	const normalizedValue = normalizeUrlInput(value);
 
 	if (!normalizedValue) {

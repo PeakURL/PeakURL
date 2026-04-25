@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useCreateUrlMutation } from "@/store/slices/api";
 import {
 	buildShortUrl,
-	escUrl,
 	getErrorMessage,
 	isRelativeUrl,
 	isFutureLocalDateTime,
+	sanitizeUrl,
 	toIsoFromLocalDateTime,
 } from "@/utils";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -75,7 +75,7 @@ const UrlShorteningForm = () => {
 			return;
 		}
 
-		const normalizedDestinationUrl = escUrl(destinationUrl);
+		const normalizedDestinationUrl = sanitizeUrl(destinationUrl);
 
 		if (
 			!normalizedDestinationUrl ||

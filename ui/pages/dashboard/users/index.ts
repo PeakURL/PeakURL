@@ -1,2 +1,2 @@
-export { default as UsersPage } from './UsersPage';
-export { default as UsersSkeleton } from './UsersSkeleton';
+export { default as UsersPage } from "./UsersPage";
+export { default as UsersSkeleton } from "./UsersSkeleton";

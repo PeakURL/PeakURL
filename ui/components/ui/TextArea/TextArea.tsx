@@ -1,17 +1,17 @@
-import { forwardRef, useId } from 'react';
-import { Info } from 'lucide-react';
-import { getDocumentDirection, getFieldDirection } from '@/i18n/direction';
-import { cn } from '@/utils';
-import type { TextAreaProps } from '../types';
+import { forwardRef, useId } from "react";
+import { Info } from "lucide-react";
+import { getDocumentDirection, getFieldDirection } from "@/i18n/direction";
+import { cn } from "@/utils";
+import type { TextAreaProps } from "../types";
 
-export type { TextAreaProps } from '../types';
+export type { TextAreaProps } from "../types";
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 	function TextArea(
 		{
 			label,
 			error,
-			className = '',
+			className = "",
 			helperText,
 			valueDirection,
 			rows = 3,
@@ -30,7 +30,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 		const helperId = helperText ? `${textAreaId}-helper` : undefined;
 		const errorId = error ? `${textAreaId}-error` : undefined;
 		const describedBy =
-			[errorId, helperId].filter(Boolean).join(' ') || undefined;
+			[errorId, helperId].filter(Boolean).join(" ") || undefined;
 		const placeholderFollowsPageDirection =
 			Boolean(valueDirection) && valueDirection !== chromeDirection;
 
@@ -40,9 +40,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 					<label htmlFor={textAreaId} className="form-field-label">
 						{label}
 						{props.required && (
-							<span className="field-required-indicator">
-								*
-							</span>
+							<span className="field-required-indicator">*</span>
 						)}
 					</label>
 				)}
@@ -55,13 +53,13 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 						aria-invalid={Boolean(error)}
 						aria-describedby={describedBy}
 						className={cn(
-							'form-control-base',
-							'form-control-accent-focus',
-							'text-page-start',
-							'form-field-textarea',
+							"form-control-base",
+							"form-control-accent-focus",
+							"text-page-start",
+							"form-field-textarea",
 							placeholderFollowsPageDirection &&
-								'placeholder-follow-page-direction',
-							error && 'form-field-control-error',
+								"placeholder-follow-page-direction",
+							error && "form-field-control-error",
 							className
 						)}
 						{...props}
@@ -83,4 +81,4 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 	}
 );
 
-TextArea.displayName = 'TextArea';
+TextArea.displayName = "TextArea";

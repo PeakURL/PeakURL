@@ -1,1 +1,1 @@
-export { default } from './WorldMap';
+export { default } from "./WorldMap";

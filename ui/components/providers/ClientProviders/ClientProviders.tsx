@@ -1,8 +1,8 @@
-import { Provider } from 'react-redux';
-import { store } from '@store';
-import { NotificationProvider } from '../NotificationProvider';
-import { ThemeProvider } from '../ThemeProvider';
-import type { ClientProvidersProps } from '../types';
+import { Provider } from "react-redux";
+import { store } from "@store";
+import { NotificationProvider } from "../NotificationProvider";
+import { ThemeProvider } from "../ThemeProvider";
+import type { ClientProvidersProps } from "../types";
 
 /**
  * ClientProviders wraps the app with Redux, theme, and notification providers.

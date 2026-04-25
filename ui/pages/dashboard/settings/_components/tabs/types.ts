@@ -1,11 +1,11 @@
-import type { SerializedError } from '@reduxjs/toolkit';
-import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import type { SettingsTabId } from '../layout/types';
+import type { SerializedError } from "@reduxjs/toolkit";
+import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import type { SettingsTabId } from "../layout/types";
 
 /**
  * Supported release actions exposed by the updater UI.
  */
-export type ReleaseAction = 'install' | 'reinstall';
+export type ReleaseAction = "install" | "reinstall";
 
 /**
  * Normalized RTK Query error union used by the settings content shell.
@@ -98,12 +98,12 @@ export interface GeoipConfigurationPayload {
 /**
  * Supported mail transport drivers.
  */
-export type MailDriver = 'mail' | 'smtp';
+export type MailDriver = "mail" | "smtp";
 
 /**
  * Supported SMTP encryption modes.
  */
-export type SmtpEncryption = 'tls' | 'ssl' | 'none';
+export type SmtpEncryption = "tls" | "ssl" | "none";
 
 /**
  * Persisted email delivery settings saved from the dashboard.

@@ -1,16 +1,16 @@
-import { Content } from './_components';
-import { Navigate, useParams } from 'react-router-dom';
-import { useAdminAccess } from '@/hooks';
-import type { SettingsTabId } from './_components/layout/types';
+import { Content } from "./_components";
+import { Navigate, useParams } from "react-router-dom";
+import { useAdminAccess } from "@/hooks";
+import type { SettingsTabId } from "./_components/layout/types";
 
 const VALID_SETTINGS_TABS = new Set<SettingsTabId>([
-	'general',
-	'security',
-	'api',
-	'integrations',
-	'email',
-	'location',
-	'updates',
+	"general",
+	"security",
+	"api",
+	"integrations",
+	"email",
+	"location",
+	"updates",
 ]);
 
 function TabPage() {
@@ -44,7 +44,7 @@ function TabPage() {
 	return (
 		<div className="settings-tab-page">
 			<div className="settings-tab-page-panel">
-				<Content activeTab={tab || 'general'} />
+				<Content activeTab={tab || "general"} />
 			</div>
 		</div>
 	);

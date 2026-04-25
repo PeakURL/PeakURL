@@ -1,18 +1,18 @@
-import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
-import { X, Trash2, AlertTriangle } from 'lucide-react';
-import { useState } from 'react';
-import { ReadOnlyValueBlock } from '@/components';
-import { useDeleteUrlMutation } from '@/store/slices/api';
-import { buildShortUrl, getErrorMessage } from '@/utils';
-import { __ } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
-import type { DeleteLinkModalProps } from '../types';
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { X, Trash2, AlertTriangle } from "lucide-react";
+import { useState } from "react";
+import { ReadOnlyValueBlock } from "@/components";
+import { useDeleteUrlMutation } from "@/store/slices/api";
+import { buildShortUrl, getErrorMessage } from "@/utils";
+import { __ } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
+import type { DeleteLinkModalProps } from "../types";
 
 function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
-	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
-	const [error, setError] = useState('');
+	const direction = isDocumentRtl() ? "rtl" : "ltr";
+	const [error, setError] = useState("");
 	const [deleteUrl, { isLoading }] = useDeleteUrlMutation();
-	const shortUrl = link ? buildShortUrl(link) : '';
+	const shortUrl = link ? buildShortUrl(link) : "";
 	const totalClicks = Number(link?.clicks || 0);
 	const uniqueClicks = Number(link?.uniqueClicks || 0);
 
@@ -21,13 +21,13 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 			return;
 		}
 
-		setError('');
+		setError("");
 
 		try {
 			await deleteUrl(link.id).unwrap();
 			setOpen(false);
 		} catch (err) {
-			setError(getErrorMessage(err, __('Failed to delete link')));
+			setError(getErrorMessage(err, __("Failed to delete link")));
 		}
 	};
 
@@ -48,7 +48,7 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 							<div className="links-modal-title-icon links-delete-modal-title-icon">
 								<AlertTriangle className="links-delete-modal-title-icon-svg" />
 							</div>
-							{__('Delete Link')}
+							{__("Delete Link")}
 						</DialogTitle>
 						<button
 							onClick={() => setOpen(false)}
@@ -70,7 +70,7 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 
 						<p className="links-delete-modal-copy">
 							{__(
-								'Are you sure you want to delete this link? This action cannot be undone.'
+								"Are you sure you want to delete this link? This action cannot be undone."
 							)}
 						</p>
 
@@ -78,7 +78,7 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 						<div className="links-delete-modal-summary">
 							<div>
 								<p className="links-delete-modal-summary-label">
-									{__('Short URL')}
+									{__("Short URL")}
 								</p>
 								<ReadOnlyValueBlock
 									value={shortUrl}
@@ -88,7 +88,7 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 							</div>
 							<div>
 								<p className="links-delete-modal-summary-label">
-									{__('Destination')}
+									{__("Destination")}
 								</p>
 								<ReadOnlyValueBlock
 									value={link.destinationUrl}
@@ -101,7 +101,7 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 								<div className="links-delete-modal-metrics">
 									<div>
 										<p className="links-delete-modal-metric-label">
-											{__('Total Clicks')}
+											{__("Total Clicks")}
 										</p>
 										<p className="links-delete-modal-metric-value">
 											{totalClicks}
@@ -109,7 +109,7 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 									</div>
 									<div>
 										<p className="links-delete-modal-metric-label">
-											{__('Unique Visitors')}
+											{__("Unique Visitors")}
 										</p>
 										<p className="links-delete-modal-metric-value">
 											{uniqueClicks}
@@ -127,7 +127,7 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 								disabled={isLoading}
 								className="links-modal-button links-modal-button-secondary"
 							>
-								{__('Cancel')}
+								{__("Cancel")}
 							</button>
 							<button
 								onClick={handleDelete}
@@ -137,12 +137,12 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 								{isLoading ? (
 									<span className="links-modal-button-content">
 										<div className="links-modal-spinner"></div>
-										{__('Deleting...')}
+										{__("Deleting...")}
 									</span>
 								) : (
 									<span className="links-modal-button-content">
 										<Trash2 className="links-modal-button-icon" />
-										{__('Delete')}
+										{__("Delete")}
 									</span>
 								)}
 							</button>

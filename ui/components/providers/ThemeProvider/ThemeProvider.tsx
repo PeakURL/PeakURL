@@ -4,31 +4,27 @@ import {
 	useContext,
 	useEffect,
 	useSyncExternalStore,
-} from 'react';
-import type {
-	Theme,
-	ThemeContextValue,
-	ThemeProviderProps,
-} from '../types';
+} from "react";
+import type { Theme, ThemeContextValue, ThemeProviderProps } from "../types";
 
-const DEFAULT_THEME: Theme = 'light';
-const THEME_STORAGE_KEY = 'theme';
-const THEME_CHANGE_EVENT = 'peakurl-theme-change';
+const DEFAULT_THEME: Theme = "light";
+const THEME_STORAGE_KEY = "theme";
+const THEME_CHANGE_EVENT = "peakurl-theme-change";
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 const getStoredTheme = (): Theme => {
-	if ('undefined' === typeof window) {
+	if ("undefined" === typeof window) {
 		return DEFAULT_THEME;
 	}
 
 	const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
 
-	return 'dark' === storedTheme ? 'dark' : DEFAULT_THEME;
+	return "dark" === storedTheme ? "dark" : DEFAULT_THEME;
 };
 
 const subscribeToTheme = (callback: () => void) => {
-	if ('undefined' === typeof window) {
+	if ("undefined" === typeof window) {
 		return () => {};
 	}
 
@@ -42,16 +38,16 @@ const subscribeToTheme = (callback: () => void) => {
 	};
 
 	window.addEventListener(THEME_CHANGE_EVENT, handleThemeChange);
-	window.addEventListener('storage', handleStorage);
+	window.addEventListener("storage", handleStorage);
 
 	return () => {
 		window.removeEventListener(THEME_CHANGE_EVENT, handleThemeChange);
-		window.removeEventListener('storage', handleStorage);
+		window.removeEventListener("storage", handleStorage);
 	};
 };
 
 const setStoredTheme = (theme: Theme) => {
-	if ('undefined' === typeof window) {
+	if ("undefined" === typeof window) {
 		return;
 	}
 
@@ -74,11 +70,11 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
 	useEffect(() => {
 		const root = window.document.documentElement;
-		root.classList.toggle('dark', 'dark' === theme);
+		root.classList.toggle("dark", "dark" === theme);
 	}, [theme]);
 
 	const toggleTheme = useCallback(() => {
-		setStoredTheme('light' === theme ? 'dark' : 'light');
+		setStoredTheme("light" === theme ? "dark" : "light");
 	}, [theme]);
 
 	return (
@@ -95,7 +91,7 @@ export function useTheme(): ThemeContextValue {
 	const context = useContext(ThemeContext);
 
 	if (!context) {
-		throw new Error('useTheme must be used within a ThemeProvider');
+		throw new Error("useTheme must be used within a ThemeProvider");
 	}
 
 	return context;

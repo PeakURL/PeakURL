@@ -1,2 +1,2 @@
-export { default as SettingsLayout } from './Layout';
-export { default as SettingsTabPage } from './TabPage';
+export { default as SettingsLayout } from "./Layout";
+export { default as SettingsTabPage } from "./TabPage";

@@ -1,4 +1,4 @@
-import type { LinkRecord, LinksMeta } from './_components/types';
+import type { LinkRecord, LinksMeta } from "./_components/types";
 
 /**
  * API response wrapper used by the links dashboard list and lookup queries.

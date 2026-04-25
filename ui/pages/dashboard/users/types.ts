@@ -1,12 +1,12 @@
 /**
  * Supported modes for the user create/edit dialog.
  */
-export type UserDialogMode = 'create' | 'edit';
+export type UserDialogMode = "create" | "edit";
 
 /**
  * Canonical user roles supported by the self-hosted dashboard.
  */
-export type UserRole = 'admin' | 'editor';
+export type UserRole = "admin" | "editor";
 
 /**
  * Editable form state for the user dialog.

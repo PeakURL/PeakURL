@@ -1,1 +1,1 @@
-export { default as PasteImport } from './PasteImport';
+export { default as PasteImport } from "./PasteImport";

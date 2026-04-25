@@ -1,4 +1,4 @@
-import baseApi from './base';
+import baseApi from "./base";
 import type {
 	ApiDataResponse,
 	AuthCheckResponse,
@@ -18,8 +18,8 @@ import type {
 	UserDialogPayload,
 	UserSummary,
 	VerifyTwoFactorPayload,
-} from './types';
-import type { ProfileUser } from '@/pages/dashboard/settings/_components/tabs/types';
+} from "./types";
+import type { ProfileUser } from "@/pages/dashboard/settings/_components/tabs/types";
 
 /**
  * Generic object payload used by auth endpoints that do not yet have a stable
@@ -32,18 +32,24 @@ type UnknownBodyPayload = Record<string, unknown>;
  */
 export const userApi = baseApi.injectEndpoints({
 	endpoints: (build) => ({
-		register: build.mutation<ApiDataResponse<UnknownBodyPayload>, UnknownBodyPayload>({
+		register: build.mutation<
+			ApiDataResponse<UnknownBodyPayload>,
+			UnknownBodyPayload
+		>({
 			query: (body) => ({
-				url: 'auth/register',
-				method: 'POST',
+				url: "auth/register",
+				method: "POST",
 				body,
 			}),
-			invalidatesTags: ['Users'],
+			invalidatesTags: ["Users"],
 		}),
-		verifyEmail: build.mutation<ApiDataResponse<UnknownBodyPayload>, UnknownBodyPayload>({
+		verifyEmail: build.mutation<
+			ApiDataResponse<UnknownBodyPayload>,
+			UnknownBodyPayload
+		>({
 			query: (body) => ({
-				url: 'auth/verify-email',
-				method: 'POST',
+				url: "auth/verify-email",
+				method: "POST",
 				body,
 			}),
 		}),
@@ -52,66 +58,66 @@ export const userApi = baseApi.injectEndpoints({
 			UnknownBodyPayload
 		>({
 			query: (body) => ({
-				url: 'auth/resend-verification',
-				method: 'POST',
+				url: "auth/resend-verification",
+				method: "POST",
 				body,
 			}),
 		}),
 		login: build.mutation<LoginResponse, CredentialLoginPayload>({
 			query: (body) => ({
-				url: 'auth/login',
-				method: 'POST',
+				url: "auth/login",
+				method: "POST",
 				body,
 			}),
 			invalidatesTags: (result) =>
-				result?.data?.user ? ['AuthSession', 'Profile'] : [],
+				result?.data?.user ? ["AuthSession", "Profile"] : [],
 		}),
 		verifyTwoFactorLogin: build.mutation<
 			LoginResponse,
 			CredentialLoginPayload
 		>({
 			query: (body) => ({
-				url: 'auth/login/verify',
-				method: 'POST',
+				url: "auth/login/verify",
+				method: "POST",
 				body,
 			}),
 			invalidatesTags: (result) =>
-				result?.data?.user ? ['AuthSession', 'Profile'] : [],
+				result?.data?.user ? ["AuthSession", "Profile"] : [],
 		}),
 		logout: build.mutation<LogoutResponse, void>({
 			query: () => ({
-				url: 'auth/logout',
-				method: 'POST',
+				url: "auth/logout",
+				method: "POST",
 			}),
 			invalidatesTags: (result) =>
-				result?.data?.loggedOut ? ['AuthSession', 'Profile'] : [],
+				result?.data?.loggedOut ? ["AuthSession", "Profile"] : [],
 		}),
 		getUserProfile: build.query<ApiDataResponse<ProfileUser>, void>({
-			query: () => 'users/me',
-			providesTags: ['Profile'],
+			query: () => "users/me",
+			providesTags: ["Profile"],
 		}),
 		updateUserProfile: build.mutation<
 			ApiDataResponse<ProfileUser>,
 			UnknownBodyPayload
 		>({
 			query: (body) => ({
-				url: 'users/me',
-				method: 'PUT',
+				url: "users/me",
+				method: "PUT",
 				body,
 			}),
-			invalidatesTags: ['Profile'],
+			invalidatesTags: ["Profile"],
 		}),
 		authCheck: build.query<AuthCheckResponse, void>({
-			query: () => 'users/me',
-			providesTags: ['AuthSession'],
+			query: () => "users/me",
+			providesTags: ["AuthSession"],
 		}),
 		forgotPassword: build.mutation<
 			ApiDataResponse<UnknownBodyPayload>,
 			ForgotPasswordPayload
 		>({
 			query: (body) => ({
-				url: 'auth/forgot-password',
-				method: 'POST',
+				url: "auth/forgot-password",
+				method: "POST",
 				body,
 			}),
 		}),
@@ -121,106 +127,112 @@ export const userApi = baseApi.injectEndpoints({
 		>({
 			query: ({ token, ...body }) => ({
 				url: `auth/reset-password/${token}`,
-				method: 'POST',
+				method: "POST",
 				body,
 			}),
 		}),
 		getAllUsers: build.query<ApiDataResponse<UserSummary[]>, void>({
-			query: () => 'users',
-			providesTags: ['Users'],
+			query: () => "users",
+			providesTags: ["Users"],
 		}),
-		createUser: build.mutation<ApiDataResponse<UserSummary>, UserDialogPayload>({
+		createUser: build.mutation<
+			ApiDataResponse<UserSummary>,
+			UserDialogPayload
+		>({
 			query: (body) => ({
-				url: 'users',
-				method: 'POST',
+				url: "users",
+				method: "POST",
 				body,
 			}),
-			invalidatesTags: ['Users'],
+			invalidatesTags: ["Users"],
 		}),
-		updateUser: build.mutation<ApiDataResponse<UserSummary>, UpdateUserPayload>({
+		updateUser: build.mutation<
+			ApiDataResponse<UserSummary>,
+			UpdateUserPayload
+		>({
 			query: ({ currentUsername, username, ...body }) => ({
 				url: `users/${currentUsername || username}`,
-				method: 'PUT',
+				method: "PUT",
 				body: {
 					username,
 					...body,
 				},
 			}),
-			invalidatesTags: ['Users'],
+			invalidatesTags: ["Users"],
 		}),
 		deleteUser: build.mutation<void, string>({
 			query: (username) => ({
 				url: `users/${username}`,
-				method: 'DELETE',
+				method: "DELETE",
 			}),
-			invalidatesTags: ['Users'],
+			invalidatesTags: ["Users"],
 		}),
 		generateApiKey: build.mutation<
 			GenerateApiKeyResponse,
 			GenerateApiKeyPayload
 		>({
 			query: (body) => ({
-				url: 'auth/api-key',
-				method: 'POST',
+				url: "auth/api-key",
+				method: "POST",
 				body,
 			}),
-			invalidatesTags: ['Profile'],
+			invalidatesTags: ["Profile"],
 		}),
 		deleteApiKey: build.mutation<void, string>({
 			query: (id) => ({
 				url: `auth/api-key/${id}`,
-				method: 'DELETE',
+				method: "DELETE",
 			}),
-			invalidatesTags: ['Profile'],
+			invalidatesTags: ["Profile"],
 		}),
 		getSecuritySettings: build.query<SecuritySettingsResponse, void>({
-			query: () => 'auth/security',
-			providesTags: ['Security'],
+			query: () => "auth/security",
+			providesTags: ["Security"],
 		}),
 		startTwoFactorSetup: build.mutation<TwoFactorSetupResponse, void>({
 			query: () => ({
-				url: 'auth/security/two-factor/setup',
-				method: 'POST',
+				url: "auth/security/two-factor/setup",
+				method: "POST",
 			}),
-			invalidatesTags: ['Security'],
+			invalidatesTags: ["Security"],
 		}),
 		verifyTwoFactor: build.mutation<
 			BackupCodesResponse,
 			VerifyTwoFactorPayload
 		>({
 			query: (body) => ({
-				url: 'auth/security/two-factor/verify',
-				method: 'POST',
+				url: "auth/security/two-factor/verify",
+				method: "POST",
 				body,
 			}),
-			invalidatesTags: ['Security'],
+			invalidatesTags: ["Security"],
 		}),
 		disableTwoFactor: build.mutation<
 			ApiDataResponse<UnknownBodyPayload>,
 			CurrentPasswordPayload
 		>({
 			query: (body) => ({
-				url: 'auth/security/two-factor/disable',
-				method: 'POST',
+				url: "auth/security/two-factor/disable",
+				method: "POST",
 				body,
 			}),
-			invalidatesTags: ['Security'],
+			invalidatesTags: ["Security"],
 		}),
 		regenerateBackupCodes: build.mutation<
 			BackupCodesResponse,
 			CurrentPasswordPayload
 		>({
 			query: (body) => ({
-				url: 'auth/security/two-factor/backup-codes',
-				method: 'POST',
+				url: "auth/security/two-factor/backup-codes",
+				method: "POST",
 				body,
 			}),
-			invalidatesTags: ['Security'],
+			invalidatesTags: ["Security"],
 		}),
 		downloadBackupCodes: build.mutation<string, CurrentPasswordPayload>({
 			query: (body) => ({
-				url: 'auth/security/backup-codes/download',
-				method: 'POST',
+				url: "auth/security/backup-codes/download",
+				method: "POST",
 				body,
 				responseHandler: (response: Response) => response.text(),
 			}),
@@ -228,16 +240,16 @@ export const userApi = baseApi.injectEndpoints({
 		revokeSession: build.mutation<void, string>({
 			query: (sessionId) => ({
 				url: `auth/security/sessions/${sessionId}`,
-				method: 'DELETE',
+				method: "DELETE",
 			}),
-			invalidatesTags: ['Security'],
+			invalidatesTags: ["Security"],
 		}),
 		revokeOtherSessions: build.mutation<RevokeOtherSessionsResponse, void>({
 			query: () => ({
-				url: 'auth/security/sessions',
-				method: 'DELETE',
+				url: "auth/security/sessions",
+				method: "DELETE",
 			}),
-			invalidatesTags: ['Security'],
+			invalidatesTags: ["Security"],
 		}),
 	}),
 });

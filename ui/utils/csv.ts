@@ -1,52 +1,54 @@
 /**
  * Normalizes a CSV header so it can be matched against known import keys.
  */
-export const normalizeCsvHeader = (value: unknown = ''): string =>
+export const normalizeCsvHeader = (value: unknown = ""): string =>
 	String(value)
-		.replace(/^\uFEFF/, '')
+		.replace(/^\uFEFF/, "")
 		.trim()
 		.toLowerCase()
-		.replace(/[^a-z0-9]/g, '');
+		.replace(/[^a-z0-9]/g, "");
 
 /**
  * Extracts a short-code or alias value from a public short URL.
  */
-export const extractAliasFromShortUrl = (value: unknown = ''): string => {
+export const extractAliasFromShortUrl = (value: unknown = ""): string => {
 	const normalizedValue = String(value).trim();
 
 	if (!normalizedValue) {
-		return '';
+		return "";
 	}
 
 	try {
 		const url = new URL(normalizedValue);
-		const pathname = url.pathname.replace(/^\/+|\/+$/g, '');
-		return pathname ? decodeURIComponent(pathname.split('/').pop() || '') : '';
+		const pathname = url.pathname.replace(/^\/+|\/+$/g, "");
+		return pathname
+			? decodeURIComponent(pathname.split("/").pop() || "")
+			: "";
 	} catch {
-		const pathname = normalizedValue.replace(/^\/+|\/+$/g, '');
-		return pathname ? pathname.split('/').pop() || '' : '';
+		const pathname = normalizedValue.replace(/^\/+|\/+$/g, "");
+		return pathname ? pathname.split("/").pop() || "" : "";
 	}
 };
 
 /**
  * Parses CSV text into rows while handling quoted values and escaped quotes.
  */
-export const parseCsvRows = (text: string = ''): string[][] => {
+export const parseCsvRows = (text: string = ""): string[][] => {
 	const rows: string[][] = [];
-	const source = String(text).replace(/^\uFEFF/, '');
+	const source = String(text).replace(/^\uFEFF/, "");
 	let row: string[] = [];
-	let value = '';
+	let value = "";
 	let inQuotes = false;
 
 	const pushRow = () => {
 		row.push(value);
 
-		if (row.some((cell) => String(cell).trim() !== '')) {
+		if (row.some((cell) => String(cell).trim() !== "")) {
 			rows.push(row);
 		}
 
 		row = [];
-		value = '';
+		value = "";
 	};
 
 	for (let i = 0; i < source.length; i += 1) {
@@ -62,14 +64,14 @@ export const parseCsvRows = (text: string = ''): string[][] => {
 			continue;
 		}
 
-		if (',' === char && !inQuotes) {
+		if ("," === char && !inQuotes) {
 			row.push(value);
-			value = '';
+			value = "";
 			continue;
 		}
 
-		if (('\n' === char || '\r' === char) && !inQuotes) {
-			if ('\r' === char && source[i + 1] === '\n') {
+		if (("\n" === char || "\r" === char) && !inQuotes) {
+			if ("\r" === char && source[i + 1] === "\n") {
 				i += 1;
 			}
 
@@ -91,7 +93,7 @@ export const parseCsvRows = (text: string = ''): string[][] => {
  * Escapes a CSV value when it contains delimiters or newlines.
  */
 export const stringifyCsvValue = (value: unknown): string => {
-	const normalizedValue = value == null ? '' : String(value);
+	const normalizedValue = value == null ? "" : String(value);
 
 	if (/[",\r\n]/.test(normalizedValue)) {
 		return `"${normalizedValue.replace(/"/g, '""')}"`;
@@ -108,5 +110,5 @@ export const serializeCsv = (
 	rows: Array<Array<unknown>> = []
 ): string =>
 	[headers, ...rows]
-		.map((row) => row.map((value) => stringifyCsvValue(value)).join(','))
-		.join('\n');
+		.map((row) => row.map((value) => stringifyCsvValue(value)).join(","))
+		.join("\n");

@@ -1,9 +1,9 @@
-import { Input } from '@/components';
-import { Calendar } from 'lucide-react';
-import { __ } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
-import { getLocalDateValue } from '@/utils';
-import type { ExpirationFieldsProps } from '../types';
+import { Input } from "@/components";
+import { Calendar } from "lucide-react";
+import { __ } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
+import { getLocalDateValue } from "@/utils";
+import type { ExpirationFieldsProps } from "../types";
 
 const ExpirationFields = ({
 	expirationDate,
@@ -11,7 +11,7 @@ const ExpirationFields = ({
 	expirationTime,
 	setExpirationTime,
 }: ExpirationFieldsProps) => {
-	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
+	const direction = isDocumentRtl() ? "rtl" : "ltr";
 	return (
 		<div>
 			<label className="links-form-section-label">
@@ -20,7 +20,7 @@ const ExpirationFields = ({
 					className="links-form-section-label-content"
 				>
 					<Calendar className="links-form-section-label-icon" />
-					{__('Expiration Date (Optional)')}
+					{__("Expiration Date (Optional)")}
 				</span>
 			</label>
 			<div className="links-form-expiration-grid">

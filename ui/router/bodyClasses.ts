@@ -1,11 +1,11 @@
-import { matchPath } from 'react-router-dom';
-import { applyFilters } from '@/utils';
+import { matchPath } from "react-router-dom";
+import { applyFilters } from "@/utils";
 
-const BODY_CLASS_DATA_ATTRIBUTE = 'peakurlBodyClasses';
+const BODY_CLASS_DATA_ATTRIBUTE = "peakurlBodyClasses";
 
 interface BodyClassContext {
 	pathname: string;
-	pageType: 'auth' | 'dashboard' | 'default';
+	pageType: "auth" | "dashboard" | "default";
 	pageSlug: string;
 }
 
@@ -13,9 +13,9 @@ function sanitizeBodyClassName(value: string): string {
 	return value
 		.trim()
 		.toLowerCase()
-		.replace(/[^a-z0-9-]+/g, '-')
-		.replace(/-{2,}/g, '-')
-		.replace(/^-+|-+$/g, '');
+		.replace(/[^a-z0-9-]+/g, "-")
+		.replace(/-{2,}/g, "-")
+		.replace(/^-+|-+$/g, "");
 }
 
 function uniqueBodyClassNames(
@@ -23,10 +23,10 @@ function uniqueBodyClassNames(
 ): string[] {
 	return Array.from(
 		new Set(
-				classes
-					.map((className) =>
-						className ? sanitizeBodyClassName(className) : ''
-					)
+			classes
+				.map((className) =>
+					className ? sanitizeBodyClassName(className) : ""
+				)
 				.filter(Boolean)
 		)
 	);
@@ -34,7 +34,7 @@ function uniqueBodyClassNames(
 
 function getRuntimeBodyClassNames(): string[] {
 	if (
-		'undefined' === typeof window ||
+		"undefined" === typeof window ||
 		!Array.isArray(window.__PEAKURL_BODY_CLASSES__)
 	) {
 		return [];
@@ -44,27 +44,27 @@ function getRuntimeBodyClassNames(): string[] {
 }
 
 function getAuthBodyClassNames(pathname: string): string[] {
-	if ('/login' === pathname) {
-		return ['peakurl-ui', 'public-page', 'auth-page', 'login-page'];
+	if ("/login" === pathname) {
+		return ["peakurl-ui", "public-page", "auth-page", "login-page"];
 	}
 
-	if ('/forgot-password' === pathname) {
+	if ("/forgot-password" === pathname) {
 		return [
-			'peakurl-ui',
-			'public-page',
-			'auth-page',
-			'auth-page-recovery',
-			'forgot-password-page',
+			"peakurl-ui",
+			"public-page",
+			"auth-page",
+			"auth-page-recovery",
+			"forgot-password-page",
 		];
 	}
 
-	if (matchPath('/reset-password/:token', pathname)) {
+	if (matchPath("/reset-password/:token", pathname)) {
 		return [
-			'peakurl-ui',
-			'public-page',
-			'auth-page',
-			'auth-page-recovery',
-			'reset-password-page',
+			"peakurl-ui",
+			"public-page",
+			"auth-page",
+			"auth-page-recovery",
+			"reset-password-page",
 		];
 	}
 
@@ -72,136 +72,136 @@ function getAuthBodyClassNames(pathname: string): string[] {
 }
 
 function getDashboardBodyClassNames(pathname: string): string[] {
-	if (!pathname.startsWith('/dashboard')) {
+	if (!pathname.startsWith("/dashboard")) {
 		return [];
 	}
 
-	const classes = ['peakurl-ui', 'dashboard-page'];
+	const classes = ["peakurl-ui", "dashboard-page"];
 
-	if ('/dashboard' === pathname) {
-		classes.push('dashboard-home-page');
+	if ("/dashboard" === pathname) {
+		classes.push("dashboard-home-page");
 		return classes;
 	}
 
-	if ('/dashboard/about' === pathname) {
-		classes.push('dashboard-about-page');
+	if ("/dashboard/about" === pathname) {
+		classes.push("dashboard-about-page");
 		return classes;
 	}
 
-	if ('/dashboard/activity' === pathname) {
-		classes.push('dashboard-activity-page');
+	if ("/dashboard/activity" === pathname) {
+		classes.push("dashboard-activity-page");
 		return classes;
 	}
 
-	if ('/dashboard/links' === pathname) {
-		classes.push('dashboard-links-page');
+	if ("/dashboard/links" === pathname) {
+		classes.push("dashboard-links-page");
 		return classes;
 	}
 
-	if ('/dashboard/plugins' === pathname) {
-		classes.push('dashboard-plugins-page');
+	if ("/dashboard/plugins" === pathname) {
+		classes.push("dashboard-plugins-page");
 		return classes;
 	}
 
-	if ('/dashboard/users' === pathname) {
-		classes.push('dashboard-users-page');
+	if ("/dashboard/users" === pathname) {
+		classes.push("dashboard-users-page");
 		return classes;
 	}
 
-	if ('/dashboard/settings' === pathname) {
-		classes.push(
-			'dashboard-settings-page',
-			'dashboard-settings-general'
-		);
+	if ("/dashboard/settings" === pathname) {
+		classes.push("dashboard-settings-page", "dashboard-settings-general");
 		return classes;
 	}
 
-	const settingsMatch = matchPath('/dashboard/settings/:tab', pathname);
+	const settingsMatch = matchPath("/dashboard/settings/:tab", pathname);
 
 	if (settingsMatch) {
 		const tab = sanitizeBodyClassName(
-			settingsMatch.params.tab || 'general'
+			settingsMatch.params.tab || "general"
 		);
-		classes.push('dashboard-settings-page', `dashboard-settings-${tab}`);
+		classes.push("dashboard-settings-page", `dashboard-settings-${tab}`);
 		return classes;
 	}
 
-	const importMatch = matchPath('/dashboard/tools/import/:tab', pathname);
+	const importMatch = matchPath("/dashboard/tools/import/:tab", pathname);
 
 	if (importMatch) {
-		const tab = sanitizeBodyClassName(importMatch.params.tab || 'file');
+		const tab = sanitizeBodyClassName(importMatch.params.tab || "file");
 		classes.push(
-			'dashboard-tools-page',
-			'dashboard-import-page',
+			"dashboard-tools-page",
+			"dashboard-import-page",
 			`dashboard-import-${tab}`
 		);
 		return classes;
 	}
 
-	if ('/dashboard/tools/export' === pathname) {
-		classes.push('dashboard-tools-page', 'dashboard-export-page');
+	if ("/dashboard/tools/export" === pathname) {
+		classes.push("dashboard-tools-page", "dashboard-export-page");
 		return classes;
 	}
 
-	if ('/dashboard/tools/system-status' === pathname) {
-		classes.push('dashboard-tools-page', 'dashboard-system-status-page');
+	if ("/dashboard/tools/system-status" === pathname) {
+		classes.push("dashboard-tools-page", "dashboard-system-status-page");
 		return classes;
 	}
 
-	if ('/dashboard/tools' === pathname) {
-		classes.push('dashboard-tools-page');
+	if ("/dashboard/tools" === pathname) {
+		classes.push("dashboard-tools-page");
 		return classes;
 	}
 
-	classes.push('dashboard-not-found-page', 'not-found-page');
+	classes.push("dashboard-not-found-page", "not-found-page");
 	return classes;
 }
 
 function getPageSlug(classes: string[]): string {
 	const pageClass = classes.find(
 		(className) =>
-			className.endsWith('-page') &&
-			!['app-page', 'public-page', 'auth-page', 'dashboard-page'].includes(
-				className
-			)
+			className.endsWith("-page") &&
+			![
+				"app-page",
+				"public-page",
+				"auth-page",
+				"dashboard-page",
+			].includes(className)
 	);
-	return pageClass || 'default-page';
+	return pageClass || "default-page";
 }
 
 function getBodyClassContext(
 	pathname: string,
 	classes: string[]
 ): BodyClassContext {
-	if (classes.includes('auth-page')) {
+	if (classes.includes("auth-page")) {
 		return {
 			pathname,
-			pageType: 'auth',
+			pageType: "auth",
 			pageSlug: getPageSlug(classes),
 		};
 	}
 
-	if (classes.includes('dashboard-page')) {
+	if (classes.includes("dashboard-page")) {
 		return {
 			pathname,
-			pageType: 'dashboard',
+			pageType: "dashboard",
 			pageSlug: getPageSlug(classes),
 		};
 	}
 
 	return {
 		pathname,
-		pageType: 'default',
+		pageType: "default",
 		pageSlug: getPageSlug(classes),
 	};
 }
 
 function readManagedBodyClasses(): string[] {
-	if ('undefined' === typeof document || !document.body) {
+	if ("undefined" === typeof document || !document.body) {
 		return [];
 	}
 
-	return (document.body.dataset[BODY_CLASS_DATA_ATTRIBUTE] || '')
-		.split(' ')
+	return (document.body.dataset[BODY_CLASS_DATA_ATTRIBUTE] || "")
+		.split(" ")
 		.filter(Boolean);
 }
 
@@ -221,7 +221,7 @@ export function getBodyClassNames(
 		...getDashboardBodyClassNames(pathname),
 	];
 	const defaultClasses =
-		0 === routeClasses.length ? ['peakurl-ui', 'app-page'] : routeClasses;
+		0 === routeClasses.length ? ["peakurl-ui", "app-page"] : routeClasses;
 	const mergedClasses = uniqueBodyClassNames([
 		...defaultClasses,
 		...runtimeClasses,
@@ -230,7 +230,7 @@ export function getBodyClassNames(
 	const context = getBodyClassContext(pathname, mergedClasses);
 
 	return uniqueBodyClassNames(
-		applyFilters('body_class', mergedClasses, extraClasses, context)
+		applyFilters("body_class", mergedClasses, extraClasses, context)
 	);
 }
 
@@ -239,7 +239,7 @@ export function getBodyClassNames(
  * unrelated classes untouched.
  */
 export function syncBodyClassNames(nextClasses: string[]): void {
-	if ('undefined' === typeof document || !document.body) {
+	if ("undefined" === typeof document || !document.body) {
 		return;
 	}
 
@@ -262,14 +262,14 @@ export function syncBodyClassNames(nextClasses: string[]): void {
 		return;
 	}
 
-	document.body.dataset[BODY_CLASS_DATA_ATTRIBUTE] = nextClasses.join(' ');
+	document.body.dataset[BODY_CLASS_DATA_ATTRIBUTE] = nextClasses.join(" ");
 }
 
 /**
  * Removes the currently managed route body classes.
  */
 export function clearBodyClassNames(): void {
-	if ('undefined' === typeof document || !document.body) {
+	if ("undefined" === typeof document || !document.body) {
 		return;
 	}
 

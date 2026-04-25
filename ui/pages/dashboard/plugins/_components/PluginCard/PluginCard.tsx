@@ -1,8 +1,8 @@
-import { Star, Download, Bell, ExternalLink } from 'lucide-react';
-import { __ } from '@/i18n';
-import { PLUGINS_WAITLIST_URL } from '@constants';
-import PluginPreviewSkeleton from '../PluginPreviewSkeleton';
-import type { PluginCardProps } from '../types';
+import { Star, Download, Bell, ExternalLink } from "lucide-react";
+import { __ } from "@/i18n";
+import { PLUGINS_WAITLIST_URL } from "@constants";
+import PluginPreviewSkeleton from "../PluginPreviewSkeleton";
+import type { PluginCardProps } from "../types";
 
 function PluginCard({ plugin }: PluginCardProps) {
 	return (
@@ -77,7 +77,7 @@ function PluginCard({ plugin }: PluginCardProps) {
 						size={13}
 						className="plugins-card-button-icon group-hover/btn:rotate-12"
 					/>
-					{__('Join the Waitlist')}
+					{__("Join the Waitlist")}
 					<ExternalLink
 						size={11}
 						className="plugins-preview-link-icon"
@@ -93,7 +93,7 @@ function PluginCard({ plugin }: PluginCardProps) {
 			>
 				<span className="plugins-card-overlay-pill">
 					<Bell size={11} />
-					{__('Join the Waitlist')}
+					{__("Join the Waitlist")}
 				</span>
 			</a>
 		</div>

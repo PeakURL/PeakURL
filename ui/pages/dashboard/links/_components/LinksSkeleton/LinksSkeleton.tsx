@@ -1,4 +1,4 @@
-import { Skeleton } from '@/components';
+import { Skeleton } from "@/components";
 
 const LinkStatSkeleton = () => (
 	<div className="skeleton-card-sm">

@@ -1,23 +1,20 @@
-import { useState, useRef } from 'react';
-import { useBulkCreateUrlMutation } from '@/store/slices/api';
+import { useState, useRef } from "react";
+import { useBulkCreateUrlMutation } from "@/store/slices/api";
 import {
 	buildShortUrl,
 	extractAliasFromShortUrl,
 	getErrorMessage,
 	normalizeCsvHeader,
 	parseCsvRows,
-} from '@/utils';
-import FileUploadArea from './FileUploadArea';
-import ProcessingStatus from './ProcessingStatus';
-import { ImportDetails, ImportSummary } from '../results';
-import FormatRequirements from './FormatRequirements';
-import SampleData from './SampleData';
-import { __, sprintf } from '@/i18n';
-import type { ImportResult } from '../types';
-import type {
-	FileUploadProps,
-	ImportRecord,
-} from './types';
+} from "@/utils";
+import FileUploadArea from "./FileUploadArea";
+import ProcessingStatus from "./ProcessingStatus";
+import { ImportDetails, ImportSummary } from "../results";
+import FormatRequirements from "./FormatRequirements";
+import SampleData from "./SampleData";
+import { __, sprintf } from "@/i18n";
+import type { ImportResult } from "../types";
+import type { FileUploadProps, ImportRecord } from "./types";
 
 const FileUpload = ({
 	importStatus,
@@ -44,13 +41,13 @@ const FileUpload = ({
 			let data: ImportRecord[] = [];
 
 			try {
-				if ('string' !== typeof text) {
-					throw new Error(__('The selected file could not be read.'));
+				if ("string" !== typeof text) {
+					throw new Error(__("The selected file could not be read."));
 				}
 
-				if (file.name.endsWith('.csv')) {
+				if (file.name.endsWith(".csv")) {
 					data = parseCsv(text);
-				} else if (file.name.endsWith('.json')) {
+				} else if (file.name.endsWith(".json")) {
 					const parsed = JSON.parse(text) as Array<
 						Record<string, unknown>
 					>;
@@ -62,27 +59,27 @@ const FileUpload = ({
 						}))
 						.filter(
 							(item): item is ImportRecord =>
-								'string' === typeof item.destinationUrl &&
+								"string" === typeof item.destinationUrl &&
 								Boolean(item.destinationUrl)
 						);
-				} else if (file.name.endsWith('.xml')) {
+				} else if (file.name.endsWith(".xml")) {
 					data = parseXml(text);
 				} else {
-					alert(__('Unsupported file format'));
+					alert(__("Unsupported file format"));
 					return;
 				}
 
 				if (data.length > 0) {
 					processImport(data);
 				} else {
-					alert(__('No valid data found in file'));
+					alert(__("No valid data found in file"));
 				}
 			} catch (err) {
-				console.error('Parsing error', err);
+				console.error("Parsing error", err);
 				alert(
 					sprintf(
-						__('Failed to parse file: %s'),
-						getErrorMessage(err, __('Unknown error'))
+						__("Failed to parse file: %s"),
+						getErrorMessage(err, __("Unknown error"))
 					)
 				);
 			}
@@ -108,24 +105,24 @@ const FileUpload = ({
 
 				if (value) {
 					if (
-						header === 'url' ||
-						header === 'destinationurl' ||
-						header === 'destination'
+						header === "url" ||
+						header === "destinationurl" ||
+						header === "destination"
 					) {
 						entry.destinationUrl = value;
-					} else if (header === 'alias' || header === 'shortcode') {
+					} else if (header === "alias" || header === "shortcode") {
 						entry.alias = value;
 					} else if (
-						header === 'shorturl' ||
-						header === 'shortlink'
+						header === "shorturl" ||
+						header === "shortlink"
 					) {
 						entry.alias =
 							entry.alias || extractAliasFromShortUrl(value);
-					} else if (header === 'password') {
+					} else if (header === "password") {
 						entry.password = value;
-					} else if (header === 'expires' || header === 'expiresat') {
+					} else if (header === "expires" || header === "expiresat") {
 						entry.expiresAt = value;
-					} else if (header === 'title') {
+					} else if (header === "title") {
 						entry.title = value;
 					}
 				}
@@ -140,11 +137,11 @@ const FileUpload = ({
 
 	const parseXml = (text: string): ImportRecord[] => {
 		const parser = new DOMParser();
-		const xmlDoc = parser.parseFromString(text, 'text/xml');
-		const urls = xmlDoc.getElementsByTagName('url'); // Assumes <url> item tag
+		const xmlDoc = parser.parseFromString(text, "text/xml");
+		const urls = xmlDoc.getElementsByTagName("url"); // Assumes <url> item tag
 		// If not <url>, try <item>
 		const items =
-			urls.length > 0 ? urls : xmlDoc.getElementsByTagName('item');
+			urls.length > 0 ? urls : xmlDoc.getElementsByTagName("item");
 
 		const data: ImportRecord[] = [];
 
@@ -153,15 +150,15 @@ const FileUpload = ({
 			const getVal = (tag: string): string | undefined =>
 				node.getElementsByTagName(tag)[0]?.textContent || undefined;
 
-			const destinationUrl = getVal('destinationUrl') || getVal('url');
+			const destinationUrl = getVal("destinationUrl") || getVal("url");
 
 			if (destinationUrl) {
 				data.push({
 					destinationUrl,
-					alias: getVal('alias') || getVal('shortCode'),
-					password: getVal('password'),
-					expiresAt: getVal('expiresAt') || getVal('expires'),
-					title: getVal('title'),
+					alias: getVal("alias") || getVal("shortCode"),
+					password: getVal("password"),
+					expiresAt: getVal("expiresAt") || getVal("expires"),
+					title: getVal("title"),
 				});
 			}
 		}
@@ -169,7 +166,7 @@ const FileUpload = ({
 	};
 
 	const processImport = async (data: ImportRecord[]) => {
-		setImportStatus('processing');
+		setImportStatus("processing");
 		try {
 			const result = await bulkCreateUrl({
 				urls: data,
@@ -184,9 +181,9 @@ const FileUpload = ({
 						alias:
 							item.alias ||
 							item.shortCode ||
-							extractAliasFromShortUrl(item.shortUrl || '') ||
-							__('Auto-generated'),
-						status: 'success',
+							extractAliasFromShortUrl(item.shortUrl || "") ||
+							__("Auto-generated"),
+						status: "success",
 						shortUrl: buildShortUrl(item),
 					});
 				});
@@ -194,22 +191,22 @@ const FileUpload = ({
 				(result.data.errors || []).forEach((item) => {
 					results.push({
 						url: item.destinationUrl,
-						alias: item.alias || 'N/A',
-						status: 'error',
+						alias: item.alias || "N/A",
+						status: "error",
 						error: item.error,
 					});
 				});
 			}
 
 			setImportResults(results);
-			setImportStatus('completed');
+			setImportStatus("completed");
 		} catch (err) {
-			console.error('Import failed', err);
-			setImportStatus('idle');
+			console.error("Import failed", err);
+			setImportStatus("idle");
 			alert(
 				sprintf(
-					__('Import failed: %s'),
-					getErrorMessage(err, __('Unknown error'))
+					__("Import failed: %s"),
+					getErrorMessage(err, __("Unknown error"))
 				)
 			);
 		}
@@ -219,35 +216,33 @@ const FileUpload = ({
 		<div className="import-file-grid">
 			<div className="import-file-main">
 				<div className="import-panel import-file-panel">
-					<h2 className="import-panel-title">
-						{__('Upload File')}
-					</h2>
+					<h2 className="import-panel-title">{__("Upload File")}</h2>
 					<p className="import-panel-copy">
 						{__(
-							'Upload a CSV, JSON, or XML file containing URLs and their metadata.'
+							"Upload a CSV, JSON, or XML file containing URLs and their metadata."
 						)}
 					</p>
 
-					{importStatus === 'idle' && (
+					{importStatus === "idle" && (
 						<FileUploadArea
 							fileInputRef={fileInputRef}
 							onFileSelected={handleFileSelect}
 						/>
 					)}
 
-					{(importStatus === 'uploading' ||
-						importStatus === 'processing') && (
+					{(importStatus === "uploading" ||
+						importStatus === "processing") && (
 						<ProcessingStatus
 							status={importStatus}
 							progress={importProgress}
 						/>
 					)}
 
-					{importStatus === 'completed' && (
+					{importStatus === "completed" && (
 						<ImportSummary
 							results={importResults}
 							onReset={() => {
-								setImportStatus('idle');
+								setImportStatus("idle");
 								setImportResults([]);
 							}}
 						/>
@@ -258,7 +253,7 @@ const FileUpload = ({
 			</div>
 
 			<div className="import-file-sidebar">
-				{importStatus === 'completed' ? (
+				{importStatus === "completed" ? (
 					<ImportDetails results={importResults} />
 				) : (
 					<SampleData sampleData={sampleData} />

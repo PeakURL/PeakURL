@@ -1,4 +1,4 @@
-import { __ } from '@/i18n';
+import { __ } from "@/i18n";
 import type {
 	DashboardSearchCapabilities,
 	DashboardSearchLocationLike,
@@ -7,7 +7,7 @@ import type {
 	DashboardSearchSection,
 	DashboardSearchUserLike,
 	DashboardSearchUserMatch,
-} from './types';
+} from "./types";
 
 interface CreateRouteTargetInput {
 	id: string;
@@ -23,8 +23,8 @@ interface ScoredRouteTarget extends DashboardSearchRouteTarget {
 	score: number;
 }
 
-function normalizeTerm(value: unknown = ''): string {
-	return String(value).trim().toLowerCase().replace(/\s+/g, ' ');
+function normalizeTerm(value: unknown = ""): string {
+	return String(value).trim().toLowerCase().replace(/\s+/g, " ");
 }
 
 function createRouteTarget({
@@ -33,7 +33,7 @@ function createRouteTarget({
 	label,
 	description,
 	terms,
-	section = 'pages',
+	section = "pages",
 	isAllowed = true,
 }: CreateRouteTargetInput): DashboardSearchRouteTarget {
 	return {
@@ -52,271 +52,269 @@ function getRouteTargets(
 ): DashboardSearchRouteTarget[] {
 	return [
 		createRouteTarget({
-			id: 'overview',
-			href: '/dashboard',
-			label: __('Overview'),
-			description: __('Dashboard'),
-			section: 'pages',
+			id: "overview",
+			href: "/dashboard",
+			label: __("Overview"),
+			description: __("Dashboard"),
+			section: "pages",
 			terms: [
-				__('Dashboard'),
-				__('Overview'),
-				'dashboard',
-				'overview',
-				'home',
-				'analytics',
+				__("Dashboard"),
+				__("Overview"),
+				"dashboard",
+				"overview",
+				"home",
+				"analytics",
 			],
 		}),
 		createRouteTarget({
-			id: 'links',
-			href: '/dashboard/links',
-			label: __('All Links'),
-			description: __('Links'),
-			section: 'pages',
+			id: "links",
+			href: "/dashboard/links",
+			label: __("All Links"),
+			description: __("Links"),
+			section: "pages",
 			terms: [
-				__('Links'),
-				__('All Links'),
-				'links',
-				'link',
-				'url',
-				'urls',
-				'short url',
-				'short urls',
-				'short link',
-				'short links',
+				__("Links"),
+				__("All Links"),
+				"links",
+				"link",
+				"url",
+				"urls",
+				"short url",
+				"short urls",
+				"short link",
+				"short links",
 			],
 		}),
 		createRouteTarget({
-			id: 'activity',
-			href: '/dashboard/activity',
-			label: __('Activity'),
-			description: __('Dashboard'),
-			section: 'pages',
+			id: "activity",
+			href: "/dashboard/activity",
+			label: __("Activity"),
+			description: __("Dashboard"),
+			section: "pages",
 			terms: [
-				__('Activity'),
-				__('Recent Activity'),
-				'activity',
-				'recent activity',
-				'audit log',
-				'history',
-				'events',
+				__("Activity"),
+				__("Recent Activity"),
+				"activity",
+				"recent activity",
+				"audit log",
+				"history",
+				"events",
 			],
 		}),
 		createRouteTarget({
-			id: 'about',
-			href: '/dashboard/about',
-			label: __('About PeakURL'),
-			description: __('About'),
-			section: 'pages',
+			id: "about",
+			href: "/dashboard/about",
+			label: __("About PeakURL"),
+			description: __("About"),
+			section: "pages",
 			terms: [
-				__('About'),
-				__('About PeakURL'),
-				'about',
-				'version',
-				'peakurl',
+				__("About"),
+				__("About PeakURL"),
+				"about",
+				"version",
+				"peakurl",
 			],
 		}),
 		createRouteTarget({
-			id: 'settings-general',
-			href: '/dashboard/settings/general',
-			label: __('General Settings'),
-			description: __('Settings'),
-			section: 'pages',
+			id: "settings-general",
+			href: "/dashboard/settings/general",
+			label: __("General Settings"),
+			description: __("Settings"),
+			section: "pages",
 			terms: [
-				__('Settings'),
-				__('General'),
-				__('General Settings'),
-				__('Profile'),
-				'settings',
-				'general',
-				'profile',
-				'account',
-				'language',
-				'site language',
-				'site settings',
+				__("Settings"),
+				__("General"),
+				__("General Settings"),
+				__("Profile"),
+				"settings",
+				"general",
+				"profile",
+				"account",
+				"language",
+				"site language",
+				"site settings",
 			],
 		}),
 		createRouteTarget({
-			id: 'settings-security',
-			href: '/dashboard/settings/security',
-			label: __('Security Settings'),
-			description: __('Settings'),
-			section: 'pages',
+			id: "settings-security",
+			href: "/dashboard/settings/security",
+			label: __("Security Settings"),
+			description: __("Settings"),
+			section: "pages",
 			terms: [
-				__('Security'),
-				__('Security Settings'),
-				'security',
-				'password',
-				'password reset',
-				'sessions',
-				'two factor',
-				'2fa',
-				'backup codes',
+				__("Security"),
+				__("Security Settings"),
+				"security",
+				"password",
+				"password reset",
+				"sessions",
+				"two factor",
+				"2fa",
+				"backup codes",
 			],
 		}),
 		createRouteTarget({
-			id: 'settings-api',
-			href: '/dashboard/settings/api',
-			label: __('API Keys'),
-			description: __('Settings'),
-			section: 'pages',
+			id: "settings-api",
+			href: "/dashboard/settings/api",
+			label: __("API Keys"),
+			description: __("Settings"),
+			section: "pages",
 			terms: [
-				__('API Keys'),
-				'api',
-				'api key',
-				'api keys',
-				'token',
-				'tokens',
+				__("API Keys"),
+				"api",
+				"api key",
+				"api keys",
+				"token",
+				"tokens",
 			],
 			isAllowed: Boolean(capabilities.canManageApiKeys),
 		}),
 		createRouteTarget({
-			id: 'settings-integrations',
-			href: '/dashboard/settings/integrations',
-			label: __('Integrations'),
-			description: __('Settings'),
-			section: 'pages',
-			terms: [
-				__('Integrations'),
-				'integrations',
-				'webhook',
-				'webhooks',
-			],
+			id: "settings-integrations",
+			href: "/dashboard/settings/integrations",
+			label: __("Integrations"),
+			description: __("Settings"),
+			section: "pages",
+			terms: [__("Integrations"), "integrations", "webhook", "webhooks"],
 			isAllowed: Boolean(capabilities.canManageWebhooks),
 		}),
 		createRouteTarget({
-			id: 'settings-email',
-			href: '/dashboard/settings/email',
-			label: __('Email SMTP'),
-			description: __('Settings'),
-			section: 'pages',
+			id: "settings-email",
+			href: "/dashboard/settings/email",
+			label: __("Email SMTP"),
+			description: __("Settings"),
+			section: "pages",
 			terms: [
-				__('Email Configuration'),
-				__('Email SMTP'),
-				'email',
-				'mail',
-				'smtp',
-				'mailer',
+				__("Email Configuration"),
+				__("Email SMTP"),
+				"email",
+				"mail",
+				"smtp",
+				"mailer",
 			],
 			isAllowed: Boolean(capabilities.canManageMailDelivery),
 		}),
 		createRouteTarget({
-			id: 'settings-location',
-			href: '/dashboard/settings/location',
-			label: __('Location Data'),
-			description: __('Settings'),
-			section: 'pages',
+			id: "settings-location",
+			href: "/dashboard/settings/location",
+			label: __("Location Data"),
+			description: __("Settings"),
+			section: "pages",
 			terms: [
-				__('Location Data'),
-				'location',
-				'location data',
-				'geoip',
-				'maxmind',
-				'geolite',
+				__("Location Data"),
+				"location",
+				"location data",
+				"geoip",
+				"maxmind",
+				"geolite",
 			],
 			isAllowed: Boolean(capabilities.canManageLocationData),
 		}),
 		createRouteTarget({
-			id: 'settings-updates',
-			href: '/dashboard/settings/updates',
-			label: __('Updates'),
-			description: __('Settings'),
-			section: 'pages',
+			id: "settings-updates",
+			href: "/dashboard/settings/updates",
+			label: __("Updates"),
+			description: __("Settings"),
+			section: "pages",
 			terms: [
-				__('Updates'),
-				'updates',
-				'update',
-				'updater',
-				'release',
-				'upgrade',
+				__("Updates"),
+				"updates",
+				"update",
+				"updater",
+				"release",
+				"upgrade",
 			],
 			isAllowed: Boolean(capabilities.canManageUpdates),
 		}),
 		createRouteTarget({
-			id: 'users',
-			href: '/dashboard/users',
-			label: __('Users'),
-			description: __('Management'),
-			section: 'pages',
+			id: "users",
+			href: "/dashboard/users",
+			label: __("Users"),
+			description: __("Management"),
+			section: "pages",
 			terms: [
-				__('Users'),
-				'user',
-				'users',
-				'team',
-				'members',
-				'admins',
-				'editors',
+				__("Users"),
+				"user",
+				"users",
+				"team",
+				"members",
+				"admins",
+				"editors",
 			],
 			isAllowed: Boolean(capabilities.canManageUsers),
 		}),
 		createRouteTarget({
-			id: 'plugins',
-			href: '/dashboard/plugins',
-			label: __('Plugins'),
-			description: __('Management'),
-			section: 'pages',
-			terms: [__('Plugins'), 'plugin', 'plugins', 'extensions'],
+			id: "plugins",
+			href: "/dashboard/plugins",
+			label: __("Plugins"),
+			description: __("Management"),
+			section: "pages",
+			terms: [__("Plugins"), "plugin", "plugins", "extensions"],
 			isAllowed: Boolean(capabilities.canManagePlugins),
 		}),
 		createRouteTarget({
-			id: 'tools-import',
-			href: '/dashboard/tools/import/file',
-			label: __('Import'),
-			description: __('Tools'),
-			section: 'tools',
+			id: "tools-import",
+			href: "/dashboard/tools/import/file",
+			label: __("Import"),
+			description: __("Tools"),
+			section: "tools",
 			terms: [
-				__('Tools'),
-				__('Import'),
-				__('Import: File Upload'),
-				'tools',
-				'import',
-				'bulk import',
-				'csv',
-				'upload',
-				'paste import',
-				'api import',
+				__("Tools"),
+				__("Import"),
+				__("Import: File Upload"),
+				"tools",
+				"import",
+				"bulk import",
+				"csv",
+				"upload",
+				"paste import",
+				"api import",
 			],
 			isAllowed: Boolean(capabilities.canImportLinks),
 		}),
 		createRouteTarget({
-			id: 'tools-export',
-			href: '/dashboard/tools/export',
-			label: __('Export'),
-			description: __('Tools'),
-			section: 'tools',
+			id: "tools-export",
+			href: "/dashboard/tools/export",
+			label: __("Export"),
+			description: __("Tools"),
+			section: "tools",
 			terms: [
-				__('Tools'),
-				__('Export'),
-				'tools',
-				'export',
-				'download',
-				'backup',
-				'csv export',
-				'json export',
-				'xml export',
+				__("Tools"),
+				__("Export"),
+				"tools",
+				"export",
+				"download",
+				"backup",
+				"csv export",
+				"json export",
+				"xml export",
 			],
 			isAllowed: Boolean(capabilities.canExportLinks),
 		}),
 		createRouteTarget({
-			id: 'tools-system-status',
-			href: '/dashboard/tools/system-status',
-			label: __('System Status'),
-			description: __('Tools'),
-			section: 'tools',
+			id: "tools-system-status",
+			href: "/dashboard/tools/system-status",
+			label: __("System Status"),
+			description: __("Tools"),
+			section: "tools",
 			terms: [
-				__('Tools'),
-				__('System Status'),
-				'system status',
-				'site health',
-				'health',
-				'server',
-				'database',
+				__("Tools"),
+				__("System Status"),
+				"system status",
+				"site health",
+				"health",
+				"server",
+				"database",
 			],
 			isAllowed: Boolean(capabilities.canViewSystemStatus),
 		}),
 	].filter((target) => target.isAllowed);
 }
 
-function getTargetScore(query: string, target: DashboardSearchRouteTarget): number {
+function getTargetScore(
+	query: string,
+	target: DashboardSearchRouteTarget
+): number {
 	let bestScore = 0;
 
 	target.terms.forEach((term) => {
@@ -341,7 +339,7 @@ function getTargetScore(query: string, target: DashboardSearchRouteTarget): numb
 			bestScore = Math.max(bestScore, 60);
 		}
 
-		const queryParts = query.split(' ');
+		const queryParts = query.split(" ");
 		if (
 			queryParts.length > 1 &&
 			queryParts.every((part) => term.includes(part))
@@ -378,15 +376,15 @@ function getUserScore(query: string, terms: string[]): number {
 /**
  * Builds the links page path, preserving the dashboard search query param.
  */
-export function buildLinksSearchPath(query: string = ''): string {
+export function buildLinksSearchPath(query: string = ""): string {
 	const value = String(query).trim();
 
 	if (!value) {
-		return '/dashboard/links';
+		return "/dashboard/links";
 	}
 
 	const params = new URLSearchParams();
-	params.set('search', value);
+	params.set("search", value);
 
 	return `/dashboard/links?${params.toString()}`;
 }
@@ -394,15 +392,15 @@ export function buildLinksSearchPath(query: string = ''): string {
 /**
  * Builds a links page path that opens the stats drawer for a short code.
  */
-export function buildLinkStatsPath(shortCode: string = ''): string {
+export function buildLinkStatsPath(shortCode: string = ""): string {
 	const value = String(shortCode).trim();
 
 	if (!value) {
-		return '/dashboard/links';
+		return "/dashboard/links";
 	}
 
 	const params = new URLSearchParams();
-	params.set('stats', value);
+	params.set("stats", value);
 
 	return `/dashboard/links?${params.toString()}`;
 }
@@ -413,14 +411,14 @@ export function buildLinkStatsPath(shortCode: string = ''): string {
 export function getDashboardSearchValueFromLocation(
 	location?: DashboardSearchLocationLike | null
 ): string {
-	const pathname = location?.pathname?.replace(/\/+$/, '') || '/';
+	const pathname = location?.pathname?.replace(/\/+$/, "") || "/";
 
-	if ('/dashboard/links' !== pathname) {
-		return '';
+	if ("/dashboard/links" !== pathname) {
+		return "";
 	}
 
-	const params = new URLSearchParams(location?.search || '');
-	return params.get('search') || '';
+	const params = new URLSearchParams(location?.search || "");
+	return params.get("search") || "";
 }
 
 /**
@@ -478,7 +476,7 @@ export function findDashboardUserMatches(
 		.map((user) => {
 			const fullName = [user.firstName, user.lastName]
 				.filter(Boolean)
-				.join(' ')
+				.join(" ")
 				.trim();
 			const terms = [
 				user.username,
@@ -493,11 +491,11 @@ export function findDashboardUserMatches(
 			const score = getUserScore(normalizedQuery, terms);
 
 			return {
-				id: user.id || user.username || user.email || 'user',
-				title: fullName || user.username || user.email || __('User'),
-				description: user.username || user.email || '',
-				meta: user.role || '',
-				href: '/dashboard/users',
+				id: user.id || user.username || user.email || "user",
+				title: fullName || user.username || user.email || __("User"),
+				description: user.username || user.email || "",
+				meta: user.role || "",
+				href: "/dashboard/users",
 				score,
 			};
 		})
@@ -523,7 +521,7 @@ export function resolveDashboardSearchPath(
 	const normalizedQuery = normalizeTerm(query);
 
 	if (!normalizedQuery) {
-		return '/dashboard/links';
+		return "/dashboard/links";
 	}
 
 	const [bestTarget] = getRouteTargets(capabilities)

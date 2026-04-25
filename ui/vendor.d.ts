@@ -7,7 +7,7 @@
  * Note: All imports from this module will be typed as `any`
  * unless more specific typings are added.
  */
-declare module 'qrcode';
+declare module "qrcode";
 
 /**
  * Type declaration for the `topojson-client` module.
@@ -18,4 +18,4 @@ declare module 'qrcode';
  * Note: Consider installing `@types/topojson-client` or
  * providing custom typings for better type safety.
  */
-declare module 'topojson-client';
+declare module "topojson-client";

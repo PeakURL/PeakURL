@@ -1,16 +1,13 @@
-import type { ReactNode } from 'react';
-import type { LucideIcon } from 'lucide-react';
-import type {
-	ButtonVariant,
-	NotificationContextValue,
-} from '@/components';
-import type { InstalledLanguage, TextDirection } from '@/i18n/types';
+import type { ReactNode } from "react";
+import type { LucideIcon } from "lucide-react";
+import type { ButtonVariant, NotificationContextValue } from "@/components";
+import type { InstalledLanguage, TextDirection } from "@/i18n/types";
 import type {
 	ApiKeySummary,
 	GeneralFormState,
 	MailDriver,
 	SmtpEncryption,
-} from '../types';
+} from "../types";
 
 /**
  * Configured site favicon metadata shown in the General settings tab.
@@ -202,7 +199,7 @@ export interface LocationDataTabProps {
 /**
  * Visual variants used by location-data state cards.
  */
-export type StateCardVariant = 'info' | 'success' | 'error';
+export type StateCardVariant = "info" | "success" | "error";
 
 /**
  * Props for a location-data state card.
@@ -220,13 +217,13 @@ export interface StateCardProps {
 export interface StatCardProps {
 	label: string;
 	value: string;
-	valueDirection?: 'auto' | 'ltr' | 'rtl';
+	valueDirection?: "auto" | "ltr" | "rtl";
 }
 
 /**
  * Sensitive 2FA actions that require password confirmation.
  */
-export type ProtectedAction = 'download' | 'disable' | 'regenerate';
+export type ProtectedAction = "download" | "disable" | "regenerate";
 
 /**
  * Editable password form state for the security tab.
@@ -317,14 +314,14 @@ export interface SecurityTabProps {
 	isUpdating: boolean;
 	notification?: Pick<
 		NotificationContextValue,
-		'error' | 'success' | 'info'
+		"error" | "success" | "info"
 	> | null;
 }
 
 /**
  * Tone tokens shared by the updates tab status UI.
  */
-export type StatusTone = 'info' | 'success' | 'error';
+export type StatusTone = "info" | "success" | "error";
 
 /**
  * Icon contract used by update status helper components.
@@ -343,10 +340,10 @@ export interface UpdateIssue {
  * Human-friendly release-install progress stages shown in the dashboard.
  */
 export type ReleaseInstallStage =
-	| 'preparing'
-	| 'downloading'
-	| 'installing'
-	| 'finishing';
+	| "preparing"
+	| "downloading"
+	| "installing"
+	| "finishing";
 
 /**
  * Single progress step shown while applying or reinstalling a release.
@@ -354,7 +351,7 @@ export type ReleaseInstallStage =
 export interface ReleaseInstallProgressStep {
 	id: ReleaseInstallStage;
 	label: string;
-	state: 'complete' | 'current' | 'upcoming';
+	state: "complete" | "current" | "upcoming";
 }
 
 /**
@@ -437,7 +434,7 @@ export interface SectionHeaderProps {
 export interface MetricItem {
 	label: string;
 	value: string;
-	valueDirection?: 'auto' | 'ltr' | 'rtl';
+	valueDirection?: "auto" | "ltr" | "rtl";
 }
 
 /**
@@ -483,7 +480,7 @@ export interface DetailRowProps {
 	value: string;
 	icon?: IconComponent;
 	href?: string;
-	valueDirection?: 'auto' | 'ltr' | 'rtl';
+	valueDirection?: "auto" | "ltr" | "rtl";
 }
 
 /**

@@ -1,10 +1,10 @@
-import type { PropsWithChildren } from 'react';
-import type { NotificationItem, NotificationPayload } from '@/components/ui';
+import type { PropsWithChildren } from "react";
+import type { NotificationItem, NotificationPayload } from "@/components/ui";
 
 /**
  * Theme tokens supported by the dashboard shell.
  */
-export type Theme = 'light' | 'dark';
+export type Theme = "light" | "dark";
 
 /**
  * Theme context payload exposed by the theme provider.

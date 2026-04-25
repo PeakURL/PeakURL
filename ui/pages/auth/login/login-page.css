@@ -170,5 +170,4 @@
 	.login-page-back-action {
 		@apply inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 transition-colors duration-150 hover:text-slate-700;
 	}
-
 }

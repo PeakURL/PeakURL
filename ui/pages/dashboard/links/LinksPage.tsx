@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react';
-import { CircleCheckBig, Link2, MousePointerClick, Users } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { CircleCheckBig, Link2, MousePointerClick, Users } from "lucide-react";
 import {
 	DEFAULT_PAGE_SIZE_MAX,
 	DEFAULT_PAGE_SIZE_OPTIONS,
 	normalizePageSize,
-} from '@/components';
+} from "@/components";
 // LocalStorage keys for persistence (defined outside component to satisfy hook deps)
 const LS_KEYS = {
-	sortBy: 'admin_links_sortBy',
-	sortOrder: 'admin_links_sortOrder',
-	limit: 'admin_links_limit',
+	sortBy: "admin_links_sortBy",
+	sortOrder: "admin_links_sortOrder",
+	limit: "admin_links_limit",
 };
 import {
 	Header,
@@ -18,35 +18,35 @@ import {
 	TableFooter,
 	Pagination,
 	LinksSkeleton,
-} from './_components';
+} from "./_components";
 
-import { useGetUrlQuery, useGetUrlsQuery } from '@/store/slices/api';
-import { useSearchParams } from 'react-router-dom';
-import { __ } from '@/i18n';
+import { useGetUrlQuery, useGetUrlsQuery } from "@/store/slices/api";
+import { useSearchParams } from "react-router-dom";
+import { __ } from "@/i18n";
 import type {
 	LinkRecord,
 	LinksMeta,
 	LinksSortBy,
 	LinksSortOrder,
-} from './_components/types';
-import type { GetUrlsResponse } from './types';
+} from "./_components/types";
+import type { GetUrlsResponse } from "./types";
 
 function LinksPage() {
 	// State for Sorting and Pagination
 	const [sortBy, setSortBy] = useState<LinksSortBy>(() =>
-		typeof window !== 'undefined'
+		typeof window !== "undefined"
 			? (localStorage.getItem(LS_KEYS.sortBy) as LinksSortBy) ||
-				'createdAt'
-			: 'createdAt'
+				"createdAt"
+			: "createdAt"
 	);
 	const [sortOrder, setSortOrder] = useState<LinksSortOrder>(() =>
-		typeof window !== 'undefined'
+		typeof window !== "undefined"
 			? (localStorage.getItem(LS_KEYS.sortOrder) as LinksSortOrder) ||
-				'desc'
-			: 'desc'
+				"desc"
+			: "desc"
 	);
 	const [limit, setLimit] = useState(() => {
-		if (typeof window !== 'undefined') {
+		if (typeof window !== "undefined") {
 			return normalizePageSize(
 				localStorage.getItem(LS_KEYS.limit),
 				DEFAULT_PAGE_SIZE_OPTIONS[0],
@@ -58,8 +58,8 @@ function LinksPage() {
 	});
 	const [currentPage, setCurrentPage] = useState(1);
 	const [searchParams] = useSearchParams();
-	const statsShortId = searchParams.get('stats');
-	const searchQuery = searchParams.get('search')?.trim() || '';
+	const statsShortId = searchParams.get("stats");
+	const searchQuery = searchParams.get("search")?.trim() || "";
 
 	// No need for a load effect since initial state derives from localStorage
 
@@ -93,7 +93,7 @@ function LinksPage() {
 		totalPages: 1,
 	};
 	const { data: statsLinkRes, refetch: refetchStatsLookup } = useGetUrlQuery(
-		statsShortId || '',
+		statsShortId || "",
 		{ skip: !statsShortId }
 	);
 	const statsLink = statsLinkRes?.data ?? null;
@@ -167,7 +167,7 @@ function LinksPage() {
 		0
 	);
 	const activeLinks = linksForStats.filter(
-		(link: LinkRecord) => link.status === 'active'
+		(link: LinkRecord) => link.status === "active"
 	).length;
 
 	return (
@@ -187,7 +187,7 @@ function LinksPage() {
 						{linksForStats.length}
 					</div>
 					<div className="links-page-stat-label">
-						{__('Total Links')}
+						{__("Total Links")}
 					</div>
 				</div>
 
@@ -197,12 +197,12 @@ function LinksPage() {
 							<CircleCheckBig className="h-4 w-4 text-success" />
 						</div>
 						<span className="links-page-stat-trend">
-							{__('Active')}
+							{__("Active")}
 						</span>
 					</div>
 					<div className="links-page-stat-value">{activeLinks}</div>
 					<div className="links-page-stat-label">
-						{__('Active Links')}
+						{__("Active Links")}
 					</div>
 				</div>
 
@@ -217,7 +217,7 @@ function LinksPage() {
 						{totalClicks.toLocaleString()}
 					</div>
 					<div className="links-page-stat-label">
-						{__('Total Clicks')}
+						{__("Total Clicks")}
 					</div>
 				</div>
 
@@ -232,7 +232,7 @@ function LinksPage() {
 						{totalUniqueClicks.toLocaleString()}
 					</div>
 					<div className="links-page-stat-label">
-						{__('Unique Visitors')}
+						{__("Unique Visitors")}
 					</div>
 				</div>
 			</div>

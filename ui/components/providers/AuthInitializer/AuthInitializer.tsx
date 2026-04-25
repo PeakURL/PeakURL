@@ -1,12 +1,12 @@
-import { authApi } from '@/store/slices';
-import { ApiErrorPage } from '@/components/common';
-import { PageLoader } from '@/components/ui';
+import { authApi } from "@/store/slices";
+import { ApiErrorPage } from "@/components/common";
+import { PageLoader } from "@/components/ui";
 import {
 	getErrorStatus,
 	getInstallRecovery,
 	redirectToInstallRecovery,
-} from '@/utils';
-import type { AuthInitializerProps } from '../types';
+} from "@/utils";
+import type { AuthInitializerProps } from "../types";
 
 /**
  * AuthInitializer performs the initial session check before rendering the app.
@@ -26,8 +26,7 @@ const AuthInitializer = ({ children }: AuthInitializerProps) => {
 		refetch,
 	} = useAuthCheckQuery(undefined);
 	const hasResolvedSession = undefined !== data || undefined !== error;
-	const isPending =
-		!hasResolvedSession && (isLoading || isUninitialized);
+	const isPending = !hasResolvedSession && (isLoading || isUninitialized);
 	const errorStatus = getErrorStatus(error);
 	const isAuthError = 401 === errorStatus || 403 === errorStatus;
 	const isRetryingConnection =

@@ -1,20 +1,20 @@
-import { forwardRef, useId } from 'react';
-import { Info } from 'lucide-react';
-import { getDocumentDirection, getFieldDirection } from '@/i18n/direction';
-import { cn } from '@/utils';
-import type { InputProps } from '../types';
-export type { InputIcon, InputProps } from '../types';
+import { forwardRef, useId } from "react";
+import { Info } from "lucide-react";
+import { getDocumentDirection, getFieldDirection } from "@/i18n/direction";
+import { cn } from "@/utils";
+import type { InputProps } from "../types";
+export type { InputIcon, InputProps } from "../types";
 
 const LTR_INPUT_TYPES = new Set([
-	'date',
-	'datetime-local',
-	'email',
-	'month',
-	'number',
-	'tel',
-	'time',
-	'url',
-	'week',
+	"date",
+	"datetime-local",
+	"email",
+	"month",
+	"number",
+	"tel",
+	"time",
+	"url",
+	"week",
 ]);
 
 /**
@@ -31,8 +31,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 		label,
 		error,
 		icon: IconComponent,
-		className = '',
-		type = 'text',
+		className = "",
+		type = "text",
 		helperText,
 		valueDirection,
 		...props
@@ -42,7 +42,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 	const generatedId = useId();
 	const chromeDirection = getDocumentDirection();
 	const preferredValueDirection =
-		valueDirection || (LTR_INPUT_TYPES.has(type) ? 'ltr' : undefined);
+		valueDirection || (LTR_INPUT_TYPES.has(type) ? "ltr" : undefined);
 	const contentDirection = getFieldDirection({
 		fallbackDirection: chromeDirection,
 		valueDirection: preferredValueDirection,
@@ -52,7 +52,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 	const helperId = helperText ? `${inputId}-helper` : undefined;
 	const errorId = error ? `${inputId}-error` : undefined;
 	const describedBy =
-		[errorId, helperId].filter(Boolean).join(' ') || undefined;
+		[errorId, helperId].filter(Boolean).join(" ") || undefined;
 	const hasInlineStartIcon = Boolean(IconComponent);
 	const placeholderFollowsPageDirection =
 		Boolean(preferredValueDirection) &&
@@ -61,15 +61,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 	return (
 		<div className="form-field">
 			{label && (
-				<label
-					htmlFor={inputId}
-					className="form-field-label"
-				>
+				<label htmlFor={inputId} className="form-field-label">
 					{label}
 					{props.required && (
-						<span className="field-required-indicator">
-							*
-						</span>
+						<span className="field-required-indicator">*</span>
 					)}
 				</label>
 			)}
@@ -87,35 +82,29 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 					aria-invalid={Boolean(error)}
 					aria-describedby={describedBy}
 					className={cn(
-						'form-control-base',
-						'form-control-accent-focus',
-						'text-page-start',
-						'form-field-input',
+						"form-control-base",
+						"form-control-accent-focus",
+						"text-page-start",
+						"form-field-input",
 						hasInlineStartIcon
-							? 'field-with-inline-start-icon'
-							: 'form-field-input-no-icon',
+							? "field-with-inline-start-icon"
+							: "form-field-input-no-icon",
 						placeholderFollowsPageDirection &&
-							'placeholder-follow-page-direction',
-						error && 'form-field-control-error',
+							"placeholder-follow-page-direction",
+						error && "form-field-control-error",
 						className
 					)}
 					{...props}
 				/>
 			</div>
 			{error && (
-				<p
-					id={errorId}
-					className="form-field-error"
-				>
+				<p id={errorId} className="form-field-error">
 					<Info size={14} />
 					{error}
 				</p>
 			)}
 			{helperText && !error && (
-				<p
-					id={helperId}
-					className="form-field-helper"
-				>
+				<p id={helperId} className="form-field-helper">
 					{helperText}
 				</p>
 			)}
@@ -123,4 +112,4 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 	);
 });
 
-Input.displayName = 'Input';
+Input.displayName = "Input";

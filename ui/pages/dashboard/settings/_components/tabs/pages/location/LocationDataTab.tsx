@@ -1,47 +1,49 @@
-import type { SubmitEvent } from 'react';
-import { useState } from 'react';
-import { Button, Input, ReadOnlyValueBlock } from '@/components';
-import { __ } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
-import { cn, formatByteSize, formatDateTimeValue } from '@/utils';
+import type { SubmitEvent } from "react";
+import { useState } from "react";
+import { Button, Input, ReadOnlyValueBlock } from "@/components";
+import { __ } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
+import { cn, formatByteSize, formatDateTimeValue } from "@/utils";
 import {
 	AlertCircle,
 	CheckCircle2,
 	CloudDownload,
 	MapPin,
 	RefreshCcw,
-} from 'lucide-react';
+} from "lucide-react";
 import type {
 	LocationDataStatus,
 	LocationDataTabProps,
 	StateCardProps,
 	StateCardVariant,
 	StatCardProps,
-} from '../types';
+} from "../types";
 
 function StateCard({
 	icon: Icon,
 	title,
 	description,
-	variant = 'info',
+	variant = "info",
 }: StateCardProps) {
 	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isRtl ? "rtl" : "ltr";
 	const styles: Record<StateCardVariant, string> = {
-		info: 'settings-location-state-card-info',
-		success: 'settings-location-state-card-success',
-		error: 'settings-location-state-card-error',
+		info: "settings-location-state-card-info",
+		success: "settings-location-state-card-success",
+		error: "settings-location-state-card-error",
 	};
 
 	return (
-		<div className={cn('settings-location-state-card', styles[variant])}>
+		<div className={cn("settings-location-state-card", styles[variant])}>
 			<div
 				dir={direction}
 				className="settings-location-state-card-layout"
 			>
 				<Icon size={18} className="settings-location-state-card-icon" />
 				<div className="settings-location-state-card-content">
-					<h3 className="settings-location-state-card-title">{title}</h3>
+					<h3 className="settings-location-state-card-title">
+						{title}
+					</h3>
 					<p className="settings-location-state-card-text">
 						{description}
 					</p>
@@ -61,9 +63,9 @@ function LocationDataTab({
 	onDownload,
 }: LocationDataTabProps) {
 	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isRtl ? "rtl" : "ltr";
 	const [accountIdInput, setAccountIdInput] = useState<string | null>(null);
-	const [licenseKey, setLicenseKey] = useState('');
+	const [licenseKey, setLicenseKey] = useState("");
 	const [isEditingCredentials, setIsEditingCredentials] = useState(false);
 	const [savedStatusOverride, setSavedStatusOverride] =
 		useState<Partial<LocationDataStatus> | null>(null);
@@ -74,7 +76,7 @@ function LocationDataTab({
 			: status;
 	const accountId =
 		null === accountIdInput
-			? effectiveStatus?.accountId || ''
+			? effectiveStatus?.accountId || ""
 			: accountIdInput;
 	const hasSavedCredentials = Boolean(effectiveStatus?.credentialsConfigured);
 
@@ -90,7 +92,7 @@ function LocationDataTab({
 			}
 			setIsEditingCredentials(false);
 			setAccountIdInput(null);
-			setLicenseKey('');
+			setLicenseKey("");
 		} catch {}
 	};
 
@@ -99,10 +101,7 @@ function LocationDataTab({
 	return (
 		<div className="settings-location">
 			<div className="settings-location-intro">
-				<div
-					dir={direction}
-					className="settings-location-intro-layout"
-				>
+				<div dir={direction} className="settings-location-intro-layout">
 					<div className="settings-location-intro-copy">
 						<div
 							dir={direction}
@@ -113,11 +112,11 @@ function LocationDataTab({
 							</div>
 							<div>
 								<h2 className="settings-location-intro-title">
-									{__('Location Data')}
+									{__("Location Data")}
 								</h2>
 								<p className="settings-location-intro-description">
 									{__(
-										'Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder.'
+										"Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder."
 									)}
 								</p>
 							</div>
@@ -141,31 +140,31 @@ function LocationDataTab({
 						}
 					>
 						{isReady
-							? __('Update Database')
-							: __('Download Database')}
+							? __("Update Database")
+							: __("Download Database")}
 					</Button>
 				</div>
 			</div>
 
 			<div className="settings-stat-grid">
 				<StatCard
-					label={__('Status')}
-					value={isReady ? __('Ready') : __('Setup Required')}
+					label={__("Status")}
+					value={isReady ? __("Ready") : __("Setup Required")}
 				/>
 				<StatCard
-					label={__('Database Updated')}
+					label={__("Database Updated")}
 					value={formatDateTimeValue(
 						effectiveStatus?.lastDownloadedAt ||
 							effectiveStatus?.databaseUpdatedAt,
-						__('Never')
+						__("Never")
 					)}
 					valueDirection="ltr"
 				/>
 				<StatCard
-					label={__('Database Size')}
+					label={__("Database Size")}
 					value={formatByteSize(
 						effectiveStatus?.databaseSizeBytes,
-						__('Not available')
+						__("Not available")
 					)}
 					valueDirection="ltr"
 				/>
@@ -174,7 +173,7 @@ function LocationDataTab({
 			{errorMessage && (
 				<StateCard
 					icon={AlertCircle}
-					title={__('Location data unavailable')}
+					title={__("Location data unavailable")}
 					description={errorMessage}
 					variant="error"
 				/>
@@ -185,26 +184,26 @@ function LocationDataTab({
 					icon={isReady ? CheckCircle2 : RefreshCcw}
 					title={
 						isReady
-							? __('Location analytics is enabled')
-							: __('Location analytics is disabled')
+							? __("Location analytics is enabled")
+							: __("Location analytics is disabled")
 					}
 					description={
 						isReady
 							? __(
-									'PeakURL is using the local GeoLite2 City database for click locations.'
+									"PeakURL is using the local GeoLite2 City database for click locations."
 								)
 							: __(
-									'Save your MaxMind credentials, then download the GeoLite2 City database to enable visitor country and city analytics.'
+									"Save your MaxMind credentials, then download the GeoLite2 City database to enable visitor country and city analytics."
 								)
 					}
-					variant={isReady ? 'success' : 'info'}
+					variant={isReady ? "success" : "info"}
 				/>
 			)}
 
 			{effectiveStatus?.manageDisabledReason && (
 				<StateCard
 					icon={AlertCircle}
-					title={__('Dashboard management unavailable')}
+					title={__("Dashboard management unavailable")}
 					description={effectiveStatus.manageDisabledReason}
 					variant="info"
 				/>
@@ -213,11 +212,11 @@ function LocationDataTab({
 			<div className="settings-location-credentials-card">
 				<div className="settings-location-credentials-header">
 					<h3 className="settings-location-credentials-title">
-						{__('MaxMind Credentials')}
+						{__("MaxMind Credentials")}
 					</h3>
 					<p className="settings-location-credentials-description">
 						{__(
-							'PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again.'
+							"PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
 						)}
 					</p>
 				</div>
@@ -228,7 +227,7 @@ function LocationDataTab({
 							<div className="settings-location-credentials-grid">
 								<div>
 									<p className="settings-location-credentials-label">
-										{__('Account ID')}
+										{__("Account ID")}
 									</p>
 									<ReadOnlyValueBlock
 										value={effectiveStatus?.accountId}
@@ -239,7 +238,7 @@ function LocationDataTab({
 								</div>
 								<div>
 									<p className="settings-location-credentials-label">
-										{__('License Key')}
+										{__("License Key")}
 									</p>
 									<ReadOnlyValueBlock
 										value={effectiveStatus?.licenseKeyHint}
@@ -263,7 +262,7 @@ function LocationDataTab({
 									!effectiveStatus.canManageFromDashboard
 								)}
 							>
-								{__('Update Credentials')}
+								{__("Update Credentials")}
 							</Button>
 							<Button
 								type="button"
@@ -281,16 +280,19 @@ function LocationDataTab({
 								icon={CloudDownload}
 							>
 								{isReady
-									? __('Refresh Database')
-									: __('Download Database')}
+									? __("Refresh Database")
+									: __("Download Database")}
 							</Button>
 						</div>
 					</div>
 				) : (
-					<form className="settings-location-form" onSubmit={handleSubmit}>
+					<form
+						className="settings-location-form"
+						onSubmit={handleSubmit}
+					>
 						<div className="settings-location-form-grid">
 							<Input
-								label={__('MaxMind Account ID')}
+								label={__("MaxMind Account ID")}
 								type="text"
 								inputMode="numeric"
 								autoComplete="off"
@@ -304,7 +306,7 @@ function LocationDataTab({
 							/>
 
 							<Input
-								label={__('MaxMind License Key')}
+								label={__("MaxMind License Key")}
 								type="password"
 								autoComplete="new-password"
 								valueDirection="ltr"
@@ -314,12 +316,8 @@ function LocationDataTab({
 								}
 								placeholder={
 									hasSavedCredentials
-										? __(
-												'Enter a new MaxMind license key'
-											)
-										: __(
-												'Enter your MaxMind license key'
-										)
+										? __("Enter a new MaxMind license key")
+										: __("Enter your MaxMind license key")
 								}
 								className="settings-location-input"
 							/>
@@ -327,7 +325,7 @@ function LocationDataTab({
 
 						{hasSavedCredentials && (
 							<p className="settings-location-saved-key">
-								{__('Saved license key:')}{' '}
+								{__("Saved license key:")}{" "}
 								<span className="preserve-ltr-value">
 									{effectiveStatus?.licenseKeyHint}
 								</span>
@@ -348,8 +346,8 @@ function LocationDataTab({
 								)}
 							>
 								{hasSavedCredentials
-									? __('Save New Credentials')
-									: __('Save Credentials')}
+									? __("Save New Credentials")
+									: __("Save Credentials")}
 							</Button>
 							{hasSavedCredentials && (
 								<Button
@@ -359,10 +357,10 @@ function LocationDataTab({
 									onClick={() => {
 										setIsEditingCredentials(false);
 										setAccountIdInput(null);
-										setLicenseKey('');
+										setLicenseKey("");
 									}}
 								>
-									{__('Cancel')}
+									{__("Cancel")}
 								</Button>
 							)}
 						</div>
@@ -373,27 +371,18 @@ function LocationDataTab({
 	);
 }
 
-function StatCard({
-	label,
-	value,
-	valueDirection = 'auto',
-}: StatCardProps) {
-	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
+function StatCard({ label, value, valueDirection = "auto" }: StatCardProps) {
+	const direction = isDocumentRtl() ? "rtl" : "ltr";
 
 	return (
-		<div
-			dir={direction}
-			className="settings-stat-card"
-		>
-			<p className="settings-stat-label">
-				{label}
-			</p>
+		<div dir={direction} className="settings-stat-card">
+			<p className="settings-stat-label">{label}</p>
 			<p className="settings-stat-value">
-				{'ltr' === valueDirection ? (
+				{"ltr" === valueDirection ? (
 					<span className="preserve-ltr-value inline-block">
 						{value}
 					</span>
-				) : 'rtl' === valueDirection ? (
+				) : "rtl" === valueDirection ? (
 					<span dir="rtl" className="inline-block">
 						{value}
 					</span>

@@ -1,5 +1,5 @@
-import type { InstalledLanguage } from './types';
-import { getBaseLocale, normalizeLocale } from './direction';
+import type { InstalledLanguage } from "./types";
+import { getBaseLocale, normalizeLocale } from "./direction";
 
 function getVariantCount(
 	locale: string,
@@ -20,40 +20,41 @@ function getVariantCount(
 
 function normalizeDisplayLabel(label?: string | null): string {
 	if (!label) {
-		return '';
+		return "";
 	}
 
-	const normalizedLabel = label.replace(/\s+/g, ' ').trim();
+	const normalizedLabel = label.replace(/\s+/g, " ").trim();
 
 	if (!normalizedLabel) {
-		return '';
+		return "";
 	}
 
-	const [firstCharacter, ...remainingCharacters] = Array.from(normalizedLabel);
+	const [firstCharacter, ...remainingCharacters] =
+		Array.from(normalizedLabel);
 
 	if (!firstCharacter) {
 		return normalizedLabel;
 	}
 
-	return firstCharacter.toLocaleUpperCase() + remainingCharacters.join('');
+	return firstCharacter.toLocaleUpperCase() + remainingCharacters.join("");
 }
 
 function resolveRegionCode(locale: string): string {
 	const normalizedLocale = normalizeLocale(locale);
 
 	if (!normalizedLocale) {
-		return '';
+		return "";
 	}
 
-	if ('undefined' !== typeof Intl && 'Locale' in Intl) {
+	if ("undefined" !== typeof Intl && "Locale" in Intl) {
 		try {
-			return new Intl.Locale(normalizedLocale).region || '';
+			return new Intl.Locale(normalizedLocale).region || "";
 		} catch {
-			return '';
+			return "";
 		}
 	}
 
-	const localeParts = normalizedLocale.split('-');
+	const localeParts = normalizedLocale.split("-");
 
 	for (let index = localeParts.length - 1; index >= 1; index -= 1) {
 		const value = localeParts[index];
@@ -63,31 +64,31 @@ function resolveRegionCode(locale: string): string {
 		}
 	}
 
-	return '';
+	return "";
 }
 
 function resolveDisplayName(
 	locale: string,
-	type: 'language' | 'region',
+	type: "language" | "region",
 	code: string
 ): string {
 	if (
 		!locale ||
 		!code ||
-		'undefined' === typeof Intl ||
-		!('DisplayNames' in Intl)
+		"undefined" === typeof Intl ||
+		!("DisplayNames" in Intl)
 	) {
-		return '';
+		return "";
 	}
 
 	try {
 		return (
 			new Intl.DisplayNames([locale], {
 				type,
-			}).of(code) || ''
+			}).of(code) || ""
 		);
 	} catch {
-		return '';
+		return "";
 	}
 }
 
@@ -95,23 +96,23 @@ export function getInstalledLanguageLabel(
 	language: InstalledLanguage,
 	availableLanguages: InstalledLanguage[] = []
 ): string {
-	const locale = language?.locale || '';
+	const locale = language?.locale || "";
 
 	if (!locale) {
-		return language?.label || language?.englishLabel || '';
+		return language?.label || language?.englishLabel || "";
 	}
 
 	const normalizedLocale = normalizeLocale(locale);
 	const languageCode = getBaseLocale(locale);
 	const regionCode = resolveRegionCode(locale);
 	const nativeLanguage = normalizeDisplayLabel(
-		resolveDisplayName(normalizedLocale, 'language', languageCode)
+		resolveDisplayName(normalizedLocale, "language", languageCode)
 	);
 	const nativeTerritory = normalizeDisplayLabel(
-		resolveDisplayName(normalizedLocale, 'region', regionCode)
+		resolveDisplayName(normalizedLocale, "region", regionCode)
 	);
 	const showTerritory =
-		'en_US' === locale || getVariantCount(locale, availableLanguages) > 1;
+		"en_US" === locale || getVariantCount(locale, availableLanguages) > 1;
 
 	if (!nativeLanguage) {
 		return language?.label || language?.englishLabel || locale;

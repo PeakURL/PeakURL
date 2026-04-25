@@ -5,8 +5,8 @@ import type {
 	MouseEvent,
 	RefObject,
 	SetStateAction,
-} from 'react';
-import type { ImportStatus, SampleRow } from '../types';
+} from "react";
+import type { ImportStatus, SampleRow } from "../types";
 
 /**
  * Single import record parsed from a file before it is sent to the API.
@@ -62,7 +62,7 @@ export interface FileUploadAreaProps {
 /**
  * Supported downloadable example file formats.
  */
-export type SampleFormat = 'csv' | 'json' | 'xml';
+export type SampleFormat = "csv" | "json" | "xml";
 
 /**
  * Props for the file-processing status panel.
@@ -86,7 +86,9 @@ export interface SampleDataProps {
 /**
  * Change handler used by the file input element.
  */
-export type FileInputChangeHandler = (event: ChangeEvent<HTMLInputElement>) => void;
+export type FileInputChangeHandler = (
+	event: ChangeEvent<HTMLInputElement>
+) => void;
 
 /**
  * Drag handler used by the dropzone surface.
@@ -96,4 +98,6 @@ export type FileDropHandler = (event: DragEvent<HTMLDivElement>) => void;
 /**
  * Click handler used by the upload button.
  */
-export type FileButtonClickHandler = (event: MouseEvent<HTMLButtonElement>) => void;
+export type FileButtonClickHandler = (
+	event: MouseEvent<HTMLButtonElement>
+) => void;

@@ -1,16 +1,16 @@
-import { Header, Sidebar } from './_components';
-import { useParams } from 'react-router-dom';
-import { useAdminAccess } from '@/hooks';
-import { __ } from '@/i18n';
+import { Header, Sidebar } from "./_components";
+import { useParams } from "react-router-dom";
+import { useAdminAccess } from "@/hooks";
+import { __ } from "@/i18n";
 import type {
 	SettingsLayoutProps,
 	SettingsTabId,
 	SettingsTabItem,
-} from './_components/layout/types';
+} from "./_components/layout/types";
 
 function Layout({ children }: SettingsLayoutProps) {
 	const params = useParams();
-	const activeTab = (params.tab as SettingsTabId | undefined) || 'general';
+	const activeTab = (params.tab as SettingsTabId | undefined) || "general";
 	const {
 		canManageApiKeys,
 		canManageWebhooks,
@@ -20,36 +20,36 @@ function Layout({ children }: SettingsLayoutProps) {
 	} = useAdminAccess();
 
 	let tabs: SettingsTabItem[] = [
-		{ id: 'general', name: __('General'), icon: 'settings' },
-		{ id: 'security', name: __('Security'), icon: 'shield' },
+		{ id: "general", name: __("General"), icon: "settings" },
+		{ id: "security", name: __("Security"), icon: "shield" },
 	];
 
 	if (canManageApiKeys) {
-		tabs.push({ id: 'api', name: __('API Keys'), icon: 'key' });
+		tabs.push({ id: "api", name: __("API Keys"), icon: "key" });
 	}
 
 	if (canManageWebhooks) {
 		tabs.push({
-			id: 'integrations',
-			name: __('Integrations'),
-			icon: 'plug',
+			id: "integrations",
+			name: __("Integrations"),
+			icon: "plug",
 		});
 	}
 
 	if (canManageMailDelivery) {
-		tabs.push({ id: 'email', name: __('Email SMTP'), icon: 'mail' });
+		tabs.push({ id: "email", name: __("Email SMTP"), icon: "mail" });
 	}
 
 	if (canManageLocationData) {
 		tabs.push({
-			id: 'location',
-			name: __('Location Data'),
-			icon: 'mapPin',
+			id: "location",
+			name: __("Location Data"),
+			icon: "mapPin",
 		});
 	}
 
 	if (canManageUpdates) {
-		tabs.push({ id: 'updates', name: __('Updates'), icon: 'download' });
+		tabs.push({ id: "updates", name: __("Updates"), icon: "download" });
 	}
 
 	return (

@@ -1,7 +1,7 @@
-import { CheckCircle2, Clock3, LoaderCircle } from 'lucide-react';
-import { getDocumentDirection } from '@/i18n/direction';
-import { cn } from '@/utils';
-import type { ReleaseInstallProgressState } from '../types';
+import { CheckCircle2, Clock3, LoaderCircle } from "lucide-react";
+import { getDocumentDirection } from "@/i18n/direction";
+import { cn } from "@/utils";
+import type { ReleaseInstallProgressState } from "../types";
 
 interface ReleaseInstallProgressProps {
 	progress: ReleaseInstallProgressState;
@@ -9,15 +9,15 @@ interface ReleaseInstallProgressProps {
 }
 
 const stepStateStyles = {
-	complete: 'settings-release-progress-badge-complete',
-	current: 'settings-release-progress-badge-current',
-	upcoming: 'settings-release-progress-badge-upcoming',
+	complete: "settings-release-progress-badge-complete",
+	current: "settings-release-progress-badge-current",
+	upcoming: "settings-release-progress-badge-upcoming",
 } as const;
 
 const stepTextStyles = {
-	complete: 'settings-release-progress-label-complete',
-	current: 'settings-release-progress-label-current',
-	upcoming: 'settings-release-progress-label-upcoming',
+	complete: "settings-release-progress-label-complete",
+	current: "settings-release-progress-label-current",
+	upcoming: "settings-release-progress-label-upcoming",
 } as const;
 
 function ReleaseInstallProgress({
@@ -30,21 +30,23 @@ function ReleaseInstallProgress({
 		<div
 			dir={direction}
 			className={cn(
-				'settings-release-progress',
+				"settings-release-progress",
 				compact
-					? 'settings-release-progress-compact'
-					: 'settings-release-progress-default'
+					? "settings-release-progress-compact"
+					: "settings-release-progress-default"
 			)}
 		>
 			<div
 				className={cn(
-					'settings-release-progress-header',
+					"settings-release-progress-header",
 					compact
-						? 'settings-release-progress-header-compact'
-						: 'settings-release-progress-header-default'
+						? "settings-release-progress-header-compact"
+						: "settings-release-progress-header-default"
 				)}
 			>
-				<p className="settings-release-progress-title">{progress.title}</p>
+				<p className="settings-release-progress-title">
+					{progress.title}
+				</p>
 				<p className="settings-release-progress-description">
 					{progress.description}
 				</p>
@@ -52,41 +54,44 @@ function ReleaseInstallProgress({
 
 			<ol
 				className={cn(
-					'settings-release-progress-list',
+					"settings-release-progress-list",
 					compact
-						? 'settings-release-progress-list-compact'
-						: 'settings-release-progress-list-default'
+						? "settings-release-progress-list-compact"
+						: "settings-release-progress-list-default"
 				)}
 			>
 				{progress.steps.map((step) => {
 					const Icon =
-						'complete' === step.state
+						"complete" === step.state
 							? CheckCircle2
-							: 'current' === step.state
+							: "current" === step.state
 								? LoaderCircle
 								: Clock3;
 
 					return (
-						<li key={step.id} className="settings-release-progress-item">
+						<li
+							key={step.id}
+							className="settings-release-progress-item"
+						>
 							<span
 								className={cn(
-									'settings-release-progress-badge',
+									"settings-release-progress-badge",
 									stepStateStyles[step.state]
 								)}
 							>
 								<Icon
 									size={16}
 									className={cn(
-										'settings-release-progress-icon',
-										'current' === step.state
-											? 'settings-release-progress-icon-spin'
-											: ''
+										"settings-release-progress-icon",
+										"current" === step.state
+											? "settings-release-progress-icon-spin"
+											: ""
 									)}
 								/>
 							</span>
 							<span
 								className={cn(
-									'settings-release-progress-label',
+									"settings-release-progress-label",
 									stepTextStyles[step.state]
 								)}
 							>

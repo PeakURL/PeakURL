@@ -1,7 +1,7 @@
-import type { ReactNode } from 'react';
-import { Copy } from 'lucide-react';
-import { getDocumentDirection } from '@/i18n/direction';
-import { cn } from '@/utils';
+import type { ReactNode } from "react";
+import { Copy } from "lucide-react";
+import { getDocumentDirection } from "@/i18n/direction";
+import { cn } from "@/utils";
 
 interface ReadOnlyValueBlockProps {
 	value?: string | null;
@@ -16,33 +16,30 @@ interface ReadOnlyValueBlockProps {
 
 export function ReadOnlyValueBlock({
 	value,
-	className = '',
-	valueClassName = '',
+	className = "",
+	valueClassName = "",
 	monospace = true,
 	onCopy,
 	copyButtonLabel,
-	copyButtonClassName = '',
+	copyButtonClassName = "",
 	copyButtonContent,
 }: ReadOnlyValueBlockProps) {
 	const direction = getDocumentDirection();
 	const copyButtonStyles =
-		copyButtonClassName || 'readonly-value-block-copy-default';
+		copyButtonClassName || "readonly-value-block-copy-default";
 
 	return (
-		<div
-			dir={direction}
-			className={cn('readonly-value-block', className)}
-		>
+		<div dir={direction} className={cn("readonly-value-block", className)}>
 			<div className="readonly-value-block-value">
 				<span
 					className={cn(
-						'readonly-value-block-text',
-						'preserve-ltr-value',
-						monospace && 'font-mono',
+						"readonly-value-block-text",
+						"preserve-ltr-value",
+						monospace && "font-mono",
 						valueClassName
 					)}
 				>
-					{value || ''}
+					{value || ""}
 				</span>
 			</div>
 			{onCopy ? (
@@ -52,7 +49,7 @@ export function ReadOnlyValueBlock({
 					aria-label={copyButtonLabel}
 					title={copyButtonLabel}
 					className={cn(
-						'readonly-value-block-copy',
+						"readonly-value-block-copy",
 						copyButtonStyles
 					)}
 				>

@@ -7,37 +7,37 @@ import {
 	Orbit,
 	Smartphone,
 	Tablet,
-} from 'lucide-react';
-import { __, _n } from '@/i18n';
+} from "lucide-react";
+import { __, _n } from "@/i18n";
 import type {
 	BrowserIconProps,
 	DeviceStatsProps,
 	StatsMetricItem,
-} from './types';
+} from "./types";
 
 // Browser icon mapping
 const getBrowserIcon = (browser: string) => {
 	const browserLower = browser.toLowerCase();
-	if (browserLower.includes('chrome')) return 'chrome';
-	if (browserLower.includes('safari')) return 'safari';
-	if (browserLower.includes('firefox')) return 'firefox';
-	if (browserLower.includes('edge')) return 'edge';
-	return 'globe';
+	if (browserLower.includes("chrome")) return "chrome";
+	if (browserLower.includes("safari")) return "safari";
+	if (browserLower.includes("firefox")) return "firefox";
+	if (browserLower.includes("edge")) return "edge";
+	return "globe";
 };
 
 const BrowserIcon = ({ browser, className }: BrowserIconProps) => {
 	const iconType = getBrowserIcon(browser);
 
-	if (iconType === 'chrome') {
+	if (iconType === "chrome") {
 		return <Globe className={className} />;
 	}
-	if (iconType === 'safari') {
+	if (iconType === "safari") {
 		return <Compass className={className} />;
 	}
-	if (iconType === 'firefox') {
+	if (iconType === "firefox") {
 		return <Flame className={className} />;
 	}
-	if (iconType === 'edge') {
+	if (iconType === "edge") {
 		return <Orbit className={className} />;
 	}
 	return <Globe className={className} />;
@@ -46,19 +46,19 @@ const BrowserIcon = ({ browser, className }: BrowserIconProps) => {
 // Device icon mapping
 const getDeviceIcon = (deviceType: string) => {
 	const typeLower = deviceType.toLowerCase();
-	if (typeLower.includes('mobile')) return Smartphone;
-	if (typeLower.includes('tablet')) return Tablet;
+	if (typeLower.includes("mobile")) return Smartphone;
+	if (typeLower.includes("tablet")) return Tablet;
 	return Monitor;
 };
 
 // OS emoji mapping
 const getOSEmoji = (os: string) => {
 	const osLower = os.toLowerCase();
-	if (osLower.includes('windows')) return '🪟';
-	if (osLower.includes('mac') || osLower.includes('ios')) return '🍎';
-	if (osLower.includes('android')) return '🤖';
-	if (osLower.includes('linux')) return '🐧';
-	return '💻';
+	if (osLower.includes("windows")) return "🪟";
+	if (osLower.includes("mac") || osLower.includes("ios")) return "🍎";
+	if (osLower.includes("android")) return "🤖";
+	if (osLower.includes("linux")) return "🐧";
+	return "💻";
 };
 
 function DeviceStats({
@@ -71,11 +71,11 @@ function DeviceStats({
 		return (
 			<div className="links-device-section animate-pulse">
 				<h3 className="links-drawer-section-title mb-4">
-					{__('Device & Browser Analytics')}
+					{__("Device & Browser Analytics")}
 				</h3>
 				<div className="links-device-empty">
 					<p className="links-device-empty-copy">
-						{__('Loading analytics...')}
+						{__("Loading analytics...")}
 					</p>
 				</div>
 			</div>
@@ -89,17 +89,17 @@ function DeviceStats({
 		return (
 			<div className="links-device-section">
 				<h3 className="links-drawer-section-title mb-4">
-					{__('Device & Browser Analytics')}
+					{__("Device & Browser Analytics")}
 				</h3>
 				<div className="links-device-empty">
 					<div className="links-device-empty-content">
 						<Monitor className="links-drawer-empty-icon-spaced" />
 						<p className="links-device-empty-title">
-							{__('No device data available yet')}
+							{__("No device data available yet")}
 						</p>
 						<p className="links-device-empty-copy-small">
 							{__(
-								'Device and browser information will appear here once clicks are recorded'
+								"Device and browser information will appear here once clicks are recorded"
 							)}
 						</p>
 					</div>
@@ -119,7 +119,7 @@ function DeviceStats({
 		return items.map((item) => ({
 			...item,
 			percentage:
-				total > 0 ? ((item.count / total) * 100).toFixed(1) : '0.0',
+				total > 0 ? ((item.count / total) * 100).toFixed(1) : "0.0",
 		}));
 	};
 
@@ -138,7 +138,7 @@ function DeviceStats({
 						</div>
 						<div>
 							<p className="links-drawer-summary-label">
-								{__('Total Devices')}
+								{__("Total Devices")}
 							</p>
 							<p className="links-drawer-summary-value">
 								{total}
@@ -147,7 +147,7 @@ function DeviceStats({
 					</div>
 					<div className="links-drawer-summary-meta">
 						<p className="links-drawer-summary-label">
-							{__('Unique Browsers')}
+							{__("Unique Browsers")}
 						</p>
 						<p className="links-drawer-summary-value">
 							{displayBrowsers.length}
@@ -161,54 +161,52 @@ function DeviceStats({
 				<div className="links-drawer-section-header">
 					<Globe className="links-drawer-section-icon" />
 					<h3 className="links-drawer-section-title">
-						{__('Browsers')}
+						{__("Browsers")}
 					</h3>
 				</div>
 				<div className="links-device-list">
-					{displayBrowsers
-						.slice(0, 5)
-						.map(
-							(
-								browser: StatsMetricItem & {
-									percentage: string;
-								}
-							) => {
-								return (
-									<div
-										key={browser.name}
-										className="links-device-list-row"
-									>
-										<div className="links-device-list-row-header">
-											<div className="links-device-list-main">
-												<BrowserIcon
-													browser={browser.name}
-													className="w-4 h-4 text-accent"
-												/>
-												<span className="text-sm font-medium text-heading">
-													{browser.name}
-												</span>
-											</div>
-											<div className="links-device-list-meta">
-												<span className="links-device-list-percentage">
-													{browser.percentage}%
-												</span>
-												<span className="links-device-list-count">
-													{browser.count}
-												</span>
-											</div>
+					{displayBrowsers.slice(0, 5).map(
+						(
+							browser: StatsMetricItem & {
+								percentage: string;
+							}
+						) => {
+							return (
+								<div
+									key={browser.name}
+									className="links-device-list-row"
+								>
+									<div className="links-device-list-row-header">
+										<div className="links-device-list-main">
+											<BrowserIcon
+												browser={browser.name}
+												className="w-4 h-4 text-accent"
+											/>
+											<span className="text-sm font-medium text-heading">
+												{browser.name}
+											</span>
 										</div>
-										<div className="links-drawer-bar-track">
-											<div
-												className="links-drawer-bar-fill bg-accent"
-												style={{
-													width: `${browser.percentage}%`,
-												}}
-											></div>
+										<div className="links-device-list-meta">
+											<span className="links-device-list-percentage">
+												{browser.percentage}%
+											</span>
+											<span className="links-device-list-count">
+												{browser.count}
+											</span>
 										</div>
 									</div>
-								);
-							}
-						)}
+									<div className="links-drawer-bar-track">
+										<div
+											className="links-drawer-bar-fill bg-accent"
+											style={{
+												width: `${browser.percentage}%`,
+											}}
+										></div>
+									</div>
+								</div>
+							);
+						}
+					)}
 				</div>
 			</div>
 
@@ -217,7 +215,7 @@ function DeviceStats({
 				<div className="links-drawer-section-header">
 					<Monitor className="links-drawer-section-icon" />
 					<h3 className="links-drawer-section-title">
-						{__('Device Types')}
+						{__("Device Types")}
 					</h3>
 				</div>
 				<div className="links-device-types">
@@ -238,10 +236,10 @@ function DeviceStats({
 												{device.name}
 											</p>
 											<p className="text-xs text-text-muted">
-												{device.count}{' '}
+												{device.count}{" "}
 												{_n(
-													'device',
-													'devices',
+													"device",
+													"devices",
 													device.count
 												)}
 											</p>
@@ -264,16 +262,13 @@ function DeviceStats({
 				<div className="links-drawer-section-header">
 					<Laptop className="links-drawer-section-icon" />
 					<h3 className="links-drawer-section-title">
-						{__('Operating Systems')}
+						{__("Operating Systems")}
 					</h3>
 				</div>
 				<div className="links-device-os-list">
 					{displayOses.map(
 						(os: StatsMetricItem & { percentage: string }) => (
-							<div
-								key={os.name}
-								className="links-device-os-item"
-							>
+							<div key={os.name} className="links-device-os-item">
 								<div className="links-device-os-main">
 									<div className="links-device-os-icon">
 										{getOSEmoji(os.name)}

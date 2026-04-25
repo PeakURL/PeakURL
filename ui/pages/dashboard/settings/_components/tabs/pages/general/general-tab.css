@@ -170,11 +170,11 @@
 		@apply max-w-xl text-sm text-text-muted;
 	}
 
-	[dir='rtl'] .settings-general-favicon-browser-body {
+	[dir="rtl"] .settings-general-favicon-browser-body {
 		direction: rtl;
 	}
 
-	[dir='rtl'] .settings-general-favicon-browser-tab {
+	[dir="rtl"] .settings-general-favicon-browser-tab {
 		grid-template-columns: 1.25rem minmax(0, 1fr) 1.5rem;
 	}
 }

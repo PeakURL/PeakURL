@@ -11,7 +11,7 @@
 		@apply text-left;
 	}
 
-	html[dir='rtl'] .text-page-start {
+	html[dir="rtl"] .text-page-start {
 		@apply text-right;
 	}
 
@@ -47,28 +47,28 @@
 		unicode-bidi: plaintext;
 	}
 
-	html[dir='rtl']
+	html[dir="rtl"]
 		.placeholder-follow-page-direction::-webkit-input-placeholder {
 		direction: rtl;
 		text-align: right;
 	}
 
-	html[dir='rtl'] .placeholder-follow-page-direction::-moz-placeholder {
+	html[dir="rtl"] .placeholder-follow-page-direction::-moz-placeholder {
 		direction: rtl;
 		text-align: right;
 	}
 
-	html[dir='rtl'] .placeholder-follow-page-direction:-ms-input-placeholder {
+	html[dir="rtl"] .placeholder-follow-page-direction:-ms-input-placeholder {
 		direction: rtl;
 		text-align: right;
 	}
 
-	html[dir='rtl'] .placeholder-follow-page-direction::-ms-input-placeholder {
+	html[dir="rtl"] .placeholder-follow-page-direction::-ms-input-placeholder {
 		direction: rtl;
 		text-align: right;
 	}
 
-	html[dir='rtl'] .placeholder-follow-page-direction::placeholder {
+	html[dir="rtl"] .placeholder-follow-page-direction::placeholder {
 		direction: rtl;
 		text-align: right;
 	}
@@ -77,7 +77,7 @@
 		@apply text-right;
 	}
 
-	html[dir='rtl'] .text-page-end {
+	html[dir="rtl"] .text-page-end {
 		@apply text-left;
 	}
 
@@ -134,7 +134,7 @@
 		transform-origin: top right;
 	}
 
-	html[dir='rtl'] .origin-top-inline-end {
+	html[dir="rtl"] .origin-top-inline-end {
 		transform-origin: top left;
 	}
 
@@ -142,7 +142,7 @@
 		transform-origin: left;
 	}
 
-	html[dir='rtl'] .origin-inline-start {
+	html[dir="rtl"] .origin-inline-start {
 		transform-origin: right;
 	}
 

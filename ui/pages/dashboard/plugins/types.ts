@@ -1,14 +1,14 @@
-import type { LucideIcon } from 'lucide-react';
+import type { LucideIcon } from "lucide-react";
 
 /**
  * Supported plugin dashboard tabs.
  */
-export type TabId = 'installed' | 'browse' | 'featured' | 'popular';
+export type TabId = "installed" | "browse" | "featured" | "popular";
 
 /**
  * Available layout modes for plugin cards.
  */
-export type ViewMode = 'grid' | 'list';
+export type ViewMode = "grid" | "list";
 
 /**
  * Tab metadata rendered in the plugin header.

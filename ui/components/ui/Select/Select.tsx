@@ -3,13 +3,13 @@ import {
 	ListboxButton,
 	ListboxOption,
 	ListboxOptions,
-} from '@headlessui/react';
-import { Check, ChevronDown } from 'lucide-react';
-import { getDocumentDirection } from '@/i18n/direction';
-import { cn } from '@/utils';
-import type { SelectProps, SelectValue } from '../types';
+} from "@headlessui/react";
+import { Check, ChevronDown } from "lucide-react";
+import { getDocumentDirection } from "@/i18n/direction";
+import { cn } from "@/utils";
+import type { SelectProps, SelectValue } from "../types";
 
-export type { SelectOption, SelectProps, SelectValue } from '../types';
+export type { SelectOption, SelectProps, SelectValue } from "../types";
 
 export function Select<T extends SelectValue>({
 	id,
@@ -18,10 +18,10 @@ export function Select<T extends SelectValue>({
 	onChange,
 	disabled = false,
 	ariaLabel,
-	className = '',
-	buttonClassName = '',
-	optionsClassName = '',
-	optionClassName = '',
+	className = "",
+	buttonClassName = "",
+	optionsClassName = "",
+	optionClassName = "",
 	...props
 }: SelectProps<T>) {
 	const direction = getDocumentDirection();
@@ -38,11 +38,11 @@ export function Select<T extends SelectValue>({
 							aria-label={ariaLabel}
 							dir={direction}
 							className={cn(
-								'form-control-base',
-								'select-trigger',
+								"form-control-base",
+								"select-trigger",
 								open
-									? 'select-trigger-open'
-									: 'form-control-accent-focus',
+									? "select-trigger-open"
+									: "form-control-accent-focus",
 								buttonClassName
 							)}
 						>
@@ -54,10 +54,10 @@ export function Select<T extends SelectValue>({
 
 						<ListboxOptions
 							dir={direction}
-							anchor={{ to: 'bottom start', gap: 6, padding: 12 }}
+							anchor={{ to: "bottom start", gap: 6, padding: 12 }}
 							modal={false}
 							transition
-							className={cn('select-options', optionsClassName)}
+							className={cn("select-options", optionsClassName)}
 						>
 							{options.map((option) => (
 								<ListboxOption
@@ -73,14 +73,14 @@ export function Select<T extends SelectValue>({
 									}) => (
 										<div
 											className={cn(
-												'select-option',
-												focus && 'select-option-focus',
+												"select-option",
+												focus && "select-option-focus",
 												selected
-													? 'select-option-selected'
-													: 'select-option-default',
+													? "select-option-selected"
+													: "select-option-default",
 												optionDisabled
-													? 'select-option-disabled'
-													: 'select-option-enabled',
+													? "select-option-disabled"
+													: "select-option-enabled",
 												optionClassName
 											)}
 										>
@@ -89,10 +89,10 @@ export function Select<T extends SelectValue>({
 											</span>
 											<Check
 												className={cn(
-													'select-option-check',
+													"select-option-check",
 													selected
-														? 'opacity-100'
-														: 'opacity-0'
+														? "opacity-100"
+														: "opacity-0"
 												)}
 											/>
 										</div>

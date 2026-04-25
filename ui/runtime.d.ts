@@ -2,7 +2,7 @@ import type {
 	RuntimeFaviconPayload,
 	RuntimeI18nCatalog,
 	TextDirection,
-} from './i18n/types';
+} from "./i18n/types";
 
 export {};
 

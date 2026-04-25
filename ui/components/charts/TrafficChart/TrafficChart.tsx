@@ -1,17 +1,17 @@
-import type { ChartData, TooltipItem } from 'chart.js';
-import { useEffect, useRef, useState } from 'react';
-import { Chart } from 'chart.js/auto';
-import { __ } from '@/i18n';
+import type { ChartData, TooltipItem } from "chart.js";
+import { useEffect, useRef, useState } from "react";
+import { Chart } from "chart.js/auto";
+import { __ } from "@/i18n";
 import type {
 	TrafficChartData,
 	TrafficChartProps,
 	TrafficChartType,
-} from '../types';
+} from "../types";
 export type {
 	TrafficChartData,
 	TrafficChartProps,
 	TrafficChartType,
-} from '../types';
+} from "../types";
 
 /**
  * TrafficChart Component
@@ -23,8 +23,8 @@ export type {
  */
 export function TrafficChart({
 	data,
-	timeRange = '7d',
-	type = 'line',
+	timeRange = "7d",
+	type = "line",
 }: TrafficChartProps) {
 	const chartRef = useRef<HTMLCanvasElement | null>(null);
 	const chartInstanceRef = useRef<Chart<
@@ -37,14 +37,14 @@ export function TrafficChart({
 	// Detect dark mode
 	useEffect(() => {
 		const checkDarkMode = () => {
-			setIsDark(document.documentElement.classList.contains('dark'));
+			setIsDark(document.documentElement.classList.contains("dark"));
 		};
 
 		checkDarkMode();
 		const observer = new MutationObserver(checkDarkMode);
 		observer.observe(document.documentElement, {
 			attributes: true,
-			attributeFilter: ['class'],
+			attributeFilter: ["class"],
 		});
 
 		return () => observer.disconnect();
@@ -58,7 +58,7 @@ export function TrafficChart({
 		}
 
 		const initChart = async () => {
-			const context = canvas.getContext('2d');
+			const context = canvas.getContext("2d");
 
 			if (!context) {
 				return;
@@ -78,21 +78,21 @@ export function TrafficChart({
 
 			// Theme colors
 			const clicksColor = isDark
-				? 'rgb(99, 102, 241)'
-				: 'rgb(79, 70, 229)';
+				? "rgb(99, 102, 241)"
+				: "rgb(79, 70, 229)";
 			const uniqueColor = isDark
-				? 'rgb(16, 185, 129)'
-				: 'rgb(5, 150, 105)';
+				? "rgb(16, 185, 129)"
+				: "rgb(5, 150, 105)";
 
 			// Create gradients
 			const clicksGradient = context.createLinearGradient(0, 0, 0, 300);
 			clicksGradient.addColorStop(
 				0,
-				isDark ? 'rgba(99, 102, 241, 0.2)' : 'rgba(99, 102, 241, 0.15)'
+				isDark ? "rgba(99, 102, 241, 0.2)" : "rgba(99, 102, 241, 0.15)"
 			);
 			clicksGradient.addColorStop(
 				1,
-				isDark ? 'rgba(99, 102, 241, 0)' : 'rgba(99, 102, 241, 0)'
+				isDark ? "rgba(99, 102, 241, 0)" : "rgba(99, 102, 241, 0)"
 			);
 
 			// Use provided data if it exists and has the right structure, otherwise use demo data
@@ -111,13 +111,13 @@ export function TrafficChart({
 					}
 				: {
 						labels: [
-							__('Mon'),
-							__('Tue'),
-							__('Wed'),
-							__('Thu'),
-							__('Fri'),
-							__('Sat'),
-							__('Sun'),
+							__("Mon"),
+							__("Tue"),
+							__("Wed"),
+							__("Thu"),
+							__("Fri"),
+							__("Sat"),
+							__("Sun"),
 						],
 						clicks: [420, 380, 520, 478, 589, 639, 749],
 						unique: [340, 289, 420, 390, 480, 520, 630],
@@ -125,12 +125,12 @@ export function TrafficChart({
 
 			// Theme colors
 			const textColor = isDark
-				? 'rgb(156, 163, 175)'
-				: 'rgb(107, 114, 128)';
+				? "rgb(156, 163, 175)"
+				: "rgb(107, 114, 128)";
 			const gridColor = isDark
-				? 'rgba(75, 85, 99, 0.3)'
-				: 'rgba(229, 231, 235, 0.8)';
-			const isLineChart = type === 'line';
+				? "rgba(75, 85, 99, 0.3)"
+				: "rgba(229, 231, 235, 0.8)";
+			const isLineChart = type === "line";
 			const maxTrafficValue = Math.max(
 				...chartData.clicks,
 				...chartData.unique,
@@ -157,49 +157,49 @@ export function TrafficChart({
 				labels: chartData.labels,
 				datasets: [
 					{
-						label: __('Total Clicks'),
+						label: __("Total Clicks"),
 						data: chartData.clicks,
 						borderColor: clicksColor,
 						backgroundColor:
-							type === 'bar' ? clicksColor : clicksGradient,
+							type === "bar" ? clicksColor : clicksGradient,
 						fill: isLineChart,
 						tension: 0.4,
 						borderWidth: 2,
 						pointRadius: 0,
 						pointHoverRadius: 6,
 						pointBackgroundColor: isDark
-							? 'rgb(17, 24, 39)'
-							: 'white',
+							? "rgb(17, 24, 39)"
+							: "white",
 						pointBorderColor: clicksColor,
 						pointBorderWidth: 2,
 						pointHoverBackgroundColor: clicksColor,
 						pointHoverBorderColor: isDark
-							? 'rgb(17, 24, 39)'
-							: 'white',
+							? "rgb(17, 24, 39)"
+							: "white",
 						pointHoverBorderWidth: 2,
 						borderRadius: 4,
 						order: 1,
 					},
 					{
-						label: __('Unique Visitors'),
+						label: __("Unique Visitors"),
 						data: renderedUniqueData,
 						borderColor: uniqueColor,
 						backgroundColor:
-							type === 'bar' ? uniqueColor : 'transparent',
-						fill: type === 'bar',
+							type === "bar" ? uniqueColor : "transparent",
+						fill: type === "bar",
 						tension: 0.4,
 						borderWidth: 2,
 						pointRadius: 0,
 						pointHoverRadius: 6,
 						pointBackgroundColor: isDark
-							? 'rgb(17, 24, 39)'
-							: 'white',
+							? "rgb(17, 24, 39)"
+							: "white",
 						pointBorderColor: uniqueColor,
 						pointBorderWidth: 2,
 						pointHoverBackgroundColor: uniqueColor,
 						pointHoverBorderColor: isDark
-							? 'rgb(17, 24, 39)'
-							: 'white',
+							? "rgb(17, 24, 39)"
+							: "white",
 						pointHoverBorderWidth: 2,
 						borderRadius: 4,
 						order: 2,
@@ -218,7 +218,7 @@ export function TrafficChart({
 					responsive: true,
 					maintainAspectRatio: false,
 					interaction: {
-						mode: 'index',
+						mode: "index",
 						intersect: false,
 					},
 					plugins: {
@@ -228,17 +228,17 @@ export function TrafficChart({
 						tooltip: {
 							enabled: true,
 							backgroundColor: isDark
-								? 'rgb(31, 41, 55)'
-								: 'white',
+								? "rgb(31, 41, 55)"
+								: "white",
 							titleColor: isDark
-								? 'rgb(243, 244, 246)'
-								: 'rgb(17, 24, 39)',
+								? "rgb(243, 244, 246)"
+								: "rgb(17, 24, 39)",
 							bodyColor: isDark
-								? 'rgb(209, 213, 219)'
-								: 'rgb(55, 65, 81)',
+								? "rgb(209, 213, 219)"
+								: "rgb(55, 65, 81)",
 							borderColor: isDark
-								? 'rgb(75, 85, 99)'
-								: 'rgb(229, 231, 235)',
+								? "rgb(75, 85, 99)"
+								: "rgb(229, 231, 235)",
 							borderWidth: 1,
 							padding: 12,
 							boxPadding: 6,
@@ -257,7 +257,9 @@ export function TrafficChart({
 										context.datasetIndex === 0
 											? chartData.clicks
 											: chartData.unique;
-									const rawValue = Number(rawSeries[dataIndex] || 0);
+									const rawValue = Number(
+										rawSeries[dataIndex] || 0
+									);
 									return ` ${
 										context.dataset.label
 									}: ${rawValue.toLocaleString()}`;
@@ -298,7 +300,7 @@ export function TrafficChart({
 								padding: 10,
 								callback: function (value: string | number) {
 									const numericValue =
-										'number' === typeof value
+										"number" === typeof value
 											? value
 											: Number(value);
 
@@ -308,7 +310,7 @@ export function TrafficChart({
 									) {
 										return (
 											(numericValue / 1000).toFixed(1) +
-											'k'
+											"k"
 										);
 									}
 									return value;

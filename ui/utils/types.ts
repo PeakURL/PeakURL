@@ -1,4 +1,4 @@
-import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 /**
  * Generic object record used by utility guards before reading arbitrary keys.
@@ -30,7 +30,7 @@ export type NumericStatusQueryError = Extract<
 /**
  * Recovery states returned when the PHP runtime needs setup or installation.
  */
-export type InstallRecoveryState = 'needs_setup' | 'needs_install';
+export type InstallRecoveryState = "needs_setup" | "needs_install";
 
 /**
  * Redirect target returned for setup or install recovery flows.
@@ -119,7 +119,7 @@ export interface LinkExportSourceLink extends ShortUrlLinkLike {
 /**
  * File formats supported by the shared dashboard export utility.
  */
-export type LinkExportFormat = 'csv' | 'json' | 'xml';
+export type LinkExportFormat = "csv" | "json" | "xml";
 
 /**
  * Normalized export row shape written into CSV, JSON, and XML downloads.
@@ -202,7 +202,7 @@ export interface DashboardSearchCapabilities {
 /**
  * Search result groups rendered in the dashboard command palette.
  */
-export type DashboardSearchSection = 'pages' | 'tools';
+export type DashboardSearchSection = "pages" | "tools";
 
 /**
  * Internal route target definition used to build searchable dashboard routes.

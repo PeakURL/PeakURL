@@ -1,31 +1,31 @@
-import { serializeCsv } from './csv';
-import { buildShortUrl } from './linkHelpers';
+import { serializeCsv } from "./csv";
+import { buildShortUrl } from "./linkHelpers";
 import type {
 	LinkExportFile,
 	LinkExportFormat,
 	LinkExportItem,
 	LinkExportSourceLink,
-} from './types';
+} from "./types";
 
 const LINK_EXPORT_HEADERS: Array<keyof LinkExportItem> = [
-	'url',
-	'alias',
-	'title',
-	'password',
-	'expires',
-	'short_url',
-	'clicks',
-	'unique_clicks',
-	'created_at',
+	"url",
+	"alias",
+	"title",
+	"password",
+	"expires",
+	"short_url",
+	"clicks",
+	"unique_clicks",
+	"created_at",
 ];
 
 function escapeXml(value: unknown): string {
-	return String(value ?? '')
-		.replace(/&/g, '&amp;')
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/"/g, '&quot;')
-		.replace(/'/g, '&apos;');
+	return String(value ?? "")
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&apos;");
 }
 
 /**
@@ -35,18 +35,18 @@ export function buildLinkExportItems(
 	links: Array<LinkExportSourceLink> = []
 ): LinkExportItem[] {
 	return links.map((link) => {
-		const alias = link.alias || link.shortCode || '';
+		const alias = link.alias || link.shortCode || "";
 
 		return {
-			url: link.destinationUrl || '',
+			url: link.destinationUrl || "",
 			alias,
-			title: link.title || '',
-			password: '',
-			expires: link.expiresAt || '',
+			title: link.title || "",
+			password: "",
+			expires: link.expiresAt || "",
 			short_url: buildShortUrl(link),
-			clicks: link.clicks ?? '',
-			unique_clicks: link.uniqueClicks ?? '',
-			created_at: link.createdAt || '',
+			clicks: link.clicks ?? "",
+			unique_clicks: link.uniqueClicks ?? "",
+			created_at: link.createdAt || "",
 		};
 	});
 }
@@ -55,14 +55,14 @@ export function buildLinkExportItems(
  * Serializes export rows into CSV, JSON, or XML content.
  */
 export function serializeLinkExport(
-	format: LinkExportFormat = 'csv',
+	format: LinkExportFormat = "csv",
 	items: Array<LinkExportItem> = []
 ): string {
-	if ('json' === format) {
+	if ("json" === format) {
 		return JSON.stringify(items, null, 2);
 	}
 
-	if ('xml' === format) {
+	if ("xml" === format) {
 		const itemXml = items
 			.map(
 				(item) => `  <url>
@@ -77,7 +77,7 @@ export function serializeLinkExport(
     <createdAt>${escapeXml(item.created_at)}</createdAt>
   </url>`
 			)
-			.join('\n');
+			.join("\n");
 
 		return `<urls>\n${itemXml}\n</urls>`;
 	}
@@ -93,23 +93,23 @@ export function serializeLinkExport(
  * Returns the default filename and MIME type for a link export format.
  */
 export function getLinkExportFile(
-	format: LinkExportFormat = 'csv'
+	format: LinkExportFormat = "csv"
 ): LinkExportFile {
 	switch (format) {
-		case 'json':
+		case "json":
 			return {
-				filename: 'peakurl-links.json',
-				type: 'application/json;charset=utf-8;',
+				filename: "peakurl-links.json",
+				type: "application/json;charset=utf-8;",
 			};
-		case 'xml':
+		case "xml":
 			return {
-				filename: 'peakurl-links.xml',
-				type: 'application/xml;charset=utf-8;',
+				filename: "peakurl-links.xml",
+				type: "application/xml;charset=utf-8;",
 			};
 		default:
 			return {
-				filename: 'peakurl-links.csv',
-				type: 'text/csv;charset=utf-8;',
+				filename: "peakurl-links.csv",
+				type: "text/csv;charset=utf-8;",
 			};
 	}
 }
@@ -119,17 +119,17 @@ export function getLinkExportFile(
  */
 export function downloadLinkExport(
 	links: Array<LinkExportSourceLink> = [],
-	format: LinkExportFormat = 'csv'
+	format: LinkExportFormat = "csv"
 ): LinkExportItem[] {
 	const items = buildLinkExportItems(links);
 	const content = serializeLinkExport(format, items);
 	const file = getLinkExportFile(format);
 	const blob = new Blob([content], { type: file.type });
 	const blobUrl = window.URL.createObjectURL(blob);
-	const link = document.createElement('a');
+	const link = document.createElement("a");
 
-	link.setAttribute('href', blobUrl);
-	link.setAttribute('download', file.filename);
+	link.setAttribute("href", blobUrl);
+	link.setAttribute("download", file.filename);
 	document.body.appendChild(link);
 	link.click();
 	document.body.removeChild(link);

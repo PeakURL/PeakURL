@@ -1,1 +1,1 @@
-export { default } from './TableFooter';
+export { default } from "./TableFooter";

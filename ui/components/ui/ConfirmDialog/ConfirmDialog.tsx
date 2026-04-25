@@ -1,16 +1,16 @@
-import { Fragment } from 'react';
+import { Fragment } from "react";
 import {
 	Dialog,
 	DialogPanel,
 	DialogTitle,
 	Transition,
 	TransitionChild,
-} from '@headlessui/react';
-import { __ } from '@/i18n';
-import { getDocumentDirection } from '@/i18n/direction';
-import { Button } from '../Button';
-import type { ConfirmDialogProps } from '../types';
-export type { ConfirmDialogProps, ConfirmVariant } from '../types';
+} from "@headlessui/react";
+import { __ } from "@/i18n";
+import { getDocumentDirection } from "@/i18n/direction";
+import { Button } from "../Button";
+import type { ConfirmDialogProps } from "../types";
+export type { ConfirmDialogProps, ConfirmVariant } from "../types";
 
 /**
  * Reusable confirmation dialog using Headless UI.
@@ -26,10 +26,10 @@ export function ConfirmDialog({
 	title,
 	description,
 	children,
-	confirmText = __('Confirm'),
-	cancelText = __('Cancel'),
+	confirmText = __("Confirm"),
+	cancelText = __("Cancel"),
 	onConfirm,
-	confirmVariant = 'primary',
+	confirmVariant = "primary",
 	loading = false,
 	hideActions = false,
 }: ConfirmDialogProps) {
@@ -77,7 +77,10 @@ export function ConfirmDialog({
 								)}
 								{children}
 								{!hideActions ? (
-									<div dir={direction} className="confirm-dialog-actions">
+									<div
+										dir={direction}
+										className="confirm-dialog-actions"
+									>
 										<Button
 											variant="secondary"
 											onClick={onClose}
@@ -91,7 +94,7 @@ export function ConfirmDialog({
 											disabled={loading}
 										>
 											{loading
-												? __('Working...')
+												? __("Working...")
 												: confirmText}
 										</Button>
 									</div>

@@ -1,4 +1,4 @@
-import type { TabId, PluginTabItem } from '../types';
+import type { TabId, PluginTabItem } from "../types";
 
 /**
  * Placeholder plugin card data used by the preview screens.

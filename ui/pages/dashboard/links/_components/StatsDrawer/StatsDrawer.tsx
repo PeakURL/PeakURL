@@ -7,45 +7,45 @@ import {
 	TabList,
 	TabPanel,
 	TabPanels,
-} from '@headlessui/react';
-import { X, Link2, BarChart3, Globe, Share2, ExternalLink } from 'lucide-react';
-import { useState } from 'react';
-import { useGetLinkStatsQuery } from '@/store/slices/api';
-import { isDocumentRtl } from '@/i18n/direction';
-import { buildShortUrl } from '@/utils';
-import { __ } from '@/i18n';
-import StatCards from './StatCards';
-import ClickChart from './ClickChart';
-import HistoricalStats from './HistoricalStats';
-import BestDay from './BestDay';
-import ShareTab from './ShareTab';
-import TrafficLocationTab from './TrafficLocationTab';
-import TrafficSourcesTab from './TrafficSourcesTab';
-import QuickInsights from './QuickInsights';
-import type { StatsDrawerProps, StatsTimeRange } from './types';
+} from "@headlessui/react";
+import { X, Link2, BarChart3, Globe, Share2, ExternalLink } from "lucide-react";
+import { useState } from "react";
+import { useGetLinkStatsQuery } from "@/store/slices/api";
+import { isDocumentRtl } from "@/i18n/direction";
+import { buildShortUrl } from "@/utils";
+import { __ } from "@/i18n";
+import StatCards from "./StatCards";
+import ClickChart from "./ClickChart";
+import HistoricalStats from "./HistoricalStats";
+import BestDay from "./BestDay";
+import ShareTab from "./ShareTab";
+import TrafficLocationTab from "./TrafficLocationTab";
+import TrafficSourcesTab from "./TrafficSourcesTab";
+import QuickInsights from "./QuickInsights";
+import type { StatsDrawerProps, StatsTimeRange } from "./types";
 
 export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 	const [selectedTab, setSelectedTab] = useState(0);
-	const [timeRange, setTimeRange] = useState<StatsTimeRange>('7d');
+	const [timeRange, setTimeRange] = useState<StatsTimeRange>("7d");
 	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isRtl ? "rtl" : "ltr";
 
 	const getDaysFromRange = (range: StatsTimeRange): number => {
 		switch (range) {
-			case '24h':
+			case "24h":
 				return 1;
-			case '7d':
+			case "7d":
 				return 7;
-			case '30d':
+			case "30d":
 				return 30;
-			case 'all':
+			case "all":
 				return 90;
 		}
 	};
 
 	const { data: statsData, isLoading } = useGetLinkStatsQuery(
 		{
-			id: link?.id || '',
+			id: link?.id || "",
 			days: getDaysFromRange(timeRange),
 		},
 		{
@@ -59,10 +59,10 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 	const statsPayload = statsData?.data;
 
 	const tabs = [
-		{ name: __('Traffic Statistics'), icon: BarChart3 },
-		{ name: __('Traffic Location'), icon: Globe },
-		{ name: __('Traffic Sources'), icon: ExternalLink },
-		{ name: __('Share'), icon: Share2 },
+		{ name: __("Traffic Statistics"), icon: BarChart3 },
+		{ name: __("Traffic Location"), icon: Globe },
+		{ name: __("Traffic Sources"), icon: ExternalLink },
+		{ name: __("Share"), icon: Share2 },
 	];
 
 	return (
@@ -74,8 +74,8 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 					<div
 						className={`links-drawer-shell ${
 							isRtl
-								? 'links-drawer-shell-rtl'
-								: 'links-drawer-shell-ltr'
+								? "links-drawer-shell-rtl"
+								: "links-drawer-shell-ltr"
 						}`}
 					>
 						<DialogPanel
@@ -83,8 +83,8 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 							transition
 							className={`links-drawer-panel ${
 								isRtl
-									? 'data-closed:-translate-x-full'
-									: 'data-closed:translate-x-full'
+									? "data-closed:-translate-x-full"
+									: "data-closed:translate-x-full"
 							}`}
 						>
 							<div className="flex h-full flex-col overflow-y-auto bg-surface shadow-xl">
@@ -96,11 +96,11 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 												<div className="links-drawer-title-icon">
 													<Link2 className="w-4 h-4 text-accent" />
 												</div>
-												{__('Link Analytics')}
+												{__("Link Analytics")}
 											</DialogTitle>
 											<p className="links-drawer-description">
 												{__(
-													'Detailed statistics and performance metrics'
+													"Detailed statistics and performance metrics"
 												)}
 											</p>
 										</div>
@@ -110,7 +110,7 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 											className="links-drawer-close"
 										>
 											<span className="sr-only">
-												{__('Close panel')}
+												{__("Close panel")}
 											</span>
 											<X className="w-5 h-5" />
 										</button>
@@ -135,8 +135,8 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 														}) =>
 															`links-drawer-tab ${
 																selected
-																	? 'links-drawer-tab-active'
-																	: 'links-drawer-tab-inactive'
+																	? "links-drawer-tab-active"
+																	: "links-drawer-tab-inactive"
 															}`
 														}
 													>
@@ -215,7 +215,7 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 											onClick={() => setOpen(false)}
 											className="links-drawer-footer-button"
 										>
-											{__('Close')}
+											{__("Close")}
 										</button>
 									</div>
 								</div>

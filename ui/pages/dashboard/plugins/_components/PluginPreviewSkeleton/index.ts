@@ -1,1 +1,1 @@
-export { default } from './PluginPreviewSkeleton';
+export { default } from "./PluginPreviewSkeleton";

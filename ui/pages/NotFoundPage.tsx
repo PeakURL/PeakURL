@@ -6,11 +6,11 @@ import {
 	Wrench,
 	Settings,
 	FileX,
-} from 'lucide-react';
-import { Button } from '@/components';
-import { Link, useNavigate } from 'react-router-dom';
-import { isDocumentRtl } from '@/i18n/direction';
-import { __ } from '@/i18n';
+} from "lucide-react";
+import { Button } from "@/components";
+import { Link, useNavigate } from "react-router-dom";
+import { isDocumentRtl } from "@/i18n/direction";
+import { __ } from "@/i18n";
 
 const NotFoundPage = () => {
 	const navigate = useNavigate();
@@ -30,7 +30,7 @@ const NotFoundPage = () => {
 					</div>
 
 					<h1 className="not-found-page-title">
-						{__('Page Not Found')}
+						{__("Page Not Found")}
 					</h1>
 
 					<p className="not-found-page-summary">
@@ -46,21 +46,21 @@ const NotFoundPage = () => {
 							className="not-found-page-action"
 						>
 							<BackArrow size={16} />
-							{__('Go Back')}
+							{__("Go Back")}
 						</Button>
 						<Button
 							variant="primary"
-							onClick={() => navigate('/dashboard')}
+							onClick={() => navigate("/dashboard")}
 							className="not-found-page-action"
 						>
 							<Gauge size={16} />
-							{__('Go to Dashboard')}
+							{__("Go to Dashboard")}
 						</Button>
 					</div>
 
 					<div className="not-found-page-links">
 						<p className="not-found-page-links-title">
-							{__('Popular Destinations')}
+							{__("Popular Destinations")}
 						</p>
 						<div className="not-found-page-link-grid">
 							<Link
@@ -71,7 +71,7 @@ const NotFoundPage = () => {
 									size={16}
 									className="not-found-page-link-icon"
 								/>
-								{__('All Links')}
+								{__("All Links")}
 							</Link>
 							<Link
 								to="/dashboard/tools/import/file"
@@ -81,7 +81,7 @@ const NotFoundPage = () => {
 									size={16}
 									className="not-found-page-link-icon"
 								/>
-								{__('Import')}
+								{__("Import")}
 							</Link>
 							<Link
 								to="/dashboard/settings/general"
@@ -91,7 +91,7 @@ const NotFoundPage = () => {
 									size={16}
 									className="not-found-page-link-icon"
 								/>
-								{__('Settings')}
+								{__("Settings")}
 							</Link>
 						</div>
 					</div>

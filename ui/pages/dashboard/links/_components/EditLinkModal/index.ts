@@ -1,1 +1,1 @@
-export { default } from './EditLinkModal';
+export { default } from "./EditLinkModal";

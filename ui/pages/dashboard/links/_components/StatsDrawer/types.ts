@@ -1,10 +1,10 @@
-import type { Dispatch, SetStateAction } from 'react';
-import type { LinkRecord } from '../types';
+import type { Dispatch, SetStateAction } from "react";
+import type { LinkRecord } from "../types";
 
 /**
  * Supported time ranges for filtering statistics.
  */
-export type StatsTimeRange = '24h' | '7d' | '30d' | 'all';
+export type StatsTimeRange = "24h" | "7d" | "30d" | "all";
 
 /**
  * Generic metric item used for grouped statistics
@@ -222,7 +222,7 @@ export interface TrafficLocationTabProps {
 /**
  * Supported share destinations from the share tab.
  */
-export type SharePlatform = 'facebook' | 'twitter' | 'linkedin' | 'email';
+export type SharePlatform = "facebook" | "twitter" | "linkedin" | "email";
 
 /**
  * Props for the share tab.
@@ -236,20 +236,20 @@ export interface ShareTabProps {
  * Supported referrer category labels rendered in the sources tab.
  */
 export type TrafficCategory =
-	| 'Search Engine'
-	| 'Social Media'
-	| 'Messaging'
-	| 'Video'
-	| 'News & Content'
-	| 'Developer'
-	| 'Email'
-	| 'Email Marketing'
-	| 'Shopping'
-	| 'AI'
-	| 'Productivity'
-	| 'Website'
-	| 'Direct'
-	| 'Unknown';
+	| "Search Engine"
+	| "Social Media"
+	| "Messaging"
+	| "Video"
+	| "News & Content"
+	| "Developer"
+	| "Email"
+	| "Email Marketing"
+	| "Shopping"
+	| "AI"
+	| "Productivity"
+	| "Website"
+	| "Direct"
+	| "Unknown";
 
 /**
  * Props for the browser icon helper in the device stats card.
@@ -266,5 +266,5 @@ export interface DeviceStatsProps {
 	devices?: StatsMetricItem[];
 	browsers?: StatsMetricItem[];
 	os?: StatsMetricItem[];
-	isLoading: LinkStatsViewProps['isLoading'];
+	isLoading: LinkStatsViewProps["isLoading"];
 }

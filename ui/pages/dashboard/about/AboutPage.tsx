@@ -16,11 +16,11 @@ import {
 	BookOpen,
 	Coffee,
 	SquareTerminal,
-} from 'lucide-react';
-import { Link, useSearchParams } from 'react-router-dom';
-import { PEAKURL_VERSION, PEAKURL_NAME } from '@/constants';
-import { BrandLockup, Logo } from '@/components';
-import { __, sprintf } from '@/i18n';
+} from "lucide-react";
+import { Link, useSearchParams } from "react-router-dom";
+import { PEAKURL_VERSION, PEAKURL_NAME } from "@/constants";
+import { BrandLockup, Logo } from "@/components";
+import { __, sprintf } from "@/i18n";
 import type {
 	AboutIconProps,
 	AddOnLink,
@@ -31,7 +31,7 @@ import type {
 	LandingSource,
 	SectionTitleProps,
 	SystemInfoRowProps,
-} from './types';
+} from "./types";
 
 /* ─── Helpers ─────────────────────────────────────────────── */
 const SectionTitle = ({ children, subtitle }: SectionTitleProps) => (
@@ -49,7 +49,7 @@ const Divider = () => (
 	</div>
 );
 
-const WordPressIcon = ({ className = '' }: AboutIconProps) => (
+const WordPressIcon = ({ className = "" }: AboutIconProps) => (
 	<svg
 		viewBox="0 0 24 24"
 		aria-hidden="true"
@@ -63,7 +63,7 @@ const WordPressIcon = ({ className = '' }: AboutIconProps) => (
 	</svg>
 );
 
-const DockerIcon = ({ className = '' }: AboutIconProps) => (
+const DockerIcon = ({ className = "" }: AboutIconProps) => (
 	<svg
 		viewBox="0 0 439 309"
 		aria-hidden="true"
@@ -82,7 +82,7 @@ const DockerIcon = ({ className = '' }: AboutIconProps) => (
 	</svg>
 );
 
-const ChromeIcon = ({ className = '' }: AboutIconProps) => (
+const ChromeIcon = ({ className = "" }: AboutIconProps) => (
 	<svg
 		viewBox="0 0 24 24"
 		aria-hidden="true"
@@ -96,7 +96,7 @@ const ChromeIcon = ({ className = '' }: AboutIconProps) => (
 	</svg>
 );
 
-const FirefoxIcon = ({ className = '' }: AboutIconProps) => (
+const FirefoxIcon = ({ className = "" }: AboutIconProps) => (
 	<svg
 		viewBox="0 0 24 24"
 		aria-hidden="true"
@@ -112,93 +112,93 @@ const FirefoxIcon = ({ className = '' }: AboutIconProps) => (
 
 const getAddOnLinks = (): AddOnLink[] => [
 	{
-		label: 'WordPress',
-		href: 'https://go.peakurl.org/get-wordpress-plugin',
+		label: "WordPress",
+		href: "https://go.peakurl.org/get-wordpress-plugin",
 		icon: WordPressIcon,
 	},
 	{
-		label: 'Chrome',
-		href: 'https://go.peakurl.org/get-chrome-extension',
+		label: "Chrome",
+		href: "https://go.peakurl.org/get-chrome-extension",
 		icon: ChromeIcon,
 	},
 	{
-		label: 'Firefox',
-		href: 'https://go.peakurl.org/get-firefox-addon',
+		label: "Firefox",
+		href: "https://go.peakurl.org/get-firefox-addon",
 		icon: FirefoxIcon,
 	},
 	{
-		label: 'Docker',
-		href: 'https://go.peakurl.org/docker',
+		label: "Docker",
+		href: "https://go.peakurl.org/docker",
 		icon: DockerIcon,
 	},
 	{
-		label: 'CLI',
-		href: 'https://go.peakurl.org/cli',
+		label: "CLI",
+		href: "https://go.peakurl.org/cli",
 		icon: SquareTerminal,
 	},
 ];
 
 const getLandingMeta = (): Record<LandingSource, LandingMetaEntry> => ({
 	install: {
-		eyebrow: __('Setup Complete'),
-		title: __('PeakURL is ready to use.'),
+		eyebrow: __("Setup Complete"),
+		title: __("PeakURL is ready to use."),
 		description: __(
-			'Your administrator account is active and the dashboard is ready. Use these next steps to finish the initial configuration and start publishing links.'
+			"Your administrator account is active and the dashboard is ready. Use these next steps to finish the initial configuration and start publishing links."
 		),
 		actions: [
 			{
-				label: __('Create your first short link'),
-				to: '/dashboard/links',
+				label: __("Create your first short link"),
+				to: "/dashboard/links",
 			},
 			{
-				label: __('Review general settings'),
-				to: '/dashboard/settings/general',
+				label: __("Review general settings"),
+				to: "/dashboard/settings/general",
 			},
 			{
-				label: __('Connect location data'),
-				to: '/dashboard/settings/location',
+				label: __("Connect location data"),
+				to: "/dashboard/settings/location",
 			},
 		],
 	},
 	update: {
-		eyebrow: __('Update Complete'),
-		title: __('PeakURL has been updated to the latest version.'),
+		eyebrow: __("Update Complete"),
+		title: __("PeakURL has been updated to the latest version."),
 		description: __(
-			'The latest version is now installed. Review the essentials below and confirm services like email delivery, location data, and updates are set the way you expect.'
+			"The latest version is now installed. Review the essentials below and confirm services like email delivery, location data, and updates are set the way you expect."
 		),
 		actions: [
 			{
-				label: __('Check email configuration'),
-				to: '/dashboard/settings/email',
+				label: __("Check email configuration"),
+				to: "/dashboard/settings/email",
 			},
 			{
-				label: __('Verify update status'),
-				to: '/dashboard/settings/updates',
+				label: __("Verify update status"),
+				to: "/dashboard/settings/updates",
 			},
-			{ label: __('Open all links'), to: '/dashboard/links' },
+			{ label: __("Open all links"), to: "/dashboard/links" },
 		],
 	},
 	reinstall: {
-		eyebrow: __('Reinstall Complete'),
-		title: __('PeakURL has been reinstalled.'),
+		eyebrow: __("Reinstall Complete"),
+		title: __("PeakURL has been reinstalled."),
 		description: __(
-			'The latest version has been reinstalled. Review the essentials below and confirm services like email delivery, location data, and updates are set the way you expect.'
+			"The latest version has been reinstalled. Review the essentials below and confirm services like email delivery, location data, and updates are set the way you expect."
 		),
 		actions: [
 			{
-				label: __('Check email configuration'),
-				to: '/dashboard/settings/email',
+				label: __("Check email configuration"),
+				to: "/dashboard/settings/email",
 			},
 			{
-				label: __('Verify update status'),
-				to: '/dashboard/settings/updates',
+				label: __("Verify update status"),
+				to: "/dashboard/settings/updates",
 			},
-			{ label: __('Open all links'), to: '/dashboard/links' },
+			{ label: __("Open all links"), to: "/dashboard/links" },
 		],
 	},
 });
 
-const LANDING_SOURCES: LandingSource[] = ['install', 'update', 'reinstall'];
+const LANDING_SOURCES: LandingSource[] = ["install", "update", "reinstall"];
 
 const isLandingSource = (source: string | null): source is LandingSource =>
 	null !== source && LANDING_SOURCES.includes(source as LandingSource);
@@ -235,44 +235,44 @@ const LandingBanner = ({ source }: LandingBannerProps) => {
 const getFeatures = (): Feature[] => [
 	{
 		icon: Link2,
-		title: __('Branded Short Links'),
+		title: __("Branded Short Links"),
 		description: __(
-			'Create clean short links with custom aliases, generated codes, QR output, and redirect settings that stay easy to manage.'
+			"Create clean short links with custom aliases, generated codes, QR output, and redirect settings that stay easy to manage."
 		),
 	},
 	{
 		icon: BarChart3,
-		title: __('Click Analytics'),
+		title: __("Click Analytics"),
 		description: __(
-			'Review clicks, unique visitors, referrers, device breakdowns, and traffic trends from the same dashboard used to publish links.'
+			"Review clicks, unique visitors, referrers, device breakdowns, and traffic trends from the same dashboard used to publish links."
 		),
 	},
 	{
 		icon: Globe,
-		title: __('Local Location Data'),
+		title: __("Local Location Data"),
 		description: __(
-			'Resolve visitor locations from a local MaxMind GeoLite2 database so analytics stay under your control.'
+			"Resolve visitor locations from a local MaxMind GeoLite2 database so analytics stay under your control."
 		),
 	},
 	{
 		icon: Shield,
-		title: __('Access And Security'),
+		title: __("Access And Security"),
 		description: __(
-			'Run with admin and editor roles, session controls, two-factor authentication, backup codes, and API keys.'
+			"Run with admin and editor roles, session controls, two-factor authentication, backup codes, and API keys."
 		),
 	},
 	{
 		icon: Code,
-		title: __('Operations And Integrations'),
+		title: __("Operations And Integrations"),
 		description: __(
-			'Use API keys, webhooks, import tools, and the built-in updater baseline to operate the service over time.'
+			"Use API keys, webhooks, import tools, and the built-in updater baseline to operate the service over time."
 		),
 	},
 	{
 		icon: Server,
-		title: __('Portable Self-Hosting'),
+		title: __("Portable Self-Hosting"),
 		description: __(
-			'Deploy on your own domain, keep runtime configuration in your own environment, and preserve user-owned content across updates.'
+			"Deploy on your own domain, keep runtime configuration in your own environment, and preserve user-owned content across updates."
 		),
 	},
 ];
@@ -290,31 +290,31 @@ const FeatureCard = ({ icon: Icon, title, description }: Feature) => (
 /* ─── Freedom cards ───────────────────────────────────────── */
 const getFreedoms = (): Freedom[] => [
 	{
-		number: '0',
-		title: __('Use'),
+		number: "0",
+		title: __("Use"),
 		description: __(
-			'Run PeakURL for any purpose, personal projects, business, education, or anything in between.'
+			"Run PeakURL for any purpose, personal projects, business, education, or anything in between."
 		),
 	},
 	{
-		number: '1',
-		title: __('Study'),
+		number: "1",
+		title: __("Study"),
 		description: __(
-			'Explore the source code, understand how it works, and modify it to suit your exact needs.'
+			"Explore the source code, understand how it works, and modify it to suit your exact needs."
 		),
 	},
 	{
-		number: '2',
-		title: __('Share'),
+		number: "2",
+		title: __("Share"),
 		description: __(
-			'Redistribute copies freely so others can benefit from the same powerful link management platform.'
+			"Redistribute copies freely so others can benefit from the same powerful link management platform."
 		),
 	},
 	{
-		number: '3',
-		title: __('Improve'),
+		number: "3",
+		title: __("Improve"),
 		description: __(
-			'Enhance PeakURL and share your improvements, contributing back to the open-source community.'
+			"Enhance PeakURL and share your improvements, contributing back to the open-source community."
 		),
 	},
 ];
@@ -333,7 +333,7 @@ const SystemInfoRow = ({ icon: Icon, label, value }: SystemInfoRowProps) => (
 /* ═══════════════════════════════════════════════════════════ */
 function AboutPage() {
 	const [searchParams] = useSearchParams();
-	const source = searchParams.get('source');
+	const source = searchParams.get("source");
 	const features = getFeatures();
 	const freedoms = getFreedoms();
 	const addOnLinks = getAddOnLinks();
@@ -351,7 +351,7 @@ function AboutPage() {
 							size={14}
 							className="about-page-hero-version-icon"
 						/>
-						{__('Version')} {PEAKURL_VERSION}
+						{__("Version")} {PEAKURL_VERSION}
 					</div>
 
 					<div className="about-page-hero-mark">
@@ -364,11 +364,11 @@ function AboutPage() {
 					</div>
 
 					<h1 className="about-page-hero-title">
-						{sprintf(__('Welcome to %s'), PEAKURL_NAME)}
+						{sprintf(__("Welcome to %s"), PEAKURL_NAME)}
 					</h1>
 					<p className="about-page-hero-summary">
 						{__(
-							'PeakURL gives you a focused workspace for publishing short links, measuring engagement, and running branded link infrastructure on your own stack.'
+							"PeakURL gives you a focused workspace for publishing short links, measuring engagement, and running branded link infrastructure on your own stack."
 						)}
 					</p>
 
@@ -380,7 +380,7 @@ function AboutPage() {
 							className="about-page-hero-link about-page-hero-link-primary"
 						>
 							<BookOpen size={16} />
-							{__('Documentation')}
+							{__("Documentation")}
 						</a>
 						<a
 							href="https://github.com/PeakURL/PeakURL"
@@ -397,7 +397,7 @@ function AboutPage() {
 							>
 								<path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
 							</svg>
-							{__('View on GitHub')}
+							{__("View on GitHub")}
 						</a>
 					</div>
 
@@ -435,7 +435,7 @@ function AboutPage() {
 				<section>
 					<SectionTitle
 						subtitle={__(
-							'Everything you need to publish short links, review traffic, and operate the service from one focused dashboard.'
+							"Everything you need to publish short links, review traffic, and operate the service from one focused dashboard."
 						)}
 					>
 						{__("What's Inside")}
@@ -454,10 +454,10 @@ function AboutPage() {
 				<section>
 					<SectionTitle
 						subtitle={__(
-							'PeakURL is built to stay understandable in day-to-day use and dependable over time.'
+							"PeakURL is built to stay understandable in day-to-day use and dependable over time."
 						)}
 					>
-						{__('Product Principles')}
+						{__("Product Principles")}
 					</SectionTitle>
 
 					<div className="about-page-principles-grid">
@@ -466,11 +466,11 @@ function AboutPage() {
 								<Monitor size={22} className="text-accent" />
 							</div>
 							<h3 className="about-page-principle-title">
-								{__('Clear By Default')}
+								{__("Clear By Default")}
 							</h3>
 							<p className="about-page-principle-copy">
 								{__(
-									'The dashboard should stay direct and readable so routine work like publishing links, reviewing traffic, and managing users does not feel heavy.'
+									"The dashboard should stay direct and readable so routine work like publishing links, reviewing traffic, and managing users does not feel heavy."
 								)}
 							</p>
 						</div>
@@ -479,11 +479,11 @@ function AboutPage() {
 								<Code size={22} className="text-accent" />
 							</div>
 							<h3 className="about-page-principle-title">
-								{__('Portable To Run')}
+								{__("Portable To Run")}
 							</h3>
 							<p className="about-page-principle-copy">
 								{__(
-									'The application should install cleanly on common PHP and MySQL hosting without depending on a managed SaaS control plane.'
+									"The application should install cleanly on common PHP and MySQL hosting without depending on a managed SaaS control plane."
 								)}
 							</p>
 						</div>
@@ -492,11 +492,11 @@ function AboutPage() {
 								<Heart size={22} className="text-accent" />
 							</div>
 							<h3 className="about-page-principle-title">
-								{__('Open And Inspectable')}
+								{__("Open And Inspectable")}
 							</h3>
 							<p className="about-page-principle-copy">
 								{__(
-									'The codebase stays auditable and adaptable so operators can understand what they run, extend it carefully, and keep long-term control.'
+									"The codebase stays auditable and adaptable so operators can understand what they run, extend it carefully, and keep long-term control."
 								)}
 							</p>
 						</div>
@@ -509,10 +509,10 @@ function AboutPage() {
 				<section>
 					<SectionTitle
 						subtitle={__(
-							'PeakURL is released under the MIT License so it can stay practical to adopt, inspect, modify, and distribute.'
+							"PeakURL is released under the MIT License so it can stay practical to adopt, inspect, modify, and distribute."
 						)}
 					>
-						{__('Open Source Terms')}
+						{__("Open Source Terms")}
 					</SectionTitle>
 
 					<div className="about-page-freedoms-grid">
@@ -526,7 +526,7 @@ function AboutPage() {
 								</div>
 								<div className="about-page-freedom-copy">
 									<h3 className="about-page-freedom-title">
-										{__('Freedom to')} {f.title}
+										{__("Freedom to")} {f.title}
 									</h3>
 									<p className="about-page-freedom-description">
 										{f.description}
@@ -540,16 +540,16 @@ function AboutPage() {
 						<div className="about-page-support-layout">
 							<div className="about-page-support-copy">
 								<p className="about-page-support-eyebrow">
-									{__('Support PeakURL')}
+									{__("Support PeakURL")}
 								</p>
 								<h3 className="about-page-support-title">
 									{__(
-										'If PeakURL is useful to you, help keep it practical and actively maintained.'
+										"If PeakURL is useful to you, help keep it practical and actively maintained."
 									)}
 								</h3>
 								<p className="about-page-support-description">
 									{__(
-										'Sponsorships and small contributions help fund releases, documentation, infrastructure, and the maintenance work that keeps the project moving.'
+										"Sponsorships and small contributions help fund releases, documentation, infrastructure, and the maintenance work that keeps the project moving."
 									)}
 								</p>
 							</div>
@@ -561,7 +561,7 @@ function AboutPage() {
 									className="about-page-support-link about-page-support-link-primary"
 								>
 									<Heart size={16} />
-									{__('Sponsor PeakURL')}
+									{__("Sponsor PeakURL")}
 									<ExternalLink size={14} />
 								</a>
 								<a
@@ -571,7 +571,7 @@ function AboutPage() {
 									className="about-page-support-link about-page-support-link-secondary"
 								>
 									<Coffee size={16} />
-									{__('Buy Me a Coffee')}
+									{__("Buy Me a Coffee")}
 									<ExternalLink size={14} />
 								</a>
 							</div>
@@ -585,41 +585,41 @@ function AboutPage() {
 				<section>
 					<SectionTitle
 						subtitle={__(
-							'A quick overview of the installation you are running right now.'
+							"A quick overview of the installation you are running right now."
 						)}
 					>
-						{__('Current Installation')}
+						{__("Current Installation")}
 					</SectionTitle>
 
 					<div className="about-page-installation-card">
 						<SystemInfoRow
 							icon={Sparkles}
-							label={__('Version')}
+							label={__("Version")}
 							value={PEAKURL_VERSION}
 						/>
 						<SystemInfoRow
 							icon={Palette}
-							label={__('Dashboard')}
+							label={__("Dashboard")}
 							value="Vite + React"
 						/>
 						<SystemInfoRow
 							icon={Server}
-							label={__('Runtime')}
+							label={__("Runtime")}
 							value="PHP 7.4+"
 						/>
 						<SystemInfoRow
 							icon={Database}
-							label={__('Database')}
+							label={__("Database")}
 							value="MySQL / MariaDB"
 						/>
 						<SystemInfoRow
 							icon={Lock}
-							label={__('Authentication')}
+							label={__("Authentication")}
 							value="Session + API Key"
 						/>
 						<SystemInfoRow
 							icon={Globe}
-							label={__('GeoIP')}
+							label={__("GeoIP")}
 							value="MaxMind GeoLite2"
 						/>
 					</div>
@@ -634,7 +634,7 @@ function AboutPage() {
 					</div>
 					<p className="about-page-footer-tagline">
 						{__(
-							'Self-hosted link management with clear ownership and a focused dashboard.'
+							"Self-hosted link management with clear ownership and a focused dashboard."
 						)}
 					</p>
 					<div className="about-page-footer-links">
@@ -644,7 +644,7 @@ function AboutPage() {
 							rel="noreferrer"
 							className="about-page-footer-link"
 						>
-							{__('Website')} <ExternalLink size={10} />
+							{__("Website")} <ExternalLink size={10} />
 						</a>
 						<span className="about-page-footer-separator">•</span>
 						<a
@@ -662,7 +662,7 @@ function AboutPage() {
 							rel="noreferrer"
 							className="about-page-footer-link"
 						>
-							{__('Release Notes')} <ExternalLink size={10} />
+							{__("Release Notes")} <ExternalLink size={10} />
 						</a>
 					</div>
 				</section>

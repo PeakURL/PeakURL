@@ -1,4 +1,4 @@
-import baseApi from './base';
+import baseApi from "./base";
 import type {
 	AdminNoticesResponse,
 	ApiDataResponse,
@@ -11,7 +11,7 @@ import type {
 	SystemStatusResponse,
 	UpdateStatusPayload,
 	UpgradeDatabaseResponse,
-} from './types';
+} from "./types";
 
 /**
  * RTK Query endpoints for system configuration, diagnostics, and updates.
@@ -19,16 +19,16 @@ import type {
 export const systemApi = baseApi.injectEndpoints({
 	endpoints: (build) => ({
 		getAdminNotices: build.query<AdminNoticesResponse, void>({
-			query: () => 'system/notices',
-			providesTags: ['AdminNotices'],
+			query: () => "system/notices",
+			providesTags: ["AdminNotices"],
 		}),
 		getGeneralSettings: build.query<ApiDataResponse<SiteSettings>, void>({
-			query: () => 'system/general',
-			providesTags: ['GeneralSettings'],
+			query: () => "system/general",
+			providesTags: ["GeneralSettings"],
 		}),
 		getSystemStatus: build.query<SystemStatusResponse, void>({
-			query: () => 'system/status',
-			providesTags: ['SystemStatus'],
+			query: () => "system/status",
+			providesTags: ["SystemStatus"],
 		}),
 		saveGeneralSettings: build.mutation<
 			ApiDataResponse<SiteSettings>,
@@ -37,109 +37,114 @@ export const systemApi = baseApi.injectEndpoints({
 			query: ({ siteName, siteLanguage, faviconFile, removeFavicon }) => {
 				if (faviconFile || removeFavicon) {
 					const formData = new FormData();
-					formData.append('siteName', siteName || '');
-					formData.append('siteLanguage', siteLanguage);
+					formData.append("siteName", siteName || "");
+					formData.append("siteLanguage", siteLanguage);
 
 					if (faviconFile) {
-						formData.append('favicon', faviconFile);
+						formData.append("favicon", faviconFile);
 					}
 
 					if (removeFavicon) {
-						formData.append('removeFavicon', '1');
+						formData.append("removeFavicon", "1");
 					}
 
 					return {
-						url: 'system/general',
-						method: 'POST',
+						url: "system/general",
+						method: "POST",
 						body: formData,
 					};
 				}
 
 				return {
-					url: 'system/general',
-					method: 'POST',
+					url: "system/general",
+					method: "POST",
 					body: {
 						siteName,
 						siteLanguage,
 					},
 				};
 			},
-			invalidatesTags: ['GeneralSettings'],
+			invalidatesTags: ["GeneralSettings"],
 		}),
 		getGeoipStatus: build.query<ApiDataResponse<LocationDataStatus>, void>({
-			query: () => 'system/geoip',
-			providesTags: ['Geoip'],
+			query: () => "system/geoip",
+			providesTags: ["Geoip"],
 		}),
 		getMailStatus: build.query<ApiDataResponse<EmailStatus>, void>({
-			query: () => 'system/mail',
-			providesTags: ['Mail'],
+			query: () => "system/mail",
+			providesTags: ["Mail"],
 		}),
 		saveGeoipConfiguration: build.mutation<
 			ApiDataResponse<LocationDataStatus>,
 			GeoipConfigurationPayload
 		>({
 			query: (body) => ({
-				url: 'system/geoip',
-				method: 'POST',
+				url: "system/geoip",
+				method: "POST",
 				body,
 			}),
-			invalidatesTags: ['Geoip', 'AdminNotices'],
+			invalidatesTags: ["Geoip", "AdminNotices"],
 		}),
 		saveMailConfiguration: build.mutation<
 			ApiDataResponse<EmailStatus>,
 			MailConfigurationPayload
 		>({
 			query: (body) => ({
-				url: 'system/mail',
-				method: 'POST',
+				url: "system/mail",
+				method: "POST",
 				body,
 			}),
-			invalidatesTags: ['Mail'],
+			invalidatesTags: ["Mail"],
 		}),
 		downloadGeoipDatabase: build.mutation<void, void>({
 			query: () => ({
-				url: 'system/geoip/download',
-				method: 'POST',
+				url: "system/geoip/download",
+				method: "POST",
 			}),
-			invalidatesTags: ['Geoip', 'AdminNotices'],
+			invalidatesTags: ["Geoip", "AdminNotices"],
 		}),
-		getUpdateStatus: build.query<ApiDataResponse<UpdateStatusPayload>, void>({
-			query: () => 'system/update',
-			providesTags: ['Updates'],
+		getUpdateStatus: build.query<
+			ApiDataResponse<UpdateStatusPayload>,
+			void
+		>({
+			query: () => "system/update",
+			providesTags: ["Updates"],
 		}),
 		checkForUpdates: build.mutation<
 			ApiDataResponse<UpdateStatusPayload>,
 			void
 		>({
 			query: () => ({
-				url: 'system/update/check',
-				method: 'POST',
+				url: "system/update/check",
+				method: "POST",
 			}),
-			invalidatesTags: ['Updates', 'AdminNotices'],
+			invalidatesTags: ["Updates", "AdminNotices"],
 		}),
-		applyUpdate: build.mutation<ApiDataResponse<UpdateStatusPayload>, void>({
-			query: () => ({
-				url: 'system/update/apply',
-				method: 'POST',
-			}),
-			invalidatesTags: ['Updates', 'AdminNotices'],
-		}),
+		applyUpdate: build.mutation<ApiDataResponse<UpdateStatusPayload>, void>(
+			{
+				query: () => ({
+					url: "system/update/apply",
+					method: "POST",
+				}),
+				invalidatesTags: ["Updates", "AdminNotices"],
+			}
+		),
 		reinstallUpdate: build.mutation<
 			ApiDataResponse<UpdateStatusPayload>,
 			void
 		>({
 			query: () => ({
-				url: 'system/update/reinstall',
-				method: 'POST',
+				url: "system/update/reinstall",
+				method: "POST",
 			}),
-			invalidatesTags: ['Updates', 'AdminNotices'],
+			invalidatesTags: ["Updates", "AdminNotices"],
 		}),
 		upgradeDatabaseSchema: build.mutation<UpgradeDatabaseResponse, void>({
 			query: () => ({
-				url: 'system/update/database',
-				method: 'POST',
+				url: "system/update/database",
+				method: "POST",
 			}),
-			invalidatesTags: ['Updates', 'AdminNotices', 'SystemStatus'],
+			invalidatesTags: ["Updates", "AdminNotices", "SystemStatus"],
 		}),
 	}),
 });

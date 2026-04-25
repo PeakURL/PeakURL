@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 import {
 	ArrowLeft,
 	ArrowRight,
@@ -9,12 +9,12 @@ import {
 	User,
 	Wrench,
 	X,
-} from 'lucide-react';
-import { useDashboardSearch } from '@/hooks';
-import { getDocumentDirection, isDocumentRtl } from '@/i18n/direction';
-import { __, sprintf } from '@/i18n';
-import { cn } from '@/utils';
-import type { ResultButtonProps, ResultSectionProps } from '../types';
+} from "lucide-react";
+import { useDashboardSearch } from "@/hooks";
+import { getDocumentDirection, isDocumentRtl } from "@/i18n/direction";
+import { __, sprintf } from "@/i18n";
+import { cn } from "@/utils";
+import type { ResultButtonProps, ResultSectionProps } from "../types";
 
 function ResultButton({
 	icon: Icon,
@@ -37,18 +37,14 @@ function ResultButton({
 				<Icon size={16} />
 			</div>
 			<div className="dashboard-search-result-content">
-				<p className="dashboard-search-result-title">
-					{title}
-				</p>
+				<p className="dashboard-search-result-title">{title}</p>
 				{description ? (
 					<p className="dashboard-search-result-description">
 						{description}
 					</p>
 				) : null}
 				{meta ? (
-					<p className="dashboard-search-result-meta">
-						{meta}
-					</p>
+					<p className="dashboard-search-result-meta">{meta}</p>
 				) : null}
 			</div>
 			<DirectionArrow
@@ -100,15 +96,15 @@ export const Search = () => {
 			}
 		};
 
-		document.addEventListener('pointerdown', handlePointerDown);
+		document.addEventListener("pointerdown", handlePointerDown);
 
 		return () => {
-			document.removeEventListener('pointerdown', handlePointerDown);
+			document.removeEventListener("pointerdown", handlePointerDown);
 		};
 	}, [clearSearch]);
 
-	const toolMatches = routeMatches.filter((item) => item.section === 'tools');
-	const pageMatches = routeMatches.filter((item) => item.section !== 'tools');
+	const toolMatches = routeMatches.filter((item) => item.section === "tools");
+	const pageMatches = routeMatches.filter((item) => item.section !== "tools");
 	const hasResults =
 		pageMatches.length > 0 ||
 		toolMatches.length > 0 ||
@@ -116,8 +112,8 @@ export const Search = () => {
 		linkMatches.length > 0;
 	const getSectionWrapperClassName = (isSpaced: boolean) =>
 		cn(
-			'dashboard-search-section-wrapper',
-			isSpaced && 'dashboard-search-section-wrapper-spaced'
+			"dashboard-search-section-wrapper",
+			isSpaced && "dashboard-search-section-wrapper-spaced"
 		);
 	const hasFooterBorder =
 		pageMatches.length > 0 ||
@@ -135,19 +131,19 @@ export const Search = () => {
 					/>
 					<input
 						type="text"
-						dir={query ? 'auto' : direction}
+						dir={query ? "auto" : direction}
 						value={query}
 						onFocus={handleFocus}
 						onChange={(event) => handleChange(event.target.value)}
 						onKeyDown={(event) => {
-							if ('Escape' === event.key) {
+							if ("Escape" === event.key) {
 								clearSearch({
 									resetLinksSearch: false,
 								});
 							}
 						}}
-						placeholder={__('Search links, settings...')}
-						aria-label={__('Search the dashboard')}
+						placeholder={__("Search links, settings...")}
+						aria-label={__("Search the dashboard")}
 						className="dashboard-search-input"
 					/>
 					{query ? (
@@ -159,7 +155,7 @@ export const Search = () => {
 								})
 							}
 							className="dashboard-search-clear"
-							aria-label={__('Clear search')}
+							aria-label={__("Clear search")}
 						>
 							<X size={15} />
 						</button>
@@ -171,7 +167,7 @@ export const Search = () => {
 				<div className="dashboard-search-panel">
 					<div className="dashboard-search-panel-body">
 						{pageMatches.length > 0 ? (
-							<ResultSection title={__('Pages')}>
+							<ResultSection title={__("Pages")}>
 								{pageMatches.map((item) => (
 									<ResultButton
 										key={item.id}
@@ -190,7 +186,7 @@ export const Search = () => {
 									pageMatches.length > 0
 								)}
 							>
-								<ResultSection title={__('Tools')}>
+								<ResultSection title={__("Tools")}>
 									{toolMatches.map((item) => (
 										<ResultButton
 											key={item.id}
@@ -213,14 +209,14 @@ export const Search = () => {
 										toolMatches.length > 0
 								)}
 							>
-								<ResultSection title={__('Users')}>
+								<ResultSection title={__("Users")}>
 									{isFetchingUsers ? (
 										<div className="dashboard-search-status">
 											<LoaderCircle
 												size={16}
 												className="dashboard-search-status-icon"
 											/>
-											{__('Searching users...')}
+											{__("Searching users...")}
 										</div>
 									) : userMatches.length > 0 ? (
 										userMatches.map((item) => (
@@ -237,7 +233,7 @@ export const Search = () => {
 										))
 									) : (
 										<p className="dashboard-search-empty">
-											{__('No matching users found.')}
+											{__("No matching users found.")}
 										</p>
 									)}
 								</ResultSection>
@@ -252,14 +248,14 @@ export const Search = () => {
 										userMatches.length > 0
 								)}
 							>
-								<ResultSection title={__('Links')}>
+								<ResultSection title={__("Links")}>
 									{isFetchingLinks ? (
 										<div className="dashboard-search-status">
 											<LoaderCircle
 												size={16}
 												className="dashboard-search-status-icon"
 											/>
-											{__('Searching links...')}
+											{__("Searching links...")}
 										</div>
 									) : linkMatches.length > 0 ? (
 										linkMatches.map((item) => (
@@ -276,7 +272,7 @@ export const Search = () => {
 										))
 									) : (
 										<p className="dashboard-search-empty">
-											{__('No matching links found.')}
+											{__("No matching links found.")}
 										</p>
 									)}
 								</ResultSection>
@@ -285,9 +281,9 @@ export const Search = () => {
 
 						<div
 							className={cn(
-								'dashboard-search-footer',
+								"dashboard-search-footer",
 								hasFooterBorder &&
-									'dashboard-search-footer-bordered'
+									"dashboard-search-footer-bordered"
 							)}
 						>
 							<ResultButton
@@ -297,7 +293,7 @@ export const Search = () => {
 									query.trim()
 								)}
 								description={__(
-									'Open the links page with this search applied'
+									"Open the links page with this search applied"
 								)}
 								onClick={() => handleSelect(allLinksHref)}
 							/>
@@ -306,7 +302,7 @@ export const Search = () => {
 						{!hasResults && query.trim().length < 2 ? (
 							<p className="dashboard-search-helper">
 								{__(
-									'Keep typing to search links, or jump straight to a dashboard page.'
+									"Keep typing to search links, or jump straight to a dashboard page."
 								)}
 							</p>
 						) : null}

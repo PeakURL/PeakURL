@@ -1,4 +1,4 @@
-import type { NotificationContextValue } from '@/components';
+import type { NotificationContextValue } from "@/components";
 
 /**
  * Webhook event option shown in the integrations form.
@@ -58,5 +58,5 @@ export interface CreatedWebhook extends WebhookSummary {
  */
 export interface IntegrationsTabProps {
 	/** Notification helpers injected by the settings shell. */
-	notification?: Pick<NotificationContextValue, 'error' | 'success'> | null;
+	notification?: Pick<NotificationContextValue, "error" | "success"> | null;
 }

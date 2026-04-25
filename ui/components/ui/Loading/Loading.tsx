@@ -1,6 +1,6 @@
-import { Loader2, Zap } from 'lucide-react';
-import { __ } from '@/i18n';
-import { cn } from '@/utils';
+import { Loader2, Zap } from "lucide-react";
+import { __ } from "@/i18n";
+import { cn } from "@/utils";
 import type {
 	InlineLoaderProps,
 	LoadingSize,
@@ -12,7 +12,7 @@ import type {
 	PulseDotSize,
 	SkeletonLoaderProps,
 	TableRowSkeletonProps,
-} from '../types';
+} from "../types";
 export type {
 	InlineLoaderProps,
 	LoadingSize,
@@ -24,7 +24,7 @@ export type {
 	PulseDotSize,
 	SkeletonLoaderProps,
 	TableRowSkeletonProps,
-} from '../types';
+} from "../types";
 
 /**
  * Modern Loading Spinner
@@ -33,8 +33,8 @@ export type {
  * @param {string} [props.className=''] - Additional class names
  */
 export function LoadingSpinner({
-	size = 'md',
-	className = '',
+	size = "md",
+	className = "",
 }: LoadingSpinnerProps) {
 	const sizes: Record<LoadingSize, number> = {
 		xs: 12,
@@ -45,7 +45,7 @@ export function LoadingSpinner({
 	};
 
 	return (
-		<div className={cn('loading-spinner', className)}>
+		<div className={cn("loading-spinner", className)}>
 			<Loader2 size={sizes[size]} className="loading-spinner-icon" />
 		</div>
 	);
@@ -66,9 +66,7 @@ export function PageLoader() {
 						<Zap size={24} />
 					</div>
 				</div>
-				<p className="page-loader-label">
-					{__('Loading…')}
-				</p>
+				<p className="page-loader-label">{__("Loading…")}</p>
 			</div>
 		</div>
 	);
@@ -81,15 +79,10 @@ export function PageLoader() {
  * @param {string} [props.className=''] - Additional class names
  */
 export function SkeletonLoader({
-	className = '',
+	className = "",
 	...props
 }: SkeletonLoaderProps) {
-	return (
-		<div
-			className={cn('skeleton-loader', className)}
-			{...props}
-		/>
-	);
+	return <div className={cn("skeleton-loader", className)} {...props} />;
 }
 
 /**
@@ -139,33 +132,33 @@ export function TableRowSkeleton({ columns = 4 }: TableRowSkeletonProps) {
  * @param {boolean} [props.animated=true] - Whether to show the pulsing animation
  */
 export function PulseDot({
-	color = 'green',
-	size = 'sm',
+	color = "green",
+	size = "sm",
 	animated = true,
 }: PulseDotProps) {
 	const colors: Record<PulseDotColor, string> = {
-		green: 'pulse-dot-color-green',
-		red: 'pulse-dot-color-red',
-		yellow: 'pulse-dot-color-yellow',
-		blue: 'pulse-dot-color-blue',
-		purple: 'pulse-dot-color-purple',
+		green: "pulse-dot-color-green",
+		red: "pulse-dot-color-red",
+		yellow: "pulse-dot-color-yellow",
+		blue: "pulse-dot-color-blue",
+		purple: "pulse-dot-color-purple",
 	};
 
 	const sizes: Record<PulseDotSize, string> = {
-		xs: 'pulse-dot-size-xs',
-		sm: 'pulse-dot-size-sm',
-		md: 'pulse-dot-size-md',
-		lg: 'pulse-dot-size-lg',
+		xs: "pulse-dot-size-xs",
+		sm: "pulse-dot-size-sm",
+		md: "pulse-dot-size-md",
+		lg: "pulse-dot-size-lg",
 	};
 
 	return (
 		<span className="pulse-dot">
 			<span
-				className={cn('pulse-dot-core', sizes[size], colors[color])}
+				className={cn("pulse-dot-core", sizes[size], colors[color])}
 			></span>
 			{animated && (
 				<span
-					className={cn('pulse-dot-ping', sizes[size], colors[color])}
+					className={cn("pulse-dot-ping", sizes[size], colors[color])}
 				></span>
 			)}
 		</span>
@@ -183,17 +176,17 @@ export function PulseDot({
  */
 export function ProgressBar({
 	progress = 0,
-	color = 'blue',
-	className = '',
+	color = "blue",
+	className = "",
 	showLabel = false,
 }: ProgressBarProps) {
 	const colors: Record<ProgressColor, string> = {
-		blue: 'progress-bar-fill-blue',
-		green: 'progress-bar-fill-green',
-		red: 'progress-bar-fill-red',
-		yellow: 'progress-bar-fill-yellow',
-		purple: 'progress-bar-fill-purple',
-		accent: 'progress-bar-fill-accent',
+		blue: "progress-bar-fill-blue",
+		green: "progress-bar-fill-green",
+		red: "progress-bar-fill-red",
+		yellow: "progress-bar-fill-yellow",
+		purple: "progress-bar-fill-purple",
+		accent: "progress-bar-fill-accent",
 	};
 
 	const normalizedProgress = Math.min(100, Math.max(0, progress));
@@ -202,14 +195,12 @@ export function ProgressBar({
 		<div className={className}>
 			<div className="progress-bar-track">
 				<div
-					className={cn('progress-bar-fill', colors[color])}
+					className={cn("progress-bar-fill", colors[color])}
 					style={{ width: `${normalizedProgress}%` }}
 				></div>
 			</div>
 			{showLabel && (
-				<div className="progress-bar-label">
-					{normalizedProgress}%
-				</div>
+				<div className="progress-bar-label">{normalizedProgress}%</div>
 			)}
 		</div>
 	);
@@ -221,6 +212,6 @@ export function ProgressBar({
  * @param {Object} props
  * @param {string} [props.className=''] - Additional class names
  */
-export function InlineLoader({ className = '' }: InlineLoaderProps) {
-	return <Loader2 size={16} className={cn('inline-loader', className)} />;
+export function InlineLoader({ className = "" }: InlineLoaderProps) {
+	return <Loader2 size={16} className={cn("inline-loader", className)} />;
 }

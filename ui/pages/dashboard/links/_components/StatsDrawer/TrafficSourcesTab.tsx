@@ -12,9 +12,9 @@ import {
 	Globe,
 	MousePointerClick,
 	TrendingUp,
-} from 'lucide-react';
-import DeviceStats from './DeviceStats';
-import { __ } from '@/i18n';
+} from "lucide-react";
+import DeviceStats from "./DeviceStats";
+import { __ } from "@/i18n";
 import type {
 	LinkStatsViewProps,
 	ReferrerCategoryItem,
@@ -22,7 +22,7 @@ import type {
 	StatsMetricItem,
 	TrafficCategory,
 	UtmCampaignItem,
-} from './types';
+} from "./types";
 
 // Map category to icon and color
 const getCategoryInfo = (category: string) => {
@@ -30,86 +30,86 @@ const getCategoryInfo = (category: string) => {
 		TrafficCategory,
 		{ icon: typeof Globe; color: string; bg: string }
 	> = {
-		'Search Engine': {
+		"Search Engine": {
 			icon: Search,
-			color: 'text-blue-500',
-			bg: 'bg-blue-500/10',
+			color: "text-blue-500",
+			bg: "bg-blue-500/10",
 		},
-		'Social Media': {
+		"Social Media": {
 			icon: Share2,
-			color: 'text-pink-500',
-			bg: 'bg-pink-500/10',
+			color: "text-pink-500",
+			bg: "bg-pink-500/10",
 		},
 		Messaging: {
 			icon: MessageCircle,
-			color: 'text-green-500',
-			bg: 'bg-green-500/10',
+			color: "text-green-500",
+			bg: "bg-green-500/10",
 		},
-		Video: { icon: Video, color: 'text-red-500', bg: 'bg-red-500/10' },
-		'News & Content': {
+		Video: { icon: Video, color: "text-red-500", bg: "bg-red-500/10" },
+		"News & Content": {
 			icon: Newspaper,
-			color: 'text-orange-500',
-			bg: 'bg-orange-500/10',
+			color: "text-orange-500",
+			bg: "bg-orange-500/10",
 		},
-		Developer: { icon: Code, color: 'text-gray-500', bg: 'bg-gray-500/10' },
-		Email: { icon: Mail, color: 'text-yellow-500', bg: 'bg-yellow-500/10' },
-		'Email Marketing': {
+		Developer: { icon: Code, color: "text-gray-500", bg: "bg-gray-500/10" },
+		Email: { icon: Mail, color: "text-yellow-500", bg: "bg-yellow-500/10" },
+		"Email Marketing": {
 			icon: Mail,
-			color: 'text-yellow-600',
-			bg: 'bg-yellow-600/10',
+			color: "text-yellow-600",
+			bg: "bg-yellow-600/10",
 		},
 		Shopping: {
 			icon: ShoppingBag,
-			color: 'text-emerald-500',
-			bg: 'bg-emerald-500/10',
+			color: "text-emerald-500",
+			bg: "bg-emerald-500/10",
 		},
 		AI: {
 			icon: Sparkles,
-			color: 'text-purple-500',
-			bg: 'bg-purple-500/10',
+			color: "text-purple-500",
+			bg: "bg-purple-500/10",
 		},
 		Productivity: {
 			icon: TrendingUp,
-			color: 'text-indigo-500',
-			bg: 'bg-indigo-500/10',
+			color: "text-indigo-500",
+			bg: "bg-indigo-500/10",
 		},
-		Website: { icon: Globe, color: 'text-cyan-500', bg: 'bg-cyan-500/10' },
+		Website: { icon: Globe, color: "text-cyan-500", bg: "bg-cyan-500/10" },
 		Direct: {
 			icon: MousePointerClick,
-			color: 'text-accent',
-			bg: 'bg-accent/10',
+			color: "text-accent",
+			bg: "bg-accent/10",
 		},
-		Unknown: { icon: Globe, color: 'text-text-muted', bg: 'bg-surface' },
+		Unknown: { icon: Globe, color: "text-text-muted", bg: "bg-surface" },
 	};
 
 	return (
-		categoryMap[(category as TrafficCategory) || 'Unknown'] ||
+		categoryMap[(category as TrafficCategory) || "Unknown"] ||
 		categoryMap.Unknown
 	);
 };
 
 const getCategoryLabel = (category: string) => {
 	const labels: Record<TrafficCategory, string> = {
-		'Search Engine': __('Search Engine'),
-		'Social Media': __('Social Media'),
-		Messaging: __('Messaging'),
-		Video: __('Video'),
-		'News & Content': __('News & Content'),
-		Developer: __('Developer'),
-		Email: __('Email'),
-		'Email Marketing': __('Email Marketing'),
-		Shopping: __('Shopping'),
-		AI: __('AI'),
-		Productivity: __('Productivity'),
-		Website: __('Website'),
-		Direct: __('Direct'),
-		Unknown: __('Unknown'),
+		"Search Engine": __("Search Engine"),
+		"Social Media": __("Social Media"),
+		Messaging: __("Messaging"),
+		Video: __("Video"),
+		"News & Content": __("News & Content"),
+		Developer: __("Developer"),
+		Email: __("Email"),
+		"Email Marketing": __("Email Marketing"),
+		Shopping: __("Shopping"),
+		AI: __("AI"),
+		Productivity: __("Productivity"),
+		Website: __("Website"),
+		Direct: __("Direct"),
+		Unknown: __("Unknown"),
 	};
 
 	return (
-		labels[(category as TrafficCategory) || 'Unknown'] ||
+		labels[(category as TrafficCategory) || "Unknown"] ||
 		category ||
-		__('Unknown')
+		__("Unknown")
 	);
 };
 
@@ -146,7 +146,7 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 			{referrerCategories.length > 0 && (
 				<div className="links-drawer-section">
 					<h3 className="links-drawer-section-title mb-4">
-						{__('Traffic by Category')}
+						{__("Traffic by Category")}
 					</h3>
 					<div className="links-sources-category-grid">
 						{referrerCategories.map(
@@ -180,7 +180,7 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 												{getCategoryLabel(cat.category)}
 											</p>
 											<p className="text-xs text-text-muted">
-												{cat.count} {__('clicks')} (
+												{cat.count} {__("clicks")} (
 												{percentage}%)
 											</p>
 										</div>
@@ -195,19 +195,19 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 			{/* Detailed Referrer Data */}
 			<div className="links-drawer-section">
 				<h3 className="links-drawer-section-title mb-4">
-					{__('Referrer Sources')}
+					{__("Referrer Sources")}
 				</h3>
 				{isLoading ? (
 					<div className="links-drawer-empty-panel links-drawer-empty-panel-large animate-pulse">
 						<p className="links-drawer-empty-copy">
-							{__('Loading referrers...')}
+							{__("Loading referrers...")}
 						</p>
 					</div>
 				) : referrers.length > 0 ? (
 					<div className="links-sources-referrer-list">
 						{referrers.map((ref: ReferrerItem, index: number) => {
 							const categoryInfo = getCategoryInfo(
-								ref.category || 'Unknown'
+								ref.category || "Unknown"
 							);
 							const Icon = categoryInfo.icon;
 							const percentage =
@@ -233,7 +233,7 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 										<div className="links-sources-referrer-copy">
 											<p className="text-sm font-medium text-heading truncate">
 												{ref.name ||
-													__('Direct / Unknown')}
+													__("Direct / Unknown")}
 											</p>
 											{ref.domain &&
 												ref.domain !==
@@ -248,8 +248,8 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 										<div className="links-sources-referrer-bar">
 											<div
 												className={`h-full ${categoryInfo.bg.replace(
-													'/10',
-													'/40'
+													"/10",
+													"/40"
 												)} rounded-full`}
 												style={{
 													width: `${percentage}%`,
@@ -261,7 +261,7 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 												{ref.count}
 											</span>
 											<span className="hidden text-xs text-text-muted sm:inline">
-												{' '}
+												{" "}
 												({percentage}%)
 											</span>
 										</div>
@@ -275,11 +275,11 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 						<div className="text-center">
 							<ExternalLink className="links-drawer-empty-icon" />
 							<p className="links-drawer-empty-copy">
-								{__('No referrer data available yet')}
+								{__("No referrer data available yet")}
 							</p>
 							<p className="mt-1 text-xs text-text-muted">
 								{__(
-									'Referrer data will appear when visitors come from external sources'
+									"Referrer data will appear when visitors come from external sources"
 								)}
 							</p>
 						</div>
@@ -291,7 +291,7 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 			{utmCampaigns && utmCampaigns.length > 0 && (
 				<div className="links-drawer-section">
 					<h3 className="links-drawer-section-title mb-4">
-						{__('UTM Campaign Tracking')}
+						{__("UTM Campaign Tracking")}
 					</h3>
 					<div className="links-sources-utm-list">
 						{utmCampaigns.map(
@@ -307,20 +307,20 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 										<div className="links-sources-utm-tags">
 											{campaign.source && (
 												<span className="links-sources-utm-tag">
-													{__('source:')}{' '}
+													{__("source:")}{" "}
 													{campaign.source}
 												</span>
 											)}
 											{campaign.medium && (
 												<span className="links-sources-utm-tag">
-													{__('medium:')}{' '}
+													{__("medium:")}{" "}
 													{campaign.medium}
 												</span>
 											)}
 										</div>
 									</div>
 									<span className="text-sm font-medium text-heading shrink-0">
-										{campaign.count} {__('clicks')}
+										{campaign.count} {__("clicks")}
 									</span>
 								</div>
 							)

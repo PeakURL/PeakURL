@@ -1,10 +1,10 @@
-import { __ } from '@/i18n';
-import { cn } from '@/utils';
+import { __ } from "@/i18n";
+import { cn } from "@/utils";
 import type {
 	DeviceBreakdownProps,
 	DeviceColorKey,
 	MetricItem,
-} from '../types';
+} from "../types";
 
 const DeviceBreakdown = ({ deviceData }: DeviceBreakdownProps) => {
 	// Calculate total for percentage
@@ -18,9 +18,9 @@ const DeviceBreakdown = ({ deviceData }: DeviceBreakdownProps) => {
 	);
 
 	const deviceColors: Record<DeviceColorKey, string> = {
-		mobile: 'mobile',
-		desktop: 'desktop',
-		tablet: 'tablet',
+		mobile: "mobile",
+		desktop: "desktop",
+		tablet: "tablet",
 	};
 
 	const noData =
@@ -44,23 +44,23 @@ const DeviceBreakdown = ({ deviceData }: DeviceBreakdownProps) => {
 					color:
 						deviceColors[
 							device.name.toLowerCase() as DeviceColorKey
-						] || 'default',
+						] || "default",
 				}))
 			: [];
 
 	const getDeviceBarClassName = (color: string) =>
-		cn('dashboard-devices-item-bar', `dashboard-devices-item-bar-${color}`);
+		cn("dashboard-devices-item-bar", `dashboard-devices-item-bar-${color}`);
 
 	return (
 		<div className="dashboard-devices">
 			<h3 className="dashboard-devices-title">
-				{__('Device Breakdown')}
+				{__("Device Breakdown")}
 			</h3>
 
 			{noData ? (
 				<div className="dashboard-devices-empty">
 					<p className="dashboard-devices-empty-text">
-						{__('No device data available')}
+						{__("No device data available")}
 					</p>
 				</div>
 			) : (
@@ -92,7 +92,7 @@ const DeviceBreakdown = ({ deviceData }: DeviceBreakdownProps) => {
 					{browsers.length > 0 && (
 						<div className="dashboard-devices-section">
 							<h4 className="dashboard-devices-section-title">
-								{__('Top Browsers')}
+								{__("Top Browsers")}
 							</h4>
 
 							<div className="dashboard-devices-section-list">
@@ -123,7 +123,7 @@ const DeviceBreakdown = ({ deviceData }: DeviceBreakdownProps) => {
 					{operatingSystems.length > 0 && (
 						<div className="dashboard-devices-section">
 							<h4 className="dashboard-devices-section-title">
-								{__('Top Operating Systems')}
+								{__("Top Operating Systems")}
 							</h4>
 
 							<div className="dashboard-devices-section-list">

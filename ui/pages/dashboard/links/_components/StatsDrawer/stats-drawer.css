@@ -85,7 +85,7 @@
 		@apply flex justify-end gap-3;
 	}
 
-	html[dir='rtl'] .links-drawer-footer-actions {
+	html[dir="rtl"] .links-drawer-footer-actions {
 		@apply justify-start;
 	}
 

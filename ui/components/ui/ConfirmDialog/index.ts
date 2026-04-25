@@ -1,2 +1,2 @@
-export * from './ConfirmDialog';
-export { default } from './ConfirmDialog';
+export * from "./ConfirmDialog";
+export { default } from "./ConfirmDialog";

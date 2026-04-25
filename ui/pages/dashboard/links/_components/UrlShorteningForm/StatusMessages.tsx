@@ -1,5 +1,5 @@
-import { CircleAlert, CircleCheckBig } from 'lucide-react';
-import type { StatusMessagesProps } from '../types';
+import { CircleAlert, CircleCheckBig } from "lucide-react";
+import type { StatusMessagesProps } from "../types";
 
 const StatusMessages = ({ error, success }: StatusMessagesProps) => {
 	if (!error && !success) return null;

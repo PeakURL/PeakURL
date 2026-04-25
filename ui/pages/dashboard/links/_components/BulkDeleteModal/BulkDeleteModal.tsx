@@ -1,11 +1,11 @@
-import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
-import { X, Trash2, AlertTriangle } from 'lucide-react';
-import { useState } from 'react';
-import { useBulkDeleteUrlMutation } from '@/store/slices/api';
-import { __, sprintf } from '@/i18n';
-import { getDocumentDirection } from '@/i18n/direction';
-import { getErrorMessage } from '@/utils';
-import type { BulkDeleteModalProps } from '../types';
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { X, Trash2, AlertTriangle } from "lucide-react";
+import { useState } from "react";
+import { useBulkDeleteUrlMutation } from "@/store/slices/api";
+import { __, sprintf } from "@/i18n";
+import { getDocumentDirection } from "@/i18n/direction";
+import { getErrorMessage } from "@/utils";
+import type { BulkDeleteModalProps } from "../types";
 
 function BulkDeleteModal({
 	open,
@@ -14,18 +14,18 @@ function BulkDeleteModal({
 	onSuccess,
 }: BulkDeleteModalProps) {
 	const direction = getDocumentDirection();
-	const [error, setError] = useState('');
+	const [error, setError] = useState("");
 	const [bulkDeleteUrl, { isLoading }] = useBulkDeleteUrlMutation();
 
 	const handleDelete = async () => {
-		setError('');
+		setError("");
 
 		try {
 			await bulkDeleteUrl(selectedIds).unwrap();
 			setOpen(false);
 			if (onSuccess) onSuccess();
 		} catch (err) {
-			setError(getErrorMessage(err, __('Failed to delete links')));
+			setError(getErrorMessage(err, __("Failed to delete links")));
 		}
 	};
 
@@ -46,7 +46,7 @@ function BulkDeleteModal({
 							<div className="links-modal-title-icon links-bulk-delete-modal-title-icon">
 								<AlertTriangle className="links-bulk-delete-modal-title-icon-svg" />
 							</div>
-							{__('Delete Links')}
+							{__("Delete Links")}
 						</DialogTitle>
 						<button
 							onClick={() => setOpen(false)}
@@ -69,7 +69,7 @@ function BulkDeleteModal({
 						<p className="links-bulk-delete-modal-copy">
 							{sprintf(
 								__(
-									'Are you sure you want to delete %s selected link(s)? This action cannot be undone.'
+									"Are you sure you want to delete %s selected link(s)? This action cannot be undone."
 								),
 								String(selectedIds.length)
 							)}
@@ -83,7 +83,7 @@ function BulkDeleteModal({
 								disabled={isLoading}
 								className="links-modal-button links-modal-button-secondary"
 							>
-								{__('Cancel')}
+								{__("Cancel")}
 							</button>
 							<button
 								onClick={handleDelete}
@@ -93,13 +93,13 @@ function BulkDeleteModal({
 								{isLoading ? (
 									<span className="links-modal-button-content">
 										<div className="links-modal-spinner"></div>
-										{__('Deleting...')}
+										{__("Deleting...")}
 									</span>
 								) : (
 									<span className="links-modal-button-content">
 										<Trash2 className="links-modal-button-icon" />
 										{sprintf(
-											__('Delete (%s)'),
+											__("Delete (%s)"),
 											String(selectedIds.length)
 										)}
 									</span>

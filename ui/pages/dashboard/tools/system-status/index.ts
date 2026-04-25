@@ -1,1 +1,1 @@
-export { default as SystemStatusPage } from './SystemStatusPage';
+export { default as SystemStatusPage } from "./SystemStatusPage";

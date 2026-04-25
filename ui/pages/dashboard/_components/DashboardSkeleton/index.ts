@@ -1,2 +1,2 @@
-export * from './DashboardSkeleton';
-export { default } from './DashboardSkeleton';
+export * from "./DashboardSkeleton";
+export { default } from "./DashboardSkeleton";

@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
-import { cn } from '@/utils';
-import type { ImportTab, TabsProps } from '../types';
+import { Link } from "react-router-dom";
+import { cn } from "@/utils";
+import type { ImportTab, TabsProps } from "../types";
 
 const Tabs = ({ tabs, activeTab }: TabsProps) => {
 	return (
@@ -13,8 +13,8 @@ const Tabs = ({ tabs, activeTab }: TabsProps) => {
 						key={tab.id}
 						to={`/dashboard/tools/import/${tab.id}`}
 						className={cn(
-							'import-layout-tab',
-							activeTab === tab.id && 'import-layout-tab-active'
+							"import-layout-tab",
+							activeTab === tab.id && "import-layout-tab-active"
 						)}
 					>
 						<TabIcon className="import-layout-tab-icon" />

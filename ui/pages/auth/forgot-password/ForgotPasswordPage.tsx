@@ -1,16 +1,16 @@
-import type { KeyboardEvent, SubmitEvent } from 'react';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, KeyRound, Mail } from 'lucide-react';
-import { isDocumentRtl } from '@/i18n/direction';
-import { AuthLayout } from '@/pages/layout';
-import { Button, Input } from '@/components';
-import { useForgotPasswordMutation } from '@/store/slices/api';
-import { __, sprintf } from '@/i18n';
-import { getErrorMessage, requestControlFormSubmit } from '@/utils';
+import type { KeyboardEvent, SubmitEvent } from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { ArrowLeft, ArrowRight, KeyRound, Mail } from "lucide-react";
+import { isDocumentRtl } from "@/i18n/direction";
+import { AuthLayout } from "@/pages/layout";
+import { Button, Input } from "@/components";
+import { useForgotPasswordMutation } from "@/store/slices/api";
+import { __, sprintf } from "@/i18n";
+import { getErrorMessage, requestControlFormSubmit } from "@/utils";
 
 const submitFormOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
-	if ('Enter' !== event.key) {
+	if ("Enter" !== event.key) {
 		return;
 	}
 
@@ -21,18 +21,18 @@ const submitFormOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
 function ForgotPasswordPage() {
 	const isRtl = isDocumentRtl();
 	const ReturnArrow = isRtl ? ArrowLeft : ArrowRight;
-	const [identifier, setIdentifier] = useState('');
-	const [submittedIdentifier, setSubmittedIdentifier] = useState('');
-	const [formError, setFormError] = useState('');
+	const [identifier, setIdentifier] = useState("");
+	const [submittedIdentifier, setSubmittedIdentifier] = useState("");
+	const [formError, setFormError] = useState("");
 	const [isSubmitted, setIsSubmitted] = useState(false);
 	const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
 
 	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		setFormError('');
+		setFormError("");
 
 		if (!identifier.trim()) {
-			setFormError(__('Email or username is required.'));
+			setFormError(__("Email or username is required."));
 			return;
 		}
 
@@ -46,7 +46,7 @@ function ForgotPasswordPage() {
 			setFormError(
 				getErrorMessage(
 					error,
-					__('PeakURL could not process the password reset request.')
+					__("PeakURL could not process the password reset request.")
 				)
 			);
 		}
@@ -55,42 +55,42 @@ function ForgotPasswordPage() {
 	return (
 		<AuthLayout
 			badgeIcon={KeyRound}
-			badgeLabel={__('Account Recovery')}
-			showcaseTitle={__('Reset your password')}
+			badgeLabel={__("Account Recovery")}
+			showcaseTitle={__("Reset your password")}
 			showcaseCopy={__(
 				"Enter the email address or username linked to your PeakURL account and we'll send a secure reset link."
 			)}
-			noteTitle={__('Password reset links expire after 1 hour.')}
+			noteTitle={__("Password reset links expire after 1 hour.")}
 			noteCopy={__(
-				'If the account exists, PeakURL sends a single-use link and keeps your existing sessions revoked after the password is changed.'
+				"If the account exists, PeakURL sends a single-use link and keeps your existing sessions revoked after the password is changed."
 			)}
-			cardTitle={__('Forgot your password?')}
+			cardTitle={__("Forgot your password?")}
 			cardCopy={__(
-				'Enter your account email or username and PeakURL will send a secure password reset link.'
+				"Enter your account email or username and PeakURL will send a secure password reset link."
 			)}
 		>
 			{isSubmitted ? (
 				<div className="auth-page-status">
 					<p className="auth-page-status-title">
-						{__('Check your inbox')}
+						{__("Check your inbox")}
 					</p>
 					<p className="auth-page-status-copy">
 						{sprintf(
 							__(
-								'If an account exists for %s, PeakURL has sent a password reset link.'
+								"If an account exists for %s, PeakURL has sent a password reset link."
 							),
 							submittedIdentifier
 						)}
 					</p>
 					<Link to="/login" className="auth-page-status-link">
-						{__('Return to login')}
+						{__("Return to login")}
 						<ReturnArrow size={15} />
 					</Link>
 				</div>
 			) : (
 				<form className="auth-page-form" onSubmit={handleSubmit}>
 					<Input
-						label={__('Email or username')}
+						label={__("Email or username")}
 						type="text"
 						icon={Mail}
 						valueDirection="ltr"
@@ -98,7 +98,7 @@ function ForgotPasswordPage() {
 						name="identifier"
 						onChange={(event) => setIdentifier(event.target.value)}
 						autoFocus
-						placeholder={__('owner@example.com or admin')}
+						placeholder={__("owner@example.com or admin")}
 						autoComplete="username"
 						autoCapitalize="none"
 						spellCheck={false}
@@ -114,7 +114,7 @@ function ForgotPasswordPage() {
 						loading={isLoading}
 						className="auth-page-submit"
 					>
-						{__('Send reset link')}
+						{__("Send reset link")}
 					</Button>
 				</form>
 			)}

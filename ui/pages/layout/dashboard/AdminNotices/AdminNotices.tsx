@@ -1,43 +1,39 @@
-import { Link } from 'react-router-dom';
-import { AlertCircle, CheckCircle2, Info, TriangleAlert } from 'lucide-react';
-import { useGetAdminNoticesQuery } from '@/store/slices/api';
-import { isDocumentRtl } from '@/i18n/direction';
-import { cn, escUrl, isRelativeUrl } from '@/utils';
-import type {
-	AdminNoticeItem,
-	NoticeActionProps,
-	NoticeTone,
-} from '../types';
+import { Link } from "react-router-dom";
+import { AlertCircle, CheckCircle2, Info, TriangleAlert } from "lucide-react";
+import { useGetAdminNoticesQuery } from "@/store/slices/api";
+import { isDocumentRtl } from "@/i18n/direction";
+import { cn, escUrl, isRelativeUrl } from "@/utils";
+import type { AdminNoticeItem, NoticeActionProps, NoticeTone } from "../types";
 
 const NOTICE_STYLES = {
 	error: {
-		containerClassName: 'dashboard-notice-error',
-		actionClassName: 'dashboard-notice-action-error',
+		containerClassName: "dashboard-notice-error",
+		actionClassName: "dashboard-notice-action-error",
 		icon: AlertCircle,
 	},
 	warning: {
-		containerClassName: 'dashboard-notice-warning',
-		actionClassName: 'dashboard-notice-action-warning',
+		containerClassName: "dashboard-notice-warning",
+		actionClassName: "dashboard-notice-action-warning",
 		icon: TriangleAlert,
 	},
 	success: {
-		containerClassName: 'dashboard-notice-success',
-		actionClassName: 'dashboard-notice-action-success',
+		containerClassName: "dashboard-notice-success",
+		actionClassName: "dashboard-notice-action-success",
 		icon: CheckCircle2,
 	},
 	info: {
-		containerClassName: 'dashboard-notice-info',
-		actionClassName: 'dashboard-notice-action-info',
+		containerClassName: "dashboard-notice-info",
+		actionClassName: "dashboard-notice-action-info",
 		icon: Info,
 	},
 };
 
 function isNoticeTone(value: unknown): value is NoticeTone {
 	return (
-		'error' === value ||
-		'warning' === value ||
-		'success' === value ||
-		'info' === value
+		"error" === value ||
+		"warning" === value ||
+		"success" === value ||
+		"info" === value
 	);
 }
 
@@ -48,10 +44,7 @@ function NoticeAction({ action, actionClassName }: NoticeActionProps) {
 		return null;
 	}
 
-	const actionClasses = cn(
-		'dashboard-notice-action',
-		actionClassName
-	);
+	const actionClasses = cn("dashboard-notice-action", actionClassName);
 
 	if (isRelativeUrl(url)) {
 		return (
@@ -75,7 +68,7 @@ function NoticeAction({ action, actionClassName }: NoticeActionProps) {
 
 export const AdminNotices = () => {
 	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isRtl ? "rtl" : "ltr";
 	const { data } = useGetAdminNoticesQuery(undefined);
 	const notices = data?.data?.items ?? [];
 
@@ -88,7 +81,7 @@ export const AdminNotices = () => {
 			{notices.map((notice: AdminNoticeItem) => {
 				const toneKey = isNoticeTone(notice?.type)
 					? notice.type
-					: 'info';
+					: "info";
 				const tone = NOTICE_STYLES[toneKey];
 				const Icon = tone.icon;
 
@@ -96,7 +89,7 @@ export const AdminNotices = () => {
 					<div
 						key={notice?.id || notice?.title}
 						className={cn(
-							'dashboard-notice',
+							"dashboard-notice",
 							tone.containerClassName
 						)}
 					>

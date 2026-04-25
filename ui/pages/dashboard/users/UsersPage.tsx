@@ -1,6 +1,6 @@
-import type { ChangeEvent, SubmitEvent } from 'react';
-import { useMemo, useState } from 'react';
-import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
+import type { ChangeEvent, SubmitEvent } from "react";
+import { useMemo, useState } from "react";
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import {
 	Pencil,
 	Plus,
@@ -9,8 +9,8 @@ import {
 	UserRound,
 	Users,
 	X,
-} from 'lucide-react';
-import { useAdminAccess } from '@/hooks';
+} from "lucide-react";
+import { useAdminAccess } from "@/hooks";
 import {
 	Avatar,
 	Button,
@@ -20,18 +20,18 @@ import {
 	Select,
 	type SelectOption,
 	useNotification,
-} from '@/components';
+} from "@/components";
 import {
 	useCreateUserMutation,
 	useDeleteUserMutation,
 	useGetAllUsersQuery,
 	useGetUserProfileQuery,
 	useUpdateUserMutation,
-} from '@/store/slices/api';
-import { __, sprintf } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
-import { getErrorMessage } from '@/utils';
-import { UsersTableSkeletonRows } from './UsersSkeleton';
+} from "@/store/slices/api";
+import { __, sprintf } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
+import { getErrorMessage } from "@/utils";
+import { UsersTableSkeletonRows } from "./UsersSkeleton";
 import type {
 	UserDialogFormState,
 	UserDialogMode,
@@ -40,30 +40,30 @@ import type {
 	UserRole,
 	UserRoleMeta,
 	UserSummary,
-} from './types';
+} from "./types";
 
 const EMPTY_FORM: UserDialogFormState = {
-	firstName: '',
-	lastName: '',
-	username: '',
-	email: '',
-	password: '',
-	confirmPassword: '',
-	role: 'editor',
+	firstName: "",
+	lastName: "",
+	username: "",
+	email: "",
+	password: "",
+	confirmPassword: "",
+	role: "editor",
 };
 
 const getRoleMeta = (): Record<UserRole, UserRoleMeta> => ({
 	admin: {
-		label: __('Admin'),
-		description: __('Can manage users, settings, and all links.'),
-		badge: 'users-page-role-badge-admin',
+		label: __("Admin"),
+		description: __("Can manage users, settings, and all links."),
+		badge: "users-page-role-badge-admin",
 	},
 	editor: {
-		label: __('Editor'),
+		label: __("Editor"),
 		description: __(
-			'Can create, edit, and delete site links without admin access.'
+			"Can create, edit, and delete site links without admin access."
 		),
-		badge: 'users-page-role-badge-editor',
+		badge: "users-page-role-badge-editor",
 	},
 });
 
@@ -71,15 +71,15 @@ const getInitialFormState = (
 	mode: UserDialogMode,
 	initialUser?: UserSummary | null
 ): UserDialogFormState => {
-	if ('edit' === mode && initialUser) {
+	if ("edit" === mode && initialUser) {
 		return {
-			firstName: initialUser.firstName ?? '',
-			lastName: initialUser.lastName ?? '',
-			username: initialUser.username ?? '',
-			email: initialUser.email ?? '',
-			password: '',
-			confirmPassword: '',
-			role: initialUser.role ?? 'editor',
+			firstName: initialUser.firstName ?? "",
+			lastName: initialUser.lastName ?? "",
+			username: initialUser.username ?? "",
+			email: initialUser.email ?? "",
+			password: "",
+			confirmPassword: "",
+			role: initialUser.role ?? "editor",
 		};
 	}
 
@@ -98,13 +98,13 @@ function UserDialog({
 	const isRtl = isDocumentRtl();
 	const roleMeta = getRoleMeta();
 	const roleOptions: SelectOption<UserRole>[] = [
-		{ value: 'admin', label: __('Admin') },
-		{ value: 'editor', label: __('Editor') },
+		{ value: "admin", label: __("Admin") },
+		{ value: "editor", label: __("Editor") },
 	];
 	const [form, setForm] = useState<UserDialogFormState>(() =>
 		getInitialFormState(mode, initialUser)
 	);
-	const [formError, setFormError] = useState('');
+	const [formError, setFormError] = useState("");
 
 	const handleChange =
 		(key: keyof UserDialogFormState) =>
@@ -117,7 +117,7 @@ function UserDialog({
 
 	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		setFormError('');
+		setFormError("");
 
 		const payload: UserDialogPayload = {
 			firstName: form.firstName.trim(),
@@ -127,14 +127,14 @@ function UserDialog({
 			role: form.role as UserRole,
 		};
 
-		if ('create' === mode || '' !== form.password.trim()) {
+		if ("create" === mode || "" !== form.password.trim()) {
 			if (form.password.length < 8) {
-				setFormError(__('Use at least 8 characters.'));
+				setFormError(__("Use at least 8 characters."));
 				return;
 			}
 
 			if (form.password !== form.confirmPassword) {
-				setFormError(__('Passwords do not match.'));
+				setFormError(__("Passwords do not match."));
 				return;
 			}
 
@@ -146,13 +146,13 @@ function UserDialog({
 			onClose();
 		} catch (error) {
 			setFormError(
-				getErrorMessage(error, __('Unable to save the user.'))
+				getErrorMessage(error, __("Unable to save the user."))
 			);
 		}
 	};
 
 	const isEditingSelf =
-		'edit' === mode && initialUser?.id === currentUser?.id;
+		"edit" === mode && initialUser?.id === currentUser?.id;
 
 	return (
 		<Dialog open={open} onClose={onClose} className="users-page-dialog">
@@ -162,17 +162,17 @@ function UserDialog({
 					<div className="users-page-dialog-header">
 						<div>
 							<DialogTitle className="users-page-dialog-title">
-								{'create' === mode
-									? __('Add User')
-									: __('Edit User')}
+								{"create" === mode
+									? __("Add User")
+									: __("Edit User")}
 							</DialogTitle>
 							<p className="users-page-dialog-summary">
-								{'create' === mode
+								{"create" === mode
 									? __(
-											'Create a new account with admin or editor access.'
+											"Create a new account with admin or editor access."
 										)
 									: __(
-											'Update the account details and role for this user.'
+											"Update the account details and role for this user."
 										)}
 							</p>
 						</div>
@@ -197,34 +197,34 @@ function UserDialog({
 
 						<div className="users-page-dialog-grid">
 							<Input
-								label={__('First Name')}
+								label={__("First Name")}
 								value={form.firstName}
-								onChange={handleChange('firstName')}
+								onChange={handleChange("firstName")}
 								required
 							/>
 							<Input
-								label={__('Last Name')}
+								label={__("Last Name")}
 								value={form.lastName}
-								onChange={handleChange('lastName')}
+								onChange={handleChange("lastName")}
 								required
 							/>
 						</div>
 
 						<div className="users-page-dialog-grid">
 							<Input
-								label={__('Username')}
+								label={__("Username")}
 								valueDirection="ltr"
 								autoCapitalize="off"
 								spellCheck={false}
 								value={form.username}
-								onChange={handleChange('username')}
+								onChange={handleChange("username")}
 								required
 							/>
 							<Input
-								label={__('Email')}
+								label={__("Email")}
 								type="email"
 								value={form.email}
-								onChange={handleChange('email')}
+								onChange={handleChange("email")}
 								required
 							/>
 						</div>
@@ -232,44 +232,44 @@ function UserDialog({
 						<div className="users-page-dialog-grid">
 							<Input
 								label={
-									'create' === mode
-										? __('Password')
-										: __('New Password')
+									"create" === mode
+										? __("Password")
+										: __("New Password")
 								}
 								type="password"
 								value={form.password}
-								onChange={handleChange('password')}
-								required={'create' === mode}
+								onChange={handleChange("password")}
+								required={"create" === mode}
 								autoComplete="new-password"
 								helperText={
-									'create' === mode
-										? __('Use at least 8 characters.')
+									"create" === mode
+										? __("Use at least 8 characters.")
 										: __(
-												'Leave blank to keep the current password.'
+												"Leave blank to keep the current password."
 											)
 								}
 							/>
 							<Input
 								label={
-									'create' === mode
-										? __('Confirm Password')
-										: __('Confirm New Password')
+									"create" === mode
+										? __("Confirm Password")
+										: __("Confirm New Password")
 								}
 								type="password"
 								value={form.confirmPassword}
-								onChange={handleChange('confirmPassword')}
+								onChange={handleChange("confirmPassword")}
 								required={
-									'create' === mode ||
-									'' !== form.password.trim()
+									"create" === mode ||
+									"" !== form.password.trim()
 								}
 								autoComplete="new-password"
 								helperText={
-									'create' === mode
+									"create" === mode
 										? __(
-												'Re-enter the password to confirm it.'
+												"Re-enter the password to confirm it."
 											)
 										: __(
-												'Re-enter the new password to confirm it.'
+												"Re-enter the new password to confirm it."
 											)
 								}
 							/>
@@ -278,7 +278,7 @@ function UserDialog({
 						<div className="users-page-dialog-grid">
 							<div className="users-page-dialog-field">
 								<label className="users-page-dialog-label">
-									{__('Role')}
+									{__("Role")}
 								</label>
 								<Select
 									value={form.role}
@@ -290,13 +290,13 @@ function UserDialog({
 									}
 									options={roleOptions}
 									disabled={isEditingSelf}
-									ariaLabel={__('User role')}
+									ariaLabel={__("User role")}
 								/>
 								<p className="users-page-dialog-help">
 									{roleMeta[form.role]?.description}
 									{isEditingSelf
-										? ` ${__('Your own role is locked here.')}`
-										: ''}
+										? ` ${__("Your own role is locked here.")}`
+										: ""}
 								</p>
 							</div>
 						</div>
@@ -304,8 +304,8 @@ function UserDialog({
 						<div
 							className={`users-page-dialog-actions ${
 								isRtl
-									? 'users-page-dialog-actions-start'
-									: 'users-page-dialog-actions-end'
+									? "users-page-dialog-actions-start"
+									: "users-page-dialog-actions-end"
 							}`}
 						>
 							<Button
@@ -313,12 +313,12 @@ function UserDialog({
 								variant="secondary"
 								onClick={onClose}
 							>
-								{__('Cancel')}
+								{__("Cancel")}
 							</Button>
 							<Button type="submit" loading={isSubmitting}>
-								{'create' === mode
-									? __('Create User')
-									: __('Save Changes')}
+								{"create" === mode
+									? __("Create User")
+									: __("Save Changes")}
 							</Button>
 						</div>
 					</form>
@@ -330,16 +330,16 @@ function UserDialog({
 
 function UsersPage() {
 	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isRtl ? "rtl" : "ltr";
 	const roleMeta = getRoleMeta();
 	const { data: userData } = useGetUserProfileQuery(undefined);
 	const { canManageUsers, user: authUser } = useAdminAccess();
 	const resolvedCurrentUser = userData?.data ?? authUser ?? null;
-	const currentUserRole: UserSummary['role'] =
-		resolvedCurrentUser?.role === 'admin'
-			? 'admin'
-			: resolvedCurrentUser?.role === 'editor'
-				? 'editor'
+	const currentUserRole: UserSummary["role"] =
+		resolvedCurrentUser?.role === "admin"
+			? "admin"
+			: resolvedCurrentUser?.role === "editor"
+				? "editor"
 				: undefined;
 	const currentUser: UserSummary | null = resolvedCurrentUser
 		? {
@@ -348,7 +348,7 @@ function UsersPage() {
 					resolvedCurrentUser._id ||
 					resolvedCurrentUser.username ||
 					resolvedCurrentUser.email ||
-					'current-user',
+					"current-user",
 				firstName: resolvedCurrentUser.firstName,
 				lastName: resolvedCurrentUser.lastName,
 				username: resolvedCurrentUser.username,
@@ -364,7 +364,7 @@ function UsersPage() {
 	const [createUser, { isLoading: isCreating }] = useCreateUserMutation();
 	const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
 	const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
-	const [dialogMode, setDialogMode] = useState<UserDialogMode>('create');
+	const [dialogMode, setDialogMode] = useState<UserDialogMode>("create");
 	const [activeUser, setActiveUser] = useState<UserSummary | null>(null);
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [userPendingDelete, setUserPendingDelete] =
@@ -376,22 +376,22 @@ function UsersPage() {
 		[usersData]
 	);
 	const adminCount = useMemo(
-		() => users.filter((user) => user.role === 'admin').length,
+		() => users.filter((user) => user.role === "admin").length,
 		[users]
 	);
 	const editorCount = useMemo(
-		() => users.filter((user) => user.role === 'editor').length,
+		() => users.filter((user) => user.role === "editor").length,
 		[users]
 	);
 
 	const openCreateDialog = () => {
-		setDialogMode('create');
+		setDialogMode("create");
 		setActiveUser(null);
 		setIsDialogOpen(true);
 	};
 
 	const openEditDialog = (user: UserSummary) => {
-		setDialogMode('edit');
+		setDialogMode("edit");
 		setActiveUser(user);
 		setIsDialogOpen(true);
 	};
@@ -416,26 +416,26 @@ function UsersPage() {
 		try {
 			await deleteUser(userPendingDelete.username).unwrap();
 			notification.success(
-				__('User deleted'),
+				__("User deleted"),
 				sprintf(
-					__('%s was removed successfully.'),
+					__("%s was removed successfully."),
 					`${userPendingDelete.firstName} ${userPendingDelete.lastName}`
 				)
 			);
 			setUserPendingDelete(null);
 		} catch (error) {
 			notification.error(
-				__('Delete failed'),
+				__("Delete failed"),
 				getErrorMessage(
 					error,
-					__('Unable to delete this user right now.')
+					__("Unable to delete this user right now.")
 				)
 			);
 		}
 	};
 
 	const handleSubmitUser = async (payload: UserDialogPayload) => {
-		if ('create' === dialogMode) {
+		if ("create" === dialogMode) {
 			return createUser(payload).unwrap();
 		}
 
@@ -452,11 +452,11 @@ function UsersPage() {
 					<ShieldCheck size={28} />
 				</div>
 				<h2 className="users-page-access-title">
-					{__('Admin access required')}
+					{__("Admin access required")}
 				</h2>
 				<p className="users-page-access-summary">
 					{__(
-						'Only admin accounts can manage other users and their roles.'
+						"Only admin accounts can manage other users and their roles."
 					)}
 				</p>
 			</div>
@@ -469,51 +469,51 @@ function UsersPage() {
 				<div>
 					<div className="users-page-hero-badge">
 						<UserRound size={14} />
-						{__('User Access')}
+						{__("User Access")}
 					</div>
-					<h1 className="users-page-hero-title">{__('Users')}</h1>
+					<h1 className="users-page-hero-title">{__("Users")}</h1>
 					<p className="users-page-hero-summary">
 						{__(
-							'Manage the people who can access this installation. Admins control site-wide settings. Editors can create and maintain links.'
+							"Manage the people who can access this installation. Admins control site-wide settings. Editors can create and maintain links."
 						)}
 					</p>
 				</div>
 				<Button icon={Plus} onClick={openCreateDialog}>
-					{__('Add User')}
+					{__("Add User")}
 				</Button>
 			</div>
 
 			<div className="users-page-stats">
 				<div className="users-page-stat-card">
-					<p className="users-page-stat-label">{__('Total Users')}</p>
+					<p className="users-page-stat-label">{__("Total Users")}</p>
 					<p className="users-page-stat-value">
-						{isUsersLoading ? '...' : users.length}
+						{isUsersLoading ? "..." : users.length}
 					</p>
 				</div>
 				<div className="users-page-stat-card">
-					<p className="users-page-stat-label">{__('Admins')}</p>
+					<p className="users-page-stat-label">{__("Admins")}</p>
 					<p className="users-page-stat-value">
-						{isUsersLoading ? '...' : adminCount}
+						{isUsersLoading ? "..." : adminCount}
 					</p>
 				</div>
 				<div className="users-page-stat-card">
-					<p className="users-page-stat-label">{__('Editors')}</p>
+					<p className="users-page-stat-label">{__("Editors")}</p>
 					<p className="users-page-stat-value">
-						{isUsersLoading ? '...' : editorCount}
+						{isUsersLoading ? "..." : editorCount}
 					</p>
 				</div>
 			</div>
 
 			<div className="users-page-panel">
 				<div className="users-page-panel-header">
-					<h2 className="users-page-panel-title">{__('Accounts')}</h2>
+					<h2 className="users-page-panel-title">{__("Accounts")}</h2>
 				</div>
 
 				{usersError ? (
 					<div className="users-page-panel-error">
 						{getErrorMessage(
 							usersError,
-							__('Unable to load users.')
+							__("Unable to load users.")
 						)}
 					</div>
 				) : !isUsersLoading && users.length === 0 ? (
@@ -522,11 +522,11 @@ function UsersPage() {
 							<Users size={28} />
 						</div>
 						<h3 className="users-page-empty-title">
-							{__('No users yet')}
+							{__("No users yet")}
 						</h3>
 						<p className="users-page-empty-summary">
 							{__(
-								'Add an admin or editor account to start sharing access.'
+								"Add an admin or editor account to start sharing access."
 							)}
 						</p>
 					</div>
@@ -536,16 +536,16 @@ function UsersPage() {
 							<thead className="users-page-table-head">
 								<tr className="users-page-table-head-row">
 									<th className="users-page-table-heading">
-										{__('User')}
+										{__("User")}
 									</th>
 									<th className="users-page-table-heading">
-										{__('Role')}
+										{__("Role")}
 									</th>
 									<th className="users-page-table-heading">
-										{__('Created')}
+										{__("Created")}
 									</th>
 									<th className="users-page-table-heading-end">
-										{__('Actions')}
+										{__("Actions")}
 									</th>
 								</tr>
 							</thead>
@@ -572,14 +572,14 @@ function UsersPage() {
 														lastName={user.lastName}
 														fallbackName={
 															user.username ||
-															__('User')
+															__("User")
 														}
 														className="users-page-avatar"
 													/>
 													<div className="users-page-user-copy">
 														<div className="users-page-user-name">
 															<bdi dir="auto">
-																{user.firstName}{' '}
+																{user.firstName}{" "}
 																{user.lastName}
 															</bdi>
 														</div>
@@ -601,18 +601,18 @@ function UsersPage() {
 													className={`users-page-role-badge ${
 														roleMeta[
 															user.role ===
-															'admin'
-																? 'admin'
-																: 'editor'
+															"admin"
+																? "admin"
+																: "editor"
 														].badge
 													}`}
 												>
 													{
 														roleMeta[
 															user.role ===
-															'admin'
-																? 'admin'
-																: 'editor'
+															"admin"
+																? "admin"
+																: "editor"
 														].label
 													}
 												</span>
@@ -622,7 +622,7 @@ function UsersPage() {
 													? new Date(
 															user.createdAt
 														).toLocaleDateString()
-													: __('Unknown')}
+													: __("Unknown")}
 											</td>
 											<td className="users-page-table-cell-actions">
 												<div className="users-page-actions">
@@ -631,11 +631,11 @@ function UsersPage() {
 														variant="outline"
 														size="sm"
 														aria-label={sprintf(
-															__('Edit %s'),
+															__("Edit %s"),
 															`${user.firstName} ${user.lastName}`
 														)}
 														title={sprintf(
-															__('Edit %s'),
+															__("Edit %s"),
 															`${user.firstName} ${user.lastName}`
 														)}
 														onClick={() =>
@@ -647,11 +647,11 @@ function UsersPage() {
 														variant="outline"
 														size="sm"
 														aria-label={sprintf(
-															__('Delete %s'),
+															__("Delete %s"),
 															`${user.firstName} ${user.lastName}`
 														)}
 														title={sprintf(
-															__('Delete %s'),
+															__("Delete %s"),
 															`${user.firstName} ${user.lastName}`
 														)}
 														className="users-page-action-delete"
@@ -679,7 +679,7 @@ function UsersPage() {
 			</div>
 
 			<UserDialog
-				key={`${dialogMode}-${activeUser?.id ?? 'new'}-${isDialogOpen ? 'open' : 'closed'}`}
+				key={`${dialogMode}-${activeUser?.id ?? "new"}-${isDialogOpen ? "open" : "closed"}`}
 				open={isDialogOpen}
 				mode={dialogMode}
 				currentUser={currentUser}
@@ -691,18 +691,18 @@ function UsersPage() {
 			<ConfirmDialog
 				open={Boolean(userPendingDelete)}
 				onClose={() => setUserPendingDelete(null)}
-				title={__('Delete User')}
+				title={__("Delete User")}
 				description={
 					userPendingDelete
 						? sprintf(
 								__(
-									'Delete %s? This will revoke their sessions, remove their API keys, and permanently delete their account.'
+									"Delete %s? This will revoke their sessions, remove their API keys, and permanently delete their account."
 								),
 								`${userPendingDelete.firstName} ${userPendingDelete.lastName}`
 							)
-						: ''
+						: ""
 				}
-				confirmText={__('Delete User')}
+				confirmText={__("Delete User")}
 				confirmVariant="danger"
 				onConfirm={handleDelete}
 				loading={isDeleting}

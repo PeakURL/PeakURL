@@ -1,7 +1,7 @@
-import SecurityFields from './SecurityFields';
-import ExpirationFields from './ExpirationFields';
-import UTMFields from './UTMFields';
-import type { AdvancedOptionsProps } from '../types';
+import SecurityFields from "./SecurityFields";
+import ExpirationFields from "./ExpirationFields";
+import UTMFields from "./UTMFields";
+import type { AdvancedOptionsProps } from "../types";
 
 const AdvancedOptions = ({
 	title,

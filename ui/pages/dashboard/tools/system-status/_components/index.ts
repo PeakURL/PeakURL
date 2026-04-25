@@ -1,1 +1,1 @@
-export { default as SystemStatusSkeleton } from './SystemStatusSkeleton';
+export { default as SystemStatusSkeleton } from "./SystemStatusSkeleton";

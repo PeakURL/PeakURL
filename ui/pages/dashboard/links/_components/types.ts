@@ -1,6 +1,6 @@
-export type LinkStatus = 'active' | 'inactive' | 'expired';
-export type LinksSortBy = 'createdAt' | 'clicks' | 'alias';
-export type LinksSortOrder = 'asc' | 'desc';
+export type LinkStatus = "active" | "inactive" | "expired";
+export type LinksSortBy = "createdAt" | "clicks" | "alias";
+export type LinksSortOrder = "asc" | "desc";
 
 /**
  * Base link record consumed by the links dashboard surfaces.

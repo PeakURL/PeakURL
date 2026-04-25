@@ -1,8 +1,8 @@
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from "react-router-dom";
 
-import { PEAKURL_BASENAME } from './constants';
-import AppRouter from './router';
-import { ClientProviders } from './components/providers';
+import { PEAKURL_BASENAME } from "./constants";
+import AppRouter from "./router";
+import { ClientProviders } from "./components/providers";
 
 function App() {
 	return (

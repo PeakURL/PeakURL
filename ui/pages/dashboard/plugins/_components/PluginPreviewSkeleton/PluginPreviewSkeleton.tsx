@@ -1,10 +1,8 @@
-import { cn } from '@/utils';
-import type { PluginPreviewSkeletonProps } from '../types';
+import { cn } from "@/utils";
+import type { PluginPreviewSkeletonProps } from "../types";
 
-function PluginPreviewSkeleton({
-	className = '',
-}: PluginPreviewSkeletonProps) {
-	return <div className={cn('plugins-skeleton', className)} />;
+function PluginPreviewSkeleton({ className = "" }: PluginPreviewSkeletonProps) {
+	return <div className={cn("plugins-skeleton", className)} />;
 }
 
 export default PluginPreviewSkeleton;

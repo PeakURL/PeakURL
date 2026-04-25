@@ -1,20 +1,20 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import type { LucideIcon } from 'lucide-react';
-import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
-import { isDocumentRtl } from '@/i18n/direction';
-import { cn } from '@/utils';
+import { useState, useEffect, useCallback, useRef } from "react";
+import type { LucideIcon } from "lucide-react";
+import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from "lucide-react";
+import { isDocumentRtl } from "@/i18n/direction";
+import { cn } from "@/utils";
 import type {
 	NotificationContainerProps,
 	NotificationProps,
 	NotificationType,
-} from '../types';
+} from "../types";
 export type {
 	NotificationContainerProps,
 	NotificationItem,
 	NotificationPayload,
 	NotificationProps,
 	NotificationType,
-} from '../types';
+} from "../types";
 
 // Notification types with solid colors
 const notificationTypes: Record<
@@ -26,19 +26,19 @@ const notificationTypes: Record<
 > = {
 	success: {
 		icon: CheckCircle,
-		className: 'notification-card-success',
+		className: "notification-card-success",
 	},
 	error: {
 		icon: AlertCircle,
-		className: 'notification-card-error',
+		className: "notification-card-error",
 	},
 	warning: {
 		icon: AlertTriangle,
-		className: 'notification-card-warning',
+		className: "notification-card-warning",
 	},
 	info: {
 		icon: Info,
-		className: 'notification-card-info',
+		className: "notification-card-info",
 	},
 };
 
@@ -56,12 +56,12 @@ const notificationTypes: Record<
  */
 export function Notification({
 	id,
-	type = 'info',
+	type = "info",
 	title,
 	message,
 	duration = 5000,
 	onClose,
-	className = '',
+	className = "",
 }: NotificationProps) {
 	const [isPaused, setIsPaused] = useState(false);
 	const [isExiting, setIsExiting] = useState(false);
@@ -140,15 +140,15 @@ export function Notification({
 	return (
 		<div
 			className={cn(
-				'notification-card',
+				"notification-card",
 				config.className,
 				isExiting
 					? isRtl
-						? 'notification-card-exiting-rtl'
-						: 'notification-card-exiting-ltr'
+						? "notification-card-exiting-rtl"
+						: "notification-card-exiting-ltr"
 					: isRtl
-						? 'notification-card-entering-rtl'
-						: 'notification-card-entering-ltr',
+						? "notification-card-entering-rtl"
+						: "notification-card-entering-ltr",
 				className
 			)}
 			onMouseEnter={handleMouseEnter}
@@ -158,15 +158,9 @@ export function Notification({
 				<IconComponent className="notification-icon" />
 
 				<div className="notification-body">
-					{title && (
-						<h4 className="notification-title">
-							{title}
-						</h4>
-					)}
+					{title && <h4 className="notification-title">{title}</h4>}
 					{message && (
-						<p className="notification-message">
-							{message}
-						</p>
+						<p className="notification-message">{message}</p>
 					)}
 				</div>
 
@@ -183,15 +177,15 @@ export function Notification({
 				<div className="notification-progress">
 					<div
 						className={cn(
-							'notification-progress-bar',
+							"notification-progress-bar",
 							isRtl
-								? 'notification-progress-rtl'
-								: 'notification-progress-ltr'
+								? "notification-progress-rtl"
+								: "notification-progress-ltr"
 						)}
 						style={{
-							width: '100%',
+							width: "100%",
 							animation: `progress ${duration}ms linear forwards`,
-							animationPlayState: isPaused ? 'paused' : 'running',
+							animationPlayState: isPaused ? "paused" : "running",
 						}}
 					/>
 				</div>

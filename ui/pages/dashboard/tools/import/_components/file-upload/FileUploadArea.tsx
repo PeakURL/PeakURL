@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { Button } from '@/components';
-import { CloudUpload } from 'lucide-react';
-import { __ } from '@/i18n';
-import { cn } from '@/utils';
+import { useState } from "react";
+import { Button } from "@/components";
+import { CloudUpload } from "lucide-react";
+import { __ } from "@/i18n";
+import { cn } from "@/utils";
 import type {
 	FileButtonClickHandler,
 	FileDropHandler,
 	FileInputChangeHandler,
 	FileUploadAreaProps,
-} from './types';
+} from "./types";
 
 function FileUploadArea({
 	fileInputRef,
@@ -32,7 +32,7 @@ function FileUploadArea({
 			onFileSelected(file);
 		}
 
-		event.target.value = '';
+		event.target.value = "";
 	};
 
 	const preventDefault: FileDropHandler = (event) => {
@@ -52,7 +52,7 @@ function FileUploadArea({
 		preventDefault(event);
 
 		if (!disabled && event.dataTransfer) {
-			event.dataTransfer.dropEffect = 'copy';
+			event.dataTransfer.dropEffect = "copy";
 		}
 	};
 
@@ -80,14 +80,10 @@ function FileUploadArea({
 		<div className="import-file-dropzone-wrapper">
 			<div
 				className={cn(
-					'import-file-dropzone',
-					disabled && 'import-file-dropzone-disabled',
-					!disabled &&
-						isDragActive &&
-						'import-file-dropzone-active',
-					!disabled &&
-						!isDragActive &&
-						'import-file-dropzone-idle'
+					"import-file-dropzone",
+					disabled && "import-file-dropzone-disabled",
+					!disabled && isDragActive && "import-file-dropzone-active",
+					!disabled && !isDragActive && "import-file-dropzone-idle"
 				)}
 				onClick={openFilePicker}
 				onDragEnter={handleDragEnter}
@@ -97,10 +93,10 @@ function FileUploadArea({
 			>
 				<CloudUpload className="import-file-dropzone-icon" />
 				<h3 className="import-file-dropzone-title">
-					{__('Drop your file here')}
+					{__("Drop your file here")}
 				</h3>
 				<p className="import-file-dropzone-copy">
-					{__('or click to browse (CSV, JSON, XML)')}
+					{__("or click to browse (CSV, JSON, XML)")}
 				</p>
 				<Button
 					size="sm"
@@ -111,7 +107,7 @@ function FileUploadArea({
 						openFilePicker();
 					}}
 				>
-					{__('Choose File')}
+					{__("Choose File")}
 				</Button>
 				<input
 					type="file"
@@ -124,7 +120,7 @@ function FileUploadArea({
 			<div className="import-file-dropzone-note">
 				<p>
 					{__(
-						'Supported formats: CSV, JSON, XML (max 10MB, up to 10,000 URLs)'
+						"Supported formats: CSV, JSON, XML (max 10MB, up to 10,000 URLs)"
 					)}
 				</p>
 			</div>

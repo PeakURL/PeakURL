@@ -7,12 +7,12 @@ import type {
 	InputHTMLAttributes,
 	ReactNode,
 	TextareaHTMLAttributes,
-} from 'react';
+} from "react";
 
 /**
  * Supported avatar size tokens for the shared avatar component.
  */
-export type AvatarSize = 'sm' | 'md';
+export type AvatarSize = "sm" | "md";
 
 /**
  * Props for rendering a user avatar with name and email fallbacks.
@@ -30,23 +30,23 @@ export interface AvatarProps {
  * Visual style variants supported by the shared button component.
  */
 export type ButtonVariant =
-	| 'primary'
-	| 'secondary'
-	| 'danger'
-	| 'success'
-	| 'warning'
-	| 'ghost'
-	| 'outline';
+	| "primary"
+	| "secondary"
+	| "danger"
+	| "success"
+	| "warning"
+	| "ghost"
+	| "outline";
 
 /**
  * Size presets shared by button-like controls.
  */
-export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type ButtonSize = "xs" | "sm" | "md" | "lg" | "xl";
 
 /**
  * Icon placement options for buttons that render both text and an icon.
  */
-export type IconPosition = 'left' | 'right';
+export type IconPosition = "left" | "right";
 
 /**
  * Icon component contract used across button surfaces.
@@ -56,8 +56,7 @@ export type ButtonIcon = ComponentType<{ className?: string; size?: number }>;
 /**
  * Props for the shared button component.
  */
-export interface ButtonProps
-	extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	children?: ReactNode;
 	variant?: ButtonVariant;
 	size?: ButtonSize;
@@ -76,8 +75,10 @@ export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement> {
 /**
  * Props for an icon-only button.
  */
-export interface IconButtonProps
-	extends Omit<ButtonProps, 'children' | 'icon'> {
+export interface IconButtonProps extends Omit<
+	ButtonProps,
+	"children" | "icon"
+> {
 	icon: ButtonIcon;
 }
 
@@ -116,18 +117,17 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 	error?: string;
 	icon?: InputIcon;
 	helperText?: string;
-	valueDirection?: 'ltr' | 'rtl';
+	valueDirection?: "ltr" | "rtl";
 }
 
 /**
  * Props for the shared textarea component.
  */
-export interface TextAreaProps
-	extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 	label?: string;
 	error?: string;
 	helperText?: string;
-	valueDirection?: 'ltr' | 'rtl';
+	valueDirection?: "ltr" | "rtl";
 }
 
 /**
@@ -147,8 +147,10 @@ export interface SelectOption<T extends SelectValue = SelectValue> {
 /**
  * Props for the shared anchored select component.
  */
-export interface SelectProps<T extends SelectValue = SelectValue>
-	extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'onChange'> {
+export interface SelectProps<T extends SelectValue = SelectValue> extends Omit<
+	HTMLAttributes<HTMLDivElement>,
+	"children" | "onChange"
+> {
 	id?: string;
 	value: T;
 	options: SelectOption<T>[];
@@ -163,28 +165,28 @@ export interface SelectProps<T extends SelectValue = SelectValue>
 /**
  * Supported loading spinner size tokens.
  */
-export type LoadingSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type LoadingSize = "xs" | "sm" | "md" | "lg" | "xl";
 
 /**
  * Accent colors available to the pulse-dot status indicator.
  */
-export type PulseDotColor = 'green' | 'red' | 'yellow' | 'blue' | 'purple';
+export type PulseDotColor = "green" | "red" | "yellow" | "blue" | "purple";
 
 /**
  * Size presets for pulse-dot indicators.
  */
-export type PulseDotSize = 'xs' | 'sm' | 'md' | 'lg';
+export type PulseDotSize = "xs" | "sm" | "md" | "lg";
 
 /**
  * Supported progress-bar color themes.
  */
 export type ProgressColor =
-	| 'blue'
-	| 'green'
-	| 'red'
-	| 'yellow'
-	| 'purple'
-	| 'accent';
+	| "blue"
+	| "green"
+	| "red"
+	| "yellow"
+	| "purple"
+	| "accent";
 
 /**
  * Props for the inline loading spinner component.
@@ -197,7 +199,7 @@ export interface LoadingSpinnerProps {
 /**
  * Pass-through props for the generic skeleton loader block.
  */
-export type SkeletonLoaderProps = ComponentPropsWithoutRef<'div'>;
+export type SkeletonLoaderProps = ComponentPropsWithoutRef<"div">;
 
 /**
  * Props for rendering a skeleton table row.
@@ -235,7 +237,7 @@ export interface InlineLoaderProps {
 /**
  * Width presets for the shared modal component.
  */
-export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
+export type ModalSize = "sm" | "md" | "lg" | "xl";
 
 /**
  * Props for the shared modal surface.
@@ -251,7 +253,7 @@ export interface ModalProps {
 /**
  * Visual variants supported by dashboard notifications.
  */
-export type NotificationType = 'success' | 'error' | 'warning' | 'info';
+export type NotificationType = "success" | "error" | "warning" | "info";
 
 /**
  * Public payload shape used to enqueue a notification.

@@ -1,21 +1,21 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
 	AlertCircle,
 	CheckCircle2,
 	ChevronDown,
 	ChevronUp,
 	Copy,
-} from 'lucide-react';
-import { useNotification } from '@/components';
-import { __, sprintf } from '@/i18n';
-import { useGetSystemStatusQuery } from '@/store/slices/api';
+} from "lucide-react";
+import { useNotification } from "@/components";
+import { __, sprintf } from "@/i18n";
+import { useGetSystemStatusQuery } from "@/store/slices/api";
 import {
 	copyToClipboard,
 	extractErrorMessage,
 	formatByteSize,
 	formatCount,
 	formatDateTimeValue,
-} from '@/utils';
+} from "@/utils";
 import type {
 	ErrorStateProps,
 	InfoItem,
@@ -27,88 +27,88 @@ import type {
 	StatusTone,
 	StatusView,
 	SystemCheck,
-} from '../types';
-import { SystemStatusSkeleton } from './_components';
+} from "../types";
+import { SystemStatusSkeleton } from "./_components";
 
 function hasValue(value: unknown) {
-	return value !== undefined && value !== null && '' !== value;
+	return value !== undefined && value !== null && "" !== value;
 }
 
 function displayValue(value: unknown) {
-	return hasValue(value) ? String(value) : __('Not available');
+	return hasValue(value) ? String(value) : __("Not available");
 }
 
 function joinHelperText(parts: Array<string | undefined | null>) {
-	return parts.filter((part) => hasValue(part)).join(' • ');
+	return parts.filter((part) => hasValue(part)).join(" • ");
 }
 
 function formatBoolean(
 	value: unknown,
-	truthy: string = __('Yes'),
-	falsy: string = __('No')
+	truthy: string = __("Yes"),
+	falsy: string = __("No")
 ) {
 	return value ? truthy : falsy;
 }
 
 function getOverallLabel(status: string | undefined) {
-	return 'ok' === status ? __('Good') : __('Should be improved');
+	return "ok" === status ? __("Good") : __("Should be improved");
 }
 
 function getStatusTone(status: string | undefined): StatusTone {
 	switch (status) {
-		case 'error':
+		case "error":
 			return {
-				ring: 'border-red-300',
-				dot: 'bg-red-500',
-				text: 'text-red-700 dark:text-red-300',
-				badge: 'border-red-200 bg-red-50 text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200',
-				panel: 'border-red-200 bg-red-50 text-red-800 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200',
+				ring: "border-red-300",
+				dot: "bg-red-500",
+				text: "text-red-700 dark:text-red-300",
+				badge: "border-red-200 bg-red-50 text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200",
+				panel: "border-red-200 bg-red-50 text-red-800 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200",
 			};
-		case 'ok':
+		case "ok":
 			return {
-				ring: 'border-emerald-300',
-				dot: 'bg-emerald-500',
-				text: 'text-emerald-700 dark:text-emerald-300',
-				badge: 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200',
-				panel: 'border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200',
+				ring: "border-emerald-300",
+				dot: "bg-emerald-500",
+				text: "text-emerald-700 dark:text-emerald-300",
+				badge: "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200",
+				panel: "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200",
 			};
 		default:
 			return {
-				ring: 'border-amber-300',
-				dot: 'bg-amber-500',
-				text: 'text-amber-700 dark:text-amber-300',
-				badge: 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200',
-				panel: 'border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200',
+				ring: "border-amber-300",
+				dot: "bg-amber-500",
+				text: "text-amber-700 dark:text-amber-300",
+				badge: "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200",
+				panel: "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200",
 			};
 	}
 }
 
 function getCheckCategoryLabel(checkId: string | null | undefined) {
 	switch (checkId) {
-		case 'database':
-			return __('Database');
-		case 'content':
-			return __('Storage');
-		case 'languages':
-			return __('Translations');
-		case 'mail':
-			return __('Email');
-		case 'geoip':
-			return __('Location Data');
-		case 'zip':
-			return __('Updates');
+		case "database":
+			return __("Database");
+		case "content":
+			return __("Storage");
+		case "languages":
+			return __("Translations");
+		case "mail":
+			return __("Email");
+		case "geoip":
+			return __("Location Data");
+		case "zip":
+			return __("Updates");
 		default:
-			return __('System');
+			return __("System");
 	}
 }
 
 function formatHeadingCount(count: number, singular: string, plural: string) {
-	return 1 === count ? singular : plural.replace('%s', formatCount(count));
+	return 1 === count ? singular : plural.replace("%s", formatCount(count));
 }
 
 function buildExportText(sections: InfoSectionData[]) {
 	return [
-		'PeakURL System Status',
+		"PeakURL System Status",
 		...sections.map((section: InfoSectionData) => {
 			const rows = section.items.map((item: InfoItem) => {
 				const value = displayValue(item.value);
@@ -117,9 +117,9 @@ function buildExportText(sections: InfoSectionData[]) {
 					: `${item.label}: ${value}`;
 			});
 
-			return `${section.title}\n${rows.join('\n')}`;
+			return `${section.title}\n${rows.join("\n")}`;
 		}),
-	].join('\n\n');
+	].join("\n\n");
 }
 
 function ErrorState({ errorMessage }: ErrorStateProps) {
@@ -132,7 +132,7 @@ function ErrorState({ errorMessage }: ErrorStateProps) {
 				/>
 				<div className="system-status-page-error-copy">
 					<h2 className="system-status-page-error-title">
-						{__('System status unavailable')}
+						{__("System status unavailable")}
 					</h2>
 					<p className="system-status-page-error-summary">
 						{errorMessage}
@@ -145,8 +145,8 @@ function ErrorState({ errorMessage }: ErrorStateProps) {
 
 function StatusTabs({ activeView, onChange }: StatusTabsProps) {
 	const tabs: Array<{ id: StatusView; label: string }> = [
-		{ id: 'status', label: __('Status') },
-		{ id: 'info', label: __('Info') },
+		{ id: "status", label: __("Status") },
+		{ id: "info", label: __("Info") },
 	];
 
 	return (
@@ -158,8 +158,8 @@ function StatusTabs({ activeView, onChange }: StatusTabsProps) {
 					onClick={() => onChange(tab.id)}
 					className={`system-status-page-tab ${
 						activeView === tab.id
-							? 'system-status-page-tab-active'
-							: 'system-status-page-tab-inactive'
+							? "system-status-page-tab-active"
+							: "system-status-page-tab-inactive"
 					}`}
 				>
 					{tab.label}
@@ -173,7 +173,7 @@ function IssueRow({ check, isOpen, onToggle, showBorder }: IssueRowProps) {
 	return (
 		<div
 			className={
-				showBorder ? 'system-status-page-issue-row-bordered' : ''
+				showBorder ? "system-status-page-issue-row-bordered" : ""
 			}
 		>
 			<button
@@ -183,7 +183,7 @@ function IssueRow({ check, isOpen, onToggle, showBorder }: IssueRowProps) {
 			>
 				<div className="system-status-page-issue-copy">
 					<p className="system-status-page-issue-label">
-						{check?.label || __('Check')}
+						{check?.label || __("Check")}
 					</p>
 				</div>
 				<div className="system-status-page-issue-meta">
@@ -205,7 +205,7 @@ function IssueRow({ check, isOpen, onToggle, showBorder }: IssueRowProps) {
 			</button>
 			{isOpen ? (
 				<div className="system-status-page-issue-body">
-					{check?.description || __('Not available')}
+					{check?.description || __("Not available")}
 				</div>
 			) : null}
 		</div>
@@ -282,8 +282,8 @@ function InfoSection({ section, isOpen, onToggle }: InfoSectionProps) {
 										key={`${section.id}-${item.label}`}
 										className={
 											index > 0
-												? 'system-status-page-info-row-bordered'
-												: ''
+												? "system-status-page-info-row-bordered"
+												: ""
 										}
 									>
 										<th className="system-status-page-info-heading">
@@ -293,8 +293,8 @@ function InfoSection({ section, isOpen, onToggle }: InfoSectionProps) {
 											<p
 												className={`system-status-page-info-value ${
 													item.monospace
-														? 'system-status-page-info-value-monospace'
-														: ''
+														? "system-status-page-info-value-monospace"
+														: ""
 												}`}
 											>
 												{displayValue(item.value)}
@@ -325,14 +325,14 @@ function SystemStatusPage() {
 	} = useGetSystemStatusQuery(undefined);
 	const status = systemStatusResponse?.data || null;
 	const errorMessage = extractErrorMessage(systemStatusError);
-	const [activeView, setActiveView] = useState<StatusView>('status');
+	const [activeView, setActiveView] = useState<StatusView>("status");
 	const [showPassedChecks, setShowPassedChecks] = useState(false);
 	const [copiedInfo, setCopiedInfo] = useState(false);
 	const [expandedChecks, setExpandedChecks] = useState<Set<string>>(
 		new Set()
 	);
 	const [expandedSections, setExpandedSections] = useState(
-		new Set<string>(['peakurl'])
+		new Set<string>(["peakurl"])
 	);
 
 	if (isLoading && !status) {
@@ -344,27 +344,27 @@ function SystemStatusPage() {
 			<ErrorState
 				errorMessage={
 					errorMessage ||
-					__('System status data is not available right now.')
+					__("System status data is not available right now.")
 				}
 			/>
 		);
 	}
 
-	const overallStatus = status?.summary?.overall || 'warning';
+	const overallStatus = status?.summary?.overall || "warning";
 	const overallTone = getStatusTone(overallStatus);
 	const overallLabel = getOverallLabel(overallStatus);
 	const checks: SystemCheck[] = status?.checks || [];
 	const errorChecks = checks.filter(
-		(check: SystemCheck) => 'error' === check.status
+		(check: SystemCheck) => "error" === check.status
 	);
 	const warningChecks = checks.filter(
-		(check: SystemCheck) => 'warning' === check.status
+		(check: SystemCheck) => "warning" === check.status
 	);
 	const passingChecks = checks.filter(
-		(check: SystemCheck) => 'ok' === check.status
+		(check: SystemCheck) => "ok" === check.status
 	);
 	const mailDriver =
-		'smtp' === status?.mail?.driver ? __('SMTP') : __('PHP mail()');
+		"smtp" === status?.mail?.driver ? __("SMTP") : __("PHP mail()");
 	const languageName =
 		status?.site?.languageNativeName || status?.site?.languageLabel;
 	const maxExecutionTime = status?.server?.maxExecutionTime;
@@ -374,350 +374,350 @@ function SystemStatusPage() {
 	const schemaIssuesCount = status?.database?.schemaIssuesCount;
 
 	const peakurlItems = [
-		{ label: __('Version'), value: status?.site?.version || __('Unknown') },
+		{ label: __("Version"), value: status?.site?.version || __("Unknown") },
 		{
-			label: __('Site Language'),
+			label: __("Site Language"),
 			value: languageName,
-			helperText: status?.site?.locale || '',
+			helperText: status?.site?.locale || "",
 		},
-		{ label: __('Environment'), value: status?.site?.environment },
+		{ label: __("Environment"), value: status?.site?.environment },
 		{
-			label: __('Site URL'),
+			label: __("Site URL"),
 			value: status?.site?.url,
 			monospace: true,
 		},
 		{
-			label: __('Install Type'),
+			label: __("Install Type"),
 			value:
-				'release' === status?.site?.installType
-					? __('Packaged Release')
-					: __('Source Checkout'),
+				"release" === status?.site?.installType
+					? __("Packaged Release")
+					: __("Source Checkout"),
 		},
 		{
-			label: __('Debug Mode'),
+			label: __("Debug Mode"),
 			value: formatBoolean(
 				status?.site?.debugEnabled,
-				__('Enabled'),
-				__('Disabled')
+				__("Enabled"),
+				__("Disabled")
 			),
 		},
 		{
-			label: __('Last Checked'),
+			label: __("Last Checked"),
 			value: formatDateTimeValue(
 				status?.generatedAt,
-				__('Not available')
+				__("Not available")
 			),
 		},
 	];
 
 	const storageItems = [
 		{
-			label: __('Content Directory'),
+			label: __("Content Directory"),
 			value: status?.storage?.contentDirectory,
 			helperText: status?.storage?.contentExists
 				? joinHelperText([
 						formatBoolean(
 							status?.storage?.contentWritable,
-							__('Writable'),
-							__('Not Writable')
+							__("Writable"),
+							__("Not Writable")
 						),
 						formatByteSize(
 							status?.storage?.contentDirectorySizeBytes,
-							''
+							""
 						),
 					])
-				: __('Missing'),
+				: __("Missing"),
 			monospace: true,
 		},
 		{
-			label: __('Languages Directory'),
+			label: __("Languages Directory"),
 			value: status?.storage?.languagesDirectory,
 			helperText: status?.storage?.languagesDirectoryExists
 				? joinHelperText([
 						formatBoolean(
 							status?.storage?.languagesDirectoryReadable,
-							__('Readable'),
-							__('Not Readable')
+							__("Readable"),
+							__("Not Readable")
 						),
 						formatByteSize(
 							status?.storage?.languagesDirectorySizeBytes,
-							''
+							""
 						),
 					])
-				: __('Missing'),
+				: __("Missing"),
 			monospace: true,
 		},
 		{
-			label: __('Config File'),
+			label: __("Config File"),
 			value: status?.storage?.configPath,
 			helperText: status?.storage?.configExists
 				? joinHelperText([
-						__('Present'),
-						formatByteSize(status?.storage?.configSizeBytes, ''),
+						__("Present"),
+						formatByteSize(status?.storage?.configSizeBytes, ""),
 					])
-				: __('Missing'),
+				: __("Missing"),
 			monospace: true,
 		},
 		{
-			label: __('Debug Log'),
+			label: __("Debug Log"),
 			value: status?.storage?.debugLogPath,
 			helperText: status?.storage?.debugLogExists
 				? joinHelperText([
 						formatBoolean(
 							status?.storage?.debugLogReadable,
-							__('Readable'),
-							__('Not Readable')
+							__("Readable"),
+							__("Not Readable")
 						),
-						formatByteSize(status?.storage?.debugLogSizeBytes, ''),
+						formatByteSize(status?.storage?.debugLogSizeBytes, ""),
 					])
-				: __('Not created yet'),
+				: __("Not created yet"),
 			monospace: true,
 		},
 		{
-			label: __('App Directory'),
+			label: __("App Directory"),
 			value: status?.storage?.appDirectory,
 			helperText: joinHelperText([
 				formatBoolean(
 					status?.storage?.appWritable,
-					__('Writable'),
-					__('Not Writable')
+					__("Writable"),
+					__("Not Writable")
 				),
-				formatByteSize(status?.storage?.appDirectorySizeBytes, ''),
+				formatByteSize(status?.storage?.appDirectorySizeBytes, ""),
 			]),
 			monospace: true,
 		},
 		{
-			label: __('Release Root'),
+			label: __("Release Root"),
 			value: status?.storage?.releaseRoot,
 			helperText: formatByteSize(
 				status?.storage?.releaseRootSizeBytes,
-				''
+				""
 			),
 			monospace: true,
 		},
 	];
 
 	const serverItems = [
-		{ label: __('PHP Version'), value: status?.server?.phpVersion },
-		{ label: __('PHP SAPI'), value: status?.server?.phpSapi },
+		{ label: __("PHP Version"), value: status?.server?.phpVersion },
+		{ label: __("PHP SAPI"), value: status?.server?.phpSapi },
 		{
-			label: __('Web Server'),
-			value: status?.server?.serverSoftware || __('Unknown'),
+			label: __("Web Server"),
+			value: status?.server?.serverSoftware || __("Unknown"),
 		},
 		{
-			label: __('Operating System'),
-			value: status?.server?.operatingSystem || __('Unknown'),
+			label: __("Operating System"),
+			value: status?.server?.operatingSystem || __("Unknown"),
 		},
-		{ label: __('Timezone'), value: status?.server?.timezone },
-		{ label: __('Memory Limit'), value: status?.server?.memoryLimit },
+		{ label: __("Timezone"), value: status?.server?.timezone },
+		{ label: __("Memory Limit"), value: status?.server?.memoryLimit },
 		{
-			label: __('Max Execution Time'),
+			label: __("Max Execution Time"),
 			value: hasValue(maxExecutionTime)
 				? `${String(maxExecutionTime)}s`
-				: __('Unknown'),
+				: __("Unknown"),
 		},
 		{
-			label: __('Upload Max Filesize'),
+			label: __("Upload Max Filesize"),
 			value: status?.server?.uploadMaxFilesize,
 		},
-		{ label: __('POST Max Size'), value: status?.server?.postMaxSize },
+		{ label: __("POST Max Size"), value: status?.server?.postMaxSize },
 		{
-			label: __('Intl Extension'),
+			label: __("Intl Extension"),
 			value: formatBoolean(
 				status?.server?.extensions?.intl,
-				__('Available'),
-				__('Missing')
+				__("Available"),
+				__("Missing")
 			),
 		},
 		{
-			label: __('cURL Extension'),
+			label: __("cURL Extension"),
 			value: formatBoolean(
 				status?.server?.extensions?.curl,
-				__('Available'),
-				__('Missing')
+				__("Available"),
+				__("Missing")
 			),
 		},
 		{
-			label: __('ZipArchive'),
+			label: __("ZipArchive"),
 			value: formatBoolean(
 				status?.server?.extensions?.zip,
-				__('Available'),
-				__('Missing')
+				__("Available"),
+				__("Missing")
 			),
 		},
 	];
 
 	const databaseItems = [
 		{
-			label: __('Database Server'),
-			value: status?.database?.serverType || __('Unknown'),
+			label: __("Database Server"),
+			value: status?.database?.serverType || __("Unknown"),
 		},
 		{
-			label: __('Version'),
-			value: status?.database?.version || __('Unknown'),
+			label: __("Version"),
+			value: status?.database?.version || __("Unknown"),
 		},
-		{ label: __('Host'), value: status?.database?.host },
+		{ label: __("Host"), value: status?.database?.host },
 		{
-			label: __('Port'),
+			label: __("Port"),
 			value: hasValue(databasePort)
 				? String(databasePort)
-				: __('Not available'),
+				: __("Not available"),
 		},
-		{ label: __('Database Name'), value: status?.database?.name },
-		{ label: __('Charset'), value: status?.database?.charset },
+		{ label: __("Database Name"), value: status?.database?.name },
+		{ label: __("Charset"), value: status?.database?.charset },
 		{
-			label: __('Table Prefix'),
-			value: status?.database?.prefix || __('None'),
+			label: __("Table Prefix"),
+			value: status?.database?.prefix || __("None"),
 		},
 		{
-			label: __('Recorded Schema'),
+			label: __("Recorded Schema"),
 			value: hasValue(recordedSchemaVersion)
 				? String(recordedSchemaVersion)
-				: __('Unknown'),
+				: __("Unknown"),
 		},
 		{
-			label: __('Required Schema'),
+			label: __("Required Schema"),
 			value: hasValue(requiredSchemaVersion)
 				? String(requiredSchemaVersion)
-				: __('Unknown'),
+				: __("Unknown"),
 		},
 		{
-			label: __('Schema Status'),
+			label: __("Schema Status"),
 			value: status?.database?.schemaUpgradeRequired
-				? __('Upgrade Recommended')
-				: __('Current'),
+				? __("Upgrade Recommended")
+				: __("Current"),
 			helperText: schemaIssuesCount
-				? `${schemaIssuesCount} ${__('issue(s) detected')}`
-				: '',
+				? `${schemaIssuesCount} ${__("issue(s) detected")}`
+				: "",
 		},
 	];
 
 	const mailItems = [
-		{ label: __('Driver'), value: mailDriver },
+		{ label: __("Driver"), value: mailDriver },
 		{
-			label: __('Transport Ready'),
+			label: __("Transport Ready"),
 			value: formatBoolean(
 				status?.mail?.transportReady,
-				__('Ready'),
-				__('Needs Setup')
+				__("Ready"),
+				__("Needs Setup")
 			),
 		},
-		{ label: __('From Email'), value: status?.mail?.fromEmail },
-		{ label: __('From Name'), value: status?.mail?.fromName },
+		{ label: __("From Email"), value: status?.mail?.fromEmail },
+		{ label: __("From Name"), value: status?.mail?.fromName },
 		{
-			label: __('SMTP Host'),
-			value: status?.mail?.smtpHost || __('Not configured'),
+			label: __("SMTP Host"),
+			value: status?.mail?.smtpHost || __("Not configured"),
 		},
 		{
-			label: __('SMTP Port'),
-			value: status?.mail?.smtpPort || __('Not configured'),
+			label: __("SMTP Port"),
+			value: status?.mail?.smtpPort || __("Not configured"),
 		},
 		{
-			label: __('Encryption'),
-			value: status?.mail?.smtpEncryption || __('None'),
+			label: __("Encryption"),
+			value: status?.mail?.smtpEncryption || __("None"),
 		},
 		{
-			label: __('Authentication'),
+			label: __("Authentication"),
 			value: formatBoolean(
 				status?.mail?.smtpAuth,
-				__('Enabled'),
-				__('Disabled')
+				__("Enabled"),
+				__("Disabled")
 			),
 		},
 		{
-			label: __('Settings Storage'),
-			value: status?.mail?.configurationLabel || __('Not available'),
-			helperText: status?.mail?.configurationPath || '',
+			label: __("Settings Storage"),
+			value: status?.mail?.configurationLabel || __("Not available"),
+			helperText: status?.mail?.configurationPath || "",
 		},
 	];
 
 	const locationItems = [
 		{
-			label: __('Status'),
+			label: __("Status"),
 			value: status?.location?.locationAnalyticsReady
-				? __('Ready')
-				: __('Setup Required'),
+				? __("Ready")
+				: __("Setup Required"),
 		},
 		{
-			label: __('Database Updated'),
+			label: __("Database Updated"),
 			value: formatDateTimeValue(
 				status?.location?.lastDownloadedAt ||
 					status?.location?.databaseUpdatedAt,
-				__('Not available')
+				__("Not available")
 			),
 		},
 		{
-			label: __('Database Size'),
+			label: __("Database Size"),
 			value: formatByteSize(
 				status?.location?.databaseSizeBytes,
-				__('Not available')
+				__("Not available")
 			),
 		},
 		{
-			label: __('Credentials Saved'),
+			label: __("Credentials Saved"),
 			value: formatBoolean(
 				status?.location?.credentialsConfigured,
-				__('Yes'),
-				__('No')
+				__("Yes"),
+				__("No")
 			),
 		},
 		{
-			label: __('Account ID'),
-			value: status?.location?.accountId || __('Not configured'),
+			label: __("Account ID"),
+			value: status?.location?.accountId || __("Not configured"),
 		},
 		{
-			label: __('Database Path'),
+			label: __("Database Path"),
 			value: status?.location?.databasePath,
 			helperText: formatBoolean(
 				status?.location?.databaseReadable,
-				__('Readable'),
-				__('Not Readable')
+				__("Readable"),
+				__("Not Readable")
 			),
 			monospace: true,
 		},
 		{
-			label: __('Refresh Command'),
+			label: __("Refresh Command"),
 			value: status?.location?.downloadCommand,
 			monospace: true,
 		},
 	];
 
 	const dataItems = [
-		{ label: __('Users'), value: formatCount(status?.data?.users) },
-		{ label: __('Short Links'), value: formatCount(status?.data?.links) },
-		{ label: __('Clicks'), value: formatCount(status?.data?.clicks) },
+		{ label: __("Users"), value: formatCount(status?.data?.users) },
+		{ label: __("Short Links"), value: formatCount(status?.data?.links) },
+		{ label: __("Clicks"), value: formatCount(status?.data?.clicks) },
 		{
-			label: __('Active Sessions'),
+			label: __("Active Sessions"),
 			value: formatCount(status?.data?.sessions),
 		},
-		{ label: __('API Keys'), value: formatCount(status?.data?.apiKeys) },
-		{ label: __('Webhooks'), value: formatCount(status?.data?.webhooks) },
+		{ label: __("API Keys"), value: formatCount(status?.data?.apiKeys) },
+		{ label: __("Webhooks"), value: formatCount(status?.data?.webhooks) },
 		{
-			label: __('Activity Events'),
+			label: __("Activity Events"),
 			value: formatCount(status?.data?.auditEvents),
 		},
 		{
-			label: __('Managed Tables'),
+			label: __("Managed Tables"),
 			value: formatCount(status?.data?.managedTables),
 		},
 	];
 
 	const infoSections: InfoSectionData[] = [
-		{ id: 'peakurl', title: 'PeakURL', items: peakurlItems },
+		{ id: "peakurl", title: "PeakURL", items: peakurlItems },
 		{
-			id: 'directories',
-			title: __('Directories and Sizes'),
+			id: "directories",
+			title: __("Directories and Sizes"),
 			items: storageItems,
 		},
-		{ id: 'server', title: __('Server'), items: serverItems },
-		{ id: 'database', title: __('Database'), items: databaseItems },
-		{ id: 'email', title: __('Email'), items: mailItems },
+		{ id: "server", title: __("Server"), items: serverItems },
+		{ id: "database", title: __("Database"), items: databaseItems },
+		{ id: "email", title: __("Email"), items: mailItems },
 		{
-			id: 'location',
-			title: __('Location Data'),
+			id: "location",
+			title: __("Location Data"),
 			items: locationItems,
 		},
-		{ id: 'footprint', title: __('Data Footprint'), items: dataItems },
+		{ id: "footprint", title: __("Data Footprint"), items: dataItems },
 	];
 
 	const toggleCheck = (checkKey: string) => {
@@ -753,14 +753,14 @@ function SystemStatusPage() {
 			await copyToClipboard(buildExportText(infoSections));
 			setCopiedInfo(true);
 			notification.success(
-				__('Copied'),
-				__('System status info copied to clipboard')
+				__("Copied"),
+				__("System status info copied to clipboard")
 			);
 			window.setTimeout(() => setCopiedInfo(false), 2000);
 		} catch {
 			notification.error(
-				__('Copy failed'),
-				__('PeakURL could not copy the system status information.')
+				__("Copy failed"),
+				__("PeakURL could not copy the system status information.")
 			);
 		}
 	};
@@ -771,7 +771,7 @@ function SystemStatusPage() {
 				<div className="system-status-page-header">
 					<div className="system-status-page-summary">
 						<h1 className="system-status-page-title">
-							{__('System Status')}
+							{__("System Status")}
 						</h1>
 
 						<div className="system-status-page-status">
@@ -791,10 +791,10 @@ function SystemStatusPage() {
 
 						<p className="system-status-page-status-time">
 							{sprintf(
-								__('Last checked: %s'),
+								__("Last checked: %s"),
 								formatDateTimeValue(
 									status?.generatedAt,
-									__('Not available')
+									__("Not available")
 								)
 							)}
 						</p>
@@ -811,15 +811,15 @@ function SystemStatusPage() {
 						<ErrorState errorMessage={errorMessage} />
 					) : null}
 
-					{'status' === activeView ? (
+					{"status" === activeView ? (
 						<div className="system-status-page-view">
 							<section className="system-status-page-section-compact">
 								<h2 className="system-status-page-section-title">
-									{__('System Status')}
+									{__("System Status")}
 								</h2>
 								<p className="system-status-page-section-summary">
 									{__(
-										'The system status check shows information about your PeakURL configuration and items that may need your attention.'
+										"The system status check shows information about your PeakURL configuration and items that may need your attention."
 									)}
 								</p>
 							</section>
@@ -828,11 +828,11 @@ function SystemStatusPage() {
 								<IssueSection
 									title={formatHeadingCount(
 										errorChecks.length,
-										__('1 critical issue'),
-										__('%s critical issues')
+										__("1 critical issue"),
+										__("%s critical issues")
 									)}
 									description={__(
-										'Critical issues are items that may have a high impact on your site performance or security. Resolving these issues should be prioritized.'
+										"Critical issues are items that may have a high impact on your site performance or security. Resolving these issues should be prioritized."
 									)}
 									checks={errorChecks}
 									expandedChecks={expandedChecks}
@@ -844,11 +844,11 @@ function SystemStatusPage() {
 								<IssueSection
 									title={formatHeadingCount(
 										warningChecks.length,
-										__('1 recommended improvement'),
-										__('%s recommended improvements')
+										__("1 recommended improvement"),
+										__("%s recommended improvements")
 									)}
 									description={__(
-										'Recommended improvements are beneficial for your site, though not as urgent as a critical issue. They may include improvements in areas such as security, performance, and user experience.'
+										"Recommended improvements are beneficial for your site, though not as urgent as a critical issue. They may include improvements in areas such as security, performance, and user experience."
 									)}
 									checks={warningChecks}
 									expandedChecks={expandedChecks}
@@ -859,10 +859,10 @@ function SystemStatusPage() {
 							{0 === errorChecks.length &&
 							0 === warningChecks.length ? (
 								<div
-									className={`system-status-page-ok-panel ${getStatusTone('ok').panel}`}
+									className={`system-status-page-ok-panel ${getStatusTone("ok").panel}`}
 								>
 									{__(
-										'All system status checks are currently passing.'
+										"All system status checks are currently passing."
 									)}
 								</div>
 							) : null}
@@ -882,12 +882,12 @@ function SystemStatusPage() {
 											<CheckCircle2 size={16} />
 											<span>
 												{showPassedChecks
-													? __('Hide passed tests')
+													? __("Hide passed tests")
 													: formatHeadingCount(
 															passingChecks.length,
-															__('1 passed test'),
+															__("1 passed test"),
 															__(
-																'%s passed tests'
+																"%s passed tests"
 															)
 														)}
 											</span>
@@ -936,16 +936,16 @@ function SystemStatusPage() {
 						<div className="system-status-page-view-compact">
 							<section className="system-status-page-section-compact">
 								<h2 className="system-status-page-section-title">
-									{__('System Status Info')}
+									{__("System Status Info")}
 								</h2>
 								<p className="system-status-page-section-summary">
 									{__(
-										'This page can show you every detail about the configuration of your PeakURL install.'
+										"This page can show you every detail about the configuration of your PeakURL install."
 									)}
 								</p>
 								<p className="system-status-page-section-summary">
 									{__(
-										'If you want to export a full snapshot of this page, you can use the button below to copy it to the clipboard.'
+										"If you want to export a full snapshot of this page, you can use the button below to copy it to the clipboard."
 									)}
 								</p>
 							</section>
@@ -958,8 +958,8 @@ function SystemStatusPage() {
 								>
 									<Copy size={16} />
 									{copiedInfo
-										? __('Copied')
-										: __('Copy site info to clipboard')}
+										? __("Copied")
+										: __("Copy site info to clipboard")}
 								</button>
 							</div>
 

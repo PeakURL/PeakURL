@@ -1,8 +1,8 @@
-@import 'tailwindcss';
-@import './styles/theme.css';
-@import './styles/base/index.css';
-@import './styles/components/index.css';
-@import './styles/layout/index.css';
-@import './styles/pages/index.css';
-@import './styles/utilities/index.css';
-@import './styles/animations.css';
+@import "tailwindcss";
+@import "./styles/theme.css";
+@import "./styles/base/index.css";
+@import "./styles/components/index.css";
+@import "./styles/layout/index.css";
+@import "./styles/pages/index.css";
+@import "./styles/utilities/index.css";
+@import "./styles/animations.css";

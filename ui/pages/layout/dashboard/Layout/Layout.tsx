@@ -1,29 +1,29 @@
-import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { PEAKURL_NAME, PEAKURL_VERSION } from '@constants';
-import { isDocumentRtl } from '@/i18n/direction';
-import { __, sprintf } from '@/i18n';
-import Sidebar from '../Sidebar';
-import { Header } from '../Header';
-import { AdminNotices } from '../AdminNotices';
-import type { LayoutProps } from '../types';
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { PEAKURL_NAME, PEAKURL_VERSION } from "@constants";
+import { isDocumentRtl } from "@/i18n/direction";
+import { __, sprintf } from "@/i18n";
+import Sidebar from "../Sidebar";
+import { Header } from "../Header";
+import { AdminNotices } from "../AdminNotices";
+import type { LayoutProps } from "../types";
 
 export const Layout = ({ children }: LayoutProps) => {
 	const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 	const isRtl = isDocumentRtl();
-	const basePath = '/dashboard';
+	const basePath = "/dashboard";
 	const location = useLocation();
 	const headerKey = `${location.pathname}${location.search}`;
 	const footerLink =
-		'https://peakurl.org?utm_source=peakurl_dashboard&utm_medium=dashboard_footer&utm_campaign=app_footer';
-	const normalizedPath = location.pathname.replace(/\/+$/, '') || '/';
-	const showAdminNotices = normalizedPath !== '/dashboard/about';
+		"https://peakurl.org?utm_source=peakurl_dashboard&utm_medium=dashboard_footer&utm_campaign=app_footer";
+	const normalizedPath = location.pathname.replace(/\/+$/, "") || "/";
+	const showAdminNotices = normalizedPath !== "/dashboard/about";
 	const footerCopy = sprintf(
-		__('Thank you for choosing %s.'),
-		'__PEAKURL_NAME__'
+		__("Thank you for choosing %s."),
+		"__PEAKURL_NAME__"
 	);
-	const [footerCopyBeforeLink, footerCopyAfterLink = ''] =
-		footerCopy.split('__PEAKURL_NAME__');
+	const [footerCopyBeforeLink, footerCopyAfterLink = ""] =
+		footerCopy.split("__PEAKURL_NAME__");
 
 	return (
 		<div className="dashboard-layout">
@@ -48,7 +48,7 @@ export const Layout = ({ children }: LayoutProps) => {
 					<footer className="dashboard-layout-footer">
 						<div className="dashboard-layout-footer-inner">
 							<p
-								dir={isRtl ? 'rtl' : 'ltr'}
+								dir={isRtl ? "rtl" : "ltr"}
 								className="dashboard-layout-footer-copy"
 							>
 								{footerCopyBeforeLink}
@@ -63,10 +63,10 @@ export const Layout = ({ children }: LayoutProps) => {
 								{footerCopyAfterLink}
 							</p>
 							<p
-								dir={isRtl ? 'rtl' : 'ltr'}
+								dir={isRtl ? "rtl" : "ltr"}
 								className="dashboard-layout-footer-version"
 							>
-								{__('Version')}{' '}
+								{__("Version")}{" "}
 								<bdi className="dashboard-layout-footer-version-value">
 									{PEAKURL_VERSION}
 								</bdi>

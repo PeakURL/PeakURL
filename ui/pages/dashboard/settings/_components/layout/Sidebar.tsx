@@ -8,11 +8,11 @@ import {
 	Globe,
 	Plug,
 	Download,
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { getDocumentDirection } from '@/i18n/direction';
-import { cn } from '@/utils';
-import type { SettingsTabIcon, SettingsTabItem, SidebarProps } from './types';
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import { getDocumentDirection } from "@/i18n/direction";
+import { cn } from "@/utils";
+import type { SettingsTabIcon, SettingsTabItem, SidebarProps } from "./types";
 
 // Icon mapping
 const iconMap: Record<SettingsTabIcon, typeof Settings> = {
@@ -31,17 +31,17 @@ const Sidebar = ({ tabs, activeTab }: SidebarProps) => {
 	const direction = getDocumentDirection();
 	const getLinkClassName = (isActive: boolean) =>
 		cn(
-			'settings-sidebar-link',
+			"settings-sidebar-link",
 			isActive
-				? 'settings-sidebar-link-active'
-				: 'settings-sidebar-link-inactive'
+				? "settings-sidebar-link-active"
+				: "settings-sidebar-link-inactive"
 		);
 	const getIconClassName = (isActive: boolean) =>
 		cn(
-			'settings-sidebar-icon',
+			"settings-sidebar-icon",
 			isActive
-				? 'settings-sidebar-icon-active'
-				: 'settings-sidebar-icon-inactive'
+				? "settings-sidebar-icon-active"
+				: "settings-sidebar-icon-inactive"
 		);
 
 	return (

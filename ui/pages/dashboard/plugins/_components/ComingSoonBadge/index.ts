@@ -1,1 +1,1 @@
-export { default } from './ComingSoonBadge';
+export { default } from "./ComingSoonBadge";

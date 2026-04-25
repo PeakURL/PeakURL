@@ -1,7 +1,7 @@
-import { Button, type ButtonVariant } from '@/components';
-import { __, sprintf } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
-import { cn, escUrl, formatDateTimeValue, isRelativeUrl } from '@/utils';
+import { Button, type ButtonVariant } from "@/components";
+import { __, sprintf } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
+import { cn, escUrl, formatDateTimeValue, isRelativeUrl } from "@/utils";
 import {
 	AlertCircle,
 	CheckCircle2,
@@ -9,7 +9,7 @@ import {
 	Download,
 	ExternalLink,
 	RefreshCcw,
-} from 'lucide-react';
+} from "lucide-react";
 import type {
 	BadgeState,
 	DatabaseStatus,
@@ -26,30 +26,30 @@ import type {
 	UpdateIssue,
 	UpdateStatusPayload,
 	UpdatesTabProps,
-} from '../types';
-import ReleaseInstallProgress from './ReleaseInstallProgress';
+} from "../types";
+import ReleaseInstallProgress from "./ReleaseInstallProgress";
 
 function hasUpdateAvailable(status?: UpdateStatusPayload | null) {
 	if (status?.updateAvailable) {
 		return true;
 	}
 
-	const currentVersion = String(status?.currentVersion || '')
+	const currentVersion = String(status?.currentVersion || "")
 		.trim()
-		.replace(/^v/i, '');
-	const latestVersion = String(status?.latestVersion || '')
+		.replace(/^v/i, "");
+	const latestVersion = String(status?.latestVersion || "")
 		.trim()
-		.replace(/^v/i, '');
+		.replace(/^v/i, "");
 
 	if (!currentVersion || !latestVersion || currentVersion === latestVersion) {
 		return false;
 	}
 
 	const currentParts = currentVersion
-		.split('.')
+		.split(".")
 		.map((part) => Number.parseInt(part, 10));
 	const latestParts = latestVersion
-		.split('.')
+		.split(".")
 		.map((part) => Number.parseInt(part, 10));
 
 	if (
@@ -90,61 +90,61 @@ function buildAppStatus(
 
 	if (errorMessage || status?.lastError) {
 		return {
-			tone: 'error',
-			label: __('Unavailable'),
-			title: __('Update service unavailable'),
+			tone: "error",
+			label: __("Unavailable"),
+			title: __("Update service unavailable"),
 			description:
 				errorMessage ||
 				status?.lastError ||
-				__('PeakURL could not reach the update manifest.'),
+				__("PeakURL could not reach the update manifest."),
 		};
 	}
 
 	if (updateAvailable) {
 		return {
-			tone: 'info',
-			label: __('Update Available'),
+			tone: "info",
+			label: __("Update Available"),
 			title: sprintf(
-				__('PeakURL %s is available'),
-				status?.latestVersion || __('update')
+				__("PeakURL %s is available"),
+				status?.latestVersion || __("update")
 			),
 			description: status?.canApply
 				? __(
-						'A newer PeakURL version is ready to install when you are ready.'
+						"A newer PeakURL version is ready to install when you are ready."
 					)
 				: __(
-						'A newer PeakURL version is available, but this install cannot apply it automatically from the dashboard.'
+						"A newer PeakURL version is available, but this install cannot apply it automatically from the dashboard."
 					),
 		};
 	}
 
 	if (reinstallAvailable) {
 		return {
-			tone: 'success',
-			label: __('Latest'),
+			tone: "success",
+			label: __("Latest"),
 			title: sprintf(
-				__('PeakURL %s is the latest version'),
-				status?.currentVersion || __('Unknown')
+				__("PeakURL %s is the latest version"),
+				status?.currentVersion || __("Unknown")
 			),
 			description: status?.canApply
 				? __(
-						'This site is already on the latest version. Reinstall the latest package if you need to restore packaged files.'
+						"This site is already on the latest version. Reinstall the latest package if you need to restore packaged files."
 					)
 				: __(
-						'This site is already on the latest version, but this install cannot reinstall the latest package automatically from the dashboard.'
+						"This site is already on the latest version, but this install cannot reinstall the latest package automatically from the dashboard."
 					),
 		};
 	}
 
 	return {
-		tone: 'success',
-		label: __('Latest'),
+		tone: "success",
+		label: __("Latest"),
 		title: sprintf(
-			__('PeakURL %s is the latest version'),
-			status?.currentVersion || __('Unknown')
+			__("PeakURL %s is the latest version"),
+			status?.currentVersion || __("Unknown")
 		),
 		description: __(
-			'This site is already running the latest known PeakURL version.'
+			"This site is already running the latest known PeakURL version."
 		),
 	};
 }
@@ -154,45 +154,45 @@ function buildDatabaseStatus(
 ): BadgeState {
 	if (databaseStatus?.lastError) {
 		return {
-			tone: 'error',
-			label: __('Attention Needed'),
-			title: __('Database upgrade failed'),
+			tone: "error",
+			label: __("Attention Needed"),
+			title: __("Database upgrade failed"),
 			description:
 				databaseStatus.lastError ||
-				__('PeakURL could not repair the database schema.'),
+				__("PeakURL could not repair the database schema."),
 		};
 	}
 
 	if (databaseStatus?.upgradeRequired) {
 		return {
-			tone: 'info',
-			label: __('Upgrade Recommended'),
-			title: __('Database upgrade recommended'),
+			tone: "info",
+			label: __("Upgrade Recommended"),
+			title: __("Database upgrade recommended"),
 			description: __(
-				'The database needs attention before every runtime path is fully current.'
+				"The database needs attention before every runtime path is fully current."
 			),
 		};
 	}
 
 	return {
-		tone: 'success',
-		label: __('Up to Date'),
-		title: __('Database schema is up to date'),
+		tone: "success",
+		label: __("Up to Date"),
+		title: __("Database schema is up to date"),
 		description: __(
-			'PeakURL has no outstanding schema repairs for this release.'
+			"PeakURL has no outstanding schema repairs for this release."
 		),
 	};
 }
 
-function StatusBadge({ tone = 'info', label }: StatusBadgeProps) {
+function StatusBadge({ tone = "info", label }: StatusBadgeProps) {
 	const styles: Record<StatusTone, string> = {
-		info: 'settings-updates-status-badge-info',
-		success: 'settings-updates-status-badge-success',
-		error: 'settings-updates-status-badge-error',
+		info: "settings-updates-status-badge-info",
+		success: "settings-updates-status-badge-success",
+		error: "settings-updates-status-badge-error",
 	};
 
 	return (
-		<span className={cn('settings-updates-status-badge', styles[tone])}>
+		<span className={cn("settings-updates-status-badge", styles[tone])}>
 			{label}
 		</span>
 	);
@@ -210,7 +210,7 @@ function SectionHeader({
 	secondaryAction,
 }: SectionHeaderProps) {
 	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isRtl ? "rtl" : "ltr";
 
 	return (
 		<div dir={direction} className="settings-updates-card-header">
@@ -236,7 +236,7 @@ function SectionHeader({
 
 function MetricGrid({ items }: MetricGridProps) {
 	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isRtl ? "rtl" : "ltr";
 
 	return (
 		<div className="settings-updates-metric-grid">
@@ -250,11 +250,11 @@ function MetricGrid({ items }: MetricGridProps) {
 						{item.label}
 					</p>
 					<p className="settings-updates-metric-value">
-						{'ltr' === item.valueDirection ? (
+						{"ltr" === item.valueDirection ? (
 							<span className="preserve-ltr-value inline-block">
 								{item.value}
 							</span>
-						) : 'rtl' === item.valueDirection ? (
+						) : "rtl" === item.valueDirection ? (
 							<span dir="rtl" className="inline-block">
 								{item.value}
 							</span>
@@ -272,18 +272,18 @@ function InlineNotice({
 	icon: Icon,
 	title,
 	description,
-	tone = 'info',
+	tone = "info",
 }: InlineNoticeProps) {
 	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isRtl ? "rtl" : "ltr";
 	const styles: Record<StatusTone, string> = {
-		info: 'settings-updates-notice-info',
-		success: 'settings-updates-notice-success',
-		error: 'settings-updates-notice-error',
+		info: "settings-updates-notice-info",
+		success: "settings-updates-notice-success",
+		error: "settings-updates-notice-error",
 	};
 
 	return (
-		<div className={cn('settings-updates-notice', styles[tone])}>
+		<div className={cn("settings-updates-notice", styles[tone])}>
 			<div dir={direction} className="settings-updates-notice-layout">
 				<Icon size={18} className="settings-updates-notice-icon" />
 				<div className="settings-updates-notice-content">
@@ -312,13 +312,13 @@ function UpdateActions({
 	onReinstall,
 }: UpdateActionsProps) {
 	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isRtl ? "rtl" : "ltr";
 	const isInstallingRelease = isApplying || isReinstalling;
 	const showDisabledReason =
 		(updateAvailable || reinstallAvailable) &&
 		!canApply &&
 		Boolean(disabledReason);
-	const primaryVariant: ButtonVariant = canApply ? 'primary' : 'outline';
+	const primaryVariant: ButtonVariant = canApply ? "primary" : "outline";
 	const primaryAction = updateAvailable ? (
 		<Button
 			variant={primaryVariant}
@@ -334,9 +334,9 @@ function UpdateActions({
 				isRepairing ||
 				isReinstalling
 			}
-			title={!canApply ? disabledReason || '' : ''}
+			title={!canApply ? disabledReason || "" : ""}
 		>
-			{__('Install Update')}
+			{__("Install Update")}
 		</Button>
 	) : reinstallAvailable ? (
 		<Button
@@ -353,9 +353,9 @@ function UpdateActions({
 				isRepairing ||
 				isApplying
 			}
-			title={!canApply ? disabledReason || '' : ''}
+			title={!canApply ? disabledReason || "" : ""}
 		>
-			{__('Reinstall Latest Version')}
+			{__("Reinstall Latest Version")}
 		</Button>
 	) : null;
 	const showCheckButton = reinstallAvailable || !updateAvailable;
@@ -363,18 +363,18 @@ function UpdateActions({
 	return (
 		<div
 			className={cn(
-				'settings-updates-actions',
+				"settings-updates-actions",
 				isRtl
-					? 'settings-updates-actions-start'
-					: 'settings-updates-actions-end'
+					? "settings-updates-actions-start"
+					: "settings-updates-actions-end"
 			)}
 		>
 			<div
 				className={cn(
-					'settings-updates-actions-row',
+					"settings-updates-actions-row",
 					isRtl
-						? 'settings-updates-actions-row-start'
-						: 'settings-updates-actions-row-end'
+						? "settings-updates-actions-row-start"
+						: "settings-updates-actions-row-end"
 				)}
 			>
 				{showCheckButton ? (
@@ -387,7 +387,7 @@ function UpdateActions({
 						icon={RefreshCcw}
 						disabled={isInstallingRelease || isRepairing}
 					>
-						{__('Check for Updates')}
+						{__("Check for Updates")}
 					</Button>
 				) : null}
 				{primaryAction}
@@ -410,15 +410,15 @@ function DetailRow({
 	value,
 	icon: Icon,
 	href,
-	valueDirection = 'auto',
+	valueDirection = "auto",
 }: DetailRowProps) {
 	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isRtl ? "rtl" : "ltr";
 	const safeHref = escUrl(href);
 	const valueNode =
-		'ltr' === valueDirection ? (
+		"ltr" === valueDirection ? (
 			<span className="preserve-ltr-value inline-block">{value}</span>
-		) : 'rtl' === valueDirection ? (
+		) : "rtl" === valueDirection ? (
 			<span dir="rtl" className="inline-block">
 				{value}
 			</span>
@@ -454,7 +454,7 @@ function DetailRow({
 
 function IssueList({ title, issues }: IssueListProps) {
 	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isRtl ? "rtl" : "ltr";
 
 	return (
 		<div dir={direction} className="settings-updates-issues">
@@ -501,7 +501,7 @@ function UpdatesTab({
 	if (isLoading && !status && !errorMessage) {
 		return (
 			<div className="settings-updates-loading">
-				{__('Loading update status...')}
+				{__("Loading update status...")}
 			</div>
 		);
 	}
@@ -510,9 +510,9 @@ function UpdatesTab({
 		<div className="settings-updates">
 			<SectionCard>
 				<SectionHeader
-					title={__('Application Updates')}
+					title={__("Application Updates")}
 					description={__(
-						'Check for new PeakURL releases, install updates, or reinstall the latest packaged release from the dashboard.'
+						"Check for new PeakURL releases, install updates, or reinstall the latest packaged release from the dashboard."
 					)}
 					badge={appState}
 					primaryAction={
@@ -525,7 +525,7 @@ function UpdatesTab({
 							isApplying={isApplying}
 							isReinstalling={isReinstalling}
 							isRepairing={isRepairing}
-							disabledReason={status?.applyDisabledReason || ''}
+							disabledReason={status?.applyDisabledReason || ""}
 							onCheck={onCheck}
 							onApply={onApply}
 							onReinstall={onReinstall}
@@ -536,22 +536,22 @@ function UpdatesTab({
 				<MetricGrid
 					items={[
 						{
-							label: __('Installed Version'),
-							value: status?.currentVersion || __('Unknown'),
-							valueDirection: 'ltr',
+							label: __("Installed Version"),
+							value: status?.currentVersion || __("Unknown"),
+							valueDirection: "ltr",
 						},
 						{
-							label: __('Latest Version'),
-							value: status?.latestVersion || __('Unknown'),
-							valueDirection: 'ltr',
+							label: __("Latest Version"),
+							value: status?.latestVersion || __("Unknown"),
+							valueDirection: "ltr",
 						},
 						{
-							label: __('Last Checked'),
+							label: __("Last Checked"),
 							value: formatDateTimeValue(
 								status?.lastCheckedAt,
-								__('Never')
+								__("Never")
 							),
-							valueDirection: 'ltr',
+							valueDirection: "ltr",
 						},
 					]}
 				/>
@@ -583,10 +583,10 @@ function UpdatesTab({
 					<div className="settings-updates-divider">
 						{status?.releasedAt ? (
 							<DetailRow
-								label={__('Released')}
+								label={__("Released")}
 								value={formatDateTimeValue(
 									status.releasedAt,
-									__('Never')
+									__("Never")
 								)}
 								icon={Clock3}
 								valueDirection="ltr"
@@ -594,8 +594,8 @@ function UpdatesTab({
 						) : null}
 						{status?.releaseNotesUrl ? (
 							<DetailRow
-								label={__('Release Notes')}
-								value={__('Read release notes')}
+								label={__("Release Notes")}
+								value={__("Read release notes")}
 								href={status.releaseNotesUrl}
 							/>
 						) : null}
@@ -605,17 +605,17 @@ function UpdatesTab({
 
 			<SectionCard>
 				<SectionHeader
-					title={__('Database Schema')}
+					title={__("Database Schema")}
 					description={__(
-						'PeakURL can repair missing tables, columns, indexes, and legacy leftovers so the current release runs against the expected schema.'
+						"PeakURL can repair missing tables, columns, indexes, and legacy leftovers so the current release runs against the expected schema."
 					)}
 					badge={databaseState}
 					primaryAction={
 						<Button
 							variant={
 								databaseStatus?.upgradeRequired
-									? 'primary'
-									: 'outline'
+									? "primary"
+									: "outline"
 							}
 							size="sm"
 							className="settings-updates-repair-button"
@@ -623,7 +623,7 @@ function UpdatesTab({
 							loading={isRepairing}
 							disabled={isLoading || isChecking || isApplying}
 						>
-							{__('Run Database Upgrade')}
+							{__("Run Database Upgrade")}
 						</Button>
 					}
 				/>
@@ -631,26 +631,26 @@ function UpdatesTab({
 				<MetricGrid
 					items={[
 						{
-							label: __('Recorded Schema'),
+							label: __("Recorded Schema"),
 							value: String(
-								databaseStatus?.currentVersion ?? __('Unknown')
+								databaseStatus?.currentVersion ?? __("Unknown")
 							),
-							valueDirection: 'ltr',
+							valueDirection: "ltr",
 						},
 						{
-							label: __('Required Schema'),
+							label: __("Required Schema"),
 							value: String(
-								databaseStatus?.targetVersion ?? __('Unknown')
+								databaseStatus?.targetVersion ?? __("Unknown")
 							),
-							valueDirection: 'ltr',
+							valueDirection: "ltr",
 						},
 						{
-							label: __('Last Database Upgrade'),
+							label: __("Last Database Upgrade"),
 							value: formatDateTimeValue(
 								databaseStatus?.lastUpgradedAt,
-								__('Never')
+								__("Never")
 							),
-							valueDirection: 'ltr',
+							valueDirection: "ltr",
 						},
 					]}
 				/>
@@ -676,7 +676,7 @@ function UpdatesTab({
 						{databaseStatus?.lastError ? (
 							<div className="settings-updates-error-card">
 								<p className="settings-updates-error-title">
-									{__('Last database error')}
+									{__("Last database error")}
 								</p>
 								<p className="settings-updates-error-text">
 									{databaseStatus.lastError}
@@ -685,7 +685,7 @@ function UpdatesTab({
 						) : null}
 						{visibleDatabaseIssues.length > 0 ? (
 							<IssueList
-								title={__('Recent database findings')}
+								title={__("Recent database findings")}
 								issues={visibleDatabaseIssues}
 							/>
 						) : null}

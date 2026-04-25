@@ -1,32 +1,32 @@
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
 /**
  * All available settings tab identifiers.
  * Used to uniquely identify each tab in the settings UI.
  */
 export type SettingsTabId =
-	| 'general'
-	| 'security'
-	| 'api'
-	| 'integrations'
-	| 'email'
-	| 'location'
-	| 'updates';
+	| "general"
+	| "security"
+	| "api"
+	| "integrations"
+	| "email"
+	| "location"
+	| "updates";
 
 /**
  * Supported icon names for settings tabs.
  * Typically maps to an icon library (e.g. Lucide, Heroicons).
  */
 export type SettingsTabIcon =
-	| 'settings'
-	| 'activity'
-	| 'shield'
-	| 'key'
-	| 'mail'
-	| 'mapPin'
-	| 'globe'
-	| 'plug'
-	| 'download';
+	| "settings"
+	| "activity"
+	| "shield"
+	| "key"
+	| "mail"
+	| "mapPin"
+	| "globe"
+	| "plug"
+	| "download";
 
 /**
  * Represents a single item (tab) in the settings navigation.

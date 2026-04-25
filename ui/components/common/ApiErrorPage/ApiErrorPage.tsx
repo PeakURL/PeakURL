@@ -5,31 +5,31 @@ import {
 	Route,
 	ServerCog,
 	ServerOff,
-} from 'lucide-react';
-import { useRef, useState } from 'react';
+} from "lucide-react";
+import { useRef, useState } from "react";
 
-import { API_CLIENT_BASE_URL, PEAKURL_DEBUG, PEAKURL_NAME } from '@constants';
-import { Button } from '@/components/ui';
-import { __, sprintf } from '@/i18n';
-import { extractErrorMessage, getErrorStatus } from '@/utils';
-import { BrandLockup } from '../BrandLockup';
-import type { ApiErrorPageProps } from '../types';
+import { API_CLIENT_BASE_URL, PEAKURL_DEBUG, PEAKURL_NAME } from "@constants";
+import { Button } from "@/components/ui";
+import { __, sprintf } from "@/i18n";
+import { extractErrorMessage, getErrorStatus } from "@/utils";
+import { BrandLockup } from "../BrandLockup";
+import type { ApiErrorPageProps } from "../types";
 
 function getStatusText(error: unknown): string {
 	const status = getErrorStatus(error);
 
 	return null === status
-		? __('No HTTP response')
-		: sprintf(__('HTTP %s'), String(status));
+		? __("No HTTP response")
+		: sprintf(__("HTTP %s"), String(status));
 }
 
 function isFetchNoise(message: string): boolean {
 	const normalized = message.toLowerCase();
 
 	return (
-		normalized.includes('failed to fetch') ||
-		normalized.includes('load failed') ||
-		normalized.includes('networkerror')
+		normalized.includes("failed to fetch") ||
+		normalized.includes("load failed") ||
+		normalized.includes("networkerror")
 	);
 }
 
@@ -40,7 +40,7 @@ function getDetailText(error: unknown): string {
 	if (null !== status) {
 		return sprintf(
 			__(
-				'The session check returned HTTP %s before PeakURL could confirm the current user.'
+				"The session check returned HTTP %s before PeakURL could confirm the current user."
 			),
 			String(status)
 		);
@@ -51,7 +51,7 @@ function getDetailText(error: unknown): string {
 	}
 
 	return __(
-		'The browser did not receive a usable response from the backend. The PHP service may be stopped, unreachable, or blocked before it can answer.'
+		"The browser did not receive a usable response from the backend. The PHP service may be stopped, unreachable, or blocked before it can answer."
 	);
 }
 
@@ -59,23 +59,23 @@ function getChecks() {
 	return [
 		{
 			icon: ServerCog,
-			title: __('PHP runtime'),
+			title: __("PHP runtime"),
 			description: __(
-				'Confirm the PHP app service or web server is running.'
+				"Confirm the PHP app service or web server is running."
 			),
 		},
 		{
 			icon: Database,
-			title: __('Database'),
+			title: __("Database"),
 			description: __(
-				'Check that the database host, credentials, and schema are reachable.'
+				"Check that the database host, credentials, and schema are reachable."
 			),
 		},
 		{
 			icon: Route,
-			title: __('API route'),
+			title: __("API route"),
 			description: sprintf(
-				__('Make sure requests to %s route to the PeakURL backend.'),
+				__("Make sure requests to %s route to the PeakURL backend."),
 				API_CLIENT_BASE_URL
 			),
 		},
@@ -86,9 +86,9 @@ export function ApiErrorPage({
 	error,
 	onRetry,
 	isRetrying = false,
-	title = sprintf(__('%s cannot connect to the backend'), PEAKURL_NAME),
+	title = sprintf(__("%s cannot connect to the backend"), PEAKURL_NAME),
 	description = __(
-		'The dashboard could not complete the session check. Start the PHP service and database, then retry.'
+		"The dashboard could not complete the session check. Start the PHP service and database, then retry."
 	),
 }: ApiErrorPageProps) {
 	const [localRetrying, setLocalRetrying] = useState(false);
@@ -129,7 +129,7 @@ export function ApiErrorPage({
 				<header className="api-error-header">
 					<BrandLockup size="md" />
 					<span className="api-error-status-pill">
-						{__('Service unavailable')}
+						{__("Service unavailable")}
 					</span>
 				</header>
 
@@ -141,12 +141,9 @@ export function ApiErrorPage({
 
 						<div className="api-error-copy">
 							<p className="api-error-kicker">
-								{__('Connection issue')}
+								{__("Connection issue")}
 							</p>
-							<h1
-								id="page-heading"
-								className="api-error-title"
-							>
+							<h1 id="page-heading" className="api-error-title">
 								{title}
 							</h1>
 							<p className="api-error-description">
@@ -161,24 +158,20 @@ export function ApiErrorPage({
 								onClick={handleRetry}
 								disabled={retrying}
 								className={`api-error-retry ${
-									retrying
-										? 'api-error-retry-checking'
-										: ''
+									retrying ? "api-error-retry-checking" : ""
 								} ${
-									isFlashing
-										? 'api-error-retry-flashing'
-										: ''
+									isFlashing ? "api-error-retry-flashing" : ""
 								}`}
 							>
 								{retrying
-									? __('Checking connection')
-									: __('Retry connection')}
+									? __("Checking connection")
+									: __("Retry connection")}
 							</Button>
 						</div>
 
 						<p className="api-error-note">
 							{__(
-								'If the problem continues, ask the site administrator to check the server.'
+								"If the problem continues, ask the site administrator to check the server."
 							)}
 						</p>
 					</div>
@@ -194,7 +187,7 @@ export function ApiErrorPage({
 										/>
 									</div>
 									<div className="api-error-debug-title">
-										{__('Debug details')}
+										{__("Debug details")}
 									</div>
 								</div>
 								<span className="api-error-badge">
@@ -205,22 +198,20 @@ export function ApiErrorPage({
 							<div className="api-error-debug-body">
 								<dl className="api-error-details-grid">
 									<div className="api-error-detail">
-										<dt>{__('API endpoint')}</dt>
+										<dt>{__("API endpoint")}</dt>
 										<dd>
-											<code>
-												{API_CLIENT_BASE_URL}
-											</code>
+											<code>{API_CLIENT_BASE_URL}</code>
 										</dd>
 									</div>
 									<div className="api-error-detail">
-										<dt>{__('What went wrong')}</dt>
+										<dt>{__("What went wrong")}</dt>
 										<dd>{detailText}</dd>
 									</div>
 								</dl>
 
 								<div className="api-error-checks">
 									<p className="api-error-checks-title">
-										{__('Check these first')}
+										{__("Check these first")}
 									</p>
 									<ul className="api-error-check-list">
 										{checks.map((item) => {
@@ -242,9 +233,7 @@ export function ApiErrorPage({
 															{item.title}
 														</span>
 														<span className="api-error-check-description">
-															{
-																item.description
-															}
+															{item.description}
 														</span>
 													</span>
 												</li>
@@ -260,4 +249,3 @@ export function ApiErrorPage({
 		</main>
 	);
 }
-

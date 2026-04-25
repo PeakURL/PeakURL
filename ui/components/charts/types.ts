@@ -1,7 +1,7 @@
 /**
  * Supported visual styles for the traffic chart component.
  */
-export type TrafficChartType = 'line' | 'bar';
+export type TrafficChartType = "line" | "bar";
 
 /**
  * Normalized traffic-series payload consumed by the chart component.

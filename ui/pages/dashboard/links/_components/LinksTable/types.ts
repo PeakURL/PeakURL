@@ -1,5 +1,5 @@
-import type { ChangeEvent } from 'react';
-import type { LinkRecord } from '../types';
+import type { ChangeEvent } from "react";
+import type { LinkRecord } from "../types";
 
 /**
  * Props for the links table container component.

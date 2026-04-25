@@ -1,4 +1,4 @@
-import { Skeleton } from '@/components';
+import { Skeleton } from "@/components";
 
 const UserRowSkeleton = () => (
 	<tr>

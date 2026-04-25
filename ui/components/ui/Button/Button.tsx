@@ -1,13 +1,13 @@
-import { Loader2 } from 'lucide-react';
-import { isDocumentRtl } from '@/i18n/direction';
-import { cn } from '@/utils';
+import { Loader2 } from "lucide-react";
+import { isDocumentRtl } from "@/i18n/direction";
+import { cn } from "@/utils";
 import type {
 	ButtonGroupProps,
 	ButtonProps,
 	ButtonSize,
 	ButtonVariant,
 	IconButtonProps,
-} from '../types';
+} from "../types";
 export type {
 	ButtonGroupProps,
 	ButtonIcon,
@@ -16,41 +16,41 @@ export type {
 	ButtonVariant,
 	IconButtonProps,
 	IconPosition,
-} from '../types';
+} from "../types";
 
 /**
  * Button component with visual variants, sizing, optional icons, and loading state.
  */
 export function Button({
 	children,
-	variant = 'primary',
-	size = 'md',
-	className = '',
+	variant = "primary",
+	size = "md",
+	className = "",
 	disabled = false,
 	loading = false,
 	onClick,
-	type = 'button',
+	type = "button",
 	icon: Icon,
-	iconPosition = 'left',
+	iconPosition = "left",
 	...props
 }: ButtonProps) {
 	const isRtl = isDocumentRtl();
 	const variantClassNames: Record<ButtonVariant, string> = {
-		primary: 'button-primary',
-		secondary: 'button-secondary',
-		danger: 'button-danger',
-		success: 'button-success',
-		warning: 'button-warning',
-		ghost: 'button-ghost',
-		outline: 'button-outline',
+		primary: "button-primary",
+		secondary: "button-secondary",
+		danger: "button-danger",
+		success: "button-success",
+		warning: "button-warning",
+		ghost: "button-ghost",
+		outline: "button-outline",
 	};
 
 	const sizeClassNames: Record<ButtonSize, string> = {
-		xs: 'button-xs',
-		sm: 'button-sm',
-		md: 'button-md',
-		lg: 'button-lg',
-		xl: 'button-xl',
+		xs: "button-xs",
+		sm: "button-sm",
+		md: "button-md",
+		lg: "button-lg",
+		xl: "button-xl",
 	};
 
 	const iconSizes: Record<ButtonSize, number> = {
@@ -61,13 +61,13 @@ export function Button({
 		xl: 20,
 	};
 
-	const disabledStyles = disabled || loading ? 'button-disabled' : false;
+	const disabledStyles = disabled || loading ? "button-disabled" : false;
 	const resolvedIconPosition = isRtl
-		? 'left' === iconPosition
-			? 'right'
-			: 'right' === iconPosition
-			? 'left'
-			: iconPosition
+		? "left" === iconPosition
+			? "right"
+			: "right" === iconPosition
+				? "left"
+				: iconPosition
 		: iconPosition;
 	const iconNode = loading ? (
 		<Loader2 size={16} className="button-loading-icon" />
@@ -79,7 +79,7 @@ export function Button({
 		<button
 			type={type}
 			className={cn(
-				'button',
+				"button",
 				variantClassNames[variant],
 				sizeClassNames[size],
 				disabledStyles,
@@ -90,9 +90,9 @@ export function Button({
 			{...props}
 		>
 			<>
-				{'left' === resolvedIconPosition ? iconNode : null}
+				{"left" === resolvedIconPosition ? iconNode : null}
 				{children}
-				{'right' === resolvedIconPosition ? iconNode : null}
+				{"right" === resolvedIconPosition ? iconNode : null}
 			</>
 		</button>
 	);
@@ -103,15 +103,11 @@ export function Button({
  */
 export function ButtonGroup({
 	children,
-	className = '',
+	className = "",
 	...props
 }: ButtonGroupProps) {
 	return (
-		<div
-			className={cn('button-group', className)}
-			role="group"
-			{...props}
-		>
+		<div className={cn("button-group", className)} role="group" {...props}>
 			{children}
 		</div>
 	);
@@ -122,17 +118,17 @@ export function ButtonGroup({
  */
 export function IconButton({
 	icon: IconComponent,
-	size = 'md',
-	variant = 'ghost',
-	className = '',
+	size = "md",
+	variant = "ghost",
+	className = "",
 	...props
 }: IconButtonProps) {
 	const iconButtonSizeClassNames: Record<ButtonSize, string> = {
-		xs: 'button-icon-only-xs',
-		sm: 'button-icon-only-sm',
-		md: 'button-icon-only-md',
-		lg: 'button-icon-only-lg',
-		xl: 'button-icon-only-xl',
+		xs: "button-icon-only-xs",
+		sm: "button-icon-only-sm",
+		md: "button-icon-only-md",
+		lg: "button-icon-only-lg",
+		xl: "button-icon-only-xl",
 	};
 
 	const iconSizes: Record<ButtonSize, number> = {
@@ -148,7 +144,7 @@ export function IconButton({
 			variant={variant}
 			size={size}
 			className={cn(
-				'button-icon-only',
+				"button-icon-only",
 				iconButtonSizeClassNames[size],
 				className
 			)}

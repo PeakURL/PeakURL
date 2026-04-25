@@ -1,6 +1,6 @@
-import { ProtectedRoute } from '@/components';
-import { DashboardLayout } from './layout';
-import type { AppLayoutProps } from './types';
+import { ProtectedRoute } from "@/components";
+import { DashboardLayout } from "./layout";
+import type { AppLayoutProps } from "./types";
 
 const AppLayout = ({ children }: AppLayoutProps) => {
 	return (

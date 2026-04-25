@@ -1,21 +1,21 @@
-import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { isDocumentRtl } from '@/i18n/direction';
-import { __ } from '@/i18n';
-import type { AuthLayoutProps } from './types';
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { isDocumentRtl } from "@/i18n/direction";
+import { __ } from "@/i18n";
+import type { AuthLayoutProps } from "./types";
 
 function AuthLayout({
-	backLabel = __('Back to login'),
-	backTo = '/login',
+	backLabel = __("Back to login"),
+	backTo = "/login",
 	badgeIcon: BadgeIcon,
 	badgeLabel,
 	cardCopy,
 	cardTitle,
 	children,
-	containerClassName = 'auth-page-container auth-page-container-compact',
+	containerClassName = "auth-page-container auth-page-container-compact",
 	noteCopy,
 	noteTitle,
-	pageClassName = 'auth-page auth-page-recovery',
+	pageClassName = "auth-page auth-page-recovery",
 	showcaseCopy,
 	showcaseTitle,
 }: AuthLayoutProps) {

@@ -1,11 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState } from "react";
 import {
 	Button,
 	ConfirmDialog,
 	Input,
 	ReadOnlyValueBlock,
 	Modal,
-} from '@/components';
+} from "@/components";
 import {
 	Copy,
 	ExternalLink,
@@ -13,37 +13,37 @@ import {
 	Trash2,
 	Webhook as WebhookIcon,
 	Link2,
-} from 'lucide-react';
+} from "lucide-react";
 import {
 	useCreateWebhookMutation,
 	useDeleteWebhookMutation,
 	useGetWebhooksQuery,
-} from '@/store/slices/api';
-import { isDocumentRtl } from '@/i18n/direction';
-import { __, sprintf } from '@/i18n';
+} from "@/store/slices/api";
+import { isDocumentRtl } from "@/i18n/direction";
+import { __, sprintf } from "@/i18n";
 import {
 	cn,
 	copyToClipboard as writeToClipboard,
 	getErrorMessage,
-} from '@/utils';
+} from "@/utils";
 import type {
 	CreatedWebhook,
 	IntegrationsTabProps,
 	WebhookEventOption,
 	WebhookFormState,
 	WebhookSummary,
-} from './types';
+} from "./types";
 
 const getEventOptions = (): WebhookEventOption[] => [
-	{ id: 'link.created', label: __('Link Created') },
-	{ id: 'link.clicked', label: __('Link Clicked') },
-	{ id: 'link.updated', label: __('Link Updated') },
-	{ id: 'link.deleted', label: __('Link Deleted') },
+	{ id: "link.created", label: __("Link Created") },
+	{ id: "link.clicked", label: __("Link Clicked") },
+	{ id: "link.updated", label: __("Link Updated") },
+	{ id: "link.deleted", label: __("Link Deleted") },
 ];
 
 function IntegrationsTab({ notification }: IntegrationsTabProps) {
 	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isRtl ? "rtl" : "ltr";
 	const eventOptions = getEventOptions();
 	const {
 		data: webhookData,
@@ -57,8 +57,8 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 	const webhooks = webhookData || [];
 
 	const [form, setForm] = useState<WebhookFormState>({
-		url: '',
-		events: ['link.clicked'],
+		url: "",
+		events: ["link.clicked"],
 	});
 	const [createdWebhook, setCreatedWebhook] = useState<CreatedWebhook | null>(
 		null
@@ -83,8 +83,8 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 	const handleCreate = async () => {
 		if (!canCreate) {
 			notification?.error?.(
-				__('Error'),
-				__('Enter a URL and select at least one event.')
+				__("Error"),
+				__("Enter a URL and select at least one event.")
 			);
 			return;
 		}
@@ -95,15 +95,15 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 				events: form.events,
 			}).unwrap();
 			notification?.success?.(
-				__('Success'),
-				__('Webhook created successfully')
+				__("Success"),
+				__("Webhook created successfully")
 			);
-			setForm({ url: '', events: ['link.clicked'] });
+			setForm({ url: "", events: ["link.clicked"] });
 			setCreatedWebhook(result?.data || null);
 		} catch (err) {
 			notification?.error?.(
-				__('Error'),
-				getErrorMessage(err, __('Failed to create webhook'))
+				__("Error"),
+				getErrorMessage(err, __("Failed to create webhook"))
 			);
 		}
 	};
@@ -113,26 +113,26 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 
 		try {
 			await deleteWebhook(id).unwrap();
-			notification?.success?.(__('Success'), __('Webhook deleted'));
+			notification?.success?.(__("Success"), __("Webhook deleted"));
 			setWebhookPendingDelete(null);
 		} catch (err) {
 			notification?.error?.(
-				__('Error'),
-				getErrorMessage(err, __('Failed to delete webhook'))
+				__("Error"),
+				getErrorMessage(err, __("Failed to delete webhook"))
 			);
 		}
 	};
 
 	const copyToClipboard = async (
 		text?: string | null,
-		label: string = __('Copied')
+		label: string = __("Copied")
 	) => {
 		if (!text) return;
 		try {
 			await writeToClipboard(text);
-			notification?.success?.(label, __('Copied to clipboard'));
+			notification?.success?.(label, __("Copied to clipboard"));
 		} catch (err) {
-			notification?.error?.(__('Error'), __('Failed to copy'));
+			notification?.error?.(__("Error"), __("Failed to copy"));
 		}
 	};
 
@@ -145,11 +145,11 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 					</div>
 					<div className="integrations-tab-intro-copy">
 						<h2 className="integrations-tab-intro-title">
-							{__('Integrations')}
+							{__("Integrations")}
 						</h2>
 						<p className="integrations-tab-intro-description">
 							{__(
-								'Connect PeakURL to your automations with outbound webhooks for link activity.'
+								"Connect PeakURL to your automations with outbound webhooks for link activity."
 							)}
 						</p>
 					</div>
@@ -160,11 +160,11 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 				<div className="integrations-tab-panel-header">
 					<div className="integrations-tab-panel-copy">
 						<h3 className="integrations-tab-panel-title">
-							{__('Webhooks')}
+							{__("Webhooks")}
 						</h3>
 						<p className="integrations-tab-panel-description">
 							{__(
-								'PeakURL sends signed POST requests to your endpoint when selected link events happen.'
+								"PeakURL sends signed POST requests to your endpoint when selected link events happen."
 							)}
 						</p>
 					</div>
@@ -175,25 +175,25 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 						dir={direction}
 						className="integrations-tab-docs-link"
 					>
-						{__('Webhook docs')}
+						{__("Webhook docs")}
 						<ExternalLink size={14} />
 					</a>
 				</div>
 
 				<div className="integrations-tab-form">
 					<h4 className="integrations-tab-form-title">
-						{__('Add New Webhook')}
+						{__("Add New Webhook")}
 					</h4>
 					<p className="integrations-tab-form-description">
 						{__(
-							'Choose which events should trigger a delivery, then save the signing secret somewhere secure when it is shown.'
+							"Choose which events should trigger a delivery, then save the signing secret somewhere secure when it is shown."
 						)}
 					</p>
 
 					<div className="integrations-tab-form-grid">
 						<div>
 							<Input
-								label={__('Endpoint URL')}
+								label={__("Endpoint URL")}
 								type="url"
 								valueDirection="ltr"
 								icon={Link2}
@@ -211,7 +211,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 							<div className="integrations-tab-endpoint-help">
 								<p>
 									{__(
-										'Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route like'
+										"Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route like"
 									)}
 								</p>
 								<code className="integrations-tab-endpoint-code">
@@ -222,7 +222,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 
 						<div>
 							<label className="integrations-tab-field-label">
-								{__('Events')}
+								{__("Events")}
 							</label>
 							<div className="integrations-tab-events-grid">
 								{eventOptions.map((event) => (
@@ -249,8 +249,8 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 
 					<div
 						className={cn(
-							'integrations-tab-form-actions',
-							isRtl && 'integrations-tab-form-actions-rtl'
+							"integrations-tab-form-actions",
+							isRtl && "integrations-tab-form-actions-rtl"
 						)}
 					>
 						<Button
@@ -261,39 +261,36 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 							disabled={!canCreate}
 						>
 							{isCreating
-								? __('Creating...')
-								: __('Create Webhook')}
+								? __("Creating...")
+								: __("Create Webhook")}
 						</Button>
 					</div>
 				</div>
 
 				{isLoading ? (
 					<div className="integrations-tab-status-copy">
-						{__('Loading webhooks…')}
+						{__("Loading webhooks…")}
 					</div>
 				) : error ? (
 					<div className="integrations-tab-status-copy integrations-tab-status-copy-error">
-						{getErrorMessage(error, __('Failed to load webhooks'))}
+						{getErrorMessage(error, __("Failed to load webhooks"))}
 					</div>
 				) : webhooks.length === 0 ? (
 					<div className="integrations-tab-empty">
 						<WebhookIcon className="integrations-tab-empty-icon" />
 						<h4 className="integrations-tab-empty-title">
-							{__('No Webhooks Configured')}
+							{__("No Webhooks Configured")}
 						</h4>
 						<p className="integrations-tab-empty-copy">
 							{__(
-								'Add a webhook to receive link events in real time.'
+								"Add a webhook to receive link events in real time."
 							)}
 						</p>
 					</div>
 				) : (
 					<div className="integrations-tab-list">
 						{webhooks.map((wh) => (
-							<div
-								key={wh.id}
-								className="integrations-tab-item"
-							>
+							<div key={wh.id} className="integrations-tab-item">
 								<div
 									dir={direction}
 									className="integrations-tab-item-row"
@@ -313,28 +310,28 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 											))}
 											{!wh.isActive && (
 												<span className="integrations-tab-item-state-pill">
-													{__('Inactive')}
+													{__("Inactive")}
 												</span>
 											)}
 										</div>
 
 										<div className="integrations-tab-item-secret">
 											{wh.secretHint ? (
-												<span
-													className="integrations-tab-item-secret-value"
-												>
+												<span className="integrations-tab-item-secret-value">
 													{wh.secretHint}
 												</span>
 											) : (
 												<span className="integrations-tab-item-secret-copy">
-													{__('Signing secret stored')}
+													{__(
+														"Signing secret stored"
+													)}
 												</span>
 											)}
 										</div>
 
 										{wh.createdAt && (
 											<p className="integrations-tab-item-created">
-												{__('Created:')}{' '}
+												{__("Created:")}{" "}
 												<bdi className="integrations-tab-item-created-value">
 													{new Date(
 														wh.createdAt
@@ -346,12 +343,12 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 
 									<button
 										className="integrations-tab-item-delete"
-										aria-label={__('Delete webhook')}
+										aria-label={__("Delete webhook")}
 										onClick={() =>
 											setWebhookPendingDelete(wh)
 										}
 										disabled={isDeleting}
-										title={__('Delete webhook')}
+										title={__("Delete webhook")}
 									>
 										<Trash2 size={18} />
 									</button>
@@ -365,24 +362,24 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 			<Modal
 				isOpen={Boolean(createdWebhook?.secret)}
 				onClose={() => setCreatedWebhook(null)}
-				title={__('Copy Your Webhook Secret')}
+				title={__("Copy Your Webhook Secret")}
 				size="md"
 			>
 				<div className="integrations-tab-secret-modal">
 					<div className="integrations-tab-secret-notice">
 						<p className="integrations-tab-secret-notice-title">
-							{__('This signing secret will not be shown again.')}
+							{__("This signing secret will not be shown again.")}
 						</p>
 						<p className="integrations-tab-secret-notice-copy">
 							{__(
-								'Store it in your automation tool or secret manager before closing this window.'
+								"Store it in your automation tool or secret manager before closing this window."
 							)}
 						</p>
 					</div>
 
 					<div className="integrations-tab-secret-endpoint">
 						<p className="integrations-tab-secret-endpoint-label">
-							{__('Endpoint URL')}
+							{__("Endpoint URL")}
 						</p>
 						<ReadOnlyValueBlock
 							value={createdWebhook?.url}
@@ -397,22 +394,22 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 						onCopy={() =>
 							copyToClipboard(
 								createdWebhook?.secret,
-								__('Secret copied')
+								__("Secret copied")
 							)
 						}
-						copyButtonLabel={__('Copy to clipboard')}
+						copyButtonLabel={__("Copy to clipboard")}
 					/>
 
 					<p className="integrations-tab-secret-copy">
 						{__(
-							'If this secret is ever exposed, delete the webhook and create a new one.'
+							"If this secret is ever exposed, delete the webhook and create a new one."
 						)}
 					</p>
 
 					<div
 						className={cn(
-							'integrations-tab-secret-actions',
-							isRtl && 'integrations-tab-secret-actions-rtl'
+							"integrations-tab-secret-actions",
+							isRtl && "integrations-tab-secret-actions-rtl"
 						)}
 					>
 						<Button
@@ -421,11 +418,11 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 							onClick={() =>
 								copyToClipboard(
 									createdWebhook?.secret,
-									__('Secret copied')
+									__("Secret copied")
 								)
 							}
 						>
-							{__('Copy Secret')}
+							{__("Copy Secret")}
 						</Button>
 						<Button onClick={() => setCreatedWebhook(null)}>
 							{__("I've Stored It")}
@@ -441,19 +438,19 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 						setWebhookPendingDelete(null);
 					}
 				}}
-				title={__('Delete webhook')}
+				title={__("Delete webhook")}
 				description={
 					webhookPendingDelete
 						? sprintf(
 								__(
-									'Delete the webhook for %s? PeakURL will stop sending signed event requests to this endpoint immediately.'
+									"Delete the webhook for %s? PeakURL will stop sending signed event requests to this endpoint immediately."
 								),
 								webhookPendingDelete.url
 							)
-						: ''
+						: ""
 				}
-				confirmText={__('Delete webhook')}
-				cancelText={__('Keep webhook')}
+				confirmText={__("Delete webhook")}
+				cancelText={__("Keep webhook")}
 				confirmVariant="danger"
 				onConfirm={() => handleDelete(webhookPendingDelete?.id)}
 				loading={isDeleting}

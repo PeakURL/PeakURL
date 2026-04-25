@@ -1,5 +1,5 @@
-import { __ } from '@/i18n';
-import type { CountryStatsProps, CountryMetric } from '../types';
+import { __ } from "@/i18n";
+import type { CountryStatsProps, CountryMetric } from "../types";
 
 const CountryStats = ({ countryData }: CountryStatsProps) => {
 	// Calculate total clicks for percentage
@@ -10,10 +10,10 @@ const CountryStats = ({ countryData }: CountryStatsProps) => {
 
 	// Get country flag emoji from country code
 	const getFlag = (code?: string | null) => {
-		if (!code || code === '??') return '🌐';
+		if (!code || code === "??") return "🌐";
 		const codePoints = code
 			.toUpperCase()
-			.split('')
+			.split("")
 			.map((char: string) => 127397 + char.charCodeAt(0));
 		return String.fromCodePoint(...codePoints);
 	};
@@ -22,7 +22,7 @@ const CountryStats = ({ countryData }: CountryStatsProps) => {
 		countryData.length > 0
 			? countryData.slice(0, 5).map((country: CountryMetric) => ({
 					flag: getFlag(country.code),
-					name: country.name || __('Unknown'),
+					name: country.name || __("Unknown"),
 					value:
 						totalClicks > 0
 							? Math.round((country.count / totalClicks) * 100)
@@ -33,14 +33,12 @@ const CountryStats = ({ countryData }: CountryStatsProps) => {
 
 	return (
 		<div className="dashboard-countries">
-			<h3 className="dashboard-countries-title">
-				{__('Top Countries')}
-			</h3>
+			<h3 className="dashboard-countries-title">{__("Top Countries")}</h3>
 
 			{countryData.length === 0 ? (
 				<div className="dashboard-countries-empty">
 					<p className="dashboard-countries-empty-text">
-						{__('No country data available')}
+						{__("No country data available")}
 					</p>
 				</div>
 			) : (

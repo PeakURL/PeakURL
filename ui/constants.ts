@@ -1,30 +1,30 @@
-import rawPeakurlVersion from '../.version?raw';
+import rawPeakurlVersion from "../.version?raw";
 
-const DEFAULT_PEAKURL_ORIGIN = 'https://peakurl.dev';
-const DEFAULT_API_PATH = '/api/v1';
-const FALLBACK_VERSION = rawPeakurlVersion.trim() || '0.0.0';
-const IS_BROWSER = 'undefined' !== typeof window;
+const DEFAULT_PEAKURL_ORIGIN = "https://peakurl.dev";
+const DEFAULT_API_PATH = "/api/v1";
+const FALLBACK_VERSION = rawPeakurlVersion.trim() || "0.0.0";
+const IS_BROWSER = "undefined" !== typeof window;
 
 /**
  * Normalizes a mounted base path so route and API URLs can be joined safely.
  */
 function normalizeBasePath(value: string | null | undefined): string {
-	if (!value || 'string' !== typeof value) {
-		return '';
+	if (!value || "string" !== typeof value) {
+		return "";
 	}
 
-	if ('/' === value.trim()) {
-		return '';
+	if ("/" === value.trim()) {
+		return "";
 	}
 
-	return `/${value.replace(/^\/+|\/+$/g, '')}`;
+	return `/${value.replace(/^\/+|\/+$/g, "")}`;
 }
 
 /**
  * Reads a trimmed runtime string injected onto `window`, falling back to `''`.
  */
 function getRuntimeString(value: string | null | undefined): string {
-	return 'string' === typeof value ? value.trim() : '';
+	return "string" === typeof value ? value.trim() : "";
 }
 
 /**
@@ -48,16 +48,16 @@ function sanitizeHost(
 	value: string | null | undefined,
 	fallback: string
 ): string {
-	if (!value || 'string' !== typeof value) {
+	if (!value || "string" !== typeof value) {
 		return fallback;
 	}
 
-	return value.replace(/^https?:\/\//i, '').replace(/\/.*$/, '') || fallback;
+	return value.replace(/^https?:\/\//i, "").replace(/\/.*$/, "") || fallback;
 }
 
 const runtimeBasePath = IS_BROWSER
 	? normalizeBasePath(window.__PEAKURL_BASE_PATH__)
-	: '';
+	: "";
 const runtimeOrigin = IS_BROWSER
 	? window.location.origin
 	: DEFAULT_PEAKURL_ORIGIN;
@@ -69,10 +69,10 @@ const runtimeApiPath = IS_BROWSER
 	: DEFAULT_API_PATH;
 const runtimeSiteName = IS_BROWSER
 	? getRuntimeString(window.__PEAKURL_SITE_NAME__)
-	: '';
+	: "";
 const runtimeVersion = IS_BROWSER
 	? getRuntimeString(window.__PEAKURL_VERSION__)
-	: '';
+	: "";
 const runtimeDebug = import.meta.env.DEV
 	? true
 	: IS_BROWSER
@@ -82,7 +82,7 @@ const runtimeDebug = import.meta.env.DEV
 /**
  * Canonical product name used throughout the dashboard UI.
  */
-export const PEAKURL_NAME = 'PeakURL';
+export const PEAKURL_NAME = "PeakURL";
 
 /**
  * Site name shown in UI copy and page titles.
@@ -103,7 +103,7 @@ export const PEAKURL_DEBUG = runtimeDebug;
  * Support contact address shown in contributor-facing UI copy.
  */
 export const SUPPORT_EMAIL =
-	import.meta.env.VITE_SUPPORT_EMAIL || 'support@example.com';
+	import.meta.env.VITE_SUPPORT_EMAIL || "support@example.com";
 
 /**
  * Canonical public site URL for the current install.
@@ -129,7 +129,7 @@ export const PEAKURL_HOST = sanitizeHost(
 /**
  * Public host normalized without a leading `www.` prefix.
  */
-export const PEAKURL_DOMAIN = PEAKURL_HOST.replace(/^www\./i, '');
+export const PEAKURL_DOMAIN = PEAKURL_HOST.replace(/^www\./i, "");
 
 /**
  * Client-visible API base path used by RTK Query and runtime fetches.
@@ -159,4 +159,4 @@ export const INTERNAL_API_ORIGIN =
 /**
  * Public waitlist URL for the plugins preview surface.
  */
-export const PLUGINS_WAITLIST_URL = 'https://go.peakurl.org/join-plugins-list';
+export const PLUGINS_WAITLIST_URL = "https://go.peakurl.org/join-plugins-list";

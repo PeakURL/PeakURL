@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
+import { useEffect } from "react";
+import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 
-import { useScrollToTop, useAdminAccess } from '@/hooks';
+import { useScrollToTop, useAdminAccess } from "@/hooks";
 import {
 	ActivityPage,
 	AboutPage,
@@ -20,13 +20,13 @@ import {
 	SettingsTabPage,
 	SystemStatusPage,
 	UsersPage,
-} from '@/pages';
+} from "@/pages";
 import {
 	clearBodyClassNames,
 	getBodyClassNames,
 	syncBodyClassNames,
-} from './bodyClasses';
-import { getPageTitle } from './pageTitle';
+} from "./bodyClasses";
+import { getPageTitle } from "./pageTitle";
 
 function RouteEffects() {
 	useScrollToTop();
@@ -80,7 +80,7 @@ function ToolsIndexRoute() {
 		return null;
 	}
 
-	return <Navigate replace to={canManageUsers ? 'import/file' : 'export'} />;
+	return <Navigate replace to={canManageUsers ? "import/file" : "export"} />;
 }
 
 function AdminOnlyRoute() {

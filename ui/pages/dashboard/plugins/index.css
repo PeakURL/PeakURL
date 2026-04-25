@@ -1,6 +1,6 @@
-@import './plugins-page.css';
-@import './_components/preview.css';
-@import './_components/PluginTabs/plugin-tabs.css';
-@import './_components/PluginCard/plugin-card.css';
-@import './_components/InstalledPluginsTable/installed-plugins-table.css';
-@import './_components/ComingSoonBadge/coming-soon-badge.css';
+@import "./plugins-page.css";
+@import "./_components/preview.css";
+@import "./_components/PluginTabs/plugin-tabs.css";
+@import "./_components/PluginCard/plugin-card.css";
+@import "./_components/InstalledPluginsTable/installed-plugins-table.css";
+@import "./_components/ComingSoonBadge/coming-soon-badge.css";

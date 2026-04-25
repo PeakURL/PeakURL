@@ -1,14 +1,20 @@
-import type { ChangeEvent, SubmitEvent } from 'react';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { ImageOff, Trash2, X } from 'lucide-react';
-import { PEAKURL_SITE_NAME } from '@constants';
-import { Button, Input, Select, TextArea, type SelectOption } from '@/components';
-import { __, sprintf } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
-import { getInstalledLanguageLabel } from '@/i18n/languages';
-import { buildFaviconPreviewUrl, cn } from '@/utils';
-import type { GeneralFormState } from '../../types';
-import type { GeneralTabProps } from '../types';
+import type { ChangeEvent, SubmitEvent } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ImageOff, Trash2, X } from "lucide-react";
+import { PEAKURL_SITE_NAME } from "@constants";
+import {
+	Button,
+	Input,
+	Select,
+	TextArea,
+	type SelectOption,
+} from "@/components";
+import { __, sprintf } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
+import { getInstalledLanguageLabel } from "@/i18n/languages";
+import { buildFaviconPreviewUrl, cn } from "@/utils";
+import type { GeneralFormState } from "../../types";
+import type { GeneralTabProps } from "../types";
 
 function GeneralTab({
 	initialForm,
@@ -22,10 +28,10 @@ function GeneralTab({
 	const [generalForm, setGeneralForm] =
 		useState<GeneralFormState>(initialForm);
 	const [siteName, setSiteName] = useState(
-		siteSettings?.siteName || PEAKURL_SITE_NAME || 'PeakURL'
+		siteSettings?.siteName || PEAKURL_SITE_NAME || "PeakURL"
 	);
 	const [siteLanguage, setSiteLanguage] = useState(
-		siteSettings?.siteLanguage || 'en_US'
+		siteSettings?.siteLanguage || "en_US"
 	);
 	const [faviconFile, setFaviconFile] = useState<File | null>(null);
 	const [removeFavicon, setRemoveFavicon] = useState(false);
@@ -36,11 +42,11 @@ function GeneralTab({
 	}, [initialForm]);
 
 	useEffect(() => {
-		setSiteLanguage(siteSettings?.siteLanguage || 'en_US');
+		setSiteLanguage(siteSettings?.siteLanguage || "en_US");
 	}, [siteSettings?.siteLanguage]);
 
 	useEffect(() => {
-		setSiteName(siteSettings?.siteName || PEAKURL_SITE_NAME || 'PeakURL');
+		setSiteName(siteSettings?.siteName || PEAKURL_SITE_NAME || "PeakURL");
 	}, [siteSettings?.siteName]);
 
 	useEffect(() => {
@@ -48,7 +54,7 @@ function GeneralTab({
 		setRemoveFavicon(false);
 
 		if (fileInputRef.current) {
-			fileInputRef.current.value = '';
+			fileInputRef.current.value = "";
 		}
 	}, [siteSettings?.favicon?.updatedAt]);
 
@@ -92,7 +98,7 @@ function GeneralTab({
 		isLoadingSiteSettings &&
 		(!siteSettings?.availableLanguages ||
 			0 === siteSettings.availableLanguages.length)
-			? [{ value: siteLanguage, label: __('Loading languages...') }]
+			? [{ value: siteLanguage, label: __("Loading languages...") }]
 			: availableLanguageOptions.length > 0
 				? availableLanguageOptions
 				: [{ value: siteLanguage, label: siteLanguage }];
@@ -101,7 +107,7 @@ function GeneralTab({
 		() =>
 			hasCustomFavicon
 				? buildFaviconPreviewUrl(siteSettings?.favicon?.updatedAt)
-				: '',
+				: "",
 		[hasCustomFavicon, siteSettings?.favicon?.updatedAt]
 	);
 	const previewUrl = useMemo(() => {
@@ -110,7 +116,7 @@ function GeneralTab({
 		}
 
 		if (removeFavicon) {
-			return '';
+			return "";
 		}
 
 		return storedPreviewUrl;
@@ -137,7 +143,7 @@ function GeneralTab({
 		setRemoveFavicon(!hasPendingUpload && hasCustomFavicon);
 
 		if (fileInputRef.current) {
-			fileInputRef.current.value = '';
+			fileInputRef.current.value = "";
 		}
 	};
 
@@ -151,35 +157,35 @@ function GeneralTab({
 		siteName.trim() ||
 		PEAKURL_SITE_NAME ||
 		siteSettings?.siteName ||
-		'PeakURL';
+		"PeakURL";
 	const chooserLabel =
 		showPreview || hasConfiguredFavicon
-			? __('Replace Favicon')
-			: __('Choose Favicon');
+			? __("Replace Favicon")
+			: __("Choose Favicon");
 
 	return (
 		<div className="settings-general">
 			<form onSubmit={handleSubmit} className="settings-general-form">
 				<h2 className="settings-general-title">
-					{__('Profile Information')}
+					{__("Profile Information")}
 				</h2>
 				<div className="settings-general-grid">
 					<Input
-						label={__('First Name')}
+						label={__("First Name")}
 						name="firstName"
 						value={generalForm.firstName}
 						onChange={handleChange}
 						required
 					/>
 					<Input
-						label={__('Last Name')}
+						label={__("Last Name")}
 						name="lastName"
 						value={generalForm.lastName}
 						onChange={handleChange}
 						required
 					/>
 					<Input
-						label={__('Username')}
+						label={__("Username")}
 						name="username"
 						valueDirection="ltr"
 						autoCapitalize="off"
@@ -189,7 +195,7 @@ function GeneralTab({
 						required
 					/>
 					<Input
-						label={__('Email Address')}
+						label={__("Email Address")}
 						type="email"
 						name="email"
 						valueDirection="ltr"
@@ -200,33 +206,33 @@ function GeneralTab({
 						required
 					/>
 					<Input
-						label={__('Phone Number')}
+						label={__("Phone Number")}
 						type="tel"
 						name="phoneNumber"
 						value={generalForm.phoneNumber}
 						onChange={handleChange}
 					/>
 					<Input
-						label={__('Company')}
+						label={__("Company")}
 						name="company"
 						value={generalForm.company}
 						onChange={handleChange}
 					/>
 					<Input
-						label={__('Job Title')}
+						label={__("Job Title")}
 						name="jobTitle"
 						value={generalForm.jobTitle}
 						onChange={handleChange}
 					/>
 					<Input
-						label={__('Site title')}
+						label={__("Site title")}
 						value={siteName}
 						onChange={(event) => setSiteName(event.target.value)}
 						disabled={!canManageSiteSettings || isUpdating}
 					/>
 					<div className="settings-general-field">
 						<label className="settings-section-label">
-							{__('Site Language')}
+							{__("Site Language")}
 						</label>
 						<Select
 							value={siteLanguage}
@@ -237,12 +243,12 @@ function GeneralTab({
 								!siteSettings?.canManageSiteSettings ||
 								isUpdating
 							}
-							ariaLabel={__('Site language')}
+							ariaLabel={__("Site language")}
 						/>
 					</div>
 					<div className="settings-general-bio-field">
 						<TextArea
-							label={__('Bio')}
+							label={__("Bio")}
 							name="bio"
 							rows={3}
 							className="settings-general-bio-input"
@@ -256,11 +262,11 @@ function GeneralTab({
 						<div className="settings-general-favicon-content">
 							<div className="settings-general-favicon-copy">
 								<h3 className="settings-general-favicon-title">
-									{__('Site Favicon')}
+									{__("Site Favicon")}
 								</h3>
 								<p className="settings-general-favicon-summary">
 									{__(
-										'Upload a square PNG favicon. PeakURL will use it for browser tabs, Apple touch icons, and the site web manifest.'
+										"Upload a square PNG favicon. PeakURL will use it for browser tabs, Apple touch icons, and the site web manifest."
 									)}
 								</p>
 							</div>
@@ -269,7 +275,7 @@ function GeneralTab({
 									htmlFor="settings-favicon-upload"
 									className="settings-section-label"
 								>
-									{__('Favicon PNG')}
+									{__("Favicon PNG")}
 								</label>
 								<input
 									ref={fileInputRef}
@@ -277,7 +283,9 @@ function GeneralTab({
 									type="file"
 									accept="image/png"
 									onChange={handleFaviconChange}
-									disabled={!canManageSiteSettings || isUpdating}
+									disabled={
+										!canManageSiteSettings || isUpdating
+									}
 									className="settings-general-favicon-input-native"
 								/>
 								<div className="settings-general-favicon-picker">
@@ -285,8 +293,12 @@ function GeneralTab({
 										type="button"
 										size="sm"
 										variant="outline"
-										onClick={() => fileInputRef.current?.click()}
-										disabled={!canManageSiteSettings || isUpdating}
+										onClick={() =>
+											fileInputRef.current?.click()
+										}
+										disabled={
+											!canManageSiteSettings || isUpdating
+										}
 									>
 										{chooserLabel}
 									</Button>
@@ -299,19 +311,20 @@ function GeneralTab({
 								<p className="settings-general-favicon-note">
 									{sprintf(
 										__(
-											'Use a square PNG, ideally %s. The minimum supported size is 180 x 180.'
+											"Use a square PNG, ideally %s. The minimum supported size is 180 x 180."
 										),
-										siteSettings?.favicon?.recommendedSize || '512x512'
+										siteSettings?.favicon
+											?.recommendedSize || "512x512"
 									)}
 								</p>
 							</div>
 						</div>
 						<div
 							className={cn(
-								'settings-general-favicon-preview',
+								"settings-general-favicon-preview",
 								showPreview
-									? 'settings-general-favicon-preview-filled'
-									: 'settings-general-favicon-preview-empty-state'
+									? "settings-general-favicon-preview-filled"
+									: "settings-general-favicon-preview-empty-state"
 							)}
 						>
 							{showPreview ? (
@@ -320,9 +333,12 @@ function GeneralTab({
 										<button
 											type="button"
 											onClick={handleRemoveFavicon}
-											disabled={!canManageSiteSettings || isUpdating}
+											disabled={
+												!canManageSiteSettings ||
+												isUpdating
+											}
 											className="settings-general-favicon-remove"
-											aria-label={__('Remove Favicon')}
+											aria-label={__("Remove Favicon")}
 										>
 											<Trash2
 												aria-hidden="true"
@@ -340,7 +356,7 @@ function GeneralTab({
 									<div className="settings-general-favicon-browser-body">
 										<img
 											src={previewUrl}
-											alt={__('Current favicon preview')}
+											alt={__("Current favicon preview")}
 											className="settings-general-favicon-app-icon"
 										/>
 										<div className="settings-general-favicon-browser-window">
@@ -386,7 +402,7 @@ function GeneralTab({
 										className="settings-general-favicon-placeholder"
 									/>
 									<span className="sr-only">
-										{__('No favicon configured')}
+										{__("No favicon configured")}
 									</span>
 								</div>
 							)}
@@ -395,14 +411,14 @@ function GeneralTab({
 				</div>
 				<div
 					className={cn(
-						'settings-general-actions',
+						"settings-general-actions",
 						isRtl
-							? 'settings-general-actions-start'
-							: 'settings-general-actions-end'
+							? "settings-general-actions-start"
+							: "settings-general-actions-end"
 					)}
 				>
 					<Button size="sm" type="submit" disabled={isUpdating}>
-						{isUpdating ? __('Saving...') : __('Save Changes')}
+						{isUpdating ? __("Saving...") : __("Save Changes")}
 					</Button>
 				</div>
 			</form>

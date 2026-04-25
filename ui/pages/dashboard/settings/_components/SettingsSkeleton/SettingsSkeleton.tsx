@@ -1,4 +1,4 @@
-import { Skeleton } from '@/components';
+import { Skeleton } from "@/components";
 
 const SettingRowSkeleton = () => (
 	<div className="settings-skeleton-row">

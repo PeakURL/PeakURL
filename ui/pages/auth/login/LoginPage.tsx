@@ -1,6 +1,6 @@
-import type { KeyboardEvent, SubmitEvent } from 'react';
-import { useMemo, useState } from 'react';
-import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import type { KeyboardEvent, SubmitEvent } from "react";
+import { useMemo, useState } from "react";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import {
 	ArrowLeft,
 	ArrowRight,
@@ -10,7 +10,7 @@ import {
 	LockKeyhole,
 	Shield,
 	UserRound,
-} from 'lucide-react';
+} from "lucide-react";
 
 import {
 	ApiErrorPage,
@@ -18,8 +18,8 @@ import {
 	Input,
 	PageLoader,
 	VerificationCodeInput,
-} from '@/components';
-import { isDocumentRtl } from '@/i18n/direction';
+} from "@/components";
+import { isDocumentRtl } from "@/i18n/direction";
 import {
 	escUrl,
 	getErrorMessage,
@@ -29,34 +29,34 @@ import {
 	redirectToInstallRecovery,
 	requestClosestFormSubmit,
 	requestControlFormSubmit,
-} from '@/utils';
+} from "@/utils";
 import {
 	useAuthCheckQuery,
 	useLoginMutation,
 	useVerifyTwoFactorLoginMutation,
-} from '@/store/slices/api';
-import { __, sprintf } from '@/i18n';
+} from "@/store/slices/api";
+import { __, sprintf } from "@/i18n";
 
 const getHighlights = () => [
 	{
 		icon: Link2,
-		label: __('Links'),
-		desc: __('Shorten, organize, and share.'),
+		label: __("Links"),
+		desc: __("Shorten, organize, and share."),
 	},
 	{
 		icon: BarChart3,
-		label: __('Analytics'),
-		desc: __('Clicks, locations, and devices.'),
+		label: __("Analytics"),
+		desc: __("Clicks, locations, and devices."),
 	},
 	{
 		icon: Shield,
-		label: __('Security'),
-		desc: __('Sessions, 2FA, and roles.'),
+		label: __("Security"),
+		desc: __("Sessions, 2FA, and roles."),
 	},
 ];
 
 const PEAKURL_URL =
-	'https://peakurl.org?utm_source=peakurl_login&utm_medium=login&utm_campaign=powered_by';
+	"https://peakurl.org?utm_source=peakurl_login&utm_medium=login&utm_campaign=powered_by";
 
 const submitVerificationCode = () => {
 	requestClosestFormSubmit(
@@ -67,7 +67,7 @@ const submitVerificationCode = () => {
 };
 
 const submitFormOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
-	if ('Enter' !== event.key) {
+	if ("Enter" !== event.key) {
 		return;
 	}
 
@@ -82,13 +82,13 @@ function LoginPage() {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const highlights = getHighlights();
-	const [identifier, setIdentifier] = useState('');
-	const [password, setPassword] = useState('');
-	const [token, setToken] = useState('');
-	const [backupCode, setBackupCode] = useState('');
+	const [identifier, setIdentifier] = useState("");
+	const [password, setPassword] = useState("");
+	const [token, setToken] = useState("");
+	const [backupCode, setBackupCode] = useState("");
 	const [useBackupMode, setUseBackupMode] = useState(false);
 	const [twoFactorRequired, setTwoFactorRequired] = useState(false);
-	const [formError, setFormError] = useState('');
+	const [formError, setFormError] = useState("");
 	const [login, { isLoading: isLoggingIn }] = useLoginMutation();
 	const [verifyLogin, { isLoading: isVerifying }] =
 		useVerifyTwoFactorLoginMutation();
@@ -106,8 +106,8 @@ function LoginPage() {
 	const isPending = !hasResolvedSession && isLoading;
 	const submitPending = isLoggingIn || isVerifying;
 	const redirectTo = useMemo(() => {
-		const searchParams = new URLSearchParams(location.search || '');
-		const redirectParam = escUrl(searchParams.get('redirect') || '');
+		const searchParams = new URLSearchParams(location.search || "");
+		const redirectParam = escUrl(searchParams.get("redirect") || "");
 
 		if (redirectParam && isRelativeUrl(redirectParam)) {
 			return redirectParam;
@@ -117,7 +117,7 @@ function LoginPage() {
 
 		if (from?.pathname) {
 			const fromPath = escUrl(
-				`${from.pathname}${from.search || ''}${from.hash || ''}`
+				`${from.pathname}${from.search || ""}${from.hash || ""}`
 			);
 
 			if (fromPath && isRelativeUrl(fromPath)) {
@@ -125,7 +125,7 @@ function LoginPage() {
 			}
 		}
 
-		return '/dashboard';
+		return "/dashboard";
 	}, [location.search, location.state]);
 
 	if (isPending) {
@@ -153,15 +153,15 @@ function LoginPage() {
 
 	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		setFormError('');
+		setFormError("");
 
 		if (!identifier.trim()) {
-			setFormError(__('Email or username is required.'));
+			setFormError(__("Email or username is required."));
 			return;
 		}
 
 		if (!password) {
-			setFormError(__('Password is required.'));
+			setFormError(__("Password is required."));
 			return;
 		}
 
@@ -173,9 +173,9 @@ function LoginPage() {
 			if (activeToken.length < 6) {
 				setFormError(
 					useBackupMode
-						? __('Enter your backup code.')
+						? __("Enter your backup code.")
 						: __(
-								'Enter the 6-digit code from your authenticator app.'
+								"Enter the 6-digit code from your authenticator app."
 							)
 				);
 				return;
@@ -214,8 +214,8 @@ function LoginPage() {
 				getErrorMessage(
 					submitError,
 					twoFactorRequired
-						? __('Unable to verify the two-factor code.')
-						: __('Unable to sign in with those credentials.')
+						? __("Unable to verify the two-factor code.")
+						: __("Unable to sign in with those credentials.")
 				)
 			);
 		}
@@ -232,18 +232,18 @@ function LoginPage() {
 					<h1 className="login-page-heading">
 						{twoFactorRequired ? (
 							<>
-								{__('Almost there.')}
+								{__("Almost there.")}
 								<br />
 								<span className="login-page-heading-accent">
-									{__('Verify to continue.')}
+									{__("Verify to continue.")}
 								</span>
 							</>
 						) : (
 							<>
-								{__('Manage every link')}
+								{__("Manage every link")}
 								<br />
 								<span className="login-page-heading-accent">
-									{__('from one place.')}
+									{__("from one place.")}
 								</span>
 							</>
 						)}
@@ -251,10 +251,10 @@ function LoginPage() {
 					<p className="login-page-summary">
 						{twoFactorRequired
 							? __(
-									'One more verification step and you’ll be in your workspace.'
+									"One more verification step and you’ll be in your workspace."
 								)
 							: __(
-									'Shorten URLs, track clicks, and manage your audience, all from your own dashboard.'
+									"Shorten URLs, track clicks, and manage your audience, all from your own dashboard."
 								)}
 					</p>
 
@@ -289,10 +289,10 @@ function LoginPage() {
 					href={PEAKURL_URL}
 					target="_blank"
 					rel="noopener noreferrer"
-					dir={isRtl ? 'rtl' : 'ltr'}
+					dir={isRtl ? "rtl" : "ltr"}
 					className="login-page-meta"
 				>
-					{sprintf(__('Powered by %s'), 'PeakURL')}
+					{sprintf(__("Powered by %s"), "PeakURL")}
 				</a>
 			</aside>
 
@@ -315,20 +315,20 @@ function LoginPage() {
 						</div>
 						<h2 id="page-heading" className="login-page-card-title">
 							{twoFactorRequired
-								? __('Verify your identity')
-								: __('Sign in to your account')}
+								? __("Verify your identity")
+								: __("Sign in to your account")}
 						</h2>
 						<p className="login-page-card-copy">
 							{twoFactorRequired
 								? useBackupMode
 									? __(
-											'Enter one of the backup codes you saved when setting up 2FA.'
+											"Enter one of the backup codes you saved when setting up 2FA."
 										)
 									: __(
-											'Enter the 6-digit code from your authenticator app.'
+											"Enter the 6-digit code from your authenticator app."
 										)
 								: __(
-										'Enter your credentials to continue to the dashboard.'
+										"Enter your credentials to continue to the dashboard."
 									)}
 						</p>
 
@@ -348,7 +348,7 @@ function LoginPage() {
 							onSubmit={handleSubmit}
 						>
 							<Input
-								label={__('Email or username')}
+								label={__("Email or username")}
 								icon={UserRound}
 								valueDirection="ltr"
 								value={identifier}
@@ -361,13 +361,13 @@ function LoginPage() {
 								autoCapitalize="none"
 								spellCheck={false}
 								disabled={submitPending || twoFactorRequired}
-								placeholder={__('you@company.com')}
+								placeholder={__("you@company.com")}
 								required
 								className="login-page-input"
 							/>
 
 							<Input
-								label={__('Password')}
+								label={__("Password")}
 								type="password"
 								icon={LockKeyhole}
 								value={password}
@@ -387,14 +387,14 @@ function LoginPage() {
 							{!twoFactorRequired ? (
 								<div
 									className={`login-page-link-row ${
-										isRtl ? 'login-page-link-row-rtl' : ''
+										isRtl ? "login-page-link-row-rtl" : ""
 									}`}
 								>
 									<Link
 										to="/forgot-password"
 										className="login-page-link"
 									>
-										{__('Forgot your password?')}
+										{__("Forgot your password?")}
 									</Link>
 								</div>
 							) : null}
@@ -404,7 +404,7 @@ function LoginPage() {
 									{useBackupMode ? (
 										<div className="login-page-two-factor-panel">
 											<Input
-												label={__('Backup code')}
+												label={__("Backup code")}
 												valueDirection="ltr"
 												value={backupCode}
 												name="backupCode"
@@ -420,7 +420,7 @@ function LoginPage() {
 												autoComplete="one-time-code"
 												disabled={submitPending}
 												placeholder={__(
-													'xxxx-xxxx-xxxx'
+													"xxxx-xxxx-xxxx"
 												)}
 												className="login-page-input"
 											/>
@@ -429,12 +429,12 @@ function LoginPage() {
 												className="login-page-secondary-link"
 												onClick={() => {
 													setUseBackupMode(false);
-													setBackupCode('');
-													setFormError('');
+													setBackupCode("");
+													setFormError("");
 												}}
 											>
 												{__(
-													'Use authenticator code instead'
+													"Use authenticator code instead"
 												)}
 											</button>
 										</div>
@@ -455,12 +455,12 @@ function LoginPage() {
 												className="login-page-muted-link"
 												onClick={() => {
 													setUseBackupMode(true);
-													setToken('');
-													setFormError('');
+													setToken("");
+													setFormError("");
 												}}
 											>
 												{__(
-													'Lost your device? Use a backup code'
+													"Lost your device? Use a backup code"
 												)}
 											</button>
 										</div>
@@ -496,14 +496,14 @@ function LoginPage() {
 												/>
 											</svg>
 											{twoFactorRequired
-												? __('Verifying…')
-												: __('Signing in…')}
+												? __("Verifying…")
+												: __("Signing in…")}
 										</>
 									) : (
 										<>
 											{twoFactorRequired
-												? __('Verify & continue')
-												: __('Sign in')}
+												? __("Verify & continue")
+												: __("Sign in")}
 											<ForwardArrow size={15} />
 										</>
 									)}
@@ -517,14 +517,14 @@ function LoginPage() {
 										className="login-page-back-action"
 										onClick={() => {
 											setTwoFactorRequired(false);
-											setToken('');
-											setBackupCode('');
+											setToken("");
+											setBackupCode("");
 											setUseBackupMode(false);
-											setFormError('');
+											setFormError("");
 										}}
 									>
 										<BackArrow size={13} />
-										{__('Back to sign-in')}
+										{__("Back to sign-in")}
 									</button>
 								</div>
 							) : null}

@@ -1,21 +1,21 @@
-import { cn } from '@/utils';
-import type { PluginTabsProps } from '../types';
+import { cn } from "@/utils";
+import type { PluginTabsProps } from "../types";
 
 function PluginTabs({ activeTab, onTabChange, tabs }: PluginTabsProps) {
 	const getButtonClassName = (isActive: boolean) =>
 		cn(
-			'plugins-tabs-button',
+			"plugins-tabs-button",
 			isActive
-				? 'plugins-tabs-button-active'
-				: 'plugins-tabs-button-inactive'
+				? "plugins-tabs-button-active"
+				: "plugins-tabs-button-inactive"
 		);
 
 	const getCountClassName = (isActive: boolean) =>
 		cn(
-			'plugins-tabs-count',
+			"plugins-tabs-count",
 			isActive
-				? 'plugins-tabs-count-active'
-				: 'plugins-tabs-count-inactive'
+				? "plugins-tabs-count-active"
+				: "plugins-tabs-count-inactive"
 		);
 
 	return (
@@ -28,7 +28,7 @@ function PluginTabs({ activeTab, onTabChange, tabs }: PluginTabsProps) {
 				>
 					<span className="plugins-tabs-button-content">
 						{tab.label}
-						{typeof tab.count === 'number' && (
+						{typeof tab.count === "number" && (
 							<span
 								className={getCountClassName(
 									activeTab === tab.id

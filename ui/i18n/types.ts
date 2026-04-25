@@ -1,7 +1,7 @@
 /**
  * Supported document text directions.
  */
-export type TextDirection = 'ltr' | 'rtl';
+export type TextDirection = "ltr" | "rtl";
 
 /**
  * Installed language metadata returned by the language discovery flow.

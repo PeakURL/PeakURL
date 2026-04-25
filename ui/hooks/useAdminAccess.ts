@@ -1,4 +1,4 @@
-import { authApi } from '@/store/slices';
+import { authApi } from "@/store/slices";
 
 export const useAdminAccess = () => {
 	const { useAuthCheckQuery } = authApi;
@@ -24,7 +24,7 @@ export const useAdminAccess = () => {
 	return {
 		user,
 		capabilities,
-		isAdmin: Boolean(capabilities.manageUsers || user?.role === 'admin'),
+		isAdmin: Boolean(capabilities.manageUsers || user?.role === "admin"),
 		canManageUsers: Boolean(capabilities.manageUsers),
 		canManageSiteSettings: Boolean(capabilities.manageSiteSettings),
 		canManageApiKeys: Boolean(capabilities.manageApiKeys),

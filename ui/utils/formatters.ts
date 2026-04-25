@@ -1,4 +1,4 @@
-import { formatLocalizedDateTime } from './dateFormatting';
+import { formatLocalizedDateTime } from "./dateFormatting";
 
 /**
  * Formats a value as a localized full count.
@@ -22,16 +22,16 @@ export function formatCount(value: unknown): string {
  */
 export function formatDateTimeValue(
 	value: unknown,
-	fallback: string = ''
+	fallback: string = ""
 ): string {
-	if (undefined === value || null === value || '' === value) {
+	if (undefined === value || null === value || "" === value) {
 		return fallback;
 	}
 
 	if (
 		value instanceof Date ||
-		'string' === typeof value ||
-		'number' === typeof value
+		"string" === typeof value ||
+		"number" === typeof value
 	) {
 		return formatLocalizedDateTime(value) || fallback;
 	}
@@ -45,11 +45,8 @@ export function formatDateTimeValue(
  * Keeps the output compact for admin cards and diagnostics while preserving
  * `0 B` for valid zero-sized values.
  */
-export function formatByteSize(
-	value: unknown,
-	fallback: string = ''
-): string {
-	if (undefined === value || null === value || '' === value) {
+export function formatByteSize(value: unknown, fallback: string = ""): string {
+	if (undefined === value || null === value || "" === value) {
 		return fallback;
 	}
 
@@ -60,10 +57,10 @@ export function formatByteSize(
 	}
 
 	if (0 === size) {
-		return '0 B';
+		return "0 B";
 	}
 
-	const units = ['B', 'KB', 'MB', 'GB'];
+	const units = ["B", "KB", "MB", "GB"];
 	let nextSize = size;
 	let index = 0;
 

@@ -1,17 +1,17 @@
-import type { SubmitEvent } from 'react';
-import { useState } from 'react';
-import { AlertCircle, Mail, Send, Server } from 'lucide-react';
-import { Button, Input, Select, type SelectOption } from '@/components';
-import { __, sprintf } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
-import { cn } from '@/utils';
+import type { SubmitEvent } from "react";
+import { useState } from "react";
+import { AlertCircle, Mail, Send, Server } from "lucide-react";
+import { Button, Input, Select, type SelectOption } from "@/components";
+import { __, sprintf } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
+import { cn } from "@/utils";
 import type {
 	EmailDeliveryTabProps,
 	EmailFormState,
 	EmailStatus,
 	MethodButtonProps,
-} from '../types';
-import type { SmtpEncryption } from '../../types';
+} from "../types";
+import type { SmtpEncryption } from "../../types";
 
 function MethodButton({
 	isActive,
@@ -19,7 +19,7 @@ function MethodButton({
 	description,
 	onClick,
 }: MethodButtonProps) {
-	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
+	const direction = isDocumentRtl() ? "rtl" : "ltr";
 
 	return (
 		<button
@@ -27,10 +27,10 @@ function MethodButton({
 			onClick={onClick}
 			dir={direction}
 			className={cn(
-				'settings-email-method-button',
+				"settings-email-method-button",
 				isActive
-					? 'settings-email-method-button-active'
-					: 'settings-email-method-button-inactive'
+					? "settings-email-method-button-active"
+					: "settings-email-method-button-inactive"
 			)}
 		>
 			<p className="settings-email-method-title">{title}</p>
@@ -41,15 +41,15 @@ function MethodButton({
 
 function buildFormState(status?: EmailStatus | null): EmailFormState {
 	return {
-		driver: status?.driver || 'mail',
-		fromEmail: status?.configuredFromEmail || '',
-		fromName: status?.configuredFromName || '',
-		smtpHost: status?.smtpHost || '',
+		driver: status?.driver || "mail",
+		fromEmail: status?.configuredFromEmail || "",
+		fromName: status?.configuredFromName || "",
+		smtpHost: status?.smtpHost || "",
 		smtpPort: String(status?.smtpPort || 587),
-		smtpEncryption: status?.smtpEncryption || 'tls',
+		smtpEncryption: status?.smtpEncryption || "tls",
 		smtpAuth: Boolean(status?.smtpAuth),
-		smtpUsername: status?.smtpUsername || '',
-		smtpPassword: '',
+		smtpUsername: status?.smtpUsername || "",
+		smtpPassword: "",
 	};
 }
 
@@ -61,14 +61,14 @@ function EmailDeliveryTab({
 	onSave,
 }: EmailDeliveryTabProps) {
 	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isRtl ? "rtl" : "ltr";
 	const [form, setForm] = useState<EmailFormState>(() =>
 		buildFormState(status)
 	);
 	const encryptionOptions: SelectOption<SmtpEncryption>[] = [
-		{ value: 'tls', label: __('TLS / STARTTLS') },
-		{ value: 'ssl', label: __('SSL') },
-		{ value: 'none', label: __('None') },
+		{ value: "tls", label: __("TLS / STARTTLS") },
+		{ value: "ssl", label: __("SSL") },
+		{ value: "none", label: __("None") },
 	];
 
 	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
@@ -87,34 +87,31 @@ function EmailDeliveryTab({
 
 		setForm((current) => ({
 			...current,
-			smtpPassword: '',
+			smtpPassword: "",
 		}));
 	};
 
 	const managementDisabled = Boolean(
 		status && !status.canManageFromDashboard
 	);
-	const savedDriver = status?.driver || 'mail';
-	const usingSmtp = 'smtp' === form.driver;
+	const savedDriver = status?.driver || "mail";
+	const usingSmtp = "smtp" === form.driver;
 	const showSubmitButton = usingSmtp || form.driver !== savedDriver;
 
 	return (
 		<div className="settings-email">
 			<div className="settings-email-intro">
-				<div
-					dir={direction}
-					className="settings-email-intro-layout"
-				>
+				<div dir={direction} className="settings-email-intro-layout">
 					<div className="settings-email-intro-icon">
 						<Mail size={18} />
 					</div>
 					<div className="settings-email-intro-content">
 						<h2 className="settings-email-intro-title">
-							{__('Email Configuration')}
+							{__("Email Configuration")}
 						</h2>
 						<p className="settings-email-intro-description">
 							{__(
-								'PeakURL uses this mail transport for password-reset emails and other account recovery notifications.'
+								"PeakURL uses this mail transport for password-reset emails and other account recovery notifications."
 							)}
 						</p>
 					</div>
@@ -127,10 +124,13 @@ function EmailDeliveryTab({
 						dir={direction}
 						className="settings-email-alert-layout"
 					>
-						<AlertCircle size={18} className="settings-email-alert-icon" />
+						<AlertCircle
+							size={18}
+							className="settings-email-alert-icon"
+						/>
 						<div className="settings-email-alert-content">
 							<p className="settings-email-alert-title">
-								{__('Mail status unavailable')}
+								{__("Mail status unavailable")}
 							</p>
 							<p className="settings-email-alert-text">
 								{errorMessage}
@@ -146,10 +146,13 @@ function EmailDeliveryTab({
 						dir={direction}
 						className="settings-email-alert-layout"
 					>
-						<AlertCircle size={18} className="settings-email-alert-icon" />
+						<AlertCircle
+							size={18}
+							className="settings-email-alert-icon"
+						/>
 						<div className="settings-email-alert-content">
 							<p className="settings-email-alert-title">
-								{__('Dashboard management unavailable')}
+								{__("Dashboard management unavailable")}
 							</p>
 							<p className="settings-email-alert-text">
 								{status?.manageDisabledReason}
@@ -159,39 +162,36 @@ function EmailDeliveryTab({
 				</div>
 			)}
 
-			<form
-				onSubmit={handleSubmit}
-				className="settings-email-form"
-			>
+			<form onSubmit={handleSubmit} className="settings-email-form">
 				<div className="settings-email-section">
 					<div className="settings-email-section-title">
 						<Send size={16} />
-						{__('Delivery method')}
+						{__("Delivery method")}
 					</div>
 					<div className="settings-email-method-grid">
 						<MethodButton
-							isActive={'mail' === form.driver}
-							title={__('PHP mail()')}
+							isActive={"mail" === form.driver}
+							title={__("PHP mail()")}
 							description={__(
-								'Use the hosting server’s built-in PHP mail transport.'
+								"Use the hosting server’s built-in PHP mail transport."
 							)}
 							onClick={() =>
 								setForm((current) => ({
 									...current,
-									driver: 'mail',
+									driver: "mail",
 								}))
 							}
 						/>
 						<MethodButton
-							isActive={'smtp' === form.driver}
-							title={__('SMTP')}
+							isActive={"smtp" === form.driver}
+							title={__("SMTP")}
 							description={__(
-								'Send through your own SMTP server with optional authentication.'
+								"Send through your own SMTP server with optional authentication."
 							)}
 							onClick={() =>
 								setForm((current) => ({
 									...current,
-									driver: 'smtp',
+									driver: "smtp",
 								}))
 							}
 						/>
@@ -202,11 +202,11 @@ function EmailDeliveryTab({
 					<div className="settings-email-connection-panel">
 						<div className="settings-email-section-title">
 							<Server size={16} />
-							{__('SMTP connection')}
+							{__("SMTP connection")}
 						</div>
 						<div className="settings-email-fields-grid">
 							<Input
-								label={__('From Name')}
+								label={__("From Name")}
 								value={form.fromName}
 								onChange={(event) =>
 									setForm((current) => ({
@@ -214,10 +214,10 @@ function EmailDeliveryTab({
 										fromName: event.target.value,
 									}))
 								}
-								placeholder={status?.fromName || __('PeakURL')}
+								placeholder={status?.fromName || __("PeakURL")}
 							/>
 							<Input
-								label={__('From Email')}
+								label={__("From Email")}
 								type="email"
 								autoCapitalize="off"
 								spellCheck={false}
@@ -228,12 +228,12 @@ function EmailDeliveryTab({
 										fromEmail: event.target.value,
 									}))
 								}
-								placeholder={__('noreply@yourdomain.com')}
+								placeholder={__("noreply@yourdomain.com")}
 							/>
 						</div>
 						<div className="settings-email-fields-grid">
 							<Input
-								label={__('SMTP Host')}
+								label={__("SMTP Host")}
 								valueDirection="ltr"
 								autoCapitalize="off"
 								spellCheck={false}
@@ -244,11 +244,11 @@ function EmailDeliveryTab({
 										smtpHost: event.target.value,
 									}))
 								}
-								placeholder={__('smtp.example.com')}
+								placeholder={__("smtp.example.com")}
 								required
 							/>
 							<Input
-								label={__('SMTP Port')}
+								label={__("SMTP Port")}
 								type="number"
 								value={form.smtpPort}
 								onChange={(event) =>
@@ -265,7 +265,7 @@ function EmailDeliveryTab({
 						<div className="settings-email-fields-grid">
 							<div className="settings-email-field">
 								<label className="settings-section-label">
-									{__('Encryption')}
+									{__("Encryption")}
 								</label>
 								<Select
 									value={form.smtpEncryption}
@@ -276,12 +276,12 @@ function EmailDeliveryTab({
 										}))
 									}
 									options={encryptionOptions}
-									ariaLabel={__('SMTP encryption')}
+									ariaLabel={__("SMTP encryption")}
 								/>
 							</div>
 							<div className="settings-email-field">
 								<label className="settings-section-label">
-									{__('Authentication')}
+									{__("Authentication")}
 								</label>
 								<button
 									type="button"
@@ -293,33 +293,33 @@ function EmailDeliveryTab({
 									}
 									dir={direction}
 									className={cn(
-										'settings-email-auth-toggle',
+										"settings-email-auth-toggle",
 										form.smtpAuth
-											? 'settings-email-auth-toggle-active'
-											: 'settings-email-auth-toggle-inactive'
+											? "settings-email-auth-toggle-active"
+											: "settings-email-auth-toggle-inactive"
 									)}
 								>
 									<span>
 										{form.smtpAuth
-											? __('Authentication enabled')
-											: __('Authentication disabled')}
+											? __("Authentication enabled")
+											: __("Authentication disabled")}
 									</span>
 									<span
 										className={cn(
-											'settings-email-auth-switch',
+											"settings-email-auth-switch",
 											form.smtpAuth
-												? 'settings-email-auth-switch-active'
-												: 'settings-email-auth-switch-inactive'
+												? "settings-email-auth-switch-active"
+												: "settings-email-auth-switch-inactive"
 										)}
 									>
 										<span
 											className={cn(
-												'settings-email-auth-knob',
+												"settings-email-auth-knob",
 												form.smtpAuth
 													? isRtl
-														? 'settings-email-auth-knob-active-rtl'
-														: 'settings-email-auth-knob-active-ltr'
-													: 'settings-email-auth-knob-inactive'
+														? "settings-email-auth-knob-active-rtl"
+														: "settings-email-auth-knob-active-ltr"
+													: "settings-email-auth-knob-inactive"
 											)}
 										/>
 									</span>
@@ -330,7 +330,7 @@ function EmailDeliveryTab({
 						{form.smtpAuth && (
 							<div className="settings-email-fields-grid">
 								<Input
-									label={__('SMTP Username')}
+									label={__("SMTP Username")}
 									valueDirection="ltr"
 									autoCapitalize="off"
 									spellCheck={false}
@@ -341,11 +341,11 @@ function EmailDeliveryTab({
 											smtpUsername: event.target.value,
 										}))
 									}
-									placeholder={__('mailer@example.com')}
+									placeholder={__("mailer@example.com")}
 									required
 								/>
 								<Input
-									label={__('SMTP Password')}
+									label={__("SMTP Password")}
 									type="password"
 									value={form.smtpPassword}
 									onChange={(event) =>
@@ -357,19 +357,19 @@ function EmailDeliveryTab({
 									placeholder={
 										status?.smtpPasswordConfigured
 											? __(
-													'Leave blank to keep the saved password'
+													"Leave blank to keep the saved password"
 												)
-											: __('Enter the SMTP password')
+											: __("Enter the SMTP password")
 									}
-										helperText={
-											status?.smtpPasswordConfigured
-												? sprintf(
-														__('Saved password: %s'),
-														status.smtpPasswordHint ||
-															''
-													)
-												: __(
-														'PeakURL stores this password encrypted in the database.'
+									helperText={
+										status?.smtpPasswordConfigured
+											? sprintf(
+													__("Saved password: %s"),
+													status.smtpPasswordHint ||
+														""
+												)
+											: __(
+													"PeakURL stores this password encrypted in the database."
 												)
 									}
 									required={!status?.smtpPasswordConfigured}
@@ -382,10 +382,10 @@ function EmailDeliveryTab({
 				{showSubmitButton && (
 					<div
 						className={cn(
-							'settings-email-actions',
+							"settings-email-actions",
 							isRtl
-								? 'settings-email-actions-start'
-								: 'settings-email-actions-end'
+								? "settings-email-actions-start"
+								: "settings-email-actions-end"
 						)}
 					>
 						<Button
@@ -395,8 +395,8 @@ function EmailDeliveryTab({
 							disabled={managementDisabled}
 						>
 							{usingSmtp
-								? __('Save Email Configuration')
-								: __('Use PHP mail()')}
+								? __("Save Email Configuration")
+								: __("Use PHP mail()")}
 						</Button>
 					</div>
 				)}

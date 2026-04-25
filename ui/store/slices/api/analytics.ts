@@ -1,4 +1,4 @@
-import baseApi from './base';
+import baseApi from "./base";
 import type {
 	ApiDataResponse,
 	ActivityHistoryResponse,
@@ -8,19 +8,19 @@ import type {
 	LinkAnalyticsArgs,
 	LinkLocationPayload,
 	LinkStatsResponse,
-} from './types';
+} from "./types";
 
 function buildActivityHistoryQueryString({
 	page = 1,
 	limit = 25,
-	category = 'all',
+	category = "all",
 }: GetActivityHistoryQueryArgs = {}): string {
 	const params = new URLSearchParams();
-	params.set('page', String(page));
-	params.set('limit', String(limit));
+	params.set("page", String(page));
+	params.set("limit", String(limit));
 
-	if (category && 'all' !== category) {
-		params.set('category', category);
+	if (category && "all" !== category) {
+		params.set("category", category);
 	}
 
 	return `analytics/activity/history?${params.toString()}`;
@@ -33,18 +33,18 @@ export const analyticsApi = baseApi.injectEndpoints({
 	endpoints: (build) => ({
 		getAnalytics: build.query<DashboardAnalyticsResponse, number | void>({
 			query: (days = 7) => `analytics?days=${days}`,
-			providesTags: ['Analytics'],
+			providesTags: ["Analytics"],
 		}),
 		getActivity: build.query<ActivityResponse, void>({
-			query: () => 'analytics/activity',
-			providesTags: ['Analytics'],
+			query: () => "analytics/activity",
+			providesTags: ["Analytics"],
 		}),
 		getActivityHistory: build.query<
 			ActivityHistoryResponse,
 			GetActivityHistoryQueryArgs | void
 		>({
 			query: (args) => buildActivityHistoryQueryString(args || {}),
-			providesTags: ['Analytics'],
+			providesTags: ["Analytics"],
 		}),
 		deleteActivityLog: build.mutation<
 			ApiDataResponse<{ deleted: boolean }>,
@@ -52,35 +52,32 @@ export const analyticsApi = baseApi.injectEndpoints({
 		>({
 			query: (id) => ({
 				url: `analytics/activity/${id}`,
-				method: 'DELETE',
+				method: "DELETE",
 			}),
-			invalidatesTags: ['Analytics'],
+			invalidatesTags: ["Analytics"],
 		}),
 		bulkDeleteActivityLogs: build.mutation<
 			ApiDataResponse<{ deletedCount: number }>,
 			string[]
 		>({
 			query: (ids) => ({
-				url: 'analytics/activity/bulk',
-				method: 'DELETE',
+				url: "analytics/activity/bulk",
+				method: "DELETE",
 				body: { ids },
 			}),
-			invalidatesTags: ['Analytics'],
+			invalidatesTags: ["Analytics"],
 		}),
-		getLinkLocation: build.query<
-			{ data?: LinkLocationPayload },
-			string
-		>({
+		getLinkLocation: build.query<{ data?: LinkLocationPayload }, string>({
 			query: (id) => `analytics/url/${id}/location`,
 			providesTags: (_result, _error, id) => [
-				{ type: 'Analytics', id: `location-${id}` },
+				{ type: "Analytics", id: `location-${id}` },
 			],
 		}),
 		getLinkStats: build.query<LinkStatsResponse, LinkAnalyticsArgs>({
 			query: ({ id, days = 7 }) =>
 				`analytics/url/${id}/stats?days=${days}`,
 			providesTags: (_result, _error, { id }) => [
-				{ type: 'Analytics', id: `stats-${id}` },
+				{ type: "Analytics", id: `stats-${id}` },
 			],
 		}),
 	}),

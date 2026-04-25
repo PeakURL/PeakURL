@@ -8,17 +8,17 @@
 	box-sizing: border-box;
 }
 
-html[dir='rtl'],
-html[dir='rtl'] body {
+html[dir="rtl"],
+html[dir="rtl"] body {
 	direction: rtl;
 }
 
-html[dir='rtl'] .ml-auto {
+html[dir="rtl"] .ml-auto {
 	margin-left: 0;
 	margin-right: auto;
 }
 
-html[dir='rtl'] .mr-auto {
+html[dir="rtl"] .mr-auto {
 	margin-right: 0;
 	margin-left: auto;
 }
@@ -32,7 +32,7 @@ body {
 		system-ui,
 		-apple-system,
 		BlinkMacSystemFont,
-		'Segoe UI',
+		"Segoe UI",
 		Roboto,
 		sans-serif;
 	background-color: var(--color-bg);

@@ -1,30 +1,24 @@
-import { useState } from 'react';
-import { Globe, MapPin } from 'lucide-react';
-import { WorldMap } from '@/components';
-import { __ } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
-import { useGetLinkLocationQuery } from '@/store/slices/api';
-import { getErrorMessage } from '@/utils';
-import type { HoveredCountry, TrafficLocationTabProps } from './types';
+import { useState } from "react";
+import { Globe, MapPin } from "lucide-react";
+import { WorldMap } from "@/components";
+import { __ } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
+import { useGetLinkLocationQuery } from "@/store/slices/api";
+import { getErrorMessage } from "@/utils";
+import type { HoveredCountry, TrafficLocationTabProps } from "./types";
 
 interface LocationNoteItemProps {
 	text: string;
 	example?: string;
-	direction: 'rtl' | 'ltr';
+	direction: "rtl" | "ltr";
 }
 
-function LocationNoteItem({
-	text,
-	example,
-	direction,
-}: LocationNoteItemProps) {
+function LocationNoteItem({ text, example, direction }: LocationNoteItemProps) {
 	return (
 		<div dir={direction} className="links-location-note-item">
 			<span className="links-location-note-bullet" />
 			<div className="links-location-note-content">
-				<p dir={direction}>
-					{text}
-				</p>
+				<p dir={direction}>{text}</p>
 				{example ? (
 					<code
 						dir="ltr"
@@ -43,14 +37,14 @@ function TrafficLocationTab({
 	selectedTab,
 	open,
 }: TrafficLocationTabProps) {
-	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
+	const direction = isDocumentRtl() ? "rtl" : "ltr";
 	const [hoveredCountry, setHoveredCountry] = useState<HoveredCountry | null>(
 		null
 	);
 	// RTK Query hook
 	const shouldFetch = open && selectedTab === 1 && !!link?.id;
 	const { data, isLoading, isError, error } = useGetLinkLocationQuery(
-		link?.id || '',
+		link?.id || "",
 		{ skip: !shouldFetch }
 	);
 
@@ -60,13 +54,13 @@ function TrafficLocationTab({
 			<div className="links-location-tab">
 				<div className="links-drawer-section">
 					<h3 className="links-drawer-section-title mb-4">
-						{__('Top Countries')}
+						{__("Top Countries")}
 					</h3>
 					<div className="links-drawer-empty-panel links-drawer-empty-panel-large">
 						<div className="text-center">
 							<Globe className="links-drawer-empty-icon" />
 							<p className="links-drawer-empty-copy">
-								{__('No link data available')}
+								{__("No link data available")}
 							</p>
 						</div>
 					</div>
@@ -83,11 +77,11 @@ function TrafficLocationTab({
 
 	// Country flag emoji helper
 	const getFlagEmoji = (countryCode?: string | null): string => {
-		if (countryCode === 'LOCAL') return '🏠';
-		if (!countryCode || countryCode === '??') return '🌍';
+		if (countryCode === "LOCAL") return "🏠";
+		if (!countryCode || countryCode === "??") return "🌍";
 		const codePoints = countryCode
 			.toUpperCase()
-			.split('')
+			.split("")
 			.map((char: string) => 127397 + char.charCodeAt(0));
 		return String.fromCodePoint(...codePoints);
 	};
@@ -102,13 +96,13 @@ function TrafficLocationTab({
 			<div className="links-location-tab">
 				<div className="links-drawer-section animate-pulse">
 					<h3 className="links-drawer-section-title mb-4">
-						{__('Top Countries')}
+						{__("Top Countries")}
 					</h3>
 					<div className="links-drawer-empty-panel links-drawer-empty-panel-large">
 						<div className="links-drawer-empty-content">
 							<Globe className="links-drawer-empty-icon-spaced" />
 							<p className="links-drawer-empty-title">
-								{__('Loading location data...')}
+								{__("Loading location data...")}
 							</p>
 						</div>
 					</div>
@@ -122,16 +116,16 @@ function TrafficLocationTab({
 			<div className="links-location-tab">
 				<div className="links-drawer-section">
 					<h3 className="links-drawer-section-title mb-4">
-						{__('Top Countries')}
+						{__("Top Countries")}
 					</h3>
 					<div className="links-drawer-empty-panel links-drawer-empty-panel-large">
 						<div className="links-drawer-empty-content">
 							<Globe className="mx-auto mb-3 h-12 w-12 text-error" />
 							<p className="links-drawer-empty-title">
-								{__('Failed to load location data')}
+								{__("Failed to load location data")}
 							</p>
 							<p className="links-drawer-empty-copy-small">
-								{getErrorMessage(error, __('Unknown error'))}
+								{getErrorMessage(error, __("Unknown error"))}
 							</p>
 						</div>
 					</div>
@@ -146,42 +140,48 @@ function TrafficLocationTab({
 				{/* Top Countries Section */}
 				<div className="links-drawer-section">
 					<h3 className="links-drawer-section-title mb-4">
-						{__('Top Countries')}
+						{__("Top Countries")}
 					</h3>
 					<div className="links-location-empty-map">
 						<div className="links-location-empty-map-inner">
 							<Globe className="links-drawer-empty-icon-spaced" />
 							<p className="links-drawer-empty-title">
-								{__('No location data available yet')}
+								{__("No location data available yet")}
 							</p>
 							<p className="mx-auto max-w-md text-xs text-text-muted">
 								{__(
-									'Location tracking will show here once clicks are recorded with a configured GeoLite2 City database'
+									"Location tracking will show here once clicks are recorded with a configured GeoLite2 City database"
 								)}
 							</p>
-							<div dir={direction} className="links-location-note">
-								<p dir={direction} className="links-location-note-title">
-									{__('Note:')}
+							<div
+								dir={direction}
+								className="links-location-note"
+							>
+								<p
+									dir={direction}
+									className="links-location-note-title"
+								>
+									{__("Note:")}
 								</p>
 								<div className="links-location-note-list">
 									<LocationNoteItem
 										direction={direction}
 										text={__(
-											'Local and private-network clicks do not include location data.'
+											"Local and private-network clicks do not include location data."
 										)}
 										example="127.0.0.1, 172.16-31.x.x, 192.168.x.x"
 									/>
 									<LocationNoteItem
 										direction={direction}
 										text={__(
-											'Store the GeoLite2 City database here:'
+											"Store the GeoLite2 City database here:"
 										)}
 										example="content/uploads/geoip/GeoLite2-City.mmdb"
 									/>
 									<LocationNoteItem
 										direction={direction}
 										text={__(
-											'VPN users may show the location of the VPN server.'
+											"VPN users may show the location of the VPN server."
 										)}
 									/>
 								</div>
@@ -193,13 +193,13 @@ function TrafficLocationTab({
 				{/* Top Cities Section */}
 				<div className="links-drawer-section">
 					<h3 className="links-drawer-section-title mb-4">
-						{__('Top Cities')}
+						{__("Top Cities")}
 					</h3>
 					<div className="links-drawer-empty-panel links-drawer-empty-panel-medium">
 						<div className="text-center">
 							<MapPin className="mx-auto mb-2 h-10 w-10 text-text-muted" />
 							<p className="links-drawer-empty-copy">
-								{__('No city data available yet')}
+								{__("No city data available yet")}
 							</p>
 						</div>
 					</div>
@@ -219,16 +219,16 @@ function TrafficLocationTab({
 						</div>
 						<div>
 							<p className="links-drawer-summary-label">
-								{__('Total Locations')}
+								{__("Total Locations")}
 							</p>
 							<p className="links-drawer-summary-value">
-								{total} {__('clicks')}
+								{total} {__("clicks")}
 							</p>
 						</div>
 					</div>
 					<div className="links-drawer-summary-meta">
 						<p className="links-drawer-summary-label">
-							{__('Countries')}
+							{__("Countries")}
 						</p>
 						<p className="links-drawer-summary-value">
 							{countries.length}
@@ -242,7 +242,7 @@ function TrafficLocationTab({
 				<div className="links-drawer-section-header">
 					<Globe className="links-drawer-section-icon" />
 					<h3 className="links-drawer-section-title">
-						{__('Geographic Distribution')}
+						{__("Geographic Distribution")}
 					</h3>
 				</div>
 				<div className="links-location-map-wrap">
@@ -273,7 +273,7 @@ function TrafficLocationTab({
 								{hoveredCountry.countryName}
 							</p>
 							<p className="links-location-tooltip-copy">
-								{hoveredCountry.clicks} {__('clicks')} (
+								{hoveredCountry.clicks} {__("clicks")} (
 								{getPercentage(hoveredCountry.clicks)}%)
 							</p>
 						</div>
@@ -286,7 +286,7 @@ function TrafficLocationTab({
 				<div className="links-drawer-section-header">
 					<Globe className="links-drawer-section-icon" />
 					<h3 className="links-drawer-section-title">
-						{__('Top Countries')}
+						{__("Top Countries")}
 					</h3>
 				</div>
 				<div className="links-location-list">
@@ -314,7 +314,7 @@ function TrafficLocationTab({
 											{percentage}%
 										</span>
 										<span className="links-location-list-count">
-											{country.count} {__('clicks')}
+											{country.count} {__("clicks")}
 										</span>
 									</div>
 								</div>
@@ -335,7 +335,7 @@ function TrafficLocationTab({
 				<div className="links-drawer-section-header">
 					<MapPin className="links-drawer-section-icon" />
 					<h3 className="links-drawer-section-title">
-						{__('Top Cities')}
+						{__("Top Cities")}
 					</h3>
 				</div>
 				<div className="links-location-city-list">

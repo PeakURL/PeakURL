@@ -1,28 +1,28 @@
-import type { ChangeEvent, ClipboardEvent, KeyboardEvent } from 'react';
-import { useEffect, useRef, useState } from 'react';
-import { cn } from '@/utils';
-import type { VerificationCodeInputProps } from '../types';
-export type { VerificationCodeInputProps } from '../types';
+import type { ChangeEvent, ClipboardEvent, KeyboardEvent } from "react";
+import { useEffect, useRef, useState } from "react";
+import { cn } from "@/utils";
+import type { VerificationCodeInputProps } from "../types";
+export type { VerificationCodeInputProps } from "../types";
 
 const toDigits = (
 	value: string | number | null | undefined,
 	length: number
 ): string[] => {
-	const sanitized = String(value || '')
-		.replace(/\D/g, '')
+	const sanitized = String(value || "")
+		.replace(/\D/g, "")
 		.slice(0, length);
 
-	return Array.from({ length }, (_, index) => sanitized[index] || '');
+	return Array.from({ length }, (_, index) => sanitized[index] || "");
 };
 
 export function VerificationCodeInput({
 	length = 6,
-	value = '',
+	value = "",
 	onChange,
 	onComplete,
 	onEnter,
 	disabled = false,
-	className = '',
+	className = "",
 }: VerificationCodeInputProps) {
 	const [digits, setDigits] = useState<string[]>(() =>
 		toDigits(value, length)
@@ -45,7 +45,7 @@ export function VerificationCodeInput({
 	const updateDigits = (nextDigits: string[]) => {
 		setDigits(nextDigits);
 
-		const nextValue = nextDigits.join('');
+		const nextValue = nextDigits.join("");
 		onChange?.(nextValue);
 
 		if (nextDigits.every(Boolean)) {
@@ -57,17 +57,17 @@ export function VerificationCodeInput({
 		event: ChangeEvent<HTMLInputElement>,
 		index: number
 	) => {
-		const sanitized = event.target.value.replace(/\D/g, '');
+		const sanitized = event.target.value.replace(/\D/g, "");
 
 		if (!sanitized) {
 			const nextDigits = [...digits];
-			nextDigits[index] = '';
+			nextDigits[index] = "";
 			updateDigits(nextDigits);
 			return;
 		}
 
 		const nextDigits = [...digits];
-		const nextValues = sanitized.slice(0, length - index).split('');
+		const nextValues = sanitized.slice(0, length - index).split("");
 
 		nextValues.forEach((digit, offset) => {
 			nextDigits[index + offset] = digit;
@@ -83,18 +83,18 @@ export function VerificationCodeInput({
 		event: KeyboardEvent<HTMLInputElement>,
 		index: number
 	) => {
-		if ('Enter' === event.key) {
+		if ("Enter" === event.key) {
 			event.preventDefault();
 			onEnter?.(event);
 			return;
 		}
 
-		if (event.key === 'Backspace') {
+		if (event.key === "Backspace") {
 			event.preventDefault();
 
 			if (digits[index]) {
 				const nextDigits = [...digits];
-				nextDigits[index] = '';
+				nextDigits[index] = "";
 				updateDigits(nextDigits);
 				return;
 			}
@@ -102,19 +102,19 @@ export function VerificationCodeInput({
 			if (index > 0) {
 				const previousIndex = index - 1;
 				const nextDigits = [...digits];
-				nextDigits[previousIndex] = '';
+				nextDigits[previousIndex] = "";
 				updateDigits(nextDigits);
 				inputsRef.current[previousIndex]?.focus();
 			}
 			return;
 		}
 
-		if (event.key === 'ArrowLeft' && index > 0) {
+		if (event.key === "ArrowLeft" && index > 0) {
 			event.preventDefault();
 			inputsRef.current[index - 1]?.focus();
 		}
 
-		if (event.key === 'ArrowRight' && index < length - 1) {
+		if (event.key === "ArrowRight" && index < length - 1) {
 			event.preventDefault();
 			inputsRef.current[index + 1]?.focus();
 		}
@@ -124,8 +124,8 @@ export function VerificationCodeInput({
 		event.preventDefault();
 
 		const pastedDigits = event.clipboardData
-			.getData('text')
-			.replace(/\D/g, '')
+			.getData("text")
+			.replace(/\D/g, "")
 			.slice(0, length);
 
 		if (!pastedDigits) {
@@ -139,7 +139,7 @@ export function VerificationCodeInput({
 
 	return (
 		<div
-			className={cn('verification-code-input', className)}
+			className={cn("verification-code-input", className)}
 			onPaste={handlePaste}
 		>
 			{digits.map((digit, index) => (
@@ -152,20 +152,20 @@ export function VerificationCodeInput({
 					type="text"
 					dir="ltr"
 					inputMode="numeric"
-					enterKeyHint={index === length - 1 ? 'done' : 'next'}
-					autoComplete={index === 0 ? 'one-time-code' : 'off'}
+					enterKeyHint={index === length - 1 ? "done" : "next"}
+					autoComplete={index === 0 ? "one-time-code" : "off"}
 					maxLength={1}
 					value={digit}
 					disabled={disabled}
 					onChange={(event) => handleChange(event, index)}
 					onKeyDown={(event) => handleKeyDown(event, index)}
 					className={cn(
-						'verification-code-input-field',
+						"verification-code-input-field",
 						digit
-							? 'verification-code-input-field-filled'
+							? "verification-code-input-field-filled"
 							: index === highlightedIndex && !disabled
-								? 'verification-code-input-field-highlighted'
-								: 'verification-code-input-field-idle'
+								? "verification-code-input-field-highlighted"
+								: "verification-code-input-field-idle"
 					)}
 				/>
 			))}

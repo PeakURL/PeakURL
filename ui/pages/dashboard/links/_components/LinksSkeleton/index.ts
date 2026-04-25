@@ -1,1 +1,1 @@
-export { default } from './LinksSkeleton';
+export { default } from "./LinksSkeleton";

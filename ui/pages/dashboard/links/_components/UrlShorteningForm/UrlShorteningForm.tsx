@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useCreateUrlMutation } from '@/store/slices/api';
+import { useState } from "react";
+import { useCreateUrlMutation } from "@/store/slices/api";
 import {
 	buildShortUrl,
 	escUrl,
@@ -7,36 +7,36 @@ import {
 	isRelativeUrl,
 	isFutureLocalDateTime,
 	toIsoFromLocalDateTime,
-} from '@/utils';
-import { ChevronDown, ChevronUp } from 'lucide-react';
-import { __, sprintf } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
-import type { SubmitEvent } from 'react';
+} from "@/utils";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { __, sprintf } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
+import type { SubmitEvent } from "react";
 
-import Header from './Header';
-import StatusMessages from './StatusMessages';
-import MainInputs from './MainInputs';
-import AdvancedOptions from './AdvancedOptions';
-import type { CreateUrlPayload } from './types';
+import Header from "./Header";
+import StatusMessages from "./StatusMessages";
+import MainInputs from "./MainInputs";
+import AdvancedOptions from "./AdvancedOptions";
+import type { CreateUrlPayload } from "./types";
 
 const UrlShorteningForm = () => {
-	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
-	const [destinationUrl, setDestinationUrl] = useState('');
-	const [alias, setAlias] = useState('');
-	const [title, setTitle] = useState('');
-	const [error, setError] = useState('');
-	const [success, setSuccess] = useState('');
+	const direction = isDocumentRtl() ? "rtl" : "ltr";
+	const [destinationUrl, setDestinationUrl] = useState("");
+	const [alias, setAlias] = useState("");
+	const [title, setTitle] = useState("");
+	const [error, setError] = useState("");
+	const [success, setSuccess] = useState("");
 	const [showAdvanced, setShowAdvanced] = useState(false);
 
 	// Advanced options state
-	const [password, setPassword] = useState('');
-	const [expirationDate, setExpirationDate] = useState('');
-	const [expirationTime, setExpirationTime] = useState('');
-	const [utmSource, setUtmSource] = useState('');
-	const [utmMedium, setUtmMedium] = useState('');
-	const [utmCampaign, setUtmCampaign] = useState('');
-	const [utmTerm, setUtmTerm] = useState('');
-	const [utmContent, setUtmContent] = useState('');
+	const [password, setPassword] = useState("");
+	const [expirationDate, setExpirationDate] = useState("");
+	const [expirationTime, setExpirationTime] = useState("");
+	const [utmSource, setUtmSource] = useState("");
+	const [utmMedium, setUtmMedium] = useState("");
+	const [utmCampaign, setUtmCampaign] = useState("");
+	const [utmTerm, setUtmTerm] = useState("");
+	const [utmContent, setUtmContent] = useState("");
 
 	const [createUrl, { isLoading }] = useCreateUrlMutation();
 
@@ -54,11 +54,11 @@ const UrlShorteningForm = () => {
 		const urlObj = new URL(url);
 		const params = new URLSearchParams(urlObj.search);
 
-		if (utmSource) params.set('utm_source', utmSource);
-		if (utmMedium) params.set('utm_medium', utmMedium);
-		if (utmCampaign) params.set('utm_campaign', utmCampaign);
-		if (utmTerm) params.set('utm_term', utmTerm);
-		if (utmContent) params.set('utm_content', utmContent);
+		if (utmSource) params.set("utm_source", utmSource);
+		if (utmMedium) params.set("utm_medium", utmMedium);
+		if (utmCampaign) params.set("utm_campaign", utmCampaign);
+		if (utmTerm) params.set("utm_term", utmTerm);
+		if (utmContent) params.set("utm_content", utmContent);
 
 		urlObj.search = params.toString();
 		return urlObj.toString();
@@ -66,12 +66,12 @@ const UrlShorteningForm = () => {
 
 	const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		setError('');
-		setSuccess('');
+		setError("");
+		setSuccess("");
 
 		// Validation
 		if (!destinationUrl.trim()) {
-			setError(__('Please enter a URL'));
+			setError(__("Please enter a URL"));
 			return;
 		}
 
@@ -83,7 +83,7 @@ const UrlShorteningForm = () => {
 		) {
 			setError(
 				__(
-					'Please enter a valid URL (must include http:// or https://)'
+					"Please enter a valid URL (must include http:// or https://)"
 				)
 			);
 			return;
@@ -94,7 +94,7 @@ const UrlShorteningForm = () => {
 
 			const payload: CreateUrlPayload = {
 				destinationUrl: urlWithUtm,
-				alias: alias.replace(/\s+/g, '') || undefined,
+				alias: alias.replace(/\s+/g, "") || undefined,
 				title: title.trim() || undefined,
 			};
 
@@ -110,7 +110,7 @@ const UrlShorteningForm = () => {
 					: `${expirationDate}T23:59:59`;
 
 				if (!isFutureLocalDateTime(expDateTime)) {
-					setError(__('Expiration time must be in the future.'));
+					setError(__("Expiration time must be in the future."));
 					return;
 				}
 
@@ -122,29 +122,29 @@ const UrlShorteningForm = () => {
 				? buildShortUrl(result.data)
 				: payload.destinationUrl;
 			setSuccess(
-				sprintf(__('Link shortened successfully! %s'), shortUrl)
+				sprintf(__("Link shortened successfully! %s"), shortUrl)
 			);
 			// Reset form
-			setDestinationUrl('');
-			setAlias('');
-			setTitle('');
-			setPassword('');
-			setExpirationDate('');
-			setExpirationTime('');
-			setUtmSource('');
-			setUtmMedium('');
-			setUtmCampaign('');
-			setUtmTerm('');
-			setUtmContent('');
+			setDestinationUrl("");
+			setAlias("");
+			setTitle("");
+			setPassword("");
+			setExpirationDate("");
+			setExpirationTime("");
+			setUtmSource("");
+			setUtmMedium("");
+			setUtmCampaign("");
+			setUtmTerm("");
+			setUtmContent("");
 			setShowAdvanced(false);
 
 			// Clear success message after 5 seconds
-			setTimeout(() => setSuccess(''), 5000);
+			setTimeout(() => setSuccess(""), 5000);
 		} catch (err) {
 			setError(
 				getErrorMessage(
 					err,
-					__('Failed to create short link. Please try again.')
+					__("Failed to create short link. Please try again.")
 				)
 			);
 		}
@@ -185,7 +185,7 @@ const UrlShorteningForm = () => {
 							d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
 						/>
 					</svg>
-					{__('Advanced Options')}
+					{__("Advanced Options")}
 					{showAdvanced ? (
 						<ChevronUp className="links-form-advanced-toggle-icon" />
 					) : (

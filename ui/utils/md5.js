@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 function safeAdd(x, y) {
 	var lsw = (x & 0xffff) + (y & 0xffff);
@@ -128,7 +128,7 @@ function binlMD5(x, len) {
 
 function binl2rstr(input) {
 	var i;
-	var output = '';
+	var output = "";
 	var length32 = input.length * 32;
 	for (i = 0; i < length32; i += 8) {
 		output += String.fromCharCode((input[i >>> 5] >>> (i % 32)) & 0xff);
@@ -173,8 +173,8 @@ function rstrHMACMD5(key, data) {
 }
 
 function rstr2hex(input) {
-	var hexTab = '0123456789abcdef';
-	var output = '';
+	var hexTab = "0123456789abcdef";
+	var output = "";
 	var x;
 	var i;
 	for (i = 0; i < input.length; i += 1) {

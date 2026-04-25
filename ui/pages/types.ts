@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from "react";
 
 /**
  * Props for the top-level authenticated app layout wrapper.

@@ -1,7 +1,7 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { __, sprintf } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
-import type { PaginationProps } from '../types';
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { __, sprintf } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
+import type { PaginationProps } from "../types";
 
 const Pagination = ({
 	currentPage,
@@ -20,7 +20,7 @@ const Pagination = ({
 			<div className="links-pagination-inner">
 				{/* Results Info */}
 				<div className="links-pagination-summary">
-					{sprintf(__('Showing %1$s–%2$s of %3$s links'), [
+					{sprintf(__("Showing %1$s–%2$s of %3$s links"), [
 						String(startItem),
 						String(endItem),
 						String(totalItems),
@@ -35,7 +35,7 @@ const Pagination = ({
 						className="links-pagination-nav"
 					>
 						<PreviousIcon className="h-3 w-3" />
-						{__('Previous')}
+						{__("Previous")}
 					</button>
 
 					<div className="links-pagination-pages">
@@ -57,8 +57,8 @@ const Pagination = ({
 									onClick={() => onPageChange(pageNum)}
 									className={`links-pagination-page ${
 										currentPage === pageNum
-											? 'links-pagination-page-current'
-											: ''
+											? "links-pagination-page-current"
+											: ""
 									}`}
 								>
 									{pageNum}
@@ -72,7 +72,7 @@ const Pagination = ({
 						disabled={currentPage === totalPages}
 						className="links-pagination-nav"
 					>
-						{__('Next')}
+						{__("Next")}
 						<NextIcon className="h-3 w-3" />
 					</button>
 				</div>

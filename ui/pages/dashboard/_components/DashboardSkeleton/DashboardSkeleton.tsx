@@ -1,4 +1,4 @@
-import { Skeleton } from '@/components';
+import { Skeleton } from "@/components";
 
 const StatCardSkeleton = () => (
 	<div className="skeleton-card">
@@ -17,7 +17,7 @@ const StatCardSkeleton = () => (
 );
 
 const TrafficSkeleton = () => {
-	const heights = ['60%', '45%', '70%', '50%', '80%', '40%', '65%'];
+	const heights = ["60%", "45%", "70%", "50%", "80%", "40%", "65%"];
 
 	return (
 		<div className="skeleton-form">

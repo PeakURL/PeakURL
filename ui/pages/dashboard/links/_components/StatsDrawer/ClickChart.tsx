@@ -1,13 +1,13 @@
-import { useEffect, useRef } from 'react';
-import { Chart } from 'chart.js/auto';
-import { __ } from '@/i18n';
-import type { ClickChartProps, StatsTimeRange } from './types';
+import { useEffect, useRef } from "react";
+import { Chart } from "chart.js/auto";
+import { __ } from "@/i18n";
+import type { ClickChartProps, StatsTimeRange } from "./types";
 
 const timeRangeOptions: Array<{ label: string; value: StatsTimeRange }> = [
-	{ label: '24h', value: '24h' },
-	{ label: '7d', value: '7d' },
-	{ label: '30d', value: '30d' },
-	{ label: __('All'), value: 'all' },
+	{ label: "24h", value: "24h" },
+	{ label: "7d", value: "7d" },
+	{ label: "30d", value: "30d" },
+	{ label: __("All"), value: "all" },
 ];
 
 function ClickChart({
@@ -20,7 +20,7 @@ function ClickChart({
 	open,
 }: ClickChartProps) {
 	const chartRef = useRef<HTMLCanvasElement | null>(null);
-	const chartInstanceRef = useRef<Chart<'line', number[], string> | null>(
+	const chartInstanceRef = useRef<Chart<"line", number[], string> | null>(
 		null
 	);
 
@@ -31,7 +31,7 @@ function ClickChart({
 				chartInstanceRef.current.destroy();
 			}
 
-			const ctx = chartRef.current.getContext('2d');
+			const ctx = chartRef.current.getContext("2d");
 
 			if (!ctx) {
 				return undefined;
@@ -41,15 +41,15 @@ function ClickChart({
 			const data = stats.traffic.clicks || [];
 
 			chartInstanceRef.current = new Chart(ctx, {
-				type: 'line',
+				type: "line",
 				data: {
 					labels: labels,
 					datasets: [
 						{
-							label: __('Clicks'),
+							label: __("Clicks"),
 							data: data,
-							borderColor: 'rgb(59, 130, 246)',
-							backgroundColor: 'rgba(59, 130, 246, 0.1)',
+							borderColor: "rgb(59, 130, 246)",
+							backgroundColor: "rgba(59, 130, 246, 0.1)",
 							fill: true,
 							tension: 0.4,
 							pointRadius: 4,
@@ -65,11 +65,11 @@ function ClickChart({
 							display: false,
 						},
 						tooltip: {
-							mode: 'index',
+							mode: "index",
 							intersect: false,
-							backgroundColor: 'rgba(0, 0, 0, 0.8)',
+							backgroundColor: "rgba(0, 0, 0, 0.8)",
 							padding: 12,
-							borderColor: 'rgba(255, 255, 255, 0.1)',
+							borderColor: "rgba(255, 255, 255, 0.1)",
 							borderWidth: 1,
 						},
 					},
@@ -78,15 +78,15 @@ function ClickChart({
 							beginAtZero: true,
 							ticks: {
 								stepSize: 1,
-								color: '#9CA3AF',
+								color: "#9CA3AF",
 							},
 							grid: {
-								color: 'rgba(156, 163, 175, 0.1)',
+								color: "rgba(156, 163, 175, 0.1)",
 							},
 						},
 						x: {
 							ticks: {
-								color: '#9CA3AF',
+								color: "#9CA3AF",
 							},
 							grid: {
 								display: false,
@@ -108,7 +108,7 @@ function ClickChart({
 		<div className="links-click-chart">
 			<div className="links-click-chart-header">
 				<h3 className="links-click-chart-title">
-					{__('Click History')}
+					{__("Click History")}
 				</h3>
 				{/* Time Range Selector */}
 				<div className="links-click-chart-ranges">
@@ -119,8 +119,8 @@ function ClickChart({
 							onClick={() => setTimeRange(range.value)}
 							className={`links-click-chart-range ${
 								timeRange === range.value
-									? 'links-click-chart-range-current'
-									: 'links-click-chart-range-idle'
+									? "links-click-chart-range-current"
+									: "links-click-chart-range-idle"
 							}`}
 						>
 							{range.label}

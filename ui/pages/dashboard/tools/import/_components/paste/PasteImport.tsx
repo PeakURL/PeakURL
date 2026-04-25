@@ -1,26 +1,26 @@
-import { useState } from 'react';
-import { Button, TextArea } from '@/components';
-import { useBulkCreateUrlMutation } from '@/store/slices/api';
-import { buildShortUrl, getErrorMessage } from '@/utils';
-import { ImportDetails, ImportSummary } from '../results';
-import { Lightbulb, LoaderCircle, WandSparkles } from 'lucide-react';
-import { __, sprintf } from '@/i18n';
+import { useState } from "react";
+import { Button, TextArea } from "@/components";
+import { useBulkCreateUrlMutation } from "@/store/slices/api";
+import { buildShortUrl, getErrorMessage } from "@/utils";
+import { ImportDetails, ImportSummary } from "../results";
+import { Lightbulb, LoaderCircle, WandSparkles } from "lucide-react";
+import { __, sprintf } from "@/i18n";
 import type {
 	ImportResult,
 	ImportStatus,
 	PasteImportRequestItem,
-} from '../types';
+} from "../types";
 
 const PasteImport = () => {
-	const [text, setText] = useState('');
-	const [status, setStatus] = useState<ImportStatus>('idle');
+	const [text, setText] = useState("");
+	const [status, setStatus] = useState<ImportStatus>("idle");
 	const [results, setResults] = useState<ImportResult[]>([]);
 	const [bulkCreateUrl] = useBulkCreateUrlMutation();
 
 	const handleImport = async () => {
 		if (!text.trim()) return;
 
-		setStatus('processing');
+		setStatus("processing");
 		try {
 			const lines = text.split(/\r\n|\n/).filter((line) => line.trim());
 			const data: PasteImportRequestItem[] = lines.map((line) => {
@@ -32,11 +32,11 @@ const PasteImport = () => {
 				let destinationUrl = line.trim();
 				let alias: string | undefined;
 
-				if (line.includes(',')) {
-					const parts = line.split(',');
+				if (line.includes(",")) {
+					const parts = line.split(",");
 					destinationUrl = parts[0].trim();
 					if (parts[1]) alias = parts[1].trim();
-				} else if (line.includes(' ')) {
+				} else if (line.includes(" ")) {
 					const parts = line.trim().split(/\s+/);
 					destinationUrl = parts[0];
 					if (parts[1]) alias = parts[1];
@@ -45,7 +45,7 @@ const PasteImport = () => {
 				return { destinationUrl, alias };
 			});
 
-			if (data.length === 0) throw new Error(__('No URLs found'));
+			if (data.length === 0) throw new Error(__("No URLs found"));
 
 			const result = await bulkCreateUrl({
 				urls: data,
@@ -59,52 +59,50 @@ const PasteImport = () => {
 						alias:
 							item.alias ||
 							item.shortCode ||
-							__('Auto-generated'),
-						status: 'success',
+							__("Auto-generated"),
+						status: "success",
 						shortUrl: buildShortUrl(item),
 					});
 				});
 				(result.data.errors || []).forEach((item) => {
 					transformResults.push({
 						url: item.destinationUrl,
-						alias: item.alias || 'N/A',
-						status: 'error',
+						alias: item.alias || "N/A",
+						status: "error",
 						error: item.error,
 					});
 				});
 			}
 
 			setResults(transformResults);
-			setStatus('completed');
+			setStatus("completed");
 		} catch (err) {
 			console.error(err);
 			alert(
 				sprintf(
-					__('Import failed: %s'),
-					getErrorMessage(err, __('Unknown error'))
+					__("Import failed: %s"),
+					getErrorMessage(err, __("Unknown error"))
 				)
 			);
-			setStatus('idle');
+			setStatus("idle");
 		}
 	};
 
 	return (
 		<div className="import-paste">
 			<div className="import-panel import-paste-panel">
-				<h2 className="import-panel-title">
-					{__('Paste URLs')}
-				</h2>
+				<h2 className="import-panel-title">{__("Paste URLs")}</h2>
 				<p className="import-panel-copy">
 					{__(
-						'Paste a list of URLs (one per line) to quickly create multiple short links. You can optionally add a custom alias separated by a comma or space.'
+						"Paste a list of URLs (one per line) to quickly create multiple short links. You can optionally add a custom alias separated by a comma or space."
 					)}
 				</p>
 
-				{status === 'idle' && (
+				{status === "idle" && (
 					<div className="import-paste-grid">
 						<div>
 							<label className="import-field-label">
-								{__('URLs (one per line)')}
+								{__("URLs (one per line)")}
 							</label>
 							<TextArea
 								valueDirection="ltr"
@@ -113,7 +111,9 @@ const PasteImport = () => {
 https://example.com/page2, my-alias
 https://example.com/page3 custom-alias`}
 								value={text}
-								onChange={(event) => setText(event.target.value)}
+								onChange={(event) =>
+									setText(event.target.value)
+								}
 							/>
 							<div className="import-paste-actions">
 								<Button
@@ -122,23 +122,23 @@ https://example.com/page3 custom-alias`}
 									disabled={!text.trim()}
 								>
 									<WandSparkles className="import-paste-action-icon" />
-									{__('Create Links')}
+									{__("Create Links")}
 								</Button>
 							</div>
 						</div>
 						<div>
 							<h3 className="import-section-title">
-								{__('Tips')}
+								{__("Tips")}
 							</h3>
 							<div className="import-paste-tips">
 								<ul className="import-paste-tips-list">
 									<li className="import-paste-tip">
 										<Lightbulb className="import-paste-tip-icon" />
 										<div className="import-paste-tip-content">
-											<p>{__('Format:')}</p>
+											<p>{__("Format:")}</p>
 											<div className="import-paste-tip-format">
 												<code>URL [alias]</code>
-												<span>{__('or')}</span>
+												<span>{__("or")}</span>
 												<code>URL, alias</code>
 											</div>
 										</div>
@@ -147,7 +147,7 @@ https://example.com/page3 custom-alias`}
 										<Lightbulb className="import-paste-tip-icon" />
 										<span>
 											{__(
-												'Each entry should be on a separate line'
+												"Each entry should be on a separate line"
 											)}
 										</span>
 									</li>
@@ -155,7 +155,7 @@ https://example.com/page3 custom-alias`}
 										<Lightbulb className="import-paste-tip-icon" />
 										<span>
 											{__(
-												'URLs must include http:// or https://'
+												"URLs must include http:// or https://"
 											)}
 										</span>
 									</li>
@@ -163,7 +163,7 @@ https://example.com/page3 custom-alias`}
 										<Lightbulb className="import-paste-tip-icon" />
 										<span>
 											{__(
-												'If alias is omitted, one will be auto-generated'
+												"If alias is omitted, one will be auto-generated"
 											)}
 										</span>
 									</li>
@@ -173,28 +173,28 @@ https://example.com/page3 custom-alias`}
 					</div>
 				)}
 
-				{status === 'processing' && (
+				{status === "processing" && (
 					<div className="import-status-panel">
 						<LoaderCircle className="import-status-icon" />
 						<p className="import-status-copy">
-							{__('Processing URLs...')}
+							{__("Processing URLs...")}
 						</p>
 					</div>
 				)}
 
-				{status === 'completed' && (
+				{status === "completed" && (
 					<ImportSummary
 						results={results}
 						onReset={() => {
-							setStatus('idle');
+							setStatus("idle");
 							setResults([]);
-							setText('');
+							setText("");
 						}}
 					/>
 				)}
 			</div>
 
-			{status === 'completed' && <ImportDetails results={results} />}
+			{status === "completed" && <ImportDetails results={results} />}
 		</div>
 	);
 };

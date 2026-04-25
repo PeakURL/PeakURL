@@ -1,1 +1,1 @@
-export { default } from './LinksTable';
+export { default } from "./LinksTable";

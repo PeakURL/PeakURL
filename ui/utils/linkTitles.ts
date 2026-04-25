@@ -2,8 +2,8 @@
  * Normalizes a stored link title by trimming surrounding whitespace.
  */
 export const normalizeLinkTitle = (title: unknown): string => {
-	if ('string' !== typeof title) {
-		return '';
+	if ("string" !== typeof title) {
+		return "";
 	}
 
 	return title.trim();
@@ -14,5 +14,5 @@ export const normalizeLinkTitle = (title: unknown): string => {
  */
 export const getLinkDisplayTitle = (
 	title: unknown,
-	fallback: string = ''
+	fallback: string = ""
 ): string => normalizeLinkTitle(title) || fallback;

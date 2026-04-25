@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useGetAnalyticsQuery, useGetActivityQuery } from '@/store/slices/api';
+import { useState } from "react";
+import { useGetAnalyticsQuery, useGetActivityQuery } from "@/store/slices/api";
 import {
 	Header,
 	StatsCards,
@@ -8,7 +8,7 @@ import {
 	DeviceBreakdown,
 	CountryStats,
 	DashboardSkeleton,
-} from './_components';
+} from "./_components";
 
 import type {
 	CountryMetric,
@@ -16,7 +16,7 @@ import type {
 	DashboardStats,
 	RecentActivity,
 	TrafficSeries,
-} from './_components/types';
+} from "./_components/types";
 
 function normalizeTrafficSeries(
 	traffic: Partial<TrafficSeries> | null | undefined
@@ -30,7 +30,7 @@ function normalizeTrafficSeries(
 		labels:
 			labels.length === length
 				? labels
-				: Array.from({ length }, (_, index) => labels[index] || ''),
+				: Array.from({ length }, (_, index) => labels[index] || ""),
 		clicks: Array.from({ length }, (_, index) => {
 			const clickCount = Number(clicks[index] || 0);
 			return Number.isFinite(clickCount) && clickCount > 0

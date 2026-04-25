@@ -1,4 +1,4 @@
-import type { LinkRecord } from '../types';
+import type { LinkRecord } from "../types";
 
 /**
  * Request payload used to create a new short link.

@@ -1,5 +1,5 @@
-import type { ComponentType, ReactNode } from 'react';
-import type { LucideIcon } from 'lucide-react';
+import type { ComponentType, ReactNode } from "react";
+import type { LucideIcon } from "lucide-react";
 
 /**
  * Icon contract used by external add-on cards.
@@ -9,7 +9,7 @@ export type AddOnIcon = ComponentType<{ className?: string }>;
 /**
  * Supported landing states for the post-install and post-update banner.
  */
-export type LandingSource = 'install' | 'update' | 'reinstall';
+export type LandingSource = "install" | "update" | "reinstall";
 
 /**
  * Single call-to-action rendered inside the landing banner.

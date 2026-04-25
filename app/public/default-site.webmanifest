@@ -1,23 +1,23 @@
 {
-  "name": "PeakURL",
-  "short_name": "PeakURL",
-  "start_url": "./dashboard",
-  "scope": "./",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "transparent",
-  "icons": [
-    {
-      "src": "./favicon.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "./apple-touch-icon.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    }
-  ]
+	"name": "PeakURL",
+	"short_name": "PeakURL",
+	"start_url": "./dashboard",
+	"scope": "./",
+	"display": "standalone",
+	"background_color": "#ffffff",
+	"theme_color": "transparent",
+	"icons": [
+		{
+			"src": "./favicon.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "./apple-touch-icon.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any"
+		}
+	]
 }

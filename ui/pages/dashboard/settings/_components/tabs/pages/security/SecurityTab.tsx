@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import QRCode from 'qrcode';
-import { Button, ConfirmDialog, Input, ReadOnlyValueBlock } from '@/components';
+import { useEffect, useState } from "react";
+import QRCode from "qrcode";
+import { Button, ConfirmDialog, Input, ReadOnlyValueBlock } from "@/components";
 import {
 	ShieldCheck,
 	ShieldOff,
@@ -8,7 +8,7 @@ import {
 	RefreshCw,
 	Download,
 	AlertCircle,
-} from 'lucide-react';
+} from "lucide-react";
 import {
 	useGetSecuritySettingsQuery,
 	useStartTwoFactorSetupMutation,
@@ -18,26 +18,26 @@ import {
 	useDownloadBackupCodesMutation,
 	useRevokeSessionMutation,
 	useRevokeOtherSessionsMutation,
-} from '@/store/slices/api';
-import { __, sprintf } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
-import { cn, formatDateTimeValue, getErrorMessage } from '@/utils';
+} from "@/store/slices/api";
+import { __, sprintf } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
+import { cn, formatDateTimeValue, getErrorMessage } from "@/utils";
 import type {
 	ProtectedAction,
 	ProtectedActionConfig,
 	SecuritySession,
 	SecurityTabProps,
-} from '../types';
+} from "../types";
 
 const buildBackupCodesFile = (codes: string[]) =>
 	[
-		__('PeakURL Backup Codes'),
-		__('Keep these codes safe. Each code can be used once.'),
-		'',
+		__("PeakURL Backup Codes"),
+		__("Keep these codes safe. Each code can be used once."),
+		"",
 		...codes.map((code) => `- ${code}`),
-		'',
-		sprintf(__('Generated at: %s'), new Date().toISOString()),
-	].join('\n');
+		"",
+		sprintf(__("Generated at: %s"), new Date().toISOString()),
+	].join("\n");
 
 function SecurityTab({
 	securityForm,
@@ -47,12 +47,12 @@ function SecurityTab({
 	notification,
 }: SecurityTabProps) {
 	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isRtl ? "rtl" : "ltr";
 	const [recentCodes, setRecentCodes] = useState<string[]>([]);
 	const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
 	const [secret, setSecret] = useState<string | null>(null);
 	const [otpauthUrl, setOtpauthUrl] = useState<string | null>(null);
-	const [verificationCode, setVerificationCode] = useState('');
+	const [verificationCode, setVerificationCode] = useState("");
 	const [isDownloading, setIsDownloading] = useState(false);
 	const [revokingId, setRevokingId] = useState<string | null>(null);
 	const [isRevokingOthers, setIsRevokingOthers] = useState(false);
@@ -60,8 +60,7 @@ function SecurityTab({
 		useState(false);
 	const [protectedAction, setProtectedAction] =
 		useState<ProtectedAction | null>(null);
-	const [protectedActionPassword, setProtectedActionPassword] =
-		useState('');
+	const [protectedActionPassword, setProtectedActionPassword] = useState("");
 
 	const {
 		data: securityData,
@@ -74,14 +73,14 @@ function SecurityTab({
 	const twoFactorEnabled = security.twoFactorEnabled;
 	const hasPendingSetup = security.hasPendingSetup;
 	const actionLabel = hasPendingSetup
-		? __('Continue 2FA setup')
-		: __('Set up 2FA');
+		? __("Continue 2FA setup")
+		: __("Set up 2FA");
 	const statusMessage = twoFactorEnabled
 		? sprintf(
-				__('Backup codes remaining: %s'),
+				__("Backup codes remaining: %s"),
 				String(security.backupCodesRemaining ?? 0)
 			)
-		: __('Enable to generate backup codes for account recovery.');
+		: __("Enable to generate backup codes for account recovery.");
 	const hasTwoFactorSetupDetails = Boolean(qrDataUrl || secret || otpauthUrl);
 
 	useEffect(() => {
@@ -106,38 +105,38 @@ function SecurityTab({
 		(session: SecuritySession) => !session.isCurrent && !session.revokedAt
 	);
 	const isProtectedActionLoading =
-		'download' === protectedAction
+		"download" === protectedAction
 			? isDownloading || isDownloadingFromApi
-			: 'disable' === protectedAction
-			? isDisabling
-			: isRegenerating;
+			: "disable" === protectedAction
+				? isDisabling
+				: isRegenerating;
 	const protectedActionConfig: ProtectedActionConfig | null =
-		'download' === protectedAction
+		"download" === protectedAction
 			? {
-					title: __('Download backup codes'),
+					title: __("Download backup codes"),
 					description: __(
-						'Enter your current password to download the latest backup codes for this account.'
+						"Enter your current password to download the latest backup codes for this account."
 					),
-					confirmText: __('Download'),
-			  }
-			: 'disable' === protectedAction
-			? {
-					title: __('Disable two-factor authentication'),
-					description: __(
-						'Enter your current password to disable two-factor authentication and clear the current backup codes for this account.'
-					),
-					confirmText: __('Disable'),
-					confirmVariant: 'danger',
-			  }
-			: 'regenerate' === protectedAction
-			? {
-					title: __('Regenerate backup codes'),
-					description: __(
-						'Enter your current password to replace the existing backup codes with a new set.'
-					),
-					confirmText: __('Regenerate Codes'),
-			  }
-			: null;
+					confirmText: __("Download"),
+				}
+			: "disable" === protectedAction
+				? {
+						title: __("Disable two-factor authentication"),
+						description: __(
+							"Enter your current password to disable two-factor authentication and clear the current backup codes for this account."
+						),
+						confirmText: __("Disable"),
+						confirmVariant: "danger",
+					}
+				: "regenerate" === protectedAction
+					? {
+							title: __("Regenerate backup codes"),
+							description: __(
+								"Enter your current password to replace the existing backup codes with a new set."
+							),
+							confirmText: __("Regenerate Codes"),
+						}
+					: null;
 
 	const closeProtectedActionDialog = () => {
 		if (isProtectedActionLoading) {
@@ -145,7 +144,7 @@ function SecurityTab({
 		}
 
 		setProtectedAction(null);
-		setProtectedActionPassword('');
+		setProtectedActionPassword("");
 	};
 
 	const openProtectedActionDialog = (action: ProtectedAction) => {
@@ -154,15 +153,15 @@ function SecurityTab({
 		}
 
 		setProtectedAction(action);
-		setProtectedActionPassword('');
+		setProtectedActionPassword("");
 	};
 
 	const downloadBackupCodesFile = (content: string) => {
-		const blob = new Blob([content], { type: 'text/plain' });
+		const blob = new Blob([content], { type: "text/plain" });
 		const url = window.URL.createObjectURL(blob);
-		const link = document.createElement('a');
+		const link = document.createElement("a");
 		link.href = url;
-		link.download = 'peakurl-backup-codes.txt';
+		link.download = "peakurl-backup-codes.txt";
 		link.click();
 		window.URL.revokeObjectURL(url);
 	};
@@ -171,16 +170,20 @@ function SecurityTab({
 		if (recentCodes.length > 0) {
 			downloadBackupCodesFile(buildBackupCodesFile(recentCodes));
 			notification?.success(
-				__('Backup codes downloaded'),
-				__('PeakURL downloaded the visible backup codes for this account.')
+				__("Backup codes downloaded"),
+				__(
+					"PeakURL downloaded the visible backup codes for this account."
+				)
 			);
 			return;
 		}
 
-		openProtectedActionDialog('download');
+		openProtectedActionDialog("download");
 	};
 
-	const startSetup = async (options: { silent: boolean } = { silent: false }) => {
+	const startSetup = async (
+		options: { silent: boolean } = { silent: false }
+	) => {
 		try {
 			const res = await startTwoFactor(undefined).unwrap();
 			const setupSecret = res?.data?.secret || null;
@@ -201,23 +204,23 @@ function SecurityTab({
 			setQrDataUrl(nextQrDataUrl);
 			setSecret(setupSecret);
 			setOtpauthUrl(setupOtpauthUrl);
-			setVerificationCode('');
+			setVerificationCode("");
 			setRecentCodes([]);
 			if (!options.silent) {
 				notification?.info(
-					__('Scan the QR code'),
+					__("Scan the QR code"),
 					__(
-						'Scan with your authenticator app and enter the 6-digit code.'
+						"Scan with your authenticator app and enter the 6-digit code."
 					)
 				);
 			}
 		} catch (err) {
 			if (!options.silent) {
 				notification?.error(
-					__('Error'),
+					__("Error"),
 					getErrorMessage(
 						err,
-						__('Failed to start two-factor authentication setup')
+						__("Failed to start two-factor authentication setup")
 					)
 				);
 			}
@@ -229,8 +232,8 @@ function SecurityTab({
 	const handleVerify = async () => {
 		if (!verificationCode.trim()) {
 			notification?.error(
-				__('Error'),
-				__('Enter the 6-digit code to verify')
+				__("Error"),
+				__("Enter the 6-digit code to verify")
 			);
 			return;
 		}
@@ -243,18 +246,18 @@ function SecurityTab({
 			setQrDataUrl(null);
 			setSecret(null);
 			setOtpauthUrl(null);
-			setVerificationCode('');
+			setVerificationCode("");
 			notification?.success(
-				__('Two-factor enabled'),
-				__('Backup codes generated. Store them safely.')
+				__("Two-factor enabled"),
+				__("Backup codes generated. Store them safely.")
 			);
 			refetchSecurity();
 		} catch (err) {
 			notification?.error(
-				__('Error'),
+				__("Error"),
 				getErrorMessage(
 					err,
-					__('Failed to verify code. Check the code and try again.')
+					__("Failed to verify code. Check the code and try again.")
 				)
 			);
 		}
@@ -267,8 +270,8 @@ function SecurityTab({
 
 		if (!protectedActionPassword) {
 			notification?.error(
-				__('Error'),
-				__('Enter your current password to continue')
+				__("Error"),
+				__("Enter your current password to continue")
 			);
 			return;
 		}
@@ -277,7 +280,7 @@ function SecurityTab({
 		const action = protectedAction;
 
 		try {
-			if ('disable' === action) {
+			if ("disable" === action) {
 				await disableTwoFactor({
 					currentPassword,
 				}).unwrap();
@@ -285,20 +288,20 @@ function SecurityTab({
 				setQrDataUrl(null);
 				setSecret(null);
 				setOtpauthUrl(null);
-				setVerificationCode('');
+				setVerificationCode("");
 				notification?.info(
-					__('Two-factor disabled'),
-					__('Backup codes cleared for this account.')
+					__("Two-factor disabled"),
+					__("Backup codes cleared for this account.")
 				);
 				refetchSecurity();
-			} else if ('regenerate' === action) {
+			} else if ("regenerate" === action) {
 				const res = await regenerateBackupCodes({
 					currentPassword,
 				}).unwrap();
 				setRecentCodes(res?.data?.backupCodes || []);
 				notification?.success(
-					__('Backup codes refreshed'),
-					__('Save the new codes before leaving this page.')
+					__("Backup codes refreshed"),
+					__("Save the new codes before leaving this page.")
 				);
 				refetchSecurity();
 			} else {
@@ -308,23 +311,25 @@ function SecurityTab({
 				}).unwrap();
 				downloadBackupCodesFile(content);
 				notification?.success(
-					__('Backup codes downloaded'),
-					__('PeakURL downloaded the latest backup codes for this account.')
+					__("Backup codes downloaded"),
+					__(
+						"PeakURL downloaded the latest backup codes for this account."
+					)
 				);
 			}
 
 			setProtectedAction(null);
-			setProtectedActionPassword('');
+			setProtectedActionPassword("");
 		} catch (err) {
 			notification?.error(
-				__('Error'),
+				__("Error"),
 				getErrorMessage(
 					err,
-					'disable' === action
-						? __('Failed to disable two-factor authentication')
-						: 'regenerate' === action
-						? __('Failed to regenerate backup codes')
-						: __('Failed to download backup codes')
+					"disable" === action
+						? __("Failed to disable two-factor authentication")
+						: "regenerate" === action
+							? __("Failed to regenerate backup codes")
+							: __("Failed to download backup codes")
 				)
 			);
 		} finally {
@@ -340,10 +345,10 @@ function SecurityTab({
 		try {
 			await revokeSession(sessionId).unwrap();
 			notification?.success(
-				__('Session ended'),
+				__("Session ended"),
 				isCurrent
-					? __('Current browser session ended.')
-					: __('The session was revoked.')
+					? __("Current browser session ended.")
+					: __("The session was revoked.")
 			);
 			if (isCurrent) {
 				setTimeout(() => {
@@ -354,8 +359,8 @@ function SecurityTab({
 			refetchSecurity();
 		} catch (err) {
 			notification?.error(
-				__('Error'),
-				getErrorMessage(err, __('Failed to end the session'))
+				__("Error"),
+				getErrorMessage(err, __("Failed to end the session"))
 			);
 		} finally {
 			setRevokingId(null);
@@ -375,21 +380,19 @@ function SecurityTab({
 			setShowRevokeOthersConfirm(false);
 
 			notification?.success(
-				__('Other sessions ended'),
+				__("Other sessions ended"),
 				revokedCount > 0
-					? sprintf(
-							__(
-								'%1$s other session%2$s were ended.'
-							),
-							[String(revokedCount), 1 === revokedCount ? '' : 's']
-						)
-					: __('No other active sessions were found.')
+					? sprintf(__("%1$s other session%2$s were ended."), [
+							String(revokedCount),
+							1 === revokedCount ? "" : "s",
+						])
+					: __("No other active sessions were found.")
 			);
 			refetchSecurity();
 		} catch (err) {
 			notification?.error(
-				__('Error'),
-				getErrorMessage(err, __('Failed to end the other sessions'))
+				__("Error"),
+				getErrorMessage(err, __("Failed to end the other sessions"))
 			);
 		} finally {
 			setIsRevokingOthers(false);
@@ -400,11 +403,11 @@ function SecurityTab({
 		<div className="settings-security">
 			<div className="settings-security-password-card">
 				<h2 className="settings-security-card-title">
-					{__('Password & Security')}
+					{__("Password & Security")}
 				</h2>
 				<div className="settings-security-password-fields">
 					<Input
-						label={__('Current Password')}
+						label={__("Current Password")}
 						type="password"
 						value={securityForm.currentPassword}
 						autoComplete="current-password"
@@ -416,7 +419,7 @@ function SecurityTab({
 						}
 					/>
 					<Input
-						label={__('New Password')}
+						label={__("New Password")}
 						type="password"
 						value={securityForm.newPassword}
 						onChange={(e) =>
@@ -427,7 +430,7 @@ function SecurityTab({
 						}
 					/>
 					<Input
-						label={__('Confirm New Password')}
+						label={__("Confirm New Password")}
 						type="password"
 						value={securityForm.confirmPassword}
 						onChange={(e) =>
@@ -440,14 +443,14 @@ function SecurityTab({
 				</div>
 				<div
 					className={cn(
-						'settings-security-password-actions',
+						"settings-security-password-actions",
 						isRtl
-							? 'settings-security-password-actions-start'
-							: 'settings-security-password-actions-end'
+							? "settings-security-password-actions-start"
+							: "settings-security-password-actions-end"
 					)}
 				>
 					<Button size="sm" onClick={onSubmit} disabled={isUpdating}>
-						{isUpdating ? __('Updating...') : __('Update Password')}
+						{isUpdating ? __("Updating...") : __("Update Password")}
 					</Button>
 				</div>
 			</div>
@@ -459,11 +462,11 @@ function SecurityTab({
 				>
 					<div className="settings-security-two-factor-copy">
 						<h2 className="settings-security-card-title">
-							{__('Two-Factor Authentication')}
+							{__("Two-Factor Authentication")}
 						</h2>
 						<p className="settings-security-two-factor-description">
 							{__(
-								'Add an extra layer of security with an authenticator app and backup codes.'
+								"Add an extra layer of security with an authenticator app and backup codes."
 							)}
 						</p>
 					</div>
@@ -474,23 +477,23 @@ function SecurityTab({
 									variant="secondary"
 									size="sm"
 									onClick={() =>
-										openProtectedActionDialog('regenerate')
+										openProtectedActionDialog("regenerate")
 									}
 									loading={isRegenerating}
 								>
 									<RefreshCw size={14} />
-									{__('Regenerate Codes')}
+									{__("Regenerate Codes")}
 								</Button>
 								<Button
 									variant="ghost"
 									size="sm"
 									onClick={() =>
-										openProtectedActionDialog('disable')
+										openProtectedActionDialog("disable")
 									}
 									loading={isDisabling}
 								>
 									<ShieldOff size={14} />
-									{__('Disable')}
+									{__("Disable")}
 								</Button>
 							</>
 						) : (
@@ -509,10 +512,10 @@ function SecurityTab({
 				<div
 					dir={direction}
 					className={cn(
-						'settings-security-two-factor-status',
+						"settings-security-two-factor-status",
 						twoFactorEnabled
-							? 'settings-security-two-factor-status-active'
-							: 'settings-security-two-factor-status-inactive'
+							? "settings-security-two-factor-status-active"
+							: "settings-security-two-factor-status-inactive"
 					)}
 				>
 					<div className="settings-security-two-factor-status-icon-panel">
@@ -531,18 +534,18 @@ function SecurityTab({
 					<div className="settings-security-two-factor-status-content">
 						<p className="settings-security-two-factor-status-title">
 							{twoFactorEnabled
-								? __('2FA is enabled')
-								: __('2FA is disabled')}
+								? __("2FA is enabled")
+								: __("2FA is disabled")}
 						</p>
 						<p className="settings-security-two-factor-status-text">
 							{statusMessage}
 						</p>
 						{security.backupCodesLastGeneratedAt && (
 							<p className="settings-security-two-factor-status-text">
-								{__('Last generated:')}{' '}
+								{__("Last generated:")}{" "}
 								{formatDateTimeValue(
 									security.backupCodesLastGeneratedAt,
-									__('Unknown')
+									__("Unknown")
 								)}
 							</p>
 						)}
@@ -555,7 +558,7 @@ function SecurityTab({
 						disabled={!twoFactorEnabled}
 					>
 						<Download size={14} />
-						{__('Download')}
+						{__("Download")}
 					</Button>
 				</div>
 
@@ -573,11 +576,11 @@ function SecurityTab({
 							</div>
 							<div className="settings-security-two-factor-setup-copy">
 								<p className="settings-security-two-factor-setup-title">
-									{__('Scan the QR code')}
+									{__("Scan the QR code")}
 								</p>
 								<p className="settings-security-two-factor-setup-description">
 									{__(
-										'Use an authenticator app (Google Authenticator, Authy, etc.) then enter the 6-digit code.'
+										"Use an authenticator app (Google Authenticator, Authy, etc.) then enter the 6-digit code."
 									)}
 								</p>
 							</div>
@@ -587,7 +590,7 @@ function SecurityTab({
 								{qrDataUrl ? (
 									<img
 										src={qrDataUrl}
-										alt={__('TOTP QR code')}
+										alt={__("TOTP QR code")}
 										width={192}
 										height={192}
 										loading="lazy"
@@ -596,7 +599,7 @@ function SecurityTab({
 								) : (
 									<div className="settings-security-two-factor-qr-fallback">
 										{__(
-											'QR preview is unavailable in this browser. Use the secret or authenticator URI below.'
+											"QR preview is unavailable in this browser. Use the secret or authenticator URI below."
 										)}
 									</div>
 								)}
@@ -604,7 +607,7 @@ function SecurityTab({
 							<div className="settings-security-two-factor-secret-stack">
 								<div className="settings-security-two-factor-secret-card">
 									<p className="settings-security-two-factor-secret-label">
-										{__('Secret')}
+										{__("Secret")}
 									</p>
 									<ReadOnlyValueBlock
 										value={secret}
@@ -615,7 +618,7 @@ function SecurityTab({
 								{otpauthUrl ? (
 									<div className="settings-security-two-factor-secret-card">
 										<p className="settings-security-two-factor-secret-label">
-											{__('Authenticator URI')}
+											{__("Authenticator URI")}
 										</p>
 										<ReadOnlyValueBlock
 											value={otpauthUrl}
@@ -625,13 +628,13 @@ function SecurityTab({
 									</div>
 								) : null}
 								<Input
-									label={__('6-digit code')}
+									label={__("6-digit code")}
 									valueDirection="ltr"
 									value={verificationCode}
 									onChange={(e) =>
 										setVerificationCode(e.target.value)
 									}
-									placeholder={__('123456')}
+									placeholder={__("123456")}
 								/>
 								<div className="settings-security-two-factor-verify-actions">
 									<Button
@@ -640,7 +643,7 @@ function SecurityTab({
 										loading={isVerifying}
 										className="settings-security-two-factor-verify-submit"
 									>
-										{__('Verify & Enable')}
+										{__("Verify & Enable")}
 									</Button>
 									<Button
 										variant="ghost"
@@ -649,10 +652,10 @@ function SecurityTab({
 											setQrDataUrl(null);
 											setSecret(null);
 											setOtpauthUrl(null);
-											setVerificationCode('');
+											setVerificationCode("");
 										}}
 									>
-										{__('Cancel')}
+										{__("Cancel")}
 									</Button>
 								</div>
 							</div>
@@ -668,7 +671,7 @@ function SecurityTab({
 						>
 							<div>
 								<p className="settings-security-backup-codes-title">
-									{__('New backup codes')}
+									{__("New backup codes")}
 								</p>
 								<p className="settings-security-backup-codes-description">
 									{__(
@@ -687,7 +690,7 @@ function SecurityTab({
 								}
 							>
 								<Download size={14} />
-								{__('Download')}
+								{__("Download")}
 							</Button>
 						</div>
 						<div className="settings-security-backup-codes-grid">
@@ -711,13 +714,11 @@ function SecurityTab({
 				>
 					<div>
 						<h2 className="settings-security-card-title">
-							{__('Active Sessions')}
+							{__("Active Sessions")}
 						</h2>
 						<span className="settings-security-sessions-count">
 							{sprintf(
-								__(
-									'%s active session(s)'
-								),
+								__("%s active session(s)"),
 								String(sessions.length)
 							)}
 						</span>
@@ -729,18 +730,18 @@ function SecurityTab({
 							onClick={() => setShowRevokeOthersConfirm(true)}
 							loading={isRevokingOthers}
 						>
-							{__('End all other sessions')}
+							{__("End all other sessions")}
 						</Button>
-						) : null}
+					) : null}
 				</div>
 				<div className="settings-security-sessions-list">
 					{isSecurityLoading ? (
 						<div className="settings-security-sessions-empty">
-							{__('Loading security data...')}
+							{__("Loading security data...")}
 						</div>
 					) : sessions.length === 0 ? (
 						<div className="settings-security-sessions-empty">
-							{__('No active sessions found.')}
+							{__("No active sessions found.")}
 						</div>
 					) : (
 						sessions.map((session: SecuritySession) => (
@@ -748,10 +749,10 @@ function SecurityTab({
 								key={session.id}
 								dir={direction}
 								className={cn(
-									'settings-security-session-row',
+									"settings-security-session-row",
 									session.revokedAt
-										? 'settings-security-session-row-ended'
-										: ''
+										? "settings-security-session-row-ended"
+										: ""
 								)}
 							>
 								<div className="settings-security-session-meta">
@@ -763,15 +764,16 @@ function SecurityTab({
 									</div>
 									<div className="settings-security-session-copy">
 										<p className="settings-security-session-title">
-											{session.browser || __('Browser')} •{' '}
-											{session.os || __('Unknown OS')}
+											{session.browser || __("Browser")} •{" "}
+											{session.os || __("Unknown OS")}
 										</p>
 										<p className="settings-security-session-description">
-											{session.ipAddress || __('Unknown IP')}{' '}
-											• {__('Last active')}{' '}
+											{session.ipAddress ||
+												__("Unknown IP")}{" "}
+											• {__("Last active")}{" "}
 											{formatDateTimeValue(
 												session.lastActiveAt,
-												__('Unknown')
+												__("Unknown")
 											)}
 										</p>
 									</div>
@@ -779,12 +781,12 @@ function SecurityTab({
 								<div className="settings-security-session-actions">
 									{session.isCurrent && (
 										<span className="settings-security-session-badge-current">
-											{__('Current')}
+											{__("Current")}
 										</span>
 									)}
 									{session.revokedAt ? (
 										<span className="settings-security-session-badge-ended">
-											{__('Ended')}
+											{__("Ended")}
 										</span>
 									) : session.isCurrent ? null : (
 										<Button
@@ -798,7 +800,7 @@ function SecurityTab({
 											}
 											loading={revokingId === session.id}
 										>
-											{__('End session')}
+											{__("End session")}
 										</Button>
 									)}
 								</div>
@@ -812,29 +814,28 @@ function SecurityTab({
 				open={Boolean(protectedAction)}
 				onClose={closeProtectedActionDialog}
 				title={
-					protectedActionConfig?.title ||
-					__('Confirm your password')
+					protectedActionConfig?.title || __("Confirm your password")
 				}
-				description={protectedActionConfig?.description || ''}
+				description={protectedActionConfig?.description || ""}
 				confirmText={
-					protectedActionConfig?.confirmText || __('Continue')
+					protectedActionConfig?.confirmText || __("Continue")
 				}
 				confirmVariant={
-					protectedActionConfig?.confirmVariant || 'primary'
+					protectedActionConfig?.confirmVariant || "primary"
 				}
-				cancelText={__('Cancel')}
+				cancelText={__("Cancel")}
 				onConfirm={handleProtectedAction}
 				loading={isProtectedActionLoading}
 			>
 				<Input
-					label={__('Current Password')}
+					label={__("Current Password")}
 					type="password"
 					value={protectedActionPassword}
 					onChange={(event) =>
 						setProtectedActionPassword(event.target.value)
 					}
 					autoComplete="current-password"
-					placeholder={__('Enter your current password')}
+					placeholder={__("Enter your current password")}
 				/>
 			</ConfirmDialog>
 
@@ -845,15 +846,15 @@ function SecurityTab({
 						setShowRevokeOthersConfirm(false);
 					}
 				}}
-				title={__('End all other sessions')}
+				title={__("End all other sessions")}
 				description={sprintf(
 					__(
-						'End %s other active session(s) for this account? Any browsers or devices using them will be signed out immediately.'
+						"End %s other active session(s) for this account? Any browsers or devices using them will be signed out immediately."
 					),
 					String(otherActiveSessions.length)
 				)}
-				confirmText={__('End sessions')}
-				cancelText={__('Keep sessions')}
+				confirmText={__("End sessions")}
+				cancelText={__("Keep sessions")}
 				onConfirm={handleRevokeOtherSessions}
 				loading={isRevokingOthers}
 			/>

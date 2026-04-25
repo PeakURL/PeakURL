@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
-import { PEAKURL_BASENAME } from '@constants';
-import { ConfirmDialog, useNotification } from '@/components';
+import { useEffect, useRef, useState } from "react";
+import { PEAKURL_BASENAME } from "@constants";
+import { ConfirmDialog, useNotification } from "@/components";
 import {
 	useGetUserProfileQuery,
 	useUpdateUserProfileMutation,
 	useGenerateApiKeyMutation,
 	useDeleteApiKeyMutation,
-} from '@/store/slices/api';
+} from "@/store/slices/api";
 import {
 	useGetGeneralSettingsQuery,
 	useSaveGeneralSettingsMutation,
@@ -20,13 +20,13 @@ import {
 	useApplyUpdateMutation,
 	useReinstallUpdateMutation,
 	useUpgradeDatabaseSchemaMutation,
-} from '@/store/slices/api';
-import { __, applyDocumentFavicon, sprintf } from '@/i18n';
+} from "@/store/slices/api";
+import { __, applyDocumentFavicon, sprintf } from "@/i18n";
 import {
 	copyToClipboard as writeToClipboard,
 	extractErrorMessage,
 	getErrorMessage,
-} from '@/utils';
+} from "@/utils";
 import type {
 	ApiKeySummary,
 	ContentProps,
@@ -36,12 +36,12 @@ import type {
 	MailConfigurationPayload,
 	ProfileUser,
 	ReleaseAction,
-} from './types';
+} from "./types";
 import type {
 	ReleaseInstallStage,
 	ReleaseInstallProgressState,
 	SecurityFormState,
-} from './pages/types';
+} from "./pages/types";
 import {
 	ApiKeyModals,
 	ApiTab,
@@ -52,29 +52,29 @@ import {
 	ReleaseInstallProgress,
 	SecurityTab,
 	UpdatesTab,
-} from './pages';
-import SettingsSkeleton from '../SettingsSkeleton';
+} from "./pages";
+import SettingsSkeleton from "../SettingsSkeleton";
 
 const buildGeneralForm = (user?: ProfileUser | null): GeneralFormState => ({
-	firstName: user?.firstName || '',
-	lastName: user?.lastName || '',
-	username: user?.username || '',
-	email: user?.email || '',
-	phoneNumber: user?.phoneNumber || '',
-	company: user?.company || '',
-	jobTitle: user?.jobTitle || '',
-	bio: user?.bio || '',
+	firstName: user?.firstName || "",
+	lastName: user?.lastName || "",
+	username: user?.username || "",
+	email: user?.email || "",
+	phoneNumber: user?.phoneNumber || "",
+	company: user?.company || "",
+	jobTitle: user?.jobTitle || "",
+	bio: user?.bio || "",
 });
 
 const profileFormKeys: Array<keyof GeneralFormState> = [
-	'firstName',
-	'lastName',
-	'username',
-	'email',
-	'phoneNumber',
-	'company',
-	'jobTitle',
-	'bio',
+	"firstName",
+	"lastName",
+	"username",
+	"email",
+	"phoneNumber",
+	"company",
+	"jobTitle",
+	"bio",
 ];
 
 const hasProfileChanges = (
@@ -83,12 +83,14 @@ const hasProfileChanges = (
 ): boolean => {
 	const currentProfile = buildGeneralForm(user);
 
-	return profileFormKeys.some((key) => currentProfile[key] !== profileForm[key]);
+	return profileFormKeys.some(
+		(key) => currentProfile[key] !== profileForm[key]
+	);
 };
 
 const resolveBaseApiUrl = (
 	user?: ProfileUser | null,
-	fallbackBaseApiUrl: string | null | undefined = ''
+	fallbackBaseApiUrl: string | null | undefined = ""
 ): string => {
 	if (fallbackBaseApiUrl) {
 		return fallbackBaseApiUrl;
@@ -99,59 +101,59 @@ const resolveBaseApiUrl = (
 	}
 
 	if (user?.siteUrl) {
-		return `${String(user.siteUrl).replace(/\/+$/, '')}/api/v1`;
+		return `${String(user.siteUrl).replace(/\/+$/, "")}/api/v1`;
 	}
 
-	return '';
+	return "";
 };
 
 const releaseInstallStageOrder: ReleaseInstallStage[] = [
-	'preparing',
-	'downloading',
-	'installing',
-	'finishing',
+	"preparing",
+	"downloading",
+	"installing",
+	"finishing",
 ];
 
 const releaseInstallRedirectDelayMs = 2400;
 
 const getReleaseInstallTitle = (action: ReleaseAction): string =>
-	action === 'reinstall'
-		? __('Restoring the latest version')
-		: __('Installing the latest version');
+	action === "reinstall"
+		? __("Restoring the latest version")
+		: __("Installing the latest version");
 
 const getReleaseInstallStepLabel = (
 	action: ReleaseAction,
 	stage: ReleaseInstallStage
 ): string => {
-	if ('preparing' === stage) {
-		return __('Getting ready');
+	if ("preparing" === stage) {
+		return __("Getting ready");
 	}
 
-	if ('downloading' === stage) {
-		return __('Downloading update');
+	if ("downloading" === stage) {
+		return __("Downloading update");
 	}
 
-	if ('installing' === stage) {
-		return action === 'reinstall'
-			? __('Restoring included files')
-			: __('Installing update');
+	if ("installing" === stage) {
+		return action === "reinstall"
+			? __("Restoring included files")
+			: __("Installing update");
 	}
 
-	return __('Finishing up');
+	return __("Finishing up");
 };
 
 const getReleaseInstallActiveStageIndex = (
 	progress: ReleaseInstallProgressState | null
 ): number => {
 	const currentStageIndex =
-		progress?.steps.findIndex(({ state }) => 'current' === state) ?? -1;
+		progress?.steps.findIndex(({ state }) => "current" === state) ?? -1;
 
 	if (currentStageIndex >= 0) {
 		return currentStageIndex;
 	}
 
 	const completedStepCount =
-		progress?.steps.filter(({ state }) => 'complete' === state).length ?? 0;
+		progress?.steps.filter(({ state }) => "complete" === state).length ?? 0;
 
 	return Math.min(
 		Math.max(completedStepCount, 0),
@@ -168,26 +170,26 @@ const buildReleaseInstallProgressState = (
 	return {
 		title: getReleaseInstallTitle(action),
 		description:
-			stage === 'preparing'
-				? __('PeakURL is getting everything ready.')
-				: stage === 'downloading'
-					? __('PeakURL is downloading the update.')
-					: stage === 'installing'
+			stage === "preparing"
+				? __("PeakURL is getting everything ready.")
+				: stage === "downloading"
+					? __("PeakURL is downloading the update.")
+					: stage === "installing"
 						? __(
-								'PeakURL is applying the included files and content updates.'
+								"PeakURL is applying the included files and content updates."
 							)
 						: __(
-								'PeakURL is finishing up and getting the dashboard ready.'
+								"PeakURL is finishing up and getting the dashboard ready."
 							),
 		steps: releaseInstallStageOrder.map((step, index) => ({
 			id: step,
 			label: getReleaseInstallStepLabel(action, step),
 			state:
 				index < currentStepIndex
-					? 'complete'
+					? "complete"
 					: index === currentStepIndex
-						? 'current'
-						: 'upcoming',
+						? "current"
+						: "upcoming",
 		})),
 	};
 };
@@ -196,24 +198,24 @@ const buildCompletedReleaseInstallProgressState = (
 	action: ReleaseAction,
 	appliedVersion?: string | null
 ): ReleaseInstallProgressState => {
-	const isReinstall = action === 'reinstall';
+	const isReinstall = action === "reinstall";
 
 	return {
 		title: getReleaseInstallTitle(action),
 		description: appliedVersion
 			? sprintf(
 					isReinstall
-						? __('PeakURL %s has been reinstalled.')
-						: __('PeakURL %s is now installed.'),
+						? __("PeakURL %s has been reinstalled.")
+						: __("PeakURL %s is now installed."),
 					appliedVersion
 				)
 			: isReinstall
-				? __('The latest version has been reinstalled.')
-				: __('The latest version is now installed.'),
+				? __("The latest version has been reinstalled.")
+				: __("The latest version is now installed."),
 		steps: releaseInstallStageOrder.map((step) => ({
 			id: step,
 			label: getReleaseInstallStepLabel(action, step),
-			state: 'complete',
+			state: "complete",
 		})),
 	};
 };
@@ -231,7 +233,7 @@ const Content = ({ activeTab }: ContentProps) => {
 		data: generalSettingsResponse,
 		isLoading: isLoadingGeneralSettings,
 	} = useGetGeneralSettingsQuery(undefined, {
-		skip: activeTab !== 'general',
+		skip: activeTab !== "general",
 	});
 	const [saveGeneralSettings, { isLoading: isSavingGeneralSettings }] =
 		useSaveGeneralSettingsMutation();
@@ -241,7 +243,7 @@ const Content = ({ activeTab }: ContentProps) => {
 		isLoading: isLoadingGeoipStatus,
 		isFetching: isFetchingGeoipStatus,
 	} = useGetGeoipStatusQuery(undefined, {
-		skip: activeTab !== 'location',
+		skip: activeTab !== "location",
 	});
 	const [saveGeoipConfiguration, { isLoading: isSavingGeoipConfiguration }] =
 		useSaveGeoipConfigurationMutation();
@@ -250,7 +252,7 @@ const Content = ({ activeTab }: ContentProps) => {
 		error: mailError,
 		isLoading: isLoadingMailStatus,
 	} = useGetMailStatusQuery(undefined, {
-		skip: activeTab !== 'email',
+		skip: activeTab !== "email",
 	});
 	const [saveMailConfiguration, { isLoading: isSavingMailConfiguration }] =
 		useSaveMailConfigurationMutation();
@@ -262,7 +264,7 @@ const Content = ({ activeTab }: ContentProps) => {
 		isLoading: isLoadingUpdateStatus,
 		isFetching: isFetchingUpdateStatus,
 	} = useGetUpdateStatusQuery(undefined, {
-		skip: activeTab !== 'updates',
+		skip: activeTab !== "updates",
 	});
 	const [checkForUpdates, { isLoading: isCheckingForUpdates }] =
 		useCheckForUpdatesMutation();
@@ -278,12 +280,12 @@ const Content = ({ activeTab }: ContentProps) => {
 	const user = userData?.data || null;
 
 	const [securityForm, setSecurityForm] = useState<SecurityFormState>({
-		currentPassword: '',
-		newPassword: '',
-		confirmPassword: '',
+		currentPassword: "",
+		newPassword: "",
+		confirmPassword: "",
 	});
 
-	const [newApiKey, setNewApiKey] = useState('');
+	const [newApiKey, setNewApiKey] = useState("");
 	const [showKeyModal, setShowKeyModal] = useState(false);
 	const [showCreateModal, setShowCreateModal] = useState(false);
 	const [apiKeyPendingDelete, setApiKeyPendingDelete] =
@@ -294,8 +296,8 @@ const Content = ({ activeTab }: ContentProps) => {
 		useState<ReleaseAction | null>(null);
 	const [releaseInstallProgress, setReleaseInstallProgress] =
 		useState<ReleaseInstallProgressState | null>(null);
-	const [keyLabel, setKeyLabel] = useState('');
-	const [newApiBaseUrl, setNewApiBaseUrl] = useState('');
+	const [keyLabel, setKeyLabel] = useState("");
+	const [newApiBaseUrl, setNewApiBaseUrl] = useState("");
 	const releaseInstallProgressTimerIds = useRef<number[]>([]);
 	const releaseInstallProgressStateRef =
 		useRef<ReleaseInstallProgressState | null>(null);
@@ -327,16 +329,16 @@ const Content = ({ activeTab }: ContentProps) => {
 		clearReleaseInstallRedirectTimer();
 		setActiveReleaseInstallAction(action);
 		setReleaseInstallProgressState(
-			buildReleaseInstallProgressState(action, 'preparing')
+			buildReleaseInstallProgressState(action, "preparing")
 		);
 
 		const stageTransitions: Array<{
 			afterMs: number;
 			stage: ReleaseInstallStage;
 		}> = [
-			{ afterMs: 700, stage: 'downloading' },
-			{ afterMs: 1900, stage: 'installing' },
-			{ afterMs: 3600, stage: 'finishing' },
+			{ afterMs: 700, stage: "downloading" },
+			{ afterMs: 1900, stage: "installing" },
+			{ afterMs: 3600, stage: "finishing" },
 		];
 
 		releaseInstallProgressTimerIds.current = stageTransitions.map(
@@ -363,9 +365,8 @@ const Content = ({ activeTab }: ContentProps) => {
 		const completionTransitionCount = remainingStageSequence.length + 1;
 		const completionSegmentDuration =
 			releaseInstallRedirectDelayMs / (completionTransitionCount + 1);
-		const finishingStageOffset = remainingStageSequence.indexOf(
-			'finishing'
-		);
+		const finishingStageOffset =
+			remainingStageSequence.indexOf("finishing");
 		const finishingStageDelay =
 			-1 === finishingStageOffset
 				? 0
@@ -411,7 +412,7 @@ const Content = ({ activeTab }: ContentProps) => {
 			setActiveReleaseInstallAction(null);
 			setReleaseInstallProgressState(null);
 			window.location.assign(
-				`${PEAKURL_BASENAME || ''}/dashboard/about?source=${action === 'reinstall' ? 'reinstall' : 'update'}`
+				`${PEAKURL_BASENAME || ""}/dashboard/about?source=${action === "reinstall" ? "reinstall" : "update"}`
 			);
 		}, releaseInstallRedirectDelayMs);
 	};
@@ -430,9 +431,10 @@ const Content = ({ activeTab }: ContentProps) => {
 			faviconFile,
 			removeFavicon,
 			...profileForm
-		} =
-			generalForm || {};
-		const currentSiteName = (generalSettingsResponse?.data?.siteName || '').trim();
+		} = generalForm || {};
+		const currentSiteName = (
+			generalSettingsResponse?.data?.siteName || ""
+		).trim();
 		const currentSiteLanguage = generalSettingsResponse?.data?.siteLanguage;
 		const shouldSaveProfile = hasProfileChanges(user, profileForm);
 		const shouldSaveSiteName =
@@ -457,8 +459,8 @@ const Content = ({ activeTab }: ContentProps) => {
 				await updateProfile(profileForm).unwrap();
 			} catch (err) {
 				notification.error(
-					__('Error'),
-					getErrorMessage(err, __('Failed to update profile'))
+					__("Error"),
+					getErrorMessage(err, __("Failed to update profile"))
 				);
 				return;
 			}
@@ -484,8 +486,8 @@ const Content = ({ activeTab }: ContentProps) => {
 
 				if (shouldSaveLanguage) {
 					notification.success(
-						__('Language updated'),
-						__('PeakURL is reloading the dashboard now.')
+						__("Language updated"),
+						__("PeakURL is reloading the dashboard now.")
 					);
 					window.setTimeout(() => {
 						window.location.reload();
@@ -494,41 +496,43 @@ const Content = ({ activeTab }: ContentProps) => {
 				}
 
 				notification.success(
-					__('Success'),
+					__("Success"),
 					shouldSaveProfile
-						? __('Profile and general settings updated successfully')
-						: __('General settings updated successfully')
+						? __(
+								"Profile and general settings updated successfully"
+							)
+						: __("General settings updated successfully")
 				);
 				return;
 			} catch (err) {
 				notification.error(
-					__('Save failed'),
+					__("Save failed"),
 					getErrorMessage(
 						err,
-						__('Failed to update the general settings')
+						__("Failed to update the general settings")
 					)
 				);
 				return;
 			}
 		}
 
-		notification.success(__('Success'), __('Profile updated successfully'));
+		notification.success(__("Success"), __("Profile updated successfully"));
 	};
 
 	const handleSecuritySubmit = async () => {
 		if (!securityForm.currentPassword) {
-			notification.error(__('Error'), __('Enter your current password'));
+			notification.error(__("Error"), __("Enter your current password"));
 			return;
 		}
 
 		if (securityForm.newPassword !== securityForm.confirmPassword) {
-			notification.error(__('Error'), __('Passwords do not match'));
+			notification.error(__("Error"), __("Passwords do not match"));
 			return;
 		}
 		if (securityForm.newPassword.length < 8) {
 			notification.error(
-				__('Error'),
-				__('Password must be at least 8 characters')
+				__("Error"),
+				__("Password must be at least 8 characters")
 			);
 			return;
 		}
@@ -539,18 +543,18 @@ const Content = ({ activeTab }: ContentProps) => {
 				password: securityForm.newPassword,
 			}).unwrap();
 			notification.success(
-				__('Success'),
-				__('Password updated successfully')
+				__("Success"),
+				__("Password updated successfully")
 			);
 			setSecurityForm({
-				currentPassword: '',
-				newPassword: '',
-				confirmPassword: '',
+				currentPassword: "",
+				newPassword: "",
+				confirmPassword: "",
 			});
 		} catch (err) {
 			notification.error(
-				__('Error'),
-				getErrorMessage(err, __('Failed to update password'))
+				__("Error"),
+				getErrorMessage(err, __("Failed to update password"))
 			);
 		}
 	};
@@ -558,7 +562,7 @@ const Content = ({ activeTab }: ContentProps) => {
 	const handleCreateKey = async () => {
 		try {
 			const result = await generateApiKey({ label: keyLabel }).unwrap();
-			const plainTextKey = result?.data?.apiKey || '';
+			const plainTextKey = result?.data?.apiKey || "";
 			const baseApiUrl = resolveBaseApiUrl(
 				user,
 				result?.data?.baseApiUrl
@@ -566,13 +570,13 @@ const Content = ({ activeTab }: ContentProps) => {
 
 			if (!plainTextKey) {
 				notification.error(
-					__('Key created without visible token'),
+					__("Key created without visible token"),
 					__(
-						'PeakURL created the API key, but the one-time token was not returned. Revoke it and create a new key.'
+						"PeakURL created the API key, but the one-time token was not returned. Revoke it and create a new key."
 					)
 				);
 				setShowCreateModal(false);
-				setKeyLabel('');
+				setKeyLabel("");
 				return;
 			}
 
@@ -580,15 +584,15 @@ const Content = ({ activeTab }: ContentProps) => {
 			setNewApiBaseUrl(baseApiUrl);
 			setShowCreateModal(false);
 			setShowKeyModal(true);
-			setKeyLabel('');
+			setKeyLabel("");
 			notification.success(
-				__('API key created'),
-				__('Copy the token now. PeakURL will not show it again.')
+				__("API key created"),
+				__("Copy the token now. PeakURL will not show it again.")
 			);
 		} catch (err) {
 			notification.error(
-				__('Error'),
-				getErrorMessage(err, __('Failed to generate API key'))
+				__("Error"),
+				getErrorMessage(err, __("Failed to generate API key"))
 			);
 		}
 	};
@@ -602,36 +606,36 @@ const Content = ({ activeTab }: ContentProps) => {
 			await deleteApiKey(apiKeyPendingDelete.id).unwrap();
 			setApiKeyPendingDelete(null);
 			notification.success(
-				__('Success'),
-				__('API key deleted successfully')
+				__("Success"),
+				__("API key deleted successfully")
 			);
 		} catch (err) {
 			notification.error(
-				__('Error'),
-				getErrorMessage(err, __('Failed to delete API key'))
+				__("Error"),
+				getErrorMessage(err, __("Failed to delete API key"))
 			);
 		}
 	};
 
 	const copyToClipboard = async (
 		text: string,
-		message: string = __('API key copied to clipboard')
+		message: string = __("API key copied to clipboard")
 	): Promise<void> => {
 		try {
 			await writeToClipboard(text);
-			notification.success(__('Copied'), message);
+			notification.success(__("Copied"), message);
 		} catch {
 			notification.error(
-				__('Copy failed'),
-				__('PeakURL could not copy that value to the clipboard.')
+				__("Copy failed"),
+				__("PeakURL could not copy that value to the clipboard.")
 			);
 		}
 	};
 
 	const handleCloseKeyModal = () => {
 		setShowKeyModal(false);
-		setNewApiKey('');
-		setNewApiBaseUrl('');
+		setNewApiKey("");
+		setNewApiBaseUrl("");
 	};
 
 	const handleCheckForUpdates = async () => {
@@ -642,9 +646,9 @@ const Content = ({ activeTab }: ContentProps) => {
 
 			if (result?.data?.updateAvailable && latestVersion) {
 				notification.success(
-					__('Update available'),
+					__("Update available"),
 					sprintf(
-						__('PeakURL %s is ready to install.'),
+						__("PeakURL %s is ready to install."),
 						latestVersion
 					)
 				);
@@ -652,20 +656,20 @@ const Content = ({ activeTab }: ContentProps) => {
 			}
 
 			notification.success(
-				__('Up to date'),
+				__("Up to date"),
 				currentVersion
 					? sprintf(
-							__('PeakURL %s is already on the latest version.'),
+							__("PeakURL %s is already on the latest version."),
 							currentVersion
 						)
-					: __('PeakURL is already on the latest version.')
+					: __("PeakURL is already on the latest version.")
 			);
 		} catch (err) {
 			notification.error(
-				__('Update check failed'),
+				__("Update check failed"),
 				getErrorMessage(
 					err,
-					__('PeakURL could not reach the update service.')
+					__("PeakURL could not reach the update service.")
 				)
 			);
 		}
@@ -677,16 +681,16 @@ const Content = ({ activeTab }: ContentProps) => {
 		try {
 			const result = await saveGeoipConfiguration(values).unwrap();
 			notification.success(
-				__('Saved'),
-				__('Location data settings were updated successfully.')
+				__("Saved"),
+				__("Location data settings were updated successfully.")
 			);
 			return result?.data || undefined;
 		} catch (err) {
 			notification.error(
-				__('Save failed'),
+				__("Save failed"),
 				getErrorMessage(
 					err,
-					__('PeakURL could not save the MaxMind settings.')
+					__("PeakURL could not save the MaxMind settings.")
 				)
 			);
 			throw err;
@@ -697,15 +701,15 @@ const Content = ({ activeTab }: ContentProps) => {
 		try {
 			await downloadGeoipDatabase(undefined).unwrap();
 			notification.success(
-				__('Database updated'),
-				__('PeakURL downloaded the latest GeoLite2 City database.')
+				__("Database updated"),
+				__("PeakURL downloaded the latest GeoLite2 City database.")
 			);
 		} catch (err) {
 			notification.error(
-				__('Download failed'),
+				__("Download failed"),
 				getErrorMessage(
 					err,
-					__('PeakURL could not download the GeoLite2 database.')
+					__("PeakURL could not download the GeoLite2 database.")
 				)
 			);
 		}
@@ -717,15 +721,15 @@ const Content = ({ activeTab }: ContentProps) => {
 		try {
 			await saveMailConfiguration(values).unwrap();
 			notification.success(
-				__('Saved'),
-				__('Email configuration was updated successfully.')
+				__("Saved"),
+				__("Email configuration was updated successfully.")
 			);
 		} catch (err) {
 			notification.error(
-				__('Save failed'),
+				__("Save failed"),
 				getErrorMessage(
 					err,
-					__('PeakURL could not save the email configuration.')
+					__("PeakURL could not save the email configuration.")
 				)
 			);
 			throw err;
@@ -746,7 +750,7 @@ const Content = ({ activeTab }: ContentProps) => {
 	}
 
 	const runReleaseInstall = async (action: ReleaseAction) => {
-		const isReinstall = action === 'reinstall';
+		const isReinstall = action === "reinstall";
 		const installRelease = isReinstall ? reinstallUpdate : applyUpdate;
 		startReleaseInstallProgress(action);
 
@@ -756,28 +760,28 @@ const Content = ({ activeTab }: ContentProps) => {
 			startReleaseInstallCompletion(action, appliedVersion, () => {
 				notification.success(
 					isReinstall
-						? __('Release reinstalled')
-						: __('Update installed'),
+						? __("Release reinstalled")
+						: __("Update installed"),
 					appliedVersion
 						? sprintf(
 								isReinstall
-									? __('PeakURL %s has been reinstalled.')
-									: __('PeakURL %s is now installed.'),
+									? __("PeakURL %s has been reinstalled.")
+									: __("PeakURL %s is now installed."),
 								appliedVersion
 							)
 						: isReinstall
-							? __('The latest version has been reinstalled.')
-							: __('The latest version is now installed.')
+							? __("The latest version has been reinstalled.")
+							: __("The latest version is now installed.")
 				);
 			});
 		} catch (err) {
 			notification.error(
-				isReinstall ? __('Reinstall failed') : __('Update failed'),
+				isReinstall ? __("Reinstall failed") : __("Update failed"),
 				getErrorMessage(
 					err,
 					isReinstall
-						? __('PeakURL could not reinstall the latest version.')
-						: __('PeakURL could not apply the update.')
+						? __("PeakURL could not reinstall the latest version.")
+						: __("PeakURL could not apply the update.")
 				)
 			);
 			clearReleaseInstallProgressTimers();
@@ -789,12 +793,12 @@ const Content = ({ activeTab }: ContentProps) => {
 
 	const handleApplyUpdate = async () => {
 		setPendingReleaseAction(null);
-		await runReleaseInstall('install');
+		await runReleaseInstall("install");
 	};
 
 	const handleReinstallUpdate = async () => {
 		setPendingReleaseAction(null);
-		await runReleaseInstall('reinstall');
+		await runReleaseInstall("reinstall");
 	};
 
 	const handleUpgradeDatabase = async () => {
@@ -803,19 +807,19 @@ const Content = ({ activeTab }: ContentProps) => {
 			const issuesCount = Number(result?.data?.issuesCount || 0);
 
 			notification.success(
-				__('Database updated'),
+				__("Database updated"),
 				issuesCount > 0
 					? __(
-							'PeakURL repaired the database schema. Review any remaining warnings below.'
+							"PeakURL repaired the database schema. Review any remaining warnings below."
 						)
-					: __('The database schema is now current.')
+					: __("The database schema is now current.")
 			);
 		} catch (err) {
 			notification.error(
-				__('Database upgrade failed'),
+				__("Database upgrade failed"),
 				getErrorMessage(
 					err,
-					__('PeakURL could not repair the database schema.')
+					__("PeakURL could not repair the database schema.")
 				)
 			);
 		}
@@ -823,9 +827,9 @@ const Content = ({ activeTab }: ContentProps) => {
 
 	return (
 		<div className="settings-content">
-			{activeTab === 'general' && (
+			{activeTab === "general" && (
 				<GeneralTab
-					key={`${user?._id || user?.id || user?.username || 'user'}-${user?.updatedAt || 'initial'}`}
+					key={`${user?._id || user?.id || user?.username || "user"}-${user?.updatedAt || "initial"}`}
 					initialForm={buildGeneralForm(user)}
 					onSubmit={handleGeneralSubmit}
 					isUpdating={isUpdating || isSavingGeneralSettings}
@@ -834,7 +838,7 @@ const Content = ({ activeTab }: ContentProps) => {
 				/>
 			)}
 
-			{activeTab === 'security' && (
+			{activeTab === "security" && (
 				<SecurityTab
 					securityForm={securityForm}
 					setSecurityForm={setSecurityForm}
@@ -844,7 +848,7 @@ const Content = ({ activeTab }: ContentProps) => {
 				/>
 			)}
 
-			{activeTab === 'api' && (
+			{activeTab === "api" && (
 				<ApiTab
 					user={user}
 					baseApiUrl={resolveBaseApiUrl(user)}
@@ -856,11 +860,11 @@ const Content = ({ activeTab }: ContentProps) => {
 				/>
 			)}
 
-			{activeTab === 'integrations' && (
+			{activeTab === "integrations" && (
 				<IntegrationsTab notification={notification} />
 			)}
 
-			{activeTab === 'email' && (
+			{activeTab === "email" && (
 				<EmailDeliveryTab
 					key={JSON.stringify(mailStatusResponse?.data || {})}
 					status={mailStatusResponse?.data || null}
@@ -871,7 +875,7 @@ const Content = ({ activeTab }: ContentProps) => {
 				/>
 			)}
 
-			{activeTab === 'location' && (
+			{activeTab === "location" && (
 				<LocationDataTab
 					status={geoipStatusResponse?.data || null}
 					errorMessage={extractErrorMessage(geoipError)}
@@ -883,7 +887,7 @@ const Content = ({ activeTab }: ContentProps) => {
 				/>
 			)}
 
-			{activeTab === 'updates' && (
+			{activeTab === "updates" && (
 				<UpdatesTab
 					status={updateStatusData}
 					errorMessage={extractErrorMessage(updateError)}
@@ -894,8 +898,8 @@ const Content = ({ activeTab }: ContentProps) => {
 					isReinstalling={isReinstallingUpdate}
 					isRepairing={isUpgradingDatabaseSchema}
 					onCheck={handleCheckForUpdates}
-					onApply={() => setPendingReleaseAction('install')}
-					onReinstall={() => setPendingReleaseAction('reinstall')}
+					onApply={() => setPendingReleaseAction("install")}
+					onReinstall={() => setPendingReleaseAction("reinstall")}
 					onRepair={handleUpgradeDatabase}
 				/>
 			)}
@@ -920,21 +924,21 @@ const Content = ({ activeTab }: ContentProps) => {
 						setApiKeyPendingDelete(null);
 					}
 				}}
-				title={__('Delete API key')}
+				title={__("Delete API key")}
 				description={
 					apiKeyPendingDelete
 						? sprintf(
 								__(
-									'Delete %s? Any scripts, automations, or extensions using it will stop working immediately.'
+									"Delete %s? Any scripts, automations, or extensions using it will stop working immediately."
 								),
 								apiKeyPendingDelete.label ||
 									apiKeyPendingDelete.maskedKey ||
-									__('this API key')
+									__("this API key")
 							)
-						: ''
+						: ""
 				}
-				confirmText={__('Delete key')}
-				cancelText={__('Keep key')}
+				confirmText={__("Delete key")}
+				cancelText={__("Keep key")}
 				confirmVariant="danger"
 				onConfirm={handleDeleteKey}
 				loading={isDeletingKey}
@@ -948,32 +952,32 @@ const Content = ({ activeTab }: ContentProps) => {
 					}
 				}}
 				title={sprintf(
-					pendingReleaseAction === 'reinstall'
-						? __('Reinstall PeakURL %s?')
-						: __('Install PeakURL %s?'),
+					pendingReleaseAction === "reinstall"
+						? __("Reinstall PeakURL %s?")
+						: __("Install PeakURL %s?"),
 					updateStatusData?.latestVersion ||
 						updateStatusData?.currentVersion ||
-						__('update')
+						__("update")
 				)}
 				description={
 					releaseInstallProgress
-						? ''
-						: pendingReleaseAction === 'reinstall'
+						? ""
+						: pendingReleaseAction === "reinstall"
 							? __(
-									'PeakURL will restore the latest version and refresh the included files.'
+									"PeakURL will restore the latest version and refresh the included files."
 								)
 							: __(
-									'PeakURL will install the latest version and refresh the included files.'
+									"PeakURL will install the latest version and refresh the included files."
 								)
 				}
 				confirmText={
-					pendingReleaseAction === 'reinstall'
-						? __('Reinstall latest version')
-						: __('Install update')
+					pendingReleaseAction === "reinstall"
+						? __("Reinstall latest version")
+						: __("Install update")
 				}
-				cancelText={__('Cancel')}
+				cancelText={__("Cancel")}
 				onConfirm={
-					pendingReleaseAction === 'reinstall'
+					pendingReleaseAction === "reinstall"
 						? handleReinstallUpdate
 						: handleApplyUpdate
 				}

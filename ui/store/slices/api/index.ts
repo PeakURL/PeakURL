@@ -1,4 +1,4 @@
-export { analyticsApi } from './analytics';
+export { analyticsApi } from "./analytics";
 export {
 	useBulkDeleteActivityLogsMutation,
 	useDeleteActivityLogMutation,
@@ -7,9 +7,9 @@ export {
 	useGetAnalyticsQuery,
 	useGetLinkLocationQuery,
 	useGetLinkStatsQuery,
-} from './analytics';
-export { default as baseApi } from './base';
-export { systemApi } from './system';
+} from "./analytics";
+export { default as baseApi } from "./base";
+export { systemApi } from "./system";
 export {
 	useApplyUpdateMutation,
 	useCheckForUpdatesMutation,
@@ -25,9 +25,9 @@ export {
 	useSaveGeoipConfigurationMutation,
 	useSaveMailConfigurationMutation,
 	useUpgradeDatabaseSchemaMutation,
-} from './system';
-export * from './types';
-export { urlsApi } from './urls';
+} from "./system";
+export * from "./types";
+export { urlsApi } from "./urls";
 export {
 	useBulkCreateUrlMutation,
 	useBulkDeleteUrlMutation,
@@ -37,8 +37,8 @@ export {
 	useGetUrlsQuery,
 	useLazyGetUrlsExportQuery,
 	useUpdateUrlMutation,
-} from './urls';
-export { userApi } from './user';
+} from "./urls";
+export { userApi } from "./user";
 export {
 	useAuthCheckQuery,
 	useCreateUserMutation,
@@ -65,10 +65,10 @@ export {
 	useVerifyEmailMutation,
 	useVerifyTwoFactorLoginMutation,
 	useVerifyTwoFactorMutation,
-} from './user';
-export { webhookApi } from './webhook';
+} from "./user";
+export { webhookApi } from "./webhook";
 export {
 	useCreateWebhookMutation,
 	useDeleteWebhookMutation,
 	useGetWebhooksQuery,
-} from './webhook';
+} from "./webhook";

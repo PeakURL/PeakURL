@@ -1,39 +1,39 @@
 import type {
 	CreatedWebhook,
 	WebhookSummary,
-} from '@/pages/dashboard/settings/_components/tabs/pages/integrations/types';
+} from "@/pages/dashboard/settings/_components/tabs/pages/integrations/types";
 import type {
 	CountryMetric,
 	DashboardDeviceData,
 	DashboardStats,
 	RecentActivity,
 	TrafficSeries,
-} from '@/pages/dashboard/_components/types';
+} from "@/pages/dashboard/_components/types";
 import type {
 	BulkCreateResponse,
 	PasteImportRequestItem,
-} from '@/pages/dashboard/tools/import/_components/types';
-import type { ImportRecord } from '@/pages/dashboard/tools/import/_components/file-upload/types';
+} from "@/pages/dashboard/tools/import/_components/types";
+import type { ImportRecord } from "@/pages/dashboard/tools/import/_components/file-upload/types";
 import type {
 	LinkLocationPayload,
 	LinkStatsResponse,
-} from '@/pages/dashboard/links/_components/StatsDrawer/types';
+} from "@/pages/dashboard/links/_components/StatsDrawer/types";
 import type {
 	LinkRecord,
 	LinksSortBy,
 	LinksSortOrder,
-} from '@/pages/dashboard/links/_components/types';
-import type { UpdateUrlPayload } from '@/pages/dashboard/links/_components/types';
+} from "@/pages/dashboard/links/_components/types";
+import type { UpdateUrlPayload } from "@/pages/dashboard/links/_components/types";
 import type {
 	CreateUrlPayload,
 	CreateUrlResponse,
-} from '@/pages/dashboard/links/_components/UrlShorteningForm/types';
-import type { GetUrlsResponse } from '@/pages/dashboard/links/types';
+} from "@/pages/dashboard/links/_components/UrlShorteningForm/types";
+import type { GetUrlsResponse } from "@/pages/dashboard/links/types";
 import type {
 	GeoipConfigurationPayload,
 	MailConfigurationPayload,
 	ProfileUser,
-} from '@/pages/dashboard/settings/_components/tabs/types';
+} from "@/pages/dashboard/settings/_components/tabs/types";
 import type {
 	BackupCodesResponse,
 	EmailStatus,
@@ -43,34 +43,34 @@ import type {
 	SiteSettings,
 	TwoFactorSetupResponse,
 	UpdateStatusPayload,
-} from '@/pages/dashboard/settings/_components/tabs/pages/types';
+} from "@/pages/dashboard/settings/_components/tabs/pages/types";
 import type {
 	SystemStatusResponse,
 	UrlExportResponse,
-} from '@/pages/dashboard/tools/types';
+} from "@/pages/dashboard/tools/types";
 import type {
 	UserDialogPayload,
 	UserSummary,
-} from '@/pages/dashboard/users/types';
-import type { AdminNoticesResponse } from '@/pages/layout/dashboard/types';
+} from "@/pages/dashboard/users/types";
+import type { AdminNoticesResponse } from "@/pages/layout/dashboard/types";
 
 /**
  * Cache tag names shared by the dashboard RTK Query API slices.
  */
 export type ApiTagType =
-	| 'AuthSession'
-	| 'Urls'
-	| 'Analytics'
-	| 'Profile'
-	| 'Users'
-	| 'Webhooks'
-	| 'Security'
-	| 'Geoip'
-	| 'Mail'
-	| 'Updates'
-	| 'GeneralSettings'
-	| 'SystemStatus'
-	| 'AdminNotices';
+	| "AuthSession"
+	| "Urls"
+	| "Analytics"
+	| "Profile"
+	| "Users"
+	| "Webhooks"
+	| "Security"
+	| "Geoip"
+	| "Mail"
+	| "Updates"
+	| "GeneralSettings"
+	| "SystemStatus"
+	| "AdminNotices";
 
 /**
  * Ordered list of RTK Query cache tags registered on the base API instance.
@@ -80,19 +80,19 @@ export type ApiTagType =
  * invalidators during future endpoint additions.
  */
 export const API_TAG_TYPES: ApiTagType[] = [
-	'AuthSession',
-	'Urls',
-	'Analytics',
-	'Profile',
-	'Users',
-	'Webhooks',
-	'Security',
-	'Geoip',
-	'Mail',
-	'Updates',
-	'GeneralSettings',
-	'SystemStatus',
-	'AdminNotices',
+	"AuthSession",
+	"Urls",
+	"Analytics",
+	"Profile",
+	"Users",
+	"Webhooks",
+	"Security",
+	"Geoip",
+	"Mail",
+	"Updates",
+	"GeneralSettings",
+	"SystemStatus",
+	"AdminNotices",
 ];
 
 /**
@@ -111,13 +111,13 @@ export interface DashboardAnalyticsPayload extends DashboardStats {
 	traffic?: Partial<TrafficSeries> | null;
 
 	/** Device totals grouped by form factor. */
-	devices?: DashboardDeviceData['devices'];
+	devices?: DashboardDeviceData["devices"];
 
 	/** Browser totals grouped by browser family. */
-	browsers?: DashboardDeviceData['browsers'];
+	browsers?: DashboardDeviceData["browsers"];
 
 	/** Operating-system totals grouped by OS family. */
-	operatingSystems?: DashboardDeviceData['operatingSystems'];
+	operatingSystems?: DashboardDeviceData["operatingSystems"];
 
 	/** Country-level click counts used by the map and cards. */
 	countries?: CountryMetric[];
@@ -186,7 +186,7 @@ export interface GetActivityHistoryQueryArgs {
 	limit?: number;
 
 	/** Optional server-side category filter. */
-	category?: 'all' | 'links' | 'users';
+	category?: "all" | "links" | "users";
 }
 
 /**
@@ -211,7 +211,7 @@ export interface GetUrlsQueryArgs {
 	limit?: number;
 
 	/** Sort field applied by the API. */
-	sortBy?: LinksSortBy | 'createdAt' | 'updatedAt';
+	sortBy?: LinksSortBy | "createdAt" | "updatedAt";
 
 	/** Sort direction applied by the API. */
 	sortOrder?: LinksSortOrder;
@@ -225,7 +225,7 @@ export interface GetUrlsQueryArgs {
  */
 export interface GetUrlsExportQueryArgs {
 	/** Sort field applied before exporting records. */
-	sortBy?: LinksSortBy | 'createdAt' | 'updatedAt';
+	sortBy?: LinksSortBy | "createdAt" | "updatedAt";
 
 	/** Sort direction applied before exporting records. */
 	sortOrder?: LinksSortOrder;

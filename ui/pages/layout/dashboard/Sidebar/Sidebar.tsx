@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import {
 	PieChart,
 	Link2,
@@ -13,73 +13,73 @@ import {
 	Heart,
 	Coffee,
 	ExternalLink,
-} from 'lucide-react';
-import { useGetUrlsQuery } from '@/store/slices/api';
-import { useAdminAccess } from '@/hooks';
-import { BrandLockup } from '@/components';
-import { isDocumentRtl } from '@/i18n/direction';
-import { __ } from '@/i18n';
-import { cn } from '@/utils';
-import type { NavItem, SidebarProps } from '../types';
+} from "lucide-react";
+import { useGetUrlsQuery } from "@/store/slices/api";
+import { useAdminAccess } from "@/hooks";
+import { BrandLockup } from "@/components";
+import { isDocumentRtl } from "@/i18n/direction";
+import { __ } from "@/i18n";
+import { cn } from "@/utils";
+import type { NavItem, SidebarProps } from "../types";
 
 const buildNav = (
-	basePath = '/dashboard',
+	basePath = "/dashboard",
 	canManageUsers = false
 ): NavItem[] => {
 	const base =
-		basePath === '/'
-			? ''
-			: basePath.endsWith('/') && basePath.length > 1
+		basePath === "/"
+			? ""
+			: basePath.endsWith("/") && basePath.length > 1
 				? basePath.slice(0, -1)
-				: basePath || '/dashboard';
+				: basePath || "/dashboard";
 	const navigation = [
 		{
-			name: __('Overview'),
-			href: base || '/',
+			name: __("Overview"),
+			href: base || "/",
 			icon: PieChart,
 		},
 		{
-			name: __('All Links'),
-			href: `${base || ''}/links`,
+			name: __("All Links"),
+			href: `${base || ""}/links`,
 			icon: Link2,
 		},
 		{
-			name: __('Users'),
-			href: `${base || ''}/users`,
+			name: __("Users"),
+			href: `${base || ""}/users`,
 			icon: Users,
 			adminOnly: true,
 		},
 		{
-			name: __('Plugins'),
-			href: `${base || ''}/plugins`,
+			name: __("Plugins"),
+			href: `${base || ""}/plugins`,
 			icon: Plug,
 			adminOnly: true,
 		},
 		{
-			name: __('Tools'),
+			name: __("Tools"),
 			icon: Wrench,
 			adminOnly: true,
 			children: [
 				{
-					name: __('Import'),
-					href: `${base || ''}/tools/import/file`,
+					name: __("Import"),
+					href: `${base || ""}/tools/import/file`,
 					adminOnly: true,
 				},
 				{
-					name: __('Export'),
-					href: `${base || ''}/tools/export`,
+					name: __("Export"),
+					href: `${base || ""}/tools/export`,
 				},
 				{
-					name: __('System Status'),
-					href: `${base || ''}/tools/system-status`,
+					name: __("System Status"),
+					href: `${base || ""}/tools/system-status`,
 					adminOnly: true,
 				},
 			],
 		},
 		{
-			name: __('Settings'),
-			href: `${base || ''}/settings/general`,
-			activeBasePath: `${base || ''}/settings`,
+			name: __("Settings"),
+			href: `${base || ""}/settings/general`,
+			activeBasePath: `${base || ""}/settings`,
 			icon: Settings,
 		},
 	];
@@ -108,75 +108,73 @@ const buildNav = (
 
 const getSectionToggleClassName = (isActive: boolean): string =>
 	cn(
-		'dashboard-sidebar-section-toggle',
-		isActive && 'dashboard-sidebar-section-toggle-active'
+		"dashboard-sidebar-section-toggle",
+		isActive && "dashboard-sidebar-section-toggle-active"
 	);
 
 const getSectionIconClassName = (isActive: boolean): string =>
 	cn(
-		'dashboard-sidebar-section-icon',
-		isActive && 'dashboard-sidebar-section-icon-active'
+		"dashboard-sidebar-section-icon",
+		isActive && "dashboard-sidebar-section-icon-active"
 	);
 
 const getSectionCaretClassName = (isOpen: boolean): string =>
 	cn(
-		'dashboard-sidebar-section-caret',
-		isOpen && 'dashboard-sidebar-section-caret-open'
+		"dashboard-sidebar-section-caret",
+		isOpen && "dashboard-sidebar-section-caret-open"
 	);
 
 const getSubmenuClassName = (isOpen: boolean): string =>
-	cn('dashboard-sidebar-submenu', isOpen && 'dashboard-sidebar-submenu-open');
+	cn("dashboard-sidebar-submenu", isOpen && "dashboard-sidebar-submenu-open");
 
 const getSubmenuLinkClassName = (isActive: boolean): string =>
 	cn(
-		'dashboard-sidebar-submenu-link',
-		isActive && 'dashboard-sidebar-submenu-link-active'
+		"dashboard-sidebar-submenu-link",
+		isActive && "dashboard-sidebar-submenu-link-active"
 	);
 
 const getLinkClassName = (isActive: boolean): string =>
-	cn('dashboard-sidebar-link', isActive && 'dashboard-sidebar-link-active');
+	cn("dashboard-sidebar-link", isActive && "dashboard-sidebar-link-active");
 
 const getLinkIconClassName = (isActive: boolean): string =>
 	cn(
-		'dashboard-sidebar-link-icon',
-		isActive && 'dashboard-sidebar-link-icon-active'
+		"dashboard-sidebar-link-icon",
+		isActive && "dashboard-sidebar-link-icon-active"
 	);
 
 const getLinkBadgeClassName = (isActive: boolean): string =>
 	cn(
-		'dashboard-sidebar-link-badge',
-		isActive && 'dashboard-sidebar-link-badge-active'
+		"dashboard-sidebar-link-badge",
+		isActive && "dashboard-sidebar-link-badge-active"
 	);
 
 const getAboutPanelClassName = (isOpen: boolean): string =>
 	cn(
-		'dashboard-sidebar-about-panel',
-		isOpen && 'dashboard-sidebar-about-panel-open'
+		"dashboard-sidebar-about-panel",
+		isOpen && "dashboard-sidebar-about-panel-open"
 	);
 
 const getAboutLinkClassName = (isActive: boolean): string =>
 	cn(
-		'dashboard-sidebar-about-link',
-		isActive && 'dashboard-sidebar-about-link-active'
+		"dashboard-sidebar-about-link",
+		isActive && "dashboard-sidebar-about-link-active"
 	);
 
 const resolveSidebarTargetHref = (
 	href: string | undefined,
 	base: string
-): string => href || base || '/dashboard';
+): string => href || base || "/dashboard";
 
-const resolveSidebarSectionStateKey = (
-	item: NavItem,
-	index: number
-): string => item.href || item.children?.[0]?.href || `section-${index}`;
+const resolveSidebarSectionStateKey = (item: NavItem, index: number): string =>
+	item.href || item.children?.[0]?.href || `section-${index}`;
 
 export const Sidebar = ({
-	basePath = '',
+	basePath = "",
 	isMobileOpen,
 	onMobileClose,
 }: SidebarProps) => {
 	const isRtl = isDocumentRtl();
-	const direction = isRtl ? 'rtl' : 'ltr';
+	const direction = isRtl ? "rtl" : "ltr";
 	const location = useLocation();
 	const pathname = location.pathname;
 	const { data: urlsRes } = useGetUrlsQuery(undefined);
@@ -188,11 +186,11 @@ export const Sidebar = ({
 		[basePath, canManageUsers]
 	);
 	const base =
-		basePath === '/'
-			? ''
-			: basePath.endsWith('/') && basePath.length > 1
+		basePath === "/"
+			? ""
+			: basePath.endsWith("/") && basePath.length > 1
 				? basePath.slice(0, -1)
-				: basePath || '';
+				: basePath || "";
 	const [openSections, setOpenSections] = useState<Record<string, boolean>>(
 		{}
 	);
@@ -211,12 +209,12 @@ export const Sidebar = ({
 				setIsAboutOpen(false);
 			}
 		};
-		document.addEventListener('mousedown', handler);
-		return () => document.removeEventListener('mousedown', handler);
+		document.addEventListener("mousedown", handler);
+		return () => document.removeEventListener("mousedown", handler);
 	}, [isAboutOpen]);
 
 	const getSectionBasePath = (href?: string) =>
-		href ? href.replace(/\/[^/]+$/, '') : '';
+		href ? href.replace(/\/[^/]+$/, "") : "";
 
 	return (
 		<>
@@ -229,14 +227,14 @@ export const Sidebar = ({
 
 			<aside
 				className={cn(
-					'dashboard-sidebar',
-					isRtl && 'dashboard-sidebar-rtl',
-					isMobileOpen && 'dashboard-sidebar-open'
+					"dashboard-sidebar",
+					isRtl && "dashboard-sidebar-rtl",
+					isMobileOpen && "dashboard-sidebar-open"
 				)}
 			>
 				<div className="dashboard-sidebar-header">
 					<BrandLockup
-						to={base || '/dashboard'}
+						to={base || "/dashboard"}
 						size="md"
 						className="dashboard-sidebar-brand"
 					/>
@@ -299,7 +297,9 @@ export const Sidebar = ({
 												setOpenSections((current) => ({
 													...current,
 													[sectionStateKey]:
-														!current[sectionStateKey],
+														!current[
+															sectionStateKey
+														],
 												}))
 											}
 											className={getSectionToggleClassName(
@@ -376,7 +376,7 @@ export const Sidebar = ({
 									<span className="dashboard-sidebar-link-label">
 										{item.name}
 									</span>
-									{item.name === __('All Links') &&
+									{item.name === __("All Links") &&
 										links.length > 0 && (
 											<span
 												className={getLinkBadgeClassName(
@@ -396,10 +396,10 @@ export const Sidebar = ({
 					<div className={getAboutPanelClassName(isAboutOpen)}>
 						<div className="dashboard-sidebar-about-panel-list">
 							<Link
-								to={`${base || '/dashboard'}/about`}
+								to={`${base || "/dashboard"}/about`}
 								onClick={onMobileClose}
 								className={getAboutLinkClassName(
-									pathname === `${base || '/dashboard'}/about`
+									pathname === `${base || "/dashboard"}/about`
 								)}
 							>
 								<Info
@@ -407,7 +407,7 @@ export const Sidebar = ({
 									className="dashboard-sidebar-about-link-icon"
 								/>
 								<span className="dashboard-sidebar-about-link-label">
-									{__('About PeakURL')}
+									{__("About PeakURL")}
 								</span>
 							</Link>
 							<a
@@ -422,7 +422,7 @@ export const Sidebar = ({
 									className="dashboard-sidebar-about-link-icon"
 								/>
 								<span className="dashboard-sidebar-about-link-label">
-									{__('Sponsor')}
+									{__("Sponsor")}
 								</span>
 								<ExternalLink
 									size={12}
@@ -441,7 +441,7 @@ export const Sidebar = ({
 									className="dashboard-sidebar-about-link-icon"
 								/>
 								<span className="dashboard-sidebar-about-link-label">
-									{__('Buy Me a Coffee')}
+									{__("Buy Me a Coffee")}
 								</span>
 								<ExternalLink
 									size={12}
@@ -462,7 +462,7 @@ export const Sidebar = ({
 							className={getSectionIconClassName(isAboutOpen)}
 						/>
 						<span className="dashboard-sidebar-section-label">
-							{__('About PeakURL')}
+							{__("About PeakURL")}
 						</span>
 						<ChevronDown
 							size={16}

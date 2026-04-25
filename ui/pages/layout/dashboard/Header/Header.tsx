@@ -5,17 +5,17 @@ import {
 	User,
 	Settings,
 	LogOut,
-} from 'lucide-react';
-import { useLogoutMutation } from '@/store/slices/api';
-import { authApi } from '@/store/slices';
-import { Avatar, ThemeToggle } from '@/components';
-import { useNavigate } from 'react-router-dom';
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { getDocumentDirection } from '@/i18n/direction';
-import { __ } from '@/i18n';
-import { cn } from '@/utils';
-import { Search } from '../Search';
-import type { HeaderProps } from '../types';
+} from "lucide-react";
+import { useLogoutMutation } from "@/store/slices/api";
+import { authApi } from "@/store/slices";
+import { Avatar, ThemeToggle } from "@/components";
+import { useNavigate } from "react-router-dom";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { getDocumentDirection } from "@/i18n/direction";
+import { __ } from "@/i18n";
+import { cn } from "@/utils";
+import { Search } from "../Search";
+import type { HeaderProps } from "../types";
 
 export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 	const direction = getDocumentDirection();
@@ -24,20 +24,20 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 	const user = sessionData?.data ?? sessionData?.user;
 	const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
 	const navigate = useNavigate();
-	const basePath = '/dashboard';
+	const basePath = "/dashboard";
 
 	const getRoleLabel = (role?: string | null) => {
-		if (role === 'admin') return __('Admin');
-		if (role === 'editor') return __('Editor');
-		return __('User');
+		if (role === "admin") return __("Admin");
+		if (role === "editor") return __("Editor");
+		return __("User");
 	};
 
 	const handleLogout = async () => {
 		try {
 			await logout(undefined).unwrap();
-			navigate('/login', { replace: true });
+			navigate("/login", { replace: true });
 		} catch (error) {
-			console.error('Logout failed:', error);
+			console.error("Logout failed:", error);
 		}
 	};
 
@@ -66,18 +66,18 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 								email={user?.email}
 								firstName={user?.firstName}
 								lastName={user?.lastName}
-								fallbackName={user?.username || __('Admin')}
+								fallbackName={user?.username || __("Admin")}
 							/>
 							<div className="dashboard-header-user-details">
 								<div className="dashboard-header-user-name">
 									{user
 										? `${user.firstName} ${user.lastName}`
-										: __('Admin Account')}
+										: __("Admin Account")}
 								</div>
 								<div className="dashboard-header-user-role">
 									{user
 										? getRoleLabel(user.role)
-										: __('Admin')}
+										: __("Admin")}
 								</div>
 							</div>
 							<ChevronDown
@@ -98,16 +98,16 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 												navigate(`${basePath}/activity`)
 											}
 											className={cn(
-												'dashboard-header-user-item',
+												"dashboard-header-user-item",
 												focus &&
-													'dashboard-header-user-item-active'
+													"dashboard-header-user-item-active"
 											)}
 										>
 											<Clock3
 												size={16}
 												className="dashboard-header-user-item-icon"
 											/>
-											{__('Activity')}
+											{__("Activity")}
 										</button>
 									)}
 								</MenuItem>
@@ -120,16 +120,16 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 												)
 											}
 											className={cn(
-												'dashboard-header-user-item',
+												"dashboard-header-user-item",
 												focus &&
-													'dashboard-header-user-item-active'
+													"dashboard-header-user-item-active"
 											)}
 										>
 											<User
 												size={16}
 												className="dashboard-header-user-item-icon"
 											/>
-											{__('Profile')}
+											{__("Profile")}
 										</button>
 									)}
 								</MenuItem>
@@ -140,16 +140,16 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 												navigate(`${basePath}/settings`)
 											}
 											className={cn(
-												'dashboard-header-user-item',
+												"dashboard-header-user-item",
 												focus &&
-													'dashboard-header-user-item-active'
+													"dashboard-header-user-item-active"
 											)}
 										>
 											<Settings
 												size={16}
 												className="dashboard-header-user-item-icon"
 											/>
-											{__('Settings')}
+											{__("Settings")}
 										</button>
 									)}
 								</MenuItem>
@@ -160,16 +160,16 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 											onClick={handleLogout}
 											disabled={isLoggingOut}
 											className={cn(
-												'dashboard-header-user-item',
-												'dashboard-header-user-item-danger',
+												"dashboard-header-user-item",
+												"dashboard-header-user-item-danger",
 												focus &&
-													'dashboard-header-user-item-danger-active'
+													"dashboard-header-user-item-danger-active"
 											)}
 										>
 											<LogOut size={16} />
 											{isLoggingOut
-												? __('Logging out...')
-												: __('Logout')}
+												? __("Logging out...")
+												: __("Logout")}
 										</button>
 									)}
 								</MenuItem>

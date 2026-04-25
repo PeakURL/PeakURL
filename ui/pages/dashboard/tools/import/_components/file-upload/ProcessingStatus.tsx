@@ -1,17 +1,17 @@
-import { Cog, LoaderCircle } from 'lucide-react';
-import { __ } from '@/i18n';
-import type { ProcessingStatusProps } from './types';
+import { Cog, LoaderCircle } from "lucide-react";
+import { __ } from "@/i18n";
+import type { ProcessingStatusProps } from "./types";
 
 function ProcessingStatus({ status, progress }: ProcessingStatusProps) {
-	if (status === 'uploading') {
+	if (status === "uploading") {
 		return (
 			<div className="import-processing import-processing-upload">
 				<LoaderCircle className="import-processing-upload-icon" />
 				<h3 className="import-processing-title">
-					{__('Uploading file...')}
+					{__("Uploading file...")}
 				</h3>
 				<p className="import-processing-copy">
-					{__('Please wait while we process your file')}
+					{__("Please wait while we process your file")}
 				</p>
 				{progress ? (
 					<p className="import-processing-progress-copy">
@@ -21,16 +21,16 @@ function ProcessingStatus({ status, progress }: ProcessingStatusProps) {
 			</div>
 		);
 	}
-	if (status === 'processing') {
+	if (status === "processing") {
 		return (
 			<div className="import-processing">
 				<div className="import-processing-header">
 					<Cog className="import-processing-icon" />
 					<h3 className="import-processing-title">
-						{__('Processing URLs')}
+						{__("Processing URLs")}
 					</h3>
 					<p className="import-processing-copy">
-						{__('Creating short links...')}
+						{__("Creating short links...")}
 					</p>
 				</div>
 				<div className="import-processing-bar">

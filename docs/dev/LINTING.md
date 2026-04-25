@@ -78,8 +78,9 @@ npm run format:web:check
 
 The current Prettier conventions are:
 
-- tabs enabled
-- tab width `4`
+- **Tabs enabled** for code and JSON
+- **Spaces (Width: 2)** strictly enforced for YAML
+- tab width `4` (for tabs)
 - single quotes
 - trailing commas where valid in ES5
 - generated/runtime paths are excluded through [`.prettierignore`](../../.prettierignore), including `build/`, `release/`, `content/`, `app/vendor/`, and `package-lock.json`

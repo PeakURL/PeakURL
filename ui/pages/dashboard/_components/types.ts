@@ -209,7 +209,7 @@ export interface DeviceBreakdownProps {
 /**
  * Supported device color keys used in the dashboard breakdown.
  */
-export type DeviceColorKey = 'mobile' | 'desktop' | 'tablet';
+export type DeviceColorKey = "mobile" | "desktop" | "tablet";
 
 /**
  * Traffic-series data shown in the dashboard overview chart.

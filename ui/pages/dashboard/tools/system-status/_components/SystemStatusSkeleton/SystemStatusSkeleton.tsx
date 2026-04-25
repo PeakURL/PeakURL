@@ -1,30 +1,28 @@
-import { SkeletonLoader } from '@/components';
+import { SkeletonLoader } from "@/components";
 
 type InfoSectionSkeletonProps = {
 	isOpen?: boolean;
 	rowCount?: number;
-	titleWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+	titleWidth?: "xs" | "sm" | "md" | "lg" | "xl";
 };
 
 function InfoSectionSkeleton({
 	isOpen = false,
 	rowCount = 4,
-	titleWidth = 'xl',
+	titleWidth = "xl",
 }: InfoSectionSkeletonProps) {
 	const titleWidthClassNames = {
-		xs: 'system-status-skeleton-title-xs',
-		sm: 'system-status-skeleton-title-sm',
-		md: 'system-status-skeleton-title-md',
-		lg: 'system-status-skeleton-title-lg',
-		xl: 'system-status-skeleton-title-xl',
+		xs: "system-status-skeleton-title-xs",
+		sm: "system-status-skeleton-title-sm",
+		md: "system-status-skeleton-title-md",
+		lg: "system-status-skeleton-title-lg",
+		xl: "system-status-skeleton-title-xl",
 	} as const;
 
 	return (
 		<div className="system-status-skeleton-info">
 			<div className="system-status-skeleton-info-header">
-				<SkeletonLoader
-					className={titleWidthClassNames[titleWidth]}
-				/>
+				<SkeletonLoader className={titleWidthClassNames[titleWidth]} />
 				<SkeletonLoader className="system-status-skeleton-chevron" />
 			</div>
 
@@ -38,8 +36,8 @@ function InfoSectionSkeleton({
 										key={index}
 										className={
 											index > 0
-												? 'system-status-skeleton-row-bordered'
-												: ''
+												? "system-status-skeleton-row-bordered"
+												: ""
 										}
 									>
 										<th className="system-status-skeleton-heading">

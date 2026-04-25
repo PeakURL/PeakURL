@@ -4,30 +4,28 @@ import {
 	useContext,
 	useMemo,
 	useState,
-} from 'react';
-import type { NotificationItem, NotificationPayload } from '@/components/ui';
-import { NotificationContainer } from '@/components/ui';
+} from "react";
+import type { NotificationItem, NotificationPayload } from "@/components/ui";
+import { NotificationContainer } from "@/components/ui";
 import type {
 	NotificationContextValue,
 	NotificationProviderProps,
-} from '../types';
-export type { NotificationContextValue } from '../types';
+} from "../types";
+export type { NotificationContextValue } from "../types";
 
 const NotificationContext = createContext<NotificationContextValue | null>(
 	null
 );
 
 function buildNotification(
-	type: NotificationPayload['type'],
+	type: NotificationPayload["type"],
 	title: string,
 	message?: string
 ): NotificationPayload {
 	return { type, title, message };
 }
 
-export function NotificationProvider({
-	children,
-}: NotificationProviderProps) {
+export function NotificationProvider({ children }: NotificationProviderProps) {
 	const [notifications, setNotifications] = useState<NotificationItem[]>([]);
 
 	const showNotification = useCallback(
@@ -65,13 +63,13 @@ export function NotificationProvider({
 			showNotification,
 			hideNotification,
 			success: (title: string, message?: string) =>
-				showNotification(buildNotification('success', title, message)),
+				showNotification(buildNotification("success", title, message)),
 			error: (title: string, message?: string) =>
-				showNotification(buildNotification('error', title, message)),
+				showNotification(buildNotification("error", title, message)),
 			warning: (title: string, message?: string) =>
-				showNotification(buildNotification('warning', title, message)),
+				showNotification(buildNotification("warning", title, message)),
 			info: (title: string, message?: string) =>
-				showNotification(buildNotification('info', title, message)),
+				showNotification(buildNotification("info", title, message)),
 		}),
 		[notifications, showNotification, hideNotification]
 	);
@@ -92,7 +90,7 @@ export function useNotification(): NotificationContextValue {
 
 	if (!context) {
 		throw new Error(
-			'useNotification must be used within NotificationProvider'
+			"useNotification must be used within NotificationProvider"
 		);
 	}
 

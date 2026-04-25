@@ -1,4 +1,4 @@
-import { formatNumber } from '@/utils';
+import { formatNumber } from "@/utils";
 import {
 	ArrowDown,
 	ArrowUp,
@@ -6,12 +6,12 @@ import {
 	Link2,
 	MousePointerClick,
 	Users,
-} from 'lucide-react';
-import { __ } from '@/i18n';
-import { cn } from '@/utils';
-import type { StatsCardsProps } from '../types';
+} from "lucide-react";
+import { __ } from "@/i18n";
+import { cn } from "@/utils";
+import type { StatsCardsProps } from "../types";
 
-type DashboardStatTone = 'clicks' | 'links' | 'rate' | 'users';
+type DashboardStatTone = "clicks" | "links" | "rate" | "users";
 
 const StatsCards = ({ stats }: StatsCardsProps) => {
 	const uniqueClickRate = Number(
@@ -19,57 +19,54 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
 	);
 	const statsData = [
 		{
-			title: __('Total Clicks'),
+			title: __("Total Clicks"),
 			value: formatNumber(stats.totalClicks),
-			change: '+12.3%',
-			changeType: 'positive',
+			change: "+12.3%",
+			changeType: "positive",
 			icon: MousePointerClick,
-			tone: 'clicks' as DashboardStatTone,
+			tone: "clicks" as DashboardStatTone,
 		},
 		{
-			title: __('Active Links'),
+			title: __("Active Links"),
 			value: stats.totalLinks,
 			change: `+${((stats.totalLinks || 0) % 5) + 1}`,
-			changeType: 'positive',
+			changeType: "positive",
 			icon: Link2,
-			tone: 'links' as DashboardStatTone,
+			tone: "links" as DashboardStatTone,
 		},
 		{
-			title: __('Unique Click Rate'),
+			title: __("Unique Click Rate"),
 			value: `${uniqueClickRate.toFixed(1)}%`,
-			change: '+0.8%',
-			changeType: 'positive',
+			change: "+0.8%",
+			changeType: "positive",
 			icon: ChartLine,
-			tone: 'rate' as DashboardStatTone,
+			tone: "rate" as DashboardStatTone,
 		},
 		{
-			title: __('Unique Visitors'),
+			title: __("Unique Visitors"),
 			value: formatNumber(stats.uniqueClicks),
-			change: '+15.2%',
-			changeType: 'positive',
+			change: "+15.2%",
+			changeType: "positive",
 			icon: Users,
-			tone: 'users' as DashboardStatTone,
+			tone: "users" as DashboardStatTone,
 		},
 	];
 
 	const getIconClassName = (tone: DashboardStatTone) =>
-		cn(
-			'dashboard-stats-card-icon',
-			`dashboard-stats-card-icon-${tone}`
-		);
+		cn("dashboard-stats-card-icon", `dashboard-stats-card-icon-${tone}`);
 
 	const getIconGlyphClassName = (tone: DashboardStatTone) =>
 		cn(
-			'dashboard-stats-card-icon-glyph',
+			"dashboard-stats-card-icon-glyph",
 			`dashboard-stats-card-icon-glyph-${tone}`
 		);
 
 	const getChangeBadgeClassName = (changeType: string) =>
 		cn(
-			'dashboard-stats-card-change-badge',
-			'positive' === changeType
-				? 'dashboard-stats-card-change-badge-positive'
-				: 'dashboard-stats-card-change-badge-negative'
+			"dashboard-stats-card-change-badge",
+			"positive" === changeType
+				? "dashboard-stats-card-change-badge-positive"
+				: "dashboard-stats-card-change-badge-negative"
 		);
 
 	return (
@@ -89,13 +86,19 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
 								</p>
 							</div>
 							<div className={getIconClassName(stat.tone)}>
-								<StatIcon className={getIconGlyphClassName(stat.tone)} />
+								<StatIcon
+									className={getIconGlyphClassName(stat.tone)}
+								/>
 							</div>
 						</div>
 
 						<div className="dashboard-stats-card-change">
-							<span className={getChangeBadgeClassName(stat.changeType)}>
-								{stat.changeType === 'positive' ? (
+							<span
+								className={getChangeBadgeClassName(
+									stat.changeType
+								)}
+							>
+								{stat.changeType === "positive" ? (
 									<ArrowUp className="dashboard-stats-card-change-icon" />
 								) : (
 									<ArrowDown className="dashboard-stats-card-change-icon" />
@@ -103,7 +106,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
 								{stat.change}
 							</span>
 							<span className="dashboard-stats-card-change-note">
-								{__('vs last month')}
+								{__("vs last month")}
 							</span>
 						</div>
 					</div>

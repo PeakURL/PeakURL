@@ -1,34 +1,32 @@
-import { MoreHorizontal, Lock, Info } from 'lucide-react';
-import { Button } from '@/components';
-import { __ } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
-import { cn } from '@/utils';
-import PluginPreviewSkeleton from '../PluginPreviewSkeleton';
+import { MoreHorizontal, Lock, Info } from "lucide-react";
+import { Button } from "@/components";
+import { __ } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
+import { cn } from "@/utils";
+import PluginPreviewSkeleton from "../PluginPreviewSkeleton";
 import type {
 	InstalledPluginsTableProps,
 	PluginStatusPillProps,
-} from '../types';
+} from "../types";
 
 function StatusPill({ active }: PluginStatusPillProps) {
 	const statusPillClassName = cn(
-		'plugins-status-pill',
-		active ? 'plugins-status-pill-active' : 'plugins-status-pill-inactive'
+		"plugins-status-pill",
+		active ? "plugins-status-pill-active" : "plugins-status-pill-inactive"
 	);
 
 	return active ? (
 		<span className={statusPillClassName}>
 			<span className="plugins-status-pill-dot" />
-			{__('Active')}
+			{__("Active")}
 		</span>
 	) : (
-		<span className={statusPillClassName}>
-			{__('Inactive')}
-		</span>
+		<span className={statusPillClassName}>{__("Inactive")}</span>
 	);
 }
 
 function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
-	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
+	const direction = isDocumentRtl() ? "rtl" : "ltr";
 
 	if (plugins.length === 0) {
 		return (
@@ -37,11 +35,11 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 					<Info size={22} />
 				</div>
 				<h3 className="plugins-table-empty-title">
-					{__('No installed plugins')}
+					{__("No installed plugins")}
 				</h3>
 				<p className="plugins-table-empty-copy">
 					{__(
-						'Plugins you install will appear here once the feature is live.'
+						"Plugins you install will appear here once the feature is live."
 					)}
 				</p>
 			</div>
@@ -55,19 +53,19 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 					<thead>
 						<tr className="plugins-table-head-row">
 							<th className="plugins-table-head-cell">
-								{__('Plugin')}
+								{__("Plugin")}
 							</th>
 							<th className="plugins-table-head-cell hidden md:table-cell">
-								{__('Version')}
+								{__("Version")}
 							</th>
 							<th className="plugins-table-head-cell hidden sm:table-cell">
-								{__('Status')}
+								{__("Status")}
 							</th>
 							<th className="plugins-table-head-cell hidden lg:table-cell">
-								{__('Author')}
+								{__("Author")}
 							</th>
 							<th className="plugins-table-head-cell plugins-table-head-cell-end">
-								{__('Actions')}
+								{__("Actions")}
 							</th>
 						</tr>
 					</thead>
@@ -131,8 +129,8 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 													<Lock size={11} />
 													<span className="hidden sm:inline">
 														{isActive
-															? __('Deactivate')
-															: __('Activate')}
+															? __("Deactivate")
+															: __("Activate")}
 													</span>
 												</span>
 											</Button>

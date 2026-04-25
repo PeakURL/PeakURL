@@ -3,7 +3,7 @@
  */
 export function getLocalDateValue(date: Date = new Date()): string {
 	const offset = date.getTimezoneOffset() * 60000;
-	return new Date(date.getTime() - offset).toISOString().split('T')[0];
+	return new Date(date.getTime() - offset).toISOString().split("T")[0];
 }
 
 /**
@@ -19,13 +19,13 @@ export function getLocalDateTimeValue(date: Date = new Date()): string {
  */
 export function toLocalDateTimeValue(dateString?: string | null): string {
 	if (!dateString) {
-		return '';
+		return "";
 	}
 
 	const date = new Date(dateString);
 
 	if (Number.isNaN(date.getTime())) {
-		return '';
+		return "";
 	}
 
 	return getLocalDateTimeValue(date);
@@ -53,9 +53,7 @@ export function toIsoFromLocalDateTime(
 /**
  * Determines whether a datetime-local value resolves to a future instant.
  */
-export function isFutureLocalDateTime(
-	localDateTime?: string | null
-): boolean {
+export function isFutureLocalDateTime(localDateTime?: string | null): boolean {
 	if (!localDateTime) {
 		return true;
 	}

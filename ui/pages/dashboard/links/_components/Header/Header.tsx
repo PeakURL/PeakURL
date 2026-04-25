@@ -1,7 +1,7 @@
-import { PEAKURL_DOMAIN } from '@constants';
-import { Link2, RefreshCw } from 'lucide-react';
-import { __ } from '@/i18n';
-import type { LinksHeaderProps } from '../types';
+import { PEAKURL_DOMAIN } from "@constants";
+import { Link2, RefreshCw } from "lucide-react";
+import { __ } from "@/i18n";
+import type { LinksHeaderProps } from "../types";
 
 const Header = ({ onRefresh, isRefreshing = false }: LinksHeaderProps) => {
 	const refreshButton = (
@@ -10,12 +10,12 @@ const Header = ({ onRefresh, isRefreshing = false }: LinksHeaderProps) => {
 			onClick={onRefresh}
 			disabled={isRefreshing}
 			className="links-header-refresh"
-			aria-label={__('Refresh links')}
-			title={__('Refresh links')}
+			aria-label={__("Refresh links")}
+			title={__("Refresh links")}
 		>
 			<RefreshCw
 				className={`links-header-refresh-icon ${
-					isRefreshing ? 'animate-spin' : ''
+					isRefreshing ? "animate-spin" : ""
 				}`}
 			/>
 		</button>
@@ -28,11 +28,9 @@ const Header = ({ onRefresh, isRefreshing = false }: LinksHeaderProps) => {
 					<Link2 className="h-5 w-5 text-white" />
 				</div>
 				<div className="links-header-brand-copy">
-					<h1 className="links-header-title">
-						{__('Links')}
-					</h1>
+					<h1 className="links-header-title">{__("Links")}</h1>
 					<p className="links-header-description">
-						{__('Manage and track your shortened URLs')}
+						{__("Manage and track your shortened URLs")}
 					</p>
 				</div>
 			</div>
@@ -44,7 +42,7 @@ const Header = ({ onRefresh, isRefreshing = false }: LinksHeaderProps) => {
 				<div className="links-header-actions-desktop">
 					{refreshButton}
 					<p className="links-header-domain">
-						{__('Short links domain')}{' '}
+						{__("Short links domain")}{" "}
 						<span className="links-header-domain-value">
 							{PEAKURL_DOMAIN}
 						</span>

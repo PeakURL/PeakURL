@@ -1,1 +1,1 @@
-export { default } from './PluginCard';
+export { default } from "./PluginCard";

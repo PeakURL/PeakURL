@@ -1,7 +1,7 @@
-import { Button, Input } from '@/components';
-import { Link as LinkIcon, Tag, Scissors } from 'lucide-react';
-import { __ } from '@/i18n';
-import type { MainInputsProps } from '../types';
+import { Button, Input } from "@/components";
+import { Link as LinkIcon, Tag, Scissors } from "lucide-react";
+import { __ } from "@/i18n";
+import type { MainInputsProps } from "../types";
 
 const MainInputs = ({
 	destinationUrl,
@@ -17,7 +17,7 @@ const MainInputs = ({
 				{/* Long URL Input - Takes most space */}
 				<div className="links-form-main-destination">
 					<label htmlFor="long-url" className="sr-only">
-						{__('Destination URL')}
+						{__("Destination URL")}
 					</label>
 					<Input
 						type="url"
@@ -25,7 +25,7 @@ const MainInputs = ({
 						valueDirection="ltr"
 						value={destinationUrl}
 						onChange={(e) => setDestinationUrl(e.target.value)}
-						placeholder={__('Enter long link here...')}
+						placeholder={__("Enter long link here...")}
 						icon={LinkIcon}
 						autoCapitalize="off"
 						spellCheck={false}
@@ -37,7 +37,7 @@ const MainInputs = ({
 				{/* Alias Input */}
 				<div className="links-form-main-alias">
 					<label htmlFor="alias" className="sr-only">
-						{__('Alias (Optional)')}
+						{__("Alias (Optional)")}
 					</label>
 					<Input
 						type="text"
@@ -45,7 +45,7 @@ const MainInputs = ({
 						valueDirection="ltr"
 						value={alias}
 						onChange={(e) => setAlias(e.target.value)}
-						placeholder={__('Alias (optional)')}
+						placeholder={__("Alias (optional)")}
 						icon={Tag}
 						autoCapitalize="off"
 						spellCheck={false}
@@ -63,7 +63,7 @@ const MainInputs = ({
 						className="links-form-main-button"
 					>
 						<span className="links-form-main-button-label">
-							{isLoading ? __('Shortening...') : __('Shorten')}
+							{isLoading ? __("Shortening...") : __("Shorten")}
 						</span>
 					</Button>
 				</div>

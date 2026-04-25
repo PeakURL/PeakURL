@@ -1,9 +1,9 @@
-import type { To } from 'react-router-dom';
+import type { To } from "react-router-dom";
 
 /**
  * Supported size presets for the shared logo component.
  */
-export type LogoSize = 'xs' | 'sm' | 'md' | 'lg';
+export type LogoSize = "xs" | "sm" | "md" | "lg";
 
 /**
  * Props for the standalone logo mark.
@@ -19,12 +19,12 @@ export interface LogoProps {
 /**
  * Supported size presets for the combined icon-and-wordmark lockup.
  */
-export type BrandLockupSize = 'sm' | 'md' | 'lg';
+export type BrandLockupSize = "sm" | "md" | "lg";
 
 /**
  * Supported color treatments for the brand lockup.
  */
-export type BrandLockupTone = 'light' | 'dark';
+export type BrandLockupTone = "light" | "dark";
 
 /**
  * Props for the brand lockup component.

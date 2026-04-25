@@ -1,13 +1,13 @@
-import { authApi } from '@/store/slices';
-import { ApiErrorPage } from '@/components/common';
-import { PageLoader } from '@/components/ui';
+import { authApi } from "@/store/slices";
+import { ApiErrorPage } from "@/components/common";
+import { PageLoader } from "@/components/ui";
 import {
 	getErrorStatus,
 	getInstallRecovery,
 	redirectToInstallRecovery,
-} from '@/utils';
-import { Navigate, useLocation } from 'react-router-dom';
-import type { ProtectedRouteProps } from '../types';
+} from "@/utils";
+import { Navigate, useLocation } from "react-router-dom";
+import type { ProtectedRouteProps } from "../types";
 
 /**
  * ProtectedRoute guards authenticated dashboard routes.
@@ -30,8 +30,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 	const currentUser = data?.user || data?.data;
 	const isAuthenticated = Boolean(currentUser);
 	const hasResolvedSession = undefined !== data || undefined !== error;
-	const isPending =
-		!hasResolvedSession && (isLoading || isUninitialized);
+	const isPending = !hasResolvedSession && (isLoading || isUninitialized);
 	const errorStatus = getErrorStatus(error);
 	const isAuthError = 401 === errorStatus || 403 === errorStatus;
 	const isRetryingConnection =

@@ -1,4 +1,4 @@
-import type { LucideIcon } from 'lucide-react';
+import type { LucideIcon } from "lucide-react";
 
 /**
  * Represents the current state of an import process.
@@ -6,7 +6,7 @@ import type { LucideIcon } from 'lucide-react';
  * Tracks whether the import UI is idle, uploading data, processing rows,
  * or displaying the completed result set.
  */
-export type ImportStatus = 'idle' | 'uploading' | 'processing' | 'completed';
+export type ImportStatus = "idle" | "uploading" | "processing" | "completed";
 
 /**
  * Result of processing a single imported item.
@@ -19,7 +19,7 @@ export interface ImportResult {
 	alias: string;
 
 	/** Result status of the import operation */
-	status: 'success' | 'error';
+	status: "success" | "error";
 
 	/** Generated short URL (available on success) */
 	shortUrl?: string;
@@ -47,7 +47,7 @@ export interface SampleRow {
  */
 export interface ImportTab {
 	/** Unique identifier for the tab */
-	id: 'file' | 'api' | 'paste';
+	id: "file" | "api" | "paste";
 
 	/** Display name shown in the UI */
 	name: string;
@@ -64,7 +64,7 @@ export interface TabsProps {
 	tabs: ImportTab[];
 
 	/** Identifier for the currently selected tab. */
-	activeTab: ImportTab['id'];
+	activeTab: ImportTab["id"];
 }
 
 /**

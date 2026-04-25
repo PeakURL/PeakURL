@@ -1,18 +1,18 @@
-import { useState } from 'react';
-import { __ } from '@/i18n';
-import { cn, getAvatarInitials, getGravatarUrl } from '@/utils';
-import type { AvatarProps } from '../types';
-export type { AvatarProps, AvatarSize } from '../types';
+import { useState } from "react";
+import { __ } from "@/i18n";
+import { cn, getAvatarInitials, getGravatarUrl } from "@/utils";
+import type { AvatarProps } from "../types";
+export type { AvatarProps, AvatarSize } from "../types";
 
 const SIZE_STYLES = {
 	sm: {
-		wrapper: 'avatar-sm',
-		text: 'avatar-text-sm',
+		wrapper: "avatar-sm",
+		text: "avatar-text-sm",
 		image: 64,
 	},
 	md: {
-		wrapper: 'avatar-md',
-		text: 'avatar-text-md',
+		wrapper: "avatar-md",
+		text: "avatar-text-md",
 		image: 96,
 	},
 };
@@ -22,14 +22,14 @@ export const Avatar = ({
 	firstName,
 	lastName,
 	fallbackName,
-	size = 'sm',
-	className = '',
+	size = "sm",
+	className = "",
 }: AvatarProps) => {
 	const sizeStyle = SIZE_STYLES[size];
-	const normalizedEmail = email ?? '';
-	const normalizedFirstName = firstName ?? '';
-	const normalizedLastName = lastName ?? '';
-	const normalizedFallbackName = fallbackName ?? '';
+	const normalizedEmail = email ?? "";
+	const normalizedFirstName = firstName ?? "";
+	const normalizedLastName = lastName ?? "";
+	const normalizedFallbackName = fallbackName ?? "";
 	const imageUrl = getGravatarUrl(normalizedEmail, sizeStyle.image);
 	const initials = getAvatarInitials(
 		normalizedFirstName,
@@ -39,18 +39,12 @@ export const Avatar = ({
 	const label =
 		`${normalizedFirstName} ${normalizedLastName}`.trim() ||
 		normalizedFallbackName ||
-		__('User avatar');
-	const [failedImageUrl, setFailedImageUrl] = useState('');
+		__("User avatar");
+	const [failedImageUrl, setFailedImageUrl] = useState("");
 	const showImage = Boolean(imageUrl) && failedImageUrl !== imageUrl;
 
 	return (
-		<div
-			className={cn(
-				'avatar',
-				sizeStyle.wrapper,
-				className
-			)}
-		>
+		<div className={cn("avatar", sizeStyle.wrapper, className)}>
 			{showImage ? (
 				<img
 					src={imageUrl}
@@ -60,7 +54,7 @@ export const Avatar = ({
 					referrerPolicy="no-referrer"
 				/>
 			) : (
-				<span className={cn('avatar-text', sizeStyle.text)}>
+				<span className={cn("avatar-text", sizeStyle.text)}>
 					{initials}
 				</span>
 			)}

@@ -1,2 +1,2 @@
-export * from './dashboard';
-export * from './public';
+export * from "./dashboard";
+export * from "./public";

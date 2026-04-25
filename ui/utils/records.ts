@@ -1,4 +1,4 @@
-import type { ErrorRecord } from './types';
+import type { ErrorRecord } from "./types";
 
 /**
  * Narrows unknown values to an inspectable object record.
@@ -7,7 +7,7 @@ import type { ErrorRecord } from './types';
  * back to loose assertions or repeating the same object checks everywhere.
  */
 export function isObjectRecord(value: unknown): value is ErrorRecord {
-	return 'object' === typeof value && null !== value;
+	return "object" === typeof value && null !== value;
 }
 
 /**
@@ -29,5 +29,5 @@ export function getStringRecordValue(
 	key: string
 ): string | null {
 	const value = record[key];
-	return 'string' === typeof value && value.length > 0 ? value : null;
+	return "string" === typeof value && value.length > 0 ? value : null;
 }

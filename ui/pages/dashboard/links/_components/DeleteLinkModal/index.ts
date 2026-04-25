@@ -1,1 +1,1 @@
-export { default } from './DeleteLinkModal';
+export { default } from "./DeleteLinkModal";

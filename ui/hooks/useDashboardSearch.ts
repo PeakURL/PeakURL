@@ -1,9 +1,9 @@
-import type { SubmitEvent } from 'react';
-import { useDeferredValue, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useAdminAccess } from './useAdminAccess';
-import { useGetAllUsersQuery, useGetUrlsQuery } from '@/store/slices/api';
-import { __ } from '@/i18n';
+import type { SubmitEvent } from "react";
+import { useDeferredValue, useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAdminAccess } from "./useAdminAccess";
+import { useGetAllUsersQuery, useGetUrlsQuery } from "@/store/slices/api";
+import { __ } from "@/i18n";
 import {
 	buildLinkStatsPath,
 	buildLinksSearchPath,
@@ -13,8 +13,8 @@ import {
 	getLinkDisplayTitle,
 	resolveDashboardSearchPath,
 	buildShortUrl,
-} from '@/utils';
-import type { ClearSearchOptions } from './types';
+} from "@/utils";
+import type { ClearSearchOptions } from "./types";
 
 export const useDashboardSearch = () => {
 	const location = useLocation();
@@ -65,8 +65,8 @@ export const useDashboardSearch = () => {
 		{
 			page: 1,
 			limit: 5,
-			sortBy: 'updatedAt',
-			sortOrder: 'desc',
+			sortBy: "updatedAt",
+			sortOrder: "desc",
 			search: deferredQuery,
 		},
 		{
@@ -77,17 +77,17 @@ export const useDashboardSearch = () => {
 		const items = linksData?.data?.items || [];
 
 		return items.map((link) => {
-			const shortCode = link.alias || link.shortCode || '';
+			const shortCode = link.alias || link.shortCode || "";
 			const shortUrl = buildShortUrl(link);
 
 			return {
 				id: link.id,
 				title: getLinkDisplayTitle(
 					link.title,
-					shortCode || link.destinationUrl || __('Untitled Link')
+					shortCode || link.destinationUrl || __("Untitled Link")
 				),
 				description: shortUrl,
-				meta: link.destinationUrl || '',
+				meta: link.destinationUrl || "",
 				href: shortCode
 					? buildLinkStatsPath(shortCode)
 					: buildLinksSearchPath(deferredQuery),
@@ -101,14 +101,14 @@ export const useDashboardSearch = () => {
 
 	const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		const normalizedPath = location.pathname.replace(/\/+$/, '') || '/';
+		const normalizedPath = location.pathname.replace(/\/+$/, "") || "/";
 
 		if (!trimmedQuery) {
 			if (
-				'/dashboard/links' === normalizedPath &&
-				new URLSearchParams(location.search).has('search')
+				"/dashboard/links" === normalizedPath &&
+				new URLSearchParams(location.search).has("search")
 			) {
-				navigate(buildLinksSearchPath(''));
+				navigate(buildLinksSearchPath(""));
 			}
 
 			setIsOpen(false);
@@ -121,7 +121,7 @@ export const useDashboardSearch = () => {
 	};
 
 	const handleSelect = (href: string) => {
-		setQuery('');
+		setQuery("");
 		setIsOpen(false);
 		navigate(href);
 	};
@@ -140,18 +140,18 @@ export const useDashboardSearch = () => {
 	const clearSearch = (options: ClearSearchOptions = {}) => {
 		const shouldResetLinksSearch = Boolean(options.resetLinksSearch);
 
-		setQuery('');
+		setQuery("");
 		setIsOpen(false);
 
 		if (!shouldResetLinksSearch) {
 			return;
 		}
 
-		const normalizedPath = location.pathname.replace(/\/+$/, '') || '/';
+		const normalizedPath = location.pathname.replace(/\/+$/, "") || "/";
 		const params = new URLSearchParams(location.search);
 
-		if ('/dashboard/links' === normalizedPath && params.has('search')) {
-			navigate(buildLinksSearchPath(''));
+		if ("/dashboard/links" === normalizedPath && params.has("search")) {
+			navigate(buildLinksSearchPath(""));
 		}
 	};
 

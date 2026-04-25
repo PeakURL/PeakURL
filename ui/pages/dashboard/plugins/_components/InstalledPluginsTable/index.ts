@@ -1,1 +1,1 @@
-export { default } from './InstalledPluginsTable';
+export { default } from "./InstalledPluginsTable";

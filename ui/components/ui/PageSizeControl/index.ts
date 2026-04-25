@@ -1,2 +1,2 @@
-export * from './PageSizeControl';
-export { default } from './PageSizeControl';
+export * from "./PageSizeControl";
+export { default } from "./PageSizeControl";

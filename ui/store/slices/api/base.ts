@@ -1,6 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { API_CLIENT_BASE_URL } from '@/constants';
-import { API_TAG_TYPES } from './types';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { API_CLIENT_BASE_URL } from "@/constants";
+import { API_TAG_TYPES } from "./types";
 
 /**
  * Shared RTK Query API instance for dashboard requests.
@@ -9,10 +9,10 @@ import { API_TAG_TYPES } from './types';
  * store, middleware, and tag configuration remain centralized.
  */
 const baseApi = createApi({
-	reducerPath: 'api',
+	reducerPath: "api",
 	baseQuery: fetchBaseQuery({
 		baseUrl: API_CLIENT_BASE_URL,
-		credentials: 'include',
+		credentials: "include",
 	}),
 	tagTypes: API_TAG_TYPES,
 	endpoints: () => ({}),

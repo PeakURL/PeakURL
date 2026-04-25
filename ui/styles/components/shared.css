@@ -81,7 +81,7 @@
 		@apply pl-8 pr-3;
 	}
 
-	html[dir='rtl'] .field-with-inline-start-icon {
+	html[dir="rtl"] .field-with-inline-start-icon {
 		@apply pl-3 pr-8;
 	}
 
@@ -90,7 +90,7 @@
 		right: auto;
 	}
 
-	html[dir='rtl'] .inline-start-icon-slot {
+	html[dir="rtl"] .inline-start-icon-slot {
 		@apply right-0 pl-0 pr-2.5;
 		left: auto;
 	}

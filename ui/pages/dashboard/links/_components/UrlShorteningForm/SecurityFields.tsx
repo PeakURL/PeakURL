@@ -1,8 +1,8 @@
-import { Input } from '@/components';
-import { Lock, Tags } from 'lucide-react';
-import { __ } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
-import type { SecurityFieldsProps } from '../types';
+import { Input } from "@/components";
+import { Lock, Tags } from "lucide-react";
+import { __ } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
+import type { SecurityFieldsProps } from "../types";
 
 const SecurityFields = ({
 	title,
@@ -10,7 +10,7 @@ const SecurityFields = ({
 	password,
 	setPassword,
 }: SecurityFieldsProps) => {
-	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
+	const direction = isDocumentRtl() ? "rtl" : "ltr";
 	return (
 		<div className="links-form-section-grid">
 			<div>
@@ -20,7 +20,7 @@ const SecurityFields = ({
 						className="links-form-section-label-content"
 					>
 						<Tags className="links-form-section-label-icon" />
-						{__('Link Title (Optional)')}
+						{__("Link Title (Optional)")}
 					</span>
 				</label>
 				<Input
@@ -28,7 +28,7 @@ const SecurityFields = ({
 					id="title"
 					value={title}
 					onChange={(e) => setTitle(e.target.value)}
-					placeholder={__('My Awesome Link')}
+					placeholder={__("My Awesome Link")}
 				/>
 			</div>
 
@@ -39,7 +39,7 @@ const SecurityFields = ({
 						className="links-form-section-label-content"
 					>
 						<Lock className="links-form-section-label-icon" />
-						{__('Password Protection (Optional)')}
+						{__("Password Protection (Optional)")}
 					</span>
 				</label>
 				<Input
@@ -47,7 +47,7 @@ const SecurityFields = ({
 					id="password"
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
-					placeholder={__('Enter password')}
+					placeholder={__("Enter password")}
 				/>
 			</div>
 		</div>

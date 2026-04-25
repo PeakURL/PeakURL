@@ -1,1 +1,1 @@
-export { default } from './PluginTabs';
+export { default } from "./PluginTabs";

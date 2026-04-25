@@ -1,1 +1,1 @@
-export { default } from './BulkDeleteModal';
+export { default } from "./BulkDeleteModal";

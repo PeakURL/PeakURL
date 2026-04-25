@@ -23,7 +23,7 @@
 		@apply flex gap-4 border-t border-stroke pt-2 justify-start;
 	}
 
-	html[dir='rtl'] .links-delete-modal-metrics {
+	html[dir="rtl"] .links-delete-modal-metrics {
 		@apply justify-end;
 	}
 

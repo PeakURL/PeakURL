@@ -27,7 +27,7 @@ export function requestClosestFormSubmit(
 		return false;
 	}
 
-	return requestFormSubmit(element.closest('form'));
+	return requestFormSubmit(element.closest("form"));
 }
 
 /**
@@ -49,7 +49,7 @@ export function requestControlFormSubmit(
  */
 export async function copyToClipboard(text: string): Promise<void> {
 	if (!navigator.clipboard?.writeText) {
-		throw new Error('clipboard-unavailable');
+		throw new Error("clipboard-unavailable");
 	}
 
 	await navigator.clipboard.writeText(text);

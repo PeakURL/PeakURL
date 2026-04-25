@@ -8,11 +8,11 @@ import {
 	Lock,
 	Clock,
 	Link2,
-} from 'lucide-react';
-import { isPast } from 'date-fns';
-import { __ } from '@/i18n';
-import { formatRelativeTime, getLinkDisplayTitle } from '@/utils';
-import type { LinkRowProps } from '../types';
+} from "lucide-react";
+import { isPast } from "date-fns";
+import { __ } from "@/i18n";
+import { formatRelativeTime, getLinkDisplayTitle } from "@/utils";
+import type { LinkRowProps } from "../types";
 
 function LinkRow({
 	link,
@@ -27,38 +27,38 @@ function LinkRow({
 	formatNumber,
 }: LinkRowProps) {
 	const statusLabel =
-		'active' === link.status
-			? __('Active')
-			: 'inactive' === link.status
-				? __('Inactive')
-				: 'expired' === link.status
-					? __('Expired')
-					: __('Unknown');
+		"active" === link.status
+			? __("Active")
+			: "inactive" === link.status
+				? __("Inactive")
+				: "expired" === link.status
+					? __("Expired")
+					: __("Unknown");
 	const statusColorClass =
-		'active' === link.status
-			? 'text-success'
-			: 'expired' === link.status
-				? 'text-error'
-				: 'text-text-muted';
+		"active" === link.status
+			? "text-success"
+			: "expired" === link.status
+				? "text-error"
+				: "text-text-muted";
 	const statusDotClass =
-		'active' === link.status
-			? 'bg-success'
-			: 'expired' === link.status
-				? 'bg-error'
-				: 'bg-stroke';
+		"active" === link.status
+			? "bg-success"
+			: "expired" === link.status
+				? "bg-error"
+				: "bg-stroke";
 	const expiresAtDate = link.expiresAt ? new Date(link.expiresAt) : null;
 	const isExpiredLink = expiresAtDate ? isPast(expiresAtDate) : false;
 	const expirationRelativeTime = expiresAtDate
 		? formatRelativeTime(expiresAtDate, {
-				style: 'long',
-				numeric: 'always',
+				style: "long",
+				numeric: "always",
 			})
-		: '';
+		: "";
 
 	return (
 		<tr
 			className={`links-row group ${
-				selected ? 'links-row-selected' : ''
+				selected ? "links-row-selected" : ""
 			}`}
 		>
 			<td className="links-row-cell">
@@ -76,9 +76,7 @@ function LinkRow({
 					</div>
 					<div className="min-w-0">
 						<div className="flex items-center gap-1.5">
-							<code
-								className="preserve-ltr-value text-sm font-mono font-semibold text-accent"
-							>
+							<code className="preserve-ltr-value text-sm font-mono font-semibold text-accent">
 								/{link.alias || link.shortCode}
 							</code>
 							<button
@@ -86,8 +84,8 @@ function LinkRow({
 								className="links-row-link-copy"
 								title={
 									copiedId === link.id
-										? __('Copied!')
-										: __('Copy')
+										? __("Copied!")
+										: __("Copy")
 								}
 							>
 								{copiedId === link.id ? (
@@ -102,7 +100,7 @@ function LinkRow({
 			</td>
 			<td className="links-row-cell">
 				<div className="links-row-title">
-					{getLinkDisplayTitle(link.title, __('Untitled Link'))}
+					{getLinkDisplayTitle(link.title, __("Untitled Link"))}
 				</div>
 			</td>
 			<td className="links-row-cell">
@@ -115,10 +113,13 @@ function LinkRow({
 					</div>
 					<div className="links-row-meta">
 						{link.hasPassword && (
-							<div key="password" className="flex items-center gap-1.5">
+							<div
+								key="password"
+								className="flex items-center gap-1.5"
+							>
 								<span className="links-row-badge links-row-badge-warning">
 									<Lock size={10} />
-									{__('Protected')}
+									{__("Protected")}
 								</span>
 							</div>
 						)}
@@ -127,13 +128,18 @@ function LinkRow({
 								key="expires"
 								className={`links-row-badge ${
 									isExpiredLink
-										? 'links-row-badge-error'
-										: 'links-row-badge-info'
+										? "links-row-badge-error"
+										: "links-row-badge-info"
 								}`}
 							>
 								<Clock size={10} />
-								<span className="links-row-badge-copy" dir="auto">
-									{isExpiredLink ? __('Expired') : __('Expires')}{' '}
+								<span
+									className="links-row-badge-copy"
+									dir="auto"
+								>
+									{isExpiredLink
+										? __("Expired")
+										: __("Expires")}{" "}
 									<bdi className="links-row-badge-time">
 										{expirationRelativeTime}
 									</bdi>
@@ -150,7 +156,7 @@ function LinkRow({
 							{formatNumber(link.clicks || 0)}
 						</div>
 						<div className="links-row-performance-label">
-							{__('Total')}
+							{__("Total")}
 						</div>
 					</div>
 					<div className="links-row-performance-divider"></div>
@@ -159,7 +165,7 @@ function LinkRow({
 							{formatNumber(link.uniqueClicks || 0)}
 						</div>
 						<div className="links-row-performance-label">
-							{__('Unique')}
+							{__("Unique")}
 						</div>
 					</div>
 				</div>
@@ -168,10 +174,10 @@ function LinkRow({
 				<div className="links-row-created">
 					{link.createdAt
 						? formatRelativeTime(new Date(link.createdAt), {
-								style: 'compact',
-								numeric: 'always',
+								style: "compact",
+								numeric: "always",
 							})
-						: __('Unknown')}
+						: __("Unknown")}
 				</div>
 				<div className="links-row-status">
 					<span
@@ -189,28 +195,28 @@ function LinkRow({
 					<button
 						onClick={() => onQRCode(link)}
 						className="links-row-action links-row-action-qr"
-						title={__('QR Code')}
+						title={__("QR Code")}
 					>
 						<QrCode size={14} />
 					</button>
 					<button
 						onClick={() => onOpenStats(link)}
 						className="links-row-action links-row-action-stats"
-						title={__('Analytics')}
+						title={__("Analytics")}
 					>
 						<BarChart3 size={14} />
 					</button>
 					<button
 						onClick={() => onEdit(link)}
 						className="links-row-action links-row-action-edit"
-						title={__('Edit')}
+						title={__("Edit")}
 					>
 						<Pencil size={14} />
 					</button>
 					<button
 						onClick={() => onDelete(link)}
 						className="links-row-action links-row-action-delete"
-						title={__('Delete')}
+						title={__("Delete")}
 					>
 						<Trash2 size={14} />
 					</button>

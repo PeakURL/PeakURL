@@ -1,23 +1,23 @@
-import { Button } from '@/components';
-import { ExternalLink } from 'lucide-react';
-import { API_SERVER_BASE_URL } from '@/constants';
-import { __ } from '@/i18n';
+import { Button } from "@/components";
+import { ExternalLink } from "lucide-react";
+import { API_SERVER_BASE_URL } from "@/constants";
+import { __ } from "@/i18n";
 
 const ApiImport = () => {
-	const apiKey = 'YOUR_API_KEY';
+	const apiKey = "YOUR_API_KEY";
 
 	return (
 		<div className="import-panel import-api-panel">
-			<h2 className="import-panel-title">{__('API Import')}</h2>
+			<h2 className="import-panel-title">{__("API Import")}</h2>
 			<p className="import-panel-copy">
 				{__(
-					'Use our API to programmatically import multiple URLs. Perfect for integrations and automated workflows.'
+					"Use our API to programmatically import multiple URLs. Perfect for integrations and automated workflows."
 				)}
 			</p>
 			<div className="import-api-grid">
 				<div className="import-api-column">
 					<h3 className="import-section-title">
-						{__('Example Request')}
+						{__("Example Request")}
 					</h3>
 					<pre className="import-api-code-block">
 						<code>{`POST ${API_SERVER_BASE_URL}/urls/bulk
@@ -42,7 +42,7 @@ Content-Type: application/json
 					</pre>
 				</div>
 				<div className="import-api-column">
-					<h3 className="import-section-title">{__('Response')}</h3>
+					<h3 className="import-section-title">{__("Response")}</h3>
 					<pre className="import-api-code-block">
 						<code>{`{
   "success": true,
@@ -74,7 +74,7 @@ Content-Type: application/json
 				>
 					<Button size="sm">
 						<ExternalLink className="import-api-button-icon" />
-						{__('Read Import Guide')}
+						{__("Read Import Guide")}
 					</Button>
 				</a>
 			</div>

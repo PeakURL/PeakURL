@@ -1,18 +1,18 @@
-import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
-import { X, Download, Copy, Check } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import QRCode from 'qrcode';
-import { ReadOnlyValueBlock } from '@/components';
-import { buildShortUrl, copyToClipboard } from '@/utils';
-import { __ } from '@/i18n';
-import { isDocumentRtl } from '@/i18n/direction';
-import type { QRCodeModalProps } from '../types';
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { X, Download, Copy, Check } from "lucide-react";
+import { useState, useEffect } from "react";
+import QRCode from "qrcode";
+import { ReadOnlyValueBlock } from "@/components";
+import { buildShortUrl, copyToClipboard } from "@/utils";
+import { __ } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
+import type { QRCodeModalProps } from "../types";
 
 function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
-	const direction = isDocumentRtl() ? 'rtl' : 'ltr';
-	const [qrDataUrl, setQrDataUrl] = useState('');
+	const direction = isDocumentRtl() ? "rtl" : "ltr";
+	const [qrDataUrl, setQrDataUrl] = useState("");
 	const [copied, setCopied] = useState(false);
-	const shortUrl = link ? buildShortUrl(link) : '';
+	const shortUrl = link ? buildShortUrl(link) : "";
 
 	useEffect(() => {
 		if (link && open && shortUrl) {
@@ -22,13 +22,13 @@ function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
 					width: 400,
 					margin: 2,
 					color: {
-						dark: '#000000',
-						light: '#FFFFFF',
+						dark: "#000000",
+						light: "#FFFFFF",
 					},
 				},
 				(err: Error | null | undefined, url: string) => {
 					if (err) {
-						console.error('QR Code generation error:', err);
+						console.error("QR Code generation error:", err);
 						return;
 					}
 					setQrDataUrl(url);
@@ -40,9 +40,9 @@ function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
 	const handleDownload = () => {
 		if (!qrDataUrl) return;
 
-		const downloadLink = document.createElement('a');
+		const downloadLink = document.createElement("a");
 		downloadLink.href = qrDataUrl;
-		downloadLink.download = `qr-code-${link?.alias || link?.shortCode || 'download'}.png`;
+		downloadLink.download = `qr-code-${link?.alias || link?.shortCode || "download"}.png`;
 		document.body.appendChild(downloadLink);
 		downloadLink.click();
 		document.body.removeChild(downloadLink);
@@ -54,7 +54,7 @@ function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
 			setCopied(true);
 			setTimeout(() => setCopied(false), 2000);
 		} catch (err) {
-			console.error('Failed to copy URL:', err);
+			console.error("Failed to copy URL:", err);
 		}
 	};
 
@@ -72,7 +72,7 @@ function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
 					{/* Header */}
 					<div className="links-modal-header">
 						<DialogTitle className="links-modal-title">
-							{__('QR Code')}
+							{__("QR Code")}
 						</DialogTitle>
 						<button
 							onClick={() => setOpen(false)}
@@ -105,7 +105,7 @@ function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
 						{/* Link Info */}
 						<div className="links-qr-modal-summary">
 							<p className="links-qr-modal-summary-label">
-								{__('Short URL')}
+								{__("Short URL")}
 							</p>
 							<ReadOnlyValueBlock
 								value={shortUrl}
@@ -123,7 +123,7 @@ function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
 							>
 								<span className="links-modal-button-content">
 									<Download className="links-modal-button-icon" />
-									{__('Download')}
+									{__("Download")}
 								</span>
 							</button>
 							<button
@@ -133,12 +133,12 @@ function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
 								{copied ? (
 									<span className="links-modal-button-content">
 										<Check className="links-modal-button-icon links-qr-modal-copy-success" />
-										{__('Copied!')}
+										{__("Copied!")}
 									</span>
 								) : (
 									<span className="links-modal-button-content">
 										<Copy className="links-modal-button-icon" />
-										{__('Copy')}
+										{__("Copy")}
 									</span>
 								)}
 							</button>

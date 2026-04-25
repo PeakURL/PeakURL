@@ -463,15 +463,15 @@
 		}
 	}
 
-	html[dir='rtl'] .activity-page-panel-actions {
+	html[dir="rtl"] .activity-page-panel-actions {
 		flex-direction: row-reverse;
 	}
 
-	html[dir='rtl'] .activity-page-event-time {
+	html[dir="rtl"] .activity-page-event-time {
 		justify-self: start;
 	}
 
-	html[dir='rtl'] .activity-page-event-actions {
+	html[dir="rtl"] .activity-page-event-actions {
 		justify-content: flex-start;
 	}
 }

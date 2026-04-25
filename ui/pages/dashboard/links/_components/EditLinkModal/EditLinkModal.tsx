@@ -1,15 +1,15 @@
-import type { SubmitEvent } from 'react';
-import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
-import { X, Save } from 'lucide-react';
-import { useState } from 'react';
+import type { SubmitEvent } from "react";
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { X, Save } from "lucide-react";
+import { useState } from "react";
 import {
 	Input,
 	ReadOnlyValueBlock,
 	Select,
 	type SelectOption,
-} from '@/components';
-import { useUpdateUrlMutation } from '@/store/slices/api';
-import { __ } from '@/i18n';
+} from "@/components";
+import { useUpdateUrlMutation } from "@/store/slices/api";
+import { __ } from "@/i18n";
 import {
 	buildShortUrl,
 	getErrorMessage,
@@ -18,46 +18,46 @@ import {
 	isFutureLocalDateTime,
 	toIsoFromLocalDateTime,
 	toLocalDateTimeValue,
-} from '@/utils';
+} from "@/utils";
 import type {
 	EditLinkModalProps,
 	LinkStatus,
 	UpdateUrlPayload,
-} from '../types';
+} from "../types";
 
 function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 	const getInitialTitle = () => normalizeLinkTitle(link?.title);
-	const getInitialStatus = (): LinkStatus => link?.status || 'active';
+	const getInitialStatus = (): LinkStatus => link?.status || "active";
 	const getInitialExpiresAt = () => toLocalDateTimeValue(link?.expiresAt);
 	const hasExistingPassword = Boolean(link?.hasPassword);
 	const statusOptions: SelectOption<LinkStatus>[] = [
-		{ value: 'active', label: __('Active') },
-		{ value: 'inactive', label: __('Inactive') },
-		{ value: 'expired', label: __('Expired') },
+		{ value: "active", label: __("Active") },
+		{ value: "inactive", label: __("Inactive") },
+		{ value: "expired", label: __("Expired") },
 	];
 
 	const [title, setTitle] = useState(getInitialTitle);
 	const [status, setStatus] = useState<LinkStatus>(getInitialStatus);
-	const [password, setPassword] = useState('');
+	const [password, setPassword] = useState("");
 	const [clearPassword, setClearPassword] = useState(false);
 	const [expiresAt, setExpiresAt] = useState(getInitialExpiresAt);
-	const [error, setError] = useState('');
+	const [error, setError] = useState("");
 
 	const [updateUrl, { isLoading }] = useUpdateUrlMutation();
-	const shortUrl = link ? buildShortUrl(link) : '';
+	const shortUrl = link ? buildShortUrl(link) : "";
 
 	const handleClose = () => setOpen(false);
 
 	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		setError('');
+		setError("");
 
 		if (!link) {
 			return;
 		}
 
 		if (expiresAt && !isFutureLocalDateTime(expiresAt)) {
-			setError(__('Expiration time must be in the future.'));
+			setError(__("Expiration time must be in the future."));
 			return;
 		}
 
@@ -81,7 +81,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 
 			handleClose();
 		} catch (error) {
-			setError(getErrorMessage(error, __('Failed to update link')));
+			setError(getErrorMessage(error, __("Failed to update link")));
 		}
 	};
 
@@ -96,7 +96,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 					{/* Header */}
 					<div className="links-modal-header">
 						<DialogTitle className="links-modal-title">
-							{__('Edit Link')}
+							{__("Edit Link")}
 						</DialogTitle>
 						<button
 							onClick={handleClose}
@@ -119,7 +119,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 						{/* Short URL (Read-only) */}
 						<div>
 							<label className="links-modal-field-label">
-								{__('Short URL')}
+								{__("Short URL")}
 							</label>
 							<div className="links-modal-static-field">
 								<ReadOnlyValueBlock
@@ -133,7 +133,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 						{/* Destination URL (Read-only) */}
 						<div>
 							<label className="links-modal-field-label">
-								{__('Destination URL')}
+								{__("Destination URL")}
 							</label>
 							<div className="links-modal-static-field">
 								<ReadOnlyValueBlock
@@ -147,38 +147,48 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 
 						{/* Title */}
 						<div>
-							<label htmlFor="title" className="links-modal-field-label">
-								{__('Title (Optional)')}
+							<label
+								htmlFor="title"
+								className="links-modal-field-label"
+							>
+								{__("Title (Optional)")}
 							</label>
 							<Input
 								type="text"
 								id="title"
 								value={title}
-								onChange={(event) => setTitle(event.target.value)}
-								placeholder={__('Enter a title for this link')}
+								onChange={(event) =>
+									setTitle(event.target.value)
+								}
+								placeholder={__("Enter a title for this link")}
 								className="form-control-surface-alt form-control-compact form-control-strong-focus"
 							/>
 						</div>
 
 						{/* Password */}
 						<div>
-							<label htmlFor="password" className="links-modal-field-label">
-								{__('Password Protection (Optional)')}
+							<label
+								htmlFor="password"
+								className="links-modal-field-label"
+							>
+								{__("Password Protection (Optional)")}
 							</label>
 							<Input
 								type="password"
 								id="password"
 								value={password}
 								disabled={clearPassword}
-								onChange={(event) => setPassword(event.target.value)}
+								onChange={(event) =>
+									setPassword(event.target.value)
+								}
 								placeholder={
 									hasExistingPassword
 										? __(
-												'Enter a new password to replace the current one'
+												"Enter a new password to replace the current one"
 											)
 										: __(
-										'Set a password to protect this link'
-									)
+												"Set a password to protect this link"
+											)
 								}
 								className="form-control-surface-alt form-control-compact form-control-strong-focus"
 							/>
@@ -186,7 +196,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 								<div className="links-edit-modal-password-options">
 									<p className="links-edit-modal-help">
 										{__(
-											'Leave this blank to keep the current password.'
+											"Leave this blank to keep the current password."
 										)}
 									</p>
 									<label className="links-edit-modal-checkbox-label">
@@ -198,12 +208,12 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 													e.target.checked
 												);
 												if (e.target.checked) {
-													setPassword('');
+													setPassword("");
 												}
 											}}
 											className="links-checkbox"
 										/>
-										{__('Remove password protection')}
+										{__("Remove password protection")}
 									</label>
 								</div>
 							)}
@@ -211,14 +221,19 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 
 						{/* Expiration Date */}
 						<div>
-							<label htmlFor="expiresAt" className="links-modal-field-label">
-								{__('Expiration Date (Optional)')}
+							<label
+								htmlFor="expiresAt"
+								className="links-modal-field-label"
+							>
+								{__("Expiration Date (Optional)")}
 							</label>
 							<Input
 								type="datetime-local"
 								id="expiresAt"
 								value={expiresAt}
-								onChange={(event) => setExpiresAt(event.target.value)}
+								onChange={(event) =>
+									setExpiresAt(event.target.value)
+								}
 								min={getLocalDateTimeValue()}
 								step="60"
 								className="form-control-surface-alt form-control-compact form-control-strong-focus"
@@ -227,15 +242,18 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 
 						{/* Status */}
 						<div>
-							<label htmlFor="status" className="links-modal-field-label">
-								{__('Status')}
+							<label
+								htmlFor="status"
+								className="links-modal-field-label"
+							>
+								{__("Status")}
 							</label>
 							<Select
 								id="status"
 								value={status}
 								onChange={setStatus}
 								options={statusOptions}
-								ariaLabel={__('Link status')}
+								ariaLabel={__("Link status")}
 								buttonClassName="form-control-surface-alt form-control-compact"
 							/>
 						</div>
@@ -247,7 +265,7 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 								onClick={handleClose}
 								className="links-modal-button links-modal-button-secondary"
 							>
-								{__('Cancel')}
+								{__("Cancel")}
 							</button>
 							<button
 								type="submit"
@@ -257,12 +275,12 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 								{isLoading ? (
 									<span className="links-modal-button-content">
 										<div className="links-modal-spinner"></div>
-										{__('Saving...')}
+										{__("Saving...")}
 									</span>
 								) : (
 									<span className="links-modal-button-content">
 										<Save className="links-modal-button-icon" />
-										{__('Save Changes')}
+										{__("Save Changes")}
 									</span>
 								)}
 							</button>

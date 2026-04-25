@@ -1,20 +1,20 @@
-import type { LucideIcon } from 'lucide-react';
-import type { LinkRecord } from '../links/_components/types';
+import type { LucideIcon } from "lucide-react";
+import type { LinkRecord } from "../links/_components/types";
 
 /**
  * Supported overall and per-check system status keys.
  */
-export type StatusKey = 'ok' | 'warning' | 'error';
+export type StatusKey = "ok" | "warning" | "error";
 
 /**
  * Tabs available on the system status page.
  */
-export type StatusView = 'status' | 'info';
+export type StatusView = "status" | "info";
 
 /**
  * Export formats available from the tools export screen.
  */
-export type ExportFormat = 'csv' | 'json' | 'xml';
+export type ExportFormat = "csv" | "json" | "xml";
 
 /**
  * Presentation tokens used for status badges and panels.

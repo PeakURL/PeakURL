@@ -1,2 +1,2 @@
-export * from './AdminNotices';
-export { default } from './AdminNotices';
+export * from "./AdminNotices";
+export { default } from "./AdminNotices";

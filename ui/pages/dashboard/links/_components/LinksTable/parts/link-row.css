@@ -111,7 +111,7 @@
 		@apply flex items-center gap-1 justify-end;
 	}
 
-	html[dir='rtl'] .links-row-actions {
+	html[dir="rtl"] .links-row-actions {
 		@apply justify-start;
 	}
 

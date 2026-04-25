@@ -1,30 +1,24 @@
-import type { SerializedError } from '@reduxjs/toolkit';
-import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import type { SerializedError } from "@reduxjs/toolkit";
+import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import {
 	getNestedRecord,
 	getStringRecordValue,
 	isObjectRecord,
-} from './records';
-import type {
-	ApiErrorData,
-	NumericStatusQueryError,
-} from './types';
+} from "./records";
+import type { ApiErrorData, NumericStatusQueryError } from "./types";
 
 /**
  * Detects RTK Query errors before narrowing into a specific variant.
  */
 function isFetchBaseQueryError(value: unknown): value is FetchBaseQueryError {
-	return isObjectRecord(value) && 'status' in value;
+	return isObjectRecord(value) && "status" in value;
 }
 
 /**
  * Detects RTK Query errors that carry a numeric HTTP status code.
  */
 function hasNumericStatus(value: unknown): value is NumericStatusQueryError {
-	return (
-		isFetchBaseQueryError(value) &&
-		'number' === typeof value.status
-	);
+	return isFetchBaseQueryError(value) && "number" === typeof value.status;
 }
 
 /**
@@ -35,15 +29,15 @@ function hasApiErrorData(value: unknown): value is { data: ApiErrorData } {
 		return false;
 	}
 
-	const data = getNestedRecord(value, 'data');
+	const data = getNestedRecord(value, "data");
 
 	if (!data) {
 		return false;
 	}
 
 	return (
-		'message' in data &&
-		'string' === typeof data.message &&
+		"message" in data &&
+		"string" === typeof data.message &&
 		data.message.length > 0
 	);
 }
@@ -52,7 +46,9 @@ function hasApiErrorData(value: unknown): value is { data: ApiErrorData } {
  * Detects error-like objects that expose a top-level `error` string.
  */
 function hasErrorString(value: unknown): value is { error: string } {
-	return Boolean(isObjectRecord(value) && getStringRecordValue(value, 'error'));
+	return Boolean(
+		isObjectRecord(value) && getStringRecordValue(value, "error")
+	);
 }
 
 /**

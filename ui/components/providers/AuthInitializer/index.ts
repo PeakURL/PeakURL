@@ -1,1 +1,1 @@
-export { default } from './AuthInitializer';
+export { default } from "./AuthInitializer";

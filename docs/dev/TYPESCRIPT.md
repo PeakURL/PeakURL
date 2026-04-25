@@ -169,10 +169,10 @@ Preferred:
 
 ```ts
 notification?.error(
-	__('Export failed'),
+	__("Export failed"),
 	getErrorMessage(
 		error,
-		__('PeakURL could not prepare the export right now.')
+		__("PeakURL could not prepare the export right now.")
 	)
 );
 ```
@@ -182,9 +182,9 @@ Avoid:
 ```ts
 if (
 	error &&
-	'object' === typeof error &&
-	'data' in error &&
-	'object' === typeof error.data
+	"object" === typeof error &&
+	"data" in error &&
+	"object" === typeof error.data
 ) {
 	// repeated local parsing
 }

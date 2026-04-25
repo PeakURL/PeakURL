@@ -1,1 +1,1 @@
-export { default } from './SettingsSkeleton';
+export { default } from "./SettingsSkeleton";

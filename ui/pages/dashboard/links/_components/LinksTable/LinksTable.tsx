@@ -1,17 +1,17 @@
-import type { ChangeEvent } from 'react';
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { buildShortUrl, copyToClipboard, formatNumber } from '@/utils';
-import StatsDrawer from '../StatsDrawer';
-import QRCodeModal from '../QRCodeModal';
-import EditLinkModal from '../EditLinkModal';
-import DeleteLinkModal from '../DeleteLinkModal';
-import BulkDeleteModal from '../BulkDeleteModal';
-import TableHeaderRow from './parts/TableHeaderRow';
-import LinkRow from './parts/LinkRow';
-import EmptyState from './parts/EmptyState';
-import type { LinkRecord } from '../types';
-import type { LinksTableProps } from './types';
+import type { ChangeEvent } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { buildShortUrl, copyToClipboard, formatNumber } from "@/utils";
+import StatsDrawer from "../StatsDrawer";
+import QRCodeModal from "../QRCodeModal";
+import EditLinkModal from "../EditLinkModal";
+import DeleteLinkModal from "../DeleteLinkModal";
+import BulkDeleteModal from "../BulkDeleteModal";
+import TableHeaderRow from "./parts/TableHeaderRow";
+import LinkRow from "./parts/LinkRow";
+import EmptyState from "./parts/EmptyState";
+import type { LinkRecord } from "../types";
+import type { LinksTableProps } from "./types";
 
 const LinksTable = ({ links, statsShortId, statsLink }: LinksTableProps) => {
 	const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -42,7 +42,7 @@ const LinksTable = ({ links, statsShortId, statsLink }: LinksTableProps) => {
 		}, 0);
 
 		const params = new URLSearchParams(searchParams.toString());
-		params.delete('stats');
+		params.delete("stats");
 		setSearchParams(params, { replace: true });
 	}, [statsShortId, links, statsLink, searchParams, setSearchParams]);
 
@@ -53,7 +53,7 @@ const LinksTable = ({ links, statsShortId, statsLink }: LinksTableProps) => {
 			setCopiedId(link.id);
 			setTimeout(() => setCopiedId(null), 2000);
 		} catch (err) {
-			console.error('Failed to copy:', err);
+			console.error("Failed to copy:", err);
 		}
 	};
 

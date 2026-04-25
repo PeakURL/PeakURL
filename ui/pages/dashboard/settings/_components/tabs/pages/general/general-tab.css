@@ -19,6 +19,23 @@
 		@apply min-h-24;
 	}
 
+	.settings-general-readonly-label {
+		@apply flex items-center gap-2;
+	}
+
+	.settings-general-readonly-note {
+		@apply rounded-full bg-surface-alt px-2 py-0.5 text-[11px] font-medium text-text-muted;
+	}
+
+	.settings-general-readonly-input {
+		@apply cursor-not-allowed border-stroke bg-surface-alt text-text-muted opacity-100;
+	}
+
+	.settings-general-readonly-input:focus {
+		border-color: var(--color-stroke);
+		box-shadow: none;
+	}
+
 	.settings-general-timezone-options {
 		@apply max-h-72;
 	}

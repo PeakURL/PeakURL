@@ -6,23 +6,28 @@ import {
 	Send,
 	BriefcaseBusiness,
 	Mail,
+	ExternalLink,
 } from "lucide-react";
 import { ReadOnlyValueBlock } from "@/components";
 import { __ } from "@/i18n";
-import { copyToClipboard, getLinkDisplayTitle } from "@/utils";
+import { cn, copyToClipboard, getLinkDisplayTitle } from "@/utils";
 import type { SharePlatform, ShareTabProps } from "./types";
 
 function ShareTab({ link, shortUrl }: ShareTabProps) {
-	const [copied, setCopied] = useState(false);
+	const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
 
-	const handleCopy = async () => {
+	const handleCopy = async (url: string) => {
 		try {
-			await copyToClipboard(shortUrl);
-			setCopied(true);
-			setTimeout(() => setCopied(false), 2000);
+			await copyToClipboard(url);
+			setCopiedUrl(url);
+			setTimeout(() => setCopiedUrl(null), 2000);
 		} catch (err) {
 			console.error("Failed to copy:", err);
 		}
+	};
+
+	const handleOpen = (url: string) => {
+		window.open(url, "_blank", "noopener,noreferrer");
 	};
 
 	const handleShare = (platform: SharePlatform) => {
@@ -48,11 +53,17 @@ function ShareTab({ link, shortUrl }: ShareTabProps) {
 				<label className="links-share-label">{__("Short URL")}</label>
 				<ReadOnlyValueBlock
 					value={shortUrl}
-					onCopy={handleCopy}
-					copyButtonLabel={copied ? __("Copied!") : __("Copy")}
-					copyButtonClassName="rounded-lg bg-accent p-2 text-white hover:bg-accent/90 hover:text-white"
+					onCopy={() => handleCopy(shortUrl)}
+					copyButtonLabel={
+						copiedUrl === shortUrl ? __("Copied!") : __("Copy")
+					}
+					copyButtonClassName={cn(
+						"rounded-lg bg-accent p-2 text-white hover:bg-accent/90 hover:text-white",
+						copiedUrl === shortUrl &&
+							"bg-emerald-500 hover:bg-emerald-600"
+					)}
 					copyButtonContent={
-						copied ? (
+						copiedUrl === shortUrl ? (
 							<Check className="h-4 w-4" />
 						) : (
 							<Copy className="h-4 w-4" />
@@ -60,6 +71,16 @@ function ShareTab({ link, shortUrl }: ShareTabProps) {
 					}
 					className="links-share-readonly"
 					valueClassName="text-accent"
+					extraActions={
+						<button
+							type="button"
+							onClick={() => handleOpen(shortUrl)}
+							className="rounded-lg border border-accent/20 bg-accent/5 p-2 text-accent transition-colors hover:bg-accent hover:text-white"
+							title={__("Open Link")}
+						>
+							<ExternalLink className="h-4 w-4" />
+						</button>
+					}
 				/>
 			</div>
 
@@ -70,9 +91,43 @@ function ShareTab({ link, shortUrl }: ShareTabProps) {
 				</label>
 				<ReadOnlyValueBlock
 					value={link.destinationUrl}
-					className="links-readonly-reset"
+					onCopy={
+						link.destinationUrl
+							? () => handleCopy(link.destinationUrl!)
+							: undefined
+					}
+					copyButtonLabel={
+						copiedUrl === link.destinationUrl
+							? __("Copied!")
+							: __("Copy")
+					}
+					copyButtonClassName={cn(
+						"rounded-lg bg-accent p-2 text-white hover:bg-accent/90 hover:text-white",
+						copiedUrl === link.destinationUrl &&
+							"bg-emerald-500 hover:bg-emerald-600"
+					)}
+					copyButtonContent={
+						copiedUrl === link.destinationUrl ? (
+							<Check className="h-4 w-4" />
+						) : (
+							<Copy className="h-4 w-4" />
+						)
+					}
+					className="links-share-readonly"
 					monospace={false}
 					valueClassName="text-heading"
+					extraActions={
+						link.destinationUrl ? (
+							<button
+								type="button"
+								onClick={() => handleOpen(link.destinationUrl!)}
+								className="rounded-lg border border-accent/20 bg-accent/5 p-2 text-accent transition-colors hover:bg-accent hover:text-white"
+								title={__("Open Link")}
+							>
+								<ExternalLink className="h-4 w-4" />
+							</button>
+						) : null
+					}
 				/>
 			</div>
 

@@ -12,6 +12,10 @@
 		@apply inline-block max-w-full break-all text-sm text-heading;
 	}
 
+	.readonly-value-block-actions {
+		@apply flex shrink-0 items-start gap-1.5;
+	}
+
 	.readonly-value-block-copy {
 		@apply shrink-0 rounded p-1.5 transition-all;
 	}

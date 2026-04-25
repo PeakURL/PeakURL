@@ -25,6 +25,7 @@ import type { GeneralTabProps } from "../types";
 
 function GeneralTab({
 	initialForm,
+	username,
 	onSubmit,
 	isUpdating,
 	siteSettings,
@@ -216,16 +217,29 @@ function GeneralTab({
 						onChange={handleChange}
 						required
 					/>
-					<Input
-						label={__("Username")}
-						name="username"
-						valueDirection="ltr"
-						autoCapitalize="off"
-						spellCheck={false}
-						value={generalForm.username}
-						onChange={handleChange}
-						required
-					/>
+					<div className="form-field">
+						<label
+							htmlFor="settings-general-username"
+							className="form-field-label settings-general-readonly-label"
+						>
+							<span>{__("Username")}</span>
+							<span className="settings-general-readonly-note">
+								{__("Cannot be changed")}
+							</span>
+						</label>
+						<div className="form-field-control">
+							<input
+								id="settings-general-username"
+								type="text"
+								dir="ltr"
+								value={username || ""}
+								disabled
+								autoCapitalize="off"
+								spellCheck={false}
+								className="form-control-base form-field-input form-field-input-no-icon settings-general-readonly-input"
+							/>
+						</div>
+					</div>
 					<Input
 						label={__("Email Address")}
 						type="email"

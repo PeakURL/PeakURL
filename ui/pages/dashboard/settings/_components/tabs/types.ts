@@ -69,7 +69,6 @@ export interface ProfileUser {
 export interface GeneralFormState {
 	firstName: string;
 	lastName: string;
-	username: string;
 	email: string;
 	phoneNumber: string;
 	company: string;

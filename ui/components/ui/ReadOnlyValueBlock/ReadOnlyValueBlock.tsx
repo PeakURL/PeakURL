@@ -12,6 +12,7 @@ interface ReadOnlyValueBlockProps {
 	copyButtonLabel?: string;
 	copyButtonClassName?: string;
 	copyButtonContent?: ReactNode;
+	extraActions?: ReactNode;
 }
 
 export function ReadOnlyValueBlock({
@@ -23,6 +24,7 @@ export function ReadOnlyValueBlock({
 	copyButtonLabel,
 	copyButtonClassName = "",
 	copyButtonContent,
+	extraActions,
 }: ReadOnlyValueBlockProps) {
 	const direction = getDocumentDirection();
 	const copyButtonStyles =
@@ -42,20 +44,23 @@ export function ReadOnlyValueBlock({
 					{value || ""}
 				</span>
 			</div>
-			{onCopy ? (
-				<button
-					type="button"
-					onClick={onCopy}
-					aria-label={copyButtonLabel}
-					title={copyButtonLabel}
-					className={cn(
-						"readonly-value-block-copy",
-						copyButtonStyles
-					)}
-				>
-					{copyButtonContent || <Copy size={14} />}
-				</button>
-			) : null}
+			<div className="readonly-value-block-actions">
+				{onCopy ? (
+					<button
+						type="button"
+						onClick={onCopy}
+						aria-label={copyButtonLabel}
+						title={copyButtonLabel}
+						className={cn(
+							"readonly-value-block-copy",
+							copyButtonStyles
+						)}
+					>
+						{copyButtonContent || <Copy size={14} />}
+					</button>
+				) : null}
+				{extraActions}
+			</div>
 		</div>
 	);
 }

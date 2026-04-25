@@ -53,8 +53,8 @@ trait UsersTrait {
 	/**
 	 * Update the authenticated user's own profile fields.
 	 *
-	 * Supports name, username, email, phone, company, job title,
-	 * bio, and password changes. Validates uniqueness of email/username.
+	 * Supports name, email, phone, company, job title, bio, and password changes.
+	 * Validates email uniqueness.
 	 *
 	 * @param Request              $request Incoming HTTP request.
 	 * @param array<string, mixed> $changes Partial profile payload.
@@ -76,10 +76,13 @@ trait UsersTrait {
 		$params           = array( 'id' => $user_id );
 		$password_changed = false;
 
+		if ( array_key_exists( 'username', $changes ) ) {
+			throw new ApiException( __( 'Username cannot be changed.', 'peakurl' ), 422 );
+		}
+
 		$field_map = array(
 			'firstName'   => 'first_name',
 			'lastName'    => 'last_name',
-			'username'    => 'username',
 			'email'       => 'email',
 			'phoneNumber' => 'phone_number',
 			'company'     => 'company',
@@ -106,17 +109,6 @@ trait UsersTrait {
 							422,
 						);
 					}
-				}
-			}
-
-			if ( 'username' === $input_key ) {
-				$value = $this->validate_username_required(
-					$value,
-					__( 'Username cannot be empty.', 'peakurl' ),
-				);
-
-				if ( $this->username_in_use( $value, $user_id ) ) {
-					throw new ApiException( __( 'Username is already taken.', 'peakurl' ), 422 );
 				}
 			}
 

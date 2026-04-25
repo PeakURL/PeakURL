@@ -4,6 +4,7 @@ import type { ButtonVariant, NotificationContextValue } from "@/components";
 import type { InstalledLanguage, TextDirection } from "@/i18n/types";
 import type {
 	ApiKeySummary,
+	GeneralFormPayload,
 	GeneralFormState,
 	MailDriver,
 	SmtpEncryption,
@@ -49,16 +50,8 @@ export interface SiteSettings {
  */
 export interface GeneralTabProps {
 	initialForm: GeneralFormState;
-	onSubmit: (
-		payload: GeneralFormState & {
-			siteName: string;
-			siteLanguage: string;
-			siteTimezone: string;
-			siteTimeFormat: SiteTimeFormat;
-			faviconFile?: File | null;
-			removeFavicon?: boolean;
-		}
-	) => void;
+	username?: string | null;
+	onSubmit: (payload: GeneralFormPayload) => void;
 	isUpdating: boolean;
 	siteSettings?: SiteSettings | null;
 	isLoadingSiteSettings: boolean;

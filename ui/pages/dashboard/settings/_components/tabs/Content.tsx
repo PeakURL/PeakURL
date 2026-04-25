@@ -59,7 +59,6 @@ import SettingsSkeleton from "../SettingsSkeleton";
 const buildGeneralForm = (user?: ProfileUser | null): GeneralFormState => ({
 	firstName: user?.firstName || "",
 	lastName: user?.lastName || "",
-	username: user?.username || "",
 	email: user?.email || "",
 	phoneNumber: user?.phoneNumber || "",
 	company: user?.company || "",
@@ -70,7 +69,6 @@ const buildGeneralForm = (user?: ProfileUser | null): GeneralFormState => ({
 const profileFormKeys: Array<keyof GeneralFormState> = [
 	"firstName",
 	"lastName",
-	"username",
 	"email",
 	"phoneNumber",
 	"company",
@@ -883,6 +881,7 @@ const Content = ({ activeTab }: ContentProps) => {
 				<GeneralTab
 					key={`${user?._id || user?.id || user?.username || "user"}-${user?.updatedAt || "initial"}`}
 					initialForm={buildGeneralForm(user)}
+					username={user?.username || ""}
 					onSubmit={handleGeneralSubmit}
 					isUpdating={isUpdating || isSavingGeneralSettings}
 					siteSettings={generalSettingsResponse?.data || null}

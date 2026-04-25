@@ -5,6 +5,7 @@ import {
 	ShieldCheck,
 	ShieldOff,
 	Monitor,
+	MapPin,
 	RefreshCw,
 	Download,
 	AlertCircle,
@@ -38,6 +39,25 @@ const buildBackupCodesFile = (codes: string[]) =>
 		"",
 		sprintf(__("Generated at: %s"), new Date().toISOString()),
 	].join("\n");
+
+const getSessionLocationLabel = (session: SecuritySession) => {
+	const city = session.location?.city?.trim();
+	const country = session.location?.country?.trim();
+
+	if (city && country) {
+		return `${city}, ${country}`;
+	}
+
+	if (city || country) {
+		return city || country || "";
+	}
+
+	if (false === session.location?.isPublic && session.ipAddress) {
+		return __("Private network");
+	}
+
+	return __("Location unavailable");
+};
 
 function SecurityTab({
 	securityForm,
@@ -744,68 +764,89 @@ function SecurityTab({
 							{__("No active sessions found.")}
 						</div>
 					) : (
-						sessions.map((session: SecuritySession) => (
-							<div
-								key={session.id}
-								dir={direction}
-								className={cn(
-									"settings-security-session-row",
-									session.revokedAt
-										? "settings-security-session-row-ended"
-										: ""
-								)}
-							>
-								<div className="settings-security-session-meta">
-									<div className="settings-security-session-icon-panel">
-										<Monitor
-											size={18}
-											className="settings-security-session-icon"
-										/>
+						sessions.map((session: SecuritySession) => {
+							const locationLabel =
+								getSessionLocationLabel(session);
+
+							return (
+								<div
+									key={session.id}
+									dir={direction}
+									className={cn(
+										"settings-security-session-row",
+										session.revokedAt
+											? "settings-security-session-row-ended"
+											: ""
+									)}
+								>
+									<div className="settings-security-session-meta">
+										<div className="settings-security-session-icon-panel">
+											<Monitor
+												size={18}
+												className="settings-security-session-icon"
+											/>
+										</div>
+										<div className="settings-security-session-copy">
+											<p className="settings-security-session-title">
+												{session.browser ||
+													__("Browser")}{" "}
+												•{" "}
+												{session.os || __("Unknown OS")}
+											</p>
+											<div className="settings-security-session-details">
+												<span className="settings-security-session-detail settings-security-session-detail-location">
+													<MapPin
+														size={13}
+														className="settings-security-session-detail-icon"
+														aria-hidden="true"
+													/>
+													<span>{locationLabel}</span>
+												</span>
+												<span className="settings-security-session-detail">
+													{session.ipAddress ||
+														__("Unknown IP")}
+												</span>
+												<span className="settings-security-session-detail">
+													{__("Last active")}{" "}
+													{formatDateTimeValue(
+														session.lastActiveAt,
+														__("Unknown")
+													)}
+												</span>
+											</div>
+										</div>
 									</div>
-									<div className="settings-security-session-copy">
-										<p className="settings-security-session-title">
-											{session.browser || __("Browser")} •{" "}
-											{session.os || __("Unknown OS")}
-										</p>
-										<p className="settings-security-session-description">
-											{session.ipAddress ||
-												__("Unknown IP")}{" "}
-											• {__("Last active")}{" "}
-											{formatDateTimeValue(
-												session.lastActiveAt,
-												__("Unknown")
-											)}
-										</p>
+									<div className="settings-security-session-actions">
+										{session.isCurrent && (
+											<span className="settings-security-session-badge-current">
+												{__("Current")}
+											</span>
+										)}
+										{session.revokedAt ? (
+											<span className="settings-security-session-badge-ended">
+												{__("Ended")}
+											</span>
+										) : session.isCurrent ? null : (
+											<Button
+												variant="ghost"
+												size="sm"
+												onClick={() =>
+													handleRevokeSession(
+														session.id,
+														session.isCurrent
+													)
+												}
+												loading={
+													revokingId === session.id
+												}
+											>
+												{__("End session")}
+											</Button>
+										)}
 									</div>
 								</div>
-								<div className="settings-security-session-actions">
-									{session.isCurrent && (
-										<span className="settings-security-session-badge-current">
-											{__("Current")}
-										</span>
-									)}
-									{session.revokedAt ? (
-										<span className="settings-security-session-badge-ended">
-											{__("Ended")}
-										</span>
-									) : session.isCurrent ? null : (
-										<Button
-											variant="ghost"
-											size="sm"
-											onClick={() =>
-												handleRevokeSession(
-													session.id,
-													session.isCurrent
-												)
-											}
-											loading={revokingId === session.id}
-										>
-											{__("End session")}
-										</Button>
-									)}
-								</div>
-							</div>
-						))
+							);
+						})
 					)}
 				</div>
 			</div>

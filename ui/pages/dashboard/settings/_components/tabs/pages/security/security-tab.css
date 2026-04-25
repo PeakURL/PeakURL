@@ -65,7 +65,6 @@
 	.settings-security-two-factor-status-text,
 	.settings-security-two-factor-setup-description,
 	.settings-security-backup-codes-description,
-	.settings-security-session-description,
 	.settings-security-sessions-count {
 		@apply mt-1 text-xs text-text-muted;
 	}
@@ -176,6 +175,22 @@
 
 	.settings-security-session-copy {
 		text-align: start;
+	}
+
+	.settings-security-session-details {
+		@apply mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-text-muted;
+	}
+
+	.settings-security-session-detail {
+		@apply inline-flex items-center gap-1;
+	}
+
+	.settings-security-session-detail-location {
+		@apply font-medium text-heading;
+	}
+
+	.settings-security-session-detail-icon {
+		@apply shrink-0 text-accent;
 	}
 
 	.settings-security-session-badge-current {

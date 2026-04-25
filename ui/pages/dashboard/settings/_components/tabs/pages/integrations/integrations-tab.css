@@ -76,6 +76,7 @@
 		font-size: 11px;
 		direction: ltr;
 		text-align: start;
+		unicode-bidi: -moz-plaintext;
 		unicode-bidi: plaintext;
 	}
 
@@ -92,7 +93,7 @@
 	}
 
 	.integrations-tab-form-actions {
-		@apply mt-4 flex justify-end;
+		@apply mt-6 flex justify-end;
 	}
 
 	.integrations-tab-form-actions-rtl {
@@ -144,6 +145,7 @@
 		@apply truncate text-sm font-medium text-heading;
 		direction: ltr;
 		text-align: start;
+		unicode-bidi: -moz-plaintext;
 		unicode-bidi: plaintext;
 	}
 
@@ -167,6 +169,7 @@
 		@apply truncate font-mono text-xs text-text-muted;
 		direction: ltr;
 		text-align: start;
+		unicode-bidi: -moz-plaintext;
 		unicode-bidi: plaintext;
 	}
 
@@ -181,6 +184,7 @@
 	.integrations-tab-item-created-value {
 		@apply inline-block;
 		direction: ltr;
+		unicode-bidi: -moz-plaintext;
 		unicode-bidi: plaintext;
 	}
 

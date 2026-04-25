@@ -246,11 +246,19 @@ export interface SecurityFormState {
 /**
  * Single active or revoked session shown in the security tab.
  */
+export interface SecuritySessionLocation {
+	city?: string | null;
+	country?: string | null;
+	countryCode?: string | null;
+	isPublic?: boolean | null;
+}
+
 export interface SecuritySession {
 	id: string;
 	browser?: string | null;
 	os?: string | null;
 	ipAddress?: string | null;
+	location?: SecuritySessionLocation | null;
 	lastActiveAt?: string | null;
 	isCurrent?: boolean;
 	revokedAt?: string | null;

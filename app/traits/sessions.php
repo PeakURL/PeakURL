@@ -201,12 +201,14 @@ trait SessionsTrait {
 	 *
 	 * @param string  $user_id User row ID.
 	 * @param Request $request Incoming request (to identify the current session).
+	 * @param bool    $include_location Whether to include GeoIP location details.
 	 * @return array<int, array<string, mixed>> Session list.
 	 * @since 1.0.0
 	 */
 	private function list_user_sessions(
 		string $user_id,
-		Request $request
+		Request $request,
+		bool $include_location = false
 	): array {
 		$this->prune_stale_sessions();
 
@@ -225,22 +227,113 @@ trait SessionsTrait {
 		);
 
 		return array_map(
-			fn( array $row ): array => array(
-				'id'           => (string) $row['id'],
-				'device'       => (string) ( $row['device'] ?? '' ),
-				'browser'      => (string) ( $row['browser'] ?? '' ),
-				'os'           => (string) ( $row['operating_system'] ?? '' ),
-				'ipAddress'    => (string) ( $row['ip_address'] ?? '' ),
-				'lastActiveAt' => $this->to_iso(
-					(string) $row['last_active_at'],
-				),
-				'createdAt'    => $this->to_iso( (string) $row['created_at'] ),
-				'revokedAt'    => null,
-				'isCurrent'    => $current_session
-					? $row['id'] === $current_session['id']
-					: false,
+			fn( array $row ): array => $this->hydrate_session_row(
+				$row,
+				$current_session,
+				$include_location,
 			),
 			$rows,
+		);
+	}
+
+	/**
+	 * Hydrate a session row for API responses.
+	 *
+	 * @param array<string, mixed>      $row              Raw session row.
+	 * @param array<string, mixed>|null $current_session  Current session row.
+	 * @param bool                      $include_location Whether to include GeoIP details.
+	 * @return array<string, mixed>
+	 * @since 1.1.0
+	 */
+	private function hydrate_session_row(
+		array $row,
+		?array $current_session,
+		bool $include_location
+	): array {
+		$ip_address = (string) ( $row['ip_address'] ?? '' );
+		$session    = array(
+			'id'           => (string) $row['id'],
+			'device'       => (string) ( $row['device'] ?? '' ),
+			'browser'      => (string) ( $row['browser'] ?? '' ),
+			'os'           => (string) ( $row['operating_system'] ?? '' ),
+			'ipAddress'    => $ip_address,
+			'lastActiveAt' => $this->to_iso(
+				(string) $row['last_active_at'],
+			),
+			'createdAt'    => $this->to_iso( (string) $row['created_at'] ),
+			'revokedAt'    => null,
+			'isCurrent'    => $current_session
+				? $row['id'] === $current_session['id']
+				: false,
+		);
+
+		if ( $include_location ) {
+			$session['location'] = $this->get_session_location( $ip_address );
+		}
+
+		return $session;
+	}
+
+	/**
+	 * Resolve GeoIP details for a session IP address.
+	 *
+	 * @param string $ip_address Session IP address.
+	 * @return array<string, string|bool|null>
+	 * @since 1.1.0
+	 */
+	private function get_session_location( string $ip_address ): array {
+		$is_public = $this->is_public_session_ip_address( $ip_address );
+		$location  = $is_public
+			? $this->geoip_service->lookup_location( $ip_address )
+			: array(
+				'country_code' => null,
+				'country_name' => null,
+				'city_name'    => null,
+			);
+
+		return array(
+			'city'        => $this->normalize_session_location_value(
+				$location['city_name'] ?? null,
+			),
+			'country'     => $this->normalize_session_location_value(
+				$location['country_name'] ?? null,
+			),
+			'countryCode' => $this->normalize_session_location_value(
+				$location['country_code'] ?? null,
+			),
+			'isPublic'    => $is_public,
+		);
+	}
+
+	/**
+	 * Normalize optional session location strings.
+	 *
+	 * @param mixed $value Raw location value.
+	 * @return string|null
+	 * @since 1.1.0
+	 */
+	private function normalize_session_location_value( $value ): ?string {
+		$value = trim( (string) $value );
+
+		return '' !== $value ? $value : null;
+	}
+
+	/**
+	 * Check whether a session IP address can be resolved through GeoIP.
+	 *
+	 * @param string $ip_address Session IP address.
+	 * @return bool
+	 * @since 1.1.0
+	 */
+	private function is_public_session_ip_address( string $ip_address ): bool {
+		if ( '' === trim( $ip_address ) ) {
+			return false;
+		}
+
+		return false !== filter_var(
+			$ip_address,
+			FILTER_VALIDATE_IP,
+			FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE,
 		);
 	}
 

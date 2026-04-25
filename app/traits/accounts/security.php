@@ -83,7 +83,11 @@ trait SecurityTrait {
 			'manage_profile',
 			'You do not have permission to manage account security.',
 		);
-		$sessions     = $this->list_user_sessions( (string) $user['id'], $request );
+		$sessions     = $this->list_user_sessions(
+			(string) $user['id'],
+			$request,
+			true,
+		);
 		$backup_codes = $this->list_backup_codes( (string) $user['id'] );
 		$row          = $this->find_user_row_by_id( (string) $user['id'] );
 

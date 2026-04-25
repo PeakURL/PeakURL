@@ -43,7 +43,7 @@
 	.settings-email-actions,
 	.settings-location-actions,
 	.settings-security-password-actions {
-		@apply flex flex-wrap gap-3;
+		@apply mt-6 flex flex-wrap gap-3;
 	}
 
 	.settings-general-actions-start,
@@ -57,7 +57,7 @@
 	.settings-api-modal-actions-end,
 	.settings-email-actions-end,
 	.settings-security-password-actions-end {
-		@apply justify-end py-2;
+		@apply justify-end;
 	}
 
 	.settings-stat-grid {

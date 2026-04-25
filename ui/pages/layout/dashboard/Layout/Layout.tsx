@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom';
 import { PEAKURL_NAME, PEAKURL_VERSION } from '@constants';
 import { isDocumentRtl } from '@/i18n/direction';
 import { __, sprintf } from '@/i18n';
-import { cn } from '@/utils';
 import Sidebar from '../Sidebar';
 import { Header } from '../Header';
 import { AdminNotices } from '../AdminNotices';
@@ -34,12 +33,7 @@ export const Layout = ({ children }: LayoutProps) => {
 				onMobileClose={() => setIsMobileSidebarOpen(false)}
 			/>
 
-			<div
-				className={cn(
-					'dashboard-layout-wrapper',
-					isRtl && 'dashboard-layout-wrapper-rtl'
-				)}
-			>
+			<div className="dashboard-layout-wrapper">
 				<Header
 					key={headerKey}
 					onMobileMenuToggle={() => setIsMobileSidebarOpen(true)}

@@ -1,10 +1,10 @@
 @layer components {
 	.dashboard-header {
-		@apply sticky top-0 z-30 border-b border-stroke bg-surface;
+		@apply sticky top-0 z-30 w-full border-b border-stroke bg-surface;
 	}
 
 	.dashboard-header-inner {
-		@apply flex h-16 items-center justify-between gap-2 px-3 sm:gap-4 sm:px-4;
+		@apply flex h-16 min-w-0 items-center justify-between gap-2 px-3 sm:gap-4 sm:px-4;
 	}
 
 	.dashboard-header-menu-button {

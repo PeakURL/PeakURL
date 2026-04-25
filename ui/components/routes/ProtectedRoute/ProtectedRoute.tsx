@@ -1,4 +1,5 @@
 import { authApi } from '@/store/slices';
+import { ApiErrorPage } from '@/components/common';
 import { PageLoader } from '@/components/ui';
 import {
 	getErrorStatus,
@@ -6,34 +7,7 @@ import {
 	redirectToInstallRecovery,
 } from '@/utils';
 import { Navigate, useLocation } from 'react-router-dom';
-import { __ } from '@/i18n';
-import type { AuthRequiredStateProps, ProtectedRouteProps } from '../types';
-
-const AuthRequiredState = ({
-	title,
-	description,
-	onRetry,
-}: AuthRequiredStateProps) => {
-	return (
-		<div className="protected-route-state">
-			<div className="protected-route-card">
-				<div className="protected-route-copy">
-					<h1 className="protected-route-title">
-						{title}
-					</h1>
-					<p className="protected-route-description">{description}</p>
-				</div>
-				<button
-					type="button"
-					onClick={onRetry}
-					className="protected-route-retry"
-				>
-					{__('Retry')}
-				</button>
-			</div>
-		</div>
-	);
-};
+import type { ProtectedRouteProps } from '../types';
 
 /**
  * ProtectedRoute guards authenticated dashboard routes.
@@ -57,9 +31,13 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 	const isAuthenticated = Boolean(currentUser);
 	const hasResolvedSession = undefined !== data || undefined !== error;
 	const isPending =
-		!hasResolvedSession && (isLoading || isFetching || isUninitialized);
+		!hasResolvedSession && (isLoading || isUninitialized);
 	const errorStatus = getErrorStatus(error);
 	const isAuthError = 401 === errorStatus || 403 === errorStatus;
+	const isRetryingConnection =
+		isFetching && !isLoading && !currentUser && !isAuthError;
+	const hasConnectionError =
+		(isError || isRetryingConnection) && !isAuthError;
 	const installRecovery = getInstallRecovery(error);
 
 	if (isPending) {
@@ -71,13 +49,11 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 		return <PageLoader />;
 	}
 
-	if (isError && !isAuthError) {
+	if (hasConnectionError) {
 		return (
-			<AuthRequiredState
-				title={__('Unable to load your session')}
-				description={__(
-					'The dashboard could not reach the PHP API. Make sure the core service is running and try again.'
-				)}
+			<ApiErrorPage
+				error={error}
+				isRetrying={isRetryingConnection}
 				onRetry={refetch}
 			/>
 		);

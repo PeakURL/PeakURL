@@ -73,6 +73,11 @@ const runtimeSiteName = IS_BROWSER
 const runtimeVersion = IS_BROWSER
 	? getRuntimeString(window.__PEAKURL_VERSION__)
 	: '';
+const runtimeDebug = import.meta.env.DEV
+	? true
+	: IS_BROWSER
+		? true === window.__PEAKURL_DEBUG__
+		: false;
 
 /**
  * Canonical product name used throughout the dashboard UI.
@@ -88,6 +93,11 @@ export const PEAKURL_SITE_NAME = runtimeSiteName || PEAKURL_NAME;
  * Current application version available to the dashboard.
  */
 export const PEAKURL_VERSION = runtimeVersion || FALLBACK_VERSION;
+
+/**
+ * Whether runtime debug mode is enabled for the current install.
+ */
+export const PEAKURL_DEBUG = runtimeDebug;
 
 /**
  * Support contact address shown in contributor-facing UI copy.
@@ -149,5 +159,4 @@ export const INTERNAL_API_ORIGIN =
 /**
  * Public waitlist URL for the plugins preview surface.
  */
-export const PLUGINS_WAITLIST_URL =
-	'https://go.peakurl.org/join-plugins-list';
+export const PLUGINS_WAITLIST_URL = 'https://go.peakurl.org/join-plugins-list';

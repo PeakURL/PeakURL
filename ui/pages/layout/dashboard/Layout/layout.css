@@ -4,11 +4,14 @@
 	}
 
 	.dashboard-layout-wrapper {
-		@apply min-h-screen lg:ml-64;
+		@apply min-h-screen min-w-0;
 	}
 
-	.dashboard-layout-wrapper-rtl {
-		@apply lg:ml-0 lg:mr-64;
+	@media (min-width: 1024px) {
+		.dashboard-layout-wrapper {
+			margin-inline-start: 16rem;
+			width: calc(100% - 16rem);
+		}
 	}
 
 	.dashboard-layout-content {
@@ -16,7 +19,7 @@
 	}
 
 	.dashboard-layout-main {
-		@apply flex flex-1 flex-col p-4 sm:p-6;
+		@apply flex min-w-0 flex-1 flex-col p-4 sm:p-6;
 	}
 
 	.dashboard-layout-footer {

@@ -55,6 +55,11 @@ declare global {
 		__PEAKURL_VERSION__?: string;
 
 		/**
+		 * Whether runtime debug mode is enabled for the current install.
+		 */
+		__PEAKURL_DEBUG__?: boolean;
+
+		/**
 		 * Public favicon metadata injected by the PHP runtime.
 		 */
 		__PEAKURL_FAVICON__?: RuntimeFaviconPayload;

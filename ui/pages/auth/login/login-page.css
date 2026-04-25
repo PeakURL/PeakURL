@@ -171,29 +171,4 @@
 		@apply inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 transition-colors duration-150 hover:text-slate-700;
 	}
 
-	.login-page-error-state {
-		@apply flex min-h-screen items-center justify-center bg-white px-6;
-	}
-
-	.login-page-error-card {
-		@apply w-full max-w-sm text-center;
-		-webkit-animation: auth-page-scale-in 0.45s ease-out 0.08s both;
-		animation: auth-page-scale-in 0.45s ease-out 0.08s both;
-	}
-
-	.login-page-error-icon {
-		@apply mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-red-500;
-	}
-
-	.login-page-error-title {
-		@apply mt-5 text-xl font-semibold text-slate-900;
-	}
-
-	.login-page-error-copy {
-		@apply mt-2 text-sm leading-relaxed text-slate-500;
-	}
-
-	.login-page-error-button {
-		@apply mt-6 w-full rounded-xl! bg-slate-900! py-3! text-sm! font-semibold! text-white! shadow-none! hover:bg-slate-800! focus:ring-slate-900/10! focus:ring-offset-0!;
-	}
 }

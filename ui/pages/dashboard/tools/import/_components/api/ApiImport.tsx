@@ -8,9 +8,7 @@ const ApiImport = () => {
 
 	return (
 		<div className="import-panel import-api-panel">
-			<h2 className="import-panel-title">
-				{__('API Import')}
-			</h2>
+			<h2 className="import-panel-title">{__('API Import')}</h2>
 			<p className="import-panel-copy">
 				{__(
 					'Use our API to programmatically import multiple URLs. Perfect for integrations and automated workflows.'
@@ -33,7 +31,7 @@ Content-Type: application/json
       "alias": "page1",
       "title": "Marketing Page",
       "password": "optional-password",
-      "expiresAt": "2025-12-31"
+      "expiresAt": "YYYY-MM-DD"
     },
     {
       "destinationUrl": "https://example.com/page2",
@@ -44,9 +42,7 @@ Content-Type: application/json
 					</pre>
 				</div>
 				<div className="import-api-column">
-					<h3 className="import-section-title">
-						{__('Response')}
-					</h3>
+					<h3 className="import-section-title">{__('Response')}</h3>
 					<pre className="import-api-code-block">
 						<code>{`{
   "success": true,

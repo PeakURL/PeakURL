@@ -318,8 +318,8 @@ function peakurl_should_serve_dashboard_shell( string $relative_path ): bool {
  * Inject runtime configuration into the dashboard HTML shell.
  *
  * Inserts a `<base>` tag and a `<script>` block carrying the base path,
- * API base, site name, version, backend body classes, locale, and dashboard
- * translation catalog into the `<head>` element.
+ * API base, site name, version, debug flag, backend body classes, locale, and
+ * dashboard translation catalog into the `<head>` element.
  *
  * @param string               $html                Raw app.html content.
  * @param string               $base_path           URL base path.
@@ -330,6 +330,7 @@ function peakurl_should_serve_dashboard_shell( string $relative_path ): bool {
  * @param string               $text_direction      Active document text direction.
  * @param array<string, mixed> $translation_catalog Dashboard JSON catalog.
  * @param array<string, mixed> $favicon             Public favicon settings payload.
+ * @param bool                 $debug_enabled       Whether runtime debug mode is enabled.
  * @return string Modified HTML.
  * @since 1.0.0
  */
@@ -342,7 +343,8 @@ function peakurl_inject_runtime_shell(
 	string $locale,
 	string $text_direction,
 	array $translation_catalog,
-	array $favicon
+	array $favicon,
+	bool $debug_enabled
 ): string {
 	$base_href    = '' === $base_path ? '/' : $base_path . '/';
 	$html_lang    = htmlspecialchars(
@@ -371,6 +373,8 @@ function peakurl_inject_runtime_shell(
 		json_encode( $site_name ) .
 		';window.__PEAKURL_VERSION__=' .
 		json_encode( $version ) .
+		';window.__PEAKURL_DEBUG__=' .
+		json_encode( $debug_enabled ) .
 		';window.__PEAKURL_FAVICON__=' .
 		json_encode(
 			$favicon,
@@ -627,6 +631,12 @@ $body_classes   = get_body_class(
 		'is_spa_shell'  => true,
 	),
 );
+$runtime_env    = strtolower(
+	(string) ( $runtime_config[ Constants::CONFIG_ENV ] ?? 'production' ),
+);
+$debug_enabled  =
+	! empty( $runtime_config[ Constants::CONFIG_DEBUG ] ) ||
+	'development' === $runtime_env;
 
 $dashboard_shell_path = $root_path . '/app.html';
 
@@ -658,4 +668,5 @@ echo peakurl_inject_runtime_shell(
 	$text_direction,
 	$catalog,
 	$favicon,
+	$debug_enabled,
 );

@@ -9,13 +9,12 @@ import {
 	Link2,
 	LockKeyhole,
 	Shield,
-	ShieldCheck,
 	UserRound,
 } from 'lucide-react';
 
 import {
+	ApiErrorPage,
 	BrandLockup,
-	Button,
 	Input,
 	PageLoader,
 	VerificationCodeInput,
@@ -37,7 +36,6 @@ import {
 	useVerifyTwoFactorLoginMutation,
 } from '@/store/slices/api';
 import { __, sprintf } from '@/i18n';
-import type { ApiErrorStateProps } from './types';
 
 const getHighlights = () => [
 	{
@@ -56,30 +54,6 @@ const getHighlights = () => [
 		desc: __('Sessions, 2FA, and roles.'),
 	},
 ];
-
-const ApiErrorState = ({ onRetry }: ApiErrorStateProps) => (
-	<main id="page-container" className="login-page-error-state">
-		<section
-			className="login-page-error-card"
-			aria-labelledby="page-heading"
-		>
-			<div className="login-page-error-icon">
-				<ShieldCheck size={24} />
-			</div>
-			<h1 id="page-heading" className="login-page-error-title">
-				{__('Could not reach the API')}
-			</h1>
-			<p className="login-page-error-copy">
-				{__(
-					'The PHP runtime did not answer the session check. Verify the API and database, then retry.'
-				)}
-			</p>
-			<Button className="login-page-error-button" onClick={onRetry}>
-				{__('Retry connection')}
-			</Button>
-		</section>
-	</main>
-);
 
 const PEAKURL_URL =
 	'https://peakurl.org?utm_source=peakurl_login&utm_medium=login&utm_campaign=powered_by';
@@ -124,10 +98,12 @@ function LoginPage() {
 	const currentUser = data?.user || data?.data;
 	const errorStatus = getErrorStatus(error);
 	const isAuthError = 401 === errorStatus || 403 === errorStatus;
-	const isApiError = isError && !isAuthError;
+	const isRetryingApiCheck =
+		isFetching && !isLoading && !currentUser && !isAuthError;
+	const isApiError = (isError || isRetryingApiCheck) && !isAuthError;
 	const installRecovery = getInstallRecovery(error);
 	const hasResolvedSession = undefined !== data || undefined !== error;
-	const isPending = !hasResolvedSession && (isLoading || isFetching);
+	const isPending = !hasResolvedSession && isLoading;
 	const submitPending = isLoggingIn || isVerifying;
 	const redirectTo = useMemo(() => {
 		const searchParams = new URLSearchParams(location.search || '');
@@ -166,7 +142,13 @@ function LoginPage() {
 	}
 
 	if (isApiError) {
-		return <ApiErrorState onRetry={refetch} />;
+		return (
+			<ApiErrorPage
+				error={error}
+				isRetrying={isRetryingApiCheck}
+				onRetry={refetch}
+			/>
+		);
 	}
 
 	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {

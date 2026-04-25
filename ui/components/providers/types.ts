@@ -38,14 +38,6 @@ export type ClientProvidersProps = PropsWithChildren;
 export type NotificationProviderProps = PropsWithChildren;
 
 /**
- * Props for the auth-initializer retry state.
- */
-export interface AuthErrorStateProps {
-	/** Retries the initial auth check. */
-	onRetry: () => void;
-}
-
-/**
  * Notification context payload exposed by the notification provider.
  */
 export interface NotificationContextValue {

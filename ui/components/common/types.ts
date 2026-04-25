@@ -45,3 +45,23 @@ export interface BrandLockupProps {
 	/** Additional utility classes for the text node. */
 	textClassName?: string;
 }
+
+/**
+ * Props for the page shown when the UI cannot reach the PHP API.
+ */
+export interface ApiErrorPageProps {
+	/** Raw RTK Query error object used to explain the failed request. */
+	error?: unknown;
+
+	/** Retries the failed session/API connectivity check. */
+	onRetry: () => Promise<unknown> | void;
+
+	/** Whether a retry request is currently in progress. */
+	isRetrying?: boolean;
+
+	/** Optional title override for the failure state. */
+	title?: string;
+
+	/** Optional supporting copy override for the failure state. */
+	description?: string;
+}

@@ -359,6 +359,8 @@ trait AuthTrait {
 			throw new ApiException( __( 'Email or username is required.', 'peakurl' ), 422 );
 		}
 
+		$this->delete_expired_password_reset_tokens();
+
 		$normalized_identifier = sanitize_email( $identifier );
 		$user                  = false !== is_email( $normalized_identifier )
 			? $this->find_user_row_by_email( $normalized_identifier )
@@ -402,6 +404,17 @@ trait AuthTrait {
 	}
 
 	/**
+	 * Check whether a password reset token is present and still valid.
+	 *
+	 * @param string $token Password-reset token from the email link.
+	 * @return bool True when the token can still be used.
+	 * @since 1.1.0
+	 */
+	public function check_password_reset_token( string $token ): bool {
+		return null !== $this->get_user_by_password_reset_token( $token );
+	}
+
+	/**
 	 * Reset a user's password using a valid reset token.
 	 *
 	 * @param string               $token   Password-reset token from the email link.
@@ -421,16 +434,7 @@ trait AuthTrait {
 			return false;
 		}
 
-		$user = $this->query_one(
-			'SELECT * FROM users
-            WHERE password_reset_token = :token
-            AND password_reset_expires_at >= :now
-            LIMIT 1',
-			array(
-				'token' => Secrets::hash_lookup_token( $token ),
-				'now'   => $this->now(),
-			),
-		);
+		$user = $this->get_user_by_password_reset_token( $token );
 
 		if ( ! $user ) {
 			return false;
@@ -464,5 +468,55 @@ trait AuthTrait {
 		$this->send_password_changed_notification( $user );
 
 		return true;
+	}
+
+	/**
+	 * Look up the user for a valid password reset token.
+	 *
+	 * @param string $token Password-reset token from the email link.
+	 * @return array<string, mixed>|null User row when the token is valid.
+	 * @since 1.1.0
+	 */
+	private function get_user_by_password_reset_token( string $token ): ?array {
+		$token = trim( $token );
+
+		if ( '' === $token ) {
+			return null;
+		}
+
+		$this->delete_expired_password_reset_tokens();
+
+		return $this->query_one(
+			'SELECT * FROM users
+            WHERE password_reset_token = :token
+            AND password_reset_expires_at >= :now
+            LIMIT 1',
+			array(
+				'token' => Secrets::hash_lookup_token( $token ),
+				'now'   => $this->now(),
+			),
+		);
+	}
+
+	/**
+	 * Remove expired password reset tokens from user rows.
+	 *
+	 * @return void
+	 * @since 1.1.0
+	 */
+	private function delete_expired_password_reset_tokens(): void {
+		$this->execute(
+			'UPDATE users
+            SET password_reset_token = NULL,
+                password_reset_expires_at = NULL
+            WHERE password_reset_token IS NOT NULL
+            AND (
+                password_reset_expires_at IS NULL
+                OR password_reset_expires_at < :now
+            )',
+			array(
+				'now' => $this->now(),
+			),
+		);
 	}
 }

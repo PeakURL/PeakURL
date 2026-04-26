@@ -4,7 +4,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CheckCircle2, KeyRound, LockKeyhole } from "lucide-react";
 import { AuthLayout } from "@/pages/layout";
 import { Button, Input } from "@/components";
-import { useResetPasswordMutation } from "@/store/slices/api";
+import {
+	useCheckPasswordResetTokenQuery,
+	useResetPasswordMutation,
+} from "@/store/slices/api";
 import { __ } from "@/i18n";
 import { getErrorMessage, requestControlFormSubmit } from "@/utils";
 
@@ -20,17 +23,27 @@ const submitFormOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
 function ResetPasswordPage() {
 	const navigate = useNavigate();
 	const { token = "" } = useParams();
+	const resetToken = token.trim();
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [formError, setFormError] = useState("");
 	const [isCompleted, setIsCompleted] = useState(false);
+	const {
+		isError: isTokenError,
+		isFetching: isCheckingToken,
+		isLoading: isLoadingToken,
+	} = useCheckPasswordResetTokenQuery(resetToken, {
+		skip: !resetToken,
+	});
 	const [resetPassword, { isLoading }] = useResetPasswordMutation();
+	const isTokenInvalid = !resetToken || isTokenError;
+	const isCheckingResetLink = isCheckingToken || isLoadingToken;
 
 	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setFormError("");
 
-		if (!token.trim()) {
+		if (isCheckingResetLink || isTokenInvalid) {
 			setFormError(__("The password reset link is invalid."));
 			return;
 		}
@@ -47,7 +60,7 @@ function ResetPasswordPage() {
 
 		try {
 			await resetPassword({
-				token: token.trim(),
+				token: resetToken,
 				password,
 			}).unwrap();
 			setIsCompleted(true);
@@ -81,7 +94,51 @@ function ResetPasswordPage() {
 				"Set a new account password, then sign in again with the updated credentials."
 			)}
 		>
-			{isCompleted ? (
+			{isCheckingResetLink ? (
+				<div className="auth-page-status">
+					<div className="reset-password-page-status">
+						<LockKeyhole
+							size={18}
+							className="reset-password-page-status-icon"
+						/>
+						<div>
+							<p className="auth-page-status-title">
+								{__("Loading")}
+							</p>
+							<p className="auth-page-status-copy">
+								{__("Reset your password")}
+							</p>
+						</div>
+					</div>
+				</div>
+			) : isTokenInvalid ? (
+				<div className="auth-page-status">
+					<div className="reset-password-page-status">
+						<LockKeyhole
+							size={18}
+							className="reset-password-page-status-icon"
+						/>
+						<div>
+							<p className="auth-page-status-title">
+								{__("The password reset link is invalid.")}
+							</p>
+							<p className="auth-page-status-copy">
+								{__(
+									"Enter your account email or username and PeakURL will send a secure password reset link."
+								)}
+							</p>
+							<Button
+								type="button"
+								size="sm"
+								className="auth-page-submit"
+								onClick={() => navigate("/forgot-password")}
+							>
+								{__("Send reset link")}
+							</Button>
+						</div>
+					</div>
+				</div>
+			) : isCompleted ? (
 				<div className="auth-page-status">
 					<div className="reset-password-page-status">
 						<CheckCircle2
@@ -114,6 +171,7 @@ function ResetPasswordPage() {
 						autoComplete="new-password"
 						required
 						error={formError}
+						disabled={isCheckingResetLink}
 						className="auth-page-input"
 					/>
 					<Input
@@ -130,12 +188,13 @@ function ResetPasswordPage() {
 						placeholder={__("Confirm your new password")}
 						autoComplete="new-password"
 						required
+						disabled={isCheckingResetLink}
 						className="auth-page-input"
 					/>
 					<Button
 						type="submit"
 						size="md"
-						loading={isLoading}
+						loading={isLoading || isCheckingResetLink}
 						className="auth-page-submit"
 					>
 						{__("Reset password")}

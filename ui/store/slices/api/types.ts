@@ -349,6 +349,14 @@ export interface ResetPasswordPayload {
 }
 
 /**
+ * Response returned when checking a password-reset token.
+ */
+export interface PasswordResetTokenStatus {
+	/** Whether the reset token is present and still valid. */
+	valid: boolean;
+}
+
+/**
  * Request payload used when updating an existing user record.
  */
 export interface UpdateUserPayload extends UserDialogPayload {

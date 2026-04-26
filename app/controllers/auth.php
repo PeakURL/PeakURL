@@ -154,6 +154,31 @@ class AuthController {
 	}
 
 	/**
+	 * Check a password reset token before showing the reset form.
+	 *
+	 * @param Request $request Request containing the reset token route param.
+	 * @return array<string, mixed> Token status response.
+	 * @since 1.1.0
+	 */
+	public function check_password_reset_token( Request $request ): array {
+		$token = (string) $request->get_route_param( 'token' );
+
+		if ( ! $this->data_store->check_password_reset_token( $token ) ) {
+			return JsonResponse::error(
+				__( 'Password reset token is invalid or expired.', 'peakurl' ),
+				404,
+			);
+		}
+
+		return JsonResponse::success(
+			array(
+				'valid' => true,
+			),
+			__( 'Password reset token is valid.', 'peakurl' ),
+		);
+	}
+
+	/**
 	 * Reset a user's password via token (POST /api/v1/auth/reset-password/{token}).
 	 *
 	 * @param Request $request Request with the new password.

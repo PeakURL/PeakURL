@@ -10,6 +10,7 @@ import type {
 	GenerateApiKeyResponse,
 	LoginResponse,
 	LogoutResponse,
+	PasswordResetTokenStatus,
 	ResetPasswordPayload,
 	RevokeOtherSessionsResponse,
 	SecuritySettingsResponse,
@@ -121,12 +122,19 @@ export const userApi = baseApi.injectEndpoints({
 				body,
 			}),
 		}),
+		checkPasswordResetToken: build.query<
+			ApiDataResponse<PasswordResetTokenStatus>,
+			string
+		>({
+			query: (token) =>
+				`auth/reset-password/${encodeURIComponent(token)}`,
+		}),
 		resetPassword: build.mutation<
 			ApiDataResponse<UnknownBodyPayload>,
 			ResetPasswordPayload
 		>({
 			query: ({ token, ...body }) => ({
-				url: `auth/reset-password/${token}`,
+				url: `auth/reset-password/${encodeURIComponent(token)}`,
 				method: "POST",
 				body,
 			}),
@@ -265,6 +273,7 @@ export const {
 	useUpdateUserProfileMutation,
 	useAuthCheckQuery,
 	useForgotPasswordMutation,
+	useCheckPasswordResetTokenQuery,
 	useResetPasswordMutation,
 	useGetAllUsersQuery,
 	useCreateUserMutation,
@@ -282,4 +291,5 @@ export const {
 	useRevokeOtherSessionsMutation,
 } = userApi;
 
-export const { forgotPassword, resetPassword } = userApi.endpoints;
+export const { forgotPassword, checkPasswordResetToken, resetPassword } =
+	userApi.endpoints;

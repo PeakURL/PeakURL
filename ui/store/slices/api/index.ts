@@ -42,6 +42,7 @@ export {
 export { userApi } from "./user";
 export {
 	useAuthCheckQuery,
+	useCheckPasswordResetTokenQuery,
 	useCreateUserMutation,
 	useDeleteApiKeyMutation,
 	useDeleteUserMutation,

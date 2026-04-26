@@ -174,6 +174,13 @@ class Application {
 				'forgot_password',
 			)
 		);
+		$this->router->get(
+			'/api/v1/auth/reset-password/{token}',
+			array(
+				$auth,
+				'check_password_reset_token',
+			)
+		);
 		$this->router->post(
 			'/api/v1/auth/reset-password/{token}',
 			array(

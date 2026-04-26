@@ -63,7 +63,7 @@
 	}
 
 	.api-error-retry {
-		@apply flex h-11 w-52 items-center justify-center rounded-xl text-sm font-bold shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md active:translate-y-0;
+		@apply flex h-11 w-52 items-center justify-center rounded-xl text-sm font-bold shadow-sm transition-all hover:shadow-md;
 	}
 
 	.api-error-retry:active {
@@ -71,12 +71,26 @@
 	}
 
 	.api-error-retry-flashing {
+		-webkit-animation: api-error-flash 0.4s ease-out;
 		animation: api-error-flash 0.4s ease-out;
 	}
 
 	.api-error-retry-checking svg {
+		-webkit-animation: api-error-spin 0.8s linear infinite !important;
 		animation: api-error-spin 0.8s linear infinite !important;
 		transform-origin: center;
+	}
+
+	@-webkit-keyframes api-error-flash {
+		0% {
+			box-shadow: 0 0 0 0 rgba(244, 63, 94, 0);
+		}
+		50% {
+			box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.3);
+		}
+		100% {
+			box-shadow: 0 0 0 0 rgba(244, 63, 94, 0);
+		}
 	}
 
 	@keyframes api-error-flash {
@@ -88,6 +102,15 @@
 		}
 		100% {
 			box-shadow: 0 0 0 0 rgba(244, 63, 94, 0);
+		}
+	}
+
+	@-webkit-keyframes api-error-spin {
+		from {
+			transform: rotate(0deg);
+		}
+		to {
+			transform: rotate(360deg);
 		}
 	}
 

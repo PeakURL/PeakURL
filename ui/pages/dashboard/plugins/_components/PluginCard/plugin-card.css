@@ -56,7 +56,7 @@
 	}
 
 	.plugins-card-button {
-		@apply flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent/80 px-3 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:-translate-y-px hover:from-accent/95 hover:to-accent/75 hover:shadow-md active:translate-y-0;
+		@apply flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent/80 px-3 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:from-accent/95 hover:to-accent/75 hover:shadow-md;
 	}
 
 	.plugins-card-button-icon {

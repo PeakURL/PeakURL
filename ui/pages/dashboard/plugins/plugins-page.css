@@ -80,7 +80,7 @@
 	}
 
 	.plugins-page-header-waitlist-button {
-		@apply inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-accent/90 hover:shadow-lg active:translate-y-0 active:shadow-sm;
+		@apply inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:bg-accent/90 hover:shadow-lg active:shadow-sm;
 	}
 
 	.plugins-page-header-waitlist-button-icon {

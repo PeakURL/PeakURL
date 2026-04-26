@@ -125,7 +125,7 @@ msgid "Username must be 3-120 characters using letters, numbers, dots, dashes, u
 msgstr "صارف نام 3 سے 120 حروف کا ہونا چاہیے اور اس میں صرف letters، numbers، dots، dashes، underscores، یا @ استعمال ہو سکتے ہیں۔"
 
 #: app/traits/accounts/support.php:108
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:39
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:52
 msgid "Password must be at least 8 characters."
 msgstr "پاس ورڈ کم از کم 8 حروف کا ہونا چاہیے۔"
 
@@ -149,7 +149,7 @@ msgid "Username is already taken."
 msgstr "یہ صارف نام پہلے سے استعمال میں ہے۔"
 
 #: app/traits/accounts/auth.php:112
-#: app/controllers/auth.php:264
+#: app/controllers/auth.php:289
 msgid "Verification token is required."
 msgstr "تصدیقی ٹوکن درکار ہے۔"
 
@@ -350,73 +350,78 @@ msgstr "سائن آؤٹ ہو گیا۔"
 msgid "If that account exists, a password reset link has been sent."
 msgstr "اگر یہ اکاؤنٹ موجود ہے تو پاس ورڈ ری سیٹ لنک بھیج دیا گیا ہے۔"
 
-#: app/controllers/auth.php:172
+#: app/controllers/auth.php:168
+#: app/controllers/auth.php:197
 msgid "Password reset token is invalid or expired."
 msgstr "پاس ورڈ ری سیٹ ٹوکن درست نہیں یا اس کی مدت ختم ہو چکی ہے۔"
 
-#: app/controllers/auth.php:181
+#: app/controllers/auth.php:177
+msgid "Password reset token is valid."
+msgstr ""
+
+#: app/controllers/auth.php:206
 msgid "Password reset complete."
 msgstr "پاس ورڈ ری سیٹ مکمل ہو گیا۔"
 
-#: app/controllers/auth.php:193
+#: app/controllers/auth.php:218
 msgid "Generated Key"
 msgstr "تیار کردہ key"
 
-#: app/controllers/auth.php:201
+#: app/controllers/auth.php:226
 msgid "API key created."
 msgstr "API key بن گئی۔"
 
-#: app/controllers/auth.php:219
+#: app/controllers/auth.php:244
 msgid "API key not found."
 msgstr "API key نہیں ملی۔"
 
-#: app/controllers/auth.php:222
+#: app/controllers/auth.php:247
 msgid "API key deleted."
 msgstr "API key حذف ہو گئی۔"
 
-#: app/controllers/auth.php:235
+#: app/controllers/auth.php:260
 msgid "Security settings loaded."
 msgstr "سیکیورٹی ترتیبات لوڈ ہو گئیں۔"
 
-#: app/controllers/auth.php:249
+#: app/controllers/auth.php:274
 msgid "Two-factor setup started."
 msgstr "دو مرحلہ سیٹ اپ شروع ہو گیا۔"
 
-#: app/controllers/auth.php:274
+#: app/controllers/auth.php:299
 msgid "Two-factor authentication enabled."
 msgstr "دو مرحلہ تصدیق فعال ہو گئی۔"
 
-#: app/controllers/auth.php:294
+#: app/controllers/auth.php:319
 msgid "Two-factor authentication disabled."
 msgstr "دو مرحلہ تصدیق غیر فعال ہو گئی۔"
 
-#: app/controllers/auth.php:318
+#: app/controllers/auth.php:343
 msgid "Backup codes regenerated."
 msgstr "بیک اپ کوڈز دوبارہ بنائے گئے۔"
 
-#: app/controllers/auth.php:342
+#: app/controllers/auth.php:367
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:35
 msgid "PeakURL Backup Codes"
 msgstr "PeakURL بیک اپ کوڈز"
 
-#: app/controllers/auth.php:343
+#: app/controllers/auth.php:368
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/SecurityTab.tsx:36
 msgid "Keep these codes safe. Each code can be used once."
 msgstr "ان کوڈز کو محفوظ رکھیں۔ ہر کوڈ صرف ایک بار استعمال ہو سکتا ہے۔"
 
-#: app/controllers/auth.php:350
+#: app/controllers/auth.php:375
 msgid "Generated:"
 msgstr "بنایا گیا:"
 
-#: app/controllers/auth.php:371
+#: app/controllers/auth.php:396
 msgid "Session not found."
 msgstr "سیشن نہیں ملا۔"
 
-#: app/controllers/auth.php:374
+#: app/controllers/auth.php:399
 msgid "Session revoked."
 msgstr "سیشن منسوخ ہو گیا۔"
 
-#: app/controllers/auth.php:392
+#: app/controllers/auth.php:417
 msgid "Other sessions revoked."
 msgstr "دیگر سیشنز منسوخ کر دیے گئے۔"
 
@@ -1387,7 +1392,7 @@ msgid "Site info"
 msgstr "سائٹ کی معلومات"
 
 #: site/install.php:561
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:274
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:277
 msgid "Site title"
 msgstr "سائٹ کا عنوان"
 
@@ -1401,7 +1406,7 @@ msgstr "ایڈمنسٹریٹر"
 
 #: site/install.php:569
 #: site/setup-config.php:798
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:225
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:228
 #: ui/pages/dashboard/users/UsersPage.tsx:215
 msgid "Username"
 msgstr "صارف نام"
@@ -1451,7 +1456,7 @@ msgid "Welcome - %s"
 msgstr "خوش آمدید - %s"
 
 #: site/setup-config.php:636
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:292
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:295
 msgid "Site language"
 msgstr "سائٹ کی زبان"
 
@@ -2082,9 +2087,9 @@ msgid "click"
 msgstr "کلک"
 
 #: ui/components/charts/WorldMap/WorldMap.tsx:452
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:225
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:276
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:317
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:234
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:285
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:324
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:183
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:323
 msgid "clicks"
@@ -2203,7 +2208,7 @@ msgid "Account Recovery"
 msgstr "اکاؤنٹ بازیافت"
 
 #: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:59
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:79
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:92
 msgid "Reset your password"
 msgstr "اپنا پاس ورڈ ری سیٹ کریں"
 
@@ -2225,6 +2230,7 @@ msgid "Forgot your password?"
 msgstr "پاس ورڈ بھول گئے؟"
 
 #: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:68
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:109
 msgid "Enter your account email or username and PeakURL will send a secure password reset link."
 msgstr "اپنا اکاؤنٹ ای میل یا صارف نام درج کریں اور PeakURL محفوظ پاس ورڈ ری سیٹ لنک بھیج دے گا۔"
 
@@ -2250,73 +2256,75 @@ msgid "owner@example.com or admin"
 msgstr "owner@example.com یا admin"
 
 #: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:117
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:119
 msgid "Send reset link"
 msgstr "ری سیٹ لنک بھیجیں"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:34
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:47
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:106
 msgid "The password reset link is invalid."
 msgstr "پاس ورڈ ری سیٹ لنک درست نہیں ہے۔"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:44
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:57
 #: ui/pages/dashboard/users/UsersPage.tsx:137
 msgid "Passwords do not match."
 msgstr "پاس ورڈ ایک جیسے نہیں ہیں۔"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:61
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:74
 msgid "PeakURL could not reset the password with that link."
 msgstr "PeakURL اس لنک کے ذریعے پاس ورڈ ری سیٹ نہیں کر سکا۔"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:70
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:83
 msgid "Secure Reset"
 msgstr "محفوظ ری سیٹ"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:71
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:84
 msgid "Choose a new password and get back to work."
 msgstr "نیا پاس ورڈ منتخب کریں اور دوبارہ کام شروع کریں۔"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:72
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:85
 msgid "Once the password changes, PeakURL revokes the old sessions so only the new login remains valid."
 msgstr "پاس ورڈ تبدیل ہوتے ہی PeakURL پرانے سیشنز منسوخ کر دے گا تاکہ صرف نیا لاگ اِن درست رہے۔"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:75
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:88
 #: ui/pages/dashboard/users/UsersPage.tsx:132
 #: ui/pages/dashboard/users/UsersPage.tsx:246
 msgid "Use at least 8 characters."
 msgstr "کم از کم 8 حروف استعمال کریں۔"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:76
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:89
 msgid "For best results, combine uppercase, lowercase, numbers, and a unique phrase you do not reuse elsewhere."
 msgstr "بہتر نتائج کے لیے بڑے اور چھوٹے حروف، اعداد، اور ایسا منفرد فقرہ استعمال کریں جو کہیں اور استعمال نہ کرتے ہوں۔"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:80
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:93
 msgid "Set a new account password, then sign in again with the updated credentials."
 msgstr "نیا اکاؤنٹ پاس ورڈ مقرر کریں، پھر نئی اسناد کے ساتھ دوبارہ سائن اِن کریں۔"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:93
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:133
 msgid "Password updated"
 msgstr "پاس ورڈ اپ ڈیٹ ہو گیا"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:96
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:136
 msgid "PeakURL updated your password and revoked the older sessions. Redirecting you to the login page now."
 msgstr "PeakURL نے آپ کا پاس ورڈ اپ ڈیٹ کر دیا ہے اور پرانے سیشنز منسوخ کر دیے ہیں۔ اب آپ کو لاگ اِن صفحے پر بھیجا جا رہا ہے۔"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:106
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:146
 msgid "New password"
 msgstr "نیا پاس ورڈ"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:113
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:153
 msgid "Enter your new password"
 msgstr "اپنا نیا پاس ورڈ درج کریں"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:120
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:161
 msgid "Confirm new password"
 msgstr "نئے پاس ورڈ کی تصدیق کریں"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:130
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:171
 msgid "Confirm your new password"
 msgstr "اپنے نئے پاس ورڈ کی تصدیق کریں"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:141
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:183
 msgid "Reset password"
 msgstr "پاس ورڈ ری سیٹ کریں"
 
@@ -3269,102 +3277,102 @@ msgstr "sessions ختم کریں"
 msgid "Keep sessions"
 msgstr "sessions برقرار رکھیں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:127
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:130
 msgid "Loading languages..."
 msgstr "زبانیں لوڈ ہو رہی ہیں..."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:133
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:136
 msgid "12-hour (AM/PM)"
 msgstr "12 گھنٹے (AM/PM)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:134
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:137
 msgid "24-hour"
 msgstr "24 گھنٹے"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:196
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:199
 msgid "Replace Favicon"
 msgstr "فیویکون تبدیل کریں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:197
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:200
 msgid "Choose Favicon"
 msgstr "فیویکون منتخب کریں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:203
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:206
 msgid "Profile Information"
 msgstr "پروفائل کی معلومات"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:207
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:210
 #: ui/pages/dashboard/users/UsersPage.tsx:200
 msgid "First Name"
 msgstr "پہلا نام"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:214
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:217
 #: ui/pages/dashboard/users/UsersPage.tsx:206
 msgid "Last Name"
 msgstr "آخری نام"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:227
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:230
 msgid "Cannot be changed"
 msgstr "تبدیل نہیں کیا جا سکتا"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:244
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:247
 msgid "Email Address"
 msgstr "ای میل پتہ"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:255
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:258
 msgid "Phone Number"
 msgstr "فون نمبر"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:262
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:265
 msgid "Company"
 msgstr "کمپنی"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:268
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:271
 msgid "Job Title"
 msgstr "عہدہ"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:281
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:284
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:379
 msgid "Site Language"
 msgstr "سائٹ کی زبان"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:297
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:300
 msgid "Site Timezone"
 msgstr "سائٹ ٹائم زون"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:308
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:311
 msgid "Site timezone"
 msgstr "سائٹ ٹائم زون"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:314
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:317
 msgid "Time Format"
 msgstr "وقت کا فارمیٹ"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:325
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:328
 msgid "Time format"
 msgstr "وقت کا فارمیٹ"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:330
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:333
 msgid "Bio"
 msgstr "تعارف"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:344
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:347
 msgid "Site Favicon"
 msgstr "سائٹ favicon"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:347
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:350
 msgid "Upload a square PNG favicon. PeakURL will use it for browser tabs, Apple touch icons, and the site web manifest."
 msgstr "ایک مربع PNG favicon اپ لوڈ کریں۔ PeakURL اسے browser tabs، Apple touch icons، اور سائٹ web manifest کے لیے استعمال کرے گا۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:357
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:360
 msgid "Favicon PNG"
 msgstr "Favicon PNG"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:392
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:395
 msgid "Use a square PNG, ideally %s. The minimum supported size is 180 x 180."
 msgstr "ایک مربع PNG استعمال کریں، بہتر ہے %s ہو۔ کم از کم سپورٹڈ سائز 180 x 180 ہے۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:420
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:423
 msgid "Remove Favicon"
 msgstr "favicon ہٹائیں"
 
@@ -4715,7 +4723,7 @@ msgstr "فائل پارس نہیں ہو سکی: %s"
 #: ui/pages/dashboard/tools/import/_components/file-upload/FileUpload.tsx:82
 #: ui/pages/dashboard/tools/import/_components/file-upload/FileUpload.tsx:209
 #: ui/pages/dashboard/tools/import/_components/paste/PasteImport.tsx:84
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:128
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:137
 msgid "Unknown error"
 msgstr "نامعلوم خرابی"
 
@@ -5574,11 +5582,11 @@ msgid "Dashboard time range"
 msgstr "ڈیش بورڈ کا وقتی دورانیہ"
 
 #: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:36
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:57
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:99
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:119
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:143
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:289
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:58
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:108
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:128
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:152
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:298
 msgid "Top Countries"
 msgstr "سرفہرست ممالک"
 
@@ -5820,60 +5828,60 @@ msgstr "اپنے لمبے URL کو مختصر اور شیئر کرنے کے قا
 msgid "Expiration Date (Optional)"
 msgstr "اختتامی تاریخ (اختیاری)"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:63
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:64
 msgid "No link data available"
 msgstr "لنک کا ڈیٹا دستیاب نہیں ہے"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:105
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:114
 msgid "Loading location data..."
 msgstr "مقام کا ڈیٹا لوڈ ہو رہا ہے..."
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:125
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:134
 msgid "Failed to load location data"
 msgstr "مقام کا ڈیٹا لوڈ کرنے میں ناکامی ہوئی"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:149
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:158
 msgid "No location data available yet"
 msgstr "ابھی مقام کا کوئی ڈیٹا دستیاب نہیں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:152
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:161
 msgid "Location tracking will show here once clicks are recorded with a configured GeoLite2 City database"
 msgstr "جب GeoLite2 City ڈیٹابیس درست طور پر سیٹ ہو جائے اور کلکس ریکارڈ ہونا شروع ہوں، تو مقام کی معلومات یہاں دکھائی دیں گی"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:164
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:173
 msgid "Note:"
 msgstr "نوٹ:"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:169
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:178
 msgid "Local and private-network clicks do not include location data."
 msgstr "مقامی یا نجی نیٹ ورک سے آنے والے کلکس کے لیے مقام کی معلومات دستیاب نہیں ہوتیں۔"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:176
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:185
 msgid "Store the GeoLite2 City database here:"
 msgstr "اس راستے پر GeoLite2 City ڈیٹابیس رکھیں:"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:183
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:192
 msgid "VPN users may show the location of the VPN server."
 msgstr "VPN استعمال کرنے والے صارفین کے لیے اصل مقام کے بجائے VPN سرور کا مقام دکھائی دے سکتا ہے۔"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:196
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:338
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:205
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:345
 msgid "Top Cities"
 msgstr "سرفہرست شہر"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:202
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:211
 msgid "No city data available yet"
 msgstr "ابھی شہر کا کوئی ڈیٹا دستیاب نہیں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:222
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:231
 msgid "Total Locations"
 msgstr "کل مقامات"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:231
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:240
 msgid "Countries"
 msgstr "ممالک"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:245
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:254
 msgid "Geographic Distribution"
 msgstr "جغرافیائی تقسیم"
 
@@ -6066,44 +6074,44 @@ msgstr "تفصیلات دیکھیں"
 msgid "Year"
 msgstr "سال"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:94
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:112
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:90
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:108
 msgid "Device & Browser Analytics"
 msgstr "ڈیوائس اور براؤزر تجزیات"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:98
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:94
 msgid "Loading analytics..."
 msgstr "تجزیات لوڈ ہو رہے ہیں..."
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:118
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:114
 msgid "No device data available yet"
 msgstr "ابھی ڈیوائس کا کوئی ڈیٹا دستیاب نہیں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:121
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:117
 msgid "Device and browser information will appear here once clicks are recorded"
 msgstr "کلکس ریکارڈ ہونے کے بعد ڈیوائس اور براؤزر کی معلومات یہاں ظاہر ہوں گی"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:161
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:157
 msgid "Total Devices"
 msgstr "کل ڈیوائسز"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:170
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:166
 msgid "Unique Browsers"
 msgstr "منفرد براؤزرز"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:184
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:180
 msgid "Browsers"
 msgstr "براؤزرز"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:238
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:234
 msgid "Device Types"
 msgstr "ڈیوائس کی اقسام"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:285
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:281
 msgid "Operating Systems"
 msgstr "آپریٹنگ سسٹمز"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:260
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:256
 msgid "device"
 msgid_plural "devices"
 msgstr[0] "ڈیوائس"

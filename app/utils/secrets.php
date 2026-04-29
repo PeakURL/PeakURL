@@ -36,6 +36,17 @@ class Secrets {
 	}
 
 	/**
+	 * Hash a raw token for database storage or lookup comparisons.
+	 *
+	 * @param string $token Raw token.
+	 * @return string
+	 * @since 1.1.1
+	 */
+	public static function hash_token( string $token ): string {
+		return hash( 'sha256', trim( $token ) );
+	}
+
+	/**
 	 * Hash a raw lookup token for database storage.
 	 *
 	 * @param string $token Raw token.
@@ -43,7 +54,7 @@ class Secrets {
 	 * @since 1.0.3
 	 */
 	public static function hash_lookup_token( string $token ): string {
-		return hash( 'sha256', trim( $token ) );
+		return self::hash_token( $token );
 	}
 
 	/**

@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace PeakURL\Services\Geoip;
 
 use MaxMind\Db\Reader;
+use PeakURL\Utils\Security;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -50,7 +51,7 @@ class Lookup {
 	 * @since 1.0.14
 	 */
 	public function lookup_location( string $ip_address = '' ): array {
-		if ( ! $this->is_public_ip_address( $ip_address ) ) {
+		if ( ! Security::is_public_ip_address( $ip_address ) ) {
 			return $this->get_empty_location();
 		}
 
@@ -153,25 +154,6 @@ class Lookup {
 		}
 
 		return $country_code;
-	}
-
-	/**
-	 * Check whether an IP address is publicly routable.
-	 *
-	 * @param string $ip_address Candidate IP address.
-	 * @return bool
-	 * @since 1.0.14
-	 */
-	private function is_public_ip_address( string $ip_address ): bool {
-		if ( '' === trim( $ip_address ) ) {
-			return false;
-		}
-
-		return false !== filter_var(
-			$ip_address,
-			FILTER_VALIDATE_IP,
-			FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE,
-		);
 	}
 
 	/**

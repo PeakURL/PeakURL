@@ -91,6 +91,27 @@ class Security {
 	}
 
 	/**
+	 * Check whether an IP address is publicly routable.
+	 *
+	 * @param string $ip_address Candidate IP address.
+	 * @return bool True when the address is not private or reserved.
+	 * @since 1.1.1
+	 */
+	public static function is_public_ip_address( string $ip_address ): bool {
+		$ip_address = trim( $ip_address );
+
+		if ( '' === $ip_address ) {
+			return false;
+		}
+
+		return false !== filter_var(
+			$ip_address,
+			FILTER_VALIDATE_IP,
+			FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE,
+		);
+	}
+
+	/**
 	 * Determine whether cookies should be sent with the Secure attribute.
 	 *
 	 * Supports explicit 'true'/'false' overrides and 'auto' mode that

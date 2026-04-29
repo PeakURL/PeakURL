@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace PeakURL\Controllers;
 
-use PeakURL\Http\JsonResponse;
 use PeakURL\Http\Request;
-use PeakURL\Store;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -36,25 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class AnalyticsController {
-
-	/**
-	 * Persistence layer for analytics queries.
-	 *
-	 * @var Store
-	 * @since 1.0.0
-	 */
-	private Store $data_store;
-
-	/**
-	 * Create a new AnalyticsController instance.
-	 *
-	 * @param Store $data_store Shared data-store dependency.
-	 * @since 1.0.0
-	 */
-	public function __construct( Store $data_store ) {
-		$this->data_store = $data_store;
-	}
+class AnalyticsController extends BaseController {
 
 	/**
 	 * Dashboard analytics summary (GET /api/v1/analytics).
@@ -68,7 +48,7 @@ class AnalyticsController {
 	 */
 	public function index( Request $request ): array {
 		$days = (int) $request->get_query_param( 'days', 7 );
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->analytics_summary( $request, $days ),
 			__( 'Analytics loaded.', 'peakurl' ),
 		);
@@ -84,7 +64,7 @@ class AnalyticsController {
 	 * @since 1.0.0
 	 */
 	public function activity( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->activity( $request ),
 			__( 'Activity loaded.', 'peakurl' ),
 		);
@@ -101,7 +81,7 @@ class AnalyticsController {
 	 * @since 1.0.0
 	 */
 	public function history( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->activity_history(
 				$request,
 				array(
@@ -130,11 +110,11 @@ class AnalyticsController {
 		);
 
 		if ( ! $deleted ) {
-			return JsonResponse::error( __( 'Activity log not found.', 'peakurl' ), 404 );
+			return $this->not_found_response( __( 'Activity log not found.', 'peakurl' ) );
 		}
 
-		return JsonResponse::success(
-			array( 'deleted' => true ),
+		return $this->boolean_response(
+			'deleted',
 			__( 'Activity log deleted.', 'peakurl' ),
 		);
 	}
@@ -155,7 +135,7 @@ class AnalyticsController {
 			is_array( $ids ) ? $ids : array(),
 		);
 
-		return JsonResponse::success(
+		return $this->success_response(
 			array(
 				'deletedCount' => $count,
 			),
@@ -180,10 +160,10 @@ class AnalyticsController {
 		);
 
 		if ( ! $location ) {
-			return JsonResponse::error( __( 'Link analytics not found.', 'peakurl' ), 404 );
+			return $this->not_found_response( __( 'Link analytics not found.', 'peakurl' ) );
 		}
 
-		return JsonResponse::success( $location, __( 'Location analytics loaded.', 'peakurl' ) );
+		return $this->success_response( $location, __( 'Location analytics loaded.', 'peakurl' ) );
 	}
 
 	/**
@@ -205,9 +185,9 @@ class AnalyticsController {
 		);
 
 		if ( ! $stats ) {
-			return JsonResponse::error( __( 'Link analytics not found.', 'peakurl' ), 404 );
+			return $this->not_found_response( __( 'Link analytics not found.', 'peakurl' ) );
 		}
 
-		return JsonResponse::success( $stats, __( 'Link analytics loaded.', 'peakurl' ) );
+		return $this->success_response( $stats, __( 'Link analytics loaded.', 'peakurl' ) );
 	}
 }

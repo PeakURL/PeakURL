@@ -15,7 +15,6 @@ namespace PeakURL\Controllers;
 
 use PeakURL\Http\JsonResponse;
 use PeakURL\Http\Request;
-use PeakURL\Store;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -27,32 +26,19 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class AuthController {
-
-	/** @var Store Shared data access layer. */
-	private Store $data_store;
+class AuthController extends BaseController {
 
 	/**
-	 * Create a new AuthController.
-	 *
-	 * @param Store $data_store Data access layer instance.
-	 * @since 1.0.0
-	 */
-	public function __construct( Store $data_store ) {
-		$this->data_store = $data_store;
-	}
-
-	/**
-	 * Register a new user account (POST /api/v1/auth/register).
+	 * Reject public registration for self-hosted installs.
 	 *
 	 * @param Request $request Incoming HTTP request with body parameters.
-	 * @return array<string, mixed> JSON success response with the new user.
+	 * @return array<string, mixed> JSON error response.
 	 * @since 1.0.0
 	 */
 	public function register( Request $request ): array {
 		unset( $request );
 
-		return JsonResponse::error(
+		return $this->error_response(
 			__( 'Public registration is disabled on this self-hosted release.', 'peakurl' ),
 			403,
 		);
@@ -70,13 +56,12 @@ class AuthController {
 		$verified = $this->data_store->verify_email( $token );
 
 		if ( ! $verified ) {
-			return JsonResponse::error(
+			return $this->not_found_response(
 				__( 'Verification token is invalid or expired.', 'peakurl' ),
-				404,
 			);
 		}
 
-		return JsonResponse::success( array( 'verified' => true ), __( 'Email verified.', 'peakurl' ) );
+		return $this->boolean_response( 'verified', __( 'Email verified.', 'peakurl' ) );
 	}
 
 	/**
@@ -87,7 +72,7 @@ class AuthController {
 	 * @since 1.0.0
 	 */
 	public function resend_verification( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->resend_verification(
 				$request,
 				$request->get_body_params(),
@@ -104,7 +89,7 @@ class AuthController {
 	 * @since 1.0.0
 	 */
 	public function login( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->login( $request, $request->get_body_params() ),
 			__( 'Signed in.', 'peakurl' ),
 		);
@@ -118,7 +103,7 @@ class AuthController {
 	 * @since 1.0.0
 	 */
 	public function verify_two_factor_login( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->verify_two_factor_login(
 				$request,
 				$request->get_body_params(),
@@ -136,7 +121,7 @@ class AuthController {
 	 */
 	public function logout( Request $request ): array {
 		$this->data_store->logout( $request );
-		return JsonResponse::success( array( 'loggedOut' => true ), __( 'Signed out.', 'peakurl' ) );
+		return $this->boolean_response( 'loggedOut', __( 'Signed out.', 'peakurl' ) );
 	}
 
 	/**
@@ -147,7 +132,7 @@ class AuthController {
 	 * @since 1.0.0
 	 */
 	public function forgot_password( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->forgot_password( $request->get_body_params() ),
 			__( 'If that account exists, a password reset link has been sent.', 'peakurl' ),
 		);
@@ -164,13 +149,12 @@ class AuthController {
 		$token = (string) $request->get_route_param( 'token' );
 
 		if ( ! $this->data_store->check_password_reset_token( $token ) ) {
-			return JsonResponse::error(
+			return $this->not_found_response(
 				__( 'Password reset token is invalid or expired.', 'peakurl' ),
-				404,
 			);
 		}
 
-		return JsonResponse::success(
+		return $this->success_response(
 			array(
 				'valid' => true,
 			),
@@ -193,13 +177,12 @@ class AuthController {
 		);
 
 		if ( ! $reset ) {
-			return JsonResponse::error(
+			return $this->not_found_response(
 				__( 'Password reset token is invalid or expired.', 'peakurl' ),
-				404,
 			);
 		}
 
-		return JsonResponse::success(
+		return $this->success_response(
 			array(
 				'token' => $token,
 			),
@@ -218,7 +201,7 @@ class AuthController {
 		$label = (string) $request->get_body_param( 'label', __( 'Generated Key', 'peakurl' ) );
 		$key   = $this->data_store->add_api_key( $request, $label );
 
-		return JsonResponse::success(
+		return $this->success_response(
 			array(
 				'apiKey'     => $key['key'],
 				'baseApiUrl' => \get_api_base_url(),
@@ -241,10 +224,10 @@ class AuthController {
 		);
 
 		if ( ! $deleted ) {
-			return JsonResponse::error( __( 'API key not found.', 'peakurl' ), 404 );
+			return $this->not_found_response( __( 'API key not found.', 'peakurl' ) );
 		}
 
-		return JsonResponse::success( array( 'deleted' => true ), __( 'API key deleted.', 'peakurl' ) );
+		return $this->boolean_response( 'deleted', __( 'API key deleted.', 'peakurl' ) );
 	}
 
 	/**
@@ -255,7 +238,7 @@ class AuthController {
 	 * @since 1.0.0
 	 */
 	public function get_security( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->get_security_settings( $request ),
 			__( 'Security settings loaded.', 'peakurl' ),
 		);
@@ -269,7 +252,7 @@ class AuthController {
 	 * @since 1.0.0
 	 */
 	public function start_two_factor_setup( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->start_two_factor_setup( $request ),
 			__( 'Two-factor setup started.', 'peakurl' ),
 		);
@@ -286,10 +269,13 @@ class AuthController {
 		$token = trim( (string) $request->get_body_param( 'token', '' ) );
 
 		if ( '' === $token ) {
-			return JsonResponse::error( __( 'Verification token is required.', 'peakurl' ), 422 );
+			return $this->error_response(
+				__( 'Verification token is required.', 'peakurl' ),
+				422,
+			);
 		}
 
-		return JsonResponse::success(
+		return $this->success_response(
 			array(
 				'backupCodes' => $this->data_store->verify_two_factor(
 					$request,
@@ -314,8 +300,8 @@ class AuthController {
 		);
 
 		$this->data_store->disable_two_factor( $request, $current_password );
-		return JsonResponse::success(
-			array( 'disabled' => true ),
+		return $this->boolean_response(
+			'disabled',
 			__( 'Two-factor authentication disabled.', 'peakurl' ),
 		);
 	}
@@ -333,7 +319,7 @@ class AuthController {
 			'',
 		);
 
-		return JsonResponse::success(
+		return $this->success_response(
 			array(
 				'backupCodes' => $this->data_store->regenerate_backup_codes(
 					$request,
@@ -393,10 +379,10 @@ class AuthController {
 		);
 
 		if ( ! $revoked ) {
-			return JsonResponse::error( __( 'Session not found.', 'peakurl' ), 404 );
+			return $this->not_found_response( __( 'Session not found.', 'peakurl' ) );
 		}
 
-		return JsonResponse::success( array( 'revoked' => true ), __( 'Session revoked.', 'peakurl' ) );
+		return $this->boolean_response( 'revoked', __( 'Session revoked.', 'peakurl' ) );
 	}
 
 	/**
@@ -409,7 +395,7 @@ class AuthController {
 	public function revoke_other_sessions( Request $request ): array {
 		$revoked_count = $this->data_store->revoke_other_sessions( $request );
 
-		return JsonResponse::success(
+		return $this->success_response(
 			array(
 				'revoked'      => true,
 				'revokedCount' => $revoked_count,

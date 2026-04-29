@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace PeakURL\Http;
 
+use PeakURL\Utils\Security;
 use PeakURL\Utils\Str;
 
 // If this file is called directly, abort.
@@ -381,7 +382,7 @@ class Request {
 				continue;
 			}
 
-			if ( $this->is_public_ip( $ip_address ) ) {
+			if ( Security::is_public_ip_address( $ip_address ) ) {
 				return $ip_address;
 			}
 
@@ -408,21 +409,6 @@ class Request {
 		}
 
 		return $ip_address;
-	}
-
-	/**
-	 * Check whether an IP address is publicly routable.
-	 *
-	 * @param string $ip_address Candidate IP address.
-	 * @return bool True when the address is not private or reserved.
-	 * @since 1.0.0
-	 */
-	private function is_public_ip( string $ip_address ): bool {
-		return false !== filter_var(
-			$ip_address,
-			FILTER_VALIDATE_IP,
-			FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE,
-		);
 	}
 
 	/**

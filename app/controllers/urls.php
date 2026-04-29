@@ -15,7 +15,6 @@ namespace PeakURL\Controllers;
 
 use PeakURL\Http\JsonResponse;
 use PeakURL\Http\Request;
-use PeakURL\Store;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -27,20 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class UrlsController {
-
-	/** @var Store Shared data access layer. */
-	private Store $data_store;
-
-	/**
-	 * Create a new UrlsController.
-	 *
-	 * @param Store $data_store Data access layer instance.
-	 * @since 1.0.0
-	 */
-	public function __construct( Store $data_store ) {
-		$this->data_store = $data_store;
-	}
+class UrlsController extends BaseController {
 
 	/**
 	 * Extract a stats-preview short code from a public route parameter.
@@ -112,7 +98,7 @@ class UrlsController {
 			)
 		);
 
-		return JsonResponse::success( $payload, __( 'URLs loaded.', 'peakurl' ) );
+		return $this->success_response( $payload, __( 'URLs loaded.', 'peakurl' ) );
 	}
 
 	/**
@@ -135,7 +121,7 @@ class UrlsController {
 			)
 		);
 
-		return JsonResponse::success( $payload, __( 'URLs export loaded.', 'peakurl' ) );
+		return $this->success_response( $payload, __( 'URLs export loaded.', 'peakurl' ) );
 	}
 
 	/**
@@ -152,10 +138,10 @@ class UrlsController {
 		);
 
 		if ( ! $url ) {
-			return JsonResponse::error( __( 'URL not found.', 'peakurl' ), 404 );
+			return $this->not_found_response( __( 'URL not found.', 'peakurl' ) );
 		}
 
-		return JsonResponse::success( $url, __( 'URL loaded.', 'peakurl' ) );
+		return $this->success_response( $url, __( 'URL loaded.', 'peakurl' ) );
 	}
 
 	/**
@@ -166,7 +152,7 @@ class UrlsController {
 	 * @since 1.0.0
 	 */
 	public function create( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->create_url(
 				$request,
 				$request->get_body_params(),
@@ -184,7 +170,7 @@ class UrlsController {
 	 * @since 1.0.0
 	 */
 	public function bulk_create( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->bulk_create_urls(
 				$request,
 				$request->get_body_params(),
@@ -208,10 +194,10 @@ class UrlsController {
 		);
 
 		if ( ! $url ) {
-			return JsonResponse::error( __( 'URL not found.', 'peakurl' ), 404 );
+			return $this->not_found_response( __( 'URL not found.', 'peakurl' ) );
 		}
 
-		return JsonResponse::success( $url, __( 'URL updated.', 'peakurl' ) );
+		return $this->success_response( $url, __( 'URL updated.', 'peakurl' ) );
 	}
 
 	/**
@@ -228,10 +214,10 @@ class UrlsController {
 		);
 
 		if ( ! $deleted ) {
-			return JsonResponse::error( __( 'URL not found.', 'peakurl' ), 404 );
+			return $this->not_found_response( __( 'URL not found.', 'peakurl' ) );
 		}
 
-		return JsonResponse::success( array( 'deleted' => true ), __( 'URL deleted.', 'peakurl' ) );
+		return $this->boolean_response( 'deleted', __( 'URL deleted.', 'peakurl' ) );
 	}
 
 	/**
@@ -248,7 +234,7 @@ class UrlsController {
 			is_array( $ids ) ? $ids : array(),
 		);
 
-		return JsonResponse::success(
+		return $this->success_response(
 			array(
 				'deletedCount' => $count,
 			),

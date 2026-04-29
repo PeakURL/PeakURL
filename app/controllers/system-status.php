@@ -10,9 +10,7 @@ declare(strict_types=1);
 
 namespace PeakURL\Controllers;
 
-use PeakURL\Http\JsonResponse;
 use PeakURL\Http\Request;
-use PeakURL\Store;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -27,25 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.3
  */
-class SystemStatusController {
-
-	/**
-	 * Shared data-store dependency.
-	 *
-	 * @var Store
-	 * @since 1.0.3
-	 */
-	private Store $data_store;
-
-	/**
-	 * Create a new controller instance.
-	 *
-	 * @param Store $data_store Shared store dependency.
-	 * @since 1.0.3
-	 */
-	public function __construct( Store $data_store ) {
-		$this->data_store = $data_store;
-	}
+class SystemStatusController extends BaseController {
 
 	/**
 	 * Return the aggregated dashboard system-status payload.
@@ -55,7 +35,7 @@ class SystemStatusController {
 	 * @since 1.0.3
 	 */
 	public function status( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->get_system_status( $request ),
 			__( 'System status loaded.', 'peakurl' ),
 		);

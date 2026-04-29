@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace PeakURL\Traits;
 
+use PeakURL\Utils\Secrets;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -118,7 +120,7 @@ trait CredentialsTrait {
 	 * @since 1.0.1
 	 */
 	private function hash_api_key( string $token ): string {
-		return hash( 'sha256', trim( $token ) );
+		return Secrets::hash_token( $token );
 	}
 
 	/**

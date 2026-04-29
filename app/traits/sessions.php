@@ -15,6 +15,7 @@ use PeakURL\Includes\RuntimeConfig;
 use PeakURL\Http\Request;
 use PeakURL\Services\Crypto;
 use PeakURL\Utils\Security;
+use PeakURL\Utils\Secrets;
 use PeakURL\Utils\Visitor;
 
 // If this file is called directly, abort.
@@ -117,9 +118,9 @@ trait SessionsTrait {
             WHERE token_hash = :token_hash
             AND revoked_at IS NULL
             AND last_active_at >= :active_since
-            LIMIT 1',
+			LIMIT 1',
 			array(
-				'token_hash'   => hash( 'sha256', $token ),
+				'token_hash'   => Secrets::hash_token( $token ),
 				'active_since' => $this->session_active_since(),
 			),
 		);
@@ -149,7 +150,7 @@ trait SessionsTrait {
 		$row       = array(
 			'id'               => $this->generate_random_id(),
 			'user_id'          => $user_id,
-			'token_hash'       => hash( 'sha256', $raw_token ),
+			'token_hash'       => Secrets::hash_token( $raw_token ),
 			'user_agent'       => $request->get_user_agent(),
 			'ip_address'       => $request->get_ip_address(),
 			'browser'          => $metadata['browser'],
@@ -282,7 +283,7 @@ trait SessionsTrait {
 	 * @since 1.1.0
 	 */
 	private function get_session_location( string $ip_address ): array {
-		$is_public = $this->is_public_session_ip_address( $ip_address );
+		$is_public = Security::is_public_ip_address( $ip_address );
 		$location  = $is_public
 			? $this->geoip_service->lookup_location( $ip_address )
 			: array(
@@ -316,25 +317,6 @@ trait SessionsTrait {
 		$value = trim( (string) $value );
 
 		return '' !== $value ? $value : null;
-	}
-
-	/**
-	 * Check whether a session IP address can be resolved through GeoIP.
-	 *
-	 * @param string $ip_address Session IP address.
-	 * @return bool
-	 * @since 1.1.0
-	 */
-	private function is_public_session_ip_address( string $ip_address ): bool {
-		if ( '' === trim( $ip_address ) ) {
-			return false;
-		}
-
-		return false !== filter_var(
-			$ip_address,
-			FILTER_VALIDATE_IP,
-			FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE,
-		);
 	}
 
 	/**

@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace PeakURL\Controllers;
 
-use PeakURL\Http\JsonResponse;
 use PeakURL\Http\Request;
-use PeakURL\Store;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -34,25 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class UpdatesController {
-
-	/**
-	 * Persistence layer shared across controllers.
-	 *
-	 * @var Store
-	 * @since 1.0.0
-	 */
-	private Store $data_store;
-
-	/**
-	 * Create a new UpdatesController instance.
-	 *
-	 * @param Store $data_store Shared data-store dependency.
-	 * @since 1.0.0
-	 */
-	public function __construct( Store $data_store ) {
-		$this->data_store = $data_store;
-	}
+class UpdatesController extends BaseController {
 
 	/**
 	 * Return the cached update status (GET /api/v1/system/update).
@@ -65,7 +45,7 @@ class UpdatesController {
 	 * @since 1.0.0
 	 */
 	public function status( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->get_update_status( $request ),
 			__( 'Update status loaded.', 'peakurl' ),
 		);
@@ -82,7 +62,7 @@ class UpdatesController {
 	 * @since 1.0.0
 	 */
 	public function check( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->check_for_updates( $request ),
 			__( 'Update check complete.', 'peakurl' ),
 		);
@@ -99,7 +79,7 @@ class UpdatesController {
 	 * @since 1.0.0
 	 */
 	public function apply( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->apply_update( $request ),
 			__( 'Update applied.', 'peakurl' ),
 		);
@@ -116,7 +96,7 @@ class UpdatesController {
 	 * @since 1.0.5
 	 */
 	public function reinstall( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->reinstall_update( $request ),
 			__( 'Release reinstalled.', 'peakurl' ),
 		);
@@ -130,7 +110,7 @@ class UpdatesController {
 	 * @since 1.0.3
 	 */
 	public function upgrade_database( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->upgrade_database_schema( $request ),
 			__( 'Database upgrade complete.', 'peakurl' ),
 		);

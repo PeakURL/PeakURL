@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace PeakURL\Controllers;
 
-use PeakURL\Http\JsonResponse;
 use PeakURL\Http\Request;
-use PeakURL\Store;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -35,25 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class UsersController {
-
-	/**
-	 * Persistence layer for user data.
-	 *
-	 * @var Store
-	 * @since 1.0.0
-	 */
-	private Store $data_store;
-
-	/**
-	 * Create a new UsersController instance.
-	 *
-	 * @param Store $data_store Shared data-store dependency.
-	 * @since 1.0.0
-	 */
-	public function __construct( Store $data_store ) {
-		$this->data_store = $data_store;
-	}
+class UsersController extends BaseController {
 
 	/**
 	 * List all users (GET /api/v1/users).
@@ -66,7 +46,7 @@ class UsersController {
 	 * @since 1.0.0
 	 */
 	public function index( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->get_all_users( $request ),
 			__( 'Users loaded.', 'peakurl' ),
 		);
@@ -82,7 +62,7 @@ class UsersController {
 	 * @since 1.0.0
 	 */
 	public function create( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->create_user(
 				$request,
 				$request->get_body_params(),
@@ -100,7 +80,7 @@ class UsersController {
 	 * @since 1.0.0
 	 */
 	public function me( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->get_current_user( $request ),
 			__( 'Current user loaded.', 'peakurl' ),
 		);
@@ -117,7 +97,7 @@ class UsersController {
 	 * @since 1.0.0
 	 */
 	public function update_me( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->update_current_user(
 				$request,
 				$request->get_body_params(),
@@ -144,10 +124,10 @@ class UsersController {
 		);
 
 		if ( ! $user ) {
-			return JsonResponse::error( __( 'User not found.', 'peakurl' ), 404 );
+			return $this->not_found_response( __( 'User not found.', 'peakurl' ) );
 		}
 
-		return JsonResponse::success( $user, __( 'User updated.', 'peakurl' ) );
+		return $this->success_response( $user, __( 'User updated.', 'peakurl' ) );
 	}
 
 	/**
@@ -166,9 +146,9 @@ class UsersController {
 		);
 
 		if ( ! $deleted ) {
-			return JsonResponse::error( __( 'User not found.', 'peakurl' ), 404 );
+			return $this->not_found_response( __( 'User not found.', 'peakurl' ) );
 		}
 
-		return JsonResponse::success( array( 'deleted' => true ), __( 'User deleted.', 'peakurl' ) );
+		return $this->boolean_response( 'deleted', __( 'User deleted.', 'peakurl' ) );
 	}
 }

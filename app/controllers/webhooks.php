@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace PeakURL\Controllers;
 
-use PeakURL\Http\JsonResponse;
 use PeakURL\Http\Request;
-use PeakURL\Store;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -32,25 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class WebhooksController {
-
-	/**
-	 * Persistence layer for webhook data.
-	 *
-	 * @var Store
-	 * @since 1.0.0
-	 */
-	private Store $data_store;
-
-	/**
-	 * Create a new WebhooksController instance.
-	 *
-	 * @param Store $data_store Shared data-store dependency.
-	 * @since 1.0.0
-	 */
-	public function __construct( Store $data_store ) {
-		$this->data_store = $data_store;
-	}
+class WebhooksController extends BaseController {
 
 	/**
 	 * List all webhooks for the authenticated user (GET /api/v1/webhooks).
@@ -60,7 +40,7 @@ class WebhooksController {
 	 * @since 1.0.0
 	 */
 	public function index( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->list_webhooks( $request ),
 			__( 'Webhooks loaded.', 'peakurl' ),
 		);
@@ -76,7 +56,7 @@ class WebhooksController {
 	 * @since 1.0.0
 	 */
 	public function create( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->create_webhook(
 				$request,
 				$request->get_body_params(),
@@ -103,9 +83,9 @@ class WebhooksController {
 		);
 
 		if ( ! $deleted ) {
-			return JsonResponse::error( __( 'Webhook not found.', 'peakurl' ), 404 );
+			return $this->not_found_response( __( 'Webhook not found.', 'peakurl' ) );
 		}
 
-		return JsonResponse::success( array( 'deleted' => true ), __( 'Webhook deleted.', 'peakurl' ) );
+		return $this->boolean_response( 'deleted', __( 'Webhook deleted.', 'peakurl' ) );
 	}
 }

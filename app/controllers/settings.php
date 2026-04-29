@@ -10,9 +10,7 @@ declare(strict_types=1);
 
 namespace PeakURL\Controllers;
 
-use PeakURL\Http\JsonResponse;
 use PeakURL\Http\Request;
-use PeakURL\Store;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -29,25 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.3
  */
-class SettingsController {
-
-	/**
-	 * Shared data-store dependency.
-	 *
-	 * @var Store
-	 * @since 1.0.3
-	 */
-	private Store $data_store;
-
-	/**
-	 * Create a new controller instance.
-	 *
-	 * @param Store $data_store Shared store dependency.
-	 * @since 1.0.3
-	 */
-	public function __construct( Store $data_store ) {
-		$this->data_store = $data_store;
-	}
+class SettingsController extends BaseController {
 
 	/**
 	 * Return the public dashboard locale/catalog payload.
@@ -57,7 +37,7 @@ class SettingsController {
 	 * @since 1.0.3
 	 */
 	public function i18n( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->get_public_i18n_payload(),
 			__( 'Dashboard translation catalog loaded.', 'peakurl' ),
 		);
@@ -71,7 +51,7 @@ class SettingsController {
 	 * @since 1.0.3
 	 */
 	public function general( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->get_general_settings( $request ),
 			__( 'General settings loaded.', 'peakurl' ),
 		);
@@ -85,7 +65,7 @@ class SettingsController {
 	 * @since 1.0.3
 	 */
 	public function update_general( Request $request ): array {
-		return JsonResponse::success(
+		return $this->success_response(
 			$this->data_store->save_general_settings(
 				$request,
 				$request->get_body_params(),

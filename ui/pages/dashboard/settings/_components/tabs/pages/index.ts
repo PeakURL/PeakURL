@@ -4,6 +4,6 @@ export { default as EmailDeliveryTab } from "./email/EmailDeliveryTab";
 export { default as GeneralTab } from "./general/GeneralTab";
 export { default as IntegrationsTab } from "./integrations/IntegrationsTab";
 export { default as LocationDataTab } from "./location/LocationDataTab";
-export { default as SecurityTab } from "./security/SecurityTab";
+export { default as SecurityTab } from "./security";
 export { default as ReleaseInstallProgress } from "./updates/ReleaseInstallProgress";
 export { default as UpdatesTab } from "./updates/UpdatesTab";

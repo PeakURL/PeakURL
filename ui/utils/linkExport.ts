@@ -1,4 +1,5 @@
 import { serializeCsv } from "./csv";
+import { downloadBrowserFile } from "./dom";
 import { getShortUrl } from "./linkHelpers";
 import type {
 	LinkExportFile,
@@ -124,16 +125,7 @@ export function downloadLinkExport(
 	const items = formatLinkExportItems(links);
 	const content = serializeLinkExport(format, items);
 	const file = createLinkExportFile(format);
-	const blob = new Blob([content], { type: file.type });
-	const blobUrl = window.URL.createObjectURL(blob);
-	const link = document.createElement("a");
-
-	link.setAttribute("href", blobUrl);
-	link.setAttribute("download", file.filename);
-	document.body.appendChild(link);
-	link.click();
-	document.body.removeChild(link);
-	window.URL.revokeObjectURL(blobUrl);
+	downloadBrowserFile(content, file.filename, file.type);
 
 	return items;
 }

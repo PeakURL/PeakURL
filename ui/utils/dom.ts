@@ -54,3 +54,24 @@ export async function copyToClipboard(text: string): Promise<void> {
 
 	await navigator.clipboard.writeText(text);
 }
+
+/**
+ * Downloads generated browser content through a temporary object URL.
+ */
+export function downloadBrowserFile(
+	content: BlobPart | BlobPart[],
+	filename: string,
+	type = "text/plain;charset=utf-8;"
+): void {
+	const parts = Array.isArray(content) ? content : [content];
+	const blob = new Blob(parts, { type });
+	const blobUrl = window.URL.createObjectURL(blob);
+	const link = document.createElement("a");
+
+	link.href = blobUrl;
+	link.download = filename;
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
+	window.URL.revokeObjectURL(blobUrl);
+}

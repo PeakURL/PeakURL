@@ -1,6 +1,7 @@
 import { Button } from "@/components";
 import { Download } from "lucide-react";
 import { __ } from "@/i18n";
+import { downloadBrowserFile } from "@/utils";
 import type { SampleFormat } from "./types";
 
 function FormatRequirements() {
@@ -46,12 +47,7 @@ function FormatRequirements() {
 			type = "text/xml";
 		}
 
-		const blob = new Blob([content], { type });
-		const url = window.URL.createObjectURL(blob);
-		const a = document.createElement("a");
-		a.href = url;
-		a.download = filename;
-		a.click();
+		downloadBrowserFile(content, filename, type);
 	};
 
 	return (

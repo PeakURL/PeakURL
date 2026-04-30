@@ -101,6 +101,7 @@ export {
 } from "./installRecovery";
 export {
 	copyToClipboard,
+	downloadBrowserFile,
 	requestClosestFormSubmit,
 	requestControlFormSubmit,
 	requestFormSubmit,

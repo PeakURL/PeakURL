@@ -88,7 +88,7 @@ class Loader {
 		string $locale,
 		string $plural_forms_header
 	): array {
-		$catalog_path = $this->paths->get_dashboard_catalog_path( $locale );
+		$catalog_path = $this->paths->get_json_catalog_path( $locale );
 
 		if ( file_exists( $catalog_path ) ) {
 			$contents = file_get_contents( $catalog_path );

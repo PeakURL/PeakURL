@@ -7,7 +7,7 @@ import {
 } from "@wordpress/i18n";
 
 import { API_CLIENT_BASE_URL } from "@/constants";
-import { buildManagedFaviconUrl } from "@/utils";
+import { getManagedFaviconUrl } from "@/utils";
 import { getLocaleDirection } from "./direction";
 import type {
 	RuntimeFaviconPayload,
@@ -80,18 +80,18 @@ function setDocumentLocale(
 		return textDirection || getLocaleDirection(locale || htmlLang);
 	}
 
-	const resolvedLang =
+	const documentLang =
 		htmlLang || locale?.replace(/_/g, "-").toLowerCase() || "en";
-	const resolvedDirection =
-		textDirection || getLocaleDirection(locale || resolvedLang);
-	document.documentElement.lang = resolvedLang;
-	document.documentElement.dir = resolvedDirection;
+	const textDirectionValue =
+		textDirection || getLocaleDirection(locale || documentLang);
+	document.documentElement.lang = documentLang;
+	document.documentElement.dir = textDirectionValue;
 
 	if (document.body) {
-		document.body.dir = resolvedDirection;
+		document.body.dir = textDirectionValue;
 	}
 
-	return resolvedDirection;
+	return textDirectionValue;
 }
 
 function readStringProperty(
@@ -215,16 +215,16 @@ export function applyDocumentFavicon(
 		"string" === typeof favicon.sizes && favicon.sizes.trim()
 			? favicon.sizes.trim()
 			: "";
-	const iconUrl = buildManagedFaviconUrl("favicon.png", favicon.updatedAt);
-	const shortcutIconUrl = buildManagedFaviconUrl(
+	const iconUrl = getManagedFaviconUrl("favicon.png", favicon.updatedAt);
+	const shortcutIconUrl = getManagedFaviconUrl(
 		"favicon.ico",
 		favicon.updatedAt
 	);
-	const appleTouchUrl = buildManagedFaviconUrl(
+	const appleTouchUrl = getManagedFaviconUrl(
 		"apple-touch-icon.png",
 		favicon.updatedAt
 	);
-	const manifestUrl = buildManagedFaviconUrl(
+	const manifestUrl = getManagedFaviconUrl(
 		"site.webmanifest",
 		favicon.updatedAt
 	);

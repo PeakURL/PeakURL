@@ -92,7 +92,7 @@ class RuntimeConfig {
 				$file_values,
 				Constants::DEFAULT_UPDATE_MANIFEST_URL,
 			),
-			Constants::CONFIG_CONTENT_DIR              => self::resolve_path_value(
+			Constants::CONFIG_CONTENT_DIR              => self::get_path_value(
 				self::get_value(
 					Constants::CONFIG_CONTENT_DIR,
 					$file_values,
@@ -100,7 +100,7 @@ class RuntimeConfig {
 				),
 				$root_path,
 			),
-			Constants::CONFIG_GEOIP_DB_PATH            => self::resolve_path_value(
+			Constants::CONFIG_GEOIP_DB_PATH            => self::get_path_value(
 				self::get_value(
 					Constants::CONFIG_GEOIP_DB_PATH,
 					$file_values,
@@ -115,10 +115,12 @@ class RuntimeConfig {
 			),
 			'DB_HOST'                                  => self::get_value( 'DB_HOST', $file_values, '127.0.0.1' ),
 			'DB_PORT'                                  => (int) self::get_value( 'DB_PORT', $file_values, '3306' ),
-			'DB_DATABASE'                              => self::get_value(
-				'DB_DATABASE',
-				$file_values,
-				'peakurl',
+			'DB_DATABASE'                              => self::normalize_db_name(
+				self::get_value(
+					'DB_DATABASE',
+					$file_values,
+					'peakurl',
+				),
 			),
 			'DB_USERNAME'                              => self::get_value( 'DB_USERNAME', $file_values, 'root' ),
 			'DB_PASSWORD'                              => self::get_value( 'DB_PASSWORD', $file_values, '' ),
@@ -143,7 +145,7 @@ class RuntimeConfig {
 			Constants::CONFIG_SESSION_COOKIE_PATH      => self::get_value(
 				Constants::CONFIG_SESSION_COOKIE_PATH,
 				$file_values,
-				self::default_session_cookie_path( $site_url ),
+				self::default_cookie_path( $site_url ),
 			),
 			Constants::CONFIG_SESSION_COOKIE_DOMAIN    => self::sanitize_domain(
 				self::get_value( Constants::CONFIG_SESSION_COOKIE_DOMAIN, $file_values, '' ),
@@ -551,6 +553,27 @@ class RuntimeConfig {
 	}
 
 	/**
+	 * Validate and normalise a database name.
+	 *
+	 * @param string $value Raw database name.
+	 * @return string Valid database name.
+	 *
+	 * @throws \RuntimeException When the database name is invalid.
+	 * @since 1.1.1
+	 */
+	public static function normalize_db_name( string $value ): string {
+		$value = trim( $value );
+
+		if ( '' === $value || ! preg_match( '/^[A-Za-z0-9_]+$/', $value ) ) {
+			throw new \RuntimeException(
+				__( 'Database name may contain only letters, numbers, and underscores.', 'peakurl' ),
+			);
+		}
+
+		return $value;
+	}
+
+	/**
 	 * Normalise a SameSite cookie attribute value.
 	 *
 	 * @param string $value Raw SameSite input.
@@ -600,7 +623,7 @@ class RuntimeConfig {
 	 * @return string
 	 * @since 1.0.0
 	 */
-	private static function default_session_cookie_path( string $site_url ): string {
+	private static function default_cookie_path( string $site_url ): string {
 		$path = parse_url( $site_url, PHP_URL_PATH );
 
 		if ( ! is_string( $path ) || '' === $path || '/' === $path ) {
@@ -660,7 +683,7 @@ class RuntimeConfig {
 	 * @return string Absolute or normalized relative path.
 	 * @since 1.0.0
 	 */
-	private static function resolve_path_value(
+	private static function get_path_value(
 		string $value,
 		string $base_path
 	): string {

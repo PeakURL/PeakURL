@@ -106,6 +106,9 @@ class Query {
 		string $column,
 		string $direction
 	): string {
+		$column    = self::sort_expression( $column );
+		$direction = 'ASC' === strtoupper( trim( $direction ) ) ? 'ASC' : 'DESC';
+
 		return ' ORDER BY ' . $column . ' ' . $direction;
 	}
 
@@ -147,5 +150,27 @@ class Query {
 		}
 
 		return array_values( array_unique( $items ) );
+	}
+
+	/**
+	 * Validate an internal ORDER BY expression.
+	 *
+	 * Supports a plain identifier or an aliased column expression such as
+	 * `u.created_at`. Values must come from server-side whitelists.
+	 *
+	 * @param string $column Column expression.
+	 * @return string Validated expression.
+	 * @since 1.1.1
+	 */
+	private static function sort_expression( string $column ): string {
+		$column = trim( $column );
+
+		if ( preg_match( '/^[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)?$/', $column ) ) {
+			return $column;
+		}
+
+		throw new \InvalidArgumentException(
+			'PeakURL received an invalid sort column.',
+		);
 	}
 }

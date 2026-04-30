@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, TextArea } from "@/components";
 import { useBulkCreateUrlMutation } from "@/store/slices/api";
-import { buildShortUrl, getErrorMessage } from "@/utils";
+import { getShortUrl, getErrorMessage } from "@/utils";
 import { ImportDetails, ImportSummary } from "../results";
 import { Lightbulb, LoaderCircle, WandSparkles } from "lucide-react";
 import { __, sprintf } from "@/i18n";
@@ -61,7 +61,7 @@ const PasteImport = () => {
 							item.shortCode ||
 							__("Auto-generated"),
 						status: "success",
-						shortUrl: buildShortUrl(item),
+						shortUrl: getShortUrl(item),
 					});
 				});
 				(result.data.errors || []).forEach((item) => {

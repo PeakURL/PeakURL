@@ -93,7 +93,7 @@ class UsersApi {
 	 * @return array<string, mixed>|null Owner row or null.
 	 * @since 1.0.0
 	 */
-	public function get_workspace_owner_user(): ?array {
+	public function get_owner_user(): ?array {
 		return $this->db->get_row(
 			'SELECT * FROM users ORDER BY FIELD(role, \'admin\', \'editor\'), created_at ASC LIMIT 1',
 		);

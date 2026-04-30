@@ -112,7 +112,7 @@ trait HelpersTrait {
 	 * @return float Unique click rate rounded to one decimal.
 	 * @since 1.0.14
 	 */
-	private function calculate_unique_click_rate(
+	private function get_unique_click_rate(
 		int $clicks,
 		int $unique_clicks
 	): float {
@@ -181,7 +181,7 @@ trait HelpersTrait {
 	 * @return DatabaseSchema
 	 * @since 1.0.3
 	 */
-	private function get_database_schema_service(): DatabaseSchema {
+	private function get_schema_service(): DatabaseSchema {
 		return new DatabaseSchema( $this->connection );
 	}
 

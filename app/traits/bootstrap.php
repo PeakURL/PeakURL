@@ -18,14 +18,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * BootstrapTrait — workspace bootstrap methods for Store.
+ * BootstrapTrait — site bootstrap methods for Store.
  *
  * @since 1.0.0
  */
 trait BootstrapTrait {
 
 	/**
-	 * Bootstrap the workspace on first request.
+	 * Bootstrap the site on first request.
 	 *
 	 * Ensures the database tables exist, creates the owner admin user
 	 * from config seed values if absent, and synchronizes install-time
@@ -36,13 +36,13 @@ trait BootstrapTrait {
 	 * @throws \RuntimeException When the owner row cannot be created.
 	 * @since 1.0.0
 	 */
-	public function bootstrap_workspace(): void {
+	public function bootstrap_site(): void {
 		if ( $this->bootstrapped ) {
 			return;
 		}
 
 		try {
-			$this->get_database_schema_service()->repair_schema();
+			$this->get_schema_service()->repair_schema();
 		} catch ( \Throwable $exception ) {
 			throw new ApiException(
 				'PeakURL could not finish the database upgrade. Verify the database user can alter tables, then retry.',
@@ -50,7 +50,7 @@ trait BootstrapTrait {
 			);
 		}
 
-		$this->i18n_service->prepare_languages_directory();
+		$this->i18n_service->prepare_languages_dir();
 
 		if ( ! $this->table_exists( 'users' ) ) {
 			throw new ApiException(
@@ -62,7 +62,7 @@ trait BootstrapTrait {
 		$this->db->begin_transaction();
 
 		try {
-			$owner = $this->get_workspace_owner_row();
+			$owner = $this->get_owner_row();
 
 			if ( ! $owner ) {
 				if ( ! $this->has_install_data() ) {
@@ -93,7 +93,7 @@ trait BootstrapTrait {
 						'is_email_verified' => 1,
 						'email_verified_at' => $now,
 						'company'           => 'PeakURL',
-						'bio'               => 'PeakURL workspace owner.',
+						'bio'               => 'PeakURL site owner.',
 						'created_at'        => $now,
 						'updated_at'        => $now,
 					),
@@ -104,7 +104,7 @@ trait BootstrapTrait {
 
 			if ( ! $owner ) {
 				throw new \RuntimeException(
-					'Failed to bootstrap the workspace owner.',
+					'Failed to bootstrap the site owner.',
 				);
 			}
 
@@ -122,7 +122,7 @@ trait BootstrapTrait {
 	}
 
 	/**
-	 * Send the install welcome email once for the seeded workspace owner.
+	 * Send the install welcome email once for the seeded site owner.
 	 *
 	 * Delivery is best-effort so installation can still complete on hosts
 	 * where mail is not configured yet.
@@ -130,7 +130,7 @@ trait BootstrapTrait {
 	 * @return void
 	 * @since 1.0.2
 	 */
-	public function send_install_welcome_email_once(): void {
+	public function send_install_welcome_once(): void {
 		if ( ! $this->table_exists( 'settings' ) ) {
 			return;
 		}
@@ -139,14 +139,14 @@ trait BootstrapTrait {
 			return;
 		}
 
-		$owner = $this->get_workspace_owner_row();
+		$owner = $this->get_owner_row();
 
 		if ( ! is_array( $owner ) ) {
 			return;
 		}
 
 		try {
-			$this->notifications_service->send_install_welcome_email( $owner );
+			$this->notifications_service->send_welcome( $owner );
 			$this->update_option(
 				'install_welcome_email_sent_at',
 				$this->now(),

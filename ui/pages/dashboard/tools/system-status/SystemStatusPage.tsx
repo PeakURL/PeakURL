@@ -106,7 +106,7 @@ function formatHeadingCount(count: number, singular: string, plural: string) {
 	return 1 === count ? singular : plural.replace("%s", formatCount(count));
 }
 
-function buildExportText(sections: InfoSectionData[]) {
+function formatExportText(sections: InfoSectionData[]) {
 	return [
 		"PeakURL System Status",
 		...sections.map((section: InfoSectionData) => {
@@ -750,7 +750,7 @@ function SystemStatusPage() {
 
 	const handleCopyInfo = async () => {
 		try {
-			await copyToClipboard(buildExportText(infoSections));
+			await copyToClipboard(formatExportText(infoSections));
 			setCopiedInfo(true);
 			notification.success(
 				__("Copied"),

@@ -61,7 +61,7 @@ function isMusl() {
 	}
 }
 
-function resolveNativeBindingName() {
+function getNativeBindingName() {
 	if (process.platform === "darwin") {
 		if (process.arch === "x64") {
 			return "@rolldown/binding-darwin-x64";
@@ -144,7 +144,7 @@ function repairPackage(name, version) {
 }
 
 const rolldownVersion = getRolldownVersion();
-const nativeBinding = resolveNativeBindingName();
+const nativeBinding = getNativeBindingName();
 const wasiBinding = "@rolldown/binding-wasm32-wasi";
 
 if (repairPackage(nativeBinding, rolldownVersion)) {

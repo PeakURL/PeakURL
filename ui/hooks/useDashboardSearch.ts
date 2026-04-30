@@ -5,14 +5,14 @@ import { useAdminAccess } from "./useAdminAccess";
 import { useGetAllUsersQuery, useGetUrlsQuery } from "@/store/slices/api";
 import { __ } from "@/i18n";
 import {
-	buildLinkStatsPath,
-	buildLinksSearchPath,
+	getLinkStatsPath,
+	getLinksSearchPath,
 	findDashboardRouteMatches,
 	findDashboardUserMatches,
 	getDashboardSearchValueFromLocation,
 	getLinkDisplayTitle,
-	resolveDashboardSearchPath,
-	buildShortUrl,
+	getDashboardSearchPath,
+	getShortUrl,
 } from "@/utils";
 import type { ClearSearchOptions } from "./types";
 
@@ -78,7 +78,7 @@ export const useDashboardSearch = () => {
 
 		return items.map((link) => {
 			const shortCode = link.alias || link.shortCode || "";
-			const shortUrl = buildShortUrl(link);
+			const shortUrl = getShortUrl(link);
 
 			return {
 				id: link.id,
@@ -89,8 +89,8 @@ export const useDashboardSearch = () => {
 				description: shortUrl,
 				meta: link.destinationUrl || "",
 				href: shortCode
-					? buildLinkStatsPath(shortCode)
-					: buildLinksSearchPath(deferredQuery),
+					? getLinkStatsPath(shortCode)
+					: getLinksSearchPath(deferredQuery),
 			};
 		});
 	}, [linksData, deferredQuery]);
@@ -108,7 +108,7 @@ export const useDashboardSearch = () => {
 				"/dashboard/links" === normalizedPath &&
 				new URLSearchParams(location.search).has("search")
 			) {
-				navigate(buildLinksSearchPath(""));
+				navigate(getLinksSearchPath(""));
 			}
 
 			setIsOpen(false);
@@ -116,7 +116,7 @@ export const useDashboardSearch = () => {
 		}
 
 		handleSelect(
-			resolveDashboardSearchPath(trimmedQuery, searchCapabilities)
+			getDashboardSearchPath(trimmedQuery, searchCapabilities)
 		);
 	};
 
@@ -138,12 +138,12 @@ export const useDashboardSearch = () => {
 	};
 
 	const clearSearch = (options: ClearSearchOptions = {}) => {
-		const shouldResetLinksSearch = Boolean(options.resetLinksSearch);
+		const resetLinksSearch = Boolean(options.resetLinksSearch);
 
 		setQuery("");
 		setIsOpen(false);
 
-		if (!shouldResetLinksSearch) {
+		if (!resetLinksSearch) {
 			return;
 		}
 
@@ -151,7 +151,7 @@ export const useDashboardSearch = () => {
 		const params = new URLSearchParams(location.search);
 
 		if ("/dashboard/links" === normalizedPath && params.has("search")) {
-			navigate(buildLinksSearchPath(""));
+			navigate(getLinksSearchPath(""));
 		}
 	};
 
@@ -163,7 +163,7 @@ export const useDashboardSearch = () => {
 		linkMatches,
 		isFetchingLinks,
 		isFetchingUsers,
-		allLinksHref: buildLinksSearchPath(trimmedQuery),
+		allLinksHref: getLinksSearchPath(trimmedQuery),
 		handleChange,
 		handleFocus,
 		handleSelect,

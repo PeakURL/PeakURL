@@ -29,17 +29,13 @@ trait UsersTrait {
 	 * Return the currently authenticated user's profile.
 	 *
 	 * @param Request $request Incoming HTTP request.
-	 * @return array<string, mixed> Hydrated user profile.
+	 * @return array<string, mixed> Formatted user profile.
 	 *
 	 * @throws ApiException When no valid session or API key exists (401).
 	 * @since 1.0.0
 	 */
-	public function get_current_user( Request $request ): array {
-		$user = $this->resolve_current_user( $request, true );
-
-		if ( ! $user ) {
-			throw new ApiException( __( 'Authentication required.', 'peakurl' ), 401 );
-		}
+	public function get_current_profile( Request $request ): array {
+		$user = $this->get_current_user( $request );
 
 		return array_merge(
 			$user,
@@ -58,14 +54,15 @@ trait UsersTrait {
 	 *
 	 * @param Request              $request Incoming HTTP request.
 	 * @param array<string, mixed> $changes Partial profile payload.
-	 * @return array<string, mixed> Hydrated updated user profile.
+	 * @return array<string, mixed> Formatted updated user profile.
 	 *
 	 * @throws ApiException On validation failures (422).
 	 * @since 1.0.0
 	 */
 	public function update_current_user( Request $request, array $changes ): array {
-		$user             = $this->assert_request_capability(
-			$request,
+		$user = $this->get_current_user( $request );
+		$this->validate_capability(
+			$user,
 			'manage_profile',
 			'You do not have permission to update this profile.',
 		);
@@ -122,7 +119,7 @@ trait UsersTrait {
 		) {
 			$password = $this->validate_password( (string) $changes['password'] );
 
-			$this->assert_password_confirmation_for_user(
+			$this->confirm_current_password(
 				$user_row,
 				(string) ( $changes['currentPassword'] ?? '' ),
 				__(
@@ -140,7 +137,7 @@ trait UsersTrait {
 		}
 
 		if ( empty( $updates ) ) {
-			return $this->hydrate_user(
+			return $this->format_user(
 				$this->find_user_row_by_id( $user_id ),
 				$request,
 			);
@@ -155,10 +152,10 @@ trait UsersTrait {
 		);
 
 		if ( $password_changed && $user_row ) {
-			$this->send_password_changed_notification( $user_row );
+			$this->send_password_changed( $user_row );
 		}
 
-		return $this->hydrate_user(
+		return $this->format_user(
 			$this->find_user_row_by_id( $user_id ),
 			$request,
 		);
@@ -168,14 +165,14 @@ trait UsersTrait {
 	 * List all users (admin only).
 	 *
 	 * @param Request $request Incoming HTTP request (must be admin).
-	 * @return array<int, array<string, mixed>> Hydrated user rows.
+	 * @return array<int, array<string, mixed>> Formatted user rows.
 	 * @since 1.0.0
 	 */
 	public function get_all_users( Request $request ): array {
-		$this->assert_admin_request( $request );
+		$this->get_admin_user( $request );
 
 		return array_map(
-			fn( array $row ): array => $this->hydrate_user( $row ),
+			fn( array $row ): array => $this->format_user( $row ),
 			$this->query_all(
 				'SELECT * FROM users
 				ORDER BY FIELD(role, \'admin\', \'editor\'), created_at ASC',
@@ -191,16 +188,16 @@ trait UsersTrait {
 	 *
 	 * @param Request              $request Incoming HTTP request (must be admin).
 	 * @param array<string, mixed> $payload User creation payload.
-	 * @return array<string, mixed> Hydrated new user.
+	 * @return array<string, mixed> Formatted new user.
 	 *
 	 * @throws ApiException On validation or uniqueness failure (422).
 	 * @since 1.0.0
 	 */
 	public function create_user( Request $request, array $payload ): array {
-		$current_user = $this->assert_admin_request( $request );
+		$current_user = $this->get_admin_user( $request );
 
 		$email      = $this->validate_email( (string) ( $payload['email'] ?? '' ) );
-		$username   = $this->validate_username_pattern(
+		$username   = $this->validate_user_login(
 			(string) ( $payload['username'] ?? '' )
 		);
 		$password   = $this->validate_password(
@@ -253,12 +250,12 @@ trait UsersTrait {
 				(string) $current_user['id'],
 				null,
 				array(
-					'user' => $this->build_activity_user_metadata( $user ),
+					'user' => $this->get_user_activity_meta( $user ),
 				),
 			);
 		}
 
-		return $this->hydrate_user( $user );
+		return $this->format_user( $user );
 	}
 
 	/**
@@ -270,7 +267,7 @@ trait UsersTrait {
 	 * @param Request              $request  Incoming HTTP request (must be admin).
 	 * @param string               $username Target user's username.
 	 * @param array<string, mixed> $changes  Partial update payload.
-	 * @return array<string, mixed>|null Hydrated user or null if not found.
+	 * @return array<string, mixed>|null Formatted user or null if not found.
 	 *
 	 * @throws ApiException On validation or role-change violation (422).
 	 * @since 1.0.0
@@ -280,7 +277,7 @@ trait UsersTrait {
 		string $username,
 		array $changes
 	): ?array {
-		$current_user = $this->assert_admin_request( $request );
+		$current_user = $this->get_admin_user( $request );
 		$user         = $this->find_user_row_by_username( $username );
 
 		if ( ! $user ) {
@@ -313,7 +310,7 @@ trait UsersTrait {
 		}
 
 		if ( array_key_exists( 'username', $changes ) ) {
-			$new_username = $this->validate_username_pattern(
+			$new_username = $this->validate_user_login(
 				(string) $changes['username']
 			);
 
@@ -345,7 +342,7 @@ trait UsersTrait {
 
 		if ( array_key_exists( 'role', $changes ) ) {
 			$role = $this->roles->normalize_role( (string) $changes['role'] );
-			$this->assert_admin_role_change_is_allowed(
+			$this->validate_role_change(
 				(string) $user['id'],
 				(string) $user['role'],
 				$role,
@@ -370,7 +367,7 @@ trait UsersTrait {
 		}
 
 		if ( empty( $updates ) ) {
-			return $this->hydrate_user(
+			return $this->format_user(
 				$this->find_user_row_by_id( $user_id ),
 			);
 		}
@@ -384,7 +381,7 @@ trait UsersTrait {
 		);
 
 		if ( ! empty( $password_changed ) ) {
-			$this->send_password_changed_notification( $user );
+			$this->send_password_changed( $user );
 		}
 
 		$updated_user = $this->find_user_row_by_id( $user_id );
@@ -396,12 +393,12 @@ trait UsersTrait {
 				(string) $current_user['id'],
 				null,
 				array(
-					'user' => $this->build_activity_user_metadata( $updated_user ),
+					'user' => $this->get_user_activity_meta( $updated_user ),
 				),
 			);
 		}
 
-		return $this->hydrate_user( $updated_user );
+		return $this->format_user( $updated_user );
 	}
 
 	/**
@@ -420,7 +417,7 @@ trait UsersTrait {
 		Request $request,
 		string $username
 	): bool {
-		$current_user = $this->assert_admin_request( $request );
+		$current_user = $this->get_admin_user( $request );
 		$user         = $this->find_user_row_by_username( $username );
 
 		if ( ! $user ) {
@@ -431,7 +428,7 @@ trait UsersTrait {
 			throw new ApiException( __( 'You cannot delete the current user.', 'peakurl' ), 422 );
 		}
 
-		$this->assert_admin_role_change_is_allowed(
+		$this->validate_role_change(
 			(string) $user['id'],
 			(string) $user['role'],
 			'deleted',
@@ -441,7 +438,7 @@ trait UsersTrait {
 		$this->db->begin_transaction();
 
 		try {
-			$this->prune_activity_logs_for_user( (string) $user['id'] );
+			$this->prune_user_activity( (string) $user['id'] );
 
 			$this->record_activity(
 				'user_deleted',
@@ -449,7 +446,7 @@ trait UsersTrait {
 				(string) $current_user['id'],
 				null,
 				array(
-					'user' => $this->build_activity_user_metadata( $user ),
+					'user' => $this->get_user_activity_meta( $user ),
 				),
 			);
 			$this->db->delete(
@@ -480,7 +477,7 @@ trait UsersTrait {
 	 * @return void
 	 * @since 1.0.6
 	 */
-	private function prune_activity_logs_for_user( string $user_id ): void {
+	private function prune_user_activity( string $user_id ): void {
 		$this->execute(
 			"DELETE FROM audit_logs
 			WHERE user_id = :user_id
@@ -493,13 +490,13 @@ trait UsersTrait {
 	}
 
 	/**
-	 * Build lightweight user metadata for audit-log payloads.
+	 * Return lightweight user metadata for audit-log payloads.
 	 *
 	 * @param array<string, mixed> $user Raw user row.
 	 * @return array<string, string|null>
 	 * @since 1.0.4
 	 */
-	private function build_activity_user_metadata( array $user ): array {
+	private function get_user_activity_meta( array $user ): array {
 		$first_name = trim( (string) ( $user['first_name'] ?? '' ) );
 		$last_name  = trim( (string) ( $user['last_name'] ?? '' ) );
 		$username   = trim( (string) ( $user['username'] ?? '' ) );

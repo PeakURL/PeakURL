@@ -248,7 +248,7 @@ class Upgrade {
 			return;
 		}
 
-		$matching_ids = $this->context->get_ids_with_prefix( $table_name, $prefix );
+		$matching_ids = $this->context->get_prefixed_ids( $table_name, $prefix );
 
 		if ( empty( $matching_ids ) ) {
 			return;
@@ -333,7 +333,7 @@ class Upgrade {
 		foreach ( SchemaSpecs::foreign_key_specs() as $table_name => $specs ) {
 			foreach ( $specs as $spec ) {
 				$constraint_name      = (string) $spec['name'];
-				$expected_delete_rule = $this->get_expected_delete_rule(
+				$expected_delete_rule = $this->parse_delete_rule(
 					(string) $spec['definition'],
 				);
 
@@ -493,7 +493,7 @@ class Upgrade {
 	 * @return string|null
 	 * @since 1.0.14
 	 */
-	private function get_expected_delete_rule( string $definition ): ?string {
+	private function parse_delete_rule( string $definition ): ?string {
 		$matches = array();
 
 		if ( 1 !== preg_match( '/ON DELETE\s+([A-Z ]+)/i', $definition, $matches ) ) {

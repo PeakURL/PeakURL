@@ -5,7 +5,7 @@ import type { ShortUrlLinkLike } from "./types";
 /**
  * Resolves a public host from the link payload when a custom domain exists.
  */
-export const resolveLinkHost = (link?: ShortUrlLinkLike | null): string => {
+export const getLinkHost = (link?: ShortUrlLinkLike | null): string => {
 	const rawDomain = link?.domain;
 
 	if (!rawDomain) {
@@ -56,14 +56,14 @@ const normalizeSiteUrl = (
 export const getSiteUrl = (): string => normalizeSiteUrl(PEAKURL_URL);
 
 /**
- * Builds the public short URL for a link payload.
+ * Returns the public short URL for a link payload.
  */
-export const buildShortUrl = (link?: ShortUrlLinkLike | null): string => {
+export const getShortUrl = (link?: ShortUrlLinkLike | null): string => {
 	if ("string" === typeof link?.shortUrl && link.shortUrl.trim()) {
 		return link.shortUrl.trim();
 	}
 
-	const host = resolveLinkHost(link);
+	const host = getLinkHost(link);
 	const base = host ? `https://${host}` : getSiteUrl();
 	const code = link?.alias || link?.shortCode || "";
 

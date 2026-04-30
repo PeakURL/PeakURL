@@ -11,7 +11,7 @@ import {
 import { useUpdateUrlMutation } from "@/store/slices/api";
 import { __ } from "@/i18n";
 import {
-	buildShortUrl,
+	getShortUrl,
 	getErrorMessage,
 	normalizeLinkTitle,
 	getLocalDateTimeValue,
@@ -26,9 +26,9 @@ import type {
 } from "../types";
 
 function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
-	const getInitialTitle = () => normalizeLinkTitle(link?.title);
-	const getInitialStatus = (): LinkStatus => link?.status || "active";
-	const getInitialExpiresAt = () => toLocalDateTimeValue(link?.expiresAt);
+	const initialTitle = () => normalizeLinkTitle(link?.title);
+	const initialStatus = (): LinkStatus => link?.status || "active";
+	const initialExpiresAt = () => toLocalDateTimeValue(link?.expiresAt);
 	const hasExistingPassword = Boolean(link?.hasPassword);
 	const statusOptions: SelectOption<LinkStatus>[] = [
 		{ value: "active", label: __("Active") },
@@ -36,15 +36,15 @@ function EditLinkModal({ open, setOpen, link }: EditLinkModalProps) {
 		{ value: "expired", label: __("Expired") },
 	];
 
-	const [title, setTitle] = useState(getInitialTitle);
-	const [status, setStatus] = useState<LinkStatus>(getInitialStatus);
+	const [title, setTitle] = useState(initialTitle);
+	const [status, setStatus] = useState<LinkStatus>(initialStatus);
 	const [password, setPassword] = useState("");
 	const [clearPassword, setClearPassword] = useState(false);
-	const [expiresAt, setExpiresAt] = useState(getInitialExpiresAt);
+	const [expiresAt, setExpiresAt] = useState(initialExpiresAt);
 	const [error, setError] = useState("");
 
 	const [updateUrl, { isLoading }] = useUpdateUrlMutation();
-	const shortUrl = link ? buildShortUrl(link) : "";
+	const shortUrl = link ? getShortUrl(link) : "";
 
 	const handleClose = () => setOpen(false);
 

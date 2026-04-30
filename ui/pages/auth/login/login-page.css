@@ -114,10 +114,6 @@
 		@apply mt-7 space-y-5;
 	}
 
-	.login-page-input {
-		@apply rounded-xl! border-slate-200! bg-slate-50! py-3! text-sm! transition-colors duration-150 placeholder:text-slate-400 focus:border-indigo-400! focus:bg-white! focus:ring-2! focus:ring-indigo-500/15!;
-	}
-
 	.login-page-link-row {
 		@apply -mt-1 flex justify-end;
 	}

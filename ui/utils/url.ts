@@ -25,8 +25,7 @@ export function sanitizeUrl(value: string | null | undefined): string {
 
 		if (
 			url.protocol !== "http:" &&
-			url.protocol !== "https:" &&
-			url.protocol !== "blob:"
+			url.protocol !== "https:"
 		) {
 			return "";
 		}

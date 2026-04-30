@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * AuthorizationTrait — shared permission helpers for Store.
  *
- * Keeps request-level capability checks and ownership scoping logic out of the
+ * Keeps request-level capability policy and ownership scoping logic out of the
  * main store class so role policy stays modular and easier to reason about.
  *
  * @since 1.0.0
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 trait AuthorizationTrait {
 
 	/**
-	 * Enforce owner-or-admin access against a record's user_id column.
+	 * Validate owner-or-admin access against a record's user_id column.
 	 *
 	 * @param array<string, mixed> $user              Current user.
 	 * @param string               $owner_user_id     Record owner user ID.
@@ -41,20 +41,20 @@ trait AuthorizationTrait {
 	 * @throws ApiException When the user cannot access the record.
 	 * @since 1.0.0
 	 */
-	private function assert_record_access(
+	private function validate_record_access(
 		array $user,
 		string $owner_user_id,
 		string $own_capability,
 		string $global_capability,
 		string $message
 	): void {
-		if ( $this->roles->user_can( $user, $global_capability ) ) {
+		if ( $this->roles->has_capability( $user, $global_capability ) ) {
 			return;
 		}
 
 		if (
 			(string) ( $user['id'] ?? '' ) === $owner_user_id &&
-			$this->roles->user_can( $user, $own_capability )
+			$this->roles->has_capability( $user, $own_capability )
 		) {
 			return;
 		}
@@ -74,17 +74,17 @@ trait AuthorizationTrait {
 	 * @throws ApiException When the user cannot view links.
 	 * @since 1.0.0
 	 */
-	private function add_link_visibility_scope(
+	private function scope_link_visibility(
 		array $user,
 		array &$conditions,
 		array &$params,
 		string $table_alias = 'u'
 	): void {
-		if ( $this->roles->user_can( $user, 'view_all_links' ) ) {
+		if ( $this->roles->has_capability( $user, 'view_all_links' ) ) {
 			return;
 		}
 
-		if ( $this->roles->user_can( $user, 'view_own_links' ) ) {
+		if ( $this->roles->has_capability( $user, 'view_own_links' ) ) {
 			$conditions[]            = $table_alias . '.user_id = :scope_user_id';
 			$params['scope_user_id'] = (string) $user['id'];
 			return;
@@ -110,7 +110,7 @@ trait AuthorizationTrait {
 	 * @throws ApiException When the user cannot view analytics.
 	 * @since 1.0.0
 	 */
-	private function add_click_analytics_scope(
+	private function scope_click_analytics(
 		array $user,
 		string &$join_sql,
 		array &$conditions,
@@ -118,11 +118,11 @@ trait AuthorizationTrait {
 		string $click_alias = 'c',
 		string $url_alias = 'u'
 	): void {
-		if ( $this->roles->user_can( $user, 'view_site_analytics' ) ) {
+		if ( $this->roles->has_capability( $user, 'view_site_analytics' ) ) {
 			return;
 		}
 
-		if ( $this->roles->user_can( $user, 'view_own_analytics' ) ) {
+		if ( $this->roles->has_capability( $user, 'view_own_analytics' ) ) {
 			$join_sql               .=
 				' INNER JOIN urls ' .
 				$url_alias .
@@ -143,45 +143,43 @@ trait AuthorizationTrait {
 	}
 
 	/**
-	 * Assert the current request belongs to a user with a capability.
+	 * Validate a user capability.
 	 *
-	 * @param Request $request       Incoming HTTP request.
+	 * @param array<string, mixed> $user          Current user.
 	 * @param string  $capability    Required capability.
 	 * @param string  $error_message Message returned on denial.
-	 * @return array<string, mixed> Hydrated current user.
+	 * @return void
 	 *
 	 * @throws ApiException When the capability is missing.
 	 * @since 1.0.0
 	 */
-	private function assert_request_capability(
-		Request $request,
+	private function validate_capability(
+		array $user,
 		string $capability,
 		string $error_message
-	): array {
-		$user = $this->get_current_user( $request );
-
-		if ( ! $this->roles->user_can( $user, $capability ) ) {
+	): void {
+		if ( ! $this->roles->has_capability( $user, $capability ) ) {
 			throw new ApiException( $error_message, 403 );
 		}
-
-		return $user;
 	}
 
 	/**
-	 * Assert the current request belongs to an admin user.
+	 * Return the current admin user.
 	 *
 	 * @param Request $request Incoming HTTP request.
-	 * @return array<string, mixed> The admin user's hydrated profile.
+	 * @return array<string, mixed> The admin user's formatted profile.
 	 *
 	 * @throws ApiException When the user is not an admin.
 	 * @since 1.0.0
 	 */
-	private function assert_admin_request( Request $request ): array {
-		return $this->assert_request_capability(
-			$request,
-			'manage_users',
-			__( 'Admin access is required.', 'peakurl' ),
-		);
+	private function get_admin_user( Request $request ): array {
+		$user = $this->get_current_user( $request );
+
+		if ( ! $this->roles->is_admin( $user ) ) {
+			throw new ApiException( __( 'Admin access is required.', 'peakurl' ), 403 );
+		}
+
+		return $user;
 	}
 
 	/**
@@ -195,7 +193,7 @@ trait AuthorizationTrait {
 	}
 
 	/**
-	 * Guard against demoting or deleting the last remaining admin.
+	 * Validate that a role change keeps at least one admin.
 	 *
 	 * @param string $target_user_id User being changed.
 	 * @param string $current_role   Current role of the target user.
@@ -206,7 +204,7 @@ trait AuthorizationTrait {
 	 * @throws ApiException When the change would leave zero admins.
 	 * @since 1.0.0
 	 */
-	private function assert_admin_role_change_is_allowed(
+	private function validate_role_change(
 		string $target_user_id,
 		string $current_role,
 		string $next_role,

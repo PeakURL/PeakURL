@@ -33,18 +33,18 @@ trait AuthTrait {
 	 *
 	 * Validates email, username, and password; inserts the user row
 	 * with an unverified email status; creates a session; and returns
-	 * the hydrated user profile.
+	 * the formatted user profile.
 	 *
 	 * @param Request              $request Incoming HTTP request (for session creation).
 	 * @param array<string, mixed> $payload Body with `email`, `username`, `password`, optional `firstName`/`lastName`.
-	 * @return array<string, mixed> Hydrated user profile.
+	 * @return array<string, mixed> Formatted user profile.
 	 *
 	 * @throws ApiException On validation failure or duplicate email/username (422).
 	 * @since 1.0.0
 	 */
 	public function register( Request $request, array $payload ): array {
 		$email    = $this->validate_email( (string) ( $payload['email'] ?? '' ) );
-		$username = $this->validate_username_required(
+		$username = $this->validate_username(
 			(string) ( $payload['username'] ?? '' )
 		);
 		$password = $this->validate_password(
@@ -88,7 +88,7 @@ trait AuthTrait {
 
 		$this->create_session_for_user( $request, $user_id );
 
-		return $this->hydrate_user(
+		return $this->format_user(
 			$this->find_user_row_by_id( $user_id ),
 			$request,
 		);
@@ -160,7 +160,7 @@ trait AuthTrait {
 	 * @since 1.0.0
 	 */
 	public function resend_verification( Request $request, array $payload ): array {
-		$current_user = $this->resolve_current_user( $request, false );
+		$current_user = $this->current_user( $request );
 		$email        = sanitize_email(
 			(string) ( $payload['email'] ?? ( $current_user['email'] ?? '' ) )
 		);
@@ -203,7 +203,7 @@ trait AuthTrait {
 	 *
 	 * @param Request              $request Incoming HTTP request (for session creation).
 	 * @param array<string, mixed> $payload Body with `identifier`/`email`/`username`, `password`, optional `token`.
-	 * @return array<string, mixed> Hydrated user + `requiresTwoFactor` flag.
+	 * @return array<string, mixed> Formatted user + `requiresTwoFactor` flag.
 	 *
 	 * @throws ApiException On missing credentials (422) or invalid credentials (401).
 	 * @since 1.0.0
@@ -246,7 +246,7 @@ trait AuthTrait {
 		if ( ! empty( $user['two_factor_enabled'] ) ) {
 			if ( '' === $token ) {
 				return array(
-					'user'              => $this->hydrate_user( $user, $request ),
+					'user'              => $this->format_user( $user, $request ),
 					'requiresTwoFactor' => true,
 				);
 			}
@@ -276,7 +276,7 @@ trait AuthTrait {
 		);
 
 		return array(
-			'user'              => $this->hydrate_user(
+			'user'              => $this->format_user(
 				$this->find_user_row_by_id( (string) $user['id'] ),
 				$request,
 			),
@@ -291,7 +291,7 @@ trait AuthTrait {
 	 *
 	 * @param Request              $request Incoming HTTP request.
 	 * @param array<string, mixed> $payload Body with `identifier`, `password`, and `token`.
-	 * @return array<string, mixed> Hydrated user.
+	 * @return array<string, mixed> Formatted user.
 	 *
 	 * @throws ApiException When the token is missing or invalid (422).
 	 * @since 1.0.0
@@ -359,7 +359,7 @@ trait AuthTrait {
 			throw new ApiException( __( 'Email or username is required.', 'peakurl' ), 422 );
 		}
 
-		$this->delete_expired_password_reset_tokens();
+		$this->delete_expired_tokens();
 
 		$normalized_identifier = sanitize_email( $identifier );
 		$user                  = false !== is_email( $normalized_identifier )
@@ -386,7 +386,7 @@ trait AuthTrait {
 		);
 
 		try {
-			$this->notifications_service->send_password_reset_email(
+			$this->notifications_service->send_password_reset(
 				$user,
 				$reset_token['raw'],
 			);
@@ -410,8 +410,8 @@ trait AuthTrait {
 	 * @return bool True when the token can still be used.
 	 * @since 1.1.0
 	 */
-	public function check_password_reset_token( string $token ): bool {
-		return null !== $this->get_user_by_password_reset_token( $token );
+	public function validate_reset_token( string $token ): bool {
+		return null !== $this->get_reset_token_user( $token );
 	}
 
 	/**
@@ -434,7 +434,7 @@ trait AuthTrait {
 			return false;
 		}
 
-		$user = $this->get_user_by_password_reset_token( $token );
+		$user = $this->get_reset_token_user( $token );
 
 		if ( ! $user ) {
 			return false;
@@ -465,7 +465,7 @@ trait AuthTrait {
 				'user_id'        => $user['id'],
 			),
 		);
-		$this->send_password_changed_notification( $user );
+		$this->send_password_changed( $user );
 
 		return true;
 	}
@@ -477,14 +477,14 @@ trait AuthTrait {
 	 * @return array<string, mixed>|null User row when the token is valid.
 	 * @since 1.1.0
 	 */
-	private function get_user_by_password_reset_token( string $token ): ?array {
+	private function get_reset_token_user( string $token ): ?array {
 		$token = trim( $token );
 
 		if ( '' === $token ) {
 			return null;
 		}
 
-		$this->delete_expired_password_reset_tokens();
+		$this->delete_expired_tokens();
 
 		return $this->query_one(
 			'SELECT * FROM users
@@ -504,7 +504,7 @@ trait AuthTrait {
 	 * @return void
 	 * @since 1.1.0
 	 */
-	private function delete_expired_password_reset_tokens(): void {
+	private function delete_expired_tokens(): void {
 		$this->execute(
 			'UPDATE users
             SET password_reset_token = NULL,

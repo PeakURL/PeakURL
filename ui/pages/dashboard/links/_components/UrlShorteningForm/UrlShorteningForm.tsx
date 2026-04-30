@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useCreateUrlMutation } from "@/store/slices/api";
 import {
-	buildShortUrl,
+	getShortUrl,
 	getErrorMessage,
 	isRelativeUrl,
 	isFutureLocalDateTime,
@@ -40,7 +40,7 @@ const UrlShorteningForm = () => {
 
 	const [createUrl, { isLoading }] = useCreateUrlMutation();
 
-	const buildUrlWithUtm = (url: string) => {
+	const applyUtmParams = (url: string) => {
 		if (
 			!utmSource &&
 			!utmMedium &&
@@ -90,7 +90,7 @@ const UrlShorteningForm = () => {
 		}
 
 		try {
-			const urlWithUtm = buildUrlWithUtm(normalizedDestinationUrl);
+			const urlWithUtm = applyUtmParams(normalizedDestinationUrl);
 
 			const payload: CreateUrlPayload = {
 				destinationUrl: urlWithUtm,
@@ -119,7 +119,7 @@ const UrlShorteningForm = () => {
 
 			const result = await createUrl(payload).unwrap();
 			const shortUrl = result.data
-				? buildShortUrl(result.data)
+				? getShortUrl(result.data)
 				: payload.destinationUrl;
 			setSuccess(
 				sprintf(__("Link shortened successfully! %s"), shortUrl)

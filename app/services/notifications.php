@@ -42,7 +42,7 @@ class Notifications {
 	 * @throws \RuntimeException When email delivery fails.
 	 * @since 1.0.2
 	 */
-	public function send_password_reset_email( array $user, string $token ): void {
+	public function send_password_reset( array $user, string $token ): void {
 		$email = $this->get_user_email(
 			$user,
 			__( 'PeakURL could not send the password reset email because the account email address is invalid.', 'peakurl' ),
@@ -74,7 +74,7 @@ class Notifications {
 			$user,
 			$token,
 		);
-		$bodies  = $this->render_template_pair(
+		$bodies  = $this->format_email_bodies(
 			'password-reset',
 			$context,
 		);
@@ -108,7 +108,7 @@ class Notifications {
 	 * @throws \RuntimeException When email delivery fails.
 	 * @since 1.0.6
 	 */
-	public function send_password_changed_email( array $user ): void {
+	public function send_password_changed( array $user ): void {
 		$email = $this->get_user_email(
 			$user,
 			__( 'PeakURL could not send the password changed email because the account email address is invalid.', 'peakurl' ),
@@ -148,7 +148,7 @@ class Notifications {
 			$site_url,
 			$changed_at,
 		);
-		$bodies  = $this->render_template_pair(
+		$bodies  = $this->format_email_bodies(
 			'password-changed',
 			$context,
 		);
@@ -182,7 +182,7 @@ class Notifications {
 	 * @throws \RuntimeException When email delivery fails.
 	 * @since 1.0.2
 	 */
-	public function send_install_welcome_email( array $user ): void {
+	public function send_welcome( array $user ): void {
 		$email = $this->get_user_email(
 			$user,
 			__( 'PeakURL could not send the welcome email because the account email address is invalid.', 'peakurl' ),
@@ -222,7 +222,7 @@ class Notifications {
 			),
 			$user,
 		);
-		$bodies  = $this->render_template_pair(
+		$bodies  = $this->format_email_bodies(
 			'install-welcome',
 			$context,
 		);
@@ -299,7 +299,7 @@ class Notifications {
 			$user,
 			$mail_status,
 		);
-		$bodies  = $this->render_template_pair(
+		$bodies  = $this->format_email_bodies(
 			'test-email',
 			$context,
 		);
@@ -362,7 +362,7 @@ class Notifications {
 	}
 
 	/**
-	 * Render the HTML and text versions of a named email template.
+	 * Get the HTML and text versions of a named email template.
 	 *
 	 * @param string               $template_name Template base filename.
 	 * @param array<string, mixed> $context       Placeholder values.
@@ -371,18 +371,18 @@ class Notifications {
 	 * @throws \RuntimeException When a required template file is missing.
 	 * @since 1.0.2
 	 */
-	private function render_template_pair(
+	private function format_email_bodies(
 		string $template_name,
 		array $context
 	): array {
 		return array(
-			'html' => $this->render_template( $template_name, 'html', 'html', $context ),
-			'text' => $this->render_template( $template_name, 'plain', 'txt', $context ),
+			'html' => $this->format_email_body( $template_name, 'html', 'html', $context ),
+			'text' => $this->format_email_body( $template_name, 'plain', 'txt', $context ),
 		);
 	}
 
 	/**
-	 * Render one email template file with placeholder replacement.
+	 * Get one email template file with placeholder replacement.
 	 *
 	 * @param string               $template_name Template base filename.
 	 * @param string               $directory     Template subdirectory.
@@ -393,13 +393,13 @@ class Notifications {
 	 * @throws \RuntimeException When the template file cannot be read.
 	 * @since 1.0.2
 	 */
-	private function render_template(
+	private function format_email_body(
 		string $template_name,
 		string $directory,
 		string $extension,
 		array $context
 	): string {
-		$template_path = $this->get_email_template_path(
+		$template_path = $this->get_template_path(
 			$template_name,
 			$directory,
 			$extension,
@@ -417,7 +417,7 @@ class Notifications {
 
 		return strtr(
 			$template,
-			$this->build_template_placeholders( $context, 'html' === $extension ),
+			$this->get_placeholders( $context, 'html' === $extension ),
 		);
 	}
 
@@ -430,14 +430,14 @@ class Notifications {
 	 * @return string
 	 * @since 1.0.8
 	 */
-	private function get_email_template_path(
+	private function get_template_path(
 		string $template_name,
 		string $directory,
 		string $extension
 	): string {
-		$email_templates_directory = $this->get_email_templates_directory();
-		$site_locale               = \peakurl_get_i18n_service()->get_site_locale();
-		$localized_template_path   = $email_templates_directory .
+		$template_dir            = $this->get_template_dir();
+		$site_locale             = \peakurl_get_i18n_service()->get_site_locale();
+		$localized_template_path = $template_dir .
 			'/locales/' .
 			$site_locale .
 			'/' .
@@ -451,7 +451,7 @@ class Notifications {
 			return $localized_template_path;
 		}
 
-		return $email_templates_directory .
+		return $template_dir .
 			'/' .
 			$directory .
 			'/' .
@@ -468,7 +468,7 @@ class Notifications {
 	 * @return array<string, string>
 	 * @since 1.0.2
 	 */
-	private function build_template_placeholders(
+	private function get_placeholders(
 		array $context,
 		bool $escape_html
 	): array {
@@ -492,12 +492,12 @@ class Notifications {
 	}
 
 	/**
-	 * Get the absolute path to the email templates directory.
+	 * Return the absolute path to the email templates directory.
 	 *
 	 * @return string
 	 * @since 1.0.2
 	 */
-	private function get_email_templates_directory(): string {
+	private function get_template_dir(): string {
 		return dirname( __DIR__ ) . '/templates/emails';
 	}
 

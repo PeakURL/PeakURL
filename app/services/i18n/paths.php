@@ -100,13 +100,13 @@ class Paths {
 	}
 
 	/**
-	 * Build the absolute dashboard JSON catalog path for a locale.
+	 * Build the absolute JSON catalog path for a locale.
 	 *
 	 * @param string $locale Locale identifier.
 	 * @return string
 	 * @since 1.0.14
 	 */
-	public function get_dashboard_catalog_path( string $locale ): string {
+	public function get_json_catalog_path( string $locale ): string {
 		return $this->get_languages_dir() .
 			DIRECTORY_SEPARATOR .
 			sprintf(
@@ -122,17 +122,17 @@ class Paths {
 	 * @return array{created: bool, exists: bool}
 	 * @since 1.0.14
 	 */
-	public function prepare_languages_directory(): array {
+	public function prepare_languages_dir(): array {
 		$content_directory   = $this->get_content_dir();
 		$languages_directory = $this->get_languages_dir();
 		$created_directory   = false;
 
 		if ( ! is_dir( $content_directory ) ) {
-			$created_directory = $this->create_directory_if_missing( $content_directory ) || $created_directory;
+			$created_directory = $this->mkdir_p( $content_directory ) || $created_directory;
 		}
 
 		if ( is_dir( $content_directory ) && ! is_dir( $languages_directory ) ) {
-			$created_directory = $this->create_directory_if_missing( $languages_directory ) || $created_directory;
+			$created_directory = $this->mkdir_p( $languages_directory ) || $created_directory;
 		}
 
 		if ( $created_directory ) {
@@ -146,13 +146,13 @@ class Paths {
 	}
 
 	/**
-	 * Create a directory when its immediate parent already exists and is writable.
+	 * Create a directory when its immediate parent exists and is writable.
 	 *
 	 * @param string $path Absolute directory path.
 	 * @return bool
 	 * @since 1.0.14
 	 */
-	private function create_directory_if_missing( string $path ): bool {
+	private function mkdir_p( string $path ): bool {
 		if ( '' === trim( $path ) || is_dir( $path ) ) {
 			return false;
 		}

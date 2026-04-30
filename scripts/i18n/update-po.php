@@ -31,7 +31,7 @@ if ( ! file_exists( $template_path ) ) {
 }
 
 $requested_locales = parse_requested_locales( $argv );
-$targets           = resolve_targets( $requested_locales, $languages_dir );
+$targets           = get_targets( $requested_locales, $languages_dir );
 
 if ( empty( $targets ) ) {
 	fwrite(
@@ -52,12 +52,12 @@ $template->setDomain( 'peakurl' );
 foreach ( $targets as $locale => $po_path ) {
 	$already_exists = file_exists( $po_path );
 	$catalog        = $already_exists
-		? merge_catalog_with_template(
+		? merge_catalog(
 			$template,
 			$loader->loadFile( $po_path ),
 			$locale,
 		)
-		: create_catalog_from_template( $template, $locale );
+		: create_catalog( $template, $locale );
 
 	$generator->generateFile( $catalog, $po_path );
 
@@ -150,7 +150,7 @@ function normalize_locale_code( string $locale ): string {
  * @param string             $languages_dir     Absolute languages directory.
  * @return array<string, string>
  */
-function resolve_targets( array $requested_locales, string $languages_dir ): array {
+function get_targets( array $requested_locales, string $languages_dir ): array {
 	$targets = array();
 
 	if ( ! empty( $requested_locales ) ) {
@@ -165,7 +165,13 @@ function resolve_targets( array $requested_locales, string $languages_dir ): arr
 		return $targets;
 	}
 
-	foreach ( glob( $languages_dir . '/peakurl-*.po' ) ?: array() as $po_path ) {
+	$po_paths = glob( $languages_dir . '/peakurl-*.po' );
+
+	if ( false === $po_paths ) {
+		$po_paths = array();
+	}
+
+	foreach ( $po_paths as $po_path ) {
 		if (
 			! is_string( $po_path ) ||
 			'.pot' === substr( $po_path, -4 ) ||
@@ -192,7 +198,7 @@ function resolve_targets( array $requested_locales, string $languages_dir ): arr
  * @param string       $locale   Locale identifier.
  * @return Translations
  */
-function merge_catalog_with_template(
+function merge_catalog(
 	Translations $template,
 	Translations $existing,
 	string $locale
@@ -218,7 +224,7 @@ function merge_catalog_with_template(
  * @param string       $locale   Locale identifier.
  * @return Translations
  */
-function create_catalog_from_template(
+function create_catalog(
 	Translations $template,
 	string $locale
 ): Translations {
@@ -240,7 +246,7 @@ function create_catalog_from_template(
 function apply_locale_headers( Translations $catalog, string $locale ): void {
 	$catalog->getHeaders()->set( 'Language', $locale );
 
-	$language = resolve_language_info( $locale );
+	$language = get_language_info( $locale );
 
 	if ( null !== $language ) {
 		$catalog->getHeaders()->set(
@@ -260,7 +266,7 @@ function apply_locale_headers( Translations $catalog, string $locale ): void {
  * @param string $locale Locale identifier.
  * @return GettextLanguage|null
  */
-function resolve_language_info( string $locale ): ?GettextLanguage {
+function get_language_info( string $locale ): ?GettextLanguage {
 	$language = GettextLanguage::getById( $locale );
 
 	if ( null !== $language ) {

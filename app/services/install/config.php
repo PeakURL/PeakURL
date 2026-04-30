@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Config — database configuration step for the release installer.
  *
- * Validates the submitted database credentials, checks filesystem access,
+ * Validates the submitted database credentials, verifies filesystem access,
  * and writes the generated config.php used by the remaining install flow.
  *
  * @since 1.0.14
@@ -81,8 +81,8 @@ class Config {
 	): array {
 		$values = self::normalize_input( $app_path, $input );
 
-		self::assert_writable_root( $app_path );
-		self::assert_database_connection( $values );
+		self::validate_writable_root( $app_path );
+		self::validate_database( $values );
 		Writer::write_config_file( $app_path, $values );
 
 		return $values;
@@ -129,14 +129,13 @@ class Config {
 		$db_prefix = RuntimeConfig::normalize_db_prefix(
 			trim( (string) ( $input['db_prefix'] ?? 'peakurl_' ) ),
 		);
+		$db_name   = RuntimeConfig::normalize_db_name(
+			trim( (string) ( $input['db_name'] ?? '' ) ),
+		);
 		$db_port   = (string) ( (int) ( $input['db_port'] ?? 3306 ) );
 
 		if ( '' === trim( (string) ( $input['db_host'] ?? '' ) ) ) {
 			throw new \RuntimeException( __( 'Database host is required.', 'peakurl' ) );
-		}
-
-		if ( '' === trim( (string) ( $input['db_name'] ?? '' ) ) ) {
-			throw new \RuntimeException( __( 'Database name is required.', 'peakurl' ) );
 		}
 
 		if ( '' === trim( (string) ( $input['db_user'] ?? '' ) ) ) {
@@ -160,11 +159,11 @@ class Config {
 			Constants::CONFIG_AUTH_KEY                 => self::generate_auth_key(),
 			Constants::CONFIG_AUTH_SALT                => self::generate_auth_salt(),
 			Constants::CONFIG_UPDATE_MANIFEST_URL      => Constants::DEFAULT_UPDATE_MANIFEST_URL,
-			'PEAKURL_CONTENT_DIR'                      => self::get_default_content_directory( $app_path ),
-			'PEAKURL_GEOIP_DB_PATH'                    => self::get_default_geoip_database_path( $app_path ),
+			'PEAKURL_CONTENT_DIR'                      => self::get_default_content_dir( $app_path ),
+			'PEAKURL_GEOIP_DB_PATH'                    => self::get_default_geoip_path( $app_path ),
 			'DB_HOST'                                  => trim( (string) $input['db_host'] ),
 			'DB_PORT'                                  => $db_port,
-			'DB_DATABASE'                              => trim( (string) $input['db_name'] ),
+			'DB_DATABASE'                              => $db_name,
 			'DB_USERNAME'                              => trim( (string) $input['db_user'] ),
 			'DB_PASSWORD'                              => (string) ( $input['db_password'] ?? '' ),
 			'DB_CHARSET'                               => 'utf8mb4',
@@ -194,7 +193,7 @@ class Config {
 	 * @throws \RuntimeException When the connection fails.
 	 * @since 1.0.14
 	 */
-	private static function assert_database_connection( array $values ): void {
+	private static function validate_database( array $values ): void {
 		$dsn = sprintf(
 			'mysql:host=%s;port=%d;dbname=%s;charset=%s',
 			$values['DB_HOST'],
@@ -225,14 +224,14 @@ class Config {
 	}
 
 	/**
-	 * Assert that the release root and app directories are writable.
+	 * Validate that the release root and app directories are writable.
 	 *
 	 * @param string $app_path Absolute path to the app directory.
 	 *
 	 * @throws \RuntimeException When the release cannot write config.php.
 	 * @since 1.0.14
 	 */
-	private static function assert_writable_root( string $app_path ): void {
+	private static function validate_writable_root( string $app_path ): void {
 		$root_path = Writer::get_release_root_path( $app_path );
 
 		if ( ! is_writable( $root_path ) ) {
@@ -253,7 +252,7 @@ class Config {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	private static function get_default_content_directory( string $app_path ): string {
+	private static function get_default_content_dir( string $app_path ): string {
 		return Writer::get_release_root_path( $app_path ) . '/content';
 	}
 
@@ -264,8 +263,8 @@ class Config {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	private static function get_default_geoip_database_path( string $app_path ): string {
-		return self::get_default_content_directory( $app_path ) . '/uploads/geoip/GeoLite2-City.mmdb';
+	private static function get_default_geoip_path( string $app_path ): string {
+		return self::get_default_content_dir( $app_path ) . '/uploads/geoip/GeoLite2-City.mmdb';
 	}
 
 	/**

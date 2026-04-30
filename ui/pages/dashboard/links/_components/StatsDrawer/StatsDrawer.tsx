@@ -12,7 +12,7 @@ import { X, Link2, BarChart3, Globe, Share2, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { useGetLinkStatsQuery } from "@/store/slices/api";
 import { isDocumentRtl } from "@/i18n/direction";
-import { buildShortUrl } from "@/utils";
+import { getShortUrl } from "@/utils";
 import { __ } from "@/i18n";
 import StatCards from "./StatCards";
 import ClickChart from "./ClickChart";
@@ -55,7 +55,7 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 
 	if (!link) return null;
 
-	const shortUrl = buildShortUrl(link);
+	const shortUrl = getShortUrl(link);
 	const statsPayload = statsData?.data;
 
 	const tabs = [

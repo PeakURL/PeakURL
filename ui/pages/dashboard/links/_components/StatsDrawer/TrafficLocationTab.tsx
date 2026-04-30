@@ -43,10 +43,10 @@ function TrafficLocationTab({
 		null
 	);
 	// RTK Query hook
-	const shouldFetch = open && selectedTab === 1 && !!link?.id;
+	const canFetchLocation = open && selectedTab === 1 && !!link?.id;
 	const { data, isLoading, isError, error } = useGetLinkLocationQuery(
 		link?.id || "",
-		{ skip: !shouldFetch }
+		{ skip: !canFetchLocation }
 	);
 
 	// Add safety check
@@ -76,7 +76,7 @@ function TrafficLocationTab({
 	const total = payload.totalClicks || 0;
 	const hasData = total > 0;
 
-	// Country flag emoji helper
+	// Location icon helper
 	const getFlagEmoji = (countryCode?: string | null) => {
 		if (countryCode === "LOCAL") {
 			return <LocalIcon className="w-6 h-6" />;
@@ -95,7 +95,7 @@ function TrafficLocationTab({
 		);
 	};
 
-	// Calculate percentage
+	// Calculate share of total
 	const getPercentage = (count: number): string | number => {
 		return total > 0 ? ((count / total) * 100).toFixed(1) : 0;
 	};
@@ -300,7 +300,7 @@ function TrafficLocationTab({
 				</div>
 				<div className="links-location-list">
 					{countries.map((country) => {
-						const percentage = getPercentage(country.count);
+						const percent = getPercentage(country.count);
 						return (
 							<div
 								key={`${country.code}-${country.name}`}
@@ -318,7 +318,7 @@ function TrafficLocationTab({
 									</div>
 									<div className="links-location-list-meta">
 										<span className="text-sm text-text-muted">
-											{percentage}%
+											{percent}%
 										</span>
 										<span className="links-location-list-count">
 											{country.count} {__("clicks")}
@@ -328,7 +328,7 @@ function TrafficLocationTab({
 								<div className="links-drawer-bar-track">
 									<div
 										className="links-drawer-bar-fill bg-primary-600"
-										style={{ width: `${percentage}%` }}
+										style={{ width: `${percent}%` }}
 									></div>
 								</div>
 							</div>
@@ -347,7 +347,7 @@ function TrafficLocationTab({
 				</div>
 				<div className="links-location-city-list">
 					{cities.map((city, index) => {
-						const percentage = getPercentage(city.count);
+						const percent = getPercentage(city.count);
 						return (
 							<div
 								key={`${city.name}-${city.country}`}
@@ -371,7 +371,7 @@ function TrafficLocationTab({
 										{city.count}
 									</p>
 									<p className="text-xs text-text-muted">
-										{percentage}%
+										{percent}%
 									</p>
 								</div>
 							</div>

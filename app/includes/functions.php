@@ -602,13 +602,13 @@ function peakurl_get_i18n_service(
 		}
 	}
 
-	$resolved_config = $config ?? RuntimeConfig::bootstrap( ABSPATH . 'app' );
-	$next_hash       = md5(
+	$runtime_config = $config ?? RuntimeConfig::bootstrap( ABSPATH . 'app' );
+	$next_hash      = md5(
 		(string) json_encode(
 			array(
-				'content_dir' => (string) ( $resolved_config['PEAKURL_CONTENT_DIR'] ?? '' ),
-				'site_url'    => (string) ( $resolved_config['SITE_URL'] ?? '' ),
-				'db_name'     => (string) ( $resolved_config['DB_DATABASE'] ?? '' ),
+				'content_dir' => (string) ( $runtime_config['PEAKURL_CONTENT_DIR'] ?? '' ),
+				'site_url'    => (string) ( $runtime_config['SITE_URL'] ?? '' ),
+				'db_name'     => (string) ( $runtime_config['DB_DATABASE'] ?? '' ),
 			),
 		),
 	);
@@ -617,10 +617,10 @@ function peakurl_get_i18n_service(
 		return $service;
 	}
 
-	$resolved_connection = $connection ?? new Connection( $resolved_config );
-	$settings_api        = new SettingsApi( new PeakURL_DB( $resolved_connection ) );
-	$service             = new I18n( $resolved_config, $settings_api );
-	$config_hash         = $next_hash;
+	$runtime_connection = $connection ?? new Connection( $runtime_config );
+	$settings_api       = new SettingsApi( new PeakURL_DB( $runtime_connection ) );
+	$service            = new I18n( $runtime_config, $settings_api );
+	$config_hash        = $next_hash;
 
 	return $service;
 }
@@ -746,35 +746,35 @@ function peakurl_get_maintenance_view_data(
 	?array $config = null,
 	?Connection $connection = null
 ): array {
-	$resolved_config     = $config ?? RuntimeConfig::bootstrap( ABSPATH . 'app' );
-	$resolved_connection = $connection;
-	$site_name           = 'PeakURL';
-	$locale              = Constants::DEFAULT_LOCALE;
-	$html_lang           = 'en-US';
-	$text_direction      = 'ltr';
-	$i18n_service        = null;
+	$runtime_config     = $config ?? RuntimeConfig::bootstrap( ABSPATH . 'app' );
+	$runtime_connection = $connection;
+	$site_name          = 'PeakURL';
+	$locale             = Constants::DEFAULT_LOCALE;
+	$html_lang          = 'en-US';
+	$text_direction     = 'ltr';
+	$i18n_service       = null;
 
 	try {
 		if (
-			null === $resolved_connection &&
+			null === $runtime_connection &&
 			file_exists( ABSPATH . 'config.php' )
 		) {
-			$resolved_connection = new Connection( $resolved_config );
+			$runtime_connection = new Connection( $runtime_config );
 		}
 
 		$i18n_service   = new I18n(
-			$resolved_config,
-			null !== $resolved_connection
-				? new SettingsApi( new PeakURL_DB( $resolved_connection ) )
+			$runtime_config,
+			null !== $runtime_connection
+				? new SettingsApi( new PeakURL_DB( $runtime_connection ) )
 				: null,
 		);
 		$locale         = $i18n_service->load_locale();
 		$html_lang      = $i18n_service->get_html_lang( $locale );
 		$text_direction = $i18n_service->get_text_direction( $locale );
 
-		if ( null !== $resolved_connection ) {
+		if ( null !== $runtime_connection ) {
 			$configured_site_name = trim(
-				(string) ( $resolved_connection->get_option( 'site_name' ) ?? '' ),
+				(string) ( $runtime_connection->get_option( 'site_name' ) ?? '' ),
 			);
 
 			if ( '' !== $configured_site_name ) {
@@ -838,14 +838,14 @@ function peakurl_get_maintenance_api_payload( array $maintenance_view_data ): ar
 }
 
 /**
- * Render the HTML maintenance page.
+ * Get the HTML maintenance page.
  *
  * @param array<string, string> $maintenance_view_data Localized maintenance data.
  * @return string
  * @since 1.0.8
  */
 // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
-function peakurl_render_maintenance_page( array $maintenance_view_data ): string {
+function peakurl_get_maintenance_page( array $maintenance_view_data ): string {
 	$html_lang          = htmlspecialchars(
 		(string) ( $maintenance_view_data['htmlLang'] ?? 'en-US' ),
 		ENT_QUOTES,

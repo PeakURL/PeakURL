@@ -36,7 +36,7 @@ const BAR_COMBOS: [string, string, string][] = [
 	["w-28", "w-3/4", "w-5/6"],
 ];
 
-function buildCards(count: number, offset = 0): PluginCardData[] {
+function createCards(count: number, offset = 0): PluginCardData[] {
 	return Array.from({ length: count }, (_, i) => ({
 		id: `placeholder-${offset + i}`,
 		gradient: GRADIENTS[(offset + i) % GRADIENTS.length],
@@ -44,7 +44,7 @@ function buildCards(count: number, offset = 0): PluginCardData[] {
 	}));
 }
 
-export const BROWSE_CARDS = buildCards(12);
-export const INSTALLED_CARDS = buildCards(3, 20);
-export const FEATURED_CARDS = buildCards(8, 40);
-export const POPULAR_CARDS = buildCards(8, 60);
+export const BROWSE_CARDS = createCards(12);
+export const INSTALLED_CARDS = createCards(3, 20);
+export const FEATURED_CARDS = createCards(8, 40);
+export const POPULAR_CARDS = createCards(8, 60);

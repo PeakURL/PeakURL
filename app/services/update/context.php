@@ -108,7 +108,7 @@ class Context {
 		);
 
 		if ( '' === $content_dir ) {
-			return $this->filesystem->build_path(
+			return $this->filesystem->join_path(
 				ABSPATH,
 				Constants::DEFAULT_CONTENT_DIR,
 			);
@@ -124,22 +124,8 @@ class Context {
 	 * @since 1.0.14
 	 */
 	public function get_storage_dir(): string {
-		return $this->filesystem->build_path(
+		return $this->filesystem->join_path(
 			$this->get_content_dir(),
-			'updates',
-		);
-	}
-
-	/**
-	 * Get the obsolete pre-1.0.9 update workspace path.
-	 *
-	 * @return string
-	 * @since 1.0.14
-	 */
-	public function get_legacy_storage_dir(): string {
-		return $this->filesystem->build_path(
-			$this->get_content_dir(),
-			'uploads',
 			'updates',
 		);
 	}
@@ -151,7 +137,7 @@ class Context {
 	 * @since 1.0.14
 	 */
 	public function get_lock_path(): string {
-		return $this->filesystem->build_path(
+		return $this->filesystem->join_path(
 			$this->get_storage_dir(),
 			'update.lock',
 		);
@@ -164,7 +150,7 @@ class Context {
 	 * @since 1.0.14
 	 */
 	public function get_maintenance_path(): string {
-		return $this->filesystem->build_path( ABSPATH, '.maintenance' );
+		return $this->filesystem->join_path( ABSPATH, '.maintenance' );
 	}
 
 	/**
@@ -197,7 +183,7 @@ class Context {
 			);
 		}
 
-		if ( ! is_writable( $this->filesystem->build_path( ABSPATH, 'app' ) ) ) {
+		if ( ! is_writable( $this->filesystem->join_path( ABSPATH, 'app' ) ) ) {
 			return array(
 				'allowed' => false,
 				'reason'  => __( 'The app directory is not writable.', 'peakurl' ),

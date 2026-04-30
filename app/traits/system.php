@@ -45,7 +45,7 @@ trait SystemTrait {
 		$service = new AdminNotices();
 
 		return $service->get_notices(
-			$this->build_admin_notice_context( $user ),
+			$this->get_admin_notice_context( $user ),
 		);
 	}
 
@@ -57,11 +57,7 @@ trait SystemTrait {
 	 * @since 1.0.3
 	 */
 	public function get_system_status( Request $request ): array {
-		$this->assert_request_capability(
-			$request,
-			'manage_updates',
-			__( 'Admin access is required.', 'peakurl' ),
-		);
+		$this->get_update_user( $request );
 
 		$service = new SystemStatusManager(
 			$this->config,
@@ -69,7 +65,7 @@ trait SystemTrait {
 			$this->settings_api,
 			$this->geoip_service,
 			$this->mailer_service,
-			$this->get_database_schema_service(),
+			$this->get_schema_service(),
 			$this->i18n_service,
 		);
 
@@ -77,16 +73,16 @@ trait SystemTrait {
 	}
 
 	/**
-	 * Build the shared dashboard notice context for the current user.
+	 * Get the shared dashboard notice context for the current user.
 	 *
 	 * @param array<string, mixed> $user Current authenticated user row.
 	 * @return array<string, mixed>
 	 * @since 1.0.3
 	 */
-	private function build_admin_notice_context( array $user ): array {
+	private function get_admin_notice_context( array $user ): array {
 		$capabilities = array(
-			'manageUpdates'      => $this->roles->user_can( $user, 'manage_updates' ),
-			'manageLocationData' => $this->roles->user_can( $user, 'manage_location_data' ),
+			'manageUpdates'      => $this->roles->has_capability( $user, 'manage_updates' ),
+			'manageLocationData' => $this->roles->has_capability( $user, 'manage_location_data' ),
 		);
 		$context      = array(
 			'user'         => $user,
@@ -98,17 +94,84 @@ trait SystemTrait {
 		}
 
 		if ( ! empty( $capabilities['manageLocationData'] ) ) {
-			$geoip_status                     = $this->geoip_service->get_status();
-			$last_downloaded_at               = $this->get_option( 'geoip_last_downloaded_at' );
-			$geoip_status['installed']        = ! empty( $geoip_status['locationAnalyticsReady'] );
-			$geoip_status['lastDownloadedAt'] =
-				$last_downloaded_at
-					? $this->to_iso( (string) $last_downloaded_at )
-					: null;
-			$context['geoipStatus']           = $geoip_status;
+			$context['geoipStatus'] = $this->format_geoip_status(
+				$this->geoip_service->get_status(),
+			);
 		}
 
 		return $context;
+	}
+
+	/**
+	 * Return the current update-management user.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> Current user.
+	 * @since 1.0.0
+	 */
+	private function get_update_user( Request $request ): array {
+		$user = $this->get_current_user( $request );
+		$this->validate_capability(
+			$user,
+			'manage_updates',
+			__( 'Admin access is required.', 'peakurl' ),
+		);
+
+		return $user;
+	}
+
+	/**
+	 * Return the current site-settings user.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> Current user.
+	 * @since 1.0.0
+	 */
+	private function get_settings_user( Request $request ): array {
+		$user = $this->get_current_user( $request );
+		$this->validate_capability(
+			$user,
+			'manage_site_settings',
+			__( 'Admin access is required.', 'peakurl' ),
+		);
+
+		return $user;
+	}
+
+	/**
+	 * Return the current mail-management user.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> Current user.
+	 * @since 1.0.0
+	 */
+	private function get_mail_user( Request $request ): array {
+		$user = $this->get_current_user( $request );
+		$this->validate_capability(
+			$user,
+			'manage_mail_delivery',
+			__( 'Admin access is required.', 'peakurl' ),
+		);
+
+		return $user;
+	}
+
+	/**
+	 * Return the current GeoIP-management user.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> Current user.
+	 * @since 1.0.0
+	 */
+	private function get_geoip_user( Request $request ): array {
+		$user = $this->get_current_user( $request );
+		$this->validate_capability(
+			$user,
+			'manage_location_data',
+			__( 'Admin access is required.', 'peakurl' ),
+		);
+
+		return $user;
 	}
 
 	/**
@@ -139,7 +202,7 @@ trait SystemTrait {
 			'isRtl'                 => $this->i18n_service->is_locale_rtl(),
 			'availableLanguages'    => $this->i18n_service->list_languages(),
 			'favicon'               => $this->favicon_service->get_settings( $site_name ),
-			'canManageSiteSettings' => $this->roles->user_can(
+			'canManageSiteSettings' => $this->roles->has_capability(
 				$user,
 				'manage_site_settings',
 			),
@@ -189,11 +252,7 @@ trait SystemTrait {
 		Request $request,
 		array $payload
 	): array {
-		$this->assert_request_capability(
-			$request,
-			'manage_site_settings',
-			'Admin access is required.',
-		);
+		$this->get_settings_user( $request );
 
 		$site_language = $this->i18n_service->normalize_locale(
 			(string) ( $payload['siteLanguage'] ?? '' ),
@@ -336,11 +395,7 @@ trait SystemTrait {
 	 * @since 1.0.0
 	 */
 	public function get_mail_status( Request $request ): array {
-		$this->assert_request_capability(
-			$request,
-			'manage_mail_delivery',
-			__( 'Admin access is required.', 'peakurl' ),
-		);
+		$this->get_mail_user( $request );
 
 		$status = $this->mailer_service->get_status();
 		return $status;
@@ -358,11 +413,7 @@ trait SystemTrait {
 		Request $request,
 		array $payload
 	): array {
-		$this->assert_request_capability(
-			$request,
-			'manage_mail_delivery',
-			__( 'Admin access is required.', 'peakurl' ),
-		);
+		$this->get_mail_user( $request );
 
 		try {
 			$status = $this->mailer_service->save_settings(
@@ -396,11 +447,7 @@ trait SystemTrait {
 	 * @since 1.1.0
 	 */
 	public function send_test_email( Request $request ): array {
-		$user = $this->assert_request_capability(
-			$request,
-			'manage_mail_delivery',
-			__( 'Admin access is required.', 'peakurl' ),
-		);
+		$user = $this->get_mail_user( $request );
 
 		$status = $this->mailer_service->get_status();
 
@@ -438,11 +485,7 @@ trait SystemTrait {
 	 * @since 1.0.0
 	 */
 	public function get_update_status( Request $request ): array {
-		$this->assert_request_capability(
-			$request,
-			'manage_updates',
-			__( 'Admin access is required.', 'peakurl' ),
-		);
+		$this->get_update_user( $request );
 
 		return $this->load_update_status( false );
 	}
@@ -455,21 +498,9 @@ trait SystemTrait {
 	 * @since 1.0.0
 	 */
 	public function get_geoip_status( Request $request ): array {
-		$this->assert_request_capability(
-			$request,
-			'manage_location_data',
-			__( 'Admin access is required.', 'peakurl' ),
-		);
+		$this->get_geoip_user( $request );
 
-		$status                     = $this->geoip_service->get_status();
-		$last_downloaded_at         = $this->get_option( 'geoip_last_downloaded_at' );
-		$status['installed']        = ! empty( $status['locationAnalyticsReady'] );
-		$status['lastDownloadedAt'] =
-			$last_downloaded_at
-				? $this->to_iso( $last_downloaded_at )
-				: null;
-
-		return $status;
+		return $this->format_geoip_status( $this->geoip_service->get_status() );
 	}
 
 	/**
@@ -484,12 +515,8 @@ trait SystemTrait {
 		Request $request,
 		array $payload
 	): array {
-		$this->assert_request_capability(
-			$request,
-			'manage_location_data',
-			__( 'Admin access is required.', 'peakurl' ),
-		);
-		$this->assert_geoip_dashboard_management_allowed();
+		$this->get_geoip_user( $request );
+		$this->validate_geoip_admin();
 
 		$app_path = ABSPATH . 'app';
 		try {
@@ -510,11 +537,7 @@ trait SystemTrait {
 			$this->settings_api,
 			$this->crypto_service,
 		);
-		$status['installed']        = ! empty( $status['locationAnalyticsReady'] );
-		$status['lastDownloadedAt'] = $this->get_option( 'geoip_last_downloaded_at' );
-		$status['lastDownloadedAt'] = $status['lastDownloadedAt']
-			? $this->to_iso( (string) $status['lastDownloadedAt'] )
-			: null;
+		$status                     = $this->format_geoip_status( $status );
 		$status['credentialsSaved'] = true;
 
 		return $status;
@@ -528,12 +551,8 @@ trait SystemTrait {
 	 * @since 1.0.0
 	 */
 	public function download_geoip_database( Request $request ): array {
-		$this->assert_request_capability(
-			$request,
-			'manage_location_data',
-			__( 'Admin access is required.', 'peakurl' ),
-		);
-		$this->assert_geoip_dashboard_management_allowed();
+		$this->get_geoip_user( $request );
+		$this->validate_geoip_admin();
 
 		try {
 			$status = $this->geoip_service->download_database();
@@ -541,27 +560,47 @@ trait SystemTrait {
 			throw new ApiException( $exception->getMessage(), 422 );
 		}
 
-		$this->update_option( 'geoip_last_downloaded_at', $this->now(), false );
-		$status['installed']        = ! empty( $status['locationAnalyticsReady'] );
-		$status['lastDownloadedAt'] = $this->to_iso( $this->now() );
-		$status['downloaded']       = true;
+		$downloaded_at = $this->now();
+		$this->update_option( 'geoip_last_downloaded_at', $downloaded_at, false );
+		$status               = $this->format_geoip_status( $status, $downloaded_at );
+		$status['downloaded'] = true;
 
 		return $status;
 	}
 
 	/**
-	 * Check the remote manifest for a new release.
+	 * Format GeoIP status for dashboard responses.
 	 *
-	 * @param Request $request Incoming HTTP request (admin-only).
-	 * @return array<string, mixed> Updated status after the remote check.
+	 * @param array<string, mixed> $status             Raw GeoIP status payload.
+	 * @param string|null          $last_downloaded_at Optional download timestamp.
+	 * @return array<string, mixed>
 	 * @since 1.0.0
 	 */
-	public function check_for_updates( Request $request ): array {
-		$this->assert_request_capability(
-			$request,
-			'manage_updates',
-			__( 'Admin access is required.', 'peakurl' ),
-		);
+	private function format_geoip_status(
+		array $status,
+		?string $last_downloaded_at = null
+	): array {
+		if ( null === $last_downloaded_at ) {
+			$last_downloaded_at = $this->get_option( 'geoip_last_downloaded_at' );
+		}
+
+		$status['installed']        = ! empty( $status['locationAnalyticsReady'] );
+		$status['lastDownloadedAt'] = $last_downloaded_at
+			? $this->to_iso( (string) $last_downloaded_at )
+			: null;
+
+		return $status;
+	}
+
+	/**
+	 * Refresh the remote update manifest status.
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed> Updated status after the remote refresh.
+	 * @since 1.0.0
+	 */
+	public function refresh_update_status( Request $request ): array {
+		$this->get_update_user( $request );
 
 		return $this->load_update_status( true );
 	}
@@ -578,11 +617,7 @@ trait SystemTrait {
 	 * @since 1.0.0
 	 */
 	public function apply_update( Request $request ): array {
-		$this->assert_request_capability(
-			$request,
-			'manage_updates',
-			__( 'Admin access is required.', 'peakurl' ),
-		);
+		$this->get_update_user( $request );
 
 		$status = $this->load_update_status( true );
 
@@ -590,7 +625,7 @@ trait SystemTrait {
 			throw new ApiException( __( 'PeakURL is already up to date.', 'peakurl' ), 422 );
 		}
 
-		return $this->install_release_from_status( $status );
+		return $this->install_release( $status );
 	}
 
 	/**
@@ -603,11 +638,7 @@ trait SystemTrait {
 	 * @since 1.0.5
 	 */
 	public function reinstall_update( Request $request ): array {
-		$this->assert_request_capability(
-			$request,
-			'manage_updates',
-			__( 'Admin access is required.', 'peakurl' ),
-		);
+		$this->get_update_user( $request );
 
 		$status = $this->load_update_status( true );
 
@@ -625,7 +656,7 @@ trait SystemTrait {
 			);
 		}
 
-		return $this->install_release_from_status( $status, true );
+		return $this->install_release( $status, true );
 	}
 
 	/**
@@ -636,14 +667,10 @@ trait SystemTrait {
 	 * @since 1.0.3
 	 */
 	public function upgrade_database_schema( Request $request ): array {
-		$this->assert_request_capability(
-			$request,
-			'manage_updates',
-			__( 'Admin access is required.', 'peakurl' ),
-		);
+		$this->get_update_user( $request );
 
 		try {
-			$service = $this->get_database_schema_service();
+			$service = $this->get_schema_service();
 			$status  = $service->inspect();
 
 			if ( empty( $status['upgradeRequired'] ) ) {
@@ -672,7 +699,7 @@ trait SystemTrait {
 
 		InstallWriter::write_config_file(
 			ABSPATH . 'app',
-			InstallWriter::build_config_values( $this->config ),
+			InstallWriter::prepare_config_values( $this->config ),
 		);
 	}
 }

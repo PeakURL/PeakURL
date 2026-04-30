@@ -150,8 +150,30 @@
 		@apply mt-8 space-y-5;
 	}
 
-	.auth-page-input {
-		@apply rounded-xl! border-slate-200! bg-slate-50! py-3! text-sm! transition-colors duration-150 placeholder:text-slate-400 focus:border-indigo-400! focus:bg-white! focus:ring-2! focus:ring-indigo-500/15!;
+	.auth-page-form .form-field-label,
+	.login-page-form .form-field-label {
+		@apply text-slate-700;
+	}
+
+	.auth-page-form .form-field-icon,
+	.login-page-form .form-field-icon {
+		@apply text-slate-400;
+	}
+
+	.auth-page-input,
+	.login-page-input {
+		@apply rounded-xl! border-slate-200! bg-slate-50! py-3! text-sm! text-slate-900! caret-slate-900 transition-colors duration-150 placeholder:text-slate-400 focus:border-indigo-400! focus:bg-white! focus:ring-2! focus:ring-indigo-500/15!;
+	}
+
+	.auth-page-input:-webkit-autofill,
+	.login-page-input:-webkit-autofill {
+		-webkit-text-fill-color: rgb(15 23 42);
+		box-shadow: 0 0 0 1000px rgb(248 250 252) inset;
+	}
+
+	.auth-page-input:focus:-webkit-autofill,
+	.login-page-input:focus:-webkit-autofill {
+		box-shadow: 0 0 0 1000px rgb(255 255 255) inset;
 	}
 
 	.auth-page-submit {

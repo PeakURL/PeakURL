@@ -139,16 +139,16 @@ class AuthController extends BaseController {
 	}
 
 	/**
-	 * Check a password reset token before showing the reset form.
+	 * Validate a password reset token before showing the reset form.
 	 *
 	 * @param Request $request Request containing the reset token route param.
 	 * @return array<string, mixed> Token status response.
 	 * @since 1.1.0
 	 */
-	public function check_password_reset_token( Request $request ): array {
+	public function validate_reset_token( Request $request ): array {
 		$token = (string) $request->get_route_param( 'token' );
 
-		if ( ! $this->data_store->check_password_reset_token( $token ) ) {
+		if ( ! $this->data_store->validate_reset_token( $token ) ) {
 			return $this->not_found_response(
 				__( 'Password reset token is invalid or expired.', 'peakurl' ),
 			);
@@ -342,7 +342,7 @@ class AuthController extends BaseController {
 			'currentPassword',
 			'',
 		);
-		$codes            = $this->data_store->get_backup_codes_for_download(
+		$codes            = $this->data_store->get_backup_codes(
 			$request,
 			$current_password,
 		);

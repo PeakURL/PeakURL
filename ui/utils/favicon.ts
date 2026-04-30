@@ -63,9 +63,9 @@ function getUpdatedTimestamp(updatedAt?: string | null): number | undefined {
 }
 
 /**
- * Builds a same-origin URL for a managed favicon asset.
+ * Returns a same-origin URL for a managed favicon asset.
  */
-export function buildManagedFaviconUrl(
+export function getManagedFaviconUrl(
 	asset: ManagedFaviconAsset,
 	updatedAt?: string | null
 ): string {
@@ -83,6 +83,6 @@ export function buildManagedFaviconUrl(
 /**
  * Returns the managed PNG favicon URL used for dashboard previews.
  */
-export function buildFaviconPreviewUrl(updatedAt?: string | null): string {
-	return buildManagedFaviconUrl("favicon.png", updatedAt);
+export function getFaviconPreviewUrl(updatedAt?: string | null): string {
+	return getManagedFaviconUrl("favicon.png", updatedAt);
 }

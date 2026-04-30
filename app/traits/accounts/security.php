@@ -34,11 +34,7 @@ trait SecurityTrait {
 	 * @since 1.0.0
 	 */
 	public function add_api_key( Request $request, string $label ): array {
-		$user = $this->assert_request_capability(
-			$request,
-			'manage_api_keys',
-			'You do not have permission to manage API keys.',
-		);
+		$user = $this->get_api_key_user( $request );
 		return $this->insert_api_key( (string) $user['id'], $label );
 	}
 
@@ -51,11 +47,7 @@ trait SecurityTrait {
 	 * @since 1.0.0
 	 */
 	public function delete_api_key( Request $request, string $id ): bool {
-		$user    = $this->assert_request_capability(
-			$request,
-			'manage_api_keys',
-			'You do not have permission to manage API keys.',
-		);
+		$user    = $this->get_api_key_user( $request );
 		$deleted = $this->db->delete(
 			'api_keys',
 			array(
@@ -65,6 +57,24 @@ trait SecurityTrait {
 		);
 
 		return $deleted > 0;
+	}
+
+	/**
+	 * Return the current API-key user.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> Current user.
+	 * @since 1.0.0
+	 */
+	private function get_api_key_user( Request $request ): array {
+		$user = $this->get_current_user( $request );
+		$this->validate_capability(
+			$user,
+			'manage_api_keys',
+			'You do not have permission to manage API keys.',
+		);
+
+		return $user;
 	}
 
 	/**
@@ -78,11 +88,7 @@ trait SecurityTrait {
 	 * @since 1.0.0
 	 */
 	public function get_security_settings( Request $request ): array {
-		$user         = $this->assert_request_capability(
-			$request,
-			'manage_profile',
-			'You do not have permission to manage account security.',
-		);
+		$user         = $this->get_profile_user( $request );
 		$sessions     = $this->list_user_sessions(
 			(string) $user['id'],
 			$request,
@@ -117,11 +123,7 @@ trait SecurityTrait {
 	 * @since 1.0.0
 	 */
 	public function start_two_factor_setup( Request $request ): array {
-		$user   = $this->assert_request_capability(
-			$request,
-			'manage_profile',
-			'You do not have permission to manage account security.',
-		);
+		$user   = $this->get_profile_user( $request );
 		$secret = $this->totp_service->generate_secret();
 
 		$this->db->update(
@@ -136,7 +138,7 @@ trait SecurityTrait {
 		);
 
 		$label       = ! empty( $user['email'] ) ? $user['email'] : $user['username'];
-		$otpauth_url = $this->totp_service->build_otpauth_url(
+		$otpauth_url = $this->totp_service->get_otpauth_url(
 			'PeakURL',
 			(string) $label,
 			$secret,
@@ -161,11 +163,7 @@ trait SecurityTrait {
 	 * @since 1.0.0
 	 */
 	public function verify_two_factor( Request $request, string $token ): array {
-		$user           = $this->assert_request_capability(
-			$request,
-			'manage_profile',
-			'You do not have permission to manage account security.',
-		);
+		$user           = $this->get_profile_user( $request );
 		$row            = $this->find_user_row_by_id( (string) $user['id'] );
 		$pending_secret = (string) ( $row['two_factor_pending_secret'] ?? '' );
 
@@ -211,20 +209,15 @@ trait SecurityTrait {
 		Request $request,
 		string $current_password
 	): void {
-		$user     = $this->assert_request_capability(
+		$user_row = $this->confirm_profile_password(
 			$request,
-			'manage_profile',
-			'You do not have permission to manage account security.',
-		);
-		$user_row = $this->assert_password_confirmation_for_user(
-			$this->find_user_row_by_id( (string) $user['id'] ),
 			$current_password,
 			__(
 				'Current password is required to disable two-factor authentication.',
 				'peakurl',
 			),
 		);
-		$this->assert_two_factor_is_enabled_for_user( $user_row );
+		$this->validate_two_factor( $user_row );
 
 		$this->execute(
 			'UPDATE users
@@ -253,20 +246,15 @@ trait SecurityTrait {
 		Request $request,
 		string $current_password
 	): array {
-		$user     = $this->assert_request_capability(
+		$user_row = $this->confirm_profile_password(
 			$request,
-			'manage_profile',
-			'You do not have permission to manage account security.',
-		);
-		$user_row = $this->assert_password_confirmation_for_user(
-			$this->find_user_row_by_id( (string) $user['id'] ),
 			$current_password,
 			__(
 				'Current password is required to regenerate backup codes.',
 				'peakurl',
 			),
 		);
-		$this->assert_two_factor_is_enabled_for_user( $user_row );
+		$this->validate_two_factor( $user_row );
 
 		return $this->replace_backup_codes( (string) $user_row['id'] );
 	}
@@ -279,24 +267,19 @@ trait SecurityTrait {
 	 * @return array<int, string> Plain-text backup codes.
 	 * @since 1.0.6
 	 */
-	public function get_backup_codes_for_download(
+	public function get_backup_codes(
 		Request $request,
 		string $current_password
 	): array {
-		$user     = $this->assert_request_capability(
+		$user_row = $this->confirm_profile_password(
 			$request,
-			'manage_profile',
-			'You do not have permission to manage account security.',
-		);
-		$user_row = $this->assert_password_confirmation_for_user(
-			$this->find_user_row_by_id( (string) $user['id'] ),
 			$current_password,
 			__(
 				'Current password is required to download backup codes.',
 				'peakurl',
 			),
 		);
-		$this->assert_two_factor_is_enabled_for_user( $user_row );
+		$this->validate_two_factor( $user_row );
 
 		return $this->list_backup_codes( (string) $user_row['id'] );
 	}
@@ -310,11 +293,7 @@ trait SecurityTrait {
 	 * @since 1.0.0
 	 */
 	public function revoke_session( Request $request, string $id ): bool {
-		$user = $this->assert_request_capability(
-			$request,
-			'manage_profile',
-			'You do not have permission to manage account security.',
-		);
+		$user = $this->get_profile_user( $request );
 		$this->prune_stale_sessions();
 
 		return $this->execute_statement(
@@ -340,11 +319,7 @@ trait SecurityTrait {
 	 * @since 1.0.0
 	 */
 	public function revoke_other_sessions( Request $request ): int {
-		$user = $this->assert_request_capability(
-			$request,
-			'manage_profile',
-			'You do not have permission to manage account security.',
-		);
+		$user = $this->get_profile_user( $request );
 		$this->prune_stale_sessions();
 		$current_session = $this->find_session_by_request( $request );
 
@@ -366,6 +341,47 @@ trait SecurityTrait {
 				'current_session_id' => $current_session['id'],
 				'active_since'       => $this->session_active_since(),
 			),
+		);
+	}
+
+	/**
+	 * Return the current profile user.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> Current user.
+	 * @since 1.0.0
+	 */
+	private function get_profile_user( Request $request ): array {
+		$user = $this->get_current_user( $request );
+		$this->validate_capability(
+			$user,
+			'manage_profile',
+			'You do not have permission to manage account security.',
+		);
+
+		return $user;
+	}
+
+	/**
+	 * Confirm the profile password and return the user row.
+	 *
+	 * @param Request $request          Incoming HTTP request.
+	 * @param string  $current_password Current password from the request.
+	 * @param string  $missing_message  Validation message for missing input.
+	 * @return array<string, mixed> User database row.
+	 * @since 1.0.6
+	 */
+	private function confirm_profile_password(
+		Request $request,
+		string $current_password,
+		string $missing_message
+	): array {
+		$user = $this->get_profile_user( $request );
+
+		return $this->confirm_current_password(
+			$this->find_user_row_by_id( (string) $user['id'] ),
+			$current_password,
+			$missing_message,
 		);
 	}
 }

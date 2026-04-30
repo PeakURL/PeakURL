@@ -16,14 +16,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Checks — build the health checks and summary for system status.
+ * Checks — get the health checks and summary for system status.
  *
  * @since 1.0.14
  */
 class Checks {
 
 	/**
-	 * Build the top-level health check list.
+	 * Get the top-level health check list.
 	 *
 	 * @param array<string, mixed> $server   Server status section.
 	 * @param array<string, mixed> $database Database status section.
@@ -33,7 +33,7 @@ class Checks {
 	 * @return array<int, array<string, string>>
 	 * @since 1.0.14
 	 */
-	public function build(
+	public function status_checks(
 		array $server,
 		array $database,
 		array $storage,
@@ -124,13 +124,13 @@ class Checks {
 	}
 
 	/**
-	 * Build the overall status summary from the check list.
+	 * Get the overall status summary from the check list.
 	 *
 	 * @param array<int, array<string, string>> $checks Health checks list.
 	 * @return array<string, mixed>
 	 * @since 1.0.14
 	 */
-	public function build_summary( array $checks ): array {
+	public function status_summary( array $checks ): array {
 		$ok_count      = 0;
 		$warning_count = 0;
 		$error_count   = 0;

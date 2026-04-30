@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\Install;
 
+use PeakURL\Utils\Security;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -40,7 +42,7 @@ class Screen {
 	}
 
 	/**
-	 * Build a URL by combining the base path, suffix, and query arguments.
+	 * Get a URL by combining the base path, suffix, and query arguments.
 	 *
 	 * @param string              $base_path Base path (may be empty).
 	 * @param string              $suffix    Suffix to append.
@@ -48,7 +50,7 @@ class Screen {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	public static function build_url(
+	public static function format_url(
 		string $base_path,
 		string $suffix,
 		array $query = array()
@@ -106,6 +108,38 @@ class Screen {
 		$host   = self::get_request_host( $server );
 
 		return $scheme . '://' . $host . $base_path;
+	}
+
+	/**
+	 * Validate a browser-originating installer POST.
+	 *
+	 * Non-browser clients without Origin/Referer are allowed; browser posts
+	 * must come from the detected site origin.
+	 *
+	 * @param string               $site_url Detected installer site URL.
+	 * @param array<string, mixed> $server   Request server variables.
+	 * @return void
+	 *
+	 * @throws \RuntimeException When the origin does not match the installer site.
+	 * @since 1.1.1
+	 */
+	public static function validate_post_origin(
+		string $site_url,
+		array $server
+	): void {
+		$origin = Security::get_server_origin( $server );
+
+		if ( null === $origin ) {
+			return;
+		}
+
+		if ( Security::is_same_origin( array( 'SITE_URL' => $site_url ), $origin ) ) {
+			return;
+		}
+
+		throw new \RuntimeException(
+			__( 'Request origin is not allowed.', 'peakurl' ),
+		);
 	}
 
 	/**

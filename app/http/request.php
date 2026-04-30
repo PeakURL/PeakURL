@@ -452,7 +452,7 @@ class Request {
 			'secure'   => $this->is_secure(),
 		);
 
-		$this->response_cookies[]     = $this->build_cookie_header(
+		$this->response_cookies[]     = $this->get_cookie_header(
 			$name,
 			$value,
 			array_merge( $defaults, $options ),
@@ -494,7 +494,7 @@ class Request {
 	 * @return string Complete Set-Cookie header value.
 	 * @since 1.0.0
 	 */
-	private function build_cookie_header(
+	private function get_cookie_header(
 		string $name,
 		string $value,
 		array $options

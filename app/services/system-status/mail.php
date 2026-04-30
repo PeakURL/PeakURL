@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Mail — build the mail section of the system-status payload.
+ * Mail — get the mail section of the system-status payload.
  *
  * @since 1.0.14
  */
@@ -41,12 +41,12 @@ class Mail {
 	}
 
 	/**
-	 * Build mail status details.
+	 * Get mail status details.
 	 *
 	 * @return array<string, mixed>
 	 * @since 1.0.14
 	 */
-	public function build(): array {
+	public function mail_status(): array {
 		$status = $this->context->get_mailer_service()->get_status();
 
 		return array(

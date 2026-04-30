@@ -23,7 +23,7 @@ import type {
 	StatsMetricItem,
 } from "./types";
 
-// Browser icon mapping
+// Browser icon type
 const getBrowserIcon = (browser: string) => {
 	const browserLower = browser.toLowerCase();
 	if (browserLower.includes("chrome")) return "chrome";
@@ -51,7 +51,7 @@ const BrowserIcon = ({ browser, className }: BrowserIconProps) => {
 	return <Globe className={className} />;
 };
 
-// Device icon mapping
+// Device icon
 const getDeviceIcon = (deviceType: string) => {
 	const typeLower = deviceType.toLowerCase();
 	if (typeLower.includes("mobile")) return Smartphone;
@@ -59,7 +59,7 @@ const getDeviceIcon = (deviceType: string) => {
 	return Monitor;
 };
 
-// OS icon/emoji mapping
+// OS icon
 const getOSIcon = (os: string): ReactNode => {
 	const osLower = os.toLowerCase();
 	if (osLower.includes("windows")) {
@@ -130,7 +130,7 @@ function DeviceStats({
 		0
 	);
 
-	// Helper to calculate percentage
+	// Add percentage values
 	const formatData = (items: StatsMetricItem[]) => {
 		return items.map((item) => ({
 			...item,

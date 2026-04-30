@@ -54,7 +54,7 @@ trait SupportTrait {
 	 * @throws ApiException When the username is empty.
 	 * @since 1.0.14
 	 */
-	private function validate_username_required(
+	private function validate_username(
 		string $username,
 		string $message = ''
 	): string {
@@ -80,7 +80,7 @@ trait SupportTrait {
 	 * @throws ApiException When the username format is invalid.
 	 * @since 1.0.14
 	 */
-	private function validate_username_pattern( string $username ): string {
+	private function validate_user_login( string $username ): string {
 		$username = trim( $username );
 
 		if ( ! preg_match( '/^[A-Za-z0-9._@-]{3,120}$/', $username ) ) {
@@ -114,7 +114,7 @@ trait SupportTrait {
 	}
 
 	/**
-	 * Check whether an email address already belongs to another user.
+	 * Return whether an email address already belongs to another user.
 	 *
 	 * @param string      $email           Normalized email address.
 	 * @param string|null $exclude_user_id Optional user ID to ignore.
@@ -139,9 +139,9 @@ trait SupportTrait {
 	}
 
 	/**
-	 * Check whether a username already belongs to another user.
+	 * Return whether a username already belongs to another user.
 	 *
-	 * @param string      $username        Username to check.
+	 * @param string      $username        Username to inspect.
 	 * @param string|null $exclude_user_id Optional user ID to ignore.
 	 * @return bool
 	 * @since 1.0.14
@@ -192,7 +192,7 @@ trait SupportTrait {
 	 * @throws ApiException When the password is missing or incorrect.
 	 * @since 1.0.6
 	 */
-	private function assert_password_confirmation_for_user(
+	private function confirm_current_password(
 		?array $user_row,
 		string $current_password,
 		string $missing_message
@@ -224,7 +224,7 @@ trait SupportTrait {
 	}
 
 	/**
-	 * Ensure backup-code actions only run when 2FA is enabled.
+	 * Ensure two-factor actions only run when 2FA is enabled.
 	 *
 	 * @param array<string, mixed> $user_row User database row.
 	 * @return void
@@ -232,7 +232,7 @@ trait SupportTrait {
 	 * @throws ApiException When 2FA is not enabled.
 	 * @since 1.0.6
 	 */
-	private function assert_two_factor_is_enabled_for_user( array $user_row ): void {
+	private function validate_two_factor( array $user_row ): void {
 		if ( empty( $user_row['two_factor_enabled'] ) ) {
 			throw new ApiException(
 				__(
@@ -251,9 +251,9 @@ trait SupportTrait {
 	 * @return void
 	 * @since 1.0.6
 	 */
-	private function send_password_changed_notification( array $user ): void {
+	private function send_password_changed( array $user ): void {
 		try {
-			$this->notifications_service->send_password_changed_email( $user );
+			$this->notifications_service->send_password_changed( $user );
 		} catch ( \RuntimeException $exception ) {
 			error_log(
 				sprintf(

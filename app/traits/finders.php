@@ -66,14 +66,14 @@ trait FindersTrait {
 	 * @return array<string, mixed>|null URL row or null.
 	 * @since 1.0.0
 	 */
-	private function find_public_access_url_row( string $id ): ?array {
+	private function find_link_access_row( string $id ): ?array {
 		$normalized_id = $this->sanitize_code( $id );
 
 		if ( '' === $normalized_id ) {
 			return null;
 		}
 
-		$row = $this->links_api->get_public_link_access_row( $normalized_id );
+		$row = $this->links_api->get_link_access_row( $normalized_id );
 
 		return $row ? $row : null;
 	}
@@ -112,12 +112,12 @@ trait FindersTrait {
 	}
 
 	/**
-	 * Retrieve the workspace owner.
+	 * Retrieve the site owner.
 	 *
 	 * @return array<string, mixed>|null Owner user row or null.
 	 * @since 1.0.0
 	 */
-	private function get_workspace_owner_row(): ?array {
-		return $this->users_api->get_workspace_owner_user();
+	private function get_owner_row(): ?array {
+		return $this->users_api->get_owner_user();
 	}
 }

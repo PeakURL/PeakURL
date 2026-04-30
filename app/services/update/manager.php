@@ -141,12 +141,12 @@ class Manager {
 	 * @return array<string, mixed>
 	 * @since 1.0.14
 	 */
-	public function build_status(
+	public function get_status(
 		?array $manifest,
 		?string $last_checked_at,
 		?string $last_error
 	): array {
-		return $this->status->build_status(
+		return $this->status->get_status(
 			$manifest,
 			$last_checked_at,
 			$last_error,

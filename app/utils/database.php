@@ -96,20 +96,13 @@ class Database {
 	): string {
 		$identifier = trim( str_replace( '`', '', $identifier ) );
 
-		if ( '' === $identifier ) {
-			return '';
-		}
-
-		$sanitized = preg_replace( '/[^A-Za-z0-9_]/', '', $identifier );
-		$sanitized = is_string( $sanitized ) ? $sanitized : '';
-
-		if ( '' === $sanitized ) {
+		if ( '' === $identifier || ! preg_match( '/^[A-Za-z0-9_]+$/', $identifier ) ) {
 			throw new \InvalidArgumentException(
 				sprintf( 'PeakURL received an invalid %s.', $context ),
 			);
 		}
 
-		return $sanitized;
+		return $identifier;
 	}
 
 	/**

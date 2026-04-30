@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\Update;
 
+use PeakURL\Utils\File;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -81,7 +83,7 @@ class Workspace {
 	public function acquire_lock(): array {
 		$lock_path = $this->context->get_lock_path();
 
-		$this->filesystem->create_directory( dirname( $lock_path ) );
+		$this->filesystem->mkdir_p( dirname( $lock_path ) );
 		$this->remove_stale_lock( $lock_path );
 
 		$handle = fopen( $lock_path, 'c+' );
@@ -131,25 +133,9 @@ class Workspace {
 			fclose( $lock['handle'] );
 		}
 
-		if ( ! empty( $lock['path'] ) && file_exists( (string) $lock['path'] ) ) {
-			unlink( (string) $lock['path'] );
+		if ( ! empty( $lock['path'] ) ) {
+			File::delete( (string) $lock['path'], true );
 		}
-	}
-
-	/**
-	 * Remove the obsolete update workspace from older packaged installs.
-	 *
-	 * @return void
-	 * @since 1.0.14
-	 */
-	public function cleanup_legacy_storage(): void {
-		$legacy_storage_root = $this->context->get_legacy_storage_dir();
-
-		if ( $legacy_storage_root === $this->context->get_storage_dir() ) {
-			return;
-		}
-
-		$this->filesystem->delete_path( $legacy_storage_root );
 	}
 
 	/**
@@ -159,7 +145,7 @@ class Workspace {
 	 * @since 1.0.14
 	 */
 	public function cleanup_storage(): void {
-		$this->filesystem->delete_empty_directory_tree(
+		$this->filesystem->delete_empty_dirs(
 			$this->context->get_storage_dir(),
 		);
 	}
@@ -200,9 +186,7 @@ class Workspace {
 	public function disable_maintenance_mode(): void {
 		$maintenance_path = $this->context->get_maintenance_path();
 
-		if ( file_exists( $maintenance_path ) ) {
-			unlink( $maintenance_path );
-		}
+		File::delete( $maintenance_path, true );
 	}
 
 	/**
@@ -223,6 +207,6 @@ class Workspace {
 			return;
 		}
 
-		unlink( $lock_path );
+		File::delete( $lock_path, true );
 	}
 }

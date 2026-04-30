@@ -10,7 +10,7 @@ import type {
 	LinkStatsResponse,
 } from "./types";
 
-function buildActivityHistoryQueryString({
+function serializeActivityHistoryQuery({
 	page = 1,
 	limit = 25,
 	category = "all",
@@ -43,7 +43,7 @@ export const analyticsApi = baseApi.injectEndpoints({
 			ActivityHistoryResponse,
 			GetActivityHistoryQueryArgs | void
 		>({
-			query: (args) => buildActivityHistoryQueryString(args || {}),
+			query: (args) => serializeActivityHistoryQuery(args || {}),
 			providesTags: ["Analytics"],
 		}),
 		deleteActivityLog: build.mutation<

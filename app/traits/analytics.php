@@ -40,10 +40,10 @@ trait AnalyticsTrait {
 	public function analytics_summary( Request $request, int $days = 7 ): array {
 		$user            = $this->get_current_user( $request );
 		$days            = max( 1, $days );
-		$window          = $this->build_time_window( $days );
+		$window          = $this->time_window( $days );
 		$link_conditions = array();
 		$link_params     = array();
-		$this->add_link_visibility_scope(
+		$this->scope_link_visibility(
 			$user,
 			$link_conditions,
 			$link_params,
@@ -59,7 +59,7 @@ trait AnalyticsTrait {
 		$click_join       = '';
 		$click_conditions = array( 'c.clicked_at >= :start_at' );
 		$click_params     = array( 'start_at' => $window['start_at'] );
-		$this->add_click_analytics_scope(
+		$this->scope_click_analytics(
 			$user,
 			$click_join,
 			$click_conditions,
@@ -79,7 +79,7 @@ trait AnalyticsTrait {
 				$click_params,
 			) ?? array();
 
-		$unique_click_rate = $this->calculate_unique_click_rate(
+		$unique_click_rate = $this->get_unique_click_rate(
 			(int) ( $stats['total_clicks'] ?? 0 ),
 			(int) ( $stats['unique_clicks'] ?? 0 ),
 		);
@@ -122,7 +122,7 @@ trait AnalyticsTrait {
 				null,
 				$user,
 			),
-			'traffic'          => $this->build_traffic_series(
+			'traffic'          => $this->query_traffic_series(
 				null,
 				$days,
 				$user,
@@ -140,7 +140,7 @@ trait AnalyticsTrait {
 	 * @since 1.0.0
 	 */
 	public function activity( Request $request ): array {
-		$query = $this->build_activity_listing_query( $request );
+		$query = $this->prepare_activity_query( $request );
 		$sql   =
 			$this->activity_select_sql() . ' ' .
 			$query['from'] .
@@ -148,7 +148,7 @@ trait AnalyticsTrait {
 			' ORDER BY a.created_at DESC LIMIT 12';
 
 		return array_map(
-			fn( array $row ): array => $this->hydrate_activity_row( $row ),
+			fn( array $row ): array => $this->format_activity( $row ),
 			$this->query_all( $sql, $query['params'] ),
 		);
 	}
@@ -166,7 +166,7 @@ trait AnalyticsTrait {
 		$page       = $pagination['page'];
 		$limit      = $pagination['limit'];
 		$offset     = $pagination['offset'];
-		$listing    = $this->build_activity_listing_query( $request, $query );
+		$listing    = $this->prepare_activity_query( $request, $query );
 		$total      = (int) $this->query_value(
 			'SELECT COUNT(*) ' . $listing['from'] . $listing['where'],
 			$listing['params'],
@@ -182,7 +182,7 @@ trait AnalyticsTrait {
 
 		return array(
 			'items' => array_map(
-				fn( array $row ): array => $this->hydrate_activity_row( $row ),
+				fn( array $row ): array => $this->format_activity( $row ),
 				$rows,
 			),
 			'meta'  => array(
@@ -217,7 +217,7 @@ trait AnalyticsTrait {
 			);
 		}
 
-		$this->assert_admin_request( $request );
+		$this->get_admin_user( $request );
 
 		return $this->db->delete(
 			'audit_logs',
@@ -240,7 +240,7 @@ trait AnalyticsTrait {
 		Request $request,
 		array $ids
 	): int {
-		$this->assert_admin_request( $request );
+		$this->get_admin_user( $request );
 		$ids = Query::string_ids( $ids );
 
 		if ( empty( $ids ) ) {
@@ -255,7 +255,7 @@ trait AnalyticsTrait {
 	}
 
 	/**
-	 * Build the scoped FROM / WHERE clauses used by activity queries.
+	 * Get the scoped FROM / WHERE clauses used by activity queries.
 	 *
 	 * Editors only see activity tied to their own user ID or links. Admins
 	 * receive the full site-wide audit log.
@@ -265,7 +265,7 @@ trait AnalyticsTrait {
 	 * @return array{from: string, where: string, params: array<string, string>}
 	 * @since 1.0.0
 	 */
-	private function build_activity_listing_query(
+	private function prepare_activity_query(
 		Request $request,
 		array $query = array()
 	): array {
@@ -281,8 +281,8 @@ trait AnalyticsTrait {
 			$conditions[] = "LEFT(a.type, 5) = 'user_'";
 		}
 
-		if ( ! $this->roles->user_can( $user, 'view_site_analytics' ) ) {
-			if ( ! $this->roles->user_can( $user, 'view_own_analytics' ) ) {
+		if ( ! $this->roles->has_capability( $user, 'view_site_analytics' ) ) {
+			if ( ! $this->roles->has_capability( $user, 'view_own_analytics' ) ) {
 				throw new ApiException(
 					'You do not have permission to view activity.',
 					403,
@@ -305,7 +305,7 @@ trait AnalyticsTrait {
 	}
 
 	/**
-	 * Build the shared SELECT clause for activity queries.
+	 * Get the shared SELECT clause for activity queries.
 	 *
 	 * @return string
 	 * @since 1.0.4
@@ -342,7 +342,7 @@ trait AnalyticsTrait {
 			return null;
 		}
 
-		$this->assert_record_access(
+		$this->validate_record_access(
 			$user,
 			(string) ( $url['user_id'] ?? '' ),
 			'view_own_analytics',
@@ -351,7 +351,7 @@ trait AnalyticsTrait {
 		);
 
 		$days   = max( 1, $days );
-		$window = $this->build_time_window( $days );
+		$window = $this->time_window( $days );
 		$totals =
 			$this->query_one(
 				'SELECT
@@ -366,7 +366,7 @@ trait AnalyticsTrait {
 				),
 			) ?? array();
 
-		$unique_click_rate = $this->calculate_unique_click_rate(
+		$unique_click_rate = $this->get_unique_click_rate(
 			(int) ( $totals['total_clicks'] ?? 0 ),
 			(int) ( $totals['unique_clicks'] ?? 0 ),
 		);
@@ -376,7 +376,7 @@ trait AnalyticsTrait {
 			'uniqueClicks'       => (int) ( $totals['unique_clicks'] ?? 0 ),
 			'uniqueClickRate'    => $unique_click_rate,
 			'conversionRate'     => $unique_click_rate,
-			'traffic'            => $this->build_traffic_series(
+			'traffic'            => $this->query_traffic_series(
 				(string) $url['id'],
 				$days,
 			),
@@ -443,7 +443,7 @@ trait AnalyticsTrait {
 			return null;
 		}
 
-		$this->assert_record_access(
+		$this->validate_record_access(
 			$user,
 			(string) ( $url['user_id'] ?? '' ),
 			'view_own_analytics',

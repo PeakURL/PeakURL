@@ -202,18 +202,18 @@ class I18n {
 	 * @since 1.0.14
 	 */
 	public function load_locale( ?string $locale = null ): string {
-		$resolved_locale = null === $locale
+		$locale_name = null === $locale
 			? $this->get_site_locale()
 			: $this->normalize_locale( $locale );
 
-		if ( $resolved_locale === $this->locale && null !== $this->catalog ) {
-			return $resolved_locale;
+		if ( $locale_name === $this->locale && null !== $this->catalog ) {
+			return $locale_name;
 		}
 
-		$this->locale  = $resolved_locale;
-		$this->catalog = $this->loader->load_php_catalog( $resolved_locale );
+		$this->locale  = $locale_name;
+		$this->catalog = $this->loader->load_php_catalog( $locale_name );
 
-		return $resolved_locale;
+		return $locale_name;
 	}
 
 	/**
@@ -279,7 +279,7 @@ class I18n {
 		?string $context = null,
 		?string $locale = null
 	): string {
-		$resolved_locale = $this->load_locale( $locale );
+		$locale_name = $this->load_locale( $locale );
 
 		if ( null === $this->catalog ) {
 			return 1 === abs( $number ) ? $single : $plural;
@@ -308,8 +308,8 @@ class I18n {
 			return 1 === abs( $number ) ? $single : $plural;
 		}
 
-		$index = $this->languages->resolve_plural_index(
-			$resolved_locale,
+		$index = $this->languages->get_plural_index(
+			$locale_name,
 			$number,
 		);
 		$value = (string) ( $plural_translations[ $index ] ?? '' );
@@ -375,13 +375,13 @@ class I18n {
 	 * @since 1.0.14
 	 */
 	public function get_dashboard_catalog( ?string $locale = null ): array {
-		$resolved_locale = null === $locale
+		$locale_name = null === $locale
 			? $this->get_current_locale()
 			: $this->normalize_locale( $locale );
 
 		return $this->loader->get_dashboard_catalog(
-			$resolved_locale,
-			$this->languages->get_plural_forms_header( $resolved_locale ),
+			$locale_name,
+			$this->languages->get_plural_forms_header( $locale_name ),
 		);
 	}
 
@@ -393,11 +393,11 @@ class I18n {
 	 * @since 1.0.14
 	 */
 	public function get_html_lang( ?string $locale = null ): string {
-		$resolved_locale = null === $locale
+		$locale_name = null === $locale
 			? $this->get_current_locale()
 			: $this->normalize_locale( $locale );
 
-		return $this->locale_helper->get_html_lang( $resolved_locale );
+		return $this->locale_helper->get_html_lang( $locale_name );
 	}
 
 	/**
@@ -408,11 +408,11 @@ class I18n {
 	 * @since 1.0.14
 	 */
 	public function is_locale_rtl( ?string $locale = null ): bool {
-		$resolved_locale = null === $locale
+		$locale_name = null === $locale
 			? $this->get_current_locale()
 			: $this->normalize_locale( $locale );
 
-		return $this->locale_helper->is_locale_rtl( $resolved_locale );
+		return $this->locale_helper->is_locale_rtl( $locale_name );
 	}
 
 	/**
@@ -423,11 +423,11 @@ class I18n {
 	 * @since 1.0.14
 	 */
 	public function get_text_direction( ?string $locale = null ): string {
-		$resolved_locale = null === $locale
+		$locale_name = null === $locale
 			? $this->get_current_locale()
 			: $this->normalize_locale( $locale );
 
-		return $this->locale_helper->get_text_direction( $resolved_locale );
+		return $this->locale_helper->get_text_direction( $locale_name );
 	}
 
 	/**
@@ -436,8 +436,8 @@ class I18n {
 	 * @return bool
 	 * @since 1.0.14
 	 */
-	public function prepare_languages_directory(): bool {
-		$directory_status = $this->paths->prepare_languages_directory();
+	public function prepare_languages_dir(): bool {
+		$directory_status = $this->paths->prepare_languages_dir();
 
 		if ( ! empty( $directory_status['created'] ) ) {
 			$this->catalog = null;

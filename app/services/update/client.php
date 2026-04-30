@@ -57,10 +57,10 @@ class Client {
 		);
 
 		if ( function_exists( 'curl_init' ) ) {
-			return $this->get_with_curl( $url, $accept );
+			return $this->get_curl( $url, $accept );
 		}
 
-		return $this->get_with_stream( $url, $accept );
+		return $this->get_stream( $url, $accept );
 	}
 
 	/**
@@ -127,7 +127,7 @@ class Client {
 	 * @throws \RuntimeException On cURL failure or non-2xx status.
 	 * @since 1.0.14
 	 */
-	private function get_with_curl( string $url, string $accept ): string {
+	private function get_curl( string $url, string $accept ): string {
 		$curl = curl_init( $url );
 
 		if ( false === $curl ) {
@@ -147,7 +147,7 @@ class Client {
 				CURLOPT_SSL_VERIFYHOST => 2,
 				CURLOPT_HTTPHEADER     => array(
 					'Accept: ' . $accept,
-					'User-Agent: ' . $this->build_user_agent(),
+					'User-Agent: ' . $this->format_user_agent(),
 				),
 			),
 		);
@@ -194,7 +194,7 @@ class Client {
 	 * @throws \RuntimeException On stream failure or non-2xx status.
 	 * @since 1.0.14
 	 */
-	private function get_with_stream( string $url, string $accept ): string {
+	private function get_stream( string $url, string $accept ): string {
 		$context = stream_context_create(
 			array(
 				'http' => array(
@@ -205,7 +205,7 @@ class Client {
 						"\r\n",
 						array(
 							'Accept: ' . $accept,
-							'User-Agent: ' . $this->build_user_agent(),
+							'User-Agent: ' . $this->format_user_agent(),
 						),
 					),
 				),
@@ -270,12 +270,12 @@ class Client {
 	}
 
 	/**
-	 * Build the User-Agent header for update requests.
+	 * Get the User-Agent header for update requests.
 	 *
 	 * @return string
 	 * @since 1.0.14
 	 */
-	private function build_user_agent(): string {
+	private function format_user_agent(): string {
 		return sprintf(
 			'PeakURL/%s; %s',
 			$this->context->get_current_version(),

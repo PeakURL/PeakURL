@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useBulkCreateUrlMutation } from "@/store/slices/api";
 import {
-	buildShortUrl,
+	getShortUrl,
 	extractAliasFromShortUrl,
 	getErrorMessage,
 	normalizeCsvHeader,
@@ -184,7 +184,7 @@ const FileUpload = ({
 							extractAliasFromShortUrl(item.shortUrl || "") ||
 							__("Auto-generated"),
 						status: "success",
-						shortUrl: buildShortUrl(item),
+						shortUrl: getShortUrl(item),
 					});
 				});
 

@@ -101,33 +101,33 @@ function hasDateTimeDisplayOption(
 	].some((key) => key in options);
 }
 
-function buildDateTimeOptions(
+function createDateTimeOptions(
 	options: Intl.DateTimeFormatOptions
 ): Intl.DateTimeFormatOptions {
 	const timeFormat = getActiveTimeFormat();
-	const resolvedOptions: Intl.DateTimeFormatOptions = {
+	const dateOptions: Intl.DateTimeFormatOptions = {
 		timeZone: getActiveTimeZone(),
 		...(hasDateTimeDisplayOption(options)
 			? options
 			: { dateStyle: "medium", timeStyle: "medium" }),
 	};
-	const shouldIncludeSeconds =
-		!("second" in resolvedOptions) &&
-		!("fractionalSecondDigits" in resolvedOptions) &&
-		!("timeStyle" in resolvedOptions) &&
-		("hour" in resolvedOptions || "minute" in resolvedOptions);
+	const includeSeconds =
+		!("second" in dateOptions) &&
+		!("fractionalSecondDigits" in dateOptions) &&
+		!("timeStyle" in dateOptions) &&
+		("hour" in dateOptions || "minute" in dateOptions);
 
 	if ("12" === timeFormat) {
-		resolvedOptions.hour12 = true;
+		dateOptions.hour12 = true;
 	} else if ("24" === timeFormat) {
-		resolvedOptions.hour12 = false;
+		dateOptions.hour12 = false;
 	}
 
-	if (shouldIncludeSeconds) {
-		resolvedOptions.second = "2-digit";
+	if (includeSeconds) {
+		dateOptions.second = "2-digit";
 	}
 
-	return resolvedOptions;
+	return dateOptions;
 }
 
 export function getZonedDateKey(
@@ -179,7 +179,7 @@ export function formatDateOnly(
 	}
 }
 
-function resolveRelativeUnit(targetDate: Date, nowDate: Date) {
+function getRelativeUnit(targetDate: Date, nowDate: Date) {
 	const deltaMs = targetDate.getTime() - nowDate.getTime();
 	const absoluteDeltaMs = Math.abs(deltaMs);
 
@@ -277,7 +277,7 @@ export function formatRelativeTime(
 		return "";
 	}
 
-	const { unit, value: relativeValue } = resolveRelativeUnit(
+	const { unit, value: relativeValue } = getRelativeUnit(
 		targetDate,
 		nowDate
 	);
@@ -315,11 +315,11 @@ export function formatLocalizedDateTime(
 	try {
 		return new Intl.DateTimeFormat(
 			getActiveLocale(),
-			buildDateTimeOptions(options)
+			createDateTimeOptions(options)
 		).format(targetDate);
 	} catch {
 		return targetDate.toLocaleString(getActiveLocale(), {
-			...buildDateTimeOptions({}),
+			...createDateTimeOptions({}),
 			timeZone: undefined,
 		});
 	}

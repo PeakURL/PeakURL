@@ -17,7 +17,7 @@ const NotificationContext = createContext<NotificationContextValue | null>(
 	null
 );
 
-function buildNotification(
+function createNotification(
 	type: NotificationPayload["type"],
 	title: string,
 	message?: string
@@ -63,13 +63,13 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
 			showNotification,
 			hideNotification,
 			success: (title: string, message?: string) =>
-				showNotification(buildNotification("success", title, message)),
+				showNotification(createNotification("success", title, message)),
 			error: (title: string, message?: string) =>
-				showNotification(buildNotification("error", title, message)),
+				showNotification(createNotification("error", title, message)),
 			warning: (title: string, message?: string) =>
-				showNotification(buildNotification("warning", title, message)),
+				showNotification(createNotification("warning", title, message)),
 			info: (title: string, message?: string) =>
-				showNotification(buildNotification("info", title, message)),
+				showNotification(createNotification("info", title, message)),
 		}),
 		[notifications, showNotification, hideNotification]
 	);

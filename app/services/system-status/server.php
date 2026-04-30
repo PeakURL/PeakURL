@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Server — build the server section of the system-status payload.
+ * Server — get the server section of the system-status payload.
  *
  * @since 1.0.14
  */
@@ -41,12 +41,12 @@ class Server {
 	}
 
 	/**
-	 * Build PHP and server status details.
+	 * Get PHP and server status details.
 	 *
 	 * @return array<string, mixed>
 	 * @since 1.0.14
 	 */
-	public function build(): array {
+	public function server_status(): array {
 		return array(
 			'phpVersion'        => PHP_VERSION,
 			'phpSapi'           => PHP_SAPI,

@@ -39,22 +39,81 @@ class Security {
 	 * @return string Allowed origin URL, or '' for no match.
 	 * @since 1.0.0
 	 */
-	public static function resolve_allowed_origin(
+	public static function get_allowed_origin(
 		array $config,
 		array $server_params
 	): string {
-		$request_origin = trim( (string) ( $server_params['HTTP_ORIGIN'] ?? '' ) );
+		$request_origin = self::extract_origin( (string) ( $server_params['HTTP_ORIGIN'] ?? '' ) );
 		$site_origin    = self::extract_origin( (string) ( $config['SITE_URL'] ?? '' ) );
 
 		if ( '' === $request_origin ) {
 			return $site_origin;
 		}
 
-		if ( '' !== $site_origin && $request_origin === $site_origin ) {
+		if ( self::is_same_origin( $config, $request_origin ) ) {
 			return $request_origin;
 		}
 
 		return '';
+	}
+
+	/**
+	 * Return the request origin from Origin or Referer headers.
+	 *
+	 * @param Request $request Incoming request.
+	 * @return string|null Normalized origin, empty string when invalid, or null when absent.
+	 * @since 1.1.1
+	 */
+	public static function get_request_origin( Request $request ): ?string {
+		$origin = trim( (string) $request->get_header( 'Origin', '' ) );
+
+		if ( '' === $origin ) {
+			$origin = trim( (string) $request->get_header( 'Referer', '' ) );
+		}
+
+		if ( '' === $origin ) {
+			return null;
+		}
+
+		return self::extract_origin( $origin );
+	}
+
+	/**
+	 * Return the request origin from server header variables.
+	 *
+	 * @param array<string, mixed> $server_params $_SERVER super-global.
+	 * @return string|null Normalized origin, empty string when invalid, or null when absent.
+	 * @since 1.1.1
+	 */
+	public static function get_server_origin( array $server_params ): ?string {
+		$origin = trim( (string) ( $server_params['HTTP_ORIGIN'] ?? '' ) );
+
+		if ( '' === $origin ) {
+			$origin = trim( (string) ( $server_params['HTTP_REFERER'] ?? '' ) );
+		}
+
+		if ( '' === $origin ) {
+			return null;
+		}
+
+		return self::extract_origin( $origin );
+	}
+
+	/**
+	 * Return whether a request origin matches the configured site origin.
+	 *
+	 * @param array<string, mixed> $config Runtime config.
+	 * @param string               $origin Request origin URL.
+	 * @return bool True when both origins match.
+	 * @since 1.1.1
+	 */
+	public static function is_same_origin( array $config, string $origin ): bool {
+		$request_origin = self::extract_origin( $origin );
+		$site_origin    = self::extract_origin( (string) ( $config['SITE_URL'] ?? '' ) );
+
+		return '' !== $request_origin &&
+			'' !== $site_origin &&
+			hash_equals( $site_origin, $request_origin );
 	}
 
 	/**
@@ -78,7 +137,7 @@ class Security {
 			'httponly' => true,
 			'samesite' =>
 				(string) ( $config[ Constants::CONFIG_SESSION_COOKIE_SAME_SITE ] ?? Constants::DEFAULT_SESSION_COOKIE_SAME_SITE ),
-			'secure'   => self::should_use_secure_cookies( $config, $request ),
+			'secure'   => self::use_secure_cookies( $config, $request ),
 		);
 
 		$domain = trim( (string) ( $config[ Constants::CONFIG_SESSION_COOKIE_DOMAIN ] ?? '' ) );
@@ -122,7 +181,7 @@ class Security {
 	 * @return bool True when the Secure flag should be set.
 	 * @since 1.0.0
 	 */
-	private static function should_use_secure_cookies(
+	private static function use_secure_cookies(
 		array $config,
 		Request $request
 	): bool {

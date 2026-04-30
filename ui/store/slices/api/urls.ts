@@ -13,9 +13,9 @@ import type {
 } from "./types";
 
 /**
- * Builds a stable query string for the links list endpoint.
+ * Returns a stable query string for the links list endpoint.
  */
-function buildUrlsQueryString({
+function serializeUrlsQuery({
 	page = 1,
 	limit = 25,
 	sortBy = "createdAt",
@@ -36,9 +36,9 @@ function buildUrlsQueryString({
 }
 
 /**
- * Builds a stable query string for the export lookup endpoint.
+ * Returns a stable query string for the export lookup endpoint.
  */
-function buildUrlsExportQueryString({
+function serializeUrlsExportQuery({
 	sortBy = "createdAt",
 	sortOrder = "desc",
 	search = "",
@@ -60,7 +60,7 @@ function buildUrlsExportQueryString({
 export const urlsApi = baseApi.injectEndpoints({
 	endpoints: (build) => ({
 		getUrls: build.query<UrlsListResponse, GetUrlsQueryArgs | void>({
-			query: (args) => buildUrlsQueryString(args || {}),
+			query: (args) => serializeUrlsQuery(args || {}),
 			providesTags: (result) => {
 				const items = result?.data?.items || result?.items || [];
 
@@ -77,10 +77,10 @@ export const urlsApi = baseApi.injectEndpoints({
 			query: (id) => `urls/${id}`,
 			providesTags: (result, _error, id) => {
 				const tags = [{ type: "Urls" as const, id }];
-				const resolvedId = result?.data?.id;
+				const createdId = result?.data?.id;
 
-				if (resolvedId) {
-					tags.push({ type: "Urls" as const, id: resolvedId });
+				if (createdId) {
+					tags.push({ type: "Urls" as const, id: createdId });
 				}
 
 				return tags;
@@ -90,7 +90,7 @@ export const urlsApi = baseApi.injectEndpoints({
 			UrlExportResponse,
 			GetUrlsExportQueryArgs | void
 		>({
-			query: (args) => buildUrlsExportQueryString(args || {}),
+			query: (args) => serializeUrlsExportQuery(args || {}),
 		}),
 		createUrl: build.mutation<CreateUrlResponse, CreateUrlPayload>({
 			query: (body) => ({ url: "urls", method: "POST", body }),

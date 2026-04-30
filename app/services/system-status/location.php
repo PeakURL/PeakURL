@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Location — build the location section of the system-status payload.
+ * Location — get the location section of the system-status payload.
  *
  * @since 1.0.14
  */
@@ -41,12 +41,12 @@ class Location {
 	}
 
 	/**
-	 * Build location-data status details.
+	 * Get location-data status details.
 	 *
 	 * @return array<string, mixed>
 	 * @since 1.0.14
 	 */
-	public function build(): array {
+	public function location_status(): array {
 		$status                = $this->context->get_geoip_service()->get_status();
 		$last_downloaded_at    = $this->context->get_settings_api()->get_option(
 			'geoip_last_downloaded_at'

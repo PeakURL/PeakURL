@@ -2,7 +2,7 @@
 /**
  * Dashboard updater endpoints.
  *
- * Provides the update status, remote-check, and apply actions
+ * Provides the update status, remote refresh, and apply actions
  * that power the admin-only "Updates" settings tab.
  *
  * @package PeakURL\Controllers
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Routes registered by Application::register_routes():
  *  GET  /api/v1/system/update       → status
- *  POST /api/v1/system/update/check → check
+ *  POST /api/v1/system/update/check → refresh
  *  POST /api/v1/system/update/apply → apply
  *  POST /api/v1/system/update/reinstall → reinstall
  *  POST /api/v1/system/update/database → upgrade_database
@@ -52,19 +52,19 @@ class UpdatesController extends BaseController {
 	}
 
 	/**
-	 * Check for available updates (POST /api/v1/system/update/check).
+	 * Refresh available updates (POST /api/v1/system/update/check).
 	 *
 	 * Fetches the remote update manifest and compares it against the
 	 * current runtime version. Caches the result in settings.
 	 *
 	 * @param Request $request Incoming HTTP request (admin-only).
-	 * @return array<string, mixed> JSON envelope with check result.
+	 * @return array<string, mixed> JSON envelope with refreshed status.
 	 * @since 1.0.0
 	 */
-	public function check( Request $request ): array {
+	public function refresh( Request $request ): array {
 		return $this->success_response(
-			$this->data_store->check_for_updates( $request ),
-			__( 'Update check complete.', 'peakurl' ),
+			$this->data_store->refresh_update_status( $request ),
+			__( 'Update status refreshed.', 'peakurl' ),
 		);
 	}
 

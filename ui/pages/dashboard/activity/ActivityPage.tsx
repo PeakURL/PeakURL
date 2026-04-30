@@ -193,7 +193,7 @@ function getActivityVisual(type?: string | null): {
 	}
 }
 
-function getActivityDayGroupLabel(timestamp?: string | null): {
+function formatActivityDayGroupLabel(timestamp?: string | null): {
 	key: string;
 	label: string;
 } {
@@ -241,7 +241,7 @@ function groupActivitiesByDay(
 	const groups = new Map<string, ActivityDayGroup>();
 
 	activities.forEach((activity) => {
-		const { key, label } = getActivityDayGroupLabel(activity.timestamp);
+		const { key, label } = formatActivityDayGroupLabel(activity.timestamp);
 		const existingGroup = groups.get(key);
 
 		if (existingGroup) {

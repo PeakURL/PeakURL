@@ -58,13 +58,13 @@ class Bootstrap {
 	}
 
 	/**
-	 * Build a typed runtime configuration array from flat config values.
+	 * Get a typed runtime configuration array from flat config values.
 	 *
 	 * @param array<string, string> $values Flat config values.
 	 * @return array<string, mixed>
 	 * @since 1.0.14
 	 */
-	public static function build_config( array $values ): array {
+	public static function prepare_config( array $values ): array {
 		return array(
 			'PEAKURL_ENV'                 => $values['PEAKURL_ENV'],
 			'SITE_URL'                    => $values['SITE_URL'],
@@ -106,7 +106,7 @@ class Bootstrap {
 	 * @return array<string, string>
 	 * @since 1.0.14
 	 */
-	public static function get_release_values( array $values ): array {
+	public static function prepare_release_values( array $values ): array {
 		unset(
 			$values['PEAKURL_OWNER_FALLBACK'],
 			$values['PEAKURL_OWNER_FIRST_NAME'],

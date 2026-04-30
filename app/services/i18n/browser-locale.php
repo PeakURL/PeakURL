@@ -58,7 +58,7 @@ class BrowserLocale {
 			return '';
 		}
 
-		foreach ( $this->parse_browser_language_preferences( $accept_language_header ) as $preferred_locale ) {
+		foreach ( $this->parse_accept_language( $accept_language_header ) as $preferred_locale ) {
 			$matched_locale = $this->find_available_locale(
 				$installed_locales,
 				$preferred_locale,
@@ -79,7 +79,7 @@ class BrowserLocale {
 	 * @return array<int, string>
 	 * @since 1.0.14
 	 */
-	private function parse_browser_language_preferences( string $accept_language_header ): array {
+	private function parse_accept_language( string $accept_language_header ): array {
 		$preferences = array();
 
 		foreach ( explode( ',', $accept_language_header ) as $index => $segment ) {

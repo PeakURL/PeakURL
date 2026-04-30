@@ -86,7 +86,7 @@ class Crypto {
 				'# PeakURL local development overrides'
 			);
 		} else {
-			$values                                = InstallWriter::build_config_values( $this->config );
+			$values                                = InstallWriter::prepare_config_values( $this->config );
 			$values[ Constants::CONFIG_AUTH_KEY ]  = $auth_key;
 			$values[ Constants::CONFIG_AUTH_SALT ] = $auth_salt;
 			InstallWriter::write_config_file( $app_path, $values );
@@ -246,7 +246,7 @@ class Crypto {
 	}
 
 	/**
-	 * Build a stable 32-byte key for the given crypto context.
+	 * Get a stable 32-byte key for the given crypto context.
 	 *
 	 * @param string $context Key-derivation context label.
 	 * @return string

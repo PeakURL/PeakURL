@@ -49,11 +49,7 @@ trait WebhooksTrait {
 	 * @since 1.0.0
 	 */
 	public function list_webhooks( Request $request ): array {
-		$user = $this->assert_request_capability(
-			$request,
-			'manage_webhooks',
-			'You do not have permission to manage webhooks.',
-		);
+		$user = $this->get_webhook_user( $request );
 		$rows = $this->db->get_results_by(
 			'webhooks',
 			array( 'user_id' => $user['id'] ),
@@ -62,18 +58,7 @@ trait WebhooksTrait {
 		);
 
 		return array_map(
-			fn( array $row ): array => array(
-				'id'         => (string) $row['id'],
-				'url'        => (string) $row['url'],
-				'events'     => $this->decode_json_array(
-					(string) ( $row['events'] ?? '[]' ),
-				),
-				'secretHint' => $this->mask_webhook_secret(
-					(string) ( $row['secret'] ?? '' ),
-				),
-				'isActive'   => ! empty( $row['is_active'] ),
-				'createdAt'  => $this->to_iso( (string) $row['created_at'] ),
-			),
+			fn( array $row ): array => $this->format_webhook( $row ),
 			$rows,
 		);
 	}
@@ -91,11 +76,7 @@ trait WebhooksTrait {
 	 * @since 1.0.0
 	 */
 	public function create_webhook( Request $request, array $payload ): array {
-		$user = $this->assert_request_capability(
-			$request,
-			'manage_webhooks',
-			'You do not have permission to manage webhooks.',
-		);
+		$user = $this->get_webhook_user( $request );
 		$url  = trim( (string) ( $payload['url'] ?? '' ) );
 
 		if ( '' === $url || ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
@@ -124,29 +105,14 @@ trait WebhooksTrait {
 			'url'        => $url,
 			'events'     => $this->encode_json( array_values( array_unique( $events ) ) ),
 			'secret'     => 'whsec_' . bin2hex( random_bytes( 18 ) ),
+			'is_active'  => 1,
 			'created_at' => $this->now(),
 			'updated_at' => $this->now(),
 		);
 
-		$this->db->insert(
-			'webhooks',
-			array_merge(
-				$row,
-				array(
-					'is_active' => 1,
-				),
-			),
-		);
+		$this->db->insert( 'webhooks', $row );
 
-		return array(
-			'id'         => $row['id'],
-			'url'        => $row['url'],
-			'events'     => $this->decode_json_array( $row['events'] ),
-			'secret'     => $row['secret'],
-			'secretHint' => $this->mask_webhook_secret( $row['secret'] ),
-			'isActive'   => true,
-			'createdAt'  => $this->to_iso( $row['created_at'] ),
-		);
+		return $this->format_webhook( $row, true );
 	}
 
 	/**
@@ -158,11 +124,7 @@ trait WebhooksTrait {
 	 * @since 1.0.0
 	 */
 	public function delete_webhook( Request $request, string $id ): bool {
-		$user = $this->assert_request_capability(
-			$request,
-			'manage_webhooks',
-			'You do not have permission to manage webhooks.',
-		);
+		$user = $this->get_webhook_user( $request );
 
 		return $this->db->delete(
 			'webhooks',
@@ -171,5 +133,56 @@ trait WebhooksTrait {
 				'user_id' => $user['id'],
 			),
 		) > 0;
+	}
+
+	/**
+	 * Return the current webhook user.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> Current user.
+	 * @since 1.0.0
+	 */
+	private function get_webhook_user( Request $request ): array {
+		$user = $this->get_current_user( $request );
+		$this->validate_capability(
+			$user,
+			'manage_webhooks',
+			'You do not have permission to manage webhooks.',
+		);
+
+		return $user;
+	}
+
+	/**
+	 * Format a webhook row for API responses.
+	 *
+	 * @param array<string, mixed> $row          Raw webhook row.
+	 * @param bool                 $show_secret Whether to include the raw secret.
+	 * @return array<string, mixed> Webhook response payload.
+	 * @since 1.0.0
+	 */
+	private function format_webhook( array $row, bool $show_secret = false ): array {
+		$webhook = array(
+			'id'     => (string) $row['id'],
+			'url'    => (string) $row['url'],
+			'events' => $this->decode_json_array(
+				(string) ( $row['events'] ?? '[]' ),
+			),
+		);
+
+		if ( $show_secret ) {
+			$webhook['secret'] = (string) ( $row['secret'] ?? '' );
+		}
+
+		return array_merge(
+			$webhook,
+			array(
+				'secretHint' => $this->mask_webhook_secret(
+					(string) ( $row['secret'] ?? '' ),
+				),
+				'isActive'   => ! empty( $row['is_active'] ),
+				'createdAt'  => $this->to_iso( (string) $row['created_at'] ),
+			),
+		);
 	}
 }

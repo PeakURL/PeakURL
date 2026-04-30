@@ -75,7 +75,7 @@ class Status {
 	 * @return array<string, mixed>
 	 * @since 1.0.14
 	 */
-	public function build_status(
+	public function get_status(
 		?array $manifest_data,
 		?string $last_checked_at,
 		?string $last_error

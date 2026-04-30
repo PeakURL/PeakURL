@@ -7,7 +7,7 @@ import type {
 } from "../types";
 
 const DeviceBreakdown = ({ deviceData }: DeviceBreakdownProps) => {
-	// Calculate total for percentage
+	// Count total device clicks
 	const devices = deviceData?.devices ?? [];
 	const browsers = deviceData?.browsers ?? [];
 	const operatingSystems = deviceData?.operatingSystems ?? [];

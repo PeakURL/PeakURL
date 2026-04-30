@@ -374,9 +374,9 @@ function getUserScore(query: string, terms: string[]): number {
 }
 
 /**
- * Builds the links page path, preserving the dashboard search query param.
+ * Returns the links page path, preserving the dashboard search query param.
  */
-export function buildLinksSearchPath(query: string = ""): string {
+export function getLinksSearchPath(query: string = ""): string {
 	const value = String(query).trim();
 
 	if (!value) {
@@ -390,9 +390,9 @@ export function buildLinksSearchPath(query: string = ""): string {
 }
 
 /**
- * Builds a links page path that opens the stats drawer for a short code.
+ * Returns a links page path that opens the stats drawer for a short code.
  */
-export function buildLinkStatsPath(shortCode: string = ""): string {
+export function getLinkStatsPath(shortCode: string = ""): string {
 	const value = String(shortCode).trim();
 
 	if (!value) {
@@ -514,7 +514,7 @@ export function findDashboardUserMatches(
 /**
  * Resolves the best destination for a dashboard search submission.
  */
-export function resolveDashboardSearchPath(
+export function getDashboardSearchPath(
 	query: string,
 	capabilities: DashboardSearchCapabilities = {}
 ): string {
@@ -536,5 +536,5 @@ export function resolveDashboardSearchPath(
 		return bestTarget.href;
 	}
 
-	return buildLinksSearchPath(query);
+	return getLinksSearchPath(query);
 }

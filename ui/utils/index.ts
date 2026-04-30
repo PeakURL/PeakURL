@@ -71,13 +71,13 @@ export function generateRandomAlias(): string {
 }
 
 export { addFilter, applyFilters, removeFilter } from "./hooks";
-export { buildFaviconPreviewUrl, buildManagedFaviconUrl } from "./favicon";
+export { getFaviconPreviewUrl, getManagedFaviconUrl } from "./favicon";
 export { isRelativeUrl, sanitizeUrl } from "./url";
-export { buildShortUrl, getSiteUrl, resolveLinkHost } from "./linkHelpers";
+export { getShortUrl, getSiteUrl, getLinkHost } from "./linkHelpers";
 export {
-	buildLinkExportItems,
+	formatLinkExportItems,
 	downloadLinkExport,
-	getLinkExportFile,
+	createLinkExportFile,
 	serializeLinkExport,
 } from "./linkExport";
 export { getLinkDisplayTitle, normalizeLinkTitle } from "./linkTitles";
@@ -107,12 +107,12 @@ export {
 export { extractErrorMessage, getErrorMessage, getErrorStatus } from "./errors";
 export { getAvatarInitials, getGravatarUrl } from "./avatar";
 export {
-	buildLinkStatsPath,
-	buildLinksSearchPath,
+	getLinkStatsPath,
+	getLinksSearchPath,
 	findDashboardRouteMatches,
 	findDashboardUserMatches,
 	getDashboardSearchValueFromLocation,
-	resolveDashboardSearchPath,
+	getDashboardSearchPath,
 } from "./dashboardSearch";
 export {
 	formatDateOnly,

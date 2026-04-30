@@ -1,7 +1,7 @@
 import type { ChangeEvent } from "react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { buildShortUrl, copyToClipboard, formatNumber } from "@/utils";
+import { getShortUrl, copyToClipboard, formatNumber } from "@/utils";
 import StatsDrawer from "../StatsDrawer";
 import QRCodeModal from "../QRCodeModal";
 import EditLinkModal from "../EditLinkModal";
@@ -47,7 +47,7 @@ const LinksTable = ({ links, statsShortId, statsLink }: LinksTableProps) => {
 	}, [statsShortId, links, statsLink, searchParams, setSearchParams]);
 
 	const handleCopy = async (link: LinkRecord) => {
-		const shortUrl = buildShortUrl(link);
+		const shortUrl = getShortUrl(link);
 		try {
 			await copyToClipboard(shortUrl);
 			setCopiedId(link.id);

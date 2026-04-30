@@ -145,13 +145,13 @@ class Visitor {
 	}
 
 	/**
-	 * Build a privacy-safe visitor hash from request IP and user-agent.
+	 * Get a privacy-safe visitor hash from request IP and user-agent.
 	 *
 	 * @param Request $request Incoming HTTP request.
 	 * @return string|null SHA-256 hash or null when both inputs are empty.
 	 * @since 1.0.0
 	 */
-	public static function build_hash( Request $request ): ?string {
+	public static function hash_request( Request $request ): ?string {
 		$ip_address = trim( $request->get_ip_address() );
 		$user_agent = trim( $request->get_user_agent() );
 
@@ -170,7 +170,7 @@ class Visitor {
 	 * @return bool True when the request should not increment analytics.
 	 * @since 1.0.0
 	 */
-	public static function should_skip_click_tracking(
+	public static function skip_click_tracking(
 		Request $request,
 		bool $allow_non_get = false
 	): bool {

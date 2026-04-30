@@ -80,7 +80,7 @@ class Mailer {
 	public function get_status(): array {
 		$settings             = $this->get_settings();
 		$capability           = $this->get_capability();
-		$test_disabled_reason = $this->get_test_disabled_reason(
+		$test_disabled_reason = $this->test_disabled_reason(
 			$settings,
 			$capability,
 		);
@@ -359,7 +359,7 @@ class Mailer {
 	 * @return string|null Reason when disabled, otherwise null.
 	 * @since 1.1.0
 	 */
-	private function get_test_disabled_reason(
+	private function test_disabled_reason(
 		array $settings,
 		array $capability
 	): ?string {

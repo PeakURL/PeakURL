@@ -58,13 +58,13 @@ trait AnalyticsSupportTrait {
 	}
 
 	/**
-	 * Build the start-at timestamp for a given time window.
+	 * Get the start-at timestamp for a given time window.
 	 *
 	 * @param int $days Number of days to look back.
 	 * @return array<string, string> Window metadata using UTC start time.
 	 * @since 1.0.0
 	 */
-	private function build_time_window( int $days ): array {
+	private function time_window( int $days ): array {
 		$timezone   = $this->get_analytics_timezone();
 		$start_date =
 			( new \DateTimeImmutable( 'now', $timezone ) )
@@ -100,7 +100,7 @@ trait AnalyticsSupportTrait {
 	}
 
 	/**
-	 * Build a date-bucketed traffic time series for charts.
+	 * Get a date-bucketed traffic time series for charts.
 	 *
 	 * @param string|null         $url_id Optional URL ID to scope the series.
 	 * @param int                 $days   Number of days to include.
@@ -108,12 +108,12 @@ trait AnalyticsSupportTrait {
 	 * @return array{labels: string[], clicks: int[], unique: int[]}
 	 * @since 1.0.0
 	 */
-	private function build_traffic_series(
+	private function query_traffic_series(
 		?string $url_id,
 		int $days,
 		?array $user = null
 	): array {
-		$window     = $this->build_time_window( $days );
+		$window     = $this->time_window( $days );
 		$timezone   = new \DateTimeZone( $window['timezone'] );
 		$join_sql   = '';
 		$conditions = array( 'c.clicked_at >= :start_at' );
@@ -123,7 +123,7 @@ trait AnalyticsSupportTrait {
 			$conditions[]     = 'c.url_id = :url_id';
 			$params['url_id'] = $url_id;
 		} elseif ( null !== $user ) {
-			$this->add_click_analytics_scope(
+			$this->scope_click_analytics(
 				$user,
 				$join_sql,
 				$conditions,
@@ -279,7 +279,7 @@ trait AnalyticsSupportTrait {
 			$conditions[]     = 'c.url_id = :url_id';
 			$params['url_id'] = $url_id;
 		} elseif ( null !== $user ) {
-			$this->add_click_analytics_scope(
+			$this->scope_click_analytics(
 				$user,
 				$join_sql,
 				$conditions,
@@ -446,13 +446,13 @@ trait AnalyticsSupportTrait {
 		$now        = $this->now();
 
 		if (
-			Visitor::should_skip_click_tracking(
+			Visitor::skip_click_tracking(
 				$request,
 				$allow_non_get_hit,
 			) ||
 			$this->is_duplicate_click(
 				(string) $url['id'],
-				Visitor::build_hash( $request ),
+				Visitor::hash_request( $request ),
 				$ip_address,
 				$user_agent,
 				$now,
@@ -470,7 +470,7 @@ trait AnalyticsSupportTrait {
 		$location     = $this->geoip_service->lookup_location(
 			(string) ( $ip_address ?? '' ),
 		);
-		$visitor_hash = Visitor::build_hash( $request );
+		$visitor_hash = Visitor::hash_request( $request );
 
 		$this->db->insert(
 			'clicks',

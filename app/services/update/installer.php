@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\Update;
 
+use PeakURL\Utils\File;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -121,27 +123,26 @@ class Installer {
 			__( 'release package URL', 'peakurl' ),
 		);
 
-		$lock                       = $this->workspace->acquire_lock();
-		$working_dir                = $this->filesystem->build_path(
+		$lock           = $this->workspace->acquire_lock();
+		$working_dir    = $this->filesystem->join_path(
 			$this->context->get_storage_dir(),
 			'tmp',
 			gmdate( 'Ymd-His' ) . '-' . bin2hex( random_bytes( 4 ) ),
 		);
-		$extract_dir                = $this->filesystem->build_path( $working_dir, 'package' );
-		$zip_path                   = $this->filesystem->build_path( $working_dir, 'package.zip' );
-		$backup_dir                 = $this->filesystem->build_path(
+		$extract_dir    = $this->filesystem->join_path( $working_dir, 'package' );
+		$zip_path       = $this->filesystem->join_path( $working_dir, 'package.zip' );
+		$backup_dir     = $this->filesystem->join_path(
 			$this->context->get_storage_dir(),
 			'backups',
 			gmdate( 'Ymd-His' ) . '-' . preg_replace( '/[^0-9A-Za-z.\-_]/', '-', $version ),
 		);
-		$backed_up                  = false;
-		$rollback_root_paths        = array();
-		$package_content_root_paths = array();
+		$backed_up      = false;
+		$rollback_paths = array();
+		$content_paths  = array();
 
 		try {
-			$this->workspace->cleanup_legacy_storage();
-			$this->filesystem->create_directory( $working_dir );
-			$this->filesystem->create_directory( $extract_dir );
+			$this->filesystem->mkdir_p( $working_dir );
+			$this->filesystem->mkdir_p( $extract_dir );
 			$this->workspace->enable_maintenance_mode( $version );
 			$this->download( $package_url, $zip_path );
 			$this->verify_checksum(
@@ -150,34 +151,34 @@ class Installer {
 			);
 			$this->extract( $zip_path, $extract_dir );
 
-			$source_root                  = $this->resolve_package_root( $extract_dir );
-			$installed_release_root_paths = $this->files->get_release_root_paths( ABSPATH );
-			$package_release_root_paths   = $this->files->get_release_root_paths( $source_root );
-			$rollback_root_paths          = $this->files->merge_release_root_paths(
-				$installed_release_root_paths,
-				$package_release_root_paths,
+			$source_root     = $this->get_package_root( $extract_dir );
+			$installed_paths = $this->files->get_release_paths( ABSPATH );
+			$package_paths   = $this->files->get_release_paths( $source_root );
+			$rollback_paths  = $this->files->merge_release_paths(
+				$installed_paths,
+				$package_paths,
 			);
-			$package_content_root_paths   = $this->files->get_packaged_content_root_paths( $source_root );
-			$this->files->backup_release_root_paths(
-				$installed_release_root_paths,
+			$content_paths   = $this->files->get_content_paths( $source_root );
+			$this->files->backup_release_paths(
+				$installed_paths,
 				$backup_dir,
 			);
-			$this->files->backup_packaged_content_root_paths(
-				$package_content_root_paths,
+			$this->files->backup_content_paths(
+				$content_paths,
 				$backup_dir,
 			);
 			$backed_up = true;
 
-			$this->files->replace_release_root_paths(
-				$installed_release_root_paths,
-				$package_release_root_paths,
+			$this->files->replace_release_paths(
+				$installed_paths,
+				$package_paths,
 				$source_root,
 			);
-			$this->files->copy_packaged_content_root_paths(
-				$package_content_root_paths,
+			$this->files->copy_content_paths(
+				$content_paths,
 				$source_root,
 			);
-			$this->filesystem->delete_path( $backup_dir );
+			$this->filesystem->delete( $backup_dir );
 
 			return array(
 				'version'    => $version,
@@ -188,15 +189,15 @@ class Installer {
 		} catch ( \Throwable $exception ) {
 			if ( $backed_up ) {
 				try {
-					$this->files->restore_release_root_paths(
-						$rollback_root_paths,
+					$this->files->restore_release_paths(
+						$rollback_paths,
 						$backup_dir,
 					);
-					$this->files->restore_packaged_content_root_paths(
-						$package_content_root_paths,
+					$this->files->restore_content_paths(
+						$content_paths,
 						$backup_dir,
 					);
-					$this->filesystem->delete_path( $backup_dir );
+					$this->filesystem->delete( $backup_dir );
 				} catch ( \Throwable $rollback_exception ) {
 					throw new \RuntimeException(
 						__( 'PeakURL could not apply the update and the rollback failed. ', 'peakurl' ) .
@@ -214,7 +215,7 @@ class Installer {
 			);
 		} finally {
 			$this->workspace->disable_maintenance_mode();
-			$this->filesystem->delete_path( $working_dir );
+			$this->filesystem->delete( $working_dir );
 			$this->workspace->release_lock( $lock );
 			$this->workspace->cleanup_storage();
 		}
@@ -296,14 +297,53 @@ class Installer {
 			);
 		}
 
-		if ( ! $zip->extractTo( $extract_path ) ) {
-			$zip->close();
-			throw new \RuntimeException(
-				__( 'PeakURL could not extract the downloaded release archive.', 'peakurl' ),
-			);
-		}
+		try {
+			$this->validate_archive( $zip );
 
-		$zip->close();
+			if ( ! $zip->extractTo( $extract_path ) ) {
+				throw new \RuntimeException(
+					__( 'PeakURL could not extract the downloaded release archive.', 'peakurl' ),
+				);
+			}
+		} finally {
+			$zip->close();
+		}
+	}
+
+	/**
+	 * Validate release archive entries before extraction.
+	 *
+	 * @param \ZipArchive $zip Open release archive.
+	 * @return void
+	 *
+	 * @throws \RuntimeException When the archive contains an unsafe path.
+	 * @since 1.1.1
+	 */
+	private function validate_archive( \ZipArchive $zip ): void {
+		for ( $index = 0, $file_count = count( $zip ); $index < $file_count; $index++ ) {
+			$name = $zip->getNameIndex( $index );
+
+			if ( ! is_string( $name ) || ! File::is_safe_archive_path( $name ) ) {
+				throw new \RuntimeException(
+					__( 'The downloaded release archive contains an unsafe file path.', 'peakurl' ),
+				);
+			}
+
+			$attributes = 0;
+
+			if (
+				$zip->getExternalAttributesIndex(
+					$index,
+					$operating_system,
+					$attributes,
+				) &&
+				0120000 === ( ( $attributes >> 16 ) & 0170000 )
+			) {
+				throw new \RuntimeException(
+					__( 'The downloaded release archive contains an unsupported symbolic link.', 'peakurl' ),
+				);
+			}
+		}
 	}
 
 	/**
@@ -315,7 +355,7 @@ class Installer {
 	 * @throws \RuntimeException When the package structure is unrecognized.
 	 * @since 1.0.14
 	 */
-	private function resolve_package_root( string $extract_path ): string {
+	private function get_package_root( string $extract_path ): string {
 		if ( $this->is_runtime_root( $extract_path ) ) {
 			return $extract_path;
 		}
@@ -341,7 +381,7 @@ class Installer {
 			);
 		}
 
-		$nested_root = $this->filesystem->build_path( $extract_path, $entries[0] );
+		$nested_root = $this->filesystem->join_path( $extract_path, $entries[0] );
 
 		if ( is_dir( $nested_root ) && $this->is_runtime_root( $nested_root ) ) {
 			return $nested_root;
@@ -360,11 +400,11 @@ class Installer {
 	 * @since 1.0.14
 	 */
 	private function is_runtime_root( string $root_path ): bool {
-		if ( ! file_exists( $this->filesystem->build_path( $root_path, 'index.php' ) ) ) {
+		if ( ! file_exists( $this->filesystem->join_path( $root_path, 'index.php' ) ) ) {
 			return false;
 		}
 
-		return is_dir( $this->filesystem->build_path( $root_path, 'app' ) ) ||
-			is_dir( $this->filesystem->build_path( $root_path, 'core' ) );
+		return is_dir( $this->filesystem->join_path( $root_path, 'app' ) ) ||
+			is_dir( $this->filesystem->join_path( $root_path, 'core' ) );
 	}
 }

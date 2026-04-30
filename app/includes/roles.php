@@ -96,14 +96,14 @@ class Roles {
 	}
 
 	/**
-	 * Check whether a user row has a specific capability.
+	 * Return whether a user row has a specific capability.
 	 *
-	 * @param array<string, mixed> $user       Hydrated or raw user row.
+	 * @param array<string, mixed> $user       Formatted or raw user row.
 	 * @param string               $capability Capability name to test.
 	 * @return bool True when the capability is granted.
 	 * @since 1.0.0
 	 */
-	public function user_can( array $user, string $capability ): bool {
+	public function has_capability( array $user, string $capability ): bool {
 		$capabilities = $this->capabilities_for_role(
 			(string) ( $user['role'] ?? 'editor' ),
 		);
@@ -114,11 +114,11 @@ class Roles {
 	/**
 	 * Determine whether a user is an admin-level account.
 	 *
-	 * @param array<string, mixed> $user Hydrated or raw user row.
+	 * @param array<string, mixed> $user Formatted or raw user row.
 	 * @return bool True for admin users.
 	 * @since 1.0.0
 	 */
 	public function is_admin( array $user ): bool {
-		return $this->user_can( $user, 'manage_users' );
+		return $this->has_capability( $user, 'manage_users' );
 	}
 }

@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Database — build the database section of the system-status payload.
+ * Database — get the database section of the system-status payload.
  *
  * @since 1.0.14
  */
@@ -43,12 +43,12 @@ class Database {
 	}
 
 	/**
-	 * Build database status details.
+	 * Get database status details.
 	 *
 	 * @return array<string, mixed>
 	 * @since 1.0.14
 	 */
-	public function build(): array {
+	public function database_status(): array {
 		$config          = $this->context->get_config();
 		$metadata        = $this->query_metadata();
 		$schema_status   = $this->context->get_database_schema()->inspect();

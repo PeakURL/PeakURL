@@ -56,7 +56,7 @@ import {
 } from "./pages";
 import SettingsSkeleton from "../SettingsSkeleton";
 
-const buildGeneralForm = (user?: ProfileUser | null): GeneralFormState => ({
+const createGeneralForm = (user?: ProfileUser | null): GeneralFormState => ({
 	firstName: user?.firstName || "",
 	lastName: user?.lastName || "",
 	email: user?.email || "",
@@ -80,14 +80,14 @@ const hasProfileChanges = (
 	user: ProfileUser | null | undefined,
 	profileForm: GeneralFormState
 ): boolean => {
-	const currentProfile = buildGeneralForm(user);
+	const currentProfile = createGeneralForm(user);
 
 	return profileFormKeys.some(
 		(key) => currentProfile[key] !== profileForm[key]
 	);
 };
 
-const resolveBaseApiUrl = (
+const formatBaseApiUrl = (
 	user?: ProfileUser | null,
 	fallbackBaseApiUrl: string | null | undefined = ""
 ): string => {
@@ -115,12 +115,12 @@ const releaseInstallStageOrder: ReleaseInstallStage[] = [
 
 const releaseInstallRedirectDelayMs = 2400;
 
-const getReleaseInstallTitle = (action: ReleaseAction): string =>
+const formatReleaseInstallTitle = (action: ReleaseAction): string =>
 	action === "reinstall"
 		? __("Restoring the latest version")
 		: __("Installing the latest version");
 
-const getReleaseInstallStepLabel = (
+const formatReleaseInstallStepLabel = (
 	action: ReleaseAction,
 	stage: ReleaseInstallStage
 ): string => {
@@ -141,7 +141,7 @@ const getReleaseInstallStepLabel = (
 	return __("Finishing up");
 };
 
-const getReleaseInstallActiveStageIndex = (
+const findReleaseInstallStageIndex = (
 	progress: ReleaseInstallProgressState | null
 ): number => {
 	const currentStageIndex =
@@ -160,14 +160,14 @@ const getReleaseInstallActiveStageIndex = (
 	);
 };
 
-const buildReleaseInstallProgressState = (
+const createReleaseInstallProgress = (
 	action: ReleaseAction,
 	stage: ReleaseInstallStage
 ): ReleaseInstallProgressState => {
 	const currentStepIndex = releaseInstallStageOrder.indexOf(stage);
 
 	return {
-		title: getReleaseInstallTitle(action),
+		title: formatReleaseInstallTitle(action),
 		description:
 			stage === "preparing"
 				? __("PeakURL is getting everything ready.")
@@ -182,7 +182,7 @@ const buildReleaseInstallProgressState = (
 							),
 		steps: releaseInstallStageOrder.map((step, index) => ({
 			id: step,
-			label: getReleaseInstallStepLabel(action, step),
+			label: formatReleaseInstallStepLabel(action, step),
 			state:
 				index < currentStepIndex
 					? "complete"
@@ -193,14 +193,14 @@ const buildReleaseInstallProgressState = (
 	};
 };
 
-const buildCompletedReleaseInstallProgressState = (
+const createCompletedReleaseInstallProgress = (
 	action: ReleaseAction,
 	appliedVersion?: string | null
 ): ReleaseInstallProgressState => {
 	const isReinstall = action === "reinstall";
 
 	return {
-		title: getReleaseInstallTitle(action),
+		title: formatReleaseInstallTitle(action),
 		description: appliedVersion
 			? sprintf(
 					isReinstall
@@ -213,7 +213,7 @@ const buildCompletedReleaseInstallProgressState = (
 				: __("The latest version is now installed."),
 		steps: releaseInstallStageOrder.map((step) => ({
 			id: step,
-			label: getReleaseInstallStepLabel(action, step),
+			label: formatReleaseInstallStepLabel(action, step),
 			state: "complete",
 		})),
 	};
@@ -330,7 +330,7 @@ const Content = ({ activeTab }: ContentProps) => {
 		clearReleaseInstallRedirectTimer();
 		setActiveReleaseInstallAction(action);
 		setReleaseInstallProgressState(
-			buildReleaseInstallProgressState(action, "preparing")
+			createReleaseInstallProgress(action, "preparing")
 		);
 
 		const stageTransitions: Array<{
@@ -346,7 +346,7 @@ const Content = ({ activeTab }: ContentProps) => {
 			({ afterMs, stage }) =>
 				window.setTimeout(() => {
 					setReleaseInstallProgressState(
-						buildReleaseInstallProgressState(action, stage)
+						createReleaseInstallProgress(action, stage)
 					);
 				}, afterMs)
 		);
@@ -357,7 +357,7 @@ const Content = ({ activeTab }: ContentProps) => {
 		appliedVersion?: string | null,
 		onReachFinishingStage?: (() => void) | null
 	) => {
-		const activeStageIndex = getReleaseInstallActiveStageIndex(
+		const activeStageIndex = findReleaseInstallStageIndex(
 			releaseInstallProgressStateRef.current
 		);
 		const remainingStageSequence = releaseInstallStageOrder.slice(
@@ -381,7 +381,7 @@ const Content = ({ activeTab }: ContentProps) => {
 				window.setTimeout(
 					() => {
 						setReleaseInstallProgressState(
-							buildReleaseInstallProgressState(action, stage)
+							createReleaseInstallProgress(action, stage)
 						);
 					},
 					completionSegmentDuration * (index + 1)
@@ -396,7 +396,7 @@ const Content = ({ activeTab }: ContentProps) => {
 				: []),
 			window.setTimeout(() => {
 				setReleaseInstallProgressState(
-					buildCompletedReleaseInstallProgressState(
+					createCompletedReleaseInstallProgress(
 						action,
 						appliedVersion
 					)
@@ -443,35 +443,35 @@ const Content = ({ activeTab }: ContentProps) => {
 			generalSettingsResponse?.data?.siteTimezone || "UTC";
 		const currentSiteTimeFormat =
 			generalSettingsResponse?.data?.siteTimeFormat || "12";
-		const shouldSaveProfile = hasProfileChanges(user, profileForm);
-		const shouldSaveSiteName =
+		const saveProfile = hasProfileChanges(user, profileForm);
+		const saveSiteName =
 			(generalSettingsResponse?.data?.canManageSiteSettings ?? false) &&
 			nextSiteName.trim() !== currentSiteName;
-		const shouldSaveLanguage =
+		const saveLanguage =
 			!!nextSiteLanguage &&
 			generalSettingsResponse?.data?.canManageSiteSettings &&
 			nextSiteLanguage !== currentSiteLanguage;
-		const shouldSaveTimezone =
+		const saveTimezone =
 			!!nextSiteTimezone &&
 			generalSettingsResponse?.data?.canManageSiteSettings &&
 			nextSiteTimezone !== currentSiteTimezone;
-		const shouldSaveTimeFormat =
+		const saveTimeFormat =
 			!!nextSiteTimeFormat &&
 			generalSettingsResponse?.data?.canManageSiteSettings &&
 			nextSiteTimeFormat !== currentSiteTimeFormat;
-		const shouldSaveGeneralSettings =
-			shouldSaveSiteName ||
-			shouldSaveLanguage ||
-			shouldSaveTimezone ||
-			shouldSaveTimeFormat ||
+		const saveGeneral =
+			saveSiteName ||
+			saveLanguage ||
+			saveTimezone ||
+			saveTimeFormat ||
 			Boolean(faviconFile) ||
 			Boolean(removeFavicon);
 
-		if (!shouldSaveProfile && !shouldSaveGeneralSettings) {
+		if (!saveProfile && !saveGeneral) {
 			return;
 		}
 
-		if (shouldSaveProfile) {
+		if (saveProfile) {
 			try {
 				await updateProfile(profileForm).unwrap();
 			} catch (err) {
@@ -483,7 +483,7 @@ const Content = ({ activeTab }: ContentProps) => {
 			}
 		}
 
-		if (shouldSaveGeneralSettings) {
+		if (saveGeneral) {
 			try {
 				const response = await saveGeneralSettings({
 					siteName: nextSiteName,
@@ -512,7 +512,7 @@ const Content = ({ activeTab }: ContentProps) => {
 						response.data.siteTimeFormat;
 				}
 
-				if (shouldSaveLanguage) {
+				if (saveLanguage) {
 					notification.success(
 						__("Language updated"),
 						__("PeakURL is reloading the dashboard now.")
@@ -525,7 +525,7 @@ const Content = ({ activeTab }: ContentProps) => {
 
 				notification.success(
 					__("Success"),
-					shouldSaveProfile
+					saveProfile
 						? __(
 								"Profile and general settings updated successfully"
 							)
@@ -591,7 +591,7 @@ const Content = ({ activeTab }: ContentProps) => {
 		try {
 			const result = await generateApiKey({ label: keyLabel }).unwrap();
 			const plainTextKey = result?.data?.apiKey || "";
-			const baseApiUrl = resolveBaseApiUrl(
+			const baseApiUrl = formatBaseApiUrl(
 				user,
 				result?.data?.baseApiUrl
 			);
@@ -880,7 +880,7 @@ const Content = ({ activeTab }: ContentProps) => {
 			{activeTab === "general" && (
 				<GeneralTab
 					key={`${user?._id || user?.id || user?.username || "user"}-${user?.updatedAt || "initial"}`}
-					initialForm={buildGeneralForm(user)}
+					initialForm={createGeneralForm(user)}
 					username={user?.username || ""}
 					onSubmit={handleGeneralSubmit}
 					isUpdating={isUpdating || isSavingGeneralSettings}
@@ -902,7 +902,7 @@ const Content = ({ activeTab }: ContentProps) => {
 			{activeTab === "api" && (
 				<ApiTab
 					user={user}
-					baseApiUrl={resolveBaseApiUrl(user)}
+					baseApiUrl={formatBaseApiUrl(user)}
 					copyToClipboard={copyToClipboard}
 					isGeneratingKey={isGeneratingKey}
 					isDeletingKey={isDeletingKey}
@@ -965,7 +965,7 @@ const Content = ({ activeTab }: ContentProps) => {
 				keyLabel={keyLabel}
 				setKeyLabel={setKeyLabel}
 				newApiKey={newApiKey}
-				baseApiUrl={newApiBaseUrl || resolveBaseApiUrl(user)}
+				baseApiUrl={newApiBaseUrl || formatBaseApiUrl(user)}
 				onCreateKey={handleCreateKey}
 				copyToClipboard={copyToClipboard}
 				isGeneratingKey={isGeneratingKey}

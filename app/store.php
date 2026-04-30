@@ -6,7 +6,7 @@
  * short URLs, analytics, webhooks, and the update system.
  * Controllers delegate directly to public methods here while
  * focused traits and utility classes provide the internal
- * session, hydration, analytics, and query support layers.
+ * session, formatting, analytics, and query support layers.
  *
  * @package PeakURL\Data
  * @since 1.0.0
@@ -37,7 +37,7 @@ use PeakURL\Traits\BootstrapTrait;
 use PeakURL\Traits\CredentialsTrait;
 use PeakURL\Traits\FindersTrait;
 use PeakURL\Traits\HelpersTrait;
-use PeakURL\Traits\HydrationTrait;
+use PeakURL\Traits\FormattingTrait;
 use PeakURL\Traits\LinksTrait;
 use PeakURL\Traits\SessionsTrait;
 use PeakURL\Traits\SettingsTrait;
@@ -106,11 +106,11 @@ class Store {
 	use SettingsTrait;
 
 	/**
-	 * API hydration helpers.
+	 * API formatting helpers.
 	 *
 	 * @since 1.0.0
 	 */
-	use HydrationTrait;
+	use FormattingTrait;
 
 	/**
 	 * Links CRUD methods.
@@ -281,7 +281,7 @@ class Store {
 	private I18n $i18n_service;
 
 	/**
-	 * Whether the workspace has been bootstrapped in this request.
+	 * Whether the site has been bootstrapped in this request.
 	 *
 	 * @var bool
 	 * @since 1.0.0

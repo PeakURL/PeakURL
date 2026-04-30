@@ -62,12 +62,12 @@ peakurl_override_i18n_service( $installer_locale->get_i18n_service() );
 $runtime_state = InstallState::get_runtime_state( $app_path );
 
 if ( InstallState::READY === $runtime_state ) {
-	header( 'Location: ' . InstallScreen::build_url( $base_path, '/dashboard' ) );
+	header( 'Location: ' . InstallScreen::format_url( $base_path, '/dashboard' ) );
 	exit();
 }
 
 if ( InstallState::NEEDS_INSTALL === $runtime_state ) {
-	header( 'Location: ' . InstallScreen::build_url( $base_path, '/install.php' ) );
+	header( 'Location: ' . InstallScreen::format_url( $base_path, '/install.php' ) );
 	exit();
 }
 
@@ -91,9 +91,10 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 	}
 
 	try {
+		InstallScreen::validate_post_origin( $detected_site_url, $_SERVER );
 		InstallConfig::configure( $app_path, $_POST );
 		header(
-			'Location: ' . InstallScreen::build_url(
+			'Location: ' . InstallScreen::format_url(
 				$base_path,
 				'/install.php',
 				array( 'site_language' => $values['site_language'] ),
@@ -632,7 +633,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 
 		<?php if ( 0 === $step ) : ?>
 			<div class="language-picker">
-				<form method="get" action="<?php echo htmlspecialchars( InstallScreen::build_url( $base_path, '/setup-config.php' ), ENT_QUOTES, 'UTF-8' ); ?>" class="language-picker-form">
+				<form method="get" action="<?php echo htmlspecialchars( InstallScreen::format_url( $base_path, '/setup-config.php' ), ENT_QUOTES, 'UTF-8' ); ?>" class="language-picker-form">
 					<label class="language-picker-label" for="site_language"><?php echo esc_html__( 'Site language', 'peakurl' ); ?></label>
 					<select id="site_language" name="site_language" class="language-picker-select" onchange="this.form.submit()">
 						<?php foreach ( $installer_locale->list_languages() as $language ) : ?>
@@ -729,7 +730,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 				<a class="btn btn-primary" href="
 				<?php
 				echo htmlspecialchars(
-					InstallScreen::build_url(
+					InstallScreen::format_url(
 						$base_path,
 						'/setup-config.php',
 						array(
@@ -771,7 +772,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 			<form method="post" action="
 			<?php
 			echo htmlspecialchars(
-				InstallScreen::build_url(
+				InstallScreen::format_url(
 					$base_path,
 					'/setup-config.php',
 					array(
@@ -821,7 +822,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 						</div>
 					</div>
 					<div class="actions">
-						<a class="btn btn-ghost" href="<?php echo htmlspecialchars( InstallScreen::build_url( $base_path, '/setup-config.php', array( 'site_language' => $values['site_language'] ) ), ENT_QUOTES, 'UTF-8' ); ?>">
+						<a class="btn btn-ghost" href="<?php echo htmlspecialchars( InstallScreen::format_url( $base_path, '/setup-config.php', array( 'site_language' => $values['site_language'] ) ), ENT_QUOTES, 'UTF-8' ); ?>">
 							<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
 							<?php echo esc_html__( 'Back', 'peakurl' ); ?>
 						</a>

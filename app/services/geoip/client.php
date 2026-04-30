@@ -53,11 +53,11 @@ class Client {
 	 */
 	public function download_archive( string $archive_path ): void {
 		if ( function_exists( 'curl_init' ) ) {
-			$this->download_with_curl( $archive_path );
+			$this->download_curl( $archive_path );
 			return;
 		}
 
-		$this->download_with_streams( $archive_path );
+		$this->download_stream( $archive_path );
 	}
 
 	/**
@@ -69,7 +69,7 @@ class Client {
 	 * @throws \RuntimeException When the request fails.
 	 * @since 1.0.14
 	 */
-	private function download_with_curl( string $archive_path ): void {
+	private function download_curl( string $archive_path ): void {
 		$handle = curl_init( GeoipService::DOWNLOAD_URL );
 
 		if ( false === $handle ) {
@@ -104,7 +104,7 @@ class Client {
 		}
 
 		if ( $status < 200 || $status >= 300 ) {
-			throw new \RuntimeException( $this->build_http_error_message( $status ) );
+			throw new \RuntimeException( $this->get_http_error_message( $status ) );
 		}
 
 		if ( false === file_put_contents( $archive_path, $body, LOCK_EX ) ) {
@@ -123,7 +123,7 @@ class Client {
 	 * @throws \RuntimeException When the request fails.
 	 * @since 1.0.14
 	 */
-	private function download_with_streams( string $archive_path ): void {
+	private function download_stream( string $archive_path ): void {
 		$headers = array(
 			'Accept: application/gzip, application/octet-stream',
 			'Authorization: Basic ' . base64_encode(
@@ -142,7 +142,7 @@ class Client {
 
 			if ( null === $redirect_url ) {
 				throw new \RuntimeException(
-					__( 'PeakURL could not follow the GeoLite2 download redirect from MaxMind.', 'peakurl' ),
+					__( 'PeakURL could not follow a secure GeoLite2 download redirect from MaxMind.', 'peakurl' ),
 				);
 			}
 
@@ -157,7 +157,7 @@ class Client {
 		}
 
 		if ( false === $result['body'] || $result['status'] < 200 || $result['status'] >= 300 ) {
-			throw new \RuntimeException( $this->build_http_error_message( $result['status'] ) );
+			throw new \RuntimeException( $this->get_http_error_message( $result['status'] ) );
 		}
 
 		if ( false === file_put_contents( $archive_path, $result['body'], LOCK_EX ) ) {
@@ -233,7 +233,14 @@ class Client {
 				continue;
 			}
 
-			return trim( substr( $header, 9 ) );
+			$redirect_url = trim( substr( $header, 9 ) );
+			$scheme       = parse_url( $redirect_url, PHP_URL_SCHEME );
+
+			if ( 'https' !== $scheme ) {
+				return null;
+			}
+
+			return $redirect_url;
 		}
 
 		return null;
@@ -246,7 +253,7 @@ class Client {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	private function build_http_error_message( int $status ): string {
+	private function get_http_error_message( int $status ): string {
 		if ( 401 === $status || 403 === $status ) {
 			return __( 'MaxMind rejected the download request. Check the account ID, license key, and GeoLite download permissions.', 'peakurl' );
 		}

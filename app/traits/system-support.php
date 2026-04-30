@@ -13,6 +13,7 @@ namespace PeakURL\Traits;
 use PeakURL\Includes\Constants;
 use PeakURL\Http\ApiException;
 use PeakURL\Services\Update\Manager as UpdateManager;
+use PeakURL\Utils\Database;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -80,14 +81,14 @@ trait SystemSupportTrait {
 			}
 		}
 
-		$status = $update_service->build_status(
+		$status = $update_service->get_status(
 			$cached_manifest,
 			$last_checked,
 			$last_error,
 		);
 
 		try {
-			$status['database'] = $this->get_database_schema_service()->inspect();
+			$status['database'] = $this->get_schema_service()->inspect();
 		} catch ( \Throwable $exception ) {
 			$status['database'] = array(
 				'currentVersion'  => 0,
@@ -124,7 +125,7 @@ trait SystemSupportTrait {
 	 * @return array<string, mixed> Result of the install operation.
 	 * @since 1.0.5
 	 */
-	private function install_release_from_status( array $status, bool $reinstall = false ): array {
+	private function install_release( array $status, bool $reinstall = false ): array {
 		if ( empty( $status['canApply'] ) ) {
 			throw new ApiException(
 				(string) ( $status['applyDisabledReason'] ?? __( 'PeakURL cannot apply this release.', 'peakurl' ) ),
@@ -190,12 +191,12 @@ trait SystemSupportTrait {
 	}
 
 	/**
-	 * Ensure GeoIP dashboard management is allowed in this runtime.
+	 * Validate whether GeoIP dashboard management is allowed.
 	 *
 	 * @throws ApiException When the runtime config target is not writable.
 	 * @since 1.0.0
 	 */
-	private function assert_geoip_dashboard_management_allowed(): void {
+	private function validate_geoip_admin(): void {
 		$status = $this->geoip_service->get_status();
 
 		if ( ! empty( $status['canManageFromDashboard'] ) ) {
@@ -233,6 +234,8 @@ trait SystemSupportTrait {
 	 * @since 1.0.0
 	 */
 	private function private_network_ip_sql( string $column ): string {
+		$column = Database::quote_identifier( $column );
+
 		return sprintf(
 			'(
                 %1$s LIKE \'10.%%\' OR

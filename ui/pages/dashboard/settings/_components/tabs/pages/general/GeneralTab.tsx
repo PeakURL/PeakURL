@@ -13,7 +13,7 @@ import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { getInstalledLanguageLabel } from "@/i18n/languages";
 import {
-	buildFaviconPreviewUrl,
+	getFaviconPreviewUrl,
 	cn,
 	getTimeZoneOptions,
 	normalizeSiteTimeFormat,
@@ -140,7 +140,7 @@ function GeneralTab({
 	const storedPreviewUrl = useMemo(
 		() =>
 			hasCustomFavicon
-				? buildFaviconPreviewUrl(siteSettings?.favicon?.updatedAt)
+				? getFaviconPreviewUrl(siteSettings?.favicon?.updatedAt)
 				: "",
 		[hasCustomFavicon, siteSettings?.favicon?.updatedAt]
 	);

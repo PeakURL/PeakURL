@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\Update;
 
+use PeakURL\Utils\File;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -34,12 +36,8 @@ class Filesystem {
 	 * @throws \RuntimeException When directory creation fails.
 	 * @since 1.0.14
 	 */
-	public function create_directory( string $path ): void {
-		if ( is_dir( $path ) ) {
-			return;
-		}
-
-		if ( ! mkdir( $path, 0775, true ) && ! is_dir( $path ) ) {
+	public function mkdir_p( string $path ): void {
+		if ( ! File::mkdir_p( $path, 0775 ) ) {
 			throw new \RuntimeException(
 				__( 'PeakURL could not prepare the update workspace.', 'peakurl' ),
 			);
@@ -54,18 +52,8 @@ class Filesystem {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	public function build_path( string $base_path, string ...$segments ): string {
-		$path = rtrim( $base_path, DIRECTORY_SEPARATOR );
-
-		foreach ( $segments as $segment ) {
-			if ( '' === $segment ) {
-				continue;
-			}
-
-			$path .= DIRECTORY_SEPARATOR . trim( $segment, DIRECTORY_SEPARATOR );
-		}
-
-		return $path;
+	public function join_path( string $base_path, string ...$segments ): string {
+		return File::join_path( $base_path, ...$segments );
 	}
 
 	/**
@@ -75,34 +63,8 @@ class Filesystem {
 	 * @return void
 	 * @since 1.0.14
 	 */
-	public function delete_path( string $path ): void {
-		if ( ! file_exists( $path ) ) {
-			return;
-		}
-
-		if ( is_file( $path ) || is_link( $path ) ) {
-			unlink( $path );
-			return;
-		}
-
-		$iterator = new \RecursiveIteratorIterator(
-			new \RecursiveDirectoryIterator(
-				$path,
-				\FilesystemIterator::SKIP_DOTS,
-			),
-			\RecursiveIteratorIterator::CHILD_FIRST,
-		);
-
-		foreach ( $iterator as $item ) {
-			if ( $item->isDir() ) {
-				rmdir( $item->getPathname() );
-				continue;
-			}
-
-			unlink( $item->getPathname() );
-		}
-
-		rmdir( $path );
+	public function delete( string $path ): void {
+		File::delete( $path );
 	}
 
 	/**
@@ -112,7 +74,7 @@ class Filesystem {
 	 * @return void
 	 * @since 1.0.14
 	 */
-	public function delete_empty_directory_tree( string $path ): void {
+	public function delete_empty_dirs( string $path ): void {
 		if ( ! is_dir( $path ) ) {
 			return;
 		}
@@ -133,13 +95,13 @@ class Filesystem {
 		);
 
 		foreach ( $entries as $entry ) {
-			$entry_path = $this->build_path( $path, $entry );
+			$entry_path = $this->join_path( $path, $entry );
 
 			if ( ! is_dir( $entry_path ) ) {
 				return;
 			}
 
-			$this->delete_empty_directory_tree( $entry_path );
+			$this->delete_empty_dirs( $entry_path );
 		}
 
 		$remaining_entries = scandir( $path );
@@ -165,18 +127,18 @@ class Filesystem {
 	 * @throws \RuntimeException On copy failure.
 	 * @since 1.0.14
 	 */
-	public function copy_path( string $source_path, string $target_path ): void {
+	public function copy( string $source_path, string $target_path ): void {
 		if ( is_dir( $source_path ) ) {
-			$this->create_directory( $target_path );
+			$this->mkdir_p( $target_path );
 
-			$source_root                 = $this->normalize_path( $source_path );
-			$target_root                 = $this->normalize_path( $target_path );
+			$source_root                 = File::normalize_path( $source_path );
+			$target_root                 = File::normalize_path( $target_path );
 			$directory_iterator          = new \RecursiveDirectoryIterator(
 				$source_path,
 				\FilesystemIterator::SKIP_DOTS,
 			);
 			$recursive_source_iterator   = $directory_iterator;
-			$target_nested_inside_source = $this->path_matches_or_is_within(
+			$target_nested_inside_source = File::is_path_inside(
 				$target_root,
 				$source_root,
 			);
@@ -185,8 +147,8 @@ class Filesystem {
 				$recursive_source_iterator = new \RecursiveCallbackFilterIterator(
 					$directory_iterator,
 					function ( \SplFileInfo $item ) use ( $target_root ): bool {
-						return ! $this->path_matches_or_is_within(
-							$this->normalize_path( $item->getPathname() ),
+						return ! File::is_path_inside(
+							File::normalize_path( $item->getPathname() ),
 							$target_root,
 						);
 					},
@@ -203,16 +165,16 @@ class Filesystem {
 					$item->getPathname(),
 					strlen( $source_path ) + 1,
 				);
-				$destination   = $this->build_path( $target_path, $relative_path );
+				$destination   = $this->join_path( $target_path, $relative_path );
 
 				if ( $item->isDir() ) {
-					$this->create_directory( $destination );
+					$this->mkdir_p( $destination );
 					continue;
 				}
 
-				$this->create_directory( dirname( $destination ) );
+				$this->mkdir_p( dirname( $destination ) );
 
-				if ( ! copy( $item->getPathname(), $destination ) ) {
+				if ( ! File::copy( $item->getPathname(), $destination ) ) {
 					throw new \RuntimeException(
 						__( 'PeakURL could not copy the updated release files.', 'peakurl' ),
 					);
@@ -222,50 +184,12 @@ class Filesystem {
 			return;
 		}
 
-		$this->create_directory( dirname( $target_path ) );
+		$this->mkdir_p( dirname( $target_path ) );
 
-		if ( ! copy( $source_path, $target_path ) ) {
+		if ( ! File::copy( $source_path, $target_path ) ) {
 			throw new \RuntimeException(
 				__( 'PeakURL could not copy the updated release files.', 'peakurl' ),
 			);
 		}
-	}
-
-	/**
-	 * Normalize a filesystem path for safe path-prefix comparisons.
-	 *
-	 * @param string $path Absolute or relative filesystem path.
-	 * @return string
-	 * @since 1.0.14
-	 */
-	private function normalize_path( string $path ): string {
-		$normalized_path = str_replace( '\\', '/', $path );
-		$normalized_path = preg_replace( '#/+#', '/', $normalized_path );
-
-		if ( null === $normalized_path ) {
-			$normalized_path = str_replace( '\\', '/', $path );
-		}
-
-		return rtrim( $normalized_path, '/' );
-	}
-
-	/**
-	 * Check whether a path matches or lives inside another path.
-	 *
-	 * @param string $candidate_path Candidate path to inspect.
-	 * @param string $base_path      Base path that may contain the candidate.
-	 * @return bool
-	 * @since 1.0.14
-	 */
-	private function path_matches_or_is_within(
-		string $candidate_path,
-		string $base_path
-	): bool {
-		if ( '' === $base_path ) {
-			return false;
-		}
-
-		return $candidate_path === $base_path ||
-			0 === strpos( $candidate_path, $base_path . '/' );
 	}
 }

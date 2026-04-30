@@ -1,6 +1,6 @@
 <?php
 /**
- * Data store hydration trait.
+ * Data store formatting trait.
  *
  * @package PeakURL\Data
  * @since 1.0.0
@@ -18,21 +18,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * HydrationTrait — API-ready row mappers for Store.
+ * FormattingTrait — API-ready row mappers for Store.
  *
  * @since 1.0.0
  */
-trait HydrationTrait {
+trait FormattingTrait {
 
 	/**
-	 * Hydrate a raw user database row into an API-ready user array.
+	 * Format a raw user database row into an API-ready user array.
 	 *
 	 * @param array<string, mixed>|null $row     Raw user row from the database.
 	 * @param Request|null              $request Optional request for session context.
-	 * @return array<string, mixed> Hydrated user profile.
+	 * @return array<string, mixed> Formatted user profile.
 	 * @since 1.0.0
 	 */
-	private function hydrate_user( ?array $row, ?Request $request = null ): array {
+	private function format_user( ?array $row, ?Request $request = null ): array {
 		if ( ! $row ) {
 			return array();
 		}
@@ -41,7 +41,7 @@ trait HydrationTrait {
 
 		if (
 			$request &&
-			$this->roles->user_can( $row, 'manage_api_keys' )
+			$this->roles->has_capability( $row, 'manage_api_keys' )
 		) {
 			$api_keys = $this->list_api_keys( (string) $row['id'] );
 		}
@@ -80,13 +80,13 @@ trait HydrationTrait {
 	}
 
 	/**
-	 * Hydrate a raw URL database row into an API-ready array.
+	 * Format a raw URL database row into an API-ready array.
 	 *
 	 * @param array<string, mixed>|null $row Raw URL row from the database.
-	 * @return array<string, mixed> Hydrated URL data.
+	 * @return array<string, mixed> Formatted URL data.
 	 * @since 1.0.0
 	 */
-	private function hydrate_url_row( ?array $row ): array {
+	private function format_url( ?array $row ): array {
 		if ( ! $row ) {
 			return array();
 		}
@@ -130,15 +130,15 @@ trait HydrationTrait {
 	}
 
 	/**
-	 * Hydrate a raw audit-log row into an API-ready activity item.
+	 * Format a raw audit-log row into an API-ready activity item.
 	 *
 	 * @param array<string, mixed> $row Raw audit log row.
-	 * @return array<string, mixed> Hydrated activity item.
+	 * @return array<string, mixed> Formatted activity item.
 	 * @since 1.0.0
 	 */
-	private function hydrate_activity_row( array $row ): array {
+	private function format_activity( array $row ): array {
 		$metadata = $this->decode_json( (string) ( $row['metadata'] ?? '{}' ) );
-		$actor    = $this->normalize_activity_person(
+		$actor    = $this->format_activity_person(
 			array(
 				'id'        => (string) ( $row['user_id'] ?? '' ),
 				'firstName' => (string) ( $row['actor_first_name'] ?? '' ),
@@ -154,7 +154,7 @@ trait HydrationTrait {
 			'type'      => (string) $row['type'],
 			'message'   => (string) ( $row['message'] ?? '' ),
 			'actor'     => $actor,
-			'user'      => $this->normalize_activity_person(
+			'user'      => $this->format_activity_person(
 				is_array( $metadata['user'] ?? null )
 					? $metadata['user']
 					: null,
@@ -170,13 +170,13 @@ trait HydrationTrait {
 	}
 
 	/**
-	 * Normalize lightweight activity person metadata for the UI.
+	 * Format lightweight activity person metadata for the UI.
 	 *
 	 * @param array<string, mixed>|null $person Raw person metadata.
 	 * @return array<string, string|null>|null
 	 * @since 1.0.4
 	 */
-	private function normalize_activity_person( ?array $person ): ?array {
+	private function format_activity_person( ?array $person ): ?array {
 		if ( ! is_array( $person ) ) {
 			return null;
 		}

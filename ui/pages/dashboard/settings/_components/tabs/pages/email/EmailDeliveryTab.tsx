@@ -39,7 +39,7 @@ function MethodButton({
 	);
 }
 
-function buildFormState(status?: EmailStatus | null): EmailFormState {
+function createMailForm(status?: EmailStatus | null): EmailFormState {
 	return {
 		driver: status?.driver || "mail",
 		fromEmail: status?.configuredFromEmail || "",
@@ -53,7 +53,7 @@ function buildFormState(status?: EmailStatus | null): EmailFormState {
 	};
 }
 
-function buildMailPayload(form: EmailFormState): EmailFormState {
+function prepareMailPayload(form: EmailFormState): EmailFormState {
 	return {
 		driver: form.driver,
 		fromEmail: form.fromEmail.trim(),
@@ -67,7 +67,7 @@ function buildMailPayload(form: EmailFormState): EmailFormState {
 	};
 }
 
-function buildComparableState(form: EmailFormState) {
+function normalizeMailState(form: EmailFormState) {
 	return {
 		driver: form.driver,
 		fromEmail: form.fromEmail.trim(),
@@ -93,8 +93,8 @@ function hasUnsavedMailChanges(
 	}
 
 	return (
-		JSON.stringify(buildComparableState(form)) !==
-		JSON.stringify(buildComparableState(buildFormState(status)))
+		JSON.stringify(normalizeMailState(form)) !==
+		JSON.stringify(normalizeMailState(createMailForm(status)))
 	);
 }
 
@@ -110,7 +110,7 @@ function EmailDeliveryTab({
 	const isRtl = isDocumentRtl();
 	const direction = isRtl ? "rtl" : "ltr";
 	const [form, setForm] = useState<EmailFormState>(() =>
-		buildFormState(status)
+		createMailForm(status)
 	);
 	const encryptionOptions: SelectOption<SmtpEncryption>[] = [
 		{ value: "tls", label: __("TLS / STARTTLS") },
@@ -120,7 +120,7 @@ function EmailDeliveryTab({
 
 	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		await onSave(buildMailPayload(form));
+		await onSave(prepareMailPayload(form));
 
 		setForm((current) => ({
 			...current,

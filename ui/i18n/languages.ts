@@ -39,7 +39,7 @@ function normalizeDisplayLabel(label?: string | null): string {
 	return firstCharacter.toLocaleUpperCase() + remainingCharacters.join("");
 }
 
-function resolveRegionCode(locale: string): string {
+function getRegionCode(locale: string): string {
 	const normalizedLocale = normalizeLocale(locale);
 
 	if (!normalizedLocale) {
@@ -67,7 +67,7 @@ function resolveRegionCode(locale: string): string {
 	return "";
 }
 
-function resolveDisplayName(
+function getDisplayName(
 	locale: string,
 	type: "language" | "region",
 	code: string
@@ -104,12 +104,12 @@ export function getInstalledLanguageLabel(
 
 	const normalizedLocale = normalizeLocale(locale);
 	const languageCode = getBaseLocale(locale);
-	const regionCode = resolveRegionCode(locale);
+	const regionCode = getRegionCode(locale);
 	const nativeLanguage = normalizeDisplayLabel(
-		resolveDisplayName(normalizedLocale, "language", languageCode)
+		getDisplayName(normalizedLocale, "language", languageCode)
 	);
 	const nativeTerritory = normalizeDisplayLabel(
-		resolveDisplayName(normalizedLocale, "region", regionCode)
+		getDisplayName(normalizedLocale, "region", regionCode)
 	);
 	const showTerritory =
 		"en_US" === locale || getVariantCount(locale, availableLanguages) > 1;

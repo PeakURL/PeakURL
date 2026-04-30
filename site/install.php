@@ -62,12 +62,12 @@ peakurl_override_i18n_service( $installer_locale->get_i18n_service() );
 $runtime_state = InstallState::get_runtime_state( $app_path );
 
 if ( InstallState::READY === $runtime_state ) {
-	header( 'Location: ' . InstallScreen::build_url( $base_path, '/dashboard' ) );
+	header( 'Location: ' . InstallScreen::format_url( $base_path, '/dashboard' ) );
 	exit();
 }
 
 if ( InstallState::NEEDS_SETUP === $runtime_state ) {
-	header( 'Location: ' . InstallScreen::build_url( $base_path, '/setup-config.php' ) );
+	header( 'Location: ' . InstallScreen::format_url( $base_path, '/setup-config.php' ) );
 	exit();
 }
 
@@ -90,6 +90,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 	}
 
 	try {
+		InstallScreen::validate_post_origin( $detected_site_url, $_SERVER );
 		$request = Request::from_globals();
 		InstallManager::install( $app_path, $_POST, $request );
 
@@ -97,7 +98,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 			header( 'Set-Cookie: ' . $cookie_header, false );
 		}
 
-		header( 'Location: ' . InstallScreen::build_url( $base_path, '/dashboard/about?source=install' ) );
+		header( 'Location: ' . InstallScreen::format_url( $base_path, '/dashboard/about?source=install' ) );
 		exit();
 	} catch ( \Throwable $exception ) {
 		$error_message = $exception->getMessage();
@@ -551,7 +552,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 				</div>
 			<?php endif; ?>
 
-			<form method="post" action="<?php echo htmlspecialchars( InstallScreen::build_url( $base_path, '/install.php' ), ENT_QUOTES, 'UTF-8' ); ?>" novalidate>
+			<form method="post" action="<?php echo htmlspecialchars( InstallScreen::format_url( $base_path, '/install.php' ), ENT_QUOTES, 'UTF-8' ); ?>" novalidate>
 				<input type="hidden" name="site_language" value="<?php echo InstallScreen::get_escaped_value( $values, 'site_language' ); ?>">
 				<div class="form-body">
 					<div class="divider" style="margin: 0;"></div>

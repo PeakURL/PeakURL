@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Site — build the site section of the system-status payload.
+ * Site — get the site section of the system-status payload.
  *
  * @since 1.0.14
  */
@@ -43,12 +43,12 @@ class Site {
 	}
 
 	/**
-	 * Build site-level status details.
+	 * Get site-level status details.
 	 *
 	 * @return array<string, mixed>
 	 * @since 1.0.14
 	 */
-	public function build(): array {
+	public function site_status(): array {
 		$settings_api        = $this->context->get_settings_api();
 		$i18n_service        = $this->context->get_i18n_service();
 		$config              = $this->context->get_config();

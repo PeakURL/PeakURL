@@ -310,7 +310,7 @@ class PeakURL_DB {
 			return array();
 		}
 
-		list( $sql, $params ) = $this->build_where_in_query(
+		list( $sql, $params ) = $this->prepare_where_in_query(
 			$table_name,
 			$column_name,
 			$values,
@@ -348,7 +348,7 @@ class PeakURL_DB {
 			return array();
 		}
 
-		list( $sql, $params ) = $this->build_where_in_query(
+		list( $sql, $params ) = $this->prepare_where_in_query(
 			$table_name,
 			$filter_column,
 			$values,
@@ -382,7 +382,7 @@ class PeakURL_DB {
 			return 0;
 		}
 
-		list( $sql, $params ) = $this->build_where_in_query(
+		list( $sql, $params ) = $this->prepare_where_in_query(
 			$table_name,
 			$column_name,
 			$values,
@@ -656,7 +656,7 @@ class PeakURL_DB {
 	}
 
 	/**
-	 * Build a base query with an `IN (...)` condition plus optional filters.
+	 * Get a base query with an `IN (...)` condition plus optional filters.
 	 *
 	 * @param string               $table_name   Base table name without prefix.
 	 * @param string               $column_name  Column to compare in the IN list.
@@ -666,7 +666,7 @@ class PeakURL_DB {
 	 * @return array{0: string, 1: array<string, mixed>}
 	 * @since 1.0.1
 	 */
-	private function build_where_in_query(
+	private function prepare_where_in_query(
 		string $table_name,
 		string $column_name,
 		array $values,

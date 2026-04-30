@@ -284,7 +284,7 @@ class Context {
 	 * @return array<int, string>
 	 * @since 1.0.14
 	 */
-	public function get_ids_with_prefix(
+	public function get_prefixed_ids(
 		string $table_name,
 		string $prefix
 	): array {

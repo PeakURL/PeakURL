@@ -64,13 +64,13 @@ class Schema {
 		Connection $connection,
 		?string $schema_path = null
 	) {
-		$resolved_schema_path = is_string( $schema_path ) && '' !== trim( $schema_path )
+		$schema_file = is_string( $schema_path ) && '' !== trim( $schema_path )
 			? $schema_path
 			: ABSPATH . 'app/database/schema.sql';
 
 		$this->context         = new Context( $connection );
 		$this->status          = new Status( $this->context );
-		$this->upgrade_service = new Upgrade( $this->context, $resolved_schema_path );
+		$this->upgrade_service = new Upgrade( $this->context, $schema_file );
 	}
 
 	/**

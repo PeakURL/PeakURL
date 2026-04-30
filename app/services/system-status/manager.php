@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Manager — build the complete dashboard system-status payload.
+ * Manager — get the complete dashboard system-status payload.
  *
  * @since 1.0.14
  */
@@ -142,20 +142,20 @@ class Manager {
 	}
 
 	/**
-	 * Build the complete dashboard system-status payload.
+	 * Get the complete dashboard system-status payload.
 	 *
 	 * @return array<string, mixed>
 	 * @since 1.0.14
 	 */
 	public function get_status(): array {
-		$site     = $this->site->build();
-		$server   = $this->server->build();
-		$database = $this->database->build();
-		$storage  = $this->storage->build();
-		$mail     = $this->mail->build();
-		$location = $this->location->build();
-		$data     = $this->counts->build();
-		$checks   = $this->checks->build(
+		$site     = $this->site->site_status();
+		$server   = $this->server->server_status();
+		$database = $this->database->database_status();
+		$storage  = $this->storage->storage_status();
+		$mail     = $this->mail->mail_status();
+		$location = $this->location->location_status();
+		$data     = $this->counts->data_counts();
+		$checks   = $this->checks->status_checks(
 			$server,
 			$database,
 			$storage,
@@ -165,7 +165,7 @@ class Manager {
 
 		return array(
 			'generatedAt' => gmdate( DATE_ATOM ),
-			'summary'     => $this->checks->build_summary( $checks ),
+			'summary'     => $this->checks->status_summary( $checks ),
 			'checks'      => $checks,
 			'site'        => $site,
 			'server'      => $server,

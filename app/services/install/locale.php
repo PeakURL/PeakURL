@@ -61,7 +61,7 @@ class Locale {
 			$this->get_service_config( $root_path ),
 			null,
 		);
-		$this->locale       = $this->resolve_locale(
+		$this->locale       = $this->choose_locale(
 			$requested_locale,
 			$accept_language_header,
 		);
@@ -123,14 +123,14 @@ class Locale {
 	}
 
 	/**
-	 * Resolve the requested installer locale.
+	 * Choose the installer locale.
 	 *
 	 * @param string|null $requested_locale       Requested installer locale.
 	 * @param string|null $accept_language_header Browser language header.
 	 * @return string
 	 * @since 1.0.14
 	 */
-	private function resolve_locale(
+	private function choose_locale(
 		?string $requested_locale,
 		?string $accept_language_header
 	): string {

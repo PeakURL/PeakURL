@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Storage — build the storage section of the system-status payload.
+ * Storage — get the storage section of the system-status payload.
  *
  * @since 1.0.14
  */
@@ -47,15 +47,15 @@ class Storage {
 	}
 
 	/**
-	 * Build filesystem and storage status details.
+	 * Get filesystem and storage status details.
 	 *
 	 * @return array<string, mixed>
 	 * @since 1.0.14
 	 */
-	public function build(): array {
+	public function storage_status(): array {
 		$i18n_service = $this->context->get_i18n_service();
 
-		$i18n_service->prepare_languages_directory();
+		$i18n_service->prepare_languages_dir();
 
 		$content_directory   = $i18n_service->get_content_dir();
 		$languages_directory = $i18n_service->get_languages_dir();

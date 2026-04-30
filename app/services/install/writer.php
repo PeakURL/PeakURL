@@ -99,8 +99,8 @@ class Writer {
 
 		$replacements = array();
 
-		foreach ( self::build_template_values( $values ) as $key => $value ) {
-			$replacements[ self::get_template_token( $key ) ] = $value;
+		foreach ( self::prepare_template_values( $values ) as $key => $value ) {
+			$replacements[ self::template_token( $key ) ] = $value;
 		}
 
 		$config_contents = strtr( $template, $replacements );
@@ -120,7 +120,7 @@ class Writer {
 	 * @return array<string, string>
 	 * @since 1.0.14
 	 */
-	public static function build_config_values( array $config ): array {
+	public static function prepare_config_values( array $config ): array {
 		return array(
 			'PEAKURL_ENV'                              => (string) ( $config['PEAKURL_ENV'] ?? 'production' ),
 			'PEAKURL_DEBUG'                            => ! empty( $config['PEAKURL_DEBUG'] ) ? 'true' : 'false',
@@ -242,7 +242,7 @@ class Writer {
 	 * @return array<string, string>
 	 * @since 1.0.14
 	 */
-	private static function build_template_values( array $values ): array {
+	private static function prepare_template_values( array $values ): array {
 		return array(
 			'PEAKURL_ENV'                              => var_export( $values['PEAKURL_ENV'], true ),
 			'PEAKURL_DEBUG'                            => 'true' === $values['PEAKURL_DEBUG'] ? 'true' : 'false',
@@ -290,7 +290,7 @@ class Writer {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	private static function get_template_token( string $key ): string {
+	private static function template_token( string $key ): string {
 		return '__' . $key . '__';
 	}
 

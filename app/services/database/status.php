@@ -250,7 +250,7 @@ class Status {
 		}
 
 		foreach ( RepairSpecs::opaque_id_repairs() as $repair ) {
-			if ( empty( $this->context->get_ids_with_prefix( (string) $repair['table'], (string) $repair['prefix'] ) ) ) {
+			if ( empty( $this->context->get_prefixed_ids( (string) $repair['table'], (string) $repair['prefix'] ) ) ) {
 				continue;
 			}
 
@@ -333,7 +333,7 @@ class Status {
 		}
 
 		foreach ( RepairSpecs::opaque_id_repairs() as $repair ) {
-			if ( ! empty( $this->context->get_ids_with_prefix( (string) $repair['table'], (string) $repair['prefix'] ) ) ) {
+			if ( ! empty( $this->context->get_prefixed_ids( (string) $repair['table'], (string) $repair['prefix'] ) ) ) {
 				return true;
 			}
 		}

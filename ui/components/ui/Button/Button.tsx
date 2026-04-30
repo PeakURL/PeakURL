@@ -62,7 +62,7 @@ export function Button({
 	};
 
 	const disabledStyles = disabled || loading ? "button-disabled" : false;
-	const resolvedIconPosition = isRtl
+	const effectiveIconPosition = isRtl
 		? "left" === iconPosition
 			? "right"
 			: "right" === iconPosition
@@ -90,9 +90,9 @@ export function Button({
 			{...props}
 		>
 			<>
-				{"left" === resolvedIconPosition ? iconNode : null}
+				{"left" === effectiveIconPosition ? iconNode : null}
 				{children}
-				{"right" === resolvedIconPosition ? iconNode : null}
+				{"right" === effectiveIconPosition ? iconNode : null}
 			</>
 		</button>
 	);

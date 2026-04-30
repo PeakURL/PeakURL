@@ -47,7 +47,7 @@ class Totp {
 	}
 
 	/**
-	 * Build an otpauth URI for authenticator apps and QR generation.
+	 * Get an otpauth URI for authenticator apps and QR generation.
 	 *
 	 * @param string $issuer Issuer name (e.g. 'PeakURL').
 	 * @param string $label  Account label (e.g. user email).
@@ -55,7 +55,7 @@ class Totp {
 	 * @return string Complete otpauth:// URI.
 	 * @since 1.0.0
 	 */
-	public function build_otpauth_url(
+	public function get_otpauth_url(
 		string $issuer,
 		string $label,
 		string $secret

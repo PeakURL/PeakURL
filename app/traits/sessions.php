@@ -12,6 +12,7 @@ namespace PeakURL\Traits;
 
 use PeakURL\Includes\Constants;
 use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Http\ApiException;
 use PeakURL\Http\Request;
 use PeakURL\Services\Crypto;
 use PeakURL\Utils\Security;
@@ -31,19 +32,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 trait SessionsTrait {
 
 	/**
-	 * Resolve the current user from API key or session cookie.
+	 * Return the authenticated user from an API key or session cookie.
 	 *
-	 * @param Request $request        Incoming HTTP request.
-	 * @param bool    $allow_fallback Reserved for future use (currently ignored).
-	 * @return array<string, mixed>|null Hydrated user or null.
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed>|null Formatted user or null.
 	 * @since 1.0.0
 	 */
-	private function resolve_current_user(
-		Request $request,
-		bool $allow_fallback
-	): ?array {
-		unset( $allow_fallback );
-		$api_user = $this->resolve_api_key_user( $request );
+	private function current_user( Request $request ): ?array {
+		$api_user = $this->get_api_user( $request );
 
 		if ( $api_user ) {
 			return $api_user;
@@ -54,20 +50,39 @@ trait SessionsTrait {
 		if ( $session ) {
 			$this->touch_session( (string) $session['id'] );
 			$user = $this->find_user_row_by_id( (string) $session['user_id'] );
-			return $user ? $this->hydrate_user( $user, $request ) : null;
+			return $user ? $this->format_user( $user, $request ) : null;
 		}
 
 		return null;
 	}
 
 	/**
+	 * Return the current user.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> Current user.
+	 *
+	 * @throws ApiException When no valid session or API key exists.
+	 * @since 1.0.0
+	 */
+	private function get_current_user( Request $request ): array {
+		$user = $this->current_user( $request );
+
+		if ( ! $user ) {
+			throw new ApiException( __( 'Authentication required.', 'peakurl' ), 401 );
+		}
+
+		return $user;
+	}
+
+	/**
 	 * Authenticate a request by its API key header.
 	 *
 	 * @param Request $request Incoming HTTP request.
-	 * @return array<string, mixed>|null Hydrated user or null if no valid key.
+	 * @return array<string, mixed>|null Formatted user or null if no valid key.
 	 * @since 1.0.0
 	 */
-	private function resolve_api_key_user( Request $request ): ?array {
+	private function get_api_user( Request $request ): ?array {
 		$authorization = trim(
 			(string) $request->get_header( 'Authorization', '' ),
 		);
@@ -91,7 +106,7 @@ trait SessionsTrait {
 			array( 'key_hash' => $this->hash_api_key( $token ) ),
 		);
 
-		return $row ? $this->hydrate_user( $row ) : null;
+		return $row ? $this->format_user( $row ) : null;
 	}
 
 	/**
@@ -228,7 +243,7 @@ trait SessionsTrait {
 		);
 
 		return array_map(
-			fn( array $row ): array => $this->hydrate_session_row(
+			fn( array $row ): array => $this->format_session(
 				$row,
 				$current_session,
 				$include_location,
@@ -238,7 +253,7 @@ trait SessionsTrait {
 	}
 
 	/**
-	 * Hydrate a session row for API responses.
+	 * Format a session row for API responses.
 	 *
 	 * @param array<string, mixed>      $row              Raw session row.
 	 * @param array<string, mixed>|null $current_session  Current session row.
@@ -246,7 +261,7 @@ trait SessionsTrait {
 	 * @return array<string, mixed>
 	 * @since 1.1.0
 	 */
-	private function hydrate_session_row(
+	private function format_session(
 		array $row,
 		?array $current_session,
 		bool $include_location
@@ -293,13 +308,13 @@ trait SessionsTrait {
 			);
 
 		return array(
-			'city'        => $this->normalize_session_location_value(
+			'city'        => $this->normalize_location_value(
 				$location['city_name'] ?? null,
 			),
-			'country'     => $this->normalize_session_location_value(
+			'country'     => $this->normalize_location_value(
 				$location['country_name'] ?? null,
 			),
-			'countryCode' => $this->normalize_session_location_value(
+			'countryCode' => $this->normalize_location_value(
 				$location['country_code'] ?? null,
 			),
 			'isPublic'    => $is_public,
@@ -313,7 +328,7 @@ trait SessionsTrait {
 	 * @return string|null
 	 * @since 1.1.0
 	 */
-	private function normalize_session_location_value( $value ): ?string {
+	private function normalize_location_value( $value ): ?string {
 		$value = trim( (string) $value );
 
 		return '' !== $value ? $value : null;

@@ -64,8 +64,8 @@ class AdminNotices {
 		AdminNoticeRegistry $registry,
 		array $context
 	): void {
-		$this->maybe_add_update_notice( $registry, $context );
-		$this->maybe_add_location_notice( $registry, $context );
+		$this->add_update_notice( $registry, $context );
+		$this->add_location_notice( $registry, $context );
 	}
 
 	/**
@@ -76,7 +76,7 @@ class AdminNotices {
 	 * @return void
 	 * @since 1.0.3
 	 */
-	private function maybe_add_update_notice(
+	private function add_update_notice(
 		AdminNoticeRegistry $registry,
 		array $context
 	): void {
@@ -131,7 +131,7 @@ class AdminNotices {
 	 * @return void
 	 * @since 1.0.3
 	 */
-	private function maybe_add_location_notice(
+	private function add_location_notice(
 		AdminNoticeRegistry $registry,
 		array $context
 	): void {

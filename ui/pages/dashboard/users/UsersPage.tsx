@@ -334,25 +334,25 @@ function UsersPage() {
 	const roleMeta = getRoleMeta();
 	const { data: userData } = useGetUserProfileQuery(undefined);
 	const { canManageUsers, user: authUser } = useAdminAccess();
-	const resolvedCurrentUser = userData?.data ?? authUser ?? null;
+	const accountUser = userData?.data ?? authUser ?? null;
 	const currentUserRole: UserSummary["role"] =
-		resolvedCurrentUser?.role === "admin"
+		accountUser?.role === "admin"
 			? "admin"
-			: resolvedCurrentUser?.role === "editor"
+			: accountUser?.role === "editor"
 				? "editor"
 				: undefined;
-	const currentUser: UserSummary | null = resolvedCurrentUser
+	const currentUser: UserSummary | null = accountUser
 		? {
 				id:
-					resolvedCurrentUser.id ||
-					resolvedCurrentUser._id ||
-					resolvedCurrentUser.username ||
-					resolvedCurrentUser.email ||
+					accountUser.id ||
+					accountUser._id ||
+					accountUser.username ||
+					accountUser.email ||
 					"current-user",
-				firstName: resolvedCurrentUser.firstName,
-				lastName: resolvedCurrentUser.lastName,
-				username: resolvedCurrentUser.username,
-				email: resolvedCurrentUser.email,
+				firstName: accountUser.firstName,
+				lastName: accountUser.lastName,
+				username: accountUser.username,
+				email: accountUser.email,
 				role: currentUserRole,
 			}
 		: null;

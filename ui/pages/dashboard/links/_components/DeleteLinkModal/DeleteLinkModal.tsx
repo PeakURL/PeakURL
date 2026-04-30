@@ -3,7 +3,7 @@ import { X, Trash2, AlertTriangle } from "lucide-react";
 import { useState } from "react";
 import { ReadOnlyValueBlock } from "@/components";
 import { useDeleteUrlMutation } from "@/store/slices/api";
-import { buildShortUrl, getErrorMessage } from "@/utils";
+import { getShortUrl, getErrorMessage } from "@/utils";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import type { DeleteLinkModalProps } from "../types";
@@ -12,7 +12,7 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 	const direction = isDocumentRtl() ? "rtl" : "ltr";
 	const [error, setError] = useState("");
 	const [deleteUrl, { isLoading }] = useDeleteUrlMutation();
-	const shortUrl = link ? buildShortUrl(link) : "";
+	const shortUrl = link ? getShortUrl(link) : "";
 	const totalClicks = Number(link?.clicks || 0);
 	const uniqueClicks = Number(link?.uniqueClicks || 0);
 

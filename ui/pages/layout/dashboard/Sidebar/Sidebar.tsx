@@ -22,7 +22,7 @@ import { __ } from "@/i18n";
 import { cn } from "@/utils";
 import type { NavItem, SidebarProps } from "../types";
 
-const buildNav = (
+const getNavItems = (
 	basePath = "/dashboard",
 	canManageUsers = false
 ): NavItem[] => {
@@ -160,12 +160,12 @@ const getAboutLinkClassName = (isActive: boolean): string =>
 		isActive && "dashboard-sidebar-about-link-active"
 	);
 
-const resolveSidebarTargetHref = (
+const getSidebarTargetHref = (
 	href: string | undefined,
 	base: string
 ): string => href || base || "/dashboard";
 
-const resolveSidebarSectionStateKey = (item: NavItem, index: number): string =>
+const getSidebarSectionStateKey = (item: NavItem, index: number): string =>
 	item.href || item.children?.[0]?.href || `section-${index}`;
 
 export const Sidebar = ({
@@ -182,7 +182,7 @@ export const Sidebar = ({
 	const links = Array.isArray(urlsRes?.data?.items) ? urlsRes.data.items : [];
 
 	const navigation = useMemo(
-		() => buildNav(basePath, canManageUsers),
+		() => getNavItems(basePath, canManageUsers),
 		[basePath, canManageUsers]
 	);
 	const base =
@@ -253,12 +253,12 @@ export const Sidebar = ({
 							const childHrefBase = getSectionBasePath(
 								item.children?.[0]?.href
 							);
-							const resolvedHref = resolveSidebarTargetHref(
+							const itemHref = getSidebarTargetHref(
 								item.href,
 								base
 							);
 							const sectionStateKey =
-								resolveSidebarSectionStateKey(item, index);
+								getSidebarSectionStateKey(item, index);
 							const isChildActive = item.children?.some(
 								(child) =>
 									pathname === child.href ||
@@ -276,14 +276,14 @@ export const Sidebar = ({
 								Boolean(openSections[sectionStateKey]);
 							const activeBasePath = item.activeBasePath;
 							const isActive =
-								pathname === resolvedHref ||
+								pathname === itemHref ||
 								(Boolean(activeBasePath) &&
 									(pathname === activeBasePath ||
 										pathname.startsWith(
 											`${activeBasePath}/`
 										))) ||
-								(resolvedHref !== base &&
-									pathname.startsWith(`${resolvedHref}/`));
+								(itemHref !== base &&
+									pathname.startsWith(`${itemHref}/`));
 
 							if (item.children?.length) {
 								return (
@@ -361,8 +361,8 @@ export const Sidebar = ({
 
 							return (
 								<Link
-									key={resolvedHref}
-									to={resolvedHref}
+									key={itemHref}
+									to={itemHref}
 									onClick={onMobileClose}
 									className={getLinkClassName(isActive)}
 									dir={direction}

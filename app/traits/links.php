@@ -43,7 +43,7 @@ trait LinksTrait {
 		$page       = $pagination['page'];
 		$limit      = $pagination['limit'];
 		$offset     = $pagination['offset'];
-		$listing    = $this->build_url_listing_query( $request, $query );
+		$listing    = $this->prepare_url_listing_query( $request, $query );
 		$count      = $this->count_url_listing_rows(
 			$listing['where'],
 			$listing['params'],
@@ -58,7 +58,7 @@ trait LinksTrait {
 		);
 
 		return array(
-			'items' => $this->hydrate_url_listing_rows( $rows ),
+			'items' => $this->format_url_list( $rows ),
 			'meta'  => array(
 				'page'       => $page,
 				'limit'      => $limit,
@@ -80,14 +80,14 @@ trait LinksTrait {
 	 * @since 1.0.0
 	 */
 	public function export_urls( Request $request, array $query = array() ): array {
-		$listing = $this->build_url_listing_query( $request, $query );
+		$listing = $this->prepare_url_listing_query( $request, $query );
 		$rows    = $this->query_url_listing_rows(
 			$listing['where'],
 			$listing['params'],
 			$listing['sortBy'],
 			$listing['sortOrder'],
 		);
-		$items   = $this->hydrate_url_listing_rows( $rows );
+		$items   = $this->format_url_list( $rows );
 
 		return array(
 			'items' => $items,
@@ -100,9 +100,9 @@ trait LinksTrait {
 	/**
 	 * Find a single short URL by its ID.
 	 *
-	 * @param Request $request Incoming HTTP request (for ownership check).
+	 * @param Request $request Incoming HTTP request (for ownership access).
 	 * @param string  $id      Short-URL row ID.
-	 * @return array<string, mixed>|null Hydrated URL row or null.
+	 * @return array<string, mixed>|null Formatted URL row or null.
 	 * @since 1.0.0
 	 */
 	public function find_url( Request $request, string $id ): ?array {
@@ -110,7 +110,7 @@ trait LinksTrait {
 		$row  = $this->find_url_row( $id );
 
 		if ( $row ) {
-			$this->assert_record_access(
+			$this->validate_record_access(
 				$user,
 				(string) ( $row['user_id'] ?? '' ),
 				'view_own_links',
@@ -119,11 +119,11 @@ trait LinksTrait {
 			);
 		}
 
-		return $row ? $this->hydrate_url_row( $row ) : null;
+		return $row ? $this->format_url( $row ) : null;
 	}
 
 	/**
-	 * Resolve a short code to its redirect destination.
+	 * Return the redirect URL for a short code.
 	 *
 	 * Looks up the public URL row, records a click event, and
 	 * returns the destination URL. Returns null for expired or
@@ -134,11 +134,11 @@ trait LinksTrait {
 	 * @return string|null Destination URL or null.
 	 * @since 1.0.0
 	 */
-	public function resolve_redirect_destination(
+	public function get_redirect_url(
 		string $id,
 		Request $request
 	): ?string {
-		$result = $this->resolve_public_link_access( $id, $request );
+		$result = $this->get_link_access( $id, $request );
 
 		return 'redirect' === $result['status']
 			? (string) $result['location']
@@ -146,7 +146,7 @@ trait LinksTrait {
 	}
 
 	/**
-	 * Resolve the public access state for a short link.
+	 * Return the public access state for a short link.
 	 *
 	 * Determines whether the link should redirect immediately, prompt for a
 	 * password, or stop because it is expired, inactive, or missing.
@@ -156,11 +156,11 @@ trait LinksTrait {
 	 * @return array<string, mixed> Public access result.
 	 * @since 1.0.0
 	 */
-	public function resolve_public_link_access(
+	public function get_link_access(
 		string $id,
 		Request $request
 	): array {
-		$url = $this->find_public_access_url_row( $id );
+		$url = $this->find_link_access_row( $id );
 
 		if ( ! $url ) {
 			return array(
@@ -183,9 +183,9 @@ trait LinksTrait {
 			);
 		}
 
-		if ( $this->public_link_requires_password( $url ) ) {
-			$cookie_name     = $this->public_link_access_cookie_name( $url );
-			$expected_cookie = $this->public_link_access_cookie_value( $url );
+		if ( $this->link_requires_password( $url ) ) {
+			$cookie_name     = $this->link_cookie_name( $url );
+			$expected_cookie = $this->link_cookie_value( $url );
 			$cookie_value    = (string) $request->get_cookie( $cookie_name, '' );
 
 			if (
@@ -214,11 +214,11 @@ trait LinksTrait {
 					);
 				}
 
-				if ( $this->public_link_password_matches( $url, $password_attempt ) ) {
+				if ( $this->link_password_matches( $url, $password_attempt ) ) {
 					$request->queue_cookie(
 						$cookie_name,
 						$expected_cookie,
-						$this->public_link_access_cookie_options(
+						$this->link_cookie_options(
 							$request,
 							$url,
 						),
@@ -263,28 +263,21 @@ trait LinksTrait {
 	 *
 	 * @param Request              $request Incoming HTTP request.
 	 * @param array<string, mixed> $payload Creation payload.
-	 * @return array<string, mixed> Hydrated URL row.
+	 * @return array<string, mixed> Formatted URL row.
 	 *
 	 * @throws ApiException On validation failure (422).
 	 * @since 1.0.0
 	 */
 	public function create_url( Request $request, array $payload ): array {
-		$user            = $this->assert_request_capability(
-			$request,
+		$user = $this->get_current_user( $request );
+		$this->validate_capability(
+			$user,
 			'create_links',
 			'You do not have permission to create links.',
 		);
-		$destination_url = trim( (string) ( $payload['destinationUrl'] ?? '' ) );
-
-		if (
-			'' === $destination_url ||
-			! filter_var( $destination_url, FILTER_VALIDATE_URL )
-		) {
-			throw new ApiException(
-				__( 'A valid destination URL is required.', 'peakurl' ),
-				422,
-			);
-		}
+		$destination_url = $this->clean_destination(
+			$payload['destinationUrl'] ?? '',
+		);
 
 		$alias             = $this->sanitize_code(
 			(string) ( $payload['alias'] ?? '' ),
@@ -295,18 +288,9 @@ trait LinksTrait {
 			$alias = $this->generate_short_code();
 		}
 
-		if ( $this->is_reserved_short_code( $alias ) ) {
-			throw new ApiException(
-				__( 'That short code is reserved by the application.', 'peakurl' ),
-				422,
-			);
-		}
+		$this->validate_alias( $alias );
 
-		if ( $this->short_code_exists( $alias ) ) {
-			throw new ApiException( __( 'That short code is already in use.', 'peakurl' ), 422 );
-		}
-
-		$title = $this->resolve_new_url_title(
+		$title = $this->get_url_title(
 			$payload['title'] ?? '',
 			$alias,
 			$uses_custom_alias,
@@ -314,7 +298,7 @@ trait LinksTrait {
 
 		$id       = $this->generate_random_id();
 		$now      = $this->now();
-		$password = $this->normalize_link_password_input(
+		$password = $this->sanitize_link_password(
 			$payload['password'] ?? '',
 		);
 
@@ -362,7 +346,7 @@ trait LinksTrait {
 			(string) $user['id'],
 			$id,
 			array(
-				'link' => $this->build_activity_link_metadata(
+				'link' => $this->get_link_activity_meta(
 					array(
 						'id'         => $id,
 						'title'      => $title,
@@ -373,11 +357,11 @@ trait LinksTrait {
 			),
 		);
 
-		return $this->hydrate_url_row( $this->find_url_row( $id ) );
+		return $this->format_url( $this->find_url_row( $id ) );
 	}
 
 	/**
-	 * Resolve the stored title for a newly created link.
+	 * Return the stored title for a new link.
 	 *
 	 * Custom aliases default to a human-friendlier alias-derived title when the
 	 * user does not enter a title. Auto-generated short codes remain untitled so
@@ -389,7 +373,7 @@ trait LinksTrait {
 	 * @return string Normalized title value.
 	 * @since 1.0.3
 	 */
-	private function resolve_new_url_title(
+	private function get_url_title(
 		$title,
 		string $alias,
 		bool $uses_custom_alias
@@ -401,14 +385,14 @@ trait LinksTrait {
 		}
 
 		if ( $uses_custom_alias ) {
-			return $this->format_alias_default_title( $alias );
+			return $this->format_alias_title( $alias );
 		}
 
 		return '';
 	}
 
 	/**
-	 * Build a default title from a custom alias.
+	 * Get a default title from a custom alias.
 	 *
 	 * Keeps the alias readable while matching the dashboard convention of
 	 * presenting untitled user-created aliases with a capitalized first letter.
@@ -417,7 +401,7 @@ trait LinksTrait {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	private function format_alias_default_title( string $alias ): string {
+	private function format_alias_title( string $alias ): string {
 		if ( '' === $alias ) {
 			return '';
 		}
@@ -436,13 +420,13 @@ trait LinksTrait {
 	}
 
 	/**
-	 * Normalize raw protected-link password input.
+	 * Sanitize raw protected-link password input.
 	 *
 	 * @param mixed $value Raw request value.
 	 * @return string
 	 * @since 1.0.3
 	 */
-	private function normalize_link_password_input( $value ): string {
+	private function sanitize_link_password( $value ): string {
 		return trim( (string) $value );
 	}
 
@@ -454,12 +438,12 @@ trait LinksTrait {
 	 * @return bool
 	 * @since 1.0.3
 	 */
-	private function public_link_password_matches(
+	private function link_password_matches(
 		array $url,
 		string $password
 	): bool {
 		return Secrets::verify_link_password(
-			$this->normalize_link_password_input( $password ),
+			$this->sanitize_link_password( $password ),
 			(string) ( $url['password_value'] ?? '' ),
 		);
 	}
@@ -492,29 +476,29 @@ trait LinksTrait {
 	 * @return bool True when password protection is enabled.
 	 * @since 1.0.0
 	 */
-	private function public_link_requires_password( array $url ): bool {
+	private function link_requires_password( array $url ): bool {
 		return '' !== trim( (string) ( $url['password_value'] ?? '' ) );
 	}
 
 	/**
-	 * Build the cookie name used for password-authorised public links.
+	 * Get the cookie name used for password-authorised public links.
 	 *
 	 * @param array<string, mixed> $url Raw URL row.
 	 * @return string Cookie name.
 	 * @since 1.0.0
 	 */
-	private function public_link_access_cookie_name( array $url ): string {
+	private function link_cookie_name( array $url ): string {
 		return 'peakurl_link_access_' . (string) ( $url['id'] ?? '' );
 	}
 
 	/**
-	 * Build the cookie value used for password-authorised public links.
+	 * Get the cookie value used for password-authorised public links.
 	 *
 	 * @param array<string, mixed> $url Raw URL row.
 	 * @return string Cookie value hash.
 	 * @since 1.0.0
 	 */
-	private function public_link_access_cookie_value( array $url ): string {
+	private function link_cookie_value( array $url ): string {
 		return hash(
 			'sha256',
 			(string) ( $url['id'] ?? '' ) . '|' . (string) ( $url['password_value'] ?? '' ),
@@ -529,7 +513,7 @@ trait LinksTrait {
 	 * @return array<string, mixed> Cookie options.
 	 * @since 1.0.0
 	 */
-	private function public_link_access_cookie_options(
+	private function link_cookie_options(
 		Request $request,
 		array $url
 	): array {
@@ -569,7 +553,7 @@ trait LinksTrait {
 	 * @since 1.0.0
 	 */
 	public function bulk_create_urls( Request $request, array $payload ): array {
-		$this->assert_admin_request( $request );
+		$this->get_admin_user( $request );
 
 		$entries = is_array( $payload['urls'] ?? null ) ? $payload['urls'] : array();
 		$results = array();
@@ -605,7 +589,7 @@ trait LinksTrait {
 	 * @param Request              $request Incoming HTTP request.
 	 * @param string               $id      Short-URL row ID.
 	 * @param array<string, mixed> $payload Partial update payload.
-	 * @return array<string, mixed>|null Hydrated URL or null if not found.
+	 * @return array<string, mixed>|null Formatted URL or null if not found.
 	 *
 	 * @throws ApiException On validation failure (422).
 	 * @since 1.0.0
@@ -625,7 +609,7 @@ trait LinksTrait {
 			return null;
 		}
 
-		$this->assert_record_access(
+		$this->validate_record_access(
 			$user,
 			(string) ( $existing['user_id'] ?? '' ),
 			'edit_own_links',
@@ -650,14 +634,7 @@ trait LinksTrait {
 			$value = $payload[ $input_key ];
 
 			if ( 'destinationUrl' === $input_key ) {
-				$value = trim( (string) $value );
-
-				if ( '' === $value || ! filter_var( $value, FILTER_VALIDATE_URL ) ) {
-					throw new ApiException(
-						__( 'A valid destination URL is required.', 'peakurl' ),
-						422,
-					);
-				}
+				$value = $this->clean_destination( $value );
 			}
 
 			if ( 'status' === $input_key ) {
@@ -673,7 +650,7 @@ trait LinksTrait {
 		if ( $clear_password ) {
 			$updates[] = 'password_value = NULL';
 		} elseif ( array_key_exists( 'password', $payload ) ) {
-			$password = $this->normalize_link_password_input(
+			$password = $this->sanitize_link_password(
 				$payload['password'],
 			);
 
@@ -698,22 +675,7 @@ trait LinksTrait {
 		) {
 			$alias = $this->sanitize_code( (string) $payload['alias'] );
 
-			if ( $this->is_reserved_short_code( $alias ) ) {
-				throw new ApiException(
-					__( 'That short code is reserved by the application.', 'peakurl' ),
-					422,
-				);
-			}
-
-			if (
-				$alias !== $existing['alias'] &&
-				$this->short_code_exists( $alias )
-			) {
-				throw new ApiException(
-					__( 'That short code is already in use.', 'peakurl' ),
-					422,
-				);
-			}
+			$this->validate_alias( $alias, (string) $existing['alias'] );
 
 			$updates[]            = 'alias = :alias';
 			$updates[]            = 'short_code = :short_code';
@@ -722,7 +684,7 @@ trait LinksTrait {
 		}
 
 		if ( empty( $updates ) ) {
-			return $this->hydrate_url_row( $this->find_url_row( $id ) );
+			return $this->format_url( $this->find_url_row( $id ) );
 		}
 
 		$updates[]            = 'updated_at = :updated_at';
@@ -741,13 +703,13 @@ trait LinksTrait {
 			(string) $user['id'],
 			$id,
 			array(
-				'link' => $this->build_activity_link_metadata(
+				'link' => $this->get_link_activity_meta(
 					$updated_row ? $updated_row : $existing,
 				),
 			),
 		);
 
-		return $this->hydrate_url_row( $updated_row );
+		return $this->format_url( $updated_row );
 	}
 
 	/**
@@ -772,7 +734,7 @@ trait LinksTrait {
 			return false;
 		}
 
-		$this->assert_record_access(
+		$this->validate_record_access(
 			$user,
 			(string) ( $row['user_id'] ?? '' ),
 			'delete_own_links',
@@ -789,7 +751,7 @@ trait LinksTrait {
 				(string) $user['id'],
 				null,
 				array(
-					'link' => $this->build_activity_link_metadata( $row ),
+					'link' => $this->get_link_activity_meta( $row ),
 				),
 			);
 
@@ -837,8 +799,8 @@ trait LinksTrait {
 
 		$allowed_ids = $ids;
 
-		if ( ! $this->roles->user_can( $user, 'delete_all_links' ) ) {
-			if ( ! $this->roles->user_can( $user, 'delete_own_links' ) ) {
+		if ( ! $this->roles->has_capability( $user, 'delete_all_links' ) ) {
+			if ( ! $this->roles->has_capability( $user, 'delete_own_links' ) ) {
 				throw new ApiException(
 					__( 'You do not have permission to delete links.', 'peakurl' ),
 					403,
@@ -880,7 +842,7 @@ trait LinksTrait {
 					(string) $user['id'],
 					null,
 					array(
-						'link' => $this->build_activity_link_metadata( $deleted_row ),
+						'link' => $this->get_link_activity_meta( $deleted_row ),
 					),
 				);
 			}
@@ -917,11 +879,11 @@ trait LinksTrait {
 	 * @return array<string, mixed> Prepared SQL fragments and parameters.
 	 * @since 1.0.0
 	 */
-	private function build_url_listing_query( Request $request, array $query ): array {
+	private function prepare_url_listing_query( Request $request, array $query ): array {
 		$user       = $this->get_current_user( $request );
 		$search     = trim( (string) ( $query['search'] ?? '' ) );
 		$sort_by    = Query::sort_column(
-			$this->get_url_listing_sort_map(),
+			$this->get_url_sort_map(),
 			$query['sortBy'] ?? 'createdAt',
 			'u.created_at',
 		);
@@ -948,7 +910,7 @@ trait LinksTrait {
 			$params['search_destination'] = $search_like;
 		}
 
-		$this->add_link_visibility_scope( $user, $conditions, $params, 'u' );
+		$this->scope_link_visibility( $user, $conditions, $params, 'u' );
 
 		return array(
 			'where'     => ! empty( $conditions )
@@ -961,13 +923,13 @@ trait LinksTrait {
 	}
 
 	/**
-	 * Build lightweight link metadata for audit-log payloads.
+	 * Return lightweight link metadata for audit-log payloads.
 	 *
 	 * @param array<string, mixed> $link Raw link row or partial row.
 	 * @return array<string, string|null>
 	 * @since 1.0.4
 	 */
-	private function build_activity_link_metadata( array $link ): array {
+	private function get_link_activity_meta( array $link ): array {
 		$title = trim( (string) ( $link['title'] ?? '' ) );
 		$code  = trim(
 			(string) ( $link['alias'] ?? ( $link['short_code'] ?? '' ) ),
@@ -981,6 +943,55 @@ trait LinksTrait {
 	}
 
 	/**
+	 * Clean and validate a destination URL.
+	 *
+	 * @param mixed $value Raw destination URL value.
+	 * @return string Valid destination URL.
+	 *
+	 * @throws ApiException When the URL is missing or invalid.
+	 * @since 1.0.0
+	 */
+	private function clean_destination( $value ): string {
+		$value = trim( (string) $value );
+
+		if ( '' !== $value && filter_var( $value, FILTER_VALIDATE_URL ) ) {
+			return $value;
+		}
+
+		throw new ApiException(
+			__( 'A valid destination URL is required.', 'peakurl' ),
+			422,
+		);
+	}
+
+	/**
+	 * Validate a short-code alias before saving it.
+	 *
+	 * @param string $alias          Sanitized alias.
+	 * @param string $current_alias  Current alias when updating a link.
+	 * @return void
+	 *
+	 * @throws ApiException When the alias is reserved or already used.
+	 * @since 1.0.0
+	 */
+	private function validate_alias( string $alias, string $current_alias = '' ): void {
+		if ( $this->is_reserved_short_code( $alias ) ) {
+			throw new ApiException(
+				__( 'That short code is reserved by the application.', 'peakurl' ),
+				422,
+			);
+		}
+
+		if ( $alias === $current_alias ) {
+			return;
+		}
+
+		if ( $this->short_code_exists( $alias ) ) {
+			throw new ApiException( __( 'That short code is already in use.', 'peakurl' ), 422 );
+		}
+	}
+
+	/**
 	 * Count rows for a prepared URL listing query.
 	 *
 	 * @param string               $where  Prepared WHERE clause.
@@ -989,12 +1000,7 @@ trait LinksTrait {
 	 * @since 1.0.0
 	 */
 	private function count_url_listing_rows( string $where, array $params ): int {
-		return (int) $this->query_value(
-			'SELECT COUNT(*)
-	            FROM urls u
-	            ' . $where,
-			$params,
-		);
+		return $this->links_api->count_links_for_listing( $where, $params );
 	}
 
 	/**
@@ -1017,40 +1023,26 @@ trait LinksTrait {
 		?int $limit = null,
 		?int $offset = null
 	): array {
-		$sql = 'SELECT
-	                u.*,
-	                COALESCE(stats.clicks, 0) AS click_count,
-	                COALESCE(stats.unique_clicks, 0) AS unique_click_count
-	            FROM urls u
-	            LEFT JOIN (
-	                SELECT
-	                    url_id,
-	                    COUNT(*) AS clicks,
-	                    COUNT(DISTINCT COALESCE(NULLIF(visitor_hash, \'\'), id)) AS unique_clicks
-	                FROM clicks
-	                GROUP BY url_id
-	            ) stats ON stats.url_id = u.id
-	            ' .
-			$where .
-			Query::order_by_clause( $sort_by, $sort_order );
-
-		if ( null !== $limit && null !== $offset ) {
-			$sql .= Query::limit_offset_clause( $limit, $offset );
-		}
-
-		return $this->query_all( $sql, $params );
+		return $this->links_api->query_link_rows(
+			$where,
+			$params,
+			$sort_by,
+			$sort_order,
+			$limit,
+			$offset,
+		);
 	}
 
 	/**
-	 * Hydrate a list of raw URL rows into API-ready items.
+	 * Format a list of raw URL rows into API-ready items.
 	 *
 	 * @param array<int, array<string, mixed>> $rows Raw URL rows.
-	 * @return array<int, array<string, mixed>> Hydrated URL items.
+	 * @return array<int, array<string, mixed>> Formatted URL items.
 	 * @since 1.0.0
 	 */
-	private function hydrate_url_listing_rows( array $rows ): array {
+	private function format_url_list( array $rows ): array {
 		return array_map(
-			fn( array $row ): array => $this->hydrate_url_row( $row ),
+			fn( array $row ): array => $this->format_url( $row ),
 			$rows,
 		);
 	}
@@ -1061,7 +1053,7 @@ trait LinksTrait {
 	 * @return array<string, string> API sort keys mapped to SQL columns.
 	 * @since 1.0.0
 	 */
-	private function get_url_listing_sort_map(): array {
+	private function get_url_sort_map(): array {
 		return array(
 			'createdAt'    => 'u.created_at',
 			'updatedAt'    => 'u.updated_at',

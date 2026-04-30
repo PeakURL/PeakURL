@@ -30,7 +30,7 @@ import type {
 	SecurityTabProps,
 } from "../types";
 
-const buildBackupCodesFile = (codes: string[]) =>
+const createBackupCodesFile = (codes: string[]) =>
 	[
 		__("PeakURL Backup Codes"),
 		__("Keep these codes safe. Each code can be used once."),
@@ -188,7 +188,7 @@ function SecurityTab({
 
 	const handleDownloadRequest = () => {
 		if (recentCodes.length > 0) {
-			downloadBackupCodesFile(buildBackupCodesFile(recentCodes));
+			downloadBackupCodesFile(createBackupCodesFile(recentCodes));
 			notification?.success(
 				__("Backup codes downloaded"),
 				__(

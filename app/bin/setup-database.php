@@ -4,7 +4,7 @@
  *
  * Creates the target database (if it does not exist), applies the
  * SQL schema from `database/schema.sql`, and seeds initial
- * workspace data via {@see Store::bootstrap_workspace()}.
+ * site data via {@see Store::bootstrap_site()}.
  *
  * Intended for Docker/CI bootstrapping—not for production use.
  *
@@ -48,20 +48,7 @@ require $autoload_path;
 
 $base_path     = dirname( __DIR__ );
 $config        = RuntimeConfig::bootstrap( $base_path );
-$database_name = preg_replace(
-	'/[^A-Za-z0-9_]/',
-	'',
-	(string) $config['DB_DATABASE'],
-);
-
-if ( ! is_string( $database_name ) ) {
-	$database_name = '';
-}
-
-if ( '' === $database_name ) {
-	fwrite( STDERR, "Invalid database name.\n" );
-	exit( 1 );
-}
+$database_name = (string) $config['DB_DATABASE'];
 
 // ── Create the database if it does not exist ────────────────────
 
@@ -101,7 +88,7 @@ $server->exec(
 	),
 );
 
-// ── Apply schema and seed workspace ─────────────────────────────
+// ── Apply schema and seed site ─────────────────────────────
 
 $schema_path = $base_path . '/database/schema.sql';
 
@@ -115,6 +102,6 @@ $schema_service     = new DatabaseSchema( $connection_manager, $schema_path );
 $schema_service->upgrade();
 
 $data_store = new Store( $connection_manager, $config );
-$data_store->bootstrap_workspace();
+$data_store->bootstrap_site();
 
 fwrite( STDOUT, "Database ready: {$database_name}\n" );

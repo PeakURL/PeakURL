@@ -24,67 +24,66 @@ import type {
 	UtmCampaignItem,
 } from "./types";
 
-// Map category to icon and color
-const getCategoryInfo = (category: string) => {
-	const categoryMap: Record<
-		TrafficCategory,
-		{ icon: typeof Globe; color: string; bg: string }
-	> = {
-		"Search Engine": {
-			icon: Search,
-			color: "text-blue-500",
-			bg: "bg-blue-500/10",
-		},
-		"Social Media": {
-			icon: Share2,
-			color: "text-pink-500",
-			bg: "bg-pink-500/10",
-		},
-		Messaging: {
-			icon: MessageCircle,
-			color: "text-green-500",
-			bg: "bg-green-500/10",
-		},
-		Video: { icon: Video, color: "text-red-500", bg: "bg-red-500/10" },
-		"News & Content": {
-			icon: Newspaper,
-			color: "text-orange-500",
-			bg: "bg-orange-500/10",
-		},
-		Developer: { icon: Code, color: "text-gray-500", bg: "bg-gray-500/10" },
-		Email: { icon: Mail, color: "text-yellow-500", bg: "bg-yellow-500/10" },
-		"Email Marketing": {
-			icon: Mail,
-			color: "text-yellow-600",
-			bg: "bg-yellow-600/10",
-		},
-		Shopping: {
-			icon: ShoppingBag,
-			color: "text-emerald-500",
-			bg: "bg-emerald-500/10",
-		},
-		AI: {
-			icon: Sparkles,
-			color: "text-purple-500",
-			bg: "bg-purple-500/10",
-		},
-		Productivity: {
-			icon: TrendingUp,
-			color: "text-indigo-500",
-			bg: "bg-indigo-500/10",
-		},
-		Website: { icon: Globe, color: "text-cyan-500", bg: "bg-cyan-500/10" },
-		Direct: {
-			icon: MousePointerClick,
-			color: "text-accent",
-			bg: "bg-accent/10",
-		},
-		Unknown: { icon: Globe, color: "text-text-muted", bg: "bg-surface" },
-	};
+const CATEGORY_INFO: Record<
+	TrafficCategory,
+	{ icon: typeof Globe; color: string; bg: string }
+> = {
+	"Search Engine": {
+		icon: Search,
+		color: "text-blue-500",
+		bg: "bg-blue-500/10",
+	},
+	"Social Media": {
+		icon: Share2,
+		color: "text-pink-500",
+		bg: "bg-pink-500/10",
+	},
+	Messaging: {
+		icon: MessageCircle,
+		color: "text-green-500",
+		bg: "bg-green-500/10",
+	},
+	Video: { icon: Video, color: "text-red-500", bg: "bg-red-500/10" },
+	"News & Content": {
+		icon: Newspaper,
+		color: "text-orange-500",
+		bg: "bg-orange-500/10",
+	},
+	Developer: { icon: Code, color: "text-gray-500", bg: "bg-gray-500/10" },
+	Email: { icon: Mail, color: "text-yellow-500", bg: "bg-yellow-500/10" },
+	"Email Marketing": {
+		icon: Mail,
+		color: "text-yellow-600",
+		bg: "bg-yellow-600/10",
+	},
+	Shopping: {
+		icon: ShoppingBag,
+		color: "text-emerald-500",
+		bg: "bg-emerald-500/10",
+	},
+	AI: {
+		icon: Sparkles,
+		color: "text-purple-500",
+		bg: "bg-purple-500/10",
+	},
+	Productivity: {
+		icon: TrendingUp,
+		color: "text-indigo-500",
+		bg: "bg-indigo-500/10",
+	},
+	Website: { icon: Globe, color: "text-cyan-500", bg: "bg-cyan-500/10" },
+	Direct: {
+		icon: MousePointerClick,
+		color: "text-accent",
+		bg: "bg-accent/10",
+	},
+	Unknown: { icon: Globe, color: "text-text-muted", bg: "bg-surface" },
+};
 
+const getCategoryInfo = (category: string) => {
 	return (
-		categoryMap[(category as TrafficCategory) || "Unknown"] ||
-		categoryMap.Unknown
+		CATEGORY_INFO[(category as TrafficCategory) || "Unknown"] ||
+		CATEGORY_INFO.Unknown
 	);
 };
 
@@ -113,12 +112,15 @@ const getCategoryLabel = (category: string) => {
 	);
 };
 
-// Get total clicks from referrers array
 const getTotalClicks = (referrers: ReferrerItem[]) => {
 	return referrers.reduce(
 		(sum: number, ref: ReferrerItem) => sum + (ref.count || 0),
 		0
 	);
+};
+
+const getPercentage = (count: number, total: number) => {
+	return total > 0 ? ((count / total) * 100).toFixed(1) : 0;
 };
 
 function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
@@ -151,17 +153,14 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 					<div className="links-sources-category-grid">
 						{referrerCategories.map(
 							(cat: ReferrerCategoryItem, index: number) => {
-								const categoryInfo = getCategoryInfo(
+								const meta = getCategoryInfo(
 									cat.category
 								);
-								const Icon = categoryInfo.icon;
-								const percentage =
-									totalClicks > 0
-										? (
-												(cat.count / totalClicks) *
-												100
-											).toFixed(1)
-										: 0;
+								const Icon = meta.icon;
+								const percentage = getPercentage(
+									cat.count,
+									totalClicks
+								);
 
 								return (
 									<div
@@ -169,10 +168,10 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 										className="links-sources-category-card"
 									>
 										<div
-											className={`links-sources-category-icon ${categoryInfo.bg}`}
+											className={`links-sources-category-icon ${meta.bg}`}
 										>
 											<Icon
-												className={`w-5 h-5 ${categoryInfo.color}`}
+												className={`w-5 h-5 ${meta.color}`}
 											/>
 										</div>
 										<div className="links-sources-category-copy">
@@ -206,16 +205,14 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 				) : referrers.length > 0 ? (
 					<div className="links-sources-referrer-list">
 						{referrers.map((ref: ReferrerItem, index: number) => {
-							const categoryInfo = getCategoryInfo(
+							const meta = getCategoryInfo(
 								ref.category || "Unknown"
 							);
-							const Icon = categoryInfo.icon;
-							const percentage =
-								totalClicks > 0
-									? ((ref.count / totalClicks) * 100).toFixed(
-											1
-										)
-									: 0;
+							const Icon = meta.icon;
+							const percentage = getPercentage(
+								ref.count,
+								totalClicks
+							);
 
 							return (
 								<div
@@ -224,10 +221,10 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 								>
 									<div className="links-sources-referrer-main">
 										<div
-											className={`links-sources-referrer-icon ${categoryInfo.bg}`}
+											className={`links-sources-referrer-icon ${meta.bg}`}
 										>
 											<Icon
-												className={`w-4 h-4 ${categoryInfo.color}`}
+												className={`w-4 h-4 ${meta.color}`}
 											/>
 										</div>
 										<div className="links-sources-referrer-copy">
@@ -247,7 +244,7 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 									<div className="links-sources-referrer-meta">
 										<div className="links-sources-referrer-bar">
 											<div
-												className={`h-full ${categoryInfo.bg.replace(
+												className={`h-full ${meta.bg.replace(
 													"/10",
 													"/40"
 												)} rounded-full`}

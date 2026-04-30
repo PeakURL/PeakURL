@@ -81,7 +81,7 @@ function hasReinstallAvailable(status?: UpdateStatusPayload | null) {
 	return Boolean(status?.reinstallAvailable);
 }
 
-function buildAppStatus(
+function formatAppStatus(
 	status: UpdateStatusPayload | null | undefined,
 	errorMessage?: string | null
 ): BadgeState {
@@ -149,7 +149,7 @@ function buildAppStatus(
 	};
 }
 
-function buildDatabaseStatus(
+function formatDatabaseStatus(
 	databaseStatus: DatabaseStatus | null | undefined
 ): BadgeState {
 	if (databaseStatus?.lastError) {
@@ -495,8 +495,8 @@ function UpdatesTab({
 		? databaseStatus.issues
 		: [];
 	const visibleDatabaseIssues: UpdateIssue[] = databaseIssues.slice(0, 6);
-	const appState = buildAppStatus(status, errorMessage);
-	const databaseState = buildDatabaseStatus(databaseStatus);
+	const appState = formatAppStatus(status, errorMessage);
+	const databaseState = formatDatabaseStatus(databaseStatus);
 
 	if (isLoading && !status && !errorMessage) {
 		return (

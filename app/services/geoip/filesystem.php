@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\Geoip;
 
+use PeakURL\Utils\File;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -31,12 +33,8 @@ class Filesystem {
 	 * @throws \RuntimeException When the directory cannot be created.
 	 * @since 1.0.14
 	 */
-	public function create_directory( string $path ): void {
-		if ( is_dir( $path ) ) {
-			return;
-		}
-
-		if ( ! mkdir( $path, 0755, true ) && ! is_dir( $path ) ) {
+	public function mkdir_p( string $path ): void {
+		if ( ! File::mkdir_p( $path, 0755 ) ) {
 			throw new \RuntimeException(
 				__( 'PeakURL could not create the required directory: ', 'peakurl' ) . $path,
 			);
@@ -50,34 +48,8 @@ class Filesystem {
 	 * @return void
 	 * @since 1.0.14
 	 */
-	public function remove_path( string $path ): void {
-		if ( ! file_exists( $path ) ) {
-			return;
-		}
-
-		if ( is_file( $path ) || is_link( $path ) ) {
-			@unlink( $path );
-			return;
-		}
-
-		$iterator = new \RecursiveIteratorIterator(
-			new \RecursiveDirectoryIterator(
-				$path,
-				\RecursiveDirectoryIterator::SKIP_DOTS,
-			),
-			\RecursiveIteratorIterator::CHILD_FIRST,
-		);
-
-		foreach ( $iterator as $item ) {
-			if ( $item->isDir() ) {
-				@rmdir( $item->getPathname() );
-				continue;
-			}
-
-			@unlink( $item->getPathname() );
-		}
-
-		@rmdir( $path );
+	public function delete( string $path ): void {
+		File::delete( $path, true );
 	}
 
 	/**
@@ -97,15 +69,14 @@ class Filesystem {
 			throw new \RuntimeException( __( 'PeakURL could not prepare the GeoLite2 archive for extraction.', 'peakurl' ) );
 		}
 
-		if ( file_exists( $tar_path ) ) {
-			unlink( $tar_path );
-		}
+		$this->delete( $tar_path );
 
 		try {
 			$archive = new \PharData( $archive_path );
 			$archive->decompress();
 
 			$tar = new \PharData( $tar_path );
+			$this->validate_archive( $tar );
 			$tar->extractTo( $extract_path, null, true );
 		} catch ( \Throwable $exception ) {
 			throw new \RuntimeException(
@@ -114,10 +85,65 @@ class Filesystem {
 				$exception,
 			);
 		} finally {
-			if ( file_exists( $tar_path ) ) {
-				unlink( $tar_path );
+			$this->delete( $tar_path );
+		}
+	}
+
+	/**
+	 * Validate archive entries before extraction.
+	 *
+	 * @param \PharData $archive Open tar archive.
+	 * @return void
+	 *
+	 * @throws \RuntimeException When the archive contains an unsafe path.
+	 * @since 1.1.1
+	 */
+	private function validate_archive( \PharData $archive ): void {
+		$archive_path = str_replace( '\\', '/', $archive->getPath() );
+		$iterator     = new \RecursiveIteratorIterator(
+			$archive,
+			\RecursiveIteratorIterator::SELF_FIRST,
+		);
+
+		foreach ( $iterator as $entry ) {
+			$entry_name = $this->archive_entry_name( $entry, $archive_path );
+
+			if (
+				! File::is_safe_archive_path( $entry_name ) ||
+				( method_exists( $entry, 'isLink' ) && $entry->isLink() )
+			) {
+				throw new \RuntimeException(
+					__( 'The GeoLite2 archive contains an unsafe file path.', 'peakurl' ),
+				);
 			}
 		}
+	}
+
+	/**
+	 * Return the archive-relative entry name from a PharData item.
+	 *
+	 * @param \SplFileInfo $entry        Archive entry.
+	 * @param string       $archive_path Normalized tar path.
+	 * @return string
+	 * @since 1.1.1
+	 */
+	private function archive_entry_name(
+		\SplFileInfo $entry,
+		string $archive_path
+	): string {
+		$entry_path = str_replace( '\\', '/', $entry->getPathname() );
+
+		if ( 0 === strpos( $entry_path, 'phar://' ) ) {
+			$entry_path = substr( $entry_path, strlen( 'phar://' ) );
+		}
+
+		$prefix = rtrim( $archive_path, '/' ) . '/';
+
+		if ( 0 === strpos( $entry_path, $prefix ) ) {
+			return substr( $entry_path, strlen( $prefix ) );
+		}
+
+		return $entry_path;
 	}
 
 	/**
@@ -163,21 +189,21 @@ class Filesystem {
 	public function replace_database_file( string $source_path, string $target_path ): void {
 		$temp_path = dirname( $target_path ) . '/.' . basename( $target_path ) . '.tmp';
 
-		if ( ! copy( $source_path, $temp_path ) ) {
+		if ( ! File::copy( $source_path, $temp_path ) ) {
 			throw new \RuntimeException(
 				__( 'PeakURL could not copy the downloaded GeoLite2 database into place.', 'peakurl' ),
 			);
 		}
 
-		if ( file_exists( $target_path ) && ! unlink( $target_path ) ) {
-			@unlink( $temp_path );
+		if ( ! File::delete( $target_path, true ) ) {
+			$this->delete( $temp_path );
 			throw new \RuntimeException(
 				__( 'PeakURL could not replace the existing GeoLite2 database file.', 'peakurl' ),
 			);
 		}
 
-		if ( ! rename( $temp_path, $target_path ) ) {
-			@unlink( $temp_path );
+		if ( ! File::move( $temp_path, $target_path ) ) {
+			$this->delete( $temp_path );
 			throw new \RuntimeException(
 				__( 'PeakURL could not activate the downloaded GeoLite2 database file.', 'peakurl' ),
 			);

@@ -3,7 +3,7 @@ import { X, Download, Copy, Check } from "lucide-react";
 import { useState, useEffect } from "react";
 import QRCode from "qrcode";
 import { ReadOnlyValueBlock } from "@/components";
-import { buildShortUrl, copyToClipboard } from "@/utils";
+import { getShortUrl, copyToClipboard } from "@/utils";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import type { QRCodeModalProps } from "../types";
@@ -12,7 +12,7 @@ function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
 	const direction = isDocumentRtl() ? "rtl" : "ltr";
 	const [qrDataUrl, setQrDataUrl] = useState("");
 	const [copied, setCopied] = useState(false);
-	const shortUrl = link ? buildShortUrl(link) : "";
+	const shortUrl = link ? getShortUrl(link) : "";
 
 	useEffect(() => {
 		if (link && open && shortUrl) {

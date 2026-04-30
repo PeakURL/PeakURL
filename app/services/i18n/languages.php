@@ -103,10 +103,10 @@ class Languages {
 		ksort( $available, SORT_NATURAL | SORT_FLAG_CASE );
 
 		$languages      = array();
-		$variant_counts = $this->count_base_language_variants( array_keys( $available ) );
+		$variant_counts = $this->count_language_variants( array_keys( $available ) );
 
 		foreach ( $available as $locale => $flags ) {
-			$languages[] = $this->build_language_entry(
+			$languages[] = $this->format_language_entry(
 				$locale,
 				$flags,
 				(int) ( $variant_counts[ $this->locale_helper->get_base_locale( $locale ) ] ?? 1 ),
@@ -148,14 +148,14 @@ class Languages {
 	}
 
 	/**
-	 * Build the default gettext plural-forms header for a locale.
+	 * Get the default gettext plural-forms header for a locale.
 	 *
 	 * @param string $locale Locale identifier.
 	 * @return string
 	 * @since 1.0.14
 	 */
 	public function get_plural_forms_header( string $locale ): string {
-		$language = $this->resolve_language_info( $locale );
+		$language = $this->get_language_info( $locale );
 
 		if ( null === $language ) {
 			return 'nplurals=2; plural=(n != 1);';
@@ -180,8 +180,8 @@ class Languages {
 	 * @return int
 	 * @since 1.0.14
 	 */
-	public function resolve_plural_index( string $locale, int $number ): int {
-		$language = $this->resolve_language_info( $locale );
+	public function get_plural_index( string $locale, int $number ): int {
+		$language = $this->get_language_info( $locale );
 		$formula  = $language ? $language->formula : '(n != 1)';
 		$n        = abs( $number );
 
@@ -204,7 +204,7 @@ class Languages {
 	}
 
 	/**
-	 * Build a language entry for the dashboard dropdown.
+	 * Get a language entry for the dashboard dropdown.
 	 *
 	 * @param string              $locale        Locale identifier.
 	 * @param array<string, bool> $flags         Installed-catalog flags.
@@ -212,19 +212,19 @@ class Languages {
 	 * @return array<string, mixed>
 	 * @since 1.0.14
 	 */
-	private function build_language_entry(
+	private function format_language_entry(
 		string $locale,
 		array $flags,
 		int $variant_count = 1
 	): array {
-		$language         = $this->resolve_language_info( $locale );
-		$base_language    = $this->resolve_base_language_info( $locale );
-		$territory        = $this->resolve_territory_label( $locale, $language );
+		$language         = $this->get_language_info( $locale );
+		$base_language    = $this->get_base_language( $locale );
+		$territory        = $this->get_territory_label( $locale, $language );
 		$english_name     = $base_language
 			? (string) $base_language->name
 			: ( $language ? (string) $language->name : str_replace( '_', ' ', $locale ) );
-		$native_name      = $this->resolve_native_language_label( $locale, $english_name );
-		$native_territory = $this->resolve_native_territory_label( $locale, $territory );
+		$native_name      = $this->get_native_name( $locale, $english_name );
+		$native_territory = $this->get_native_territory( $locale, $territory );
 		$show_territory   = $variant_count > 1 || $locale === $this->locale_helper->get_default_locale();
 		$label            = $show_territory && $native_territory
 			? sprintf( '%s (%s)', $native_name, $native_territory )
@@ -256,7 +256,7 @@ class Languages {
 	 * @return array<string, int>
 	 * @since 1.0.14
 	 */
-	private function count_base_language_variants( array $locales ): array {
+	private function count_language_variants( array $locales ): array {
 		$counts = array();
 
 		foreach ( $locales as $locale ) {
@@ -273,13 +273,13 @@ class Languages {
 	}
 
 	/**
-	 * Resolve locale metadata from the gettext/languages registry.
+	 * Return locale metadata from the gettext/languages registry.
 	 *
 	 * @param string $locale Locale identifier.
 	 * @return GettextLanguage|null
 	 * @since 1.0.14
 	 */
-	private function resolve_language_info( string $locale ): ?GettextLanguage {
+	private function get_language_info( string $locale ): ?GettextLanguage {
 		$language = GettextLanguage::getById( $locale );
 
 		if ( null !== $language ) {
@@ -298,17 +298,17 @@ class Languages {
 	}
 
 	/**
-	 * Resolve base-language metadata for a locale.
+	 * Return base-language metadata for a locale.
 	 *
 	 * @param string $locale Locale identifier.
 	 * @return GettextLanguage|null
 	 * @since 1.0.14
 	 */
-	private function resolve_base_language_info( string $locale ): ?GettextLanguage {
+	private function get_base_language( string $locale ): ?GettextLanguage {
 		$base_locale = strstr( $locale, '_', true );
 
 		if ( false === $base_locale || '' === $base_locale ) {
-			return $this->resolve_language_info( $locale );
+			return $this->get_language_info( $locale );
 		}
 
 		$base_language = GettextLanguage::getById( $base_locale );
@@ -317,18 +317,18 @@ class Languages {
 			return $base_language;
 		}
 
-		return $this->resolve_language_info( $locale );
+		return $this->get_language_info( $locale );
 	}
 
 	/**
-	 * Resolve territory metadata for a locale.
+	 * Return territory metadata for a locale.
 	 *
 	 * @param string               $locale   Locale identifier.
 	 * @param GettextLanguage|null $language Full locale metadata.
 	 * @return string|null
 	 * @since 1.0.14
 	 */
-	private function resolve_territory_label(
+	private function get_territory_label(
 		string $locale,
 		?GettextLanguage $language
 	): ?string {
@@ -355,14 +355,14 @@ class Languages {
 	}
 
 	/**
-	 * Resolve the native language name for a locale.
+	 * Return the native language name for a locale.
 	 *
 	 * @param string $locale   Locale identifier.
 	 * @param string $fallback English fallback label.
 	 * @return string
 	 * @since 1.0.14
 	 */
-	private function resolve_native_language_label(
+	private function get_native_name(
 		string $locale,
 		string $fallback
 	): string {
@@ -378,14 +378,14 @@ class Languages {
 	}
 
 	/**
-	 * Resolve the native territory name for a locale.
+	 * Return the native territory name for a locale.
 	 *
 	 * @param string      $locale   Locale identifier.
 	 * @param string|null $fallback English fallback label.
 	 * @return string|null
 	 * @since 1.0.14
 	 */
-	private function resolve_native_territory_label(
+	private function get_native_territory(
 		string $locale,
 		?string $fallback
 	): ?string {

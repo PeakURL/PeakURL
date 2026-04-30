@@ -29,6 +29,7 @@ use PeakURL\Http\JsonResponse;
 use PeakURL\Http\Request;
 use PeakURL\Http\Router;
 use PeakURL\Store;
+use PeakURL\Utils\Security;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -81,7 +82,8 @@ class Application {
 		$request = Request::from_globals();
 
 		try {
-			$this->data_store->bootstrap_workspace();
+			$this->validate_request_origin( $request );
+			$this->data_store->bootstrap_site();
 			$response = $this->router->dispatch( $request );
 
 			if ( ! is_array( $response ) ) {
@@ -113,6 +115,35 @@ class Application {
 	}
 
 	/**
+	 * Reject cross-origin browser mutations before route dispatch.
+	 *
+	 * API clients without browser Origin/Referer headers are still allowed;
+	 * browser-originating writes must come from the configured site origin.
+	 *
+	 * @param Request $request Incoming request.
+	 * @return void
+	 *
+	 * @throws ApiException When a mutating browser request is cross-origin.
+	 * @since 1.1.1
+	 */
+	private function validate_request_origin( Request $request ): void {
+		if ( in_array( $request->get_method(), array( 'GET', 'HEAD', 'OPTIONS' ), true ) ) {
+			return;
+		}
+
+		$origin = Security::get_request_origin( $request );
+
+		if ( null === $origin || Security::is_same_origin( $this->config, $origin ) ) {
+			return;
+		}
+
+		throw new ApiException(
+			__( 'Request origin is not allowed.', 'peakurl' ),
+			403,
+		);
+	}
+
+	/**
 	 * Register all API and catch-all routes on the router.
 	 *
 	 * Instantiates every controller and maps HTTP verb + path pairs to
@@ -134,300 +165,256 @@ class Application {
 		$status    = new SystemStatusController( $this->data_store );
 		$updates   = new UpdatesController( $this->data_store );
 
-		$this->router->get( '/api/v1/health', array( $this, 'health' ) );
-		$this->router->get(
-			'/api/v1/system/i18n',
-			array(
-				$settings,
-				'i18n',
-			)
+		$this->register_core_routes( $settings );
+		$this->register_auth_routes( $auth );
+		$this->register_user_routes( $users );
+		$this->register_url_routes( $urls );
+		$this->register_analytics_routes( $analytics );
+		$this->register_webhook_routes( $webhooks );
+		$this->register_system_routes(
+			$notices,
+			$settings,
+			$status,
+			$geoip,
+			$mail,
 		);
+		$this->register_update_routes( $updates );
+		$this->register_redirect_routes( $urls );
+	}
 
-		$this->router->post( '/api/v1/auth/register', array( $auth, 'register' ) );
-		$this->router->post(
-			'/api/v1/auth/verify-email',
+	/**
+	 * Register public redirect routes.
+	 *
+	 * @param SettingsController $settings Settings controller.
+	 * @return void
+	 * @since 1.1.1
+	 */
+	private function register_core_routes( SettingsController $settings ): void {
+		$this->add_routes(
 			array(
-				$auth,
-				'verify_email',
+				array( 'get', '/api/v1/health', array( $this, 'health' ) ),
+				array( 'get', '/api/v1/system/i18n', array( $settings, 'i18n' ) ),
 			)
 		);
-		$this->router->post(
-			'/api/v1/auth/resend-verification',
-			array(
-				$auth,
-				'resend_verification',
-			)
-		);
-		$this->router->post( '/api/v1/auth/login', array( $auth, 'login' ) );
-		$this->router->post(
-			'/api/v1/auth/login/verify',
-			array(
-				$auth,
-				'verify_two_factor_login',
-			)
-		);
-		$this->router->post( '/api/v1/auth/logout', array( $auth, 'logout' ) );
-		$this->router->post(
-			'/api/v1/auth/forgot-password',
-			array(
-				$auth,
-				'forgot_password',
-			)
-		);
-		$this->router->get(
-			'/api/v1/auth/reset-password/{token}',
-			array(
-				$auth,
-				'check_password_reset_token',
-			)
-		);
-		$this->router->post(
-			'/api/v1/auth/reset-password/{token}',
-			array(
-				$auth,
-				'reset_password',
-			)
-		);
-		$this->router->post(
-			'/api/v1/auth/api-key',
-			array(
-				$auth,
-				'generate_api_key',
-			)
-		);
-		$this->router->delete(
-			'/api/v1/auth/api-key/{id}',
-			array(
-				$auth,
-				'delete_api_key',
-			)
-		);
-		$this->router->get( '/api/v1/auth/security', array( $auth, 'get_security' ) );
-		$this->router->post(
-			'/api/v1/auth/security/two-factor/setup',
-			array(
-				$auth,
-				'start_two_factor_setup',
-			)
-		);
-		$this->router->post(
-			'/api/v1/auth/security/two-factor/verify',
-			array(
-				$auth,
-				'verify_two_factor',
-			)
-		);
-		$this->router->post(
-			'/api/v1/auth/security/two-factor/disable',
-			array(
-				$auth,
-				'disable_two_factor',
-			)
-		);
-		$this->router->post(
-			'/api/v1/auth/security/two-factor/backup-codes',
-			array(
-				$auth,
-				'regenerate_backup_codes',
-			)
-		);
-		$this->router->post(
-			'/api/v1/auth/security/backup-codes/download',
-			array(
-				$auth,
-				'download_backup_codes',
-			)
-		);
-		$this->router->delete(
-			'/api/v1/auth/security/sessions',
-			array(
-				$auth,
-				'revoke_other_sessions',
-			)
-		);
-		$this->router->delete(
-			'/api/v1/auth/security/sessions/{id}',
-			array(
-				$auth,
-				'revoke_session',
-			)
-		);
+	}
 
-		$this->router->get( '/api/v1/users', array( $users, 'index' ) );
-		$this->router->post( '/api/v1/users', array( $users, 'create' ) );
-		$this->router->get( '/api/v1/users/me', array( $users, 'me' ) );
-		$this->router->put( '/api/v1/users/me', array( $users, 'update_me' ) );
-		$this->router->put( '/api/v1/users/{username}', array( $users, 'update' ) );
-		$this->router->delete( '/api/v1/users/{username}', array( $users, 'delete' ) );
+	/**
+	 * Register authentication and account-security routes.
+	 *
+	 * @param AuthController $auth Authentication controller.
+	 * @return void
+	 * @since 1.1.1
+	 */
+	private function register_auth_routes( AuthController $auth ): void {
+		$this->add_routes(
+			array(
+				array( 'post', '/api/v1/auth/register', array( $auth, 'register' ) ),
+				array( 'post', '/api/v1/auth/verify-email', array( $auth, 'verify_email' ) ),
+				array( 'post', '/api/v1/auth/resend-verification', array( $auth, 'resend_verification' ) ),
+				array( 'post', '/api/v1/auth/login', array( $auth, 'login' ) ),
+				array( 'post', '/api/v1/auth/login/verify', array( $auth, 'verify_two_factor_login' ) ),
+				array( 'post', '/api/v1/auth/logout', array( $auth, 'logout' ) ),
+				array( 'post', '/api/v1/auth/forgot-password', array( $auth, 'forgot_password' ) ),
+				array( 'get', '/api/v1/auth/reset-password/{token}', array( $auth, 'validate_reset_token' ) ),
+				array( 'post', '/api/v1/auth/reset-password/{token}', array( $auth, 'reset_password' ) ),
+				array( 'post', '/api/v1/auth/api-key', array( $auth, 'generate_api_key' ) ),
+				array( 'delete', '/api/v1/auth/api-key/{id}', array( $auth, 'delete_api_key' ) ),
+				array( 'get', '/api/v1/auth/security', array( $auth, 'get_security' ) ),
+				array( 'post', '/api/v1/auth/security/two-factor/setup', array( $auth, 'start_two_factor_setup' ) ),
+				array( 'post', '/api/v1/auth/security/two-factor/verify', array( $auth, 'verify_two_factor' ) ),
+				array( 'post', '/api/v1/auth/security/two-factor/disable', array( $auth, 'disable_two_factor' ) ),
+				array( 'post', '/api/v1/auth/security/two-factor/backup-codes', array( $auth, 'regenerate_backup_codes' ) ),
+				array( 'post', '/api/v1/auth/security/backup-codes/download', array( $auth, 'download_backup_codes' ) ),
+				array( 'delete', '/api/v1/auth/security/sessions', array( $auth, 'revoke_other_sessions' ) ),
+				array( 'delete', '/api/v1/auth/security/sessions/{id}', array( $auth, 'revoke_session' ) ),
+			)
+		);
+	}
 
-		$this->router->get( '/api/v1/urls', array( $urls, 'index' ) );
-		$this->router->get( '/api/v1/urls/export', array( $urls, 'export' ) );
-		$this->router->get( '/api/v1/urls/{id}', array( $urls, 'show' ) );
-		$this->router->post( '/api/v1/urls', array( $urls, 'create' ) );
-		$this->router->post( '/api/v1/urls/bulk', array( $urls, 'bulk_create' ) );
-		$this->router->delete( '/api/v1/urls/bulk', array( $urls, 'bulk_delete' ) );
-		$this->router->put( '/api/v1/urls/{id}', array( $urls, 'update' ) );
-		$this->router->delete( '/api/v1/urls/{id}', array( $urls, 'delete' ) );
+	/**
+	 * Register user-management routes.
+	 *
+	 * @param UsersController $users Users controller.
+	 * @return void
+	 * @since 1.1.1
+	 */
+	private function register_user_routes( UsersController $users ): void {
+		$this->add_routes(
+			array(
+				array( 'get', '/api/v1/users', array( $users, 'index' ) ),
+				array( 'post', '/api/v1/users', array( $users, 'create' ) ),
+				array( 'get', '/api/v1/users/me', array( $users, 'me' ) ),
+				array( 'put', '/api/v1/users/me', array( $users, 'update_me' ) ),
+				array( 'put', '/api/v1/users/{username}', array( $users, 'update' ) ),
+				array( 'delete', '/api/v1/users/{username}', array( $users, 'delete' ) ),
+			)
+		);
+	}
 
-		$this->router->get( '/api/v1/analytics', array( $analytics, 'index' ) );
-		$this->router->get(
-			'/api/v1/analytics/activity',
+	/**
+	 * Register short-link CRUD and import/export routes.
+	 *
+	 * @param UrlsController $urls URLs controller.
+	 * @return void
+	 * @since 1.1.1
+	 */
+	private function register_url_routes( UrlsController $urls ): void {
+		$this->add_routes(
 			array(
-				$analytics,
-				'activity',
+				array( 'get', '/api/v1/urls', array( $urls, 'index' ) ),
+				array( 'get', '/api/v1/urls/export', array( $urls, 'export' ) ),
+				array( 'get', '/api/v1/urls/{id}', array( $urls, 'show' ) ),
+				array( 'post', '/api/v1/urls', array( $urls, 'create' ) ),
+				array( 'post', '/api/v1/urls/bulk', array( $urls, 'bulk_create' ) ),
+				array( 'delete', '/api/v1/urls/bulk', array( $urls, 'bulk_delete' ) ),
+				array( 'put', '/api/v1/urls/{id}', array( $urls, 'update' ) ),
+				array( 'delete', '/api/v1/urls/{id}', array( $urls, 'delete' ) ),
 			)
 		);
-		$this->router->get(
-			'/api/v1/analytics/activity/history',
-			array(
-				$analytics,
-				'history',
-			)
-		);
-		$this->router->delete(
-			'/api/v1/analytics/activity/bulk',
-			array(
-				$analytics,
-				'bulk_delete',
-			)
-		);
-		$this->router->delete(
-			'/api/v1/analytics/activity/{id}',
-			array(
-				$analytics,
-				'delete',
-			)
-		);
-		$this->router->get(
-			'/api/v1/analytics/url/{id}/location',
-			array(
-				$analytics,
-				'location',
-			)
-		);
-		$this->router->get(
-			'/api/v1/analytics/url/{id}/stats',
-			array(
-				$analytics,
-				'stats',
-			)
-		);
+	}
 
-		$this->router->get( '/api/v1/webhooks', array( $webhooks, 'index' ) );
-		$this->router->post( '/api/v1/webhooks', array( $webhooks, 'create' ) );
-		$this->router->delete( '/api/v1/webhooks/{id}', array( $webhooks, 'delete' ) );
+	/**
+	 * Register analytics routes.
+	 *
+	 * @param AnalyticsController $analytics Analytics controller.
+	 * @return void
+	 * @since 1.1.1
+	 */
+	private function register_analytics_routes( AnalyticsController $analytics ): void {
+		$this->add_routes(
+			array(
+				array( 'get', '/api/v1/analytics', array( $analytics, 'index' ) ),
+				array( 'get', '/api/v1/analytics/activity', array( $analytics, 'activity' ) ),
+				array( 'get', '/api/v1/analytics/activity/history', array( $analytics, 'history' ) ),
+				array( 'delete', '/api/v1/analytics/activity/bulk', array( $analytics, 'bulk_delete' ) ),
+				array( 'delete', '/api/v1/analytics/activity/{id}', array( $analytics, 'delete' ) ),
+				array( 'get', '/api/v1/analytics/url/{id}/location', array( $analytics, 'location' ) ),
+				array( 'get', '/api/v1/analytics/url/{id}/stats', array( $analytics, 'stats' ) ),
+			)
+		);
+	}
 
-		$this->router->get(
-			'/api/v1/system/notices',
+	/**
+	 * Register webhook routes.
+	 *
+	 * @param WebhooksController $webhooks Webhooks controller.
+	 * @return void
+	 * @since 1.1.1
+	 */
+	private function register_webhook_routes( WebhooksController $webhooks ): void {
+		$this->add_routes(
 			array(
-				$notices,
-				'index',
+				array( 'get', '/api/v1/webhooks', array( $webhooks, 'index' ) ),
+				array( 'post', '/api/v1/webhooks', array( $webhooks, 'create' ) ),
+				array( 'delete', '/api/v1/webhooks/{id}', array( $webhooks, 'delete' ) ),
 			)
 		);
-		$this->router->get(
-			'/api/v1/system/general',
-			array(
-				$settings,
-				'general',
-			)
-		);
-		$this->router->post(
-			'/api/v1/system/general',
-			array(
-				$settings,
-				'update_general',
-			)
-		);
-		$this->router->get(
-			'/api/v1/system/status',
-			array(
-				$status,
-				'status',
-			)
-		);
-		$this->router->get(
-			'/api/v1/system/geoip',
-			array(
-				$geoip,
-				'status',
-			)
-		);
-		$this->router->post(
-			'/api/v1/system/geoip',
-			array(
-				$geoip,
-				'update',
-			)
-		);
-		$this->router->post(
-			'/api/v1/system/geoip/download',
-			array(
-				$geoip,
-				'download',
-			)
-		);
-		$this->router->get(
-			'/api/v1/system/mail',
-			array(
-				$mail,
-				'status',
-			)
-		);
-		$this->router->post(
-			'/api/v1/system/mail',
-			array(
-				$mail,
-				'update',
-			)
-		);
-		$this->router->post(
-			'/api/v1/system/mail/test',
-			array(
-				$mail,
-				'test',
-			)
-		);
+	}
 
-		$this->router->get(
-			'/api/v1/system/update',
+	/**
+	 * Register system settings, status, GeoIP, and mail routes.
+	 *
+	 * @param AdminNoticesController $notices  Admin notices controller.
+	 * @param SettingsController     $settings Settings controller.
+	 * @param SystemStatusController $status   System status controller.
+	 * @param GeoipController        $geoip    GeoIP controller.
+	 * @param MailController         $mail     Mail controller.
+	 * @return void
+	 * @since 1.1.1
+	 */
+	private function register_system_routes(
+		AdminNoticesController $notices,
+		SettingsController $settings,
+		SystemStatusController $status,
+		GeoipController $geoip,
+		MailController $mail
+	): void {
+		$this->add_routes(
 			array(
-				$updates,
-				'status',
+				array( 'get', '/api/v1/system/notices', array( $notices, 'index' ) ),
+				array( 'get', '/api/v1/system/general', array( $settings, 'general' ) ),
+				array( 'post', '/api/v1/system/general', array( $settings, 'update_general' ) ),
+				array( 'get', '/api/v1/system/status', array( $status, 'status' ) ),
+				array( 'get', '/api/v1/system/geoip', array( $geoip, 'status' ) ),
+				array( 'post', '/api/v1/system/geoip', array( $geoip, 'update' ) ),
+				array( 'post', '/api/v1/system/geoip/download', array( $geoip, 'download' ) ),
+				array( 'get', '/api/v1/system/mail', array( $mail, 'status' ) ),
+				array( 'post', '/api/v1/system/mail', array( $mail, 'update' ) ),
+				array( 'post', '/api/v1/system/mail/test', array( $mail, 'test' ) ),
 			)
 		);
-		$this->router->post(
-			'/api/v1/system/update/check',
-			array(
-				$updates,
-				'check',
-			)
-		);
-		$this->router->post(
-			'/api/v1/system/update/apply',
-			array(
-				$updates,
-				'apply',
-			)
-		);
-		$this->router->post(
-			'/api/v1/system/update/reinstall',
-			array(
-				$updates,
-				'reinstall',
-			)
-		);
-		$this->router->post(
-			'/api/v1/system/update/database',
-			array(
-				$updates,
-				'upgrade_database',
-			)
-		);
+	}
 
-		$this->router->get( '/{id}', array( $urls, 'redirect' ) );
-		$this->router->get( '/{id}/', array( $urls, 'redirect' ) );
-		$this->router->post( '/{id}', array( $urls, 'redirect' ) );
-		$this->router->post( '/{id}/', array( $urls, 'redirect' ) );
+	/**
+	 * Register update-management routes.
+	 *
+	 * @param UpdatesController $updates Updates controller.
+	 * @return void
+	 * @since 1.1.1
+	 */
+	private function register_update_routes( UpdatesController $updates ): void {
+		$this->add_routes(
+			array(
+				array( 'get', '/api/v1/system/update', array( $updates, 'status' ) ),
+				array( 'post', '/api/v1/system/update/check', array( $updates, 'refresh' ) ),
+				array( 'post', '/api/v1/system/update/apply', array( $updates, 'apply' ) ),
+				array( 'post', '/api/v1/system/update/reinstall', array( $updates, 'reinstall' ) ),
+				array( 'post', '/api/v1/system/update/database', array( $updates, 'upgrade_database' ) ),
+			)
+		);
+	}
+
+	/**
+	 * Register public short-link redirect catch-all routes.
+	 *
+	 * @param UrlsController $urls URLs controller.
+	 * @return void
+	 * @since 1.1.1
+	 */
+	private function register_redirect_routes( UrlsController $urls ): void {
+		$this->add_routes(
+			array(
+				array( 'get', '/{id}', array( $urls, 'redirect' ) ),
+				array( 'get', '/{id}/', array( $urls, 'redirect' ) ),
+				array( 'post', '/{id}', array( $urls, 'redirect' ) ),
+				array( 'post', '/{id}/', array( $urls, 'redirect' ) ),
+			)
+		);
+	}
+
+	/**
+	 * Register a compact route map on the router.
+	 *
+	 * @param array<int, array{0: string, 1: string, 2: callable}> $routes Route definitions.
+	 * @return void
+	 * @since 1.1.1
+	 */
+	private function add_routes( array $routes ): void {
+		foreach ( $routes as $route ) {
+			$method  = strtolower( (string) $route[0] );
+			$path    = (string) $route[1];
+			$handler = $route[2];
+
+			switch ( $method ) {
+				case 'get':
+					$this->router->get( $path, $handler );
+					break;
+				case 'post':
+					$this->router->post( $path, $handler );
+					break;
+				case 'put':
+					$this->router->put( $path, $handler );
+					break;
+				case 'patch':
+					$this->router->patch( $path, $handler );
+					break;
+				case 'delete':
+					$this->router->delete( $path, $handler );
+					break;
+				default:
+					throw new \LogicException( 'Unsupported route method: ' . $method );
+			}
+		}
 	}
 
 	/**

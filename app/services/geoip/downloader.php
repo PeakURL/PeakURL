@@ -102,10 +102,10 @@ class Downloader {
 		$extract_path       = $working_directory . '/extract';
 
 		try {
-			$this->filesystem->create_directory( $this->context->get_content_dir() );
-			$this->filesystem->create_directory( $database_directory );
-			$this->filesystem->create_directory( $working_directory );
-			$this->filesystem->create_directory( $extract_path );
+			$this->filesystem->mkdir_p( $this->context->get_content_dir() );
+			$this->filesystem->mkdir_p( $database_directory );
+			$this->filesystem->mkdir_p( $working_directory );
+			$this->filesystem->mkdir_p( $extract_path );
 
 			$this->client->download_archive( $archive_path );
 			$this->filesystem->extract_archive( $archive_path, $extract_path );
@@ -124,7 +124,7 @@ class Downloader {
 			);
 			$this->context->reset_reader();
 		} finally {
-			$this->filesystem->remove_path( $working_directory );
+			$this->filesystem->delete( $working_directory );
 		}
 	}
 }

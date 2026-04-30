@@ -81,7 +81,7 @@ class UsersController extends BaseController {
 	 */
 	public function me( Request $request ): array {
 		return $this->success_response(
-			$this->data_store->get_current_user( $request ),
+			$this->data_store->get_current_profile( $request ),
 			__( 'Current user loaded.', 'peakurl' ),
 		);
 	}

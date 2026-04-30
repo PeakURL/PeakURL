@@ -79,7 +79,7 @@ class ReleaseFiles {
 	 * @throws \RuntimeException When the root cannot be read.
 	 * @since 1.0.14
 	 */
-	public function get_release_root_paths( string $root_path ): array {
+	public function get_release_paths( string $root_path ): array {
 		$scan_results = scandir( $root_path );
 
 		if ( false === $scan_results ) {
@@ -88,7 +88,7 @@ class ReleaseFiles {
 			);
 		}
 
-		$release_root_paths = array();
+		$release_paths = array();
 
 		foreach ( $scan_results as $entry ) {
 			if ( '.' === $entry || '..' === $entry ) {
@@ -99,12 +99,12 @@ class ReleaseFiles {
 				continue;
 			}
 
-			$release_root_paths[ $entry ] = $entry;
+			$release_paths[ $entry ] = $entry;
 		}
 
-		ksort( $release_root_paths, SORT_STRING );
+		ksort( $release_paths, SORT_STRING );
 
-		return array_values( $release_root_paths );
+		return array_values( $release_paths );
 	}
 
 	/**
@@ -115,7 +115,7 @@ class ReleaseFiles {
 	 * @return array<int, string>
 	 * @since 1.0.14
 	 */
-	public function merge_release_root_paths(
+	public function merge_release_paths(
 		array $left_paths,
 		array $right_paths
 	): array {
@@ -133,25 +133,25 @@ class ReleaseFiles {
 	/**
 	 * Back up the currently installed release-managed root paths.
 	 *
-	 * @param array<int, string> $release_root_paths Release-managed root paths.
-	 * @param string             $backup_root        Backup destination directory.
+	 * @param array<int, string> $release_paths Release-managed root paths.
+	 * @param string             $backup_root   Backup destination directory.
 	 * @return void
 	 * @since 1.0.14
 	 */
-	public function backup_release_root_paths(
-		array $release_root_paths,
+	public function backup_release_paths(
+		array $release_paths,
 		string $backup_root
 	): void {
-		foreach ( $release_root_paths as $relative_path ) {
-			$source_path = $this->filesystem->build_path( ABSPATH, $relative_path );
+		foreach ( $release_paths as $relative_path ) {
+			$source_path = $this->filesystem->join_path( ABSPATH, $relative_path );
 
 			if ( ! file_exists( $source_path ) ) {
 				continue;
 			}
 
-			$this->filesystem->copy_path(
+			$this->filesystem->copy(
 				$source_path,
-				$this->filesystem->build_path( $backup_root, $relative_path ),
+				$this->filesystem->join_path( $backup_root, $relative_path ),
 			);
 		}
 	}
@@ -159,18 +159,18 @@ class ReleaseFiles {
 	/**
 	 * Restore the previous release root after a failed update.
 	 *
-	 * @param array<int, string> $rollback_root_paths Root paths to remove before restore.
-	 * @param string             $backup_root         Backup directory to restore from.
+	 * @param array<int, string> $rollback_paths Root paths to remove before restore.
+	 * @param string             $backup_root    Backup directory to restore from.
 	 * @return void
 	 * @since 1.0.14
 	 */
-	public function restore_release_root_paths(
-		array $rollback_root_paths,
+	public function restore_release_paths(
+		array $rollback_paths,
 		string $backup_root
 	): void {
-		$this->delete_release_root_paths( $rollback_root_paths, ABSPATH );
-		$this->copy_release_root_paths(
-			$this->get_release_root_paths( $backup_root ),
+		$this->delete_release_paths( $rollback_paths, ABSPATH );
+		$this->copy_release_paths(
+			$this->get_release_paths( $backup_root ),
 			$backup_root,
 			ABSPATH,
 		);
@@ -179,20 +179,20 @@ class ReleaseFiles {
 	/**
 	 * Replace the installed release-managed root paths with package contents.
 	 *
-	 * @param array<int, string> $installed_release_root_paths Installed release-root paths.
-	 * @param array<int, string> $package_release_root_paths   Package release-root paths.
-	 * @param string             $source_root                  Extracted package root.
+	 * @param array<int, string> $installed_paths Installed release-root paths.
+	 * @param array<int, string> $package_paths   Package release-root paths.
+	 * @param string             $source_root     Extracted package root.
 	 * @return void
 	 * @since 1.0.14
 	 */
-	public function replace_release_root_paths(
-		array $installed_release_root_paths,
-		array $package_release_root_paths,
+	public function replace_release_paths(
+		array $installed_paths,
+		array $package_paths,
 		string $source_root
 	): void {
-		$this->delete_release_root_paths( $installed_release_root_paths, ABSPATH );
-		$this->copy_release_root_paths(
-			$package_release_root_paths,
+		$this->delete_release_paths( $installed_paths, ABSPATH );
+		$this->copy_release_paths(
+			$package_paths,
 			$source_root,
 			ABSPATH,
 		);
@@ -207,17 +207,17 @@ class ReleaseFiles {
 	 * @throws \RuntimeException When the packaged content directory cannot be read.
 	 * @since 1.0.14
 	 */
-	public function get_packaged_content_root_paths( string $source_root ): array {
-		$package_content_directory = $this->filesystem->build_path(
+	public function get_content_paths( string $source_root ): array {
+		$package_content_dir = $this->filesystem->join_path(
 			$source_root,
 			Constants::DEFAULT_CONTENT_DIR,
 		);
 
-		if ( ! is_dir( $package_content_directory ) ) {
+		if ( ! is_dir( $package_content_dir ) ) {
 			return array();
 		}
 
-		$scan_results = scandir( $package_content_directory );
+		$scan_results = scandir( $package_content_dir );
 
 		if ( false === $scan_results ) {
 			throw new \RuntimeException(
@@ -225,7 +225,7 @@ class ReleaseFiles {
 			);
 		}
 
-		$content_root_paths = array();
+		$content_paths = array();
 
 		foreach ( $scan_results as $entry ) {
 			if ( '.' === $entry || '..' === $entry ) {
@@ -233,45 +233,45 @@ class ReleaseFiles {
 			}
 
 			if (
-				! $this->content_path_contains_release_payload(
-					$this->filesystem->build_path( $package_content_directory, $entry ),
+				! $this->has_release_payload(
+					$this->filesystem->join_path( $package_content_dir, $entry ),
 				)
 			) {
 				continue;
 			}
 
-			$content_root_paths[ $entry ] = $entry;
+			$content_paths[ $entry ] = $entry;
 		}
 
-		ksort( $content_root_paths, SORT_STRING );
+		ksort( $content_paths, SORT_STRING );
 
-		return array_values( $content_root_paths );
+		return array_values( $content_paths );
 	}
 
 	/**
 	 * Back up installed content entries that will be replaced by the package.
 	 *
-	 * @param array<int, string> $package_content_root_paths Packaged content root paths.
-	 * @param string             $backup_root               Backup destination directory.
+	 * @param array<int, string> $content_paths Packaged content root paths.
+	 * @param string             $backup_root   Backup destination directory.
 	 * @return void
 	 * @since 1.0.14
 	 */
-	public function backup_packaged_content_root_paths(
-		array $package_content_root_paths,
+	public function backup_content_paths(
+		array $content_paths,
 		string $backup_root
 	): void {
 		$content_directory = $this->context->get_content_dir();
 
-		foreach ( $package_content_root_paths as $relative_path ) {
-			$source_path = $this->filesystem->build_path( $content_directory, $relative_path );
+		foreach ( $content_paths as $relative_path ) {
+			$source_path = $this->filesystem->join_path( $content_directory, $relative_path );
 
 			if ( ! file_exists( $source_path ) ) {
 				continue;
 			}
 
-			$this->filesystem->copy_path(
+			$this->filesystem->copy(
 				$source_path,
-				$this->filesystem->build_path(
+				$this->filesystem->join_path(
 					$backup_root,
 					Constants::DEFAULT_CONTENT_DIR,
 					$relative_path,
@@ -283,25 +283,25 @@ class ReleaseFiles {
 	/**
 	 * Copy package-provided content entries into the installed content directory.
 	 *
-	 * @param array<int, string> $package_content_root_paths Packaged content root paths.
-	 * @param string             $source_root               Extracted release package root.
+	 * @param array<int, string> $content_paths Packaged content root paths.
+	 * @param string             $source_root   Extracted release package root.
 	 * @return void
 	 * @since 1.0.14
 	 */
-	public function copy_packaged_content_root_paths(
-		array $package_content_root_paths,
+	public function copy_content_paths(
+		array $content_paths,
 		string $source_root
 	): void {
-		if ( empty( $package_content_root_paths ) ) {
+		if ( empty( $content_paths ) ) {
 			return;
 		}
 
 		$content_directory = $this->context->get_content_dir();
 
-		$this->filesystem->create_directory( $content_directory );
+		$this->filesystem->mkdir_p( $content_directory );
 
-		foreach ( $package_content_root_paths as $relative_path ) {
-			$source_path = $this->filesystem->build_path(
+		foreach ( $content_paths as $relative_path ) {
+			$source_path = $this->filesystem->join_path(
 				$source_root,
 				Constants::DEFAULT_CONTENT_DIR,
 				$relative_path,
@@ -311,9 +311,9 @@ class ReleaseFiles {
 				continue;
 			}
 
-			$this->filesystem->copy_path(
+			$this->filesystem->copy(
 				$source_path,
-				$this->filesystem->build_path( $content_directory, $relative_path ),
+				$this->filesystem->join_path( $content_directory, $relative_path ),
 			);
 		}
 	}
@@ -321,27 +321,27 @@ class ReleaseFiles {
 	/**
 	 * Restore packaged content entries after a failed update.
 	 *
-	 * @param array<int, string> $package_content_root_paths Packaged content root paths.
-	 * @param string             $backup_root               Backup directory to restore from.
+	 * @param array<int, string> $content_paths Packaged content root paths.
+	 * @param string             $backup_root   Backup directory to restore from.
 	 * @return void
 	 * @since 1.0.14
 	 */
-	public function restore_packaged_content_root_paths(
-		array $package_content_root_paths,
+	public function restore_content_paths(
+		array $content_paths,
 		string $backup_root
 	): void {
-		if ( empty( $package_content_root_paths ) ) {
+		if ( empty( $content_paths ) ) {
 			return;
 		}
 
 		$content_directory = $this->context->get_content_dir();
 
-		foreach ( $package_content_root_paths as $relative_path ) {
-			$this->filesystem->delete_path(
-				$this->filesystem->build_path( $content_directory, $relative_path ),
+		foreach ( $content_paths as $relative_path ) {
+			$this->filesystem->delete(
+				$this->filesystem->join_path( $content_directory, $relative_path ),
 			);
 
-			$backup_path = $this->filesystem->build_path(
+			$backup_path = $this->filesystem->join_path(
 				$backup_root,
 				Constants::DEFAULT_CONTENT_DIR,
 				$relative_path,
@@ -351,9 +351,9 @@ class ReleaseFiles {
 				continue;
 			}
 
-			$this->filesystem->copy_path(
+			$this->filesystem->copy(
 				$backup_path,
-				$this->filesystem->build_path( $content_directory, $relative_path ),
+				$this->filesystem->join_path( $content_directory, $relative_path ),
 			);
 		}
 	}
@@ -361,18 +361,18 @@ class ReleaseFiles {
 	/**
 	 * Delete release-managed root paths under a given root directory.
 	 *
-	 * @param array<int, string> $release_root_paths Release-managed root paths.
-	 * @param string             $root_path          Root directory.
+	 * @param array<int, string> $release_paths Release-managed root paths.
+	 * @param string             $root_path     Root directory.
 	 * @return void
 	 * @since 1.0.14
 	 */
-	private function delete_release_root_paths(
-		array $release_root_paths,
+	private function delete_release_paths(
+		array $release_paths,
 		string $root_path
 	): void {
-		foreach ( $release_root_paths as $relative_path ) {
-			$this->filesystem->delete_path(
-				$this->filesystem->build_path( $root_path, $relative_path ),
+		foreach ( $release_paths as $relative_path ) {
+			$this->filesystem->delete(
+				$this->filesystem->join_path( $root_path, $relative_path ),
 			);
 		}
 	}
@@ -380,27 +380,27 @@ class ReleaseFiles {
 	/**
 	 * Copy release-managed root paths from a source root to a target root.
 	 *
-	 * @param array<int, string> $release_root_paths Release-managed root paths.
-	 * @param string             $source_root        Source root.
-	 * @param string             $target_root        Target root.
+	 * @param array<int, string> $release_paths Release-managed root paths.
+	 * @param string             $source_root   Source root.
+	 * @param string             $target_root   Target root.
 	 * @return void
 	 * @since 1.0.14
 	 */
-	private function copy_release_root_paths(
-		array $release_root_paths,
+	private function copy_release_paths(
+		array $release_paths,
 		string $source_root,
 		string $target_root
 	): void {
-		foreach ( $release_root_paths as $relative_path ) {
-			$source_path = $this->filesystem->build_path( $source_root, $relative_path );
+		foreach ( $release_paths as $relative_path ) {
+			$source_path = $this->filesystem->join_path( $source_root, $relative_path );
 
 			if ( ! file_exists( $source_path ) ) {
 				continue;
 			}
 
-			$this->filesystem->copy_path(
+			$this->filesystem->copy(
 				$source_path,
-				$this->filesystem->build_path( $target_root, $relative_path ),
+				$this->filesystem->join_path( $target_root, $relative_path ),
 			);
 		}
 	}
@@ -412,7 +412,7 @@ class ReleaseFiles {
 	 * @return bool
 	 * @since 1.0.14
 	 */
-	private function content_path_contains_release_payload( string $path ): bool {
+	private function has_release_payload( string $path ): bool {
 		if ( is_file( $path ) ) {
 			return true;
 		}

@@ -38,7 +38,7 @@ class UrlsController extends BaseController {
 	 * @return string|null Sanitised short code or null when not a stats path.
 	 * @since 1.0.0
 	 */
-	private function get_stats_preview_short_code( string $id ): ?string {
+	private function get_stats_code( string $id ): ?string {
 		$matches = array();
 
 		if ( 1 !== preg_match( '/^([a-z0-9-]+)\+$/i', trim( $id ), $matches ) ) {
@@ -51,14 +51,14 @@ class UrlsController extends BaseController {
 	}
 
 	/**
-	 * Build an app-relative URL that preserves subdirectory installs.
+	 * Get an app-relative URL that preserves subdirectory installs.
 	 *
 	 * @param Request $request Current request instance.
 	 * @param string  $suffix  Root-relative path to append.
 	 * @return string URL path relative to the active install root.
 	 * @since 1.0.0
 	 */
-	private function build_runtime_url( Request $request, string $suffix ): string {
+	private function format_runtime_url( Request $request, string $suffix ): string {
 		$script_name = str_replace(
 			'\\',
 			'/',
@@ -253,23 +253,23 @@ class UrlsController extends BaseController {
 	 * @since 1.0.0
 	 */
 	public function redirect( Request $request ): array {
-		$route_id                 = (string) $request->get_route_param( 'id' );
-		$stats_preview_short_code = $this->get_stats_preview_short_code( $route_id );
+		$route_id   = (string) $request->get_route_param( 'id' );
+		$stats_code = $this->get_stats_code( $route_id );
 
 		if (
-			null !== $stats_preview_short_code &&
+			null !== $stats_code &&
 			in_array( $request->get_method(), array( 'GET', 'HEAD' ), true )
 		) {
 			return JsonResponse::redirect(
-				$this->build_runtime_url(
+				$this->format_runtime_url(
 					$request,
 					'/dashboard/links?stats=' .
-						rawurlencode( $stats_preview_short_code ),
+						rawurlencode( $stats_code ),
 				),
 			);
 		}
 
-		$result = $this->data_store->resolve_public_link_access(
+		$result = $this->data_store->get_link_access(
 			$route_id,
 			$request,
 		);
@@ -283,7 +283,7 @@ class UrlsController extends BaseController {
 			'password_invalid' === ( $result['status'] ?? '' )
 		) {
 			return JsonResponse::text(
-				$this->render_password_prompt(
+				$this->format_password_page(
 					$request,
 					(string) $request->get_route_param( 'id' ),
 					is_array( $result['url'] ?? null ) ? $result['url'] : array(),
@@ -296,7 +296,7 @@ class UrlsController extends BaseController {
 
 		if ( 'expired' === ( $result['status'] ?? '' ) ) {
 			return JsonResponse::text(
-				$this->render_public_status_page(
+				$this->format_status_page(
 					__( 'This link has expired', 'peakurl' ),
 					__( 'The short link you requested is no longer active because its expiration date has passed.', 'peakurl' ),
 					'expired',
@@ -307,7 +307,7 @@ class UrlsController extends BaseController {
 		}
 
 		return JsonResponse::text(
-			$this->render_public_status_page(
+			$this->format_status_page(
 				__( 'This link is unavailable', 'peakurl' ),
 				__( 'The short link you requested is not available right now.', 'peakurl' ),
 			),
@@ -317,7 +317,7 @@ class UrlsController extends BaseController {
 	}
 
 	/**
-	 * Render the public password prompt for a protected short link.
+	 * Get the public password page for a protected short link.
 	 *
 	 * @param Request              $request Current HTTP request.
 	 * @param string               $id      Short code or alias.
@@ -326,7 +326,7 @@ class UrlsController extends BaseController {
 	 * @return string HTML page markup.
 	 * @since 1.0.0
 	 */
-	private function render_password_prompt(
+	private function format_password_page(
 		Request $request,
 		string $id,
 		array $url,
@@ -373,11 +373,11 @@ class UrlsController extends BaseController {
 			'</button>' .
 			'</form>';
 
-		return $this->render_public_shell( __( 'Protected Link', 'peakurl' ), $content_html );
+		return $this->format_public_page( __( 'Protected Link', 'peakurl' ), $content_html );
 	}
 
 	/**
-	 * Render a simple public status page for expired or unavailable links.
+	 * Get a simple public status page for expired or unavailable links.
 	 *
 	 * @param string $title       Page title.
 	 * @param string $description Supporting description.
@@ -385,7 +385,7 @@ class UrlsController extends BaseController {
 	 * @return string HTML page markup.
 	 * @since 1.0.0
 	 */
-	private function render_public_status_page(
+	private function format_status_page(
 		string $title,
 		string $description,
 		string $icon_type = 'unavailable'
@@ -410,18 +410,18 @@ class UrlsController extends BaseController {
 			'<h1 class="title">' . htmlspecialchars( $title, ENT_QUOTES, 'UTF-8' ) . '</h1>' .
 			'<p class="subtitle">' . htmlspecialchars( $description, ENT_QUOTES, 'UTF-8' ) . '</p>';
 
-		return $this->render_public_shell( $title, $content_html );
+		return $this->format_public_page( $title, $content_html );
 	}
 
 	/**
-	 * Render a shared branded shell for public short-link pages.
+	 * Get a shared branded shell for public short-link pages.
 	 *
 	 * @param string $page_title   Browser page title.
 	 * @param string $content_html Safe inner HTML for the card body.
 	 * @return string HTML page markup.
 	 * @since 1.0.0
 	 */
-	private function render_public_shell(
+	private function format_public_page(
 		string $page_title,
 		string $content_html
 	): string {
@@ -548,12 +548,12 @@ HTML;
 	}
 
 	/**
-	 * Render the shared public PeakURL brand mark.
+	 * Get the shared public PeakURL brand mark.
 	 *
 	 * @return string HTML markup.
 	 * @since 1.0.0
 	 */
-	private function render_public_brand_mark(): string {
+	private function format_brand_mark(): string {
 		return '<svg style="width:28px;height:28px" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
 	}
 }

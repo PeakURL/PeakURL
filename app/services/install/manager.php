@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Manager — final release installer flow for site and admin setup.
  *
  * Validates the install submission, writes the runtime config with the
- * install-only seed values, creates the schema, bootstraps the workspace,
+ * install-only seed values, creates the schema, bootstraps the site,
  * and then rewrites config.php without the temporary install secrets.
  *
  * @since 1.0.14
@@ -82,12 +82,12 @@ class Manager {
 		Writer::write_config_file( $app_path, $values );
 
 		try {
-			$runtime_config = Bootstrap::build_config( $values );
+			$runtime_config = Bootstrap::prepare_config( $values );
 			Bootstrap::initialize_schema( $runtime_config, $app_path );
 
 			$connection = new Connection( $runtime_config );
 			$data_store = new Store( $connection, $runtime_config );
-			$data_store->bootstrap_workspace();
+			$data_store->bootstrap_site();
 			$data_store->login(
 				$request,
 				array(
@@ -98,14 +98,14 @@ class Manager {
 
 			Writer::write_config_file(
 				$app_path,
-				Bootstrap::get_release_values( $values ),
+				Bootstrap::prepare_release_values( $values ),
 			);
-			$data_store->send_install_welcome_email_once();
+			$data_store->send_install_welcome_once();
 		} catch ( \Throwable $exception ) {
 			Writer::write_config_file(
 				$app_path,
-				Bootstrap::get_release_values(
-					Writer::build_config_values( $current_config ),
+				Bootstrap::prepare_release_values(
+					Writer::prepare_config_values( $current_config ),
 				),
 			);
 
@@ -175,7 +175,7 @@ class Manager {
 			);
 		}
 
-		$values                             = Writer::build_config_values( $config );
+		$values                             = Writer::prepare_config_values( $config );
 		$values['SITE_URL']                 = $site_url;
 		$values['SESSION_COOKIE_PATH']      = Site::get_cookie_path( $site_url );
 		$values['PEAKURL_WORKSPACE_NAME']   = $workspace_name;

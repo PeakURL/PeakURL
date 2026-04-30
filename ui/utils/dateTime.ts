@@ -158,9 +158,9 @@ export function toIsoFromLocalDateTime(
 	const offset = getTimeZoneOffsetMs(new Date(localUtcTime));
 	const firstPassTime = localUtcTime - offset;
 	const secondOffset = getTimeZoneOffsetMs(new Date(firstPassTime));
-	const resolvedTime =
+	const timeValue =
 		secondOffset === offset ? firstPassTime : localUtcTime - secondOffset;
-	const date = new Date(resolvedTime);
+	const date = new Date(timeValue);
 
 	return Number.isNaN(date.getTime()) ? null : date.toISOString();
 }

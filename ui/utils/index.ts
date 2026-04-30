@@ -74,6 +74,7 @@ export { addFilter, applyFilters, removeFilter } from "./hooks";
 export { getFaviconPreviewUrl, getManagedFaviconUrl } from "./favicon";
 export { isRelativeUrl, sanitizeUrl } from "./url";
 export { getShortUrl, getSiteUrl, getLinkHost } from "./linkHelpers";
+export { getCountryFlagEmoji } from "./countries";
 export {
 	formatLinkExportItems,
 	downloadLinkExport,

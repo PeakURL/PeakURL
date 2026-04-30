@@ -5,7 +5,6 @@ import {
 	ShieldCheck,
 	ShieldOff,
 	Monitor,
-	MapPin,
 	RefreshCw,
 	Download,
 	AlertCircle,
@@ -22,7 +21,12 @@ import {
 } from "@/store/slices/api";
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
-import { cn, formatDateTimeValue, getErrorMessage } from "@/utils";
+import {
+	cn,
+	formatDateTimeValue,
+	getCountryFlagEmoji,
+	getErrorMessage,
+} from "@/utils";
 import type {
 	ProtectedAction,
 	ProtectedActionConfig,
@@ -767,6 +771,9 @@ function SecurityTab({
 						sessions.map((session: SecuritySession) => {
 							const locationLabel =
 								getSessionLocationLabel(session);
+							const countryFlag = getCountryFlagEmoji(
+								session.location?.countryCode
+							);
 
 							return (
 								<div
@@ -795,11 +802,12 @@ function SecurityTab({
 											</p>
 											<div className="settings-security-session-details">
 												<span className="settings-security-session-detail settings-security-session-detail-location">
-													<MapPin
-														size={13}
-														className="settings-security-session-detail-icon"
+													<span
+														className="settings-security-session-detail-flag"
 														aria-hidden="true"
-													/>
+													>
+														{countryFlag}
+													</span>
 													<span>{locationLabel}</span>
 												</span>
 												<span className="settings-security-session-detail">

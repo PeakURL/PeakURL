@@ -154,7 +154,7 @@
 	}
 
 	.settings-security-session-row {
-		@apply flex items-center justify-between rounded-lg border border-stroke p-3;
+		@apply flex flex-col items-start justify-between gap-4 rounded-lg border border-stroke bg-surface p-4 sm:flex-row sm:items-center;
 	}
 
 	.settings-security-session-row-ended {
@@ -162,11 +162,11 @@
 	}
 
 	.settings-security-session-meta {
-		@apply flex items-center gap-3;
+		@apply flex min-w-0 items-center gap-3;
 	}
 
 	.settings-security-session-icon-panel {
-		@apply rounded-md bg-surface-alt p-2;
+		@apply flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-surface-alt;
 	}
 
 	.settings-security-session-icon {
@@ -174,23 +174,28 @@
 	}
 
 	.settings-security-session-copy {
+		@apply min-w-0;
 		text-align: start;
 	}
 
 	.settings-security-session-details {
-		@apply mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-text-muted;
+		@apply mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-text-muted;
 	}
 
 	.settings-security-session-detail {
-		@apply inline-flex items-center gap-1;
+		@apply inline-flex min-w-0 items-center gap-1;
 	}
 
 	.settings-security-session-detail-location {
-		@apply font-medium text-heading;
+		@apply gap-2 font-semibold text-heading;
 	}
 
-	.settings-security-session-detail-icon {
-		@apply shrink-0 text-accent;
+	.settings-security-session-detail-flag {
+		@apply inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-stroke bg-surface-alt text-xl leading-none;
+	}
+
+	.settings-security-session-actions {
+		@apply shrink-0 self-end sm:self-auto;
 	}
 
 	.settings-security-session-badge-current {

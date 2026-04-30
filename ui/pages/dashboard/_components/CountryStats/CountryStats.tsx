@@ -1,4 +1,5 @@
 import { __ } from "@/i18n";
+import { getCountryFlagEmoji } from "@/utils";
 import type { CountryStatsProps, CountryMetric } from "../types";
 
 const CountryStats = ({ countryData }: CountryStatsProps) => {
@@ -8,20 +9,10 @@ const CountryStats = ({ countryData }: CountryStatsProps) => {
 		0
 	);
 
-	// Get country flag emoji from country code
-	const getFlag = (code?: string | null) => {
-		if (!code || code === "??") return "🌐";
-		const codePoints = code
-			.toUpperCase()
-			.split("")
-			.map((char: string) => 127397 + char.charCodeAt(0));
-		return String.fromCodePoint(...codePoints);
-	};
-
 	const formattedCountries =
 		countryData.length > 0
 			? countryData.slice(0, 5).map((country: CountryMetric) => ({
-					flag: getFlag(country.code),
+					flag: getCountryFlagEmoji(country.code),
 					name: country.name || __("Unknown"),
 					value:
 						totalClicks > 0

@@ -4,7 +4,7 @@ import { WorldMap } from "@/components";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { useGetLinkLocationQuery } from "@/store/slices/api";
-import { getErrorMessage } from "@/utils";
+import { getCountryFlagEmoji, getErrorMessage } from "@/utils";
 import type { HoveredCountry, TrafficLocationTabProps } from "./types";
 import { LocalIcon, UnknownLocationIcon } from "./Icons";
 
@@ -84,13 +84,9 @@ function TrafficLocationTab({
 		if (!countryCode || countryCode === "??") {
 			return <UnknownLocationIcon className="w-6 h-6" />;
 		}
-		const codePoints = countryCode
-			.toUpperCase()
-			.split("")
-			.map((char: string) => 127397 + char.charCodeAt(0));
 		return (
 			<span className="text-2xl">
-				{String.fromCodePoint(...codePoints)}
+				{getCountryFlagEmoji(countryCode)}
 			</span>
 		);
 	};

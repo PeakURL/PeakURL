@@ -41,6 +41,7 @@ export {
 } from "./urls";
 export { userApi } from "./user";
 export {
+	selectSessionUser,
 	useAuthCheckQuery,
 	useCheckPasswordResetTokenQuery,
 	useCreateUserMutation,

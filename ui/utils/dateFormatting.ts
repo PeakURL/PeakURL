@@ -3,17 +3,29 @@ const MINUTE_MS = 60 * SECOND_MS;
 const HOUR_MS = 60 * MINUTE_MS;
 const DAY_MS = 24 * HOUR_MS;
 const WEEK_MS = 7 * DAY_MS;
-const MONTH_MS = 30 * DAY_MS;
-const YEAR_MS = 365 * DAY_MS;
+const SECOND_TO_MINUTE_THRESHOLD = 45;
+const MINUTE_TO_HOUR_THRESHOLD = 45;
+const HOUR_TO_DAY_THRESHOLD = 22;
+const DAY_TO_WEEK_THRESHOLD = 6;
+const WEEK_TO_MONTH_THRESHOLD = 4;
 const DEFAULT_LOCALE = "en-US";
 const DEFAULT_TIMEZONE = "UTC";
+
+type RelativeTimeUnit =
+	| "second"
+	| "minute"
+	| "hour"
+	| "day"
+	| "week"
+	| "month"
+	| "year";
 
 function toDate(value: string | number | Date | null | undefined): Date | null {
 	if (value instanceof Date) {
 		return Number.isNaN(value.getTime()) ? null : new Date(value.getTime());
 	}
 
-	if ("string" === typeof value || "number" === typeof value) {
+	if (typeof value === "string" || typeof value === "number") {
 		const date = new Date(value);
 		return Number.isNaN(date.getTime()) ? null : date;
 	}
@@ -36,46 +48,49 @@ function toDateOnly(value: string | null | undefined): Date | null {
 	return Number.isNaN(date.getTime()) ? null : date;
 }
 
+function getNonEmptyString(value: unknown): string | null {
+	return typeof value === "string" && value ? value : null;
+}
+
 export function getActiveLocale(): string {
-	if (
-		"undefined" !== typeof window &&
-		"string" === typeof window.__PEAKURL_LOCALE__ &&
-		window.__PEAKURL_LOCALE__
-	) {
-		return window.__PEAKURL_LOCALE__.replace(/_/g, "-");
+	const windowLocale =
+		typeof window === "undefined"
+			? null
+			: getNonEmptyString(window.__PEAKURL_LOCALE__);
+
+	if (windowLocale) {
+		return windowLocale.replace(/_/g, "-");
 	}
 
-	if (
-		"undefined" !== typeof document &&
-		"string" === typeof document.documentElement?.lang &&
-		document.documentElement.lang
-	) {
-		return document.documentElement.lang;
+	const documentLocale =
+		typeof document === "undefined"
+			? null
+			: getNonEmptyString(document.documentElement?.lang);
+
+	if (documentLocale) {
+		return documentLocale;
 	}
 
 	return DEFAULT_LOCALE;
 }
 
 export function getActiveTimeZone(): string {
-	if (
-		"undefined" !== typeof window &&
-		"string" === typeof window.__PEAKURL_TIMEZONE__ &&
-		window.__PEAKURL_TIMEZONE__
-	) {
-		return window.__PEAKURL_TIMEZONE__;
-	}
+	const timezone =
+		typeof window === "undefined"
+			? null
+			: getNonEmptyString(window.__PEAKURL_TIMEZONE__);
 
-	return DEFAULT_TIMEZONE;
+	return timezone ?? DEFAULT_TIMEZONE;
 }
 
 function getActiveTimeFormat(): "12" | "24" {
-	if (
-		"undefined" !== typeof window &&
-		"string" === typeof window.__PEAKURL_TIME_FORMAT__
-	) {
-		if ("24" === window.__PEAKURL_TIME_FORMAT__) {
-			return "24";
-		}
+	const timeFormat =
+		typeof window === "undefined"
+			? null
+			: getNonEmptyString(window.__PEAKURL_TIME_FORMAT__);
+
+	if (timeFormat === "24") {
+		return "24";
 	}
 
 	return "12";
@@ -101,25 +116,30 @@ function hasDateTimeDisplayOption(
 	].some((key) => key in options);
 }
 
+function shouldIncludeSeconds(options: Intl.DateTimeFormatOptions): boolean {
+	const secondsConfigured =
+		"second" in options || "fractionalSecondDigits" in options;
+	const hasTimeStyle = "timeStyle" in options;
+	const hasTimeFields = "hour" in options || "minute" in options;
+
+	return !secondsConfigured && !hasTimeStyle && hasTimeFields;
+}
+
 function createDateTimeOptions(
 	options: Intl.DateTimeFormatOptions
 ): Intl.DateTimeFormatOptions {
 	const timeFormat = getActiveTimeFormat();
+	const includeSeconds = shouldIncludeSeconds(options);
 	const dateOptions: Intl.DateTimeFormatOptions = {
 		timeZone: getActiveTimeZone(),
 		...(hasDateTimeDisplayOption(options)
 			? options
 			: { dateStyle: "medium", timeStyle: "medium" }),
 	};
-	const includeSeconds =
-		!("second" in dateOptions) &&
-		!("fractionalSecondDigits" in dateOptions) &&
-		!("timeStyle" in dateOptions) &&
-		("hour" in dateOptions || "minute" in dateOptions);
 
-	if ("12" === timeFormat) {
+	if (timeFormat === "12") {
 		dateOptions.hour12 = true;
-	} else if ("24" === timeFormat) {
+	} else if (timeFormat === "24") {
 		dateOptions.hour12 = false;
 	}
 
@@ -146,9 +166,9 @@ export function getZonedDateKey(
 			month: "2-digit",
 			day: "2-digit",
 		}).formatToParts(targetDate);
-		const year = parts.find((part) => "year" === part.type)?.value;
-		const month = parts.find((part) => "month" === part.type)?.value;
-		const day = parts.find((part) => "day" === part.type)?.value;
+		const year = parts.find((part) => part.type === "year")?.value;
+		const month = parts.find((part) => part.type === "month")?.value;
+		const day = parts.find((part) => part.type === "day")?.value;
 
 		return year && month && day ? `${year}-${month}-${day}` : "";
 	} catch {
@@ -179,69 +199,160 @@ export function formatDateOnly(
 	}
 }
 
+/**
+ * Returns the number of days in a month.
+ *
+ * @param year Full year (for example, 2026).
+ * @param month Zero-based month index, matching JavaScript Date.
+ * `new Date(year, month + 1, 0)` uses day 0 as the day before
+ * the first day of `month + 1`, which is the last day of `month`.
+ */
+function daysInMonth(year: number, month: number): number {
+	return new Date(year, month + 1, 0).getDate();
+}
+
+function addMonths(date: Date, count: number): Date {
+	const result = new Date(date.getTime());
+	const day = result.getDate();
+
+	result.setDate(1);
+	result.setMonth(result.getMonth() + count);
+	result.setDate(
+		Math.min(day, daysInMonth(result.getFullYear(), result.getMonth()))
+	);
+
+	return result;
+}
+
+function addYears(date: Date, count: number): Date {
+	const result = new Date(date.getTime());
+	const day = result.getDate();
+
+	result.setDate(1);
+	result.setFullYear(result.getFullYear() + count);
+	result.setDate(
+		Math.min(day, daysInMonth(result.getFullYear(), result.getMonth()))
+	);
+
+	return result;
+}
+
+function wholeMonths(startDate: Date, endDate: Date): number {
+	let count =
+		(endDate.getFullYear() - startDate.getFullYear()) * 12 +
+		endDate.getMonth() -
+		startDate.getMonth();
+
+	if (addMonths(startDate, count).getTime() > endDate.getTime()) {
+		count -= 1;
+	}
+
+	return Math.max(0, count);
+}
+
+function wholeYears(startDate: Date, endDate: Date): number {
+	let count = endDate.getFullYear() - startDate.getFullYear();
+
+	if (addYears(startDate, count).getTime() > endDate.getTime()) {
+		count -= 1;
+	}
+
+	return Math.max(0, count);
+}
+
+function roundedCalendarUnit(
+	targetDate: Date,
+	nowDate: Date,
+	unit: "month" | "year"
+): number {
+	const sign = targetDate.getTime() >= nowDate.getTime() ? 1 : -1;
+	const startDate = sign > 0 ? nowDate : targetDate;
+	const endDate = sign > 0 ? targetDate : nowDate;
+	const wholeCount =
+		unit === "month"
+			? wholeMonths(startDate, endDate)
+			: wholeYears(startDate, endDate);
+	const addUnit = unit === "month" ? addMonths : addYears;
+	const anchorDate = addUnit(startDate, wholeCount);
+	const nextDate = addUnit(startDate, wholeCount + 1);
+	const elapsedMs = endDate.getTime() - anchorDate.getTime();
+	const unitMs = nextDate.getTime() - anchorDate.getTime();
+	const roundedCount =
+		unitMs > 0 && elapsedMs >= unitMs / 2
+			? wholeCount + 1
+			: wholeCount;
+
+	return sign * roundedCount;
+}
+
+/**
+ * Returns the relative-time unit and signed value between two dates.
+ */
 function getRelativeUnit(targetDate: Date, nowDate: Date) {
 	const deltaMs = targetDate.getTime() - nowDate.getTime();
 	const absoluteDeltaMs = Math.abs(deltaMs);
 
-	if (absoluteDeltaMs < 45 * SECOND_MS) {
+	if (absoluteDeltaMs < SECOND_TO_MINUTE_THRESHOLD * SECOND_MS) {
 		return {
 			unit: "second" as const,
 			value: Math.round(deltaMs / SECOND_MS),
 		};
 	}
 
-	if (absoluteDeltaMs < 45 * MINUTE_MS) {
+	if (absoluteDeltaMs < MINUTE_TO_HOUR_THRESHOLD * MINUTE_MS) {
 		return {
 			unit: "minute" as const,
 			value: Math.round(deltaMs / MINUTE_MS),
 		};
 	}
 
-	if (absoluteDeltaMs < 22 * HOUR_MS) {
+	if (absoluteDeltaMs < HOUR_TO_DAY_THRESHOLD * HOUR_MS) {
 		return {
 			unit: "hour" as const,
 			value: Math.round(deltaMs / HOUR_MS),
 		};
 	}
 
-	if (absoluteDeltaMs < 6 * DAY_MS) {
+	if (absoluteDeltaMs < DAY_TO_WEEK_THRESHOLD * DAY_MS) {
 		return {
 			unit: "day" as const,
 			value: Math.round(deltaMs / DAY_MS),
 		};
 	}
 
-	if (absoluteDeltaMs < 4 * WEEK_MS) {
+	if (absoluteDeltaMs < WEEK_TO_MONTH_THRESHOLD * WEEK_MS) {
 		return {
 			unit: "week" as const,
 			value: Math.round(deltaMs / WEEK_MS),
 		};
 	}
 
-	if (absoluteDeltaMs < 11 * MONTH_MS) {
+	const monthValue = roundedCalendarUnit(targetDate, nowDate, "month");
+
+	if (Math.abs(monthValue) < 12) {
 		return {
 			unit: "month" as const,
-			value: Math.round(deltaMs / MONTH_MS),
+			value: monthValue,
 		};
 	}
 
 	return {
 		unit: "year" as const,
-		value: Math.round(deltaMs / YEAR_MS),
+		value: roundedCalendarUnit(targetDate, nowDate, "year"),
 	};
 }
 
 function formatRelativeTimeFallback(
 	value: number,
-	unit: "second" | "minute" | "hour" | "day" | "week" | "month" | "year",
+	unit: RelativeTimeUnit,
 	style: "long" | "compact"
 ): string {
-	if (0 === value) {
+	if (value === 0) {
 		return "now";
 	}
 
 	const absoluteValue = Math.abs(value);
-	const compactUnitMap = {
+	const compactUnitMap: Record<RelativeTimeUnit, string> = {
 		second: "s",
 		minute: "m",
 		hour: "h",
@@ -251,9 +362,9 @@ function formatRelativeTimeFallback(
 		year: "y",
 	};
 	const token =
-		"compact" === style
-			? `${absoluteValue}${compactUnitMap[unit] || ""}`
-			: `${absoluteValue} ${unit}${1 === absoluteValue ? "" : "s"}`;
+		style === "compact"
+			? `${absoluteValue}${compactUnitMap[unit]}`
+			: `${absoluteValue} ${unit}${absoluteValue === 1 ? "" : "s"}`;
 
 	return value < 0 ? `${token} ago` : `in ${token}`;
 }
@@ -283,13 +394,13 @@ export function formatRelativeTime(
 	);
 
 	if (
-		"undefined" !== typeof Intl &&
-		"function" === typeof Intl.RelativeTimeFormat
+		typeof Intl !== "undefined" &&
+		typeof Intl.RelativeTimeFormat === "function"
 	) {
 		try {
 			return new Intl.RelativeTimeFormat(getActiveLocale(), {
 				numeric,
-				style: "compact" === style ? "narrow" : "long",
+				style: style === "compact" ? "narrow" : "long",
 			}).format(relativeValue, unit);
 		} catch {
 			return formatRelativeTimeFallback(relativeValue, unit, style);
@@ -312,15 +423,14 @@ export function formatLocalizedDateTime(
 		return "";
 	}
 
+	const dateTimeOptions = createDateTimeOptions(options);
+
 	try {
 		return new Intl.DateTimeFormat(
 			getActiveLocale(),
-			createDateTimeOptions(options)
+			dateTimeOptions
 		).format(targetDate);
 	} catch {
-		return targetDate.toLocaleString(getActiveLocale(), {
-			...createDateTimeOptions({}),
-			timeZone: undefined,
-		});
+		return targetDate.toLocaleString(getActiveLocale(), dateTimeOptions);
 	}
 }

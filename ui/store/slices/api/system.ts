@@ -14,6 +14,16 @@ import type {
 	UpgradeDatabaseResponse,
 } from "./types";
 
+const GENERAL_SETTINGS_TAGS = ["GeneralSettings"] as const;
+const GEOIP_CHANGE_TAGS = ["Geoip", "AdminNotices"] as const;
+const MAIL_TAGS = ["Mail"] as const;
+const UPDATE_CHANGE_TAGS = ["Updates", "AdminNotices"] as const;
+const DATABASE_UPDATE_TAGS = [
+	"Updates",
+	"AdminNotices",
+	"SystemStatus",
+] as const;
+
 /**
  * RTK Query endpoints for system configuration, diagnostics, and updates.
  */
@@ -25,7 +35,7 @@ export const systemApi = baseApi.injectEndpoints({
 		}),
 		getGeneralSettings: build.query<ApiDataResponse<SiteSettings>, void>({
 			query: () => "system/general",
-			providesTags: ["GeneralSettings"],
+			providesTags: GENERAL_SETTINGS_TAGS,
 		}),
 		getSystemStatus: build.query<SystemStatusResponse, void>({
 			query: () => "system/status",
@@ -76,7 +86,7 @@ export const systemApi = baseApi.injectEndpoints({
 					},
 				};
 			},
-			invalidatesTags: ["GeneralSettings"],
+			invalidatesTags: GENERAL_SETTINGS_TAGS,
 		}),
 		getGeoipStatus: build.query<ApiDataResponse<LocationDataStatus>, void>({
 			query: () => "system/geoip",
@@ -84,7 +94,7 @@ export const systemApi = baseApi.injectEndpoints({
 		}),
 		getMailStatus: build.query<ApiDataResponse<EmailStatus>, void>({
 			query: () => "system/mail",
-			providesTags: ["Mail"],
+			providesTags: MAIL_TAGS,
 		}),
 		saveGeoipConfiguration: build.mutation<
 			ApiDataResponse<LocationDataStatus>,
@@ -95,7 +105,7 @@ export const systemApi = baseApi.injectEndpoints({
 				method: "POST",
 				body,
 			}),
-			invalidatesTags: ["Geoip", "AdminNotices"],
+			invalidatesTags: GEOIP_CHANGE_TAGS,
 		}),
 		saveMailConfiguration: build.mutation<
 			ApiDataResponse<EmailStatus>,
@@ -106,21 +116,21 @@ export const systemApi = baseApi.injectEndpoints({
 				method: "POST",
 				body,
 			}),
-			invalidatesTags: ["Mail"],
+			invalidatesTags: MAIL_TAGS,
 		}),
 		sendTestEmail: build.mutation<ApiDataResponse<MailTestResult>, void>({
 			query: () => ({
 				url: "system/mail/test",
 				method: "POST",
 			}),
-			invalidatesTags: ["Mail"],
+			invalidatesTags: MAIL_TAGS,
 		}),
 		downloadGeoipDatabase: build.mutation<void, void>({
 			query: () => ({
 				url: "system/geoip/download",
 				method: "POST",
 			}),
-			invalidatesTags: ["Geoip", "AdminNotices"],
+			invalidatesTags: GEOIP_CHANGE_TAGS,
 		}),
 		getUpdateStatus: build.query<
 			ApiDataResponse<UpdateStatusPayload>,
@@ -137,7 +147,7 @@ export const systemApi = baseApi.injectEndpoints({
 				url: "system/update/check",
 				method: "POST",
 			}),
-			invalidatesTags: ["Updates", "AdminNotices"],
+			invalidatesTags: UPDATE_CHANGE_TAGS,
 		}),
 		applyUpdate: build.mutation<ApiDataResponse<UpdateStatusPayload>, void>(
 			{
@@ -145,7 +155,7 @@ export const systemApi = baseApi.injectEndpoints({
 					url: "system/update/apply",
 					method: "POST",
 				}),
-				invalidatesTags: ["Updates", "AdminNotices"],
+				invalidatesTags: UPDATE_CHANGE_TAGS,
 			}
 		),
 		reinstallUpdate: build.mutation<
@@ -156,14 +166,14 @@ export const systemApi = baseApi.injectEndpoints({
 				url: "system/update/reinstall",
 				method: "POST",
 			}),
-			invalidatesTags: ["Updates", "AdminNotices"],
+			invalidatesTags: UPDATE_CHANGE_TAGS,
 		}),
 		upgradeDatabaseSchema: build.mutation<UpgradeDatabaseResponse, void>({
 			query: () => ({
 				url: "system/update/database",
 				method: "POST",
 			}),
-			invalidatesTags: ["Updates", "AdminNotices", "SystemStatus"],
+			invalidatesTags: DATABASE_UPDATE_TAGS,
 		}),
 	}),
 });

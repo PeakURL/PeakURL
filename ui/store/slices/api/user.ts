@@ -28,6 +28,26 @@ import type { ProfileUser } from "@/pages/dashboard/settings/_components/tabs/ty
  */
 type UnknownBodyPayload = Record<string, unknown>;
 
+type SessionUserResponse = {
+	data?: ProfileUser | null;
+	user?: ProfileUser | null;
+};
+
+const USER_PROFILE_TAGS = ["AuthSession", "Profile"] as const;
+const USER_LIST_TAGS = ["Users"] as const;
+const PROFILE_TAGS = ["Profile"] as const;
+const SECURITY_TAGS = ["Security"] as const;
+
+const userProfileTags = (result?: LoginResponse) =>
+	result?.data?.user ? USER_PROFILE_TAGS : [];
+
+const loggedOutTags = (result?: LogoutResponse) =>
+	result?.data?.loggedOut ? USER_PROFILE_TAGS : [];
+
+export const selectSessionUser = (
+	response?: SessionUserResponse | null
+): ProfileUser | null => response?.data ?? response?.user ?? null;
+
 /**
  * RTK Query endpoints for authentication, profile, and user management.
  */
@@ -42,7 +62,7 @@ export const userApi = baseApi.injectEndpoints({
 				method: "POST",
 				body,
 			}),
-			invalidatesTags: ["Users"],
+			invalidatesTags: USER_LIST_TAGS,
 		}),
 		verifyEmail: build.mutation<
 			ApiDataResponse<UnknownBodyPayload>,
@@ -70,8 +90,7 @@ export const userApi = baseApi.injectEndpoints({
 				method: "POST",
 				body,
 			}),
-			invalidatesTags: (result) =>
-				result?.data?.user ? ["AuthSession", "Profile"] : [],
+			invalidatesTags: userProfileTags,
 		}),
 		verifyTwoFactorLogin: build.mutation<
 			LoginResponse,
@@ -82,20 +101,18 @@ export const userApi = baseApi.injectEndpoints({
 				method: "POST",
 				body,
 			}),
-			invalidatesTags: (result) =>
-				result?.data?.user ? ["AuthSession", "Profile"] : [],
+			invalidatesTags: userProfileTags,
 		}),
 		logout: build.mutation<LogoutResponse, void>({
 			query: () => ({
 				url: "auth/logout",
 				method: "POST",
 			}),
-			invalidatesTags: (result) =>
-				result?.data?.loggedOut ? ["AuthSession", "Profile"] : [],
+			invalidatesTags: loggedOutTags,
 		}),
 		getUserProfile: build.query<ApiDataResponse<ProfileUser>, void>({
 			query: () => "users/me",
-			providesTags: ["Profile"],
+			providesTags: USER_PROFILE_TAGS,
 		}),
 		updateUserProfile: build.mutation<
 			ApiDataResponse<ProfileUser>,
@@ -106,11 +123,11 @@ export const userApi = baseApi.injectEndpoints({
 				method: "PUT",
 				body,
 			}),
-			invalidatesTags: ["Profile"],
+			invalidatesTags: PROFILE_TAGS,
 		}),
 		authCheck: build.query<AuthCheckResponse, void>({
 			query: () => "users/me",
-			providesTags: ["AuthSession"],
+			providesTags: USER_PROFILE_TAGS,
 		}),
 		forgotPassword: build.mutation<
 			ApiDataResponse<UnknownBodyPayload>,
@@ -141,7 +158,7 @@ export const userApi = baseApi.injectEndpoints({
 		}),
 		getAllUsers: build.query<ApiDataResponse<UserSummary[]>, void>({
 			query: () => "users",
-			providesTags: ["Users"],
+			providesTags: USER_LIST_TAGS,
 		}),
 		createUser: build.mutation<
 			ApiDataResponse<UserSummary>,
@@ -152,7 +169,7 @@ export const userApi = baseApi.injectEndpoints({
 				method: "POST",
 				body,
 			}),
-			invalidatesTags: ["Users"],
+			invalidatesTags: USER_LIST_TAGS,
 		}),
 		updateUser: build.mutation<
 			ApiDataResponse<UserSummary>,
@@ -166,14 +183,14 @@ export const userApi = baseApi.injectEndpoints({
 					...body,
 				},
 			}),
-			invalidatesTags: ["Users"],
+			invalidatesTags: USER_LIST_TAGS,
 		}),
 		deleteUser: build.mutation<void, string>({
 			query: (username) => ({
 				url: `users/${username}`,
 				method: "DELETE",
 			}),
-			invalidatesTags: ["Users"],
+			invalidatesTags: USER_LIST_TAGS,
 		}),
 		generateApiKey: build.mutation<
 			GenerateApiKeyResponse,
@@ -184,25 +201,25 @@ export const userApi = baseApi.injectEndpoints({
 				method: "POST",
 				body,
 			}),
-			invalidatesTags: ["Profile"],
+			invalidatesTags: PROFILE_TAGS,
 		}),
 		deleteApiKey: build.mutation<void, string>({
 			query: (id) => ({
 				url: `auth/api-key/${id}`,
 				method: "DELETE",
 			}),
-			invalidatesTags: ["Profile"],
+			invalidatesTags: PROFILE_TAGS,
 		}),
 		getSecuritySettings: build.query<SecuritySettingsResponse, void>({
 			query: () => "auth/security",
-			providesTags: ["Security"],
+			providesTags: SECURITY_TAGS,
 		}),
 		startTwoFactorSetup: build.mutation<TwoFactorSetupResponse, void>({
 			query: () => ({
 				url: "auth/security/two-factor/setup",
 				method: "POST",
 			}),
-			invalidatesTags: ["Security"],
+			invalidatesTags: SECURITY_TAGS,
 		}),
 		verifyTwoFactor: build.mutation<
 			BackupCodesResponse,
@@ -213,7 +230,7 @@ export const userApi = baseApi.injectEndpoints({
 				method: "POST",
 				body,
 			}),
-			invalidatesTags: ["Security"],
+			invalidatesTags: SECURITY_TAGS,
 		}),
 		disableTwoFactor: build.mutation<
 			ApiDataResponse<UnknownBodyPayload>,
@@ -224,7 +241,7 @@ export const userApi = baseApi.injectEndpoints({
 				method: "POST",
 				body,
 			}),
-			invalidatesTags: ["Security"],
+			invalidatesTags: SECURITY_TAGS,
 		}),
 		regenerateBackupCodes: build.mutation<
 			BackupCodesResponse,
@@ -235,7 +252,7 @@ export const userApi = baseApi.injectEndpoints({
 				method: "POST",
 				body,
 			}),
-			invalidatesTags: ["Security"],
+			invalidatesTags: SECURITY_TAGS,
 		}),
 		downloadBackupCodes: build.mutation<string, CurrentPasswordPayload>({
 			query: (body) => ({
@@ -250,14 +267,14 @@ export const userApi = baseApi.injectEndpoints({
 				url: `auth/security/sessions/${sessionId}`,
 				method: "DELETE",
 			}),
-			invalidatesTags: ["Security"],
+			invalidatesTags: SECURITY_TAGS,
 		}),
 		revokeOtherSessions: build.mutation<RevokeOtherSessionsResponse, void>({
 			query: () => ({
 				url: "auth/security/sessions",
 				method: "DELETE",
 			}),
-			invalidatesTags: ["Security"],
+			invalidatesTags: SECURITY_TAGS,
 		}),
 	}),
 });

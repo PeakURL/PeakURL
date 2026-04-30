@@ -1,4 +1,5 @@
 import { authApi } from "@/store/slices";
+import { selectSessionUser } from "@/store/slices/api";
 import { ApiErrorPage } from "@/components/common";
 import { PageLoader } from "@/components/ui";
 import {
@@ -27,7 +28,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 		isError,
 		refetch,
 	} = useAuthCheckQuery(undefined);
-	const currentUser = data?.user || data?.data;
+	const currentUser = selectSessionUser(data);
 	const isAuthenticated = Boolean(currentUser);
 	const hasResolvedSession = undefined !== data || undefined !== error;
 	const isPending = !hasResolvedSession && (isLoading || isUninitialized);

@@ -1,9 +1,10 @@
 import { authApi } from "@/store/slices";
+import { selectSessionUser } from "@/store/slices/api";
 
 export const useAdminAccess = () => {
 	const { useAuthCheckQuery } = authApi;
 	const { data, isLoading, isFetching } = useAuthCheckQuery(undefined);
-	const user = data?.data ?? data?.user ?? null;
+	const user = selectSessionUser(data);
 	const rawCapabilities = user?.capabilities || {};
 	const capabilities = {
 		manageUsers: Boolean(rawCapabilities.manage_users),

@@ -6,7 +6,7 @@ import {
 	Settings,
 	LogOut,
 } from "lucide-react";
-import { useLogoutMutation } from "@/store/slices/api";
+import { selectSessionUser, useLogoutMutation } from "@/store/slices/api";
 import { authApi } from "@/store/slices";
 import { Avatar, ThemeToggle } from "@/components";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +21,7 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 	const direction = getDocumentDirection();
 	const { useAuthCheckQuery } = authApi;
 	const { data: sessionData } = useAuthCheckQuery(undefined);
-	const user = sessionData?.data ?? sessionData?.user;
+	const user = selectSessionUser(sessionData);
 	const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
 	const navigate = useNavigate();
 	const basePath = "/dashboard";

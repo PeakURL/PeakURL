@@ -31,6 +31,7 @@ import {
 	sanitizeUrl,
 } from "@/utils";
 import {
+	selectSessionUser,
 	useAuthCheckQuery,
 	useLoginMutation,
 	useVerifyTwoFactorLoginMutation,
@@ -95,7 +96,7 @@ function LoginPage() {
 	const { data, error, isError, isFetching, isLoading, refetch } =
 		useAuthCheckQuery(undefined);
 
-	const currentUser = data?.user || data?.data;
+	const currentUser = selectSessionUser(data);
 	const errorStatus = getErrorStatus(error);
 	const isAuthError = 401 === errorStatus || 403 === errorStatus;
 	const isRetryingApiCheck =

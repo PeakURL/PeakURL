@@ -10,6 +10,12 @@ import type {
 	LinkStatsResponse,
 } from "./types";
 
+const ANALYTICS_TAGS = ["Analytics"] as const;
+
+const linkAnalyticsTags = (type: "location" | "stats", id: string) => [
+	{ type: "Analytics" as const, id: `${type}-${id}` },
+];
+
 function serializeActivityHistoryQuery({
 	page = 1,
 	limit = 25,
@@ -33,18 +39,18 @@ export const analyticsApi = baseApi.injectEndpoints({
 	endpoints: (build) => ({
 		getAnalytics: build.query<DashboardAnalyticsResponse, number | void>({
 			query: (days = 7) => `analytics?days=${days}`,
-			providesTags: ["Analytics"],
+			providesTags: ANALYTICS_TAGS,
 		}),
 		getActivity: build.query<ActivityResponse, void>({
 			query: () => "analytics/activity",
-			providesTags: ["Analytics"],
+			providesTags: ANALYTICS_TAGS,
 		}),
 		getActivityHistory: build.query<
 			ActivityHistoryResponse,
 			GetActivityHistoryQueryArgs | void
 		>({
 			query: (args) => serializeActivityHistoryQuery(args || {}),
-			providesTags: ["Analytics"],
+			providesTags: ANALYTICS_TAGS,
 		}),
 		deleteActivityLog: build.mutation<
 			ApiDataResponse<{ deleted: boolean }>,
@@ -54,7 +60,7 @@ export const analyticsApi = baseApi.injectEndpoints({
 				url: `analytics/activity/${id}`,
 				method: "DELETE",
 			}),
-			invalidatesTags: ["Analytics"],
+			invalidatesTags: ANALYTICS_TAGS,
 		}),
 		bulkDeleteActivityLogs: build.mutation<
 			ApiDataResponse<{ deletedCount: number }>,
@@ -65,20 +71,18 @@ export const analyticsApi = baseApi.injectEndpoints({
 				method: "DELETE",
 				body: { ids },
 			}),
-			invalidatesTags: ["Analytics"],
+			invalidatesTags: ANALYTICS_TAGS,
 		}),
 		getLinkLocation: build.query<{ data?: LinkLocationPayload }, string>({
 			query: (id) => `analytics/url/${id}/location`,
-			providesTags: (_result, _error, id) => [
-				{ type: "Analytics", id: `location-${id}` },
-			],
+			providesTags: (_result, _error, id) =>
+				linkAnalyticsTags("location", id),
 		}),
 		getLinkStats: build.query<LinkStatsResponse, LinkAnalyticsArgs>({
 			query: ({ id, days = 7 }) =>
 				`analytics/url/${id}/stats?days=${days}`,
-			providesTags: (_result, _error, { id }) => [
-				{ type: "Analytics", id: `stats-${id}` },
-			],
+			providesTags: (_result, _error, { id }) =>
+				linkAnalyticsTags("stats", id),
 		}),
 	}),
 });

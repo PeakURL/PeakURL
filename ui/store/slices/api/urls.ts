@@ -12,6 +12,11 @@ import type {
 	UrlsListResponse,
 } from "./types";
 
+const urlTag = (id: string) => ({ type: "Urls" as const, id });
+
+const URL_LIST_TAG = urlTag("LIST");
+const URL_LIST_CHANGE_TAGS = [URL_LIST_TAG, "Analytics"] as const;
+
 /**
  * Returns a stable query string for the links list endpoint.
  */
@@ -65,22 +70,19 @@ export const urlsApi = baseApi.injectEndpoints({
 				const items = result?.data?.items || result?.items || [];
 
 				return [
-					{ type: "Urls" as const, id: "LIST" },
-					...items.map((url) => ({
-						type: "Urls" as const,
-						id: url.id,
-					})),
+					URL_LIST_TAG,
+					...items.map((url) => urlTag(url.id)),
 				];
 			},
 		}),
 		getUrl: build.query<UrlResponse, string>({
 			query: (id) => `urls/${id}`,
 			providesTags: (result, _error, id) => {
-				const tags = [{ type: "Urls" as const, id }];
+				const tags = [urlTag(id)];
 				const createdId = result?.data?.id;
 
 				if (createdId) {
-					tags.push({ type: "Urls" as const, id: createdId });
+					tags.push(urlTag(createdId));
 				}
 
 				return tags;
@@ -94,14 +96,14 @@ export const urlsApi = baseApi.injectEndpoints({
 		}),
 		createUrl: build.mutation<CreateUrlResponse, CreateUrlPayload>({
 			query: (body) => ({ url: "urls", method: "POST", body }),
-			invalidatesTags: [{ type: "Urls", id: "LIST" }, "Analytics"],
+			invalidatesTags: URL_LIST_CHANGE_TAGS,
 		}),
 		bulkCreateUrl: build.mutation<
 			BulkCreateResponse,
 			BulkCreateUrlsPayload
 		>({
 			query: (body) => ({ url: "urls/bulk", method: "POST", body }),
-			invalidatesTags: [{ type: "Urls", id: "LIST" }, "Analytics"],
+			invalidatesTags: URL_LIST_CHANGE_TAGS,
 		}),
 		updateUrl: build.mutation<UrlResponse, UpdateUrlPayload>({
 			query: ({ id, ...body }) => ({
@@ -110,14 +112,14 @@ export const urlsApi = baseApi.injectEndpoints({
 				body,
 			}),
 			invalidatesTags: (_result, _error, { id }) => [
-				{ type: "Urls", id },
-				{ type: "Urls", id: "LIST" },
+				urlTag(id),
+				URL_LIST_TAG,
 				"Analytics",
 			],
 		}),
 		deleteUrl: build.mutation<void, string>({
 			query: (id) => ({ url: `urls/${id}`, method: "DELETE" }),
-			invalidatesTags: [{ type: "Urls", id: "LIST" }, "Analytics"],
+			invalidatesTags: URL_LIST_CHANGE_TAGS,
 		}),
 		bulkDeleteUrl: build.mutation<void, string[]>({
 			query: (ids) => ({
@@ -125,7 +127,7 @@ export const urlsApi = baseApi.injectEndpoints({
 				method: "DELETE",
 				body: { ids },
 			}),
-			invalidatesTags: [{ type: "Urls", id: "LIST" }, "Analytics"],
+			invalidatesTags: URL_LIST_CHANGE_TAGS,
 		}),
 	}),
 });

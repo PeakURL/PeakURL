@@ -1,60 +1,52 @@
 import type {
+	BackupCodesResponse,
 	CreatedWebhook,
+	EmailStatus,
+	GeoipConfigurationPayload,
+	LocationDataStatus,
+	MailConfigurationPayload,
+	MailTestResult,
+	ProfileUser,
+	RevokeOtherSessionsResponse,
+	SecuritySettingsResponse,
+	SiteSettings,
+	SiteTimeFormat,
+	TwoFactorSetupResponse,
+	UpdateStatusPayload,
 	WebhookSummary,
-} from "@/pages/dashboard/settings/_components/tabs/pages/integrations/types";
+} from "@/pages/dashboard/settings/_components/tabs";
 import type {
 	CountryMetric,
 	DashboardDeviceData,
 	DashboardStats,
 	RecentActivity,
 	TrafficSeries,
-} from "@/pages/dashboard/_components/types";
-import type {
-	BulkCreateResponse,
-	PasteImportRequestItem,
-} from "@/pages/dashboard/tools/import/_components/types";
-import type { ImportRecord } from "@/pages/dashboard/tools/import/_components/file-upload/types";
-import type {
-	LinkLocationPayload,
-	LinkStatsResponse,
-} from "@/pages/dashboard/links/_components/StatsDrawer/types";
-import type {
-	LinkRecord,
-	LinksSortBy,
-	LinksSortOrder,
-} from "@/pages/dashboard/links/_components/types";
-import type { UpdateUrlPayload } from "@/pages/dashboard/links/_components/types";
+} from "@/pages/dashboard/_components";
 import type {
 	CreateUrlPayload,
 	CreateUrlResponse,
-} from "@/pages/dashboard/links/_components/UrlShorteningForm/types";
-import type { GetUrlsResponse } from "@/pages/dashboard/links/types";
+	LinkLocationPayload,
+	LinkRecord,
+	LinkStatsResponse,
+	LinksSortBy,
+	LinksSortOrder,
+	UpdateUrlPayload,
+} from "@/pages/dashboard/links/_components";
+import type { GetUrlsResponse } from "@/pages/dashboard/links";
 import type {
-	GeoipConfigurationPayload,
-	MailConfigurationPayload,
-	MailTestResult,
-	ProfileUser,
-	SiteTimeFormat,
-} from "@/pages/dashboard/settings/_components/tabs/types";
-import type {
-	BackupCodesResponse,
-	EmailStatus,
-	LocationDataStatus,
-	RevokeOtherSessionsResponse,
-	SecuritySettingsResponse,
-	SiteSettings,
-	TwoFactorSetupResponse,
-	UpdateStatusPayload,
-} from "@/pages/dashboard/settings/_components/tabs/pages/types";
+	BulkCreateResponse,
+	ImportRecord,
+	PasteImportRequestItem,
+} from "@/pages/dashboard/tools/import/_components";
 import type {
 	SystemStatusResponse,
 	UrlExportResponse,
-} from "@/pages/dashboard/tools/types";
+} from "@/pages/dashboard/tools";
 import type {
 	UserDialogPayload,
 	UserSummary,
-} from "@/pages/dashboard/users/types";
-import type { AdminNoticesResponse } from "@/pages/layout/dashboard/types";
+} from "@/pages/dashboard/users";
+import type { AdminNoticesResponse } from "@/pages/layout/dashboard";
 
 /**
  * Cache tag names shared by the dashboard RTK Query API slices.

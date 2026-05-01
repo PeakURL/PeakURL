@@ -1,8 +1,11 @@
 import { CheckCircle2, Clock3, LoaderCircle } from "lucide-react";
 import { getDocumentDirection } from "@/i18n/direction";
 import { cn } from "@/utils";
-import type { ReleaseInstallProgressState } from "../types";
+import type { ReleaseInstallProgressState } from "./types";
 
+/**
+ * Props for the release install progress timeline.
+ */
 interface ReleaseInstallProgressProps {
 	progress: ReleaseInstallProgressState;
 	compact?: boolean;
@@ -20,6 +23,9 @@ const stepTextStyles = {
 	upcoming: "settings-release-progress-label-upcoming",
 } as const;
 
+/**
+ * Renders the install or reinstall progress steps inside the page and dialog.
+ */
 function ReleaseInstallProgress({
 	progress,
 	compact = false,

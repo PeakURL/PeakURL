@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import { PEAKURL_BASENAME } from "@constants";
+import { useState } from "react";
 import { ConfirmDialog, useNotification } from "@/components";
 import {
 	useGetUserProfileQuery,
@@ -38,11 +37,6 @@ import type {
 	ProfileUser,
 	ReleaseAction,
 } from "./types";
-import type {
-	ReleaseInstallStage,
-	ReleaseInstallProgressState,
-	SecurityFormState,
-} from "./pages/types";
 import {
 	ApiKeyModals,
 	ApiTab,
@@ -53,6 +47,8 @@ import {
 	ReleaseInstallProgress,
 	SecurityTab,
 	UpdatesTab,
+	type SecurityFormState,
+	useReleaseInstallProgress,
 } from "./pages";
 import SettingsSkeleton from "../SettingsSkeleton";
 
@@ -104,119 +100,6 @@ const formatBaseApiUrl = (
 	}
 
 	return "";
-};
-
-const releaseInstallStageOrder: ReleaseInstallStage[] = [
-	"preparing",
-	"downloading",
-	"installing",
-	"finishing",
-];
-
-const releaseInstallRedirectDelayMs = 2400;
-
-const formatReleaseInstallTitle = (action: ReleaseAction): string =>
-	action === "reinstall"
-		? __("Restoring the latest version")
-		: __("Installing the latest version");
-
-const formatReleaseInstallStepLabel = (
-	action: ReleaseAction,
-	stage: ReleaseInstallStage
-): string => {
-	if ("preparing" === stage) {
-		return __("Getting ready");
-	}
-
-	if ("downloading" === stage) {
-		return __("Downloading update");
-	}
-
-	if ("installing" === stage) {
-		return action === "reinstall"
-			? __("Restoring included files")
-			: __("Installing update");
-	}
-
-	return __("Finishing up");
-};
-
-const findReleaseInstallStageIndex = (
-	progress: ReleaseInstallProgressState | null
-): number => {
-	const currentStageIndex =
-		progress?.steps.findIndex(({ state }) => "current" === state) ?? -1;
-
-	if (currentStageIndex >= 0) {
-		return currentStageIndex;
-	}
-
-	const completedStepCount =
-		progress?.steps.filter(({ state }) => "complete" === state).length ?? 0;
-
-	return Math.min(
-		Math.max(completedStepCount, 0),
-		releaseInstallStageOrder.length - 1
-	);
-};
-
-const createReleaseInstallProgress = (
-	action: ReleaseAction,
-	stage: ReleaseInstallStage
-): ReleaseInstallProgressState => {
-	const currentStepIndex = releaseInstallStageOrder.indexOf(stage);
-
-	return {
-		title: formatReleaseInstallTitle(action),
-		description:
-			stage === "preparing"
-				? __("PeakURL is getting everything ready.")
-				: stage === "downloading"
-					? __("PeakURL is downloading the update.")
-					: stage === "installing"
-						? __(
-								"PeakURL is applying the included files and content updates."
-							)
-						: __(
-								"PeakURL is finishing up and getting the dashboard ready."
-							),
-		steps: releaseInstallStageOrder.map((step, index) => ({
-			id: step,
-			label: formatReleaseInstallStepLabel(action, step),
-			state:
-				index < currentStepIndex
-					? "complete"
-					: index === currentStepIndex
-						? "current"
-						: "upcoming",
-		})),
-	};
-};
-
-const createCompletedReleaseInstallProgress = (
-	action: ReleaseAction,
-	appliedVersion?: string | null
-): ReleaseInstallProgressState => {
-	const isReinstall = action === "reinstall";
-
-	return {
-		title: formatReleaseInstallTitle(action),
-		description: appliedVersion
-			? sprintf(
-					isReinstall
-						? __("PeakURL %s has been reinstalled.")
-						: __("PeakURL %s is now installed."),
-					appliedVersion
-				)
-			: isReinstall
-				? __("The latest version has been reinstalled.")
-				: __("The latest version is now installed."),
-		steps: releaseInstallStageOrder.map((step) => ({
-			id: step,
-			label: formatReleaseInstallStepLabel(action, step),
-			state: "complete",
-		})),
-	};
 };
 
 const Content = ({ activeTab }: ContentProps) => {
@@ -291,139 +174,18 @@ const Content = ({ activeTab }: ContentProps) => {
 	const [showCreateModal, setShowCreateModal] = useState(false);
 	const [apiKeyPendingDelete, setApiKeyPendingDelete] =
 		useState<ApiKeySummary | null>(null);
-	const [pendingReleaseAction, setPendingReleaseAction] =
-		useState<ReleaseAction | null>(null);
-	const [activeReleaseInstallAction, setActiveReleaseInstallAction] =
-		useState<ReleaseAction | null>(null);
-	const [releaseInstallProgress, setReleaseInstallProgress] =
-		useState<ReleaseInstallProgressState | null>(null);
 	const [keyLabel, setKeyLabel] = useState("");
 	const [newApiBaseUrl, setNewApiBaseUrl] = useState("");
-	const releaseInstallProgressTimerIds = useRef<number[]>([]);
-	const releaseInstallProgressStateRef =
-		useRef<ReleaseInstallProgressState | null>(null);
-	const releaseInstallRedirectTimerId = useRef<number | null>(null);
-
-	const setReleaseInstallProgressState = (
-		progress: ReleaseInstallProgressState | null
-	) => {
-		releaseInstallProgressStateRef.current = progress;
-		setReleaseInstallProgress(progress);
-	};
-
-	const clearReleaseInstallProgressTimers = () => {
-		releaseInstallProgressTimerIds.current.forEach((timerId) => {
-			window.clearTimeout(timerId);
-		});
-		releaseInstallProgressTimerIds.current = [];
-	};
-
-	const clearReleaseInstallRedirectTimer = () => {
-		if (null !== releaseInstallRedirectTimerId.current) {
-			window.clearTimeout(releaseInstallRedirectTimerId.current);
-			releaseInstallRedirectTimerId.current = null;
-		}
-	};
-
-	const startReleaseInstallProgress = (action: ReleaseAction) => {
-		clearReleaseInstallProgressTimers();
-		clearReleaseInstallRedirectTimer();
-		setActiveReleaseInstallAction(action);
-		setReleaseInstallProgressState(
-			createReleaseInstallProgress(action, "preparing")
-		);
-
-		const stageTransitions: Array<{
-			afterMs: number;
-			stage: ReleaseInstallStage;
-		}> = [
-			{ afterMs: 700, stage: "downloading" },
-			{ afterMs: 1900, stage: "installing" },
-			{ afterMs: 3600, stage: "finishing" },
-		];
-
-		releaseInstallProgressTimerIds.current = stageTransitions.map(
-			({ afterMs, stage }) =>
-				window.setTimeout(() => {
-					setReleaseInstallProgressState(
-						createReleaseInstallProgress(action, stage)
-					);
-				}, afterMs)
-		);
-	};
-
-	const startReleaseInstallCompletion = (
-		action: ReleaseAction,
-		appliedVersion?: string | null,
-		onReachFinishingStage?: (() => void) | null
-	) => {
-		const activeStageIndex = findReleaseInstallStageIndex(
-			releaseInstallProgressStateRef.current
-		);
-		const remainingStageSequence = releaseInstallStageOrder.slice(
-			activeStageIndex + 1
-		);
-		const completionTransitionCount = remainingStageSequence.length + 1;
-		const completionSegmentDuration =
-			releaseInstallRedirectDelayMs / (completionTransitionCount + 1);
-		const finishingStageOffset =
-			remainingStageSequence.indexOf("finishing");
-		const finishingStageDelay =
-			-1 === finishingStageOffset
-				? 0
-				: completionSegmentDuration * (finishingStageOffset + 1);
-
-		clearReleaseInstallProgressTimers();
-		clearReleaseInstallRedirectTimer();
-
-		releaseInstallProgressTimerIds.current = [
-			...remainingStageSequence.map((stage, index) =>
-				window.setTimeout(
-					() => {
-						setReleaseInstallProgressState(
-							createReleaseInstallProgress(action, stage)
-						);
-					},
-					completionSegmentDuration * (index + 1)
-				)
-			),
-			...(onReachFinishingStage && finishingStageDelay > 0
-				? [
-						window.setTimeout(() => {
-							onReachFinishingStage();
-						}, finishingStageDelay),
-					]
-				: []),
-			window.setTimeout(() => {
-				setReleaseInstallProgressState(
-					createCompletedReleaseInstallProgress(
-						action,
-						appliedVersion
-					)
-				);
-			}, completionSegmentDuration * completionTransitionCount),
-		];
-
-		if (onReachFinishingStage && 0 === finishingStageDelay) {
-			onReachFinishingStage();
-		}
-
-		releaseInstallRedirectTimerId.current = window.setTimeout(() => {
-			setPendingReleaseAction(null);
-			setActiveReleaseInstallAction(null);
-			setReleaseInstallProgressState(null);
-			window.location.assign(
-				`${PEAKURL_BASENAME || ""}/dashboard/about?source=${action === "reinstall" ? "reinstall" : "update"}`
-			);
-		}, releaseInstallRedirectDelayMs);
-	};
-
-	useEffect(() => {
-		return () => {
-			clearReleaseInstallProgressTimers();
-			clearReleaseInstallRedirectTimer();
-		};
-	}, []);
+	const {
+		pendingReleaseAction,
+		setPendingReleaseAction,
+		activeReleaseInstallAction,
+		releaseInstallProgress,
+		startReleaseInstallProgress,
+		startReleaseInstallCompletion,
+		resetReleaseInstallProgress,
+		closePendingReleaseAction,
+	} = useReleaseInstallProgress();
 
 	const handleGeneralSubmit = async (generalForm: GeneralFormPayload) => {
 		const {
@@ -834,10 +596,7 @@ const Content = ({ activeTab }: ContentProps) => {
 						: __("PeakURL could not apply the update.")
 				)
 			);
-			clearReleaseInstallProgressTimers();
-			clearReleaseInstallRedirectTimer();
-			setActiveReleaseInstallAction(null);
-			setReleaseInstallProgressState(null);
+			resetReleaseInstallProgress();
 		}
 	};
 
@@ -998,12 +757,7 @@ const Content = ({ activeTab }: ContentProps) => {
 			/>
 			<ConfirmDialog
 				open={Boolean(pendingReleaseAction)}
-				onClose={() => {
-					if (!activeReleaseInstallAction) {
-						setPendingReleaseAction(null);
-						setReleaseInstallProgressState(null);
-					}
-				}}
+				onClose={closePendingReleaseAction}
 				title={sprintf(
 					pendingReleaseAction === "reinstall"
 						? __("Reinstall PeakURL %s?")

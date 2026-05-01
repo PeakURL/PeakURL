@@ -6122,6 +6122,7 @@ msgstr ""
 msgid "Operating Systems"
 msgstr ""
 
+#. Translators: provide both singular and plural forms for this term.
 #: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:256
 msgid "device"
 msgid_plural "devices"

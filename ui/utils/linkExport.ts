@@ -45,8 +45,8 @@ export function formatLinkExportItems(
 			password: "",
 			expires: link.expiresAt || "",
 			short_url: getShortUrl(link),
-			clicks: link.clicks ?? "",
-			unique_clicks: link.uniqueClicks ?? "",
+			clicks: link.clicks ?? 0,
+			unique_clicks: link.uniqueClicks ?? 0,
 			created_at: link.createdAt || "",
 		};
 	});
@@ -59,11 +59,11 @@ export function serializeLinkExport(
 	format: LinkExportFormat = "csv",
 	items: Array<LinkExportItem> = []
 ): string {
-	if ("json" === format) {
+	if (format === "json") {
 		return JSON.stringify(items, null, 2);
 	}
 
-	if ("xml" === format) {
+	if (format === "xml") {
 		const itemXml = items
 			.map(
 				(item) => `  <url>

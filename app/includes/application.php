@@ -376,6 +376,8 @@ class Application {
 			array(
 				array( 'get', '/{id}', array( $urls, 'redirect' ) ),
 				array( 'get', '/{id}/', array( $urls, 'redirect' ) ),
+				array( 'head', '/{id}', array( $urls, 'redirect' ) ),
+				array( 'head', '/{id}/', array( $urls, 'redirect' ) ),
 				array( 'post', '/{id}', array( $urls, 'redirect' ) ),
 				array( 'post', '/{id}/', array( $urls, 'redirect' ) ),
 			)
@@ -398,6 +400,9 @@ class Application {
 			switch ( $method ) {
 				case 'get':
 					$this->router->get( $path, $handler );
+					break;
+				case 'head':
+					$this->router->head( $path, $handler );
 					break;
 				case 'post':
 					$this->router->post( $path, $handler );
@@ -457,6 +462,10 @@ class Application {
 
 		foreach ( $request->get_response_cookies() as $cookie_header ) {
 			header( 'Set-Cookie: ' . $cookie_header, false );
+		}
+
+		if ( 'HEAD' === $request->get_method() ) {
+			return;
 		}
 
 		if ( is_array( $body ) ) {

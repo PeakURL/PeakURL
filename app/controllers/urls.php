@@ -29,6 +29,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 class UrlsController extends BaseController {
 
 	/**
+	 * Redirect status used for public short links with stable destinations.
+	 *
+	 * @var int
+	 * @since 1.1.2
+	 */
+	private const REDIRECT_PERMANENT = 301;
+
+	/**
 	 * Extract a stats-preview short code from a public route parameter.
 	 *
 	 * A trailing `+` opens the dashboard stats drawer instead of resolving the
@@ -266,6 +274,7 @@ class UrlsController extends BaseController {
 					'/dashboard/links?stats=' .
 						rawurlencode( $stats_code ),
 				),
+				302,
 			);
 		}
 
@@ -275,7 +284,10 @@ class UrlsController extends BaseController {
 		);
 
 		if ( 'redirect' === ( $result['status'] ?? '' ) ) {
-			return JsonResponse::redirect( (string) $result['location'] );
+			return JsonResponse::redirect(
+				(string) $result['location'],
+				self::REDIRECT_PERMANENT,
+			);
 		}
 
 		if (

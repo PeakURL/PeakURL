@@ -46,6 +46,18 @@ class Router {
 	}
 
 	/**
+	 * Register a HEAD route.
+	 *
+	 * @param string   $path    URI pattern.
+	 * @param callable $handler Request handler.
+	 * @return void
+	 * @since 1.1.2
+	 */
+	public function head( string $path, callable $handler ): void {
+		$this->add( 'HEAD', $path, $handler );
+	}
+
+	/**
 	 * Register a POST route.
 	 *
 	 * @param string   $path    URI pattern.

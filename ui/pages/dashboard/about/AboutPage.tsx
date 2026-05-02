@@ -374,7 +374,7 @@ function AboutPage() {
 
 					<div className="about-page-hero-actions">
 						<a
-							href="https://peakurl.org"
+							href="https://peakurl.org/docs?utm_source=dashboard&utm_medium=about_page&utm_campaign=docs_link"
 							target="_blank"
 							rel="noreferrer"
 							className="about-page-hero-link about-page-hero-link-primary"
@@ -555,7 +555,7 @@ function AboutPage() {
 							</div>
 							<div className="about-page-support-actions">
 								<a
-									href="https://peakurl.org/sponsor"
+									href="https://peakurl.org/sponsor?utm_source=dashboard&utm_medium=about_page&utm_campaign=sponsor_link"
 									target="_blank"
 									rel="noreferrer"
 									className="about-page-support-link about-page-support-link-primary"
@@ -639,7 +639,7 @@ function AboutPage() {
 					</p>
 					<div className="about-page-footer-links">
 						<a
-							href="https://peakurl.org"
+							href="https://peakurl.org?utm_source=dashboard&utm_medium=about_page&utm_campaign=website_link"
 							target="_blank"
 							rel="noreferrer"
 							className="about-page-footer-link"
@@ -657,7 +657,7 @@ function AboutPage() {
 						</a>
 						<span className="about-page-footer-separator">•</span>
 						<a
-							href="https://peakurl.org/release-notes"
+							href="https://peakurl.org/release-notes?utm_source=dashboard&utm_medium=about_page&utm_campaign=release_notes_link"
 							target="_blank"
 							rel="noreferrer"
 							className="about-page-footer-link"

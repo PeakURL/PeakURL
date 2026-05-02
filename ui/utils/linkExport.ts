@@ -42,6 +42,7 @@ export function formatLinkExportItems(
 			url: link.destinationUrl || "",
 			alias,
 			title: link.title || "",
+			// Password values are intentionally excluded for security reasons.
 			password: "",
 			expires: link.expiresAt || "",
 			short_url: getShortUrl(link),
@@ -84,7 +85,7 @@ export function serializeLinkExport(
 	}
 
 	const rows = items.map((item) =>
-		LINK_EXPORT_HEADERS.map((header) => item[header])
+		LINK_EXPORT_HEADERS.map((header) => item[header] ?? "")
 	);
 
 	return serializeCsv(LINK_EXPORT_HEADERS, rows);

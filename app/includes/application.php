@@ -88,7 +88,9 @@ class Application {
 
 			if ( ! is_array( $response ) ) {
 				$response = JsonResponse::error(
-					'Unhandled application response.',
+					'Expected array response from router, received: ' .
+					$this->get_debug_type( $response ) .
+					'.',
 				);
 			}
 		} catch ( ApiException $exception ) {
@@ -103,7 +105,10 @@ class Application {
 			}
 
 			$response = JsonResponse::error(
-				'Unexpected application error.',
+				__(
+					'An internal server error occurred. Please try again or contact support if the issue persists.',
+					'peakurl',
+				),
 				500,
 				'development' === ( $this->config['PEAKURL_ENV'] ?? 'production' )
 					? array( 'exception' => $exception->getMessage() )
@@ -397,6 +402,8 @@ class Application {
 			$path    = (string) $route[1];
 			$handler = $route[2];
 
+			$this->assert_supported_route_method( $method );
+
 			switch ( $method ) {
 				case 'get':
 					$this->router->get( $path, $handler );
@@ -417,9 +424,54 @@ class Application {
 					$this->router->delete( $path, $handler );
 					break;
 				default:
-					throw new \LogicException( 'Unsupported route method: ' . $method );
+					throw new RouteConfigurationException(
+						'Unsupported route method: ' . $method,
+					);
 			}
 		}
+	}
+
+	/**
+	 * Ensure a route method is supported by this router.
+	 *
+	 * @param string $method Normalized lowercase HTTP method.
+	 * @return void
+	 *
+	 * @throws RouteConfigurationException If the route method is unsupported.
+	 * @since 1.1.2
+	 */
+	private function assert_supported_route_method( string $method ): void {
+		$supported_methods = array(
+			'get',
+			'head',
+			'post',
+			'put',
+			'patch',
+			'delete',
+		);
+
+		if ( in_array( $method, $supported_methods, true ) ) {
+			return;
+		}
+
+		throw new RouteConfigurationException(
+			'Unsupported route method: ' . $method,
+		);
+	}
+
+	/**
+	 * Get a stable debug type label for unexpected values.
+	 *
+	 * @param mixed $value Value to inspect.
+	 * @return string Type name.
+	 * @since 1.1.2
+	 */
+	private function get_debug_type( $value ): string {
+		if ( is_object( $value ) ) {
+			return get_class( $value );
+		}
+
+		return gettype( $value );
 	}
 
 	/**
@@ -473,7 +525,22 @@ class Application {
 				header( 'Content-Type: application/json; charset=utf-8' );
 			}
 
-			echo json_encode( $body, JSON_PRETTY_PRINT );
+			try {
+				echo json_encode(
+					$body,
+					JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR,
+				);
+			} catch ( \JsonException $exception ) {
+				if ( ! empty( $this->config['PEAKURL_DEBUG'] ) ) {
+					error_log( (string) $exception );
+				}
+
+				http_response_code( 500 );
+				header( 'Content-Type: application/json; charset=utf-8' );
+				echo '{"success":false,"message":"JSON encoding failed.","data":[],"timestamp":"' .
+					gmdate( DATE_ATOM ) .
+					'"}';
+			}
 			return;
 		}
 

@@ -1,11 +1,15 @@
 msgid ""
 msgstr ""
-"Content-Transfer-Encoding: 8bit\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Language: ur_PK\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "Project-Id-Version: 1.0.7\n"
 "Report-Msgid-Bugs-To: https://peakurl.org\n"
+"PO-Revision-Date: 2026-05-03 00:00+0000\n"
+"Last-Translator: PeakURL Team\n"
+"Language-Team: Urdu (Pakistan)\n"
+"Language: ur_PK\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Domain: peakurl\n"
 
 #: app/database/repair-specs.php:41
@@ -204,12 +208,12 @@ msgstr "تصدیقی کوڈ درست نہیں۔"
 msgid "PeakURL could not identify the current session."
 msgstr "PeakURL موجودہ سیشن کی شناخت نہیں کر سکا۔"
 
-#: app/traits/analytics.php:215
+#: app/traits/analytics.php:214
 msgid "Activity log ID is required."
 msgstr "ایکٹیویٹی لاگ کی آئی ڈی درکار ہے۔"
 
 #: app/traits/analytics.php:350
-#: app/traits/analytics.php:451
+#: app/traits/analytics.php:470
 msgid "You do not have permission to view analytics for this link."
 msgstr "آپ کو اس لنک کے تجزیات دیکھنے کی اجازت نہیں ہے۔"
 
@@ -292,10 +296,10 @@ msgstr "آپ کے صبر کا شکریہ۔"
 msgid "Loading"
 msgstr "لوڈ ہو رہا ہے"
 
-#: app/includes/application.php:141
+#: app/includes/application.php:146
 #: app/services/install/screen.php:141
 msgid "Request origin is not allowed."
-msgstr ""
+msgstr "درخواست کا origin اجازت یافتہ نہیں ہے۔"
 
 #: app/includes/runtime-config.php:548
 msgid "DB_PREFIX must start with a letter or underscore and use only letters, numbers, and underscores."
@@ -303,7 +307,7 @@ msgstr "DB_PREFIX کو حرف یا underscore سے شروع ہونا چاہیے 
 
 #: app/includes/runtime-config.php:569
 msgid "Database name may contain only letters, numbers, and underscores."
-msgstr ""
+msgstr "ڈیٹابیس نام میں صرف letters، numbers، اور underscores استعمال ہو سکتے ہیں۔"
 
 #: app/utils/secrets.php:74
 msgid "PeakURL could not hash the protected-link password."
@@ -313,7 +317,7 @@ msgstr "PeakURL محفوظ لنک کے پاس ورڈ کو hash نہیں کر س�
 msgid "Something went wrong."
 msgstr "کچھ غلط ہو گیا۔"
 
-#: app/http/router.php:128
+#: app/http/router.php:140
 msgid "Route not found."
 msgstr "روٹ نہیں ملا۔"
 
@@ -356,7 +360,7 @@ msgstr "پاس ورڈ ری سیٹ ٹوکن درست نہیں یا اس کی مد
 
 #: app/controllers/auth.php:161
 msgid "Password reset token is valid."
-msgstr ""
+msgstr "پاس ورڈ ری سیٹ ٹوکن درست ہے۔"
 
 #: app/controllers/auth.php:189
 msgid "Password reset complete."
@@ -480,69 +484,69 @@ msgstr "GeoIP کی ترتیبات محفوظ ہو گئیں۔"
 msgid "GeoIP database updated."
 msgstr "GeoIP ڈیٹابیس اپ ڈیٹ ہو گیا۔"
 
-#: app/controllers/urls.php:101
+#: app/controllers/urls.php:109
 msgid "URLs loaded."
 msgstr "URLs لوڈ ہو گئے۔"
 
-#: app/controllers/urls.php:124
+#: app/controllers/urls.php:132
 msgid "URLs export loaded."
 msgstr "URLs ایکسپورٹ لوڈ ہو گئی۔"
 
-#: app/controllers/urls.php:141
-#: app/controllers/urls.php:197
-#: app/controllers/urls.php:217
+#: app/controllers/urls.php:149
+#: app/controllers/urls.php:205
+#: app/controllers/urls.php:225
 msgid "URL not found."
 msgstr "URL نہیں ملا۔"
 
-#: app/controllers/urls.php:144
+#: app/controllers/urls.php:152
 msgid "URL loaded."
 msgstr "URL لوڈ ہو گیا۔"
 
-#: app/controllers/urls.php:160
+#: app/controllers/urls.php:168
 msgid "Short URL created."
 msgstr "شارٹ URL بن گیا۔"
 
-#: app/controllers/urls.php:178
+#: app/controllers/urls.php:186
 msgid "Bulk import processed."
 msgstr "بلک امپورٹ پروسیس ہو گئی۔"
 
-#: app/controllers/urls.php:200
+#: app/controllers/urls.php:208
 msgid "URL updated."
 msgstr "URL اپ ڈیٹ ہو گیا۔"
 
-#: app/controllers/urls.php:220
+#: app/controllers/urls.php:228
 msgid "URL deleted."
 msgstr "URL حذف ہو گیا۔"
 
-#: app/controllers/urls.php:241
+#: app/controllers/urls.php:249
 msgid "Bulk delete complete."
 msgstr "بلک حذف مکمل ہو گئی۔"
 
-#: app/controllers/urls.php:300
+#: app/controllers/urls.php:312
 msgid "This link has expired"
 msgstr "اس لنک کی میعاد ختم ہو چکی ہے"
 
-#: app/controllers/urls.php:301
+#: app/controllers/urls.php:313
 msgid "The short link you requested is no longer active because its expiration date has passed."
 msgstr "آپ کا مطلوبہ شارٹ لنک اب فعال نہیں ہے کیونکہ اس کی اختتامی تاریخ گزر چکی ہے۔"
 
-#: app/controllers/urls.php:311
+#: app/controllers/urls.php:323
 msgid "This link is unavailable"
 msgstr "یہ لنک دستیاب نہیں"
 
-#: app/controllers/urls.php:312
+#: app/controllers/urls.php:324
 msgid "The short link you requested is not available right now."
 msgstr "آپ کا مطلوبہ شارٹ لنک اس وقت دستیاب نہیں ہے۔"
 
-#: app/controllers/urls.php:359
+#: app/controllers/urls.php:371
 msgid "Password required"
 msgstr "پاس ورڈ درکار ہے"
 
-#: app/controllers/urls.php:360
+#: app/controllers/urls.php:372
 msgid "This link is protected. Enter the password to continue."
 msgstr "یہ لنک محفوظ ہے۔ جاری رکھنے کے لیے پاس ورڈ درج کریں۔"
 
-#: app/controllers/urls.php:364
+#: app/controllers/urls.php:376
 #: site/install.php:579
 #: site/setup-config.php:803
 #: ui/pages/auth/login/LoginPage.tsx:371
@@ -550,17 +554,17 @@ msgstr "یہ لنک محفوظ ہے۔ جاری رکھنے کے لیے پاس و�
 msgid "Password"
 msgstr "پاس ورڈ"
 
-#: app/controllers/urls.php:367
+#: app/controllers/urls.php:379
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:50
 msgid "Enter password"
 msgstr "پاس ورڈ درج کریں"
 
-#: app/controllers/urls.php:371
+#: app/controllers/urls.php:383
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:57
 msgid "Continue"
 msgstr "جاری رکھیں"
 
-#: app/controllers/urls.php:376
+#: app/controllers/urls.php:388
 msgid "Protected Link"
 msgstr "محفوظ لنک"
 
@@ -622,7 +626,7 @@ msgid "Bulk activity delete complete."
 msgstr "سرگرمی لاگز کی اجتماعی حذف کاری مکمل ہو گئی ہے۔"
 
 #: app/controllers/analytics.php:163
-#: app/controllers/analytics.php:188
+#: app/controllers/analytics.php:190
 msgid "Link analytics not found."
 msgstr "لنک تجزیات نہیں ملے۔"
 
@@ -630,7 +634,7 @@ msgstr "لنک تجزیات نہیں ملے۔"
 msgid "Location analytics loaded."
 msgstr "مقام کے تجزیات لوڈ ہو گئے۔"
 
-#: app/controllers/analytics.php:191
+#: app/controllers/analytics.php:193
 msgid "Link analytics loaded."
 msgstr "لنک تجزیات لوڈ ہو گئے۔"
 
@@ -640,7 +644,7 @@ msgstr "اپ ڈیٹ کی حالت لوڈ ہو گئی۔"
 
 #: app/controllers/updates.php:67
 msgid "Update status refreshed."
-msgstr ""
+msgstr "اپ ڈیٹ اسٹیٹس تازہ کر دیا گیا۔"
 
 #: app/controllers/updates.php:84
 msgid "Update applied."
@@ -1030,11 +1034,11 @@ msgstr "PeakURL ڈاؤن لوڈ شدہ ریلیز archive extract نہیں کر 
 
 #: app/services/update/installer.php:328
 msgid "The downloaded release archive contains an unsafe file path."
-msgstr ""
+msgstr "ڈاؤن لوڈ شدہ ریلیز archive میں غیر محفوظ file path موجود ہے۔"
 
 #: app/services/update/installer.php:343
 msgid "The downloaded release archive contains an unsupported symbolic link."
-msgstr ""
+msgstr "ڈاؤن لوڈ شدہ ریلیز archive میں unsupported symbolic link موجود ہے۔"
 
 #: app/services/update/installer.php:380
 msgid "PeakURL could not determine the extracted package root."
@@ -1093,7 +1097,7 @@ msgstr "PeakURL GeoLite2 archive unpack نہیں کر سکا۔ "
 
 #: app/services/geoip/filesystem.php:116
 msgid "The GeoLite2 archive contains an unsafe file path."
-msgstr ""
+msgstr "GeoLite2 archive میں غیر محفوظ file path موجود ہے۔"
 
 #: app/services/geoip/filesystem.php:194
 msgid "PeakURL could not copy the downloaded GeoLite2 database into place."
@@ -1146,7 +1150,7 @@ msgstr "PeakURL نے GeoLite2 archive ڈاؤن لوڈ کی، مگر اسے مق�
 
 #: app/services/geoip/client.php:145
 msgid "PeakURL could not follow a secure GeoLite2 download redirect from MaxMind."
-msgstr ""
+msgstr "PeakURL MaxMind سے GeoLite2 ڈاؤن لوڈ کے محفوظ redirect پر نہیں جا سکا۔"
 
 #: app/services/geoip/client.php:258
 msgid "MaxMind rejected the download request. Check the account ID, license key, and GeoLite download permissions."
@@ -1822,45 +1826,45 @@ msgstr "حسبِ ضرورت صفحہ سائز لاگو کریں"
 msgid "Cancel custom page size"
 msgstr "حسبِ ضرورت صفحہ سائز منسوخ کریں"
 
-#: ui/components/charts/TrafficChart/TrafficChart.tsx:130
+#: ui/components/charts/TrafficChart/TrafficChart.tsx:136
 msgid "Mon"
 msgstr "پیر"
 
-#: ui/components/charts/TrafficChart/TrafficChart.tsx:131
+#: ui/components/charts/TrafficChart/TrafficChart.tsx:137
 msgid "Tue"
 msgstr "منگل"
 
-#: ui/components/charts/TrafficChart/TrafficChart.tsx:132
+#: ui/components/charts/TrafficChart/TrafficChart.tsx:138
 msgid "Wed"
 msgstr "بدھ"
 
-#: ui/components/charts/TrafficChart/TrafficChart.tsx:133
+#: ui/components/charts/TrafficChart/TrafficChart.tsx:139
 msgid "Thu"
 msgstr "جمعرات"
 
-#: ui/components/charts/TrafficChart/TrafficChart.tsx:134
+#: ui/components/charts/TrafficChart/TrafficChart.tsx:140
 msgid "Fri"
 msgstr "جمعہ"
 
-#: ui/components/charts/TrafficChart/TrafficChart.tsx:135
+#: ui/components/charts/TrafficChart/TrafficChart.tsx:141
 msgid "Sat"
 msgstr "ہفتہ"
 
-#: ui/components/charts/TrafficChart/TrafficChart.tsx:136
+#: ui/components/charts/TrafficChart/TrafficChart.tsx:142
 msgid "Sun"
 msgstr "اتوار"
 
-#: ui/components/charts/TrafficChart/TrafficChart.tsx:176
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:22
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:23
+#: ui/components/charts/TrafficChart/TrafficChart.tsx:156
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:20
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:19
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:104
 #: ui/pages/dashboard/links/LinksPage.tsx:221
 msgid "Total Clicks"
 msgstr "کل کلکس"
 
-#: ui/components/charts/TrafficChart/TrafficChart.tsx:200
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:46
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:34
+#: ui/components/charts/TrafficChart/TrafficChart.tsx:157
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:44
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:26
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:112
 #: ui/pages/dashboard/links/LinksPage.tsx:236
 msgid "Unique Visitors"
@@ -2114,7 +2118,8 @@ msgstr "نقشہ لوڈ ہو رہا ہے..."
 #: ui/components/charts/WorldMap/WorldMap.tsx:597
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:688
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:62
-#: ui/pages/dashboard/links/_components/StatsDrawer/ClickChart.tsx:66
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:36
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:82
 msgid "Clicks"
 msgstr "کلکس"
 
@@ -3150,11 +3155,11 @@ msgstr "آخری بار بنایا گیا:"
 #: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:16
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:36
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:180
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:69
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:76
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:92
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:99
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:105
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:111
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:51
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:39
 #: ui/pages/dashboard/users/UsersPage.tsx:629
 msgid "Unknown"
 msgstr "نامعلوم"
@@ -3377,7 +3382,7 @@ msgstr "ڈیٹابیس ڈاؤن لوڈ کریں"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:148
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:636
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:62
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:29
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:41
 #: ui/pages/dashboard/links/_components/EditLinkModal/EditLinkModal.tsx:249
 msgid "Status"
 msgstr "حالت"
@@ -3817,7 +3822,7 @@ msgstr "لنک ایونٹس ریئل ٹائم میں حاصل کرنے کے لی
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:314
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:24
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:33
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:30
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:42
 #: ui/pages/dashboard/links/_components/EditLinkModal/EditLinkModal.tsx:35
 msgid "Inactive"
 msgstr "غیر فعال"
@@ -4605,7 +4610,7 @@ msgstr "جواب"
 
 #: ui/pages/dashboard/tools/export/ExportPage.tsx:251
 msgid "Read Export Guide"
-msgstr ""
+msgstr "ایکسپورٹ گائیڈ پڑھیں"
 
 #: ui/pages/dashboard/tools/import/TabPage.tsx:19
 msgid "Product launch"
@@ -4781,7 +4786,7 @@ msgstr "متعدد URLs کو پروگرام کے ذریعے امپورٹ کرن�
 
 #: ui/pages/dashboard/tools/import/_components/api/ApiImport.tsx:77
 msgid "Read Import Guide"
-msgstr ""
+msgstr "امپورٹ گائیڈ پڑھیں"
 
 #: ui/pages/dashboard/tools/import/_components/paste/PasteImport.tsx:48
 msgid "No URLs found"
@@ -5379,7 +5384,7 @@ msgid "Explore the source code, understand how it works, and modify it to suit y
 msgstr "سورس کوڈ دیکھیں، سمجھیں کہ یہ کیسے کام کرتا ہے، اور اپنی ضرورت کے مطابق ترمیم کریں۔"
 
 #: ui/pages/dashboard/about/AboutPage.tsx:308
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:65
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:52
 msgid "Share"
 msgstr "شیئر کریں"
 
@@ -5533,15 +5538,21 @@ msgid "Traffic Overview"
 msgstr "ٹریفک کا جائزہ"
 
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:43
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:105
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:108
 msgid "Line Chart"
 msgstr "لائن چارٹ"
 
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:52
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:116
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:119
 msgid "Bar Chart"
 msgstr "بار چارٹ"
 
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:68
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:168
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:37
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:89
 msgid "Unique"
 msgstr "منفرد"
 
@@ -5549,27 +5560,27 @@ msgstr "منفرد"
 msgid "No traffic data available"
 msgstr "ٹریفک کا کوئی ڈیٹا دستیاب نہیں"
 
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:30
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:28
 #: ui/pages/dashboard/links/LinksPage.tsx:206
 msgid "Active Links"
 msgstr "فعال لنکس"
 
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:38
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:57
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:36
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:45
 msgid "Unique Click Rate"
 msgstr "منفرد کلک کی شرح"
 
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:109
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:107
 msgid "vs last month"
 msgstr "پچھلے مہینے کے مقابلے میں"
 
 #: ui/pages/dashboard/_components/Header/Header.tsx:14
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:27
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:56
 msgid "Last 7 days"
 msgstr "پچھلے 7 دن"
 
 #: ui/pages/dashboard/_components/Header/Header.tsx:15
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:33
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:62
 msgid "Last 30 days"
 msgstr "پچھلے 30 دن"
 
@@ -5682,7 +5693,7 @@ msgid "Performance"
 msgstr "کارکردگی"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:52
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:45
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:33
 #: ui/pages/dashboard/users/UsersPage.tsx:545
 msgid "Created"
 msgstr "بنایا گیا"
@@ -5894,89 +5905,110 @@ msgstr "ممالک"
 msgid "Geographic Distribution"
 msgstr "جغرافیائی تقسیم"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:21
-msgid "Last 24 hours"
-msgstr "گزشتہ 24 گھنٹے"
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:23
-msgid "%s per hour"
-msgstr "فی گھنٹہ %s"
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:39
-msgid "All time"
-msgstr "ہر وقت"
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:43
-msgid "%s per day"
-msgstr "فی دن %s"
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:46
-msgid "0 per day"
-msgstr "0 فی دن"
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:56
-msgid "Historical click count"
-msgstr "تاریخی کلک شمار"
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:60
-msgid "Short URL created on"
-msgstr "شارٹ URL بنایا گیا"
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:102
-msgid "hit"
-msgstr "کلک"
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:102
-msgid "hits"
-msgstr "کلکس"
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/ClickChart.tsx:12
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:27
 msgid "All"
 msgstr "سب"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/ClickChart.tsx:135
-msgid "Click History"
-msgstr "کلک کی تاریخچہ"
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:35
+msgid "Both"
+msgstr "دونوں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:30
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:77
+msgid "Traffic History"
+msgstr "ٹریفک ہسٹری"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:175
+msgid "No traffic data available for this range."
+msgstr "اس رینج کے لیے کوئی ٹریفک ڈیٹا دستیاب نہیں۔"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:50
+msgid "Last 24 hours"
+msgstr "گزشتہ 24 گھنٹے"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:68
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:65
+msgid "All time"
+msgstr "ہر وقت"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:79
+msgid "Historical click count"
+msgstr "تاریخی کلک شمار"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:83
+msgid "Short URL created on"
+msgstr "شارٹ URL بنایا گیا"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:134
+msgid "%s unique"
+msgstr "منفرد: %s"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:42
 msgid "Active & Tracking"
 msgstr "فعال اور ٹریک ہو رہا ہے"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:38
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:50
 msgid "Engagement"
 msgstr "انگیجمنٹ"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:41
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:54
 msgid "High"
 msgstr "زیادہ"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:43
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:56
 msgid "Medium"
 msgstr "درمیانہ"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:44
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:57
 msgid "Low"
 msgstr "کم"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:57
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:71
 msgid "%s%% unique click rate"
 msgstr "%s%% منفرد کلک کی شرح"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:61
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:77
 msgid "Average"
 msgstr "اوسط"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:62
-msgid "%s clicks/day"
-msgstr "%s کلکس/دن"
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:84
+msgid "Showing %s"
+msgstr "دکھایا جا رہا ہے: %s"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:72
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:94
 msgid "Quick Insights"
 msgstr "فوری جھلکیاں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:75
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:97
 msgid "Last updated:"
 msgstr "آخری اپ ڈیٹ:"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:61
+msgid "24 hours"
+msgstr "24 گھنٹے"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:63
+msgid "30 days"
+msgstr "30 دن"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:68
+msgid "7 days"
+msgstr "7 دن"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:136
+msgid "%s click"
+msgstr "%s کلک"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:136
+msgid "%s clicks"
+msgstr "%s کلکس"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:145
+msgid "%s per hour"
+msgstr "فی گھنٹہ %s"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:145
+msgid "%s per day"
+msgstr "فی دن %s"
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:92
 msgid "Search Engine"
@@ -6058,30 +6090,37 @@ msgstr "ماخذ:"
 msgid "medium:"
 msgstr "ذریعہ:"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:13
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:21
 msgid "Best day"
 msgstr "بہترین دن"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:16
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:65
-msgid "%s hits"
-msgstr "%s کلکس"
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:25
+msgid "Loading best day..."
+msgstr "بہترین دن لوڈ ہو رہا ہے..."
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:18
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:33
 msgid "on"
 msgstr "پر"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:29
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:36
+msgid "%s unique visitors"
+msgstr "منفرد وزٹرز: %s"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:46
 msgid "Hide details"
 msgstr "تفصیلات چھپائیں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:29
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:47
 msgid "View details"
 msgstr "تفصیلات دیکھیں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:45
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:62
 msgid "Year"
 msgstr "سال"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:96
+msgid "No click activity has been recorded yet."
+msgstr "ابھی تک کوئی کلک سرگرمی ریکارڈ نہیں ہوئی۔"
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:90
 #: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:108
@@ -6140,7 +6179,7 @@ msgstr "شارٹ URL"
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:79
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:125
 msgid "Open Link"
-msgstr ""
+msgstr "لنک کھولیں"
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:136
 msgid "Quick Share"
@@ -6158,31 +6197,31 @@ msgstr "ٹویٹر"
 msgid "LinkedIn"
 msgstr "لنکڈ اِن"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:62
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:49
 msgid "Traffic Statistics"
 msgstr "ٹریفک کے اعدادوشمار"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:63
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:50
 msgid "Traffic Location"
 msgstr "ٹریفک کا مقام"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:64
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:51
 msgid "Traffic Sources"
 msgstr "ٹریفک کے ذرائع"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:99
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:86
 msgid "Link Analytics"
 msgstr "لنک تجزیات"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:102
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:89
 msgid "Detailed statistics and performance metrics"
 msgstr "تفصیلی اعدادوشمار اور کارکردگی کے پیمانے"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:113
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:100
 msgid "Close panel"
 msgstr "پینل بند کریں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:218
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:216
 msgid "Close"
 msgstr "بند کریں"
 

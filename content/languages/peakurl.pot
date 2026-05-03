@@ -6,7 +6,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language: en_US\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"Project-Id-Version: 1.1.2\n"
+"Project-Id-Version: 1.1.3\n"
 "Report-Msgid-Bugs-To: https://peakurl.org\n"
 "X-Domain: peakurl\n"
 
@@ -206,12 +206,12 @@ msgstr ""
 msgid "PeakURL could not identify the current session."
 msgstr ""
 
-#: app/traits/analytics.php:215
+#: app/traits/analytics.php:214
 msgid "Activity log ID is required."
 msgstr ""
 
 #: app/traits/analytics.php:350
-#: app/traits/analytics.php:451
+#: app/traits/analytics.php:470
 msgid "You do not have permission to view analytics for this link."
 msgstr ""
 
@@ -294,7 +294,7 @@ msgstr ""
 msgid "Loading"
 msgstr ""
 
-#: app/includes/application.php:141
+#: app/includes/application.php:146
 #: app/services/install/screen.php:141
 msgid "Request origin is not allowed."
 msgstr ""
@@ -315,7 +315,7 @@ msgstr ""
 msgid "Something went wrong."
 msgstr ""
 
-#: app/http/router.php:128
+#: app/http/router.php:140
 msgid "Route not found."
 msgstr ""
 
@@ -482,69 +482,69 @@ msgstr ""
 msgid "GeoIP database updated."
 msgstr ""
 
-#: app/controllers/urls.php:101
+#: app/controllers/urls.php:109
 msgid "URLs loaded."
 msgstr ""
 
-#: app/controllers/urls.php:124
+#: app/controllers/urls.php:132
 msgid "URLs export loaded."
 msgstr ""
 
-#: app/controllers/urls.php:141
-#: app/controllers/urls.php:197
-#: app/controllers/urls.php:217
+#: app/controllers/urls.php:149
+#: app/controllers/urls.php:205
+#: app/controllers/urls.php:225
 msgid "URL not found."
 msgstr ""
 
-#: app/controllers/urls.php:144
+#: app/controllers/urls.php:152
 msgid "URL loaded."
 msgstr ""
 
-#: app/controllers/urls.php:160
+#: app/controllers/urls.php:168
 msgid "Short URL created."
 msgstr ""
 
-#: app/controllers/urls.php:178
+#: app/controllers/urls.php:186
 msgid "Bulk import processed."
 msgstr ""
 
-#: app/controllers/urls.php:200
+#: app/controllers/urls.php:208
 msgid "URL updated."
 msgstr ""
 
-#: app/controllers/urls.php:220
+#: app/controllers/urls.php:228
 msgid "URL deleted."
 msgstr ""
 
-#: app/controllers/urls.php:241
+#: app/controllers/urls.php:249
 msgid "Bulk delete complete."
 msgstr ""
 
-#: app/controllers/urls.php:300
+#: app/controllers/urls.php:312
 msgid "This link has expired"
 msgstr ""
 
-#: app/controllers/urls.php:301
+#: app/controllers/urls.php:313
 msgid "The short link you requested is no longer active because its expiration date has passed."
 msgstr ""
 
-#: app/controllers/urls.php:311
+#: app/controllers/urls.php:323
 msgid "This link is unavailable"
 msgstr ""
 
-#: app/controllers/urls.php:312
+#: app/controllers/urls.php:324
 msgid "The short link you requested is not available right now."
 msgstr ""
 
-#: app/controllers/urls.php:359
+#: app/controllers/urls.php:371
 msgid "Password required"
 msgstr ""
 
-#: app/controllers/urls.php:360
+#: app/controllers/urls.php:372
 msgid "This link is protected. Enter the password to continue."
 msgstr ""
 
-#: app/controllers/urls.php:364
+#: app/controllers/urls.php:376
 #: site/install.php:579
 #: site/setup-config.php:803
 #: ui/pages/auth/login/LoginPage.tsx:371
@@ -552,17 +552,17 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: app/controllers/urls.php:367
+#: app/controllers/urls.php:379
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:50
 msgid "Enter password"
 msgstr ""
 
-#: app/controllers/urls.php:371
+#: app/controllers/urls.php:383
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:57
 msgid "Continue"
 msgstr ""
 
-#: app/controllers/urls.php:376
+#: app/controllers/urls.php:388
 msgid "Protected Link"
 msgstr ""
 
@@ -624,7 +624,7 @@ msgid "Bulk activity delete complete."
 msgstr ""
 
 #: app/controllers/analytics.php:163
-#: app/controllers/analytics.php:188
+#: app/controllers/analytics.php:190
 msgid "Link analytics not found."
 msgstr ""
 
@@ -632,7 +632,7 @@ msgstr ""
 msgid "Location analytics loaded."
 msgstr ""
 
-#: app/controllers/analytics.php:191
+#: app/controllers/analytics.php:193
 msgid "Link analytics loaded."
 msgstr ""
 
@@ -1824,45 +1824,45 @@ msgstr ""
 msgid "Cancel custom page size"
 msgstr ""
 
-#: ui/components/charts/TrafficChart/TrafficChart.tsx:130
+#: ui/components/charts/TrafficChart/TrafficChart.tsx:136
 msgid "Mon"
 msgstr ""
 
-#: ui/components/charts/TrafficChart/TrafficChart.tsx:131
+#: ui/components/charts/TrafficChart/TrafficChart.tsx:137
 msgid "Tue"
 msgstr ""
 
-#: ui/components/charts/TrafficChart/TrafficChart.tsx:132
+#: ui/components/charts/TrafficChart/TrafficChart.tsx:138
 msgid "Wed"
 msgstr ""
 
-#: ui/components/charts/TrafficChart/TrafficChart.tsx:133
+#: ui/components/charts/TrafficChart/TrafficChart.tsx:139
 msgid "Thu"
 msgstr ""
 
-#: ui/components/charts/TrafficChart/TrafficChart.tsx:134
+#: ui/components/charts/TrafficChart/TrafficChart.tsx:140
 msgid "Fri"
 msgstr ""
 
-#: ui/components/charts/TrafficChart/TrafficChart.tsx:135
+#: ui/components/charts/TrafficChart/TrafficChart.tsx:141
 msgid "Sat"
 msgstr ""
 
-#: ui/components/charts/TrafficChart/TrafficChart.tsx:136
+#: ui/components/charts/TrafficChart/TrafficChart.tsx:142
 msgid "Sun"
 msgstr ""
 
-#: ui/components/charts/TrafficChart/TrafficChart.tsx:176
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:22
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:23
+#: ui/components/charts/TrafficChart/TrafficChart.tsx:156
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:20
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:19
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:104
 #: ui/pages/dashboard/links/LinksPage.tsx:221
 msgid "Total Clicks"
 msgstr ""
 
-#: ui/components/charts/TrafficChart/TrafficChart.tsx:200
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:46
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:34
+#: ui/components/charts/TrafficChart/TrafficChart.tsx:157
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:44
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:26
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:112
 #: ui/pages/dashboard/links/LinksPage.tsx:236
 msgid "Unique Visitors"
@@ -2116,7 +2116,8 @@ msgstr ""
 #: ui/components/charts/WorldMap/WorldMap.tsx:597
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:688
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:62
-#: ui/pages/dashboard/links/_components/StatsDrawer/ClickChart.tsx:66
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:36
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:82
 msgid "Clicks"
 msgstr ""
 
@@ -3152,11 +3153,11 @@ msgstr ""
 #: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:16
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:36
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:180
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:69
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:76
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:92
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:99
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:105
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:111
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:51
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:39
 #: ui/pages/dashboard/users/UsersPage.tsx:629
 msgid "Unknown"
 msgstr ""
@@ -3379,7 +3380,7 @@ msgstr ""
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:148
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:636
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:62
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:29
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:41
 #: ui/pages/dashboard/links/_components/EditLinkModal/EditLinkModal.tsx:249
 msgid "Status"
 msgstr ""
@@ -3819,7 +3820,7 @@ msgstr ""
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:314
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:24
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:33
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:30
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:42
 #: ui/pages/dashboard/links/_components/EditLinkModal/EditLinkModal.tsx:35
 msgid "Inactive"
 msgstr ""
@@ -5381,7 +5382,7 @@ msgid "Explore the source code, understand how it works, and modify it to suit y
 msgstr ""
 
 #: ui/pages/dashboard/about/AboutPage.tsx:308
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:65
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:52
 msgid "Share"
 msgstr ""
 
@@ -5535,15 +5536,21 @@ msgid "Traffic Overview"
 msgstr ""
 
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:43
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:105
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:108
 msgid "Line Chart"
 msgstr ""
 
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:52
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:116
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:119
 msgid "Bar Chart"
 msgstr ""
 
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:68
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:168
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:37
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:89
 msgid "Unique"
 msgstr ""
 
@@ -5551,27 +5558,27 @@ msgstr ""
 msgid "No traffic data available"
 msgstr ""
 
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:30
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:28
 #: ui/pages/dashboard/links/LinksPage.tsx:206
 msgid "Active Links"
 msgstr ""
 
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:38
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:57
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:36
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:45
 msgid "Unique Click Rate"
 msgstr ""
 
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:109
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:107
 msgid "vs last month"
 msgstr ""
 
 #: ui/pages/dashboard/_components/Header/Header.tsx:14
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:27
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:56
 msgid "Last 7 days"
 msgstr ""
 
 #: ui/pages/dashboard/_components/Header/Header.tsx:15
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:33
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:62
 msgid "Last 30 days"
 msgstr ""
 
@@ -5684,7 +5691,7 @@ msgid "Performance"
 msgstr ""
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:52
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:45
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:33
 #: ui/pages/dashboard/users/UsersPage.tsx:545
 msgid "Created"
 msgstr ""
@@ -5896,88 +5903,109 @@ msgstr ""
 msgid "Geographic Distribution"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:21
-msgid "Last 24 hours"
-msgstr ""
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:23
-msgid "%s per hour"
-msgstr ""
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:39
-msgid "All time"
-msgstr ""
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:43
-msgid "%s per day"
-msgstr ""
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:46
-msgid "0 per day"
-msgstr ""
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:56
-msgid "Historical click count"
-msgstr ""
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:60
-msgid "Short URL created on"
-msgstr ""
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:102
-msgid "hit"
-msgstr ""
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:102
-msgid "hits"
-msgstr ""
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/ClickChart.tsx:12
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:27
 msgid "All"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/ClickChart.tsx:135
-msgid "Click History"
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:35
+msgid "Both"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:30
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:77
+msgid "Traffic History"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:175
+msgid "No traffic data available for this range."
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:50
+msgid "Last 24 hours"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:68
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:65
+msgid "All time"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:79
+msgid "Historical click count"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:83
+msgid "Short URL created on"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:134
+msgid "%s unique"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:42
 msgid "Active & Tracking"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:38
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:50
 msgid "Engagement"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:41
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:54
 msgid "High"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:43
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:56
 msgid "Medium"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:44
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:57
 msgid "Low"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:57
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:71
 msgid "%s%% unique click rate"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:61
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:77
 msgid "Average"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:62
-msgid "%s clicks/day"
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:84
+msgid "Showing %s"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:72
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:94
 msgid "Quick Insights"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:75
+#: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:97
 msgid "Last updated:"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:61
+msgid "24 hours"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:63
+msgid "30 days"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:68
+msgid "7 days"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:136
+msgid "%s click"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:136
+msgid "%s clicks"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:145
+msgid "%s per hour"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:145
+msgid "%s per day"
 msgstr ""
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:92
@@ -6060,29 +6088,36 @@ msgstr ""
 msgid "medium:"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:13
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:21
 msgid "Best day"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:16
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:65
-msgid "%s hits"
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:25
+msgid "Loading best day..."
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:18
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:33
 msgid "on"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:29
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:36
+msgid "%s unique visitors"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:46
 msgid "Hide details"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:29
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:47
 msgid "View details"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:45
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:62
 msgid "Year"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:96
+msgid "No click activity has been recorded yet."
 msgstr ""
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:90
@@ -6122,7 +6157,6 @@ msgstr ""
 msgid "Operating Systems"
 msgstr ""
 
-#. Translators: provide both singular and plural forms for this term.
 #: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:256
 msgid "device"
 msgid_plural "devices"
@@ -6161,31 +6195,31 @@ msgstr ""
 msgid "LinkedIn"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:62
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:49
 msgid "Traffic Statistics"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:63
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:50
 msgid "Traffic Location"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:64
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:51
 msgid "Traffic Sources"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:99
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:86
 msgid "Link Analytics"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:102
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:89
 msgid "Detailed statistics and performance metrics"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:113
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:100
 msgid "Close panel"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:218
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:216
 msgid "Close"
 msgstr ""
 

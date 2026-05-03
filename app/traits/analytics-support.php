@@ -100,6 +100,277 @@ trait AnalyticsSupportTrait {
 	}
 
 	/**
+	 * Resolve the stats drawer range into chart and query metadata.
+	 *
+	 * @param string|null $range      Requested dashboard range token.
+	 * @param int         $days       Number of days to look back.
+	 * @param string      $created_at Link creation timestamp.
+	 * @return array{key: string, days: int, start_at: string|null}
+	 * @since 1.1.0
+	 */
+	private function get_link_stats_range_config(
+		?string $range,
+		int $days,
+		string $created_at = ''
+	): array {
+		$range = sanitize_key( (string) $range );
+
+		if ( 'all' === $range ) {
+			return array(
+				'key'      => 'all',
+				'days'     => $this->get_link_lifetime_days( $created_at ),
+				'start_at' => null,
+			);
+		}
+
+		if ( '24h' === $range ) {
+			$resolved_days = 1;
+		} elseif ( '30d' === $range ) {
+			$resolved_days = 30;
+		} elseif ( '7d' === $range ) {
+			$resolved_days = 7;
+		} else {
+			$resolved_days = max( 1, $days );
+		}
+		$window = $this->time_window( $resolved_days );
+
+		return array(
+			'key'      => '' !== $range ? $range : $resolved_days . 'd',
+			'days'     => $resolved_days,
+			'start_at' => $window['start_at'],
+		);
+	}
+
+	/**
+	 * Calculate how many date buckets are needed for all-time link charts.
+	 *
+	 * @param string $created_at Link creation timestamp.
+	 * @return int Number of days between creation and today, inclusive.
+	 * @since 1.1.0
+	 */
+	private function get_link_lifetime_days( string $created_at ): int {
+		$timezone = $this->get_analytics_timezone();
+		$today    = ( new \DateTimeImmutable( 'now', $timezone ) )
+			->setTime( 0, 0, 0 );
+
+		try {
+			$created = new \DateTimeImmutable(
+				$created_at,
+				new \DateTimeZone( 'UTC' ),
+			);
+			$start   = $created->setTimezone( $timezone )->setTime( 0, 0, 0 );
+		} catch ( \Exception $exception ) {
+			$start = $today;
+		}
+
+		if ( $start > $today ) {
+			return 1;
+		}
+
+		return max( 1, (int) $start->diff( $today )->format( '%a' ) + 1 );
+	}
+
+	/**
+	 * Build exact period totals for the link stats drawer.
+	 *
+	 * @param string $url_id     URL ID to scope summaries to.
+	 * @param string $created_at Link creation timestamp.
+	 * @return array<string, array<string, mixed>> Period totals keyed by range.
+	 * @since 1.1.0
+	 */
+	private function get_link_period_summaries(
+		string $url_id,
+		string $created_at
+	): array {
+		$timezone       = $this->get_analytics_timezone();
+		$last_24_start  =
+			( new \DateTimeImmutable( 'now', $timezone ) )
+				->modify( '-24 hours' )
+				->setTimezone( new \DateTimeZone( 'UTC' ) )
+				->format( 'Y-m-d H:i:s' );
+		$last_7_window  = $this->time_window( 7 );
+		$last_30_window = $this->time_window( 30 );
+		$lifetime_days  = $this->get_link_lifetime_days( $created_at );
+		$unique_visitor = 'COALESCE(NULLIF(visitor_hash, \'\'), id)';
+		$period_totals  =
+			$this->query_one(
+				'SELECT
+	                COUNT(*) AS all_total,
+	                COUNT(DISTINCT ' . $unique_visitor . ') AS all_unique,
+	                SUM(CASE WHEN clicked_at >= :last_24_start_total THEN 1 ELSE 0 END) AS last_24_total,
+	                COUNT(DISTINCT CASE WHEN clicked_at >= :last_24_start_unique THEN ' . $unique_visitor . ' ELSE NULL END) AS last_24_unique,
+	                SUM(CASE WHEN clicked_at >= :last_7_start_total THEN 1 ELSE 0 END) AS last_7_total,
+	                COUNT(DISTINCT CASE WHEN clicked_at >= :last_7_start_unique THEN ' . $unique_visitor . ' ELSE NULL END) AS last_7_unique,
+	                SUM(CASE WHEN clicked_at >= :last_30_start_total THEN 1 ELSE 0 END) AS last_30_total,
+	                COUNT(DISTINCT CASE WHEN clicked_at >= :last_30_start_unique THEN ' . $unique_visitor . ' ELSE NULL END) AS last_30_unique
+	            FROM clicks
+	            WHERE url_id = :url_id',
+				array(
+					'url_id'               => $url_id,
+					'last_24_start_total'  => $last_24_start,
+					'last_24_start_unique' => $last_24_start,
+					'last_7_start_total'   => $last_7_window['start_at'],
+					'last_7_start_unique'  => $last_7_window['start_at'],
+					'last_30_start_total'  => $last_30_window['start_at'],
+					'last_30_start_unique' => $last_30_window['start_at'],
+				),
+			) ?? array();
+
+		return array(
+			'last24Hours' => $this->format_link_period_summary(
+				'last24Hours',
+				(int) ( $period_totals['last_24_total'] ?? 0 ),
+				(int) ( $period_totals['last_24_unique'] ?? 0 ),
+				24,
+				'hour',
+			),
+			'last7Days'   => $this->format_link_period_summary(
+				'last7Days',
+				(int) ( $period_totals['last_7_total'] ?? 0 ),
+				(int) ( $period_totals['last_7_unique'] ?? 0 ),
+				7,
+				'day',
+			),
+			'last30Days'  => $this->format_link_period_summary(
+				'last30Days',
+				(int) ( $period_totals['last_30_total'] ?? 0 ),
+				(int) ( $period_totals['last_30_unique'] ?? 0 ),
+				30,
+				'day',
+			),
+			'allTime'     => $this->format_link_period_summary(
+				'allTime',
+				(int) ( $period_totals['all_total'] ?? 0 ),
+				(int) ( $period_totals['all_unique'] ?? 0 ),
+				$lifetime_days,
+				'day',
+			),
+		);
+	}
+
+	/**
+	 * Normalize one period summary row.
+	 *
+	 * @param string $key            Stable period key.
+	 * @param int    $total_clicks   Total clicks in the period.
+	 * @param int    $unique_clicks  Unique visitors in the period.
+	 * @param int    $average_window Average divisor for the period.
+	 * @param string $average_unit   Average unit label key.
+	 * @return array<string, mixed> Formatted period summary.
+	 * @since 1.1.0
+	 */
+	private function format_link_period_summary(
+		string $key,
+		int $total_clicks,
+		int $unique_clicks,
+		int $average_window,
+		string $average_unit
+	): array {
+		$unique_clicks = min( $unique_clicks, $total_clicks );
+
+		return array(
+			'key'             => $key,
+			'totalClicks'     => $total_clicks,
+			'uniqueClicks'    => $unique_clicks,
+			'uniqueClickRate' => $this->get_unique_click_rate(
+				$total_clicks,
+				$unique_clicks,
+			),
+			'averageClicks'   => round(
+				$total_clicks / max( 1, $average_window ),
+				2,
+			),
+			'averageUnit'     => $average_unit,
+		);
+	}
+
+	/**
+	 * Find the best traffic day for a link, including unique visitors.
+	 *
+	 * @param string $url_id URL ID to scope the lookup to.
+	 * @return array<string, mixed>|null Best day payload or null when empty.
+	 * @since 1.1.0
+	 */
+	private function get_link_best_day( string $url_id ): ?array {
+		$timezone = $this->get_analytics_timezone();
+		$rows     = $this->query_all(
+			'SELECT
+                clicked_at,
+                COALESCE(NULLIF(visitor_hash, \'\'), id) AS visitor_key
+            FROM clicks
+            WHERE url_id = :url_id
+            ORDER BY clicked_at ASC',
+			array( 'url_id' => $url_id ),
+		);
+		$buckets  = array();
+
+		foreach ( $rows as $row ) {
+			try {
+				$clicked_at = new \DateTimeImmutable(
+					(string) $row['clicked_at'],
+					new \DateTimeZone( 'UTC' ),
+				);
+			} catch ( \Exception $exception ) {
+				continue;
+			}
+
+			$date = $clicked_at->setTimezone( $timezone )->format( 'Y-m-d' );
+
+			if ( ! isset( $buckets[ $date ] ) ) {
+				$buckets[ $date ] = array(
+					'clicks' => 0,
+					'unique' => array(),
+				);
+			}
+
+			++$buckets[ $date ]['clicks'];
+
+			$visitor_key = (string) ( $row['visitor_key'] ?? '' );
+
+			if ( '' !== $visitor_key ) {
+				$buckets[ $date ]['unique'][ $visitor_key ] = true;
+			}
+		}
+
+		$best_date   = null;
+		$best_clicks = 0;
+		$best_unique = 0;
+
+		foreach ( $buckets as $date => $bucket ) {
+			$clicks = (int) ( $bucket['clicks'] ?? 0 );
+
+			if ( $clicks < $best_clicks ) {
+				continue;
+			}
+
+			if ( $clicks === $best_clicks && null !== $best_date && $date < $best_date ) {
+				continue;
+			}
+
+			$best_date   = $date;
+			$best_clicks = $clicks;
+			$best_unique = min(
+				count( (array) ( $bucket['unique'] ?? array() ) ),
+				$clicks,
+			);
+		}
+
+		if ( null === $best_date || $best_clicks <= 0 ) {
+			return null;
+		}
+
+		return array(
+			'date'            => $best_date,
+			'totalClicks'     => $best_clicks,
+			'uniqueClicks'    => $best_unique,
+			'uniqueClickRate' => $this->get_unique_click_rate(
+				$best_clicks,
+				$best_unique,
+			),
+		);
+	}
+
+	/**
 	 * Get a date-bucketed traffic time series for charts.
 	 *
 	 * @param string|null         $url_id Optional URL ID to scope the series.

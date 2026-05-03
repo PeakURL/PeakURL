@@ -42,10 +42,7 @@ import type {
 	SystemStatusResponse,
 	UrlExportResponse,
 } from "@/pages/dashboard/tools";
-import type {
-	UserDialogPayload,
-	UserSummary,
-} from "@/pages/dashboard/users";
+import type { UserDialogPayload, UserSummary } from "@/pages/dashboard/users";
 import type { AdminNoticesResponse } from "@/pages/layout/dashboard";
 
 /**
@@ -192,6 +189,9 @@ export interface LinkAnalyticsArgs {
 
 	/** Optional time range in days for the query. */
 	days?: number;
+
+	/** Optional dashboard range token for link-specific analytics. */
+	range?: "24h" | "7d" | "30d" | "all";
 }
 
 /**

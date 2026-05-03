@@ -14,9 +14,7 @@ import type { StatsCardsProps } from "../types";
 type DashboardStatTone = "clicks" | "links" | "rate" | "users";
 
 const StatsCards = ({ stats }: StatsCardsProps) => {
-	const uniqueClickRate = Number(
-		stats.uniqueClickRate ?? stats.conversionRate ?? 0
-	);
+	const uniqueClickRate = Number(stats.uniqueClickRate ?? 0);
 	const statsData = [
 		{
 			title: __("Total Clicks"),

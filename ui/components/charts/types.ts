@@ -4,6 +4,11 @@
 export type TrafficChartType = "line" | "bar";
 
 /**
+ * Series visibility options supported by the traffic chart.
+ */
+export type TrafficChartSeriesMode = "both" | "clicks" | "unique";
+
+/**
  * Normalized traffic-series payload consumed by the chart component.
  */
 export interface TrafficChartData {
@@ -29,6 +34,9 @@ export interface TrafficChartProps {
 
 	/** Desired chart presentation mode. */
 	type?: TrafficChartType;
+
+	/** Which traffic series should be visible. */
+	seriesMode?: TrafficChartSeriesMode;
 }
 
 /**

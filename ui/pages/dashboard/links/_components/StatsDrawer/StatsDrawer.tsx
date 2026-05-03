@@ -15,13 +15,14 @@ import { isDocumentRtl } from "@/i18n/direction";
 import { getShortUrl } from "@/utils";
 import { __ } from "@/i18n";
 import StatCards from "./StatCards";
-import ClickChart from "./ClickChart";
+import TrafficHistory from "./TrafficHistory";
 import HistoricalStats from "./HistoricalStats";
 import BestDay from "./BestDay";
 import ShareTab from "./ShareTab";
 import TrafficLocationTab from "./TrafficLocationTab";
 import TrafficSourcesTab from "./TrafficSourcesTab";
 import QuickInsights from "./QuickInsights";
+import { getStatsTimeRangeDays } from "./analytics";
 import type { StatsDrawerProps, StatsTimeRange } from "./types";
 
 export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
@@ -30,26 +31,14 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 	const isRtl = isDocumentRtl();
 	const direction = isRtl ? "rtl" : "ltr";
 
-	const getDaysFromRange = (range: StatsTimeRange): number => {
-		switch (range) {
-			case "24h":
-				return 1;
-			case "7d":
-				return 7;
-			case "30d":
-				return 30;
-			case "all":
-				return 90;
-		}
-	};
-
 	const { data: statsData, isLoading } = useGetLinkStatsQuery(
 		{
 			id: link?.id || "",
-			days: getDaysFromRange(timeRange),
+			days: getStatsTimeRangeDays(timeRange),
+			range: timeRange,
 		},
 		{
-			skip: !link?.id || !open || selectedTab !== 0,
+			skip: !link?.id || !open || ![0, 2].includes(selectedTab),
 		}
 	);
 
@@ -158,24 +147,35 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 												/>
 
 												{/* Quick Insights */}
-												<QuickInsights link={link} />
+												<QuickInsights
+													link={link}
+													stats={statsPayload}
+													isLoading={isLoading}
+													timeRange={timeRange}
+												/>
 
-												{/* Click Chart */}
-												<ClickChart
+												{/* Traffic History */}
+												<TrafficHistory
 													link={link}
 													stats={statsPayload}
 													isLoading={isLoading}
 													timeRange={timeRange}
 													setTimeRange={setTimeRange}
-													selectedTab={selectedTab}
-													open={open}
 												/>
 
 												{/* Historical Stats */}
-												<HistoricalStats link={link} />
+												<HistoricalStats
+													link={link}
+													stats={statsPayload}
+													isLoading={isLoading}
+												/>
 
 												{/* Best Day */}
-												<BestDay link={link} />
+												<BestDay
+													link={link}
+													stats={statsPayload}
+													isLoading={isLoading}
+												/>
 											</TabPanel>
 
 											{/* Traffic Location Tab */}

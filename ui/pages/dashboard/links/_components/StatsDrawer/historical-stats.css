@@ -20,7 +20,7 @@
 	}
 
 	.links-historical-stats-item {
-		@apply flex items-center rounded px-3 py-2.5 transition-all hover:bg-accent/10;
+		@apply grid grid-cols-1 gap-1 rounded px-3 py-2.5 transition-all hover:bg-accent/10;
 	}
 
 	.links-historical-stats-item-highlighted {
@@ -28,7 +28,7 @@
 	}
 
 	.links-historical-stats-period {
-		@apply w-24 text-sm sm:w-32;
+		@apply text-sm;
 	}
 
 	.links-historical-stats-period-highlighted {
@@ -40,10 +40,23 @@
 	}
 
 	.links-historical-stats-value {
-		@apply flex-1 text-sm font-semibold text-heading;
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.links-historical-stats-unique {
+		@apply text-sm text-text-muted;
 	}
 
 	.links-historical-stats-rate {
 		@apply text-sm text-text-muted;
+	}
+}
+
+@media (min-width: 640px) {
+	.links-historical-stats-item {
+		align-items: center;
+		grid-template-columns:
+			8rem minmax(6rem, 1fr) minmax(5rem, 0.8fr)
+			minmax(6rem, 0.8fr);
 	}
 }

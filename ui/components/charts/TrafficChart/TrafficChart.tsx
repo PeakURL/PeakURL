@@ -11,6 +11,7 @@ import type {
 export type {
 	TrafficChartData,
 	TrafficChartProps,
+	TrafficChartSeriesMode,
 	TrafficChartType,
 } from "../types";
 
@@ -39,6 +40,7 @@ export function TrafficChart({
 	data,
 	timeRange = "7d",
 	type = "line",
+	seriesMode = "both",
 }: TrafficChartProps) {
 	const chartRef = useRef<HTMLCanvasElement | null>(null);
 	const chartInstanceRef = useRef<Chart<
@@ -147,6 +149,8 @@ export function TrafficChart({
 				? "rgba(75, 85, 99, 0.3)"
 				: "rgba(229, 231, 235, 0.8)";
 			const isLineChart = type === "line";
+			const clicksLabel = __("Total Clicks");
+			const uniqueLabel = __("Unique Visitors");
 			const maxTrafficValue = Math.max(
 				...chartData.clicks,
 				...chartData.unique,
@@ -156,14 +160,67 @@ export function TrafficChart({
 				Math.max(maxTrafficValue * 0.015, 0.02),
 				0.35
 			);
-			const renderedUniqueData = isLineChart
-				? chartData.unique.map((value, index) => {
-						const clickValue = chartData.clicks[index] ?? 0;
-						return value > 0 && value === clickValue
-							? Math.max(value - overlapOffset, 0)
-							: value;
-					})
-				: chartData.unique;
+			const renderedUniqueData =
+				isLineChart && "both" === seriesMode
+					? chartData.unique.map((value, index) => {
+							const clickValue = chartData.clicks[index] ?? 0;
+							return value > 0 && value === clickValue
+								? Math.max(value - overlapOffset, 0)
+								: value;
+						})
+					: chartData.unique;
+
+			const datasets: ChartData<
+				TrafficChartType,
+				number[],
+				string
+			>["datasets"] = [];
+
+			if ("unique" !== seriesMode) {
+				datasets.push({
+					label: clicksLabel,
+					data: chartData.clicks,
+					borderColor: clicksColor,
+					backgroundColor:
+						type === "bar" ? clicksColor : clicksGradient,
+					fill: isLineChart,
+					tension: 0.4,
+					borderWidth: 2,
+					pointRadius: 0,
+					pointHoverRadius: 6,
+					pointBackgroundColor: isDark ? "rgb(17, 24, 39)" : "white",
+					pointBorderColor: clicksColor,
+					pointBorderWidth: 2,
+					pointHoverBackgroundColor: clicksColor,
+					pointHoverBorderColor: isDark ? "rgb(17, 24, 39)" : "white",
+					pointHoverBorderWidth: 2,
+					borderRadius: 4,
+					order: 1,
+				});
+			}
+
+			if ("clicks" !== seriesMode) {
+				datasets.push({
+					label: uniqueLabel,
+					data: renderedUniqueData,
+					borderColor: uniqueColor,
+					backgroundColor:
+						type === "bar" ? uniqueColor : "transparent",
+					fill: type === "bar",
+					tension: 0.4,
+					borderWidth: 2,
+					pointRadius: 0,
+					pointHoverRadius: 6,
+					pointBackgroundColor: isDark ? "rgb(17, 24, 39)" : "white",
+					pointBorderColor: uniqueColor,
+					pointBorderWidth: 2,
+					pointHoverBackgroundColor: uniqueColor,
+					pointHoverBorderColor: isDark ? "rgb(17, 24, 39)" : "white",
+					pointHoverBorderWidth: 2,
+					borderRadius: 4,
+					order: 2,
+				});
+			}
 
 			const chartDataConfig: ChartData<
 				TrafficChartType,
@@ -171,56 +228,7 @@ export function TrafficChart({
 				string
 			> = {
 				labels: chartData.labels,
-				datasets: [
-					{
-						label: __("Total Clicks"),
-						data: chartData.clicks,
-						borderColor: clicksColor,
-						backgroundColor:
-							type === "bar" ? clicksColor : clicksGradient,
-						fill: isLineChart,
-						tension: 0.4,
-						borderWidth: 2,
-						pointRadius: 0,
-						pointHoverRadius: 6,
-						pointBackgroundColor: isDark
-							? "rgb(17, 24, 39)"
-							: "white",
-						pointBorderColor: clicksColor,
-						pointBorderWidth: 2,
-						pointHoverBackgroundColor: clicksColor,
-						pointHoverBorderColor: isDark
-							? "rgb(17, 24, 39)"
-							: "white",
-						pointHoverBorderWidth: 2,
-						borderRadius: 4,
-						order: 1,
-					},
-					{
-						label: __("Unique Visitors"),
-						data: renderedUniqueData,
-						borderColor: uniqueColor,
-						backgroundColor:
-							type === "bar" ? uniqueColor : "transparent",
-						fill: type === "bar",
-						tension: 0.4,
-						borderWidth: 2,
-						pointRadius: 0,
-						pointHoverRadius: 6,
-						pointBackgroundColor: isDark
-							? "rgb(17, 24, 39)"
-							: "white",
-						pointBorderColor: uniqueColor,
-						pointBorderWidth: 2,
-						pointHoverBackgroundColor: uniqueColor,
-						pointHoverBorderColor: isDark
-							? "rgb(17, 24, 39)"
-							: "white",
-						pointHoverBorderWidth: 2,
-						borderRadius: 4,
-						order: 2,
-					},
-				],
+				datasets,
 			};
 
 			chartInstanceRef.current = new Chart<
@@ -270,9 +278,9 @@ export function TrafficChart({
 								) {
 									const dataIndex = context.dataIndex;
 									const rawSeries =
-										context.datasetIndex === 0
-											? chartData.clicks
-											: chartData.unique;
+										context.dataset.label === uniqueLabel
+											? chartData.unique
+											: chartData.clicks;
 									const rawValue = Number(
 										rawSeries[dataIndex] || 0
 									);
@@ -346,7 +354,7 @@ export function TrafficChart({
 				chartInstanceRef.current = null;
 			}
 		};
-	}, [data, timeRange, isDark, type]);
+	}, [data, timeRange, isDark, type, seriesMode]);
 
 	return (
 		<div className="traffic-chart">

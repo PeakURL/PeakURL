@@ -16,6 +16,22 @@ const linkAnalyticsTags = (type: "location" | "stats", id: string) => [
 	{ type: "Analytics" as const, id: `${type}-${id}` },
 ];
 
+function serializeLinkStatsQuery({
+	id,
+	days = 7,
+	range,
+}: LinkAnalyticsArgs): string {
+	const params = new URLSearchParams();
+
+	if (range) {
+		params.set("range", range);
+	} else {
+		params.set("days", String(days));
+	}
+
+	return `analytics/url/${id}/stats?${params.toString()}`;
+}
+
 function serializeActivityHistoryQuery({
 	page = 1,
 	limit = 25,
@@ -79,8 +95,7 @@ export const analyticsApi = baseApi.injectEndpoints({
 				linkAnalyticsTags("location", id),
 		}),
 		getLinkStats: build.query<LinkStatsResponse, LinkAnalyticsArgs>({
-			query: ({ id, days = 7 }) =>
-				`analytics/url/${id}/stats?days=${days}`,
+			query: serializeLinkStatsQuery,
 			providesTags: (_result, _error, { id }) =>
 				linkAnalyticsTags("stats", id),
 		}),

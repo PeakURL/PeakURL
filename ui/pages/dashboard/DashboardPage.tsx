@@ -94,7 +94,6 @@ function DashboardPage() {
 		totalLinks: 0,
 		uniqueClicks: 0,
 		uniqueClickRate: 0,
-		conversionRate: 0,
 	};
 	const activities: RecentActivity[] = activityRes?.data ?? [];
 

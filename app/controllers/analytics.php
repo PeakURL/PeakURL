@@ -178,10 +178,12 @@ class AnalyticsController extends BaseController {
 	 */
 	public function stats( Request $request ): array {
 		$days  = (int) $request->get_query_param( 'days', 7 );
+		$range = trim( (string) $request->get_query_param( 'range', '' ) );
 		$stats = $this->data_store->link_stats(
 			$request,
 			(string) $request->get_route_param( 'id' ),
 			$days,
+			$range,
 		);
 
 		if ( ! $stats ) {

@@ -78,6 +78,57 @@ export interface StatsTrafficSeries {
 }
 
 /**
+ * Server-resolved stats range metadata.
+ */
+export interface LinkStatsRange {
+	/** Requested range key used by the dashboard. */
+	key?: StatsTimeRange | string;
+
+	/** Number of date buckets returned for the chart. */
+	days?: number;
+}
+
+/**
+ * Exact totals for a named historical period.
+ */
+export interface LinkPeriodSummary {
+	/** Stable period key returned by the API. */
+	key: "last24Hours" | "last7Days" | "last30Days" | "allTime" | string;
+
+	/** Total clicks in the period. */
+	totalClicks: number;
+
+	/** Unique visitor count in the period. */
+	uniqueClicks: number;
+
+	/** Unique visitor rate for the period. */
+	uniqueClickRate: number;
+
+	/** Average click count for the period unit. */
+	averageClicks: number;
+
+	/** Period unit used by the average. */
+	averageUnit: "hour" | "day" | string;
+}
+
+/**
+ * Best all-time click day for a link.
+ */
+export interface LinkBestDay {
+	/** Date-only value in YYYY-MM-DD format. */
+	date: string;
+
+	/** Total clicks recorded on the date. */
+	totalClicks: number;
+
+	/** Unique visitors recorded on the date. */
+	uniqueClicks: number;
+
+	/** Unique visitor rate for the date. */
+	uniqueClickRate: number;
+}
+
+/**
  * Main payload containing all analytics data for a link.
  */
 export interface LinkStatsPayload {
@@ -90,11 +141,17 @@ export interface LinkStatsPayload {
 	/** Unique click rate percentage. */
 	uniqueClickRate: number;
 
-	/** Deprecated compatibility alias for the unique click rate percentage. */
-	conversionRate?: number;
+	/** Server-resolved range metadata for this response. */
+	range?: LinkStatsRange;
 
 	/** Time-series traffic data */
 	traffic?: StatsTrafficSeries | null;
+
+	/** Exact historical totals for common dashboard periods. */
+	periodSummaries?: Partial<Record<string, LinkPeriodSummary>>;
+
+	/** Best all-time day for this link. */
+	bestDay?: LinkBestDay | null;
 
 	/** Breakdown by device type */
 	devices?: StatsMetricItem[];
@@ -147,31 +204,24 @@ export interface StatsDrawerProps {
 }
 
 /**
- * Minimal traffic series used by the click chart tab.
+ * Stats payload subset required by the traffic history chart.
  */
-export interface ChartTrafficData {
-	labels?: string[];
-	clicks?: number[];
-}
+export type TrafficHistoryStats = Pick<
+	LinkStatsPayload,
+	"totalClicks" | "uniqueClicks" | "uniqueClickRate" | "range"
+> & {
+	traffic?: StatsTrafficSeries | null;
+};
 
 /**
- * Stats payload subset required by the click chart.
+ * Props for the traffic history chart.
  */
-export interface ClickChartStats {
-	traffic?: ChartTrafficData | null;
-}
-
-/**
- * Props for the click history chart.
- */
-export interface ClickChartProps {
+export interface TrafficHistoryProps {
 	link?: LinkRecord | null;
-	stats?: ClickChartStats | null;
+	stats?: TrafficHistoryStats | null;
 	isLoading: boolean;
 	timeRange: StatsTimeRange;
 	setTimeRange: Dispatch<SetStateAction<StatsTimeRange>>;
-	selectedTab: number;
-	open: boolean;
 }
 
 /**

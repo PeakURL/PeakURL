@@ -1,11 +1,18 @@
 import { Calendar } from "lucide-react";
 import { __, sprintf } from "@/i18n";
 import { formatLocalizedDateTime, formatRelativeTime } from "@/utils";
-import type { LinkStatsViewProps } from "./types";
+import { formatAverageClicks, formatClickCount } from "./analytics";
+import type { LinkPeriodSummary, LinkStatsViewProps } from "./types";
 
-function HistoricalStats({ link }: Pick<LinkStatsViewProps, "link">) {
-	const totalClicks = Number(link.clicks || 0);
-	const ageInDays = link.createdAt
+interface HistoricalPeriodRow {
+	key: "last24Hours" | "last7Days" | "last30Days" | "allTime";
+	label: string;
+	highlighted: boolean;
+	summary?: LinkPeriodSummary;
+}
+
+function HistoricalStats({ link, stats, isLoading }: LinkStatsViewProps) {
+	const linkAgeInDays = link.createdAt
 		? Math.max(
 				1,
 				Math.ceil(
@@ -15,36 +22,52 @@ function HistoricalStats({ link }: Pick<LinkStatsViewProps, "link">) {
 				)
 			)
 		: 1;
-
-	const stats = [
-		{
-			period: __("Last 24 hours"),
-			hits: totalClicks,
-			rate: sprintf(__("%s per hour"), (totalClicks / 24).toFixed(2)),
-			highlighted: true,
-		},
-		{
-			period: __("Last 7 days"),
-			hits: totalClicks,
-			rate: null,
-			highlighted: false,
-		},
-		{
-			period: __("Last 30 days"),
-			hits: totalClicks,
-			rate: null,
-			highlighted: false,
-		},
-		{
-			period: __("All time"),
-			hits: totalClicks,
-			rate: link.createdAt
-				? sprintf(
-						__("%s per day"),
-						(totalClicks / ageInDays).toFixed(1)
+	const allTimeTotalClicks = Number(link.clicks || 0);
+	const allTimeUniqueClicks = Math.min(
+		Number(link.uniqueClicks || 0),
+		allTimeTotalClicks
+	);
+	const allTimeFallback: LinkPeriodSummary = {
+		key: "allTime",
+		totalClicks: allTimeTotalClicks,
+		uniqueClicks: allTimeUniqueClicks,
+		uniqueClickRate:
+			allTimeTotalClicks > 0
+				? Number(
+						(
+							(allTimeUniqueClicks / allTimeTotalClicks) *
+							100
+						).toFixed(1)
 					)
-				: __("0 per day"),
+				: 0,
+		averageClicks: allTimeTotalClicks / linkAgeInDays,
+		averageUnit: "day",
+	};
+	const periodSummaries = stats?.periodSummaries || {};
+	const rows: HistoricalPeriodRow[] = [
+		{
+			key: "last24Hours",
+			label: __("Last 24 hours"),
 			highlighted: true,
+			summary: periodSummaries.last24Hours,
+		},
+		{
+			key: "last7Days",
+			label: __("Last 7 days"),
+			highlighted: false,
+			summary: periodSummaries.last7Days,
+		},
+		{
+			key: "last30Days",
+			label: __("Last 30 days"),
+			highlighted: false,
+			summary: periodSummaries.last30Days,
+		},
+		{
+			key: "allTime",
+			label: __("All time"),
+			highlighted: true,
+			summary: periodSummaries.allTime || allTimeFallback,
 		},
 	];
 
@@ -77,37 +100,52 @@ function HistoricalStats({ link }: Pick<LinkStatsViewProps, "link">) {
 				)
 			</p>
 
-			{/* Time Range Stats Table */}
 			<div className="links-historical-stats-list">
-				{stats.map((stat, index) => (
-					<div
-						key={index}
-						className={`links-historical-stats-item ${
-							stat.highlighted
-								? "links-historical-stats-item-highlighted"
-								: ""
-						}`}
-					>
-						<span
-							className={`links-historical-stats-period ${
-								stat.highlighted
-									? "links-historical-stats-period-highlighted"
-									: "links-historical-stats-period-muted"
+				{rows.map((row) => {
+					const summary = row.summary;
+
+					return (
+						<div
+							key={row.key}
+							className={`links-historical-stats-item ${
+								row.highlighted
+									? "links-historical-stats-item-highlighted"
+									: ""
 							}`}
 						>
-							{stat.period}
-						</span>
-						<span className="links-historical-stats-value">
-							{stat.hits}{" "}
-							{stat.hits === 1 ? __("hit") : __("hits")}
-						</span>
-						{stat.rate && (
-							<span className="links-historical-stats-rate">
-								{stat.rate}
+							<span
+								className={`links-historical-stats-period ${
+									row.highlighted
+										? "links-historical-stats-period-highlighted"
+										: "links-historical-stats-period-muted"
+								}`}
+							>
+								{row.label}
 							</span>
-						)}
-					</div>
-				))}
+							<span className="links-historical-stats-value">
+								{isLoading || !summary
+									? "..."
+									: formatClickCount(summary.totalClicks)}
+							</span>
+							<span className="links-historical-stats-unique">
+								{isLoading || !summary
+									? ""
+									: sprintf(
+											__("%s unique"),
+											String(summary.uniqueClicks)
+										)}
+							</span>
+							<span className="links-historical-stats-rate">
+								{isLoading || !summary
+									? ""
+									: formatAverageClicks(
+											summary.averageClicks,
+											summary.averageUnit
+										)}
+							</span>
+						</div>
+					);
+				})}
 			</div>
 		</div>
 	);

@@ -1,26 +1,37 @@
 import { TrendingUp, Activity, Clock } from "lucide-react";
 import { __, sprintf } from "@/i18n";
 import { formatRelativeTime } from "@/utils";
-import type { LinkStatsViewProps } from "./types";
+import {
+	formatAverageClicks,
+	getStatsTimeRangeDays,
+	getStatsTimeRangeLabel,
+	getStatsTotals,
+} from "./analytics";
+import type { LinkStatsViewProps, StatsTimeRange } from "./types";
 
-function QuickInsights({ link }: Pick<LinkStatsViewProps, "link">) {
-	// Estimate the unique-click rate from the current link totals.
-	const uniqueClicks = Number(link.uniqueClicks || 0);
-	const totalClicks = Number(link.clicks || 0);
-	const uniqueClickRate =
-		totalClicks > 0 ? ((uniqueClicks / totalClicks) * 100).toFixed(1) : "0";
-	const avgClicksPerDay = link.createdAt
-		? totalClicks /
-			Math.max(
-				1,
-				Math.ceil(
-					(new Date().getTime() -
-						new Date(link.createdAt).getTime()) /
-						(1000 * 60 * 60 * 24)
-				)
-			)
-		: 0;
+interface QuickInsightsProps extends LinkStatsViewProps {
+	timeRange: StatsTimeRange;
+}
+
+function QuickInsights({
+	link,
+	stats,
+	isLoading,
+	timeRange,
+}: QuickInsightsProps) {
+	const { totalClicks, uniqueClickRate } = getStatsTotals(link, stats);
 	const uniqueClickRateValue = Number(uniqueClickRate);
+	const averageUnit = "24h" === timeRange ? "hour" : "day";
+	const averageWindow =
+		"hour" === averageUnit
+			? 24
+			: Math.max(
+					1,
+					Number(
+						stats?.range?.days || getStatsTimeRangeDays(timeRange)
+					)
+				);
+	const averageClicks = totalClicks / averageWindow;
 
 	const isActive = link.status === "active";
 	const insights = [
@@ -36,8 +47,9 @@ function QuickInsights({ link }: Pick<LinkStatsViewProps, "link">) {
 		{
 			icon: TrendingUp,
 			label: __("Engagement"),
-			value:
-				uniqueClickRateValue > 50
+			value: isLoading
+				? "..."
+				: uniqueClickRateValue > 50
 					? __("High")
 					: uniqueClickRateValue > 20
 						? __("Medium")
@@ -54,14 +66,23 @@ function QuickInsights({ link }: Pick<LinkStatsViewProps, "link">) {
 					: uniqueClickRateValue > 20
 						? "bg-yellow-500/10"
 						: "bg-orange-500/10",
-			subtext: sprintf(__("%s%% unique click rate"), uniqueClickRate),
+			subtext: sprintf(
+				__("%s%% unique click rate"),
+				uniqueClickRate.toFixed(1)
+			),
 		},
 		{
 			icon: Clock,
 			label: __("Average"),
-			value: sprintf(__("%s clicks/day"), avgClicksPerDay.toFixed(1)),
+			value: isLoading
+				? "..."
+				: formatAverageClicks(averageClicks, averageUnit),
 			color: "text-blue-600 dark:text-blue-400",
 			bg: "bg-blue-500/10",
+			subtext: sprintf(
+				__("Showing %s"),
+				getStatsTimeRangeLabel(timeRange)
+			),
 		},
 	];
 

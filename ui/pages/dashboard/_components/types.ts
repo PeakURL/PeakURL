@@ -13,9 +13,6 @@ export interface DashboardStats {
 
 	/** Unique click rate percentage. */
 	uniqueClickRate: number;
-
-	/** Deprecated compatibility alias for the unique click rate percentage. */
-	conversionRate?: number;
 }
 
 /**

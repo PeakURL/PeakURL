@@ -15,8 +15,16 @@
 		@apply font-semibold;
 	}
 
+	.links-best-day-unique {
+		@apply text-text-muted;
+	}
+
 	.links-best-day-toggle {
 		@apply inline-flex items-center gap-1 text-accent hover:underline;
+	}
+
+	.links-best-day-empty {
+		@apply text-sm text-text-muted;
 	}
 
 	.links-best-day-details {

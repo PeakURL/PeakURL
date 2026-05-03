@@ -180,19 +180,30 @@ export interface GetActivityHistoryQueryArgs {
 	category?: "all" | "links" | "users";
 }
 
+type LinkStatsRange = "24h" | "7d" | "30d" | "all";
+
 /**
  * Arguments accepted by the link-specific analytics endpoints.
  */
-export interface LinkAnalyticsArgs {
+export type LinkAnalyticsArgs = {
 	/** Stable link identifier used by the analytics route. */
 	id: string;
+} & (
+	| {
+			/** Dashboard range token for link-specific analytics. */
+			range: LinkStatsRange;
 
-	/** Optional time range in days for the query. */
-	days?: number;
+			/** Day count is intentionally omitted when a range is provided. */
+			days?: never;
+	  }
+	| {
+			/** Optional time range in days for the query. */
+			days?: number;
 
-	/** Optional dashboard range token for link-specific analytics. */
-	range?: "24h" | "7d" | "30d" | "all";
-}
+			/** Range is intentionally omitted when an explicit day count is provided. */
+			range?: never;
+	  }
+);
 
 /**
  * Query arguments accepted by the links list endpoint.

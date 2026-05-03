@@ -18,6 +18,9 @@ import type {
 	TrafficSeries,
 } from "./_components/types";
 
+// Keeps manual-refresh feedback visible long enough to perceive.
+const MIN_REFRESH_DURATION_MS = 700;
+
 function normalizeTrafficSeries(
 	traffic: Partial<TrafficSeries> | null | undefined
 ): TrafficSeries {
@@ -79,7 +82,8 @@ function DashboardPage() {
 		try {
 			await Promise.allSettled([refetchAnalytics(), refetchActivity()]);
 		} finally {
-			const remaining = 700 - (Date.now() - startedAt);
+			const remaining =
+				MIN_REFRESH_DURATION_MS - (Date.now() - startedAt);
 
 			if (remaining > 0) {
 				window.setTimeout(() => setIsRefreshing(false), remaining);

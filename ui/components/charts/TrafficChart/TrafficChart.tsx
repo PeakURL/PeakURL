@@ -28,6 +28,10 @@ function formatTrafficLabel(label: string, totalLabels: number): string {
 	);
 }
 
+const UNIQUE_OVERLAP_OFFSET_SCALE = 0.015;
+const UNIQUE_OVERLAP_OFFSET_MIN = 0.02;
+const UNIQUE_OVERLAP_OFFSET_MAX = 0.35;
+
 /**
  * TrafficChart Component
  * Visualizes traffic data (clicks and unique visitors) using Chart.js
@@ -156,9 +160,13 @@ export function TrafficChart({
 				...chartData.unique,
 				0
 			);
+			// Separate equal click and unique lines just enough to keep both visible.
 			const overlapOffset = Math.min(
-				Math.max(maxTrafficValue * 0.015, 0.02),
-				0.35
+				Math.max(
+					maxTrafficValue * UNIQUE_OVERLAP_OFFSET_SCALE,
+					UNIQUE_OVERLAP_OFFSET_MIN
+				),
+				UNIQUE_OVERLAP_OFFSET_MAX
 			);
 			const renderedUniqueData =
 				isLineChart && "both" === seriesMode

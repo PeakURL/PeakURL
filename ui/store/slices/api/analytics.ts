@@ -16,17 +16,13 @@ const linkAnalyticsTags = (type: "location" | "stats", id: string) => [
 	{ type: "Analytics" as const, id: `${type}-${id}` },
 ];
 
-function serializeLinkStatsQuery({
-	id,
-	days = 7,
-	range,
-}: LinkAnalyticsArgs): string {
+function serializeLinkStatsQuery({ id, ...args }: LinkAnalyticsArgs): string {
 	const params = new URLSearchParams();
 
-	if (range) {
-		params.set("range", range);
+	if (args.range) {
+		params.set("range", args.range);
 	} else {
-		params.set("days", String(days));
+		params.set("days", String(args.days ?? 7));
 	}
 
 	return `analytics/url/${id}/stats?${params.toString()}`;

@@ -28,7 +28,8 @@ function QuickInsights({
 			: Math.max(
 					1,
 					Number(
-						stats?.range?.days || getStatsTimeRangeDays(timeRange)
+						stats?.range?.days ||
+							getStatsTimeRangeDays(timeRange, link.createdAt)
 					)
 				);
 	const averageClicks = totalClicks / averageWindow;

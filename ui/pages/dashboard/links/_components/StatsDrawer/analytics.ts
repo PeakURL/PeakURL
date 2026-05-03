@@ -18,19 +18,37 @@ export interface NormalizedTrafficSeries {
 	unique: number[];
 }
 
+const DAY_MS = 24 * 60 * 60 * 1000;
+
 function toFiniteNumber(value: unknown): number {
 	const numericValue = Number(value ?? 0);
 	return Number.isFinite(numericValue) ? numericValue : 0;
 }
 
-export function getStatsTimeRangeDays(range: StatsTimeRange): number {
+function getLinkAgeInDays(createdAt?: string | null): number {
+	const createdDate = createdAt ? new Date(createdAt) : null;
+
+	if (!createdDate || Number.isNaN(createdDate.getTime())) {
+		return 1;
+	}
+
+	return Math.max(
+		1,
+		Math.ceil((Date.now() - createdDate.getTime()) / DAY_MS)
+	);
+}
+
+export function getStatsTimeRangeDays(
+	range: StatsTimeRange,
+	createdAt?: string | null
+): number {
 	switch (range) {
 		case "24h":
 			return 1;
 		case "30d":
 			return 30;
 		case "all":
-			return 90;
+			return getLinkAgeInDays(createdAt);
 		case "7d":
 		default:
 			return 7;

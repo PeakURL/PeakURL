@@ -22,7 +22,6 @@ import ShareTab from "./ShareTab";
 import TrafficLocationTab from "./TrafficLocationTab";
 import TrafficSourcesTab from "./TrafficSourcesTab";
 import QuickInsights from "./QuickInsights";
-import { getStatsTimeRangeDays } from "./analytics";
 import type { StatsDrawerProps, StatsTimeRange } from "./types";
 
 export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
@@ -34,7 +33,6 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 	const { data: statsData, isLoading } = useGetLinkStatsQuery(
 		{
 			id: link?.id || "",
-			days: getStatsTimeRangeDays(timeRange),
 			range: timeRange,
 		},
 		{

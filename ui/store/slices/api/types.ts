@@ -180,7 +180,12 @@ export interface GetActivityHistoryQueryArgs {
 	category?: "all" | "links" | "users";
 }
 
-type LinkStatsRange = "24h" | "7d" | "30d" | "all";
+export type LinkStatsRange = "24h" | "7d" | "30d" | "all";
+
+/**
+ * Shared sort field options for links list and export queries.
+ */
+export type LinksQuerySortBy = LinksSortBy | "createdAt" | "updatedAt";
 
 /**
  * Arguments accepted by the link-specific analytics endpoints.
@@ -216,7 +221,7 @@ export interface GetUrlsQueryArgs {
 	limit?: number;
 
 	/** Sort field applied by the API. */
-	sortBy?: LinksSortBy | "createdAt" | "updatedAt";
+	sortBy?: LinksQuerySortBy;
 
 	/** Sort direction applied by the API. */
 	sortOrder?: LinksSortOrder;
@@ -230,7 +235,7 @@ export interface GetUrlsQueryArgs {
  */
 export interface GetUrlsExportQueryArgs {
 	/** Sort field applied before exporting records. */
-	sortBy?: LinksSortBy | "createdAt" | "updatedAt";
+	sortBy?: LinksQuerySortBy;
 
 	/** Sort direction applied before exporting records. */
 	sortOrder?: LinksSortOrder;
@@ -453,7 +458,7 @@ export interface UpgradeDatabaseResponse {
 	/** Database repair metadata returned by the updater. */
 	data?: {
 		/** Number of remaining database issues detected after repair. */
-		issuesCount?: number | string | null;
+		issuesCount?: number | null;
 	};
 }
 

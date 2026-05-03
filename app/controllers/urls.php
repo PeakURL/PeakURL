@@ -553,7 +553,7 @@ form{margin-top:28px;text-align:left}
 </head>
 <body>
 <main class="card">{$content_html}</main>
-<p class="footer">Powered by <a href="https://peakurl.org">PeakURL</a></p>
+<p class="footer">Powered by <a href="https://peakurl.org?utm_source=peakurl_urls_controller&utm_medium=public_page&utm_campaign=powered_by" target="_blank" rel="noopener noreferrer">PeakURL</a></p>
 </body>
 </html>
 HTML;

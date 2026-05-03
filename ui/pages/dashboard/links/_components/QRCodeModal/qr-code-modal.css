@@ -1,6 +1,6 @@
 @layer components {
 	.links-qr-modal-code-wrap {
-		@apply flex justify-center rounded-lg bg-white p-6;
+		@apply flex justify-center rounded-lg bg-surface p-6;
 	}
 
 	.links-qr-modal-code {

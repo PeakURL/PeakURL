@@ -19,10 +19,11 @@ const linkAnalyticsTags = (type: "location" | "stats", id: string) => [
 function serializeLinkStatsQuery({ id, ...args }: LinkAnalyticsArgs): string {
 	const params = new URLSearchParams();
 
-	if (args.range) {
-		params.set("range", args.range);
-	} else {
-		params.set("days", String(args.days ?? 7));
+	params.set("range", args.range);
+
+	if ("custom" === args.range) {
+		params.set("from", args.from);
+		params.set("to", args.to);
 	}
 
 	return `analytics/url/${id}/stats?${params.toString()}`;

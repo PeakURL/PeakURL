@@ -10,6 +10,7 @@ import {
 	Tablet,
 } from "lucide-react";
 import { __, _n } from "@/i18n";
+import { formatCount } from "@/utils";
 import {
 	AppleIcon,
 	AndroidIcon,
@@ -157,7 +158,7 @@ function DeviceStats({
 								{__("Total Devices")}
 							</p>
 							<p className="links-drawer-summary-value">
-								{total}
+								{formatCount(total)}
 							</p>
 						</div>
 					</div>
@@ -166,7 +167,7 @@ function DeviceStats({
 							{__("Unique Browsers")}
 						</p>
 						<p className="links-drawer-summary-value">
-							{displayBrowsers.length}
+							{formatCount(displayBrowsers.length)}
 						</p>
 					</div>
 				</div>
@@ -207,7 +208,7 @@ function DeviceStats({
 												{browser.percentage}%
 											</span>
 											<span className="links-device-list-count">
-												{browser.count}
+												{formatCount(browser.count)}
 											</span>
 										</div>
 									</div>
@@ -252,7 +253,7 @@ function DeviceStats({
 												{device.name}
 											</p>
 											<p className="text-xs text-text-muted">
-												{device.count}{" "}
+												{formatCount(device.count)}{" "}
 												{_n(
 													"device",
 													"devices",
@@ -300,7 +301,7 @@ function DeviceStats({
 										{os.percentage}%
 									</span>
 									<span className="links-device-os-count">
-										{os.count}
+										{formatCount(os.count)}
 									</span>
 								</div>
 							</div>

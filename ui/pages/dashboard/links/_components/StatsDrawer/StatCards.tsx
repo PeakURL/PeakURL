@@ -1,5 +1,5 @@
 import { MousePointerClick, Users, Calendar, TrendingUp } from "lucide-react";
-import { formatNumber, formatRelativeTime } from "@/utils";
+import { formatCount, formatRelativeTime } from "@/utils";
 import { __ } from "@/i18n";
 import { getStatsTotals } from "./analytics";
 import type { LinkStatsViewProps } from "./types";
@@ -17,14 +17,14 @@ function StatCards({
 	const displayStats = [
 		{
 			name: __("Total Clicks"),
-			value: isLoading ? "..." : formatNumber(totalClicks),
+			value: isLoading ? "..." : formatCount(totalClicks),
 			icon: MousePointerClick,
 			color: "text-blue-600 dark:text-blue-400",
 			bg: "bg-blue-500/10",
 		},
 		{
 			name: __("Unique Visitors"),
-			value: isLoading ? "..." : formatNumber(uniqueClicks),
+			value: isLoading ? "..." : formatCount(uniqueClicks),
 			icon: Users,
 			color: "text-purple-600 dark:text-purple-400",
 			bg: "bg-purple-500/10",

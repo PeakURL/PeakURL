@@ -9,34 +9,105 @@ import {
 	TabPanels,
 } from "@headlessui/react";
 import { X, Link2, BarChart3, Globe, Share2, ExternalLink } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useMemo, useState, type SetStateAction } from "react";
 import { useGetLinkStatsQuery } from "@/store/slices/api";
 import { isDocumentRtl } from "@/i18n/direction";
-import { getShortUrl } from "@/utils";
+import { getLocalDateValue, getShortUrl } from "@/utils";
 import { __ } from "@/i18n";
-import StatCards from "./StatCards";
-import TrafficHistory from "./TrafficHistory";
-import HistoricalStats from "./HistoricalStats";
-import BestDay from "./BestDay";
-import ShareTab from "./ShareTab";
-import TrafficLocationTab from "./TrafficLocationTab";
-import TrafficSourcesTab from "./TrafficSourcesTab";
-import QuickInsights from "./QuickInsights";
-import type { StatsDrawerProps, StatsTimeRange } from "./types";
+import {
+	BestDay,
+	ClickHistory,
+	HistoricalStats,
+	QuickInsights,
+	ShareTab,
+	StatCards,
+	TrafficHistory,
+	TrafficLocationTab,
+	TrafficSourcesTab,
+} from "./sections";
+import type {
+	StatsCustomDateRange,
+	StatsDrawerProps,
+	StatsTimeRange,
+} from "./types";
+
+const CUSTOM_RANGE_FALLBACK_DAYS = 30;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/**
+ * Build the first custom chart range for a link.
+ */
+function getDefaultCustomDateRange(
+	createdAt?: string | null
+): StatsCustomDateRange {
+	const today = getLocalDateValue(new Date());
+	const createdDate = createdAt ? new Date(createdAt) : null;
+	const fromDate =
+		createdDate && !Number.isNaN(createdDate.getTime())
+			? createdDate
+			: new Date(Date.now() - CUSTOM_RANGE_FALLBACK_DAYS * DAY_MS);
+	const from = getLocalDateValue(fromDate);
+
+	return from > today ? { from: today, to: today } : { from, to: today };
+}
 
 export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [timeRange, setTimeRange] = useState<StatsTimeRange>("7d");
 	const isRtl = isDocumentRtl();
 	const direction = isRtl ? "rtl" : "ltr";
+	const linkId = link?.id || "";
+	const defaultCustomDateRange = useMemo(
+		() => getDefaultCustomDateRange(link?.createdAt),
+		[link?.createdAt]
+	);
+	const [customDateRangeState, setCustomDateRangeState] = useState<{
+		linkId: string;
+		range: StatsCustomDateRange;
+	} | null>(null);
+	const customDateRange =
+		customDateRangeState?.linkId === linkId
+			? customDateRangeState.range
+			: defaultCustomDateRange;
+	const setCustomDateRange = useCallback(
+		(nextRange: SetStateAction<StatsCustomDateRange>) => {
+			setCustomDateRangeState((currentState) => {
+				const currentRange =
+					currentState?.linkId === linkId
+						? currentState.range
+						: defaultCustomDateRange;
+				const range =
+					"function" === typeof nextRange
+						? nextRange(currentRange)
+						: nextRange;
+
+				return { linkId, range };
+			});
+		},
+		[defaultCustomDateRange, linkId]
+	);
+	const statsQueryArgs =
+		"custom" === timeRange
+			? {
+					id: linkId,
+					range: "custom" as const,
+					from: customDateRange.from,
+					to: customDateRange.to,
+				}
+			: {
+					id: linkId,
+					range: timeRange,
+				};
 
 	const { data: statsData, isLoading } = useGetLinkStatsQuery(
+		statsQueryArgs,
 		{
-			id: link?.id || "",
-			range: timeRange,
-		},
-		{
-			skip: !link?.id || !open || ![0, 2].includes(selectedTab),
+			skip:
+				!link?.id ||
+				!open ||
+				![0, 2].includes(selectedTab) ||
+				("custom" === timeRange &&
+					(!customDateRange.from || !customDateRange.to)),
 		}
 	);
 
@@ -159,6 +230,12 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 													isLoading={isLoading}
 													timeRange={timeRange}
 													setTimeRange={setTimeRange}
+													customDateRange={
+														customDateRange
+													}
+													setCustomDateRange={
+														setCustomDateRange
+													}
 												/>
 
 												{/* Historical Stats */}
@@ -170,6 +247,13 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 
 												{/* Best Day */}
 												<BestDay
+													link={link}
+													stats={statsPayload}
+													isLoading={isLoading}
+												/>
+
+												{/* Click History */}
+												<ClickHistory
 													link={link}
 													stats={statsPayload}
 													isLoading={isLoading}

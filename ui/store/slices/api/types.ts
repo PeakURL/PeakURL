@@ -180,7 +180,7 @@ export interface GetActivityHistoryQueryArgs {
 	category?: "all" | "links" | "users";
 }
 
-export type LinkStatsRange = "24h" | "7d" | "30d" | "all";
+export type LinkStatsRange = "24h" | "7d" | "30d";
 
 /**
  * Shared sort field options for links list and export queries.
@@ -198,15 +198,21 @@ export type LinkAnalyticsArgs = {
 			/** Dashboard range token for link-specific analytics. */
 			range: LinkStatsRange;
 
-			/** Day count is intentionally omitted when a range is provided. */
-			days?: never;
+			/** Custom range start is intentionally omitted for preset ranges. */
+			from?: never;
+
+			/** Custom range end is intentionally omitted for preset ranges. */
+			to?: never;
 	  }
 	| {
-			/** Optional time range in days for the query. */
-			days?: number;
+			/** Custom dashboard range token for date-bounded analytics. */
+			range: "custom";
 
-			/** Range is intentionally omitted when an explicit day count is provided. */
-			range?: never;
+			/** Inclusive custom range start date in YYYY-MM-DD format. */
+			from: string;
+
+			/** Inclusive custom range end date in YYYY-MM-DD format. */
+			to: string;
 	  }
 );
 

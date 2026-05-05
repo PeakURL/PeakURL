@@ -1,4 +1,5 @@
 import { __, sprintf } from "@/i18n";
+import { formatCount } from "@/utils";
 import type { LinkRecord } from "../types";
 import type {
 	LinkStatsPayload,
@@ -16,6 +17,7 @@ export interface NormalizedTrafficSeries {
 	labels: string[];
 	clicks: number[];
 	unique: number[];
+	granularity?: "day" | "month";
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -47,7 +49,7 @@ export function getStatsTimeRangeDays(
 			return 1;
 		case "30d":
 			return 30;
-		case "all":
+		case "custom":
 			return getLinkAgeInDays(createdAt);
 		case "7d":
 		default:
@@ -61,8 +63,8 @@ export function getStatsTimeRangeLabel(range: StatsTimeRange): string {
 			return __("24 hours");
 		case "30d":
 			return __("30 days");
-		case "all":
-			return __("All time");
+		case "custom":
+			return __("Custom range");
 		case "7d":
 		default:
 			return __("7 days");
@@ -120,6 +122,7 @@ export function normalizeTrafficSeries(
 			const uniqueCount = Math.max(0, toFiniteNumber(rawUnique[index]));
 			return Math.min(uniqueCount, clickCount);
 		}),
+		granularity: traffic?.granularity,
 	};
 }
 
@@ -134,12 +137,25 @@ export function hasTrafficActivity(series: NormalizedTrafficSeries): boolean {
 export function formatClickCount(count: number): string {
 	return sprintf(
 		1 === count ? __("%s click") : __("%s clicks"),
-		String(count)
+		formatCount(count)
+	);
+}
+
+export function formatUniqueCount(count: number): string {
+	return sprintf(__("%s unique"), formatCount(count));
+}
+
+export function formatUniqueVisitorCount(count: number): string {
+	return sprintf(
+		1 === count ? __("%s unique visitor") : __("%s unique visitors"),
+		formatCount(count)
 	);
 }
 
 export function formatAverageClicks(value: number, unit: string): string {
-	const formattedValue = value.toFixed("hour" === unit ? 2 : 1);
+	const formattedValue = formatCount(
+		Number(value.toFixed("hour" === unit ? 2 : 1))
+	);
 
 	return sprintf(
 		"hour" === unit ? __("%s per hour") : __("%s per day"),

@@ -15,9 +15,51 @@ export type {
 	TrafficChartType,
 } from "../types";
 
-function formatTrafficLabel(label: string, totalLabels: number): string {
+function getTrafficLabelYear(label: string): string {
+	const match = label.match(/^(\d{4})-/);
+	return match?.[1] || "";
+}
+
+function trafficLabelsSpanYears(labels: string[]): boolean {
+	const years = new Set(
+		labels.map(getTrafficLabelYear).filter((year) => "" !== year)
+	);
+
+	return years.size > 1;
+}
+
+function formatTrafficAxisLabel(
+	label: string,
+	totalLabels: number,
+	granularity: TrafficChartData["granularity"],
+	rawLabels: string[]
+): string {
+	if ("month" === granularity) {
+		return (
+			formatDateOnly(label, {
+				month: "short",
+				year: "numeric",
+			}) || label
+		);
+	}
+
 	if (totalLabels <= 7) {
-		return formatDateOnly(label, { weekday: "short" }) || label;
+		return (
+			formatDateOnly(label, {
+				weekday: "short",
+				day: "numeric",
+			}) || label
+		);
+	}
+
+	if (trafficLabelsSpanYears(rawLabels)) {
+		return (
+			formatDateOnly(label, {
+				month: "short",
+				day: "numeric",
+				year: "2-digit",
+			}) || label
+		);
 	}
 
 	return (
@@ -26,6 +68,22 @@ function formatTrafficLabel(label: string, totalLabels: number): string {
 			day: "numeric",
 		}) || label
 	);
+}
+
+function formatTrafficTooltipLabel(
+	label: string,
+	granularity: TrafficChartData["granularity"]
+): string {
+	if ("month" === granularity) {
+		return (
+			formatDateOnly(label, {
+				month: "long",
+				year: "numeric",
+			}) || label
+		);
+	}
+
+	return formatDateOnly(label, { dateStyle: "medium" }) || label;
 }
 
 const UNIQUE_OVERLAP_OFFSET_SCALE = 0.015;
@@ -123,13 +181,21 @@ export function TrafficChart({
 				Array.isArray(data.unique) &&
 				data.labels.length > 0;
 
+			const rawLabels = data?.labels || [];
+			const granularity = "month" === data?.granularity ? "month" : "day";
 			const chartData: TrafficChartData = hasValidStructure
 				? {
-						labels: (data?.labels || []).map((label) =>
-							formatTrafficLabel(label, data?.labels?.length || 0)
+						labels: rawLabels.map((label) =>
+							formatTrafficAxisLabel(
+								label,
+								rawLabels.length,
+								granularity,
+								rawLabels
+							)
 						),
 						clicks: data?.clicks || [],
 						unique: data?.unique || [],
+						granularity,
 					}
 				: {
 						labels: [
@@ -143,6 +209,7 @@ export function TrafficChart({
 						],
 						clicks: [420, 380, 520, 478, 589, 639, 749],
 						unique: [340, 289, 420, 390, 480, 520, 630],
+						granularity: "day",
 					};
 
 			// Theme colors
@@ -279,7 +346,15 @@ export function TrafficChart({
 								title: function (
 									context: TooltipItem<TrafficChartType>[]
 								) {
-									return context[0].label;
+									const dataIndex = context[0].dataIndex;
+									const rawLabel = rawLabels[dataIndex];
+
+									return rawLabel
+										? formatTrafficTooltipLabel(
+												rawLabel,
+												chartData.granularity
+											)
+										: context[0].label;
 								},
 								label: function (
 									context: TooltipItem<TrafficChartType>

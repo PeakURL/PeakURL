@@ -43,6 +43,14 @@
 		@apply flex items-center gap-2;
 	}
 
+	.links-best-day-tree-label {
+		@apply text-sm font-medium text-heading;
+	}
+
+	.links-best-day-tree-label-muted {
+		@apply text-sm text-text-muted;
+	}
+
 	.links-best-day-tree-dot-large {
 		@apply h-2 w-2 rounded-full bg-accent;
 	}

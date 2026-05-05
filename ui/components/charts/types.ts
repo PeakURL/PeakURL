@@ -20,6 +20,9 @@ export interface TrafficChartData {
 
 	/** Unique visitor counts aligned with the labels array. */
 	unique: number[];
+
+	/** Bucket size used by the traffic series. */
+	granularity?: "day" | "month";
 }
 
 /**

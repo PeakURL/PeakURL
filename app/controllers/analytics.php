@@ -40,7 +40,7 @@ class AnalyticsController extends BaseController {
 	 * Dashboard analytics summary (GET /api/v1/analytics).
 	 *
 	 * Returns total clicks, unique visitors, top links, and
-	 * referrer/device/browser breakdowns for the given time window.
+	 * referrer/device/browser breakdowns for the selected period.
 	 *
 	 * @param Request $request Incoming HTTP request with optional `days` query param.
 	 * @return array<string, mixed> JSON envelope with analytics summary.
@@ -170,20 +170,22 @@ class AnalyticsController extends BaseController {
 	 * Per-link time-series statistics (GET /api/v1/analytics/stats/:id).
 	 *
 	 * Returns daily click counts for a specific short link over the
-	 * requested number of days. Returns 404 if the link has no data.
+	 * requested range. Returns 404 if the link has no data.
 	 *
-	 * @param Request $request Incoming HTTP request with route param `id` and optional `days`.
+	 * @param Request $request Incoming HTTP request with route param `id`.
 	 * @return array<string, mixed> JSON envelope with click time-series or 404 error.
 	 * @since 1.0.0
 	 */
 	public function stats( Request $request ): array {
-		$days  = (int) $request->get_query_param( 'days', 7 );
-		$range = trim( (string) $request->get_query_param( 'range', '' ) );
-		$stats = $this->data_store->link_stats(
+		$range            = trim( (string) $request->get_query_param( 'range', '' ) );
+		$custom_date_from = trim( (string) $request->get_query_param( 'from', '' ) );
+		$custom_date_to   = trim( (string) $request->get_query_param( 'to', '' ) );
+		$stats            = $this->data_store->link_stats(
 			$request,
 			(string) $request->get_route_param( 'id' ),
-			$days,
 			$range,
+			$custom_date_from,
+			$custom_date_to,
 		);
 
 		if ( ! $stats ) {

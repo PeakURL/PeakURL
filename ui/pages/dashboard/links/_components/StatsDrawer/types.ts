@@ -4,7 +4,18 @@ import type { LinkRecord } from "../types";
 /**
  * Supported time ranges for filtering statistics.
  */
-export type StatsTimeRange = "24h" | "7d" | "30d" | "all";
+export type StatsTimeRange = "24h" | "7d" | "30d" | "custom";
+
+/**
+ * Date-only range used by the custom traffic-history filter.
+ */
+export interface StatsCustomDateRange {
+	/** Inclusive start date in YYYY-MM-DD format. */
+	from: string;
+
+	/** Inclusive end date in YYYY-MM-DD format. */
+	to: string;
+}
 
 /**
  * Generic metric item used for grouped statistics
@@ -75,6 +86,9 @@ export interface StatsTrafficSeries {
 
 	/** Unique clicks over time */
 	unique?: number[];
+
+	/** Bucket size used by the traffic series. */
+	granularity?: "day" | "month";
 }
 
 /**
@@ -86,6 +100,12 @@ export interface LinkStatsRange {
 
 	/** Number of date buckets returned for the chart. */
 	days?: number;
+
+	/** Inclusive custom start date when the range is custom. */
+	from?: string;
+
+	/** Inclusive custom end date when the range is custom. */
+	to?: string;
 }
 
 /**
@@ -112,9 +132,9 @@ export interface LinkPeriodSummary {
 }
 
 /**
- * Best all-time click day for a link.
+ * Day-level click totals shared by best-day and click-history analytics.
  */
-export interface LinkBestDay {
+export interface LinkClickDay {
 	/** Date-only value in YYYY-MM-DD format. */
 	date: string;
 
@@ -126,6 +146,27 @@ export interface LinkBestDay {
 
 	/** Unique visitor rate for the date. */
 	uniqueClickRate: number;
+}
+
+/**
+ * Best all-time click day for a link.
+ */
+export type LinkBestDay = LinkClickDay;
+
+/**
+ * One active day in a link's click history.
+ */
+export type LinkClickHistoryDay = LinkClickDay;
+
+/**
+ * Day-level click history for a link.
+ */
+export interface LinkClickHistory {
+	/** Number of days with click activity. */
+	activeDayCount: number;
+
+	/** Active day rows returned oldest first by the API. */
+	days: LinkClickHistoryDay[];
 }
 
 /**
@@ -152,6 +193,9 @@ export interface LinkStatsPayload {
 
 	/** Best all-time day for this link. */
 	bestDay?: LinkBestDay | null;
+
+	/** Day-level click history for this link. */
+	clickHistory?: LinkClickHistory | null;
 
 	/** Breakdown by device type */
 	devices?: StatsMetricItem[];
@@ -222,6 +266,8 @@ export interface TrafficHistoryProps {
 	isLoading: boolean;
 	timeRange: StatsTimeRange;
 	setTimeRange: Dispatch<SetStateAction<StatsTimeRange>>;
+	customDateRange: StatsCustomDateRange;
+	setCustomDateRange: Dispatch<SetStateAction<StatsCustomDateRange>>;
 }
 
 /**

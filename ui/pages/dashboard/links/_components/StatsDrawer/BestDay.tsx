@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { __, sprintf } from "@/i18n";
+import { __ } from "@/i18n";
 import { formatDateOnly } from "@/utils";
-import { formatClickCount } from "./analytics";
+import { formatClickCount, formatUniqueVisitorCount } from "./analytics";
 import type { LinkBestDay, LinkStatsViewProps } from "./types";
 
 function BestDay({ stats, isLoading }: LinkStatsViewProps) {
@@ -32,10 +32,7 @@ function BestDay({ stats, isLoading }: LinkStatsViewProps) {
 						</span>{" "}
 						{__("on")} {bestDayLabel}.{" "}
 						<span className="links-best-day-unique">
-							{sprintf(
-								__("%s unique visitors"),
-								String(bestDay.uniqueClicks)
-							)}
+							{formatUniqueVisitorCount(bestDay.uniqueClicks)}
 						</span>{" "}
 						<button
 							type="button"
@@ -58,7 +55,7 @@ function BestDay({ stats, isLoading }: LinkStatsViewProps) {
 							<div className="links-best-day-tree">
 								<div className="links-best-day-tree-row">
 									<span className="links-best-day-tree-dot-large"></span>
-									<span className="text-sm font-medium text-heading">
+									<span className="links-best-day-tree-label">
 										{__("Year")}{" "}
 										{formatDateOnly(bestDay.date, {
 											year: "numeric",
@@ -68,7 +65,7 @@ function BestDay({ stats, isLoading }: LinkStatsViewProps) {
 								<div className="links-best-day-tree-branch">
 									<div className="links-best-day-tree-row">
 										<span className="links-best-day-tree-dot-medium"></span>
-										<span className="text-sm text-text-muted">
+										<span className="links-best-day-tree-label-muted">
 											{formatDateOnly(bestDay.date, {
 												month: "long",
 											})}
@@ -76,7 +73,7 @@ function BestDay({ stats, isLoading }: LinkStatsViewProps) {
 									</div>
 									<div className="links-best-day-tree-row links-best-day-tree-branch">
 										<span className="links-best-day-tree-dot-small"></span>
-										<span className="text-sm font-medium text-heading">
+										<span className="links-best-day-tree-label">
 											{formatDateOnly(bestDay.date, {
 												day: "numeric",
 											})}

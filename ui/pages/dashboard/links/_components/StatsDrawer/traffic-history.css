@@ -40,12 +40,12 @@
 	}
 
 	.links-traffic-history-toolbar {
-		@apply flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center xl:justify-end;
+		@apply flex flex-col gap-2 sm:flex-row sm:flex-nowrap sm:items-center xl:justify-end;
 	}
 
 	.links-traffic-history-tools,
 	.links-traffic-history-series {
-		@apply flex gap-1 rounded-lg bg-surface p-1;
+		@apply flex shrink-0 gap-1 rounded-lg bg-surface p-1;
 	}
 
 	.links-traffic-history-tool-button {
@@ -65,11 +65,11 @@
 	}
 
 	.links-traffic-history-ranges {
-		@apply flex gap-1 rounded-lg bg-surface p-1;
+		@apply flex shrink-0 gap-1 rounded-lg bg-surface p-1;
 	}
 
 	.links-traffic-history-range {
-		@apply rounded px-3 py-1 text-xs font-medium transition-all;
+		@apply inline-flex items-center gap-1.5 rounded px-3 py-1 text-xs font-medium transition-all;
 	}
 
 	.links-traffic-history-range-current {
@@ -78,6 +78,56 @@
 
 	.links-traffic-history-range-idle {
 		@apply text-text-muted hover:text-heading;
+	}
+
+	.links-traffic-history-range-icon {
+		@apply h-3.5 w-3.5 shrink-0;
+	}
+
+	.links-traffic-history-custom {
+		@apply relative;
+	}
+
+	.links-traffic-history-custom-panel {
+		@apply z-50 rounded-lg border border-stroke bg-surface p-4 shadow-lg;
+		width: min(18rem, calc(100vw - 2rem));
+	}
+
+	.links-traffic-history-custom-header {
+		@apply mb-3;
+	}
+
+	.links-traffic-history-custom-title {
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.links-traffic-history-date-grid {
+		@apply grid gap-3;
+	}
+
+	.links-traffic-history-date-field {
+		@apply grid gap-1.5 text-xs font-medium text-text-muted;
+	}
+
+	.links-traffic-history-date-field input {
+		@apply h-9 rounded-md border border-stroke bg-surface-alt px-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20;
+		color-scheme: light;
+	}
+
+	.dark .links-traffic-history-date-field input {
+		color-scheme: dark;
+	}
+
+	.links-traffic-history-custom-summary {
+		@apply mt-3 rounded-md bg-surface-alt px-2.5 py-2 text-xs text-text-muted;
+	}
+
+	.links-traffic-history-custom-actions {
+		@apply mt-3 flex justify-end;
+	}
+
+	.links-traffic-history-custom-apply {
+		@apply inline-flex h-8 items-center justify-center rounded bg-accent px-3 text-xs font-medium text-white transition-all hover:bg-accent/90;
 	}
 
 	.links-traffic-history-canvas-wrap {

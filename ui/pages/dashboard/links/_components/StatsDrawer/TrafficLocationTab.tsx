@@ -4,9 +4,10 @@ import { WorldMap } from "@/components";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { useGetLinkLocationQuery } from "@/store/slices/api";
-import { getCountryFlagEmoji, getErrorMessage } from "@/utils";
+import { formatCount, getCountryFlagEmoji, getErrorMessage } from "@/utils";
 import type { HoveredCountry, TrafficLocationTabProps } from "./types";
 import { LocalIcon, UnknownLocationIcon } from "./Icons";
+import { formatClickCount } from "./analytics";
 
 interface LocationNoteItemProps {
 	text: string;
@@ -85,9 +86,7 @@ function TrafficLocationTab({
 			return <UnknownLocationIcon className="w-6 h-6" />;
 		}
 		return (
-			<span className="text-2xl">
-				{getCountryFlagEmoji(countryCode)}
-			</span>
+			<span className="text-2xl">{getCountryFlagEmoji(countryCode)}</span>
 		);
 	};
 
@@ -227,7 +226,7 @@ function TrafficLocationTab({
 								{__("Total Locations")}
 							</p>
 							<p className="links-drawer-summary-value">
-								{total} {__("clicks")}
+								{formatClickCount(total)}
 							</p>
 						</div>
 					</div>
@@ -236,7 +235,7 @@ function TrafficLocationTab({
 							{__("Countries")}
 						</p>
 						<p className="links-drawer-summary-value">
-							{countries.length}
+							{formatCount(countries.length)}
 						</p>
 					</div>
 				</div>
@@ -278,7 +277,7 @@ function TrafficLocationTab({
 								{hoveredCountry.countryName}
 							</p>
 							<p className="links-location-tooltip-copy">
-								{hoveredCountry.clicks} {__("clicks")} (
+								{formatClickCount(hoveredCountry.clicks)} (
 								{getPercentage(hoveredCountry.clicks)}%)
 							</p>
 						</div>
@@ -317,7 +316,7 @@ function TrafficLocationTab({
 											{percent}%
 										</span>
 										<span className="links-location-list-count">
-											{country.count} {__("clicks")}
+											{formatClickCount(country.count)}
 										</span>
 									</div>
 								</div>
@@ -364,7 +363,7 @@ function TrafficLocationTab({
 								</div>
 								<div className="links-location-city-meta">
 									<p className="text-sm font-semibold text-heading">
-										{city.count}
+										{formatCount(city.count)}
 									</p>
 									<p className="text-xs text-text-muted">
 										{percent}%

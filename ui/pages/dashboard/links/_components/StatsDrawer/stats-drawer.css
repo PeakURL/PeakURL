@@ -12,7 +12,8 @@
 	}
 
 	.links-drawer-panel {
-		@apply pointer-events-auto flex h-full w-screen max-w-4xl transform flex-col overflow-y-auto bg-surface shadow-xl transition duration-500 ease-in-out sm:duration-700;
+		@apply pointer-events-auto flex h-full w-screen transform flex-col overflow-y-auto bg-surface shadow-xl transition duration-500 ease-in-out sm:duration-700;
+		max-width: 60rem;
 	}
 
 	.links-drawer-header {

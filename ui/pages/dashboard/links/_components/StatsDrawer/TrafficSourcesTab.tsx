@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import DeviceStats from "./DeviceStats";
 import { __ } from "@/i18n";
+import { formatCount } from "@/utils";
+import { formatClickCount } from "./analytics";
 import type {
 	LinkStatsViewProps,
 	ReferrerCategoryItem,
@@ -153,9 +155,7 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 					<div className="links-sources-category-grid">
 						{referrerCategories.map(
 							(cat: ReferrerCategoryItem, index: number) => {
-								const meta = getCategoryInfo(
-									cat.category
-								);
+								const meta = getCategoryInfo(cat.category);
 								const Icon = meta.icon;
 								const percentage = getPercentage(
 									cat.count,
@@ -179,7 +179,7 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 												{getCategoryLabel(cat.category)}
 											</p>
 											<p className="text-xs text-text-muted">
-												{cat.count} {__("clicks")} (
+												{formatClickCount(cat.count)} (
 												{percentage}%)
 											</p>
 										</div>
@@ -255,7 +255,7 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 										</div>
 										<div className="links-sources-referrer-count">
 											<span className="text-sm font-medium text-heading">
-												{ref.count}
+												{formatCount(ref.count)}
 											</span>
 											<span className="hidden text-xs text-text-muted sm:inline">
 												{" "}
@@ -317,7 +317,7 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 										</div>
 									</div>
 									<span className="text-sm font-medium text-heading shrink-0">
-										{campaign.count} {__("clicks")}
+										{formatClickCount(campaign.count)}
 									</span>
 								</div>
 							)

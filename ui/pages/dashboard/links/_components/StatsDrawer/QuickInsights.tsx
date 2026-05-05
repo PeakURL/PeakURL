@@ -22,7 +22,7 @@ function QuickInsights({
 	const { totalClicks, uniqueClickRate } = getStatsTotals(link, stats);
 	const uniqueClickRateValue = Number(uniqueClickRate);
 	const averageUnit = "24h" === timeRange ? "hour" : "day";
-	const averageWindow =
+	const averagePeriod =
 		"hour" === averageUnit
 			? 24
 			: Math.max(
@@ -32,7 +32,7 @@ function QuickInsights({
 							getStatsTimeRangeDays(timeRange, link.createdAt)
 					)
 				);
-	const averageClicks = totalClicks / averageWindow;
+	const averageClicks = totalClicks / averagePeriod;
 
 	const isActive = link.status === "active";
 	const insights = [

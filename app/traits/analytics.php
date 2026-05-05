@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 trait AnalyticsTrait {
 
 	/**
-	 * Dashboard analytics summary over a time window.
+	 * Dashboard analytics summary over a selected period.
 	 *
 	 * Returns total clicks, unique visitors, top links, traffic series,
 	 * and browser/device/referrer breakdowns.
@@ -40,7 +40,7 @@ trait AnalyticsTrait {
 	public function analytics_summary( Request $request, int $days = 7 ): array {
 		$user            = $this->get_current_user( $request );
 		$days            = max( 1, $days );
-		$window          = $this->time_window( $days );
+		$period          = $this->get_analytics_period( $days );
 		$link_conditions = array();
 		$link_params     = array();
 		$this->scope_link_visibility(
@@ -52,13 +52,13 @@ trait AnalyticsTrait {
 		$total_links      = (int) $this->query_value(
 			'SELECT COUNT(*) FROM urls u ' .
 			( ! empty( $link_conditions )
-				? 'WHERE ' . implode( ' AND ', $link_conditions )
-				: '' ),
+			? 'WHERE ' . implode( ' AND ', $link_conditions )
+			: '' ),
 			$link_params,
 		);
 		$click_join       = '';
 		$click_conditions = array( 'c.clicked_at >= :start_at' );
-		$click_params     = array( 'start_at' => $window['start_at'] );
+		$click_params     = array( 'start_at' => $period['start_at'] );
 		$this->scope_click_analytics(
 			$user,
 			$click_join,
@@ -68,16 +68,16 @@ trait AnalyticsTrait {
 			'u',
 		);
 		$stats =
-			$this->query_one(
-				'SELECT
+		$this->query_one(
+			'SELECT
 	                COUNT(*) AS total_clicks,
 	                COUNT(DISTINCT COALESCE(NULLIF(c.visitor_hash, \'\'), c.id)) AS unique_clicks
 	            FROM clicks c' .
-				$click_join .
-				' WHERE ' .
-				implode( ' AND ', $click_conditions ),
-				$click_params,
-			) ?? array();
+			$click_join .
+			' WHERE ' .
+			implode( ' AND ', $click_conditions ),
+			$click_params,
+		) ?? array();
 
 		$unique_click_rate = $this->get_unique_click_rate(
 			(int) ( $stats['total_clicks'] ?? 0 ),
@@ -92,7 +92,8 @@ trait AnalyticsTrait {
 			'devices'          => $this->group_click_metrics(
 				'device',
 				'name',
-				$window['start_at'],
+				$period['start_at'],
+				null,
 				null,
 				null,
 				$user,
@@ -100,7 +101,8 @@ trait AnalyticsTrait {
 			'browsers'         => $this->group_click_metrics(
 				'browser',
 				'name',
-				$window['start_at'],
+				$period['start_at'],
+				null,
 				null,
 				null,
 				$user,
@@ -108,7 +110,8 @@ trait AnalyticsTrait {
 			'operatingSystems' => $this->group_click_metrics(
 				'operating_system',
 				'name',
-				$window['start_at'],
+				$period['start_at'],
+				null,
 				null,
 				null,
 				$user,
@@ -116,7 +119,8 @@ trait AnalyticsTrait {
 			'countries'        => $this->group_click_metrics(
 				'country_name',
 				'name',
-				$window['start_at'],
+				$period['start_at'],
+				null,
 				'country_code',
 				null,
 				$user,
@@ -325,15 +329,18 @@ trait AnalyticsTrait {
 	 *
 	 * @param Request $request Incoming HTTP request.
 	 * @param string  $id      Short-URL row ID.
-	 * @param int     $days    Number of days to look back.
+	 * @param string|null $range            Requested dashboard range token.
+	 * @param string|null $custom_date_from Custom start date in YYYY-MM-DD format.
+	 * @param string|null $custom_date_to   Custom end date in YYYY-MM-DD format.
 	 * @return array<string, mixed>|null Link stats or null if not found.
 	 * @since 1.0.0
 	 */
 	public function link_stats(
 		Request $request,
 		string $id,
-		int $days = 7,
-		?string $range = null
+		?string $range = null,
+		?string $custom_date_from = null,
+		?string $custom_date_to = null
 	): ?array {
 		$user = $this->get_current_user( $request );
 		$url  = $this->find_url_row( $id );
@@ -350,19 +357,28 @@ trait AnalyticsTrait {
 			__( 'You do not have permission to view analytics for this link.', 'peakurl' ),
 		);
 
-		$range_config     = $this->get_link_stats_range_config(
+		$stats_period     = $this->get_link_stats_period(
 			$range,
-			$days,
-			(string) ( $url['created_at'] ?? '' ),
+			$custom_date_from,
+			$custom_date_to,
 		);
-		$window_start_at  = $range_config['start_at'];
-		$metric_start_at  = $window_start_at ?? '1000-01-01 00:00:00';
+		$url_id           = (string) $url['id'];
+		$period_start_at  = $stats_period['start_at'];
+		$period_end_at    = $stats_period['end_at'];
+		$metric_start_at  = $period_start_at ?? '1000-01-01 00:00:00';
 		$total_conditions = array( 'url_id = :url_id' );
-		$total_params     = array( 'url_id' => $url['id'] );
+		$total_params     = array( 'url_id' => $url_id );
+		// Reuse the active-day history for both best-day and full history output.
+		$click_days = $this->get_link_click_history_days( $url_id );
 
-		if ( null !== $window_start_at ) {
+		if ( null !== $period_start_at ) {
 			$total_conditions[]       = 'clicked_at >= :start_at';
-			$total_params['start_at'] = $window_start_at;
+			$total_params['start_at'] = $period_start_at;
+		}
+
+		if ( null !== $period_end_at ) {
+			$total_conditions[]     = 'clicked_at < :end_at';
+			$total_params['end_at'] = $period_end_at;
 		}
 
 		$totals =
@@ -379,58 +395,87 @@ trait AnalyticsTrait {
 			(int) ( $totals['total_clicks'] ?? 0 ),
 			(int) ( $totals['unique_clicks'] ?? 0 ),
 		);
+		$range_payload     = array(
+			'key'  => $stats_period['key'],
+			'days' => $stats_period['days'],
+		);
+
+		if ( 'custom' === $stats_period['key'] ) {
+			$range_payload['from'] = $stats_period['start_date'];
+			$range_payload['to']   = $stats_period['end_date'];
+		}
 
 		return array(
 			'totalClicks'        => (int) ( $totals['total_clicks'] ?? 0 ),
 			'uniqueClicks'       => (int) ( $totals['unique_clicks'] ?? 0 ),
 			'uniqueClickRate'    => $unique_click_rate,
-			'range'              => array(
-				'key'  => $range_config['key'],
-				'days' => $range_config['days'],
-			),
-			'traffic'            => $this->query_traffic_series(
-				(string) $url['id'],
-				$range_config['days'],
-			),
+			'range'              => $range_payload,
+			'traffic'            => 'custom' === $stats_period['key']
+				? $this->query_traffic_series_range(
+					$url_id,
+					(string) $stats_period['start_date'],
+					(int) $stats_period['days'],
+					(string) $period_start_at,
+					(string) $period_end_at,
+					$this->get_analytics_timezone()->getName(),
+					null,
+					$this->get_traffic_series_granularity(
+						(int) $stats_period['days'],
+					),
+				)
+				: $this->query_traffic_series(
+					$url_id,
+					$stats_period['days'],
+				),
 			'periodSummaries'    => $this->get_link_period_summaries(
-				(string) $url['id'],
+				$url_id,
 				(string) ( $url['created_at'] ?? '' ),
 			),
 			'bestDay'            => $this->get_link_best_day(
-				(string) $url['id'],
+				$click_days,
+			),
+			'clickHistory'       => array(
+				'activeDayCount' => count( $click_days ),
+				'days'           => $click_days,
 			),
 			'devices'            => $this->group_click_metrics(
 				'device',
 				'name',
 				$metric_start_at,
+				$period_end_at,
 				null,
-				(string) $url['id'],
+				$url_id,
 			),
 			'browsers'           => $this->group_click_metrics(
 				'browser',
 				'name',
 				$metric_start_at,
+				$period_end_at,
 				null,
-				(string) $url['id'],
+				$url_id,
 			),
 			'operatingSystems'   => $this->group_click_metrics(
 				'operating_system',
 				'name',
 				$metric_start_at,
+				$period_end_at,
 				null,
-				(string) $url['id'],
+				$url_id,
 			),
 			'referrers'          => $this->group_referrers(
-				(string) $url['id'],
+				$url_id,
 				$metric_start_at,
+				$period_end_at,
 			),
 			'referrerCategories' => $this->group_referrer_categories(
-				(string) $url['id'],
+				$url_id,
 				$metric_start_at,
+				$period_end_at,
 			),
 			'utmCampaigns'       => $this->group_utm_campaigns(
-				(string) $url['id'],
+				$url_id,
 				$metric_start_at,
+				$period_end_at,
 			),
 		);
 	}

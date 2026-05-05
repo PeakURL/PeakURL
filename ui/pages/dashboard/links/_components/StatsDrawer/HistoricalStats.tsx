@@ -1,7 +1,11 @@
 import { Calendar } from "lucide-react";
-import { __, sprintf } from "@/i18n";
+import { __ } from "@/i18n";
 import { formatLocalizedDateTime, formatRelativeTime } from "@/utils";
-import { formatAverageClicks, formatClickCount } from "./analytics";
+import {
+	formatAverageClicks,
+	formatClickCount,
+	formatUniqueCount,
+} from "./analytics";
 import type { LinkPeriodSummary, LinkStatsViewProps } from "./types";
 
 interface HistoricalPeriodRow {
@@ -130,10 +134,7 @@ function HistoricalStats({ link, stats, isLoading }: LinkStatsViewProps) {
 							<span className="links-historical-stats-unique">
 								{isLoading || !summary
 									? ""
-									: sprintf(
-											__("%s unique"),
-											String(summary.uniqueClicks)
-										)}
+									: formatUniqueCount(summary.uniqueClicks)}
 							</span>
 							<span className="links-historical-stats-rate">
 								{isLoading || !summary

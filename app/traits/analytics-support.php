@@ -58,13 +58,13 @@ trait AnalyticsSupportTrait {
 	}
 
 	/**
-	 * Get the start-at timestamp for a given time window.
+	 * Get analytics period metadata for a rolling day count.
 	 *
 	 * @param int $days Number of days to look back.
-	 * @return array<string, string> Window metadata using UTC start time.
+	 * @return array<string, string> Period metadata using UTC start time.
 	 * @since 1.0.0
 	 */
-	private function time_window( int $days ): array {
+	private function get_analytics_period( int $days ): array {
 		$timezone   = $this->get_analytics_timezone();
 		$start_date =
 			( new \DateTimeImmutable( 'now', $timezone ) )
@@ -100,45 +100,147 @@ trait AnalyticsSupportTrait {
 	}
 
 	/**
-	 * Resolve the stats drawer range into chart and query metadata.
+	 * Resolve the stats drawer period into chart and query metadata.
 	 *
-	 * @param string|null $range      Requested dashboard range token.
-	 * @param int         $days       Number of days to look back.
-	 * @param string      $created_at Link creation timestamp.
-	 * @return array{key: string, days: int, start_at: string|null}
+	 * @param string|null $range            Requested dashboard period token.
+	 * @param string|null $custom_date_from Custom start date in YYYY-MM-DD format.
+	 * @param string|null $custom_date_to   Custom end date in YYYY-MM-DD format.
+	 * @return array{key: string, days: int, start_at: string|null, end_at: string|null, start_date: string|null, end_date: string|null}
 	 * @since 1.1.0
 	 */
-	private function get_link_stats_range_config(
+	private function get_link_stats_period(
 		?string $range,
-		int $days,
-		string $created_at = ''
+		?string $custom_date_from = null,
+		?string $custom_date_to = null
 	): array {
 		$range = sanitize_key( (string) $range );
 
-		if ( 'all' === $range ) {
-			return array(
-				'key'      => 'all',
-				'days'     => $this->get_link_lifetime_days( $created_at ),
-				'start_at' => null,
+		if ( 'custom' === $range ) {
+			$custom_period = $this->get_link_stats_custom_period(
+				$custom_date_from,
+				$custom_date_to,
 			);
+
+			if ( null !== $custom_period ) {
+				return $custom_period;
+			}
 		}
 
 		if ( '24h' === $range ) {
 			$resolved_days = 1;
+			$period_key    = '24h';
 		} elseif ( '30d' === $range ) {
 			$resolved_days = 30;
+			$period_key    = '30d';
 		} elseif ( '7d' === $range ) {
 			$resolved_days = 7;
+			$period_key    = '7d';
 		} else {
-			$resolved_days = max( 1, $days );
+			$resolved_days = 7;
+			$period_key    = '7d';
 		}
-		$window = $this->time_window( $resolved_days );
+		$period = $this->get_analytics_period( $resolved_days );
 
 		return array(
-			'key'      => '' !== $range ? $range : $resolved_days . 'd',
-			'days'     => $resolved_days,
-			'start_at' => $window['start_at'],
+			'key'        => $period_key,
+			'days'       => $resolved_days,
+			'start_at'   => $period['start_at'],
+			'end_at'     => null,
+			'start_date' => $period['start_date'],
+			'end_date'   => null,
 		);
+	}
+
+	/**
+	 * Resolve a custom stats period into inclusive day buckets and UTC bounds.
+	 *
+	 * @param string|null $custom_date_from Custom range start date.
+	 * @param string|null $custom_date_to   Custom range end date.
+	 * @return array{key: string, days: int, start_at: string, end_at: string, start_date: string, end_date: string}|null
+	 * @since 1.1.4
+	 */
+	private function get_link_stats_custom_period(
+		?string $custom_date_from,
+		?string $custom_date_to
+	): ?array {
+		$start_date = $this->normalize_link_stats_date( $custom_date_from );
+		$end_date   = $this->normalize_link_stats_date( $custom_date_to );
+
+		if ( null === $start_date || null === $end_date ) {
+			return null;
+		}
+
+		$timezone = $this->get_analytics_timezone();
+
+		try {
+			$start = ( new \DateTimeImmutable( $start_date, $timezone ) )
+				->setTime( 0, 0, 0 );
+			$end   = ( new \DateTimeImmutable( $end_date, $timezone ) )
+				->setTime( 0, 0, 0 );
+		} catch ( \Exception $exception ) {
+			return null;
+		}
+
+		if ( $start > $end ) {
+			$previous_start = $start;
+			$start          = $end;
+			$end            = $previous_start;
+		}
+
+		$exclusive_end = $end->modify( '+1 day' );
+
+		return array(
+			'key'        => 'custom',
+			'days'       => max( 1, (int) $start->diff( $end )->format( '%a' ) + 1 ),
+			'start_at'   => $start
+				->setTimezone( new \DateTimeZone( 'UTC' ) )
+				->format( 'Y-m-d H:i:s' ),
+			'end_at'     => $exclusive_end
+				->setTimezone( new \DateTimeZone( 'UTC' ) )
+				->format( 'Y-m-d H:i:s' ),
+			'start_date' => $start->format( 'Y-m-d' ),
+			'end_date'   => $end->format( 'Y-m-d' ),
+		);
+	}
+
+	/**
+	 * Normalize a date-only stats input.
+	 *
+	 * @param string|null $date_value Date value to normalize.
+	 * @return string|null Valid YYYY-MM-DD value, or null when invalid.
+	 * @since 1.1.4
+	 */
+	private function normalize_link_stats_date( ?string $date_value ): ?string {
+		$date_value = trim( (string) $date_value );
+
+		if ( ! preg_match( '/^(\d{4})-(\d{2})-(\d{2})$/', $date_value, $matches ) ) {
+			return null;
+		}
+
+		if (
+			! checkdate(
+				(int) $matches[2],
+				(int) $matches[3],
+				(int) $matches[1],
+			)
+		) {
+			return null;
+		}
+
+		return $date_value;
+	}
+
+	/**
+	 * Choose the chart bucket size for a custom traffic period.
+	 *
+	 * @param int $days Number of selected days.
+	 * @return string Traffic series granularity.
+	 * @since 1.1.4
+	 */
+	private function get_traffic_series_granularity( int $days ): string {
+		$monthly_threshold_days = 120;
+
+		return $days > $monthly_threshold_days ? 'month' : 'day';
 	}
 
 	/**
@@ -188,8 +290,8 @@ trait AnalyticsSupportTrait {
 				->modify( '-24 hours' )
 				->setTimezone( new \DateTimeZone( 'UTC' ) )
 				->format( 'Y-m-d H:i:s' );
-		$last_7_window  = $this->time_window( 7 );
-		$last_30_window = $this->time_window( 30 );
+		$last_7_period  = $this->get_analytics_period( 7 );
+		$last_30_period = $this->get_analytics_period( 30 );
 		$lifetime_days  = $this->get_link_lifetime_days( $created_at );
 		$unique_visitor = 'COALESCE(NULLIF(visitor_hash, \'\'), id)';
 		$period_totals  =
@@ -209,10 +311,10 @@ trait AnalyticsSupportTrait {
 					'url_id'               => $url_id,
 					'last_24_start_total'  => $last_24_start,
 					'last_24_start_unique' => $last_24_start,
-					'last_7_start_total'   => $last_7_window['start_at'],
-					'last_7_start_unique'  => $last_7_window['start_at'],
-					'last_30_start_total'  => $last_30_window['start_at'],
-					'last_30_start_unique' => $last_30_window['start_at'],
+					'last_7_start_total'   => $last_7_period['start_at'],
+					'last_7_start_unique'  => $last_7_period['start_at'],
+					'last_30_start_total'  => $last_30_period['start_at'],
+					'last_30_start_unique' => $last_30_period['start_at'],
 				),
 			) ?? array();
 
@@ -254,7 +356,7 @@ trait AnalyticsSupportTrait {
 	 * @param string $key            Stable period key.
 	 * @param int    $total_clicks   Total clicks in the period.
 	 * @param int    $unique_clicks  Unique visitors in the period.
-	 * @param int    $average_window Average divisor for the period.
+	 * @param int    $average_days   Average divisor for the period.
 	 * @param string $average_unit   Average unit label key.
 	 * @return array<string, mixed> Formatted period summary.
 	 * @since 1.1.0
@@ -263,7 +365,7 @@ trait AnalyticsSupportTrait {
 		string $key,
 		int $total_clicks,
 		int $unique_clicks,
-		int $average_window,
+		int $average_days,
 		string $average_unit
 	): array {
 		$unique_clicks = min( $unique_clicks, $total_clicks );
@@ -277,7 +379,7 @@ trait AnalyticsSupportTrait {
 				$unique_clicks,
 			),
 			'averageClicks'   => round(
-				$total_clicks / max( 1, $average_window ),
+				$total_clicks / max( 1, $average_days ),
 				2,
 			),
 			'averageUnit'     => $average_unit,
@@ -285,13 +387,13 @@ trait AnalyticsSupportTrait {
 	}
 
 	/**
-	 * Find the best traffic day for a link, including unique visitors.
+	 * Build the full click history for a link, grouped by active day.
 	 *
 	 * @param string $url_id URL ID to scope the lookup to.
-	 * @return array<string, mixed>|null Best day payload or null when empty.
-	 * @since 1.1.0
+	 * @return array<int, array<string, mixed>> Active day payloads sorted oldest first.
+	 * @since 1.1.4
 	 */
-	private function get_link_best_day( string $url_id ): ?array {
+	private function get_link_click_history_days( string $url_id ): array {
 		$timezone = $this->get_analytics_timezone();
 		$rows     = $this->query_all(
 			'SELECT
@@ -332,42 +434,71 @@ trait AnalyticsSupportTrait {
 			}
 		}
 
-		$best_date   = null;
-		$best_clicks = 0;
-		$best_unique = 0;
+		ksort( $buckets );
 
+		$days = array();
 		foreach ( $buckets as $date => $bucket ) {
-			$clicks = (int) ( $bucket['clicks'] ?? 0 );
+			$total_clicks = (int) ( $bucket['clicks'] ?? 0 );
 
-			if ( $clicks < $best_clicks ) {
+			if ( $total_clicks <= 0 ) {
 				continue;
 			}
 
-			if ( $clicks === $best_clicks && null !== $best_date && $date < $best_date ) {
-				continue;
-			}
-
-			$best_date   = $date;
-			$best_clicks = $clicks;
-			$best_unique = min(
+			$unique_clicks = min(
 				count( (array) ( $bucket['unique'] ?? array() ) ),
-				$clicks,
+				$total_clicks,
+			);
+
+			$days[] = array(
+				'date'            => $date,
+				'totalClicks'     => $total_clicks,
+				'uniqueClicks'    => $unique_clicks,
+				'uniqueClickRate' => $this->get_unique_click_rate(
+					$total_clicks,
+					$unique_clicks,
+				),
 			);
 		}
 
-		if ( null === $best_date || $best_clicks <= 0 ) {
+		return $days;
+	}
+
+	/**
+	 * Find the best traffic day for a link, including unique visitors.
+	 *
+	 * @param array<int, array<string, mixed>> $click_days Active day payloads.
+	 * @return array<string, mixed>|null Best day payload or null when empty.
+	 * @since 1.1.0
+	 */
+	private function get_link_best_day( array $click_days ): ?array {
+		$best_day    = null;
+		$best_clicks = 0;
+
+		foreach ( $click_days as $day ) {
+			$date         = (string) ( $day['date'] ?? '' );
+			$total_clicks = (int) ( $day['totalClicks'] ?? 0 );
+
+			if ( '' === $date || $total_clicks < $best_clicks ) {
+				continue;
+			}
+
+			if (
+				$total_clicks === $best_clicks
+				&& null !== $best_day
+				&& $date < (string) $best_day['date']
+			) {
+				continue;
+			}
+
+			$best_day    = $day;
+			$best_clicks = $total_clicks;
+		}
+
+		if ( null === $best_day || $best_clicks <= 0 ) {
 			return null;
 		}
 
-		return array(
-			'date'            => $best_date,
-			'totalClicks'     => $best_clicks,
-			'uniqueClicks'    => $best_unique,
-			'uniqueClickRate' => $this->get_unique_click_rate(
-				$best_clicks,
-				$best_unique,
-			),
-		);
+		return $best_day;
 	}
 
 	/**
@@ -384,11 +515,54 @@ trait AnalyticsSupportTrait {
 		int $days,
 		?array $user = null
 	): array {
-		$window     = $this->time_window( $days );
-		$timezone   = new \DateTimeZone( $window['timezone'] );
-		$join_sql   = '';
-		$conditions = array( 'c.clicked_at >= :start_at' );
-		$params     = array( 'start_at' => $window['start_at'] );
+		$period = $this->get_analytics_period( $days );
+
+		return $this->query_traffic_series_range(
+			$url_id,
+			$period['start_date'],
+			$days,
+			$period['start_at'],
+			null,
+			$period['timezone'],
+			$user,
+			'day',
+		);
+	}
+
+	/**
+	 * Get a date-bucketed traffic time series for a specific date range.
+	 *
+	 * @param string|null              $url_id     Optional URL ID to scope the series.
+	 * @param string                   $start_date First local date bucket in YYYY-MM-DD format.
+	 * @param int                      $days       Number of day buckets to include.
+	 * @param string                   $start_at   Inclusive UTC start timestamp.
+	 * @param string|null              $end_at     Optional exclusive UTC end timestamp.
+	 * @param string                   $timezone   Timezone used for local buckets.
+	 * @param array<string, mixed>|null $user      Optional user scope for site-level charts.
+	 * @param string                   $granularity Bucket size, either day or month.
+	 * @return array{labels: string[], clicks: int[], unique: int[], granularity: string}
+	 * @since 1.1.4
+	 */
+	private function query_traffic_series_range(
+		?string $url_id,
+		string $start_date,
+		int $days,
+		string $start_at,
+		?string $end_at,
+		string $timezone,
+		?array $user = null,
+		string $granularity = 'day'
+	): array {
+		$timezone    = new \DateTimeZone( $timezone );
+		$granularity = 'month' === $granularity ? 'month' : 'day';
+		$join_sql    = '';
+		$conditions  = array( 'c.clicked_at >= :start_at' );
+		$params      = array( 'start_at' => $start_at );
+
+		if ( null !== $end_at ) {
+			$conditions[]     = 'c.clicked_at < :end_at';
+			$params['end_at'] = $end_at;
+		}
 
 		if ( $url_id ) {
 			$conditions[]     = 'c.url_id = :url_id';
@@ -416,20 +590,28 @@ trait AnalyticsSupportTrait {
 			$params,
 		);
 
-		$lookup = array();
+		$lookup      = array();
+		$range_start = ( new \DateTimeImmutable(
+			$start_date,
+			$timezone
+		) )->setTime( 0, 0, 0 );
+		$range_end   = $range_start->modify( '+' . max( 0, $days - 1 ) . ' days' );
+		$cursor      = $range_start;
 
-		$cursor = new \DateTimeImmutable(
-			$window['start_date'],
-			$timezone,
-		);
+		if ( 'month' === $granularity ) {
+			$cursor    = $range_start->modify( 'first day of this month' );
+			$range_end = $range_end->modify( 'first day of this month' );
+		}
 
-		for ( $index = 0; $index < $days; $index++ ) {
-			$date            = $cursor->format( 'Y-m-d' );
+		while ( $cursor <= $range_end ) {
+			$date            = 'month' === $granularity
+				? $cursor->format( 'Y-m-01' )
+				: $cursor->format( 'Y-m-d' );
 			$lookup[ $date ] = array(
 				'clicks' => 0,
 				'unique' => array(),
 			);
-			$cursor          = $cursor->modify( '+1 day' );
+			$cursor          = $cursor->modify( 'month' === $granularity ? '+1 month' : '+1 day' );
 		}
 
 		foreach ( $rows as $row ) {
@@ -442,7 +624,9 @@ trait AnalyticsSupportTrait {
 				continue;
 			}
 
-			$bucket_date = $clicked_at->setTimezone( $timezone )->format( 'Y-m-d' );
+			$bucket_date = $clicked_at->setTimezone( $timezone )->format(
+				'month' === $granularity ? 'Y-m-01' : 'Y-m-d'
+			);
 
 			if ( ! isset( $lookup[ $bucket_date ] ) ) {
 				continue;
@@ -472,11 +656,12 @@ trait AnalyticsSupportTrait {
 			);
 		}
 
-		return array(
-			'labels' => $labels,
-			'clicks' => $clicks,
-			'unique' => $unique,
-		);
+			return array(
+				'labels'      => $labels,
+				'clicks'      => $clicks,
+				'unique'      => $unique,
+				'granularity' => $granularity,
+			);
 	}
 
 	/**
@@ -484,7 +669,8 @@ trait AnalyticsSupportTrait {
 	 *
 	 * @param string               $column      Column to aggregate on.
 	 * @param string               $name_key    Output key name for the grouped label.
-	 * @param string               $start_at    Start timestamp for the time window.
+	 * @param string               $start_at    Start timestamp for the period.
+	 * @param string|null          $end_at      Optional exclusive end timestamp for the date range.
 	 * @param string|null          $code_column Optional secondary column for codes.
 	 * @param string|null          $url_id      Optional URL ID filter.
 	 * @param array<string, mixed>|null $user   Optional user scope for site-level charts.
@@ -495,6 +681,7 @@ trait AnalyticsSupportTrait {
 		string $column,
 		string $name_key,
 		string $start_at,
+		?string $end_at = null,
 		?string $code_column = null,
 		?string $url_id = null,
 		?array $user = null
@@ -546,6 +733,11 @@ trait AnalyticsSupportTrait {
 		$params     = array( 'start_at' => $start_at );
 		$conditions = array( 'c.clicked_at >= :start_at' );
 
+		if ( null !== $end_at ) {
+			$conditions[]     = 'c.clicked_at < :end_at';
+			$params['end_at'] = $end_at;
+		}
+
 		if ( $url_id ) {
 			$conditions[]     = 'c.url_id = :url_id';
 			$params['url_id'] = $url_id;
@@ -589,14 +781,33 @@ trait AnalyticsSupportTrait {
 	}
 
 	/**
-	 * Group referrers for a specific URL within a time window.
+	 * Group referrers for a specific URL within a date range.
 	 *
-	 * @param string $url_id   URL ID to scope referrers to.
-	 * @param string $start_at Start timestamp for the window.
+	 * @param string      $url_id   URL ID to scope referrers to.
+	 * @param string      $start_at Start timestamp for the date range.
+	 * @param string|null $end_at   Optional exclusive end timestamp for the date range.
 	 * @return array<int, array{name: string, domain: string, category: string, count: int}>
 	 * @since 1.0.0
 	 */
-	private function group_referrers( string $url_id, string $start_at ): array {
+	private function group_referrers(
+		string $url_id,
+		string $start_at,
+		?string $end_at = null
+	): array {
+		$conditions = array(
+			'url_id = :url_id',
+			'clicked_at >= :start_at',
+		);
+		$params     = array(
+			'url_id'   => $url_id,
+			'start_at' => $start_at,
+		);
+
+		if ( null !== $end_at ) {
+			$conditions[]     = 'clicked_at < :end_at';
+			$params['end_at'] = $end_at;
+		}
+
 		return array_map(
 			static fn( array $row ): array => array(
 				'name'     =>
@@ -612,31 +823,43 @@ trait AnalyticsSupportTrait {
                     COALESCE(NULLIF(referrer_category, \'\'), \'Unknown\') AS referrer_category,
                     COUNT(*) AS referrer_count
                 FROM clicks
-                WHERE url_id = :url_id
-                AND clicked_at >= :start_at
+                WHERE ' . implode( ' AND ', $conditions ) . '
                 GROUP BY referrer_name, referrer_domain, referrer_category
                 ORDER BY referrer_count DESC, referrer_name ASC
                 LIMIT 20',
-				array(
-					'url_id'   => $url_id,
-					'start_at' => $start_at,
-				),
+				$params,
 			),
 		);
 	}
 
 	/**
-	 * Group referrer categories for a specific URL within a time window.
+	 * Group referrer categories for a specific URL within a date range.
 	 *
-	 * @param string $url_id   URL ID to scope referrers to.
-	 * @param string $start_at Start timestamp for the window.
+	 * @param string      $url_id   URL ID to scope referrers to.
+	 * @param string      $start_at Start timestamp for the date range.
+	 * @param string|null $end_at   Optional exclusive end timestamp for the date range.
 	 * @return array<int, array{category: string, count: int}>
 	 * @since 1.0.0
 	 */
 	private function group_referrer_categories(
 		string $url_id,
-		string $start_at
+		string $start_at,
+		?string $end_at = null
 	): array {
+		$conditions = array(
+			'url_id = :url_id',
+			'clicked_at >= :start_at',
+		);
+		$params     = array(
+			'url_id'   => $url_id,
+			'start_at' => $start_at,
+		);
+
+		if ( null !== $end_at ) {
+			$conditions[]     = 'clicked_at < :end_at';
+			$params['end_at'] = $end_at;
+		}
+
 		return array_map(
 			static fn( array $row ): array => array(
 				'category' => (string) ( $row['referrer_category'] ?? 'Unknown' ),
@@ -647,31 +870,43 @@ trait AnalyticsSupportTrait {
                     COALESCE(NULLIF(referrer_category, \'\'), \'Unknown\') AS referrer_category,
                     COUNT(*) AS referrer_count
                 FROM clicks
-                WHERE url_id = :url_id
-                AND clicked_at >= :start_at
+                WHERE ' . implode( ' AND ', $conditions ) . '
                 GROUP BY referrer_category
                 ORDER BY referrer_count DESC, referrer_category ASC
                 LIMIT 12',
-				array(
-					'url_id'   => $url_id,
-					'start_at' => $start_at,
-				),
+				$params,
 			),
 		);
 	}
 
 	/**
-	 * Group UTM campaign data for a specific URL within a time window.
+	 * Group UTM campaign data for a specific URL within a date range.
 	 *
-	 * @param string $url_id   URL ID to scope campaigns to.
-	 * @param string $start_at Start timestamp for the window.
+	 * @param string      $url_id   URL ID to scope campaigns to.
+	 * @param string      $start_at Start timestamp for the date range.
+	 * @param string|null $end_at   Optional exclusive end timestamp for the date range.
 	 * @return array<int, array{campaign: string, source: string, medium: string, count: int}>
 	 * @since 1.0.0
 	 */
 	private function group_utm_campaigns(
 		string $url_id,
-		string $start_at
+		string $start_at,
+		?string $end_at = null
 	): array {
+		$conditions = array(
+			'url_id = :url_id',
+			'clicked_at >= :start_at',
+		);
+		$params     = array(
+			'url_id'   => $url_id,
+			'start_at' => $start_at,
+		);
+
+		if ( null !== $end_at ) {
+			$conditions[]     = 'clicked_at < :end_at';
+			$params['end_at'] = $end_at;
+		}
+
 		return array_map(
 			static fn( array $row ): array => array(
 				'campaign' => (string) ( $row['utm_campaign'] ?? '' ),
@@ -686,15 +921,11 @@ trait AnalyticsSupportTrait {
                     COALESCE(NULLIF(utm_medium, \'\'), \'\') AS utm_medium,
                     COUNT(*) AS utm_count
                 FROM clicks
-                WHERE url_id = :url_id
-                AND clicked_at >= :start_at
+                WHERE ' . implode( ' AND ', $conditions ) . '
                 GROUP BY utm_campaign, utm_source, utm_medium
                 ORDER BY utm_count DESC, utm_campaign ASC
                 LIMIT 12',
-				array(
-					'url_id'   => $url_id,
-					'start_at' => $start_at,
-				),
+				$params,
 			),
 		);
 	}

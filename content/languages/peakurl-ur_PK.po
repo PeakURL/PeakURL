@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
+"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ur_PK\n"
+"Language-Team: Urdu (Pakistan)\n"
+"Last-Translator: PeakURL Team\n"
+"MIME-Version: 1.0\n"
+"PO-Revision-Date: 2026-05-03 00:00+0000\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "Project-Id-Version: 1.0.7\n"
 "Report-Msgid-Bugs-To: https://peakurl.org\n"
-"PO-Revision-Date: 2026-05-03 00:00+0000\n"
-"Last-Translator: PeakURL Team\n"
-"Language-Team: Urdu (Pakistan)\n"
-"Language: ur_PK\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Domain: peakurl\n"
 
 #: app/database/repair-specs.php:41
@@ -208,12 +208,12 @@ msgstr "تصدیقی کوڈ درست نہیں۔"
 msgid "PeakURL could not identify the current session."
 msgstr "PeakURL موجودہ سیشن کی شناخت نہیں کر سکا۔"
 
-#: app/traits/analytics.php:214
+#: app/traits/analytics.php:218
 msgid "Activity log ID is required."
 msgstr "ایکٹیویٹی لاگ کی آئی ڈی درکار ہے۔"
 
-#: app/traits/analytics.php:350
-#: app/traits/analytics.php:470
+#: app/traits/analytics.php:357
+#: app/traits/analytics.php:511
 msgid "You do not have permission to view analytics for this link."
 msgstr "آپ کو اس لنک کے تجزیات دیکھنے کی اجازت نہیں ہے۔"
 
@@ -626,7 +626,7 @@ msgid "Bulk activity delete complete."
 msgstr "سرگرمی لاگز کی اجتماعی حذف کاری مکمل ہو گئی ہے۔"
 
 #: app/controllers/analytics.php:163
-#: app/controllers/analytics.php:190
+#: app/controllers/analytics.php:192
 msgid "Link analytics not found."
 msgstr "لنک تجزیات نہیں ملے۔"
 
@@ -634,7 +634,7 @@ msgstr "لنک تجزیات نہیں ملے۔"
 msgid "Location analytics loaded."
 msgstr "مقام کے تجزیات لوڈ ہو گئے۔"
 
-#: app/controllers/analytics.php:193
+#: app/controllers/analytics.php:195
 msgid "Link analytics loaded."
 msgstr "لنک تجزیات لوڈ ہو گئے۔"
 
@@ -1430,7 +1430,7 @@ msgstr "حروف، اعداد، dots، dashes، underscores یا @ استعما�
 #: site/install.php:575
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:95
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:714
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:98
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:100
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:171
 #: ui/pages/dashboard/users/UsersPage.tsx:224
 msgid "Email"
@@ -2099,11 +2099,6 @@ msgid "click"
 msgstr "کلک"
 
 #: ui/components/charts/WorldMap/WorldMap.tsx:452
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:230
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:281
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:320
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:182
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:320
 msgid "clicks"
 msgstr "کلکس"
 
@@ -2118,8 +2113,8 @@ msgstr "نقشہ لوڈ ہو رہا ہے..."
 #: ui/components/charts/WorldMap/WorldMap.tsx:597
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:688
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:62
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:36
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:82
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:41
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:158
 msgid "Clicks"
 msgstr "کلکس"
 
@@ -3155,10 +3150,10 @@ msgstr "آخری بار بنایا گیا:"
 #: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:16
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:36
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:180
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:92
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:99
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:105
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:111
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:96
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:103
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:107
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:113
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:39
 #: ui/pages/dashboard/users/UsersPage.tsx:629
 msgid "Unknown"
@@ -4737,7 +4732,7 @@ msgstr "فائل پارس نہیں ہو سکی: %s"
 #: ui/pages/dashboard/tools/import/_components/file-upload/FileUpload.tsx:82
 #: ui/pages/dashboard/tools/import/_components/file-upload/FileUpload.tsx:209
 #: ui/pages/dashboard/tools/import/_components/paste/PasteImport.tsx:84
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:133
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:132
 msgid "Unknown error"
 msgstr "نامعلوم خرابی"
 
@@ -5193,6 +5188,7 @@ msgid "Link"
 msgstr "لنک"
 
 #: ui/pages/dashboard/activity/ActivityPage.tsx:933
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:257
 msgid "From"
 msgstr "سے"
 
@@ -5384,7 +5380,7 @@ msgid "Explore the source code, understand how it works, and modify it to suit y
 msgstr "سورس کوڈ دیکھیں، سمجھیں کہ یہ کیسے کام کرتا ہے، اور اپنی ضرورت کے مطابق ترمیم کریں۔"
 
 #: ui/pages/dashboard/about/AboutPage.tsx:308
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:52
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:123
 msgid "Share"
 msgstr "شیئر کریں"
 
@@ -5501,7 +5497,7 @@ msgid "Self-hosted link management with clear ownership and a focused dashboard.
 msgstr "واضح ملکیت اور ایک مرکوز ڈیش بورڈ کے ساتھ خود میزبان لنک مینجمنٹ۔"
 
 #: ui/pages/dashboard/about/AboutPage.tsx:647
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:103
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:105
 msgid "Website"
 msgstr "ویب سائٹ"
 
@@ -5538,21 +5534,21 @@ msgid "Traffic Overview"
 msgstr "ٹریفک کا جائزہ"
 
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:43
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:105
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:108
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:181
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:184
 msgid "Line Chart"
 msgstr "لائن چارٹ"
 
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:52
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:116
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:119
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:192
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:195
 msgid "Bar Chart"
 msgstr "بار چارٹ"
 
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:68
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:168
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:37
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:89
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:42
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:165
 msgid "Unique"
 msgstr "منفرد"
 
@@ -5575,12 +5571,12 @@ msgid "vs last month"
 msgstr "پچھلے مہینے کے مقابلے میں"
 
 #: ui/pages/dashboard/_components/Header/Header.tsx:14
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:56
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:60
 msgid "Last 7 days"
 msgstr "پچھلے 7 دن"
 
 #: ui/pages/dashboard/_components/Header/Header.tsx:15
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:62
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:66
 msgid "Last 30 days"
 msgstr "پچھلے 30 دن"
 
@@ -5602,11 +5598,11 @@ msgid "Dashboard time range"
 msgstr "ڈیش بورڈ کا وقتی دورانیہ"
 
 #: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:27
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:58
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:104
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:124
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:148
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:294
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:59
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:103
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:123
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:147
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:293
 msgid "Top Countries"
 msgstr "سرفہرست ممالک"
 
@@ -5848,99 +5844,130 @@ msgstr "اپنے لمبے URL کو مختصر اور شیئر کرنے کے قا
 msgid "Expiration Date (Optional)"
 msgstr "اختتامی تاریخ (اختیاری)"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:64
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:65
 msgid "No link data available"
 msgstr "لنک کا ڈیٹا دستیاب نہیں ہے"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:110
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:109
 msgid "Loading location data..."
 msgstr "مقام کا ڈیٹا لوڈ ہو رہا ہے..."
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:130
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:129
 msgid "Failed to load location data"
 msgstr "مقام کا ڈیٹا لوڈ کرنے میں ناکامی ہوئی"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:154
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:153
 msgid "No location data available yet"
 msgstr "ابھی مقام کا کوئی ڈیٹا دستیاب نہیں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:157
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:156
 msgid "Location tracking will show here once clicks are recorded with a configured GeoLite2 City database"
 msgstr "جب GeoLite2 City ڈیٹابیس درست طور پر سیٹ ہو جائے اور کلکس ریکارڈ ہونا شروع ہوں، تو مقام کی معلومات یہاں دکھائی دیں گی"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:169
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:168
 msgid "Note:"
 msgstr "نوٹ:"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:174
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:173
 msgid "Local and private-network clicks do not include location data."
 msgstr "مقامی یا نجی نیٹ ورک سے آنے والے کلکس کے لیے مقام کی معلومات دستیاب نہیں ہوتیں۔"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:181
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:180
 msgid "Store the GeoLite2 City database here:"
 msgstr "اس راستے پر GeoLite2 City ڈیٹابیس رکھیں:"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:188
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:187
 msgid "VPN users may show the location of the VPN server."
 msgstr "VPN استعمال کرنے والے صارفین کے لیے اصل مقام کے بجائے VPN سرور کا مقام دکھائی دے سکتا ہے۔"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:201
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:341
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:200
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:340
 msgid "Top Cities"
 msgstr "سرفہرست شہر"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:207
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:206
 msgid "No city data available yet"
 msgstr "ابھی شہر کا کوئی ڈیٹا دستیاب نہیں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:227
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:226
 msgid "Total Locations"
 msgstr "کل مقامات"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:236
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:235
 msgid "Countries"
 msgstr "ممالک"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:250
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:249
 msgid "Geographic Distribution"
 msgstr "جغرافیائی تقسیم"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:27
-msgid "All"
-msgstr "سب"
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:30
+msgid "24h"
+msgstr "24 گھنٹے"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:35
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:31
+msgid "7d"
+msgstr "7 دن"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:32
+msgid "30d"
+msgstr "30 دن"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:40
 msgid "Both"
 msgstr "دونوں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:77
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:153
 msgid "Traffic History"
 msgstr "ٹریفک ہسٹری"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:175
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:247
+msgid "Custom"
+msgstr "حسب ضرورت"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:252
+msgid "Custom date range"
+msgstr "حسب ضرورت تاریخ کی حد"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:272
+msgid "Start date"
+msgstr "شروع کی تاریخ"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:278
+msgid "To"
+msgstr "تک"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:293
+msgid "End date"
+msgstr "اختتامی تاریخ"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:299
+msgid "Showing %s to %s"
+msgstr "%s سے %s تک دکھایا جا رہا ہے"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:313
+msgid "Apply"
+msgstr "لاگو کریں"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:339
 msgid "No traffic data available for this range."
 msgstr "اس رینج کے لیے کوئی ٹریفک ڈیٹا دستیاب نہیں۔"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:50
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:54
 msgid "Last 24 hours"
 msgstr "گزشتہ 24 گھنٹے"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:68
-#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:65
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:72
 msgid "All time"
 msgstr "ہر وقت"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:79
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:83
 msgid "Historical click count"
 msgstr "تاریخی کلک شمار"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:83
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:87
 msgid "Short URL created on"
 msgstr "شارٹ URL بنایا گیا"
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:134
-msgid "%s unique"
-msgstr "منفرد: %s"
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:42
 msgid "Active & Tracking"
@@ -5982,79 +6009,95 @@ msgstr "فوری جھلکیاں"
 msgid "Last updated:"
 msgstr "آخری اپ ڈیٹ:"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:61
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:62
 msgid "24 hours"
 msgstr "24 گھنٹے"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:63
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:64
 msgid "30 days"
 msgstr "30 دن"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:68
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:66
+msgid "Custom range"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:69
 msgid "7 days"
 msgstr "7 دن"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:136
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:137
 msgid "%s click"
 msgstr "%s کلک"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:136
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:137
 msgid "%s clicks"
 msgstr "%s کلکس"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:145
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:143
+msgid "%s unique"
+msgstr "منفرد: %s"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:148
+msgid "%s unique visitor"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:148
+msgid "%s unique visitors"
+msgstr "منفرد وزٹرز: %s"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:159
 msgid "%s per hour"
 msgstr "فی گھنٹہ %s"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:145
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:159
 msgid "%s per day"
 msgstr "فی دن %s"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:92
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:94
 msgid "Search Engine"
 msgstr "سرچ انجن"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:93
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:95
 msgid "Social Media"
 msgstr "سوشل میڈیا"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:94
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:96
 msgid "Messaging"
 msgstr "میسجنگ"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:95
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:97
 msgid "Video"
 msgstr "ویڈیو"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:96
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:98
 msgid "News & Content"
 msgstr "خبریں اور مواد"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:97
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
 msgid "Developer"
 msgstr "ڈویلپر"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:101
 msgid "Email Marketing"
 msgstr "ای میل مارکیٹنگ"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:100
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:102
 msgid "Shopping"
 msgstr "خریداری"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:101
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:103
 msgid "AI"
 msgstr "AI"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:102
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
 msgid "Productivity"
 msgstr "پیداواریت"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:106
 msgid "Direct"
 msgstr "براہِ راست"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:151
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:153
 msgid "Traffic by Category"
 msgstr "زمرہ وار ٹریفک"
 
@@ -6090,6 +6133,44 @@ msgstr "ماخذ:"
 msgid "medium:"
 msgstr "ذریعہ:"
 
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:150
+msgid "%s active day"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:150
+msgid "%s active days"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:200
+msgid "Year %s"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:254
+msgid "across %s"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:261
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:43
+msgid "Hide details"
+msgstr "تفصیلات چھپائیں"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:261
+msgid "View all days"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:404
+msgid "Click history"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:410
+msgid "Loading click history..."
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:428
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:93
+msgid "No click activity has been recorded yet."
+msgstr "ابھی تک کوئی کلک سرگرمی ریکارڈ نہیں ہوئی۔"
+
 #: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:21
 msgid "Best day"
 msgstr "بہترین دن"
@@ -6102,64 +6183,52 @@ msgstr "بہترین دن لوڈ ہو رہا ہے..."
 msgid "on"
 msgstr "پر"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:36
-msgid "%s unique visitors"
-msgstr "منفرد وزٹرز: %s"
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:46
-msgid "Hide details"
-msgstr "تفصیلات چھپائیں"
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:47
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:44
 msgid "View details"
 msgstr "تفصیلات دیکھیں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:62
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:59
 msgid "Year"
 msgstr "سال"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:96
-msgid "No click activity has been recorded yet."
-msgstr "ابھی تک کوئی کلک سرگرمی ریکارڈ نہیں ہوئی۔"
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:90
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:108
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:91
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:109
 msgid "Device & Browser Analytics"
 msgstr "ڈیوائس اور براؤزر تجزیات"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:94
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:95
 msgid "Loading analytics..."
 msgstr "تجزیات لوڈ ہو رہے ہیں..."
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:114
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:115
 msgid "No device data available yet"
 msgstr "ابھی ڈیوائس کا کوئی ڈیٹا دستیاب نہیں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:117
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:118
 msgid "Device and browser information will appear here once clicks are recorded"
 msgstr "کلکس ریکارڈ ہونے کے بعد ڈیوائس اور براؤزر کی معلومات یہاں ظاہر ہوں گی"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:157
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:158
 msgid "Total Devices"
 msgstr "کل ڈیوائسز"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:166
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:167
 msgid "Unique Browsers"
 msgstr "منفرد براؤزرز"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:180
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:181
 msgid "Browsers"
 msgstr "براؤزرز"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:234
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:235
 msgid "Device Types"
 msgstr "ڈیوائس کی اقسام"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:281
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:282
 msgid "Operating Systems"
 msgstr "آپریٹنگ سسٹمز"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:256
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:257
 msgid "device"
 msgid_plural "devices"
 msgstr[0] "ڈیوائس"
@@ -6197,31 +6266,31 @@ msgstr "ٹویٹر"
 msgid "LinkedIn"
 msgstr "لنکڈ اِن"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:49
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:120
 msgid "Traffic Statistics"
 msgstr "ٹریفک کے اعدادوشمار"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:50
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:121
 msgid "Traffic Location"
 msgstr "ٹریفک کا مقام"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:51
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:122
 msgid "Traffic Sources"
 msgstr "ٹریفک کے ذرائع"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:86
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:157
 msgid "Link Analytics"
 msgstr "لنک تجزیات"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:89
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:160
 msgid "Detailed statistics and performance metrics"
 msgstr "تفصیلی اعدادوشمار اور کارکردگی کے پیمانے"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:100
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:171
 msgid "Close panel"
 msgstr "پینل بند کریں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:216
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:300
 msgid "Close"
 msgstr "بند کریں"
 

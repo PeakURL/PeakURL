@@ -6,7 +6,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language: en_US\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"Project-Id-Version: 1.1.3\n"
+"Project-Id-Version: 1.1.4\n"
 "Report-Msgid-Bugs-To: https://peakurl.org\n"
 "X-Domain: peakurl\n"
 
@@ -206,12 +206,12 @@ msgstr ""
 msgid "PeakURL could not identify the current session."
 msgstr ""
 
-#: app/traits/analytics.php:214
+#: app/traits/analytics.php:218
 msgid "Activity log ID is required."
 msgstr ""
 
-#: app/traits/analytics.php:350
-#: app/traits/analytics.php:470
+#: app/traits/analytics.php:357
+#: app/traits/analytics.php:511
 msgid "You do not have permission to view analytics for this link."
 msgstr ""
 
@@ -624,7 +624,7 @@ msgid "Bulk activity delete complete."
 msgstr ""
 
 #: app/controllers/analytics.php:163
-#: app/controllers/analytics.php:190
+#: app/controllers/analytics.php:192
 msgid "Link analytics not found."
 msgstr ""
 
@@ -632,7 +632,7 @@ msgstr ""
 msgid "Location analytics loaded."
 msgstr ""
 
-#: app/controllers/analytics.php:193
+#: app/controllers/analytics.php:195
 msgid "Link analytics loaded."
 msgstr ""
 
@@ -1428,7 +1428,7 @@ msgstr ""
 #: site/install.php:575
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:95
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:714
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:98
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:100
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:171
 #: ui/pages/dashboard/users/UsersPage.tsx:224
 msgid "Email"
@@ -2097,11 +2097,6 @@ msgid "click"
 msgstr ""
 
 #: ui/components/charts/WorldMap/WorldMap.tsx:452
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:230
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:281
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:320
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:182
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:320
 msgid "clicks"
 msgstr ""
 
@@ -2116,8 +2111,8 @@ msgstr ""
 #: ui/components/charts/WorldMap/WorldMap.tsx:597
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:688
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:62
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:36
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:82
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:41
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:158
 msgid "Clicks"
 msgstr ""
 
@@ -3153,10 +3148,10 @@ msgstr ""
 #: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:16
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:36
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:180
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:92
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:99
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:105
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:111
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:96
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:103
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:107
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:113
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:39
 #: ui/pages/dashboard/users/UsersPage.tsx:629
 msgid "Unknown"
@@ -4735,7 +4730,7 @@ msgstr ""
 #: ui/pages/dashboard/tools/import/_components/file-upload/FileUpload.tsx:82
 #: ui/pages/dashboard/tools/import/_components/file-upload/FileUpload.tsx:209
 #: ui/pages/dashboard/tools/import/_components/paste/PasteImport.tsx:84
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:133
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:132
 msgid "Unknown error"
 msgstr ""
 
@@ -5191,6 +5186,7 @@ msgid "Link"
 msgstr ""
 
 #: ui/pages/dashboard/activity/ActivityPage.tsx:933
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:257
 msgid "From"
 msgstr ""
 
@@ -5382,7 +5378,7 @@ msgid "Explore the source code, understand how it works, and modify it to suit y
 msgstr ""
 
 #: ui/pages/dashboard/about/AboutPage.tsx:308
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:52
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:123
 msgid "Share"
 msgstr ""
 
@@ -5499,7 +5495,7 @@ msgid "Self-hosted link management with clear ownership and a focused dashboard.
 msgstr ""
 
 #: ui/pages/dashboard/about/AboutPage.tsx:647
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:103
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:105
 msgid "Website"
 msgstr ""
 
@@ -5536,21 +5532,21 @@ msgid "Traffic Overview"
 msgstr ""
 
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:43
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:105
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:108
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:181
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:184
 msgid "Line Chart"
 msgstr ""
 
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:52
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:116
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:119
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:192
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:195
 msgid "Bar Chart"
 msgstr ""
 
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:68
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:168
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:37
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:89
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:42
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:165
 msgid "Unique"
 msgstr ""
 
@@ -5573,12 +5569,12 @@ msgid "vs last month"
 msgstr ""
 
 #: ui/pages/dashboard/_components/Header/Header.tsx:14
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:56
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:60
 msgid "Last 7 days"
 msgstr ""
 
 #: ui/pages/dashboard/_components/Header/Header.tsx:15
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:62
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:66
 msgid "Last 30 days"
 msgstr ""
 
@@ -5600,11 +5596,11 @@ msgid "Dashboard time range"
 msgstr ""
 
 #: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:27
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:58
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:104
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:124
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:148
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:294
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:59
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:103
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:123
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:147
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:293
 msgid "Top Countries"
 msgstr ""
 
@@ -5846,98 +5842,129 @@ msgstr ""
 msgid "Expiration Date (Optional)"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:64
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:65
 msgid "No link data available"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:110
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:109
 msgid "Loading location data..."
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:130
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:129
 msgid "Failed to load location data"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:154
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:153
 msgid "No location data available yet"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:157
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:156
 msgid "Location tracking will show here once clicks are recorded with a configured GeoLite2 City database"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:169
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:168
 msgid "Note:"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:174
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:173
 msgid "Local and private-network clicks do not include location data."
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:181
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:180
 msgid "Store the GeoLite2 City database here:"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:188
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:187
 msgid "VPN users may show the location of the VPN server."
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:201
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:341
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:200
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:340
 msgid "Top Cities"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:207
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:206
 msgid "No city data available yet"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:227
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:226
 msgid "Total Locations"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:236
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:235
 msgid "Countries"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:250
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:249
 msgid "Geographic Distribution"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:27
-msgid "All"
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:30
+msgid "24h"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:35
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:31
+msgid "7d"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:32
+msgid "30d"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:40
 msgid "Both"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:77
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:153
 msgid "Traffic History"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:175
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:247
+msgid "Custom"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:252
+msgid "Custom date range"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:272
+msgid "Start date"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:278
+msgid "To"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:293
+msgid "End date"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:299
+msgid "Showing %s to %s"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:313
+msgid "Apply"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:339
 msgid "No traffic data available for this range."
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:50
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:54
 msgid "Last 24 hours"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:68
-#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:65
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:72
 msgid "All time"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:79
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:83
 msgid "Historical click count"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:83
+#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:87
 msgid "Short URL created on"
-msgstr ""
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:134
-msgid "%s unique"
 msgstr ""
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:42
@@ -5980,79 +6007,95 @@ msgstr ""
 msgid "Last updated:"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:61
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:62
 msgid "24 hours"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:63
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:64
 msgid "30 days"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:68
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:66
+msgid "Custom range"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:69
 msgid "7 days"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:136
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:137
 msgid "%s click"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:136
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:137
 msgid "%s clicks"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:145
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:143
+msgid "%s unique"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:148
+msgid "%s unique visitor"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:148
+msgid "%s unique visitors"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:159
 msgid "%s per hour"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:145
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:159
 msgid "%s per day"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:92
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:94
 msgid "Search Engine"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:93
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:95
 msgid "Social Media"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:94
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:96
 msgid "Messaging"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:95
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:97
 msgid "Video"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:96
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:98
 msgid "News & Content"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:97
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
 msgid "Developer"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:101
 msgid "Email Marketing"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:100
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:102
 msgid "Shopping"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:101
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:103
 msgid "AI"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:102
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
 msgid "Productivity"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:106
 msgid "Direct"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:151
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:153
 msgid "Traffic by Category"
 msgstr ""
 
@@ -6088,6 +6131,44 @@ msgstr ""
 msgid "medium:"
 msgstr ""
 
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:150
+msgid "%s active day"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:150
+msgid "%s active days"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:200
+msgid "Year %s"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:254
+msgid "across %s"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:261
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:43
+msgid "Hide details"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:261
+msgid "View all days"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:404
+msgid "Click history"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:410
+msgid "Loading click history..."
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:428
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:93
+msgid "No click activity has been recorded yet."
+msgstr ""
+
 #: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:21
 msgid "Best day"
 msgstr ""
@@ -6100,64 +6181,52 @@ msgstr ""
 msgid "on"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:36
-msgid "%s unique visitors"
-msgstr ""
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:46
-msgid "Hide details"
-msgstr ""
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:47
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:44
 msgid "View details"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:62
+#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:59
 msgid "Year"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:96
-msgid "No click activity has been recorded yet."
-msgstr ""
-
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:90
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:108
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:91
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:109
 msgid "Device & Browser Analytics"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:94
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:95
 msgid "Loading analytics..."
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:114
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:115
 msgid "No device data available yet"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:117
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:118
 msgid "Device and browser information will appear here once clicks are recorded"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:157
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:158
 msgid "Total Devices"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:166
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:167
 msgid "Unique Browsers"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:180
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:181
 msgid "Browsers"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:234
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:235
 msgid "Device Types"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:281
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:282
 msgid "Operating Systems"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:256
+#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:257
 msgid "device"
 msgid_plural "devices"
 msgstr[0] ""
@@ -6195,31 +6264,31 @@ msgstr ""
 msgid "LinkedIn"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:49
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:120
 msgid "Traffic Statistics"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:50
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:121
 msgid "Traffic Location"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:51
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:122
 msgid "Traffic Sources"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:86
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:157
 msgid "Link Analytics"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:89
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:160
 msgid "Detailed statistics and performance metrics"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:100
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:171
 msgid "Close panel"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:216
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:300
 msgid "Close"
 msgstr ""
 

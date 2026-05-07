@@ -20,15 +20,15 @@
 	}
 
 	.links-historical-stats-item {
-		@apply grid grid-cols-1 gap-1 rounded px-3 py-2.5 transition-all hover:bg-accent/10;
+		@apply grid grid-cols-1 gap-1 rounded border border-transparent px-3 py-2.5 transition-colors duration-200 hover:bg-accent/10;
 	}
 
 	.links-historical-stats-item-highlighted {
-		@apply border border-accent/20 bg-accent/5;
+		@apply border-accent/20 bg-accent/5;
 	}
 
 	.links-historical-stats-period {
-		@apply text-sm;
+		@apply text-sm transition-colors duration-200;
 	}
 
 	.links-historical-stats-period-highlighted {

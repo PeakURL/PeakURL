@@ -1,0 +1,26 @@
+@layer components {
+	.links-click-history {
+		@apply rounded-lg border border-stroke bg-surface-alt p-4;
+	}
+
+	.links-click-history-summary {
+		@apply flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm text-heading;
+	}
+
+	.links-click-history-summary-value {
+		@apply font-semibold;
+	}
+
+	.links-click-history-summary-muted {
+		@apply text-text-muted;
+	}
+
+	.links-click-history-toggle {
+		@apply inline-flex items-center gap-1 text-accent hover:underline;
+	}
+
+	.links-click-history-loading,
+	.links-click-history-empty {
+		@apply text-sm text-text-muted;
+	}
+}

@@ -1,17 +1,33 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { __ } from "@/i18n";
+import { __, sprintf } from "@/i18n";
 import { formatDateOnly } from "@/utils";
+import DetailMetric from "./DetailMetric";
 import { formatClickCount, formatUniqueVisitorCount } from "./analytics";
 import type { LinkBestDay, LinkStatsViewProps } from "./types";
 
 function BestDay({ stats, isLoading }: LinkStatsViewProps) {
 	const [showDetails, setShowDetails] = useState(true);
 	const bestDay: LinkBestDay | null = stats?.bestDay || null;
-	const bestDayLabel = bestDay
+	const bestDayDate = bestDay
 		? formatDateOnly(bestDay.date, {
 				year: "numeric",
 				month: "long",
+				day: "numeric",
+			})
+		: "";
+	const bestDayYear = bestDay
+		? formatDateOnly(bestDay.date, {
+				year: "numeric",
+			})
+		: "";
+	const bestDayMonth = bestDay
+		? formatDateOnly(bestDay.date, {
+				month: "long",
+			})
+		: "";
+	const bestDayDay = bestDay
+		? formatDateOnly(bestDay.date, {
 				day: "numeric",
 			})
 		: "";
@@ -30,13 +46,15 @@ function BestDay({ stats, isLoading }: LinkStatsViewProps) {
 						<span className="links-best-day-value">
 							{formatClickCount(bestDay.totalClicks)}
 						</span>{" "}
-						{__("on")} {bestDayLabel}.{" "}
+						{__("on")} {bestDayDate}.{" "}
 						<span className="links-best-day-unique">
 							{formatUniqueVisitorCount(bestDay.uniqueClicks)}
 						</span>{" "}
 						<button
 							type="button"
-							onClick={() => setShowDetails(!showDetails)}
+							onClick={() =>
+								setShowDetails((isShowing) => !isShowing)
+							}
 							className="links-best-day-toggle"
 						>
 							{showDetails
@@ -51,40 +69,55 @@ function BestDay({ stats, isLoading }: LinkStatsViewProps) {
 					</p>
 
 					{showDetails && (
-						<div className="links-best-day-details">
-							<div className="links-best-day-tree">
-								<div className="links-best-day-tree-row">
-									<span className="links-best-day-tree-dot-large"></span>
-									<span className="links-best-day-tree-label">
-										{__("Year")}{" "}
-										{formatDateOnly(bestDay.date, {
-											year: "numeric",
-										})}
-									</span>
-								</div>
-								<div className="links-best-day-tree-branch">
-									<div className="links-best-day-tree-row">
-										<span className="links-best-day-tree-dot-medium"></span>
-										<span className="links-best-day-tree-label-muted">
-											{formatDateOnly(bestDay.date, {
-												month: "long",
-											})}
-										</span>
-									</div>
-									<div className="links-best-day-tree-row links-best-day-tree-branch">
-										<span className="links-best-day-tree-dot-small"></span>
-										<span className="links-best-day-tree-label">
-											{formatDateOnly(bestDay.date, {
-												day: "numeric",
-											})}
-											:{" "}
-											{formatClickCount(
-												bestDay.totalClicks
+						<div className="links-detail-list">
+							<section className="links-detail-group">
+								<div className="links-detail-row">
+									<div className="links-detail-heading">
+										<span
+											className="links-detail-marker links-detail-marker-primary"
+											aria-hidden="true"
+										></span>
+										<h4 className="links-detail-title">
+											{sprintf(
+												__("Year %s"),
+												bestDayYear
 											)}
-										</span>
+										</h4>
 									</div>
 								</div>
-							</div>
+								<div className="links-detail-children">
+									<div className="links-detail-group-nested">
+										<div className="links-detail-row">
+											<span
+												className="links-detail-marker links-detail-marker-secondary"
+												aria-hidden="true"
+											></span>
+											<h5 className="links-detail-title-muted">
+												{bestDayMonth}
+											</h5>
+										</div>
+										<div className="links-detail-items">
+											<div className="links-detail-item">
+												<span className="links-detail-item-label">
+													{bestDayDay}
+												</span>
+												<DetailMetric
+													tone="clicks"
+													value={formatClickCount(
+														bestDay.totalClicks
+													)}
+												/>
+												<DetailMetric
+													tone="unique"
+													value={formatUniqueVisitorCount(
+														bestDay.uniqueClicks
+													)}
+												/>
+											</div>
+										</div>
+									</div>
+								</div>
+							</section>
 						</div>
 					)}
 				</>

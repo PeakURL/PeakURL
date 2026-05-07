@@ -243,6 +243,7 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 													link={link}
 													stats={statsPayload}
 													isLoading={isLoading}
+													timeRange={timeRange}
 												/>
 
 												{/* Best Day */}

@@ -6,16 +6,46 @@ import {
 	formatClickCount,
 	formatUniqueCount,
 } from "./analytics";
-import type { LinkPeriodSummary, LinkStatsViewProps } from "./types";
+import type {
+	LinkPeriodSummary,
+	LinkStatsViewProps,
+	StatsTimeRange,
+} from "./types";
 
 interface HistoricalPeriodRow {
-	key: "last24Hours" | "last7Days" | "last30Days" | "allTime";
+	key: "custom" | "last24Hours" | "last7Days" | "last30Days" | "allTime";
 	label: string;
 	highlighted: boolean;
 	summary?: LinkPeriodSummary;
 }
 
-function HistoricalStats({ link, stats, isLoading }: LinkStatsViewProps) {
+interface HistoricalStatsProps extends LinkStatsViewProps {
+	/** Currently selected Traffic History range. */
+	timeRange: StatsTimeRange;
+}
+
+/**
+ * Resolve the historical row that matches the selected chart range.
+ */
+function getActiveHistoricalPeriodKey(
+	timeRange: StatsTimeRange
+): HistoricalPeriodRow["key"] {
+	if ("24h" === timeRange) {
+		return "last24Hours";
+	}
+
+	if ("30d" === timeRange) {
+		return "last30Days";
+	}
+
+	if ("custom" === timeRange) {
+		return "custom";
+	}
+
+	return "last7Days";
+}
+
+function HistoricalStats({ link, stats, timeRange }: HistoricalStatsProps) {
 	const linkAgeInDays = link.createdAt
 		? Math.max(
 				1,
@@ -26,6 +56,37 @@ function HistoricalStats({ link, stats, isLoading }: LinkStatsViewProps) {
 				)
 			)
 		: 1;
+	const selectedRangeDays = Math.max(1, Number(stats?.range?.days || 1));
+	const selectedRangeTotalClicks = Math.max(
+		0,
+		Number(stats?.totalClicks || 0)
+	);
+	const selectedRangeUniqueClicks = Math.max(
+		0,
+		Math.min(Number(stats?.uniqueClicks || 0), selectedRangeTotalClicks)
+	);
+	const hasCustomRangeSummary =
+		stats && "custom" === timeRange && "custom" === stats.range?.key;
+	const customRangeSummary: LinkPeriodSummary | undefined =
+		hasCustomRangeSummary
+			? {
+					key: "custom",
+					totalClicks: selectedRangeTotalClicks,
+					uniqueClicks: selectedRangeUniqueClicks,
+					uniqueClickRate:
+						selectedRangeTotalClicks > 0
+							? Number(
+									(
+										(selectedRangeUniqueClicks /
+											selectedRangeTotalClicks) *
+										100
+									).toFixed(1)
+								)
+							: 0,
+					averageClicks: selectedRangeTotalClicks / selectedRangeDays,
+					averageUnit: "day",
+				}
+			: undefined;
 	const allTimeTotalClicks = Number(link.clicks || 0);
 	const allTimeUniqueClicks = Math.min(
 		Number(link.uniqueClicks || 0),
@@ -48,29 +109,42 @@ function HistoricalStats({ link, stats, isLoading }: LinkStatsViewProps) {
 		averageUnit: "day",
 	};
 	const periodSummaries = stats?.periodSummaries || {};
+	const activePeriodKey = getActiveHistoricalPeriodKey(timeRange);
+	const customRangeRows: HistoricalPeriodRow[] =
+		"custom" === timeRange
+			? [
+					{
+						key: "custom",
+						label: __("Custom range"),
+						highlighted: activePeriodKey === "custom",
+						summary: customRangeSummary,
+					},
+				]
+			: [];
 	const rows: HistoricalPeriodRow[] = [
+		...customRangeRows,
 		{
 			key: "last24Hours",
 			label: __("Last 24 hours"),
-			highlighted: true,
+			highlighted: activePeriodKey === "last24Hours",
 			summary: periodSummaries.last24Hours,
 		},
 		{
 			key: "last7Days",
 			label: __("Last 7 days"),
-			highlighted: false,
+			highlighted: activePeriodKey === "last7Days",
 			summary: periodSummaries.last7Days,
 		},
 		{
 			key: "last30Days",
 			label: __("Last 30 days"),
-			highlighted: false,
+			highlighted: activePeriodKey === "last30Days",
 			summary: periodSummaries.last30Days,
 		},
 		{
 			key: "allTime",
 			label: __("All time"),
-			highlighted: true,
+			highlighted: activePeriodKey === "allTime",
 			summary: periodSummaries.allTime || allTimeFallback,
 		},
 	];
@@ -127,17 +201,17 @@ function HistoricalStats({ link, stats, isLoading }: LinkStatsViewProps) {
 								{row.label}
 							</span>
 							<span className="links-historical-stats-value">
-								{isLoading || !summary
+								{!summary
 									? "..."
 									: formatClickCount(summary.totalClicks)}
 							</span>
 							<span className="links-historical-stats-unique">
-								{isLoading || !summary
+								{!summary
 									? ""
 									: formatUniqueCount(summary.uniqueClicks)}
 							</span>
 							<span className="links-historical-stats-rate">
-								{isLoading || !summary
+								{!summary
 									? ""
 									: formatAverageClicks(
 											summary.averageClicks,

@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { CalendarDays, ChevronDown, ChevronUp } from "lucide-react";
 import { __, sprintf } from "@/i18n";
 import { formatCount, formatDateOnly } from "@/utils";
+import DetailMetric from "./DetailMetric";
 import { formatClickCount, formatUniqueVisitorCount } from "./analytics";
 import type { LinkClickHistoryDay, LinkStatsViewProps } from "./types";
 
@@ -20,10 +21,10 @@ interface DateParts {
 }
 
 /**
- * Display-ready day row used by the click-history tree.
+ * Display-ready day row used by the click-history details layout.
  */
 interface ClickHistoryDayGroup extends LinkClickHistoryDay {
-	/** Localized day-of-month label shown in the tree. */
+	/** Localized day-of-month label shown in the details layout. */
 	dayLabel: string;
 }
 
@@ -74,23 +75,23 @@ interface ClickHistorySummaryProps {
 	/** All-time unique visitors for the link. */
 	allTimeUniqueClicks: number;
 
-	/** Whether the year/month/day tree is expanded. */
+	/** Whether the year/month/day details are expanded. */
 	showDetails: boolean;
 
-	/** Toggle callback for the details tree. */
+	/** Toggle callback for the details layout. */
 	onToggleDetails: () => void;
 }
 
 /**
- * Props for the complete click-history tree.
+ * Props for the complete click-history details view.
  */
-interface ClickHistoryTreeProps {
+interface ClickHistoryDetailsProps {
 	/** Year-grouped click history rows. */
 	yearGroups: ClickHistoryYearGroup[];
 }
 
 /**
- * Props for one year row and its month children.
+ * Props for one year group and its month children.
  */
 interface ClickHistoryYearProps {
 	/** Year bucket to render. */
@@ -98,7 +99,7 @@ interface ClickHistoryYearProps {
 }
 
 /**
- * Props for one month row and its day children.
+ * Props for one month group and its day children.
  */
 interface ClickHistoryMonthProps {
 	/** Month bucket to render. */
@@ -106,7 +107,7 @@ interface ClickHistoryMonthProps {
 }
 
 /**
- * Props for one active click day row.
+ * Props for one active click day item.
  */
 interface ClickHistoryDayProps {
 	/** Active day to render. */
@@ -153,7 +154,7 @@ function formatActiveDayCount(count: number): string {
 }
 
 /**
- * Groups active click days into a compact year/month/day tree for display.
+ * Groups active click days into year/month/day buckets for display.
  *
  * @param clickDays Active click days returned by the stats API.
  * @returns Click history grouped by year, month, and day.
@@ -230,7 +231,7 @@ function groupClickHistoryDays(
 }
 
 /**
- * Render the summary line above the expandable click-history tree.
+ * Render the summary line above the expandable click-history details.
  *
  * @param props Summary totals and toggle state.
  * @returns Click-history summary markup.
@@ -243,20 +244,20 @@ function ClickHistorySummary({
 	onToggleDetails,
 }: ClickHistorySummaryProps) {
 	return (
-		<p className="links-best-day-copy">
-			<span className="links-best-day-value">
+		<p className="links-click-history-summary">
+			<span className="links-click-history-summary-value">
 				{formatClickCount(allTimeTotalClicks)}
 			</span>{" "}
-			<span className="links-best-day-unique">
+			<span className="links-click-history-summary-muted">
 				{formatUniqueVisitorCount(allTimeUniqueClicks)}
 			</span>{" "}
-			<span className="links-best-day-unique">
+			<span className="links-click-history-summary-muted">
 				{sprintf(__("across %s"), formatActiveDayCount(activeDayCount))}
 			</span>{" "}
 			<button
 				type="button"
 				onClick={onToggleDetails}
-				className="links-best-day-toggle"
+				className="links-click-history-toggle"
 			>
 				{showDetails ? __("Hide details") : __("View all days")}
 				{showDetails ? (
@@ -270,45 +271,47 @@ function ClickHistorySummary({
 }
 
 /**
- * Render the expanded year/month/day click-history tree.
+ * Render the expanded year/month/day click-history details.
  *
  * @param props Grouped click-history rows.
- * @returns Click-history tree markup.
+ * @returns Click-history details markup.
  */
-function ClickHistoryTree({ yearGroups }: ClickHistoryTreeProps) {
+function ClickHistoryDetails({ yearGroups }: ClickHistoryDetailsProps) {
 	return (
-		<div className="links-best-day-details">
-			<div className="links-best-day-tree">
-				{yearGroups.map((yearGroup) => (
-					<ClickHistoryYear
-						key={yearGroup.key}
-						yearGroup={yearGroup}
-					/>
-				))}
-			</div>
+		<div className="links-detail-list">
+			{yearGroups.map((yearGroup) => (
+				<ClickHistoryYear key={yearGroup.key} yearGroup={yearGroup} />
+			))}
 		</div>
 	);
 }
 
 /**
- * Render one year group in the click-history tree.
+ * Render one year group in the click-history details.
  *
  * @param props Year group details.
- * @returns Year row and month children.
+ * @returns Year summary and month children.
  */
 function ClickHistoryYear({ yearGroup }: ClickHistoryYearProps) {
+	const headingId = `links-click-history-year-${yearGroup.key}`;
+
 	return (
-		<div className="links-best-day-tree">
-			<div className="links-best-day-tree-row">
-				<span className="links-best-day-tree-dot-large"></span>
-				<span className="links-best-day-tree-label">
-					{yearGroup.label}
-				</span>
-				<span className="links-best-day-tree-label-muted">
+		<section className="links-detail-group" aria-labelledby={headingId}>
+			<div className="links-detail-row">
+				<div className="links-detail-heading">
+					<span
+						className="links-detail-marker links-detail-marker-primary"
+						aria-hidden="true"
+					></span>
+					<h4 id={headingId} className="links-detail-title">
+						{yearGroup.label}
+					</h4>
+				</div>
+				<span className="links-detail-total">
 					{formatClickCount(yearGroup.totalClicks)}
 				</span>
 			</div>
-			<div className="links-best-day-tree-branch">
+			<div className="links-detail-children">
 				{yearGroup.months.map((monthGroup) => (
 					<ClickHistoryMonth
 						key={monthGroup.key}
@@ -316,54 +319,56 @@ function ClickHistoryYear({ yearGroup }: ClickHistoryYearProps) {
 					/>
 				))}
 			</div>
-		</div>
+		</section>
 	);
 }
 
 /**
- * Render one month group in the click-history tree.
+ * Render one month group in the click-history details.
  *
  * @param props Month group details.
- * @returns Month row and day children.
+ * @returns Month summary and active-day rows.
  */
 function ClickHistoryMonth({ monthGroup }: ClickHistoryMonthProps) {
 	return (
-		<div className="links-best-day-tree">
-			<div className="links-best-day-tree-row">
-				<span className="links-best-day-tree-dot-medium"></span>
-				<span className="links-best-day-tree-label-muted">
-					{monthGroup.label}
-				</span>
-				<span className="links-best-day-tree-label-muted">
+		<section className="links-detail-group-nested">
+			<div className="links-detail-row">
+				<span
+					className="links-detail-marker links-detail-marker-secondary"
+					aria-hidden="true"
+				></span>
+				<h5 className="links-detail-title-muted">{monthGroup.label}</h5>
+				<span className="links-detail-total">
 					{formatClickCount(monthGroup.totalClicks)}
 				</span>
 			</div>
-			<div className="links-best-day-tree-branch">
+			<div className="links-detail-items">
 				{monthGroup.days.map((day) => (
 					<ClickHistoryDay key={day.date} day={day} />
 				))}
 			</div>
-		</div>
+		</section>
 	);
 }
 
 /**
- * Render one active day in the click-history tree.
+ * Render one active day in the click-history details.
  *
- * @param props Day row details.
- * @returns Day row markup.
+ * @param props Day details.
+ * @returns Active-day detail markup.
  */
 function ClickHistoryDay({ day }: ClickHistoryDayProps) {
 	return (
-		<div className="links-best-day-tree-row">
-			<span className="links-best-day-tree-dot-small"></span>
-			<span className="links-best-day-tree-label">{day.dayLabel}:</span>
-			<span className="links-best-day-tree-label">
-				{formatClickCount(day.totalClicks)}
-			</span>
-			<span className="links-best-day-tree-label-muted">
-				{formatUniqueVisitorCount(day.uniqueClicks)}
-			</span>
+		<div className="links-detail-item">
+			<span className="links-detail-item-label">{day.dayLabel}</span>
+			<DetailMetric
+				tone="clicks"
+				value={formatClickCount(day.totalClicks)}
+			/>
+			<DetailMetric
+				tone="unique"
+				value={formatUniqueVisitorCount(day.uniqueClicks)}
+			/>
 		</div>
 	);
 }
@@ -397,7 +402,7 @@ function ClickHistory({ link, stats, isLoading }: LinkStatsViewProps) {
 	const toggleDetails = () => setShowDetails((isShowing) => !isShowing);
 
 	return (
-		<div className="links-best-day">
+		<div className="links-click-history">
 			<div className="links-historical-stats-header">
 				<CalendarDays className="links-drawer-section-icon" />
 				<h3 className="links-historical-stats-title">
@@ -406,7 +411,7 @@ function ClickHistory({ link, stats, isLoading }: LinkStatsViewProps) {
 			</div>
 
 			{isLoading ? (
-				<p className="links-best-day-copy">
+				<p className="links-click-history-loading">
 					{__("Loading click history...")}
 				</p>
 			) : hasClickHistory ? (
@@ -420,11 +425,11 @@ function ClickHistory({ link, stats, isLoading }: LinkStatsViewProps) {
 					/>
 
 					{showDetails && (
-						<ClickHistoryTree yearGroups={yearGroups} />
+						<ClickHistoryDetails yearGroups={yearGroups} />
 					)}
 				</>
 			) : (
-				<p className="links-best-day-empty">
+				<p className="links-click-history-empty">
 					{__("No click activity has been recorded yet.")}
 				</p>
 			)}

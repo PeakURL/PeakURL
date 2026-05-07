@@ -8,11 +8,11 @@
 	}
 
 	.links-table-header-cell {
-		@apply px-4 py-3 text-xs font-semibold uppercase tracking-wide text-text-muted;
+		@apply px-4 py-3 text-xs text-left font-semibold uppercase tracking-wide text-text-muted;
 	}
 
 	.links-table-header-cell-select {
-		@apply w-[40px];
+		@apply w-10;
 	}
 
 	.links-table-header-cell-performance {
@@ -24,8 +24,7 @@
 	}
 
 	.links-table-header-cell-actions {
-		@apply px-4 py-3;
-		text-align: end;
+		@apply px-4 py-3 text-center;
 	}
 
 	.links-table-header-delete {

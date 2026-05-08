@@ -13,6 +13,8 @@ import {
 	Trash2,
 	Webhook as WebhookIcon,
 	Link2,
+	ShieldCheck,
+	ShieldAlert,
 } from "lucide-react";
 import {
 	useCreateWebhookMutation,
@@ -27,6 +29,7 @@ import {
 	formatLocalizedDateTime,
 	getErrorMessage,
 } from "@/utils";
+import CaptchaSettings from "./CaptchaSettings";
 import type {
 	CreatedWebhook,
 	IntegrationsTabProps,
@@ -66,6 +69,9 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 	);
 	const [webhookPendingDelete, setWebhookPendingDelete] =
 		useState<WebhookSummary | null>(null);
+
+	const [userToggled, setUserToggled] = useState<boolean | null>(null);
+	const webhooksEnabled = userToggled ?? webhooks.length > 0;
 
 	const canCreate = useMemo(() => {
 		return form.url.trim().length > 0 && form.events.length > 0;
@@ -169,199 +175,251 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 							)}
 						</p>
 					</div>
-					<a
-						href="https://peakurl.org/docs/integrations"
-						target="_blank"
-						rel="noreferrer"
-						dir={direction}
-						className="integrations-tab-docs-link"
-					>
-						{__("Webhook docs")}
-						<ExternalLink size={14} />
-					</a>
-				</div>
-
-				<div className="integrations-tab-form">
-					<h4 className="integrations-tab-form-title">
-						{__("Add New Webhook")}
-					</h4>
-					<p className="integrations-tab-form-description">
-						{__(
-							"Choose which events should trigger a delivery, then save the signing secret somewhere secure when it is shown."
-						)}
-					</p>
-
-					<div className="integrations-tab-form-grid">
-						<div>
-							<Input
-								label={__("Endpoint URL")}
-								type="url"
-								valueDirection="ltr"
-								icon={Link2}
-								placeholder="https://hooks.zapier.com/hooks/catch/123456/peakurl"
-								value={form.url}
-								autoCapitalize="off"
-								spellCheck={false}
-								onChange={(event) =>
-									setForm((prev) => ({
-										...prev,
-										url: event.target.value,
-									}))
-								}
-							/>
-							<div className="integrations-tab-endpoint-help">
-								<p>
-									{__(
-										"Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route like"
+					<div className="flex items-center gap-3">
+						<span className="integrations-tab-status-pill">
+							{webhooksEnabled ? __("Ready") : __("Disabled")}
+						</span>
+						<div className="integrations-tab-switch">
+							<span
+								id="webhooks-toggle-label"
+								className="sr-only"
+							>
+								{__("Enable webhooks")}
+							</span>
+							<button
+								type="button"
+								role="switch"
+								aria-checked={webhooksEnabled}
+								aria-labelledby="webhooks-toggle-label"
+								disabled={isLoading}
+								onClick={() => setUserToggled(!webhooksEnabled)}
+								className={cn(
+									"integrations-tab-switch-track",
+									webhooksEnabled
+										? "integrations-tab-switch-track-active"
+										: "integrations-tab-switch-track-inactive"
+								)}
+							>
+								<span
+									className={cn(
+										"integrations-tab-switch-thumb",
+										webhooksEnabled
+											? "integrations-tab-switch-thumb-active"
+											: "integrations-tab-switch-thumb-inactive"
 									)}
-								</p>
-								<code className="integrations-tab-endpoint-code">
-									https://example.com/api/webhooks/peakurl
-								</code>
-							</div>
+								/>
+							</button>
 						</div>
-
-						<div>
-							<label className="integrations-tab-field-label">
-								{__("Events")}
-							</label>
-							<div className="integrations-tab-events-grid">
-								{eventOptions.map((event) => (
-									<label
-										key={event.id}
-										dir={direction}
-										className="integrations-tab-event-option"
-									>
-										<input
-											type="checkbox"
-											checked={form.events.includes(
-												event.id
-											)}
-											onChange={() =>
-												toggleEvent(event.id)
-											}
-										/>
-										<span>{event.label}</span>
-									</label>
-								))}
-							</div>
-						</div>
-					</div>
-
-					<div
-						className={cn(
-							"integrations-tab-form-actions",
-							isRtl && "integrations-tab-form-actions-rtl"
-						)}
-					>
-						<Button
-							size="sm"
-							icon={Plus}
-							loading={isCreating}
-							onClick={handleCreate}
-							disabled={!canCreate}
-						>
-							{isCreating
-								? __("Creating...")
-								: __("Create Webhook")}
-						</Button>
 					</div>
 				</div>
 
-				{isLoading ? (
-					<div className="integrations-tab-status-copy">
-						{__("Loading webhooks…")}
-					</div>
-				) : error ? (
-					<div className="integrations-tab-status-copy integrations-tab-status-copy-error">
-						{getErrorMessage(error, __("Failed to load webhooks"))}
-					</div>
-				) : webhooks.length === 0 ? (
-					<div className="integrations-tab-empty">
-						<WebhookIcon className="integrations-tab-empty-icon" />
-						<h4 className="integrations-tab-empty-title">
-							{__("No Webhooks Configured")}
-						</h4>
-						<p className="integrations-tab-empty-copy">
-							{__(
-								"Add a webhook to receive link events in real time."
-							)}
-						</p>
-					</div>
-				) : (
-					<div className="integrations-tab-list">
-						{webhooks.map((wh) => (
-							<div key={wh.id} className="integrations-tab-item">
-								<div
-									dir={direction}
-									className="integrations-tab-item-row"
-								>
-									<div className="integrations-tab-item-content">
-										<p className="integrations-tab-item-url">
-											{wh.url}
-										</p>
-										<div className="integrations-tab-item-events">
-											{(wh.events || []).map((evt) => (
-												<span
-													key={evt}
-													className="integrations-tab-item-event-pill"
-												>
-													{evt}
-												</span>
-											))}
-											{!wh.isActive && (
-												<span className="integrations-tab-item-state-pill">
-													{__("Inactive")}
-												</span>
-											)}
-										</div>
+				{webhooksEnabled && (
+					<>
+						<div className="integrations-tab-form integrations-tab-captcha-form">
+							<h4 className="integrations-tab-form-title">
+								{__("Add New Webhook")}
+							</h4>
+							<p className="integrations-tab-form-description">
+								{__(
+									"Choose which events should trigger a delivery, then save the signing secret somewhere secure when it is shown."
+								)}
+							</p>
 
-										<div className="integrations-tab-item-secret">
-											{wh.secretHint ? (
-												<span className="integrations-tab-item-secret-value">
-													{wh.secretHint}
-												</span>
-											) : (
-												<span className="integrations-tab-item-secret-copy">
-													{__(
-														"Signing secret stored"
-													)}
-												</span>
-											)}
-										</div>
-
-										{wh.createdAt && (
-											<p className="integrations-tab-item-created">
-												{__("Created:")}{" "}
-												<bdi className="integrations-tab-item-created-value">
-													{formatLocalizedDateTime(
-														wh.createdAt,
-														{
-															dateStyle: "medium",
-														}
-													)}
-												</bdi>
-											</p>
-										)}
-									</div>
-
-									<button
-										className="integrations-tab-item-delete"
-										aria-label={__("Delete webhook")}
-										onClick={() =>
-											setWebhookPendingDelete(wh)
+							<div className="integrations-tab-form-grid">
+								<div>
+									<Input
+										label={__("Endpoint URL")}
+										type="url"
+										valueDirection="ltr"
+										icon={Link2}
+										placeholder="https://hooks.zapier.com/hooks/catch/123456/peakurl"
+										value={form.url}
+										autoCapitalize="off"
+										spellCheck={false}
+										onChange={(event) =>
+											setForm((prev) => ({
+												...prev,
+												url: event.target.value,
+											}))
 										}
-										disabled={isDeleting}
-										title={__("Delete webhook")}
-									>
-										<Trash2 size={18} />
-									</button>
+									/>
+									<div className="integrations-tab-endpoint-help">
+										<p>
+											{__(
+												"Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route like"
+											)}
+										</p>
+										<code className="integrations-tab-endpoint-code">
+											https://example.com/api/webhooks/peakurl
+										</code>
+									</div>
+								</div>
+
+								<div>
+									<label className="integrations-tab-field-label">
+										{__("Events")}
+									</label>
+									<div className="integrations-tab-events-grid">
+										{eventOptions.map((event) => (
+											<label
+												key={event.id}
+												dir={direction}
+												className={cn(
+													"integrations-tab-event-option",
+													form.events.includes(
+														event.id
+													) &&
+														"integrations-tab-event-option-checked"
+												)}
+											>
+												<input
+													type="checkbox"
+													className="integrations-tab-event-checkbox"
+													checked={form.events.includes(
+														event.id
+													)}
+													onChange={() =>
+														toggleEvent(event.id)
+													}
+												/>
+												<span className="integrations-tab-event-label">
+													{event.label}
+												</span>
+											</label>
+										))}
+									</div>
 								</div>
 							</div>
-						))}
-					</div>
+
+							<div className="integrations-tab-form-actions items-center justify-between">
+								<a
+									href="https://peakurl.org/docs/integrations"
+									target="_blank"
+									rel="noreferrer"
+									dir={direction}
+									className="integrations-tab-docs-link"
+								>
+									{__("Webhook docs")}
+									<ExternalLink size={14} />
+								</a>
+								<Button
+									size="sm"
+									icon={Plus}
+									loading={isCreating}
+									onClick={handleCreate}
+									disabled={!canCreate}
+								>
+									{isCreating
+										? __("Creating...")
+										: __("Create Webhook")}
+								</Button>
+							</div>
+						</div>
+
+						{isLoading ? (
+							<div className="integrations-tab-status-copy">
+								{__("Loading webhooks…")}
+							</div>
+						) : error ? (
+							<div className="integrations-tab-status-copy integrations-tab-status-copy-error">
+								{getErrorMessage(
+									error,
+									__("Failed to load webhooks")
+								)}
+							</div>
+						) : webhooks.length > 0 ? (
+							<div className="integrations-tab-list">
+								{webhooks.map((wh) => (
+									<div
+										key={wh.id}
+										className="integrations-tab-item"
+									>
+										<div
+											dir={direction}
+											className="integrations-tab-item-row"
+										>
+											<div className="integrations-tab-item-content">
+												<p className="integrations-tab-item-url">
+													<Link2 className="mr-2 inline-block h-4 w-4 text-text-muted" />
+													{wh.url}
+												</p>
+												<div className="integrations-tab-item-events">
+													{(wh.events || []).map(
+														(evt) => (
+															<span
+																key={evt}
+																className="integrations-tab-item-event-pill"
+															>
+																{evt}
+															</span>
+														)
+													)}
+													{!wh.isActive && (
+														<span className="integrations-tab-item-state-pill">
+															{__("Inactive")}
+														</span>
+													)}
+												</div>
+
+												<div className="integrations-tab-item-secret">
+													{wh.secretHint ? (
+														<>
+															<ShieldCheck className="mr-1.5 h-3.5 w-3.5 text-success-500" />
+															<span className="integrations-tab-item-secret-value">
+																{wh.secretHint}
+															</span>
+														</>
+													) : (
+														<>
+															<ShieldAlert className="mr-1.5 h-3.5 w-3.5 text-warning-500" />
+															<span className="integrations-tab-item-secret-copy">
+																{__(
+																	"Signing secret stored"
+																)}
+															</span>
+														</>
+													)}
+												</div>
+
+												{wh.createdAt && (
+													<p className="integrations-tab-item-created">
+														{__("Created:")}{" "}
+														<bdi className="integrations-tab-item-created-value">
+															{formatLocalizedDateTime(
+																wh.createdAt,
+																{
+																	dateStyle:
+																		"medium",
+																}
+															)}
+														</bdi>
+													</p>
+												)}
+											</div>
+
+											<button
+												className="integrations-tab-item-delete"
+												aria-label={__(
+													"Delete webhook"
+												)}
+												onClick={() =>
+													setWebhookPendingDelete(wh)
+												}
+												disabled={isDeleting}
+												title={__("Delete webhook")}
+											>
+												<Trash2 size={18} />
+											</button>
+										</div>
+									</div>
+								))}
+							</div>
+						) : null}
+					</>
 				)}
 			</div>
+
+			<CaptchaSettings notification={notification} />
 
 			<Modal
 				isOpen={Boolean(createdWebhook?.secret)}

@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace PeakURL\Traits;
 
+use PeakURL\Includes\Constants;
 use PeakURL\Http\ApiException;
 use PeakURL\Http\Request;
 use PeakURL\Utils\Query;
@@ -183,6 +184,16 @@ trait LinksTrait {
 			);
 		}
 
+		$allow_non_get_hit = false;
+		$captcha_access    = $this->get_link_captcha_access( $url, $request );
+		$captcha_protected = ! empty( $captcha_access['protected'] );
+
+		if ( 'passed' === $captcha_access['status'] ) {
+			$allow_non_get_hit = true;
+		} elseif ( 'open' !== $captcha_access['status'] ) {
+			return $captcha_access;
+		}
+
 		if ( $this->link_requires_password( $url ) ) {
 			$cookie_name     = $this->link_cookie_name( $url );
 			$expected_cookie = $this->link_cookie_value( $url );
@@ -192,12 +203,13 @@ trait LinksTrait {
 				'' !== $cookie_value &&
 				hash_equals( $expected_cookie, $cookie_value )
 			) {
-				$this->record_click( $url, $request );
+				$this->record_click( $url, $request, $allow_non_get_hit );
 
 				return array(
-					'status'   => 'redirect',
-					'url'      => $url,
-					'location' => (string) $url['destination_url'],
+					'status'           => 'redirect',
+					'url'              => $url,
+					'location'         => (string) $url['destination_url'],
+					'captchaProtected' => $captcha_protected,
 				);
 			}
 
@@ -226,9 +238,10 @@ trait LinksTrait {
 					$this->record_click( $url, $request, true );
 
 					return array(
-						'status'   => 'redirect',
-						'url'      => $url,
-						'location' => (string) $url['destination_url'],
+						'status'           => 'redirect',
+						'url'              => $url,
+						'location'         => (string) $url['destination_url'],
+						'captchaProtected' => $captcha_protected,
 					);
 				}
 
@@ -245,12 +258,13 @@ trait LinksTrait {
 			);
 		}
 
-		$this->record_click( $url, $request );
+		$this->record_click( $url, $request, $allow_non_get_hit );
 
 		return array(
-			'status'   => 'redirect',
-			'url'      => $url,
-			'location' => (string) $url['destination_url'],
+			'status'           => 'redirect',
+			'url'              => $url,
+			'location'         => (string) $url['destination_url'],
+			'captchaProtected' => $captcha_protected,
 		);
 	}
 
@@ -470,6 +484,94 @@ trait LinksTrait {
 	}
 
 	/**
+	 * Resolve the CAPTCHA access state for a public link.
+	 *
+	 * @param array<string, mixed> $url     Raw URL row.
+	 * @param Request              $request Incoming HTTP request.
+	 * @return array<string, mixed> Access state for the public redirect flow.
+	 * @since 1.2.0
+	 */
+	private function get_link_captcha_access(
+		array $url,
+		Request $request
+	): array {
+		$challenge = $this->captcha_service->get_challenge();
+
+		if ( null === $challenge ) {
+			return array(
+				'status'    => 'open',
+				'protected' => false,
+			);
+		}
+
+		$cookie_name     = $this->link_captcha_cookie_name( $url );
+		$expected_cookie = $this->link_captcha_cookie_value( $url, $challenge );
+		$cookie_value    = (string) $request->get_cookie( $cookie_name, '' );
+
+		if (
+			'' !== $cookie_value &&
+			hash_equals( $expected_cookie, $cookie_value )
+		) {
+			return array(
+				'status'    => 'open',
+				'protected' => true,
+			);
+		}
+
+		if ( 'POST' !== $request->get_method() ) {
+			return array(
+				'status'    => 'captcha_required',
+				'url'       => $url,
+				'challenge' => $challenge,
+				'protected' => true,
+			);
+		}
+
+		$token = trim(
+			(string) $request->get_body_param(
+				(string) $challenge['responseField'],
+				'',
+			),
+		);
+
+		if ( '' === $token ) {
+			return array(
+				'status'    => 'captcha_required',
+				'url'       => $url,
+				'challenge' => $challenge,
+				'protected' => true,
+				'message'   => __( 'Complete the verification to open this link.', 'peakurl' ),
+			);
+		}
+
+		if (
+			! $this->captcha_service->verify_token(
+				$token,
+				$request->get_ip_address(),
+			)
+		) {
+			return array(
+				'status'    => 'captcha_invalid',
+				'url'       => $url,
+				'challenge' => $challenge,
+				'protected' => true,
+				'message'   => __( 'Verification failed. Please try again.', 'peakurl' ),
+			);
+		}
+
+		$request->queue_cookie(
+			$cookie_name,
+			$expected_cookie,
+			$this->link_captcha_cookie_options( $request, $url ),
+		);
+
+		return array(
+			'status'    => 'passed',
+			'protected' => true,
+		);
+	}
+
+	/**
 	 * Determine whether a public link requires a password challenge.
 	 *
 	 * @param array<string, mixed> $url Raw URL row.
@@ -517,6 +619,95 @@ trait LinksTrait {
 		Request $request,
 		array $url
 	): array {
+		return $this->link_access_cookie_options(
+			$request,
+			$url,
+			30 * 24 * 60 * 60,
+		);
+	}
+
+	/**
+	 * Get the cookie name used after successful CAPTCHA verification.
+	 *
+	 * @param array<string, mixed> $url Raw URL row.
+	 * @return string Cookie name.
+	 * @since 1.2.0
+	 */
+	private function link_captcha_cookie_name( array $url ): string {
+		return 'peakurl_link_captcha_' . (string) ( $url['id'] ?? '' );
+	}
+
+	/**
+	 * Get the signed cookie value used after successful CAPTCHA verification.
+	 *
+	 * @param array<string, mixed>  $url       Raw URL row.
+	 * @param array<string, string> $challenge Public challenge settings.
+	 * @return string Cookie value hash.
+	 * @since 1.2.0
+	 */
+	private function link_captcha_cookie_value(
+		array $url,
+		array $challenge
+	): string {
+		$payload = implode(
+			'|',
+			array(
+				(string) ( $url['id'] ?? '' ),
+				(string) ( $url['updated_at'] ?? '' ),
+				(string) ( $challenge['provider'] ?? '' ),
+				(string) ( $challenge['siteKey'] ?? '' ),
+			),
+		);
+		$secret  = trim(
+			(string) ( $this->config[ Constants::CONFIG_AUTH_SALT ] ?? '' ),
+		);
+
+		if ( '' === $secret ) {
+			$secret = trim(
+				(string) ( $this->config[ Constants::CONFIG_AUTH_KEY ] ?? '' ),
+			);
+		}
+
+		return '' === $secret
+			? hash( 'sha256', $payload )
+			: hash_hmac( 'sha256', $payload, $secret );
+	}
+
+	/**
+	 * Build cookie options for CAPTCHA-verified public links.
+	 *
+	 * @param Request              $request Incoming HTTP request.
+	 * @param array<string, mixed> $url     Raw URL row.
+	 * @return array<string, mixed> Cookie options.
+	 * @since 1.2.0
+	 */
+	private function link_captcha_cookie_options(
+		Request $request,
+		array $url
+	): array {
+		$challenge_max_age = 12 * 60 * 60;
+
+		return $this->link_access_cookie_options(
+			$request,
+			$url,
+			$challenge_max_age,
+		);
+	}
+
+	/**
+	 * Build cookie options shared by public link access challenges.
+	 *
+	 * @param Request              $request         Incoming HTTP request.
+	 * @param array<string, mixed> $url             Raw URL row.
+	 * @param int                  $default_max_age Default lifetime in seconds.
+	 * @return array<string, mixed> Cookie options.
+	 * @since 1.2.0
+	 */
+	private function link_access_cookie_options(
+		Request $request,
+		array $url,
+		int $default_max_age
+	): array {
 		$options = Security::session_cookie_options(
 			$this->config,
 			$request,
@@ -524,7 +715,7 @@ trait LinksTrait {
 				'samesite' => 'Lax',
 			),
 		);
-		$max_age = 30 * 24 * 60 * 60;
+		$max_age = $default_max_age;
 
 		$expires_at = (string) ( $url['expires_at'] ?? '' );
 

@@ -97,6 +97,40 @@ export interface GeoipConfigurationPayload {
 }
 
 /**
+ * Supported public-link CAPTCHA providers.
+ */
+export type CaptchaProvider = "none" | "recaptcha" | "turnstile";
+
+/**
+ * Persisted CAPTCHA provider settings saved from the dashboard.
+ */
+export interface CaptchaConfigurationPayload {
+	provider: CaptchaProvider;
+	siteKey: string;
+	secretKey: string;
+}
+
+/**
+ * Current CAPTCHA provider status returned by the settings API.
+ *
+ * The API never returns the raw provider secret key. Saved secrets are exposed
+ * only as a fixed masked hint so the dashboard can show their configured state.
+ */
+export interface CaptchaStatus {
+	provider: CaptchaProvider;
+	siteKey?: string | null;
+	siteKeyConfigured?: boolean | null;
+	siteKeyHint?: string | null;
+	secretKeyConfigured?: boolean | null;
+	secretKeyHint?: string | null;
+	configured?: boolean | null;
+	enabled?: boolean | null;
+	canManageFromDashboard?: boolean | null;
+	manageDisabledReason?: string | null;
+	saved?: boolean | null;
+}
+
+/**
  * Supported mail transport drivers.
  */
 export type MailDriver = "mail" | "smtp";

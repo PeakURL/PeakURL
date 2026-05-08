@@ -48,7 +48,7 @@
 	}
 
 	.form-control-base {
-		@apply w-full rounded-md border border-stroke bg-surface px-4 py-2 text-sm text-heading placeholder:text-muted outline-none transition-colors;
+		@apply h-10 w-full rounded-md border border-stroke bg-surface px-4 py-2 text-sm text-heading placeholder:text-muted outline-none transition-colors;
 	}
 
 	.form-control-accent-focus {

@@ -37,6 +37,14 @@ class UrlsController extends BaseController {
 	private const REDIRECT_PERMANENT = 301;
 
 	/**
+	 * Redirect status used after request-bound public access checks.
+	 *
+	 * @var int
+	 * @since 1.2.0
+	 */
+	private const REDIRECT_TEMPORARY = 302;
+
+	/**
 	 * Extract a stats-preview short code from a public route parameter.
 	 *
 	 * A trailing `+` opens the dashboard stats drawer instead of resolving the
@@ -286,7 +294,9 @@ class UrlsController extends BaseController {
 		if ( 'redirect' === ( $result['status'] ?? '' ) ) {
 			return JsonResponse::redirect(
 				(string) $result['location'],
-				self::REDIRECT_PERMANENT,
+				! empty( $result['captchaProtected'] )
+					? self::REDIRECT_TEMPORARY
+					: self::REDIRECT_PERMANENT,
 			);
 		}
 
@@ -302,6 +312,23 @@ class UrlsController extends BaseController {
 					(string) ( $result['message'] ?? '' ),
 				),
 				'password_invalid' === ( $result['status'] ?? '' ) ? 401 : 200,
+				'text/html; charset=utf-8',
+			);
+		}
+
+		if (
+			'captcha_required' === ( $result['status'] ?? '' ) ||
+			'captcha_invalid' === ( $result['status'] ?? '' )
+		) {
+			return JsonResponse::text(
+				$this->format_captcha_page(
+					$request,
+					is_array( $result['challenge'] ?? null )
+						? $result['challenge']
+						: array(),
+					(string) ( $result['message'] ?? '' ),
+				),
+				'captcha_invalid' === ( $result['status'] ?? '' ) ? 403 : 200,
 				'text/html; charset=utf-8',
 			);
 		}
@@ -389,6 +416,157 @@ class UrlsController extends BaseController {
 	}
 
 	/**
+	 * Get the public CAPTCHA page for a protected short link.
+	 *
+	 * @param Request              $request   Current HTTP request.
+	 * @param array<string, mixed> $challenge Public CAPTCHA challenge settings.
+	 * @param string               $error     Optional error message.
+	 * @return string HTML page markup.
+	 * @since 1.2.0
+	 */
+	private function format_captcha_page(
+		Request $request,
+		array $challenge,
+		string $error = ''
+	): string {
+		$form_action    = htmlspecialchars(
+			$request->get_path(),
+			ENT_QUOTES,
+			'UTF-8',
+		);
+		$site_key       = htmlspecialchars(
+			(string) ( $challenge['siteKey'] ?? '' ),
+			ENT_QUOTES,
+			'UTF-8',
+		);
+		$response_field = htmlspecialchars(
+			(string) ( $challenge['responseField'] ?? 'g-recaptcha-response' ),
+			ENT_QUOTES,
+			'UTF-8',
+		);
+		$script_url_raw = (string) ( $challenge['scriptUrl'] ?? '' );
+		$provider       = (string) ( $challenge['provider'] ?? '' );
+
+		if ( 'recaptcha' === $provider ) {
+			$script_query    = http_build_query(
+				array(
+					'render' => (string) ( $challenge['siteKey'] ?? '' ),
+					'onload' => 'PeakURLRenderCaptcha',
+				),
+				'',
+				'&',
+			);
+			$script_url_raw .= false === strpos( $script_url_raw, '?' )
+				? '?' . $script_query
+				: '&' . $script_query;
+		}
+
+		$script_url     = htmlspecialchars(
+			$script_url_raw,
+			ENT_QUOTES,
+			'UTF-8',
+		);
+		$json_flags     = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT;
+		$site_key_json  = json_encode(
+			(string) ( $challenge['siteKey'] ?? '' ),
+			$json_flags,
+		);
+		$action_json    = json_encode(
+			(string) ( $challenge['action'] ?? 'peakurl_redirect' ),
+			$json_flags,
+		);
+		$success_status = json_encode(
+			__( 'Verification complete. Redirecting…', 'peakurl' ),
+			$json_flags,
+		);
+		$expired_status = json_encode(
+			__( 'Verification expired. Please try again.', 'peakurl' ),
+			$json_flags,
+		);
+		$error_status   = json_encode(
+			__( 'Verification could not be completed. Please try again.', 'peakurl' ),
+			$json_flags,
+		);
+		$error_markup   = '';
+
+		if ( '' !== trim( $error ) ) {
+			$error_markup =
+				'<div class="alert">' .
+				'<svg class="alert-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"/></svg>' .
+				'<span>' . htmlspecialchars( $error, ENT_QUOTES, 'UTF-8' ) . '</span>' .
+				'</div>';
+		}
+
+		$shield_icon =
+			'<svg class="hero-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' .
+			'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' .
+			'<path d="m9 12 2 2 4-4"/>' .
+			'</svg>';
+
+		$verification_script =
+			'<script>' .
+			'(function(){' .
+			'var submitted=false;' .
+			'function setStatus(message,state){' .
+			'var status=document.getElementById("captcha-status-text");' .
+			'var panel=document.getElementById("captcha-status-panel");' .
+			'if(status){status.textContent=message;}' .
+			'if(panel){panel.className="captcha-status-panel captcha-status-panel-"+state;}' .
+			'}' .
+			'function setToken(token){' .
+			'var input=document.getElementById("captcha-token");' .
+			'if(input){input.value=token||"";}' .
+			'}' .
+			'function submitVerification(token){' .
+			'if(submitted){return;}' .
+			'submitted=true;' .
+			'setToken(token);' .
+			'setStatus(' . $success_status . ',"success");' .
+			'window.setTimeout(function(){' .
+			'var form=document.getElementById("captcha-form");' .
+			'if(form){form.submit();}' .
+			'},160);' .
+			'}' .
+			'window.PeakURLCaptchaVerified=submitVerification;' .
+			'window.PeakURLCaptchaExpired=function(){submitted=false;setStatus(' . $expired_status . ',"warning");};' .
+			'window.PeakURLCaptchaError=function(){submitted=false;setStatus(' . $error_status . ',"warning");};' .
+			'window.PeakURLCaptchaTheme=function(){return window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";};' .
+			'window.PeakURLRenderCaptcha=function(){' .
+			'if(!window.grecaptcha){window.PeakURLCaptchaError();return;}' .
+			'window.grecaptcha.ready(function(){' .
+			'window.grecaptcha.execute(' . $site_key_json . ',{action:' . $action_json . '}).then(' .
+			'window.PeakURLCaptchaVerified,' .
+			'window.PeakURLCaptchaError' .
+			');' .
+			'});' .
+			'};' .
+			'}());' .
+			'</script>';
+
+		$widget_html = 'turnstile' === $provider
+			? '<div class="captcha-widget"><div class="cf-turnstile" data-sitekey="' . $site_key . '" data-theme="auto" data-language="auto" data-callback="PeakURLCaptchaVerified" data-expired-callback="PeakURLCaptchaExpired" data-error-callback="PeakURLCaptchaError"></div></div>'
+			: '<input id="captcha-token" type="hidden" name="' . $response_field . '" value="">';
+
+		$content_html =
+			$verification_script .
+			'<script src="' . $script_url . '" async defer></script>' .
+			'<div class="hero-icon-wrap">' . $shield_icon . '</div>' .
+			'<h1 class="title">' . __( 'Performing security verification', 'peakurl' ) . '</h1>' .
+			'<p class="subtitle">' . __( 'This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot.', 'peakurl' ) . '</p>' .
+			$error_markup .
+			'<form id="captcha-form" class="captcha-form" method="post" action="' . $form_action . '" autocomplete="off">' .
+			'<div id="captcha-status-panel" class="captcha-status-panel captcha-status-panel-pending">' .
+			'<span class="captcha-spinner" aria-hidden="true"></span>' .
+			'<span id="captcha-status-text">' . __( 'Waiting for verification…', 'peakurl' ) . '</span>' .
+			'</div>' .
+			$widget_html .
+			'<noscript><p class="captcha-noscript">' . __( 'JavaScript is required to complete this verification.', 'peakurl' ) . '</p></noscript>' .
+			'</form>';
+
+		return $this->format_public_page( __( 'Security Verification', 'peakurl' ), $content_html );
+	}
+
+	/**
 	 * Get a simple public status page for expired or unavailable links.
 	 *
 	 * @param string $title       Page title.
@@ -453,12 +631,23 @@ class UrlsController extends BaseController {
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
+  color-scheme:light;
   --accent:#6366f1;--accent-hover:#4f46e5;
   --bg:#fafafa;--surface:#fff;
   --border:#e5e7eb;--border-focus:#6366f1;
   --heading:#111827;--text:#6b7280;
   --error:#ef4444;--error-bg:#fef2f2;--error-border:#fecaca;--error-text:#991b1b;
   --radius:12px;--radius-lg:20px;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    color-scheme:dark;
+    --accent:#818cf8;--accent-hover:#6366f1;
+    --bg:#111113;--surface:#18181b;
+    --border:#2d2d32;--border-focus:#818cf8;
+    --heading:#f8fafc;--text:#a1a1aa;
+    --error:#f87171;--error-bg:#2a1518;--error-border:#7f1d1d;--error-text:#fecaca;
+  }
 }
 body{
   font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
@@ -476,6 +665,9 @@ body{
   box-shadow:0 1px 3px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.04);
   text-align:center;
 }
+@media(prefers-color-scheme:dark){
+  .card{box-shadow:0 1px 3px rgba(0,0,0,.25),0 18px 40px rgba(0,0,0,.28)}
+}
 .hero-icon-wrap{
   display:inline-flex;align-items:center;justify-content:center;
   width:56px;height:56px;border-radius:16px;
@@ -488,7 +680,7 @@ body{
 .hero-icon-wrap--muted .hero-icon{color:#9ca3af}
 .hero-icon{width:26px;height:26px;color:var(--accent)}
 .title{
-  font-size:22px;font-weight:700;letter-spacing:-.03em;
+  font-size:22px;font-weight:700;letter-spacing:0;
   color:var(--heading);line-height:1.2;margin-bottom:8px;
 }
 .subtitle{
@@ -539,6 +731,49 @@ form{margin-top:28px;text-align:left}
   color:var(--error-text);font-size:13px;line-height:1.5;text-align:left;
 }
 .alert-icon{width:16px;height:16px;flex-shrink:0;margin-top:1px}
+.captcha-form{margin-top:24px}
+.captcha-status-panel{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:16px;padding:12px 14px;
+  border:1px solid var(--border);border-radius:var(--radius);
+  background:var(--bg);color:var(--text);
+  font-size:13px;font-weight:500;line-height:1.5;text-align:left;
+}
+.captcha-status-panel-success{
+  border-color:#bbf7d0;background:#f0fdf4;color:#166534;
+}
+.captcha-status-panel-warning{
+  border-color:#fed7aa;background:#fff7ed;color:#9a3412;
+}
+@media(prefers-color-scheme:dark){
+  .captcha-status-panel-success{
+    border-color:#14532d;background:#102719;color:#bbf7d0;
+  }
+  .captcha-status-panel-warning{
+    border-color:#7c2d12;background:#2d1b10;color:#fed7aa;
+  }
+}
+.captcha-spinner{
+  width:16px;height:16px;border-radius:999px;
+  border:2px solid rgba(99,102,241,.22);
+  border-top-color:var(--accent);
+  animation:captcha-spin .8s linear infinite;flex-shrink:0;
+}
+.captcha-status-panel-success .captcha-spinner{
+  border-color:#22c55e;background:#22c55e;animation:none;
+}
+.captcha-status-panel-warning .captcha-spinner{
+  border-color:#f97316;border-top-color:#f97316;animation:none;
+}
+.captcha-widget{
+  display:flex;justify-content:center;align-items:center;
+  min-height:78px;overflow:hidden;
+}
+.captcha-widget iframe{max-width:100%}
+.captcha-noscript{
+  margin-top:14px;color:var(--error-text);font-size:13px;line-height:1.5;text-align:center;
+}
+@keyframes captcha-spin{to{transform:rotate(360deg)}}
 .footer{
   margin-top:24px;
   font-size:12px;color:#9ca3af;

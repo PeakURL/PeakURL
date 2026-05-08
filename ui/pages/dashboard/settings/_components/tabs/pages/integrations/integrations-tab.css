@@ -51,20 +51,126 @@
 		@apply inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline;
 	}
 
+	.integrations-tab-status-pill {
+		@apply inline-flex w-fit items-center rounded-full border border-stroke bg-surface-alt px-3 py-1 text-xs font-medium text-text-muted;
+	}
+
 	.integrations-tab-form {
 		@apply mb-6 rounded-lg border border-stroke bg-surface-alt p-4;
+	}
+
+	.integrations-tab-captcha-form {
+		@apply mb-0;
 	}
 
 	.integrations-tab-form-title {
 		@apply mb-3 text-sm font-semibold text-heading;
 	}
 
+	.integrations-tab-form-title-compact {
+		@apply mb-1.5;
+	}
+
 	.integrations-tab-form-description {
 		@apply mb-4 text-sm leading-6 text-text-muted;
 	}
 
+	.integrations-tab-form-description-compact {
+		@apply mb-0;
+	}
+
 	.integrations-tab-form-grid {
 		@apply grid grid-cols-1 gap-3 md:grid-cols-2;
+	}
+
+	.integrations-tab-captcha-fields {
+		@apply gap-4 lg:grid-cols-3;
+	}
+
+	.integrations-tab-field-help {
+		@apply mt-1.5 text-xs leading-5 text-text-muted;
+	}
+
+	.integrations-tab-captcha-provider {
+		@apply min-w-0;
+	}
+
+	.integrations-tab-switch {
+		@apply inline-flex items-center gap-3 text-sm font-medium text-heading;
+	}
+
+	.integrations-tab-switch-track {
+		@apply relative inline-flex h-6 w-11 shrink-0 rounded-full border transition-colors disabled:cursor-not-allowed disabled:opacity-60;
+	}
+
+	.integrations-tab-switch-track-active {
+		@apply border-primary-600 bg-primary-600;
+	}
+
+	.integrations-tab-switch-track-inactive {
+		@apply border-stroke bg-surface-alt;
+	}
+
+	.integrations-tab-switch-thumb {
+		@apply absolute left-[1px] top-[1px] h-5 w-5 rounded-full bg-white shadow transition-transform;
+	}
+
+	.integrations-tab-switch-thumb-active {
+		@apply translate-x-[20px];
+	}
+
+	.integrations-tab-switch-thumb-inactive {
+		@apply translate-x-0;
+	}
+
+	.integrations-tab-captcha-secret {
+		@apply min-w-0;
+	}
+
+	.integrations-tab-captcha-summary {
+		@apply rounded-lg border border-stroke bg-surface p-4;
+	}
+
+	.integrations-tab-captcha-summary-grid {
+		@apply grid grid-cols-1 gap-4 md:grid-cols-3;
+	}
+
+	.integrations-tab-captcha-summary-item {
+		@apply min-w-0;
+		text-align: start;
+	}
+
+	.integrations-tab-captcha-summary-label {
+		@apply block text-xs font-medium text-text-muted;
+	}
+
+	.integrations-tab-captcha-summary-value {
+		@apply mt-1 block truncate text-sm font-semibold text-heading;
+	}
+
+	.integrations-tab-captcha-summary-code {
+		@apply w-fit rounded bg-surface-alt px-2 py-0.5 font-mono font-medium text-text-muted;
+		direction: ltr;
+		text-align: inherit;
+		unicode-bidi: -moz-plaintext;
+		unicode-bidi: plaintext;
+	}
+
+	.integrations-tab-captcha-summary-note {
+		@apply mt-3 text-xs leading-5 text-text-muted;
+		text-align: start;
+	}
+
+	.integrations-tab-captcha-footer {
+		@apply mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between;
+	}
+
+	.integrations-tab-captcha-footer-actions {
+		@apply flex flex-wrap gap-2;
+	}
+
+	.integrations-tab-captcha-remove-button {
+		@apply !border-red-200 !text-red-600 hover:!border-red-300 hover:!bg-red-50 hover:!text-red-700 dark:!border-red-900/50 dark:!text-red-400 dark:hover:!border-red-800 dark:hover:!bg-red-900/20 dark:hover:!text-red-300;
 	}
 
 	.integrations-tab-endpoint-help {
@@ -81,15 +187,28 @@
 	}
 
 	.integrations-tab-field-label {
-		@apply mb-1 block text-sm font-medium text-text-muted;
+		@apply block text-sm font-semibold text-heading;
+		text-align: start;
 	}
 
 	.integrations-tab-events-grid {
-		@apply grid grid-cols-2 gap-2;
+		@apply grid grid-cols-2 gap-3;
 	}
 
 	.integrations-tab-event-option {
-		@apply flex cursor-pointer select-none items-center gap-2 text-sm text-text-muted;
+		@apply flex cursor-pointer select-none items-center gap-3 rounded-lg border border-stroke bg-surface p-3 text-sm text-text-muted transition-colors hover:border-accent/50 hover:bg-accent/5;
+	}
+
+	.integrations-tab-event-option-checked {
+		@apply border-accent bg-accent/5 text-heading;
+	}
+
+	.integrations-tab-event-checkbox {
+		@apply h-4 w-4 rounded border-stroke text-accent focus:ring-accent focus:ring-offset-surface;
+	}
+
+	.integrations-tab-event-label {
+		@apply font-medium;
 	}
 
 	.integrations-tab-form-actions {
@@ -125,24 +244,24 @@
 	}
 
 	.integrations-tab-list {
-		@apply space-y-3;
+		@apply flex flex-col gap-4;
 	}
 
 	.integrations-tab-item {
-		@apply rounded-lg border border-stroke p-4;
+		@apply rounded-xl border border-stroke bg-surface mt-5 p-5 shadow-sm transition-all hover:border-accent/20 hover:shadow-md;
 	}
 
 	.integrations-tab-item-row {
-		@apply flex items-start justify-between gap-4;
+		@apply flex items-start justify-between gap-6;
 	}
 
 	.integrations-tab-item-content {
-		@apply min-w-0 flex-1;
+		@apply min-w-0 flex-1 space-y-3;
 		text-align: start;
 	}
 
 	.integrations-tab-item-url {
-		@apply truncate text-sm font-medium text-heading;
+		@apply flex items-center truncate text-base font-semibold text-heading;
 		direction: ltr;
 		text-align: start;
 		unicode-bidi: -moz-plaintext;
@@ -150,11 +269,11 @@
 	}
 
 	.integrations-tab-item-events {
-		@apply mt-2 flex flex-wrap gap-1.5;
+		@apply flex flex-wrap gap-2;
 	}
 
 	.integrations-tab-item-event-pill {
-		@apply rounded bg-accent/10 px-2 py-0.5 text-xs text-accent dark:bg-accent/20;
+		@apply rounded-md bg-accent/10 px-2.5 py-1 text-xs font-medium text-accent dark:bg-accent/20;
 	}
 
 	.integrations-tab-item-state-pill {

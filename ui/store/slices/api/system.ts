@@ -2,6 +2,8 @@ import baseApi from "./base";
 import type {
 	AdminNoticesResponse,
 	ApiDataResponse,
+	CaptchaConfigurationPayload,
+	CaptchaStatus,
 	EmailStatus,
 	GeoipConfigurationPayload,
 	LocationDataStatus,
@@ -17,6 +19,7 @@ import type {
 const GENERAL_SETTINGS_TAGS = ["GeneralSettings"] as const;
 const GEOIP_CHANGE_TAGS = ["Geoip", "AdminNotices"] as const;
 const MAIL_TAGS = ["Mail"] as const;
+const CAPTCHA_TAGS = ["Captcha"] as const;
 const UPDATE_CHANGE_TAGS = ["Updates", "AdminNotices"] as const;
 const DATABASE_UPDATE_TAGS = [
 	"Updates",
@@ -96,6 +99,10 @@ export const systemApi = baseApi.injectEndpoints({
 			query: () => "system/mail",
 			providesTags: MAIL_TAGS,
 		}),
+		getCaptchaStatus: build.query<ApiDataResponse<CaptchaStatus>, void>({
+			query: () => "system/captcha",
+			providesTags: CAPTCHA_TAGS,
+		}),
 		saveGeoipConfiguration: build.mutation<
 			ApiDataResponse<LocationDataStatus>,
 			GeoipConfigurationPayload
@@ -117,6 +124,17 @@ export const systemApi = baseApi.injectEndpoints({
 				body,
 			}),
 			invalidatesTags: MAIL_TAGS,
+		}),
+		saveCaptchaConfiguration: build.mutation<
+			ApiDataResponse<CaptchaStatus>,
+			CaptchaConfigurationPayload
+		>({
+			query: (body) => ({
+				url: "system/captcha",
+				method: "POST",
+				body,
+			}),
+			invalidatesTags: CAPTCHA_TAGS,
 		}),
 		sendTestEmail: build.mutation<ApiDataResponse<MailTestResult>, void>({
 			query: () => ({
@@ -185,8 +203,10 @@ export const {
 	useSaveGeneralSettingsMutation,
 	useGetGeoipStatusQuery,
 	useGetMailStatusQuery,
+	useGetCaptchaStatusQuery,
 	useSaveGeoipConfigurationMutation,
 	useSaveMailConfigurationMutation,
+	useSaveCaptchaConfigurationMutation,
 	useSendTestEmailMutation,
 	useDownloadGeoipDatabaseMutation,
 	useGetUpdateStatusQuery,

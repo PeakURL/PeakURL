@@ -15,6 +15,7 @@ use PeakURL\Includes\RuntimeConfig;
 use PeakURL\Http\ApiException;
 use PeakURL\Http\Request;
 use PeakURL\Services\AdminNotices;
+use PeakURL\Services\Captcha;
 use PeakURL\Services\Crypto;
 use PeakURL\Services\Geoip;
 use PeakURL\Services\Install\Writer as InstallWriter;
@@ -488,6 +489,57 @@ trait SystemTrait {
 		$this->get_update_user( $request );
 
 		return $this->load_update_status( false );
+	}
+
+	/**
+	 * Return the current CAPTCHA provider status.
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed> Current CAPTCHA settings payload.
+	 * @since 1.2.0
+	 */
+	public function get_captcha_status( Request $request ): array {
+		$this->get_settings_user( $request );
+
+		return $this->captcha_service->get_status();
+	}
+
+	/**
+	 * Save CAPTCHA provider credentials into the settings table.
+	 *
+	 * @param Request              $request Incoming HTTP request (admin-only).
+	 * @param array<string, mixed> $payload Submitted CAPTCHA config payload.
+	 * @return array<string, mixed> Fresh CAPTCHA settings payload.
+	 * @since 1.2.0
+	 */
+	public function save_captcha_configuration(
+		Request $request,
+		array $payload
+	): array {
+		$this->get_settings_user( $request );
+
+		$app_path = ABSPATH . 'app';
+		try {
+			$status = $this->captcha_service->save_settings(
+				$app_path,
+				$this->config,
+				$payload,
+			);
+		} catch ( \RuntimeException $exception ) {
+			throw new ApiException( $exception->getMessage(), 422 );
+		}
+
+		$this->config          = RuntimeConfig::load( ABSPATH . 'app' );
+		$this->crypto_service  = new Crypto( $this->config );
+		$this->captcha_service = new Captcha(
+			$this->config,
+			$this->settings_api,
+			$this->crypto_service,
+		);
+		$status                = $this->captcha_service->get_status();
+		$status['saved']       = true;
+
+		return $status;
 	}
 
 	/**

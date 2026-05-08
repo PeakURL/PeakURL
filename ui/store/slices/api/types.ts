@@ -1,5 +1,7 @@
 import type {
 	BackupCodesResponse,
+	CaptchaConfigurationPayload,
+	CaptchaStatus,
 	CreatedWebhook,
 	EmailStatus,
 	GeoipConfigurationPayload,
@@ -58,6 +60,7 @@ export type ApiTagType =
 	| "Security"
 	| "Geoip"
 	| "Mail"
+	| "Captcha"
 	| "Updates"
 	| "GeneralSettings"
 	| "SystemStatus"
@@ -80,6 +83,7 @@ export const API_TAG_TYPES: ApiTagType[] = [
 	"Security",
 	"Geoip",
 	"Mail",
+	"Captcha",
 	"Updates",
 	"GeneralSettings",
 	"SystemStatus",
@@ -472,6 +476,8 @@ export type {
 	AdminNoticesResponse,
 	BackupCodesResponse,
 	BulkCreateResponse,
+	CaptchaConfigurationPayload,
+	CaptchaStatus,
 	CreateUrlPayload,
 	CreateUrlResponse,
 	CreatedWebhook,

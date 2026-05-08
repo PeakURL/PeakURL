@@ -23,6 +23,7 @@ use PeakURL\Includes\Connection;
 use PeakURL\Includes\PeakURL_DB;
 use PeakURL\Includes\Roles;
 use PeakURL\Services\Crypto;
+use PeakURL\Services\Captcha;
 use PeakURL\Services\Favicon;
 use PeakURL\Services\Geoip;
 use PeakURL\Services\I18n;
@@ -241,6 +242,14 @@ class Store {
 	private Crypto $crypto_service;
 
 	/**
+	 * CAPTCHA provider helper for public link protection.
+	 *
+	 * @var Captcha
+	 * @since 1.2.0
+	 */
+	private Captcha $captcha_service;
+
+	/**
 	 * Site favicon management helper.
 	 *
 	 * @var Favicon
@@ -305,6 +314,11 @@ class Store {
 		$this->roles                 = new Roles();
 		$this->totp_service          = new Totp();
 		$this->crypto_service        = new Crypto( $config );
+		$this->captcha_service       = new Captcha(
+			$config,
+			$this->settings_api,
+			$this->crypto_service,
+		);
 		$this->favicon_service       = new Favicon(
 			$config,
 			$this->settings_api,

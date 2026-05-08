@@ -16,6 +16,7 @@ namespace PeakURL\Includes;
 use PeakURL\Controllers\AnalyticsController;
 use PeakURL\Controllers\AdminNoticesController;
 use PeakURL\Controllers\AuthController;
+use PeakURL\Controllers\CaptchaController;
 use PeakURL\Controllers\GeoipController;
 use PeakURL\Controllers\MailController;
 use PeakURL\Controllers\SettingsController;
@@ -163,6 +164,7 @@ class Application {
 		$urls      = new UrlsController( $this->data_store );
 		$analytics = new AnalyticsController( $this->data_store );
 		$webhooks  = new WebhooksController( $this->data_store );
+		$captcha   = new CaptchaController( $this->data_store );
 		$geoip     = new GeoipController( $this->data_store );
 		$mail      = new MailController( $this->data_store );
 		$notices   = new AdminNoticesController( $this->data_store );
@@ -180,6 +182,7 @@ class Application {
 			$notices,
 			$settings,
 			$status,
+			$captcha,
 			$geoip,
 			$mail,
 		);
@@ -322,6 +325,7 @@ class Application {
 	 * @param AdminNoticesController $notices  Admin notices controller.
 	 * @param SettingsController     $settings Settings controller.
 	 * @param SystemStatusController $status   System status controller.
+	 * @param CaptchaController      $captcha  CAPTCHA controller.
 	 * @param GeoipController        $geoip    GeoIP controller.
 	 * @param MailController         $mail     Mail controller.
 	 * @return void
@@ -331,6 +335,7 @@ class Application {
 		AdminNoticesController $notices,
 		SettingsController $settings,
 		SystemStatusController $status,
+		CaptchaController $captcha,
 		GeoipController $geoip,
 		MailController $mail
 	): void {
@@ -340,6 +345,8 @@ class Application {
 				array( 'get', '/api/v1/system/general', array( $settings, 'general' ) ),
 				array( 'post', '/api/v1/system/general', array( $settings, 'update_general' ) ),
 				array( 'get', '/api/v1/system/status', array( $status, 'status' ) ),
+				array( 'get', '/api/v1/system/captcha', array( $captcha, 'status' ) ),
+				array( 'post', '/api/v1/system/captcha', array( $captcha, 'update' ) ),
 				array( 'get', '/api/v1/system/geoip', array( $geoip, 'status' ) ),
 				array( 'post', '/api/v1/system/geoip', array( $geoip, 'update' ) ),
 				array( 'post', '/api/v1/system/geoip/download', array( $geoip, 'download' ) ),

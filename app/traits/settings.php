@@ -207,6 +207,16 @@ trait SettingsTrait {
 			'',
 			false,
 		);
+		$this->add_option(
+			'captcha_provider',
+			'none',
+			false,
+		);
+		$this->add_option(
+			'captcha_site_key',
+			'',
+			false,
+		);
 	}
 
 	/**

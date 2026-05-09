@@ -50,15 +50,24 @@ export const systemApi = baseApi.injectEndpoints({
 		>({
 			query: ({
 				siteName,
+				siteTagline,
 				siteLanguage,
 				siteTimezone,
 				siteTimeFormat,
+				socialPreviewFile,
+				removeSocialPreviewImage,
 				faviconFile,
 				removeFavicon,
 			}) => {
-				if (faviconFile || removeFavicon) {
+				if (
+					faviconFile ||
+					removeFavicon ||
+					socialPreviewFile ||
+					removeSocialPreviewImage
+				) {
 					const formData = new FormData();
 					formData.append("siteName", siteName || "");
+					formData.append("siteTagline", siteTagline || "");
 					formData.append("siteLanguage", siteLanguage);
 					formData.append("siteTimezone", siteTimezone || "");
 					formData.append("siteTimeFormat", siteTimeFormat || "");
@@ -69,6 +78,17 @@ export const systemApi = baseApi.injectEndpoints({
 
 					if (removeFavicon) {
 						formData.append("removeFavicon", "1");
+					}
+
+					if (socialPreviewFile) {
+						formData.append(
+							"socialPreviewImage",
+							socialPreviewFile
+						);
+					}
+
+					if (removeSocialPreviewImage) {
+						formData.append("removeSocialPreviewImage", "1");
 					}
 
 					return {
@@ -83,6 +103,7 @@ export const systemApi = baseApi.injectEndpoints({
 					method: "POST",
 					body: {
 						siteName,
+						siteTagline,
 						siteLanguage,
 						siteTimezone,
 						siteTimeFormat,

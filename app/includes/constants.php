@@ -66,7 +66,7 @@ class Constants {
 	/** Default update manifest URL. */
 	public const DEFAULT_UPDATE_MANIFEST_URL = 'https://api.peakurl.org/v1/update';
 	/** Current managed database schema version. */
-	public const DB_SCHEMA_VERSION = 4;
+	public const DB_SCHEMA_VERSION = 5;
 	/** Default content directory. */
 	public const DEFAULT_CONTENT_DIR = 'content';
 	/** Default site locale. */
@@ -99,4 +99,6 @@ class Constants {
 	public const SETTING_DB_SCHEMA_LAST_ERROR = 'db_schema_last_error';
 	/** Settings key storing the site favicon metadata payload. */
 	public const SETTING_SITE_FAVICON = 'site_favicon_json';
+	/** Settings key storing the default social preview image metadata. */
+	public const SETTING_SOCIAL_PREVIEW_IMAGE = 'social_preview_image_json';
 }

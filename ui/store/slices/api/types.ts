@@ -442,6 +442,9 @@ export interface SaveGeneralSettingsPayload {
 	/** Site title used across the dashboard shell and runtime metadata. */
 	siteName?: string;
 
+	/** Site tagline used as the default social preview description. */
+	siteTagline?: string;
+
 	/** Locale code for the selected dashboard language. */
 	siteLanguage: string;
 
@@ -450,6 +453,12 @@ export interface SaveGeneralSettingsPayload {
 
 	/** Time display preference for dashboard timestamps. */
 	siteTimeFormat?: SiteTimeFormat;
+
+	/** Optional image file uploaded for default social link previews. */
+	socialPreviewFile?: File | null;
+
+	/** Whether the stored default social preview image should be removed. */
+	removeSocialPreviewImage?: boolean;
 
 	/** Optional PNG favicon file uploaded from the General settings tab. */
 	faviconFile?: File | null;

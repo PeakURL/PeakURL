@@ -185,9 +185,10 @@ trait SystemTrait {
 	 * @since 1.0.3
 	 */
 	public function get_general_settings( Request $request ): array {
-		$user      = $this->get_current_user( $request );
-		$site_name = trim( (string) $this->get_option( 'site_name' ) );
-		$site_url  = \get_site_url();
+		$user         = $this->get_current_user( $request );
+		$site_name    = trim( (string) $this->get_option( 'site_name' ) );
+		$site_tagline = $this->get_site_tagline();
+		$site_url     = \get_site_url();
 
 		if ( '' === $site_name ) {
 			$site_name = 'PeakURL';
@@ -195,6 +196,7 @@ trait SystemTrait {
 
 		return array(
 			'siteName'              => $site_name,
+			'siteTagline'           => $site_tagline,
 			'siteUrl'               => $site_url,
 			'siteLanguage'          => $this->i18n_service->get_site_locale(),
 			'siteTimezone'          => $this->get_site_timezone(),
@@ -203,6 +205,7 @@ trait SystemTrait {
 			'isRtl'                 => $this->i18n_service->is_locale_rtl(),
 			'availableLanguages'    => $this->i18n_service->list_languages(),
 			'favicon'               => $this->favicon_service->get_settings( $site_name ),
+			'socialPreview'         => $this->social_preview_service->get_settings(),
 			'canManageSiteSettings' => $this->roles->has_capability(
 				$user,
 				'manage_site_settings',
@@ -220,8 +223,9 @@ trait SystemTrait {
 	 * @since 1.0.3
 	 */
 	public function get_public_i18n_payload(): array {
-		$locale    = $this->i18n_service->get_site_locale();
-		$site_name = trim( (string) $this->get_option( 'site_name' ) );
+		$locale       = $this->i18n_service->get_site_locale();
+		$site_name    = trim( (string) $this->get_option( 'site_name' ) );
+		$site_tagline = $this->get_site_tagline();
 
 		if ( '' === $site_name ) {
 			$site_name = 'PeakURL';
@@ -235,7 +239,9 @@ trait SystemTrait {
 			'textDomain'    => Constants::I18N_TEXT_DOMAIN,
 			'timezone'      => $this->get_site_timezone(),
 			'timeFormat'    => $this->get_site_time_format(),
+			'siteTagline'   => $site_tagline,
 			'favicon'       => $this->favicon_service->get_settings( $site_name ),
+			'socialPreview' => $this->social_preview_service->get_settings(),
 			'defaultLocale' => $this->i18n_service->get_default_locale(),
 			'catalog'       => $this->i18n_service->get_dashboard_catalog( $locale ),
 		);
@@ -293,6 +299,15 @@ trait SystemTrait {
 			$this->update_option( 'site_name', $site_name );
 		}
 
+		$site_tagline         = $this->normalize_site_tagline(
+			$payload['siteTagline'] ?? $this->get_site_tagline(),
+		);
+		$current_site_tagline = $this->get_site_tagline();
+
+		if ( $site_tagline !== $current_site_tagline ) {
+			$this->update_option( 'site_tagline', $site_tagline );
+		}
+
 		try {
 			$this->favicon_service->save(
 				$request->get_file( 'favicon' ),
@@ -303,10 +318,54 @@ trait SystemTrait {
 			throw new ApiException( $exception->getMessage(), 422 );
 		}
 
+		try {
+			$this->social_preview_service->save_settings(
+				$request->get_file( 'socialPreviewImage' ),
+				! empty( $payload['removeSocialPreviewImage'] ),
+			);
+		} catch ( \RuntimeException $exception ) {
+			throw new ApiException( $exception->getMessage(), 422 );
+		}
+
 		$settings          = $this->get_general_settings( $request );
 		$settings['saved'] = true;
 
 		return $settings;
+	}
+
+	/**
+	 * Return the configured site tagline for social previews.
+	 *
+	 * @return string
+	 * @since 1.2.0
+	 */
+	private function get_site_tagline(): string {
+		$tagline = trim( (string) $this->get_option( 'site_tagline' ) );
+
+		return '' !== $tagline
+			? $tagline
+			: __( 'Shorten, track, and own every link - PeakURL', 'peakurl' );
+	}
+
+	/**
+	 * Normalize the site tagline used by default link previews.
+	 *
+	 * @param mixed $value Submitted tagline value.
+	 * @return string
+	 * @since 1.2.0
+	 */
+	private function normalize_site_tagline( $value ): string {
+		$tagline = trim( (string) $value );
+
+		if ( '' === $tagline ) {
+			return __( 'Shorten, track, and own every link - PeakURL', 'peakurl' );
+		}
+
+		if ( function_exists( 'mb_strlen' ) && mb_strlen( $tagline, 'UTF-8' ) > 300 ) {
+			return mb_substr( $tagline, 0, 300, 'UTF-8' );
+		}
+
+		return strlen( $tagline ) > 300 ? substr( $tagline, 0, 300 ) : $tagline;
 	}
 
 	/**

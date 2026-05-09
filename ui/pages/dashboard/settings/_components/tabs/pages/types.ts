@@ -29,10 +29,25 @@ export interface SiteFavicon {
 }
 
 /**
+ * Site-level social preview metadata shown in the General settings tab.
+ */
+export interface SiteSocialPreview {
+	configured?: boolean;
+	url?: string | null;
+	mimeType?: string | null;
+	width?: number | string | null;
+	height?: number | string | null;
+	sizes?: string | null;
+	updatedAt?: string | null;
+	recommendedSize?: string | null;
+}
+
+/**
  * Site-level settings required by the general settings tab.
  */
 export interface SiteSettings {
 	siteName?: string | null;
+	siteTagline?: string | null;
 	siteUrl?: string | null;
 	siteLanguage?: string | null;
 	siteTimezone?: string | null;
@@ -42,6 +57,7 @@ export interface SiteSettings {
 	canManageSiteSettings?: boolean;
 	availableLanguages?: InstalledLanguage[];
 	favicon?: SiteFavicon | null;
+	socialPreview?: SiteSocialPreview | null;
 }
 
 /**

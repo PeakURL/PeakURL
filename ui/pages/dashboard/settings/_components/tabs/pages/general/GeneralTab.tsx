@@ -25,6 +25,13 @@ import type { GeneralTabProps } from "../types";
 const isPngFaviconFile = (file: File | null): file is File =>
 	Boolean(file && "image/png" === file.type && /\.png$/i.test(file.name));
 
+const isSocialPreviewImageFile = (file: File | null): file is File =>
+	Boolean(
+		file &&
+			["image/png", "image/jpeg", "image/webp"].includes(file.type) &&
+			/\.(png|jpe?g|webp)$/i.test(file.name)
+	);
+
 function GeneralTab({
 	initialForm,
 	username,
@@ -35,10 +42,16 @@ function GeneralTab({
 }: GeneralTabProps) {
 	const isRtl = isDocumentRtl();
 	const availableLanguages = siteSettings?.availableLanguages || [];
+	const defaultSiteTagline = __(
+		"Shorten, track, and own every link - PeakURL"
+	);
 	const [generalForm, setGeneralForm] =
 		useState<GeneralFormState>(initialForm);
 	const [siteName, setSiteName] = useState(
 		siteSettings?.siteName || PEAKURL_SITE_NAME || "PeakURL"
+	);
+	const [siteTagline, setSiteTagline] = useState(
+		siteSettings?.siteTagline || defaultSiteTagline
 	);
 	const [siteLanguage, setSiteLanguage] = useState(
 		siteSettings?.siteLanguage || "en_US"
@@ -52,7 +65,15 @@ function GeneralTab({
 	const [faviconFile, setFaviconFile] = useState<File | null>(null);
 	const [removeFavicon, setRemoveFavicon] = useState(false);
 	const [uploadedPreviewUrl, setUploadedPreviewUrl] = useState("");
+	const [socialPreviewFile, setSocialPreviewFile] = useState<File | null>(
+		null
+	);
+	const [removeSocialPreviewImage, setRemoveSocialPreviewImage] =
+		useState(false);
+	const [uploadedSocialPreviewUrl, setUploadedSocialPreviewUrl] =
+		useState("");
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
+	const socialPreviewInputRef = useRef<HTMLInputElement | null>(null);
 
 	useEffect(() => {
 		setGeneralForm(initialForm);
@@ -77,6 +98,10 @@ function GeneralTab({
 	}, [siteSettings?.siteName]);
 
 	useEffect(() => {
+		setSiteTagline(siteSettings?.siteTagline || defaultSiteTagline);
+	}, [defaultSiteTagline, siteSettings?.siteTagline]);
+
+	useEffect(() => {
 		setFaviconFile(null);
 		setRemoveFavicon(false);
 
@@ -84,6 +109,15 @@ function GeneralTab({
 			fileInputRef.current.value = "";
 		}
 	}, [siteSettings?.favicon?.updatedAt]);
+
+	useEffect(() => {
+		setSocialPreviewFile(null);
+		setRemoveSocialPreviewImage(false);
+
+		if (socialPreviewInputRef.current) {
+			socialPreviewInputRef.current.value = "";
+		}
+	}, [siteSettings?.socialPreview?.updatedAt]);
 
 	const handleChange = (
 		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -100,9 +134,12 @@ function GeneralTab({
 		onSubmit({
 			...generalForm,
 			siteName,
+			siteTagline,
 			siteLanguage,
 			siteTimezone,
 			siteTimeFormat,
+			socialPreviewFile,
+			removeSocialPreviewImage,
 			faviconFile,
 			removeFavicon,
 		});
@@ -166,6 +203,20 @@ function GeneralTab({
 		};
 	}, [faviconFile]);
 
+	useEffect(() => {
+		if (!isSocialPreviewImageFile(socialPreviewFile)) {
+			setUploadedSocialPreviewUrl("");
+			return;
+		}
+
+		const nextPreviewUrl = URL.createObjectURL(socialPreviewFile);
+		setUploadedSocialPreviewUrl(nextPreviewUrl);
+
+		return () => {
+			URL.revokeObjectURL(nextPreviewUrl);
+		};
+	}, [socialPreviewFile]);
+
 	const handleFaviconChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const nextFile = event.target.files?.[0] || null;
 		setFaviconFile(isPngFaviconFile(nextFile) ? nextFile : null);
@@ -180,6 +231,34 @@ function GeneralTab({
 
 		if (fileInputRef.current) {
 			fileInputRef.current.value = "";
+		}
+	};
+
+	const handleSocialPreviewChange = (
+		event: ChangeEvent<HTMLInputElement>
+	) => {
+		const nextFile = event.target.files?.[0] || null;
+		setSocialPreviewFile(
+			isSocialPreviewImageFile(nextFile) ? nextFile : null
+		);
+		setRemoveSocialPreviewImage(false);
+	};
+
+	const hasConfiguredSocialPreview = Boolean(
+		siteSettings?.socialPreview?.configured &&
+			siteSettings?.socialPreview?.url
+	);
+
+	const handleRemoveSocialPreview = () => {
+		const hasPendingUpload = Boolean(socialPreviewFile);
+
+		setSocialPreviewFile(null);
+		setRemoveSocialPreviewImage(
+			!hasPendingUpload && hasConfiguredSocialPreview
+		);
+
+		if (socialPreviewInputRef.current) {
+			socialPreviewInputRef.current.value = "";
 		}
 	};
 
@@ -198,6 +277,19 @@ function GeneralTab({
 		showPreview || hasConfiguredFavicon
 			? __("Replace Favicon")
 			: __("Choose Favicon");
+	const storedSocialPreviewUrl = hasConfiguredSocialPreview
+		? siteSettings?.socialPreview?.url || ""
+		: "";
+	const socialPreviewUrl = removeSocialPreviewImage
+		? ""
+		: uploadedSocialPreviewUrl || storedSocialPreviewUrl;
+	const showSocialPreviewRemove =
+		Boolean(socialPreviewFile) ||
+		(!removeSocialPreviewImage && hasConfiguredSocialPreview);
+	const socialPreviewChooserLabel =
+		socialPreviewUrl || hasConfiguredSocialPreview
+			? __("Replace Preview Image")
+			: __("Choose Preview Image");
 
 	return (
 		<div className="settings-general">
@@ -277,6 +369,14 @@ function GeneralTab({
 						label={__("Site title")}
 						value={siteName}
 						onChange={(event) => setSiteName(event.target.value)}
+						disabled={!canManageSiteSettings || isUpdating}
+					/>
+					<Input
+						label={__("Tagline")}
+						value={siteTagline}
+						onChange={(event) =>
+							setSiteTagline(event.target.value)
+						}
 						disabled={!canManageSiteSettings || isUpdating}
 					/>
 					<div className="settings-general-field">
@@ -482,6 +582,106 @@ function GeneralTab({
 									/>
 									<span className="sr-only">
 										{__("No favicon configured")}
+									</span>
+								</div>
+							)}
+						</div>
+					</div>
+				</div>
+				<div className="settings-general-social-preview">
+					<div className="settings-general-social-preview-copy">
+						<h3 className="settings-general-social-preview-title">
+							{__("Social Preview")}
+						</h3>
+						<p className="settings-general-social-preview-summary">
+							{__(
+								"Upload the default image used when short links are shared on social platforms. Individual links can override it."
+							)}
+						</p>
+					</div>
+					<div className="settings-general-social-preview-grid">
+						<div className="settings-general-social-preview-field">
+							<label
+								htmlFor="settings-social-preview-upload"
+								className="settings-section-label"
+							>
+								{__("Preview Image")}
+							</label>
+							<input
+								ref={socialPreviewInputRef}
+								id="settings-social-preview-upload"
+								type="file"
+								accept="image/png,image/jpeg,image/webp"
+								onChange={handleSocialPreviewChange}
+								disabled={!canManageSiteSettings || isUpdating}
+								className="settings-general-favicon-input-native"
+							/>
+							<div className="settings-general-favicon-picker">
+								<Button
+									type="button"
+									size="sm"
+									variant="outline"
+									onClick={() =>
+										socialPreviewInputRef.current?.click()
+									}
+									disabled={
+										!canManageSiteSettings || isUpdating
+									}
+								>
+									{socialPreviewChooserLabel}
+								</Button>
+								{socialPreviewFile ? (
+									<span className="settings-general-favicon-filename">
+										{socialPreviewFile.name}
+									</span>
+								) : null}
+							</div>
+							<p className="settings-general-social-preview-note">
+								{sprintf(
+									__(
+										"Use a PNG, JPG, or WebP image, ideally %s, for clean previews on Facebook, X, LinkedIn, and messaging apps."
+									),
+									siteSettings?.socialPreview
+										?.recommendedSize || "1200x630"
+								)}
+							</p>
+						</div>
+						<div className="settings-general-social-preview-card">
+							{socialPreviewUrl ? (
+								<div className="settings-general-social-preview-media">
+									{showSocialPreviewRemove ? (
+										<button
+											type="button"
+											onClick={handleRemoveSocialPreview}
+											disabled={
+												!canManageSiteSettings ||
+												isUpdating
+											}
+											className="settings-general-social-preview-remove"
+											aria-label={__(
+												"Remove Preview Image"
+											)}
+										>
+											<Trash2
+												aria-hidden="true"
+												className="settings-general-favicon-remove-icon"
+											/>
+										</button>
+									) : null}
+									<img
+										src={socialPreviewUrl}
+										alt={__("Default social preview image")}
+										className="settings-general-social-preview-image"
+									/>
+								</div>
+							) : (
+								<div className="settings-general-social-preview-empty">
+									<ImageOff
+										aria-hidden="true"
+										className="settings-general-social-preview-icon"
+									/>
+									<span>
+										{__("No default preview image")}
 									</span>
 								</div>
 							)}

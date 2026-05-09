@@ -310,49 +310,64 @@ trait LinksTrait {
 			$uses_custom_alias,
 		);
 
-		$id       = $this->generate_random_id();
-		$now      = $this->now();
-		$password = $this->sanitize_link_password(
+		$id                = $this->generate_random_id();
+		$now               = $this->now();
+		$password          = $this->sanitize_link_password(
 			$payload['password'] ?? '',
 		);
-
-		$this->db->insert(
-			'urls',
-			array(
-				'id'              => $id,
-				'user_id'         => $user['id'],
-				'short_code'      => $alias,
-				'alias'           => $alias,
-				'title'           => '' !== $title ? $title : null,
-				'destination_url' => $destination_url,
-				'password_value'  => '' !== $password
-					? Secrets::hash_link_password( $password )
-					: null,
-				'expires_at'      => $this->normalize_datetime_value(
-					$payload['expiresAt'] ?? null,
-				),
-				'status'          => $this->normalize_url_status(
-					(string) ( $payload['status'] ?? 'active' ),
-				),
-				'utm_source'      => $this->nullable_string(
-					$payload['utmSource'] ?? null,
-				),
-				'utm_medium'      => $this->nullable_string(
-					$payload['utmMedium'] ?? null,
-				),
-				'utm_campaign'    => $this->nullable_string(
-					$payload['utmCampaign'] ?? null,
-				),
-				'utm_term'        => $this->nullable_string(
-					$payload['utmTerm'] ?? null,
-				),
-				'utm_content'     => $this->nullable_string(
-					$payload['utmContent'] ?? null,
-				),
-				'created_at'      => $now,
-				'updated_at'      => $now,
-			),
+		$social_preview    = $this->normalize_link_social_preview( $payload );
+		$social_image_path = $this->save_link_social_preview_image(
+			$id,
+			$request->get_file( 'socialImage' ),
+			false,
+			'',
 		);
+
+		try {
+			$this->db->insert(
+				'urls',
+				array(
+					'id'                 => $id,
+					'user_id'            => $user['id'],
+					'short_code'         => $alias,
+					'alias'              => $alias,
+					'title'              => '' !== $title ? $title : null,
+					'destination_url'    => $destination_url,
+					'social_title'       => $social_preview['title'],
+					'social_description' => $social_preview['description'],
+					'social_image_path'  => $social_image_path,
+					'password_value'     => '' !== $password
+						? Secrets::hash_link_password( $password )
+						: null,
+					'expires_at'         => $this->normalize_datetime_value(
+						$payload['expiresAt'] ?? null,
+					),
+					'status'             => $this->normalize_url_status(
+						(string) ( $payload['status'] ?? 'active' ),
+					),
+					'utm_source'         => $this->nullable_string(
+						$payload['utmSource'] ?? null,
+					),
+					'utm_medium'         => $this->nullable_string(
+						$payload['utmMedium'] ?? null,
+					),
+					'utm_campaign'       => $this->nullable_string(
+						$payload['utmCampaign'] ?? null,
+					),
+					'utm_term'           => $this->nullable_string(
+						$payload['utmTerm'] ?? null,
+					),
+					'utm_content'        => $this->nullable_string(
+						$payload['utmContent'] ?? null,
+					),
+					'created_at'         => $now,
+					'updated_at'         => $now,
+				),
+			);
+		} catch ( \Throwable $exception ) {
+			$this->social_preview_service->delete_link_image( $social_image_path );
+			throw $exception;
+		}
 
 		$this->record_activity(
 			'link_created',
@@ -372,6 +387,146 @@ trait LinksTrait {
 		);
 
 		return $this->format_url( $this->find_url_row( $id ) );
+	}
+
+	/**
+	 * Normalize social preview fields from a link payload.
+	 *
+	 * @param array<string, mixed> $payload Submitted link payload.
+	 * @param bool                 $include_missing Whether missing keys should be normalized as null.
+	 * @return array<string, mixed>
+	 *
+	 * @throws ApiException When a submitted preview image URL is invalid.
+	 * @since 1.2.0
+	 */
+	private function normalize_link_social_preview(
+		array $payload,
+		bool $include_missing = true
+	): array {
+		$field_map = array(
+			'socialTitle'       => array(
+				'value'  => 'title',
+				'column' => 'social_title',
+			),
+			'socialDescription' => array(
+				'value'  => 'description',
+				'column' => 'social_description',
+			),
+		);
+		$columns   = array();
+		$values    = array(
+			'title'       => null,
+			'description' => null,
+			'columns'     => array(),
+		);
+
+		foreach ( $field_map as $input_key => $meta ) {
+			if ( ! $include_missing && ! array_key_exists( $input_key, $payload ) ) {
+				continue;
+			}
+
+			$value_key                  = $meta['value'];
+			$columns[ $meta['column'] ] = true;
+			$value                      = $payload[ $input_key ] ?? null;
+
+			try {
+				if ( 'title' === $value_key ) {
+					$values[ $value_key ] = $this->social_preview_service->normalize_title( $value );
+				} else {
+					$values[ $value_key ] = $this->social_preview_service->normalize_description( $value );
+				}
+			} catch ( \RuntimeException $exception ) {
+				throw new ApiException( $exception->getMessage(), 422 );
+			}
+		}
+
+		$values['columns'] = $columns;
+
+		return $values;
+	}
+
+	/**
+	 * Save a submitted per-link social preview image.
+	 *
+	 * @param string                    $link_id      Short-link row ID.
+	 * @param array<string, mixed>|null $file         Uploaded image file.
+	 * @param bool                      $remove_image Whether the stored image should be removed.
+	 * @param string                    $current_path Current stored image path.
+	 * @return string|null Stored relative image path.
+	 *
+	 * @throws ApiException When the uploaded image is invalid.
+	 * @since 1.2.0
+	 */
+	private function save_link_social_preview_image(
+		string $link_id,
+		?array $file,
+		bool $remove_image,
+		string $current_path
+	): ?string {
+		try {
+			return $this->social_preview_service->save_link_image(
+				$link_id,
+				$file,
+				$remove_image,
+				$current_path,
+			);
+		} catch ( \RuntimeException $exception ) {
+			throw new ApiException( $exception->getMessage(), 422 );
+		}
+	}
+
+	/**
+	 * Return whether an uploaded file payload should update link media.
+	 *
+	 * @param array<string, mixed>|null $file Uploaded file data.
+	 * @return bool
+	 * @since 1.2.0
+	 */
+	private function has_link_upload( ?array $file ): bool {
+		return is_array( $file ) &&
+			array_key_exists( 'error', $file ) &&
+			UPLOAD_ERR_NO_FILE !== (int) $file['error'];
+	}
+
+	/**
+	 * Return social sharing metadata for a public short link.
+	 *
+	 * Social crawlers receive this metadata without triggering access
+	 * challenges or click analytics. Browser redirects still use the regular
+	 * access flow.
+	 *
+	 * @param string $id Short code or alias.
+	 * @return array<string, mixed>|null Preview payload or null when unavailable.
+	 * @since 1.2.0
+	 */
+	public function get_link_social_preview( string $id ): ?array {
+		$url = $this->find_link_access_row( $id );
+
+		if ( ! $url || $this->is_public_link_expired( $url ) ) {
+			return null;
+		}
+
+		if ( 'active' !== (string) ( $url['status'] ?? 'active' ) ) {
+			return null;
+		}
+
+		$formatted    = $this->format_url( $url );
+		$site_name    = trim( (string) $this->get_option( 'site_name' ) );
+		$site_tagline = $this->get_site_tagline();
+
+		if ( '' === $site_name ) {
+			$site_name = 'PeakURL';
+		}
+
+		return array(
+			'link'    => $formatted,
+			'preview' => $this->social_preview_service->get_link_preview(
+				$url,
+				(string) ( $formatted['shortUrl'] ?? '' ),
+				$site_name,
+				$site_tagline,
+			),
+		);
 	}
 
 	/**
@@ -836,6 +991,40 @@ trait LinksTrait {
 			$params[ $column ] = is_string( $value ) ? trim( $value ) : $value;
 		}
 
+		$social_preview = $this->normalize_link_social_preview(
+			$payload,
+			false,
+		);
+
+		foreach (
+			array(
+				'social_title'       => 'title',
+				'social_description' => 'description',
+			) as $column => $value_key
+		) {
+			if ( ! array_key_exists( $column, $social_preview['columns'] ) ) {
+				continue;
+			}
+
+			$updates[]         = $column . ' = :' . $column;
+			$params[ $column ] = $social_preview[ $value_key ] ?? null;
+		}
+
+		$social_image_file = $request->get_file( 'socialImage' );
+
+		if (
+			$this->has_link_upload( $social_image_file ) ||
+			! empty( $payload['removeSocialImage'] )
+		) {
+			$updates[]                   = 'social_image_path = :social_image_path';
+			$params['social_image_path'] = $this->save_link_social_preview_image(
+				$id,
+				$social_image_file,
+				! empty( $payload['removeSocialImage'] ),
+				(string) ( $existing['social_image_path'] ?? '' ),
+			);
+		}
+
 		$clear_password = ! empty( $payload['clearPassword'] );
 
 		if ( $clear_password ) {
@@ -906,7 +1095,8 @@ trait LinksTrait {
 	/**
 	 * Delete a short URL by ID.
 	 *
-	 * Also removes associated clicks and activity records.
+	 * Also removes associated clicks, activity records, and the stored social
+	 * preview image.
 	 *
 	 * @param Request $request Incoming HTTP request.
 	 * @param string  $id      Short-URL row ID.
@@ -918,7 +1108,7 @@ trait LinksTrait {
 		$row  = $this->db->get_row_by(
 			'urls',
 			array( 'id' => $id ),
-			array( 'id', 'user_id', 'title', 'alias', 'short_code' ),
+			array( 'id', 'user_id', 'title', 'alias', 'short_code', 'social_image_path' ),
 		);
 
 		if ( ! $row ) {
@@ -953,6 +1143,13 @@ trait LinksTrait {
 				),
 			);
 
+			$this->db->delete(
+				'clicks',
+				array(
+					'url_id' => $id,
+				),
+			);
+
 			$deleted = $this->db->delete(
 				'urls',
 				array(
@@ -969,11 +1166,20 @@ trait LinksTrait {
 			throw $exception;
 		}
 
+		if ( $deleted ) {
+			$this->social_preview_service->delete_link_image(
+				(string) ( $row['social_image_path'] ?? '' ),
+			);
+		}
+
 		return $deleted;
 	}
 
 	/**
 	 * Bulk-delete short URLs by an array of IDs.
+	 *
+	 * Also removes associated clicks, activity records, and stored social
+	 * preview images.
 	 *
 	 * @param Request            $request Incoming HTTP request.
 	 * @param array<int, string> $ids     Short-URL row IDs.
@@ -1023,7 +1229,7 @@ trait LinksTrait {
 				'urls',
 				'id',
 				$allowed_ids,
-				array( 'id', 'title', 'alias', 'short_code' ),
+				array( 'id', 'title', 'alias', 'short_code', 'social_image_path' ),
 			);
 
 			foreach ( $deleted_rows as $deleted_row ) {
@@ -1044,6 +1250,12 @@ trait LinksTrait {
 				$allowed_ids,
 			);
 
+			$this->db->delete_where_in(
+				'clicks',
+				'url_id',
+				$allowed_ids,
+			);
+
 			$deleted_count = $this->db->delete_where_in(
 				'urls',
 				'id',
@@ -1051,6 +1263,10 @@ trait LinksTrait {
 			);
 
 			$this->db->commit();
+
+			$this->social_preview_service->delete_link_images(
+				array_column( $deleted_rows, 'social_image_path' ),
+			);
 
 			return $deleted_count;
 		} catch ( \Throwable $exception ) {

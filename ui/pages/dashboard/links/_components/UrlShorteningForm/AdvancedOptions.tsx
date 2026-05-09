@@ -1,6 +1,7 @@
 import SecurityFields from "./SecurityFields";
 import ExpirationFields from "./ExpirationFields";
 import UTMFields from "./UTMFields";
+import SocialPreviewFields from "./SocialPreviewFields";
 import type { AdvancedOptionsProps } from "../types";
 
 const AdvancedOptions = ({
@@ -22,6 +23,13 @@ const AdvancedOptions = ({
 	setUtmTerm,
 	utmContent,
 	setUtmContent,
+	socialTitle,
+	setSocialTitle,
+	socialDescription,
+	setSocialDescription,
+	socialImageFile,
+	setSocialImageFile,
+	socialImagePreviewUrl,
 }: AdvancedOptionsProps) => {
 	return (
 		<div className="links-form-advanced-panel">
@@ -48,6 +56,15 @@ const AdvancedOptions = ({
 				setUtmTerm={setUtmTerm}
 				utmContent={utmContent}
 				setUtmContent={setUtmContent}
+			/>
+			<SocialPreviewFields
+				socialTitle={socialTitle}
+				setSocialTitle={setSocialTitle}
+				socialDescription={socialDescription}
+				setSocialDescription={setSocialDescription}
+				socialImageFile={socialImageFile}
+				setSocialImageFile={setSocialImageFile}
+				socialImagePreviewUrl={socialImagePreviewUrl}
 			/>
 		</div>
 	);

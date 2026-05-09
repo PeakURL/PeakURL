@@ -435,10 +435,18 @@ trait UsersTrait {
 			(string) $current_user['id'],
 		);
 
+		$link_cleanup = array(
+			'ids'         => array(),
+			'image_paths' => array(),
+		);
+
 		$this->db->begin_transaction();
 
 		try {
+			$link_cleanup = $this->get_user_link_cleanup_data( (string) $user['id'] );
+
 			$this->prune_user_activity( (string) $user['id'] );
+			$this->delete_user_links( $link_cleanup['ids'] );
 
 			$this->record_activity(
 				'user_deleted',
@@ -464,7 +472,84 @@ trait UsersTrait {
 			throw $exception;
 		}
 
+		$this->social_preview_service->delete_link_images(
+			$link_cleanup['image_paths'],
+		);
+
 		return true;
+	}
+
+	/**
+	 * Return link rows that need database and file cleanup before user deletion.
+	 *
+	 * @param string $user_id Target user ID.
+	 * @return array{ids: array<int, string>, image_paths: array<int, string>}
+	 * @since 1.2.0
+	 */
+	private function get_user_link_cleanup_data( string $user_id ): array {
+		$rows = $this->db->get_results_by(
+			'urls',
+			array(
+				'user_id' => $user_id,
+			),
+			array( 'id', 'social_image_path' ),
+		);
+
+		$ids         = array();
+		$image_paths = array();
+
+		foreach ( $rows as $row ) {
+			$id = trim( (string) ( $row['id'] ?? '' ) );
+
+			if ( '' !== $id ) {
+				$ids[] = $id;
+			}
+
+			$image_path = trim( (string) ( $row['social_image_path'] ?? '' ) );
+
+			if ( '' !== $image_path ) {
+				$image_paths[] = $image_path;
+			}
+		}
+
+		return array(
+			'ids'         => $ids,
+			'image_paths' => $image_paths,
+		);
+	}
+
+	/**
+	 * Delete all link-owned rows for a user before the user row is removed.
+	 *
+	 * This keeps cleanup explicit even on installs where foreign-key repair has
+	 * not run yet.
+	 *
+	 * @param array<int, string> $link_ids Link IDs owned by the user.
+	 * @return void
+	 * @since 1.2.0
+	 */
+	private function delete_user_links( array $link_ids ): void {
+		if ( empty( $link_ids ) ) {
+			return;
+		}
+
+		$this->db->delete_where_in(
+			'clicks',
+			'url_id',
+			$link_ids,
+		);
+
+		$this->db->delete_where_in(
+			'audit_logs',
+			'link_id',
+			$link_ids,
+		);
+
+		$this->db->delete_where_in(
+			'urls',
+			'id',
+			$link_ids,
+		);
 	}
 
 	/**

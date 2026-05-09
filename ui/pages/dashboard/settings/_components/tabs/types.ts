@@ -81,9 +81,12 @@ export interface GeneralFormState {
  */
 export interface GeneralFormPayload extends GeneralFormState {
 	siteName: string;
+	siteTagline: string;
 	siteLanguage: string;
 	siteTimezone: string;
 	siteTimeFormat: SiteTimeFormat;
+	socialPreviewFile?: File | null;
+	removeSocialPreviewImage?: boolean;
 	faviconFile?: File | null;
 	removeFavicon?: boolean;
 }

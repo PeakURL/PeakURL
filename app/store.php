@@ -29,6 +29,7 @@ use PeakURL\Services\Geoip;
 use PeakURL\Services\I18n;
 use PeakURL\Services\Mailer;
 use PeakURL\Services\Notifications;
+use PeakURL\Services\SocialPreview;
 use PeakURL\Services\Totp;
 use PeakURL\Traits\Accounts\AccountsTrait;
 use PeakURL\Traits\AnalyticsSupportTrait;
@@ -258,6 +259,14 @@ class Store {
 	private Favicon $favicon_service;
 
 	/**
+	 * Social preview metadata helper.
+	 *
+	 * @var SocialPreview
+	 * @since 1.2.0
+	 */
+	private SocialPreview $social_preview_service;
+
+	/**
 	 * Request geolocation helper for click analytics.
 	 *
 	 * @var Geoip
@@ -305,36 +314,40 @@ class Store {
 	 * @since 1.0.0
 	 */
 	public function __construct( Connection $connection, array $config ) {
-		$this->connection            = $connection;
-		$this->db                    = new PeakURL_DB( $connection );
-		$this->settings_api          = new SettingsApi( $this->db );
-		$this->users_api             = new UsersApi( $this->db );
-		$this->links_api             = new LinksApi( $this->db );
-		$this->config                = $config;
-		$this->roles                 = new Roles();
-		$this->totp_service          = new Totp();
-		$this->crypto_service        = new Crypto( $config );
-		$this->captcha_service       = new Captcha(
+		$this->connection             = $connection;
+		$this->db                     = new PeakURL_DB( $connection );
+		$this->settings_api           = new SettingsApi( $this->db );
+		$this->users_api              = new UsersApi( $this->db );
+		$this->links_api              = new LinksApi( $this->db );
+		$this->config                 = $config;
+		$this->roles                  = new Roles();
+		$this->totp_service           = new Totp();
+		$this->crypto_service         = new Crypto( $config );
+		$this->captcha_service        = new Captcha(
 			$config,
 			$this->settings_api,
 			$this->crypto_service,
 		);
-		$this->favicon_service       = new Favicon(
+		$this->favicon_service        = new Favicon(
 			$config,
 			$this->settings_api,
 		);
-		$this->geoip_service         = new Geoip(
+		$this->social_preview_service = new SocialPreview(
+			$config,
+			$this->settings_api,
+		);
+		$this->geoip_service          = new Geoip(
 			$config,
 			$this->settings_api,
 			$this->crypto_service,
 		);
-		$this->mailer_service        = new Mailer(
+		$this->mailer_service         = new Mailer(
 			$config,
 			$this->settings_api,
 			$this->crypto_service,
 		);
-		$this->notifications_service = new Notifications();
-		$this->i18n_service          = new I18n(
+		$this->notifications_service  = new Notifications();
+		$this->i18n_service           = new I18n(
 			$config,
 			$this->settings_api,
 		);

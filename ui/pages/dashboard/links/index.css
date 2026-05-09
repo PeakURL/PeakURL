@@ -7,7 +7,7 @@
 @import "./_components/DeleteLinkModal/delete-link-modal.css";
 @import "./_components/BulkDeleteModal/bulk-delete-modal.css";
 @import "./_components/QRCodeModal/qr-code-modal.css";
-@import "./_components/EditLinkModal/edit-link-modal.css";
+@import "./_components/EditLinkDrawer/edit-link-drawer.css";
 @import "./_components/UrlShorteningForm/index.css";
 @import "./_components/LinksTable/index.css";
 @import "./_components/StatsDrawer/index.css";

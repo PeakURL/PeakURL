@@ -14,4 +14,67 @@
 	.links-form-utm-wide {
 		@apply md:col-span-2;
 	}
+
+	.links-form-social-preview {
+		@apply mt-5 space-y-3 border-t border-stroke/50 pt-5;
+	}
+
+	.links-form-social-preview-header {
+		@apply space-y-1;
+	}
+
+	.links-form-social-preview-help {
+		@apply text-sm leading-6 text-text-muted;
+		text-align: start;
+	}
+
+	.links-form-social-preview-grid {
+		@apply grid grid-cols-1 gap-6 md:grid-cols-2;
+	}
+
+	.links-form-social-preview-wide {
+		@apply md:col-span-2;
+	}
+
+	.links-form-social-preview-input {
+		@apply sr-only;
+	}
+
+	.links-form-social-preview-picker {
+		@apply mt-2 flex flex-wrap items-center gap-2.5;
+	}
+
+	.links-form-social-preview-filename {
+		@apply text-sm font-medium text-heading;
+	}
+
+	.links-form-social-preview-card {
+		@apply mt-3 overflow-hidden rounded-xl border border-stroke/50 bg-surface/50;
+		aspect-ratio: 1200 / 630;
+	}
+
+	.links-form-social-preview-media {
+		@apply relative h-full w-full;
+	}
+
+	.links-form-social-preview-image {
+		@apply h-full w-full object-cover;
+	}
+
+	.links-form-social-preview-remove {
+		@apply absolute bottom-3 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-surface/95 text-heading shadow-sm transition hover:border-red-600 hover:bg-red-600 hover:text-white;
+		inset-inline-start: 0.75rem;
+	}
+
+	.links-form-social-preview-remove-icon {
+		@apply h-4 w-4;
+	}
+
+	.links-form-social-preview-empty {
+		@apply flex h-full w-full flex-col items-center justify-center gap-2 text-sm font-medium text-text-muted bg-surface/30;
+	}
+
+	.links-form-social-preview-empty-icon {
+		@apply h-6 w-6;
+	}
 }

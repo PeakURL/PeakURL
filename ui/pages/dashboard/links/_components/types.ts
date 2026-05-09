@@ -13,6 +13,11 @@ export interface LinkRecord {
 	shortUrl?: string | null;
 	title?: string | null;
 	domain?: string | { domain?: string; name?: string } | null;
+	socialPreview?: {
+		title?: string | null;
+		description?: string | null;
+		imageUrl?: string | null;
+	} | null;
 	status?: LinkStatus | null;
 	clicks?: number | null;
 	uniqueClicks?: number | null;
@@ -86,8 +91,25 @@ export interface UTMFieldsProps {
 	setUtmContent: (value: string) => void;
 }
 
+/**
+ * Props for social preview fields in the advanced URL form.
+ */
+export interface SocialPreviewFieldsProps {
+	socialTitle: string;
+	setSocialTitle: (value: string) => void;
+	socialDescription: string;
+	setSocialDescription: (value: string) => void;
+	socialImageFile: File | null;
+	setSocialImageFile: (value: File | null) => void;
+	socialImagePreviewUrl: string;
+}
+
 export interface AdvancedOptionsProps
-	extends SecurityFieldsProps, ExpirationFieldsProps, UTMFieldsProps {}
+	extends
+		SecurityFieldsProps,
+		ExpirationFieldsProps,
+		UTMFieldsProps,
+		SocialPreviewFieldsProps {}
 
 /**
  * Props for the links page header.
@@ -179,7 +201,7 @@ export interface QRCodeModalProps {
 }
 
 /**
- * Link payload required by the edit modal.
+ * Link payload required by the edit drawer.
  */
 export interface EditableLink {
 	id: string;
@@ -192,12 +214,17 @@ export interface EditableLink {
 	alias?: string | null;
 	shortCode?: string | null;
 	domain?: string | { domain?: string; name?: string } | null;
+	socialPreview?: {
+		title?: string | null;
+		description?: string | null;
+		imageUrl?: string | null;
+	} | null;
 }
 
 /**
- * Props for the edit-link modal.
+ * Props for the edit-link drawer.
  */
-export interface EditLinkModalProps {
+export interface EditLinkDrawerProps {
 	open: boolean;
 	setOpen: (open: boolean) => void;
 	link: EditableLink | null;
@@ -211,6 +238,10 @@ export interface UpdateUrlPayload {
 	title?: string;
 	status: LinkStatus;
 	expiresAt: string | null;
+	socialTitle?: string;
+	socialDescription?: string;
+	socialImageFile?: File | null;
+	removeSocialImage?: boolean;
 	clearPassword?: boolean;
 	password?: string;
 }

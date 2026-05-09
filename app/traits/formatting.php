@@ -114,6 +114,13 @@ trait FormattingTrait {
 			'shortUrl'       => $short_url,
 			'title'          => trim( (string) ( $row['title'] ?? '' ) ),
 			'destinationUrl' => (string) $row['destination_url'],
+			'socialPreview'  => array(
+				'title'       => trim( (string) ( $row['social_title'] ?? '' ) ),
+				'description' => trim( (string) ( $row['social_description'] ?? '' ) ),
+				'imageUrl'    => $this->social_preview_service->get_link_image_url(
+					(string) ( $row['social_image_path'] ?? '' ),
+				),
+			),
 			'domain'         => null,
 			'clicks'         => (int) ( $row['click_count'] ?? 0 ),
 			'uniqueClicks'   => (int) ( $row['unique_click_count'] ?? 0 ),

@@ -274,6 +274,7 @@ class Application {
 				array( 'get', '/api/v1/urls/{id}', array( $urls, 'show' ) ),
 				array( 'post', '/api/v1/urls', array( $urls, 'create' ) ),
 				array( 'post', '/api/v1/urls/bulk', array( $urls, 'bulk_create' ) ),
+				array( 'post', '/api/v1/urls/{id}', array( $urls, 'update' ) ),
 				array( 'delete', '/api/v1/urls/bulk', array( $urls, 'bulk_delete' ) ),
 				array( 'put', '/api/v1/urls/{id}', array( $urls, 'update' ) ),
 				array( 'delete', '/api/v1/urls/{id}', array( $urls, 'delete' ) ),

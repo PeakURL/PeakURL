@@ -286,6 +286,25 @@ class UrlsController extends BaseController {
 			);
 		}
 
+		if (
+			in_array( $request->get_method(), array( 'GET', 'HEAD' ), true ) &&
+			$this->is_social_preview_request( $request )
+		) {
+			$preview = $this->data_store->get_link_social_preview( $route_id );
+
+			if ( is_array( $preview ) ) {
+				return JsonResponse::text(
+					$this->format_social_preview_page(
+						is_array( $preview['preview'] ?? null )
+							? $preview['preview']
+							: array(),
+					),
+					200,
+					'text/html; charset=utf-8',
+				);
+			}
+		}
+
 		$result = $this->data_store->get_link_access(
 			$route_id,
 			$request,
@@ -546,6 +565,12 @@ class UrlsController extends BaseController {
 		$widget_html = 'turnstile' === $provider
 			? '<div class="captcha-widget"><div class="cf-turnstile" data-sitekey="' . $site_key . '" data-theme="auto" data-language="auto" data-callback="PeakURLCaptchaVerified" data-expired-callback="PeakURLCaptchaExpired" data-error-callback="PeakURLCaptchaError"></div></div>'
 			: '<input id="captcha-token" type="hidden" name="' . $response_field . '" value="">';
+		$status_html = 'recaptcha' === $provider
+			? '<div id="captcha-status-panel" class="captcha-status-panel captcha-status-panel-pending">' .
+				'<span class="captcha-spinner" aria-hidden="true"></span>' .
+				'<span id="captcha-status-text">' . __( 'Waiting for verification…', 'peakurl' ) . '</span>' .
+			'</div>'
+			: '';
 
 		$content_html =
 			$verification_script .
@@ -555,15 +580,119 @@ class UrlsController extends BaseController {
 			'<p class="subtitle">' . __( 'This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot.', 'peakurl' ) . '</p>' .
 			$error_markup .
 			'<form id="captcha-form" class="captcha-form" method="post" action="' . $form_action . '" autocomplete="off">' .
-			'<div id="captcha-status-panel" class="captcha-status-panel captcha-status-panel-pending">' .
-			'<span class="captcha-spinner" aria-hidden="true"></span>' .
-			'<span id="captcha-status-text">' . __( 'Waiting for verification…', 'peakurl' ) . '</span>' .
-			'</div>' .
+			$status_html .
 			$widget_html .
 			'<noscript><p class="captcha-noscript">' . __( 'JavaScript is required to complete this verification.', 'peakurl' ) . '</p></noscript>' .
 			'</form>';
 
 		return $this->format_public_page( __( 'Security Verification', 'peakurl' ), $content_html );
+	}
+
+	/**
+	 * Determine whether the request is from a social preview crawler.
+	 *
+	 * @param Request $request Current HTTP request.
+	 * @return bool True when the user-agent is known to fetch link previews.
+	 * @since 1.2.0
+	 */
+	private function is_social_preview_request( Request $request ): bool {
+		$user_agent = strtolower( $request->get_user_agent() );
+
+		if ( '' === $user_agent ) {
+			return false;
+		}
+
+		foreach (
+			array(
+				'facebookexternalhit',
+				'facebot',
+				'twitterbot',
+				'linkedinbot',
+				'slackbot',
+				'discordbot',
+				'whatsapp',
+				'telegrambot',
+				'pinterest',
+				'skypeuripreview',
+				'applebot',
+			) as $crawler
+		) {
+			if ( false !== strpos( $user_agent, $crawler ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get a public HTML document containing social preview metadata.
+	 *
+	 * @param array<string, string> $preview Social preview metadata.
+	 * @return string HTML page markup.
+	 * @since 1.2.0
+	 */
+	private function format_social_preview_page( array $preview ): string {
+		$title       = $this->escape_meta_text(
+			(string) ( $preview['title'] ?? 'PeakURL' ),
+		);
+		$description = $this->escape_meta_text(
+			(string) ( $preview['description'] ?? '' ),
+		);
+		$site_name   = $this->escape_meta_text(
+			(string) ( $preview['siteName'] ?? 'PeakURL' ),
+		);
+		$url         = esc_url( (string) ( $preview['url'] ?? '' ) );
+		$image_url   = esc_url( (string) ( $preview['imageUrl'] ?? '' ) );
+		$image_tags  = '';
+		$card_type   = '' !== $image_url ? 'summary_large_image' : 'summary';
+
+		if ( '' !== $image_url ) {
+			$image_tags =
+				'<meta property="og:image" content="' . $image_url . '">' . "\n" .
+				'<meta property="og:image:secure_url" content="' . $image_url . '">' . "\n" .
+				'<meta name="twitter:image" content="' . $image_url . '">' . "\n";
+		}
+
+		return <<<HTML
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{$title}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, max-image-preview:large">
+<link rel="canonical" href="{$url}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{$site_name}">
+<meta property="og:title" content="{$title}">
+<meta property="og:description" content="{$description}">
+<meta property="og:url" content="{$url}">
+{$image_tags}<meta name="twitter:card" content="{$card_type}">
+<meta name="twitter:title" content="{$title}">
+<meta name="twitter:description" content="{$description}">
+<meta name="twitter:url" content="{$url}">
+</head>
+<body>
+<main>
+<h1>{$title}</h1>
+<p>{$description}</p>
+<p><a href="{$url}">{$url}</a></p>
+</main>
+</body>
+</html>
+HTML;
+	}
+
+	/**
+	 * Escape plain text for meta attributes and fallback body text.
+	 *
+	 * @param string $value Raw text.
+	 * @return string Escaped text.
+	 * @since 1.2.0
+	 */
+	private function escape_meta_text( string $value ): string {
+		return htmlspecialchars( trim( $value ), ENT_QUOTES, 'UTF-8' );
 	}
 
 	/**

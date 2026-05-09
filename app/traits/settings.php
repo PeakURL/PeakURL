@@ -163,6 +163,10 @@ trait SettingsTrait {
 			Constants::DEFAULT_TIME_FORMAT,
 		);
 		$this->add_option(
+			'site_tagline',
+			__( 'Shorten, track, and own every link - PeakURL', 'peakurl' ),
+		);
+		$this->add_option(
 			'mail_driver',
 			'mail',
 			false,
@@ -214,6 +218,11 @@ trait SettingsTrait {
 		);
 		$this->add_option(
 			'captcha_site_key',
+			'',
+			false,
+		);
+		$this->add_option(
+			Constants::SETTING_SOCIAL_PREVIEW_IMAGE,
 			'',
 			false,
 		);

@@ -7,6 +7,9 @@ export interface CreateUrlPayload {
 	destinationUrl: string;
 	alias?: string;
 	title?: string;
+	socialTitle?: string;
+	socialDescription?: string;
+	socialImageFile?: File | null;
 	password?: string;
 	expiresAt?: string | null;
 }

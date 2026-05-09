@@ -18,6 +18,47 @@ const URL_LIST_TAG = urlTag("LIST");
 const URL_LIST_CHANGE_TAGS = [URL_LIST_TAG, "Analytics"] as const;
 
 /**
+ * Append defined short-link fields to a multipart request body.
+ */
+function appendUrlFormData(
+	formData: FormData,
+	payload: Record<string, unknown>
+): FormData {
+	Object.entries(payload).forEach(([key, value]) => {
+		if (undefined === value || null === value) {
+			return;
+		}
+
+		if (value instanceof File) {
+			formData.append(key, value);
+			return;
+		}
+
+		formData.append(key, String(value));
+	});
+
+	return formData;
+}
+
+/**
+ * Return a request body for creating or updating a link.
+ */
+function createUrlRequestBody<T extends { socialImageFile?: File | null }>(
+	payload: T
+): T | FormData {
+	const { socialImageFile, ...body } = payload;
+
+	if (!socialImageFile) {
+		return body as T;
+	}
+
+	return appendUrlFormData(new FormData(), {
+		...body,
+		socialImage: socialImageFile,
+	});
+}
+
+/**
  * Returns a stable query string for the links list endpoint.
  */
 function serializeUrlsQuery({
@@ -95,7 +136,11 @@ export const urlsApi = baseApi.injectEndpoints({
 			query: (args) => serializeUrlsExportQuery(args || {}),
 		}),
 		createUrl: build.mutation<CreateUrlResponse, CreateUrlPayload>({
-			query: (body) => ({ url: "urls", method: "POST", body }),
+			query: (body) => ({
+				url: "urls",
+				method: "POST",
+				body: createUrlRequestBody(body),
+			}),
 			invalidatesTags: URL_LIST_CHANGE_TAGS,
 		}),
 		bulkCreateUrl: build.mutation<
@@ -106,11 +151,23 @@ export const urlsApi = baseApi.injectEndpoints({
 			invalidatesTags: URL_LIST_CHANGE_TAGS,
 		}),
 		updateUrl: build.mutation<UrlResponse, UpdateUrlPayload>({
-			query: ({ id, ...body }) => ({
-				url: `urls/${id}`,
-				method: "PUT",
-				body,
-			}),
+			query: ({ id, socialImageFile, removeSocialImage, ...body }) => {
+				const hasMultipartUpdate =
+					Boolean(socialImageFile) || Boolean(removeSocialImage);
+				const requestBody = hasMultipartUpdate
+					? appendUrlFormData(new FormData(), {
+							...body,
+							socialImage: socialImageFile || undefined,
+							removeSocialImage: removeSocialImage ? "1" : undefined,
+						})
+					: body;
+
+				return {
+					url: `urls/${id}`,
+					method: hasMultipartUpdate ? "POST" : "PUT",
+					body: requestBody,
+				};
+			},
 			invalidatesTags: (_result, _error, { id }) => [
 				urlTag(id),
 				URL_LIST_TAG,

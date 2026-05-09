@@ -1,0 +1,175 @@
+@layer components {
+	.links-edit-drawer-layout {
+		@apply pointer-events-none fixed inset-y-0 flex max-w-full;
+	}
+
+	.links-edit-drawer-layout-ltr {
+		@apply right-0 pl-0 sm:pl-16;
+	}
+
+	.links-edit-drawer-layout-rtl {
+		@apply left-0 pr-0 sm:pr-16;
+	}
+
+	.links-edit-drawer-panel {
+		@apply pointer-events-auto flex h-full w-screen max-w-2xl transform flex-col overflow-hidden bg-surface shadow-xl transition duration-500 ease-in-out sm:duration-700;
+	}
+
+	.links-edit-drawer-form {
+		@apply flex h-full min-h-0 flex-col;
+	}
+
+	.links-edit-drawer-header {
+		@apply flex items-start justify-between gap-4 border-b border-stroke bg-surface-alt px-4 py-6 sm:px-6;
+	}
+
+	.links-edit-drawer-header-copy,
+	.links-edit-drawer-section-heading {
+		@apply space-y-1;
+	}
+
+	.links-edit-drawer-title {
+		@apply flex items-center gap-2 text-lg font-semibold text-heading;
+	}
+
+	.links-edit-drawer-title-icon {
+		@apply flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 text-accent;
+	}
+
+	.links-edit-drawer-description {
+		@apply text-sm text-text-muted;
+	}
+
+	.links-edit-drawer-close {
+		@apply rounded-lg p-2 text-text-muted transition-all hover:bg-surface-alt hover:text-heading;
+	}
+
+	.links-edit-drawer-content {
+		@apply min-h-0 flex-1 overflow-y-auto px-4 sm:px-6;
+	}
+
+	.links-edit-drawer-section {
+		@apply space-y-5 border-b border-stroke py-6 last:border-0;
+	}
+
+	.links-edit-drawer-section-heading {
+		text-align: start;
+	}
+
+	.links-edit-drawer-section-title {
+		@apply text-base font-semibold text-heading;
+	}
+
+	.links-edit-drawer-help {
+		@apply text-xs leading-5 text-text-muted;
+	}
+
+	.links-edit-drawer-stack {
+		@apply space-y-3;
+	}
+
+	.links-edit-drawer-field-grid {
+		@apply grid grid-cols-1 gap-3 md:grid-cols-2;
+	}
+
+	.links-edit-drawer-social-fields {
+		@apply grid grid-cols-1 gap-3;
+	}
+
+	.links-edit-drawer-readonly-grid {
+		@apply grid grid-cols-1 gap-3;
+	}
+
+	.links-edit-drawer-readonly-item {
+		@apply rounded-lg border border-stroke/50 bg-surface-alt/50 px-3.5 py-3;
+		text-align: start;
+	}
+
+	.links-edit-drawer-readonly-label {
+		@apply mb-1 block text-xs font-semibold text-text-muted;
+	}
+
+	.links-edit-drawer-readonly-value {
+		@apply border-0 bg-transparent p-0;
+	}
+
+	.links-edit-drawer-readonly-text {
+		@apply text-sm text-heading;
+	}
+
+	.links-edit-drawer-image-field {
+		@apply space-y-2;
+	}
+
+	.links-edit-drawer-file-input {
+		@apply sr-only;
+	}
+
+	.links-edit-drawer-picker {
+		@apply mt-2 flex flex-wrap items-center gap-2.5;
+	}
+
+	.links-edit-drawer-filename {
+		@apply min-w-0 max-w-full truncate text-sm font-medium text-heading;
+	}
+
+	.links-edit-drawer-preview-card {
+		@apply mt-3 overflow-hidden rounded-xl border border-stroke bg-surface-alt/30;
+		aspect-ratio: 1200 / 630;
+	}
+
+	.links-edit-drawer-preview-media {
+		@apply relative h-full w-full;
+	}
+
+	.links-edit-drawer-preview-image {
+		@apply h-full w-full object-cover;
+	}
+
+	.links-edit-drawer-preview-remove {
+		@apply absolute bottom-3 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-surface/95 text-heading shadow-sm transition hover:border-red-600 hover:bg-red-600 hover:text-white;
+		inset-inline-start: 0.75rem;
+	}
+
+	.links-edit-drawer-preview-remove-icon {
+		@apply h-4 w-4;
+	}
+
+	.links-edit-drawer-preview-empty {
+		@apply flex h-full w-full flex-col items-center justify-center gap-2 text-sm font-medium text-text-muted bg-surface-alt/30;
+	}
+
+	.links-edit-drawer-preview-empty-icon {
+		@apply h-6 w-6;
+	}
+
+	.links-edit-drawer-password-options {
+		@apply space-y-2;
+	}
+
+	.links-edit-drawer-checkbox-label {
+		@apply flex items-center gap-2 text-sm text-heading;
+	}
+
+	.links-edit-drawer-footer {
+		@apply flex shrink-0 justify-end gap-3 border-t border-stroke bg-surface-alt px-4 py-4 sm:px-6;
+	}
+
+	.links-edit-drawer-action,
+	.links-edit-drawer-footer-button {
+		@apply inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium transition-all disabled:cursor-not-allowed disabled:opacity-50;
+	}
+
+	.links-edit-drawer-action-secondary,
+	.links-edit-drawer-footer-button-secondary {
+		@apply border border-stroke bg-surface text-heading hover:bg-surface-alt;
+	}
+
+	.links-edit-drawer-footer-button-primary {
+		@apply bg-accent text-white shadow-sm hover:bg-accent/90;
+	}
+
+	html[dir="rtl"] .links-edit-drawer-footer {
+		@apply justify-start;
+	}
+}

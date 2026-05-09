@@ -190,15 +190,21 @@ const Content = ({ activeTab }: ContentProps) => {
 	const handleGeneralSubmit = async (generalForm: GeneralFormPayload) => {
 		const {
 			siteName: nextSiteName,
+			siteTagline: nextSiteTagline,
 			siteLanguage: nextSiteLanguage,
 			siteTimezone: nextSiteTimezone,
 			siteTimeFormat: nextSiteTimeFormat,
+			socialPreviewFile,
+			removeSocialPreviewImage,
 			faviconFile,
 			removeFavicon,
 			...profileForm
 		} = generalForm || {};
 		const currentSiteName = (
 			generalSettingsResponse?.data?.siteName || ""
+		).trim();
+		const currentSiteTagline = (
+			generalSettingsResponse?.data?.siteTagline || ""
 		).trim();
 		const currentSiteLanguage = generalSettingsResponse?.data?.siteLanguage;
 		const currentSiteTimezone =
@@ -209,6 +215,9 @@ const Content = ({ activeTab }: ContentProps) => {
 		const saveSiteName =
 			(generalSettingsResponse?.data?.canManageSiteSettings ?? false) &&
 			nextSiteName.trim() !== currentSiteName;
+		const saveSiteTagline =
+			(generalSettingsResponse?.data?.canManageSiteSettings ?? false) &&
+			nextSiteTagline.trim() !== currentSiteTagline;
 		const saveLanguage =
 			!!nextSiteLanguage &&
 			generalSettingsResponse?.data?.canManageSiteSettings &&
@@ -221,11 +230,17 @@ const Content = ({ activeTab }: ContentProps) => {
 			!!nextSiteTimeFormat &&
 			generalSettingsResponse?.data?.canManageSiteSettings &&
 			nextSiteTimeFormat !== currentSiteTimeFormat;
+		const saveSocialPreview =
+			(generalSettingsResponse?.data?.canManageSiteSettings ?? false) &&
+			(Boolean(socialPreviewFile) ||
+				Boolean(removeSocialPreviewImage));
 		const saveGeneral =
 			saveSiteName ||
+			saveSiteTagline ||
 			saveLanguage ||
 			saveTimezone ||
 			saveTimeFormat ||
+			saveSocialPreview ||
 			Boolean(faviconFile) ||
 			Boolean(removeFavicon);
 
@@ -249,9 +264,12 @@ const Content = ({ activeTab }: ContentProps) => {
 			try {
 				const response = await saveGeneralSettings({
 					siteName: nextSiteName,
+					siteTagline: nextSiteTagline,
 					siteLanguage: nextSiteLanguage,
 					siteTimezone: nextSiteTimezone,
 					siteTimeFormat: nextSiteTimeFormat,
+					socialPreviewFile,
+					removeSocialPreviewImage,
 					faviconFile,
 					removeFavicon,
 				}).unwrap();
@@ -353,10 +371,7 @@ const Content = ({ activeTab }: ContentProps) => {
 		try {
 			const result = await generateApiKey({ label: keyLabel }).unwrap();
 			const plainTextKey = result?.data?.apiKey || "";
-			const baseApiUrl = formatBaseApiUrl(
-				user,
-				result?.data?.baseApiUrl
-			);
+			const baseApiUrl = formatBaseApiUrl(user, result?.data?.baseApiUrl);
 
 			if (!plainTextKey) {
 				notification.error(

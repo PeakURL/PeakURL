@@ -178,6 +178,18 @@ class SchemaSpecs {
 					'definition' => 'VARCHAR(191) DEFAULT NULL',
 				),
 				array(
+					'name'       => 'social_title',
+					'definition' => 'VARCHAR(191) DEFAULT NULL',
+				),
+				array(
+					'name'       => 'social_description',
+					'definition' => 'TEXT DEFAULT NULL',
+				),
+				array(
+					'name'       => 'social_image_path',
+					'definition' => 'TEXT DEFAULT NULL',
+				),
+				array(
 					'name'       => 'password_value',
 					'definition' => 'VARCHAR(255) DEFAULT NULL',
 				),

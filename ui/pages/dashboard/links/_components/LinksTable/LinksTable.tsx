@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { getShortUrl, copyToClipboard, formatNumber } from "@/utils";
 import StatsDrawer from "../StatsDrawer";
 import QRCodeModal from "../QRCodeModal";
-import EditLinkModal from "../EditLinkModal";
+import EditLinkDrawer from "../EditLinkDrawer";
 import DeleteLinkModal from "../DeleteLinkModal";
 import BulkDeleteModal from "../BulkDeleteModal";
 import TableHeaderRow from "./parts/TableHeaderRow";
@@ -17,7 +17,7 @@ const LinksTable = ({ links, statsShortId, statsLink }: LinksTableProps) => {
 	const [copiedId, setCopiedId] = useState<string | null>(null);
 	const [statsDrawerOpen, setStatsDrawerOpen] = useState(false);
 	const [qrModalOpen, setQrModalOpen] = useState(false);
-	const [editModalOpen, setEditModalOpen] = useState(false);
+	const [editDrawerOpen, setEditDrawerOpen] = useState(false);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
 	const [selectedLink, setSelectedLink] = useState<LinkRecord | null>(null);
@@ -69,7 +69,7 @@ const LinksTable = ({ links, statsShortId, statsLink }: LinksTableProps) => {
 
 	const handleEdit = (link: LinkRecord) => {
 		setSelectedLink(link);
-		setEditModalOpen(true);
+		setEditDrawerOpen(true);
 	};
 
 	const handleQRCode = (link: LinkRecord) => {
@@ -146,14 +146,11 @@ const LinksTable = ({ links, statsShortId, statsLink }: LinksTableProps) => {
 				setOpen={setQrModalOpen}
 				link={selectedLink}
 			/>
-			{editModalOpen && selectedLink && (
-				<EditLinkModal
-					key={selectedLink.id}
-					open={editModalOpen}
-					setOpen={setEditModalOpen}
-					link={selectedLink}
-				/>
-			)}
+			<EditLinkDrawer
+				open={editDrawerOpen}
+				setOpen={setEditDrawerOpen}
+				link={selectedLink}
+			/>
 			<DeleteLinkModal
 				open={deleteModalOpen}
 				setOpen={setDeleteModalOpen}

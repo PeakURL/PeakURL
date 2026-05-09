@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCreateUrlMutation } from "@/store/slices/api";
 import {
 	getShortUrl,
@@ -37,8 +37,36 @@ const UrlShorteningForm = () => {
 	const [utmCampaign, setUtmCampaign] = useState("");
 	const [utmTerm, setUtmTerm] = useState("");
 	const [utmContent, setUtmContent] = useState("");
+	const [socialTitle, setSocialTitle] = useState("");
+	const [socialDescription, setSocialDescription] = useState("");
+	const [socialImageFile, setSocialImageFile] = useState<File | null>(null);
+	const [socialImagePreviewUrl, setSocialImagePreviewUrl] = useState("");
+	const socialImagePreviewRef = useRef("");
 
 	const [createUrl, { isLoading }] = useCreateUrlMutation();
+
+	useEffect(
+		() => () => {
+			if (socialImagePreviewRef.current) {
+				URL.revokeObjectURL(socialImagePreviewRef.current);
+			}
+		},
+		[]
+	);
+
+	const updateSocialImageFile = (file: File | null) => {
+		if (socialImagePreviewRef.current) {
+			URL.revokeObjectURL(socialImagePreviewRef.current);
+			socialImagePreviewRef.current = "";
+		}
+
+		if (file) {
+			socialImagePreviewRef.current = URL.createObjectURL(file);
+		}
+
+		setSocialImageFile(file);
+		setSocialImagePreviewUrl(socialImagePreviewRef.current);
+	};
 
 	const applyUtmParams = (url: string) => {
 		if (
@@ -96,6 +124,9 @@ const UrlShorteningForm = () => {
 				destinationUrl: urlWithUtm,
 				alias: alias.replace(/\s+/g, "") || undefined,
 				title: title.trim() || undefined,
+				socialTitle: socialTitle.trim() || undefined,
+				socialDescription: socialDescription.trim() || undefined,
+				socialImageFile,
 			};
 
 			// Add password if provided
@@ -136,6 +167,9 @@ const UrlShorteningForm = () => {
 			setUtmCampaign("");
 			setUtmTerm("");
 			setUtmContent("");
+			setSocialTitle("");
+			setSocialDescription("");
+			updateSocialImageFile(null);
 			setShowAdvanced(false);
 
 			// Clear success message after 5 seconds
@@ -214,6 +248,13 @@ const UrlShorteningForm = () => {
 						setUtmTerm={setUtmTerm}
 						utmContent={utmContent}
 						setUtmContent={setUtmContent}
+						socialTitle={socialTitle}
+						setSocialTitle={setSocialTitle}
+						socialDescription={socialDescription}
+						setSocialDescription={setSocialDescription}
+						socialImageFile={socialImageFile}
+						setSocialImageFile={updateSocialImageFile}
+						socialImagePreviewUrl={socialImagePreviewUrl}
 					/>
 				)}
 			</form>

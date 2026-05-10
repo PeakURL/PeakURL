@@ -2,6 +2,16 @@ function normalizeUrlInput(value: string | null | undefined): string {
 	return typeof value === "string" ? value.trim() : "";
 }
 
+declare const imageSourceBrand: unique symbol;
+
+export type ImageSource = string & {
+	readonly [imageSourceBrand]: true;
+};
+
+function toImageSource(value: string): ImageSource {
+	return value as ImageSource;
+}
+
 /**
  * Sanitize a dashboard URL for internal navigation or external linking.
  */
@@ -36,7 +46,9 @@ export function sanitizeUrl(value: string | null | undefined): string {
 /**
  * Sanitize an image preview URL before assigning it to an image `src`.
  */
-export function sanitizeImageUrl(value: string | null | undefined): string {
+export function sanitizeImageUrl(
+	value: string | null | undefined
+): ImageSource | "" {
 	const normalizedValue = normalizeUrlInput(value);
 
 	if (!normalizedValue) {
@@ -44,7 +56,7 @@ export function sanitizeImageUrl(value: string | null | undefined): string {
 	}
 
 	if (isRelativeUrl(normalizedValue)) {
-		return normalizedValue;
+		return toImageSource(normalizedValue);
 	}
 
 	if (normalizedValue.startsWith("//")) {
@@ -55,7 +67,7 @@ export function sanitizeImageUrl(value: string | null | undefined): string {
 		const url = new URL(normalizedValue);
 
 		if ("http:" === url.protocol || "https:" === url.protocol) {
-			return url.toString();
+			return toImageSource(url.toString());
 		}
 
 		if ("blob:" === url.protocol) {
@@ -63,7 +75,7 @@ export function sanitizeImageUrl(value: string | null | undefined): string {
 
 			return "http:" === blobOrigin.protocol ||
 				"https:" === blobOrigin.protocol
-				? url.toString()
+				? toImageSource(url.toString())
 				: "";
 		}
 

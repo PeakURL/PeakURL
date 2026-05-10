@@ -73,6 +73,7 @@ export function generateRandomAlias(): string {
 export { addFilter, applyFilters, removeFilter } from "./hooks";
 export { getFaviconPreviewUrl, getManagedFaviconUrl } from "./favicon";
 export { isRelativeUrl, sanitizeImageUrl, sanitizeUrl } from "./url";
+export type { ImageSource } from "./url";
 export { getShortUrl, getSiteUrl, getLinkHost } from "./linkHelpers";
 export { getCountryFlagEmoji } from "./countries";
 export {

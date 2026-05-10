@@ -5,6 +5,7 @@ import { PEAKURL_SITE_NAME } from "@constants";
 import {
 	Button,
 	Input,
+	PreviewImage,
 	Select,
 	TextArea,
 	type SelectOption,
@@ -189,7 +190,7 @@ function GeneralTab({
 
 		return uploadedPreviewUrl || storedPreviewUrl;
 	}, [removeFavicon, storedPreviewUrl, uploadedPreviewUrl]);
-	const faviconPreviewSrc = useMemo(
+	const faviconPreviewSource = useMemo(
 		() => sanitizeImageUrl(faviconPreviewUrl),
 		[faviconPreviewUrl]
 	);
@@ -270,7 +271,7 @@ function GeneralTab({
 	const canManageSiteSettings =
 		siteSettings?.canManageSiteSettings && !isLoadingSiteSettings;
 	const hasConfiguredFavicon = hasCustomFavicon;
-	const showPreview = Boolean(faviconPreviewSrc);
+	const hasFaviconPreview = Boolean(faviconPreviewSource);
 	const showRemoveButton =
 		Boolean(faviconFile) || (!removeFavicon && hasCustomFavicon);
 	const previewSiteName =
@@ -279,7 +280,7 @@ function GeneralTab({
 		siteSettings?.siteName ||
 		"PeakURL";
 	const chooserLabel =
-		showPreview || hasConfiguredFavicon
+		hasFaviconPreview || hasConfiguredFavicon
 			? __("Replace Favicon")
 			: __("Choose Favicon");
 	const storedSocialPreviewUrl = hasConfiguredSocialPreview
@@ -288,7 +289,7 @@ function GeneralTab({
 	const socialPreviewImageUrl = removeSocialPreviewImage
 		? ""
 		: uploadedSocialPreviewUrl || storedSocialPreviewUrl;
-	const socialPreviewImageSrc = useMemo(
+	const socialPreviewImageSource = useMemo(
 		() => sanitizeImageUrl(socialPreviewImageUrl),
 		[socialPreviewImageUrl]
 	);
@@ -296,7 +297,7 @@ function GeneralTab({
 		Boolean(socialPreviewFile) ||
 		(!removeSocialPreviewImage && hasConfiguredSocialPreview);
 	const socialPreviewChooserLabel =
-		socialPreviewImageSrc || hasConfiguredSocialPreview
+		socialPreviewImageSource || hasConfiguredSocialPreview
 			? __("Replace Preview Image")
 			: __("Choose Preview Image");
 
@@ -511,12 +512,12 @@ function GeneralTab({
 						<div
 							className={cn(
 								"settings-general-favicon-preview",
-								showPreview
+								hasFaviconPreview
 									? "settings-general-favicon-preview-filled"
 									: "settings-general-favicon-preview-empty-state"
 							)}
 						>
-							{showPreview ? (
+							{faviconPreviewSource ? (
 								<div className="settings-general-favicon-browser">
 									{showRemoveButton ? (
 										<button
@@ -540,8 +541,8 @@ function GeneralTab({
 										className="settings-general-favicon-glow"
 									/>
 									<div className="settings-general-favicon-browser-body">
-										<img
-											src={faviconPreviewSrc}
+										<PreviewImage
+											source={faviconPreviewSource}
 											alt={__("Current favicon preview")}
 											className="settings-general-favicon-app-icon"
 										/>
@@ -556,8 +557,10 @@ function GeneralTab({
 													<span className="settings-general-favicon-browser-dot" />
 												</div>
 												<div className="settings-general-favicon-browser-tab">
-													<img
-														src={faviconPreviewSrc}
+													<PreviewImage
+														source={
+															faviconPreviewSource
+														}
 														alt=""
 														aria-hidden="true"
 														className="settings-general-favicon-browser-icon"
@@ -654,7 +657,7 @@ function GeneralTab({
 							</p>
 						</div>
 						<div className="settings-general-social-preview-card">
-							{socialPreviewImageSrc ? (
+							{socialPreviewImageSource ? (
 								<div className="settings-general-social-preview-media">
 									{showSocialPreviewRemove ? (
 										<button
@@ -675,8 +678,8 @@ function GeneralTab({
 											/>
 										</button>
 									) : null}
-									<img
-										src={socialPreviewImageSrc}
+									<PreviewImage
+										source={socialPreviewImageSource}
 										alt={__("Default social preview image")}
 										className="settings-general-social-preview-image"
 									/>

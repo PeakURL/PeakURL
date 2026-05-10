@@ -150,7 +150,7 @@ function CaptchaSettingsContent({
 					"Use Google reCAPTCHA v3 site and secret keys for invisible score-based verification."
 				)
 			: __(
-					"Use Cloudflare Turnstile site and secret keys for the managed challenge widget."
+					"Use Cloudflare Turnstile site and secret keys for the Managed Challenge widget."
 				);
 	const savedSiteKeyHint =
 		status?.siteKeyHint || maskCaptchaKey(status?.siteKey);

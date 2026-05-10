@@ -17,6 +17,7 @@ import {
 	cn,
 	getTimeZoneOptions,
 	normalizeSiteTimeFormat,
+	sanitizeImageUrl,
 	type SiteTimeFormat,
 } from "@/utils";
 import type { GeneralFormState } from "../../types";
@@ -28,8 +29,8 @@ const isPngFaviconFile = (file: File | null): file is File =>
 const isSocialPreviewImageFile = (file: File | null): file is File =>
 	Boolean(
 		file &&
-			["image/png", "image/jpeg", "image/webp"].includes(file.type) &&
-			/\.(png|jpe?g|webp)$/i.test(file.name)
+		["image/png", "image/jpeg", "image/webp"].includes(file.type) &&
+		/\.(png|jpe?g|webp)$/i.test(file.name)
 	);
 
 function GeneralTab({
@@ -181,13 +182,17 @@ function GeneralTab({
 				: "",
 		[hasCustomFavicon, siteSettings?.favicon?.updatedAt]
 	);
-	const previewUrl = useMemo(() => {
+	const faviconPreviewUrl = useMemo(() => {
 		if (removeFavicon) {
 			return "";
 		}
 
 		return uploadedPreviewUrl || storedPreviewUrl;
 	}, [removeFavicon, storedPreviewUrl, uploadedPreviewUrl]);
+	const faviconPreviewSrc = useMemo(
+		() => sanitizeImageUrl(faviconPreviewUrl),
+		[faviconPreviewUrl]
+	);
 
 	useEffect(() => {
 		if (!isPngFaviconFile(faviconFile)) {
@@ -246,7 +251,7 @@ function GeneralTab({
 
 	const hasConfiguredSocialPreview = Boolean(
 		siteSettings?.socialPreview?.configured &&
-			siteSettings?.socialPreview?.url
+		siteSettings?.socialPreview?.url
 	);
 
 	const handleRemoveSocialPreview = () => {
@@ -265,7 +270,7 @@ function GeneralTab({
 	const canManageSiteSettings =
 		siteSettings?.canManageSiteSettings && !isLoadingSiteSettings;
 	const hasConfiguredFavicon = hasCustomFavicon;
-	const showPreview = Boolean(previewUrl);
+	const showPreview = Boolean(faviconPreviewSrc);
 	const showRemoveButton =
 		Boolean(faviconFile) || (!removeFavicon && hasCustomFavicon);
 	const previewSiteName =
@@ -280,14 +285,18 @@ function GeneralTab({
 	const storedSocialPreviewUrl = hasConfiguredSocialPreview
 		? siteSettings?.socialPreview?.url || ""
 		: "";
-	const socialPreviewUrl = removeSocialPreviewImage
+	const socialPreviewImageUrl = removeSocialPreviewImage
 		? ""
 		: uploadedSocialPreviewUrl || storedSocialPreviewUrl;
+	const socialPreviewImageSrc = useMemo(
+		() => sanitizeImageUrl(socialPreviewImageUrl),
+		[socialPreviewImageUrl]
+	);
 	const showSocialPreviewRemove =
 		Boolean(socialPreviewFile) ||
 		(!removeSocialPreviewImage && hasConfiguredSocialPreview);
 	const socialPreviewChooserLabel =
-		socialPreviewUrl || hasConfiguredSocialPreview
+		socialPreviewImageSrc || hasConfiguredSocialPreview
 			? __("Replace Preview Image")
 			: __("Choose Preview Image");
 
@@ -374,9 +383,7 @@ function GeneralTab({
 					<Input
 						label={__("Tagline")}
 						value={siteTagline}
-						onChange={(event) =>
-							setSiteTagline(event.target.value)
-						}
+						onChange={(event) => setSiteTagline(event.target.value)}
 						disabled={!canManageSiteSettings || isUpdating}
 					/>
 					<div className="settings-general-field">
@@ -534,7 +541,7 @@ function GeneralTab({
 									/>
 									<div className="settings-general-favicon-browser-body">
 										<img
-											src={previewUrl}
+											src={faviconPreviewSrc}
 											alt={__("Current favicon preview")}
 											className="settings-general-favicon-app-icon"
 										/>
@@ -550,7 +557,7 @@ function GeneralTab({
 												</div>
 												<div className="settings-general-favicon-browser-tab">
 													<img
-														src={previewUrl}
+														src={faviconPreviewSrc}
 														alt=""
 														aria-hidden="true"
 														className="settings-general-favicon-browser-icon"
@@ -647,7 +654,7 @@ function GeneralTab({
 							</p>
 						</div>
 						<div className="settings-general-social-preview-card">
-							{socialPreviewUrl ? (
+							{socialPreviewImageSrc ? (
 								<div className="settings-general-social-preview-media">
 									{showSocialPreviewRemove ? (
 										<button
@@ -669,7 +676,7 @@ function GeneralTab({
 										</button>
 									) : null}
 									<img
-										src={socialPreviewUrl}
+										src={socialPreviewImageSrc}
 										alt={__("Default social preview image")}
 										className="settings-general-social-preview-image"
 									/>

@@ -92,7 +92,7 @@ class Downloader {
 
 		if ( ! class_exists( '\PharData' ) ) {
 			throw new \RuntimeException(
-				__( 'The Phar extension is required to unpack the GeoLite2 database archive.', 'peakurl' ),
+				__( 'The Phar extension is required to unpack the GeoLite2 database archive. Enable the PHP Phar extension on the server, restart PHP, and try again. See https://www.php.net/manual/en/phar.setup.php for setup guidance.', 'peakurl' ),
 			);
 		}
 

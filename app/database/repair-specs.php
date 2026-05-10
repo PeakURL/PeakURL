@@ -38,14 +38,14 @@ class RepairSpecs {
 				'table'        => 'clicks',
 				'prefix'       => 'click_',
 				'issue_id'     => 'click-id-prefixes',
-				'issue_label'  => __( 'The clicks table still contains prefixed row IDs and should be normalized.', 'peakurl' ),
+				'issue_label'  => __( 'The clicks table still contains row IDs with prefixes and should be normalized.', 'peakurl' ),
 				'change_label' => __( 'Normalized click IDs to the current opaque format.', 'peakurl' ),
 			),
 			array(
 				'table'        => 'webhooks',
 				'prefix'       => 'webhook_',
 				'issue_id'     => 'webhook-id-prefixes',
-				'issue_label'  => __( 'The webhooks table still contains prefixed row IDs and should be normalized.', 'peakurl' ),
+				'issue_label'  => __( 'The webhooks table still contains row IDs with prefixes and should be normalized.', 'peakurl' ),
 				'change_label' => __( 'Normalized webhook IDs to the current opaque format.', 'peakurl' ),
 			),
 		);

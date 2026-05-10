@@ -246,7 +246,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 									<div className="integrations-tab-endpoint-help">
 										<p>
 											{__(
-												"Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route like"
+												"Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route."
 											)}
 										</p>
 										<code className="integrations-tab-endpoint-code">

@@ -461,7 +461,7 @@ class SocialPreview {
 	 */
 	private function upload_error_message( int $error ): string {
 		if ( UPLOAD_ERR_INI_SIZE === $error || UPLOAD_ERR_FORM_SIZE === $error ) {
-			return __( 'The uploaded social preview image is too large for this server.', 'peakurl' );
+			return __( 'The uploaded social preview image exceeds the server maximum file size limit.', 'peakurl' );
 		}
 
 		if ( UPLOAD_ERR_PARTIAL === $error ) {

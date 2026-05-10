@@ -2,6 +2,7 @@ import type { ChangeEvent, RefObject } from "react";
 import { ImageOff, Trash2 } from "lucide-react";
 import { Input, TextArea } from "@/components";
 import { __ } from "@/i18n";
+import { sanitizeImageUrl } from "@/utils";
 
 interface SocialPreviewTabProps {
 	fileInputRef: RefObject<HTMLInputElement | null>;
@@ -28,6 +29,8 @@ function SocialPreviewTab({
 	onSocialImageChange,
 	onRemoveSocialImage,
 }: SocialPreviewTabProps) {
+	const socialPreviewImageSrc = sanitizeImageUrl(socialPreviewUrl);
+
 	return (
 		<>
 			<div className="links-edit-drawer-social-fields">
@@ -73,7 +76,7 @@ function SocialPreviewTab({
 						onClick={() => fileInputRef.current?.click()}
 						className="links-edit-drawer-action links-edit-drawer-action-secondary"
 					>
-						{socialPreviewUrl
+						{socialPreviewImageSrc
 							? __("Replace Preview Image")
 							: __("Choose Preview Image")}
 					</button>
@@ -84,7 +87,7 @@ function SocialPreviewTab({
 					) : null}
 				</div>
 				<div className="links-edit-drawer-preview-card">
-					{socialPreviewUrl ? (
+					{socialPreviewImageSrc ? (
 						<div className="links-edit-drawer-preview-media">
 							{showSocialImageRemove ? (
 								<button
@@ -100,7 +103,7 @@ function SocialPreviewTab({
 								</button>
 							) : null}
 							<img
-								src={socialPreviewUrl}
+								src={socialPreviewImageSrc}
 								alt={__("Social preview image")}
 								className="links-edit-drawer-preview-image"
 							/>

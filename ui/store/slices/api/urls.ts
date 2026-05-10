@@ -17,6 +17,14 @@ const urlTag = (id: string) => ({ type: "Urls" as const, id });
 const URL_LIST_TAG = urlTag("LIST");
 const URL_LIST_CHANGE_TAGS = [URL_LIST_TAG, "Analytics"] as const;
 
+type CreateUrlRequestBody =
+	| Omit<CreateUrlPayload, "socialImageFile">
+	| FormData;
+
+type UpdateUrlRequestBody =
+	| Omit<UpdateUrlPayload, "id" | "socialImageFile" | "removeSocialImage">
+	| FormData;
+
 /**
  * Append defined short-link fields to a multipart request body.
  */
@@ -41,21 +49,46 @@ function appendUrlFormData(
 }
 
 /**
- * Return a request body for creating or updating a link.
+ * Return a request body for creating a link.
  */
-function createUrlRequestBody<T extends { socialImageFile?: File | null }>(
-	payload: T
-): T | FormData {
+function createUrlRequestBody(payload: CreateUrlPayload): CreateUrlRequestBody {
 	const { socialImageFile, ...body } = payload;
 
 	if (!socialImageFile) {
-		return body as T;
+		return body;
 	}
 
 	return appendUrlFormData(new FormData(), {
 		...body,
 		socialImage: socialImageFile,
 	});
+}
+
+/**
+ * Return the request body and method mode for updating a link.
+ */
+function buildUpdateUrlRequest({
+	socialImageFile,
+	removeSocialImage,
+	...body
+}: Omit<UpdateUrlPayload, "id">): {
+	hasMultipartUpdate: boolean;
+	requestBody: UpdateUrlRequestBody;
+} {
+	const hasMultipartUpdate =
+		Boolean(socialImageFile) || Boolean(removeSocialImage);
+
+	if (!hasMultipartUpdate) {
+		return { hasMultipartUpdate, requestBody: body };
+	}
+
+	const requestBody = appendUrlFormData(new FormData(), {
+		...body,
+		socialImage: socialImageFile || undefined,
+		removeSocialImage: removeSocialImage ? "1" : undefined,
+	});
+
+	return { hasMultipartUpdate, requestBody };
 }
 
 /**
@@ -110,10 +143,7 @@ export const urlsApi = baseApi.injectEndpoints({
 			providesTags: (result) => {
 				const items = result?.data?.items || result?.items || [];
 
-				return [
-					URL_LIST_TAG,
-					...items.map((url) => urlTag(url.id)),
-				];
+				return [URL_LIST_TAG, ...items.map((url) => urlTag(url.id))];
 			},
 		}),
 		getUrl: build.query<UrlResponse, string>({
@@ -151,16 +181,9 @@ export const urlsApi = baseApi.injectEndpoints({
 			invalidatesTags: URL_LIST_CHANGE_TAGS,
 		}),
 		updateUrl: build.mutation<UrlResponse, UpdateUrlPayload>({
-			query: ({ id, socialImageFile, removeSocialImage, ...body }) => {
-				const hasMultipartUpdate =
-					Boolean(socialImageFile) || Boolean(removeSocialImage);
-				const requestBody = hasMultipartUpdate
-					? appendUrlFormData(new FormData(), {
-							...body,
-							socialImage: socialImageFile || undefined,
-							removeSocialImage: removeSocialImage ? "1" : undefined,
-						})
-					: body;
+			query: ({ id, ...payload }) => {
+				const { hasMultipartUpdate, requestBody } =
+					buildUpdateUrlRequest(payload);
 
 				return {
 					url: `urls/${id}`,

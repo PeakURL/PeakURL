@@ -13,16 +13,16 @@ msgstr ""
 "X-Domain: peakurl\n"
 
 #: app/database/repair-specs.php:41
-msgid "The clicks table still contains prefixed row IDs and should be normalized."
-msgstr "clicks table میں ابھی بھی prefix والے row IDs موجود ہیں اور انہیں normalize کرنا چاہیے۔"
+msgid "The clicks table still contains row IDs with prefixes and should be normalized."
+msgstr ""
 
 #: app/database/repair-specs.php:42
 msgid "Normalized click IDs to the current opaque format."
 msgstr "click IDs کو موجودہ opaque format میں normalize کر دیا گیا۔"
 
 #: app/database/repair-specs.php:48
-msgid "The webhooks table still contains prefixed row IDs and should be normalized."
-msgstr "webhooks table میں ابھی بھی prefix والے row IDs موجود ہیں اور انہیں normalize کرنا چاہیے۔"
+msgid "The webhooks table still contains row IDs with prefixes and should be normalized."
+msgstr ""
 
 #: app/database/repair-specs.php:49
 msgid "Normalized webhook IDs to the current opaque format."
@@ -67,7 +67,7 @@ msgstr "کم از کم ایک webhook event منتخب کریں۔"
 #: app/traits/settings.php:167
 #: app/traits/system.php:347
 #: app/traits/system.php:361
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:45
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:46
 msgid "Shorten, track, and own every link - PeakURL"
 msgstr "ہر لنک کو مختصر کریں، ٹریک کریں، اور اپنے اختیار میں رکھیں - PeakURL"
 
@@ -257,23 +257,23 @@ msgstr "تصدیق ناکام ہو گئی۔ دوبارہ کوشش کریں۔"
 msgid "You do not have permission to edit this link."
 msgstr "آپ کو اس لنک میں ترمیم کرنے کی اجازت نہیں ہے۔"
 
-#: app/traits/links.php:1122
+#: app/traits/links.php:1123
 msgid "You do not have permission to delete this link."
 msgstr "آپ کو اس لنک کو حذف کرنے کی اجازت نہیں ہے۔"
 
-#: app/traits/links.php:1191
+#: app/traits/links.php:1202
 msgid "You do not have permission to delete links."
 msgstr "آپ کو لنکس حذف کرنے کی اجازت نہیں ہے۔"
 
-#: app/traits/links.php:1354
+#: app/traits/links.php:1369
 msgid "A valid destination URL is required."
 msgstr "درست destination URL درکار ہے۔"
 
-#: app/traits/links.php:1372
+#: app/traits/links.php:1387
 msgid "That short code is reserved by the application."
 msgstr "یہ short code ایپلی کیشن کے لیے محفوظ ہے۔"
 
-#: app/traits/links.php:1382
+#: app/traits/links.php:1397
 msgid "That short code is already in use."
 msgstr "یہ short code پہلے سے استعمال میں ہے۔"
 
@@ -1140,58 +1140,58 @@ msgstr "PeakURL اپ ڈیٹ سروس سے رابطہ نہیں کر سکا۔"
 msgid "PeakURL could not read the update service response."
 msgstr "PeakURL اپ ڈیٹ سروس کا جواب پڑھ نہیں سکا۔"
 
-#: app/services/social-preview.php:251
+#: app/services/social-preview.php:273
 #: ui/hooks/useDashboardSearch.ts:87
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:103
 msgid "Untitled Link"
 msgstr "بے عنوان لنک"
 
-#: app/services/social-preview.php:311
+#: app/services/social-preview.php:333
 msgid "Upload a PNG, JPG, or WebP social preview image."
 msgstr "PNG، JPG، یا WebP سوشل پری ویو تصویر اپ لوڈ کریں۔"
 
-#: app/services/social-preview.php:320
+#: app/services/social-preview.php:342
 msgid "PeakURL could not read the social preview image dimensions."
 msgstr "PeakURL سوشل پری ویو تصویر کے dimensions نہیں پڑھ سکا۔"
 
-#: app/services/social-preview.php:332
+#: app/services/social-preview.php:354
 msgid "PeakURL could not create the social preview uploads directory."
 msgstr "PeakURL سوشل پری ویو اپ لوڈز کی ڈائریکٹری نہیں بنا سکا۔"
 
-#: app/services/social-preview.php:338
+#: app/services/social-preview.php:360
 msgid "PeakURL could not store the uploaded social preview image."
 msgstr "PeakURL اپ لوڈ کی گئی سوشل پری ویو تصویر محفوظ نہیں کر سکا۔"
 
-#: app/services/social-preview.php:348
+#: app/services/social-preview.php:367
 msgid "PeakURL could not activate the uploaded social preview image."
 msgstr "PeakURL اپ لوڈ کی گئی سوشل پری ویو تصویر فعال نہیں کر سکا۔"
 
-#: app/services/social-preview.php:381
+#: app/services/social-preview.php:403
 msgid "PeakURL could not verify the uploaded social preview image."
 msgstr "PeakURL اپ لوڈ کی گئی سوشل پری ویو تصویر کی تصدیق نہیں کر سکا۔"
 
-#: app/services/social-preview.php:442
-msgid "The uploaded social preview image is too large for this server."
-msgstr "اپ لوڈ کی گئی سوشل پری ویو تصویر اس سرور کے لیے بہت بڑی ہے۔"
+#: app/services/social-preview.php:464
+msgid "The uploaded social preview image exceeds the server maximum file size limit."
+msgstr ""
 
-#: app/services/social-preview.php:446
+#: app/services/social-preview.php:468
 msgid "The social preview image upload did not finish. Try again."
 msgstr "سوشل پری ویو تصویر کا اپ لوڈ مکمل نہیں ہوا۔ دوبارہ کوشش کریں۔"
 
-#: app/services/social-preview.php:450
+#: app/services/social-preview.php:472
 #: app/services/favicon.php:374
 msgid "The server is missing a temporary upload directory."
 msgstr "سرور میں عارضی اپ لوڈ ڈائریکٹری موجود نہیں ہے۔"
 
-#: app/services/social-preview.php:454
+#: app/services/social-preview.php:476
 msgid "The server could not write the uploaded social preview image to disk."
 msgstr "سرور اپ لوڈ کی گئی سوشل پری ویو تصویر کو disk پر نہیں لکھ سکا۔"
 
-#: app/services/social-preview.php:458
+#: app/services/social-preview.php:480
 msgid "A PHP extension stopped the social preview image upload."
 msgstr "ایک PHP extension نے سوشل پری ویو تصویر کا اپ لوڈ روک دیا۔"
 
-#: app/services/social-preview.php:461
+#: app/services/social-preview.php:483
 msgid "PeakURL could not upload the social preview image."
 msgstr "PeakURL سوشل پری ویو تصویر اپ لوڈ نہیں کر سکا۔"
 
@@ -1240,8 +1240,8 @@ msgid "MaxMind credentials are required before PeakURL can download the GeoLite2
 msgstr "PeakURL کے GeoLite2 City database ڈاؤن لوڈ کرنے سے پہلے MaxMind credentials درکار ہیں۔"
 
 #: app/services/geoip/downloader.php:95
-msgid "The Phar extension is required to unpack the GeoLite2 database archive."
-msgstr "GeoLite2 database archive کھولنے کے لیے Phar extension درکار ہے۔"
+msgid "The Phar extension is required to unpack the GeoLite2 database archive. Enable the PHP Phar extension on the server, restart PHP, and try again. See https://www.php.net/manual/en/phar.setup.php for setup guidance."
+msgstr ""
 
 #: app/services/geoip/downloader.php:117
 msgid "PeakURL downloaded the GeoLite2 archive, but it did not contain GeoLite2-City.mmdb."
@@ -1314,8 +1314,8 @@ msgid "PeakURL could not verify the uploaded favicon."
 msgstr "PeakURL اپ لوڈ کیے گئے favicon کی تصدیق نہیں کر سکا۔"
 
 #: app/services/favicon.php:366
-msgid "The uploaded favicon is too large for this server."
-msgstr "اپ لوڈ کیا گیا favicon اس سرور کے لیے بہت بڑا ہے۔"
+msgid "The uploaded favicon exceeds the server maximum file size limit."
+msgstr ""
 
 #: app/services/favicon.php:370
 msgid "The favicon upload did not finish. Try again."
@@ -1528,7 +1528,7 @@ msgid "Site info"
 msgstr "سائٹ کی معلومات"
 
 #: site/install.php:562
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:369
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:378
 msgid "Site title"
 msgstr "سائٹ کا عنوان"
 
@@ -1542,7 +1542,7 @@ msgstr "ایڈمنسٹریٹر"
 
 #: site/install.php:570
 #: site/setup-config.php:799
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:320
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:329
 #: ui/pages/dashboard/users/UsersPage.tsx:215
 msgid "Username"
 msgstr "صارف نام"
@@ -1592,7 +1592,7 @@ msgid "Welcome - %s"
 msgstr "خوش آمدید - %s"
 
 #: site/setup-config.php:637
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:395
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:404
 msgid "Site language"
 msgstr "سائٹ کی زبان"
 
@@ -1909,7 +1909,7 @@ msgstr "تصدیق کریں"
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:61
 #: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:86
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:130
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:576
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:17
 #: ui/pages/dashboard/users/UsersPage.tsx:316
 msgid "Cancel"
 msgstr "منسوخ کریں"
@@ -3366,172 +3366,170 @@ msgstr "اپ ڈیٹ ہو رہا ہے..."
 msgid "Update Password"
 msgstr "پاس ورڈ اپ ڈیٹ کریں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:167
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:168
 msgid "Loading languages..."
 msgstr "زبانیں لوڈ ہو رہی ہیں..."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:173
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:174
 msgid "12-hour (AM/PM)"
 msgstr "12 گھنٹے (AM/PM)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:174
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:175
 msgid "24-hour"
 msgstr "24 گھنٹے"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:278
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:283
 msgid "Replace Favicon"
 msgstr "فیویکون تبدیل کریں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:279
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:284
 msgid "Choose Favicon"
 msgstr "فیویکون منتخب کریں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:291
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:101
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:439
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:300
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:80
 msgid "Replace Preview Image"
 msgstr "پری ویو تصویر بدلیں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:292
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:102
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:442
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:301
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:81
 msgid "Choose Preview Image"
 msgstr "پری ویو تصویر منتخب کریں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:298
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:307
 msgid "Profile Information"
 msgstr "پروفائل کی معلومات"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:302
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:311
 #: ui/pages/dashboard/users/UsersPage.tsx:200
 msgid "First Name"
 msgstr "پہلا نام"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:309
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:318
 #: ui/pages/dashboard/users/UsersPage.tsx:206
 msgid "Last Name"
 msgstr "آخری نام"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:322
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:331
 msgid "Cannot be changed"
 msgstr "تبدیل نہیں کیا جا سکتا"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:339
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:348
 msgid "Email Address"
 msgstr "ای میل پتہ"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:350
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:359
 msgid "Phone Number"
 msgstr "فون نمبر"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:357
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:366
 msgid "Company"
 msgstr "کمپنی"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:363
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:372
 msgid "Job Title"
 msgstr "عہدہ"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:375
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:384
 msgid "Tagline"
 msgstr "ٹیگ لائن"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:384
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:393
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:379
 msgid "Site Language"
 msgstr "سائٹ کی زبان"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:400
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:409
 msgid "Site Timezone"
 msgstr "سائٹ ٹائم زون"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:411
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:420
 msgid "Site timezone"
 msgstr "سائٹ ٹائم زون"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:417
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:426
 msgid "Time Format"
 msgstr "وقت کا فارمیٹ"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:428
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:437
 msgid "Time format"
 msgstr "وقت کا فارمیٹ"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:433
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:442
 msgid "Bio"
 msgstr "تعارف"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:447
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:456
 msgid "Site Favicon"
 msgstr "سائٹ favicon"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:450
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:459
 msgid "Upload a square PNG favicon. PeakURL will use it for browser tabs, Apple touch icons, and the site web manifest."
 msgstr "ایک مربع PNG favicon اپ لوڈ کریں۔ PeakURL اسے browser tabs، Apple touch icons، اور سائٹ web manifest کے لیے استعمال کرے گا۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:460
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:469
 msgid "Favicon PNG"
 msgstr "Favicon PNG"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:495
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:504
 msgid "Use a square PNG, ideally %s. The minimum supported size is 180 x 180."
 msgstr "ایک مربع PNG استعمال کریں، بہتر ہے %s ہو۔ کم از کم سپورٹڈ سائز 180 x 180 ہے۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:523
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:532
 msgid "Remove Favicon"
 msgstr "favicon ہٹائیں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:538
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:547
 msgid "Current favicon preview"
 msgstr "موجودہ favicon پیش منظر"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:584
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:593
 msgid "No favicon configured"
 msgstr "کوئی favicon کنفیگر نہیں ہے"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:594
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:603
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:48
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:100
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Form.tsx:63
 msgid "Social Preview"
 msgstr "سوشل پری ویو"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:597
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:606
 msgid "Upload the default image used when short links are shared on social platforms. Individual links can override it."
 msgstr "سوشل پلیٹ فارمز پر شارٹ لنکس شیئر ہونے پر استعمال ہونے والی ڈیفالٹ تصویر اپ لوڈ کریں۔ ہر لنک اسے override کر سکتا ہے۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:608
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:83
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:418
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:617
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:88
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:63
 msgid "Preview Image"
 msgstr "پری ویو تصویر"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:641
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:650
 msgid "Use a PNG, JPG, or WebP image, ideally %s, for clean previews on Facebook, X, LinkedIn, and messaging apps."
 msgstr "Facebook، X، LinkedIn، اور messaging apps میں صاف پری ویوز کے لیے PNG، JPG، یا WebP تصویر استعمال کریں، بہتر ہے %s۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:661
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:117
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:464
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:670
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:98
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:97
 msgid "Remove Preview Image"
 msgstr "پری ویو تصویر ہٹائیں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:673
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:682
 msgid "Default social preview image"
 msgstr "ڈیفالٹ سوشل پری ویو تصویر"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:684
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:693
 msgid "No default preview image"
 msgstr "کوئی ڈیفالٹ پری ویو تصویر نہیں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:700
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:709
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:503
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:522
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:586
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:27
 msgid "Saving..."
 msgstr "محفوظ کیا جا رہا ہے..."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:700
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:591
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:709
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:32
 #: ui/pages/dashboard/users/UsersPage.tsx:321
 msgid "Save Changes"
 msgstr "تبدیلیاں محفوظ کریں"
@@ -3554,7 +3552,7 @@ msgstr "ڈیٹابیس ڈاؤن لوڈ کریں"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:636
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:62
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:41
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:356
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:78
 msgid "Status"
 msgstr "حالت"
 
@@ -3908,8 +3906,8 @@ msgid "Use Google reCAPTCHA v3 site and secret keys for invisible score-based ve
 msgstr "غیر مرئی score-based تصدیق کے لیے Google reCAPTCHA v3 کی site اور secret keys استعمال کریں۔"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:152
-msgid "Use Cloudflare Turnstile site and secret keys for the managed challenge widget."
-msgstr "managed challenge widget کے لیے Cloudflare Turnstile کی site اور secret keys استعمال کریں۔"
+msgid "Use Cloudflare Turnstile site and secret keys for the Managed Challenge widget."
+msgstr ""
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:160
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:118
@@ -4111,8 +4109,8 @@ msgid "Endpoint URL"
 msgstr "اینڈ پوائنٹ URL"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:248
-msgid "Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route like"
-msgstr "ایسا عوامی HTTPS اینڈپوائنٹ استعمال کریں جو POST درخواستیں قبول کر سکے، مثلاً Zapier catch hook، n8n webhook URL، یا آپ کی اپنی API route جیسے"
+msgid "Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route."
+msgstr ""
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:260
 msgid "Events"
@@ -4143,7 +4141,7 @@ msgstr "ویب ہکس لوڈ کرنے میں ناکامی ہوئی"
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:24
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:33
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:42
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:58
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:47
 msgid "Inactive"
 msgstr "غیر فعال"
 
@@ -4242,7 +4240,7 @@ msgstr "API key"
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:103
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:21
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:31
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:57
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:46
 #: ui/pages/dashboard/links/LinksPage.tsx:201
 msgid "Active"
 msgstr "فعال"
@@ -6004,7 +6002,7 @@ msgstr "بنایا گیا"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:35
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:141
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:59
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:48
 msgid "Expired"
 msgstr "میعاد ختم"
 
@@ -6060,7 +6058,7 @@ msgid "My Awesome Link"
 msgstr "میرا بہترین لنک"
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:42
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:504
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/ProtectionTab.tsx:22
 msgid "Password Protection (Optional)"
 msgstr "پاس ورڈ تحفظ (اختیاری)"
 
@@ -6073,7 +6071,7 @@ msgid "Please enter a valid URL (must include http:// or https://)"
 msgstr "براہ کرم درست URL درج کریں (اس میں http:// یا https:// شامل ہونا چاہیے)"
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:144
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:167
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:111
 msgid "Expiration time must be in the future."
 msgstr "اختتامی وقت مستقبل میں ہونا چاہیے۔"
 
@@ -6094,34 +6092,42 @@ msgid "Customize the Open Graph preview shown when this short link is shared."
 msgstr "اس شارٹ لنک کے شیئر ہونے پر دکھائی جانے والی Open Graph پری ویو کو حسب ضرورت بنائیں۔"
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:58
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:377
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:38
 msgid "Preview Title"
 msgstr "پری ویو عنوان"
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:62
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:388
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:42
 msgid "Use link title"
 msgstr "لنک کا عنوان استعمال کریں"
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:67
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:394
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:66
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:46
 msgid "Preview Description"
 msgstr "پری ویو تفصیل"
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:73
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:407
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:72
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:52
 msgid "Short description for Facebook, X, LinkedIn, and messaging apps"
 msgstr "Facebook، X، LinkedIn اور messaging apps کے لیے مختصر تفصیل"
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:126
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:478
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:107
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:107
 msgid "Social preview image"
 msgstr "سوشل پری ویو تصویر"
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:136
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:491
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:118
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:117
 msgid "Use default preview image"
 msgstr "ڈیفالٹ پری ویو تصویر استعمال کریں"
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:140
+msgid "Replace Image"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:141
+msgid "Choose Image"
+msgstr ""
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/UTMFields.tsx:28
 msgid "UTM Parameters (Optional)"
@@ -6149,7 +6155,7 @@ msgstr "utm_content (مثلاً banner)"
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/MainInputs.tsx:20
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:90
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:303
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:44
 msgid "Destination URL"
 msgstr "منزل کا URL"
 
@@ -6182,7 +6188,7 @@ msgid "Transform your long URL into a short, shareable link"
 msgstr "اپنے لمبے URL کو مختصر اور شیئر کرنے کے قابل لنک میں بدلیں"
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/ExpirationFields.tsx:23
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:336
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:65
 msgid "Expiration Date (Optional)"
 msgstr "اختتامی تاریخ (اختیاری)"
 
@@ -6581,7 +6587,7 @@ msgstr "یہ لنک دیکھیں"
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:53
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:108
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:81
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:293
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:34
 msgid "Short URL"
 msgstr "شارٹ URL"
 
@@ -6627,7 +6633,7 @@ msgid "Detailed statistics and performance metrics"
 msgstr "تفصیلی اعدادوشمار اور کارکردگی کے پیمانے"
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:171
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:245
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Header.tsx:28
 msgid "Close panel"
 msgstr "پینل بند کریں"
 
@@ -6647,53 +6653,53 @@ msgstr "لنک حذف کریں"
 msgid "Are you sure you want to delete this link? This action cannot be undone."
 msgstr "کیا آپ واقعی یہ لنک حذف کرنا چاہتے ہیں؟ یہ عمل واپس نہیں ہو سکتا۔"
 
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:99
-msgid "Link Details"
-msgstr "لنک کی تفصیلات"
-
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:101
-msgid "Protection"
-msgstr "تحفظ"
-
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:193
-msgid "Failed to update link"
-msgstr "لنک اپ ڈیٹ کرنے میں ناکامی ہوئی"
-
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:231
-msgid "Edit Link"
-msgstr "لنک میں ترمیم کریں"
-
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:234
-msgid "Update link settings and sharing details."
-msgstr "لنک کی ترتیبات اور شیئرنگ تفصیلات اپ ڈیٹ کریں۔"
-
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:318
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:55
 msgid "Title (Optional)"
 msgstr "عنوان (اختیاری)"
 
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:328
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:59
 msgid "Enter a title for this link"
 msgstr "اس لنک کے لیے عنوان درج کریں"
 
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:364
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:84
 msgid "Link status"
 msgstr "لنک کی حالت"
 
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:517
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Header.tsx:17
+msgid "Edit Link"
+msgstr "لنک میں ترمیم کریں"
+
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Header.tsx:20
+msgid "Update link settings and sharing details."
+msgstr "لنک کی ترتیبات اور شیئرنگ تفصیلات اپ ڈیٹ کریں۔"
+
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/ProtectionTab.tsx:29
 msgid "Enter a new password to replace the current one"
 msgstr "موجودہ پاس ورڈ بدلنے کے لیے نیا پاس ورڈ درج کریں"
 
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:520
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/ProtectionTab.tsx:32
 msgid "Set a password to protect this link"
 msgstr "اس لنک کی حفاظت کے لیے پاس ورڈ مقرر کریں"
 
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:529
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/ProtectionTab.tsx:39
 msgid "Leave this blank to keep the current password."
 msgstr "موجودہ پاس ورڈ برقرار رکھنے کے لیے اسے خالی چھوڑ دیں۔"
 
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/EditLinkDrawer.tsx:559
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/ProtectionTab.tsx:57
 msgid "Remove password protection"
 msgstr "پاس ورڈ تحفظ ہٹا دیں"
+
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:137
+msgid "Failed to update link"
+msgstr "لنک اپ ڈیٹ کرنے میں ناکامی ہوئی"
+
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Form.tsx:62
+msgid "Link Details"
+msgstr "لنک کی تفصیلات"
+
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Form.tsx:64
+msgid "Protection"
+msgstr "تحفظ"
 
 #: ui/pages/dashboard/links/_components/Header/Header.tsx:13
 #: ui/pages/dashboard/links/_components/Header/Header.tsx:14

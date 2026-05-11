@@ -123,7 +123,7 @@
 	}
 
 	.links-edit-drawer-preview-image {
-		@apply h-full w-full object-cover;
+		@apply block h-full w-full bg-cover bg-center bg-no-repeat;
 	}
 
 	.links-edit-drawer-preview-remove {

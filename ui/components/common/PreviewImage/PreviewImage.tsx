@@ -1,15 +1,56 @@
-import type { ImgHTMLAttributes } from "react";
+import type { CSSProperties, HTMLAttributes } from "react";
 import type { ImageSource } from "@/utils";
 
 interface PreviewImageProps
-	extends Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> {
+	extends Omit<HTMLAttributes<HTMLSpanElement>, "children"> {
 	source: ImageSource;
+	alt?: string;
+}
+
+const cssUrlEscapePattern = /["\\\n\r\f]/g;
+
+const cssUrlEscapes: Record<string, string> = {
+	'"': '\\"',
+	"\\": "\\\\",
+	"\n": "\\A ",
+	"\r": "\\D ",
+	"\f": "\\C ",
+};
+
+function getPreviewImageStyle(
+	source: ImageSource,
+	style: CSSProperties | undefined
+): CSSProperties {
+	return {
+		...style,
+		backgroundImage: `url("${source.replace(
+			cssUrlEscapePattern,
+			(match) => cssUrlEscapes[match]
+		)}")`,
+	};
 }
 
 /**
  * Renders dashboard preview images from sources approved by `sanitizeImageUrl`.
  */
-export function PreviewImage({ source, ...imageProps }: PreviewImageProps) {
-	// codeql[js/xss-through-dom] `source` is a branded ImageSource produced by sanitizeImageUrl().
-	return <img {...imageProps} src={source} />;
+export function PreviewImage({
+	source,
+	alt,
+	style,
+	"aria-hidden": ariaHidden,
+	"aria-label": ariaLabel,
+	...imageProps
+}: PreviewImageProps) {
+	const isHidden = true === ariaHidden || "true" === ariaHidden;
+	const isDecorative = "" === alt || isHidden;
+
+	return (
+		<span
+			{...imageProps}
+			role={isDecorative ? undefined : "img"}
+			aria-hidden={isDecorative ? true : ariaHidden}
+			aria-label={isDecorative ? undefined : ariaLabel || alt}
+			style={getPreviewImageStyle(source, style)}
+		/>
+	);
 }

@@ -1,3 +1,5 @@
+import { API_ORIGIN, PEAKURL_URL } from "@/constants";
+
 function normalizeUrlInput(value: string | null | undefined): string {
 	return typeof value === "string" ? value.trim() : "";
 }
@@ -10,6 +12,41 @@ export type ImageSource = string & {
 
 function toImageSource(value: string): ImageSource {
 	return value as ImageSource;
+}
+
+function addTrustedOrigin(origins: Set<string>, value: string): void {
+	try {
+		origins.add(new URL(value).origin);
+	} catch {
+		// Ignore invalid runtime values; image previews fail closed.
+	}
+}
+
+function getTrustedImageOrigins(): Set<string> {
+	const origins = new Set<string>();
+
+	if (typeof window !== "undefined" && window.location?.origin) {
+		origins.add(window.location.origin);
+	}
+
+	addTrustedOrigin(origins, PEAKURL_URL);
+	addTrustedOrigin(origins, API_ORIGIN);
+
+	return origins;
+}
+
+let trustedImageOriginsCache: Set<string> | null = null;
+
+function getCachedTrustedImageOrigins(): Set<string> {
+	if (trustedImageOriginsCache === null) {
+		trustedImageOriginsCache = getTrustedImageOrigins();
+	}
+
+	return trustedImageOriginsCache;
+}
+
+function isTrustedImageOrigin(origin: string): boolean {
+	return getCachedTrustedImageOrigins().has(origin);
 }
 
 /**
@@ -66,17 +103,11 @@ export function sanitizeImageUrl(
 	try {
 		const url = new URL(normalizedValue);
 
-		if ("http:" === url.protocol || "https:" === url.protocol) {
+		if (
+			(url.protocol === "http:" || url.protocol === "https:") &&
+			isTrustedImageOrigin(url.origin)
+		) {
 			return toImageSource(url.toString());
-		}
-
-		if ("blob:" === url.protocol) {
-			const blobOrigin = new URL(normalizedValue.slice("blob:".length));
-
-			return "http:" === blobOrigin.protocol ||
-				"https:" === blobOrigin.protocol
-				? toImageSource(url.toString())
-				: "";
 		}
 
 		return "";

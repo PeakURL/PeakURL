@@ -76,6 +76,7 @@
 
 	.settings-general-social-preview-image {
 		@apply block h-full w-full bg-cover bg-center bg-no-repeat;
+		background-image: var(--preview-image-url);
 	}
 
 	.settings-general-social-preview-remove {
@@ -181,8 +182,13 @@
 	}
 
 	.settings-general-favicon-app-icon {
-		@apply block h-14 w-14 shrink-0 rounded-2xl border border-white/10 bg-[#232738] bg-contain bg-center bg-no-repeat p-2.5 shadow-lg;
-		@apply bg-clip-content bg-origin-content;
+		@apply relative block h-14 w-14 shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-[#232738] shadow-lg;
+	}
+
+	.settings-general-favicon-app-icon::before {
+		@apply absolute inset-2.5 bg-contain bg-center bg-no-repeat;
+		content: "";
+		background-image: var(--preview-image-url);
 	}
 
 	.settings-general-favicon-browser-window {
@@ -219,8 +225,13 @@
 	}
 
 	.settings-general-favicon-browser-icon {
-		@apply block h-5 w-5 rounded-md bg-[#202631] bg-contain bg-center bg-no-repeat p-1;
-		@apply bg-clip-content bg-origin-content;
+		@apply relative block h-5 w-5 overflow-hidden rounded-md bg-[#202631];
+	}
+
+	.settings-general-favicon-browser-icon::before {
+		@apply absolute inset-1 bg-contain bg-center bg-no-repeat;
+		content: "";
+		background-image: var(--preview-image-url);
 	}
 
 	.settings-general-favicon-browser-title {

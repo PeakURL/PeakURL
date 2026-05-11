@@ -23,11 +23,11 @@ function getPreviewImageStyle(
 ): CSSProperties {
 	return {
 		...style,
-		backgroundImage: `url("${source.replace(
+		"--preview-image-url": `url("${source.replace(
 			cssUrlEscapePattern,
 			(match) => cssUrlEscapes[match]
 		)}")`,
-	};
+	} as CSSProperties;
 }
 
 /**

@@ -124,6 +124,7 @@
 
 	.links-edit-drawer-preview-image {
 		@apply block h-full w-full bg-cover bg-center bg-no-repeat;
+		background-image: var(--preview-image-url);
 	}
 
 	.links-edit-drawer-preview-remove {

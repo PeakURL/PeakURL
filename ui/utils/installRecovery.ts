@@ -5,6 +5,12 @@ import {
 } from "./records";
 import type { InstallRecoveryPayload, InstallRecoveryResult } from "./types";
 
+/**
+ * Extract the raw recovery payload from an API error.
+ *
+ * @param error - The error object to parse.
+ * @return The recovery payload or null if not found or invalid.
+ */
 function getInstallRecoveryPayload(
 	error: unknown
 ): InstallRecoveryPayload | null {
@@ -21,6 +27,7 @@ function getInstallRecoveryPayload(
 
 	const recoveryState = getStringRecordValue(payload, "recoveryState");
 
+	/* Only allow specific recovery states. */
 	if ("needs_setup" !== recoveryState && "needs_install" !== recoveryState) {
 		return null;
 	}
@@ -33,7 +40,10 @@ function getInstallRecoveryPayload(
 }
 
 /**
- * Extracts a setup or install recovery target from an API error payload.
+ * Extract a setup or install recovery target from an API error payload.
+ *
+ * @param error - The error object to parse.
+ * @return The normalized recovery result or null.
  */
 export function getInstallRecovery(
 	error: unknown
@@ -44,6 +54,7 @@ export function getInstallRecovery(
 		return null;
 	}
 
+	/* Map the recovery state to the appropriate redirect URL. */
 	if ("needs_setup" === payload.recoveryState && payload.setupConfigUrl) {
 		return {
 			state: payload.recoveryState,
@@ -62,7 +73,10 @@ export function getInstallRecovery(
 }
 
 /**
- * Redirects the browser to the setup or install recovery flow when present.
+ * Redirect the browser to the setup or install recovery flow when present.
+ *
+ * @param error - The error object to check for recovery instructions.
+ * @return Whether a redirect was initiated.
  */
 export function redirectToInstallRecovery(error: unknown): boolean {
 	const recovery = getInstallRecovery(error);

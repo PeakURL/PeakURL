@@ -3,14 +3,20 @@ const MINUTE_MS = 60 * SECOND_MS;
 const HOUR_MS = 60 * MINUTE_MS;
 const DAY_MS = 24 * HOUR_MS;
 const WEEK_MS = 7 * DAY_MS;
+
+/* Thresholds for relative time unit promotion. */
 const SECOND_TO_MINUTE_THRESHOLD = 45;
 const MINUTE_TO_HOUR_THRESHOLD = 45;
 const HOUR_TO_DAY_THRESHOLD = 22;
 const DAY_TO_WEEK_THRESHOLD = 6;
 const WEEK_TO_MONTH_THRESHOLD = 4;
+
 const DEFAULT_LOCALE = "en-US";
 const DEFAULT_TIMEZONE = "UTC";
 
+/**
+ * Supported relative time units.
+ */
 type RelativeTimeUnit =
 	| "second"
 	| "minute"
@@ -20,6 +26,12 @@ type RelativeTimeUnit =
 	| "month"
 	| "year";
 
+/**
+ * Safely convert a value to a Date object.
+ *
+ * @param value - The raw date value.
+ * @return The Date object or null if invalid.
+ */
 function toDate(value: string | number | Date | null | undefined): Date | null {
 	if (value instanceof Date) {
 		return Number.isNaN(value.getTime()) ? null : new Date(value.getTime());
@@ -33,6 +45,12 @@ function toDate(value: string | number | Date | null | undefined): Date | null {
 	return null;
 }
 
+/**
+ * Parse a YYYY-MM-DD string into a UTC Date object.
+ *
+ * @param value - The date string.
+ * @return The Date object or null if invalid.
+ */
 function toDateOnly(value: string | null | undefined): Date | null {
 	const match = value?.match(/^(\d{4})-(\d{2})-(\d{2})$/);
 
@@ -48,20 +66,33 @@ function toDateOnly(value: string | null | undefined): Date | null {
 	return Number.isNaN(date.getTime()) ? null : date;
 }
 
+/**
+ * Validate that a value is a non-empty string.
+ *
+ * @param value - The value to check.
+ * @return The string if valid, otherwise null.
+ */
 function getNonEmptyString(value: unknown): string | null {
 	return typeof value === "string" && value ? value : null;
 }
 
+/**
+ * Resolve the active locale from the environment.
+ *
+ * @return The BCP 47 locale string.
+ */
 export function getActiveLocale(): string {
 	const windowLocale =
 		typeof window === "undefined"
 			? null
 			: getNonEmptyString(window.__PEAKURL_LOCALE__);
 
+	/* Prefer the server-provided locale if available. */
 	if (windowLocale) {
 		return windowLocale.replace(/_/g, "-");
 	}
 
+	/* Fall back to the document language attribute. */
 	const documentLocale =
 		typeof document === "undefined"
 			? null
@@ -74,6 +105,11 @@ export function getActiveLocale(): string {
 	return DEFAULT_LOCALE;
 }
 
+/**
+ * Resolve the active time zone from the environment.
+ *
+ * @return The IANA time zone identifier.
+ */
 export function getActiveTimeZone(): string {
 	const timezone =
 		typeof window === "undefined"
@@ -83,6 +119,11 @@ export function getActiveTimeZone(): string {
 	return timezone ?? DEFAULT_TIMEZONE;
 }
 
+/**
+ * Resolve the active time format preference (12/24 hour).
+ *
+ * @return The time format identifier.
+ */
 function getActiveTimeFormat(): "12" | "24" {
 	const timeFormat =
 		typeof window === "undefined"
@@ -96,6 +137,12 @@ function getActiveTimeFormat(): "12" | "24" {
 	return "12";
 }
 
+/**
+ * Check if formatting options include any visual display configuration.
+ *
+ * @param options - The formatting options.
+ * @return Whether display options are present.
+ */
 function hasDateTimeDisplayOption(
 	options: Intl.DateTimeFormatOptions
 ): boolean {
@@ -116,6 +163,12 @@ function hasDateTimeDisplayOption(
 	].some((key) => key in options);
 }
 
+/**
+ * Determine if seconds should be included in the formatted output.
+ *
+ * @param options - The formatting options.
+ * @return Whether to include seconds.
+ */
 function shouldIncludeSeconds(options: Intl.DateTimeFormatOptions): boolean {
 	const secondsConfigured =
 		"second" in options || "fractionalSecondDigits" in options;
@@ -125,6 +178,12 @@ function shouldIncludeSeconds(options: Intl.DateTimeFormatOptions): boolean {
 	return !secondsConfigured && !hasTimeStyle && hasTimeFields;
 }
 
+/**
+ * Normalize DateTimeFormat options with site-wide preferences.
+ *
+ * @param options - The raw formatting options.
+ * @return The normalized options.
+ */
 function createDateTimeOptions(
 	options: Intl.DateTimeFormatOptions
 ): Intl.DateTimeFormatOptions {
@@ -137,12 +196,14 @@ function createDateTimeOptions(
 			: { dateStyle: "medium", timeStyle: "medium" }),
 	};
 
+	/* Apply global 12/24 hour preference. */
 	if (timeFormat === "12") {
 		dateOptions.hour12 = true;
 	} else if (timeFormat === "24") {
 		dateOptions.hour12 = false;
 	}
 
+	/* Include seconds by default if time fields are present but seconds are omitted. */
 	if (includeSeconds) {
 		dateOptions.second = "2-digit";
 	}
@@ -150,6 +211,12 @@ function createDateTimeOptions(
 	return dateOptions;
 }
 
+/**
+ * Return a YYYY-MM-DD key for a date in the active time zone.
+ *
+ * @param value - The raw date value.
+ * @return The zoned date key string.
+ */
 export function getZonedDateKey(
 	value: string | number | Date | null | undefined
 ): string {
@@ -160,24 +227,31 @@ export function getZonedDateKey(
 	}
 
 	try {
+		/* Use Intl to extract date parts in the target time zone. */
 		const parts = new Intl.DateTimeFormat("en-US", {
 			timeZone: getActiveTimeZone(),
 			year: "numeric",
 			month: "2-digit",
 			day: "2-digit",
 		}).formatToParts(targetDate);
+
 		const year = parts.find((part) => part.type === "year")?.value;
 		const month = parts.find((part) => part.type === "month")?.value;
 		const day = parts.find((part) => part.type === "day")?.value;
 
 		return year && month && day ? `${year}-${month}-${day}` : "";
 	} catch {
+		/* Fall back to UTC ISO string if Intl fails. */
 		return targetDate.toISOString().slice(0, 10);
 	}
 }
 
 /**
- * Formats a date-only `YYYY-MM-DD` value without shifting it across zones.
+ * Format a date-only `YYYY-MM-DD` value without shifting it across zones.
+ *
+ * @param value   - The YYYY-MM-DD date string.
+ * @param options - Formatting options.
+ * @return The localized date string.
  */
 export function formatDateOnly(
 	value: string | null | undefined,
@@ -200,17 +274,23 @@ export function formatDateOnly(
 }
 
 /**
- * Returns the number of days in a month.
+ * Return the number of days in a month.
  *
- * @param year Full year (for example, 2026).
- * @param month Zero-based month index, matching JavaScript Date.
- * `new Date(year, month + 1, 0)` uses day 0 as the day before
- * the first day of `month + 1`, which is the last day of `month`.
+ * @param year  - Full year (e.g., 2026).
+ * @param month - Zero-based month index.
+ * @return The number of days in the month.
  */
 function daysInMonth(year: number, month: number): number {
 	return new Date(year, month + 1, 0).getDate();
 }
 
+/**
+ * Add months to a date while preserving month-end alignment.
+ *
+ * @param date  - The starting date.
+ * @param count - The number of months to add.
+ * @return The resulting date.
+ */
 function addMonths(date: Date, count: number): Date {
 	const result = new Date(date.getTime());
 	const day = result.getDate();
@@ -224,6 +304,13 @@ function addMonths(date: Date, count: number): Date {
 	return result;
 }
 
+/**
+ * Add years to a date while preserving month-end alignment.
+ *
+ * @param date  - The starting date.
+ * @param count - The number of years to add.
+ * @return The resulting date.
+ */
 function addYears(date: Date, count: number): Date {
 	const result = new Date(date.getTime());
 	const day = result.getDate();
@@ -237,6 +324,13 @@ function addYears(date: Date, count: number): Date {
 	return result;
 }
 
+/**
+ * Calculate the number of whole months between two dates.
+ *
+ * @param startDate - The starting date.
+ * @param endDate   - The ending date.
+ * @return The number of whole months.
+ */
 function wholeMonths(startDate: Date, endDate: Date): number {
 	let count =
 		(endDate.getFullYear() - startDate.getFullYear()) * 12 +
@@ -250,6 +344,13 @@ function wholeMonths(startDate: Date, endDate: Date): number {
 	return Math.max(0, count);
 }
 
+/**
+ * Calculate the number of whole years between two dates.
+ *
+ * @param startDate - The starting date.
+ * @param endDate   - The ending date.
+ * @return The number of whole years.
+ */
 function wholeYears(startDate: Date, endDate: Date): number {
 	let count = endDate.getFullYear() - startDate.getFullYear();
 
@@ -260,6 +361,14 @@ function wholeYears(startDate: Date, endDate: Date): number {
 	return Math.max(0, count);
 }
 
+/**
+ * Calculate a rounded calendar unit difference.
+ *
+ * @param targetDate - The target date.
+ * @param nowDate    - The reference date.
+ * @param unit       - The unit to calculate (month/year).
+ * @return The rounded count.
+ */
 function roundedCalendarUnit(
 	targetDate: Date,
 	nowDate: Date,
@@ -284,7 +393,11 @@ function roundedCalendarUnit(
 }
 
 /**
- * Returns the relative-time unit and signed value between two dates.
+ * Return the relative-time unit and signed value between two dates.
+ *
+ * @param targetDate - The target date.
+ * @param nowDate    - The reference date.
+ * @return The unit and value for relative formatting.
  */
 function getRelativeUnit(targetDate: Date, nowDate: Date) {
 	const deltaMs = targetDate.getTime() - nowDate.getTime();
@@ -340,6 +453,14 @@ function getRelativeUnit(targetDate: Date, nowDate: Date) {
 	};
 }
 
+/**
+ * Fallback relative time formatter for environments without Intl.RelativeTimeFormat.
+ *
+ * @param value - The numeric value.
+ * @param unit  - The time unit.
+ * @param style - The display style.
+ * @return The formatted string.
+ */
 function formatRelativeTimeFallback(
 	value: number,
 	unit: RelativeTimeUnit,
@@ -359,6 +480,7 @@ function formatRelativeTimeFallback(
 		month: "mo",
 		year: "y",
 	};
+
 	const token =
 		style === "compact"
 			? `${absoluteValue}${compactUnitMap[unit]}`
@@ -368,7 +490,11 @@ function formatRelativeTimeFallback(
 }
 
 /**
- * Formats a value relative to a reference point such as "2 days ago".
+ * Format a value relative to a reference point such as "2 days ago".
+ *
+ * @param value   - The date value to format.
+ * @param options - Formatting options.
+ * @return The localized relative time string.
  */
 export function formatRelativeTime(
 	value: string | number | Date | null | undefined,
@@ -388,6 +514,7 @@ export function formatRelativeTime(
 
 	const { unit, value: relativeValue } = getRelativeUnit(targetDate, nowDate);
 
+	/* Use standard browser APIs if available. */
 	if (
 		typeof Intl !== "undefined" &&
 		typeof Intl.RelativeTimeFormat === "function"
@@ -398,7 +525,7 @@ export function formatRelativeTime(
 				style: style === "compact" ? "narrow" : "long",
 			}).format(relativeValue, unit);
 		} catch {
-			return formatRelativeTimeFallback(relativeValue, unit, style);
+			/* Fall back to manual formatting if Intl fails. */
 		}
 	}
 
@@ -406,7 +533,11 @@ export function formatRelativeTime(
 }
 
 /**
- * Formats a value as a localized date/time string.
+ * Format a value as a localized date/time string.
+ *
+ * @param value   - The date value to format.
+ * @param options - Intl formatting options.
+ * @return The localized date/time string.
  */
 export function formatLocalizedDateTime(
 	value: string | number | Date | null | undefined,
@@ -426,6 +557,7 @@ export function formatLocalizedDateTime(
 			dateTimeOptions
 		).format(targetDate);
 	} catch {
+		/* Fall back to standard toLocaleString if Intl.DateTimeFormat fails. */
 		return targetDate.toLocaleString(getActiveLocale(), dateTimeOptions);
 	}
 }

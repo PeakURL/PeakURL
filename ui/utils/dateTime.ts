@@ -1,5 +1,8 @@
 import { getActiveTimeZone } from "./dateFormatting";
 
+/**
+ * Breakdown of date and time components.
+ */
 interface DateTimeParts {
 	year: number;
 	month: number;
@@ -9,10 +12,22 @@ interface DateTimeParts {
 	second: number;
 }
 
+/**
+ * Pad a numeric date part with a leading zero if necessary.
+ *
+ * @param value - The number to pad.
+ * @return The padded string.
+ */
 function padDatePart(value: number): string {
 	return String(value).padStart(2, "0");
 }
 
+/**
+ * Parse a `YYYY-MM-DDTHH:mm` datetime-local value.
+ *
+ * @param value - The input value string.
+ * @return The parsed parts or null if invalid.
+ */
 function parseLocalDateTimeValue(value: string): DateTimeParts | null {
 	const match = value.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/);
 
@@ -30,6 +45,12 @@ function parseLocalDateTimeValue(value: string): DateTimeParts | null {
 	};
 }
 
+/**
+ * Extract date parts in the active site time zone.
+ *
+ * @param date - The Date object to format.
+ * @return The zoned parts or null if Intl fails.
+ */
 function getZonedParts(date: Date): DateTimeParts | null {
 	try {
 		const parts = new Intl.DateTimeFormat("en-US", {
@@ -42,6 +63,7 @@ function getZonedParts(date: Date): DateTimeParts | null {
 			second: "2-digit",
 			hourCycle: "h23",
 		}).formatToParts(date);
+
 		const getPart = (type: Intl.DateTimeFormatPartTypes) =>
 			Number(parts.find((part) => part.type === type)?.value || 0);
 
@@ -58,9 +80,16 @@ function getZonedParts(date: Date): DateTimeParts | null {
 	}
 }
 
+/**
+ * Calculate the offset between UTC and the site time zone in milliseconds.
+ *
+ * @param date - The reference date.
+ * @return The offset in milliseconds.
+ */
 function getTimeZoneOffsetMs(date: Date): number {
 	const parts = getZonedParts(date);
 
+	/* Fall back to the local browser offset if zoning fails. */
 	if (!parts) {
 		return -date.getTimezoneOffset() * 60000;
 	}
@@ -77,6 +106,12 @@ function getTimeZoneOffsetMs(date: Date): number {
 	return zonedUtcTime - date.getTime();
 }
 
+/**
+ * Convert date parts into a YYYY-MM-DD input value.
+ *
+ * @param parts - The date parts.
+ * @return The formatted date string.
+ */
 function toDateInputValue(parts: DateTimeParts): string {
 	return [
 		String(parts.year).padStart(4, "0"),
@@ -86,7 +121,10 @@ function toDateInputValue(parts: DateTimeParts): string {
 }
 
 /**
- * Formats a date as a site-timezone `YYYY-MM-DD` value for date inputs.
+ * Format a date as a site-timezone `YYYY-MM-DD` value for date inputs.
+ *
+ * @param date - The Date object.
+ * @return The formatted date string.
  */
 export function getLocalDateValue(date: Date = new Date()): string {
 	const parts = getZonedParts(date);
@@ -100,7 +138,10 @@ export function getLocalDateValue(date: Date = new Date()): string {
 }
 
 /**
- * Formats a date as a site-timezone `YYYY-MM-DDTHH:mm` datetime-local value.
+ * Format a date as a site-timezone `YYYY-MM-DDTHH:mm` datetime-local value.
+ *
+ * @param date - The Date object.
+ * @return The formatted datetime-local string.
  */
 export function getLocalDateTimeValue(date: Date = new Date()): string {
 	const parts = getZonedParts(date);
@@ -116,7 +157,10 @@ export function getLocalDateTimeValue(date: Date = new Date()): string {
 }
 
 /**
- * Converts an ISO-like date string into a site-timezone datetime-local value.
+ * Convert an ISO-like date string into a site-timezone datetime-local value.
+ *
+ * @param dateString - The raw date string.
+ * @return The formatted datetime-local value or an empty string.
  */
 export function toLocalDateTimeValue(dateString?: string | null): string {
 	if (!dateString) {
@@ -133,7 +177,10 @@ export function toLocalDateTimeValue(dateString?: string | null): string {
 }
 
 /**
- * Converts a site-timezone datetime-local input value into an ISO string.
+ * Convert a site-timezone datetime-local input value into an ISO string.
+ *
+ * @param localDateTime - The datetime-local string.
+ * @return The ISO string or null.
  */
 export function toIsoFromLocalDateTime(
 	localDateTime?: string | null
@@ -155,18 +202,27 @@ export function toIsoFromLocalDateTime(
 		parts.hour,
 		parts.minute
 	);
+
+	/*
+	 * Iteratively resolve the UTC timestamp from the local wall-clock time
+	 * by accounting for the time zone offset at the resulting instant.
+	 */
 	const offset = getTimeZoneOffsetMs(new Date(localUtcTime));
 	const firstPassTime = localUtcTime - offset;
 	const secondOffset = getTimeZoneOffsetMs(new Date(firstPassTime));
 	const timeValue =
 		secondOffset === offset ? firstPassTime : localUtcTime - secondOffset;
+
 	const date = new Date(timeValue);
 
 	return Number.isNaN(date.getTime()) ? null : date.toISOString();
 }
 
 /**
- * Determines whether a datetime-local value resolves to a future instant.
+ * Determine whether a datetime-local value resolves to a future instant.
+ *
+ * @param localDateTime - The datetime-local string.
+ * @return Whether the date is in the future.
  */
 export function isFutureLocalDateTime(localDateTime?: string | null): boolean {
 	if (!localDateTime) {

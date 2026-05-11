@@ -1,35 +1,66 @@
 "use strict";
 
+/**
+ * MD5 message-digest algorithm implementation.
+ *
+ * This is a local vendored version of the JavaScript MD5 implementation.
+ * It provides standard hashing and HMAC support.
+ */
+
+/**
+ * Safe addition for 32-bit integers.
+ */
 function safeAdd(x, y) {
 	var lsw = (x & 0xffff) + (y & 0xffff);
 	var msw = (x >>> 16) + (y >>> 16) + (lsw >>> 16);
 	return (msw << 16) | (lsw & 0xffff);
 }
 
+/**
+ * Bitwise left rotation.
+ */
 function bitRotateLeft(num, cnt) {
 	return (num << cnt) | (num >>> (32 - cnt));
 }
 
+/**
+ * Basic MD5 helper function.
+ */
 function md5cmn(q, a, b, x, s, t) {
 	return safeAdd(bitRotateLeft(safeAdd(safeAdd(a, q), safeAdd(x, t)), s), b);
 }
 
+/**
+ * MD5 FF round function.
+ */
 function md5ff(a, b, c, d, x, s, t) {
 	return md5cmn((b & c) | (~b & d), a, b, x, s, t);
 }
 
+/**
+ * MD5 GG round function.
+ */
 function md5gg(a, b, c, d, x, s, t) {
 	return md5cmn((b & d) | (c & ~d), a, b, x, s, t);
 }
 
+/**
+ * MD5 HH round function.
+ */
 function md5hh(a, b, c, d, x, s, t) {
 	return md5cmn(b ^ c ^ d, a, b, x, s, t);
 }
 
+/**
+ * MD5 II round function.
+ */
 function md5ii(a, b, c, d, x, s, t) {
 	return md5cmn(c ^ (b | ~d), a, b, x, s, t);
 }
 
+/**
+ * Core MD5 algorithm implementation.
+ */
 function binlMD5(x, len) {
 	x[len >>> 5] |= 0x80 << (len % 32);
 	x[(((len + 64) >>> 9) << 4) + 14] = len;
@@ -126,6 +157,9 @@ function binlMD5(x, len) {
 	return [a, b, c, d];
 }
 
+/**
+ * Convert an array of little-endian words to a raw string.
+ */
 function binl2rstr(input) {
 	var i;
 	var output = "";
@@ -136,6 +170,9 @@ function binl2rstr(input) {
 	return output;
 }
 
+/**
+ * Convert a raw string to an array of little-endian words.
+ */
 function rstr2binl(input) {
 	var i;
 	var output = [];
@@ -150,10 +187,16 @@ function rstr2binl(input) {
 	return output;
 }
 
+/**
+ * Calculate the MD5 hash of a raw string.
+ */
 function rstrMD5(s) {
 	return binl2rstr(binlMD5(rstr2binl(s), s.length * 8));
 }
 
+/**
+ * Calculate the HMAC-MD5 of a key and some data.
+ */
 function rstrHMACMD5(key, data) {
 	var i;
 	var bkey = rstr2binl(key);
@@ -172,6 +215,9 @@ function rstrHMACMD5(key, data) {
 	return binl2rstr(binlMD5(opad.concat(hash), 512 + 128));
 }
 
+/**
+ * Convert a raw string to a hex string.
+ */
 function rstr2hex(input) {
 	var hexTab = "0123456789abcdef";
 	var output = "";
@@ -184,26 +230,49 @@ function rstr2hex(input) {
 	return output;
 }
 
+/**
+ * Encode a string as UTF-8.
+ */
 function str2rstrUTF8(input) {
 	return unescape(encodeURIComponent(input));
 }
 
+/**
+ * Calculate the MD5 hash of a string (returned as raw).
+ */
 function rawMD5(s) {
 	return rstrMD5(str2rstrUTF8(s));
 }
 
+/**
+ * Calculate the MD5 hash of a string (returned as hex).
+ */
 function hexMD5(s) {
 	return rstr2hex(rawMD5(s));
 }
 
+/**
+ * Calculate the HMAC-MD5 of a key and data (returned as raw).
+ */
 function rawHMACMD5(k, d) {
 	return rstrHMACMD5(str2rstrUTF8(k), str2rstrUTF8(d));
 }
 
+/**
+ * Calculate the HMAC-MD5 of a key and data (returned as hex).
+ */
 function hexHMACMD5(k, d) {
 	return rstr2hex(rawHMACMD5(k, d));
 }
 
+/**
+ * Main MD5 interface.
+ *
+ * @param {string}  string - The string to hash.
+ * @param {string}  [key]  - Optional HMAC key.
+ * @param {boolean} [raw]  - Whether to return raw output.
+ * @return {string} The MD5 hash.
+ */
 function md5(string, key, raw) {
 	if (!key) {
 		if (!raw) {

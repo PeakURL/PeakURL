@@ -8,6 +8,9 @@ import type {
 	LinkExportSourceLink,
 } from "./types";
 
+/**
+ * Ordered list of headers for CSV exports.
+ */
 const LINK_EXPORT_HEADERS: Array<keyof LinkExportItem> = [
 	"url",
 	"alias",
@@ -20,17 +23,26 @@ const LINK_EXPORT_HEADERS: Array<keyof LinkExportItem> = [
 	"created_at",
 ];
 
+/**
+ * Escape values for safe inclusion in XML documents.
+ *
+ * @param value - The value to escape.
+ * @return The XML-safe string.
+ */
 function escapeXml(value: unknown): string {
 	return String(value ?? "")
-		.replace(/&/g, "&amp;")
-		.replace(/</g, "&lt;")
-		.replace(/>/g, "&gt;")
-		.replace(/"/g, "&quot;")
-		.replace(/'/g, "&apos;");
+		.replace(/&/g, "\u0026amp;")
+		.replace(/</g, "\u0026lt;")
+		.replace(/>/g, "\u0026gt;")
+		.replace(/"/g, "\u0026quot;")
+		.replace(/'/g, "\u0026apos;");
 }
 
 /**
- * Maps link records into the normalized export row shape shared by all formats.
+ * Map link records into the normalized export row shape shared by all formats.
+ *
+ * @param links - The source link records.
+ * @return The formatted export items.
  */
 export function formatLinkExportItems(
 	links: Array<LinkExportSourceLink> = []
@@ -42,7 +54,7 @@ export function formatLinkExportItems(
 			url: link.destinationUrl || "",
 			alias,
 			title: link.title || "",
-			// Password values are intentionally excluded for security reasons.
+			/* Password values are intentionally excluded for security reasons. */
 			password: "",
 			expires: link.expiresAt || "",
 			short_url: getShortUrl(link),
@@ -54,7 +66,11 @@ export function formatLinkExportItems(
 }
 
 /**
- * Serializes export rows into CSV, JSON, or XML content.
+ * Serialize export rows into CSV, JSON, or XML content.
+ *
+ * @param format - The target export format.
+ * @param items  - The items to serialize.
+ * @return The serialized string content.
  */
 export function serializeLinkExport(
 	format: LinkExportFormat = "csv",
@@ -92,7 +108,10 @@ export function serializeLinkExport(
 }
 
 /**
- * Returns the default filename and MIME type for a link export format.
+ * Return the default filename and MIME type for a link export format.
+ *
+ * @param format - The export format.
+ * @return The file configuration object.
  */
 export function createLinkExportFile(
 	format: LinkExportFormat = "csv"
@@ -117,7 +136,11 @@ export function createLinkExportFile(
 }
 
 /**
- * Downloads a browser export file and returns the normalized exported rows.
+ * Download a browser export file and return the normalized exported rows.
+ *
+ * @param links  - The source link records.
+ * @param format - The target export format.
+ * @return The normalized exported items.
  */
 export function downloadLinkExport(
 	links: Array<LinkExportSourceLink> = [],
@@ -126,6 +149,8 @@ export function downloadLinkExport(
 	const items = formatLinkExportItems(links);
 	const content = serializeLinkExport(format, items);
 	const file = createLinkExportFile(format);
+
+	/* Trigger a browser download for the serialized content. */
 	downloadBrowserFile(content, file.filename, file.type);
 
 	return items;

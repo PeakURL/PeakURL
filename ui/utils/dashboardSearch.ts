@@ -9,6 +9,9 @@ import type {
 	DashboardSearchUserMatch,
 } from "./types";
 
+/**
+ * Input for creating a route search target.
+ */
 interface CreateRouteTargetInput {
 	id: string;
 	href: string;
@@ -19,14 +22,29 @@ interface CreateRouteTargetInput {
 	isAllowed?: boolean;
 }
 
+/**
+ * A route search target with an associated search score.
+ */
 interface ScoredRouteTarget extends DashboardSearchRouteTarget {
 	score: number;
 }
 
+/**
+ * Normalize a search term for consistent comparison.
+ *
+ * @param value - The raw search term.
+ * @return The normalized search term.
+ */
 function normalizeTerm(value: unknown = ""): string {
 	return String(value).trim().toLowerCase().replace(/\s+/g, " ");
 }
 
+/**
+ * Create a route target object for the search index.
+ *
+ * @param input - The target configuration.
+ * @return The initialized route target.
+ */
 function createRouteTarget({
 	id,
 	href,
@@ -47,6 +65,12 @@ function createRouteTarget({
 	};
 }
 
+/**
+ * Generate the list of searchable dashboard route targets.
+ *
+ * @param capabilities - The current user's capabilities.
+ * @return The filtered list of allowed route targets.
+ */
 function getRouteTargets(
 	capabilities: DashboardSearchCapabilities = {}
 ): DashboardSearchRouteTarget[] {
@@ -311,6 +335,13 @@ function getRouteTargets(
 	].filter((target) => target.isAllowed);
 }
 
+/**
+ * Calculate a search relevance score for a route target.
+ *
+ * @param query  - The normalized search query.
+ * @param target - The route target to score.
+ * @return The calculated score (0-100).
+ */
 function getTargetScore(
 	query: string,
 	target: DashboardSearchRouteTarget
@@ -322,23 +353,28 @@ function getTargetScore(
 			return;
 		}
 
+		/* Exact match provides the highest score. */
 		if (query === term) {
 			bestScore = Math.max(bestScore, 100);
 			return;
 		}
 
+		/* Prefix matches are scored highly. */
 		if (term.startsWith(query)) {
 			bestScore = Math.max(bestScore, 80);
 		}
 
+		/* Partial inclusion matches are scored moderately. */
 		if (term.includes(query)) {
 			bestScore = Math.max(bestScore, 70);
 		}
 
+		/* Reverse inclusion matches are scored lower. */
 		if (query.includes(term)) {
 			bestScore = Math.max(bestScore, 60);
 		}
 
+		/* Multi-part matches (all query words present in term) are scored moderately. */
 		const queryParts = query.split(" ");
 		if (
 			queryParts.length > 1 &&
@@ -351,6 +387,13 @@ function getTargetScore(
 	return bestScore;
 }
 
+/**
+ * Calculate a search relevance score for a user match.
+ *
+ * @param query - The normalized search query.
+ * @param terms - The search terms associated with the user.
+ * @return The calculated score (0-100).
+ */
 function getUserScore(query: string, terms: string[]): number {
 	return terms.reduce((bestScore, term) => {
 		if (term === query) {
@@ -374,7 +417,10 @@ function getUserScore(query: string, terms: string[]): number {
 }
 
 /**
- * Returns the links page path, preserving the dashboard search query param.
+ * Return the links page path, preserving the dashboard search query param.
+ *
+ * @param query - The search query.
+ * @return The dashboard links path with search param.
  */
 export function getLinksSearchPath(query: string = ""): string {
 	const value = String(query).trim();
@@ -390,7 +436,10 @@ export function getLinksSearchPath(query: string = ""): string {
 }
 
 /**
- * Returns a links page path that opens the stats drawer for a short code.
+ * Return a links page path that opens the stats drawer for a short code.
+ *
+ * @param shortCode - The short code or alias.
+ * @return The dashboard links path with stats param.
  */
 export function getLinkStatsPath(shortCode: string = ""): string {
 	const value = String(shortCode).trim();
@@ -406,13 +455,17 @@ export function getLinkStatsPath(shortCode: string = ""): string {
 }
 
 /**
- * Reads the active dashboard search value from the current router location.
+ * Read the active dashboard search value from the current router location.
+ *
+ * @param location - The current router location-like object.
+ * @return The active search query, or an empty string.
  */
 export function getDashboardSearchValueFromLocation(
 	location?: DashboardSearchLocationLike | null
 ): string {
 	const pathname = location?.pathname?.replace(/\/+$/, "") || "/";
 
+	/* Search values are only read from the main links directory. */
 	if ("/dashboard/links" !== pathname) {
 		return "";
 	}
@@ -422,7 +475,12 @@ export function getDashboardSearchValueFromLocation(
 }
 
 /**
- * Finds the best matching dashboard routes for a search query.
+ * Find the best matching dashboard routes for a search query.
+ *
+ * @param query        - The search query.
+ * @param capabilities - The current user's capabilities.
+ * @param limit        - The maximum number of matches to return.
+ * @return The ranked list of route matches.
  */
 export function findDashboardRouteMatches(
 	query: string,
@@ -442,6 +500,7 @@ export function findDashboardRouteMatches(
 		}))
 		.filter((target) => target.score > 0)
 		.sort((a, b) => {
+			/* Sort by score descending, then by label ascending. */
 			if (b.score !== a.score) {
 				return b.score - a.score;
 			}
@@ -459,7 +518,12 @@ export function findDashboardRouteMatches(
 }
 
 /**
- * Finds matching dashboard users for the search palette.
+ * Find matching dashboard users for the search palette.
+ *
+ * @param query - The search query.
+ * @param users - The list of users to search against.
+ * @param limit - The maximum number of matches to return.
+ * @return The ranked list of user matches.
  */
 export function findDashboardUserMatches(
 	query: string,
@@ -478,6 +542,8 @@ export function findDashboardUserMatches(
 				.filter(Boolean)
 				.join(" ")
 				.trim();
+
+			/* Compile search terms from various user fields. */
 			const terms = [
 				user.username,
 				user.email,
@@ -488,6 +554,7 @@ export function findDashboardUserMatches(
 			]
 				.map(normalizeTerm)
 				.filter(Boolean);
+
 			const score = getUserScore(normalizedQuery, terms);
 
 			return {
@@ -512,7 +579,11 @@ export function findDashboardUserMatches(
 }
 
 /**
- * Resolves the best destination for a dashboard search submission.
+ * Resolve the best destination for a dashboard search submission.
+ *
+ * @param query        - The search query.
+ * @param capabilities - The current user's capabilities.
+ * @return The resolved destination path.
  */
 export function getDashboardSearchPath(
 	query: string,
@@ -524,6 +595,7 @@ export function getDashboardSearchPath(
 		return "/dashboard/links";
 	}
 
+	/* Look for the best-matching internal route target. */
 	const [bestTarget] = getRouteTargets(capabilities)
 		.map<ScoredRouteTarget>((target) => ({
 			...target,
@@ -532,9 +604,11 @@ export function getDashboardSearchPath(
 		.filter((target) => target.score > 0)
 		.sort((a, b) => b.score - a.score);
 
+	/* If a route target matches strongly, redirect to it directly. */
 	if (bestTarget && bestTarget.score >= 70) {
 		return bestTarget.href;
 	}
 
+	/* Fall back to a general links search. */
 	return getLinksSearchPath(query);
 }

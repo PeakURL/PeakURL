@@ -5,7 +5,10 @@ import {
 } from "./dateFormatting";
 
 /**
- * Joins class names while dropping falsy entries.
+ * Join class names while dropping falsy entries.
+ *
+ * @param classes - The class names to join.
+ * @return The joined class name string.
  */
 export function cn(
 	...classes: Array<string | false | null | undefined>
@@ -14,10 +17,13 @@ export function cn(
 }
 
 /**
- * Formats a timestamp for dashboard activity feeds.
+ * Format a timestamp for dashboard activity feeds.
  *
  * Recent values are shown relatively, while older values use a medium date.
  * Invalid or missing values resolve to an empty string.
+ *
+ * @param dateString - The raw date value to format.
+ * @return The formatted date string.
  */
 export function formatDate(
 	dateString: string | number | Date | null | undefined
@@ -35,6 +41,7 @@ export function formatDate(
 	const diffDays =
 		Math.abs(now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
 
+	/* Use relative formatting for dates within the last week. */
 	if (diffDays < 7) {
 		return formatRelativeTime(date, {
 			style: "long",
@@ -42,13 +49,17 @@ export function formatDate(
 		});
 	}
 
+	/* Fall back to localized medium date format for older entries. */
 	return formatLocalizedDateTime(date, {
 		dateStyle: "medium",
 	});
 }
 
 /**
- * Formats large metric counts into compact dashboard-friendly labels.
+ * Format large metric counts into compact dashboard-friendly labels.
+ *
+ * @param num - The number to format.
+ * @return The formatted compact string.
  */
 export function formatNumber(num: number): string {
 	return new Intl.NumberFormat(getActiveLocale(), {
@@ -58,15 +69,20 @@ export function formatNumber(num: number): string {
 }
 
 /**
- * Generates a random six-character alias suggestion.
+ * Generate a random six-character alias suggestion.
+ *
+ * @return A random alphanumeric alias.
  */
 export function generateRandomAlias(): string {
 	const chars =
 		"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 	let result = "";
+
+	/* Build a random string character by character. */
 	for (let i = 0; i < 6; i += 1) {
 		result += chars.charAt(Math.floor(Math.random() * chars.length));
 	}
+
 	return result;
 }
 
@@ -130,7 +146,10 @@ export { getTimeZoneOptions, normalizeSiteTimeFormat } from "./timezones";
 export type { SiteTimeFormat } from "./timezones";
 
 /**
- * Resolves the theme color classes associated with a link tag.
+ * Resolve the theme color classes associated with a link tag.
+ *
+ * @param tag - The tag slug to look up.
+ * @return The CSS class names for the tag.
  */
 export function getTagColor(tag: string): string {
 	const colors: Record<string, string> = {
@@ -147,6 +166,7 @@ export function getTagColor(tag: string): string {
 		personal:
 			"bg-pink-100 dark:bg-pink-900/20 text-pink-700 dark:text-pink-300",
 	};
+
 	return (
 		colors[tag] ||
 		"bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"

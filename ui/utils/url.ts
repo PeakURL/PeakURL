@@ -3,8 +3,8 @@ import { API_ORIGIN, PEAKURL_URL } from "@/constants";
 /**
  * Normalize URL input by trimming whitespace.
  *
- * @param {string|null|undefined} value The URL to normalize.
- * @return {string} The normalized URL.
+ * @param value - The URL to normalize.
+ * @return The normalized URL.
  */
 function normalizeUrlInput(value: string | null | undefined): string {
 	return typeof value === "string" ? value.trim() : "";
@@ -13,17 +13,17 @@ function normalizeUrlInput(value: string | null | undefined): string {
 declare const imageSourceBrand: unique symbol;
 
 /**
- * Image source brand type.
+ * Branded type for trusted image sources.
  */
 export type ImageSource = string & {
 	readonly [imageSourceBrand]: true;
 };
 
 /**
- * Cast a string to an ImageSource.
+ * Cast a string to an ImageSource type.
  *
- * @param {string} value The value to cast.
- * @return {ImageSource} The casted value.
+ * @param value - The value to cast.
+ * @return The branded ImageSource.
  */
 function toImageSource(value: string): ImageSource {
 	return value as ImageSource;
@@ -32,8 +32,8 @@ function toImageSource(value: string): ImageSource {
 /**
  * Add a trusted origin to a set of origins.
  *
- * @param {Set<string>} origins The set of origins.
- * @param {string|null|undefined} value The origin to add.
+ * @param origins - The set of trusted origins.
+ * @param value   - The origin to add.
  */
 function addTrustedOrigin(
 	origins: Set<string>,
@@ -48,15 +48,15 @@ function addTrustedOrigin(
 	try {
 		origins.add(new URL(normalizedValue).origin);
 	} catch {
-		// Fail closed for invalid runtime values.
+		/* Fail closed for invalid runtime values. */
 	}
 }
 
 /**
  * Retrieve the set of trusted image origins.
  *
- * @param {string|undefined} currentOrigin The current runtime origin.
- * @return {Set<string>} The set of trusted origins.
+ * @param currentOrigin - The current runtime origin.
+ * @return The set of trusted origins.
  */
 function getTrustedImageOrigins(currentOrigin?: string): Set<string> {
 	const origins = new Set<string>();
@@ -71,7 +71,7 @@ function getTrustedImageOrigins(currentOrigin?: string): Set<string> {
 /**
  * Resolve the current browser origin.
  *
- * @return {string|undefined} The current origin, if available.
+ * @return The current origin if available, otherwise undefined.
  */
 function getCurrentOrigin(): string | undefined {
 	if (typeof window !== "undefined" && window.location?.origin) {
@@ -82,11 +82,11 @@ function getCurrentOrigin(): string | undefined {
 }
 
 /**
- * Check if an origin is a trusted image origin.
+ * Check if an origin is in the trusted origins set.
  *
- * @param {ReadonlySet<string>} trustedOrigins The allowed image origins.
- * @param {string}              origin         The origin to check.
- * @return {boolean} Whether the origin is trusted.
+ * @param trustedOrigins - The set of allowed origins.
+ * @param origin         - The origin to verify.
+ * @return Whether the origin is trusted.
  */
 function isTrustedImageOrigin(
 	trustedOrigins: ReadonlySet<string>,
@@ -96,10 +96,10 @@ function isTrustedImageOrigin(
 }
 
 /**
- * Sanitize a dashboard URL for internal navigation or external linking.
+ * Sanitize a URL for internal navigation or external linking.
  *
- * @param {string|null|undefined} value The URL to sanitize.
- * @return {string} The sanitized URL.
+ * @param value - The URL to sanitize.
+ * @return The sanitized URL.
  */
 export function sanitizeUrl(value: string | null | undefined): string {
 	const normalizedValue = normalizeUrlInput(value);
@@ -108,10 +108,12 @@ export function sanitizeUrl(value: string | null | undefined): string {
 		return "";
 	}
 
+	/* Relative URLs are considered safe for internal navigation. */
 	if (isRelativeUrl(normalizedValue)) {
 		return normalizedValue;
 	}
 
+	/* Protocol-relative URLs are blocked to prevent redirection ambiguity. */
 	if (normalizedValue.startsWith("//")) {
 		return "";
 	}
@@ -119,6 +121,7 @@ export function sanitizeUrl(value: string | null | undefined): string {
 	try {
 		const url = new URL(normalizedValue);
 
+		/* Only allow standard web protocols. */
 		if (url.protocol !== "http:" && url.protocol !== "https:") {
 			return "";
 		}
@@ -130,11 +133,11 @@ export function sanitizeUrl(value: string | null | undefined): string {
 }
 
 /**
- * Sanitize an image preview URL before rendering it as an image source.
+ * Sanitize an image URL before rendering.
  *
- * @param {string|null|undefined} value         The URL to sanitize.
- * @param {string|undefined}      currentOrigin The current runtime origin.
- * @return {ImageSource|string} The sanitized image source.
+ * @param value         - The URL to sanitize.
+ * @param currentOrigin - The current runtime origin.
+ * @return The sanitized ImageSource or an empty string.
  */
 export function sanitizeImageUrl(
 	value: string | null | undefined,
@@ -146,6 +149,7 @@ export function sanitizeImageUrl(
 		return "";
 	}
 
+	/* Trusted relative paths are allowed. */
 	if (isRelativeUrl(normalizedValue)) {
 		return toImageSource(normalizedValue);
 	}
@@ -158,6 +162,7 @@ export function sanitizeImageUrl(
 		const url = new URL(normalizedValue);
 		const trustedOrigins = getTrustedImageOrigins(currentOrigin);
 
+		/* Validate against trusted origins for http/https. */
 		if (
 			(url.protocol === "http:" || url.protocol === "https:") &&
 			isTrustedImageOrigin(trustedOrigins, url.origin)
@@ -165,6 +170,7 @@ export function sanitizeImageUrl(
 			return toImageSource(url.toString());
 		}
 
+		/* Validate against trusted origins for blob URLs (object URLs). */
 		if (
 			url.protocol === "blob:" &&
 			isTrustedImageOrigin(trustedOrigins, url.origin)
@@ -179,10 +185,10 @@ export function sanitizeImageUrl(
 }
 
 /**
- * Returns whether a URL points to a root-relative dashboard path.
+ * Check whether a URL points to a root-relative path.
  *
- * @param {string} value The URL to check.
- * @return {boolean} Whether the URL is relative.
+ * @param value - The URL string to check.
+ * @return Whether the URL is relative.
  */
 export function isRelativeUrl(value: string): boolean {
 	return value.startsWith("/") && !value.startsWith("//");

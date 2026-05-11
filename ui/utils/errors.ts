@@ -8,21 +8,30 @@ import {
 import type { ApiErrorData, NumericStatusQueryError } from "./types";
 
 /**
- * Detects RTK Query errors before narrowing into a specific variant.
+ * Detect RTK Query errors before narrowing into a specific variant.
+ *
+ * @param value - The value to check.
+ * @return Whether the value is a FetchBaseQueryError.
  */
 function isFetchBaseQueryError(value: unknown): value is FetchBaseQueryError {
 	return isObjectRecord(value) && "status" in value;
 }
 
 /**
- * Detects RTK Query errors that carry a numeric HTTP status code.
+ * Detect RTK Query errors that carry a numeric HTTP status code.
+ *
+ * @param value - The value to check.
+ * @return Whether the value has a numeric status.
  */
 function hasNumericStatus(value: unknown): value is NumericStatusQueryError {
 	return isFetchBaseQueryError(value) && "number" === typeof value.status;
 }
 
 /**
- * Detects RTK Query errors that include a structured `data.message` payload.
+ * Detect RTK Query errors that include a structured `data.message` payload.
+ *
+ * @param value - The value to check.
+ * @return Whether the value has structured API error data.
  */
 function hasApiErrorData(value: unknown): value is { data: ApiErrorData } {
 	if (!isFetchBaseQueryError(value)) {
@@ -43,7 +52,10 @@ function hasApiErrorData(value: unknown): value is { data: ApiErrorData } {
 }
 
 /**
- * Detects error-like objects that expose a top-level `error` string.
+ * Detect error-like objects that expose a top-level `error` string.
+ *
+ * @param value - The value to check.
+ * @return Whether the value has an error string.
  */
 function hasErrorString(value: unknown): value is { error: string } {
 	return Boolean(
@@ -52,21 +64,25 @@ function hasErrorString(value: unknown): value is { error: string } {
 }
 
 /**
- * Extracts the best available message from RTK Query, serialized, or native errors.
+ * Extract the best available message from RTK Query, serialized, or native errors.
  *
- * Returns `null` when the value does not contain a readable message.
+ * @param error - The error object to parse.
+ * @return The extracted message or null if none found.
  */
 export function extractErrorMessage(
 	error: FetchBaseQueryError | SerializedError | Error | unknown
 ): string | null {
+	/* Check for structured API error messages (data.message). */
 	if (hasApiErrorData(error)) {
 		return error.data.message || null;
 	}
 
+	/* Check for simple error string properties (error). */
 	if (hasErrorString(error)) {
 		return error.error || null;
 	}
 
+	/* Fall back to native Error object messages. */
 	if (error instanceof Error && error.message) {
 		return error.message;
 	}
@@ -75,7 +91,10 @@ export function extractErrorMessage(
 }
 
 /**
- * Extracts a numeric HTTP status from RTK Query errors when available.
+ * Extract a numeric HTTP status from RTK Query errors when available.
+ *
+ * @param error - The error object to parse.
+ * @return The numeric status or null if not available.
  */
 export function getErrorStatus(
 	error: FetchBaseQueryError | SerializedError | Error | unknown
@@ -88,7 +107,11 @@ export function getErrorStatus(
 }
 
 /**
- * Resolves a readable error message while guaranteeing a stable fallback.
+ * Resolve a readable error message while guaranteeing a stable fallback.
+ *
+ * @param error    - The error object.
+ * @param fallback - The fallback message to use if extraction fails.
+ * @return The final error message.
  */
 export function getErrorMessage(error: unknown, fallback: string): string {
 	return extractErrorMessage(error) || fallback;

@@ -31,15 +31,9 @@ function SecurityTab({
 				isRtl={isRtl}
 			/>
 
-			<TwoFactorSettings
-				direction={direction}
-				{...twoFactor.section}
-			/>
+			<TwoFactorSettings direction={direction} {...twoFactor.section} />
 
-			<ActiveSessions
-				direction={direction}
-				{...activeSessions.section}
-			/>
+			<ActiveSessions direction={direction} {...activeSessions.section} />
 
 			{/* Shared confirmation for password-protected 2FA actions. */}
 			<ConfirmDialog
@@ -49,16 +43,12 @@ function SecurityTab({
 					twoFactor.dialog.config?.title ||
 					__("Confirm your password")
 				}
-				description={
-					twoFactor.dialog.config?.description || ""
-				}
+				description={twoFactor.dialog.config?.description || ""}
 				confirmText={
-					twoFactor.dialog.config?.confirmText ||
-					__("Continue")
+					twoFactor.dialog.config?.confirmText || __("Continue")
 				}
 				confirmVariant={
-					twoFactor.dialog.config?.confirmVariant ||
-					"primary"
+					twoFactor.dialog.config?.confirmVariant || "primary"
 				}
 				cancelText={__("Cancel")}
 				onConfirm={twoFactor.dialog.onConfirm}

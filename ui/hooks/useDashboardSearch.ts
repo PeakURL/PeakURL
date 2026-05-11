@@ -115,9 +115,7 @@ export const useDashboardSearch = () => {
 			return;
 		}
 
-		handleSelect(
-			getDashboardSearchPath(trimmedQuery, searchCapabilities)
-		);
+		handleSelect(getDashboardSearchPath(trimmedQuery, searchCapabilities));
 	};
 
 	const handleSelect = (href: string) => {

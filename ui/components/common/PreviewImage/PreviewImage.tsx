@@ -1,8 +1,10 @@
 import type { CSSProperties, HTMLAttributes } from "react";
 import type { ImageSource } from "@/utils";
 
-interface PreviewImageProps
-	extends Omit<HTMLAttributes<HTMLSpanElement>, "children"> {
+interface PreviewImageProps extends Omit<
+	HTMLAttributes<HTMLSpanElement>,
+	"children"
+> {
 	source: ImageSource;
 	alt?: string;
 }

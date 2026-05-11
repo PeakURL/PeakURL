@@ -1,4 +1,9 @@
-import { Input, ReadOnlyValueBlock, Select, type SelectOption } from "@/components";
+import {
+	Input,
+	ReadOnlyValueBlock,
+	Select,
+	type SelectOption,
+} from "@/components";
 import { __ } from "@/i18n";
 import { getLocalDateTimeValue } from "@/utils";
 import type { LinkStatus } from "../../types";

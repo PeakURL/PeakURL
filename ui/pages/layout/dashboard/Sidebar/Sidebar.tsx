@@ -160,10 +160,8 @@ const getAboutLinkClassName = (isActive: boolean): string =>
 		isActive && "dashboard-sidebar-about-link-active"
 	);
 
-const getSidebarTargetHref = (
-	href: string | undefined,
-	base: string
-): string => href || base || "/dashboard";
+const getSidebarTargetHref = (href: string | undefined, base: string): string =>
+	href || base || "/dashboard";
 
 const getSidebarSectionStateKey = (item: NavItem, index: number): string =>
 	item.href || item.children?.[0]?.href || `section-${index}`;
@@ -257,8 +255,10 @@ export const Sidebar = ({
 								item.href,
 								base
 							);
-							const sectionStateKey =
-								getSidebarSectionStateKey(item, index);
+							const sectionStateKey = getSidebarSectionStateKey(
+								item,
+								index
+							);
 							const isChildActive = item.children?.some(
 								(child) =>
 									pathname === child.href ||

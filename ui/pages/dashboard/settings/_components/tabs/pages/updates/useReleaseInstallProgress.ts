@@ -8,10 +8,7 @@ import {
 	getReleaseInstallStageOrder,
 	RELEASE_INSTALL_REDIRECT_DELAY_MS,
 } from "./releaseProgress";
-import type {
-	ReleaseInstallProgressState,
-	ReleaseInstallStage,
-} from "./types";
+import type { ReleaseInstallProgressState, ReleaseInstallStage } from "./types";
 
 /**
  * State and controls for the release install confirmation and progress dialog.
@@ -127,8 +124,7 @@ function useReleaseInstallProgress(): UseReleaseInstallProgress {
 		);
 		const completionTransitionCount = remainingStageSequence.length + 1;
 		const completionSegmentDuration =
-			RELEASE_INSTALL_REDIRECT_DELAY_MS /
-			(completionTransitionCount + 1);
+			RELEASE_INSTALL_REDIRECT_DELAY_MS / (completionTransitionCount + 1);
 		const finishingStageOffset =
 			remainingStageSequence.indexOf("finishing");
 		const finishingStageDelay =

@@ -11,11 +11,5 @@ export type {
 	LinksSortOrder,
 	UpdateUrlPayload,
 } from "./types";
-export type {
-	LinkLocationPayload,
-	LinkStatsResponse,
-} from "./StatsDrawer";
-export type {
-	CreateUrlPayload,
-	CreateUrlResponse,
-} from "./UrlShorteningForm";
+export type { LinkLocationPayload, LinkStatsResponse } from "./StatsDrawer";
+export type { CreateUrlPayload, CreateUrlResponse } from "./UrlShorteningForm";

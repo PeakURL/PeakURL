@@ -100,7 +100,11 @@ function TwoFactorSetup({
 						>
 							{__("Verify & Enable")}
 						</Button>
-						<Button variant="ghost" size="sm" onClick={onCancelSetup}>
+						<Button
+							variant="ghost"
+							size="sm"
+							onClick={onCancelSetup}
+						>
 							{__("Cancel")}
 						</Button>
 					</div>

@@ -26,9 +26,7 @@ function ProtectionTab({
 				onChange={(event) => setPassword(event.target.value)}
 				placeholder={
 					hasExistingPassword
-						? __(
-								"Enter a new password to replace the current one"
-							)
+						? __("Enter a new password to replace the current one")
 						: __("Set a password to protect this link")
 				}
 				className="form-control-surface-alt form-control-compact form-control-strong-focus"

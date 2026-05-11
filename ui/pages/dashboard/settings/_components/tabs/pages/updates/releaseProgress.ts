@@ -1,9 +1,6 @@
 import { __, sprintf } from "@/i18n";
 import type { ReleaseAction } from "../../types";
-import type {
-	ReleaseInstallProgressState,
-	ReleaseInstallStage,
-} from "./types";
+import type { ReleaseInstallProgressState, ReleaseInstallStage } from "./types";
 
 export const RELEASE_INSTALL_REDIRECT_DELAY_MS = 2400;
 

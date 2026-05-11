@@ -5,10 +5,7 @@ export { default as GeneralTab } from "./general/GeneralTab";
 export { default as IntegrationsTab } from "./integrations";
 export { default as LocationDataTab } from "./location/LocationDataTab";
 export { default as SecurityTab } from "./security";
-export {
-	ReleaseInstallProgress,
-	useReleaseInstallProgress,
-} from "./updates";
+export { ReleaseInstallProgress, useReleaseInstallProgress } from "./updates";
 export { default as UpdatesTab } from "./updates";
 export type {
 	CreatedWebhook,

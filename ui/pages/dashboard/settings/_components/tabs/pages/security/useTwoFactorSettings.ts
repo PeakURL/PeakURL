@@ -284,8 +284,7 @@ export function useTwoFactorSettings({
 		},
 		section: {
 			actionLabel,
-			backupCodesLastGeneratedAt:
-				security.backupCodesLastGeneratedAt,
+			backupCodesLastGeneratedAt: security.backupCodesLastGeneratedAt,
 			hasSetupDetails,
 			isDisabling,
 			isDownloading,

@@ -67,9 +67,7 @@ function TwoFactorSettings({
 							<Button
 								variant="ghost"
 								size="sm"
-								onClick={() =>
-									onOpenProtectedAction("disable")
-								}
+								onClick={() => onOpenProtectedAction("disable")}
 								loading={isDisabling}
 							>
 								<ShieldOff size={14} />

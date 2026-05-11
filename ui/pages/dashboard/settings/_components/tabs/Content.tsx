@@ -232,8 +232,7 @@ const Content = ({ activeTab }: ContentProps) => {
 			nextSiteTimeFormat !== currentSiteTimeFormat;
 		const saveSocialPreview =
 			(generalSettingsResponse?.data?.canManageSiteSettings ?? false) &&
-			(Boolean(socialPreviewFile) ||
-				Boolean(removeSocialPreviewImage));
+			(Boolean(socialPreviewFile) || Boolean(removeSocialPreviewImage));
 		const saveGeneral =
 			saveSiteName ||
 			saveSiteTagline ||

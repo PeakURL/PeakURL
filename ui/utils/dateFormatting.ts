@@ -278,9 +278,7 @@ function roundedCalendarUnit(
 	const elapsedMs = endDate.getTime() - anchorDate.getTime();
 	const unitMs = nextDate.getTime() - anchorDate.getTime();
 	const roundedCount =
-		unitMs > 0 && elapsedMs >= unitMs / 2
-			? wholeCount + 1
-			: wholeCount;
+		unitMs > 0 && elapsedMs >= unitMs / 2 ? wholeCount + 1 : wholeCount;
 
 	return sign * roundedCount;
 }
@@ -388,10 +386,7 @@ export function formatRelativeTime(
 		return "";
 	}
 
-	const { unit, value: relativeValue } = getRelativeUnit(
-		targetDate,
-		nowDate
-	);
+	const { unit, value: relativeValue } = getRelativeUnit(targetDate, nowDate);
 
 	if (
 		typeof Intl !== "undefined" &&

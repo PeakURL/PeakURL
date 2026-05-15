@@ -4,11 +4,11 @@
 	}
 
 	.links-traffic-history-header {
-		@apply mb-4 flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between;
+		@apply mb-4 flex flex-col gap-3 sm:gap-4 xl:flex-row xl:items-start xl:justify-between;
 	}
 
 	.links-traffic-history-heading {
-		@apply min-w-0 space-y-2;
+		@apply min-w-0 space-y-1.5 sm:space-y-2;
 	}
 
 	.links-traffic-history-title {
@@ -40,16 +40,16 @@
 	}
 
 	.links-traffic-history-toolbar {
-		@apply flex flex-col gap-2 sm:flex-row sm:flex-nowrap sm:items-center xl:justify-end;
+		@apply flex flex-wrap items-center gap-2 xl:justify-end;
 	}
 
 	.links-traffic-history-tools,
 	.links-traffic-history-series {
-		@apply flex shrink-0 gap-1 rounded-lg bg-surface p-1;
+		@apply flex grow gap-1 rounded-lg bg-surface p-1 sm:grow-0;
 	}
 
 	.links-traffic-history-tool-button {
-		@apply inline-flex h-8 items-center justify-center gap-1.5 rounded px-2.5 text-xs font-medium transition-all;
+		@apply inline-flex flex-1 h-8 items-center justify-center gap-1.5 rounded px-2.5 text-xs font-medium transition-all sm:flex-none;
 	}
 
 	.links-traffic-history-tool-button-current {
@@ -65,11 +65,11 @@
 	}
 
 	.links-traffic-history-ranges {
-		@apply flex shrink-0 gap-1 rounded-lg bg-surface p-1;
+		@apply flex grow gap-1 rounded-lg bg-surface p-1 sm:grow-0;
 	}
 
 	.links-traffic-history-range {
-		@apply inline-flex items-center gap-1.5 rounded px-3 py-1 text-xs font-medium transition-all;
+		@apply inline-flex flex-1 items-center justify-center gap-1.5 rounded px-3 py-1 text-xs font-medium transition-all sm:flex-none;
 	}
 
 	.links-traffic-history-range-current {

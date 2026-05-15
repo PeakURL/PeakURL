@@ -181,7 +181,7 @@ function TrafficHistory({
 							title={__("Line Chart")}
 						>
 							<LineChart className="links-traffic-history-tool-icon" />
-							<span className="sr-only">{__("Line Chart")}</span>
+							<span>{__("Line")}</span>
 						</button>
 						<button
 							type="button"
@@ -192,7 +192,7 @@ function TrafficHistory({
 							title={__("Bar Chart")}
 						>
 							<BarChart3 className="links-traffic-history-tool-icon" />
-							<span className="sr-only">{__("Bar Chart")}</span>
+							<span>{__("Bar")}</span>
 						</button>
 					</div>
 

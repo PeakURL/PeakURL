@@ -143,6 +143,40 @@ trait AuthorizationTrait {
 	}
 
 	/**
+	 * Add click-analytics ownership scope when URLs are already joined.
+	 *
+	 * @param array<string, mixed>      $user       Current user.
+	 * @param array<int, string>        $conditions SQL conditions array.
+	 * @param array<string, string|int> $params     Bound parameter array.
+	 * @param string                    $url_alias  URLs table alias.
+	 * @return void
+	 *
+	 * @throws ApiException When the user cannot view analytics.
+	 * @since 1.2.1
+	 */
+	private function scope_click_analytics_visibility(
+		array $user,
+		array &$conditions,
+		array &$params,
+		string $url_alias = 'u'
+	): void {
+		if ( $this->roles->has_capability( $user, 'view_site_analytics' ) ) {
+			return;
+		}
+
+		if ( $this->roles->has_capability( $user, 'view_own_analytics' ) ) {
+			$conditions[]            = $url_alias . '.user_id = :scope_user_id';
+			$params['scope_user_id'] = (string) $user['id'];
+			return;
+		}
+
+		throw new ApiException(
+			__( 'You do not have permission to view analytics.', 'peakurl' ),
+			403,
+		);
+	}
+
+	/**
 	 * Validate a user capability.
 	 *
 	 * @param array<string, mixed> $user          Current user.

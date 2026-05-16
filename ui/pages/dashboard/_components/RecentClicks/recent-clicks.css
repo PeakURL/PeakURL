@@ -1,0 +1,65 @@
+@layer components {
+	.dashboard-recent-clicks {
+		@apply flex flex-col rounded-lg border border-stroke bg-surface p-5;
+	}
+
+	.dashboard-recent-clicks-title {
+		@apply mb-4 text-base font-semibold text-heading;
+	}
+
+	.dashboard-recent-clicks-list {
+		@apply max-h-80 flex-1 space-y-2 overflow-y-auto;
+	}
+
+	.dashboard-recent-clicks-list-empty {
+		@apply max-h-none;
+	}
+
+	.dashboard-recent-clicks-empty {
+		@apply py-8 text-center;
+	}
+
+	.dashboard-recent-clicks-empty-text {
+		@apply text-sm text-text-muted;
+	}
+
+	.dashboard-recent-clicks-item {
+		@apply grid w-full min-w-0 grid-cols-[auto_minmax(0,1fr)] gap-2.5 rounded-lg border border-transparent px-2 py-2 text-start transition hover:border-stroke hover:bg-surface-alt disabled:cursor-not-allowed disabled:opacity-60 sm:grid-cols-[auto_minmax(0,1fr)_auto];
+	}
+
+	.dashboard-recent-clicks-icon {
+		@apply mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary-500/10 text-primary-600 dark:bg-primary-500/20 dark:text-primary-400;
+	}
+
+	.dashboard-recent-clicks-icon-glyph {
+		@apply h-3 w-3;
+	}
+
+	.dashboard-recent-clicks-copy {
+		@apply min-w-0;
+	}
+
+	.dashboard-recent-clicks-name {
+		@apply block truncate text-sm font-medium text-heading;
+	}
+
+	.dashboard-recent-clicks-meta {
+		@apply mt-0.5 block truncate text-xs text-text-muted;
+	}
+
+	.dashboard-recent-clicks-stats {
+		@apply col-start-2 flex min-w-0 items-center gap-2 text-xs text-text-muted sm:col-start-auto sm:flex-col sm:items-end sm:gap-1;
+	}
+
+	.dashboard-recent-clicks-count {
+		@apply block whitespace-nowrap tabular-nums;
+	}
+
+	.dashboard-recent-clicks-action {
+		@apply inline-flex h-6 shrink-0 items-center rounded-full bg-primary-500/10 px-2 text-xs font-medium text-primary-600 transition dark:bg-primary-500/20 dark:text-primary-400;
+	}
+
+	.dashboard-recent-clicks-item:hover .dashboard-recent-clicks-action {
+		@apply bg-primary-600 text-white dark:bg-primary-500 dark:text-white;
+	}
+}

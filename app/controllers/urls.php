@@ -111,6 +111,9 @@ class UrlsController extends BaseController {
 				'sortBy'    => $request->get_query_param( 'sortBy', 'createdAt' ),
 				'sortOrder' => $request->get_query_param( 'sortOrder', 'desc' ),
 				'search'    => $request->get_query_param( 'search', '' ),
+				'range'     => $request->get_query_param( 'range', '' ),
+				'from'      => $request->get_query_param( 'from', '' ),
+				'to'        => $request->get_query_param( 'to', '' ),
 			)
 		);
 

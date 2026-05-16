@@ -1,0 +1,21 @@
+@layer components {
+	.metric-donut-chart {
+		@apply relative h-48 min-h-48 w-full;
+	}
+
+	.metric-donut-chart-canvas {
+		@apply h-full w-full;
+	}
+
+	.metric-donut-chart-center {
+		@apply pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center;
+	}
+
+	.metric-donut-chart-value {
+		@apply text-2xl font-bold text-heading;
+	}
+
+	.metric-donut-chart-label {
+		@apply mt-1 text-xs font-medium uppercase tracking-wide text-text-muted;
+	}
+}

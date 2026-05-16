@@ -22,6 +22,7 @@ import type {
 	DashboardDeviceData,
 	DashboardStats,
 	RecentActivity,
+	RecentClick,
 	TrafficSeries,
 } from "@/pages/dashboard/_components";
 import type {
@@ -135,6 +136,14 @@ export interface ActivityResponse {
 }
 
 /**
+ * Response wrapper returned by the recent clicks endpoint.
+ */
+export interface RecentClicksResponse {
+	/** Recent click rows ordered from newest to oldest. */
+	data?: RecentClick[];
+}
+
+/**
  * Pagination metadata returned by the activity history endpoint.
  */
 export interface ActivityHistoryMeta {
@@ -223,7 +232,7 @@ export type LinkAnalyticsArgs = {
 /**
  * Query arguments accepted by the links list endpoint.
  */
-export interface GetUrlsQueryArgs {
+interface GetUrlsQueryBaseArgs {
 	/** Page number to request. */
 	page?: number;
 
@@ -239,6 +248,33 @@ export interface GetUrlsQueryArgs {
 	/** Optional search term forwarded to the API. */
 	search?: string;
 }
+
+/**
+ * Query arguments accepted by the links list endpoint.
+ */
+export type GetUrlsQueryArgs = GetUrlsQueryBaseArgs &
+	(
+		| {
+				/** Preset range used to calculate click totals. */
+				range?: LinkStatsRange;
+
+				/** Custom range start is intentionally omitted for presets. */
+				from?: never;
+
+				/** Custom range end is intentionally omitted for presets. */
+				to?: never;
+		  }
+		| {
+				/** Custom range used to calculate click totals. */
+				range: "custom";
+
+				/** Inclusive custom range start date in YYYY-MM-DD format. */
+				from: string;
+
+				/** Inclusive custom range end date in YYYY-MM-DD format. */
+				to: string;
+		  }
+	);
 
 /**
  * Query arguments accepted by the links export lookup endpoint.

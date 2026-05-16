@@ -104,4 +104,20 @@
 	.links-location-city-meta {
 		text-align: end;
 	}
+
+	.links-location-city-summary {
+		@apply mt-3 flex justify-end;
+	}
+
+	.links-location-city-toggle {
+		@apply inline-flex items-center gap-1 text-xs font-medium text-accent hover:underline;
+	}
+
+	.links-location-city-details {
+		@apply mb-0;
+	}
+
+	.links-location-city-details-list {
+		@apply mt-3;
+	}
 }

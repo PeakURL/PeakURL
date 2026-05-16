@@ -1,6 +1,18 @@
 export type LinkStatus = "active" | "inactive" | "expired";
 export type LinksSortBy = "createdAt" | "clicks" | "alias";
 export type LinksSortOrder = "asc" | "desc";
+export type LinksDateRange = "all" | "24h" | "7d" | "30d" | "custom";
+
+/**
+ * Date-only custom range used by links analytics controls.
+ */
+export interface LinksCustomDateRange {
+	/** Inclusive start date in YYYY-MM-DD format. */
+	from: string;
+
+	/** Inclusive end date in YYYY-MM-DD format. */
+	to: string;
+}
 
 /**
  * Base link record consumed by the links dashboard surfaces.
@@ -117,6 +129,10 @@ export interface AdvancedOptionsProps
 export interface LinksHeaderProps {
 	onRefresh: () => Promise<void> | void;
 	isRefreshing?: boolean;
+	clickRange: LinksDateRange;
+	customClickRange: LinksCustomDateRange;
+	onClickRangeChange: (range: LinksDateRange) => void;
+	onCustomClickRangeChange: (range: LinksCustomDateRange) => void;
 }
 
 /**

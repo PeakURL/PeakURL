@@ -1,11 +1,15 @@
 import { useState } from "react";
-import { Globe, MapPin } from "lucide-react";
+import { ChevronDown, ChevronUp, Globe, MapPin } from "lucide-react";
 import { WorldMap } from "@/components";
-import { __ } from "@/i18n";
+import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { useGetLinkLocationQuery } from "@/store/slices/api";
 import { formatCount, getCountryFlagEmoji, getErrorMessage } from "@/utils";
-import type { HoveredCountry, TrafficLocationTabProps } from "./types";
+import type {
+	CityLocation,
+	HoveredCountry,
+	TrafficLocationTabProps,
+} from "./types";
 import { LocalIcon, UnknownLocationIcon } from "./Icons";
 import { formatClickCount } from "./analytics";
 
@@ -13,6 +17,36 @@ interface LocationNoteItemProps {
 	text: string;
 	example?: string;
 	direction: "rtl" | "ltr";
+}
+
+interface CityListItemProps {
+	city: CityLocation;
+	percent: string | number;
+	rank: number;
+}
+
+const CITY_LIST_PREVIEW_LIMIT = 10;
+
+function CityListItem({ city, percent, rank }: CityListItemProps) {
+	return (
+		<div className="links-location-city-item">
+			<div className="links-location-city-main">
+				<div className="links-location-city-rank">#{rank}</div>
+				<div>
+					<p className="text-sm font-medium text-heading">
+						{city.name}
+					</p>
+					<p className="text-xs text-text-muted">{city.country}</p>
+				</div>
+			</div>
+			<div className="links-location-city-meta">
+				<p className="text-sm font-semibold text-heading">
+					{formatCount(city.count)}
+				</p>
+				<p className="text-xs text-text-muted">{percent}%</p>
+			</div>
+		</div>
+	);
 }
 
 function LocationNoteItem({ text, example, direction }: LocationNoteItemProps) {
@@ -43,6 +77,10 @@ function TrafficLocationTab({
 	const [hoveredCountry, setHoveredCountry] = useState<HoveredCountry | null>(
 		null
 	);
+	const [expandedCityListLinkId, setExpandedCityListLinkId] = useState<
+		string | null
+	>(null);
+	const showAllCities = expandedCityListLinkId === link?.id;
 	// RTK Query hook
 	const canFetchLocation = open && selectedTab === 1 && !!link?.id;
 	const { data, isLoading, isError, error } = useGetLinkLocationQuery(
@@ -74,6 +112,8 @@ function TrafficLocationTab({
 	const payload = data?.data || {};
 	const countries = (payload.countries || []).slice(0, 5);
 	const cities = payload.cities || [];
+	const hasMoreCities = cities.length > CITY_LIST_PREVIEW_LIMIT;
+	const topCities = cities.slice(0, CITY_LIST_PREVIEW_LIMIT);
 	const total = payload.totalClicks || 0;
 	const hasData = total > 0;
 
@@ -341,38 +381,76 @@ function TrafficLocationTab({
 					</h3>
 				</div>
 				<div className="links-location-city-list">
-					{cities.map((city, index) => {
+					{topCities.map((city, index) => {
 						const percent = getPercentage(city.count);
 						return (
-							<div
-								key={`${city.name}-${city.country}`}
-								className="links-location-city-item"
-							>
-								<div className="links-location-city-main">
-									<div className="links-location-city-rank">
-										#{index + 1}
-									</div>
-									<div>
-										<p className="text-sm font-medium text-heading">
-											{city.name}
-										</p>
-										<p className="text-xs text-text-muted">
-											{city.country}
-										</p>
-									</div>
-								</div>
-								<div className="links-location-city-meta">
-									<p className="text-sm font-semibold text-heading">
-										{formatCount(city.count)}
-									</p>
-									<p className="text-xs text-text-muted">
-										{percent}%
-									</p>
-								</div>
-							</div>
+							<CityListItem
+								key={`${city.name}-${city.country}-${index}`}
+								city={city}
+								percent={percent}
+								rank={index + 1}
+							/>
 						);
 					})}
 				</div>
+				{hasMoreCities ? (
+					<p className="links-location-city-summary">
+						<button
+							type="button"
+							className="links-location-city-toggle"
+							onClick={() =>
+								setExpandedCityListLinkId((currentLinkId) =>
+									currentLinkId === link.id ? null : link.id
+								)
+							}
+						>
+							{showAllCities
+								? __("Hide details")
+								: sprintf(
+										__("View all %s cities"),
+										formatCount(cities.length)
+									)}
+							{showAllCities ? (
+								<ChevronUp className="w-3 h-3" />
+							) : (
+								<ChevronDown className="w-3 h-3" />
+							)}
+						</button>
+					</p>
+				) : null}
+
+				{showAllCities ? (
+					<div className="links-detail-list links-location-city-details">
+						<div className="links-detail-row">
+							<div className="links-detail-heading">
+								<span
+									className="links-detail-marker links-detail-marker-primary"
+									aria-hidden="true"
+								></span>
+								<h4 className="links-detail-title">
+									{__("All cities")}
+								</h4>
+							</div>
+							<span className="links-detail-total">
+								{formatCount(cities.length)}
+							</span>
+						</div>
+						<div className="links-location-city-list links-location-city-details-list">
+							{cities.map((city, index) => {
+								const percent = getPercentage(city.count);
+
+								return (
+									<CityListItem
+										key={`${city.name}-${city.country}-${index}-details`}
+										city={city}
+										percent={percent}
+										rank={index + 1}
+									/>
+								);
+							})}
+						</div>
+					</div>
+				) : null}
 			</div>
 		</div>
 	);

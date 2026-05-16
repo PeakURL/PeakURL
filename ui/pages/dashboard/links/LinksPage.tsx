@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CircleCheckBig, Link2, MousePointerClick, Users } from "lucide-react";
 import {
 	DEFAULT_PAGE_SIZE_MAX,
@@ -21,16 +21,39 @@ import {
 } from "./_components";
 
 import { useGetUrlQuery, useGetUrlsQuery } from "@/store/slices/api";
+import type { GetUrlsQueryArgs } from "@/store/slices/api";
 import { useSearchParams } from "react-router-dom";
 import { __ } from "@/i18n";
 import { formatCount } from "@/utils";
 import type {
 	LinkRecord,
+	LinksCustomDateRange,
+	LinksDateRange,
 	LinksMeta,
 	LinksSortBy,
 	LinksSortOrder,
 } from "./_components/types";
 import type { GetUrlsResponse } from "./types";
+
+const DATE_RANGE_DAY_MS = 24 * 60 * 60 * 1000;
+
+function formatDateInput(date: Date): string {
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, "0");
+	const day = String(date.getDate()).padStart(2, "0");
+
+	return `${year}-${month}-${day}`;
+}
+
+function getDefaultCustomClickRange(): LinksCustomDateRange {
+	const today = new Date();
+	const weekStart = new Date(today.getTime() - 6 * DATE_RANGE_DAY_MS);
+
+	return {
+		from: formatDateInput(weekStart),
+		to: formatDateInput(today),
+	};
+}
 
 function LinksPage() {
 	// State for Sorting and Pagination
@@ -58,6 +81,9 @@ function LinksPage() {
 		return DEFAULT_PAGE_SIZE_OPTIONS[0];
 	});
 	const [currentPage, setCurrentPage] = useState(1);
+	const [clickRange, setClickRange] = useState<LinksDateRange>("all");
+	const [customClickRange, setCustomClickRange] =
+		useState<LinksCustomDateRange>(() => getDefaultCustomClickRange());
 	const [searchParams] = useSearchParams();
 	const statsShortId = searchParams.get("stats");
 	const searchQuery = searchParams.get("search")?.trim() || "";
@@ -73,17 +99,48 @@ function LinksPage() {
 		} catch {}
 	}, [sortBy, sortOrder, limit]);
 
+	const urlsQueryArgs = useMemo<GetUrlsQueryArgs>(() => {
+		const query = {
+			page: currentPage,
+			limit,
+			sortBy,
+			sortOrder,
+			search: searchQuery,
+		};
+
+		if ("custom" === clickRange) {
+			return {
+				...query,
+				range: "custom",
+				from: customClickRange.from,
+				to: customClickRange.to,
+			};
+		}
+
+		if ("all" === clickRange) {
+			return query;
+		}
+
+		return {
+			...query,
+			range: clickRange,
+		};
+	}, [
+		clickRange,
+		currentPage,
+		customClickRange.from,
+		customClickRange.to,
+		limit,
+		searchQuery,
+		sortBy,
+		sortOrder,
+	]);
+
 	const {
 		data: urlsRes,
 		refetch: refetchUrls,
 		isLoading: isUrlsLoading,
-	} = useGetUrlsQuery({
-		page: currentPage,
-		limit,
-		sortBy,
-		sortOrder,
-		search: searchQuery,
-	});
+	} = useGetUrlsQuery(urlsQueryArgs);
 	const typedUrlsRes = urlsRes as GetUrlsResponse | undefined;
 
 	const apiItems: LinkRecord[] = typedUrlsRes?.data?.items ?? [];
@@ -107,6 +164,10 @@ function LinksPage() {
 	useEffect(() => {
 		setCurrentPage(1);
 	}, [limit, sortBy, sortOrder]);
+
+	useEffect(() => {
+		setCurrentPage(1);
+	}, [clickRange, customClickRange.from, customClickRange.to]);
 
 	const handleRefresh = async () => {
 		if (isRefreshing) {
@@ -151,7 +212,14 @@ function LinksPage() {
 	if (isLoading) {
 		return (
 			<div className="links-page">
-				<Header onRefresh={handleRefresh} isRefreshing={true} />
+				<Header
+					onRefresh={handleRefresh}
+					isRefreshing={true}
+					clickRange={clickRange}
+					customClickRange={customClickRange}
+					onClickRangeChange={setClickRange}
+					onCustomClickRangeChange={setCustomClickRange}
+				/>
 				<LinksSkeleton />
 			</div>
 		);
@@ -173,7 +241,14 @@ function LinksPage() {
 
 	return (
 		<div className="links-page">
-			<Header onRefresh={handleRefresh} isRefreshing={isRefreshing} />
+			<Header
+				onRefresh={handleRefresh}
+				isRefreshing={isRefreshing}
+				clickRange={clickRange}
+				customClickRange={customClickRange}
+				onClickRangeChange={setClickRange}
+				onCustomClickRangeChange={setCustomClickRange}
+			/>
 
 			{/* Quick Stats - Compact Row */}
 			<div className="links-page-stats">

@@ -157,6 +157,72 @@ trait AnalyticsTrait {
 	}
 
 	/**
+	 * Recent click feed for the dashboard overview.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @param int     $limit   Maximum click rows to return.
+	 * @return array<int, array<string, mixed>> Recent click rows.
+	 * @since 1.2.1
+	 */
+	public function recent_clicks( Request $request, int $limit = 8 ): array {
+		$user          = $this->get_current_user( $request );
+		$default_limit = 8;
+		$max_limit     = 20;
+		$limit         = max(
+			1,
+			min( $max_limit, $limit > 0 ? $limit : $default_limit ),
+		);
+		$conditions    = array();
+		$params        = array();
+
+		$this->scope_click_analytics_visibility(
+			$user,
+			$conditions,
+			$params,
+			'u',
+		);
+
+		$where = ! empty( $conditions )
+			? ' WHERE ' . implode( ' AND ', $conditions )
+			: '';
+
+		$rows = $this->query_all(
+			'SELECT
+				c.id AS recent_click_id,
+				c.clicked_at AS recent_clicked_at,
+				c.country_name AS click_country_name,
+				c.city_name AS click_city_name,
+				c.device AS click_device,
+				c.browser AS click_browser,
+				c.operating_system AS click_operating_system,
+				c.referrer_name AS click_referrer_name,
+				c.referrer_domain AS click_referrer_domain,
+				u.*,
+				COALESCE(stats.clicks, 0) AS click_count,
+				COALESCE(stats.unique_clicks, 0) AS unique_click_count
+			FROM clicks c
+			INNER JOIN urls u ON u.id = c.url_id
+			LEFT JOIN (
+				SELECT
+					url_id,
+					COUNT(*) AS clicks,
+					COUNT(DISTINCT COALESCE(NULLIF(visitor_hash, \'\'), id)) AS unique_clicks
+				FROM clicks
+				GROUP BY url_id
+			) stats ON stats.url_id = u.id' .
+			$where .
+			' ORDER BY c.clicked_at DESC' .
+			Query::limit_offset_clause( $limit, 0 ),
+			$params,
+		);
+
+		return array_map(
+			fn( array $row ): array => $this->format_recent_click( $row ),
+			$rows,
+		);
+	}
+
+	/**
 	 * Paginated activity history for the dedicated dashboard page.
 	 *
 	 * @param Request              $request Incoming HTTP request.
@@ -320,6 +386,35 @@ trait AnalyticsTrait {
 			actor.username AS actor_username,
 			actor.email AS actor_email,
 			actor.role AS actor_role';
+	}
+
+	/**
+	 * Format a raw recent-click row for the dashboard.
+	 *
+	 * @param array<string, mixed> $row Raw click and link row.
+	 * @return array<string, mixed> API-ready recent click item.
+	 * @since 1.2.1
+	 */
+	private function format_recent_click( array $row ): array {
+		$country = trim( (string) ( $row['click_country_name'] ?? '' ) );
+		$city    = trim( (string) ( $row['click_city_name'] ?? '' ) );
+
+		return array(
+			'id'              => (string) $row['recent_click_id'],
+			'clickedAt'       => $this->to_iso( (string) $row['recent_clicked_at'] ),
+			'link'            => $this->format_url( $row ),
+			'location'        => array(
+				'country' => '' !== $country ? $country : null,
+				'city'    => '' !== $city ? $city : null,
+			),
+			'device'          => trim( (string) ( $row['click_device'] ?? '' ) ),
+			'browser'         => trim( (string) ( $row['click_browser'] ?? '' ) ),
+			'operatingSystem' => trim( (string) ( $row['click_operating_system'] ?? '' ) ),
+			'referrer'        => array(
+				'name'   => trim( (string) ( $row['click_referrer_name'] ?? '' ) ),
+				'domain' => trim( (string) ( $row['click_referrer_domain'] ?? '' ) ),
+			),
+		);
 	}
 
 	/**

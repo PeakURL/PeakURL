@@ -95,6 +95,7 @@ class LinksApi {
 	 * @param string               $sort_order Safe SQL sort direction.
 	 * @param int|null             $limit      Optional LIMIT value.
 	 * @param int|null             $offset     Optional OFFSET value.
+	 * @param array<string, mixed> $stats_params Optional click-stat query bounds.
 	 * @return array<int, array<string, mixed>> Raw URL rows with click stats.
 	 * @since 1.1.1
 	 */
@@ -104,9 +105,10 @@ class LinksApi {
 		string $sort_by,
 		string $sort_order,
 		?int $limit = null,
-		?int $offset = null
+		?int $offset = null,
+		array $stats_params = array()
 	): array {
-		$sql = $this->get_links_select_sql() .
+		$sql = $this->get_links_select_sql( $stats_params ) .
 			' ' .
 			$where .
 			Query::order_by_clause( $sort_by, $sort_order );
@@ -115,7 +117,10 @@ class LinksApi {
 			$sql .= Query::limit_offset_clause( $limit, $offset );
 		}
 
-		return $this->db->get_results( $sql, $params );
+		return $this->db->get_results(
+			$sql,
+			array_merge( $params, $stats_params ),
+		);
 	}
 
 	/**
@@ -193,10 +198,25 @@ class LinksApi {
 	/**
 	 * Build the shared URL row + click stats SELECT fragment.
 	 *
+	 * @param array<string, mixed> $stats_params Optional click-stat query bounds.
 	 * @return string SQL SELECT fragment ending before WHERE/ORDER clauses.
 	 * @since 1.1.1
 	 */
-	private function get_links_select_sql(): string {
+	private function get_links_select_sql( array $stats_params = array() ): string {
+		$stats_conditions = array();
+
+		if ( isset( $stats_params['stats_start_at'] ) ) {
+			$stats_conditions[] = 'clicked_at >= :stats_start_at';
+		}
+
+		if ( isset( $stats_params['stats_end_at'] ) ) {
+			$stats_conditions[] = 'clicked_at < :stats_end_at';
+		}
+
+		$stats_where = ! empty( $stats_conditions )
+			? 'WHERE ' . implode( ' AND ', $stats_conditions )
+			: '';
+
 		return 'SELECT
 				u.*,
 				COALESCE(stats.clicks, 0) AS click_count,
@@ -208,6 +228,7 @@ class LinksApi {
 					COUNT(*) AS clicks,
 					COUNT(DISTINCT COALESCE(NULLIF(visitor_hash, \'\'), id)) AS unique_clicks
 				FROM clicks
+				' . $stats_where . '
 				GROUP BY url_id
 			) stats ON stats.url_id = u.id';
 	}

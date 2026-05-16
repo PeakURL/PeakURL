@@ -100,6 +100,9 @@ function serializeUrlsQuery({
 	sortBy = "createdAt",
 	sortOrder = "desc",
 	search = "",
+	range,
+	from,
+	to,
 }: GetUrlsQueryArgs = {}): string {
 	const params = new URLSearchParams();
 	params.set("page", String(page));
@@ -109,6 +112,15 @@ function serializeUrlsQuery({
 
 	if (search) {
 		params.set("search", search);
+	}
+
+	if (range) {
+		params.set("range", range);
+
+		if ("custom" === range) {
+			params.set("from", from);
+			params.set("to", to);
+		}
 	}
 
 	return `urls?${params.toString()}`;

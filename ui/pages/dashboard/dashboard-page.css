@@ -11,7 +11,16 @@
 		@apply xl:col-span-2;
 	}
 
+	.dashboard-page-traffic-side {
+		@apply grid gap-5;
+	}
+
 	.dashboard-page-summary-grid {
-		@apply grid grid-cols-1 gap-5 md:grid-cols-2;
+		@apply grid items-start gap-5;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 32rem), 1fr));
+	}
+
+	.dashboard-page-summary-column {
+		@apply grid min-w-0 gap-5;
 	}
 }

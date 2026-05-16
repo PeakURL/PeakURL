@@ -56,6 +56,7 @@ trait LinksTrait {
 			$listing['sortOrder'],
 			$limit,
 			$offset,
+			$listing['statsParams'],
 		);
 
 		return array(
@@ -87,6 +88,9 @@ trait LinksTrait {
 			$listing['params'],
 			$listing['sortBy'],
 			$listing['sortOrder'],
+			null,
+			null,
+			$listing['statsParams'],
 		);
 		$items   = $this->format_url_list( $rows );
 
@@ -1287,18 +1291,19 @@ trait LinksTrait {
 	 * @since 1.0.0
 	 */
 	private function prepare_url_listing_query( Request $request, array $query ): array {
-		$user       = $this->get_current_user( $request );
-		$search     = trim( (string) ( $query['search'] ?? '' ) );
-		$sort_by    = Query::sort_column(
+		$user         = $this->get_current_user( $request );
+		$search       = trim( (string) ( $query['search'] ?? '' ) );
+		$sort_by      = Query::sort_column(
 			$this->get_url_sort_map(),
 			$query['sortBy'] ?? 'createdAt',
 			'u.created_at',
 		);
-		$sort_order = Query::sort_direction(
+		$sort_order   = Query::sort_direction(
 			$query['sortOrder'] ?? 'desc',
 		);
-		$conditions = array();
-		$params     = array();
+		$conditions   = array();
+		$params       = array();
+		$stats_params = $this->get_url_listing_stats_params( $query );
 
 		if ( '' !== $search ) {
 			$conditions[]                 = '(
@@ -1320,13 +1325,46 @@ trait LinksTrait {
 		$this->scope_link_visibility( $user, $conditions, $params, 'u' );
 
 		return array(
-			'where'     => ! empty( $conditions )
+			'where'       => ! empty( $conditions )
 				? 'WHERE ' . implode( ' AND ', $conditions )
 				: '',
-			'params'    => $params,
-			'sortBy'    => $sort_by,
-			'sortOrder' => $sort_order,
+			'params'      => $params,
+			'statsParams' => $stats_params,
+			'sortBy'      => $sort_by,
+			'sortOrder'   => $sort_order,
 		);
+	}
+
+	/**
+	 * Resolve optional click-stat bounds for the links listing.
+	 *
+	 * @param array<string, mixed> $query Raw listing query parameters.
+	 * @return array<string, string> Bound parameters for the click stats subquery.
+	 * @since 1.2.1
+	 */
+	private function get_url_listing_stats_params( array $query ): array {
+		$range = trim( (string) ( $query['range'] ?? '' ) );
+
+		if ( '' === $range ) {
+			return array();
+		}
+
+		$period = $this->get_link_stats_period(
+			$range,
+			(string) ( $query['from'] ?? '' ),
+			(string) ( $query['to'] ?? '' ),
+		);
+		$params = array();
+
+		if ( null !== $period['start_at'] ) {
+			$params['stats_start_at'] = (string) $period['start_at'];
+		}
+
+		if ( null !== $period['end_at'] ) {
+			$params['stats_end_at'] = (string) $period['end_at'];
+		}
+
+		return $params;
 	}
 
 	/**
@@ -1419,6 +1457,7 @@ trait LinksTrait {
 	 * @param string               $sort_order Safe SQL sort direction.
 	 * @param int|null             $limit      Optional LIMIT value.
 	 * @param int|null             $offset     Optional OFFSET value.
+	 * @param array<string, string> $stats_params Optional click-stat query bounds.
 	 * @return array<int, array<string, mixed>> Raw URL rows with click stats.
 	 * @since 1.0.0
 	 */
@@ -1428,7 +1467,8 @@ trait LinksTrait {
 		string $sort_by,
 		string $sort_order,
 		?int $limit = null,
-		?int $offset = null
+		?int $offset = null,
+		array $stats_params = array()
 	): array {
 		return $this->links_api->query_link_rows(
 			$where,
@@ -1437,6 +1477,7 @@ trait LinksTrait {
 			$sort_order,
 			$limit,
 			$offset,
+			$stats_params,
 		);
 	}
 

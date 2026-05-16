@@ -5,6 +5,7 @@ export {
 	useGetActivityQuery,
 	useGetActivityHistoryQuery,
 	useGetAnalyticsQuery,
+	useGetRecentClicksQuery,
 	useGetLinkLocationQuery,
 	useGetLinkStatsQuery,
 } from "./analytics";

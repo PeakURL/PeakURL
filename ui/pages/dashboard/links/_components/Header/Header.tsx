@@ -1,9 +1,17 @@
-import { PEAKURL_DOMAIN } from "@constants";
 import { Link2, RefreshCw } from "lucide-react";
 import { __ } from "@/i18n";
+import { cn } from "@/utils";
 import type { LinksHeaderProps } from "../types";
+import DateRangeFilter from "./DateRangeFilter";
 
-const Header = ({ onRefresh, isRefreshing = false }: LinksHeaderProps) => {
+const Header = ({
+	onRefresh,
+	isRefreshing = false,
+	clickRange,
+	customClickRange,
+	onClickRangeChange,
+	onCustomClickRangeChange,
+}: LinksHeaderProps) => {
 	const refreshButton = (
 		<button
 			type="button"
@@ -14,9 +22,10 @@ const Header = ({ onRefresh, isRefreshing = false }: LinksHeaderProps) => {
 			title={__("Refresh links")}
 		>
 			<RefreshCw
-				className={`links-header-refresh-icon ${
-					isRefreshing ? "animate-spin" : ""
-				}`}
+				className={cn(
+					"links-header-refresh-icon",
+					isRefreshing && "animate-spin"
+				)}
 			/>
 		</button>
 	);
@@ -36,18 +45,13 @@ const Header = ({ onRefresh, isRefreshing = false }: LinksHeaderProps) => {
 			</div>
 
 			<div className="links-header-actions">
-				<div className="links-header-actions-mobile">
-					{refreshButton}
-				</div>
-				<div className="links-header-actions-desktop">
-					{refreshButton}
-					<p className="links-header-domain">
-						{__("Short links domain")}{" "}
-						<span className="links-header-domain-value">
-							{PEAKURL_DOMAIN}
-						</span>
-					</p>
-				</div>
+				{refreshButton}
+				<DateRangeFilter
+					clickRange={clickRange}
+					customClickRange={customClickRange}
+					onClickRangeChange={onClickRangeChange}
+					onCustomClickRangeChange={onCustomClickRangeChange}
+				/>
 			</div>
 		</div>
 	);

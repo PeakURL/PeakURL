@@ -1,3 +1,5 @@
+import type { LinkRecord } from "@/pages/dashboard/links/_components";
+
 /**
  * Summary statistics displayed on the dashboard.
  */
@@ -107,6 +109,41 @@ export interface RecentActivity {
 }
 
 /**
+ * Represents one recent click with its associated short link.
+ */
+export interface RecentClick {
+	/** Stable click row identifier. */
+	id: string;
+
+	/** Timestamp of when the click occurred. */
+	clickedAt?: string | null;
+
+	/** Full link payload used by dashboard stats navigation. */
+	link: LinkRecord;
+
+	/** Click location when GeoIP data is available. */
+	location?: ActivityLocation | null;
+
+	/** Device type captured for the click. */
+	device?: string | null;
+
+	/** Browser family captured for the click. */
+	browser?: string | null;
+
+	/** Operating system captured for the click. */
+	operatingSystem?: string | null;
+
+	/** Referrer metadata captured for the click. */
+	referrer?: {
+		/** Referrer display name. */
+		name?: string | null;
+
+		/** Referrer domain. */
+		domain?: string | null;
+	} | null;
+}
+
+/**
  * Generic metric item used for grouped statistics.
  */
 export interface MetricItem {
@@ -163,6 +200,14 @@ export interface ActivityFeedProps {
 }
 
 /**
+ * Props for the recent clicks dashboard widget.
+ */
+export interface RecentClicksProps {
+	/** Click events rendered in the widget. */
+	recentClicks: RecentClick[];
+}
+
+/**
  * Props for the country stats component.
  */
 export interface CountryStatsProps {
@@ -202,11 +247,6 @@ export interface DeviceBreakdownProps {
 	/** Device, browser, and OS metrics rendered in the panel. */
 	deviceData?: DashboardDeviceData | null;
 }
-
-/**
- * Supported device color keys used in the dashboard breakdown.
- */
-export type DeviceColorKey = "mobile" | "desktop" | "tablet";
 
 /**
  * Traffic-series data shown in the dashboard overview chart.

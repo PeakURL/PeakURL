@@ -43,6 +43,37 @@ export interface TrafficChartProps {
 }
 
 /**
+ * Single segment rendered in a metric donut chart.
+ */
+export interface MetricDonutSegment {
+	/** Segment label shown in the tooltip and legend. */
+	label: string;
+
+	/** Segment value used by the chart. */
+	value: number;
+
+	/** Segment color. */
+	color: string;
+}
+
+/**
+ * Props for the compact metric donut chart component.
+ */
+export interface MetricDonutChartProps {
+	/** Segments rendered in the chart. */
+	segments: MetricDonutSegment[];
+
+	/** Accessible chart label. */
+	ariaLabel?: string;
+
+	/** Value shown in the chart center. */
+	totalValue?: string;
+
+	/** Label shown below the center value. */
+	totalLabel?: string;
+}
+
+/**
  * Single country metric rendered on the world map.
  */
 export interface WorldMapDatum {

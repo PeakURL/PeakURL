@@ -15,52 +15,56 @@
 		@apply text-sm text-text-muted;
 	}
 
+	.dashboard-countries-map {
+		@apply mb-4 h-52 overflow-hidden rounded-lg border border-stroke bg-bg/60;
+	}
+
+	.dashboard-countries-map .world-map {
+		@apply rounded-none bg-transparent;
+	}
+
+	.dashboard-countries-map .world-map-legend {
+		@apply hidden;
+	}
+
+	.dashboard-countries-map .world-map-controls {
+		@apply top-3 gap-1.5;
+		inset-inline-end: 0.75rem;
+	}
+
+	.dashboard-countries-map .world-map-control {
+		@apply h-8 w-8 rounded-md shadow-sm;
+	}
+
+	.dashboard-countries-map .world-map-control-icon {
+		@apply h-4 w-4;
+	}
+
 	.dashboard-countries-list {
-		@apply space-y-4;
+		@apply divide-y divide-stroke overflow-hidden rounded-lg border border-stroke bg-bg/60;
 	}
 
 	.dashboard-countries-row {
-		@apply flex items-center gap-3;
+		@apply grid grid-cols-[2rem_auto_minmax(0,1fr)_auto_auto] items-center gap-3 px-3 py-2.5 text-sm;
+	}
+
+	.dashboard-countries-row-rank {
+		@apply text-xs font-semibold tabular-nums text-text-muted;
 	}
 
 	.dashboard-countries-row-flag {
-		@apply text-xl;
-	}
-
-	.dashboard-countries-row-copy {
-		@apply min-w-0 flex-1;
-	}
-
-	.dashboard-countries-row-header {
-		@apply mb-2 flex items-center justify-between gap-3;
+		@apply text-lg leading-none;
 	}
 
 	.dashboard-countries-row-name {
 		@apply truncate text-sm font-medium text-heading;
 	}
 
-	.dashboard-countries-row-value {
-		@apply text-sm font-semibold text-text-muted;
+	.dashboard-countries-row-percentage {
+		@apply text-sm tabular-nums text-text-muted;
 	}
 
-	.dashboard-countries-row-track {
-		@apply h-2 w-full rounded-full bg-surface-alt;
-	}
-
-	.dashboard-countries-row-bar {
-		@apply h-2 rounded-full transition-all duration-300;
-		background-image: linear-gradient(
-			to right,
-			var(--color-primary-600),
-			var(--color-purple-600)
-		);
-	}
-
-	.dark .dashboard-countries-row-bar {
-		background-image: linear-gradient(
-			to right,
-			var(--color-primary-500),
-			var(--color-purple-500)
-		);
+	.dashboard-countries-row-count {
+		@apply min-w-12 text-end font-semibold tabular-nums text-heading;
 	}
 }

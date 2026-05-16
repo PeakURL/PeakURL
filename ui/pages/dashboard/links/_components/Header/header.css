@@ -1,6 +1,6 @@
 @layer components {
 	.links-header {
-		@apply flex items-start justify-between gap-4;
+		@apply flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between;
 	}
 
 	.links-header-brand {
@@ -24,22 +24,76 @@
 	}
 
 	.links-header-actions {
-		@apply flex shrink-0 items-center gap-2;
+		@apply flex shrink-0 flex-wrap items-center gap-2 sm:justify-end;
 	}
 
-	.links-header-actions-mobile {
-		@apply sm:hidden;
+	.links-header-refresh {
+		@apply inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-stroke bg-surface text-text-muted transition-colors hover:border-accent/30 hover:text-accent disabled:cursor-wait disabled:opacity-60;
 	}
 
-	.links-header-actions-desktop {
-		@apply hidden items-center gap-2 sm:flex;
+	.links-header-refresh-icon {
+		@apply h-5 w-5;
 	}
 
-	.links-header-domain {
-		@apply rounded-full border border-stroke bg-surface px-4 py-3 text-xs font-medium text-text-muted;
+	.links-date-range {
+		@apply flex min-w-0 gap-1 overflow-x-auto rounded-lg bg-surface p-1;
 	}
 
-	.links-header-domain-value {
-		@apply text-heading;
+	.links-date-range-button {
+		@apply inline-flex h-8 shrink-0 items-center justify-center gap-1.5 rounded px-2.5 text-xs font-medium transition-all;
+	}
+
+	.links-date-range-button-current {
+		@apply bg-accent text-white shadow-sm;
+	}
+
+	.links-date-range-button-idle {
+		@apply text-text-muted hover:bg-surface-alt hover:text-heading;
+	}
+
+	.links-date-range-icon {
+		@apply h-3.5 w-3.5 shrink-0;
+	}
+
+	.links-date-range-custom {
+		@apply relative;
+	}
+
+	.links-date-range-panel {
+		@apply z-50 rounded-lg border border-stroke bg-surface p-4 shadow-lg;
+		width: min(18rem, calc(100vw - 2rem));
+	}
+
+	.links-date-range-title {
+		@apply mb-3 text-sm font-semibold text-heading;
+	}
+
+	.links-date-range-fields {
+		@apply grid gap-3;
+	}
+
+	.links-date-range-field {
+		@apply grid gap-1.5 text-xs font-medium text-text-muted;
+	}
+
+	.links-date-range-field input {
+		@apply h-9 rounded-md border border-stroke bg-surface-alt px-2 text-sm text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20;
+		color-scheme: light;
+	}
+
+	.dark .links-date-range-field input {
+		color-scheme: dark;
+	}
+
+	.links-date-range-summary {
+		@apply mt-3 rounded-md bg-surface-alt px-2.5 py-2 text-xs text-text-muted;
+	}
+
+	.links-date-range-actions {
+		@apply mt-3 flex justify-end;
+	}
+
+	.links-date-range-apply {
+		@apply inline-flex h-8 items-center justify-center rounded bg-accent px-3 text-xs font-medium text-white transition-all hover:bg-accent/90 disabled:cursor-not-allowed disabled:opacity-60;
 	}
 }

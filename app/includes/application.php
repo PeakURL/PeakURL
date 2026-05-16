@@ -294,6 +294,7 @@ class Application {
 			array(
 				array( 'get', '/api/v1/analytics', array( $analytics, 'index' ) ),
 				array( 'get', '/api/v1/analytics/activity', array( $analytics, 'activity' ) ),
+				array( 'get', '/api/v1/analytics/recent-clicks', array( $analytics, 'recent_clicks' ) ),
 				array( 'get', '/api/v1/analytics/activity/history', array( $analytics, 'history' ) ),
 				array( 'delete', '/api/v1/analytics/activity/bulk', array( $analytics, 'bulk_delete' ) ),
 				array( 'delete', '/api/v1/analytics/activity/{id}', array( $analytics, 'delete' ) ),

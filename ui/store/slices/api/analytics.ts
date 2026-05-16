@@ -8,6 +8,7 @@ import type {
 	LinkAnalyticsArgs,
 	LinkLocationPayload,
 	LinkStatsResponse,
+	RecentClicksResponse,
 } from "./types";
 
 const ANALYTICS_TAGS = ["Analytics"] as const;
@@ -58,6 +59,10 @@ export const analyticsApi = baseApi.injectEndpoints({
 			query: () => "analytics/activity",
 			providesTags: ANALYTICS_TAGS,
 		}),
+		getRecentClicks: build.query<RecentClicksResponse, number | void>({
+			query: (limit = 8) => `analytics/recent-clicks?limit=${limit}`,
+			providesTags: ANALYTICS_TAGS,
+		}),
 		getActivityHistory: build.query<
 			ActivityHistoryResponse,
 			GetActivityHistoryQueryArgs | void
@@ -102,6 +107,7 @@ export const analyticsApi = baseApi.injectEndpoints({
 export const {
 	useGetAnalyticsQuery,
 	useGetActivityQuery,
+	useGetRecentClicksQuery,
 	useGetActivityHistoryQuery,
 	useDeleteActivityLogMutation,
 	useBulkDeleteActivityLogsMutation,

@@ -1,6 +1,6 @@
 @layer components {
 	.dashboard-devices {
-		@apply rounded-lg border border-stroke bg-surface p-5;
+		@apply min-w-0 overflow-hidden rounded-lg border border-stroke bg-surface p-4 sm:p-5;
 	}
 
 	.dashboard-devices-title {
@@ -15,67 +15,80 @@
 		@apply text-sm text-text-muted;
 	}
 
-	.dashboard-devices-list {
-		@apply space-y-4;
+	.dashboard-devices-content {
+		@apply grid min-w-0 gap-3;
 	}
 
-	.dashboard-devices-item-header {
-		@apply mb-2 flex items-center justify-between;
+	.dashboard-devices-chart-panel {
+		@apply grid min-w-0 items-center gap-3 overflow-hidden rounded-lg border border-stroke bg-bg/60 p-3 sm:grid-cols-[minmax(8rem,12rem)_minmax(0,1fr)] sm:p-4;
 	}
 
-	.dashboard-devices-item-name {
-		@apply text-sm font-medium text-heading;
+	.dashboard-devices-chart {
+		@apply mx-auto w-full max-w-44;
 	}
 
-	.dashboard-devices-item-value {
-		@apply text-sm font-semibold text-text-muted;
+	.dashboard-devices-chart-panel .metric-donut-chart {
+		@apply h-32 min-h-32 max-w-full;
 	}
 
-	.dashboard-devices-item-track {
-		@apply h-2 w-full rounded-full bg-surface-alt;
+	.dashboard-devices-chart-panel .metric-donut-chart-value {
+		@apply text-xl;
 	}
 
-	.dashboard-devices-item-bar {
-		@apply h-2 rounded-full transition-all duration-300;
+	.dashboard-devices-chart-empty {
+		@apply flex min-h-48 items-center justify-center rounded-lg border border-dashed border-stroke bg-surface-alt px-4 text-center text-sm text-text-muted;
 	}
 
-	.dashboard-devices-item-bar-mobile {
-		@apply bg-blue-600 dark:bg-blue-500;
+	.dashboard-devices-legend {
+		@apply min-w-0 space-y-1.5;
 	}
 
-	.dashboard-devices-item-bar-desktop {
-		@apply bg-purple-600 dark:bg-purple-500;
+	.dashboard-devices-legend-row {
+		@apply grid min-w-0 grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-2 text-sm;
 	}
 
-	.dashboard-devices-item-bar-tablet {
-		@apply bg-emerald-600 dark:bg-emerald-500;
+	.dashboard-devices-legend-marker {
+		@apply h-2.5 w-2.5 rounded-full;
 	}
 
-	.dashboard-devices-item-bar-default {
-		@apply bg-gray-500;
+	.dashboard-devices-legend-name {
+		@apply truncate font-medium text-heading;
+	}
+
+	.dashboard-devices-legend-value {
+		@apply shrink-0 tabular-nums text-text-muted;
+	}
+
+	.dashboard-devices-legend-count {
+		@apply min-w-12 shrink-0 text-end font-semibold tabular-nums text-heading;
+	}
+
+	.dashboard-devices-details {
+		@apply grid min-w-0 gap-3;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
 	}
 
 	.dashboard-devices-section {
-		@apply mt-6 border-t border-stroke pt-6;
+		@apply min-w-0;
 	}
 
 	.dashboard-devices-section-title {
-		@apply mb-3 text-sm font-semibold text-heading;
+		@apply mb-2 text-sm font-semibold text-heading;
 	}
 
 	.dashboard-devices-section-list {
-		@apply space-y-2;
+		@apply min-w-0 divide-y divide-stroke overflow-hidden rounded-lg border border-stroke bg-bg/60;
 	}
 
 	.dashboard-devices-section-row {
-		@apply flex items-center justify-between text-sm;
+		@apply flex min-w-0 items-center justify-between gap-3 px-3 py-2 text-sm;
 	}
 
 	.dashboard-devices-section-label {
-		@apply text-text-muted;
+		@apply min-w-0 truncate text-text-muted;
 	}
 
 	.dashboard-devices-section-count {
-		@apply font-medium text-heading;
+		@apply shrink-0 font-medium tabular-nums text-heading;
 	}
 }

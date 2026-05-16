@@ -1,10 +1,15 @@
 import { useState } from "react";
-import { useGetAnalyticsQuery, useGetActivityQuery } from "@/store/slices/api";
+import {
+	useGetAnalyticsQuery,
+	useGetActivityQuery,
+	useGetRecentClicksQuery,
+} from "@/store/slices/api";
 import {
 	Header,
 	StatsCards,
 	TrafficOverview,
 	ActivityFeed,
+	RecentClicks,
 	DeviceBreakdown,
 	CountryStats,
 	DashboardSkeleton,
@@ -15,6 +20,7 @@ import type {
 	DashboardDeviceData,
 	DashboardStats,
 	RecentActivity,
+	RecentClick,
 	TrafficSeries,
 } from "./_components/types";
 
@@ -70,6 +76,12 @@ function DashboardPage() {
 		isFetching: isActivityFetching,
 		isLoading: isActivityLoading,
 	} = useGetActivityQuery(undefined);
+	const {
+		data: recentClicksRes,
+		refetch: refetchRecentClicks,
+		isFetching: isRecentClicksFetching,
+		isLoading: isRecentClicksLoading,
+	} = useGetRecentClicksQuery(8);
 
 	const handleRefresh = async () => {
 		if (isRefreshing) {
@@ -80,7 +92,11 @@ function DashboardPage() {
 		const startedAt = Date.now();
 
 		try {
-			await Promise.allSettled([refetchAnalytics(), refetchActivity()]);
+			await Promise.allSettled([
+				refetchAnalytics(),
+				refetchActivity(),
+				refetchRecentClicks(),
+			]);
 		} finally {
 			const remaining =
 				MIN_REFRESH_DURATION_MS - (Date.now() - startedAt);
@@ -100,6 +116,7 @@ function DashboardPage() {
 		uniqueClickRate: 0,
 	};
 	const activities: RecentActivity[] = activityRes?.data ?? [];
+	const recentClicks: RecentClick[] = recentClicksRes?.data ?? [];
 
 	const recentActivities = activities.slice(0, 6);
 
@@ -111,7 +128,8 @@ function DashboardPage() {
 	const countryData: CountryMetric[] = analyticsRes?.data?.countries ?? [];
 	const trafficData = normalizeTrafficSeries(analyticsRes?.data?.traffic);
 
-	const isLoading = isAnalyticsLoading || isActivityLoading;
+	const isLoading =
+		isAnalyticsLoading || isActivityLoading || isRecentClicksLoading;
 
 	if (isLoading) {
 		return (
@@ -134,7 +152,10 @@ function DashboardPage() {
 				onTimeRangeChange={setTimeRange}
 				onRefresh={handleRefresh}
 				isRefreshing={
-					isRefreshing || isAnalyticsFetching || isActivityFetching
+					isRefreshing ||
+					isAnalyticsFetching ||
+					isActivityFetching ||
+					isRecentClicksFetching
 				}
 			/>
 
@@ -144,11 +165,16 @@ function DashboardPage() {
 				<div className="dashboard-page-traffic-main">
 					<TrafficOverview trafficData={trafficData} />
 				</div>
-				<ActivityFeed recentActivities={recentActivities} />
+				<div className="dashboard-page-traffic-side">
+					<RecentClicks recentClicks={recentClicks} />
+				</div>
 			</div>
 
 			<div className="dashboard-page-summary-grid">
-				<DeviceBreakdown deviceData={deviceData} />
+				<div className="dashboard-page-summary-column">
+					<DeviceBreakdown deviceData={deviceData} />
+					<ActivityFeed recentActivities={recentActivities} />
+				</div>
 				<CountryStats countryData={countryData} />
 			</div>
 		</div>

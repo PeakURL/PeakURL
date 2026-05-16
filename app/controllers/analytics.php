@@ -26,6 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Routes registered by Application::register_routes():
  *  GET /api/v1/analytics              → index
  *  GET /api/v1/analytics/activity     → activity
+ *  GET /api/v1/analytics/recent-clicks → recent_clicks
  *  GET /api/v1/analytics/activity/history → history
  *  DELETE /api/v1/analytics/activity/bulk → bulk_delete
  *  DELETE /api/v1/analytics/activity/:id → delete
@@ -67,6 +68,25 @@ class AnalyticsController extends BaseController {
 		return $this->success_response(
 			$this->data_store->activity( $request ),
 			__( 'Activity loaded.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Recent click feed (GET /api/v1/analytics/recent-clicks).
+	 *
+	 * Returns recent click rows with their related short-link payloads.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> JSON envelope with recent click list.
+	 * @since 1.2.1
+	 */
+	public function recent_clicks( Request $request ): array {
+		return $this->success_response(
+			$this->data_store->recent_clicks(
+				$request,
+				(int) $request->get_query_param( 'limit', 8 ),
+			),
+			__( 'Recent clicks loaded.', 'peakurl' ),
 		);
 	}
 

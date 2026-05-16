@@ -1,12 +1,15 @@
-import type { RefObject } from "react";
-import { memo, useEffect, useState } from "react";
+import type { MouseEvent, WheelEvent } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { Mercator } from "@visx/geo";
 import type { GeoPermissibleObjects } from "@visx/geo/lib/types";
 import { Zoom } from "@visx/zoom";
+import type { TransformMatrix } from "@visx/zoom/lib/types";
 import { feature as topojsonFeature } from "topojson-client";
 import { scaleLinear } from "d3-scale";
-import { Plus, Minus, Maximize2 } from "lucide-react";
+import { Plus, Minus, Maximize2, Minimize2, RotateCcw } from "lucide-react";
 import { __ } from "@/i18n";
+import { useTheme } from "@/components/providers";
+import { cn } from "@/utils";
 import type {
 	GeographyFeature,
 	TooltipContent,
@@ -19,6 +22,11 @@ const MAP_WIDTH = 960;
 const MAP_HEIGHT = 500;
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
+const TOOLTIP_WIDTH = 220;
+const TOOLTIP_HEIGHT = 88;
+const TOOLTIP_OFFSET = "0.75rem";
+/* Render one neighboring world on each side so horizontal panning wraps cleanly. */
+const WORLD_COPY_OFFSETS = [-MAP_WIDTH, 0, MAP_WIDTH];
 const INITIAL_TRANSFORM = {
 	scaleX: 1,
 	scaleY: 1,
@@ -27,6 +35,10 @@ const INITIAL_TRANSFORM = {
 	skewX: 0,
 	skewY: 0,
 };
+
+function isWheelZoomGesture(event: WheelEvent<SVGSVGElement>): boolean {
+	return event.metaKey || event.ctrlKey;
+}
 
 const getTranslatedCountryName = (alpha3Code: string): string => {
 	switch (alpha3Code) {
@@ -255,7 +267,62 @@ const alpha3ToNumeric: Record<string, string> = {
 	VEN: "862",
 };
 
-const defaultCountryFill = "#e5e7eb";
+const LIGHT_MAP_COLORS = {
+	defaultFill: "#e5e7eb",
+	stroke: "#cbd5e1",
+	activeStroke: "#0f172a",
+	scale: ["#e0f2fe", "#0ea5e9", "#0369a1"],
+	legend: ["#e0f2fe", "#7dd3fc", "#38bdf8", "#0ea5e9", "#0284c7", "#0369a1"],
+};
+
+const DARK_MAP_COLORS = {
+	defaultFill: "#1f2937",
+	stroke: "#374151",
+	activeStroke: "#f8fafc",
+	scale: ["#172554", "#0284c7", "#7dd3fc"],
+	legend: ["#172554", "#0c4a6e", "#075985", "#0284c7", "#38bdf8", "#7dd3fc"],
+};
+
+interface TooltipPosition {
+	x: number;
+	y: number;
+	isNearRightEdge: boolean;
+	isNearBottomEdge: boolean;
+}
+
+interface RenderedMapFeature {
+	feature: GeographyFeature;
+	path: string | null;
+}
+
+function clampValue(value: number, minimum: number, maximum: number): number {
+	return Math.min(Math.max(value, minimum), maximum);
+}
+
+function wrapMapOffset(translateX: number, worldWidth: number): number {
+	if (worldWidth <= 0) {
+		return 0;
+	}
+
+	const wrappedOffset = translateX % worldWidth;
+
+	return Object.is(wrappedOffset, -0) ? 0 : wrappedOffset;
+}
+
+function constrainMapTransform(transform: TransformMatrix): TransformMatrix {
+	const scaleX = clampValue(transform.scaleX, MIN_ZOOM, MAX_ZOOM);
+	const scaleY = clampValue(transform.scaleY, MIN_ZOOM, MAX_ZOOM);
+	const minTranslateY = Math.min(0, MAP_HEIGHT - MAP_HEIGHT * scaleY);
+	const worldWidth = MAP_WIDTH * scaleX;
+
+	return {
+		...transform,
+		scaleX,
+		scaleY,
+		translateX: wrapMapOffset(transform.translateX, worldWidth),
+		translateY: clampValue(transform.translateY, minTranslateY, 0),
+	};
+}
 
 /**
  * WorldMap Component
@@ -270,11 +337,16 @@ const WorldMap = ({
 	hoveredCountry,
 	onCountryHover,
 }: WorldMapProps) => {
+	const { theme } = useTheme();
+	const mapRef = useRef<HTMLDivElement | null>(null);
 	const [tooltipContent, setTooltipContent] = useState<TooltipContent | null>(
 		null
 	);
+	const [tooltipPosition, setTooltipPosition] =
+		useState<TooltipPosition | null>(null);
 	const [geographies, setGeographies] = useState<GeoPermissibleObjects[]>([]);
 	const [loadError, setLoadError] = useState(false);
+	const [isFullscreen, setIsFullscreen] = useState(false);
 
 	useEffect(() => {
 		const controller = new AbortController();
@@ -316,12 +388,28 @@ const WorldMap = ({
 		};
 	}, []);
 
+	useEffect(() => {
+		const handleFullscreenChange = () => {
+			setIsFullscreen(document.fullscreenElement === mapRef.current);
+		};
+
+		document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+		return () => {
+			document.removeEventListener(
+				"fullscreenchange",
+				handleFullscreenChange
+			);
+		};
+	}, []);
+
 	const maxClicks =
 		data.length > 0 ? Math.max(...data.map((item) => item.clicks)) : 100;
+	const mapColors = theme === "dark" ? DARK_MAP_COLORS : LIGHT_MAP_COLORS;
 
 	const colorScale = scaleLinear<string>()
 		.domain([0, maxClicks / 2, maxClicks])
-		.range(["#e0f2fe", "#0ea5e9", "#0369a1"]);
+		.range(mapColors.scale);
 
 	const countryClickMap = data.reduce<Record<string, WorldMapDatum>>(
 		(acc, item) => {
@@ -347,7 +435,29 @@ const WorldMap = ({
 
 	const activeCountryCode = (hoveredCountry || "").toString().toUpperCase();
 
+	const getTooltipPosition = (
+		event: MouseEvent<SVGPathElement>
+	): TooltipPosition | null => {
+		const mapElement = mapRef.current;
+
+		if (!mapElement) {
+			return null;
+		}
+
+		const bounds = mapElement.getBoundingClientRect();
+		const x = event.clientX - bounds.left;
+		const y = event.clientY - bounds.top;
+
+		return {
+			x,
+			y,
+			isNearRightEdge: bounds.width - x < TOOLTIP_WIDTH,
+			isNearBottomEdge: bounds.height - y < TOOLTIP_HEIGHT,
+		};
+	};
+
 	const handleCountryEnter = (
+		event: MouseEvent<SVGPathElement>,
 		countryData: WorldMapDatum | null,
 		isDragging: boolean
 	) => {
@@ -359,7 +469,20 @@ const WorldMap = ({
 			name: countryData.countryName || countryData.countryCode,
 			clicks: countryData.clicks,
 		});
+		setTooltipPosition(getTooltipPosition(event));
 		onCountryHover?.(countryData);
+	};
+
+	const handleCountryMove = (
+		event: MouseEvent<SVGPathElement>,
+		countryData: WorldMapDatum | null,
+		isDragging: boolean
+	) => {
+		if (isDragging || !countryData || countryData.clicks <= 0) {
+			return;
+		}
+
+		setTooltipPosition(getTooltipPosition(event));
 	};
 
 	const handleCountryLeave = (isDragging: boolean) => {
@@ -368,11 +491,76 @@ const WorldMap = ({
 		}
 
 		setTooltipContent(null);
+		setTooltipPosition(null);
 		onCountryHover?.(null);
 	};
 
+	const handleFullscreenToggle = () => {
+		const mapElement = mapRef.current;
+
+		if (!mapElement) {
+			return;
+		}
+
+		if (document.fullscreenElement === mapElement) {
+			const exitRequest = document.exitFullscreen?.();
+			exitRequest?.catch(() => undefined);
+			return;
+		}
+
+		const fullscreenRequest = mapElement.requestFullscreen?.();
+		fullscreenRequest?.catch(() => undefined);
+	};
+
+	const renderCountryPath = (
+		{ feature, path }: RenderedMapFeature,
+		index: number,
+		isDragging: boolean
+	) => {
+		if (typeof path !== "string") {
+			return null;
+		}
+
+		const countryCode =
+			feature.id == null ? null : String(feature.id).padStart(3, "0");
+		const featureKey =
+			countryCode || `feature-${feature.properties?.name || index}`;
+		const countryData =
+			countryCode == null ? null : countryClickMap[countryCode];
+		const clicks = countryData?.clicks || 0;
+		const isActive = countryData?.countryCode === activeCountryCode;
+
+		return (
+			<path
+				key={featureKey}
+				d={path}
+				fill={clicks > 0 ? colorScale(clicks) : mapColors.defaultFill}
+				stroke={isActive ? mapColors.activeStroke : mapColors.stroke}
+				strokeWidth={isActive ? 1.25 : 0.5}
+				className={cn(
+					"world-map-country",
+					clicks > 0 && "world-map-country-clickable"
+				)}
+				vectorEffect="non-scaling-stroke"
+				onMouseEnter={(event) =>
+					handleCountryEnter(event, countryData, isDragging)
+				}
+				onMouseMove={(event) =>
+					handleCountryMove(event, countryData, isDragging)
+				}
+				onMouseLeave={() => handleCountryLeave(isDragging)}
+			/>
+		);
+	};
+
 	return (
-		<div className="world-map">
+		<div
+			className={cn(
+				"world-map",
+				theme === "dark" ? "world-map-dark" : "world-map-light"
+			)}
+			ref={mapRef}
+		>
 			<Zoom
 				width={MAP_WIDTH}
 				height={MAP_HEIGHT}
@@ -381,6 +569,7 @@ const WorldMap = ({
 				scaleYMin={MIN_ZOOM}
 				scaleYMax={MAX_ZOOM}
 				initialTransformMatrix={INITIAL_TRANSFORM}
+				constrain={constrainMapTransform}
 				wheelDelta={(event) => {
 					const scale = event.deltaY > 0 ? 0.92 : 1.08;
 
@@ -436,12 +625,42 @@ const WorldMap = ({
 								className="world-map-control"
 								title={__("Reset view")}
 							>
-								<Maximize2 className="world-map-control-icon" />
+								<RotateCcw className="world-map-control-icon" />
+							</button>
+							<button
+								onClick={handleFullscreenToggle}
+								className="world-map-control"
+								title={
+									isFullscreen
+										? __("Exit full screen")
+										: __("Full screen")
+								}
+							>
+								{isFullscreen ? (
+									<Minimize2 className="world-map-control-icon" />
+								) : (
+									<Maximize2 className="world-map-control-icon" />
+								)}
 							</button>
 						</div>
 
-						{tooltipContent && (
-							<div className="world-map-tooltip">
+						{tooltipContent && tooltipPosition && (
+							<div
+								className="world-map-tooltip"
+								style={{
+									insetInlineStart: tooltipPosition.x,
+									top: tooltipPosition.y,
+									transform: `translate(${
+										tooltipPosition.isNearRightEdge
+											? `calc(-100% - ${TOOLTIP_OFFSET})`
+											: TOOLTIP_OFFSET
+									}, ${
+										tooltipPosition.isNearBottomEdge
+											? `calc(-100% - ${TOOLTIP_OFFSET})`
+											: TOOLTIP_OFFSET
+									})`,
+								}}
+							>
 								<p className="world-map-tooltip-title">
 									{tooltipContent.name}
 								</p>
@@ -456,16 +675,22 @@ const WorldMap = ({
 
 						<svg
 							viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
-							className={`world-map-svg ${
-								zoom.isDragging ? "world-map-svg-dragging" : ""
-							}`}
-							ref={
-								zoom.containerRef as unknown as RefObject<SVGSVGElement>
-							}
-							onWheel={zoom.handleWheel}
+							className={cn(
+								"world-map-svg",
+								zoom.isDragging && "world-map-svg-dragging"
+							)}
 							onMouseDown={zoom.dragStart}
 							onMouseMove={zoom.dragMove}
 							onMouseUp={zoom.dragEnd}
+							onWheel={(event) => {
+								if (!isWheelZoomGesture(event)) {
+									return;
+								}
+
+								event.preventDefault();
+								event.stopPropagation();
+								zoom.handleWheel(event);
+							}}
 							onMouseLeave={() => {
 								zoom.dragEnd();
 								handleCountryLeave(false);
@@ -488,91 +713,24 @@ const WorldMap = ({
 										center={[0, 20]}
 									>
 										{({ features }) =>
-											(
-												features as Array<{
-													feature: GeographyFeature;
-													path: string | null;
-												}>
-											).map(
-												({ feature, path }, index) => {
-													const countryCode =
-														feature.id == null
-															? null
-															: String(
-																	feature.id
-																).padStart(
-																	3,
-																	"0"
-																);
-													const featureKey =
-														countryCode ||
-														`feature-${
-															feature.properties
-																?.name || index
-														}`;
-													const countryData =
-														countryCode == null
-															? null
-															: countryClickMap[
-																	countryCode
-																];
-													const clicks =
-														countryData?.clicks ||
-														0;
-													const isActive =
-														countryData?.countryCode ===
-														activeCountryCode;
-
-													return (
-														<path
-															key={featureKey}
-															d={
-																"string" ===
-																typeof path
-																	? path
-																	: undefined
-															}
-															fill={
-																clicks > 0
-																	? colorScale(
-																			clicks
-																		)
-																	: defaultCountryFill
-															}
-															stroke={
-																isActive
-																	? "#0f172a"
-																	: "#cbd5e1"
-															}
-															strokeWidth={
-																isActive
-																	? 1.25
-																	: 0.5
-															}
-															className="world-map-country"
-															vectorEffect="non-scaling-stroke"
-															style={{
-																cursor:
-																	clicks > 0
-																		? "pointer"
-																		: "default",
-																transition:
-																	"fill 0.2s ease-in-out, stroke 0.2s ease-in-out, stroke-width 0.2s ease-in-out",
-															}}
-															onMouseEnter={() =>
-																handleCountryEnter(
-																	countryData,
+											WORLD_COPY_OFFSETS.map(
+												(mapOffset) => (
+													<g
+														key={`world-copy-${mapOffset}`}
+														transform={`translate(${mapOffset} 0)`}
+													>
+														{(
+															features as RenderedMapFeature[]
+														).map(
+															(feature, index) =>
+																renderCountryPath(
+																	feature,
+																	index,
 																	zoom.isDragging
 																)
-															}
-															onMouseLeave={() =>
-																handleCountryLeave(
-																	zoom.isDragging
-																)
-															}
-														/>
-													);
-												}
+														)}
+													</g>
+												)
 											)
 										}
 									</Mercator>
@@ -601,30 +759,15 @@ const WorldMap = ({
 									0
 								</span>
 								<div className="world-map-legend-gradient">
-									<div
-										className="world-map-legend-gradient-stop"
-										style={{ backgroundColor: "#e0f2fe" }}
-									></div>
-									<div
-										className="world-map-legend-gradient-stop"
-										style={{ backgroundColor: "#7dd3fc" }}
-									></div>
-									<div
-										className="world-map-legend-gradient-stop"
-										style={{ backgroundColor: "#38bdf8" }}
-									></div>
-									<div
-										className="world-map-legend-gradient-stop"
-										style={{ backgroundColor: "#0ea5e9" }}
-									></div>
-									<div
-										className="world-map-legend-gradient-stop"
-										style={{ backgroundColor: "#0284c7" }}
-									></div>
-									<div
-										className="world-map-legend-gradient-stop"
-										style={{ backgroundColor: "#0369a1" }}
-									></div>
+									{mapColors.legend.map((color) => (
+										<div
+											key={color}
+											className="world-map-legend-gradient-stop"
+											style={{
+												backgroundColor: color,
+											}}
+										></div>
+									))}
 								</div>
 								<span className="world-map-legend-value">
 									{maxClicks}

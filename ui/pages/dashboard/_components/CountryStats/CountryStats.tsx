@@ -1,26 +1,51 @@
+import { useMemo, useState } from "react";
+import { WorldMap, type WorldMapDatum } from "@/components";
 import { __ } from "@/i18n";
-import { getCountryFlagEmoji } from "@/utils";
+import { formatCount, getCountryFlagEmoji } from "@/utils";
 import type { CountryStatsProps, CountryMetric } from "../types";
 
+const MAX_COUNTRIES = 8;
+
+function getMetricTotal(countries: CountryMetric[]): number {
+	return countries.reduce((total, country) => total + country.count, 0);
+}
+
+function getMetricPercentage(count: number, total: number): number {
+	return total > 0 ? Math.round((count / total) * 100) : 0;
+}
+
 const CountryStats = ({ countryData }: CountryStatsProps) => {
-	// Calculate total clicks for percentage
-	const totalClicks = countryData.reduce(
-		(sum: number, country: CountryMetric) => sum + country.count,
-		0
+	const [hoveredCountry, setHoveredCountry] = useState<WorldMapDatum | null>(
+		null
+	);
+	const totalClicks = getMetricTotal(countryData);
+	const mapData = useMemo(
+		() =>
+			countryData
+				.filter((country) => country.code)
+				.map((country) => ({
+					countryCode: String(country.code),
+					countryName: country.name,
+					clicks: country.count,
+				})),
+		[countryData]
 	);
 
-	const formattedCountries =
-		countryData.length > 0
-			? countryData.slice(0, 5).map((country: CountryMetric) => ({
-					flag: getCountryFlagEmoji(country.code),
-					name: country.name || __("Unknown"),
-					value:
-						totalClicks > 0
-							? Math.round((country.count / totalClicks) * 100)
-							: 0,
-					count: country.count,
-				}))
-			: [];
+	const formattedCountries = useMemo(
+		() =>
+			countryData.length > 0
+				? countryData.slice(0, MAX_COUNTRIES).map((country) => ({
+						flag: getCountryFlagEmoji(country.code),
+						name: country.name || __("Unknown"),
+						percentage: getMetricPercentage(
+							country.count,
+							totalClicks
+						),
+						count: country.count,
+					}))
+				: [],
+		[countryData, totalClicks]
+	);
 
 	return (
 		<div className="dashboard-countries">
@@ -33,35 +58,40 @@ const CountryStats = ({ countryData }: CountryStatsProps) => {
 					</p>
 				</div>
 			) : (
-				<div className="dashboard-countries-list">
-					{formattedCountries.map((country, index: number) => (
-						<div
-							key={`${country.name}-${index}`}
-							className="dashboard-countries-row"
-						>
-							<span className="dashboard-countries-row-flag">
-								{country.flag}
-							</span>
-							<div className="dashboard-countries-row-copy">
-								<div className="dashboard-countries-row-header">
-									<span className="dashboard-countries-row-name">
-										{country.name}
-									</span>
-									<span className="dashboard-countries-row-value">
-										{country.value}% ({country.count})
-									</span>
-								</div>
+				<>
+					<div className="dashboard-countries-map">
+						<WorldMap
+							data={mapData}
+							hoveredCountry={hoveredCountry?.countryCode}
+							onCountryHover={setHoveredCountry}
+						/>
+					</div>
 
-								<div className="dashboard-countries-row-track">
-									<div
-										className="dashboard-countries-row-bar"
-										style={{ width: `${country.value}%` }}
-									></div>
-								</div>
+					<div className="dashboard-countries-list">
+						{formattedCountries.map((country, index: number) => (
+							<div
+								key={`${country.name}-${index}`}
+								className="dashboard-countries-row"
+							>
+								<span className="dashboard-countries-row-rank">
+									{index + 1}
+								</span>
+								<span className="dashboard-countries-row-flag">
+									{country.flag}
+								</span>
+								<span className="dashboard-countries-row-name">
+									{country.name}
+								</span>
+								<span className="dashboard-countries-row-percentage">
+									{country.percentage}%
+								</span>
+								<span className="dashboard-countries-row-count">
+									{formatCount(country.count)}
+								</span>
 							</div>
-						</div>
-					))}
-				</div>
+						))}
+					</div>
+				</>
 			)}
 		</div>
 	);

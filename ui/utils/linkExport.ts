@@ -31,11 +31,11 @@ const LINK_EXPORT_HEADERS: Array<keyof LinkExportItem> = [
  */
 function escapeXml(value: unknown): string {
 	return String(value ?? "")
-		.replace(/&/g, "\u0026amp;")
-		.replace(/</g, "\u0026lt;")
-		.replace(/>/g, "\u0026gt;")
-		.replace(/"/g, "\u0026quot;")
-		.replace(/'/g, "\u0026apos;");
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&apos;");
 }
 
 /**

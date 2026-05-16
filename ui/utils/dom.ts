@@ -85,7 +85,7 @@ export function downloadBrowserFile(
 	document.body.appendChild(link);
 	link.click();
 
-	/* Clean up the temporary element and revoked the object URL. */
+	/* Clean up the temporary element and revoke the object URL. */
 	document.body.removeChild(link);
 	window.URL.revokeObjectURL(blobUrl);
 }

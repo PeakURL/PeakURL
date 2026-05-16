@@ -4,7 +4,7 @@
 	}
 
 	.links-location-empty-map {
-		@apply min-h-[22rem] rounded-lg border border-stroke bg-surface px-4 py-6 sm:px-6;
+		@apply min-h-88 rounded-lg border border-stroke bg-surface px-4 py-6 sm:px-6;
 	}
 
 	.links-location-empty-map-inner {

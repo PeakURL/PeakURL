@@ -33,7 +33,7 @@ function appendUrlFormData(
 	payload: Record<string, unknown>
 ): FormData {
 	Object.entries(payload).forEach(([key, value]) => {
-		if (undefined === value || null === value) {
+		if (value === undefined || value === null) {
 			return;
 		}
 
@@ -114,13 +114,17 @@ function serializeUrlsQuery({
 		params.set("search", search);
 	}
 
-	if (range) {
-		params.set("range", range);
+	if (range === "custom") {
+		const hasValidFrom = typeof from === "string" && from.trim().length > 0;
+		const hasValidTo = typeof to === "string" && to.trim().length > 0;
 
-		if ("custom" === range) {
+		if (hasValidFrom && hasValidTo) {
+			params.set("range", range);
 			params.set("from", from);
 			params.set("to", to);
 		}
+	} else if (range) {
+		params.set("range", range);
 	}
 
 	return `urls?${params.toString()}`;

@@ -374,7 +374,7 @@ function TrafficLocationTab({
 						const percent = getPercentage(city.count);
 						return (
 							<CityListItem
-								key={`${city.name}-${city.country}-${index}`}
+								key={`${city.name}-${city.country}-${city.count}`}
 								city={city}
 								percent={percent}
 								rank={index + 1}
@@ -430,7 +430,7 @@ function TrafficLocationTab({
 
 								return (
 									<CityListItem
-										key={`${city.name}-${city.country}-${index}-details`}
+										key={`${city.name}-${city.country}-${city.count}-details`}
 										city={city}
 										percent={percent}
 										rank={index + 1}

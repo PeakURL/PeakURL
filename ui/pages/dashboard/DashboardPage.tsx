@@ -41,9 +41,9 @@ function normalizeTrafficSeries(
 				? labels
 				: Array.from({ length }, (_, index) => labels[index] || ""),
 		clicks: Array.from({ length }, (_, index) => {
-			const clickCount = Number(clicks[index] || 0);
-			return Number.isFinite(clickCount) && clickCount > 0
-				? clickCount
+			const clickValue = Number(clicks[index] || 0);
+			return Number.isFinite(clickValue) && clickValue > 0
+				? clickValue
 				: 0;
 		}),
 		unique: Array.from({ length }, (_, index) => {
@@ -141,7 +141,12 @@ function DashboardPage() {
 					timeRange={timeRange}
 					onTimeRangeChange={setTimeRange}
 					onRefresh={handleRefresh}
-					isRefreshing={true}
+					isRefreshing={
+						isRefreshing ||
+						isAnalyticsFetching ||
+						isActivityFetching ||
+						isRecentClicksFetching
+					}
 				/>
 				<DashboardSkeleton />
 			</div>

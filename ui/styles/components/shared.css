@@ -80,6 +80,7 @@
 			[type="time"],
 			[type="week"]
 		)::-webkit-calendar-picker-indicator {
+		-webkit-filter: invert(1);
 		filter: invert(1);
 		opacity: 0.8;
 	}
@@ -129,7 +130,7 @@
 	}
 
 	.content-area {
-		@apply bg-bg dark:bg-bg;
+		@apply bg-bg dark:bg-gray-900;
 	}
 
 	.focus-ring {

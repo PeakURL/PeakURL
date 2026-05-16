@@ -46,20 +46,6 @@
 		@apply relative h-96 overflow-hidden rounded-lg border border-stroke;
 	}
 
-	.links-location-tooltip {
-		@apply absolute top-4 min-w-32 rounded-lg border border-stroke bg-surface p-3 shadow-xl;
-		inset-inline-start: 1rem;
-		text-align: start;
-	}
-
-	.links-location-tooltip-title {
-		@apply text-sm font-semibold text-heading;
-	}
-
-	.links-location-tooltip-copy {
-		@apply mt-1 text-xs text-text-muted;
-	}
-
 	.links-location-list {
 		@apply space-y-3;
 	}

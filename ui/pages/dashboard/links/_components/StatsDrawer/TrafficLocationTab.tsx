@@ -311,17 +311,6 @@ function TrafficLocationTab({
 							)
 						}
 					/>
-					{hoveredCountry && (
-						<div className="links-location-tooltip">
-							<p className="links-location-tooltip-title">
-								{hoveredCountry.countryName}
-							</p>
-							<p className="links-location-tooltip-copy">
-								{formatClickCount(hoveredCountry.clicks)} (
-								{getPercentage(hoveredCountry.clicks)}%)
-							</p>
-						</div>
-					)}
 				</div>
 			</div>
 

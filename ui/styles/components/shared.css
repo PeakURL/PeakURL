@@ -51,6 +51,39 @@
 		@apply h-10 w-full rounded-md border border-stroke bg-surface px-4 py-2 text-sm text-heading placeholder:text-muted outline-none transition-colors;
 	}
 
+	.form-control-base:is(
+		[type="date"],
+		[type="datetime-local"],
+		[type="month"],
+		[type="time"],
+		[type="week"]
+	) {
+		color-scheme: light;
+	}
+
+	.dark
+		.form-control-base:is(
+			[type="date"],
+			[type="datetime-local"],
+			[type="month"],
+			[type="time"],
+			[type="week"]
+		) {
+		color-scheme: dark;
+	}
+
+	.dark
+		.form-control-base:is(
+			[type="date"],
+			[type="datetime-local"],
+			[type="month"],
+			[type="time"],
+			[type="week"]
+		)::-webkit-calendar-picker-indicator {
+		filter: invert(1);
+		opacity: 0.8;
+	}
+
 	.form-control-accent-focus {
 		@apply focus:outline-none;
 	}

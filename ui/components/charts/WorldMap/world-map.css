@@ -49,7 +49,7 @@
 	}
 
 	.world-map-svg {
-		@apply h-full w-full cursor-grab bg-surface;
+		@apply h-full w-full cursor-grab overflow-hidden bg-surface;
 		touch-action: none;
 	}
 

@@ -48,7 +48,7 @@
 	}
 
 	.dashboard-recent-clicks-stats {
-		@apply col-start-2 flex min-w-0 items-center gap-2 text-xs text-text-muted sm:col-start-auto sm:flex-col sm:items-end sm:gap-1;
+		@apply col-start-2 flex min-w-0 items-center! gap-2 text-xs text-text-muted sm:col-start-auto sm:flex-col sm:items-end sm:gap-1;
 	}
 
 	.dashboard-recent-clicks-count {

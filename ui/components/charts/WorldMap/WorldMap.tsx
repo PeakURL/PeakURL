@@ -1,21 +1,22 @@
 import type { MouseEvent, WheelEvent } from "react";
 import { memo, useEffect, useRef, useState } from "react";
-import { Mercator } from "@visx/geo";
 import type { GeoPermissibleObjects } from "@visx/geo/lib/types";
 import { Zoom } from "@visx/zoom";
 import type { TransformMatrix } from "@visx/zoom/lib/types";
 import { feature as topojsonFeature } from "topojson-client";
 import { scaleLinear } from "d3-scale";
-import { Plus, Minus, Maximize2, Minimize2, RotateCcw } from "lucide-react";
 import { __ } from "@/i18n";
 import { useTheme } from "@/components/providers";
 import { cn } from "@/utils";
-import type {
-	GeographyFeature,
-	TooltipContent,
-	WorldMapDatum,
-	WorldMapProps,
-} from "../types";
+import type { TooltipContent, WorldMapDatum, WorldMapProps } from "../types";
+import {
+	type RenderedMapFeature,
+	WorldMapCanvas,
+	WorldMapControls,
+	WorldMapLegend,
+	WorldMapTooltip,
+	type WorldMapTooltipPosition,
+} from "./_components";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 const MAP_WIDTH = 960;
@@ -24,9 +25,8 @@ const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
 const TOOLTIP_WIDTH = 220;
 const TOOLTIP_HEIGHT = 88;
-const TOOLTIP_OFFSET = "0.75rem";
-/* Render one neighboring world on each side so horizontal panning wraps cleanly. */
 const WORLD_COPY_OFFSETS = [-MAP_WIDTH, 0, MAP_WIDTH];
+const WORLD_COPY_RENDER_THRESHOLD = 1;
 const INITIAL_TRANSFORM = {
 	scaleX: 1,
 	scaleY: 1,
@@ -283,22 +283,16 @@ const DARK_MAP_COLORS = {
 	legend: ["#172554", "#0c4a6e", "#075985", "#0284c7", "#38bdf8", "#7dd3fc"],
 };
 
-interface TooltipPosition {
-	x: number;
-	y: number;
-	isNearRightEdge: boolean;
-	isNearBottomEdge: boolean;
-}
-
-interface RenderedMapFeature {
-	feature: GeographyFeature;
-	path: string | null;
-}
-
+/**
+ * Clamp a number within a fixed range.
+ */
 function clampValue(value: number, minimum: number, maximum: number): number {
 	return Math.min(Math.max(value, minimum), maximum);
 }
 
+/**
+ * Wrap the horizontal map offset inside the current scaled world width.
+ */
 function wrapMapOffset(translateX: number, worldWidth: number): number {
 	if (worldWidth <= 0) {
 		return 0;
@@ -309,6 +303,26 @@ function wrapMapOffset(translateX: number, worldWidth: number): number {
 	return Object.is(wrappedOffset, -0) ? 0 : wrappedOffset;
 }
 
+/**
+ * Check whether the map has moved enough to need neighboring world copies.
+ */
+function hasAdjustedMapView(transform: TransformMatrix): boolean {
+	return (
+		Math.abs(transform.translateX) > WORLD_COPY_RENDER_THRESHOLD ||
+		transform.scaleX > MIN_ZOOM + Number.EPSILON
+	);
+}
+
+/**
+ * Return the rendered world copies for the current map position.
+ */
+function getWorldCopyOffsets(transform: TransformMatrix): number[] {
+	return hasAdjustedMapView(transform) ? WORLD_COPY_OFFSETS : [0];
+}
+
+/**
+ * Keep map movement bounded vertically while allowing horizontal wrapping.
+ */
 function constrainMapTransform(transform: TransformMatrix): TransformMatrix {
 	const scaleX = clampValue(transform.scaleX, MIN_ZOOM, MAX_ZOOM);
 	const scaleY = clampValue(transform.scaleY, MIN_ZOOM, MAX_ZOOM);
@@ -325,12 +339,7 @@ function constrainMapTransform(transform: TransformMatrix): TransformMatrix {
 }
 
 /**
- * WorldMap Component
- * Displays a choropleth map showing click distribution by country
- * @param {Object} props
- * @param {Array} props.data - Array of country data objects { countryCode, countryName, clicks }
- * @param {Object} props.hoveredCountry - Currently hovered country code
- * @param {Function} props.onCountryHover - Callback when a country is hovered
+ * Display an interactive choropleth map of click distribution by country.
  */
 const WorldMap = ({
 	data = [],
@@ -343,7 +352,7 @@ const WorldMap = ({
 		null
 	);
 	const [tooltipPosition, setTooltipPosition] =
-		useState<TooltipPosition | null>(null);
+		useState<WorldMapTooltipPosition | null>(null);
 	const [geographies, setGeographies] = useState<GeoPermissibleObjects[]>([]);
 	const [loadError, setLoadError] = useState(false);
 	const [isFullscreen, setIsFullscreen] = useState(false);
@@ -384,6 +393,7 @@ const WorldMap = ({
 		loadMap();
 
 		return () => {
+			// Stop the atlas request when the map unmounts or React re-runs the effect.
 			controller.abort();
 		};
 	}, []);
@@ -437,7 +447,7 @@ const WorldMap = ({
 
 	const getTooltipPosition = (
 		event: MouseEvent<SVGPathElement>
-	): TooltipPosition | null => {
+	): WorldMapTooltipPosition | null => {
 		const mapElement = mapRef.current;
 
 		if (!mapElement) {
@@ -579,11 +589,23 @@ const WorldMap = ({
 					};
 				}}
 			>
-				{(zoom) => (
-					<>
-						<div className="world-map-controls">
-							<button
-								onClick={() =>
+				{(zoom) => {
+					// Keep the resting map compact, then add neighboring copies once interaction starts.
+					const mapCopyOffsets = getWorldCopyOffsets(
+						zoom.transformMatrix
+					);
+
+					return (
+						<>
+							<WorldMapControls
+								canZoomIn={
+									zoom.transformMatrix.scaleX < MAX_ZOOM
+								}
+								canZoomOut={
+									zoom.transformMatrix.scaleX > MIN_ZOOM
+								}
+								isFullscreen={isFullscreen}
+								onZoomIn={() =>
 									zoom.scale({
 										scaleX: 1.2,
 										scaleY: 1.2,
@@ -593,16 +615,7 @@ const WorldMap = ({
 										},
 									})
 								}
-								disabled={
-									zoom.transformMatrix.scaleX >= MAX_ZOOM
-								}
-								className="world-map-control"
-								title={__("Zoom in")}
-							>
-								<Plus className="world-map-control-icon" />
-							</button>
-							<button
-								onClick={() =>
+								onZoomOut={() =>
 									zoom.scale({
 										scaleX: 1 / 1.2,
 										scaleY: 1 / 1.2,
@@ -612,170 +625,65 @@ const WorldMap = ({
 										},
 									})
 								}
-								disabled={
-									zoom.transformMatrix.scaleX <= MIN_ZOOM
-								}
-								className="world-map-control"
-								title={__("Zoom out")}
-							>
-								<Minus className="world-map-control-icon" />
-							</button>
-							<button
-								onClick={() => zoom.reset()}
-								className="world-map-control"
-								title={__("Reset view")}
-							>
-								<RotateCcw className="world-map-control-icon" />
-							</button>
-							<button
-								onClick={handleFullscreenToggle}
-								className="world-map-control"
-								title={
-									isFullscreen
-										? __("Exit full screen")
-										: __("Full screen")
-								}
-							>
-								{isFullscreen ? (
-									<Minimize2 className="world-map-control-icon" />
-								) : (
-									<Maximize2 className="world-map-control-icon" />
-								)}
-							</button>
-						</div>
+								onReset={() => zoom.reset()}
+								onFullscreenToggle={handleFullscreenToggle}
+							/>
 
-						{tooltipContent && tooltipPosition && (
-							<div
-								className="world-map-tooltip"
-								style={{
-									insetInlineStart: tooltipPosition.x,
-									top: tooltipPosition.y,
-									transform: `translate(${
-										tooltipPosition.isNearRightEdge
-											? `calc(-100% - ${TOOLTIP_OFFSET})`
-											: TOOLTIP_OFFSET
-									}, ${
-										tooltipPosition.isNearBottomEdge
-											? `calc(-100% - ${TOOLTIP_OFFSET})`
-											: TOOLTIP_OFFSET
-									})`,
-								}}
-							>
-								<p className="world-map-tooltip-title">
-									{tooltipContent.name}
-								</p>
-								<p className="world-map-tooltip-copy">
-									{tooltipContent.clicks}{" "}
-									{tooltipContent.clicks === 1
-										? __("click")
-										: __("clicks")}
-								</p>
-							</div>
-						)}
-
-						<svg
-							viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
-							className={cn(
-								"world-map-svg",
-								zoom.isDragging && "world-map-svg-dragging"
+							{tooltipContent && tooltipPosition && (
+								<WorldMapTooltip
+									content={tooltipContent}
+									position={tooltipPosition}
+								/>
 							)}
-							onMouseDown={zoom.dragStart}
-							onMouseMove={zoom.dragMove}
-							onMouseUp={zoom.dragEnd}
-							onWheel={(event) => {
-								if (!isWheelZoomGesture(event)) {
-									return;
-								}
 
-								event.preventDefault();
-								event.stopPropagation();
-								zoom.handleWheel(event);
-							}}
-							onMouseLeave={() => {
-								zoom.dragEnd();
-								handleCountryLeave(false);
-							}}
-						>
-							<rect
+							<WorldMapCanvas
 								width={MAP_WIDTH}
 								height={MAP_HEIGHT}
-								fill="transparent"
+								geographies={geographies}
+								mapCopyOffsets={mapCopyOffsets}
+								transform={zoom.toString()}
+								isDragging={zoom.isDragging}
+								onDragStart={zoom.dragStart}
+								onDragMove={zoom.dragMove}
+								onDragEnd={zoom.dragEnd}
+								onWheel={(event) => {
+									if (!isWheelZoomGesture(event)) {
+										return;
+									}
+
+									// Let the page scroll normally unless the user asks to zoom the map.
+									event.preventDefault();
+									event.stopPropagation();
+									zoom.handleWheel(event);
+								}}
+								onMouseLeave={() => {
+									zoom.dragEnd();
+									handleCountryLeave(false);
+								}}
+								renderCountryPath={renderCountryPath}
 							/>
-							<g transform={zoom.toString()}>
-								{geographies.length > 0 && (
-									<Mercator
-										data={geographies}
-										scale={147}
-										translate={[
-											MAP_WIDTH / 2,
-											MAP_HEIGHT / 2,
-										]}
-										center={[0, 20]}
-									>
-										{({ features }) =>
-											WORLD_COPY_OFFSETS.map(
-												(mapOffset) => (
-													<g
-														key={`world-copy-${mapOffset}`}
-														transform={`translate(${mapOffset} 0)`}
-													>
-														{(
-															features as RenderedMapFeature[]
-														).map(
-															(feature, index) =>
-																renderCountryPath(
-																	feature,
-																	index,
-																	zoom.isDragging
-																)
-														)}
-													</g>
-												)
-											)
-										}
-									</Mercator>
-								)}
-							</g>
-						</svg>
 
-						{loadError && (
-							<div className="world-map-overlay world-map-overlay-error">
-								{__("Unable to load the world map right now.")}
-							</div>
-						)}
-
-						{!loadError && geographies.length === 0 && (
-							<div className="world-map-overlay world-map-overlay-loading">
-								{__("Loading map...")}
-							</div>
-						)}
-
-						<div className="world-map-legend">
-							<div className="world-map-legend-title">
-								{__("Clicks")}
-							</div>
-							<div className="world-map-legend-scale">
-								<span className="world-map-legend-value">
-									0
-								</span>
-								<div className="world-map-legend-gradient">
-									{mapColors.legend.map((color) => (
-										<div
-											key={color}
-											className="world-map-legend-gradient-stop"
-											style={{
-												backgroundColor: color,
-											}}
-										></div>
-									))}
+							{loadError && (
+								<div className="world-map-overlay world-map-overlay-error">
+									{__(
+										"Unable to load the world map right now."
+									)}
 								</div>
-								<span className="world-map-legend-value">
-									{maxClicks}
-								</span>
-							</div>
-						</div>
-					</>
-				)}
+							)}
+
+							{!loadError && geographies.length === 0 && (
+								<div className="world-map-overlay world-map-overlay-loading">
+									{__("Loading map...")}
+								</div>
+							)}
+
+							<WorldMapLegend
+								colors={mapColors.legend}
+								maxClicks={maxClicks}
+							/>
+						</>
+					);
+				}}
 			</Zoom>
 		</div>
 	);

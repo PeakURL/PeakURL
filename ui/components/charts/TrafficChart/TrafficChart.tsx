@@ -1,5 +1,5 @@
 import type { ChartData, TooltipItem } from "chart.js";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Chart } from "chart.js/auto";
 import { __ } from "@/i18n";
 import { formatCount, formatDateOnly } from "@/utils";
@@ -90,17 +90,40 @@ const UNIQUE_OVERLAP_OFFSET_SCALE = 0.015;
 const UNIQUE_OVERLAP_OFFSET_MIN = 0.02;
 const UNIQUE_OVERLAP_OFFSET_MAX = 0.35;
 
+function getTrafficStringValues(values: unknown): string[] {
+	return Array.isArray(values) ? values.map((value) => String(value)) : [];
+}
+
+function getTrafficNumberValues(values: unknown): number[] {
+	if (!Array.isArray(values)) {
+		return [];
+	}
+
+	return values.map((value) => {
+		const numericValue = Number(value);
+		return Number.isFinite(numericValue) ? numericValue : 0;
+	});
+}
+
+/**
+ * Parse a memo key created by JSON.stringify().
+ *
+ * @param value - Serialized chart field value.
+ * @return Parsed field values.
+ */
+function parseTrafficDataKey<T>(value: string): T[] {
+	return JSON.parse(value) as T[];
+}
+
 /**
  * TrafficChart Component
  * Visualizes traffic data (clicks and unique visitors) using Chart.js
  * @param {Object} props
  * @param {Object} props.data - Chart data containing labels, clicks, and unique arrays
- * @param {string} [props.timeRange="7d"] - Selected time range filter
  * @param {TrafficChartType} [props.type="line"] - Chart type (line or bar)
  */
 export function TrafficChart({
 	data,
-	timeRange = "7d",
 	type = "line",
 	seriesMode = "both",
 }: TrafficChartProps) {
@@ -110,6 +133,19 @@ export function TrafficChart({
 		number[],
 		string
 	> | null>(null);
+	const labelsKey = JSON.stringify(getTrafficStringValues(data?.labels));
+	const clicksKey = JSON.stringify(getTrafficNumberValues(data?.clicks));
+	const uniqueKey = JSON.stringify(getTrafficNumberValues(data?.unique));
+	const granularity = "month" === data?.granularity ? "month" : "day";
+	const chartDataInput = useMemo<Required<TrafficChartData>>(
+		() => ({
+			labels: parseTrafficDataKey<string>(labelsKey),
+			clicks: parseTrafficDataKey<number>(clicksKey),
+			unique: parseTrafficDataKey<number>(uniqueKey),
+			granularity,
+		}),
+		[labelsKey, clicksKey, uniqueKey, granularity]
+	);
 	const [isDark, setIsDark] = useState(false);
 
 	// Detect dark mode
@@ -175,14 +211,12 @@ export function TrafficChart({
 
 			// Use provided data if it exists and has the right structure, otherwise use demo data
 			const hasValidStructure =
-				data &&
-				Array.isArray(data.labels) &&
-				Array.isArray(data.clicks) &&
-				Array.isArray(data.unique) &&
-				data.labels.length > 0;
+				Array.isArray(chartDataInput.labels) &&
+				Array.isArray(chartDataInput.clicks) &&
+				Array.isArray(chartDataInput.unique) &&
+				chartDataInput.labels.length > 0;
 
-			const rawLabels = data?.labels || [];
-			const granularity = "month" === data?.granularity ? "month" : "day";
+			const rawLabels = chartDataInput.labels;
 			const chartData: TrafficChartData = hasValidStructure
 				? {
 						labels: rawLabels.map((label) =>
@@ -193,9 +227,9 @@ export function TrafficChart({
 								rawLabels
 							)
 						),
-						clicks: data?.clicks || [],
-						unique: data?.unique || [],
-						granularity,
+						clicks: chartDataInput.clicks,
+						unique: chartDataInput.unique,
+						granularity: chartDataInput.granularity,
 					}
 				: {
 						labels: [
@@ -437,7 +471,7 @@ export function TrafficChart({
 				chartInstanceRef.current = null;
 			}
 		};
-	}, [data, timeRange, isDark, type, seriesMode]);
+	}, [chartDataInput, granularity, isDark, type, seriesMode]);
 
 	return (
 		<div className="traffic-chart">

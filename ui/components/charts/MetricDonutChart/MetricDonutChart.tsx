@@ -92,6 +92,7 @@ export default function MetricDonutChart({
 						bodyColor: isDarkMode ? "#d1d5db" : "#4b5563",
 						borderColor: isDarkMode ? "#374151" : "#e5e7eb",
 						borderWidth: 1,
+						displayColors: false,
 						callbacks: {
 							label: (context) =>
 								formatTooltipLabel(context, total),

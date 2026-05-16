@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
 	useGetAnalyticsQuery,
 	useGetActivityQuery,
@@ -126,7 +126,10 @@ function DashboardPage() {
 		operatingSystems: analyticsRes?.data?.operatingSystems ?? [],
 	};
 	const countryData: CountryMetric[] = analyticsRes?.data?.countries ?? [];
-	const trafficData = normalizeTrafficSeries(analyticsRes?.data?.traffic);
+	const trafficData = useMemo(
+		() => normalizeTrafficSeries(analyticsRes?.data?.traffic),
+		[analyticsRes?.data?.traffic]
+	);
 
 	const isLoading =
 		isAnalyticsLoading || isActivityLoading || isRecentClicksLoading;

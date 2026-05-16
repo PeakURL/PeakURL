@@ -4,11 +4,11 @@
 	}
 
 	.metric-donut-chart-canvas {
-		@apply h-full w-full;
+		@apply relative z-10 h-full w-full;
 	}
 
 	.metric-donut-chart-center {
-		@apply pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center;
+		@apply pointer-events-none absolute inset-0 z-0 flex flex-col items-center justify-center text-center;
 	}
 
 	.metric-donut-chart-value {

@@ -8,7 +8,7 @@
 	}
 
 	.links-row-cell {
-		@apply px-4 py-3;
+		@apply px-4 py-3 align-middle;
 	}
 
 	.links-row-link {
@@ -52,6 +52,7 @@
 	}
 
 	.links-row-badge-time {
+		unicode-bidi: -moz-plaintext;
 		unicode-bidi: plaintext;
 	}
 

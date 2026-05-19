@@ -9,7 +9,7 @@
 	}
 
 	.links-table-header-cell {
-		@apply px-4 py-3 text-xs font-semibold uppercase tracking-wide text-text-muted;
+		@apply px-4 py-3 align-middle text-xs font-semibold uppercase tracking-wide text-text-muted;
 	}
 
 	.links-table-header-cell-select {

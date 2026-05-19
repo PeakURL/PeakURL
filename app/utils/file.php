@@ -195,13 +195,13 @@ class File {
 	}
 
 	/**
-	 * Check whether an archive member path is safe to extract.
+	 * Check whether an archive member path is valid for extraction.
 	 *
 	 * @param string $path Archive member path.
 	 * @return bool
 	 * @since 1.1.1
 	 */
-	public static function is_safe_archive_path( string $path ): bool {
+	public static function is_valid_archive_path( string $path ): bool {
 		$path = self::normalize_path( $path );
 
 		if (

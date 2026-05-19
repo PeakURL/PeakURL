@@ -199,14 +199,14 @@ trait CredentialsTrait {
 	}
 
 	/**
-	 * Consume (mark as used) a backup code during 2FA login.
+	 * Verify a one-time backup code during 2FA login.
 	 *
 	 * @param string $user_id User row ID.
 	 * @param string $token   Plain-text backup code.
-	 * @return bool True if a valid, unused code was consumed.
+	 * @return bool True if a valid unused code was accepted and removed.
 	 * @since 1.0.0
 	 */
-	private function consume_backup_code( string $user_id, string $token ): bool {
+	private function verify_backup_code( string $user_id, string $token ): bool {
 		$backup_code = strtoupper( trim( $token ) );
 
 		if ( '' === $backup_code ) {

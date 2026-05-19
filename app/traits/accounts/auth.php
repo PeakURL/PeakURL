@@ -257,7 +257,7 @@ trait AuthTrait {
 					$token,
 				)
 			) {
-				if ( ! $this->consume_backup_code( (string) $user['id'], $token ) ) {
+				if ( ! $this->verify_backup_code( (string) $user['id'], $token ) ) {
 					throw new ApiException( __( 'Invalid two-factor code.', 'peakurl' ), 401 );
 				}
 			}

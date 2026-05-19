@@ -27,161 +27,6 @@ if (
 }
 
 /**
- * Normalize a runtime namespace segment into a kebab-case path segment.
- *
- * @param string $value Raw class or namespace segment.
- * @return string
- * @since 1.0.14
- */
-// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
-function peakurl_get_runtime_path_segment( string $value ): string {
-	if ( 'PeakURL_DB' === $value ) {
-		return 'peakurl-db';
-	}
-
-	if ( 'Str' === $value ) {
-		return 'string';
-	}
-
-	$value = str_replace( '_', '-', $value );
-	$value = preg_replace( '/([A-Z]+)([A-Z][a-z])/', '$1-$2', $value );
-	$value = preg_replace( '/([a-z0-9])([A-Z])/', '$1-$2', (string) $value );
-
-	return strtolower( trim( (string) $value ) );
-}
-
-/**
- * Resolve a PeakURL runtime class name to its source file.
- *
- * Composer's classmap is still generated for the PHP runtime, but during
- * development a new file can exist before `composer dump-autoload` has
- * refreshed the map. This keeps WordPress-style filenames working without
- * blocking the whole API on a stale classmap.
- *
- * @param string $type Fully qualified class or trait name.
- * @return string|null Absolute file path when the class follows the runtime layout.
- * @since 1.0.3
- */
-// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
-function peakurl_get_runtime_class_file( string $type ): ?string {
-	$namespace_prefix = 'PeakURL\\';
-
-	if ( 0 !== strpos( $type, $namespace_prefix ) ) {
-		return null;
-	}
-
-	$relative_class = substr( $type, strlen( $namespace_prefix ) );
-
-	if ( '' === $relative_class ) {
-		return null;
-	}
-
-	$app_root      = dirname( __DIR__ ) . DIRECTORY_SEPARATOR;
-	$segments      = explode( '\\', $relative_class );
-	$type_name     = array_pop( $segments );
-	$directory_map = array(
-		'Api'         => 'api/',
-		'Controllers' => 'controllers/',
-		'Database'    => 'database/',
-		'Http'        => 'http/',
-		'Includes'    => 'includes/',
-		'Services'    => 'services/',
-		'Traits'      => 'traits/',
-		'Utils'       => 'utils/',
-	);
-
-	if ( empty( $segments ) ) {
-		return 'Store' === $type_name ? $app_root . 'store.php' : null;
-	}
-
-	$group = array_shift( $segments );
-
-	if ( ! isset( $directory_map[ $group ] ) ) {
-		return null;
-	}
-
-	if ( 'Controllers' === $group && 0 === substr_compare( $type_name, 'Controller', -10 ) ) {
-		$type_name = substr( $type_name, 0, -10 );
-	}
-
-	if ( 'Api' === $group && 0 === substr_compare( $type_name, 'Api', -3 ) ) {
-		$type_name = substr( $type_name, 0, -3 );
-	}
-
-	if ( 'Traits' === $group && 0 === substr_compare( $type_name, 'Trait', -5 ) ) {
-		$type_name = substr( $type_name, 0, -5 );
-	}
-
-	$sub_path = '';
-
-	foreach ( $segments as $segment ) {
-		$segment_name = peakurl_get_runtime_path_segment( $segment );
-
-		if ( '' === $segment_name ) {
-			return null;
-		}
-
-		$sub_path .= $segment_name . DIRECTORY_SEPARATOR;
-	}
-
-	$file_name = peakurl_get_runtime_path_segment( $type_name );
-
-	if ( '' === $file_name ) {
-		return null;
-	}
-
-	$file = $app_root . $directory_map[ $group ] . $sub_path . $file_name . '.php';
-
-	if ( is_readable( $file ) ) {
-		return $file;
-	}
-
-	$nested_file = substr( $file, 0, -4 ) . DIRECTORY_SEPARATOR . basename( $file );
-
-	if ( is_readable( $nested_file ) ) {
-		return $nested_file;
-	}
-
-	$index_name = '';
-
-	if ( ! empty( $segments ) ) {
-		$index_name = peakurl_get_runtime_path_segment(
-			(string) end( $segments )
-		);
-	}
-
-	if ( 'base' === $file_name || $file_name === $index_name ) {
-		$index_file = $app_root . $directory_map[ $group ] . $sub_path . 'index.php';
-
-		if ( is_readable( $index_file ) ) {
-			return $index_file;
-		}
-	}
-
-	return $file;
-}
-
-/**
- * Load PeakURL runtime classes from the source tree when Composer misses them.
- *
- * @param string $type Fully qualified class or trait name.
- * @return void
- * @since 1.0.3
- */
-// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
-function peakurl_load_runtime_class( string $type ): void {
-	$file = peakurl_get_runtime_class_file( $type );
-
-	if ( null === $file || ! is_readable( $file ) ) {
-		return;
-	}
-
-	require_once $file;
-}
-
-spl_autoload_register( 'peakurl_load_runtime_class' );
-
-/**
  * Send an email through the active PeakURL transport.
  *
  * Mirrors the role of WordPress `wp_mail()` while keeping PeakURL's
@@ -602,13 +447,13 @@ function peakurl_get_i18n_service(
 		}
 	}
 
-	$runtime_config = $config ?? RuntimeConfig::bootstrap( ABSPATH . 'app' );
-	$next_hash      = md5(
+	$app_config = $config ?? RuntimeConfig::bootstrap( ABSPATH . 'app' );
+	$next_hash  = md5(
 		(string) json_encode(
 			array(
-				'content_dir' => (string) ( $runtime_config['PEAKURL_CONTENT_DIR'] ?? '' ),
-				'site_url'    => (string) ( $runtime_config['SITE_URL'] ?? '' ),
-				'db_name'     => (string) ( $runtime_config['DB_DATABASE'] ?? '' ),
+				'content_dir' => (string) ( $app_config['PEAKURL_CONTENT_DIR'] ?? '' ),
+				'site_url'    => (string) ( $app_config['SITE_URL'] ?? '' ),
+				'db_name'     => (string) ( $app_config['DB_DATABASE'] ?? '' ),
 			),
 		),
 	);
@@ -617,10 +462,10 @@ function peakurl_get_i18n_service(
 		return $service;
 	}
 
-	$runtime_connection = $connection ?? new Connection( $runtime_config );
-	$settings_api       = new SettingsApi( new PeakURL_DB( $runtime_connection ) );
-	$service            = new I18n( $runtime_config, $settings_api );
-	$config_hash        = $next_hash;
+	$app_connection = $connection ?? new Connection( $app_config );
+	$settings_api   = new SettingsApi( new PeakURL_DB( $app_connection ) );
+	$service        = new I18n( $app_config, $settings_api );
+	$config_hash    = $next_hash;
 
 	return $service;
 }
@@ -741,40 +586,39 @@ function peakurl_get_text_direction(): string {
  * @return array<string, string>
  * @since 1.0.8
  */
-// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
-function peakurl_get_maintenance_view_data(
+function get_maintenance_view_data(
 	?array $config = null,
 	?Connection $connection = null
 ): array {
-	$runtime_config     = $config ?? RuntimeConfig::bootstrap( ABSPATH . 'app' );
-	$runtime_connection = $connection;
-	$site_name          = 'PeakURL';
-	$locale             = Constants::DEFAULT_LOCALE;
-	$html_lang          = 'en-US';
-	$text_direction     = 'ltr';
-	$i18n_service       = null;
+	$app_config     = $config ?? RuntimeConfig::bootstrap( ABSPATH . 'app' );
+	$app_connection = $connection;
+	$site_name      = 'PeakURL';
+	$locale         = Constants::DEFAULT_LOCALE;
+	$html_lang      = 'en-US';
+	$text_direction = 'ltr';
+	$i18n_service   = null;
 
 	try {
 		if (
-			null === $runtime_connection &&
+			null === $app_connection &&
 			file_exists( ABSPATH . 'config.php' )
 		) {
-			$runtime_connection = new Connection( $runtime_config );
+			$app_connection = new Connection( $app_config );
 		}
 
 		$i18n_service   = new I18n(
-			$runtime_config,
-			null !== $runtime_connection
-				? new SettingsApi( new PeakURL_DB( $runtime_connection ) )
+			$app_config,
+			null !== $app_connection
+				? new SettingsApi( new PeakURL_DB( $app_connection ) )
 				: null,
 		);
 		$locale         = $i18n_service->load_locale();
 		$html_lang      = $i18n_service->get_html_lang( $locale );
 		$text_direction = $i18n_service->get_text_direction( $locale );
 
-		if ( null !== $runtime_connection ) {
+		if ( null !== $app_connection ) {
 			$configured_site_name = trim(
-				(string) ( $runtime_connection->get_option( 'site_name' ) ?? '' ),
+				(string) ( $app_connection->get_option( 'site_name' ) ?? '' ),
 			);
 
 			if ( '' !== $configured_site_name ) {
@@ -826,8 +670,7 @@ function peakurl_get_maintenance_view_data(
  * @return array<string, mixed>
  * @since 1.0.8
  */
-// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
-function peakurl_get_maintenance_api_payload( array $maintenance_view_data ): array {
+function get_maintenance_api_payload( array $maintenance_view_data ): array {
 	return array(
 		'success' => false,
 		'message' => (string) ( $maintenance_view_data['apiMessage'] ?? 'PeakURL is updating. Please try again in a moment.' ),
@@ -844,8 +687,7 @@ function peakurl_get_maintenance_api_payload( array $maintenance_view_data ): ar
  * @return string
  * @since 1.0.8
  */
-// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
-function peakurl_get_maintenance_page( array $maintenance_view_data ): string {
+function render_maintenance_page( array $maintenance_view_data ): string {
 	$html_lang          = htmlspecialchars(
 		(string) ( $maintenance_view_data['htmlLang'] ?? 'en-US' ),
 		ENT_QUOTES,

@@ -36,9 +36,9 @@ if ( file_exists( ABSPATH . '.maintenance' ) ) {
 	if ( file_exists( $autoload_path ) ) {
 		require_once $autoload_path;
 
-		if ( function_exists( 'peakurl_get_maintenance_view_data' ) ) {
+		if ( function_exists( 'get_maintenance_view_data' ) ) {
 			try {
-				$maintenance_view_data = peakurl_get_maintenance_view_data();
+				$maintenance_view_data = get_maintenance_view_data();
 			} catch ( Throwable $exception ) {
 				$maintenance_view_data = array(
 					'htmlLang'   => 'en-US',
@@ -55,9 +55,9 @@ if ( file_exists( ABSPATH . '.maintenance' ) ) {
 		(string) ( $maintenance_view_data['htmlLang'] ?? 'en-US' ),
 	);
 	header( 'Retry-After: 60' );
-	echo function_exists( 'peakurl_get_maintenance_api_payload' )
+	echo function_exists( 'get_maintenance_api_payload' )
 		? json_encode(
-			peakurl_get_maintenance_api_payload( $maintenance_view_data ),
+			get_maintenance_api_payload( $maintenance_view_data ),
 			JSON_PRETTY_PRINT,
 		)
 		: json_encode(

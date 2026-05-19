@@ -82,11 +82,11 @@ class Manager {
 		Writer::write_config_file( $app_path, $values );
 
 		try {
-			$runtime_config = Bootstrap::prepare_config( $values );
-			Bootstrap::initialize_schema( $runtime_config, $app_path );
+			$app_config = Bootstrap::prepare_config( $values );
+			Bootstrap::initialize_schema( $app_config, $app_path );
 
-			$connection = new Connection( $runtime_config );
-			$data_store = new Store( $connection, $runtime_config );
+			$connection = new Connection( $app_config );
+			$data_store = new Store( $connection, $app_config );
 			$data_store->bootstrap_site();
 			$data_store->login(
 				$request,

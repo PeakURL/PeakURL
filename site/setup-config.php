@@ -59,14 +59,14 @@ $installer_locale = new InstallLocale(
 
 peakurl_override_i18n_service( $installer_locale->get_i18n_service() );
 
-$runtime_state = InstallState::get_runtime_state( $app_path );
+$install_state = InstallState::get_state( $app_path );
 
-if ( InstallState::READY === $runtime_state ) {
+if ( InstallState::READY === $install_state ) {
 	header( 'Location: ' . InstallScreen::format_url( $base_path, '/dashboard' ) );
 	exit();
 }
 
-if ( InstallState::NEEDS_INSTALL === $runtime_state ) {
+if ( InstallState::NEEDS_INSTALL === $install_state ) {
 	header( 'Location: ' . InstallScreen::format_url( $base_path, '/install.php' ) );
 	exit();
 }

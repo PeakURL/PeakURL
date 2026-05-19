@@ -1,6 +1,6 @@
 <?php
 /**
- * Release install runtime state service.
+ * Release install state service.
  *
  * @package PeakURL\Services\Install
  * @since 1.0.14
@@ -20,19 +20,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * State — runtime state detection for the release installer.
+ * State — install state detection for the release package.
  *
  * @since 1.0.14
  */
 class State {
 
-	/** Runtime state: config.php is missing. */
+		/** Install state: config.php is missing. */
 	public const NEEDS_SETUP = 'needs_setup';
 
-	/** Runtime state: config.php exists but tables or seed data are missing. */
+		/** Install state: config.php exists but tables or seed data are missing. */
 	public const NEEDS_INSTALL = 'needs_install';
 
-	/** Runtime state: the release is fully installed and ready. */
+		/** Install state: the release is fully installed and ready. */
 	public const READY = 'ready';
 
 	/**
@@ -43,11 +43,11 @@ class State {
 	 * @since 1.0.14
 	 */
 	public static function is_installed( string $app_path ): bool {
-		return self::READY === self::get_runtime_state( $app_path );
+		return self::READY === self::get_state( $app_path );
 	}
 
 	/**
-	 * Determine whether a runtime config.php file exists.
+	 * Determine whether a release config.php file exists.
 	 *
 	 * @param string $app_path Absolute path to the app directory.
 	 * @return bool
@@ -64,7 +64,7 @@ class State {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	public static function get_runtime_state( string $app_path ): string {
+	public static function get_state( string $app_path ): string {
 		if ( ! self::config_exists( $app_path ) ) {
 			return self::NEEDS_SETUP;
 		}

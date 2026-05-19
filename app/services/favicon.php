@@ -3,7 +3,7 @@
  * Site favicon management service.
  *
  * Stores the uploaded favicon under `content/uploads/favicon`, writes the
- * related web manifest, and exposes stable public URLs for the runtime shell.
+ * related web manifest, and exposes stable public URLs for the dashboard app.
  *
  * @package PeakURL\Services
  * @since 1.0.14

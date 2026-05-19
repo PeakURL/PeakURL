@@ -67,14 +67,14 @@ class UrlsController extends BaseController {
 	}
 
 	/**
-	 * Get an app-relative URL that preserves subdirectory installs.
+	 * Get an app-relative path that preserves subdirectory installs.
 	 *
 	 * @param Request $request Current request instance.
 	 * @param string  $suffix  Root-relative path to append.
 	 * @return string URL path relative to the active install root.
 	 * @since 1.0.0
 	 */
-	private function format_runtime_url( Request $request, string $suffix ): string {
+	private function format_app_path( Request $request, string $suffix ): string {
 		$script_name = str_replace(
 			'\\',
 			'/',
@@ -280,7 +280,7 @@ class UrlsController extends BaseController {
 			in_array( $request->get_method(), array( 'GET', 'HEAD' ), true )
 		) {
 			return JsonResponse::redirect(
-				$this->format_runtime_url(
+				$this->format_app_path(
 					$request,
 					'/dashboard/links?stats=' .
 						rawurlencode( $stats_code ),
@@ -736,7 +736,7 @@ HTML;
 	}
 
 	/**
-	 * Get a shared branded shell for public short-link pages.
+	 * Get shared branded markup for public short-link pages.
 	 *
 	 * @param string $page_title   Browser page title.
 	 * @param string $content_html Safe inner HTML for the card body.

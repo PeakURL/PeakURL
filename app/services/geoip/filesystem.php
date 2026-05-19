@@ -109,7 +109,7 @@ class Filesystem {
 			$entry_name = $this->archive_entry_name( $entry, $archive_path );
 
 			if (
-				! File::is_safe_archive_path( $entry_name ) ||
+				! File::is_valid_archive_path( $entry_name ) ||
 				( method_exists( $entry, 'isLink' ) && $entry->isLink() )
 			) {
 				throw new \RuntimeException(

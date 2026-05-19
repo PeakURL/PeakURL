@@ -323,7 +323,7 @@ class Installer {
 		for ( $index = 0, $file_count = count( $zip ); $index < $file_count; $index++ ) {
 			$name = $zip->getNameIndex( $index );
 
-			if ( ! is_string( $name ) || ! File::is_safe_archive_path( $name ) ) {
+			if ( ! is_string( $name ) || ! File::is_valid_archive_path( $name ) ) {
 				throw new \RuntimeException(
 					__( 'The downloaded release archive contains an unsafe file path.', 'peakurl' ),
 				);
@@ -356,7 +356,7 @@ class Installer {
 	 * @since 1.0.14
 	 */
 	private function get_package_root( string $extract_path ): string {
-		if ( $this->is_runtime_root( $extract_path ) ) {
+		if ( $this->is_release_root( $extract_path ) ) {
 			return $extract_path;
 		}
 
@@ -383,7 +383,7 @@ class Installer {
 
 		$nested_root = $this->filesystem->join_path( $extract_path, $entries[0] );
 
-		if ( is_dir( $nested_root ) && $this->is_runtime_root( $nested_root ) ) {
+		if ( is_dir( $nested_root ) && $this->is_release_root( $nested_root ) ) {
 			return $nested_root;
 		}
 
@@ -393,13 +393,13 @@ class Installer {
 	}
 
 	/**
-	 * Check whether an extracted package root contains a valid runtime directory.
+	 * Check whether an extracted package root contains a valid release layout.
 	 *
 	 * @param string $root_path Candidate package root.
 	 * @return bool
 	 * @since 1.0.14
 	 */
-	private function is_runtime_root( string $root_path ): bool {
+	private function is_release_root( string $root_path ): bool {
 		if ( ! file_exists( $this->filesystem->join_path( $root_path, 'index.php' ) ) ) {
 			return false;
 		}

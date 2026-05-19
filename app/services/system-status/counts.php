@@ -52,24 +52,24 @@ class Counts {
 	public function data_counts(): array {
 		return array(
 			'managedTables' => count( SchemaSpecs::managed_tables() ),
-			'users'         => $this->safe_table_count( 'users' ),
-			'links'         => $this->safe_table_count( 'urls' ),
-			'clicks'        => $this->safe_table_count( 'clicks' ),
+			'users'         => $this->count_table_rows( 'users' ),
+			'links'         => $this->count_table_rows( 'urls' ),
+			'clicks'        => $this->count_table_rows( 'clicks' ),
 			'sessions'      => $this->count_active_sessions(),
-			'apiKeys'       => $this->safe_table_count( 'api_keys' ),
-			'webhooks'      => $this->safe_table_count( 'webhooks' ),
-			'auditEvents'   => $this->safe_table_count( 'audit_logs' ),
+			'apiKeys'       => $this->count_table_rows( 'api_keys' ),
+			'webhooks'      => $this->count_table_rows( 'webhooks' ),
+			'auditEvents'   => $this->count_table_rows( 'audit_logs' ),
 		);
 	}
 
 	/**
-	 * Count rows in a managed table without throwing on edge failures.
+	 * Count rows in a managed table.
 	 *
 	 * @param string $table_name Managed table name without prefix.
 	 * @return int
 	 * @since 1.0.14
 	 */
-	private function safe_table_count( string $table_name ): int {
+	private function count_table_rows( string $table_name ): int {
 		try {
 			return $this->context->get_db()->count( $table_name );
 		} catch ( \Throwable $exception ) {

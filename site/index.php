@@ -8,7 +8,7 @@
  *  - Maintenance-mode detection and 503 responses.
  *  - Runtime-state routing (redirect to setup-config / install).
  *  - API pass-through to `app/public/index.php`.
- *  - Dashboard SPA shell injection for `/`, `/login`, `/dashboard*`.
+ *  - Dashboard app HTML injection for `/`, `/login`, `/dashboard*`.
  *
  * @package PeakURL\Site
  * @since 1.0.0
@@ -44,7 +44,7 @@ require_once __DIR__ . '/app/utils/string.php';
  * @return string Base path without trailing slash, or ''.
  * @since 1.0.0
  */
-function peakurl_runtime_base_path( string $script_name ): string {
+$base_path_from = static function ( string $script_name ): string {
 	$base_path = str_replace( '\\', '/', dirname( $script_name ) );
 
 	if ( '.' === $base_path || '/' === $base_path ) {
@@ -52,7 +52,7 @@ function peakurl_runtime_base_path( string $script_name ): string {
 	}
 
 	return rtrim( $base_path, '/' );
-}
+};
 
 /**
  * Strip the base path prefix to produce a root-relative request path.
@@ -62,7 +62,7 @@ function peakurl_runtime_base_path( string $script_name ): string {
  * @return string Relative path starting with '/'.
  * @since 1.0.0
  */
-function peakurl_relative_request_path(
+$request_path_from = static function (
 	string $request_path,
 	string $base_path
 ): string {
@@ -82,7 +82,7 @@ function peakurl_relative_request_path(
 	}
 
 	return $request_path;
-}
+};
 
 /**
  * Build a full URL path by combining the base path and a suffix.
@@ -92,7 +92,7 @@ function peakurl_relative_request_path(
  * @return string Combined URL path.
  * @since 1.0.0
  */
-function peakurl_runtime_url( string $base_path, string $suffix ): string {
+$app_url = static function ( string $base_path, string $suffix ): string {
 	$normalized_suffix = '/' . ltrim( $suffix, '/' );
 
 	if ( '' === $base_path ) {
@@ -100,17 +100,15 @@ function peakurl_runtime_url( string $base_path, string $suffix ): string {
 	}
 
 	return $base_path . $normalized_suffix;
-}
+};
 
 /** Get the absolute path to the maintenance flag file. */
-function peakurl_maintenance_path(): string {
+$maintenance_file = static function (): string {
 	return __DIR__ . '/.maintenance';
-}
+};
 
 /** Check whether the site is in maintenance mode. */
-function peakurl_is_under_maintenance(): bool {
-	return file_exists( peakurl_maintenance_path() );
-}
+$is_maintenance = static fn(): bool => file_exists( $maintenance_file() );
 
 /**
  * Send a 503 maintenance response and terminate.
@@ -121,7 +119,7 @@ function peakurl_is_under_maintenance(): bool {
  * @param array<string, string>|null $maintenance_view_data Optional localized maintenance data.
  * @since 1.0.0
  */
-function peakurl_send_maintenance_response(
+$send_maintenance = static function (
 	bool $is_api_request,
 	?array $maintenance_view_data = null
 ): void {
@@ -142,9 +140,9 @@ function peakurl_send_maintenance_response(
 
 	if ( $is_api_request ) {
 		header( 'Content-Type: application/json; charset=utf-8' );
-		echo function_exists( 'peakurl_get_maintenance_api_payload' )
+		echo function_exists( 'get_maintenance_api_payload' )
 			? json_encode(
-				peakurl_get_maintenance_api_payload( $maintenance_view_data ),
+				get_maintenance_api_payload( $maintenance_view_data ),
 				JSON_PRETTY_PRINT,
 			)
 			: json_encode(
@@ -161,11 +159,11 @@ function peakurl_send_maintenance_response(
 	}
 
 	header( 'Content-Type: text/html; charset=utf-8' );
-	echo function_exists( 'peakurl_render_maintenance_page' )
-		? peakurl_render_maintenance_page( $maintenance_view_data )
+	echo function_exists( 'render_maintenance_page' )
+		? render_maintenance_page( $maintenance_view_data )
 		: '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>PeakURL is briefly unavailable</title><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><p>PeakURL is briefly unavailable right now. Please try again in a moment.</p></body></html>';
 	exit();
-}
+};
 
 /**
  * Determine whether the current request targets a favicon alias route.
@@ -174,7 +172,7 @@ function peakurl_send_maintenance_response(
  * @return bool
  * @since 1.0.14
  */
-function peakurl_is_favicon_request( string $relative_path ): bool {
+$is_favicon = static function ( string $relative_path ): bool {
 	return in_array(
 		$relative_path,
 		array(
@@ -185,7 +183,7 @@ function peakurl_is_favicon_request( string $relative_path ): bool {
 		),
 		true,
 	);
-}
+};
 
 /**
  * Send a static file response and terminate the request.
@@ -196,7 +194,7 @@ function peakurl_is_favicon_request( string $relative_path ): bool {
  * @return void
  * @since 1.0.14
  */
-function peakurl_send_file_response(
+$send_file = static function (
 	string $file_path,
 	string $content_type,
 	int $max_age = 3600
@@ -229,17 +227,17 @@ function peakurl_send_file_response(
 
 	readfile( $file_path );
 	exit();
-}
+};
 
 /**
- * Build the favicon and manifest markup for the dashboard shell.
+ * Build the favicon and manifest markup for the dashboard app.
  *
  * @param string               $site_name Configured site name.
  * @param array<string, mixed> $favicon   Favicon settings payload.
  * @return string
  * @since 1.0.14
  */
-function peakurl_get_favicon_head_markup(
+$favicon_markup = static function (
 	string $site_name,
 	array $favicon
 ): string {
@@ -287,19 +285,19 @@ function peakurl_get_favicon_head_markup(
 	return $markup .
 		"\n" .
 		'<meta name="apple-mobile-web-app-title" content="' . $site_name_attr . '">';
-}
+};
 
 /**
- * Decide whether a request path should serve the React dashboard shell.
+ * Decide whether a request path should serve the React dashboard app.
  *
  * Matches `/`, `/login`, `/forgot-password`, `/reset-password/*`,
  * `/dashboard`, and `/dashboard/*`.
  *
  * @param string $relative_path Root-relative request path.
- * @return bool True when the SPA HTML shell should be returned.
+ * @return bool True when the dashboard app HTML should be returned.
  * @since 1.0.0
  */
-function peakurl_should_serve_dashboard_shell( string $relative_path ): bool {
+$is_dashboard_path = static function ( string $relative_path ): bool {
 	if (
 		'/' === $relative_path ||
 		'/login' === $relative_path ||
@@ -312,10 +310,10 @@ function peakurl_should_serve_dashboard_shell( string $relative_path ): bool {
 
 	return '/dashboard' === $relative_path ||
 		Str::starts_with( $relative_path, '/dashboard/' );
-}
+};
 
 /**
- * Inject runtime configuration into the dashboard HTML shell.
+ * Inject runtime configuration into the dashboard app HTML.
  *
  * Inserts a `<base>` tag and a `<script>` block carrying the base path,
  * API base, site name, version, debug flag, backend body classes, locale, and
@@ -336,7 +334,7 @@ function peakurl_should_serve_dashboard_shell( string $relative_path ): bool {
  * @return string Modified HTML.
  * @since 1.0.0
  */
-function peakurl_inject_runtime_shell(
+$prepare_html = static function (
 	string $html,
 	string $base_path,
 	string $site_name,
@@ -357,7 +355,7 @@ function peakurl_inject_runtime_shell(
 		'UTF-8',
 	);
 	$html_dir     = 'rtl' === strtolower( $text_direction ) ? 'rtl' : 'ltr';
-	$favicon_head = peakurl_get_favicon_head_markup(
+	$favicon_head = $favicon_markup(
 		$site_name,
 		$favicon,
 	);
@@ -370,7 +368,7 @@ function peakurl_inject_runtime_shell(
 		'<script>window.__PEAKURL_BASE_PATH__=' .
 		json_encode( $base_path ) .
 		';window.__PEAKURL_API_BASE__=' .
-		json_encode( peakurl_runtime_url( $base_path, '/api/v1' ) ) .
+		json_encode( $app_url( $base_path, '/api/v1' ) ) .
 		';window.__PEAKURL_URL__=window.location.origin+' .
 		json_encode( $base_path ) .
 		';window.__PEAKURL_SITE_NAME__=' .
@@ -472,7 +470,7 @@ function peakurl_inject_runtime_shell(
 	}
 
 	return $updated_html !== $html ? $updated_html : $runtime . $html;
-}
+};
 
 // ────────────────────────────────────────────────────────────────
 // Request routing
@@ -489,29 +487,29 @@ if ( ! is_string( $path ) || '' === $path ) {
 	$path = '/';
 }
 
-$base_path     = peakurl_runtime_base_path(
+$base_path     = $base_path_from(
 	(string) ( $_SERVER['SCRIPT_NAME'] ?? '/index.php' ),
 );
-$relative_path = peakurl_relative_request_path( $path, $base_path );
-$setup_path    = peakurl_runtime_url( $base_path, '/setup-config.php' );
-$install_path  = peakurl_runtime_url( $base_path, '/install.php' );
+$relative_path = $request_path_from( $path, $base_path );
+$setup_path    = $app_url( $base_path, '/setup-config.php' );
+$install_path  = $app_url( $base_path, '/install.php' );
 
-if ( peakurl_is_under_maintenance() ) {
+if ( $is_maintenance() ) {
 	$maintenance_view_data = null;
 
 	if ( file_exists( $autoload ) ) {
 		require_once $autoload;
 
-		if ( function_exists( 'peakurl_get_maintenance_view_data' ) ) {
+		if ( function_exists( 'get_maintenance_view_data' ) ) {
 			try {
-				$maintenance_view_data = peakurl_get_maintenance_view_data();
+				$maintenance_view_data = get_maintenance_view_data();
 			} catch ( \Throwable $exception ) {
 				$maintenance_view_data = null;
 			}
 		}
 	}
 
-	peakurl_send_maintenance_response(
+	$send_maintenance(
 		Str::starts_with( $relative_path, '/api/' ),
 		$maintenance_view_data,
 	);
@@ -526,21 +524,21 @@ if ( ! file_exists( $autoload ) ) {
 
 require_once $autoload;
 
-$runtime_state = InstallState::get_runtime_state( $app_path );
+$install_state = InstallState::get_state( $app_path );
 
-if ( peakurl_is_favicon_request( $relative_path ) ) {
-	if ( InstallState::READY !== $runtime_state ) {
+if ( $is_favicon( $relative_path ) ) {
+	if ( InstallState::READY !== $install_state ) {
 		http_response_code( 404 );
 		exit();
 	}
 
-	$runtime_config  = RuntimeConfig::bootstrap( $app_path );
-	$connection      = new Connection( $runtime_config );
+	$app_config      = RuntimeConfig::bootstrap( $app_path );
+	$connection      = new Connection( $app_config );
 	$settings_api    = new SettingsApi( new PeakURL_DB( $connection ) );
 	$site_name       = trim(
 		(string) ( $connection->get_option( 'site_name' ) ?? 'PeakURL' ),
 	);
-	$favicon_service = new Favicon( $runtime_config, $settings_api );
+	$favicon_service = new Favicon( $app_config, $settings_api );
 	$favicon_assets  = $favicon_service->get_assets(
 		'' !== $site_name ? $site_name : 'PeakURL'
 	);
@@ -551,14 +549,14 @@ if ( peakurl_is_favicon_request( $relative_path ) ) {
 	}
 
 	if ( '/site.webmanifest' === $relative_path ) {
-		peakurl_send_file_response(
+		$send_file(
 			(string) $favicon_assets['manifestPath'],
 			'application/manifest+json; charset=utf-8',
 			3600,
 		);
 	}
 
-	peakurl_send_file_response(
+	$send_file(
 		(string) $favicon_assets['iconPath'],
 		'image/png',
 		31536000,
@@ -566,20 +564,20 @@ if ( peakurl_is_favicon_request( $relative_path ) ) {
 }
 
 if ( Str::starts_with( $relative_path, '/api/' ) ) {
-	if ( InstallState::READY !== $runtime_state ) {
+	if ( InstallState::READY !== $install_state ) {
 		http_response_code( 503 );
 		header( 'Content-Type: application/json; charset=utf-8' );
 		echo json_encode(
 			array(
 				'success' => false,
-				'message' => InstallState::NEEDS_INSTALL === $runtime_state
+				'message' => InstallState::NEEDS_INSTALL === $install_state
 					? 'PeakURL needs installation.'
 					: 'PeakURL needs database configuration.',
 				'data'    => array(
 					'setupConfigUrl' => $setup_path,
 					'installUrl'     => $install_path,
 					'isConfigured'   => file_exists( $config_path ),
-					'recoveryState'  => $runtime_state,
+					'recoveryState'  => $install_state,
 				),
 			),
 			JSON_PRETTY_PRINT,
@@ -591,24 +589,24 @@ if ( Str::starts_with( $relative_path, '/api/' ) ) {
 	exit();
 }
 
-if ( InstallState::NEEDS_SETUP === $runtime_state ) {
+if ( InstallState::NEEDS_SETUP === $install_state ) {
 	header( 'Location: ' . $setup_path );
 	exit();
 }
 
-if ( InstallState::NEEDS_INSTALL === $runtime_state ) {
+if ( InstallState::NEEDS_INSTALL === $install_state ) {
 	header( 'Location: ' . $install_path );
 	exit();
 }
 
-if ( ! peakurl_should_serve_dashboard_shell( $relative_path ) ) {
+if ( ! $is_dashboard_path( $relative_path ) ) {
 	require $app_path . '/public/index.php';
 	exit();
 }
 
-$runtime_config = RuntimeConfig::bootstrap( $app_path );
-$connection     = new Connection( $runtime_config );
-peakurl_bootstrap_i18n( $runtime_config, $connection );
+$app_config = RuntimeConfig::bootstrap( $app_path );
+$connection = new Connection( $app_config );
+peakurl_bootstrap_i18n( $app_config, $connection );
 $site_name      = trim(
 	(string) ( $connection->get_option( 'site_name' ) ?? 'PeakURL' ),
 );
@@ -640,39 +638,39 @@ if ( ! in_array( $time_format, array( '12', '24' ), true ) ) {
 
 $catalog       = peakurl_get_dashboard_translation_catalog(
 	$locale,
-	$runtime_config,
+	$app_config,
 	$connection,
 );
 $version       = trim(
 	(string) (
 		$connection->get_option( 'installed_version' ) ??
-		$runtime_config[ Constants::CONFIG_VERSION ] ??
+		$app_config[ Constants::CONFIG_VERSION ] ??
 		Constants::DEFAULT_VERSION
 	),
 );
 $favicon       = ( new Favicon(
-	$runtime_config,
+	$app_config,
 	new SettingsApi( new PeakURL_DB( $connection ) ),
 ) )->get_settings( $site_name );
 $body_classes  = get_body_class(
 	array(),
 	array(
-		'base_path'     => $base_path,
-		'relative_path' => $relative_path,
-		'request_path'  => $path,
-		'is_spa_shell'  => true,
+		'base_path'        => $base_path,
+		'relative_path'    => $relative_path,
+		'request_path'     => $path,
+		'is_dashboard_app' => true,
 	),
 );
-$runtime_env   = strtolower(
-	(string) ( $runtime_config[ Constants::CONFIG_ENV ] ?? 'production' ),
+$app_env       = strtolower(
+	(string) ( $app_config[ Constants::CONFIG_ENV ] ?? 'production' ),
 );
 $debug_enabled =
-	! empty( $runtime_config[ Constants::CONFIG_DEBUG ] ) ||
-	'development' === $runtime_env;
+	! empty( $app_config[ Constants::CONFIG_DEBUG ] ) ||
+	'development' === $app_env;
 
-$dashboard_shell_path = $root_path . '/app.html';
+$dashboard_html_path = $root_path . '/app.html';
 
-if ( ! file_exists( $dashboard_shell_path ) ) {
+if ( ! file_exists( $dashboard_html_path ) ) {
 	http_response_code( 500 );
 	header( 'Content-Type: text/plain; charset=utf-8' );
 	echo "PeakURL build output is missing. Upload the full release package and try again.\n";
@@ -681,17 +679,17 @@ if ( ! file_exists( $dashboard_shell_path ) ) {
 
 header( 'Content-Type: text/html; charset=utf-8' );
 header( 'Content-Language: ' . peakurl_get_html_lang_attribute() );
-$dashboard_shell = file_get_contents( $dashboard_shell_path );
+$dashboard_html = file_get_contents( $dashboard_html_path );
 
-if ( false === $dashboard_shell ) {
+if ( false === $dashboard_html ) {
 	http_response_code( 500 );
 	header( 'Content-Type: text/plain; charset=utf-8' );
 	echo "PeakURL build output could not be read.\n";
 	exit();
 }
 
-echo peakurl_inject_runtime_shell(
-	$dashboard_shell,
+echo $prepare_html(
+	$dashboard_html,
 	$base_path,
 	$site_name,
 	$version,

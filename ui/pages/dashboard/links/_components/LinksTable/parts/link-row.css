@@ -11,6 +11,10 @@
 		@apply px-4 py-3 align-middle;
 	}
 
+	.links-row-cell-select {
+		@apply w-10 px-0 text-center align-middle;
+	}
+
 	.links-row-link {
 		@apply flex items-center gap-2;
 	}

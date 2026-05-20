@@ -1,15 +1,11 @@
 @layer components {
 	.links-checkbox {
-		@apply h-4 w-4 cursor-pointer rounded border border-stroke-strong bg-surface shadow-xs transition-all duration-200;
+		@apply h-4 w-4 cursor-pointer rounded border border-stroke-strong bg-surface transition-colors duration-200;
 		-moz-appearance: none;
 		appearance: none;
 		-webkit-appearance: none;
 		position: relative;
 		outline: none;
-	}
-
-	.dark .links-checkbox {
-		@apply border-gray-600;
 	}
 
 	.links-checkbox:hover:not(:disabled) {

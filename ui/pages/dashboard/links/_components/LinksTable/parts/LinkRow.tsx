@@ -61,7 +61,7 @@ function LinkRow({
 				selected ? "links-row-selected" : ""
 			}`}
 		>
-			<td className="links-row-cell">
+			<td className="links-row-cell-select">
 				<input
 					type="checkbox"
 					checked={selected}

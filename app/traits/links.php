@@ -293,6 +293,12 @@ trait LinksTrait {
 			'create_links',
 			'You do not have permission to create links.',
 		);
+		$payload         = $this->filter_link_payload(
+			'pre_create_link',
+			$payload,
+			$request,
+			$user,
+		);
 		$destination_url = $this->clean_destination(
 			$payload['destinationUrl'] ?? '',
 		);
@@ -390,7 +396,20 @@ trait LinksTrait {
 			),
 		);
 
-		return $this->format_url( $this->find_url_row( $id ) );
+		$url = $this->format_url( $this->find_url_row( $id ) );
+
+		/**
+		 * Fires after a short link has been created.
+		 *
+		 * @since 1.2.2
+		 *
+		 * @param array<string, mixed> $url     Formatted link payload.
+		 * @param Request              $request Incoming request.
+		 * @param array<string, mixed> $user    Current user row.
+		 */
+		\do_action( 'link_created', $url, $request, $user );
+
+		return $url;
 	}
 
 	/**
@@ -966,6 +985,14 @@ trait LinksTrait {
 			'edit_all_links',
 			__( 'You do not have permission to edit this link.', 'peakurl' ),
 		);
+		$payload = $this->filter_link_payload(
+			'pre_update_link',
+			$payload,
+			$id,
+			$existing,
+			$request,
+			$user,
+		);
 
 		$updates = array();
 		$params  = array( 'id' => $id );
@@ -1093,7 +1120,21 @@ trait LinksTrait {
 			),
 		);
 
-		return $this->format_url( $updated_row );
+		$url = $this->format_url( $updated_row );
+
+		/**
+		 * Fires after a short link has been updated.
+		 *
+		 * @since 1.2.2
+		 *
+		 * @param array<string, mixed> $url      Formatted link payload.
+		 * @param array<string, mixed> $previous Previous database row.
+		 * @param Request              $request  Incoming request.
+		 * @param array<string, mixed> $user     Current user row.
+		 */
+		\do_action( 'link_updated', $url, $existing, $request, $user );
+
+		return $url;
 	}
 
 	/**
@@ -1126,6 +1167,17 @@ trait LinksTrait {
 			'delete_all_links',
 			__( 'You do not have permission to delete this link.', 'peakurl' ),
 		);
+
+		/**
+		 * Fires before a short link is deleted.
+		 *
+		 * @since 1.2.2
+		 *
+		 * @param array<string, mixed> $row     Database link row.
+		 * @param Request              $request Incoming request.
+		 * @param array<string, mixed> $user    Current user row.
+		 */
+		\do_action( 'pre_delete_link', $row, $request, $user );
 
 		$this->db->begin_transaction();
 
@@ -1174,6 +1226,17 @@ trait LinksTrait {
 			$this->social_preview_service->delete_link_image(
 				(string) ( $row['social_image_path'] ?? '' ),
 			);
+
+			/**
+			 * Fires after a short link has been deleted.
+			 *
+			 * @since 1.2.2
+			 *
+			 * @param array<string, mixed> $row     Deleted database row.
+			 * @param Request              $request Incoming request.
+			 * @param array<string, mixed> $user    Current user row.
+			 */
+			\do_action( 'link_deleted', $row, $request, $user );
 		}
 
 		return $deleted;
@@ -1493,6 +1556,25 @@ trait LinksTrait {
 			fn( array $row ): array => $this->format_url( $row ),
 			$rows,
 		);
+	}
+
+	/**
+	 * Apply a link payload filter and keep invalid callback output isolated.
+	 *
+	 * @param string               $hook_name Hook name.
+	 * @param array<string, mixed> $payload   Original payload.
+	 * @param mixed                ...$args   Additional hook arguments.
+	 * @return array<string, mixed>
+	 * @since 1.2.2
+	 */
+	private function filter_link_payload(
+		string $hook_name,
+		array $payload,
+		...$args
+	): array {
+		$filtered = \apply_filters( $hook_name, $payload, ...$args );
+
+		return is_array( $filtered ) ? $filtered : $payload;
 	}
 
 	/**

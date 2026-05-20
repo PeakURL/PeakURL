@@ -57,7 +57,7 @@ $installer_locale = new InstallLocale(
 	(string) ( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? '' ),
 );
 
-peakurl_override_i18n_service( $installer_locale->get_i18n_service() );
+set_i18n_service( $installer_locale->get_i18n_service() );
 
 $install_state = InstallState::get_state( $app_path );
 

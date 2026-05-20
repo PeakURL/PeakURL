@@ -24,6 +24,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * AuthTrait — registration, login, and password recovery methods.
  *
+ * @property \PeakURL\Includes\PeakURL_DB $db
+ * @property array<string, mixed> $config
+ * @property \PeakURL\Services\Totp $totp_service
+ * @property \PeakURL\Services\Notifications $notifications_service
+ *
+ * @method string validate_email(string $email)
+ * @method string validate_username(string $username, string $message = '')
+ * @method string validate_password(string $password)
+ * @method bool email_in_use(string $email, ?string $exclude_user_id = null)
+ * @method bool username_in_use(string $username, ?string $exclude_user_id = null)
+ * @method array{raw: string, hash: string} issue_lookup_token()
+ * @method void create_session_for_user(Request $request, string $user_id)
+ * @method array<string, mixed>|null current_user(Request $request)
+ * @method array<string, mixed>|null find_session_by_request(Request $request)
+ * @method array<string, mixed>|null find_user_row_by_id(string $id)
+ * @method array<string, mixed>|null find_user_row_by_email(string $email)
+ * @method array<string, mixed>|null find_user_row_by_username(string $username)
+ * @method array<string, mixed> format_user(?array $row, ?Request $request = null)
+ * @method array<string, mixed>|null query_one(string $sql, array $params = array())
+ * @method void execute(string $sql, array $params = array())
+ * @method string last_insert_id()
+ * @method string now()
+ * @method bool verify_backup_code(string $user_id, string $token)
+ * @method void send_password_changed(array $user)
+ *
  * @since 1.0.14
  */
 trait AuthTrait {
@@ -87,11 +112,19 @@ trait AuthTrait {
 		$user_id = $this->last_insert_id();
 
 		$this->create_session_for_user( $request, $user_id );
+		$user = $this->find_user_row_by_id( $user_id );
 
-		return $this->format_user(
-			$this->find_user_row_by_id( $user_id ),
-			$request,
-		);
+		/**
+		 * Fires after a new user account has been registered.
+		 *
+		 * @since 1.2.2
+		 *
+		 * @param array<string, mixed> $user    Registered user profile.
+		 * @param Request              $request Current request.
+		 */
+		\do_action( 'user_register', $this->format_user( $user ), $request );
+
+		return $this->format_user( $user, $request );
 	}
 
 	/**
@@ -237,6 +270,17 @@ trait AuthTrait {
 			! $user ||
 			! password_verify( $password, (string) $user['password_hash'] )
 		) {
+			/**
+			 * Fires after a login attempt fails.
+			 *
+			 * @since 1.2.2
+			 *
+			 * @param string  $identifier Submitted email address or username.
+			 * @param string  $reason     Failure reason.
+			 * @param Request $request    Current request.
+			 */
+			\do_action( 'login_failed', $identifier, 'invalid_credentials', $request );
+
 			throw new ApiException(
 				__( 'Invalid email, username, or password.', 'peakurl' ),
 				401,
@@ -258,6 +302,17 @@ trait AuthTrait {
 				)
 			) {
 				if ( ! $this->verify_backup_code( (string) $user['id'], $token ) ) {
+					/**
+					 * Fires after a login attempt fails.
+					 *
+					 * @since 1.2.2
+					 *
+					 * @param string  $identifier Submitted email address or username.
+					 * @param string  $reason     Failure reason.
+					 * @param Request $request    Current request.
+					 */
+					\do_action( 'login_failed', $identifier, 'invalid_two_factor_code', $request );
+
 					throw new ApiException( __( 'Invalid two-factor code.', 'peakurl' ), 401 );
 				}
 			}
@@ -275,11 +330,20 @@ trait AuthTrait {
 			),
 		);
 
+		$user = $this->find_user_row_by_id( (string) $user['id'] );
+
+		/**
+		 * Fires after a user has logged in successfully.
+		 *
+		 * @since 1.2.2
+		 *
+		 * @param array<string, mixed> $user    Authenticated user profile.
+		 * @param Request              $request Current request.
+		 */
+		\do_action( 'login', $this->format_user( $user ), $request );
+
 		return array(
-			'user'              => $this->format_user(
-				$this->find_user_row_by_id( (string) $user['id'] ),
-				$request,
-			),
+			'user'              => $this->format_user( $user, $request ),
 			'requiresTwoFactor' => false,
 		);
 	}
@@ -322,6 +386,9 @@ trait AuthTrait {
 	 */
 	public function logout( Request $request ): void {
 		$session = $this->find_session_by_request( $request );
+		$user    = $session
+			? $this->find_user_row_by_id( (string) $session['user_id'] )
+			: null;
 
 		if ( $session ) {
 			$this->db->delete(
@@ -336,6 +403,16 @@ trait AuthTrait {
 			(string) $this->config[ Constants::CONFIG_SESSION_COOKIE_NAME ],
 			Security::session_cookie_options( $this->config, $request ),
 		);
+
+		/**
+		 * Fires after a user has logged out.
+		 *
+		 * @since 1.2.2
+		 *
+		 * @param array<string, mixed> $user    Logged-out user profile, or an empty array.
+		 * @param Request              $request Current request.
+		 */
+		\do_action( 'logout', $this->format_user( $user ), $request );
 	}
 
 	/**
@@ -466,6 +543,15 @@ trait AuthTrait {
 			),
 		);
 		$this->send_password_changed( $user );
+
+		/**
+		 * Fires after a user password has been reset.
+		 *
+		 * @since 1.2.2
+		 *
+		 * @param array<string, mixed> $user Reset user profile.
+		 */
+		\do_action( 'password_reset', $this->format_user( $user ) );
 
 		return true;
 	}

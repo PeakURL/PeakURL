@@ -432,7 +432,7 @@ function body_class(
  * @since 1.0.3
  */
 // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
-function peakurl_get_i18n_service(
+function get_i18n_service(
 	?array $config = null,
 	?Connection $connection = null
 ): I18n {
@@ -481,7 +481,7 @@ function peakurl_get_i18n_service(
  * @since 1.0.8
  */
 // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
-function peakurl_override_i18n_service( ?I18n $service ): void {
+function set_i18n_service( ?I18n $service ): void {
 	if ( null === $service ) {
 		unset( $GLOBALS['peakurl_i18n_service_override'] );
 		return;
@@ -499,11 +499,11 @@ function peakurl_override_i18n_service( ?I18n $service ): void {
  * @since 1.0.3
  */
 // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
-function peakurl_bootstrap_i18n(
+function load_i18n(
 	?array $config = null,
 	?Connection $connection = null
 ): string {
-	return peakurl_get_i18n_service(
+	return get_i18n_service(
 		$config,
 		$connection,
 	)->load_locale();
@@ -519,12 +519,12 @@ function peakurl_bootstrap_i18n(
  * @since 1.0.3
  */
 // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
-function peakurl_get_dashboard_translation_catalog(
+function get_dashboard_translation_catalog(
 	?string $locale = null,
 	?array $config = null,
 	?Connection $connection = null
 ): array {
-	return peakurl_get_i18n_service(
+	return get_i18n_service(
 		$config,
 		$connection,
 	)->get_dashboard_catalog( $locale );
@@ -540,7 +540,7 @@ function peakurl_get_dashboard_translation_catalog(
  */
 // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
 function get_locale(): string {
-	return peakurl_get_i18n_service()->get_current_locale();
+	return get_i18n_service()->get_current_locale();
 }
 
 /**
@@ -563,8 +563,8 @@ function determine_locale(): string {
  * @since 1.0.3
  */
 // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
-function peakurl_get_html_lang_attribute(): string {
-	return peakurl_get_i18n_service()->get_html_lang();
+function get_html_lang_attribute(): string {
+	return get_i18n_service()->get_html_lang();
 }
 
 /**
@@ -574,8 +574,8 @@ function peakurl_get_html_lang_attribute(): string {
  * @since 1.0.7
  */
 // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
-function peakurl_get_text_direction(): string {
-	return peakurl_get_i18n_service()->get_text_direction();
+function get_text_direction(): string {
+	return get_i18n_service()->get_text_direction();
 }
 
 /**
@@ -633,7 +633,7 @@ function get_maintenance_view_data(
 	}
 
 	if ( $i18n_service instanceof I18n ) {
-		peakurl_override_i18n_service( $i18n_service );
+		set_i18n_service( $i18n_service );
 	}
 
 	$maintenance_title = sprintf(
@@ -774,7 +774,7 @@ function render_maintenance_page( array $maintenance_view_data ): string {
  */
 // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
 function is_rtl(): bool {
-	return peakurl_get_i18n_service()->is_locale_rtl();
+	return get_i18n_service()->is_locale_rtl();
 }
 
 /**
@@ -794,7 +794,7 @@ function translate( string $text, string $domain = 'default' ): string {
 		return $text;
 	}
 
-	return peakurl_get_i18n_service()->translate( $text );
+	return get_i18n_service()->translate( $text );
 }
 
 /**
@@ -818,7 +818,7 @@ function translate_with_gettext_context(
 		return $text;
 	}
 
-	return peakurl_get_i18n_service()->translate( $text, $context );
+	return get_i18n_service()->translate( $text, $context );
 }
 
 /**
@@ -914,7 +914,7 @@ function _n(
 		return 1 === abs( $number ) ? $single : $plural;
 	}
 
-	return peakurl_get_i18n_service()->translate_plural(
+	return get_i18n_service()->translate_plural(
 		$single,
 		$plural,
 		$number,
@@ -946,7 +946,7 @@ function _nx(
 		return 1 === abs( $number ) ? $single : $plural;
 	}
 
-	return peakurl_get_i18n_service()->translate_plural(
+	return get_i18n_service()->translate_plural(
 		$single,
 		$plural,
 		$number,

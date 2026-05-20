@@ -117,7 +117,17 @@ if ( 'OPTIONS' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 // ── Bootstrap application ───────────────────────────────────────
 
 $connection = new Connection( $config );
-peakurl_bootstrap_i18n( $config, $connection );
-header( 'Content-Language: ' . peakurl_get_html_lang_attribute() );
+load_i18n( $config, $connection );
+
+/**
+ * Fires after PeakURL has loaded configuration, translations, and shared helpers.
+ *
+ * This is the main request-level initialization hook for custom PHP code.
+ *
+ * @since 1.2.2
+ */
+do_action( 'init' );
+
+header( 'Content-Language: ' . get_html_lang_attribute() );
 $application = new Application( $connection, $config );
 $application->run();

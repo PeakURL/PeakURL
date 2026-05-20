@@ -85,7 +85,19 @@ class Application {
 		try {
 			$this->validate_request_origin( $request );
 			$this->data_store->bootstrap_site();
-			$response = $this->router->dispatch( $request );
+
+			if ( $this->is_admin_request( $request ) ) {
+				/**
+				 * Fires during dashboard API initialization.
+				 *
+				 * Custom PHP can use this hook for dashboard-only request setup.
+				 *
+				 * @since 1.2.2
+				 */
+				\do_action( 'admin_init' );
+			}
+
+			$response = $this->dispatch_request( $request );
 
 			if ( ! is_array( $response ) ) {
 				$response = JsonResponse::error(
@@ -118,6 +130,95 @@ class Application {
 		}
 
 		$this->send_response( $response, $request );
+	}
+
+	/**
+	 * Dispatch the API request through WordPress-style REST hooks.
+	 *
+	 * @param Request $request Incoming request.
+	 * @return array<string, mixed> Structured response.
+	 * @since 1.2.2
+	 */
+	private function dispatch_request( Request $request ): array {
+		/**
+		 * Filters the response before the API request is dispatched.
+		 *
+		 * Returning an array short-circuits route dispatch. Return null to let
+		 * PeakURL dispatch the request through the registered router.
+		 *
+		 * @since 1.2.2
+		 *
+		 * @param array<string, mixed>|null $response   Pre-dispatch response.
+		 * @param Request                   $request    Incoming request.
+		 * @param Router                    $router     API router.
+		 * @param Store                     $data_store Shared data store.
+		 */
+		$pre_dispatch = \apply_filters(
+			'rest_pre_dispatch',
+			null,
+			$request,
+			$this->router,
+			$this->data_store,
+		);
+
+		if ( is_array( $pre_dispatch ) ) {
+			$response = $pre_dispatch;
+		} else {
+			/**
+			 * Fires immediately before an API request is dispatched.
+			 *
+			 * @since 1.2.2
+			 *
+			 * @param Request $request    Incoming request.
+			 * @param Router  $router     API router.
+			 * @param Store   $data_store Shared data store.
+			 */
+			\do_action(
+				'rest_request_before_dispatch',
+				$request,
+				$this->router,
+				$this->data_store,
+			);
+
+			$response = $this->router->dispatch( $request );
+		}
+
+		/**
+		 * Filters the response after the API request has been dispatched.
+		 *
+		 * @since 1.2.2
+		 *
+		 * @param array<string, mixed> $response   Structured response.
+		 * @param Request              $request    Incoming request.
+		 * @param Router               $router     API router.
+		 * @param Store                $data_store Shared data store.
+		 */
+		$response = \apply_filters(
+			'rest_post_dispatch',
+			$response,
+			$request,
+			$this->router,
+			$this->data_store,
+		);
+
+		return is_array( $response ) ? $response : JsonResponse::error(
+			'Expected array response from rest_post_dispatch, received: ' .
+			$this->get_debug_type( $response ) .
+			'.',
+		);
+	}
+
+	/**
+	 * Determine whether the current request belongs to the dashboard API.
+	 *
+	 * @param Request $request Incoming request.
+	 * @return bool
+	 * @since 1.2.2
+	 */
+	private function is_admin_request( Request $request ): bool {
+		$path = $request->get_path();
+
+		return '/api/v1' === $path || 0 === strpos( $path, '/api/v1/' );
 	}
 
 	/**
@@ -187,6 +288,20 @@ class Application {
 			$mail,
 		);
 		$this->register_update_routes( $updates );
+
+		/**
+		 * Fires after built-in API routes have been registered.
+		 *
+		 * Custom PHP can register additional routes on the shared router.
+		 *
+		 * @since 1.2.2
+		 *
+		 * @param Router      $router      API router.
+		 * @param Store       $data_store  Shared data store.
+		 * @param Application $application Current application instance.
+		 */
+		\do_action( 'rest_api_init', $this->router, $this->data_store, $this );
+
 		$this->register_redirect_routes( $urls );
 	}
 

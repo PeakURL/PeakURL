@@ -606,12 +606,22 @@ if ( ! $is_dashboard_path( $relative_path ) ) {
 
 $app_config = RuntimeConfig::bootstrap( $app_path );
 $connection = new Connection( $app_config );
-peakurl_bootstrap_i18n( $app_config, $connection );
+load_i18n( $app_config, $connection );
+
+/**
+ * Fires after PeakURL has loaded configuration, translations, and shared helpers.
+ *
+ * This is the main request-level initialization hook for custom PHP code.
+ *
+ * @since 1.2.2
+ */
+do_action( 'init' );
+
 $site_name      = trim(
 	(string) ( $connection->get_option( 'site_name' ) ?? 'PeakURL' ),
 );
 $locale         = get_locale();
-$text_direction = peakurl_get_text_direction();
+$text_direction = get_text_direction();
 $timezone       = trim(
 	(string) (
 		$connection->get_option( 'site_timezone' ) ??
@@ -636,7 +646,7 @@ if ( ! in_array( $time_format, array( '12', '24' ), true ) ) {
 	$time_format = Constants::DEFAULT_TIME_FORMAT;
 }
 
-$catalog       = peakurl_get_dashboard_translation_catalog(
+$catalog       = get_dashboard_translation_catalog(
 	$locale,
 	$app_config,
 	$connection,
@@ -668,6 +678,16 @@ $debug_enabled =
 	! empty( $app_config[ Constants::CONFIG_DEBUG ] ) ||
 	'development' === $app_env;
 
+/**
+ * Fires after the dashboard page context has been prepared.
+ *
+ * Custom PHP can use this hook for dashboard-only setup. Public
+ * short-link redirects do not run this action.
+ *
+ * @since 1.2.2
+ */
+do_action( 'admin_init' );
+
 $dashboard_html_path = $root_path . '/app.html';
 
 if ( ! file_exists( $dashboard_html_path ) ) {
@@ -678,7 +698,7 @@ if ( ! file_exists( $dashboard_html_path ) ) {
 }
 
 header( 'Content-Type: text/html; charset=utf-8' );
-header( 'Content-Language: ' . peakurl_get_html_lang_attribute() );
+header( 'Content-Language: ' . get_html_lang_attribute() );
 $dashboard_html = file_get_contents( $dashboard_html_path );
 
 if ( false === $dashboard_html ) {

@@ -436,7 +436,7 @@ class Notifications {
 		string $extension
 	): string {
 		$template_dir            = $this->get_template_dir();
-		$site_locale             = \peakurl_get_i18n_service()->get_site_locale();
+		$site_locale             = \get_i18n_service()->get_site_locale();
 		$localized_template_path = $template_dir .
 			'/locales/' .
 			$site_locale .

@@ -28,8 +28,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  *  POST   /api/v1/users          → create
  *  GET    /api/v1/users/me       → me
  *  PUT    /api/v1/users/me       → update_me
- *  PUT    /api/v1/users/:username → update
- *  DELETE /api/v1/users/:username → delete
+ *  PUT    /api/v1/users/{username} → update
+ *  DELETE /api/v1/users/{username} → delete
  *
  * @since 1.0.0
  */
@@ -107,7 +107,7 @@ class UsersController extends BaseController {
 	}
 
 	/**
-	 * Update a user by username (PUT /api/v1/users/:username).
+	 * Update a user by username (PUT /api/v1/users/{username}).
 	 *
 	 * Admin-only. Returns 404 if the username does not exist.
 	 *
@@ -131,7 +131,7 @@ class UsersController extends BaseController {
 	}
 
 	/**
-	 * Delete a user by username (DELETE /api/v1/users/:username).
+	 * Delete a user by username (DELETE /api/v1/users/{username}).
 	 *
 	 * Admin-only. Returns 404 if the username does not exist.
 	 *

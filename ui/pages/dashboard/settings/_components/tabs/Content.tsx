@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ConfirmDialog, useNotification } from "@/components";
+import { API_SERVER_BASE_URL } from "@/constants";
 import {
 	useGetUserProfileQuery,
 	useUpdateUserProfileMutation,
@@ -22,6 +23,7 @@ import {
 	useUpgradeDatabaseSchemaMutation,
 } from "@/store/slices/api";
 import { __, applyDocumentFavicon, sprintf } from "@/i18n";
+import { updatePeakURLData } from "@/data";
 import {
 	copyToClipboard as writeToClipboard,
 	extractErrorMessage,
@@ -85,18 +87,14 @@ const hasProfileChanges = (
 
 const formatBaseApiUrl = (
 	user?: ProfileUser | null,
-	fallbackBaseApiUrl: string | null | undefined = ""
+	fallbackBaseApiUrl: string | null | undefined = API_SERVER_BASE_URL
 ): string => {
-	if (fallbackBaseApiUrl) {
-		return fallbackBaseApiUrl;
-	}
-
 	if (user?.baseApiUrl) {
 		return user.baseApiUrl;
 	}
 
-	if (user?.siteUrl) {
-		return `${String(user.siteUrl).replace(/\/+$/, "")}/api/v1`;
+	if (fallbackBaseApiUrl) {
+		return fallbackBaseApiUrl;
 	}
 
 	return "";
@@ -273,22 +271,15 @@ const Content = ({ activeTab }: ContentProps) => {
 					removeFavicon,
 				}).unwrap();
 
-				if (response?.data?.siteName) {
-					window.__PEAKURL_SITE_NAME__ = response.data.siteName;
-				}
+				updatePeakURLData({
+					siteName: response?.data?.siteName || undefined,
+					favicon: response?.data?.favicon || undefined,
+					timezone: response?.data?.siteTimezone || undefined,
+					timeFormat: response?.data?.siteTimeFormat || undefined,
+				});
 
 				if (response?.data?.favicon) {
-					window.__PEAKURL_FAVICON__ = response.data.favicon;
 					applyDocumentFavicon(response.data.favicon);
-				}
-
-				if (response?.data?.siteTimezone) {
-					window.__PEAKURL_TIMEZONE__ = response.data.siteTimezone;
-				}
-
-				if (response?.data?.siteTimeFormat) {
-					window.__PEAKURL_TIME_FORMAT__ =
-						response.data.siteTimeFormat;
 				}
 
 				if (saveLanguage) {

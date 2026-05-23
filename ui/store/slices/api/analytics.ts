@@ -1,3 +1,4 @@
+import { API_ROUTES, buildApiRouteWithQuery } from "@/api";
 import baseApi from "./base";
 import type {
 	ApiDataResponse,
@@ -27,7 +28,7 @@ function serializeLinkStatsQuery({ id, ...args }: LinkAnalyticsArgs): string {
 		params.set("to", args.to);
 	}
 
-	return `analytics/url/${id}/stats?${params.toString()}`;
+	return buildApiRouteWithQuery(API_ROUTES.analytics.linkStats(id), params);
 }
 
 function serializeActivityHistoryQuery({
@@ -43,7 +44,7 @@ function serializeActivityHistoryQuery({
 		params.set("category", category);
 	}
 
-	return `analytics/activity/history?${params.toString()}`;
+	return buildApiRouteWithQuery(API_ROUTES.analytics.activityHistory, params);
 }
 
 /**
@@ -52,15 +53,25 @@ function serializeActivityHistoryQuery({
 export const analyticsApi = baseApi.injectEndpoints({
 	endpoints: (build) => ({
 		getAnalytics: build.query<DashboardAnalyticsResponse, number | void>({
-			query: (days = 7) => `analytics?days=${days}`,
+			query: (days = 7) => {
+				const params = new URLSearchParams();
+				params.set("days", String(days));
+
+				return buildApiRouteWithQuery(API_ROUTES.analytics.index, params);
+			},
 			providesTags: ANALYTICS_TAGS,
 		}),
 		getActivity: build.query<ActivityResponse, void>({
-			query: () => "analytics/activity",
+			query: () => API_ROUTES.analytics.activity,
 			providesTags: ANALYTICS_TAGS,
 		}),
 		getRecentClicks: build.query<RecentClicksResponse, number | void>({
-			query: (limit = 8) => `analytics/recent-clicks?limit=${limit}`,
+			query: (limit = 8) => {
+				const params = new URLSearchParams();
+				params.set("limit", String(limit));
+
+				return buildApiRouteWithQuery(API_ROUTES.analytics.recentClicks, params);
+			},
 			providesTags: ANALYTICS_TAGS,
 		}),
 		getActivityHistory: build.query<
@@ -75,7 +86,7 @@ export const analyticsApi = baseApi.injectEndpoints({
 			string
 		>({
 			query: (id) => ({
-				url: `analytics/activity/${id}`,
+				url: API_ROUTES.analytics.activityById(id),
 				method: "DELETE",
 			}),
 			invalidatesTags: ANALYTICS_TAGS,
@@ -85,14 +96,14 @@ export const analyticsApi = baseApi.injectEndpoints({
 			string[]
 		>({
 			query: (ids) => ({
-				url: "analytics/activity/bulk",
+				url: API_ROUTES.analytics.activityBulk,
 				method: "DELETE",
 				body: { ids },
 			}),
 			invalidatesTags: ANALYTICS_TAGS,
 		}),
 		getLinkLocation: build.query<{ data?: LinkLocationPayload }, string>({
-			query: (id) => `analytics/url/${id}/location`,
+			query: (id) => API_ROUTES.analytics.linkLocation(id),
 			providesTags: (_result, _error, id) =>
 				linkAnalyticsTags("location", id),
 		}),

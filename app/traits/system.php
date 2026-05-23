@@ -226,12 +226,29 @@ trait SystemTrait {
 		$locale       = $this->i18n_service->get_site_locale();
 		$site_name    = trim( (string) $this->get_option( 'site_name' ) );
 		$site_tagline = $this->get_site_tagline();
+		$site_url     = trim( (string) $this->get_option( 'site_url' ) );
 
 		if ( '' === $site_name ) {
 			$site_name = 'PeakURL';
 		}
 
+		if ( '' === $site_url ) {
+			$site_url = trim( (string) ( $this->config[ Constants::CONFIG_SITE_URL ] ?? '' ) );
+		}
+
+		$site_url    = rtrim( $site_url, '/' );
+		$parsed_path = parse_url( $site_url, PHP_URL_PATH );
+		$base_path   = is_string( $parsed_path ) ? rtrim( $parsed_path, '/' ) : '';
+		$base_path   = '/' === $base_path ? '' : $base_path;
+		$catalog     = $this->i18n_service->get_dashboard_catalog( $locale );
+
 		return array(
+			'basePath'      => $base_path,
+			'apiBase'       => $base_path . Constants::API_BASE_PATH,
+			'siteUrl'       => $site_url,
+			'siteName'      => $site_name,
+			'version'       => (string) ( $this->config[ Constants::CONFIG_VERSION ] ?? Constants::DEFAULT_VERSION ),
+			'debug'         => ! empty( $this->config[ Constants::CONFIG_DEBUG ] ),
 			'locale'        => $locale,
 			'htmlLang'      => $this->i18n_service->get_html_lang( $locale ),
 			'textDirection' => $this->i18n_service->get_text_direction( $locale ),
@@ -243,7 +260,8 @@ trait SystemTrait {
 			'favicon'       => $this->favicon_service->get_settings( $site_name ),
 			'socialPreview' => $this->social_preview_service->get_settings(),
 			'defaultLocale' => $this->i18n_service->get_default_locale(),
-			'catalog'       => $this->i18n_service->get_dashboard_catalog( $locale ),
+			'i18n'          => $catalog,
+			'catalog'       => $catalog,
 		);
 	}
 

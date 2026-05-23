@@ -1,3 +1,4 @@
+import { API_ROUTES } from "@/api";
 import baseApi from "./base";
 import type {
 	AdminNoticesResponse,
@@ -33,15 +34,15 @@ const DATABASE_UPDATE_TAGS = [
 export const systemApi = baseApi.injectEndpoints({
 	endpoints: (build) => ({
 		getAdminNotices: build.query<AdminNoticesResponse, void>({
-			query: () => "system/notices",
+			query: () => API_ROUTES.system.notices,
 			providesTags: ["AdminNotices"],
 		}),
 		getGeneralSettings: build.query<ApiDataResponse<SiteSettings>, void>({
-			query: () => "system/general",
+			query: () => API_ROUTES.system.general,
 			providesTags: GENERAL_SETTINGS_TAGS,
 		}),
 		getSystemStatus: build.query<SystemStatusResponse, void>({
-			query: () => "system/status",
+			query: () => API_ROUTES.system.status,
 			providesTags: ["SystemStatus"],
 		}),
 		saveGeneralSettings: build.mutation<
@@ -92,14 +93,14 @@ export const systemApi = baseApi.injectEndpoints({
 					}
 
 					return {
-						url: "system/general",
+						url: API_ROUTES.system.general,
 						method: "POST",
 						body: formData,
 					};
 				}
 
 				return {
-					url: "system/general",
+					url: API_ROUTES.system.general,
 					method: "POST",
 					body: {
 						siteName,
@@ -113,15 +114,15 @@ export const systemApi = baseApi.injectEndpoints({
 			invalidatesTags: GENERAL_SETTINGS_TAGS,
 		}),
 		getGeoipStatus: build.query<ApiDataResponse<LocationDataStatus>, void>({
-			query: () => "system/geoip",
+			query: () => API_ROUTES.system.geoip,
 			providesTags: ["Geoip"],
 		}),
 		getMailStatus: build.query<ApiDataResponse<EmailStatus>, void>({
-			query: () => "system/mail",
+			query: () => API_ROUTES.system.mail,
 			providesTags: MAIL_TAGS,
 		}),
 		getCaptchaStatus: build.query<ApiDataResponse<CaptchaStatus>, void>({
-			query: () => "system/captcha",
+			query: () => API_ROUTES.system.captcha,
 			providesTags: CAPTCHA_TAGS,
 		}),
 		saveGeoipConfiguration: build.mutation<
@@ -129,7 +130,7 @@ export const systemApi = baseApi.injectEndpoints({
 			GeoipConfigurationPayload
 		>({
 			query: (body) => ({
-				url: "system/geoip",
+				url: API_ROUTES.system.geoip,
 				method: "POST",
 				body,
 			}),
@@ -140,7 +141,7 @@ export const systemApi = baseApi.injectEndpoints({
 			MailConfigurationPayload
 		>({
 			query: (body) => ({
-				url: "system/mail",
+				url: API_ROUTES.system.mail,
 				method: "POST",
 				body,
 			}),
@@ -151,7 +152,7 @@ export const systemApi = baseApi.injectEndpoints({
 			CaptchaConfigurationPayload
 		>({
 			query: (body) => ({
-				url: "system/captcha",
+				url: API_ROUTES.system.captcha,
 				method: "POST",
 				body,
 			}),
@@ -159,14 +160,14 @@ export const systemApi = baseApi.injectEndpoints({
 		}),
 		sendTestEmail: build.mutation<ApiDataResponse<MailTestResult>, void>({
 			query: () => ({
-				url: "system/mail/test",
+				url: API_ROUTES.system.mailTest,
 				method: "POST",
 			}),
 			invalidatesTags: MAIL_TAGS,
 		}),
 		downloadGeoipDatabase: build.mutation<void, void>({
 			query: () => ({
-				url: "system/geoip/download",
+				url: API_ROUTES.system.geoipDownload,
 				method: "POST",
 			}),
 			invalidatesTags: GEOIP_CHANGE_TAGS,
@@ -175,7 +176,7 @@ export const systemApi = baseApi.injectEndpoints({
 			ApiDataResponse<UpdateStatusPayload>,
 			void
 		>({
-			query: () => "system/update",
+			query: () => API_ROUTES.system.update,
 			providesTags: ["Updates"],
 		}),
 		checkForUpdates: build.mutation<
@@ -183,18 +184,18 @@ export const systemApi = baseApi.injectEndpoints({
 			void
 		>({
 			query: () => ({
-				url: "system/update/check",
+				url: API_ROUTES.system.updateCheck,
 				method: "POST",
 			}),
 			invalidatesTags: UPDATE_CHANGE_TAGS,
 		}),
 		applyUpdate: build.mutation<ApiDataResponse<UpdateStatusPayload>, void>(
-			{
-				query: () => ({
-					url: "system/update/apply",
-					method: "POST",
-				}),
-				invalidatesTags: UPDATE_CHANGE_TAGS,
+		{
+			query: () => ({
+				url: API_ROUTES.system.updateApply,
+				method: "POST",
+			}),
+			invalidatesTags: UPDATE_CHANGE_TAGS,
 			}
 		),
 		reinstallUpdate: build.mutation<
@@ -202,14 +203,14 @@ export const systemApi = baseApi.injectEndpoints({
 			void
 		>({
 			query: () => ({
-				url: "system/update/reinstall",
+				url: API_ROUTES.system.updateReinstall,
 				method: "POST",
 			}),
 			invalidatesTags: UPDATE_CHANGE_TAGS,
 		}),
 		upgradeDatabaseSchema: build.mutation<UpgradeDatabaseResponse, void>({
 			query: () => ({
-				url: "system/update/database",
+				url: API_ROUTES.system.updateDatabase,
 				method: "POST",
 			}),
 			invalidatesTags: DATABASE_UPDATE_TAGS,

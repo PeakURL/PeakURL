@@ -204,7 +204,10 @@ function site_url( string $path = '', ?string $scheme = null ): string {
  */
 // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
 function get_api_base_url( string $path = '', ?string $scheme = null ): string {
-	$api_base_url = get_site_url( 'api/v1', $scheme );
+	$api_base_url = get_site_url(
+		ltrim( Constants::API_BASE_PATH, '/' ),
+		$scheme,
+	);
 
 	if ( '' !== $path ) {
 		$api_base_url .= '/' . ltrim( $path, '/' );

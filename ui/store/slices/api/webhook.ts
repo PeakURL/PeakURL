@@ -1,3 +1,4 @@
+import { API_ROUTES } from "@/api";
 import baseApi from "./base";
 import type {
 	ApiDataResponse,
@@ -12,7 +13,7 @@ import type {
 export const webhookApi = baseApi.injectEndpoints({
 	endpoints: (build) => ({
 		getWebhooks: build.query<WebhookSummary[], void>({
-			query: () => "webhooks",
+			query: () => API_ROUTES.webhooks.index,
 			transformResponse: (response: ApiDataResponse<WebhookSummary[]>) =>
 				response.data ?? [],
 			providesTags: ["Webhooks"],
@@ -22,7 +23,7 @@ export const webhookApi = baseApi.injectEndpoints({
 			CreateWebhookPayload
 		>({
 			query: (body) => ({
-				url: "webhooks",
+				url: API_ROUTES.webhooks.index,
 				method: "POST",
 				body,
 			}),
@@ -30,7 +31,7 @@ export const webhookApi = baseApi.injectEndpoints({
 		}),
 		deleteWebhook: build.mutation<void, string>({
 			query: (id) => ({
-				url: `webhooks/${id}`,
+				url: API_ROUTES.webhooks.byId(id),
 				method: "DELETE",
 			}),
 			invalidatesTags: ["Webhooks"],

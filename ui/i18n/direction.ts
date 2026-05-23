@@ -1,4 +1,5 @@
 import type { TextDirection } from "./types";
+import { getPeakURLData } from "@/data";
 
 const RTL_BASE_LOCALES = new Set([
 	"ar",
@@ -33,12 +34,13 @@ export function getLocaleDirection(locale?: string): TextDirection {
 }
 
 export function getDocumentDirection(): TextDirection {
+	const peakurlData = getPeakURLData();
+
 	if (
-		"undefined" !== typeof window &&
-		("rtl" === window.__PEAKURL_TEXT_DIRECTION__ ||
-			"ltr" === window.__PEAKURL_TEXT_DIRECTION__)
+		"rtl" === peakurlData.textDirection ||
+		"ltr" === peakurlData.textDirection
 	) {
-		return window.__PEAKURL_TEXT_DIRECTION__;
+		return peakurlData.textDirection;
 	}
 
 	if (
@@ -50,7 +52,7 @@ export function getDocumentDirection(): TextDirection {
 	}
 
 	return getLocaleDirection(
-		("undefined" !== typeof window && window.__PEAKURL_LOCALE__) ||
+		peakurlData.locale ||
 			("undefined" !== typeof document
 				? document.documentElement?.lang
 				: "")

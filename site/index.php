@@ -262,14 +262,14 @@ $favicon_markup = static function (
 		? ' sizes="' . htmlspecialchars( $sizes, ENT_QUOTES, 'UTF-8' ) . '"'
 		: '';
 
-	$markup = '<link rel="icon" type="image/png" href="' . $icon_url . '"' . $sizes_attr . '>' .
+	$markup = '<link data-peakurl-favicon="1" rel="icon" type="image/png" href="' . $icon_url . '"' . $sizes_attr . '>' .
 		"\n" .
-		'<link rel="shortcut icon" type="image/png" href="' . $shortcut_url . '">';
+		'<link data-peakurl-favicon="1" rel="shortcut icon" type="image/png" href="' . $shortcut_url . '">';
 
 	if ( '' !== $apple_touch_url ) {
 		$markup .=
 			"\n" .
-			'<link rel="apple-touch-icon" href="' .
+			'<link data-peakurl-favicon="1" rel="apple-touch-icon" href="' .
 			htmlspecialchars( $apple_touch_url, ENT_QUOTES, 'UTF-8' ) .
 			'">';
 	}
@@ -277,14 +277,14 @@ $favicon_markup = static function (
 	if ( '' !== $manifest_url ) {
 		$markup .=
 			"\n" .
-			'<link rel="manifest" href="' .
+			'<link data-peakurl-favicon="1" rel="manifest" href="' .
 			htmlspecialchars( $manifest_url, ENT_QUOTES, 'UTF-8' ) .
 			'">';
 	}
 
 	return $markup .
 		"\n" .
-		'<meta name="apple-mobile-web-app-title" content="' . $site_name_attr . '">';
+		'<meta data-peakurl-favicon="1" name="apple-mobile-web-app-title" content="' . $site_name_attr . '">';
 };
 
 /**
@@ -313,30 +313,31 @@ $is_dashboard_path = static function ( string $relative_path ): bool {
 };
 
 /**
- * Inject runtime configuration into the dashboard app HTML.
+ * Inject PHP-provided app data into the dashboard app HTML.
  *
- * Inserts a `<base>` tag and a `<script>` block carrying the base path,
- * API base, site name, version, debug flag, backend body classes, locale, and
- * dashboard translation catalog into the `<head>` element.
+ * Inserts a `<base>` tag and a single `window.__PEAKURL__` object carrying
+ * the dashboard values the React app needs before it renders.
  *
  * @param string               $html                Raw app.html content.
  * @param string               $base_path           URL base path.
+ * @param string               $site_url            Configured site URL.
  * @param string               $site_name           Site name from settings.
  * @param string               $version             Installed PeakURL version.
- * @param array<int, string>   $body_classes        Initial body classes from PHP runtime hooks.
+ * @param array<int, string>   $body_classes        Initial body classes from PHP hooks.
  * @param string               $locale              Active site locale.
  * @param string               $text_direction      Active document text direction.
  * @param string               $timezone            Active site timezone.
  * @param string               $time_format         Active dashboard time format.
  * @param array<string, mixed> $translation_catalog Dashboard JSON catalog.
  * @param array<string, mixed> $favicon             Public favicon settings payload.
- * @param bool                 $debug_enabled       Whether runtime debug mode is enabled.
+ * @param bool                 $debug_enabled       Whether debug mode is enabled.
  * @return string Modified HTML.
  * @since 1.0.0
  */
 $prepare_html = static function (
 	string $html,
 	string $base_path,
+	string $site_url,
 	string $site_name,
 	string $version,
 	array $body_classes,
@@ -359,49 +360,43 @@ $prepare_html = static function (
 		$site_name,
 		$favicon,
 	);
-	$runtime      =
+	$peakurl_data = array(
+		'basePath'      => $base_path,
+		'apiBase'       => $app_url( $base_path, Constants::API_BASE_PATH ),
+		'siteUrl'       => $site_url,
+		'siteName'      => $site_name,
+		'version'       => $version,
+		'debug'         => $debug_enabled,
+		'locale'        => $locale,
+		'htmlLang'      => $html_lang,
+		'textDirection' => $html_dir,
+		'textDomain'    => Constants::I18N_TEXT_DOMAIN,
+		'timezone'      => $timezone,
+		'timeFormat'    => $time_format,
+		'favicon'       => $favicon,
+		'i18n'          => $translation_catalog,
+	);
+	$peakurl_json = json_encode(
+		$peakurl_data,
+		JSON_HEX_TAG |
+			JSON_HEX_AMP |
+			JSON_HEX_APOS |
+			JSON_HEX_QUOT |
+			JSON_UNESCAPED_SLASHES |
+			JSON_UNESCAPED_UNICODE,
+	);
+	$peakurl_json = is_string( $peakurl_json ) ? $peakurl_json : '{}';
+	$app_data     =
 		'<base href="' .
 		htmlspecialchars( $base_href, ENT_QUOTES, 'UTF-8' ) .
 		'">' .
 		"\n" .
 		( '' !== $favicon_head ? $favicon_head . "\n" : '' ) .
-		'<script>window.__PEAKURL_BASE_PATH__=' .
-		json_encode( $base_path ) .
-		';window.__PEAKURL_API_BASE__=' .
-		json_encode( $app_url( $base_path, '/api/v1' ) ) .
-		';window.__PEAKURL_URL__=window.location.origin+' .
-		json_encode( $base_path ) .
-		';window.__PEAKURL_SITE_NAME__=' .
-		json_encode( $site_name ) .
-		';window.__PEAKURL_VERSION__=' .
-		json_encode( $version ) .
-		';window.__PEAKURL_DEBUG__=' .
-		json_encode( $debug_enabled ) .
-		';window.__PEAKURL_FAVICON__=' .
-		json_encode(
-			$favicon,
-			JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
-		) .
-		';window.__PEAKURL_BODY_CLASSES__=' .
-		json_encode( $body_classes ) .
-		';window.__PEAKURL_LOCALE__=' .
-		json_encode( $locale ) .
-		';window.__PEAKURL_TEXT_DIRECTION__=' .
-		json_encode( $html_dir ) .
-		';window.__PEAKURL_TIMEZONE__=' .
-		json_encode( $timezone ) .
-		';window.__PEAKURL_TIME_FORMAT__=' .
-		json_encode( $time_format ) .
-		';window.__PEAKURL_TEXT_DOMAIN__=' .
-		json_encode( Constants::I18N_TEXT_DOMAIN ) .
-		';window.__PEAKURL_I18N__=' .
-		json_encode(
-			$translation_catalog,
-			JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
-		) .
+		'<script>window.__PEAKURL__=' .
+		$peakurl_json .
 		';</script>';
 
-	$updated_html   = str_replace( '<head>', "<head>\n\t\t" . $runtime, $html );
+	$updated_html   = str_replace( '<head>', "<head>\n\t\t" . $app_data, $html );
 	$html_with_lang = preg_replace_callback(
 		'/<html\b([^>]*)>/i',
 		static function ( array $matches ) use ( $html_lang, $html_dir ): string {
@@ -469,7 +464,7 @@ $prepare_html = static function (
 		}
 	}
 
-	return $updated_html !== $html ? $updated_html : $runtime . $html;
+	return $updated_html !== $html ? $updated_html : $app_data . $html;
 };
 
 // ────────────────────────────────────────────────────────────────
@@ -620,6 +615,7 @@ do_action( 'init' );
 $site_name      = trim(
 	(string) ( $connection->get_option( 'site_name' ) ?? 'PeakURL' ),
 );
+$site_url       = get_site_url();
 $locale         = get_locale();
 $text_direction = get_text_direction();
 $timezone       = trim(
@@ -711,6 +707,7 @@ if ( false === $dashboard_html ) {
 echo $prepare_html(
 	$dashboard_html,
 	$base_path,
+	$site_url,
 	$site_name,
 	$version,
 	$body_classes,

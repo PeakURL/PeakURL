@@ -6,14 +6,20 @@ import {
 	sprintf,
 } from "@wordpress/i18n";
 
+import { API_ROUTES } from "@/api";
 import { API_CLIENT_BASE_URL } from "@/constants";
+import {
+	getPeakURLData,
+	toPeakURLData,
+	updatePeakURLData,
+	type PeakURLData,
+} from "@/data";
 import { getManagedFaviconUrl } from "@/utils";
 import { getLocaleDirection } from "./direction";
 import type {
-	RuntimeFaviconPayload,
+	FaviconData,
+	I18nCatalog,
 	LocaleMessageMap,
-	RuntimeI18nCatalog,
-	RuntimeI18nPayload,
 	TextDirection,
 } from "./types";
 
@@ -34,9 +40,7 @@ let initializationPromise: Promise<void> | null = null;
  * Default translation domain used across the dashboard UI.
  */
 export const TEXT_DOMAIN =
-	"undefined" !== typeof window && window.__PEAKURL_TEXT_DOMAIN__
-		? window.__PEAKURL_TEXT_DOMAIN__
-		: DEFAULT_TEXT_DOMAIN;
+	getPeakURLData().textDomain || DEFAULT_TEXT_DOMAIN;
 
 function isObjectRecord(value: unknown): value is Record<string, unknown> {
 	return "object" === typeof value && null !== value;
@@ -46,20 +50,14 @@ function isLocaleMessageMap(value: unknown): value is LocaleMessageMap {
 	return isObjectRecord(value);
 }
 
-function isRuntimeI18nCatalog(value: unknown): value is RuntimeI18nCatalog {
-	return isObjectRecord(value);
-}
-
-function isRuntimeFaviconPayload(
-	value: unknown
-): value is RuntimeFaviconPayload {
-	return isObjectRecord(value);
+function hasLocaleData(catalog: I18nCatalog | null | undefined): boolean {
+	return isObjectRecord(catalog?.locale_data);
 }
 
 function getLocaleDataFromCatalog(
-	runtimeCatalog: RuntimeI18nCatalog | null | undefined
+	catalog: I18nCatalog | null | undefined
 ): LocaleMessageMap {
-	const messages = runtimeCatalog?.locale_data?.messages;
+	const messages = catalog?.locale_data?.messages;
 	if (isLocaleMessageMap(messages)) {
 		return messages;
 	}
@@ -94,81 +92,6 @@ function setDocumentLocale(
 	return textDirectionValue;
 }
 
-function readStringProperty(
-	record: Record<string, unknown>,
-	key: string
-): string | undefined {
-	const value = record[key];
-	return "string" === typeof value ? value : undefined;
-}
-
-function readRuntimeCatalog(
-	record: Record<string, unknown>,
-	key: string
-): RuntimeI18nCatalog | undefined {
-	const value = record[key];
-	return isRuntimeI18nCatalog(value) ? value : undefined;
-}
-
-function readRuntimeFavicon(
-	record: Record<string, unknown>,
-	key: string
-): RuntimeFaviconPayload | undefined {
-	const value = record[key];
-	return isRuntimeFaviconPayload(value) ? value : undefined;
-}
-
-function readTextDirectionProperty(
-	record: Record<string, unknown>,
-	key: string
-): TextDirection | undefined {
-	const value = record[key];
-
-	return "rtl" === value || "ltr" === value ? value : undefined;
-}
-
-function readBooleanProperty(
-	record: Record<string, unknown>,
-	key: string
-): boolean | undefined {
-	const value = record[key];
-	return "boolean" === typeof value ? value : undefined;
-}
-
-function readTimeFormatProperty(
-	record: Record<string, unknown>,
-	key: string
-): "12" | "24" | undefined {
-	const value = readStringProperty(record, key);
-
-	return "12" === value || "24" === value ? value : undefined;
-}
-
-function normalizeRuntimePayload(payload: unknown): RuntimeI18nPayload | null {
-	if (!isObjectRecord(payload)) {
-		return null;
-	}
-
-	const payloadData = isObjectRecord(payload.data) ? payload.data : payload;
-	if (!isObjectRecord(payloadData)) {
-		return null;
-	}
-
-	return {
-		catalog:
-			readRuntimeCatalog(payloadData, "catalog") ||
-			(isRuntimeI18nCatalog(payloadData) ? payloadData : undefined),
-		locale: readStringProperty(payloadData, "locale"),
-		htmlLang: readStringProperty(payloadData, "htmlLang"),
-		textDirection: readTextDirectionProperty(payloadData, "textDirection"),
-		isRtl: readBooleanProperty(payloadData, "isRtl"),
-		textDomain: readStringProperty(payloadData, "textDomain"),
-		timezone: readStringProperty(payloadData, "timezone"),
-		timeFormat: readTimeFormatProperty(payloadData, "timeFormat"),
-		favicon: readRuntimeFavicon(payloadData, "favicon"),
-	};
-}
-
 function removeManagedFaviconTags(): void {
 	if ("undefined" === typeof document) {
 		return;
@@ -199,7 +122,7 @@ function appendManagedHeadTag(
  * Applies the current site favicon metadata to the document head.
  */
 export function applyDocumentFavicon(
-	favicon?: RuntimeFaviconPayload | null
+	favicon?: FaviconData | null
 ): void {
 	if ("undefined" === typeof document) {
 		return;
@@ -260,38 +183,43 @@ export function applyDocumentFavicon(
 		});
 	}
 
-	if (window.__PEAKURL_SITE_NAME__) {
+	const siteName = getPeakURLData().siteName;
+
+	if (siteName) {
 		appendManagedHeadTag("meta", {
 			name: "apple-mobile-web-app-title",
-			content: window.__PEAKURL_SITE_NAME__,
+			content: siteName,
 		});
 	}
 }
 
 /**
- * Fetches the runtime translation payload from the dashboard API.
+ * Fetches the dashboard translation payload from the dashboard API.
  */
-async function fetchRuntimeCatalog(): Promise<RuntimeI18nPayload | null> {
+async function fetchPeakURLData(): Promise<PeakURLData | null> {
 	try {
-		const response = await fetch(`${API_CLIENT_BASE_URL}/system/i18n`, {
-			credentials: "include",
-			headers: {
-				Accept: "application/json",
-			},
-		});
+		const response = await fetch(
+			`${API_CLIENT_BASE_URL}/${API_ROUTES.system.i18n}`,
+			{
+				credentials: "include",
+				headers: {
+					Accept: "application/json",
+				},
+			}
+		);
 
 		if (!response.ok) {
 			return null;
 		}
 
-		return normalizeRuntimePayload(await response.json());
+		return toPeakURLData(await response.json());
 	} catch {
 		return null;
 	}
 }
 
 /**
- * Initializes the client-side translation runtime before the app renders.
+ * Initializes the client-side translations before the app renders.
  */
 export function initializeI18n(): Promise<void> {
 	if ("undefined" === typeof window) {
@@ -307,52 +235,39 @@ export function initializeI18n(): Promise<void> {
 	}
 
 	initializationPromise = (async () => {
-		const runtimeCatalog = window.__PEAKURL_I18N__;
-		const payload = isRuntimeI18nCatalog(runtimeCatalog)
-			? {
-					catalog: runtimeCatalog,
-					locale: window.__PEAKURL_LOCALE__ || DEFAULT_LOCALE,
-					textDirection:
-						window.__PEAKURL_TEXT_DIRECTION__ ||
-						getLocaleDirection(
-							window.__PEAKURL_LOCALE__ || DEFAULT_LOCALE
-						),
-					textDomain: window.__PEAKURL_TEXT_DOMAIN__ || TEXT_DOMAIN,
-				}
-			: await fetchRuntimeCatalog();
-		const localeData = getLocaleDataFromCatalog(payload?.catalog);
-		const domain =
-			payload?.textDomain ||
-			window.__PEAKURL_TEXT_DOMAIN__ ||
-			TEXT_DOMAIN;
-		const locale =
-			payload?.locale || window.__PEAKURL_LOCALE__ || DEFAULT_LOCALE;
+		const currentData = getPeakURLData();
+		const fetchedData = hasLocaleData(currentData.i18n)
+			? null
+			: await fetchPeakURLData();
+		const data = {
+			...currentData,
+			...(fetchedData || {}),
+			favicon:
+				undefined !== fetchedData?.favicon
+					? fetchedData.favicon
+					: currentData.favicon,
+			i18n: fetchedData?.i18n || currentData.i18n,
+		};
+		const localeData = getLocaleDataFromCatalog(data.i18n);
+		const domain = data.textDomain || TEXT_DOMAIN;
+		const locale = data.locale || DEFAULT_LOCALE;
 		const textDirection =
-			payload?.textDirection ||
-			(payload?.isRtl ? "rtl" : undefined) ||
-			window.__PEAKURL_TEXT_DIRECTION__ ||
+			data.textDirection ||
 			getLocaleDirection(locale);
 
 		setLocaleData(localeData, domain);
-		window.__PEAKURL_TEXT_DIRECTION__ = setDocumentLocale(
+		const nextData = updatePeakURLData({
+			...data,
 			locale,
-			payload?.htmlLang,
-			textDirection
-		);
-		window.__PEAKURL_FAVICON__ =
-			payload?.favicon || window.__PEAKURL_FAVICON__;
-		window.__PEAKURL_TIMEZONE__ =
-			payload?.timezone || window.__PEAKURL_TIMEZONE__;
-		window.__PEAKURL_TIME_FORMAT__ =
-			payload?.timeFormat || window.__PEAKURL_TIME_FORMAT__;
-		applyDocumentFavicon(window.__PEAKURL_FAVICON__);
+			textDomain: domain,
+			textDirection: setDocumentLocale(
+				locale,
+				data.htmlLang,
+				textDirection
+			),
+		});
 
-		if (payload?.catalog) {
-			window.__PEAKURL_I18N__ = payload.catalog;
-		}
-
-		window.__PEAKURL_LOCALE__ = locale;
-		window.__PEAKURL_TEXT_DOMAIN__ = domain;
+		applyDocumentFavicon(nextData.favicon);
 		initialized = true;
 	})().finally(() => {
 		initializationPromise = null;
@@ -362,7 +277,7 @@ export function initializeI18n(): Promise<void> {
 }
 
 /**
- * Runtime translation helpers bound to PeakURL's active text domain.
+ * Translation helpers bound to PeakURL's active text domain.
  */
 export const translate = <Text extends string>(text: Text): Text =>
 	wpTranslate(text, TEXT_DOMAIN) as unknown as Text;

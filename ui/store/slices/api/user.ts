@@ -1,3 +1,4 @@
+import { API_ROUTES } from "@/api";
 import baseApi from "./base";
 import type {
 	ApiDataResponse,
@@ -58,7 +59,7 @@ export const userApi = baseApi.injectEndpoints({
 			UnknownBodyPayload
 		>({
 			query: (body) => ({
-				url: "auth/register",
+				url: API_ROUTES.auth.register,
 				method: "POST",
 				body,
 			}),
@@ -69,7 +70,7 @@ export const userApi = baseApi.injectEndpoints({
 			UnknownBodyPayload
 		>({
 			query: (body) => ({
-				url: "auth/verify-email",
+				url: API_ROUTES.auth.verifyEmail,
 				method: "POST",
 				body,
 			}),
@@ -79,14 +80,14 @@ export const userApi = baseApi.injectEndpoints({
 			UnknownBodyPayload
 		>({
 			query: (body) => ({
-				url: "auth/resend-verification",
+				url: API_ROUTES.auth.resendVerification,
 				method: "POST",
 				body,
 			}),
 		}),
 		login: build.mutation<LoginResponse, CredentialLoginPayload>({
 			query: (body) => ({
-				url: "auth/login",
+				url: API_ROUTES.auth.login,
 				method: "POST",
 				body,
 			}),
@@ -97,7 +98,7 @@ export const userApi = baseApi.injectEndpoints({
 			CredentialLoginPayload
 		>({
 			query: (body) => ({
-				url: "auth/login/verify",
+				url: API_ROUTES.auth.loginVerify,
 				method: "POST",
 				body,
 			}),
@@ -105,13 +106,13 @@ export const userApi = baseApi.injectEndpoints({
 		}),
 		logout: build.mutation<LogoutResponse, void>({
 			query: () => ({
-				url: "auth/logout",
+				url: API_ROUTES.auth.logout,
 				method: "POST",
 			}),
 			invalidatesTags: loggedOutTags,
 		}),
 		getUserProfile: build.query<ApiDataResponse<ProfileUser>, void>({
-			query: () => "users/me",
+			query: () => API_ROUTES.users.me,
 			providesTags: USER_PROFILE_TAGS,
 		}),
 		updateUserProfile: build.mutation<
@@ -119,14 +120,14 @@ export const userApi = baseApi.injectEndpoints({
 			UnknownBodyPayload
 		>({
 			query: (body) => ({
-				url: "users/me",
+				url: API_ROUTES.users.me,
 				method: "PUT",
 				body,
 			}),
 			invalidatesTags: PROFILE_TAGS,
 		}),
 		authCheck: build.query<AuthCheckResponse, void>({
-			query: () => "users/me",
+			query: () => API_ROUTES.users.me,
 			providesTags: USER_PROFILE_TAGS,
 		}),
 		forgotPassword: build.mutation<
@@ -134,7 +135,7 @@ export const userApi = baseApi.injectEndpoints({
 			ForgotPasswordPayload
 		>({
 			query: (body) => ({
-				url: "auth/forgot-password",
+				url: API_ROUTES.auth.forgotPassword,
 				method: "POST",
 				body,
 			}),
@@ -143,21 +144,20 @@ export const userApi = baseApi.injectEndpoints({
 			ApiDataResponse<PasswordResetTokenStatus>,
 			string
 		>({
-			query: (token) =>
-				`auth/reset-password/${encodeURIComponent(token)}`,
+			query: (token) => API_ROUTES.auth.resetPassword(token),
 		}),
 		resetPassword: build.mutation<
 			ApiDataResponse<UnknownBodyPayload>,
 			ResetPasswordPayload
 		>({
 			query: ({ token, ...body }) => ({
-				url: `auth/reset-password/${encodeURIComponent(token)}`,
+				url: API_ROUTES.auth.resetPassword(token),
 				method: "POST",
 				body,
 			}),
 		}),
 		getAllUsers: build.query<ApiDataResponse<UserSummary[]>, void>({
-			query: () => "users",
+			query: () => API_ROUTES.users.index,
 			providesTags: USER_LIST_TAGS,
 		}),
 		createUser: build.mutation<
@@ -165,7 +165,7 @@ export const userApi = baseApi.injectEndpoints({
 			UserDialogPayload
 		>({
 			query: (body) => ({
-				url: "users",
+				url: API_ROUTES.users.index,
 				method: "POST",
 				body,
 			}),
@@ -176,7 +176,7 @@ export const userApi = baseApi.injectEndpoints({
 			UpdateUserPayload
 		>({
 			query: ({ currentUsername, username, ...body }) => ({
-				url: `users/${currentUsername || username}`,
+				url: API_ROUTES.users.byUsername(currentUsername || username),
 				method: "PUT",
 				body: {
 					username,
@@ -187,7 +187,7 @@ export const userApi = baseApi.injectEndpoints({
 		}),
 		deleteUser: build.mutation<void, string>({
 			query: (username) => ({
-				url: `users/${username}`,
+				url: API_ROUTES.users.byUsername(username),
 				method: "DELETE",
 			}),
 			invalidatesTags: USER_LIST_TAGS,
@@ -197,7 +197,7 @@ export const userApi = baseApi.injectEndpoints({
 			GenerateApiKeyPayload
 		>({
 			query: (body) => ({
-				url: "auth/api-key",
+				url: API_ROUTES.auth.apiKey,
 				method: "POST",
 				body,
 			}),
@@ -205,18 +205,18 @@ export const userApi = baseApi.injectEndpoints({
 		}),
 		deleteApiKey: build.mutation<void, string>({
 			query: (id) => ({
-				url: `auth/api-key/${id}`,
+				url: API_ROUTES.auth.apiKeyById(id),
 				method: "DELETE",
 			}),
 			invalidatesTags: PROFILE_TAGS,
 		}),
 		getSecuritySettings: build.query<SecuritySettingsResponse, void>({
-			query: () => "auth/security",
+			query: () => API_ROUTES.auth.security,
 			providesTags: SECURITY_TAGS,
 		}),
 		startTwoFactorSetup: build.mutation<TwoFactorSetupResponse, void>({
 			query: () => ({
-				url: "auth/security/two-factor/setup",
+				url: API_ROUTES.auth.twoFactorSetup,
 				method: "POST",
 			}),
 			invalidatesTags: SECURITY_TAGS,
@@ -226,7 +226,7 @@ export const userApi = baseApi.injectEndpoints({
 			VerifyTwoFactorPayload
 		>({
 			query: (body) => ({
-				url: "auth/security/two-factor/verify",
+				url: API_ROUTES.auth.twoFactorVerify,
 				method: "POST",
 				body,
 			}),
@@ -237,7 +237,7 @@ export const userApi = baseApi.injectEndpoints({
 			CurrentPasswordPayload
 		>({
 			query: (body) => ({
-				url: "auth/security/two-factor/disable",
+				url: API_ROUTES.auth.twoFactorDisable,
 				method: "POST",
 				body,
 			}),
@@ -248,7 +248,7 @@ export const userApi = baseApi.injectEndpoints({
 			CurrentPasswordPayload
 		>({
 			query: (body) => ({
-				url: "auth/security/two-factor/backup-codes",
+				url: API_ROUTES.auth.twoFactorBackupCodes,
 				method: "POST",
 				body,
 			}),
@@ -256,7 +256,7 @@ export const userApi = baseApi.injectEndpoints({
 		}),
 		downloadBackupCodes: build.mutation<string, CurrentPasswordPayload>({
 			query: (body) => ({
-				url: "auth/security/backup-codes/download",
+				url: API_ROUTES.auth.securityBackupCodesDownload,
 				method: "POST",
 				body,
 				responseHandler: (response: Response) => response.text(),
@@ -264,14 +264,14 @@ export const userApi = baseApi.injectEndpoints({
 		}),
 		revokeSession: build.mutation<void, string>({
 			query: (sessionId) => ({
-				url: `auth/security/sessions/${sessionId}`,
+				url: API_ROUTES.auth.securitySession(sessionId),
 				method: "DELETE",
 			}),
 			invalidatesTags: SECURITY_TAGS,
 		}),
 		revokeOtherSessions: build.mutation<RevokeOtherSessionsResponse, void>({
 			query: () => ({
-				url: "auth/security/sessions",
+				url: API_ROUTES.auth.securitySessions,
 				method: "DELETE",
 			}),
 			invalidatesTags: SECURITY_TAGS,

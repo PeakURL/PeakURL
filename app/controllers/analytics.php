@@ -29,9 +29,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  *  GET /api/v1/analytics/recent-clicks → recent_clicks
  *  GET /api/v1/analytics/activity/history → history
  *  DELETE /api/v1/analytics/activity/bulk → bulk_delete
- *  DELETE /api/v1/analytics/activity/:id → delete
- *  GET /api/v1/analytics/location/:id → location
- *  GET /api/v1/analytics/stats/:id    → stats
+ *  DELETE /api/v1/analytics/activity/{id} → delete
+ *  GET /api/v1/analytics/url/{id}/location → location
+ *  GET /api/v1/analytics/url/{id}/stats    → stats
  *
  * @since 1.0.0
  */
@@ -115,7 +115,7 @@ class AnalyticsController extends BaseController {
 	}
 
 	/**
-	 * Delete an activity entry (DELETE /api/v1/analytics/activity/:id).
+	 * Delete an activity entry (DELETE /api/v1/analytics/activity/{id}).
 	 *
 	 * Admin-only. Returns 404 if the activity row does not exist.
 	 *
@@ -164,7 +164,7 @@ class AnalyticsController extends BaseController {
 	}
 
 	/**
-	 * Per-link location analytics (GET /api/v1/analytics/location/:id).
+	 * Per-link location analytics (GET /api/v1/analytics/url/{id}/location).
 	 *
 	 * Returns geographic breakdown (country, city) of clicks for a
 	 * specific short link. Returns 404 if the link has no analytics data.
@@ -187,7 +187,7 @@ class AnalyticsController extends BaseController {
 	}
 
 	/**
-	 * Per-link time-series statistics (GET /api/v1/analytics/stats/:id).
+	 * Per-link time-series statistics (GET /api/v1/analytics/url/{id}/stats).
 	 *
 	 * Returns daily click counts for a specific short link over the
 	 * requested range. Returns 404 if the link has no data.

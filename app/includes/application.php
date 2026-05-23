@@ -47,6 +47,20 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Application {
 
+	/**
+	 * Router methods supported by the internal route map.
+	 *
+	 * @var array<string, bool>
+	 */
+	private const ROUTE_METHODS = array(
+		'get'    => true,
+		'head'   => true,
+		'post'   => true,
+		'put'    => true,
+		'patch'  => true,
+		'delete' => true,
+	);
+
 	/** @var Router HTTP route dispatcher. */
 	private Router $router;
 
@@ -216,9 +230,10 @@ class Application {
 	 * @since 1.2.2
 	 */
 	private function is_admin_request( Request $request ): bool {
-		$path = $request->get_path();
+		$path     = $request->get_path();
+		$api_path = Constants::API_BASE_PATH;
 
-		return '/api/v1' === $path || 0 === strpos( $path, '/api/v1/' );
+		return $api_path === $path || 0 === strpos( $path, $api_path . '/' );
 	}
 
 	/**
@@ -306,7 +321,7 @@ class Application {
 	}
 
 	/**
-	 * Register public redirect routes.
+	 * Register health and dashboard data routes.
 	 *
 	 * @param SettingsController $settings Settings controller.
 	 * @return void
@@ -315,8 +330,8 @@ class Application {
 	private function register_core_routes( SettingsController $settings ): void {
 		$this->add_routes(
 			array(
-				array( 'get', '/api/v1/health', array( $this, 'health' ) ),
-				array( 'get', '/api/v1/system/i18n', array( $settings, 'i18n' ) ),
+				array( 'get', '/health', array( $this, 'health' ) ),
+				array( 'get', '/system/i18n', array( $settings, 'i18n' ) ),
 			)
 		);
 	}
@@ -331,25 +346,25 @@ class Application {
 	private function register_auth_routes( AuthController $auth ): void {
 		$this->add_routes(
 			array(
-				array( 'post', '/api/v1/auth/register', array( $auth, 'register' ) ),
-				array( 'post', '/api/v1/auth/verify-email', array( $auth, 'verify_email' ) ),
-				array( 'post', '/api/v1/auth/resend-verification', array( $auth, 'resend_verification' ) ),
-				array( 'post', '/api/v1/auth/login', array( $auth, 'login' ) ),
-				array( 'post', '/api/v1/auth/login/verify', array( $auth, 'verify_two_factor_login' ) ),
-				array( 'post', '/api/v1/auth/logout', array( $auth, 'logout' ) ),
-				array( 'post', '/api/v1/auth/forgot-password', array( $auth, 'forgot_password' ) ),
-				array( 'get', '/api/v1/auth/reset-password/{token}', array( $auth, 'validate_reset_token' ) ),
-				array( 'post', '/api/v1/auth/reset-password/{token}', array( $auth, 'reset_password' ) ),
-				array( 'post', '/api/v1/auth/api-key', array( $auth, 'generate_api_key' ) ),
-				array( 'delete', '/api/v1/auth/api-key/{id}', array( $auth, 'delete_api_key' ) ),
-				array( 'get', '/api/v1/auth/security', array( $auth, 'get_security' ) ),
-				array( 'post', '/api/v1/auth/security/two-factor/setup', array( $auth, 'start_two_factor_setup' ) ),
-				array( 'post', '/api/v1/auth/security/two-factor/verify', array( $auth, 'verify_two_factor' ) ),
-				array( 'post', '/api/v1/auth/security/two-factor/disable', array( $auth, 'disable_two_factor' ) ),
-				array( 'post', '/api/v1/auth/security/two-factor/backup-codes', array( $auth, 'regenerate_backup_codes' ) ),
-				array( 'post', '/api/v1/auth/security/backup-codes/download', array( $auth, 'download_backup_codes' ) ),
-				array( 'delete', '/api/v1/auth/security/sessions', array( $auth, 'revoke_other_sessions' ) ),
-				array( 'delete', '/api/v1/auth/security/sessions/{id}', array( $auth, 'revoke_session' ) ),
+				array( 'post', '/auth/register', array( $auth, 'register' ) ),
+				array( 'post', '/auth/verify-email', array( $auth, 'verify_email' ) ),
+				array( 'post', '/auth/resend-verification', array( $auth, 'resend_verification' ) ),
+				array( 'post', '/auth/login', array( $auth, 'login' ) ),
+				array( 'post', '/auth/login/verify', array( $auth, 'verify_two_factor_login' ) ),
+				array( 'post', '/auth/logout', array( $auth, 'logout' ) ),
+				array( 'post', '/auth/forgot-password', array( $auth, 'forgot_password' ) ),
+				array( 'get', '/auth/reset-password/{token}', array( $auth, 'validate_reset_token' ) ),
+				array( 'post', '/auth/reset-password/{token}', array( $auth, 'reset_password' ) ),
+				array( 'post', '/auth/api-key', array( $auth, 'generate_api_key' ) ),
+				array( 'delete', '/auth/api-key/{id}', array( $auth, 'delete_api_key' ) ),
+				array( 'get', '/auth/security', array( $auth, 'get_security' ) ),
+				array( 'post', '/auth/security/two-factor/setup', array( $auth, 'start_two_factor_setup' ) ),
+				array( 'post', '/auth/security/two-factor/verify', array( $auth, 'verify_two_factor' ) ),
+				array( 'post', '/auth/security/two-factor/disable', array( $auth, 'disable_two_factor' ) ),
+				array( 'post', '/auth/security/two-factor/backup-codes', array( $auth, 'regenerate_backup_codes' ) ),
+				array( 'post', '/auth/security/backup-codes/download', array( $auth, 'download_backup_codes' ) ),
+				array( 'delete', '/auth/security/sessions', array( $auth, 'revoke_other_sessions' ) ),
+				array( 'delete', '/auth/security/sessions/{id}', array( $auth, 'revoke_session' ) ),
 			)
 		);
 	}
@@ -364,12 +379,12 @@ class Application {
 	private function register_user_routes( UsersController $users ): void {
 		$this->add_routes(
 			array(
-				array( 'get', '/api/v1/users', array( $users, 'index' ) ),
-				array( 'post', '/api/v1/users', array( $users, 'create' ) ),
-				array( 'get', '/api/v1/users/me', array( $users, 'me' ) ),
-				array( 'put', '/api/v1/users/me', array( $users, 'update_me' ) ),
-				array( 'put', '/api/v1/users/{username}', array( $users, 'update' ) ),
-				array( 'delete', '/api/v1/users/{username}', array( $users, 'delete' ) ),
+				array( 'get', '/users', array( $users, 'index' ) ),
+				array( 'post', '/users', array( $users, 'create' ) ),
+				array( 'get', '/users/me', array( $users, 'me' ) ),
+				array( 'put', '/users/me', array( $users, 'update_me' ) ),
+				array( 'put', '/users/{username}', array( $users, 'update' ) ),
+				array( 'delete', '/users/{username}', array( $users, 'delete' ) ),
 			)
 		);
 	}
@@ -384,15 +399,14 @@ class Application {
 	private function register_url_routes( UrlsController $urls ): void {
 		$this->add_routes(
 			array(
-				array( 'get', '/api/v1/urls', array( $urls, 'index' ) ),
-				array( 'get', '/api/v1/urls/export', array( $urls, 'export' ) ),
-				array( 'get', '/api/v1/urls/{id}', array( $urls, 'show' ) ),
-				array( 'post', '/api/v1/urls', array( $urls, 'create' ) ),
-				array( 'post', '/api/v1/urls/bulk', array( $urls, 'bulk_create' ) ),
-				array( 'post', '/api/v1/urls/{id}', array( $urls, 'update' ) ),
-				array( 'delete', '/api/v1/urls/bulk', array( $urls, 'bulk_delete' ) ),
-				array( 'put', '/api/v1/urls/{id}', array( $urls, 'update' ) ),
-				array( 'delete', '/api/v1/urls/{id}', array( $urls, 'delete' ) ),
+				array( 'get', '/urls', array( $urls, 'index' ) ),
+				array( 'get', '/urls/export', array( $urls, 'export' ) ),
+				array( 'get', '/urls/{id}', array( $urls, 'show' ) ),
+				array( 'post', '/urls', array( $urls, 'create' ) ),
+				array( 'post', '/urls/bulk', array( $urls, 'bulk_create' ) ),
+				array( array( 'post', 'put' ), '/urls/{id}', array( $urls, 'update' ) ),
+				array( 'delete', '/urls/bulk', array( $urls, 'bulk_delete' ) ),
+				array( 'delete', '/urls/{id}', array( $urls, 'delete' ) ),
 			)
 		);
 	}
@@ -407,14 +421,14 @@ class Application {
 	private function register_analytics_routes( AnalyticsController $analytics ): void {
 		$this->add_routes(
 			array(
-				array( 'get', '/api/v1/analytics', array( $analytics, 'index' ) ),
-				array( 'get', '/api/v1/analytics/activity', array( $analytics, 'activity' ) ),
-				array( 'get', '/api/v1/analytics/recent-clicks', array( $analytics, 'recent_clicks' ) ),
-				array( 'get', '/api/v1/analytics/activity/history', array( $analytics, 'history' ) ),
-				array( 'delete', '/api/v1/analytics/activity/bulk', array( $analytics, 'bulk_delete' ) ),
-				array( 'delete', '/api/v1/analytics/activity/{id}', array( $analytics, 'delete' ) ),
-				array( 'get', '/api/v1/analytics/url/{id}/location', array( $analytics, 'location' ) ),
-				array( 'get', '/api/v1/analytics/url/{id}/stats', array( $analytics, 'stats' ) ),
+				array( 'get', '/analytics', array( $analytics, 'index' ) ),
+				array( 'get', '/analytics/activity', array( $analytics, 'activity' ) ),
+				array( 'get', '/analytics/recent-clicks', array( $analytics, 'recent_clicks' ) ),
+				array( 'get', '/analytics/activity/history', array( $analytics, 'history' ) ),
+				array( 'delete', '/analytics/activity/bulk', array( $analytics, 'bulk_delete' ) ),
+				array( 'delete', '/analytics/activity/{id}', array( $analytics, 'delete' ) ),
+				array( 'get', '/analytics/url/{id}/location', array( $analytics, 'location' ) ),
+				array( 'get', '/analytics/url/{id}/stats', array( $analytics, 'stats' ) ),
 			)
 		);
 	}
@@ -429,9 +443,9 @@ class Application {
 	private function register_webhook_routes( WebhooksController $webhooks ): void {
 		$this->add_routes(
 			array(
-				array( 'get', '/api/v1/webhooks', array( $webhooks, 'index' ) ),
-				array( 'post', '/api/v1/webhooks', array( $webhooks, 'create' ) ),
-				array( 'delete', '/api/v1/webhooks/{id}', array( $webhooks, 'delete' ) ),
+				array( 'get', '/webhooks', array( $webhooks, 'index' ) ),
+				array( 'post', '/webhooks', array( $webhooks, 'create' ) ),
+				array( 'delete', '/webhooks/{id}', array( $webhooks, 'delete' ) ),
 			)
 		);
 	}
@@ -458,18 +472,18 @@ class Application {
 	): void {
 		$this->add_routes(
 			array(
-				array( 'get', '/api/v1/system/notices', array( $notices, 'index' ) ),
-				array( 'get', '/api/v1/system/general', array( $settings, 'general' ) ),
-				array( 'post', '/api/v1/system/general', array( $settings, 'update_general' ) ),
-				array( 'get', '/api/v1/system/status', array( $status, 'status' ) ),
-				array( 'get', '/api/v1/system/captcha', array( $captcha, 'status' ) ),
-				array( 'post', '/api/v1/system/captcha', array( $captcha, 'update' ) ),
-				array( 'get', '/api/v1/system/geoip', array( $geoip, 'status' ) ),
-				array( 'post', '/api/v1/system/geoip', array( $geoip, 'update' ) ),
-				array( 'post', '/api/v1/system/geoip/download', array( $geoip, 'download' ) ),
-				array( 'get', '/api/v1/system/mail', array( $mail, 'status' ) ),
-				array( 'post', '/api/v1/system/mail', array( $mail, 'update' ) ),
-				array( 'post', '/api/v1/system/mail/test', array( $mail, 'test' ) ),
+				array( 'get', '/system/notices', array( $notices, 'index' ) ),
+				array( 'get', '/system/general', array( $settings, 'general' ) ),
+				array( 'post', '/system/general', array( $settings, 'update_general' ) ),
+				array( 'get', '/system/status', array( $status, 'status' ) ),
+				array( 'get', '/system/captcha', array( $captcha, 'status' ) ),
+				array( 'post', '/system/captcha', array( $captcha, 'update' ) ),
+				array( 'get', '/system/geoip', array( $geoip, 'status' ) ),
+				array( 'post', '/system/geoip', array( $geoip, 'update' ) ),
+				array( 'post', '/system/geoip/download', array( $geoip, 'download' ) ),
+				array( 'get', '/system/mail', array( $mail, 'status' ) ),
+				array( 'post', '/system/mail', array( $mail, 'update' ) ),
+				array( 'post', '/system/mail/test', array( $mail, 'test' ) ),
 			)
 		);
 	}
@@ -484,11 +498,11 @@ class Application {
 	private function register_update_routes( UpdatesController $updates ): void {
 		$this->add_routes(
 			array(
-				array( 'get', '/api/v1/system/update', array( $updates, 'status' ) ),
-				array( 'post', '/api/v1/system/update/check', array( $updates, 'refresh' ) ),
-				array( 'post', '/api/v1/system/update/apply', array( $updates, 'apply' ) ),
-				array( 'post', '/api/v1/system/update/reinstall', array( $updates, 'reinstall' ) ),
-				array( 'post', '/api/v1/system/update/database', array( $updates, 'upgrade_database' ) ),
+				array( 'get', '/system/update', array( $updates, 'status' ) ),
+				array( 'post', '/system/update/check', array( $updates, 'refresh' ) ),
+				array( 'post', '/system/update/apply', array( $updates, 'apply' ) ),
+				array( 'post', '/system/update/reinstall', array( $updates, 'reinstall' ) ),
+				array( 'post', '/system/update/database', array( $updates, 'upgrade_database' ) ),
 			)
 		);
 	}
@@ -503,56 +517,62 @@ class Application {
 	private function register_redirect_routes( UrlsController $urls ): void {
 		$this->add_routes(
 			array(
-				array( 'get', '/{id}', array( $urls, 'redirect' ) ),
-				array( 'get', '/{id}/', array( $urls, 'redirect' ) ),
-				array( 'head', '/{id}', array( $urls, 'redirect' ) ),
-				array( 'head', '/{id}/', array( $urls, 'redirect' ) ),
-				array( 'post', '/{id}', array( $urls, 'redirect' ) ),
-				array( 'post', '/{id}/', array( $urls, 'redirect' ) ),
-			)
+				array( array( 'get', 'head', 'post' ), '/{id}', array( $urls, 'redirect' ) ),
+				array( array( 'get', 'head', 'post' ), '/{id}/', array( $urls, 'redirect' ) ),
+			),
+			''
 		);
 	}
 
 	/**
 	 * Register a compact route map on the router.
 	 *
-	 * @param array<int, array{0: string, 1: string, 2: callable}> $routes Route definitions.
+	 * Dashboard API routes use the public API base by default. Public routes
+	 * can pass an empty prefix to register directly at the site root.
+	 *
+	 * @param array<int, array{0: string|array<int, string>, 1: string, 2: callable}> $routes      Route definitions.
+	 * @param string                                                                  $path_prefix Optional route path prefix.
 	 * @return void
 	 * @since 1.1.1
 	 */
-	private function add_routes( array $routes ): void {
+	private function add_routes(
+		array $routes,
+		string $path_prefix = Constants::API_BASE_PATH
+	): void {
 		foreach ( $routes as $route ) {
-			$method  = strtolower( (string) $route[0] );
-			$path    = (string) $route[1];
-			$handler = $route[2];
+			list( $methods, $path, $handler ) = $route;
 
-			$this->assert_supported_route_method( $method );
+			$methods = is_array( $methods ) ? $methods : array( $methods );
+			$path    = $this->prefix_route_path(
+				(string) $path,
+				$path_prefix,
+			);
 
-			switch ( $method ) {
-				case 'get':
-					$this->router->get( $path, $handler );
-					break;
-				case 'head':
-					$this->router->head( $path, $handler );
-					break;
-				case 'post':
-					$this->router->post( $path, $handler );
-					break;
-				case 'put':
-					$this->router->put( $path, $handler );
-					break;
-				case 'patch':
-					$this->router->patch( $path, $handler );
-					break;
-				case 'delete':
-					$this->router->delete( $path, $handler );
-					break;
-				default:
-					throw new RouteConfigurationException(
-						'Unsupported route method: ' . $method,
-					);
+			foreach ( $methods as $method_name ) {
+				$method = strtolower( (string) $method_name );
+
+				$this->assert_supported_route_method( $method );
+				$this->router->{$method}( $path, $handler );
 			}
 		}
+	}
+
+	/**
+	 * Prefix a route path while preserving root-relative route syntax.
+	 *
+	 * @param string $path        Route path.
+	 * @param string $path_prefix Optional route path prefix.
+	 * @return string Prefixed route path.
+	 * @since 1.2.2
+	 */
+	private function prefix_route_path( string $path, string $path_prefix = '' ): string {
+		$path = '/' . ltrim( $path, '/' );
+
+		if ( '' === $path_prefix ) {
+			return $path;
+		}
+
+		return rtrim( '/' . trim( $path_prefix, '/' ), '/' ) . $path;
 	}
 
 	/**
@@ -565,16 +585,7 @@ class Application {
 	 * @since 1.1.2
 	 */
 	private function assert_supported_route_method( string $method ): void {
-		$supported_methods = array(
-			'get',
-			'head',
-			'post',
-			'put',
-			'patch',
-			'delete',
-		);
-
-		if ( in_array( $method, $supported_methods, true ) ) {
+		if ( isset( self::ROUTE_METHODS[ $method ] ) ) {
 			return;
 		}
 

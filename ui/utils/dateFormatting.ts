@@ -1,3 +1,5 @@
+import { getPeakURLData } from "@/data";
+
 const SECOND_MS = 1000;
 const MINUTE_MS = 60 * SECOND_MS;
 const HOUR_MS = 60 * MINUTE_MS;
@@ -82,10 +84,11 @@ function getNonEmptyString(value: unknown): string | null {
  * @return The BCP 47 locale string.
  */
 export function getActiveLocale(): string {
+	const peakurlData = getPeakURLData();
 	const windowLocale =
 		typeof window === "undefined"
 			? null
-			: getNonEmptyString(window.__PEAKURL_LOCALE__);
+			: getNonEmptyString(peakurlData.locale);
 
 	/* Prefer the server-provided locale if available. */
 	if (windowLocale) {
@@ -111,10 +114,11 @@ export function getActiveLocale(): string {
  * @return The IANA time zone identifier.
  */
 export function getActiveTimeZone(): string {
+	const peakurlData = getPeakURLData();
 	const timezone =
 		typeof window === "undefined"
 			? null
-			: getNonEmptyString(window.__PEAKURL_TIMEZONE__);
+			: getNonEmptyString(peakurlData.timezone);
 
 	return timezone ?? DEFAULT_TIMEZONE;
 }
@@ -125,10 +129,11 @@ export function getActiveTimeZone(): string {
  * @return The time format identifier.
  */
 function getActiveTimeFormat(): "12" | "24" {
+	const peakurlData = getPeakURLData();
 	const timeFormat =
 		typeof window === "undefined"
 			? null
-			: getNonEmptyString(window.__PEAKURL_TIME_FORMAT__);
+			: getNonEmptyString(peakurlData.timeFormat);
 
 	if (timeFormat === "24") {
 		return "24";

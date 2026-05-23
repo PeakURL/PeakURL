@@ -32,17 +32,6 @@ function uniqueBodyClassNames(
 	);
 }
 
-function getRuntimeBodyClassNames(): string[] {
-	if (
-		"undefined" === typeof window ||
-		!Array.isArray(window.__PEAKURL_BODY_CLASSES__)
-	) {
-		return [];
-	}
-
-	return uniqueBodyClassNames(window.__PEAKURL_BODY_CLASSES__);
-}
-
 function getAuthBodyClassNames(pathname: string): string[] {
 	if ("/login" === pathname) {
 		return ["peakurl-ui", "public-page", "auth-page", "login-page"];
@@ -215,7 +204,6 @@ export function getBodyClassNames(
 	pathname: string,
 	extraClasses: string[] = []
 ): string[] {
-	const runtimeClasses = getRuntimeBodyClassNames();
 	const routeClasses = [
 		...getAuthBodyClassNames(pathname),
 		...getDashboardBodyClassNames(pathname),
@@ -224,7 +212,6 @@ export function getBodyClassNames(
 		0 === routeClasses.length ? ["peakurl-ui", "app-page"] : routeClasses;
 	const mergedClasses = uniqueBodyClassNames([
 		...defaultClasses,
-		...runtimeClasses,
 		...extraClasses,
 	]);
 	const context = getBodyClassContext(pathname, mergedClasses);

@@ -63,6 +63,8 @@ class Constants {
 	public const VERSION_FILE = '.version';
 	/** Fallback version string. */
 	public const DEFAULT_VERSION = '0.0.0';
+	/** Public REST API base path. */
+	public const API_BASE_PATH = '/api/v1';
 	/** Default update manifest URL. */
 	public const DEFAULT_UPDATE_MANIFEST_URL = 'https://api.peakurl.org/v1/update';
 	/** Current managed database schema version. */

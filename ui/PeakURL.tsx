@@ -5,7 +5,7 @@ import "./index.css";
 import App from "./App";
 import { initializeI18n } from "./i18n";
 
-async function bootstrap(): Promise<void> {
+async function PeakURL(): Promise<void> {
 	try {
 		await initializeI18n();
 	} finally {
@@ -17,4 +17,4 @@ async function bootstrap(): Promise<void> {
 	}
 }
 
-void bootstrap();
+void PeakURL();

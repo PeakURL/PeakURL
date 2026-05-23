@@ -37,25 +37,25 @@ export type LocaleMessageEntry = string[] | Record<string, string>;
 export type LocaleMessageMap = Record<string, LocaleMessageEntry>;
 
 /**
- * Nested `locale_data` block exposed by runtime translation catalogs.
+ * Nested `locale_data` block exposed by dashboard translation catalogs.
  */
-export interface RuntimeLocaleData {
+export interface I18nLocaleData {
 	/** Translation messages grouped under the default `messages` domain. */
 	messages?: LocaleMessageMap;
 }
 
 /**
- * Runtime translation catalog injected into `window` or returned by the API.
+ * Translation catalog injected into `window.__PEAKURL__` or returned by the API.
  */
-export interface RuntimeI18nCatalog {
+export interface I18nCatalog {
 	/** Locale data consumed by `setLocaleData()`. */
-	locale_data?: RuntimeLocaleData;
+	locale_data?: I18nLocaleData;
 }
 
 /**
- * Public favicon metadata exposed to the runtime shell and bootstrap API.
+ * Public favicon metadata exposed to the dashboard app.
  */
-export interface RuntimeFaviconPayload {
+export interface FaviconData {
 	/** Whether a site favicon is currently configured. */
 	configured?: boolean;
 
@@ -82,36 +82,4 @@ export interface RuntimeFaviconPayload {
 
 	/** Last updated timestamp used for cache-busting managed asset URLs. */
 	updatedAt?: string | null;
-}
-
-/**
- * Normalized payload returned by the dashboard i18n bootstrap endpoint.
- */
-export interface RuntimeI18nPayload {
-	/** Translation catalog that should be registered with the client. */
-	catalog?: RuntimeI18nCatalog;
-
-	/** Locale code that should become the active dashboard locale. */
-	locale?: string;
-
-	/** HTML language attribute to apply to the document root. */
-	htmlLang?: string;
-
-	/** Text direction that should be applied to the document root. */
-	textDirection?: TextDirection;
-
-	/** Whether the active locale uses right-to-left layout. */
-	isRtl?: boolean;
-
-	/** Translation domain used for runtime lookups. */
-	textDomain?: string;
-
-	/** Site timezone used for dashboard date/time formatting. */
-	timezone?: string;
-
-	/** Dashboard time display preference. */
-	timeFormat?: "12" | "24";
-
-	/** Public favicon metadata for the current install. */
-	favicon?: RuntimeFaviconPayload;
 }

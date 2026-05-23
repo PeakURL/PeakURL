@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Routes registered by Application::register_routes():
  *  GET    /api/v1/webhooks     → index
  *  POST   /api/v1/webhooks     → create
- *  DELETE /api/v1/webhooks/:id → delete
+ *  DELETE /api/v1/webhooks/{id} → delete
  *
  * @since 1.0.0
  */
@@ -67,7 +67,7 @@ class WebhooksController extends BaseController {
 	}
 
 	/**
-	 * Delete a webhook by ID (DELETE /api/v1/webhooks/:id).
+	 * Delete a webhook by ID (DELETE /api/v1/webhooks/{id}).
 	 *
 	 * Returns 404 if the webhook does not exist or does not
 	 * belong to the authenticated user.

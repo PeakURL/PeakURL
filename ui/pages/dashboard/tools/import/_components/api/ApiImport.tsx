@@ -1,5 +1,6 @@
 import { Button } from "@/components";
 import { ExternalLink } from "lucide-react";
+import { API_ROUTES } from "@/api";
 import { API_SERVER_BASE_URL } from "@/constants";
 import { __ } from "@/i18n";
 
@@ -20,7 +21,7 @@ const ApiImport = () => {
 						{__("Example Request")}
 					</h3>
 					<pre className="import-api-code-block">
-						<code>{`POST ${API_SERVER_BASE_URL}/urls/bulk
+						<code>{`POST ${API_SERVER_BASE_URL}/${API_ROUTES.urls.bulk}
 Authorization: Bearer ${apiKey}
 Content-Type: application/json
 

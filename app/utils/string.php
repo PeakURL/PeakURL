@@ -5,7 +5,7 @@
  * Provides polyfills for common string inspection methods that became
  * native in PHP 8.0 (str_starts_with, str_ends_with, str_contains).
  *
- * @package PeakURL\Bootstrap
+ * @package PeakURL\Utils
  * @since 1.0.0
  */
 

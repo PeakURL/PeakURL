@@ -1,29 +1,18 @@
 import rawPeakurlVersion from "../.version?raw";
+import {
+	DEFAULT_API_PATH,
+	formatBasePath,
+	getPeakURLData,
+} from "@/data";
 
 const DEFAULT_PEAKURL_ORIGIN = "https://peakurl.dev";
-const DEFAULT_API_PATH = "/api/v1";
 const FALLBACK_VERSION = rawPeakurlVersion.trim() || "0.0.0";
 const IS_BROWSER = "undefined" !== typeof window;
 
 /**
- * Normalizes a mounted base path so route and API URLs can be joined safely.
+ * Reads a trimmed app data string injected onto `window`, falling back to `''`.
  */
-function normalizeBasePath(value: string | null | undefined): string {
-	if (!value || "string" !== typeof value) {
-		return "";
-	}
-
-	if ("/" === value.trim()) {
-		return "";
-	}
-
-	return `/${value.replace(/^\/+|\/+$/g, "")}`;
-}
-
-/**
- * Reads a trimmed runtime string injected onto `window`, falling back to `''`.
- */
-function getRuntimeString(value: string | null | undefined): string {
+function getAppDataString(value: string | null | undefined): string {
 	return "string" === typeof value ? value.trim() : "";
 }
 
@@ -55,28 +44,29 @@ function sanitizeHost(
 	return value.replace(/^https?:\/\//i, "").replace(/\/.*$/, "") || fallback;
 }
 
-const runtimeBasePath = IS_BROWSER
-	? normalizeBasePath(window.__PEAKURL_BASE_PATH__)
-	: "";
-const runtimeOrigin = IS_BROWSER
+const peakurlData = getPeakURLData();
+const appBasePath = IS_BROWSER ? formatBasePath(peakurlData.basePath) : "";
+const appOrigin = IS_BROWSER
 	? window.location.origin
 	: DEFAULT_PEAKURL_ORIGIN;
-const runtimePeakurlUrl = IS_BROWSER
-	? window.__PEAKURL_URL__ || `${runtimeOrigin}${runtimeBasePath}`
+const appSiteUrl = IS_BROWSER ? getAppDataString(peakurlData.siteUrl) : "";
+const appApiBase = IS_BROWSER ? getAppDataString(peakurlData.apiBase) : "";
+const fallbackSiteUrl = IS_BROWSER
+	? `${appOrigin}${appBasePath}`
 	: DEFAULT_PEAKURL_ORIGIN;
-const runtimeApiPath = IS_BROWSER
-	? window.__PEAKURL_API_BASE__ || `${runtimeBasePath}${DEFAULT_API_PATH}`
+const fallbackApiPath = IS_BROWSER
+	? `${appBasePath}${DEFAULT_API_PATH}`
 	: DEFAULT_API_PATH;
-const runtimeSiteName = IS_BROWSER
-	? getRuntimeString(window.__PEAKURL_SITE_NAME__)
+const appSiteName = IS_BROWSER
+	? getAppDataString(peakurlData.siteName)
 	: "";
-const runtimeVersion = IS_BROWSER
-	? getRuntimeString(window.__PEAKURL_VERSION__)
+const appVersion = IS_BROWSER
+	? getAppDataString(peakurlData.version)
 	: "";
-const runtimeDebug = import.meta.env.DEV
+const appDebug = import.meta.env.DEV
 	? true
 	: IS_BROWSER
-		? true === window.__PEAKURL_DEBUG__
+		? true === peakurlData.debug
 		: false;
 
 /**
@@ -87,17 +77,17 @@ export const PEAKURL_NAME = "PeakURL";
 /**
  * Site name shown in UI copy and page titles.
  */
-export const PEAKURL_SITE_NAME = runtimeSiteName || PEAKURL_NAME;
+export const PEAKURL_SITE_NAME = appSiteName || PEAKURL_NAME;
 
 /**
  * Current application version available to the dashboard.
  */
-export const PEAKURL_VERSION = runtimeVersion || FALLBACK_VERSION;
+export const PEAKURL_VERSION = appVersion || FALLBACK_VERSION;
 
 /**
- * Whether runtime debug mode is enabled for the current install.
+ * Whether debug mode is enabled for the current install.
  */
-export const PEAKURL_DEBUG = runtimeDebug;
+export const PEAKURL_DEBUG = appDebug;
 
 /**
  * Support contact address shown in contributor-facing UI copy.
@@ -109,14 +99,14 @@ export const SUPPORT_EMAIL =
  * Canonical public site URL for the current install.
  */
 export const PEAKURL_URL = toAbsoluteUrl(
-	runtimePeakurlUrl || import.meta.env.VITE_PEAKURL_URL || runtimeOrigin,
-	runtimeOrigin
+	appSiteUrl || import.meta.env.VITE_PEAKURL_URL || fallbackSiteUrl,
+	appOrigin
 );
 
 /**
  * Router basename used when PeakURL is mounted below the site root.
  */
-export const PEAKURL_BASENAME = runtimeBasePath;
+export const PEAKURL_BASENAME = appBasePath;
 
 /**
  * Public host for the current install without path information.
@@ -132,10 +122,10 @@ export const PEAKURL_HOST = sanitizeHost(
 export const PEAKURL_DOMAIN = PEAKURL_HOST.replace(/^www\./i, "");
 
 /**
- * Client-visible API base path used by RTK Query and runtime fetches.
+ * Client-visible API base path used by RTK Query and app data fetches.
  */
 export const API_CLIENT_BASE_URL =
-	runtimeApiPath || import.meta.env.VITE_API_BASE_URL || DEFAULT_API_PATH;
+	appApiBase || import.meta.env.VITE_API_BASE_URL || fallbackApiPath;
 
 /**
  * Absolute server API base URL resolved against the current install URL.

@@ -1,3 +1,4 @@
+import { API_ROUTES, buildApiRouteWithQuery } from "@/api";
 import baseApi from "./base";
 import type {
 	BulkCreateResponse,
@@ -127,7 +128,7 @@ function serializeUrlsQuery({
 		params.set("range", range);
 	}
 
-	return `urls?${params.toString()}`;
+	return buildApiRouteWithQuery(API_ROUTES.urls.index, params);
 }
 
 /**
@@ -146,7 +147,7 @@ function serializeUrlsExportQuery({
 		params.set("search", search);
 	}
 
-	return `urls/export?${params.toString()}`;
+	return buildApiRouteWithQuery(API_ROUTES.urls.export, params);
 }
 
 /**
@@ -163,7 +164,7 @@ export const urlsApi = baseApi.injectEndpoints({
 			},
 		}),
 		getUrl: build.query<UrlResponse, string>({
-			query: (id) => `urls/${id}`,
+			query: (id) => API_ROUTES.urls.byId(id),
 			providesTags: (result, _error, id) => {
 				const tags = [urlTag(id)];
 				const createdId = result?.data?.id;
@@ -183,7 +184,7 @@ export const urlsApi = baseApi.injectEndpoints({
 		}),
 		createUrl: build.mutation<CreateUrlResponse, CreateUrlPayload>({
 			query: (body) => ({
-				url: "urls",
+				url: API_ROUTES.urls.index,
 				method: "POST",
 				body: createUrlRequestBody(body),
 			}),
@@ -193,7 +194,11 @@ export const urlsApi = baseApi.injectEndpoints({
 			BulkCreateResponse,
 			BulkCreateUrlsPayload
 		>({
-			query: (body) => ({ url: "urls/bulk", method: "POST", body }),
+			query: (body) => ({
+				url: API_ROUTES.urls.bulk,
+				method: "POST",
+				body,
+			}),
 			invalidatesTags: URL_LIST_CHANGE_TAGS,
 		}),
 		updateUrl: build.mutation<UrlResponse, UpdateUrlPayload>({
@@ -202,7 +207,7 @@ export const urlsApi = baseApi.injectEndpoints({
 					buildUpdateUrlRequest(payload);
 
 				return {
-					url: `urls/${id}`,
+					url: API_ROUTES.urls.byId(id),
 					method: hasMultipartUpdate ? "POST" : "PUT",
 					body: requestBody,
 				};
@@ -214,12 +219,15 @@ export const urlsApi = baseApi.injectEndpoints({
 			],
 		}),
 		deleteUrl: build.mutation<void, string>({
-			query: (id) => ({ url: `urls/${id}`, method: "DELETE" }),
+			query: (id) => ({
+				url: API_ROUTES.urls.byId(id),
+				method: "DELETE",
+			}),
 			invalidatesTags: URL_LIST_CHANGE_TAGS,
 		}),
 		bulkDeleteUrl: build.mutation<void, string[]>({
 			query: (ids) => ({
-				url: "urls/bulk",
+				url: API_ROUTES.urls.bulk,
 				method: "DELETE",
 				body: { ids },
 			}),

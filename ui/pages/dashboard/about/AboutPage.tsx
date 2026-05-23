@@ -604,7 +604,7 @@ function AboutPage() {
 						/>
 						<SystemInfoRow
 							icon={Server}
-							label={__("Runtime")}
+							label={__("Server")}
 							value="PHP 7.4+"
 						/>
 						<SystemInfoRow

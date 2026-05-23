@@ -7,6 +7,7 @@ import {
 	FileSpreadsheet,
 	Link2,
 } from "lucide-react";
+import { API_ROUTES } from "@/api";
 import { Button, useNotification } from "@/components";
 import { API_SERVER_BASE_URL } from "@/constants";
 import { __, sprintf } from "@/i18n";
@@ -206,7 +207,7 @@ function ExportPage() {
 							{__("Example Request")}
 						</h3>
 						<pre className="export-page-api-code-block">
-							<code>{`GET ${API_SERVER_BASE_URL}/urls/export?sortBy=createdAt&sortOrder=desc
+							<code>{`GET ${API_SERVER_BASE_URL}/${API_ROUTES.urls.export}?sortBy=createdAt&sortOrder=desc
 Authorization: Bearer YOUR_API_KEY
 Accept: application/json`}</code>
 						</pre>

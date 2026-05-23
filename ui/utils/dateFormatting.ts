@@ -1,4 +1,5 @@
 import { getPeakURLData } from "@/data";
+import type { PeakURLData } from "@/data";
 
 const SECOND_MS = 1000;
 const MINUTE_MS = 60 * SECOND_MS;
@@ -81,10 +82,11 @@ function getNonEmptyString(value: unknown): string | null {
 /**
  * Resolve the active locale from the environment.
  *
+ * @param data - Optional app data to avoid redundant parsing.
  * @return The BCP 47 locale string.
  */
-export function getActiveLocale(): string {
-	const peakurlData = getPeakURLData();
+export function getActiveLocale(data?: PeakURLData): string {
+	const peakurlData = data ?? getPeakURLData();
 	const windowLocale =
 		typeof window === "undefined"
 			? null
@@ -111,10 +113,11 @@ export function getActiveLocale(): string {
 /**
  * Resolve the active time zone from the environment.
  *
+ * @param data - Optional app data to avoid redundant parsing.
  * @return The IANA time zone identifier.
  */
-export function getActiveTimeZone(): string {
-	const peakurlData = getPeakURLData();
+export function getActiveTimeZone(data?: PeakURLData): string {
+	const peakurlData = data ?? getPeakURLData();
 	const timezone =
 		typeof window === "undefined"
 			? null
@@ -126,10 +129,11 @@ export function getActiveTimeZone(): string {
 /**
  * Resolve the active time format preference (12/24 hour).
  *
+ * @param data - Optional app data to avoid redundant parsing.
  * @return The time format identifier.
  */
-function getActiveTimeFormat(): "12" | "24" {
-	const peakurlData = getPeakURLData();
+function getActiveTimeFormat(data?: PeakURLData): "12" | "24" {
+	const peakurlData = data ?? getPeakURLData();
 	const timeFormat =
 		typeof window === "undefined"
 			? null
@@ -187,15 +191,17 @@ function shouldIncludeSeconds(options: Intl.DateTimeFormatOptions): boolean {
  * Normalize DateTimeFormat options with site-wide preferences.
  *
  * @param options - The raw formatting options.
+ * @param data    - Optional app data to avoid redundant parsing.
  * @return The normalized options.
  */
 function createDateTimeOptions(
-	options: Intl.DateTimeFormatOptions
+	options: Intl.DateTimeFormatOptions,
+	data?: PeakURLData
 ): Intl.DateTimeFormatOptions {
-	const timeFormat = getActiveTimeFormat();
+	const timeFormat = getActiveTimeFormat(data);
 	const includeSeconds = shouldIncludeSeconds(options);
 	const dateOptions: Intl.DateTimeFormatOptions = {
-		timeZone: getActiveTimeZone(),
+		timeZone: getActiveTimeZone(data),
 		...(hasDateTimeDisplayOption(options)
 			? options
 			: { dateStyle: "medium", timeStyle: "medium" }),
@@ -231,10 +237,12 @@ export function getZonedDateKey(
 		return "";
 	}
 
+	const peakurlData = getPeakURLData();
+
 	try {
 		/* Use Intl to extract date parts in the target time zone. */
 		const parts = new Intl.DateTimeFormat("en-US", {
-			timeZone: getActiveTimeZone(),
+			timeZone: getActiveTimeZone(peakurlData),
 			year: "numeric",
 			month: "2-digit",
 			day: "2-digit",
@@ -268,8 +276,10 @@ export function formatDateOnly(
 		return value || "";
 	}
 
+	const peakurlData = getPeakURLData();
+
 	try {
-		return new Intl.DateTimeFormat(getActiveLocale(), {
+		return new Intl.DateTimeFormat(getActiveLocale(peakurlData), {
 			timeZone: "UTC",
 			...options,
 		}).format(date);
@@ -524,8 +534,10 @@ export function formatRelativeTime(
 		typeof Intl !== "undefined" &&
 		typeof Intl.RelativeTimeFormat === "function"
 	) {
+		const peakurlData = getPeakURLData();
+
 		try {
-			return new Intl.RelativeTimeFormat(getActiveLocale(), {
+			return new Intl.RelativeTimeFormat(getActiveLocale(peakurlData), {
 				numeric,
 				style: style === "compact" ? "narrow" : "long",
 			}).format(relativeValue, unit);
@@ -554,15 +566,21 @@ export function formatLocalizedDateTime(
 		return "";
 	}
 
-	const dateTimeOptions = createDateTimeOptions(options);
+	const peakurlData = getPeakURLData();
+	const dateTimeOptions = createDateTimeOptions(options, peakurlData);
+	const locale = getActiveLocale(peakurlData);
 
 	try {
-		return new Intl.DateTimeFormat(
-			getActiveLocale(),
-			dateTimeOptions
-		).format(targetDate);
+		return new Intl.DateTimeFormat(locale, dateTimeOptions).format(
+			targetDate
+		);
 	} catch {
 		/* Fall back to standard toLocaleString if Intl.DateTimeFormat fails. */
-		return targetDate.toLocaleString(getActiveLocale(), dateTimeOptions);
+		try {
+			return targetDate.toLocaleString(locale, dateTimeOptions);
+		} catch {
+			/* Final safe fallback if locale/options are invalid for both APIs. */
+			return targetDate.toISOString();
+		}
 	}
 }

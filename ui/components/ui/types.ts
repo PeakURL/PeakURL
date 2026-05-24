@@ -9,6 +9,9 @@ import type {
 	TextareaHTMLAttributes,
 } from "react";
 
+import type { SelectOption, SelectValue } from "@/options";
+export type { SelectOption, SelectValue } from "@/options";
+
 /**
  * Supported avatar size tokens for the shared avatar component.
  */
@@ -128,20 +131,6 @@ export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
 	error?: string;
 	helperText?: string;
 	valueDirection?: "ltr" | "rtl";
-}
-
-/**
- * Primitive values supported by the shared select component.
- */
-export type SelectValue = string | number;
-
-/**
- * Option shape consumed by the shared select component.
- */
-export interface SelectOption<T extends SelectValue = SelectValue> {
-	label: ReactNode;
-	value: T;
-	disabled?: boolean;
 }
 
 /**

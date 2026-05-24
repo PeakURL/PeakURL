@@ -1,4 +1,5 @@
-import type { SelectOption } from "@/components";
+import type { SelectOption } from "@/options";
+
 import { getActiveLocale } from "./dateFormatting";
 
 /**

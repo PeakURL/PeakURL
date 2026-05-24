@@ -1,8 +1,10 @@
-import { Modal, Button, Input, ReadOnlyValueBlock } from "@/components";
 import { Copy } from "lucide-react";
+
+import { Modal, Button, Input, ReadOnlyValueBlock } from "@/components";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { cn } from "@/utils";
+
 import type { ApiKeyModalsProps } from "../types";
 
 function ApiKeyModals({

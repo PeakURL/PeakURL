@@ -1,4 +1,5 @@
 import { cn } from "@/utils";
+
 import type { PluginPreviewSkeletonProps } from "../types";
 
 function PluginPreviewSkeleton({ className = "" }: PluginPreviewSkeletonProps) {

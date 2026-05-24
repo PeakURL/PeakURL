@@ -1,4 +1,5 @@
 import { __, sprintf } from "@/i18n";
+
 import type { TableHeaderRowProps } from "../types";
 
 function TableHeaderRow({

@@ -1,5 +1,6 @@
 import { __ } from "@/i18n";
 import { cn } from "@/utils";
+
 import type { ComingSoonBadgeProps } from "../types";
 
 function ComingSoonBadge({ className = "" }: ComingSoonBadgeProps) {

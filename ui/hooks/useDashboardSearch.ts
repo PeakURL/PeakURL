@@ -1,7 +1,7 @@
 import type { SubmitEvent } from "react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAdminAccess } from "./useAdminAccess";
+
 import { useGetAllUsersQuery, useGetUrlsQuery } from "@/store/slices/api";
 import { __ } from "@/i18n";
 import {
@@ -14,6 +14,8 @@ import {
 	getDashboardSearchPath,
 	getShortUrl,
 } from "@/utils";
+
+import { useAdminAccess } from "./useAdminAccess";
 import type { ClearSearchOptions } from "./types";
 
 export const useDashboardSearch = () => {

@@ -1,4 +1,5 @@
 import { cn } from "@/utils";
+
 import type { PluginTabsProps } from "../types";
 
 function PluginTabs({ activeTab, onTabChange, tabs }: PluginTabsProps) {

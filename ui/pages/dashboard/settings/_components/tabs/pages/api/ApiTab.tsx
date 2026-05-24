@@ -1,4 +1,3 @@
-import { Button, ReadOnlyValueBlock } from "@/components";
 import {
 	Plus,
 	Trash2,
@@ -9,9 +8,12 @@ import {
 	Copy,
 	Link2,
 } from "lucide-react";
+
+import { Button, ReadOnlyValueBlock } from "@/components";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { formatLocalizedDateTime } from "@/utils";
+
 import type { ApiTabProps } from "../types";
 
 function ApiTab({

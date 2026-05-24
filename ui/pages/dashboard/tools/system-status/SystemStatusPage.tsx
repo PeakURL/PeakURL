@@ -6,6 +6,7 @@ import {
 	ChevronUp,
 	Copy,
 } from "lucide-react";
+
 import { useNotification } from "@/components";
 import { __, sprintf } from "@/i18n";
 import { useGetSystemStatusQuery } from "@/store/slices/api";
@@ -16,6 +17,7 @@ import {
 	formatCount,
 	formatDateTimeValue,
 } from "@/utils";
+
 import type {
 	ErrorStateProps,
 	InfoItem,

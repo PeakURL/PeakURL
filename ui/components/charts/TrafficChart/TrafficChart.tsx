@@ -1,13 +1,16 @@
 import type { ChartData, TooltipItem } from "chart.js";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Chart } from "chart.js/auto";
+
 import { __ } from "@/i18n";
 import { formatCount, formatDateOnly } from "@/utils";
+
 import type {
 	TrafficChartData,
 	TrafficChartProps,
 	TrafficChartType,
 } from "../types";
+
 export type {
 	TrafficChartData,
 	TrafficChartProps,

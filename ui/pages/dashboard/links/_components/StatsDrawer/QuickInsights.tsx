@@ -1,6 +1,8 @@
 import { TrendingUp, Activity, Clock } from "lucide-react";
+
 import { __, sprintf } from "@/i18n";
 import { formatRelativeTime } from "@/utils";
+
 import {
 	formatAverageClicks,
 	getStatsTimeRangeDays,

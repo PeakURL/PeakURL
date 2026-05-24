@@ -1,6 +1,8 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
+
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
+
 import type { PaginationProps } from "../types";
 
 const Pagination = ({

@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
+
 import { PEAKURL_NAME, PEAKURL_VERSION } from "@constants";
 import { isDocumentRtl } from "@/i18n/direction";
 import { __, sprintf } from "@/i18n";
+
 import Sidebar from "../Sidebar";
 import { Header } from "../Header";
 import { AdminNotices } from "../AdminNotices";

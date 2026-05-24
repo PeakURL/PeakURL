@@ -8,9 +8,11 @@ import {
 	Mail,
 	ExternalLink,
 } from "lucide-react";
+
 import { ReadOnlyValueBlock } from "@/components";
 import { __ } from "@/i18n";
 import { cn, copyToClipboard, getLinkDisplayTitle } from "@/utils";
+
 import type { SharePlatform, ShareTabProps } from "./types";
 
 function ShareTab({ link, shortUrl }: ShareTabProps) {

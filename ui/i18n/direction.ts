@@ -1,5 +1,6 @@
-import type { TextDirection } from "./types";
 import { getPeakURLData } from "@/data";
+
+import type { TextDirection } from "./types";
 
 const RTL_BASE_LOCALES = new Set([
 	"ar",

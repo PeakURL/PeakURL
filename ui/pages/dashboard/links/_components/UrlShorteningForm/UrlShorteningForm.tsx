@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import type { SubmitEvent } from "react";
+
 import { useCreateUrlMutation } from "@/store/slices/api";
 import {
 	getShortUrl,
@@ -8,10 +11,8 @@ import {
 	sanitizeUrl,
 	toIsoFromLocalDateTime,
 } from "@/utils";
-import { ChevronDown, ChevronUp } from "lucide-react";
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
-import type { SubmitEvent } from "react";
 
 import Header from "./Header";
 import StatusMessages from "./StatusMessages";

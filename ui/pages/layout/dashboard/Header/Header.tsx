@@ -6,14 +6,16 @@ import {
 	Settings,
 	LogOut,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+
 import { selectSessionUser, useLogoutMutation } from "@/store/slices/api";
 import { authApi } from "@/store/slices";
 import { Avatar, ThemeToggle } from "@/components";
-import { useNavigate } from "react-router-dom";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { getDocumentDirection } from "@/i18n/direction";
 import { __ } from "@/i18n";
 import { cn } from "@/utils";
+
 import { Search } from "../Search";
 import type { HeaderProps } from "../types";
 

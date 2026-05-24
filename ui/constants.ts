@@ -1,10 +1,11 @@
-import rawPeakurlVersion from "../.version?raw";
 import {
 	DEFAULT_API_PATH,
 	formatBasePath,
 	getDataString,
 	getPeakURLData,
 } from "@/data";
+
+import rawPeakurlVersion from "../.version?raw";
 
 const DEFAULT_PEAKURL_ORIGIN = "https://peakurl.dev";
 const FALLBACK_VERSION = rawPeakurlVersion.trim() || "0.0.0";

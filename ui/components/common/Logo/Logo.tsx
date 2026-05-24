@@ -1,3 +1,15 @@
+import { cn } from "@/utils";
+
+import type { LogoProps } from "../types";
+export type { LogoProps, LogoSize } from "../types";
+
+const sizeMap = {
+	xs: { box: "logo-mark-xs", icon: "logo-mark-icon-xs" },
+	sm: { box: "logo-mark-sm", icon: "logo-mark-icon-sm" },
+	md: { box: "logo-mark-md", icon: "logo-mark-icon-md" },
+	lg: { box: "logo-mark-lg", icon: "logo-mark-icon-lg" },
+} as const;
+
 /**
  * Global PeakURL logo component.
  *
@@ -8,17 +20,6 @@
  * @param props.size Visual size preset
  * @param props.className Additional container classes
  */
-import type { LogoProps } from "../types";
-import { cn } from "@/utils";
-export type { LogoProps, LogoSize } from "../types";
-
-const sizeMap = {
-	xs: { box: "logo-mark-xs", icon: "logo-mark-icon-xs" },
-	sm: { box: "logo-mark-sm", icon: "logo-mark-icon-sm" },
-	md: { box: "logo-mark-md", icon: "logo-mark-icon-md" },
-	lg: { box: "logo-mark-lg", icon: "logo-mark-icon-lg" },
-} as const;
-
 export function Logo({ size = "lg", className = "" }: LogoProps) {
 	const sizing = sizeMap[size];
 

@@ -1,7 +1,9 @@
 import { type HTMLAttributes, useEffect, useId, useRef, useState } from "react";
 import { Check, X } from "lucide-react";
+
 import { __, sprintf } from "@/i18n";
 import { cn } from "@/utils";
+
 import { Select } from "../Select";
 import type { SelectOption } from "../types";
 

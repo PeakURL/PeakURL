@@ -1,8 +1,10 @@
 import { MousePointerClick } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+
+import type { LinkRecord } from "@/api";
 import { __, sprintf } from "@/i18n";
 import { cn, formatCount, formatDate, getLinkDisplayTitle } from "@/utils";
-import type { LinkRecord } from "@/pages/dashboard/links/_components";
+
 import type { RecentClick, RecentClicksProps } from "../types";
 
 function getClickTitle(click: RecentClick): string {

@@ -5,9 +5,11 @@ import { Zoom } from "@visx/zoom";
 import type { TransformMatrix } from "@visx/zoom/lib/types";
 import { feature as topojsonFeature } from "topojson-client";
 import { scaleLinear } from "d3-scale";
+
 import { __ } from "@/i18n";
 import { useTheme } from "@/components/providers";
 import { cn } from "@/utils";
+
 import type { TooltipContent, WorldMapDatum, WorldMapProps } from "../types";
 import {
 	type RenderedMapFeature,

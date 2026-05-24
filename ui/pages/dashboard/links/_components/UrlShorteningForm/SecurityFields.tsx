@@ -1,7 +1,9 @@
-import { Input } from "@/components";
 import { Lock, Tags } from "lucide-react";
+
+import { Input } from "@/components";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
+
 import type { SecurityFieldsProps } from "../types";
 
 const SecurityFields = ({

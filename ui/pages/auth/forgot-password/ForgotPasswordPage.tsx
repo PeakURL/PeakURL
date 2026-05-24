@@ -2,6 +2,7 @@ import type { KeyboardEvent, SubmitEvent } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight, KeyRound, Mail } from "lucide-react";
+
 import { isDocumentRtl } from "@/i18n/direction";
 import { AuthLayout } from "@/pages/layout";
 import { Button, Input } from "@/components";

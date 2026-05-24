@@ -5,8 +5,10 @@ import {
 	ListboxOptions,
 } from "@headlessui/react";
 import { Check, ChevronDown } from "lucide-react";
+
 import { getDocumentDirection } from "@/i18n/direction";
 import { cn } from "@/utils";
+
 import type { SelectProps, SelectValue } from "../types";
 
 export type { SelectOption, SelectProps, SelectValue } from "../types";

@@ -1,10 +1,12 @@
 import type { SubmitEvent } from "react";
 import { useState } from "react";
 import { AlertCircle, Mail, MailCheck, Send, Server } from "lucide-react";
+
 import { Button, Input, Select, type SelectOption } from "@/components";
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { cn } from "@/utils";
+
 import type {
 	EmailDeliveryTabProps,
 	EmailFormState,

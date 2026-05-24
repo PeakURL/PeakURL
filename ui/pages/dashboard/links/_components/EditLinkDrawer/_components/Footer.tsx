@@ -1,4 +1,5 @@
 import { Save } from "lucide-react";
+
 import { __ } from "@/i18n";
 
 interface FooterProps {

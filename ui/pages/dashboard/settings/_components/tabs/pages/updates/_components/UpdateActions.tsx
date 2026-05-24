@@ -1,7 +1,9 @@
+import { Download, RefreshCcw } from "lucide-react";
+
 import { Button, type ButtonVariant } from "@/components";
 import { __ } from "@/i18n";
 import { cn } from "@/utils";
-import { Download, RefreshCcw } from "lucide-react";
+
 import type { UpdateActionsProps } from "../types";
 
 /**

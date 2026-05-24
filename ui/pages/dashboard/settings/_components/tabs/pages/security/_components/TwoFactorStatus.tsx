@@ -1,7 +1,9 @@
+import { AlertCircle, Download, ShieldCheck } from "lucide-react";
+
 import { Button } from "@/components";
 import { __ } from "@/i18n";
 import { cn, formatDateTimeValue } from "@/utils";
-import { AlertCircle, Download, ShieldCheck } from "lucide-react";
+
 import type { TwoFactorStatusProps } from "../types";
 
 /**

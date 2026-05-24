@@ -1,7 +1,9 @@
-import { Header, Tabs } from "./_components";
 import { useLocation } from "react-router-dom";
 import { ClipboardPaste, CodeXml, FileUp } from "lucide-react";
+
 import { __ } from "@/i18n";
+
+import { Header, Tabs } from "./_components";
 import type { ImportTab } from "./_components/types";
 import type { ImportLayoutProps } from "./types";
 

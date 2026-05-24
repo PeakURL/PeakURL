@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp, Globe, MapPin } from "lucide-react";
+
 import { WorldMap } from "@/components";
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { useGetLinkLocationQuery } from "@/store/slices/api";
 import { formatCount, getCountryFlagEmoji, getErrorMessage } from "@/utils";
+
 import type {
 	CityLocation,
 	HoveredCountry,

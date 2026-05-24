@@ -1,6 +1,3 @@
-import { Button } from "@/components";
-import { __, sprintf } from "@/i18n";
-import { cn, formatDate, getLinkDisplayTitle } from "@/utils";
 import {
 	Link2,
 	MousePointerClick,
@@ -12,6 +9,11 @@ import {
 	UserPlus,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+
+import { Button } from "@/components";
+import { __, sprintf } from "@/i18n";
+import { cn, formatDate, getLinkDisplayTitle } from "@/utils";
+
 import type {
 	ActivityFeedProps,
 	ActivityPerson,

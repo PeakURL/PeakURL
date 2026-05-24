@@ -1,4 +1,5 @@
 import { __ } from "@/i18n";
+
 import type { SampleDataProps } from "./types";
 
 function SampleData({ sampleData }: SampleDataProps) {

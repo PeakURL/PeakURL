@@ -1,7 +1,9 @@
-import { Button } from "@/components";
 import { Download } from "lucide-react";
+
+import { Button } from "@/components";
 import { __ } from "@/i18n";
 import { downloadBrowserFile } from "@/utils";
+
 import type { SampleFormat } from "./types";
 
 function FormatRequirements() {

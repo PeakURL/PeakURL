@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import { ExternalLink, Pencil, Save, Trash2, X } from "lucide-react";
+
 import { Button, Input, Select, type SelectOption } from "@/components";
 import {
 	useGetCaptchaStatusQuery,
@@ -7,7 +9,7 @@ import {
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { cn, getErrorMessage } from "@/utils";
-import { ExternalLink, Pencil, Save, Trash2, X } from "lucide-react";
+
 import type { CaptchaProvider, CaptchaStatus } from "../../types";
 import type { IntegrationsTabProps } from "./types";
 

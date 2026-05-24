@@ -1,5 +1,7 @@
 import { Cog, LoaderCircle } from "lucide-react";
+
 import { __ } from "@/i18n";
+
 import type { ProcessingStatusProps } from "./types";
 
 function ProcessingStatus({ status, progress }: ProcessingStatusProps) {

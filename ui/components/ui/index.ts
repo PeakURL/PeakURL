@@ -1,3 +1,11 @@
+/**
+ * Shared primitive UI component exports.
+ *
+ * Feature code should import reusable controls from `@/components`, while
+ * scoped component internals can import from this barrel when avoiding the
+ * root component barrel prevents circular dependencies.
+ */
+
 export * from "./Avatar";
 export * from "./Button";
 export * from "./ConfirmDialog";

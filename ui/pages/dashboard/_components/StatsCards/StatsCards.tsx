@@ -1,4 +1,3 @@
-import { formatNumber } from "@/utils";
 import {
 	ArrowDown,
 	ArrowUp,
@@ -7,8 +6,11 @@ import {
 	MousePointerClick,
 	Users,
 } from "lucide-react";
+
+import { formatNumber } from "@/utils";
 import { __ } from "@/i18n";
 import { cn } from "@/utils";
+
 import type { StatsCardsProps } from "../types";
 
 type DashboardStatTone = "clicks" | "links" | "rate" | "users";

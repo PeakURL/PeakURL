@@ -1,7 +1,9 @@
+import { AlertCircle, CheckCircle2 } from "lucide-react";
+
 import { Button } from "@/components";
 import { __ } from "@/i18n";
 import { formatDateTimeValue } from "@/utils";
-import { AlertCircle, CheckCircle2 } from "lucide-react";
+
 import type { DatabaseSchemaProps } from "../types";
 import InlineNotice from "./InlineNotice";
 import IssueList from "./IssueList";

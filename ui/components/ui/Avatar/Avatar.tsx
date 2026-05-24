@@ -1,7 +1,10 @@
 import { useState } from "react";
+
 import { __ } from "@/i18n";
 import { cn, getAvatarInitials, getGravatarUrl } from "@/utils";
+
 import type { AvatarProps } from "../types";
+
 export type { AvatarProps, AvatarSize } from "../types";
 
 const SIZE_STYLES = {

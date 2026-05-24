@@ -1,6 +1,8 @@
-import { Button } from "@/components";
 import { CircleCheckBig } from "lucide-react";
+
+import { Button } from "@/components";
 import { __, sprintf } from "@/i18n";
+
 import type { ImportSummaryProps } from "../types";
 
 function ImportSummary({ results, onReset }: ImportSummaryProps) {

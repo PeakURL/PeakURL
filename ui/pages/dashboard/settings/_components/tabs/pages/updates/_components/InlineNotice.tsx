@@ -1,4 +1,5 @@
 import { cn } from "@/utils";
+
 import type { InlineNoticeProps, StatusTone } from "../types";
 
 const noticeStyles: Record<StatusTone, string> = {

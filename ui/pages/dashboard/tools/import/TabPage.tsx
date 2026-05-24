@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { ApiImport, PasteImport, FileUpload } from "./_components";
 import { useLocation } from "react-router-dom";
+
 import { __ } from "@/i18n";
+
+import { ApiImport, PasteImport, FileUpload } from "./_components";
 import type { ImportStatus, SampleRow } from "./_components/types";
 
 function TabPage() {

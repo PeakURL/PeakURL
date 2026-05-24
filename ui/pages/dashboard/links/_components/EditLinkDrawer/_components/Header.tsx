@@ -1,5 +1,6 @@
 import { DialogTitle } from "@headlessui/react";
 import { Link2, X } from "lucide-react";
+
 import { __ } from "@/i18n";
 
 interface HeaderProps {

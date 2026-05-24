@@ -1,7 +1,10 @@
 import type { ChangeEvent, ClipboardEvent, KeyboardEvent } from "react";
 import { useEffect, useRef, useState } from "react";
+
 import { cn } from "@/utils";
+
 import type { VerificationCodeInputProps } from "../types";
+
 export type { VerificationCodeInputProps } from "../types";
 
 const toDigits = (

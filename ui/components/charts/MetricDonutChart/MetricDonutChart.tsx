@@ -1,9 +1,11 @@
 import type { TooltipItem } from "chart.js";
 import { Chart } from "chart.js/auto";
 import { useEffect, useMemo, useRef } from "react";
+
 import { __ } from "@/i18n";
 import { formatCount } from "@/utils";
 import { useTheme } from "@/components/providers";
+
 import type { MetricDonutChartProps } from "../types";
 
 const DOUGHNUT_CUTOUT = "72%";

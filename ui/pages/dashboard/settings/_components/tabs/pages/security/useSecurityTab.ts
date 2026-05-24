@@ -1,5 +1,6 @@
 import { useGetSecuritySettingsQuery } from "@/store/slices/api";
 import { isDocumentRtl } from "@/i18n/direction";
+
 import { useActiveSessions } from "./useActiveSessions";
 import { useTwoFactorSettings } from "./useTwoFactorSettings";
 import type { SecuritySession, SecurityTabProps } from "../types";

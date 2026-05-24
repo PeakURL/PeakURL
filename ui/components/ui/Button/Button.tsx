@@ -1,6 +1,8 @@
 import { Loader2 } from "lucide-react";
+
 import { isDocumentRtl } from "@/i18n/direction";
 import { cn } from "@/utils";
+
 import type {
 	ButtonGroupProps,
 	ButtonProps,
@@ -8,6 +10,7 @@ import type {
 	ButtonVariant,
 	IconButtonProps,
 } from "../types";
+
 export type {
 	ButtonGroupProps,
 	ButtonIcon,

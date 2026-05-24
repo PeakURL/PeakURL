@@ -5,6 +5,7 @@ import {
 	useEffect,
 	useSyncExternalStore,
 } from "react";
+
 import type { Theme, ThemeContextValue, ThemeProviderProps } from "../types";
 
 const DEFAULT_THEME: Theme = "light";

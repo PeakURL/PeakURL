@@ -1,13 +1,16 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import type { LucideIcon } from "lucide-react";
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from "lucide-react";
+
 import { isDocumentRtl } from "@/i18n/direction";
 import { cn } from "@/utils";
+
 import type {
 	NotificationContainerProps,
 	NotificationProps,
 	NotificationType,
 } from "../types";
+
 export type {
 	NotificationContainerProps,
 	NotificationItem,

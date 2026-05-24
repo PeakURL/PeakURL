@@ -1,6 +1,13 @@
 import type { LucideIcon } from "lucide-react";
+
 import type { SystemCheck } from "@/api";
 
+/**
+ * API DTOs shared by tool pages.
+ *
+ * Keeping these re-exports here lets tool components import from their local
+ * feature types while the DTO source remains the canonical `@/api` barrel.
+ */
 export type {
 	StatusKey,
 	SystemCheck,
@@ -8,7 +15,6 @@ export type {
 	SystemStatusResponse,
 	UrlExportResponse,
 } from "@/api";
-
 
 /**
  * Tabs available on the system status page.

@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
+
 import { WorldMap, type WorldMapDatum } from "@/components";
 import { __ } from "@/i18n";
 import { formatCount, getCountryFlagEmoji } from "@/utils";
+
 import type { CountryStatsProps, CountryMetric } from "../types";
 
 const MAX_COUNTRIES = 8;

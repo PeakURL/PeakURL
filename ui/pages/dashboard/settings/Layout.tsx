@@ -1,7 +1,9 @@
-import { Header, Sidebar } from "./_components";
 import { useParams } from "react-router-dom";
+
 import { useAdminAccess } from "@/hooks";
 import { __ } from "@/i18n";
+
+import { Header, Sidebar } from "./_components";
 import type {
 	SettingsLayoutProps,
 	SettingsTabId,

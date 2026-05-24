@@ -2,10 +2,12 @@ import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { X, Download, Copy, Check } from "lucide-react";
 import { useState, useEffect } from "react";
 import QRCode from "qrcode";
+
 import { ReadOnlyValueBlock } from "@/components";
 import { getShortUrl, copyToClipboard } from "@/utils";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
+
 import type { QRCodeModalProps } from "../types";
 
 function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {

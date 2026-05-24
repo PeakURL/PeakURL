@@ -1,8 +1,10 @@
 import { MoreHorizontal, Lock, Info } from "lucide-react";
+
 import { Button } from "@/components";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { cn } from "@/utils";
+
 import PluginPreviewSkeleton from "../PluginPreviewSkeleton";
 import type {
 	InstalledPluginsTableProps,

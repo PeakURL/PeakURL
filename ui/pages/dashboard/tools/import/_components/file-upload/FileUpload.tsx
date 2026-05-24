@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+
 import { useBulkCreateUrlMutation } from "@/store/slices/api";
 import {
 	getShortUrl,
@@ -7,12 +8,13 @@ import {
 	normalizeCsvHeader,
 	parseCsvRows,
 } from "@/utils";
+import { __, sprintf } from "@/i18n";
+
 import FileUploadArea from "./FileUploadArea";
 import ProcessingStatus from "./ProcessingStatus";
 import { ImportDetails, ImportSummary } from "../results";
 import FormatRequirements from "./FormatRequirements";
 import SampleData from "./SampleData";
-import { __, sprintf } from "@/i18n";
 import type { ImportResult } from "../types";
 import type { FileUploadProps, ImportRecord } from "./types";
 

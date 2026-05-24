@@ -1,5 +1,6 @@
-import type { TooltipContent } from "../../types";
 import { __ } from "@/i18n";
+
+import type { TooltipContent } from "../../types";
 
 const TOOLTIP_OFFSET = "0.75rem";
 

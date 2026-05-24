@@ -1,10 +1,12 @@
 import { useState } from "react";
+
 import {
 	useRevokeOtherSessionsMutation,
 	useRevokeSessionMutation,
 } from "@/store/slices/api";
 import { __, sprintf } from "@/i18n";
 import { getErrorMessage } from "@/utils";
+
 import type { SecuritySession, SecurityTabProps } from "../types";
 
 interface UseActiveSessionsOptions {

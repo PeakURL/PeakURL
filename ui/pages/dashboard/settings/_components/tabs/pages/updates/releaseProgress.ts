@@ -1,4 +1,5 @@
 import { __, sprintf } from "@/i18n";
+
 import type { ReleaseAction } from "../../types";
 import type { ReleaseInstallProgressState, ReleaseInstallStage } from "./types";
 

@@ -1,6 +1,8 @@
 import { Star, Download, Bell, ExternalLink } from "lucide-react";
+
 import { __ } from "@/i18n";
 import { PLUGINS_WAITLIST_URL } from "@constants";
+
 import PluginPreviewSkeleton from "../PluginPreviewSkeleton";
 import type { PluginCardProps } from "../types";
 

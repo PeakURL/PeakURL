@@ -8,6 +8,7 @@ import {
 	Users,
 	type LucideIcon,
 } from "lucide-react";
+
 import {
 	TrafficChart,
 	type TrafficChartSeriesMode,
@@ -15,6 +16,7 @@ import {
 } from "@/components";
 import { __, sprintf } from "@/i18n";
 import { cn, formatCount, formatDateOnly } from "@/utils";
+
 import {
 	getStatsTotals,
 	hasTrafficActivity,

@@ -13,9 +13,11 @@ import {
 	MousePointerClick,
 	TrendingUp,
 } from "lucide-react";
-import DeviceStats from "./DeviceStats";
+
 import { __ } from "@/i18n";
 import { formatCount } from "@/utils";
+
+import DeviceStats from "./DeviceStats";
 import { formatClickCount } from "./analytics";
 import type {
 	LinkStatsViewProps,

@@ -5,12 +5,15 @@ import {
 	useMemo,
 	useState,
 } from "react";
+
 import type { NotificationItem, NotificationPayload } from "@/components/ui";
 import { NotificationContainer } from "@/components/ui";
+
 import type {
 	NotificationContextValue,
 	NotificationProviderProps,
 } from "../types";
+
 export type { NotificationContextValue } from "../types";
 
 const NotificationContext = createContext<NotificationContextValue | null>(

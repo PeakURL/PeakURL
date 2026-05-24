@@ -1,6 +1,8 @@
+import { ShieldCheck } from "lucide-react";
+
 import { Button, Input, ReadOnlyValueBlock } from "@/components";
 import { __ } from "@/i18n";
-import { ShieldCheck } from "lucide-react";
+
 import type { TwoFactorSetupProps } from "../types";
 
 /**

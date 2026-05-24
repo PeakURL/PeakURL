@@ -1,6 +1,8 @@
+import { AlertCircle, CheckCircle2, Clock3, Download } from "lucide-react";
+
 import { __ } from "@/i18n";
 import { formatDateTimeValue } from "@/utils";
-import { AlertCircle, CheckCircle2, Clock3, Download } from "lucide-react";
+
 import type { ApplicationUpdatesProps } from "../types";
 import ReleaseInstallProgress from "../ReleaseInstallProgress";
 import DetailRow from "./DetailRow";

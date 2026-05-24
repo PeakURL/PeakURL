@@ -1,3 +1,10 @@
+/**
+ * Dashboard RTK Query API exports.
+ *
+ * Domain slices stay in separate files, while app code imports generated hooks
+ * and shared DTO types from this single API barrel.
+ */
+
 export { analyticsApi } from "./analytics";
 export {
 	useBulkDeleteActivityLogsMutation,

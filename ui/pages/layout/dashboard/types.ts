@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
+
 import type { NoticeActionLink } from "@/api";
 
 export type {

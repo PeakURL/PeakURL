@@ -1,6 +1,8 @@
-import { Content } from "./_components";
 import { Navigate, useParams } from "react-router-dom";
+
 import { useAdminAccess } from "@/hooks";
+
+import { Content } from "./_components";
 import type { SettingsTabId } from "./_components/layout/types";
 
 const VALID_SETTINGS_TABS = new Set<SettingsTabId>([

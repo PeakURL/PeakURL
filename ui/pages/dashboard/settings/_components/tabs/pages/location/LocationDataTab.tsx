@@ -1,9 +1,5 @@
 import type { SubmitEvent } from "react";
 import { useState } from "react";
-import { Button, Input, ReadOnlyValueBlock } from "@/components";
-import { __ } from "@/i18n";
-import { isDocumentRtl } from "@/i18n/direction";
-import { cn, formatByteSize, formatDateTimeValue } from "@/utils";
 import {
 	AlertCircle,
 	CheckCircle2,
@@ -11,6 +7,12 @@ import {
 	MapPin,
 	RefreshCcw,
 } from "lucide-react";
+
+import { Button, Input, ReadOnlyValueBlock } from "@/components";
+import { __ } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
+import { cn, formatByteSize, formatDateTimeValue } from "@/utils";
+
 import type {
 	LocationDataStatus,
 	LocationDataTabProps,

@@ -1,5 +1,6 @@
-import { useTheme } from "@/components";
 import { Monitor, Home, Globe } from "lucide-react";
+
+import { useTheme } from "@/components";
 
 export const AppleIcon = ({ className }: { className?: string }) => {
 	const { theme } = useTheme();

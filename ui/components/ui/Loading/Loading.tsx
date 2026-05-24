@@ -1,6 +1,8 @@
 import { Loader2, Zap } from "lucide-react";
+
 import { __ } from "@/i18n";
 import { cn } from "@/utils";
+
 import type {
 	InlineLoaderProps,
 	LoadingSize,
@@ -13,6 +15,7 @@ import type {
 	SkeletonLoaderProps,
 	TableRowSkeletonProps,
 } from "../types";
+
 export type {
 	InlineLoaderProps,
 	LoadingSize,

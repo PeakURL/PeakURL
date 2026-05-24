@@ -1,6 +1,8 @@
-import { Button, Input } from "@/components";
 import { Link as LinkIcon, Tag, Scissors } from "lucide-react";
+
+import { Button, Input } from "@/components";
 import { __ } from "@/i18n";
+
 import type { MainInputsProps } from "../types";
 
 const MainInputs = ({

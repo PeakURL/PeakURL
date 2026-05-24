@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { Button } from "@/components";
 import { CloudUpload } from "lucide-react";
+
+import { Button } from "@/components";
 import { __ } from "@/i18n";
 import { cn } from "@/utils";
+
 import type {
 	FileButtonClickHandler,
 	FileDropHandler,

@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
+
 import { cn } from "@/utils";
+
 import type { ImportTab, TabsProps } from "../types";
 
 const Tabs = ({ tabs, activeTab }: TabsProps) => {

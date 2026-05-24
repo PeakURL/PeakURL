@@ -1,6 +1,8 @@
+import { RefreshCw, ShieldCheck, ShieldOff } from "lucide-react";
+
 import { Button } from "@/components";
 import { __ } from "@/i18n";
-import { RefreshCw, ShieldCheck, ShieldOff } from "lucide-react";
+
 import BackupCodesList from "./BackupCodesList";
 import TwoFactorSetup from "./TwoFactorSetup";
 import TwoFactorStatus from "./TwoFactorStatus";

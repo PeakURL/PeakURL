@@ -14,6 +14,8 @@ import {
 	UserPlus,
 	Users,
 } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
+
 import {
 	ConfirmDialog,
 	DEFAULT_PAGE_SIZE_MAX,
@@ -39,7 +41,7 @@ import {
 	getZonedDateKey,
 	getLinkDisplayTitle,
 } from "@/utils";
-import { useSearchParams } from "react-router-dom";
+
 import type { ActivityPerson, RecentActivity } from "../_components/types";
 
 const ACTIVITY_PAGE_LIMIT = DEFAULT_PAGE_SIZE_OPTIONS[0];

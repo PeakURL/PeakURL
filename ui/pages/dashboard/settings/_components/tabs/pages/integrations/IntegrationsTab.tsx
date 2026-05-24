@@ -1,12 +1,5 @@
 import { useMemo, useState } from "react";
 import {
-	Button,
-	ConfirmDialog,
-	Input,
-	ReadOnlyValueBlock,
-	Modal,
-} from "@/components";
-import {
 	Copy,
 	ExternalLink,
 	Plus,
@@ -16,6 +9,14 @@ import {
 	ShieldCheck,
 	ShieldAlert,
 } from "lucide-react";
+
+import {
+	Button,
+	ConfirmDialog,
+	Input,
+	ReadOnlyValueBlock,
+	Modal,
+} from "@/components";
 import {
 	useCreateWebhookMutation,
 	useDeleteWebhookMutation,
@@ -29,6 +30,7 @@ import {
 	formatLocalizedDateTime,
 	getErrorMessage,
 } from "@/utils";
+
 import CaptchaSettings from "./CaptchaSettings";
 import type {
 	CreatedWebhook,

@@ -1,4 +1,5 @@
 import { __, sprintf } from "@/i18n";
+
 import type {
 	BadgeState,
 	DatabaseStatus,

@@ -1,7 +1,9 @@
 import { useMemo } from "react";
+
 import { __ } from "@/i18n";
 import { formatCount } from "@/utils";
 import { MetricDonutChart } from "@/components";
+
 import type { DeviceBreakdownProps, MetricItem } from "../types";
 
 const EMPTY_METRICS: MetricItem[] = [];

@@ -1,8 +1,11 @@
 import { forwardRef, useId } from "react";
 import { Info } from "lucide-react";
+
 import { getDocumentDirection, getFieldDirection } from "@/i18n/direction";
 import { cn } from "@/utils";
+
 import type { InputProps } from "../types";
+
 export type { InputIcon, InputProps } from "../types";
 
 const LTR_INPUT_TYPES = new Set([

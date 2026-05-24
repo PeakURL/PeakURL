@@ -1,11 +1,13 @@
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { X, Trash2, AlertTriangle } from "lucide-react";
 import { useState } from "react";
+
 import { ReadOnlyValueBlock } from "@/components";
 import { useDeleteUrlMutation } from "@/store/slices/api";
 import { getShortUrl, getErrorMessage } from "@/utils";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
+
 import type { DeleteLinkModalProps } from "../types";
 
 function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {

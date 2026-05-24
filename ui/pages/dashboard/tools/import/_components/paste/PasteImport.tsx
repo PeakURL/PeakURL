@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { Lightbulb, LoaderCircle, WandSparkles } from "lucide-react";
+
 import { Button, TextArea } from "@/components";
 import { useBulkCreateUrlMutation } from "@/store/slices/api";
 import { getShortUrl, getErrorMessage } from "@/utils";
-import { ImportDetails, ImportSummary } from "../results";
-import { Lightbulb, LoaderCircle, WandSparkles } from "lucide-react";
 import { __, sprintf } from "@/i18n";
+
+import { ImportDetails, ImportSummary } from "../results";
 import type {
 	ImportResult,
 	ImportStatus,

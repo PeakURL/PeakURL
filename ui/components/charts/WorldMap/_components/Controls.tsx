@@ -1,4 +1,5 @@
 import { Maximize2, Minimize2, Minus, Plus, RotateCcw } from "lucide-react";
+
 import { __ } from "@/i18n";
 
 interface WorldMapControlsProps {

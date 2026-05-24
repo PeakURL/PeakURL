@@ -10,10 +10,12 @@ import {
 	Wrench,
 	X,
 } from "lucide-react";
+
 import { useDashboardSearch } from "@/hooks";
 import { getDocumentDirection, isDocumentRtl } from "@/i18n/direction";
 import { __, sprintf } from "@/i18n";
 import { cn } from "@/utils";
+
 import type { ResultButtonProps, ResultSectionProps } from "../types";
 
 function ResultButton({

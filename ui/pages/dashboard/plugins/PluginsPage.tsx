@@ -1,9 +1,3 @@
-import type {
-	FeatureRoadmapCardProps,
-	PluginTabItem,
-	TabId,
-	ViewMode,
-} from "./types";
 import { useState } from "react";
 import {
 	Plug,
@@ -21,7 +15,18 @@ import {
 	ExternalLink,
 	Bell,
 } from "lucide-react";
+
 import { useAdminAccess } from "@/hooks";
+import { __ } from "@/i18n";
+import { cn } from "@/utils";
+import { PLUGINS_WAITLIST_URL } from "@constants";
+
+import type {
+	FeatureRoadmapCardProps,
+	PluginTabItem,
+	TabId,
+	ViewMode,
+} from "./types";
 import { InstalledPluginsTable, PluginCard, PluginTabs } from "./_components";
 import {
 	BROWSE_CARDS,
@@ -29,9 +34,6 @@ import {
 	FEATURED_CARDS,
 	POPULAR_CARDS,
 } from "./pluginData";
-import { __ } from "@/i18n";
-import { cn } from "@/utils";
-import { PLUGINS_WAITLIST_URL } from "@constants";
 
 function PluginsPage() {
 	const { canManageUsers, isLoading } = useAdminAccess();

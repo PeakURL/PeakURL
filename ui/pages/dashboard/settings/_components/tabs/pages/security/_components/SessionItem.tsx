@@ -1,7 +1,9 @@
+import { Monitor } from "lucide-react";
+
 import { Button } from "@/components";
 import { __ } from "@/i18n";
 import { cn, formatDateTimeValue, getCountryFlagEmoji } from "@/utils";
-import { Monitor } from "lucide-react";
+
 import { getSessionLocationLabel } from "../helpers";
 import type { SessionItemProps } from "../types";
 

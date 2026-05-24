@@ -1,4 +1,5 @@
 import { matchPath } from "react-router-dom";
+
 import { applyFilters } from "@/utils";
 
 const BODY_CLASS_DATA_ATTRIBUTE = "peakurlBodyClasses";

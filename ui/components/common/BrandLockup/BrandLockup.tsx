@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
+
 import { PEAKURL_NAME } from "@constants";
-import type { BrandLockupProps } from "../types";
 import { cn } from "@/utils";
+
+import type { BrandLockupProps } from "../types";
+
 export type {
 	BrandLockupProps,
 	BrandLockupSize,

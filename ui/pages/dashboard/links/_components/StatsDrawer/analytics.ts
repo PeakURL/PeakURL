@@ -1,5 +1,6 @@
 import { __, sprintf } from "@/i18n";
 import { formatCount } from "@/utils";
+
 import type { LinkRecord } from "../types";
 import type {
 	LinkStatsPayload,

@@ -6,10 +6,13 @@ import {
 	Transition,
 	TransitionChild,
 } from "@headlessui/react";
+
 import { __ } from "@/i18n";
 import { getDocumentDirection } from "@/i18n/direction";
+
 import { Button } from "../Button";
 import type { ConfirmDialogProps } from "../types";
+
 export type { ConfirmDialogProps, ConfirmVariant } from "../types";
 
 /**

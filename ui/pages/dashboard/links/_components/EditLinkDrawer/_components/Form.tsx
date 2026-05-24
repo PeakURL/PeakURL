@@ -6,8 +6,10 @@ import {
 	TabPanels,
 } from "@headlessui/react";
 import { Image, Link2, Shield } from "lucide-react";
+
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
+
 import type { EditableLink } from "../../types";
 import Footer from "./Footer";
 import Header from "./Header";

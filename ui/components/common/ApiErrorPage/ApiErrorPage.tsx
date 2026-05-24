@@ -12,6 +12,7 @@ import { API_CLIENT_BASE_URL, PEAKURL_DEBUG, PEAKURL_NAME } from "@constants";
 import { Button } from "@/components/ui";
 import { __, sprintf } from "@/i18n";
 import { extractErrorMessage, getErrorStatus } from "@/utils";
+
 import { BrandLockup } from "../BrandLockup";
 import type { ApiErrorPageProps } from "../types";
 

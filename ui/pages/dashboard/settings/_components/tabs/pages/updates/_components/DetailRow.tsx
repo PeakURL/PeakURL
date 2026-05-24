@@ -1,5 +1,7 @@
-import { isRelativeUrl, sanitizeUrl } from "@/utils";
 import { ExternalLink } from "lucide-react";
+
+import { isRelativeUrl, sanitizeUrl } from "@/utils";
+
 import type { DetailRowProps } from "../types";
 import DirectionalValue from "./DirectionalValue";
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
+
 import {
 	useDisableTwoFactorMutation,
 	useDownloadBackupCodesMutation,
@@ -9,6 +10,7 @@ import {
 } from "@/store/slices/api";
 import { __, sprintf } from "@/i18n";
 import { downloadBrowserFile, getErrorMessage } from "@/utils";
+
 import {
 	BACKUP_CODES_FILENAME,
 	createBackupCodesFile,

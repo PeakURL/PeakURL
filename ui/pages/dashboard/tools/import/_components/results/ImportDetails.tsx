@@ -1,7 +1,9 @@
-import { Button } from "@/components";
 import { CircleAlert, CircleCheckBig, Download } from "lucide-react";
+
+import { Button } from "@/components";
 import { __, sprintf } from "@/i18n";
 import { cn } from "@/utils";
+
 import type { ImportDetailsProps } from "../types";
 
 function ImportDetails({ results }: ImportDetailsProps) {

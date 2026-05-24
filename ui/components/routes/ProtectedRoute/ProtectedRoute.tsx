@@ -1,3 +1,5 @@
+import { Navigate, useLocation } from "react-router-dom";
+
 import { authApi } from "@/store/slices";
 import { selectSessionUser } from "@/store/slices/api";
 import { ApiErrorPage } from "@/components/common";
@@ -7,7 +9,7 @@ import {
 	getInstallRecovery,
 	redirectToInstallRecovery,
 } from "@/utils";
-import { Navigate, useLocation } from "react-router-dom";
+
 import type { ProtectedRouteProps } from "../types";
 
 /**

@@ -155,40 +155,38 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 						{__("Traffic by Category")}
 					</h3>
 					<div className="links-sources-category-grid">
-						{referrerCategories.map(
-							(cat: ReferrerCategoryItem, index: number) => {
-								const meta = getCategoryInfo(cat.category);
-								const Icon = meta.icon;
-								const percentage = getPercentage(
-									cat.count,
-									totalClicks
-								);
+						{referrerCategories.map((cat: ReferrerCategoryItem) => {
+							const meta = getCategoryInfo(cat.category);
+							const Icon = meta.icon;
+							const percentage = getPercentage(
+								cat.count,
+								totalClicks
+							);
 
-								return (
+							return (
+								<div
+									key={cat.category}
+									className="links-sources-category-card"
+								>
 									<div
-										key={index}
-										className="links-sources-category-card"
+										className={`links-sources-category-icon ${meta.bg}`}
 									>
-										<div
-											className={`links-sources-category-icon ${meta.bg}`}
-										>
-											<Icon
-												className={`w-5 h-5 ${meta.color}`}
-											/>
-										</div>
-										<div className="links-sources-category-copy">
-											<p className="text-sm font-medium text-heading truncate">
-												{getCategoryLabel(cat.category)}
-											</p>
-											<p className="text-xs text-text-muted">
-												{formatClickCount(cat.count)} (
-												{percentage}%)
-											</p>
-										</div>
+										<Icon
+											className={`w-5 h-5 ${meta.color}`}
+										/>
 									</div>
-								);
-							}
-						)}
+									<div className="links-sources-category-copy">
+										<p className="text-sm font-medium text-heading truncate">
+											{getCategoryLabel(cat.category)}
+										</p>
+										<p className="text-xs text-text-muted">
+											{formatClickCount(cat.count)} (
+											{percentage}%)
+										</p>
+									</div>
+								</div>
+							);
+						})}
 					</div>
 				</div>
 			)}
@@ -218,7 +216,7 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 
 							return (
 								<div
-									key={index}
+									key={`${ref.category || "unknown"}:${ref.domain || ref.name || "direct"}:${ref.count}:${index}`}
 									className="links-sources-referrer-item"
 								>
 									<div className="links-sources-referrer-main">
@@ -293,37 +291,35 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 						{__("UTM Campaign Tracking")}
 					</h3>
 					<div className="links-sources-utm-list">
-						{utmCampaigns.map(
-							(campaign: UtmCampaignItem, index: number) => (
-								<div
-									key={index}
-									className="links-sources-utm-item"
-								>
-									<div className="links-sources-utm-copy">
-										<p className="text-sm font-medium text-heading truncate">
-											{campaign.campaign}
-										</p>
-										<div className="links-sources-utm-tags">
-											{campaign.source && (
-												<span className="links-sources-utm-tag">
-													{__("source:")}{" "}
-													{campaign.source}
-												</span>
-											)}
-											{campaign.medium && (
-												<span className="links-sources-utm-tag">
-													{__("medium:")}{" "}
-													{campaign.medium}
-												</span>
-											)}
-										</div>
+						{utmCampaigns.map((campaign: UtmCampaignItem) => (
+							<div
+								key={`${campaign.campaign}-${campaign.source ?? ""}-${campaign.medium ?? ""}`}
+								className="links-sources-utm-item"
+							>
+								<div className="links-sources-utm-copy">
+									<p className="text-sm font-medium text-heading truncate">
+										{campaign.campaign}
+									</p>
+									<div className="links-sources-utm-tags">
+										{campaign.source && (
+											<span className="links-sources-utm-tag">
+												{__("source:")}{" "}
+												{campaign.source}
+											</span>
+										)}
+										{campaign.medium && (
+											<span className="links-sources-utm-tag">
+												{__("medium:")}{" "}
+												{campaign.medium}
+											</span>
+										)}
 									</div>
-									<span className="text-sm font-medium text-heading shrink-0">
-										{formatClickCount(campaign.count)}
-									</span>
 								</div>
-							)
-						)}
+								<span className="text-sm font-medium text-heading shrink-0">
+									{formatClickCount(campaign.count)}
+								</span>
+							</div>
+						))}
 					</div>
 				</div>
 			)}

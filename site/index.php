@@ -328,7 +328,7 @@ $prepare_html = static function (
 	string $html,
 	array $body_classes,
 	array $peakurl_data
-): string {
+) use ( $favicon_markup ): string {
 	$base_path    = trim( (string) ( $peakurl_data['basePath'] ?? '' ) );
 	$base_href    = '' === $base_path ? '/' : $base_path . '/';
 	$site_name    = trim( (string) ( $peakurl_data['siteName'] ?? 'PeakURL' ) );
@@ -435,7 +435,39 @@ $prepare_html = static function (
 		}
 	}
 
-	return $updated_html !== $html ? $updated_html : $app_data . $html;
+	if ( $updated_html !== $html ) {
+		return $updated_html;
+	}
+
+	$fallback_after_body_open = preg_replace(
+		'/<body\b[^>]*>/i',
+		'$0' . $app_data,
+		$html,
+		1,
+	);
+
+	if (
+		is_string( $fallback_after_body_open ) &&
+		$fallback_after_body_open !== $html
+	) {
+		return $fallback_after_body_open;
+	}
+
+	$fallback_before_body_close = preg_replace(
+		'/<\/body>/i',
+		$app_data . '</body>',
+		$html,
+		1,
+	);
+
+	if (
+		is_string( $fallback_before_body_close ) &&
+		$fallback_before_body_close !== $html
+	) {
+		return $fallback_before_body_close;
+	}
+
+	return $html;
 };
 
 // ────────────────────────────────────────────────────────────────

@@ -21,7 +21,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
 		{
 			title: __("Total Clicks"),
 			value: formatNumber(stats.totalClicks),
-			change: "+12.3%",
+			change: null,
 			changeType: "positive",
 			icon: MousePointerClick,
 			tone: "clicks" as DashboardStatTone,
@@ -29,7 +29,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
 		{
 			title: __("Active Links"),
 			value: stats.totalLinks,
-			change: `+${((stats.totalLinks || 0) % 5) + 1}`,
+			change: null,
 			changeType: "positive",
 			icon: Link2,
 			tone: "links" as DashboardStatTone,
@@ -37,7 +37,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
 		{
 			title: __("Unique Click Rate"),
 			value: `${uniqueClickRate.toFixed(1)}%`,
-			change: "+0.8%",
+			change: null,
 			changeType: "positive",
 			icon: ChartLine,
 			tone: "rate" as DashboardStatTone,
@@ -45,7 +45,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
 		{
 			title: __("Unique Visitors"),
 			value: formatNumber(stats.uniqueClicks),
-			change: "+15.2%",
+			change: null,
 			changeType: "positive",
 			icon: Users,
 			tone: "users" as DashboardStatTone,
@@ -92,23 +92,25 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
 							</div>
 						</div>
 
-						<div className="dashboard-stats-card-change">
-							<span
-								className={getChangeBadgeClassName(
-									stat.changeType
-								)}
-							>
-								{stat.changeType === "positive" ? (
-									<ArrowUp className="dashboard-stats-card-change-icon" />
-								) : (
-									<ArrowDown className="dashboard-stats-card-change-icon" />
-								)}
-								{stat.change}
-							</span>
-							<span className="dashboard-stats-card-change-note">
-								{__("vs last month")}
-							</span>
-						</div>
+						{stat.change && (
+							<div className="dashboard-stats-card-change">
+								<span
+									className={getChangeBadgeClassName(
+										stat.changeType
+									)}
+								>
+									{stat.changeType === "positive" ? (
+										<ArrowUp className="dashboard-stats-card-change-icon" />
+									) : (
+										<ArrowDown className="dashboard-stats-card-change-icon" />
+									)}
+									{stat.change}
+								</span>
+								<span className="dashboard-stats-card-change-note">
+									{__("vs last month")}
+								</span>
+							</div>
+						)}
 					</div>
 				);
 			})}

@@ -41,19 +41,26 @@ const Pagination = ({
 					</button>
 
 					<div className="links-pagination-pages">
-						{/* Simplified pagination for now - just showing current page surroundings could be better but sticking to simple list or range */}
-						{[...Array(Math.min(totalPages, 5))].map((_, i) => {
-							// Logic to show pages around current page
-							// For simplicity, if totalPages <= 5, show all.
-							// If > 5, this logic needs improvement but I'll stick to a simple window or just standard implementation.
-							// The original code just showed first 5 pages.
-							// I'll implement a smarter one or keep simple.
-							// Let's keep simple first 5 if pages are many, or we can improve it.
-							// Actually, let's just show up to 5 pages.
-							const pageNum = i + 1;
-							if (pageNum > totalPages) return null;
+						{(() => {
+							const maxVisiblePages = 5;
+							const visiblePages = Math.min(
+								totalPages,
+								maxVisiblePages
+							);
+							const halfWindow = Math.floor(visiblePages / 2);
 
-							return (
+							const startPage = Math.max(
+								1,
+								Math.min(
+									currentPage - halfWindow,
+									totalPages - visiblePages + 1
+								)
+							);
+
+							return Array.from(
+								{ length: visiblePages },
+								(_, i) => startPage + i
+							).map((pageNum) => (
 								<button
 									key={pageNum}
 									onClick={() => onPageChange(pageNum)}
@@ -65,8 +72,8 @@ const Pagination = ({
 								>
 									{pageNum}
 								</button>
-							);
-						})}
+							));
+						})()}
 					</div>
 
 					<button

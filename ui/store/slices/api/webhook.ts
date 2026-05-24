@@ -7,6 +7,8 @@ import type {
 	WebhookSummary,
 } from "./types";
 
+const WEBHOOK_TAGS = ["Webhooks"] as const;
+
 /**
  * RTK Query endpoints used by the integrations webhook settings UI.
  */
@@ -16,7 +18,7 @@ export const webhookApi = baseApi.injectEndpoints({
 			query: () => API_ROUTES.webhooks.index,
 			transformResponse: (response: ApiDataResponse<WebhookSummary[]>) =>
 				response.data ?? [],
-			providesTags: ["Webhooks"],
+			providesTags: WEBHOOK_TAGS,
 		}),
 		createWebhook: build.mutation<
 			ApiDataResponse<CreatedWebhook>,
@@ -27,14 +29,14 @@ export const webhookApi = baseApi.injectEndpoints({
 				method: "POST",
 				body,
 			}),
-			invalidatesTags: ["Webhooks"],
+			invalidatesTags: WEBHOOK_TAGS,
 		}),
 		deleteWebhook: build.mutation<void, string>({
 			query: (id) => ({
 				url: API_ROUTES.webhooks.byId(id),
 				method: "DELETE",
 			}),
-			invalidatesTags: ["Webhooks"],
+			invalidatesTags: WEBHOOK_TAGS,
 		}),
 	}),
 });

@@ -12,6 +12,7 @@ import type {
 	LoginResponse,
 	LogoutResponse,
 	PasswordResetTokenStatus,
+	ProfileUser,
 	ResetPasswordPayload,
 	RevokeOtherSessionsResponse,
 	SecuritySettingsResponse,
@@ -21,7 +22,6 @@ import type {
 	UserSummary,
 	VerifyTwoFactorPayload,
 } from "./types";
-import type { ProfileUser } from "@/pages/dashboard/settings/_components/tabs";
 
 /**
  * Generic object payload used by auth endpoints that do not yet have a stable

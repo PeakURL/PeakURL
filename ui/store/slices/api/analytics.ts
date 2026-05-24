@@ -1,4 +1,8 @@
-import { API_ROUTES, buildApiRouteWithQuery } from "@/api";
+import {
+	API_ROUTES,
+	buildApiRouteWithQuery,
+	createApiQueryParams,
+} from "@/api";
 import baseApi from "./base";
 import type {
 	ApiDataResponse,
@@ -14,35 +18,36 @@ import type {
 
 const ANALYTICS_TAGS = ["Analytics"] as const;
 
-const linkAnalyticsTags = (type: "location" | "stats", id: string) => [
+const getLinkAnalyticsTags = (type: "location" | "stats", id: string) => [
 	{ type: "Analytics" as const, id: `${type}-${id}` },
 ];
 
-function serializeLinkStatsQuery({ id, ...args }: LinkAnalyticsArgs): string {
-	const params = new URLSearchParams();
-
-	params.set("range", args.range);
-
-	if ("custom" === args.range) {
-		params.set("from", args.from);
-		params.set("to", args.to);
-	}
+/**
+ * Return the link-stats route with range query parameters.
+ */
+function getLinkStatsRoute({ id, ...args }: LinkAnalyticsArgs): string {
+	const params = createApiQueryParams({
+		range: args.range,
+		from: "custom" === args.range ? args.from : undefined,
+		to: "custom" === args.range ? args.to : undefined,
+	});
 
 	return buildApiRouteWithQuery(API_ROUTES.analytics.linkStats(id), params);
 }
 
-function serializeActivityHistoryQuery({
+/**
+ * Return the activity-history route with pagination query parameters.
+ */
+function getActivityHistoryRoute({
 	page = 1,
 	limit = 25,
 	category = "all",
 }: GetActivityHistoryQueryArgs = {}): string {
-	const params = new URLSearchParams();
-	params.set("page", String(page));
-	params.set("limit", String(limit));
-
-	if (category && "all" !== category) {
-		params.set("category", category);
-	}
+	const params = createApiQueryParams({
+		page,
+		limit,
+		category: "all" !== category ? category : undefined,
+	});
 
 	return buildApiRouteWithQuery(API_ROUTES.analytics.activityHistory, params);
 }
@@ -53,11 +58,13 @@ function serializeActivityHistoryQuery({
 export const analyticsApi = baseApi.injectEndpoints({
 	endpoints: (build) => ({
 		getAnalytics: build.query<DashboardAnalyticsResponse, number | void>({
-			query: (days = 7) => {
-				const params = new URLSearchParams();
-				params.set("days", String(days));
+			query: (days) => {
+				const rangeDays = days ?? 7;
 
-				return buildApiRouteWithQuery(API_ROUTES.analytics.index, params);
+				return buildApiRouteWithQuery(
+					API_ROUTES.analytics.index,
+					createApiQueryParams({ days: rangeDays })
+				);
 			},
 			providesTags: ANALYTICS_TAGS,
 		}),
@@ -66,11 +73,13 @@ export const analyticsApi = baseApi.injectEndpoints({
 			providesTags: ANALYTICS_TAGS,
 		}),
 		getRecentClicks: build.query<RecentClicksResponse, number | void>({
-			query: (limit = 8) => {
-				const params = new URLSearchParams();
-				params.set("limit", String(limit));
+			query: (limit) => {
+				const pageLimit = limit ?? 8;
 
-				return buildApiRouteWithQuery(API_ROUTES.analytics.recentClicks, params);
+				return buildApiRouteWithQuery(
+					API_ROUTES.analytics.recentClicks,
+					createApiQueryParams({ limit: pageLimit })
+				);
 			},
 			providesTags: ANALYTICS_TAGS,
 		}),
@@ -78,7 +87,7 @@ export const analyticsApi = baseApi.injectEndpoints({
 			ActivityHistoryResponse,
 			GetActivityHistoryQueryArgs | void
 		>({
-			query: (args) => serializeActivityHistoryQuery(args || {}),
+			query: (args) => getActivityHistoryRoute(args || {}),
 			providesTags: ANALYTICS_TAGS,
 		}),
 		deleteActivityLog: build.mutation<
@@ -105,12 +114,12 @@ export const analyticsApi = baseApi.injectEndpoints({
 		getLinkLocation: build.query<{ data?: LinkLocationPayload }, string>({
 			query: (id) => API_ROUTES.analytics.linkLocation(id),
 			providesTags: (_result, _error, id) =>
-				linkAnalyticsTags("location", id),
+				getLinkAnalyticsTags("location", id),
 		}),
 		getLinkStats: build.query<LinkStatsResponse, LinkAnalyticsArgs>({
-			query: serializeLinkStatsQuery,
+			query: getLinkStatsRoute,
 			providesTags: (_result, _error, { id }) =>
-				linkAnalyticsTags("stats", id),
+				getLinkAnalyticsTags("stats", id),
 		}),
 	}),
 });

@@ -96,7 +96,7 @@ class UrlsController extends BaseController {
 	}
 
 	/**
-	 * List URLs with pagination and sorting (GET /api/v1/urls).
+	 * List URLs with pagination and sorting.
 	 *
 	 * @param Request $request Incoming HTTP request with query parameters.
 	 * @return array<string, mixed> Paginated URL list response.
@@ -121,7 +121,7 @@ class UrlsController extends BaseController {
 	}
 
 	/**
-	 * Export accessible URLs for the current user (GET /api/v1/urls/export).
+	 * Export accessible URLs for the current user.
 	 *
 	 * Returns all links the current user can access, without pagination, for
 	 * dashboard export workflows.
@@ -144,7 +144,7 @@ class UrlsController extends BaseController {
 	}
 
 	/**
-	 * Show a single URL by ID (GET /api/v1/urls/{id}).
+	 * Show a single URL by ID.
 	 *
 	 * @param Request $request Request with route parameter 'id'.
 	 * @return array<string, mixed> URL data or 404 error.
@@ -164,7 +164,7 @@ class UrlsController extends BaseController {
 	}
 
 	/**
-	 * Create a new short URL (POST /api/v1/urls).
+	 * Create a new short URL.
 	 *
 	 * @param Request $request Request with URL payload.
 	 * @return array<string, mixed> Created URL response (201).
@@ -182,7 +182,7 @@ class UrlsController extends BaseController {
 	}
 
 	/**
-	 * Bulk import URLs (POST /api/v1/urls/bulk).
+	 * Bulk import URLs.
 	 *
 	 * @param Request $request Request with array of URL payloads.
 	 * @return array<string, mixed> Bulk import result.
@@ -199,7 +199,7 @@ class UrlsController extends BaseController {
 	}
 
 	/**
-	 * Update an existing URL (PUT /api/v1/urls/{id}).
+	 * Update an existing URL.
 	 *
 	 * @param Request $request Request with route 'id' and body changes.
 	 * @return array<string, mixed> Updated URL or 404 error.
@@ -220,7 +220,7 @@ class UrlsController extends BaseController {
 	}
 
 	/**
-	 * Delete a URL (DELETE /api/v1/urls/{id}).
+	 * Delete a URL.
 	 *
 	 * @param Request $request Request with route 'id'.
 	 * @return array<string, mixed> Deletion confirmation or 404 error.
@@ -240,7 +240,7 @@ class UrlsController extends BaseController {
 	}
 
 	/**
-	 * Bulk delete URLs by ID array (DELETE /api/v1/urls/bulk).
+	 * Bulk delete URLs by ID array.
 	 *
 	 * @param Request $request Request with 'ids' body parameter.
 	 * @return array<string, mixed> Response with deleted count.
@@ -262,7 +262,7 @@ class UrlsController extends BaseController {
 	}
 
 	/**
-	 * Resolve a short code and handle public access (GET|POST /{id}).
+	 * Resolve a short code and handle public access.
 	 *
 	 * Handles password-protected and expired links before sending the final
 	 * redirect response.

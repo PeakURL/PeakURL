@@ -1,4 +1,62 @@
-import { formatLocalizedDateTime, getActiveLocale } from "./dateFormatting";
+import {
+	formatLocalizedDateTime,
+	formatRelativeTime,
+	getActiveLocale,
+} from "./dateFormatting";
+
+const RECENT_DATE_DAY_LIMIT = 7;
+const DAY_MS = 1000 * 60 * 60 * 24;
+
+/**
+ * Format a timestamp for dashboard activity feeds.
+ *
+ * Recent values are shown relatively, while older values use a medium date.
+ * Invalid or missing values resolve to an empty string.
+ *
+ * @param dateValue - The raw date value to format.
+ * @return The formatted date string.
+ */
+export function formatDate(
+	dateValue: string | number | Date | null | undefined
+): string {
+	if (null == dateValue) {
+		return "";
+	}
+
+	const date = new Date(dateValue);
+	if (Number.isNaN(date.getTime())) {
+		return "";
+	}
+
+	const now = new Date();
+	const diffDays = Math.abs(now.getTime() - date.getTime()) / DAY_MS;
+
+	/* Use relative formatting for dates within the last week. */
+	if (diffDays < RECENT_DATE_DAY_LIMIT) {
+		return formatRelativeTime(date, {
+			style: "long",
+			numeric: "auto",
+		});
+	}
+
+	/* Fall back to localized medium date format for older entries. */
+	return formatLocalizedDateTime(date, {
+		dateStyle: "medium",
+	});
+}
+
+/**
+ * Format a number into a compact dashboard-friendly label.
+ *
+ * @param value - The number to format.
+ * @return The formatted compact string.
+ */
+export function formatNumber(value: number): string {
+	return new Intl.NumberFormat(getActiveLocale(), {
+		notation: "compact",
+		maximumFractionDigits: 1,
+	}).format(value);
+}
 
 /**
  * Format a value as a localized full count.

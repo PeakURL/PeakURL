@@ -23,20 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * UsersController — REST handlers for the users resource.
  *
- * Routes registered by Application::register_routes():
- *  GET    /api/v1/users          → index
- *  POST   /api/v1/users          → create
- *  GET    /api/v1/users/me       → me
- *  PUT    /api/v1/users/me       → update_me
- *  PUT    /api/v1/users/{username} → update
- *  DELETE /api/v1/users/{username} → delete
+ * Route paths are registered centrally in Application.
  *
  * @since 1.0.0
  */
 class UsersController extends BaseController {
 
 	/**
-	 * List all users (GET /api/v1/users).
+	 * List all users.
 	 *
 	 * Supports pagination and sorting via query parameters.
 	 * Restricted to admin-role users.
@@ -53,7 +47,7 @@ class UsersController extends BaseController {
 	}
 
 	/**
-	 * Create a new user account (POST /api/v1/users).
+	 * Create a new user account.
 	 *
 	 * Admin-only. Accepts username, email, password, and role in the body.
 	 *
@@ -73,7 +67,7 @@ class UsersController extends BaseController {
 	}
 
 	/**
-	 * Return the currently authenticated user (GET /api/v1/users/me).
+	 * Return the currently authenticated user.
 	 *
 	 * @param Request $request Incoming HTTP request (session-authenticated).
 	 * @return array<string, mixed> JSON envelope with the current user profile.
@@ -87,7 +81,7 @@ class UsersController extends BaseController {
 	}
 
 	/**
-	 * Update the authenticated user's own profile (PUT /api/v1/users/me).
+	 * Update the authenticated user's own profile.
 	 *
 	 * Accepts email, display name, and password change fields. Password
 	 * changes must include the current password for confirmation.
@@ -107,7 +101,7 @@ class UsersController extends BaseController {
 	}
 
 	/**
-	 * Update a user by username (PUT /api/v1/users/{username}).
+	 * Update a user by username.
 	 *
 	 * Admin-only. Returns 404 if the username does not exist.
 	 *
@@ -131,7 +125,7 @@ class UsersController extends BaseController {
 	}
 
 	/**
-	 * Delete a user by username (DELETE /api/v1/users/{username}).
+	 * Delete a user by username.
 	 *
 	 * Admin-only. Returns 404 if the username does not exist.
 	 *

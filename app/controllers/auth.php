@@ -45,7 +45,7 @@ class AuthController extends BaseController {
 	}
 
 	/**
-	 * Verify a user's email address (POST /api/v1/auth/verify-email).
+	 * Verify a user's email address.
 	 *
 	 * @param Request $request Request containing the verification token.
 	 * @return array<string, mixed> Success or 404 error response.
@@ -65,7 +65,7 @@ class AuthController extends BaseController {
 	}
 
 	/**
-	 * Resend the email verification message (POST /api/v1/auth/resend-verification).
+	 * Resend the email verification message.
 	 *
 	 * @param Request $request Request with the target email address.
 	 * @return array<string, mixed> Success response.
@@ -82,7 +82,7 @@ class AuthController extends BaseController {
 	}
 
 	/**
-	 * Authenticate with email/username and password (POST /api/v1/auth/login).
+	 * Authenticate with email/username and password.
 	 *
 	 * @param Request $request Request containing identifier and password.
 	 * @return array<string, mixed> User data and session cookie.
@@ -96,7 +96,7 @@ class AuthController extends BaseController {
 	}
 
 	/**
-	 * Complete a two-factor login challenge (POST /api/v1/auth/login/verify).
+	 * Complete a two-factor login challenge.
 	 *
 	 * @param Request $request Request with identifier, password, and TOTP token.
 	 * @return array<string, mixed> Authenticated user response.
@@ -113,7 +113,7 @@ class AuthController extends BaseController {
 	}
 
 	/**
-	 * Sign out and revoke the session (POST /api/v1/auth/logout).
+	 * Sign out and revoke the session.
 	 *
 	 * @param Request $request Current authenticated request.
 	 * @return array<string, mixed> Logout confirmation response.
@@ -125,7 +125,7 @@ class AuthController extends BaseController {
 	}
 
 	/**
-	 * Initiate a password reset (POST /api/v1/auth/forgot-password).
+	 * Initiate a password reset.
 	 *
 	 * @param Request $request Request with the user's email address or username.
 	 * @return array<string, mixed> Confirmation response.
@@ -163,7 +163,7 @@ class AuthController extends BaseController {
 	}
 
 	/**
-	 * Reset a user's password via token (POST /api/v1/auth/reset-password/{token}).
+	 * Reset a user's password via token.
 	 *
 	 * @param Request $request Request with the new password.
 	 * @return array<string, mixed> Success or 404 error response.
@@ -191,7 +191,7 @@ class AuthController extends BaseController {
 	}
 
 	/**
-	 * Create a new API key (POST /api/v1/auth/api-key).
+	 * Create a new API key.
 	 *
 	 * @param Request $request Authenticated request with optional label.
 	 * @return array<string, mixed> Response containing the new key.
@@ -211,7 +211,7 @@ class AuthController extends BaseController {
 	}
 
 	/**
-	 * Delete an API key (DELETE /api/v1/auth/api-key/{id}).
+	 * Delete an API key.
 	 *
 	 * @param Request $request Authenticated request.
 	 * @return array<string, mixed> Deletion confirmation or 404 error.
@@ -231,7 +231,7 @@ class AuthController extends BaseController {
 	}
 
 	/**
-	 * Get security settings for the current user (GET /api/v1/auth/security).
+	 * Get security settings for the current user.
 	 *
 	 * @param Request $request Authenticated request.
 	 * @return array<string, mixed> Security settings response.
@@ -245,7 +245,7 @@ class AuthController extends BaseController {
 	}
 
 	/**
-	 * Begin TOTP two-factor setup (POST /api/v1/auth/security/two-factor/setup).
+	 * Begin TOTP two-factor setup.
 	 *
 	 * @param Request $request Authenticated request.
 	 * @return array<string, mixed> Setup payload with secret and otpauth URI.
@@ -259,7 +259,7 @@ class AuthController extends BaseController {
 	}
 
 	/**
-	 * Verify a TOTP code to enable two-factor (POST /api/v1/auth/security/two-factor/verify).
+	 * Verify a TOTP code to enable two-factor.
 	 *
 	 * @param Request $request Request with the TOTP token.
 	 * @return array<string, mixed> Response with backup codes.
@@ -287,7 +287,7 @@ class AuthController extends BaseController {
 	}
 
 	/**
-	 * Disable two-factor authentication (POST /api/v1/auth/security/two-factor/disable).
+	 * Disable two-factor authentication.
 	 *
 	 * @param Request $request Authenticated request.
 	 * @return array<string, mixed> Confirmation response.
@@ -307,7 +307,7 @@ class AuthController extends BaseController {
 	}
 
 	/**
-	 * Regenerate two-factor backup codes (POST /api/v1/auth/security/two-factor/backup-codes).
+	 * Regenerate two-factor backup codes.
 	 *
 	 * @param Request $request Authenticated request.
 	 * @return array<string, mixed> Response with new backup codes.
@@ -331,7 +331,7 @@ class AuthController extends BaseController {
 	}
 
 	/**
-	 * Download backup codes as a plain-text file (POST /api/v1/auth/security/backup-codes/download).
+	 * Download backup codes as a plain-text file.
 	 *
 	 * @param Request $request Authenticated request.
 	 * @return array<string, mixed> Text response with codes.
@@ -366,7 +366,7 @@ class AuthController extends BaseController {
 	}
 
 	/**
-	 * Revoke an active session (DELETE /api/v1/auth/security/sessions/{id}).
+	 * Revoke an active session.
 	 *
 	 * @param Request $request Authenticated request.
 	 * @return array<string, mixed> Confirmation or 404 error.

@@ -23,19 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * UpdatesController — REST handlers for system updates.
  *
- * Routes registered by Application::register_routes():
- *  GET  /api/v1/system/update       → status
- *  POST /api/v1/system/update/check → refresh
- *  POST /api/v1/system/update/apply → apply
- *  POST /api/v1/system/update/reinstall → reinstall
- *  POST /api/v1/system/update/database → upgrade_database
+ * Route paths are registered centrally in Application.
  *
  * @since 1.0.0
  */
 class UpdatesController extends BaseController {
 
 	/**
-	 * Return the cached update status (GET /api/v1/system/update).
+	 * Return the cached update status.
 	 *
 	 * Returns current version, latest available version, and
 	 * whether an update is available.
@@ -52,7 +47,7 @@ class UpdatesController extends BaseController {
 	}
 
 	/**
-	 * Refresh available updates (POST /api/v1/system/update/check).
+	 * Refresh available updates.
 	 *
 	 * Fetches the remote update manifest and compares it against the
 	 * current runtime version. Caches the result in settings.
@@ -69,7 +64,7 @@ class UpdatesController extends BaseController {
 	}
 
 	/**
-	 * Apply a pending update (POST /api/v1/system/update/apply).
+	 * Apply a pending update.
 	 *
 	 * Downloads and extracts the release archive, then reconciles the
 	 * database schema. Only allowed from packaged release installs.
@@ -86,7 +81,7 @@ class UpdatesController extends BaseController {
 	}
 
 	/**
-	 * Reinstall the current release package (POST /api/v1/system/update/reinstall).
+	 * Reinstall the current release package.
 	 *
 	 * Downloads and extracts the current release archive again so packaged
 	 * files can be restored without waiting for a newer version.

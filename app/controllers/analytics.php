@@ -23,22 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * AnalyticsController — REST handlers for analytics data.
  *
- * Routes registered by Application::register_routes():
- *  GET /api/v1/analytics              → index
- *  GET /api/v1/analytics/activity     → activity
- *  GET /api/v1/analytics/recent-clicks → recent_clicks
- *  GET /api/v1/analytics/activity/history → history
- *  DELETE /api/v1/analytics/activity/bulk → bulk_delete
- *  DELETE /api/v1/analytics/activity/{id} → delete
- *  GET /api/v1/analytics/url/{id}/location → location
- *  GET /api/v1/analytics/url/{id}/stats    → stats
+ * Route paths are registered centrally in Application.
  *
  * @since 1.0.0
  */
 class AnalyticsController extends BaseController {
 
 	/**
-	 * Dashboard analytics summary (GET /api/v1/analytics).
+	 * Return the dashboard analytics summary.
 	 *
 	 * Returns total clicks, unique visitors, top links, and
 	 * referrer/device/browser breakdowns for the selected period.
@@ -56,7 +48,7 @@ class AnalyticsController extends BaseController {
 	}
 
 	/**
-	 * Recent activity feed (GET /api/v1/analytics/activity).
+	 * Return the recent activity feed.
 	 *
 	 * Returns the latest click / creation events across all links.
 	 *
@@ -72,7 +64,7 @@ class AnalyticsController extends BaseController {
 	}
 
 	/**
-	 * Recent click feed (GET /api/v1/analytics/recent-clicks).
+	 * Return the recent click feed.
 	 *
 	 * Returns recent click rows with their related short-link payloads.
 	 *
@@ -91,7 +83,7 @@ class AnalyticsController extends BaseController {
 	}
 
 	/**
-	 * Paginated activity history (GET /api/v1/analytics/activity/history).
+	 * Return the paginated activity history.
 	 *
 	 * Returns the full audit-log feed with pagination metadata for the
 	 * dedicated dashboard activity page.
@@ -115,7 +107,7 @@ class AnalyticsController extends BaseController {
 	}
 
 	/**
-	 * Delete an activity entry (DELETE /api/v1/analytics/activity/{id}).
+	 * Delete an activity entry.
 	 *
 	 * Admin-only. Returns 404 if the activity row does not exist.
 	 *
@@ -140,7 +132,7 @@ class AnalyticsController extends BaseController {
 	}
 
 	/**
-	 * Delete multiple activity entries (DELETE /api/v1/analytics/activity/bulk).
+	 * Delete multiple activity entries.
 	 *
 	 * Admin-only. Accepts an `ids` array in the request body.
 	 *
@@ -164,7 +156,7 @@ class AnalyticsController extends BaseController {
 	}
 
 	/**
-	 * Per-link location analytics (GET /api/v1/analytics/url/{id}/location).
+	 * Return per-link location analytics.
 	 *
 	 * Returns geographic breakdown (country, city) of clicks for a
 	 * specific short link. Returns 404 if the link has no analytics data.
@@ -187,7 +179,7 @@ class AnalyticsController extends BaseController {
 	}
 
 	/**
-	 * Per-link time-series statistics (GET /api/v1/analytics/url/{id}/stats).
+	 * Return per-link time-series statistics.
 	 *
 	 * Returns daily click counts for a specific short link over the
 	 * requested range. Returns 404 if the link has no data.

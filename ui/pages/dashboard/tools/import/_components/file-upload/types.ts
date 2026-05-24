@@ -8,25 +8,7 @@ import type {
 } from "react";
 import type { ImportStatus, SampleRow } from "../types";
 
-/**
- * Single import record parsed from a file before it is sent to the API.
- */
-export interface ImportRecord {
-	/** Destination URL that should receive the short link. */
-	destinationUrl: string;
-
-	/** Optional requested alias or short code. */
-	alias?: string;
-
-	/** Optional password protection value. */
-	password?: string;
-
-	/** Optional expiration timestamp string. */
-	expiresAt?: string;
-
-	/** Optional display title for the link. */
-	title?: string;
-}
+export type { ImportRecord } from "@/api";
 
 /**
  * Props for the file-upload import experience.

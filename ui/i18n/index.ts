@@ -6,22 +6,16 @@ import {
 	sprintf,
 } from "@wordpress/i18n";
 
-import { API_ROUTES } from "@/api";
-import { API_CLIENT_BASE_URL } from "@/constants";
+import { API_ROUTES, getApiRequestUrl } from "@/api";
 import {
 	getPeakURLData,
 	toPeakURLData,
 	updatePeakURLData,
 	type PeakURLData,
 } from "@/data";
-import { getManagedFaviconUrl } from "@/utils";
+import { applyDocumentFavicon, setDocumentLocale } from "@/utils";
 import { getLocaleDirection } from "./direction";
-import type {
-	FaviconData,
-	I18nCatalog,
-	LocaleMessageMap,
-	TextDirection,
-} from "./types";
+import type { I18nCatalog, LocaleMessageMap } from "./types";
 
 const DEFAULT_TEXT_DOMAIN = "peakurl";
 const DEFAULT_LOCALE = "en_US";
@@ -66,147 +60,16 @@ function getLocaleDataFromCatalog(
 }
 
 /**
- * Applies the active locale to the document root for accessibility and
- * browser-native formatting behavior.
- */
-function setDocumentLocale(
-	locale?: string,
-	htmlLang?: string,
-	textDirection?: TextDirection
-): TextDirection {
-	if ("undefined" === typeof document) {
-		return textDirection || getLocaleDirection(locale || htmlLang);
-	}
-
-	const documentLang =
-		htmlLang || locale?.replace(/_/g, "-").toLowerCase() || "en";
-	const textDirectionValue =
-		textDirection || getLocaleDirection(locale || documentLang);
-	document.documentElement.lang = documentLang;
-	document.documentElement.dir = textDirectionValue;
-
-	if (document.body) {
-		document.body.dir = textDirectionValue;
-	}
-
-	return textDirectionValue;
-}
-
-function removeManagedFaviconTags(): void {
-	if ("undefined" === typeof document) {
-		return;
-	}
-
-	document.head
-		.querySelectorAll("[data-peakurl-favicon]")
-		.forEach((node) => node.remove());
-}
-
-function appendManagedHeadTag(
-	tagName: "link" | "meta",
-	attributes: Record<string, string>
-): void {
-	const element = document.createElement(tagName);
-	element.setAttribute("data-peakurl-favicon", "1");
-
-	Object.entries(attributes).forEach(([key, value]) => {
-		if (value) {
-			element.setAttribute(key, value);
-		}
-	});
-
-	document.head.appendChild(element);
-}
-
-/**
- * Applies the current site favicon metadata to the document head.
- */
-export function applyDocumentFavicon(
-	favicon?: FaviconData | null
-): void {
-	if ("undefined" === typeof document) {
-		return;
-	}
-
-	removeManagedFaviconTags();
-
-	if (!favicon?.configured) {
-		return;
-	}
-
-	const sizes =
-		"string" === typeof favicon.sizes && favicon.sizes.trim()
-			? favicon.sizes.trim()
-			: "";
-	const iconUrl = getManagedFaviconUrl("favicon.png", favicon.updatedAt);
-	const shortcutIconUrl = getManagedFaviconUrl(
-		"favicon.ico",
-		favicon.updatedAt
-	);
-	const appleTouchUrl = getManagedFaviconUrl(
-		"apple-touch-icon.png",
-		favicon.updatedAt
-	);
-	const manifestUrl = getManagedFaviconUrl(
-		"site.webmanifest",
-		favicon.updatedAt
-	);
-
-	if (!iconUrl) {
-		return;
-	}
-
-	appendManagedHeadTag("link", {
-		rel: "icon",
-		type: "image/png",
-		href: iconUrl,
-		...(sizes ? { sizes } : {}),
-	});
-
-	appendManagedHeadTag("link", {
-		rel: "shortcut icon",
-		type: "image/png",
-		href: shortcutIconUrl || iconUrl,
-	});
-
-	if (appleTouchUrl) {
-		appendManagedHeadTag("link", {
-			rel: "apple-touch-icon",
-			href: appleTouchUrl,
-		});
-	}
-
-	if (manifestUrl) {
-		appendManagedHeadTag("link", {
-			rel: "manifest",
-			href: manifestUrl,
-		});
-	}
-
-	const siteName = getPeakURLData().siteName;
-
-	if (siteName) {
-		appendManagedHeadTag("meta", {
-			name: "apple-mobile-web-app-title",
-			content: siteName,
-		});
-	}
-}
-
-/**
  * Fetches the dashboard translation payload from the dashboard API.
  */
 async function fetchPeakURLData(): Promise<PeakURLData | null> {
 	try {
-		const response = await fetch(
-			`${API_CLIENT_BASE_URL}/${API_ROUTES.system.i18n}`,
-			{
-				credentials: "include",
-				headers: {
-					Accept: "application/json",
-				},
-			}
-		);
+		const response = await fetch(getApiRequestUrl(API_ROUTES.system.i18n), {
+			credentials: "include",
+			headers: {
+				Accept: "application/json",
+			},
+		});
 
 		if (!response.ok) {
 			return null;

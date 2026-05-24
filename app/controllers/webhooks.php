@@ -23,17 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * WebhooksController — REST handlers for webhook CRUD.
  *
- * Routes registered by Application::register_routes():
- *  GET    /api/v1/webhooks     → index
- *  POST   /api/v1/webhooks     → create
- *  DELETE /api/v1/webhooks/{id} → delete
+ * Route paths are registered centrally in Application.
  *
  * @since 1.0.0
  */
 class WebhooksController extends BaseController {
 
 	/**
-	 * List all webhooks for the authenticated user (GET /api/v1/webhooks).
+	 * List all webhooks for the authenticated user.
 	 *
 	 * @param Request $request Incoming HTTP request.
 	 * @return array<string, mixed> JSON envelope with webhook list.
@@ -47,7 +44,7 @@ class WebhooksController extends BaseController {
 	}
 
 	/**
-	 * Register a new webhook (POST /api/v1/webhooks).
+	 * Register a new webhook.
 	 *
 	 * Accepts `url` and `events` in the request body.
 	 *
@@ -67,7 +64,7 @@ class WebhooksController extends BaseController {
 	}
 
 	/**
-	 * Delete a webhook by ID (DELETE /api/v1/webhooks/{id}).
+	 * Delete a webhook by ID.
 	 *
 	 * Returns 404 if the webhook does not exist or does not
 	 * belong to the authenticated user.

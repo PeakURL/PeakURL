@@ -1,5 +1,13 @@
 import type { LucideIcon } from "lucide-react";
 
+export type {
+	BulkCreateErrorItem,
+	BulkCreateResponse,
+	BulkCreateSuccessItem,
+	ImportRecord,
+	PasteImportRequestItem,
+} from "@/api";
+
 /**
  * Represents the current state of an import process.
  *
@@ -65,62 +73,6 @@ export interface TabsProps {
 
 	/** Identifier for the currently selected tab. */
 	activeTab: ImportTab["id"];
-}
-
-/**
- * Request item built from pasted text before it is sent to the API.
- */
-export interface PasteImportRequestItem {
-	/** Destination URL parsed from the pasted line. */
-	destinationUrl: string;
-
-	/** Optional alias parsed from the same line. */
-	alias?: string;
-}
-
-/**
- * Successful item returned by the paste-import mutation.
- */
-export interface BulkCreateSuccessItem {
-	/** Destination URL created successfully. */
-	destinationUrl: string;
-
-	/** Alias saved for the new short link, when present. */
-	alias?: string;
-
-	/** Generated short code returned by the API. */
-	shortCode?: string;
-
-	/** Canonical short URL returned by the API, when available. */
-	shortUrl?: string;
-}
-
-/**
- * Failed item returned by the paste-import mutation.
- */
-export interface BulkCreateErrorItem {
-	/** Destination URL that failed to import. */
-	destinationUrl: string;
-
-	/** Alias associated with the failed row, when provided. */
-	alias?: string;
-
-	/** Human-readable API error message for the failed row. */
-	error?: string;
-}
-
-/**
- * Response wrapper returned by the paste-import mutation.
- */
-export interface BulkCreateResponse {
-	/** Response payload containing success and failure collections. */
-	data?: {
-		/** Successfully created short-link records. */
-		results?: BulkCreateSuccessItem[];
-
-		/** Failed records returned by the API. */
-		errors?: BulkCreateErrorItem[];
-	};
 }
 
 /**

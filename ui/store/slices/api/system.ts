@@ -1,5 +1,6 @@
 import { API_ROUTES } from "@/api";
 import baseApi from "./base";
+import { createFormData } from "./formData";
 import type {
 	AdminNoticesResponse,
 	ApiDataResponse,
@@ -17,16 +18,100 @@ import type {
 	UpgradeDatabaseResponse,
 } from "./types";
 
+const ADMIN_NOTICE_TAGS = ["AdminNotices"] as const;
 const GENERAL_SETTINGS_TAGS = ["GeneralSettings"] as const;
+const GEOIP_TAGS = ["Geoip"] as const;
 const GEOIP_CHANGE_TAGS = ["Geoip", "AdminNotices"] as const;
 const MAIL_TAGS = ["Mail"] as const;
 const CAPTCHA_TAGS = ["Captcha"] as const;
+const UPDATE_TAGS = ["Updates"] as const;
 const UPDATE_CHANGE_TAGS = ["Updates", "AdminNotices"] as const;
+const SYSTEM_STATUS_TAGS = ["SystemStatus"] as const;
 const DATABASE_UPDATE_TAGS = [
 	"Updates",
 	"AdminNotices",
 	"SystemStatus",
 ] as const;
+
+/**
+ * Check whether general settings must be saved as multipart form data.
+ */
+function hasGeneralSettingsUpload({
+	faviconFile,
+	removeFavicon,
+	socialPreviewFile,
+	removeSocialPreviewImage,
+}: SaveGeneralSettingsPayload): boolean {
+	return Boolean(
+		faviconFile ||
+			removeFavicon ||
+			socialPreviewFile ||
+			removeSocialPreviewImage
+	);
+}
+
+/**
+ * Create a request body for saving general site settings.
+ *
+ * File uploads and remove flags use multipart form data, while plain settings
+ * can stay JSON so PHP receives the same values without unnecessary encoding.
+ */
+function createGeneralSettingsBody({
+	siteName,
+	siteTagline,
+	siteLanguage,
+	siteTimezone,
+	siteTimeFormat,
+	faviconFile,
+	removeFavicon,
+	socialPreviewFile,
+	removeSocialPreviewImage,
+}: SaveGeneralSettingsPayload):
+	| FormData
+	| Pick<
+			SaveGeneralSettingsPayload,
+			| "siteName"
+			| "siteTagline"
+			| "siteLanguage"
+			| "siteTimezone"
+			| "siteTimeFormat"
+	  > {
+	if (
+		hasGeneralSettingsUpload({
+			siteName,
+			siteTagline,
+			siteLanguage,
+			siteTimezone,
+			siteTimeFormat,
+			faviconFile,
+			removeFavicon,
+			socialPreviewFile,
+			removeSocialPreviewImage,
+		})
+	) {
+		return createFormData({
+			siteName: siteName || "",
+			siteTagline: siteTagline || "",
+			siteLanguage,
+			siteTimezone: siteTimezone || "",
+			siteTimeFormat: siteTimeFormat || "",
+			favicon: faviconFile || undefined,
+			removeFavicon: removeFavicon ? "1" : undefined,
+			socialPreviewImage: socialPreviewFile || undefined,
+			removeSocialPreviewImage: removeSocialPreviewImage
+				? "1"
+				: undefined,
+		});
+	}
+
+	return {
+		siteName,
+		siteTagline,
+		siteLanguage,
+		siteTimezone,
+		siteTimeFormat,
+	};
+}
 
 /**
  * RTK Query endpoints for system configuration, diagnostics, and updates.
@@ -35,7 +120,7 @@ export const systemApi = baseApi.injectEndpoints({
 	endpoints: (build) => ({
 		getAdminNotices: build.query<AdminNoticesResponse, void>({
 			query: () => API_ROUTES.system.notices,
-			providesTags: ["AdminNotices"],
+			providesTags: ADMIN_NOTICE_TAGS,
 		}),
 		getGeneralSettings: build.query<ApiDataResponse<SiteSettings>, void>({
 			query: () => API_ROUTES.system.general,
@@ -43,79 +128,22 @@ export const systemApi = baseApi.injectEndpoints({
 		}),
 		getSystemStatus: build.query<SystemStatusResponse, void>({
 			query: () => API_ROUTES.system.status,
-			providesTags: ["SystemStatus"],
+			providesTags: SYSTEM_STATUS_TAGS,
 		}),
 		saveGeneralSettings: build.mutation<
 			ApiDataResponse<SiteSettings>,
 			SaveGeneralSettingsPayload
 		>({
-			query: ({
-				siteName,
-				siteTagline,
-				siteLanguage,
-				siteTimezone,
-				siteTimeFormat,
-				socialPreviewFile,
-				removeSocialPreviewImage,
-				faviconFile,
-				removeFavicon,
-			}) => {
-				if (
-					faviconFile ||
-					removeFavicon ||
-					socialPreviewFile ||
-					removeSocialPreviewImage
-				) {
-					const formData = new FormData();
-					formData.append("siteName", siteName || "");
-					formData.append("siteTagline", siteTagline || "");
-					formData.append("siteLanguage", siteLanguage);
-					formData.append("siteTimezone", siteTimezone || "");
-					formData.append("siteTimeFormat", siteTimeFormat || "");
-
-					if (faviconFile) {
-						formData.append("favicon", faviconFile);
-					}
-
-					if (removeFavicon) {
-						formData.append("removeFavicon", "1");
-					}
-
-					if (socialPreviewFile) {
-						formData.append(
-							"socialPreviewImage",
-							socialPreviewFile
-						);
-					}
-
-					if (removeSocialPreviewImage) {
-						formData.append("removeSocialPreviewImage", "1");
-					}
-
-					return {
-						url: API_ROUTES.system.general,
-						method: "POST",
-						body: formData,
-					};
-				}
-
-				return {
-					url: API_ROUTES.system.general,
-					method: "POST",
-					body: {
-						siteName,
-						siteTagline,
-						siteLanguage,
-						siteTimezone,
-						siteTimeFormat,
-					},
-				};
-			},
+			query: (body) => ({
+				url: API_ROUTES.system.general,
+				method: "POST",
+				body: createGeneralSettingsBody(body),
+			}),
 			invalidatesTags: GENERAL_SETTINGS_TAGS,
 		}),
 		getGeoipStatus: build.query<ApiDataResponse<LocationDataStatus>, void>({
 			query: () => API_ROUTES.system.geoip,
-			providesTags: ["Geoip"],
+			providesTags: GEOIP_TAGS,
 		}),
 		getMailStatus: build.query<ApiDataResponse<EmailStatus>, void>({
 			query: () => API_ROUTES.system.mail,
@@ -177,7 +205,7 @@ export const systemApi = baseApi.injectEndpoints({
 			void
 		>({
 			query: () => API_ROUTES.system.update,
-			providesTags: ["Updates"],
+			providesTags: UPDATE_TAGS,
 		}),
 		checkForUpdates: build.mutation<
 			ApiDataResponse<UpdateStatusPayload>,
@@ -189,15 +217,13 @@ export const systemApi = baseApi.injectEndpoints({
 			}),
 			invalidatesTags: UPDATE_CHANGE_TAGS,
 		}),
-		applyUpdate: build.mutation<ApiDataResponse<UpdateStatusPayload>, void>(
-		{
+		applyUpdate: build.mutation<ApiDataResponse<UpdateStatusPayload>, void>({
 			query: () => ({
 				url: API_ROUTES.system.updateApply,
 				method: "POST",
 			}),
 			invalidatesTags: UPDATE_CHANGE_TAGS,
-			}
-		),
+		}),
 		reinstallUpdate: build.mutation<
 			ApiDataResponse<UpdateStatusPayload>,
 			void

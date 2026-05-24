@@ -22,9 +22,10 @@ import {
 	useReinstallUpdateMutation,
 	useUpgradeDatabaseSchemaMutation,
 } from "@/store/slices/api";
-import { __, applyDocumentFavicon, sprintf } from "@/i18n";
+import { __, sprintf } from "@/i18n";
 import { updatePeakURLData } from "@/data";
 import {
+	applyDocumentFavicon,
 	copyToClipboard as writeToClipboard,
 	extractErrorMessage,
 	getErrorMessage,

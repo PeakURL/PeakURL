@@ -1,12 +1,15 @@
+import type {
+	UserDialogPayload,
+	UserRole,
+	UserSummary,
+} from "@/api";
+
+export type { UserDialogPayload, UserRole, UserSummary } from "@/api";
+
 /**
  * Supported modes for the user create/edit dialog.
  */
 export type UserDialogMode = "create" | "edit";
-
-/**
- * Canonical user roles supported by the self-hosted dashboard.
- */
-export type UserRole = "admin" | "editor";
 
 /**
  * Editable form state for the user dialog.
@@ -35,55 +38,6 @@ export interface UserDialogFormState {
 
 	/** Role selected for the user account. */
 	role: UserRole;
-}
-
-/**
- * Summary user shape returned by the users list API.
- */
-export interface UserSummary {
-	/** Stable user identifier. */
-	id: string;
-
-	/** Optional first name saved for the account. */
-	firstName?: string | null;
-
-	/** Optional last name saved for the account. */
-	lastName?: string | null;
-
-	/** Username used to sign in to the dashboard. */
-	username?: string | null;
-
-	/** Email address associated with the account. */
-	email?: string | null;
-
-	/** Current role assigned to the account. */
-	role?: UserRole | null;
-
-	/** Account creation timestamp, when available. */
-	createdAt?: string | null;
-}
-
-/**
- * Mutation payload submitted when creating or updating a user.
- */
-export interface UserDialogPayload {
-	/** First name to save for the account. */
-	firstName: string;
-
-	/** Last name to save for the account. */
-	lastName: string;
-
-	/** Username to save for the account. */
-	username: string;
-
-	/** Email address to save for the account. */
-	email: string;
-
-	/** Role to assign to the account. */
-	role: UserRole;
-
-	/** Optional password included for new users or password changes. */
-	password?: string;
 }
 
 /**

@@ -1,6 +1,18 @@
-export type LinkStatus = "active" | "inactive" | "expired";
-export type LinksSortBy = "createdAt" | "clicks" | "alias";
-export type LinksSortOrder = "asc" | "desc";
+import type {
+	LinkStatus,
+	LinksSortBy,
+	LinksSortOrder,
+} from "@/api";
+
+export type {
+	LinkRecord,
+	LinkStatus,
+	LinksMeta,
+	LinksSortBy,
+	LinksSortOrder,
+	UpdateUrlPayload,
+} from "@/api";
+
 export type LinksDateRange = "all" | "24h" | "7d" | "30d" | "custom";
 
 /**
@@ -12,40 +24,6 @@ export interface LinksCustomDateRange {
 
 	/** Inclusive end date in YYYY-MM-DD format. */
 	to: string;
-}
-
-/**
- * Base link record consumed by the links dashboard surfaces.
- */
-export interface LinkRecord {
-	id: string;
-	destinationUrl: string;
-	alias?: string | null;
-	shortCode?: string | null;
-	shortUrl?: string | null;
-	title?: string | null;
-	domain?: string | { domain?: string; name?: string } | null;
-	socialPreview?: {
-		title?: string | null;
-		description?: string | null;
-		imageUrl?: string | null;
-	} | null;
-	status?: LinkStatus | null;
-	clicks?: number | null;
-	uniqueClicks?: number | null;
-	createdAt?: string | null;
-	expiresAt?: string | null;
-	hasPassword?: boolean;
-}
-
-/**
- * Pagination metadata returned by the links list endpoint.
- */
-export interface LinksMeta {
-	page: number;
-	limit: number;
-	totalItems: number;
-	totalPages: number;
 }
 
 /**
@@ -244,20 +222,4 @@ export interface EditLinkDrawerProps {
 	open: boolean;
 	setOpen: (open: boolean) => void;
 	link: EditableLink | null;
-}
-
-/**
- * Mutation payload used to update an existing short link.
- */
-export interface UpdateUrlPayload {
-	id: string;
-	title?: string;
-	status: LinkStatus;
-	expiresAt: string | null;
-	socialTitle?: string;
-	socialDescription?: string;
-	socialImageFile?: File | null;
-	removeSocialImage?: boolean;
-	clearPassword?: boolean;
-	password?: string;
 }

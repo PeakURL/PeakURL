@@ -1,4 +1,4 @@
-import { getPeakURLData } from "@/data";
+import { getDataString, getPeakURLData } from "@/data";
 import type { PeakURLData } from "@/data";
 
 const SECOND_MS = 1000;
@@ -70,16 +70,6 @@ function toDateOnly(value: string | null | undefined): Date | null {
 }
 
 /**
- * Validate that a value is a non-empty string.
- *
- * @param value - The value to check.
- * @return The string if valid, otherwise null.
- */
-function getNonEmptyString(value: unknown): string | null {
-	return typeof value === "string" && value ? value : null;
-}
-
-/**
  * Resolve the active locale from the environment.
  *
  * @param data - Optional app data to avoid redundant parsing.
@@ -87,21 +77,18 @@ function getNonEmptyString(value: unknown): string | null {
  */
 export function getActiveLocale(data?: PeakURLData): string {
 	const peakurlData = data ?? getPeakURLData();
-	const windowLocale =
-		typeof window === "undefined"
-			? null
-			: getNonEmptyString(peakurlData.locale);
+	const appLocale = getDataString(peakurlData.locale);
 
 	/* Prefer the server-provided locale if available. */
-	if (windowLocale) {
-		return windowLocale.replace(/_/g, "-");
+	if (appLocale) {
+		return appLocale.replace(/_/g, "-");
 	}
 
 	/* Fall back to the document language attribute. */
 	const documentLocale =
 		typeof document === "undefined"
 			? null
-			: getNonEmptyString(document.documentElement?.lang);
+			: getDataString(document.documentElement?.lang);
 
 	if (documentLocale) {
 		return documentLocale;
@@ -118,12 +105,9 @@ export function getActiveLocale(data?: PeakURLData): string {
  */
 export function getActiveTimeZone(data?: PeakURLData): string {
 	const peakurlData = data ?? getPeakURLData();
-	const timezone =
-		typeof window === "undefined"
-			? null
-			: getNonEmptyString(peakurlData.timezone);
+	const timezone = getDataString(peakurlData.timezone);
 
-	return timezone ?? DEFAULT_TIMEZONE;
+	return timezone || DEFAULT_TIMEZONE;
 }
 
 /**
@@ -134,10 +118,7 @@ export function getActiveTimeZone(data?: PeakURLData): string {
  */
 function getActiveTimeFormat(data?: PeakURLData): "12" | "24" {
 	const peakurlData = data ?? getPeakURLData();
-	const timeFormat =
-		typeof window === "undefined"
-			? null
-			: getNonEmptyString(peakurlData.timeFormat);
+	const timeFormat = getDataString(peakurlData.timeFormat);
 
 	if (timeFormat === "24") {
 		return "24";

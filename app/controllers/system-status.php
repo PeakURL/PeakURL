@@ -20,8 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * SystemStatusController — dashboard health and runtime status handlers.
  *
- * Routes registered by Application::register_routes():
- *  GET /api/v1/system/status → status
+ * Route paths are registered centrally in Application.
  *
  * @since 1.0.3
  */

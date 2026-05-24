@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
-import type { LinkRecord } from "../types";
+import type { LinkRecord } from "@/api";
 
 /**
  * Supported time ranges for filtering statistics.

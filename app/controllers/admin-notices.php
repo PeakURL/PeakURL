@@ -20,8 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * AdminNoticesController — dashboard notice handlers.
  *
- * Routes registered by Application::register_routes():
- *  GET /api/v1/system/notices → index
+ * Route paths are registered centrally in Application.
  *
  * @since 1.0.3
  */

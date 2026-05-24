@@ -318,63 +318,34 @@ $is_dashboard_path = static function ( string $relative_path ): bool {
  * Inserts a `<base>` tag and a single `window.__PEAKURL__` object carrying
  * the dashboard values the React app needs before it renders.
  *
- * @param string               $html                Raw app.html content.
- * @param string               $base_path           URL base path.
- * @param string               $site_url            Configured site URL.
- * @param string               $site_name           Site name from settings.
- * @param string               $version             Installed PeakURL version.
- * @param array<int, string>   $body_classes        Initial body classes from PHP hooks.
- * @param string               $locale              Active site locale.
- * @param string               $text_direction      Active document text direction.
- * @param string               $timezone            Active site timezone.
- * @param string               $time_format         Active dashboard time format.
- * @param array<string, mixed> $translation_catalog Dashboard JSON catalog.
- * @param array<string, mixed> $favicon             Public favicon settings payload.
- * @param bool                 $debug_enabled       Whether debug mode is enabled.
+ * @param string               $html         Raw app.html content.
+ * @param array<int, string>   $body_classes Initial body classes from PHP hooks.
+ * @param array<string, mixed> $peakurl_data Dashboard data from get_peakurl_data().
  * @return string Modified HTML.
  * @since 1.0.0
  */
 $prepare_html = static function (
 	string $html,
-	string $base_path,
-	string $site_url,
-	string $site_name,
-	string $version,
 	array $body_classes,
-	string $locale,
-	string $text_direction,
-	string $timezone,
-	string $time_format,
-	array $translation_catalog,
-	array $favicon,
-	bool $debug_enabled
+	array $peakurl_data
 ): string {
+	$base_path    = trim( (string) ( $peakurl_data['basePath'] ?? '' ) );
 	$base_href    = '' === $base_path ? '/' : $base_path . '/';
+	$site_name    = trim( (string) ( $peakurl_data['siteName'] ?? 'PeakURL' ) );
 	$html_lang    = htmlspecialchars(
-		strtolower( str_replace( '_', '-', $locale ) ),
+		(string) ( $peakurl_data['htmlLang'] ?? 'en-US' ),
 		ENT_QUOTES,
 		'UTF-8',
 	);
-	$html_dir     = 'rtl' === strtolower( $text_direction ) ? 'rtl' : 'ltr';
+	$html_dir     = 'rtl' === strtolower(
+		(string) ( $peakurl_data['textDirection'] ?? 'ltr' )
+	) ? 'rtl' : 'ltr';
+	$favicon      = is_array( $peakurl_data['favicon'] ?? null )
+		? $peakurl_data['favicon']
+		: array();
 	$favicon_head = $favicon_markup(
 		$site_name,
 		$favicon,
-	);
-	$peakurl_data = array(
-		'basePath'      => $base_path,
-		'apiBase'       => $app_url( $base_path, Constants::API_BASE_PATH ),
-		'siteUrl'       => $site_url,
-		'siteName'      => $site_name,
-		'version'       => $version,
-		'debug'         => $debug_enabled,
-		'locale'        => $locale,
-		'htmlLang'      => $html_lang,
-		'textDirection' => $html_dir,
-		'textDomain'    => Constants::I18N_TEXT_DOMAIN,
-		'timezone'      => $timezone,
-		'timeFormat'    => $time_format,
-		'favicon'       => $favicon,
-		'i18n'          => $translation_catalog,
 	);
 	$peakurl_json = json_encode(
 		$peakurl_data,
@@ -612,52 +583,6 @@ load_i18n( $app_config, $connection );
  */
 do_action( 'init' );
 
-$site_name      = trim(
-	(string) ( $connection->get_option( 'site_name' ) ?? 'PeakURL' ),
-);
-$site_url       = get_site_url();
-$locale         = get_locale();
-$text_direction = get_text_direction();
-$timezone       = trim(
-	(string) (
-		$connection->get_option( 'site_timezone' ) ??
-		Constants::DEFAULT_TIMEZONE
-	),
-);
-$time_format    = trim(
-	(string) (
-		$connection->get_option( 'site_time_format' ) ??
-		Constants::DEFAULT_TIME_FORMAT
-	),
-);
-
-if (
-	Constants::DEFAULT_TIMEZONE !== $timezone &&
-	! in_array( $timezone, \DateTimeZone::listIdentifiers(), true )
-) {
-	$timezone = Constants::DEFAULT_TIMEZONE;
-}
-
-if ( ! in_array( $time_format, array( '12', '24' ), true ) ) {
-	$time_format = Constants::DEFAULT_TIME_FORMAT;
-}
-
-$catalog       = get_dashboard_translation_catalog(
-	$locale,
-	$app_config,
-	$connection,
-);
-$version       = trim(
-	(string) (
-		$connection->get_option( 'installed_version' ) ??
-		$app_config[ Constants::CONFIG_VERSION ] ??
-		Constants::DEFAULT_VERSION
-	),
-);
-$favicon       = ( new Favicon(
-	$app_config,
-	new SettingsApi( new PeakURL_DB( $connection ) ),
-) )->get_settings( $site_name );
 $body_classes  = get_body_class(
 	array(),
 	array(
@@ -684,6 +609,19 @@ $debug_enabled =
  */
 do_action( 'admin_init' );
 
+/*
+ * Build the PHP-provided client data after dashboard hooks run so filters can
+ * adjust the payload before it is serialized into the app HTML.
+ */
+$peakurl_data = get_peakurl_data(
+	array(
+		'base_path'  => $base_path,
+		'config'     => $app_config,
+		'connection' => $connection,
+		'debug'      => $debug_enabled,
+	)
+);
+
 $dashboard_html_path = $root_path . '/app.html';
 
 if ( ! file_exists( $dashboard_html_path ) ) {
@@ -694,7 +632,10 @@ if ( ! file_exists( $dashboard_html_path ) ) {
 }
 
 header( 'Content-Type: text/html; charset=utf-8' );
-header( 'Content-Language: ' . get_html_lang_attribute() );
+header(
+	'Content-Language: ' .
+	(string) ( $peakurl_data['htmlLang'] ?? get_html_lang_attribute() )
+);
 $dashboard_html = file_get_contents( $dashboard_html_path );
 
 if ( false === $dashboard_html ) {
@@ -706,16 +647,6 @@ if ( false === $dashboard_html ) {
 
 echo $prepare_html(
 	$dashboard_html,
-	$base_path,
-	$site_url,
-	$site_name,
-	$version,
 	$body_classes,
-	$locale,
-	$text_direction,
-	$timezone,
-	$time_format,
-	$catalog,
-	$favicon,
-	$debug_enabled,
+	$peakurl_data,
 );

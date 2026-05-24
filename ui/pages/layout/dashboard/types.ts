@@ -1,50 +1,13 @@
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
+import type { NoticeActionLink } from "@/api";
 
-/**
- * Supported admin notice tones.
- */
-export type NoticeTone = "error" | "warning" | "success" | "info";
-
-/**
- * Optional action link attached to an admin notice.
- */
-export interface NoticeActionLink {
-	/** Button label shown in the notice. */
-	label?: string | null;
-
-	/** Relative or absolute URL opened by the notice action. */
-	url?: string | null;
-}
-
-/**
- * Single admin notice returned by the system API.
- */
-export interface AdminNoticeItem {
-	/** Stable notice identifier. */
-	id?: string | null;
-
-	/** Visual tone used to style the notice. */
-	type?: NoticeTone | null;
-
-	/** Short notice heading. */
-	title?: string | null;
-
-	/** Body copy for the notice. */
-	message?: string | null;
-
-	/** Optional CTA rendered beside the notice body. */
-	action?: NoticeActionLink | null;
-}
-
-/**
- * RTK Query response shape for admin notices.
- */
-export interface AdminNoticesResponse {
-	data?: {
-		items?: AdminNoticeItem[];
-	};
-}
+export type {
+	AdminNoticeItem,
+	AdminNoticesResponse,
+	NoticeActionLink,
+	NoticeTone,
+} from "@/api";
 
 /**
  * Props for the rendered notice action button/link.

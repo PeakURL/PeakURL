@@ -1,52 +1,45 @@
 import type {
+	AdminNoticesResponse,
 	BackupCodesResponse,
+	BulkCreateResponse,
 	CaptchaConfigurationPayload,
 	CaptchaStatus,
+	CreateUrlPayload,
+	CreateUrlResponse,
 	CreatedWebhook,
-	EmailStatus,
-	GeoipConfigurationPayload,
-	LocationDataStatus,
-	MailConfigurationPayload,
-	MailTestResult,
-	ProfileUser,
-	RevokeOtherSessionsResponse,
-	SecuritySettingsResponse,
-	SiteSettings,
-	SiteTimeFormat,
-	TwoFactorSetupResponse,
-	UpdateStatusPayload,
-	WebhookSummary,
-} from "@/pages/dashboard/settings/_components/tabs";
-import type {
 	CountryMetric,
 	DashboardDeviceData,
 	DashboardStats,
-	RecentActivity,
-	RecentClick,
-	TrafficSeries,
-} from "@/pages/dashboard/_components";
-import type {
-	CreateUrlPayload,
-	CreateUrlResponse,
+	EmailStatus,
+	GetUrlsResponse,
+	GeoipConfigurationPayload,
+	ImportRecord,
 	LinkLocationPayload,
 	LinkRecord,
 	LinkStatsResponse,
 	LinksSortBy,
 	LinksSortOrder,
-	UpdateUrlPayload,
-} from "@/pages/dashboard/links/_components";
-import type { GetUrlsResponse } from "@/pages/dashboard/links";
-import type {
-	BulkCreateResponse,
-	ImportRecord,
+	LocationDataStatus,
+	MailConfigurationPayload,
+	MailTestResult,
 	PasteImportRequestItem,
-} from "@/pages/dashboard/tools/import/_components";
-import type {
+	ProfileUser,
+	RecentActivity,
+	RecentClick,
+	RevokeOtherSessionsResponse,
+	SecuritySettingsResponse,
+	SiteSettings,
+	SiteTimeFormat,
 	SystemStatusResponse,
+	TrafficSeries,
+	TwoFactorSetupResponse,
+	UpdateStatusPayload,
+	UpdateUrlPayload,
 	UrlExportResponse,
-} from "@/pages/dashboard/tools";
-import type { UserDialogPayload, UserSummary } from "@/pages/dashboard/users";
-import type { AdminNoticesResponse } from "@/pages/layout/dashboard";
+	UserDialogPayload,
+	UserSummary,
+	WebhookSummary,
+} from "@/api";
 
 /**
  * Cache tag names shared by the dashboard RTK Query API slices.
@@ -533,6 +526,7 @@ export type {
 	LocationDataStatus,
 	MailConfigurationPayload,
 	MailTestResult,
+	ProfileUser,
 	RevokeOtherSessionsResponse,
 	SecuritySettingsResponse,
 	SiteSettings,

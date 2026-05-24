@@ -223,45 +223,25 @@ trait SystemTrait {
 	 * @since 1.0.3
 	 */
 	public function get_public_i18n_payload(): array {
-		$locale       = $this->i18n_service->get_site_locale();
-		$site_name    = trim( (string) $this->get_option( 'site_name' ) );
-		$site_tagline = $this->get_site_tagline();
-		$site_url     = trim( (string) $this->get_option( 'site_url' ) );
+		$locale  = $this->i18n_service->get_site_locale();
+		$catalog = $this->i18n_service->get_dashboard_catalog( $locale );
 
-		if ( '' === $site_name ) {
-			$site_name = 'PeakURL';
-		}
-
-		if ( '' === $site_url ) {
-			$site_url = trim( (string) ( $this->config[ Constants::CONFIG_SITE_URL ] ?? '' ) );
-		}
-
-		$site_url    = rtrim( $site_url, '/' );
-		$parsed_path = parse_url( $site_url, PHP_URL_PATH );
-		$base_path   = is_string( $parsed_path ) ? rtrim( $parsed_path, '/' ) : '';
-		$base_path   = '/' === $base_path ? '' : $base_path;
-		$catalog     = $this->i18n_service->get_dashboard_catalog( $locale );
-
-		return array(
-			'basePath'      => $base_path,
-			'apiBase'       => $base_path . Constants::API_BASE_PATH,
-			'siteUrl'       => $site_url,
-			'siteName'      => $site_name,
-			'version'       => (string) ( $this->config[ Constants::CONFIG_VERSION ] ?? Constants::DEFAULT_VERSION ),
-			'debug'         => ! empty( $this->config[ Constants::CONFIG_DEBUG ] ),
-			'locale'        => $locale,
-			'htmlLang'      => $this->i18n_service->get_html_lang( $locale ),
-			'textDirection' => $this->i18n_service->get_text_direction( $locale ),
-			'isRtl'         => $this->i18n_service->is_locale_rtl( $locale ),
-			'textDomain'    => Constants::I18N_TEXT_DOMAIN,
-			'timezone'      => $this->get_site_timezone(),
-			'timeFormat'    => $this->get_site_time_format(),
-			'siteTagline'   => $site_tagline,
-			'favicon'       => $this->favicon_service->get_settings( $site_name ),
-			'socialPreview' => $this->social_preview_service->get_settings(),
-			'defaultLocale' => $this->i18n_service->get_default_locale(),
-			'i18n'          => $catalog,
-			'catalog'       => $catalog,
+		/*
+		 * Return the same client data shape used by packaged dashboard HTML,
+		 * keeping Vite/dev mode aligned with `window.__PEAKURL__`.
+		 */
+		return \get_peakurl_data(
+			array(
+				'config'          => $this->config,
+				'connection'      => $this->connection,
+				'favicon_service' => $this->favicon_service,
+				'i18n'            => $catalog,
+				'i18n_service'    => $this->i18n_service,
+				'locale'          => $locale,
+				'settings_api'    => $this->settings_api,
+				'time_format'     => $this->get_site_time_format(),
+				'timezone'        => $this->get_site_timezone(),
+			)
 		);
 	}
 

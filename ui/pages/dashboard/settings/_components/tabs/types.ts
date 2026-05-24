@@ -1,6 +1,22 @@
 import type { SerializedError } from "@reduxjs/toolkit";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import type { SiteTimeFormat } from "@/api";
 import type { SettingsTabId } from "../layout/types";
+
+export type {
+	ApiKeySummary,
+	CaptchaConfigurationPayload,
+	CaptchaProvider,
+	CaptchaStatus,
+	GeoipConfigurationPayload,
+	MailConfigurationPayload,
+	MailDriver,
+	MailTestResult,
+	ProfileUser,
+	ProfileUserCapabilities,
+	SiteTimeFormat,
+	SmtpEncryption,
+} from "@/api";
 
 /**
  * Supported release actions exposed by the updater UI.
@@ -11,57 +27,6 @@ export type ReleaseAction = "install" | "reinstall";
  * Normalized RTK Query error union used by the settings content shell.
  */
 export type QueryError = FetchBaseQueryError | SerializedError | undefined;
-
-/**
- * Summary metadata for a user-owned API key.
- */
-export interface ApiKeySummary {
-	id: string;
-	label?: string | null;
-	maskedKey?: string | null;
-	createdAt?: string | null;
-}
-
-/**
- * Capability flags returned for the authenticated user.
- */
-export interface ProfileUserCapabilities {
-	manage_users?: boolean | null;
-	manage_site_settings?: boolean | null;
-	manage_mail_delivery?: boolean | null;
-	manage_location_data?: boolean | null;
-	manage_updates?: boolean | null;
-	manage_profile?: boolean | null;
-	manage_api_keys?: boolean | null;
-	manage_webhooks?: boolean | null;
-	view_all_links?: boolean | null;
-	view_own_links?: boolean | null;
-	view_site_analytics?: boolean | null;
-	view_own_analytics?: boolean | null;
-	create_links?: boolean | null;
-}
-
-/**
- * Canonical profile shape consumed by the settings dashboard.
- */
-export interface ProfileUser {
-	_id?: string | null;
-	id?: string | null;
-	username?: string | null;
-	email?: string | null;
-	firstName?: string | null;
-	lastName?: string | null;
-	phoneNumber?: string | null;
-	company?: string | null;
-	jobTitle?: string | null;
-	bio?: string | null;
-	role?: string | null;
-	updatedAt?: string | null;
-	baseApiUrl?: string | null;
-	siteUrl?: string | null;
-	apiKeys?: ApiKeySummary[] | null;
-	capabilities?: ProfileUserCapabilities | null;
-}
 
 /**
  * Editable profile fields shown in the general settings form.
@@ -89,87 +54,6 @@ export interface GeneralFormPayload extends GeneralFormState {
 	removeSocialPreviewImage?: boolean;
 	faviconFile?: File | null;
 	removeFavicon?: boolean;
-}
-
-/**
- * Credentials payload used to save GeoLite2 download settings.
- */
-export interface GeoipConfigurationPayload {
-	accountId: string;
-	licenseKey: string;
-}
-
-/**
- * Supported public-link CAPTCHA providers.
- */
-export type CaptchaProvider = "none" | "recaptcha" | "turnstile";
-
-/**
- * Persisted CAPTCHA provider settings saved from the dashboard.
- */
-export interface CaptchaConfigurationPayload {
-	provider: CaptchaProvider;
-	siteKey: string;
-	secretKey: string;
-}
-
-/**
- * Current CAPTCHA provider status returned by the settings API.
- *
- * The API never returns the raw provider secret key. Saved secrets are exposed
- * only as a fixed masked hint so the dashboard can show their configured state.
- */
-export interface CaptchaStatus {
-	provider: CaptchaProvider;
-	siteKey?: string | null;
-	siteKeyConfigured?: boolean | null;
-	siteKeyHint?: string | null;
-	secretKeyConfigured?: boolean | null;
-	secretKeyHint?: string | null;
-	configured?: boolean | null;
-	enabled?: boolean | null;
-	canManageFromDashboard?: boolean | null;
-	manageDisabledReason?: string | null;
-	saved?: boolean | null;
-}
-
-/**
- * Supported mail transport drivers.
- */
-export type MailDriver = "mail" | "smtp";
-
-/**
- * Supported SMTP encryption modes.
- */
-export type SmtpEncryption = "tls" | "ssl" | "none";
-
-/**
- * Supported dashboard time display preferences.
- */
-export type SiteTimeFormat = "12" | "24";
-
-/**
- * Persisted email delivery settings saved from the dashboard.
- */
-export interface MailConfigurationPayload {
-	driver: MailDriver;
-	fromEmail: string;
-	fromName: string;
-	smtpHost: string;
-	smtpPort: string;
-	smtpEncryption: SmtpEncryption;
-	smtpAuth: boolean;
-	smtpUsername: string;
-	smtpPassword: string;
-}
-
-/**
- * Result returned after sending a dashboard test email.
- */
-export interface MailTestResult {
-	sent?: boolean;
-	recipient?: string | null;
-	driver?: MailDriver | null;
 }
 
 /**

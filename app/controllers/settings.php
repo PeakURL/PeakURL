@@ -20,17 +20,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * SettingsController — general site-settings handlers.
  *
- * Routes registered by Application::register_routes():
- *  GET  /api/v1/system/i18n     → i18n
- *  GET  /api/v1/system/general  → general
- *  POST /api/v1/system/general  → update_general
+ * Route paths are registered centrally in Application.
  *
  * @since 1.0.3
  */
 class SettingsController extends BaseController {
 
 	/**
-	 * Return the public dashboard locale/catalog payload.
+	 * Return the public dashboard app-data payload.
 	 *
 	 * @param Request $request Incoming request.
 	 * @return array<string, mixed>
@@ -39,7 +36,7 @@ class SettingsController extends BaseController {
 	public function i18n( Request $request ): array {
 		return $this->success_response(
 			$this->data_store->get_public_i18n_payload(),
-			__( 'Dashboard translation catalog loaded.', 'peakurl' ),
+			__( 'Dashboard app data loaded.', 'peakurl' ),
 		);
 	}
 

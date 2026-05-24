@@ -1,6 +1,17 @@
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
+import type {
+	DatabaseStatus,
+	UpdateIssue,
+	UpdateStatusPayload,
+} from "@/api";
 import type { TextDirection } from "@/i18n/types";
+
+export type {
+	DatabaseStatus,
+	UpdateIssue,
+	UpdateStatusPayload,
+} from "@/api";
 
 /**
  * Text direction passed from the updates mount into all child components.
@@ -21,14 +32,6 @@ export type ValueDirection = "auto" | "ltr" | "rtl";
  * Icon contract used by update status helper components.
  */
 export type IconComponent = LucideIcon;
-
-/**
- * Single updater or database issue rendered in the UI.
- */
-export interface UpdateIssue {
-	id?: string | null;
-	label: string;
-}
 
 /**
  * Human-friendly release-install progress stages shown in the dashboard.
@@ -55,35 +58,6 @@ export interface ReleaseInstallProgressState {
 	title: string;
 	description: string;
 	steps: ReleaseInstallProgressStep[];
-}
-
-/**
- * Database repair status returned by the updater status API.
- */
-export interface DatabaseStatus {
-	upgradeRequired?: boolean;
-	lastError?: string | null;
-	currentVersion?: string | number | null;
-	targetVersion?: string | number | null;
-	lastUpgradedAt?: string | null;
-	issues?: UpdateIssue[] | null;
-}
-
-/**
- * Aggregate updater status payload for the updates tab.
- */
-export interface UpdateStatusPayload {
-	updateAvailable?: boolean;
-	reinstallAvailable?: boolean;
-	currentVersion?: string | null;
-	latestVersion?: string | null;
-	canApply?: boolean;
-	lastError?: string | null;
-	lastCheckedAt?: string | null;
-	releasedAt?: string | null;
-	releaseNotesUrl?: string | null;
-	applyDisabledReason?: string | null;
-	database?: DatabaseStatus | null;
 }
 
 /**

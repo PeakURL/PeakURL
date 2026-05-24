@@ -2,19 +2,13 @@ import rawPeakurlVersion from "../.version?raw";
 import {
 	DEFAULT_API_PATH,
 	formatBasePath,
+	getDataString,
 	getPeakURLData,
 } from "@/data";
 
 const DEFAULT_PEAKURL_ORIGIN = "https://peakurl.dev";
 const FALLBACK_VERSION = rawPeakurlVersion.trim() || "0.0.0";
 const IS_BROWSER = "undefined" !== typeof window;
-
-/**
- * Reads a trimmed app data string injected onto `window`, falling back to `''`.
- */
-function getAppDataString(value: string | null | undefined): string {
-	return "string" === typeof value ? value.trim() : "";
-}
 
 /**
  * Converts a relative or absolute URL value into a safe absolute URL string.
@@ -49,20 +43,16 @@ const appBasePath = IS_BROWSER ? formatBasePath(peakurlData.basePath) : "";
 const appOrigin = IS_BROWSER
 	? window.location.origin
 	: DEFAULT_PEAKURL_ORIGIN;
-const appSiteUrl = IS_BROWSER ? getAppDataString(peakurlData.siteUrl) : "";
-const appApiBase = IS_BROWSER ? getAppDataString(peakurlData.apiBase) : "";
+const appSiteUrl = IS_BROWSER ? getDataString(peakurlData.siteUrl) : "";
+const appApiBase = IS_BROWSER ? getDataString(peakurlData.apiBase) : "";
 const fallbackSiteUrl = IS_BROWSER
 	? `${appOrigin}${appBasePath}`
 	: DEFAULT_PEAKURL_ORIGIN;
 const fallbackApiPath = IS_BROWSER
 	? `${appBasePath}${DEFAULT_API_PATH}`
 	: DEFAULT_API_PATH;
-const appSiteName = IS_BROWSER
-	? getAppDataString(peakurlData.siteName)
-	: "";
-const appVersion = IS_BROWSER
-	? getAppDataString(peakurlData.version)
-	: "";
+const appSiteName = IS_BROWSER ? getDataString(peakurlData.siteName) : "";
+const appVersion = IS_BROWSER ? getDataString(peakurlData.version) : "";
 const appDebug = import.meta.env.DEV
 	? true
 	: IS_BROWSER

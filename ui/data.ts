@@ -86,18 +86,27 @@ function isObjectRecord(value: unknown): value is Record<string, unknown> {
 }
 
 /**
+ * Return a trimmed app-data string or an empty string.
+ */
+export function getDataString(value: string | null | undefined): string {
+	return "string" === typeof value ? value.trim() : "";
+}
+
+/**
  * Format a mounted base path so route and API URLs can be joined safely.
  */
 export function formatBasePath(value: string | null | undefined): string {
-	if (!value || "string" !== typeof value) {
+	const basePath = getDataString(value);
+
+	if (!basePath) {
 		return "";
 	}
 
-	if ("/" === value.trim()) {
+	if ("/" === basePath) {
 		return "";
 	}
 
-	return `/${value.replace(/^\/+|\/+$/g, "")}`;
+	return `/${basePath.replace(/^\/+|\/+$/g, "")}`;
 }
 
 /**
@@ -138,8 +147,6 @@ export function toPeakURLData(value: unknown): PeakURLData {
 
 	if (isObjectRecord(data.i18n)) {
 		peakurlData.i18n = data.i18n as I18nCatalog;
-	} else if (isObjectRecord(data.catalog)) {
-		peakurlData.i18n = data.catalog as I18nCatalog;
 	}
 
 	return peakurlData;

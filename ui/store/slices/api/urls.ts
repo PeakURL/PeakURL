@@ -1,5 +1,10 @@
-import { API_ROUTES, buildApiRouteWithQuery } from "@/api";
+import {
+	API_ROUTES,
+	buildApiRouteWithQuery,
+	createApiQueryParams,
+} from "@/api";
 import baseApi from "./base";
+import { createFormData } from "./formData";
 import type {
 	BulkCreateResponse,
 	BulkCreateUrlsPayload,
@@ -27,29 +32,6 @@ type UpdateUrlRequestBody =
 	| FormData;
 
 /**
- * Append defined short-link fields to a multipart request body.
- */
-function appendUrlFormData(
-	formData: FormData,
-	payload: Record<string, unknown>
-): FormData {
-	Object.entries(payload).forEach(([key, value]) => {
-		if (value === undefined || value === null) {
-			return;
-		}
-
-		if (value instanceof File) {
-			formData.append(key, value);
-			return;
-		}
-
-		formData.append(key, String(value));
-	});
-
-	return formData;
-}
-
-/**
  * Return a request body for creating a link.
  */
 function createUrlRequestBody(payload: CreateUrlPayload): CreateUrlRequestBody {
@@ -59,7 +41,7 @@ function createUrlRequestBody(payload: CreateUrlPayload): CreateUrlRequestBody {
 		return body;
 	}
 
-	return appendUrlFormData(new FormData(), {
+	return createFormData({
 		...body,
 		socialImage: socialImageFile,
 	});
@@ -83,7 +65,7 @@ function buildUpdateUrlRequest({
 		return { hasMultipartUpdate, requestBody: body };
 	}
 
-	const requestBody = appendUrlFormData(new FormData(), {
+	const requestBody = createFormData({
 		...body,
 		socialImage: socialImageFile || undefined,
 		removeSocialImage: removeSocialImage ? "1" : undefined,
@@ -93,9 +75,9 @@ function buildUpdateUrlRequest({
 }
 
 /**
- * Returns a stable query string for the links list endpoint.
+ * Return the links-list route with stable query parameters.
  */
-function serializeUrlsQuery({
+function getUrlsRoute({
 	page = 1,
 	limit = 25,
 	sortBy = "createdAt",
@@ -105,15 +87,13 @@ function serializeUrlsQuery({
 	from,
 	to,
 }: GetUrlsQueryArgs = {}): string {
-	const params = new URLSearchParams();
-	params.set("page", String(page));
-	params.set("limit", String(limit));
-	params.set("sortBy", sortBy);
-	params.set("sortOrder", sortOrder);
-
-	if (search) {
-		params.set("search", search);
-	}
+	const params = createApiQueryParams({
+		page,
+		limit,
+		sortBy,
+		sortOrder,
+		search: search || undefined,
+	});
 
 	if (range === "custom") {
 		const hasValidFrom = typeof from === "string" && from.trim().length > 0;
@@ -132,20 +112,18 @@ function serializeUrlsQuery({
 }
 
 /**
- * Returns a stable query string for the export lookup endpoint.
+ * Return the links-export route with stable query parameters.
  */
-function serializeUrlsExportQuery({
+function getUrlsExportRoute({
 	sortBy = "createdAt",
 	sortOrder = "desc",
 	search = "",
 }: GetUrlsExportQueryArgs = {}): string {
-	const params = new URLSearchParams();
-	params.set("sortBy", sortBy);
-	params.set("sortOrder", sortOrder);
-
-	if (search) {
-		params.set("search", search);
-	}
+	const params = createApiQueryParams({
+		sortBy,
+		sortOrder,
+		search: search || undefined,
+	});
 
 	return buildApiRouteWithQuery(API_ROUTES.urls.export, params);
 }
@@ -156,7 +134,7 @@ function serializeUrlsExportQuery({
 export const urlsApi = baseApi.injectEndpoints({
 	endpoints: (build) => ({
 		getUrls: build.query<UrlsListResponse, GetUrlsQueryArgs | void>({
-			query: (args) => serializeUrlsQuery(args || {}),
+			query: (args) => getUrlsRoute(args || {}),
 			providesTags: (result) => {
 				const items = result?.data?.items || result?.items || [];
 
@@ -180,7 +158,7 @@ export const urlsApi = baseApi.injectEndpoints({
 			UrlExportResponse,
 			GetUrlsExportQueryArgs | void
 		>({
-			query: (args) => serializeUrlsExportQuery(args || {}),
+			query: (args) => getUrlsExportRoute(args || {}),
 		}),
 		createUrl: build.mutation<CreateUrlResponse, CreateUrlPayload>({
 			query: (body) => ({

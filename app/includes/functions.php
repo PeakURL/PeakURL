@@ -15,6 +15,7 @@ use PeakURL\Includes\Hooks;
 use PeakURL\Includes\PeakURL_DB;
 use PeakURL\Includes\RuntimeConfig;
 use PeakURL\Services\Crypto;
+use PeakURL\Services\Favicon;
 use PeakURL\Services\I18n;
 use PeakURL\Services\Mailer;
 
@@ -24,6 +25,102 @@ if (
 	realpath( (string) ( $_SERVER['SCRIPT_FILENAME'] ?? '' ) ) === __FILE__
 ) {
 	exit( 'Direct access forbidden.' );
+}
+
+/**
+ * Get the shared PeakURL configuration for the current request.
+ *
+ * This keeps global helpers from repeating the same config bootstrapping work
+ * each time they need settings, URLs, mail, or i18n services.
+ *
+ * @return array<string, mixed>
+ * @since 1.2.2
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
+function get_peakurl_config(): array {
+	static $config = null;
+
+	if ( null === $config ) {
+		$config = RuntimeConfig::bootstrap( ABSPATH . 'app' );
+	}
+
+	return $config;
+}
+
+/**
+ * Get the shared database connection for the current request.
+ *
+ * @param array<string, mixed>|null $config Optional app config.
+ * @return Connection
+ * @since 1.2.2
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
+function get_peakurl_connection( ?array $config = null ): Connection {
+	static $connection  = null;
+	static $config_hash = null;
+
+	$app_config = $config ?? get_peakurl_config();
+	$next_hash  = md5(
+		(string) json_encode(
+			array(
+				'db_host'     => (string) ( $app_config['DB_HOST'] ?? '' ),
+				'db_port'     => (string) ( $app_config['DB_PORT'] ?? '' ),
+				'db_database' => (string) ( $app_config['DB_DATABASE'] ?? '' ),
+				'db_username' => (string) ( $app_config['DB_USERNAME'] ?? '' ),
+				'db_prefix'   => (string) ( $app_config['DB_PREFIX'] ?? '' ),
+			),
+		),
+	);
+
+	if ( $connection instanceof Connection && $config_hash === $next_hash ) {
+		return $connection;
+	}
+
+	$connection  = new Connection( $app_config );
+	$config_hash = $next_hash;
+
+	return $connection;
+}
+
+/**
+ * Get the shared settings API for the current request.
+ *
+ * @param array<string, mixed>|null $config     Optional app config.
+ * @param Connection|null           $connection Optional reused connection.
+ * @return SettingsApi
+ * @since 1.2.2
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
+function get_settings_api(
+	?array $config = null,
+	?Connection $connection = null
+): SettingsApi {
+	static $settings_api = null;
+	static $cache_key    = null;
+
+	$app_config     = $config ?? get_peakurl_config();
+	$app_connection = $connection ?? get_peakurl_connection( $app_config );
+	$next_cache_key = md5(
+		(string) json_encode(
+			array(
+				'db_host'     => (string) ( $app_config['DB_HOST'] ?? '' ),
+				'db_port'     => (string) ( $app_config['DB_PORT'] ?? '' ),
+				'db_database' => (string) ( $app_config['DB_DATABASE'] ?? '' ),
+				'db_username' => (string) ( $app_config['DB_USERNAME'] ?? '' ),
+				'db_prefix'   => (string) ( $app_config['DB_PREFIX'] ?? '' ),
+				'connection'  => spl_object_id( $app_connection ),
+			),
+		),
+	);
+
+	if ( $settings_api instanceof SettingsApi && $cache_key === $next_cache_key ) {
+		return $settings_api;
+	}
+
+	$settings_api = new SettingsApi( new PeakURL_DB( $app_connection ) );
+	$cache_key    = $next_cache_key;
+
+	return $settings_api;
 }
 
 /**
@@ -48,16 +145,15 @@ function PeakURL_Mail(
 	string $message,
 	array $args = array()
 ): bool {
-	$config     = RuntimeConfig::bootstrap( ABSPATH . 'app' );
-	$connection = new Connection( $config );
-	$settings   = new SettingsApi( new PeakURL_DB( $connection ) );
-	$crypto     = new Crypto( $config );
-	$mailer     = new Mailer( $config, $settings, $crypto );
-	$to_name    = trim( (string) ( $args['to_name'] ?? '' ) );
-	$text       = array_key_exists( 'text_body', $args )
+	$config   = get_peakurl_config();
+	$settings = get_settings_api( $config );
+	$crypto   = new Crypto( $config );
+	$mailer   = new Mailer( $config, $settings, $crypto );
+	$to_name  = trim( (string) ( $args['to_name'] ?? '' ) );
+	$text     = array_key_exists( 'text_body', $args )
 		? (string) $args['text_body']
 		: trim( html_entity_decode( strip_tags( $message ), ENT_QUOTES, 'UTF-8' ) );
-	$html       = ! empty( $args['html'] )
+	$html     = ! empty( $args['html'] )
 		? $message
 		: nl2br( htmlspecialchars( $message, ENT_QUOTES, 'UTF-8' ) );
 
@@ -77,11 +173,10 @@ function PeakURL_Mail(
  */
 // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
 function get_site_name(): string {
-	$config     = RuntimeConfig::bootstrap( ABSPATH . 'app' );
-	$connection = new Connection( $config );
-	$settings   = new SettingsApi( new PeakURL_DB( $connection ) );
-	$site_name  = trim( (string) $settings->get_option( 'site_name' ) );
-	$site_name  = '' !== $site_name ? $site_name : 'PeakURL';
+	$config    = get_peakurl_config();
+	$settings  = get_settings_api( $config );
+	$site_name = trim( (string) $settings->get_option( 'site_name' ) );
+	$site_name = '' !== $site_name ? $site_name : 'PeakURL';
 
 	return (string) apply_filters(
 		'site_name',
@@ -132,10 +227,9 @@ function trailingslashit( string $value ): string {
  */
 // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
 function get_site_url( string $path = '', ?string $scheme = null ): string {
-	$config     = RuntimeConfig::bootstrap( ABSPATH . 'app' );
-	$connection = new Connection( $config );
-	$settings   = new SettingsApi( new PeakURL_DB( $connection ) );
-	$site_url   = trim( (string) $settings->get_option( 'site_url' ) );
+	$config   = get_peakurl_config();
+	$settings = get_settings_api( $config );
+	$site_url = trim( (string) $settings->get_option( 'site_url' ) );
 
 	if ( '' === $site_url ) {
 		$site_url = trim( (string) ( $config['SITE_URL'] ?? '' ) );
@@ -235,6 +329,189 @@ function get_api_base_url( string $path = '', ?string $scheme = null ): string {
 // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
 function api_base_url( string $path = '', ?string $scheme = null ): string {
 	return get_api_base_url( $path, $scheme );
+}
+
+/**
+ * Build the client data object consumed by the dashboard app.
+ *
+ * This is the one PHP source for `window.__PEAKURL__` values. Packaged HTML
+ * rendering and the Vite i18n fallback both use this helper so their payloads
+ * cannot drift from each other.
+ *
+ * @param array<string, mixed> $args Optional dependencies and value overrides.
+ * @return array<string, mixed>
+ * @since 1.2.2
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function get_peakurl_data( array $args = array() ): array {
+	/*
+	 * Resolve shared services first. Callers can pass existing dependencies so
+	 * this helper does not open extra database connections in normal requests.
+	 */
+	$app_config = isset( $args['config'] ) && is_array( $args['config'] )
+		? $args['config']
+		: get_peakurl_config();
+	$connection = isset( $args['connection'] ) &&
+		$args['connection'] instanceof Connection
+		? $args['connection']
+		: get_peakurl_connection( $app_config );
+	$settings   = isset( $args['settings_api'] ) &&
+		$args['settings_api'] instanceof SettingsApi
+		? $args['settings_api']
+		: get_settings_api( $app_config, $connection );
+	$i18n       = isset( $args['i18n_service'] ) &&
+		$args['i18n_service'] instanceof I18n
+		? $args['i18n_service']
+		: get_i18n_service( $app_config, $connection );
+
+	/*
+	 * Read payload settings in one query. The local option helper keeps later
+	 * value resolution short and consistently trimmed.
+	 */
+	$options = $settings->get_options(
+		array(
+			'installed_version',
+			'site_name',
+			'site_time_format',
+			'site_timezone',
+			'site_url',
+		)
+	);
+	$option  = static function ( string $name ) use ( $options ): string {
+		return trim( (string) ( $options[ $name ] ?? '' ) );
+	};
+
+	/*
+	 * Resolve public site identity from settings first, with config fallback
+	 * for early install and source-checkout development flows.
+	 */
+	$site_name = array_key_exists( 'site_name', $args )
+		? trim( (string) $args['site_name'] )
+		: $option( 'site_name' );
+	$site_name = '' !== $site_name ? $site_name : 'PeakURL';
+
+	$site_url = array_key_exists( 'site_url', $args )
+		? trim( (string) $args['site_url'] )
+		: $option( 'site_url' );
+
+	if ( '' === $site_url ) {
+		$site_url = trim(
+			(string) ( $app_config[ Constants::CONFIG_SITE_URL ] ?? '' ),
+		);
+	}
+
+	$site_url = untrailingslashit( $site_url );
+	$site_url = (string) apply_filters( 'site_url', $site_url, '', null );
+
+	/*
+	 * Normalize the mount path. Root installs use an empty string, while
+	 * subdirectory installs keep one leading slash and no trailing slash.
+	 */
+	if ( array_key_exists( 'base_path', $args ) ) {
+		$base_path = trim( str_replace( '\\', '/', (string) $args['base_path'] ) );
+	} else {
+		$parsed_path = parse_url( $site_url, PHP_URL_PATH );
+		$base_path   = is_string( $parsed_path ) ? $parsed_path : '';
+	}
+
+	$base_path = trim( $base_path );
+	$base_path = '' === $base_path || '/' === $base_path
+		? ''
+		: '/' . trim( $base_path, '/' );
+
+	/*
+	 * Resolve locale and dashboard time preferences in the same shape exposed
+	 * through `window.__PEAKURL__`.
+	 */
+	$locale = array_key_exists( 'locale', $args )
+		? $i18n->normalize_locale( (string) $args['locale'] )
+		: $i18n->get_current_locale();
+
+	$timezone = array_key_exists( 'timezone', $args )
+		? trim( (string) $args['timezone'] )
+		: $option( 'site_timezone' );
+
+	if (
+		'' === $timezone ||
+		! in_array( $timezone, \DateTimeZone::listIdentifiers(), true )
+	) {
+		$timezone = Constants::DEFAULT_TIMEZONE;
+	}
+
+	$time_format = array_key_exists( 'time_format', $args )
+		? trim( (string) $args['time_format'] )
+		: $option( 'site_time_format' );
+	$time_format = in_array( $time_format, array( '12', '24' ), true )
+		? $time_format
+		: Constants::DEFAULT_TIME_FORMAT;
+
+	/*
+	 * Prefer the installed version from settings because it reflects the
+	 * applied release. Debug can still be forced by callers such as site HTML.
+	 */
+	$version = array_key_exists( 'version', $args )
+		? trim( (string) $args['version'] )
+		: $option( 'installed_version' );
+	$version = '' !== $version
+		? $version
+		: (string) ( $app_config[ Constants::CONFIG_VERSION ] ?? Constants::DEFAULT_VERSION );
+
+	$debug_enabled = array_key_exists( 'debug', $args )
+		? (bool) $args['debug']
+		: ! empty( $app_config[ Constants::CONFIG_DEBUG ] );
+
+	/*
+	 * Reuse caller-provided favicon data when available; otherwise ask the
+	 * favicon service so HTML and API fallback payloads stay aligned.
+	 */
+	if (
+		array_key_exists( 'favicon', $args ) &&
+		( is_array( $args['favicon'] ) || null === $args['favicon'] )
+	) {
+		$favicon = $args['favicon'];
+	} else {
+		$favicon_service = isset( $args['favicon_service'] ) &&
+			$args['favicon_service'] instanceof Favicon
+			? $args['favicon_service']
+			: new Favicon( $app_config, $settings );
+		$favicon         = $favicon_service->get_settings( $site_name );
+	}
+
+	/*
+	 * Accept preloaded catalogs from callers that already resolved i18n data,
+	 * avoiding duplicate catalog work during HTML rendering and API fallback.
+	 */
+	if ( isset( $args['i18n'] ) && is_array( $args['i18n'] ) ) {
+		$catalog = $args['i18n'];
+	} elseif ( isset( $args['catalog'] ) && is_array( $args['catalog'] ) ) {
+		$catalog = $args['catalog'];
+	} else {
+		$catalog = $i18n->get_dashboard_catalog( $locale );
+	}
+
+	/*
+	 * Keep the public client contract compact: one object, stable camelCase
+	 * keys, and one filter for extension code to add fields intentionally.
+	 */
+	$data     = array(
+		'basePath'      => $base_path,
+		'apiBase'       => $base_path . Constants::API_BASE_PATH,
+		'siteUrl'       => $site_url,
+		'siteName'      => $site_name,
+		'version'       => $version,
+		'debug'         => $debug_enabled,
+		'locale'        => $locale,
+		'htmlLang'      => $i18n->get_html_lang( $locale ),
+		'textDirection' => $i18n->get_text_direction( $locale ),
+		'textDomain'    => Constants::I18N_TEXT_DOMAIN,
+		'timezone'      => $timezone,
+		'timeFormat'    => $time_format,
+		'favicon'       => $favicon,
+		'i18n'          => $catalog,
+	);
+	$filtered = apply_filters( 'peakurl_data', $data, $args );
+
+	return is_array( $filtered ) ? $filtered : $data;
 }
 
 /**
@@ -450,7 +727,7 @@ function get_i18n_service(
 		}
 	}
 
-	$app_config = $config ?? RuntimeConfig::bootstrap( ABSPATH . 'app' );
+	$app_config = $config ?? get_peakurl_config();
 	$next_hash  = md5(
 		(string) json_encode(
 			array(
@@ -465,8 +742,8 @@ function get_i18n_service(
 		return $service;
 	}
 
-	$app_connection = $connection ?? new Connection( $app_config );
-	$settings_api   = new SettingsApi( new PeakURL_DB( $app_connection ) );
+	$app_connection = $connection ?? get_peakurl_connection( $app_config );
+	$settings_api   = get_settings_api( $app_config, $app_connection );
 	$service        = new I18n( $app_config, $settings_api );
 	$config_hash    = $next_hash;
 
@@ -593,7 +870,7 @@ function get_maintenance_view_data(
 	?array $config = null,
 	?Connection $connection = null
 ): array {
-	$app_config     = $config ?? RuntimeConfig::bootstrap( ABSPATH . 'app' );
+	$app_config     = $config ?? get_peakurl_config();
 	$app_connection = $connection;
 	$site_name      = 'PeakURL';
 	$locale         = Constants::DEFAULT_LOCALE;
@@ -606,13 +883,13 @@ function get_maintenance_view_data(
 			null === $app_connection &&
 			file_exists( ABSPATH . 'config.php' )
 		) {
-			$app_connection = new Connection( $app_config );
+			$app_connection = get_peakurl_connection( $app_config );
 		}
 
 		$i18n_service   = new I18n(
 			$app_config,
 			null !== $app_connection
-				? new SettingsApi( new PeakURL_DB( $app_connection ) )
+				? get_settings_api( $app_config, $app_connection )
 				: null,
 		);
 		$locale         = $i18n_service->load_locale();

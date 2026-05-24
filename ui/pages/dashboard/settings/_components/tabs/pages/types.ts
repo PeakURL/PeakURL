@@ -1,64 +1,32 @@
 import type { LucideIcon } from "lucide-react";
-import type { ButtonVariant, NotificationContextValue } from "@/components";
-import type { InstalledLanguage, TextDirection } from "@/i18n/types";
 import type {
 	ApiKeySummary,
+	EmailStatus,
+	LocationDataStatus,
+	SiteSettings,
+} from "@/api";
+import type { ButtonVariant, NotificationContextValue } from "@/components";
+import type {
 	GeneralFormPayload,
 	GeneralFormState,
 	MailDriver,
 	SmtpEncryption,
-	SiteTimeFormat,
 } from "../types";
 
-/**
- * Configured site favicon metadata shown in the General settings tab.
- */
-export interface SiteFavicon {
-	configured?: boolean;
-	isCustom?: boolean;
-	url?: string | null;
-	iconUrl?: string | null;
-	appleTouchUrl?: string | null;
-	manifestUrl?: string | null;
-	mimeType?: string | null;
-	width?: number | string | null;
-	height?: number | string | null;
-	sizes?: string | null;
-	updatedAt?: string | null;
-	recommendedSize?: string | null;
-}
-
-/**
- * Site-level social preview metadata shown in the General settings tab.
- */
-export interface SiteSocialPreview {
-	configured?: boolean;
-	url?: string | null;
-	mimeType?: string | null;
-	width?: number | string | null;
-	height?: number | string | null;
-	sizes?: string | null;
-	updatedAt?: string | null;
-	recommendedSize?: string | null;
-}
-
-/**
- * Site-level settings required by the general settings tab.
- */
-export interface SiteSettings {
-	siteName?: string | null;
-	siteTagline?: string | null;
-	siteUrl?: string | null;
-	siteLanguage?: string | null;
-	siteTimezone?: string | null;
-	siteTimeFormat?: SiteTimeFormat | null;
-	textDirection?: TextDirection;
-	isRtl?: boolean;
-	canManageSiteSettings?: boolean;
-	availableLanguages?: InstalledLanguage[];
-	favicon?: SiteFavicon | null;
-	socialPreview?: SiteSocialPreview | null;
-}
+export type {
+	BackupCodesResponse,
+	EmailStatus,
+	LocationDataStatus,
+	RevokeOtherSessionsResponse,
+	SecuritySettingsPayload,
+	SecuritySettingsResponse,
+	SecuritySession,
+	SecuritySessionLocation,
+	SiteFavicon,
+	SiteSettings,
+	SiteSocialPreview,
+	TwoFactorSetupResponse,
+} from "@/api";
 
 /**
  * Props for the general settings tab.
@@ -116,27 +84,6 @@ export interface ApiKeyModalsProps {
 }
 
 /**
- * Current mail delivery status returned by the email configuration API.
- */
-export interface EmailStatus {
-	driver?: MailDriver | null;
-	configuredFromEmail?: string | null;
-	configuredFromName?: string | null;
-	fromName?: string | null;
-	smtpHost?: string | null;
-	smtpPort?: number | string | null;
-	smtpEncryption?: SmtpEncryption | null;
-	smtpAuth?: boolean | null;
-	smtpUsername?: string | null;
-	smtpPasswordConfigured?: boolean;
-	smtpPasswordHint?: string | null;
-	canManageFromDashboard?: boolean;
-	manageDisabledReason?: string | null;
-	canSendTestEmail?: boolean;
-	testDisabledReason?: string | null;
-}
-
-/**
  * Editable email delivery form state.
  */
 export interface EmailFormState {
@@ -172,22 +119,6 @@ export interface MethodButtonProps {
 	title: string;
 	description: string;
 	onClick: () => void;
-}
-
-/**
- * GeoLite2 status and credential metadata shown in the location data tab.
- */
-export interface LocationDataStatus {
-	locationAnalyticsReady?: boolean;
-	lastDownloadedAt?: string | null;
-	databaseUpdatedAt?: string | null;
-	databaseSizeBytes?: number | string | null;
-	credentialsConfigured?: boolean;
-	accountId?: string | null;
-	configurationLabel?: string | null;
-	canManageFromDashboard?: boolean;
-	manageDisabledReason?: string | null;
-	licenseKeyHint?: string | null;
 }
 
 /**
@@ -249,74 +180,6 @@ export interface SecurityFormState {
 	currentPassword: string;
 	newPassword: string;
 	confirmPassword: string;
-}
-
-/**
- * Single active or revoked session shown in the security tab.
- */
-export interface SecuritySessionLocation {
-	city?: string | null;
-	country?: string | null;
-	countryCode?: string | null;
-	isPublic?: boolean | null;
-}
-
-export interface SecuritySession {
-	id: string;
-	browser?: string | null;
-	os?: string | null;
-	ipAddress?: string | null;
-	location?: SecuritySessionLocation | null;
-	lastActiveAt?: string | null;
-	isCurrent?: boolean;
-	revokedAt?: string | null;
-}
-
-/**
- * Security settings payload returned by the profile API.
- */
-export interface SecuritySettingsPayload {
-	sessions?: SecuritySession[];
-	twoFactorEnabled?: boolean;
-	hasPendingSetup?: boolean;
-	backupCodesRemaining?: number;
-	backupCodesLastGeneratedAt?: string | null;
-}
-
-/**
- * RTK Query wrapper for the security settings response.
- */
-export interface SecuritySettingsResponse {
-	data?: SecuritySettingsPayload;
-}
-
-/**
- * Setup response returned when starting 2FA enrollment.
- */
-export interface TwoFactorSetupResponse {
-	data?: {
-		secret?: string | null;
-		otpauthUrl?: string | null;
-		qrDataUrl?: string | null;
-	};
-}
-
-/**
- * Response payload that contains generated backup codes.
- */
-export interface BackupCodesResponse {
-	data?: {
-		backupCodes?: string[];
-	};
-}
-
-/**
- * Response payload returned when ending all other sessions.
- */
-export interface RevokeOtherSessionsResponse {
-	data?: {
-		revokedCount?: number;
-	};
 }
 
 /**

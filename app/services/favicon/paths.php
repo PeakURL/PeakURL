@@ -56,7 +56,7 @@ class Paths {
 	public function __construct( array $config ) {
 		$this->content_dir = rtrim(
 			(string) (
-				$config[ Constants::CONFIG_CONTENT_DIR ]
+				$config[ Constants::CONTENT_DIR ]
 				?? ABSPATH . Constants::DEFAULT_CONTENT_DIR
 			),
 			'/\\',

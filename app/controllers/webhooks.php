@@ -76,13 +76,13 @@ class WebhooksController extends BaseController {
 	public function delete( Request $request ): array {
 		$deleted = $this->data_store->delete_webhook(
 			$request,
-			(string) $request->get_route_param( 'id' ),
+			$this->route_param( $request, 'id' ),
 		);
 
-		if ( ! $deleted ) {
-			return $this->not_found_response( __( 'Webhook not found.', 'peakurl' ) );
-		}
-
-		return $this->boolean_response( 'deleted', __( 'Webhook deleted.', 'peakurl' ) );
+		return $this->delete_response(
+			$deleted,
+			__( 'Webhook not found.', 'peakurl' ),
+			__( 'Webhook deleted.', 'peakurl' ),
+		);
 	}
 }

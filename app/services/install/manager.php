@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace PeakURL\Services\Install;
 
 use PeakURL\Includes\Connection;
+use PeakURL\Includes\Constants;
 use PeakURL\Includes\RuntimeConfig;
 use PeakURL\Http\Request;
 use PeakURL\Services\I18n;
@@ -24,9 +25,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Manager — final release installer flow for site and admin setup.
  *
- * Validates the install submission, writes the runtime config with the
- * install-only seed values, creates the schema, bootstraps the site,
- * and then rewrites config.php without the temporary install secrets.
+ * Validates the install submission, writes the runtime config with
+ * temporary install values, creates the schema, bootstraps the site,
+ * and then rewrites config.php without those setup-only secrets.
  *
  * @since 1.0.14
  */
@@ -91,8 +92,8 @@ class Manager {
 			$data_store->login(
 				$request,
 				array(
-					'identifier' => $values['PEAKURL_OWNER_USERNAME'],
-					'password'   => $values['PEAKURL_OWNER_PASSWORD'],
+					'identifier' => $values[ Constants::OWNER_USERNAME ],
+					'password'   => $values[ Constants::OWNER_PASSWORD ],
 				)
 			);
 
@@ -127,7 +128,7 @@ class Manager {
 	 */
 	private static function normalize_input( array $input, array $config ): array {
 		$site_url       = Site::normalize_url(
-			(string) ( $config['SITE_URL'] ?? '' ),
+			(string) ( $config[ Constants::SITE_URL ] ?? '' ),
 		);
 		$workspace_name = trim( (string) ( $input['workspace_name'] ?? '' ) );
 		$workspace_slug = sanitize_title(
@@ -175,18 +176,18 @@ class Manager {
 			);
 		}
 
-		$values                             = Writer::prepare_config_values( $config );
-		$values['SITE_URL']                 = $site_url;
-		$values['SESSION_COOKIE_PATH']      = Site::get_cookie_path( $site_url );
-		$values['PEAKURL_WORKSPACE_NAME']   = $workspace_name;
-		$values['PEAKURL_WORKSPACE_SLUG']   = $workspace_slug;
-		$values['PEAKURL_OWNER_FIRST_NAME'] = $owner_names['first_name'];
-		$values['PEAKURL_OWNER_LAST_NAME']  = $owner_names['last_name'];
-		$values['PEAKURL_OWNER_USERNAME']   = $owner_username;
-		$values['PEAKURL_OWNER_EMAIL']      = $owner_email;
-		$values['PEAKURL_OWNER_PASSWORD']   = $owner_password;
-		$values['PEAKURL_SITE_LANGUAGE']    = $site_language;
-		$values['PEAKURL_OWNER_FALLBACK']   = 'false';
+		$values                                   = Writer::prepare_config_values( $config );
+		$values[ Constants::SITE_URL ]            = $site_url;
+		$values[ Constants::SESSION_COOKIE_PATH ] = Site::get_cookie_path( $site_url );
+		$values[ Constants::WORKSPACE_NAME ]      = $workspace_name;
+		$values[ Constants::WORKSPACE_SLUG ]      = $workspace_slug;
+		$values[ Constants::OWNER_FIRST_NAME ]    = $owner_names['first_name'];
+		$values[ Constants::OWNER_LAST_NAME ]     = $owner_names['last_name'];
+		$values[ Constants::OWNER_USERNAME ]      = $owner_username;
+		$values[ Constants::OWNER_EMAIL ]         = $owner_email;
+		$values[ Constants::OWNER_PASSWORD ]      = $owner_password;
+		$values[ Constants::SITE_LANGUAGE ]       = $site_language;
+		$values[ Constants::OWNER_FALLBACK ]      = 'false';
 
 		return $values;
 	}

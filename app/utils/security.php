@@ -31,7 +31,7 @@ class Security {
 	/**
 	 * Resolve the Access-Control-Allow-Origin value for the response.
 	 *
-	 * Returns the request origin when it matches the configured SITE_URL,
+	 * Returns the request origin when it matches the configured site URL,
 	 * or falls back to the site origin. Returns '' when neither matches.
 	 *
 	 * @param array<string, mixed> $config        Merged runtime configuration.
@@ -44,7 +44,7 @@ class Security {
 		array $server_params
 	): string {
 		$request_origin = self::extract_origin( (string) ( $server_params['HTTP_ORIGIN'] ?? '' ) );
-		$site_origin    = self::extract_origin( (string) ( $config['SITE_URL'] ?? '' ) );
+		$site_origin    = self::extract_origin( (string) ( $config[ Constants::SITE_URL ] ?? '' ) );
 
 		if ( '' === $request_origin ) {
 			return $site_origin;
@@ -109,7 +109,7 @@ class Security {
 	 */
 	public static function is_same_origin( array $config, string $origin ): bool {
 		$request_origin = self::extract_origin( $origin );
-		$site_origin    = self::extract_origin( (string) ( $config['SITE_URL'] ?? '' ) );
+		$site_origin    = self::extract_origin( (string) ( $config[ Constants::SITE_URL ] ?? '' ) );
 
 		return '' !== $request_origin &&
 			'' !== $site_origin &&
@@ -133,14 +133,14 @@ class Security {
 		array $overrides = array()
 	): array {
 		$options = array(
-			'path'     => (string) ( $config[ Constants::CONFIG_SESSION_COOKIE_PATH ] ?? '/' ),
+			'path'     => (string) ( $config[ Constants::SESSION_COOKIE_PATH ] ?? '/' ),
 			'httponly' => true,
 			'samesite' =>
-				(string) ( $config[ Constants::CONFIG_SESSION_COOKIE_SAME_SITE ] ?? Constants::DEFAULT_SESSION_COOKIE_SAME_SITE ),
+				(string) ( $config[ Constants::SESSION_COOKIE_SAME_SITE ] ?? Constants::DEFAULT_SESSION_COOKIE_SAME_SITE ),
 			'secure'   => self::use_secure_cookies( $config, $request ),
 		);
 
-		$domain = trim( (string) ( $config[ Constants::CONFIG_SESSION_COOKIE_DOMAIN ] ?? '' ) );
+		$domain = trim( (string) ( $config[ Constants::SESSION_COOKIE_DOMAIN ] ?? '' ) );
 
 		if ( '' !== $domain ) {
 			$options['domain'] = $domain;
@@ -187,7 +187,7 @@ class Security {
 	): bool {
 		$mode = strtolower(
 			trim(
-				(string) ( $config[ Constants::CONFIG_SESSION_COOKIE_SECURE ] ?? Constants::DEFAULT_SESSION_COOKIE_SECURE ),
+				(string) ( $config[ Constants::SESSION_COOKIE_SECURE ] ?? Constants::DEFAULT_SESSION_COOKIE_SECURE ),
 			),
 		);
 

@@ -400,7 +400,7 @@ trait AuthTrait {
 		}
 
 		$request->expire_cookie(
-			(string) $this->config[ Constants::CONFIG_SESSION_COOKIE_NAME ],
+			(string) $this->config[ Constants::SESSION_COOKIE_NAME ],
 			Security::session_cookie_options( $this->config, $request ),
 		);
 

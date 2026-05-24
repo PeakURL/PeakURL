@@ -39,18 +39,7 @@ class JsonResponse {
 		string $message = 'OK',
 		int $status = 200
 	): array {
-		return array(
-			'status'  => $status,
-			'headers' => array(
-				'Content-Type' => 'application/json; charset=utf-8',
-			),
-			'body'    => array(
-				'success'   => true,
-				'message'   => $message,
-				'data'      => $data,
-				'timestamp' => gmdate( DATE_ATOM ),
-			),
-		);
+		return self::json( true, $message, $data, $status );
 	}
 
 	/**
@@ -71,13 +60,35 @@ class JsonResponse {
 			$message = __( 'Something went wrong.', 'peakurl' );
 		}
 
+		return self::json( false, $message, $data, $status );
+	}
+
+	/**
+	 * Build the shared JSON response envelope.
+	 *
+	 * Keeps success and error responses on the same response structure without
+	 * duplicating headers, timestamps, or body keys.
+	 *
+	 * @param bool   $success Whether the request succeeded.
+	 * @param string $message Human-readable response message.
+	 * @param mixed  $data    JSON-serialisable payload data.
+	 * @param int    $status  HTTP status code.
+	 * @return array<string, mixed> Structured response array.
+	 * @since 1.2.2
+	 */
+	private static function json(
+		bool $success,
+		string $message,
+		$data,
+		int $status
+	): array {
 		return array(
 			'status'  => $status,
 			'headers' => array(
 				'Content-Type' => 'application/json; charset=utf-8',
 			),
 			'body'    => array(
-				'success'   => false,
+				'success'   => $success,
 				'message'   => $message,
 				'data'      => $data,
 				'timestamp' => gmdate( DATE_ATOM ),

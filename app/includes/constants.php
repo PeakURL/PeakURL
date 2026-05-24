@@ -26,38 +26,135 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class Constants {
+final class Constants {
+
+	/**
+	 * Prevent instantiation; this class only groups internal constants.
+	 *
+	 * @since 1.2.2
+	 */
+	private function __construct() {}
 
 	/** Runtime version array key. */
-	public const CONFIG_VERSION = 'PEAKURL_VERSION';
+	public const VERSION = 'PEAKURL_VERSION';
 	/** Environment key. */
-	public const CONFIG_ENV = 'PEAKURL_ENV';
+	public const ENV = 'PEAKURL_ENV';
 	/** Debug flag key. */
-	public const CONFIG_DEBUG = 'PEAKURL_DEBUG';
+	public const DEBUG = 'PEAKURL_DEBUG';
 	/** Site URL key. */
-	public const CONFIG_SITE_URL = 'SITE_URL';
+	public const SITE_URL = 'SITE_URL';
 	/** Auth key config name. */
-	public const CONFIG_AUTH_KEY = 'PEAKURL_AUTH_KEY';
+	public const AUTH_KEY = 'PEAKURL_AUTH_KEY';
 	/** Auth salt config name. */
-	public const CONFIG_AUTH_SALT = 'PEAKURL_AUTH_SALT';
+	public const AUTH_SALT = 'PEAKURL_AUTH_SALT';
 	/** Update manifest URL key. */
-	public const CONFIG_UPDATE_MANIFEST_URL = 'PEAKURL_UPDATE_MANIFEST_URL';
+	public const UPDATE_MANIFEST_URL = 'PEAKURL_UPDATE_MANIFEST_URL';
 	/** Content directory key. */
-	public const CONFIG_CONTENT_DIR = 'PEAKURL_CONTENT_DIR';
+	public const CONTENT_DIR = 'PEAKURL_CONTENT_DIR';
 	/** GeoIP database path key. */
-	public const CONFIG_GEOIP_DB_PATH = 'PEAKURL_GEOIP_DB_PATH';
+	public const GEOIP_DB_PATH = 'PEAKURL_GEOIP_DB_PATH';
 	/** Session cookie name key. */
-	public const CONFIG_SESSION_COOKIE_NAME = 'SESSION_COOKIE_NAME';
+	public const SESSION_COOKIE_NAME = 'SESSION_COOKIE_NAME';
 	/** Session lifetime key. */
-	public const CONFIG_SESSION_LIFETIME = 'SESSION_LIFETIME';
+	public const SESSION_LIFETIME = 'SESSION_LIFETIME';
 	/** Session cookie path key. */
-	public const CONFIG_SESSION_COOKIE_PATH = 'SESSION_COOKIE_PATH';
+	public const SESSION_COOKIE_PATH = 'SESSION_COOKIE_PATH';
 	/** Session cookie domain key. */
-	public const CONFIG_SESSION_COOKIE_DOMAIN = 'SESSION_COOKIE_DOMAIN';
+	public const SESSION_COOKIE_DOMAIN = 'SESSION_COOKIE_DOMAIN';
 	/** Session cookie SameSite key. */
-	public const CONFIG_SESSION_COOKIE_SAME_SITE = 'SESSION_COOKIE_SAME_SITE';
+	public const SESSION_COOKIE_SAME_SITE = 'SESSION_COOKIE_SAME_SITE';
 	/** Session cookie secure-mode key. */
-	public const CONFIG_SESSION_COOKIE_SECURE = 'SESSION_COOKIE_SECURE';
+	public const SESSION_COOKIE_SECURE = 'SESSION_COOKIE_SECURE';
+	/** Database host key. */
+	public const DB_HOST = 'DB_HOST';
+	/** Database port key. */
+	public const DB_PORT = 'DB_PORT';
+	/** Database name key. */
+	public const DB_DATABASE = 'DB_DATABASE';
+	/** Database username key. */
+	public const DB_USERNAME = 'DB_USERNAME';
+	/** Database password key. */
+	public const DB_PASSWORD = 'DB_PASSWORD';
+	/** Database charset key. */
+	public const DB_CHARSET = 'DB_CHARSET';
+	/** Database table-prefix key. */
+	public const DB_PREFIX = 'DB_PREFIX';
+	/** Install owner fallback flag key. */
+	public const OWNER_FALLBACK = 'PEAKURL_OWNER_FALLBACK';
+	/** Install owner first-name key. */
+	public const OWNER_FIRST_NAME = 'PEAKURL_OWNER_FIRST_NAME';
+	/** Install owner last-name key. */
+	public const OWNER_LAST_NAME = 'PEAKURL_OWNER_LAST_NAME';
+	/** Install owner username key. */
+	public const OWNER_USERNAME = 'PEAKURL_OWNER_USERNAME';
+	/** Install owner email key. */
+	public const OWNER_EMAIL = 'PEAKURL_OWNER_EMAIL';
+	/** Install owner password key. */
+	public const OWNER_PASSWORD = 'PEAKURL_OWNER_PASSWORD';
+	/** Install site language key. */
+	public const SITE_LANGUAGE = 'PEAKURL_SITE_LANGUAGE';
+	/** Install site name key. */
+	public const WORKSPACE_NAME = 'PEAKURL_WORKSPACE_NAME';
+	/** Install site slug key. */
+	public const WORKSPACE_SLUG = 'PEAKURL_WORKSPACE_SLUG';
+
+	/** Runtime config keys parsed from config.php and .env files. */
+	public const RUNTIME_KEYS = array(
+		self::ENV,
+		self::DEBUG,
+		self::SITE_URL,
+		self::AUTH_KEY,
+		self::AUTH_SALT,
+		self::UPDATE_MANIFEST_URL,
+		self::CONTENT_DIR,
+		self::GEOIP_DB_PATH,
+		self::DB_HOST,
+		self::DB_PORT,
+		self::DB_DATABASE,
+		self::DB_USERNAME,
+		self::DB_PASSWORD,
+		self::DB_CHARSET,
+		self::DB_PREFIX,
+		self::SESSION_COOKIE_NAME,
+		self::SESSION_LIFETIME,
+		self::SESSION_COOKIE_PATH,
+		self::SESSION_COOKIE_DOMAIN,
+		self::SESSION_COOKIE_SAME_SITE,
+		self::SESSION_COOKIE_SECURE,
+	);
+
+	/** Install-only keys removed from config.php after setup. */
+	public const INSTALL_KEYS = array(
+		self::OWNER_FALLBACK,
+		self::OWNER_FIRST_NAME,
+		self::OWNER_LAST_NAME,
+		self::OWNER_USERNAME,
+		self::OWNER_EMAIL,
+		self::OWNER_PASSWORD,
+		self::SITE_LANGUAGE,
+		self::WORKSPACE_NAME,
+		self::WORKSPACE_SLUG,
+	);
+
+	/** Install keys required before the site can bootstrap. */
+	public const INSTALL_REQUIRED_KEYS = array(
+		self::OWNER_USERNAME,
+		self::OWNER_EMAIL,
+		self::OWNER_PASSWORD,
+		self::WORKSPACE_NAME,
+		self::WORKSPACE_SLUG,
+	);
+
+	/** Database keys that identify a connection. */
+	public const DB_KEYS = array(
+		self::DB_HOST,
+		self::DB_PORT,
+		self::DB_DATABASE,
+		self::DB_USERNAME,
+		self::DB_PASSWORD,
+		self::DB_CHARSET,
+		self::DB_PREFIX,
+	);
 
 	/** Canonical version file name. */
 	public const VERSION_FILE = '.version';

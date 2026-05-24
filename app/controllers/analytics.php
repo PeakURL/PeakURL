@@ -96,10 +96,13 @@ class AnalyticsController extends BaseController {
 		return $this->success_response(
 			$this->data_store->activity_history(
 				$request,
-				array(
-					'page'     => $request->get_query_param( 'page', 1 ),
-					'limit'    => $request->get_query_param( 'limit', 25 ),
-					'category' => $request->get_query_param( 'category', '' ),
+				$this->query_params(
+					$request,
+					array(
+						'page'     => 1,
+						'limit'    => 25,
+						'category' => '',
+					),
 				),
 			),
 			__( 'Activity history loaded.', 'peakurl' ),
@@ -118,15 +121,12 @@ class AnalyticsController extends BaseController {
 	public function delete( Request $request ): array {
 		$deleted = $this->data_store->delete_activity_log(
 			$request,
-			(string) $request->get_route_param( 'id' ),
+			$this->route_param( $request, 'id' ),
 		);
 
-		if ( ! $deleted ) {
-			return $this->not_found_response( __( 'Activity log not found.', 'peakurl' ) );
-		}
-
-		return $this->boolean_response(
-			'deleted',
+		return $this->delete_response(
+			$deleted,
+			__( 'Activity log not found.', 'peakurl' ),
 			__( 'Activity log deleted.', 'peakurl' ),
 		);
 	}
@@ -141,10 +141,9 @@ class AnalyticsController extends BaseController {
 	 * @since 1.0.6
 	 */
 	public function bulk_delete( Request $request ): array {
-		$ids   = $request->get_body_param( 'ids', array() );
 		$count = $this->data_store->bulk_delete_activity_logs(
 			$request,
-			is_array( $ids ) ? $ids : array(),
+			$this->body_array_param( $request, 'ids' ),
 		);
 
 		return $this->success_response(
@@ -168,14 +167,14 @@ class AnalyticsController extends BaseController {
 	public function location( Request $request ): array {
 		$location = $this->data_store->link_location(
 			$request,
-			(string) $request->get_route_param( 'id' ),
+			$this->route_param( $request, 'id' ),
 		);
 
-		if ( ! $location ) {
-			return $this->not_found_response( __( 'Link analytics not found.', 'peakurl' ) );
-		}
-
-		return $this->success_response( $location, __( 'Location analytics loaded.', 'peakurl' ) );
+		return $this->found_response(
+			$location,
+			__( 'Link analytics not found.', 'peakurl' ),
+			__( 'Location analytics loaded.', 'peakurl' ),
+		);
 	}
 
 	/**
@@ -194,16 +193,16 @@ class AnalyticsController extends BaseController {
 		$custom_date_to   = trim( (string) $request->get_query_param( 'to', '' ) );
 		$stats            = $this->data_store->link_stats(
 			$request,
-			(string) $request->get_route_param( 'id' ),
+			$this->route_param( $request, 'id' ),
 			$range,
 			$custom_date_from,
 			$custom_date_to,
 		);
 
-		if ( ! $stats ) {
-			return $this->not_found_response( __( 'Link analytics not found.', 'peakurl' ) );
-		}
-
-		return $this->success_response( $stats, __( 'Link analytics loaded.', 'peakurl' ) );
+		return $this->found_response(
+			$stats,
+			__( 'Link analytics not found.', 'peakurl' ),
+			__( 'Link analytics loaded.', 'peakurl' ),
+		);
 	}
 }

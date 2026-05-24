@@ -177,12 +177,12 @@ class Locale {
 		string $locale = ''
 	): array {
 		$config = array(
-			Constants::CONFIG_CONTENT_DIR => rtrim( $root_path, '/\\' ) . DIRECTORY_SEPARATOR . Constants::DEFAULT_CONTENT_DIR,
-			Constants::CONFIG_SITE_URL    => '',
+			Constants::CONTENT_DIR => rtrim( $root_path, '/\\' ) . DIRECTORY_SEPARATOR . Constants::DEFAULT_CONTENT_DIR,
+			Constants::SITE_URL    => '',
 		);
 
 		if ( '' !== $locale ) {
-			$config['PEAKURL_SITE_LANGUAGE'] = $locale;
+			$config[ Constants::SITE_LANGUAGE ] = $locale;
 		}
 
 		return $config;

@@ -58,149 +58,170 @@ class RuntimeConfig {
 			self::parse_env_file( $base_path . '/.env' ),
 		);
 		$site_url    = self::get_value(
-			'SITE_URL',
+			Constants::SITE_URL,
 			$file_values,
 			'http://localhost:5173',
 		);
 
 		return array(
-			Constants::CONFIG_VERSION                  => self::read_version_file(
+			Constants::VERSION                  => self::read_version_file(
 				$root_path . '/' . Constants::VERSION_FILE,
 			),
-			Constants::CONFIG_ENV                      => self::get_value(
-				Constants::CONFIG_ENV,
+			Constants::ENV                      => self::get_value(
+				Constants::ENV,
 				$file_values,
 				'development',
 			),
-			Constants::CONFIG_SITE_URL                 => self::get_value(
-				Constants::CONFIG_SITE_URL,
+			Constants::SITE_URL                 => self::get_value(
+				Constants::SITE_URL,
 				$file_values,
 				$site_url,
 			),
-			Constants::CONFIG_AUTH_KEY                 => self::get_value(
-				Constants::CONFIG_AUTH_KEY,
+			Constants::AUTH_KEY                 => self::get_value(
+				Constants::AUTH_KEY,
 				$file_values,
 				'',
 			),
-			Constants::CONFIG_AUTH_SALT                => self::get_value(
-				Constants::CONFIG_AUTH_SALT,
+			Constants::AUTH_SALT                => self::get_value(
+				Constants::AUTH_SALT,
 				$file_values,
 				'',
 			),
-			Constants::CONFIG_UPDATE_MANIFEST_URL      => self::get_value(
-				Constants::CONFIG_UPDATE_MANIFEST_URL,
+			Constants::UPDATE_MANIFEST_URL      => self::get_value(
+				Constants::UPDATE_MANIFEST_URL,
 				$file_values,
 				Constants::DEFAULT_UPDATE_MANIFEST_URL,
 			),
-			Constants::CONFIG_CONTENT_DIR              => self::get_path_value(
+			Constants::CONTENT_DIR              => self::get_path_value(
 				self::get_value(
-					Constants::CONFIG_CONTENT_DIR,
+					Constants::CONTENT_DIR,
 					$file_values,
 					Constants::DEFAULT_CONTENT_DIR,
 				),
 				$root_path,
 			),
-			Constants::CONFIG_GEOIP_DB_PATH            => self::get_path_value(
+			Constants::GEOIP_DB_PATH            => self::get_path_value(
 				self::get_value(
-					Constants::CONFIG_GEOIP_DB_PATH,
+					Constants::GEOIP_DB_PATH,
 					$file_values,
 					Constants::DEFAULT_GEOIP_DB_PATH,
 				),
 				$root_path,
 			),
-			Constants::CONFIG_DEBUG                    => self::get_bool_value(
-				Constants::CONFIG_DEBUG,
+			Constants::DEBUG                    => self::get_bool_value(
+				Constants::DEBUG,
 				$file_values,
 				false,
 			),
-			'DB_HOST'                                  => self::get_value( 'DB_HOST', $file_values, '127.0.0.1' ),
-			'DB_PORT'                                  => (int) self::get_value( 'DB_PORT', $file_values, '3306' ),
-			'DB_DATABASE'                              => self::normalize_db_name(
+			Constants::DB_HOST                  => self::get_value(
+				Constants::DB_HOST,
+				$file_values,
+				'127.0.0.1',
+			),
+			Constants::DB_PORT                  => (int) self::get_value(
+				Constants::DB_PORT,
+				$file_values,
+				'3306',
+			),
+			Constants::DB_DATABASE              => self::normalize_db_name(
 				self::get_value(
-					'DB_DATABASE',
+					Constants::DB_DATABASE,
 					$file_values,
 					'peakurl',
 				),
 			),
-			'DB_USERNAME'                              => self::get_value( 'DB_USERNAME', $file_values, 'root' ),
-			'DB_PASSWORD'                              => self::get_value( 'DB_PASSWORD', $file_values, '' ),
-			'DB_CHARSET'                               => self::get_value(
-				'DB_CHARSET',
+			Constants::DB_USERNAME              => self::get_value(
+				Constants::DB_USERNAME,
+				$file_values,
+				'root',
+			),
+			Constants::DB_PASSWORD              => self::get_value(
+				Constants::DB_PASSWORD,
+				$file_values,
+				'',
+			),
+			Constants::DB_CHARSET               => self::get_value(
+				Constants::DB_CHARSET,
 				$file_values,
 				'utf8mb4',
 			),
-			'DB_PREFIX'                                => self::normalize_db_prefix(
-				self::get_value( 'DB_PREFIX', $file_values, '' ),
+			Constants::DB_PREFIX                => self::normalize_db_prefix(
+				self::get_value( Constants::DB_PREFIX, $file_values, '' ),
 			),
-			Constants::CONFIG_SESSION_COOKIE_NAME      => self::get_value(
-				Constants::CONFIG_SESSION_COOKIE_NAME,
+			Constants::SESSION_COOKIE_NAME      => self::get_value(
+				Constants::SESSION_COOKIE_NAME,
 				$file_values,
 				Constants::DEFAULT_SESSION_COOKIE_NAME,
 			),
-			Constants::CONFIG_SESSION_LIFETIME         => (int) self::get_value(
-				Constants::CONFIG_SESSION_LIFETIME,
+			Constants::SESSION_LIFETIME         => (int) self::get_value(
+				Constants::SESSION_LIFETIME,
 				$file_values,
 				(string) Constants::DEFAULT_SESSION_LIFETIME,
 			),
-			Constants::CONFIG_SESSION_COOKIE_PATH      => self::get_value(
-				Constants::CONFIG_SESSION_COOKIE_PATH,
+			Constants::SESSION_COOKIE_PATH      => self::get_value(
+				Constants::SESSION_COOKIE_PATH,
 				$file_values,
 				self::default_cookie_path( $site_url ),
 			),
-			Constants::CONFIG_SESSION_COOKIE_DOMAIN    => self::sanitize_domain(
-				self::get_value( Constants::CONFIG_SESSION_COOKIE_DOMAIN, $file_values, '' ),
+			Constants::SESSION_COOKIE_DOMAIN    => self::sanitize_domain(
+				self::get_value( Constants::SESSION_COOKIE_DOMAIN, $file_values, '' ),
 			),
-			Constants::CONFIG_SESSION_COOKIE_SAME_SITE => self::normalize_same_site(
+			Constants::SESSION_COOKIE_SAME_SITE => self::normalize_same_site(
 				self::get_value(
-					Constants::CONFIG_SESSION_COOKIE_SAME_SITE,
+					Constants::SESSION_COOKIE_SAME_SITE,
 					$file_values,
 					Constants::DEFAULT_SESSION_COOKIE_SAME_SITE,
 				),
 			),
-			Constants::CONFIG_SESSION_COOKIE_SECURE    => self::normalize_secure_mode(
+			Constants::SESSION_COOKIE_SECURE    => self::normalize_secure_mode(
 				self::get_value(
-					Constants::CONFIG_SESSION_COOKIE_SECURE,
+					Constants::SESSION_COOKIE_SECURE,
 					$file_values,
 					Constants::DEFAULT_SESSION_COOKIE_SECURE,
 				),
 			),
-			'PEAKURL_OWNER_FALLBACK'                   => self::get_bool_value(
-				'PEAKURL_OWNER_FALLBACK',
+			Constants::OWNER_FALLBACK           => self::get_bool_value(
+				Constants::OWNER_FALLBACK,
 				$file_values,
 				false,
 			),
-			'PEAKURL_OWNER_FIRST_NAME'                 => self::get_value(
-				'PEAKURL_OWNER_FIRST_NAME',
+			Constants::OWNER_FIRST_NAME         => self::get_value(
+				Constants::OWNER_FIRST_NAME,
 				$file_values,
 				'',
 			),
-			'PEAKURL_OWNER_LAST_NAME'                  => self::get_value(
-				'PEAKURL_OWNER_LAST_NAME',
+			Constants::OWNER_LAST_NAME          => self::get_value(
+				Constants::OWNER_LAST_NAME,
 				$file_values,
 				'',
 			),
-			'PEAKURL_OWNER_USERNAME'                   => self::get_value(
-				'PEAKURL_OWNER_USERNAME',
+			Constants::OWNER_USERNAME           => self::get_value(
+				Constants::OWNER_USERNAME,
 				$file_values,
 				'',
 			),
-			'PEAKURL_OWNER_EMAIL'                      => self::get_value(
-				'PEAKURL_OWNER_EMAIL',
+			Constants::OWNER_EMAIL              => self::get_value(
+				Constants::OWNER_EMAIL,
 				$file_values,
 				'',
 			),
-			'PEAKURL_OWNER_PASSWORD'                   => self::get_value(
-				'PEAKURL_OWNER_PASSWORD',
+			Constants::OWNER_PASSWORD           => self::get_value(
+				Constants::OWNER_PASSWORD,
 				$file_values,
 				'',
 			),
-			'PEAKURL_WORKSPACE_NAME'                   => self::get_value(
-				'PEAKURL_WORKSPACE_NAME',
+			Constants::SITE_LANGUAGE            => self::get_value(
+				Constants::SITE_LANGUAGE,
 				$file_values,
 				'',
 			),
-			'PEAKURL_WORKSPACE_SLUG'                   => self::get_value(
-				'PEAKURL_WORKSPACE_SLUG',
+			Constants::WORKSPACE_NAME           => self::get_value(
+				Constants::WORKSPACE_NAME,
+				$file_values,
+				'',
+			),
+			Constants::WORKSPACE_SLUG           => self::get_value(
+				Constants::WORKSPACE_SLUG,
 				$file_values,
 				'',
 			),
@@ -228,36 +249,7 @@ class RuntimeConfig {
 			return array();
 		}
 
-		$keys   = array(
-			'PEAKURL_ENV',
-			'PEAKURL_DEBUG',
-			'SITE_URL',
-			Constants::CONFIG_AUTH_KEY,
-			Constants::CONFIG_AUTH_SALT,
-			Constants::CONFIG_UPDATE_MANIFEST_URL,
-			Constants::CONFIG_CONTENT_DIR,
-			Constants::CONFIG_GEOIP_DB_PATH,
-			'DB_HOST',
-			'DB_PORT',
-			'DB_DATABASE',
-			'DB_USERNAME',
-			'DB_PASSWORD',
-			'DB_CHARSET',
-			Constants::CONFIG_SESSION_COOKIE_NAME,
-			Constants::CONFIG_SESSION_LIFETIME,
-			Constants::CONFIG_SESSION_COOKIE_PATH,
-			Constants::CONFIG_SESSION_COOKIE_DOMAIN,
-			Constants::CONFIG_SESSION_COOKIE_SAME_SITE,
-			Constants::CONFIG_SESSION_COOKIE_SECURE,
-			'PEAKURL_OWNER_FALLBACK',
-			'PEAKURL_OWNER_FIRST_NAME',
-			'PEAKURL_OWNER_LAST_NAME',
-			'PEAKURL_OWNER_USERNAME',
-			'PEAKURL_OWNER_EMAIL',
-			'PEAKURL_OWNER_PASSWORD',
-			'PEAKURL_WORKSPACE_NAME',
-			'PEAKURL_WORKSPACE_SLUG',
-		);
+		$keys   = array_merge( Constants::RUNTIME_KEYS, Constants::INSTALL_KEYS );
 		$values = array();
 
 		foreach ( $keys as $key ) {
@@ -271,7 +263,7 @@ class RuntimeConfig {
 		$table_prefix = self::extract_assigned_value( $contents, 'table_prefix' );
 
 		if ( is_string( $table_prefix ) && '' !== trim( $table_prefix ) ) {
-			$values['DB_PREFIX'] = trim( $table_prefix );
+			$values[ Constants::DB_PREFIX ] = trim( $table_prefix );
 		}
 
 		return $values;
@@ -641,7 +633,7 @@ class RuntimeConfig {
 	 * @since 1.0.0
 	 */
 	private static function bootstrap_debug_mode( array $config ): void {
-		if ( empty( $config[ Constants::CONFIG_DEBUG ] ) ) {
+		if ( empty( $config[ Constants::DEBUG ] ) ) {
 			return;
 		}
 
@@ -650,7 +642,7 @@ class RuntimeConfig {
 		ini_set( 'log_errors', '1' );
 
 		$content_dir = trim(
-			(string) ( $config[ Constants::CONFIG_CONTENT_DIR ] ?? '' ),
+			(string) ( $config[ Constants::CONTENT_DIR ] ?? '' ),
 		);
 
 		if ( '' === $content_dir ) {

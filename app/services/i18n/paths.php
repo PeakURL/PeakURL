@@ -60,7 +60,7 @@ class Paths {
 	 */
 	public function get_content_dir(): string {
 		return rtrim(
-			(string) ( $this->config[ Constants::CONFIG_CONTENT_DIR ] ?? ABSPATH . Constants::DEFAULT_CONTENT_DIR ),
+			(string) ( $this->config[ Constants::CONTENT_DIR ] ?? ABSPATH . Constants::DEFAULT_CONTENT_DIR ),
 			'/\\',
 		);
 	}

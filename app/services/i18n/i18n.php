@@ -12,6 +12,7 @@ namespace PeakURL\Services;
 
 use Gettext\Translations as GettextTranslations;
 use PeakURL\Api\SettingsApi;
+use PeakURL\Includes\Constants;
 use PeakURL\Services\I18n\BrowserLocale;
 use PeakURL\Services\I18n\Languages;
 use PeakURL\Services\I18n\Loader;
@@ -178,7 +179,7 @@ class I18n {
 		}
 
 		$configured_locale = trim(
-			(string) ( $this->config['PEAKURL_SITE_LANGUAGE'] ?? '' ),
+			(string) ( $this->config[ Constants::SITE_LANGUAGE ] ?? '' ),
 		);
 
 		if ( '' === $configured_locale ) {

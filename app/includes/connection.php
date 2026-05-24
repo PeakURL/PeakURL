@@ -46,8 +46,8 @@ class Connection {
 	 * @since 1.0.14
 	 */
 	public function __construct( array $config ) {
-		$config['DB_PREFIX'] = RuntimeConfig::normalize_db_prefix(
-			(string) ( $config['DB_PREFIX'] ?? '' ),
+		$config[ Constants::DB_PREFIX ] = RuntimeConfig::normalize_db_prefix(
+			(string) ( $config[ Constants::DB_PREFIX ] ?? '' ),
 		);
 
 		$this->config = $config;
@@ -69,16 +69,16 @@ class Connection {
 
 		$dsn = sprintf(
 			'mysql:host=%s;port=%d;dbname=%s;charset=%s',
-			(string) $this->config['DB_HOST'],
-			(int) $this->config['DB_PORT'],
-			(string) $this->config['DB_DATABASE'],
-			(string) $this->config['DB_CHARSET'],
+			(string) $this->config[ Constants::DB_HOST ],
+			(int) $this->config[ Constants::DB_PORT ],
+			(string) $this->config[ Constants::DB_DATABASE ],
+			(string) $this->config[ Constants::DB_CHARSET ],
 		);
 
 		$this->connection = new \PDO(
 			$dsn,
-			(string) $this->config['DB_USERNAME'],
-			(string) $this->config['DB_PASSWORD'],
+			(string) $this->config[ Constants::DB_USERNAME ],
+			(string) $this->config[ Constants::DB_PASSWORD ],
 			array(
 				\PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
 				\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
@@ -97,7 +97,7 @@ class Connection {
 	 * @since 1.0.0
 	 */
 	public function get_table_prefix(): string {
-		return (string) ( $this->config['DB_PREFIX'] ?? '' );
+		return (string) ( $this->config[ Constants::DB_PREFIX ] ?? '' );
 	}
 
 	/**
@@ -198,7 +198,7 @@ class Connection {
 			AND table_name = :table_name
 			AND column_name = :column_name',
 			array(
-				'table_schema' => (string) $this->config['DB_DATABASE'],
+				'table_schema' => (string) $this->config[ Constants::DB_DATABASE ],
 				'table_name'   => $this->table_name( $table_name ),
 				'column_name'  => $column_name,
 			),
@@ -221,7 +221,7 @@ class Connection {
 			AND table_name = :table_name
 			AND index_name = :index_name',
 			array(
-				'table_schema' => (string) $this->config['DB_DATABASE'],
+				'table_schema' => (string) $this->config[ Constants::DB_DATABASE ],
 				'table_name'   => $this->table_name( $table_name ),
 				'index_name'   => $index_name,
 			),
@@ -248,7 +248,7 @@ class Connection {
 			AND column_name = :column_name
 			LIMIT 1',
 			array(
-				'table_schema' => (string) $this->config['DB_DATABASE'],
+				'table_schema' => (string) $this->config[ Constants::DB_DATABASE ],
 				'table_name'   => $this->table_name( $table_name ),
 				'column_name'  => $column_name,
 			),
@@ -271,7 +271,7 @@ class Connection {
 			WHERE table_schema = :table_schema
 			AND table_name = :table_name',
 			array(
-				'table_schema' => (string) $this->config['DB_DATABASE'],
+				'table_schema' => (string) $this->config[ Constants::DB_DATABASE ],
 				'table_name'   => $this->table_name( $table_name ),
 			),
 		) > 0;

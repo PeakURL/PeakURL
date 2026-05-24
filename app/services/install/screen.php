@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\Install;
 
+use PeakURL\Includes\Constants;
 use PeakURL\Utils\Security;
 
 // If this file is called directly, abort.
@@ -133,7 +134,7 @@ class Screen {
 			return;
 		}
 
-		if ( Security::is_same_origin( array( 'SITE_URL' => $site_url ), $origin ) ) {
+		if ( Security::is_same_origin( array( Constants::SITE_URL => $site_url ), $origin ) ) {
 			return;
 		}
 

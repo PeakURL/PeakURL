@@ -3,7 +3,7 @@
  * PeakURL command-line database provisioning script.
  *
  * Creates the target database (if it does not exist), applies the
- * SQL schema from `database/schema.sql`, and seeds initial
+ * SQL schema from `database/schema.sql`, and saves initial
  * site data via {@see Store::bootstrap_site()}.
  *
  * Intended for Docker/CI bootstrapping—not for production use.
@@ -19,6 +19,7 @@
 declare(strict_types=1);
 
 use PeakURL\Includes\Connection;
+use PeakURL\Includes\Constants;
 use PeakURL\Includes\RuntimeConfig;
 use PeakURL\Services\Database\Schema as DatabaseSchema;
 use PeakURL\Store;
@@ -48,21 +49,21 @@ require $autoload_path;
 
 $base_path     = dirname( __DIR__ );
 $config        = RuntimeConfig::bootstrap( $base_path );
-$database_name = (string) $config['DB_DATABASE'];
+$database_name = (string) $config[ Constants::DB_DATABASE ];
 
 // ── Create the database if it does not exist ────────────────────
 
 $server_dsn = sprintf(
 	'mysql:host=%s;port=%d;charset=%s',
-	(string) $config['DB_HOST'],
-	(int) $config['DB_PORT'],
-	(string) $config['DB_CHARSET'],
+	(string) $config[ Constants::DB_HOST ],
+	(int) $config[ Constants::DB_PORT ],
+	(string) $config[ Constants::DB_CHARSET ],
 );
 
 $server = new \PDO(
 	$server_dsn,
-	(string) $config['DB_USERNAME'],
-	(string) $config['DB_PASSWORD'],
+	(string) $config[ Constants::DB_USERNAME ],
+	(string) $config[ Constants::DB_PASSWORD ],
 	array(
 		\PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
 		\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
@@ -73,7 +74,7 @@ $server = new \PDO(
 $database_charset = preg_replace(
 	'/[^A-Za-z0-9_]/',
 	'',
-	(string) $config['DB_CHARSET'],
+	(string) $config[ Constants::DB_CHARSET ],
 );
 
 if ( ! is_string( $database_charset ) || '' === $database_charset ) {
@@ -88,7 +89,7 @@ $server->exec(
 	),
 );
 
-// ── Apply schema and seed site ─────────────────────────────
+// ── Apply schema and create site data ──────────────────────
 
 $schema_path = $base_path . '/database/schema.sql';
 

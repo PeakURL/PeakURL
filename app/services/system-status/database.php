@@ -57,11 +57,11 @@ class Database {
 
 		return array(
 			'connected'             => true,
-			'host'                  => (string) ( $config['DB_HOST'] ?? '' ),
-			'port'                  => (int) ( $config['DB_PORT'] ?? 0 ),
-			'name'                  => (string) ( $config['DB_DATABASE'] ?? '' ),
-			'charset'               => (string) ( $config['DB_CHARSET'] ?? 'utf8mb4' ),
-			'prefix'                => (string) ( $config['DB_PREFIX'] ?? '' ),
+			'host'                  => (string) ( $config[ Constants::DB_HOST ] ?? '' ),
+			'port'                  => (int) ( $config[ Constants::DB_PORT ] ?? 0 ),
+			'name'                  => (string) ( $config[ Constants::DB_DATABASE ] ?? '' ),
+			'charset'               => (string) ( $config[ Constants::DB_CHARSET ] ?? 'utf8mb4' ),
+			'prefix'                => (string) ( $config[ Constants::DB_PREFIX ] ?? '' ),
 			'version'               => $version,
 			'versionComment'        => $version_comment,
 			'serverType'            => $this->detect_server_type(

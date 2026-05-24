@@ -99,7 +99,7 @@ class Writer {
 
 		$replacements = array();
 
-		foreach ( self::prepare_template_values( $values ) as $key => $value ) {
+		foreach ( self::template_values( $values ) as $key => $value ) {
 			$replacements[ self::template_token( $key ) ] = $value;
 		}
 
@@ -122,35 +122,35 @@ class Writer {
 	 */
 	public static function prepare_config_values( array $config ): array {
 		return array(
-			'PEAKURL_ENV'                              => (string) ( $config['PEAKURL_ENV'] ?? 'production' ),
-			'PEAKURL_DEBUG'                            => ! empty( $config['PEAKURL_DEBUG'] ) ? 'true' : 'false',
-			'SITE_URL'                                 => (string) ( $config['SITE_URL'] ?? '' ),
-			Constants::CONFIG_AUTH_KEY                 => (string) ( $config[ Constants::CONFIG_AUTH_KEY ] ?? '' ),
-			Constants::CONFIG_AUTH_SALT                => (string) ( $config[ Constants::CONFIG_AUTH_SALT ] ?? '' ),
-			Constants::CONFIG_UPDATE_MANIFEST_URL      => (string) ( $config[ Constants::CONFIG_UPDATE_MANIFEST_URL ] ?? Constants::DEFAULT_UPDATE_MANIFEST_URL ),
-			'PEAKURL_CONTENT_DIR'                      => (string) ( $config['PEAKURL_CONTENT_DIR'] ?? '' ),
-			'PEAKURL_GEOIP_DB_PATH'                    => (string) ( $config['PEAKURL_GEOIP_DB_PATH'] ?? '' ),
-			'DB_HOST'                                  => (string) ( $config['DB_HOST'] ?? 'localhost' ),
-			'DB_PORT'                                  => (string) ( $config['DB_PORT'] ?? 3306 ),
-			'DB_DATABASE'                              => (string) ( $config['DB_DATABASE'] ?? '' ),
-			'DB_USERNAME'                              => (string) ( $config['DB_USERNAME'] ?? '' ),
-			'DB_PASSWORD'                              => (string) ( $config['DB_PASSWORD'] ?? '' ),
-			'DB_CHARSET'                               => (string) ( $config['DB_CHARSET'] ?? 'utf8mb4' ),
-			'DB_PREFIX'                                => (string) ( $config['DB_PREFIX'] ?? 'peakurl_' ),
-			Constants::CONFIG_SESSION_COOKIE_NAME      => (string) ( $config[ Constants::CONFIG_SESSION_COOKIE_NAME ] ?? Constants::DEFAULT_SESSION_COOKIE_NAME ),
-			Constants::CONFIG_SESSION_LIFETIME         => (string) ( $config[ Constants::CONFIG_SESSION_LIFETIME ] ?? Constants::DEFAULT_SESSION_LIFETIME ),
-			'SESSION_COOKIE_PATH'                      => (string) ( $config['SESSION_COOKIE_PATH'] ?? '/' ),
-			'SESSION_COOKIE_DOMAIN'                    => (string) ( $config['SESSION_COOKIE_DOMAIN'] ?? '' ),
-			Constants::CONFIG_SESSION_COOKIE_SAME_SITE => (string) ( $config[ Constants::CONFIG_SESSION_COOKIE_SAME_SITE ] ?? Constants::DEFAULT_SESSION_COOKIE_SAME_SITE ),
-			Constants::CONFIG_SESSION_COOKIE_SECURE    => (string) ( $config[ Constants::CONFIG_SESSION_COOKIE_SECURE ] ?? Constants::DEFAULT_SESSION_COOKIE_SECURE ),
-			'PEAKURL_OWNER_FALLBACK'                   => ! empty( $config['PEAKURL_OWNER_FALLBACK'] ) ? 'true' : 'false',
-			'PEAKURL_OWNER_FIRST_NAME'                 => (string) ( $config['PEAKURL_OWNER_FIRST_NAME'] ?? '' ),
-			'PEAKURL_OWNER_LAST_NAME'                  => (string) ( $config['PEAKURL_OWNER_LAST_NAME'] ?? '' ),
-			'PEAKURL_OWNER_USERNAME'                   => (string) ( $config['PEAKURL_OWNER_USERNAME'] ?? '' ),
-			'PEAKURL_OWNER_EMAIL'                      => (string) ( $config['PEAKURL_OWNER_EMAIL'] ?? '' ),
-			'PEAKURL_OWNER_PASSWORD'                   => (string) ( $config['PEAKURL_OWNER_PASSWORD'] ?? '' ),
-			'PEAKURL_WORKSPACE_NAME'                   => (string) ( $config['PEAKURL_WORKSPACE_NAME'] ?? '' ),
-			'PEAKURL_WORKSPACE_SLUG'                   => (string) ( $config['PEAKURL_WORKSPACE_SLUG'] ?? '' ),
+			Constants::ENV                      => (string) ( $config[ Constants::ENV ] ?? 'production' ),
+			Constants::DEBUG                    => ! empty( $config[ Constants::DEBUG ] ) ? 'true' : 'false',
+			Constants::SITE_URL                 => (string) ( $config[ Constants::SITE_URL ] ?? '' ),
+			Constants::AUTH_KEY                 => (string) ( $config[ Constants::AUTH_KEY ] ?? '' ),
+			Constants::AUTH_SALT                => (string) ( $config[ Constants::AUTH_SALT ] ?? '' ),
+			Constants::UPDATE_MANIFEST_URL      => (string) ( $config[ Constants::UPDATE_MANIFEST_URL ] ?? Constants::DEFAULT_UPDATE_MANIFEST_URL ),
+			Constants::CONTENT_DIR              => (string) ( $config[ Constants::CONTENT_DIR ] ?? '' ),
+			Constants::GEOIP_DB_PATH            => (string) ( $config[ Constants::GEOIP_DB_PATH ] ?? '' ),
+			Constants::DB_HOST                  => (string) ( $config[ Constants::DB_HOST ] ?? 'localhost' ),
+			Constants::DB_PORT                  => (string) ( $config[ Constants::DB_PORT ] ?? 3306 ),
+			Constants::DB_DATABASE              => (string) ( $config[ Constants::DB_DATABASE ] ?? '' ),
+			Constants::DB_USERNAME              => (string) ( $config[ Constants::DB_USERNAME ] ?? '' ),
+			Constants::DB_PASSWORD              => (string) ( $config[ Constants::DB_PASSWORD ] ?? '' ),
+			Constants::DB_CHARSET               => (string) ( $config[ Constants::DB_CHARSET ] ?? 'utf8mb4' ),
+			Constants::DB_PREFIX                => (string) ( $config[ Constants::DB_PREFIX ] ?? 'peakurl_' ),
+			Constants::SESSION_COOKIE_NAME      => (string) ( $config[ Constants::SESSION_COOKIE_NAME ] ?? Constants::DEFAULT_SESSION_COOKIE_NAME ),
+			Constants::SESSION_LIFETIME         => (string) ( $config[ Constants::SESSION_LIFETIME ] ?? Constants::DEFAULT_SESSION_LIFETIME ),
+			Constants::SESSION_COOKIE_PATH      => (string) ( $config[ Constants::SESSION_COOKIE_PATH ] ?? '/' ),
+			Constants::SESSION_COOKIE_DOMAIN    => (string) ( $config[ Constants::SESSION_COOKIE_DOMAIN ] ?? '' ),
+			Constants::SESSION_COOKIE_SAME_SITE => (string) ( $config[ Constants::SESSION_COOKIE_SAME_SITE ] ?? Constants::DEFAULT_SESSION_COOKIE_SAME_SITE ),
+			Constants::SESSION_COOKIE_SECURE    => (string) ( $config[ Constants::SESSION_COOKIE_SECURE ] ?? Constants::DEFAULT_SESSION_COOKIE_SECURE ),
+			Constants::OWNER_FALLBACK           => ! empty( $config[ Constants::OWNER_FALLBACK ] ) ? 'true' : 'false',
+			Constants::OWNER_FIRST_NAME         => (string) ( $config[ Constants::OWNER_FIRST_NAME ] ?? '' ),
+			Constants::OWNER_LAST_NAME          => (string) ( $config[ Constants::OWNER_LAST_NAME ] ?? '' ),
+			Constants::OWNER_USERNAME           => (string) ( $config[ Constants::OWNER_USERNAME ] ?? '' ),
+			Constants::OWNER_EMAIL              => (string) ( $config[ Constants::OWNER_EMAIL ] ?? '' ),
+			Constants::OWNER_PASSWORD           => (string) ( $config[ Constants::OWNER_PASSWORD ] ?? '' ),
+			Constants::WORKSPACE_NAME           => (string) ( $config[ Constants::WORKSPACE_NAME ] ?? '' ),
+			Constants::WORKSPACE_SLUG           => (string) ( $config[ Constants::WORKSPACE_SLUG ] ?? '' ),
 		);
 	}
 
@@ -198,7 +198,7 @@ class Writer {
 				in_array( $matches[1], $managed_keys, true )
 			) {
 				$key             = $matches[1];
-				$updated_lines[] = self::format_env_assignment(
+				$updated_lines[] = self::env_assignment(
 					$key,
 					(string) $managed_values[ $key ],
 				);
@@ -218,7 +218,7 @@ class Writer {
 				continue;
 			}
 
-			$updated_lines[] = self::format_env_assignment(
+			$updated_lines[] = self::env_assignment(
 				$key,
 				(string) $managed_values[ $key ],
 			);
@@ -242,44 +242,44 @@ class Writer {
 	 * @return array<string, string>
 	 * @since 1.0.14
 	 */
-	private static function prepare_template_values( array $values ): array {
+	private static function template_values( array $values ): array {
 		return array(
-			'PEAKURL_ENV'                              => var_export( $values['PEAKURL_ENV'], true ),
-			'PEAKURL_DEBUG'                            => 'true' === $values['PEAKURL_DEBUG'] ? 'true' : 'false',
-			'SITE_URL'                                 => var_export( $values['SITE_URL'], true ),
-			Constants::CONFIG_AUTH_KEY                 => var_export(
-				$values[ Constants::CONFIG_AUTH_KEY ],
+			Constants::ENV                      => var_export( $values[ Constants::ENV ], true ),
+			Constants::DEBUG                    => 'true' === $values[ Constants::DEBUG ] ? 'true' : 'false',
+			Constants::SITE_URL                 => var_export( $values[ Constants::SITE_URL ], true ),
+			Constants::AUTH_KEY                 => var_export(
+				$values[ Constants::AUTH_KEY ],
 				true,
 			),
-			Constants::CONFIG_AUTH_SALT                => var_export(
-				$values[ Constants::CONFIG_AUTH_SALT ],
+			Constants::AUTH_SALT                => var_export(
+				$values[ Constants::AUTH_SALT ],
 				true,
 			),
-			Constants::CONFIG_UPDATE_MANIFEST_URL      => var_export(
-				$values[ Constants::CONFIG_UPDATE_MANIFEST_URL ],
+			Constants::UPDATE_MANIFEST_URL      => var_export(
+				$values[ Constants::UPDATE_MANIFEST_URL ],
 				true,
 			),
-			'PEAKURL_CONTENT_DIR'                      => var_export(
-				$values['PEAKURL_CONTENT_DIR'],
+			Constants::CONTENT_DIR              => var_export(
+				$values[ Constants::CONTENT_DIR ],
 				true,
 			),
-			'PEAKURL_GEOIP_DB_PATH'                    => var_export(
-				$values['PEAKURL_GEOIP_DB_PATH'],
+			Constants::GEOIP_DB_PATH            => var_export(
+				$values[ Constants::GEOIP_DB_PATH ],
 				true,
 			),
-			'DB_HOST'                                  => var_export( $values['DB_HOST'], true ),
-			'DB_PORT'                                  => (string) (int) $values['DB_PORT'],
-			'DB_DATABASE'                              => var_export( $values['DB_DATABASE'], true ),
-			'DB_USERNAME'                              => var_export( $values['DB_USERNAME'], true ),
-			'DB_PASSWORD'                              => var_export( $values['DB_PASSWORD'], true ),
-			'DB_CHARSET'                               => var_export( $values['DB_CHARSET'], true ),
-			'DB_PREFIX'                                => var_export( $values['DB_PREFIX'], true ),
-			Constants::CONFIG_SESSION_COOKIE_NAME      => var_export( $values[ Constants::CONFIG_SESSION_COOKIE_NAME ], true ),
-			Constants::CONFIG_SESSION_LIFETIME         => (string) (int) $values[ Constants::CONFIG_SESSION_LIFETIME ],
-			'SESSION_COOKIE_PATH'                      => var_export( $values['SESSION_COOKIE_PATH'], true ),
-			'SESSION_COOKIE_DOMAIN'                    => var_export( $values['SESSION_COOKIE_DOMAIN'], true ),
-			Constants::CONFIG_SESSION_COOKIE_SAME_SITE => var_export( $values[ Constants::CONFIG_SESSION_COOKIE_SAME_SITE ], true ),
-			Constants::CONFIG_SESSION_COOKIE_SECURE    => var_export( $values[ Constants::CONFIG_SESSION_COOKIE_SECURE ], true ),
+			Constants::DB_HOST                  => var_export( $values[ Constants::DB_HOST ], true ),
+			Constants::DB_PORT                  => (string) (int) $values[ Constants::DB_PORT ],
+			Constants::DB_DATABASE              => var_export( $values[ Constants::DB_DATABASE ], true ),
+			Constants::DB_USERNAME              => var_export( $values[ Constants::DB_USERNAME ], true ),
+			Constants::DB_PASSWORD              => var_export( $values[ Constants::DB_PASSWORD ], true ),
+			Constants::DB_CHARSET               => var_export( $values[ Constants::DB_CHARSET ], true ),
+			Constants::DB_PREFIX                => var_export( $values[ Constants::DB_PREFIX ], true ),
+			Constants::SESSION_COOKIE_NAME      => var_export( $values[ Constants::SESSION_COOKIE_NAME ], true ),
+			Constants::SESSION_LIFETIME         => (string) (int) $values[ Constants::SESSION_LIFETIME ],
+			Constants::SESSION_COOKIE_PATH      => var_export( $values[ Constants::SESSION_COOKIE_PATH ], true ),
+			Constants::SESSION_COOKIE_DOMAIN    => var_export( $values[ Constants::SESSION_COOKIE_DOMAIN ], true ),
+			Constants::SESSION_COOKIE_SAME_SITE => var_export( $values[ Constants::SESSION_COOKIE_SAME_SITE ], true ),
+			Constants::SESSION_COOKIE_SECURE    => var_export( $values[ Constants::SESSION_COOKIE_SECURE ], true ),
 		);
 	}
 
@@ -302,8 +302,8 @@ class Writer {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	private static function format_env_assignment( string $key, string $value ): string {
-		return $key . '=' . self::format_env_value( $value );
+	private static function env_assignment( string $key, string $value ): string {
+		return $key . '=' . self::env_value( $value );
 	}
 
 	/**
@@ -313,7 +313,7 @@ class Writer {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	private static function format_env_value( string $value ): string {
+	private static function env_value( string $value ): string {
 		if ( '' === $value ) {
 			return '';
 		}

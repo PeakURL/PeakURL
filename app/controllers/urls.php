@@ -75,19 +75,7 @@ class UrlsController extends BaseController {
 	 * @since 1.0.0
 	 */
 	private function format_app_path( Request $request, string $suffix ): string {
-		$script_name = str_replace(
-			'\\',
-			'/',
-			(string) $request->get_server_param( 'SCRIPT_NAME', '/index.php' ),
-		);
-		$base_path   = dirname( $script_name );
-
-		if ( '.' === $base_path || '/' === $base_path ) {
-			$base_path = '';
-		} else {
-			$base_path = rtrim( $base_path, '/' );
-		}
-
+		$base_path         = $request->get_base_path();
 		$normalized_suffix = '/' . ltrim( $suffix, '/' );
 
 		return '' === $base_path
@@ -105,16 +93,19 @@ class UrlsController extends BaseController {
 	public function index( Request $request ): array {
 		$payload = $this->data_store->list_urls(
 			$request,
-			array(
-				'page'      => $request->get_query_param( 'page', 1 ),
-				'limit'     => $request->get_query_param( 'limit', 25 ),
-				'sortBy'    => $request->get_query_param( 'sortBy', 'createdAt' ),
-				'sortOrder' => $request->get_query_param( 'sortOrder', 'desc' ),
-				'search'    => $request->get_query_param( 'search', '' ),
-				'range'     => $request->get_query_param( 'range', '' ),
-				'from'      => $request->get_query_param( 'from', '' ),
-				'to'        => $request->get_query_param( 'to', '' ),
-			)
+			$this->query_params(
+				$request,
+				array(
+					'page'      => 1,
+					'limit'     => 25,
+					'sortBy'    => 'createdAt',
+					'sortOrder' => 'desc',
+					'search'    => '',
+					'range'     => '',
+					'from'      => '',
+					'to'        => '',
+				),
+			),
 		);
 
 		return $this->success_response( $payload, __( 'URLs loaded.', 'peakurl' ) );
@@ -133,11 +124,14 @@ class UrlsController extends BaseController {
 	public function export( Request $request ): array {
 		$payload = $this->data_store->export_urls(
 			$request,
-			array(
-				'sortBy'    => $request->get_query_param( 'sortBy', 'createdAt' ),
-				'sortOrder' => $request->get_query_param( 'sortOrder', 'desc' ),
-				'search'    => $request->get_query_param( 'search', '' ),
-			)
+			$this->query_params(
+				$request,
+				array(
+					'sortBy'    => 'createdAt',
+					'sortOrder' => 'desc',
+					'search'    => '',
+				),
+			),
 		);
 
 		return $this->success_response( $payload, __( 'URLs export loaded.', 'peakurl' ) );
@@ -153,14 +147,14 @@ class UrlsController extends BaseController {
 	public function show( Request $request ): array {
 		$url = $this->data_store->find_url(
 			$request,
-			(string) $request->get_route_param( 'id' ),
+			$this->route_param( $request, 'id' ),
 		);
 
-		if ( ! $url ) {
-			return $this->not_found_response( __( 'URL not found.', 'peakurl' ) );
-		}
-
-		return $this->success_response( $url, __( 'URL loaded.', 'peakurl' ) );
+		return $this->found_response(
+			$url,
+			__( 'URL not found.', 'peakurl' ),
+			__( 'URL loaded.', 'peakurl' ),
+		);
 	}
 
 	/**
@@ -208,15 +202,15 @@ class UrlsController extends BaseController {
 	public function update( Request $request ): array {
 		$url = $this->data_store->update_url(
 			$request,
-			(string) $request->get_route_param( 'id' ),
+			$this->route_param( $request, 'id' ),
 			$request->get_body_params(),
 		);
 
-		if ( ! $url ) {
-			return $this->not_found_response( __( 'URL not found.', 'peakurl' ) );
-		}
-
-		return $this->success_response( $url, __( 'URL updated.', 'peakurl' ) );
+		return $this->found_response(
+			$url,
+			__( 'URL not found.', 'peakurl' ),
+			__( 'URL updated.', 'peakurl' ),
+		);
 	}
 
 	/**
@@ -229,14 +223,14 @@ class UrlsController extends BaseController {
 	public function delete( Request $request ): array {
 		$deleted = $this->data_store->delete_url(
 			$request,
-			(string) $request->get_route_param( 'id' ),
+			$this->route_param( $request, 'id' ),
 		);
 
-		if ( ! $deleted ) {
-			return $this->not_found_response( __( 'URL not found.', 'peakurl' ) );
-		}
-
-		return $this->boolean_response( 'deleted', __( 'URL deleted.', 'peakurl' ) );
+		return $this->delete_response(
+			$deleted,
+			__( 'URL not found.', 'peakurl' ),
+			__( 'URL deleted.', 'peakurl' ),
+		);
 	}
 
 	/**
@@ -247,10 +241,9 @@ class UrlsController extends BaseController {
 	 * @since 1.0.0
 	 */
 	public function bulk_delete( Request $request ): array {
-		$ids   = $request->get_body_param( 'ids', array() );
 		$count = $this->data_store->bulk_delete_urls(
 			$request,
-			is_array( $ids ) ? $ids : array(),
+			$this->body_array_param( $request, 'ids' ),
 		);
 
 		return $this->success_response(
@@ -272,7 +265,7 @@ class UrlsController extends BaseController {
 	 * @since 1.0.0
 	 */
 	public function redirect( Request $request ): array {
-		$route_id   = (string) $request->get_route_param( 'id' );
+		$route_id   = $this->route_param( $request, 'id' );
 		$stats_code = $this->get_stats_code( $route_id );
 
 		if (
@@ -329,7 +322,7 @@ class UrlsController extends BaseController {
 			return JsonResponse::text(
 				$this->format_password_page(
 					$request,
-					(string) $request->get_route_param( 'id' ),
+					$this->route_param( $request, 'id' ),
 					is_array( $result['url'] ?? null ) ? $result['url'] : array(),
 					(string) ( $result['message'] ?? '' ),
 				),

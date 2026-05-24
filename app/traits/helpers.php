@@ -96,7 +96,7 @@ trait HelpersTrait {
 	 * @return bool True when reserved.
 	 * @since 1.0.0
 	 */
-	private function is_reserved_short_code( string $code ): bool {
+	private function is_reserved_code( string $code ): bool {
 		return in_array(
 			strtolower( trim( $code ) ),
 			array( 'api', 'dashboard', 'login' ),
@@ -130,7 +130,7 @@ trait HelpersTrait {
 	 * @return string|null Formatted datetime or null.
 	 * @since 1.0.0
 	 */
-	private function normalize_datetime_value( $value ): ?string {
+	private function normalize_datetime( $value ): ?string {
 		if ( null === $value || '' === $value ) {
 			return null;
 		}
@@ -186,18 +186,19 @@ trait HelpersTrait {
 	}
 
 	/**
-	 * Check whether all install seed config values are present and non-empty.
+	 * Check whether required install values are present and non-empty.
 	 *
-	 * @return bool True when every required seed value is set.
+	 * @return bool True when every required install value is set.
 	 * @since 1.0.0
 	 */
 	private function has_install_data(): bool {
-		return '' !== trim( (string) ( $this->config['PEAKURL_OWNER_USERNAME'] ?? '' ) ) &&
-			'' !== trim( (string) ( $this->config['PEAKURL_OWNER_EMAIL'] ?? '' ) ) &&
-			'' !== trim( (string) ( $this->config['PEAKURL_OWNER_PASSWORD'] ?? '' ) ) &&
-			'' !== trim( (string) ( $this->config['PEAKURL_WORKSPACE_NAME'] ?? '' ) ) &&
-			'' !== trim( (string) ( $this->config['PEAKURL_WORKSPACE_SLUG'] ?? '' ) ) &&
-			'' !== trim( (string) ( $this->config['SITE_URL'] ?? '' ) );
+		foreach ( Constants::INSTALL_REQUIRED_KEYS as $key ) {
+			if ( '' === trim( (string) ( $this->config[ $key ] ?? '' ) ) ) {
+				return false;
+			}
+		}
+
+		return '' !== trim( (string) ( $this->config[ Constants::SITE_URL ] ?? '' ) );
 	}
 
 	/**
@@ -221,7 +222,7 @@ trait HelpersTrait {
 			'Y-m-d H:i:s',
 			time() - max(
 				0,
-				(int) ( $this->config[ Constants::CONFIG_SESSION_LIFETIME ] ?? Constants::DEFAULT_SESSION_LIFETIME ),
+				(int) ( $this->config[ Constants::SESSION_LIFETIME ] ?? Constants::DEFAULT_SESSION_LIFETIME ),
 			),
 		);
 	}

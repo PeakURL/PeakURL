@@ -110,18 +110,18 @@ class UsersController extends BaseController {
 	 * @since 1.0.0
 	 */
 	public function update( Request $request ): array {
-		$username = (string) $request->get_route_param( 'username' );
+		$username = $this->route_param( $request, 'username' );
 		$user     = $this->data_store->update_user_by_username(
 			$request,
 			$username,
 			$request->get_body_params(),
 		);
 
-		if ( ! $user ) {
-			return $this->not_found_response( __( 'User not found.', 'peakurl' ) );
-		}
-
-		return $this->success_response( $user, __( 'User updated.', 'peakurl' ) );
+		return $this->found_response(
+			$user,
+			__( 'User not found.', 'peakurl' ),
+			__( 'User updated.', 'peakurl' ),
+		);
 	}
 
 	/**
@@ -136,13 +136,13 @@ class UsersController extends BaseController {
 	public function delete( Request $request ): array {
 		$deleted = $this->data_store->delete_user_by_username(
 			$request,
-			(string) $request->get_route_param( 'username' ),
+			$this->route_param( $request, 'username' ),
 		);
 
-		if ( ! $deleted ) {
-			return $this->not_found_response( __( 'User not found.', 'peakurl' ) );
-		}
-
-		return $this->boolean_response( 'deleted', __( 'User deleted.', 'peakurl' ) );
+		return $this->delete_response(
+			$deleted,
+			__( 'User not found.', 'peakurl' ),
+			__( 'User deleted.', 'peakurl' ),
+		);
 	}
 }

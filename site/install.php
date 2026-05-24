@@ -4,7 +4,7 @@
  *
  * Collects site name, administrator credentials, and optional
  * settings, then delegates to {@see \PeakURL\Services\Install\Manager::install()} to
- * create the schema, seed initial data, and log the admin in.
+ * create the schema, save initial data, and log the admin in.
  *
  * On success the user is redirected to `/dashboard/about?source=install`.
  *

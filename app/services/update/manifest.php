@@ -69,7 +69,7 @@ class Manifest {
 	public function get_manifest_url(): string {
 		$manifest_url = trim(
 			(string) $this->context->get_config_value(
-				Constants::CONFIG_UPDATE_MANIFEST_URL,
+				Constants::UPDATE_MANIFEST_URL,
 				'',
 			),
 		);

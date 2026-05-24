@@ -47,20 +47,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Application {
 
-	/**
-	 * Router methods supported by the internal route map.
-	 *
-	 * @var array<string, bool>
-	 */
-	private const ROUTE_METHODS = array(
-		'get'    => true,
-		'head'   => true,
-		'post'   => true,
-		'put'    => true,
-		'patch'  => true,
-		'delete' => true,
-	);
-
 	/** @var Router HTTP route dispatcher. */
 	private Router $router;
 
@@ -127,7 +113,7 @@ class Application {
 				$exception->get_data(),
 			);
 		} catch ( \Throwable $exception ) {
-			if ( ! empty( $this->config['PEAKURL_DEBUG'] ) ) {
+			if ( ! empty( $this->config[ Constants::DEBUG ] ) ) {
 				error_log( (string) $exception );
 			}
 
@@ -137,7 +123,7 @@ class Application {
 					'peakurl',
 				),
 				500,
-				'development' === ( $this->config['PEAKURL_ENV'] ?? 'production' )
+				'development' === ( $this->config[ Constants::ENV ] ?? 'production' )
 					? array( 'exception' => $exception->getMessage() )
 					: array(),
 			);
@@ -549,10 +535,7 @@ class Application {
 			);
 
 			foreach ( $methods as $method_name ) {
-				$method = strtolower( (string) $method_name );
-
-				$this->assert_supported_route_method( $method );
-				$this->router->{$method}( $path, $handler );
+				$this->router->add_route( (string) $method_name, $path, $handler );
 			}
 		}
 	}
@@ -573,25 +556,6 @@ class Application {
 		}
 
 		return rtrim( '/' . trim( $path_prefix, '/' ), '/' ) . $path;
-	}
-
-	/**
-	 * Ensure a route method is supported by this router.
-	 *
-	 * @param string $method Normalized lowercase HTTP method.
-	 * @return void
-	 *
-	 * @throws RouteConfigurationException If the route method is unsupported.
-	 * @since 1.1.2
-	 */
-	private function assert_supported_route_method( string $method ): void {
-		if ( isset( self::ROUTE_METHODS[ $method ] ) ) {
-			return;
-		}
-
-		throw new RouteConfigurationException(
-			'Unsupported route method: ' . $method,
-		);
 	}
 
 	/**
@@ -666,7 +630,7 @@ class Application {
 					JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR,
 				);
 			} catch ( \JsonException $exception ) {
-				if ( ! empty( $this->config['PEAKURL_DEBUG'] ) ) {
+				if ( ! empty( $this->config[ Constants::DEBUG ] ) ) {
 					error_log( (string) $exception );
 				}
 

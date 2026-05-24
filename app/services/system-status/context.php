@@ -194,7 +194,7 @@ class Context {
 	 */
 	public function get_version(): string {
 		$version = trim(
-			(string) ( $this->config[ Constants::CONFIG_VERSION ] ?? '' ),
+			(string) ( $this->config[ Constants::VERSION ] ?? '' ),
 		);
 
 		return '' !== $version ? $version : Constants::DEFAULT_VERSION;

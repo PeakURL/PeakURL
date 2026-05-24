@@ -221,7 +221,7 @@ class Context {
 			AND table_name = :table_name
 			AND constraint_name = :constraint_name',
 			array(
-				'table_schema'    => (string) $this->connection->get_config()['DB_DATABASE'],
+				'table_schema'    => (string) $this->connection->get_config()[ Constants::DB_DATABASE ],
 				'table_name'      => $this->connection->table_name( $table_name ),
 				'constraint_name' => $this->get_constraint_name( $constraint_name ),
 			),
@@ -248,7 +248,7 @@ class Context {
 			AND constraint_name = :constraint_name
 			LIMIT 1',
 			array(
-				'table_schema'    => (string) $this->connection->get_config()['DB_DATABASE'],
+				'table_schema'    => (string) $this->connection->get_config()[ Constants::DB_DATABASE ],
 				'table_name'      => $this->connection->table_name( $table_name ),
 				'constraint_name' => $this->get_constraint_name( $constraint_name ),
 			),

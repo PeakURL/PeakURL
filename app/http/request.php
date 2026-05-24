@@ -98,59 +98,22 @@ class Request {
 	public static function from_globals(): self {
 		$method       = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 		$uri          = $_SERVER['REQUEST_URI'] ?? '/';
-		$path         = parse_url( $uri, PHP_URL_PATH );
 		$script_name  = (string) ( $_SERVER['SCRIPT_NAME'] ?? '/index.php' );
 		$query_params = $_GET;
-
-		if ( ! is_string( $path ) || '' === $path ) {
-			$path = '/';
-		}
-
-		$base_path = str_replace( '\\', '/', dirname( $script_name ) );
-
-		if ( '.' === $base_path || '/' === $base_path ) {
-			$base_path = '';
-		} else {
-			$base_path = rtrim( $base_path, '/' );
-		}
-
-		if (
-			'' !== $base_path &&
-			Str::starts_with( $path, $base_path . '/' )
-		) {
-			$trimmed_path = substr( $path, strlen( $base_path ) );
-			$path         =
-				false !== $trimmed_path && '' !== $trimmed_path
-					? $trimmed_path
-					: '/';
-		} elseif ( $path === $base_path ) {
-			$path = '/';
-		}
-
-		$body = file_get_contents( 'php://input' );
-
-		if ( false === $body ) {
-			$body = '';
-		}
-
-		$content_type = $_SERVER['CONTENT_TYPE'] ?? '';
-		$body_params  = array();
-		$file_params  = array();
-
-		if ( false !== stripos( $content_type, 'multipart/form-data' ) ) {
-			$body_params = is_array( $_POST ) ? $_POST : array();
-			$file_params = is_array( $_FILES ) ? $_FILES : array();
-		} elseif ( '' !== $body ) {
-			if ( false !== stripos( $content_type, 'application/json' ) ) {
-				$decoded     = json_decode( $body, true );
-				$body_params = is_array( $decoded ) ? $decoded : array();
-			} else {
-				parse_str( $body, $body_params );
-				if ( ! is_array( $body_params ) ) {
-					$body_params = array();
-				}
-			}
-		}
+		$content_type = (string) ( $_SERVER['CONTENT_TYPE'] ?? '' );
+		$body         = self::read_body();
+		$path         = self::normalize_path(
+			parse_url( $uri, PHP_URL_PATH ),
+			$script_name,
+		);
+		$body_params  = self::parse_body(
+			$content_type,
+			$body,
+			is_array( $_POST ) ? $_POST : array(),
+		);
+		$file_params  = self::is_multipart( $content_type ) && is_array( $_FILES )
+			? $_FILES
+			: array();
 
 		return new self(
 			$method,
@@ -161,6 +124,110 @@ class Request {
 			$file_params,
 			$_SERVER,
 		);
+	}
+
+	/**
+	 * Normalize the URI path relative to the active script directory.
+	 *
+	 * Release installs can live in a subdirectory. The router should receive
+	 * only the application-relative path, never the filesystem script mount.
+	 *
+	 * @param mixed  $raw_path    Parsed URI path.
+	 * @param string $script_name Current script path.
+	 * @return string Normalized request path.
+	 * @since 1.2.2
+	 */
+	private static function normalize_path( $raw_path, string $script_name ): string {
+		$path = is_string( $raw_path ) && '' !== $raw_path ? $raw_path : '/';
+
+		$base_path = self::get_script_base_path( $script_name );
+
+		if (
+			'' !== $base_path &&
+			Str::starts_with( $path, $base_path . '/' )
+		) {
+			$trimmed_path = substr( $path, strlen( $base_path ) );
+
+			return false !== $trimmed_path && '' !== $trimmed_path
+				? $trimmed_path
+				: '/';
+		}
+
+		return $path === $base_path ? '/' : $path;
+	}
+
+	/**
+	 * Resolve the request base path from the running script path.
+	 *
+	 * @param string $script_name Current script path.
+	 * @return string Base path without a trailing slash.
+	 * @since 1.2.2
+	 */
+	private static function get_script_base_path( string $script_name ): string {
+		$base_path = str_replace( '\\', '/', dirname( $script_name ) );
+
+		if ( '.' === $base_path || '/' === $base_path ) {
+			return '';
+		}
+
+		return rtrim( $base_path, '/' );
+	}
+
+	/**
+	 * Read the raw request body.
+	 *
+	 * @return string Raw request body, or an empty string when unavailable.
+	 * @since 1.2.2
+	 */
+	private static function read_body(): string {
+		$body = file_get_contents( 'php://input' );
+
+		return false === $body ? '' : $body;
+	}
+
+	/**
+	 * Parse request body parameters based on the content type.
+	 *
+	 * @param string               $content_type Content-Type header value.
+	 * @param string               $body         Raw request body.
+	 * @param array<string, mixed> $post_params  Parsed POST values for multipart requests.
+	 * @return array<string, mixed> Parsed body parameters.
+	 * @since 1.2.2
+	 */
+	private static function parse_body(
+		string $content_type,
+		string $body,
+		array $post_params
+	): array {
+		if ( self::is_multipart( $content_type ) ) {
+			return $post_params;
+		}
+
+		if ( '' === $body ) {
+			return array();
+		}
+
+		if ( false !== stripos( $content_type, 'application/json' ) ) {
+			$decoded = json_decode( $body, true );
+
+			return is_array( $decoded ) ? $decoded : array();
+		}
+
+		$body_params = array();
+		parse_str( $body, $body_params );
+
+		return is_array( $body_params ) ? $body_params : array();
+	}
+
+	/**
+	 * Determine whether the request uses multipart form data.
+	 *
+	 * @param string $content_type Content-Type header value.
+	 * @return bool True for multipart form uploads.
+	 * @since 1.2.2
+	 */
+	private static function is_multipart( string $content_type ): bool {
+		return false !== stripos( $content_type, 'multipart/form-data' );
 	}
 
 	/**
@@ -285,6 +352,18 @@ class Request {
 	 */
 	public function get_server_param( string $key, $fallback = null ) {
 		return $this->server_params[ $key ] ?? $fallback;
+	}
+
+	/**
+	 * Get the app base path for subdirectory installs.
+	 *
+	 * @return string Base path without a trailing slash.
+	 * @since 1.2.2
+	 */
+	public function get_base_path(): string {
+		return self::get_script_base_path(
+			(string) $this->get_server_param( 'SCRIPT_NAME', '/index.php' ),
+		);
 	}
 
 	/**

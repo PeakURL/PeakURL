@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace PeakURL\Traits;
 
+use PeakURL\Includes\Constants;
 use PeakURL\Http\ApiException;
 
 // If this file is called directly, abort.
@@ -28,9 +29,9 @@ trait BootstrapTrait {
 	 * Bootstrap the site on first request.
 	 *
 	 * Ensures the database tables exist, creates the owner admin user
-	 * from config seed values if absent, and synchronizes install-time
-	 * settings. Runs inside a transaction and is idempotent within a
-	 * single request lifecycle.
+	 * from install-time config values when absent, and synchronizes
+	 * setup settings. Runs inside a transaction and is idempotent within
+	 * a single request lifecycle.
 	 *
 	 * @throws ApiException  When tables are missing or install is incomplete.
 	 * @throws \RuntimeException When the owner row cannot be created.
@@ -78,15 +79,15 @@ trait BootstrapTrait {
 					'users',
 					array(
 						'username'          =>
-							(string) $this->config['PEAKURL_OWNER_USERNAME'],
+							(string) $this->config[ Constants::OWNER_USERNAME ],
 						'email'             =>
-							(string) $this->config['PEAKURL_OWNER_EMAIL'],
+							(string) $this->config[ Constants::OWNER_EMAIL ],
 						'first_name'        =>
-							(string) $this->config['PEAKURL_OWNER_FIRST_NAME'],
+							(string) $this->config[ Constants::OWNER_FIRST_NAME ],
 						'last_name'         =>
-							(string) $this->config['PEAKURL_OWNER_LAST_NAME'],
+							(string) $this->config[ Constants::OWNER_LAST_NAME ],
 						'password_hash'     => password_hash(
-							(string) $this->config['PEAKURL_OWNER_PASSWORD'],
+							(string) $this->config[ Constants::OWNER_PASSWORD ],
 							PASSWORD_DEFAULT,
 						),
 						'role'              => 'admin',
@@ -122,7 +123,7 @@ trait BootstrapTrait {
 	}
 
 	/**
-	 * Send the install welcome email once for the seeded site owner.
+	 * Send the install welcome email once for the site owner.
 	 *
 	 * Delivery is best-effort so installation can still complete on hosts
 	 * where mail is not configured yet.

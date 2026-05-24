@@ -349,7 +349,7 @@ trait LinksTrait {
 					'password_value'     => '' !== $password
 						? Secrets::hash_link_password( $password )
 						: null,
-					'expires_at'         => $this->normalize_datetime_value(
+					'expires_at'         => $this->normalize_datetime(
 						$payload['expiresAt'] ?? null,
 					),
 					'status'             => $this->normalize_url_status(
@@ -837,12 +837,12 @@ trait LinksTrait {
 			),
 		);
 		$secret  = trim(
-			(string) ( $this->config[ Constants::CONFIG_AUTH_SALT ] ?? '' ),
+			(string) ( $this->config[ Constants::AUTH_SALT ] ?? '' ),
 		);
 
 		if ( '' === $secret ) {
 			$secret = trim(
-				(string) ( $this->config[ Constants::CONFIG_AUTH_KEY ] ?? '' ),
+				(string) ( $this->config[ Constants::AUTH_KEY ] ?? '' ),
 			);
 		}
 
@@ -1075,7 +1075,7 @@ trait LinksTrait {
 
 		if ( array_key_exists( 'expiresAt', $payload ) ) {
 			$updates[]            = 'expires_at = :expires_at';
-			$params['expires_at'] = $this->normalize_datetime_value(
+			$params['expires_at'] = $this->normalize_datetime(
 				$payload['expiresAt'],
 			);
 		}
@@ -1483,7 +1483,7 @@ trait LinksTrait {
 	 * @since 1.0.0
 	 */
 	private function validate_alias( string $alias, string $current_alias = '' ): void {
-		if ( $this->is_reserved_short_code( $alias ) ) {
+		if ( $this->is_reserved_code( $alias ) ) {
 			throw new ApiException(
 				__( 'That short code is reserved by the application.', 'peakurl' ),
 				422,

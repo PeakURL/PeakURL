@@ -50,8 +50,8 @@ class Crypto {
 	 * @since 1.0.0
 	 */
 	public function is_configured(): bool {
-		return '' !== trim( (string) ( $this->config[ Constants::CONFIG_AUTH_KEY ] ?? '' ) ) &&
-			'' !== trim( (string) ( $this->config[ Constants::CONFIG_AUTH_SALT ] ?? '' ) );
+		return '' !== trim( (string) ( $this->config[ Constants::AUTH_KEY ] ?? '' ) ) &&
+			'' !== trim( (string) ( $this->config[ Constants::AUTH_SALT ] ?? '' ) );
 	}
 
 	/**
@@ -64,8 +64,8 @@ class Crypto {
 	 * @since 1.0.0
 	 */
 	public function persist_auth_keys( string $app_path ): array {
-		$auth_key  = trim( (string) ( $this->config[ Constants::CONFIG_AUTH_KEY ] ?? '' ) );
-		$auth_salt = trim( (string) ( $this->config[ Constants::CONFIG_AUTH_SALT ] ?? '' ) );
+		$auth_key  = trim( (string) ( $this->config[ Constants::AUTH_KEY ] ?? '' ) );
+		$auth_salt = trim( (string) ( $this->config[ Constants::AUTH_SALT ] ?? '' ) );
 
 		if ( '' === $auth_key ) {
 			$auth_key = bin2hex( random_bytes( 32 ) );
@@ -79,21 +79,21 @@ class Crypto {
 			InstallWriter::write_env_overrides(
 				$app_path . '/.env',
 				array(
-					Constants::CONFIG_AUTH_KEY  => $auth_key,
-					Constants::CONFIG_AUTH_SALT => $auth_salt,
+					Constants::AUTH_KEY  => $auth_key,
+					Constants::AUTH_SALT => $auth_salt,
 				),
 				'PeakURL could not update app/.env with the authentication keys.',
 				'# PeakURL local development overrides'
 			);
 		} else {
-			$values                                = InstallWriter::prepare_config_values( $this->config );
-			$values[ Constants::CONFIG_AUTH_KEY ]  = $auth_key;
-			$values[ Constants::CONFIG_AUTH_SALT ] = $auth_salt;
+			$values                         = InstallWriter::prepare_config_values( $this->config );
+			$values[ Constants::AUTH_KEY ]  = $auth_key;
+			$values[ Constants::AUTH_SALT ] = $auth_salt;
 			InstallWriter::write_config_file( $app_path, $values );
 		}
 
-		$this->config[ Constants::CONFIG_AUTH_KEY ]  = $auth_key;
-		$this->config[ Constants::CONFIG_AUTH_SALT ] = $auth_salt;
+		$this->config[ Constants::AUTH_KEY ]  = $auth_key;
+		$this->config[ Constants::AUTH_SALT ] = $auth_salt;
 
 		return array(
 			'authKey'  => $auth_key,
@@ -255,8 +255,8 @@ class Crypto {
 	 * @since 1.0.0
 	 */
 	private function derive_key( string $context ): string {
-		$auth_key  = trim( (string) ( $this->config[ Constants::CONFIG_AUTH_KEY ] ?? '' ) );
-		$auth_salt = trim( (string) ( $this->config[ Constants::CONFIG_AUTH_SALT ] ?? '' ) );
+		$auth_key  = trim( (string) ( $this->config[ Constants::AUTH_KEY ] ?? '' ) );
+		$auth_salt = trim( (string) ( $this->config[ Constants::AUTH_SALT ] ?? '' ) );
 
 		if ( '' === $auth_key || '' === $auth_salt ) {
 			throw new \RuntimeException( __( 'PeakURL is missing PEAKURL_AUTH_KEY or PEAKURL_AUTH_SALT.', 'peakurl' ) );

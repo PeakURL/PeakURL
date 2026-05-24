@@ -593,10 +593,10 @@ $body_classes  = get_body_class(
 	),
 );
 $app_env       = strtolower(
-	(string) ( $app_config[ Constants::CONFIG_ENV ] ?? 'production' ),
+	(string) ( $app_config[ Constants::ENV ] ?? 'production' ),
 );
 $debug_enabled =
-	! empty( $app_config[ Constants::CONFIG_DEBUG ] ) ||
+	! empty( $app_config[ Constants::DEBUG ] ) ||
 	'development' === $app_env;
 
 /**

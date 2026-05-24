@@ -77,7 +77,7 @@ class Context {
 	 */
 	public function get_current_version(): string {
 		$version = trim(
-			(string) ( $this->config[ Constants::CONFIG_VERSION ] ?? '' ),
+			(string) ( $this->config[ Constants::VERSION ] ?? '' ),
 		);
 
 		return '' !== $version ? $version : Constants::DEFAULT_VERSION;
@@ -91,7 +91,7 @@ class Context {
 	 */
 	public function get_site_url(): string {
 		return (string) (
-			$this->config[ Constants::CONFIG_SITE_URL ]
+			$this->config[ Constants::SITE_URL ]
 			?? 'unknown-site'
 		);
 	}
@@ -104,7 +104,7 @@ class Context {
 	 */
 	public function get_content_dir(): string {
 		$content_dir = trim(
-			(string) ( $this->config[ Constants::CONFIG_CONTENT_DIR ] ?? '' ),
+			(string) ( $this->config[ Constants::CONTENT_DIR ] ?? '' ),
 		);
 
 		if ( '' === $content_dir ) {

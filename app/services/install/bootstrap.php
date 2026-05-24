@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace PeakURL\Services\Install;
 
 use PeakURL\Includes\Connection;
+use PeakURL\Includes\Constants;
 use PeakURL\Services\Database\Schema as DatabaseSchema;
 
 // If this file is called directly, abort.
@@ -24,7 +25,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.14
  */
 class Bootstrap {
-
 	/**
 	 * Create the database schema from the bundled schema.sql file.
 	 *
@@ -66,58 +66,50 @@ class Bootstrap {
 	 */
 	public static function prepare_config( array $values ): array {
 		return array(
-			'PEAKURL_ENV'                 => $values['PEAKURL_ENV'],
-			'SITE_URL'                    => $values['SITE_URL'],
-			'PEAKURL_DEBUG'               => 'true' === $values['PEAKURL_DEBUG'],
-			'PEAKURL_AUTH_KEY'            => $values['PEAKURL_AUTH_KEY'],
-			'PEAKURL_AUTH_SALT'           => $values['PEAKURL_AUTH_SALT'],
-			'PEAKURL_UPDATE_MANIFEST_URL' => $values['PEAKURL_UPDATE_MANIFEST_URL'],
-			'PEAKURL_CONTENT_DIR'         => $values['PEAKURL_CONTENT_DIR'],
-			'PEAKURL_GEOIP_DB_PATH'       => $values['PEAKURL_GEOIP_DB_PATH'],
-			'DB_HOST'                     => $values['DB_HOST'],
-			'DB_PORT'                     => (int) $values['DB_PORT'],
-			'DB_DATABASE'                 => $values['DB_DATABASE'],
-			'DB_USERNAME'                 => $values['DB_USERNAME'],
-			'DB_PASSWORD'                 => $values['DB_PASSWORD'],
-			'DB_CHARSET'                  => $values['DB_CHARSET'],
-			'DB_PREFIX'                   => $values['DB_PREFIX'],
-			'SESSION_COOKIE_NAME'         => $values['SESSION_COOKIE_NAME'],
-			'SESSION_LIFETIME'            => (int) $values['SESSION_LIFETIME'],
-			'SESSION_COOKIE_PATH'         => $values['SESSION_COOKIE_PATH'],
-			'SESSION_COOKIE_DOMAIN'       => $values['SESSION_COOKIE_DOMAIN'],
-			'SESSION_COOKIE_SAME_SITE'    => $values['SESSION_COOKIE_SAME_SITE'],
-			'SESSION_COOKIE_SECURE'       => $values['SESSION_COOKIE_SECURE'],
-			'PEAKURL_OWNER_FALLBACK'      => 'true' === $values['PEAKURL_OWNER_FALLBACK'],
-			'PEAKURL_OWNER_FIRST_NAME'    => $values['PEAKURL_OWNER_FIRST_NAME'],
-			'PEAKURL_OWNER_LAST_NAME'     => $values['PEAKURL_OWNER_LAST_NAME'],
-			'PEAKURL_OWNER_USERNAME'      => $values['PEAKURL_OWNER_USERNAME'],
-			'PEAKURL_OWNER_EMAIL'         => $values['PEAKURL_OWNER_EMAIL'],
-			'PEAKURL_OWNER_PASSWORD'      => $values['PEAKURL_OWNER_PASSWORD'],
-			'PEAKURL_SITE_LANGUAGE'       => $values['PEAKURL_SITE_LANGUAGE'],
-			'PEAKURL_WORKSPACE_NAME'      => $values['PEAKURL_WORKSPACE_NAME'],
-			'PEAKURL_WORKSPACE_SLUG'      => $values['PEAKURL_WORKSPACE_SLUG'],
+			Constants::ENV                      => $values[ Constants::ENV ],
+			Constants::SITE_URL                 => $values[ Constants::SITE_URL ],
+			Constants::DEBUG                    => 'true' === $values[ Constants::DEBUG ],
+			Constants::AUTH_KEY                 => $values[ Constants::AUTH_KEY ],
+			Constants::AUTH_SALT                => $values[ Constants::AUTH_SALT ],
+			Constants::UPDATE_MANIFEST_URL      => $values[ Constants::UPDATE_MANIFEST_URL ],
+			Constants::CONTENT_DIR              => $values[ Constants::CONTENT_DIR ],
+			Constants::GEOIP_DB_PATH            => $values[ Constants::GEOIP_DB_PATH ],
+			Constants::DB_HOST                  => $values[ Constants::DB_HOST ],
+			Constants::DB_PORT                  => (int) $values[ Constants::DB_PORT ],
+			Constants::DB_DATABASE              => $values[ Constants::DB_DATABASE ],
+			Constants::DB_USERNAME              => $values[ Constants::DB_USERNAME ],
+			Constants::DB_PASSWORD              => $values[ Constants::DB_PASSWORD ],
+			Constants::DB_CHARSET               => $values[ Constants::DB_CHARSET ],
+			Constants::DB_PREFIX                => $values[ Constants::DB_PREFIX ],
+			Constants::SESSION_COOKIE_NAME      => $values[ Constants::SESSION_COOKIE_NAME ],
+			Constants::SESSION_LIFETIME         => (int) $values[ Constants::SESSION_LIFETIME ],
+			Constants::SESSION_COOKIE_PATH      => $values[ Constants::SESSION_COOKIE_PATH ],
+			Constants::SESSION_COOKIE_DOMAIN    => $values[ Constants::SESSION_COOKIE_DOMAIN ],
+			Constants::SESSION_COOKIE_SAME_SITE => $values[ Constants::SESSION_COOKIE_SAME_SITE ],
+			Constants::SESSION_COOKIE_SECURE    => $values[ Constants::SESSION_COOKIE_SECURE ],
+			Constants::OWNER_FALLBACK           => 'true' === $values[ Constants::OWNER_FALLBACK ],
+			Constants::OWNER_FIRST_NAME         => $values[ Constants::OWNER_FIRST_NAME ],
+			Constants::OWNER_LAST_NAME          => $values[ Constants::OWNER_LAST_NAME ],
+			Constants::OWNER_USERNAME           => $values[ Constants::OWNER_USERNAME ],
+			Constants::OWNER_EMAIL              => $values[ Constants::OWNER_EMAIL ],
+			Constants::OWNER_PASSWORD           => $values[ Constants::OWNER_PASSWORD ],
+			Constants::SITE_LANGUAGE            => $values[ Constants::SITE_LANGUAGE ],
+			Constants::WORKSPACE_NAME           => $values[ Constants::WORKSPACE_NAME ],
+			Constants::WORKSPACE_SLUG           => $values[ Constants::WORKSPACE_SLUG ],
 		);
 	}
 
 	/**
-	 * Strip install-only seed values from the final runtime config payload.
+	 * Remove temporary install values from the final runtime config payload.
 	 *
 	 * @param array<string, string> $values Full install config values.
 	 * @return array<string, string>
 	 * @since 1.0.14
 	 */
 	public static function prepare_release_values( array $values ): array {
-		unset(
-			$values['PEAKURL_OWNER_FALLBACK'],
-			$values['PEAKURL_OWNER_FIRST_NAME'],
-			$values['PEAKURL_OWNER_LAST_NAME'],
-			$values['PEAKURL_OWNER_USERNAME'],
-			$values['PEAKURL_OWNER_EMAIL'],
-			$values['PEAKURL_OWNER_PASSWORD'],
-			$values['PEAKURL_SITE_LANGUAGE'],
-			$values['PEAKURL_WORKSPACE_NAME'],
-			$values['PEAKURL_WORKSPACE_SLUG'],
-		);
+		foreach ( Constants::INSTALL_KEYS as $key ) {
+			unset( $values[ $key ] );
+		}
 
 		return $values;
 	}

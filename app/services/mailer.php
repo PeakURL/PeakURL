@@ -16,6 +16,7 @@ namespace PeakURL\Services;
 use PHPMailer\PHPMailer\Exception as PHPMailer_Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PeakURL\Api\SettingsApi;
+use PeakURL\Includes\Constants;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -584,7 +585,7 @@ class Mailer {
 		}
 
 		$host = (string) parse_url(
-			(string) ( $this->config['SITE_URL'] ?? '' ),
+			(string) ( $this->config[ Constants::SITE_URL ] ?? '' ),
 			PHP_URL_HOST
 		);
 		$host = preg_replace( '/^www\./i', '', strtolower( $host ) ?? '' );

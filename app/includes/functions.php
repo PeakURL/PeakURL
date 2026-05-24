@@ -48,6 +48,41 @@ function get_peakurl_config(): array {
 }
 
 /**
+ * Build a stable hash from selected runtime config values.
+ *
+ * Shared request helpers use this to decide when a cached service can be
+ * reused without keeping raw secret values in object state.
+ *
+ * @param array<string, mixed> $config Runtime config map.
+ * @param array<int, string>   $keys   Config keys that affect the service.
+ * @param array<string, mixed> $extra  Extra identity values, such as object IDs.
+ * @return string
+ * @since 1.2.2
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
+function get_peakurl_config_hash(
+	array $config,
+	array $keys,
+	array $extra = array()
+): string {
+	$values = array();
+
+	foreach ( $keys as $key ) {
+		$values[ $key ] = (string) ( $config[ $key ] ?? '' );
+	}
+
+	foreach ( $extra as $key => $value ) {
+		$values[ $key ] = is_scalar( $value ) || null === $value
+			? (string) $value
+			: gettype( $value );
+	}
+
+	$encoded = json_encode( $values );
+
+	return md5( is_string( $encoded ) ? $encoded : serialize( $values ) );
+}
+
+/**
  * Get the shared database connection for the current request.
  *
  * @param array<string, mixed>|null $config Optional app config.
@@ -60,16 +95,9 @@ function get_peakurl_connection( ?array $config = null ): Connection {
 	static $config_hash = null;
 
 	$app_config = $config ?? get_peakurl_config();
-	$next_hash  = md5(
-		(string) json_encode(
-			array(
-				'db_host'     => (string) ( $app_config['DB_HOST'] ?? '' ),
-				'db_port'     => (string) ( $app_config['DB_PORT'] ?? '' ),
-				'db_database' => (string) ( $app_config['DB_DATABASE'] ?? '' ),
-				'db_username' => (string) ( $app_config['DB_USERNAME'] ?? '' ),
-				'db_prefix'   => (string) ( $app_config['DB_PREFIX'] ?? '' ),
-			),
-		),
+	$next_hash  = get_peakurl_config_hash(
+		$app_config,
+		Constants::DB_KEYS,
 	);
 
 	if ( $connection instanceof Connection && $config_hash === $next_hash ) {
@@ -100,17 +128,10 @@ function get_settings_api(
 
 	$app_config     = $config ?? get_peakurl_config();
 	$app_connection = $connection ?? get_peakurl_connection( $app_config );
-	$next_cache_key = md5(
-		(string) json_encode(
-			array(
-				'db_host'     => (string) ( $app_config['DB_HOST'] ?? '' ),
-				'db_port'     => (string) ( $app_config['DB_PORT'] ?? '' ),
-				'db_database' => (string) ( $app_config['DB_DATABASE'] ?? '' ),
-				'db_username' => (string) ( $app_config['DB_USERNAME'] ?? '' ),
-				'db_prefix'   => (string) ( $app_config['DB_PREFIX'] ?? '' ),
-				'connection'  => spl_object_id( $app_connection ),
-			),
-		),
+	$next_cache_key = get_peakurl_config_hash(
+		$app_config,
+		Constants::DB_KEYS,
+		array( 'connection' => spl_object_id( $app_connection ) ),
 	);
 
 	if ( $settings_api instanceof SettingsApi && $cache_key === $next_cache_key ) {
@@ -232,7 +253,9 @@ function get_site_url( string $path = '', ?string $scheme = null ): string {
 	$site_url = trim( (string) $settings->get_option( 'site_url' ) );
 
 	if ( '' === $site_url ) {
-		$site_url = trim( (string) ( $config['SITE_URL'] ?? '' ) );
+		$site_url = trim(
+			(string) ( $config[ Constants::SITE_URL ] ?? '' ),
+		);
 	}
 
 	$site_url = untrailingslashit( $site_url );
@@ -396,7 +419,7 @@ function get_peakurl_data( array $args = array() ): array {
 
 	if ( '' === $site_url ) {
 		$site_url = trim(
-			(string) ( $app_config[ Constants::CONFIG_SITE_URL ] ?? '' ),
+			(string) ( $app_config[ Constants::SITE_URL ] ?? '' ),
 		);
 	}
 
@@ -454,11 +477,11 @@ function get_peakurl_data( array $args = array() ): array {
 		: $option( 'installed_version' );
 	$version = '' !== $version
 		? $version
-		: (string) ( $app_config[ Constants::CONFIG_VERSION ] ?? Constants::DEFAULT_VERSION );
+		: (string) ( $app_config[ Constants::VERSION ] ?? Constants::DEFAULT_VERSION );
 
 	$debug_enabled = array_key_exists( 'debug', $args )
 		? (bool) $args['debug']
-		: ! empty( $app_config[ Constants::CONFIG_DEBUG ] );
+		: ! empty( $app_config[ Constants::DEBUG ] );
 
 	/*
 	 * Reuse caller-provided favicon data when available; otherwise ask the
@@ -728,13 +751,13 @@ function get_i18n_service(
 	}
 
 	$app_config = $config ?? get_peakurl_config();
-	$next_hash  = md5(
-		(string) json_encode(
-			array(
-				'content_dir' => (string) ( $app_config['PEAKURL_CONTENT_DIR'] ?? '' ),
-				'site_url'    => (string) ( $app_config['SITE_URL'] ?? '' ),
-				'db_name'     => (string) ( $app_config['DB_DATABASE'] ?? '' ),
-			),
+	$next_hash  = get_peakurl_config_hash(
+		$app_config,
+		array(
+			Constants::CONTENT_DIR,
+			Constants::SITE_URL,
+			Constants::DB_DATABASE,
+			Constants::DB_PREFIX,
 		),
 	);
 

@@ -67,7 +67,7 @@ class Site {
 
 		if ( '' === $site_url ) {
 			$site_url = trim(
-				(string) ( $config[ Constants::CONFIG_SITE_URL ] ?? '' ),
+				(string) ( $config[ Constants::SITE_URL ] ?? '' ),
 			);
 		}
 
@@ -76,13 +76,13 @@ class Site {
 			'url'                     => $site_url,
 			'version'                 => $this->context->get_version(),
 			'environment'             => trim(
-				(string) ( $config[ Constants::CONFIG_ENV ] ?? 'production' ),
+				(string) ( $config[ Constants::ENV ] ?? 'production' ),
 			),
 			'installType'             => $this->context->is_source_checkout()
 				? 'source'
 				: 'release',
 			'debugEnabled'            => ! empty(
-				$config[ Constants::CONFIG_DEBUG ]
+				$config[ Constants::DEBUG ]
 			),
 			'locale'                  => $locale,
 			'htmlLang'                => $i18n_service->get_html_lang( $locale ),

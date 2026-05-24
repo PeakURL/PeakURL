@@ -26,13 +26,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class State {
 
-		/** Install state: config.php is missing. */
+	/** Install state: config.php is missing. */
 	public const NEEDS_SETUP = 'needs_setup';
 
-		/** Install state: config.php exists but tables or seed data are missing. */
+	/** Install state: config.php exists but tables or setup data are missing. */
 	public const NEEDS_INSTALL = 'needs_install';
 
-		/** Install state: the release is fully installed and ready. */
+	/** Install state: the release is fully installed and ready. */
 	public const READY = 'ready';
 
 	/**

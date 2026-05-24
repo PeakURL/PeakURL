@@ -34,15 +34,15 @@ trait SettingsTrait {
 			return;
 		}
 
-		$site_name    = trim( (string) ( $this->config['PEAKURL_WORKSPACE_NAME'] ?? '' ) );
-		$site_slug    = trim( (string) ( $this->config['PEAKURL_WORKSPACE_SLUG'] ?? '' ) );
-		$site_url     = trim( (string) ( $this->config['SITE_URL'] ?? '' ) );
-		$admin_email  = trim( (string) ( $this->config['PEAKURL_OWNER_EMAIL'] ?? '' ) );
+		$site_name    = trim( (string) ( $this->config[ Constants::WORKSPACE_NAME ] ?? '' ) );
+		$site_slug    = trim( (string) ( $this->config[ Constants::WORKSPACE_SLUG ] ?? '' ) );
+		$site_url     = trim( (string) ( $this->config[ Constants::SITE_URL ] ?? '' ) );
+		$admin_email  = trim( (string) ( $this->config[ Constants::OWNER_EMAIL ] ?? '' ) );
 		$version      = trim(
-			(string) ( $this->config[ Constants::CONFIG_VERSION ] ?? '' ),
+			(string) ( $this->config[ Constants::VERSION ] ?? '' ),
 		);
 		$manifest_url = trim(
-			(string) ( $this->config[ Constants::CONFIG_UPDATE_MANIFEST_URL ] ?? '' ),
+			(string) ( $this->config[ Constants::UPDATE_MANIFEST_URL ] ?? '' ),
 		);
 
 		if ( '' !== $site_name ) {
@@ -138,7 +138,7 @@ trait SettingsTrait {
 	 * @since 1.0.0
 	 */
 	private function add_default_options(): void {
-		$site_language = trim( (string) ( $this->config['PEAKURL_SITE_LANGUAGE'] ?? '' ) );
+		$site_language = trim( (string) ( $this->config[ Constants::SITE_LANGUAGE ] ?? '' ) );
 
 		if ( '' === $site_language ) {
 			$site_language = Constants::DEFAULT_LOCALE;

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace PeakURL\Http;
 
+use PeakURL\Includes\RouteConfigurationException;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -26,9 +28,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Router {
 
 	/**
+	 * HTTP methods accepted by the route registry.
+	 *
+	 * @var array<string, bool>
+	 * @since 1.2.2
+	 */
+	private const METHODS = array(
+		'GET'    => true,
+		'HEAD'   => true,
+		'POST'   => true,
+		'PUT'    => true,
+		'PATCH'  => true,
+		'DELETE' => true,
+	);
+
+	/**
 	 * Registered route definitions.
 	 *
-	 * @var array<int, array<string, mixed>>
+	 * Grouped by HTTP method so dispatch only scans relevant routes.
+	 *
+	 * @var array<string, array<int, array<string, mixed>>>
 	 * @since 1.0.0
 	 */
 	private array $routes = array();
@@ -42,7 +61,7 @@ class Router {
 	 * @since 1.0.0
 	 */
 	public function get( string $path, callable $handler ): void {
-		$this->add( 'GET', $path, $handler );
+		$this->add_route( 'GET', $path, $handler );
 	}
 
 	/**
@@ -54,7 +73,7 @@ class Router {
 	 * @since 1.1.2
 	 */
 	public function head( string $path, callable $handler ): void {
-		$this->add( 'HEAD', $path, $handler );
+		$this->add_route( 'HEAD', $path, $handler );
 	}
 
 	/**
@@ -66,7 +85,7 @@ class Router {
 	 * @since 1.0.0
 	 */
 	public function post( string $path, callable $handler ): void {
-		$this->add( 'POST', $path, $handler );
+		$this->add_route( 'POST', $path, $handler );
 	}
 
 	/**
@@ -78,7 +97,7 @@ class Router {
 	 * @since 1.0.0
 	 */
 	public function put( string $path, callable $handler ): void {
-		$this->add( 'PUT', $path, $handler );
+		$this->add_route( 'PUT', $path, $handler );
 	}
 
 	/**
@@ -90,7 +109,7 @@ class Router {
 	 * @since 1.0.0
 	 */
 	public function patch( string $path, callable $handler ): void {
-		$this->add( 'PATCH', $path, $handler );
+		$this->add_route( 'PATCH', $path, $handler );
 	}
 
 	/**
@@ -102,7 +121,33 @@ class Router {
 	 * @since 1.0.0
 	 */
 	public function delete( string $path, callable $handler ): void {
-		$this->add( 'DELETE', $path, $handler );
+		$this->add_route( 'DELETE', $path, $handler );
+	}
+
+	/**
+	 * Register a route from a normalized route map entry.
+	 *
+	 * Higher-level route maps can call this method without dispatching through
+	 * dynamic method names.
+	 *
+	 * @param string   $method  HTTP method.
+	 * @param string   $path    URI pattern.
+	 * @param callable $handler Request handler.
+	 * @return void
+	 *
+	 * @throws RouteConfigurationException If the HTTP method is unsupported.
+	 * @since 1.2.2
+	 */
+	public function add_route( string $method, string $path, callable $handler ): void {
+		$method = strtoupper( trim( $method ) );
+
+		if ( ! isset( self::METHODS[ $method ] ) ) {
+			throw new RouteConfigurationException(
+				'Unsupported route method: ' . $method,
+			);
+		}
+
+		$this->register( $method, $path, $handler );
 	}
 
 	/**
@@ -116,11 +161,9 @@ class Router {
 	 * @since 1.0.0
 	 */
 	public function dispatch( Request $request ): array {
-		foreach ( $this->routes as $route ) {
-			if ( $route['method'] !== $request->get_method() ) {
-				continue;
-			}
+		$routes = $this->routes[ $request->get_method() ] ?? array();
 
+		foreach ( $routes as $route ) {
 			if ( ! preg_match( $route['regex'], $request->get_path(), $matches ) ) {
 				continue;
 			}
@@ -147,7 +190,7 @@ class Router {
 	}
 
 	/**
-	 * Add a route definition to the internal registry.
+	 * Register a route definition in the internal route table.
 	 *
 	 * Converts `{param}` placeholders to regex capture groups and records
 	 * the parameter names in order for later extraction.
@@ -158,23 +201,59 @@ class Router {
 	 * @return void
 	 * @since 1.0.0
 	 */
-	private function add( string $method, string $path, callable $handler ): void {
+	private function register( string $method, string $path, callable $handler ): void {
 		$params = array();
-		$regex  = preg_replace_callback(
-			'/\{([^}]+)\}/',
-			static function ( array $matches ) use ( &$params ): string {
-				$params[] = $matches[1];
-				return '([^/]+)';
-			},
-			$path,
-		);
+		$regex  = $this->compile_path( $path, $params );
 
-		$this->routes[] = array(
-			'method'  => strtoupper( $method ),
+		if ( ! isset( $this->routes[ $method ] ) ) {
+			$this->routes[ $method ] = array();
+		}
+
+		$this->routes[ $method ][] = array(
 			'path'    => $path,
-			'regex'   => '#^' . $regex . '$#',
+			'regex'   => $regex,
 			'params'  => $params,
 			'handler' => $handler,
 		);
+	}
+
+	/**
+	 * Compile a route path into a safe regular expression.
+	 *
+	 * Literal path text is escaped, while `{param}` placeholders become one
+	 * path-segment capture group and are recorded for later extraction.
+	 *
+	 * @param string             $path   Route path with optional placeholders.
+	 * @param array<int, string> $params Placeholder names collected by reference.
+	 * @return string Regex pattern ready for `preg_match()`.
+	 * @since 1.2.2
+	 */
+	private function compile_path( string $path, array &$params ): string {
+		$parts = preg_split(
+			'/(\{[^}]+\})/',
+			$path,
+			-1,
+			PREG_SPLIT_DELIM_CAPTURE
+		);
+
+		if ( ! is_array( $parts ) ) {
+			return '#^' . preg_quote( $path, '#' ) . '$#';
+		}
+
+		$regex = '';
+
+		foreach ( $parts as $part ) {
+			if (
+				preg_match( '/^\{([^}]+)\}$/', $part, $matches )
+			) {
+				$params[] = $matches[1];
+				$regex   .= '([^/]+)';
+				continue;
+			}
+
+			$regex .= preg_quote( $part, '#' );
+		}
+
+		return '#^' . $regex . '$#';
 	}
 }

@@ -61,7 +61,7 @@ class AuthController extends BaseController {
 			);
 		}
 
-		return $this->boolean_response( 'verified', __( 'Email verified.', 'peakurl' ) );
+		return $this->confirm_response( 'verified', __( 'Email verified.', 'peakurl' ) );
 	}
 
 	/**
@@ -121,7 +121,7 @@ class AuthController extends BaseController {
 	 */
 	public function logout( Request $request ): array {
 		$this->data_store->logout( $request );
-		return $this->boolean_response( 'loggedOut', __( 'Signed out.', 'peakurl' ) );
+		return $this->confirm_response( 'loggedOut', __( 'Signed out.', 'peakurl' ) );
 	}
 
 	/**
@@ -146,7 +146,7 @@ class AuthController extends BaseController {
 	 * @since 1.1.0
 	 */
 	public function validate_reset_token( Request $request ): array {
-		$token = (string) $request->get_route_param( 'token' );
+		$token = $this->route_param( $request, 'token' );
 
 		if ( ! $this->data_store->validate_reset_token( $token ) ) {
 			return $this->not_found_response(
@@ -170,7 +170,7 @@ class AuthController extends BaseController {
 	 * @since 1.0.0
 	 */
 	public function reset_password( Request $request ): array {
-		$token = (string) $request->get_route_param( 'token' );
+		$token = $this->route_param( $request, 'token' );
 		$reset = $this->data_store->reset_password(
 			$token,
 			$request->get_body_params(),
@@ -220,14 +220,14 @@ class AuthController extends BaseController {
 	public function delete_api_key( Request $request ): array {
 		$deleted = $this->data_store->delete_api_key(
 			$request,
-			(string) $request->get_route_param( 'id' ),
+			$this->route_param( $request, 'id' ),
 		);
 
-		if ( ! $deleted ) {
-			return $this->not_found_response( __( 'API key not found.', 'peakurl' ) );
-		}
-
-		return $this->boolean_response( 'deleted', __( 'API key deleted.', 'peakurl' ) );
+		return $this->delete_response(
+			$deleted,
+			__( 'API key not found.', 'peakurl' ),
+			__( 'API key deleted.', 'peakurl' ),
+		);
 	}
 
 	/**
@@ -300,7 +300,7 @@ class AuthController extends BaseController {
 		);
 
 		$this->data_store->disable_two_factor( $request, $current_password );
-		return $this->boolean_response(
+		return $this->confirm_response(
 			'disabled',
 			__( 'Two-factor authentication disabled.', 'peakurl' ),
 		);
@@ -375,14 +375,14 @@ class AuthController extends BaseController {
 	public function revoke_session( Request $request ): array {
 		$revoked = $this->data_store->revoke_session(
 			$request,
-			(string) $request->get_route_param( 'id' ),
+			$this->route_param( $request, 'id' ),
 		);
 
 		if ( ! $revoked ) {
 			return $this->not_found_response( __( 'Session not found.', 'peakurl' ) );
 		}
 
-		return $this->boolean_response( 'revoked', __( 'Session revoked.', 'peakurl' ) );
+		return $this->confirm_response( 'revoked', __( 'Session revoked.', 'peakurl' ) );
 	}
 
 	/**

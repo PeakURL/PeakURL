@@ -119,7 +119,7 @@ trait SessionsTrait {
 	private function find_session_by_request( Request $request ): ?array {
 		$this->prune_stale_sessions();
 
-		$cookie_name = (string) $this->config[ Constants::CONFIG_SESSION_COOKIE_NAME ];
+		$cookie_name = (string) $this->config[ Constants::SESSION_COOKIE_NAME ];
 		$token       = $this->crypto_service->verify_session_token(
 			trim( (string) $request->get_cookie( $cookie_name, '' ) )
 		);
@@ -178,16 +178,16 @@ trait SessionsTrait {
 		$this->db->insert( 'sessions', $row );
 
 		$request->queue_cookie(
-			(string) $this->config[ Constants::CONFIG_SESSION_COOKIE_NAME ],
+			(string) $this->config[ Constants::SESSION_COOKIE_NAME ],
 			$this->crypto_service->sign_session_token( $raw_token ),
 			Security::session_cookie_options(
 				$this->config,
 				$request,
 				array(
-					'max-age' => (int) $this->config[ Constants::CONFIG_SESSION_LIFETIME ],
+					'max-age' => (int) $this->config[ Constants::SESSION_LIFETIME ],
 					'expires' => gmdate(
 						'D, d M Y H:i:s T',
-						time() + (int) $this->config[ Constants::CONFIG_SESSION_LIFETIME ],
+						time() + (int) $this->config[ Constants::SESSION_LIFETIME ],
 					),
 				)
 			),

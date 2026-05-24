@@ -124,13 +124,13 @@ class Context {
 		$this->settings_api      = $settings_api;
 		$this->crypto_service    = $crypto_service;
 		$this->content_directory = trim(
-			(string) ( $config['PEAKURL_CONTENT_DIR'] ?? ABSPATH . 'content' ),
+			(string) ( $config[ Constants::CONTENT_DIR ] ?? ABSPATH . 'content' ),
 		);
 		$this->database_path     = trim(
-			(string) ( $config['PEAKURL_GEOIP_DB_PATH'] ?? '' ),
+			(string) ( $config[ Constants::GEOIP_DB_PATH ] ?? '' ),
 		);
 		$this->peakurl_version   = trim(
-			(string) ( $config[ Constants::CONFIG_VERSION ] ?? Constants::DEFAULT_VERSION ),
+			(string) ( $config[ Constants::VERSION ] ?? Constants::DEFAULT_VERSION ),
 		);
 	}
 

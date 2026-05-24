@@ -112,7 +112,7 @@ class Counts {
 			'Y-m-d H:i:s',
 			time() - max(
 				0,
-				(int) ( $this->context->get_config()[ Constants::CONFIG_SESSION_LIFETIME ] ?? Constants::DEFAULT_SESSION_LIFETIME ),
+				(int) ( $this->context->get_config()[ Constants::SESSION_LIFETIME ] ?? Constants::DEFAULT_SESSION_LIFETIME ),
 			),
 		);
 	}

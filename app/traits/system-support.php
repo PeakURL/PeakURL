@@ -161,7 +161,7 @@ trait SystemSupportTrait {
 
 		$installed_version = (string) (
 			$result['version']
-			?? $this->config[ Constants::CONFIG_VERSION ]
+			?? $this->config[ Constants::VERSION ]
 			?? Constants::DEFAULT_VERSION
 		);
 

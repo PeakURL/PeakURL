@@ -5,9 +5,13 @@ import type { LinkRecord } from "./links";
  */
 export interface DashboardStats {
 	totalClicks: number;
+	previousTotalClicks?: number;
 	totalLinks: number;
+	previousTotalLinks?: number;
 	uniqueClicks: number;
+	previousUniqueClicks?: number;
 	uniqueClickRate: number;
+	previousUniqueClickRate?: number;
 }
 
 /**

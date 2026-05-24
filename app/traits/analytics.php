@@ -84,12 +84,62 @@ trait AnalyticsTrait {
 			(int) ( $stats['unique_clicks'] ?? 0 ),
 		);
 
+		$prev_click_conditions = array( 'c.clicked_at >= :prev_start_at', 'c.clicked_at < :start_at' );
+		$prev_click_params     = array(
+			'prev_start_at' => gmdate( 'Y-m-d H:i:s', strtotime( $period['start_at'] . " -{$days} days" ) ),
+			'start_at'      => $period['start_at'],
+		);
+		$this->scope_click_analytics(
+			$user,
+			$click_join,
+			$prev_click_conditions,
+			$prev_click_params,
+			'c',
+			'u',
+		);
+		$prev_stats =
+		$this->query_one(
+			'SELECT
+	                COUNT(*) AS total_clicks,
+	                COUNT(DISTINCT COALESCE(NULLIF(c.visitor_hash, \'\'), c.id)) AS unique_clicks
+	            FROM clicks c' .
+			$click_join .
+			' WHERE ' .
+			implode( ' AND ', $prev_click_conditions ),
+			$prev_click_params,
+		) ?? array();
+
+		$prev_unique_click_rate = $this->get_unique_click_rate(
+			(int) ( $prev_stats['total_clicks'] ?? 0 ),
+			(int) ( $prev_stats['unique_clicks'] ?? 0 ),
+		);
+
+		$prev_link_conditions = array( 'u.created_at < :start_at' );
+		$prev_link_params     = array( 'start_at' => $period['start_at'] );
+		$this->scope_link_visibility(
+			$user,
+			$prev_link_conditions,
+			$prev_link_params,
+			'u',
+		);
+		$prev_total_links = (int) $this->query_value(
+			'SELECT COUNT(*) FROM urls u ' .
+			( ! empty( $prev_link_conditions )
+			? 'WHERE ' . implode( ' AND ', $prev_link_conditions )
+			: '' ),
+			$prev_link_params,
+		);
+
 		return array(
-			'totalClicks'      => (int) ( $stats['total_clicks'] ?? 0 ),
-			'totalLinks'       => $total_links,
-			'uniqueClicks'     => (int) ( $stats['unique_clicks'] ?? 0 ),
-			'uniqueClickRate'  => $unique_click_rate,
-			'devices'          => $this->group_click_metrics(
+			'totalClicks'             => (int) ( $stats['total_clicks'] ?? 0 ),
+			'previousTotalClicks'     => (int) ( $prev_stats['total_clicks'] ?? 0 ),
+			'totalLinks'              => $total_links,
+			'previousTotalLinks'      => $prev_total_links,
+			'uniqueClicks'            => (int) ( $stats['unique_clicks'] ?? 0 ),
+			'previousUniqueClicks'    => (int) ( $prev_stats['unique_clicks'] ?? 0 ),
+			'uniqueClickRate'         => $unique_click_rate,
+			'previousUniqueClickRate' => $prev_unique_click_rate,
+			'devices'                 => $this->group_click_metrics(
 				'device',
 				'name',
 				$period['start_at'],
@@ -98,7 +148,7 @@ trait AnalyticsTrait {
 				null,
 				$user,
 			),
-			'browsers'         => $this->group_click_metrics(
+			'browsers'                => $this->group_click_metrics(
 				'browser',
 				'name',
 				$period['start_at'],
@@ -107,7 +157,7 @@ trait AnalyticsTrait {
 				null,
 				$user,
 			),
-			'operatingSystems' => $this->group_click_metrics(
+			'operatingSystems'        => $this->group_click_metrics(
 				'operating_system',
 				'name',
 				$period['start_at'],
@@ -116,7 +166,7 @@ trait AnalyticsTrait {
 				null,
 				$user,
 			),
-			'countries'        => $this->group_click_metrics(
+			'countries'               => $this->group_click_metrics(
 				'country_name',
 				'name',
 				$period['start_at'],
@@ -125,7 +175,7 @@ trait AnalyticsTrait {
 				null,
 				$user,
 			),
-			'traffic'          => $this->query_traffic_series(
+			'traffic'                 => $this->query_traffic_series(
 				null,
 				$days,
 				$user,

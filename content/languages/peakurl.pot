@@ -213,12 +213,12 @@ msgstr ""
 msgid "PeakURL could not identify the current session."
 msgstr ""
 
-#: app/traits/analytics.php:284
+#: app/traits/analytics.php:334
 msgid "Activity log ID is required."
 msgstr ""
 
-#: app/traits/analytics.php:452
-#: app/traits/analytics.php:610
+#: app/traits/analytics.php:502
+#: app/traits/analytics.php:660
 msgid "You do not have permission to view analytics for this link."
 msgstr ""
 
@@ -1993,7 +1993,7 @@ msgid "Sun"
 msgstr ""
 
 #: ui/components/charts/TrafficChart/TrafficChart.tsx:260
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:22
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:70
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:21
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:106
 #: ui/pages/dashboard/links/LinksPage.tsx:296
@@ -2001,7 +2001,7 @@ msgid "Total Clicks"
 msgstr ""
 
 #: ui/components/charts/TrafficChart/TrafficChart.tsx:261
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:46
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:94
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:28
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:114
 #: ui/pages/dashboard/links/LinksPage.tsx:311
@@ -5555,7 +5555,7 @@ msgid "Previous"
 msgstr ""
 
 #: ui/pages/dashboard/activity/ActivityPage.tsx:1200
-#: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:77
+#: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:84
 msgid "Next"
 msgstr ""
 
@@ -5875,18 +5875,18 @@ msgstr ""
 msgid "No traffic data available"
 msgstr ""
 
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:30
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:78
 #: ui/pages/dashboard/links/LinksPage.tsx:281
 msgid "Active Links"
 msgstr ""
 
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:38
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:86
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:47
 msgid "Unique Click Rate"
 msgstr ""
 
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:109
-msgid "vs last month"
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:158
+msgid "vs previous period"
 msgstr ""
 
 #: ui/pages/dashboard/_components/Header/Header.tsx:16
@@ -6514,35 +6514,35 @@ msgstr ""
 msgid "Traffic by Category"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:199
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:197
 msgid "Referrer Sources"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:204
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:202
 msgid "Loading referrers..."
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:235
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:233
 msgid "Direct / Unknown"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:277
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:275
 msgid "No referrer data available yet"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:280
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:278
 msgid "Referrer data will appear when visitors come from external sources"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:293
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:291
 msgid "UTM Campaign Tracking"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:309
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:306
 msgid "source:"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:315
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:312
 msgid "medium:"
 msgstr ""
 

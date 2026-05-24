@@ -215,12 +215,12 @@ msgstr "تصدیقی کوڈ درست نہیں۔"
 msgid "PeakURL could not identify the current session."
 msgstr "PeakURL موجودہ سیشن کی شناخت نہیں کر سکا۔"
 
-#: app/traits/analytics.php:284
+#: app/traits/analytics.php:334
 msgid "Activity log ID is required."
 msgstr "ایکٹیویٹی لاگ کی آئی ڈی درکار ہے۔"
 
-#: app/traits/analytics.php:452
-#: app/traits/analytics.php:610
+#: app/traits/analytics.php:502
+#: app/traits/analytics.php:660
 msgid "You do not have permission to view analytics for this link."
 msgstr "آپ کو اس لنک کے تجزیات دیکھنے کی اجازت نہیں ہے۔"
 
@@ -1995,7 +1995,7 @@ msgid "Sun"
 msgstr "اتوار"
 
 #: ui/components/charts/TrafficChart/TrafficChart.tsx:260
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:22
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:70
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:21
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:106
 #: ui/pages/dashboard/links/LinksPage.tsx:296
@@ -2003,7 +2003,7 @@ msgid "Total Clicks"
 msgstr "کل کلکس"
 
 #: ui/components/charts/TrafficChart/TrafficChart.tsx:261
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:46
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:94
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:28
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:114
 #: ui/pages/dashboard/links/LinksPage.tsx:311
@@ -5557,7 +5557,7 @@ msgid "Previous"
 msgstr "پچھلا"
 
 #: ui/pages/dashboard/activity/ActivityPage.tsx:1200
-#: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:77
+#: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:84
 msgid "Next"
 msgstr "اگلا"
 
@@ -5877,19 +5877,19 @@ msgstr "منفرد"
 msgid "No traffic data available"
 msgstr "ٹریفک کا کوئی ڈیٹا دستیاب نہیں"
 
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:30
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:78
 #: ui/pages/dashboard/links/LinksPage.tsx:281
 msgid "Active Links"
 msgstr "فعال لنکس"
 
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:38
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:86
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:47
 msgid "Unique Click Rate"
 msgstr "منفرد کلک کی شرح"
 
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:109
-msgid "vs last month"
-msgstr "پچھلے مہینے کے مقابلے میں"
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:158
+msgid "vs previous period"
+msgstr "گزشتہ مدت کے مقابلے میں"
 
 #: ui/pages/dashboard/_components/Header/Header.tsx:16
 #: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:136
@@ -6516,35 +6516,35 @@ msgstr "براہِ راست"
 msgid "Traffic by Category"
 msgstr "زمرہ وار ٹریفک"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:199
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:197
 msgid "Referrer Sources"
 msgstr "ریفرر ذرائع"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:204
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:202
 msgid "Loading referrers..."
 msgstr "ریفررز لوڈ ہو رہے ہیں..."
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:235
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:233
 msgid "Direct / Unknown"
 msgstr "براہِ راست / نامعلوم"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:277
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:275
 msgid "No referrer data available yet"
 msgstr "ابھی ریفرر کا کوئی ڈیٹا دستیاب نہیں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:280
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:278
 msgid "Referrer data will appear when visitors come from external sources"
 msgstr "جب وزیٹرز بیرونی ذرائع سے آئیں گے تو ریفرر ڈیٹا یہاں ظاہر ہوگا"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:293
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:291
 msgid "UTM Campaign Tracking"
 msgstr "UTM مہم ٹریکنگ"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:309
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:306
 msgid "source:"
 msgstr "ماخذ:"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:315
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:312
 msgid "medium:"
 msgstr "ذریعہ:"
 

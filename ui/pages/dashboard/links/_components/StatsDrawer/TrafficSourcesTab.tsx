@@ -85,10 +85,7 @@ const CATEGORY_INFO: Record<
 };
 
 const getCategoryInfo = (category: string) => {
-	return (
-		CATEGORY_INFO[(category as TrafficCategory) || "Unknown"] ||
-		CATEGORY_INFO.Unknown
-	);
+	return CATEGORY_INFO[category as TrafficCategory] || CATEGORY_INFO.Unknown;
 };
 
 const getCategoryLabel = (category: string) => {
@@ -109,11 +106,7 @@ const getCategoryLabel = (category: string) => {
 		Unknown: __("Unknown"),
 	};
 
-	return (
-		labels[(category as TrafficCategory) || "Unknown"] ||
-		category ||
-		__("Unknown")
-	);
+	return labels[category as TrafficCategory] || category || __("Unknown");
 };
 
 const getTotalClicks = (referrers: ReferrerItem[]) => {
@@ -158,9 +151,15 @@ function TrafficSourcesTab({ stats, isLoading }: LinkStatsViewProps) {
 						{referrerCategories.map((cat: ReferrerCategoryItem) => {
 							const meta = getCategoryInfo(cat.category);
 							const Icon = meta.icon;
+							const totalCategoryClicks =
+								referrerCategories.reduce(
+									(sum: number, item: ReferrerCategoryItem) =>
+										sum + item.count,
+									0
+								);
 							const percentage = getPercentage(
 								cat.count,
-								totalClicks
+								totalCategoryClicks
 							);
 
 							return (

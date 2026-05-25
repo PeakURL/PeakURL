@@ -439,9 +439,11 @@ $prepare_html = static function (
 		return $updated_html;
 	}
 
-	$fallback_after_body_open = preg_replace(
+	$fallback_after_body_open = preg_replace_callback(
 		'/<body\b[^>]*>/i',
-		'$0' . $dashboard_data_script,
+		static function ( array $matches ) use ( $dashboard_data_script ): string {
+			return (string) ( $matches[0] ?? '' ) . $dashboard_data_script;
+		},
 		$html,
 		1,
 	);
@@ -453,9 +455,11 @@ $prepare_html = static function (
 		return $fallback_after_body_open;
 	}
 
-	$fallback_before_body_close = preg_replace(
+	$fallback_before_body_close = preg_replace_callback(
 		'/<\/body>/i',
-		$dashboard_data_script . '</body>',
+		static function ( array $matches ) use ( $dashboard_data_script ): string {
+			return $dashboard_data_script . (string) ( $matches[0] ?? '' );
+		},
 		$html,
 		1,
 	);
@@ -588,12 +592,24 @@ if ( Str::starts_with( $relative_path, '/api/' ) ) {
 }
 
 if ( InstallState::NEEDS_SETUP === $install_state ) {
-	header( 'Location: ' . $setup_path );
+	$safe_setup_path = str_replace( array( "\r", "\n" ), '', (string) $setup_path );
+
+	if ( '' === $safe_setup_path || '/' !== $safe_setup_path[0] ) {
+		$safe_setup_path = '/';
+	}
+
+	header( 'Location: ' . $safe_setup_path, true, 302 );
 	exit();
 }
 
 if ( InstallState::NEEDS_INSTALL === $install_state ) {
-	header( 'Location: ' . $install_path );
+	$safe_install_path = str_replace( array( "\r", "\n" ), '', (string) $install_path );
+
+	if ( '' === $safe_install_path || '/' !== $safe_install_path[0] ) {
+		$safe_install_path = '/';
+	}
+
+	header( 'Location: ' . $safe_install_path, true, 302 );
 	exit();
 }
 

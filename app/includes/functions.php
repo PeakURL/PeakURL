@@ -296,7 +296,7 @@ function get_site_url( string $path = '', ?string $scheme = null ): string {
 }
 
 /**
- * Get the configured PeakURL site URL.
+ * Convenience wrapper for get_site_url().
  *
  * Mirrors the role of WordPress `site_url()` as a wrapper around
  * `get_site_url()`.

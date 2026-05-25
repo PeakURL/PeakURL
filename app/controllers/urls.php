@@ -309,9 +309,7 @@ class UrlsController extends BaseController {
 		if ( 'redirect' === ( $result['status'] ?? '' ) ) {
 			return JsonResponse::redirect(
 				(string) $result['location'],
-				! empty( $result['captchaProtected'] )
-					? self::REDIRECT_TEMPORARY
-					: self::REDIRECT_PERMANENT,
+				self::REDIRECT_TEMPORARY,
 			);
 		}
 
@@ -323,7 +321,6 @@ class UrlsController extends BaseController {
 				$this->format_password_page(
 					$request,
 					$this->route_param( $request, 'id' ),
-					is_array( $result['url'] ?? null ) ? $result['url'] : array(),
 					(string) ( $result['message'] ?? '' ),
 				),
 				'password_invalid' === ( $result['status'] ?? '' ) ? 401 : 200,
@@ -383,7 +380,6 @@ class UrlsController extends BaseController {
 	private function format_password_page(
 		Request $request,
 		string $id,
-		array $url,
 		string $error = ''
 	): string {
 		$form_action  = htmlspecialchars(
@@ -459,6 +455,11 @@ class UrlsController extends BaseController {
 		);
 		$widget_html = $this->format_captcha_widget( $challenge, $provider );
 
+		$script_tag = '';
+		if ( $this->is_allowed_captcha_script_url( $script_url ) ) {
+			$script_tag = '<script src="' . $script_url . '" async defer></script>';
+		}
+
 		$shield_icon =
 			'<svg class="hero-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' .
 			'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' .
@@ -467,7 +468,7 @@ class UrlsController extends BaseController {
 
 		$content_html =
 			$this->format_captcha_script( $challenge, $provider, $has_error, $error ) .
-			'<script src="' . $script_url . '" async defer></script>' .
+			$script_tag .
 			'<div class="hero-icon-wrap">' . $shield_icon . '</div>' .
 			'<h1 class="title">' . __( 'Performing security verification', 'peakurl' ) . '</h1>' .
 			'<p class="subtitle">' . __( 'This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot.', 'peakurl' ) . '</p>' .
@@ -478,6 +479,36 @@ class UrlsController extends BaseController {
 			'</form>';
 
 		return $this->format_public_page( __( 'Security Verification', 'peakurl' ), $content_html );
+	}
+
+	/**
+	 * Validate that CAPTCHA script URL is HTTPS and hosted by an allowed domain.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $url Script URL to validate.
+	 * @return bool True when URL is trusted for script inclusion.
+	 */
+	private function is_allowed_captcha_script_url( string $url ): bool {
+		$parts = parse_url( $url );
+		if ( ! is_array( $parts ) ) {
+			return false;
+		}
+
+		$scheme = strtolower( (string) ( $parts['scheme'] ?? '' ) );
+		$host   = strtolower( (string) ( $parts['host'] ?? '' ) );
+
+		if ( 'https' !== $scheme || '' === $host ) {
+			return false;
+		}
+
+		$allowed_hosts = array(
+			'www.google.com',
+			'www.gstatic.com',
+			'challenges.cloudflare.com',
+		);
+
+		return in_array( $host, $allowed_hosts, true );
 	}
 
 	/**
@@ -944,9 +975,6 @@ HTML;
 <title>{$page_title} &mdash; PeakURL</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -969,7 +997,7 @@ HTML;
   }
 }
 body{
-  font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   background:var(--bg);min-height:100vh;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:24px 16px;color:var(--heading);

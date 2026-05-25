@@ -6,97 +6,137 @@ import {
 	MousePointerClick,
 	Users,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
-import { formatNumber } from "@/utils";
-import { __ } from "@/i18n";
-import { cn } from "@/utils";
+import { __, sprintf } from "@/i18n";
+import { cn, formatNumber } from "@/utils";
 
 import type { StatsCardsProps } from "../types";
 
 type DashboardStatTone = "clicks" | "links" | "rate" | "users";
+type DashboardStatChangeType = "positive" | "negative";
+
+interface DashboardStatChange {
+	text: string;
+	type: DashboardStatChangeType;
+}
+
+interface DashboardStatCard {
+	title: string;
+	value: string;
+	change: DashboardStatChange | null;
+	icon: LucideIcon;
+	tone: DashboardStatTone;
+}
+
+/**
+ * Format a dashboard-card delta against the last-month value.
+ *
+ * Count cards show percentage movement. Rate cards show percentage-point
+ * movement while keeping the compact percent badge style.
+ */
+function getLastMonthChange(
+	current: number,
+	lastMonth?: number,
+	isRate = false
+): DashboardStatChange | null {
+	if (lastMonth === undefined) {
+		return null;
+	}
+
+	const delta = current - lastMonth;
+	let formatted: string;
+
+	if (isRate) {
+		formatted = Math.abs(delta).toFixed(1) + "%";
+	} else if (lastMonth === 0) {
+		if (current === 0) {
+			return null;
+		}
+
+		formatted = "100%";
+	} else {
+		formatted = Math.abs((delta / lastMonth) * 100).toFixed(1) + "%";
+	}
+
+	return {
+		text: `${delta >= 0 ? "+" : "-"}${formatted}`,
+		type: delta >= 0 ? "positive" : "negative",
+	};
+}
+
+/**
+ * Return hover copy for the last-month date window.
+ */
+function getLastMonthTitle(
+	lastMonth: StatsCardsProps["stats"]["lastMonth"]
+): string {
+	if (!lastMonth?.startDate || !lastMonth?.endDate) {
+		return __(
+			"Compares with the same selected day range from last month."
+		);
+	}
+
+	return sprintf(__("Compared with %1$s to %2$s."), [
+		lastMonth.startDate,
+		lastMonth.endDate,
+	]);
+}
 
 const StatsCards = ({ stats }: StatsCardsProps) => {
 	const uniqueClickRate = Number(stats.uniqueClickRate ?? 0);
-	const previousUniqueClickRate = Number(stats.previousUniqueClickRate ?? 0);
+	const lastMonthUniqueClickRate =
+		stats.lastMonthUniqueClickRate === undefined
+			? undefined
+			: Number(stats.lastMonthUniqueClickRate);
 
-	const getChangeData = (
-		current: number,
-		previous?: number,
-		isRate = false
-	) => {
-		if (previous === undefined) return null;
-
-		const delta = current - previous;
-		let formatted: string;
-
-		if (isRate) {
-			formatted = Math.abs(delta).toFixed(1) + "%";
-		} else {
-			if (previous === 0) {
-				if (current === 0) return null;
-				formatted = "100%";
-			} else {
-				const percentage = (delta / previous) * 100;
-				formatted = Math.abs(percentage).toFixed(1) + "%";
-			}
-		}
-
-		return {
-			text: `${delta >= 0 ? "+" : "-"}${formatted}`,
-			type: delta >= 0 ? "positive" : "negative",
-		};
-	};
-
-	const clicksChange = getChangeData(
+	const clicksChange = getLastMonthChange(
 		stats.totalClicks,
-		stats.previousTotalClicks
+		stats.lastMonthTotalClicks
 	);
-	const linksChange = getChangeData(
+	const linksChange = getLastMonthChange(
 		stats.totalLinks,
-		stats.previousTotalLinks
+		stats.lastMonthTotalLinks
 	);
-	const rateChange = getChangeData(
+	const rateChange = getLastMonthChange(
 		uniqueClickRate,
-		previousUniqueClickRate,
+		lastMonthUniqueClickRate,
 		true
 	);
-	const uniqueChange = getChangeData(
+	const uniqueChange = getLastMonthChange(
 		stats.uniqueClicks,
-		stats.previousUniqueClicks
+		stats.lastMonthUniqueClicks
 	);
+	const lastMonthTitle = getLastMonthTitle(stats.lastMonth);
 
-	const statsData = [
+	const statsData: DashboardStatCard[] = [
 		{
 			title: __("Total Clicks"),
 			value: formatNumber(stats.totalClicks),
-			change: clicksChange?.text || null,
-			changeType: clicksChange?.type || "positive",
+			change: clicksChange,
 			icon: MousePointerClick,
-			tone: "clicks" as DashboardStatTone,
+			tone: "clicks",
 		},
 		{
 			title: __("Active Links"),
-			value: stats.totalLinks,
-			change: linksChange?.text || null,
-			changeType: linksChange?.type || "positive",
+			value: formatNumber(stats.totalLinks),
+			change: linksChange,
 			icon: Link2,
-			tone: "links" as DashboardStatTone,
+			tone: "links",
 		},
 		{
 			title: __("Unique Click Rate"),
 			value: `${uniqueClickRate.toFixed(1)}%`,
-			change: rateChange?.text || null,
-			changeType: rateChange?.type || "positive",
+			change: rateChange,
 			icon: ChartLine,
-			tone: "rate" as DashboardStatTone,
+			tone: "rate",
 		},
 		{
 			title: __("Unique Visitors"),
 			value: formatNumber(stats.uniqueClicks),
-			change: uniqueChange?.text || null,
-			changeType: uniqueChange?.type || "positive",
+			change: uniqueChange,
 			icon: Users,
-			tone: "users" as DashboardStatTone,
+			tone: "users",
 		},
 	];
 
@@ -109,10 +149,10 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
 			`dashboard-stats-card-icon-glyph-${tone}`
 		);
 
-	const getChangeBadgeClassName = (changeType: string) =>
+	const getChangeBadgeClassName = (changeType: DashboardStatChangeType) =>
 		cn(
 			"dashboard-stats-card-change-badge",
-			"positive" === changeType
+			changeType === "positive"
 				? "dashboard-stats-card-change-badge-positive"
 				: "dashboard-stats-card-change-badge-negative"
 		);
@@ -144,18 +184,21 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
 							<div className="dashboard-stats-card-change">
 								<span
 									className={getChangeBadgeClassName(
-										stat.changeType
+										stat.change.type
 									)}
 								>
-									{stat.changeType === "positive" ? (
+									{stat.change.type === "positive" ? (
 										<ArrowUp className="dashboard-stats-card-change-icon" />
 									) : (
 										<ArrowDown className="dashboard-stats-card-change-icon" />
 									)}
-									{stat.change}
+									{stat.change.text}
 								</span>
-								<span className="dashboard-stats-card-change-note">
-									{__("vs previous period")}
+								<span
+									className="dashboard-stats-card-change-note"
+									title={lastMonthTitle}
+								>
+									{__("vs last month")}
 								</span>
 							</div>
 						)}

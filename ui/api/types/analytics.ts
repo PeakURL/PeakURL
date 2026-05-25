@@ -1,17 +1,52 @@
 import type { LinkRecord } from "./links";
 
 /**
+ * Dashboard summary window from last month.
+ */
+export interface DashboardLastMonth {
+	/** Period strategy used by the analytics endpoint. */
+	type: "lastMonth" | string;
+
+	/** Number of local day buckets included. */
+	days: number;
+
+	/** First local date included in the last-month window. */
+	startDate: string;
+
+	/** Last local date included in the last-month window. */
+	endDate: string;
+}
+
+/**
  * Dashboard overview totals returned by analytics.
  */
 export interface DashboardStats {
+	/** Total clicks in the selected dashboard range. */
 	totalClicks: number;
-	previousTotalClicks?: number;
+
+	/** Total clicks in the matching last-month window. */
+	lastMonthTotalClicks?: number;
+
+	/** Visible links at the current request time. */
 	totalLinks: number;
-	previousTotalLinks?: number;
+
+	/** Visible links that existed by the end of the last-month window. */
+	lastMonthTotalLinks?: number;
+
+	/** Unique visitors in the selected dashboard range. */
 	uniqueClicks: number;
-	previousUniqueClicks?: number;
+
+	/** Unique visitors in the matching last-month window. */
+	lastMonthUniqueClicks?: number;
+
+	/** Unique visitor rate for the selected dashboard range. */
 	uniqueClickRate: number;
-	previousUniqueClickRate?: number;
+
+	/** Unique visitor rate for the matching last-month window. */
+	lastMonthUniqueClickRate?: number;
+
+	/** Date metadata for the dashboard-card last-month window. */
+	lastMonth?: DashboardLastMonth;
 }
 
 /**

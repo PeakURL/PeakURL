@@ -100,6 +100,157 @@ trait AnalyticsSupportTrait {
 	}
 
 	/**
+	 * Get the matching dashboard window from last month.
+	 *
+	 * Dashboard summary cards compare the selected number of local day buckets
+	 * with this same-length window shifted one calendar month back.
+	 *
+	 * @param array<string, string> $period Current dashboard period metadata.
+	 * @param int                   $days   Number of selected day buckets.
+	 * @return array{type: string, days: int, start_at: string, end_at: string, start_date: string, end_date: string}
+	 * @since 1.2.2
+	 */
+	private function get_last_month_period( array $period, int $days ): array {
+		$days     = max( 1, $days );
+		$timezone = new \DateTimeZone(
+			(string) ( $period['timezone'] ?? Constants::DEFAULT_TIMEZONE ),
+		);
+		$start    = ( new \DateTimeImmutable(
+			(string) ( $period['start_date'] ?? 'now' ),
+			$timezone,
+		) )->setTime( 0, 0, 0 );
+
+		$last_month_base = $start
+			->modify( 'first day of this month' )
+			->modify( '-1 month' );
+		$last_month_day  = min(
+			(int) $start->format( 'd' ),
+			(int) $last_month_base->format( 't' ),
+		);
+
+		// Clamp month-end dates so March 31 compares with February 28/29.
+		$last_month_start = $last_month_base->setDate(
+			(int) $last_month_base->format( 'Y' ),
+			(int) $last_month_base->format( 'm' ),
+			$last_month_day,
+		);
+		$last_month_end   = $last_month_start->modify( '+' . $days . ' days' );
+		$utc_timezone     = new \DateTimeZone( 'UTC' );
+
+		return array(
+			'type'       => 'lastMonth',
+			'days'       => $days,
+			'start_at'   => $last_month_start
+				->setTimezone( $utc_timezone )
+				->format( 'Y-m-d H:i:s' ),
+			'end_at'     => $last_month_end
+				->setTimezone( $utc_timezone )
+				->format( 'Y-m-d H:i:s' ),
+			'start_date' => $last_month_start->format( 'Y-m-d' ),
+			'end_date'   => $last_month_end->modify( '-1 day' )->format( 'Y-m-d' ),
+		);
+	}
+
+	/**
+	 * Count visible links for the dashboard summary cards.
+	 *
+	 * When `$created_before` is supplied, the count represents the visible
+	 * links that existed before that cutoff.
+	 *
+	 * @param array<string, mixed> $user           Current user.
+	 * @param string|null          $created_before Optional exclusive creation cutoff.
+	 * @return int Visible link count.
+	 * @since 1.2.2
+	 */
+	private function get_dashboard_link_count(
+		array $user,
+		?string $created_before = null
+	): int {
+		$conditions = array();
+		$params     = array();
+
+		if ( null !== $created_before ) {
+			$conditions[]             = 'u.created_at < :created_before';
+			$params['created_before'] = $created_before;
+		}
+
+		$this->scope_link_visibility(
+			$user,
+			$conditions,
+			$params,
+			'u',
+		);
+
+		return (int) $this->query_value(
+			'SELECT COUNT(*) FROM urls u ' .
+			( ! empty( $conditions )
+				? 'WHERE ' . implode( ' AND ', $conditions )
+				: '' ),
+			$params,
+		);
+	}
+
+	/**
+	 * Get dashboard click totals for a bounded or rolling period.
+	 *
+	 * The optional `$end_at` keeps last-month periods exact while the current
+	 * dashboard period can stay open-ended and naturally include clicks up to
+	 * the current request time.
+	 *
+	 * @param array<string, mixed> $user     Current user.
+	 * @param string               $start_at Inclusive UTC period start.
+	 * @param string|null          $end_at   Optional exclusive UTC period end.
+	 * @return array{totalClicks: int, uniqueClicks: int, uniqueClickRate: float}
+	 * @since 1.2.2
+	 */
+	private function get_dashboard_click_totals(
+		array $user,
+		string $start_at,
+		?string $end_at = null
+	): array {
+		$join_sql   = '';
+		$conditions = array( 'c.clicked_at >= :start_at' );
+		$params     = array( 'start_at' => $start_at );
+
+		if ( null !== $end_at ) {
+			$conditions[]     = 'c.clicked_at < :end_at';
+			$params['end_at'] = $end_at;
+		}
+
+		$this->scope_click_analytics(
+			$user,
+			$join_sql,
+			$conditions,
+			$params,
+			'c',
+			'u',
+		);
+
+		$stats = $this->query_one(
+			'SELECT
+	                COUNT(*) AS total_clicks,
+	                COUNT(DISTINCT COALESCE(NULLIF(c.visitor_hash, \'\'), c.id)) AS unique_clicks
+	            FROM clicks c' .
+			$join_sql .
+			' WHERE ' .
+			implode( ' AND ', $conditions ),
+			$params,
+		) ?? array();
+
+		$total_clicks  = (int) ( $stats['total_clicks'] ?? 0 );
+		$unique_clicks = (int) ( $stats['unique_clicks'] ?? 0 );
+
+		return array(
+			'totalClicks'     => $total_clicks,
+			'uniqueClicks'    => $unique_clicks,
+			'uniqueClickRate' => $this->get_unique_click_rate(
+				$total_clicks,
+				$unique_clicks,
+			),
+		);
+	}
+
+	/**
 	 * Resolve the stats drawer period into chart and query metadata.
 	 *
 	 * @param string|null $range            Requested dashboard period token.

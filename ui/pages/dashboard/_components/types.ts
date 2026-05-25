@@ -11,6 +11,7 @@ export type {
 	ActivityLocation,
 	ActivityPerson,
 	CountryMetric,
+	DashboardLastMonth,
 	DashboardDeviceData,
 	DashboardStats,
 	MetricItem,

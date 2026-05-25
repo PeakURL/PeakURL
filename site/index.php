@@ -329,25 +329,25 @@ $prepare_html = static function (
 	array $body_classes,
 	array $peakurl_data
 ) use ( $favicon_markup ): string {
-	$base_path    = trim( (string) ( $peakurl_data['basePath'] ?? '' ) );
-	$base_href    = '' === $base_path ? '/' : $base_path . '/';
-	$site_name    = trim( (string) ( $peakurl_data['siteName'] ?? 'PeakURL' ) );
-	$html_lang    = htmlspecialchars(
+	$base_path             = trim( (string) ( $peakurl_data['basePath'] ?? '' ) );
+	$base_href             = '' === $base_path ? '/' : $base_path . '/';
+	$site_name             = trim( (string) ( $peakurl_data['siteName'] ?? 'PeakURL' ) );
+	$html_lang             = htmlspecialchars(
 		(string) ( $peakurl_data['htmlLang'] ?? 'en-US' ),
 		ENT_QUOTES,
 		'UTF-8',
 	);
-	$html_dir     = 'rtl' === strtolower(
+	$html_dir              = 'rtl' === strtolower(
 		(string) ( $peakurl_data['textDirection'] ?? 'ltr' )
 	) ? 'rtl' : 'ltr';
-	$favicon      = is_array( $peakurl_data['favicon'] ?? null )
+	$favicon               = is_array( $peakurl_data['favicon'] ?? null )
 		? $peakurl_data['favicon']
 		: array();
-	$favicon_head = $favicon_markup(
+	$favicon_head          = $favicon_markup(
 		$site_name,
 		$favicon,
 	);
-	$peakurl_json = json_encode(
+	$peakurl_json          = json_encode(
 		$peakurl_data,
 		JSON_HEX_TAG |
 			JSON_HEX_AMP |
@@ -356,8 +356,8 @@ $prepare_html = static function (
 			JSON_UNESCAPED_SLASHES |
 			JSON_UNESCAPED_UNICODE,
 	);
-	$peakurl_json = is_string( $peakurl_json ) ? $peakurl_json : '{}';
-	$app_data     =
+	$peakurl_json          = is_string( $peakurl_json ) ? $peakurl_json : '{}';
+	$dashboard_data_script =
 		'<base href="' .
 		htmlspecialchars( $base_href, ENT_QUOTES, 'UTF-8' ) .
 		'">' .
@@ -367,7 +367,7 @@ $prepare_html = static function (
 		$peakurl_json .
 		';</script>';
 
-	$updated_html   = str_replace( '<head>', "<head>\n\t\t" . $app_data, $html );
+	$updated_html   = str_replace( '<head>', "<head>\n\t\t" . $dashboard_data_script, $html );
 	$html_with_lang = preg_replace_callback(
 		'/<html\b([^>]*)>/i',
 		static function ( array $matches ) use ( $html_lang, $html_dir ): string {
@@ -441,7 +441,7 @@ $prepare_html = static function (
 
 	$fallback_after_body_open = preg_replace(
 		'/<body\b[^>]*>/i',
-		'$0' . $app_data,
+		'$0' . $dashboard_data_script,
 		$html,
 		1,
 	);
@@ -455,7 +455,7 @@ $prepare_html = static function (
 
 	$fallback_before_body_close = preg_replace(
 		'/<\/body>/i',
-		$app_data . '</body>',
+		$dashboard_data_script . '</body>',
 		$html,
 		1,
 	);

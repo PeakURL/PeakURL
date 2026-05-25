@@ -54,7 +54,7 @@ class Notifications {
 		);
 		$display_name = \get_user_display_name( $user );
 		$subject      = (string) \apply_filters(
-			'peakurl_password_reset_email_subject',
+			'password_reset_email_subject',
 			sprintf(
 				/* translators: %s: site name. */
 				__( 'Reset your %s password', 'peakurl' ),
@@ -65,7 +65,7 @@ class Notifications {
 			$site_name,
 		);
 		$context = $this->filter_template_context(
-			'peakurl_password_reset_email_context',
+			'password_reset_email_context',
 			array(
 				'recipient' => $display_name,
 				'site_name' => $site_name,
@@ -91,7 +91,7 @@ class Notifications {
 		);
 
 		\do_action(
-			'peakurl_password_reset_email_sent',
+			'password_reset_email_sent',
 			$user,
 			$email,
 			$display_name,
@@ -122,7 +122,7 @@ class Notifications {
 		$display_name  = \get_user_display_name( $user );
 		$changed_at    = gmdate( DATE_ATOM );
 		$subject       = (string) \apply_filters(
-			'peakurl_password_changed_email_subject',
+			'password_changed_email_subject',
 			sprintf(
 				/* translators: %s: site name. */
 				__( 'Your %s password was changed', 'peakurl' ),
@@ -133,7 +133,7 @@ class Notifications {
 			$site_url,
 		);
 		$context = $this->filter_template_context(
-			'peakurl_password_changed_email_context',
+			'password_changed_email_context',
 			array(
 				'recipient'     => $display_name,
 				'site_name'     => $site_name,
@@ -165,7 +165,7 @@ class Notifications {
 		);
 
 		\do_action(
-			'peakurl_password_changed_email_sent',
+			'password_changed_email_sent',
 			$user,
 			$email,
 			$display_name,
@@ -198,7 +198,7 @@ class Notifications {
 		$display_name  = \get_user_display_name( $user );
 		$username      = trim( (string) ( $user['username'] ?? '' ) );
 		$subject       = (string) \apply_filters(
-			'peakurl_install_welcome_email_subject',
+			'install_welcome_email_subject',
 			sprintf(
 				/* translators: %s: site name. */
 				__( 'Welcome to %s', 'peakurl' ),
@@ -209,7 +209,7 @@ class Notifications {
 			$site_url,
 		);
 		$context = $this->filter_template_context(
-			'peakurl_install_welcome_email_context',
+			'install_welcome_email_context',
 			array(
 				'recipient'     => $display_name,
 				'site_url'      => $site_url,
@@ -239,7 +239,7 @@ class Notifications {
 		);
 
 		\do_action(
-			'peakurl_install_welcome_email_sent',
+			'install_welcome_email_sent',
 			$user,
 			$email,
 			$display_name,
@@ -276,7 +276,7 @@ class Notifications {
 			: __( 'PHP mail()', 'peakurl' );
 		$sent_at       = $this->format_email_sent_at( time() );
 		$subject       = (string) \apply_filters(
-			'peakurl_test_email_subject',
+			'test_email_subject',
 			sprintf(
 				/* translators: %s: site name. */
 				__( 'Test email from %s', 'peakurl' ),
@@ -287,7 +287,7 @@ class Notifications {
 			$mail_status,
 		);
 		$context = $this->filter_template_context(
-			'peakurl_test_email_context',
+			'test_email_context',
 			array(
 				'recipient'     => $display_name,
 				'site_name'     => $site_name,
@@ -316,7 +316,7 @@ class Notifications {
 		);
 
 		\do_action(
-			'peakurl_test_email_sent',
+			'test_email_sent',
 			$user,
 			$email,
 			$display_name,

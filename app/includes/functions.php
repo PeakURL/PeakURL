@@ -532,7 +532,7 @@ function get_peakurl_data( array $args = array() ): array {
 		'favicon'       => $favicon,
 		'i18n'          => $catalog,
 	);
-	$filtered = apply_filters( 'peakurl_data', $data, $args );
+	$filtered = apply_filters( 'dashboard_data', $data, $args );
 
 	return is_array( $filtered ) ? $filtered : $data;
 }

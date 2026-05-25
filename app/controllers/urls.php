@@ -444,73 +444,20 @@ class UrlsController extends BaseController {
 		array $challenge,
 		string $error = ''
 	): string {
-		$form_action    = htmlspecialchars(
+		$form_action = htmlspecialchars(
 			$request->get_path(),
 			ENT_QUOTES,
 			'UTF-8',
 		);
-		$site_key       = htmlspecialchars(
-			(string) ( $challenge['siteKey'] ?? '' ),
-			ENT_QUOTES,
-			'UTF-8',
+		$provider    = (string) ( $challenge['provider'] ?? '' );
+		$has_error   = '' !== trim( $error );
+		$script_url  = $this->format_captcha_script_url( $challenge, $provider );
+		$status_html = $this->format_captcha_status_panel(
+			$provider,
+			$has_error,
+			$error,
 		);
-		$response_field = htmlspecialchars(
-			(string) ( $challenge['responseField'] ?? 'g-recaptcha-response' ),
-			ENT_QUOTES,
-			'UTF-8',
-		);
-		$script_url_raw = (string) ( $challenge['scriptUrl'] ?? '' );
-		$provider       = (string) ( $challenge['provider'] ?? '' );
-
-		if ( 'recaptcha' === $provider ) {
-			$script_query    = http_build_query(
-				array(
-					'render' => (string) ( $challenge['siteKey'] ?? '' ),
-					'onload' => 'PeakURLRenderCaptcha',
-				),
-				'',
-				'&',
-			);
-			$script_url_raw .= false === strpos( $script_url_raw, '?' )
-				? '?' . $script_query
-				: '&' . $script_query;
-		}
-
-		$script_url     = htmlspecialchars(
-			$script_url_raw,
-			ENT_QUOTES,
-			'UTF-8',
-		);
-		$json_flags     = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT;
-		$site_key_json  = json_encode(
-			(string) ( $challenge['siteKey'] ?? '' ),
-			$json_flags,
-		);
-		$action_json    = json_encode(
-			(string) ( $challenge['action'] ?? 'peakurl_redirect' ),
-			$json_flags,
-		);
-		$success_status = json_encode(
-			__( 'Verification complete. Redirecting…', 'peakurl' ),
-			$json_flags,
-		);
-		$expired_status = json_encode(
-			__( 'Verification expired. Please try again.', 'peakurl' ),
-			$json_flags,
-		);
-		$error_status   = json_encode(
-			__( 'Verification could not be completed. Please try again.', 'peakurl' ),
-			$json_flags,
-		);
-		$error_markup   = '';
-
-		if ( '' !== trim( $error ) ) {
-			$error_markup =
-				'<div class="alert">' .
-				'<svg class="alert-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"/></svg>' .
-				'<span>' . htmlspecialchars( $error, ENT_QUOTES, 'UTF-8' ) . '</span>' .
-				'</div>';
-		}
+		$widget_html = $this->format_captcha_widget( $challenge, $provider );
 
 		$shield_icon =
 			'<svg class="hero-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' .
@@ -518,63 +465,12 @@ class UrlsController extends BaseController {
 			'<path d="m9 12 2 2 4-4"/>' .
 			'</svg>';
 
-		$verification_script =
-			'<script>' .
-			'(function(){' .
-			'var submitted=false;' .
-			'function setStatus(message,state){' .
-			'var status=document.getElementById("captcha-status-text");' .
-			'var panel=document.getElementById("captcha-status-panel");' .
-			'if(status){status.textContent=message;}' .
-			'if(panel){panel.className="captcha-status-panel captcha-status-panel-"+state;}' .
-			'}' .
-			'function setToken(token){' .
-			'var input=document.getElementById("captcha-token");' .
-			'if(input){input.value=token||"";}' .
-			'}' .
-			'function submitVerification(token){' .
-			'if(submitted){return;}' .
-			'submitted=true;' .
-			'setToken(token);' .
-			'setStatus(' . $success_status . ',"success");' .
-			'window.setTimeout(function(){' .
-			'var form=document.getElementById("captcha-form");' .
-			'if(form){form.submit();}' .
-			'},160);' .
-			'}' .
-			'window.PeakURLCaptchaVerified=submitVerification;' .
-			'window.PeakURLCaptchaExpired=function(){submitted=false;setStatus(' . $expired_status . ',"warning");};' .
-			'window.PeakURLCaptchaError=function(){submitted=false;setStatus(' . $error_status . ',"warning");};' .
-			'window.PeakURLCaptchaTheme=function(){return window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";};' .
-			'window.PeakURLRenderCaptcha=function(){' .
-			'if(!window.grecaptcha){window.PeakURLCaptchaError();return;}' .
-			'window.grecaptcha.ready(function(){' .
-			'window.grecaptcha.execute(' . $site_key_json . ',{action:' . $action_json . '}).then(' .
-			'window.PeakURLCaptchaVerified,' .
-			'window.PeakURLCaptchaError' .
-			');' .
-			'});' .
-			'};' .
-			'}());' .
-			'</script>';
-
-		$widget_html = 'turnstile' === $provider
-			? '<div class="captcha-widget"><div class="cf-turnstile" data-sitekey="' . $site_key . '" data-theme="auto" data-language="auto" data-callback="PeakURLCaptchaVerified" data-expired-callback="PeakURLCaptchaExpired" data-error-callback="PeakURLCaptchaError"></div></div>'
-			: '<input id="captcha-token" type="hidden" name="' . $response_field . '" value="">';
-		$status_html = 'recaptcha' === $provider
-			? '<div id="captcha-status-panel" class="captcha-status-panel captcha-status-panel-pending">' .
-				'<span class="captcha-spinner" aria-hidden="true"></span>' .
-				'<span id="captcha-status-text">' . __( 'Waiting for verification…', 'peakurl' ) . '</span>' .
-			'</div>'
-			: '';
-
 		$content_html =
-			$verification_script .
+			$this->format_captcha_script( $challenge, $provider, $has_error, $error ) .
 			'<script src="' . $script_url . '" async defer></script>' .
 			'<div class="hero-icon-wrap">' . $shield_icon . '</div>' .
 			'<h1 class="title">' . __( 'Performing security verification', 'peakurl' ) . '</h1>' .
 			'<p class="subtitle">' . __( 'This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot.', 'peakurl' ) . '</p>' .
-			$error_markup .
 			'<form id="captcha-form" class="captcha-form" method="post" action="' . $form_action . '" autocomplete="off">' .
 			$status_html .
 			$widget_html .
@@ -582,6 +478,304 @@ class UrlsController extends BaseController {
 			'</form>';
 
 		return $this->format_public_page( __( 'Security Verification', 'peakurl' ), $content_html );
+	}
+
+	/**
+	 * Format the provider script URL for the CAPTCHA page.
+	 *
+	 * @param array<string, mixed> $challenge Public CAPTCHA challenge settings.
+	 * @param string               $provider  CAPTCHA provider key.
+	 * @return string Escaped script URL.
+	 * @since 1.2.2
+	 */
+	private function format_captcha_script_url(
+		array $challenge,
+		string $provider
+	): string {
+		$script_url = (string) ( $challenge['scriptUrl'] ?? '' );
+		$query      = array();
+
+		if ( 'recaptcha' === $provider ) {
+			$query = array(
+				'render' => (string) ( $challenge['siteKey'] ?? '' ),
+				'onload' => 'PeakURLRenderCaptcha',
+			);
+		} elseif ( 'turnstile' === $provider ) {
+			$query = array(
+				'render' => 'explicit',
+				'onload' => 'PeakURLRenderCaptcha',
+			);
+		}
+
+		if ( array() !== $query ) {
+			$script_query = http_build_query( $query, '', '&' );
+			$script_url  .= false === strpos( $script_url, '?' )
+				? '?' . $script_query
+				: '&' . $script_query;
+		}
+
+		return htmlspecialchars( $script_url, ENT_QUOTES, 'UTF-8' );
+	}
+
+	/**
+	 * Format the CAPTCHA page script.
+	 *
+	 * Failed server-side checks wait for a manual retry. Turnstile is rendered
+	 * with explicit execution so it cannot auto-submit another failing request
+	 * after the error page reloads.
+	 *
+	 * @param array<string, mixed> $challenge Public CAPTCHA challenge settings.
+	 * @param string               $provider  CAPTCHA provider key.
+	 * @param bool                 $has_error Whether the previous verification failed.
+	 * @param string               $error     Verification error message.
+	 * @return string Inline script markup.
+	 * @since 1.2.2
+	 */
+	private function format_captcha_script(
+		array $challenge,
+		string $provider,
+		bool $has_error,
+		string $error
+	): string {
+		$site_key_json   = $this->encode_captcha_json(
+			(string) ( $challenge['siteKey'] ?? '' ),
+		);
+		$action_json     = $this->encode_captcha_json(
+			(string) ( $challenge['action'] ?? 'peakurl_redirect' ),
+		);
+		$provider_json   = $this->encode_captcha_json( $provider );
+		$auto_json       = $this->encode_captcha_json( ! $has_error );
+		$initial_state   = $has_error ? 'error' : 'pending';
+		$initial_status  = $this->encode_captcha_json(
+			$has_error
+				? $error
+				: __( 'Waiting for verification…', 'peakurl' ),
+		);
+		$checking_status = $this->encode_captcha_json(
+			__( 'Checking verification…', 'peakurl' ),
+		);
+		$running_status  = $this->encode_captcha_json(
+			__( 'Starting verification…', 'peakurl' ),
+		);
+		$expired_status  = $this->encode_captcha_json(
+			__( 'Verification expired. Please try again.', 'peakurl' ),
+		);
+		$error_status    = $this->encode_captcha_json(
+			__( 'Verification could not be completed. Please try again.', 'peakurl' ),
+		);
+
+		return <<<HTML
+<script>
+(function(){
+var submitted=false;
+var active=false;
+var provider={$provider_json};
+var autoVerify={$auto_json};
+var turnstileSelector="#captcha-turnstile";
+var turnstileWidgetId=null;
+function whenReady(callback){
+	if("loading"===document.readyState){
+		document.addEventListener("DOMContentLoaded",callback);
+		return;
+	}
+	callback();
+}
+function setRetryVisible(visible){
+	var button=document.getElementById("captcha-retry-button");
+	if(button){button.hidden=!visible;}
+}
+function setWidgetVisible(visible){
+	var widget=document.getElementById("captcha-widget");
+	if(widget){widget.hidden=!visible;}
+}
+function setStatus(message,state,visible){
+	var status=document.getElementById("captcha-status-text");
+	var panel=document.getElementById("captcha-status-panel");
+	var needsRetry="error"===state||"warning"===state;
+	var showPanel=false!==visible||needsRetry;
+	if(status){status.textContent=message;}
+	if(panel){
+		panel.className="captcha-status-panel captcha-status-panel-"+state;
+		panel.hidden=!showPanel;
+	}
+	setRetryVisible(needsRetry);
+	if(needsRetry){setWidgetVisible(false);}
+}
+function setToken(token){
+	var input=document.getElementById("captcha-token");
+	if(input){input.value=token||"";}
+}
+function renderTurnstile(){
+	if("turnstile"!==provider||!window.turnstile||turnstileWidgetId!==null){return;}
+	/* Explicit execution prevents automatic retry loops after a failed token. */
+	try{
+		turnstileWidgetId=window.turnstile.render(turnstileSelector,{
+			sitekey:{$site_key_json},
+			theme:window.PeakURLCaptchaTheme(),
+			language:"auto",
+			execution:"execute",
+			callback:window.PeakURLCaptchaVerified,
+			"expired-callback":window.PeakURLCaptchaExpired,
+			"error-callback":window.PeakURLCaptchaError
+		});
+	}catch(error){
+		window.PeakURLCaptchaError();
+	}
+}
+function startVerification(){
+	submitted=false;
+	active=true;
+	setToken("");
+	setRetryVisible(false);
+	setWidgetVisible("turnstile"===provider);
+	/* Turnstile shows its own challenge state, so keep our panel for fallback and retry states. */
+	setStatus({$running_status},"pending","turnstile"!==provider);
+	if("recaptcha"===provider){
+		if(!window.grecaptcha){window.PeakURLCaptchaError();return;}
+		window.grecaptcha.ready(function(){
+			window.grecaptcha.execute({$site_key_json},{action:{$action_json}}).then(
+				window.PeakURLCaptchaVerified,
+				window.PeakURLCaptchaError
+			);
+		});
+		return;
+	}
+	if("turnstile"===provider){
+		if(!window.turnstile){window.PeakURLCaptchaError();return;}
+		if(turnstileWidgetId===null){renderTurnstile();}
+		if(turnstileWidgetId===null){window.PeakURLCaptchaError();return;}
+		try{
+			window.turnstile.reset(turnstileWidgetId);
+			window.turnstile.execute(turnstileSelector);
+		}catch(error){
+			window.PeakURLCaptchaError();
+		}
+	}
+}
+function submitVerification(token){
+	if(submitted||!active){return;}
+	if(!token){window.PeakURLCaptchaError();return;}
+	submitted=true;
+	active=false;
+	setToken(token);
+	/* Keep Turnstile visible so Cloudflare can show the verified state before submit. */
+	if("turnstile"!==provider){setWidgetVisible(false);}
+	setStatus({$checking_status},"pending","turnstile"!==provider);
+	window.setTimeout(function(){
+		whenReady(function(){
+			var form=document.getElementById("captcha-form");
+			if(form){form.submit();}
+		});
+	},"turnstile"===provider?650:160);
+}
+window.PeakURLCaptchaVerified=submitVerification;
+window.PeakURLCaptchaExpired=function(){submitted=false;active=false;setStatus({$expired_status},"warning");};
+window.PeakURLCaptchaError=function(){submitted=false;active=false;setStatus({$error_status},"warning");};
+window.PeakURLStartCaptcha=startVerification;
+window.PeakURLCaptchaTheme=function(){
+	return window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+};
+window.PeakURLRenderCaptcha=function(){
+	whenReady(function(){
+		if(autoVerify){
+			startVerification();
+			return;
+		}
+		setStatus({$initial_status},"{$initial_state}");
+	});
+};
+document.addEventListener("click",function(event){
+	if(event.target&&"captcha-retry-button"===event.target.id){startVerification();}
+});
+}());
+</script>
+HTML;
+	}
+
+	/**
+	 * Format the verification status panel.
+	 *
+	 * @param string $provider  CAPTCHA provider key.
+	 * @param bool   $has_error Whether the previous verification failed.
+	 * @param string $error     Verification error message.
+	 * @return string Status panel HTML.
+	 * @since 1.2.2
+	 */
+	private function format_captcha_status_panel(
+		string $provider,
+		bool $has_error,
+		string $error
+	): string {
+		$state       = $has_error ? 'error' : 'pending';
+		$status_text = htmlspecialchars(
+			$has_error
+				? $error
+				: __( 'Waiting for verification…', 'peakurl' ),
+			ENT_QUOTES,
+			'UTF-8',
+		);
+		$retry_label = htmlspecialchars(
+			__( 'Try again', 'peakurl' ),
+			ENT_QUOTES,
+			'UTF-8',
+		);
+		$has_retry   = in_array(
+			$provider,
+			array( 'recaptcha', 'turnstile' ),
+			true,
+		);
+		$retry_html  = $has_retry
+			? '<button id="captcha-retry-button" class="captcha-retry-button" type="button"' . ( $has_error ? '' : ' hidden' ) . '>' . $retry_label . '</button>'
+			: '';
+
+		return '<div id="captcha-status-panel" class="captcha-status-panel captcha-status-panel-' . $state . '">' .
+				'<span class="captcha-spinner" aria-hidden="true"></span>' .
+				'<span class="captcha-status-content">' .
+					'<span id="captcha-status-text" class="captcha-status-text">' . $status_text . '</span>' .
+					$retry_html .
+				'</span>' .
+			'</div>';
+	}
+
+	/**
+	 * Format provider-specific CAPTCHA widget markup.
+	 *
+	 * @param array<string, mixed> $challenge Public CAPTCHA challenge settings.
+	 * @param string               $provider  CAPTCHA provider key.
+	 * @return string Widget HTML.
+	 * @since 1.2.2
+	 */
+	private function format_captcha_widget(
+		array $challenge,
+		string $provider
+	): string {
+		if ( 'turnstile' === $provider ) {
+			return '<div id="captcha-widget" class="captcha-widget" hidden><div id="captcha-turnstile" class="captcha-turnstile"></div></div>';
+		}
+
+		$response_field = htmlspecialchars(
+			(string) ( $challenge['responseField'] ?? 'g-recaptcha-response' ),
+			ENT_QUOTES,
+			'UTF-8',
+		);
+
+		return '<input id="captcha-token" type="hidden" name="' . $response_field . '" value="">';
+	}
+
+	/**
+	 * Encode a value for the inline CAPTCHA script.
+	 *
+	 * @param mixed $value Value to encode.
+	 * @return string JSON literal safe for script context.
+	 * @since 1.2.2
+	 */
+	private function encode_captcha_json( $value ): string {
+		$encoded = json_encode(
+			$value,
+			JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT,
+		);
+
+		return false === $encoded ? 'null' : $encoded;
 	}
 
 	/**
@@ -856,26 +1050,32 @@ form{margin-top:28px;text-align:left}
   color:var(--error-text);font-size:13px;line-height:1.5;text-align:left;
 }
 .alert-icon{width:16px;height:16px;flex-shrink:0;margin-top:1px}
+/* Keep CAPTCHA status text and retry actions clear without widening the card. */
 .captcha-form{margin-top:24px}
 .captcha-status-panel{
-  display:flex;align-items:center;gap:10px;
-  margin-bottom:16px;padding:12px 14px;
+  display:flex;align-items:flex-start;gap:12px;
+  margin-bottom:18px;padding:14px 16px;
   border:1px solid var(--border);border-radius:var(--radius);
   background:var(--bg);color:var(--text);
   font-size:13px;font-weight:500;line-height:1.5;text-align:left;
 }
-.captcha-status-panel-success{
-  border-color:#bbf7d0;background:#f0fdf4;color:#166534;
+.captcha-status-panel[hidden]{display:none}
+.captcha-status-content{
+  display:flex;flex:1;min-width:0;flex-direction:column;align-items:flex-start;gap:10px;
 }
+.captcha-status-text{display:block;min-width:0}
 .captcha-status-panel-warning{
   border-color:#fed7aa;background:#fff7ed;color:#9a3412;
 }
+.captcha-status-panel-error{
+  border-color:#fecaca;background:#fef2f2;color:#991b1b;
+}
 @media(prefers-color-scheme:dark){
-  .captcha-status-panel-success{
-    border-color:#14532d;background:#102719;color:#bbf7d0;
-  }
   .captcha-status-panel-warning{
     border-color:#7c2d12;background:#2d1b10;color:#fed7aa;
+  }
+  .captcha-status-panel-error{
+    border-color:#7f1d1d;background:#2b1111;color:#fecaca;
   }
 }
 .captcha-spinner{
@@ -884,16 +1084,27 @@ form{margin-top:28px;text-align:left}
   border-top-color:var(--accent);
   animation:captcha-spin .8s linear infinite;flex-shrink:0;
 }
-.captcha-status-panel-success .captcha-spinner{
-  border-color:#22c55e;background:#22c55e;animation:none;
-}
 .captcha-status-panel-warning .captcha-spinner{
   border-color:#f97316;border-top-color:#f97316;animation:none;
 }
+.captcha-status-panel-error .captcha-spinner{
+  border-color:#ef4444;background:#ef4444;animation:none;
+}
+.captcha-retry-button{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:34px;margin:0;padding:7px 14px;border:1px solid currentColor;
+  border-radius:10px;background:transparent;color:inherit;
+  font:inherit;font-size:12px;font-weight:700;line-height:1.2;text-align:center;white-space:nowrap;cursor:pointer;
+  transition:background .15s ease,transform .1s ease;
+}
+.captcha-retry-button:hover{background:rgba(0,0,0,.05)}
+.captcha-retry-button:active{transform:scale(.98)}
+.captcha-retry-button[hidden]{display:none}
 .captcha-widget{
   display:flex;justify-content:center;align-items:center;
   min-height:78px;overflow:hidden;
 }
+.captcha-widget[hidden]{display:none}
 .captcha-widget iframe{max-width:100%}
 .captcha-noscript{
   margin-top:14px;color:var(--error-text);font-size:13px;line-height:1.5;text-align:center;
@@ -908,6 +1119,11 @@ form{margin-top:28px;text-align:left}
 @media(max-width:480px){
   .card{padding:28px 24px;border-radius:16px}
   .title{font-size:20px}
+  .captcha-status-panel{padding:14px}
+  .captcha-retry-button{width:100%}
+}
+@media(prefers-color-scheme:dark){
+  .captcha-retry-button:hover{background:rgba(255,255,255,.12)}
 }
 </style>
 </head>

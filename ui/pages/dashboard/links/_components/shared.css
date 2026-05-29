@@ -1,6 +1,6 @@
 @layer components {
 	.links-checkbox {
-		@apply h-4 w-4 cursor-pointer rounded border border-stroke-strong bg-surface transition-colors duration-200;
+		@apply h-4 w-4 shrink-0 cursor-pointer rounded border border-stroke-strong bg-surface transition-colors duration-200;
 		-moz-appearance: none;
 		appearance: none;
 		-webkit-appearance: none;

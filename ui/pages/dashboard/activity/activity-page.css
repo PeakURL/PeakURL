@@ -143,7 +143,7 @@
 
 	.activity-page-table-head {
 		@apply hidden border-b border-stroke bg-surface-alt/90 px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-text-muted lg:grid;
-		grid-template-columns: 52px minmax(0, 1.9fr) minmax(0, 1.45fr) minmax(
+		grid-template-columns: 64px minmax(0, 1.9fr) minmax(0, 1.45fr) minmax(
 				150px,
 				auto
 			);
@@ -154,7 +154,7 @@
 
 	.activity-page-table-head-admin {
 		grid-template-columns:
-			52px minmax(0, 1.9fr) minmax(0, 1.45fr) minmax(150px, auto)
+			64px minmax(0, 1.9fr) minmax(0, 1.45fr) minmax(150px, auto)
 			56px;
 	}
 
@@ -432,13 +432,13 @@
 		.activity-page-event {
 			align-items: center;
 			grid-template-columns:
-				52px minmax(0, 1.9fr) minmax(0, 1.45fr)
+				64px minmax(0, 1.9fr) minmax(0, 1.45fr)
 				minmax(150px, auto);
 		}
 
 		.activity-page-event-admin {
 			grid-template-columns:
-				52px minmax(0, 1.9fr) minmax(0, 1.45fr)
+				64px minmax(0, 1.9fr) minmax(0, 1.45fr)
 				minmax(150px, auto) 56px;
 		}
 

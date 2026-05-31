@@ -288,36 +288,21 @@ export const API_ROUTES = {
 		 *
 		 * Disables two-factor authentication for the current user.
 		 */
-		twoFactorDisable: apiPath(
-			"auth",
-			"security",
-			"two-factor",
-			"disable"
-		),
+		twoFactorDisable: apiPath("auth", "security", "two-factor", "disable"),
 
 		/**
 		 * Relative API path: `auth/security/two-factor/setup`.
 		 *
 		 * Begins two-factor setup and returns setup details.
 		 */
-		twoFactorSetup: apiPath(
-			"auth",
-			"security",
-			"two-factor",
-			"setup"
-		),
+		twoFactorSetup: apiPath("auth", "security", "two-factor", "setup"),
 
 		/**
 		 * Relative API path: `auth/security/two-factor/verify`.
 		 *
 		 * Verifies a TOTP code and enables two-factor authentication.
 		 */
-		twoFactorVerify: apiPath(
-			"auth",
-			"security",
-			"two-factor",
-			"verify"
-		),
+		twoFactorVerify: apiPath("auth", "security", "two-factor", "verify"),
 
 		/**
 		 * Relative API path: `auth/verify-email`.
@@ -446,8 +431,7 @@ export const API_ROUTES = {
 		 *
 		 * Reads, updates, or deletes one short link by ID.
 		 */
-		byId: (id: ApiPathPart) =>
-			apiPath("urls", encodeApiParam(id)),
+		byId: (id: ApiPathPart) => apiPath("urls", encodeApiParam(id)),
 
 		/**
 		 * Relative API path: `urls/export`.
@@ -500,8 +484,7 @@ export const API_ROUTES = {
 		 *
 		 * Deletes one webhook by ID.
 		 */
-		byId: (id: ApiPathPart) =>
-			apiPath("webhooks", encodeApiParam(id)),
+		byId: (id: ApiPathPart) => apiPath("webhooks", encodeApiParam(id)),
 
 		/**
 		 * Relative API path: `webhooks`.

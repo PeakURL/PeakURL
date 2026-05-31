@@ -1,8 +1,4 @@
-import type {
-	UserDialogPayload,
-	UserRole,
-	UserSummary,
-} from "@/api";
+import type { UserDialogPayload, UserRole, UserSummary } from "@/api";
 
 export type { UserDialogPayload, UserRole, UserSummary } from "@/api";
 

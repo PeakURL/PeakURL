@@ -1,8 +1,4 @@
-import type {
-	LinkStatus,
-	LinksSortBy,
-	LinksSortOrder,
-} from "@/api";
+import type { LinkStatus, LinksSortBy, LinksSortOrder } from "@/api";
 
 export type {
 	LinkRecord,

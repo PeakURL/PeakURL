@@ -150,10 +150,10 @@ function get_settings_api(
  * Mirrors the role of WordPress `wp_mail()` while keeping PeakURL's
  * transport settings behind one public helper.
  *
- * @param string               $to_email Recipient email address.
- * @param string               $subject  Email subject line.
- * @param string               $message  Primary message body.
- * @param array<string, mixed> $args     Optional send arguments.
+ * @param string                                                           $to_email Recipient email address.
+ * @param string                                                           $subject  Email subject line.
+ * @param string                                                           $message  Primary message body.
+ * @param array{to_name?: string, text_body?: string, html?: bool} $args     Optional send arguments.
  * @return bool
  *
  * @throws \RuntimeException When PeakURL cannot deliver the email.
@@ -951,11 +951,14 @@ function get_maintenance_view_data(
 		$site_name,
 	);
 
+	$version = trim( (string) ( $app_config[ Constants::VERSION ] ?? '' ) );
+
 	return array(
 		'siteName'          => $site_name,
 		'locale'            => $locale,
 		'htmlLang'          => $html_lang,
 		'textDirection'     => $text_direction,
+		'version'           => $version,
 		'title'             => $maintenance_title,
 		'statusLabel'       => __( 'Temporarily unavailable', 'peakurl' ),
 		'heading'           => __( 'Briefly unavailable', 'peakurl' ),
@@ -1029,6 +1032,7 @@ function render_maintenance_page( array $maintenance_view_data ): string {
 		ENT_QUOTES,
 		'UTF-8',
 	);
+	$generator_meta     = get_generator_tag( (string) ( $maintenance_view_data['version'] ?? '' ) );
 
 	return '<!doctype html>' .
 		'<html lang="' . $html_lang . '" dir="' . $text_direction . '">' .
@@ -1036,6 +1040,7 @@ function render_maintenance_page( array $maintenance_view_data ): string {
 		'<meta charset="utf-8">' .
 		'<title>' . $title . '</title>' .
 		'<meta name="viewport" content="width=device-width, initial-scale=1">' .
+		( '' !== $generator_meta ? "\n\t\t" . $generator_meta : '' ) .
 		'<style>' .
 		'body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top,#eef2ff 0,#f8fafc 38%,#eef2ff 100%);color:#0f172a;min-height:100vh}' .
 		'.shell{min-height:100vh;display:grid;place-items:center;padding:24px}' .
@@ -1398,7 +1403,80 @@ function esc_attr__( string $text, string $domain = 'default' ): string {
 function esc_attr_e( string $text, string $domain = 'default' ): void {
 	echo esc_attr__( $text, $domain );
 }
+
+/**
+ * Sanitize HTML to allow only specified tags and attributes.
+ *
+ * This provides a safe way to output HTML that includes translations or
+ * user-provided links, mirroring the role of WordPress `wp_kses()`.
+ *
+ * @param string               $html        Raw HTML to sanitize.
+ * @param array<string, array> $allowed_tags Allowed tags and their attributes.
+ * @return string
+ * @since 1.2.4
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+function PeakURL_sanitize_html( string $html, array $allowed_tags ): string {
+	if ( '' === trim( $html ) ) {
+		return '';
+	}
+
+	$tags_list = '';
+	foreach ( array_keys( $allowed_tags ) as $tag ) {
+		$tags_list .= '<' . $tag . '>';
+	}
+
+	$sanitized = strip_tags( $html, $tags_list );
+
+	foreach ( $allowed_tags as $tag => $attributes ) {
+		$pattern   = '/<' . $tag . '\b([^>]*)>/i';
+		$sanitized = preg_replace_callback(
+			$pattern,
+			function ( $matches ) use ( $tag, $attributes ) {
+				$attr_string = $matches[1];
+				$new_attrs   = '';
+
+				foreach ( $attributes as $attr_name => $true ) {
+					if ( preg_match( '/\b' . $attr_name . '=(["\'])(.*?)\1/i', $attr_string, $attr_matches ) ) {
+						$val = $attr_matches[2];
+						if ( 'href' === $attr_name || 'src' === $attr_name ) {
+							$val = sanitize_url( $val );
+						}
+						$new_attrs .= ' ' . $attr_name . '="' . htmlspecialchars( $val, ENT_QUOTES, 'UTF-8' ) . '"';
+					}
+				}
+
+				return '<' . $tag . $new_attrs . '>';
+			},
+			$sanitized
+		);
+	}
+
+	return $sanitized;
+}
 // phpcs:enable
+
+/**
+ * Build the generator meta tag for the site document head.
+ *
+ * @param string|null $version Optional version override.
+ * @return string HTML meta tag string, or empty if version is missing.
+ * @since 1.2.3
+ */
+function get_generator_tag( ?string $version = null ): string {
+	if ( null === $version ) {
+		$app_config = get_peakurl_config();
+		$version    = trim( (string) ( $app_config[ Constants::VERSION ] ?? '' ) );
+	}
+
+	$version = htmlspecialchars( $version, ENT_QUOTES, 'UTF-8' );
+
+	if ( '' === $version ) {
+		return '';
+	}
+
+	return '<meta name="generator" content="PeakURL ' . $version . '">';
+}
 
 /**
  * Build a human-readable display name from a user row.

@@ -15,6 +15,8 @@
 
 declare(strict_types=1);
 
+use PeakURL\Includes\Constants;
+use PeakURL\Includes\RuntimeConfig;
 use PeakURL\Services\Install\Config as InstallConfig;
 use PeakURL\Services\Install\Locale as InstallLocale;
 use PeakURL\Services\Install\Screen as InstallScreen;
@@ -75,8 +77,14 @@ $detected_site_url       = InstallScreen::detect_site_url( $base_path, $_SERVER 
 $values                  = InstallConfig::get_form_defaults( $detected_site_url );
 $values['site_language'] = $installer_locale->get_locale();
 $error_message           = '';
-$step                    = isset( $_GET['step'] ) ? max( 0, (int) $_GET['step'] ) : 0;
-$page_title              =
+$app_config              = RuntimeConfig::bootstrap( $app_path );
+$version                 = trim( (string) ( $app_config[ Constants::VERSION ] ?? '' ) );
+$generator_meta          = get_generator_tag( $version );
+if ( '' !== $generator_meta ) {
+	$generator_meta .= "\n\t";
+}
+$step       = isset( $_GET['step'] ) ? max( 0, (int) $_GET['step'] ) : 0;
+$page_title =
 	$step >= 1
 		/* translators: %s: Application name. */
 		? sprintf( __( 'Database Setup - %s', 'peakurl' ), 'PeakURL' )
@@ -112,7 +120,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title><?php echo htmlspecialchars( $page_title, ENT_QUOTES, 'UTF-8' ); ?></title>
+	<?php echo $generator_meta; ?><title><?php echo htmlspecialchars( $page_title, ENT_QUOTES, 'UTF-8' ); ?></title>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -841,7 +849,22 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 		<!-- Footer -->
 		<div class="footer">
 			<?php /* translators: %s: PeakURL website link. */ ?>
-			<?php echo sprintf( esc_html__( 'Powered by %s', 'peakurl' ), '<a href="https://peakurl.org?utm_source=peakurl_setup_config&utm_medium=installer&utm_campaign=powered_by" target="_blank" rel="noopener noreferrer">PeakURL</a>' ); ?>
+			<?php
+			$powered_by_html = sprintf(
+				esc_html__( 'Powered by %s', 'peakurl' ),
+				'<a href="https://peakurl.org?utm_source=peakurl_setup_config&utm_medium=installer&utm_campaign=powered_by" target="_blank" rel="noopener noreferrer">PeakURL</a>'
+			);
+			echo PeakURL_sanitize_html(
+				$powered_by_html,
+				array(
+					'a' => array(
+						'href'   => true,
+						'target' => true,
+						'rel'    => true,
+					),
+				)
+			);
+			?>
 		</div>
 	</div>
 </body>

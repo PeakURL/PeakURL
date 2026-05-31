@@ -48,9 +48,7 @@ const RecentClicks = ({ recentClicks }: RecentClicksProps) => {
 			return;
 		}
 
-		navigate(
-			`/dashboard/links?stats=${encodeURIComponent(statsShortId)}`
-		);
+		navigate(`/dashboard/links?stats=${encodeURIComponent(statsShortId)}`);
 	};
 
 	return (

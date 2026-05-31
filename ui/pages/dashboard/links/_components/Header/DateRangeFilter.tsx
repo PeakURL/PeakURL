@@ -37,11 +37,13 @@ function formatDateLabel(value: string): string {
 		return __("Not selected");
 	}
 
-	return formatDateOnly(value, {
-		month: "short",
-		day: "numeric",
-		year: "numeric",
-	}) || value;
+	return (
+		formatDateOnly(value, {
+			month: "short",
+			day: "numeric",
+			year: "numeric",
+		}) || value
+	);
 }
 
 const DateRangeFilter = ({

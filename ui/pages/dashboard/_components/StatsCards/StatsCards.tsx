@@ -72,9 +72,7 @@ function getLastMonthTitle(
 	lastMonth: StatsCardsProps["stats"]["lastMonth"]
 ): string {
 	if (!lastMonth?.startDate || !lastMonth?.endDate) {
-		return __(
-			"Compares with the same selected day range from last month."
-		);
+		return __("Compares with the same selected day range from last month.");
 	}
 
 	return sprintf(__("Compared with %1$s to %2$s."), [

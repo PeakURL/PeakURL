@@ -329,25 +329,25 @@ $prepare_html = static function (
 	array $body_classes,
 	array $peakurl_data
 ) use ( $favicon_markup ): string {
-	$base_path             = trim( (string) ( $peakurl_data['basePath'] ?? '' ) );
-	$base_href             = '' === $base_path ? '/' : $base_path . '/';
-	$site_name             = trim( (string) ( $peakurl_data['siteName'] ?? 'PeakURL' ) );
-	$html_lang             = htmlspecialchars(
+	$base_path      = trim( (string) ( $peakurl_data['basePath'] ?? '' ) );
+	$base_href      = '' === $base_path ? '/' : $base_path . '/';
+	$site_name      = trim( (string) ( $peakurl_data['siteName'] ?? 'PeakURL' ) );
+	$html_lang      = htmlspecialchars(
 		(string) ( $peakurl_data['htmlLang'] ?? 'en-US' ),
 		ENT_QUOTES,
 		'UTF-8',
 	);
-	$html_dir              = 'rtl' === strtolower(
+	$html_dir       = 'rtl' === strtolower(
 		(string) ( $peakurl_data['textDirection'] ?? 'ltr' )
 	) ? 'rtl' : 'ltr';
-	$favicon               = is_array( $peakurl_data['favicon'] ?? null )
+	$favicon        = is_array( $peakurl_data['favicon'] ?? null )
 		? $peakurl_data['favicon']
 		: array();
-	$favicon_head          = $favicon_markup(
+	$favicon_head   = $favicon_markup(
 		$site_name,
 		$favicon,
 	);
-	$peakurl_json          = json_encode(
+	$peakurl_json   = json_encode(
 		$peakurl_data,
 		JSON_HEX_TAG |
 			JSON_HEX_AMP |
@@ -356,12 +356,15 @@ $prepare_html = static function (
 			JSON_UNESCAPED_SLASHES |
 			JSON_UNESCAPED_UNICODE,
 	);
-	$peakurl_json          = is_string( $peakurl_json ) ? $peakurl_json : '{}';
+	$peakurl_json   = is_string( $peakurl_json ) ? $peakurl_json : '{}';
+	$generator_meta = get_generator_tag( (string) ( $peakurl_data['version'] ?? '' ) );
+
 	$dashboard_data_script =
 		'<base href="' .
 		htmlspecialchars( $base_href, ENT_QUOTES, 'UTF-8' ) .
 		'">' .
 		"\n" .
+		( '' !== $generator_meta ? $generator_meta . "\n\t\t" : '' ) .
 		( '' !== $favicon_head ? $favicon_head . "\n" : '' ) .
 		'<script>window.__PEAKURL__=' .
 		$peakurl_json .

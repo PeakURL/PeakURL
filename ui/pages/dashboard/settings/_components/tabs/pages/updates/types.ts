@@ -1,18 +1,10 @@
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 
-import type {
-	DatabaseStatus,
-	UpdateIssue,
-	UpdateStatusPayload,
-} from "@/api";
+import type { DatabaseStatus, UpdateIssue, UpdateStatusPayload } from "@/api";
 import type { TextDirection } from "@/i18n/types";
 
-export type {
-	DatabaseStatus,
-	UpdateIssue,
-	UpdateStatusPayload,
-} from "@/api";
+export type { DatabaseStatus, UpdateIssue, UpdateStatusPayload } from "@/api";
 
 /**
  * Text direction passed from the updates mount into all child components.

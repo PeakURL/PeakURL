@@ -34,8 +34,7 @@ let initializationPromise: Promise<void> | null = null;
 /**
  * Default translation domain used across the dashboard UI.
  */
-export const TEXT_DOMAIN =
-	getPeakURLData().textDomain || DEFAULT_TEXT_DOMAIN;
+export const TEXT_DOMAIN = getPeakURLData().textDomain || DEFAULT_TEXT_DOMAIN;
 
 function isObjectRecord(value: unknown): value is Record<string, unknown> {
 	return "object" === typeof value && null !== value;
@@ -115,9 +114,7 @@ export function initializeI18n(): Promise<void> {
 		const localeData = getLocaleDataFromCatalog(data.i18n);
 		const domain = data.textDomain || TEXT_DOMAIN;
 		const locale = data.locale || DEFAULT_LOCALE;
-		const textDirection =
-			data.textDirection ||
-			getLocaleDirection(locale);
+		const textDirection = data.textDirection || getLocaleDirection(locale);
 
 		setLocaleData(localeData, domain);
 		const nextData = updatePeakURLData({

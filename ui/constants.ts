@@ -41,9 +41,7 @@ function sanitizeHost(
 
 const peakurlData = getPeakURLData();
 const appBasePath = IS_BROWSER ? formatBasePath(peakurlData.basePath) : "";
-const appOrigin = IS_BROWSER
-	? window.location.origin
-	: DEFAULT_PEAKURL_ORIGIN;
+const appOrigin = IS_BROWSER ? window.location.origin : DEFAULT_PEAKURL_ORIGIN;
 const appSiteUrl = IS_BROWSER ? getDataString(peakurlData.siteUrl) : "";
 const appApiBase = IS_BROWSER ? getDataString(peakurlData.apiBase) : "";
 const fallbackSiteUrl = IS_BROWSER

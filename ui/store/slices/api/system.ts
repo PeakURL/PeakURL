@@ -45,9 +45,9 @@ function hasGeneralSettingsUpload({
 }: SaveGeneralSettingsPayload): boolean {
 	return Boolean(
 		faviconFile ||
-			removeFavicon ||
-			socialPreviewFile ||
-			removeSocialPreviewImage
+		removeFavicon ||
+		socialPreviewFile ||
+		removeSocialPreviewImage
 	);
 }
 
@@ -218,13 +218,15 @@ export const systemApi = baseApi.injectEndpoints({
 			}),
 			invalidatesTags: UPDATE_CHANGE_TAGS,
 		}),
-		applyUpdate: build.mutation<ApiDataResponse<UpdateStatusPayload>, void>({
-			query: () => ({
-				url: API_ROUTES.system.updateApply,
-				method: "POST",
-			}),
-			invalidatesTags: UPDATE_CHANGE_TAGS,
-		}),
+		applyUpdate: build.mutation<ApiDataResponse<UpdateStatusPayload>, void>(
+			{
+				query: () => ({
+					url: API_ROUTES.system.updateApply,
+					method: "POST",
+				}),
+				invalidatesTags: UPDATE_CHANGE_TAGS,
+			}
+		),
 		reinstallUpdate: build.mutation<
 			ApiDataResponse<UpdateStatusPayload>,
 			void

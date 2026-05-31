@@ -8,7 +8,11 @@
 export { cn } from "./classNames";
 export { addFilter, applyFilters, removeFilter } from "./hooks";
 export { getFaviconPreviewUrl, getManagedFaviconUrl } from "./favicon";
-export { applyDocumentFavicon, setDocumentLocale } from "./document";
+export {
+	addGeneratorTag,
+	applyDocumentFavicon,
+	setDocumentLocale,
+} from "./document";
 export { isRelativeUrl, sanitizeImageUrl, sanitizeUrl } from "./url";
 export type { ImageSource } from "./url";
 export { getShortUrl, getSiteUrl, getLinkHost } from "./linkHelpers";

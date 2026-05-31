@@ -1,3 +1,4 @@
+import { PEAKURL_VERSION } from "@/constants";
 import { getPeakURLData } from "@/data";
 import { getLocaleDirection } from "@/i18n/direction";
 import type { FaviconData, TextDirection } from "@/i18n/types";
@@ -20,7 +21,8 @@ export function setDocumentLocale(
 
 	const documentLang =
 		htmlLang || locale?.replace(/_/g, "-").toLowerCase() || "en";
-	const direction = textDirection || getLocaleDirection(locale || documentLang);
+	const direction =
+		textDirection || getLocaleDirection(locale || documentLang);
 
 	document.documentElement.lang = documentLang;
 	document.documentElement.dir = direction;
@@ -70,9 +72,7 @@ function appendManagedHeadTag(
  * PHP-rendered favicon tags use the same `data-peakurl-favicon` marker, so the
  * dashboard can replace stale tags after settings are saved.
  */
-export function applyDocumentFavicon(
-	favicon?: FaviconData | null
-): void {
+export function applyDocumentFavicon(favicon?: FaviconData | null): void {
 	if ("undefined" === typeof document) {
 		return;
 	}
@@ -139,5 +139,23 @@ export function applyDocumentFavicon(
 			name: "apple-mobile-web-app-title",
 			content: siteName,
 		});
+	}
+}
+
+/**
+ * Apply the generator meta tag for the current install if missing.
+ *
+ * flows before the PHP backend can inject the `<head>` block.
+ */
+export function addGeneratorTag(): void {
+	if ("undefined" === typeof document) {
+		return;
+	}
+
+	if (!document.querySelector('meta[name="generator"]')) {
+		const meta = document.createElement("meta");
+		meta.name = "generator";
+		meta.content = `PeakURL ${PEAKURL_VERSION}`;
+		document.head.appendChild(meta);
 	}
 }

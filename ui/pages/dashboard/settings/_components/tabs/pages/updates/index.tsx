@@ -16,7 +16,6 @@ import type { UpdatesTabProps } from "./types";
 function UpdatesTab({
 	status,
 	errorMessage,
-	releaseInstallProgress,
 	isLoading,
 	isChecking,
 	isApplying,
@@ -58,7 +57,6 @@ function UpdatesTab({
 				reinstallAvailable={reinstallAvailable}
 				canApply={canApply}
 				showReleaseMeta={showReleaseMeta}
-				releaseInstallProgress={releaseInstallProgress}
 				isLoading={isLoading}
 				isChecking={isChecking}
 				isApplying={isApplying}

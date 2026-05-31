@@ -168,9 +168,10 @@ function useReleaseInstallProgress(): UseReleaseInstallProgress {
 		}
 
 		releaseInstallRedirectTimerId.current = window.setTimeout(() => {
+			// Intentionally do not clear activeReleaseInstallAction or
+			// releaseInstallProgressState here so the modal remains fully
+			// rendered on-screen until the browser completes the redirect.
 			setPendingReleaseAction(null);
-			setActiveReleaseInstallAction(null);
-			setReleaseInstallProgressState(null);
 			window.location.assign(
 				`${PEAKURL_BASENAME || ""}/dashboard/about?source=${action === "reinstall" ? "reinstall" : "update"}`
 			);

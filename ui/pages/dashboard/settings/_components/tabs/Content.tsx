@@ -711,7 +711,6 @@ const Content = ({ activeTab }: ContentProps) => {
 				<UpdatesTab
 					status={updateStatusData}
 					errorMessage={extractErrorMessage(updateError)}
-					releaseInstallProgress={releaseInstallProgress}
 					isLoading={isFetchingUpdateStatus}
 					isChecking={isCheckingForUpdates}
 					isApplying={isApplyingUpdate}

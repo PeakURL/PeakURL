@@ -69,7 +69,6 @@ export interface BadgeState {
 export interface UpdatesTabProps {
 	status?: UpdateStatusPayload | null;
 	errorMessage?: string | null;
-	releaseInstallProgress?: ReleaseInstallProgressState | null;
 	isLoading: boolean;
 	isChecking: boolean;
 	isApplying: boolean;
@@ -195,7 +194,6 @@ export interface ApplicationUpdatesProps {
 	reinstallAvailable: boolean;
 	canApply: boolean;
 	showReleaseMeta: boolean;
-	releaseInstallProgress?: ReleaseInstallProgressState | null;
 	isLoading: boolean;
 	isChecking: boolean;
 	isApplying: boolean;

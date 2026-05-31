@@ -4,7 +4,6 @@ import { __ } from "@/i18n";
 import { formatDateTimeValue } from "@/utils";
 
 import type { ApplicationUpdatesProps } from "../types";
-import ReleaseInstallProgress from "../ReleaseInstallProgress";
 import DetailRow from "./DetailRow";
 import InlineNotice from "./InlineNotice";
 import MetricGrid from "./MetricGrid";
@@ -23,7 +22,6 @@ function ApplicationUpdates({
 	reinstallAvailable,
 	canApply,
 	showReleaseMeta,
-	releaseInstallProgress,
 	isLoading,
 	isChecking,
 	isApplying,
@@ -102,12 +100,6 @@ function ApplicationUpdates({
 					tone={appState.tone}
 				/>
 			</div>
-
-			{releaseInstallProgress && (isApplying || isReinstalling) ? (
-				<div className="settings-updates-block">
-					<ReleaseInstallProgress progress={releaseInstallProgress} />
-				</div>
-			) : null}
 
 			{showReleaseMeta ? (
 				<div className="settings-updates-divider">

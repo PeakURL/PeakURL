@@ -6,7 +6,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language: en_US\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"Project-Id-Version: 1.2.2\n"
+"Project-Id-Version: 1.2.3\n"
 "Report-Msgid-Bugs-To: https://peakurl.org\n"
 "X-Domain: peakurl\n"
 
@@ -213,12 +213,12 @@ msgstr ""
 msgid "PeakURL could not identify the current session."
 msgstr ""
 
-#: app/traits/analytics.php:334
+#: app/traits/analytics.php:267
 msgid "Activity log ID is required."
 msgstr ""
 
-#: app/traits/analytics.php:502
-#: app/traits/analytics.php:660
+#: app/traits/analytics.php:435
+#: app/traits/analytics.php:593
 msgid "You do not have permission to view analytics for this link."
 msgstr ""
 
@@ -289,23 +289,23 @@ msgstr ""
 msgid "%s is briefly unavailable right now. Please try again in a moment."
 msgstr ""
 
-#: app/includes/functions.php:960
+#: app/includes/functions.php:963
 msgid "Temporarily unavailable"
 msgstr ""
 
-#: app/includes/functions.php:961
+#: app/includes/functions.php:964
 msgid "Briefly unavailable"
 msgstr ""
 
-#: app/includes/functions.php:962
+#: app/includes/functions.php:965
 msgid "We are making a few improvements right now. Please refresh this page in a moment."
 msgstr ""
 
-#: app/includes/functions.php:963
+#: app/includes/functions.php:966
 msgid "Thanks for your patience."
 msgstr ""
 
-#: app/includes/functions.php:964
+#: app/includes/functions.php:967
 #: ui/pages/auth/reset-password/ResetPasswordPage.tsx:107
 msgid "Loading"
 msgstr ""
@@ -536,82 +536,91 @@ msgstr ""
 msgid "Bulk delete complete."
 msgstr ""
 
-#: app/controllers/urls.php:354
+#: app/controllers/urls.php:351
 msgid "This link has expired"
 msgstr ""
 
-#: app/controllers/urls.php:355
+#: app/controllers/urls.php:352
 msgid "The short link you requested is no longer active because its expiration date has passed."
 msgstr ""
 
-#: app/controllers/urls.php:365
+#: app/controllers/urls.php:362
 msgid "This link is unavailable"
 msgstr ""
 
-#: app/controllers/urls.php:366
+#: app/controllers/urls.php:363
 msgid "The short link you requested is not available right now."
 msgstr ""
 
-#: app/controllers/urls.php:413
+#: app/controllers/urls.php:409
 msgid "Password required"
 msgstr ""
 
-#: app/controllers/urls.php:414
+#: app/controllers/urls.php:410
 msgid "This link is protected. Enter the password to continue."
 msgstr ""
 
-#: app/controllers/urls.php:418
-#: site/install.php:579
-#: site/setup-config.php:803
+#: app/controllers/urls.php:414
+#: site/install.php:587
+#: site/setup-config.php:811
 #: ui/pages/auth/login/LoginPage.tsx:371
 #: ui/pages/dashboard/users/UsersPage.tsx:238
 msgid "Password"
 msgstr ""
 
-#: app/controllers/urls.php:421
+#: app/controllers/urls.php:417
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:52
 msgid "Enter password"
 msgstr ""
 
-#: app/controllers/urls.php:425
+#: app/controllers/urls.php:421
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:48
 msgid "Continue"
 msgstr ""
 
-#: app/controllers/urls.php:430
+#: app/controllers/urls.php:426
 msgid "Protected Link"
 msgstr ""
 
-#: app/controllers/urls.php:494
-msgid "Verification complete. Redirecting…"
-msgstr ""
-
-#: app/controllers/urls.php:498
-msgid "Verification expired. Please try again."
-msgstr ""
-
-#: app/controllers/urls.php:502
-msgid "Verification could not be completed. Please try again."
-msgstr ""
-
-#: app/controllers/urls.php:567
-msgid "Waiting for verification…"
-msgstr ""
-
-#: app/controllers/urls.php:575
+#: app/controllers/urls.php:473
 msgid "Performing security verification"
 msgstr ""
 
-#: app/controllers/urls.php:576
+#: app/controllers/urls.php:474
 msgid "This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot."
 msgstr ""
 
-#: app/controllers/urls.php:581
+#: app/controllers/urls.php:478
 msgid "JavaScript is required to complete this verification."
 msgstr ""
 
-#: app/controllers/urls.php:584
+#: app/controllers/urls.php:481
 msgid "Security Verification"
+msgstr ""
+
+#: app/controllers/urls.php:583
+#: app/controllers/urls.php:744
+msgid "Waiting for verification…"
+msgstr ""
+
+#: app/controllers/urls.php:586
+msgid "Checking verification…"
+msgstr ""
+
+#: app/controllers/urls.php:589
+msgid "Starting verification…"
+msgstr ""
+
+#: app/controllers/urls.php:592
+msgid "Verification expired. Please try again."
+msgstr ""
+
+#: app/controllers/urls.php:595
+msgid "Verification could not be completed. Please try again."
+msgstr ""
+
+#: app/controllers/urls.php:749
+msgid "Try again"
 msgstr ""
 
 #: app/controllers/users.php:45
@@ -1357,7 +1366,7 @@ msgid "PeakURL could not send the welcome email because the account email addres
 msgstr ""
 
 #: app/services/notifications.php:204
-#: site/setup-config.php:688
+#: site/setup-config.php:696
 #: ui/pages/dashboard/about/AboutPage.tsx:367
 msgid "Welcome to %s"
 msgstr ""
@@ -1399,7 +1408,7 @@ msgid "CAPTCHA secret key must be 512 characters or fewer."
 msgstr ""
 
 #: app/services/system-status/checks.php:46
-#: site/setup-config.php:758
+#: site/setup-config.php:766
 msgid "Database connection"
 msgstr ""
 
@@ -1495,17 +1504,17 @@ msgstr ""
 msgid "Visitor location analytics is not fully ready yet."
 msgstr ""
 
-#: site/install.php:79
+#: site/install.php:87
 msgid "Administrator Setup - %s"
 msgstr ""
 
-#: site/install.php:516
-#: site/setup-config.php:659
+#: site/install.php:524
+#: site/setup-config.php:667
 msgid "Welcome"
 msgstr ""
 
-#: site/install.php:523
-#: site/setup-config.php:666
+#: site/install.php:531
+#: site/setup-config.php:674
 #: ui/components/common/ApiErrorPage/ApiErrorPage.tsx:70
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:91
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:715
@@ -1513,157 +1522,157 @@ msgstr ""
 msgid "Database"
 msgstr ""
 
-#: site/install.php:530
-#: site/setup-config.php:673
+#: site/install.php:538
+#: site/setup-config.php:681
 msgid "Admin account"
 msgstr ""
 
-#: site/install.php:541
+#: site/install.php:549
 msgid "Create your account"
 msgstr ""
 
-#: site/install.php:543
+#: site/install.php:551
 msgid "Name your site and set up the first administrator. You will be signed in automatically once the install completes."
 msgstr ""
 
-#: site/install.php:559
+#: site/install.php:567
 msgid "Site info"
 msgstr ""
 
-#: site/install.php:562
+#: site/install.php:570
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:381
 msgid "Site title"
 msgstr ""
 
-#: site/install.php:563
+#: site/install.php:571
 msgid "My Link Hub"
 msgstr ""
 
-#: site/install.php:567
+#: site/install.php:575
 msgid "Administrator"
 msgstr ""
 
-#: site/install.php:570
-#: site/setup-config.php:799
+#: site/install.php:578
+#: site/setup-config.php:807
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:332
 #: ui/pages/dashboard/users/UsersPage.tsx:217
 msgid "Username"
 msgstr ""
 
-#: site/install.php:572
+#: site/install.php:580
 msgid "Letters, numbers, dots, dashes, underscores, or @."
 msgstr ""
 
-#: site/install.php:575
+#: site/install.php:583
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:97
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:716
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:102
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:173
 #: ui/pages/dashboard/users/UsersPage.tsx:226
 msgid "Email"
 msgstr ""
 
-#: site/install.php:576
+#: site/install.php:584
 #: ui/pages/auth/login/LoginPage.tsx:365
 msgid "you@company.com"
 msgstr ""
 
-#: site/install.php:581
+#: site/install.php:589
 msgid "At least 8 characters. You will be signed in right after installation."
 msgstr ""
 
-#: site/install.php:585
+#: site/install.php:593
 msgid "Database configuration is already saved."
 msgstr ""
 
-#: site/install.php:588
+#: site/install.php:596
 msgid "Install %s"
 msgstr ""
 
-#: site/install.php:599
-#: site/setup-config.php:844
+#: site/install.php:619
+#: site/setup-config.php:854
 #: ui/pages/auth/login/LoginPage.tsx:296
 msgid "Powered by %s"
 msgstr ""
 
-#: site/setup-config.php:82
+#: site/setup-config.php:90
 msgid "Database Setup - %s"
 msgstr ""
 
-#: site/setup-config.php:84
+#: site/setup-config.php:92
 msgid "Welcome - %s"
 msgstr ""
 
-#: site/setup-config.php:637
+#: site/setup-config.php:645
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:405
 msgid "Site language"
 msgstr ""
 
-#: site/setup-config.php:690
+#: site/setup-config.php:698
 msgid "Before getting started, you'll need your database connection details. PeakURL will use them to create config.php and set up the required tables."
 msgstr ""
 
-#: site/setup-config.php:702
-#: site/setup-config.php:795
+#: site/setup-config.php:710
+#: site/setup-config.php:803
 msgid "Database name"
 msgstr ""
 
-#: site/setup-config.php:708
+#: site/setup-config.php:716
 msgid "Username and password"
 msgstr ""
 
-#: site/setup-config.php:714
+#: site/setup-config.php:722
 msgid "Host and port"
 msgstr ""
 
-#: site/setup-config.php:720
-#: site/setup-config.php:819
+#: site/setup-config.php:728
+#: site/setup-config.php:827
 msgid "Table prefix"
 msgstr ""
 
-#: site/setup-config.php:720
+#: site/setup-config.php:728
 msgid "optional"
 msgstr ""
 
-#: site/setup-config.php:726
+#: site/setup-config.php:734
 msgid "These details are usually available in your hosting control panel or from your database administrator."
 msgstr ""
 
-#: site/setup-config.php:746
+#: site/setup-config.php:754
 msgid "Let's go"
 msgstr ""
 
-#: site/setup-config.php:760
+#: site/setup-config.php:768
 msgid "Enter the credentials for your MySQL or MariaDB database. PeakURL will write them to config.php in the site root."
 msgstr ""
 
-#: site/setup-config.php:792
+#: site/setup-config.php:800
 msgid "Connection details"
 msgstr ""
 
-#: site/setup-config.php:807
+#: site/setup-config.php:815
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:561
 msgid "Host"
 msgstr ""
 
-#: site/setup-config.php:812
+#: site/setup-config.php:820
 msgid "Advanced"
 msgstr ""
 
-#: site/setup-config.php:815
+#: site/setup-config.php:823
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:563
 msgid "Port"
 msgstr ""
 
-#: site/setup-config.php:821
+#: site/setup-config.php:829
 msgid "Letters, numbers, underscores. Example: peakurl_"
 msgstr ""
 
-#: site/setup-config.php:827
+#: site/setup-config.php:835
 msgid "Back"
 msgstr ""
 
-#: site/setup-config.php:830
+#: site/setup-config.php:838
 msgid "Save and continue"
 msgstr ""
 
@@ -1993,7 +2002,7 @@ msgid "Sun"
 msgstr ""
 
 #: ui/components/charts/TrafficChart/TrafficChart.tsx:260
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:70
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:112
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:21
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:106
 #: ui/pages/dashboard/links/LinksPage.tsx:296
@@ -2001,7 +2010,7 @@ msgid "Total Clicks"
 msgstr ""
 
 #: ui/components/charts/TrafficChart/TrafficChart.tsx:261
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:94
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:133
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:28
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:114
 #: ui/pages/dashboard/links/LinksPage.tsx:311
@@ -3291,8 +3300,8 @@ msgstr ""
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:182
 #: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:172
 #: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:179
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:106
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:109
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:115
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:41
 #: ui/pages/dashboard/users/UsersPage.tsx:631
 msgid "Unknown"
@@ -5511,7 +5520,7 @@ msgstr ""
 
 #: ui/pages/dashboard/activity/ActivityPage.tsx:935
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:267
-#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:114
+#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:116
 msgid "From"
 msgstr ""
 
@@ -5816,7 +5825,7 @@ msgid "Self-hosted link management with clear ownership and a focused dashboard.
 msgstr ""
 
 #: ui/pages/dashboard/about/AboutPage.tsx:647
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:107
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
 msgid "Website"
 msgstr ""
 
@@ -5875,18 +5884,26 @@ msgstr ""
 msgid "No traffic data available"
 msgstr ""
 
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:75
+msgid "Compares with the same selected day range from last month."
+msgstr ""
+
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:78
+msgid "Compared with %1$s to %2$s."
+msgstr ""
+
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:119
 #: ui/pages/dashboard/links/LinksPage.tsx:281
 msgid "Active Links"
 msgstr ""
 
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:86
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:126
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:47
 msgid "Unique Click Rate"
 msgstr ""
 
-#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:158
-msgid "vs previous period"
+#: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:199
+msgid "vs last month"
 msgstr ""
 
 #: ui/pages/dashboard/_components/Header/Header.tsx:16
@@ -5937,20 +5954,20 @@ msgstr ""
 msgid "%1$s from %2$s"
 msgstr ""
 
-#: ui/pages/dashboard/_components/RecentClicks/RecentClicks.tsx:59
+#: ui/pages/dashboard/_components/RecentClicks/RecentClicks.tsx:57
 msgid "Recent Clicks"
 msgstr ""
 
-#: ui/pages/dashboard/_components/RecentClicks/RecentClicks.tsx:72
+#: ui/pages/dashboard/_components/RecentClicks/RecentClicks.tsx:70
 msgid "No recent clicks yet"
 msgstr ""
 
-#: ui/pages/dashboard/_components/RecentClicks/RecentClicks.tsx:88
-#: ui/pages/dashboard/_components/RecentClicks/RecentClicks.tsx:109
+#: ui/pages/dashboard/_components/RecentClicks/RecentClicks.tsx:86
+#: ui/pages/dashboard/_components/RecentClicks/RecentClicks.tsx:107
 msgid "View stats"
 msgstr ""
 
-#: ui/pages/dashboard/_components/RecentClicks/RecentClicks.tsx:104
+#: ui/pages/dashboard/_components/RecentClicks/RecentClicks.tsx:102
 #: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:140
 msgid "%s clicks"
 msgstr ""
@@ -6334,12 +6351,12 @@ msgid "Bar"
 msgstr ""
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:249
-#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:102
+#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:104
 msgid "Custom"
 msgstr ""
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:262
-#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:110
+#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:112
 msgid "Custom date range"
 msgstr ""
 
@@ -6348,7 +6365,7 @@ msgid "Start date"
 msgstr ""
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:288
-#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:128
+#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:130
 msgid "To"
 msgstr ""
 
@@ -6361,7 +6378,7 @@ msgid "Showing %s to %s"
 msgstr ""
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:323
-#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:158
+#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:160
 msgid "Apply"
 msgstr ""
 
@@ -6466,83 +6483,83 @@ msgstr ""
 msgid "%s per day"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:96
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:93
 msgid "Search Engine"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:97
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:94
 msgid "Social Media"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:98
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:95
 msgid "Messaging"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:96
 msgid "Video"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:100
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:97
 msgid "News & Content"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:101
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:98
 msgid "Developer"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:103
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:100
 msgid "Email Marketing"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:101
 msgid "Shopping"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:105
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:102
 msgid "AI"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:106
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:103
 msgid "Productivity"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:108
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:105
 msgid "Direct"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:155
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:148
 msgid "Traffic by Category"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:197
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:196
 msgid "Referrer Sources"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:202
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:201
 msgid "Loading referrers..."
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:233
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:232
 msgid "Direct / Unknown"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:275
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:274
 msgid "No referrer data available yet"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:278
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:277
 msgid "Referrer data will appear when visitors come from external sources"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:291
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:290
 msgid "UTM Campaign Tracking"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:306
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:305
 msgid "source:"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:312
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:311
 msgid "medium:"
 msgstr ""
 
@@ -6768,7 +6785,7 @@ msgstr ""
 msgid "Not selected"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:143
+#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:145
 msgid "Showing %1$s to %2$s"
 msgstr ""
 

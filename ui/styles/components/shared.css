@@ -48,7 +48,7 @@
 	}
 
 	.form-control-base {
-		@apply h-10 w-full rounded-md border border-stroke bg-surface px-4 py-2 text-sm text-heading placeholder:text-muted outline-none transition-colors;
+		@apply h-10 w-full min-w-0 rounded-md border border-stroke bg-surface px-4 py-2 text-sm text-heading placeholder:text-muted outline-none transition-colors;
 	}
 
 	.form-control-base:is(
@@ -59,6 +59,11 @@
 		[type="week"]
 	) {
 		color-scheme: light;
+		-moz-appearance: none;
+		appearance: none;
+		-webkit-appearance: none;
+		min-height: 2.5rem;
+		background-color: var(--color-surface);
 	}
 
 	.dark
@@ -70,6 +75,11 @@
 			[type="week"]
 		) {
 		color-scheme: dark;
+		-moz-appearance: none;
+		appearance: none;
+		-webkit-appearance: none;
+		min-height: 2.5rem;
+		background-color: var(--color-surface);
 	}
 
 	.dark

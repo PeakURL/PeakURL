@@ -1,8 +1,8 @@
 import type { MouseEvent, WheelEvent } from "react";
 import { memo, useEffect, useRef, useState } from "react";
-import type { GeoPermissibleObjects } from "@visx/geo/lib/types";
+import type { GeoPermissibleObjects } from "@visx/geo";
 import { Zoom } from "@visx/zoom";
-import type { TransformMatrix } from "@visx/zoom/lib/types";
+import type { TransformMatrix } from "@visx/zoom";
 import { feature as topojsonFeature } from "topojson-client";
 import { scaleLinear } from "d3-scale";
 

@@ -1,6 +1,6 @@
 @layer components {
 	.form-field {
-		@apply space-y-2;
+		@apply space-y-2 w-full min-w-0 max-w-full box-border;
 	}
 
 	.form-field-label {
@@ -13,7 +13,7 @@
 	}
 
 	.form-field-control {
-		@apply relative;
+		@apply relative w-full min-w-0 max-w-full box-border;
 	}
 
 	.form-field-icon {

@@ -40,7 +40,7 @@ const FileUpload = ({
 		const reader = new FileReader();
 		reader.onload = (event: ProgressEvent<FileReader>) => {
 			const text = event.target?.result;
-			let data: ImportRecord[] = [];
+			let data: ImportRecord[];
 
 			try {
 				if ("string" !== typeof text) {

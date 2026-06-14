@@ -48,7 +48,7 @@ function getManagedFaviconBasePath(): string {
 	 * to prevent directory traversal or invalid path characters.
 	 */
 	for (const segment of PEAKURL_BASENAME.split("/")) {
-		let decodedSegment = "";
+		let decodedSegment: string;
 
 		try {
 			decodedSegment = decodePathSegment(segment);

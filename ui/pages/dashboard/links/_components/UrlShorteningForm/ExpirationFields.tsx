@@ -1,4 +1,4 @@
-import { Calendar } from "lucide-react";
+import { Calendar, Clock } from "lucide-react";
 
 import { Input } from "@/components";
 import { __ } from "@/i18n";
@@ -28,12 +28,14 @@ const ExpirationFields = ({
 			<div className="links-form-expiration-grid">
 				<Input
 					type="date"
+					icon={Calendar}
 					value={expirationDate}
 					onChange={(e) => setExpirationDate(e.target.value)}
 					min={getLocalDateValue()}
 				/>
 				<Input
 					type="time"
+					icon={Clock}
 					value={expirationTime}
 					onChange={(e) => setExpirationTime(e.target.value)}
 				/>

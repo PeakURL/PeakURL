@@ -12,7 +12,7 @@
 	}
 
 	.links-row-cell-select {
-		@apply w-10 px-0 text-center align-middle;
+		@apply w-12 pl-4 pr-2 align-middle;
 	}
 
 	.links-row-link {

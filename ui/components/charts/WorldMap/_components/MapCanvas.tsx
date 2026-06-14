@@ -1,6 +1,6 @@
 import type { MouseEventHandler, ReactNode, WheelEventHandler } from "react";
 import { Mercator } from "@visx/geo";
-import type { GeoPermissibleObjects } from "@visx/geo/lib/types";
+import type { GeoPermissibleObjects } from "@visx/geo";
 import { cn } from "@/utils";
 import type { GeographyFeature } from "../../types";
 

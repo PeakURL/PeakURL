@@ -25,6 +25,7 @@ export default defineConfig([
 			"no-empty": "off",
 			"prefer-const": "off",
 			"react-refresh/only-export-components": "off",
+			"react-hooks/set-state-in-effect": "off",
 		},
 	},
 ]);

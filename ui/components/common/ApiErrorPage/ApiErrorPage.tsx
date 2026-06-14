@@ -6,7 +6,7 @@ import {
 	ServerCog,
 	ServerOff,
 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { API_CLIENT_BASE_URL, PEAKURL_DEBUG, PEAKURL_NAME } from "@constants";
 import { Button } from "@/components/ui";
@@ -95,11 +95,15 @@ export function ApiErrorPage({
 	const [localRetrying, setLocalRetrying] = useState(false);
 	const [isFlashing, setIsFlashing] = useState(false);
 	const retrying = isRetrying || localRetrying;
-	const lastError = useRef(error);
-	if (undefined !== error) {
-		lastError.current = error;
-	}
-	const visibleError = error ?? lastError.current;
+	const [lastError, setLastError] = useState(error);
+
+	useEffect(() => {
+		if (error !== undefined) {
+			setLastError(error);
+		}
+	}, [error]);
+
+	const visibleError = error ?? lastError;
 	const statusText = getStatusText(visibleError);
 	const detailText = getDetailText(visibleError);
 	const checks = getChecks();

@@ -97,6 +97,7 @@ trait AuthTrait {
 				'email'                         => $email,
 				'first_name'                    => trim( (string) ( $payload['firstName'] ?? 'New' ) ),
 				'last_name'                     => trim( (string) ( $payload['lastName'] ?? 'User' ) ),
+				'display_name'                  => isset( $payload['displayName'] ) ? trim( (string) $payload['displayName'] ) : null,
 				'password_hash'                 => password_hash( $password, PASSWORD_DEFAULT ),
 				'role'                          => 'editor',
 				'is_email_verified'             => 0,

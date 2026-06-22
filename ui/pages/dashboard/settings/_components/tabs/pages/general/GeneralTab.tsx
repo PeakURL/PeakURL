@@ -324,6 +324,13 @@ function GeneralTab({
 						onChange={handleChange}
 						required
 					/>
+					<Input
+						label={__("Display Name")}
+						name="displayName"
+						value={generalForm.displayName}
+						onChange={handleChange}
+						placeholder={`${generalForm.firstName} ${generalForm.lastName}`}
+					/>
 					<div className="form-field">
 						<label
 							htmlFor="settings-general-username"

@@ -50,6 +50,7 @@ trait FormattingTrait {
 			'id'              => (string) $row['id'],
 			'firstName'       => (string) ( $row['first_name'] ?? '' ),
 			'lastName'        => (string) ( $row['last_name'] ?? '' ),
+			'displayName'     => $row['display_name'] ? (string) $row['display_name'] : null,
 			'username'        => (string) ( $row['username'] ?? '' ),
 			'email'           => (string) ( $row['email'] ?? '' ),
 			'phoneNumber'     => (string) ( $row['phone_number'] ?? '' ),
@@ -147,12 +148,13 @@ trait FormattingTrait {
 		$metadata = $this->decode_json( (string) ( $row['metadata'] ?? '{}' ) );
 		$actor    = $this->format_activity_person(
 			array(
-				'id'        => (string) ( $row['user_id'] ?? '' ),
-				'firstName' => (string) ( $row['actor_first_name'] ?? '' ),
-				'lastName'  => (string) ( $row['actor_last_name'] ?? '' ),
-				'username'  => (string) ( $row['actor_username'] ?? '' ),
-				'email'     => (string) ( $row['actor_email'] ?? '' ),
-				'role'      => (string) ( $row['actor_role'] ?? '' ),
+				'id'          => (string) ( $row['user_id'] ?? '' ),
+				'firstName'   => (string) ( $row['actor_first_name'] ?? '' ),
+				'lastName'    => (string) ( $row['actor_last_name'] ?? '' ),
+				'displayName' => (string) ( $row['actor_display_name'] ?? '' ),
+				'username'    => (string) ( $row['actor_username'] ?? '' ),
+				'email'       => (string) ( $row['actor_email'] ?? '' ),
+				'role'        => (string) ( $row['actor_role'] ?? '' ),
 			),
 		);
 
@@ -188,17 +190,19 @@ trait FormattingTrait {
 			return null;
 		}
 
-		$id         = trim( (string) ( $person['id'] ?? '' ) );
-		$first_name = trim( (string) ( $person['firstName'] ?? '' ) );
-		$last_name  = trim( (string) ( $person['lastName'] ?? '' ) );
-		$username   = trim( (string) ( $person['username'] ?? '' ) );
-		$email      = trim( (string) ( $person['email'] ?? '' ) );
-		$role       = trim( (string) ( $person['role'] ?? '' ) );
+		$id           = trim( (string) ( $person['id'] ?? '' ) );
+		$first_name   = trim( (string) ( $person['firstName'] ?? '' ) );
+		$last_name    = trim( (string) ( $person['lastName'] ?? '' ) );
+		$display_name = trim( (string) ( $person['displayName'] ?? '' ) );
+		$username     = trim( (string) ( $person['username'] ?? '' ) );
+		$email        = trim( (string) ( $person['email'] ?? '' ) );
+		$role         = trim( (string) ( $person['role'] ?? '' ) );
 
 		if (
 			'' === $id &&
 			'' === $first_name &&
 			'' === $last_name &&
+			'' === $display_name &&
 			'' === $username &&
 			'' === $email &&
 			'' === $role
@@ -207,12 +211,13 @@ trait FormattingTrait {
 		}
 
 		return array(
-			'id'        => '' !== $id ? $id : null,
-			'firstName' => '' !== $first_name ? $first_name : null,
-			'lastName'  => '' !== $last_name ? $last_name : null,
-			'username'  => '' !== $username ? $username : null,
-			'email'     => '' !== $email ? $email : null,
-			'role'      => '' !== $role ? $role : null,
+			'id'          => '' !== $id ? $id : null,
+			'firstName'   => '' !== $first_name ? $first_name : null,
+			'lastName'    => '' !== $last_name ? $last_name : null,
+			'displayName' => '' !== $display_name ? $display_name : null,
+			'username'    => '' !== $username ? $username : null,
+			'email'       => '' !== $email ? $email : null,
+			'role'        => '' !== $role ? $role : null,
 		);
 	}
 }

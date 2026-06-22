@@ -538,16 +538,19 @@ export function findDashboardUserMatches(
 
 	return users
 		.map((user) => {
-			const fullName = [user.firstName, user.lastName]
-				.filter(Boolean)
-				.join(" ")
-				.trim();
+			const fullName =
+				user.displayName ||
+				[user.firstName, user.lastName]
+					.filter(Boolean)
+					.join(" ")
+					.trim();
 
 			/* Compile search terms from various user fields. */
 			const terms = [
 				user.username,
 				user.email,
 				user.role,
+				user.displayName,
 				fullName,
 				user.firstName,
 				user.lastName,

@@ -74,6 +74,7 @@ export interface ActivityPerson {
 	id?: string | null;
 	firstName?: string | null;
 	lastName?: string | null;
+	displayName?: string | null;
 	username?: string | null;
 	email?: string | null;
 	role?: string | null;

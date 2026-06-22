@@ -1487,12 +1487,15 @@ function get_generator_tag( ?string $version = null ): string {
  */
 // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
 function get_user_display_name( array $user ): string {
-	$full_name    = trim(
-		(string) ( $user['first_name'] ?? '' ) . ' ' . (string) ( $user['last_name'] ?? '' )
-	);
-	$display_name = '' !== $full_name
-		? $full_name
-		: trim( (string) ( $user['username'] ?? '' ) );
+	$display_name = trim( (string) ( $user['display_name'] ?? '' ) );
+	if ( '' === $display_name ) {
+		$full_name    = trim(
+			(string) ( $user['first_name'] ?? '' ) . ' ' . (string) ( $user['last_name'] ?? '' )
+		);
+		$display_name = '' !== $full_name
+			? $full_name
+			: trim( (string) ( $user['username'] ?? '' ) );
+	}
 	$display_name = '' !== $display_name ? $display_name : 'there';
 
 	return (string) apply_filters(

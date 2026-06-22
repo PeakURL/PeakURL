@@ -37,6 +37,7 @@ export interface ProfileUser {
 	email?: string | null;
 	firstName?: string | null;
 	lastName?: string | null;
+	displayName?: string | null;
 	phoneNumber?: string | null;
 	company?: string | null;
 	jobTitle?: string | null;
@@ -132,6 +133,7 @@ export interface UserSummary {
 	id: string;
 	firstName?: string | null;
 	lastName?: string | null;
+	displayName?: string | null;
 	username?: string | null;
 	email?: string | null;
 	role?: UserRole | null;
@@ -144,6 +146,7 @@ export interface UserSummary {
 export interface UserDialogPayload {
 	firstName: string;
 	lastName: string;
+	displayName?: string;
 	username: string;
 	email: string;
 	role: UserRole;

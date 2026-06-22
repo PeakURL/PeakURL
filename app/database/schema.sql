@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(190) NOT NULL UNIQUE,
     first_name VARCHAR(120) NOT NULL,
     last_name VARCHAR(120) NOT NULL,
+    display_name VARCHAR(255) DEFAULT NULL,
     password_hash VARCHAR(255) NOT NULL,
     phone_number VARCHAR(40) DEFAULT NULL,
     company VARCHAR(190) DEFAULT NULL,

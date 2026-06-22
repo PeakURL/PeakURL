@@ -366,6 +366,7 @@ trait AnalyticsTrait {
 		return 'SELECT a.*,
 			actor.first_name AS actor_first_name,
 			actor.last_name AS actor_last_name,
+			actor.display_name AS actor_display_name,
 			actor.username AS actor_username,
 			actor.email AS actor_email,
 			actor.role AS actor_role';

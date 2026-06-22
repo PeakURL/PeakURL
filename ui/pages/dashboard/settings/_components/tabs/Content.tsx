@@ -60,6 +60,7 @@ import SettingsSkeleton from "../SettingsSkeleton";
 const createGeneralForm = (user?: ProfileUser | null): GeneralFormState => ({
 	firstName: user?.firstName || "",
 	lastName: user?.lastName || "",
+	displayName: user?.displayName || "",
 	email: user?.email || "",
 	phoneNumber: user?.phoneNumber || "",
 	company: user?.company || "",
@@ -70,6 +71,7 @@ const createGeneralForm = (user?: ProfileUser | null): GeneralFormState => ({
 const profileFormKeys: Array<keyof GeneralFormState> = [
 	"firstName",
 	"lastName",
+	"displayName",
 	"email",
 	"phoneNumber",
 	"company",

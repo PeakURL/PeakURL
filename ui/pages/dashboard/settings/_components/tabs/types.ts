@@ -36,6 +36,7 @@ export type QueryError = FetchBaseQueryError | SerializedError | undefined;
 export interface GeneralFormState {
 	firstName: string;
 	lastName: string;
+	displayName: string;
 	email: string;
 	phoneNumber: string;
 	company: string;

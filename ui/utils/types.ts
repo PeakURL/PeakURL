@@ -282,6 +282,9 @@ export interface DashboardSearchUserLike {
 
 	/** Family name for display and search matching. */
 	lastName?: string | null;
+
+	/** Preferred display name. */
+	displayName?: string | null;
 }
 
 /**

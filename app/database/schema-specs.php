@@ -64,6 +64,10 @@ class SchemaSpecs {
 			),
 			'users'      => array(
 				array(
+					'name'       => 'display_name',
+					'definition' => 'VARCHAR(255) DEFAULT NULL',
+				),
+				array(
 					'name'       => 'phone_number',
 					'definition' => 'VARCHAR(40) DEFAULT NULL',
 				),

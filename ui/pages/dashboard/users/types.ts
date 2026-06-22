@@ -20,6 +20,9 @@ export interface UserDialogFormState {
 	/** User last name entered in the dialog. */
 	lastName: string;
 
+	/** User preferred display name. */
+	displayName: string;
+
 	/** Unique dashboard username. */
 	username: string;
 

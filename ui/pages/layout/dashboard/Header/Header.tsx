@@ -73,7 +73,8 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 							<div className="dashboard-header-user-details">
 								<div className="dashboard-header-user-name">
 									{user
-										? `${user.firstName} ${user.lastName}`
+										? user.displayName ||
+											`${user.firstName} ${user.lastName}`
 										: __("Admin Account")}
 								</div>
 								<div className="dashboard-header-user-role">

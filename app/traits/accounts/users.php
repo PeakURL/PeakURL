@@ -80,6 +80,7 @@ trait UsersTrait {
 		$field_map = array(
 			'firstName'   => 'first_name',
 			'lastName'    => 'last_name',
+			'displayName' => 'display_name',
 			'email'       => 'email',
 			'phoneNumber' => 'phone_number',
 			'company'     => 'company',
@@ -232,6 +233,7 @@ trait UsersTrait {
 				'email'             => $email,
 				'first_name'        => $first_name,
 				'last_name'         => $last_name,
+				'display_name'      => isset( $payload['displayName'] ) ? trim( (string) $payload['displayName'] ) : null,
 				'password_hash'     => password_hash( $password, PASSWORD_DEFAULT ),
 				'role'              => $role,
 				'is_email_verified' => 1,
@@ -294,6 +296,7 @@ trait UsersTrait {
 			array(
 				'firstName'   => 'first_name',
 				'lastName'    => 'last_name',
+				'displayName' => 'display_name',
 				'phoneNumber' => 'phone_number',
 				'company'     => 'company',
 				'jobTitle'    => 'job_title',
@@ -582,19 +585,21 @@ trait UsersTrait {
 	 * @since 1.0.4
 	 */
 	private function get_user_activity_meta( array $user ): array {
-		$first_name = trim( (string) ( $user['first_name'] ?? '' ) );
-		$last_name  = trim( (string) ( $user['last_name'] ?? '' ) );
-		$username   = trim( (string) ( $user['username'] ?? '' ) );
-		$email      = sanitize_email( (string) ( $user['email'] ?? '' ) );
-		$role       = trim( (string) ( $user['role'] ?? '' ) );
+		$first_name   = trim( (string) ( $user['first_name'] ?? '' ) );
+		$last_name    = trim( (string) ( $user['last_name'] ?? '' ) );
+		$display_name = trim( (string) ( $user['display_name'] ?? '' ) );
+		$username     = trim( (string) ( $user['username'] ?? '' ) );
+		$email        = sanitize_email( (string) ( $user['email'] ?? '' ) );
+		$role         = trim( (string) ( $user['role'] ?? '' ) );
 
 		return array(
-			'id'        => (string) ( $user['id'] ?? '' ),
-			'firstName' => '' !== $first_name ? $first_name : null,
-			'lastName'  => '' !== $last_name ? $last_name : null,
-			'username'  => '' !== $username ? $username : null,
-			'email'     => '' !== $email ? $email : null,
-			'role'      => '' !== $role ? $role : null,
+			'id'          => (string) ( $user['id'] ?? '' ),
+			'firstName'   => '' !== $first_name ? $first_name : null,
+			'lastName'    => '' !== $last_name ? $last_name : null,
+			'displayName' => '' !== $display_name ? $display_name : null,
+			'username'    => '' !== $username ? $username : null,
+			'email'       => '' !== $email ? $email : null,
+			'role'        => '' !== $role ? $role : null,
 		);
 	}
 }

@@ -47,6 +47,7 @@ import type {
 const EMPTY_FORM: UserDialogFormState = {
 	firstName: "",
 	lastName: "",
+	displayName: "",
 	username: "",
 	email: "",
 	password: "",
@@ -77,6 +78,7 @@ const getInitialFormState = (
 		return {
 			firstName: initialUser.firstName ?? "",
 			lastName: initialUser.lastName ?? "",
+			displayName: initialUser.displayName ?? "",
 			username: initialUser.username ?? "",
 			email: initialUser.email ?? "",
 			password: "",
@@ -124,6 +126,7 @@ function UserDialog({
 		const payload: UserDialogPayload = {
 			firstName: form.firstName.trim(),
 			lastName: form.lastName.trim(),
+			displayName: form.displayName.trim(),
 			username: form.username.trim(),
 			email: form.email.trim(),
 			role: form.role as UserRole,
@@ -209,6 +212,15 @@ function UserDialog({
 								value={form.lastName}
 								onChange={handleChange("lastName")}
 								required
+							/>
+						</div>
+
+						<div className="users-page-dialog-grid">
+							<Input
+								label={__("Display Name")}
+								value={form.displayName}
+								onChange={handleChange("displayName")}
+								placeholder={`${form.firstName} ${form.lastName}`}
 							/>
 						</div>
 
@@ -353,6 +365,7 @@ function UsersPage() {
 					"current-user",
 				firstName: accountUser.firstName,
 				lastName: accountUser.lastName,
+				displayName: accountUser.displayName,
 				username: accountUser.username,
 				email: accountUser.email,
 				role: currentUserRole,
@@ -421,7 +434,8 @@ function UsersPage() {
 				__("User deleted"),
 				sprintf(
 					__("%s was removed successfully."),
-					`${userPendingDelete.firstName} ${userPendingDelete.lastName}`
+					userPendingDelete.displayName ||
+						`${userPendingDelete.firstName} ${userPendingDelete.lastName}`
 				)
 			);
 			setUserPendingDelete(null);
@@ -581,8 +595,8 @@ function UsersPage() {
 													<div className="users-page-user-copy">
 														<div className="users-page-user-name">
 															<bdi dir="auto">
-																{user.firstName}{" "}
-																{user.lastName}
+																{user.displayName ||
+																	`${user.firstName} ${user.lastName}`}
 															</bdi>
 														</div>
 														<div className="users-page-user-email">
@@ -638,11 +652,13 @@ function UsersPage() {
 														size="sm"
 														aria-label={sprintf(
 															__("Edit %s"),
-															`${user.firstName} ${user.lastName}`
+															user.displayName ||
+																`${user.firstName} ${user.lastName}`
 														)}
 														title={sprintf(
 															__("Edit %s"),
-															`${user.firstName} ${user.lastName}`
+															user.displayName ||
+																`${user.firstName} ${user.lastName}`
 														)}
 														onClick={() =>
 															openEditDialog(user)
@@ -654,11 +670,13 @@ function UsersPage() {
 														size="sm"
 														aria-label={sprintf(
 															__("Delete %s"),
-															`${user.firstName} ${user.lastName}`
+															user.displayName ||
+																`${user.firstName} ${user.lastName}`
 														)}
 														title={sprintf(
 															__("Delete %s"),
-															`${user.firstName} ${user.lastName}`
+															user.displayName ||
+																`${user.firstName} ${user.lastName}`
 														)}
 														className="users-page-action-delete"
 														disabled={
@@ -704,7 +722,8 @@ function UsersPage() {
 								__(
 									"Delete %s? This will revoke their sessions, remove their API keys, and permanently delete their account."
 								),
-								`${userPendingDelete.firstName} ${userPendingDelete.lastName}`
+								userPendingDelete.displayName ||
+									`${userPendingDelete.firstName} ${userPendingDelete.lastName}`
 							)
 						: ""
 				}

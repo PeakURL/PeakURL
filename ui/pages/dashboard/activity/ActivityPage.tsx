@@ -88,6 +88,10 @@ function getActivityPersonName(person?: ActivityPerson | null): string | null {
 		return null;
 	}
 
+	if (person.displayName) {
+		return person.displayName;
+	}
+
 	const fullName = [person.firstName, person.lastName]
 		.filter(Boolean)
 		.join(" ")

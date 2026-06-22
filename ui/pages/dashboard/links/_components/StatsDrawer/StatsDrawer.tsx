@@ -91,7 +91,7 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [copiedKey, setCopiedKey] = useTemporaryState<
 		"short" | "destination" | null
-	>();
+	>(null);
 	const [timeRange, setTimeRange] = useState<StatsTimeRange>("7d");
 	const linkId = link?.id || "";
 	const createdAt = link?.createdAt;
@@ -115,7 +115,28 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 	);
 
 	const handleOpen = useCallback((url: string) => {
-		window.open(url, "_blank", "noopener,noreferrer");
+		let parsedUrl: URL;
+		try {
+			parsedUrl = new URL(url, window.location.origin);
+		} catch (err) {
+			console.error("Invalid URL:", err);
+			return;
+		}
+
+		if (parsedUrl.protocol !== "http:" && parsedUrl.protocol !== "https:") {
+			console.error("Blocked opening non-http(s) URL:", url);
+			return;
+		}
+
+		const openedWindow = window.open(
+			parsedUrl.toString(),
+			"_blank",
+			"noopener,noreferrer"
+		);
+
+		if (!openedWindow) {
+			console.warn("Popup blocked by browser.");
+		}
 	}, []);
 
 	const isRtl = isDocumentRtl();

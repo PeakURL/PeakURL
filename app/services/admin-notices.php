@@ -103,11 +103,11 @@ class AdminNotices {
 		$message = '' !== $latest_version && '' !== $current_version
 			? sprintf(
 				/* translators: 1: current version, 2: latest version. */
-				__( 'You are running PeakURL %1$s. Review the update details and install %2$s from the Updates screen.', 'peakurl' ),
+				__( 'You are running PeakURL %1$s. Review the <a href="https://peakurl.org/release-notes?utm_source=dashboard&utm_medium=banner&utm_campaign=update-notice" target="_blank" rel="noopener noreferrer" class="underline hover:opacity-100">update details</a> and install %2$s from the Updates screen.', 'peakurl' ),
 				$current_version,
 				$latest_version,
 			)
-			: __( 'Review the update details and install the latest release from the Updates screen.', 'peakurl' );
+			: __( 'Review the <a href="https://peakurl.org/release-notes?utm_source=dashboard&utm_medium=banner&utm_campaign=update-notice" target="_blank" rel="noopener noreferrer" class="underline hover:opacity-100">update details</a> and install the latest release from the Updates screen.', 'peakurl' );
 
 		$registry->add(
 			array(

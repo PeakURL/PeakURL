@@ -110,9 +110,12 @@ export const AdminNotices = () => {
 										</p>
 									) : null}
 									{notice?.message ? (
-										<p className="dashboard-notice-message">
-											{notice.message}
-										</p>
+										<p
+											className="dashboard-notice-message"
+											dangerouslySetInnerHTML={{
+												__html: notice.message,
+											}}
+										/>
 									) : null}
 								</div>
 							</div>

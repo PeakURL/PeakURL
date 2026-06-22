@@ -178,15 +178,17 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 					range: timeRange,
 				};
 
+	const shouldSkipStatsQuery =
+		!link?.id ||
+		!open ||
+		!selectedTabUsesStatsQuery ||
+		(timeRange === "custom" &&
+			(!customDateRange.from || !customDateRange.to));
+
 	const { data: statsData, isLoading } = useGetLinkStatsQuery(
 		statsQueryArgs,
 		{
-			skip:
-				!link?.id ||
-				!open ||
-				!selectedTabUsesStatsQuery ||
-				(timeRange === "custom" &&
-					(!customDateRange.from || !customDateRange.to)),
+			skip: shouldSkipStatsQuery,
 		}
 	);
 

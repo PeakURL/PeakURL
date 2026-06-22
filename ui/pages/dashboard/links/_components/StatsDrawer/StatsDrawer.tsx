@@ -18,14 +18,7 @@ import {
 	Copy,
 	Check,
 } from "lucide-react";
-import {
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-	type SetStateAction,
-} from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { useGetLinkStatsQuery } from "@/store/slices/api";
 import { isDocumentRtl } from "@/i18n/direction";
@@ -36,6 +29,7 @@ import {
 	copyToClipboard,
 } from "@/utils";
 import { __ } from "@/i18n";
+import { useTemporaryState, usePerLinkState } from "@/hooks";
 
 import {
 	BestDay,
@@ -74,8 +68,7 @@ const isStatsQuerySkipped = ({
 	!linkId ||
 	!open ||
 	!selectedTabUsesStatsQuery ||
-	(timeRange === "custom" &&
-		(!customDateRange.from || !customDateRange.to));
+	(timeRange === "custom" && (!customDateRange.from || !customDateRange.to));
 
 /**
  * Build the first custom chart range for a link.
@@ -96,39 +89,21 @@ function getDefaultCustomDateRange(
 
 export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 	const [selectedTab, setSelectedTab] = useState(0);
-	const [copiedKey, setCopiedKey] = useState<"short" | "destination" | null>(
-		null
-	);
-	const copyResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
-		null
-	);
+	const [copiedKey, setCopiedKeyTemporarily] = useTemporaryState<
+		"short" | "destination" | null
+	>(null);
 
 	const handleCopy = useCallback(
 		async (url: string, key: "short" | "destination") => {
 			try {
 				await copyToClipboard(url);
-				setCopiedKey(key);
-				if (copyResetTimeoutRef.current) {
-					clearTimeout(copyResetTimeoutRef.current);
-				}
-				copyResetTimeoutRef.current = setTimeout(() => {
-					setCopiedKey(null);
-					copyResetTimeoutRef.current = null;
-				}, COPIED_STATE_TIMEOUT_MS);
+				setCopiedKeyTemporarily(key, null, COPIED_STATE_TIMEOUT_MS);
 			} catch (err) {
 				console.error("Failed to copy:", err);
 			}
 		},
-		[]
+		[setCopiedKeyTemporarily]
 	);
-
-	useEffect(() => {
-		return () => {
-			if (copyResetTimeoutRef.current) {
-				clearTimeout(copyResetTimeoutRef.current);
-			}
-		};
-	}, []);
 
 	const handleOpen = useCallback((url: string) => {
 		window.open(url, "_blank", "noopener,noreferrer");
@@ -141,31 +116,8 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 		() => getDefaultCustomDateRange(link?.createdAt),
 		[link?.createdAt]
 	);
-	const [customDateRangeState, setCustomDateRangeState] = useState<{
-		linkId: string;
-		range: StatsCustomDateRange;
-	} | null>(null);
-	const customDateRange =
-		customDateRangeState?.linkId === linkId
-			? customDateRangeState.range
-			: defaultCustomDateRange;
-	const setCustomDateRange = useCallback(
-		(nextRange: SetStateAction<StatsCustomDateRange>) => {
-			setCustomDateRangeState((currentState) => {
-				const currentRange =
-					currentState?.linkId === linkId
-						? currentState.range
-						: defaultCustomDateRange;
-				const range =
-					typeof nextRange === "function"
-						? nextRange(currentRange)
-						: nextRange;
-
-				return { linkId, range };
-			});
-		},
-		[defaultCustomDateRange, linkId]
-	);
+	const [customDateRange, setCustomDateRange] =
+		usePerLinkState<StatsCustomDateRange>(linkId, defaultCustomDateRange);
 
 	const tabs = [
 		{
@@ -232,7 +184,11 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 		: destinationUnavailableLabel;
 
 	return (
-		<Dialog open={open} onClose={setOpen} className="relative z-50">
+		<Dialog
+			open={open}
+			onClose={() => setOpen(false)}
+			className="relative z-50"
+		>
 			<div className="links-modal-backdrop" aria-hidden="true" />
 
 			<div className="fixed inset-0 overflow-hidden">

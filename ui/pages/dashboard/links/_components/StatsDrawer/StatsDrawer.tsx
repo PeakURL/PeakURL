@@ -231,9 +231,9 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 												</div>
 												{__("Link Analytics")}
 											</DialogTitle>
-											<div className="links-drawer-description flex flex-wrap items-center gap-x-2 gap-y-1.5 mt-2.5 text-xs text-text-muted">
+											<div className="links-drawer-description">
 												<span
-													className="font-semibold text-heading truncate max-w-37.5 sm:max-w-62.5"
+													className="links-drawer-description-title"
 													title={
 														link.title ||
 														__("Untitled Link")
@@ -244,10 +244,10 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 														__("Untitled Link")
 													)}
 												</span>
-												<span className="text-stroke/60">
+												<span className="links-drawer-description-separator">
 													&bull;
 												</span>
-												<span className="inline-flex items-center gap-1 font-mono text-accent font-semibold preserve-ltr-value shrink-0">
+												<span className="links-drawer-short-link">
 													<span>
 														/
 														{link.alias ||
@@ -260,7 +260,7 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 																"short"
 															)
 														}
-														className="text-text-muted hover:text-accent transition-colors cursor-pointer"
+														className="links-drawer-short-action"
 														title={
 															copiedKey ===
 															"short"
@@ -272,35 +272,36 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 													>
 														{copiedKey ===
 														"short" ? (
-															<Check className="h-3 w-3 text-success" />
+															<Check className="links-drawer-action-icon links-drawer-action-icon-success" />
 														) : (
-															<Copy className="h-3 w-3" />
+															<Copy className="links-drawer-action-icon" />
 														)}
 													</button>
 													<button
 														onClick={() =>
 															handleOpen(shortUrl)
 														}
-														className="text-text-muted hover:text-accent transition-colors cursor-pointer"
+														className="links-drawer-short-action"
 														title={__(
 															"Open short URL"
 														)}
 													>
-														<ExternalLink className="h-3 w-3" />
+														<ExternalLink className="links-drawer-action-icon" />
 													</button>
 												</span>
-												<span className="text-stroke/60">
+												<span className="links-drawer-description-separator">
 													&bull;
 												</span>
-												<span className="inline-flex items-center gap-1 min-w-0 text-text-muted preserve-ltr-value">
+												<span className="links-drawer-destination-link">
 													<span
-														className="truncate max-w-37.5 sm:max-w-75"
+														className="links-drawer-destination-value"
 														title={
 															destinationUrl ||
 															destinationUnavailableLabel
 														}
 													>
-														{destinationUrl}
+														{destinationUrl ||
+															destinationUnavailableLabel}
 													</span>
 													<button
 														onClick={() => {
@@ -316,16 +317,16 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 														disabled={
 															!hasDestinationUrl
 														}
-														className="text-text-muted hover:text-heading transition-colors cursor-pointer shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+														className="links-drawer-destination-action"
 														title={
 															copyDestinationTitle
 														}
 													>
 														{copiedKey ===
 														"destination" ? (
-															<Check className="h-3 w-3 text-success" />
+															<Check className="links-drawer-action-icon links-drawer-action-icon-success" />
 														) : (
-															<Copy className="h-3 w-3" />
+															<Copy className="links-drawer-action-icon" />
 														)}
 													</button>
 													<button
@@ -341,12 +342,12 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 														disabled={
 															!hasDestinationUrl
 														}
-														className="text-text-muted hover:text-heading transition-colors cursor-pointer shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+														className="links-drawer-destination-action"
 														title={
 															openDestinationTitle
 														}
 													>
-														<ExternalLink className="h-3 w-3" />
+														<ExternalLink className="links-drawer-action-icon" />
 													</button>
 												</span>
 											</div>
@@ -354,7 +355,7 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 										<button
 											type="button"
 											onClick={() => setOpen(false)}
-											className="links-drawer-close shrink-0 ml-4"
+											className="links-drawer-close"
 										>
 											<span className="sr-only">
 												{__("Close panel")}

@@ -58,6 +58,25 @@ const CUSTOM_RANGE_FALLBACK_DAYS = 30;
 const DAY_MS = 24 * 60 * 60 * 1000;
 const COPIED_STATE_TIMEOUT_MS = 2000;
 
+const isStatsQuerySkipped = ({
+	linkId,
+	open,
+	selectedTabUsesStatsQuery,
+	timeRange,
+	customDateRange,
+}: {
+	linkId?: string;
+	open: boolean;
+	selectedTabUsesStatsQuery: boolean;
+	timeRange: StatsTimeRange;
+	customDateRange: StatsCustomDateRange;
+}) =>
+	!linkId ||
+	!open ||
+	!selectedTabUsesStatsQuery ||
+	(timeRange === "custom" &&
+		(!customDateRange.from || !customDateRange.to));
+
 /**
  * Build the first custom chart range for a link.
  */
@@ -165,30 +184,34 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 	const selectedTabUsesStatsQuery =
 		tabs[selectedTab]?.usesStatsQuery === true;
 
-	const statsQueryArgs =
-		timeRange === "custom"
-			? {
-					id: linkId,
-					range: "custom" as const,
-					from: customDateRange.from,
-					to: customDateRange.to,
-				}
-			: {
-					id: linkId,
-					range: timeRange,
-				};
+	const statsQueryArgs = useMemo(
+		() =>
+			timeRange === "custom"
+				? {
+						id: linkId,
+						range: "custom" as const,
+						from: customDateRange.from,
+						to: customDateRange.to,
+					}
+				: {
+						id: linkId,
+						range: timeRange,
+					},
+		[timeRange, linkId, customDateRange.from, customDateRange.to]
+	);
 
-	const shouldSkipStatsQuery =
-		!link?.id ||
-		!open ||
-		!selectedTabUsesStatsQuery ||
-		(timeRange === "custom" &&
-			(!customDateRange.from || !customDateRange.to));
+	const shouldSkip = isStatsQuerySkipped({
+		linkId: link?.id,
+		open,
+		selectedTabUsesStatsQuery,
+		timeRange,
+		customDateRange,
+	});
 
 	const { data: statsData, isLoading } = useGetLinkStatsQuery(
 		statsQueryArgs,
 		{
-			skip: shouldSkipStatsQuery,
+			skip: shouldSkip,
 		}
 	);
 

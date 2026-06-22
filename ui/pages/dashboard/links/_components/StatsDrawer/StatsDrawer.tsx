@@ -8,12 +8,26 @@ import {
 	TabPanel,
 	TabPanels,
 } from "@headlessui/react";
-import { X, Link2, BarChart3, Globe, Share2, ExternalLink } from "lucide-react";
+import {
+	X,
+	Link2,
+	BarChart3,
+	Globe,
+	Share2,
+	ExternalLink,
+	Copy,
+	Check,
+} from "lucide-react";
 import { useCallback, useMemo, useState, type SetStateAction } from "react";
 
 import { useGetLinkStatsQuery } from "@/store/slices/api";
 import { isDocumentRtl } from "@/i18n/direction";
-import { getLocalDateValue, getShortUrl } from "@/utils";
+import {
+	getLocalDateValue,
+	getShortUrl,
+	getLinkDisplayTitle,
+	copyToClipboard,
+} from "@/utils";
 import { __ } from "@/i18n";
 
 import {
@@ -55,6 +69,26 @@ function getDefaultCustomDateRange(
 
 export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 	const [selectedTab, setSelectedTab] = useState(0);
+	const [copiedKey, setCopiedKey] = useState<"short" | "destination" | null>(
+		null
+	);
+
+	const handleCopy = useCallback(
+		async (url: string, key: "short" | "destination") => {
+			try {
+				await copyToClipboard(url);
+				setCopiedKey(key);
+				setTimeout(() => setCopiedKey(null), 2000);
+			} catch (err) {
+				console.error("Failed to copy:", err);
+			}
+		},
+		[]
+	);
+
+	const handleOpen = useCallback((url: string) => {
+		window.open(url, "_blank", "noopener,noreferrer");
+	}, []);
 	const [timeRange, setTimeRange] = useState<StatsTimeRange>("7d");
 	const isRtl = isDocumentRtl();
 	const direction = isRtl ? "rtl" : "ltr";
@@ -79,7 +113,7 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 						? currentState.range
 						: defaultCustomDateRange;
 				const range =
-					"function" === typeof nextRange
+					typeof nextRange === "function"
 						? nextRange(currentRange)
 						: nextRange;
 
@@ -88,8 +122,18 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 		},
 		[defaultCustomDateRange, linkId]
 	);
+
+	const tabs = [
+		{ name: __("Traffic Statistics"), icon: BarChart3, usesStatsQuery: true },
+		{ name: __("Traffic Location"), icon: Globe, usesStatsQuery: false },
+		{ name: __("Traffic Sources"), icon: ExternalLink, usesStatsQuery: true },
+		{ name: __("Share"), icon: Share2, usesStatsQuery: false },
+	];
+	const selectedTabUsesStatsQuery =
+		tabs[selectedTab]?.usesStatsQuery === true;
+
 	const statsQueryArgs =
-		"custom" === timeRange
+		timeRange === "custom"
 			? {
 					id: linkId,
 					range: "custom" as const,
@@ -107,8 +151,8 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 			skip:
 				!link?.id ||
 				!open ||
-				![0, 2].includes(selectedTab) ||
-				("custom" === timeRange &&
+				!selectedTabUsesStatsQuery ||
+				(timeRange === "custom" &&
 					(!customDateRange.from || !customDateRange.to)),
 		}
 	);
@@ -117,13 +161,6 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 
 	const shortUrl = getShortUrl(link);
 	const statsPayload = statsData?.data;
-
-	const tabs = [
-		{ name: __("Traffic Statistics"), icon: BarChart3 },
-		{ name: __("Traffic Location"), icon: Globe },
-		{ name: __("Traffic Sources"), icon: ExternalLink },
-		{ name: __("Share"), icon: Share2 },
-	];
 
 	return (
 		<Dialog open={open} onClose={setOpen} className="relative z-50">
@@ -151,23 +188,129 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 								{/* Header */}
 								<div className="links-drawer-header">
 									<div className="links-drawer-header-inner">
-										<div className="links-drawer-header-copy">
+										<div className="links-drawer-header-copy min-w-0 flex-1">
 											<DialogTitle className="links-drawer-title">
 												<div className="links-drawer-title-icon">
 													<Link2 className="w-4 h-4 text-accent" />
 												</div>
 												{__("Link Analytics")}
 											</DialogTitle>
-											<p className="links-drawer-description">
-												{__(
-													"Detailed statistics and performance metrics"
-												)}
-											</p>
+											<div className="links-drawer-description flex flex-wrap items-center gap-x-2 gap-y-1.5 mt-2.5 text-xs text-text-muted">
+												<span
+													className="font-semibold text-heading truncate max-w-37.5 sm:max-w-62.5"
+													title={
+														link.title ||
+														__("Untitled Link")
+													}
+												>
+													{getLinkDisplayTitle(
+														link.title,
+														__("Untitled Link")
+													)}
+												</span>
+												<span className="text-stroke/60">
+													&bull;
+												</span>
+												<span className="inline-flex items-center gap-1 font-mono text-accent font-semibold preserve-ltr-value shrink-0">
+													<span>
+														/
+														{link.alias ||
+															link.shortCode}
+													</span>
+													<button
+														onClick={() =>
+															handleCopy(
+																shortUrl,
+																"short"
+															)
+														}
+														className="text-text-muted hover:text-accent transition-colors cursor-pointer"
+														title={
+															copiedKey ===
+															"short"
+																? __("Copied!")
+																: __(
+																		"Copy short URL"
+																	)
+														}
+													>
+														{copiedKey ===
+														"short" ? (
+															<Check className="h-3 w-3 text-success" />
+														) : (
+															<Copy className="h-3 w-3" />
+														)}
+													</button>
+													<button
+														onClick={() =>
+															handleOpen(shortUrl)
+														}
+														className="text-text-muted hover:text-accent transition-colors cursor-pointer"
+														title={__(
+															"Open short URL"
+														)}
+													>
+														<ExternalLink className="h-3 w-3" />
+													</button>
+												</span>
+												<span className="text-stroke/60">
+													&bull;
+												</span>
+												<span className="inline-flex items-center gap-1 min-w-0 text-text-muted preserve-ltr-value">
+													<span
+														className="truncate max-w-37.5 sm:max-w-75"
+														title={
+															link.destinationUrl
+														}
+													>
+														{link.destinationUrl}
+													</span>
+													<button
+														onClick={() =>
+															handleCopy(
+																link.destinationUrl ||
+																	"",
+																"destination"
+															)
+														}
+														className="text-text-muted hover:text-heading transition-colors cursor-pointer shrink-0"
+														title={
+															copiedKey ===
+															"destination"
+																? __("Copied!")
+																: __(
+																		"Copy destination URL"
+																	)
+														}
+													>
+														{copiedKey ===
+														"destination" ? (
+															<Check className="h-3 w-3 text-success" />
+														) : (
+															<Copy className="h-3 w-3" />
+														)}
+													</button>
+													<button
+														onClick={() =>
+															handleOpen(
+																link.destinationUrl ||
+																	""
+															)
+														}
+														className="text-text-muted hover:text-heading transition-colors cursor-pointer shrink-0"
+														title={__(
+															"Open destination URL"
+														)}
+													>
+														<ExternalLink className="h-3 w-3" />
+													</button>
+												</span>
+											</div>
 										</div>
 										<button
 											type="button"
 											onClick={() => setOpen(false)}
-											className="links-drawer-close"
+											className="links-drawer-close shrink-0 ml-4"
 										>
 											<span className="sr-only">
 												{__("Close panel")}

@@ -18,7 +18,14 @@ import {
 	Copy,
 	Check,
 } from "lucide-react";
-import { useCallback, useMemo, useState, type SetStateAction } from "react";
+import {
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+	type SetStateAction,
+} from "react";
 
 import { useGetLinkStatsQuery } from "@/store/slices/api";
 import { isDocumentRtl } from "@/i18n/direction";
@@ -49,6 +56,7 @@ import type {
 
 const CUSTOM_RANGE_FALLBACK_DAYS = 30;
 const DAY_MS = 24 * 60 * 60 * 1000;
+const COPIED_STATE_TIMEOUT_MS = 2000;
 
 /**
  * Build the first custom chart range for a link.
@@ -72,19 +80,36 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 	const [copiedKey, setCopiedKey] = useState<"short" | "destination" | null>(
 		null
 	);
+	const copyResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+		null
+	);
 
 	const handleCopy = useCallback(
 		async (url: string, key: "short" | "destination") => {
 			try {
 				await copyToClipboard(url);
 				setCopiedKey(key);
-				setTimeout(() => setCopiedKey(null), 2000);
+				if (copyResetTimeoutRef.current) {
+					clearTimeout(copyResetTimeoutRef.current);
+				}
+				copyResetTimeoutRef.current = setTimeout(() => {
+					setCopiedKey(null);
+					copyResetTimeoutRef.current = null;
+				}, COPIED_STATE_TIMEOUT_MS);
 			} catch (err) {
 				console.error("Failed to copy:", err);
 			}
 		},
 		[]
 	);
+
+	useEffect(() => {
+		return () => {
+			if (copyResetTimeoutRef.current) {
+				clearTimeout(copyResetTimeoutRef.current);
+			}
+		};
+	}, []);
 
 	const handleOpen = useCallback((url: string) => {
 		window.open(url, "_blank", "noopener,noreferrer");
@@ -161,6 +186,17 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 
 	const shortUrl = getShortUrl(link);
 	const statsPayload = statsData?.data;
+	const destinationUrl = link.destinationUrl;
+	const hasDestinationUrl = Boolean(destinationUrl);
+	const destinationUnavailableLabel = __("Destination URL unavailable");
+	const copyDestinationTitle = hasDestinationUrl
+		? copiedKey === "destination"
+			? __("Copied!")
+			: __("Copy destination URL")
+		: destinationUnavailableLabel;
+	const openDestinationTitle = hasDestinationUrl
+		? __("Open destination URL")
+		: destinationUnavailableLabel;
 
 	return (
 		<Dialog open={open} onClose={setOpen} className="relative z-50">
@@ -260,27 +296,29 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 													<span
 														className="truncate max-w-37.5 sm:max-w-75"
 														title={
-															link.destinationUrl
+															destinationUrl ||
+															destinationUnavailableLabel
 														}
 													>
-														{link.destinationUrl}
+														{destinationUrl}
 													</span>
 													<button
-														onClick={() =>
-															handleCopy(
-																link.destinationUrl ||
-																	"",
-																"destination"
-															)
+														onClick={() => {
+															if (
+																destinationUrl
+															) {
+																handleCopy(
+																	destinationUrl,
+																	"destination"
+																);
+															}
+														}}
+														disabled={
+															!hasDestinationUrl
 														}
-														className="text-text-muted hover:text-heading transition-colors cursor-pointer shrink-0"
+														className="text-text-muted hover:text-heading transition-colors cursor-pointer shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
 														title={
-															copiedKey ===
-															"destination"
-																? __("Copied!")
-																: __(
-																		"Copy destination URL"
-																	)
+															copyDestinationTitle
 														}
 													>
 														{copiedKey ===
@@ -291,16 +329,22 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 														)}
 													</button>
 													<button
-														onClick={() =>
-															handleOpen(
-																link.destinationUrl ||
-																	""
-															)
+														onClick={() => {
+															if (
+																destinationUrl
+															) {
+																handleOpen(
+																	destinationUrl
+																);
+															}
+														}}
+														disabled={
+															!hasDestinationUrl
 														}
-														className="text-text-muted hover:text-heading transition-colors cursor-pointer shrink-0"
-														title={__(
-															"Open destination URL"
-														)}
+														className="text-text-muted hover:text-heading transition-colors cursor-pointer shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+														title={
+															openDestinationTitle
+														}
 													>
 														<ExternalLink className="h-3 w-3" />
 													</button>

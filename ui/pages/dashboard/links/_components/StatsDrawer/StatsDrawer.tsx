@@ -149,9 +149,17 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 	);
 
 	const tabs = [
-		{ name: __("Traffic Statistics"), icon: BarChart3, usesStatsQuery: true },
+		{
+			name: __("Traffic Statistics"),
+			icon: BarChart3,
+			usesStatsQuery: true,
+		},
 		{ name: __("Traffic Location"), icon: Globe, usesStatsQuery: false },
-		{ name: __("Traffic Sources"), icon: ExternalLink, usesStatsQuery: true },
+		{
+			name: __("Traffic Sources"),
+			icon: ExternalLink,
+			usesStatsQuery: true,
+		},
 		{ name: __("Share"), icon: Share2, usesStatsQuery: false },
 	];
 	const selectedTabUsesStatsQuery =

@@ -89,35 +89,37 @@ function getDefaultCustomDateRange(
 
 export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 	const [selectedTab, setSelectedTab] = useState(0);
-	const [copiedKey, setCopiedKeyTemporarily] = useTemporaryState<
+	const [copiedKey, setCopiedKey] = useTemporaryState<
 		"short" | "destination" | null
-	>(null);
+	>();
+	const [timeRange, setTimeRange] = useState<StatsTimeRange>("7d");
+	const linkId = link?.id || "";
+	const createdAt = link?.createdAt;
+	const defaultCustomDateRange = useMemo(
+		() => getDefaultCustomDateRange(createdAt),
+		[createdAt]
+	);
+	const [customDateRange, setCustomDateRange] =
+		usePerLinkState<StatsCustomDateRange>(linkId, defaultCustomDateRange);
 
 	const handleCopy = useCallback(
 		async (url: string, key: "short" | "destination") => {
 			try {
 				await copyToClipboard(url);
-				setCopiedKeyTemporarily(key, null, COPIED_STATE_TIMEOUT_MS);
+				setCopiedKey(key, COPIED_STATE_TIMEOUT_MS);
 			} catch (err) {
 				console.error("Failed to copy:", err);
 			}
 		},
-		[setCopiedKeyTemporarily]
+		[setCopiedKey]
 	);
 
 	const handleOpen = useCallback((url: string) => {
 		window.open(url, "_blank", "noopener,noreferrer");
 	}, []);
-	const [timeRange, setTimeRange] = useState<StatsTimeRange>("7d");
+
 	const isRtl = isDocumentRtl();
 	const direction = isRtl ? "rtl" : "ltr";
-	const linkId = link?.id || "";
-	const defaultCustomDateRange = useMemo(
-		() => getDefaultCustomDateRange(link?.createdAt),
-		[link?.createdAt]
-	);
-	const [customDateRange, setCustomDateRange] =
-		usePerLinkState<StatsCustomDateRange>(linkId, defaultCustomDateRange);
 
 	const tabs = [
 		{

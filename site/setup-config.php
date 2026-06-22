@@ -848,9 +848,9 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 
 		<!-- Footer -->
 		<div class="footer">
-			<?php /* translators: %s: PeakURL website link. */ ?>
 			<?php
 			$powered_by_html = sprintf(
+				/* translators: %s: PeakURL website link. */
 				esc_html__( 'Powered by %s', 'peakurl' ),
 				'<a href="https://peakurl.org?utm_source=peakurl_setup_config&utm_medium=installer&utm_campaign=powered_by" target="_blank" rel="noopener noreferrer">PeakURL</a>'
 			);

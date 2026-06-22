@@ -603,7 +603,6 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 
 		<!-- Footer -->
 		<div class="footer">
-			<?php /* translators: %s: PeakURL website link. */ ?>
 			<?php
 			$powered_by_link = PeakURL_sanitize_html(
 				'<a href="https://peakurl.org?utm_source=peakurl_install&utm_medium=installer&utm_campaign=powered_by" target="_blank" rel="noopener noreferrer">PeakURL</a>',
@@ -616,7 +615,11 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 				)
 			);
 			echo PeakURL_sanitize_html(
-				sprintf( __( 'Powered by %s', 'peakurl' ), $powered_by_link ),
+				sprintf(
+					/* translators: %s: PeakURL website link. */
+					__( 'Powered by %s', 'peakurl' ),
+					$powered_by_link
+				),
 				array(
 					'a' => array(
 						'href'   => true,

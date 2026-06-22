@@ -32,10 +32,10 @@ const NOTICE_STYLES = {
 
 function isNoticeTone(value: unknown): value is NoticeTone {
 	return (
-		"error" === value ||
-		"warning" === value ||
-		"success" === value ||
-		"info" === value
+		value === "error" ||
+		value === "warning" ||
+		value === "success" ||
+		value === "info"
 	);
 }
 
@@ -61,7 +61,7 @@ function NoticeAction({ action, actionClassName }: NoticeActionProps) {
 			href={url}
 			className={actionClasses}
 			target="_blank"
-			rel="noreferrer"
+			rel="noopener noreferrer"
 		>
 			{action.label}
 		</a>
@@ -80,16 +80,18 @@ export const AdminNotices = () => {
 
 	return (
 		<div className="dashboard-notices">
-			{notices.map((notice: AdminNoticeItem) => {
+			{notices.map((notice: AdminNoticeItem, index: number) => {
 				const toneKey = isNoticeTone(notice?.type)
 					? notice.type
 					: "info";
 				const tone = NOTICE_STYLES[toneKey];
 				const Icon = tone.icon;
 
+				const noticeKey = notice?.id ?? `notice-${index}`;
+
 				return (
 					<div
-						key={notice?.id || notice?.title}
+						key={noticeKey}
 						className={cn(
 							"dashboard-notice",
 							tone.containerClassName

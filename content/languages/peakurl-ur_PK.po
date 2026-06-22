@@ -976,12 +976,12 @@ msgid "A new PeakURL update is available."
 msgstr "PeakURL کی نئی اپ ڈیٹ دستیاب ہے۔"
 
 #: app/services/admin-notices.php:106
-msgid "You are running PeakURL %1$s. Review the update details and install %2$s from the Updates screen."
-msgstr "آپ PeakURL %1$s چلا رہے ہیں۔ اپ ڈیٹ کی تفصیلات دیکھیں اور Updates screen سے %2$s انسٹال کریں۔"
+msgid "You are running PeakURL %1$s. Review the <a href=\"https://peakurl.org/release-notes?utm_source=dashboard&utm_medium=banner&utm_campaign=update-notice\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">update details</a> and install %2$s from the Updates screen."
+msgstr "آپ PeakURL %1$s چلا رہے ہیں۔ <a href=\"https://peakurl.org/release-notes?utm_source=dashboard&utm_medium=banner&utm_campaign=update-notice\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">اپ ڈیٹ کی تفصیلات</a> دیکھیں اور Updates screen سے %2$s انسٹال کریں۔"
 
 #: app/services/admin-notices.php:110
-msgid "Review the update details and install the latest release from the Updates screen."
-msgstr "اپ ڈیٹ کی تفصیلات دیکھیں اور Updates screen سے تازہ ترین ریلیز انسٹال کریں۔"
+msgid "Review the <a href=\"https://peakurl.org/release-notes?utm_source=dashboard&utm_medium=banner&utm_campaign=update-notice\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">update details</a> and install the latest release from the Updates screen."
+msgstr "<a href=\"https://peakurl.org/release-notes?utm_source=dashboard&utm_medium=banner&utm_campaign=update-notice\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">اپ ڈیٹ کی تفصیلات</a> دیکھیں اور Updates screen سے تازہ ترین ریلیز انسٹال کریں۔"
 
 #: app/services/admin-notices.php:119
 msgid "Open Updates"
@@ -1157,6 +1157,8 @@ msgstr "PeakURL اپ ڈیٹ سروس کا جواب پڑھ نہیں سکا۔"
 #: app/services/social-preview.php:273
 #: ui/hooks/useDashboardSearch.ts:89
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:105
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:228
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:233
 msgid "Untitled Link"
 msgstr "بے عنوان لنک"
 
@@ -1591,7 +1593,7 @@ msgstr "ڈیٹابیس کی کنفیگریشن پہلے ہی محفوظ کی ج�
 msgid "Install %s"
 msgstr "%s انسٹال کریں"
 
-#: site/install.php:619
+#: site/install.php:620
 #: site/setup-config.php:854
 #: ui/pages/auth/login/LoginPage.tsx:296
 msgid "Powered by %s"
@@ -5719,7 +5721,7 @@ msgid "Explore the source code, understand how it works, and modify it to suit y
 msgstr "سورس کوڈ دیکھیں، سمجھیں کہ یہ کیسے کام کرتا ہے، اور اپنی ضرورت کے مطابق ترمیم کریں۔"
 
 #: ui/pages/dashboard/about/AboutPage.tsx:308
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:125
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:134
 msgid "Share"
 msgstr "شیئر کریں"
 
@@ -6072,6 +6074,8 @@ msgstr "میعاد ختم"
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:89
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:103
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:179
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:256
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:138
 msgid "Copied!"
 msgstr "کاپی ہو گیا!"
@@ -6695,32 +6699,48 @@ msgstr "ٹویٹر"
 msgid "LinkedIn"
 msgstr "لنکڈ اِن"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:122
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:124
 msgid "Traffic Statistics"
 msgstr "ٹریفک کے اعدادوشمار"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:123
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:128
 msgid "Traffic Location"
 msgstr "ٹریفک کا مقام"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:124
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:130
 msgid "Traffic Sources"
 msgstr "ٹریفک کے ذرائع"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:159
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:176
+msgid "Destination URL unavailable"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:180
+msgid "Copy destination URL"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:183
+msgid "Open destination URL"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:221
 msgid "Link Analytics"
 msgstr "لنک تجزیات"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:162
-msgid "Detailed statistics and performance metrics"
-msgstr "تفصیلی اعدادوشمار اور کارکردگی کے پیمانے"
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:257
+msgid "Copy short URL"
+msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:173
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:274
+msgid "Open short URL"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:350
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Header.tsx:29
 msgid "Close panel"
 msgstr "پینل بند کریں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:303
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:480
 msgid "Close"
 msgstr "بند کریں"
 

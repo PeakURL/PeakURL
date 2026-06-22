@@ -976,12 +976,12 @@ msgid "A new PeakURL update is available."
 msgstr "Hay una nueva actualización de PeakURL disponible."
 
 #: app/services/admin-notices.php:106
-msgid "You are running PeakURL %1$s. Review the update details and install %2$s from the Updates screen."
-msgstr "Estás usando PeakURL %1$s. Revisa los detalles de la actualización e instala %2$s desde la pantalla de Actualizaciones."
+msgid "You are running PeakURL %1$s. Review the <a href=\"https://peakurl.org/release-notes?utm_source=dashboard&utm_medium=banner&utm_campaign=update-notice\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">update details</a> and install %2$s from the Updates screen."
+msgstr "Estás usando PeakURL %1$s. Revisa los <a href=\"https://peakurl.org/release-notes?utm_source=dashboard&utm_medium=banner&utm_campaign=update-notice\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">detalles de la actualización</a> e instala %2$s desde la pantalla de Actualizaciones."
 
 #: app/services/admin-notices.php:110
-msgid "Review the update details and install the latest release from the Updates screen."
-msgstr "Revisa los detalles de la actualización e instala la versión más reciente desde la pantalla de Actualizaciones."
+msgid "Review the <a href=\"https://peakurl.org/release-notes?utm_source=dashboard&utm_medium=banner&utm_campaign=update-notice\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">update details</a> and install the latest release from the Updates screen."
+msgstr "Revisa los <a href=\"https://peakurl.org/release-notes?utm_source=dashboard&utm_medium=banner&utm_campaign=update-notice\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">detalles de la actualización</a> e instala la versión más reciente desde la pantalla de Actualizaciones."
 
 #: app/services/admin-notices.php:119
 msgid "Open Updates"
@@ -1157,6 +1157,8 @@ msgstr "PeakURL no pudo leer la respuesta del servicio de actualización."
 #: app/services/social-preview.php:273
 #: ui/hooks/useDashboardSearch.ts:89
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:105
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:228
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:233
 msgid "Untitled Link"
 msgstr "Enlace sin título"
 
@@ -1591,7 +1593,7 @@ msgstr "La configuración de la base de datos ya está guardada."
 msgid "Install %s"
 msgstr "Instalar %s"
 
-#: site/install.php:619
+#: site/install.php:620
 #: site/setup-config.php:854
 #: ui/pages/auth/login/LoginPage.tsx:296
 msgid "Powered by %s"
@@ -5719,7 +5721,7 @@ msgid "Explore the source code, understand how it works, and modify it to suit y
 msgstr "Explora el código fuente, entiende cómo funciona y modifícalo para adaptarlo exactamente a tus necesidades."
 
 #: ui/pages/dashboard/about/AboutPage.tsx:308
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:125
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:134
 msgid "Share"
 msgstr "Compartir"
 
@@ -6072,6 +6074,8 @@ msgstr "Caducado"
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:89
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:103
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:179
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:256
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:138
 msgid "Copied!"
 msgstr "Copiado"
@@ -6696,32 +6700,48 @@ msgstr "Twitter"
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:122
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:124
 msgid "Traffic Statistics"
 msgstr "Estadísticas de tráfico"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:123
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:128
 msgid "Traffic Location"
 msgstr "Ubicación del tráfico"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:124
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:130
 msgid "Traffic Sources"
 msgstr "Fuentes de tráfico"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:159
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:176
+msgid "Destination URL unavailable"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:180
+msgid "Copy destination URL"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:183
+msgid "Open destination URL"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:221
 msgid "Link Analytics"
 msgstr "Analíticas del enlace"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:162
-msgid "Detailed statistics and performance metrics"
-msgstr "Estadísticas detalladas y métricas de rendimiento"
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:257
+msgid "Copy short URL"
+msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:173
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:274
+msgid "Open short URL"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:350
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Header.tsx:29
 msgid "Close panel"
 msgstr "Cerrar panel"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:303
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:480
 msgid "Close"
 msgstr "Cerrar"
 

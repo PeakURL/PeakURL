@@ -50,7 +50,7 @@ trait FormattingTrait {
 			'id'              => (string) $row['id'],
 			'firstName'       => (string) ( $row['first_name'] ?? '' ),
 			'lastName'        => (string) ( $row['last_name'] ?? '' ),
-			'displayName'     => $row['display_name'] ? (string) $row['display_name'] : null,
+			'displayName'     => ( $row['display_name'] ?? null ) ? (string) $row['display_name'] : null,
 			'username'        => (string) ( $row['username'] ?? '' ),
 			'email'           => (string) ( $row['email'] ?? '' ),
 			'phoneNumber'     => (string) ( $row['phone_number'] ?? '' ),

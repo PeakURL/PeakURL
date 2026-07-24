@@ -1,4 +1,4 @@
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router";
 
 import { PEAKURL_BASENAME } from "./constants";
 import AppRouter from "./router";

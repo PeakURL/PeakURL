@@ -22,7 +22,7 @@ import {
 
 import { useGetUrlQuery, useGetUrlsQuery } from "@/store/slices/api";
 import type { GetUrlsQueryArgs } from "@/store/slices/api";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 import { __ } from "@/i18n";
 import { formatCount } from "@/utils";
 import type {

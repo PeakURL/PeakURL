@@ -7,7 +7,7 @@ import {
 	Settings,
 	FileX,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
 
 import { Button } from "@/components";
 import { isDocumentRtl } from "@/i18n/direction";

@@ -17,7 +17,7 @@ import {
 	Coffee,
 	SquareTerminal,
 } from "lucide-react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router";
 import { PEAKURL_VERSION, PEAKURL_NAME } from "@/constants";
 import { BrandLockup, Logo } from "@/components";
 import { __, sprintf } from "@/i18n";

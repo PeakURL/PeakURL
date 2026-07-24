@@ -6,7 +6,7 @@ import {
 	Settings,
 	LogOut,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
 import { selectSessionUser, useLogoutMutation } from "@/store/slices/api";

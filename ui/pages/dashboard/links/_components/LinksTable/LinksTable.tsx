@@ -1,6 +1,6 @@
 import type { ChangeEvent } from "react";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 
 import { getShortUrl, copyToClipboard, formatNumber } from "@/utils";
 

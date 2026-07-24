@@ -1,6 +1,6 @@
 import type { KeyboardEvent, SubmitEvent } from "react";
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
 import { CheckCircle2, KeyRound, LockKeyhole } from "lucide-react";
 
 import { AuthLayout } from "@/pages/layout";

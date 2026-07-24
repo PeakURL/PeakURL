@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 import { ClipboardPaste, CodeXml, FileUp } from "lucide-react";
 
 import { __ } from "@/i18n";

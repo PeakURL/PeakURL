@@ -1,6 +1,6 @@
 import type { SubmitEvent } from "react";
 import { useDeferredValue, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router";
 
 import { useGetAllUsersQuery, useGetUrlsQuery } from "@/store/slices/api";
 import { __ } from "@/i18n";

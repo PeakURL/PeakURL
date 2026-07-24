@@ -1,5 +1,5 @@
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 import { isDocumentRtl } from "@/i18n/direction";
 import { __ } from "@/i18n";

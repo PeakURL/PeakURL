@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 
 import { PEAKURL_NAME, PEAKURL_VERSION } from "@constants";
 import { isDocumentRtl } from "@/i18n/direction";

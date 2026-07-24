@@ -1,5 +1,5 @@
 import { MousePointerClick } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 import type { LinkRecord } from "@/api";
 import { __, sprintf } from "@/i18n";

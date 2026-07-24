@@ -8,7 +8,7 @@ import {
 	UserPen,
 	UserPlus,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 import { Button } from "@/components";
 import { __, sprintf } from "@/i18n";

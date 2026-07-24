@@ -14,7 +14,7 @@ import {
 	UserPlus,
 	Users,
 } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 
 import {
 	ConfirmDialog,

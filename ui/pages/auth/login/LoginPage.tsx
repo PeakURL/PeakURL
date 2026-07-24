@@ -1,6 +1,6 @@
 import type { KeyboardEvent, SubmitEvent } from "react";
 import { useMemo, useState } from "react";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router";
 import {
 	ArrowLeft,
 	ArrowRight,

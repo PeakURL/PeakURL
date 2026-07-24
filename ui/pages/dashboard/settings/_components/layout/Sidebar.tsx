@@ -9,7 +9,7 @@ import {
 	Plug,
 	Download,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { getDocumentDirection } from "@/i18n/direction";
 import { cn } from "@/utils";
 import type { SettingsTabIcon, SettingsTabItem, SidebarProps } from "./types";

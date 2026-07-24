@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { AlertCircle, CheckCircle2, Info, TriangleAlert } from "lucide-react";
 
 import { useGetAdminNoticesQuery } from "@/store/slices/api";

@@ -1,4 +1,4 @@
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router";
 
 import { authApi } from "@/store/slices";
 import { selectSessionUser } from "@/store/slices/api";

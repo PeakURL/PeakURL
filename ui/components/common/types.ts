@@ -1,4 +1,4 @@
-import type { To } from "react-router-dom";
+import type { To } from "react-router";
 
 /**
  * Supported size presets for the shared logo component.

@@ -33,6 +33,7 @@ function Form({ open, setOpen, link }: FormProps) {
 		error,
 		expiresAt,
 		fileInputRef,
+		destinationUrl,
 		handleClose,
 		handleRemoveSocialImage,
 		handleSocialImageChange,
@@ -42,6 +43,7 @@ function Form({ open, setOpen, link }: FormProps) {
 		password,
 		selectedTab,
 		setClearPassword,
+		setDestinationUrl,
 		setExpiresAt,
 		setPassword,
 		setSelectedTab,
@@ -113,7 +115,10 @@ function Form({ open, setOpen, link }: FormProps) {
 												<LinkDetailsTab
 													shortUrl={shortUrl}
 													destinationUrl={
-														link.destinationUrl
+														destinationUrl
+													}
+													setDestinationUrl={
+														setDestinationUrl
 													}
 													title={title}
 													setTitle={setTitle}

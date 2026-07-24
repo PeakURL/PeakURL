@@ -6,6 +6,7 @@ export const getEditLinkDrawerKey = (link: EditableLink) =>
 		link.title || "",
 		link.status || "",
 		link.expiresAt || "",
+		link.destinationUrl || "",
 		link.hasPassword ? "1" : "0",
 		link.socialPreview?.title || "",
 		link.socialPreview?.description || "",

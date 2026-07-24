@@ -73,6 +73,7 @@ export interface UpdateUrlPayload {
 	id: string;
 	title?: string;
 	status: LinkStatus;
+	destinationUrl?: string;
 	expiresAt: string | null;
 	socialTitle?: string;
 	socialDescription?: string;

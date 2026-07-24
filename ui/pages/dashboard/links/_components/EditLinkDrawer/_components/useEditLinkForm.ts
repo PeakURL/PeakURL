@@ -9,6 +9,8 @@ import {
 	getShortUrl,
 	isFutureLocalDateTime,
 	normalizeLinkTitle,
+	sanitizeUrl,
+	isRelativeUrl,
 	toIsoFromLocalDateTime,
 	toLocalDateTimeValue,
 } from "@/utils";
@@ -20,6 +22,9 @@ export function useEditLinkForm(
 	link: EditableLink,
 	setOpen: (open: boolean) => void
 ) {
+	const [destinationUrl, setDestinationUrl] = useState(
+		() => link.destinationUrl || ""
+	);
 	const [title, setTitle] = useState(() => normalizeLinkTitle(link.title));
 	const [socialTitle, setSocialTitle] = useState(
 		() => link.socialPreview?.title || ""
@@ -109,6 +114,27 @@ export function useEditLinkForm(
 		event.preventDefault();
 		setError("");
 
+		const trimmedDestinationUrl = destinationUrl.trim();
+
+		if (!trimmedDestinationUrl) {
+			setError(__("Please enter a URL"));
+			return;
+		}
+
+		const normalizedDestinationUrl = sanitizeUrl(trimmedDestinationUrl);
+
+		if (
+			!normalizedDestinationUrl ||
+			isRelativeUrl(normalizedDestinationUrl)
+		) {
+			setError(
+				__(
+					"Please enter a valid URL (must include http:// or https://)"
+				)
+			);
+			return;
+		}
+
 		if (expiresAt && !isFutureLocalDateTime(expiresAt)) {
 			setError(__("Expiration time must be in the future."));
 			return;
@@ -125,6 +151,10 @@ export function useEditLinkForm(
 				socialImageFile,
 				removeSocialImage,
 			};
+
+			if (trimmedDestinationUrl !== link.destinationUrl) {
+				payload.destinationUrl = normalizedDestinationUrl;
+			}
 
 			if (clearPassword) {
 				payload.clearPassword = true;
@@ -146,6 +176,7 @@ export function useEditLinkForm(
 		expiresAt,
 		fileInputRef,
 		handleClose,
+		destinationUrl,
 		handleRemoveSocialImage,
 		handleSocialImageChange,
 		handleSubmit,
@@ -154,6 +185,7 @@ export function useEditLinkForm(
 		password,
 		selectedTab,
 		setClearPassword,
+		setDestinationUrl,
 		setExpiresAt,
 		setPassword,
 		setSelectedTab,

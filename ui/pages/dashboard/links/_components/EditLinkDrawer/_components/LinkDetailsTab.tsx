@@ -12,6 +12,7 @@ import type { LinkStatus } from "../../types";
 interface LinkDetailsTabProps {
 	shortUrl: string;
 	destinationUrl: string;
+	setDestinationUrl: (value: string) => void;
 	title: string;
 	setTitle: (value: string) => void;
 	expiresAt: string;
@@ -24,6 +25,7 @@ interface LinkDetailsTabProps {
 function LinkDetailsTab({
 	shortUrl,
 	destinationUrl,
+	setDestinationUrl,
 	title,
 	setTitle,
 	expiresAt,
@@ -45,18 +47,18 @@ function LinkDetailsTab({
 						valueClassName="links-edit-drawer-readonly-text"
 					/>
 				</div>
-				<div className="links-edit-drawer-readonly-item">
-					<span className="links-edit-drawer-readonly-label">
-						{__("Destination URL")}
-					</span>
-					<ReadOnlyValueBlock
-						value={destinationUrl}
-						className="links-edit-drawer-readonly-value"
-						monospace={false}
-						valueClassName="links-edit-drawer-readonly-text"
-					/>
-				</div>
 			</div>
+			<Input
+				label={__("Destination URL")}
+				type="url"
+				value={destinationUrl}
+				onChange={(event) => setDestinationUrl(event.target.value)}
+				placeholder={__("https://example.com")}
+				autoCapitalize="off"
+				spellCheck={false}
+				required
+				className="form-control-surface-alt form-control-compact form-control-strong-focus"
+			/>
 			<Input
 				label={__("Title (Optional)")}
 				type="text"

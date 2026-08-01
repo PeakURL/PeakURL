@@ -6,7 +6,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language: en_US\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"Project-Id-Version: 1.2.6\n"
+"Project-Id-Version: 1.2.7\n"
 "Report-Msgid-Bugs-To: https://peakurl.org\n"
 "X-Domain: peakurl\n"
 
@@ -1155,8 +1155,8 @@ msgstr ""
 #: app/services/social-preview.php:273
 #: ui/hooks/useDashboardSearch.ts:89
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:105
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:228
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:233
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:251
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:256
 msgid "Untitled Link"
 msgstr ""
 
@@ -1713,7 +1713,7 @@ msgstr ""
 
 #: ui/utils/dashboardSearch.ts:115
 #: ui/utils/dashboardSearch.ts:119
-#: ui/pages/layout/dashboard/Header/Header.tsx:113
+#: ui/pages/layout/dashboard/Header/Header.tsx:120
 #: ui/pages/dashboard/activity/ActivityPage.tsx:132
 #: ui/pages/dashboard/activity/ActivityPage.tsx:631
 #: ui/router/pageTitle.ts:73
@@ -1753,7 +1753,7 @@ msgstr ""
 #: ui/utils/dashboardSearch.ts:225
 #: ui/utils/dashboardSearch.ts:241
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:82
-#: ui/pages/layout/dashboard/Header/Header.tsx:155
+#: ui/pages/layout/dashboard/Header/Header.tsx:162
 #: ui/pages/NotFoundPage.tsx:95
 #: ui/router/pageTitle.ts:34
 msgid "Settings"
@@ -1765,7 +1765,7 @@ msgid "General"
 msgstr ""
 
 #: ui/utils/dashboardSearch.ts:152
-#: ui/pages/layout/dashboard/Header/Header.tsx:135
+#: ui/pages/layout/dashboard/Header/Header.tsx:142
 msgid "Profile"
 msgstr ""
 
@@ -1898,7 +1898,7 @@ msgid "System Status"
 msgstr ""
 
 #: ui/utils/dashboardSearch.ts:565
-#: ui/pages/layout/dashboard/Header/Header.tsx:34
+#: ui/pages/layout/dashboard/Header/Header.tsx:40
 #: ui/pages/dashboard/activity/ActivityPage.tsx:112
 #: ui/pages/dashboard/activity/ActivityPage.tsx:930
 #: ui/pages/dashboard/users/UsersPage.tsx:555
@@ -2661,31 +2661,31 @@ msgstr ""
 msgid "Keep typing to search links, or jump straight to a dashboard page."
 msgstr ""
 
-#: ui/pages/layout/dashboard/Header/Header.tsx:32
-#: ui/pages/layout/dashboard/Header/Header.tsx:71
-#: ui/pages/layout/dashboard/Header/Header.tsx:83
+#: ui/pages/layout/dashboard/Header/Header.tsx:38
+#: ui/pages/layout/dashboard/Header/Header.tsx:78
+#: ui/pages/layout/dashboard/Header/Header.tsx:90
 #: ui/pages/dashboard/activity/ActivityPage.tsx:105
 #: ui/pages/dashboard/users/UsersPage.tsx:60
 #: ui/pages/dashboard/users/UsersPage.tsx:105
 msgid "Admin"
 msgstr ""
 
-#: ui/pages/layout/dashboard/Header/Header.tsx:33
+#: ui/pages/layout/dashboard/Header/Header.tsx:39
 #: ui/pages/dashboard/activity/ActivityPage.tsx:109
 #: ui/pages/dashboard/users/UsersPage.tsx:65
 #: ui/pages/dashboard/users/UsersPage.tsx:106
 msgid "Editor"
 msgstr ""
 
-#: ui/pages/layout/dashboard/Header/Header.tsx:78
+#: ui/pages/layout/dashboard/Header/Header.tsx:85
 msgid "Admin Account"
 msgstr ""
 
-#: ui/pages/layout/dashboard/Header/Header.tsx:174
+#: ui/pages/layout/dashboard/Header/Header.tsx:181
 msgid "Logging out..."
 msgstr ""
 
-#: ui/pages/layout/dashboard/Header/Header.tsx:175
+#: ui/pages/layout/dashboard/Header/Header.tsx:182
 msgid "Logout"
 msgstr ""
 
@@ -3520,7 +3520,7 @@ msgstr ""
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:613
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:50
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Form.tsx:65
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Form.tsx:67
 msgid "Social Preview"
 msgstr ""
 
@@ -3583,7 +3583,7 @@ msgstr ""
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:638
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:64
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:43
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:84
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:86
 msgid "Status"
 msgstr ""
 
@@ -4172,7 +4172,7 @@ msgstr ""
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:26
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:35
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:44
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:49
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:54
 msgid "Inactive"
 msgstr ""
 
@@ -4271,7 +4271,7 @@ msgstr ""
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:105
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:33
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:48
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:53
 #: ui/pages/dashboard/links/LinksPage.tsx:276
 msgid "Active"
 msgstr ""
@@ -5719,7 +5719,7 @@ msgid "Explore the source code, understand how it works, and modify it to suit y
 msgstr ""
 
 #: ui/pages/dashboard/about/AboutPage.tsx:308
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:134
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:157
 msgid "Share"
 msgstr ""
 
@@ -6065,15 +6065,15 @@ msgstr ""
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:37
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:143
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:50
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:55
 msgid "Expired"
 msgstr ""
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:89
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:103
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:179
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:256
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:202
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:279
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:138
 msgid "Copied!"
 msgstr ""
@@ -6128,15 +6128,17 @@ msgid "Password Protection (Optional)"
 msgstr ""
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:103
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:120
 msgid "Please enter a URL"
 msgstr ""
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:114
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:131
 msgid "Please enter a valid URL (must include http:// or https://)"
 msgstr ""
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:145
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:113
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:139
 msgid "Expiration time must be in the future."
 msgstr ""
 
@@ -6220,7 +6222,7 @@ msgstr ""
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/MainInputs.tsx:22
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:92
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:50
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:52
 msgid "Destination URL"
 msgstr ""
 
@@ -6253,7 +6255,7 @@ msgid "Transform your long URL into a short, shareable link"
 msgstr ""
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/ExpirationFields.tsx:25
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:71
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:73
 msgid "Expiration Date (Optional)"
 msgstr ""
 
@@ -6672,7 +6674,7 @@ msgstr ""
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:55
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:110
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:83
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:40
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:42
 msgid "Short URL"
 msgstr ""
 
@@ -6697,48 +6699,48 @@ msgstr ""
 msgid "LinkedIn"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:124
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:147
 msgid "Traffic Statistics"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:128
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:151
 msgid "Traffic Location"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:130
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:153
 msgid "Traffic Sources"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:176
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:199
 msgid "Destination URL unavailable"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:180
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:203
 msgid "Copy destination URL"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:183
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:206
 msgid "Open destination URL"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:221
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:244
 msgid "Link Analytics"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:257
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:280
 msgid "Copy short URL"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:274
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:297
 msgid "Open short URL"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:350
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:373
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Header.tsx:29
 msgid "Close panel"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:480
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:503
 msgid "Close"
 msgstr ""
 
@@ -6754,15 +6756,19 @@ msgstr ""
 msgid "Are you sure you want to delete this link? This action cannot be undone."
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:61
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:56
+msgid "https://example.com"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:63
 msgid "Title (Optional)"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:65
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:67
 msgid "Enter a title for this link"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:90
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:92
 msgid "Link status"
 msgstr ""
 
@@ -6790,15 +6796,15 @@ msgstr ""
 msgid "Remove password protection"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:139
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:169
 msgid "Failed to update link"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Form.tsx:64
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Form.tsx:66
 msgid "Link Details"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Form.tsx:66
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Form.tsx:68
 msgid "Protection"
 msgstr ""
 

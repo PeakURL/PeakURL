@@ -138,7 +138,7 @@ function LoginPage() {
 		return <PageLoader />;
 	}
 
-	if (currentUser) {
+	if (currentUser && !isAuthError) {
 		return <Navigate replace to={redirectTo} />;
 	}
 

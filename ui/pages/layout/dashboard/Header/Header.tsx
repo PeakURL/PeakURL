@@ -7,9 +7,14 @@ import {
 	LogOut,
 } from "lucide-react";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
-import { selectSessionUser, useLogoutMutation } from "@/store/slices/api";
+import {
+	selectSessionUser,
+	useLogoutMutation,
+	baseApi,
+} from "@/store/slices/api";
 import { authApi } from "@/store/slices";
 import { Avatar, ThemeToggle } from "@/components";
 import { getDocumentDirection } from "@/i18n/direction";
@@ -26,6 +31,7 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 	const user = selectSessionUser(sessionData);
 	const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const basePath = "/dashboard";
 
 	const getRoleLabel = (role?: string | null) => {
@@ -37,6 +43,7 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 	const handleLogout = async () => {
 		try {
 			await logout(undefined).unwrap();
+			dispatch(baseApi.util.resetApiState());
 			navigate("/login", { replace: true });
 		} catch (error) {
 			console.error("Logout failed:", error);

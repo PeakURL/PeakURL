@@ -160,6 +160,9 @@ trait SessionsTrait {
 			$this->crypto_service = new Crypto( $this->config );
 		}
 
+		$this->delete_current_session( $request );
+		$this->delete_matching_browser_sessions( $request, $user_id );
+
 		$raw_token = bin2hex( random_bytes( 32 ) );
 		$metadata  = Visitor::parse_user_agent( $request->get_user_agent() );
 		$row       = array(
@@ -190,6 +193,69 @@ trait SessionsTrait {
 						time() + (int) $this->config[ Constants::SESSION_LIFETIME ],
 					),
 				)
+			),
+		);
+	}
+
+	/**
+	 * Remove the current browser session before issuing a replacement token.
+	 *
+	 * A successful sign-in always rotates the session token. Removing the old
+	 * token prevents the same browser from appearing as multiple active sessions.
+	 *
+	 * @param Request $request Incoming request that may carry a session cookie.
+	 * @return void
+	 * @since 1.2.8
+	 */
+	private function delete_current_session( Request $request ): void {
+		$current_session = $this->find_session_by_request( $request );
+
+		if ( ! $current_session ) {
+			return;
+		}
+
+		$this->db->delete(
+			'sessions',
+			array(
+				'id' => $current_session['id'],
+			),
+		);
+	}
+
+	/**
+	 * Remove prior active records for the same browser fingerprint.
+	 *
+	 * This clears duplicate tokens created by earlier sign-ins from the same
+	 * user, IP address, and browser. Sessions from other devices remain active.
+	 *
+	 * @param Request $request Incoming request used to identify the browser.
+	 * @param string  $user_id Authenticated user ID.
+	 * @return void
+	 * @since 1.2.8
+	 */
+	private function delete_matching_browser_sessions(
+		Request $request,
+		string $user_id
+	): void {
+		$user_agent = trim( $request->get_user_agent() );
+		$ip_address = trim( $request->get_ip_address() );
+
+		if ( '' === $user_agent || '' === $ip_address ) {
+			return;
+		}
+
+		$this->execute(
+			'DELETE FROM sessions
+			WHERE user_id = :user_id
+			AND revoked_at IS NULL
+			AND last_active_at >= :active_since
+			AND COALESCE(user_agent, \'\') = :user_agent
+			AND COALESCE(ip_address, \'\') = :ip_address',
+			array(
+				'user_id'      => $user_id,
+				'active_since' => $this->session_active_since(),
+				'user_agent'   => $user_agent,
+				'ip_address'   => $ip_address,
 			),
 		);
 	}

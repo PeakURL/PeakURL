@@ -205,7 +205,7 @@ trait SessionsTrait {
 	 *
 	 * @param Request $request Incoming request that may carry a session cookie.
 	 * @return void
-	 * @since 1.2.8
+	 * @since 1.3.0
 	 */
 	private function delete_current_session( Request $request ): void {
 		$current_session = $this->find_session_by_request( $request );
@@ -231,7 +231,7 @@ trait SessionsTrait {
 	 * @param Request $request Incoming request used to identify the browser.
 	 * @param string  $user_id Authenticated user ID.
 	 * @return void
-	 * @since 1.2.8
+	 * @since 1.3.0
 	 */
 	private function delete_matching_browser_sessions(
 		Request $request,

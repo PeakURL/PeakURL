@@ -492,12 +492,13 @@ if ( ! is_string( $path ) || '' === $path ) {
 	$path = '/';
 }
 
-$base_path     = $base_path_from(
+$base_path                      = $base_path_from(
 	(string) ( $_SERVER['SCRIPT_NAME'] ?? '/index.php' ),
 );
-$relative_path = $request_path_from( $path, $base_path );
-$setup_path    = $app_url( $base_path, '/setup-config.php' );
-$install_path  = $app_url( $base_path, '/install.php' );
+$relative_path                  = $request_path_from( $path, $base_path );
+$setup_path                     = $app_url( $base_path, '/setup-config.php' );
+$install_path                   = $app_url( $base_path, '/install.php' );
+$database_connection_error_path = $app_url( $base_path, '/database-connection-error.php' );
 
 if ( $is_maintenance() ) {
 	$maintenance_view_data = null;
@@ -577,12 +578,15 @@ if ( Str::starts_with( $relative_path, '/api/' ) ) {
 				'success' => false,
 				'message' => InstallState::NEEDS_INSTALL === $install_state
 					? 'PeakURL needs installation.'
-					: 'PeakURL needs database configuration.',
+					: ( InstallState::DATABASE_CONNECTION_ERROR === $install_state
+						? 'PeakURL could not connect to the configured database.'
+						: 'PeakURL needs database configuration.' ),
 				'data'    => array(
-					'setupConfigUrl' => $setup_path,
-					'installUrl'     => $install_path,
-					'isConfigured'   => file_exists( $config_path ),
-					'recoveryState'  => $install_state,
+					'setupConfigUrl'             => $setup_path,
+					'installUrl'                 => $install_path,
+					'databaseConnectionErrorUrl' => $database_connection_error_path,
+					'isConfigured'               => file_exists( $config_path ),
+					'recoveryState'              => $install_state,
 				),
 			),
 			JSON_PRETTY_PRINT,
@@ -591,6 +595,24 @@ if ( Str::starts_with( $relative_path, '/api/' ) ) {
 	}
 
 	require $app_path . '/public/index.php';
+	exit();
+}
+
+if ( InstallState::DATABASE_CONNECTION_ERROR === $install_state ) {
+	$safe_database_connection_error_path = str_replace(
+		array( "\r", "\n" ),
+		'',
+		(string) $database_connection_error_path,
+	);
+
+	if (
+		'' === $safe_database_connection_error_path ||
+		'/' !== $safe_database_connection_error_path[0]
+	) {
+		$safe_database_connection_error_path = '/';
+	}
+
+	header( 'Location: ' . $safe_database_connection_error_path, true, 302 );
 	exit();
 }
 

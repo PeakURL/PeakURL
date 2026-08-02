@@ -229,10 +229,32 @@ class RuntimeConfig {
 	}
 
 	/**
+	 * Check whether config.php declares the required database settings.
+	 *
+	 * This intentionally reads config.php only. Install-state detection must
+	 * not treat defaults or alternate configuration sources as a configured
+	 * release database.
+	 *
+	 * @param string $base_path Absolute path to the PHP runtime directory.
+	 * @return bool True when required database values are explicitly configured.
+	 * @since 1.3.0
+	 */
+	public static function has_database_configuration( string $base_path ): bool {
+		$file_values = self::parse_config_file( dirname( $base_path ) . '/config.php' );
+
+		return (
+			isset( $file_values[ Constants::DB_DATABASE ] ) &&
+			'' !== trim( $file_values[ Constants::DB_DATABASE ] ) &&
+			isset( $file_values[ Constants::DB_USERNAME ] ) &&
+			'' !== trim( $file_values[ Constants::DB_USERNAME ] )
+		);
+	}
+
+	/**
 	 * Parse a PHP config.php file that defines constants and $table_prefix.
 	 *
-	 * The file is included with require, and any defined() constants are
-	 * extracted into a key-value map.
+	 * The file is read without executing it. Active define() constants are
+	 * extracted into a key-value map, while PHP comments are ignored.
 	 *
 	 * @param string $file_path Absolute path to config.php.
 	 * @return array<string, string> Constant name → string value pairs.
@@ -248,6 +270,8 @@ class RuntimeConfig {
 		if ( false === $contents ) {
 			return array();
 		}
+
+		$contents = self::strip_php_comments( $contents );
 
 		$keys   = array_merge( Constants::RUNTIME_KEYS, Constants::INSTALL_KEYS );
 		$values = array();
@@ -267,6 +291,36 @@ class RuntimeConfig {
 		}
 
 		return $values;
+	}
+
+	/**
+	 * Remove PHP comments without treating commented configuration as active.
+	 *
+	 * @param string $contents Raw PHP config.php contents.
+	 * @return string Content with comments replaced by whitespace.
+	 * @since 1.3.0
+	 */
+	private static function strip_php_comments( string $contents ): string {
+		$clean_contents = '';
+
+		foreach ( token_get_all( $contents ) as $token ) {
+			if ( is_array( $token ) ) {
+				if ( T_COMMENT === $token[0] || T_DOC_COMMENT === $token[0] ) {
+					$clean_contents .= str_repeat(
+						"\n",
+						substr_count( $token[1], "\n" ),
+					);
+					continue;
+				}
+
+				$clean_contents .= $token[1];
+				continue;
+			}
+
+			$clean_contents .= $token;
+		}
+
+		return $clean_contents;
 	}
 
 	/**

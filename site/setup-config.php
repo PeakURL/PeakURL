@@ -73,6 +73,11 @@ if ( InstallState::NEEDS_INSTALL === $install_state ) {
 	exit();
 }
 
+if ( InstallState::DATABASE_CONNECTION_ERROR === $install_state ) {
+	header( 'Location: ' . InstallScreen::format_url( $base_path, '/database-connection-error.php' ) );
+	exit();
+}
+
 $detected_site_url       = InstallScreen::detect_site_url( $base_path, $_SERVER );
 $values                  = InstallConfig::get_form_defaults( $detected_site_url );
 $values['site_language'] = $installer_locale->get_locale();

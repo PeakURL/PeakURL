@@ -32,6 +32,9 @@ class State {
 	/** Install state: config.php exists but tables or setup data are missing. */
 	public const NEEDS_INSTALL = 'needs_install';
 
+	/** Install state: config.php exists but its database connection fails. */
+	public const DATABASE_CONNECTION_ERROR = 'database_connection_error';
+
 	/** Install state: the release is fully installed and ready. */
 	public const READY = 'ready';
 
@@ -69,6 +72,10 @@ class State {
 			return self::NEEDS_SETUP;
 		}
 
+		if ( ! RuntimeConfig::has_database_configuration( $app_path ) ) {
+			return self::DATABASE_CONNECTION_ERROR;
+		}
+
 		try {
 			$config     = RuntimeConfig::load( $app_path );
 			$connection = new Connection( $config );
@@ -89,7 +96,7 @@ class State {
 				return self::NEEDS_INSTALL;
 			}
 		} catch ( \Throwable $exception ) {
-			return self::NEEDS_SETUP;
+			return self::DATABASE_CONNECTION_ERROR;
 		}
 
 		return self::READY;

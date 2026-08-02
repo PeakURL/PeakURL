@@ -107,6 +107,7 @@ trait AnalyticsTrait {
 				'country_code',
 				null,
 				$user,
+				null,
 			),
 			'traffic'                  => $this->query_traffic_series(
 				null,

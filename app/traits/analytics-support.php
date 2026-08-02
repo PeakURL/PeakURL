@@ -825,6 +825,7 @@ trait AnalyticsSupportTrait {
 	 * @param string|null          $code_column Optional secondary column for codes.
 	 * @param string|null          $url_id      Optional URL ID filter.
 	 * @param array<string, mixed>|null $user   Optional user scope for site-level charts.
+	 * @param int|null             $limit       Maximum metric rows, or null for all rows.
 	 * @return array<int, array<string, mixed>> Sorted metric rows.
 	 * @since 1.0.0
 	 */
@@ -835,7 +836,8 @@ trait AnalyticsSupportTrait {
 		?string $end_at = null,
 		?string $code_column = null,
 		?string $url_id = null,
-		?array $user = null
+		?array $user = null,
+		?int $limit = 12
 	): array {
 		$allowed_columns = array(
 			'device',
@@ -903,13 +905,16 @@ trait AnalyticsSupportTrait {
 			);
 		}
 
+		$limit_sql = null === $limit ? '' : ' LIMIT ' . max( 1, $limit );
+
 		$sql .=
 			$join_sql .
 			' WHERE ' .
 			implode( ' AND ', $conditions ) .
 			' GROUP BY item_name' .
 			( $code_column ? ', item_code' : '' ) .
-			' ORDER BY item_count DESC, item_name ASC LIMIT 12';
+			' ORDER BY item_count DESC, item_name ASC' .
+			$limit_sql;
 
 		return array_map(
 			static function ( array $row ) use (

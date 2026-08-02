@@ -112,7 +112,8 @@ function TrafficLocationTab({
 	}
 
 	const payload = data?.data || {};
-	const countries = (payload.countries || []).slice(0, 5);
+	const allCountries = payload.countries || [];
+	const countries = allCountries.slice(0, 5);
 	const cities = payload.cities || [];
 	const hasMoreCities = cities.length > CITY_LIST_PREVIEW_LIMIT;
 	const topCities = cities.slice(0, CITY_LIST_PREVIEW_LIMIT);
@@ -277,7 +278,7 @@ function TrafficLocationTab({
 							{__("Countries")}
 						</p>
 						<p className="links-drawer-summary-value">
-							{formatCount(countries.length)}
+							{formatCount(allCountries.length)}
 						</p>
 					</div>
 				</div>
@@ -293,7 +294,7 @@ function TrafficLocationTab({
 				</div>
 				<div className="links-location-map-wrap">
 					<WorldMap
-						data={countries.map((country) => ({
+						data={allCountries.map((country) => ({
 							countryCode: country.code,
 							countryName: country.name,
 							clicks: country.count,

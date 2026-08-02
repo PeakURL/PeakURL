@@ -7,6 +7,7 @@ const devProxyTarget =
 	process.env.VITE_DEV_PROXY_TARGET || "http://127.0.0.1:8000";
 const devPublicHost = process.env.VITE_DEV_PUBLIC_HOST || "";
 const useHttpsProxy = "true" === process.env.VITE_DEV_USE_HTTPS_PROXY;
+const ui = path.resolve(import.meta.dirname, "ui");
 const excludedProxyPaths = [
 	"dashboard",
 	"login",
@@ -55,9 +56,9 @@ export default defineConfig({
 	},
 	resolve: {
 		alias: {
-			"@": path.resolve(__dirname, "ui"),
-			"@constants": path.resolve(__dirname, "ui/constants"),
-			"@store": path.resolve(__dirname, "ui/store"),
+			"@": ui,
+			"@constants": path.join(ui, "constants"),
+			"@store": path.join(ui, "store"),
 		},
 	},
 	server: {

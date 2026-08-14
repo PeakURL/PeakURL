@@ -88,6 +88,8 @@ export interface SocialPreviewFieldsProps {
 	socialImageFile: File | null;
 	setSocialImageFile: (value: File | null) => void;
 	socialImagePreviewUrl: string;
+	socialImageUrl: string;
+	setSocialImageUrl: (value: string) => void;
 }
 
 export interface AdvancedOptionsProps
@@ -208,6 +210,7 @@ export interface EditableLink {
 		title?: string | null;
 		description?: string | null;
 		imageUrl?: string | null;
+		externalImageUrl?: string | null;
 	} | null;
 }
 

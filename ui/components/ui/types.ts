@@ -170,12 +170,7 @@ export type PulseDotSize = "xs" | "sm" | "md" | "lg";
  * Supported progress-bar color themes.
  */
 export type ProgressColor =
-	| "blue"
-	| "green"
-	| "red"
-	| "yellow"
-	| "purple"
-	| "accent";
+	"blue" | "green" | "red" | "yellow" | "purple" | "accent";
 
 /**
  * Props for the inline loading spinner component.

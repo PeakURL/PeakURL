@@ -116,11 +116,20 @@ trait FormattingTrait {
 			'title'          => trim( (string) ( $row['title'] ?? '' ) ),
 			'destinationUrl' => (string) $row['destination_url'],
 			'socialPreview'  => array(
-				'title'       => trim( (string) ( $row['social_title'] ?? '' ) ),
-				'description' => trim( (string) ( $row['social_description'] ?? '' ) ),
-				'imageUrl'    => $this->social_preview_service->get_link_image_url(
-					(string) ( $row['social_image_path'] ?? '' ),
-				),
+				'title'            => trim( (string) ( $row['social_title'] ?? '' ) ),
+				'description'      => trim( (string) ( $row['social_description'] ?? '' ) ),
+				'imageUrl'         => '' !== trim(
+					(string) ( $row['social_image_url'] ?? '' ),
+				)
+					? trim( (string) $row['social_image_url'] )
+					: $this->social_preview_service->get_link_image_url(
+						(string) ( $row['social_image_path'] ?? '' ),
+					),
+				'externalImageUrl' => '' !== trim(
+					(string) ( $row['social_image_url'] ?? '' ),
+				)
+					? trim( (string) $row['social_image_url'] )
+					: null,
 			),
 			'domain'         => null,
 			'clicks'         => (int) ( $row['click_count'] ?? 0 ),

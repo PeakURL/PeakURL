@@ -4,10 +4,7 @@ import { PEAKURL_BASENAME } from "@constants";
  * Valid managed favicon asset filenames.
  */
 export type ManagedFaviconAsset =
-	| "favicon.png"
-	| "favicon.ico"
-	| "apple-touch-icon.png"
-	| "site.webmanifest";
+	"favicon.png" | "favicon.ico" | "apple-touch-icon.png" | "site.webmanifest";
 
 /**
  * Recursively decode a path segment to ensure it's fully normalized.

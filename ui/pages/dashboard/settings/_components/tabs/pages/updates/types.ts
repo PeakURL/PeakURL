@@ -30,10 +30,7 @@ export type IconComponent = LucideIcon;
  * Human-friendly release-install progress stages shown in the dashboard.
  */
 export type ReleaseInstallStage =
-	| "preparing"
-	| "downloading"
-	| "installing"
-	| "finishing";
+	"preparing" | "downloading" | "installing" | "finishing";
 
 /**
  * Single progress step shown while applying or reinstalling a release.

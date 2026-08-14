@@ -21,13 +21,7 @@ const DEFAULT_TIMEZONE = "UTC";
  * Supported relative time units.
  */
 type RelativeTimeUnit =
-	| "second"
-	| "minute"
-	| "hour"
-	| "day"
-	| "week"
-	| "month"
-	| "year";
+	"second" | "minute" | "hour" | "day" | "week" | "month" | "year";
 
 /**
  * Safely convert a value to a Date object.

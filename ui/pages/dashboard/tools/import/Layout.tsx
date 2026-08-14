@@ -11,8 +11,7 @@ function Layout({ children }: ImportLayoutProps) {
 	const location = useLocation();
 	const activeTab =
 		(location.pathname.split("/").filter(Boolean).pop() as
-			| ImportTab["id"]
-			| undefined) || "file";
+			ImportTab["id"] | undefined) || "file";
 
 	const tabs: ImportTab[] = [
 		{ id: "file", name: __("File Upload"), icon: FileUp },

@@ -25,8 +25,7 @@ const URL_LIST_TAG = urlTag("LIST");
 const URL_LIST_CHANGE_TAGS = [URL_LIST_TAG, "Analytics"] as const;
 
 type CreateUrlRequestBody =
-	| Omit<CreateUrlPayload, "socialImageFile">
-	| FormData;
+	Omit<CreateUrlPayload, "socialImageFile"> | FormData;
 
 type UpdateUrlRequestBody =
 	| Omit<UpdateUrlPayload, "id" | "socialImageFile" | "removeSocialImage">

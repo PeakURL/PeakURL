@@ -30,6 +30,8 @@ const AdvancedOptions = ({
 	socialImageFile,
 	setSocialImageFile,
 	socialImagePreviewUrl,
+	socialImageUrl,
+	setSocialImageUrl,
 }: AdvancedOptionsProps) => {
 	return (
 		<div className="links-form-advanced-panel">
@@ -65,6 +67,8 @@ const AdvancedOptions = ({
 				socialImageFile={socialImageFile}
 				setSocialImageFile={setSocialImageFile}
 				socialImagePreviewUrl={socialImagePreviewUrl}
+				socialImageUrl={socialImageUrl}
+				setSocialImageUrl={setSocialImageUrl}
 			/>
 		</div>
 	);

@@ -39,6 +39,7 @@ If you want the fastest path to a working install:
 For installation, setup, usage, and product documentation, start here:
 
 - [PeakURL.org Docs](https://peakurl.org/docs)
+- [Full Setup Tutorial (Video)](https://youtu.be/Xal8Qp5VPrc)
 
 If you are migrating from YOURLS, you can export your links with the
 [`YOURLS to PeakURL` plugin](https://github.com/PeakURL/YOURLS-to-PeakURL)
@@ -136,6 +137,26 @@ The project is intended to stay practical, readable, and self-hostable.
 ## Support the Project
 
 If you use PeakURL in production, client work, or internal tooling, sponsorship helps support ongoing maintenance, releases, documentation, and long-term development.
+
+[Become a sponsor](https://peakurl.org/sponsor) to claim your spot on the homepage and GitHub repository!
+
+### Wall of Love
+
+A huge thank you to everyone who has contributed to keeping PeakURL running.
+
+#### Creator & Maintainer
+
+- **Abd Ur Rehman** - [Independent Solo Maintainer](https://go.peakurl.org/author)
+
+#### Company Sponsors
+
+Help keep PeakURL actively maintained and free for everyone. [Become a sponsor](https://peakurl.org/sponsor) to feature your company's logo here and on the homepage.
+
+#### Community Supporters
+
+- Ibrahym Ben ElZobyr
+
+[Buy Me a Coffee](https://buymeacoffee.com/PeakURL) to join the community supporters.
 
 ## Contributing
 

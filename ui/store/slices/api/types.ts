@@ -42,6 +42,32 @@ import type {
 } from "@/api";
 
 /**
+ * Single release note returned from the API.
+ */
+export interface ReleaseNote {
+	version: string;
+	releaseDate: string;
+	title: string;
+	summary: string;
+	highlights: string[];
+	fullChangelogUrl: string;
+	releaseNotesUrl: string;
+}
+
+/**
+ * Full response payload from the release notes API.
+ */
+export interface ReleaseNotesResponse {
+	success: boolean;
+	statusCode: number;
+	message: string;
+	data: {
+		releases: ReleaseNote[];
+		lastUpdated: string;
+	};
+}
+
+/**
  * Cache tag names shared by the dashboard RTK Query API slices.
  */
 export type ApiTagType =

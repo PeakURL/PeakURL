@@ -36,7 +36,7 @@ export interface LandingMetaEntry {
 	description: string;
 
 	/** Dashboard actions rendered beneath the copy. */
-	actions: LandingAction[];
+	actions?: LandingAction[];
 }
 
 /**
@@ -65,20 +65,6 @@ export interface Freedom {
 
 	/** Supporting explanatory copy. */
 	description: string;
-}
-
-/**
- * Props for a row in the system information grid.
- */
-export interface SystemInfoRowProps {
-	/** Icon rendered beside the label. */
-	icon: LucideIcon;
-
-	/** Row label. */
-	label: string;
-
-	/** Row value. */
-	value: string;
 }
 
 /**

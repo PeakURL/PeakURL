@@ -17,6 +17,7 @@ import type {
 	SystemStatusResponse,
 	UpdateStatusPayload,
 	UpgradeDatabaseResponse,
+	ReleaseNotesResponse,
 } from "./types";
 
 const ADMIN_NOTICE_TAGS = ["AdminNotices"] as const;
@@ -244,6 +245,45 @@ export const systemApi = baseApi.injectEndpoints({
 			}),
 			invalidatesTags: DATABASE_UPDATE_TAGS,
 		}),
+		getReleaseNotes: build.query<ReleaseNotesResponse, void>({
+			queryFn: async (_arg, api) => {
+				// <-- grab `api` from the arguments
+				try {
+					const response = await fetch(
+						"https://api.peakurl.org/v1/release-notes",
+						{
+							signal: api.signal, // <-- pass the signal to native fetch
+						}
+					);
+					if (!response.ok) {
+						return {
+							error: {
+								status: response.status,
+								data: "Failed to fetch release notes",
+							},
+						};
+					}
+					const data = await response.json();
+					return { data };
+				} catch (err: unknown) {
+					// Check if the error is just an AbortError (from component unmounting)
+					if (err instanceof Error && err.name === "AbortError") {
+						return {
+							error: {
+								status: "FETCH_ERROR",
+								error: "Request aborted",
+							},
+						};
+					}
+					return {
+						error: { 
+							status: "FETCH_ERROR", 
+							error: err instanceof Error ? err.message : "An unknown error occurred" 
+						},
+					};
+				}
+			},
+		}),
 	}),
 });
 
@@ -265,4 +305,5 @@ export const {
 	useApplyUpdateMutation,
 	useReinstallUpdateMutation,
 	useUpgradeDatabaseSchemaMutation,
+	useGetReleaseNotesQuery,
 } = systemApi;

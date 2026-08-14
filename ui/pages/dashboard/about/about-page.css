@@ -197,69 +197,128 @@
 		@apply text-sm leading-relaxed text-text-muted;
 	}
 
-	.about-page-support {
-		@apply mt-8 rounded-2xl border border-accent/20 bg-accent/5 p-6;
+	.about-page-sponsors {
+		@apply mt-10;
 	}
 
-	.about-page-support-layout {
-		@apply flex flex-col gap-5 md:flex-row md:items-center md:justify-between;
+	.about-page-sponsor-creator {
+		@apply border-stroke bg-surface hover:border-accent/30 mx-auto mt-12 flex max-w-3xl flex-col justify-between gap-10 rounded-3xl border p-8 transition-all duration-300 sm:p-12 md:flex-row md:items-center;
 	}
 
-	.about-page-support-copy {
-		@apply max-w-2xl;
+	.about-page-sponsor-creator-info {
+		@apply text-left md:max-w-xs;
 	}
 
-	.about-page-support-eyebrow {
-		@apply text-xs font-semibold uppercase text-accent;
-		letter-spacing: 0.18em;
+	.about-page-sponsor-creator-title {
+		@apply text-heading text-xl font-bold;
 	}
 
-	.about-page-support-title {
-		@apply mt-2 text-xl font-semibold text-heading;
+	.about-page-sponsor-creator-desc {
+		@apply text-text-muted mt-3 text-sm leading-relaxed;
 	}
 
-	.about-page-support-description {
-		@apply mt-2 text-sm leading-6 text-text-muted;
+	.about-page-sponsor-creator-profile {
+		@apply flex items-center gap-5;
 	}
 
-	.about-page-support-actions {
-		@apply flex flex-wrap gap-3;
+	.about-page-sponsor-author-logo {
+		@apply drop-shadow-sm;
 	}
 
-	.about-page-support-link {
-		@apply inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors;
+	.about-page-sponsor-creator-details {
+		@apply text-left;
 	}
 
-	.about-page-support-link-primary {
-		@apply bg-accent text-white hover:opacity-95;
+	.about-page-sponsor-creator-name {
+		@apply text-heading text-base font-bold;
 	}
 
-	.about-page-support-link-secondary {
-		@apply border border-stroke bg-surface text-heading hover:border-accent/30 hover:text-accent;
+	.about-page-sponsor-creator-badge {
+		@apply text-text-muted mt-0.5 text-[13px] font-medium;
 	}
 
-	.about-page-installation-card {
-		@apply mx-auto max-w-lg rounded-xl border border-stroke bg-surface p-6;
+	.about-page-sponsor-creator-socials {
+		@apply text-text-muted mt-3 flex items-center gap-3;
 	}
 
-	.about-page-system-row {
-		@apply flex items-center justify-between border-b border-stroke/60 py-3 last:border-0;
+	.about-page-sponsor-creator-socials a {
+		@apply hover:text-heading transition-colors;
 	}
 
-	.about-page-system-label {
-		@apply flex items-center gap-3;
+	.about-page-sponsor-section {
+		@apply border-stroke mt-16 border-t pt-12;
 	}
 
-	.about-page-system-icon {
-		@apply text-text-muted;
+	.about-page-sponsor-section-header {
+		@apply mb-8 text-center;
 	}
 
-	.about-page-system-label-copy {
-		@apply text-sm text-text-muted;
+	.about-page-sponsor-section-title {
+		@apply text-heading mb-2 text-xl font-bold;
 	}
 
-	.about-page-system-value {
-		@apply text-sm font-medium text-heading;
+	.about-page-sponsor-section-desc {
+		@apply text-text-muted mx-auto max-w-lg text-sm leading-relaxed;
+	}
+
+	.about-page-sponsor-companies {
+		@apply grid grid-cols-2 gap-4 md:grid-cols-4;
+	}
+
+	.about-page-sponsor-company-slot {
+		@apply border-stroke bg-surface hover:bg-accent/5 hover:border-accent/30 relative flex h-24 items-center justify-center rounded-2xl border-2 border-dashed transition-all duration-300;
+	}
+
+	.about-page-sponsor-company-slot-bg {
+		@apply from-accent/0 to-accent/0 group-hover:from-accent/5 absolute inset-0 rounded-2xl bg-linear-to-br transition-all duration-300 group-hover:to-transparent;
+	}
+
+	.about-page-sponsor-company-slot-content {
+		@apply text-text-muted/50 group-hover:text-accent/70 z-10 flex flex-col items-center gap-2 transition-colors;
+	}
+
+	.about-page-sponsor-company-slot-content svg {
+		@apply h-5 w-5;
+	}
+
+	.about-page-sponsor-company-slot-content span {
+		@apply text-[10px] font-bold uppercase tracking-wider;
+	}
+
+	.about-page-sponsor-btn {
+		@apply border-stroke bg-surface text-heading hover:border-accent/30 hover:text-accent mt-6 inline-block rounded-xl border px-6 py-2.5 text-sm font-semibold transition-colors;
+	}
+
+	.about-page-sponsor-community {
+		@apply mt-10 flex flex-wrap items-center justify-center gap-8;
+	}
+
+	.about-page-sponsor-supporter {
+		@apply flex flex-col items-center;
+	}
+
+	.about-page-sponsor-supporter-avatar {
+		@apply border-stroke relative mb-3 flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full border bg-white shadow-sm transition-transform group-hover:-translate-y-1;
+	}
+
+	.about-page-sponsor-supporter-avatar svg {
+		@apply h-8 w-8 object-contain;
+	}
+
+	.about-page-sponsor-supporter-info {
+		@apply mt-1 text-center;
+	}
+
+	.about-page-sponsor-supporter-name {
+		@apply text-heading text-sm font-bold;
+	}
+
+	.about-page-sponsor-supporter-socials {
+		@apply text-text-muted mt-1.5 flex items-center justify-center gap-2.5;
+	}
+
+	.about-page-sponsor-supporter-socials a {
+		@apply hover:text-heading transition-colors;
 	}
 
 	.about-page-footer {

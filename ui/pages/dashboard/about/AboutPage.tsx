@@ -4,23 +4,23 @@ import {
 	Globe,
 	BarChart3,
 	Code,
-	Lock,
 	Heart,
 	ExternalLink,
 	Sparkles,
 	Server,
-	Database,
 	Monitor,
-	Palette,
 	ChevronRight,
 	BookOpen,
-	Coffee,
 	SquareTerminal,
+	TextAlignJustify,
 } from "lucide-react";
 import { Link, useSearchParams } from "react-router";
 import { PEAKURL_VERSION, PEAKURL_NAME } from "@/constants";
 import { BrandLockup, Logo } from "@/components";
+import { formatRelativeTime } from "@/utils";
 import { __, sprintf } from "@/i18n";
+import { useGetReleaseNotesQuery } from "@/store/slices/api/system";
+import { Sponsors } from "./Sponsors";
 import type {
 	AboutIconProps,
 	AddOnLink,
@@ -30,7 +30,6 @@ import type {
 	LandingMetaEntry,
 	LandingSource,
 	SectionTitleProps,
-	SystemInfoRowProps,
 } from "./types";
 
 /* ─── Helpers ─────────────────────────────────────────────── */
@@ -164,37 +163,15 @@ const getLandingMeta = (): Record<LandingSource, LandingMetaEntry> => ({
 		eyebrow: __("Update Complete"),
 		title: __("PeakURL has been updated to the latest version."),
 		description: __(
-			"The latest version is now installed. Review the essentials below and confirm services like email delivery, location data, and updates are set the way you expect."
+			"The latest version is now installed. Here's a look at what's new in this release."
 		),
-		actions: [
-			{
-				label: __("Check email configuration"),
-				to: "/dashboard/settings/email",
-			},
-			{
-				label: __("Verify update status"),
-				to: "/dashboard/settings/updates",
-			},
-			{ label: __("Open all links"), to: "/dashboard/links" },
-		],
 	},
 	reinstall: {
 		eyebrow: __("Reinstall Complete"),
 		title: __("PeakURL has been reinstalled."),
 		description: __(
-			"The latest version has been reinstalled. Review the essentials below and confirm services like email delivery, location data, and updates are set the way you expect."
+			"The latest version has been reinstalled. Here's a look at what's included in this release."
 		),
-		actions: [
-			{
-				label: __("Check email configuration"),
-				to: "/dashboard/settings/email",
-			},
-			{
-				label: __("Verify update status"),
-				to: "/dashboard/settings/updates",
-			},
-			{ label: __("Open all links"), to: "/dashboard/links" },
-		],
 	},
 });
 
@@ -204,30 +181,114 @@ const isLandingSource = (source: string | null): source is LandingSource =>
 	null !== source && LANDING_SOURCES.includes(source as LandingSource);
 
 const LandingBanner = ({ source }: LandingBannerProps) => {
+	const shouldFetch = source === "update" || source === "reinstall";
+	const { data: releaseNotesData } = useGetReleaseNotesQuery(undefined, {
+		skip: !shouldFetch,
+	});
+
 	if (!isLandingSource(source)) {
 		return null;
 	}
 
 	const meta = getLandingMeta()[source];
 
+	let releaseNote = null;
+	if (releaseNotesData?.data?.releases?.length) {
+		const releases = releaseNotesData.data.releases;
+		releaseNote =
+			releases.find((r) => r.version === PEAKURL_VERSION) || releases[0];
+	}
+
 	return (
-		<div className="about-page-landing">
-			<p className="about-page-landing-eyebrow">{meta.eyebrow}</p>
-			<h2 className="about-page-landing-title">{meta.title}</h2>
-			<p className="about-page-landing-copy">{meta.description}</p>
-			<div className="about-page-landing-actions">
-				{meta.actions.map((action) => (
-					<Link
-						key={action.to}
-						to={action.to}
-						className="about-page-landing-action"
-					>
-						{action.label}
-						<ChevronRight size={15} />
-					</Link>
-				))}
+		<>
+			<div className="about-page-landing mb-8">
+				<p className="about-page-landing-eyebrow">{meta.eyebrow}</p>
+				<h2 className="about-page-landing-title">{meta.title}</h2>
+				<p className="about-page-landing-copy">{meta.description}</p>
+
+				{meta.actions && meta.actions.length > 0 && (
+					<div className="about-page-landing-actions">
+						{meta.actions.map((action) => (
+							<Link
+								key={action.to}
+								to={action.to}
+								className="about-page-landing-action"
+							>
+								{action.label}
+								<ChevronRight size={15} />
+							</Link>
+						))}
+					</div>
+				)}
 			</div>
-		</div>
+
+			{releaseNote && (
+				<div className="bg-surface border border-stroke rounded-xl p-6 text-left shadow-sm mb-12">
+					<div className="flex items-center gap-2 text-accent font-semibold text-xs mb-3 uppercase tracking-wide">
+						<Sparkles className="w-4 h-4" />
+						<span>
+							{__("Version")} {releaseNote.version}
+						</span>
+						{releaseNote.releaseDate && (
+							<>
+								<span className="text-stroke px-1">•</span>
+								<span className="text-text-muted normal-case">
+									{sprintf(
+										__("Released %s"),
+										formatRelativeTime(
+											releaseNote.releaseDate
+										)
+									)}
+								</span>
+							</>
+						)}
+					</div>
+					<h3 className="text-base font-semibold text-heading mb-2">
+						{releaseNote.title}
+					</h3>
+					<p className="text-sm leading-relaxed text-text-muted mb-6">
+						{releaseNote.summary}
+					</p>
+
+					<div className="space-y-3 mb-6 bg-background border border-stroke/50 rounded-lg p-5">
+						{releaseNote.highlights.map((highlight, idx) => (
+							<div
+								key={idx}
+								className="flex items-start gap-3 text-sm text-text-muted"
+							>
+								<span className="text-accent text-sm leading-relaxed">
+									•
+								</span>
+								<span className="leading-relaxed">
+									{highlight}
+								</span>
+							</div>
+						))}
+					</div>
+
+					<div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-5 border-t border-stroke/50 text-sm">
+						<a
+							href="https://go.peakurl.org/release-notes"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="inline-flex items-center gap-1.5 font-medium text-accent hover:text-accent-hover transition-colors"
+						>
+							<BookOpen className="w-4 h-4" />
+							{__("For all release notes see the main page")}
+						</a>
+						<a
+							href="https://go.peakurl.org/release-notes-txt"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="inline-flex items-center gap-1.5 font-medium text-text-muted hover:text-text transition-colors"
+						>
+							<TextAlignJustify className="w-4 h-4" />
+							{__("Plain text format")}
+						</a>
+					</div>
+				</div>
+			)}
+		</>
 	);
 };
 
@@ -319,17 +380,6 @@ const getFreedoms = (): Freedom[] => [
 	},
 ];
 
-/* ─── System info rows ────────────────────────────────────── */
-const SystemInfoRow = ({ icon: Icon, label, value }: SystemInfoRowProps) => (
-	<div className="about-page-system-row">
-		<div className="about-page-system-label">
-			<Icon size={16} className="about-page-system-icon" />
-			<span className="about-page-system-label-copy">{label}</span>
-		</div>
-		<span className="about-page-system-value">{value}</span>
-	</div>
-);
-
 /* ═══════════════════════════════════════════════════════════ */
 function AboutPage() {
 	const [searchParams] = useSearchParams();
@@ -383,7 +433,7 @@ function AboutPage() {
 							{__("Documentation")}
 						</a>
 						<a
-							href="https://github.com/PeakURL/PeakURL"
+							href="https://go.peakurl.org/repo"
 							target="_blank"
 							rel="noreferrer"
 							className="about-page-hero-link about-page-hero-link-secondary"
@@ -535,95 +585,11 @@ function AboutPage() {
 							</div>
 						))}
 					</div>
-
-					<div className="about-page-support">
-						<div className="about-page-support-layout">
-							<div className="about-page-support-copy">
-								<p className="about-page-support-eyebrow">
-									{__("Support PeakURL")}
-								</p>
-								<h3 className="about-page-support-title">
-									{__(
-										"If PeakURL is useful to you, help keep it practical and actively maintained."
-									)}
-								</h3>
-								<p className="about-page-support-description">
-									{__(
-										"Sponsorships and small contributions help fund releases, documentation, infrastructure, and the maintenance work that keeps the project moving."
-									)}
-								</p>
-							</div>
-							<div className="about-page-support-actions">
-								<a
-									href="https://peakurl.org/sponsor?utm_source=dashboard&utm_medium=about_page&utm_campaign=sponsor_link"
-									target="_blank"
-									rel="noreferrer"
-									className="about-page-support-link about-page-support-link-primary"
-								>
-									<Heart size={16} />
-									{__("Sponsor PeakURL")}
-									<ExternalLink size={14} />
-								</a>
-								<a
-									href="https://buymeacoffee.com/PeakURL"
-									target="_blank"
-									rel="noreferrer"
-									className="about-page-support-link about-page-support-link-secondary"
-								>
-									<Coffee size={16} />
-									{__("Buy Me a Coffee")}
-									<ExternalLink size={14} />
-								</a>
-							</div>
-						</div>
-					</div>
 				</section>
 
 				<Divider />
 
-				{/* ─── System At A Glance ─────────────────────────── */}
-				<section>
-					<SectionTitle
-						subtitle={__(
-							"A quick overview of the installation you are running right now."
-						)}
-					>
-						{__("Current Installation")}
-					</SectionTitle>
-
-					<div className="about-page-installation-card">
-						<SystemInfoRow
-							icon={Sparkles}
-							label={__("Version")}
-							value={PEAKURL_VERSION}
-						/>
-						<SystemInfoRow
-							icon={Palette}
-							label={__("Dashboard")}
-							value="Vite + React"
-						/>
-						<SystemInfoRow
-							icon={Server}
-							label={__("Server")}
-							value="PHP 8+"
-						/>
-						<SystemInfoRow
-							icon={Database}
-							label={__("Database")}
-							value="MySQL / MariaDB"
-						/>
-						<SystemInfoRow
-							icon={Lock}
-							label={__("Authentication")}
-							value="Session + API Key"
-						/>
-						<SystemInfoRow
-							icon={Globe}
-							label={__("GeoIP")}
-							value="MaxMind GeoLite2"
-						/>
-					</div>
-				</section>
+				<Sponsors />
 
 				<Divider />
 
@@ -648,7 +614,7 @@ function AboutPage() {
 						</a>
 						<span className="about-page-footer-separator">•</span>
 						<a
-							href="https://github.com/PeakURL/PeakURL"
+							href="https://go.peakurl.org/repo"
 							target="_blank"
 							rel="noreferrer"
 							className="about-page-footer-link"

@@ -293,7 +293,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 								</div>
 							</div>
 
-							<div className="integrations-tab-form-actions items-center justify-between">
+							<div className="integrations-tab-form-actions">
 								<a
 									href="https://peakurl.org/docs/integrations"
 									target="_blank"

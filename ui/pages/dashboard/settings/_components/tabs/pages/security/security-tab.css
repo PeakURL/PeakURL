@@ -9,7 +9,7 @@
 
 	.settings-security-two-factor-header,
 	.settings-security-sessions-header {
-		@apply flex items-center justify-between;
+		@apply flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between;
 	}
 
 	.settings-security-two-factor-copy {
@@ -22,11 +22,20 @@
 
 	.settings-security-two-factor-actions,
 	.settings-security-session-actions {
-		@apply flex items-center gap-2;
+		@apply flex w-full flex-col sm:w-auto sm:flex-row sm:flex-wrap items-center gap-2;
+	}
+
+	.settings-security-two-factor-actions > *,
+	.settings-security-session-actions > * {
+		@apply w-full sm:w-auto;
 	}
 
 	.settings-security-two-factor-status {
-		@apply flex items-start gap-3 rounded-lg border p-3;
+		@apply flex flex-col items-start gap-4 rounded-lg border p-4 sm:flex-row sm:items-center sm:gap-3;
+	}
+
+	.settings-security-two-factor-status > button {
+		@apply w-full justify-center sm:w-auto;
 	}
 
 	.settings-security-two-factor-status-active {

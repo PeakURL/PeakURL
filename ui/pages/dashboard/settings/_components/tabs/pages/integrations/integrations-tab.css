@@ -112,11 +112,11 @@
 	}
 
 	.integrations-tab-switch-thumb {
-		@apply absolute left-[1px] top-[1px] h-5 w-5 rounded-full bg-white shadow transition-transform;
+		@apply absolute left-px top-px h-5 w-5 rounded-full bg-white shadow transition-transform;
 	}
 
 	.integrations-tab-switch-thumb-active {
-		@apply translate-x-[20px];
+		@apply translate-x-5;
 	}
 
 	.integrations-tab-switch-thumb-inactive {
@@ -170,7 +170,7 @@
 	}
 
 	.integrations-tab-captcha-remove-button {
-		@apply !border-red-200 !text-red-600 hover:!border-red-300 hover:!bg-red-50 hover:!text-red-700 dark:!border-red-900/50 dark:!text-red-400 dark:hover:!border-red-800 dark:hover:!bg-red-900/20 dark:hover:!text-red-300;
+		@apply border-red-200! text-red-600! hover:border-red-300! hover:bg-red-50! hover:text-red-700! dark:border-red-900/50! dark:text-red-400! dark:hover:border-red-800! dark:hover:bg-red-900/20! dark:hover:text-red-300!;
 	}
 
 	.integrations-tab-endpoint-help {
@@ -212,7 +212,11 @@
 	}
 
 	.integrations-tab-form-actions {
-		@apply mt-6 flex justify-end;
+		@apply mt-6 flex flex-col-reverse gap-4 sm:flex-row sm:items-center sm:justify-between;
+	}
+
+	.integrations-tab-form-actions > * {
+		@apply w-full sm:w-auto justify-center;
 	}
 
 	.integrations-tab-form-actions-rtl {

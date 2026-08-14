@@ -28,37 +28,39 @@ function TwoFactorStatus({
 					: "settings-security-two-factor-status-inactive"
 			)}
 		>
-			<div className="settings-security-two-factor-status-icon-panel">
-				{twoFactorEnabled ? (
-					<ShieldCheck
-						size={18}
-						className="settings-security-two-factor-status-icon-active"
-					/>
-				) : (
-					<AlertCircle
-						size={18}
-						className="settings-security-two-factor-status-icon-inactive"
-					/>
-				)}
-			</div>
-			<div className="settings-security-two-factor-status-content">
-				<p className="settings-security-two-factor-status-title">
-					{twoFactorEnabled
-						? __("2FA is enabled")
-						: __("2FA is disabled")}
-				</p>
-				<p className="settings-security-two-factor-status-text">
-					{statusMessage}
-				</p>
-				{backupCodesLastGeneratedAt ? (
-					<p className="settings-security-two-factor-status-text">
-						{__("Last generated:")}{" "}
-						{formatDateTimeValue(
-							backupCodesLastGeneratedAt,
-							__("Unknown")
-						)}
+			<div className="flex flex-1 items-start gap-3">
+				<div className="settings-security-two-factor-status-icon-panel">
+					{twoFactorEnabled ? (
+						<ShieldCheck
+							size={18}
+							className="settings-security-two-factor-status-icon-active"
+						/>
+					) : (
+						<AlertCircle
+							size={18}
+							className="settings-security-two-factor-status-icon-inactive"
+						/>
+					)}
+				</div>
+				<div className="settings-security-two-factor-status-content">
+					<p className="settings-security-two-factor-status-title">
+						{twoFactorEnabled
+							? __("2FA is enabled")
+							: __("2FA is disabled")}
 					</p>
-				) : null}
+					<p className="settings-security-two-factor-status-text">
+						{statusMessage}
+					</p>
+					{backupCodesLastGeneratedAt ? (
+						<p className="settings-security-two-factor-status-text">
+							{__("Last generated:")}{" "}
+							{formatDateTimeValue(
+								backupCodesLastGeneratedAt,
+								__("Unknown")
+							)}
+						</p>
+					) : null}
+				</div>
 			</div>
 			<Button
 				variant="outline"

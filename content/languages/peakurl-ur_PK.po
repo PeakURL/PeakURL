@@ -215,12 +215,12 @@ msgstr "تصدیقی کوڈ درست نہیں۔"
 msgid "PeakURL could not identify the current session."
 msgstr "PeakURL موجودہ سیشن کی شناخت نہیں کر سکا۔"
 
-#: app/traits/analytics.php:267
+#: app/traits/analytics.php:268
 msgid "Activity log ID is required."
 msgstr "ایکٹیویٹی لاگ کی آئی ڈی درکار ہے۔"
 
-#: app/traits/analytics.php:436
-#: app/traits/analytics.php:594
+#: app/traits/analytics.php:437
+#: app/traits/analytics.php:595
 msgid "You do not have permission to view analytics for this link."
 msgstr "آپ کو اس لنک کے تجزیات دیکھنے کی اجازت نہیں ہے۔"
 
@@ -317,11 +317,11 @@ msgstr "لوڈ ہو رہا ہے"
 msgid "Request origin is not allowed."
 msgstr "درخواست کا origin اجازت یافتہ نہیں ہے۔"
 
-#: app/includes/runtime-config.php:540
+#: app/includes/runtime-config.php:594
 msgid "DB_PREFIX must start with a letter or underscore and use only letters, numbers, and underscores."
 msgstr "DB_PREFIX کو حرف یا underscore سے شروع ہونا چاہیے اور اس میں صرف letters، numbers، اور underscores ہونے چاہییں۔"
 
-#: app/includes/runtime-config.php:561
+#: app/includes/runtime-config.php:615
 msgid "Database name may contain only letters, numbers, and underscores."
 msgstr "ڈیٹابیس نام میں صرف letters، numbers، اور underscores استعمال ہو سکتے ہیں۔"
 
@@ -563,8 +563,8 @@ msgid "This link is protected. Enter the password to continue."
 msgstr "یہ لنک محفوظ ہے۔ جاری رکھنے کے لیے پاس ورڈ درج کریں۔"
 
 #: app/controllers/urls.php:414
-#: site/install.php:587
-#: site/setup-config.php:811
+#: site/install.php:592
+#: site/setup-config.php:816
 #: ui/pages/auth/login/LoginPage.tsx:371
 #: ui/pages/dashboard/users/UsersPage.tsx:250
 msgid "Password"
@@ -1370,8 +1370,8 @@ msgid "PeakURL could not send the welcome email because the account email addres
 msgstr "PeakURL خوش آمدیدی ای میل نہیں بھیج سکا کیونکہ اکاؤنٹ کا ای میل پتہ درست نہیں ہے۔"
 
 #: app/services/notifications.php:204
-#: site/setup-config.php:696
-#: ui/pages/dashboard/about/AboutPage.tsx:367
+#: site/setup-config.php:701
+#: ui/pages/dashboard/about/AboutPage.tsx:417
 msgid "Welcome to %s"
 msgstr "%s میں خوش آمدید"
 
@@ -1412,7 +1412,7 @@ msgid "CAPTCHA secret key must be 512 characters or fewer."
 msgstr "CAPTCHA خفیہ کلید 512 حروف یا اس سے کم ہونی چاہیے۔"
 
 #: app/services/system-status/checks.php:46
-#: site/setup-config.php:766
+#: site/setup-config.php:771
 msgid "Database connection"
 msgstr "ڈیٹابیس کنکشن"
 
@@ -1508,66 +1508,65 @@ msgstr "GeoLite2 City database وزیٹر مقام کے تجزیات کے لیے
 msgid "Visitor location analytics is not fully ready yet."
 msgstr "وزیٹر مقام کے تجزیات ابھی مکمل طور پر تیار نہیں ہیں۔"
 
-#: site/install.php:87
+#: site/install.php:92
 msgid "Administrator Setup - %s"
 msgstr "ایڈمنسٹریٹر سیٹ اپ - %s"
 
-#: site/install.php:524
-#: site/setup-config.php:667
+#: site/install.php:529
+#: site/setup-config.php:672
 msgid "Welcome"
 msgstr "خوش آمدید"
 
-#: site/install.php:531
-#: site/setup-config.php:674
+#: site/install.php:536
+#: site/setup-config.php:679
 #: ui/components/common/ApiErrorPage/ApiErrorPage.tsx:70
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:91
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:715
-#: ui/pages/dashboard/about/AboutPage.tsx:612
 msgid "Database"
 msgstr "ڈیٹابیس"
 
-#: site/install.php:538
-#: site/setup-config.php:681
+#: site/install.php:543
+#: site/setup-config.php:686
 msgid "Admin account"
 msgstr "ایڈمن اکاؤنٹ"
 
-#: site/install.php:549
+#: site/install.php:554
 msgid "Create your account"
 msgstr "اپنا اکاؤنٹ بنائیں"
 
-#: site/install.php:551
+#: site/install.php:556
 msgid "Name your site and set up the first administrator. You will be signed in automatically once the install completes."
 msgstr "اپنی سائٹ کا نام رکھیں اور پہلے ایڈمنسٹریٹر کا اکاؤنٹ بنائیں۔ انسٹال مکمل ہوتے ہی آپ خود بخود سائن ان ہو جائیں گے۔"
 
-#: site/install.php:567
+#: site/install.php:572
 msgid "Site info"
 msgstr "سائٹ کی معلومات"
 
-#: site/install.php:570
+#: site/install.php:575
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:388
 msgid "Site title"
 msgstr "سائٹ کا عنوان"
 
-#: site/install.php:571
+#: site/install.php:576
 msgid "My Link Hub"
 msgstr "میرا لنک ہب"
 
-#: site/install.php:575
+#: site/install.php:580
 msgid "Administrator"
 msgstr "ایڈمنسٹریٹر"
 
-#: site/install.php:578
-#: site/setup-config.php:807
+#: site/install.php:583
+#: site/setup-config.php:812
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:339
 #: ui/pages/dashboard/users/UsersPage.tsx:229
 msgid "Username"
 msgstr "صارف نام"
 
-#: site/install.php:580
+#: site/install.php:585
 msgid "Letters, numbers, dots, dashes, underscores, or @."
 msgstr "حروف، اعداد، dots، dashes، underscores یا @ استعمال کریں۔"
 
-#: site/install.php:583
+#: site/install.php:588
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:97
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:716
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
@@ -1576,107 +1575,107 @@ msgstr "حروف، اعداد، dots، dashes، underscores یا @ استعما�
 msgid "Email"
 msgstr "ای میل"
 
-#: site/install.php:584
+#: site/install.php:589
 #: ui/pages/auth/login/LoginPage.tsx:365
 msgid "you@company.com"
 msgstr "you@company.com"
 
-#: site/install.php:589
+#: site/install.php:594
 msgid "At least 8 characters. You will be signed in right after installation."
 msgstr "کم از کم 8 حروف۔ انسٹالیشن کے فوراً بعد آپ سائن ان ہو جائیں گے۔"
 
-#: site/install.php:593
+#: site/install.php:598
 msgid "Database configuration is already saved."
 msgstr "ڈیٹابیس کی کنفیگریشن پہلے ہی محفوظ کی جا چکی ہے۔"
 
-#: site/install.php:596
+#: site/install.php:601
 msgid "Install %s"
 msgstr "%s انسٹال کریں"
 
-#: site/install.php:620
-#: site/setup-config.php:854
+#: site/install.php:625
+#: site/setup-config.php:859
 #: ui/pages/auth/login/LoginPage.tsx:296
 msgid "Powered by %s"
 msgstr "تقویت یافتہ از %s"
 
-#: site/setup-config.php:90
+#: site/setup-config.php:95
 msgid "Database Setup - %s"
 msgstr "ڈیٹابیس سیٹ اپ - %s"
 
-#: site/setup-config.php:92
+#: site/setup-config.php:97
 msgid "Welcome - %s"
 msgstr "خوش آمدید - %s"
 
-#: site/setup-config.php:645
+#: site/setup-config.php:650
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:412
 msgid "Site language"
 msgstr "سائٹ کی زبان"
 
-#: site/setup-config.php:698
+#: site/setup-config.php:703
 msgid "Before getting started, you'll need your database connection details. PeakURL will use them to create config.php and set up the required tables."
 msgstr "شروع کرنے سے پہلے آپ کو اپنے ڈیٹابیس کنکشن کی تفصیلات درکار ہوں گی۔ PeakURL انہی کی مدد سے config.php بنائے گا اور مطلوبہ ٹیبلز سیٹ اپ کرے گا۔"
 
-#: site/setup-config.php:710
-#: site/setup-config.php:803
+#: site/setup-config.php:715
+#: site/setup-config.php:808
 msgid "Database name"
 msgstr "ڈیٹابیس کا نام"
 
-#: site/setup-config.php:716
+#: site/setup-config.php:721
 msgid "Username and password"
 msgstr "صارف نام اور پاس ورڈ"
 
-#: site/setup-config.php:722
+#: site/setup-config.php:727
 msgid "Host and port"
 msgstr "ہوسٹ اور پورٹ"
 
-#: site/setup-config.php:728
-#: site/setup-config.php:827
+#: site/setup-config.php:733
+#: site/setup-config.php:832
 msgid "Table prefix"
 msgstr "ٹیبل پری فکس"
 
-#: site/setup-config.php:728
+#: site/setup-config.php:733
 msgid "optional"
 msgstr "اختیاری"
 
-#: site/setup-config.php:734
+#: site/setup-config.php:739
 msgid "These details are usually available in your hosting control panel or from your database administrator."
 msgstr "یہ تفصیلات عموماً آپ کے ہوسٹنگ کنٹرول پینل یا ڈیٹابیس ایڈمنسٹریٹر سے مل جاتی ہیں۔"
 
-#: site/setup-config.php:754
+#: site/setup-config.php:759
 msgid "Let's go"
 msgstr "آئیے شروع کریں"
 
-#: site/setup-config.php:768
+#: site/setup-config.php:773
 msgid "Enter the credentials for your MySQL or MariaDB database. PeakURL will write them to config.php in the site root."
 msgstr "اپنے MySQL یا MariaDB ڈیٹابیس کی تفصیلات درج کریں۔ PeakURL انہیں سائٹ روٹ میں config.php میں محفوظ کرے گا۔"
 
-#: site/setup-config.php:800
+#: site/setup-config.php:805
 msgid "Connection details"
 msgstr "کنکشن کی تفصیلات"
 
-#: site/setup-config.php:815
+#: site/setup-config.php:820
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:561
 msgid "Host"
 msgstr "ہوسٹ"
 
-#: site/setup-config.php:820
+#: site/setup-config.php:825
 msgid "Advanced"
 msgstr "ایڈوانسڈ"
 
-#: site/setup-config.php:823
+#: site/setup-config.php:828
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:563
 msgid "Port"
 msgstr "پورٹ"
 
-#: site/setup-config.php:829
+#: site/setup-config.php:834
 msgid "Letters, numbers, underscores. Example: peakurl_"
 msgstr "حروف، اعداد اور underscores استعمال کریں۔ مثال: peakurl_"
 
-#: site/setup-config.php:835
+#: site/setup-config.php:840
 msgid "Back"
 msgstr "واپس"
 
-#: site/setup-config.php:838
+#: site/setup-config.php:843
 msgid "Save and continue"
 msgstr "محفوظ کریں اور جاری رکھیں"
 
@@ -1689,7 +1688,6 @@ msgstr "جائزہ"
 #: ui/utils/dashboardSearch.ts:82
 #: ui/utils/dashboardSearch.ts:85
 #: ui/utils/dashboardSearch.ts:116
-#: ui/pages/dashboard/about/AboutPage.tsx:602
 #: ui/pages/dashboard/_components/Header/Header.tsx:25
 #: ui/router/pageTitle.ts:65
 msgid "Dashboard"
@@ -2049,223 +2047,11 @@ msgstr "فل سکرین سے باہر نکلیں"
 msgid "Full screen"
 msgstr "فل سکرین"
 
-#: ui/components/charts/WorldMap/WorldMap.tsx:48
-msgid "United States"
-msgstr "ریاستہائے متحدہ"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:50
-msgid "United Kingdom"
-msgstr "برطانیہ"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:52
-msgid "Canada"
-msgstr "کینیڈا"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:54
-msgid "Australia"
-msgstr "آسٹریلیا"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:56
-msgid "Germany"
-msgstr "جرمنی"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:58
-msgid "France"
-msgstr "فرانس"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:60
-msgid "Italy"
-msgstr "اٹلی"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:62
-msgid "Spain"
-msgstr "اسپین"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:64
-msgid "Netherlands"
-msgstr "نیدرلینڈز"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:66
-msgid "Belgium"
-msgstr "بیلجیم"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:68
-msgid "Switzerland"
-msgstr "سوئٹزرلینڈ"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:70
-msgid "Austria"
-msgstr "آسٹریا"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:72
-msgid "Sweden"
-msgstr "سویڈن"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:74
-msgid "Norway"
-msgstr "ناروے"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:76
-msgid "Denmark"
-msgstr "ڈنمارک"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:78
-msgid "Finland"
-msgstr "فن لینڈ"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:80
-msgid "Poland"
-msgstr "پولینڈ"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:82
-msgid "Czech Republic"
-msgstr "جمہوریہ چیک"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:84
-msgid "Hungary"
-msgstr "ہنگری"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:86
-msgid "Romania"
-msgstr "رومانیہ"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:88
-msgid "Bulgaria"
-msgstr "بلغاریہ"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:90
-msgid "Greece"
-msgstr "یونان"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:92
-msgid "Portugal"
-msgstr "پرتگال"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:94
-msgid "Ireland"
-msgstr "آئرلینڈ"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:96
-msgid "Japan"
-msgstr "جاپان"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:98
-msgid "China"
-msgstr "چین"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:100
-msgid "India"
-msgstr "بھارت"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:102
-msgid "Pakistan"
-msgstr "پاکستان"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:104
-msgid "Brazil"
-msgstr "برازیل"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:106
-msgid "Mexico"
-msgstr "میکسیکو"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:108
-msgid "Argentina"
-msgstr "ارجنٹینا"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:110
-msgid "South Africa"
-msgstr "جنوبی افریقہ"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:112
-msgid "Egypt"
-msgstr "مصر"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:114
-msgid "Nigeria"
-msgstr "نائجیریا"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:116
-msgid "Kenya"
-msgstr "کینیا"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:118
-msgid "Saudi Arabia"
-msgstr "سعودی عرب"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:120
-msgid "United Arab Emirates"
-msgstr "متحدہ عرب امارات"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:122
-msgid "Turkey"
-msgstr "ترکی"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:124
-msgid "Russia"
-msgstr "روس"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:126
-msgid "Ukraine"
-msgstr "یوکرین"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:128
-msgid "South Korea"
-msgstr "جنوبی کوریا"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:130
-msgid "Thailand"
-msgstr "تھائی لینڈ"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:132
-msgid "Vietnam"
-msgstr "ویتنام"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:134
-msgid "Singapore"
-msgstr "سنگاپور"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:136
-msgid "Malaysia"
-msgstr "ملائیشیا"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:138
-msgid "Indonesia"
-msgstr "انڈونیشیا"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:140
-msgid "Philippines"
-msgstr "فلپائن"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:142
-msgid "Palestine"
-msgstr "فلسطین"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:144
-msgid "New Zealand"
-msgstr "نیوزی لینڈ"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:146
-msgid "Chile"
-msgstr "چلی"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:148
-msgid "Colombia"
-msgstr "کولمبیا"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:150
-msgid "Peru"
-msgstr "پیرو"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:152
-msgid "Venezuela"
-msgstr "وینزویلا"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:670
+#: ui/components/charts/WorldMap/WorldMap.tsx:472
 msgid "Unable to load the world map right now."
 msgstr "دنیا کا نقشہ اس وقت لوڈ نہیں ہو سکا۔"
 
-#: ui/components/charts/WorldMap/WorldMap.tsx:678
+#: ui/components/charts/WorldMap/WorldMap.tsx:480
 msgid "Loading map..."
 msgstr "نقشہ لوڈ ہو رہا ہے..."
 
@@ -2602,7 +2388,6 @@ msgid "Sponsor"
 msgstr "اسپانسر"
 
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:446
-#: ui/pages/dashboard/about/AboutPage.tsx:574
 msgid "Buy Me a Coffee"
 msgstr "میرے لیے کافی خریدیں"
 
@@ -2614,8 +2399,8 @@ msgstr "%s منتخب کرنے کا شکریہ۔"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:379
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:558
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:61
-#: ui/pages/dashboard/about/AboutPage.tsx:354
-#: ui/pages/dashboard/about/AboutPage.tsx:597
+#: ui/pages/dashboard/about/AboutPage.tsx:230
+#: ui/pages/dashboard/about/AboutPage.tsx:404
 msgid "Version"
 msgstr "ورژن"
 
@@ -3069,7 +2854,7 @@ msgstr "اس اکاؤنٹ کے تازہ ترین بیک اپ کوڈز ڈاؤن �
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/helpers.ts:37
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/BackupCodesList.tsx:45
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:71
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:73
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:128
 msgid "Download"
 msgstr "ڈاؤن لوڈ کریں"
@@ -3263,19 +3048,19 @@ msgstr "سیکیورٹی ڈیٹا لوڈ ہو رہا ہے..."
 msgid "No active sessions found."
 msgstr "کوئی فعال session نہیں ملا۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:47
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:48
 msgid "2FA is enabled"
 msgstr "2FA فعال ہے"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:48
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:49
 msgid "2FA is disabled"
 msgstr "2FA غیر فعال ہے"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:55
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:56
 msgid "Last generated:"
 msgstr "آخری بار بنایا گیا:"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:58
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:59
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:59
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:130
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:147
@@ -3908,7 +3693,7 @@ msgid "Released"
 msgstr "جاری کیا گیا"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:121
-#: ui/pages/dashboard/about/AboutPage.tsx:665
+#: ui/pages/dashboard/about/AboutPage.tsx:631
 msgid "Release Notes"
 msgstr "ریلیز نوٹس"
 
@@ -4440,7 +4225,6 @@ msgstr "SMTP انکرپشن"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:334
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:622
-#: ui/pages/dashboard/about/AboutPage.tsx:617
 msgid "Authentication"
 msgstr "تصدیق"
 
@@ -4761,7 +4545,6 @@ msgid "Directories and Sizes"
 msgstr "ڈائریکٹریاں اور سائز"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:714
-#: ui/pages/dashboard/about/AboutPage.tsx:607
 msgid "Server"
 msgstr "سرور"
 
@@ -5072,7 +4855,7 @@ msgstr "فائل پارس نہیں ہو سکی: %s"
 #: ui/pages/dashboard/tools/import/_components/file-upload/FileUpload.tsx:84
 #: ui/pages/dashboard/tools/import/_components/file-upload/FileUpload.tsx:211
 #: ui/pages/dashboard/tools/import/_components/paste/PasteImport.tsx:86
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:174
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:175
 msgid "Unknown error"
 msgstr "نامعلوم خرابی"
 
@@ -5111,7 +4894,7 @@ msgid "Supported formats: CSV, JSON, XML (max 10MB, up to 10,000 URLs)"
 msgstr "قابلِ قبول فارمیٹس: CSV، JSON، XML (زیادہ سے زیادہ 10MB، اور 10,000 URLs تک)"
 
 #: ui/pages/dashboard/tools/import/_components/api/ApiImport.tsx:13
-#: ui/pages/dashboard/tools/import/Layout.tsx:19
+#: ui/pages/dashboard/tools/import/Layout.tsx:18
 msgid "API Import"
 msgstr "API امپورٹ"
 
@@ -5128,7 +4911,7 @@ msgid "No URLs found"
 msgstr "کوئی URLs نہیں ملے"
 
 #: ui/pages/dashboard/tools/import/_components/paste/PasteImport.tsx:96
-#: ui/pages/dashboard/tools/import/Layout.tsx:20
+#: ui/pages/dashboard/tools/import/Layout.tsx:19
 msgid "Paste URLs"
 msgstr "URLs پیسٹ کریں"
 
@@ -5172,7 +4955,7 @@ msgstr "اگر alias نہ دیا جائے تو خودکار طور پر ایک �
 msgid "Processing URLs..."
 msgstr "URLs پروسیس ہو رہے ہیں..."
 
-#: ui/pages/dashboard/tools/import/Layout.tsx:18
+#: ui/pages/dashboard/tools/import/Layout.tsx:17
 msgid "File Upload"
 msgstr "فائل اپ لوڈ"
 
@@ -5593,247 +5376,260 @@ msgstr "کیا سرگرمی کا اندراج \"%s\" حذف کر دیا جائے
 msgid "Delete activity"
 msgstr "سرگرمی حذف کریں"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:143
+#: ui/pages/dashboard/about/Sponsors.tsx:51
+msgid "Our amazing supporters"
+msgstr "ہمارے شاندار معاونین"
+
+#: ui/pages/dashboard/about/Sponsors.tsx:54
+msgid "A huge thank you to everyone who has contributed to keeping PeakURL running."
+msgstr "PeakURL کو فعال رکھنے میں اپنا حصہ ڈالنے والے تمام افراد کا بے حد شکریہ۔"
+
+#: ui/pages/dashboard/about/Sponsors.tsx:64
+msgid "Creator & Maintainer"
+msgstr "تخلیق کار اور دیکھ بھال کنندہ"
+
+#: ui/pages/dashboard/about/Sponsors.tsx:67
+msgid "PeakURL is a solo project. All development, hosting, and infrastructure costs are currently self-funded by the creator. If PeakURL brings value to your workflow, consider pitching in!"
+msgstr "PeakURL ایک انفرادی پروجیکٹ ہے۔ ڈویلپمنٹ، ہوسٹنگ اور انفراسٹرکچر کے تمام اخراجات فی الحال تخلیق کار خود برداشت کر رہا ہے۔ اگر PeakURL آپ کے کام میں مددگار ثابت ہوتا ہے، تو مالی تعاون پر ضرور غور کریں!"
+
+#: ui/pages/dashboard/about/Sponsors.tsx:85
+msgid "Independent Solo Maintainer"
+msgstr "آزاد انفرادی دیکھ بھال کنندہ"
+
+#: ui/pages/dashboard/about/Sponsors.tsx:132
+msgid "Company Sponsors"
+msgstr "کمپنی اسپانسرز"
+
+#: ui/pages/dashboard/about/Sponsors.tsx:135
+msgid "Claim your spot on the homepage. Get visibility for your brand while supporting open-source development."
+msgstr "ہوم پیج پر اپنا مقام حاصل کریں۔ اوپن سورس ڈویلپمنٹ کی حمایت کے ساتھ اپنے برانڈ کی نمائش بڑھائیں۔"
+
+#: ui/pages/dashboard/about/Sponsors.tsx:163
+msgid "Your Logo"
+msgstr "آپ کا لوگو"
+
+#: ui/pages/dashboard/about/Sponsors.tsx:174
+msgid "Community Supporters"
+msgstr "کمیونٹی کے معاونین"
+
+#: ui/pages/dashboard/about/Sponsors.tsx:177
+msgid "A huge thanks to the individuals who back PeakURL's development and help keep the project actively maintained."
+msgstr "PeakURL کی ڈویلپمنٹ کی حمایت کرنے اور پروجیکٹ کو فعال رکھنے میں مدد کرنے والے تمام افراد کا بے حد شکریہ۔"
+
+#: ui/pages/dashboard/about/Sponsors.tsx:187
+msgid "Support the Project"
+msgstr "پروجیکٹ کی حمایت کریں"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:142
 msgid "Setup Complete"
 msgstr "سیٹ اپ مکمل"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:144
+#: ui/pages/dashboard/about/AboutPage.tsx:143
 msgid "PeakURL is ready to use."
 msgstr "PeakURL استعمال کے لیے تیار ہے۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:145
+#: ui/pages/dashboard/about/AboutPage.tsx:144
 msgid "Your administrator account is active and the dashboard is ready. Use these next steps to finish the initial configuration and start publishing links."
 msgstr "آپ کا ایڈمنسٹریٹر اکاؤنٹ فعال ہے اور ڈیش بورڈ تیار ہے۔ ابتدائی کنفیگریشن مکمل کرنے اور لنکس شائع کرنے کے لیے یہ اگلے مراحل استعمال کریں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:150
+#: ui/pages/dashboard/about/AboutPage.tsx:149
 msgid "Create your first short link"
 msgstr "اپنا پہلا شارٹ لنک بنائیں"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:154
+#: ui/pages/dashboard/about/AboutPage.tsx:153
 msgid "Review general settings"
 msgstr "عمومی ترتیبات دیکھیں"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:158
+#: ui/pages/dashboard/about/AboutPage.tsx:157
 msgid "Connect location data"
 msgstr "مقام کا ڈیٹا منسلک کریں"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:164
+#: ui/pages/dashboard/about/AboutPage.tsx:163
 msgid "Update Complete"
 msgstr "اپ ڈیٹ مکمل"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:165
+#: ui/pages/dashboard/about/AboutPage.tsx:164
 msgid "PeakURL has been updated to the latest version."
 msgstr "PeakURL تازہ ترین ورژن پر اپ ڈیٹ ہو گیا ہے۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:166
-msgid "The latest version is now installed. Review the essentials below and confirm services like email delivery, location data, and updates are set the way you expect."
-msgstr "تازہ ترین version اب انسٹال ہو چکی ہے۔ نیچے ضروری چیزیں دیکھیں اور تصدیق کریں کہ ای میل، مقام کے ڈیٹا، اور updates جیسی سروسز آپ کی توقع کے مطابق سیٹ ہیں۔"
+#: ui/pages/dashboard/about/AboutPage.tsx:165
+msgid "The latest version is now installed. Here's a look at what's new in this release."
+msgstr "تازہ ترین ورژن انسٹال ہو چکا ہے۔ اس ریلیز میں شامل نئی خصوصیات پر ایک نظر ڈالیں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:171
-#: ui/pages/dashboard/about/AboutPage.tsx:189
-msgid "Check email configuration"
-msgstr "ای میل کنفیگریشن چیک کریں"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:175
-#: ui/pages/dashboard/about/AboutPage.tsx:193
-msgid "Verify update status"
-msgstr "اپ ڈیٹ کی حالت چیک کریں"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:178
-#: ui/pages/dashboard/about/AboutPage.tsx:196
-msgid "Open all links"
-msgstr "تمام لنکس کھولیں"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:182
+#: ui/pages/dashboard/about/AboutPage.tsx:170
 msgid "Reinstall Complete"
 msgstr "دوبارہ انسٹال مکمل"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:183
+#: ui/pages/dashboard/about/AboutPage.tsx:171
 msgid "PeakURL has been reinstalled."
 msgstr "PeakURL دوبارہ انسٹال ہو گیا ہے۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:184
-msgid "The latest version has been reinstalled. Review the essentials below and confirm services like email delivery, location data, and updates are set the way you expect."
-msgstr "تازہ ترین version دوبارہ انسٹال ہو چکی ہے۔ نیچے ضروری چیزیں دیکھیں اور تصدیق کریں کہ ای میل، مقام کے ڈیٹا، اور updates جیسی سروسز آپ کی توقع کے مطابق سیٹ ہیں۔"
+#: ui/pages/dashboard/about/AboutPage.tsx:172
+msgid "The latest version has been reinstalled. Here's a look at what's included in this release."
+msgstr "تازہ ترین ورژن دوبارہ انسٹال ہو چکا ہے۔ اس ریلیز میں شامل خصوصیات پر ایک نظر ڈالیں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:238
+#: ui/pages/dashboard/about/AboutPage.tsx:237
+msgid "Released %s"
+msgstr "جاری کردہ %s"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:277
+msgid "For all release notes see the main page"
+msgstr "تمام ریلیز نوٹس دیکھنے کے لیے مرکزی صفحہ ملاحظہ کریں"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:286
+msgid "Plain text format"
+msgstr "سادہ متن کا فارمیٹ"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:299
 msgid "Branded Short Links"
 msgstr "برانڈڈ شارٹ لنکس"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:239
+#: ui/pages/dashboard/about/AboutPage.tsx:300
 msgid "Create clean short links with custom aliases, generated codes, QR output, and redirect settings that stay easy to manage."
 msgstr "صاف ستھرے شارٹ لنکس بنائیں جن میں حسبِ منشا aliases، خودکار کوڈز، QR آؤٹ پٹ، اور redirect ترتیبات ہوں اور جنہیں آسانی سے منظم کیا جا سکے۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:245
+#: ui/pages/dashboard/about/AboutPage.tsx:306
 msgid "Click Analytics"
 msgstr "کلک تجزیات"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:246
+#: ui/pages/dashboard/about/AboutPage.tsx:307
 msgid "Review clicks, unique visitors, referrers, device breakdowns, and traffic trends from the same dashboard used to publish links."
 msgstr "اسی ڈیش بورڈ سے کلکس، منفرد وزیٹرز، ریفررز، ڈیوائس کی تفصیل، اور ٹریفک رجحانات دیکھیں جس سے آپ لنکس شائع کرتے ہیں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:252
+#: ui/pages/dashboard/about/AboutPage.tsx:313
 msgid "Local Location Data"
 msgstr "مقامی مقام کا ڈیٹا"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:253
+#: ui/pages/dashboard/about/AboutPage.tsx:314
 msgid "Resolve visitor locations from a local MaxMind GeoLite2 database so analytics stay under your control."
 msgstr "مقامی MaxMind GeoLite2 ڈیٹابیس سے وزیٹرز کے مقامات معلوم کریں تاکہ تجزیات آپ کے اپنے کنٹرول میں رہیں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:259
+#: ui/pages/dashboard/about/AboutPage.tsx:320
 msgid "Access And Security"
 msgstr "رسائی اور سیکیورٹی"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:260
+#: ui/pages/dashboard/about/AboutPage.tsx:321
 msgid "Run with admin and editor roles, session controls, two-factor authentication, backup codes, and API keys."
 msgstr "ایڈمن اور ایڈیٹر کردار، سیشن کنٹرولز، دو مرحلہ تصدیق، بیک اپ کوڈز، اور API keys کے ساتھ چلائیں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:266
+#: ui/pages/dashboard/about/AboutPage.tsx:327
 msgid "Operations And Integrations"
 msgstr "آپریشنز اور انضمامات"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:267
+#: ui/pages/dashboard/about/AboutPage.tsx:328
 msgid "Use API keys, webhooks, import tools, and the built-in updater baseline to operate the service over time."
 msgstr "وقت کے ساتھ سروس چلانے کے لیے API keys، webhooks، import tools، اور built-in updater baseline استعمال کریں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:273
+#: ui/pages/dashboard/about/AboutPage.tsx:334
 msgid "Portable Self-Hosting"
 msgstr "قابلِ منتقلی سیلف ہوسٹنگ"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:274
+#: ui/pages/dashboard/about/AboutPage.tsx:335
 msgid "Deploy on your own domain, keep runtime configuration in your own environment, and preserve user-owned content across updates."
 msgstr "اپنے ڈومین پر تعینات کریں، runtime configuration اپنے ماحول میں رکھیں، اور updates کے دوران صارف کی ملکیت والا content محفوظ رکھیں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:294
+#: ui/pages/dashboard/about/AboutPage.tsx:355
 msgid "Use"
 msgstr "استعمال کریں"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:295
+#: ui/pages/dashboard/about/AboutPage.tsx:356
 msgid "Run PeakURL for any purpose, personal projects, business, education, or anything in between."
 msgstr "PeakURL کو کسی بھی مقصد کے لیے چلائیں، ذاتی منصوبوں، کاروبار، تعلیم، یا اس کے درمیان کسی بھی استعمال کے لیے۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:301
+#: ui/pages/dashboard/about/AboutPage.tsx:362
 msgid "Study"
 msgstr "مطالعہ کریں"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:302
+#: ui/pages/dashboard/about/AboutPage.tsx:363
 msgid "Explore the source code, understand how it works, and modify it to suit your exact needs."
 msgstr "سورس کوڈ دیکھیں، سمجھیں کہ یہ کیسے کام کرتا ہے، اور اپنی ضرورت کے مطابق ترمیم کریں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:308
+#: ui/pages/dashboard/about/AboutPage.tsx:369
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:157
 msgid "Share"
 msgstr "شیئر کریں"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:309
+#: ui/pages/dashboard/about/AboutPage.tsx:370
 msgid "Redistribute copies freely so others can benefit from the same powerful link management platform."
 msgstr "اس کی نقول آزادانہ تقسیم کریں تاکہ دوسرے بھی اسی طاقتور لنک مینجمنٹ پلیٹ فارم سے فائدہ اٹھا سکیں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:315
+#: ui/pages/dashboard/about/AboutPage.tsx:376
 msgid "Improve"
 msgstr "بہتر بنائیں"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:316
+#: ui/pages/dashboard/about/AboutPage.tsx:377
 msgid "Enhance PeakURL and share your improvements, contributing back to the open-source community."
 msgstr "PeakURL کو مزید بہتر بنائیں اور اپنی بہتریاں شیئر کریں تاکہ اوپن سورس کمیونٹی کو واپس فائدہ پہنچے۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:370
+#: ui/pages/dashboard/about/AboutPage.tsx:420
 msgid "PeakURL gives you a focused workspace for publishing short links, measuring engagement, and running branded link infrastructure on your own stack."
 msgstr "PeakURL آپ کو مختصر لنکس شائع کرنے، انگیجمنٹ ناپنے، اور اپنے ہی انفراسٹرکچر پر برانڈڈ لنک سروس چلانے کے لیے ایک مرکوز ورک اسپیس فراہم کرتا ہے۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:383
+#: ui/pages/dashboard/about/AboutPage.tsx:433
 msgid "Documentation"
 msgstr "دستاویزات"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:400
+#: ui/pages/dashboard/about/AboutPage.tsx:450
 msgid "View on GitHub"
 msgstr "GitHub پر دیکھیں"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:437
+#: ui/pages/dashboard/about/AboutPage.tsx:487
 msgid "Everything you need to publish short links, review traffic, and operate the service from one focused dashboard."
 msgstr "مختصر لنکس شائع کرنے، ٹریفک کا جائزہ لینے، اور ایک ہی مرکوز ڈیش بورڈ سے سروس چلانے کے لیے درکار ہر چیز۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:441
+#: ui/pages/dashboard/about/AboutPage.tsx:491
 msgid "What's Inside"
 msgstr "کیا شامل ہے"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:456
+#: ui/pages/dashboard/about/AboutPage.tsx:506
 msgid "PeakURL is built to stay understandable in day-to-day use and dependable over time."
 msgstr "PeakURL روزمرہ استعمال میں قابلِ فہم اور وقت کے ساتھ قابلِ اعتماد رہنے کے لیے بنایا گیا ہے۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:460
+#: ui/pages/dashboard/about/AboutPage.tsx:510
 msgid "Product Principles"
 msgstr "پروڈکٹ کے اصول"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:469
+#: ui/pages/dashboard/about/AboutPage.tsx:519
 msgid "Clear By Default"
 msgstr "بطورِ ڈیفالٹ واضح"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:472
+#: ui/pages/dashboard/about/AboutPage.tsx:522
 msgid "The dashboard should stay direct and readable so routine work like publishing links, reviewing traffic, and managing users does not feel heavy."
 msgstr "ڈیش بورڈ سیدھا اور پڑھنے میں آسان رہنا چاہیے تاکہ لنکس شائع کرنا، ٹریفک دیکھنا، اور صارفین سنبھالنا بھاری محسوس نہ ہو۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:482
+#: ui/pages/dashboard/about/AboutPage.tsx:532
 msgid "Portable To Run"
 msgstr "چلانے میں آسان اور قابلِ منتقلی"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:485
+#: ui/pages/dashboard/about/AboutPage.tsx:535
 msgid "The application should install cleanly on common PHP and MySQL hosting without depending on a managed SaaS control plane."
 msgstr "ایپ عام PHP اور MySQL ہوسٹنگ پر بغیر کسی managed SaaS control plane کے صاف طریقے سے انسٹال ہونی چاہیے۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:495
+#: ui/pages/dashboard/about/AboutPage.tsx:545
 msgid "Open And Inspectable"
 msgstr "کھلا اور قابلِ جانچ"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:498
+#: ui/pages/dashboard/about/AboutPage.tsx:548
 msgid "The codebase stays auditable and adaptable so operators can understand what they run, extend it carefully, and keep long-term control."
 msgstr "کوڈبیس قابلِ جانچ اور قابلِ تطبیق رہتی ہے تاکہ آپ سمجھ سکیں کہ کیا چلا رہے ہیں، احتیاط سے اسے بڑھا سکیں، اور طویل مدتی کنٹرول برقرار رکھیں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:511
+#: ui/pages/dashboard/about/AboutPage.tsx:561
 msgid "PeakURL is released under the MIT License so it can stay practical to adopt, inspect, modify, and distribute."
 msgstr "PeakURL MIT License کے تحت جاری کیا گیا ہے تاکہ اسے اپنانا، جانچنا، تبدیل کرنا، اور تقسیم کرنا عملی اور آسان رہے۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:515
+#: ui/pages/dashboard/about/AboutPage.tsx:565
 msgid "Open Source Terms"
 msgstr "اوپن سورس لائسنس کی شرائط"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:529
+#: ui/pages/dashboard/about/AboutPage.tsx:579
 msgid "Freedom to"
 msgstr "آپ کو آزادی ہے کہ"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:543
-msgid "Support PeakURL"
-msgstr "PeakURL کی معاونت کریں"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:546
-msgid "If PeakURL is useful to you, help keep it practical and actively maintained."
-msgstr "اگر PeakURL آپ کے لیے مفید ہے تو اسے عملی اور فعال طور پر برقرار رکھنے میں مدد کریں۔"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:551
-msgid "Sponsorships and small contributions help fund releases, documentation, infrastructure, and the maintenance work that keeps the project moving."
-msgstr "اسپانسرشپس اور چھوٹی معاونتیں ریلیزز، دستاویزات، انفراسٹرکچر، اور دیکھ بھال کے اُس کام کی مالی مدد کرتی ہیں جو منصوبے کو آگے بڑھاتا ہے۔"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:564
-msgid "Sponsor PeakURL"
-msgstr "PeakURL کو اسپانسر کریں"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:587
-msgid "A quick overview of the installation you are running right now."
-msgstr "اس انسٹالیشن کا ایک مختصر جائزہ جو آپ اس وقت چلا رہے ہیں۔"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:591
-msgid "Current Installation"
-msgstr "موجودہ انسٹالیشن"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:622
-msgid "GeoIP"
-msgstr "GeoIP"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:636
+#: ui/pages/dashboard/about/AboutPage.tsx:602
 msgid "Self-hosted link management with clear ownership and a focused dashboard."
 msgstr "واضح ملکیت اور ایک مرکوز ڈیش بورڈ کے ساتھ خود میزبان لنک مینجمنٹ۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:647
+#: ui/pages/dashboard/about/AboutPage.tsx:613
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
 msgid "Website"
 msgstr "ویب سائٹ"
@@ -5944,10 +5740,10 @@ msgstr "ڈیش بورڈ کا وقتی دورانیہ"
 
 #: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:54
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:99
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:145
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:165
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:189
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:324
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:146
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:166
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:190
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:325
 msgid "Top Countries"
 msgstr "سرفہرست ممالک"
 
@@ -6265,70 +6061,70 @@ msgstr "اختتامی تاریخ (اختیاری)"
 msgid "No link data available"
 msgstr "لنک کا ڈیٹا دستیاب نہیں ہے"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:151
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:152
 msgid "Loading location data..."
 msgstr "مقام کا ڈیٹا لوڈ ہو رہا ہے..."
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:171
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:172
 msgid "Failed to load location data"
 msgstr "مقام کا ڈیٹا لوڈ کرنے میں ناکامی ہوئی"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:195
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:196
 msgid "No location data available yet"
 msgstr "ابھی مقام کا کوئی ڈیٹا دستیاب نہیں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:198
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:199
 msgid "Location tracking will show here once clicks are recorded with a configured GeoLite2 City database"
 msgstr "جب GeoLite2 City ڈیٹابیس درست طور پر سیٹ ہو جائے اور کلکس ریکارڈ ہونا شروع ہوں، تو مقام کی معلومات یہاں دکھائی دیں گی"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:210
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:211
 msgid "Note:"
 msgstr "نوٹ:"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:215
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:216
 msgid "Local and private-network clicks do not include location data."
 msgstr "مقامی یا نجی نیٹ ورک سے آنے والے کلکس کے لیے مقام کی معلومات دستیاب نہیں ہوتیں۔"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:222
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:223
 msgid "Store the GeoLite2 City database here:"
 msgstr "اس راستے پر GeoLite2 City ڈیٹابیس رکھیں:"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:229
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:230
 msgid "VPN users may show the location of the VPN server."
 msgstr "VPN استعمال کرنے والے صارفین کے لیے اصل مقام کے بجائے VPN سرور کا مقام دکھائی دے سکتا ہے۔"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:242
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:371
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:243
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:372
 msgid "Top Cities"
 msgstr "سرفہرست شہر"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:248
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:249
 msgid "No city data available yet"
 msgstr "ابھی شہر کا کوئی ڈیٹا دستیاب نہیں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:268
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:269
 msgid "Total Locations"
 msgstr "کل مقامات"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:277
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:278
 msgid "Countries"
 msgstr "ممالک"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:291
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:292
 msgid "Geographic Distribution"
 msgstr "جغرافیائی تقسیم"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:399
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:400
 #: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:262
 #: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:63
 msgid "Hide details"
 msgstr "تفصیلات چھپائیں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:401
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:402
 msgid "View all %s cities"
 msgstr "تمام %s شہر دیکھیں"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:422
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:423
 msgid "All cities"
 msgstr "تمام شہر"
 

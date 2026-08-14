@@ -215,12 +215,12 @@ msgstr "Código de verificación no válido."
 msgid "PeakURL could not identify the current session."
 msgstr "PeakURL no pudo identificar la sesión actual."
 
-#: app/traits/analytics.php:267
+#: app/traits/analytics.php:268
 msgid "Activity log ID is required."
 msgstr "Se requiere el ID del registro de actividad."
 
-#: app/traits/analytics.php:436
-#: app/traits/analytics.php:594
+#: app/traits/analytics.php:437
+#: app/traits/analytics.php:595
 msgid "You do not have permission to view analytics for this link."
 msgstr "No tienes permiso para ver las analíticas de este enlace."
 
@@ -317,11 +317,11 @@ msgstr "Cargando"
 msgid "Request origin is not allowed."
 msgstr "No se permite el origen de la solicitud."
 
-#: app/includes/runtime-config.php:540
+#: app/includes/runtime-config.php:594
 msgid "DB_PREFIX must start with a letter or underscore and use only letters, numbers, and underscores."
 msgstr "DB_PREFIX debe empezar con una letra o un guion bajo y usar solo letras, números y guiones bajos."
 
-#: app/includes/runtime-config.php:561
+#: app/includes/runtime-config.php:615
 msgid "Database name may contain only letters, numbers, and underscores."
 msgstr "El nombre de la base de datos solo puede contener letras, números y guiones bajos."
 
@@ -563,8 +563,8 @@ msgid "This link is protected. Enter the password to continue."
 msgstr "Este enlace está protegido. Introduce la contraseña para continuar."
 
 #: app/controllers/urls.php:414
-#: site/install.php:587
-#: site/setup-config.php:811
+#: site/install.php:592
+#: site/setup-config.php:816
 #: ui/pages/auth/login/LoginPage.tsx:371
 #: ui/pages/dashboard/users/UsersPage.tsx:250
 msgid "Password"
@@ -1370,8 +1370,8 @@ msgid "PeakURL could not send the welcome email because the account email addres
 msgstr "PeakURL no pudo enviar el correo de bienvenida porque la dirección de correo de la cuenta no es válida."
 
 #: app/services/notifications.php:204
-#: site/setup-config.php:696
-#: ui/pages/dashboard/about/AboutPage.tsx:367
+#: site/setup-config.php:701
+#: ui/pages/dashboard/about/AboutPage.tsx:417
 msgid "Welcome to %s"
 msgstr "Te damos la bienvenida a %s"
 
@@ -1412,7 +1412,7 @@ msgid "CAPTCHA secret key must be 512 characters or fewer."
 msgstr "La clave secreta de CAPTCHA debe tener 512 caracteres o menos."
 
 #: app/services/system-status/checks.php:46
-#: site/setup-config.php:766
+#: site/setup-config.php:771
 msgid "Database connection"
 msgstr "Conexión a la base de datos"
 
@@ -1508,66 +1508,65 @@ msgstr "La base de datos GeoLite2 City está disponible para la analítica de ub
 msgid "Visitor location analytics is not fully ready yet."
 msgstr "La analítica de ubicaciones de visitantes aún no está lista por completo."
 
-#: site/install.php:87
+#: site/install.php:92
 msgid "Administrator Setup - %s"
 msgstr "Configuración del administrador - %s"
 
-#: site/install.php:524
-#: site/setup-config.php:667
+#: site/install.php:529
+#: site/setup-config.php:672
 msgid "Welcome"
 msgstr "Bienvenido"
 
-#: site/install.php:531
-#: site/setup-config.php:674
+#: site/install.php:536
+#: site/setup-config.php:679
 #: ui/components/common/ApiErrorPage/ApiErrorPage.tsx:70
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:91
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:715
-#: ui/pages/dashboard/about/AboutPage.tsx:612
 msgid "Database"
 msgstr "Base de datos"
 
-#: site/install.php:538
-#: site/setup-config.php:681
+#: site/install.php:543
+#: site/setup-config.php:686
 msgid "Admin account"
 msgstr "Cuenta de administrador"
 
-#: site/install.php:549
+#: site/install.php:554
 msgid "Create your account"
 msgstr "Crea tu cuenta"
 
-#: site/install.php:551
+#: site/install.php:556
 msgid "Name your site and set up the first administrator. You will be signed in automatically once the install completes."
 msgstr "Asigna un nombre a tu sitio y configura la primera cuenta de administrador. Iniciarás sesión automáticamente cuando termine la instalación."
 
-#: site/install.php:567
+#: site/install.php:572
 msgid "Site info"
 msgstr "Información del sitio"
 
-#: site/install.php:570
+#: site/install.php:575
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:388
 msgid "Site title"
 msgstr "Título del sitio"
 
-#: site/install.php:571
+#: site/install.php:576
 msgid "My Link Hub"
 msgstr "Mi centro de enlaces"
 
-#: site/install.php:575
+#: site/install.php:580
 msgid "Administrator"
 msgstr "Administrador"
 
-#: site/install.php:578
-#: site/setup-config.php:807
+#: site/install.php:583
+#: site/setup-config.php:812
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:339
 #: ui/pages/dashboard/users/UsersPage.tsx:229
 msgid "Username"
 msgstr "Nombre de usuario"
 
-#: site/install.php:580
+#: site/install.php:585
 msgid "Letters, numbers, dots, dashes, underscores, or @."
 msgstr "Usa letras, números, puntos, guiones, guiones bajos o @."
 
-#: site/install.php:583
+#: site/install.php:588
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:97
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:716
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
@@ -1576,107 +1575,107 @@ msgstr "Usa letras, números, puntos, guiones, guiones bajos o @."
 msgid "Email"
 msgstr "Correo electrónico"
 
-#: site/install.php:584
+#: site/install.php:589
 #: ui/pages/auth/login/LoginPage.tsx:365
 msgid "you@company.com"
 msgstr "tu@empresa.com"
 
-#: site/install.php:589
+#: site/install.php:594
 msgid "At least 8 characters. You will be signed in right after installation."
 msgstr "Al menos 8 caracteres. Iniciarás sesión justo después de la instalación."
 
-#: site/install.php:593
+#: site/install.php:598
 msgid "Database configuration is already saved."
 msgstr "La configuración de la base de datos ya está guardada."
 
-#: site/install.php:596
+#: site/install.php:601
 msgid "Install %s"
 msgstr "Instalar %s"
 
-#: site/install.php:620
-#: site/setup-config.php:854
+#: site/install.php:625
+#: site/setup-config.php:859
 #: ui/pages/auth/login/LoginPage.tsx:296
 msgid "Powered by %s"
 msgstr "Impulsado por %s"
 
-#: site/setup-config.php:90
+#: site/setup-config.php:95
 msgid "Database Setup - %s"
 msgstr "Configuración de la base de datos - %s"
 
-#: site/setup-config.php:92
+#: site/setup-config.php:97
 msgid "Welcome - %s"
 msgstr "Bienvenido a %s"
 
-#: site/setup-config.php:645
+#: site/setup-config.php:650
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:412
 msgid "Site language"
 msgstr "Idioma del sitio"
 
-#: site/setup-config.php:698
+#: site/setup-config.php:703
 msgid "Before getting started, you'll need your database connection details. PeakURL will use them to create config.php and set up the required tables."
 msgstr "Antes de empezar, necesitarás los datos de conexión de tu base de datos. PeakURL los usará para crear config.php y configurar las tablas necesarias."
 
-#: site/setup-config.php:710
-#: site/setup-config.php:803
+#: site/setup-config.php:715
+#: site/setup-config.php:808
 msgid "Database name"
 msgstr "Nombre de la base de datos"
 
-#: site/setup-config.php:716
+#: site/setup-config.php:721
 msgid "Username and password"
 msgstr "Nombre de usuario y contraseña"
 
-#: site/setup-config.php:722
+#: site/setup-config.php:727
 msgid "Host and port"
 msgstr "Host y puerto"
 
-#: site/setup-config.php:728
-#: site/setup-config.php:827
+#: site/setup-config.php:733
+#: site/setup-config.php:832
 msgid "Table prefix"
 msgstr "Prefijo de tabla"
 
-#: site/setup-config.php:728
+#: site/setup-config.php:733
 msgid "optional"
 msgstr "opcional"
 
-#: site/setup-config.php:734
+#: site/setup-config.php:739
 msgid "These details are usually available in your hosting control panel or from your database administrator."
 msgstr "Normalmente encontrarás estos datos en el panel de control de tu hosting o con el administrador de la base de datos."
 
-#: site/setup-config.php:754
+#: site/setup-config.php:759
 msgid "Let's go"
 msgstr "Empecemos"
 
-#: site/setup-config.php:768
+#: site/setup-config.php:773
 msgid "Enter the credentials for your MySQL or MariaDB database. PeakURL will write them to config.php in the site root."
 msgstr "Introduce las credenciales de tu base de datos MySQL o MariaDB. PeakURL las escribirá en config.php, en la raíz del sitio."
 
-#: site/setup-config.php:800
+#: site/setup-config.php:805
 msgid "Connection details"
 msgstr "Detalles de la conexión"
 
-#: site/setup-config.php:815
+#: site/setup-config.php:820
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:561
 msgid "Host"
 msgstr "Host"
 
-#: site/setup-config.php:820
+#: site/setup-config.php:825
 msgid "Advanced"
 msgstr "Avanzado"
 
-#: site/setup-config.php:823
+#: site/setup-config.php:828
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:563
 msgid "Port"
 msgstr "Puerto"
 
-#: site/setup-config.php:829
+#: site/setup-config.php:834
 msgid "Letters, numbers, underscores. Example: peakurl_"
 msgstr "Usa letras, números y guiones bajos. Ejemplo: peakurl_"
 
-#: site/setup-config.php:835
+#: site/setup-config.php:840
 msgid "Back"
 msgstr "Atrás"
 
-#: site/setup-config.php:838
+#: site/setup-config.php:843
 msgid "Save and continue"
 msgstr "Guardar y continuar"
 
@@ -1689,7 +1688,6 @@ msgstr "Resumen"
 #: ui/utils/dashboardSearch.ts:82
 #: ui/utils/dashboardSearch.ts:85
 #: ui/utils/dashboardSearch.ts:116
-#: ui/pages/dashboard/about/AboutPage.tsx:602
 #: ui/pages/dashboard/_components/Header/Header.tsx:25
 #: ui/router/pageTitle.ts:65
 msgid "Dashboard"
@@ -2049,223 +2047,11 @@ msgstr "Salir de pantalla completa"
 msgid "Full screen"
 msgstr "Pantalla completa"
 
-#: ui/components/charts/WorldMap/WorldMap.tsx:48
-msgid "United States"
-msgstr "Estados Unidos"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:50
-msgid "United Kingdom"
-msgstr "Reino Unido"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:52
-msgid "Canada"
-msgstr "Canadá"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:54
-msgid "Australia"
-msgstr "Australia"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:56
-msgid "Germany"
-msgstr "Alemania"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:58
-msgid "France"
-msgstr "Francia"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:60
-msgid "Italy"
-msgstr "Italia"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:62
-msgid "Spain"
-msgstr "España"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:64
-msgid "Netherlands"
-msgstr "Países Bajos"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:66
-msgid "Belgium"
-msgstr "Bélgica"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:68
-msgid "Switzerland"
-msgstr "Suiza"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:70
-msgid "Austria"
-msgstr "Austria"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:72
-msgid "Sweden"
-msgstr "Suecia"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:74
-msgid "Norway"
-msgstr "Noruega"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:76
-msgid "Denmark"
-msgstr "Dinamarca"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:78
-msgid "Finland"
-msgstr "Finlandia"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:80
-msgid "Poland"
-msgstr "Polonia"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:82
-msgid "Czech Republic"
-msgstr "República Checa"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:84
-msgid "Hungary"
-msgstr "Hungría"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:86
-msgid "Romania"
-msgstr "Rumanía"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:88
-msgid "Bulgaria"
-msgstr "Bulgaria"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:90
-msgid "Greece"
-msgstr "Grecia"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:92
-msgid "Portugal"
-msgstr "Portugal"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:94
-msgid "Ireland"
-msgstr "Irlanda"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:96
-msgid "Japan"
-msgstr "Japón"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:98
-msgid "China"
-msgstr "China"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:100
-msgid "India"
-msgstr "India"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:102
-msgid "Pakistan"
-msgstr "Pakistán"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:104
-msgid "Brazil"
-msgstr "Brasil"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:106
-msgid "Mexico"
-msgstr "México"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:108
-msgid "Argentina"
-msgstr "Argentina"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:110
-msgid "South Africa"
-msgstr "Sudáfrica"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:112
-msgid "Egypt"
-msgstr "Egipto"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:114
-msgid "Nigeria"
-msgstr "Nigeria"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:116
-msgid "Kenya"
-msgstr "Kenia"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:118
-msgid "Saudi Arabia"
-msgstr "Arabia Saudí"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:120
-msgid "United Arab Emirates"
-msgstr "Emiratos Árabes Unidos"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:122
-msgid "Turkey"
-msgstr "Turquía"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:124
-msgid "Russia"
-msgstr "Rusia"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:126
-msgid "Ukraine"
-msgstr "Ucrania"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:128
-msgid "South Korea"
-msgstr "Corea del Sur"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:130
-msgid "Thailand"
-msgstr "Tailandia"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:132
-msgid "Vietnam"
-msgstr "Vietnam"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:134
-msgid "Singapore"
-msgstr "Singapur"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:136
-msgid "Malaysia"
-msgstr "Malasia"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:138
-msgid "Indonesia"
-msgstr "Indonesia"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:140
-msgid "Philippines"
-msgstr "Filipinas"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:142
-msgid "Palestine"
-msgstr "Palestina"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:144
-msgid "New Zealand"
-msgstr "Nueva Zelanda"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:146
-msgid "Chile"
-msgstr "Chile"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:148
-msgid "Colombia"
-msgstr "Colombia"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:150
-msgid "Peru"
-msgstr "Perú"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:152
-msgid "Venezuela"
-msgstr "Venezuela"
-
-#: ui/components/charts/WorldMap/WorldMap.tsx:670
+#: ui/components/charts/WorldMap/WorldMap.tsx:472
 msgid "Unable to load the world map right now."
 msgstr "No se puede cargar el mapa mundial en este momento."
 
-#: ui/components/charts/WorldMap/WorldMap.tsx:678
+#: ui/components/charts/WorldMap/WorldMap.tsx:480
 msgid "Loading map..."
 msgstr "Cargando mapa..."
 
@@ -2602,7 +2388,6 @@ msgid "Sponsor"
 msgstr "Patrocinar"
 
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:446
-#: ui/pages/dashboard/about/AboutPage.tsx:574
 msgid "Buy Me a Coffee"
 msgstr "Invítame a un café"
 
@@ -2614,8 +2399,8 @@ msgstr "Gracias por elegir %s."
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:379
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:558
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:61
-#: ui/pages/dashboard/about/AboutPage.tsx:354
-#: ui/pages/dashboard/about/AboutPage.tsx:597
+#: ui/pages/dashboard/about/AboutPage.tsx:230
+#: ui/pages/dashboard/about/AboutPage.tsx:404
 msgid "Version"
 msgstr "Versión"
 
@@ -3069,7 +2854,7 @@ msgstr "Introduce tu contraseña actual para descargar los códigos de respaldo 
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/helpers.ts:37
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/BackupCodesList.tsx:45
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:71
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:73
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:128
 msgid "Download"
 msgstr "Descargar"
@@ -3263,19 +3048,19 @@ msgstr "Cargando datos de seguridad..."
 msgid "No active sessions found."
 msgstr "No se encontraron sesiones activas."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:47
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:48
 msgid "2FA is enabled"
 msgstr "La 2FA está activada"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:48
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:49
 msgid "2FA is disabled"
 msgstr "La 2FA está desactivada"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:55
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:56
 msgid "Last generated:"
 msgstr "Última generación:"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:58
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:59
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:59
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:130
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:147
@@ -3908,7 +3693,7 @@ msgid "Released"
 msgstr "Publicado"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:121
-#: ui/pages/dashboard/about/AboutPage.tsx:665
+#: ui/pages/dashboard/about/AboutPage.tsx:631
 msgid "Release Notes"
 msgstr "Notas de la versión"
 
@@ -4440,7 +4225,6 @@ msgstr "Cifrado SMTP"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:334
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:622
-#: ui/pages/dashboard/about/AboutPage.tsx:617
 msgid "Authentication"
 msgstr "Autenticación"
 
@@ -4761,7 +4545,6 @@ msgid "Directories and Sizes"
 msgstr "Directorios y tamaños"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:714
-#: ui/pages/dashboard/about/AboutPage.tsx:607
 msgid "Server"
 msgstr "Servidor"
 
@@ -5072,7 +4855,7 @@ msgstr "No se pudo procesar el archivo: %s"
 #: ui/pages/dashboard/tools/import/_components/file-upload/FileUpload.tsx:84
 #: ui/pages/dashboard/tools/import/_components/file-upload/FileUpload.tsx:211
 #: ui/pages/dashboard/tools/import/_components/paste/PasteImport.tsx:86
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:174
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:175
 msgid "Unknown error"
 msgstr "Error desconocido"
 
@@ -5111,7 +4894,7 @@ msgid "Supported formats: CSV, JSON, XML (max 10MB, up to 10,000 URLs)"
 msgstr "Formatos compatibles: CSV, JSON, XML (máx. 10 MB, hasta 10.000 URLs)"
 
 #: ui/pages/dashboard/tools/import/_components/api/ApiImport.tsx:13
-#: ui/pages/dashboard/tools/import/Layout.tsx:19
+#: ui/pages/dashboard/tools/import/Layout.tsx:18
 msgid "API Import"
 msgstr "Importación por API"
 
@@ -5128,7 +4911,7 @@ msgid "No URLs found"
 msgstr "No se encontraron URLs"
 
 #: ui/pages/dashboard/tools/import/_components/paste/PasteImport.tsx:96
-#: ui/pages/dashboard/tools/import/Layout.tsx:20
+#: ui/pages/dashboard/tools/import/Layout.tsx:19
 msgid "Paste URLs"
 msgstr "Pegar URLs"
 
@@ -5172,7 +4955,7 @@ msgstr "Si se omite el alias, se generará uno automáticamente"
 msgid "Processing URLs..."
 msgstr "Procesando URLs..."
 
-#: ui/pages/dashboard/tools/import/Layout.tsx:18
+#: ui/pages/dashboard/tools/import/Layout.tsx:17
 msgid "File Upload"
 msgstr "Subida de archivos"
 
@@ -5593,247 +5376,260 @@ msgstr "¿Eliminar la entrada de actividad \"%s\"? Esta acción no se puede desh
 msgid "Delete activity"
 msgstr "Eliminar actividad"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:143
+#: ui/pages/dashboard/about/Sponsors.tsx:51
+msgid "Our amazing supporters"
+msgstr "Nuestros increíbles colaboradores"
+
+#: ui/pages/dashboard/about/Sponsors.tsx:54
+msgid "A huge thank you to everyone who has contributed to keeping PeakURL running."
+msgstr "Un enorme agradecimiento a todos los que han contribuido a mantener PeakURL en funcionamiento."
+
+#: ui/pages/dashboard/about/Sponsors.tsx:64
+msgid "Creator & Maintainer"
+msgstr "Creador y mantenedor"
+
+#: ui/pages/dashboard/about/Sponsors.tsx:67
+msgid "PeakURL is a solo project. All development, hosting, and infrastructure costs are currently self-funded by the creator. If PeakURL brings value to your workflow, consider pitching in!"
+msgstr "PeakURL es un proyecto individual. Todos los costes de desarrollo, alojamiento e infraestructura son financiados actualmente por el propio creador. Si PeakURL aporta valor a tu flujo de trabajo, ¡considera colaborar!"
+
+#: ui/pages/dashboard/about/Sponsors.tsx:85
+msgid "Independent Solo Maintainer"
+msgstr "Mantenedor independiente"
+
+#: ui/pages/dashboard/about/Sponsors.tsx:132
+msgid "Company Sponsors"
+msgstr "Empresas patrocinadoras"
+
+#: ui/pages/dashboard/about/Sponsors.tsx:135
+msgid "Claim your spot on the homepage. Get visibility for your brand while supporting open-source development."
+msgstr "Consigue tu espacio en la página principal. Dale visibilidad a tu marca mientras apoyas el desarrollo de código abierto."
+
+#: ui/pages/dashboard/about/Sponsors.tsx:163
+msgid "Your Logo"
+msgstr "Tu logotipo"
+
+#: ui/pages/dashboard/about/Sponsors.tsx:174
+msgid "Community Supporters"
+msgstr "Colaboradores de la comunidad"
+
+#: ui/pages/dashboard/about/Sponsors.tsx:177
+msgid "A huge thanks to the individuals who back PeakURL's development and help keep the project actively maintained."
+msgstr "Un enorme agradecimiento a las personas que apoyan el desarrollo de PeakURL y ayudan a mantener el proyecto activo."
+
+#: ui/pages/dashboard/about/Sponsors.tsx:187
+msgid "Support the Project"
+msgstr "Apoyar el proyecto"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:142
 msgid "Setup Complete"
 msgstr "Configuración completada"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:144
+#: ui/pages/dashboard/about/AboutPage.tsx:143
 msgid "PeakURL is ready to use."
 msgstr "PeakURL está listo para usarse."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:145
+#: ui/pages/dashboard/about/AboutPage.tsx:144
 msgid "Your administrator account is active and the dashboard is ready. Use these next steps to finish the initial configuration and start publishing links."
 msgstr "Tu cuenta de administrador está activa y el panel está listo. Usa estos siguientes pasos para terminar la configuración inicial y empezar a publicar enlaces."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:150
+#: ui/pages/dashboard/about/AboutPage.tsx:149
 msgid "Create your first short link"
 msgstr "Crea tu primer enlace corto"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:154
+#: ui/pages/dashboard/about/AboutPage.tsx:153
 msgid "Review general settings"
 msgstr "Revisar ajustes generales"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:158
+#: ui/pages/dashboard/about/AboutPage.tsx:157
 msgid "Connect location data"
 msgstr "Conectar datos de ubicación"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:164
+#: ui/pages/dashboard/about/AboutPage.tsx:163
 msgid "Update Complete"
 msgstr "Actualización completada"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:165
+#: ui/pages/dashboard/about/AboutPage.tsx:164
 msgid "PeakURL has been updated to the latest version."
 msgstr "PeakURL se ha actualizado a la última versión."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:166
-msgid "The latest version is now installed. Review the essentials below and confirm services like email delivery, location data, and updates are set the way you expect."
-msgstr "La versión más reciente ya está instalada. Revisa lo esencial a continuación y confirma que servicios como el correo, los datos de ubicación y las actualizaciones estén configurados como esperas."
+#: ui/pages/dashboard/about/AboutPage.tsx:165
+msgid "The latest version is now installed. Here's a look at what's new in this release."
+msgstr "La última versión ya está instalada. Echa un vistazo a las novedades de esta versión."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:171
-#: ui/pages/dashboard/about/AboutPage.tsx:189
-msgid "Check email configuration"
-msgstr "Comprobar configuración de correo"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:175
-#: ui/pages/dashboard/about/AboutPage.tsx:193
-msgid "Verify update status"
-msgstr "Verificar el estado de actualización"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:178
-#: ui/pages/dashboard/about/AboutPage.tsx:196
-msgid "Open all links"
-msgstr "Abrir todos los enlaces"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:182
+#: ui/pages/dashboard/about/AboutPage.tsx:170
 msgid "Reinstall Complete"
 msgstr "Reinstalación completada"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:183
+#: ui/pages/dashboard/about/AboutPage.tsx:171
 msgid "PeakURL has been reinstalled."
 msgstr "PeakURL se ha reinstalado."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:184
-msgid "The latest version has been reinstalled. Review the essentials below and confirm services like email delivery, location data, and updates are set the way you expect."
-msgstr "La versión más reciente se ha reinstalado. Revisa lo esencial a continuación y confirma que servicios como el correo, los datos de ubicación y las actualizaciones estén configurados como esperas."
+#: ui/pages/dashboard/about/AboutPage.tsx:172
+msgid "The latest version has been reinstalled. Here's a look at what's included in this release."
+msgstr "Se ha reinstalado la última versión. Echa un vistazo a lo que se incluye en esta versión."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:238
+#: ui/pages/dashboard/about/AboutPage.tsx:237
+msgid "Released %s"
+msgstr "Publicado el %s"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:277
+msgid "For all release notes see the main page"
+msgstr "Para ver todas las notas de la versión, consulta la página principal"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:286
+msgid "Plain text format"
+msgstr "Formato de texto plano"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:299
 msgid "Branded Short Links"
 msgstr "Enlaces cortos con marca"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:239
+#: ui/pages/dashboard/about/AboutPage.tsx:300
 msgid "Create clean short links with custom aliases, generated codes, QR output, and redirect settings that stay easy to manage."
 msgstr "Crea enlaces cortos limpios con alias personalizados, códigos generados, salida QR y ajustes de redirección que siguen siendo fáciles de gestionar."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:245
+#: ui/pages/dashboard/about/AboutPage.tsx:306
 msgid "Click Analytics"
 msgstr "Analíticas de clics"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:246
+#: ui/pages/dashboard/about/AboutPage.tsx:307
 msgid "Review clicks, unique visitors, referrers, device breakdowns, and traffic trends from the same dashboard used to publish links."
 msgstr "Revisa clics, visitantes únicos, referentes, desglose por dispositivo y tendencias de tráfico desde el mismo panel que usas para publicar enlaces."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:252
+#: ui/pages/dashboard/about/AboutPage.tsx:313
 msgid "Local Location Data"
 msgstr "Datos de ubicación locales"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:253
+#: ui/pages/dashboard/about/AboutPage.tsx:314
 msgid "Resolve visitor locations from a local MaxMind GeoLite2 database so analytics stay under your control."
 msgstr "Resuelve las ubicaciones de los visitantes desde una base de datos local MaxMind GeoLite2 para que las analíticas sigan bajo tu control."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:259
+#: ui/pages/dashboard/about/AboutPage.tsx:320
 msgid "Access And Security"
 msgstr "Acceso y seguridad"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:260
+#: ui/pages/dashboard/about/AboutPage.tsx:321
 msgid "Run with admin and editor roles, session controls, two-factor authentication, backup codes, and API keys."
 msgstr "Funciona con roles de administrador y editor, controles de sesión, autenticación en dos pasos, códigos de respaldo y claves API."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:266
+#: ui/pages/dashboard/about/AboutPage.tsx:327
 msgid "Operations And Integrations"
 msgstr "Operaciones e integraciones"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:267
+#: ui/pages/dashboard/about/AboutPage.tsx:328
 msgid "Use API keys, webhooks, import tools, and the built-in updater baseline to operate the service over time."
 msgstr "Usa claves API, webhooks, herramientas de importación y el actualizador integrado para operar el servicio con el tiempo."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:273
+#: ui/pages/dashboard/about/AboutPage.tsx:334
 msgid "Portable Self-Hosting"
 msgstr "Autoalojamiento portable"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:274
+#: ui/pages/dashboard/about/AboutPage.tsx:335
 msgid "Deploy on your own domain, keep runtime configuration in your own environment, and preserve user-owned content across updates."
 msgstr "Despliega en tu propio dominio, mantén la configuración en tu propio entorno y conserva el contenido de tus usuarios entre actualizaciones."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:294
+#: ui/pages/dashboard/about/AboutPage.tsx:355
 msgid "Use"
 msgstr "Usar"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:295
+#: ui/pages/dashboard/about/AboutPage.tsx:356
 msgid "Run PeakURL for any purpose, personal projects, business, education, or anything in between."
 msgstr "Usa PeakURL para cualquier propósito, proyectos personales, negocios, educación o cualquier cosa intermedia."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:301
+#: ui/pages/dashboard/about/AboutPage.tsx:362
 msgid "Study"
 msgstr "Estudiar"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:302
+#: ui/pages/dashboard/about/AboutPage.tsx:363
 msgid "Explore the source code, understand how it works, and modify it to suit your exact needs."
 msgstr "Explora el código fuente, entiende cómo funciona y modifícalo para adaptarlo exactamente a tus necesidades."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:308
+#: ui/pages/dashboard/about/AboutPage.tsx:369
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:157
 msgid "Share"
 msgstr "Compartir"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:309
+#: ui/pages/dashboard/about/AboutPage.tsx:370
 msgid "Redistribute copies freely so others can benefit from the same powerful link management platform."
 msgstr "Redistribuye copias libremente para que otros también se beneficien de esta potente plataforma de gestión de enlaces."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:315
+#: ui/pages/dashboard/about/AboutPage.tsx:376
 msgid "Improve"
 msgstr "Mejorar"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:316
+#: ui/pages/dashboard/about/AboutPage.tsx:377
 msgid "Enhance PeakURL and share your improvements, contributing back to the open-source community."
 msgstr "Mejora PeakURL y comparte tus cambios para contribuir de vuelta a la comunidad de código abierto."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:370
+#: ui/pages/dashboard/about/AboutPage.tsx:420
 msgid "PeakURL gives you a focused workspace for publishing short links, measuring engagement, and running branded link infrastructure on your own stack."
 msgstr "PeakURL te ofrece un espacio de trabajo centrado en publicar enlaces cortos, medir la interacción y operar infraestructura de enlaces con marca en tu propia plataforma."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:383
+#: ui/pages/dashboard/about/AboutPage.tsx:433
 msgid "Documentation"
 msgstr "Documentación"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:400
+#: ui/pages/dashboard/about/AboutPage.tsx:450
 msgid "View on GitHub"
 msgstr "Ver en GitHub"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:437
+#: ui/pages/dashboard/about/AboutPage.tsx:487
 msgid "Everything you need to publish short links, review traffic, and operate the service from one focused dashboard."
 msgstr "Todo lo que necesitas para publicar enlaces cortos, revisar el tráfico y operar el servicio desde un panel único y centrado."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:441
+#: ui/pages/dashboard/about/AboutPage.tsx:491
 msgid "What's Inside"
 msgstr "Qué incluye"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:456
+#: ui/pages/dashboard/about/AboutPage.tsx:506
 msgid "PeakURL is built to stay understandable in day-to-day use and dependable over time."
 msgstr "PeakURL está diseñado para seguir siendo comprensible en el uso diario y fiable a lo largo del tiempo."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:460
+#: ui/pages/dashboard/about/AboutPage.tsx:510
 msgid "Product Principles"
 msgstr "Principios del producto"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:469
+#: ui/pages/dashboard/about/AboutPage.tsx:519
 msgid "Clear By Default"
 msgstr "Claro por defecto"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:472
+#: ui/pages/dashboard/about/AboutPage.tsx:522
 msgid "The dashboard should stay direct and readable so routine work like publishing links, reviewing traffic, and managing users does not feel heavy."
 msgstr "El panel debe mantenerse directo y legible para que el trabajo rutinario, como publicar enlaces, revisar tráfico y gestionar usuarios, no se sienta pesado."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:482
+#: ui/pages/dashboard/about/AboutPage.tsx:532
 msgid "Portable To Run"
 msgstr "Portable para ejecutar"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:485
+#: ui/pages/dashboard/about/AboutPage.tsx:535
 msgid "The application should install cleanly on common PHP and MySQL hosting without depending on a managed SaaS control plane."
 msgstr "La aplicación debe poder instalarse limpiamente en alojamientos comunes con PHP y MySQL sin depender de un plano de control SaaS gestionado."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:495
+#: ui/pages/dashboard/about/AboutPage.tsx:545
 msgid "Open And Inspectable"
 msgstr "Abierto e inspeccionable"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:498
+#: ui/pages/dashboard/about/AboutPage.tsx:548
 msgid "The codebase stays auditable and adaptable so operators can understand what they run, extend it carefully, and keep long-term control."
 msgstr "El código sigue siendo auditable y adaptable para que los operadores entiendan lo que ejecutan, lo amplíen con cuidado y mantengan el control a largo plazo."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:511
+#: ui/pages/dashboard/about/AboutPage.tsx:561
 msgid "PeakURL is released under the MIT License so it can stay practical to adopt, inspect, modify, and distribute."
 msgstr "PeakURL se publica bajo la Licencia MIT para que siga siendo práctico de adoptar, inspeccionar, modificar y distribuir."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:515
+#: ui/pages/dashboard/about/AboutPage.tsx:565
 msgid "Open Source Terms"
 msgstr "Términos de código abierto"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:529
+#: ui/pages/dashboard/about/AboutPage.tsx:579
 msgid "Freedom to"
 msgstr "Libertad para"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:543
-msgid "Support PeakURL"
-msgstr "Apoya a PeakURL"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:546
-msgid "If PeakURL is useful to you, help keep it practical and actively maintained."
-msgstr "Si PeakURL te resulta útil, ayuda a que siga siendo práctico y mantenido activamente."
-
-#: ui/pages/dashboard/about/AboutPage.tsx:551
-msgid "Sponsorships and small contributions help fund releases, documentation, infrastructure, and the maintenance work that keeps the project moving."
-msgstr "Los patrocinios y pequeñas contribuciones ayudan a financiar versiones, documentación, infraestructura y el trabajo de mantenimiento que mantiene el proyecto en marcha."
-
-#: ui/pages/dashboard/about/AboutPage.tsx:564
-msgid "Sponsor PeakURL"
-msgstr "Patrocina PeakURL"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:587
-msgid "A quick overview of the installation you are running right now."
-msgstr "Un resumen rápido de la instalación que estás ejecutando ahora mismo."
-
-#: ui/pages/dashboard/about/AboutPage.tsx:591
-msgid "Current Installation"
-msgstr "Instalación actual"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:622
-msgid "GeoIP"
-msgstr "GeoIP"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:636
+#: ui/pages/dashboard/about/AboutPage.tsx:602
 msgid "Self-hosted link management with clear ownership and a focused dashboard."
 msgstr "Gestión de enlaces autoalojada con propiedad clara y un panel centrado."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:647
+#: ui/pages/dashboard/about/AboutPage.tsx:613
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
 msgid "Website"
 msgstr "Sitio web"
@@ -5944,10 +5740,10 @@ msgstr "Rango de tiempo del panel"
 
 #: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:54
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:99
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:145
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:165
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:189
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:324
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:146
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:166
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:190
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:325
 msgid "Top Countries"
 msgstr "Países principales"
 
@@ -6265,70 +6061,70 @@ msgstr "Fecha de caducidad (opcional)"
 msgid "No link data available"
 msgstr "No hay datos del enlace disponibles"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:151
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:152
 msgid "Loading location data..."
 msgstr "Cargando datos de ubicación..."
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:171
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:172
 msgid "Failed to load location data"
 msgstr "No se pudieron cargar los datos de ubicación"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:195
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:196
 msgid "No location data available yet"
 msgstr "Aún no hay datos de ubicación disponibles"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:198
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:199
 msgid "Location tracking will show here once clicks are recorded with a configured GeoLite2 City database"
 msgstr "El seguimiento de ubicación aparecerá aquí cuando se registren clics con una base de datos GeoLite2 City configurada"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:210
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:211
 msgid "Note:"
 msgstr "Nota:"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:215
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:216
 msgid "Local and private-network clicks do not include location data."
 msgstr "Los clics de redes locales o privadas no incluyen datos de ubicación."
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:222
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:223
 msgid "Store the GeoLite2 City database here:"
 msgstr "Guarda aquí la base de datos GeoLite2 City:"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:229
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:230
 msgid "VPN users may show the location of the VPN server."
 msgstr "Los usuarios de VPN pueden mostrar la ubicación del servidor VPN."
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:242
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:371
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:243
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:372
 msgid "Top Cities"
 msgstr "Ciudades principales"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:248
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:249
 msgid "No city data available yet"
 msgstr "Aún no hay datos de ciudad disponibles"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:268
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:269
 msgid "Total Locations"
 msgstr "Ubicaciones totales"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:277
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:278
 msgid "Countries"
 msgstr "Países"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:291
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:292
 msgid "Geographic Distribution"
 msgstr "Distribución geográfica"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:399
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:400
 #: ui/pages/dashboard/links/_components/StatsDrawer/ClickHistory.tsx:262
 #: ui/pages/dashboard/links/_components/StatsDrawer/BestDay.tsx:63
 msgid "Hide details"
 msgstr "Ocultar detalles"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:401
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:402
 msgid "View all %s cities"
 msgstr "Ver las %s ciudades"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:422
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:423
 msgid "All cities"
 msgstr "Todas las ciudades"
 

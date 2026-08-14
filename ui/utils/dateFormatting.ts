@@ -21,7 +21,7 @@ const DEFAULT_TIMEZONE = "UTC";
  * Supported relative time units.
  */
 type RelativeTimeUnit =
-	| "second"
+	| "second" //
 	| "minute"
 	| "hour"
 	| "day"

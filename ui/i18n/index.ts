@@ -153,8 +153,7 @@ export const translatePlural = <Single extends string, Plural extends string>(
 	count: number
 ): Single | Plural =>
 	wpTranslatePlural(single, plural, count, TEXT_DOMAIN) as unknown as
-		| Single
-		| Plural;
+		Single | Plural;
 
 export {
 	sprintf,

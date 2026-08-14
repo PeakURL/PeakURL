@@ -170,7 +170,7 @@ export type PulseDotSize = "xs" | "sm" | "md" | "lg";
  * Supported progress-bar color themes.
  */
 export type ProgressColor =
-	| "blue"
+	| "blue" //
 	| "green"
 	| "red"
 	| "yellow"

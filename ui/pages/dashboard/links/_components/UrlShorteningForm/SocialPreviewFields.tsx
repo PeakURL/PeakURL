@@ -90,7 +90,7 @@ const SocialPreviewFields = ({
 					/>
 					<div className="flex flex-col gap-2">
 						<Input
-							label={__("External Image URL")}
+							label={__("Image from URL")}
 							type="url"
 							value={socialImageUrl}
 							onChange={(event) =>
@@ -98,9 +98,13 @@ const SocialPreviewFields = ({
 							}
 							placeholder="https://example.com/image.jpg"
 						/>
-						<p className="text-sm text-muted text-center">
-							{__("or")}
-						</p>
+						<div className="links-form-separator">
+							<div className="links-form-separator-line"></div>
+							<span className="links-form-separator-text">
+								{__("or")}
+							</span>
+							<div className="links-form-separator-line"></div>
+						</div>
 						<label
 							htmlFor="links-social-preview-image"
 							className="links-form-section-label !mb-0"
@@ -158,7 +162,7 @@ const SocialPreviewFields = ({
 							>
 								{socialImagePreviewUrl
 									? __("Replace Image")
-									: __("Choose Image")}
+									: __("Upload Image")}
 							</Button>
 							{socialImageFile ? (
 								<span className="text-sm font-medium text-heading truncate max-w-[200px]">

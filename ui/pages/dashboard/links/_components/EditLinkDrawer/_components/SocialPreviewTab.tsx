@@ -62,7 +62,7 @@ function SocialPreviewTab({
 			</div>
 			<div className="links-edit-drawer-image-field">
 				<Input
-					label={__("External Image URL")}
+					label={__("Image from URL")}
 					type="url"
 					value={socialImageUrl}
 					onChange={(event) =>
@@ -71,7 +71,13 @@ function SocialPreviewTab({
 					placeholder="https://example.com/image.jpg"
 					className="form-control-surface-alt form-control-compact form-control-strong-focus"
 				/>
-				<p className="text-sm text-muted text-center">{__("or")}</p>
+				<div className="links-edit-drawer-separator">
+					<div className="links-edit-drawer-separator-line"></div>
+					<span className="links-edit-drawer-separator-text">
+						{__("or")}
+					</span>
+					<div className="links-edit-drawer-separator-line"></div>
+				</div>
 				<label
 					htmlFor="links-edit-social-image"
 					className="links-modal-field-label"
@@ -93,8 +99,8 @@ function SocialPreviewTab({
 						className="links-edit-drawer-action links-edit-drawer-action-secondary"
 					>
 						{socialPreviewImageSource
-							? __("Replace Preview Image")
-							: __("Choose Preview Image")}
+							? __("Replace Image")
+							: __("Upload Image")}
 					</button>
 					{socialImageFile ? (
 						<span className="links-edit-drawer-filename">

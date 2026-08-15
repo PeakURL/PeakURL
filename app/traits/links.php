@@ -326,12 +326,32 @@ trait LinksTrait {
 			$payload['password'] ?? '',
 		);
 		$social_preview    = $this->normalize_link_social_preview( $payload );
-		$social_image_path = $this->save_link_social_preview_image(
-			$id,
-			$request->get_file( 'socialImage' ),
-			false,
-			'',
+		$social_image_file = $request->get_file( 'socialImage' );
+		$social_image_url  = $this->normalize_link_social_image_url(
+			$payload['socialImageUrl'] ?? null,
 		);
+		$has_social_upload = $this->has_link_upload( $social_image_file );
+
+		if ( $has_social_upload && null !== $social_image_url ) {
+			throw new ApiException(
+				__(
+					'Provide either socialImage or socialImageUrl, not both.',
+					'peakurl',
+				),
+				422,
+			);
+		}
+
+		$social_image_path = null;
+
+		if ( $has_social_upload ) {
+			$social_image_path = $this->save_link_social_preview_image(
+				$id,
+				$social_image_file,
+				false,
+				'',
+			);
+		}
 
 		try {
 			$this->db->insert(
@@ -346,6 +366,7 @@ trait LinksTrait {
 					'social_title'       => $social_preview['title'],
 					'social_description' => $social_preview['description'],
 					'social_image_path'  => $social_image_path,
+					'social_image_url'   => $social_image_url,
 					'password_value'     => '' !== $password
 						? Secrets::hash_link_password( $password )
 						: null,
@@ -466,6 +487,23 @@ trait LinksTrait {
 		$values['columns'] = $columns;
 
 		return $values;
+	}
+
+	/**
+	 * Normalize an external per-link social preview image URL.
+	 *
+	 * @param mixed $value Submitted external image URL.
+	 * @return string|null Normalized URL or null when empty.
+	 *
+	 * @throws ApiException When the submitted URL is invalid.
+	 * @since 1.2.0
+	 */
+	private function normalize_link_social_image_url( $value ): ?string {
+		try {
+			return $this->social_preview_service->normalize_image_url( $value );
+		} catch ( \RuntimeException $exception ) {
+			throw new ApiException( $exception->getMessage(), 422 );
+		}
 	}
 
 	/**
@@ -1041,19 +1079,72 @@ trait LinksTrait {
 			$params[ $column ] = $social_preview[ $value_key ] ?? null;
 		}
 
-		$social_image_file = $request->get_file( 'socialImage' );
+		$social_image_file       = $request->get_file( 'socialImage' );
+		$has_social_image_upload = $this->has_link_upload( $social_image_file );
+		$has_social_image_url    = array_key_exists( 'socialImageUrl', $payload );
+		$remove_social_image     = ! empty( $payload['removeSocialImage'] );
+		$delete_social_image     = '';
+
+		$social_image_url = $has_social_image_url
+			? $this->normalize_link_social_image_url(
+				$payload['socialImageUrl'],
+			)
+			: null;
 
 		if (
-			$this->has_link_upload( $social_image_file ) ||
-			! empty( $payload['removeSocialImage'] )
+			$has_social_image_upload &&
+			$has_social_image_url &&
+			null !== $social_image_url
 		) {
+			throw new ApiException(
+				__(
+					'Provide either socialImage or socialImageUrl, not both.',
+					'peakurl',
+				),
+				422,
+			);
+		}
+
+		if ( $remove_social_image ) {
+			$updates[]                   = 'social_image_path = :social_image_path';
+			$params['social_image_path'] = $this->save_link_social_preview_image(
+				$id,
+				null,
+				true,
+				(string) ( $existing['social_image_path'] ?? '' ),
+			);
+
+			$updates[]                  = 'social_image_url = :social_image_url';
+			$params['social_image_url'] = null;
+		} elseif ( $has_social_image_upload ) {
 			$updates[]                   = 'social_image_path = :social_image_path';
 			$params['social_image_path'] = $this->save_link_social_preview_image(
 				$id,
 				$social_image_file,
-				! empty( $payload['removeSocialImage'] ),
+				false,
 				(string) ( $existing['social_image_path'] ?? '' ),
 			);
+
+			// An uploaded image replaces any previously configured external URL.
+			$updates[]                  = 'social_image_url = :social_image_url';
+			$params['social_image_url'] = null;
+		} elseif ( $has_social_image_url ) {
+			$updates[]                  = 'social_image_url = :social_image_url';
+			$params['social_image_url'] = $social_image_url;
+
+			/*
+			 * A non-empty external image replaces a locally uploaded image.
+			 * Clear the database path immediately and remove the file after the
+			 * database update succeeds.
+			 */
+			if ( null !== $social_image_url ) {
+				$delete_social_image = trim(
+					(string) ( $existing['social_image_path'] ?? '' ),
+				);
+
+				$updates[]                   = 'social_image_path = :social_image_path';
+				$params['social_image_path'] = null;
+			}
 		}
 
 		$clear_password = ! empty( $payload['clearPassword'] );
@@ -1105,6 +1196,12 @@ trait LinksTrait {
 			'UPDATE urls SET ' . implode( ', ', $updates ) . ' WHERE id = :id',
 			$params,
 		);
+
+		if ( '' !== $delete_social_image ) {
+			$this->social_preview_service->delete_link_image(
+				$delete_social_image,
+			);
+		}
 
 		$updated_row = $this->find_url_row( $id );
 

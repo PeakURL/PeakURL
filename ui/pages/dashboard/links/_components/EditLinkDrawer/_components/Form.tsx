@@ -37,6 +37,7 @@ function Form({ open, setOpen, link }: FormProps) {
 		handleClose,
 		handleRemoveSocialImage,
 		handleSocialImageChange,
+		handleSocialImageUrlChange,
 		handleSubmit,
 		hasExistingPassword,
 		isLoading,
@@ -55,6 +56,7 @@ function Form({ open, setOpen, link }: FormProps) {
 		showSocialImageRemove,
 		socialDescription,
 		socialImageFile,
+		socialImageUrl,
 		socialPreviewUrl,
 		socialTitle,
 		status,
@@ -147,6 +149,12 @@ function Form({ open, setOpen, link }: FormProps) {
 													}
 													socialImageFile={
 														socialImageFile
+													}
+													socialImageUrl={
+														socialImageUrl
+													}
+													onSocialImageUrlChange={
+														handleSocialImageUrlChange
 													}
 													socialPreviewUrl={
 														socialPreviewUrl

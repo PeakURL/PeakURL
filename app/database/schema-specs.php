@@ -194,6 +194,10 @@ class SchemaSpecs {
 					'definition' => 'TEXT DEFAULT NULL',
 				),
 				array(
+					'name'       => 'social_image_url',
+					'definition' => 'TEXT DEFAULT NULL',
+				),
+				array(
 					'name'       => 'password_value',
 					'definition' => 'VARCHAR(255) DEFAULT NULL',
 				),

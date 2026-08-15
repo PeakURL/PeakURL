@@ -33,6 +33,9 @@ export function useEditLinkForm(
 		() => link.socialPreview?.description || ""
 	);
 	const [socialImageFile, setSocialImageFile] = useState<File | null>(null);
+	const [socialImageUrl, setSocialImageUrl] = useState(
+		() => link.socialPreview?.externalImageUrl || ""
+	);
 	const [socialImagePreviewUrl, setSocialImagePreviewUrl] = useState("");
 	const [removeSocialImage, setRemoveSocialImage] = useState(false);
 	const [status, setStatus] = useState<LinkStatus>(
@@ -58,7 +61,9 @@ export function useEditLinkForm(
 	const storedSocialImageUrl = link.socialPreview?.imageUrl || "";
 	const socialPreviewUrl = removeSocialImage
 		? ""
-		: socialImagePreviewUrl || storedSocialImageUrl;
+		: socialImagePreviewUrl ||
+			socialImageUrl.trim() ||
+			storedSocialImageUrl;
 	const showSocialImageRemove =
 		Boolean(socialImageFile) ||
 		(!removeSocialImage && Boolean(storedSocialImageUrl));
@@ -95,6 +100,21 @@ export function useEditLinkForm(
 			isSocialPreviewImageFile(nextFile) ? nextFile : null
 		);
 		setRemoveSocialImage(false);
+		if (isSocialPreviewImageFile(nextFile)) {
+			setSocialImageUrl("");
+		}
+	};
+
+	const handleSocialImageUrlChange = (value: string) => {
+		setSocialImageUrl(value);
+		setRemoveSocialImage(false);
+
+		if (value.trim()) {
+			updateSocialImagePreview(null);
+			if (fileInputRef.current) {
+				fileInputRef.current.value = "";
+			}
+		}
 	};
 
 	const handleRemoveSocialImage = () => {
@@ -140,6 +160,33 @@ export function useEditLinkForm(
 			return;
 		}
 
+		const trimmedSocialImageUrl = socialImageUrl.trim();
+		const normalizedSocialImageUrl = trimmedSocialImageUrl
+			? sanitizeUrl(trimmedSocialImageUrl)
+			: "";
+
+		if (
+			trimmedSocialImageUrl &&
+			(!normalizedSocialImageUrl ||
+				isRelativeUrl(normalizedSocialImageUrl))
+		) {
+			setError(
+				__(
+					"Please enter a valid social image URL (must include http:// or https://)"
+				)
+			);
+			return;
+		}
+
+		if (socialImageFile && normalizedSocialImageUrl) {
+			setError(
+				__(
+					"Choose a preview image file or enter an image URL, not both."
+				)
+			);
+			return;
+		}
+
 		try {
 			const payload: UpdateUrlPayload = {
 				id: link.id,
@@ -151,6 +198,10 @@ export function useEditLinkForm(
 				socialImageFile,
 				removeSocialImage,
 			};
+
+			if (!socialImageFile && !removeSocialImage) {
+				payload.socialImageUrl = normalizedSocialImageUrl || null;
+			}
 
 			if (trimmedDestinationUrl !== link.destinationUrl) {
 				payload.destinationUrl = normalizedDestinationUrl;
@@ -179,6 +230,7 @@ export function useEditLinkForm(
 		destinationUrl,
 		handleRemoveSocialImage,
 		handleSocialImageChange,
+		handleSocialImageUrlChange,
 		handleSubmit,
 		hasExistingPassword: Boolean(link.hasPassword),
 		isLoading,
@@ -197,6 +249,7 @@ export function useEditLinkForm(
 		showSocialImageRemove,
 		socialDescription,
 		socialImageFile,
+		socialImageUrl,
 		socialPreviewUrl,
 		socialTitle,
 		status,

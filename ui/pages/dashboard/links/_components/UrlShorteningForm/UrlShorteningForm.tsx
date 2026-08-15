@@ -41,6 +41,7 @@ const UrlShorteningForm = () => {
 	const [socialTitle, setSocialTitle] = useState("");
 	const [socialDescription, setSocialDescription] = useState("");
 	const [socialImageFile, setSocialImageFile] = useState<File | null>(null);
+	const [socialImageUrl, setSocialImageUrl] = useState("");
 	const [socialImagePreviewUrl, setSocialImagePreviewUrl] = useState("");
 	const socialImagePreviewRef = useRef("");
 
@@ -63,10 +64,20 @@ const UrlShorteningForm = () => {
 
 		if (file) {
 			socialImagePreviewRef.current = URL.createObjectURL(file);
+			setSocialImageUrl("");
 		}
 
 		setSocialImageFile(file);
 		setSocialImagePreviewUrl(socialImagePreviewRef.current);
+	};
+
+	const updateSocialImageUrl = (value: string) => {
+		setSocialImageUrl(value);
+
+		if (value.trim()) {
+			updateSocialImageFile(null);
+			setSocialImageUrl(value);
+		}
 	};
 
 	const applyUtmParams = (url: string) => {
@@ -104,6 +115,33 @@ const UrlShorteningForm = () => {
 			return;
 		}
 
+		const trimmedSocialImageUrl = socialImageUrl.trim();
+		const normalizedSocialImageUrl = trimmedSocialImageUrl
+			? sanitizeUrl(trimmedSocialImageUrl)
+			: "";
+
+		if (
+			trimmedSocialImageUrl &&
+			(!normalizedSocialImageUrl ||
+				isRelativeUrl(normalizedSocialImageUrl))
+		) {
+			setError(
+				__(
+					"Please enter a valid social image URL (must include http:// or https://)"
+				)
+			);
+			return;
+		}
+
+		if (socialImageFile && normalizedSocialImageUrl) {
+			setError(
+				__(
+					"Choose a preview image file or enter an image URL, not both."
+				)
+			);
+			return;
+		}
+
 		const normalizedDestinationUrl = sanitizeUrl(destinationUrl);
 
 		if (
@@ -128,6 +166,7 @@ const UrlShorteningForm = () => {
 				socialTitle: socialTitle.trim() || undefined,
 				socialDescription: socialDescription.trim() || undefined,
 				socialImageFile,
+				socialImageUrl: normalizedSocialImageUrl || undefined,
 			};
 
 			// Add password if provided
@@ -171,6 +210,7 @@ const UrlShorteningForm = () => {
 			setSocialTitle("");
 			setSocialDescription("");
 			updateSocialImageFile(null);
+			setSocialImageUrl("");
 			setShowAdvanced(false);
 
 			// Clear success message after 5 seconds
@@ -256,6 +296,8 @@ const UrlShorteningForm = () => {
 						socialImageFile={socialImageFile}
 						setSocialImageFile={updateSocialImageFile}
 						socialImagePreviewUrl={socialImagePreviewUrl}
+						socialImageUrl={socialImageUrl}
+						setSocialImageUrl={updateSocialImageUrl}
 					/>
 				)}
 			</form>

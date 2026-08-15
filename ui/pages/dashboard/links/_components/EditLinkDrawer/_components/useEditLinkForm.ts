@@ -66,6 +66,7 @@ export function useEditLinkForm(
 			storedSocialImageUrl;
 	const showSocialImageRemove =
 		Boolean(socialImageFile) ||
+		Boolean(socialImageUrl.trim()) ||
 		(!removeSocialImage && Boolean(storedSocialImageUrl));
 
 	useEffect(
@@ -121,6 +122,7 @@ export function useEditLinkForm(
 		const hasPendingUpload = Boolean(socialImageFile);
 
 		updateSocialImagePreview(null);
+		setSocialImageUrl("");
 		setRemoveSocialImage(
 			!hasPendingUpload && Boolean(storedSocialImageUrl)
 		);

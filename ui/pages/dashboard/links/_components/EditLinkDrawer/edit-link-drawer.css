@@ -173,9 +173,12 @@
 		@apply inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium transition-all disabled:cursor-not-allowed disabled:opacity-50;
 	}
 
-	.links-edit-drawer-action-secondary,
+	.links-edit-drawer-action-secondary {
+		@apply border border-stroke bg-surface-alt text-heading hover:bg-surface hover:shadow-sm;
+	}
+
 	.links-edit-drawer-footer-button-secondary {
-		@apply border border-stroke bg-surface text-heading hover:bg-surface-alt;
+		@apply border border-stroke bg-surface text-heading hover:bg-surface-alt hover:shadow-sm;
 	}
 
 	.links-edit-drawer-footer-button-primary {

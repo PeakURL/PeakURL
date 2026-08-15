@@ -162,11 +162,8 @@ export function sanitizeImageUrl(
 		const url = new URL(normalizedValue);
 		const trustedOrigins = getTrustedImageOrigins(currentOrigin);
 
-		/* Validate against trusted origins for http/https. */
-		if (
-			(url.protocol === "http:" || url.protocol === "https:") &&
-			isTrustedImageOrigin(trustedOrigins, url.origin)
-		) {
+		/* Allow any valid http/https URL for external image support. */
+		if (url.protocol === "http:" || url.protocol === "https:") {
 			return toImageSource(url.toString());
 		}
 

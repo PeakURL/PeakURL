@@ -4,6 +4,7 @@ import { Image, ImageOff, Trash2, Type } from "lucide-react";
 import { Button, Input, TextArea } from "@/components";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
+import { sanitizeImageUrl } from "@/utils";
 
 import type { SocialPreviewFieldsProps } from "../types";
 
@@ -20,6 +21,8 @@ const SocialPreviewFields = ({
 }: SocialPreviewFieldsProps) => {
 	const direction = isDocumentRtl() ? "rtl" : "ltr";
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
+	const activePreviewUrl =
+		socialImagePreviewUrl || sanitizeImageUrl(socialImageUrl.trim());
 
 	const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const nextFile = event.target.files?.[0] || null;
@@ -37,6 +40,7 @@ const SocialPreviewFields = ({
 
 	const handleClearImage = () => {
 		setSocialImageFile(null);
+		setSocialImageUrl("");
 
 		if (fileInputRef.current) {
 			fileInputRef.current.value = "";
@@ -105,15 +109,38 @@ const SocialPreviewFields = ({
 							</span>
 							<div className="links-form-separator-line"></div>
 						</div>
-						<label
-							htmlFor="links-social-preview-image"
-							className="links-form-section-label !mb-0"
-						>
+						<input
+							ref={fileInputRef}
+							id="links-social-preview-image"
+							type="file"
+							accept="image/png,image/jpeg,image/webp"
+							onChange={handleImageChange}
+							className="sr-only"
+						/>
+						<div className="flex items-center gap-3">
+							<Button
+								type="button"
+								size="sm"
+								variant="secondary"
+								onClick={() => fileInputRef.current?.click()}
+								className="w-full"
+							>
+								{activePreviewUrl
+									? __("Replace Image")
+									: __("Upload Image")}
+							</Button>
+							{socialImageFile ? (
+								<span className="text-sm font-medium text-heading truncate max-w-[200px]">
+									{socialImageFile.name}
+								</span>
+							) : null}
+						</div>
+						<label className="links-form-section-label !mb-0 mt-4">
 							{__("Preview Image")}
 						</label>
 
 						<div className="links-form-social-preview-card mt-0 shadow-sm">
-							{socialImagePreviewUrl ? (
+							{activePreviewUrl ? (
 								<div className="links-form-social-preview-media">
 									<button
 										type="button"
@@ -127,7 +154,7 @@ const SocialPreviewFields = ({
 										/>
 									</button>
 									<img
-										src={socialImagePreviewUrl}
+										src={activePreviewUrl}
 										alt={__("Social preview image")}
 										className="links-form-social-preview-image"
 									/>
@@ -143,32 +170,6 @@ const SocialPreviewFields = ({
 									</span>
 								</div>
 							)}
-						</div>
-
-						<input
-							ref={fileInputRef}
-							id="links-social-preview-image"
-							type="file"
-							accept="image/png,image/jpeg,image/webp"
-							onChange={handleImageChange}
-							className="sr-only"
-						/>
-						<div className="flex items-center gap-3">
-							<Button
-								type="button"
-								size="sm"
-								variant="outline"
-								onClick={() => fileInputRef.current?.click()}
-							>
-								{socialImagePreviewUrl
-									? __("Replace Image")
-									: __("Upload Image")}
-							</Button>
-							{socialImageFile ? (
-								<span className="text-sm font-medium text-heading truncate max-w-[200px]">
-									{socialImageFile.name}
-								</span>
-							) : null}
 						</div>
 					</div>
 				</div>

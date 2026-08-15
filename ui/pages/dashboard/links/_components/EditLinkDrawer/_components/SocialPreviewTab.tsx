@@ -78,12 +78,6 @@ function SocialPreviewTab({
 					</span>
 					<div className="links-edit-drawer-separator-line"></div>
 				</div>
-				<label
-					htmlFor="links-edit-social-image"
-					className="links-modal-field-label"
-				>
-					{__("Preview Image")}
-				</label>
 				<input
 					ref={fileInputRef}
 					id="links-edit-social-image"
@@ -96,18 +90,21 @@ function SocialPreviewTab({
 					<button
 						type="button"
 						onClick={() => fileInputRef.current?.click()}
-						className="links-edit-drawer-action links-edit-drawer-action-secondary"
+						className="links-edit-drawer-action links-edit-drawer-action-secondary w-full"
 					>
 						{socialPreviewImageSource
 							? __("Replace Image")
 							: __("Upload Image")}
 					</button>
 					{socialImageFile ? (
-						<span className="links-edit-drawer-filename">
+						<span className="links-edit-drawer-filename mt-2">
 							{socialImageFile.name}
 						</span>
 					) : null}
 				</div>
+				<label className="links-modal-field-label mt-4">
+					{__("Preview Image")}
+				</label>
 				<div className="links-edit-drawer-preview-card">
 					{socialPreviewImageSource ? (
 						<div className="links-edit-drawer-preview-media">

@@ -276,9 +276,12 @@ export const systemApi = baseApi.injectEndpoints({
 						};
 					}
 					return {
-						error: { 
-							status: "FETCH_ERROR", 
-							error: err instanceof Error ? err.message : "An unknown error occurred" 
+						error: {
+							status: "FETCH_ERROR",
+							error:
+								err instanceof Error
+									? err.message
+									: "An unknown error occurred",
 						},
 					};
 				}

@@ -12,9 +12,11 @@ interface SocialPreviewTabProps {
 	socialDescription: string;
 	setSocialDescription: (value: string) => void;
 	socialImageFile: File | null;
+	socialImageUrl: string;
 	socialPreviewUrl: string;
 	showSocialImageRemove: boolean;
 	onSocialImageChange: (event: ChangeEvent<HTMLInputElement>) => void;
+	onSocialImageUrlChange: (value: string) => void;
 	onRemoveSocialImage: () => void;
 }
 
@@ -25,9 +27,11 @@ function SocialPreviewTab({
 	socialDescription,
 	setSocialDescription,
 	socialImageFile,
+	socialImageUrl,
 	socialPreviewUrl,
 	showSocialImageRemove,
 	onSocialImageChange,
+	onSocialImageUrlChange,
 	onRemoveSocialImage,
 }: SocialPreviewTabProps) {
 	const socialPreviewImageSource = sanitizeImageUrl(socialPreviewUrl);
@@ -57,12 +61,23 @@ function SocialPreviewTab({
 				/>
 			</div>
 			<div className="links-edit-drawer-image-field">
-				<label
-					htmlFor="links-edit-social-image"
-					className="links-modal-field-label"
-				>
-					{__("Preview Image")}
-				</label>
+				<Input
+					label={__("Image from URL")}
+					type="url"
+					value={socialImageUrl}
+					onChange={(event) =>
+						onSocialImageUrlChange(event.target.value)
+					}
+					placeholder="https://example.com/image.jpg"
+					className="form-control-surface-alt form-control-compact form-control-strong-focus"
+				/>
+				<div className="links-edit-drawer-separator">
+					<div className="links-edit-drawer-separator-line"></div>
+					<span className="links-edit-drawer-separator-text">
+						{__("or")}
+					</span>
+					<div className="links-edit-drawer-separator-line"></div>
+				</div>
 				<input
 					ref={fileInputRef}
 					id="links-edit-social-image"
@@ -75,18 +90,21 @@ function SocialPreviewTab({
 					<button
 						type="button"
 						onClick={() => fileInputRef.current?.click()}
-						className="links-edit-drawer-action links-edit-drawer-action-secondary"
+						className="links-edit-drawer-action links-edit-drawer-action-secondary w-full"
 					>
 						{socialPreviewImageSource
-							? __("Replace Preview Image")
-							: __("Choose Preview Image")}
+							? __("Replace Image")
+							: __("Upload Image")}
 					</button>
 					{socialImageFile ? (
-						<span className="links-edit-drawer-filename">
+						<span className="links-edit-drawer-filename mt-2">
 							{socialImageFile.name}
 						</span>
 					) : null}
 				</div>
+				<label className="links-modal-field-label mt-4">
+					{__("Preview Image")}
+				</label>
 				<div className="links-edit-drawer-preview-card">
 					{socialPreviewImageSource ? (
 						<div className="links-edit-drawer-preview-media">

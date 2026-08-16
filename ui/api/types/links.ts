@@ -28,6 +28,7 @@ export interface LinkRecord {
 		title?: string | null;
 		description?: string | null;
 		imageUrl?: string | null;
+		externalImageUrl?: string | null;
 	} | null;
 	status?: LinkStatus | null;
 	clicks?: number | null;
@@ -78,6 +79,7 @@ export interface UpdateUrlPayload {
 	socialTitle?: string;
 	socialDescription?: string;
 	socialImageFile?: File | null;
+	socialImageUrl?: string | null;
 	removeSocialImage?: boolean;
 	clearPassword?: boolean;
 	password?: string;
@@ -93,6 +95,7 @@ export interface CreateUrlPayload {
 	socialTitle?: string;
 	socialDescription?: string;
 	socialImageFile?: File | null;
+	socialImageUrl?: string | null;
 	password?: string;
 	expiresAt?: string | null;
 }

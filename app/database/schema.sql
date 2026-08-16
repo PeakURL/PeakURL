@@ -78,6 +78,7 @@ CREATE TABLE IF NOT EXISTS urls (
     social_title VARCHAR(191) DEFAULT NULL,
     social_description TEXT DEFAULT NULL,
     social_image_path TEXT DEFAULT NULL,
+    social_image_url TEXT DEFAULT NULL,
     password_value VARCHAR(255) DEFAULT NULL,
     expires_at DATETIME DEFAULT NULL,
     status VARCHAR(32) NOT NULL DEFAULT 'active',

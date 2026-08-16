@@ -45,6 +45,9 @@ class SocialPreview {
 	/** @var int Maximum per-link preview description length. */
 	private const DESCRIPTION_LIMIT = 300;
 
+	/** @var int Maximum external social preview image URL length. */
+	private const IMAGE_URL_LIMIT = 2048;
+
 	/**
 	 * Settings API helper.
 	 *
@@ -228,6 +231,75 @@ class SocialPreview {
 	}
 
 	/**
+	 * Normalize and validate an external social preview image URL.
+	 *
+	 * PeakURL emits this URL directly in Open Graph metadata and never fetches
+	 * the remote resource. Requiring HTTPS and rejecting embedded credentials
+	 * keeps the value suitable for public metadata without introducing a
+	 * server-side request or leaking credentials.
+	 *
+	 * @param mixed $value Submitted external image URL.
+	 * @return string|null Normalized URL or null when empty.
+	 *
+	 * @throws \RuntimeException When the submitted URL is invalid.
+	 * @since 1.2.0
+	 */
+	public function normalize_image_url( $value ): ?string {
+		if ( null === $value ) {
+			return null;
+		}
+
+		if ( ! is_string( $value ) ) {
+			throw new \RuntimeException(
+				__( 'Enter a valid social preview image URL.', 'peakurl' ),
+			);
+		}
+
+		$url = trim( $value );
+
+		if ( '' === $url ) {
+			return null;
+		}
+
+		if ( strlen( $url ) > self::IMAGE_URL_LIMIT ) {
+			throw new \RuntimeException(
+				__( 'The social preview image URL is too long.', 'peakurl' ),
+			);
+		}
+
+		if ( false === filter_var( $url, FILTER_VALIDATE_URL ) ) {
+			throw new \RuntimeException(
+				__( 'Enter a valid social preview image URL.', 'peakurl' ),
+			);
+		}
+
+		$parts = parse_url( $url );
+
+		if ( ! is_array( $parts ) ) {
+			throw new \RuntimeException(
+				__( 'Enter a valid social preview image URL.', 'peakurl' ),
+			);
+		}
+
+		$scheme = strtolower( (string) ( $parts['scheme'] ?? '' ) );
+		$host   = trim( (string) ( $parts['host'] ?? '' ) );
+
+		if ( 'https' !== $scheme || '' === $host ) {
+			throw new \RuntimeException(
+				__( 'The social preview image URL must use HTTPS.', 'peakurl' ),
+			);
+		}
+
+		if ( isset( $parts['user'] ) || isset( $parts['pass'] ) ) {
+			throw new \RuntimeException(
+				__( 'The social preview image URL cannot contain credentials.', 'peakurl' ),
+			);
+		}
+
+		return $url;
+	}
+
+	/**
 	 * Return a public URL for a stored per-link social preview image.
 	 *
 	 * @param string|null $path Stored relative image path.
@@ -260,15 +332,21 @@ class SocialPreview {
 		string $site_name,
 		string $site_tagline
 	): array {
-		$link_title    = trim( (string) ( $url['social_title'] ?? '' ) );
-		$stored_title  = trim( (string) ( $url['title'] ?? '' ) );
-		$destination   = trim( (string) ( $url['destination_url'] ?? '' ) );
-		$description   = trim( (string) ( $url['social_description'] ?? '' ) );
-		$link_image    = $this->get_link_image_url(
+		$link_title     = trim( (string) ( $url['social_title'] ?? '' ) );
+		$stored_title   = trim( (string) ( $url['title'] ?? '' ) );
+		$destination    = trim( (string) ( $url['destination_url'] ?? '' ) );
+		$description    = trim( (string) ( $url['social_description'] ?? '' ) );
+		$external_image = trim(
+			(string) ( $url['social_image_url'] ?? '' ),
+		);
+		$local_image    = $this->get_link_image_url(
 			(string) ( $url['social_image_path'] ?? '' ),
 		);
-		$global_image  = $this->get_global_image_url();
-		$display_title = '' !== $link_title
+		$link_image     = '' !== $external_image
+			? $external_image
+			: $local_image;
+		$global_image   = $this->get_global_image_url();
+		$display_title  = '' !== $link_title
 			? $link_title
 			: ( '' !== $stored_title ? $stored_title : __( 'Untitled Link', 'peakurl' ) );
 

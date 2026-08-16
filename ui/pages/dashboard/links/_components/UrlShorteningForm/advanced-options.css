@@ -44,6 +44,19 @@
 		@apply sr-only;
 	}
 
+	.links-form-separator {
+		@apply flex items-center gap-4 my-2 opacity-60;
+	}
+
+	.links-form-separator-line {
+		@apply flex-1 h-px;
+		background-color: var(--color-stroke-strong);
+	}
+
+	.links-form-separator-text {
+		@apply text-xs font-semibold text-text-muted uppercase tracking-wider;
+	}
+
 	.links-form-social-preview-picker {
 		@apply mt-2 flex flex-wrap items-center gap-2.5;
 	}

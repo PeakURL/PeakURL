@@ -101,6 +101,18 @@
 		@apply space-y-2;
 	}
 
+	.links-edit-drawer-separator {
+		@apply flex items-center gap-4 my-2 opacity-60;
+	}
+
+	.links-edit-drawer-separator-line {
+		@apply flex-1 h-px bg-stroke;
+	}
+
+	.links-edit-drawer-separator-text {
+		@apply text-xs font-semibold text-text-muted uppercase tracking-wider;
+	}
+
 	.links-edit-drawer-file-input {
 		@apply sr-only;
 	}
@@ -161,9 +173,12 @@
 		@apply inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium transition-all disabled:cursor-not-allowed disabled:opacity-50;
 	}
 
-	.links-edit-drawer-action-secondary,
+	.links-edit-drawer-action-secondary {
+		@apply border border-stroke bg-surface-alt text-heading hover:bg-surface hover:shadow-sm;
+	}
+
 	.links-edit-drawer-footer-button-secondary {
-		@apply border border-stroke bg-surface text-heading hover:bg-surface-alt;
+		@apply border border-stroke bg-surface text-heading hover:bg-surface-alt hover:shadow-sm;
 	}
 
 	.links-edit-drawer-footer-button-primary {

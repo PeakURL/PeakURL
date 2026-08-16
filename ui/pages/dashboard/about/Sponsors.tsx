@@ -39,7 +39,13 @@ export type Sponsor = {
 
 export const communitySupporters: Sponsor[] = [
 	{
-		name: "Ibrahym Ben ElZobyr",
+		name: "Abdellah Chelli",
+		socials: [
+			{
+				platform: "github",
+				url: "https://github.com/sneetsher",
+			},
+		],
 	},
 ];
 

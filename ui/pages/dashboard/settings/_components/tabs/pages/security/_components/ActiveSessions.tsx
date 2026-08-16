@@ -32,6 +32,7 @@ function ActiveSessions({
 					<Button
 						variant="secondary"
 						size="sm"
+						className="w-full sm:w-auto"
 						onClick={onRequestRevokeOthers}
 						loading={isRevokingOthers}
 					>

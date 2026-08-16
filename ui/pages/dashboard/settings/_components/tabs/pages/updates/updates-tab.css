@@ -24,7 +24,7 @@
 	}
 
 	.settings-updates-card-actions {
-		@apply flex flex-wrap gap-3;
+		@apply flex flex-col sm:flex-row sm:flex-wrap w-full sm:w-auto gap-3;
 	}
 
 	.settings-updates-metric-grid {
@@ -103,12 +103,12 @@
 
 	.settings-updates-check-button,
 	.settings-updates-install-button {
-		@apply min-w-44 whitespace-nowrap;
+		@apply w-full sm:w-auto sm:min-w-44 whitespace-nowrap;
 	}
 
 	.settings-updates-reinstall-button,
 	.settings-updates-repair-button {
-		@apply min-w-52 whitespace-nowrap;
+		@apply w-full sm:w-auto sm:min-w-52 whitespace-nowrap;
 	}
 
 	.settings-updates-disabled-reason {

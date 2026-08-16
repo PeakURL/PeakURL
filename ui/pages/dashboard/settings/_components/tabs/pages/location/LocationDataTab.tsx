@@ -261,6 +261,7 @@ function LocationDataTab({
 							<Button
 								type="button"
 								size="sm"
+								className="w-full sm:w-auto"
 								onClick={() => setIsEditingCredentials(true)}
 								disabled={Boolean(
 									effectiveStatus &&
@@ -273,6 +274,7 @@ function LocationDataTab({
 								type="button"
 								variant="outline"
 								size="sm"
+								className="w-full sm:w-auto"
 								onClick={onDownload}
 								loading={isDownloading}
 								disabled={
@@ -344,6 +346,7 @@ function LocationDataTab({
 							<Button
 								type="submit"
 								size="sm"
+								className="w-full sm:w-auto"
 								loading={isSaving}
 								disabled={Boolean(
 									effectiveStatus &&
@@ -359,6 +362,7 @@ function LocationDataTab({
 									type="button"
 									variant="outline"
 									size="sm"
+									className="w-full sm:w-auto"
 									onClick={() => {
 										setIsEditingCredentials(false);
 										setAccountIdInput(null);

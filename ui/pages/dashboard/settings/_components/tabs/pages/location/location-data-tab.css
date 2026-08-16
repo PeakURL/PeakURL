@@ -58,7 +58,7 @@
 	}
 
 	.settings-location-download-button {
-		@apply min-w-42 whitespace-nowrap;
+		@apply w-full sm:w-auto sm:min-w-42 whitespace-nowrap;
 	}
 
 	.settings-location-credentials-view {
@@ -82,7 +82,7 @@
 	}
 
 	.settings-location-actions {
-		@apply flex flex-wrap gap-3;
+		@apply flex flex-col sm:flex-row sm:flex-wrap w-full sm:w-auto gap-3;
 	}
 
 	.settings-location-form {

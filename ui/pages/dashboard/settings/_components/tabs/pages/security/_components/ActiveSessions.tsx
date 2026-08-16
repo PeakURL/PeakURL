@@ -18,19 +18,16 @@ function ActiveSessions({
 	onRevokeSession,
 }: ActiveSessionsProps) {
 	return (
-		<div className="settings-security-sessions-card">
+		<fieldset className="settings-fieldset">
+			<legend className="settings-legend">{__("Active Sessions")}</legend>
+			<hr className="settings-separator" />
 			<div dir={direction} className="settings-security-sessions-header">
-				<div>
-					<h2 className="settings-security-card-title">
-						{__("Active Sessions")}
-					</h2>
-					<span className="settings-security-sessions-count">
-						{sprintf(
-							__("%s active session(s)"),
-							String(sessions.length)
-						)}
-					</span>
-				</div>
+				<p className="settings-group-description mb-0! mt-0!">
+					{sprintf(
+						__("%s active session(s)"),
+						String(sessions.length)
+					)}
+				</p>
 				{otherActiveSessions.length > 0 ? (
 					<Button
 						variant="secondary"
@@ -63,7 +60,7 @@ function ActiveSessions({
 					))
 				)}
 			</div>
-		</div>
+		</fieldset>
 	);
 }
 

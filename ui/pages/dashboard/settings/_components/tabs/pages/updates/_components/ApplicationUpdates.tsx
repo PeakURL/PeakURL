@@ -1,7 +1,7 @@
 import { AlertCircle, CheckCircle2, Clock3, Download } from "lucide-react";
 
 import { __ } from "@/i18n";
-import { formatDateTimeValue } from "@/utils";
+import { formatRelativeTime } from "@/utils";
 
 import type { ApplicationUpdatesProps } from "../types";
 import DetailRow from "./DetailRow";
@@ -82,10 +82,9 @@ function ApplicationUpdates({
 					},
 					{
 						label: __("Last Checked"),
-						value: formatDateTimeValue(
-							status?.lastCheckedAt,
-							__("Never")
-						),
+						value: status?.lastCheckedAt
+							? formatRelativeTime(status.lastCheckedAt)
+							: __("Never"),
 						valueDirection: "ltr",
 					},
 				]}
@@ -107,10 +106,7 @@ function ApplicationUpdates({
 						<DetailRow
 							direction={direction}
 							label={__("Released")}
-							value={formatDateTimeValue(
-								status.releasedAt,
-								__("Never")
-							)}
+							value={formatRelativeTime(status.releasedAt)}
 							icon={Clock3}
 							valueDirection="ltr"
 						/>

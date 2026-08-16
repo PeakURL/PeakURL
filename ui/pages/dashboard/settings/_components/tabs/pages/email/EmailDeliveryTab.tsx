@@ -150,23 +150,23 @@ function EmailDeliveryTab({
 
 	return (
 		<div className="settings-email">
-			<div className="settings-email-intro">
+			<fieldset className="settings-fieldset">
 				<div dir={direction} className="settings-email-intro-layout">
 					<div className="settings-email-intro-icon">
 						<Mail size={18} />
 					</div>
 					<div className="settings-email-intro-content">
-						<h2 className="settings-email-intro-title">
-							{__("Email Configuration")}
-						</h2>
-						<p className="settings-email-intro-description">
+						<legend className="settings-legend !mb-0">
+							{__("Email Delivery")}
+						</legend>
+						<p className="settings-group-description !mb-0 !mt-0">
 							{__(
 								"PeakURL uses this mail transport for password-reset emails and other account recovery notifications."
 							)}
 						</p>
 					</div>
 				</div>
-			</div>
+			</fieldset>
 
 			{errorMessage && (
 				<div className="settings-email-alert settings-email-alert-error">
@@ -212,12 +212,11 @@ function EmailDeliveryTab({
 				</div>
 			)}
 
-			<form onSubmit={handleSubmit} className="settings-email-form">
-				<div className="settings-email-section">
-					<div className="settings-email-section-title">
-						<Send size={16} />
+			<form onSubmit={handleSubmit} className="settings-form">
+				<fieldset className="settings-fieldset">
+					<legend className="settings-legend">
 						{__("Delivery method")}
-					</div>
+					</legend>
 					<div className="settings-email-method-grid">
 						<MethodButton
 							isActive={"mail" === form.driver}
@@ -246,15 +245,14 @@ function EmailDeliveryTab({
 							}
 						/>
 					</div>
-				</div>
+				</fieldset>
 
 				{usingSmtp && (
-					<div className="settings-email-connection-panel">
-						<div className="settings-email-section-title">
-							<Server size={16} />
-							{__("SMTP connection")}
-						</div>
-						<div className="settings-email-fields-grid">
+					<fieldset className="settings-fieldset">
+						<legend className="settings-legend">
+							{__("SMTP Configuration")}
+						</legend>
+						<div className="settings-grid">
 							<Input
 								label={__("From Name")}
 								value={form.fromName}
@@ -281,7 +279,7 @@ function EmailDeliveryTab({
 								placeholder={__("noreply@yourdomain.com")}
 							/>
 						</div>
-						<div className="settings-email-fields-grid">
+						<div className="settings-grid">
 							<Input
 								label={__("SMTP Host")}
 								valueDirection="ltr"
@@ -312,7 +310,7 @@ function EmailDeliveryTab({
 							/>
 						</div>
 
-						<div className="settings-email-fields-grid">
+						<div className="settings-grid">
 							<div className="settings-email-field">
 								<label className="settings-section-label">
 									{__("Encryption")}
@@ -378,7 +376,7 @@ function EmailDeliveryTab({
 						</div>
 
 						{form.smtpAuth && (
-							<div className="settings-email-fields-grid">
+							<div className="settings-grid">
 								<Input
 									label={__("SMTP Username")}
 									valueDirection="ltr"
@@ -426,7 +424,7 @@ function EmailDeliveryTab({
 								/>
 							</div>
 						)}
-					</div>
+					</fieldset>
 				)}
 
 				{(showSubmitButton || showTestButton) && (

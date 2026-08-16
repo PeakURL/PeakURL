@@ -1,7 +1,5 @@
 @layer components {
-	.settings-api-endpoint-card {
-		@apply border-accent/20;
-	}
+	/* Replaced with standard .settings-fieldset */
 
 	.settings-api-endpoint-header {
 		@apply flex flex-col gap-4 md:flex-row md:items-start md:justify-between;

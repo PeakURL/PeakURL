@@ -16,24 +16,11 @@
 	}
 
 	.settings-updates-card-header {
-		@apply flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between;
-	}
-
-	.settings-updates-card-copy {
-		text-align: start;
-		@apply space-y-2;
+		@apply flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between border-b border-stroke pb-5;
 	}
 
 	.settings-updates-card-title-row {
 		@apply flex flex-wrap items-center gap-3;
-	}
-
-	.settings-updates-card-title {
-		@apply text-base font-semibold text-heading;
-	}
-
-	.settings-updates-card-description {
-		@apply max-w-2xl text-sm leading-6 text-text-muted;
 	}
 
 	.settings-updates-card-actions {
@@ -95,27 +82,23 @@
 	}
 
 	.settings-updates-actions {
-		@apply flex w-full flex-col gap-3 lg:max-w-104;
+		@apply flex flex-col gap-3;
 	}
 
 	.settings-updates-actions-start {
-		@apply lg:items-start;
-	}
-
-	.settings-updates-actions-end {
-		@apply lg:items-end;
+		@apply sm:items-start;
 	}
 
 	.settings-updates-actions-row {
-		@apply flex flex-wrap gap-3;
+		@apply flex flex-col gap-3 sm:flex-row sm:items-center;
 	}
 
 	.settings-updates-actions-row-start {
-		@apply lg:justify-start;
+		@apply sm:justify-start;
 	}
 
-	.settings-updates-actions-row-end {
-		@apply lg:justify-end;
+	.settings-updates-actions-container {
+		@apply mt-6 flex flex-wrap gap-3;
 	}
 
 	.settings-updates-check-button,

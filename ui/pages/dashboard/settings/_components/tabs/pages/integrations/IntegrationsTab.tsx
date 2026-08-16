@@ -147,31 +147,31 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 
 	return (
 		<div className="integrations-tab">
-			<div className="integrations-tab-intro">
+			<fieldset className="settings-fieldset">
 				<div className="integrations-tab-intro-row">
 					<div className="integrations-tab-intro-icon">
 						<WebhookIcon className="integrations-tab-intro-icon-glyph" />
 					</div>
 					<div className="integrations-tab-intro-copy">
-						<h2 className="integrations-tab-intro-title">
+						<legend className="settings-legend !mb-0">
 							{__("Integrations")}
-						</h2>
-						<p className="integrations-tab-intro-description">
+						</legend>
+						<p className="settings-group-description !mb-0 !mt-0">
 							{__(
 								"Connect PeakURL to your automations with outbound webhooks for link activity."
 							)}
 						</p>
 					</div>
 				</div>
-			</div>
+			</fieldset>
 
-			<div className="integrations-tab-panel">
+			<fieldset className="settings-fieldset">
 				<div className="integrations-tab-panel-header">
 					<div className="integrations-tab-panel-copy">
-						<h3 className="integrations-tab-panel-title">
+						<legend className="settings-legend !mb-0">
 							{__("Webhooks")}
-						</h3>
-						<p className="integrations-tab-panel-description">
+						</legend>
+						<p className="settings-group-description !mb-0">
 							{__(
 								"PeakURL sends signed POST requests to your endpoint when selected link events happen."
 							)}
@@ -419,7 +419,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 						) : null}
 					</>
 				)}
-			</div>
+			</fieldset>
 
 			<CaptchaSettings notification={notification} />
 

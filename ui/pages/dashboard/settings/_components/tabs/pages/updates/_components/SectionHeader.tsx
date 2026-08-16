@@ -13,24 +13,28 @@ function SectionHeader({
 	secondaryAction,
 }: SectionHeaderProps) {
 	return (
-		<div dir={direction} className="settings-updates-card-header">
-			<div className="settings-updates-card-copy">
-				<div className="settings-updates-card-title-row">
-					<h2 className="settings-updates-card-title">{title}</h2>
-					{badge ? (
-						<StatusBadge tone={badge.tone} label={badge.label} />
-					) : null}
+		<>
+			<legend className="settings-legend flex items-center gap-2">
+				{title}
+				{badge ? (
+					<StatusBadge tone={badge.tone} label={badge.label} />
+				) : null}
+			</legend>
+			<div dir={direction} className="settings-updates-card-header">
+				<div className="settings-updates-card-copy">
+					<p className="settings-group-description !mb-0 !mt-0">
+						{description}
+					</p>
 				</div>
-				<p className="settings-updates-card-description">
-					{description}
-				</p>
-			</div>
 
-			<div className="settings-updates-card-actions">
-				{secondaryAction}
-				{primaryAction}
+				{primaryAction || secondaryAction ? (
+					<div className="settings-updates-card-actions">
+						{secondaryAction}
+						{primaryAction}
+					</div>
+				) : null}
 			</div>
-		</div>
+		</>
 	);
 }
 

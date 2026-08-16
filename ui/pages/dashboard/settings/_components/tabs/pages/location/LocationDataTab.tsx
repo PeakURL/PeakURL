@@ -11,7 +11,7 @@ import {
 import { Button, Input, ReadOnlyValueBlock } from "@/components";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
-import { cn, formatByteSize, formatDateTimeValue } from "@/utils";
+import { cn, formatByteSize, formatRelativeTime } from "@/utils";
 
 import type {
 	LocationDataStatus,
@@ -113,10 +113,10 @@ function LocationDataTab({
 								<MapPin size={18} />
 							</div>
 							<div>
-								<h2 className="settings-location-intro-title">
-									{__("Location Data")}
+								<h2 className="block w-full text-lg font-semibold text-heading pb-4 mb-4 border-b border-stroke">
+									{__("Location Database")}
 								</h2>
-								<p className="settings-location-intro-description">
+								<p className="settings-group-description mb-0!">
 									{__(
 										"Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder."
 									)}
@@ -155,11 +155,15 @@ function LocationDataTab({
 				/>
 				<StatCard
 					label={__("Database Updated")}
-					value={formatDateTimeValue(
+					value={
 						effectiveStatus?.lastDownloadedAt ||
-							effectiveStatus?.databaseUpdatedAt,
-						__("Never")
-					)}
+						effectiveStatus?.databaseUpdatedAt
+							? formatRelativeTime(
+									effectiveStatus.lastDownloadedAt ||
+										effectiveStatus.databaseUpdatedAt
+								)
+							: __("Never")
+					}
 					valueDirection="ltr"
 				/>
 				<StatCard
@@ -211,22 +215,21 @@ function LocationDataTab({
 				/>
 			)}
 
-			<div className="settings-location-credentials-card">
-				<div className="settings-location-credentials-header">
-					<h3 className="settings-location-credentials-title">
-						{__("MaxMind Credentials")}
-					</h3>
-					<p className="settings-location-credentials-description">
-						{__(
-							"PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
-						)}
-					</p>
-				</div>
+			<fieldset className="settings-fieldset">
+				<legend className="settings-legend">
+					{__("MaxMind Credentials")}
+				</legend>
+				<hr className="settings-separator" />
+				<p className="settings-group-description mb-0!">
+					{__(
+						"PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
+					)}
+				</p>
 
 				{hasSavedCredentials && !isEditingCredentials ? (
 					<div className="settings-location-credentials-view">
 						<div className="settings-location-credentials-panel">
-							<div className="settings-location-credentials-grid">
+							<div className="settings-grid">
 								<div>
 									<p className="settings-location-credentials-label">
 										{__("Account ID")}
@@ -292,7 +295,7 @@ function LocationDataTab({
 						className="settings-location-form"
 						onSubmit={handleSubmit}
 					>
-						<div className="settings-location-form-grid">
+						<div className="settings-grid mt-4!">
 							<Input
 								label={__("MaxMind Account ID")}
 								type="text"
@@ -368,7 +371,7 @@ function LocationDataTab({
 						</div>
 					</form>
 				)}
-			</div>
+			</fieldset>
 		</div>
 	);
 }

@@ -37,16 +37,17 @@ function TwoFactorSettings({
 	onVerificationCodeChange,
 }: TwoFactorSettingsProps) {
 	return (
-		<div className="settings-security-two-factor-card">
+		<fieldset className="settings-fieldset">
+			<legend className="settings-legend">
+				{__("Two-Factor Authentication")}
+			</legend>
+			<hr className="settings-separator" />
 			<div
 				dir={direction}
 				className="settings-security-two-factor-header"
 			>
 				<div className="settings-security-two-factor-copy">
-					<h2 className="settings-security-card-title">
-						{__("Two-Factor Authentication")}
-					</h2>
-					<p className="settings-security-two-factor-description">
+					<p className="settings-group-description">
 						{__(
 							"Add an extra layer of security with an authenticator app and backup codes."
 						)}
@@ -122,7 +123,7 @@ function TwoFactorSettings({
 					onDownloadRequest={onDownloadRequest}
 				/>
 			) : null}
-		</div>
+		</fieldset>
 	);
 }
 

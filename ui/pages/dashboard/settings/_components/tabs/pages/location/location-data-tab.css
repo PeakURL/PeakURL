@@ -46,7 +46,7 @@
 	}
 
 	.settings-location-intro-title-row {
-		@apply flex items-center gap-3;
+		@apply flex items-start gap-3;
 	}
 
 	.settings-location-intro-icon {
@@ -61,29 +61,12 @@
 		@apply min-w-42 whitespace-nowrap;
 	}
 
-	.settings-location-credentials-header {
-		@apply mb-5 space-y-1;
-	}
-
-	.settings-location-credentials-title {
-		@apply text-sm font-semibold text-heading;
-	}
-
-	.settings-location-credentials-description {
-		@apply text-sm leading-6 text-text-muted;
-	}
-
 	.settings-location-credentials-view {
-		@apply space-y-4;
+		@apply space-y-4 mt-4;
 	}
 
 	.settings-location-credentials-panel {
-		@apply rounded-lg border border-stroke bg-surface-alt p-4;
-	}
-
-	.settings-location-credentials-grid,
-	.settings-location-form-grid {
-		@apply grid grid-cols-1 gap-4 md:grid-cols-2;
+		@apply rounded-xl border border-stroke bg-surface-alt p-5;
 	}
 
 	.settings-location-credentials-label {

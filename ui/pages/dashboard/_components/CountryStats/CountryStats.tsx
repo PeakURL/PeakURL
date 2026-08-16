@@ -6,7 +6,6 @@ import { formatCount, getCountryFlagEmoji } from "@/utils";
 
 import type { CountryStatsProps, CountryMetric } from "../types";
 
-
 function getMetricTotal(countries: CountryMetric[]): number {
 	return countries.reduce((total, country) => total + country.count, 0);
 }

@@ -29,7 +29,7 @@ function ApiTab({
 	return (
 		<div className="settings-api">
 			{baseApiUrl && (
-				<div className="settings-api-endpoint-card">
+				<fieldset className="settings-fieldset !border-accent/20">
 					<div className="settings-api-endpoint-header">
 						<div className="settings-api-endpoint-summary">
 							<div className="settings-api-endpoint-title-row">
@@ -70,10 +70,10 @@ function ApiTab({
 						value={baseApiUrl}
 						className="settings-api-endpoint-value"
 					/>
-				</div>
+				</fieldset>
 			)}
 
-			<div className="settings-api-keys-card">
+			<fieldset className="settings-fieldset">
 				<div className="settings-api-keys-header">
 					<h2 className="settings-api-keys-title">
 						{__("API Keys")}
@@ -159,7 +159,7 @@ function ApiTab({
 						</Button>
 					</div>
 				)}
-			</div>
+			</fieldset>
 
 			<div className="settings-api-note">
 				<div className="settings-api-note-layout">
@@ -177,7 +177,7 @@ function ApiTab({
 				</div>
 			</div>
 
-			<div className="settings-api-docs-card">
+			<fieldset className="settings-fieldset">
 				<div className="settings-api-docs-header">
 					<div className="settings-api-docs-summary">
 						<div className="settings-api-docs-title-row">
@@ -210,7 +210,7 @@ function ApiTab({
 						</Button>
 					</a>
 				</div>
-			</div>
+			</fieldset>
 		</div>
 	);
 }

@@ -8,34 +8,31 @@
 		@apply space-y-5;
 	}
 
-	.settings-general-form,
-	.settings-api-endpoint-card,
-	.settings-api-keys-card,
-	.settings-api-docs-card,
-	.settings-email-intro,
-	.settings-email-form,
-	.settings-location-intro,
-	.settings-location-credentials-card,
-	.settings-security-password-card,
-	.settings-security-two-factor-card,
-	.settings-security-sessions-card {
-		@apply rounded-lg border border-stroke bg-surface p-5;
+	.settings-form {
+		@apply flex flex-col gap-6;
 	}
 
-	.settings-updates-card {
-		@apply rounded-xl border border-stroke bg-surface p-5 sm:p-6;
+	.settings-fieldset {
+		@apply rounded-xl bg-surface p-5 sm:p-6 shadow-sm ring-1 ring-inset ring-stroke flex flex-col gap-5 min-w-0;
+		border: none;
+	}
+
+	.settings-legend {
+		@apply block w-full text-lg font-semibold text-heading;
+		float: left;
+		padding: 0;
+	}
+
+	.settings-group-description {
+		@apply text-sm leading-6 text-text-muted max-w-2xl;
+	}
+
+	.settings-grid {
+		@apply grid grid-cols-1 gap-5 md:grid-cols-2;
 	}
 
 	.settings-section-label {
 		@apply block text-sm font-semibold text-heading;
-	}
-
-	.settings-general-title,
-	.settings-security-card-title,
-	.settings-api-keys-title,
-	.settings-location-intro-title,
-	.settings-location-credentials-title {
-		@apply text-base font-semibold text-heading;
 	}
 
 	.settings-general-actions,
@@ -66,7 +63,7 @@
 
 	.settings-stat-card {
 		text-align: start;
-		@apply rounded-lg border border-stroke bg-surface p-5;
+		@apply rounded-xl bg-surface p-4 sm:p-5 shadow-sm ring-1 ring-inset ring-stroke;
 	}
 
 	.settings-stat-label {
@@ -83,5 +80,9 @@
 
 	.settings-updates-divider {
 		@apply mt-5 space-y-3 border-t border-stroke pt-5;
+	}
+
+	.settings-separator {
+		@apply m-0 w-full border-t border-stroke;
 	}
 }

@@ -2,7 +2,7 @@ import { AlertCircle, CheckCircle2 } from "lucide-react";
 
 import { Button } from "@/components";
 import { __ } from "@/i18n";
-import { formatDateTimeValue } from "@/utils";
+import { formatRelativeTime } from "@/utils";
 
 import type { DatabaseSchemaProps } from "../types";
 import InlineNotice from "./InlineNotice";
@@ -78,10 +78,9 @@ function DatabaseSchema({
 					},
 					{
 						label: __("Last Database Upgrade"),
-						value: formatDateTimeValue(
-							databaseStatus?.lastUpgradedAt,
-							__("Never")
-						),
+						value: databaseStatus?.lastUpgradedAt
+							? formatRelativeTime(databaseStatus.lastUpgradedAt)
+							: __("Never"),
 						valueDirection: "ltr",
 					},
 				]}

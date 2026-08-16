@@ -25,11 +25,10 @@ function PasswordSettings({
 	};
 
 	return (
-		<div className="settings-security-password-card">
-			<h2 className="settings-security-card-title">
-				{__("Password & Security")}
-			</h2>
-			<div className="settings-security-password-fields">
+		<fieldset className="settings-fieldset">
+			<legend className="settings-legend">{__("Password")}</legend>
+			<hr className="settings-separator" />
+			<div className="flex flex-col gap-5 max-w-md">
 				<Input
 					label={__("Current Password")}
 					type="password"
@@ -74,7 +73,7 @@ function PasswordSettings({
 					{isUpdating ? __("Updating...") : __("Update Password")}
 				</Button>
 			</div>
-		</div>
+		</fieldset>
 	);
 }
 

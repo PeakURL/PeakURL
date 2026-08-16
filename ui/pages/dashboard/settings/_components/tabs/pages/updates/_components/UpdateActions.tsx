@@ -73,22 +73,8 @@ function UpdateActions({
 	const showCheckButton = reinstallAvailable || !updateAvailable;
 
 	return (
-		<div
-			className={cn(
-				"settings-updates-actions",
-				isRtl
-					? "settings-updates-actions-start"
-					: "settings-updates-actions-end"
-			)}
-		>
-			<div
-				className={cn(
-					"settings-updates-actions-row",
-					isRtl
-						? "settings-updates-actions-row-start"
-						: "settings-updates-actions-row-end"
-				)}
-			>
+		<div className="settings-updates-actions settings-updates-actions-start">
+			<div className="settings-updates-actions-row settings-updates-actions-row-start">
 				{showCheckButton ? (
 					<Button
 						variant="outline"

@@ -78,7 +78,7 @@
 	}
 
 	.export-page-api-column {
-		@apply space-y-2;
+		@apply min-w-0 space-y-2;
 	}
 
 	.export-page-api-heading {

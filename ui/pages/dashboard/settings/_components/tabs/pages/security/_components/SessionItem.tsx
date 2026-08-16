@@ -1,4 +1,4 @@
-import { Monitor } from "lucide-react";
+import { Monitor, Smartphone, Tablet } from "lucide-react";
 
 import { Button } from "@/components";
 import { __ } from "@/i18n";
@@ -18,6 +18,12 @@ function SessionItem({
 }: SessionItemProps) {
 	const locationLabel = getSessionLocationLabel(session);
 	const countryFlag = getCountryFlagEmoji(session.location?.countryCode);
+	const Icon =
+		session.device === "Mobile"
+			? Smartphone
+			: session.device === "Tablet"
+				? Tablet
+				: Monitor;
 
 	return (
 		<div
@@ -29,7 +35,7 @@ function SessionItem({
 		>
 			<div className="settings-security-session-meta">
 				<div className="settings-security-session-icon-panel">
-					<Monitor
+					<Icon
 						size={18}
 						className="settings-security-session-icon"
 					/>
@@ -74,7 +80,7 @@ function SessionItem({
 					</span>
 				) : session.isCurrent ? null : (
 					<Button
-						variant="ghost"
+						variant="secondary"
 						size="sm"
 						onClick={() =>
 							onRevokeSession(session.id, session.isCurrent)

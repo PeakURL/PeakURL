@@ -89,7 +89,7 @@ const SocialPreviewFields = ({
 
 				<div className="flex flex-col">
 					<div
-						className="hidden md:block h-[58px]"
+						className="hidden md:block h-14.5"
 						aria-hidden="true"
 					/>
 					<div className="flex flex-col gap-2">
@@ -130,12 +130,12 @@ const SocialPreviewFields = ({
 									: __("Upload Image")}
 							</Button>
 							{socialImageFile ? (
-								<span className="text-sm font-medium text-heading truncate max-w-[200px]">
+								<span className="text-sm font-medium text-heading truncate max-w-50">
 									{socialImageFile.name}
 								</span>
 							) : null}
 						</div>
-						<label className="links-form-section-label !mb-0 mt-4">
+						<label className="links-form-section-label mb-0! mt-4">
 							{__("Preview Image")}
 						</label>
 

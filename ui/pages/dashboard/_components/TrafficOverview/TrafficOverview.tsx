@@ -67,7 +67,7 @@ const TrafficOverview = ({ trafficData }: TrafficOverviewProps) => {
 							<div className="dashboard-traffic-legend-item">
 								<div className="dashboard-traffic-legend-dot dashboard-traffic-legend-dot-unique"></div>
 								<span className="dashboard-traffic-legend-text">
-									{__("Unique")}
+									{__("Visitors")}
 								</span>
 							</div>
 						</div>

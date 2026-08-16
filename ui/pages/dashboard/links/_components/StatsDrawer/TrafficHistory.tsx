@@ -41,7 +41,7 @@ const seriesOptions: Array<{
 }> = [
 	{ label: __("Both"), value: "both", icon: BarChart3 },
 	{ label: __("Clicks"), value: "clicks", icon: MousePointerClick },
-	{ label: __("Unique"), value: "unique", icon: Users },
+	{ label: __("Visitors"), value: "unique", icon: Users },
 ];
 
 function TrafficHistory({
@@ -164,7 +164,7 @@ function TrafficHistory({
 						</div>
 						<div className="links-traffic-history-legend-item">
 							<span className="links-traffic-history-legend-dot links-traffic-history-legend-dot-unique" />
-							<span>{__("Unique")}</span>
+							<span>{__("Visitors")}</span>
 							<strong>
 								{isLoading ? "..." : formatCount(uniqueClicks)}
 							</strong>

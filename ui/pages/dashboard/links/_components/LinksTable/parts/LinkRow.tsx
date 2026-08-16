@@ -158,7 +158,7 @@ function LinkRow({
 							{formatNumber(link.clicks || 0)}
 						</div>
 						<div className="links-row-performance-label">
-							{__("Total")}
+							{__("Clicks")}
 						</div>
 					</div>
 					<div className="links-row-performance-divider"></div>
@@ -167,7 +167,7 @@ function LinkRow({
 							{formatNumber(link.uniqueClicks || 0)}
 						</div>
 						<div className="links-row-performance-label">
-							{__("Unique")}
+							{__("Visitors")}
 						</div>
 					</div>
 				</div>

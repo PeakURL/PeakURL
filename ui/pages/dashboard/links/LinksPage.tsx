@@ -308,7 +308,7 @@ function LinksPage() {
 						{formatCount(totalUniqueClicks)}
 					</div>
 					<div className="links-page-stat-label">
-						{__("Unique Visitors")}
+						{__("Visitors")}
 					</div>
 				</div>
 			</div>

@@ -130,7 +130,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
 			tone: "rate",
 		},
 		{
-			title: __("Unique Visitors"),
+			title: __("Visitors"),
 			value: formatNumber(stats.uniqueClicks),
 			change: uniqueChange,
 			icon: Users,

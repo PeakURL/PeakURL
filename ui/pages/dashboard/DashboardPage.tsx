@@ -183,7 +183,9 @@ function DashboardPage() {
 					<DeviceBreakdown deviceData={deviceData} />
 					<ActivityFeed recentActivities={recentActivities} />
 				</div>
-				<CountryStats countryData={countryData} />
+				<div className="dashboard-page-summary-countries">
+					<CountryStats countryData={countryData} />
+				</div>
 			</div>
 		</div>
 	);

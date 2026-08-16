@@ -65,6 +65,7 @@ export interface SecuritySessionLocation {
  */
 export interface SecuritySession {
 	id: string;
+	device?: string | null;
 	browser?: string | null;
 	os?: string | null;
 	ipAddress?: string | null;

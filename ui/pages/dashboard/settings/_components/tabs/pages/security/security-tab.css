@@ -3,7 +3,8 @@
 		@apply space-y-4;
 	}
 
-	.settings-security-two-factor-card {
+	.settings-security-two-factor-card,
+	.settings-security-sessions-card {
 		@apply space-y-4;
 	}
 

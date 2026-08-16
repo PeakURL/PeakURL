@@ -33,7 +33,7 @@ function ActiveSessions({
 				</div>
 				{otherActiveSessions.length > 0 ? (
 					<Button
-						variant="outline"
+						variant="secondary"
 						size="sm"
 						onClick={onRequestRevokeOthers}
 						loading={isRevokingOthers}

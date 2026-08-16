@@ -46,7 +46,7 @@
 	}
 
 	.users-page-stats {
-		@apply grid gap-4 md:grid-cols-3;
+		@apply grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4;
 	}
 
 	.users-page-stat-card {
@@ -202,11 +202,11 @@
 	}
 
 	.users-page-dialog-panel {
-		@apply w-full max-w-2xl rounded-2xl border border-stroke bg-surface shadow-2xl;
+		@apply flex max-h-full w-full max-w-2xl flex-col rounded-2xl border border-stroke bg-surface shadow-2xl sm:max-h-[90vh];
 	}
 
 	.users-page-dialog-header {
-		@apply flex items-start justify-between border-b border-stroke px-6 py-5;
+		@apply flex shrink-0 items-start justify-between border-b border-stroke px-6 py-5;
 	}
 
 	.users-page-dialog-title {
@@ -222,7 +222,7 @@
 	}
 
 	.users-page-dialog-form {
-		@apply space-y-5 px-6 py-6;
+		@apply space-y-5 overflow-y-auto px-6 py-6;
 	}
 
 	.users-page-dialog-error {

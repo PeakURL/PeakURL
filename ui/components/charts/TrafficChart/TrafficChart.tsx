@@ -258,7 +258,7 @@ export function TrafficChart({
 				: "rgba(229, 231, 235, 0.8)";
 			const isLineChart = type === "line";
 			const clicksLabel = __("Total Clicks");
-			const uniqueLabel = __("Unique Visitors");
+			const uniqueLabel = __("Visitors");
 			const maxTrafficValue = Math.max(
 				...chartData.clicks,
 				...chartData.unique,

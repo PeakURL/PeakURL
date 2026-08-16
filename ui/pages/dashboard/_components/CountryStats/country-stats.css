@@ -41,7 +41,7 @@
 	}
 
 	.dashboard-countries-list {
-		@apply divide-y divide-stroke overflow-hidden rounded-lg border border-stroke bg-bg/60;
+		@apply max-h-80 divide-y divide-stroke overflow-y-auto rounded-lg border border-stroke bg-bg/60;
 	}
 
 	.dashboard-countries-row {

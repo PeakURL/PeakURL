@@ -599,9 +599,7 @@ function AboutPage() {
 						<BrandLockup to="/dashboard" size="md" />
 					</div>
 					<p className="about-page-footer-tagline">
-						{__(
-							"Self-hosted link management with clear ownership and a focused dashboard."
-						)}
+						{__("Shorten, track, and own every link.")}
 					</p>
 					<div className="about-page-footer-links">
 						<a

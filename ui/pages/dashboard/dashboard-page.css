@@ -21,6 +21,10 @@
 	}
 
 	.dashboard-page-summary-column {
-		@apply grid min-w-0 gap-5;
+		@apply order-2 grid min-w-0 gap-5 xl:order-1;
+	}
+
+	.dashboard-page-summary-countries {
+		@apply order-1 min-w-0 xl:order-2;
 	}
 }

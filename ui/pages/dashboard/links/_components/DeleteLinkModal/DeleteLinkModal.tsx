@@ -111,7 +111,7 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 									</div>
 									<div>
 										<p className="links-delete-modal-metric-label">
-											{__("Unique Visitors")}
+											{__("Visitors")}
 										</p>
 										<p className="links-delete-modal-metric-value">
 											{uniqueClicks}

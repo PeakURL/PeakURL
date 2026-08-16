@@ -6,7 +6,6 @@ import { formatCount, getCountryFlagEmoji } from "@/utils";
 
 import type { CountryStatsProps, CountryMetric } from "../types";
 
-const MAX_COUNTRIES = 8;
 
 function getMetricTotal(countries: CountryMetric[]): number {
 	return countries.reduce((total, country) => total + country.count, 0);
@@ -36,7 +35,7 @@ const CountryStats = ({ countryData }: CountryStatsProps) => {
 	const formattedCountries = useMemo(
 		() =>
 			countryData.length > 0
-				? countryData.slice(0, MAX_COUNTRIES).map((country) => ({
+				? countryData.map((country) => ({
 						flag: getCountryFlagEmoji(country.code),
 						name: country.name || __("Unknown"),
 						percentage: getMetricPercentage(

@@ -46,7 +46,10 @@ trait BootstrapTrait {
 			$this->get_schema_service()->repair_schema();
 		} catch ( \Throwable $exception ) {
 			throw new ApiException(
-				'PeakURL could not finish the database upgrade. Verify the database user can alter tables, then retry.',
+				__(
+					'PeakURL could not finish the database upgrade. Verify the database user can alter tables, then retry.',
+					'peakurl',
+				),
 				500,
 			);
 		}
@@ -55,7 +58,10 @@ trait BootstrapTrait {
 
 		if ( ! $this->table_exists( 'users' ) ) {
 			throw new ApiException(
-				'Database tables are missing. Run the installer or `php bin/setup-database.php` inside the PHP runtime directory.',
+				__(
+					'Database tables are missing. Run the installer or `php bin/setup-database.php` inside the PHP runtime directory.',
+					'peakurl',
+				),
 				500,
 			);
 		}
@@ -68,7 +74,10 @@ trait BootstrapTrait {
 			if ( ! $owner ) {
 				if ( ! $this->has_install_data() ) {
 					throw new ApiException(
-						'PeakURL is not installed yet. Run install.php to finish setup.',
+						__(
+							'PeakURL is not installed yet. Run install.php to finish setup.',
+							'peakurl',
+						),
 						503,
 					);
 				}

@@ -337,7 +337,10 @@ trait AnalyticsTrait {
 		if ( ! $this->roles->has_capability( $user, 'view_site_analytics' ) ) {
 			if ( ! $this->roles->has_capability( $user, 'view_own_analytics' ) ) {
 				throw new ApiException(
-					'You do not have permission to view activity.',
+					__(
+						'You do not have permission to view activity.',
+						'peakurl',
+					),
 					403,
 				);
 			}

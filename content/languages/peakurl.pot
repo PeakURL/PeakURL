@@ -6,7 +6,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language: en_US\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"Project-Id-Version: 1.3.1\n"
+"Project-Id-Version: 1.4.0\n"
 "Report-Msgid-Bugs-To: https://peakurl.org\n"
 "X-Domain: peakurl\n"
 
@@ -71,6 +71,18 @@ msgstr ""
 
 #: app/traits/sessions.php:72
 msgid "Authentication required."
+msgstr ""
+
+#: app/traits/bootstrap.php:49
+msgid "PeakURL could not finish the database upgrade. Verify the database user can alter tables, then retry."
+msgstr ""
+
+#: app/traits/bootstrap.php:61
+msgid "Database tables are missing. Run the installer or `php bin/setup-database.php` inside the PHP runtime directory."
+msgstr ""
+
+#: app/traits/bootstrap.php:77
+msgid "PeakURL is not installed yet. Run install.php to finish setup."
 msgstr ""
 
 #: app/traits/system.php:118
@@ -142,6 +154,10 @@ msgstr ""
 msgid "Current password is incorrect."
 msgstr ""
 
+#: app/traits/accounts/support.php:238
+msgid "Two-factor authentication is not enabled for this account."
+msgstr ""
+
 #: app/traits/accounts/auth.php:81
 #: app/traits/accounts/users.php:220
 msgid "Email address is already registered."
@@ -193,6 +209,10 @@ msgstr ""
 msgid "Email address is already in use."
 msgstr ""
 
+#: app/traits/accounts/users.php:126
+msgid "Current password is required to change your password."
+msgstr ""
+
 #: app/traits/accounts/users.php:215
 msgid "First and last name are required."
 msgstr ""
@@ -209,6 +229,18 @@ msgstr ""
 msgid "Invalid verification code."
 msgstr ""
 
+#: app/traits/accounts/security.php:215
+msgid "Current password is required to disable two-factor authentication."
+msgstr ""
+
+#: app/traits/accounts/security.php:252
+msgid "Current password is required to regenerate backup codes."
+msgstr ""
+
+#: app/traits/accounts/security.php:277
+msgid "Current password is required to download backup codes."
+msgstr ""
+
 #: app/traits/accounts/security.php:328
 msgid "PeakURL could not identify the current session."
 msgstr ""
@@ -217,8 +249,12 @@ msgstr ""
 msgid "Activity log ID is required."
 msgstr ""
 
-#: app/traits/analytics.php:437
-#: app/traits/analytics.php:595
+#: app/traits/analytics.php:340
+msgid "You do not have permission to view activity."
+msgstr ""
+
+#: app/traits/analytics.php:440
+#: app/traits/analytics.php:598
 msgid "You do not have permission to view analytics for this link."
 msgstr ""
 
@@ -244,35 +280,40 @@ msgstr ""
 msgid "You do not have permission to view this link."
 msgstr ""
 
-#: app/traits/links.php:721
+#: app/traits/links.php:337
+#: app/traits/links.php:1100
+msgid "Provide either socialImage or socialImageUrl, not both."
+msgstr ""
+
+#: app/traits/links.php:759
 msgid "Complete the verification to open this link."
 msgstr ""
 
-#: app/traits/links.php:736
+#: app/traits/links.php:774
 msgid "Verification failed. Please try again."
 msgstr ""
 
-#: app/traits/links.php:986
+#: app/traits/links.php:1024
 msgid "You do not have permission to edit this link."
 msgstr ""
 
-#: app/traits/links.php:1168
+#: app/traits/links.php:1265
 msgid "You do not have permission to delete this link."
 msgstr ""
 
-#: app/traits/links.php:1269
+#: app/traits/links.php:1366
 msgid "You do not have permission to delete links."
 msgstr ""
 
-#: app/traits/links.php:1470
+#: app/traits/links.php:1567
 msgid "A valid destination URL is required."
 msgstr ""
 
-#: app/traits/links.php:1488
+#: app/traits/links.php:1585
 msgid "That short code is reserved by the application."
 msgstr ""
 
-#: app/traits/links.php:1498
+#: app/traits/links.php:1595
 msgid "That short code is already in use."
 msgstr ""
 
@@ -308,6 +349,10 @@ msgstr ""
 #: app/includes/functions.php:967
 #: ui/pages/auth/reset-password/ResetPasswordPage.tsx:107
 msgid "Loading"
+msgstr ""
+
+#: app/includes/application.php:121
+msgid "An internal server error occurred. Please try again or contact support if the issue persists."
 msgstr ""
 
 #: app/includes/application.php:249
@@ -564,6 +609,7 @@ msgstr ""
 #: site/install.php:592
 #: site/setup-config.php:816
 #: ui/pages/auth/login/LoginPage.tsx:371
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:29
 #: ui/pages/dashboard/users/UsersPage.tsx:250
 msgid "Password"
 msgstr ""
@@ -1152,7 +1198,25 @@ msgstr ""
 msgid "PeakURL could not read the update service response."
 msgstr ""
 
-#: app/services/social-preview.php:273
+#: app/services/social-preview.php:254
+#: app/services/social-preview.php:272
+#: app/services/social-preview.php:280
+msgid "Enter a valid social preview image URL."
+msgstr ""
+
+#: app/services/social-preview.php:266
+msgid "The social preview image URL is too long."
+msgstr ""
+
+#: app/services/social-preview.php:289
+msgid "The social preview image URL must use HTTPS."
+msgstr ""
+
+#: app/services/social-preview.php:295
+msgid "The social preview image URL cannot contain credentials."
+msgstr ""
+
+#: app/services/social-preview.php:351
 #: ui/hooks/useDashboardSearch.ts:89
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:105
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:251
@@ -1160,52 +1224,52 @@ msgstr ""
 msgid "Untitled Link"
 msgstr ""
 
-#: app/services/social-preview.php:333
+#: app/services/social-preview.php:411
 msgid "Upload a PNG, JPG, or WebP social preview image."
 msgstr ""
 
-#: app/services/social-preview.php:342
+#: app/services/social-preview.php:420
 msgid "PeakURL could not read the social preview image dimensions."
 msgstr ""
 
-#: app/services/social-preview.php:354
+#: app/services/social-preview.php:432
 msgid "PeakURL could not create the social preview uploads directory."
 msgstr ""
 
-#: app/services/social-preview.php:360
+#: app/services/social-preview.php:438
 msgid "PeakURL could not store the uploaded social preview image."
 msgstr ""
 
-#: app/services/social-preview.php:367
+#: app/services/social-preview.php:445
 msgid "PeakURL could not activate the uploaded social preview image."
 msgstr ""
 
-#: app/services/social-preview.php:403
+#: app/services/social-preview.php:481
 msgid "PeakURL could not verify the uploaded social preview image."
 msgstr ""
 
-#: app/services/social-preview.php:464
+#: app/services/social-preview.php:542
 msgid "The uploaded social preview image exceeds the server maximum file size limit."
 msgstr ""
 
-#: app/services/social-preview.php:468
+#: app/services/social-preview.php:546
 msgid "The social preview image upload did not finish. Try again."
 msgstr ""
 
-#: app/services/social-preview.php:472
+#: app/services/social-preview.php:550
 #: app/services/favicon.php:374
 msgid "The server is missing a temporary upload directory."
 msgstr ""
 
-#: app/services/social-preview.php:476
+#: app/services/social-preview.php:554
 msgid "The server could not write the uploaded social preview image to disk."
 msgstr ""
 
-#: app/services/social-preview.php:480
+#: app/services/social-preview.php:558
 msgid "A PHP extension stopped the social preview image upload."
 msgstr ""
 
-#: app/services/social-preview.php:483
+#: app/services/social-preview.php:561
 msgid "PeakURL could not upload the social preview image."
 msgstr ""
 
@@ -1378,13 +1442,13 @@ msgid "PeakURL could not send the test email because your account email address 
 msgstr ""
 
 #: app/services/notifications.php:275
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:237
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:236
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:369
 msgid "SMTP"
 msgstr ""
 
 #: app/services/notifications.php:276
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:224
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:223
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:369
 msgid "PHP mail()"
 msgstr ""
@@ -1541,7 +1605,7 @@ msgid "Site info"
 msgstr ""
 
 #: site/install.php:575
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:388
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:408
 msgid "Site title"
 msgstr ""
 
@@ -1555,7 +1619,7 @@ msgstr ""
 
 #: site/install.php:583
 #: site/setup-config.php:812
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:339
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:341
 #: ui/pages/dashboard/users/UsersPage.tsx:229
 msgid "Username"
 msgstr ""
@@ -1605,7 +1669,7 @@ msgid "Welcome - %s"
 msgstr ""
 
 #: site/setup-config.php:650
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:412
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:436
 msgid "Site language"
 msgstr ""
 
@@ -1803,14 +1867,12 @@ msgid "Email SMTP"
 msgstr ""
 
 #: ui/utils/dashboardSearch.ts:212
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:160
 #: ui/router/pageTitle.ts:28
 msgid "Email Configuration"
 msgstr ""
 
 #: ui/utils/dashboardSearch.ts:224
 #: ui/utils/dashboardSearch.ts:228
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:117
 #: ui/pages/dashboard/settings/Layout.tsx:48
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:99
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:719
@@ -1916,7 +1978,7 @@ msgstr ""
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:794
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:53
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorSetup.tsx:110
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:365
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:372
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:494
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:63
 #: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:88
@@ -1968,6 +2030,7 @@ msgstr ""
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:690
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:113
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:64
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:161
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:43
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:160
 msgid "Clicks"
@@ -2010,11 +2073,15 @@ msgid "Total Clicks"
 msgstr ""
 
 #: ui/components/charts/TrafficChart/TrafficChart.tsx:261
+#: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:70
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:133
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:170
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:44
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:167
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:28
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:114
 #: ui/pages/dashboard/links/LinksPage.tsx:311
-msgid "Unique Visitors"
+msgid "Visitors"
 msgstr ""
 
 #: ui/components/charts/WorldMap/_components/Tooltip.tsx:54
@@ -2817,12 +2884,12 @@ msgid "Confirm your password"
 msgstr ""
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:58
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:34
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:33
 msgid "Current Password"
 msgstr ""
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:73
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:41
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:39
 msgid "End all other sessions"
 msgstr ""
 
@@ -2866,7 +2933,7 @@ msgid "Enter your current password to disable two-factor authentication and clea
 msgstr ""
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/helpers.ts:47
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorSettings.tsx:76
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorSettings.tsx:77
 msgid "Disable"
 msgstr ""
 
@@ -2879,7 +2946,7 @@ msgid "Enter your current password to replace the existing backup codes with a n
 msgstr ""
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/helpers.ts:58
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorSettings.tsx:67
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorSettings.tsx:68
 msgid "Regenerate Codes"
 msgstr ""
 
@@ -3013,11 +3080,11 @@ msgstr ""
 msgid "PeakURL downloaded the latest backup codes for this account."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorSettings.tsx:47
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorSettings.tsx:42
 msgid "Two-Factor Authentication"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorSettings.tsx:50
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorSettings.tsx:51
 msgid "Add an extra layer of security with an authenticator app and backup codes."
 msgstr ""
 
@@ -3029,20 +3096,20 @@ msgstr ""
 msgid "Save or download these codes now—they won't be shown again."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:25
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:22
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:692
 msgid "Active Sessions"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:29
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:27
 msgid "%s active session(s)"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:48
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:46
 msgid "Loading security data..."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:52
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:50
 msgid "No active sessions found."
 msgstr ""
 
@@ -3059,7 +3126,7 @@ msgid "Last generated:"
 msgstr ""
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorStatus.tsx:59
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:59
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:65
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:130
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:147
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:68
@@ -3081,7 +3148,7 @@ msgstr ""
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:49
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:72
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:31
-#: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:41
+#: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:39
 #: ui/pages/dashboard/_components/RecentClicks/RecentClicks.tsx:11
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:38
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:182
@@ -3126,54 +3193,50 @@ msgstr ""
 msgid "Verify & Enable"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:39
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:45
 msgid "Browser"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:40
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:46
 msgid "Unknown OS"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:53
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:59
 msgid "Unknown IP"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:56
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:62
 msgid "Last active"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:68
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:74
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:590
 msgid "Current"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:73
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:79
 msgid "Ended"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:84
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:90
 msgid "End session"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:30
-msgid "Password & Security"
-msgstr ""
-
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:46
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:45
 #: ui/pages/dashboard/users/UsersPage.tsx:251
 msgid "New Password"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:54
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:53
 #: ui/pages/dashboard/users/UsersPage.tsx:270
 msgid "Confirm New Password"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:74
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:73
 msgid "Updating..."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:74
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:73
 msgid "Update Password"
 msgstr ""
 
@@ -3198,156 +3261,166 @@ msgid "Choose Favicon"
 msgstr ""
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:303
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:81
 msgid "Replace Preview Image"
 msgstr ""
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:304
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:82
 msgid "Choose Preview Image"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:310
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:311
 msgid "Profile Information"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:314
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:316
 #: ui/pages/dashboard/users/UsersPage.tsx:205
 msgid "First Name"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:321
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:323
 #: ui/pages/dashboard/users/UsersPage.tsx:211
 msgid "Last Name"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:328
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:330
 #: ui/pages/dashboard/users/UsersPage.tsx:220
 msgid "Display Name"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:341
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:343
 msgid "Cannot be changed"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:358
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:360
 msgid "Email Address"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:369
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:371
 msgid "Phone Number"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:376
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:378
 msgid "Company"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:382
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:384
 msgid "Job Title"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:394
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:391
+msgid "Bio"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:403
+msgid "Site Configuration"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:416
 msgid "Tagline"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:401
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:425
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:381
 msgid "Site Language"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:417
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:441
 msgid "Site Timezone"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:428
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:452
 msgid "Site timezone"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:434
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:458
 msgid "Time Format"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:445
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:469
 msgid "Time format"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:450
-msgid "Bio"
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:476
+msgid "Branding"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:464
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:484
 msgid "Site Favicon"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:467
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:487
 msgid "Upload a square PNG favicon. PeakURL will use it for browser tabs, Apple touch icons, and the site web manifest."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:477
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:497
 msgid "Favicon PNG"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:512
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:533
 msgid "Use a square PNG, ideally %s. The minimum supported size is 180 x 180."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:540
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:561
 msgid "Remove Favicon"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:555
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:578
 msgid "Current favicon preview"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:603
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:628
 msgid "No favicon configured"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:613
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:50
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Form.tsx:67
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:638
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:60
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Form.tsx:69
 msgid "Social Preview"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:616
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:641
 msgid "Upload the default image used when short links are shared on social platforms. Individual links can override it."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:627
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:90
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:64
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:652
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:139
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:106
 msgid "Preview Image"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:660
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:687
 msgid "Use a PNG, JPG, or WebP image, ideally %s, for clean previews on Facebook, X, LinkedIn, and messaging apps."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:680
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:100
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:98
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:709
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:149
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:116
 msgid "Remove Preview Image"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:692
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:721
 msgid "Default social preview image"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:703
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:734
 msgid "No default preview image"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:719
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:751
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:505
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:524
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:28
 msgid "Saving..."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:719
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:751
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:33
 #: ui/pages/dashboard/users/UsersPage.tsx:335
 msgid "Save Changes"
+msgstr ""
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:117
+msgid "Location Database"
 msgstr ""
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:120
@@ -3359,7 +3432,7 @@ msgid "Update Database"
 msgstr ""
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:146
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:286
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:291
 msgid "Download Database"
 msgstr ""
 
@@ -3390,19 +3463,18 @@ msgstr ""
 msgid "Database Updated"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:161
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:165
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:83
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:87
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:112
 msgid "Never"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:166
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:170
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:652
 msgid "Database Size"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:169
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:173
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:40
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:210
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:410
@@ -3414,81 +3486,81 @@ msgstr ""
 msgid "Not available"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:178
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:182
 msgid "Location data unavailable"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:189
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:193
 msgid "Location analytics is enabled"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:190
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:194
 msgid "Location analytics is disabled"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:194
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:198
 msgid "PeakURL is using the local GeoLite2 City database for click locations."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:197
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:201
 msgid "Save your MaxMind credentials, then download the GeoLite2 City database to enable visitor country and city analytics."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:208
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:212
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:205
 msgid "Dashboard management unavailable"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:217
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:220
 msgid "MaxMind Credentials"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:220
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:224
 msgid "PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:232
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:235
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:667
 msgid "Account ID"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:243
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:246
 msgid "License Key"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:267
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:271
 msgid "Update Credentials"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:285
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:290
 msgid "Refresh Database"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:297
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:302
 msgid "MaxMind Account ID"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:311
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:316
 msgid "MaxMind License Key"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:321
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:326
 msgid "Enter a new MaxMind license key"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:322
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:327
 msgid "Enter your MaxMind license key"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:330
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:335
 msgid "Saved license key:"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:351
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:357
 msgid "Save New Credentials"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:352
+#: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:358
 msgid "Save Credentials"
 msgstr ""
 
@@ -3645,23 +3717,23 @@ msgstr ""
 msgid "Last Database Upgrade"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:105
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:104
 msgid "Last database error"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:115
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:114
 msgid "Recent database findings"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/UpdateActions.tsx:51
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/UpdateActions.tsx:49
 msgid "Install Update"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/UpdateActions.tsx:70
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/UpdateActions.tsx:68
 msgid "Reinstall Latest Version"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/UpdateActions.tsx:102
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/UpdateActions.tsx:86
 msgid "Check for Updates"
 msgstr ""
 
@@ -3686,16 +3758,16 @@ msgstr ""
 msgid "Last Checked"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:109
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:108
 msgid "Released"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:121
-#: ui/pages/dashboard/about/AboutPage.tsx:631
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:117
+#: ui/pages/dashboard/about/AboutPage.tsx:629
 msgid "Release Notes"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:122
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:118
 msgid "Read release notes"
 msgstr ""
 
@@ -3957,7 +4029,7 @@ msgstr ""
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:26
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:35
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:44
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:54
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:57
 msgid "Inactive"
 msgstr ""
 
@@ -4056,7 +4128,7 @@ msgstr ""
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:105
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:33
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:53
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:56
 #: ui/pages/dashboard/links/LinksPage.tsx:276
 msgid "Active"
 msgstr ""
@@ -4156,6 +4228,10 @@ msgstr ""
 msgid "Save the current email settings before sending a test email."
 msgstr ""
 
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:160
+msgid "Email Delivery"
+msgstr ""
+
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:163
 msgid "PeakURL uses this mail transport for password-reset emails and other account recovery notifications."
 msgstr ""
@@ -4164,113 +4240,113 @@ msgstr ""
 msgid "Mail status unavailable"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:219
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:218
 msgid "Delivery method"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:225
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:224
 msgid "Use the hosting server’s built-in PHP mail transport."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:238
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:237
 msgid "Send through your own SMTP server with optional authentication."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:255
-msgid "SMTP connection"
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:253
+msgid "SMTP Configuration"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:259
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:257
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:608
 msgid "From Name"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:267
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:265
 msgid "PeakURL"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:270
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:268
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:607
 msgid "From Email"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:281
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:279
 msgid "noreply@yourdomain.com"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:286
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:284
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:610
 msgid "SMTP Host"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:297
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:295
 msgid "smtp.example.com"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:301
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:299
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:614
 msgid "SMTP Port"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:318
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:316
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:618
 msgid "Encryption"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:329
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:327
 msgid "SMTP encryption"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:334
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:332
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:622
 msgid "Authentication"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:354
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:352
 msgid "Authentication enabled"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:355
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:353
 msgid "Authentication disabled"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:383
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:381
 msgid "SMTP Username"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:394
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:392
 msgid "mailer@example.com"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:398
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:396
 msgid "SMTP Password"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:409
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:407
 msgid "Leave blank to keep the saved password"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:412
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:410
 msgid "Enter the SMTP password"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:417
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:415
 msgid "Saved password: %s"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:421
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:419
 msgid "PeakURL stores this password encrypted in the database."
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:451
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:449
 msgid "Send Test Email"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:462
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:460
 msgid "Save Email Configuration"
 msgstr ""
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:463
+#: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:461
 msgid "Use PHP mail()"
 msgstr ""
 
@@ -4934,6 +5010,8 @@ msgid "Format:"
 msgstr ""
 
 #: ui/pages/dashboard/tools/import/_components/paste/PasteImport.tsx:143
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:108
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:77
 msgid "or"
 msgstr ""
 
@@ -5374,47 +5452,47 @@ msgstr ""
 msgid "Delete activity"
 msgstr ""
 
-#: ui/pages/dashboard/about/Sponsors.tsx:51
+#: ui/pages/dashboard/about/Sponsors.tsx:57
 msgid "Our amazing supporters"
 msgstr ""
 
-#: ui/pages/dashboard/about/Sponsors.tsx:54
+#: ui/pages/dashboard/about/Sponsors.tsx:60
 msgid "A huge thank you to everyone who has contributed to keeping PeakURL running."
 msgstr ""
 
-#: ui/pages/dashboard/about/Sponsors.tsx:64
+#: ui/pages/dashboard/about/Sponsors.tsx:70
 msgid "Creator & Maintainer"
 msgstr ""
 
-#: ui/pages/dashboard/about/Sponsors.tsx:67
+#: ui/pages/dashboard/about/Sponsors.tsx:73
 msgid "PeakURL is a solo project. All development, hosting, and infrastructure costs are currently self-funded by the creator. If PeakURL brings value to your workflow, consider pitching in!"
 msgstr ""
 
-#: ui/pages/dashboard/about/Sponsors.tsx:85
+#: ui/pages/dashboard/about/Sponsors.tsx:91
 msgid "Independent Solo Maintainer"
 msgstr ""
 
-#: ui/pages/dashboard/about/Sponsors.tsx:132
+#: ui/pages/dashboard/about/Sponsors.tsx:138
 msgid "Company Sponsors"
 msgstr ""
 
-#: ui/pages/dashboard/about/Sponsors.tsx:135
+#: ui/pages/dashboard/about/Sponsors.tsx:141
 msgid "Claim your spot on the homepage. Get visibility for your brand while supporting open-source development."
 msgstr ""
 
-#: ui/pages/dashboard/about/Sponsors.tsx:163
+#: ui/pages/dashboard/about/Sponsors.tsx:169
 msgid "Your Logo"
 msgstr ""
 
-#: ui/pages/dashboard/about/Sponsors.tsx:174
+#: ui/pages/dashboard/about/Sponsors.tsx:180
 msgid "Community Supporters"
 msgstr ""
 
-#: ui/pages/dashboard/about/Sponsors.tsx:177
+#: ui/pages/dashboard/about/Sponsors.tsx:183
 msgid "A huge thanks to the individuals who back PeakURL's development and help keep the project actively maintained."
 msgstr ""
 
-#: ui/pages/dashboard/about/Sponsors.tsx:187
+#: ui/pages/dashboard/about/Sponsors.tsx:193
 msgid "Support the Project"
 msgstr ""
 
@@ -5624,10 +5702,10 @@ msgid "Freedom to"
 msgstr ""
 
 #: ui/pages/dashboard/about/AboutPage.tsx:602
-msgid "Self-hosted link management with clear ownership and a focused dashboard."
+msgid "Shorten, track, and own every link."
 msgstr ""
 
-#: ui/pages/dashboard/about/AboutPage.tsx:613
+#: ui/pages/dashboard/about/AboutPage.tsx:611
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
 msgid "Website"
 msgstr ""
@@ -5674,13 +5752,6 @@ msgstr ""
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:54
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:194
 msgid "Bar Chart"
-msgstr ""
-
-#: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:70
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:170
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:44
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:167
-msgid "Unique"
 msgstr ""
 
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:83
@@ -5736,7 +5807,7 @@ msgstr ""
 msgid "Dashboard time range"
 msgstr ""
 
-#: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:54
+#: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:52
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:99
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:146
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficLocationTab.tsx:166
@@ -5745,7 +5816,7 @@ msgstr ""
 msgid "Top Countries"
 msgstr ""
 
-#: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:59
+#: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:57
 msgid "No country data available"
 msgstr ""
 
@@ -5861,7 +5932,7 @@ msgstr ""
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:37
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:143
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:55
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:58
 msgid "Expired"
 msgstr ""
 
@@ -5887,10 +5958,6 @@ msgstr ""
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:144
 msgid "Expires"
-msgstr ""
-
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:161
-msgid "Total"
 msgstr ""
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:200
@@ -5923,73 +5990,90 @@ msgstr ""
 msgid "Password Protection (Optional)"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:103
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:120
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:114
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:142
 msgid "Please enter a URL"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:114
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:131
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:129
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:176
+msgid "Please enter a valid social image URL (must include http:// or https://)"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:138
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:185
+msgid "Choose a preview image file or enter an image URL, not both."
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:152
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:153
 msgid "Please enter a valid URL (must include http:// or https://)"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:145
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:139
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:184
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:161
 msgid "Expiration time must be in the future."
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:157
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:196
 msgid "Link shortened successfully! %s"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:182
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:222
 msgid "Failed to create short link. Please try again."
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:223
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:263
 msgid "Advanced Options"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:53
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:63
 msgid "Customize the Open Graph preview shown when this short link is shared."
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:60
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:39
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:70
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:43
 msgid "Preview Title"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:64
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:43
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:74
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:47
 msgid "Use link title"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:68
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:47
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:78
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:51
 msgid "Preview Description"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:74
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:53
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:84
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:57
 msgid "Short description for Facebook, X, LinkedIn, and messaging apps"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:109
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:108
-msgid "Social preview image"
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:97
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:65
+msgid "Image from URL"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:120
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:118
-msgid "Use default preview image"
-msgstr ""
-
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:142
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:129
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:96
 msgid "Replace Image"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:143
-msgid "Choose Image"
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:130
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:97
+msgid "Upload Image"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:158
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:126
+msgid "Social preview image"
+msgstr ""
+
+#: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:169
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:136
+msgid "Use default preview image"
 msgstr ""
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/UTMFields.tsx:30
@@ -6457,12 +6541,6 @@ msgstr ""
 msgid "Operating Systems"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/DeviceStats.tsx:257
-msgid "device"
-msgid_plural "devices"
-msgstr[0] ""
-msgstr[1] ""
-
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:38
 msgid "Check out this link"
 msgstr ""
@@ -6592,15 +6670,15 @@ msgstr ""
 msgid "Remove password protection"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:169
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:222
 msgid "Failed to update link"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Form.tsx:66
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Form.tsx:68
 msgid "Link Details"
 msgstr ""
 
-#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Form.tsx:68
+#: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Form.tsx:70
 msgid "Protection"
 msgstr ""
 

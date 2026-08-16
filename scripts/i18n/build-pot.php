@@ -37,19 +37,19 @@ $extensions  = array(
 $patterns    = array(
 	array(
 		'type'    => 'singular',
-		'pattern' => '/(?P<fn>__|_e|esc_html__|esc_html_e|esc_attr__|esc_attr_e)\(\s*(?P<quote>[\'"])(?P<text>(?:\\\\.|(?!\k<quote>).)*)\k<quote>\s*(?:,\s*(?P<domain_quote>[\'"])(?P<domain>(?:\\\\.|(?!\k<domain_quote>).)*)\k<domain_quote>)?\s*\)/s',
+		'pattern' => '/(?P<fn>__|_e|esc_html__|esc_html_e|esc_attr__|esc_attr_e)\(\s*(?P<quote>[\'"])(?P<text>(?:\\\\.|(?!\k<quote>).)*)\k<quote>\s*(?:,\s*(?P<domain_quote>[\'"])(?P<domain>(?:\\\\.|(?!\k<domain_quote>).)*)\k<domain_quote>)?\s*,?\s*\)/s',
 	),
 	array(
 		'type'    => 'context',
-		'pattern' => '/(?P<fn>_x|_ex)\(\s*(?P<text_quote>[\'"])(?P<text>(?:\\\\.|(?!\k<text_quote>).)*)\k<text_quote>\s*,\s*(?P<context_quote>[\'"])(?P<context>(?:\\\\.|(?!\k<context_quote>).)*)\k<context_quote>\s*(?:,\s*(?P<domain_quote>[\'"])(?P<domain>(?:\\\\.|(?!\k<domain_quote>).)*)\k<domain_quote>)?\s*\)/s',
+		'pattern' => '/(?P<fn>_x|_ex)\(\s*(?P<text_quote>[\'"])(?P<text>(?:\\\\.|(?!\k<text_quote>).)*)\k<text_quote>\s*,\s*(?P<context_quote>[\'"])(?P<context>(?:\\\\.|(?!\k<context_quote>).)*)\k<context_quote>\s*(?:,\s*(?P<domain_quote>[\'"])(?P<domain>(?:\\\\.|(?!\k<domain_quote>).)*)\k<domain_quote>)?\s*,?\s*\)/s',
 	),
 	array(
 		'type'    => 'plural',
-		'pattern' => '/(?P<fn>_n)\(\s*(?P<single_quote>[\'"])(?P<single>(?:\\\\.|(?!\k<single_quote>).)*)\k<single_quote>\s*,\s*(?P<plural_quote>[\'"])(?P<plural>(?:\\\\.|(?!\k<plural_quote>).)*)\k<plural_quote>\s*,/s',
+		'pattern' => '/(?P<fn>_n)\(\s*(?P<single_quote>[\'"])(?P<single>(?:\\\\.|(?!\k<single_quote>).)*)\k<single_quote>\s*,\s*(?P<plural_quote>[\'"])(?P<plural>(?:\\\\.|(?!\k<plural_quote>).)*)\k<plural_quote>\s*,.*?,\s*(?:(?P<domain_quote>[\'"])(?P<domain>(?:\\\\.|(?!\k<domain_quote>).)*)\k<domain_quote>\s*,?)?\s*\)/s',
 	),
 	array(
 		'type'    => 'plural_context',
-		'pattern' => '/(?P<fn>_nx)\(\s*(?P<single_quote>[\'"])(?P<single>(?:\\\\.|(?!\k<single_quote>).)*)\k<single_quote>\s*,\s*(?P<plural_quote>[\'"])(?P<plural>(?:\\\\.|(?!\k<plural_quote>).)*)\k<plural_quote>\s*,.*?,\s*(?P<context_quote>[\'"])(?P<context>(?:\\\\.|(?!\k<context_quote>).)*)\k<context_quote>\s*(?:,\s*(?P<domain_quote>[\'"])(?P<domain>(?:\\\\.|(?!\k<domain_quote>).)*)\k<domain_quote>)?\s*\)/s',
+		'pattern' => '/(?P<fn>_nx)\(\s*(?P<single_quote>[\'"])(?P<single>(?:\\\\.|(?!\k<single_quote>).)*)\k<single_quote>\s*,\s*(?P<plural_quote>[\'"])(?P<plural>(?:\\\\.|(?!\k<plural_quote>).)*)\k<plural_quote>\s*,.*?,\s*(?P<context_quote>[\'"])(?P<context>(?:\\\\.|(?!\k<context_quote>).)*)\k<context_quote>\s*(?:,\s*(?P<domain_quote>[\'"])(?P<domain>(?:\\\\.|(?!\k<domain_quote>).)*)\k<domain_quote>)?\s*,?\s*\)/s',
 	),
 );
 

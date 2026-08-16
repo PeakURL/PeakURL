@@ -62,7 +62,7 @@
 	}
 
 	.settings-location-credentials-view {
-		@apply space-y-4 mt-4;
+		@apply space-y-4 mt-0;
 	}
 
 	.settings-location-credentials-panel {

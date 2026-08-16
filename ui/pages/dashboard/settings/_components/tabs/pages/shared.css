@@ -75,7 +75,7 @@
 	}
 
 	.settings-updates-block {
-		@apply mt-5;
+		@apply mt-0;
 	}
 
 	.settings-updates-divider {

@@ -28,7 +28,7 @@
 	}
 
 	.settings-updates-metric-grid {
-		@apply mt-5 grid grid-cols-1 gap-3 md:grid-cols-3;
+		@apply mt-0! grid grid-cols-1 gap-3 md:grid-cols-3;
 	}
 
 	.settings-updates-metric-item {

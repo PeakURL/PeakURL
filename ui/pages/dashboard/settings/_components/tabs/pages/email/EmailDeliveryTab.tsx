@@ -1,6 +1,6 @@
 import type { SubmitEvent } from "react";
 import { useState } from "react";
-import { AlertCircle, Mail, MailCheck, Send, Server } from "lucide-react";
+import { AlertCircle, Mail, MailCheck } from "lucide-react";
 
 import { Button, Input, Select, type SelectOption } from "@/components";
 import { __, sprintf } from "@/i18n";
@@ -156,10 +156,10 @@ function EmailDeliveryTab({
 						<Mail size={18} />
 					</div>
 					<div className="settings-email-intro-content">
-						<legend className="settings-legend !mb-0">
+						<legend className="settings-legend mb-0!">
 							{__("Email Delivery")}
 						</legend>
-						<p className="settings-group-description !mb-0 !mt-0">
+						<p className="settings-group-description mb-0! mt-0!">
 							{__(
 								"PeakURL uses this mail transport for password-reset emails and other account recovery notifications."
 							)}

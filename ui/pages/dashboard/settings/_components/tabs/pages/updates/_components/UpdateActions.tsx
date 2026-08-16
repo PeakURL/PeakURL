@@ -2,7 +2,6 @@ import { Download, RefreshCcw } from "lucide-react";
 
 import { Button, type ButtonVariant } from "@/components";
 import { __ } from "@/i18n";
-import { cn } from "@/utils";
 
 import type { UpdateActionsProps } from "../types";
 
@@ -24,7 +23,6 @@ function UpdateActions({
 	onApply,
 	onReinstall,
 }: UpdateActionsProps) {
-	const isRtl = "rtl" === direction;
 	const isInstallingRelease = isApplying || isReinstalling;
 	const showDisabledReason =
 		(updateAvailable || reinstallAvailable) &&

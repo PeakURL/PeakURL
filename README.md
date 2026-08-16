@@ -154,7 +154,7 @@ Help keep PeakURL actively maintained and free for everyone. [Become a sponsor](
 
 #### Community Supporters
 
-- Ibrahym Ben ElZobyr
+- [Abdellah Chelli](https://github.com/sneetsher)
 
 [Buy Me a Coffee](https://buymeacoffee.com/PeakURL) to join the community supporters.
 

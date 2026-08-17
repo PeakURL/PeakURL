@@ -44,7 +44,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 ) {
 	const [showPassword, setShowPassword] = useState(false);
 	const isPasswordField = type === "password";
-	const actualType = isPasswordField ? (showPassword ? "text" : "password") : type;
+	const actualType = isPasswordField
+		? showPassword
+			? "text"
+			: "password"
+		: type;
 
 	const generatedId = useId();
 	const chromeDirection = getDocumentDirection();
@@ -95,7 +99,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 						"form-field-input",
 						hasInlineStartIcon && "field-with-inline-start-icon",
 						isPasswordField && "field-with-inline-end-icon",
-						!hasInlineStartIcon && !isPasswordField && "form-field-input-no-icon",
+						!hasInlineStartIcon &&
+							!isPasswordField &&
+							"form-field-input-no-icon",
 						placeholderFollowsPageDirection &&
 							"placeholder-follow-page-direction",
 						error && "form-field-control-error",
@@ -108,10 +114,16 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 						type="button"
 						className="form-field-icon pointer-events-auto cursor-pointer inline-end-icon-slot text-slate-400 hover:text-slate-600 focus:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-full p-2 absolute transition-colors"
 						onClick={() => setShowPassword(!showPassword)}
-						aria-label={showPassword ? "Hide password" : "Show password"}
+						aria-label={
+							showPassword ? "Hide password" : "Show password"
+						}
 						aria-pressed={showPassword}
 					>
-						{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+						{showPassword ? (
+							<EyeOff size={18} />
+						) : (
+							<Eye size={18} />
+						)}
 					</button>
 				)}
 			</div>

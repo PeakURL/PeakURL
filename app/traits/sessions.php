@@ -146,11 +146,13 @@ trait SessionsTrait {
 	 *
 	 * @param Request $request Incoming HTTP request.
 	 * @param string  $user_id User row ID.
+	 * @param bool    $remember Whether to issue a persistent 30-day cookie (true) or a transient session cookie (false).
 	 * @since 1.0.0
 	 */
 	private function create_session_for_user(
 		Request $request,
-		string $user_id
+		string $user_id,
+		bool $remember = true
 	): void {
 		$this->prune_stale_sessions();
 
@@ -180,19 +182,23 @@ trait SessionsTrait {
 
 		$this->db->insert( 'sessions', $row );
 
+		$cookie_options = array();
+
+		if ( $remember ) {
+			$cookie_options['max-age'] = (int) $this->config[ Constants::SESSION_LIFETIME ];
+			$cookie_options['expires'] = gmdate(
+				'D, d M Y H:i:s T',
+				time() + (int) $this->config[ Constants::SESSION_LIFETIME ],
+			);
+		}
+
 		$request->queue_cookie(
 			(string) $this->config[ Constants::SESSION_COOKIE_NAME ],
 			$this->crypto_service->sign_session_token( $raw_token ),
 			Security::session_cookie_options(
 				$this->config,
 				$request,
-				array(
-					'max-age' => (int) $this->config[ Constants::SESSION_LIFETIME ],
-					'expires' => gmdate(
-						'D, d M Y H:i:s T',
-						time() + (int) $this->config[ Constants::SESSION_LIFETIME ],
-					),
-				)
+				$cookie_options
 			),
 		);
 	}

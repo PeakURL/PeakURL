@@ -87,6 +87,7 @@ function LoginPage() {
 	const highlights = getHighlights();
 	const [identifier, setIdentifier] = useState("");
 	const [password, setPassword] = useState("");
+	const [rememberMe, setRememberMe] = useState(false);
 	const [token, setToken] = useState("");
 	const [backupCode, setBackupCode] = useState("");
 	const [useBackupMode, setUseBackupMode] = useState(false);
@@ -196,6 +197,7 @@ function LoginPage() {
 					identifier: identifier.trim(),
 					password,
 					token: activeToken,
+					rememberMe,
 				}).unwrap();
 			} else {
 				let captchaToken: string | undefined = undefined;
@@ -207,6 +209,7 @@ function LoginPage() {
 					identifier: identifier.trim(),
 					password,
 					captchaToken,
+					rememberMe,
 				}).unwrap();
 
 				if (
@@ -393,6 +396,25 @@ function LoginPage() {
 								required
 								className="login-page-input"
 							/>
+
+							{!twoFactorRequired ? (
+								<div className="login-page-remember-me">
+									<label className="login-page-remember-me-label">
+										<input
+											type="checkbox"
+											className="login-page-remember-me-checkbox"
+											checked={rememberMe}
+											onChange={(e) =>
+												setRememberMe(e.target.checked)
+											}
+											disabled={submitPending}
+										/>
+										<span className="login-page-remember-me-text">
+											{__("Remember me")}
+										</span>
+									</label>
+								</div>
+							) : null}
 
 							{!twoFactorRequired ? (
 								<div

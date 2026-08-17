@@ -349,6 +349,9 @@ export interface CredentialLoginPayload {
 
 	/** Optional CAPTCHA token for unauthenticated endpoints. */
 	captchaToken?: string;
+
+	/** Optional flag to remember the session for 30 days instead of a transient session. */
+	rememberMe?: boolean;
 }
 
 /**

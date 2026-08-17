@@ -166,4 +166,19 @@
 	.login-page-back-action {
 		@apply inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 transition-colors duration-150 hover:text-slate-700;
 	}
+	.login-page-remember-me {
+		@apply mb-4;
+	}
+
+	.login-page-remember-me-label {
+		@apply mt-3 flex cursor-pointer items-center gap-2;
+	}
+
+	.login-page-remember-me-checkbox {
+		@apply h-4 w-4 rounded border-slate-300 text-accent transition-colors focus:ring-accent;
+	}
+
+	.login-page-remember-me-text {
+		@apply select-none text-sm font-medium text-slate-600 dark:text-slate-400;
+	}
 }

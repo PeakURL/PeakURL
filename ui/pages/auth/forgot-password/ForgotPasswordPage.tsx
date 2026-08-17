@@ -73,9 +73,9 @@ function ForgotPasswordPage() {
 			showcaseCopy={__(
 				"Enter the email address or username linked to your PeakURL account and we'll send a secure reset link."
 			)}
-			noteTitle={__("Password reset links expire after 1 hour.")}
+			noteTitle={__("Secure account recovery")}
 			noteCopy={__(
-				"If the account exists, PeakURL sends a single-use link and keeps your existing sessions revoked after the password is changed."
+				"For your security, password reset links expire after 1 hour. Changing your password will also immediately revoke all active sessions across your devices."
 			)}
 			cardTitle={__("Forgot your password?")}
 			cardCopy={__(

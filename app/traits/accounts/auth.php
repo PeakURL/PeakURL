@@ -35,15 +35,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @method bool email_in_use(string $email, ?string $exclude_user_id = null)
  * @method bool username_in_use(string $username, ?string $exclude_user_id = null)
  * @method array{raw: string, hash: string} issue_lookup_token()
- * @method void create_session_for_user(Request $request, string $user_id)
+ * @method void create_session_for_user(Request $request, string $user_id, bool $remember = true)
  * @method array<string, mixed>|null current_user(Request $request)
  * @method array<string, mixed>|null find_session_by_request(Request $request)
  * @method array<string, mixed>|null find_user_row_by_id(string $id)
  * @method array<string, mixed>|null find_user_row_by_email(string $email)
  * @method array<string, mixed>|null find_user_row_by_username(string $username)
  * @method array<string, mixed> format_user(?array $row, ?Request $request = null)
- * @method array<string, mixed>|null query_one(string $sql, array $params = array())
- * @method void execute(string $sql, array $params = array())
+ * @method array<string, mixed>|null query_one(string $sql, array $params = [])
+ * @method void execute(string $sql, array $params = [])
  * @method string last_insert_id()
  * @method string now()
  * @method bool verify_backup_code(string $user_id, string $token)
@@ -249,6 +249,7 @@ trait AuthTrait {
 		);
 		$password   = (string) ( $payload['password'] ?? '' );
 		$token      = trim( (string) ( $payload['token'] ?? '' ) );
+		$remember   = ! empty( $payload['rememberMe'] );
 
 		if ( '' === $identifier || '' === $password ) {
 			throw new ApiException(
@@ -319,7 +320,7 @@ trait AuthTrait {
 			}
 		}
 
-		$this->create_session_for_user( $request, (string) $user['id'] );
+		$this->create_session_for_user( $request, (string) $user['id'], $remember );
 		$this->db->update(
 			'users',
 			array(

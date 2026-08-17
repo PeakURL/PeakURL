@@ -139,6 +139,24 @@
 		left: auto;
 	}
 
+	.field-with-inline-end-icon {
+		@apply pr-10;
+	}
+
+	html[dir="rtl"] .field-with-inline-end-icon {
+		@apply pl-10 pr-3;
+	}
+
+	.inline-end-icon-slot {
+		@apply right-0 pr-1;
+		left: auto;
+	}
+
+	html[dir="rtl"] .inline-end-icon-slot {
+		@apply left-0 pl-1 pr-0;
+		right: auto;
+	}
+
 	.content-area {
 		@apply bg-bg dark:bg-gray-900;
 	}

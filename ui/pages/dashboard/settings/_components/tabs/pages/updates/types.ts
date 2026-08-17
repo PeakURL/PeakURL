@@ -114,6 +114,7 @@ export interface MetricItem {
 	label: string;
 	value: string;
 	valueDirection?: ValueDirection;
+	action?: ReactNode;
 }
 
 /**

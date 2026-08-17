@@ -28,12 +28,12 @@
 	}
 
 	.settings-updates-metric-grid {
-		@apply mt-0! grid grid-cols-1 gap-3 md:grid-cols-3;
+		@apply mt-0! flex flex-col md:flex-row md:flex-wrap gap-3;
 	}
 
 	.settings-updates-metric-item {
 		text-align: start;
-		@apply rounded-lg border border-stroke bg-bg px-4 py-4;
+		@apply flex-1 min-w-50 rounded-lg border border-stroke bg-bg px-4 py-4;
 	}
 
 	.settings-updates-metric-label {

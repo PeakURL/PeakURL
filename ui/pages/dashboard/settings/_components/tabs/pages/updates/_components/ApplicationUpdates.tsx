@@ -1,10 +1,9 @@
-import { AlertCircle, CheckCircle2, Clock3, Download } from "lucide-react";
+import { AlertCircle, CheckCircle2, Download } from "lucide-react";
 
 import { __ } from "@/i18n";
 import { formatRelativeTime } from "@/utils";
 
 import type { ApplicationUpdatesProps } from "../types";
-import DetailRow from "./DetailRow";
 import InlineNotice from "./InlineNotice";
 import MetricGrid from "./MetricGrid";
 import SectionHeader from "./SectionHeader";
@@ -43,7 +42,7 @@ function ApplicationUpdates({
 		<UpdateSection>
 			<SectionHeader
 				direction={direction}
-				title={__("Application Updates")}
+				title={__("PeakURL Updates")}
 				description={__(
 					"Check for new PeakURL releases, install updates, or reinstall the latest packaged release from the dashboard."
 				)}
@@ -79,7 +78,29 @@ function ApplicationUpdates({
 						label: __("Latest Version"),
 						value: status?.latestVersion || __("Unknown"),
 						valueDirection: "ltr",
+						action:
+							showReleaseMeta && status?.releaseNotesUrl ? (
+								<a
+									href={status.releaseNotesUrl}
+									className="settings-updates-detail-link text-[13px]! font-normal!"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{__("Read notes")}
+								</a>
+							) : undefined,
 					},
+					...(showReleaseMeta && status?.releasedAt
+						? [
+								{
+									label: __("Released"),
+									value: formatRelativeTime(
+										status.releasedAt
+									),
+									valueDirection: "ltr" as const,
+								},
+							]
+						: []),
 					{
 						label: __("Last Checked"),
 						value: status?.lastCheckedAt
@@ -99,28 +120,6 @@ function ApplicationUpdates({
 					tone={appState.tone}
 				/>
 			</div>
-
-			{showReleaseMeta ? (
-				<div className="settings-updates-divider">
-					{status?.releasedAt ? (
-						<DetailRow
-							direction={direction}
-							label={__("Released")}
-							value={formatRelativeTime(status.releasedAt)}
-							icon={Clock3}
-							valueDirection="ltr"
-						/>
-					) : null}
-					{status?.releaseNotesUrl ? (
-						<DetailRow
-							direction={direction}
-							label={__("Release Notes")}
-							value={__("Read release notes")}
-							href={status.releaseNotesUrl}
-						/>
-					) : null}
-				</div>
-			) : null}
 		</UpdateSection>
 	);
 }

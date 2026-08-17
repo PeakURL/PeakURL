@@ -16,11 +16,16 @@ function MetricGrid({ direction, items }: MetricGridProps) {
 					<p className="settings-updates-metric-label">
 						{item.label}
 					</p>
-					<p className="settings-updates-metric-value">
-						<DirectionalValue direction={item.valueDirection}>
-							{item.value}
-						</DirectionalValue>
-					</p>
+					<div className="flex items-center justify-between gap-3">
+						<p className="settings-updates-metric-value">
+							<DirectionalValue direction={item.valueDirection}>
+								{item.value}
+							</DirectionalValue>
+						</p>
+						{item.action ? (
+							<div className="shrink-0 pt-2">{item.action}</div>
+						) : null}
+					</div>
 				</div>
 			))}
 		</div>

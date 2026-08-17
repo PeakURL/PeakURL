@@ -54,7 +54,7 @@
 	}
 
 	.settings-general-social-preview-grid {
-		@apply grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start;
+		@apply grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_18rem] xl:items-start;
 	}
 
 	.settings-general-social-preview-field {
@@ -104,7 +104,7 @@
 	}
 
 	.settings-general-favicon-header {
-		@apply grid gap-5 lg:w-fit lg:max-w-full lg:grid-cols-[minmax(0,28rem)_22rem] lg:items-start lg:justify-start;
+		@apply grid gap-5 xl:w-fit xl:max-w-full xl:grid-cols-[minmax(0,28rem)_22rem] xl:items-start xl:justify-start;
 	}
 
 	.settings-general-favicon-content {

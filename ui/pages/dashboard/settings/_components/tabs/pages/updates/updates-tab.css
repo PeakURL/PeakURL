@@ -16,7 +16,7 @@
 	}
 
 	.settings-updates-card-header {
-		@apply flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between border-b border-stroke pb-5;
+		@apply flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between border-b border-stroke pb-5;
 	}
 
 	.settings-updates-card-title-row {

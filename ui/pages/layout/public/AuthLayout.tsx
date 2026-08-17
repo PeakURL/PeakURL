@@ -3,6 +3,7 @@ import { Link } from "react-router";
 
 import { isDocumentRtl } from "@/i18n/direction";
 import { __ } from "@/i18n";
+import { BrandLockup } from "@/components";
 
 import type { AuthLayoutProps } from "./types";
 
@@ -53,10 +54,7 @@ function AuthLayout({
 						aria-labelledby="page-heading"
 					>
 						<header className="auth-page-card-header">
-							<div className="auth-page-brand">
-								<span className="auth-page-brand-dot" />
-								PeakURL
-							</div>
+							<BrandLockup size="md" />
 							<Link to={backTo} className="auth-page-back-link">
 								<BackArrow size={16} />
 								{backLabel}

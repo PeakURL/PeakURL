@@ -513,6 +513,15 @@ function get_peakurl_data( array $args = array() ): array {
 	}
 
 	/*
+	 * Retrieve CAPTCHA configuration for auth flows.
+	 */
+	$captcha_service = isset( $args['captcha_service'] ) &&
+		$args['captcha_service'] instanceof \PeakURL\Services\Captcha
+		? $args['captcha_service']
+		: new \PeakURL\Services\Captcha( $app_config, $settings, new \PeakURL\Services\Crypto( $app_config ) );
+	$captcha         = $captcha_service->get_challenge();
+
+	/*
 	 * Keep the public client contract compact: one object, stable camelCase
 	 * keys, and one filter for extension code to add fields intentionally.
 	 */
@@ -530,6 +539,7 @@ function get_peakurl_data( array $args = array() ): array {
 		'timezone'      => $timezone,
 		'timeFormat'    => $time_format,
 		'favicon'       => $favicon,
+		'captcha'       => $captcha,
 		'i18n'          => $catalog,
 	);
 	$filtered = apply_filters( 'dashboard_data', $data, $args );

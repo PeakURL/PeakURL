@@ -1,5 +1,5 @@
 import type { KeyboardEvent, SubmitEvent } from "react";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router";
 import {
 	ArrowLeft,
@@ -15,6 +15,8 @@ import {
 import {
 	ApiErrorPage,
 	BrandLockup,
+	CaptchaWidget,
+	type CaptchaWidgetRef,
 	Input,
 	PageLoader,
 	VerificationCodeInput,
@@ -90,6 +92,7 @@ function LoginPage() {
 	const [useBackupMode, setUseBackupMode] = useState(false);
 	const [twoFactorRequired, setTwoFactorRequired] = useState(false);
 	const [formError, setFormError] = useState("");
+	const captchaRef = useRef<CaptchaWidgetRef>(null);
 	const [login, { isLoading: isLoggingIn }] = useLoginMutation();
 	const [verifyLogin, { isLoading: isVerifying }] =
 		useVerifyTwoFactorLoginMutation();
@@ -195,9 +198,15 @@ function LoginPage() {
 					token: activeToken,
 				}).unwrap();
 			} else {
+				let captchaToken: string | undefined = undefined;
+				if (captchaRef.current) {
+					captchaToken = await captchaRef.current.getToken();
+				}
+
 				const result = await login({
 					identifier: identifier.trim(),
 					password,
+					captchaToken,
 				}).unwrap();
 
 				if (
@@ -467,6 +476,10 @@ function LoginPage() {
 										</div>
 									)}
 								</div>
+							) : null}
+
+							{!twoFactorRequired ? (
+								<CaptchaWidget ref={captchaRef} />
 							) : null}
 
 							<button

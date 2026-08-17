@@ -1,10 +1,15 @@
 import type { KeyboardEvent, SubmitEvent } from "react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { CheckCircle2, KeyRound, LockKeyhole } from "lucide-react";
 
 import { AuthLayout } from "@/pages/layout";
-import { Button, Input } from "@/components";
+import {
+	Button,
+	CaptchaWidget,
+	type CaptchaWidgetRef,
+	Input,
+} from "@/components";
 import {
 	useCheckPasswordResetTokenQuery,
 	useResetPasswordMutation,
@@ -29,6 +34,7 @@ function ResetPasswordPage() {
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [formError, setFormError] = useState("");
 	const [isCompleted, setIsCompleted] = useState(false);
+	const captchaRef = useRef<CaptchaWidgetRef>(null);
 	const {
 		isError: isTokenError,
 		isFetching: isCheckingToken,
@@ -60,9 +66,15 @@ function ResetPasswordPage() {
 		}
 
 		try {
+			let captchaToken: string | undefined = undefined;
+			if (captchaRef.current) {
+				captchaToken = await captchaRef.current.getToken();
+			}
+
 			await resetPassword({
 				token: resetToken,
 				password,
+				captchaToken,
 			}).unwrap();
 			setIsCompleted(true);
 			window.setTimeout(() => {
@@ -192,6 +204,7 @@ function ResetPasswordPage() {
 						disabled={isCheckingResetLink}
 						className="auth-page-input"
 					/>
+					<CaptchaWidget ref={captchaRef} />
 					<Button
 						type="submit"
 						size="md"

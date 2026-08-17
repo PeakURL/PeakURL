@@ -600,6 +600,16 @@ trait SystemTrait {
 	}
 
 	/**
+	 * Return the CAPTCHA service instance.
+	 *
+	 * @return Captcha
+	 * @since 1.2.0
+	 */
+	public function get_captcha_service(): Captcha {
+		return $this->captcha_service;
+	}
+
+	/**
 	 * Return the current GeoIP integration status.
 	 *
 	 * @param Request $request Incoming HTTP request (admin-only).

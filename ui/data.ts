@@ -11,6 +11,17 @@ export const DEFAULT_API_PATH = "/api/v1";
 export type PeakURLTimeFormat = "12" | "24";
 
 /**
+ * Public configuration for the active CAPTCHA provider.
+ */
+export interface CaptchaChallenge {
+	provider: "recaptcha" | "turnstile";
+	siteKey: string;
+	action?: string;
+	responseField: string;
+	scriptUrl: string;
+}
+
+/**
  * PHP-injected app data consumed by the React dashboard.
  */
 export interface PeakURLData {
@@ -55,6 +66,9 @@ export interface PeakURLData {
 
 	/** Translation catalog consumed by `@wordpress/i18n`. */
 	i18n?: I18nCatalog;
+
+	/** Public CAPTCHA configuration, if enabled. */
+	captcha?: CaptchaChallenge | null;
 }
 
 declare global {
@@ -147,6 +161,10 @@ export function toPeakURLData(value: unknown): PeakURLData {
 
 	if (isObjectRecord(data.i18n)) {
 		peakurlData.i18n = data.i18n as I18nCatalog;
+	}
+
+	if (null === data.captcha || isObjectRecord(data.captcha)) {
+		peakurlData.captcha = data.captcha as CaptchaChallenge | null;
 	}
 
 	return peakurlData;

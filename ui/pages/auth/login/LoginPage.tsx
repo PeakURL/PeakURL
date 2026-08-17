@@ -1,5 +1,5 @@
 import type { KeyboardEvent, SubmitEvent } from "react";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router";
 import {
 	ArrowLeft,
@@ -15,6 +15,8 @@ import {
 import {
 	ApiErrorPage,
 	BrandLockup,
+	CaptchaWidget,
+	type CaptchaWidgetRef,
 	Input,
 	PageLoader,
 	VerificationCodeInput,
@@ -85,11 +87,13 @@ function LoginPage() {
 	const highlights = getHighlights();
 	const [identifier, setIdentifier] = useState("");
 	const [password, setPassword] = useState("");
+	const [rememberMe, setRememberMe] = useState(false);
 	const [token, setToken] = useState("");
 	const [backupCode, setBackupCode] = useState("");
 	const [useBackupMode, setUseBackupMode] = useState(false);
 	const [twoFactorRequired, setTwoFactorRequired] = useState(false);
 	const [formError, setFormError] = useState("");
+	const captchaRef = useRef<CaptchaWidgetRef>(null);
 	const [login, { isLoading: isLoggingIn }] = useLoginMutation();
 	const [verifyLogin, { isLoading: isVerifying }] =
 		useVerifyTwoFactorLoginMutation();
@@ -193,11 +197,19 @@ function LoginPage() {
 					identifier: identifier.trim(),
 					password,
 					token: activeToken,
+					rememberMe,
 				}).unwrap();
 			} else {
+				let captchaToken: string | undefined = undefined;
+				if (captchaRef.current) {
+					captchaToken = await captchaRef.current.getToken();
+				}
+
 				const result = await login({
 					identifier: identifier.trim(),
 					password,
+					captchaToken,
+					rememberMe,
 				}).unwrap();
 
 				if (
@@ -386,6 +398,25 @@ function LoginPage() {
 							/>
 
 							{!twoFactorRequired ? (
+								<div className="login-page-remember-me">
+									<label className="login-page-remember-me-label">
+										<input
+											type="checkbox"
+											className="login-page-remember-me-checkbox"
+											checked={rememberMe}
+											onChange={(e) =>
+												setRememberMe(e.target.checked)
+											}
+											disabled={submitPending}
+										/>
+										<span className="login-page-remember-me-text">
+											{__("Remember me")}
+										</span>
+									</label>
+								</div>
+							) : null}
+
+							{!twoFactorRequired ? (
 								<div
 									className={`login-page-link-row ${
 										isRtl ? "login-page-link-row-rtl" : ""
@@ -467,6 +498,10 @@ function LoginPage() {
 										</div>
 									)}
 								</div>
+							) : null}
+
+							{!twoFactorRequired ? (
+								<CaptchaWidget ref={captchaRef} />
 							) : null}
 
 							<button

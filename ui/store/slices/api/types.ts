@@ -346,6 +346,12 @@ export interface CredentialLoginPayload {
 
 	/** Optional TOTP or backup code used for two-factor verification. */
 	token?: string;
+
+	/** Optional CAPTCHA token for unauthenticated endpoints. */
+	captchaToken?: string;
+
+	/** Optional flag to remember the session for 30 days instead of a transient session. */
+	rememberMe?: boolean;
 }
 
 /**
@@ -408,6 +414,9 @@ export interface LogoutResponse {
 export interface ForgotPasswordPayload {
 	/** Email address or username entered on the recovery form. */
 	identifier: string;
+
+	/** Optional CAPTCHA token for unauthenticated endpoints. */
+	captchaToken?: string;
 }
 
 /**
@@ -419,6 +428,9 @@ export interface ResetPasswordPayload {
 
 	/** New plain-text password chosen by the user. */
 	password: string;
+
+	/** Optional CAPTCHA token for unauthenticated endpoints. */
+	captchaToken?: string;
 }
 
 /**

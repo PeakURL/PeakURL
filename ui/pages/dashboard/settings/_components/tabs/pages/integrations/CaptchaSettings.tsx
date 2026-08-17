@@ -268,7 +268,7 @@ function CaptchaSettingsContent({
 					</h3>
 					<p className="integrations-tab-panel-description">
 						{__(
-							"Require a verification challenge before public short links redirect."
+							"Require a verification challenge on the authentication pages and before public short links redirect."
 						)}
 					</p>
 				</div>

@@ -1,11 +1,16 @@
 import type { KeyboardEvent, SubmitEvent } from "react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router";
 import { ArrowLeft, ArrowRight, KeyRound, Mail } from "lucide-react";
 
 import { isDocumentRtl } from "@/i18n/direction";
 import { AuthLayout } from "@/pages/layout";
-import { Button, Input } from "@/components";
+import {
+	Button,
+	CaptchaWidget,
+	type CaptchaWidgetRef,
+	Input,
+} from "@/components";
 import { useForgotPasswordMutation } from "@/store/slices/api";
 import { __, sprintf } from "@/i18n";
 import { getErrorMessage, requestControlFormSubmit } from "@/utils";
@@ -26,6 +31,7 @@ function ForgotPasswordPage() {
 	const [submittedIdentifier, setSubmittedIdentifier] = useState("");
 	const [formError, setFormError] = useState("");
 	const [isSubmitted, setIsSubmitted] = useState(false);
+	const captchaRef = useRef<CaptchaWidgetRef>(null);
 	const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
 
 	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
@@ -38,8 +44,14 @@ function ForgotPasswordPage() {
 		}
 
 		try {
+			let captchaToken: string | undefined = undefined;
+			if (captchaRef.current) {
+				captchaToken = await captchaRef.current.getToken();
+			}
+
 			await forgotPassword({
 				identifier: identifier.trim(),
+				captchaToken,
 			}).unwrap();
 			setSubmittedIdentifier(identifier.trim());
 			setIsSubmitted(true);
@@ -61,9 +73,9 @@ function ForgotPasswordPage() {
 			showcaseCopy={__(
 				"Enter the email address or username linked to your PeakURL account and we'll send a secure reset link."
 			)}
-			noteTitle={__("Password reset links expire after 1 hour.")}
+			noteTitle={__("Secure account recovery")}
 			noteCopy={__(
-				"If the account exists, PeakURL sends a single-use link and keeps your existing sessions revoked after the password is changed."
+				"For your security, password reset links expire after 1 hour. Changing your password will also immediately revoke all active sessions across your devices."
 			)}
 			cardTitle={__("Forgot your password?")}
 			cardCopy={__(
@@ -109,6 +121,7 @@ function ForgotPasswordPage() {
 						error={formError}
 						className="auth-page-input"
 					/>
+					<CaptchaWidget ref={captchaRef} />
 					<Button
 						type="submit"
 						size="md"

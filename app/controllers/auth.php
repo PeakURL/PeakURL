@@ -89,6 +89,8 @@ class AuthController extends BaseController {
 	 * @since 1.0.0
 	 */
 	public function login( Request $request ): array {
+		$this->verify_captcha_token( $request );
+
 		return $this->success_response(
 			$this->data_store->login( $request, $request->get_body_params() ),
 			__( 'Signed in.', 'peakurl' ),
@@ -132,6 +134,8 @@ class AuthController extends BaseController {
 	 * @since 1.0.0
 	 */
 	public function forgot_password( Request $request ): array {
+		$this->verify_captcha_token( $request );
+
 		return $this->success_response(
 			$this->data_store->forgot_password( $request->get_body_params() ),
 			__( 'If that account exists, a password reset link has been sent.', 'peakurl' ),
@@ -170,6 +174,8 @@ class AuthController extends BaseController {
 	 * @since 1.0.0
 	 */
 	public function reset_password( Request $request ): array {
+		$this->verify_captcha_token( $request );
+
 		$token = $this->route_param( $request, 'token' );
 		$reset = $this->data_store->reset_password(
 			$token,

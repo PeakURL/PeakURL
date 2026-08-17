@@ -186,4 +186,40 @@ abstract class BaseController {
 
 		return $this->success_response( $payload, $success_message );
 	}
+
+	/**
+	 * Verify CAPTCHA token for unauthenticated endpoints.
+	 *
+	 * @param Request $request Incoming request.
+	 * @return void
+	 *
+	 * @throws \PeakURL\Http\ApiException When CAPTCHA verification fails.
+	 * @since 1.5.0
+	 */
+	protected function verify_captcha_token( Request $request ): void {
+		$captcha_service = $this->data_store->get_captcha_service();
+		$challenge       = $captcha_service->get_challenge();
+
+		if ( null === $challenge ) {
+			return; // CAPTCHA is not configured or enabled.
+		}
+
+		$token = trim( (string) $request->get_body_param( 'captchaToken', '' ) );
+
+		if ( '' === $token ) {
+			throw new \PeakURL\Http\ApiException(
+				__( 'CAPTCHA verification failed. Please try again.', 'peakurl' ),
+				403,
+			);
+		}
+
+		$ip_address = $request->get_ip_address();
+
+		if ( ! $captcha_service->verify_token( $token, $ip_address ) ) {
+			throw new \PeakURL\Http\ApiException(
+				__( 'CAPTCHA verification failed. Please try again.', 'peakurl' ),
+				403,
+			);
+		}
+	}
 }

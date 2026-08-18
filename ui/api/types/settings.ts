@@ -126,6 +126,14 @@ export interface SiteSettings {
 	availableLanguages?: InstalledLanguage[];
 	favicon?: SiteFavicon | null;
 	socialPreview?: SiteSocialPreview | null;
+	/** Mode for the root domain landing page behavior. */
+	landingPageMode?: "login" | "url" | "html";
+
+	/** Target URL when landingPageMode is 'url'. */
+	landingPageUrl?: string;
+
+	/** Absolute path to the content directory. */
+	contentDirectory?: string;
 }
 
 /**

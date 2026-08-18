@@ -201,6 +201,8 @@ const Content = ({ activeTab }: ContentProps) => {
 			removeSocialPreviewImage,
 			faviconFile,
 			removeFavicon,
+			landingPageMode: nextLandingPageMode,
+			landingPageUrl: nextLandingPageUrl,
 			...profileForm
 		} = generalForm || {};
 		const currentSiteName = (
@@ -214,6 +216,10 @@ const Content = ({ activeTab }: ContentProps) => {
 			generalSettingsResponse?.data?.siteTimezone || "UTC";
 		const currentSiteTimeFormat =
 			generalSettingsResponse?.data?.siteTimeFormat || "12";
+		const currentLandingPageMode =
+			generalSettingsResponse?.data?.landingPageMode || "html";
+		const currentLandingPageUrl =
+			generalSettingsResponse?.data?.landingPageUrl || "";
 		const saveProfile = hasProfileChanges(user, profileForm);
 		const saveSiteName =
 			(generalSettingsResponse?.data?.canManageSiteSettings ?? false) &&
@@ -236,6 +242,10 @@ const Content = ({ activeTab }: ContentProps) => {
 		const saveSocialPreview =
 			(generalSettingsResponse?.data?.canManageSiteSettings ?? false) &&
 			(Boolean(socialPreviewFile) || Boolean(removeSocialPreviewImage));
+		const saveLandingPage =
+			(generalSettingsResponse?.data?.canManageSiteSettings ?? false) &&
+			(nextLandingPageMode !== currentLandingPageMode ||
+				nextLandingPageUrl !== currentLandingPageUrl);
 		const saveGeneral =
 			saveSiteName ||
 			saveSiteTagline ||
@@ -243,6 +253,7 @@ const Content = ({ activeTab }: ContentProps) => {
 			saveTimezone ||
 			saveTimeFormat ||
 			saveSocialPreview ||
+			saveLandingPage ||
 			Boolean(faviconFile) ||
 			Boolean(removeFavicon);
 
@@ -274,6 +285,8 @@ const Content = ({ activeTab }: ContentProps) => {
 					removeSocialPreviewImage,
 					faviconFile,
 					removeFavicon,
+					landingPageMode: nextLandingPageMode,
+					landingPageUrl: nextLandingPageUrl,
 				}).unwrap();
 
 				updatePeakURLData({

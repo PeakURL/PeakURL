@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PeakURL - Open-Source Self-Hosted URL Shortener</title>
+    <meta name="description" content="PeakURL is an open-source, self-hosted URL shortener built for speed, privacy, and control.">
+
+    <!-- Tailwind v4 Browser Build via jsDelivr -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+        body {
+            font-family: 'DM Sans', system-ui, sans-serif;
+            background-color: #0b1120;
+            color: #e2e8f0;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4, h5, h6, .font-heading {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+        }
+
+        .hero-gradient {
+            background:
+                radial-gradient(ellipse 80% 60% at 50% -10%, rgba(37, 99, 235, 0.12), transparent 70%),
+                radial-gradient(ellipse 40% 40% at 80% 80%, rgba(124, 58, 237, 0.05), transparent),
+                linear-gradient(170deg, #0c1426 0%, #0b1120 50%, #0f1b30 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .button-primary {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #ffffff !important;
+            box-shadow:
+                0 1px 2px rgba(0, 0, 0, 0.06),
+                0 4px 12px rgba(37, 99, 235, 0.18);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .button-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+            box-shadow:
+                0 1px 3px rgba(0, 0, 0, 0.08),
+                0 8px 20px rgba(37, 99, 235, 0.28);
+            transform: translateY(-1px);
+        }
+
+        .button-secondary-inverse {
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.06);
+            color: #ffffff !important;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .button-secondary-inverse:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-blue-500/30 selection:text-white">
+    <div class="hero-gradient relative overflow-hidden">
+        <!-- Header -->
+        <header class="px-6 py-5 flex items-center justify-between mx-auto max-w-6xl w-full" role="banner">
+            <a href="https://peakurl.org?utm_source=peakurl_app&amp;utm_medium=landing_page" class="flex items-center gap-2.5 no-underline hover:opacity-90 transition-opacity" aria-label="PeakURL Homepage" rel="noopener noreferrer">
+                <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-[#2b3040] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]" aria-hidden="true">
+                    <svg class="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                    </svg>
+                </span>
+                <span class="font-heading font-semibold tracking-tight text-[15px] text-white">PeakURL</span>
+            </a>
+            <nav class="hidden sm:flex gap-6" aria-label="Main Navigation">
+                <a href="https://peakurl.org?utm_source=peakurl_app&amp;utm_medium=landing_page" class="text-white/70 hover:text-white font-medium transition-colors text-sm" rel="noopener noreferrer">Website</a>
+                <a href="https://peakurl.org/docs?utm_source=peakurl_app&amp;utm_medium=landing_page" class="text-white/70 hover:text-white font-medium transition-colors text-sm" rel="noopener noreferrer">Documentation</a>
+                <a href="https://go.peakurl.org/repo" class="text-white/70 hover:text-white font-medium transition-colors text-sm" rel="noopener noreferrer" aria-label="GitHub Repository">GitHub</a>
+            </nav>
+        </header>
+
+        <!-- Main Hero Section -->
+        <main class="grow flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8 relative z-10 pb-20" role="main">
+            <div class="mx-auto max-w-3xl">
+                <!-- Status Badge -->
+                <div class="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm mb-10 shadow-sm" role="status" aria-live="polite">
+                    <span class="relative flex h-2 w-2" aria-hidden="true">
+                        <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-400"></span>
+                    </span>
+                    <span class="text-xs font-semibold tracking-[0.15em] text-white/70 uppercase sm:text-sm">
+                        Self-Hosted
+                    </span>
+                </div>
+
+                <h1 class="text-[2.75rem] leading-[1.05] font-extrabold text-white sm:text-6xl lg:text-7xl mb-7 font-heading">
+                    Shorten, track, and <span class="gradient-text">own every link.</span>
+                </h1>
+
+                <p class="mx-auto max-w-2xl text-base leading-[1.85] text-white/50 sm:text-lg mb-10">
+                    Welcome to your self-hosted PeakURL installation. The platform is running securely and is ready to manage your links, analytics, and integrations.
+                </p>
+
+                <div class="flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-4 mb-16">
+                    <a href="/login" class="button-primary inline-flex w-full items-center justify-center gap-2.5 rounded-xl px-8 py-4 text-sm font-bold sm:w-auto transition-transform outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-[#0b1120]">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                            <polyline points="10 17 15 12 10 7"/>
+                            <line x1="15" x2="3" y1="12" y2="12"/>
+                        </svg>
+                        Dashboard Login
+                    </a>
+                    <a href="https://peakurl.org/docs?utm_source=peakurl_app&amp;utm_medium=landing_page" class="button-secondary-inverse inline-flex w-full items-center justify-center gap-2 rounded-xl px-7 py-3.5 text-sm font-semibold sm:w-auto transition-transform outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#0b1120]" rel="noopener noreferrer">
+                        Read the docs
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                </div>
+
+                <!-- Customize Information Card -->
+                <section class="text-left bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md max-w-2xl mx-auto shadow-xl" aria-labelledby="customize-title">
+                    <h3 id="customize-title" class="text-white font-semibold flex items-center gap-2.5 mb-3 font-heading">
+                        <svg class="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        Customize This Page
+                    </h3>
+                    <p class="text-white/60 text-sm leading-relaxed mb-4">
+                        This is the default PeakURL landing page template. To completely re-style and customize this page with your own branding, edit the local file:
+                        <code class="bg-black/40 text-white/90 px-2 py-0.5 rounded font-mono text-[13px] border border-white/10 ml-1 select-all">content/landing-page.html</code>
+                    </p>
+                    <p class="text-white/60 text-sm leading-relaxed">
+                        Changes are applied instantly. You can also switch the root domain behavior back to a direct Login screen or a Custom Redirect URL from your dashboard under <strong class="text-white/80 font-medium">Settings &rarr; General</strong>.
+                    </p>
+                </section>
+            </div>
+        </main>
+
+        <footer class="text-center py-6 text-white/40 text-sm pb-8 relative z-10" role="contentinfo">
+            <p>
+                &copy; <script>document.write(new Date().getFullYear())</script> PeakURL.
+                <a href="https://peakurl.org?utm_source=peakurl_app&amp;utm_medium=landing_page" class="hover:text-white transition-colors underline decoration-white/20 underline-offset-4" rel="noopener noreferrer">Visit peakurl.org</a> for updates.
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

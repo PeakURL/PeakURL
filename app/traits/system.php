@@ -210,6 +210,9 @@ trait SystemTrait {
 				$user,
 				'manage_site_settings',
 			),
+			'landingPageMode'       => $this->get_option( 'landing_page_mode' ) ? $this->get_option( 'landing_page_mode' ) : 'html',
+			'landingPageUrl'        => $this->get_option( 'landing_page_url' ) ? $this->get_option( 'landing_page_url' ) : '',
+			'contentDirectory'      => $this->i18n_service->get_content_dir(),
 		);
 	}
 
@@ -304,6 +307,17 @@ trait SystemTrait {
 
 		if ( $site_tagline !== $current_site_tagline ) {
 			$this->update_option( 'site_tagline', $site_tagline );
+		}
+
+		$landing_page_mode = trim( (string) ( $payload['landingPageMode'] ?? 'html' ) );
+		if ( ! in_array( $landing_page_mode, array( 'login', 'url', 'html' ), true ) ) {
+			$landing_page_mode = 'html';
+		}
+		$this->update_option( 'landing_page_mode', $landing_page_mode );
+
+		$landing_page_url = trim( (string) ( $payload['landingPageUrl'] ?? '' ) );
+		if ( $landing_page_url !== (string) $this->get_option( 'landing_page_url' ) ) {
+			$this->update_option( 'landing_page_url', $landing_page_url );
 		}
 
 		try {

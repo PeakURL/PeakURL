@@ -57,6 +57,8 @@ export interface GeneralFormPayload extends GeneralFormState {
 	removeSocialPreviewImage?: boolean;
 	faviconFile?: File | null;
 	removeFavicon?: boolean;
+	landingPageMode?: "login" | "url" | "html";
+	landingPageUrl?: string;
 }
 
 /**

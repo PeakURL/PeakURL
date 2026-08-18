@@ -638,6 +638,33 @@ if ( InstallState::NEEDS_INSTALL === $install_state ) {
 	exit();
 }
 
+if ( '/' === $relative_path && InstallState::READY === $install_state ) {
+	$app_config   = RuntimeConfig::bootstrap( $app_path );
+	$connection   = new Connection( $app_config );
+	$settings_api = new SettingsApi( new PeakURL_DB( $connection ) );
+
+	$landing_page_mode = $settings_api->get_option( 'landing_page_mode' );
+	if ( empty( $landing_page_mode ) ) {
+		$landing_page_mode = 'html';
+	}
+
+	if ( 'url' === $landing_page_mode ) {
+		$landing_page_url = $settings_api->get_option( 'landing_page_url' );
+
+		if ( is_string( $landing_page_url ) && '' !== trim( $landing_page_url ) ) {
+			header( 'Location: ' . trim( $landing_page_url ), true, 302 );
+			exit();
+		}
+	} elseif ( 'html' === $landing_page_mode ) {
+		$landing_page_file = ABSPATH . 'content/landing-page.html';
+		if ( file_exists( $landing_page_file ) ) {
+			header( 'Content-Type: text/html; charset=utf-8' );
+			readfile( $landing_page_file );
+			exit();
+		}
+	}
+}
+
 if ( ! $is_dashboard_path( $relative_path ) ) {
 	require $app_path . '/public/index.php';
 	exit();

@@ -105,6 +105,8 @@ copy_release_tree "$ROOT_DIR/site" "$RELEASE_DIR" \
 	--exclude='.DS_Store' \
 	--exclude='.gitkeep'
 copy_release_language_packs "$ROOT_DIR/content/languages" "$RELEASE_DIR/content/languages"
+mkdir -p "$RELEASE_DIR/content"
+cp "$ROOT_DIR/content/landing-page.html" "$RELEASE_DIR/content/landing-page.html"
 
 copy_release_tree "$UI_BUILD_DIR" "$RELEASE_DIR" \
 	--exclude='index.html' \

@@ -532,6 +532,12 @@ export interface SaveGeneralSettingsPayload {
 
 	/** Whether the stored favicon should be removed. */
 	removeFavicon?: boolean;
+
+	/** Mode for the root domain landing page behavior. */
+	landingPageMode?: "login" | "url" | "html";
+
+	/** Target URL when landingPageMode is 'url'. */
+	landingPageUrl?: string;
 }
 
 /**

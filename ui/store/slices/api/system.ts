@@ -64,6 +64,8 @@ function createGeneralSettingsBody({
 	siteLanguage,
 	siteTimezone,
 	siteTimeFormat,
+	landingPageMode,
+	landingPageUrl,
 	faviconFile,
 	removeFavicon,
 	socialPreviewFile,
@@ -77,6 +79,8 @@ function createGeneralSettingsBody({
 			| "siteLanguage"
 			| "siteTimezone"
 			| "siteTimeFormat"
+			| "landingPageMode"
+			| "landingPageUrl"
 	  > {
 	if (
 		hasGeneralSettingsUpload({
@@ -85,6 +89,8 @@ function createGeneralSettingsBody({
 			siteLanguage,
 			siteTimezone,
 			siteTimeFormat,
+			landingPageMode,
+			landingPageUrl,
 			faviconFile,
 			removeFavicon,
 			socialPreviewFile,
@@ -97,12 +103,12 @@ function createGeneralSettingsBody({
 			siteLanguage,
 			siteTimezone: siteTimezone || "",
 			siteTimeFormat: siteTimeFormat || "",
+			landingPageMode: landingPageMode || "",
+			landingPageUrl: landingPageUrl || "",
 			favicon: faviconFile || undefined,
-			removeFavicon: removeFavicon ? "1" : undefined,
+			removeFavicon: removeFavicon ? "1" : "0",
 			socialPreviewImage: socialPreviewFile || undefined,
-			removeSocialPreviewImage: removeSocialPreviewImage
-				? "1"
-				: undefined,
+			removeSocialPreviewImage: removeSocialPreviewImage ? "1" : "0",
 		});
 	}
 
@@ -112,6 +118,8 @@ function createGeneralSettingsBody({
 		siteLanguage,
 		siteTimezone,
 		siteTimeFormat,
+		landingPageMode,
+		landingPageUrl,
 	};
 }
 

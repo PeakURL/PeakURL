@@ -76,6 +76,12 @@ function GeneralTab({
 		useState(false);
 	const [uploadedSocialPreviewUrl, setUploadedSocialPreviewUrl] =
 		useState("");
+	const [landingPageMode, setLandingPageMode] = useState<
+		"login" | "url" | "html"
+	>(siteSettings?.landingPageMode || "html");
+	const [landingPageUrl, setLandingPageUrl] = useState(
+		siteSettings?.landingPageUrl || ""
+	);
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const socialPreviewInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -104,6 +110,14 @@ function GeneralTab({
 	useEffect(() => {
 		setSiteTagline(siteSettings?.siteTagline || defaultSiteTagline);
 	}, [defaultSiteTagline, siteSettings?.siteTagline]);
+
+	useEffect(() => {
+		setLandingPageMode(siteSettings?.landingPageMode || "html");
+	}, [siteSettings?.landingPageMode]);
+
+	useEffect(() => {
+		setLandingPageUrl(siteSettings?.landingPageUrl || "");
+	}, [siteSettings?.landingPageUrl]);
 
 	useEffect(() => {
 		setFaviconFile(null);
@@ -142,6 +156,8 @@ function GeneralTab({
 			siteLanguage,
 			siteTimezone,
 			siteTimeFormat,
+			landingPageMode,
+			landingPageUrl,
 			socialPreviewFile,
 			removeSocialPreviewImage,
 			faviconFile,
@@ -176,6 +192,11 @@ function GeneralTab({
 	const timeFormatOptions: SelectOption<SiteTimeFormat>[] = [
 		{ value: "12", label: __("12-hour (AM/PM)") },
 		{ value: "24", label: __("24-hour") },
+	];
+	const landingPageModeOptions: SelectOption<"login" | "url" | "html">[] = [
+		{ value: "html", label: __("Default (Landing Page)") },
+		{ value: "url", label: __("Redirect URL") },
+		{ value: "login", label: __("Login Page") },
 	];
 	const hasCustomFavicon = Boolean(siteSettings?.favicon?.isCustom);
 	const storedPreviewUrl = useMemo(
@@ -469,6 +490,100 @@ function GeneralTab({
 								ariaLabel={__("Time format")}
 							/>
 						</div>
+					</div>
+				</fieldset>
+				<fieldset className="settings-fieldset">
+					<legend className="settings-legend">
+						{__("Homepage Configuration")}
+					</legend>
+					<hr className="settings-separator" />
+					<div className="settings-grid">
+						<div
+							className="settings-general-field"
+							style={{ gridColumn: "1 / -1" }}
+						>
+							<label className="settings-section-label">
+								{__("Root URL Behavior")}
+							</label>
+							<Select
+								value={landingPageMode}
+								onChange={(val) =>
+									setLandingPageMode(
+										val as "login" | "url" | "html"
+									)
+								}
+								options={landingPageModeOptions}
+								disabled={
+									isLoadingSiteSettings ||
+									!siteSettings?.canManageSiteSettings ||
+									isUpdating
+								}
+								ariaLabel={__("Root URL Behavior")}
+							/>
+						</div>
+						{landingPageMode === "url" && (
+							<div
+								className="settings-general-field"
+								style={{ gridColumn: "1 / -1" }}
+							>
+								<Input
+									label={__("Custom Redirect URL")}
+									value={landingPageUrl}
+									onChange={(event) =>
+										setLandingPageUrl(event.target.value)
+									}
+									disabled={
+										!canManageSiteSettings || isUpdating
+									}
+									placeholder="https://example.com"
+									type="url"
+									valueDirection="ltr"
+								/>
+								<p
+									className="settings-group-description"
+									style={{ marginTop: "0.5rem" }}
+								>
+									{__(
+										"Visitors to the root domain will be redirected to this URL."
+									)}
+								</p>
+							</div>
+						)}
+						{landingPageMode === "html" && (
+							<div
+								className="settings-general-field"
+								style={{ gridColumn: "1 / -1" }}
+							>
+								<div
+									className="settings-group-description"
+									style={{ marginTop: "0.5rem" }}
+								>
+									<p>
+										{__(
+											"To customize your HTML landing page, edit the following file in your installation:"
+										)}
+									</p>
+									<code
+										style={{
+											display: "inline-block",
+											marginTop: "0.5rem",
+											padding: "0.25rem 0.5rem",
+											backgroundColor: "rgba(0,0,0,0.05)",
+											borderRadius: "4px",
+										}}
+									>
+										{siteSettings?.contentDirectory
+											? `${siteSettings.contentDirectory}/landing-page.html`
+											: "content/landing-page.html"}
+									</code>
+									<p style={{ marginTop: "0.5rem" }}>
+										{__(
+											"This raw HTML file will be served at the root domain. You can include custom styles, scripts, and branding."
+										)}
+									</p>
+								</div>
+							</div>
+						)}
 					</div>
 				</fieldset>
 				<fieldset className="settings-fieldset">

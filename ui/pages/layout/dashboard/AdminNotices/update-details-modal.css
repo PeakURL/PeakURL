@@ -1,0 +1,73 @@
+@layer components {
+	.update-details-modal {
+		@apply flex flex-col gap-6 pb-2 text-left;
+	}
+
+	.update-details-modal-loading {
+		@apply flex justify-center p-8;
+	}
+
+	.update-details-modal-spinner {
+		@apply h-8 w-8 animate-spin rounded-full border-b-2 border-accent;
+	}
+
+	.update-details-modal-meta {
+		@apply mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-accent;
+	}
+
+	.update-details-modal-meta-icon {
+		@apply h-4 w-4;
+	}
+
+	.update-details-modal-meta-separator {
+		@apply px-1 text-stroke;
+	}
+
+	.update-details-modal-meta-date {
+		@apply normal-case text-text-muted;
+	}
+
+	.update-details-modal-title {
+		@apply mb-2 text-base font-semibold text-heading;
+	}
+
+	.update-details-modal-summary {
+		@apply text-sm leading-relaxed text-text-muted;
+	}
+
+	.update-details-modal-highlights {
+		@apply max-h-75 overflow-y-auto space-y-3 rounded-lg border border-stroke/50 bg-bg p-5;
+	}
+
+	.update-details-modal-highlight-item {
+		@apply flex items-start gap-3 text-sm text-text-muted;
+	}
+
+	.update-details-modal-highlight-bullet {
+		@apply text-sm leading-relaxed text-accent;
+	}
+
+	.update-details-modal-highlight-text {
+		@apply leading-relaxed;
+	}
+
+	.update-details-modal-footer {
+		@apply mt-2 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-stroke/50 pt-2 text-sm;
+	}
+
+	.update-details-modal-footer-link {
+		@apply inline-flex items-center gap-1.5 font-medium transition-colors;
+	}
+
+	.update-details-modal-footer-link-primary {
+		@apply text-accent hover:opacity-80;
+	}
+
+	.update-details-modal-footer-link-secondary {
+		@apply text-text-muted hover:text-text;
+	}
+
+	.update-details-modal-footer-link-icon {
+		@apply h-4 w-4;
+	}
+}

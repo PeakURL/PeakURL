@@ -1,3 +1,4 @@
+import { useState, useCallback } from "react";
 import { Link } from "react-router";
 import { AlertCircle, CheckCircle2, Info, TriangleAlert } from "lucide-react";
 
@@ -6,6 +7,7 @@ import { isDocumentRtl } from "@/i18n/direction";
 import { cn, isRelativeUrl, sanitizeUrl } from "@/utils";
 
 import type { AdminNoticeItem, NoticeActionProps, NoticeTone } from "../types";
+import UpdateDetailsModal from "./UpdateDetailsModal";
 
 const NOTICE_STYLES = {
 	error: {
@@ -73,64 +75,100 @@ export const AdminNotices = () => {
 	const direction = isRtl ? "rtl" : "ltr";
 	const { data } = useGetAdminNoticesQuery(undefined);
 	const notices = data?.data?.items ?? [];
+	const [updateModalOpen, setUpdateModalOpen] = useState(false);
+
+	const handleNoticeClick = useCallback(
+		(e: React.MouseEvent<HTMLDivElement>) => {
+			const target = e.target as HTMLElement;
+			// Handle legacy <a> tags from older translations or cached responses
+			const anchor = target.closest("a");
+			if (
+				anchor &&
+				anchor.href &&
+				anchor.href.includes("peakurl.org/release-notes")
+			) {
+				e.preventDefault();
+				setUpdateModalOpen(true);
+				return;
+			}
+
+			// Handle the new <button> element
+			const button = target.closest("button.js-update-details-trigger");
+			if (button) {
+				e.preventDefault();
+				setUpdateModalOpen(true);
+			}
+		},
+		[]
+	);
 
 	if (!notices.length) {
 		return null;
 	}
 
 	return (
-		<div className="dashboard-notices">
-			{notices.map((notice: AdminNoticeItem, index: number) => {
-				const toneKey = isNoticeTone(notice?.type)
-					? notice.type
-					: "info";
-				const tone = NOTICE_STYLES[toneKey];
-				const Icon = tone.icon;
+		<>
+			<div className="dashboard-notices">
+				{notices.map((notice: AdminNoticeItem, index: number) => {
+					const toneKey = isNoticeTone(notice?.type)
+						? notice.type
+						: "info";
+					const tone = NOTICE_STYLES[toneKey];
+					const Icon = tone.icon;
 
-				const noticeKey = notice?.id ?? `notice-${index}`;
+					const noticeKey = notice?.id ?? `notice-${index}`;
 
-				return (
-					<div
-						key={noticeKey}
-						className={cn(
-							"dashboard-notice",
-							tone.containerClassName
-						)}
-					>
+					return (
 						<div
-							dir={direction}
-							className="dashboard-notice-layout"
+							key={noticeKey}
+							className={cn(
+								"dashboard-notice",
+								tone.containerClassName
+							)}
 						>
-							<div className="dashboard-notice-content">
-								<div className="dashboard-notice-icon">
-									<Icon size={18} />
+							<div
+								dir={direction}
+								className="dashboard-notice-layout"
+							>
+								<div className="dashboard-notice-content">
+									<div className="dashboard-notice-icon">
+										<Icon size={18} />
+									</div>
+									<div
+										className="dashboard-notice-copy"
+										onClick={handleNoticeClick}
+									>
+										{notice?.title ? (
+											<p className="dashboard-notice-title">
+												{notice.title}
+											</p>
+										) : null}
+										{notice?.message ? (
+											<div
+												className="dashboard-notice-message"
+												dangerouslySetInnerHTML={{
+													__html: notice.message,
+												}}
+											/>
+										) : null}
+									</div>
 								</div>
-								<div className="dashboard-notice-copy">
-									{notice?.title ? (
-										<p className="dashboard-notice-title">
-											{notice.title}
-										</p>
-									) : null}
-									{notice?.message ? (
-										<p
-											className="dashboard-notice-message"
-											dangerouslySetInnerHTML={{
-												__html: notice.message,
-											}}
-										/>
-									) : null}
-								</div>
-							</div>
 
-							<NoticeAction
-								action={notice?.action}
-								actionClassName={tone.actionClassName}
-							/>
+								<NoticeAction
+									action={notice?.action}
+									actionClassName={tone.actionClassName}
+								/>
+							</div>
 						</div>
-					</div>
-				);
-			})}
-		</div>
+					);
+				})}
+			</div>
+
+			<UpdateDetailsModal
+				open={updateModalOpen}
+				setOpen={setUpdateModalOpen}
+			/>
+		</>
 	);
 };
 

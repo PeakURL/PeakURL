@@ -103,6 +103,7 @@ export interface SectionHeaderProps {
 	title: string;
 	description: string;
 	badge?: BadgeState | null;
+	badgeAction?: ReactNode;
 	primaryAction?: ReactNode;
 	secondaryAction?: ReactNode;
 }

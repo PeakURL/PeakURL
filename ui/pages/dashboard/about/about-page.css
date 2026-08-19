@@ -344,4 +344,68 @@
 	.about-page-footer-separator {
 		@apply opacity-30;
 	}
+
+	.about-page-release-notes {
+		@apply mb-12 rounded-xl border border-stroke bg-surface p-6 text-left shadow-sm;
+	}
+
+	.about-page-release-meta {
+		@apply mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-accent;
+	}
+
+	.about-page-release-meta-icon {
+		@apply h-4 w-4;
+	}
+
+	.about-page-release-meta-separator {
+		@apply px-1 text-stroke;
+	}
+
+	.about-page-release-meta-date {
+		@apply normal-case text-text-muted;
+	}
+
+	.about-page-release-title {
+		@apply mb-2 text-base font-semibold text-heading;
+	}
+
+	.about-page-release-summary {
+		@apply mb-6 text-sm leading-relaxed text-text-muted;
+	}
+
+	.about-page-release-highlights {
+		@apply mb-6 space-y-3 rounded-lg border border-stroke/50 bg-bg p-5;
+	}
+
+	.about-page-release-highlight-item {
+		@apply flex items-start gap-3 text-sm text-text-muted;
+	}
+
+	.about-page-release-highlight-bullet {
+		@apply text-sm leading-relaxed text-accent;
+	}
+
+	.about-page-release-highlight-text {
+		@apply leading-relaxed;
+	}
+
+	.about-page-release-footer {
+		@apply mt-2 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-stroke/50 pt-5 text-sm;
+	}
+
+	.about-page-release-footer-link {
+		@apply inline-flex items-center gap-1.5 font-medium transition-colors;
+	}
+
+	.about-page-release-footer-link-primary {
+		@apply text-accent hover:opacity-80;
+	}
+
+	.about-page-release-footer-link-secondary {
+		@apply text-text-muted hover:text-text;
+	}
+
+	.about-page-release-footer-link-icon {
+		@apply h-4 w-4;
+	}
 }

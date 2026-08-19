@@ -154,7 +154,8 @@
 
         <footer class="text-center py-6 text-white/40 text-sm pb-8 relative z-10" role="contentinfo">
             <p>
-                &copy; <script>document.write(new Date().getFullYear())</script> PeakURL.
+                &copy; <span id="current-year"></span> PeakURL.
+                <script>document.getElementById('current-year').textContent = new Date().getFullYear();</script>
                 <a href="https://peakurl.org?utm_source=peakurl_app&amp;utm_medium=landing_page" class="hover:text-white transition-colors underline decoration-white/20 underline-offset-4" rel="noopener noreferrer">Visit peakurl.org</a> for updates.
             </p>
         </footer>

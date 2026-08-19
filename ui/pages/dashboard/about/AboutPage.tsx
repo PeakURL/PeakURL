@@ -223,16 +223,18 @@ const LandingBanner = ({ source }: LandingBannerProps) => {
 			</div>
 
 			{releaseNote && (
-				<div className="bg-surface border border-stroke rounded-xl p-6 text-left shadow-sm mb-12">
-					<div className="flex items-center gap-2 text-accent font-semibold text-xs mb-3 uppercase tracking-wide">
-						<Sparkles className="w-4 h-4" />
+				<div className="about-page-release-notes">
+					<div className="about-page-release-meta">
+						<Sparkles className="about-page-release-meta-icon" />
 						<span>
 							{__("Version")} {releaseNote.version}
 						</span>
 						{releaseNote.releaseDate && (
 							<>
-								<span className="text-stroke px-1">•</span>
-								<span className="text-text-muted normal-case">
+								<span className="about-page-release-meta-separator">
+									•
+								</span>
+								<span className="about-page-release-meta-date">
 									{sprintf(
 										__("Released %s"),
 										formatRelativeTime(
@@ -243,46 +245,46 @@ const LandingBanner = ({ source }: LandingBannerProps) => {
 							</>
 						)}
 					</div>
-					<h3 className="text-base font-semibold text-heading mb-2">
+					<h3 className="about-page-release-title">
 						{releaseNote.title}
 					</h3>
-					<p className="text-sm leading-relaxed text-text-muted mb-6">
+					<p className="about-page-release-summary">
 						{releaseNote.summary}
 					</p>
 
-					<div className="space-y-3 mb-6 bg-background border border-stroke/50 rounded-lg p-5">
+					<div className="about-page-release-highlights">
 						{releaseNote.highlights.map((highlight, idx) => (
 							<div
 								key={idx}
-								className="flex items-start gap-3 text-sm text-text-muted"
+								className="about-page-release-highlight-item"
 							>
-								<span className="text-accent text-sm leading-relaxed">
+								<span className="about-page-release-highlight-bullet">
 									•
 								</span>
-								<span className="leading-relaxed">
+								<span className="about-page-release-highlight-text">
 									{highlight}
 								</span>
 							</div>
 						))}
 					</div>
 
-					<div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-5 border-t border-stroke/50 text-sm">
+					<div className="about-page-release-footer">
 						<a
 							href="https://go.peakurl.org/release-notes"
 							target="_blank"
 							rel="noopener noreferrer"
-							className="inline-flex items-center gap-1.5 font-medium text-accent hover:text-accent-hover transition-colors"
+							className="about-page-release-footer-link about-page-release-footer-link-primary"
 						>
-							<BookOpen className="w-4 h-4" />
+							<BookOpen className="about-page-release-footer-link-icon" />
 							{__("For all release notes see the main page")}
 						</a>
 						<a
 							href="https://go.peakurl.org/release-notes-txt"
 							target="_blank"
 							rel="noopener noreferrer"
-							className="inline-flex items-center gap-1.5 font-medium text-text-muted hover:text-text transition-colors"
+							className="about-page-release-footer-link about-page-release-footer-link-secondary"
 						>
-							<TextAlignJustify className="w-4 h-4" />
+							<TextAlignJustify className="about-page-release-footer-link-icon" />
 							{__("Plain text format")}
 						</a>
 					</div>
@@ -621,7 +623,7 @@ function AboutPage() {
 						</a>
 						<span className="about-page-footer-separator">•</span>
 						<a
-							href="https://peakurl.org/release-notes?utm_source=dashboard&utm_medium=about_page&utm_campaign=release_notes_link"
+							href="https://go.peakurl.org/release-notes?utm_source=dashboard&utm_medium=about_page&utm_campaign=release_notes_link"
 							target="_blank"
 							rel="noreferrer"
 							className="about-page-footer-link"

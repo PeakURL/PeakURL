@@ -9,6 +9,7 @@ function SectionHeader({
 	title,
 	description,
 	badge,
+	badgeAction,
 	primaryAction,
 	secondaryAction,
 }: SectionHeaderProps) {
@@ -19,10 +20,11 @@ function SectionHeader({
 				{badge ? (
 					<StatusBadge tone={badge.tone} label={badge.label} />
 				) : null}
+				{badgeAction}
 			</legend>
 			<div dir={direction} className="settings-updates-card-header">
 				<div className="settings-updates-card-copy">
-					<p className="settings-group-description !mb-0 !mt-0">
+					<p className="settings-group-description mb-0! mt-0!">
 						{description}
 					</p>
 				</div>

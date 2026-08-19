@@ -65,8 +65,8 @@ msgid "Select at least one webhook event."
 msgstr "کم از کم ایک webhook event منتخب کریں۔"
 
 #: app/traits/settings.php:167
-#: app/traits/system.php:345
 #: app/traits/system.php:359
+#: app/traits/system.php:373
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:49
 msgid "Shorten, track, and own every link - PeakURL"
 msgstr "ہر لنک کو مختصر کریں، ٹریک کریں، اور اپنے اختیار میں رکھیں - PeakURL"
@@ -95,27 +95,27 @@ msgstr "PeakURL ابھی انسٹال نہیں ہے۔ سیٹ اپ مکمل کر�
 msgid "Admin access is required."
 msgstr "ایڈمن رسائی درکار ہے۔"
 
-#: app/traits/system.php:268
+#: app/traits/system.php:271
 msgid "PeakURL could not find that language pack."
 msgstr "PeakURL کو یہ زبان پیک نہیں ملا۔"
 
-#: app/traits/system.php:426
+#: app/traits/system.php:440
 msgid "PeakURL could not find that timezone."
 msgstr "PeakURL کو یہ ٹائم زون نہیں ملا۔"
 
-#: app/traits/system.php:516
+#: app/traits/system.php:530
 msgid "Save a complete mail configuration before sending a test email."
 msgstr "ٹیسٹ ای میل بھیجنے سے پہلے مکمل میل کنفیگریشن محفوظ کریں۔"
 
-#: app/traits/system.php:734
+#: app/traits/system.php:758
 msgid "PeakURL is already up to date."
 msgstr "PeakURL پہلے ہی تازہ ترین ہے۔"
 
-#: app/traits/system.php:756
+#: app/traits/system.php:780
 msgid "A newer PeakURL release is available. Install the update instead."
 msgstr "PeakURL کی نئی ریلیز دستیاب ہے۔ اس کے بجائے اپ ڈیٹ انسٹال کریں۔"
 
-#: app/traits/system.php:763
+#: app/traits/system.php:787
 msgid "PeakURL cannot reinstall the latest release right now."
 msgstr "PeakURL اس وقت تازہ ترین ریلیز دوبارہ انسٹال نہیں کر سکتا۔"
 
@@ -144,7 +144,7 @@ msgid "Username must be 3-120 characters using letters, numbers, dots, dashes, u
 msgstr "صارف نام 3 سے 120 حروف کا ہونا چاہیے اور اس میں صرف letters، numbers، dots، dashes، underscores، یا @ استعمال ہو سکتے ہیں۔"
 
 #: app/traits/accounts/support.php:108
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:53
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:59
 msgid "Password must be at least 8 characters."
 msgstr "پاس ورڈ کم از کم 8 حروف کا ہونا چاہیے۔"
 
@@ -172,7 +172,7 @@ msgid "Username is already taken."
 msgstr "یہ صارف نام پہلے سے استعمال میں ہے۔"
 
 #: app/traits/accounts/auth.php:146
-#: app/controllers/auth.php:273
+#: app/controllers/auth.php:279
 msgid "Verification token is required."
 msgstr "تصدیقی ٹوکن درکار ہے۔"
 
@@ -180,25 +180,25 @@ msgstr "تصدیقی ٹوکن درکار ہے۔"
 msgid "Email is required."
 msgstr "ای میل درکار ہے۔"
 
-#: app/traits/accounts/auth.php:255
+#: app/traits/accounts/auth.php:256
 msgid "Email or username and password are required."
 msgstr "ای میل یا صارف نام اور پاس ورڈ درکار ہیں۔"
 
-#: app/traits/accounts/auth.php:286
+#: app/traits/accounts/auth.php:287
 msgid "Invalid email, username, or password."
 msgstr "ای میل، صارف نام، یا پاس ورڈ درست نہیں۔"
 
-#: app/traits/accounts/auth.php:317
+#: app/traits/accounts/auth.php:318
 msgid "Invalid two-factor code."
 msgstr "دو مرحلہ کوڈ درست نہیں۔"
 
-#: app/traits/accounts/auth.php:372
+#: app/traits/accounts/auth.php:373
 msgid "Two-factor authentication is still required."
 msgstr "دو مرحلہ تصدیق ابھی بھی درکار ہے۔"
 
-#: app/traits/accounts/auth.php:437
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:36
-#: ui/pages/auth/login/LoginPage.tsx:160
+#: app/traits/accounts/auth.php:438
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:42
+#: ui/pages/auth/login/LoginPage.tsx:164
 msgid "Email or username is required."
 msgstr "ای میل یا صارف نام درکار ہے۔"
 
@@ -324,32 +324,32 @@ msgstr "یہ short code پہلے سے استعمال میں ہے۔"
 msgid "Invalid date value provided."
 msgstr "غلط تاریخ کی قدر فراہم کی گئی ہے۔"
 
-#: app/includes/functions.php:944
+#: app/includes/functions.php:954
 msgid "%s is briefly unavailable"
 msgstr "%s مختصر وقت کے لیے دستیاب نہیں ہے"
 
-#: app/includes/functions.php:950
+#: app/includes/functions.php:960
 msgid "%s is briefly unavailable right now. Please try again in a moment."
 msgstr "%s اس وقت مختصر طور پر دستیاب نہیں ہے۔ براہ کرم ایک لمحے بعد دوبارہ کوشش کریں۔"
 
-#: app/includes/functions.php:963
+#: app/includes/functions.php:973
 msgid "Temporarily unavailable"
 msgstr "عارضی طور پر دستیاب نہیں"
 
-#: app/includes/functions.php:964
+#: app/includes/functions.php:974
 msgid "Briefly unavailable"
 msgstr "مختصر وقت کے لیے دستیاب نہیں"
 
-#: app/includes/functions.php:965
+#: app/includes/functions.php:975
 msgid "We are making a few improvements right now. Please refresh this page in a moment."
 msgstr "ہم اس وقت چند بہتریاں کر رہے ہیں۔ براہ کرم ایک لمحے بعد یہ صفحہ دوبارہ لوڈ کریں۔"
 
-#: app/includes/functions.php:966
+#: app/includes/functions.php:976
 msgid "Thanks for your patience."
 msgstr "آپ کے صبر کا شکریہ۔"
 
-#: app/includes/functions.php:967
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:107
+#: app/includes/functions.php:977
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:119
 msgid "Loading"
 msgstr "لوڈ ہو رہا ہے"
 
@@ -398,94 +398,94 @@ msgstr "ای میل کی تصدیق ہو گئی۔"
 msgid "Verification email resent."
 msgstr "تصدیقی ای میل دوبارہ بھیج دی گئی۔"
 
-#: app/controllers/auth.php:94
+#: app/controllers/auth.php:96
 msgid "Signed in."
 msgstr "سائن اِن ہو گیا۔"
 
-#: app/controllers/auth.php:111
+#: app/controllers/auth.php:113
 msgid "Two-factor login verified."
 msgstr "دو مرحلہ لاگ اِن کی تصدیق ہو گئی۔"
 
-#: app/controllers/auth.php:124
+#: app/controllers/auth.php:126
 msgid "Signed out."
 msgstr "سائن آؤٹ ہو گیا۔"
 
-#: app/controllers/auth.php:137
+#: app/controllers/auth.php:141
 msgid "If that account exists, a password reset link has been sent."
 msgstr "اگر یہ اکاؤنٹ موجود ہے تو پاس ورڈ ری سیٹ لنک بھیج دیا گیا ہے۔"
 
-#: app/controllers/auth.php:153
-#: app/controllers/auth.php:181
+#: app/controllers/auth.php:157
+#: app/controllers/auth.php:187
 msgid "Password reset token is invalid or expired."
 msgstr "پاس ورڈ ری سیٹ ٹوکن درست نہیں یا اس کی مدت ختم ہو چکی ہے۔"
 
-#: app/controllers/auth.php:161
+#: app/controllers/auth.php:165
 msgid "Password reset token is valid."
 msgstr "پاس ورڈ ری سیٹ ٹوکن درست ہے۔"
 
-#: app/controllers/auth.php:189
+#: app/controllers/auth.php:195
 msgid "Password reset complete."
 msgstr "پاس ورڈ ری سیٹ مکمل ہو گیا۔"
 
-#: app/controllers/auth.php:201
+#: app/controllers/auth.php:207
 msgid "Generated Key"
 msgstr "تیار کردہ key"
 
-#: app/controllers/auth.php:209
+#: app/controllers/auth.php:215
 msgid "API key created."
 msgstr "API key بن گئی۔"
 
-#: app/controllers/auth.php:228
+#: app/controllers/auth.php:234
 msgid "API key not found."
 msgstr "API key نہیں ملی۔"
 
-#: app/controllers/auth.php:229
+#: app/controllers/auth.php:235
 msgid "API key deleted."
 msgstr "API key حذف ہو گئی۔"
 
-#: app/controllers/auth.php:243
+#: app/controllers/auth.php:249
 msgid "Security settings loaded."
 msgstr "سیکیورٹی ترتیبات لوڈ ہو گئیں۔"
 
-#: app/controllers/auth.php:257
+#: app/controllers/auth.php:263
 msgid "Two-factor setup started."
 msgstr "دو مرحلہ سیٹ اپ شروع ہو گیا۔"
 
-#: app/controllers/auth.php:285
+#: app/controllers/auth.php:291
 msgid "Two-factor authentication enabled."
 msgstr "دو مرحلہ تصدیق فعال ہو گئی۔"
 
-#: app/controllers/auth.php:305
+#: app/controllers/auth.php:311
 msgid "Two-factor authentication disabled."
 msgstr "دو مرحلہ تصدیق غیر فعال ہو گئی۔"
 
-#: app/controllers/auth.php:329
+#: app/controllers/auth.php:335
 msgid "Backup codes regenerated."
 msgstr "بیک اپ کوڈز دوبارہ بنائے گئے۔"
 
-#: app/controllers/auth.php:353
+#: app/controllers/auth.php:359
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/helpers.ts:16
 msgid "PeakURL Backup Codes"
 msgstr "PeakURL بیک اپ کوڈز"
 
-#: app/controllers/auth.php:354
+#: app/controllers/auth.php:360
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/helpers.ts:17
 msgid "Keep these codes safe. Each code can be used once."
 msgstr "ان کوڈز کو محفوظ رکھیں۔ ہر کوڈ صرف ایک بار استعمال ہو سکتا ہے۔"
 
-#: app/controllers/auth.php:361
+#: app/controllers/auth.php:367
 msgid "Generated:"
 msgstr "بنایا گیا:"
 
-#: app/controllers/auth.php:382
+#: app/controllers/auth.php:388
 msgid "Session not found."
 msgstr "سیشن نہیں ملا۔"
 
-#: app/controllers/auth.php:385
+#: app/controllers/auth.php:391
 msgid "Session revoked."
 msgstr "سیشن منسوخ ہو گیا۔"
 
-#: app/controllers/auth.php:403
+#: app/controllers/auth.php:409
 msgid "Other sessions revoked."
 msgstr "دیگر سیشنز منسوخ کر دیے گئے۔"
 
@@ -610,7 +610,7 @@ msgstr "یہ لنک محفوظ ہے۔ جاری رکھنے کے لیے پاس و�
 #: app/controllers/urls.php:414
 #: site/install.php:592
 #: site/setup-config.php:816
-#: ui/pages/auth/login/LoginPage.tsx:371
+#: ui/pages/auth/login/LoginPage.tsx:383
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:29
 #: ui/pages/dashboard/users/UsersPage.tsx:250
 msgid "Password"
@@ -699,6 +699,11 @@ msgstr "صارف اپ ڈیٹ ہو گیا۔"
 #: app/controllers/users.php:145
 msgid "User deleted."
 msgstr "صارف حذف ہو گیا۔"
+
+#: app/controllers/base.php:211
+#: app/controllers/base.php:220
+msgid "CAPTCHA verification failed. Please try again."
+msgstr "کپچا (CAPTCHA) کی تصدیق ناکام ہو گئی۔ براہ کرم دوبارہ کوشش کریں۔"
 
 #: app/controllers/system-status.php:39
 msgid "System status loaded."
@@ -1022,12 +1027,12 @@ msgid "A new PeakURL update is available."
 msgstr "PeakURL کی نئی اپ ڈیٹ دستیاب ہے۔"
 
 #: app/services/admin-notices.php:106
-msgid "You are running PeakURL %1$s. Review the <a href=\"https://peakurl.org/release-notes?utm_source=dashboard&utm_medium=banner&utm_campaign=update-notice\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">update details</a> and install %2$s from the Updates screen."
-msgstr "آپ PeakURL %1$s چلا رہے ہیں۔ <a href=\"https://peakurl.org/release-notes?utm_source=dashboard&utm_medium=banner&utm_campaign=update-notice\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">اپ ڈیٹ کی تفصیلات</a> دیکھیں اور Updates screen سے %2$s انسٹال کریں۔"
+msgid "You are running PeakURL %1$s. View the <button type=\"button\" class=\"underline hover:opacity-100 js-update-details-trigger\">release notes</button> and install %2$s from the Updates page."
+msgstr "آپ PeakURL %1$s چلا رہے ہیں۔ <button type=\"button\" class=\"underline hover:opacity-100 js-update-details-trigger\">ریلیز نوٹس</button> دیکھیں اور اپ ڈیٹس کے صفحے سے %2$s انسٹال کریں۔"
 
 #: app/services/admin-notices.php:110
-msgid "Review the <a href=\"https://peakurl.org/release-notes?utm_source=dashboard&utm_medium=banner&utm_campaign=update-notice\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">update details</a> and install the latest release from the Updates screen."
-msgstr "<a href=\"https://peakurl.org/release-notes?utm_source=dashboard&utm_medium=banner&utm_campaign=update-notice\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">اپ ڈیٹ کی تفصیلات</a> دیکھیں اور Updates screen سے تازہ ترین ریلیز انسٹال کریں۔"
+msgid "View the <button type=\"button\" class=\"underline hover:opacity-100 js-update-details-trigger\">release notes</button> and install the latest release from the Updates page."
+msgstr "<button type=\"button\" class=\"underline hover:opacity-100 js-update-details-trigger\">ریلیز نوٹس</button> دیکھیں اور اپ ڈیٹس کے صفحے سے تازہ ترین ریلیز انسٹال کریں۔"
 
 #: app/services/admin-notices.php:119
 msgid "Open Updates"
@@ -1435,7 +1440,7 @@ msgstr "PeakURL خوش آمدیدی ای میل نہیں بھیج سکا کیو�
 
 #: app/services/notifications.php:204
 #: site/setup-config.php:701
-#: ui/pages/dashboard/about/AboutPage.tsx:417
+#: ui/pages/dashboard/about/AboutPage.tsx:419
 msgid "Welcome to %s"
 msgstr "%s میں خوش آمدید"
 
@@ -1607,7 +1612,7 @@ msgid "Site info"
 msgstr "سائٹ کی معلومات"
 
 #: site/install.php:575
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:408
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:429
 msgid "Site title"
 msgstr "سائٹ کا عنوان"
 
@@ -1621,7 +1626,7 @@ msgstr "ایڈمنسٹریٹر"
 
 #: site/install.php:583
 #: site/setup-config.php:812
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:341
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:362
 #: ui/pages/dashboard/users/UsersPage.tsx:229
 msgid "Username"
 msgstr "صارف نام"
@@ -1640,7 +1645,7 @@ msgid "Email"
 msgstr "ای میل"
 
 #: site/install.php:589
-#: ui/pages/auth/login/LoginPage.tsx:365
+#: ui/pages/auth/login/LoginPage.tsx:377
 msgid "you@company.com"
 msgstr "you@company.com"
 
@@ -1658,7 +1663,7 @@ msgstr "%s انسٹال کریں"
 
 #: site/install.php:625
 #: site/setup-config.php:859
-#: ui/pages/auth/login/LoginPage.tsx:296
+#: ui/pages/auth/login/LoginPage.tsx:308
 msgid "Powered by %s"
 msgstr "تقویت یافتہ از %s"
 
@@ -1671,7 +1676,7 @@ msgid "Welcome - %s"
 msgstr "خوش آمدید - %s"
 
 #: site/setup-config.php:650
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:436
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:457
 msgid "Site language"
 msgstr "سائٹ کی زبان"
 
@@ -1767,7 +1772,7 @@ msgstr "تمام لنکس"
 
 #: ui/utils/dashboardSearch.ts:97
 #: ui/utils/dashboardSearch.ts:100
-#: ui/pages/auth/login/LoginPage.tsx:44
+#: ui/pages/auth/login/LoginPage.tsx:46
 #: ui/pages/layout/dashboard/Search/Search.tsx:253
 #: ui/pages/dashboard/activity/ActivityPage.tsx:586
 #: ui/pages/dashboard/links/_components/Header/Header.tsx:42
@@ -1840,7 +1845,7 @@ msgid "Security Settings"
 msgstr "سیکیورٹی ترتیبات"
 
 #: ui/utils/dashboardSearch.ts:169
-#: ui/pages/auth/login/LoginPage.tsx:54
+#: ui/pages/auth/login/LoginPage.tsx:56
 #: ui/pages/dashboard/settings/Layout.tsx:26
 msgid "Security"
 msgstr "سیکیورٹی"
@@ -1977,7 +1982,7 @@ msgid "Confirm"
 msgstr "تصدیق کریں"
 
 #: ui/components/ui/ConfirmDialog/ConfirmDialog.tsx:33
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:794
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:807
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:53
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorSetup.tsx:110
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:372
@@ -2206,247 +2211,251 @@ msgstr "کیا غلط ہوا"
 msgid "Check these first"
 msgstr "پہلے ان چیزوں کو چیک کریں"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:50
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:62
 msgid "PeakURL could not process the password reset request."
 msgstr "PeakURL پاس ورڈ ری سیٹ کی درخواست پر عمل نہیں کر سکا۔"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:59
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:71
 msgid "Account Recovery"
 msgstr "اکاؤنٹ بازیافت"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:60
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:93
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:110
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:72
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:105
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:122
 msgid "Reset your password"
 msgstr "اپنا پاس ورڈ ری سیٹ کریں"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:61
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:73
 msgid "Enter the email address or username linked to your PeakURL account and we'll send a secure reset link."
 msgstr "اپنے PeakURL اکاؤنٹ سے منسلک ای میل یا صارف نام درج کریں اور ہم محفوظ ری سیٹ لنک بھیج دیں گے۔"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:64
-msgid "Password reset links expire after 1 hour."
-msgstr "پاس ورڈ ری سیٹ لنکس 1 گھنٹے بعد ختم ہو جاتے ہیں۔"
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:76
+msgid "Secure account recovery"
+msgstr "محفوظ اکاؤنٹ کی بحالی"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:65
-msgid "If the account exists, PeakURL sends a single-use link and keeps your existing sessions revoked after the password is changed."
-msgstr "اگر اکاؤنٹ موجود ہے تو PeakURL ایک بار استعمال ہونے والا لنک بھیجے گا اور پاس ورڈ تبدیل ہونے کے بعد موجودہ سیشنز کو منسوخ رکھے گا۔"
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:77
+msgid "For your security, password reset links expire after 1 hour. Changing your password will also immediately revoke all active sessions across your devices."
+msgstr "آپ کی سیکیورٹی کے لیے، پاس ورڈ ری سیٹ لنکس 1 گھنٹے کے بعد ختم ہو جاتے ہیں۔ اپنا پاس ورڈ تبدیل کرنے سے آپ کے تمام آلات پر تمام فعال سیشنز بھی فوری طور پر منسوخ ہو جائیں گے۔"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:68
-#: ui/pages/auth/login/LoginPage.tsx:398
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:80
+#: ui/pages/auth/login/LoginPage.tsx:429
 msgid "Forgot your password?"
 msgstr "پاس ورڈ بھول گئے؟"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:69
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:127
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:81
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:139
 msgid "Enter your account email or username and PeakURL will send a secure password reset link."
 msgstr "اپنا اکاؤنٹ ای میل یا صارف نام درج کریں اور PeakURL محفوظ پاس ورڈ ری سیٹ لنک بھیج دے گا۔"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:76
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:88
 msgid "Check your inbox"
 msgstr "اپنا ان باکس چیک کریں"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:80
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:92
 msgid "If an account exists for %s, PeakURL has sent a password reset link."
 msgstr "اگر %s کے لیے کوئی اکاؤنٹ موجود ہے تو PeakURL نے پاس ورڈ ری سیٹ لنک بھیج دیا ہے۔"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:87
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:99
 msgid "Return to login"
 msgstr "لاگ اِن پر واپس جائیں"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:94
-#: ui/pages/auth/login/LoginPage.tsx:352
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:106
+#: ui/pages/auth/login/LoginPage.tsx:364
 msgid "Email or username"
 msgstr "ای میل یا صارف نام"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:102
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:114
 msgid "owner@example.com or admin"
 msgstr "owner@example.com یا admin"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:118
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:137
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:131
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:149
 msgid "Send reset link"
 msgstr "ری سیٹ لنک بھیجیں"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:48
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:124
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:54
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:136
 msgid "The password reset link is invalid."
 msgstr "پاس ورڈ ری سیٹ لنک درست نہیں ہے۔"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:58
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:64
 #: ui/pages/dashboard/users/UsersPage.tsx:142
 msgid "Passwords do not match."
 msgstr "پاس ورڈ ایک جیسے نہیں ہیں۔"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:75
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:87
 msgid "PeakURL could not reset the password with that link."
 msgstr "PeakURL اس لنک کے ذریعے پاس ورڈ ری سیٹ نہیں کر سکا۔"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:84
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:96
 msgid "Secure Reset"
 msgstr "محفوظ ری سیٹ"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:85
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:97
 msgid "Choose a new password and get back to work."
 msgstr "نیا پاس ورڈ منتخب کریں اور دوبارہ کام شروع کریں۔"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:86
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:98
 msgid "Once the password changes, PeakURL revokes the old sessions so only the new login remains valid."
 msgstr "پاس ورڈ تبدیل ہوتے ہی PeakURL پرانے سیشنز منسوخ کر دے گا تاکہ صرف نیا لاگ اِن درست رہے۔"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:89
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:101
 #: ui/pages/dashboard/users/UsersPage.tsx:137
 #: ui/pages/dashboard/users/UsersPage.tsx:260
 msgid "Use at least 8 characters."
 msgstr "کم از کم 8 حروف استعمال کریں۔"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:90
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:102
 msgid "For best results, combine uppercase, lowercase, numbers, and a unique phrase you do not reuse elsewhere."
 msgstr "بہتر نتائج کے لیے بڑے اور چھوٹے حروف، اعداد، اور ایسا منفرد فقرہ استعمال کریں جو کہیں اور استعمال نہ کرتے ہوں۔"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:94
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:106
 msgid "Set a new account password, then sign in again with the updated credentials."
 msgstr "نیا اکاؤنٹ پاس ورڈ مقرر کریں، پھر نئی اسناد کے ساتھ دوبارہ سائن اِن کریں۔"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:151
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:163
 msgid "Password updated"
 msgstr "پاس ورڈ اپ ڈیٹ ہو گیا"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:154
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:166
 msgid "PeakURL updated your password and revoked the older sessions. Redirecting you to the login page now."
 msgstr "PeakURL نے آپ کا پاس ورڈ اپ ڈیٹ کر دیا ہے اور پرانے سیشنز منسوخ کر دیے ہیں۔ اب آپ کو لاگ اِن صفحے پر بھیجا جا رہا ہے۔"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:164
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:176
 msgid "New password"
 msgstr "نیا پاس ورڈ"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:171
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:183
 msgid "Enter your new password"
 msgstr "اپنا نیا پاس ورڈ درج کریں"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:179
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:191
 msgid "Confirm new password"
 msgstr "نئے پاس ورڈ کی تصدیق کریں"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:189
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:201
 msgid "Confirm your new password"
 msgstr "اپنے نئے پاس ورڈ کی تصدیق کریں"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:201
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:214
 msgid "Reset password"
 msgstr "پاس ورڈ ری سیٹ کریں"
 
-#: ui/pages/auth/login/LoginPage.tsx:45
+#: ui/pages/auth/login/LoginPage.tsx:47
 msgid "Shorten, organize, and share."
 msgstr "مختصر کریں، منظم کریں، اور شیئر کریں۔"
 
-#: ui/pages/auth/login/LoginPage.tsx:49
+#: ui/pages/auth/login/LoginPage.tsx:51
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:207
 msgid "Analytics"
 msgstr "تجزیات"
 
-#: ui/pages/auth/login/LoginPage.tsx:50
+#: ui/pages/auth/login/LoginPage.tsx:52
 msgid "Clicks, locations, and devices."
 msgstr "کلکس، مقامات، اور ڈیوائسز۔"
 
-#: ui/pages/auth/login/LoginPage.tsx:55
+#: ui/pages/auth/login/LoginPage.tsx:57
 msgid "Sessions, 2FA, and roles."
 msgstr "سیشنز، 2FA، اور کردار۔"
 
-#: ui/pages/auth/login/LoginPage.tsx:165
+#: ui/pages/auth/login/LoginPage.tsx:169
 msgid "Password is required."
 msgstr "پاس ورڈ درکار ہے۔"
 
-#: ui/pages/auth/login/LoginPage.tsx:177
+#: ui/pages/auth/login/LoginPage.tsx:181
 msgid "Enter your backup code."
 msgstr "اپنا بیک اپ کوڈ درج کریں۔"
 
-#: ui/pages/auth/login/LoginPage.tsx:178
-#: ui/pages/auth/login/LoginPage.tsx:328
+#: ui/pages/auth/login/LoginPage.tsx:182
+#: ui/pages/auth/login/LoginPage.tsx:340
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "اپنی آتھنٹیکیٹر ایپ سے 6 ہندسوں والا کوڈ درج کریں۔"
 
-#: ui/pages/auth/login/LoginPage.tsx:218
+#: ui/pages/auth/login/LoginPage.tsx:230
 msgid "Unable to verify the two-factor code."
 msgstr "دو مرحلہ کوڈ کی تصدیق نہیں ہو سکی۔"
 
-#: ui/pages/auth/login/LoginPage.tsx:219
+#: ui/pages/auth/login/LoginPage.tsx:231
 msgid "Unable to sign in with those credentials."
 msgstr "ان اسناد کے ساتھ سائن اِن نہیں ہو سکا۔"
 
-#: ui/pages/auth/login/LoginPage.tsx:236
+#: ui/pages/auth/login/LoginPage.tsx:248
 msgid "Almost there."
 msgstr "بس تھوڑا سا باقی ہے۔"
 
-#: ui/pages/auth/login/LoginPage.tsx:239
+#: ui/pages/auth/login/LoginPage.tsx:251
 msgid "Verify to continue."
 msgstr "جاری رکھنے کے لیے تصدیق کریں۔"
 
-#: ui/pages/auth/login/LoginPage.tsx:244
+#: ui/pages/auth/login/LoginPage.tsx:256
 msgid "Manage every link"
 msgstr "ہر لنک کو منظم کریں"
 
-#: ui/pages/auth/login/LoginPage.tsx:247
+#: ui/pages/auth/login/LoginPage.tsx:259
 msgid "from one place."
 msgstr "ایک ہی جگہ سے۔"
 
-#: ui/pages/auth/login/LoginPage.tsx:254
+#: ui/pages/auth/login/LoginPage.tsx:266
 msgid "One more verification step and you’ll be in your workspace."
 msgstr "ایک اور تصدیقی مرحلہ باقی ہے، پھر آپ اپنے ورک اسپیس میں ہوں گے۔"
 
-#: ui/pages/auth/login/LoginPage.tsx:257
+#: ui/pages/auth/login/LoginPage.tsx:269
 msgid "Shorten URLs, track clicks, and manage your audience, all from your own dashboard."
 msgstr "اپنے ہی dashboard سے URLs مختصر کریں، clicks track کریں، اور اپنی audience منظم کریں۔"
 
-#: ui/pages/auth/login/LoginPage.tsx:319
+#: ui/pages/auth/login/LoginPage.tsx:331
 msgid "Verify your identity"
 msgstr "اپنی شناخت کی تصدیق کریں"
 
-#: ui/pages/auth/login/LoginPage.tsx:320
+#: ui/pages/auth/login/LoginPage.tsx:332
 msgid "Sign in to your account"
 msgstr "اپنے اکاؤنٹ میں سائن اِن کریں"
 
-#: ui/pages/auth/login/LoginPage.tsx:325
+#: ui/pages/auth/login/LoginPage.tsx:337
 msgid "Enter one of the backup codes you saved when setting up 2FA."
 msgstr "2FA سیٹ اپ کرتے وقت محفوظ کیے گئے backup codes میں سے ایک درج کریں۔"
 
-#: ui/pages/auth/login/LoginPage.tsx:331
+#: ui/pages/auth/login/LoginPage.tsx:343
 msgid "Enter your credentials to continue to the dashboard."
 msgstr "dashboard میں جاری رکھنے کے لیے اپنی credentials درج کریں۔"
 
-#: ui/pages/auth/login/LoginPage.tsx:408
+#: ui/pages/auth/login/LoginPage.tsx:413
+msgid "Remember me"
+msgstr "مجھے یاد رکھیں"
+
+#: ui/pages/auth/login/LoginPage.tsx:439
 msgid "Backup code"
 msgstr "بیک اپ کوڈ"
 
-#: ui/pages/auth/login/LoginPage.tsx:423
+#: ui/pages/auth/login/LoginPage.tsx:454
 msgid "xxxx-xxxx-xxxx"
 msgstr "xxxx-xxxx-xxxx"
 
-#: ui/pages/auth/login/LoginPage.tsx:437
+#: ui/pages/auth/login/LoginPage.tsx:468
 msgid "Use authenticator code instead"
 msgstr "اس کے بجائے authenticator code استعمال کریں"
 
-#: ui/pages/auth/login/LoginPage.tsx:463
+#: ui/pages/auth/login/LoginPage.tsx:494
 msgid "Lost your device? Use a backup code"
 msgstr "ڈیوائس گم ہو گئی؟ بیک اپ کوڈ استعمال کریں"
 
-#: ui/pages/auth/login/LoginPage.tsx:500
+#: ui/pages/auth/login/LoginPage.tsx:535
 msgid "Verifying…"
 msgstr "تصدیق ہو رہی ہے…"
 
-#: ui/pages/auth/login/LoginPage.tsx:501
+#: ui/pages/auth/login/LoginPage.tsx:536
 msgid "Signing in…"
 msgstr "سائن اِن ہو رہا ہے…"
 
-#: ui/pages/auth/login/LoginPage.tsx:506
+#: ui/pages/auth/login/LoginPage.tsx:541
 msgid "Verify & continue"
 msgstr "تصدیق کریں اور جاری رکھیں"
 
-#: ui/pages/auth/login/LoginPage.tsx:507
+#: ui/pages/auth/login/LoginPage.tsx:542
 msgid "Sign in"
 msgstr "سائن اِن"
 
-#: ui/pages/auth/login/LoginPage.tsx:528
+#: ui/pages/auth/login/LoginPage.tsx:563
 msgid "Back to sign-in"
 msgstr "سائن اِن پر واپس جائیں"
 
@@ -2463,13 +2472,33 @@ msgid "Thank you for choosing %s."
 msgstr "%s منتخب کرنے کا شکریہ۔"
 
 #: ui/pages/layout/dashboard/Layout/Layout.tsx:71
+#: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:42
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:379
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:558
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:61
 #: ui/pages/dashboard/about/AboutPage.tsx:230
-#: ui/pages/dashboard/about/AboutPage.tsx:404
+#: ui/pages/dashboard/about/AboutPage.tsx:406
 msgid "Version"
 msgstr "ورژن"
+
+#: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:28
+msgid "Update Details"
+msgstr "اپ ڈیٹ کی تفصیلات"
+
+#: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:51
+#: ui/pages/dashboard/about/AboutPage.tsx:239
+msgid "Released %s"
+msgstr "جاری کردہ %s"
+
+#: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:96
+#: ui/pages/dashboard/about/AboutPage.tsx:279
+msgid "For all release notes see the main page"
+msgstr "تمام ریلیز نوٹس دیکھنے کے لیے مرکزی صفحہ ملاحظہ کریں"
+
+#: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:105
+#: ui/pages/dashboard/about/AboutPage.tsx:288
+msgid "Plain text format"
+msgstr "سادہ متن کا فارمیٹ"
 
 #: ui/pages/layout/dashboard/Search/Search.tsx:147
 msgid "Search links, settings..."
@@ -2543,17 +2572,17 @@ msgstr "لاگ آؤٹ ہو رہا ہے..."
 msgid "Logout"
 msgstr "لاگ آؤٹ"
 
-#: ui/pages/layout/public/AuthLayout.tsx:10
+#: ui/pages/layout/public/AuthLayout.tsx:11
 msgid "Back to login"
 msgstr "لاگ اِن پر واپس جائیں"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:258
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:327
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:332
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:337
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:359
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:394
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:414
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:269
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:340
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:345
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:350
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:372
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:407
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:427
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/useActiveSessions.ts:74
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/useActiveSessions.ts:106
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/useTwoFactorSettings.ts:167
@@ -2570,22 +2599,22 @@ msgstr "لاگ اِن پر واپس جائیں"
 msgid "Error"
 msgstr "خرابی"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:259
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:270
 msgid "Failed to update profile"
 msgstr "پروفائل اپ ڈیٹ نہیں ہو سکا"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:292
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:305
 msgid "Language updated"
 msgstr "زبان اپ ڈیٹ ہو گئی"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:293
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:306
 msgid "PeakURL is reloading the dashboard now."
 msgstr "PeakURL اب ڈیش بورڈ دوبارہ لوڈ کر رہا ہے۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:302
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:322
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:349
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:409
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:315
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:335
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:362
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:422
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:231
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:251
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:107
@@ -2593,291 +2622,291 @@ msgstr "PeakURL اب ڈیش بورڈ دوبارہ لوڈ کر رہا ہے۔"
 msgid "Success"
 msgstr "کامیابی"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:304
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:317
 msgid "Profile and general settings updated successfully"
 msgstr "پروفائل اور جنرل سیٹنگز کامیابی سے اپ ڈیٹ ہو گئیں۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:307
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:320
 msgid "General settings updated successfully"
 msgstr "جنرل سیٹنگز کامیابی سے اپ ڈیٹ ہو گئیں۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:312
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:490
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:529
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:325
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:503
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:542
 msgid "Save failed"
 msgstr "محفوظ کرنا ناکام رہا"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:315
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:328
 msgid "Failed to update the general settings"
 msgstr "جنرل سیٹنگز اپ ڈیٹ نہیں ہو سکیں۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:322
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:335
 msgid "Profile updated successfully"
 msgstr "پروفائل کامیابی سے اپ ڈیٹ ہو گیا"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:327
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:340
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:65
 msgid "Enter your current password"
 msgstr "اپنا موجودہ پاس ورڈ درج کریں"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:332
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:345
 msgid "Passwords do not match"
 msgstr "پاس ورڈ ایک جیسے نہیں ہیں"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:338
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:351
 msgid "Password must be at least 8 characters"
 msgstr "پاس ورڈ کم از کم 8 حروف کا ہونا چاہیے"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:350
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:363
 msgid "Password updated successfully"
 msgstr "پاس ورڈ کامیابی سے اپ ڈیٹ ہو گیا"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:360
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:373
 msgid "Failed to update password"
 msgstr "پاس ورڈ اپ ڈیٹ کرنے میں ناکامی ہوئی"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:373
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:386
 msgid "Key created without visible token"
 msgstr "کی بنا دی گئی مگر token دکھایا نہیں گیا"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:374
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:387
 msgid "PeakURL created the API key, but the one-time token was not returned. Revoke it and create a new key."
 msgstr "PeakURL نے API key بنا دی، مگر one-time token واپس نہیں آیا۔ اسے revoke کریں اور نئی key بنائیں۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:389
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:402
 msgid "API key created"
 msgstr "API key بن گئی"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:390
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:403
 msgid "Copy the token now. PeakURL will not show it again."
 msgstr "token ابھی کاپی کریں۔ PeakURL اسے دوبارہ نہیں دکھائے گا۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:395
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:408
 msgid "Failed to generate API key"
 msgstr "API key بنانے میں ناکامی ہوئی"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:410
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:423
 msgid "API key deleted successfully"
 msgstr "API key کامیابی سے حذف ہو گئی"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:415
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:428
 msgid "Failed to delete API key"
 msgstr "API key حذف کرنے میں ناکامی ہوئی"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:422
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:435
 msgid "API key copied to clipboard"
 msgstr "API key کلپ بورڈ پر کاپی ہو گئی"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:426
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:439
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:137
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:758
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:963
 msgid "Copied"
 msgstr "کاپی ہو گیا"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:429
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:442
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:764
 msgid "Copy failed"
 msgstr "کاپی ناکام ہوئی"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:430
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:443
 msgid "PeakURL could not copy that value to the clipboard."
 msgstr "PeakURL اس قدر کو کلپ بورڈ پر کاپی نہیں کر سکا۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:449
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:462
 msgid "Update available"
 msgstr "اپ ڈیٹ دستیاب ہے"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:451
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:464
 msgid "PeakURL %s is ready to install."
 msgstr "PeakURL %s انسٹال کرنے کے لیے تیار ہے۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:459
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:472
 msgid "Up to date"
 msgstr "تازہ ترین"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:462
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:475
 msgid "PeakURL %s is already on the latest version."
 msgstr "PeakURL %s پہلے ہی تازہ ترین version پر ہے۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:465
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:478
 msgid "PeakURL is already on the latest version."
 msgstr "PeakURL پہلے ہی تازہ ترین version پر ہے۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:469
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:482
 msgid "Update check failed"
 msgstr "اپ ڈیٹ چیک ناکام ہو گیا"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:472
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:485
 msgid "PeakURL could not reach the update service."
 msgstr "PeakURL update service تک نہیں پہنچ سکا۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:484
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:524
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:497
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:537
 msgid "Saved"
 msgstr "محفوظ ہو گیا"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:485
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:498
 msgid "Location data settings were updated successfully."
 msgstr "مقام کے ڈیٹا کی ترتیبات کامیابی سے اپ ڈیٹ ہو گئیں۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:493
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:506
 msgid "PeakURL could not save the MaxMind settings."
 msgstr "PeakURL MaxMind ترتیبات محفوظ نہیں کر سکا۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:504
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:629
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:517
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:642
 msgid "Database updated"
 msgstr "ڈیٹابیس اپ ڈیٹ ہو گیا"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:505
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:518
 msgid "PeakURL downloaded the latest GeoLite2 City database."
 msgstr "PeakURL نے تازہ ترین GeoLite2 City database ڈاؤن لوڈ کر لیا۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:509
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:522
 msgid "Download failed"
 msgstr "ڈاؤن لوڈ ناکام ہو گیا"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:512
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:525
 msgid "PeakURL could not download the GeoLite2 database."
 msgstr "PeakURL GeoLite2 database ڈاؤن لوڈ نہیں کر سکا۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:525
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:538
 msgid "Email configuration was updated successfully."
 msgstr "ای میل کنفیگریشن کامیابی سے اپ ڈیٹ ہو گئی۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:532
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:545
 msgid "PeakURL could not save the email configuration."
 msgstr "PeakURL ای میل کنفیگریشن محفوظ نہیں کر سکا۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:545
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:558
 msgid "Test email sent"
 msgstr "ٹیسٹ ای میل بھیج دی گئی"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:547
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:560
 msgid "PeakURL sent a test email to %s."
 msgstr "PeakURL نے %s پر ٹیسٹ ای میل بھیج دی۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:548
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:561
 msgid "PeakURL sent a test email to your account email."
 msgstr "PeakURL نے آپ کے اکاؤنٹ ای میل پر ٹیسٹ ای میل بھیج دی۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:552
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:565
 msgid "Test email failed"
 msgstr "ٹیسٹ ای میل ناکام ہو گئی"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:555
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:568
 msgid "PeakURL could not send the test email."
 msgstr "PeakURL ٹیسٹ ای میل نہیں بھیج سکا۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:585
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:598
 msgid "Release reinstalled"
 msgstr "release دوبارہ انسٹال ہو گئی"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:586
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:599
 msgid "Update installed"
 msgstr "اپ ڈیٹ انسٹال ہو گئی"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:590
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:603
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:120
 msgid "PeakURL %s has been reinstalled."
 msgstr "PeakURL %s دوبارہ انسٹال ہو گیا ہے۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:591
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:604
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:121
 msgid "PeakURL %s is now installed."
 msgstr "PeakURL %s اب انسٹال ہو چکا ہے۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:595
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:608
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:125
 msgid "The latest version has been reinstalled."
 msgstr "تازہ ترین version دوبارہ انسٹال ہو چکی ہے۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:596
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:609
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:126
 msgid "The latest version is now installed."
 msgstr "تازہ ترین version اب انسٹال ہو چکی ہے۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:601
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:614
 msgid "Reinstall failed"
 msgstr "دوبارہ انسٹال کرنا ناکام ہو گیا"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:601
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:614
 msgid "Update failed"
 msgstr "اپ ڈیٹ ناکام ہو گئی"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:605
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:618
 msgid "PeakURL could not reinstall the latest version."
 msgstr "PeakURL تازہ ترین version دوبارہ انسٹال نہیں کر سکا۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:606
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:619
 msgid "PeakURL could not apply the update."
 msgstr "PeakURL اپ ڈیٹ لاگو نہیں کر سکا۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:631
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:644
 msgid "PeakURL repaired the database schema. Review any remaining warnings below."
 msgstr "PeakURL نے ڈیٹابیس اسکیما ٹھیک کر دیا ہے۔ نیچے موجود باقی warnings کا جائزہ لیں۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:634
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:647
 msgid "The database schema is now current."
 msgstr "ڈیٹابیس اسکیما اب تازہ ہے۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:638
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:651
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:165
 msgid "Database upgrade failed"
 msgstr "ڈیٹابیس اپ گریڈ ناکام ہو گیا"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:641
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:654
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:168
 msgid "PeakURL could not repair the database schema."
 msgstr "PeakURL ڈیٹابیس اسکیما ٹھیک نہیں کر سکا۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:748
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:761
 msgid "Delete API key"
 msgstr "API key حذف کریں"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:752
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:765
 msgid "Delete %s? Any scripts, automations, or extensions using it will stop working immediately."
 msgstr "%s حذف کریں؟ اسے استعمال کرنے والی کوئی بھی scripts، automations، یا extensions فوراً کام کرنا بند کر دیں گی۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:757
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:770
 msgid "this API key"
 msgstr "یہ API key"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:761
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:774
 msgid "Delete key"
 msgstr "key حذف کریں"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:762
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:775
 msgid "Keep key"
 msgstr "key برقرار رکھیں"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:772
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:785
 msgid "Reinstall PeakURL %s?"
 msgstr "PeakURL %s دوبارہ انسٹال کریں؟"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:773
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:786
 msgid "Install PeakURL %s?"
 msgstr "PeakURL %s انسٹال کریں؟"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:776
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:789
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:112
 msgid "update"
 msgstr "اپ ڈیٹ"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:782
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:795
 msgid "PeakURL will restore the latest version and refresh the included files."
 msgstr "PeakURL تازہ ترین version بحال کرے گا اور شامل فائلیں تازہ کرے گا۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:785
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:798
 msgid "PeakURL will install the latest version and refresh the included files."
 msgstr "PeakURL تازہ ترین version انسٹال کرے گا اور شامل فائلیں تازہ کرے گا۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:791
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:804
 msgid "Reinstall latest version"
 msgstr "تازہ ترین ورژن دوبارہ انسٹال کریں"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:792
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:805
 msgid "Install update"
 msgstr "اپ ڈیٹ انسٹال کریں"
 
@@ -3133,8 +3162,8 @@ msgstr "آخری بار بنایا گیا:"
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:147
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:68
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:75
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:75
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:80
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:88
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:93
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:123
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:379
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:507
@@ -3242,180 +3271,217 @@ msgstr "اپ ڈیٹ ہو رہا ہے..."
 msgid "Update Password"
 msgstr "پاس ورڈ اپ ڈیٹ کریں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:171
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:187
 msgid "Loading languages..."
 msgstr "زبانیں لوڈ ہو رہی ہیں..."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:177
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:193
 msgid "12-hour (AM/PM)"
 msgstr "12 گھنٹے (AM/PM)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:178
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:194
 msgid "24-hour"
 msgstr "24 گھنٹے"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:286
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:197
+msgid "Default (Landing Page)"
+msgstr "ڈیفالٹ (لینڈنگ پیج)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:198
+msgid "Redirect URL"
+msgstr "ری ڈائریکٹ URL"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:199
+msgid "Login Page"
+msgstr "لاگ ان پیج"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:307
 msgid "Replace Favicon"
 msgstr "فیویکون تبدیل کریں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:287
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:308
 msgid "Choose Favicon"
 msgstr "فیویکون منتخب کریں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:303
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:324
 msgid "Replace Preview Image"
 msgstr "پری ویو تصویر بدلیں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:304
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:325
 msgid "Choose Preview Image"
 msgstr "پری ویو تصویر منتخب کریں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:311
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:332
 msgid "Profile Information"
 msgstr "پروفائل کی معلومات"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:316
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:337
 #: ui/pages/dashboard/users/UsersPage.tsx:205
 msgid "First Name"
 msgstr "پہلا نام"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:323
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:344
 #: ui/pages/dashboard/users/UsersPage.tsx:211
 msgid "Last Name"
 msgstr "آخری نام"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:330
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:351
 #: ui/pages/dashboard/users/UsersPage.tsx:220
 msgid "Display Name"
 msgstr "نمایاں نام"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:343
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:364
 msgid "Cannot be changed"
 msgstr "تبدیل نہیں کیا جا سکتا"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:360
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:381
 msgid "Email Address"
 msgstr "ای میل پتہ"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:371
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:392
 msgid "Phone Number"
 msgstr "فون نمبر"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:378
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:399
 msgid "Company"
 msgstr "کمپنی"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:384
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:405
 msgid "Job Title"
 msgstr "عہدہ"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:391
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:412
 msgid "Bio"
 msgstr "تعارف"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:403
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:424
 msgid "Site Configuration"
 msgstr "سائٹ کی ترتیب"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:416
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:437
 msgid "Tagline"
 msgstr "ٹیگ لائن"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:425
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:446
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:381
 msgid "Site Language"
 msgstr "سائٹ کی زبان"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:441
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:462
 msgid "Site Timezone"
 msgstr "سائٹ ٹائم زون"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:452
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:473
 msgid "Site timezone"
 msgstr "سائٹ ٹائم زون"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:458
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:479
 msgid "Time Format"
 msgstr "وقت کا فارمیٹ"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:469
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:490
 msgid "Time format"
 msgstr "وقت کا فارمیٹ"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:476
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:497
+msgid "Homepage Configuration"
+msgstr "ہوم پیج کی ترتیبات"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:506
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:521
+msgid "Root URL Behavior"
+msgstr "روٹ URL کا رویہ"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:530
+msgid "Custom Redirect URL"
+msgstr "کسٹم ری ڈائریکٹ URL"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:546
+msgid "Visitors to the root domain will be redirected to this URL."
+msgstr "روٹ ڈومین پر آنے والے وزٹرز کو اس URL پر ری ڈائریکٹ کر دیا جائے گا۔"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:562
+msgid "To customize your HTML landing page, edit the following file in your installation:"
+msgstr "اپنے HTML لینڈنگ پیج کو کسٹمائز کرنے کے لیے، اپنی انسٹالیشن میں درج ذیل فائل میں ترمیم کریں:"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:580
+msgid "This raw HTML file will be served at the root domain. You can include custom styles, scripts, and branding."
+msgstr "یہ خام HTML فائل روٹ ڈومین پر دکھائی جائے گی۔ آپ اس میں کسٹم اسٹائلز، اسکرپٹس اور برانڈنگ شامل کر سکتے ہیں۔"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:591
 msgid "Branding"
 msgstr "برانڈنگ"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:484
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:599
 msgid "Site Favicon"
 msgstr "سائٹ favicon"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:487
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:602
 msgid "Upload a square PNG favicon. PeakURL will use it for browser tabs, Apple touch icons, and the site web manifest."
 msgstr "ایک مربع PNG favicon اپ لوڈ کریں۔ PeakURL اسے browser tabs، Apple touch icons، اور سائٹ web manifest کے لیے استعمال کرے گا۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:497
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:612
 msgid "Favicon PNG"
 msgstr "فیوآئیکن PNG تصویر"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:533
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:648
 msgid "Use a square PNG, ideally %s. The minimum supported size is 180 x 180."
 msgstr "ایک مربع PNG استعمال کریں، بہتر ہے %s ہو۔ کم از کم سپورٹڈ سائز 180 x 180 ہے۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:561
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:676
 msgid "Remove Favicon"
 msgstr "favicon ہٹائیں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:578
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:693
 msgid "Current favicon preview"
 msgstr "موجودہ favicon پیش منظر"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:628
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:743
 msgid "No favicon configured"
 msgstr "کوئی favicon کنفیگر نہیں ہے"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:638
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:753
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:60
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Form.tsx:69
 msgid "Social Preview"
 msgstr "سوشل پری ویو"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:641
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:756
 msgid "Upload the default image used when short links are shared on social platforms. Individual links can override it."
 msgstr "سوشل پلیٹ فارمز پر شارٹ لنکس شیئر ہونے پر استعمال ہونے والی ڈیفالٹ تصویر اپ لوڈ کریں۔ ہر لنک اسے override کر سکتا ہے۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:652
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:767
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:139
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:106
 msgid "Preview Image"
 msgstr "پری ویو تصویر"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:687
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:802
 msgid "Use a PNG, JPG, or WebP image, ideally %s, for clean previews on Facebook, X, LinkedIn, and messaging apps."
 msgstr "Facebook، X، LinkedIn، اور messaging apps میں صاف پری ویوز کے لیے PNG، JPG، یا WebP تصویر استعمال کریں، بہتر ہے %s۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:709
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:824
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:149
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:116
 msgid "Remove Preview Image"
 msgstr "پری ویو تصویر ہٹائیں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:721
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:836
 msgid "Default social preview image"
 msgstr "ڈیفالٹ سوشل پری ویو تصویر"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:734
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:849
 msgid "No default preview image"
 msgstr "کوئی ڈیفالٹ پری ویو تصویر نہیں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:751
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:866
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:505
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:524
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:28
 msgid "Saving..."
 msgstr "محفوظ کیا جا رہا ہے..."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:751
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:866
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:33
 #: ui/pages/dashboard/users/UsersPage.tsx:335
 msgid "Save Changes"
@@ -3467,7 +3533,7 @@ msgstr "ڈیٹابیس اپ ڈیٹ ہو گیا"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:165
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:83
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:87
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:111
 msgid "Never"
 msgstr "کبھی نہیں"
 
@@ -3739,39 +3805,34 @@ msgstr "تازہ ترین ورژن دوبارہ انسٹال کریں"
 msgid "Check for Updates"
 msgstr "اپ ڈیٹس چیک کریں"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:46
-msgid "Application Updates"
-msgstr "ایپلیکیشن اپ ڈیٹس"
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:50
+msgid "PeakURL Updates"
+msgstr "PeakURL کی اپ ڈیٹس"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:47
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:51
 msgid "Check for new PeakURL releases, install updates, or reinstall the latest packaged release from the dashboard."
 msgstr "PeakURL کی نئی ریلیزیں چیک کریں، اپ ڈیٹس انسٹال کریں، یا ڈیش بورڈ سے تازہ ترین پیکج شدہ ریلیز دوبارہ انسٹال کریں۔"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:74
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:61
+msgid "Release notes"
+msgstr "ریلیز نوٹس"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:87
 msgid "Installed Version"
 msgstr "انسٹال شدہ ورژن"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:79
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:92
 msgid "Latest Version"
 msgstr "تازہ ترین ورژن"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:84
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:407
-msgid "Last Checked"
-msgstr "آخری بار چیک کیا گیا"
-
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:108
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:99
 msgid "Released"
 msgstr "جاری کیا گیا"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:117
-#: ui/pages/dashboard/about/AboutPage.tsx:629
-msgid "Release Notes"
-msgstr "ریلیز نوٹس"
-
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:118
-msgid "Read release notes"
-msgstr "ریلیز نوٹس پڑھیں"
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:108
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:407
+msgid "Last Checked"
+msgstr "آخری بار چیک کیا گیا"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:54
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:62
@@ -3849,8 +3910,8 @@ msgid "CAPTCHA Protection"
 msgstr "CAPTCHA تحفظ"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:270
-msgid "Require a verification challenge before public short links redirect."
-msgstr "عوامی مختصر لنکس کے ری ڈائریکٹ ہونے سے پہلے تصدیقی چیلنج لازم کریں۔"
+msgid "Require a verification challenge on the authentication pages and before public short links redirect."
+msgstr "تصدیقی صفحات پر اور پبلک شارٹ لنکس کے ری ڈائریکٹ ہونے سے پہلے ایک ویریفیکیشن چیلنج درکار کریں۔"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:284
 msgid "Enable CAPTCHA protection"
@@ -5546,171 +5607,163 @@ msgstr "PeakURL دوبارہ انسٹال ہو گیا ہے۔"
 msgid "The latest version has been reinstalled. Here's a look at what's included in this release."
 msgstr "تازہ ترین ورژن دوبارہ انسٹال ہو چکا ہے۔ اس ریلیز میں شامل خصوصیات پر ایک نظر ڈالیں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:237
-msgid "Released %s"
-msgstr "جاری کردہ %s"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:277
-msgid "For all release notes see the main page"
-msgstr "تمام ریلیز نوٹس دیکھنے کے لیے مرکزی صفحہ ملاحظہ کریں"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:286
-msgid "Plain text format"
-msgstr "سادہ متن کا فارمیٹ"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:299
+#: ui/pages/dashboard/about/AboutPage.tsx:301
 msgid "Branded Short Links"
 msgstr "برانڈڈ شارٹ لنکس"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:300
+#: ui/pages/dashboard/about/AboutPage.tsx:302
 msgid "Create clean short links with custom aliases, generated codes, QR output, and redirect settings that stay easy to manage."
 msgstr "صاف ستھرے شارٹ لنکس بنائیں جن میں حسبِ منشا aliases، خودکار کوڈز، QR آؤٹ پٹ، اور redirect ترتیبات ہوں اور جنہیں آسانی سے منظم کیا جا سکے۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:306
+#: ui/pages/dashboard/about/AboutPage.tsx:308
 msgid "Click Analytics"
 msgstr "کلک تجزیات"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:307
+#: ui/pages/dashboard/about/AboutPage.tsx:309
 msgid "Review clicks, unique visitors, referrers, device breakdowns, and traffic trends from the same dashboard used to publish links."
 msgstr "اسی ڈیش بورڈ سے کلکس، منفرد وزیٹرز، ریفررز، ڈیوائس کی تفصیل، اور ٹریفک رجحانات دیکھیں جس سے آپ لنکس شائع کرتے ہیں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:313
+#: ui/pages/dashboard/about/AboutPage.tsx:315
 msgid "Local Location Data"
 msgstr "مقامی مقام کا ڈیٹا"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:314
+#: ui/pages/dashboard/about/AboutPage.tsx:316
 msgid "Resolve visitor locations from a local MaxMind GeoLite2 database so analytics stay under your control."
 msgstr "مقامی MaxMind GeoLite2 ڈیٹابیس سے وزیٹرز کے مقامات معلوم کریں تاکہ تجزیات آپ کے اپنے کنٹرول میں رہیں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:320
+#: ui/pages/dashboard/about/AboutPage.tsx:322
 msgid "Access And Security"
 msgstr "رسائی اور سیکیورٹی"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:321
+#: ui/pages/dashboard/about/AboutPage.tsx:323
 msgid "Run with admin and editor roles, session controls, two-factor authentication, backup codes, and API keys."
 msgstr "ایڈمن اور ایڈیٹر کردار، سیشن کنٹرولز، دو مرحلہ تصدیق، بیک اپ کوڈز، اور API keys کے ساتھ چلائیں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:327
+#: ui/pages/dashboard/about/AboutPage.tsx:329
 msgid "Operations And Integrations"
 msgstr "آپریشنز اور انضمامات"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:328
+#: ui/pages/dashboard/about/AboutPage.tsx:330
 msgid "Use API keys, webhooks, import tools, and the built-in updater baseline to operate the service over time."
 msgstr "وقت کے ساتھ سروس چلانے کے لیے API keys، webhooks، import tools، اور built-in updater baseline استعمال کریں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:334
+#: ui/pages/dashboard/about/AboutPage.tsx:336
 msgid "Portable Self-Hosting"
 msgstr "قابلِ منتقلی سیلف ہوسٹنگ"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:335
+#: ui/pages/dashboard/about/AboutPage.tsx:337
 msgid "Deploy on your own domain, keep runtime configuration in your own environment, and preserve user-owned content across updates."
 msgstr "اپنے ڈومین پر تعینات کریں، runtime configuration اپنے ماحول میں رکھیں، اور updates کے دوران صارف کی ملکیت والا content محفوظ رکھیں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:355
+#: ui/pages/dashboard/about/AboutPage.tsx:357
 msgid "Use"
 msgstr "استعمال کریں"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:356
+#: ui/pages/dashboard/about/AboutPage.tsx:358
 msgid "Run PeakURL for any purpose, personal projects, business, education, or anything in between."
 msgstr "PeakURL کو کسی بھی مقصد کے لیے چلائیں، ذاتی منصوبوں، کاروبار، تعلیم، یا اس کے درمیان کسی بھی استعمال کے لیے۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:362
+#: ui/pages/dashboard/about/AboutPage.tsx:364
 msgid "Study"
 msgstr "مطالعہ کریں"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:363
+#: ui/pages/dashboard/about/AboutPage.tsx:365
 msgid "Explore the source code, understand how it works, and modify it to suit your exact needs."
 msgstr "سورس کوڈ دیکھیں، سمجھیں کہ یہ کیسے کام کرتا ہے، اور اپنی ضرورت کے مطابق ترمیم کریں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:369
+#: ui/pages/dashboard/about/AboutPage.tsx:371
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:157
 msgid "Share"
 msgstr "شیئر کریں"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:370
+#: ui/pages/dashboard/about/AboutPage.tsx:372
 msgid "Redistribute copies freely so others can benefit from the same powerful link management platform."
 msgstr "اس کی نقول آزادانہ تقسیم کریں تاکہ دوسرے بھی اسی طاقتور لنک مینجمنٹ پلیٹ فارم سے فائدہ اٹھا سکیں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:376
+#: ui/pages/dashboard/about/AboutPage.tsx:378
 msgid "Improve"
 msgstr "بہتر بنائیں"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:377
+#: ui/pages/dashboard/about/AboutPage.tsx:379
 msgid "Enhance PeakURL and share your improvements, contributing back to the open-source community."
 msgstr "PeakURL کو مزید بہتر بنائیں اور اپنی بہتریاں شیئر کریں تاکہ اوپن سورس کمیونٹی کو واپس فائدہ پہنچے۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:420
+#: ui/pages/dashboard/about/AboutPage.tsx:422
 msgid "PeakURL gives you a focused workspace for publishing short links, measuring engagement, and running branded link infrastructure on your own stack."
 msgstr "PeakURL آپ کو مختصر لنکس شائع کرنے، انگیجمنٹ ناپنے، اور اپنے ہی انفراسٹرکچر پر برانڈڈ لنک سروس چلانے کے لیے ایک مرکوز ورک اسپیس فراہم کرتا ہے۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:433
+#: ui/pages/dashboard/about/AboutPage.tsx:435
 msgid "Documentation"
 msgstr "دستاویزات"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:450
+#: ui/pages/dashboard/about/AboutPage.tsx:452
 msgid "View on GitHub"
 msgstr "GitHub پر دیکھیں"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:487
+#: ui/pages/dashboard/about/AboutPage.tsx:489
 msgid "Everything you need to publish short links, review traffic, and operate the service from one focused dashboard."
 msgstr "مختصر لنکس شائع کرنے، ٹریفک کا جائزہ لینے، اور ایک ہی مرکوز ڈیش بورڈ سے سروس چلانے کے لیے درکار ہر چیز۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:491
+#: ui/pages/dashboard/about/AboutPage.tsx:493
 msgid "What's Inside"
 msgstr "کیا شامل ہے"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:506
+#: ui/pages/dashboard/about/AboutPage.tsx:508
 msgid "PeakURL is built to stay understandable in day-to-day use and dependable over time."
 msgstr "PeakURL روزمرہ استعمال میں قابلِ فہم اور وقت کے ساتھ قابلِ اعتماد رہنے کے لیے بنایا گیا ہے۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:510
+#: ui/pages/dashboard/about/AboutPage.tsx:512
 msgid "Product Principles"
 msgstr "پروڈکٹ کے اصول"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:519
+#: ui/pages/dashboard/about/AboutPage.tsx:521
 msgid "Clear By Default"
 msgstr "بطورِ ڈیفالٹ واضح"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:522
+#: ui/pages/dashboard/about/AboutPage.tsx:524
 msgid "The dashboard should stay direct and readable so routine work like publishing links, reviewing traffic, and managing users does not feel heavy."
 msgstr "ڈیش بورڈ سیدھا اور پڑھنے میں آسان رہنا چاہیے تاکہ لنکس شائع کرنا، ٹریفک دیکھنا، اور صارفین سنبھالنا بھاری محسوس نہ ہو۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:532
+#: ui/pages/dashboard/about/AboutPage.tsx:534
 msgid "Portable To Run"
 msgstr "چلانے میں آسان اور قابلِ منتقلی"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:535
+#: ui/pages/dashboard/about/AboutPage.tsx:537
 msgid "The application should install cleanly on common PHP and MySQL hosting without depending on a managed SaaS control plane."
 msgstr "ایپ عام PHP اور MySQL ہوسٹنگ پر بغیر کسی managed SaaS control plane کے صاف طریقے سے انسٹال ہونی چاہیے۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:545
+#: ui/pages/dashboard/about/AboutPage.tsx:547
 msgid "Open And Inspectable"
 msgstr "کھلا اور قابلِ جانچ"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:548
+#: ui/pages/dashboard/about/AboutPage.tsx:550
 msgid "The codebase stays auditable and adaptable so operators can understand what they run, extend it carefully, and keep long-term control."
 msgstr "کوڈبیس قابلِ جانچ اور قابلِ تطبیق رہتی ہے تاکہ آپ سمجھ سکیں کہ کیا چلا رہے ہیں، احتیاط سے اسے بڑھا سکیں، اور طویل مدتی کنٹرول برقرار رکھیں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:561
+#: ui/pages/dashboard/about/AboutPage.tsx:563
 msgid "PeakURL is released under the MIT License so it can stay practical to adopt, inspect, modify, and distribute."
 msgstr "PeakURL MIT License کے تحت جاری کیا گیا ہے تاکہ اسے اپنانا، جانچنا، تبدیل کرنا، اور تقسیم کرنا عملی اور آسان رہے۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:565
+#: ui/pages/dashboard/about/AboutPage.tsx:567
 msgid "Open Source Terms"
 msgstr "اوپن سورس لائسنس کی شرائط"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:579
+#: ui/pages/dashboard/about/AboutPage.tsx:581
 msgid "Freedom to"
 msgstr "آپ کو آزادی ہے کہ"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:602
+#: ui/pages/dashboard/about/AboutPage.tsx:604
 msgid "Shorten, track, and own every link."
 msgstr "ہر لنک کو مختصر کریں، ٹریک کریں، اور اس کی ملکیت حاصل کریں۔"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:611
+#: ui/pages/dashboard/about/AboutPage.tsx:613
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
 msgid "Website"
 msgstr "ویب سائٹ"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:631
+msgid "Release Notes"
+msgstr "ریلیز نوٹس"
 
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:26
 msgid "No recent activity"

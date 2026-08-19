@@ -1,4 +1,5 @@
 import { __, sprintf } from "@/i18n";
+import { formatLocalizedDateTime } from "@/utils";
 
 import type {
 	ProtectedAction,
@@ -14,11 +15,12 @@ export const BACKUP_CODES_FILENAME = "peakurl-backup-codes.txt";
 export function createBackupCodesFile(codes: string[]): string {
 	return [
 		__("PeakURL Backup Codes"),
+		"",
 		__("Keep these codes safe. Each code can be used once."),
 		"",
 		...codes.map((code) => `- ${code}`),
 		"",
-		sprintf(__("Generated at: %s"), new Date().toISOString()),
+		sprintf(__("Generated at: %s"), formatLocalizedDateTime(new Date())),
 	].join("\n");
 }
 

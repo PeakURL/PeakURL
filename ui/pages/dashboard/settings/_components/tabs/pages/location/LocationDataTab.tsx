@@ -215,10 +215,8 @@ function LocationDataTab({
 				/>
 			)}
 
-			<fieldset className="settings-fieldset">
-				<legend className="settings-legend">
-					{__("MaxMind Credentials")}
-				</legend>
+			<section className="settings-fieldset">
+				<h2 className="settings-legend">{__("MaxMind Credentials")}</h2>
 				<hr className="settings-separator" />
 				<p className="settings-group-description mb-0!">
 					{__(
@@ -375,7 +373,7 @@ function LocationDataTab({
 						</div>
 					</form>
 				)}
-			</fieldset>
+			</section>
 		</div>
 	);
 }

@@ -150,15 +150,15 @@ function EmailDeliveryTab({
 
 	return (
 		<div className="settings-email">
-			<fieldset className="settings-fieldset">
+			<section className="settings-fieldset">
 				<div dir={direction} className="settings-email-intro-layout">
 					<div className="settings-email-intro-icon">
 						<Mail size={18} />
 					</div>
 					<div className="settings-email-intro-content">
-						<legend className="settings-legend mb-0!">
+						<h2 className="settings-legend mb-0!">
 							{__("Email Delivery")}
-						</legend>
+						</h2>
 						<p className="settings-group-description mb-0! mt-0!">
 							{__(
 								"PeakURL uses this mail transport for password-reset emails and other account recovery notifications."
@@ -166,7 +166,7 @@ function EmailDeliveryTab({
 						</p>
 					</div>
 				</div>
-			</fieldset>
+			</section>
 
 			{errorMessage && (
 				<div className="settings-email-alert settings-email-alert-error">
@@ -213,10 +213,8 @@ function EmailDeliveryTab({
 			)}
 
 			<form onSubmit={handleSubmit} className="settings-form">
-				<fieldset className="settings-fieldset">
-					<legend className="settings-legend">
-						{__("Delivery method")}
-					</legend>
+				<section className="settings-fieldset">
+					<h2 className="settings-legend">{__("Delivery method")}</h2>
 					<div className="settings-email-method-grid">
 						<MethodButton
 							isActive={"mail" === form.driver}
@@ -245,13 +243,13 @@ function EmailDeliveryTab({
 							}
 						/>
 					</div>
-				</fieldset>
+				</section>
 
 				{usingSmtp && (
-					<fieldset className="settings-fieldset">
-						<legend className="settings-legend">
+					<section className="settings-fieldset">
+						<h2 className="settings-legend">
 							{__("SMTP Configuration")}
-						</legend>
+						</h2>
 						<div className="settings-grid">
 							<Input
 								label={__("From Name")}
@@ -424,7 +422,7 @@ function EmailDeliveryTab({
 								/>
 							</div>
 						)}
-					</fieldset>
+					</section>
 				)}
 
 				{(showSubmitButton || showTestButton) && (

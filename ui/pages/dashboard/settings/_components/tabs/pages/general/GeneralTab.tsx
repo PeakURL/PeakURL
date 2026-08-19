@@ -327,10 +327,10 @@ function GeneralTab({
 	return (
 		<div className="settings-general">
 			<form onSubmit={handleSubmit} className="settings-form">
-				<fieldset className="settings-fieldset">
-					<legend className="settings-legend">
+				<section className="settings-fieldset">
+					<h2 className="settings-legend">
 						{__("Profile Information")}
-					</legend>
+					</h2>
 					<hr className="settings-separator" />
 					<div className="settings-grid">
 						<Input
@@ -418,11 +418,11 @@ function GeneralTab({
 							/>
 						</div>
 					</div>
-				</fieldset>
-				<fieldset className="settings-fieldset">
-					<legend className="settings-legend">
+				</section>
+				<section className="settings-fieldset">
+					<h2 className="settings-legend">
 						{__("Site Configuration")}
-					</legend>
+					</h2>
 					<hr className="settings-separator" />
 					<div className="settings-grid">
 						<Input
@@ -491,17 +491,14 @@ function GeneralTab({
 							/>
 						</div>
 					</div>
-				</fieldset>
-				<fieldset className="settings-fieldset">
-					<legend className="settings-legend">
+				</section>
+				<section className="settings-fieldset">
+					<h2 className="settings-legend">
 						{__("Homepage Configuration")}
-					</legend>
+					</h2>
 					<hr className="settings-separator" />
 					<div className="settings-grid">
-						<div
-							className="settings-general-field"
-							style={{ gridColumn: "1 / -1" }}
-						>
+						<div className="settings-general-field-full">
 							<label className="settings-section-label">
 								{__("Root URL Behavior")}
 							</label>
@@ -522,10 +519,7 @@ function GeneralTab({
 							/>
 						</div>
 						{landingPageMode === "url" && (
-							<div
-								className="settings-general-field"
-								style={{ gridColumn: "1 / -1" }}
-							>
+							<div className="settings-general-field-full">
 								<Input
 									label={__("Custom Redirect URL")}
 									value={landingPageUrl}
@@ -539,10 +533,7 @@ function GeneralTab({
 									type="url"
 									valueDirection="ltr"
 								/>
-								<p
-									className="settings-group-description"
-									style={{ marginTop: "0.5rem" }}
-								>
+								<p className="settings-group-description settings-general-help-text">
 									{__(
 										"Visitors to the root domain will be redirected to this URL."
 									)}
@@ -550,33 +541,19 @@ function GeneralTab({
 							</div>
 						)}
 						{landingPageMode === "html" && (
-							<div
-								className="settings-general-field"
-								style={{ gridColumn: "1 / -1" }}
-							>
-								<div
-									className="settings-group-description"
-									style={{ marginTop: "0.5rem" }}
-								>
+							<div className="settings-general-field-full">
+								<div className="settings-group-description settings-general-help-text">
 									<p>
 										{__(
 											"To customize your HTML landing page, edit the following file in your installation:"
 										)}
 									</p>
-									<code
-										style={{
-											display: "inline-block",
-											marginTop: "0.5rem",
-											padding: "0.25rem 0.5rem",
-											backgroundColor: "rgba(0,0,0,0.05)",
-											borderRadius: "4px",
-										}}
-									>
+									<code className="settings-general-code-block">
 										{siteSettings?.contentDirectory
 											? `${siteSettings.contentDirectory}/landing-page.html`
 											: "content/landing-page.html"}
 									</code>
-									<p style={{ marginTop: "0.5rem" }}>
+									<p className="settings-general-help-text">
 										{__(
 											"This raw HTML file will be served at the root domain. You can include custom styles, scripts, and branding."
 										)}
@@ -585,11 +562,9 @@ function GeneralTab({
 							</div>
 						)}
 					</div>
-				</fieldset>
-				<fieldset className="settings-fieldset">
-					<legend className="settings-legend">
-						{__("Branding")}
-					</legend>
+				</section>
+				<section className="settings-fieldset">
+					<h2 className="settings-legend">{__("Branding")}</h2>
 					<hr className="settings-separator" />
 					<div className="settings-general-favicon">
 						<div className="settings-general-favicon-header">
@@ -853,7 +828,7 @@ function GeneralTab({
 							</div>
 						</div>
 					</div>
-				</fieldset>
+				</section>
 				<div
 					className={cn(
 						"settings-general-actions",

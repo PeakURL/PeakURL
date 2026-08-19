@@ -1,8 +1,9 @@
 import { Monitor, Smartphone, Tablet } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
 
 import { Button } from "@/components";
 import { __ } from "@/i18n";
-import { cn, formatDateTimeValue, getCountryFlagEmoji } from "@/utils";
+import { cn, getCountryFlagEmoji } from "@/utils";
 
 import { getSessionLocationLabel } from "../helpers";
 import type { SessionItemProps } from "../types";
@@ -53,17 +54,21 @@ function SessionItem({
 							>
 								{countryFlag}
 							</span>
-							<span>{locationLabel}</span>
+							<span className="wrap-break-word">
+								{locationLabel}
+							</span>
 						</span>
-						<span className="settings-security-session-detail">
+						<span className="settings-security-session-detail break-all">
 							{session.ipAddress || __("Unknown IP")}
 						</span>
 						<span className="settings-security-session-detail">
 							{__("Last active")}{" "}
-							{formatDateTimeValue(
-								session.lastActiveAt,
-								__("Unknown")
-							)}
+							{session.lastActiveAt
+								? formatDistanceToNow(
+										new Date(session.lastActiveAt),
+										{ addSuffix: true }
+									)
+								: __("Unknown")}
 						</span>
 					</div>
 				</div>

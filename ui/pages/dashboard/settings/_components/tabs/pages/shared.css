@@ -13,13 +13,13 @@
 	}
 
 	.settings-fieldset {
-		@apply rounded-xl bg-surface p-5 sm:p-6 shadow-sm ring-1 ring-inset ring-stroke flex flex-col gap-5 min-w-0;
+		@apply flex min-w-0 flex-col gap-5 rounded-xl bg-surface p-5 shadow-sm ring-1 ring-inset ring-stroke sm:p-6;
 		border: none;
 	}
 
 	.settings-legend {
 		@apply block w-full text-lg font-semibold text-heading;
-		float: left;
+		float: none;
 		padding: 0;
 	}
 

@@ -18,8 +18,8 @@ function ActiveSessions({
 	onRevokeSession,
 }: ActiveSessionsProps) {
 	return (
-		<fieldset className="settings-fieldset">
-			<legend className="settings-legend">{__("Active Sessions")}</legend>
+		<section className="settings-fieldset">
+			<h2 className="settings-legend">{__("Active Sessions")}</h2>
 			<hr className="settings-separator" />
 			<div dir={direction} className="settings-security-sessions-header">
 				<p className="settings-group-description mb-0! mt-0!">
@@ -61,7 +61,7 @@ function ActiveSessions({
 					))
 				)}
 			</div>
-		</fieldset>
+		</section>
 	);
 }
 

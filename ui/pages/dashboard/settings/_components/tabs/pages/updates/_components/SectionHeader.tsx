@@ -15,13 +15,13 @@ function SectionHeader({
 }: SectionHeaderProps) {
 	return (
 		<>
-			<legend className="settings-legend flex items-center gap-2">
+			<h2 className="settings-legend flex items-center gap-2">
 				{title}
 				{badge ? (
 					<StatusBadge tone={badge.tone} label={badge.label} />
 				) : null}
 				{badgeAction}
-			</legend>
+			</h2>
 			<div dir={direction} className="settings-updates-card-header">
 				<div className="settings-updates-card-copy">
 					<p className="settings-group-description mb-0! mt-0!">

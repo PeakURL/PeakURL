@@ -37,10 +37,10 @@ function TwoFactorSettings({
 	onVerificationCodeChange,
 }: TwoFactorSettingsProps) {
 	return (
-		<fieldset className="settings-fieldset">
-			<legend className="settings-legend">
+		<section className="settings-fieldset">
+			<h2 className="settings-legend">
 				{__("Two-Factor Authentication")}
-			</legend>
+			</h2>
 			<hr className="settings-separator" />
 			<div
 				dir={direction}
@@ -123,7 +123,7 @@ function TwoFactorSettings({
 					onDownloadRequest={onDownloadRequest}
 				/>
 			) : null}
-		</fieldset>
+		</section>
 	);
 }
 

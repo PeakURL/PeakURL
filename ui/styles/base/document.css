@@ -2,6 +2,27 @@
 	html {
 		scroll-behavior: smooth;
 	}
+
+	a,
+	button,
+	[role="button"],
+	[role="switch"],
+	[role="checkbox"],
+	input[type="checkbox"],
+	input[type="radio"],
+	input[type="submit"],
+	input[type="button"],
+	input[type="reset"],
+	select,
+	label {
+		cursor: pointer;
+	}
+
+	:disabled,
+	[disabled],
+	[aria-disabled="true"] {
+		cursor: not-allowed;
+	}
 }
 
 * {

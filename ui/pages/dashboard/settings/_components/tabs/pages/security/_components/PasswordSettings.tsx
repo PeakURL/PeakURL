@@ -25,8 +25,8 @@ function PasswordSettings({
 	};
 
 	return (
-		<fieldset className="settings-fieldset">
-			<legend className="settings-legend">{__("Password")}</legend>
+		<section className="settings-fieldset">
+			<h2 className="settings-legend">{__("Password")}</h2>
 			<hr className="settings-separator" />
 			<div className="flex flex-col gap-5 max-w-md">
 				<Input
@@ -73,7 +73,7 @@ function PasswordSettings({
 					{isUpdating ? __("Updating...") : __("Update Password")}
 				</Button>
 			</div>
-		</fieldset>
+		</section>
 	);
 }
 

@@ -172,7 +172,7 @@
 	}
 
 	.settings-security-session-meta {
-		@apply flex min-w-0 items-center gap-3;
+		@apply flex min-w-0 w-full sm:w-auto items-center gap-3;
 	}
 
 	.settings-security-session-icon-panel {
@@ -184,7 +184,7 @@
 	}
 
 	.settings-security-session-copy {
-		@apply min-w-0;
+		@apply min-w-0 flex-1 wrap-break-word;
 		text-align: start;
 	}
 
@@ -193,7 +193,7 @@
 	}
 
 	.settings-security-session-detail {
-		@apply inline-flex min-w-0 items-center gap-1;
+		@apply inline-flex min-w-0 max-w-full items-center gap-1;
 	}
 
 	.settings-security-session-detail-location {

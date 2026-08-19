@@ -7,6 +7,22 @@
 		@apply space-y-2;
 	}
 
+	.settings-general-field-full {
+		@apply space-y-2 md:col-span-2;
+	}
+
+	.settings-general-help-text {
+		@apply mt-2;
+	}
+
+	.settings-general-code-block {
+		@apply my-2 block w-fit max-w-full break-all rounded bg-surface-alt px-2 py-1 font-mono text-[13px] text-heading;
+		direction: ltr;
+		text-align: start;
+		unicode-bidi: -moz-plaintext;
+		unicode-bidi: plaintext;
+	}
+
 	.settings-general-bio-field {
 		@apply space-y-2 md:col-span-2;
 	}

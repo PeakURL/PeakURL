@@ -69,9 +69,9 @@ PeakURL utilizes the modern **ESLint Flat Config** (`eslint.config.js`) equipped
 
 ### TypeScript Conventions
 
-- Strict configuration is enforced via `tsconfig.app.json` (including `exactOptionalPropertyTypes: true` and `noUncheckedIndexedAccess: true`).
+- Strict configuration is enforced via `tsconfig.app.json` (including `strict: true` and `noUncheckedIndexedAccess: true`).
 - Type imports must use `import type { ... } from '@/...'` for contracts, DTOs, and component prop types.
-- Prop types and DTO interfaces with optional fields should explicitly support `undefined` (e.g. `title?: string | undefined`).
+- Array indexing and dictionary lookups must account for possible `undefined` bounds (e.g. `items[0] ?? fallback`).
 - For detailed TypeScript guidelines, consult the [TypeScript guide](TYPESCRIPT.md).
 
 ---

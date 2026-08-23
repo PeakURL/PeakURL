@@ -178,7 +178,7 @@ PeakURL uses a local MaxMind GeoLite2 City database for location analytics.
 - default path: `content/uploads/geoip/GeoLite2-City.mmdb`
 - refresh command: `php app/bin/update-geoip.php`
 
-In the source checkout, Location Data settings save into `app/.env`. In installed releases, the same settings are written to the generated root `config.php`.
+In both development and production environments, MaxMind credentials are persisted securely in encrypted settings storage within the database.
 
 ## Optional Editor Setup
 

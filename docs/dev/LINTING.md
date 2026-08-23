@@ -1,12 +1,19 @@
 # Linting and Formatting
 
-This document explains the linting and formatting workflow for PeakURL.
+This document explains the linting, formatting, git hook, and continuous integration (CI) quality workflows for PeakURL.
 
-PeakURL uses different tools for the dashboard UI and the PHP application runtime. JavaScript and TypeScript files are checked with ESLint and formatted with Prettier. PHP files are checked and formatted with PHP_CodeSniffer and PHPCBF using WordPress Coding Standards.
+PeakURL uses a modern, high-performance quality toolchain tailored to our open-source architecture:
+
+- **Web & Dashboard UI**: Modern ESLint Flat Config (`eslint.config.js`) with TypeScript-ESLint, React Hooks, JSX A11y accessibility standards, and Prettier formatting.
+- **PHP Application Runtime**: PHP_CodeSniffer and PHPCBF using WordPress Coding Standards (WordPressCS) via `phpcs.xml`.
+- **Pre-commit Automation**: Husky + `lint-staged` ensuring staged files are formatted and linted before commits.
+- **Continuous Integration**: GitHub Actions CI Quality Gate (`.github/workflows/ci.yml`) enforcing format checks, linting, syntax validation, and production builds on every PR and push to `main`.
+
+---
 
 ## Main Commands
 
-Run the main lint pass:
+Run the full project lint pass (Web + PHP):
 
 ```bash
 npm run lint
@@ -18,146 +25,196 @@ Run all formatting checks:
 npm run format:check
 ```
 
-Apply formatting automatically:
+Apply all code formatting automatically:
 
 ```bash
 npm run format
 ```
 
-## JavaScript and TypeScript
+Verify TypeScript compilation and build output:
 
-Lint the dashboard UI:
+```bash
+npm run build
+```
+
+---
+
+## JavaScript, TypeScript & Dashboard UI
+
+The dashboard UI source code lives under `ui/` and is built using React 19, TypeScript, and Vite.
+
+### Linting Commands
+
+Lint the dashboard UI with caching enabled:
 
 ```bash
 npm run lint:web
 ```
 
-This runs ESLint against the `ui/` source tree:
+Automatically fix lintable issues:
 
 ```bash
-eslint ui
+npm run lint:web:fix
 ```
 
-Format web and config files:
+### ESLint Architecture & Rules
 
-```bash
-npm run format:web
-```
+PeakURL utilizes the modern **ESLint Flat Config** (`eslint.config.js`) equipped with:
 
-Check formatting without changing files:
+- **`typescript-eslint`**: Strict type checking rules, explicit return types on key boundaries, safe index access enforcement, and canonical type-only imports (`@typescript-eslint/consistent-type-imports`).
+- **`eslint-plugin-jsx-a11y`**: Accessible HTML & ARIA attributes, keyboard navigation listeners for interactive elements, and accessible forms.
+- **`eslint-plugin-react-hooks`**: React 19 hook rule enforcement and dependency verification.
+- **`eslint-plugin-react-refresh`**: Fast Refresh architectural safety.
+- **Caching (`.eslintcache`)**: Instant incremental lint runs on unchanged files.
 
-```bash
-npm run format:web:check
-```
+### TypeScript Conventions
 
-Notes:
+- Strict configuration is enforced via `tsconfig.app.json` (including `exactOptionalPropertyTypes: true` and `noUncheckedIndexedAccess: true`).
+- Type imports must use `import type { ... } from '@/...'` for contracts, DTOs, and component prop types.
+- Prop types and DTO interfaces with optional fields should explicitly support `undefined` (e.g. `title?: string | undefined`).
+- For detailed TypeScript guidelines, consult the [TypeScript guide](TYPESCRIPT.md).
 
-- The dashboard UI is under `ui/`.
-- TypeScript files should stay type-checked through the normal lint and build flow.
-- Prefer the nearest folder-level `types.ts` for reusable or shared UI types. If a component folder needs its own prop or payload types, add that folder's own `types.ts` rather than inventing filename-specific type modules.
-- Add TSDoc comments to exported types when the shape or intent is not already obvious from the type name alone.
-- For the repo's broader TypeScript conventions, see the [TypeScript guide](TYPESCRIPT.md).
-- Web formatting is standardized through the repo-root [`.prettierrc.json`](../../.prettierrc.json), [`.prettierignore`](../../.prettierignore), and [`.editorconfig`](../../.editorconfig).
-- The goal is to improve typing gradually without loosening linting or reverting files back to JSX.
+---
 
 ## Prettier
 
-Prettier is configured for the repo and is the default formatter for web, config, JSON, YAML, CSS, and Markdown files.
+Prettier is configured as the canonical formatter for all web code, configuration files, JSON, YAML, CSS, and Markdown.
 
-Format web and config files:
+Format web and configuration files:
 
 ```bash
 npm run format:web
 ```
 
-Check formatting without changing files:
+Check formatting without modifying files:
 
 ```bash
 npm run format:web:check
 ```
 
-The current Prettier conventions are:
+### Formatting Conventions
 
-- **Tabs enabled** for code and JSON
-- **Spaces (Width: 2)** strictly enforced for YAML
-- tab width `4` (for tabs)
-- single quotes
-- trailing commas where valid in ES5
-- generated/runtime paths are excluded through [`.prettierignore`](../../.prettierignore), including `build/`, `release/`, `content/`, `app/vendor/`, and `package-lock.json`
+Standardized through [`.prettierrc.json`](../../.prettierrc.json), [`.prettierignore`](../../.prettierignore), and [`.editorconfig`](../../.editorconfig):
 
-## PHP
+- **Tabs enabled** for code, CSS, and JSON
+- **Spaces (Width: 2)** strictly enforced for YAML files
+- Tab width: `4`
+- Single quotes
+- Trailing commas where valid in ES5
+- Build artifacts and vendor directories are ignored (`build/`, `release/`, `content/`, `app/vendor/`, and `package-lock.json`).
 
-Run PHP coding standards:
+---
+
+## PHP & Backend Runtime
+
+The backend PHP runtime lives under `app/` and `site/`.
+
+### Linting and Standards
+
+Run WordPress Coding Standards checks:
 
 ```bash
 npm run lint:php
 ```
 
-That delegates to Composer:
-
-```bash
-composer --working-dir=app run phpcs
-```
-
-Auto-format PHP files:
+Auto-format PHP files using PHPCBF:
 
 ```bash
 npm run format:php
 ```
 
-That delegates to:
-
-```bash
-composer --working-dir=app run phpcbf
-```
-
-Run a raw PHP syntax sweep:
+Run raw PHP syntax validation (`php -l`):
 
 ```bash
 npm run lint:php:syntax
 ```
 
-PHP standards are defined by the repo-root [phpcs.xml](../../phpcs.xml) ruleset.
+### PHP Scope & Standards
 
-The current PHP lint scope includes:
+PHP standards are defined by the repository-level [phpcs.xml](../../phpcs.xml) ruleset.
 
-- `app/api`
-- `app/bin`
-- `app/controllers`
-- `app/http`
-- `app/includes`
-- `app/public`
-- `app/services`
+Checked directories:
+
+- `app/api/`
+- `app/bin/`
+- `app/controllers/`
+- `app/http/`
+- `app/includes/`
+- `app/public/`
+- `app/services/`
 - `app/store.php`
-- `app/traits`
-- `app/utils`
-- `site`
+- `app/traits/`
+- `app/utils/`
+- `site/`
 
 Excluded from PHP_CodeSniffer:
 
-- `vendor/`
-- generated storage/runtime areas
+- `app/vendor/`
+- Runtime storage and uploads (`content/`)
 - `site/config-sample.php`
 
-## Recommended Workflow
+---
 
-For most changes:
+## Git Pre-Commit Hook (Husky + lint-staged)
+
+PeakURL includes automatic pre-commit quality checks using **Husky** and **`lint-staged`**.
+
+When you stage changes and commit:
+
+1. Staged TypeScript/TSX files are linted with ESLint autofix and formatted with Prettier.
+2. Staged JSON, Markdown, and YAML files are formatted with Prettier.
+3. Staged PHP files are auto-formatted with PHPCBF.
+
+To manually install or reset the git hooks:
 
 ```bash
+npm run prepare
+```
+
+Configuration lives in [`package.json`](../../package.json) under the `"lint-staged"` property and in [`.husky/pre-commit`](../../.husky/pre-commit).
+
+---
+
+## GitHub Actions CI Quality Gate
+
+Continuous Integration is configured via [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml). Every pull request and push to the `main` branch undergoes automated quality verification:
+
+1. **Environment Setup**: Node.js 24 and PHP 8.4 with required PDO/Zip extensions.
+2. **Dependency Installation**: `npm ci` & `composer install` (in `app/`).
+3. **Format Check**: `npm run format:check` (Prettier & PHPCS).
+4. **Linters**: `npm run lint` (ESLint with Flat Config & PHPCS with WordPressCS).
+5. **PHP Syntax Check**: `npm run lint:php:syntax` (`php -l` sweep).
+6. **TypeScript & Production Build**: `npm run build` (`tsc -b && vite build`).
+
+---
+
+## Recommended Contributor Workflow
+
+Before opening a pull request or pushing changes, run:
+
+```bash
+# 1. Format all code
 npm run format
+
+# 2. Run all linters
 npm run lint
+
+# 3. Check PHP syntax
+npm run lint:php:syntax
+
+# 4. Verify TypeScript and production build
 npm run build
 ```
 
-If you only changed UI files:
+If you only worked on the React UI:
 
 ```bash
 npm run format:web
-npm run lint:web
+npm run lint:web:fix
 npm run build
 ```
 
-If you only changed PHP files:
+If you only worked on the PHP runtime:
 
 ```bash
 npm run format:php

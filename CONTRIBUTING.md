@@ -1,81 +1,123 @@
 # Contributing to PeakURL
 
-Thank you for taking the time to contribute to PeakURL.
+Thank you for your interest in contributing to PeakURL.
 
-This project is intended to stay approachable, well-structured, and practical for real self-hosted deployments. Contributions are welcome across code, documentation, bug fixes, testing, and product polish.
+This project is committed to maintaining a secure, performant, and well-structured self-hosted link management platform. We welcome contributions including bug fixes, feature enhancements, documentation improvements, and quality assurance.
 
-## Before You Start
+---
 
-Please review these documents first:
+## Before You Begin
+
+Please review the following foundational documents prior to contributing:
 
 - [Project README](README.md)
 - [Development Environment Setup](docs/dev/DEVELOPMENT.md)
-- [Linting and Formatting](docs/dev/LINTING.md)
+- [Linting and Formatting Guide](docs/dev/LINTING.md)
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Security Policy](SECURITY.md)
 
-## Ways to Contribute
+---
 
-- Report bugs
-- Improve documentation
-- Propose or implement focused features
-- Fix UI or runtime regressions
-- Improve tests, release tooling, or installer behavior
+## Issue-First Workflow
 
-## Development Expectations
+To ensure coordinated development and maintain project architectural integrity, **contributors must open a GitHub Issue and receive maintainer alignment before submitting a Pull Request.**
 
-PeakURL is a self-hosted dashboard product. Contributions should align with that direction.
+### Rationale
 
-Please avoid changes that:
+- **Technical Alignment**: Establishing consensus on the scope, requirements, and design prevents redundant effort and misaligned implementations.
+- **Triage and Reproducibility**: For defect reports, an issue enables maintainers and contributors to verify reproduction steps and identify root causes systematically.
+- **Community Transparency**: Open issues inform the broader community of active development tracks and prevent duplicated work.
 
-- reintroduce the old multi-domain SaaS-style admin surface
-- add dead product areas that are not part of the self-hosted experience
-- weaken the current installer, release, or runtime flow
+### Contribution Process
 
-## Setting Up Locally
+1. **Review Existing Issues**: Search the [issue tracker](https://github.com/PeakURL/PeakURL/issues) to confirm the defect or feature has not already been reported or planned.
+2. **Open a Detailed Issue**:
+    - **Bug Reports**: Provide precise reproduction steps, expected versus actual behavior, system environment details (Operating System, PHP version, Node.js version, browser), and relevant application logs.
+    - **Feature Requests**: Clearly state the problem, the anticipated user benefit, and the proposed technical implementation.
+3. **Obtain Maintainer Confirmation**: For non-trivial or architectural changes, please wait for maintainer review and approval before proceeding with implementation.
+4. **Reference the Issue in the Pull Request**: Every pull request must explicitly cite the related issue in its description (e.g., `Fixes #123` or `Closes #123`).
 
-Use the local development guide:
+> [!IMPORTANT]
+> Pull requests submitted without a corresponding issue or adequate context will be placed on hold until an issue is opened and the scope is reviewed with maintainers.
 
-- [Development Environment Setup](docs/dev/DEVELOPMENT.md)
+---
 
-That guide covers the Docker stack, local domains, release testing, and the main development workflow.
+## Architectural Scope and Boundaries
 
-## Linting and Verification
+PeakURL is designed as a single-domain, self-hosted deployment. All contributions must adhere to the following product boundaries:
 
-Before opening a pull request, run the relevant checks for your changes.
+- **Single-Domain Architecture**: Do not reintroduce multi-tenant domain models, SaaS-specific billing tables, or team-based administrative tiers.
+- **Minimal Dependencies**: Prefer standard runtime APIs and lightweight patterns over introducing extraneous external dependencies.
+- **System Integrity**: Preserve the reliability, security, and idempotency of the installer, database migration services, and runtime configuration layers.
 
-Typical full check:
+---
+
+## Local Development Environment
+
+Consult the [Development Environment Setup](docs/dev/DEVELOPMENT.md) guide for comprehensive instructions on:
+
+- Initializing the local Docker environment (`compose.yaml`).
+- Developing within the React dashboard (`ui/`) and PHP backend runtime (`app/`).
+- Verifying local domains (`https://peakurl.dev`, `https://api.peakurl.dev`, and `https://peakurl.test`).
+
+---
+
+## Code Quality and Verification Standards
+
+All code submissions must satisfy automated validation via the **CI Quality Gate** (`.github/workflows/ci.yml`) before merging. Contributors are expected to execute and pass all verification checks locally:
+
+### 1. Code Formatting (Prettier and PHPCS)
 
 ```bash
-npm run lint
-npm run build
+# Verify formatting compliance
+npm run format:check
+
+# Automatically format all files
+npm run format
 ```
 
-If your changes affect PHP runtime behavior, also run:
+### 2. Linting (ESLint and PHP_CodeSniffer)
+
+```bash
+# Execute all linters
+npm run lint
+
+# Lint frontend assets only
+npm run lint:web
+
+# Lint backend PHP files only
+npm run lint:php
+```
+
+### 3. PHP Syntax Validation
 
 ```bash
 npm run lint:php:syntax
 ```
 
-For more detail, see:
+### 4. TypeScript Compilation and Production Build
 
-- [Linting and Formatting](docs/dev/LINTING.md)
+```bash
+npm run build
+```
 
-## Pull Requests
+For complete specifications regarding coding standards, ESLint configuration, and PHPCS rules, refer to the [Linting and Formatting Guide](docs/dev/LINTING.md).
 
-When opening a pull request:
+---
 
-- keep the scope focused
-- explain the user-facing or runtime impact clearly
-- mention any tradeoffs or follow-up work
-- include verification steps when relevant
+## Pull Request Guidelines
 
-If your change affects installation, auth, release packaging, or runtime behavior, please test both the normal development flow and the packaged release flow where practical.
+When submitting a pull request, ensure compliance with the following standards:
 
-## Documentation Changes
+1. **Branch Naming**: Use concise, prefixed branch names (e.g., `fix/redirect-trailing-slash`, `feat/export-filters`, `docs/setup-guide`).
+2. **Atomic Commits**: Keep pull requests focused on a single logical change corresponding to the linked issue. Do not combine unrelated modifications.
+3. **Pull Request Description**: Complete all sections of the [Pull Request Template](.github/pull_request_template.md), including the linked issue reference, summary of changes, and verification evidence.
+4. **Documentation**: Update all corresponding documentation files within the same pull request whenever modifying user-facing functionality, configuration options, or development workflows.
 
-If a contribution changes behavior, commands, setup, or release expectations, update the relevant documentation in the same pull request.
+---
 
-## Questions and Product Direction
+## Security Vulnerability Reporting
 
-If a change is large, architectural, or product-shaping, it is better to discuss the direction before investing heavily in implementation.
+Security vulnerabilities must **not** be reported through public GitHub issues or pull requests.
+
+Please adhere to the private disclosure protocol outlined in the [Security Policy](SECURITY.md).

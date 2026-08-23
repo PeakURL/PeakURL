@@ -47,7 +47,7 @@ jobs:
           tools: composer
 
       - name: Install npm dependencies
-        run: npm ci --legacy-peer-deps
+        run: npm ci
 
       - name: Build release package
         run: npm run release:build

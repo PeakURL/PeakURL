@@ -17,7 +17,8 @@
 		"release:upload": "sh scripts/upload-release.sh",
 		"smoke:auth": "sh scripts/smoke-auth.local.sh",
 		"lint": "npm run lint:web && npm run lint:php",
-		"lint:web": "eslint ui",
+		"lint:web": "eslint ui --cache",
+		"lint:web:fix": "eslint ui --cache --fix",
 		"lint:php": "composer --working-dir=app run phpcs",
 		"lint:php:syntax": "find app site -path 'app/vendor' -prune -o -path 'site/config-sample.php' -prune -o -name '*.php' -print0 | xargs -0 -n1 php -l",
 		"format": "npm run format:web && npm run format:php",
@@ -27,9 +28,22 @@
 		"format:php": "composer --working-dir=app run phpcbf",
 		"format:php:check": "composer --working-dir=app run phpcs",
 		"preview": "vite preview",
+		"prepare": "husky",
 		"docker:up": "docker compose up --build",
 		"docker:down": "docker compose down",
 		"docker:logs": "docker compose logs -f"
+	},
+	"lint-staged": {
+		"ui/**/*.{ts,tsx}": [
+			"eslint --cache --fix",
+			"prettier --write"
+		],
+		"*.{json,md,yml,yaml}": [
+			"prettier --write"
+		],
+		"app/**/*.php": [
+			"composer --working-dir=app run phpcbf --"
+		]
 	},
 	"dependencies": {
 		"@headlessui/react": "^2.2.10",
@@ -37,12 +51,12 @@
 		"@tailwindcss/vite": "^4.3.3",
 		"@visx/geo": "^4.0.0",
 		"@visx/zoom": "^4.0.0",
-		"@wordpress/i18n": "^6.25.0",
+		"@wordpress/i18n": "^6.26.0",
 		"chart.js": "^4.5.1",
 		"d3-scale": "^4.0.2",
 		"date-fns": "^4.4.0",
 		"iso-3166": "4.4.0",
-		"lucide-react": "^1.28.0",
+		"lucide-react": "^1.33.0",
 		"qrcode": "^1.5.4",
 		"react": "^19.2.8",
 		"react-dom": "^19.2.8",
@@ -52,20 +66,23 @@
 		"topojson-client": "^3.1.0"
 	},
 	"devDependencies": {
-		"@eslint/js": "^10.0.1",
-		"@types/node": "^26.1.2",
+		"@eslint/js": "^9.21.0",
+		"@types/node": "^26.2.0",
 		"@types/qrcode": "^1.5.6",
 		"@types/react": "^19.2.18",
 		"@types/react-dom": "^19.2.4",
 		"@types/topojson-client": "^3.1.5",
-		"@vitejs/plugin-react": "^6.0.5",
-		"eslint": "^10.8.0",
+		"@vitejs/plugin-react": "^6.1.0",
+		"eslint": "^9.21.0",
+		"eslint-plugin-jsx-a11y": "^6.10.2",
 		"eslint-plugin-react-hooks": "^7.1.1",
-		"eslint-plugin-react-refresh": "^0.5.3",
-		"globals": "^17.8.0",
+		"eslint-plugin-react-refresh": "^0.5.4",
+		"globals": "^17.11.0",
+		"husky": "^9.1.7",
+		"lint-staged": "^17.3.0",
 		"prettier": "^3.9.6",
 		"typescript": "^6.0.3",
-		"typescript-eslint": "^8.65.0",
-		"vite": "^8.2.0"
+		"typescript-eslint": "^8.67.0",
+		"vite": "^8.2.2"
 	}
 }

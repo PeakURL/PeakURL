@@ -1,52 +1,53 @@
 # Code of Conduct
 
-## Our Standard
+## Purpose and Standard
 
-PeakURL is an open-source project and we want participation to remain respectful, constructive, and professional.
+PeakURL is committed to providing a professional, respectful, and collaborative environment for all contributors, maintainers, and community members.
 
-Contributors, maintainers, and community members are expected to:
+Participants are expected to adhere to the following standards of conduct:
 
-- communicate respectfully
-- give technical feedback without hostility
-- assume good intent while staying clear and direct
-- focus on improving the project rather than scoring points
-- respect different levels of experience
+- **Professional Communication**: Maintain constructive, objective, and respectful dialogue across all project spaces.
+- **Constructive Technical Feedback**: Frame technical critiques around code, architecture, and documentation rather than individuals.
+- **Collaborative Focus**: Focus discussions on project quality, performance, and long-term sustainability.
+- **Inclusivity**: Respect diverse technical backgrounds, perspectives, and experience levels.
 
-## Unacceptable Behavior
+---
 
-The following behavior is not acceptable in project spaces:
+## Prohibited Conduct
 
-- harassment, threats, or intimidation
-- personal attacks or insulting language
-- discriminatory or hateful conduct
-- bad-faith disruption of discussions or reviews
-- publishing private information without permission
-- repeated hostile or dismissive behavior after being asked to stop
+The following behaviors are strictly prohibited within all project channels:
 
-## Scope
+- Harassment, intimidation, derogatory language, or personal attacks.
+- Discriminatory, abusive, or exclusionary conduct in any form.
+- Disruptive, bad-faith interference with issue discussions, reviews, or project governance.
+- Publication of non-public personal information without explicit authorization.
+- Continued engagement in objectionable behavior following formal maintainer warning.
 
-This Code of Conduct applies to:
+---
 
-- issues
-- pull requests
-- discussions
-- review threads
-- other public project spaces connected to PeakURL
+## Policy Scope
 
-## Enforcement
+This Code of Conduct applies to all spaces associated with the PeakURL project, including:
 
-Project maintainers may remove, edit, or reject comments, issues, pull requests, or other contributions that do not follow this Code of Conduct.
+- GitHub Issues and Pull Request discussions.
+- GitHub Discussions forums.
+- Code review comments and commit messages.
+- Any official communication channels representing the PeakURL project.
 
-Depending on severity, maintainers may also warn, temporarily restrict, or permanently ban participants from project spaces.
+---
 
-## Reporting
+## Enforcement Responsibilities
 
-If you experience or witness unacceptable behavior, report it to
-`conduct@peakurl.org`.
+Project maintainers are responsible for clarifying and enforcing standards of acceptable behavior. Maintainers possess the authority to edit, redact, or delete comments, commits, issues, and pull requests that do not align with this Code of Conduct.
 
-Please include enough detail for the maintainers to understand what happened,
-where it happened, and whether any immediate action is needed.
+Violations may result in progressive enforcement actions, including formal warnings, temporary interaction limits, or permanent exclusion from project repositories.
 
-## Final Note
+---
 
-Technical disagreement is normal. Disrespect is not.
+## Reporting Incidents
+
+To report a Code of Conduct violation, please submit a confidential report via our contact form:
+
+- **Community Contact Portal**: [Contact Community Team](https://peakurl.org/contact?topic=community&subject=Community+inquiry)
+
+Please provide specific details regarding the incident, including links to relevant discussions, participants involved, and context necessary for maintainer evaluation. All reports will be reviewed confidentially.

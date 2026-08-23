@@ -135,8 +135,27 @@ export const AdminNotices = () => {
 										<Icon size={18} />
 									</div>
 									<div
+										role="presentation"
 										className="dashboard-notice-copy"
 										onClick={handleNoticeClick}
+										onKeyDown={(event) => {
+											if (
+												"Enter" === event.key ||
+												" " === event.key
+											) {
+												const target =
+													event.target as HTMLElement;
+												if (
+													target.closest("a") ||
+													target.closest(
+														"button.js-update-details-trigger"
+													)
+												) {
+													event.preventDefault();
+													setUpdateModalOpen(true);
+												}
+											}
+										}}
 									>
 										{notice?.title ? (
 											<p className="dashboard-notice-title">

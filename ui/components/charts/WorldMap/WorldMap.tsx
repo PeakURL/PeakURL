@@ -66,7 +66,7 @@ function getCountryNameKey(name?: string | null): string | null {
  * Resolve the numeric atlas identifier, falling back to its geographic name.
  */
 function getFeatureCountryKey(feature: GeographyFeature): string | null {
-	if (feature.id != null) {
+	if (null !== feature.id && undefined !== feature.id) {
 		return String(feature.id).padStart(3, "0");
 	}
 
@@ -340,7 +340,7 @@ const WorldMap = ({
 		const featureKey =
 			countryCode || `feature-${feature.properties?.name || index}`;
 		const countryData =
-			countryCode == null ? null : countryClickMap[countryCode];
+			(!countryCode ? null : countryClickMap[countryCode]) ?? null;
 		const clicks = countryData?.clicks || 0;
 		const isActive = countryData?.countryCode === activeCountryCode;
 

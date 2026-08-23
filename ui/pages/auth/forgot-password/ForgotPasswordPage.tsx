@@ -110,7 +110,6 @@ function ForgotPasswordPage() {
 						value={identifier}
 						name="identifier"
 						onChange={(event) => setIdentifier(event.target.value)}
-						autoFocus
 						placeholder={__("owner@example.com or admin")}
 						autoComplete="username"
 						autoCapitalize="none"

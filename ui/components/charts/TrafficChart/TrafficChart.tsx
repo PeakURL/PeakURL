@@ -380,10 +380,15 @@ export function TrafficChart({
 							boxPadding: 6,
 							usePointStyle: true,
 							callbacks: {
-								title: function (
+								title(
 									context: TooltipItem<TrafficChartType>[]
 								) {
-									const dataIndex = context[0].dataIndex;
+									const item = context[0];
+									if (!item) {
+										return "";
+									}
+
+									const dataIndex = item.dataIndex;
 									const rawLabel = rawLabels[dataIndex];
 
 									return rawLabel
@@ -391,11 +396,9 @@ export function TrafficChart({
 												rawLabel,
 												chartData.granularity
 											)
-										: context[0].label;
+										: item.label || "";
 								},
-								label: function (
-									context: TooltipItem<TrafficChartType>
-								) {
+								label(context: TooltipItem<TrafficChartType>) {
 									const dataIndex = context.dataIndex;
 									const rawSeries =
 										context.dataset.label === uniqueLabel
@@ -442,7 +445,7 @@ export function TrafficChart({
 									size: 12,
 								},
 								padding: 10,
-								callback: function (value: string | number) {
+								callback(value: string | number) {
 									const numericValue =
 										"number" === typeof value
 											? value
@@ -452,10 +455,7 @@ export function TrafficChart({
 										Number.isFinite(numericValue) &&
 										numericValue >= 1000
 									) {
-										return (
-											(numericValue / 1000).toFixed(1) +
-											"k"
-										);
+										return `${(numericValue / 1000).toFixed(1)}k`;
 									}
 									return value;
 								},

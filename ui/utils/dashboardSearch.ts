@@ -578,7 +578,7 @@ export function findDashboardUserMatches(
 			return a.title.localeCompare(b.title);
 		})
 		.slice(0, limit)
-		.map(({ score, ...user }) => user);
+		.map(({ score: _score, ...user }) => user);
 }
 
 /**

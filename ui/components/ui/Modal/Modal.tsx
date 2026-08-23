@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 
+import { __ } from "@/i18n";
 import { getDocumentDirection } from "@/i18n/direction";
 import { cn } from "@/utils";
 
@@ -36,7 +37,13 @@ export function Modal({
 
 	return (
 		<div className="modal-shell">
-			<div className="modal-backdrop" onClick={() => onClose()} />
+			<button
+				type="button"
+				tabIndex={-1}
+				aria-label={__("Close modal")}
+				className="modal-backdrop"
+				onClick={() => onClose()}
+			/>
 
 			<div dir={direction} className={cn("modal-panel", sizes[size])}>
 				{title && (

@@ -134,9 +134,9 @@ function getDateParts(dateValue: string): DateParts | null {
 	}
 
 	return {
-		year: match[1],
-		month: match[2],
-		day: match[3],
+		year: match[1] || "",
+		month: match[2] || "",
+		day: match[3] || "",
 	};
 }
 

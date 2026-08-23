@@ -36,11 +36,16 @@ const BAR_COMBOS: [string, string, string][] = [
 	["w-28", "w-3/4", "w-5/6"],
 ];
 
+const DEFAULT_GRADIENT = "from-indigo-500 via-purple-500 to-pink-500";
+const DEFAULT_BAR_COMBO: [string, string, string] = ["w-28", "w-full", "w-4/5"];
+
 function createCards(count: number, offset = 0): PluginCardData[] {
 	return Array.from({ length: count }, (_, i) => ({
 		id: `placeholder-${offset + i}`,
-		gradient: GRADIENTS[(offset + i) % GRADIENTS.length],
-		barWidths: BAR_COMBOS[(offset + i) % BAR_COMBOS.length],
+		gradient:
+			GRADIENTS[(offset + i) % GRADIENTS.length] ?? DEFAULT_GRADIENT,
+		barWidths:
+			BAR_COMBOS[(offset + i) % BAR_COMBOS.length] ?? DEFAULT_BAR_COMBO,
 	}));
 }
 

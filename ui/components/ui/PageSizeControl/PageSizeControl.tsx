@@ -6,23 +6,11 @@ import { cn } from "@/utils";
 
 import { Select } from "../Select";
 import type { SelectOption } from "../types";
-
-export const DEFAULT_PAGE_SIZE_OPTIONS: readonly number[] = [25, 50, 100, 150];
-export const DEFAULT_PAGE_SIZE_MAX = 250;
-
-export function normalizePageSize(
-	value: number | string | null | undefined,
-	fallback = DEFAULT_PAGE_SIZE_OPTIONS[0],
-	max = DEFAULT_PAGE_SIZE_MAX
-): number {
-	const parsed = Number(value);
-
-	if (!Number.isFinite(parsed) || parsed < 1) {
-		return fallback;
-	}
-
-	return Math.min(max, Math.max(1, Math.round(parsed)));
-}
+import {
+	DEFAULT_PAGE_SIZE_MAX,
+	DEFAULT_PAGE_SIZE_OPTIONS,
+	normalizePageSize,
+} from "./constants";
 
 interface PageSizeControlProps extends Omit<
 	HTMLAttributes<HTMLDivElement>,
@@ -50,6 +38,14 @@ export function PageSizeControl({
 	const normalizedValue = normalizePageSize(value, fallbackValue, max);
 	const [isEditingCustom, setIsEditingCustom] = useState(false);
 	const [draftValue, setDraftValue] = useState(String(normalizedValue));
+	const [prevNormalizedValue, setPrevNormalizedValue] =
+		useState(normalizedValue);
+
+	if (prevNormalizedValue !== normalizedValue) {
+		setPrevNormalizedValue(normalizedValue);
+		setDraftValue(String(normalizedValue));
+	}
+
 	const hasPresetValue = options.includes(normalizedValue);
 	const selectValue = hasPresetValue
 		? String(normalizedValue)
@@ -75,10 +71,6 @@ export function PageSizeControl({
 			label: __("Custom…"),
 		},
 	];
-
-	useEffect(() => {
-		setDraftValue(String(normalizedValue));
-	}, [normalizedValue]);
 
 	useEffect(() => {
 		if (!isEditingCustom || !inputRef.current) {

@@ -140,7 +140,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 		try {
 			await writeToClipboard(text);
 			notification?.success?.(label, __("Copied to clipboard"));
-		} catch (err) {
+		} catch (_err) {
 			notification?.error?.(__("Error"), __("Failed to copy"));
 		}
 	};
@@ -153,10 +153,10 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 						<WebhookIcon className="integrations-tab-intro-icon-glyph" />
 					</div>
 					<div className="integrations-tab-intro-copy">
-						<h2 className="settings-legend !mb-0">
+						<h2 className="settings-legend mb-0!">
 							{__("Integrations")}
 						</h2>
-						<p className="settings-group-description !mb-0 !mt-0">
+						<p className="settings-group-description mb-0! mt-0!">
 							{__(
 								"Connect PeakURL to your automations with outbound webhooks for link activity."
 							)}
@@ -168,10 +168,10 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 			<section className="settings-fieldset">
 				<div className="integrations-tab-panel-header">
 					<div className="integrations-tab-panel-copy">
-						<h2 className="settings-legend !mb-0">
+						<h2 className="settings-legend mb-0!">
 							{__("Webhooks")}
 						</h2>
-						<p className="settings-group-description !mb-0">
+						<p className="settings-group-description mb-0!">
 							{__(
 								"PeakURL sends signed POST requests to your endpoint when selected link events happen."
 							)}

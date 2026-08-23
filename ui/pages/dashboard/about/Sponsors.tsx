@@ -8,7 +8,7 @@ const socialIconPaths: Record<string, string> = {
 		"M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.85-3.037-1.853 0-2.136 1.447-2.136 2.942v5.664H9.352V9h3.414v1.561h.049c.476-.9 1.637-1.85 3.37-1.85 3.602 0 4.268 2.371 4.268 5.455v6.286ZM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124ZM7.114 20.452H3.558V9h3.556v11.452ZM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003Z",
 };
 
-export const SocialIcon = ({
+const SocialIcon = ({
 	name,
 	className,
 }: {
@@ -37,7 +37,7 @@ export type Sponsor = {
 	socials?: SponsorSocial[];
 };
 
-export const communitySupporters: Sponsor[] = [
+const communitySupporters: Sponsor[] = [
 	{
 		name: "Abdellah Chelli",
 		socials: [

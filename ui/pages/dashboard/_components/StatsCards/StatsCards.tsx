@@ -48,7 +48,7 @@ function getLastMonthChange(
 	let formatted: string;
 
 	if (isRate) {
-		formatted = Math.abs(delta).toFixed(1) + "%";
+		formatted = `${Math.abs(delta).toFixed(1)}%`;
 	} else if (lastMonth === 0) {
 		if (current === 0) {
 			return null;
@@ -56,7 +56,7 @@ function getLastMonthChange(
 
 		formatted = "100%";
 	} else {
-		formatted = Math.abs((delta / lastMonth) * 100).toFixed(1) + "%";
+		formatted = `${Math.abs((delta / lastMonth) * 100).toFixed(1)}%`;
 	}
 
 	return {

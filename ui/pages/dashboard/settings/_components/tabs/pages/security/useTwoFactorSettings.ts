@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import QRCode from "qrcode";
 
 import {
@@ -78,11 +78,14 @@ export function useTwoFactorSettings({
 		: false;
 	const protectedActionConfig = getProtectedActionConfig(protectedAction);
 
-	useEffect(() => {
+	const [prevTwoFactorEnabled, setPrevTwoFactorEnabled] =
+		useState(twoFactorEnabled);
+	if (prevTwoFactorEnabled !== twoFactorEnabled) {
+		setPrevTwoFactorEnabled(twoFactorEnabled);
 		if (!twoFactorEnabled) {
 			setRecentCodes([]);
 		}
-	}, [twoFactorEnabled]);
+	}
 
 	const clearSetupDetails = () => {
 		setQrDataUrl(null);

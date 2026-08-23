@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 
+import { useNotification } from "@/components";
 import { useBulkCreateUrlMutation } from "@/store/slices/api";
 import {
 	getShortUrl,
@@ -8,7 +9,7 @@ import {
 	normalizeCsvHeader,
 	parseCsvRows,
 } from "@/utils";
-import { __, sprintf } from "@/i18n";
+import { __ } from "@/i18n";
 
 import FileUploadArea from "./FileUploadArea";
 import ProcessingStatus from "./ProcessingStatus";
@@ -24,6 +25,7 @@ const FileUpload = ({
 	importProgress,
 	sampleData,
 }: FileUploadProps) => {
+	const notification = useNotification();
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const [importResults, setImportResults] = useState<ImportResult[]>([]);
 	const [bulkCreateUrl] = useBulkCreateUrlMutation();
@@ -38,23 +40,15 @@ const FileUpload = ({
 
 	const parseFile = (file: File) => {
 		const reader = new FileReader();
-		reader.onload = (event: ProgressEvent<FileReader>) => {
-			const text = event.target?.result;
-			let data: ImportRecord[];
-
+		reader.onload = (e) => {
 			try {
-				if ("string" !== typeof text) {
-					throw new Error(__("The selected file could not be read."));
-				}
+				const text = (e.target?.result as string) || "";
+				let data: ImportRecord[] = [];
 
 				if (file.name.endsWith(".csv")) {
 					data = parseCsv(text);
 				} else if (file.name.endsWith(".json")) {
-					const parsed = JSON.parse(text) as Array<
-						Record<string, unknown>
-					>;
-					// Normalize JSON data if needed (e.g. map 'url' to 'destinationUrl')
-					data = parsed
+					data = (JSON.parse(text) as Array<Record<string, unknown>>)
 						.map((item) => ({
 							...item,
 							destinationUrl: item.destinationUrl || item.url,
@@ -67,22 +61,20 @@ const FileUpload = ({
 				} else if (file.name.endsWith(".xml")) {
 					data = parseXml(text);
 				} else {
-					alert(__("Unsupported file format"));
+					notification.error(__("Unsupported file format"));
 					return;
 				}
 
 				if (data.length > 0) {
 					processImport(data);
 				} else {
-					alert(__("No valid data found in file"));
+					notification.error(__("No valid data found in file"));
 				}
 			} catch (err) {
 				console.error("Parsing error", err);
-				alert(
-					sprintf(
-						__("Failed to parse file: %s"),
-						getErrorMessage(err, __("Unknown error"))
-					)
+				notification.error(
+					__("Failed to parse file"),
+					getErrorMessage(err, __("Unknown error"))
 				);
 			}
 		};
@@ -93,13 +85,17 @@ const FileUpload = ({
 		const rows = parseCsvRows(text);
 		if (rows.length < 2) return [];
 
-		const headers = rows[0].map((header: string) =>
+		const firstRow = rows[0];
+		if (!firstRow) return [];
+
+		const headers = firstRow.map((header: string) =>
 			normalizeCsvHeader(header)
 		);
 		const data: ImportRecord[] = [];
 
 		for (let i = 1; i < rows.length; i++) {
 			const values = rows[i];
+			if (!values) continue;
 			const entry: Partial<ImportRecord> = {};
 
 			headers.forEach((header: string, index: number) => {
@@ -149,6 +145,7 @@ const FileUpload = ({
 
 		for (let i = 0; i < items.length; i++) {
 			const node = items[i];
+			if (!node) continue;
 			const getVal = (tag: string): string | undefined =>
 				node.getElementsByTagName(tag)[0]?.textContent || undefined;
 
@@ -205,11 +202,9 @@ const FileUpload = ({
 		} catch (err) {
 			console.error("Import failed", err);
 			setImportStatus("idle");
-			alert(
-				sprintf(
-					__("Import failed: %s"),
-					getErrorMessage(err, __("Unknown error"))
-				)
+			notification.error(
+				__("Import failed"),
+				getErrorMessage(err, __("Unknown error"))
 			);
 		}
 	};

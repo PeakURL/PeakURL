@@ -1,24 +1,10 @@
-import {
-	createContext,
-	useCallback,
-	useContext,
-	useMemo,
-	useState,
-} from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import type { NotificationItem, NotificationPayload } from "@/components/ui";
 import { NotificationContainer } from "@/components/ui";
 
-import type {
-	NotificationContextValue,
-	NotificationProviderProps,
-} from "../types";
-
-export type { NotificationContextValue } from "../types";
-
-const NotificationContext = createContext<NotificationContextValue | null>(
-	null
-);
+import type { NotificationProviderProps } from "../types";
+import { NotificationContext } from "./context";
 
 function createNotification(
 	type: NotificationPayload["type"],
@@ -86,16 +72,4 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
 			/>
 		</NotificationContext.Provider>
 	);
-}
-
-export function useNotification(): NotificationContextValue {
-	const context = useContext(NotificationContext);
-
-	if (!context) {
-		throw new Error(
-			"useNotification must be used within NotificationProvider"
-		);
-	}
-
-	return context;
 }

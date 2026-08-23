@@ -68,14 +68,11 @@ function GeneralTab({
 	);
 	const [faviconFile, setFaviconFile] = useState<File | null>(null);
 	const [removeFavicon, setRemoveFavicon] = useState(false);
-	const [uploadedPreviewUrl, setUploadedPreviewUrl] = useState("");
 	const [socialPreviewFile, setSocialPreviewFile] = useState<File | null>(
 		null
 	);
 	const [removeSocialPreviewImage, setRemoveSocialPreviewImage] =
 		useState(false);
-	const [uploadedSocialPreviewUrl, setUploadedSocialPreviewUrl] =
-		useState("");
 	const [landingPageMode, setLandingPageMode] = useState<
 		"login" | "url" | "html"
 	>(siteSettings?.landingPageMode || "html");
@@ -85,57 +82,29 @@ function GeneralTab({
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const socialPreviewInputRef = useRef<HTMLInputElement | null>(null);
 
-	useEffect(() => {
+	const [prevInitialForm, setPrevInitialForm] = useState(initialForm);
+	if (prevInitialForm !== initialForm) {
+		setPrevInitialForm(initialForm);
 		setGeneralForm(initialForm);
-	}, [initialForm]);
+	}
 
-	useEffect(() => {
+	const [prevSiteSettings, setPrevSiteSettings] = useState(siteSettings);
+	if (prevSiteSettings !== siteSettings) {
+		setPrevSiteSettings(siteSettings);
 		setSiteLanguage(siteSettings?.siteLanguage || "en_US");
-	}, [siteSettings?.siteLanguage]);
-
-	useEffect(() => {
 		setSiteTimezone(siteSettings?.siteTimezone || "UTC");
-	}, [siteSettings?.siteTimezone]);
-
-	useEffect(() => {
 		setSiteTimeFormat(
 			normalizeSiteTimeFormat(siteSettings?.siteTimeFormat)
 		);
-	}, [siteSettings?.siteTimeFormat]);
-
-	useEffect(() => {
 		setSiteName(siteSettings?.siteName || PEAKURL_SITE_NAME || "PeakURL");
-	}, [siteSettings?.siteName]);
-
-	useEffect(() => {
 		setSiteTagline(siteSettings?.siteTagline || defaultSiteTagline);
-	}, [defaultSiteTagline, siteSettings?.siteTagline]);
-
-	useEffect(() => {
 		setLandingPageMode(siteSettings?.landingPageMode || "html");
-	}, [siteSettings?.landingPageMode]);
-
-	useEffect(() => {
 		setLandingPageUrl(siteSettings?.landingPageUrl || "");
-	}, [siteSettings?.landingPageUrl]);
-
-	useEffect(() => {
 		setFaviconFile(null);
 		setRemoveFavicon(false);
-
-		if (fileInputRef.current) {
-			fileInputRef.current.value = "";
-		}
-	}, [siteSettings?.favicon?.updatedAt]);
-
-	useEffect(() => {
 		setSocialPreviewFile(null);
 		setRemoveSocialPreviewImage(false);
-
-		if (socialPreviewInputRef.current) {
-			socialPreviewInputRef.current.value = "";
-		}
-	}, [siteSettings?.socialPreview?.updatedAt]);
+	}
 
 	const handleChange = (
 		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -206,6 +175,22 @@ function GeneralTab({
 				: "",
 		[hasCustomFavicon, siteSettings?.favicon?.updatedAt]
 	);
+
+	const uploadedPreviewUrl = useMemo(
+		() =>
+			isPngFaviconFile(faviconFile)
+				? URL.createObjectURL(faviconFile)
+				: "",
+		[faviconFile]
+	);
+
+	useEffect(() => {
+		if (!uploadedPreviewUrl) return;
+		return () => {
+			URL.revokeObjectURL(uploadedPreviewUrl);
+		};
+	}, [uploadedPreviewUrl]);
+
 	const faviconPreviewUrl = useMemo(() => {
 		if (removeFavicon) {
 			return "";
@@ -218,33 +203,20 @@ function GeneralTab({
 		[faviconPreviewUrl]
 	);
 
-	useEffect(() => {
-		if (!isPngFaviconFile(faviconFile)) {
-			setUploadedPreviewUrl("");
-			return;
-		}
-
-		const nextPreviewUrl = URL.createObjectURL(faviconFile);
-		setUploadedPreviewUrl(nextPreviewUrl);
-
-		return () => {
-			URL.revokeObjectURL(nextPreviewUrl);
-		};
-	}, [faviconFile]);
+	const uploadedSocialPreviewUrl = useMemo(
+		() =>
+			isSocialPreviewImageFile(socialPreviewFile)
+				? URL.createObjectURL(socialPreviewFile)
+				: "",
+		[socialPreviewFile]
+	);
 
 	useEffect(() => {
-		if (!isSocialPreviewImageFile(socialPreviewFile)) {
-			setUploadedSocialPreviewUrl("");
-			return;
-		}
-
-		const nextPreviewUrl = URL.createObjectURL(socialPreviewFile);
-		setUploadedSocialPreviewUrl(nextPreviewUrl);
-
+		if (!uploadedSocialPreviewUrl) return;
 		return () => {
-			URL.revokeObjectURL(nextPreviewUrl);
+			URL.revokeObjectURL(uploadedSocialPreviewUrl);
 		};
-	}, [socialPreviewFile]);
+	}, [uploadedSocialPreviewUrl]);
 
 	const handleFaviconChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const nextFile = event.target.files?.[0] || null;

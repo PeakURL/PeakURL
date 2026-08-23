@@ -114,7 +114,8 @@ export const parseCsvRows = (text: string = ""): string[][] => {
  * @return The CSV-safe escaped string.
  */
 export const stringifyCsvValue = (value: unknown): string => {
-	const normalizedValue = value == null ? "" : String(value);
+	const normalizedValue =
+		null === value || undefined === value ? "" : String(value);
 
 	/* Wrap in quotes and escape internal quotes if special characters are present. */
 	if (/[",\r\n]/.test(normalizedValue)) {

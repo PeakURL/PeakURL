@@ -59,7 +59,10 @@ function getRegionCode(locale: string): string {
 	for (let index = localeParts.length - 1; index >= 1; index -= 1) {
 		const value = localeParts[index];
 
-		if (/^[A-Za-z]{2}$/.test(value) || /^[0-9]{3}$/.test(value)) {
+		if (
+			value &&
+			(/^[A-Za-z]{2}$/.test(value) || /^[0-9]{3}$/.test(value))
+		) {
 			return value.toUpperCase();
 		}
 	}

@@ -13,10 +13,9 @@ function FormatRequirements() {
 		let type = "";
 
 		if (format === "csv") {
-			content =
-				"url,alias,title,password,expires\nhttps://example.com,ex1," +
-				__("Example page") +
-				",,2025-12-31";
+			content = `url,alias,title,password,expires\nhttps://example.com,ex1,${__(
+				"Example page"
+			)},,2025-12-31`;
 			filename = "sample.csv";
 			type = "text/csv";
 		} else if (format === "json") {

@@ -82,11 +82,4 @@ function UpdatesTab({
 	);
 }
 
-export { default as ReleaseInstallProgress } from "./ReleaseInstallProgress";
-export { default as useReleaseInstallProgress } from "./useReleaseInstallProgress";
-export type {
-	DatabaseStatus,
-	ReleaseInstallProgressState,
-	UpdateStatusPayload,
-} from "./types";
 export default UpdatesTab;

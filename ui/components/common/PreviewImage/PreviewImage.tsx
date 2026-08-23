@@ -28,7 +28,7 @@ function getPreviewImageStyle(
 		...style,
 		"--preview-image-url": `url("${source.replace(
 			cssUrlEscapePattern,
-			(match) => cssUrlEscapes[match]
+			(match) => cssUrlEscapes[match] ?? match
 		)}")`,
 	} as CSSProperties;
 }

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Lightbulb, LoaderCircle, WandSparkles } from "lucide-react";
 
-import { Button, TextArea } from "@/components";
+import { Button, TextArea, useNotification } from "@/components";
 import { useBulkCreateUrlMutation } from "@/store/slices/api";
 import { getShortUrl, getErrorMessage } from "@/utils";
-import { __, sprintf } from "@/i18n";
+import { __ } from "@/i18n";
 
 import { ImportDetails, ImportSummary } from "../results";
 import type {
@@ -14,6 +14,7 @@ import type {
 } from "../types";
 
 const PasteImport = () => {
+	const notification = useNotification();
 	const [text, setText] = useState("");
 	const [status, setStatus] = useState<ImportStatus>("idle");
 	const [results, setResults] = useState<ImportResult[]>([]);
@@ -36,11 +37,11 @@ const PasteImport = () => {
 
 				if (line.includes(",")) {
 					const parts = line.split(",");
-					destinationUrl = parts[0].trim();
+					destinationUrl = parts[0]?.trim() || "";
 					if (parts[1]) alias = parts[1].trim();
 				} else if (line.includes(" ")) {
 					const parts = line.trim().split(/\s+/);
-					destinationUrl = parts[0];
+					destinationUrl = parts[0] || "";
 					if (parts[1]) alias = parts[1];
 				}
 
@@ -80,11 +81,9 @@ const PasteImport = () => {
 			setStatus("completed");
 		} catch (err) {
 			console.error(err);
-			alert(
-				sprintf(
-					__("Import failed: %s"),
-					getErrorMessage(err, __("Unknown error"))
-				)
+			notification.error(
+				__("Import failed"),
+				getErrorMessage(err, __("Unknown error"))
 			);
 			setStatus("idle");
 		}

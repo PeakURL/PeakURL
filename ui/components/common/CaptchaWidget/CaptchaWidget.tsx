@@ -16,6 +16,25 @@ export interface CaptchaWidgetRef {
 	getToken: () => Promise<string | undefined>;
 }
 
+declare global {
+	interface Window {
+		turnstile?: {
+			render: (
+				container: HTMLElement,
+				options: Record<string, unknown>
+			) => string | number;
+			remove: (widgetId: string | number) => void;
+		};
+		grecaptcha?: {
+			ready: (callback: () => void) => void;
+			execute: (
+				siteKey: string,
+				options: { action: string }
+			) => Promise<string>;
+		};
+	}
+}
+
 export const CaptchaWidget = forwardRef<CaptchaWidgetRef>((_, ref) => {
 	const { captcha } = getPeakURLData();
 	const { theme } = useTheme();
@@ -54,24 +73,20 @@ export const CaptchaWidget = forwardRef<CaptchaWidgetRef>((_, ref) => {
 			return;
 		}
 
-		// @ts-ignore
 		if (!window.turnstile) {
 			return;
 		}
 
-		// @ts-ignore
 		const widgetId = window.turnstile.render(containerRef.current, {
 			sitekey: captcha.siteKey,
-			theme: theme,
+			theme,
 			callback: (token: string) => setTurnstileToken(token),
 			"error-callback": () => setTurnstileToken(""),
 			"expired-callback": () => setTurnstileToken(""),
 		});
 
 		return () => {
-			// @ts-ignore
 			if (window.turnstile) {
-				// @ts-ignore
 				window.turnstile.remove(widgetId);
 			}
 		};
@@ -83,7 +98,6 @@ export const CaptchaWidget = forwardRef<CaptchaWidgetRef>((_, ref) => {
 
 			if (captcha.provider === "recaptcha") {
 				return new Promise<string>((resolve, reject) => {
-					// @ts-ignore
 					if (!window.grecaptcha) {
 						reject(
 							new Error(
@@ -92,11 +106,9 @@ export const CaptchaWidget = forwardRef<CaptchaWidgetRef>((_, ref) => {
 						);
 						return;
 					}
-					// @ts-ignore
 					window.grecaptcha.ready(() => {
-						// @ts-ignore
 						window.grecaptcha
-							.execute(captcha.siteKey, {
+							?.execute(captcha.siteKey, {
 								action: captcha.action || "auth",
 							})
 							.then(resolve)

@@ -369,7 +369,6 @@ function LoginPage() {
 								onChange={(event) =>
 									setIdentifier(event.target.value)
 								}
-								autoFocus
 								autoComplete="username"
 								autoCapitalize="none"
 								spellCheck={false}

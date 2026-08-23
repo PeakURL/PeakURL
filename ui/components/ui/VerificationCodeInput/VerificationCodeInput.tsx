@@ -35,9 +35,13 @@ export function VerificationCodeInput({
 	const highlightedIndex =
 		nextEmptyIndex === -1 ? length - 1 : nextEmptyIndex;
 
-	useEffect(() => {
+	const [prevValue, setPrevValue] = useState(value);
+	const [prevLength, setPrevLength] = useState(length);
+	if (prevValue !== value || prevLength !== length) {
+		setPrevValue(value);
+		setPrevLength(length);
 		setDigits(toDigits(value, length));
-	}, [length, value]);
+	}
 
 	useEffect(() => {
 		if (!disabled) {

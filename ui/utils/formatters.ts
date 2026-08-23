@@ -19,7 +19,7 @@ const DAY_MS = 1000 * 60 * 60 * 24;
 export function formatDate(
 	dateValue: string | number | Date | null | undefined
 ): string {
-	if (null == dateValue) {
+	if (null === dateValue || undefined === dateValue) {
 		return "";
 	}
 

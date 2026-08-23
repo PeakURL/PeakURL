@@ -179,7 +179,6 @@ function ResetPasswordPage() {
 						value={password}
 						name="password"
 						onChange={(event) => setPassword(event.target.value)}
-						autoFocus
 						placeholder={__("Enter your new password")}
 						autoComplete="new-password"
 						required

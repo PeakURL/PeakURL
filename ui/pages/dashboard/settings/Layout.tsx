@@ -21,7 +21,7 @@ function Layout({ children }: SettingsLayoutProps) {
 		canManageUpdates,
 	} = useAdminAccess();
 
-	let tabs: SettingsTabItem[] = [
+	const tabs: SettingsTabItem[] = [
 		{ id: "general", name: __("General"), icon: "settings" },
 		{ id: "security", name: __("Security"), icon: "shield" },
 	];

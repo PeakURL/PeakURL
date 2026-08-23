@@ -81,6 +81,9 @@ function FileUploadArea({
 	return (
 		<div className="import-file-dropzone-wrapper">
 			<div
+				role="button"
+				tabIndex={disabled ? -1 : 0}
+				aria-disabled={disabled}
 				className={cn(
 					"import-file-dropzone",
 					disabled && "import-file-dropzone-disabled",
@@ -88,6 +91,13 @@ function FileUploadArea({
 					!disabled && !isDragActive && "import-file-dropzone-idle"
 				)}
 				onClick={openFilePicker}
+				onKeyDown={(event) => {
+					if (disabled) return;
+					if ("Enter" === event.key || " " === event.key) {
+						event.preventDefault();
+						openFilePicker();
+					}
+				}}
 				onDragEnter={handleDragEnter}
 				onDragOver={handleDragOver}
 				onDragLeave={handleDragLeave}

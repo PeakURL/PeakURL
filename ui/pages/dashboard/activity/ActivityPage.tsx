@@ -44,7 +44,7 @@ import {
 
 import type { ActivityPerson, RecentActivity } from "../_components/types";
 
-const ACTIVITY_PAGE_LIMIT = DEFAULT_PAGE_SIZE_OPTIONS[0];
+const ACTIVITY_PAGE_LIMIT = DEFAULT_PAGE_SIZE_OPTIONS[0] ?? 25;
 const ACTIVITY_PAGE_STORAGE_KEY = "admin_activity_limit";
 const ACTIVITY_PAGE_SIZE_OPTIONS = DEFAULT_PAGE_SIZE_OPTIONS;
 const ACTIVITY_PAGE_MAX_LIMIT = DEFAULT_PAGE_SIZE_MAX;
@@ -72,10 +72,12 @@ function getVisiblePages(currentPage: number, totalPages: number): number[] {
 	const safeTotalPages = Math.max(1, totalPages);
 	const safeCurrentPage = Math.min(Math.max(1, currentPage), safeTotalPages);
 	const halfWindow = Math.floor(MAX_VISIBLE_PAGES / 2);
-	let startPage = Math.max(1, safeCurrentPage - halfWindow);
-	let endPage = Math.min(safeTotalPages, startPage + MAX_VISIBLE_PAGES - 1);
-
-	startPage = Math.max(1, endPage - MAX_VISIBLE_PAGES + 1);
+	const startPageInitial = Math.max(1, safeCurrentPage - halfWindow);
+	const endPage = Math.min(
+		safeTotalPages,
+		startPageInitial + MAX_VISIBLE_PAGES - 1
+	);
+	const startPage = Math.max(1, endPage - MAX_VISIBLE_PAGES + 1);
 
 	return Array.from(
 		{ length: endPage - startPage + 1 },
@@ -324,7 +326,7 @@ function ActivityPageSkeleton() {
 }
 
 function ActivityPage() {
-	const [limit, setLimit] = useState(() => {
+	const [limit, setLimit] = useState<number>(() => {
 		if (typeof window !== "undefined") {
 			return normalizePageSize(
 				localStorage.getItem(ACTIVITY_PAGE_STORAGE_KEY),
@@ -397,11 +399,11 @@ function ActivityPage() {
 		useBulkDeleteActivityLogsMutation();
 
 	const items = historyRes?.data?.items ?? EMPTY_ACTIVITY_ITEMS;
-	const meta = historyRes?.data?.meta ?? {
-		page: currentPage,
-		limit,
-		totalItems: items.length,
-		totalPages: 1,
+	const meta = {
+		page: historyRes?.data?.meta?.page ?? currentPage,
+		limit: historyRes?.data?.meta?.limit ?? limit,
+		totalItems: historyRes?.data?.meta?.totalItems ?? items.length,
+		totalPages: historyRes?.data?.meta?.totalPages ?? 1,
 	};
 	const metaTotalPages = historyRes?.data?.meta?.totalPages ?? null;
 	const totalItems = meta.totalItems;
@@ -430,17 +432,24 @@ function ActivityPage() {
 		} catch {}
 	}, [limit]);
 
-	useEffect(() => {
+	const filterKey = `${currentCategory}:${limit}`;
+	const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
+	if (prevFilterKey !== filterKey) {
+		setPrevFilterKey(filterKey);
 		setCurrentPage(1);
-	}, [currentCategory, limit]);
+	}
 
-	useEffect(() => {
-		if (metaTotalPages && currentPage > metaTotalPages) {
+	const [prevTotalPages, setPrevTotalPages] = useState(metaTotalPages);
+	if (metaTotalPages && metaTotalPages !== prevTotalPages) {
+		setPrevTotalPages(metaTotalPages);
+		if (currentPage > metaTotalPages) {
 			setCurrentPage(metaTotalPages);
 		}
-	}, [currentPage, metaTotalPages]);
+	}
 
-	useEffect(() => {
+	const [prevItems, setPrevItems] = useState(items);
+	if (prevItems !== items) {
+		setPrevItems(items);
 		const currentIds = new Set(
 			items
 				.map((item) => item.id)
@@ -450,7 +459,7 @@ function ActivityPage() {
 		setSelectedActivityIds((previous) =>
 			previous.filter((id) => currentIds.has(id))
 		);
-	}, [items]);
+	}
 
 	const handleRefresh = async () => {
 		if (isRefreshing) {

@@ -1,18 +1,11 @@
-import {
-	createContext,
-	useCallback,
-	useContext,
-	useEffect,
-	useSyncExternalStore,
-} from "react";
+import { useCallback, useEffect, useSyncExternalStore } from "react";
 
-import type { Theme, ThemeContextValue, ThemeProviderProps } from "../types";
+import type { Theme, ThemeProviderProps } from "../types";
+import { ThemeContext } from "./context";
 
 const DEFAULT_THEME: Theme = "light";
 const THEME_STORAGE_KEY = "theme";
 const THEME_CHANGE_EVENT = "peakurl-theme-change";
-
-const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 const getStoredTheme = (): Theme => {
 	if ("undefined" === typeof window) {
@@ -83,17 +76,4 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 			{children}
 		</ThemeContext.Provider>
 	);
-}
-
-/**
- * useTheme returns the active theme plus a toggle handler.
- */
-export function useTheme(): ThemeContextValue {
-	const context = useContext(ThemeContext);
-
-	if (!context) {
-		throw new Error("useTheme must be used within a ThemeProvider");
-	}
-
-	return context;
 }

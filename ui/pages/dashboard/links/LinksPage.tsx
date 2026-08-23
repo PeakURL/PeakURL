@@ -69,16 +69,16 @@ function LinksPage() {
 				"desc"
 			: "desc"
 	);
-	const [limit, setLimit] = useState(() => {
+	const [limit, setLimit] = useState<number>(() => {
 		if (typeof window !== "undefined") {
 			return normalizePageSize(
 				localStorage.getItem(LS_KEYS.limit),
-				DEFAULT_PAGE_SIZE_OPTIONS[0],
+				DEFAULT_PAGE_SIZE_OPTIONS[0] ?? 25,
 				DEFAULT_PAGE_SIZE_MAX
 			);
 		}
 
-		return DEFAULT_PAGE_SIZE_OPTIONS[0];
+		return DEFAULT_PAGE_SIZE_OPTIONS[0] ?? 25;
 	});
 	const [currentPage, setCurrentPage] = useState(1);
 	const [clickRange, setClickRange] = useState<LinksDateRange>("all");
@@ -144,11 +144,11 @@ function LinksPage() {
 	const typedUrlsRes = urlsRes as GetUrlsResponse | undefined;
 
 	const apiItems: LinkRecord[] = typedUrlsRes?.data?.items ?? [];
-	const apiMeta: LinksMeta = typedUrlsRes?.data?.meta ?? {
-		page: currentPage,
-		limit,
-		totalItems: apiItems.length,
-		totalPages: 1,
+	const apiMeta: LinksMeta = {
+		page: typedUrlsRes?.data?.meta?.page ?? currentPage,
+		limit: typedUrlsRes?.data?.meta?.limit ?? limit,
+		totalItems: typedUrlsRes?.data?.meta?.totalItems ?? apiItems.length,
+		totalPages: typedUrlsRes?.data?.meta?.totalPages ?? 1,
 	};
 	const { data: statsLinkRes, refetch: refetchStatsLookup } = useGetUrlQuery(
 		statsShortId || "",
@@ -157,17 +157,13 @@ function LinksPage() {
 	const statsLink = statsLinkRes?.data ?? null;
 	const [isRefreshing, setIsRefreshing] = useState(false);
 
-	useEffect(() => {
+	// Reset to page 1 during render when query, pagination, or date filters change
+	const filterKey = `${searchQuery}:${limit}:${sortBy}:${sortOrder}:${clickRange}:${customClickRange.from}:${customClickRange.to}`;
+	const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
+	if (prevFilterKey !== filterKey) {
+		setPrevFilterKey(filterKey);
 		setCurrentPage(1);
-	}, [searchQuery]);
-
-	useEffect(() => {
-		setCurrentPage(1);
-	}, [limit, sortBy, sortOrder]);
-
-	useEffect(() => {
-		setCurrentPage(1);
-	}, [clickRange, customClickRange.from, customClickRange.to]);
+	}
 
 	const handleRefresh = async () => {
 		if (isRefreshing) {

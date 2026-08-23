@@ -219,7 +219,10 @@ export const Sidebar = ({
 	return (
 		<>
 			{isMobileOpen && (
-				<div
+				<button
+					type="button"
+					tabIndex={-1}
+					aria-label={__("Close sidebar")}
 					className="dashboard-sidebar-overlay"
 					onClick={onMobileClose}
 				/>

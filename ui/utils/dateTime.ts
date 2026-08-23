@@ -131,7 +131,9 @@ export function getLocalDateValue(date: Date = new Date()): string {
 
 	if (!parts) {
 		const offset = date.getTimezoneOffset() * 60000;
-		return new Date(date.getTime() - offset).toISOString().split("T")[0];
+		return (
+			new Date(date.getTime() - offset).toISOString().split("T")[0] || ""
+		);
 	}
 
 	return toDateInputValue(parts);

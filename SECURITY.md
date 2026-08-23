@@ -2,46 +2,46 @@
 
 ## Supported Versions
 
-PeakURL is actively maintained on the current `1.x` release line.
+PeakURL receives active security maintenance on the current `1.x` release series.
 
-| Version | Supported |
-| ------- | --------- |
-| 1.x     | Yes       |
-| < 1.0   | No        |
+| Version | Supported          |
+| ------- | ------------------ |
+| 1.x     | :white_check_mark: |
+| < 1.0   | :x:                |
 
-## Reporting a Vulnerability
+---
 
-If you believe you have found a security vulnerability in PeakURL, please do
-not open a public GitHub issue.
+## Reporting a Security Vulnerability
 
-Instead, report it privately to:
+> [!IMPORTANT]
+> Do not report security vulnerabilities through public GitHub issues, discussions, or pull requests.
 
-- `security@peakurl.org`
+If you have identified a potential security vulnerability in PeakURL, please submit a confidential report through our secure contact form:
 
-When possible, include:
+- **Security Report Portal**: [Submit a Security Report](https://peakurl.org/contact?topic=security&subject=Security+vulnerability+report)
 
-- a clear description of the issue
-- the affected version or deployment context
-- steps to reproduce
-- proof of concept details, if available
-- any suggested mitigation or fix
+### Information to Include
 
-## What to Expect
+To facilitate rapid assessment and remediation, please include the following details where available:
 
-PeakURL maintainers will review the report and respond as soon as practical.
+- A comprehensive description of the vulnerability and its potential impact.
+- Affected PeakURL versions and deployment environment specifications.
+- Step-by-step reproduction instructions or a minimal proof-of-concept.
+- Any identified mitigations, patches, or suggested remediations.
 
-The usual process is:
+---
 
-1. acknowledge the report
-2. validate and assess the issue
-3. prepare a fix or mitigation
-4. publish the fix through the normal release process
+## Vulnerability Handling Process
 
-If the issue is confirmed, we will aim to handle disclosure responsibly and
-avoid exposing users to unnecessary risk before a fix is available.
+Upon receipt of a vulnerability report, project maintainers will execute the following procedure:
 
-## Scope
+1. **Acknowledgment**: Confirm receipt of the report within 48 business hours.
+2. **Assessment**: Validate the vulnerability, determine its severity, and evaluate affected components.
+3. **Remediation**: Develop, review, and test security patches across supported versions.
+4. **Coordinated Disclosure**: Release a security update through standard release channels and publish an advisory with appropriate remediation guidance.
 
-This policy covers security issues in the PeakURL application runtime, dashboard,
-installer, release package, and officially maintained project code in this
-repository.
+---
+
+## Policy Scope
+
+This policy applies to the PeakURL application runtime (`app/`), user interface (`ui/`), installation and database migration services, and official deployment assets maintained within this repository.

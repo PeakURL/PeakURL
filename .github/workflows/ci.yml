@@ -1,0 +1,56 @@
+name: CI Quality Gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality-gate:
+    name: Code Quality & Build Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: pdo, pdo_mysql, zip
+          tools: composer
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Install PHP dependencies
+        run: composer --working-dir=app install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Check formatting (Prettier & PHPCS)
+        run: npm run format:check
+
+      - name: Run linters (ESLint & PHPCS)
+        run: npm run lint
+
+      - name: Check PHP syntax
+        run: npm run lint:php:syntax
+
+      - name: Build UI & Verify TypeScript
+        run: npm run build

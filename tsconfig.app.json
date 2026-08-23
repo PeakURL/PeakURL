@@ -27,7 +27,6 @@
 		/* Strictness & Safety */
 		"strict": true,
 		"noUncheckedIndexedAccess": true,
-		"exactOptionalPropertyTypes": true,
 
 		/* Modern Features */
 		"erasableSyntaxOnly": true,

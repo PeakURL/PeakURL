@@ -1,41 +1,53 @@
-# Support
+# Support Guidelines
 
-## Documentation
+## Official Documentation
 
-If you are getting started with PeakURL, begin with:
+For installation, deployment guides, configuration options, and user documentation, refer to the official documentation portal:
 
-- [peakurl.org/docs](https://peakurl.org/docs)
+- **Documentation**: [PeakURL Documentation](https://peakurl.org/docs)
+- **Getting Started**: [Getting Started Guide](https://peakurl.org/docs/getting-started)
+- **API Reference**: [API Reference](https://peakurl.org/docs/api)
 
-For repository-specific setup and contributor notes, see:
+For local development setup and contributor workflows within this repository, consult:
 
 - [Development Environment Setup](docs/dev/DEVELOPMENT.md)
-- [Linting and Formatting](docs/dev/LINTING.md)
+- [Linting and Formatting Standards](docs/dev/LINTING.md)
 
-## When to Open an Issue
+---
 
-GitHub issues are the right place for:
+## Technical Support and Inquiries
 
-- reproducible bugs
-- documentation problems
-- focused feature requests
+### 1. Defect Reports and Feature Requests
 
-Please use the available issue templates so reports include the details needed
-to investigate them properly.
+The [GitHub Issue Tracker](https://github.com/PeakURL/PeakURL/issues) is dedicated to:
 
-## Security Reports
+- Reproducible software defects.
+- Documentation corrections and enhancements.
+- Targeted feature requests aligned with self-hosted product scope.
 
-For security vulnerabilities, do not file a public issue.
+Please utilize the appropriate issue template to provide all requisite system environment details and reproduction steps.
 
-Use:
+### 2. General Inquiries and Assistance
 
-- `security@peakurl.org`
+For inquiries outside the scope of public defect tracking:
 
-See the full process in the [Security Policy](SECURITY.md).
+- **Contact Form**: [Contact Support](https://peakurl.org/contact?topic=support&subject=Support+inquiry)
 
-## Code of Conduct
+---
 
-All participation in the project is covered by the [Code of Conduct](CODE_OF_CONDUCT.md).
+## Security Vulnerability Reporting
 
-If you need to report conduct-related concerns, contact:
+Do **not** report security vulnerabilities via public GitHub issues.
 
-- `conduct@peakurl.org`
+Please submit confidential vulnerability disclosures through our secure portal:
+
+- **Security Report Portal**: [Submit a Security Report](https://peakurl.org/contact?topic=security&subject=Security+vulnerability+report)
+- Refer to our [Security Policy](SECURITY.md) for handling timelines and coordination procedures.
+
+---
+
+## Code of Conduct Reports
+
+For concerns regarding community conduct, refer to the [Code of Conduct](CODE_OF_CONDUCT.md) or submit a confidential report via:
+
+- **Community Contact Portal**: [Contact Community Team](https://peakurl.org/contact?topic=community&subject=Community+inquiry)

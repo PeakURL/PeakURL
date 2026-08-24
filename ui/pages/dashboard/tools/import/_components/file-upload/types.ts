@@ -21,8 +21,8 @@ export interface FileUploadProps {
 	/** Updates the import lifecycle state. */
 	setImportStatus: Dispatch<SetStateAction<ImportStatus>>;
 
-	/** Upload progress percentage shown during transfer. */
-	importProgress: number;
+	/** Optional upload progress percentage shown during transfer. */
+	importProgress?: number;
 
 	/** Sample rows displayed when no results are available yet. */
 	sampleData: SampleRow[];

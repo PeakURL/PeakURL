@@ -16,7 +16,7 @@
 	}
 
 	.import-processing-icon {
-		@apply mx-auto mb-3 h-8 w-8 text-primary-500;
+		@apply mx-auto mb-3 h-8 w-8 animate-spin text-primary-500;
 	}
 
 	.import-processing-title {
@@ -28,14 +28,14 @@
 	}
 
 	.import-processing-progress-copy {
-		@apply mt-2 text-xs text-text-muted;
+		@apply mt-2 text-center text-xs font-medium text-text-muted;
 	}
 
 	.import-processing-bar {
-		@apply h-2 w-full animate-pulse rounded-full bg-surface-alt;
+		@apply h-2.5 w-full overflow-hidden rounded-full bg-surface-alt;
 	}
 
 	.import-processing-bar-fill {
-		@apply h-2 w-full rounded-full bg-accent;
+		@apply h-full rounded-full bg-accent transition-all duration-300 ease-out;
 	}
 }

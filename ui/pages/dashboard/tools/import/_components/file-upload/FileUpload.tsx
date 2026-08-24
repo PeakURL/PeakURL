@@ -22,11 +22,11 @@ import type { FileUploadProps, ImportRecord } from "./types";
 const FileUpload = ({
 	importStatus,
 	setImportStatus,
-	importProgress,
 	sampleData,
 }: FileUploadProps) => {
 	const notification = useNotification();
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
+	const [progress, setProgress] = useState<number>(0);
 	const [importResults, setImportResults] = useState<ImportResult[]>([]);
 	const [bulkCreateUrl] = useBulkCreateUrlMutation();
 
@@ -166,35 +166,50 @@ const FileUpload = ({
 
 	const processImport = async (data: ImportRecord[]) => {
 		setImportStatus("processing");
+		setProgress(0);
 		try {
-			const result = await bulkCreateUrl({
-				urls: data,
-			}).unwrap();
-
+			const batchSize = 25;
+			const totalItems = data.length;
 			const results: ImportResult[] = [];
+			let processedCount = 0;
 
-			if (result.data) {
-				(result.data.results || []).forEach((item) => {
-					results.push({
-						url: item.destinationUrl,
-						alias:
-							item.alias ||
-							item.shortCode ||
-							extractAliasFromShortUrl(item.shortUrl || "") ||
-							__("Auto-generated"),
-						status: "success",
-						shortUrl: getShortUrl(item),
-					});
-				});
+			for (let i = 0; i < totalItems; i += batchSize) {
+				const chunk = data.slice(i, i + batchSize);
+				const result = await bulkCreateUrl({
+					urls: chunk,
+				}).unwrap();
 
-				(result.data.errors || []).forEach((item) => {
-					results.push({
-						url: item.destinationUrl,
-						alias: item.alias || "N/A",
-						status: "error",
-						error: item.error,
+				if (result.data) {
+					(result.data.results || []).forEach((item) => {
+						results.push({
+							url: item.destinationUrl,
+							alias:
+								item.alias ||
+								item.shortCode ||
+								extractAliasFromShortUrl(item.shortUrl || "") ||
+								__("Auto-generated"),
+							status: "success",
+							shortUrl: getShortUrl(item),
+						});
 					});
-				});
+
+					(result.data.errors || []).forEach((item) => {
+						results.push({
+							url: item.destinationUrl,
+							alias: item.alias || "N/A",
+							status: "error",
+							error: item.error,
+						});
+					});
+				}
+
+				processedCount += chunk.length;
+				setProgress(
+					Math.min(
+						100,
+						Math.round((processedCount / totalItems) * 100)
+					)
+				);
 			}
 
 			setImportResults(results);
@@ -231,7 +246,7 @@ const FileUpload = ({
 						importStatus === "processing") && (
 						<ProcessingStatus
 							status={importStatus}
-							progress={importProgress}
+							progress={progress}
 						/>
 					)}
 

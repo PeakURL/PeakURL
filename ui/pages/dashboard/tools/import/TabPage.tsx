@@ -12,7 +12,6 @@ function TabPage() {
 		location.pathname.split("/").filter(Boolean).pop() || "file";
 
 	const [importStatus, setImportStatus] = useState<ImportStatus>("idle");
-	const importProgress = 0;
 
 	const sampleData: SampleRow[] = [
 		{
@@ -38,7 +37,6 @@ function TabPage() {
 				<FileUpload
 					importStatus={importStatus}
 					setImportStatus={setImportStatus}
-					importProgress={importProgress}
 					sampleData={sampleData}
 				/>
 			)}

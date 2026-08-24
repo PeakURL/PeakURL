@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Lightbulb, LoaderCircle, WandSparkles } from "lucide-react";
+import { Cog, Lightbulb, WandSparkles } from "lucide-react";
 
 import { Button, TextArea, useNotification } from "@/components";
 import { useBulkCreateUrlMutation } from "@/store/slices/api";
@@ -17,6 +17,7 @@ const PasteImport = () => {
 	const notification = useNotification();
 	const [text, setText] = useState("");
 	const [status, setStatus] = useState<ImportStatus>("idle");
+	const [progress, setProgress] = useState<number>(0);
 	const [results, setResults] = useState<ImportResult[]>([]);
 	const [bulkCreateUrl] = useBulkCreateUrlMutation();
 
@@ -24,6 +25,7 @@ const PasteImport = () => {
 		if (!text.trim()) return;
 
 		setStatus("processing");
+		setProgress(0);
 		try {
 			const lines = text.split(/\r\n|\n/).filter((line) => line.trim());
 			const data: PasteImportRequestItem[] = lines.map((line) => {
@@ -50,31 +52,46 @@ const PasteImport = () => {
 
 			if (data.length === 0) throw new Error(__("No URLs found"));
 
-			const result = await bulkCreateUrl({
-				urls: data,
-			}).unwrap();
-
+			const batchSize = 25;
+			const totalItems = data.length;
 			const transformResults: ImportResult[] = [];
-			if (result.data) {
-				(result.data.results || []).forEach((item) => {
-					transformResults.push({
-						url: item.destinationUrl,
-						alias:
-							item.alias ||
-							item.shortCode ||
-							__("Auto-generated"),
-						status: "success",
-						shortUrl: getShortUrl(item),
+			let processedCount = 0;
+
+			for (let i = 0; i < totalItems; i += batchSize) {
+				const chunk = data.slice(i, i + batchSize);
+				const result = await bulkCreateUrl({
+					urls: chunk,
+				}).unwrap();
+
+				if (result.data) {
+					(result.data.results || []).forEach((item) => {
+						transformResults.push({
+							url: item.destinationUrl,
+							alias:
+								item.alias ||
+								item.shortCode ||
+								__("Auto-generated"),
+							status: "success",
+							shortUrl: getShortUrl(item),
+						});
 					});
-				});
-				(result.data.errors || []).forEach((item) => {
-					transformResults.push({
-						url: item.destinationUrl,
-						alias: item.alias || "N/A",
-						status: "error",
-						error: item.error,
+					(result.data.errors || []).forEach((item) => {
+						transformResults.push({
+							url: item.destinationUrl,
+							alias: item.alias || "N/A",
+							status: "error",
+							error: item.error,
+						});
 					});
-				});
+				}
+
+				processedCount += chunk.length;
+				setProgress(
+					Math.min(
+						100,
+						Math.round((processedCount / totalItems) * 100)
+					)
+				);
 			}
 
 			setResults(transformResults);
@@ -175,10 +192,24 @@ https://example.com/page3 custom-alias`}
 				)}
 
 				{status === "processing" && (
-					<div className="import-status-panel">
-						<LoaderCircle className="import-status-icon" />
-						<p className="import-status-copy">
-							{__("Processing URLs...")}
+					<div className="import-processing">
+						<div className="import-processing-header">
+							<Cog className="import-processing-icon" />
+							<h3 className="import-processing-title">
+								{__("Processing URLs")}
+							</h3>
+							<p className="import-processing-copy">
+								{__("Creating short links...")}
+							</p>
+						</div>
+						<div className="import-processing-bar">
+							<div
+								className="import-processing-bar-fill"
+								style={{ width: `${progress}%` }}
+							/>
+						</div>
+						<p className="import-processing-progress-copy">
+							{`${progress}%`}
 						</p>
 					</div>
 				)}

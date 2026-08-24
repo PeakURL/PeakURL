@@ -30,24 +30,26 @@ class Query {
 	/**
 	 * Derive page, limit, and offset values from a query-parameter map.
 	 *
-	 * Clamps limit between 1 and `$max_limit`, and ensures page >= 1.
+	 * Clamps limit to >= 1 (and optionally <= $max_limit when specified), and ensures page >= 1.
 	 *
 	 * @param array<string, mixed> $query         Raw query parameters (e.g. from Request).
 	 * @param int                  $default_limit Rows per page when `limit` is absent.
-	 * @param int                  $max_limit     Upper bound for the limit value.
+	 * @param int|null             $max_limit     Optional upper bound for the limit value.
 	 * @return array<string, int>  Associative array with keys `page`, `limit`, `offset`.
 	 * @since 1.0.0
 	 */
 	public static function pagination(
 		array $query,
 		int $default_limit = 25,
-		int $max_limit = 100
+		?int $max_limit = null
 	): array {
-		$page  = max( 1, (int) ( $query['page'] ?? 1 ) );
-		$limit = max(
-			1,
-			min( $max_limit, (int) ( $query['limit'] ?? $default_limit ) ),
-		);
+		$page      = max( 1, (int) ( $query['page'] ?? 1 ) );
+		$raw_limit = (int) ( $query['limit'] ?? $default_limit );
+		$limit     = max( 1, $raw_limit );
+
+		if ( null !== $max_limit && $max_limit > 0 ) {
+			$limit = min( $max_limit, $limit );
+		}
 
 		return array(
 			'page'   => $page,

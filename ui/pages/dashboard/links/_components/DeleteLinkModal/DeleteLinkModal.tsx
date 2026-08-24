@@ -23,11 +23,12 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 			return;
 		}
 
+		const linkId = link.id;
 		setError("");
+		setOpen(false);
 
 		try {
-			await deleteUrl(link.id).unwrap();
-			setOpen(false);
+			await deleteUrl(linkId).unwrap();
 		} catch (err) {
 			setError(getErrorMessage(err, __("Failed to delete link")));
 		}

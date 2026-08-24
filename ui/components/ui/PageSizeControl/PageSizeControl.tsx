@@ -2,15 +2,11 @@ import { type HTMLAttributes, useEffect, useId, useRef, useState } from "react";
 import { Check, X } from "lucide-react";
 
 import { __, sprintf } from "@/i18n";
-import { cn } from "@/utils";
+import { cn, formatCount } from "@/utils";
 
 import { Select } from "../Select";
 import type { SelectOption } from "../types";
-import {
-	DEFAULT_PAGE_SIZE_MAX,
-	DEFAULT_PAGE_SIZE_OPTIONS,
-	normalizePageSize,
-} from "./constants";
+import { DEFAULT_PAGE_SIZE_OPTIONS, normalizePageSize } from "./constants";
 
 interface PageSizeControlProps extends Omit<
 	HTMLAttributes<HTMLDivElement>,
@@ -27,7 +23,7 @@ export function PageSizeControl({
 	value,
 	onChange,
 	options = DEFAULT_PAGE_SIZE_OPTIONS,
-	max = DEFAULT_PAGE_SIZE_MAX,
+	max,
 	ariaLabel = __("Rows per page"),
 	className = "",
 	...props
@@ -58,13 +54,13 @@ export function PageSizeControl({
 						value: `current:${normalizedValue}`,
 						label: sprintf(
 							__("Show: %s rows"),
-							String(normalizedValue)
+							formatCount(normalizedValue)
 						),
 					},
 				]),
 		...options.map((option) => ({
 			value: String(option),
-			label: sprintf(__("Show: %s rows"), String(option)),
+			label: sprintf(__("Show: %s rows"), formatCount(option)),
 		})),
 		{
 			value: "custom",
@@ -110,7 +106,7 @@ export function PageSizeControl({
 						id={inputId}
 						type="number"
 						min={1}
-						max={max}
+						{...(typeof max === "number" && max > 0 ? { max } : {})}
 						inputMode="numeric"
 						dir="ltr"
 						value={draftValue}

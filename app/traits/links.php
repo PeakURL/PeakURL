@@ -40,7 +40,7 @@ trait LinksTrait {
 	 * @since 1.0.0
 	 */
 	public function list_urls( Request $request, array $query ): array {
-		$pagination = Query::pagination( $query, 25, 250 );
+		$pagination = Query::pagination( $query, 25 );
 		$page       = $pagination['page'];
 		$limit      = $pagination['limit'];
 		$offset     = $pagination['offset'];

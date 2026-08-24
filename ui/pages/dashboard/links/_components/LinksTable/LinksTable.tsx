@@ -154,12 +154,17 @@ const LinksTable = ({ links, statsShortId, statsLink }: LinksTableProps) => {
 				link={selectedLink}
 			/>
 			<DeleteLinkModal
-				open={deleteModalOpen}
-				setOpen={setDeleteModalOpen}
+				open={deleteModalOpen && Boolean(selectedLink)}
+				setOpen={(isOpen) => {
+					setDeleteModalOpen(isOpen);
+					if (!isOpen) {
+						setSelectedLink(null);
+					}
+				}}
 				link={selectedLink}
 			/>
 			<BulkDeleteModal
-				open={bulkDeleteModalOpen}
+				open={bulkDeleteModalOpen && selectedIds.length > 0}
 				setOpen={setBulkDeleteModalOpen}
 				selectedIds={selectedIds}
 				onSuccess={handleBulkDeleteSuccess}

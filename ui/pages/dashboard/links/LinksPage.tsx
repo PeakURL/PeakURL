@@ -1,10 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { CircleCheckBig, Link2, MousePointerClick, Users } from "lucide-react";
-import {
-	DEFAULT_PAGE_SIZE_MAX,
-	DEFAULT_PAGE_SIZE_OPTIONS,
-	normalizePageSize,
-} from "@/components";
+import { DEFAULT_PAGE_SIZE_OPTIONS, normalizePageSize } from "@/components";
 // LocalStorage keys for persistence (defined outside component to satisfy hook deps)
 const LS_KEYS = {
 	sortBy: "admin_links_sortBy",
@@ -73,8 +69,7 @@ function LinksPage() {
 		if (typeof window !== "undefined") {
 			return normalizePageSize(
 				localStorage.getItem(LS_KEYS.limit),
-				DEFAULT_PAGE_SIZE_OPTIONS[0] ?? 25,
-				DEFAULT_PAGE_SIZE_MAX
+				DEFAULT_PAGE_SIZE_OPTIONS[0] ?? 25
 			);
 		}
 
@@ -231,9 +226,10 @@ function LinksPage() {
 		(sum: number, link: LinkRecord) => sum + (link.uniqueClicks || 0),
 		0
 	);
-	const activeLinks = linksForStats.filter(
-		(link: LinkRecord) => link.status === "active"
+	const inactiveCountOnPage = linksForStats.filter((link: LinkRecord) =>
+		Boolean(link.status && link.status !== "active")
 	).length;
+	const activeLinks = Math.max(0, totalItems - inactiveCountOnPage);
 
 	return (
 		<div className="links-page">
@@ -256,7 +252,7 @@ function LinksPage() {
 						<span className="links-page-stat-trend">+12%</span>
 					</div>
 					<div className="links-page-stat-value">
-						{linksForStats.length}
+						{formatCount(totalItems)}
 					</div>
 					<div className="links-page-stat-label">
 						{__("Total Links")}
@@ -272,7 +268,9 @@ function LinksPage() {
 							{__("Active")}
 						</span>
 					</div>
-					<div className="links-page-stat-value">{activeLinks}</div>
+					<div className="links-page-stat-value">
+						{formatCount(activeLinks)}
+					</div>
 					<div className="links-page-stat-label">
 						{__("Active Links")}
 					</div>
@@ -318,7 +316,7 @@ function LinksPage() {
 			/>
 
 			<TableFooter
-				totalLinks={filteredLinks.length}
+				totalLinks={totalItems}
 				totalClicks={totalClicks}
 				sortBy={sortBy}
 				setSortBy={setSortBy}

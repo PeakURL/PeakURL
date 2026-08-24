@@ -20,7 +20,7 @@ import { useAdminAccess } from "@/hooks";
 import { BrandLockup } from "@/components";
 import { isDocumentRtl } from "@/i18n/direction";
 import { __ } from "@/i18n";
-import { cn } from "@/utils";
+import { cn, formatCount } from "@/utils";
 
 import type { NavItem, SidebarProps } from "../types";
 
@@ -179,7 +179,9 @@ export const Sidebar = ({
 	const pathname = location.pathname;
 	const { data: urlsRes } = useGetUrlsQuery(undefined);
 	const { canManageUsers } = useAdminAccess();
-	const links = Array.isArray(urlsRes?.data?.items) ? urlsRes.data.items : [];
+	const totalLinks =
+		urlsRes?.data?.meta?.totalItems ??
+		(Array.isArray(urlsRes?.data?.items) ? urlsRes.data.items.length : 0);
 
 	const navigation = useMemo(
 		() => getNavItems(basePath, canManageUsers),
@@ -382,13 +384,13 @@ export const Sidebar = ({
 										{item.name}
 									</span>
 									{item.name === __("All Links") &&
-										links.length > 0 && (
+										totalLinks > 0 && (
 											<span
 												className={getLinkBadgeClassName(
 													isActive
 												)}
 											>
-												{links.length}
+												{formatCount(totalLinks)}
 											</span>
 										)}
 								</Link>

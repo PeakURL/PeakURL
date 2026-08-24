@@ -1,10 +1,9 @@
 export const DEFAULT_PAGE_SIZE_OPTIONS: readonly number[] = [25, 50, 100, 150];
-export const DEFAULT_PAGE_SIZE_MAX = 250;
 
 export function normalizePageSize(
 	value: number | string | null | undefined,
 	fallback: number = DEFAULT_PAGE_SIZE_OPTIONS[0] ?? 25,
-	max = DEFAULT_PAGE_SIZE_MAX
+	max?: number
 ): number {
 	const parsed = Number(value);
 
@@ -12,5 +11,9 @@ export function normalizePageSize(
 		return fallback;
 	}
 
-	return Math.min(max, Math.max(1, Math.round(parsed)));
+	const integerVal = Math.max(1, Math.round(parsed));
+
+	return typeof max === "number" && max > 0
+		? Math.min(max, integerVal)
+		: integerVal;
 }

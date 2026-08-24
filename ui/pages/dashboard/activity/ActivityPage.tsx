@@ -18,7 +18,6 @@ import { useSearchParams } from "react-router";
 
 import {
 	ConfirmDialog,
-	DEFAULT_PAGE_SIZE_MAX,
 	DEFAULT_PAGE_SIZE_OPTIONS,
 	PageSizeControl,
 	Skeleton,
@@ -47,7 +46,6 @@ import type { ActivityPerson, RecentActivity } from "../_components/types";
 const ACTIVITY_PAGE_LIMIT = DEFAULT_PAGE_SIZE_OPTIONS[0] ?? 25;
 const ACTIVITY_PAGE_STORAGE_KEY = "admin_activity_limit";
 const ACTIVITY_PAGE_SIZE_OPTIONS = DEFAULT_PAGE_SIZE_OPTIONS;
-const ACTIVITY_PAGE_MAX_LIMIT = DEFAULT_PAGE_SIZE_MAX;
 const MAX_VISIBLE_PAGES = 5;
 
 type ActivityCategory = "all" | "links" | "users";
@@ -330,8 +328,7 @@ function ActivityPage() {
 		if (typeof window !== "undefined") {
 			return normalizePageSize(
 				localStorage.getItem(ACTIVITY_PAGE_STORAGE_KEY),
-				ACTIVITY_PAGE_LIMIT,
-				ACTIVITY_PAGE_MAX_LIMIT
+				ACTIVITY_PAGE_LIMIT
 			);
 		}
 
@@ -456,9 +453,13 @@ function ActivityPage() {
 				.filter((id): id is string => Boolean(id))
 		);
 
-		setSelectedActivityIds((previous) =>
-			previous.filter((id) => currentIds.has(id))
-		);
+		setSelectedActivityIds((previous) => {
+			const next = previous.filter((id) => currentIds.has(id));
+			if (next.length === 0 && bulkDeleteOpen) {
+				setBulkDeleteOpen(false);
+			}
+			return next;
+		});
 	}
 
 	const handleRefresh = async () => {
@@ -520,20 +521,22 @@ function ActivityPage() {
 	};
 
 	const handleDeleteActivity = async () => {
-		if (!activityPendingDelete?.id || isDeletingActivity) {
+		const target = activityPendingDelete;
+		if (!target?.id || isDeletingActivity) {
 			return;
 		}
 
+		setActivityPendingDelete(null);
+		setSelectedActivityIds((previous) =>
+			previous.filter((id) => id !== target.id)
+		);
+
 		try {
-			await deleteActivityLog(activityPendingDelete.id).unwrap();
+			await deleteActivityLog(target.id).unwrap();
 			notifications.success(
 				__("Activity deleted"),
 				__("The activity log entry has been removed.")
 			);
-			setSelectedActivityIds((previous) =>
-				previous.filter((id) => id !== activityPendingDelete.id)
-			);
-			setActivityPendingDelete(null);
 		} catch (_error) {
 			notifications.error(
 				__("Unable to delete activity"),
@@ -547,17 +550,21 @@ function ActivityPage() {
 			return;
 		}
 
+		const idsToDelete = [...selectedActivityIds];
+		const countToDelete = idsToDelete.length;
+
+		setBulkDeleteOpen(false);
+		setSelectedActivityIds([]);
+
 		try {
-			await bulkDeleteActivityLogs(selectedActivityIds).unwrap();
+			await bulkDeleteActivityLogs(idsToDelete).unwrap();
 			notifications.success(
 				__("Activity deleted"),
 				sprintf(
 					__("Deleted %s activity log entries."),
-					String(selectedCount)
+					String(countToDelete)
 				)
 			);
-			setSelectedActivityIds([]);
-			setBulkDeleteOpen(false);
 		} catch (_error) {
 			notifications.error(
 				__("Unable to delete activity"),
@@ -742,7 +749,6 @@ function ActivityPage() {
 					value={limit}
 					onChange={setLimit}
 					options={ACTIVITY_PAGE_SIZE_OPTIONS}
-					max={ACTIVITY_PAGE_MAX_LIMIT}
 					className="activity-page-page-size"
 					ariaLabel={__("Rows per page")}
 				/>
@@ -1219,7 +1225,7 @@ function ActivityPage() {
 			) : null}
 
 			<ConfirmDialog
-				open={bulkDeleteOpen}
+				open={bulkDeleteOpen && selectedActivityIds.length > 0}
 				onClose={() => setBulkDeleteOpen(false)}
 				title={__("Delete activity logs")}
 				description={

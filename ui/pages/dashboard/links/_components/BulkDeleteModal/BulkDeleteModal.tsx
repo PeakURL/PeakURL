@@ -20,12 +20,17 @@ function BulkDeleteModal({
 	const [bulkDeleteUrl, { isLoading }] = useBulkDeleteUrlMutation();
 
 	const handleDelete = async () => {
+		if (!selectedIds || selectedIds.length === 0) {
+			return;
+		}
+
+		const idsToDelete = [...selectedIds];
 		setError("");
+		setOpen(false);
+		if (onSuccess) onSuccess();
 
 		try {
-			await bulkDeleteUrl(selectedIds).unwrap();
-			setOpen(false);
-			if (onSuccess) onSuccess();
+			await bulkDeleteUrl(idsToDelete).unwrap();
 		} catch (err) {
 			setError(getErrorMessage(err, __("Failed to delete links")));
 		}

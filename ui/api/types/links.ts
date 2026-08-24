@@ -46,6 +46,11 @@ export interface LinksMeta {
 	limit: number;
 	totalItems: number;
 	totalPages: number;
+	totalClicks: number;
+	uniqueClicks: number;
+	activeLinks: number;
+	lastPeriodTotalClicks?: number;
+	lastPeriodUniqueClicks?: number;
 }
 
 /**

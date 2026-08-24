@@ -144,6 +144,12 @@ function LinksPage() {
 		limit: typedUrlsRes?.data?.meta?.limit ?? limit,
 		totalItems: typedUrlsRes?.data?.meta?.totalItems ?? apiItems.length,
 		totalPages: typedUrlsRes?.data?.meta?.totalPages ?? 1,
+		totalClicks: typedUrlsRes?.data?.meta?.totalClicks ?? 0,
+		uniqueClicks: typedUrlsRes?.data?.meta?.uniqueClicks ?? 0,
+		activeLinks: typedUrlsRes?.data?.meta?.activeLinks ?? 0,
+		lastPeriodTotalClicks: typedUrlsRes?.data?.meta?.lastPeriodTotalClicks,
+		lastPeriodUniqueClicks:
+			typedUrlsRes?.data?.meta?.lastPeriodUniqueClicks,
 	};
 	const { data: statsLinkRes, refetch: refetchStatsLookup } = useGetUrlQuery(
 		statsShortId || "",
@@ -216,20 +222,33 @@ function LinksPage() {
 		);
 	}
 
-	// Calculate quick stats (based on filtered links or all links? usually filtered)
-	const linksForStats = filteredLinks;
-	const totalClicks = linksForStats.reduce(
-		(sum: number, link: LinkRecord) => sum + (link.clicks || 0),
-		0
+	// Real stats based on the backend API response
+	const totalClicks = apiMeta.totalClicks ?? 0;
+	const totalUniqueClicks = apiMeta.uniqueClicks ?? 0;
+	const activeLinks = apiMeta.activeLinks ?? 0;
+
+	const getPercentChange = (current: number, last: number | undefined) => {
+		if (last === undefined) return null;
+		const delta = current - last;
+		if (last === 0) {
+			if (current === 0) return null;
+			return { text: "+100%", isPositive: true };
+		}
+		const percent = Math.abs((delta / last) * 100).toFixed(1);
+		return {
+			text: `${delta >= 0 ? "+" : "-"}${percent}%`,
+			isPositive: delta >= 0,
+		};
+	};
+
+	const clicksChange = getPercentChange(
+		totalClicks,
+		apiMeta.lastPeriodTotalClicks
 	);
-	const totalUniqueClicks = linksForStats.reduce(
-		(sum: number, link: LinkRecord) => sum + (link.uniqueClicks || 0),
-		0
+	const visitorsChange = getPercentChange(
+		totalUniqueClicks,
+		apiMeta.lastPeriodUniqueClicks
 	);
-	const inactiveCountOnPage = linksForStats.filter((link: LinkRecord) =>
-		Boolean(link.status && link.status !== "active")
-	).length;
-	const activeLinks = Math.max(0, totalItems - inactiveCountOnPage);
 
 	return (
 		<div className="links-page">
@@ -246,42 +265,20 @@ function LinksPage() {
 			<div className="links-page-stats">
 				<div className="links-page-stat-card">
 					<div className="links-page-stat-header">
-						<div className="links-page-stat-icon links-page-stat-icon-links">
-							<Link2 className="h-4 w-4 text-primary-600 dark:text-primary-400" />
-						</div>
-						<span className="links-page-stat-trend">+12%</span>
-					</div>
-					<div className="links-page-stat-value">
-						{formatCount(totalItems)}
-					</div>
-					<div className="links-page-stat-label">
-						{__("Total Links")}
-					</div>
-				</div>
-
-				<div className="links-page-stat-card">
-					<div className="links-page-stat-header">
-						<div className="links-page-stat-icon links-page-stat-icon-active">
-							<CircleCheckBig className="h-4 w-4 text-success" />
-						</div>
-						<span className="links-page-stat-trend">
-							{__("Active")}
-						</span>
-					</div>
-					<div className="links-page-stat-value">
-						{formatCount(activeLinks)}
-					</div>
-					<div className="links-page-stat-label">
-						{__("Active Links")}
-					</div>
-				</div>
-
-				<div className="links-page-stat-card">
-					<div className="links-page-stat-header">
 						<div className="links-page-stat-icon links-page-stat-icon-clicks">
 							<MousePointerClick className="h-4 w-4 text-blue-600 dark:text-blue-400" />
 						</div>
-						<span className="links-page-stat-trend">+28%</span>
+						{clicksChange && (
+							<span
+								className={`links-page-stat-trend ${
+									clicksChange.isPositive
+										? "links-page-stat-trend-positive"
+										: "links-page-stat-trend-negative"
+								}`}
+							>
+								{clicksChange.text}
+							</span>
+						)}
 					</div>
 					<div className="links-page-stat-value">
 						{formatCount(totalClicks)}
@@ -296,13 +293,51 @@ function LinksPage() {
 						<div className="links-page-stat-icon links-page-stat-icon-visitors">
 							<Users className="h-4 w-4 text-purple-600 dark:text-purple-400" />
 						</div>
-						<span className="links-page-stat-trend">+35%</span>
+						{visitorsChange && (
+							<span
+								className={`links-page-stat-trend ${
+									visitorsChange.isPositive
+										? "links-page-stat-trend-positive"
+										: "links-page-stat-trend-negative"
+								}`}
+							>
+								{visitorsChange.text}
+							</span>
+						)}
 					</div>
 					<div className="links-page-stat-value">
 						{formatCount(totalUniqueClicks)}
 					</div>
 					<div className="links-page-stat-label">
 						{__("Visitors")}
+					</div>
+				</div>
+
+				<div className="links-page-stat-card">
+					<div className="links-page-stat-header">
+						<div className="links-page-stat-icon links-page-stat-icon-links">
+							<Link2 className="h-4 w-4 text-primary-600 dark:text-primary-400" />
+						</div>
+					</div>
+					<div className="links-page-stat-value">
+						{formatCount(totalItems)}
+					</div>
+					<div className="links-page-stat-label">
+						{__("Total Links")}
+					</div>
+				</div>
+
+				<div className="links-page-stat-card">
+					<div className="links-page-stat-header">
+						<div className="links-page-stat-icon links-page-stat-icon-active">
+							<CircleCheckBig className="h-4 w-4 text-success" />
+						</div>
+					</div>
+					<div className="links-page-stat-value">
+						{formatCount(activeLinks)}
+					</div>
+					<div className="links-page-stat-label">
+						{__("Active Links")}
 					</div>
 				</div>
 			</div>

@@ -49,6 +49,13 @@ trait LinksTrait {
 			$listing['where'],
 			$listing['params'],
 		);
+		$aggregates = $this->aggregate_url_listing_stats(
+			$request,
+			$query,
+			$listing['where'],
+			$listing['params'],
+			$listing['statsParams'],
+		);
 		$rows       = $this->query_url_listing_rows(
 			$listing['where'],
 			$listing['params'],
@@ -59,15 +66,73 @@ trait LinksTrait {
 			$listing['statsParams'],
 		);
 
+		$meta = array(
+			'page'         => $page,
+			'limit'        => $limit,
+			'totalItems'   => $count,
+			'totalPages'   => max( 1, (int) ceil( $count / $limit ) ),
+			'totalClicks'  => $aggregates['totalClicks'],
+			'uniqueClicks' => $aggregates['uniqueClicks'],
+			'activeLinks'  => $aggregates['activeLinks'],
+		);
+
+		if ( isset( $aggregates['lastPeriodTotalClicks'] ) ) {
+			$meta['lastPeriodTotalClicks']  = $aggregates['lastPeriodTotalClicks'];
+			$meta['lastPeriodUniqueClicks'] = $aggregates['lastPeriodUniqueClicks'];
+		}
+
 		return array(
 			'items' => $this->format_url_list( $rows ),
-			'meta'  => array(
-				'page'       => $page,
-				'limit'      => $limit,
-				'totalItems' => $count,
-				'totalPages' => max( 1, (int) ceil( $count / $limit ) ),
-			),
+			'meta'  => $meta,
 		);
+	}
+
+	/**
+	 * Calculate total stats for the current listing query.
+	 *
+	 * @param Request               $request      Incoming HTTP request.
+	 * @param array<string, mixed>  $query        Raw query parameters.
+	 * @param string                $where        Prepared WHERE clause.
+	 * @param array<string, mixed>  $params       Query parameters.
+	 * @param array<string, string> $stats_params Optional click-stat query bounds.
+	 * @return array<string, int>
+	 * @since 1.5.2
+	 */
+	private function aggregate_url_listing_stats(
+		Request $request,
+		array $query,
+		string $where,
+		array $params,
+		array $stats_params
+	): array {
+		$aggregates = $this->links_api->aggregate_link_stats(
+			$where,
+			$params,
+			$stats_params,
+		);
+
+		$range = trim( (string) ( $query['range'] ?? '' ) );
+		if ( in_array( $range, array( '24h', '7d', '30d' ), true ) ) {
+			$days        = '24h' === $range ? 1 : ( '30d' === $range ? 30 : 7 );
+			$period      = $this->get_analytics_period( $days );
+			$last_period = $this->get_last_month_period( $period, $days );
+
+			$last_stats_params = array(
+				'stats_start_at' => $last_period['start_at'],
+				'stats_end_at'   => $last_period['end_at'],
+			);
+
+			$last_stats = $this->links_api->aggregate_link_clicks(
+				$where,
+				$params,
+				$last_stats_params,
+			);
+
+			$aggregates['lastPeriodTotalClicks']  = $last_stats['totalClicks'];
+			$aggregates['lastPeriodUniqueClicks'] = $last_stats['uniqueClicks'];
+		}
+
+		return $aggregates;
 	}
 
 	/**

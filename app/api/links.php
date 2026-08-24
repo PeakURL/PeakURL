@@ -87,6 +87,91 @@ class LinksApi {
 	}
 
 	/**
+	 * Aggregate URL listing click, unique visitor, and active link totals.
+	 *
+	 * @param string               $where        Prepared WHERE clause.
+	 * @param array<string, mixed> $params       Query parameters.
+	 * @param array<string, mixed> $stats_params Optional click-stat query bounds.
+	 * @return array{totalClicks: int, uniqueClicks: int, activeLinks: int}
+	 * @since 1.5.2
+	 */
+	public function aggregate_link_stats(
+		string $where,
+		array $params,
+		array $stats_params = array()
+	): array {
+		$sql = 'SELECT
+				COUNT(c.id) AS total_clicks,
+				COUNT(DISTINCT COALESCE(NULLIF(c.visitor_hash, \'\'), c.id)) AS unique_clicks
+			FROM urls u
+			INNER JOIN clicks c ON c.url_id = u.id
+			' . $where;
+
+		$conditions = array();
+		if ( isset( $stats_params['stats_start_at'] ) ) {
+			$conditions[] = 'c.clicked_at >= :stats_start_at';
+		}
+		if ( isset( $stats_params['stats_end_at'] ) ) {
+			$conditions[] = 'c.clicked_at < :stats_end_at';
+		}
+
+		if ( ! empty( $conditions ) ) {
+			$sql .= ( '' === $where ? ' WHERE ' : ' AND ' ) . implode( ' AND ', $conditions );
+		}
+
+		$click_stats  = $this->db->get_row( $sql, array_merge( $params, $stats_params ) ) ?? array();
+		$active_sql   = 'SELECT SUM(CASE WHEN u.status = \'active\' THEN 1 ELSE 0 END) AS active_links FROM urls u ' . $where;
+		$active_stats = $this->db->get_row( $active_sql, $params ) ?? array();
+
+		return array(
+			'totalClicks'  => (int) ( $click_stats['total_clicks'] ?? 0 ),
+			'uniqueClicks' => (int) ( $click_stats['unique_clicks'] ?? 0 ),
+			'activeLinks'  => (int) ( $active_stats['active_links'] ?? 0 ),
+		);
+	}
+
+	/**
+	 * Aggregate URL listing click and unique visitor totals for a bounded period.
+	 *
+	 * @param string               $where        Prepared WHERE clause.
+	 * @param array<string, mixed> $params       Query parameters.
+	 * @param array<string, mixed> $stats_params Bounded period parameters.
+	 * @return array{totalClicks: int, uniqueClicks: int}
+	 * @since 1.5.2
+	 */
+	public function aggregate_link_clicks(
+		string $where,
+		array $params,
+		array $stats_params
+	): array {
+		$sql = 'SELECT
+				COUNT(c.id) AS total_clicks,
+				COUNT(DISTINCT COALESCE(NULLIF(c.visitor_hash, \'\'), c.id)) AS unique_clicks
+			FROM urls u
+			INNER JOIN clicks c ON c.url_id = u.id
+			' . $where;
+
+		$conditions = array();
+		if ( isset( $stats_params['stats_start_at'] ) ) {
+			$conditions[] = 'c.clicked_at >= :stats_start_at';
+		}
+		if ( isset( $stats_params['stats_end_at'] ) ) {
+			$conditions[] = 'c.clicked_at < :stats_end_at';
+		}
+
+		if ( ! empty( $conditions ) ) {
+			$sql .= ( '' === $where ? ' WHERE ' : ' AND ' ) . implode( ' AND ', $conditions );
+		}
+
+		$stats = $this->db->get_row( $sql, array_merge( $params, $stats_params ) ) ?? array();
+
+		return array(
+			'totalClicks'  => (int) ( $stats['total_clicks'] ?? 0 ),
+			'uniqueClicks' => (int) ( $stats['unique_clicks'] ?? 0 ),
+		);
+	}
+
+	/**
 	 * Query URL rows with click stats for listing and export surfaces.
 	 *
 	 * @param string               $where      Prepared WHERE clause.

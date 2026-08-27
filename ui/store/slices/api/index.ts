@@ -8,6 +8,7 @@
 export { analyticsApi } from "./analytics";
 export {
 	useBulkDeleteActivityLogsMutation,
+	useClearActivityLogsMutation,
 	useDeleteActivityLogMutation,
 	useGetActivityQuery,
 	useGetActivityHistoryQuery,
@@ -42,6 +43,7 @@ export { urlsApi } from "./urls";
 export {
 	useBulkCreateUrlMutation,
 	useBulkDeleteUrlMutation,
+	useClearUrlsMutation,
 	useCreateUrlMutation,
 	useDeleteUrlMutation,
 	useGetUrlQuery,

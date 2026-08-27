@@ -33,4 +33,5 @@ export interface TableHeaderRowProps {
 	selectedCount?: number;
 	onSelectAll: (event: ChangeEvent<HTMLInputElement>) => void;
 	onBulkDelete: () => void;
+	onDeleteAll?: () => void;
 }

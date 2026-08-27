@@ -480,6 +480,23 @@ class PeakURL_DB {
 	}
 
 	/**
+	 * Delete all rows from a managed table.
+	 *
+	 * Explicit helper for operations that intentionally clear an entire table,
+	 * keeping `delete()` strictly bound to mandatory WHERE conditions to prevent
+	 * accidental table-wide deletion.
+	 *
+	 * @param string $table_name Base table name without prefix.
+	 * @return int Number of affected rows.
+	 * @since 1.5.3
+	 */
+	public function truncate( string $table_name ): int {
+		return $this->query(
+			'DELETE FROM ' . $this->table_identifier( $table_name )
+		);
+	}
+
+	/**
 	 * Execute a write query.
 	 *
 	 * @param string               $sql    SQL query.

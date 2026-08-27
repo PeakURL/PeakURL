@@ -112,6 +112,16 @@ export const analyticsApi = baseApi.injectEndpoints({
 			}),
 			invalidatesTags: ANALYTICS_TAGS,
 		}),
+		clearActivityLogs: build.mutation<
+			ApiDataResponse<{ deletedCount: number }>,
+			void
+		>({
+			query: () => ({
+				url: API_ROUTES.analytics.activity,
+				method: "DELETE",
+			}),
+			invalidatesTags: ANALYTICS_TAGS,
+		}),
 		getLinkLocation: build.query<{ data?: LinkLocationPayload }, string>({
 			query: (id) => API_ROUTES.analytics.linkLocation(id),
 			providesTags: (_result, _error, id) =>
@@ -132,6 +142,7 @@ export const {
 	useGetActivityHistoryQuery,
 	useDeleteActivityLogMutation,
 	useBulkDeleteActivityLogsMutation,
+	useClearActivityLogsMutation,
 	useGetLinkLocationQuery,
 	useGetLinkStatsQuery,
 } = analyticsApi;

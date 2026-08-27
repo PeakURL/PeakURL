@@ -155,6 +155,26 @@ class AnalyticsController extends BaseController {
 	}
 
 	/**
+	 * Delete all activity entries.
+	 *
+	 * Admin-only. Clears all audit log rows.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> JSON envelope with deleted count.
+	 * @since 1.5.3
+	 */
+	public function clear( Request $request ): array {
+		$count = $this->data_store->clear_activity_logs( $request );
+
+		return $this->success_response(
+			array(
+				'deletedCount' => $count,
+			),
+			__( 'All activity logs deleted.', 'peakurl' ),
+		);
+	}
+
+	/**
 	 * Return per-link location analytics.
 	 *
 	 * Returns geographic breakdown (country, city) of clicks for a

@@ -255,6 +255,24 @@ class UrlsController extends BaseController {
 	}
 
 	/**
+	 * Delete all accessible URLs.
+	 *
+	 * @param Request $request Request.
+	 * @return array<string, mixed> Response with deleted count.
+	 * @since 1.5.3
+	 */
+	public function clear( Request $request ): array {
+		$count = $this->data_store->clear_urls( $request );
+
+		return $this->success_response(
+			array(
+				'deletedCount' => $count,
+			),
+			__( 'All links deleted.', 'peakurl' ),
+		);
+	}
+
+	/**
 	 * Resolve a short code and handle public access.
 	 *
 	 * Handles password-protected and expired links before sending the final

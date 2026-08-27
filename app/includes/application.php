@@ -391,6 +391,7 @@ class Application {
 				array( 'post', '/urls', array( $urls, 'create' ) ),
 				array( 'post', '/urls/bulk', array( $urls, 'bulk_create' ) ),
 				array( array( 'post', 'put' ), '/urls/{id}', array( $urls, 'update' ) ),
+				array( 'delete', '/urls', array( $urls, 'clear' ) ),
 				array( 'delete', '/urls/bulk', array( $urls, 'bulk_delete' ) ),
 				array( 'delete', '/urls/{id}', array( $urls, 'delete' ) ),
 			)
@@ -411,6 +412,7 @@ class Application {
 				array( 'get', '/analytics/activity', array( $analytics, 'activity' ) ),
 				array( 'get', '/analytics/recent-clicks', array( $analytics, 'recent_clicks' ) ),
 				array( 'get', '/analytics/activity/history', array( $analytics, 'history' ) ),
+				array( 'delete', '/analytics/activity', array( $analytics, 'clear' ) ),
 				array( 'delete', '/analytics/activity/bulk', array( $analytics, 'bulk_delete' ) ),
 				array( 'delete', '/analytics/activity/{id}', array( $analytics, 'delete' ) ),
 				array( 'get', '/analytics/url/{id}/location', array( $analytics, 'location' ) ),

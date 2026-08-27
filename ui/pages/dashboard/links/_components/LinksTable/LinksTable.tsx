@@ -2,7 +2,15 @@ import type { ChangeEvent } from "react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 
-import { getShortUrl, copyToClipboard, formatNumber } from "@/utils";
+import { ConfirmDialog, useNotification } from "@/components";
+import { useClearUrlsMutation } from "@/store/slices/api";
+import { __ } from "@/i18n";
+import {
+	getShortUrl,
+	copyToClipboard,
+	formatNumber,
+	getErrorMessage,
+} from "@/utils";
 
 import StatsDrawer from "../StatsDrawer";
 import QRCodeModal from "../QRCodeModal";
@@ -22,9 +30,12 @@ const LinksTable = ({ links, statsShortId, statsLink }: LinksTableProps) => {
 	const [editDrawerOpen, setEditDrawerOpen] = useState(false);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
+	const [deleteAllModalOpen, setDeleteAllModalOpen] = useState(false);
 	const [selectedLink, setSelectedLink] = useState<LinkRecord | null>(null);
 	const [selectedIds, setSelectedIds] = useState<string[]>([]);
 	const [searchParams, setSearchParams] = useSearchParams();
+	const notifications = useNotification();
+	const [clearUrls, { isLoading: isDeletingAll }] = useClearUrlsMutation();
 
 	useEffect(() => {
 		if (!statsShortId) return;
@@ -103,6 +114,28 @@ const LinksTable = ({ links, statsShortId, statsLink }: LinksTableProps) => {
 		setSelectedIds([]);
 	};
 
+	const handleDeleteAll = async () => {
+		if (isDeletingAll) {
+			return;
+		}
+
+		setDeleteAllModalOpen(false);
+		setSelectedIds([]);
+
+		try {
+			await clearUrls().unwrap();
+			notifications.success(
+				__("Links deleted"),
+				__("All links have been removed.")
+			);
+		} catch (err) {
+			notifications.error(
+				__("Unable to delete links"),
+				getErrorMessage(err, __("Failed to delete all links."))
+			);
+		}
+	};
+
 	if (!links || links.length === 0) {
 		return <EmptyState />;
 	}
@@ -116,6 +149,7 @@ const LinksTable = ({ links, statsShortId, statsLink }: LinksTableProps) => {
 							selectedCount={selectedIds.length}
 							onSelectAll={handleSelectAll}
 							onBulkDelete={handleBulkDelete}
+							onDeleteAll={() => setDeleteAllModalOpen(true)}
 						/>
 					</thead>
 					<tbody className="links-table-body">
@@ -168,6 +202,18 @@ const LinksTable = ({ links, statsShortId, statsLink }: LinksTableProps) => {
 				setOpen={setBulkDeleteModalOpen}
 				selectedIds={selectedIds}
 				onSuccess={handleBulkDeleteSuccess}
+			/>
+			<ConfirmDialog
+				open={deleteAllModalOpen}
+				onClose={() => setDeleteAllModalOpen(false)}
+				title={__("Delete all links")}
+				description={__(
+					"Are you sure you want to delete all links? This action cannot be undone."
+				)}
+				confirmText={__("Delete all links")}
+				confirmVariant="danger"
+				onConfirm={handleDeleteAll}
+				loading={isDeletingAll}
 			/>
 		</div>
 	);

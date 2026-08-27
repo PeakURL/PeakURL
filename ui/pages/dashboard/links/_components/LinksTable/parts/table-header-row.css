@@ -20,15 +20,23 @@
 		@apply text-center;
 	}
 
-	.links-table-header-cell-count {
-		@apply px-4 py-3 text-sm font-medium text-accent;
-	}
-
 	.links-table-header-cell-actions {
-		@apply px-4 py-3 text-center;
+		@apply px-4 py-2.5 align-middle;
 	}
 
-	.links-table-header-delete {
-		@apply inline-flex items-center gap-1 text-xs font-medium text-error hover:text-red-700;
+	.links-table-header-actions-group {
+		@apply flex items-center justify-end gap-2.5;
+	}
+
+	.links-table-selection-count {
+		@apply inline-flex items-center rounded-full border border-accent/20 bg-accent/10 px-2.5 py-1 text-xs font-semibold normal-case tracking-normal text-accent;
+	}
+
+	.links-table-header-delete-selected {
+		@apply inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-error transition-colors hover:border-red-300 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:border-red-500/20 dark:bg-red-500/10 dark:hover:border-red-500/30 dark:hover:bg-red-500/15;
+	}
+
+	.links-table-header-delete-all {
+		@apply inline-flex items-center gap-1.5 rounded-lg border border-red-300 bg-surface px-3 py-1.5 text-xs font-semibold text-error transition-colors hover:border-red-400 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:border-red-500/30 dark:bg-surface-alt dark:hover:border-red-500/50 dark:hover:bg-red-500/10;
 	}
 }

@@ -237,6 +237,13 @@ export const urlsApi = baseApi.injectEndpoints({
 			}),
 			invalidatesTags: URL_LIST_CHANGE_TAGS,
 		}),
+		clearUrls: build.mutation<void, void>({
+			query: () => ({
+				url: API_ROUTES.urls.index,
+				method: "DELETE",
+			}),
+			invalidatesTags: URL_LIST_CHANGE_TAGS,
+		}),
 	}),
 });
 
@@ -249,4 +256,5 @@ export const {
 	useUpdateUrlMutation,
 	useDeleteUrlMutation,
 	useBulkDeleteUrlMutation,
+	useClearUrlsMutation,
 } = urlsApi;

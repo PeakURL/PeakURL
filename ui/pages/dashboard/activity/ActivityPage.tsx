@@ -29,6 +29,7 @@ import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import {
 	useBulkDeleteActivityLogsMutation,
+	useClearActivityLogsMutation,
 	useDeleteActivityLogMutation,
 	useGetActivityHistoryQuery,
 } from "@/store/slices/api";
@@ -39,6 +40,7 @@ import {
 	formatLocalizedDateTime,
 	getZonedDateKey,
 	getLinkDisplayTitle,
+	getErrorMessage,
 } from "@/utils";
 
 import type { ActivityPerson, RecentActivity } from "../_components/types";
@@ -339,6 +341,7 @@ function ActivityPage() {
 	const [activityPendingDelete, setActivityPendingDelete] =
 		useState<RecentActivity | null>(null);
 	const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
+	const [clearAllOpen, setClearAllOpen] = useState(false);
 	const [selectedActivityIds, setSelectedActivityIds] = useState<string[]>(
 		[]
 	);
@@ -394,6 +397,8 @@ function ActivityPage() {
 		useDeleteActivityLogMutation();
 	const [bulkDeleteActivityLogs, { isLoading: isBulkDeletingActivities }] =
 		useBulkDeleteActivityLogsMutation();
+	const [clearActivityLogs, { isLoading: isClearingAllActivities }] =
+		useClearActivityLogsMutation();
 
 	const items = historyRes?.data?.items ?? EMPTY_ACTIVITY_ITEMS;
 	const meta = {
@@ -421,7 +426,8 @@ function ActivityPage() {
 		isFetching ||
 		isAllSummaryFetching ||
 		isLinksSummaryFetching ||
-		isUsersSummaryFetching;
+		isUsersSummaryFetching ||
+		isClearingAllActivities;
 
 	useEffect(() => {
 		try {
@@ -492,6 +498,33 @@ function ActivityPage() {
 		setCurrentPage(Math.min(Math.max(page, 1), totalPages));
 	};
 
+	const pageSelectableIds = items
+		.map((item) => item.id)
+		.filter((id): id is string => Boolean(id));
+	const selectedPageCount = pageSelectableIds.filter((id) =>
+		selectedActivityIds.includes(id)
+	).length;
+	const isAllPageSelected =
+		pageSelectableIds.length > 0 &&
+		selectedPageCount === pageSelectableIds.length;
+	const isAllPageIndeterminate = selectedPageCount > 0 && !isAllPageSelected;
+
+	const handleToggleSelectAllPage = () => {
+		if (pageSelectableIds.length === 0) {
+			return;
+		}
+
+		if (isAllPageSelected) {
+			setSelectedActivityIds((previous) =>
+				previous.filter((id) => !pageSelectableIds.includes(id))
+			);
+		} else {
+			setSelectedActivityIds((previous) =>
+				Array.from(new Set([...previous, ...pageSelectableIds]))
+			);
+		}
+	};
+
 	const handleToggleSelectActivity = (activityId: string) => {
 		setSelectedActivityIds((previous) =>
 			previous.includes(activityId)
@@ -537,10 +570,13 @@ function ActivityPage() {
 				__("Activity deleted"),
 				__("The activity log entry has been removed.")
 			);
-		} catch (_error) {
+		} catch (error) {
 			notifications.error(
 				__("Unable to delete activity"),
-				__("The activity log entry could not be removed.")
+				getErrorMessage(
+					error,
+					__("The activity log entry could not be removed.")
+				)
 			);
 		}
 	};
@@ -565,10 +601,40 @@ function ActivityPage() {
 					String(countToDelete)
 				)
 			);
-		} catch (_error) {
+		} catch (error) {
 			notifications.error(
 				__("Unable to delete activity"),
-				__("The selected activity log entries could not be removed.")
+				getErrorMessage(
+					error,
+					__(
+						"The selected activity log entries could not be removed."
+					)
+				)
+			);
+		}
+	};
+
+	const handleClearAllActivities = async () => {
+		if (isClearingAllActivities) {
+			return;
+		}
+
+		setClearAllOpen(false);
+		setSelectedActivityIds([]);
+
+		try {
+			await clearActivityLogs().unwrap();
+			notifications.success(
+				__("Activity deleted"),
+				__("All activity log entries have been removed.")
+			);
+		} catch (error) {
+			notifications.error(
+				__("Unable to delete activity"),
+				getErrorMessage(
+					error,
+					__("The activity logs could not be removed.")
+				)
 			);
 		}
 	};
@@ -777,7 +843,16 @@ function ActivityPage() {
 									onClick={() => setBulkDeleteOpen(true)}
 									className="activity-page-selection-delete"
 								>
-									{__("Delete selected")}
+									<Trash2 size={13} />
+									<span>{__("Delete selected")}</span>
+								</button>
+								<button
+									type="button"
+									onClick={() => setClearAllOpen(true)}
+									className="activity-page-selection-delete-all"
+								>
+									<Trash2 size={13} />
+									<span>{__("Delete all")}</span>
 								</button>
 							</div>
 						) : null}
@@ -789,7 +864,25 @@ function ActivityPage() {
 								isAdmin && "activity-page-table-head-admin"
 							)}
 						>
-							<span aria-hidden="true"></span>
+							{isAdmin && pageSelectableIds.length > 0 ? (
+								<input
+									type="checkbox"
+									checked={isAllPageSelected}
+									onChange={handleToggleSelectAllPage}
+									ref={(node) => {
+										if (node) {
+											node.indeterminate =
+												isAllPageIndeterminate;
+										}
+									}}
+									className="links-checkbox"
+									aria-label={__(
+										"Select all events on this page"
+									)}
+								/>
+							) : (
+								<span aria-hidden="true"></span>
+							)}
 							<span>{__("Event")}</span>
 							<span>{__("Details")}</span>
 							<span>{__("When")}</span>
@@ -1242,6 +1335,18 @@ function ActivityPage() {
 				confirmVariant="danger"
 				onConfirm={handleBulkDeleteActivities}
 				loading={isBulkDeletingActivities}
+			/>
+			<ConfirmDialog
+				open={clearAllOpen}
+				onClose={() => setClearAllOpen(false)}
+				title={__("Delete all activity")}
+				description={__(
+					"Are you sure you want to delete all activity logs? This action cannot be undone."
+				)}
+				confirmText={__("Delete all activity")}
+				confirmVariant="danger"
+				onConfirm={handleClearAllActivities}
+				loading={isClearingAllActivities}
 			/>
 			<ConfirmDialog
 				open={Boolean(activityPendingDelete)}

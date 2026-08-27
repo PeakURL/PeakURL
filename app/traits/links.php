@@ -1508,6 +1508,49 @@ trait LinksTrait {
 	}
 
 	/**
+	 * Delete all accessible URLs.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return int Number of rows deleted.
+	 * @since 1.5.3
+	 */
+	public function clear_urls( Request $request ): int {
+		$user = $this->get_current_user( $request );
+
+		if ( ! $this->roles->has_capability( $user, 'delete_all_links' ) ) {
+			if ( ! $this->roles->has_capability( $user, 'delete_own_links' ) ) {
+				throw new ApiException(
+					__( 'You do not have permission to delete links.', 'peakurl' ),
+					403,
+				);
+			}
+
+			$ids = array_map(
+				'strval',
+				$this->db->get_col_by(
+					'urls',
+					'id',
+					array( 'user_id' => (string) $user['id'] ),
+				),
+			);
+		} else {
+			$ids = array_map(
+				'strval',
+				$this->db->get_col_by(
+					'urls',
+					'id',
+				),
+			);
+		}
+
+		if ( empty( $ids ) ) {
+			return 0;
+		}
+
+		return $this->bulk_delete_urls( $request, $ids );
+	}
+
+	/**
 	 * Build shared query parts for URL listing and export requests.
 	 *
 	 * @param Request              $request Incoming HTTP request.

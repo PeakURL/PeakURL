@@ -308,6 +308,19 @@ trait AnalyticsTrait {
 	}
 
 	/**
+	 * Delete all audit-log rows (admin only).
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return int Number of deleted rows.
+	 * @since 1.5.3
+	 */
+	public function clear_activity_logs( Request $request ): int {
+		$this->get_admin_user( $request );
+
+		return $this->db->truncate( 'audit_logs' );
+	}
+
+	/**
 	 * Get the scoped FROM / WHERE clauses used by activity queries.
 	 *
 	 * Editors only see activity tied to their own user ID or links. Admins

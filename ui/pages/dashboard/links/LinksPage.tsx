@@ -1,12 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useSearchParams } from "react-router";
 import { CircleCheckBig, Link2, MousePointerClick, Users } from "lucide-react";
+
 import { DEFAULT_PAGE_SIZE_OPTIONS, normalizePageSize } from "@/components";
-// LocalStorage keys for persistence (defined outside component to satisfy hook deps)
-const LS_KEYS = {
-	sortBy: "admin_links_sortBy",
-	sortOrder: "admin_links_sortOrder",
-	limit: "admin_links_limit",
-};
+import { __ } from "@/i18n";
+import type { AppDispatch } from "@/store";
+import { urlsApi, useGetUrlQuery, useGetUrlsQuery } from "@/store/slices/api";
+import type { GetUrlsQueryArgs } from "@/store/slices/api";
+import { formatCount } from "@/utils";
+
 import {
 	Header,
 	UrlShorteningForm,
@@ -15,12 +18,6 @@ import {
 	Pagination,
 	LinksSkeleton,
 } from "./_components";
-
-import { useGetUrlQuery, useGetUrlsQuery } from "@/store/slices/api";
-import type { GetUrlsQueryArgs } from "@/store/slices/api";
-import { useSearchParams } from "react-router";
-import { __ } from "@/i18n";
-import { formatCount } from "@/utils";
 import type {
 	LinkRecord,
 	LinksCustomDateRange,
@@ -30,6 +27,13 @@ import type {
 	LinksSortOrder,
 } from "./_components/types";
 import type { GetUrlsResponse } from "./types";
+
+// LocalStorage keys for persistence (defined outside component to satisfy hook deps)
+const LS_KEYS = {
+	sortBy: "admin_links_sortBy",
+	sortOrder: "admin_links_sortOrder",
+	limit: "admin_links_limit",
+};
 
 const DATE_RANGE_DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -52,6 +56,8 @@ function getDefaultCustomClickRange(): LinksCustomDateRange {
 }
 
 function LinksPage() {
+	const dispatch = useDispatch<AppDispatch>();
+
 	// State for Sorting and Pagination
 	const [sortBy, setSortBy] = useState<LinksSortBy>(() =>
 		typeof window !== "undefined"
@@ -175,8 +181,14 @@ function LinksPage() {
 		const startedAt = Date.now();
 
 		try {
-			await Promise.all([
+			await Promise.allSettled([
 				refetchUrls(),
+				dispatch(
+					urlsApi.endpoints.getUrls.initiate(undefined, {
+						subscribe: false,
+						forceRefetch: true,
+					})
+				),
 				statsShortId ? refetchStatsLookup() : Promise.resolve(),
 			]);
 		} finally {

@@ -140,6 +140,32 @@ export const urlsApi = baseApi.injectEndpoints({
 
 				return [URL_LIST_TAG, ...items.map((url) => urlTag(url.id))];
 			},
+			async onQueryStarted(args, { dispatch, queryFulfilled }) {
+				try {
+					const { data } = await queryFulfilled;
+					const meta = data?.data?.meta;
+					const totalItems = meta?.totalItems;
+					const hasSearch =
+						typeof args?.search === "string" &&
+						args.search.trim().length > 0;
+
+					if (typeof totalItems === "number" && !hasSearch) {
+						dispatch(
+							urlsApi.util.updateQueryData(
+								"getUrls",
+								undefined,
+								(draft) => {
+									if (draft?.data?.meta) {
+										draft.data.meta.totalItems = totalItems;
+									} else if (draft?.data && meta) {
+										draft.data.meta = { ...meta };
+									}
+								}
+							)
+						);
+					}
+				} catch {}
+			},
 		}),
 		getUrl: build.query<UrlResponse, string>({
 			query: (id) => API_ROUTES.urls.byId(id),

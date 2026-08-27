@@ -702,8 +702,7 @@ trait AnalyticsTrait {
 	            FROM clicks
 	            WHERE ' . $where_clause . '
 	            GROUP BY name, country
-	            ORDER BY count DESC, name ASC
-	            LIMIT 20',
+	            ORDER BY count DESC, name ASC',
 				$private_network_condition,
 			),
 			$params,

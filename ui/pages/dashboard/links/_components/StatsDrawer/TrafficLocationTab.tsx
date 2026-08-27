@@ -9,6 +9,7 @@ import { formatCount, getCountryFlagEmoji, getErrorMessage } from "@/utils";
 
 import type {
 	CityLocation,
+	CountryLocation,
 	HoveredCountry,
 	TrafficLocationTabProps,
 } from "./types";
@@ -27,7 +28,48 @@ interface CityListItemProps {
 	rank: number;
 }
 
+interface CountryListItemProps {
+	country: CountryLocation;
+	percent: string | number;
+	getFlagEmoji: (countryCode?: string | null) => React.ReactNode;
+}
+
+const COUNTRY_LIST_PREVIEW_LIMIT = 5;
 const CITY_LIST_PREVIEW_LIMIT = 10;
+
+function CountryListItem({
+	country,
+	percent,
+	getFlagEmoji,
+}: CountryListItemProps) {
+	return (
+		<div className="links-location-list-item">
+			<div className="links-location-list-row">
+				<div className="links-location-list-main">
+					{getFlagEmoji(country.code)}
+					<span className="text-sm font-medium text-heading">
+						{country.name}
+					</span>
+					<span className="text-xs text-text-muted">
+						({country.code})
+					</span>
+				</div>
+				<div className="links-location-list-meta">
+					<span className="text-sm text-text-muted">{percent}%</span>
+					<span className="links-location-list-count">
+						{formatClickCount(country.count)}
+					</span>
+				</div>
+			</div>
+			<div className="links-drawer-bar-track">
+				<div
+					className="links-drawer-bar-fill bg-primary-600"
+					style={{ width: `${percent}%` }}
+				></div>
+			</div>
+		</div>
+	);
+}
 
 function CityListItem({ city, percent, rank }: CityListItemProps) {
 	return (
@@ -81,9 +123,13 @@ function TrafficLocationTab({
 	const [hoveredCountry, setHoveredCountry] = useState<HoveredCountry | null>(
 		null
 	);
+	const [expandedCountryListLinkId, setExpandedCountryListLinkId] = useState<
+		string | null
+	>(null);
 	const [expandedCityListLinkId, setExpandedCityListLinkId] = useState<
 		string | null
 	>(null);
+	const showAllCountries = expandedCountryListLinkId === link?.id;
 	const showAllCities = expandedCityListLinkId === link?.id;
 
 	const locationQueryArgs = useMemo(
@@ -137,7 +183,8 @@ function TrafficLocationTab({
 
 	const payload = data?.data || {};
 	const allCountries = payload.countries || [];
-	const countries = allCountries.slice(0, 5);
+	const hasMoreCountries = allCountries.length > COUNTRY_LIST_PREVIEW_LIMIT;
+	const topCountries = allCountries.slice(0, COUNTRY_LIST_PREVIEW_LIMIT);
 	const cities = payload.cities || [];
 	const hasMoreCities = cities.length > CITY_LIST_PREVIEW_LIMIT;
 	const topCities = cities.slice(0, CITY_LIST_PREVIEW_LIMIT);
@@ -350,42 +397,69 @@ function TrafficLocationTab({
 					</h3>
 				</div>
 				<div className="links-location-list">
-					{countries.map((country) => {
-						const percent = getPercentage(country.count);
-						return (
-							<div
-								key={`${country.code}-${country.name}`}
-								className="links-location-list-item"
-							>
-								<div className="links-location-list-row">
-									<div className="links-location-list-main">
-										{getFlagEmoji(country.code)}
-										<span className="text-sm font-medium text-heading">
-											{country.name}
-										</span>
-										<span className="text-xs text-text-muted">
-											({country.code})
-										</span>
-									</div>
-									<div className="links-location-list-meta">
-										<span className="text-sm text-text-muted">
-											{percent}%
-										</span>
-										<span className="links-location-list-count">
-											{formatClickCount(country.count)}
-										</span>
-									</div>
-								</div>
-								<div className="links-drawer-bar-track">
-									<div
-										className="links-drawer-bar-fill bg-primary-600"
-										style={{ width: `${percent}%` }}
-									></div>
-								</div>
-							</div>
-						);
-					})}
+					{topCountries.map((country) => (
+						<CountryListItem
+							key={`${country.code}-${country.name}`}
+							country={country}
+							percent={getPercentage(country.count)}
+							getFlagEmoji={getFlagEmoji}
+						/>
+					))}
 				</div>
+				{hasMoreCountries ? (
+					<p className="links-location-country-summary">
+						<button
+							type="button"
+							className="links-location-country-toggle"
+							onClick={() =>
+								setExpandedCountryListLinkId((currentLinkId) =>
+									currentLinkId === link.id ? null : link.id
+								)
+							}
+						>
+							{showAllCountries
+								? __("Hide details")
+								: sprintf(
+										__("View all %s countries"),
+										formatCount(allCountries.length)
+									)}
+							{showAllCountries ? (
+								<ChevronUp className="w-3 h-3" />
+							) : (
+								<ChevronDown className="w-3 h-3" />
+							)}
+						</button>
+					</p>
+				) : null}
+
+				{showAllCountries ? (
+					<div className="links-detail-list links-location-country-details">
+						<div className="links-detail-row">
+							<div className="links-detail-heading">
+								<span
+									className="links-detail-marker links-detail-marker-primary"
+									aria-hidden="true"
+								></span>
+								<h4 className="links-detail-title">
+									{__("All countries")}
+								</h4>
+							</div>
+							<span className="links-detail-total">
+								{formatCount(allCountries.length)}
+							</span>
+						</div>
+						<div className="links-location-list links-location-country-details-list">
+							{allCountries.map((country) => (
+								<CountryListItem
+									key={`${country.code}-${country.name}-details`}
+									country={country}
+									percent={getPercentage(country.count)}
+									getFlagEmoji={getFlagEmoji}
+								/>
+							))}
+						</div>
+					</div>
+				) : null}
 			</div>
 
 			{/* Top Cities */}

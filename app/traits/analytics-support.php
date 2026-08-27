@@ -256,13 +256,15 @@ trait AnalyticsSupportTrait {
 	 * @param string|null $range            Requested dashboard period token.
 	 * @param string|null $custom_date_from Custom start date in YYYY-MM-DD format.
 	 * @param string|null $custom_date_to   Custom end date in YYYY-MM-DD format.
-	 * @return array{key: string, days: int, start_at: string|null, end_at: string|null, start_date: string|null, end_date: string|null}
+	 * @param string|null $created_at       Link creation timestamp for all-time bounds.
+	 * @return array{key: string, days: int, start_at: string|null, end_at: string|null, start_date: string|null, end_date: string|null, series_start_at?: string}
 	 * @since 1.1.0
 	 */
 	private function get_link_stats_period(
 		?string $range,
 		?string $custom_date_from = null,
-		?string $custom_date_to = null
+		?string $custom_date_to = null,
+		?string $created_at = null
 	): array {
 		$range = sanitize_key( (string) $range );
 
@@ -275,6 +277,21 @@ trait AnalyticsSupportTrait {
 			if ( null !== $custom_period ) {
 				return $custom_period;
 			}
+		}
+
+		if ( 'all' === $range ) {
+			$lifetime_days = $created_at ? $this->get_link_lifetime_days( $created_at ) : 30;
+			$period        = $this->get_analytics_period( $lifetime_days );
+
+			return array(
+				'key'             => 'all',
+				'days'            => $lifetime_days,
+				'start_at'        => null,
+				'end_at'          => null,
+				'start_date'      => $period['start_date'],
+				'end_date'        => null,
+				'series_start_at' => $period['start_at'],
+			);
 		}
 
 		if ( '24h' === $range ) {

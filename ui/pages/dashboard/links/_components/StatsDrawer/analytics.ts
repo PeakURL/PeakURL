@@ -46,12 +46,13 @@ export function getStatsTimeRangeDays(
 	createdAt?: string | null
 ): number {
 	switch (range) {
+		case "all":
+		case "custom":
+			return getLinkAgeInDays(createdAt);
 		case "24h":
 			return 1;
 		case "30d":
 			return 30;
-		case "custom":
-			return getLinkAgeInDays(createdAt);
 		case "7d":
 		default:
 			return 7;
@@ -60,6 +61,8 @@ export function getStatsTimeRangeDays(
 
 export function getStatsTimeRangeLabel(range: StatsTimeRange): string {
 	switch (range) {
+		case "all":
+			return __("All time");
 		case "24h":
 			return __("24 hours");
 		case "30d":

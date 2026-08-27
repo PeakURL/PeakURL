@@ -1,5 +1,9 @@
 import type { ChangeEvent } from "react";
-import type { LinkRecord } from "../types";
+import type {
+	LinkRecord,
+	LinksCustomDateRange,
+	LinksDateRange,
+} from "../types";
 
 /**
  * Props for the links table container component.
@@ -8,6 +12,8 @@ export interface LinksTableProps {
 	links: LinkRecord[];
 	statsShortId: string | null;
 	statsLink: LinkRecord | null;
+	clickRange?: LinksDateRange;
+	customClickRange?: LinksCustomDateRange;
 }
 
 /**

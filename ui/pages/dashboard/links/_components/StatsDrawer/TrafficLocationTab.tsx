@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ChevronDown, ChevronUp, Globe, MapPin } from "lucide-react";
 
 import { WorldMap } from "@/components";
@@ -74,6 +74,8 @@ function TrafficLocationTab({
 	link,
 	selectedTab,
 	open,
+	timeRange = "7d",
+	customDateRange,
 }: TrafficLocationTabProps) {
 	const direction = isDocumentRtl() ? "rtl" : "ltr";
 	const [hoveredCountry, setHoveredCountry] = useState<HoveredCountry | null>(
@@ -83,10 +85,32 @@ function TrafficLocationTab({
 		string | null
 	>(null);
 	const showAllCities = expandedCityListLinkId === link?.id;
+
+	const locationQueryArgs = useMemo(
+		() =>
+			timeRange === "custom"
+				? {
+						id: link?.id || "",
+						range: "custom" as const,
+						from: customDateRange?.from || "",
+						to: customDateRange?.to || "",
+					}
+				: {
+						id: link?.id || "",
+						range: timeRange,
+					},
+		[link?.id, timeRange, customDateRange?.from, customDateRange?.to]
+	);
+
 	// RTK Query hook
-	const canFetchLocation = open && selectedTab === 1 && !!link?.id;
+	const canFetchLocation =
+		open &&
+		selectedTab === 1 &&
+		!!link?.id &&
+		(timeRange !== "custom" ||
+			(!!customDateRange?.from && !!customDateRange?.to));
 	const { data, isLoading, isError, error } = useGetLinkLocationQuery(
-		link?.id || "",
+		locationQueryArgs,
 		{ skip: !canFetchLocation }
 	);
 

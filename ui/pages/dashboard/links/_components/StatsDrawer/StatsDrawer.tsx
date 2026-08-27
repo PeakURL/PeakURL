@@ -87,12 +87,20 @@ function getDefaultCustomDateRange(
 	return from > today ? { from: today, to: today } : { from, to: today };
 }
 
-export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
+export default function StatsDrawer({
+	open,
+	setOpen,
+	link,
+	pageClickRange,
+	pageCustomClickRange,
+}: StatsDrawerProps) {
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [copiedKey, setCopiedKey] = useTemporaryState<
 		"short" | "destination" | null
 	>(null);
-	const [timeRange, setTimeRange] = useState<StatsTimeRange>("7d");
+	const [timeRange, setTimeRange] = useState<StatsTimeRange>(
+		pageClickRange || "7d"
+	);
 	const linkId = link?.id || "";
 	const createdAt = link?.createdAt;
 	const defaultCustomDateRange = useMemo(
@@ -101,6 +109,26 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 	);
 	const [customDateRange, setCustomDateRange] =
 		usePerLinkState<StatsCustomDateRange>(linkId, defaultCustomDateRange);
+
+	const syncKey = `${linkId}:${pageClickRange || "7d"}:${open ? "open" : "closed"}`;
+	const [prevSyncKey, setPrevSyncKey] = useState(syncKey);
+
+	if (prevSyncKey !== syncKey) {
+		setPrevSyncKey(syncKey);
+		if (open && pageClickRange) {
+			setTimeRange(pageClickRange);
+			if (
+				pageClickRange === "custom" &&
+				pageCustomClickRange?.from &&
+				pageCustomClickRange?.to
+			) {
+				setCustomDateRange({
+					from: pageCustomClickRange.from,
+					to: pageCustomClickRange.to,
+				});
+			}
+		}
+	}
 
 	const handleCopy = useCallback(
 		async (url: string, key: "short" | "destination") => {
@@ -469,6 +497,10 @@ export default function StatsDrawer({ open, setOpen, link }: StatsDrawerProps) {
 													link={link}
 													selectedTab={selectedTab}
 													open={open}
+													timeRange={timeRange}
+													customDateRange={
+														customDateRange
+													}
 												/>
 											</TabPanel>
 

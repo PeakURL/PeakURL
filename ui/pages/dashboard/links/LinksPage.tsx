@@ -360,6 +360,8 @@ function LinksPage() {
 				links={paginatedLinks}
 				statsShortId={statsShortId}
 				statsLink={statsLink}
+				clickRange={clickRange}
+				customClickRange={customClickRange}
 			/>
 
 			<TableFooter

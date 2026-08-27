@@ -37,6 +37,27 @@ function getLinkStatsRoute({ id, ...args }: LinkAnalyticsArgs): string {
 }
 
 /**
+ * Return the link-location route with optional range query parameters.
+ */
+function getLinkLocationRoute(arg: string | LinkAnalyticsArgs): string {
+	if (typeof arg === "string") {
+		return API_ROUTES.analytics.linkLocation(arg);
+	}
+
+	const { id, ...args } = arg;
+	const params = createApiQueryParams({
+		range: args.range,
+		from: "custom" === args.range ? args.from : undefined,
+		to: "custom" === args.range ? args.to : undefined,
+	});
+
+	return buildApiRouteWithQuery(
+		API_ROUTES.analytics.linkLocation(id),
+		params
+	);
+}
+
+/**
  * Return the activity-history route with pagination query parameters.
  */
 function getActivityHistoryRoute({
@@ -122,10 +143,16 @@ export const analyticsApi = baseApi.injectEndpoints({
 			}),
 			invalidatesTags: ANALYTICS_TAGS,
 		}),
-		getLinkLocation: build.query<{ data?: LinkLocationPayload }, string>({
-			query: (id) => API_ROUTES.analytics.linkLocation(id),
-			providesTags: (_result, _error, id) =>
-				getLinkAnalyticsTags("location", id),
+		getLinkLocation: build.query<
+			{ data?: LinkLocationPayload },
+			string | LinkAnalyticsArgs
+		>({
+			query: getLinkLocationRoute,
+			providesTags: (_result, _error, arg) =>
+				getLinkAnalyticsTags(
+					"location",
+					typeof arg === "string" ? arg : arg.id
+				),
 		}),
 		getLinkStats: build.query<LinkStatsResponse, LinkAnalyticsArgs>({
 			query: getLinkStatsRoute,

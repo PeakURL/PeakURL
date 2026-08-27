@@ -29,6 +29,7 @@ import type {
 } from "./types";
 
 const timeRangeOptions: Array<{ label: string; value: StatsTimeRange }> = [
+	{ label: __("All"), value: "all" },
 	{ label: __("24h"), value: "24h" },
 	{ label: __("7d"), value: "7d" },
 	{ label: __("30d"), value: "30d" },

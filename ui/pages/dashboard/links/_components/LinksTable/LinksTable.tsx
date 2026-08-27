@@ -23,7 +23,13 @@ import EmptyState from "./parts/EmptyState";
 import type { LinkRecord } from "../types";
 import type { LinksTableProps } from "./types";
 
-const LinksTable = ({ links, statsShortId, statsLink }: LinksTableProps) => {
+const LinksTable = ({
+	links,
+	statsShortId,
+	statsLink,
+	clickRange,
+	customClickRange,
+}: LinksTableProps) => {
 	const [copiedId, setCopiedId] = useState<string | null>(null);
 	const [statsDrawerOpen, setStatsDrawerOpen] = useState(false);
 	const [qrModalOpen, setQrModalOpen] = useState(false);
@@ -176,6 +182,8 @@ const LinksTable = ({ links, statsShortId, statsLink }: LinksTableProps) => {
 				open={statsDrawerOpen}
 				setOpen={setStatsDrawerOpen}
 				link={selectedLink}
+				pageClickRange={clickRange}
+				pageCustomClickRange={customClickRange}
 			/>
 			<QRCodeModal
 				open={qrModalOpen}

@@ -1,10 +1,11 @@
 import type { Dispatch, SetStateAction } from "react";
 import type { LinkRecord } from "@/api";
+import type { LinksCustomDateRange, LinksDateRange } from "../types";
 
 /**
  * Supported time ranges for filtering statistics.
  */
-export type StatsTimeRange = "24h" | "7d" | "30d" | "custom";
+export type StatsTimeRange = "all" | "24h" | "7d" | "30d" | "custom";
 
 /**
  * Date-only range used by the custom traffic-history filter.
@@ -245,6 +246,8 @@ export interface StatsDrawerProps {
 	open: boolean;
 	setOpen: (open: boolean) => void;
 	link: LinkRecord | null;
+	pageClickRange?: LinksDateRange;
+	pageCustomClickRange?: LinksCustomDateRange;
 }
 
 /**
@@ -313,6 +316,8 @@ export interface TrafficLocationTabProps {
 	link: LinkRecord | null;
 	selectedTab: number;
 	open: boolean;
+	timeRange?: StatsTimeRange;
+	customDateRange?: StatsCustomDateRange;
 }
 
 /**

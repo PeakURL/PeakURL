@@ -185,9 +185,15 @@ class AnalyticsController extends BaseController {
 	 * @since 1.0.0
 	 */
 	public function location( Request $request ): array {
-		$location = $this->data_store->link_location(
+		$range            = trim( (string) $request->get_query_param( 'range', '' ) );
+		$custom_date_from = trim( (string) $request->get_query_param( 'from', '' ) );
+		$custom_date_to   = trim( (string) $request->get_query_param( 'to', '' ) );
+		$location         = $this->data_store->link_location(
 			$request,
 			$this->route_param( $request, 'id' ),
+			$range,
+			$custom_date_from,
+			$custom_date_to,
 		);
 
 		return $this->found_response(

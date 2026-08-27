@@ -457,6 +457,7 @@ trait AnalyticsTrait {
 			$range,
 			$custom_date_from,
 			$custom_date_to,
+			(string) ( $url['created_at'] ?? '' ),
 		);
 		$url_id           = (string) $url['id'];
 		$period_start_at  = $stats_period['start_at'];
@@ -519,10 +520,23 @@ trait AnalyticsTrait {
 						(int) $stats_period['days'],
 					),
 				)
-				: $this->query_traffic_series(
-					$url_id,
-					$stats_period['days'],
-				),
+				: ( 'all' === $stats_period['key']
+					? $this->query_traffic_series_range(
+						$url_id,
+						(string) $stats_period['start_date'],
+						(int) $stats_period['days'],
+						(string) ( $stats_period['series_start_at'] ?? '1000-01-01 00:00:00' ),
+						null,
+						$this->get_analytics_timezone()->getName(),
+						null,
+						$this->get_traffic_series_granularity(
+							(int) $stats_period['days'],
+						),
+					)
+					: $this->query_traffic_series(
+						$url_id,
+						$stats_period['days'],
+					) ),
 			'periodSummaries'    => $this->get_link_period_summaries(
 				$url_id,
 				(string) ( $url['created_at'] ?? '' ),
@@ -581,15 +595,24 @@ trait AnalyticsTrait {
 	 *
 	 * Returns country and city breakdowns for clicks on a specific short link.
 	 *
-	 * @param Request $request Incoming HTTP request.
-	 * @param string  $id      Short-URL row ID.
+	 * @param Request     $request          Incoming HTTP request.
+	 * @param string      $id               Short-URL row ID.
+	 * @param string|null $range            Optional timeframe key.
+	 * @param string|null $custom_date_from Optional custom start date.
+	 * @param string|null $custom_date_to   Optional custom end date.
 	 * @return array<string, mixed>|null Location data or null if not found.
 	 * @since 1.0.0
 	 */
-	public function link_location( Request $request, string $id ): ?array {
+	public function link_location(
+		Request $request,
+		string $id,
+		?string $range = null,
+		?string $custom_date_from = null,
+		?string $custom_date_to = null
+	): ?array {
 		$user = $this->get_current_user( $request );
 		$url  = $this->query_one(
-			'SELECT id, user_id FROM urls
+			'SELECT id, user_id, created_at FROM urls
 	            WHERE id = :url_id OR short_code = :short_code OR alias = :alias
 	            LIMIT 1',
 			array(
@@ -611,6 +634,29 @@ trait AnalyticsTrait {
 			__( 'You do not have permission to view analytics for this link.', 'peakurl' ),
 		);
 
+		$stats_period    = $this->get_link_stats_period(
+			$range,
+			$custom_date_from,
+			$custom_date_to,
+			(string) ( $url['created_at'] ?? '' ),
+		);
+		$period_start_at = $stats_period['start_at'];
+		$period_end_at   = $stats_period['end_at'];
+
+		$conditions = array( 'url_id = :url_id' );
+		$params     = array( 'url_id' => $url['id'] );
+
+		if ( null !== $period_start_at ) {
+			$conditions[]       = 'clicked_at >= :start_at';
+			$params['start_at'] = $period_start_at;
+		}
+
+		if ( null !== $period_end_at ) {
+			$conditions[]     = 'clicked_at < :end_at';
+			$params['end_at'] = $period_end_at;
+		}
+
+		$where_clause              = implode( ' AND ', $conditions );
 		$private_network_condition = $this->private_network_ip_sql(
 			'ip_address',
 		);
@@ -631,12 +677,12 @@ trait AnalyticsTrait {
 	                END AS name,
 	                COUNT(*) AS count
 	            FROM clicks
-	            WHERE url_id = :url_id
+	            WHERE ' . $where_clause . '
 	            GROUP BY code, name
 	            ORDER BY count DESC, name ASC',
 				$private_network_condition,
 			),
-			array( 'url_id' => $url['id'] ),
+			$params,
 		);
 		$cities    = $this->query_all(
 			sprintf(
@@ -654,17 +700,17 @@ trait AnalyticsTrait {
 	                END AS country,
 	                COUNT(*) AS count
 	            FROM clicks
-	            WHERE url_id = :url_id
+	            WHERE ' . $where_clause . '
 	            GROUP BY name, country
 	            ORDER BY count DESC, name ASC
 	            LIMIT 20',
 				$private_network_condition,
 			),
-			array( 'url_id' => $url['id'] ),
+			$params,
 		);
 		$total     = (int) $this->query_value(
-			'SELECT COUNT(*) FROM clicks WHERE url_id = :url_id',
-			array( 'url_id' => $url['id'] ),
+			'SELECT COUNT(*) FROM clicks WHERE ' . $where_clause,
+			$params,
 		);
 
 		return array(

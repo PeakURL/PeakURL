@@ -659,7 +659,11 @@ if ( '/' === $relative_path && InstallState::READY === $install_state ) {
 		$landing_page_file = ABSPATH . 'content/landing-page.html';
 		if ( file_exists( $landing_page_file ) ) {
 			header( 'Content-Type: text/html; charset=utf-8' );
-			readfile( $landing_page_file );
+			if ( function_exists( 'get_landing_page_html' ) ) {
+				echo get_landing_page_html( $landing_page_file, $app_config, $connection );
+			} else {
+				readfile( $landing_page_file );
+			}
 			exit();
 		}
 	}

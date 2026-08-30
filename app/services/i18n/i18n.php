@@ -204,7 +204,7 @@ class I18n {
 	 */
 	public function load_locale( ?string $locale = null ): string {
 		$locale_name = null === $locale
-			? $this->get_site_locale()
+			? ( '' !== $this->locale && null !== $this->catalog ? $this->locale : $this->get_site_locale() )
 			: $this->normalize_locale( $locale );
 
 		if ( $locale_name === $this->locale && null !== $this->catalog ) {
@@ -224,7 +224,7 @@ class I18n {
 	 * @since 1.0.14
 	 */
 	public function get_current_locale(): string {
-		if ( '' === $this->locale ) {
+		if ( '' === $this->locale || null === $this->catalog ) {
 			$this->load_locale();
 		}
 
@@ -245,7 +245,9 @@ class I18n {
 		?string $context = null,
 		?string $locale = null
 	): string {
-		$this->load_locale( $locale );
+		if ( null !== $locale || null === $this->catalog ) {
+			$this->load_locale( $locale );
+		}
 
 		if ( null === $this->catalog ) {
 			return $text;
@@ -280,7 +282,9 @@ class I18n {
 		?string $context = null,
 		?string $locale = null
 	): string {
-		$locale_name = $this->load_locale( $locale );
+		if ( null !== $locale || null === $this->catalog ) {
+			$this->load_locale( $locale );
+		}
 
 		if ( null === $this->catalog ) {
 			return 1 === abs( $number ) ? $single : $plural;

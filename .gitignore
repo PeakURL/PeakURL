@@ -9,6 +9,9 @@ lerna-debug.log*
 
 .playwright-*
 
+content/languages/*.json
+content/languages/*.mo
+
 node_modules
 dist
 dist-ssr

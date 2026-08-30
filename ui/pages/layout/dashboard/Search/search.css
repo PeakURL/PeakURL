@@ -26,6 +26,11 @@
 		inset-inline-end: 0.75rem;
 	}
 
+	.dashboard-search-shortcut {
+		@apply pointer-events-none absolute top-1/2 -translate-y-1/2 hidden sm:inline-flex items-center rounded border border-stroke bg-surface px-1.5 py-0.5 font-mono text-[11px] font-medium text-text-muted select-none;
+		inset-inline-end: 0.75rem;
+	}
+
 	.dashboard-search-panel {
 		@apply absolute left-0 right-0 top-full z-40 mt-2 overflow-hidden rounded-xl border border-stroke bg-surface shadow-xl;
 	}

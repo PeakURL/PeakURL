@@ -14,7 +14,7 @@ import {
 import { useDashboardSearch } from "@/hooks";
 import { getDocumentDirection, isDocumentRtl } from "@/i18n/direction";
 import { __, sprintf } from "@/i18n";
-import { cn } from "@/utils";
+import { cn, getSearchShortcutLabel } from "@/utils";
 
 import type { ResultButtonProps, ResultSectionProps } from "../types";
 
@@ -69,6 +69,8 @@ function ResultSection({ title, children }: ResultSectionProps) {
 export const Search = () => {
 	const direction = getDocumentDirection();
 	const containerRef = useRef<HTMLDivElement | null>(null);
+	const inputRef = useRef<HTMLInputElement | null>(null);
+	const shortcutLabel = getSearchShortcutLabel();
 	const {
 		query,
 		isOpen,
@@ -105,6 +107,27 @@ export const Search = () => {
 		};
 	}, [clearSearch]);
 
+	useEffect(() => {
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (
+				(event.metaKey || event.ctrlKey) &&
+				!event.altKey &&
+				!event.shiftKey &&
+				"k" === event.key.toLowerCase()
+			) {
+				event.preventDefault();
+				inputRef.current?.focus();
+				inputRef.current?.select();
+			}
+		};
+
+		window.addEventListener("keydown", handleKeyDown);
+
+		return () => {
+			window.removeEventListener("keydown", handleKeyDown);
+		};
+	}, []);
+
 	const toolMatches = routeMatches.filter((item) => item.section === "tools");
 	const pageMatches = routeMatches.filter((item) => item.section !== "tools");
 	const hasResults =
@@ -132,6 +155,7 @@ export const Search = () => {
 						className="dashboard-search-field-icon"
 					/>
 					<input
+						ref={inputRef}
 						type="text"
 						dir={query ? "auto" : direction}
 						value={query}
@@ -142,6 +166,7 @@ export const Search = () => {
 								clearSearch({
 									resetLinksSearch: false,
 								});
+								inputRef.current?.blur();
 							}
 						}}
 						placeholder={__("Search links, settings...")}
@@ -151,17 +176,25 @@ export const Search = () => {
 					{query ? (
 						<button
 							type="button"
-							onClick={() =>
+							onClick={() => {
 								clearSearch({
 									resetLinksSearch: true,
-								})
-							}
+								});
+								inputRef.current?.focus();
+							}}
 							className="dashboard-search-clear"
 							aria-label={__("Clear search")}
 						>
 							<X size={15} />
 						</button>
-					) : null}
+					) : (
+						<kbd
+							className="dashboard-search-shortcut"
+							aria-hidden="true"
+						>
+							{shortcutLabel}
+						</kbd>
+					)}
 				</div>
 			</form>
 

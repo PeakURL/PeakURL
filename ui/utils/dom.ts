@@ -89,3 +89,38 @@ export function downloadBrowserFile(
 	document.body.removeChild(link);
 	window.URL.revokeObjectURL(blobUrl);
 }
+
+/**
+ * Determine whether the current runtime environment is running on a Mac/iOS platform.
+ *
+ * @return True if the operating system is macOS or iOS.
+ */
+export function isMacPlatform(): boolean {
+	if ("undefined" === typeof navigator) {
+		return false;
+	}
+
+	const userAgentData = (
+		navigator as unknown as { userAgentData?: { platform?: string } }
+	).userAgentData;
+	if (userAgentData?.platform) {
+		return /mac/i.test(userAgentData.platform);
+	}
+
+	const platform =
+		(navigator as unknown as { platform?: string }).platform || "";
+	if (/mac|iphone|ipad|ipod/i.test(platform)) {
+		return true;
+	}
+
+	return /macintosh|mac os x/i.test(navigator.userAgent || "");
+}
+
+/**
+ * Get the platform-specific search keyboard shortcut label.
+ *
+ * @return '⌘K' for macOS/iOS, or 'Ctrl+K' for other environments.
+ */
+export function getSearchShortcutLabel(): string {
+	return isMacPlatform() ? "⌘K" : "Ctrl+K";
+}

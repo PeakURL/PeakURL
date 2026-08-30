@@ -14,10 +14,10 @@ interface DateRangeFilterProps {
 	onCustomClickRangeChange: (range: LinksCustomDateRange) => void;
 }
 
-const RANGE_OPTIONS: Array<{
+const getRangeOptions = (): Array<{
 	value: Exclude<LinksDateRange, "custom">;
 	label: string;
-}> = [
+}> => [
 	{ value: "all", label: __("All") },
 	{ value: "24h", label: __("24h") },
 	{ value: "7d", label: __("7d") },
@@ -52,6 +52,7 @@ const DateRangeFilter = ({
 	onClickRangeChange,
 	onCustomClickRangeChange,
 }: DateRangeFilterProps) => {
+	const rangeOptions = getRangeOptions();
 	const [draftRange, setDraftRange] =
 		useState<LinksCustomDateRange>(customClickRange);
 	const canApply = Boolean(draftRange.from && draftRange.to);
@@ -77,7 +78,7 @@ const DateRangeFilter = ({
 
 	return (
 		<div className="links-date-range">
-			{RANGE_OPTIONS.map((range) => (
+			{rangeOptions.map((range) => (
 				<button
 					key={range.value}
 					type="button"

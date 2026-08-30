@@ -28,18 +28,21 @@ import type {
 	StatsTimeRange,
 } from "./types";
 
-const timeRangeOptions: Array<{ label: string; value: StatsTimeRange }> = [
+const getTimeRangeOptions = (): Array<{
+	label: string;
+	value: StatsTimeRange;
+}> => [
 	{ label: __("All"), value: "all" },
 	{ label: __("24h"), value: "24h" },
 	{ label: __("7d"), value: "7d" },
 	{ label: __("30d"), value: "30d" },
 ];
 
-const seriesOptions: Array<{
+const getSeriesOptions = (): Array<{
 	label: string;
 	value: TrafficChartSeriesMode;
 	icon: LucideIcon;
-}> = [
+}> => [
 	{ label: __("Both"), value: "both", icon: BarChart3 },
 	{ label: __("Clicks"), value: "clicks", icon: MousePointerClick },
 	{ label: __("Visitors"), value: "unique", icon: Users },
@@ -54,6 +57,8 @@ function TrafficHistory({
 	customDateRange,
 	setCustomDateRange,
 }: TrafficHistoryProps) {
+	const timeRangeOptions = getTimeRangeOptions();
+	const seriesOptions = getSeriesOptions();
 	const [chartType, setChartType] = useState<TrafficChartType>("line");
 	const [seriesMode, setSeriesMode] =
 		useState<TrafficChartSeriesMode>("both");

@@ -95,7 +95,7 @@ export const Sponsors = () => {
 								href="https://go.peakurl.org/author"
 								target="_blank"
 								rel="noopener noreferrer"
-								aria-label="Website"
+								aria-label={__("Website")}
 							>
 								<Globe size={16} />
 							</a>
@@ -103,7 +103,7 @@ export const Sponsors = () => {
 								href="https://go.peakurl.org/author-github"
 								target="_blank"
 								rel="noopener noreferrer"
-								aria-label="GitHub"
+								aria-label={__("GitHub")}
 							>
 								<SocialIcon name="github" className="h-4 w-4" />
 							</a>
@@ -111,7 +111,7 @@ export const Sponsors = () => {
 								href="https://go.peakurl.org/author-x"
 								target="_blank"
 								rel="noopener noreferrer"
-								aria-label="X (Twitter)"
+								aria-label={__("X (Twitter)")}
 							>
 								<SocialIcon name="x" className="h-4 w-4" />
 							</a>
@@ -119,7 +119,7 @@ export const Sponsors = () => {
 								href="https://go.peakurl.org/author-linkedin"
 								target="_blank"
 								rel="noopener noreferrer"
-								aria-label="LinkedIn"
+								aria-label={__("LinkedIn")}
 							>
 								<SocialIcon
 									name="linkedin"

@@ -44,6 +44,8 @@ export {
 export {
 	copyToClipboard,
 	downloadBrowserFile,
+	getSearchShortcutLabel,
+	isMacPlatform,
 	requestClosestFormSubmit,
 	requestControlFormSubmit,
 	requestFormSubmit,

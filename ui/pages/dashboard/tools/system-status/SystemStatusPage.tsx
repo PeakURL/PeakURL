@@ -44,12 +44,8 @@ function joinHelperText(parts: Array<string | undefined | null>) {
 	return parts.filter((part) => hasValue(part)).join(" • ");
 }
 
-function formatBoolean(
-	value: unknown,
-	truthy: string = __("Yes"),
-	falsy: string = __("No")
-) {
-	return value ? truthy : falsy;
+function formatBoolean(value: unknown, truthy?: string, falsy?: string) {
+	return value ? (truthy ?? __("Yes")) : (falsy ?? __("No"));
 }
 
 function getOverallLabel(status: string | undefined) {

@@ -149,11 +149,11 @@
 	}
 
 	.links-edit-drawer-preview-empty {
-		@apply flex h-full w-full flex-col items-center justify-center gap-2 text-sm font-medium text-text-muted bg-surface-alt/30;
+		@apply flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center text-xs font-medium leading-5 text-text-muted bg-surface-alt/30 sm:text-sm;
 	}
 
 	.links-edit-drawer-preview-empty-icon {
-		@apply h-6 w-6;
+		@apply h-6 w-6 shrink-0 opacity-80;
 	}
 
 	.links-edit-drawer-password-options {

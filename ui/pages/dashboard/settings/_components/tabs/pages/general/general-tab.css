@@ -70,7 +70,7 @@
 	}
 
 	.settings-general-social-preview-grid {
-		@apply grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_18rem] xl:items-start;
+		@apply grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_22rem] xl:items-start;
 	}
 
 	.settings-general-social-preview-field {
@@ -78,7 +78,7 @@
 	}
 
 	.settings-general-social-preview-card {
-		@apply overflow-hidden rounded-lg border border-stroke bg-bg;
+		@apply overflow-hidden rounded-xl border border-stroke bg-bg;
 		aspect-ratio: 1200 / 630;
 	}
 
@@ -103,11 +103,11 @@
 	}
 
 	.settings-general-social-preview-empty {
-		@apply flex h-full w-full flex-col items-center justify-center gap-2 text-sm font-medium text-text-muted;
+		@apply flex h-full w-full flex-col items-center justify-center gap-2.5 p-4 text-center text-xs font-medium leading-5 text-text-muted sm:text-sm;
 	}
 
 	.settings-general-social-preview-icon {
-		@apply h-7 w-7;
+		@apply h-6 w-6 shrink-0 opacity-80;
 	}
 
 	.settings-general-social-preview-note {

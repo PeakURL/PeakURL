@@ -96,6 +96,9 @@ RESTORE_COMPOSER_DEPS=1
     composer install --no-dev --optimize-autoloader --no-interaction
 )
 
+printf 'Compiling translation catalogs...\n'
+npm run i18n:compile
+
 printf 'Assembling release package...\n'
 mkdir -p "$RELEASE_DIR" "$RELEASE_ROOT"
 find "$RELEASE_ROOT" -maxdepth 1 \( -name 'peakurl-*.zip' -o -name 'peakurl-*.zip.sha256' \) -exec rm -f {} +

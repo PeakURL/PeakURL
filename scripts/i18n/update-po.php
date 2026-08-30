@@ -244,7 +244,15 @@ function create_catalog(
  * @return void
  */
 function apply_locale_headers( Translations $catalog, string $locale ): void {
-	$catalog->getHeaders()->set( 'Language', $locale );
+	if ( '' === (string) $catalog->getHeaders()->get( 'Language' ) ) {
+		$catalog->getHeaders()->set( 'Language', $locale );
+	}
+
+	$existing_plural_forms = (string) $catalog->getHeaders()->get( 'Plural-Forms' );
+
+	if ( '' !== trim( $existing_plural_forms ) ) {
+		return;
+	}
 
 	$language = get_language_info( $locale );
 

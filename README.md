@@ -19,6 +19,7 @@ It is built for a straightforward self-hosted experience: install it on your dom
 
 - Branded short links managed from a dedicated dashboard
 - Link analytics for clicks, visitors, devices, referrers, and locations
+- Multi-language support across [26 languages](https://go.peakurl.org/p1855) with full LTR and RTL layout support
 - Password-protected and time-based links
 - Direct site users with `admin` and `editor` roles
 - API access, webhooks, and a self-hosted release workflow
@@ -119,6 +120,7 @@ Dashboard highlights include:
 
 - short-link publishing and bulk import tools
 - analytics for traffic, devices, referrers, and locations
+- multi-language dashboard localized in [26 languages](https://go.peakurl.org/p1855) with full RTL/LTR support
 - user, session, API-key, and integration management
 - self-hosted operations for settings, mail delivery, updates, and location data
 

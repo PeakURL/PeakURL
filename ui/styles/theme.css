@@ -50,6 +50,8 @@
 	--brand-zapier: var(--color-orange-600);
 	--brand-google: var(--color-red-600);
 }
+/* Class-based Dark Mode */
+@custom-variant dark (&:where(.dark, .dark *));
 
 .dark {
 	--color-bg: var(--color-gray-950);

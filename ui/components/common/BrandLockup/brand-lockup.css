@@ -57,7 +57,9 @@
 	}
 
 	.brand-lockup-text {
-		@apply font-semibold tracking-tight;
+		@apply font-semibold tracking-tight whitespace-nowrap overflow-hidden transition-[max-width,opacity] duration-200 ease-in-out;
+		max-width: 200px;
+		opacity: 1;
 	}
 
 	.brand-lockup-text-sm {

@@ -117,4 +117,10 @@ export interface SidebarProps {
 
 	/** Closes the mobile drawer. */
 	onMobileClose: () => void;
+
+	/** Whether the desktop sidebar is currently collapsed into an icon rail. */
+	isCollapsed?: boolean;
+
+	/** Toggles the desktop sidebar collapsed state. */
+	onToggleCollapse?: () => void;
 }

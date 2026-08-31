@@ -4,14 +4,46 @@ import { useLocation } from "react-router";
 import { PEAKURL_NAME, PEAKURL_VERSION } from "@constants";
 import { isDocumentRtl } from "@/i18n/direction";
 import { __, sprintf } from "@/i18n";
+import { cn } from "@/utils";
 
 import Sidebar from "../Sidebar";
 import { Header } from "../Header";
 import { AdminNotices } from "../AdminNotices";
 import type { LayoutProps } from "../types";
 
+const SIDEBAR_COLLAPSED_STORAGE_KEY = "peakurl_sidebar_collapsed";
+
 export const Layout = ({ children }: LayoutProps) => {
 	const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+	const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => {
+		if (typeof window !== "undefined") {
+			try {
+				return (
+					localStorage.getItem(SIDEBAR_COLLAPSED_STORAGE_KEY) ===
+					"true"
+				);
+			} catch {
+				return false;
+			}
+		}
+		return false;
+	});
+
+	const handleToggleSidebarCollapse = () => {
+		setIsSidebarCollapsed((prev) => {
+			const nextState = !prev;
+			try {
+				localStorage.setItem(
+					SIDEBAR_COLLAPSED_STORAGE_KEY,
+					String(nextState)
+				);
+			} catch {
+				// Ignore storage write exceptions
+			}
+			return nextState;
+		});
+	};
+
 	const isRtl = isDocumentRtl();
 	const basePath = "/dashboard";
 	const location = useLocation();
@@ -33,9 +65,16 @@ export const Layout = ({ children }: LayoutProps) => {
 				basePath={basePath}
 				isMobileOpen={isMobileSidebarOpen}
 				onMobileClose={() => setIsMobileSidebarOpen(false)}
+				isCollapsed={isSidebarCollapsed}
+				onToggleCollapse={handleToggleSidebarCollapse}
 			/>
 
-			<div className="dashboard-layout-wrapper">
+			<div
+				className={cn(
+					"dashboard-layout-wrapper",
+					isSidebarCollapsed && "dashboard-layout-wrapper-collapsed"
+				)}
+			>
 				<Header
 					key={headerKey}
 					onMobileMenuToggle={() => setIsMobileSidebarOpen(true)}

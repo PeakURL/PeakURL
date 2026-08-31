@@ -13,6 +13,10 @@ import {
 	Heart,
 	Coffee,
 	ExternalLink,
+	PanelLeftClose,
+	PanelLeftOpen,
+	PanelRightClose,
+	PanelRightOpen,
 } from "lucide-react";
 
 import { useGetUrlsQuery } from "@/store/slices/api";
@@ -172,6 +176,8 @@ export const Sidebar = ({
 	basePath = "",
 	isMobileOpen,
 	onMobileClose,
+	isCollapsed = false,
+	onToggleCollapse,
 }: SidebarProps) => {
 	const isRtl = isDocumentRtl();
 	const direction = isRtl ? "rtl" : "ltr";
@@ -182,6 +188,14 @@ export const Sidebar = ({
 	const totalLinks =
 		urlsRes?.data?.meta?.totalItems ??
 		(Array.isArray(urlsRes?.data?.items) ? urlsRes.data.items.length : 0);
+
+	const CollapseIcon = isRtl
+		? isCollapsed
+			? PanelRightOpen
+			: PanelRightClose
+		: isCollapsed
+			? PanelLeftOpen
+			: PanelLeftClose;
 
 	const navigation = useMemo(
 		() => getNavItems(basePath, canManageUsers),
@@ -234,7 +248,8 @@ export const Sidebar = ({
 				className={cn(
 					"dashboard-sidebar",
 					isRtl && "dashboard-sidebar-rtl",
-					isMobileOpen && "dashboard-sidebar-open"
+					isMobileOpen && "dashboard-sidebar-open",
+					isCollapsed && "dashboard-sidebar-collapsed"
 				)}
 			>
 				<div className="dashboard-sidebar-header">
@@ -245,6 +260,7 @@ export const Sidebar = ({
 					/>
 					<button
 						onClick={onMobileClose}
+						aria-label={__("Close sidebar")}
 						className="dashboard-sidebar-close"
 					>
 						<X size={20} />
@@ -313,6 +329,11 @@ export const Sidebar = ({
 												isSectionActive
 											)}
 											dir={direction}
+											title={
+												isCollapsed
+													? item.name
+													: undefined
+											}
 										>
 											<IconComponent
 												size={18}
@@ -373,6 +394,7 @@ export const Sidebar = ({
 									onClick={onMobileClose}
 									className={getLinkClassName(isActive)}
 									dir={direction}
+									title={isCollapsed ? item.name : undefined}
 								>
 									<IconComponent
 										size={18}
@@ -396,6 +418,35 @@ export const Sidebar = ({
 								</Link>
 							);
 						})}
+
+						{onToggleCollapse && (
+							<button
+								type="button"
+								onClick={onToggleCollapse}
+								className="dashboard-sidebar-toggle-button"
+								dir={direction}
+								title={
+									isCollapsed
+										? __("Expand Menu")
+										: __("Collapse Menu")
+								}
+								aria-label={
+									isCollapsed
+										? __("Expand Menu")
+										: __("Collapse Menu")
+								}
+							>
+								<CollapseIcon
+									size={16}
+									className="dashboard-sidebar-toggle-icon"
+								/>
+								<span className="dashboard-sidebar-toggle-label">
+									{isCollapsed
+										? __("Expand Menu")
+										: __("Collapse Menu")}
+								</span>
+							</button>
+						)}
 					</div>
 				</nav>
 
@@ -463,6 +514,7 @@ export const Sidebar = ({
 						onClick={() => setIsAboutOpen((prev) => !prev)}
 						className={getSectionToggleClassName(isAboutOpen)}
 						dir={direction}
+						title={isCollapsed ? __("About PeakURL") : undefined}
 					>
 						<Info
 							size={18}

@@ -10,7 +10,11 @@
 	@media (min-width: 1024px) {
 		.dashboard-layout-wrapper {
 			margin-inline-start: 16rem;
-			width: calc(100% - 16rem);
+			transition: margin-inline-start 300ms cubic-bezier(0.4, 0, 0.2, 1);
+		}
+
+		.dashboard-layout-wrapper-collapsed {
+			margin-inline-start: 4.5rem;
 		}
 	}
 

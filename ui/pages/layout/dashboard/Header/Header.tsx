@@ -55,6 +55,7 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 			<div className="dashboard-header-inner">
 				<button
 					onClick={onMobileMenuToggle}
+					aria-label={__("Open menu")}
 					className="dashboard-header-menu-button"
 				>
 					<MenuIcon

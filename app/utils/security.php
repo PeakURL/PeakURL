@@ -32,7 +32,8 @@ class Security {
 	 * Resolve the Access-Control-Allow-Origin value for the response.
 	 *
 	 * Returns the request origin when it matches the configured site URL,
-	 * or falls back to the site origin. Returns '' when neither matches.
+	 * when it belongs to a browser extension, or when Bearer token authorization
+	 * is present. Falls back to the site origin. Returns '' when neither matches.
 	 *
 	 * @param array<string, mixed> $config        Merged runtime configuration.
 	 * @param array<string, mixed> $server_params $_SERVER super-global.
@@ -50,7 +51,15 @@ class Security {
 			return $site_origin;
 		}
 
-		if ( self::is_same_origin( $config, $request_origin ) ) {
+		if (
+			self::is_same_origin( $config, $request_origin ) ||
+			self::is_extension_origin( $request_origin )
+		) {
+			return $request_origin;
+		}
+
+		$auth = (string) ( $server_params['HTTP_AUTHORIZATION'] ?? '' );
+		if ( '' !== $auth && preg_match( '/^Bearer\s+/i', trim( $auth ) ) ) {
 			return $request_origin;
 		}
 
@@ -114,6 +123,24 @@ class Security {
 		return '' !== $request_origin &&
 			'' !== $site_origin &&
 			hash_equals( $site_origin, $request_origin );
+	}
+
+	/**
+	 * Return whether a request origin matches a browser extension origin.
+	 *
+	 * Supports Chrome/Edge (chrome-extension://), Firefox (moz-extension://),
+	 * and Safari (safari-web-extension://).
+	 *
+	 * @param string $origin Request origin URL.
+	 * @return bool True when the origin belongs to a browser extension.
+	 * @since 1.5.4
+	 */
+	public static function is_extension_origin( string $origin ): bool {
+		$origin = strtolower( trim( $origin ) );
+
+		return 0 === strpos( $origin, 'chrome-extension://' ) ||
+			0 === strpos( $origin, 'moz-extension://' ) ||
+			0 === strpos( $origin, 'safari-web-extension://' );
 	}
 
 	/**

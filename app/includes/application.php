@@ -225,8 +225,9 @@ class Application {
 	/**
 	 * Reject cross-origin browser mutations before route dispatch.
 	 *
-	 * API clients without browser Origin/Referer headers are still allowed;
-	 * browser-originating writes must come from the configured site origin.
+	 * API clients with Bearer token authentication, browser extensions, and
+	 * clients without browser Origin/Referer headers are allowed; browser session
+	 * writes must come from the configured site origin.
 	 *
 	 * @param Request $request Incoming request.
 	 * @return void
@@ -239,9 +240,19 @@ class Application {
 			return;
 		}
 
+		$authorization = trim( (string) $request->get_header( 'Authorization', '' ) );
+
+		if ( '' !== $authorization && preg_match( '/^Bearer\s+/i', $authorization ) ) {
+			return;
+		}
+
 		$origin = Security::get_request_origin( $request );
 
-		if ( null === $origin || Security::is_same_origin( $this->config, $origin ) ) {
+		if (
+			null === $origin ||
+			Security::is_same_origin( $this->config, $origin ) ||
+			Security::is_extension_origin( $origin )
+		) {
 			return;
 		}
 

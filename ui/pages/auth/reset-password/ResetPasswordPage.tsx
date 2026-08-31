@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { CheckCircle2, KeyRound, LockKeyhole } from "lucide-react";
 
+import { RESET_PASSWORD_LOGO_URL } from "@constants";
 import { AuthLayout } from "@/pages/layout";
 import {
 	Button,
@@ -94,6 +95,7 @@ function ResetPasswordPage() {
 		<AuthLayout
 			badgeIcon={LockKeyhole}
 			badgeLabel={__("Secure Reset")}
+			brandHref={RESET_PASSWORD_LOGO_URL}
 			showcaseTitle={__("Choose a new password and get back to work.")}
 			showcaseCopy={__(
 				"Once the password changes, PeakURL revokes the old sessions so only the new login remains valid."

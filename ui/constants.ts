@@ -139,3 +139,33 @@ export const INTERNAL_API_ORIGIN =
  * Public waitlist URL for the plugins preview surface.
  */
 export const PLUGINS_WAITLIST_URL = "https://go.peakurl.org/join-plugins-list";
+
+/**
+ * Default external site link for the brand logo on public auth recovery pages.
+ */
+export const DEFAULT_AUTH_LOGO_URL =
+	"https://peakurl.org?utm_source=peakurl_auth&utm_medium=auth_page&utm_campaign=logo_link";
+
+/**
+ * External site link for the brand logo on the login page.
+ */
+export const LOGIN_LOGO_URL =
+	"https://peakurl.org?utm_source=peakurl_login&utm_medium=login&utm_campaign=logo_link";
+
+/**
+ * External site link for the "Powered by PeakURL" footer credit on the login page.
+ */
+export const LOGIN_POWERED_BY_URL =
+	"https://peakurl.org?utm_source=peakurl_login&utm_medium=login&utm_campaign=powered_by";
+
+/**
+ * External site link for the brand logo on the forgot password page.
+ */
+export const FORGOT_PASSWORD_LOGO_URL =
+	"https://peakurl.org?utm_source=peakurl_forgot_password&utm_medium=forgot_password&utm_campaign=logo_link";
+
+/**
+ * External site link for the brand logo on the reset password page.
+ */
+export const RESET_PASSWORD_LOGO_URL =
+	"https://peakurl.org?utm_source=peakurl_reset_password&utm_medium=reset_password&utm_campaign=logo_link";

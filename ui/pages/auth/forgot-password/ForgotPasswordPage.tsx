@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { Link } from "react-router";
 import { ArrowLeft, ArrowRight, KeyRound, Mail } from "lucide-react";
 
+import { FORGOT_PASSWORD_LOGO_URL } from "@constants";
 import { isDocumentRtl } from "@/i18n/direction";
 import { AuthLayout } from "@/pages/layout";
 import {
@@ -69,6 +70,7 @@ function ForgotPasswordPage() {
 		<AuthLayout
 			badgeIcon={KeyRound}
 			badgeLabel={__("Account Recovery")}
+			brandHref={FORGOT_PASSWORD_LOGO_URL}
 			showcaseTitle={__("Reset your password")}
 			showcaseCopy={__(
 				"Enter the email address or username linked to your PeakURL account and we'll send a secure reset link."

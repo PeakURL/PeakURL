@@ -6,6 +6,7 @@ export interface AuthLayoutProps {
 	backTo?: string;
 	badgeIcon: LucideIcon;
 	badgeLabel: string;
+	brandHref?: string;
 	cardCopy: string;
 	cardTitle: string;
 	children: ReactNode;

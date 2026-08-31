@@ -12,6 +12,7 @@ import {
 	UserRound,
 } from "lucide-react";
 
+import { LOGIN_LOGO_URL, LOGIN_POWERED_BY_URL } from "@constants";
 import {
 	ApiErrorPage,
 	BrandLockup,
@@ -57,9 +58,6 @@ const getHighlights = () => [
 		desc: __("Sessions, 2FA, and roles."),
 	},
 ];
-
-const PEAKURL_URL =
-	"https://peakurl.org?utm_source=peakurl_login&utm_medium=login&utm_campaign=powered_by";
 
 const submitVerificationCode = () => {
 	requestClosestFormSubmit(
@@ -238,7 +236,7 @@ function LoginPage() {
 		<main id="page-container" className="login-page-layout">
 			<aside className="login-page-aside">
 				<div className="login-page-brand">
-					<BrandLockup tone="dark" size="md" />
+					<BrandLockup tone="dark" size="md" href={LOGIN_LOGO_URL} />
 				</div>
 
 				<div className="login-page-content">
@@ -299,7 +297,7 @@ function LoginPage() {
 				</div>
 
 				<a
-					href={PEAKURL_URL}
+					href={LOGIN_POWERED_BY_URL}
 					target="_blank"
 					rel="noopener noreferrer"
 					dir={isRtl ? "rtl" : "ltr"}
@@ -314,7 +312,7 @@ function LoginPage() {
 				aria-labelledby="page-heading"
 			>
 				<div className="login-page-mobile-header">
-					<BrandLockup size="sm" />
+					<BrandLockup size="sm" href={LOGIN_LOGO_URL} />
 				</div>
 
 				<div className="login-page-panel-content">

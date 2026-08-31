@@ -36,8 +36,17 @@ export interface BrandLockupProps {
 	/** Color treatment used for the icon and wordmark. */
 	tone?: BrandLockupTone;
 
-	/** Optional route destination when the lockup should render as a link. */
+	/** Optional route destination when the lockup should render as an internal link. */
 	to?: To;
+
+	/** Optional external URL destination when the lockup should render as an external link. */
+	href?: string;
+
+	/** Target attribute when rendering with href (defaults to _blank for external URLs). */
+	target?: string;
+
+	/** Rel attribute when rendering with href (defaults to noopener noreferrer when target is _blank). */
+	rel?: string;
 
 	/** Additional utility classes for the outer wrapper. */
 	className?: string;

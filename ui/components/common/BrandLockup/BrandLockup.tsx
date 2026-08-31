@@ -47,6 +47,9 @@ export function BrandLockup({
 	size = "md",
 	tone = "light",
 	to,
+	href,
+	target,
+	rel,
 	className = "",
 	textClassName = "",
 }: BrandLockupProps) {
@@ -84,6 +87,26 @@ export function BrandLockup({
 	);
 
 	const sharedClassName = cn("brand-lockup", sizing.container, className);
+
+	if (href) {
+		const isExternal =
+			href.startsWith("http://") || href.startsWith("https://");
+		const resolvedTarget = target ?? (isExternal ? "_blank" : undefined);
+		const resolvedRel =
+			rel ??
+			(resolvedTarget === "_blank" ? "noopener noreferrer" : undefined);
+
+		return (
+			<a
+				href={href}
+				target={resolvedTarget}
+				rel={resolvedRel}
+				className={sharedClassName}
+			>
+				{content}
+			</a>
+		);
+	}
 
 	if (to) {
 		return (

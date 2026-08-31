@@ -1,9 +1,10 @@
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "react-router";
 
-import { isDocumentRtl } from "@/i18n/direction";
-import { __ } from "@/i18n";
+import { DEFAULT_AUTH_LOGO_URL } from "@constants";
 import { BrandLockup } from "@/components";
+import { __ } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
 
 import type { AuthLayoutProps } from "./types";
 
@@ -12,6 +13,7 @@ function AuthLayout({
 	backTo = "/login",
 	badgeIcon: BadgeIcon,
 	badgeLabel,
+	brandHref = DEFAULT_AUTH_LOGO_URL,
 	cardCopy,
 	cardTitle,
 	children,
@@ -54,7 +56,7 @@ function AuthLayout({
 						aria-labelledby="page-heading"
 					>
 						<header className="auth-page-card-header">
-							<BrandLockup size="md" />
+							<BrandLockup size="md" href={brandHref} />
 							<Link to={backTo} className="auth-page-back-link">
 								<BackArrow size={16} />
 								{backLabel}

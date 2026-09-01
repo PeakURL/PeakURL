@@ -5,7 +5,8 @@ This guide covers the local development workflow for PeakURL.
 PeakURL runs a Docker-based development stack with:
 
 - a Vite-powered dashboard UI
-- a PHP application runtime and API
+- a PHP application runtime and API (with `apcu` and `redis` extensions loaded)
+- a Redis in-memory cache instance (`peakurl-redis`)
 - a local MySQL instance
 - phpMyAdmin
 - a packaged release test site served from `release/peakurl`
@@ -58,6 +59,7 @@ Fallback direct ports:
 - API: `http://localhost:8000`
 - phpMyAdmin: `http://localhost:8081`
 - MySQL: `127.0.0.1:3307`
+- Redis: `127.0.0.1:6379`
 
 ## Local Services
 
@@ -69,6 +71,7 @@ The default Docker services are:
 - `peakurl-test`
 - `peakurl-db`
 - `peakurl-db-init`
+- `peakurl-redis`
 - `peakurl-phpmyadmin`
 
 ## Working on the App
@@ -179,6 +182,17 @@ PeakURL uses a local MaxMind GeoLite2 City database for location analytics.
 - refresh command: `php app/bin/update-geoip.php`
 
 In both development and production environments, MaxMind credentials are persisted securely in encrypted settings storage within the database.
+
+## Object Caching in Local Development
+
+The development environment supports testing all cache drivers locally:
+
+- **Redis**: Served by the `peakurl-redis` container on `127.0.0.1:6379` and connected via `PEAKURL_REDIS_HOST: redis`.
+- **APCu**: Pre-installed and enabled with `apc.enable_cli=1` for testing in-memory PHP shared cache.
+- **Filesystem**: Stores sharded transient cache files in `content/cache/`.
+- **Auto Negotiation**: Defaults to `auto`, which prioritizes Redis, gracefully falls back to APCu, then disk cache, and finally direct database queries.
+
+You can inspect cache diagnostics, tune positive/negative TTL policies, and trigger on-demand cache purges under **Settings -> Performance** or **Tools -> System Status** in the dashboard.
 
 ## Optional Editor Setup
 

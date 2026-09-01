@@ -48,14 +48,39 @@ class LinksApi {
 	private ?CacheInterface $cache = null;
 
 	/**
+	 * Optional settings API instance for dynamic options.
+	 *
+	 * @var SettingsApi|null
+	 * @since 1.6.0
+	 */
+	private ?SettingsApi $settings_api = null;
+
+	/**
 	 * Create a new links API.
 	 *
-	 * @param PeakURL_DB          $db    Shared database wrapper.
-	 * @param CacheInterface|null $cache Optional cache driver instance.
+	 * @param PeakURL_DB          $db           Shared database wrapper.
+	 * @param CacheInterface|null $cache        Optional cache driver instance.
+	 * @param SettingsApi|null    $settings_api Optional settings API instance.
 	 * @since 1.0.0
 	 */
-	public function __construct( PeakURL_DB $db, ?CacheInterface $cache = null ) {
-		$this->db    = $db;
+	public function __construct(
+		PeakURL_DB $db,
+		?CacheInterface $cache = null,
+		?SettingsApi $settings_api = null
+	) {
+		$this->db           = $db;
+		$this->cache        = $cache;
+		$this->settings_api = $settings_api;
+	}
+
+	/**
+	 * Update the active cache driver instance.
+	 *
+	 * @param CacheInterface|null $cache Cache driver instance.
+	 * @return void
+	 * @since 1.6.0
+	 */
+	public function set_cache( ?CacheInterface $cache ): void {
 		$this->cache = $cache;
 	}
 
@@ -292,7 +317,15 @@ class LinksApi {
 		// 4. Populate cache on result.
 		if ( null !== $this->cache ) {
 			if ( $row ) {
-				$ttl = Constants::CACHE_LINK_TTL;
+				$default_ttl = Constants::CACHE_LINK_TTL;
+				if ( null !== $this->settings_api ) {
+					$stored_ttl = $this->settings_api->get_option( Constants::SETTING_CACHE_DEFAULT_TTL );
+					if ( null !== $stored_ttl && '' !== trim( $stored_ttl ) && is_numeric( $stored_ttl ) ) {
+						$default_ttl = max( 0, (int) $stored_ttl );
+					}
+				}
+
+				$ttl = $default_ttl;
 				if ( ! empty( $row['expires_at'] ) ) {
 					$remaining = strtotime( (string) $row['expires_at'] ) - time();
 					$ttl       = min( $ttl, max( 1, $remaining ) );
@@ -313,8 +346,16 @@ class LinksApi {
 				// Clear negative cache key if one existed.
 				$this->cache->delete( CacheKey::link_missing( $normalized ) );
 			} else {
+				$neg_ttl = Constants::CACHE_NEGATIVE_TTL;
+				if ( null !== $this->settings_api ) {
+					$stored_neg = $this->settings_api->get_option( Constants::SETTING_CACHE_NEGATIVE_TTL );
+					if ( null !== $stored_neg && '' !== trim( $stored_neg ) && is_numeric( $stored_neg ) ) {
+						$neg_ttl = max( 0, (int) $stored_neg );
+					}
+				}
+
 				// Cache negative lookup briefly to mitigate bot scans.
-				$this->cache->set( CacheKey::link_missing( $normalized ), true, Constants::CACHE_NEGATIVE_TTL );
+				$this->cache->set( CacheKey::link_missing( $normalized ), true, $neg_ttl );
 			}
 		}
 

@@ -358,7 +358,7 @@ class FileCache implements CacheInterface {
 		}
 
 		foreach ( $items as $item ) {
-			if ( '.' === $item || '..' === $item || '.htaccess' === $item || 'index.html' === $item ) {
+			if ( '.' === $item || '..' === $item || '.htaccess' === $item || 'index.html' === $item || 'index.php' === $item ) {
 				continue;
 			}
 

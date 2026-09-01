@@ -492,6 +492,7 @@ class Application {
 				array( 'get', '/system/cache', array( $cache, 'status' ) ),
 				array( 'post', '/system/cache', array( $cache, 'update' ) ),
 				array( 'post', '/system/cache/clear', array( $cache, 'clear' ) ),
+				array( 'post', '/system/cache/purge', array( $cache, 'clear' ) ),
 				array( 'get', '/system/captcha', array( $captcha, 'status' ) ),
 				array( 'post', '/system/captcha', array( $captcha, 'update' ) ),
 				array( 'get', '/system/geoip', array( $geoip, 'status' ) ),

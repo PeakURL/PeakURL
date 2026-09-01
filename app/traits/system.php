@@ -17,6 +17,7 @@ use PeakURL\Http\Request;
 use PeakURL\Services\AdminNotices;
 use PeakURL\Services\Captcha;
 use PeakURL\Services\Crypto;
+use PeakURL\Services\Cache\CacheInterface;
 use PeakURL\Services\Geoip;
 use PeakURL\Services\Install\Writer as InstallWriter;
 use PeakURL\Services\Mailer;
@@ -28,7 +29,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SystemTrait — updater and GeoIP methods for Store.
+ * SystemTrait — updater, GeoIP, and cache performance methods for Store.
+ *
+ * @property \PeakURL\Includes\PeakURL_DB $db
+ * @property array<string, mixed> $config
+ * @property \PeakURL\Api\SettingsApi $settings_api
+ * @method CacheInterface get_cache()
+ * @method CacheInterface refresh_cache_service()
+ * @method array<string, mixed> get_current_user(Request $request)
+ * @method array<string, mixed> get_admin_user(Request $request)
+ * @method string now()
  *
  * @since 1.0.0
  */
@@ -901,8 +911,9 @@ trait SystemTrait {
 			);
 		}
 
-		// Clear active cache driver on setting update.
+		// Clear active cache driver on setting update and refresh active driver.
 		$this->get_cache()->clear();
+		$this->refresh_cache_service();
 
 		return $this->get_cache_status( $request );
 	}

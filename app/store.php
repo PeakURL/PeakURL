@@ -328,11 +328,12 @@ class Store {
 		$this->connection             = $connection;
 		$this->db                     = new PeakURL_DB( $connection );
 		$this->config                 = $config;
-		$content_dir                  = (string) ( $config[ Constants::CONTENT_DIR ] ?? ( ABSPATH . Constants::DEFAULT_CONTENT_DIR ) );
-		$this->cache_service          = CacheManager::resolve( $config, $content_dir );
 		$this->settings_api           = new SettingsApi( $this->db );
+		$content_dir                  = (string) ( $config[ Constants::CONTENT_DIR ] ?? ( ABSPATH . Constants::DEFAULT_CONTENT_DIR ) );
+		$effective_config             = $this->resolve_effective_cache_config( $config );
+		$this->cache_service          = CacheManager::resolve( $effective_config, $content_dir );
 		$this->users_api              = new UsersApi( $this->db );
-		$this->links_api              = new LinksApi( $this->db, $this->cache_service );
+		$this->links_api              = new LinksApi( $this->db, $this->cache_service, $this->settings_api );
 		$this->roles                  = new Roles();
 		$this->totp_service           = new Totp();
 		$this->crypto_service         = new Crypto( $config );
@@ -374,5 +375,42 @@ class Store {
 	 */
 	public function get_cache(): CacheInterface {
 		return $this->cache_service;
+	}
+
+	/**
+	 * Re-resolve the active cache driver instance when settings change.
+	 *
+	 * @return CacheInterface
+	 * @since 1.6.0
+	 */
+	public function refresh_cache_service(): CacheInterface {
+		$content_dir         = (string) ( $this->config[ Constants::CONTENT_DIR ] ?? ( ABSPATH . Constants::DEFAULT_CONTENT_DIR ) );
+		$effective_config    = $this->resolve_effective_cache_config( $this->config );
+		$this->cache_service = CacheManager::resolve( $effective_config, $content_dir );
+		$this->links_api->set_cache( $this->cache_service );
+		return $this->cache_service;
+	}
+
+	/**
+	 * Merge settings table overrides into the runtime cache configuration map.
+	 *
+	 * @param array<string, mixed> $config Merged configuration map.
+	 * @return array<string, mixed>
+	 * @since 1.6.0
+	 */
+	private function resolve_effective_cache_config( array $config ): array {
+		$effective = $config;
+
+		$stored_enabled = $this->settings_api->get_option( Constants::SETTING_CACHE_ENABLED );
+		if ( null !== $stored_enabled && '' !== trim( $stored_enabled ) ) {
+			$effective[ Constants::CACHE_ENABLED ] = filter_var( $stored_enabled, FILTER_VALIDATE_BOOLEAN );
+		}
+
+		$stored_driver = $this->settings_api->get_option( Constants::SETTING_CACHE_DRIVER );
+		if ( null !== $stored_driver && '' !== trim( $stored_driver ) ) {
+			$effective[ Constants::CACHE_DRIVER ] = $stored_driver;
+		}
+
+		return $effective;
 	}
 }

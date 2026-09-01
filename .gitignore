@@ -33,7 +33,9 @@ core/.env
 /content/uploads/favicon/favicon.png
 /content/uploads/favicon/site.webmanifest
 /content/debug.log
-/content/cache/
+/content/cache/*
+!/content/cache/.htaccess
+!/content/cache/index.php
 /docker/proxy/certs/*
 !/docker/proxy/certs/.gitkeep
 

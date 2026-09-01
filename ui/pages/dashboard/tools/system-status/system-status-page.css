@@ -32,20 +32,81 @@
 
 	/* Operational Status Banner */
 	.system-status-page-banner {
-		@apply relative overflow-hidden rounded-xl border bg-surface p-5 sm:p-6 shadow-xs transition-all duration-200;
+		@apply relative overflow-hidden rounded-xl border p-5 sm:p-6 shadow-xs transition-all duration-200;
 		text-align: start;
 	}
 
 	.system-status-page-banner-ok {
-		@apply border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-surface hover:border-emerald-500/50;
+		@apply border-emerald-200 bg-emerald-50/80 hover:border-emerald-300 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:hover:border-emerald-500/40;
+	}
+
+	.system-status-page-banner-ok .system-status-page-banner-title {
+		@apply text-emerald-950 dark:text-emerald-50;
+	}
+
+	.system-status-page-banner-ok .system-status-page-banner-description {
+		@apply text-emerald-800/90 dark:text-emerald-200/90;
+	}
+
+	.system-status-page-banner-ok .system-status-page-banner-footer {
+		@apply border-emerald-200/80 dark:border-emerald-500/20;
+	}
+
+	.system-status-page-banner-ok .system-status-page-banner-timestamp {
+		@apply text-emerald-800/90 dark:text-emerald-300/90;
+	}
+
+	.system-status-page-banner-ok .system-status-page-banner-timestamp-icon {
+		@apply text-emerald-700 dark:text-emerald-400;
 	}
 
 	.system-status-page-banner-warning {
-		@apply border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-surface hover:border-amber-500/50;
+		@apply border-amber-200 bg-amber-50/80 hover:border-amber-300 dark:border-amber-500/30 dark:bg-amber-500/10 dark:hover:border-amber-500/40;
+	}
+
+	.system-status-page-banner-warning .system-status-page-banner-title {
+		@apply text-amber-950 dark:text-amber-50;
+	}
+
+	.system-status-page-banner-warning .system-status-page-banner-description {
+		@apply text-amber-800/90 dark:text-amber-200/90;
+	}
+
+	.system-status-page-banner-warning .system-status-page-banner-footer {
+		@apply border-amber-200/80 dark:border-amber-500/20;
+	}
+
+	.system-status-page-banner-warning .system-status-page-banner-timestamp {
+		@apply text-amber-800/90 dark:text-amber-300/90;
+	}
+
+	.system-status-page-banner-warning
+		.system-status-page-banner-timestamp-icon {
+		@apply text-amber-700 dark:text-amber-400;
 	}
 
 	.system-status-page-banner-error {
-		@apply border-rose-500/30 bg-gradient-to-br from-rose-500/10 via-rose-500/5 to-surface hover:border-rose-500/50;
+		@apply border-rose-200 bg-rose-50/80 hover:border-rose-300 dark:border-rose-500/30 dark:bg-rose-500/10 dark:hover:border-rose-500/40;
+	}
+
+	.system-status-page-banner-error .system-status-page-banner-title {
+		@apply text-rose-950 dark:text-rose-50;
+	}
+
+	.system-status-page-banner-error .system-status-page-banner-description {
+		@apply text-rose-800/90 dark:text-rose-200/90;
+	}
+
+	.system-status-page-banner-error .system-status-page-banner-footer {
+		@apply border-rose-200/80 dark:border-rose-500/20;
+	}
+
+	.system-status-page-banner-error .system-status-page-banner-timestamp {
+		@apply text-rose-800/90 dark:text-rose-300/90;
+	}
+
+	.system-status-page-banner-error .system-status-page-banner-timestamp-icon {
+		@apply text-rose-700 dark:text-rose-400;
 	}
 
 	.system-status-page-banner-main {
@@ -81,23 +142,23 @@
 	}
 
 	.system-status-page-pill-ok {
-		@apply bg-emerald-500/15 text-emerald-700 dark:bg-emerald-500/25 dark:text-emerald-300;
+		@apply bg-emerald-500/20 text-emerald-800 dark:bg-emerald-500/30 dark:text-emerald-200;
 	}
 
 	.system-status-page-pill-warning {
-		@apply bg-amber-500/15 text-amber-700 dark:bg-amber-500/25 dark:text-amber-300;
+		@apply bg-amber-500/20 text-amber-800 dark:bg-amber-500/30 dark:text-amber-200;
 	}
 
 	.system-status-page-pill-error {
-		@apply bg-rose-500/15 text-rose-700 dark:bg-rose-500/25 dark:text-rose-300;
+		@apply bg-rose-500/20 text-rose-800 dark:bg-rose-500/30 dark:text-rose-200;
 	}
 
 	.system-status-page-banner-timestamp {
 		@apply flex flex-wrap items-center gap-1.5 text-xs text-text-muted;
 	}
 
-	.system-status-page-banner-timestamp-full {
-		@apply text-text-muted/70;
+	.system-status-page-banner-timestamp-icon {
+		@apply shrink-0;
 	}
 
 	/* Subsystem Components Grid */

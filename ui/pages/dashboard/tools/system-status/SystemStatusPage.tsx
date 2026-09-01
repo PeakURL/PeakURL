@@ -1038,16 +1038,17 @@ function SystemStatusPage() {
 						)}
 					</div>
 
-					<div className="system-status-page-banner-timestamp">
-						<Clock size={13} className="shrink-0 text-text-muted" />
+					<div
+						className="system-status-page-banner-timestamp"
+						title={timeInfo.full || undefined}
+					>
+						<Clock
+							size={13}
+							className="system-status-page-banner-timestamp-icon"
+						/>
 						<span>
 							{sprintf(__("Checked %s"), timeInfo.relative)}
 						</span>
-						{timeInfo.full ? (
-							<span className="system-status-page-banner-timestamp-full">
-								• {timeInfo.full}
-							</span>
-						) : null}
 					</div>
 				</div>
 			</div>

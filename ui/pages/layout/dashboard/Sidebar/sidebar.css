@@ -1,13 +1,18 @@
 @layer components {
 	.dashboard-sidebar-overlay {
-		@apply fixed inset-0 z-40 bg-transparent lg:hidden;
+		@apply fixed inset-0 z-40 bg-black/50 backdrop-blur-xs transition-opacity duration-300 ease-in-out lg:hidden;
+	}
+
+	.dashboard-sidebar-overlay-open {
+		@apply opacity-100 pointer-events-auto;
+	}
+
+	.dashboard-sidebar-overlay-closed {
+		@apply opacity-0 pointer-events-none;
 	}
 
 	.dashboard-sidebar {
-		@apply fixed inset-y-0 left-0 z-50 flex w-64 -translate-x-full flex-col border-r border-stroke bg-surface overflow-x-hidden lg:z-30 lg:translate-x-0;
-		transition:
-			width 300ms cubic-bezier(0.4, 0, 0.2, 1),
-			transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+		@apply fixed inset-y-0 left-0 z-50 flex w-60 -translate-x-full flex-col border-r border-stroke bg-surface overflow-x-hidden transition-all duration-300 ease-in-out lg:z-30 lg:translate-x-0;
 	}
 
 	.dashboard-sidebar-rtl {
@@ -15,7 +20,7 @@
 	}
 
 	.dashboard-sidebar-open {
-		@apply translate-x-0;
+		@apply translate-x-0 shadow-2xl;
 	}
 
 	.dashboard-sidebar-header {
@@ -97,7 +102,7 @@
 	}
 
 	.dashboard-sidebar-submenu-open {
-		@apply max-h-40 opacity-100;
+		@apply max-h-96 opacity-100;
 	}
 
 	.dashboard-sidebar-submenu-list {
@@ -111,7 +116,7 @@
 	}
 
 	.dashboard-sidebar-submenu-link {
-		@apply block rounded-md px-3 py-2 text-sm font-medium text-text-muted transition-colors hover:bg-surface-alt hover:text-accent;
+		@apply block rounded-md px-3 py-2 text-sm font-medium leading-snug text-text-muted transition-colors hover:bg-surface-alt hover:text-accent;
 		text-align: start;
 	}
 
@@ -203,7 +208,7 @@
 
 	@media (min-width: 1024px) {
 		.dashboard-sidebar-collapsed {
-			@apply w-[4.5rem];
+			@apply w-18;
 		}
 
 		.dashboard-sidebar-collapsed .brand-lockup-text {

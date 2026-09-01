@@ -1,1 +1,5 @@
-export { default, UsersTableSkeletonRows } from "./UsersSkeleton";
+export {
+	default,
+	UsersOverviewSkeleton,
+	UsersTableSkeletonRows,
+} from "./UsersSkeleton";

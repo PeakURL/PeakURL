@@ -3,9 +3,9 @@
 		@apply space-y-4 pb-8 sm:space-y-5;
 	}
 
-	/* Hero Section - Clean, no borders, SaaS style */
+	/* Hero Section */
 	.activity-page-hero {
-		@apply flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between px-2 pt-2;
+		@apply flex items-start justify-between gap-3 px-1 pt-1;
 	}
 
 	.activity-page-hero-copy {
@@ -22,123 +22,130 @@
 	}
 
 	.activity-page-summary {
-		@apply mt-1.5 max-w-2xl text-[15px] leading-relaxed text-text-muted;
+		@apply mt-1 text-sm leading-relaxed text-text-muted;
 		text-align: start;
 	}
 
-	/* Overview Cards - Modern metrics layout */
+	/* Overview Metric Cards - Uniform 4-column grid */
 	.activity-page-overview {
-		@apply grid grid-cols-2 gap-3 lg:grid-cols-[minmax(0,1fr)_15rem] lg:items-stretch;
+		@apply w-full;
 	}
 
-	.activity-page-overview-items {
-		@apply contents lg:grid lg:gap-3 lg:grid-cols-2 xl:grid-cols-3;
+	.activity-page-overview-grid {
+		@apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4;
 	}
 
 	.activity-page-overview-item {
-		@apply relative flex min-h-full flex-col gap-0.5 rounded-lg border border-stroke bg-surface p-3.5 transition-all duration-200 hover:border-stroke-strong hover:shadow-md;
-		-webkit-padding-end: 3.75rem;
-		padding-inline-end: 3.75rem;
+		@apply rounded-lg border border-stroke bg-surface p-4 transition-all duration-200 hover:border-stroke-strong hover:shadow-md;
 		text-align: start;
 	}
 
-	.activity-page-overview-icon {
-		@apply absolute top-3.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-surface-alt text-text-muted;
-		inset-inline-end: 0.875rem;
+	.activity-page-overview-header {
+		@apply mb-3 flex items-start justify-between;
 	}
 
 	.activity-page-overview-copy {
-		@apply min-w-0 flex flex-col;
+		@apply flex-1 min-w-0;
 	}
 
-	.activity-page-overview-label {
-		@apply text-xs font-medium text-text-muted;
+	.activity-page-overview-title {
+		@apply mb-2 text-xs font-medium uppercase tracking-wide text-text-muted;
 	}
 
 	.activity-page-overview-value {
-		@apply mt-1 text-xl font-bold text-heading;
+		@apply text-2xl font-bold text-heading;
 	}
 
-	.activity-page-overview-status {
-		@apply flex flex-col justify-center rounded-lg border border-stroke bg-surface px-4 py-3.5 transition-all duration-200 hover:border-stroke-strong hover:shadow-md;
-		align-items: flex-start;
-		text-align: start;
+	.activity-page-overview-value-latest {
+		@apply text-base font-bold text-heading leading-tight truncate;
 	}
 
-	.activity-page-overview-status-label {
-		@apply text-xs font-medium text-text-muted;
+	.activity-page-overview-icon {
+		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-lg;
 	}
 
-	.activity-page-overview-status-value {
-		@apply mt-1 text-sm font-semibold text-heading;
-		unicode-bidi: -moz-plaintext;
-		unicode-bidi: plaintext;
+	.activity-page-overview-icon-all {
+		@apply bg-accent/10 text-accent;
 	}
 
-	.activity-page-overview-status-note {
-		@apply mt-1 text-xs text-text-muted;
-		unicode-bidi: -moz-plaintext;
-		unicode-bidi: plaintext;
+	.activity-page-overview-icon-links {
+		@apply bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400;
 	}
 
-	/* Toolbar & Filters - Segmented control / Pill style */
+	.activity-page-overview-icon-users {
+		@apply bg-orange-500/10 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400;
+	}
+
+	.activity-page-overview-icon-latest {
+		@apply bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400;
+	}
+
+	.activity-page-overview-icon-glyph {
+		@apply h-4 w-4;
+	}
+
+	.activity-page-overview-note {
+		@apply text-xs text-text-muted truncate;
+	}
+
+	/* Toolbar & Filters */
 	.activity-page-toolbar {
-		@apply flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-2;
+		@apply flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-1;
 	}
 
 	.activity-page-filters {
-		@apply inline-flex items-center gap-1 rounded-lg bg-surface-alt p-1 ring-1 ring-stroke/60;
+		@apply grid grid-cols-3 sm:inline-flex sm:w-auto w-full items-center gap-1 rounded-xl bg-surface-alt p-1 border border-stroke/60;
 	}
 
 	.activity-page-filter {
-		@apply inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium text-text-muted transition-colors hover:text-heading focus:outline-none focus:ring-2 focus:ring-accent/20;
+		@apply inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-lg px-2 sm:px-3 py-1.5 text-xs font-medium text-text-muted transition-colors hover:text-heading focus:outline-none whitespace-nowrap;
 	}
 
 	.activity-page-filter-active {
-		@apply bg-surface text-heading shadow-sm ring-1 ring-stroke/50;
+		@apply bg-accent text-white font-medium shadow-sm hover:text-white;
 	}
 
 	.activity-page-filter-count {
-		@apply inline-flex items-center justify-center rounded-full bg-surface-alt px-1.5 py-0.5 text-[10px] font-bold text-text-muted;
-		-webkit-margin-start: 0.375rem;
-		margin-inline-start: 0.375rem;
+		@apply inline-flex items-center justify-center rounded-full bg-surface-alt px-1.5 py-0.5 text-[10px] font-bold text-text-muted shrink-0;
+		-webkit-margin-start: 0.25rem;
+		margin-inline-start: 0.25rem;
+	}
+
+	.activity-page-filter-active .activity-page-filter-count {
+		@apply bg-white/20 text-white;
 	}
 
 	.activity-page-page-size {
 		@apply lg:justify-self-end;
 	}
 
-	/* Main Panel - Minimal list style */
+	/* Main Panel */
 	.activity-page-panel {
-		@apply overflow-hidden rounded-lg border border-stroke bg-surface;
+		@apply overflow-hidden rounded-xl border border-stroke bg-surface shadow-xs;
 	}
 
 	.activity-page-panel-header {
-		@apply flex flex-col gap-3 border-b border-stroke bg-surface-alt px-5 py-4 sm:flex-row sm:items-center sm:justify-between;
-	}
-
-	.activity-page-panel-eyebrow {
-		@apply text-[10px] font-semibold uppercase tracking-widest text-text-muted;
+		@apply flex flex-col gap-3 border-b border-stroke bg-surface px-5 py-3.5 sm:flex-row sm:items-center sm:justify-between;
 	}
 
 	.activity-page-panel-title {
-		@apply text-base font-semibold text-heading;
+		@apply text-sm font-semibold text-heading;
 	}
 
 	.activity-page-panel-actions {
-		@apply flex items-center gap-2.5 self-start sm:self-auto;
+		@apply flex items-center gap-2 self-start sm:self-auto;
 	}
 
 	.activity-page-panel-selection-count {
-		@apply inline-flex items-center rounded-full border border-accent/15 bg-accent/10 px-2.5 py-1 text-xs font-semibold text-accent;
+		@apply inline-flex items-center rounded-full border border-accent/15 bg-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent;
 	}
 
 	.activity-page-selection-delete {
-		@apply inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-error transition-colors hover:border-red-300 hover:bg-red-100 dark:border-red-500/20 dark:bg-red-500/10 dark:hover:border-red-500/30 dark:hover:bg-red-500/15;
+		@apply inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-2.5 py-1 text-xs font-semibold text-error transition-colors hover:border-red-300 hover:bg-red-100 dark:border-red-500/20 dark:bg-red-500/10 dark:hover:border-red-500/30 dark:hover:bg-red-500/15;
 	}
 
 	.activity-page-selection-delete-all {
-		@apply inline-flex items-center gap-1.5 rounded-lg border border-red-300 bg-surface px-3 py-1.5 text-xs font-semibold text-error transition-colors hover:border-red-400 hover:bg-red-50 dark:border-red-500/30 dark:bg-surface-alt dark:hover:border-red-500/50 dark:hover:bg-red-500/10;
+		@apply inline-flex items-center gap-1.5 rounded-lg border border-red-300 bg-surface px-2.5 py-1 text-xs font-semibold text-error transition-colors hover:border-red-400 hover:bg-red-50 dark:border-red-500/30 dark:bg-surface-alt dark:hover:border-red-500/50 dark:hover:bg-red-500/10;
 	}
 
 	.activity-page-table {
@@ -146,20 +153,20 @@
 	}
 
 	.activity-page-table-head {
-		@apply hidden border-b border-stroke bg-surface-alt/90 px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-text-muted lg:grid;
-		grid-template-columns: 64px minmax(0, 1.9fr) minmax(0, 1.45fr) minmax(
-				150px,
+		@apply hidden border-b border-stroke bg-surface-alt/70 px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-text-muted lg:grid;
+		grid-template-columns: 56px minmax(0, 1.85fr) minmax(0, 1.4fr) minmax(
+				130px,
 				auto
 			);
-		-moz-column-gap: 1.75rem;
-		column-gap: 1.75rem;
+		-moz-column-gap: 1.25rem;
+		column-gap: 1.25rem;
 		text-align: start;
 	}
 
 	.activity-page-table-head-admin {
 		grid-template-columns:
-			64px minmax(0, 1.9fr) minmax(0, 1.45fr) minmax(150px, auto)
-			56px;
+			56px minmax(0, 1.85fr) minmax(0, 1.4fr) minmax(130px, auto)
+			76px;
 	}
 
 	.activity-page-table-head-actions {
@@ -175,14 +182,14 @@
 	}
 
 	.activity-page-day-header {
-		@apply sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-stroke bg-surface-alt/90 px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-text-muted;
+		@apply sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-stroke bg-surface-alt/90 px-5 py-2 text-[11px] font-bold uppercase tracking-[0.14em] text-text-muted;
 		-webkit-backdrop-filter: blur(8px);
 		backdrop-filter: blur(8px);
 		text-align: start;
 	}
 
 	.activity-page-day-header-main {
-		@apply flex min-w-0 items-center gap-2;
+		@apply flex min-w-0 items-center gap-2.5;
 	}
 
 	.activity-page-day-header-label {
@@ -190,31 +197,31 @@
 	}
 
 	.activity-page-day-header-count {
-		@apply inline-flex min-w-7 items-center justify-center rounded-full border border-stroke bg-surface px-2 py-0.5 text-[10px] font-semibold text-text-muted;
+		@apply inline-flex min-w-6 items-center justify-center rounded-full border border-stroke/70 bg-surface px-2 py-px text-[10px] font-semibold text-text-muted;
 	}
 
 	.activity-page-events {
-		@apply divide-y divide-stroke;
+		@apply divide-y divide-stroke/60;
 	}
 
-	/* Activity Events - table-like cards */
+	/* Activity Event Row */
 	.activity-page-event {
-		@apply relative grid gap-y-2.5 bg-transparent px-5 py-3.5 transition-colors hover:bg-surface-alt/45;
+		@apply relative grid gap-y-2 bg-transparent px-5 py-3 transition-colors hover:bg-surface-alt/40;
 		grid-template-columns: auto minmax(0, 1fr);
-		-moz-column-gap: 1.25rem;
-		column-gap: 1.25rem;
+		-moz-column-gap: 1rem;
+		column-gap: 1rem;
 	}
 
 	.activity-page-event-selected {
-		@apply bg-accent/5;
+		@apply bg-accent/3 hover:bg-accent/5;
 	}
 
 	.activity-page-event-identity {
-		@apply flex items-start gap-2;
+		@apply flex items-center gap-2.5;
 	}
 
 	.activity-page-event-icon {
-		@apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ring-1 ring-black/5 dark:ring-white/10;
+		@apply flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-lg ring-1 ring-black/5 dark:ring-white/10;
 	}
 
 	.activity-page-event-icon-neutral {
@@ -222,111 +229,104 @@
 	}
 
 	.activity-page-event-icon-success {
-		@apply bg-green-500/10 text-green-700 dark:text-green-300;
+		@apply bg-emerald-500/10 text-emerald-600 dark:text-emerald-400;
 	}
 
 	.activity-page-event-icon-info {
-		@apply bg-blue-500/10 text-blue-700 dark:text-blue-300;
+		@apply bg-blue-500/10 text-blue-600 dark:text-blue-400;
 	}
 
 	.activity-page-event-icon-danger {
-		@apply bg-red-500/10 text-red-700 dark:text-red-300;
+		@apply bg-rose-500/10 text-rose-600 dark:text-rose-400;
 	}
 
 	.activity-page-event-icon-user {
-		@apply bg-orange-500/10 text-orange-700 dark:text-orange-300;
+		@apply bg-amber-500/10 text-amber-600 dark:text-amber-400;
 	}
 
 	.activity-page-event-primary {
-		@apply min-w-0 flex flex-col justify-center;
+		@apply min-w-0 flex items-center gap-2;
 		text-align: start;
 	}
 
 	.activity-page-event-title {
-		@apply text-[15px] font-semibold leading-6 text-heading;
+		@apply text-sm font-semibold text-heading leading-snug;
 		unicode-bidi: -moz-plaintext;
 		unicode-bidi: plaintext;
 	}
 
-	.activity-page-event-badges {
-		@apply mt-1 flex flex-wrap items-center gap-1.5;
+	.activity-page-event-role-badge {
+		@apply inline-flex items-center rounded-md border border-stroke/70 bg-surface-alt px-1.5 py-0.5 text-[10px] font-medium text-text-muted;
 	}
 
-	.activity-page-event-badge {
-		@apply inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold;
-	}
-
-	.activity-page-event-badge-neutral {
-		@apply bg-surface-alt text-text-muted;
-	}
-
-	.activity-page-event-badge-success {
-		@apply bg-green-500/10 text-green-700 dark:text-green-400;
-	}
-
-	.activity-page-event-badge-info {
-		@apply bg-blue-500/10 text-blue-700 dark:text-blue-400;
-	}
-
-	.activity-page-event-badge-danger {
-		@apply bg-red-500/10 text-red-700 dark:text-red-400;
-	}
-
-	.activity-page-event-badge-user {
-		@apply bg-orange-500/10 text-orange-700 dark:text-orange-400;
-	}
-
+	/* Details / Context Column */
 	.activity-page-event-context {
 		@apply flex flex-wrap items-center gap-2;
 		grid-column: 2;
 	}
 
-	.activity-page-event-detail {
-		@apply inline-flex items-center gap-1 rounded-full border border-stroke bg-surface-alt px-2.5 py-0.5 text-xs font-medium text-text-muted;
+	.activity-page-detail-item {
+		@apply inline-flex items-center gap-1.5 text-xs text-text-muted;
 	}
 
-	.activity-page-event-detail-label {
-		@apply text-text-muted/70;
+	.activity-page-detail-actor {
+		@apply inline-flex items-center gap-1 text-xs;
 	}
 
-	.activity-page-event-detail-value {
-		@apply max-w-56 truncate text-heading;
-		unicode-bidi: -moz-plaintext;
-		unicode-bidi: plaintext;
+	.activity-page-detail-destination {
+		@apply inline-flex items-center gap-1.5 text-xs text-text-muted/80 hover:text-accent transition-colors;
+	}
+
+	.activity-page-detail-destination-url {
+		@apply max-w-xs truncate;
+	}
+
+	.activity-page-detail-user {
+		@apply text-xs;
+	}
+
+	.activity-page-detail-location {
+		@apply text-xs;
 	}
 
 	.activity-page-event-detail-empty {
-		@apply text-xs text-text-muted;
+		@apply text-xs text-text-muted/50;
 	}
 
+	/* Time Column */
 	.activity-page-event-time {
-		@apply flex flex-col justify-center gap-0.5 text-xs text-text-muted;
+		@apply flex flex-col justify-center text-xs text-text-muted;
 		grid-column: 2;
 	}
 
 	.activity-page-event-time-relative {
-		@apply text-sm font-medium text-heading;
+		@apply text-xs font-semibold text-heading;
 		unicode-bidi: -moz-plaintext;
 		unicode-bidi: plaintext;
 	}
 
 	.activity-page-event-time-exact {
-		@apply mt-0.5 text-xs text-text-muted;
+		@apply text-[11px] text-text-muted/80;
 		unicode-bidi: -moz-plaintext;
 		unicode-bidi: plaintext;
 	}
 
+	/* Actions Column */
 	.activity-page-event-actions {
-		@apply flex items-center justify-start;
+		@apply flex items-center justify-start gap-1.5;
 		grid-column: 2;
 	}
 
 	.activity-page-event-action {
-		@apply inline-flex h-8 w-8 items-center justify-center rounded-lg border border-transparent bg-transparent text-text-muted transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500/20 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-30 dark:hover:border-red-500/20 dark:hover:bg-red-900/20 dark:hover:text-red-400;
+		@apply inline-flex h-7.5 w-7.5 items-center justify-center rounded-lg border border-transparent bg-transparent text-text-muted transition-colors hover:border-stroke hover:bg-surface-alt hover:text-heading focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-30;
 	}
 
 	.activity-page-event-action-restore {
-		@apply text-primary-600 hover:border-primary-200 hover:bg-primary-50 hover:text-primary-700 focus:ring-primary-500/20 dark:text-primary-400 dark:hover:border-primary-500/20 dark:hover:bg-primary-900/20 dark:hover:text-primary-300;
+		@apply text-emerald-600 hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700 focus:ring-emerald-500/20 dark:text-emerald-400 dark:hover:border-emerald-500/20 dark:hover:bg-emerald-950/30 dark:hover:text-emerald-300;
+	}
+
+	.activity-page-event-action-delete {
+		@apply text-text-muted hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 focus:ring-rose-500/20 dark:hover:border-rose-500/20 dark:hover:bg-rose-950/30 dark:hover:text-rose-400;
 	}
 
 	.activity-page-empty {
@@ -338,29 +338,29 @@
 	}
 
 	.activity-page-empty-title {
-		@apply text-lg font-semibold text-heading;
+		@apply text-base font-semibold text-heading;
 	}
 
 	.activity-page-empty-summary {
-		@apply mt-2 text-sm text-text-muted;
+		@apply mt-1 text-sm text-text-muted max-w-sm mx-auto;
 	}
 
-	/* Pagination - sleek row style */
+	/* Pagination */
 	.activity-page-pagination {
-		@apply flex flex-col gap-3 rounded-lg border border-stroke bg-surface px-4 py-3 lg:flex-row lg:items-center lg:justify-between;
+		@apply flex flex-col gap-3 rounded-xl border border-stroke bg-surface px-4 py-3 shadow-xs lg:flex-row lg:items-center lg:justify-between;
 	}
 
 	.activity-page-pagination-summary-group {
-		@apply flex flex-col gap-1;
+		@apply flex flex-col gap-0.5;
 		text-align: start;
 	}
 
 	.activity-page-pagination-summary {
-		@apply text-sm text-text-muted;
+		@apply text-xs font-medium text-heading;
 	}
 
 	.activity-page-pagination-page-note {
-		@apply text-xs text-text-muted;
+		@apply text-[11px] text-text-muted;
 	}
 
 	.activity-page-pagination-controls {
@@ -368,35 +368,36 @@
 	}
 
 	.activity-page-pagination-pages {
-		@apply mx-2 flex items-center gap-1;
+		@apply mx-1.5 flex items-center gap-1;
 	}
 
 	.activity-page-pagination-nav {
-		@apply inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium text-text-muted transition-colors hover:bg-surface-alt hover:text-heading disabled:cursor-not-allowed disabled:opacity-40;
+		@apply inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium text-text-muted transition-colors hover:bg-surface-alt hover:text-heading disabled:cursor-not-allowed disabled:opacity-40;
 	}
 
 	.activity-page-pagination-page {
-		@apply h-8 w-8 rounded-lg text-sm font-medium text-text-muted transition-colors hover:bg-surface-alt hover:text-heading;
+		@apply h-7 w-7 rounded-lg text-xs font-medium text-text-muted transition-colors hover:bg-surface-alt hover:text-heading;
 	}
 
 	.activity-page-pagination-page-current {
-		@apply bg-accent text-white hover:bg-accent hover:text-white;
+		@apply bg-accent text-white font-semibold hover:bg-accent hover:text-white;
 	}
 
+	/* Skeleton */
 	.activity-page-skeleton-heading {
-		@apply h-3 w-24;
+		@apply h-3.5 w-24;
 	}
 
 	.activity-page-skeleton-copy {
-		@apply mt-2 h-5 w-44;
+		@apply mt-2 h-4 w-44;
 	}
 
 	.activity-page-skeleton-day {
-		@apply h-3 w-32;
+		@apply h-3.5 w-28;
 	}
 
 	.activity-page-skeleton-icon {
-		@apply h-8 w-8 rounded-lg;
+		@apply h-8.5 w-8.5 rounded-lg;
 	}
 
 	.activity-page-skeleton-primary,
@@ -405,15 +406,7 @@
 	}
 
 	.activity-page-skeleton-title {
-		@apply h-4 w-72 max-w-full;
-	}
-
-	.activity-page-skeleton-badges {
-		@apply mt-2 flex flex-wrap gap-1.5;
-	}
-
-	.activity-page-skeleton-badge {
-		@apply h-5 w-20 rounded-md;
+		@apply h-4 w-64 max-w-full;
 	}
 
 	.activity-page-skeleton-details {
@@ -421,7 +414,7 @@
 	}
 
 	.activity-page-skeleton-chip {
-		@apply h-6 w-20 rounded-lg;
+		@apply h-5 w-20 rounded-md;
 	}
 
 	.activity-page-skeleton-time-group {
@@ -433,21 +426,21 @@
 	}
 
 	.activity-page-skeleton-time-secondary {
-		@apply h-3 w-28;
+		@apply h-2.5 w-24;
 	}
 
 	@media (min-width: 1024px) {
 		.activity-page-event {
 			align-items: center;
 			grid-template-columns:
-				64px minmax(0, 1.9fr) minmax(0, 1.45fr)
-				minmax(150px, auto);
+				56px minmax(0, 1.85fr) minmax(0, 1.4fr)
+				minmax(130px, auto);
 		}
 
 		.activity-page-event-admin {
 			grid-template-columns:
-				64px minmax(0, 1.9fr) minmax(0, 1.45fr)
-				minmax(150px, auto) 56px;
+				56px minmax(0, 1.85fr) minmax(0, 1.4fr)
+				minmax(130px, auto) 76px;
 		}
 
 		.activity-page-event-primary {
@@ -459,10 +452,9 @@
 		}
 
 		.activity-page-event-time {
-			@apply text-end;
+			@apply text-end items-end;
 			grid-column: 4;
 			justify-self: stretch;
-			align-items: flex-end;
 		}
 
 		.activity-page-event-actions {
@@ -477,6 +469,7 @@
 
 	html[dir="rtl"] .activity-page-event-time {
 		justify-self: start;
+		align-items: flex-start;
 	}
 
 	html[dir="rtl"] .activity-page-event-actions {

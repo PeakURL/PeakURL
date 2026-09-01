@@ -104,69 +104,69 @@ function PluginsPage() {
 	return (
 		<div className="plugins-page">
 			{/* ════════════════════════════════════
-			    PAGE HEADER
+			    PAGE HERO
 			   ════════════════════════════════════ */}
-			<div className="plugins-page-header">
-				<div className="plugins-page-header-layout">
-					<div className="plugins-page-header-copy">
-						<div className="plugins-page-header-icon-row">
-							<div className="plugins-page-header-icon">
-								<Plug size={21} />
-							</div>
+			<div className="plugins-page-hero">
+				<div className="plugins-page-hero-copy">
+					<div className="plugins-page-hero-badge">
+						<Plug size={13} />
+						<span>{__("Extensions")}</span>
+					</div>
+					<h1 className="plugins-page-title">{__("Plugins")}</h1>
+					<p className="plugins-page-summary">
+						{__(
+							"Extend PeakURL with plugins, install from the library, upload custom packages, and manage everything from one place."
+						)}
+					</p>
+				</div>
+			</div>
+
+			{/* ════════════════════════════════════
+			    WAITLIST BANNER
+			   ════════════════════════════════════ */}
+			<div className="plugins-page-waitlist-banner">
+				<div className="plugins-page-waitlist-layout">
+					<div className="plugins-page-waitlist-copy">
+						<div className="plugins-page-waitlist-heading">
+							<span className="plugins-page-waitlist-badge">
+								<Sparkles size={9} />
+								{__("Coming Soon")}
+							</span>
+							<h2 className="plugins-page-waitlist-title">
+								{__("Plugin Library")}
+							</h2>
 						</div>
-						<h1 className="plugins-page-header-title">
-							{__("Plugins")}
-						</h1>
-						<p className="plugins-page-header-summary">
+						<p className="plugins-page-waitlist-text">
 							{__(
-								"Extend PeakURL with plugins, install from the library, upload custom packages, and manage everything from one place."
+								"Be the first to know when the verified plugin marketplace and one-click installer launch."
 							)}
 						</p>
 					</div>
 
-					{/* Waitlist CTA */}
-					<div className="plugins-page-header-waitlist">
-						<div className="plugins-page-header-waitlist-inner">
-							<div className="plugins-page-header-waitlist-badge-row">
-								<span className="plugins-page-header-waitlist-badge">
-									<Sparkles
-										size={9}
-										className="plugins-page-header-waitlist-badge-icon"
-									/>
-									{__("Coming Soon")}
-								</span>
-							</div>
-							<p className="plugins-page-header-waitlist-copy">
-								{__(
-									"Be the first to know when the plugin library launches."
-								)}
-							</p>
-							<a
-								href={PLUGINS_WAITLIST_URL}
-								target="_blank"
-								rel="noreferrer"
-								className="plugins-page-header-waitlist-button group"
-							>
-								<Bell
-									size={15}
-									className="plugins-page-header-waitlist-button-icon group-hover:rotate-12"
-								/>
-								{__("Join the Waitlist")}
-								<ExternalLink
-									size={13}
-									className="plugins-page-header-waitlist-button-link"
-								/>
-							</a>
-						</div>
+					<div className="plugins-page-waitlist-action">
+						<a
+							href={PLUGINS_WAITLIST_URL}
+							target="_blank"
+							rel="noreferrer"
+							className="plugins-page-waitlist-button group"
+						>
+							<Bell
+								size={14}
+								className="group-hover:rotate-12 transition-transform"
+							/>
+							{__("Join the Waitlist")}
+							<ExternalLink size={12} className="opacity-60" />
+						</a>
 					</div>
 				</div>
 			</div>
 
 			{/* ════════════════════════════════════
-			    TAB BAR + VIEW TOGGLE
+			    MAIN CONTENT PANEL
 			   ════════════════════════════════════ */}
-			<div className="plugins-page-toolbar">
-				<div className="plugins-page-toolbar-inner">
+			<div className="plugins-page-panel">
+				{/* Tab Bar + View Toggle */}
+				<div className="plugins-page-toolbar">
 					<PluginTabs
 						activeTab={activeTab}
 						onTabChange={setActiveTab}
@@ -181,7 +181,7 @@ function PluginsPage() {
 								</div>
 								<div className="plugins-page-search-icon">
 									<svg
-										className="h-4 w-4"
+										className="h-3.5 w-3.5"
 										fill="none"
 										viewBox="0 0 24 24"
 										stroke="currentColor"
@@ -197,39 +197,32 @@ function PluginsPage() {
 									onClick={() => setViewMode("grid")}
 									className={getViewButtonClassName("grid")}
 								>
-									<Grid3X3 size={15} />
+									<Grid3X3 size={14} />
 								</button>
 								<button
 									onClick={() => setViewMode("list")}
 									className={getViewButtonClassName("list")}
 								>
-									<LayoutList size={15} />
+									<LayoutList size={14} />
 								</button>
 							</div>
 						</div>
 					)}
 				</div>
-			</div>
 
-			{/* ════════════════════════════════════
-			    CONTENT AREA — BLURRED CARDS
-			   ════════════════════════════════════ */}
-			<div className="plugins-page-content">
 				{/* ── Installed tab: table ── */}
 				{activeTab === "installed" && (
-					<div className="plugins-page-content-panel">
-						<InstalledPluginsTable plugins={activeCards} />
-					</div>
+					<InstalledPluginsTable plugins={activeCards} />
 				)}
 
 				{/* ── Browse / Featured / Popular: card grid ── */}
 				{activeTab !== "installed" && (
-					<div className="plugins-page-content-panel">
+					<div>
 						{/* Tab context banner */}
 						{activeTab === "featured" && (
 							<div className="plugins-page-banner plugins-page-banner-featured">
 								<Sparkles
-									size={18}
+									size={16}
 									className="plugins-page-banner-icon plugins-page-banner-icon-featured"
 								/>
 								<div>
@@ -247,7 +240,7 @@ function PluginsPage() {
 						{activeTab === "popular" && (
 							<div className="plugins-page-banner plugins-page-banner-popular">
 								<TrendingUp
-									size={18}
+									size={16}
 									className="plugins-page-banner-icon plugins-page-banner-icon-popular"
 								/>
 								<div>
@@ -264,24 +257,28 @@ function PluginsPage() {
 						)}
 
 						{/* Card grid (or list table) */}
-						{viewMode === "grid" ? (
-							<div className="plugins-page-grid">
-								{activeCards.map((card) => (
-									<PluginCard key={card.id} plugin={card} />
-								))}
-							</div>
-						) : (
-							<InstalledPluginsTable plugins={activeCards} />
-						)}
+						<div className="plugins-page-content-wrapper">
+							{viewMode === "grid" ? (
+								<div className="plugins-page-grid">
+									{activeCards.map((card) => (
+										<PluginCard
+											key={card.id}
+											plugin={card}
+										/>
+									))}
+								</div>
+							) : (
+								<InstalledPluginsTable plugins={activeCards} />
+							)}
+							{/* Floating overlay */}
+							<div className="plugins-page-content-overlay" />
+						</div>
 					</div>
 				)}
-
-				{/* ── Floating "under construction" overlay ── */}
-				<div className="plugins-page-content-overlay" />
 			</div>
 
 			{/* ════════════════════════════════════
-			    WORK IN PROGRESS HERO
+			    WORK IN PROGRESS ROADMAP
 			   ════════════════════════════════════ */}
 			<div className="plugins-page-roadmap">
 				<div className="plugins-page-roadmap-inner">
@@ -291,7 +288,7 @@ function PluginsPage() {
 
 					<div className="plugins-page-roadmap-copy">
 						<div className="plugins-page-roadmap-icon">
-							<Wrench size={24} />
+							<Wrench size={22} />
 						</div>
 						<h2 className="plugins-page-roadmap-title">
 							{__("Plugin System Under Development")}
@@ -376,7 +373,7 @@ function FeatureRoadmapCard({
 			)}
 		>
 			<div className="plugins-page-roadmap-card-icon">
-				<Icon size={17} />
+				<Icon size={16} />
 			</div>
 			<h3 className="plugins-page-roadmap-card-title">{title}</h3>
 			<p className="plugins-page-roadmap-card-copy">{description}</p>

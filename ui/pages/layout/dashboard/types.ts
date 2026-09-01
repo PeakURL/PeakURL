@@ -78,6 +78,9 @@ export interface NavChild {
 	/** Router destination for the child link. */
 	href: string;
 
+	/** Optional parent route prefix used to mark nested routes as active. */
+	activeBasePath?: string;
+
 	/** Whether the child requires admin access. */
 	adminOnly?: boolean;
 }

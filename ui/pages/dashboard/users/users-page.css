@@ -1,23 +1,15 @@
 @layer components {
 	.users-page {
-		@apply space-y-5;
+		@apply space-y-4 pb-8 sm:space-y-5;
 	}
 
 	.users-page-loading-state,
 	.users-page-access-state {
-		@apply rounded-xl border border-stroke bg-surface p-10 text-center;
-	}
-
-	.users-page-loading-state {
-		@apply rounded-lg;
-	}
-
-	.users-page-spinner {
-		@apply mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-accent;
+		@apply rounded-xl border border-stroke bg-surface p-10 text-center shadow-xs;
 	}
 
 	.users-page-access-icon {
-		@apply mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600;
+		@apply mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 ring-1 ring-stroke;
 	}
 
 	.users-page-access-title {
@@ -25,58 +17,117 @@
 	}
 
 	.users-page-access-summary {
-		@apply mt-2 text-sm text-text-muted;
+		@apply mt-2 text-sm text-text-muted max-w-md mx-auto;
 	}
 
+	/* Hero Section */
 	.users-page-hero {
-		@apply flex flex-col gap-4 rounded-xl border border-stroke bg-surface px-6 py-5 sm:flex-row sm:items-end sm:justify-between;
+		@apply flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between px-1 pt-1;
+	}
+
+	.users-page-hero-copy {
+		@apply min-w-0 flex flex-col;
+		text-align: start;
 	}
 
 	.users-page-hero-badge {
-		@apply mb-3 inline-flex items-center gap-2 rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold uppercase text-accent;
-		letter-spacing: 0.18em;
+		@apply mb-2 w-max inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-accent;
 	}
 
-	.users-page-hero-title {
-		@apply text-2xl font-semibold text-heading;
+	.users-page-title {
+		@apply text-2xl font-bold tracking-tight text-heading sm:text-3xl;
 	}
 
-	.users-page-hero-summary {
-		@apply mt-2 max-w-2xl text-sm text-text-muted;
+	.users-page-summary {
+		@apply mt-1 text-sm leading-relaxed text-text-muted;
+		text-align: start;
 	}
 
-	.users-page-stats {
-		@apply grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4;
+	/* Overview Metric Cards - Uniform 4-column grid */
+	.users-page-overview {
+		@apply w-full;
 	}
 
-	.users-page-stat-card {
-		@apply rounded-xl border border-stroke bg-surface p-5 transition-all duration-200 hover:border-stroke-strong hover:shadow-md;
+	.users-page-overview-grid {
+		@apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4;
 	}
 
-	.users-page-stat-label {
-		@apply text-xs font-semibold uppercase text-text-muted;
-		letter-spacing: 0.16em;
+	.users-page-overview-item {
+		@apply rounded-lg border border-stroke bg-surface p-4 transition-all duration-200 hover:border-stroke-strong hover:shadow-md;
+		text-align: start;
 	}
 
-	.users-page-stat-value {
-		@apply mt-3 text-3xl font-semibold text-heading;
+	.users-page-overview-header {
+		@apply mb-3 flex items-start justify-between;
 	}
 
+	.users-page-overview-copy {
+		@apply flex-1 min-w-0;
+	}
+
+	.users-page-overview-title {
+		@apply mb-2 text-xs font-medium uppercase tracking-wide text-text-muted;
+	}
+
+	.users-page-overview-value {
+		@apply text-2xl font-bold text-heading;
+	}
+
+	.users-page-overview-value-text {
+		@apply text-base font-bold text-heading leading-tight truncate;
+	}
+
+	.users-page-overview-icon {
+		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-lg;
+	}
+
+	.users-page-overview-icon-all {
+		@apply bg-accent/10 text-accent;
+	}
+
+	.users-page-overview-icon-admins {
+		@apply bg-rose-500/10 text-rose-600 dark:bg-rose-500/20 dark:text-rose-400;
+	}
+
+	.users-page-overview-icon-editors {
+		@apply bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400;
+	}
+
+	.users-page-overview-icon-latest {
+		@apply bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400;
+	}
+
+	.users-page-overview-icon-glyph {
+		@apply h-4 w-4;
+	}
+
+	.users-page-overview-note {
+		@apply text-xs text-text-muted truncate;
+	}
+
+	/* Main Panel */
 	.users-page-panel {
-		@apply overflow-hidden rounded-xl border border-stroke bg-surface;
+		@apply overflow-hidden rounded-xl border border-stroke bg-surface shadow-xs;
 	}
 
 	.users-page-panel-header {
-		@apply border-b border-stroke px-6 py-4;
+		@apply flex flex-col gap-3 border-b border-stroke bg-surface px-5 py-3.5 sm:flex-row sm:items-center sm:justify-between;
+	}
+
+	.users-page-panel-header-main {
+		@apply flex items-center gap-2.5;
 	}
 
 	.users-page-panel-title {
-		@apply text-sm font-semibold uppercase text-text-muted;
-		letter-spacing: 0.16em;
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.users-page-panel-count {
+		@apply inline-flex items-center rounded-full border border-accent/15 bg-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent;
 	}
 
 	.users-page-panel-state {
-		@apply p-10 text-center;
+		@apply p-12 text-center;
 	}
 
 	.users-page-panel-error {
@@ -84,15 +135,15 @@
 	}
 
 	.users-page-empty-icon {
-		@apply mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-surface-alt text-text-muted;
+		@apply mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-surface-alt text-text-muted ring-1 ring-stroke;
 	}
 
 	.users-page-empty-title {
-		@apply text-lg font-semibold text-heading;
+		@apply text-base font-semibold text-heading;
 	}
 
 	.users-page-empty-summary {
-		@apply mt-2 text-sm text-text-muted;
+		@apply mt-1 text-sm text-text-muted max-w-sm mx-auto;
 	}
 
 	.users-page-table-scroll {
@@ -104,52 +155,51 @@
 	}
 
 	.users-page-table-head {
-		@apply bg-surface-alt;
+		@apply bg-surface-alt/70 border-b border-stroke;
 	}
 
 	.users-page-table-head-row {
-		@apply text-xs font-semibold uppercase text-text-muted;
+		@apply text-[11px] font-semibold uppercase tracking-[0.14em] text-text-muted;
 		text-align: start;
-		letter-spacing: 0.16em;
 	}
 
 	.users-page-table-heading {
-		@apply px-6 py-4;
+		@apply px-5 py-2.5;
 	}
 
 	.users-page-table-heading-end {
-		@apply px-6 py-4;
+		@apply px-5 py-2.5;
 		text-align: end;
 	}
 
 	.users-page-table-body {
-		@apply divide-y divide-stroke;
+		@apply divide-y divide-stroke/60 bg-surface;
 	}
 
 	.users-page-table-row {
-		@apply hover:bg-surface-alt/60;
+		@apply transition-colors hover:bg-surface-alt/40;
 	}
 
 	.users-page-table-cell {
-		@apply px-6 py-4;
+		@apply px-5 py-3.5 align-middle;
 		text-align: start;
 	}
 
 	.users-page-table-cell-meta {
-		@apply px-6 py-4 text-sm text-text-muted;
+		@apply px-5 py-3.5 align-middle text-xs text-text-muted;
 		text-align: start;
 	}
 
 	.users-page-table-cell-actions {
-		@apply px-6 py-4;
+		@apply px-5 py-3.5 align-middle;
 	}
 
 	.users-page-user {
-		@apply flex w-full items-start justify-start gap-3;
+		@apply flex w-full items-center justify-start gap-3;
 	}
 
 	.users-page-avatar {
-		@apply mt-0.5 rounded-full;
+		@apply shrink-0 rounded-full ring-1 ring-stroke/70;
 	}
 
 	.users-page-user-copy {
@@ -158,43 +208,72 @@
 	}
 
 	.users-page-user-name {
-		@apply font-medium text-heading;
+		@apply flex items-center gap-2;
 	}
 
-	.users-page-user-email {
-		@apply text-sm text-text-muted;
+	.users-page-self-badge {
+		@apply inline-flex items-center rounded-md border border-accent/20 bg-accent/10 px-1.5 py-px text-[10px] font-semibold text-accent;
+	}
+
+	.users-page-user-meta {
+		@apply mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-text-muted;
 	}
 
 	.users-page-user-username {
+		@apply text-xs font-medium text-heading/80;
+	}
+
+	.users-page-user-dot {
+		@apply text-text-muted/40 text-[10px];
+	}
+
+	.users-page-user-email {
 		@apply text-xs text-text-muted;
 	}
 
 	.users-page-role-badge {
-		@apply inline-flex rounded-full border px-3 py-1 text-xs font-semibold;
+		@apply inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium;
 	}
 
 	.users-page-role-badge-admin {
-		@apply border-red-500/20 bg-red-500/10 text-red-700 dark:text-red-300;
+		@apply border-rose-500/20 bg-rose-500/10 text-rose-700 dark:text-rose-400;
 	}
 
 	.users-page-role-badge-editor {
-		@apply border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-300;
+		@apply border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-400;
+	}
+
+	.users-page-date-primary {
+		@apply block text-xs font-semibold text-heading;
+		unicode-bidi: -moz-plaintext;
+		unicode-bidi: plaintext;
+	}
+
+	.users-page-date-exact {
+		@apply block text-[11px] text-text-muted/80 mt-0.5;
+		unicode-bidi: -moz-plaintext;
+		unicode-bidi: plaintext;
 	}
 
 	.users-page-actions {
-		@apply flex justify-end gap-2;
+		@apply flex items-center justify-end gap-1.5;
+	}
+
+	.users-page-action-button {
+		@apply inline-flex h-7.5 w-7.5 items-center justify-center rounded-lg border border-transparent bg-transparent text-text-muted transition-colors hover:border-stroke hover:bg-surface-alt hover:text-heading focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-30;
 	}
 
 	.users-page-action-delete {
-		@apply text-red-600 hover:border-red-500 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-500/10;
+		@apply text-text-muted hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 focus:ring-rose-500/20 dark:hover:border-rose-500/20 dark:hover:bg-rose-950/30 dark:hover:text-rose-400;
 	}
 
+	/* Dialog */
 	.users-page-dialog {
 		@apply relative z-50;
 	}
 
 	.users-page-dialog-backdrop {
-		@apply fixed inset-0 bg-black/40;
+		@apply fixed inset-0 bg-black/50 backdrop-blur-xs;
 	}
 
 	.users-page-dialog-wrapper {
@@ -202,51 +281,51 @@
 	}
 
 	.users-page-dialog-panel {
-		@apply flex max-h-full w-full max-w-2xl flex-col rounded-2xl border border-stroke bg-surface shadow-2xl sm:max-h-[90vh];
+		@apply flex max-h-full w-full max-w-xl flex-col rounded-2xl border border-stroke bg-surface shadow-2xl sm:max-h-[90vh];
 	}
 
 	.users-page-dialog-header {
-		@apply flex shrink-0 items-start justify-between border-b border-stroke px-6 py-5;
+		@apply flex shrink-0 items-start justify-between border-b border-stroke px-6 py-4.5;
 	}
 
 	.users-page-dialog-title {
-		@apply text-lg font-semibold text-heading;
+		@apply text-base font-semibold text-heading;
 	}
 
 	.users-page-dialog-summary {
-		@apply mt-1 text-sm text-text-muted;
+		@apply mt-0.5 text-xs text-text-muted;
 	}
 
 	.users-page-dialog-close {
-		@apply rounded-lg p-2 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading;
+		@apply inline-flex h-7.5 w-7.5 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-surface-alt hover:text-heading;
 	}
 
 	.users-page-dialog-form {
-		@apply space-y-5 overflow-y-auto px-6 py-6;
+		@apply space-y-4 overflow-y-auto px-6 py-5;
 	}
 
 	.users-page-dialog-error {
-		@apply rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-300;
+		@apply rounded-lg border border-red-500/20 bg-red-500/10 px-3.5 py-2.5 text-xs text-red-700 dark:text-red-300;
 	}
 
 	.users-page-dialog-grid {
-		@apply grid gap-4 sm:grid-cols-2;
+		@apply grid gap-3.5 sm:grid-cols-2;
 	}
 
 	.users-page-dialog-field {
-		@apply space-y-2;
+		@apply space-y-1.5;
 	}
 
 	.users-page-dialog-label {
-		@apply block text-sm font-semibold text-heading;
+		@apply block text-xs font-semibold text-heading;
 	}
 
 	.users-page-dialog-help {
-		@apply text-xs text-text-muted;
+		@apply text-[11px] text-text-muted;
 	}
 
 	.users-page-dialog-actions {
-		@apply flex gap-3 border-t border-stroke pt-4;
+		@apply flex gap-2.5 border-t border-stroke pt-4;
 	}
 
 	.users-page-dialog-actions-start {

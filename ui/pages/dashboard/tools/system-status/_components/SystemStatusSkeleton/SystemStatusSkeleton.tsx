@@ -10,7 +10,13 @@ export function SystemStatusSkeleton() {
 					<SkeletonLoader className="system-status-skeleton-title" />
 					<SkeletonLoader className="system-status-skeleton-summary" />
 				</div>
-				<SkeletonLoader className="system-status-skeleton-refresh" />
+				<div className="system-status-skeleton-hero-actions">
+					<div className="system-status-skeleton-tabs">
+						<SkeletonLoader className="system-status-skeleton-tab" />
+						<SkeletonLoader className="system-status-skeleton-tab" />
+					</div>
+					<SkeletonLoader className="system-status-skeleton-refresh" />
+				</div>
 			</div>
 
 			{/* Operational Status Banner Skeleton */}
@@ -20,14 +26,14 @@ export function SystemStatusSkeleton() {
 					<div className="system-status-skeleton-banner-copy">
 						<SkeletonLoader className="system-status-skeleton-banner-title" />
 						<SkeletonLoader className="system-status-skeleton-banner-description" />
+						<div className="system-status-skeleton-banner-footer">
+							<div className="system-status-skeleton-banner-pills">
+								<SkeletonLoader className="system-status-skeleton-banner-pill" />
+								<SkeletonLoader className="system-status-skeleton-banner-pill" />
+							</div>
+							<SkeletonLoader className="system-status-skeleton-banner-timestamp" />
+						</div>
 					</div>
-				</div>
-				<div className="system-status-skeleton-banner-footer">
-					<div className="system-status-skeleton-banner-pills">
-						<SkeletonLoader className="system-status-skeleton-banner-pill" />
-						<SkeletonLoader className="system-status-skeleton-banner-pill" />
-					</div>
-					<SkeletonLoader className="system-status-skeleton-banner-timestamp" />
 				</div>
 			</div>
 
@@ -35,10 +41,9 @@ export function SystemStatusSkeleton() {
 			<div className="system-status-skeleton-subsystems">
 				<div className="system-status-skeleton-subsystems-header">
 					<SkeletonLoader className="system-status-skeleton-subsystems-title" />
-					<SkeletonLoader className="system-status-skeleton-subsystems-count" />
 				</div>
 				<div className="system-status-skeleton-subsystems-grid">
-					{Array.from({ length: 7 }).map((_, index) => (
+					{Array.from({ length: 8 }).map((_, index) => (
 						<div
 							key={index}
 							className="system-status-skeleton-subsystem-card"
@@ -51,14 +56,6 @@ export function SystemStatusSkeleton() {
 							<SkeletonLoader className="system-status-skeleton-subsystem-badge" />
 						</div>
 					))}
-				</div>
-			</div>
-
-			{/* Toolbar Tabs Skeleton */}
-			<div className="system-status-skeleton-toolbar">
-				<div className="system-status-skeleton-tabs">
-					<SkeletonLoader className="system-status-skeleton-tab" />
-					<SkeletonLoader className="system-status-skeleton-tab" />
 				</div>
 			</div>
 

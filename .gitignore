@@ -33,6 +33,7 @@ core/.env
 /content/uploads/favicon/favicon.png
 /content/uploads/favicon/site.webmanifest
 /content/debug.log
+/content/cache/
 /docker/proxy/certs/*
 !/docker/proxy/certs/.gitkeep
 

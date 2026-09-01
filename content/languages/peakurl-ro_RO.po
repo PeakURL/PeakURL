@@ -3,10 +3,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language: ro_RO\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"Project-Id-Version: 1.5.3\n"
-"Report-Msgid-Bugs-To: https://peakurl.org\n"
+"Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
+"Last-Translator: PeakURL Team <translate@peakurl.org>\n"
+"MIME-Version: 1.0\n"
+"PO-Revision-Date: 2026-09-01 21:23+0000\n"
+"POT-Creation-Date: 2026-09-01 21:23+0000\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n == 0 || n != 1 && n % 100 >= 1 && n % 100 <= 19 ? 1 : 2;\n"
+"Project-Id-Version: PeakURL 1.6.0\n"
+"Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
 "X-Domain: peakurl\n"
+"X-Generator: PeakURL i18n Tools\n"
 
 #: app/database/repair-specs.php:41
 msgid "The clicks table still contains row IDs with prefixes and should be normalized."
@@ -265,7 +271,7 @@ msgid "No restorable link metadata found in this activity record."
 msgstr "Nu s-au găsit metadate restaurabile în această înregistrare de activitate."
 
 #: app/traits/analytics.php:782
-#: ui/pages/dashboard/activity/ActivityPage.tsx:464
+#: ui/pages/dashboard/activity/ActivityPage.tsx:370
 msgid "This link was permanently deleted and cannot be restored."
 msgstr "Acest link a fost șters definitiv și nu poate fi restaurat."
 
@@ -292,57 +298,57 @@ msgid "You do not have permission to view this link."
 msgstr "Nu aveți permisiunea de a vizualiza acest link."
 
 #: app/traits/links.php:403
-#: app/traits/links.php:1168
+#: app/traits/links.php:1172
 msgid "Provide either socialImage or socialImageUrl, not both."
 msgstr "Specificați fie socialImage, fie socialImageUrl, nu ambele."
 
-#: app/traits/links.php:827
+#: app/traits/links.php:831
 msgid "Complete the verification to open this link."
 msgstr "Finalizați verificarea pentru a deschide acest link."
 
-#: app/traits/links.php:842
+#: app/traits/links.php:846
 msgid "Verification failed. Please try again."
 msgstr "Verificarea a eșuat. Vă rugăm să încercați din nou."
 
-#: app/traits/links.php:1092
+#: app/traits/links.php:1096
 msgid "You do not have permission to edit this link."
 msgstr "Nu aveți permisiunea de a edita acest link."
 
-#: app/traits/links.php:1354
+#: app/traits/links.php:1361
 msgid "You do not have permission to delete this link."
 msgstr "Nu aveți permisiunea de a șterge acest link."
 
-#: app/traits/links.php:1500
+#: app/traits/links.php:1511
 msgid "That short link does not exist."
 msgstr "Acel link scurt nu există."
 
-#: app/traits/links.php:1507
+#: app/traits/links.php:1518
 msgid "This link is already active."
 msgstr "Acest link este deja activ."
 
-#: app/traits/links.php:1517
+#: app/traits/links.php:1528
 msgid "You do not have permission to restore this link."
 msgstr "Nu aveți permisiunea de a restaura acest link."
 
-#: app/traits/links.php:1581
-#: app/traits/links.php:1857
-#: app/traits/links.php:1931
+#: app/traits/links.php:1594
+#: app/traits/links.php:1875
+#: app/traits/links.php:1953
 msgid "You do not have permission to delete links."
 msgstr "Nu aveți permisiunea de a șterge linkuri."
 
-#: app/traits/links.php:1760
+#: app/traits/links.php:1776
 msgid "You do not have permission to restore links."
 msgstr "Nu aveți permisiunea de a restaura linkuri."
 
-#: app/traits/links.php:2116
+#: app/traits/links.php:2138
 msgid "A valid destination URL is required."
 msgstr "Este necesar un URL de destinație valid."
 
-#: app/traits/links.php:2134
+#: app/traits/links.php:2156
 msgid "That short code is reserved by the application."
 msgstr "Acel cod scurt este rezervat de aplicație."
 
-#: app/traits/links.php:2144
+#: app/traits/links.php:2166
 msgid "That short code is already in use."
 msgstr "Acel cod scurt este deja utilizat."
 
@@ -351,118 +357,118 @@ msgstr "Acel cod scurt este deja utilizat."
 msgid "Invalid date value provided."
 msgstr "Valoarea datei furnizate este nevalidă."
 
-#: app/includes/functions.php:954
+#: app/includes/functions.php:961
 msgid "%s is briefly unavailable"
 msgstr "%s este temporar indisponibil"
 
-#: app/includes/functions.php:960
+#: app/includes/functions.php:967
 msgid "%s is briefly unavailable right now. Please try again in a moment."
 msgstr "%s este temporar indisponibil în acest moment. Vă rugăm să încercați din nou în câteva momente."
 
-#: app/includes/functions.php:973
+#: app/includes/functions.php:980
 msgid "Temporarily unavailable"
 msgstr "Temporar indisponibil"
 
-#: app/includes/functions.php:974
+#: app/includes/functions.php:981
 msgid "Briefly unavailable"
 msgstr "Indisponibil temporar"
 
-#: app/includes/functions.php:975
+#: app/includes/functions.php:982
 msgid "We are making a few improvements right now. Please refresh this page in a moment."
 msgstr "Efectuăm câteva îmbunătățiri chiar acum. Vă rugăm să reîmprospătați această pagină în câteva momente."
 
-#: app/includes/functions.php:976
+#: app/includes/functions.php:983
 msgid "Thanks for your patience."
 msgstr "Vă mulțumim pentru răbdare."
 
-#: app/includes/functions.php:977
+#: app/includes/functions.php:984
 #: ui/pages/auth/reset-password/ResetPasswordPage.tsx:121
 msgid "Loading"
 msgstr "Se încarcă"
 
-#: app/includes/functions.php:1139
+#: app/includes/functions.php:1146
 msgid "%s - Open-Source Self-Hosted URL Shortener"
 msgstr "%s - Scurtător de URL-uri open-source găzduit propriu"
 
-#: app/includes/functions.php:1145
+#: app/includes/functions.php:1152
 msgid "%s is an open-source, self-hosted URL shortener built for speed, privacy, and control."
 msgstr "%s este un scurtător de URL-uri open-source, găzduit pe propriul server, creat pentru viteză, confidențialitate și control deplin."
 
-#: app/includes/functions.php:1151
+#: app/includes/functions.php:1158
 msgid "Welcome to your self-hosted %s installation. The platform is running securely and is ready to manage your links, analytics, and integrations."
 msgstr "Bun venit la instalarea ta %s găzduită propriu. Platforma funcționează în siguranță și este gata să îți gestioneze linkurile, analizele și integrările."
 
-#: app/includes/functions.php:1157
+#: app/includes/functions.php:1164
 msgid "This is the default %s landing page template. To completely re-style and customize this page with your own branding, edit the local file:"
 msgstr "Acesta este șablonul implicit al paginii de destinație %s. Pentru a personaliza complet această pagină cu propriul tău brand, editează fișierul local:"
 
-#: app/includes/functions.php:1163
+#: app/includes/functions.php:1170
 msgid "Settings → General"
 msgstr "Setări → General"
 
-#: app/includes/functions.php:1168
+#: app/includes/functions.php:1175
 msgid "Changes are applied instantly. You can also switch the root domain behavior back to a direct Login screen or a Custom Redirect URL from your dashboard under %s."
 msgstr "Modificările se aplică instantaneu. Poți schimba oricând comportamentul domeniului rădăcină înapoi la un ecran direct de conectare sau un URL de redirecționare personalizat din panoul de control la %s."
 
-#: app/includes/functions.php:1174
+#: app/includes/functions.php:1181
 msgid "Visit %s"
 msgstr "Vizitează %s"
 
-#: app/includes/functions.php:1185
+#: app/includes/functions.php:1192
 #: ui/pages/dashboard/about/Sponsors.tsx:98
 #: ui/pages/dashboard/about/AboutPage.tsx:613
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
 msgid "Website"
 msgstr "Site web"
 
-#: app/includes/functions.php:1186
+#: app/includes/functions.php:1193
 #: ui/pages/dashboard/about/AboutPage.tsx:435
 msgid "Documentation"
 msgstr "Documentație"
 
-#: app/includes/functions.php:1187
+#: app/includes/functions.php:1194
 #: ui/pages/dashboard/about/Sponsors.tsx:106
 msgid "GitHub"
 msgstr "GitHub"
 
-#: app/includes/functions.php:1188
+#: app/includes/functions.php:1195
 msgid "Self-Hosted"
 msgstr "Găzduire proprie"
 
-#: app/includes/functions.php:1189
+#: app/includes/functions.php:1196
 msgid "Shorten, track, and <span class=\"gradient-text\">own every link.</span>"
 msgstr "Scurtează, monitorizează și <span class=\"gradient-text\">deține fiecare link.</span>"
 
-#: app/includes/functions.php:1191
+#: app/includes/functions.php:1198
 msgid "Dashboard Login"
 msgstr "Conectare în panou"
 
-#: app/includes/functions.php:1192
+#: app/includes/functions.php:1199
 msgid "Read the docs"
 msgstr "Citește documentația"
 
-#: app/includes/functions.php:1193
+#: app/includes/functions.php:1200
 msgid "Customize This Page"
 msgstr "Personalizează această pagină"
 
-#: app/includes/functions.php:1197
+#: app/includes/functions.php:1204
 msgid "for updates."
 msgstr "pentru actualizări."
 
-#: app/includes/application.php:121
+#: app/includes/application.php:125
 msgid "An internal server error occurred. Please try again or contact support if the issue persists."
 msgstr "A apărut o eroare internă de server. Vă rugăm să încercați din nou sau să contactați asistența dacă problema persistă."
 
-#: app/includes/application.php:260
+#: app/includes/application.php:274
 #: app/services/install/screen.php:142
 msgid "Request origin is not allowed."
 msgstr "Originea cererii nu este permisă."
 
-#: app/includes/runtime-config.php:594
+#: app/includes/runtime-config.php:634
 msgid "DB_PREFIX must start with a letter or underscore and use only letters, numbers, and underscores."
 msgstr "DB_PREFIX trebuie să înceapă cu o literă sau o linie de subliniere și să conțină numai litere, cifre și linii de subliniere."
 
-#: app/includes/runtime-config.php:615
+#: app/includes/runtime-config.php:655
 msgid "Database name may contain only letters, numbers, and underscores."
 msgstr "Numele bazei de date poate conține doar litere, cifre și caractere de subliniere."
 
@@ -725,7 +731,7 @@ msgstr "Acest link este protejat. Introduceți parola pentru a continua."
 #: site/setup-config.php:816
 #: ui/pages/auth/login/LoginPage.tsx:380
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:29
-#: ui/pages/dashboard/users/UsersPage.tsx:250
+#: ui/pages/dashboard/users/UsersPage.tsx:272
 msgid "Password"
 msgstr "Parolă"
 
@@ -1567,13 +1573,13 @@ msgstr "PeakURL nu a putut trimite e-mailul de test deoarece adresa de e-mail a 
 
 #: app/services/notifications.php:275
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:234
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:365
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:426
 msgid "SMTP"
 msgstr "SMTP"
 
 #: app/services/notifications.php:276
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:221
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:365
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:426
 msgid "PHP mail()"
 msgstr "PHP mail()"
 
@@ -1597,102 +1603,134 @@ msgstr "Cheia de site CAPTCHA trebuie să aibă maximum 255 de caractere."
 msgid "CAPTCHA secret key must be 512 characters or fewer."
 msgstr "Cheia secretă CAPTCHA trebuie să aibă maximum 512 caractere."
 
-#: app/services/system-status/checks.php:46
+#: app/services/system-status/checks.php:48
 #: site/setup-config.php:771
 msgid "Database connection"
 msgstr "Conexiunea la baza de date"
 
-#: app/services/system-status/checks.php:49
+#: app/services/system-status/checks.php:51
 msgid "PeakURL can reach the configured MySQL or MariaDB database."
 msgstr "PeakURL poate accesa baza de date MySQL sau MariaDB configurată."
 
-#: app/services/system-status/checks.php:50
+#: app/services/system-status/checks.php:52
 msgid "PeakURL could not reach the configured database."
 msgstr "PeakURL nu a putut accesa baza de date configurată."
 
-#: app/services/system-status/checks.php:54
+#: app/services/system-status/checks.php:56
 msgid "Database schema"
 msgstr "Schema bazei de date"
 
-#: app/services/system-status/checks.php:59
+#: app/services/system-status/checks.php:61
 msgid "PeakURL found schema changes or leftovers that still need the database upgrader."
 msgstr "PeakURL a găsit modificări ale schemei sau resturi care necesită încă actualizarea bazei de date."
 
-#: app/services/system-status/checks.php:60
+#: app/services/system-status/checks.php:62
 msgid "The PeakURL database schema matches the current release."
 msgstr "Schema bazei de date PeakURL corespunde versiunii curente."
 
-#: app/services/system-status/checks.php:64
+#: app/services/system-status/checks.php:66
+msgid "Object cache"
+msgstr "Memorie cache pentru obiecte"
+
+#: app/services/system-status/checks.php:74
 msgid "Content storage"
 msgstr "Stocarea conținutului"
 
-#: app/services/system-status/checks.php:69
+#: app/services/system-status/checks.php:79
 msgid "The persistent content directory is present and writable."
 msgstr "Directorul persistent de conținut este prezent și are permisiuni de scriere."
 
-#: app/services/system-status/checks.php:70
+#: app/services/system-status/checks.php:80
 msgid "The persistent content directory is missing or not writable."
 msgstr "Directorul persistent de conținut lipsește sau nu are permisiuni de scriere."
 
-#: app/services/system-status/checks.php:74
+#: app/services/system-status/checks.php:84
 msgid "Language packs"
 msgstr "Pachete de limbă"
 
-#: app/services/system-status/checks.php:79
+#: app/services/system-status/checks.php:89
 msgid "Installed dashboard and PHP translation files can be read from content/languages."
 msgstr "Fișierele de traducere instalate pentru panoul de control și PHP pot fi citite din content/languages."
 
-#: app/services/system-status/checks.php:80
+#: app/services/system-status/checks.php:90
 msgid "PeakURL cannot read the content/languages directory right now."
 msgstr "PeakURL nu poate citi directorul content/languages în acest moment."
 
-#: app/services/system-status/checks.php:84
+#: app/services/system-status/checks.php:94
 msgid "PHP intl extension"
 msgstr "Extensia PHP intl"
 
-#: app/services/system-status/checks.php:89
+#: app/services/system-status/checks.php:99
 msgid "Server-side locale helpers can use native intl metadata."
 msgstr "Funcțiile de asistență pentru localizare de pe server pot utiliza metadatele intl native."
 
-#: app/services/system-status/checks.php:90
+#: app/services/system-status/checks.php:100
 msgid "PeakURL can still run without intl, but server-side locale helpers use fallbacks."
 msgstr "PeakURL poate funcționa și fără intl, însă funcțiile de asistență pentru localizare de pe server folosesc mecanisme de rezervă."
 
-#: app/services/system-status/checks.php:94
+#: app/services/system-status/checks.php:104
 msgid "PHP ZipArchive"
 msgstr "Extensia PHP ZipArchive"
 
-#: app/services/system-status/checks.php:99
+#: app/services/system-status/checks.php:109
 msgid "Dashboard updates can use ZipArchive when the install type allows it."
 msgstr "Actualizările din panoul de control pot folosi ZipArchive dacă tipul de instalare permite acest lucru."
 
-#: app/services/system-status/checks.php:100
+#: app/services/system-status/checks.php:110
 msgid "Dashboard-managed updates require the PHP ZipArchive extension."
 msgstr "Actualizările gestionate din panoul de control necesită extensia PHP ZipArchive."
 
-#: app/services/system-status/checks.php:104
+#: app/services/system-status/checks.php:114
 msgid "Email transport"
 msgstr "Transport de e-mail"
 
-#: app/services/system-status/checks.php:109
+#: app/services/system-status/checks.php:119
 msgid "PeakURL has an active mail transport configuration."
 msgstr "PeakURL are o configurație activă de transport al e-mailurilor."
 
-#: app/services/system-status/checks.php:110
+#: app/services/system-status/checks.php:120
 msgid "PeakURL is missing part of the active mail transport configuration."
 msgstr "Din configurația activă de transport al e-mailurilor din PeakURL lipsesc anumite setări."
 
-#: app/services/system-status/checks.php:114
+#: app/services/system-status/checks.php:124
 msgid "Location data"
 msgstr "Date de localizare"
 
-#: app/services/system-status/checks.php:119
+#: app/services/system-status/checks.php:129
 msgid "The GeoLite2 City database is available for visitor location analytics."
 msgstr "Baza de date GeoLite2 City este disponibilă pentru statisticile privind locația vizitatorilor."
 
-#: app/services/system-status/checks.php:120
+#: app/services/system-status/checks.php:130
 msgid "Visitor location analytics is not fully ready yet."
 msgstr "Analiza locației vizitatorilor nu este încă pe deplin pregătită."
+
+#: app/services/system-status/checks.php:187
+msgid "Object cache is currently disabled in configuration."
+msgstr "Memoria cache pentru obiecte este momentan dezactivată în configurare."
+
+#: app/services/system-status/checks.php:197
+msgid "High-performance Redis%s in-memory cache is active."
+msgstr "Memoria cache în memorie Redis%s de înaltă performanță este activă."
+
+#: app/services/system-status/checks.php:200
+msgid "High-performance APCu shared memory cache is active."
+msgstr "Memoria cache partajată APCu de înaltă performanță este activă."
+
+#: app/services/system-status/checks.php:203
+msgid "Filesystem object cache is active in content/cache."
+msgstr "Memoria cache pentru obiecte din sistemul de fișiere este activă în content/cache."
+
+#: app/services/system-status/checks.php:205
+msgid "Object and transient cache is operational."
+msgstr "Memoria cache pentru obiecte și date tranzitorii este operațională."
+
+#: app/services/system-status/checks.php:209
+msgid "Configured cache driver is unavailable; operating on fallback driver."
+msgstr "Driverul de cache configurat nu este disponibil; se utilizează driverul de rezervă."
+
+#: app/services/system-status/checks.php:212
+msgid "No cache backend is currently usable; requests query the database directly."
+msgstr "Niciun backend de cache nu este utilizabil; interogările accesează direct baza de date."
 
 #: site/install.php:92
 msgid "Administrator Setup - %s"
@@ -1706,8 +1744,8 @@ msgstr "Bun venit"
 #: site/install.php:536
 #: site/setup-config.php:679
 #: ui/components/common/ApiErrorPage/ApiErrorPage.tsx:70
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:87
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:716
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:123
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:941
 msgid "Database"
 msgstr "Bază de date"
 
@@ -1744,7 +1782,7 @@ msgstr "Administrator"
 #: site/install.php:583
 #: site/setup-config.php:812
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:347
-#: ui/pages/dashboard/users/UsersPage.tsx:229
+#: ui/pages/dashboard/users/UsersPage.tsx:251
 msgid "Username"
 msgstr "Nume de utilizator"
 
@@ -1753,11 +1791,11 @@ msgid "Letters, numbers, dots, dashes, underscores, or @."
 msgstr "Litere, cifre, puncte, cratime, caractere de subliniere sau @."
 
 #: site/install.php:588
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:93
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:717
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:131
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:943
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:173
-#: ui/pages/dashboard/users/UsersPage.tsx:238
+#: ui/pages/dashboard/users/UsersPage.tsx:260
 msgid "Email"
 msgstr "E-mail"
 
@@ -1840,7 +1878,7 @@ msgid "Connection details"
 msgstr "Detalii de conectare"
 
 #: site/setup-config.php:820
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:557
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:706
 msgid "Host"
 msgstr "Gazdă"
 
@@ -1849,7 +1887,7 @@ msgid "Advanced"
 msgstr "Avansat"
 
 #: site/setup-config.php:828
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:559
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:708
 msgid "Port"
 msgstr "Port"
 
@@ -1882,7 +1920,7 @@ msgstr "Panou de control"
 #: ui/utils/dashboardSearch.ts:96
 #: ui/utils/dashboardSearch.ts:101
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:48
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:413
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:430
 #: ui/pages/NotFoundPage.tsx:75
 msgid "All Links"
 msgstr "Toate linkurile"
@@ -1891,7 +1929,7 @@ msgstr "Toate linkurile"
 #: ui/utils/dashboardSearch.ts:100
 #: ui/pages/auth/login/LoginPage.tsx:47
 #: ui/pages/layout/dashboard/Search/Search.tsx:286
-#: ui/pages/dashboard/activity/ActivityPage.tsx:751
+#: ui/pages/dashboard/activity/ActivityPage.tsx:636
 #: ui/pages/dashboard/links/_components/Header/Header.tsx:42
 #: ui/router/pageTitle.ts:77
 msgid "Links"
@@ -1899,9 +1937,9 @@ msgstr "Linkuri"
 
 #: ui/utils/dashboardSearch.ts:115
 #: ui/utils/dashboardSearch.ts:119
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:80
 #: ui/pages/layout/dashboard/Header/Header.tsx:121
-#: ui/pages/dashboard/activity/ActivityPage.tsx:142
-#: ui/pages/dashboard/activity/ActivityPage.tsx:796
+#: ui/pages/dashboard/activity/ActivityPage.tsx:693
 #: ui/router/pageTitle.ts:73
 msgid "Activity"
 msgstr "Activitate"
@@ -1913,9 +1951,9 @@ msgstr "Activitate recentă"
 
 #: ui/utils/dashboardSearch.ts:131
 #: ui/utils/dashboardSearch.ts:136
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:473
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:522
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:529
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:490
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:539
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:546
 msgid "About PeakURL"
 msgstr "Despre PeakURL"
 
@@ -1939,7 +1977,7 @@ msgstr "Setări generale"
 #: ui/utils/dashboardSearch.ts:209
 #: ui/utils/dashboardSearch.ts:225
 #: ui/utils/dashboardSearch.ts:241
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:91
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:92
 #: ui/pages/layout/dashboard/Header/Header.tsx:163
 #: ui/pages/NotFoundPage.tsx:95
 #: ui/router/pageTitle.ts:34
@@ -1972,7 +2010,7 @@ msgstr "Securitate"
 #: ui/utils/dashboardSearch.ts:187
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:79
 #: ui/pages/dashboard/settings/Layout.tsx:30
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:696
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:921
 #: ui/router/pageTitle.ts:24
 msgid "API Keys"
 msgstr "Chei API"
@@ -1999,8 +2037,9 @@ msgstr "Configurare e-mail"
 #: ui/utils/dashboardSearch.ts:224
 #: ui/utils/dashboardSearch.ts:228
 #: ui/pages/dashboard/settings/Layout.tsx:48
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:95
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:720
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:133
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:505
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:946
 #: ui/router/pageTitle.ts:30
 msgid "Location Data"
 msgstr "Date de localizare"
@@ -2008,7 +2047,7 @@ msgstr "Date de localizare"
 #: ui/utils/dashboardSearch.ts:240
 #: ui/utils/dashboardSearch.ts:244
 #: ui/pages/dashboard/settings/Layout.tsx:54
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:97
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:135
 #: ui/router/pageTitle.ts:32
 msgid "Updates"
 msgstr "Actualizări"
@@ -2017,9 +2056,9 @@ msgstr "Actualizări"
 #: ui/utils/dashboardSearch.ts:260
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:53
 #: ui/pages/layout/dashboard/Search/Search.tsx:247
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:689
-#: ui/pages/dashboard/activity/ActivityPage.tsx:757
-#: ui/pages/dashboard/users/UsersPage.tsx:490
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:914
+#: ui/pages/dashboard/activity/ActivityPage.tsx:642
+#: ui/pages/dashboard/users/UsersPage.tsx:577
 #: ui/router/pageTitle.ts:85
 msgid "Users"
 msgstr "Utilizatori"
@@ -2032,7 +2071,7 @@ msgstr "Gestionare"
 #: ui/utils/dashboardSearch.ts:273
 #: ui/utils/dashboardSearch.ts:276
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:59
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:118
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:115
 #: ui/router/pageTitle.ts:81
 msgid "Plugins"
 msgstr "Module"
@@ -2040,7 +2079,7 @@ msgstr "Module"
 #: ui/utils/dashboardSearch.ts:282
 #: ui/utils/dashboardSearch.ts:287
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:70
-#: ui/pages/dashboard/tools/import/_components/layout/Header.tsx:6
+#: ui/pages/dashboard/tools/import/_components/layout/Header.tsx:12
 #: ui/pages/NotFoundPage.tsx:85
 #: ui/router/pageTitle.ts:47
 #: ui/router/pageTitle.ts:107
@@ -2066,28 +2105,28 @@ msgstr "Import: Încărcare fișier"
 
 #: ui/utils/dashboardSearch.ts:302
 #: ui/utils/dashboardSearch.ts:307
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:75
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:50
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:138
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:76
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:56
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:152
 #: ui/router/pageTitle.ts:111
 msgid "Export"
 msgstr "Export"
 
 #: ui/utils/dashboardSearch.ts:321
 #: ui/utils/dashboardSearch.ts:326
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:84
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:777
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:821
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:85
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1006
 #: ui/router/pageTitle.ts:115
 msgid "System Status"
 msgstr "Stare sistem"
 
 #: ui/utils/dashboardSearch.ts:565
 #: ui/pages/layout/dashboard/Header/Header.tsx:40
-#: ui/pages/dashboard/activity/ActivityPage.tsx:116
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1133
-#: ui/pages/dashboard/users/UsersPage.tsx:555
-#: ui/pages/dashboard/users/UsersPage.tsx:591
+#: ui/pages/dashboard/activity/ActivityPage.tsx:112
+#: ui/pages/dashboard/users/UsersPage.tsx:82
+#: ui/pages/dashboard/users/UsersPage.tsx:90
+#: ui/pages/dashboard/users/UsersPage.tsx:679
+#: ui/pages/dashboard/users/UsersPage.tsx:715
 msgid "User"
 msgstr "Utilizator"
 
@@ -2109,7 +2148,7 @@ msgstr "Confirmă"
 #: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:122
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:156
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:18
-#: ui/pages/dashboard/users/UsersPage.tsx:330
+#: ui/pages/dashboard/users/UsersPage.tsx:352
 msgid "Cancel"
 msgstr "Anulează"
 
@@ -2126,7 +2165,7 @@ msgid "Close modal"
 msgstr "Închide fereastra"
 
 #: ui/components/ui/PageSizeControl/PageSizeControl.tsx:27
-#: ui/pages/dashboard/activity/ActivityPage.tsx:902
+#: ui/pages/dashboard/activity/ActivityPage.tsx:800
 #: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:119
 msgid "Rows per page"
 msgstr "Rânduri pe pagină"
@@ -2156,7 +2195,7 @@ msgstr "Anulează dimensiunea personalizată a paginii"
 
 #: ui/components/charts/MetricDonutChart/MetricDonutChart.tsx:37
 #: ui/components/charts/WorldMap/_components/Legend.tsx:16
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:691
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:916
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:113
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:64
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:168
@@ -2401,7 +2440,7 @@ msgid "The password reset link is invalid."
 msgstr "Linkul de resetare a parolei este nevalid."
 
 #: ui/pages/auth/reset-password/ResetPasswordPage.tsx:65
-#: ui/pages/dashboard/users/UsersPage.tsx:142
+#: ui/pages/dashboard/users/UsersPage.tsx:163
 msgid "Passwords do not match."
 msgstr "Parolele nu se potrivesc."
 
@@ -2422,8 +2461,8 @@ msgid "Once the password changes, PeakURL revokes the old sessions so only the n
 msgstr "După schimbarea parolei, PeakURL va revoca sesiunile vechi, astfel încât doar noua autentificare va rămâne validă."
 
 #: ui/pages/auth/reset-password/ResetPasswordPage.tsx:103
-#: ui/pages/dashboard/users/UsersPage.tsx:137
-#: ui/pages/dashboard/users/UsersPage.tsx:260
+#: ui/pages/dashboard/users/UsersPage.tsx:158
+#: ui/pages/dashboard/users/UsersPage.tsx:282
 msgid "Use at least 8 characters."
 msgstr "Folosiți cel puțin 8 caractere."
 
@@ -2581,32 +2620,28 @@ msgstr "Autentificare"
 msgid "Back to sign-in"
 msgstr "Înapoi la autentificare"
 
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:79
-msgid "Activity Log"
-msgstr "Jurnal de activitate"
-
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:246
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:268
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:272
 msgid "Close sidebar"
 msgstr "Închide bara laterală"
 
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:435
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:440
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:450
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:452
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:457
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:467
 msgid "Expand Menu"
 msgstr "Extindeți meniul"
 
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:436
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:441
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:451
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:453
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:458
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:468
 msgid "Collapse Menu"
 msgstr "Restrângeți meniul"
 
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:488
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:505
 msgid "Sponsor"
 msgstr "Sponsorizează"
 
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:507
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:524
 msgid "Buy Me a Coffee"
 msgstr "Cumpără-mi o cafea"
 
@@ -2616,8 +2651,8 @@ msgstr "Vă mulțumim că ați ales %s."
 
 #: ui/pages/layout/dashboard/Layout/Layout.tsx:110
 #: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:42
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:375
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:554
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:524
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:703
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:61
 #: ui/pages/dashboard/about/AboutPage.tsx:230
 #: ui/pages/dashboard/about/AboutPage.tsx:406
@@ -2690,16 +2725,16 @@ msgstr "Continuați să tastați pentru a căuta linkuri sau treceți direct la 
 #: ui/pages/layout/dashboard/Header/Header.tsx:38
 #: ui/pages/layout/dashboard/Header/Header.tsx:79
 #: ui/pages/layout/dashboard/Header/Header.tsx:91
-#: ui/pages/dashboard/activity/ActivityPage.tsx:109
-#: ui/pages/dashboard/users/UsersPage.tsx:60
-#: ui/pages/dashboard/users/UsersPage.tsx:105
+#: ui/pages/dashboard/activity/ActivityPage.tsx:105
+#: ui/pages/dashboard/users/UsersPage.tsx:67
+#: ui/pages/dashboard/users/UsersPage.tsx:126
 msgid "Admin"
 msgstr "Administrator"
 
 #: ui/pages/layout/dashboard/Header/Header.tsx:39
-#: ui/pages/dashboard/activity/ActivityPage.tsx:113
-#: ui/pages/dashboard/users/UsersPage.tsx:65
-#: ui/pages/dashboard/users/UsersPage.tsx:106
+#: ui/pages/dashboard/activity/ActivityPage.tsx:109
+#: ui/pages/dashboard/users/UsersPage.tsx:72
+#: ui/pages/dashboard/users/UsersPage.tsx:127
 msgid "Editor"
 msgstr "Editor"
 
@@ -2847,13 +2882,12 @@ msgstr "Cheia API a fost copiată în clipboard"
 
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:448
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:137
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:759
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:964
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:985
 msgid "Copied"
 msgstr "Copiat"
 
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:451
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:765
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:990
 msgid "Copy failed"
 msgstr "Copierea a eșuat"
 
@@ -3280,7 +3314,7 @@ msgid "Save or download these codes now—they won't be shown again."
 msgstr "Salvați sau descărcați aceste coduri acum — nu vor mai fi afișate din nou."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:22
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:693
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:918
 msgid "Active Sessions"
 msgstr "Sesiuni active"
 
@@ -3321,17 +3355,16 @@ msgstr "Ultima generare:"
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:88
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:93
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:123
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:375
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:503
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:507
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:515
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:551
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:555
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:574
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:580
-#: ui/pages/dashboard/activity/ActivityPage.tsx:154
-#: ui/pages/dashboard/activity/ActivityPage.tsx:196
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1080
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:524
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:652
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:656
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:664
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:700
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:704
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:724
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:730
+#: ui/pages/dashboard/activity/ActivityPage.tsx:123
+#: ui/pages/dashboard/activity/ActivityPage.tsx:165
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:53
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:90
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:31
@@ -3344,7 +3377,7 @@ msgstr "Ultima generare:"
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:106
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:109
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:41
-#: ui/pages/dashboard/users/UsersPage.tsx:645
+#: ui/pages/dashboard/users/UsersPage.tsx:787
 msgid "Unknown"
 msgstr "Necunoscut"
 
@@ -3397,7 +3430,7 @@ msgid "Last active"
 msgstr "Ultima activitate"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:79
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:586
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:736
 msgid "Current"
 msgstr "Curentă"
 
@@ -3410,12 +3443,12 @@ msgid "End session"
 msgstr "Încheie sesiunea"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:45
-#: ui/pages/dashboard/users/UsersPage.tsx:251
+#: ui/pages/dashboard/users/UsersPage.tsx:273
 msgid "New Password"
 msgstr "Parolă nouă"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:53
-#: ui/pages/dashboard/users/UsersPage.tsx:270
+#: ui/pages/dashboard/users/UsersPage.tsx:292
 msgid "Confirm New Password"
 msgstr "Confirmați noua parolă"
 
@@ -3497,17 +3530,17 @@ msgid "Profile Information"
 msgstr "Informații despre profil"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:322
-#: ui/pages/dashboard/users/UsersPage.tsx:205
+#: ui/pages/dashboard/users/UsersPage.tsx:227
 msgid "First Name"
 msgstr "Prenume"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:329
-#: ui/pages/dashboard/users/UsersPage.tsx:211
+#: ui/pages/dashboard/users/UsersPage.tsx:233
 msgid "Last Name"
 msgstr "Nume de familie"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:336
-#: ui/pages/dashboard/users/UsersPage.tsx:220
+#: ui/pages/dashboard/users/UsersPage.tsx:242
 msgid "Display Name"
 msgstr "Nume afișat"
 
@@ -3544,7 +3577,7 @@ msgid "Tagline"
 msgstr "Slogan"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:431
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:377
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:526
 msgid "Site Language"
 msgstr "Limba site-ului"
 
@@ -3672,7 +3705,7 @@ msgstr "Se salvează..."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:844
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:33
-#: ui/pages/dashboard/users/UsersPage.tsx:335
+#: ui/pages/dashboard/users/UsersPage.tsx:357
 msgid "Save Changes"
 msgstr "Salvează modificările"
 
@@ -3694,8 +3727,8 @@ msgid "Download Database"
 msgstr "Descarcă baza de date"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:153
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:146
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:639
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:188
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:788
 #: ui/pages/dashboard/tools/import/_components/results/ImportDetails.tsx:32
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:64
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:43
@@ -3706,18 +3739,18 @@ msgstr "Stare"
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:154
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:184
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:182
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:604
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:641
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:753
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:790
 msgid "Ready"
 msgstr "Gata"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:154
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:642
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:791
 msgid "Setup Required"
 msgstr "Configurare necesară"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:157
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:645
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:794
 msgid "Database Updated"
 msgstr "Bază de date actualizată"
 
@@ -3728,19 +3761,18 @@ msgid "Never"
 msgstr "Niciodată"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:170
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:653
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:802
 msgid "Database Size"
 msgstr "Dimensiunea bazei de date"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:173
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:40
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:206
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:406
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:562
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:632
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:649
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:656
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:800
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:56
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:252
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:555
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:711
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:781
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:798
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:805
 msgid "Not available"
 msgstr "Indisponibil"
 
@@ -3778,7 +3810,7 @@ msgid "PeakURL stores these values encrypted in the database so it can refresh t
 msgstr "PeakURL stochează aceste valori criptate în baza de date, astfel încât să poată reîmprospăta baza de date GeoLite2 City ulterior fără a cere din nou."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:233
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:668
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:817
 msgid "Account ID"
 msgstr "ID cont"
 
@@ -3877,7 +3909,7 @@ msgid "Attention Needed"
 msgstr "Atenție necesară"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:175
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:585
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:735
 msgid "Upgrade Recommended"
 msgstr "Actualizare recomandată"
 
@@ -3958,12 +3990,12 @@ msgid "Run Database Upgrade"
 msgstr "Rulați actualizarea bazei de date"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:66
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:571
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:721
 msgid "Recorded Schema"
 msgstr "Schemă înregistrată"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:73
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:577
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:727
 msgid "Required Schema"
 msgstr "Schemă necesară"
 
@@ -4016,7 +4048,7 @@ msgid "Released"
 msgstr "Lansat"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:108
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:403
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:552
 msgid "Last Checked"
 msgstr "Ultima verificare"
 
@@ -4052,8 +4084,8 @@ msgstr "Utilizați cheia de site și cheia secretă Cloudflare Turnstile pentru 
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:162
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:120
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:568
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:620
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:717
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:769
 msgid "None"
 msgstr "Niciunul"
 
@@ -4067,8 +4099,9 @@ msgstr "Inserați cheia secretă de la furnizorul dvs. CAPTCHA."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:176
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:182
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:399
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:627
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:548
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:776
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:857
 msgid "Disabled"
 msgstr "Dezactivat"
 
@@ -4077,9 +4110,10 @@ msgid "Editing"
 msgstr "Editare"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:185
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:612
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:616
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:669
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:761
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:765
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:818
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:894
 msgid "Not configured"
 msgstr "Neconfigurat"
 
@@ -4224,7 +4258,7 @@ msgid "Connect PeakURL to your automations with outbound webhooks for link activ
 msgstr "Conectați PeakURL la automatizările dvs. cu webhook-uri de ieșire pentru activitatea linkurilor."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:172
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:697
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:922
 msgid "Webhooks"
 msgstr "Webhook-uri"
 
@@ -4480,6 +4514,7 @@ msgid "Save the current email settings before sending a test email."
 msgstr "Salvați setările curente de e-mail înainte de a trimite un e-mail de test."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:160
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:498
 msgid "Email Delivery"
 msgstr "Livrare e-mail"
 
@@ -4508,7 +4543,7 @@ msgid "SMTP Configuration"
 msgstr "Configurare SMTP"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:255
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:609
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:758
 msgid "From Name"
 msgstr "Nume expeditor"
 
@@ -4517,7 +4552,7 @@ msgid "PeakURL"
 msgstr "PeakURL"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:266
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:608
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:757
 msgid "From Email"
 msgstr "E-mail expeditor"
 
@@ -4526,7 +4561,7 @@ msgid "noreply@yourdomain.com"
 msgstr "noreply@yourdomain.com"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:282
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:611
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:760
 msgid "SMTP Host"
 msgstr "Gazdă SMTP"
 
@@ -4535,12 +4570,12 @@ msgid "smtp.example.com"
 msgstr "smtp.example.com"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:297
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:615
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:764
 msgid "SMTP Port"
 msgstr "Port SMTP"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:314
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:619
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:768
 msgid "Encryption"
 msgstr "Criptare"
 
@@ -4549,7 +4584,7 @@ msgid "SMTP encryption"
 msgstr "Criptare SMTP"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:330
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:623
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:772
 msgid "Authentication"
 msgstr "Autentificare"
 
@@ -4609,456 +4644,666 @@ msgstr "Setările contului"
 msgid "Manage your account preferences and configurations"
 msgstr "Gestionați preferințele și configurațiile contului dvs."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:48
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:663
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:64
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:812
 msgid "Yes"
 msgstr "Da"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:48
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:664
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:64
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:813
 msgid "No"
 msgstr "Nu"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:52
-msgid "Good"
-msgstr "Bun"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:72
+msgid "recently"
+msgstr "recent"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:52
-msgid "Should be improved"
-msgstr "Ar trebui îmbunătățit"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:125
+msgid "Cache"
+msgstr "Memorie cache"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:89
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:127
 msgid "Storage"
 msgstr "Stocare"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:91
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:129
 msgid "Translations"
 msgstr "Traduceri"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:99
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:137
 msgid "System"
 msgstr "Sistem"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:133
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:171
 msgid "System status unavailable"
 msgstr "Starea sistemului este indisponibilă"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:147
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:189
 msgid "Info"
 msgstr "Informații"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:184
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:234
 msgid "Check"
 msgstr "Verificare"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:345
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:275
+msgid "Critical"
+msgstr "Critic"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:280
+msgid "Improvement"
+msgstr "Îmbunătățire"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:407
 msgid "System status data is not available right now."
 msgstr "Datele privind starea sistemului nu sunt disponibile în acest moment."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:381
-msgid "Environment"
-msgstr "Mediu"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:440
+msgid "Database Engine"
+msgstr "Motor de bază de date"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:383
-msgid "Site URL"
-msgstr "URL site"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:388
-msgid "Install Type"
-msgstr "Tip instalare"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:391
-msgid "Packaged Release"
-msgstr "Versiune împachetată"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:392
-msgid "Source Checkout"
-msgstr "Clonă din surse"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:395
-msgid "Debug Mode"
-msgstr "Mod de depanare"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:398
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:626
-msgid "Enabled"
-msgstr "Activat"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:413
-msgid "Content Directory"
-msgstr "Director de conținut"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:419
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:480
-msgid "Writable"
-msgstr "Inscriptibil"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:420
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:481
-msgid "Not Writable"
-msgstr "Neinscriptibil"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:427
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:445
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:456
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:527
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:535
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:543
-msgid "Missing"
-msgstr "Lipsește"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:431
-msgid "Languages Directory"
-msgstr "Director de limbi"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:437
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:466
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:676
-msgid "Readable"
-msgstr "Lizibil"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:438
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:467
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:677
-msgid "Not Readable"
-msgstr "Nelizibil"
+msgid "MySQL / MariaDB"
+msgstr "MySQL / MariaDB"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:449
-msgid "Config File"
-msgstr "Fișier de configurare"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:853
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:942
+msgid "Object Cache"
+msgstr "Cache obiecte"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:453
-msgid "Present"
-msgstr "Prezent"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:457
+msgid "Redis In-Memory"
+msgstr "Redis în memorie"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:460
-msgid "Debug Log"
-msgstr "Jurnal de depanare"
+msgid "APCu Memory Cache"
+msgstr "Cache memorie APCu"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:471
-msgid "Not created yet"
-msgstr "Nu a fost creat încă"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:463
+msgid "Filesystem Cache"
+msgstr "Cache sistem de fișiere"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:475
-msgid "App Directory"
-msgstr "Directorul aplicației"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:466
+msgid "Cache Disabled"
+msgstr "Cache dezactivat"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:488
-msgid "Release Root"
-msgstr "Rădăcina versiunii"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:468
+msgid "Direct Database"
+msgstr "Bază de date directă"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:499
-msgid "PHP Version"
-msgstr "Versiune PHP"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:473
+msgid "File Storage"
+msgstr "Stocare fișiere"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:500
-msgid "PHP SAPI"
-msgstr "PHP SAPI"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:477
+msgid "Writable Content Directory"
+msgstr "Director de conținut inscriptibil"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:502
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:478
+msgid "Read Only Directory"
+msgstr "Director doar pentru citire"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:482
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:487
+msgid "PHP Runtime"
+msgstr "Mediu de rulare PHP"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:491
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:494
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:651
 msgid "Web Server"
 msgstr "Server web"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:506
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:509
+msgid "GeoLite2 Installed"
+msgstr "GeoLite2 instalat"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:510
+msgid "Setup Recommended"
+msgstr "Configurare recomandată"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:514
+msgid "Release & Updates"
+msgstr "Versiune și actualizări"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:519
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:540
+msgid "Packaged Release"
+msgstr "Versiune împachetată"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:530
+msgid "Environment"
+msgstr "Mediu"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:532
+msgid "Site URL"
+msgstr "URL site"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:537
+msgid "Install Type"
+msgstr "Tip instalare"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:541
+msgid "Source Checkout"
+msgstr "Clonă din surse"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:544
+msgid "Debug Mode"
+msgstr "Mod de depanare"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:547
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:775
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:856
+msgid "Enabled"
+msgstr "Activat"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:562
+msgid "Content Directory"
+msgstr "Director de conținut"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:568
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:629
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:884
+msgid "Writable"
+msgstr "Inscriptibil"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:569
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:630
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:885
+msgid "Not Writable"
+msgstr "Neinscriptibil"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:576
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:594
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:605
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:676
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:684
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:692
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:905
+msgid "Missing"
+msgstr "Lipsește"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:580
+msgid "Languages Directory"
+msgstr "Director de limbi"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:586
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:615
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:825
+msgid "Readable"
+msgstr "Lizibil"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:587
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:616
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:826
+msgid "Not Readable"
+msgstr "Nelizibil"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:598
+msgid "Config File"
+msgstr "Fișier de configurare"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:602
+msgid "Present"
+msgstr "Prezent"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:609
+msgid "Debug Log"
+msgstr "Jurnal de depanare"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:620
+msgid "Not created yet"
+msgstr "Nu a fost creat încă"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:624
+msgid "App Directory"
+msgstr "Directorul aplicației"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:637
+msgid "Release Root"
+msgstr "Rădăcina versiunii"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:648
+msgid "PHP Version"
+msgstr "Versiune PHP"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:649
+msgid "PHP SAPI"
+msgstr "PHP SAPI"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:655
 msgid "Operating System"
 msgstr "Sistem de operare"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:509
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:658
 msgid "Timezone"
 msgstr "Fus orar"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:510
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:659
 msgid "Memory Limit"
 msgstr "Limită de memorie"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:512
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:661
 msgid "Max Execution Time"
 msgstr "Timp maxim de execuție"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:518
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:667
 msgid "Upload Max Filesize"
 msgstr "Mărime maximă fișier încărcat"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:521
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:670
 msgid "POST Max Size"
 msgstr "Mărime maximă POST"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:523
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:672
 msgid "Intl Extension"
 msgstr "Extensie Intl"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:526
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:534
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:542
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:675
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:683
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:691
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:904
 msgid "Available"
 msgstr "Disponibil"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:531
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:680
 msgid "cURL Extension"
 msgstr "Extensie cURL"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:539
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:688
 msgid "ZipArchive"
 msgstr "ZipArchive"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:550
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:699
 msgid "Database Server"
 msgstr "Server bază de date"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:564
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:713
 msgid "Database Name"
 msgstr "Nume bază de date"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:565
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:714
 msgid "Charset"
 msgstr "Set de caractere"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:567
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:716
 msgid "Table Prefix"
 msgstr "Prefix tabel"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:583
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:733
 msgid "Schema Status"
 msgstr "Stare schemă"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:589
-msgid "1 issue detected"
-msgstr "S-a detectat 1 problemă"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:740
+msgid "%s schema issue(s) detected"
+msgstr "S-au detectat %s probleme de schemă"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:591
-msgid "%s issues detected"
-msgstr "S-au detectat %s probleme"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:748
+msgid "Mail Transport"
+msgstr "Transport e-mail"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:599
-msgid "Driver"
-msgstr "Driver"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:601
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:750
 msgid "Transport Ready"
 msgstr "Transport pregătit"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:605
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:754
 msgid "Needs Setup"
 msgstr "Necesită configurare"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:631
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:780
 msgid "Settings Storage"
 msgstr "Stocare setări"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:660
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:809
 msgid "Credentials Saved"
 msgstr "Credențiale salvate"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:672
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:821
 msgid "Database Path"
 msgstr "Cale bază de date"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:682
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:831
 msgid "Refresh Command"
 msgstr "Comandă de reîmprospătare"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:690
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:841
+msgid "Redis"
+msgstr "Redis"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:843
+msgid "APCu"
+msgstr "APCu"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:845
+msgid "Filesystem"
+msgstr "Sistem de fișiere"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:847
+msgid "None / Direct DB"
+msgstr "Niciunul / BD directă"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:861
+msgid "Active Driver"
+msgstr "Driver activ"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:865
+msgid "Fallback Active"
+msgstr "Rezervă activă"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:869
+msgid "Configured Driver"
+msgstr "Driver configurat"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:870
+msgid "auto"
+msgstr "automat"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:873
+msgid "Default TTL"
+msgstr "TTL implicit"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:879
+msgid "Cache Directory"
+msgstr "Director cache"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:887
+msgid "Not Created"
+msgstr "Necreat"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:891
+msgid "Redis Server"
+msgstr "Server Redis"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:896
+msgid "Connected"
+msgstr "Conectat"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:901
+msgid "APCu Extension"
+msgstr "Extensie APCu"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:908
+msgid "Operational"
+msgstr "Operațional"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:915
 msgid "Short Links"
 msgstr "Linkuri scurte"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:699
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:924
 msgid "Activity Events"
 msgstr "Evenimente de activitate"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:703
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:928
 msgid "Managed Tables"
 msgstr "Tabele gestionate"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:712
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:937
 msgid "Directories and Sizes"
 msgstr "Directoare și dimensiuni"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:715
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:940
 msgid "Server"
 msgstr "Server"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:723
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:949
 msgid "Data Footprint"
 msgstr "Amprentă de date"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:760
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:986
 msgid "System status info copied to clipboard"
 msgstr "Informațiile despre starea sistemului au fost copiate în clipboard"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:766
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:991
 msgid "PeakURL could not copy the system status information."
 msgstr "PeakURL nu a putut copia informațiile despre starea sistemului."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:797
-msgid "Last checked: %s"
-msgstr "Ultima verificare: %s"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1003
+msgid "Site Health"
+msgstr "Sănătatea site-ului"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:824
-msgid "The system status check shows information about your PeakURL configuration and items that may need your attention."
-msgstr "Verificarea stării sistemului afișează informații despre configurația PeakURL și elementele care pot necesita atenția dvs."
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1009
+msgid "Monitor installation health, check server environment diagnostics, and review technical configuration details."
+msgstr "Monitorizați starea instalării, verificați diagnosticul mediului de server și examinați detaliile tehnice de configurare."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:834
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1025
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1026
+msgid "Refresh site health status"
+msgstr "Reîmprospătați starea de sănătate a site-ului"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1088
+msgid "Site Health: Good"
+msgstr "Sănătatea site-ului: Bună"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1092
+msgid "Site Health: 1 Critical Issue"
+msgstr "Sănătatea site-ului: 1 problemă critică"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1095
+msgid "Site Health: %s Critical Issues"
+msgstr "Sănătatea site-ului: %s probleme critice"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1101
+msgid "Site Health: 1 Recommended Improvement"
+msgstr "Sănătatea site-ului: 1 îmbunătățire recomandată"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1104
+msgid "Site Health: %s Recommended Improvements"
+msgstr "Sănătatea site-ului: %s îmbunătățiri recomandate"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1112
+msgid "PeakURL is configured properly and all environmental diagnostics are in good standing."
+msgstr "PeakURL este configurat corect și toate diagnosticele de mediu sunt în regulă."
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1116
+msgid "Critical items require attention to restore optimal site security and performance. Resolving these should be prioritized."
+msgstr "Elementele critice necesită atenție pentru restabilirea securității și performanței optime a site-ului. Rezolvarea acestora ar trebui prioritizată."
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1119
+msgid "All core features are active, with recommended improvements available below to optimize your install."
+msgstr "Toate funcțiile principale sunt active, cu îmbunătățiri recomandate disponibile mai jos pentru optimizarea instalării."
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1130
+msgid "%s Passed"
+msgstr "%s trecute"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1142
+msgid "%s Recommended"
+msgstr "%s recomandate"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1155
+msgid "%s Critical"
+msgstr "%s critice"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1175
+msgid "Checked %s"
+msgstr "Verificat %s"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1189
+msgid "System Checks"
+msgstr "Verificări de sistem"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1242
+msgid "Good"
+msgstr "Bun"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1244
+msgid "Review"
+msgstr "Revizuire"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1245
+msgid "Action Required"
+msgstr "Acțiune necesară"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1262
 msgid "1 critical issue"
 msgstr "1 problemă critică"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:835
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1263
 msgid "%s critical issues"
 msgstr "%s probleme critice"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:837
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1265
 msgid "Critical issues are items that may have a high impact on your site performance or security. Resolving these issues should be prioritized."
 msgstr "Problemele critice sunt elemente care pot avea un impact ridicat asupra performanței sau securității site-ului dvs. Rezolvarea acestor probleme ar trebui să fie prioritară."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:850
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1279
 msgid "1 recommended improvement"
 msgstr "1 îmbunătățire recomandată"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:851
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1280
 msgid "%s recommended improvements"
 msgstr "%s îmbunătățiri recomandate"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:853
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1282
 msgid "Recommended improvements are beneficial for your site, though not as urgent as a critical issue. They may include improvements in areas such as security, performance, and user experience."
 msgstr "Îmbunătățirile recomandate sunt benefice pentru site-ul dvs., deși nu sunt la fel de urgente ca o problemă critică. Acestea pot include îmbunătățiri în domenii precum securitatea, performanța și experiența utilizatorului."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:867
-msgid "All system status checks are currently passing."
-msgstr "Toate verificările stării sistemului sunt trecute cu succes în prezent."
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:888
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1308
 msgid "Hide passed tests"
 msgstr "Ascunde testele trecute"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:891
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1311
 msgid "1 passed test"
 msgstr "1 test trecut"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:892
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1312
 msgid "%s passed tests"
 msgstr "%s teste trecute"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:942
-msgid "System Status Info"
-msgstr "Informații despre starea sistemului"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1358
+msgid "System Information"
+msgstr "Informații despre sistem"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:945
-msgid "This page can show you every detail about the configuration of your PeakURL install."
-msgstr "Această pagină vă poate afișa fiecare detaliu despre configurația instalării PeakURL."
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1361
+msgid "Detailed technical environment, server configuration, storage, and database specifications."
+msgstr "Mediu tehnic detaliat, configurare server, stocare și specificații bază de date."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:950
-msgid "If you want to export a full snapshot of this page, you can use the button below to copy it to the clipboard."
-msgstr "Dacă doriți să exportați o prezentare completă a acestei pagini, puteți utiliza butonul de mai jos pentru a o copia în clipboard."
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1377
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:96
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:103
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:230
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:307
+#: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:138
+msgid "Copied!"
+msgstr "Copiat!"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:965
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1383
 msgid "Copy site info to clipboard"
 msgstr "Copiază informațiile despre site în clipboard"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:50
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:56
 msgid "Preparing..."
 msgstr "Se pregătește..."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:71
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:77
 msgid "CSV Export"
 msgstr "Export CSV"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:72
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:78
 msgid "Download a spreadsheet-friendly file that can also be imported back into PeakURL later."
 msgstr "Descărcați un fișier compatibil cu foile de calcul, care poate fi de asemenea importat înapoi în PeakURL mai târziu."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:75
-msgid "Comma-separated values"
-msgstr "Valori separate prin virgulă (CSV)"
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:81
+msgid "Comma-separated values (.csv)"
+msgstr "Valori separate prin virgulă (.csv)"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:80
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:87
 msgid "JSON Export"
 msgstr "Export JSON"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:81
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:88
 msgid "Download a structured snapshot for scripts, integrations, or backups."
 msgstr "Descărcați o copie structurată pentru scripturi, integrări sau copii de rezervă."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:84
-msgid "JavaScript Object Notation"
-msgstr "JavaScript Object Notation (JSON)"
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:91
+msgid "JavaScript Object Notation (.json)"
+msgstr "Notație obiect JavaScript (.json)"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:89
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:97
 msgid "XML Export"
 msgstr "Export XML"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:90
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:98
 msgid "Download a portable XML feed with the full link dataset and analytics totals."
 msgstr "Descărcați un flux XML portabil cu setul complet de date despre linkuri și totalurile analitice."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:93
-msgid "Extensible Markup Language"
-msgstr "Extensible Markup Language (XML)"
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:101
+msgid "Extensible Markup Language (.xml)"
+msgstr "Limbaj de marcare extensibil (.xml)"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:107
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:116
 msgid "Nothing to export"
 msgstr "Nimic de exportat"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:108
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:117
 msgid "No links are available for export yet."
 msgstr "Nu există încă linkuri disponibile pentru export."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:115
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:124
 msgid "Export downloaded"
 msgstr "Export descărcat"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:117
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:126
 msgid "Downloaded %1$s links as %2$s."
 msgstr "S-au descărcat %1$s linkuri ca %2$s."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:124
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:133
 #: ui/pages/dashboard/tools/import/_components/results/ImportDetails.tsx:57
 msgid "Export failed"
 msgstr "Exportul a eșuat"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:127
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:136
 msgid "PeakURL could not prepare the export right now."
 msgstr "PeakURL nu a putut pregăti exportul în acest moment."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:140
-msgid "Export all links you can access from one place in CSV, JSON, or XML."
-msgstr "Exportați toate linkurile accesibile dintr-un singur loc în format CSV, JSON sau XML."
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:150
+msgid "Data Export"
+msgstr "Export de date"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:155
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:154
+msgid "Export your short links dataset in CSV, JSON, or XML formats for offline analysis, migration, or programmatic backups."
+msgstr "Exportați setul de date cu linkuri scurte în formate CSV, JSON sau XML pentru analiză offline, migrare sau copii de rezervă programatice."
+
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:169
 msgid "Bulk Link Export"
 msgstr "Export masiv de linkuri"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:159
-msgid "Each export includes destination URLs, aliases, titles, short URLs, click totals, unique visitor totals, and created dates."
-msgstr "Fiecare export include URL-urile de destinație, aliasurile, titlurile, linkurile scurte, totalurile de clicuri, vizitatorii unici și datele de creare."
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:173
+msgid "Each export includes destination URLs, custom aliases, titles, short URLs, total clicks, unique visitors, and creation dates."
+msgstr "Fiecare export include adrese URL de destinație, aliasuri personalizate, titluri, adrese URL scurte, clicuri totale, vizitatori unici și date de creare."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:164
-msgid "Exports follow your current permissions. Admins can export all site links, while editors can export only their own links."
-msgstr "Exporturile respectă permisiunile dvs. curente. Administratorii pot exporta toate linkurile site-ului, în timp ce editorii pot exporta doar propriile linkuri."
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:178
+msgid "Exports follow your current role permissions. Administrators can export all site links, while Editors export links created by their account."
+msgstr "Exporturile respectă permisiunile rolului dvs. actual. Administratorii pot exporta toate linkurile site-ului, în timp ce Editorii exportă linkurile create de contul lor."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:172
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:186
 msgid "Exportable Links"
 msgstr "Linkuri exportabile"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:199
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:221
 msgid "API Export"
 msgstr "Export prin API"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:201
-msgid "Use the export route when you want to back up links or feed another tool without opening the dashboard."
-msgstr "Utilizați ruta de export atunci când doriți să faceți copii de rezervă ale linkurilor sau să alimentați un alt instrument fără a deschide panoul de control."
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:224
+msgid "Use the API export endpoint to back up short links or integrate with automated workflows without opening the dashboard."
+msgstr "Utilizați punctul final de export API pentru a face copii de rezervă ale linkurilor scurte sau pentru a vă integra cu fluxuri de lucru automate fără a deschide tabloul de bord."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:209
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:237
+msgid "Read Export Guide"
+msgstr "Citiți ghidul de export"
+
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:245
 #: ui/pages/dashboard/tools/import/_components/api/ApiImport.tsx:22
 msgid "Example Request"
 msgstr "Exemplu de cerere"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:220
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:259
 #: ui/pages/dashboard/tools/import/_components/api/ApiImport.tsx:47
 msgid "Response"
 msgstr "Răspuns"
-
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:254
-msgid "Read Export Guide"
-msgstr "Citiți ghidul de export"
 
 #: ui/pages/dashboard/tools/import/TabPage.tsx:20
 msgid "Product launch"
@@ -5072,9 +5317,13 @@ msgstr "Documentație de ajutor"
 msgid "Newsletter"
 msgstr "Buletin informativ"
 
-#: ui/pages/dashboard/tools/import/_components/layout/Header.tsx:8
-msgid "Import links from files, pasted URLs, or API payloads"
-msgstr "Importați linkuri din fișiere, adrese URL inserate sau solicitări API"
+#: ui/pages/dashboard/tools/import/_components/layout/Header.tsx:10
+msgid "Data Import"
+msgstr "Import de date"
+
+#: ui/pages/dashboard/tools/import/_components/layout/Header.tsx:14
+msgid "Bulk import short links into PeakURL from CSV, JSON, or XML files, pasted URL lists, or automated API payloads."
+msgstr "Importă în bloc linkuri scurte în PeakURL din fișiere CSV, JSON sau XML, liste de URL-uri lipite sau sarcini utile automate de API."
 
 #: ui/pages/dashboard/tools/import/_components/results/ImportSummary.tsx:15
 msgid "Import Completed!"
@@ -5330,7 +5579,7 @@ msgid "Popular"
 msgstr "Populare"
 
 #: ui/pages/dashboard/plugins/PluginsPage.tsx:93
-#: ui/pages/dashboard/users/UsersPage.tsx:471
+#: ui/pages/dashboard/users/UsersPage.tsx:558
 msgid "Admin access required"
 msgstr "Acces de administrator necesar"
 
@@ -5338,20 +5587,28 @@ msgstr "Acces de administrator necesar"
 msgid "Only admin accounts will be able to install, update, and manage plugins."
 msgstr "Numai conturile de administrator vor putea instala, actualiza și gestiona module."
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:121
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:113
+msgid "Extensions"
+msgstr "Extensii"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:117
 msgid "Extend PeakURL with plugins, install from the library, upload custom packages, and manage everything from one place."
 msgstr "Extindeți PeakURL cu module, instalați din bibliotecă, încărcați pachete personalizate și gestionați totul dintr-un singur loc."
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:136
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:133
 #: ui/pages/dashboard/plugins/_components/ComingSoonBadge/ComingSoonBadge.tsx:9
 msgid "Coming Soon"
 msgstr "În curând"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:140
-msgid "Be the first to know when the plugin library launches."
-msgstr "Fii primul care află când se lansează biblioteca de module."
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:136
+msgid "Plugin Library"
+msgstr "Bibliotecă de pluginuri"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:154
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:140
+msgid "Be the first to know when the verified plugin marketplace and one-click installer launch."
+msgstr "Fii primul care află când se lansează magazinul de pluginuri verificate și instalatorul cu un singur clic."
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:157
 #: ui/pages/dashboard/plugins/_components/PluginCard/PluginCard.tsx:82
 #: ui/pages/dashboard/plugins/_components/PluginCard/PluginCard.tsx:98
 msgid "Join the Waitlist"
@@ -5361,75 +5618,75 @@ msgstr "Alătură-te listei de așteptare"
 msgid "Search plugins…"
 msgstr "Căutați module…"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:237
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:230
 msgid "Featured Plugins"
 msgstr "Module recomandate"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:240
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:233
 msgid "Hand-picked extensions recommended by the PeakURL team."
 msgstr "Extensii alese manual recomandate de echipa PeakURL."
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:255
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:248
 msgid "Most Popular"
 msgstr "Cele mai populare"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:258
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:251
 msgid "Extensions with the highest community adoption."
 msgstr "Extensii cu cea mai mare rată de adoptare în comunitate."
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:297
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:294
 msgid "Plugin System Under Development"
 msgstr "Sistemul de module este în dezvoltare"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:300
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:297
 msgid "We're building a full plugin ecosystem for PeakURL. Install extensions, manage updates, and customise your experience from the dashboard. Here's what's coming:"
 msgstr "Construim un ecosistem complet de module pentru PeakURL. Instalați extensii, gestionați actualizările și personalizați experiența din panoul de control. Iată ce urmează:"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:310
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:307
 msgid "One-Click Installs"
 msgstr "Instalare cu un singur clic"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:311
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:308
 msgid "Browse the plugin library and install ZIP packages straight from the dashboard with compatibility checks."
 msgstr "Răsfoiți biblioteca de module și instalați pachete ZIP direct din panoul de control, cu verificări de compatibilitate."
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:318
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:315
 msgid "Activate & Manage"
 msgstr "Activare și gestionare"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:319
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:316
 msgid "Review plugin details, enable or disable features, and access per-plugin settings screens."
 msgstr "Examinați detaliile modulelor, activați sau dezactivați funcții și accesați ecranele de setări specifice fiecărui modul."
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:326
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:323
 msgid "Safe Updates"
 msgstr "Actualizări sigure"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:327
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:324
 msgid "Managed update checks from trusted manifests with rollback guardrails and clear notices."
 msgstr "Verificări gestionate ale actualizărilor din manifeste de încredere, cu mecanisme sigure de revenire și notificări clare."
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:334
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:331
 msgid "Persistent Storage"
 msgstr "Stocare persistentă"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:335
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:332
 msgid "Plugins live in content/plugins so core releases never wipe your extensions."
 msgstr "Modulele se află în content/plugins, astfel încât versiunile de bază nu vă vor șterge niciodată extensiile."
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:342
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:339
 msgid "Extension APIs"
 msgstr "API pentru extensii"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:343
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:340
 msgid "Documented hooks for settings screens, link actions, analytics widgets, and integrations."
 msgstr "Hook-uri documentate pentru ecrane de setări, acțiuni pe linkuri, widget-uri analitice și integrări."
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:350
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:347
 msgid "Admin Review Flow"
 msgstr "Flux de examinare pentru administratori"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:351
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:348
 msgid "Every install surfaces version, author, homepage, and compatibility notes before activation."
 msgstr "Fiecare instalare evidențiază versiunea, autorul, pagina principală și notele de compatibilitate înainte de activare."
 
@@ -5450,9 +5707,9 @@ msgid "Author"
 msgstr "Autor"
 
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
-#: ui/pages/dashboard/activity/ActivityPage.tsx:974
+#: ui/pages/dashboard/activity/ActivityPage.tsx:879
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:111
-#: ui/pages/dashboard/users/UsersPage.tsx:564
+#: ui/pages/dashboard/users/UsersPage.tsx:688
 msgid "Actions"
 msgstr "Acțiuni"
 
@@ -5464,376 +5721,316 @@ msgstr "Dezactivează"
 msgid "Activate"
 msgstr "Activează"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:122
-msgid "Link created"
-msgstr "Link creat"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:124
-msgid "Link updated"
-msgstr "Link actualizat"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:126
-#: ui/pages/dashboard/activity/ActivityPage.tsx:463
-msgid "Link permanently deleted"
-msgstr "Linkul a fost șters definitiv"
-
 #: ui/pages/dashboard/activity/ActivityPage.tsx:128
-msgid "Link moved to trash"
-msgstr "Linkul a fost mutat în coș"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:130
-#: ui/pages/dashboard/activity/ActivityPage.tsx:472
-#: ui/pages/dashboard/links/LinksPage.tsx:238
-msgid "Link restored"
-msgstr "Linkul a fost restaurat"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:132
-#: ui/pages/dashboard/links/LinksPage.tsx:268
-msgid "Trash emptied"
-msgstr "Coșul a fost golit"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:134
-msgid "User created"
-msgstr "Utilizator creat"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:136
-msgid "User updated"
-msgstr "Utilizator actualizat"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:138
-#: ui/pages/dashboard/users/UsersPage.tsx:434
-msgid "User deleted"
-msgstr "Utilizator șters"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:140
-msgid "Link click"
-msgstr "Clic pe link"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:159
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:55
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:190
 msgid "Unknown user"
 msgstr "Utilizator necunoscut"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:163
+#: ui/pages/dashboard/activity/ActivityPage.tsx:132
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:58
 msgid "Created new link \"%s\""
-msgstr "S-a creat un link nou \"%s\""
+msgstr "S-a creat un link nou \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:165
+#: ui/pages/dashboard/activity/ActivityPage.tsx:134
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:60
 msgid "Updated link \"%s\""
-msgstr "S-a actualizat linkul \"%s\""
+msgstr "S-a actualizat linkul \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:167
+#: ui/pages/dashboard/activity/ActivityPage.tsx:136
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:62
 msgid "Permanently deleted link \"%s\""
-msgstr "S-a șters definitiv linkul \"%s\""
+msgstr "S-a șters definitiv linkul \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:169
+#: ui/pages/dashboard/activity/ActivityPage.tsx:138
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:64
 msgid "Moved link \"%s\" to trash"
-msgstr "S-a mutat linkul \"%s\" în coș"
+msgstr "S-a mutat linkul \"%s\" în coș\"%s\" în coș\"%s\" în coș"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:171
+#: ui/pages/dashboard/activity/ActivityPage.tsx:140
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:66
 msgid "Restored link \"%s\""
-msgstr "S-a restaurat linkul \"%s\""
+msgstr "S-a restaurat linkul \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:176
+#: ui/pages/dashboard/activity/ActivityPage.tsx:145
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:71
 msgid "Permanently deleted 1 link from trash"
 msgstr "1 link a fost șters definitiv din coș"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:178
+#: ui/pages/dashboard/activity/ActivityPage.tsx:147
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:73
 msgid "Permanently deleted %s links from trash"
 msgstr "%s linkuri au fost șterse definitiv din coș"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:182
+#: ui/pages/dashboard/activity/ActivityPage.tsx:151
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:77
 msgid "Emptied links from trash"
 msgstr "S-au golit linkurile din coș"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:185
+#: ui/pages/dashboard/activity/ActivityPage.tsx:154
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:79
 msgid "Created user \"%s\""
-msgstr "S-a creat utilizatorul \"%s\""
+msgstr "S-a creat utilizatorul \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:187
+#: ui/pages/dashboard/activity/ActivityPage.tsx:156
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:81
 msgid "Updated user \"%s\""
-msgstr "S-a actualizat utilizatorul \"%s\""
+msgstr "S-a actualizat utilizatorul \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:189
+#: ui/pages/dashboard/activity/ActivityPage.tsx:158
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:83
 msgid "Deleted user \"%s\""
-msgstr "S-a șters utilizatorul \"%s\""
+msgstr "S-a șters utilizatorul \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:193
+#: ui/pages/dashboard/activity/ActivityPage.tsx:162
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:87
 msgid "from %s"
 msgstr "din %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:201
+#: ui/pages/dashboard/activity/ActivityPage.tsx:170
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:94
 msgid "Link \"%1$s\" was clicked %2$s"
-msgstr "S-a făcut clic pe linkul \"%1$s\" %2$s"
+msgstr "S-a făcut clic pe linkul \"%1$s\" %2$s\"%1$s\" %2$s\"%1$s\" %2$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:205
+#: ui/pages/dashboard/activity/ActivityPage.tsx:174
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:98
 msgid "Link \"%s\" was clicked"
-msgstr "S-a făcut clic pe linkul \"%s\""
+msgstr "S-a făcut clic pe linkul \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:208
+#: ui/pages/dashboard/activity/ActivityPage.tsx:177
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:100
 msgid "Unknown activity"
 msgstr "Activitate necunoscută"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:249
-#: ui/pages/dashboard/activity/ActivityPage.tsx:258
-msgid "Unknown date"
-msgstr "Dată necunoscută"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:269
-msgid "Today"
-msgstr "Astăzi"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:273
-msgid "Yesterday"
-msgstr "Ieri"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:450
+#: ui/pages/dashboard/activity/ActivityPage.tsx:356
 msgid "Link already active"
 msgstr "Linkul este deja activ"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:451
+#: ui/pages/dashboard/activity/ActivityPage.tsx:357
 msgid "This link is already active and does not need to be restored."
 msgstr "Acest link este deja activ și nu trebuie restaurat."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:473
+#: ui/pages/dashboard/activity/ActivityPage.tsx:369
+msgid "Link permanently deleted"
+msgstr "Linkul a fost șters definitiv"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:378
+#: ui/pages/dashboard/links/LinksPage.tsx:238
+msgid "Link restored"
+msgstr "Linkul a fost restaurat"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:379
 msgid "The link has been restored successfully."
 msgstr "Linkul a fost restaurat cu succes."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:477
+#: ui/pages/dashboard/activity/ActivityPage.tsx:383
 #: ui/pages/dashboard/links/LinksPage.tsx:243
 msgid "Unable to restore link"
 msgstr "Nu se poate restaura linkul"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:480
+#: ui/pages/dashboard/activity/ActivityPage.tsx:386
 msgid "Failed to restore link from activity record."
 msgstr "Nu s-a putut restaura linkul din înregistrarea de activitate."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:653
-#: ui/pages/dashboard/activity/ActivityPage.tsx:681
-#: ui/pages/dashboard/activity/ActivityPage.tsx:711
+#: ui/pages/dashboard/activity/ActivityPage.tsx:538
+#: ui/pages/dashboard/activity/ActivityPage.tsx:566
+#: ui/pages/dashboard/activity/ActivityPage.tsx:596
 msgid "Activity deleted"
 msgstr "Înregistrare de activitate ștearsă"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:654
+#: ui/pages/dashboard/activity/ActivityPage.tsx:539
 msgid "The activity log entry has been removed."
 msgstr "Înregistrarea din jurnalul de activitate a fost eliminată."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:658
-#: ui/pages/dashboard/activity/ActivityPage.tsx:689
-#: ui/pages/dashboard/activity/ActivityPage.tsx:716
+#: ui/pages/dashboard/activity/ActivityPage.tsx:543
+#: ui/pages/dashboard/activity/ActivityPage.tsx:574
+#: ui/pages/dashboard/activity/ActivityPage.tsx:601
 msgid "Unable to delete activity"
 msgstr "Nu s-a putut șterge activitatea"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:661
+#: ui/pages/dashboard/activity/ActivityPage.tsx:546
 msgid "The activity log entry could not be removed."
 msgstr "Înregistrarea din jurnalul de activitate nu a putut fi eliminată."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:683
+#: ui/pages/dashboard/activity/ActivityPage.tsx:568
 msgid "Deleted %s activity log entries."
 msgstr "S-au șters %s înregistrări din jurnalul de activitate."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:692
+#: ui/pages/dashboard/activity/ActivityPage.tsx:577
 msgid "The selected activity log entries could not be removed."
 msgstr "Înregistrările selectate din jurnalul de activitate nu au putut fi eliminate."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:712
+#: ui/pages/dashboard/activity/ActivityPage.tsx:597
 msgid "All activity log entries have been removed."
 msgstr "Toate înregistrările din jurnalul de activitate au fost eliminate."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:719
+#: ui/pages/dashboard/activity/ActivityPage.tsx:604
 msgid "The activity logs could not be removed."
 msgstr "Jurnalele de activitate nu au putut fi eliminate."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:745
-msgid "All activity"
-msgstr "Toată activitatea"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:630
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:35
+#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:21
+msgid "All"
+msgstr "Toate"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:770
+#: ui/pages/dashboard/activity/ActivityPage.tsx:656
 msgid "Total events"
 msgstr "Total evenimente"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:776
+#: ui/pages/dashboard/activity/ActivityPage.tsx:662
 msgid "Link events"
 msgstr "Evenimente de linkuri"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:782
+#: ui/pages/dashboard/activity/ActivityPage.tsx:668
 msgid "User events"
 msgstr "Evenimente de utilizatori"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:794
-msgid "Audit Log"
-msgstr "Jurnal de audit"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:798
-msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
-msgstr "Examinați modificările linkurilor și evenimentele de gestionare a utilizatorilor într-un singur loc, cu filtre, marcaje temporale și detalii despre autori."
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:808
-#: ui/pages/dashboard/activity/ActivityPage.tsx:809
-msgid "Refresh activity history"
-msgstr "Reîmprospătează istoricul de activitate"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:848
+#: ui/pages/dashboard/activity/ActivityPage.tsx:674
 msgid "Latest event"
 msgstr "Ultimul eveniment"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:856
+#: ui/pages/dashboard/activity/ActivityPage.tsx:677
 msgid "No recent events"
 msgstr "Niciun eveniment recent"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:913
+#: ui/pages/dashboard/activity/ActivityPage.tsx:691
+msgid "Audit Log"
+msgstr "Jurnal de audit"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:695
+msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
+msgstr "Examinați modificările linkurilor și evenimentele de gestionare a utilizatorilor într-un singur loc, cu filtre, marcaje temporale și detalii despre autori."
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:705
+#: ui/pages/dashboard/activity/ActivityPage.tsx:706
+msgid "Refresh activity history"
+msgstr "Reîmprospătează istoricul de activitate"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:811
 msgid "Activity history"
 msgstr "Istoricul activității"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:920
+#: ui/pages/dashboard/activity/ActivityPage.tsx:818
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:32
 msgid "%s selected"
 msgstr "Selectate: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:930
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1504
+#: ui/pages/dashboard/activity/ActivityPage.tsx:828
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1305
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:73
 msgid "Delete selected"
 msgstr "Șterge selectate"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:938
+#: ui/pages/dashboard/activity/ActivityPage.tsx:836
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:82
 msgid "Delete all"
 msgstr "Șterge tot"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:962
+#: ui/pages/dashboard/activity/ActivityPage.tsx:867
 msgid "Select all events on this page"
 msgstr "Selectează toate evenimentele de pe această pagină"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:969
+#: ui/pages/dashboard/activity/ActivityPage.tsx:874
 msgid "Event"
 msgstr "Eveniment"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:970
+#: ui/pages/dashboard/activity/ActivityPage.tsx:875
 msgid "Details"
 msgstr "Detalii"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:971
+#: ui/pages/dashboard/activity/ActivityPage.tsx:876
 msgid "When"
 msgstr "Când"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1033
-msgid "Select %s events"
-msgstr "Selectează %s evenimente"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:986
+msgid "Actor: %s"
+msgstr "Actor: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1103
+#: ui/pages/dashboard/activity/ActivityPage.tsx:998
 msgid "By"
 msgstr "De către"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1112
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:103
-msgid "Link"
-msgstr "Link"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1036
+msgid "User: %s"
+msgstr "Utilizator: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1122
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:105
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:117
-msgid "Destination"
-msgstr "Destinație"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1055
+msgid "Location: %s"
+msgstr "Locație: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1142
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:273
-#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:117
-msgid "From"
-msgstr "Din"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1268
-msgid "No additional details"
-msgstr "Fără detalii suplimentare"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1346
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1355
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1150
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1159
 msgid "Link is already active"
 msgstr "Linkul este deja activ"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1349
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1358
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1153
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1162
 msgid "Restore link"
 msgstr "Restaurează linkul"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1381
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1384
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1524
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1185
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1188
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1325
 msgid "Delete activity log"
 msgstr "Șterge înregistrarea din jurnal"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1413
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1214
 msgid "No user activity yet"
 msgstr "Nicio activitate a utilizatorilor încă"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1415
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1216
 msgid "No link activity yet"
 msgstr "Nicio activitate a linkurilor încă"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1416
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1217
 msgid "No activity recorded yet"
 msgstr "Nicio activitate înregistrată încă"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1419
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1220
 msgid "Once users manage accounts or links change, the audit log will appear here."
 msgstr "Odată ce utilizatorii gestionează conturi sau linkurile se modifică, jurnalul de audit va apărea aici."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1433
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1234
 msgid "Showing %1$s-%2$s of %3$s events"
 msgstr "Se afișează %1$s–%2$s din %3$s evenimente"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1440
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1241
 msgid "Page %1$s of %2$s"
 msgstr "Pagina %1$s din %2$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1456
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1257
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:40
 msgid "Previous"
 msgstr "Anterior"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1482
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1283
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:84
 msgid "Next"
 msgstr "Următor"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1493
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1294
 msgid "Delete activity logs"
 msgstr "Șterge jurnalele de activitate"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1497
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1298
 msgid "Delete %s selected activity log entries? This action cannot be undone."
 msgstr "Ștergeți %s înregistrări selectate din jurnalul de activitate? Această acțiune nu poate fi anulată."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1512
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1516
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1313
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1317
 msgid "Delete all activity"
 msgstr "Șterge toată activitatea"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1513
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1314
 msgid "Are you sure you want to delete all activity logs? This action cannot be undone."
 msgstr "Sigur doriți să ștergeți toate jurnalele de activitate? Această acțiune nu poate fi anulată."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1528
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1329
 msgid "Delete the activity entry \"%s\"? This action cannot be undone."
 msgstr "Ștergeți înregistrarea de activitate „%s”? Această acțiune nu poate fi anulată."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1535
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1336
 msgid "Delete activity"
 msgstr "Șterge activitatea"
 
@@ -6348,9 +6545,18 @@ msgstr "Șterge definitiv"
 msgid "Empty trash"
 msgstr "Golește coșul"
 
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:103
+msgid "Link"
+msgstr "Link"
+
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:104
 msgid "Title"
 msgstr "Titlu"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:105
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:117
+msgid "Destination"
+msgstr "Destinație"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:107
 msgid "Performance"
@@ -6358,7 +6564,7 @@ msgstr "Performanță"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:109
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:35
-#: ui/pages/dashboard/users/UsersPage.tsx:561
+#: ui/pages/dashboard/users/UsersPage.tsx:685
 msgid "Created"
 msgstr "Creat la"
 
@@ -6371,15 +6577,6 @@ msgstr "În coș"
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:58
 msgid "Expired"
 msgstr "Expirat"
-
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:96
-#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
-#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:103
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:230
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:307
-#: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:138
-msgid "Copied!"
-msgstr "Copiat!"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:97
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
@@ -6698,11 +6895,6 @@ msgstr "Vezi toate cele %s orașe"
 msgid "All cities"
 msgstr "Toate orașele"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:35
-#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:21
-msgid "All"
-msgstr "Toate"
-
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:36
 #: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:22
 msgid "24h"
@@ -6743,6 +6935,11 @@ msgstr "Personalizat"
 #: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:113
 msgid "Custom date range"
 msgstr "Interval de date personalizat"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:273
+#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:117
+msgid "From"
+msgstr "Din"
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:288
 msgid "Start date"
@@ -7215,6 +7412,10 @@ msgstr "Nu se pot restaura linkurile"
 msgid "Failed to restore selected links."
 msgstr "Nu s-au putut restaura linkurile selectate."
 
+#: ui/pages/dashboard/links/LinksPage.tsx:268
+msgid "Trash emptied"
+msgstr "Coșul a fost golit"
+
 #: ui/pages/dashboard/links/LinksPage.tsx:269
 msgid "All trashed links have been permanently deleted."
 msgstr "Toate linkurile din coș au fost șterse definitiv."
@@ -7239,136 +7440,166 @@ msgstr "Elementele din coș sunt păstrate pe termen nelimitat până la golire.
 msgid "Items in the trash will be automatically deleted after %d days."
 msgstr "Elementele din coș vor fi șterse automat după %d zile."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:61
+#: ui/pages/dashboard/users/UsersPage.tsx:68
 msgid "Can manage users, settings, and all links."
 msgstr "Poate gestiona utilizatori, setări și toate linkurile."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:66
+#: ui/pages/dashboard/users/UsersPage.tsx:73
 msgid "Can create, edit, and delete site links without admin access."
 msgstr "Poate crea, edita și șterge linkurile site-ului fără acces de administrator."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:154
+#: ui/pages/dashboard/users/UsersPage.tsx:175
 msgid "Unable to save the user."
 msgstr "Nu s-a putut salva utilizatorul."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:171
-#: ui/pages/dashboard/users/UsersPage.tsx:498
+#: ui/pages/dashboard/users/UsersPage.tsx:192
+#: ui/pages/dashboard/users/UsersPage.tsx:585
 msgid "Add User"
 msgstr "Adăugați un utilizator"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:172
+#: ui/pages/dashboard/users/UsersPage.tsx:193
 msgid "Edit User"
 msgstr "Editați utilizatorul"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:176
+#: ui/pages/dashboard/users/UsersPage.tsx:197
 msgid "Create a new account with admin or editor access."
 msgstr "Creați un cont nou cu acces de administrator sau editor."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:179
+#: ui/pages/dashboard/users/UsersPage.tsx:200
 msgid "Update the account details and role for this user."
 msgstr "Actualizați detaliile contului și rolul pentru acest utilizator."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:261
+#: ui/pages/dashboard/users/UsersPage.tsx:209
+msgid "Close dialog"
+msgstr "Închide caseta de dialog"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:283
 msgid "Leave blank to keep the current password."
 msgstr "Lăsați necompletat pentru a păstra parola curentă."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:269
+#: ui/pages/dashboard/users/UsersPage.tsx:291
 msgid "Confirm Password"
 msgstr "Confirmați parola"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:282
+#: ui/pages/dashboard/users/UsersPage.tsx:304
 msgid "Re-enter the password to confirm it."
 msgstr "Reintroduceți parola pentru a o confirma."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:285
+#: ui/pages/dashboard/users/UsersPage.tsx:307
 msgid "Re-enter the new password to confirm it."
 msgstr "Reintroduceți noua parolă pentru a o confirma."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:295
-#: ui/pages/dashboard/users/UsersPage.tsx:558
+#: ui/pages/dashboard/users/UsersPage.tsx:317
+#: ui/pages/dashboard/users/UsersPage.tsx:682
 msgid "Role"
 msgstr "Rol"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:307
+#: ui/pages/dashboard/users/UsersPage.tsx:329
 msgid "User role"
 msgstr "Rolul utilizatorului"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:312
+#: ui/pages/dashboard/users/UsersPage.tsx:334
 msgid "Your own role is locked here."
 msgstr "Propriul dvs. rol este blocat aici."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:334
+#: ui/pages/dashboard/users/UsersPage.tsx:356
 msgid "Create User"
 msgstr "Creează utilizator"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:436
-msgid "%s was removed successfully."
-msgstr "%s a fost eliminat cu succes."
-
-#: ui/pages/dashboard/users/UsersPage.tsx:444
-msgid "Delete failed"
-msgstr "Ștergerea a eșuat"
-
-#: ui/pages/dashboard/users/UsersPage.tsx:447
-msgid "Unable to delete this user right now."
-msgstr "Nu se poate șterge acest utilizator chiar acum."
-
-#: ui/pages/dashboard/users/UsersPage.tsx:474
-msgid "Only admin accounts can manage other users and their roles."
-msgstr "Numai conturile de administrator pot gestiona alți utilizatori și rolurile acestora."
-
-#: ui/pages/dashboard/users/UsersPage.tsx:488
-msgid "User Access"
-msgstr "Acces utilizatori"
-
-#: ui/pages/dashboard/users/UsersPage.tsx:492
-msgid "Manage the people who can access this installation. Admins control site-wide settings. Editors can create and maintain links."
-msgstr "Gestionați persoanele care pot accesa această instalare. Administratorii controlează setările la nivel de site. Editorii pot crea și întreține linkuri."
-
-#: ui/pages/dashboard/users/UsersPage.tsx:504
+#: ui/pages/dashboard/users/UsersPage.tsx:439
 msgid "Total Users"
 msgstr "Total utilizatori"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:510
-msgid "Admins"
+#: ui/pages/dashboard/users/UsersPage.tsx:454
+msgid "Administrators"
 msgstr "Administratori"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:516
+#: ui/pages/dashboard/users/UsersPage.tsx:458
+msgid "Full site & user management"
+msgstr "Gestionare completă a site-ului și a utilizatorilor"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:462
 msgid "Editors"
 msgstr "Editori"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:525
-msgid "Accounts"
-msgstr "Conturi"
+#: ui/pages/dashboard/users/UsersPage.tsx:466
+msgid "Link creation & editing access"
+msgstr "Acces pentru crearea și editarea linkurilor"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:532
-msgid "Unable to load users."
-msgstr "Nu s-au putut încărca utilizatorii."
+#: ui/pages/dashboard/users/UsersPage.tsx:470
+msgid "Latest Member"
+msgstr "Cel mai recent membru"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:541
+#: ui/pages/dashboard/users/UsersPage.tsx:483
+#: ui/pages/dashboard/users/UsersPage.tsx:665
 msgid "No users yet"
 msgstr "Niciun utilizator încă"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:544
+#: ui/pages/dashboard/users/UsersPage.tsx:521
+msgid "User deleted"
+msgstr "Utilizator șters"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:523
+msgid "%s was removed successfully."
+msgstr "%s a fost eliminat cu succes."
+
+#: ui/pages/dashboard/users/UsersPage.tsx:531
+msgid "Delete failed"
+msgstr "Ștergerea a eșuat"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:534
+msgid "Unable to delete this user right now."
+msgstr "Nu se poate șterge acest utilizator chiar acum."
+
+#: ui/pages/dashboard/users/UsersPage.tsx:561
+msgid "Only admin accounts can manage other users and their roles."
+msgstr "Numai conturile de administrator pot gestiona alți utilizatori și rolurile acestora."
+
+#: ui/pages/dashboard/users/UsersPage.tsx:575
+msgid "User Management"
+msgstr "Gestionare utilizatori"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:579
+msgid "Manage user accounts and access permissions. Administrators have complete access to system settings, while Editors manage short links."
+msgstr "Gestionați conturile de utilizator și permisiunile de acces. Administratorii au acces complet la setările de sistem, în timp ce Editorii gestionează linkurile scurte."
+
+#: ui/pages/dashboard/users/UsersPage.tsx:642
+msgid "Accounts"
+msgstr "Conturi"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:656
+msgid "Unable to load users."
+msgstr "Nu s-au putut încărca utilizatorii."
+
+#: ui/pages/dashboard/users/UsersPage.tsx:668
 msgid "Add an admin or editor account to start sharing access."
 msgstr "Adăugați un cont de administrator sau editor pentru a partaja accesul."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:654
-#: ui/pages/dashboard/users/UsersPage.tsx:659
+#: ui/pages/dashboard/users/UsersPage.tsx:732
+msgid "You"
+msgstr "Dvs."
+
+#: ui/pages/dashboard/users/UsersPage.tsx:813
+#: ui/pages/dashboard/users/UsersPage.tsx:819
 msgid "Edit %s"
 msgstr "Editează %s"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:672
-#: ui/pages/dashboard/users/UsersPage.tsx:677
+#: ui/pages/dashboard/users/UsersPage.tsx:851
+#: ui/pages/dashboard/users/UsersPage.tsx:866
+msgid "Cannot delete your own account"
+msgstr "Nu vă puteți șterge propriul cont"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:855
+#: ui/pages/dashboard/users/UsersPage.tsx:870
 msgid "Delete %s"
 msgstr "Șterge %s"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:718
-#: ui/pages/dashboard/users/UsersPage.tsx:730
+#: ui/pages/dashboard/users/UsersPage.tsx:905
+#: ui/pages/dashboard/users/UsersPage.tsx:916
 msgid "Delete User"
 msgstr "Șterge utilizatorul"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:722
+#: ui/pages/dashboard/users/UsersPage.tsx:909
 msgid "Delete %s? This will revoke their sessions, remove their API keys, and permanently delete their account."
 msgstr "Ștergeți %s? Acest lucru îi va revoca sesiunile, îi va elimina cheile API și îi va șterge definitiv contul."
 

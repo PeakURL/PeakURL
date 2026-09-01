@@ -44,7 +44,6 @@ import {
 	formatCount,
 	formatDate,
 	formatLocalizedDateTime,
-	getZonedDateKey,
 	getErrorMessage,
 } from "@/utils";
 
@@ -56,12 +55,6 @@ const ACTIVITY_PAGE_SIZE_OPTIONS = DEFAULT_PAGE_SIZE_OPTIONS;
 const MAX_VISIBLE_PAGES = 5;
 
 type ActivityCategory = "all" | "links" | "users";
-
-interface ActivityDayGroup {
-	key: string;
-	label: string;
-	items: RecentActivity[];
-}
 
 const EMPTY_ACTIVITY_ITEMS: RecentActivity[] = [];
 
@@ -215,72 +208,6 @@ function getActivityVisual(type?: string | null): {
 	}
 }
 
-function formatActivityDayGroupLabel(timestamp?: string | null): {
-	key: string;
-	label: string;
-} {
-	if (!timestamp) {
-		return {
-			key: "unknown",
-			label: __("Unknown date"),
-		};
-	}
-
-	const date = new Date(timestamp);
-
-	if (Number.isNaN(date.getTime())) {
-		return {
-			key: "unknown",
-			label: __("Unknown date"),
-		};
-	}
-
-	const key = getZonedDateKey(date) || date.toISOString().slice(0, 10);
-	const todayKey = getZonedDateKey(new Date());
-	const yesterday = new Date();
-	yesterday.setDate(yesterday.getDate() - 1);
-	const yesterdayKey = getZonedDateKey(yesterday);
-
-	if (key === todayKey) {
-		return { key, label: __("Today") };
-	}
-
-	if (key === yesterdayKey) {
-		return { key, label: __("Yesterday") };
-	}
-
-	return {
-		key,
-		label: formatLocalizedDateTime(date, {
-			dateStyle: "full",
-		}),
-	};
-}
-
-function groupActivitiesByDay(
-	activities: RecentActivity[]
-): ActivityDayGroup[] {
-	const groups = new Map<string, ActivityDayGroup>();
-
-	activities.forEach((activity) => {
-		const { key, label } = formatActivityDayGroupLabel(activity.timestamp);
-		const existingGroup = groups.get(key);
-
-		if (existingGroup) {
-			existingGroup.items.push(activity);
-			return;
-		}
-
-		groups.set(key, {
-			key,
-			label,
-			items: [activity],
-		});
-	});
-
-	return Array.from(groups.values());
-}
-
 function formatExactTimestamp(timestamp?: string | null): string {
 	if (!timestamp) {
 		return "";
@@ -307,28 +234,36 @@ function ActivityPageSkeleton() {
 					<Skeleton className="activity-page-skeleton-copy" />
 				</div>
 			</div>
-			<div className="activity-page-day-header">
-				<Skeleton className="activity-page-skeleton-day" />
-			</div>
-			<div className="activity-page-events">
-				{Array.from({ length: 6 }, (_, index) => (
-					<div key={index} className="activity-page-event">
-						<Skeleton className="activity-page-skeleton-icon" />
-						<div className="activity-page-skeleton-primary">
-							<Skeleton className="activity-page-skeleton-title" />
-						</div>
-						<div className="activity-page-skeleton-context">
-							<div className="activity-page-skeleton-details">
-								<Skeleton className="activity-page-skeleton-chip" />
-								<Skeleton className="activity-page-skeleton-chip" />
-							</div>
-						</div>
-						<div className="activity-page-skeleton-time-group">
-							<Skeleton className="activity-page-skeleton-time" />
-							<Skeleton className="activity-page-skeleton-time-secondary" />
+			<div className="activity-page-table">
+				<div className="activity-page-table-scroll">
+					<div className="activity-page-table-element">
+						<div className="activity-page-events">
+							{Array.from({ length: 6 }, (_, index) => (
+								<div
+									key={index}
+									className="activity-page-event"
+								>
+									<div className="activity-page-event-identity">
+										<Skeleton className="activity-page-skeleton-icon" />
+									</div>
+									<div className="activity-page-event-primary">
+										<Skeleton className="activity-page-skeleton-title" />
+									</div>
+									<div className="activity-page-event-context">
+										<div className="activity-page-skeleton-details">
+											<Skeleton className="activity-page-skeleton-chip" />
+											<Skeleton className="activity-page-skeleton-chip" />
+										</div>
+									</div>
+									<div className="activity-page-event-time">
+										<Skeleton className="activity-page-skeleton-time" />
+										<Skeleton className="activity-page-skeleton-time-secondary" />
+									</div>
+								</div>
+							))}
 						</div>
 					</div>
-				))}
+				</div>
 			</div>
 		</div>
 	);
@@ -470,7 +405,6 @@ function ActivityPage() {
 	const endItem =
 		totalItems > 0 ? Math.min(meta.page * meta.limit, totalItems) : 0;
 	const visiblePages = getVisiblePages(meta.page, totalPages);
-	const dayGroups = groupActivitiesByDay(items);
 	const allEventsCount = allSummaryRes?.data?.meta?.totalItems ?? totalItems;
 	const linkEventsCount = linksSummaryRes?.data?.meta?.totalItems ?? 0;
 	const userEventsCount = usersSummaryRes?.data?.meta?.totalItems ?? 0;
@@ -585,26 +519,6 @@ function ActivityPage() {
 				? previous.filter((id) => id !== activityId)
 				: [...previous, activityId]
 		);
-	};
-
-	const handleToggleSelectGroup = (activityIds: string[]) => {
-		if (activityIds.length === 0) {
-			return;
-		}
-
-		setSelectedActivityIds((previous) => {
-			const allGroupSelected = activityIds.every((activityId) =>
-				previous.includes(activityId)
-			);
-
-			if (allGroupSelected) {
-				return previous.filter(
-					(activityId) => !activityIds.includes(activityId)
-				);
-			}
-
-			return Array.from(new Set([...previous, ...activityIds]));
-		});
 	};
 
 	const handleDeleteActivity = async () => {
@@ -925,469 +839,370 @@ function ActivityPage() {
 						) : null}
 					</div>
 					<div className="activity-page-table">
-						<div
-							className={cn(
-								"activity-page-table-head",
-								isAdmin && "activity-page-table-head-admin"
-							)}
-						>
-							{isAdmin && pageSelectableIds.length > 0 ? (
-								<input
-									type="checkbox"
-									checked={isAllPageSelected}
-									onChange={handleToggleSelectAllPage}
-									ref={(node) => {
-										if (node) {
-											node.indeterminate =
-												isAllPageIndeterminate;
-										}
-									}}
-									className="links-checkbox"
-									aria-label={__(
-										"Select all events on this page"
-									)}
-								/>
-							) : (
-								<span aria-hidden="true"></span>
-							)}
-							<span>{__("Event")}</span>
-							<span>{__("Details")}</span>
-							<span>{__("When")}</span>
-							{isAdmin ? (
-								<span className="activity-page-table-head-actions">
-									{__("Actions")}
-								</span>
-							) : null}
-						</div>
+						{items.length > 0 ? (
+							<div className="activity-page-table-scroll">
+								<div className="activity-page-table-element">
+									<div
+										className={cn(
+											"activity-page-table-head",
+											isAdmin &&
+												"activity-page-table-head-admin"
+										)}
+									>
+										{isAdmin &&
+										pageSelectableIds.length > 0 ? (
+											<input
+												type="checkbox"
+												checked={isAllPageSelected}
+												onChange={
+													handleToggleSelectAllPage
+												}
+												ref={(node) => {
+													if (node) {
+														node.indeterminate =
+															isAllPageIndeterminate;
+													}
+												}}
+												className="links-checkbox"
+												aria-label={__(
+													"Select all events on this page"
+												)}
+											/>
+										) : (
+											<span aria-hidden="true"></span>
+										)}
+										<span>{__("Event")}</span>
+										<span>{__("Details")}</span>
+										<span>{__("When")}</span>
+										{isAdmin ? (
+											<span className="activity-page-table-head-actions">
+												{__("Actions")}
+											</span>
+										) : null}
+									</div>
 
-						{dayGroups.length > 0 ? (
-							<div className="activity-page-day-groups">
-								{dayGroups.map((group) => {
-									const groupSelectableIds = group.items
-										.map((item) => item.id)
-										.filter(
-											(
-												activityId
-											): activityId is string =>
-												Boolean(activityId)
-										);
-									const selectedGroupCount =
-										groupSelectableIds.filter(
-											(activityId) =>
-												selectedActivityIds.includes(
-													activityId
-												)
-										).length;
-									const isGroupSelected =
-										groupSelectableIds.length > 0 &&
-										selectedGroupCount ===
-											groupSelectableIds.length;
-									const isGroupIndeterminate =
-										selectedGroupCount > 0 &&
-										!isGroupSelected;
+									<div className="activity-page-events">
+										{items.map((activity, index) => {
+											const visual = getActivityVisual(
+												activity.type
+											);
+											const Icon = visual.icon;
+											const actorName =
+												getActivityPersonName(
+													activity.actor
+												);
+											const userName =
+												getActivityPersonName(
+													activity.user
+												);
+											const locationName =
+												activity.location
+													? activity.location.city ||
+														activity.location
+															.country ||
+														null
+													: null;
+											const exactTime =
+												formatExactTimestamp(
+													activity.timestamp
+												);
+											const destinationUrl =
+												activity.link?.destinationUrl;
+											const hasTargetUser = Boolean(
+												userName &&
+												userName !== actorName
+											);
 
-									return (
-										<section
-											key={group.key}
-											className="activity-page-day-group"
-										>
-											<div className="activity-page-day-header">
-												<div className="activity-page-day-header-main">
-													{isAdmin &&
-													groupSelectableIds.length >
-														0 ? (
-														<input
-															type="checkbox"
-															checked={
-																isGroupSelected
-															}
-															onChange={() =>
-																handleToggleSelectGroup(
-																	groupSelectableIds
-																)
-															}
-															ref={(node) => {
-																if (node) {
-																	node.indeterminate =
-																		isGroupIndeterminate;
-																}
-															}}
-															className="links-checkbox"
-															aria-label={sprintf(
-																__(
-																	"Select %s events"
-																),
-																group.label
-															)}
-														/>
-													) : null}
-													<span
-														className="activity-page-day-header-label"
-														dir="auto"
-													>
-														{group.label}
-													</span>
-												</div>
-												<span className="activity-page-day-header-count">
-													{formatCount(
-														group.items.length
+											return (
+												<article
+													key={
+														activity.id ||
+														`activity-${index}`
+													}
+													className={cn(
+														"activity-page-event",
+														activity.id &&
+															selectedActivityIds.includes(
+																activity.id
+															) &&
+															"activity-page-event-selected",
+														isAdmin &&
+															"activity-page-event-admin"
 													)}
-												</span>
-											</div>
-
-											<div className="activity-page-events">
-												{group.items.map(
-													(activity, index) => {
-														const visual =
-															getActivityVisual(
-																activity.type
-															);
-														const Icon =
-															visual.icon;
-														const actorName =
-															getActivityPersonName(
-																activity.actor
-															);
-														const userName =
-															getActivityPersonName(
-																activity.user
-															);
-														const locationName =
-															activity.location
-																? activity
-																		.location
-																		.city ||
-																	activity
-																		.location
-																		.country ||
-																	null
-																: null;
-														const exactTime =
-															formatExactTimestamp(
-																activity.timestamp
-															);
-														const destinationUrl =
-															activity.link
-																?.destinationUrl;
-														const hasTargetUser =
-															Boolean(
-																userName &&
-																userName !==
-																	actorName
-															);
-
-														return (
-															<article
-																key={
-																	activity.id ||
-																	`${group.key}-${index}`
+												>
+													<div className="activity-page-event-identity">
+														{isAdmin &&
+														activity.id ? (
+															<input
+																type="checkbox"
+																checked={selectedActivityIds.includes(
+																	activity.id
+																)}
+																onChange={() =>
+																	handleToggleSelectActivity(
+																		activity.id as string
+																	)
 																}
-																className={cn(
-																	"activity-page-event",
-																	activity.id &&
-																		selectedActivityIds.includes(
-																			activity.id
-																		) &&
-																		"activity-page-event-selected",
-																	isAdmin &&
-																		"activity-page-event-admin"
+																className="links-checkbox"
+															/>
+														) : null}
+														<div
+															className={cn(
+																"activity-page-event-icon",
+																`activity-page-event-icon-${visual.tone}`
+															)}
+														>
+															<Icon size={17} />
+														</div>
+													</div>
+
+													<div className="activity-page-event-primary">
+														<p
+															className="activity-page-event-title"
+															dir="auto"
+														>
+															{getActivityMessage(
+																activity
+															)}
+														</p>
+														{activity.user?.role &&
+														"users" ===
+															currentCategory ? (
+															<span className="activity-page-event-role-badge">
+																{getRoleLabel(
+																	activity
+																		.user
+																		.role
+																)}
+															</span>
+														) : null}
+													</div>
+
+													<div className="activity-page-event-context">
+														{actorName ? (
+															<div
+																className="activity-page-detail-item"
+																title={sprintf(
+																	__(
+																		"Actor: %s"
+																	),
+																	actorName
 																)}
 															>
-																<div className="activity-page-event-identity">
-																	{isAdmin &&
-																	activity.id ? (
-																		<input
-																			type="checkbox"
-																			checked={selectedActivityIds.includes(
-																				activity.id
-																			)}
-																			onChange={() =>
-																				handleToggleSelectActivity(
-																					activity.id as string
-																				)
-																			}
-																			className="links-checkbox"
-																		/>
-																	) : null}
-																	<div
-																		className={cn(
-																			"activity-page-event-icon",
-																			`activity-page-event-icon-${visual.tone}`
-																		)}
-																	>
-																		<Icon
-																			size={
-																				17
-																			}
-																		/>
-																	</div>
-																</div>
+																<User
+																	size={13}
+																	className="text-text-muted/70 shrink-0"
+																/>
+																<span className="activity-page-detail-actor">
+																	<span className="text-text-muted/70 font-normal">
+																		{__(
+																			"By"
+																		)}{" "}
+																	</span>
+																	<span className="font-medium text-heading">
+																		{
+																			actorName
+																		}
+																	</span>
+																</span>
+															</div>
+														) : null}
+														{destinationUrl ? (
+															<div
+																className="activity-page-detail-item activity-page-detail-destination"
+																title={
+																	destinationUrl
+																}
+															>
+																<Globe
+																	size={13}
+																	className="text-text-muted/70 shrink-0"
+																/>
+																<span
+																	className="activity-page-detail-destination-url truncate max-w-xs"
+																	dir="ltr"
+																>
+																	{
+																		destinationUrl
+																	}
+																</span>
+															</div>
+														) : null}
+														{hasTargetUser &&
+														userName ? (
+															<div
+																className="activity-page-detail-item"
+																title={sprintf(
+																	__(
+																		"User: %s"
+																	),
+																	userName
+																)}
+															>
+																<User
+																	size={13}
+																	className="text-text-muted/70 shrink-0"
+																/>
+																<span className="activity-page-detail-user font-medium text-heading">
+																	{userName}
+																</span>
+															</div>
+														) : null}
+														{locationName ? (
+															<div
+																className="activity-page-detail-item"
+																title={sprintf(
+																	__(
+																		"Location: %s"
+																	),
+																	locationName
+																)}
+															>
+																<MapPin
+																	size={13}
+																	className="text-text-muted/70 shrink-0"
+																/>
+																<span className="activity-page-detail-location">
+																	{
+																		locationName
+																	}
+																</span>
+															</div>
+														) : null}
+														{!actorName &&
+														!destinationUrl &&
+														!hasTargetUser &&
+														!locationName ? (
+															<span className="activity-page-event-detail-empty">
+																—
+															</span>
+														) : null}
+													</div>
 
-																<div className="activity-page-event-primary">
-																	<p
-																		className="activity-page-event-title"
-																		dir="auto"
-																	>
-																		{getActivityMessage(
-																			activity
-																		)}
-																	</p>
-																	{activity
-																		.user
-																		?.role &&
-																	"users" ===
-																		currentCategory ? (
-																		<span className="activity-page-event-role-badge">
-																			{getRoleLabel(
-																				activity
-																					.user
-																					.role
-																			)}
-																		</span>
-																	) : null}
-																</div>
+													<div className="activity-page-event-time">
+														<p
+															className="activity-page-event-time-relative"
+															dir="auto"
+														>
+															{formatDate(
+																activity.timestamp
+															)}
+														</p>
+														{exactTime ? (
+															<p
+																className="activity-page-event-time-exact"
+																dir="auto"
+															>
+																{exactTime}
+															</p>
+														) : null}
+													</div>
+													{isAdmin ? (
+														<div className="activity-page-event-actions">
+															{activity.id &&
+															activity.link
+																?.destinationUrl &&
+															("link_deleted" ===
+																activity.type ||
+																"link_trashed" ===
+																	activity.type)
+																? (() => {
+																		const isRestorable =
+																			activity.isRestorable ===
+																				true &&
+																			activity.linkStatus ===
+																				"trashed";
+																		const isAlreadyActive =
+																			activity.linkStatus ===
+																			"active";
+																		const isPermanentlyDeleted =
+																			activity.linkStatus ===
+																				"deleted" ||
+																			activity.type ===
+																				"link_deleted";
 
-																<div className="activity-page-event-context">
-																	{actorName ? (
-																		<div
-																			className="activity-page-detail-item"
-																			title={sprintf(
-																				__(
-																					"Actor: %s"
-																				),
-																				actorName
-																			)}
-																		>
-																			<User
-																				size={
-																					13
-																				}
-																				className="text-text-muted/70 shrink-0"
-																			/>
-																			<span className="activity-page-detail-actor">
-																				<span className="text-text-muted/70 font-normal">
-																					{__(
-																						"By"
-																					)}{" "}
-																				</span>
-																				<span className="font-medium text-heading">
-																					{
-																						actorName
-																					}
-																				</span>
-																			</span>
-																		</div>
-																	) : null}
-																	{destinationUrl ? (
-																		<div
-																			className="activity-page-detail-item activity-page-detail-destination"
-																			title={
-																				destinationUrl
-																			}
-																		>
-																			<Globe
-																				size={
-																					13
-																				}
-																				className="text-text-muted/70 shrink-0"
-																			/>
-																			<span
-																				className="activity-page-detail-destination-url truncate max-w-xs"
-																				dir="ltr"
-																			>
-																				{
-																					destinationUrl
-																				}
-																			</span>
-																		</div>
-																	) : null}
-																	{hasTargetUser &&
-																	userName ? (
-																		<div
-																			className="activity-page-detail-item"
-																			title={sprintf(
-																				__(
-																					"User: %s"
-																				),
-																				userName
-																			)}
-																		>
-																			<User
-																				size={
-																					13
-																				}
-																				className="text-text-muted/70 shrink-0"
-																			/>
-																			<span className="activity-page-detail-user font-medium text-heading">
-																				{
-																					userName
-																				}
-																			</span>
-																		</div>
-																	) : null}
-																	{locationName ? (
-																		<div
-																			className="activity-page-detail-item"
-																			title={sprintf(
-																				__(
-																					"Location: %s"
-																				),
-																				locationName
-																			)}
-																		>
-																			<MapPin
-																				size={
-																					13
-																				}
-																				className="text-text-muted/70 shrink-0"
-																			/>
-																			<span className="activity-page-detail-location">
-																				{
-																					locationName
-																				}
-																			</span>
-																		</div>
-																	) : null}
-																	{!actorName &&
-																	!destinationUrl &&
-																	!hasTargetUser &&
-																	!locationName ? (
-																		<span className="activity-page-event-detail-empty">
-																			—
-																		</span>
-																	) : null}
-																</div>
+																		if (
+																			isPermanentlyDeleted &&
+																			!isRestorable
+																		) {
+																			return null;
+																		}
 
-																<div className="activity-page-event-time">
-																	<p
-																		className="activity-page-event-time-relative"
-																		dir="auto"
-																	>
-																		{formatDate(
-																			activity.timestamp
-																		)}
-																	</p>
-																	{exactTime ? (
-																		<p
-																			className="activity-page-event-time-exact"
-																			dir="auto"
-																		>
-																			{
-																				exactTime
-																			}
-																		</p>
-																	) : null}
-																</div>
-																{isAdmin ? (
-																	<div className="activity-page-event-actions">
-																		{activity.id &&
-																		activity
-																			.link
-																			?.destinationUrl &&
-																		("link_deleted" ===
-																			activity.type ||
-																			"link_trashed" ===
-																				activity.type)
-																			? (() => {
-																					const isRestorable =
-																						activity.isRestorable ===
-																							true &&
-																						activity.linkStatus ===
-																							"trashed";
-																					const isAlreadyActive =
-																						activity.linkStatus ===
-																						"active";
-																					const isPermanentlyDeleted =
-																						activity.linkStatus ===
-																							"deleted" ||
-																						activity.type ===
-																							"link_deleted";
-
-																					if (
-																						isPermanentlyDeleted &&
-																						!isRestorable
-																					) {
-																						return null;
-																					}
-
-																					return (
-																						<button
-																							type="button"
-																							onClick={() =>
-																								handleRestoreActivityLink(
-																									activity
-																								)
-																							}
-																							disabled={
-																								!isRestorable ||
-																								isRestoringLink
-																							}
-																							className={cn(
-																								"activity-page-event-action activity-page-event-action-restore",
-																								!isRestorable &&
-																									"pointer-events-none cursor-not-allowed opacity-30"
-																							)}
-																							aria-label={
-																								isAlreadyActive
-																									? __(
-																											"Link is already active"
-																										)
-																									: __(
-																											"Restore link"
-																										)
-																							}
-																							title={
-																								isAlreadyActive
-																									? __(
-																											"Link is already active"
-																										)
-																									: __(
-																											"Restore link"
-																										)
-																							}
-																						>
-																							<RotateCcw
-																								size={
-																									14
-																								}
-																							/>
-																						</button>
-																					);
-																				})()
-																			: null}
-																		{activity.id ? (
+																		return (
 																			<button
 																				type="button"
 																				onClick={() =>
-																					setActivityPendingDelete(
+																					handleRestoreActivityLink(
 																						activity
 																					)
 																				}
-																				className="activity-page-event-action activity-page-event-action-delete"
-																				aria-label={__(
-																					"Delete activity log"
+																				disabled={
+																					!isRestorable ||
+																					isRestoringLink
+																				}
+																				className={cn(
+																					"activity-page-event-action activity-page-event-action-restore",
+																					!isRestorable &&
+																						"pointer-events-none cursor-not-allowed opacity-30"
 																				)}
-																				title={__(
-																					"Delete activity log"
-																				)}
+																				aria-label={
+																					isAlreadyActive
+																						? __(
+																								"Link is already active"
+																							)
+																						: __(
+																								"Restore link"
+																							)
+																				}
+																				title={
+																					isAlreadyActive
+																						? __(
+																								"Link is already active"
+																							)
+																						: __(
+																								"Restore link"
+																							)
+																				}
 																			>
-																				<Trash2
+																				<RotateCcw
 																					size={
 																						14
 																					}
 																				/>
 																			</button>
-																		) : null}
-																	</div>
-																) : null}
-															</article>
-														);
-													}
-												)}
-											</div>
-										</section>
-									);
-								})}
+																		);
+																	})()
+																: null}
+															{activity.id ? (
+																<button
+																	type="button"
+																	onClick={() =>
+																		setActivityPendingDelete(
+																			activity
+																		)
+																	}
+																	className="activity-page-event-action activity-page-event-action-delete"
+																	aria-label={__(
+																		"Delete activity log"
+																	)}
+																	title={__(
+																		"Delete activity log"
+																	)}
+																>
+																	<Trash2
+																		size={
+																			14
+																		}
+																	/>
+																</button>
+															) : null}
+														</div>
+													) : null}
+												</article>
+											);
+										})}
+									</div>
+								</div>
 							</div>
 						) : (
 							<div className="activity-page-empty">

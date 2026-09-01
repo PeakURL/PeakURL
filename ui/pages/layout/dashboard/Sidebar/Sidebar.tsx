@@ -77,7 +77,7 @@ const getNavItems = (
 					href: `${base || ""}/tools/export`,
 				},
 				{
-					name: __("Activity Log"),
+					name: __("Activity"),
 					href: `${base || ""}/activity`,
 					adminOnly: true,
 				},

@@ -125,7 +125,7 @@
 	}
 
 	.activity-page-panel-header {
-		@apply flex flex-col gap-3 border-b border-stroke bg-surface px-5 py-3.5 sm:flex-row sm:items-center sm:justify-between;
+		@apply flex flex-col gap-3 border-b border-stroke bg-surface px-4 py-3 sm:px-5 sm:py-3.5 sm:flex-row sm:items-center sm:justify-between;
 	}
 
 	.activity-page-panel-title {
@@ -133,71 +133,51 @@
 	}
 
 	.activity-page-panel-actions {
-		@apply flex items-center gap-2 self-start sm:self-auto;
+		@apply flex flex-wrap items-center gap-2 w-full sm:w-auto;
 	}
 
 	.activity-page-panel-selection-count {
-		@apply inline-flex items-center rounded-full border border-accent/15 bg-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent;
+		@apply inline-flex items-center rounded-full border border-accent/15 bg-accent/10 px-2.5 py-1 text-xs font-semibold text-accent;
 	}
 
 	.activity-page-selection-delete {
-		@apply inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-2.5 py-1 text-xs font-semibold text-error transition-colors hover:border-red-300 hover:bg-red-100 dark:border-red-500/20 dark:bg-red-500/10 dark:hover:border-red-500/30 dark:hover:bg-red-500/15;
+		@apply inline-flex items-center justify-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-error transition-colors hover:border-red-300 hover:bg-red-100 dark:border-red-500/20 dark:bg-red-500/10 dark:hover:border-red-500/30 dark:hover:bg-red-500/15 whitespace-nowrap;
 	}
 
 	.activity-page-selection-delete-all {
-		@apply inline-flex items-center gap-1.5 rounded-lg border border-red-300 bg-surface px-2.5 py-1 text-xs font-semibold text-error transition-colors hover:border-red-400 hover:bg-red-50 dark:border-red-500/30 dark:bg-surface-alt dark:hover:border-red-500/50 dark:hover:bg-red-500/10;
+		@apply inline-flex items-center justify-center gap-1.5 rounded-lg border border-red-300 bg-surface px-3 py-1.5 text-xs font-semibold text-error transition-colors hover:border-red-400 hover:bg-red-50 dark:border-red-500/30 dark:bg-surface-alt dark:hover:border-red-500/50 dark:hover:bg-red-500/10 whitespace-nowrap;
 	}
 
 	.activity-page-table {
 		@apply overflow-hidden bg-surface;
 	}
 
+	.activity-page-table-scroll {
+		@apply overflow-x-auto overscroll-x-contain;
+	}
+
+	.activity-page-table-element {
+		@apply min-w-full inline-block min-w-[760px] align-top;
+	}
+
 	.activity-page-table-head {
-		@apply hidden border-b border-stroke bg-surface-alt/70 px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-text-muted lg:grid;
-		grid-template-columns: 56px minmax(0, 1.85fr) minmax(0, 1.4fr) minmax(
-				130px,
-				auto
-			);
-		-moz-column-gap: 1.25rem;
-		column-gap: 1.25rem;
+		@apply grid items-center border-b border-stroke bg-surface-alt/70 px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-text-muted;
+		grid-template-columns:
+			48px minmax(180px, 1.8fr) minmax(160px, 1.4fr)
+			minmax(150px, auto);
+		-moz-column-gap: 1rem;
+		column-gap: 1rem;
 		text-align: start;
 	}
 
 	.activity-page-table-head-admin {
 		grid-template-columns:
-			56px minmax(0, 1.85fr) minmax(0, 1.4fr) minmax(130px, auto)
-			76px;
+			48px minmax(180px, 1.8fr) minmax(160px, 1.4fr) minmax(150px, auto)
+			64px;
 	}
 
 	.activity-page-table-head-actions {
 		@apply text-end;
-	}
-
-	.activity-page-day-groups {
-		@apply divide-y divide-stroke bg-surface;
-	}
-
-	.activity-page-day-group {
-		@apply bg-transparent;
-	}
-
-	.activity-page-day-header {
-		@apply sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-stroke bg-surface-alt/90 px-5 py-2 text-[11px] font-bold uppercase tracking-[0.14em] text-text-muted;
-		-webkit-backdrop-filter: blur(8px);
-		backdrop-filter: blur(8px);
-		text-align: start;
-	}
-
-	.activity-page-day-header-main {
-		@apply flex min-w-0 items-center gap-2.5;
-	}
-
-	.activity-page-day-header-label {
-		@apply min-w-0 truncate;
-	}
-
-	.activity-page-day-header-count {
-		@apply inline-flex min-w-6 items-center justify-center rounded-full border border-stroke/70 bg-surface px-2 py-px text-[10px] font-semibold text-text-muted;
 	}
 
 	.activity-page-events {
@@ -206,10 +186,18 @@
 
 	/* Activity Event Row */
 	.activity-page-event {
-		@apply relative grid gap-y-2 bg-transparent px-5 py-3 transition-colors hover:bg-surface-alt/40;
-		grid-template-columns: auto minmax(0, 1fr);
+		@apply relative grid items-center bg-transparent px-5 py-3 transition-colors hover:bg-surface-alt/40;
+		grid-template-columns:
+			48px minmax(180px, 1.8fr) minmax(160px, 1.4fr)
+			minmax(150px, auto);
 		-moz-column-gap: 1rem;
 		column-gap: 1rem;
+	}
+
+	.activity-page-event-admin {
+		grid-template-columns:
+			48px minmax(180px, 1.8fr) minmax(160px, 1.4fr) minmax(150px, auto)
+			64px;
 	}
 
 	.activity-page-event-selected {
@@ -246,6 +234,7 @@
 
 	.activity-page-event-primary {
 		@apply min-w-0 flex items-center gap-2;
+		grid-column: 2;
 		text-align: start;
 	}
 
@@ -261,32 +250,32 @@
 
 	/* Details / Context Column */
 	.activity-page-event-context {
-		@apply flex flex-wrap items-center gap-2;
-		grid-column: 2;
+		@apply min-w-0 flex flex-wrap items-center gap-2;
+		grid-column: 3;
 	}
 
 	.activity-page-detail-item {
-		@apply inline-flex items-center gap-1.5 text-xs text-text-muted;
+		@apply min-w-0 max-w-full inline-flex items-center gap-1.5 text-xs text-text-muted;
 	}
 
 	.activity-page-detail-actor {
-		@apply inline-flex items-center gap-1 text-xs;
+		@apply min-w-0 inline-flex items-center gap-1 text-xs;
 	}
 
 	.activity-page-detail-destination {
-		@apply inline-flex items-center gap-1.5 text-xs text-text-muted/80 hover:text-accent transition-colors;
+		@apply min-w-0 max-w-full inline-flex items-center gap-1.5 text-xs text-text-muted/80 hover:text-accent transition-colors;
 	}
 
 	.activity-page-detail-destination-url {
-		@apply max-w-xs truncate;
+		@apply min-w-0 truncate max-w-full;
 	}
 
 	.activity-page-detail-user {
-		@apply text-xs;
+		@apply min-w-0 text-xs truncate;
 	}
 
 	.activity-page-detail-location {
-		@apply text-xs;
+		@apply min-w-0 text-xs truncate;
 	}
 
 	.activity-page-event-detail-empty {
@@ -295,26 +284,26 @@
 
 	/* Time Column */
 	.activity-page-event-time {
-		@apply flex flex-col justify-center text-xs text-text-muted;
-		grid-column: 2;
+		@apply min-w-0 flex flex-col justify-center items-start text-start text-xs text-text-muted whitespace-nowrap;
+		grid-column: 4;
 	}
 
 	.activity-page-event-time-relative {
-		@apply text-xs font-semibold text-heading;
+		@apply text-xs font-semibold text-heading whitespace-nowrap;
 		unicode-bidi: -moz-plaintext;
 		unicode-bidi: plaintext;
 	}
 
 	.activity-page-event-time-exact {
-		@apply text-[11px] text-text-muted/80;
+		@apply text-[11px] text-text-muted/80 whitespace-nowrap;
 		unicode-bidi: -moz-plaintext;
 		unicode-bidi: plaintext;
 	}
 
 	/* Actions Column */
 	.activity-page-event-actions {
-		@apply flex items-center justify-start gap-1.5;
-		grid-column: 2;
+		@apply flex items-center justify-end gap-1;
+		grid-column: 5;
 	}
 
 	.activity-page-event-action {
@@ -392,10 +381,6 @@
 		@apply mt-2 h-4 w-44;
 	}
 
-	.activity-page-skeleton-day {
-		@apply h-3.5 w-28;
-	}
-
 	.activity-page-skeleton-icon {
 		@apply h-8.5 w-8.5 rounded-lg;
 	}
@@ -418,7 +403,7 @@
 	}
 
 	.activity-page-skeleton-time-group {
-		@apply flex flex-col gap-1;
+		@apply flex flex-col gap-1 items-start;
 	}
 
 	.activity-page-skeleton-time {
@@ -429,50 +414,15 @@
 		@apply h-2.5 w-24;
 	}
 
-	@media (min-width: 1024px) {
-		.activity-page-event {
-			align-items: center;
-			grid-template-columns:
-				56px minmax(0, 1.85fr) minmax(0, 1.4fr)
-				minmax(130px, auto);
-		}
-
-		.activity-page-event-admin {
-			grid-template-columns:
-				56px minmax(0, 1.85fr) minmax(0, 1.4fr)
-				minmax(130px, auto) 76px;
-		}
-
-		.activity-page-event-primary {
-			grid-column: 2;
-		}
-
-		.activity-page-event-context {
-			grid-column: 3;
-		}
-
-		.activity-page-event-time {
-			@apply text-end items-end;
-			grid-column: 4;
-			justify-self: stretch;
-		}
-
-		.activity-page-event-actions {
-			@apply justify-end;
-			grid-column: 5;
-		}
+	html[dir="rtl"] .activity-page-table-head-actions {
+		@apply text-start;
 	}
 
 	html[dir="rtl"] .activity-page-panel-actions {
 		flex-direction: row-reverse;
 	}
 
-	html[dir="rtl"] .activity-page-event-time {
-		justify-self: start;
-		align-items: flex-start;
-	}
-
 	html[dir="rtl"] .activity-page-event-actions {
-		justify-content: flex-start;
+		@apply justify-start;
 	}
 }

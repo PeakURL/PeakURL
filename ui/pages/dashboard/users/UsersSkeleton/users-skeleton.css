@@ -1,18 +1,22 @@
 @layer components {
-	.users-skeleton-stat-card {
-		@apply flex flex-col justify-center;
+	.users-skeleton-stat-label {
+		@apply h-3 w-20;
 	}
 
-	.users-skeleton-stat-label {
-		@apply mb-2 h-3 w-16;
+	.users-skeleton-stat-icon {
+		@apply h-10 w-10 rounded-lg;
 	}
 
 	.users-skeleton-stat-value {
-		@apply h-8 w-12;
+		@apply mt-1.5 h-6 w-14;
+	}
+
+	.users-skeleton-stat-note {
+		@apply mt-2 h-3 w-28;
 	}
 
 	.users-skeleton-row {
-		@apply border-b border-stroke last:border-0;
+		@apply border-b border-stroke/60 last:border-0;
 	}
 
 	.users-skeleton-cell {
@@ -24,7 +28,7 @@
 	}
 
 	.users-skeleton-user-avatar {
-		@apply h-10 w-10 shrink-0 rounded-full;
+		@apply h-9 w-9 shrink-0 rounded-full;
 	}
 
 	.users-skeleton-user-copy {
@@ -44,19 +48,23 @@
 	}
 
 	.users-skeleton-badge {
-		@apply h-6 w-16 rounded-full;
+		@apply h-5.5 w-16 rounded-full;
 	}
 
 	.users-skeleton-date {
-		@apply h-4 w-24;
+		@apply h-3.5 w-20;
+	}
+
+	.users-skeleton-date-sub {
+		@apply mt-1 h-2.5 w-24;
 	}
 
 	.users-skeleton-actions {
-		@apply flex justify-end gap-2;
+		@apply flex justify-end gap-1.5;
 	}
 
 	.users-skeleton-action {
-		@apply h-8 w-8 rounded-md;
+		@apply h-7.5 w-7.5 rounded-lg;
 	}
 
 	.users-skeleton-hero-copy {
@@ -72,11 +80,11 @@
 	}
 
 	.users-skeleton-copy-wide {
-		@apply h-4 w-3/4 max-w-[600px];
+		@apply h-4 w-3/4 max-w-150;
 	}
 
 	.users-skeleton-copy {
-		@apply h-4 w-1/2 max-w-[400px];
+		@apply h-4 w-1/2 max-w-100;
 	}
 
 	.users-skeleton-button {

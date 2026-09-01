@@ -1,169 +1,163 @@
 @layer components {
 	.system-status-skeleton {
-		@apply space-y-4;
+		@apply space-y-5 pb-8 sm:space-y-6;
 	}
 
-	.system-status-skeleton-panel {
-		@apply overflow-hidden rounded-lg border border-stroke bg-surface shadow-sm;
+	/* Hero Skeleton */
+	.system-status-skeleton-hero {
+		@apply flex items-start justify-between gap-3 px-1 pt-1;
 	}
 
-	.system-status-skeleton-header {
-		@apply border-b border-stroke bg-surface px-5 pt-8 sm:px-8;
+	.system-status-skeleton-hero-copy {
+		@apply min-w-0 flex flex-col;
+		text-align: start;
+	}
+
+	.system-status-skeleton-badge {
+		@apply mb-2 h-5 w-24 rounded-full;
+	}
+
+	.system-status-skeleton-title {
+		@apply h-8 w-48 rounded-lg;
 	}
 
 	.system-status-skeleton-summary {
-		@apply mx-auto max-w-2xl text-center;
+		@apply mt-2 h-4 w-72 max-w-full rounded;
 	}
 
-	.system-status-skeleton-status {
-		@apply mt-4 flex items-center justify-center gap-2;
+	.system-status-skeleton-refresh {
+		@apply h-10 w-10 shrink-0 rounded-full mt-1;
 	}
 
-	.system-status-skeleton-summary-title {
-		@apply mx-auto h-9 w-64;
+	/* Operational Status Banner Skeleton */
+	.system-status-skeleton-banner {
+		@apply rounded-xl border border-stroke bg-surface p-5 sm:p-6 shadow-xs;
 	}
 
-	.system-status-skeleton-status-dot {
-		@apply h-5 w-5 rounded-full;
+	.system-status-skeleton-banner-main {
+		@apply flex items-start gap-3.5 sm:gap-4;
 	}
 
-	.system-status-skeleton-status-label {
-		@apply h-5 w-12;
+	.system-status-skeleton-banner-beacon {
+		@apply mt-1 h-3.5 w-3.5 shrink-0 rounded-full;
 	}
 
-	.system-status-skeleton-summary-copy {
-		@apply mx-auto mt-3 h-4 w-48;
+	.system-status-skeleton-banner-copy {
+		@apply min-w-0 flex-1 space-y-2;
+	}
+
+	.system-status-skeleton-banner-title {
+		@apply h-6 w-60 max-w-full rounded-md;
+	}
+
+	.system-status-skeleton-banner-description {
+		@apply h-4 w-full max-w-2xl rounded;
+	}
+
+	.system-status-skeleton-banner-footer {
+		@apply mt-5 pt-4 border-t border-stroke/50 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between;
+	}
+
+	.system-status-skeleton-banner-pills {
+		@apply flex items-center gap-2;
+	}
+
+	.system-status-skeleton-banner-pill {
+		@apply h-6 w-20 rounded-md;
+	}
+
+	.system-status-skeleton-banner-timestamp {
+		@apply h-4 w-48 rounded;
+	}
+
+	/* Subsystems Component Grid Skeleton */
+	.system-status-skeleton-subsystems {
+		@apply space-y-3;
+	}
+
+	.system-status-skeleton-subsystems-header {
+		@apply flex items-center justify-between px-1;
+	}
+
+	.system-status-skeleton-subsystems-title {
+		@apply h-3.5 w-36 rounded;
+	}
+
+	.system-status-skeleton-subsystems-count {
+		@apply h-3.5 w-20 rounded;
+	}
+
+	.system-status-skeleton-subsystems-grid {
+		@apply grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3;
+	}
+
+	.system-status-skeleton-subsystem-card {
+		@apply flex items-center justify-between gap-3 rounded-lg border border-stroke bg-surface p-3.5;
+	}
+
+	.system-status-skeleton-subsystem-icon {
+		@apply h-9 w-9 shrink-0 rounded-lg;
+	}
+
+	.system-status-skeleton-subsystem-info {
+		@apply min-w-0 flex-1 space-y-1.5;
+	}
+
+	.system-status-skeleton-subsystem-name {
+		@apply h-3.5 w-28 rounded;
+	}
+
+	.system-status-skeleton-subsystem-meta {
+		@apply h-3 w-20 rounded;
+	}
+
+	.system-status-skeleton-subsystem-badge {
+		@apply h-5 w-20 rounded-full shrink-0;
+	}
+
+	/* Toolbar Tabs Skeleton */
+	.system-status-skeleton-toolbar {
+		@apply flex px-1;
 	}
 
 	.system-status-skeleton-tabs {
-		@apply mt-6 flex items-center justify-center gap-6;
+		@apply grid grid-cols-2 sm:inline-flex sm:w-auto w-full items-center gap-1 rounded-xl bg-surface-alt p-1 border border-stroke/60;
 	}
 
 	.system-status-skeleton-tab {
-		@apply border-b-2 px-1 pb-3;
+		@apply h-8 w-full sm:w-24 rounded-lg;
 	}
 
-	.system-status-skeleton-tab-label {
-		@apply h-4 w-12 rounded-sm;
+	/* Panel Skeleton */
+	.system-status-skeleton-panel {
+		@apply overflow-hidden rounded-lg border border-stroke bg-surface shadow-xs;
 	}
 
-	.system-status-skeleton-tab-label-short {
-		@apply h-4 w-8 rounded-sm;
-	}
-
-	.system-status-skeleton-tab-active {
-		@apply border-accent;
-	}
-
-	.system-status-skeleton-tab-inactive {
-		@apply border-transparent;
-	}
-
-	.system-status-skeleton-content {
-		@apply space-y-6 bg-bg px-5 py-6 sm:px-8;
-	}
-
-	.system-status-skeleton-section {
-		@apply space-y-3;
+	.system-status-skeleton-panel-header {
+		@apply border-b border-stroke bg-surface px-5 py-4 space-y-1.5;
 	}
 
 	.system-status-skeleton-section-title {
-		@apply h-8 w-48;
+		@apply h-4 w-32 rounded;
 	}
 
-	.system-status-skeleton-lines {
-		@apply space-y-2;
-	}
-
-	.system-status-skeleton-line-long {
-		@apply h-4 max-w-2xl;
-	}
-
-	.system-status-skeleton-line-short {
-		@apply h-4 max-w-xl;
-	}
-
-	.system-status-skeleton-copy-row {
-		@apply block;
-	}
-
-	.system-status-skeleton-copy-button {
-		@apply h-9 rounded-lg;
-		width: 13.75rem;
+	.system-status-skeleton-section-summary {
+		@apply h-3 w-64 max-w-full rounded;
 	}
 
 	.system-status-skeleton-list {
-		@apply space-y-3;
+		@apply divide-y divide-stroke/60;
 	}
 
-	.system-status-skeleton-info {
-		@apply overflow-hidden rounded-lg border border-stroke bg-surface;
+	.system-status-skeleton-row {
+		@apply flex items-center justify-between gap-4 px-5 py-4;
 	}
 
-	.system-status-skeleton-info-header {
-		@apply flex items-center justify-between gap-4 px-4 py-3.5;
+	.system-status-skeleton-row-label {
+		@apply h-4 w-40 rounded;
 	}
 
-	.system-status-skeleton-title-xs {
-		@apply h-4 w-16;
-	}
-
-	.system-status-skeleton-title-sm {
-		@apply h-4 w-20;
-	}
-
-	.system-status-skeleton-title-md {
-		@apply h-4 w-24;
-	}
-
-	.system-status-skeleton-title-lg {
-		@apply h-4 w-36;
-	}
-
-	.system-status-skeleton-title-xl {
-		@apply h-4 w-40;
-	}
-
-	.system-status-skeleton-chevron {
-		@apply h-4 w-4;
-	}
-
-	.system-status-skeleton-info-table {
-		@apply overflow-hidden border-t border-stroke;
-	}
-
-	.system-status-skeleton-table {
-		@apply min-w-full;
-	}
-
-	.system-status-skeleton-row-bordered {
-		@apply border-t border-stroke;
-	}
-
-	.system-status-skeleton-heading {
-		@apply bg-surface-alt px-4 py-3 align-top;
-		text-align: start;
-		width: 34%;
-		min-width: 11.25rem;
-	}
-
-	.system-status-skeleton-value {
-		@apply px-4 py-3 align-top;
-	}
-
-	.system-status-skeleton-value-copy {
-		@apply space-y-1.5;
-	}
-
-	.system-status-skeleton-heading-label {
-		@apply h-4 w-24;
-	}
-
-	.system-status-skeleton-value-line {
-		@apply h-4 w-32;
-	}
-
-	.system-status-skeleton-value-line-muted {
-		@apply h-3 w-20 opacity-60;
+	.system-status-skeleton-row-badge {
+		@apply h-5 w-16 rounded-md;
 	}
 }

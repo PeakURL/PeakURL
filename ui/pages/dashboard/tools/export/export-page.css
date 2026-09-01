@@ -1,134 +1,171 @@
 @layer components {
 	.export-page {
-		@apply space-y-5 pb-8;
+		@apply space-y-4 pb-8 sm:space-y-5;
 	}
 
-	.export-page-header {
-		@apply space-y-1;
+	/* Hero Section */
+	.export-page-hero {
+		@apply flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between px-1 pt-1;
+	}
+
+	.export-page-hero-copy {
+		@apply min-w-0 flex flex-col;
+		text-align: start;
+	}
+
+	.export-page-hero-badge {
+		@apply mb-2 w-max inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-accent;
 	}
 
 	.export-page-title {
-		@apply text-2xl font-bold text-heading;
+		@apply text-2xl font-bold tracking-tight text-heading sm:text-3xl;
 	}
 
 	.export-page-summary {
-		@apply text-sm text-text-muted;
+		@apply mt-1 text-sm leading-relaxed text-text-muted;
+		text-align: start;
 	}
 
+	/* Intro / Banner Card */
 	.export-page-intro {
-		@apply rounded-xl border border-stroke bg-surface p-6;
+		@apply rounded-lg border border-stroke bg-surface p-4 shadow-sm transition-all duration-200 hover:border-stroke-strong;
 	}
 
 	.export-page-intro-layout {
-		@apply flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between;
+		@apply flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between;
 	}
 
 	.export-page-intro-copy {
-		@apply max-w-2xl space-y-2;
+		@apply flex-1 min-w-0 space-y-1.5;
+		text-align: start;
 	}
 
 	.export-page-intro-heading {
-		@apply flex items-center gap-2 text-heading;
+		@apply flex items-center gap-2.5 text-heading;
 	}
 
-	.export-page-intro-icon {
-		@apply text-accent;
+	.export-page-intro-icon-wrapper {
+		@apply flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent;
 	}
 
 	.export-page-intro-title {
-		@apply text-lg font-semibold;
+		@apply text-base font-semibold text-heading;
 	}
 
 	.export-page-intro-text {
-		@apply text-sm leading-6 text-text-muted;
+		@apply text-xs leading-relaxed text-text-muted;
 	}
 
 	.export-page-intro-count {
-		@apply rounded-lg border border-stroke bg-surface-alt px-4 py-3;
-		text-align: end;
+		@apply flex flex-col justify-center rounded-lg border border-stroke bg-surface-alt px-5 py-3 shrink-0 min-w-35;
+		text-align: start;
 	}
 
 	.export-page-intro-count-label {
-		@apply text-xs font-semibold uppercase text-text-muted;
-		letter-spacing: 0.2em;
+		@apply text-xs font-medium uppercase tracking-wide text-text-muted;
 	}
 
 	.export-page-intro-count-value {
-		@apply mt-1 text-2xl font-bold text-heading;
+		@apply mt-1 text-2xl text-center font-bold text-heading;
 	}
 
+	/* Grid of Export Format Cards */
 	.export-page-grid {
-		@apply grid gap-4 lg:grid-cols-3;
-	}
-
-	.export-page-api {
-		@apply rounded-xl border border-stroke bg-surface p-6;
-	}
-
-	.export-page-api-title {
-		@apply text-lg font-semibold text-heading;
-	}
-
-	.export-page-api-copy {
-		@apply mt-2 text-sm leading-6 text-text-muted;
-	}
-
-	.export-page-api-grid {
-		@apply mt-5 grid gap-4 lg:grid-cols-2;
-	}
-
-	.export-page-api-column {
-		@apply min-w-0 space-y-2;
-	}
-
-	.export-page-api-heading {
-		@apply text-sm font-medium text-heading;
-	}
-
-	.export-page-api-code-block {
-		@apply overflow-x-auto rounded-lg border border-gray-700 bg-gray-900 p-4 text-xs text-gray-100;
-		direction: ltr;
-		text-align: start;
-		unicode-bidi: plaintext;
-	}
-
-	.export-page-api-actions {
-		@apply mt-5;
-	}
-
-	.export-page-api-button-icon {
-		@apply h-4 w-4;
+		@apply grid gap-4 sm:grid-cols-2 lg:grid-cols-3;
 	}
 
 	.export-card {
-		@apply flex h-full flex-col rounded-xl border border-stroke bg-surface p-5;
+		@apply flex h-full flex-col justify-between rounded-lg border border-stroke bg-surface p-4 transition-all duration-200 hover:border-stroke-strong hover:shadow-md;
+		text-align: start;
 	}
 
 	.export-card-header {
-		@apply mb-4 flex flex-1 items-start gap-3;
+		@apply mb-3 flex items-start gap-3.5;
 	}
 
 	.export-card-icon {
-		@apply flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-surface-alt text-accent;
+		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-lg;
+	}
+
+	.export-card-icon-csv {
+		@apply bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400;
+	}
+
+	.export-card-icon-json {
+		@apply bg-accent/10 text-accent dark:bg-accent/20;
+	}
+
+	.export-card-icon-xml {
+		@apply bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400;
+	}
+
+	.export-card-icon-glyph {
+		@apply h-4.5 w-4.5;
 	}
 
 	.export-card-copy {
-		@apply min-w-0 space-y-1;
+		@apply min-w-0 flex-1 space-y-1;
 	}
 
 	.export-card-title {
-		@apply text-lg font-semibold text-heading;
+		@apply text-sm font-semibold text-heading;
 	}
 
 	.export-card-summary {
-		@apply text-sm leading-6 text-text-muted;
+		@apply text-xs leading-relaxed text-text-muted;
 	}
 
 	.export-card-footer {
-		@apply mt-auto flex items-center justify-between gap-3 border-t border-stroke pt-4;
+		@apply mt-auto flex items-center justify-between gap-3 border-t border-stroke/60 pt-3;
 	}
 
 	.export-card-format {
-		@apply text-sm font-medium text-text-muted;
+		@apply text-[11px] font-medium text-text-muted truncate;
+	}
+
+	/* API Export Section */
+	.export-page-api {
+		@apply rounded-lg border border-stroke bg-surface p-5 shadow-sm transition-all duration-200 hover:border-stroke-strong;
+		text-align: start;
+	}
+
+	.export-page-api-header {
+		@apply flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between;
+	}
+
+	.export-page-api-header-main {
+		@apply flex items-start gap-3;
+	}
+
+	.export-page-api-icon-wrapper {
+		@apply flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent mt-0.5;
+	}
+
+	.export-page-api-title {
+		@apply text-base font-semibold text-heading;
+	}
+
+	.export-page-api-copy {
+		@apply mt-0.5 text-xs text-text-muted leading-relaxed;
+	}
+
+	.export-page-api-grid {
+		@apply mt-4 grid gap-3.5 lg:grid-cols-2;
+	}
+
+	.export-page-api-column {
+		@apply min-w-0 space-y-1.5;
+	}
+
+	.export-page-api-heading {
+		@apply flex items-center justify-between text-xs font-medium uppercase tracking-wide text-text-muted px-1;
+	}
+
+	.export-page-api-code-block {
+		@apply overflow-x-auto rounded-lg border border-gray-800 bg-gray-950 p-3.5 text-xs font-mono text-gray-200 shadow-inner;
+		direction: ltr;
+		text-align: start;
+		unicode-bidi: -moz-plaintext;
+		unicode-bidi: plaintext;
 	}
 }

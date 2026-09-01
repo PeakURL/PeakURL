@@ -16,11 +16,11 @@
 	}
 
 	.plugins-table-empty {
-		@apply rounded-xl border border-dashed border-stroke bg-surface-alt/30 px-6 py-12 text-center;
+		@apply rounded-lg border border-dashed border-stroke bg-surface-alt/30 px-6 py-10 text-center;
 	}
 
 	.plugins-table-empty-icon {
-		@apply mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-surface-alt text-text-muted;
+		@apply mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-surface-alt text-text-muted;
 	}
 
 	.plugins-table-empty-title {
@@ -28,11 +28,11 @@
 	}
 
 	.plugins-table-empty-copy {
-		@apply mt-1 text-sm text-text-muted;
+		@apply mt-1 text-xs text-text-muted;
 	}
 
 	.plugins-table {
-		@apply overflow-hidden rounded-xl border border-stroke bg-surface shadow-sm;
+		@apply overflow-hidden rounded-lg border border-stroke bg-surface shadow-xs;
 	}
 
 	.plugins-table-wrap {
@@ -49,7 +49,7 @@
 	}
 
 	.plugins-table-head-cell {
-		@apply px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-text-muted;
+		@apply px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text-muted;
 	}
 
 	.plugins-table-head-cell-end {
@@ -57,11 +57,11 @@
 	}
 
 	.plugins-table-row {
-		@apply transition-colors hover:bg-surface-alt/40;
+		@apply transition-colors hover:bg-surface-alt/40 border-b border-stroke/60 last:border-0;
 	}
 
 	.plugins-table-cell {
-		@apply px-5 py-4;
+		@apply px-4 py-3.5;
 		text-align: start;
 	}
 
@@ -70,15 +70,15 @@
 	}
 
 	.plugins-table-icon {
-		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl opacity-80;
+		@apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg opacity-80;
 	}
 
 	.plugins-table-icon-fill {
-		@apply h-5 w-5 rounded bg-white/30;
+		@apply h-4.5 w-4.5 rounded bg-white/30;
 	}
 
 	.plugins-table-copy {
-		@apply min-w-0 flex-1 space-y-1.5;
+		@apply min-w-0 flex-1 space-y-1;
 		text-align: start;
 	}
 

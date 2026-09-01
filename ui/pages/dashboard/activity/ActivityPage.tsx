@@ -2,14 +2,18 @@ import { useEffect, useState } from "react";
 import {
 	ChevronLeft,
 	ChevronRight,
+	Clock,
+	Globe,
 	History,
 	Link2,
+	MapPin,
 	MousePointerClick,
 	PencilLine,
 	RefreshCw,
 	RotateCcw,
 	Shield,
 	Trash2,
+	User,
 	UserMinus,
 	UserPen,
 	UserPlus,
@@ -41,7 +45,6 @@ import {
 	formatDate,
 	formatLocalizedDateTime,
 	getZonedDateKey,
-	getLinkDisplayTitle,
 	getErrorMessage,
 } from "@/utils";
 
@@ -114,33 +117,6 @@ function getRoleLabel(role?: string | null): string {
 	}
 
 	return __("User");
-}
-
-function getActivityTypeLabel(type?: string | null): string {
-	switch (type) {
-		case "link_created":
-			return __("Link created");
-		case "link_updated":
-			return __("Link updated");
-		case "link_deleted":
-			return __("Link permanently deleted");
-		case "link_trashed":
-			return __("Link moved to trash");
-		case "link_restored":
-			return __("Link restored");
-		case "trash_emptied":
-			return __("Trash emptied");
-		case "user_created":
-			return __("User created");
-		case "user_updated":
-			return __("User updated");
-		case "user_deleted":
-			return __("User deleted");
-		case "click":
-			return __("Link click");
-		default:
-			return __("Activity");
-	}
 }
 
 function getActivityLinkDisplayName(link?: RecentActivity["link"]): string {
@@ -340,14 +316,9 @@ function ActivityPageSkeleton() {
 						<Skeleton className="activity-page-skeleton-icon" />
 						<div className="activity-page-skeleton-primary">
 							<Skeleton className="activity-page-skeleton-title" />
-							<div className="activity-page-skeleton-badges">
-								<Skeleton className="activity-page-skeleton-badge" />
-								<Skeleton className="activity-page-skeleton-badge" />
-							</div>
 						</div>
 						<div className="activity-page-skeleton-context">
 							<div className="activity-page-skeleton-details">
-								<Skeleton className="activity-page-skeleton-chip" />
 								<Skeleton className="activity-page-skeleton-chip" />
 								<Skeleton className="activity-page-skeleton-chip" />
 							</div>
@@ -742,7 +713,7 @@ function ActivityPage() {
 	}> = [
 		{
 			value: "all",
-			label: __("All activity"),
+			label: __("All"),
 			count: allEventsCount,
 			icon: History,
 		},
@@ -763,6 +734,7 @@ function ActivityPage() {
 		key: string;
 		label: string;
 		value: string;
+		note?: string | null;
 		icon: typeof History;
 	}> = [
 		{
@@ -783,6 +755,17 @@ function ActivityPage() {
 			value: formatCount(userEventsCount),
 			icon: Users,
 		},
+		{
+			key: "latest",
+			label: __("Latest event"),
+			value: mostRecentTimestamp
+				? formatDate(mostRecentTimestamp)
+				: __("No recent events"),
+			note: mostRecentTimestamp
+				? formatExactTimestamp(mostRecentTimestamp)
+				: null,
+			icon: Clock,
+		},
 	];
 
 	return (
@@ -791,7 +774,7 @@ function ActivityPage() {
 				<div className="activity-page-hero-copy">
 					<p className="activity-page-hero-badge">
 						<Shield size={14} />
-						{__("Audit Log")}
+						<span>{__("Audit Log")}</span>
 					</p>
 					<h1 className="activity-page-title">{__("Activity")}</h1>
 					<p className="activity-page-summary">
@@ -804,7 +787,7 @@ function ActivityPage() {
 					type="button"
 					onClick={handleRefresh}
 					disabled={isBusy}
-					className="dashboard-page-refresh"
+					className="dashboard-page-refresh mt-1 shrink-0"
 					aria-label={__("Refresh activity history")}
 					title={__("Refresh activity history")}
 				>
@@ -818,51 +801,52 @@ function ActivityPage() {
 			</div>
 
 			<div className="activity-page-overview">
-				<div className="activity-page-overview-items">
+				<div className="activity-page-overview-grid">
 					{overviewItems.map((item) => {
 						const Icon = item.icon;
+						const isLatest = "latest" === item.key;
 
 						return (
 							<div
 								key={item.key}
 								className="activity-page-overview-item"
 							>
-								<div className="activity-page-overview-icon">
-									<Icon size={16} />
+								<div className="activity-page-overview-header">
+									<div className="activity-page-overview-copy">
+										<p className="activity-page-overview-title">
+											{item.label}
+										</p>
+										<p
+											className={cn(
+												"activity-page-overview-value",
+												isLatest &&
+													"activity-page-overview-value-latest"
+											)}
+											dir="auto"
+										>
+											{item.value}
+										</p>
+									</div>
+									<div
+										className={cn(
+											"activity-page-overview-icon",
+											`activity-page-overview-icon-${item.key}`
+										)}
+									>
+										<Icon className="activity-page-overview-icon-glyph" />
+									</div>
 								</div>
-								<div className="activity-page-overview-copy">
-									<p className="activity-page-overview-label">
-										{item.label}
+								{item.note ? (
+									<p
+										className="activity-page-overview-note"
+										dir="auto"
+									>
+										{item.note}
 									</p>
-									<p className="activity-page-overview-value">
-										{item.value}
-									</p>
-								</div>
+								) : null}
 							</div>
 						);
 					})}
-				</div>
-
-				<div className="activity-page-overview-status">
-					<p className="activity-page-overview-status-label">
-						{__("Latest event")}
-					</p>
-					<p
-						className="activity-page-overview-status-value"
-						dir="auto"
-					>
-						{mostRecentTimestamp
-							? formatDate(mostRecentTimestamp)
-							: __("No recent events")}
-					</p>
-					{mostRecentTimestamp ? (
-						<p
-							className="activity-page-overview-status-note"
-							dir="auto"
-						>
-							{formatExactTimestamp(mostRecentTimestamp)}
-						</p>
-					) : null}
 				</div>
 			</div>
 
@@ -884,7 +868,7 @@ function ActivityPage() {
 										"activity-page-filter-active"
 								)}
 							>
-								<Icon size={15} />
+								<Icon size={14} className="shrink-0" />
 								<span>{option.label}</span>
 								<span className="activity-page-filter-count">
 									{formatCount(option.count)}
@@ -1068,20 +1052,6 @@ function ActivityPage() {
 															getActivityPersonName(
 																activity.user
 															);
-														const linkName =
-															activity.link
-																? getLinkDisplayTitle(
-																		activity
-																			.link
-																			.title,
-																		activity
-																			.link
-																			.shortCode ||
-																			__(
-																				"Unknown"
-																			)
-																	)
-																: null;
 														const locationName =
 															activity.location
 																? activity
@@ -1096,62 +1066,15 @@ function ActivityPage() {
 															formatExactTimestamp(
 																activity.timestamp
 															);
-														const detailItems = [
-															actorName
-																? {
-																		key: "actor",
-																		label: __(
-																			"By"
-																		),
-																		value: actorName,
-																	}
-																: null,
-															linkName
-																? {
-																		key: "link",
-																		label: __(
-																			"Link"
-																		),
-																		value: linkName,
-																	}
-																: null,
+														const destinationUrl =
 															activity.link
-																?.destinationUrl
-																? {
-																		key: "destination",
-																		label: __(
-																			"Destination"
-																		),
-																		value: activity
-																			.link
-																			.destinationUrl,
-																	}
-																: null,
-															userName
-																? {
-																		key: "user",
-																		label: __(
-																			"User"
-																		),
-																		value: userName,
-																	}
-																: null,
-															locationName
-																? {
-																		key: "location",
-																		label: __(
-																			"From"
-																		),
-																		value: locationName,
-																	}
-																: null,
-														].filter(
-															Boolean
-														) as Array<{
-															key: string;
-															label: string;
-															value: string;
-														}>;
+																?.destinationUrl;
+														const hasTargetUser =
+															Boolean(
+																userName &&
+																userName !==
+																	actorName
+															);
 
 														return (
 															<article
@@ -1194,7 +1117,7 @@ function ActivityPage() {
 																	>
 																		<Icon
 																			size={
-																				18
+																				17
 																			}
 																		/>
 																	</div>
@@ -1209,67 +1132,130 @@ function ActivityPage() {
 																			activity
 																		)}
 																	</p>
-																	<div className="activity-page-event-badges">
-																		<span
-																			className={cn(
-																				"activity-page-event-badge",
-																				`activity-page-event-badge-${visual.tone}`
-																			)}
-																		>
-																			{getActivityTypeLabel(
-																				activity.type
+																	{activity
+																		.user
+																		?.role &&
+																	"users" ===
+																		currentCategory ? (
+																		<span className="activity-page-event-role-badge">
+																			{getRoleLabel(
+																				activity
+																					.user
+																					.role
 																			)}
 																		</span>
-																		{activity
-																			.user
-																			?.role ? (
-																			<span className="activity-page-event-badge activity-page-event-badge-neutral">
-																				{getRoleLabel(
-																					activity
-																						.user
-																						.role
-																				)}
-																			</span>
-																		) : null}
-																	</div>
+																	) : null}
 																</div>
 
 																<div className="activity-page-event-context">
-																	{detailItems.length >
-																	0 ? (
-																		detailItems.map(
-																			(
-																				item
-																			) => (
-																				<div
-																					key={
-																						item.key
-																					}
-																					className="activity-page-event-detail"
-																				>
-																					<span className="activity-page-event-detail-label">
-																						{
-																							item.label
-																						}
-																					</span>
-																					<span
-																						className="activity-page-event-detail-value"
-																						dir="auto"
-																					>
-																						{
-																							item.value
-																						}
-																					</span>
-																				</div>
-																			)
-																		)
-																	) : (
-																		<span className="activity-page-event-detail-empty">
-																			{__(
-																				"No additional details"
+																	{actorName ? (
+																		<div
+																			className="activity-page-detail-item"
+																			title={sprintf(
+																				__(
+																					"Actor: %s"
+																				),
+																				actorName
 																			)}
+																		>
+																			<User
+																				size={
+																					13
+																				}
+																				className="text-text-muted/70 shrink-0"
+																			/>
+																			<span className="activity-page-detail-actor">
+																				<span className="text-text-muted/70 font-normal">
+																					{__(
+																						"By"
+																					)}{" "}
+																				</span>
+																				<span className="font-medium text-heading">
+																					{
+																						actorName
+																					}
+																				</span>
+																			</span>
+																		</div>
+																	) : null}
+																	{destinationUrl ? (
+																		<div
+																			className="activity-page-detail-item activity-page-detail-destination"
+																			title={
+																				destinationUrl
+																			}
+																		>
+																			<Globe
+																				size={
+																					13
+																				}
+																				className="text-text-muted/70 shrink-0"
+																			/>
+																			<span
+																				className="activity-page-detail-destination-url truncate max-w-xs"
+																				dir="ltr"
+																			>
+																				{
+																					destinationUrl
+																				}
+																			</span>
+																		</div>
+																	) : null}
+																	{hasTargetUser &&
+																	userName ? (
+																		<div
+																			className="activity-page-detail-item"
+																			title={sprintf(
+																				__(
+																					"User: %s"
+																				),
+																				userName
+																			)}
+																		>
+																			<User
+																				size={
+																					13
+																				}
+																				className="text-text-muted/70 shrink-0"
+																			/>
+																			<span className="activity-page-detail-user font-medium text-heading">
+																				{
+																					userName
+																				}
+																			</span>
+																		</div>
+																	) : null}
+																	{locationName ? (
+																		<div
+																			className="activity-page-detail-item"
+																			title={sprintf(
+																				__(
+																					"Location: %s"
+																				),
+																				locationName
+																			)}
+																		>
+																			<MapPin
+																				size={
+																					13
+																				}
+																				className="text-text-muted/70 shrink-0"
+																			/>
+																			<span className="activity-page-detail-location">
+																				{
+																					locationName
+																				}
+																			</span>
+																		</div>
+																	) : null}
+																	{!actorName &&
+																	!destinationUrl &&
+																	!hasTargetUser &&
+																	!locationName ? (
+																		<span className="activity-page-event-detail-empty">
+																			—
 																		</span>
-																	)}
+																	) : null}
 																</div>
 
 																<div className="activity-page-event-time">
@@ -1362,7 +1348,7 @@ function ActivityPage() {
 																						>
 																							<RotateCcw
 																								size={
-																									15
+																									14
 																								}
 																							/>
 																						</button>
@@ -1377,7 +1363,7 @@ function ActivityPage() {
 																						activity
 																					)
 																				}
-																				className="activity-page-event-action"
+																				className="activity-page-event-action activity-page-event-action-delete"
 																				aria-label={__(
 																					"Delete activity log"
 																				)}
@@ -1387,7 +1373,7 @@ function ActivityPage() {
 																			>
 																				<Trash2
 																					size={
-																						15
+																						14
 																					}
 																				/>
 																			</button>

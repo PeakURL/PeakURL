@@ -1,13 +1,23 @@
 @layer components {
 	.import-layout-header {
-		@apply space-y-1;
+		@apply flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between px-1 pt-1;
+	}
+
+	.import-layout-header-copy {
+		@apply min-w-0 flex flex-col;
+		text-align: start;
+	}
+
+	.import-layout-header-badge {
+		@apply mb-2 w-max inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-accent;
 	}
 
 	.import-layout-title {
-		@apply text-2xl font-bold text-heading;
+		@apply text-2xl font-bold tracking-tight text-heading sm:text-3xl;
 	}
 
 	.import-layout-copy {
-		@apply text-sm text-text-muted;
+		@apply mt-1 text-sm leading-relaxed text-text-muted;
+		text-align: start;
 	}
 }

@@ -69,6 +69,7 @@ const getNavItems = (
 				{
 					name: __("Import"),
 					href: `${base || ""}/tools/import/file`,
+					activeBasePath: `${base || ""}/tools/import`,
 					adminOnly: true,
 				},
 				{
@@ -239,15 +240,18 @@ export const Sidebar = ({
 
 	return (
 		<>
-			{isMobileOpen && (
-				<button
-					type="button"
-					tabIndex={-1}
-					aria-label={__("Close sidebar")}
-					className="dashboard-sidebar-overlay"
-					onClick={onMobileClose}
-				/>
-			)}
+			<button
+				type="button"
+				tabIndex={-1}
+				aria-label={__("Close sidebar")}
+				className={cn(
+					"dashboard-sidebar-overlay",
+					isMobileOpen
+						? "dashboard-sidebar-overlay-open"
+						: "dashboard-sidebar-overlay-closed"
+				)}
+				onClick={onMobileClose}
+			/>
 
 			<aside
 				className={cn(
@@ -290,6 +294,11 @@ export const Sidebar = ({
 							const isChildActive = item.children?.some(
 								(child) =>
 									pathname === child.href ||
+									(Boolean(child.activeBasePath) &&
+										(pathname === child.activeBasePath ||
+											pathname.startsWith(
+												`${child.activeBasePath}/`
+											))) ||
 									pathname.startsWith(`${child.href}/`)
 							);
 							const isSectionActive =
@@ -367,6 +376,14 @@ export const Sidebar = ({
 													const isChildLinkActive =
 														pathname ===
 															child.href ||
+														(Boolean(
+															child.activeBasePath
+														) &&
+															(pathname ===
+																child.activeBasePath ||
+																pathname.startsWith(
+																	`${child.activeBasePath}/`
+																))) ||
 														pathname.startsWith(
 															`${child.href}/`
 														);

@@ -2,10 +2,12 @@ import type { ChangeEvent, SubmitEvent } from "react";
 import { useMemo, useState } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import {
+	Clock,
 	Pencil,
 	Plus,
 	ShieldCheck,
 	Trash2,
+	UserCheck,
 	UserRound,
 	Users,
 	X,
@@ -16,7 +18,6 @@ import {
 	Avatar,
 	Button,
 	ConfirmDialog,
-	IconButton,
 	Input,
 	Select,
 	type SelectOption,
@@ -29,11 +30,17 @@ import {
 	useGetUserProfileQuery,
 	useUpdateUserMutation,
 } from "@/store/slices/api";
-import { __, sprintf } from "@/i18n";
+import { __, _n, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
-import { formatLocalizedDateTime, getErrorMessage } from "@/utils";
+import {
+	cn,
+	formatCount,
+	formatDate,
+	formatLocalizedDateTime,
+	getErrorMessage,
+} from "@/utils";
 
-import { UsersTableSkeletonRows } from "./UsersSkeleton";
+import { UsersOverviewSkeleton, UsersTableSkeletonRows } from "./UsersSkeleton";
 import type {
 	UserDialogFormState,
 	UserDialogMode,
@@ -69,6 +76,20 @@ const getRoleMeta = (): Record<UserRole, UserRoleMeta> => ({
 		badge: "users-page-role-badge-editor",
 	},
 });
+
+function getUserDisplayName(user?: UserSummary | null): string {
+	if (!user) {
+		return __("User");
+	}
+	const fullName = `${user.firstName || ""} ${user.lastName || ""}`.trim();
+	return (
+		user.displayName ||
+		fullName ||
+		user.username ||
+		user.email ||
+		__("User")
+	);
+}
 
 const getInitialFormState = (
 	mode: UserDialogMode,
@@ -185,8 +206,9 @@ function UserDialog({
 							type="button"
 							onClick={onClose}
 							className="users-page-dialog-close"
+							aria-label={__("Close dialog")}
 						>
-							<X size={18} />
+							<X size={17} />
 						</button>
 					</div>
 
@@ -220,7 +242,7 @@ function UserDialog({
 								label={__("Display Name")}
 								value={form.displayName}
 								onChange={handleChange("displayName")}
-								placeholder={`${form.firstName} ${form.lastName}`}
+								placeholder={`${form.firstName} ${form.lastName}`.trim()}
 							/>
 						</div>
 
@@ -399,6 +421,71 @@ function UsersPage() {
 		[users]
 	);
 
+	const newestUser = useMemo(() => {
+		if (!users.length) return null;
+		return (
+			[...users].sort((a, b) => {
+				const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+				const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+				return dateB - dateA;
+			})[0] ?? null
+		);
+	}, [users]);
+
+	const overviewItems = useMemo(
+		() => [
+			{
+				key: "all",
+				label: __("Total Users"),
+				value: formatCount(users.length),
+				icon: Users,
+				iconTone: "all",
+				note: sprintf(
+					_n(
+						"%d registered account",
+						"%d registered accounts",
+						users.length
+					),
+					users.length
+				),
+			},
+			{
+				key: "admins",
+				label: __("Administrators"),
+				value: formatCount(adminCount),
+				icon: ShieldCheck,
+				iconTone: "admins",
+				note: __("Full site & user management"),
+			},
+			{
+				key: "editors",
+				label: __("Editors"),
+				value: formatCount(editorCount),
+				icon: UserCheck,
+				iconTone: "editors",
+				note: __("Link creation & editing access"),
+			},
+			{
+				key: "newest",
+				label: __("Latest Member"),
+				value:
+					newestUser?.displayName ||
+					(newestUser?.firstName
+						? `${newestUser.firstName} ${newestUser.lastName}`.trim()
+						: newestUser?.username
+							? `@${newestUser.username}`
+							: "—"),
+				isTextValue: true,
+				icon: Clock,
+				iconTone: "latest",
+				note: newestUser?.createdAt
+					? formatDate(newestUser.createdAt)
+					: __("No users yet"),
+			},
+		],
+		[users.length, adminCount, editorCount, newestUser]
+	);
+
 	const openCreateDialog = () => {
 		setDialogMode("create");
 		setActiveUser(null);
@@ -435,7 +522,7 @@ function UsersPage() {
 				sprintf(
 					__("%s was removed successfully."),
 					userPendingDelete.displayName ||
-						`${userPendingDelete.firstName} ${userPendingDelete.lastName}`
+						`${userPendingDelete.firstName} ${userPendingDelete.lastName}`.trim()
 				)
 			);
 			setUserPendingDelete(null);
@@ -482,15 +569,15 @@ function UsersPage() {
 	return (
 		<div className="users-page">
 			<div className="users-page-hero">
-				<div>
+				<div className="users-page-hero-copy">
 					<div className="users-page-hero-badge">
-						<UserRound size={14} />
-						{__("User Access")}
+						<UserRound size={13} />
+						<span>{__("User Management")}</span>
 					</div>
-					<h1 className="users-page-hero-title">{__("Users")}</h1>
-					<p className="users-page-hero-summary">
+					<h1 className="users-page-title">{__("Users")}</h1>
+					<p className="users-page-summary">
 						{__(
-							"Manage the people who can access this installation. Admins control site-wide settings. Editors can create and maintain links."
+							"Manage user accounts and access permissions. Administrators have complete access to system settings, while Editors manage short links."
 						)}
 					</p>
 				</div>
@@ -499,30 +586,67 @@ function UsersPage() {
 				</Button>
 			</div>
 
-			<div className="users-page-stats">
-				<div className="users-page-stat-card">
-					<p className="users-page-stat-label">{__("Total Users")}</p>
-					<p className="users-page-stat-value">
-						{isUsersLoading ? "..." : users.length}
-					</p>
-				</div>
-				<div className="users-page-stat-card">
-					<p className="users-page-stat-label">{__("Admins")}</p>
-					<p className="users-page-stat-value">
-						{isUsersLoading ? "..." : adminCount}
-					</p>
-				</div>
-				<div className="users-page-stat-card">
-					<p className="users-page-stat-label">{__("Editors")}</p>
-					<p className="users-page-stat-value">
-						{isUsersLoading ? "..." : editorCount}
-					</p>
-				</div>
+			<div className="users-page-overview">
+				{isUsersLoading ? (
+					<UsersOverviewSkeleton />
+				) : (
+					<div className="users-page-overview-grid">
+						{overviewItems.map((item) => {
+							const Icon = item.icon;
+							return (
+								<div
+									key={item.key}
+									className="users-page-overview-item"
+								>
+									<div className="users-page-overview-header">
+										<div className="users-page-overview-copy">
+											<p className="users-page-overview-title">
+												{item.label}
+											</p>
+											<p
+												className={cn(
+													"users-page-overview-value",
+													item.isTextValue &&
+														"users-page-overview-value-text"
+												)}
+											>
+												{item.value}
+											</p>
+										</div>
+										<div
+											className={cn(
+												"users-page-overview-icon",
+												`users-page-overview-icon-${item.iconTone}`
+											)}
+										>
+											<Icon className="users-page-overview-icon-glyph" />
+										</div>
+									</div>
+									<p
+										className="users-page-overview-note"
+										dir="auto"
+									>
+										{item.note}
+									</p>
+								</div>
+							);
+						})}
+					</div>
+				)}
 			</div>
 
 			<div className="users-page-panel">
 				<div className="users-page-panel-header">
-					<h2 className="users-page-panel-title">{__("Accounts")}</h2>
+					<div className="users-page-panel-header-main">
+						<h2 className="users-page-panel-title">
+							{__("Accounts")}
+						</h2>
+						{!isUsersLoading && users.length > 0 ? (
+							<span className="users-page-panel-count">
+								{formatCount(users.length)}
+							</span>
+						) : null}
+					</div>
 				</div>
 
 				{usersError ? (
@@ -535,7 +659,7 @@ function UsersPage() {
 				) : !isUsersLoading && users.length === 0 ? (
 					<div className="users-page-panel-state">
 						<div className="users-page-empty-icon">
-							<Users size={28} />
+							<Users size={24} />
 						</div>
 						<h3 className="users-page-empty-title">
 							{__("No users yet")}
@@ -594,34 +718,52 @@ function UsersPage() {
 													/>
 													<div className="users-page-user-copy">
 														<div className="users-page-user-name">
-															<bdi dir="auto">
+															<span
+																dir="auto"
+																className="font-semibold text-heading text-sm"
+															>
 																{user.displayName ||
-																	`${user.firstName} ${user.lastName}`}
-															</bdi>
+																	`${user.firstName} ${user.lastName}`.trim() ||
+																	user.username}
+															</span>
+															{user.id ===
+															currentUser?.id ? (
+																<span className="users-page-self-badge">
+																	{__("You")}
+																</span>
+															) : null}
 														</div>
-														<div className="users-page-user-email">
-															<bdi className="preserve-ltr-value inline-block">
-																{user.email}
-															</bdi>
-														</div>
-														<div className="users-page-user-username">
-															<bdi className="preserve-ltr-value inline-block">
+														<div className="users-page-user-meta">
+															<span
+																className="users-page-user-username"
+																dir="ltr"
+															>
 																@{user.username}
-															</bdi>
+															</span>
+															<span className="users-page-user-dot">
+																•
+															</span>
+															<span
+																className="users-page-user-email"
+																dir="ltr"
+															>
+																{user.email}
+															</span>
 														</div>
 													</div>
 												</div>
 											</td>
 											<td className="users-page-table-cell">
 												<span
-													className={`users-page-role-badge ${
+													className={cn(
+														"users-page-role-badge",
 														roleMeta[
 															user.role ===
 															"admin"
 																? "admin"
 																: "editor"
 														].badge
-													}`}
+													)}
 												>
 													{
 														roleMeta[
@@ -634,63 +776,108 @@ function UsersPage() {
 												</span>
 											</td>
 											<td className="users-page-table-cell-meta">
-												{user.createdAt
-													? formatLocalizedDateTime(
+												<span
+													className="users-page-date-primary"
+													dir="auto"
+												>
+													{user.createdAt
+														? formatDate(
+																user.createdAt
+															)
+														: __("Unknown")}
+												</span>
+												{user.createdAt ? (
+													<span
+														className="users-page-date-exact"
+														dir="auto"
+													>
+														{formatLocalizedDateTime(
 															user.createdAt,
 															{
 																dateStyle:
 																	"medium",
 															}
-														)
-													: __("Unknown")}
+														)}
+													</span>
+												) : null}
 											</td>
 											<td className="users-page-table-cell-actions">
 												<div className="users-page-actions">
-													<IconButton
-														icon={Pencil}
-														variant="outline"
-														size="sm"
-														aria-label={sprintf(
-															__("Edit %s"),
-															user.displayName ||
-																`${user.firstName} ${user.lastName}`
-														)}
-														title={sprintf(
-															__("Edit %s"),
-															user.displayName ||
-																`${user.firstName} ${user.lastName}`
-														)}
+													<button
+														type="button"
 														onClick={() =>
 															openEditDialog(user)
 														}
-													/>
-													<IconButton
-														icon={Trash2}
-														variant="outline"
-														size="sm"
+														className="users-page-action-button"
 														aria-label={sprintf(
-															__("Delete %s"),
-															user.displayName ||
-																`${user.firstName} ${user.lastName}`
+															__("Edit %s"),
+															getUserDisplayName(
+																user
+															)
 														)}
 														title={sprintf(
-															__("Delete %s"),
-															user.displayName ||
-																`${user.firstName} ${user.lastName}`
+															__("Edit %s"),
+															getUserDisplayName(
+																user
+															)
 														)}
-														className="users-page-action-delete"
+													>
+														<Pencil size={14} />
+													</button>
+													<button
+														type="button"
+														onClick={() =>
+															openDeleteDialog(
+																user
+															)
+														}
 														disabled={
 															!currentUser?.id ||
 															user.id ===
 																currentUser?.id ||
 															isDeleting
 														}
-														onClick={() =>
-															openDeleteDialog(
-																user
-															)
+														className={cn(
+															"users-page-action-button users-page-action-delete",
+															(!currentUser?.id ||
+																user.id ===
+																	currentUser?.id ||
+																isDeleting) &&
+																"pointer-events-none cursor-not-allowed opacity-30"
+														)}
+														aria-label={
+															user.id ===
+															currentUser?.id
+																? __(
+																		"Cannot delete your own account"
+																	)
+																: sprintf(
+																		__(
+																			"Delete %s"
+																		),
+																		getUserDisplayName(
+																			user
+																		)
+																	)
 														}
-													/>
+														title={
+															user.id ===
+															currentUser?.id
+																? __(
+																		"Cannot delete your own account"
+																	)
+																: sprintf(
+																		__(
+																			"Delete %s"
+																		),
+																		getUserDisplayName(
+																			user
+																		)
+																	)
+														}
+													>
+														<Trash2 size={14} />
+													</button>
 												</div>
 											</td>
 										</tr>
@@ -722,8 +909,7 @@ function UsersPage() {
 								__(
 									"Delete %s? This will revoke their sessions, remove their API keys, and permanently delete their account."
 								),
-								userPendingDelete.displayName ||
-									`${userPendingDelete.firstName} ${userPendingDelete.lastName}`
+								getUserDisplayName(userPendingDelete)
 							)
 						: ""
 				}

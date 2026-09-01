@@ -1,10 +1,10 @@
 @layer components {
 	.plugins-card {
-		@apply relative flex flex-col overflow-hidden rounded-xl border border-stroke bg-surface shadow-sm transition-all duration-200 hover:border-stroke-strong hover:shadow-md;
+		@apply relative flex flex-col overflow-hidden rounded-lg border border-stroke bg-surface shadow-xs transition-all duration-200 hover:border-stroke-strong hover:shadow-md;
 	}
 
 	.plugins-card-banner {
-		@apply relative h-28 overflow-hidden;
+		@apply relative h-24 overflow-hidden;
 	}
 
 	.plugins-card-banner-glow-end {
@@ -16,47 +16,47 @@
 	}
 
 	.plugins-card-banner-icon-wrap {
-		@apply absolute -bottom-5 left-4;
+		@apply absolute -bottom-4 left-3.5;
 	}
 
 	.plugins-card-banner-icon {
-		@apply flex h-12 w-12 items-center justify-center rounded-xl border-2 border-surface bg-surface shadow-md;
+		@apply flex h-10 w-10 items-center justify-center rounded-lg border-2 border-surface bg-surface shadow-sm;
 	}
 
 	.plugins-card-banner-icon-placeholder {
-		@apply h-6 w-6 rounded-lg bg-gradient-to-br from-stroke to-stroke-strong opacity-60;
+		@apply h-5 w-5 rounded-md bg-gradient-to-br from-stroke to-stroke-strong opacity-60;
 	}
 
 	.plugins-card-body {
-		@apply flex flex-1 flex-col px-4 pb-4 pt-8;
+		@apply flex flex-1 flex-col px-3.5 pb-3.5 pt-6;
 	}
 
 	.plugins-card-header {
-		@apply mb-2 flex items-center justify-between gap-2;
+		@apply mb-1.5 flex items-center justify-between gap-2;
 	}
 
 	.plugins-card-author {
-		@apply mb-3 h-3 w-20;
+		@apply mb-2.5 h-3 w-20;
 	}
 
 	.plugins-card-copy {
-		@apply mb-4 flex-1 space-y-2;
+		@apply mb-3 flex-1 space-y-1.5;
 	}
 
 	.plugins-card-meta {
-		@apply mb-3 flex items-center justify-between border-t border-stroke pt-3;
+		@apply mb-3 flex items-center justify-between border-t border-stroke/60 pt-2.5;
 	}
 
 	.plugins-card-meta-stars {
-		@apply flex items-center gap-1.5;
+		@apply flex items-center gap-1;
 	}
 
 	.plugins-card-meta-downloads {
-		@apply flex items-center gap-1 text-stroke-strong dark:text-stroke;
+		@apply flex items-center gap-1 text-text-muted;
 	}
 
 	.plugins-card-button {
-		@apply flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent/80 px-3 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:from-accent/95 hover:to-accent/75 hover:shadow-md;
+		@apply flex w-full items-center justify-center gap-1.5 rounded-lg bg-accent px-3 py-2 text-xs font-semibold text-white shadow-xs transition-all hover:bg-accent/90 hover:shadow-sm;
 	}
 
 	.plugins-card-button-icon {
@@ -68,6 +68,6 @@
 	}
 
 	.plugins-card-overlay-pill {
-		@apply inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/60 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-widest text-white shadow-lg backdrop-blur-md;
+		@apply inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/70 px-3.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-white shadow-md backdrop-blur-md;
 	}
 }

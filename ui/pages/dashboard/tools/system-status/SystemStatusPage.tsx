@@ -1,16 +1,31 @@
 import { useState } from "react";
+import { format, formatDistanceToNow, isValid, parseISO } from "date-fns";
 import {
+	Activity,
 	AlertCircle,
+	AlertTriangle,
+	Check,
 	CheckCircle2,
 	ChevronDown,
 	ChevronUp,
+	Clock,
 	Copy,
+	Database,
+	FileText,
+	Globe,
+	HardDrive,
+	Mail,
+	RefreshCw,
+	Server,
+	ShieldCheck,
 } from "lucide-react";
 
 import { useNotification } from "@/components";
+import { useTemporaryState } from "@/hooks";
 import { __, sprintf } from "@/i18n";
 import { useGetSystemStatusQuery } from "@/store/slices/api";
 import {
+	cn,
 	copyToClipboard,
 	extractErrorMessage,
 	formatByteSize,
@@ -26,7 +41,6 @@ import type {
 	IssueRowProps,
 	IssueSectionProps,
 	StatusTabsProps,
-	StatusTone,
 	StatusView,
 	SystemCheck,
 } from "../types";
@@ -48,37 +62,56 @@ function formatBoolean(value: unknown, truthy?: string, falsy?: string) {
 	return value ? (truthy ?? __("Yes")) : (falsy ?? __("No"));
 }
 
-function getOverallLabel(status: string | undefined) {
-	return "ok" === status ? __("Good") : __("Should be improved");
+function formatStatusTimestamp(
+	dateValue: string | number | Date | null | undefined
+) {
+	if (!dateValue) {
+		return {
+			relative: __("recently"),
+			full: "",
+		};
+	}
+
+	try {
+		const date =
+			typeof dateValue === "string"
+				? parseISO(dateValue)
+				: new Date(dateValue);
+
+		if (!isValid(date)) {
+			return {
+				relative: String(dateValue),
+				full: "",
+			};
+		}
+
+		const relative = formatDistanceToNow(date, { addSuffix: true });
+		const full = format(date, "MMM d, yyyy 'at' h:mm:ss a");
+
+		return { relative, full };
+	} catch {
+		return {
+			relative: String(dateValue),
+			full: "",
+		};
+	}
 }
 
-function getStatusTone(status: string | undefined): StatusTone {
-	switch (status) {
-		case "error":
-			return {
-				ring: "border-red-300",
-				dot: "bg-red-500",
-				text: "text-red-700 dark:text-red-300",
-				badge: "border-red-200 bg-red-50 text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200",
-				panel: "border-red-200 bg-red-50 text-red-800 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200",
-			};
-		case "ok":
-			return {
-				ring: "border-emerald-300",
-				dot: "bg-emerald-500",
-				text: "text-emerald-700 dark:text-emerald-300",
-				badge: "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200",
-				panel: "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200",
-			};
-		default:
-			return {
-				ring: "border-amber-300",
-				dot: "bg-amber-500",
-				text: "text-amber-700 dark:text-amber-300",
-				badge: "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200",
-				panel: "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200",
-			};
+function getSubsystemStatus(
+	checks: SystemCheck[],
+	categoryIds: string[]
+): "ok" | "warning" | "error" {
+	const matchingChecks = checks.filter((check) =>
+		categoryIds.includes(check.id || "")
+	);
+
+	if (matchingChecks.some((c) => "error" === c.status)) {
+		return "error";
 	}
+	if (matchingChecks.some((c) => "warning" === c.status)) {
+		return "warning";
+	}
+	return "ok";
 }
 
 function getCheckCategoryLabel(checkId: string | null | undefined) {
@@ -142,27 +175,38 @@ function ErrorState({ errorMessage }: ErrorStateProps) {
 }
 
 function StatusTabs({ activeView, onChange }: StatusTabsProps) {
-	const tabs: Array<{ id: StatusView; label: string }> = [
-		{ id: "status", label: __("Status") },
-		{ id: "info", label: __("Info") },
+	const tabs: Array<{
+		id: StatusView;
+		label: string;
+		icon: typeof Activity;
+	}> = [
+		{ id: "status", label: __("Status"), icon: Activity },
+		{ id: "info", label: __("Info"), icon: FileText },
 	];
 
 	return (
 		<div className="system-status-page-tabs">
-			{tabs.map((tab) => (
-				<button
-					key={tab.id}
-					type="button"
-					onClick={() => onChange(tab.id)}
-					className={`system-status-page-tab ${
-						activeView === tab.id
-							? "system-status-page-tab-active"
-							: "system-status-page-tab-inactive"
-					}`}
-				>
-					{tab.label}
-				</button>
-			))}
+			{tabs.map((tab) => {
+				const Icon = tab.icon;
+				const isActive = activeView === tab.id;
+
+				return (
+					<button
+						key={tab.id}
+						type="button"
+						onClick={() => onChange(tab.id)}
+						className={cn(
+							"system-status-page-tab",
+							isActive
+								? "system-status-page-tab-active"
+								: "system-status-page-tab-inactive"
+						)}
+					>
+						<Icon size={14} className="shrink-0" />
+						<span>{tab.label}</span>
+					</button>
+				);
+			})}
 		</div>
 	);
 }
@@ -170,9 +214,10 @@ function StatusTabs({ activeView, onChange }: StatusTabsProps) {
 function IssueRow({ check, isOpen, onToggle, showBorder }: IssueRowProps) {
 	return (
 		<div
-			className={
-				showBorder ? "system-status-page-issue-row-bordered" : ""
-			}
+			className={cn(
+				"system-status-page-issue-item",
+				showBorder && "system-status-page-issue-row-bordered"
+			)}
 		>
 			<button
 				type="button"
@@ -188,17 +233,13 @@ function IssueRow({ check, isOpen, onToggle, showBorder }: IssueRowProps) {
 					<span className="system-status-page-issue-badge">
 						{getCheckCategoryLabel(check?.id)}
 					</span>
-					{isOpen ? (
-						<ChevronUp
-							size={16}
-							className="system-status-page-icon-muted"
-						/>
-					) : (
-						<ChevronDown
-							size={16}
-							className="system-status-page-icon-muted"
-						/>
-					)}
+					<div className="system-status-page-issue-chevron">
+						{isOpen ? (
+							<ChevronUp size={16} />
+						) : (
+							<ChevronDown size={16} />
+						)}
+					</div>
 				</div>
 			</button>
 			{isOpen ? (
@@ -216,14 +257,32 @@ function IssueSection({
 	checks,
 	expandedChecks,
 	onToggleCheck,
-}: IssueSectionProps) {
+	severity = "warning",
+}: IssueSectionProps & { severity?: "error" | "warning" }) {
 	return (
-		<section className="system-status-page-section">
-			<div className="system-status-page-section-header">
-				<h3 className="system-status-page-section-title">{title}</h3>
-				<p className="system-status-page-section-summary">
-					{description}
-				</p>
+		<div className="system-status-page-panel">
+			<div className="system-status-page-panel-header">
+				<div className="system-status-page-section-header">
+					<div className="flex items-center gap-2">
+						{severity === "error" ? (
+							<span className="system-status-page-badge-error">
+								<AlertTriangle size={12} />
+								<span>{__("Critical")}</span>
+							</span>
+						) : (
+							<span className="system-status-page-badge-warning">
+								<AlertCircle size={12} />
+								<span>{__("Improvement")}</span>
+							</span>
+						)}
+						<h3 className="system-status-page-section-title">
+							{title}
+						</h3>
+					</div>
+					<p className="system-status-page-section-summary">
+						{description}
+					</p>
+				</div>
 			</div>
 
 			<div className="system-status-page-issue-list">
@@ -242,7 +301,7 @@ function IssueSection({
 					);
 				})}
 			</div>
-		</section>
+		</div>
 	);
 }
 
@@ -257,17 +316,13 @@ function InfoSection({ section, isOpen, onToggle }: InfoSectionProps) {
 				<span className="system-status-page-info-title">
 					{section.title}
 				</span>
-				{isOpen ? (
-					<ChevronUp
-						size={16}
-						className="system-status-page-icon-muted"
-					/>
-				) : (
-					<ChevronDown
-						size={16}
-						className="system-status-page-icon-muted"
-					/>
-				)}
+				<div className="system-status-page-issue-chevron">
+					{isOpen ? (
+						<ChevronUp size={16} />
+					) : (
+						<ChevronDown size={16} />
+					)}
+				</div>
 			</button>
 
 			{isOpen ? (
@@ -289,11 +344,11 @@ function InfoSection({ section, isOpen, onToggle }: InfoSectionProps) {
 										</th>
 										<td className="system-status-page-info-value-cell">
 											<p
-												className={`system-status-page-info-value ${
-													item.monospace
-														? "system-status-page-info-value-monospace"
-														: ""
-												}`}
+												className={cn(
+													"system-status-page-info-value",
+													item.monospace &&
+														"system-status-page-info-value-monospace"
+												)}
 											>
 												{displayValue(item.value)}
 											</p>
@@ -320,12 +375,14 @@ function SystemStatusPage() {
 		data: systemStatusResponse,
 		error: systemStatusError,
 		isLoading,
+		isFetching,
+		refetch,
 	} = useGetSystemStatusQuery(undefined);
 	const status = systemStatusResponse?.data || null;
 	const errorMessage = extractErrorMessage(systemStatusError);
 	const [activeView, setActiveView] = useState<StatusView>("status");
 	const [showPassedChecks, setShowPassedChecks] = useState(false);
-	const [copiedInfo, setCopiedInfo] = useState(false);
+	const [copiedInfo, setCopiedInfo] = useTemporaryState(false);
 	const [expandedChecks, setExpandedChecks] = useState<Set<string>>(
 		new Set()
 	);
@@ -349,8 +406,7 @@ function SystemStatusPage() {
 	}
 
 	const overallStatus = status?.summary?.overall || "warning";
-	const overallTone = getStatusTone(overallStatus);
-	const overallLabel = getOverallLabel(overallStatus);
+	const isHealthOk = "ok" === overallStatus;
 	const checks: SystemCheck[] = status?.checks || [];
 	const errorChecks = checks.filter(
 		(check: SystemCheck) => "error" === check.status
@@ -370,6 +426,68 @@ function SystemStatusPage() {
 	const recordedSchemaVersion = status?.database?.schemaVersion;
 	const requiredSchemaVersion = status?.database?.requiredSchemaVersion;
 	const schemaIssuesCount = status?.database?.schemaIssuesCount;
+
+	const timeInfo = formatStatusTimestamp(status?.generatedAt);
+
+	const subsystems = [
+		{
+			id: "database",
+			name: __("Database Engine"),
+			icon: Database,
+			status: getSubsystemStatus(checks, ["database"]),
+			meta: status?.database?.serverType
+				? `${status.database.serverType} ${status?.database?.version || ""}`.trim()
+				: __("MySQL / MariaDB"),
+		},
+		{
+			id: "storage",
+			name: __("File Storage"),
+			icon: HardDrive,
+			status: getSubsystemStatus(checks, ["content", "storage"]),
+			meta: status?.storage?.contentWritable
+				? __("Writable Content Directory")
+				: __("Read Only Directory"),
+		},
+		{
+			id: "server",
+			name: __("PHP Runtime"),
+			icon: Server,
+			status: getSubsystemStatus(checks, [
+				"server",
+				"php",
+				"intl",
+				"curl",
+			]),
+			meta: status?.server?.phpVersion
+				? `PHP ${status.server.phpVersion}`
+				: __("Web Server"),
+		},
+		{
+			id: "mail",
+			name: __("Email Delivery"),
+			icon: Mail,
+			status: getSubsystemStatus(checks, ["mail"]),
+			meta: mailDriver,
+		},
+		{
+			id: "location",
+			name: __("Location Data"),
+			icon: Globe,
+			status: getSubsystemStatus(checks, ["geoip", "location"]),
+			meta: status?.location?.locationAnalyticsReady
+				? __("GeoLite2 Installed")
+				: __("Setup Recommended"),
+		},
+		{
+			id: "updates",
+			name: __("Release & Updates"),
+			icon: ShieldCheck,
+			status: getSubsystemStatus(checks, ["zip", "updates"]),
+			meta: status?.site?.version
+				? `PeakURL v${status.site.version}`
+				: __("Packaged Release"),
+		},
+	];
 
 	const peakurlItems = [
 		{ label: __("Version"), value: status?.site?.version || __("Unknown") },
@@ -566,6 +684,7 @@ function SystemStatusPage() {
 		{
 			label: __("Table Prefix"),
 			value: status?.database?.prefix || __("None"),
+			monospace: true,
 		},
 		{
 			label: __("Recorded Schema"),
@@ -584,19 +703,18 @@ function SystemStatusPage() {
 			value: status?.database?.schemaUpgradeRequired
 				? __("Upgrade Recommended")
 				: __("Current"),
-			helperText: schemaIssuesCount
-				? Number(schemaIssuesCount) === 1
-					? __("1 issue detected")
-					: sprintf(
-							__("%s issues detected"),
-							String(schemaIssuesCount)
+			helperText:
+				schemaIssuesCount && Number(schemaIssuesCount) > 0
+					? sprintf(
+							__("%s schema issue(s) detected"),
+							formatCount(Number(schemaIssuesCount))
 						)
-				: "",
+					: undefined,
 		},
 	];
 
 	const mailItems = [
-		{ label: __("Driver"), value: mailDriver },
+		{ label: __("Mail Transport"), value: mailDriver },
 		{
 			label: __("Transport Ready"),
 			value: formatBoolean(
@@ -754,12 +872,11 @@ function SystemStatusPage() {
 	const handleCopyInfo = async () => {
 		try {
 			await copyToClipboard(formatExportText(infoSections));
-			setCopiedInfo(true);
+			setCopiedInfo(true, 2000);
 			notification.success(
 				__("Copied"),
 				__("System status info copied to clipboard")
 			);
-			window.setTimeout(() => setCopiedInfo(false), 2000);
 		} catch {
 			notification.error(
 				__("Copy failed"),
@@ -770,219 +887,406 @@ function SystemStatusPage() {
 
 	return (
 		<div className="system-status-page">
-			<div className="system-status-page-panel">
-				<div className="system-status-page-header">
-					<div className="system-status-page-summary">
-						<h1 className="system-status-page-title">
-							{__("System Status")}
-						</h1>
-
-						<div className="system-status-page-status">
-							<span
-								className={`system-status-page-status-indicator ${overallTone.ring}`}
-							>
-								<span
-									className={`system-status-page-status-dot ${overallTone.dot}`}
-								/>
-							</span>
-							<span
-								className={`system-status-page-status-label ${overallTone.text}`}
-							>
-								{overallLabel}
-							</span>
-						</div>
-
-						<p className="system-status-page-status-time">
-							{sprintf(
-								__("Last checked: %s"),
-								formatDateTimeValue(
-									status?.generatedAt,
-									__("Not available")
-								)
+			{/* Hero Header */}
+			<div className="system-status-page-hero">
+				<div className="system-status-page-hero-copy">
+					<div className="system-status-page-hero-badge">
+						<Activity size={13} />
+						<span>{__("Site Health")}</span>
+					</div>
+					<h1 className="system-status-page-title">
+						{__("System Status")}
+					</h1>
+					<p className="system-status-page-summary">
+						{__(
+							"Monitor installation health, check server environment diagnostics, and review technical configuration details."
+						)}
+					</p>
+				</div>
+				<div className="system-status-page-hero-actions">
+					<button
+						type="button"
+						onClick={() => refetch()}
+						disabled={isFetching}
+						className="dashboard-page-refresh"
+						aria-label={__("Refresh site health status")}
+						title={__("Refresh site health status")}
+					>
+						<RefreshCw
+							className={cn(
+								"dashboard-page-refresh-icon",
+								isFetching && "animate-spin"
 							)}
-						</p>
+						/>
+					</button>
+				</div>
+			</div>
+
+			{/* Health Status Banner */}
+			<div
+				className={cn(
+					"system-status-page-banner",
+					isHealthOk && "system-status-page-banner-ok",
+					!isHealthOk &&
+						errorChecks.length > 0 &&
+						"system-status-page-banner-error",
+					!isHealthOk &&
+						0 === errorChecks.length &&
+						"system-status-page-banner-warning"
+				)}
+			>
+				<div className="system-status-page-banner-main">
+					<div className="system-status-page-banner-indicator">
+						<span className="relative flex h-3.5 w-3.5 shrink-0">
+							<span
+								className={cn(
+									"animate-ping absolute inline-flex h-full w-full rounded-full opacity-75",
+									isHealthOk && "bg-emerald-400",
+									!isHealthOk &&
+										errorChecks.length > 0 &&
+										"bg-rose-400",
+									!isHealthOk &&
+										0 === errorChecks.length &&
+										"bg-amber-400"
+								)}
+							/>
+							<span
+								className={cn(
+									"relative inline-flex rounded-full h-3.5 w-3.5",
+									isHealthOk && "bg-emerald-500",
+									!isHealthOk &&
+										errorChecks.length > 0 &&
+										"bg-rose-500",
+									!isHealthOk &&
+										0 === errorChecks.length &&
+										"bg-amber-500"
+								)}
+							/>
+						</span>
 					</div>
 
-					<StatusTabs
-						activeView={activeView}
-						onChange={setActiveView}
-					/>
+					<div className="system-status-page-banner-copy">
+						<h2 className="system-status-page-banner-title">
+							{isHealthOk
+								? __("Site Health: Good")
+								: errorChecks.length > 0
+									? formatHeadingCount(
+											errorChecks.length,
+											__("Site Health: 1 Critical Issue"),
+											__(
+												"Site Health: %s Critical Issues"
+											)
+										)
+									: formatHeadingCount(
+											warningChecks.length,
+											__(
+												"Site Health: 1 Recommended Improvement"
+											),
+											__(
+												"Site Health: %s Recommended Improvements"
+											)
+										)}
+						</h2>
+						<p className="system-status-page-banner-description">
+							{isHealthOk
+								? __(
+										"PeakURL is configured properly. Your database, file storage, email delivery, and server environment are in good health."
+									)
+								: errorChecks.length > 0
+									? __(
+											"Critical items require attention to restore optimal site security and performance. Resolving these should be prioritized."
+										)
+									: __(
+											"All core features are active, with recommended improvements available below to optimize your install."
+										)}
+						</p>
+					</div>
 				</div>
 
-				<div className="system-status-page-content">
-					{errorMessage ? (
-						<ErrorState errorMessage={errorMessage} />
-					) : null}
+				<div className="system-status-page-banner-footer">
+					<div className="system-status-page-banner-pills">
+						<span className="system-status-page-pill system-status-page-pill-ok">
+							<CheckCircle2 size={12} />
+							<span>
+								{sprintf(
+									__("%s Passed"),
+									formatCount(passingChecks.length)
+								)}
+							</span>
+						</span>
+						{warningChecks.length > 0 && (
+							<span className="system-status-page-pill system-status-page-pill-warning">
+								<AlertCircle size={12} />
+								<span>
+									{sprintf(
+										__("%s Recommended"),
+										formatCount(warningChecks.length)
+									)}
+								</span>
+							</span>
+						)}
+						{errorChecks.length > 0 && (
+							<span className="system-status-page-pill system-status-page-pill-error">
+								<AlertTriangle size={12} />
+								<span>
+									{sprintf(
+										__("%s Critical"),
+										formatCount(errorChecks.length)
+									)}
+								</span>
+							</span>
+						)}
+					</div>
 
-					{"status" === activeView ? (
-						<div className="system-status-page-view">
-							<section className="system-status-page-section-compact">
-								<h2 className="system-status-page-section-title">
-									{__("System Status")}
-								</h2>
-								<p className="system-status-page-section-summary">
-									{__(
-										"The system status check shows information about your PeakURL configuration and items that may need your attention."
-									)}
-								</p>
-							</section>
+					<div className="system-status-page-banner-timestamp">
+						<Clock size={13} className="shrink-0 text-text-muted" />
+						<span>
+							{sprintf(__("Checked %s"), timeInfo.relative)}
+						</span>
+						{timeInfo.full ? (
+							<span className="system-status-page-banner-timestamp-full">
+								• {timeInfo.full}
+							</span>
+						) : null}
+					</div>
+				</div>
+			</div>
 
-							{errorChecks.length > 0 ? (
-								<IssueSection
-									title={formatHeadingCount(
-										errorChecks.length,
-										__("1 critical issue"),
-										__("%s critical issues")
-									)}
-									description={__(
-										"Critical issues are items that may have a high impact on your site performance or security. Resolving these issues should be prioritized."
-									)}
-									checks={errorChecks}
-									expandedChecks={expandedChecks}
-									onToggleCheck={toggleCheck}
-								/>
-							) : null}
+			{/* Subsystems Component Grid */}
+			<div className="system-status-page-subsystems">
+				<div className="system-status-page-subsystems-header">
+					<h3 className="system-status-page-subsystems-title">
+						{__("System Checks")}
+					</h3>
+					<span className="system-status-page-subsystems-count">
+						{sprintf(
+							__("%s checks"),
+							formatCount(subsystems.length)
+						)}
+					</span>
+				</div>
 
-							{warningChecks.length > 0 ? (
-								<IssueSection
-									title={formatHeadingCount(
-										warningChecks.length,
-										__("1 recommended improvement"),
-										__("%s recommended improvements")
-									)}
-									description={__(
-										"Recommended improvements are beneficial for your site, though not as urgent as a critical issue. They may include improvements in areas such as security, performance, and user experience."
-									)}
-									checks={warningChecks}
-									expandedChecks={expandedChecks}
-									onToggleCheck={toggleCheck}
-								/>
-							) : null}
+				<div className="system-status-page-subsystems-grid">
+					{subsystems.map((subsystem) => {
+						const Icon = subsystem.icon;
+						const isOk = "ok" === subsystem.status;
+						const isWarn = "warning" === subsystem.status;
 
-							{0 === errorChecks.length &&
-							0 === warningChecks.length ? (
-								<div
-									className={`system-status-page-ok-panel ${getStatusTone("ok").panel}`}
-								>
-									{__(
-										"All system status checks are currently passing."
-									)}
+						return (
+							<div
+								key={subsystem.id}
+								className="system-status-page-subsystem-card"
+							>
+								<div className="system-status-page-subsystem-icon">
+									<Icon size={16} />
 								</div>
-							) : null}
-
-							{passingChecks.length > 0 ? (
-								<section className="system-status-page-section">
-									<div className="system-status-page-passed-actions">
-										<button
-											type="button"
-											onClick={() =>
-												setShowPassedChecks(
-													(current) => !current
-												)
-											}
-											className="system-status-page-passed-toggle"
-										>
-											<CheckCircle2 size={16} />
-											<span>
-												{showPassedChecks
-													? __("Hide passed tests")
-													: formatHeadingCount(
-															passingChecks.length,
-															__("1 passed test"),
-															__(
-																"%s passed tests"
-															)
-														)}
-											</span>
-											{showPassedChecks ? (
-												<ChevronUp size={16} />
-											) : (
-												<ChevronDown size={16} />
+								<div className="system-status-page-subsystem-info">
+									<p className="system-status-page-subsystem-name">
+										{subsystem.name}
+									</p>
+									<p className="system-status-page-subsystem-meta">
+										{subsystem.meta}
+									</p>
+								</div>
+								<div className="system-status-page-subsystem-badge-wrap">
+									<span
+										className={cn(
+											"system-status-page-subsystem-badge",
+											isOk &&
+												"system-status-page-subsystem-badge-ok",
+											isWarn &&
+												"system-status-page-subsystem-badge-warning",
+											!isOk &&
+												!isWarn &&
+												"system-status-page-subsystem-badge-error"
+										)}
+									>
+										<span
+											className={cn(
+												"system-status-page-subsystem-dot",
+												isOk &&
+													"system-status-page-subsystem-dot-ok",
+												isWarn &&
+													"system-status-page-subsystem-dot-warning",
+												!isOk &&
+													!isWarn &&
+													"system-status-page-subsystem-dot-error"
 											)}
-										</button>
-									</div>
+										/>
+										<span>
+											{isOk
+												? __("Good")
+												: isWarn
+													? __("Review")
+													: __("Action Required")}
+										</span>
+									</span>
+								</div>
+							</div>
+						);
+					})}
+				</div>
+			</div>
 
-									{showPassedChecks ? (
-										<div className="system-status-page-passed-list">
-											{passingChecks.map(
-												(check, index) => {
-													const checkKey =
-														check?.id ||
-														check?.label ||
-														`passed-check-${index}`;
+			{/* Toolbar Tabs & Copy Action */}
+			<div className="system-status-page-toolbar">
+				<StatusTabs activeView={activeView} onChange={setActiveView} />
+				{"info" === activeView && (
+					<button
+						type="button"
+						onClick={handleCopyInfo}
+						className="system-status-page-copy-button"
+					>
+						{copiedInfo ? (
+							<>
+								<Check
+									size={14}
+									className="text-emerald-600 dark:text-emerald-400"
+								/>
+								<span>{__("Copied!")}</span>
+							</>
+						) : (
+							<>
+								<Copy size={14} />
+								<span>{__("Copy site info to clipboard")}</span>
+							</>
+						)}
+					</button>
+				)}
+			</div>
 
-													return (
-														<IssueRow
-															key={checkKey}
-															check={check}
-															isOpen={expandedChecks.has(
-																checkKey
-															)}
-															onToggle={() =>
-																toggleCheck(
-																	checkKey
-																)
-															}
-															showBorder={
-																index > 0
-															}
-														/>
-													);
-												}
-											)}
-										</div>
-									) : null}
-								</section>
-							) : null}
-						</div>
-					) : (
-						<div className="system-status-page-view-compact">
-							<section className="system-status-page-section-compact">
-								<h2 className="system-status-page-section-title">
-									{__("System Status Info")}
-								</h2>
-								<p className="system-status-page-section-summary">
+			{/* Main Content Area */}
+			<div className="system-status-page-content">
+				{errorMessage ? (
+					<ErrorState errorMessage={errorMessage} />
+				) : null}
+
+				{"status" === activeView ? (
+					<div className="system-status-page-view">
+						{errorChecks.length > 0 ? (
+							<IssueSection
+								title={formatHeadingCount(
+									errorChecks.length,
+									__("1 critical issue"),
+									__("%s critical issues")
+								)}
+								description={__(
+									"Critical issues are items that may have a high impact on your site performance or security. Resolving these issues should be prioritized."
+								)}
+								checks={errorChecks}
+								expandedChecks={expandedChecks}
+								onToggleCheck={toggleCheck}
+								severity="error"
+							/>
+						) : null}
+
+						{warningChecks.length > 0 ? (
+							<IssueSection
+								title={formatHeadingCount(
+									warningChecks.length,
+									__("1 recommended improvement"),
+									__("%s recommended improvements")
+								)}
+								description={__(
+									"Recommended improvements are beneficial for your site, though not as urgent as a critical issue. They may include improvements in areas such as security, performance, and user experience."
+								)}
+								checks={warningChecks}
+								expandedChecks={expandedChecks}
+								onToggleCheck={toggleCheck}
+								severity="warning"
+							/>
+						) : null}
+
+						{0 === errorChecks.length &&
+						0 === warningChecks.length ? (
+							<div className="system-status-page-ok-panel">
+								<div className="flex items-center gap-2 font-semibold">
+									<CheckCircle2 size={16} />
+									<span>
+										{__("All system checks passing")}
+									</span>
+								</div>
+								<p className="mt-1 text-text-muted">
 									{__(
-										"This page can show you every detail about the configuration of your PeakURL install."
+										"PeakURL is configured properly and all environmental diagnostics are in good standing."
 									)}
 								</p>
-								<p className="system-status-page-section-summary">
-									{__(
-										"If you want to export a full snapshot of this page, you can use the button below to copy it to the clipboard."
-									)}
-								</p>
-							</section>
+							</div>
+						) : null}
 
-							<div className="system-status-page-copy-row">
+						{passingChecks.length > 0 ? (
+							<div className="system-status-page-passed-panel">
 								<button
 									type="button"
-									onClick={handleCopyInfo}
-									className="system-status-page-copy-button"
+									onClick={() =>
+										setShowPassedChecks(
+											(current) => !current
+										)
+									}
+									className="system-status-page-passed-toggle"
 								>
-									<Copy size={16} />
-									{copiedInfo
-										? __("Copied")
-										: __("Copy site info to clipboard")}
-								</button>
-							</div>
-
-							<div className="system-status-page-info-list">
-								{infoSections.map((section) => (
-									<InfoSection
-										key={section.id}
-										section={section}
-										isOpen={expandedSections.has(
-											section.id
+									<div className="system-status-page-passed-toggle-content">
+										<CheckCircle2 size={16} />
+										<span>
+											{showPassedChecks
+												? __("Hide passed tests")
+												: formatHeadingCount(
+														passingChecks.length,
+														__("1 passed test"),
+														__("%s passed tests")
+													)}
+										</span>
+									</div>
+									<div className="system-status-page-issue-chevron">
+										{showPassedChecks ? (
+											<ChevronUp size={16} />
+										) : (
+											<ChevronDown size={16} />
 										)}
-										onToggle={() =>
-											toggleSection(section.id)
-										}
-									/>
-								))}
+									</div>
+								</button>
+
+								{showPassedChecks ? (
+									<div className="system-status-page-passed-list">
+										{passingChecks.map((check, index) => {
+											const checkKey =
+												check?.id ||
+												check?.label ||
+												`passed-check-${index}`;
+
+											return (
+												<IssueRow
+													key={checkKey}
+													check={check}
+													isOpen={expandedChecks.has(
+														checkKey
+													)}
+													onToggle={() =>
+														toggleCheck(checkKey)
+													}
+													showBorder={index > 0}
+												/>
+											);
+										})}
+									</div>
+								) : null}
 							</div>
+						) : null}
+					</div>
+				) : (
+					<div className="system-status-page-view-compact">
+						<div className="system-status-page-info-list">
+							{infoSections.map((section) => (
+								<InfoSection
+									key={section.id}
+									section={section}
+									isOpen={expandedSections.has(section.id)}
+									onToggle={() => toggleSection(section.id)}
+								/>
+							))}
 						</div>
-					)}
-				</div>
+					</div>
+				)}
 			</div>
 		</div>
 	);

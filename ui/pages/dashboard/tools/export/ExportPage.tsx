@@ -5,6 +5,7 @@ import {
 	ExternalLink,
 	FileCode2,
 	FileSpreadsheet,
+	FileText,
 	Link2,
 } from "lucide-react";
 
@@ -17,23 +18,28 @@ import { downloadLinkExport, formatCount, getErrorMessage } from "@/utils";
 
 import type { ExportCardProps, ExportFormat, ExportOption } from "../types";
 
+interface ExtendedExportCardProps extends ExportCardProps {
+	tone?: string;
+}
+
 function ExportCard({
 	title,
 	description,
 	formatLabel,
 	icon: Icon,
+	tone = "accent",
 	isLoading,
 	isDisabled,
 	onExport,
-}: ExportCardProps) {
+}: ExtendedExportCardProps) {
 	return (
 		<div className="export-card">
 			<div className="export-card-header">
-				<div className="export-card-icon">
-					<Icon size={20} />
+				<div className={`export-card-icon export-card-icon-${tone}`}>
+					<Icon className="export-card-icon-glyph" />
 				</div>
 				<div className="export-card-copy">
-					<h2 className="export-card-title">{title}</h2>
+					<h3 className="export-card-title">{title}</h3>
 					<p className="export-card-summary">{description}</p>
 				</div>
 			</div>
@@ -45,8 +51,8 @@ function ExportCard({
 					size="sm"
 					onClick={onExport}
 					disabled={isDisabled || isLoading}
+					icon={Download}
 				>
-					<Download size={16} />
 					{isLoading ? __("Preparing...") : __("Export")}
 				</Button>
 			</div>
@@ -65,15 +71,16 @@ function ExportPage() {
 		useLazyGetUrlsExportQuery();
 	const totalLinks = urlsResponse?.data?.meta?.totalItems ?? null;
 
-	const exportOptions: ExportOption[] = [
+	const exportOptions: (ExportOption & { tone: string })[] = [
 		{
 			id: "csv",
 			title: __("CSV Export"),
 			description: __(
 				"Download a spreadsheet-friendly file that can also be imported back into PeakURL later."
 			),
-			formatLabel: __("Comma-separated values"),
+			formatLabel: __("Comma-separated values (.csv)"),
 			icon: FileSpreadsheet,
+			tone: "csv",
 		},
 		{
 			id: "json",
@@ -81,8 +88,9 @@ function ExportPage() {
 			description: __(
 				"Download a structured snapshot for scripts, integrations, or backups."
 			),
-			formatLabel: __("JavaScript Object Notation"),
+			formatLabel: __("JavaScript Object Notation (.json)"),
 			icon: Braces,
+			tone: "json",
 		},
 		{
 			id: "xml",
@@ -90,8 +98,9 @@ function ExportPage() {
 			description: __(
 				"Download a portable XML feed with the full link dataset and analytics totals."
 			),
-			formatLabel: __("Extensible Markup Language"),
+			formatLabel: __("Extensible Markup Language (.xml)"),
 			icon: FileCode2,
+			tone: "xml",
 		},
 	];
 
@@ -134,35 +143,40 @@ function ExportPage() {
 
 	return (
 		<div className="export-page">
-			<div className="export-page-header">
-				<h1 className="export-page-title">{__("Export")}</h1>
-				<p className="export-page-summary">
-					{__(
-						"Export all links you can access from one place in CSV, JSON, or XML."
-					)}
-				</p>
+			<div className="export-page-hero">
+				<div className="export-page-hero-copy">
+					<div className="export-page-hero-badge">
+						<Download size={13} />
+						<span>{__("Data Export")}</span>
+					</div>
+					<h1 className="export-page-title">{__("Export")}</h1>
+					<p className="export-page-summary">
+						{__(
+							"Export your short links dataset in CSV, JSON, or XML formats for offline analysis, migration, or programmatic backups."
+						)}
+					</p>
+				</div>
 			</div>
 
 			<div className="export-page-intro">
 				<div className="export-page-intro-layout">
 					<div className="export-page-intro-copy">
 						<div className="export-page-intro-heading">
-							<Link2
-								size={18}
-								className="export-page-intro-icon"
-							/>
+							<div className="export-page-intro-icon-wrapper">
+								<Link2 size={16} />
+							</div>
 							<h2 className="export-page-intro-title">
 								{__("Bulk Link Export")}
 							</h2>
 						</div>
 						<p className="export-page-intro-text">
 							{__(
-								"Each export includes destination URLs, aliases, titles, short URLs, click totals, unique visitor totals, and created dates."
+								"Each export includes destination URLs, custom aliases, titles, short URLs, total clicks, unique visitors, and creation dates."
 							)}
 						</p>
-						<p className="export-page-intro-text">
+						<p className="export-page-intro-text text-text-muted/80">
 							{__(
-								"Exports follow your current permissions. Admins can export all site links, while editors can export only their own links."
+								"Exports follow your current role permissions. Administrators can export all site links, while Editors export links created by their account."
 							)}
 						</p>
 					</div>
@@ -188,6 +202,7 @@ function ExportPage() {
 						description={option.description}
 						formatLabel={option.formatLabel}
 						icon={option.icon}
+						tone={option.tone}
 						isLoading={isExporting && activeFormat === option.id}
 						isDisabled={0 === totalLinks}
 						onExport={() => handleExport(option.id)}
@@ -196,17 +211,41 @@ function ExportPage() {
 			</div>
 
 			<div className="export-page-api">
-				<h2 className="export-page-api-title">{__("API Export")}</h2>
-				<p className="export-page-api-copy">
-					{__(
-						"Use the export route when you want to back up links or feed another tool without opening the dashboard."
-					)}
-				</p>
+				<div className="export-page-api-header">
+					<div className="export-page-api-header-main">
+						<div className="export-page-api-icon-wrapper">
+							<FileText size={16} />
+						</div>
+						<div>
+							<h2 className="export-page-api-title">
+								{__("API Export")}
+							</h2>
+							<p className="export-page-api-copy">
+								{__(
+									"Use the API export endpoint to back up short links or integrate with automated workflows without opening the dashboard."
+								)}
+							</p>
+						</div>
+					</div>
+					<a
+						href="https://peakurl.org/docs/import-and-export#api-export"
+						target="_blank"
+						rel="noreferrer"
+						className="shrink-0"
+					>
+						<Button size="sm" icon={ExternalLink}>
+							{__("Read Export Guide")}
+						</Button>
+					</a>
+				</div>
 
 				<div className="export-page-api-grid">
 					<div className="export-page-api-column">
 						<h3 className="export-page-api-heading">
-							{__("Example Request")}
+							<span>{__("Example Request")}</span>
+							<span className="text-[11px] font-mono lowercase opacity-70">
+								cURL / HTTP
+							</span>
 						</h3>
 						<pre className="export-page-api-code-block">
 							<code>{`GET ${API_SERVER_BASE_URL}/${API_ROUTES.urls.export}?sortBy=createdAt&sortOrder=desc
@@ -217,7 +256,10 @@ Accept: application/json`}</code>
 
 					<div className="export-page-api-column">
 						<h3 className="export-page-api-heading">
-							{__("Response")}
+							<span>{__("Response")}</span>
+							<span className="text-[11px] font-mono lowercase opacity-70">
+								application/json
+							</span>
 						</h3>
 						<pre className="export-page-api-code-block">
 							<code>{`{
@@ -241,19 +283,6 @@ Accept: application/json`}</code>
 }`}</code>
 						</pre>
 					</div>
-				</div>
-
-				<div className="export-page-api-actions">
-					<a
-						href="https://peakurl.org/docs/import-and-export#api-export"
-						target="_blank"
-						rel="noreferrer"
-					>
-						<Button size="sm">
-							<ExternalLink className="export-page-api-button-icon" />
-							{__("Read Export Guide")}
-						</Button>
-					</a>
 				</div>
 			</div>
 		</div>

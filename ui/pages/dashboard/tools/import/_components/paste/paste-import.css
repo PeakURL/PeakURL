@@ -1,6 +1,6 @@
 @layer components {
 	.import-paste {
-		@apply space-y-5;
+		@apply space-y-4 sm:space-y-5;
 	}
 
 	.import-paste-panel {
@@ -8,11 +8,11 @@
 	}
 
 	.import-paste-grid {
-		@apply grid grid-cols-1 gap-5 lg:grid-cols-2;
+		@apply grid grid-cols-1 gap-4 lg:grid-cols-2;
 	}
 
 	.import-paste-textarea {
-		@apply h-64 resize-none;
+		@apply h-64 resize-none font-mono text-xs;
 	}
 
 	.import-paste-actions {
@@ -20,19 +20,19 @@
 	}
 
 	.import-paste-action-icon {
-		@apply h-4 w-4;
+		@apply h-3.5 w-3.5;
 	}
 
 	.import-paste-tips {
-		@apply rounded-lg border border-amber-500/20 bg-amber-500/10 p-4 dark:border-amber-500/30 dark:bg-amber-500/20;
+		@apply rounded-xl border border-amber-500/20 bg-amber-500/10 p-4.5 dark:border-amber-500/30 dark:bg-amber-500/15;
 	}
 
 	.import-paste-tips-list {
-		@apply space-y-2.5 text-sm text-heading;
+		@apply space-y-3 text-xs text-heading;
 	}
 
 	.import-paste-tip {
-		@apply flex items-start gap-2;
+		@apply flex items-start gap-2.5;
 	}
 
 	.import-paste-tip-icon {
@@ -44,7 +44,7 @@
 	}
 
 	.import-paste-tip-format {
-		@apply flex flex-wrap items-center gap-2 text-xs;
+		@apply flex flex-wrap items-center gap-2 text-[11px];
 		direction: ltr;
 		text-align: start;
 		unicode-bidi: plaintext;

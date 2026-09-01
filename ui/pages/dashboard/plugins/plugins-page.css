@@ -1,6 +1,6 @@
 @layer components {
 	.plugins-page {
-		@apply space-y-0 pb-8;
+		@apply space-y-4 pb-8 sm:space-y-5;
 	}
 
 	.plugins-page-loading {
@@ -12,11 +12,11 @@
 	}
 
 	.plugins-page-gate {
-		@apply rounded-xl border border-stroke bg-surface p-10 text-center;
+		@apply rounded-lg border border-stroke bg-surface p-10 text-center shadow-sm;
 	}
 
 	.plugins-page-gate-icon {
-		@apply mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600;
+		@apply mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400;
 	}
 
 	.plugins-page-gate-title {
@@ -27,80 +27,79 @@
 		@apply mt-2 text-sm text-text-muted;
 	}
 
-	.plugins-page-header {
-		@apply relative overflow-hidden rounded-t-2xl border border-stroke bg-surface px-6 py-6 shadow-sm sm:px-8;
+	/* Hero Section */
+	.plugins-page-hero {
+		@apply flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between px-1 pt-1;
 	}
 
-	.plugins-page-header-layout {
-		@apply relative flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between;
+	.plugins-page-hero-copy {
+		@apply min-w-0 flex flex-col;
+		text-align: start;
 	}
 
-	.plugins-page-header-copy {
-		@apply max-w-3xl;
+	.plugins-page-hero-badge {
+		@apply mb-2 w-max inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-accent;
 	}
 
-	.plugins-page-header-icon-row {
-		@apply mb-3 flex flex-wrap items-center gap-3;
+	.plugins-page-title {
+		@apply text-2xl font-bold tracking-tight text-heading sm:text-3xl;
 	}
 
-	.plugins-page-header-icon {
-		@apply inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-accent/10 text-accent;
+	.plugins-page-summary {
+		@apply mt-1 text-sm leading-relaxed text-text-muted;
+		text-align: start;
 	}
 
-	.plugins-page-header-title {
-		@apply text-2xl font-semibold tracking-tight text-heading sm:text-3xl;
+	/* Waitlist Banner */
+	.plugins-page-waitlist-banner {
+		@apply rounded-lg border border-accent/20 bg-surface p-3.5 sm:p-4 shadow-sm transition-all duration-200 hover:border-accent/40;
 	}
 
-	.plugins-page-header-summary {
-		@apply mt-2 max-w-2xl text-sm leading-relaxed text-text-muted sm:text-base;
+	.plugins-page-waitlist-layout {
+		@apply flex flex-col gap-3.5 sm:flex-row sm:items-center sm:justify-between;
 	}
 
-	.plugins-page-header-waitlist {
-		@apply relative overflow-hidden rounded-2xl border border-accent/20 bg-surface p-5;
+	.plugins-page-waitlist-copy {
+		@apply flex-1 min-w-0 space-y-1;
+		text-align: start;
 	}
 
-	.plugins-page-header-waitlist-inner {
-		@apply relative;
+	.plugins-page-waitlist-heading {
+		@apply flex flex-wrap items-center gap-2 text-heading;
 	}
 
-	.plugins-page-header-waitlist-badge-row {
-		@apply mb-2 flex items-center gap-2;
+	.plugins-page-waitlist-badge {
+		@apply inline-flex items-center gap-1 rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-accent;
 	}
 
-	.plugins-page-header-waitlist-badge {
-		@apply inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-accent;
+	.plugins-page-waitlist-title {
+		@apply text-sm font-semibold text-heading;
 	}
 
-	.plugins-page-header-waitlist-badge-icon {
-		@apply shrink-0;
+	.plugins-page-waitlist-text {
+		@apply text-xs leading-relaxed text-text-muted;
 	}
 
-	.plugins-page-header-waitlist-copy {
-		@apply mb-4 text-sm font-medium leading-snug text-heading;
+	.plugins-page-waitlist-action {
+		@apply shrink-0 pt-1 sm:pt-0;
 	}
 
-	.plugins-page-header-waitlist-button {
-		@apply inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:bg-accent/90 hover:shadow-lg active:shadow-sm;
+	.plugins-page-waitlist-button {
+		@apply inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-accent px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:bg-accent/90 hover:shadow-md active:shadow-xs;
 	}
 
-	.plugins-page-header-waitlist-button-icon {
-		@apply transition-transform;
-	}
-
-	.plugins-page-header-waitlist-button-link {
-		@apply opacity-60;
+	/* Main Panel */
+	.plugins-page-panel {
+		@apply rounded-lg border border-stroke bg-surface p-5 shadow-sm transition-all duration-200 hover:border-stroke-strong;
+		text-align: start;
 	}
 
 	.plugins-page-toolbar {
-		@apply overflow-hidden border-x border-stroke bg-surface shadow-sm;
-	}
-
-	.plugins-page-toolbar-inner {
-		@apply flex flex-col gap-3 px-6 sm:flex-row sm:items-center sm:justify-between sm:px-8;
+		@apply mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-stroke pb-4;
 	}
 
 	.plugins-page-toolbar-controls {
-		@apply flex items-center gap-2 pb-3 sm:pb-0;
+		@apply flex items-center gap-2;
 	}
 
 	.plugins-page-search {
@@ -108,7 +107,7 @@
 	}
 
 	.plugins-page-search-field {
-		@apply pointer-events-none w-full rounded-lg border border-stroke bg-surface-alt/50 py-2 text-sm text-text-muted/40;
+		@apply pointer-events-none w-full rounded-lg border border-stroke bg-surface-alt/50 py-1.5 text-xs text-text-muted/50;
 		-webkit-padding-start: 2rem;
 		padding-inline-start: 2rem;
 		-webkit-padding-end: 0.75rem;
@@ -130,7 +129,7 @@
 	}
 
 	.plugins-page-view-button {
-		@apply flex h-9 w-9 items-center justify-center transition-colors;
+		@apply flex h-8 w-8 items-center justify-center transition-colors;
 	}
 
 	.plugins-page-view-button-grid {
@@ -153,34 +152,16 @@
 		@apply text-text-muted hover:bg-surface-alt;
 	}
 
-	.plugins-page-content {
-		@apply relative overflow-hidden rounded-b-2xl border-x border-b border-stroke bg-surface shadow-sm;
-	}
-
-	.plugins-page-content-panel {
-		@apply px-6 pb-6 pt-5 sm:px-8;
-	}
-
 	.plugins-page-banner {
-		@apply mb-5 flex items-center gap-3 rounded-xl px-5 py-4;
+		@apply mb-4 flex items-center gap-3 rounded-lg border border-stroke/60 px-4 py-3;
 	}
 
 	.plugins-page-banner-featured {
-		background-image: linear-gradient(
-			to right,
-			rgba(99, 102, 241, 0.1),
-			rgba(168, 85, 247, 0.1),
-			rgba(236, 72, 153, 0.1)
-		);
+		@apply bg-accent/5 border-accent/20;
 	}
 
 	.plugins-page-banner-popular {
-		background-image: linear-gradient(
-			to right,
-			rgba(249, 115, 22, 0.1),
-			rgba(239, 68, 68, 0.1),
-			rgba(236, 72, 153, 0.1)
-		);
+		@apply bg-orange-500/5 border-orange-500/20;
 	}
 
 	.plugins-page-banner-icon {
@@ -196,11 +177,15 @@
 	}
 
 	.plugins-page-banner-title {
-		@apply text-sm font-semibold text-heading;
+		@apply text-xs font-semibold text-heading;
 	}
 
 	.plugins-page-banner-copy {
 		@apply text-xs text-text-muted;
+	}
+
+	.plugins-page-content-wrapper {
+		@apply relative overflow-hidden;
 	}
 
 	.plugins-page-grid {
@@ -208,23 +193,25 @@
 	}
 
 	.plugins-page-content-overlay {
-		@apply pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-linear-to-t from-surface via-surface/80 to-transparent;
+		@apply pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-surface via-surface/80 to-transparent;
 	}
 
+	/* Roadmap Section */
 	.plugins-page-roadmap {
-		@apply mt-5 overflow-hidden rounded-2xl border border-stroke bg-surface shadow-sm;
+		@apply rounded-lg border border-stroke bg-surface p-6 shadow-sm transition-all duration-200 hover:border-stroke-strong;
+		text-align: start;
 	}
 
 	.plugins-page-roadmap-inner {
-		@apply relative px-6 py-8 sm:px-10 sm:py-10;
+		@apply relative;
 	}
 
 	.plugins-page-roadmap-glow-end {
-		@apply pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-accent/5 blur-3xl;
+		@apply pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-accent/5 blur-3xl;
 	}
 
 	.plugins-page-roadmap-glow-start {
-		@apply pointer-events-none absolute -left-12 bottom-0 h-48 w-48 rounded-full bg-purple-500/5 blur-3xl;
+		@apply pointer-events-none absolute -left-10 bottom-0 h-44 w-44 rounded-full bg-purple-500/5 blur-3xl;
 	}
 
 	.plugins-page-roadmap-copy {
@@ -232,7 +219,7 @@
 	}
 
 	.plugins-page-roadmap-icon {
-		@apply mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-accent/10 text-accent;
+		@apply mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent;
 	}
 
 	.plugins-page-roadmap-title {
@@ -240,32 +227,26 @@
 	}
 
 	.plugins-page-roadmap-description {
-		@apply mx-auto mt-3 max-w-lg text-sm leading-relaxed text-text-muted;
+		@apply mx-auto mt-2 max-w-lg text-xs leading-relaxed text-text-muted;
 	}
 
 	.plugins-page-roadmap-grid {
-		@apply relative mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3;
+		@apply relative mt-6 grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3;
 	}
 
 	.plugins-page-roadmap-card {
-		@apply rounded-xl border border-stroke p-5 transition-shadow hover:shadow-sm;
+		@apply rounded-lg border border-stroke bg-surface-alt/40 p-4 transition-all duration-200 hover:shadow-xs hover:border-stroke-strong;
 	}
 
 	.plugins-page-roadmap-card-icon {
-		@apply mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-surface text-accent shadow-sm;
+		@apply mb-2.5 flex h-8 w-8 items-center justify-center rounded-lg bg-surface text-accent shadow-xs border border-stroke/60;
 	}
 
 	.plugins-page-roadmap-card-title {
-		@apply text-sm font-semibold text-heading;
+		@apply text-xs font-semibold text-heading;
 	}
 
 	.plugins-page-roadmap-card-copy {
-		@apply mt-1.5 text-xs leading-relaxed text-text-muted;
-	}
-
-	@media (min-width: 640px) {
-		.plugins-page-header-waitlist {
-			min-width: 16.25rem;
-		}
+		@apply mt-1 text-xs leading-relaxed text-text-muted;
 	}
 }

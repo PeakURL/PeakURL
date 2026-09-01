@@ -1,14 +1,14 @@
 @layer components {
 	.plugins-tabs {
-		@apply flex items-center gap-1 overflow-x-auto border-b border-stroke;
+		@apply flex items-center gap-1 overflow-x-auto;
 	}
 
 	.plugins-tabs-button {
-		@apply relative shrink-0 px-4 py-3 text-sm font-medium transition-colors;
+		@apply relative shrink-0 px-3.5 py-2 text-xs font-medium transition-colors;
 	}
 
 	.plugins-tabs-button-active {
-		@apply text-accent;
+		@apply text-accent font-semibold;
 	}
 
 	.plugins-tabs-button-inactive {
@@ -20,7 +20,7 @@
 	}
 
 	.plugins-tabs-count {
-		@apply inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[10px] font-semibold;
+		@apply inline-flex h-4.5 min-w-4.5 items-center justify-center rounded-full px-1.5 text-[10px] font-semibold;
 	}
 
 	.plugins-tabs-count-active {

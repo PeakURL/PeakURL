@@ -10,10 +10,14 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\SystemStatus;
 
+use FilesystemIterator;
 use PeakURL\Includes\Constants;
 use PeakURL\Services\Cache\Drivers\ApcuCache;
 use PeakURL\Services\Cache\Drivers\FileCache;
 use PeakURL\Services\Cache\Drivers\RedisCache;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use SplFileInfo;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -52,12 +56,34 @@ class Cache {
 	 * @since 1.6.0
 	 */
 	public function cache_status(): array {
-		$config            = $this->context->get_config();
-		$content_dir       = (string) ( $config[ Constants::CONTENT_DIR ] ?? ( ABSPATH . Constants::DEFAULT_CONTENT_DIR ) );
-		$enabled           = ! empty( $config[ Constants::CACHE_ENABLED ] );
-		$configured_driver = strtolower( (string) ( $config[ Constants::CACHE_DRIVER ] ?? Constants::CACHE_DEFAULT_DRIVER ) );
-		$custom_path       = (string) ( $config[ Constants::CACHE_PATH ] ?? '' );
-		$cache_dir         = ! empty( $custom_path )
+		$config       = $this->context->get_config();
+		$settings_api = $this->context->get_settings_api();
+
+		$content_dir = (string) ( $config[ Constants::CONTENT_DIR ] ?? ( ABSPATH . Constants::DEFAULT_CONTENT_DIR ) );
+
+		// Check settings table overrides before runtime config.
+		$stored_enabled = $settings_api->get_option( Constants::SETTING_CACHE_ENABLED );
+		$enabled        = null !== $stored_enabled
+			? (bool) filter_var( $stored_enabled, FILTER_VALIDATE_BOOLEAN )
+			: ! empty( $config[ Constants::CACHE_ENABLED ] );
+
+		$stored_driver     = $settings_api->get_option( Constants::SETTING_CACHE_DRIVER );
+		$configured_driver = strtolower(
+			(string) ( $stored_driver ?? $config[ Constants::CACHE_DRIVER ] ?? Constants::CACHE_DEFAULT_DRIVER )
+		);
+
+		$stored_default_ttl = $settings_api->get_option( Constants::SETTING_CACHE_DEFAULT_TTL );
+		$default_ttl        = null !== $stored_default_ttl && '' !== trim( $stored_default_ttl )
+			? (int) $stored_default_ttl
+			: Constants::CACHE_LINK_TTL;
+
+		$stored_negative_ttl = $settings_api->get_option( Constants::SETTING_CACHE_NEGATIVE_TTL );
+		$negative_ttl        = null !== $stored_negative_ttl && '' !== trim( $stored_negative_ttl )
+			? (int) $stored_negative_ttl
+			: Constants::CACHE_NEGATIVE_TTL;
+
+		$custom_path = (string) ( $config[ Constants::CACHE_PATH ] ?? '' );
+		$cache_dir   = ! empty( $custom_path )
 			? rtrim( $custom_path, '/\\' )
 			: rtrim( $content_dir, '/\\' ) . '/' . Constants::CACHE_DIRECTORY;
 
@@ -120,6 +146,8 @@ class Cache {
 			}
 		}
 
+		$metrics = $this->get_cache_metrics( $cache_dir );
+
 		return array(
 			'enabled'          => $enabled,
 			'status'           => $status,
@@ -128,7 +156,10 @@ class Cache {
 			'path'             => $cache_dir,
 			'writable'         => $file_writable,
 			'directoryExists'  => $file_exists,
-			'defaultTtl'       => Constants::CACHE_LINK_TTL,
+			'defaultTtl'       => $default_ttl,
+			'negativeTtl'      => $negative_ttl,
+			'sizeBytes'        => $metrics['sizeBytes'],
+			'fileCount'        => $metrics['fileCount'],
 			'redis'            => array(
 				'configured'    => $redis_configured,
 				'host'          => $redis_host,
@@ -146,7 +177,68 @@ class Cache {
 				'exists'    => $file_exists,
 				'writable'  => $file_writable,
 				'available' => $file_usable,
+				'sizeBytes' => $metrics['sizeBytes'],
+				'fileCount' => $metrics['fileCount'],
 			),
+		);
+	}
+
+	/**
+	 * Compute the storage size and item count of the cache directory.
+	 *
+	 * @param string $path Absolute cache directory path.
+	 * @return array{sizeBytes: int|null, fileCount: int}
+	 * @since 1.6.0
+	 */
+	public function get_cache_metrics( string $path ): array {
+		if ( '' === trim( $path ) || ! is_dir( $path ) ) {
+			return array(
+				'sizeBytes' => null,
+				'fileCount' => 0,
+			);
+		}
+
+		$total_size = 0;
+		$file_count = 0;
+
+		try {
+			$iterator = new RecursiveIteratorIterator(
+				new RecursiveDirectoryIterator(
+					$path,
+					FilesystemIterator::SKIP_DOTS,
+				),
+			);
+		} catch ( \UnexpectedValueException ) {
+			return array(
+				'sizeBytes' => null,
+				'fileCount' => 0,
+			);
+		}
+
+		foreach ( $iterator as $file_info ) {
+			if (
+				! $file_info instanceof SplFileInfo ||
+				$file_info->isDir() ||
+				$file_info->isLink()
+			) {
+				continue;
+			}
+
+			$filename = $file_info->getFilename();
+			if ( '.htaccess' === $filename || 'index.php' === $filename || 'index.html' === $filename ) {
+				continue;
+			}
+
+			$file_size = $file_info->getSize();
+			if ( $file_size > 0 ) {
+				$total_size += $file_size;
+			}
+			++$file_count;
+		}
+
+		return array(
+			'sizeBytes' => $total_size,
+			'fileCount' => $file_count,
 		);
 	}
 }

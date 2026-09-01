@@ -18,6 +18,7 @@ function Layout({ children }: SettingsLayoutProps) {
 		canManageWebhooks,
 		canManageMailDelivery,
 		canManageLocationData,
+		canManagePerformance,
 		canManageUpdates,
 	} = useAdminAccess();
 
@@ -35,6 +36,14 @@ function Layout({ children }: SettingsLayoutProps) {
 			id: "integrations",
 			name: __("Integrations"),
 			icon: "plug",
+		});
+	}
+
+	if (canManagePerformance) {
+		tabs.push({
+			id: "performance",
+			name: __("Performance"),
+			icon: "zap",
 		});
 	}
 

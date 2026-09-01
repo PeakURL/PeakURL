@@ -16,6 +16,7 @@ namespace PeakURL\Includes;
 use PeakURL\Controllers\AnalyticsController;
 use PeakURL\Controllers\AdminNoticesController;
 use PeakURL\Controllers\AuthController;
+use PeakURL\Controllers\CacheController;
 use PeakURL\Controllers\CaptchaController;
 use PeakURL\Controllers\GeoipController;
 use PeakURL\Controllers\MailController;
@@ -297,6 +298,7 @@ class Application {
 		$notices   = new AdminNoticesController( $this->data_store );
 		$settings  = new SettingsController( $this->data_store );
 		$status    = new SystemStatusController( $this->data_store );
+		$cache     = new CacheController( $this->data_store );
 		$updates   = new UpdatesController( $this->data_store );
 
 		$this->register_core_routes( $settings );
@@ -305,14 +307,7 @@ class Application {
 		$this->register_url_routes( $urls );
 		$this->register_analytics_routes( $analytics );
 		$this->register_webhook_routes( $webhooks );
-		$this->register_system_routes(
-			$notices,
-			$settings,
-			$status,
-			$captcha,
-			$geoip,
-			$mail,
-		);
+		$this->register_system_routes( $notices, $settings, $status, $cache, $captcha, $geoip, $mail );
 		$this->register_update_routes( $updates );
 
 		/**
@@ -483,6 +478,7 @@ class Application {
 		AdminNoticesController $notices,
 		SettingsController $settings,
 		SystemStatusController $status,
+		CacheController $cache,
 		CaptchaController $captcha,
 		GeoipController $geoip,
 		MailController $mail
@@ -493,6 +489,9 @@ class Application {
 				array( 'get', '/system/general', array( $settings, 'general' ) ),
 				array( 'post', '/system/general', array( $settings, 'update_general' ) ),
 				array( 'get', '/system/status', array( $status, 'status' ) ),
+				array( 'get', '/system/cache', array( $cache, 'status' ) ),
+				array( 'post', '/system/cache', array( $cache, 'update' ) ),
+				array( 'post', '/system/cache/clear', array( $cache, 'clear' ) ),
 				array( 'get', '/system/captcha', array( $captcha, 'status' ) ),
 				array( 'post', '/system/captcha', array( $captcha, 'update' ) ),
 				array( 'get', '/system/geoip', array( $geoip, 'status' ) ),

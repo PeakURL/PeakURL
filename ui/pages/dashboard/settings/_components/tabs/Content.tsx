@@ -11,6 +11,9 @@ import {
 import {
 	useGetGeneralSettingsQuery,
 	useSaveGeneralSettingsMutation,
+	useGetCacheStatusQuery,
+	useSaveCacheConfigurationMutation,
+	useClearCacheMutation,
 	useGetGeoipStatusQuery,
 	useGetMailStatusQuery,
 	useSaveGeoipConfigurationMutation,
@@ -34,6 +37,7 @@ import {
 
 import type {
 	ApiKeySummary,
+	CacheConfigurationPayload,
 	ContentProps,
 	GeneralFormPayload,
 	GeneralFormState,
@@ -49,6 +53,7 @@ import {
 	GeneralTab,
 	IntegrationsTab,
 	LocationDataTab,
+	PerformanceTab,
 	ReleaseInstallProgress,
 	SecurityTab,
 	UpdatesTab,
@@ -132,6 +137,17 @@ const Content = ({ activeTab }: ContentProps) => {
 	});
 	const [saveGeoipConfiguration, { isLoading: isSavingGeoipConfiguration }] =
 		useSaveGeoipConfigurationMutation();
+	const {
+		data: cacheStatusResponse,
+		error: cacheError,
+		isLoading: isLoadingCacheStatus,
+	} = useGetCacheStatusQuery(undefined, {
+		skip: activeTab !== "performance",
+	});
+	const [saveCacheConfiguration, { isLoading: isSavingCacheConfiguration }] =
+		useSaveCacheConfigurationMutation();
+	const [clearCache, { isLoading: isClearingCache }] =
+		useClearCacheMutation();
 	const {
 		data: mailStatusResponse,
 		error: mailError,
@@ -666,6 +682,43 @@ const Content = ({ activeTab }: ContentProps) => {
 		}
 	};
 
+	const handleSaveCacheConfiguration = async (
+		payload: CacheConfigurationPayload
+	) => {
+		try {
+			const result = await saveCacheConfiguration(payload).unwrap();
+			notification.success(
+				__("Settings saved"),
+				__("Performance configuration updated successfully.")
+			);
+			return result?.data;
+		} catch (err) {
+			notification.error(
+				__("Save failed"),
+				getErrorMessage(
+					err,
+					__("Could not update performance configuration.")
+				)
+			);
+			throw err;
+		}
+	};
+
+	const handlePurgeCache = async () => {
+		try {
+			await clearCache(undefined).unwrap();
+			notification.success(
+				__("Cache purged"),
+				__("Object cache cleared successfully across active backends.")
+			);
+		} catch (err) {
+			notification.error(
+				__("Purge failed"),
+				getErrorMessage(err, __("Could not clear object cache."))
+			);
+		}
+	};
+
 	return (
 		<div className="settings-content">
 			{activeTab === "general" && (
@@ -704,6 +757,19 @@ const Content = ({ activeTab }: ContentProps) => {
 
 			{activeTab === "integrations" && (
 				<IntegrationsTab notification={notification} />
+			)}
+
+			{activeTab === "performance" && (
+				<PerformanceTab
+					key={JSON.stringify(cacheStatusResponse?.data || {})}
+					status={cacheStatusResponse?.data || null}
+					errorMessage={extractErrorMessage(cacheError)}
+					isLoading={isLoadingCacheStatus}
+					isSaving={isSavingCacheConfiguration}
+					isPurging={isClearingCache}
+					onSave={handleSaveCacheConfiguration}
+					onPurge={handlePurgeCache}
+				/>
 			)}
 
 			{activeTab === "email" && (

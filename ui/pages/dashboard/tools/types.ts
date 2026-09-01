@@ -61,6 +61,9 @@ export interface InfoItem {
 
 	/** Whether the value should use monospace styling. */
 	monospace?: boolean;
+
+	/** Optional inline action element rendered alongside the value. */
+	action?: React.ReactNode;
 }
 
 /**
@@ -75,6 +78,9 @@ export interface InfoSectionData {
 
 	/** Rows rendered inside the section. */
 	items: InfoItem[];
+
+	/** Optional footer action element rendered when expanded. */
+	footerAction?: React.ReactNode;
 }
 
 /**

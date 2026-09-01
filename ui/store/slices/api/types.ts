@@ -2,6 +2,9 @@ import type {
 	AdminNoticesResponse,
 	BackupCodesResponse,
 	BulkCreateResponse,
+	CacheConfigurationPayload,
+	CacheStatusPayload,
+	CacheStatusResponse,
 	CaptchaConfigurationPayload,
 	CaptchaStatus,
 	CreateUrlPayload,
@@ -84,6 +87,7 @@ export type ApiTagType =
 	| "Updates"
 	| "GeneralSettings"
 	| "SystemStatus"
+	| "CacheStatus"
 	| "AdminNotices";
 
 /**
@@ -107,6 +111,7 @@ export const API_TAG_TYPES: ApiTagType[] = [
 	"Updates",
 	"GeneralSettings",
 	"SystemStatus",
+	"CacheStatus",
 	"AdminNotices",
 ];
 
@@ -564,6 +569,9 @@ export type {
 	AdminNoticesResponse,
 	BackupCodesResponse,
 	BulkCreateResponse,
+	CacheConfigurationPayload,
+	CacheStatusPayload,
+	CacheStatusResponse,
 	CaptchaConfigurationPayload,
 	CaptchaStatus,
 	CreateUrlPayload,

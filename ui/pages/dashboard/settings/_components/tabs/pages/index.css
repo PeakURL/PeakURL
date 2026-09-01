@@ -4,6 +4,7 @@
 @import "./api/api-tab.css";
 @import "./api/api-key-modals.css";
 @import "./integrations/integrations-tab.css";
+@import "./performance/performance-tab.css";
 @import "./email/email-delivery-tab.css";
 @import "./location/location-data-tab.css";
 @import "./updates/release-install-progress.css";

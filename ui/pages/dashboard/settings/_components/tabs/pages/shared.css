@@ -3,6 +3,7 @@
 	.settings-api,
 	.settings-email,
 	.settings-location,
+	.settings-performance,
 	.settings-security,
 	.settings-updates {
 		@apply space-y-5;

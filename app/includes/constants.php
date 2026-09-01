@@ -221,6 +221,14 @@ final class Constants {
 	public const SETTING_SITE_FAVICON = 'site_favicon_json';
 	/** Settings key storing the default social preview image metadata. */
 	public const SETTING_SOCIAL_PREVIEW_IMAGE = 'social_preview_image_json';
+	/** Settings key storing cache enabled status. */
+	public const SETTING_CACHE_ENABLED = 'cache_enabled';
+	/** Settings key storing preferred cache driver. */
+	public const SETTING_CACHE_DRIVER = 'cache_driver';
+	/** Settings key storing default link cache TTL in seconds. */
+	public const SETTING_CACHE_DEFAULT_TTL = 'cache_default_ttl';
+	/** Settings key storing negative cache TTL in seconds. */
+	public const SETTING_CACHE_NEGATIVE_TTL = 'cache_negative_ttl';
 	/** Cache format generation version. */
 	public const CACHE_VERSION = 1;
 	/** Default cache driver selection mode. */

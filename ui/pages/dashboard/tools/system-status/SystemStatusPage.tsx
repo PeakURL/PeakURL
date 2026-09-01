@@ -19,13 +19,17 @@ import {
 	RefreshCw,
 	Server,
 	ShieldCheck,
+	Trash2,
 	Zap,
 } from "lucide-react";
 
-import { useNotification } from "@/components";
+import { Button, ConfirmDialog, useNotification } from "@/components";
 import { useTemporaryState } from "@/hooks";
 import { __, sprintf } from "@/i18n";
-import { useGetSystemStatusQuery } from "@/store/slices/api";
+import {
+	useGetSystemStatusQuery,
+	useClearCacheMutation,
+} from "@/store/slices/api";
 import {
 	cn,
 	copyToClipboard,
@@ -33,6 +37,7 @@ import {
 	formatByteSize,
 	formatCount,
 	formatDateTimeValue,
+	getErrorMessage,
 } from "@/utils";
 
 import type {
@@ -348,26 +353,42 @@ function InfoSection({ section, isOpen, onToggle }: InfoSectionProps) {
 											{item.label}
 										</th>
 										<td className="system-status-page-info-value-cell">
-											<p
-												className={cn(
-													"system-status-page-info-value",
-													item.monospace &&
-														"system-status-page-info-value-monospace"
-												)}
-											>
-												{displayValue(item.value)}
-											</p>
-											{item.helperText ? (
-												<p className="system-status-page-info-helper">
-													{item.helperText}
-												</p>
-											) : null}
+											<div className="flex items-center gap-3">
+												<div>
+													<p
+														className={cn(
+															"system-status-page-info-value",
+															item.monospace &&
+																"system-status-page-info-value-monospace"
+														)}
+													>
+														{displayValue(
+															item.value
+														)}
+													</p>
+													{item.helperText ? (
+														<p className="system-status-page-info-helper">
+															{item.helperText}
+														</p>
+													) : null}
+												</div>
+												{item.action ? (
+													<div className="shrink-0">
+														{item.action}
+													</div>
+												) : null}
+											</div>
 										</td>
 									</tr>
 								)
 							)}
 						</tbody>
 					</table>
+					{section.footerAction ? (
+						<div className="flex items-center justify-end px-5 py-3 bg-surface-alt/40 border-t border-border-default">
+							{section.footerAction}
+						</div>
+					) : null}
 				</div>
 			) : null}
 		</div>
@@ -383,6 +404,8 @@ function SystemStatusPage() {
 		isFetching,
 		refetch,
 	} = useGetSystemStatusQuery(undefined);
+	const [clearCacheMutation, { isLoading: isClearingCache }] =
+		useClearCacheMutation();
 	const status = systemStatusResponse?.data || null;
 	const errorMessage = extractErrorMessage(systemStatusError);
 	const [activeView, setActiveView] = useState<StatusView>("status");
@@ -394,6 +417,20 @@ function SystemStatusPage() {
 	const [expandedSections, setExpandedSections] = useState(
 		new Set<string>(["peakurl"])
 	);
+	const [isPurgeModalOpen, setIsPurgeModalOpen] = useState(false);
+
+	const handleConfirmPurgeCache = async () => {
+		try {
+			await clearCacheMutation().unwrap();
+			notification.success(__("Object cache purged successfully."));
+			setIsPurgeModalOpen(false);
+			refetch();
+		} catch (err) {
+			notification.error(
+				getErrorMessage(err, __("Failed to purge object cache."))
+			);
+		}
+	};
 
 	if (isLoading && !status) {
 		return <SystemStatusSkeleton />;
@@ -870,10 +907,38 @@ function SystemStatusPage() {
 			value: status?.cache?.configuredDriver || __("auto"),
 		},
 		{
+			label: __("Cache Size"),
+			value: formatByteSize(status?.cache?.sizeBytes, __("0 B")),
+			helperText:
+				status?.cache?.fileCount && Number(status.cache.fileCount) > 0
+					? sprintf(
+							__("%s cached files"),
+							formatCount(Number(status.cache.fileCount))
+						)
+					: undefined,
+			action: (
+				<Button
+					size="xs"
+					variant="danger"
+					onClick={() => setIsPurgeModalOpen(true)}
+					loading={isClearingCache}
+					icon={Trash2}
+				>
+					{__("Purge Cache")}
+				</Button>
+			),
+		},
+		{
 			label: __("Default TTL"),
 			value: status?.cache?.defaultTtl
 				? `${String(status.cache.defaultTtl)}s`
 				: "3600s",
+		},
+		{
+			label: __("Negative TTL"),
+			value: status?.cache?.negativeTtl
+				? `${String(status.cache.negativeTtl)}s`
+				: "60s",
 		},
 		{
 			label: __("Cache Directory"),
@@ -1399,6 +1464,20 @@ function SystemStatusPage() {
 					</div>
 				</div>
 			)}
+
+			<ConfirmDialog
+				open={isPurgeModalOpen}
+				onClose={() => setIsPurgeModalOpen(false)}
+				title={__("Purge Object Cache")}
+				description={__(
+					"Are you sure you want to purge the object cache? All cached redirect records, in-memory objects, and temporary cache files will be immediately invalidated. Subsequent requests will query the database to rebuild the cache."
+				)}
+				confirmText={__("Purge Cache")}
+				cancelText={__("Cancel")}
+				confirmVariant="danger"
+				loading={isClearingCache}
+				onConfirm={handleConfirmPurgeCache}
+			/>
 		</div>
 	);
 }

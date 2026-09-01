@@ -46,4 +46,17 @@
 	.links-page-stat-label {
 		@apply mt-0.5 text-xs text-muted;
 	}
+
+	/* Trash Banner */
+	.links-trash-banner {
+		@apply flex items-center rounded-lg border border-amber-300 dark:border-amber-700/50 bg-amber-50 dark:bg-amber-950/30 px-4 py-3 text-sm text-amber-900 dark:text-amber-200 shadow-xs;
+	}
+
+	.links-trash-banner-content {
+		@apply flex items-center gap-2.5 font-medium text-amber-900 dark:text-amber-200;
+	}
+
+	.links-trash-banner-content svg {
+		@apply text-amber-700 dark:text-amber-400 shrink-0;
+	}
 }

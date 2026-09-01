@@ -1,7 +1,7 @@
 /**
  * Supported short-link status values.
  */
-export type LinkStatus = "active" | "inactive" | "expired";
+export type LinkStatus = "active" | "inactive" | "expired" | "trashed";
 
 /**
  * Link-list sort fields accepted by the API.
@@ -49,6 +49,7 @@ export interface LinksMeta {
 	totalClicks: number;
 	uniqueClicks: number;
 	activeLinks: number;
+	trashedLinks?: number;
 	lastPeriodTotalClicks?: number;
 	lastPeriodUniqueClicks?: number;
 }

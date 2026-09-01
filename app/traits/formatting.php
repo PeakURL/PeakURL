@@ -167,23 +167,46 @@ trait FormattingTrait {
 			),
 		);
 
+		$link_meta     = is_array( $metadata['link'] ?? null ) ? $metadata['link'] : null;
+		$type          = (string) $row['type'];
+		$link_status   = null;
+		$is_restorable = false;
+
+		if ( $link_meta && in_array( $type, array( 'link_trashed', 'link_deleted' ), true ) ) {
+			$current_status = isset( $row['current_link_status'] ) ? (string) $row['current_link_status'] : null;
+			if ( 'active' === $current_status ) {
+				$link_status   = 'active';
+				$is_restorable = false;
+			} elseif ( 'trashed' === $current_status ) {
+				$link_status   = 'trashed';
+				$is_restorable = true;
+			} else {
+				$link_status   = 'deleted';
+				$is_restorable = false;
+			}
+		} elseif ( 'link_restored' === $type ) {
+			$link_status   = 'active';
+			$is_restorable = false;
+		}
+
 		return array(
-			'id'        => (string) $row['id'],
-			'type'      => (string) $row['type'],
-			'message'   => (string) ( $row['message'] ?? '' ),
-			'actor'     => $actor,
-			'user'      => $this->format_activity_person(
+			'id'           => (string) $row['id'],
+			'type'         => $type,
+			'message'      => (string) ( $row['message'] ?? '' ),
+			'actor'        => $actor,
+			'user'         => $this->format_activity_person(
 				is_array( $metadata['user'] ?? null )
 					? $metadata['user']
 					: null,
 			),
-			'link'      => is_array( $metadata['link'] ?? null )
-				? $metadata['link']
-				: null,
-			'location'  => is_array( $metadata['location'] ?? null )
+			'link'         => $link_meta,
+			'location'     => is_array( $metadata['location'] ?? null )
 				? $metadata['location']
 				: null,
-			'timestamp' => $this->to_iso( (string) $row['created_at'] ),
+			'timestamp'    => $this->to_iso( (string) $row['created_at'] ),
+			'isRestorable' => $is_restorable,
+			'linkStatus'   => $link_status,
+			'count'        => isset( $metadata['count'] ) ? (int) $metadata['count'] : null,
 		);
 	}
 

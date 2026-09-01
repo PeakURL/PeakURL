@@ -76,6 +76,11 @@ const getNavItems = (
 					href: `${base || ""}/tools/export`,
 				},
 				{
+					name: __("Activity Log"),
+					href: `${base || ""}/activity`,
+					adminOnly: true,
+				},
+				{
 					name: __("System Status"),
 					href: `${base || ""}/tools/system-status`,
 					adminOnly: true,

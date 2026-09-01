@@ -322,7 +322,11 @@
 	}
 
 	.activity-page-event-action {
-		@apply inline-flex h-8 w-8 items-center justify-center rounded-lg border border-transparent bg-transparent text-text-muted transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:hover:border-red-500/20 dark:hover:bg-red-900/20 dark:hover:text-red-400;
+		@apply inline-flex h-8 w-8 items-center justify-center rounded-lg border border-transparent bg-transparent text-text-muted transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500/20 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-30 dark:hover:border-red-500/20 dark:hover:bg-red-900/20 dark:hover:text-red-400;
+	}
+
+	.activity-page-event-action-restore {
+		@apply text-primary-600 hover:border-primary-200 hover:bg-primary-50 hover:text-primary-700 focus:ring-primary-500/20 dark:text-primary-400 dark:hover:border-primary-500/20 dark:hover:bg-primary-900/20 dark:hover:text-primary-300;
 	}
 
 	.activity-page-empty {

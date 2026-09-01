@@ -7,6 +7,7 @@ import {
 	MousePointerClick,
 	PencilLine,
 	RefreshCw,
+	RotateCcw,
 	Shield,
 	Trash2,
 	UserMinus,
@@ -32,6 +33,7 @@ import {
 	useClearActivityLogsMutation,
 	useDeleteActivityLogMutation,
 	useGetActivityHistoryQuery,
+	useRestoreActivityLinkMutation,
 } from "@/store/slices/api";
 import {
 	cn,
@@ -121,7 +123,13 @@ function getActivityTypeLabel(type?: string | null): string {
 		case "link_updated":
 			return __("Link updated");
 		case "link_deleted":
-			return __("Link deleted");
+			return __("Link permanently deleted");
+		case "link_trashed":
+			return __("Link moved to trash");
+		case "link_restored":
+			return __("Link restored");
+		case "trash_emptied":
+			return __("Trash emptied");
 		case "user_created":
 			return __("User created");
 		case "user_updated":
@@ -135,26 +143,50 @@ function getActivityTypeLabel(type?: string | null): string {
 	}
 }
 
+function getActivityLinkDisplayName(link?: RecentActivity["link"]): string {
+	if (link?.title?.trim()) {
+		return link.title.trim();
+	}
+	const slug = link?.alias || link?.shortCode;
+	if (slug) {
+		return slug.startsWith("/") ? slug : `/${slug}`;
+	}
+	return __("Unknown");
+}
+
 function getActivityMessage(activity: RecentActivity): string {
-	const linkName = getLinkDisplayTitle(
-		activity.link?.title,
-		activity.link?.shortCode || __("Unknown")
-	);
+	const linkName = getActivityLinkDisplayName(activity.link);
 	const userName = getActivityPersonName(activity.user) || __("Unknown user");
 
 	switch (activity.type) {
 		case "link_created":
-			return sprintf(__("Created new link %s"), linkName);
+			return sprintf(__('Created new link "%s"'), linkName);
 		case "link_updated":
-			return sprintf(__("Updated link %s"), linkName);
+			return sprintf(__('Updated link "%s"'), linkName);
 		case "link_deleted":
-			return sprintf(__("Deleted link %s"), linkName);
+			return sprintf(__('Permanently deleted link "%s"'), linkName);
+		case "link_trashed":
+			return sprintf(__('Moved link "%s" to trash'), linkName);
+		case "link_restored":
+			return sprintf(__('Restored link "%s"'), linkName);
+		case "trash_emptied": {
+			const count = activity.count;
+			if (typeof count === "number" && count > 0) {
+				return count === 1
+					? __("Permanently deleted 1 link from trash")
+					: sprintf(
+							__("Permanently deleted %s links from trash"),
+							String(count)
+						);
+			}
+			return activity.message || __("Emptied links from trash");
+		}
 		case "user_created":
-			return sprintf(__("Created user %s"), userName);
+			return sprintf(__('Created user "%s"'), userName);
 		case "user_updated":
-			return sprintf(__("Updated user %s"), userName);
+			return sprintf(__('Updated user "%s"'), userName);
 		case "user_deleted":
-			return sprintf(__("Deleted user %s"), userName);
+			return sprintf(__('Deleted user "%s"'), userName);
 		case "click": {
 			const location = activity.location
 				? sprintf(
@@ -166,11 +198,11 @@ function getActivityMessage(activity: RecentActivity): string {
 				: "";
 
 			return location
-				? sprintf(__("Link %1$s was clicked %2$s"), [
+				? sprintf(__('Link "%1$s" was clicked %2$s'), [
 						linkName,
 						location,
 					])
-				: sprintf(__("Link %s was clicked"), linkName);
+				: sprintf(__('Link "%s" was clicked'), linkName);
 		}
 		default:
 			return activity.message || __("Unknown activity");
@@ -187,6 +219,12 @@ function getActivityVisual(type?: string | null): {
 		case "link_updated":
 			return { icon: PencilLine, tone: "info" };
 		case "link_deleted":
+			return { icon: Trash2, tone: "danger" };
+		case "link_trashed":
+			return { icon: Trash2, tone: "danger" };
+		case "link_restored":
+			return { icon: RotateCcw, tone: "success" };
+		case "trash_emptied":
 			return { icon: Trash2, tone: "danger" };
 		case "user_created":
 			return { icon: UserPlus, tone: "user" };
@@ -399,6 +437,51 @@ function ActivityPage() {
 		useBulkDeleteActivityLogsMutation();
 	const [clearActivityLogs, { isLoading: isClearingAllActivities }] =
 		useClearActivityLogsMutation();
+	const [restoreActivityLink, { isLoading: isRestoringLink }] =
+		useRestoreActivityLinkMutation();
+
+	const handleRestoreActivityLink = async (activity: RecentActivity) => {
+		if (!activity.id) {
+			return;
+		}
+
+		if (activity.linkStatus === "active") {
+			notifications.info(
+				__("Link already active"),
+				__(
+					"This link is already active and does not need to be restored."
+				)
+			);
+			return;
+		}
+
+		if (
+			activity.linkStatus === "deleted" ||
+			activity.isRestorable === false
+		) {
+			notifications.info(
+				__("Link permanently deleted"),
+				__("This link was permanently deleted and cannot be restored.")
+			);
+			return;
+		}
+
+		try {
+			await restoreActivityLink(activity.id).unwrap();
+			notifications.success(
+				__("Link restored"),
+				__("The link has been restored successfully.")
+			);
+		} catch (err) {
+			notifications.error(
+				__("Unable to restore link"),
+				getErrorMessage(
+					err,
+					__("Failed to restore link from activity record.")
+				)
+			);
+		}
+	};
 
 	const items = historyRes?.data?.items ?? EMPTY_ACTIVITY_ITEMS;
 	const meta = {
@@ -1032,6 +1115,18 @@ function ActivityPage() {
 																		value: linkName,
 																	}
 																: null,
+															activity.link
+																?.destinationUrl
+																? {
+																		key: "destination",
+																		label: __(
+																			"Destination"
+																		),
+																		value: activity
+																			.link
+																			.destinationUrl,
+																	}
+																: null,
 															userName
 																? {
 																		key: "user",
@@ -1199,6 +1294,81 @@ function ActivityPage() {
 																</div>
 																{isAdmin ? (
 																	<div className="activity-page-event-actions">
+																		{activity.id &&
+																		activity
+																			.link
+																			?.destinationUrl &&
+																		("link_deleted" ===
+																			activity.type ||
+																			"link_trashed" ===
+																				activity.type)
+																			? (() => {
+																					const isRestorable =
+																						activity.isRestorable ===
+																							true &&
+																						activity.linkStatus ===
+																							"trashed";
+																					const isAlreadyActive =
+																						activity.linkStatus ===
+																						"active";
+																					const isPermanentlyDeleted =
+																						activity.linkStatus ===
+																							"deleted" ||
+																						activity.type ===
+																							"link_deleted";
+
+																					if (
+																						isPermanentlyDeleted &&
+																						!isRestorable
+																					) {
+																						return null;
+																					}
+
+																					return (
+																						<button
+																							type="button"
+																							onClick={() =>
+																								handleRestoreActivityLink(
+																									activity
+																								)
+																							}
+																							disabled={
+																								!isRestorable ||
+																								isRestoringLink
+																							}
+																							className={cn(
+																								"activity-page-event-action activity-page-event-action-restore",
+																								!isRestorable &&
+																									"pointer-events-none cursor-not-allowed opacity-30"
+																							)}
+																							aria-label={
+																								isAlreadyActive
+																									? __(
+																											"Link is already active"
+																										)
+																									: __(
+																											"Restore link"
+																										)
+																							}
+																							title={
+																								isAlreadyActive
+																									? __(
+																											"Link is already active"
+																										)
+																									: __(
+																											"Restore link"
+																										)
+																							}
+																						>
+																							<RotateCcw
+																								size={
+																									15
+																								}
+																							/>
+																						</button>
+																					);
+																				})()
+																			: null}
 																		{activity.id ? (
 																			<button
 																				type="button"

@@ -264,6 +264,9 @@ interface GetUrlsQueryBaseArgs {
 	/** Sort direction applied by the API. */
 	sortOrder?: LinksSortOrder;
 
+	/** Optional status filter applied by the API. */
+	status?: "all" | "active" | "inactive" | "trashed";
+
 	/** Optional search term forwarded to the API. */
 	search?: string;
 }
@@ -538,6 +541,9 @@ export interface SaveGeneralSettingsPayload {
 
 	/** Target URL when landingPageMode is 'url'. */
 	landingPageUrl?: string;
+
+	/** Trash auto-delete retention period in days (0 for never). */
+	trashRetentionDays?: number;
 }
 
 /**
@@ -566,6 +572,7 @@ export type {
 	EmailStatus,
 	GeoipConfigurationPayload,
 	LinkLocationPayload,
+	LinkRecord,
 	LinkStatsResponse,
 	LocationDataStatus,
 	MailConfigurationPayload,

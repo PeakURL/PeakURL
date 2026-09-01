@@ -10,13 +10,19 @@ import { isDocumentRtl } from "@/i18n/direction";
 
 import type { DeleteLinkModalProps } from "../types";
 
-function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
+function DeleteLinkModal({
+	open,
+	setOpen,
+	link,
+	isTrashTab = false,
+}: DeleteLinkModalProps) {
 	const direction = isDocumentRtl() ? "rtl" : "ltr";
 	const [error, setError] = useState("");
 	const [deleteUrl, { isLoading }] = useDeleteUrlMutation();
 	const shortUrl = link ? getShortUrl(link) : "";
 	const totalClicks = Number(link?.clicks || 0);
 	const uniqueClicks = Number(link?.uniqueClicks || 0);
+	const isPermanent = isTrashTab || link?.status === "trashed";
 
 	const handleDelete = async () => {
 		if (!link) {
@@ -28,9 +34,20 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 		setOpen(false);
 
 		try {
-			await deleteUrl(linkId).unwrap();
+			if (isPermanent) {
+				await deleteUrl({ id: linkId, force: true }).unwrap();
+			} else {
+				await deleteUrl(linkId).unwrap();
+			}
 		} catch (err) {
-			setError(getErrorMessage(err, __("Failed to delete link")));
+			setError(
+				getErrorMessage(
+					err,
+					isPermanent
+						? __("Failed to permanently delete link")
+						: __("Failed to move link to trash")
+				)
+			);
 		}
 	};
 
@@ -51,7 +68,9 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 							<div className="links-modal-title-icon links-delete-modal-title-icon">
 								<AlertTriangle className="links-delete-modal-title-icon-svg" />
 							</div>
-							{__("Delete Link")}
+							{isPermanent
+								? __("Delete Link Permanently")
+								: __("Move to Trash")}
 						</DialogTitle>
 						<button
 							onClick={() => setOpen(false)}
@@ -72,9 +91,13 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 						)}
 
 						<p className="links-delete-modal-copy">
-							{__(
-								"Are you sure you want to delete this link? This action cannot be undone."
-							)}
+							{isPermanent
+								? __(
+										"Are you sure you want to delete this link permanently? This action cannot be undone."
+									)
+								: __(
+										"Are you sure you want to move this link to the trash? You can restore it later."
+									)}
 						</p>
 
 						{/* Link Info */}
@@ -145,7 +168,9 @@ function DeleteLinkModal({ open, setOpen, link }: DeleteLinkModalProps) {
 								) : (
 									<span className="links-modal-button-content">
 										<Trash2 className="links-modal-button-icon" />
-										{__("Delete")}
+										{isPermanent
+											? __("Delete Permanently")
+											: __("Move to Trash")}
 									</span>
 								)}
 							</button>

@@ -476,7 +476,7 @@ class SchemaSpecs {
 				),
 				array(
 					'name'       => 'fk_audit_logs_link_id',
-					'definition' => 'FOREIGN KEY (link_id) REFERENCES urls (id) ON DELETE CASCADE',
+					'definition' => 'FOREIGN KEY (link_id) REFERENCES urls (id) ON DELETE SET NULL',
 				),
 			),
 			'webhooks'   => array(

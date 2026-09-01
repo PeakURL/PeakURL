@@ -161,6 +161,14 @@ export const API_ROUTES = {
 			apiPath("analytics", "url", encodeApiParam(id), "stats"),
 
 		/**
+		 * Relative API path: `analytics/activity/{id}/restore`.
+		 *
+		 * Restores a link from an activity log entry.
+		 */
+		restoreActivityLink: (id: ApiPathPart) =>
+			apiPath("analytics", "activity", encodeApiParam(id), "restore"),
+
+		/**
 		 * Relative API path: `analytics/recent-clicks`.
 		 *
 		 * Loads the recent clicks feed.
@@ -422,9 +430,16 @@ export const API_ROUTES = {
 		/**
 		 * Relative API path: `urls/bulk`.
 		 *
-		 * Imports or deletes multiple short links in one request.
+		 * Bulk creates or deletes short links.
 		 */
 		bulk: apiPath("urls", "bulk"),
+
+		/**
+		 * Relative API path: `urls/restore`.
+		 *
+		 * Bulk restores trashed short links.
+		 */
+		bulkRestore: apiPath("urls", "restore"),
 
 		/**
 		 * Relative API path: `urls/{id}`.
@@ -446,6 +461,21 @@ export const API_ROUTES = {
 		 * Lists or creates short links.
 		 */
 		index: apiPath("urls"),
+
+		/**
+		 * Relative API path: `urls/{id}/restore`.
+		 *
+		 * Restores one trashed short link by ID.
+		 */
+		restore: (id: ApiPathPart) =>
+			apiPath("urls", encodeApiParam(id), "restore"),
+
+		/**
+		 * Relative API path: `urls/trash`.
+		 *
+		 * Permanently empties all trashed short links.
+		 */
+		trash: apiPath("urls", "trash"),
 	},
 
 	/**

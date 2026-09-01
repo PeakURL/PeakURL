@@ -23,10 +23,12 @@ function ActiveSessions({
 			<hr className="settings-separator" />
 			<div dir={direction} className="settings-security-sessions-header">
 				<p className="settings-group-description mb-0! mt-0!">
-					{sprintf(
-						__("%s active session(s)"),
-						String(sessions.length)
-					)}
+					{sessions.length === 1
+						? __("1 active session")
+						: sprintf(
+								__("%s active sessions"),
+								String(sessions.length)
+							)}
 				</p>
 				{otherActiveSessions.length > 0 ? (
 					<Button

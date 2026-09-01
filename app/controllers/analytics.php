@@ -231,4 +231,23 @@ class AnalyticsController extends BaseController {
 			__( 'Link analytics loaded.', 'peakurl' ),
 		);
 	}
+
+	/**
+	 * Restore a link from an activity log entry.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> JSON envelope with restored link.
+	 * @since 1.6.0
+	 */
+	public function restore_link( Request $request ): array {
+		$item = $this->data_store->restore_activity_link(
+			$request,
+			$this->route_param( $request, 'id' ),
+		);
+
+		return $this->success_response(
+			$item,
+			__( 'Link restored successfully.', 'peakurl' ),
+		);
+	}
 }

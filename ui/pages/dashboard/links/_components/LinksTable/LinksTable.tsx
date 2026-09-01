@@ -29,6 +29,11 @@ const LinksTable = ({
 	statsLink,
 	clickRange,
 	customClickRange,
+	isTrashTab = false,
+	trashedCount = 0,
+	onRestore,
+	onBulkRestore,
+	onEmptyTrash,
 }: LinksTableProps) => {
 	const [copiedId, setCopiedId] = useState<string | null>(null);
 	const [statsDrawerOpen, setStatsDrawerOpen] = useState(false);
@@ -37,6 +42,7 @@ const LinksTable = ({
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
 	const [deleteAllModalOpen, setDeleteAllModalOpen] = useState(false);
+	const [emptyTrashModalOpen, setEmptyTrashModalOpen] = useState(false);
 	const [selectedLink, setSelectedLink] = useState<LinkRecord | null>(null);
 	const [selectedIds, setSelectedIds] = useState<string[]>([]);
 	const [searchParams, setSearchParams] = useSearchParams();
@@ -53,17 +59,24 @@ const LinksTable = ({
 					linkItem.alias === statsShortId
 			) || statsLink;
 
-		if (!link) return;
+		const params = new URLSearchParams(searchParams.toString());
+		params.delete("stats");
+		setSearchParams(params, { replace: true });
+
+		if (!link || link.status === "trashed" || isTrashTab) return;
 
 		setTimeout(() => {
 			setSelectedLink(link);
 			setStatsDrawerOpen(true);
 		}, 0);
-
-		const params = new URLSearchParams(searchParams.toString());
-		params.delete("stats");
-		setSearchParams(params, { replace: true });
-	}, [statsShortId, links, statsLink, searchParams, setSearchParams]);
+	}, [
+		statsShortId,
+		links,
+		statsLink,
+		isTrashTab,
+		searchParams,
+		setSearchParams,
+	]);
 
 	const handleCopy = async (link: LinkRecord) => {
 		const shortUrl = getShortUrl(link);
@@ -77,6 +90,7 @@ const LinksTable = ({
 	};
 
 	const handleOpenStats = (link: LinkRecord) => {
+		if (link.status === "trashed" || isTrashTab) return;
 		setSelectedLink(link);
 		setStatsDrawerOpen(true);
 	};
@@ -120,6 +134,16 @@ const LinksTable = ({
 		setSelectedIds([]);
 	};
 
+	const handleBulkRestoreAction = async () => {
+		if (selectedIds.length === 0) return;
+		try {
+			if (onBulkRestore) {
+				await onBulkRestore(selectedIds);
+			}
+			setSelectedIds([]);
+		} catch {}
+	};
+
 	const handleDeleteAll = async () => {
 		if (isDeletingAll) {
 			return;
@@ -155,7 +179,19 @@ const LinksTable = ({
 							selectedCount={selectedIds.length}
 							onSelectAll={handleSelectAll}
 							onBulkDelete={handleBulkDelete}
-							onDeleteAll={() => setDeleteAllModalOpen(true)}
+							onDeleteAll={
+								isTrashTab
+									? undefined
+									: () => setDeleteAllModalOpen(true)
+							}
+							onBulkRestore={handleBulkRestoreAction}
+							onEmptyTrash={
+								isTrashTab && onEmptyTrash
+									? () => setEmptyTrashModalOpen(true)
+									: undefined
+							}
+							isTrashTab={isTrashTab}
+							trashedCount={trashedCount}
 						/>
 					</thead>
 					<tbody className="links-table-body">
@@ -170,8 +206,10 @@ const LinksTable = ({
 								onOpenStats={handleOpenStats}
 								onEdit={handleEdit}
 								onDelete={handleDelete}
+								onRestore={onRestore}
 								onQRCode={handleQRCode}
 								formatNumber={formatNumber}
+								isTrashTab={isTrashTab}
 							/>
 						))}
 					</tbody>
@@ -204,11 +242,13 @@ const LinksTable = ({
 					}
 				}}
 				link={selectedLink}
+				isTrashTab={isTrashTab}
 			/>
 			<BulkDeleteModal
 				open={bulkDeleteModalOpen && selectedIds.length > 0}
 				setOpen={setBulkDeleteModalOpen}
 				selectedIds={selectedIds}
+				isTrashTab={isTrashTab}
 				onSuccess={handleBulkDeleteSuccess}
 			/>
 			<ConfirmDialog
@@ -216,12 +256,28 @@ const LinksTable = ({
 				onClose={() => setDeleteAllModalOpen(false)}
 				title={__("Delete all links")}
 				description={__(
-					"Are you sure you want to delete all links? This action cannot be undone."
+					"Are you sure you want to delete all links? This will move active links to trash."
 				)}
 				confirmText={__("Delete all links")}
 				confirmVariant="danger"
 				onConfirm={handleDeleteAll}
 				loading={isDeletingAll}
+			/>
+			<ConfirmDialog
+				open={emptyTrashModalOpen}
+				onClose={() => setEmptyTrashModalOpen(false)}
+				title={__("Empty Trash")}
+				description={__(
+					"Are you sure you want to permanently delete all links in the trash? This action cannot be undone."
+				)}
+				confirmText={__("Empty Trash")}
+				confirmVariant="danger"
+				onConfirm={async () => {
+					setEmptyTrashModalOpen(false);
+					if (onEmptyTrash) {
+						await onEmptyTrash();
+					}
+				}}
 			/>
 		</div>
 	);

@@ -74,6 +74,7 @@ trait LinksTrait {
 			'totalClicks'  => $aggregates['totalClicks'],
 			'uniqueClicks' => $aggregates['uniqueClicks'],
 			'activeLinks'  => $aggregates['activeLinks'],
+			'trashedLinks' => $this->count_trashed_links( $request ),
 		);
 
 		if ( isset( $aggregates['lastPeriodTotalClicks'] ) ) {
@@ -465,9 +466,11 @@ trait LinksTrait {
 			throw $exception;
 		}
 
+		$link_title = ! empty( $title ) ? $title : '/' . $alias;
+
 		$this->record_activity(
 			'link_created',
-			null,
+			'Created new link "' . $link_title . '"',
 			(string) $user['id'],
 			$id,
 			array(
@@ -1300,22 +1303,43 @@ trait LinksTrait {
 	}
 
 	/**
+	 * Count trashed links for the current user/scope.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return int Total trashed links.
+	 * @since 1.6.0
+	 */
+	public function count_trashed_links( Request $request ): int {
+		$user       = $this->get_current_user( $request );
+		$conditions = array( "u.status = 'trashed'" );
+		$params     = array();
+
+		$this->scope_link_visibility( $user, $conditions, $params, 'u' );
+
+		return (int) $this->db->get_var(
+			'SELECT COUNT(*) FROM urls u WHERE ' . implode( ' AND ', $conditions ),
+			$params,
+		);
+	}
+
+	/**
 	 * Delete a short URL by ID.
 	 *
-	 * Also removes associated clicks, activity records, and the stored social
-	 * preview image.
+	 * Moves the URL to trash by setting its status to 'trashed' by default.
+	 * If $force is true or the link is already in 'trashed' status, permanently deletes
+	 * the link, associated clicks, and social preview image.
 	 *
 	 * @param Request $request Incoming HTTP request.
 	 * @param string  $id      Short-URL row ID.
-	 * @return bool True if a row was deleted.
+	 * @param bool    $force   Whether to force permanent deletion.
+	 * @return bool True if a row was updated or deleted.
 	 * @since 1.0.0
 	 */
-	public function delete_url( Request $request, string $id ): bool {
+	public function delete_url( Request $request, string $id, bool $force = false ): bool {
 		$user = $this->get_current_user( $request );
 		$row  = $this->db->get_row_by(
 			'urls',
 			array( 'id' => $id ),
-			array( 'id', 'user_id', 'title', 'alias', 'short_code', 'social_image_path' ),
 		);
 
 		if ( ! $row ) {
@@ -1330,14 +1354,64 @@ trait LinksTrait {
 			__( 'You do not have permission to delete this link.', 'peakurl' ),
 		);
 
+		$is_trashed = 'trashed' === (string) ( $row['status'] ?? 'active' );
+		$permanent  = $force || $is_trashed;
+		$link_title = ! empty( $row['title'] )
+			? (string) $row['title']
+			: '/' . (string) ( $row['alias'] ?? $row['short_code'] ?? $id );
+
+		if ( ! $permanent ) {
+			/**
+			 * Fires before a short link is moved to trash.
+			 *
+			 * @param array<string, mixed> $row     Database link row.
+			 * @param Request              $request Incoming request.
+			 * @param array<string, mixed> $user    Current user row.
+			 * @since 1.6.0
+			 */
+			\do_action( 'pre_trash_link', $row, $request, $user );
+
+			$updated = $this->db->update(
+				'urls',
+				array(
+					'status'     => 'trashed',
+					'updated_at' => $this->now(),
+				),
+				array( 'id' => $id ),
+			) > 0;
+
+			if ( $updated ) {
+				$this->record_activity(
+					'link_trashed',
+					'Moved link "' . $link_title . '" to trash',
+					(string) $user['id'],
+					$id,
+					array(
+						'link' => $this->get_link_activity_meta( $row ),
+					),
+				);
+
+				/**
+				 * Fires after a short link is moved to trash.
+				 *
+				 * @param array<string, mixed> $row     Database link row.
+				 * @param Request              $request Incoming request.
+				 * @param array<string, mixed> $user    Current user row.
+				 * @since 1.6.0
+				 */
+				\do_action( 'link_trashed', $row, $request, $user );
+			}
+
+			return $updated;
+		}
+
 		/**
 		 * Fires before a short link is deleted.
-		 *
-		 * @since 1.2.2
 		 *
 		 * @param array<string, mixed> $row     Database link row.
 		 * @param Request              $request Incoming request.
 		 * @param array<string, mixed> $user    Current user row.
+		 * @since 1.2.2
 		 */
 		\do_action( 'pre_delete_link', $row, $request, $user );
 
@@ -1346,7 +1420,7 @@ trait LinksTrait {
 		try {
 			$this->record_activity(
 				'link_deleted',
-				'Deleted link ' . (string) ( $row['alias'] ?? $row['short_code'] ?? $id ) . '.',
+				'Permanently deleted link "' . $link_title . '"',
 				(string) $user['id'],
 				null,
 				array(
@@ -1354,8 +1428,11 @@ trait LinksTrait {
 				),
 			);
 
-			$this->db->delete(
+			$this->db->update(
 				'audit_logs',
+				array(
+					'link_id' => null,
+				),
 				array(
 					'link_id' => $id,
 				),
@@ -1390,13 +1467,12 @@ trait LinksTrait {
 			);
 
 			/**
-			 * Fires after a short link has been deleted.
+			 * Fires after a short link is permanently deleted.
 			 *
-			 * @since 1.2.2
-			 *
-			 * @param array<string, mixed> $row     Deleted database row.
+			 * @param array<string, mixed> $row     Database link row.
 			 * @param Request              $request Incoming request.
 			 * @param array<string, mixed> $user    Current user row.
+			 * @since 1.2.2
 			 */
 			\do_action( 'link_deleted', $row, $request, $user );
 		}
@@ -1405,17 +1481,91 @@ trait LinksTrait {
 	}
 
 	/**
-	 * Bulk-delete short URLs by an array of IDs.
+	 * Restore a trashed short URL by ID.
 	 *
-	 * Also removes associated clicks, activity records, and stored social
-	 * preview images.
+	 * @param Request $request Incoming HTTP request.
+	 * @param string  $id      Short-URL row ID.
+	 * @return array<string, mixed> Formatted restored URL item.
+	 * @since 1.6.0
+	 */
+	public function restore_url( Request $request, string $id ): array {
+		$user = $this->get_current_user( $request );
+		$row  = $this->db->get_row_by(
+			'urls',
+			array( 'id' => $id ),
+		);
+
+		if ( ! $row ) {
+			throw new ApiException(
+				__( 'That short link does not exist.', 'peakurl' ),
+				404,
+			);
+		}
+
+		if ( 'active' === ( $row['status'] ?? '' ) ) {
+			throw new ApiException(
+				__( 'This link is already active.', 'peakurl' ),
+				400,
+			);
+		}
+
+		$this->validate_record_access(
+			$user,
+			(string) ( $row['user_id'] ?? '' ),
+			'edit_own_links',
+			'edit_all_links',
+			__( 'You do not have permission to restore this link.', 'peakurl' ),
+		);
+
+		$now = $this->now();
+		$this->db->update(
+			'urls',
+			array(
+				'status'     => 'active',
+				'updated_at' => $now,
+			),
+			array( 'id' => $id ),
+		);
+
+		$row['status']     = 'active';
+		$row['updated_at'] = $now;
+		$link_title        = ! empty( $row['title'] )
+			? (string) $row['title']
+			: '/' . (string) ( $row['alias'] ?? $row['short_code'] ?? $id );
+
+		$this->record_activity(
+			'link_restored',
+			'Restored link "' . $link_title . '"',
+			(string) $user['id'],
+			$id,
+			array(
+				'link' => $this->get_link_activity_meta( $row ),
+			),
+		);
+
+		/**
+		 * Fires after a short link is restored from trash.
+		 *
+		 * @param array<string, mixed> $row     Database link row.
+		 * @param Request              $request Incoming request.
+		 * @param array<string, mixed> $user    Current user row.
+		 * @since 1.6.0
+		 */
+		\do_action( 'link_restored', $row, $request, $user );
+
+		return $this->format_url( $row );
+	}
+
+	/**
+	 * Bulk-delete or bulk-trash short URLs by an array of IDs.
 	 *
 	 * @param Request            $request Incoming HTTP request.
 	 * @param array<int, string> $ids     Short-URL row IDs.
-	 * @return int Number of rows deleted.
+	 * @param bool               $force   Whether to force permanent deletion.
+	 * @return int Number of rows processed.
 	 * @since 1.0.0
 	 */
-	public function bulk_delete_urls( Request $request, array $ids ): int {
+	public function bulk_delete_urls( Request $request, array $ids, bool $force = false ): int {
 		$user = $this->get_current_user( $request );
 		$ids  = Query::string_ids( $ids );
 
@@ -1451,20 +1601,86 @@ trait LinksTrait {
 			return 0;
 		}
 
+		$target_rows = $this->db->get_results_where_in(
+			'urls',
+			'id',
+			$allowed_ids,
+		);
+
+		if ( empty( $target_rows ) ) {
+			return 0;
+		}
+
+		$all_trashed = true;
+		foreach ( $target_rows as $target_row ) {
+			if ( 'trashed' !== (string) ( $target_row['status'] ?? 'active' ) ) {
+				$all_trashed = false;
+				break;
+			}
+		}
+
+		$permanent = $force || $all_trashed;
+
+		if ( ! $permanent ) {
+			$now         = $this->now();
+			$trashed_ids = array();
+
+			foreach ( $target_rows as $row ) {
+				$row_id = (string) ( $row['id'] ?? '' );
+				if ( '' === $row_id ) {
+					continue;
+				}
+
+				$this->db->update(
+					'urls',
+					array(
+						'status'     => 'trashed',
+						'updated_at' => $now,
+					),
+					array( 'id' => $row_id ),
+				);
+
+				$link_title = ! empty( $row['title'] )
+					? (string) $row['title']
+					: '/' . (string) ( $row['alias'] ?? $row['short_code'] ?? $row_id );
+
+				$this->record_activity(
+					'link_trashed',
+					'Moved link "' . $link_title . '" to trash',
+					(string) $user['id'],
+					$row_id,
+					array(
+						'link' => $this->get_link_activity_meta( $row ),
+					),
+				);
+
+				$trashed_ids[] = $row_id;
+
+				/**
+				 * Fires after a short link is moved to trash.
+				 *
+				 * @param array<string, mixed> $row     Database link row.
+				 * @param Request              $request Incoming request.
+				 * @param array<string, mixed> $user    Current user row.
+				 * @since 1.6.0
+				 */
+				\do_action( 'link_trashed', $row, $request, $user );
+			}
+
+			return count( $trashed_ids );
+		}
+
 		$this->db->begin_transaction();
 
 		try {
-			$deleted_rows = $this->db->get_results_where_in(
-				'urls',
-				'id',
-				$allowed_ids,
-				array( 'id', 'title', 'alias', 'short_code', 'social_image_path' ),
-			);
+			foreach ( $target_rows as $deleted_row ) {
+				$link_title = ! empty( $deleted_row['title'] )
+					? (string) $deleted_row['title']
+					: '/' . (string) ( $deleted_row['alias'] ?? $deleted_row['short_code'] ?? $deleted_row['id'] );
 
-			foreach ( $deleted_rows as $deleted_row ) {
 				$this->record_activity(
 					'link_deleted',
-					'Deleted link ' . (string) ( $deleted_row['alias'] ?? $deleted_row['short_code'] ?? $deleted_row['id'] ) . '.',
+					'Permanently deleted link "' . $link_title . '"',
 					(string) $user['id'],
 					null,
 					array(
@@ -1473,8 +1689,9 @@ trait LinksTrait {
 				);
 			}
 
-			$this->db->delete_where_in(
+			$this->db->update_where_in(
 				'audit_logs',
+				array( 'link_id' => null ),
 				'link_id',
 				$allowed_ids,
 			);
@@ -1494,8 +1711,20 @@ trait LinksTrait {
 			$this->db->commit();
 
 			$this->social_preview_service->delete_link_images(
-				array_column( $deleted_rows, 'social_image_path' ),
+				array_column( $target_rows, 'social_image_path' ),
 			);
+
+			foreach ( $target_rows as $deleted_row ) {
+				/**
+				 * Fires after a short link is permanently deleted.
+				 *
+				 * @param array<string, mixed> $deleted_row Database link row.
+				 * @param Request              $request     Incoming request.
+				 * @param array<string, mixed> $user        Current user row.
+				 * @since 1.2.2
+				 */
+				\do_action( 'link_deleted', $deleted_row, $request, $user );
+			}
 
 			return $deleted_count;
 		} catch ( \Throwable $exception ) {
@@ -1505,6 +1734,185 @@ trait LinksTrait {
 
 			throw $exception;
 		}
+	}
+
+	/**
+	 * Bulk-restore short URLs by an array of IDs.
+	 *
+	 * @param Request            $request Incoming HTTP request.
+	 * @param array<int, string> $ids     Short-URL row IDs.
+	 * @return int Number of rows restored.
+	 * @since 1.6.0
+	 */
+	public function bulk_restore_urls( Request $request, array $ids ): int {
+		$user = $this->get_current_user( $request );
+		$ids  = Query::string_ids( $ids );
+
+		if ( empty( $ids ) ) {
+			return 0;
+		}
+
+		$allowed_ids = $ids;
+
+		if ( ! $this->roles->has_capability( $user, 'edit_all_links' ) ) {
+			if ( ! $this->roles->has_capability( $user, 'edit_own_links' ) ) {
+				throw new ApiException(
+					__( 'You do not have permission to restore links.', 'peakurl' ),
+					403,
+				);
+			}
+
+			$allowed_ids = array_map(
+				'strval',
+				$this->db->get_col_where_in(
+					'urls',
+					'id',
+					'id',
+					$ids,
+					array(
+						'user_id' => (string) $user['id'],
+					),
+				),
+			);
+		}
+
+		if ( empty( $allowed_ids ) ) {
+			return 0;
+		}
+
+		$target_rows = $this->db->get_results_where_in(
+			'urls',
+			'id',
+			$allowed_ids,
+		);
+
+		if ( empty( $target_rows ) ) {
+			return 0;
+		}
+
+		$now            = $this->now();
+		$restored_count = 0;
+
+		foreach ( $target_rows as $row ) {
+			$row_id = (string) ( $row['id'] ?? '' );
+			if ( '' === $row_id ) {
+				continue;
+			}
+
+			$this->db->update(
+				'urls',
+				array(
+					'status'     => 'active',
+					'updated_at' => $now,
+				),
+				array( 'id' => $row_id ),
+			);
+
+			$row['status']     = 'active';
+			$row['updated_at'] = $now;
+			$link_title        = ! empty( $row['title'] )
+				? (string) $row['title']
+				: '/' . (string) ( $row['alias'] ?? $row['short_code'] ?? $row_id );
+
+			$this->record_activity(
+				'link_restored',
+				'Restored link "' . $link_title . '"',
+				(string) $user['id'],
+				$row_id,
+				array(
+					'link' => $this->get_link_activity_meta( $row ),
+				),
+			);
+
+			/**
+			 * Fires after a short link is restored from trash.
+			 *
+			 * @param array<string, mixed> $row     Database link row.
+			 * @param Request              $request Incoming request.
+			 * @param array<string, mixed> $user    Current user row.
+			 * @since 1.6.0
+			 */
+			\do_action( 'link_restored', $row, $request, $user );
+			++$restored_count;
+		}
+
+		return $restored_count;
+	}
+
+	/**
+	 * Permanently delete all trashed URLs and associated data.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return int Number of permanently deleted links.
+	 * @since 1.6.0
+	 */
+	public function empty_trash( Request $request ): int {
+		$user       = $this->get_current_user( $request );
+		$conditions = array( "status = 'trashed'" );
+		$params     = array();
+
+		if ( ! $this->roles->has_capability( $user, 'delete_all_links' ) ) {
+			if ( ! $this->roles->has_capability( $user, 'delete_own_links' ) ) {
+				throw new ApiException(
+					__( 'You do not have permission to delete links.', 'peakurl' ),
+					403,
+				);
+			}
+
+			$conditions[]      = 'user_id = :user_id';
+			$params['user_id'] = (string) $user['id'];
+		}
+
+		$sql         = 'SELECT * FROM urls WHERE ' . implode( ' AND ', $conditions );
+		$target_rows = $this->db->get_results( $sql, $params );
+
+		if ( empty( $target_rows ) ) {
+			return 0;
+		}
+
+		$ids = array_map(
+			static fn( array $r ): string => (string) $r['id'],
+			$target_rows,
+		);
+
+		$this->db->begin_transaction();
+
+		try {
+			$this->db->update_where_in(
+				'audit_logs',
+				array( 'link_id' => null ),
+				'link_id',
+				$ids,
+			);
+			$this->db->delete_where_in( 'clicks', 'url_id', $ids );
+			$deleted_count = $this->db->delete_where_in( 'urls', 'id', $ids );
+
+			$message = 1 === $deleted_count
+				? 'Permanently deleted 1 link from trash'
+				: sprintf( 'Permanently deleted %d links from trash', $deleted_count );
+
+			$this->record_activity(
+				'trash_emptied',
+				$message,
+				(string) $user['id'],
+				null,
+				array( 'count' => $deleted_count ),
+			);
+
+			$this->db->commit();
+		} catch ( \Throwable $exception ) {
+			if ( $this->db->in_transaction() ) {
+				$this->db->roll_back();
+			}
+
+			throw $exception;
+		}
+
+		$this->social_preview_service->delete_link_images(
+			array_column( $target_rows, 'social_image_path' ),
+		);
+
+		return $deleted_count;
 	}
 
 	/**
@@ -1590,6 +1998,23 @@ trait LinksTrait {
 			$params['search_destination'] = $search_like;
 		}
 
+		$status = trim( (string) ( $query['status'] ?? '' ) );
+
+		if ( 'trashed' === $status ) {
+			$conditions[]            = 'u.status = :status_filter';
+			$params['status_filter'] = 'trashed';
+		} elseif ( 'active' === $status ) {
+			$conditions[]            = 'u.status = :status_filter';
+			$params['status_filter'] = 'active';
+		} elseif ( 'inactive' === $status ) {
+			$conditions[]            = 'u.status = :status_filter';
+			$params['status_filter'] = 'inactive';
+		} elseif ( 'all' === $status || '' === $status ) {
+			// By default, exclude trashed links from general listing unless explicitly requested.
+			$conditions[]                    = 'u.status != :status_filter_exclude';
+			$params['status_filter_exclude'] = 'trashed';
+		}
+
 		$this->scope_link_visibility( $user, $conditions, $params, 'u' );
 
 		return array(
@@ -1636,10 +2061,10 @@ trait LinksTrait {
 	}
 
 	/**
-	 * Return lightweight link metadata for audit-log payloads.
+	 * Return rich link metadata snapshot for audit-log payloads.
 	 *
 	 * @param array<string, mixed> $link Raw link row or partial row.
-	 * @return array<string, string|null>
+	 * @return array<string, mixed>
 	 * @since 1.0.4
 	 */
 	private function get_link_activity_meta( array $link ): array {
@@ -1647,11 +2072,27 @@ trait LinksTrait {
 		$code  = trim(
 			(string) ( $link['alias'] ?? ( $link['short_code'] ?? '' ) ),
 		);
+		$alias = trim( (string) ( $link['alias'] ?? '' ) );
+		$dest  = trim( (string) ( $link['destination_url'] ?? '' ) );
 
 		return array(
-			'id'        => (string) ( $link['id'] ?? '' ),
-			'title'     => '' !== $title ? $title : null,
-			'shortCode' => '' !== $code ? $code : null,
+			'id'                => (string) ( $link['id'] ?? '' ),
+			'title'             => '' !== $title ? $title : null,
+			'shortCode'         => '' !== $code ? $code : null,
+			'alias'             => '' !== $alias ? $alias : null,
+			'destinationUrl'    => '' !== $dest ? $dest : null,
+			'status'            => (string) ( $link['status'] ?? 'active' ),
+			'utmSource'         => ! empty( $link['utm_source'] ) ? (string) $link['utm_source'] : null,
+			'utmMedium'         => ! empty( $link['utm_medium'] ) ? (string) $link['utm_medium'] : null,
+			'utmCampaign'       => ! empty( $link['utm_campaign'] ) ? (string) $link['utm_campaign'] : null,
+			'utmTerm'           => ! empty( $link['utm_term'] ) ? (string) $link['utm_term'] : null,
+			'utmContent'        => ! empty( $link['utm_content'] ) ? (string) $link['utm_content'] : null,
+			'passwordProtected' => ! empty( $link['password_value'] ),
+			'expiresAt'         => ! empty( $link['expires_at'] ) ? (string) $link['expires_at'] : null,
+			'socialTitle'       => ! empty( $link['social_title'] ) ? (string) $link['social_title'] : null,
+			'socialDescription' => ! empty( $link['social_description'] ) ? (string) $link['social_description'] : null,
+			'socialImagePath'   => ! empty( $link['social_image_path'] ) ? (string) $link['social_image_path'] : null,
+			'socialImageUrl'    => ! empty( $link['social_image_url'] ) ? (string) $link['social_image_url'] : null,
 		);
 	}
 

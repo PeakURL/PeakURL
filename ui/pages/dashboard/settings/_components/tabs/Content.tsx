@@ -203,6 +203,7 @@ const Content = ({ activeTab }: ContentProps) => {
 			removeFavicon,
 			landingPageMode: nextLandingPageMode,
 			landingPageUrl: nextLandingPageUrl,
+			trashRetentionDays: nextTrashRetentionDays,
 			...profileForm
 		} = generalForm || {};
 		const currentSiteName = (
@@ -220,6 +221,8 @@ const Content = ({ activeTab }: ContentProps) => {
 			generalSettingsResponse?.data?.landingPageMode || "html";
 		const currentLandingPageUrl =
 			generalSettingsResponse?.data?.landingPageUrl || "";
+		const currentTrashRetentionDays =
+			generalSettingsResponse?.data?.trashRetentionDays ?? 30;
 		const saveProfile = hasProfileChanges(user, profileForm);
 		const saveSiteName =
 			(generalSettingsResponse?.data?.canManageSiteSettings ?? false) &&
@@ -246,6 +249,10 @@ const Content = ({ activeTab }: ContentProps) => {
 			(generalSettingsResponse?.data?.canManageSiteSettings ?? false) &&
 			(nextLandingPageMode !== currentLandingPageMode ||
 				nextLandingPageUrl !== currentLandingPageUrl);
+		const saveTrashRetention =
+			(generalSettingsResponse?.data?.canManageSiteSettings ?? false) &&
+			nextTrashRetentionDays !== undefined &&
+			nextTrashRetentionDays !== currentTrashRetentionDays;
 		const saveGeneral =
 			saveSiteName ||
 			saveSiteTagline ||
@@ -254,6 +261,7 @@ const Content = ({ activeTab }: ContentProps) => {
 			saveTimeFormat ||
 			saveSocialPreview ||
 			saveLandingPage ||
+			saveTrashRetention ||
 			Boolean(faviconFile) ||
 			Boolean(removeFavicon);
 
@@ -287,6 +295,7 @@ const Content = ({ activeTab }: ContentProps) => {
 					removeFavicon,
 					landingPageMode: nextLandingPageMode,
 					landingPageUrl: nextLandingPageUrl,
+					trashRetentionDays: nextTrashRetentionDays,
 				}).unwrap();
 
 				updatePeakURLData({

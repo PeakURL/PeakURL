@@ -132,6 +132,9 @@ export interface SiteSettings {
 	/** Target URL when landingPageMode is 'url'. */
 	landingPageUrl?: string;
 
+	/** Trash auto-delete retention period in days (0 for never). */
+	trashRetentionDays?: number;
+
 	/** Absolute path to the content directory. */
 	contentDirectory?: string;
 }

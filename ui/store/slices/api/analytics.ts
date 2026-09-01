@@ -13,6 +13,7 @@ import type {
 	GetActivityHistoryQueryArgs,
 	LinkAnalyticsArgs,
 	LinkLocationPayload,
+	LinkRecord,
 	LinkStatsResponse,
 	RecentClicksResponse,
 } from "./types";
@@ -143,6 +144,19 @@ export const analyticsApi = baseApi.injectEndpoints({
 			}),
 			invalidatesTags: ANALYTICS_TAGS,
 		}),
+		restoreActivityLink: build.mutation<
+			ApiDataResponse<LinkRecord>,
+			string
+		>({
+			query: (id) => ({
+				url: API_ROUTES.analytics.restoreActivityLink(id),
+				method: "POST",
+			}),
+			invalidatesTags: [
+				...ANALYTICS_TAGS,
+				{ type: "Urls" as const, id: "LIST" },
+			],
+		}),
 		getLinkLocation: build.query<
 			{ data?: LinkLocationPayload },
 			string | LinkAnalyticsArgs
@@ -170,6 +184,7 @@ export const {
 	useDeleteActivityLogMutation,
 	useBulkDeleteActivityLogsMutation,
 	useClearActivityLogsMutation,
+	useRestoreActivityLinkMutation,
 	useGetLinkLocationQuery,
 	useGetLinkStatsQuery,
 } = analyticsApi;

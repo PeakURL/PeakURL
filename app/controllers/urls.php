@@ -100,6 +100,7 @@ class UrlsController extends BaseController {
 					'limit'     => 25,
 					'sortBy'    => 'createdAt',
 					'sortOrder' => 'desc',
+					'status'    => 'all',
 					'search'    => '',
 					'range'     => '',
 					'from'      => '',
@@ -214,22 +215,46 @@ class UrlsController extends BaseController {
 	}
 
 	/**
-	 * Delete a URL.
+	 * Delete a short URL by ID.
 	 *
-	 * @param Request $request Request with route 'id'.
+	 * Moves the URL to trash by default. If force is passed or the link is already
+	 * in trash, permanently deletes the row.
+	 *
+	 * @param Request $request Incoming HTTP request.
 	 * @return array<string, mixed> Deletion confirmation or 404 error.
 	 * @since 1.0.0
 	 */
 	public function delete( Request $request ): array {
+		$force   = 'true' === (string) $request->get_query_param( 'force', '' ) || true === $request->get_body_param( 'force', false );
 		$deleted = $this->data_store->delete_url(
 			$request,
 			$this->route_param( $request, 'id' ),
+			$force,
 		);
 
 		return $this->delete_response(
 			$deleted,
 			__( 'URL not found.', 'peakurl' ),
 			__( 'URL deleted.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Restore a trashed short URL.
+	 *
+	 * @param Request $request Request.
+	 * @return array<string, mixed> Restored URL response.
+	 * @since 1.6.0
+	 */
+	public function restore( Request $request ): array {
+		$item = $this->data_store->restore_url(
+			$request,
+			$this->route_param( $request, 'id' ),
+		);
+
+		return $this->success_response(
+			$item,
+			__( 'Link restored successfully.', 'peakurl' ),
 		);
 	}
 
@@ -241,9 +266,11 @@ class UrlsController extends BaseController {
 	 * @since 1.0.0
 	 */
 	public function bulk_delete( Request $request ): array {
+		$force = 'true' === (string) $request->get_query_param( 'force', '' ) || true === $request->get_body_param( 'force', false );
 		$count = $this->data_store->bulk_delete_urls(
 			$request,
 			$this->body_array_param( $request, 'ids' ),
+			$force,
 		);
 
 		return $this->success_response(
@@ -251,6 +278,45 @@ class UrlsController extends BaseController {
 				'deletedCount' => $count,
 			),
 			__( 'Bulk delete complete.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Bulk restore trashed short URLs.
+	 *
+	 * @param Request $request Request with 'ids' body parameter.
+	 * @return array<string, mixed> Restored count response.
+	 * @since 1.6.0
+	 */
+	public function bulk_restore( Request $request ): array {
+		$count = $this->data_store->bulk_restore_urls(
+			$request,
+			$this->body_array_param( $request, 'ids' ),
+		);
+
+		return $this->success_response(
+			array(
+				'restoredCount' => $count,
+			),
+			__( 'Bulk restore complete.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Permanently empty all trashed URLs.
+	 *
+	 * @param Request $request Request.
+	 * @return array<string, mixed> Deleted count response.
+	 * @since 1.6.0
+	 */
+	public function empty_trash( Request $request ): array {
+		$count = $this->data_store->empty_trash( $request );
+
+		return $this->success_response(
+			array(
+				'deletedCount' => $count,
+			),
+			__( 'Trash emptied successfully.', 'peakurl' ),
 		);
 	}
 
@@ -388,10 +454,9 @@ class UrlsController extends BaseController {
 	/**
 	 * Get the public password page for a protected short link.
 	 *
-	 * @param Request              $request Current HTTP request.
-	 * @param string               $id      Short code or alias.
-	 * @param array<string, mixed> $url     Raw URL row.
-	 * @param string               $error   Optional error message.
+	 * @param Request $request Current HTTP request.
+	 * @param string  $id      Short code or alias.
+	 * @param string  $error   Optional error message.
 	 * @return string HTML page markup.
 	 * @since 1.0.0
 	 */

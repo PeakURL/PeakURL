@@ -71,12 +71,18 @@ function SecurityTab({
 				open={activeSessions.dialog.open}
 				onClose={activeSessions.dialog.onClose}
 				title={__("End all other sessions")}
-				description={sprintf(
-					__(
-						"End %s other active session(s) for this account? Any browsers or devices using them will be signed out immediately."
-					),
-					String(activeSessions.dialog.sessionCount)
-				)}
+				description={
+					activeSessions.dialog.sessionCount === 1
+						? __(
+								"End 1 other active session for this account? Any browsers or devices using it will be signed out immediately."
+							)
+						: sprintf(
+								__(
+									"End %s other active sessions for this account? Any browsers or devices using them will be signed out immediately."
+								),
+								String(activeSessions.dialog.sessionCount)
+							)
+				}
 				confirmText={__("End sessions")}
 				cancelText={__("Keep sessions")}
 				onConfirm={activeSessions.dialog.onConfirm}

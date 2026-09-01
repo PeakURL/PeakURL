@@ -14,6 +14,11 @@ export interface LinksTableProps {
 	statsLink: LinkRecord | null;
 	clickRange?: LinksDateRange;
 	customClickRange?: LinksCustomDateRange;
+	isTrashTab?: boolean;
+	trashedCount?: number;
+	onRestore?: (link: LinkRecord) => Promise<void> | void;
+	onBulkRestore?: (ids: string[]) => Promise<void> | void;
+	onEmptyTrash?: () => Promise<void> | void;
 }
 
 /**
@@ -28,8 +33,10 @@ export interface LinkRowProps {
 	onOpenStats: (link: LinkRecord) => void;
 	onEdit: (link: LinkRecord) => void;
 	onDelete: (link: LinkRecord) => void;
+	onRestore?: (link: LinkRecord) => void;
 	onQRCode: (link: LinkRecord) => void;
 	formatNumber: (value: number) => string;
+	isTrashTab?: boolean;
 }
 
 /**
@@ -40,4 +47,8 @@ export interface TableHeaderRowProps {
 	onSelectAll: (event: ChangeEvent<HTMLInputElement>) => void;
 	onBulkDelete: () => void;
 	onDeleteAll?: () => void;
+	onBulkRestore?: () => void;
+	onEmptyTrash?: () => void;
+	isTrashTab?: boolean;
+	trashedCount?: number;
 }

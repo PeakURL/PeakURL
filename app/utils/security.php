@@ -133,7 +133,7 @@ class Security {
 	 *
 	 * @param string $origin Request origin URL.
 	 * @return bool True when the origin belongs to a browser extension.
-	 * @since 1.5.4
+	 * @since 1.6.0
 	 */
 	public static function is_extension_origin( string $origin ): bool {
 		$origin = strtolower( trim( $origin ) );

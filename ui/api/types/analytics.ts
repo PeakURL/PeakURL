@@ -65,6 +65,20 @@ export interface ActivityLink {
 	id?: string | null;
 	title?: string | null;
 	shortCode?: string | null;
+	alias?: string | null;
+	destinationUrl?: string | null;
+	status?: string | null;
+	utmSource?: string | null;
+	utmMedium?: string | null;
+	utmCampaign?: string | null;
+	utmTerm?: string | null;
+	utmContent?: string | null;
+	passwordProtected?: boolean | null;
+	expiresAt?: string | null;
+	socialTitle?: string | null;
+	socialDescription?: string | null;
+	socialImagePath?: string | null;
+	socialImageUrl?: string | null;
 }
 
 /**
@@ -100,6 +114,9 @@ export interface RecentActivity {
 	actor?: ActivityPerson | null;
 	user?: ActivityPerson | null;
 	location?: ActivityLocation | null;
+	isRestorable?: boolean;
+	linkStatus?: "active" | "trashed" | "deleted" | null;
+	count?: number | null;
 }
 
 /**

@@ -1,14 +1,32 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router";
-import { CircleCheckBig, Link2, MousePointerClick, Users } from "lucide-react";
+import {
+	CircleCheckBig,
+	Link2,
+	MousePointerClick,
+	Trash2,
+	Users,
+} from "lucide-react";
 
-import { DEFAULT_PAGE_SIZE_OPTIONS, normalizePageSize } from "@/components";
-import { __ } from "@/i18n";
+import {
+	DEFAULT_PAGE_SIZE_OPTIONS,
+	normalizePageSize,
+	useNotification,
+} from "@/components";
+import { __, sprintf } from "@/i18n";
 import type { AppDispatch } from "@/store";
-import { urlsApi, useGetUrlQuery, useGetUrlsQuery } from "@/store/slices/api";
+import {
+	urlsApi,
+	useBulkRestoreUrlsMutation,
+	useEmptyTrashMutation,
+	useGetGeneralSettingsQuery,
+	useGetUrlQuery,
+	useGetUrlsQuery,
+	useRestoreUrlMutation,
+} from "@/store/slices/api";
 import type { GetUrlsQueryArgs } from "@/store/slices/api";
-import { formatCount } from "@/utils";
+import { formatCount, getErrorMessage } from "@/utils";
 
 import {
 	Header,
@@ -25,6 +43,7 @@ import type {
 	LinksMeta,
 	LinksSortBy,
 	LinksSortOrder,
+	LinksStatusFilter,
 } from "./_components/types";
 import type { GetUrlsResponse } from "./types";
 
@@ -57,8 +76,9 @@ function getDefaultCustomClickRange(): LinksCustomDateRange {
 
 function LinksPage() {
 	const dispatch = useDispatch<AppDispatch>();
+	const notifications = useNotification();
 
-	// State for Sorting and Pagination
+	// State for Sorting, Status Filter and Pagination
 	const [sortBy, setSortBy] = useState<LinksSortBy>(() =>
 		typeof window !== "undefined"
 			? (localStorage.getItem(LS_KEYS.sortBy) as LinksSortBy) ||
@@ -71,6 +91,8 @@ function LinksPage() {
 				"desc"
 			: "desc"
 	);
+	const [statusFilter, setStatusFilter] = useState<LinksStatusFilter>("all");
+	const isTrashTab = "trashed" === statusFilter;
 	const [limit, setLimit] = useState<number>(() => {
 		if (typeof window !== "undefined") {
 			return normalizePageSize(
@@ -89,7 +111,9 @@ function LinksPage() {
 	const statsShortId = searchParams.get("stats");
 	const searchQuery = searchParams.get("search")?.trim() || "";
 
-	// No need for a load effect since initial state derives from localStorage
+	const [restoreUrl] = useRestoreUrlMutation();
+	const [bulkRestoreUrls] = useBulkRestoreUrlsMutation();
+	const [emptyTrash] = useEmptyTrashMutation();
 
 	// Persist settings
 	useEffect(() => {
@@ -101,11 +125,12 @@ function LinksPage() {
 	}, [sortBy, sortOrder, limit]);
 
 	const urlsQueryArgs = useMemo<GetUrlsQueryArgs>(() => {
-		const query = {
+		const query: GetUrlsQueryArgs = {
 			page: currentPage,
 			limit,
 			sortBy,
 			sortOrder,
+			status: statusFilter,
 			search: searchQuery,
 		};
 
@@ -135,6 +160,7 @@ function LinksPage() {
 		searchQuery,
 		sortBy,
 		sortOrder,
+		statusFilter,
 	]);
 
 	const {
@@ -153,19 +179,22 @@ function LinksPage() {
 		totalClicks: typedUrlsRes?.data?.meta?.totalClicks ?? 0,
 		uniqueClicks: typedUrlsRes?.data?.meta?.uniqueClicks ?? 0,
 		activeLinks: typedUrlsRes?.data?.meta?.activeLinks ?? 0,
+		trashedLinks: typedUrlsRes?.data?.meta?.trashedLinks ?? 0,
 		lastPeriodTotalClicks: typedUrlsRes?.data?.meta?.lastPeriodTotalClicks,
 		lastPeriodUniqueClicks:
 			typedUrlsRes?.data?.meta?.lastPeriodUniqueClicks,
 	};
 	const { data: statsLinkRes, refetch: refetchStatsLookup } = useGetUrlQuery(
 		statsShortId || "",
-		{ skip: !statsShortId }
+		{ skip: !statsShortId || isTrashTab }
 	);
 	const statsLink = statsLinkRes?.data ?? null;
+	const { data: siteSettingsRes } = useGetGeneralSettingsQuery();
+	const trashRetentionDays = siteSettingsRes?.data?.trashRetentionDays ?? 30;
 	const [isRefreshing, setIsRefreshing] = useState(false);
 
-	// Reset to page 1 during render when query, pagination, or date filters change
-	const filterKey = `${searchQuery}:${limit}:${sortBy}:${sortOrder}:${clickRange}:${customClickRange.from}:${customClickRange.to}`;
+	// Reset to page 1 during render when query, pagination, status, or date filters change
+	const filterKey = `${statusFilter}:${searchQuery}:${limit}:${sortBy}:${sortOrder}:${clickRange}:${customClickRange.from}:${customClickRange.to}`;
 	const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
 	if (prevFilterKey !== filterKey) {
 		setPrevFilterKey(filterKey);
@@ -202,14 +231,53 @@ function LinksPage() {
 		}
 	};
 
-	// Filter
+	const handleRestoreLink = async (link: LinkRecord) => {
+		try {
+			await restoreUrl(link.id).unwrap();
+			notifications.success(
+				__("Link restored"),
+				__("The link has been restored to active status.")
+			);
+		} catch (err) {
+			notifications.error(
+				__("Unable to restore link"),
+				getErrorMessage(err, __("Failed to restore link."))
+			);
+		}
+	};
+
+	const handleBulkRestoreLinks = async (ids: string[]) => {
+		try {
+			await bulkRestoreUrls(ids).unwrap();
+			notifications.success(
+				__("Links restored"),
+				__("Selected links have been restored to active status.")
+			);
+		} catch (err) {
+			notifications.error(
+				__("Unable to restore links"),
+				getErrorMessage(err, __("Failed to restore selected links."))
+			);
+		}
+	};
+
+	const handleEmptyTrash = async () => {
+		try {
+			await emptyTrash().unwrap();
+			notifications.success(
+				__("Trash emptied"),
+				__("All trashed links have been permanently deleted.")
+			);
+		} catch (err) {
+			notifications.error(
+				__("Unable to empty trash"),
+				getErrorMessage(err, __("Failed to empty trash."))
+			);
+		}
+	};
+
 	const filteredLinks = apiItems;
-
-	// Sort
-	// Sorting is handled server-side
 	const sortedLinks = filteredLinks;
-
-	// Pagination
 	const totalItems = apiMeta.totalItems;
 	const totalPages = apiMeta.totalPages;
 	const startItem = (apiMeta.page - 1) * apiMeta.limit + 1;
@@ -234,10 +302,10 @@ function LinksPage() {
 		);
 	}
 
-	// Real stats based on the backend API response
 	const totalClicks = apiMeta.totalClicks ?? 0;
 	const totalUniqueClicks = apiMeta.uniqueClicks ?? 0;
 	const activeLinks = apiMeta.activeLinks ?? 0;
+	const trashedLinksCount = apiMeta.trashedLinks ?? 0;
 
 	const getPercentChange = (current: number, last: number | undefined) => {
 		if (last === undefined) return null;
@@ -356,12 +424,38 @@ function LinksPage() {
 
 			<UrlShorteningForm />
 
+			{/* Trash Info Notice - clean informational notice without redundant buttons */}
+			{isTrashTab && trashedLinksCount > 0 && (
+				<div className="links-trash-banner">
+					<div className="links-trash-banner-content">
+						<Trash2 size={16} />
+						<span>
+							{trashRetentionDays === 0
+								? __(
+										"Items in the trash are retained indefinitely until emptied."
+									)
+								: sprintf(
+										__(
+											"Items in the trash will be automatically deleted after %d days."
+										),
+										trashRetentionDays
+									)}
+						</span>
+					</div>
+				</div>
+			)}
+
 			<LinksTable
 				links={paginatedLinks}
 				statsShortId={statsShortId}
 				statsLink={statsLink}
 				clickRange={clickRange}
 				customClickRange={customClickRange}
+				isTrashTab={isTrashTab}
+				trashedCount={trashedLinksCount}
+				onRestore={handleRestoreLink}
+				onBulkRestore={handleBulkRestoreLinks}
+				onEmptyTrash={handleEmptyTrash}
 			/>
 
 			<TableFooter
@@ -373,6 +467,9 @@ function LinksPage() {
 				setSortOrder={setSortOrder}
 				limit={limit}
 				setLimit={setLimit}
+				statusFilter={statusFilter}
+				setStatusFilter={setStatusFilter}
+				trashedCount={trashedLinksCount}
 			/>
 
 			{totalPages > 1 && (

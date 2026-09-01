@@ -1,4 +1,4 @@
-import { Trash2 } from "lucide-react";
+import { RotateCcw, Trash2 } from "lucide-react";
 import { __, sprintf } from "@/i18n";
 
 import type { TableHeaderRowProps } from "../types";
@@ -8,6 +8,10 @@ function TableHeaderRow({
 	onSelectAll,
 	onBulkDelete,
 	onDeleteAll,
+	onBulkRestore,
+	onEmptyTrash,
+	isTrashTab = false,
+	trashedCount = 0,
 }: TableHeaderRowProps) {
 	const hasSelection = selectedCount > 0;
 	if (hasSelection) {
@@ -27,23 +31,58 @@ function TableHeaderRow({
 						<span className="links-table-selection-count">
 							{sprintf(__("%s selected"), String(selectedCount))}
 						</span>
-						<button
-							type="button"
-							onClick={onBulkDelete}
-							className="links-table-header-delete-selected"
-						>
-							<Trash2 size={13} />
-							<span>{__("Delete selected")}</span>
-						</button>
-						{onDeleteAll && (
-							<button
-								type="button"
-								onClick={onDeleteAll}
-								className="links-table-header-delete-all"
-							>
-								<Trash2 size={13} />
-								<span>{__("Delete all")}</span>
-							</button>
+						{isTrashTab ? (
+							<>
+								{onBulkRestore && (
+									<button
+										type="button"
+										onClick={onBulkRestore}
+										className="links-table-header-delete-selected text-primary-600 hover:text-primary-700"
+									>
+										<RotateCcw size={13} />
+										<span>{__("Restore selected")}</span>
+									</button>
+								)}
+								<button
+									type="button"
+									onClick={onBulkDelete}
+									className="links-table-header-delete-selected"
+								>
+									<Trash2 size={13} />
+									<span>{__("Delete permanently")}</span>
+								</button>
+								{onEmptyTrash && trashedCount > 0 && (
+									<button
+										type="button"
+										onClick={onEmptyTrash}
+										className="links-table-header-delete-all"
+									>
+										<Trash2 size={13} />
+										<span>{__("Empty trash")}</span>
+									</button>
+								)}
+							</>
+						) : (
+							<>
+								<button
+									type="button"
+									onClick={onBulkDelete}
+									className="links-table-header-delete-selected"
+								>
+									<Trash2 size={13} />
+									<span>{__("Delete selected")}</span>
+								</button>
+								{onDeleteAll && (
+									<button
+										type="button"
+										onClick={onDeleteAll}
+										className="links-table-header-delete-all"
+									>
+										<Trash2 size={13} />
+										<span>{__("Delete all")}</span>
+									</button>
+								)}
+							</>
 						)}
 					</div>
 				</th>

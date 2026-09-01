@@ -82,6 +82,7 @@ function getUrlsRoute({
 	limit = 25,
 	sortBy = "createdAt",
 	sortOrder = "desc",
+	status,
 	search = "",
 	range,
 	from,
@@ -92,6 +93,7 @@ function getUrlsRoute({
 		limit,
 		sortBy,
 		sortOrder,
+		status: status || undefined,
 		search: search || undefined,
 	});
 
@@ -222,19 +224,80 @@ export const urlsApi = baseApi.injectEndpoints({
 				"Analytics",
 			],
 		}),
-		deleteUrl: build.mutation<void, string>({
+		restoreUrl: build.mutation<UrlResponse, string>({
 			query: (id) => ({
-				url: API_ROUTES.urls.byId(id),
+				url: API_ROUTES.urls.restore(id),
+				method: "POST",
+			}),
+			invalidatesTags: URL_LIST_CHANGE_TAGS,
+		}),
+		bulkRestoreUrls: build.mutation<
+			{
+				success: boolean;
+				message?: string;
+				data?: { restoredCount?: number };
+			},
+			string[]
+		>({
+			query: (ids) => ({
+				url: API_ROUTES.urls.bulkRestore,
+				method: "POST",
+				body: { ids },
+			}),
+			invalidatesTags: URL_LIST_CHANGE_TAGS,
+		}),
+		emptyTrash: build.mutation<
+			{
+				success: boolean;
+				message?: string;
+				data?: { deletedCount?: number };
+			},
+			void
+		>({
+			query: () => ({
+				url: API_ROUTES.urls.trash,
 				method: "DELETE",
 			}),
 			invalidatesTags: URL_LIST_CHANGE_TAGS,
 		}),
-		bulkDeleteUrl: build.mutation<void, string[]>({
-			query: (ids) => ({
-				url: API_ROUTES.urls.bulk,
-				method: "DELETE",
-				body: { ids },
-			}),
+		deleteUrl: build.mutation<
+			void,
+			string | { id: string; force?: boolean }
+		>({
+			query: (arg) => {
+				const id = typeof arg === "string" ? arg : arg.id;
+				const force = typeof arg === "object" ? arg.force : undefined;
+				const params = createApiQueryParams({
+					force: force ? "true" : undefined,
+				});
+
+				return {
+					url: buildApiRouteWithQuery(
+						API_ROUTES.urls.byId(id),
+						params
+					),
+					method: "DELETE",
+				};
+			},
+			invalidatesTags: URL_LIST_CHANGE_TAGS,
+		}),
+		bulkDeleteUrl: build.mutation<
+			void,
+			string[] | { ids: string[]; force?: boolean }
+		>({
+			query: (arg) => {
+				const ids = Array.isArray(arg) ? arg : arg.ids;
+				const force = Array.isArray(arg) ? undefined : arg.force;
+				const params = createApiQueryParams({
+					force: force ? "true" : undefined,
+				});
+
+				return {
+					url: buildApiRouteWithQuery(API_ROUTES.urls.bulk, params),
+					method: "DELETE",
+					body: { ids, force },
+				};
+			},
 			invalidatesTags: URL_LIST_CHANGE_TAGS,
 		}),
 		clearUrls: build.mutation<void, void>({
@@ -254,6 +317,9 @@ export const {
 	useCreateUrlMutation,
 	useBulkCreateUrlMutation,
 	useUpdateUrlMutation,
+	useRestoreUrlMutation,
+	useBulkRestoreUrlsMutation,
+	useEmptyTrashMutation,
 	useDeleteUrlMutation,
 	useBulkDeleteUrlMutation,
 	useClearUrlsMutation,

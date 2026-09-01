@@ -1,11 +1,16 @@
 import { Link2, MousePointerClick } from "lucide-react";
 
 import { PageSizeControl, Select, type SelectOption } from "@/components";
-import { __ } from "@/i18n";
+import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { formatCount } from "@/utils";
 
-import type { LinksSortBy, LinksSortOrder, TableFooterProps } from "../types";
+import type {
+	LinksSortBy,
+	LinksSortOrder,
+	LinksStatusFilter,
+	TableFooterProps,
+} from "../types";
 
 const TableFooter = ({
 	totalLinks = 0,
@@ -16,8 +21,24 @@ const TableFooter = ({
 	setSortOrder,
 	limit = 15,
 	setLimit,
+	statusFilter = "all",
+	setStatusFilter,
+	trashedCount = 0,
 }: TableFooterProps) => {
 	const pageDirection = isDocumentRtl() ? "rtl" : "ltr";
+	const statusOptions: SelectOption<LinksStatusFilter>[] = [
+		{ value: "all", label: __("Status: All") },
+		{ value: "active", label: __("Status: Active") },
+		{ value: "inactive", label: __("Status: Inactive") },
+		{
+			value: "trashed",
+			label:
+				trashedCount > 0
+					? sprintf(__("Trash (%s)"), formatCount(trashedCount))
+					: __("Trash"),
+			disabled: trashedCount === 0,
+		},
+	];
 	const sortOptions: SelectOption<LinksSortBy>[] = [
 		{ value: "createdAt", label: __("Sort: Date Created") },
 		{ value: "clicks", label: __("Sort: Most Clicks") },
@@ -62,6 +83,17 @@ const TableFooter = ({
 							: "links-table-footer-filters-end"
 					}`}
 				>
+					{setStatusFilter && (
+						<Select
+							value={statusFilter}
+							onChange={setStatusFilter}
+							options={statusOptions}
+							className="links-table-footer-select"
+							ariaLabel={__("Filter links by status")}
+							buttonClassName="form-control-surface-alt form-control-compact"
+						/>
+					)}
+
 					<Select
 						value={sortBy}
 						onChange={setSortBy}

@@ -16,6 +16,7 @@ export {
 	useGetRecentClicksQuery,
 	useGetLinkLocationQuery,
 	useGetLinkStatsQuery,
+	useRestoreActivityLinkMutation,
 } from "./analytics";
 export { default as baseApi } from "./base";
 export { systemApi } from "./system";
@@ -43,12 +44,15 @@ export { urlsApi } from "./urls";
 export {
 	useBulkCreateUrlMutation,
 	useBulkDeleteUrlMutation,
+	useBulkRestoreUrlsMutation,
 	useClearUrlsMutation,
 	useCreateUrlMutation,
 	useDeleteUrlMutation,
+	useEmptyTrashMutation,
 	useGetUrlQuery,
 	useGetUrlsQuery,
 	useLazyGetUrlsExportQuery,
+	useRestoreUrlMutation,
 	useUpdateUrlMutation,
 } from "./urls";
 export { userApi } from "./user";

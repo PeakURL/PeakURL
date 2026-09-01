@@ -337,7 +337,7 @@ trait AnalyticsTrait {
 	): array {
 		$user       = $this->get_current_user( $request );
 		$category   = trim( (string) ( $query['category'] ?? '' ) );
-		$from       = 'FROM audit_logs a LEFT JOIN users actor ON actor.id = a.user_id';
+		$from       = 'FROM audit_logs a LEFT JOIN users actor ON actor.id = a.user_id LEFT JOIN urls u ON u.id = a.link_id';
 		$conditions = array();
 		$params     = array();
 
@@ -358,7 +358,6 @@ trait AnalyticsTrait {
 				);
 			}
 
-			$from                            .= ' LEFT JOIN urls u ON u.id = a.link_id';
 			$conditions[]                     = '(a.user_id = :scope_user_id_activity OR u.user_id = :scope_user_id_link)';
 			$params['scope_user_id_activity'] = (string) $user['id'];
 			$params['scope_user_id_link']     = (string) $user['id'];
@@ -386,7 +385,9 @@ trait AnalyticsTrait {
 			actor.display_name AS actor_display_name,
 			actor.username AS actor_username,
 			actor.email AS actor_email,
-			actor.role AS actor_role';
+			actor.role AS actor_role,
+			u.status AS current_link_status,
+			u.id AS current_link_id';
 	}
 
 	/**
@@ -730,6 +731,56 @@ trait AnalyticsTrait {
 				$cities,
 			),
 			'totalClicks' => $total,
+		);
+	}
+
+	/**
+	 * Restore a link from its activity log snapshot.
+	 *
+	 * If the link still exists in trash, restores its status to 'active'.
+	 * Permanently deleted links cannot be restored.
+	 *
+	 * @param Request $request     Incoming HTTP request.
+	 * @param string  $activity_id Activity log row ID.
+	 * @return array<string, mixed> Restored or recreated link item.
+	 * @since 1.6.0
+	 */
+	public function restore_activity_link( Request $request, string $activity_id ): array {
+		$user = $this->get_current_user( $request );
+		$row  = $this->db->get_row_by(
+			'audit_logs',
+			array( 'id' => $activity_id ),
+		);
+
+		if ( ! $row ) {
+			throw new ApiException(
+				__( 'Activity record not found.', 'peakurl' ),
+				404,
+			);
+		}
+
+		$metadata  = $this->decode_json( (string) ( $row['metadata'] ?? '{}' ) );
+		$link_meta = is_array( $metadata['link'] ?? null ) ? $metadata['link'] : null;
+
+		if ( ! $link_meta || empty( $link_meta['destinationUrl'] ) ) {
+			throw new ApiException(
+				__( 'No restorable link metadata found in this activity record.', 'peakurl' ),
+				422,
+			);
+		}
+
+		$link_id = trim( (string) ( $link_meta['id'] ?? '' ) );
+
+		if ( '' !== $link_id ) {
+			$existing_link = $this->db->get_row_by( 'urls', array( 'id' => $link_id ) );
+			if ( $existing_link ) {
+				return $this->restore_url( $request, $link_id );
+			}
+		}
+
+		throw new ApiException(
+			__( 'This link was permanently deleted and cannot be restored.', 'peakurl' ),
+			400,
 		);
 	}
 }

@@ -54,43 +54,43 @@
 	}
 
 	.links-modal-panel-medium {
-		@apply max-w-md;
-	}
-
-	.links-modal-panel-large {
 		@apply max-w-lg;
 	}
 
+	.links-modal-panel-large {
+		@apply max-w-xl;
+	}
+
 	.links-modal-header {
-		@apply flex items-center justify-between border-b border-stroke p-6;
+		@apply flex items-center justify-between border-b border-stroke px-6 py-4;
 	}
 
 	.links-modal-title {
-		@apply text-lg font-semibold text-heading;
+		@apply text-base sm:text-lg font-semibold text-heading;
 	}
 
 	.links-modal-title-with-icon {
-		@apply flex items-center gap-2;
+		@apply flex items-center gap-2.5;
 	}
 
 	.links-modal-title-icon {
-		@apply flex h-8 w-8 items-center justify-center rounded-lg;
+		@apply flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg;
 	}
 
 	.links-modal-close {
-		@apply rounded-lg p-2 text-text-muted transition-all hover:bg-surface-alt hover:text-heading;
+		@apply -mr-1 rounded-lg p-1.5 text-text-muted transition-all hover:bg-surface-alt hover:text-heading cursor-pointer;
 	}
 
 	.links-modal-close-icon {
-		@apply h-5 w-5;
+		@apply h-4 w-4;
 	}
 
 	.links-modal-content {
-		@apply space-y-4 p-6;
+		@apply space-y-4 px-6 py-5;
 	}
 
 	.links-modal-form {
-		@apply space-y-4 p-6;
+		@apply space-y-4 px-6 py-5;
 	}
 
 	.links-modal-alert {
@@ -114,15 +114,15 @@
 	}
 
 	.links-modal-actions {
-		@apply flex gap-3 pt-2;
+		@apply flex items-center justify-end gap-3 pt-3;
 	}
 
 	.links-modal-actions-spacious {
-		@apply flex gap-3 pt-4;
+		@apply flex items-center justify-end gap-3 pt-4;
 	}
 
 	.links-modal-button {
-		@apply flex-1 rounded-lg px-4 py-2.5 font-medium transition-all;
+		@apply inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-semibold transition-all whitespace-nowrap shrink-0 cursor-pointer;
 	}
 
 	.links-modal-button-secondary {

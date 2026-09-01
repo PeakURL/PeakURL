@@ -10,6 +10,7 @@ export type {
 } from "@/api";
 
 export type LinksDateRange = "all" | "24h" | "7d" | "30d" | "custom";
+export type LinksStatusFilter = "all" | "active" | "inactive" | "trashed";
 
 /**
  * Date-only custom range used by links analytics controls.
@@ -135,6 +136,9 @@ export interface TableFooterProps {
 	setSortOrder: (value: LinksSortOrder) => void;
 	limit?: number;
 	setLimit: (value: number) => void;
+	statusFilter?: LinksStatusFilter;
+	setStatusFilter?: (value: LinksStatusFilter) => void;
+	trashedCount?: number;
 }
 
 /**
@@ -144,6 +148,7 @@ export interface BulkDeleteModalProps {
 	open: boolean;
 	setOpen: (open: boolean) => void;
 	selectedIds: string[];
+	isTrashTab?: boolean;
 	onSuccess?: () => void;
 }
 
@@ -160,6 +165,7 @@ export interface DeletableLink {
 	domain?: unknown;
 	clicks?: number | null;
 	uniqueClicks?: number | null;
+	status?: LinkStatus | null;
 }
 
 /**
@@ -169,6 +175,7 @@ export interface DeleteLinkModalProps {
 	open: boolean;
 	setOpen: (open: boolean) => void;
 	link: DeletableLink | null;
+	isTrashTab?: boolean;
 }
 
 /**

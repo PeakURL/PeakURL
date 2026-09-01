@@ -212,6 +212,7 @@ trait SystemTrait {
 			),
 			'landingPageMode'       => $this->get_option( 'landing_page_mode' ) ? $this->get_option( 'landing_page_mode' ) : 'html',
 			'landingPageUrl'        => $this->get_option( 'landing_page_url' ) ? $this->get_option( 'landing_page_url' ) : '',
+			'trashRetentionDays'    => (int) ( $this->get_option( 'trash_retention_days' ) ?? 30 ),
 			'contentDirectory'      => $this->i18n_service->get_content_dir(),
 		);
 	}
@@ -318,6 +319,11 @@ trait SystemTrait {
 		$landing_page_url = trim( (string) ( $payload['landingPageUrl'] ?? '' ) );
 		if ( $landing_page_url !== (string) $this->get_option( 'landing_page_url' ) ) {
 			$this->update_option( 'landing_page_url', $landing_page_url );
+		}
+
+		if ( isset( $payload['trashRetentionDays'] ) ) {
+			$retention_days = max( 0, (int) $payload['trashRetentionDays'] );
+			$this->update_option( 'trash_retention_days', (string) $retention_days );
 		}
 
 		try {

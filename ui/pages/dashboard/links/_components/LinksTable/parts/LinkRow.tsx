@@ -3,6 +3,7 @@ import {
 	BarChart3,
 	Pencil,
 	Trash2,
+	RotateCcw,
 	Copy,
 	Check,
 	Lock,
@@ -25,25 +26,31 @@ function LinkRow({
 	onOpenStats,
 	onEdit,
 	onDelete,
+	onRestore,
 	onQRCode,
 	formatNumber,
+	isTrashTab = false,
 }: LinkRowProps) {
-	const statusLabel =
-		"active" === link.status
+	const isTrashed = isTrashTab || "trashed" === link.status;
+	const statusLabel = isTrashed
+		? __("Trashed")
+		: "active" === link.status
 			? __("Active")
 			: "inactive" === link.status
 				? __("Inactive")
 				: "expired" === link.status
 					? __("Expired")
 					: __("Unknown");
-	const statusColorClass =
-		"active" === link.status
+	const statusColorClass = isTrashed
+		? "text-warning"
+		: "active" === link.status
 			? "text-success"
 			: "expired" === link.status
 				? "text-error"
 				: "text-text-muted";
-	const statusDotClass =
-		"active" === link.status
+	const statusDotClass = isTrashed
+		? "bg-warning"
+		: "active" === link.status
 			? "bg-success"
 			: "expired" === link.status
 				? "bg-error"
@@ -194,34 +201,55 @@ function LinkRow({
 			</td>
 			<td className="links-row-cell">
 				<div className="links-row-actions">
-					<button
-						onClick={() => onQRCode(link)}
-						className="links-row-action links-row-action-qr"
-						title={__("QR Code")}
-					>
-						<QrCode size={14} />
-					</button>
-					<button
-						onClick={() => onOpenStats(link)}
-						className="links-row-action links-row-action-stats"
-						title={__("Analytics")}
-					>
-						<BarChart3 size={14} />
-					</button>
-					<button
-						onClick={() => onEdit(link)}
-						className="links-row-action links-row-action-edit"
-						title={__("Edit")}
-					>
-						<Pencil size={14} />
-					</button>
-					<button
-						onClick={() => onDelete(link)}
-						className="links-row-action links-row-action-delete"
-						title={__("Delete")}
-					>
-						<Trash2 size={14} />
-					</button>
+					{isTrashed ? (
+						<>
+							<button
+								onClick={() => onRestore?.(link)}
+								className="links-row-action links-row-action-restore text-primary-600 hover:text-primary-700"
+								title={__("Restore Link")}
+							>
+								<RotateCcw size={14} />
+							</button>
+							<button
+								onClick={() => onDelete(link)}
+								className="links-row-action links-row-action-delete text-error hover:text-error"
+								title={__("Delete Permanently")}
+							>
+								<Trash2 size={14} />
+							</button>
+						</>
+					) : (
+						<>
+							<button
+								onClick={() => onQRCode(link)}
+								className="links-row-action links-row-action-qr"
+								title={__("QR Code")}
+							>
+								<QrCode size={14} />
+							</button>
+							<button
+								onClick={() => onOpenStats(link)}
+								className="links-row-action links-row-action-stats"
+								title={__("Analytics")}
+							>
+								<BarChart3 size={14} />
+							</button>
+							<button
+								onClick={() => onEdit(link)}
+								className="links-row-action links-row-action-edit"
+								title={__("Edit")}
+							>
+								<Pencil size={14} />
+							</button>
+							<button
+								onClick={() => onDelete(link)}
+								className="links-row-action links-row-action-delete"
+								title={__("Delete")}
+							>
+								<Trash2 size={14} />
+							</button>
+						</>
+					)}
 				</div>
 			</td>
 		</tr>

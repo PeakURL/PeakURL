@@ -12,7 +12,7 @@ import { Link } from "react-router";
 
 import { Button } from "@/components";
 import { __, sprintf } from "@/i18n";
-import { cn, formatDate, getLinkDisplayTitle } from "@/utils";
+import { cn, formatDate } from "@/utils";
 
 import type {
 	ActivityFeedProps,
@@ -44,25 +44,43 @@ const ActivityFeed = ({
 	};
 
 	const formatActivityMessage = (activity: RecentActivity) => {
-		const linkName = getLinkDisplayTitle(
-			activity.link?.title,
-			activity.link?.shortCode || __("Unknown")
-		);
+		const linkName =
+			activity.link?.title?.trim() ||
+			(activity.link?.alias
+				? `/${activity.link.alias}`
+				: activity.link?.shortCode
+					? `/${activity.link.shortCode}`
+					: __("Unknown"));
 		const userName =
 			getActivityPersonName(activity.user) || __("Unknown user");
 
 		if (activity.type === "link_created") {
-			return sprintf(__("Created new link %s"), linkName);
+			return sprintf(__('Created new link "%s"'), linkName);
 		} else if (activity.type === "link_updated") {
-			return sprintf(__("Updated link %s"), linkName);
+			return sprintf(__('Updated link "%s"'), linkName);
 		} else if (activity.type === "link_deleted") {
-			return sprintf(__("Deleted link %s"), linkName);
+			return sprintf(__('Permanently deleted link "%s"'), linkName);
+		} else if (activity.type === "link_trashed") {
+			return sprintf(__('Moved link "%s" to trash'), linkName);
+		} else if (activity.type === "link_restored") {
+			return sprintf(__('Restored link "%s"'), linkName);
+		} else if (activity.type === "trash_emptied") {
+			const count = activity.count;
+			if (typeof count === "number" && count > 0) {
+				return count === 1
+					? __("Permanently deleted 1 link from trash")
+					: sprintf(
+							__("Permanently deleted %s links from trash"),
+							String(count)
+						);
+			}
+			return activity.message || __("Emptied links from trash");
 		} else if (activity.type === "user_created") {
-			return sprintf(__("Created user %s"), userName);
+			return sprintf(__('Created user "%s"'), userName);
 		} else if (activity.type === "user_updated") {
-			return sprintf(__("Updated user %s"), userName);
+			return sprintf(__('Updated user "%s"'), userName);
 		} else if (activity.type === "user_deleted") {
-			return sprintf(__("Deleted user %s"), userName);
+			return sprintf(__('Deleted user "%s"'), userName);
 		} else if (activity.type === "click") {
 			const location = activity.location
 				? sprintf(
@@ -73,11 +91,11 @@ const ActivityFeed = ({
 					)
 				: "";
 			return location
-				? sprintf(__("Link %1$s was clicked %2$s"), [
+				? sprintf(__('Link "%1$s" was clicked %2$s'), [
 						linkName,
 						location,
 					])
-				: sprintf(__("Link %s was clicked"), linkName);
+				: sprintf(__('Link "%s" was clicked'), linkName);
 		}
 		return activity.message || __("Unknown activity");
 	};
@@ -85,9 +103,11 @@ const ActivityFeed = ({
 	const getActivityIconWrapperClassName = (type?: string | null) =>
 		cn(
 			"dashboard-activity-item-icon",
-			"link_created" === type && "dashboard-activity-item-icon-link",
+			("link_created" === type || "link_restored" === type) &&
+				"dashboard-activity-item-icon-link",
 			"link_updated" === type && "dashboard-activity-item-icon-link",
-			"link_deleted" === type && "dashboard-activity-item-icon-danger",
+			("link_deleted" === type || "link_trashed" === type) &&
+				"dashboard-activity-item-icon-danger",
 			"click" === type && "dashboard-activity-item-icon-click",
 			("user_created" === type || "user_updated" === type) &&
 				"dashboard-activity-item-icon-user",
@@ -95,6 +115,8 @@ const ActivityFeed = ({
 			"link_created" !== type &&
 				"link_updated" !== type &&
 				"link_deleted" !== type &&
+				"link_trashed" !== type &&
+				"link_restored" !== type &&
 				"click" !== type &&
 				"user_created" !== type &&
 				"user_updated" !== type &&
@@ -103,13 +125,13 @@ const ActivityFeed = ({
 		);
 
 	const getActivityIcon = (type?: string | null) => {
-		if (type === "link_created") {
+		if (type === "link_created" || type === "link_restored") {
 			return <Link2 className="dashboard-activity-item-icon-glyph" />;
 		} else if (type === "link_updated") {
 			return (
 				<PencilLine className="dashboard-activity-item-icon-glyph" />
 			);
-		} else if (type === "link_deleted") {
+		} else if (type === "link_deleted" || type === "link_trashed") {
 			return <Trash2 className="dashboard-activity-item-icon-glyph" />;
 		} else if (type === "click") {
 			return (

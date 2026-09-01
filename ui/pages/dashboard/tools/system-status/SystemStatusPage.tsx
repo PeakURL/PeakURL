@@ -585,7 +585,12 @@ function SystemStatusPage() {
 				? __("Upgrade Recommended")
 				: __("Current"),
 			helperText: schemaIssuesCount
-				? `${schemaIssuesCount} ${__("issue(s) detected")}`
+				? Number(schemaIssuesCount) === 1
+					? __("1 issue detected")
+					: sprintf(
+							__("%s issues detected"),
+							String(schemaIssuesCount)
+						)
 				: "",
 		},
 	];

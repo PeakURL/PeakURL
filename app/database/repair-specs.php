@@ -96,10 +96,10 @@ class RepairSpecs {
 					AND u.id IS NULL',
 			),
 			array(
-				'label' => __( 'Removed orphaned audit-log links.', 'peakurl' ),
-				'sql'   => 'DELETE al
-					FROM audit_logs AS al
+				'label' => __( 'Cleared orphaned audit-log links.', 'peakurl' ),
+				'sql'   => 'UPDATE audit_logs AS al
 					LEFT JOIN urls AS url ON al.link_id = url.id
+					SET al.link_id = NULL
 					WHERE al.link_id IS NOT NULL
 					AND url.id IS NULL',
 			),

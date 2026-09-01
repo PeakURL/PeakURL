@@ -79,6 +79,9 @@ function GeneralTab({
 	const [landingPageUrl, setLandingPageUrl] = useState(
 		siteSettings?.landingPageUrl || ""
 	);
+	const [trashRetentionDays, setTrashRetentionDays] = useState<number>(
+		siteSettings?.trashRetentionDays ?? 30
+	);
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const socialPreviewInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -100,6 +103,7 @@ function GeneralTab({
 		setSiteTagline(siteSettings?.siteTagline || defaultSiteTagline);
 		setLandingPageMode(siteSettings?.landingPageMode || "html");
 		setLandingPageUrl(siteSettings?.landingPageUrl || "");
+		setTrashRetentionDays(siteSettings?.trashRetentionDays ?? 30);
 		setFaviconFile(null);
 		setRemoveFavicon(false);
 		setSocialPreviewFile(null);
@@ -127,6 +131,7 @@ function GeneralTab({
 			siteTimeFormat,
 			landingPageMode,
 			landingPageUrl,
+			trashRetentionDays,
 			socialPreviewFile,
 			removeSocialPreviewImage,
 			faviconFile,
@@ -161,6 +166,14 @@ function GeneralTab({
 	const timeFormatOptions: SelectOption<SiteTimeFormat>[] = [
 		{ value: "12", label: __("12-hour (AM/PM)") },
 		{ value: "24", label: __("24-hour") },
+	];
+	const trashRetentionOptions: SelectOption<string>[] = [
+		{ value: "7", label: __("7 days") },
+		{ value: "14", label: __("14 days") },
+		{ value: "30", label: __("30 days (Default)") },
+		{ value: "60", label: __("60 days") },
+		{ value: "90", label: __("90 days") },
+		{ value: "0", label: __("Never (Keep indefinitely)") },
 	];
 	const landingPageModeOptions: SelectOption<"login" | "url" | "html">[] = [
 		{ value: "html", label: __("Default (Landing Page)") },
@@ -460,6 +473,24 @@ function GeneralTab({
 									isUpdating
 								}
 								ariaLabel={__("Time format")}
+							/>
+						</div>
+						<div className="settings-general-field">
+							<label className="settings-section-label">
+								{__("Trash Retention Period")}
+							</label>
+							<Select
+								value={String(trashRetentionDays)}
+								onChange={(val) =>
+									setTrashRetentionDays(Number(val))
+								}
+								options={trashRetentionOptions}
+								disabled={
+									isLoadingSiteSettings ||
+									!siteSettings?.canManageSiteSettings ||
+									isUpdating
+								}
+								ariaLabel={__("Trash retention period")}
 							/>
 						</div>
 					</div>

@@ -45,8 +45,8 @@ msgid "Cleared orphaned audit-log users."
 msgstr "Εκκαθαρίστηκαν οι ορφανοί χρήστες του αρχείου καταγραφής ελέγχου."
 
 #: app/database/repair-specs.php:99
-msgid "Removed orphaned audit-log links."
-msgstr "Καταργήθηκαν οι ορφανοί σύνδεσμοι του αρχείου καταγραφής ελέγχου."
+msgid "Cleared orphaned audit-log links."
+msgstr "Εκκαθαρίστηκαν οι ορφανοί σύνδεσμοι καταγραφής δραστηριότητας."
 
 #: app/database/repair-specs.php:107
 msgid "Removed orphaned webhooks."
@@ -61,8 +61,8 @@ msgid "Select at least one webhook event."
 msgstr "Επιλέξτε τουλάχιστον ένα συμβάν webhook."
 
 #: app/traits/settings.php:167
-#: app/traits/system.php:359
-#: app/traits/system.php:373
+#: app/traits/system.php:365
+#: app/traits/system.php:379
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:49
 msgid "Shorten, track, and own every link - PeakURL"
 msgstr "Συντομεύστε, παρακολουθήστε και ελέγξτε κάθε σύνδεσμο - PeakURL"
@@ -91,27 +91,27 @@ msgstr "Το PeakURL δεν έχει εγκατασταθεί ακόμα. Εκτ
 msgid "Admin access is required."
 msgstr "Απαιτείται πρόσβαση διαχειριστή."
 
-#: app/traits/system.php:271
+#: app/traits/system.php:272
 msgid "PeakURL could not find that language pack."
 msgstr "Το PeakURL δεν μπόρεσε να βρει αυτό το πακέτο γλώσσας."
 
-#: app/traits/system.php:440
+#: app/traits/system.php:446
 msgid "PeakURL could not find that timezone."
 msgstr "Το PeakURL δεν μπόρεσε να βρει αυτή τη ζώνη ώρας."
 
-#: app/traits/system.php:530
+#: app/traits/system.php:536
 msgid "Save a complete mail configuration before sending a test email."
 msgstr "Αποθηκεύστε μια πλήρη διαμόρφωση αλληλογραφίας πριν στείλετε ένα δοκιμαστικό email."
 
-#: app/traits/system.php:758
+#: app/traits/system.php:764
 msgid "PeakURL is already up to date."
 msgstr "Το PeakURL είναι ήδη ενημερωμένο."
 
-#: app/traits/system.php:780
+#: app/traits/system.php:786
 msgid "A newer PeakURL release is available. Install the update instead."
 msgstr "Μια νεότερη έκδοση του PeakURL είναι διαθέσιμη. Εγκαταστήστε την ενημέρωση αντ' αυτού."
 
-#: app/traits/system.php:787
+#: app/traits/system.php:793
 msgid "PeakURL cannot reinstall the latest release right now."
 msgstr "Το PeakURL δεν μπορεί να επανεγκαταστήσει την πιο πρόσφατη έκδοση αυτή τη στιγμή."
 
@@ -140,7 +140,7 @@ msgid "Username must be 3-120 characters using letters, numbers, dots, dashes, u
 msgstr "Το όνομα χρήστη πρέπει να περιέχει 3-120 χαρακτήρες με γράμματα, αριθμούς, τελείες, παύλες, κάτω παύλες ή @."
 
 #: app/traits/accounts/support.php:108
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:59
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:60
 msgid "Password must be at least 8 characters."
 msgstr "Ο κωδικός πρόσβασης πρέπει να έχει τουλάχιστον 8 χαρακτήρες."
 
@@ -193,8 +193,8 @@ msgid "Two-factor authentication is still required."
 msgstr "Ο έλεγχος ταυτότητας δύο παραγόντων εξακολουθεί να απαιτείται."
 
 #: app/traits/accounts/auth.php:438
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:42
-#: ui/pages/auth/login/LoginPage.tsx:164
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:43
+#: ui/pages/auth/login/LoginPage.tsx:162
 msgid "Email or username is required."
 msgstr "Απαιτείται email ή όνομα χρήστη."
 
@@ -251,10 +251,23 @@ msgstr "Απαιτείται το αναγνωριστικό καταγραφή�
 msgid "You do not have permission to view activity."
 msgstr "Δεν έχετε άδεια προβολής της δραστηριότητας."
 
-#: app/traits/analytics.php:453
-#: app/traits/analytics.php:634
+#: app/traits/analytics.php:454
+#: app/traits/analytics.php:635
 msgid "You do not have permission to view analytics for this link."
 msgstr "Δεν έχετε άδεια προβολής στατιστικών για αυτόν τον σύνδεσμο."
+
+#: app/traits/analytics.php:757
+msgid "Activity record not found."
+msgstr "Η εγγραφή δραστηριότητας δεν βρέθηκε."
+
+#: app/traits/analytics.php:767
+msgid "No restorable link metadata found in this activity record."
+msgstr "Δεν βρέθηκαν μεταδεδομένα προς επαναφορά σε αυτή την εγγραφή δραστηριότητας."
+
+#: app/traits/analytics.php:782
+#: ui/pages/dashboard/activity/ActivityPage.tsx:464
+msgid "This link was permanently deleted and cannot be restored."
+msgstr "Αυτός ο σύνδεσμος διαγράφηκε οριστικά και δεν μπορεί να επαναφερθεί."
 
 #: app/traits/authorization.php:94
 msgid "You do not have permission to view links."
@@ -274,45 +287,62 @@ msgstr "Πρέπει να παραμείνει τουλάχιστον ένας �
 msgid "You cannot demote the only remaining admin account."
 msgstr "Δεν μπορείτε να υποβαθμίσετε τον μοναδικό εναπομείναντα λογαριασμό διαχειριστή."
 
-#: app/traits/links.php:188
+#: app/traits/links.php:189
 msgid "You do not have permission to view this link."
 msgstr "Δεν έχετε άδεια προβολής αυτού του συνδέσμου."
 
-#: app/traits/links.php:402
-#: app/traits/links.php:1165
+#: app/traits/links.php:403
+#: app/traits/links.php:1168
 msgid "Provide either socialImage or socialImageUrl, not both."
 msgstr "Δώστε είτε socialImage είτε socialImageUrl, όχι και τα δύο."
 
-#: app/traits/links.php:824
+#: app/traits/links.php:827
 msgid "Complete the verification to open this link."
 msgstr "Ολοκληρώστε την επαλήθευση για να ανοίξετε αυτόν τον σύνδεσμο."
 
-#: app/traits/links.php:839
+#: app/traits/links.php:842
 msgid "Verification failed. Please try again."
 msgstr "Η επαλήθευση απέτυχε. Παρακαλούμε δοκιμάστε ξανά."
 
-#: app/traits/links.php:1089
+#: app/traits/links.php:1092
 msgid "You do not have permission to edit this link."
 msgstr "Δεν έχετε άδεια επεξεργασίας αυτού του συνδέσμου."
 
-#: app/traits/links.php:1330
+#: app/traits/links.php:1354
 msgid "You do not have permission to delete this link."
 msgstr "Δεν έχετε άδεια διαγραφής αυτού του συνδέσμου."
 
-#: app/traits/links.php:1431
-#: app/traits/links.php:1523
+#: app/traits/links.php:1500
+msgid "That short link does not exist."
+msgstr "Αυτός ο σύντομος σύνδεσμος δεν υπάρχει."
+
+#: app/traits/links.php:1507
+msgid "This link is already active."
+msgstr "Αυτός ο σύνδεσμος είναι ήδη ενεργός."
+
+#: app/traits/links.php:1517
+msgid "You do not have permission to restore this link."
+msgstr "Δεν έχετε άδεια για την επαναφορά αυτού του συνδέσμου."
+
+#: app/traits/links.php:1581
+#: app/traits/links.php:1857
+#: app/traits/links.php:1931
 msgid "You do not have permission to delete links."
 msgstr "Δεν έχετε άδεια διαγραφής συνδέσμων."
 
-#: app/traits/links.php:1675
+#: app/traits/links.php:1760
+msgid "You do not have permission to restore links."
+msgstr "Δεν έχετε άδεια για την επαναφορά συνδέσμων."
+
+#: app/traits/links.php:2116
 msgid "A valid destination URL is required."
 msgstr "Απαιτείται ένα έγκυρο URL προορισμού."
 
-#: app/traits/links.php:1693
+#: app/traits/links.php:2134
 msgid "That short code is reserved by the application."
 msgstr "Αυτός ο σύντομος κωδικός είναι δεσμευμένος από την εφαρμογή."
 
-#: app/traits/links.php:1703
+#: app/traits/links.php:2144
 msgid "That short code is already in use."
 msgstr "Αυτός ο σύντομος κωδικός χρησιμοποιείται ήδη."
 
@@ -346,7 +376,7 @@ msgid "Thanks for your patience."
 msgstr "Ευχαριστούμε για την υπομονή σας."
 
 #: app/includes/functions.php:977
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:119
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:121
 msgid "Loading"
 msgstr "Φόρτωση"
 
@@ -423,7 +453,7 @@ msgstr "για ενημερώσεις."
 msgid "An internal server error occurred. Please try again or contact support if the issue persists."
 msgstr "Παρουσιάστηκε εσωτερικό σφάλμα διακομιστή. Παρακαλούμε δοκιμάστε ξανά ή επικοινωνήστε με την υποστήριξη εάν το πρόβλημα παραμένει."
 
-#: app/includes/application.php:249
+#: app/includes/application.php:260
 #: app/services/install/screen.php:142
 msgid "Request origin is not allowed."
 msgstr "Η προέλευση του αιτήματος δεν επιτρέπεται."
@@ -611,133 +641,146 @@ msgstr "Οι ρυθμίσεις GeoIP αποθηκεύτηκαν."
 msgid "GeoIP database updated."
 msgstr "Η βάση δεδομένων GeoIP ενημερώθηκε."
 
-#: app/controllers/urls.php:111
+#: app/controllers/urls.php:112
 msgid "URLs loaded."
 msgstr "Τα URL φορτώθηκαν."
 
-#: app/controllers/urls.php:137
+#: app/controllers/urls.php:138
 msgid "URLs export loaded."
 msgstr "Η εξαγωγή URL φορτώθηκε."
 
-#: app/controllers/urls.php:155
-#: app/controllers/urls.php:211
-#: app/controllers/urls.php:231
+#: app/controllers/urls.php:156
+#: app/controllers/urls.php:212
+#: app/controllers/urls.php:237
 msgid "URL not found."
 msgstr "Το URL δεν βρέθηκε."
 
-#: app/controllers/urls.php:156
+#: app/controllers/urls.php:157
 msgid "URL loaded."
 msgstr "Το URL φορτώθηκε."
 
-#: app/controllers/urls.php:173
+#: app/controllers/urls.php:174
 msgid "Short URL created."
 msgstr "Το σύντομο URL δημιουργήθηκε."
 
-#: app/controllers/urls.php:191
+#: app/controllers/urls.php:192
 msgid "Bulk import processed."
 msgstr "Η μαζική εισαγωγή υποβλήθηκε σε επεξεργασία."
 
-#: app/controllers/urls.php:212
+#: app/controllers/urls.php:213
 msgid "URL updated."
 msgstr "Το URL ενημερώθηκε."
 
-#: app/controllers/urls.php:232
+#: app/controllers/urls.php:238
 msgid "URL deleted."
 msgstr "Το URL διαγράφηκε."
 
-#: app/controllers/urls.php:253
+#: app/controllers/urls.php:257
+#: app/controllers/analytics.php:250
+msgid "Link restored successfully."
+msgstr "Ο σύνδεσμος επαναφέρθηκε επιτυχώς."
+
+#: app/controllers/urls.php:280
 msgid "Bulk delete complete."
 msgstr "Η μαζική διαγραφή ολοκληρώθηκε."
 
-#: app/controllers/urls.php:271
+#: app/controllers/urls.php:301
+msgid "Bulk restore complete."
+msgstr "Η μαζική επαναφορά ολοκληρώθηκε."
+
+#: app/controllers/urls.php:319
+msgid "Trash emptied successfully."
+msgstr "Ο κάδος αδειάστηκε επιτυχώς."
+
+#: app/controllers/urls.php:337
 msgid "All links deleted."
 msgstr "Όλοι οι σύνδεσμοι διαγράφηκαν."
 
-#: app/controllers/urls.php:369
+#: app/controllers/urls.php:435
 msgid "This link has expired"
 msgstr "Αυτός ο σύνδεσμος έχει λήξει"
 
-#: app/controllers/urls.php:370
+#: app/controllers/urls.php:436
 msgid "The short link you requested is no longer active because its expiration date has passed."
 msgstr "Ο σύντομος σύνδεσμος που ζητήσατε δεν είναι πλέον ενεργός επειδή έχει παρέλθει η ημερομηνία λήξης του."
 
-#: app/controllers/urls.php:380
+#: app/controllers/urls.php:446
 msgid "This link is unavailable"
 msgstr "Αυτός ο σύνδεσμος δεν είναι διαθέσιμος"
 
-#: app/controllers/urls.php:381
+#: app/controllers/urls.php:447
 msgid "The short link you requested is not available right now."
 msgstr "Ο σύντομος σύνδεσμος που ζητήσατε δεν είναι διαθέσιμος αυτή τη στιγμή."
 
-#: app/controllers/urls.php:427
+#: app/controllers/urls.php:492
 msgid "Password required"
 msgstr "Απαιτείται κωδικός πρόσβασης"
 
-#: app/controllers/urls.php:428
+#: app/controllers/urls.php:493
 msgid "This link is protected. Enter the password to continue."
 msgstr "Αυτός ο σύνδεσμος είναι προστατευμένος. Εισαγάγετε τον κωδικό πρόσβασης για να συνεχίσετε."
 
-#: app/controllers/urls.php:432
+#: app/controllers/urls.php:497
 #: site/install.php:592
 #: site/setup-config.php:816
-#: ui/pages/auth/login/LoginPage.tsx:382
+#: ui/pages/auth/login/LoginPage.tsx:380
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:29
 #: ui/pages/dashboard/users/UsersPage.tsx:250
 msgid "Password"
 msgstr "Κωδικός πρόσβασης"
 
-#: app/controllers/urls.php:435
+#: app/controllers/urls.php:500
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:52
 msgid "Enter password"
 msgstr "Εισαγάγετε κωδικό πρόσβασης"
 
-#: app/controllers/urls.php:439
+#: app/controllers/urls.php:504
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:48
 msgid "Continue"
 msgstr "Συνέχεια"
 
-#: app/controllers/urls.php:444
+#: app/controllers/urls.php:509
 msgid "Protected Link"
 msgstr "Προστατευμένος σύνδεσμος"
 
-#: app/controllers/urls.php:491
+#: app/controllers/urls.php:556
 msgid "Performing security verification"
 msgstr "Εκτέλεση επαλήθευσης ασφαλείας"
 
-#: app/controllers/urls.php:492
+#: app/controllers/urls.php:557
 msgid "This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot."
 msgstr "Αυτός ο ιστότοπος χρησιμοποιεί μια υπηρεσία ασφαλείας για προστασία από κακόβουλα bots. Αυτή η σελίδα εμφανίζεται ενώ το PeakURL επαληθεύει ότι δεν είστε bot."
 
-#: app/controllers/urls.php:496
+#: app/controllers/urls.php:561
 msgid "JavaScript is required to complete this verification."
 msgstr "Απαιτείται JavaScript για την ολοκλήρωση αυτής της επαλήθευσης."
 
-#: app/controllers/urls.php:499
+#: app/controllers/urls.php:564
 msgid "Security Verification"
 msgstr "Επαλήθευση ασφαλείας"
 
-#: app/controllers/urls.php:601
-#: app/controllers/urls.php:762
+#: app/controllers/urls.php:666
+#: app/controllers/urls.php:827
 msgid "Waiting for verification…"
 msgstr "Αναμονή για επαλήθευση…"
 
-#: app/controllers/urls.php:604
+#: app/controllers/urls.php:669
 msgid "Checking verification…"
 msgstr "Έλεγχος επαλήθευσης…"
 
-#: app/controllers/urls.php:607
+#: app/controllers/urls.php:672
 msgid "Starting verification…"
 msgstr "Έναρξη επαλήθευσης…"
 
-#: app/controllers/urls.php:610
+#: app/controllers/urls.php:675
 msgid "Verification expired. Please try again."
 msgstr "Η επαλήθευση έληξε. Παρακαλούμε δοκιμάστε ξανά."
 
-#: app/controllers/urls.php:613
+#: app/controllers/urls.php:678
 msgid "Verification could not be completed. Please try again."
 msgstr "Η επαλήθευση δεν ήταν δυνατό να ολοκληρωθεί. Παρακαλούμε δοκιμάστε ξανά."
 
-#: app/controllers/urls.php:767
+#: app/controllers/urls.php:832
 msgid "Try again"
 msgstr "Δοκιμάστε ξανά"
 
@@ -1299,7 +1342,7 @@ msgstr "Το URL της εικόνας κοινωνικής προεπισκόπ
 
 #: app/services/social-preview.php:351
 #: ui/hooks/useDashboardSearch.ts:89
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:105
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:112
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:279
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:284
 msgid "Untitled Link"
@@ -1664,7 +1707,7 @@ msgstr "Καλώς ήρθατε"
 #: site/setup-config.php:679
 #: ui/components/common/ApiErrorPage/ApiErrorPage.tsx:70
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:87
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:711
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:716
 msgid "Database"
 msgstr "Βάση δεδομένων"
 
@@ -1686,7 +1729,7 @@ msgid "Site info"
 msgstr "Πληροφορίες ιστότοπου"
 
 #: site/install.php:575
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:401
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:414
 msgid "Site title"
 msgstr "Τίτλος ιστότοπου"
 
@@ -1700,7 +1743,7 @@ msgstr "Διαχειριστής"
 
 #: site/install.php:583
 #: site/setup-config.php:812
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:334
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:347
 #: ui/pages/dashboard/users/UsersPage.tsx:229
 msgid "Username"
 msgstr "Όνομα χρήστη"
@@ -1711,7 +1754,7 @@ msgstr "Γράμματα, αριθμοί, τελείες, παύλες, κάτω
 
 #: site/install.php:588
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:93
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:712
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:717
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:173
 #: ui/pages/dashboard/users/UsersPage.tsx:238
@@ -1719,7 +1762,7 @@ msgid "Email"
 msgstr "Email"
 
 #: site/install.php:589
-#: ui/pages/auth/login/LoginPage.tsx:376
+#: ui/pages/auth/login/LoginPage.tsx:374
 msgid "you@company.com"
 msgstr "you@company.com"
 
@@ -1737,7 +1780,7 @@ msgstr "Εγκατάσταση %s"
 
 #: site/install.php:625
 #: site/setup-config.php:859
-#: ui/pages/auth/login/LoginPage.tsx:308
+#: ui/pages/auth/login/LoginPage.tsx:306
 msgid "Powered by %s"
 msgstr "Με την υποστήριξη του %s"
 
@@ -1750,7 +1793,7 @@ msgid "Welcome - %s"
 msgstr "Καλώς ήρθατε - %s"
 
 #: site/setup-config.php:650
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:429
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:442
 msgid "Site language"
 msgstr "Γλώσσα ιστότοπου"
 
@@ -1824,7 +1867,7 @@ msgstr "Αποθήκευση και συνέχεια"
 
 #: ui/utils/dashboardSearch.ts:81
 #: ui/utils/dashboardSearch.ts:86
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:39
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:43
 msgid "Overview"
 msgstr "Επισκόπηση"
 
@@ -1838,17 +1881,17 @@ msgstr "Πίνακας ελέγχου"
 
 #: ui/utils/dashboardSearch.ts:96
 #: ui/utils/dashboardSearch.ts:101
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:44
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:386
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:48
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:413
 #: ui/pages/NotFoundPage.tsx:75
 msgid "All Links"
 msgstr "Όλοι οι σύνδεσμοι"
 
 #: ui/utils/dashboardSearch.ts:97
 #: ui/utils/dashboardSearch.ts:100
-#: ui/pages/auth/login/LoginPage.tsx:46
+#: ui/pages/auth/login/LoginPage.tsx:47
 #: ui/pages/layout/dashboard/Search/Search.tsx:286
-#: ui/pages/dashboard/activity/ActivityPage.tsx:668
+#: ui/pages/dashboard/activity/ActivityPage.tsx:751
 #: ui/pages/dashboard/links/_components/Header/Header.tsx:42
 #: ui/router/pageTitle.ts:77
 msgid "Links"
@@ -1856,9 +1899,9 @@ msgstr "Σύνδεσμοι"
 
 #: ui/utils/dashboardSearch.ts:115
 #: ui/utils/dashboardSearch.ts:119
-#: ui/pages/layout/dashboard/Header/Header.tsx:120
-#: ui/pages/dashboard/activity/ActivityPage.tsx:134
-#: ui/pages/dashboard/activity/ActivityPage.tsx:713
+#: ui/pages/layout/dashboard/Header/Header.tsx:121
+#: ui/pages/dashboard/activity/ActivityPage.tsx:142
+#: ui/pages/dashboard/activity/ActivityPage.tsx:796
 #: ui/router/pageTitle.ts:73
 msgid "Activity"
 msgstr "Δραστηριότητα"
@@ -1870,8 +1913,9 @@ msgstr "Πρόσφατη δραστηριότητα"
 
 #: ui/utils/dashboardSearch.ts:131
 #: ui/utils/dashboardSearch.ts:136
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:417
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:472
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:473
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:522
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:529
 msgid "About PeakURL"
 msgstr "Σχετικά με το PeakURL"
 
@@ -1895,8 +1939,8 @@ msgstr "Γενικές ρυθμίσεις"
 #: ui/utils/dashboardSearch.ts:209
 #: ui/utils/dashboardSearch.ts:225
 #: ui/utils/dashboardSearch.ts:241
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:82
-#: ui/pages/layout/dashboard/Header/Header.tsx:162
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:91
+#: ui/pages/layout/dashboard/Header/Header.tsx:163
 #: ui/pages/NotFoundPage.tsx:95
 #: ui/router/pageTitle.ts:34
 msgid "Settings"
@@ -1908,7 +1952,7 @@ msgid "General"
 msgstr "Γενικά"
 
 #: ui/utils/dashboardSearch.ts:152
-#: ui/pages/layout/dashboard/Header/Header.tsx:142
+#: ui/pages/layout/dashboard/Header/Header.tsx:143
 msgid "Profile"
 msgstr "Προφίλ"
 
@@ -1919,7 +1963,7 @@ msgid "Security Settings"
 msgstr "Ρυθμίσεις ασφαλείας"
 
 #: ui/utils/dashboardSearch.ts:169
-#: ui/pages/auth/login/LoginPage.tsx:56
+#: ui/pages/auth/login/LoginPage.tsx:57
 #: ui/pages/dashboard/settings/Layout.tsx:26
 msgid "Security"
 msgstr "Ασφάλεια"
@@ -1928,7 +1972,7 @@ msgstr "Ασφάλεια"
 #: ui/utils/dashboardSearch.ts:187
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:79
 #: ui/pages/dashboard/settings/Layout.tsx:30
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:691
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:696
 #: ui/router/pageTitle.ts:24
 msgid "API Keys"
 msgstr "Κλειδιά API"
@@ -1956,7 +2000,7 @@ msgstr "Διαμόρφωση email"
 #: ui/utils/dashboardSearch.ts:228
 #: ui/pages/dashboard/settings/Layout.tsx:48
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:95
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:715
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:720
 #: ui/router/pageTitle.ts:30
 msgid "Location Data"
 msgstr "Δεδομένα τοποθεσίας"
@@ -1971,10 +2015,10 @@ msgstr "Ενημερώσεις"
 
 #: ui/utils/dashboardSearch.ts:256
 #: ui/utils/dashboardSearch.ts:260
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:49
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:53
 #: ui/pages/layout/dashboard/Search/Search.tsx:247
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:684
-#: ui/pages/dashboard/activity/ActivityPage.tsx:674
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:689
+#: ui/pages/dashboard/activity/ActivityPage.tsx:757
 #: ui/pages/dashboard/users/UsersPage.tsx:490
 #: ui/router/pageTitle.ts:85
 msgid "Users"
@@ -1987,7 +2031,7 @@ msgstr "Διαχείριση"
 
 #: ui/utils/dashboardSearch.ts:273
 #: ui/utils/dashboardSearch.ts:276
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:55
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:59
 #: ui/pages/dashboard/plugins/PluginsPage.tsx:118
 #: ui/router/pageTitle.ts:81
 msgid "Plugins"
@@ -1995,7 +2039,7 @@ msgstr "Πρόσθετα"
 
 #: ui/utils/dashboardSearch.ts:282
 #: ui/utils/dashboardSearch.ts:287
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:66
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:70
 #: ui/pages/dashboard/tools/import/_components/layout/Header.tsx:6
 #: ui/pages/NotFoundPage.tsx:85
 #: ui/router/pageTitle.ts:47
@@ -2009,7 +2053,7 @@ msgstr "Εισαγωγή"
 #: ui/utils/dashboardSearch.ts:306
 #: ui/utils/dashboardSearch.ts:322
 #: ui/utils/dashboardSearch.ts:325
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:61
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:65
 #: ui/pages/layout/dashboard/Search/Search.tsx:224
 #: ui/router/pageTitle.ts:119
 msgid "Tools"
@@ -2022,7 +2066,7 @@ msgstr "Εισαγωγή: Μεταφόρτωση αρχείου"
 
 #: ui/utils/dashboardSearch.ts:302
 #: ui/utils/dashboardSearch.ts:307
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:71
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:75
 #: ui/pages/dashboard/tools/export/ExportPage.tsx:50
 #: ui/pages/dashboard/tools/export/ExportPage.tsx:138
 #: ui/router/pageTitle.ts:111
@@ -2031,17 +2075,17 @@ msgstr "Εξαγωγή"
 
 #: ui/utils/dashboardSearch.ts:321
 #: ui/utils/dashboardSearch.ts:326
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:75
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:772
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:816
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:84
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:777
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:821
 #: ui/router/pageTitle.ts:115
 msgid "System Status"
 msgstr "Κατάσταση συστήματος"
 
 #: ui/utils/dashboardSearch.ts:565
 #: ui/pages/layout/dashboard/Header/Header.tsx:40
-#: ui/pages/dashboard/activity/ActivityPage.tsx:114
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1038
+#: ui/pages/dashboard/activity/ActivityPage.tsx:116
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1133
 #: ui/pages/dashboard/users/UsersPage.tsx:555
 #: ui/pages/dashboard/users/UsersPage.tsx:591
 msgid "User"
@@ -2056,14 +2100,14 @@ msgid "Confirm"
 msgstr "Επιβεβαίωση"
 
 #: ui/components/ui/ConfirmDialog/ConfirmDialog.tsx:33
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:807
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:816
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:53
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorSetup.tsx:110
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:370
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:494
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:63
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:93
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:133
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:122
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:156
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:18
 #: ui/pages/dashboard/users/UsersPage.tsx:330
 msgid "Cancel"
@@ -2082,8 +2126,8 @@ msgid "Close modal"
 msgstr "Κλείσιμο παραθύρου"
 
 #: ui/components/ui/PageSizeControl/PageSizeControl.tsx:27
-#: ui/pages/dashboard/activity/ActivityPage.tsx:819
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:87
+#: ui/pages/dashboard/activity/ActivityPage.tsx:902
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:119
 msgid "Rows per page"
 msgstr "Γραμμές ανά σελίδα"
 
@@ -2112,10 +2156,10 @@ msgstr "Ακύρωση προσαρμοσμένου μεγέθους σελίδ�
 
 #: ui/components/charts/MetricDonutChart/MetricDonutChart.tsx:37
 #: ui/components/charts/WorldMap/_components/Legend.tsx:16
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:686
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:691
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:113
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:64
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:161
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:168
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:47
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:166
 msgid "Clicks"
@@ -2152,20 +2196,20 @@ msgstr "Κυρ"
 #: ui/components/charts/TrafficChart/TrafficChart.tsx:260
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:112
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:21
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:107
-#: ui/pages/dashboard/links/LinksPage.tsx:299
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:130
+#: ui/pages/dashboard/links/LinksPage.tsx:367
 msgid "Total Clicks"
 msgstr "Συνολικά κλικ"
 
 #: ui/components/charts/TrafficChart/TrafficChart.tsx:261
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:70
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:133
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:170
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:177
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:48
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:173
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:28
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:115
-#: ui/pages/dashboard/links/LinksPage.tsx:324
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:138
+#: ui/pages/dashboard/links/LinksPage.tsx:392
 msgid "Visitors"
 msgstr "Επισκέπτες"
 
@@ -2289,271 +2333,288 @@ msgstr "Τι πήγε στραβά"
 msgid "Check these first"
 msgstr "Ελέγξτε πρώτα αυτά"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:62
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:63
 msgid "PeakURL could not process the password reset request."
 msgstr "Το PeakURL δεν μπόρεσε να επεξεργαστεί το αίτημα επαναφοράς κωδικού πρόσβασης."
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:71
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:72
 msgid "Account Recovery"
 msgstr "Ανάκτηση λογαριασμού"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:72
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:105
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:122
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:74
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:107
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:124
 msgid "Reset your password"
 msgstr "Επαναφορά του κωδικού πρόσβασής σας"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:73
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:75
 msgid "Enter the email address or username linked to your PeakURL account and we'll send a secure reset link."
 msgstr "Εισαγάγετε τη διεύθυνση email ή το όνομα χρήστη που συνδέεται με τον λογαριασμό σας PeakURL και θα σας στείλουμε έναν ασφαλή σύνδεσμο επαναφοράς."
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:76
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:78
 msgid "Secure account recovery"
 msgstr "Ασφαλής ανάκτηση λογαριασμού"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:77
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:79
 msgid "For your security, password reset links expire after 1 hour. Changing your password will also immediately revoke all active sessions across your devices."
 msgstr "Για την ασφάλειά σας, οι σύνδεσμοι επαναφοράς κωδικού πρόσβασης λήγουν μετά από 1 ώρα. Η αλλαγή του κωδικού πρόσβασής σας θα ανακαλέσει επίσης αμέσως όλες τις ενεργές συνεδρίες στις συσκευές σας."
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:80
-#: ui/pages/auth/login/LoginPage.tsx:428
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:82
+#: ui/pages/auth/login/LoginPage.tsx:426
 msgid "Forgot your password?"
 msgstr "Ξεχάσατε τον κωδικό πρόσβασής σας;"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:81
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:139
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:83
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:141
 msgid "Enter your account email or username and PeakURL will send a secure password reset link."
 msgstr "Εισαγάγετε το email ή το όνομα χρήστη του λογαριασμού σας και το PeakURL θα στείλει έναν ασφαλή σύνδεσμο επαναφοράς κωδικού πρόσβασης."
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:88
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:90
 msgid "Check your inbox"
 msgstr "Ελέγξτε τα εισερχόμενά σας"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:92
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:94
 msgid "If an account exists for %s, PeakURL has sent a password reset link."
 msgstr "Εάν υπάρχει λογαριασμός για το %s, το PeakURL έχει στείλει έναν σύνδεσμο επαναφοράς κωδικού πρόσβασης."
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:99
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:101
 msgid "Return to login"
 msgstr "Επιστροφή στη σύνδεση"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:106
-#: ui/pages/auth/login/LoginPage.tsx:364
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:108
+#: ui/pages/auth/login/LoginPage.tsx:362
 msgid "Email or username"
 msgstr "Email ή όνομα χρήστη"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:113
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:115
 msgid "owner@example.com or admin"
 msgstr "owner@example.com ή admin"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:130
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:149
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:132
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:151
 msgid "Send reset link"
 msgstr "Αποστολή συνδέσμου επαναφοράς"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:54
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:136
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:55
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:138
 msgid "The password reset link is invalid."
 msgstr "Ο σύνδεσμος επαναφοράς κωδικού πρόσβασης δεν είναι έγκυρος."
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:64
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:65
 #: ui/pages/dashboard/users/UsersPage.tsx:142
 msgid "Passwords do not match."
 msgstr "Οι κωδικοί πρόσβασης δεν ταιριάζουν."
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:87
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:88
 msgid "PeakURL could not reset the password with that link."
 msgstr "Το PeakURL δεν μπόρεσε να επαναφέρει τον κωδικό πρόσβασης με αυτόν τον σύνδεσμο."
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:96
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:97
 msgid "Secure Reset"
 msgstr "Ασφαλής επαναφορά"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:97
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:99
 msgid "Choose a new password and get back to work."
 msgstr "Επιλέξτε έναν νέο κωδικό πρόσβασης και επιστρέψτε στην εργασία σας."
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:98
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:100
 msgid "Once the password changes, PeakURL revokes the old sessions so only the new login remains valid."
 msgstr "Μόλις αλλάξει ο κωδικός πρόσβασης, το PeakURL ανακαλεί τις παλιές συνεδρίες, ώστε μόνο η νέα σύνδεση να παραμένει έγκυρη."
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:101
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:103
 #: ui/pages/dashboard/users/UsersPage.tsx:137
 #: ui/pages/dashboard/users/UsersPage.tsx:260
 msgid "Use at least 8 characters."
 msgstr "Χρησιμοποιήστε τουλάχιστον 8 χαρακτήρες."
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:102
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:104
 msgid "For best results, combine uppercase, lowercase, numbers, and a unique phrase you do not reuse elsewhere."
 msgstr "Για καλύτερα αποτελέσματα, συνδυάστε κεφαλαία, πεζά, αριθμούς και μια μοναδική φράση που δεν επαναχρησιμοποιείτε αλλού."
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:106
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:108
 msgid "Set a new account password, then sign in again with the updated credentials."
 msgstr "Ορίστε έναν νέο κωδικό πρόσβασης λογαριασμού και, στη συνέχεια, συνδεθείτε ξανά με τα ενημερωμένα διαπιστευτήρια."
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:163
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:165
 msgid "Password updated"
 msgstr "Ο κωδικός πρόσβασης ενημερώθηκε"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:166
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:168
 msgid "PeakURL updated your password and revoked the older sessions. Redirecting you to the login page now."
 msgstr "Το PeakURL ενημέρωσε τον κωδικό πρόσβασής σας και ανακάλεσε τις παλαιότερες συνεδρίες. Ανακατεύθυνση στη σελίδα σύνδεσης τώρα."
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:176
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:178
 msgid "New password"
 msgstr "Νέος κωδικός πρόσβασης"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:182
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:184
 msgid "Enter your new password"
 msgstr "Εισαγάγετε τον νέο σας κωδικό πρόσβασης"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:190
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:192
 msgid "Confirm new password"
 msgstr "Επιβεβαίωση νέου κωδικού πρόσβασης"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:200
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:202
 msgid "Confirm your new password"
 msgstr "Επιβεβαιώστε τον νέο σας κωδικό πρόσβασης"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:213
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:215
 msgid "Reset password"
 msgstr "Επαναφορά κωδικού πρόσβασης"
 
-#: ui/pages/auth/login/LoginPage.tsx:47
+#: ui/pages/auth/login/LoginPage.tsx:48
 msgid "Shorten, organize, and share."
 msgstr "Συντομεύστε, οργανώστε και μοιραστείτε."
 
-#: ui/pages/auth/login/LoginPage.tsx:51
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:207
+#: ui/pages/auth/login/LoginPage.tsx:52
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:233
 msgid "Analytics"
 msgstr "Αναλυτικά στοιχεία"
 
-#: ui/pages/auth/login/LoginPage.tsx:52
+#: ui/pages/auth/login/LoginPage.tsx:53
 msgid "Clicks, locations, and devices."
 msgstr "Κλικ, τοποθεσίες και συσκευές."
 
-#: ui/pages/auth/login/LoginPage.tsx:57
+#: ui/pages/auth/login/LoginPage.tsx:58
 msgid "Sessions, 2FA, and roles."
 msgstr "Συνεδρίες, 2FA και ρόλοι."
 
-#: ui/pages/auth/login/LoginPage.tsx:169
+#: ui/pages/auth/login/LoginPage.tsx:167
 msgid "Password is required."
 msgstr "Απαιτείται κωδικός πρόσβασης."
 
-#: ui/pages/auth/login/LoginPage.tsx:181
+#: ui/pages/auth/login/LoginPage.tsx:179
 msgid "Enter your backup code."
 msgstr "Εισαγάγετε τον εφεδρικό σας κωδικό."
 
-#: ui/pages/auth/login/LoginPage.tsx:182
-#: ui/pages/auth/login/LoginPage.tsx:340
+#: ui/pages/auth/login/LoginPage.tsx:180
+#: ui/pages/auth/login/LoginPage.tsx:338
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "Εισαγάγετε τον 6ψήφιο κωδικό από την εφαρμογή ελέγχου ταυτότητας."
 
-#: ui/pages/auth/login/LoginPage.tsx:230
+#: ui/pages/auth/login/LoginPage.tsx:228
 msgid "Unable to verify the two-factor code."
 msgstr "Δεν ήταν δυνατή η επαλήθευση του κωδικού δύο παραγόντων."
 
-#: ui/pages/auth/login/LoginPage.tsx:231
+#: ui/pages/auth/login/LoginPage.tsx:229
 msgid "Unable to sign in with those credentials."
 msgstr "Δεν ήταν δυνατή η σύνδεση με αυτά τα διαπιστευτήρια."
 
-#: ui/pages/auth/login/LoginPage.tsx:248
+#: ui/pages/auth/login/LoginPage.tsx:246
 msgid "Almost there."
 msgstr "Σχεδόν έτοιμοι."
 
-#: ui/pages/auth/login/LoginPage.tsx:251
+#: ui/pages/auth/login/LoginPage.tsx:249
 msgid "Verify to continue."
 msgstr "Επαληθεύστε για να συνεχίσετε."
 
-#: ui/pages/auth/login/LoginPage.tsx:256
+#: ui/pages/auth/login/LoginPage.tsx:254
 msgid "Manage every link"
 msgstr "Διαχειριστείτε κάθε σύνδεσμο"
 
-#: ui/pages/auth/login/LoginPage.tsx:259
+#: ui/pages/auth/login/LoginPage.tsx:257
 msgid "from one place."
 msgstr "από ένα μέρος."
 
-#: ui/pages/auth/login/LoginPage.tsx:266
+#: ui/pages/auth/login/LoginPage.tsx:264
 msgid "One more verification step and you’ll be in your workspace."
 msgstr "Ένα ακόμα βήμα επαλήθευσης και θα βρίσκεστε στον χώρο εργασίας σας."
 
-#: ui/pages/auth/login/LoginPage.tsx:269
+#: ui/pages/auth/login/LoginPage.tsx:267
 msgid "Shorten URLs, track clicks, and manage your audience, all from your own dashboard."
 msgstr "Συντομεύστε διευθύνσεις URL, παρακολουθήστε κλικ και διαχειριστείτε το κοινό σας, όλα από τον δικό σας πίνακα ελέγχου."
 
-#: ui/pages/auth/login/LoginPage.tsx:331
+#: ui/pages/auth/login/LoginPage.tsx:329
 msgid "Verify your identity"
 msgstr "Επαληθεύστε την ταυτότητά σας"
 
-#: ui/pages/auth/login/LoginPage.tsx:332
+#: ui/pages/auth/login/LoginPage.tsx:330
 msgid "Sign in to your account"
 msgstr "Συνδεθείτε στον λογαριασμό σας"
 
-#: ui/pages/auth/login/LoginPage.tsx:337
+#: ui/pages/auth/login/LoginPage.tsx:335
 msgid "Enter one of the backup codes you saved when setting up 2FA."
 msgstr "Εισαγάγετε έναν από τους εφεδρικούς κωδικούς που αποθηκεύσατε κατά τη ρύθμιση του 2FA."
 
-#: ui/pages/auth/login/LoginPage.tsx:343
+#: ui/pages/auth/login/LoginPage.tsx:341
 msgid "Enter your credentials to continue to the dashboard."
 msgstr "Εισαγάγετε τα διαπιστευτήριά σας για να συνεχίσετε στον πίνακα ελέγχου."
 
-#: ui/pages/auth/login/LoginPage.tsx:412
+#: ui/pages/auth/login/LoginPage.tsx:410
 msgid "Remember me"
 msgstr "Να με θυμάσαι"
 
-#: ui/pages/auth/login/LoginPage.tsx:438
+#: ui/pages/auth/login/LoginPage.tsx:436
 msgid "Backup code"
 msgstr "Εφεδρικός κωδικός"
 
-#: ui/pages/auth/login/LoginPage.tsx:453
+#: ui/pages/auth/login/LoginPage.tsx:451
 msgid "xxxx-xxxx-xxxx"
 msgstr "xxxx-xxxx-xxxx"
 
-#: ui/pages/auth/login/LoginPage.tsx:467
+#: ui/pages/auth/login/LoginPage.tsx:465
 msgid "Use authenticator code instead"
 msgstr "Χρησιμοποιήστε κωδικό πιστοποιητή αντ' αυτού"
 
-#: ui/pages/auth/login/LoginPage.tsx:493
+#: ui/pages/auth/login/LoginPage.tsx:491
 msgid "Lost your device? Use a backup code"
 msgstr "Χάσατε τη συσκευή σας; Χρησιμοποιήστε έναν εφεδρικό κωδικό"
 
-#: ui/pages/auth/login/LoginPage.tsx:534
+#: ui/pages/auth/login/LoginPage.tsx:532
 msgid "Verifying…"
 msgstr "Επαλήθευση…"
 
-#: ui/pages/auth/login/LoginPage.tsx:535
+#: ui/pages/auth/login/LoginPage.tsx:533
 msgid "Signing in…"
 msgstr "Σύνδεση…"
 
-#: ui/pages/auth/login/LoginPage.tsx:540
+#: ui/pages/auth/login/LoginPage.tsx:538
 msgid "Verify & continue"
 msgstr "Επαλήθευση & συνέχεια"
 
-#: ui/pages/auth/login/LoginPage.tsx:541
+#: ui/pages/auth/login/LoginPage.tsx:539
 msgid "Sign in"
 msgstr "Σύνδεση"
 
-#: ui/pages/auth/login/LoginPage.tsx:562
+#: ui/pages/auth/login/LoginPage.tsx:560
 msgid "Back to sign-in"
 msgstr "Επιστροφή στη σύνδεση"
 
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:227
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:79
+msgid "Activity Log"
+msgstr "Καταγραφή δραστηριότητας"
+
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:246
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:268
 msgid "Close sidebar"
 msgstr "Κλείσιμο πλευρικής γραμμής"
 
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:432
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:435
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:440
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:450
+msgid "Expand Menu"
+msgstr "Ανάπτυξη μενού"
+
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:436
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:441
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:451
+msgid "Collapse Menu"
+msgstr "Σύμπτυξη μενού"
+
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:488
 msgid "Sponsor"
 msgstr "Χορηγός"
 
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:451
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:507
 msgid "Buy Me a Coffee"
 msgstr "Κεράστε με έναν καφέ"
 
-#: ui/pages/layout/dashboard/Layout/Layout.tsx:24
+#: ui/pages/layout/dashboard/Layout/Layout.tsx:56
 msgid "Thank you for choosing %s."
 msgstr "Σας ευχαριστούμε που επιλέξατε το %s."
 
-#: ui/pages/layout/dashboard/Layout/Layout.tsx:71
+#: ui/pages/layout/dashboard/Layout/Layout.tsx:110
 #: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:42
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:375
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:554
@@ -2627,44 +2688,48 @@ msgid "Keep typing to search links, or jump straight to a dashboard page."
 msgstr "Συνεχίστε να πληκτρολογείτε για αναζήτηση συνδέσμων ή μεταβείτε απευθείας σε μια σελίδα του πίνακα ελέγχου."
 
 #: ui/pages/layout/dashboard/Header/Header.tsx:38
-#: ui/pages/layout/dashboard/Header/Header.tsx:78
-#: ui/pages/layout/dashboard/Header/Header.tsx:90
-#: ui/pages/dashboard/activity/ActivityPage.tsx:107
+#: ui/pages/layout/dashboard/Header/Header.tsx:79
+#: ui/pages/layout/dashboard/Header/Header.tsx:91
+#: ui/pages/dashboard/activity/ActivityPage.tsx:109
 #: ui/pages/dashboard/users/UsersPage.tsx:60
 #: ui/pages/dashboard/users/UsersPage.tsx:105
 msgid "Admin"
 msgstr "Διαχειριστής"
 
 #: ui/pages/layout/dashboard/Header/Header.tsx:39
-#: ui/pages/dashboard/activity/ActivityPage.tsx:111
+#: ui/pages/dashboard/activity/ActivityPage.tsx:113
 #: ui/pages/dashboard/users/UsersPage.tsx:65
 #: ui/pages/dashboard/users/UsersPage.tsx:106
 msgid "Editor"
 msgstr "Συντάκτης"
 
-#: ui/pages/layout/dashboard/Header/Header.tsx:85
+#: ui/pages/layout/dashboard/Header/Header.tsx:58
+msgid "Open menu"
+msgstr "Άνοιγμα μενού"
+
+#: ui/pages/layout/dashboard/Header/Header.tsx:86
 msgid "Admin Account"
 msgstr "Λογαριασμός διαχειριστή"
 
-#: ui/pages/layout/dashboard/Header/Header.tsx:181
+#: ui/pages/layout/dashboard/Header/Header.tsx:182
 msgid "Logging out..."
 msgstr "Αποσύνδεση..."
 
-#: ui/pages/layout/dashboard/Header/Header.tsx:182
+#: ui/pages/layout/dashboard/Header/Header.tsx:183
 msgid "Logout"
 msgstr "Αποσύνδεση"
 
-#: ui/pages/layout/public/AuthLayout.tsx:11
+#: ui/pages/layout/public/AuthLayout.tsx:12
 msgid "Back to login"
 msgstr "Επιστροφή στη σύνδεση"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:269
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:340
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:345
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:350
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:372
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:407
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:427
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:277
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:349
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:354
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:359
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:381
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:416
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:436
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/useActiveSessions.ts:74
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/useActiveSessions.ts:106
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/useTwoFactorSettings.ts:170
@@ -2682,22 +2747,22 @@ msgstr "Επιστροφή στη σύνδεση"
 msgid "Error"
 msgstr "Σφάλμα"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:270
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:278
 msgid "Failed to update profile"
 msgstr "Αποτυχία ενημέρωσης προφίλ"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:305
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:314
 msgid "Language updated"
 msgstr "Η γλώσσα ενημερώθηκε"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:306
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:315
 msgid "PeakURL is reloading the dashboard now."
 msgstr "Το PeakURL επαναφορτώνει τον πίνακα ελέγχου τώρα."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:315
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:335
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:362
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:422
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:324
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:344
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:371
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:431
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:231
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:251
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:107
@@ -2705,291 +2770,291 @@ msgstr "Το PeakURL επαναφορτώνει τον πίνακα ελέγχο
 msgid "Success"
 msgstr "Επιτυχία"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:317
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:326
 msgid "Profile and general settings updated successfully"
 msgstr "Το προφίλ και οι γενικές ρυθμίσεις ενημερώθηκαν επιτυχώς"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:320
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:329
 msgid "General settings updated successfully"
 msgstr "Οι γενικές ρυθμίσεις ενημερώθηκαν επιτυχώς"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:325
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:503
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:542
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:334
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:512
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:551
 msgid "Save failed"
 msgstr "Η αποθήκευση απέτυχε"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:328
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:337
 msgid "Failed to update the general settings"
 msgstr "Αποτυχία ενημέρωσης των γενικών ρυθμίσεων"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:335
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:344
 msgid "Profile updated successfully"
 msgstr "Το προφίλ ενημερώθηκε επιτυχώς"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:340
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:349
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:65
 msgid "Enter your current password"
 msgstr "Εισαγάγετε τον τρέχοντα κωδικό πρόσβασής σας"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:345
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:354
 msgid "Passwords do not match"
 msgstr "Οι κωδικοί πρόσβασης δεν ταιριάζουν"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:351
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:360
 msgid "Password must be at least 8 characters"
 msgstr "Ο κωδικός πρόσβασης πρέπει να έχει τουλάχιστον 8 χαρακτήρες"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:363
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:372
 msgid "Password updated successfully"
 msgstr "Ο κωδικός πρόσβασης ενημερώθηκε επιτυχώς"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:373
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:382
 msgid "Failed to update password"
 msgstr "Αποτυχία ενημέρωσης κωδικού πρόσβασης"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:386
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:395
 msgid "Key created without visible token"
 msgstr "Το κλειδί δημιουργήθηκε χωρίς ορατό διακριτικό"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:387
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:396
 msgid "PeakURL created the API key, but the one-time token was not returned. Revoke it and create a new key."
 msgstr "Το PeakURL δημιούργησε το κλειδί API, αλλά το διακριτικό μίας χρήσης δεν επιστράφηκε. Ανακαλέστε το και δημιουργήστε ένα νέο κλειδί."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:402
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:411
 msgid "API key created"
 msgstr "Το κλειδί API δημιουργήθηκε"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:403
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:412
 msgid "Copy the token now. PeakURL will not show it again."
 msgstr "Αντιγράψτε το διακριτικό τώρα. Το PeakURL δεν θα το εμφανίσει ξανά."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:408
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:417
 msgid "Failed to generate API key"
 msgstr "Αποτυχία δημιουργίας κλειδιού API"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:423
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:432
 msgid "API key deleted successfully"
 msgstr "Το κλειδί API διαγράφηκε επιτυχώς"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:428
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:437
 msgid "Failed to delete API key"
 msgstr "Αποτυχία διαγραφής κλειδιού API"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:435
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:444
 msgid "API key copied to clipboard"
 msgstr "Το κλειδί API αντιγράφηκε στο πρόχειρο"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:439
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:448
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:137
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:754
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:959
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:759
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:964
 msgid "Copied"
 msgstr "Αντιγράφηκε"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:442
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:760
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:451
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:765
 msgid "Copy failed"
 msgstr "Η αντιγραφή απέτυχε"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:443
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:452
 msgid "PeakURL could not copy that value to the clipboard."
 msgstr "Το PeakURL δεν μπόρεσε να αντιγράψει αυτήν την τιμή στο πρόχειρο."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:462
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:471
 msgid "Update available"
 msgstr "Ενημέρωση available"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:464
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:473
 msgid "PeakURL %s is ready to install."
 msgstr "Το PeakURL %s είναι έτοιμο για εγκατάσταση."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:472
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:481
 msgid "Up to date"
 msgstr "Ενημερωμένο"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:475
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:484
 msgid "PeakURL %s is already on the latest version."
 msgstr "Το PeakURL %s βρίσκεται ήδη στην πιο πρόσφατη έκδοση."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:478
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:487
 msgid "PeakURL is already on the latest version."
 msgstr "Το PeakURL βρίσκεται ήδη στην πιο πρόσφατη έκδοση."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:482
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:491
 msgid "Update check failed"
 msgstr "Ο έλεγχος ενημερώσεων απέτυχε"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:485
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:494
 msgid "PeakURL could not reach the update service."
 msgstr "Το PeakURL δεν μπόρεσε να επικοινωνήσει με την υπηρεσία ενημέρωσης."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:497
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:537
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:506
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:546
 msgid "Saved"
 msgstr "Αποθήκευσηd"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:498
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:507
 msgid "Location data settings were updated successfully."
 msgstr "Οι ρυθμίσεις δεδομένων τοποθεσίας ενημερώθηκαν επιτυχώς."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:506
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:515
 msgid "PeakURL could not save the MaxMind settings."
 msgstr "Το PeakURL δεν μπόρεσε να αποθηκεύσει τις ρυθμίσεις MaxMind."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:517
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:642
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:526
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:651
 msgid "Database updated"
 msgstr "Η βάση δεδομένων ενημερώθηκε"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:518
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:527
 msgid "PeakURL downloaded the latest GeoLite2 City database."
 msgstr "Το PeakURL πραγματοποίησε λήψη της πιο πρόσφατης βάσης δεδομένων GeoLite2 City."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:522
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:531
 msgid "Download failed"
 msgstr "Η λήψη απέτυχε"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:525
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:534
 msgid "PeakURL could not download the GeoLite2 database."
 msgstr "Το PeakURL δεν μπόρεσε να πραγματοποιήσει λήψη της βάσης δεδομένων GeoLite2."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:538
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:547
 msgid "Email configuration was updated successfully."
 msgstr "Η διαμόρφωση email ενημερώθηκε επιτυχώς."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:545
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:554
 msgid "PeakURL could not save the email configuration."
 msgstr "Το PeakURL δεν μπόρεσε να αποθηκεύσει τη διαμόρφωση email."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:558
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:567
 msgid "Test email sent"
 msgstr "Το δοκιμαστικό email στάλθηκε"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:560
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:569
 msgid "PeakURL sent a test email to %s."
 msgstr "Το PeakURL έστειλε ένα δοκιμαστικό email στο %s."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:561
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:570
 msgid "PeakURL sent a test email to your account email."
 msgstr "Το PeakURL έστειλε ένα δοκιμαστικό email στο email του λογαριασμού σας."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:565
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:574
 msgid "Test email failed"
 msgstr "Η αποστολή δοκιμαστικού email απέτυχε"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:568
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:577
 msgid "PeakURL could not send the test email."
 msgstr "Το PeakURL δεν μπόρεσε να στείλει το δοκιμαστικό email."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:598
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:607
 msgid "Release reinstalled"
 msgstr "Η έκδοση επανεγκαταστάθηκε"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:599
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:608
 msgid "Update installed"
 msgstr "Ενημέρωση installed"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:603
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:612
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:120
 msgid "PeakURL %s has been reinstalled."
 msgstr "Το PeakURL %s επανεγκαταστάθηκε."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:604
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:613
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:121
 msgid "PeakURL %s is now installed."
 msgstr "Το PeakURL %s είναι τώρα εγκατεστημένο."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:608
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:617
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:125
 msgid "The latest version has been reinstalled."
 msgstr "Η πιο πρόσφατη έκδοση έχει επανεγκατασταθεί."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:609
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:618
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:126
 msgid "The latest version is now installed."
 msgstr "Η πιο πρόσφατη έκδοση είναι τώρα εγκατεστημένη."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:614
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:623
 msgid "Reinstall failed"
 msgstr "Η επανεγκατάσταση απέτυχε"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:614
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:623
 msgid "Update failed"
 msgstr "Η ενημέρωση απέτυχε"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:618
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:627
 msgid "PeakURL could not reinstall the latest version."
 msgstr "Το PeakURL δεν μπόρεσε να επανεγκαταστήσει την πιο πρόσφατη έκδοση."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:619
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:628
 msgid "PeakURL could not apply the update."
 msgstr "Το PeakURL δεν μπόρεσε να εφαρμόσει την ενημέρωση."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:644
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:653
 msgid "PeakURL repaired the database schema. Review any remaining warnings below."
 msgstr "Το PeakURL επιδιόρθωσε το σχήμα της βάσης δεδομένων. Ελέγξτε τυχόν εναπομείνασες προειδοποιήσεις παρακάτω."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:647
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:656
 msgid "The database schema is now current."
 msgstr "Το σχήμα της βάσης δεδομένων είναι τώρα ενημερωμένο."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:651
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:660
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:165
 msgid "Database upgrade failed"
 msgstr "Η αναβάθμιση της βάσης δεδομένων απέτυχε"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:654
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:663
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:168
 msgid "PeakURL could not repair the database schema."
 msgstr "Το PeakURL δεν μπόρεσε να επιδιορθώσει το σχήμα της βάσης δεδομένων."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:761
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:770
 msgid "Delete API key"
 msgstr "Διαγραφή Κλειδί API"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:765
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:774
 msgid "Delete %s? Any scripts, automations, or extensions using it will stop working immediately."
 msgstr "Διαγραφή του %s; Τυχόν σενάρια (scripts), αυτοματισμοί ή επεκτάσεις που το χρησιμοποιούν θα σταματήσουν να λειτουργούν αμέσως."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:770
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:779
 msgid "this API key"
 msgstr "αυτό το κλειδί API"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:774
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:783
 msgid "Delete key"
 msgstr "Διαγραφή κλειδιού"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:775
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:784
 msgid "Keep key"
 msgstr "Διατήρηση κλειδιού"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:785
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:794
 msgid "Reinstall PeakURL %s?"
 msgstr "Επανεγκατάσταση του PeakURL %s;"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:786
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:795
 msgid "Install PeakURL %s?"
 msgstr "Εγκατάσταση του PeakURL %s;"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:789
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:798
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:112
 msgid "update"
 msgstr "ενημέρωση"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:795
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:804
 msgid "PeakURL will restore the latest version and refresh the included files."
 msgstr "Το PeakURL θα επαναφέρει την πιο πρόσφατη έκδοση και θα ανανεώσει τα συμπεριλαμβανόμενα αρχεία."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:798
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:807
 msgid "PeakURL will install the latest version and refresh the included files."
 msgstr "Το PeakURL θα εγκαταστήσει την πιο πρόσφατη έκδοση και θα ανανεώσει τα συμπεριλαμβανόμενα αρχεία."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:804
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:813
 msgid "Reinstall latest version"
 msgstr "Επανεγκατάσταση πιο πρόσφατης έκδοσης"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:805
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:814
 msgid "Install update"
 msgstr "Εγκατάσταση ενημέρωσης"
 
@@ -3003,19 +3068,23 @@ msgid "Current Password"
 msgstr "Τρέχων κωδικός πρόσβασης"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:73
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:39
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:41
 msgid "End all other sessions"
 msgstr "Τερματισμός όλων των άλλων συνεδριών"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:75
-msgid "End %s other active session(s) for this account? Any browsers or devices using them will be signed out immediately."
-msgstr "Τερματισμός %s άλλων ενεργών συνεδριών για αυτόν τον λογαριασμό; Τυχόν προγράμματα περιήγησης ή συσκευές που τις χρησιμοποιούν θα αποσυνδεθούν αμέσως."
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:76
+msgid "End 1 other active session for this account? Any browsers or devices using it will be signed out immediately."
+msgstr "Τερματισμός 1 άλλης ενεργής συνεδρίας για αυτόν τον λογαριασμό; Τυχόν προγράμματα περιήγησης ή συσκευές που τη χρησιμοποιούν θα αποσυνδεθούν αμέσως."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:80
+msgid "End %s other active sessions for this account? Any browsers or devices using them will be signed out immediately."
+msgstr "Τερματισμός %s άλλων ενεργών συνεδριών για αυτόν τον λογαριασμό; Τυχόν προγράμματα περιήγησης ή συσκευές που τις χρησιμοποιούν θα αποσυνδεθούν αμέσως."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:86
 msgid "End sessions"
 msgstr "Τερματισμός συνεδριών"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:81
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:87
 msgid "Keep sessions"
 msgstr "Διατήρηση συνεδριών"
 
@@ -3211,19 +3280,23 @@ msgid "Save or download these codes now—they won't be shown again."
 msgstr "Αποθηκεύστε ή κατεβάστε αυτούς τους κωδικούς τώρα—δεν θα εμφανιστούν ξανά."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:22
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:688
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:693
 msgid "Active Sessions"
 msgstr "Ενεργές συνεδρίες"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:27
-msgid "%s active session(s)"
+msgid "1 active session"
+msgstr "1 ενεργή συνεδρία"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:29
+msgid "%s active sessions"
 msgstr "%s ενεργές συνεδρίες"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:46
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:48
 msgid "Loading security data..."
 msgstr "Φόρτωση δεδομένων ασφαλείας..."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:50
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:52
 msgid "No active sessions found."
 msgstr "Δεν βρέθηκαν ενεργές συνεδρίες."
 
@@ -3256,16 +3329,16 @@ msgstr "Τελευταία δημιουργία:"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:555
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:574
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:580
-#: ui/pages/dashboard/activity/ActivityPage.tsx:141
-#: ui/pages/dashboard/activity/ActivityPage.tsx:164
-#: ui/pages/dashboard/activity/ActivityPage.tsx:997
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:49
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:72
+#: ui/pages/dashboard/activity/ActivityPage.tsx:154
+#: ui/pages/dashboard/activity/ActivityPage.tsx:196
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1080
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:53
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:90
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:31
 #: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:39
 #: ui/pages/dashboard/_components/RecentClicks/RecentClicks.tsx:11
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:38
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:182
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:43
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:189
 #: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:172
 #: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:179
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:106
@@ -3354,217 +3427,250 @@ msgstr "Ενημέρωση..."
 msgid "Update Password"
 msgstr "Ενημέρωση κωδικού πρόσβασης"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:156
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:161
 msgid "Loading languages..."
 msgstr "Φόρτωση γλωσσών..."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:162
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:167
 msgid "12-hour (AM/PM)"
 msgstr "12ωρη (ΠΜ/ΜΜ)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:163
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:168
 msgid "24-hour"
 msgstr "24ωρη"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:166
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:171
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:74
+msgid "7 days"
+msgstr "7 ημέρες"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:172
+msgid "14 days"
+msgstr "14 ημέρες"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:173
+msgid "30 days (Default)"
+msgstr "30 ημέρες (Προεπιλογή)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:174
+msgid "60 days"
+msgstr "60 ημέρες"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:175
+msgid "90 days"
+msgstr "90 ημέρες"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:176
+msgid "Never (Keep indefinitely)"
+msgstr "Ποτέ (Διατήρηση επ' αόριστον)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:179
 msgid "Default (Landing Page)"
 msgstr "Προεπιλογή (Σελίδα προορισμού)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:167
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:180
 msgid "Redirect URL"
 msgstr "URL ανακατεύθυνσης"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:168
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:181
 msgid "Login Page"
 msgstr "Σελίδα σύνδεσης"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:279
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:292
 msgid "Replace Favicon"
 msgstr "Αντικατάσταση Favicon"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:280
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:293
 msgid "Choose Favicon"
 msgstr "Επιλογή Favicon"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:296
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:309
 msgid "Replace Preview Image"
 msgstr "Αντικατάσταση εικόνας προεπισκόπησης"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:297
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:310
 msgid "Choose Preview Image"
 msgstr "Επιλογή εικόνας προεπισκόπησης"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:304
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:317
 msgid "Profile Information"
 msgstr "Πληροφορίες προφίλ"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:309
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:322
 #: ui/pages/dashboard/users/UsersPage.tsx:205
 msgid "First Name"
 msgstr "Όνομα"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:316
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:329
 #: ui/pages/dashboard/users/UsersPage.tsx:211
 msgid "Last Name"
 msgstr "Επώνυμο"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:323
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:336
 #: ui/pages/dashboard/users/UsersPage.tsx:220
 msgid "Display Name"
 msgstr "Όνομα εμφάνισης"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:336
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:349
 msgid "Cannot be changed"
 msgstr "Δεν μπορεί να αλλάξει"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:353
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:366
 msgid "Email Address"
 msgstr "Διεύθυνση email"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:364
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:377
 msgid "Phone Number"
 msgstr "Αριθμός τηλεφώνου"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:371
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:384
 msgid "Company"
 msgstr "Εταιρεία"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:377
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:390
 msgid "Job Title"
 msgstr "Τίτλος θέσης εργασίας"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:384
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:397
 msgid "Bio"
 msgstr "Βιογραφικό"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:396
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:409
 msgid "Site Configuration"
 msgstr "Διαμόρφωση ιστότοπου"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:409
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:422
 msgid "Tagline"
 msgstr "Σύντομη περιγραφή"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:418
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:431
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:377
 msgid "Site Language"
 msgstr "Γλώσσα ιστότοπου"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:434
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:447
 msgid "Site Timezone"
 msgstr "Ζώνη ώρας ιστότοπου"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:445
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:458
 msgid "Site timezone"
 msgstr "Ζώνη ώρας ιστότοπου"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:451
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:464
 msgid "Time Format"
 msgstr "Μορφή ώρας"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:462
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:475
 msgid "Time format"
 msgstr "Μορφή ώρας"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:469
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:480
+msgid "Trash Retention Period"
+msgstr "Περίοδος διατήρησης στον κάδο"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:493
+msgid "Trash retention period"
+msgstr "Περίοδος διατήρησης στον κάδο"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:500
 msgid "Homepage Configuration"
 msgstr "Διαμόρφωση αρχικής σελίδας"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:475
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:490
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:506
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:521
 msgid "Root URL Behavior"
 msgstr "Συμπεριφορά ριζικού URL"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:496
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:527
 msgid "Custom Redirect URL"
 msgstr "Προσαρμοσμένο URL ανακατεύθυνσης"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:509
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:540
 msgid "Visitors to the root domain will be redirected to this URL."
 msgstr "Οι επισκέπτες στον ριζικό τομέα θα ανακατευθύνονται σε αυτό το URL."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:519
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:550
 msgid "To customize your HTML landing page, edit the following file in your installation:"
 msgstr "Για να προσαρμόσετε τη σελίδα προορισμού HTML, επεξεργαστείτε το παρακάτω αρχείο στην εγκατάστασή σας:"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:529
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:560
 msgid "This raw HTML file will be served at the root domain. You can include custom styles, scripts, and branding."
 msgstr "Αυτό το αρχείο HTML θα εξυπηρετείται στον ριζικό τομέα. Μπορείτε να συμπεριλάβετε προσαρμοσμένα στυλ, σενάρια (scripts) και επωνυμία."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:539
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:570
 msgid "Branding"
 msgstr "Επωνυμία (Branding)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:546
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:577
 msgid "Site Favicon"
 msgstr "Favicon ιστότοπου"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:549
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:580
 msgid "Upload a square PNG favicon. PeakURL will use it for browser tabs, Apple touch icons, and the site web manifest."
 msgstr "Μεταφορτώστε ένα τετράγωνο favicon PNG. Το PeakURL θα το χρησιμοποιήσει για καρτέλες προγράμματος περιήγησης, εικονίδια αφής Apple και τη δήλωση ιστού του ιστότοπου."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:559
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:590
 msgid "Favicon PNG"
 msgstr "Favicon PNG"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:595
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:626
 msgid "Use a square PNG, ideally %s. The minimum supported size is 180 x 180."
 msgstr "Χρησιμοποιήστε τετράγωνο PNG, ιδανικά %s. Το ελάχιστο υποστηριζόμενο μέγεθος είναι 180 x 180."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:623
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:654
 msgid "Remove Favicon"
 msgstr "Διαγραφή le favicon"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:640
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:671
 msgid "Current favicon preview"
 msgstr "Προεπισκόπηση τρέχοντος favicon"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:690
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:721
 msgid "No favicon configured"
 msgstr "Δεν έχει διαμορφωθεί favicon"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:700
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:731
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:60
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Form.tsx:69
 msgid "Social Preview"
 msgstr "Κοινωνική προεπισκόπηση"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:703
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:734
 msgid "Upload the default image used when short links are shared on social platforms. Individual links can override it."
 msgstr "Μεταφορτώστε την προεπιλεγμένη εικόνα που χρησιμοποιείται κατά την κοινοποίηση σύντομων συνδέσμων σε κοινωνικά δίκτυα. Οι μεμονωμένοι σύνδεσμοι μπορούν να την παρακάμψουν."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:714
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:745
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:139
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:106
 msgid "Preview Image"
 msgstr "Εικόνα προεπισκόπησης"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:749
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:780
 msgid "Use a PNG, JPG, or WebP image, ideally %s, for clean previews on Facebook, X, LinkedIn, and messaging apps."
 msgstr "Χρησιμοποιήστε εικόνα PNG, JPG ή WebP, ιδανικά %s, για καθαρές προεπισκοπήσεις σε Facebook, X, LinkedIn και εφαρμογές μηνυμάτων."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:771
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:802
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:149
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:116
 msgid "Remove Preview Image"
 msgstr "Διαγραφή l’image d’aperçu"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:783
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:814
 msgid "Default social preview image"
 msgstr "Προεπιλεγμένη εικόνα κοινωνικής προεπισκόπησης"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:796
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:827
 msgid "No default preview image"
 msgstr "Δεν υπάρχει προεπιλεγμένη εικόνα προεπισκόπησης"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:813
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:844
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:505
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:524
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:28
 msgid "Saving..."
 msgstr "Αποθήκευση..."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:813
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:844
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:33
 #: ui/pages/dashboard/users/UsersPage.tsx:335
 msgid "Save Changes"
@@ -3589,7 +3695,7 @@ msgstr "Λήψη βάσης δεδομένων"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:153
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:146
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:634
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:639
 #: ui/pages/dashboard/tools/import/_components/results/ImportDetails.tsx:32
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:64
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:43
@@ -3600,18 +3706,18 @@ msgstr "Κατάσταση"
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:154
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:184
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:182
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:599
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:636
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:604
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:641
 msgid "Ready"
 msgstr "Έτοιμο"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:154
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:637
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:642
 msgid "Setup Required"
 msgstr "Απαιτείται ρύθμιση"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:157
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:640
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:645
 msgid "Database Updated"
 msgstr "Η βάση δεδομένων ενημερώθηκε"
 
@@ -3622,7 +3728,7 @@ msgid "Never"
 msgstr "Ποτέ"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:170
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:648
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:653
 msgid "Database Size"
 msgstr "Μέγεθος βάσης δεδομένων"
 
@@ -3631,10 +3737,10 @@ msgstr "Μέγεθος βάσης δεδομένων"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:206
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:406
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:562
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:627
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:644
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:651
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:795
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:632
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:649
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:656
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:800
 msgid "Not available"
 msgstr "Μη διαθέσιμο"
 
@@ -3672,7 +3778,7 @@ msgid "PeakURL stores these values encrypted in the database so it can refresh t
 msgstr "Το PeakURL αποθηκεύει αυτές τις τιμές κρυπτογραφημένες στη βάση δεδομένων, ώστε να μπορεί να ανανεώσει τη βάση δεδομένων GeoLite2 City αργότερα χωρίς να ρωτήσει ξανά."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:233
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:663
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:668
 msgid "Account ID"
 msgstr "ID λογαριασμού"
 
@@ -3947,7 +4053,7 @@ msgstr "Χρησιμοποιήστε κλειδιά ιστότοπου και μ
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:162
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:120
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:568
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:615
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:620
 msgid "None"
 msgstr "Κανένα"
 
@@ -3962,7 +4068,7 @@ msgstr "Επικολλήστε το μυστικό κλειδί από τον π
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:176
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:182
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:399
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:622
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:627
 msgid "Disabled"
 msgstr "Απενεργοποιημένος"
 
@@ -3971,9 +4077,9 @@ msgid "Editing"
 msgstr "Επεξεργασία"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:185
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:607
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:611
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:664
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:612
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:616
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:669
 msgid "Not configured"
 msgstr "Δεν έχει διαμορφωθεί"
 
@@ -4118,7 +4224,7 @@ msgid "Connect PeakURL to your automations with outbound webhooks for link activ
 msgstr "Συνδέστε το PeakURL με τους αυτοματισμούς σας μέσω εξερχόμενων webhooks για δραστηριότητα συνδέσμων."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:172
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:692
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:697
 msgid "Webhooks"
 msgstr "Webhooks"
 
@@ -4174,7 +4280,7 @@ msgstr "Αποτυχία κατά την load webhooks."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:361
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:26
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:35
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:40
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:44
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:57
 msgid "Inactive"
@@ -4274,14 +4380,13 @@ msgstr "Κλειδί API"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:105
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:33
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:38
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:56
 msgid "Active"
 msgstr "Ενεργός"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:131
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:221
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:148
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:247
 msgid "Delete"
 msgstr "Διαγραφή"
 
@@ -4403,7 +4508,7 @@ msgid "SMTP Configuration"
 msgstr "Διαμόρφωση SMTP"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:255
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:604
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:609
 msgid "From Name"
 msgstr "Όνομα αποστολέα"
 
@@ -4412,7 +4517,7 @@ msgid "PeakURL"
 msgstr "PeakURL"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:266
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:603
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:608
 msgid "From Email"
 msgstr "Email αποστολέα"
 
@@ -4421,7 +4526,7 @@ msgid "noreply@yourdomain.com"
 msgstr "noreply@yourdomain.com"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:282
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:606
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:611
 msgid "SMTP Host"
 msgstr "Κεντρικός υπολογιστής SMTP"
 
@@ -4430,12 +4535,12 @@ msgid "smtp.example.com"
 msgstr "smtp.example.com"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:297
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:610
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:615
 msgid "SMTP Port"
 msgstr "Θύρα SMTP"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:314
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:614
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:619
 msgid "Encryption"
 msgstr "Κρυπτογράφηση"
 
@@ -4444,7 +4549,7 @@ msgid "SMTP encryption"
 msgstr "Κρυπτογράφηση SMTP"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:330
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:618
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:623
 msgid "Authentication"
 msgstr "Έλεγχος ταυτότητας"
 
@@ -4505,12 +4610,12 @@ msgid "Manage your account preferences and configurations"
 msgstr "Διαχειριστείτε τις προτιμήσεις και τις διαμορφώσεις του λογαριασμού σας"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:48
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:658
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:663
 msgid "Yes"
 msgstr "Ναι"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:48
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:659
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:664
 msgid "No"
 msgstr "Όχι"
 
@@ -4575,7 +4680,7 @@ msgid "Debug Mode"
 msgstr "Λειτουργία αποσφαλμάτωσης (Debug Mode)"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:398
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:621
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:626
 msgid "Enabled"
 msgstr "Ενεργοποιημένο"
 
@@ -4608,13 +4713,13 @@ msgstr "Κατάλογος γλωσσών"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:437
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:466
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:671
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:676
 msgid "Readable"
 msgstr "Αναγνώσιμο"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:438
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:467
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:672
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:677
 msgid "Not Readable"
 msgstr "Μη αναγνώσιμο"
 
@@ -4716,131 +4821,135 @@ msgstr "Πρόθεμα πίνακα"
 msgid "Schema Status"
 msgstr "Κατάσταση σχήματος"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:588
-msgid "issue(s) detected"
-msgstr "εντοπίστηκαν προβλήματα"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:589
+msgid "1 issue detected"
+msgstr "Εντοπίστηκε 1 πρόβλημα"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:594
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:591
+msgid "%s issues detected"
+msgstr "Εντοπίστηκαν %s προβλήματα"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:599
 msgid "Driver"
 msgstr "Πρόγραμμα οδήγησης"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:596
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:601
 msgid "Transport Ready"
 msgstr "Έτοιμη μεταφορά"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:600
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:605
 msgid "Needs Setup"
 msgstr "Χρειάζεται ρύθμιση"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:626
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:631
 msgid "Settings Storage"
 msgstr "Αποθήκευση ρυθμίσεων"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:655
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:660
 msgid "Credentials Saved"
 msgstr "Credentials Αποθήκευσηd"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:667
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:672
 msgid "Database Path"
 msgstr "Διαδρομή βάσης δεδομένων"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:677
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:682
 msgid "Refresh Command"
 msgstr "Εντολή ανανέωσης"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:685
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:690
 msgid "Short Links"
 msgstr "Σύντομοι σύνδεσμοι"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:694
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:699
 msgid "Activity Events"
 msgstr "Συμβάντα δραστηριότητας"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:698
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:703
 msgid "Managed Tables"
 msgstr "Διαχειριζόμενοι πίνακες"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:707
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:712
 msgid "Directories and Sizes"
 msgstr "Κατάλογοι και μεγέθη"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:710
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:715
 msgid "Server"
 msgstr "Διακομιστής"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:718
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:723
 msgid "Data Footprint"
 msgstr "Αποτύπωμα δεδομένων"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:755
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:760
 msgid "System status info copied to clipboard"
 msgstr "Οι πληροφορίες κατάστασης συστήματος αντιγράφηκαν στο πρόχειρο"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:761
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:766
 msgid "PeakURL could not copy the system status information."
 msgstr "Το PeakURL δεν μπόρεσε να αντιγράψει τις πληροφορίες κατάστασης συστήματος."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:792
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:797
 msgid "Last checked: %s"
 msgstr "Τελευταίος έλεγχος: %s"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:819
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:824
 msgid "The system status check shows information about your PeakURL configuration and items that may need your attention."
 msgstr "Ο έλεγχος κατάστασης συστήματος εμφανίζει πληροφορίες σχετικά με τη διαμόρφωση του PeakURL και στοιχεία που ενδέχεται να χρειάζονται την προσοχή σας."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:829
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:834
 msgid "1 critical issue"
 msgstr "1 κρίσιμο πρόβλημα"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:830
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:835
 msgid "%s critical issues"
 msgstr "%s κρίσιμα προβλήματα"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:832
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:837
 msgid "Critical issues are items that may have a high impact on your site performance or security. Resolving these issues should be prioritized."
 msgstr "Τα κρίσιμα προβλήματα είναι στοιχεία που ενδέχεται να έχουν υψηλό αντίκτυπο στην απόδοση ή την ασφάλεια του ιστότοπού σας. Η επίλυσή τους πρέπει να έχει προτεραιότητα."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:845
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:850
 msgid "1 recommended improvement"
 msgstr "1 συνιστώμενη βελτίωση"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:846
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:851
 msgid "%s recommended improvements"
 msgstr "%s συνιστώμενες βελτιώσεις"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:848
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:853
 msgid "Recommended improvements are beneficial for your site, though not as urgent as a critical issue. They may include improvements in areas such as security, performance, and user experience."
 msgstr "Οι συνιστώμενες βελτιώσεις είναι επωφελείς για τον ιστότοπό σας, αν και όχι τόσο επείγουσες όσο ένα κρίσιμο πρόβλημα. Μπορεί να περιλαμβάνουν βελτιώσεις σε τομείς όπως η ασφάλεια, η απόδοση και η εμπειρία χρήστη."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:862
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:867
 msgid "All system status checks are currently passing."
 msgstr "Όλοι οι έλεγχοι κατάστασης συστήματος είναι προς το παρόν επιτυχείς."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:883
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:888
 msgid "Hide passed tests"
 msgstr "Απόκρυψη επιτυχών ελέγχων"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:886
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:891
 msgid "1 passed test"
 msgstr "1 επιτυχής έλεγχος"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:887
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:892
 msgid "%s passed tests"
 msgstr "%s επιτυχείς έλεγχοι"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:937
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:942
 msgid "System Status Info"
 msgstr "Πληροφορίες κατάστασης συστήματος"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:940
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:945
 msgid "This page can show you every detail about the configuration of your PeakURL install."
 msgstr "Αυτή η σελίδα μπορεί να σας δείξει κάθε λεπτομέρεια σχετικά με τη διαμόρφωση της εγκατάστασης PeakURL σας."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:945
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:950
 msgid "If you want to export a full snapshot of this page, you can use the button below to copy it to the clipboard."
 msgstr "Εάν θέλετε να εξαγάγετε ένα πλήρες στιγμιότυπο αυτής της σελίδας, μπορείτε να χρησιμοποιήσετε το παρακάτω κουμπί για να το αντιγράψετε στο πρόχειρο."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:960
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:965
 msgid "Copy site info to clipboard"
 msgstr "Αντιγραφή πληροφοριών ιστότοπου στο πρόχειρο"
 
@@ -4994,7 +5103,7 @@ msgstr "Ψευδώνυμο"
 #: ui/pages/dashboard/tools/import/_components/results/ImportDetails.tsx:33
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:55
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:110
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:84
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:107
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:42
 msgid "Short URL"
 msgstr "Σύντομο URL"
@@ -5341,8 +5450,8 @@ msgid "Author"
 msgstr "Συντάκτης"
 
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
-#: ui/pages/dashboard/activity/ActivityPage.tsx:891
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:72
+#: ui/pages/dashboard/activity/ActivityPage.tsx:974
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:111
 #: ui/pages/dashboard/users/UsersPage.tsx:564
 msgid "Actions"
 msgstr "Ενέργειες"
@@ -5355,298 +5464,376 @@ msgstr "Απενεργοποίηση"
 msgid "Activate"
 msgstr "Ενεργοποίηση"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:120
+#: ui/pages/dashboard/activity/ActivityPage.tsx:122
 msgid "Link created"
 msgstr "Ο σύνδεσμος δημιουργήθηκε"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:122
+#: ui/pages/dashboard/activity/ActivityPage.tsx:124
 msgid "Link updated"
 msgstr "Ο σύνδεσμος ενημερώθηκε"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:124
-msgid "Link deleted"
-msgstr "Ο σύνδεσμος διαγράφηκε"
-
 #: ui/pages/dashboard/activity/ActivityPage.tsx:126
+#: ui/pages/dashboard/activity/ActivityPage.tsx:463
+msgid "Link permanently deleted"
+msgstr "Ο σύνδεσμος διαγράφηκε οριστικά"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:128
+msgid "Link moved to trash"
+msgstr "Ο σύνδεσμος μεταφέρθηκε στον κάδο"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:130
+#: ui/pages/dashboard/activity/ActivityPage.tsx:472
+#: ui/pages/dashboard/links/LinksPage.tsx:238
+msgid "Link restored"
+msgstr "Ο σύνδεσμος επαναφέρθηκε"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:132
+#: ui/pages/dashboard/links/LinksPage.tsx:268
+msgid "Trash emptied"
+msgstr "Ο κάδος αδειάστηκε"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:134
 msgid "User created"
 msgstr "Ο χρήστης δημιουργήθηκε"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:128
+#: ui/pages/dashboard/activity/ActivityPage.tsx:136
 msgid "User updated"
 msgstr "Ο χρήστης ενημερώθηκε"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:130
+#: ui/pages/dashboard/activity/ActivityPage.tsx:138
 #: ui/pages/dashboard/users/UsersPage.tsx:434
 msgid "User deleted"
 msgstr "Ο χρήστης διαγράφηκε"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:132
+#: ui/pages/dashboard/activity/ActivityPage.tsx:140
 msgid "Link click"
 msgstr "Κλικ συνδέσμου"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:143
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:52
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:168
+#: ui/pages/dashboard/activity/ActivityPage.tsx:159
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:55
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:190
 msgid "Unknown user"
 msgstr "Άγνωστος χρήστης"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:147
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:55
-msgid "Created new link %s"
-msgstr "Δημιουργήθηκε νέος σύνδεσμος %s"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:163
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:58
+msgid "Created new link \"%s\""
+msgstr "Δημιουργήθηκε νέος σύνδεσμος \"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:149
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:57
-msgid "Updated link %s"
-msgstr "Ενημερώθηκε ο σύνδεσμος %s"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:165
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:60
+msgid "Updated link \"%s\""
+msgstr "Ενημερώθηκε ο σύνδεσμος \"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:151
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:59
-msgid "Deleted link %s"
-msgstr "Διαγράφηκε ο σύνδεσμος %s"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:167
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:62
+msgid "Permanently deleted link \"%s\""
+msgstr "Οριστική διαγραφή συνδέσμου \"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:153
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:61
-msgid "Created user %s"
-msgstr "Δημιουργήθηκε ο χρήστης %s"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:169
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:64
+msgid "Moved link \"%s\" to trash"
+msgstr "Μεταφέρθηκε ο σύνδεσμος \"%s\" στον κάδο"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:155
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:63
-msgid "Updated user %s"
-msgstr "Ενημερώθηκε ο χρήστης %s"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:171
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:66
+msgid "Restored link \"%s\""
+msgstr "Επαναφέρθηκε ο σύνδεσμος \"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:157
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:65
-msgid "Deleted user %s"
-msgstr "Διαγράφηκε ο χρήστης %s"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:176
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:71
+msgid "Permanently deleted 1 link from trash"
+msgstr "Οριστική διαγραφή 1 συνδέσμου από τον κάδο"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:161
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:69
+#: ui/pages/dashboard/activity/ActivityPage.tsx:178
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:73
+msgid "Permanently deleted %s links from trash"
+msgstr "Οριστική διαγραφή %s συνδέσμων από τον κάδο"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:182
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:77
+msgid "Emptied links from trash"
+msgstr "Άδειασμα συνδέσμων από τον κάδο"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:185
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:79
+msgid "Created user \"%s\""
+msgstr "Δημιουργήθηκε ο χρήστης \"%s\""
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:187
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:81
+msgid "Updated user \"%s\""
+msgstr "Ενημερώθηκε ο χρήστης \"%s\""
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:189
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:83
+msgid "Deleted user \"%s\""
+msgstr "Διαγράφηκε ο χρήστης \"%s\""
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:193
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:87
 msgid "from %s"
 msgstr "από %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:169
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:76
-msgid "Link %1$s was clicked %2$s"
-msgstr "Ο σύνδεσμος %1$s πατήθηκε %2$s"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:201
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:94
+msgid "Link \"%1$s\" was clicked %2$s"
+msgstr "Έγινε κλικ στον σύνδεσμο \"%1$s\" %2$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:173
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:80
-msgid "Link %s was clicked"
-msgstr "Ο σύνδεσμος %s πατήθηκε"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:205
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:98
+msgid "Link \"%s\" was clicked"
+msgstr "Έγινε κλικ στον σύνδεσμο \"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:176
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:82
+#: ui/pages/dashboard/activity/ActivityPage.tsx:208
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:100
 msgid "Unknown activity"
 msgstr "Άγνωστη δραστηριότητα"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:211
-#: ui/pages/dashboard/activity/ActivityPage.tsx:220
+#: ui/pages/dashboard/activity/ActivityPage.tsx:249
+#: ui/pages/dashboard/activity/ActivityPage.tsx:258
 msgid "Unknown date"
 msgstr "Άγνωστη ημερομηνία"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:231
+#: ui/pages/dashboard/activity/ActivityPage.tsx:269
 msgid "Today"
 msgstr "Σήμερα"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:235
+#: ui/pages/dashboard/activity/ActivityPage.tsx:273
 msgid "Yesterday"
 msgstr "Χθες"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:570
-#: ui/pages/dashboard/activity/ActivityPage.tsx:598
-#: ui/pages/dashboard/activity/ActivityPage.tsx:628
+#: ui/pages/dashboard/activity/ActivityPage.tsx:450
+msgid "Link already active"
+msgstr "Ο σύνδεσμος είναι ήδη ενεργός"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:451
+msgid "This link is already active and does not need to be restored."
+msgstr "Αυτός ο σύνδεσμος είναι ήδη ενεργός και δεν χρειάζεται επαναφορά."
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:473
+msgid "The link has been restored successfully."
+msgstr "Ο σύνδεσμος επαναφέρθηκε επιτυχώς."
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:477
+#: ui/pages/dashboard/links/LinksPage.tsx:243
+msgid "Unable to restore link"
+msgstr "Αδυναμία επαναφοράς συνδέσμου"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:480
+msgid "Failed to restore link from activity record."
+msgstr "Αποτυχία επαναφοράς συνδέσμου από την εγγραφή δραστηριότητας."
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:653
+#: ui/pages/dashboard/activity/ActivityPage.tsx:681
+#: ui/pages/dashboard/activity/ActivityPage.tsx:711
 msgid "Activity deleted"
 msgstr "Η δραστηριότητα διαγράφηκε"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:571
+#: ui/pages/dashboard/activity/ActivityPage.tsx:654
 msgid "The activity log entry has been removed."
 msgstr "Η καταχώριση του αρχείου καταγραφής δραστηριότητας καταργήθηκε."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:575
-#: ui/pages/dashboard/activity/ActivityPage.tsx:606
-#: ui/pages/dashboard/activity/ActivityPage.tsx:633
+#: ui/pages/dashboard/activity/ActivityPage.tsx:658
+#: ui/pages/dashboard/activity/ActivityPage.tsx:689
+#: ui/pages/dashboard/activity/ActivityPage.tsx:716
 msgid "Unable to delete activity"
 msgstr "Δεν είναι δυνατή η διαγραφή της δραστηριότητας"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:578
+#: ui/pages/dashboard/activity/ActivityPage.tsx:661
 msgid "The activity log entry could not be removed."
 msgstr "Η καταχώριση του αρχείου καταγραφής δραστηριότητας δεν ήταν δυνατό να καταργηθεί."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:600
+#: ui/pages/dashboard/activity/ActivityPage.tsx:683
 msgid "Deleted %s activity log entries."
 msgstr "Διαγράφηκαν %s καταχωρίσεις αρχείου καταγραφής δραστηριότητας."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:609
+#: ui/pages/dashboard/activity/ActivityPage.tsx:692
 msgid "The selected activity log entries could not be removed."
 msgstr "Οι επιλεγμένες καταχωρίσεις του αρχείου καταγραφής δραστηριότητας δεν ήταν δυνατό να καταργηθούν."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:629
+#: ui/pages/dashboard/activity/ActivityPage.tsx:712
 msgid "All activity log entries have been removed."
 msgstr "Όλες οι καταχωρίσεις του αρχείου καταγραφής δραστηριότητας καταργήθηκαν."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:636
+#: ui/pages/dashboard/activity/ActivityPage.tsx:719
 msgid "The activity logs could not be removed."
 msgstr "Τα αρχεία καταγραφής δραστηριότητας δεν ήταν δυνατό να καταργηθούν."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:662
+#: ui/pages/dashboard/activity/ActivityPage.tsx:745
 msgid "All activity"
 msgstr "Όλη η δραστηριότητα"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:687
+#: ui/pages/dashboard/activity/ActivityPage.tsx:770
 msgid "Total events"
 msgstr "Συνολικά συμβάντα"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:693
+#: ui/pages/dashboard/activity/ActivityPage.tsx:776
 msgid "Link events"
 msgstr "Συμβάντα συνδέσμων"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:699
+#: ui/pages/dashboard/activity/ActivityPage.tsx:782
 msgid "User events"
 msgstr "Συμβάντα χρηστών"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:711
+#: ui/pages/dashboard/activity/ActivityPage.tsx:794
 msgid "Audit Log"
 msgstr "Αρχείο καταγραφής ελέγχου"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:715
+#: ui/pages/dashboard/activity/ActivityPage.tsx:798
 msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
 msgstr "Ελέγξτε τις αλλαγές συνδέσμων και τα συμβάντα διαχείρισης χρηστών σε ένα μέρος με φίλτρα, χρονικές σημάνσεις και λεπτομέρειες χρήστη."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:725
-#: ui/pages/dashboard/activity/ActivityPage.tsx:726
+#: ui/pages/dashboard/activity/ActivityPage.tsx:808
+#: ui/pages/dashboard/activity/ActivityPage.tsx:809
 msgid "Refresh activity history"
 msgstr "Ανανέωση ιστορικού δραστηριότητας"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:765
+#: ui/pages/dashboard/activity/ActivityPage.tsx:848
 msgid "Latest event"
 msgstr "Τελευταίο συμβάν"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:773
+#: ui/pages/dashboard/activity/ActivityPage.tsx:856
 msgid "No recent events"
 msgstr "Δεν υπάρχουν πρόσφατα συμβάντα"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:830
+#: ui/pages/dashboard/activity/ActivityPage.tsx:913
 msgid "Activity history"
 msgstr "Ιστορικό δραστηριότητας"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:837
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:28
+#: ui/pages/dashboard/activity/ActivityPage.tsx:920
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:32
 msgid "%s selected"
 msgstr "Επιλέχθηκαν %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:847
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1334
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:36
+#: ui/pages/dashboard/activity/ActivityPage.tsx:930
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1504
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:73
 msgid "Delete selected"
 msgstr "Διαγραφή επιλεγμένων"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:855
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:45
+#: ui/pages/dashboard/activity/ActivityPage.tsx:938
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:82
 msgid "Delete all"
 msgstr "Διαγραφή όλων"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:879
+#: ui/pages/dashboard/activity/ActivityPage.tsx:962
 msgid "Select all events on this page"
 msgstr "Επιλογή όλων των συμβάντων σε αυτήν τη σελίδα"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:886
+#: ui/pages/dashboard/activity/ActivityPage.tsx:969
 msgid "Event"
 msgstr "Συμβάν"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:887
+#: ui/pages/dashboard/activity/ActivityPage.tsx:970
 msgid "Details"
 msgstr "Λεπτομέρειες"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:888
+#: ui/pages/dashboard/activity/ActivityPage.tsx:971
 msgid "When"
 msgstr "Πότε"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:950
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1033
 msgid "Select %s events"
 msgstr "Επιλογή %s συμβάντων"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1020
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1103
 msgid "By"
 msgstr "Από"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1029
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:64
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1112
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:103
 msgid "Link"
 msgstr "Σύνδεσμος"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1047
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1122
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:105
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:117
+msgid "Destination"
+msgstr "Προορισμός"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1142
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:273
 #: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:117
 msgid "From"
 msgstr "Από"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1173
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1268
 msgid "No additional details"
 msgstr "Δεν υπάρχουν πρόσθετες λεπτομέρειες"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1211
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1214
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1354
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1346
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1355
+msgid "Link is already active"
+msgstr "Ο σύνδεσμος είναι ήδη ενεργός"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1349
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1358
+msgid "Restore link"
+msgstr "Επαναφορά συνδέσμου"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1381
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1384
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1524
 msgid "Delete activity log"
 msgstr "Διαγραφή αρχείου καταγραφής δραστηριότητας"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1243
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1413
 msgid "No user activity yet"
 msgstr "Δεν υπάρχει δραστηριότητα χρήστη ακόμα"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1245
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1415
 msgid "No link activity yet"
 msgstr "Δεν υπάρχει δραστηριότητα συνδέσμων ακόμα"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1246
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1416
 msgid "No activity recorded yet"
 msgstr "Δεν έχει καταγραφεί δραστηριότητα ακόμα"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1249
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1419
 msgid "Once users manage accounts or links change, the audit log will appear here."
 msgstr "Μόλις οι χρήστες διαχειριστούν λογαριασμούς ή αλλάξουν σύνδεσμοι, το αρχείο καταγραφής ελέγχου θα εμφανιστεί εδώ."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1263
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1433
 msgid "Showing %1$s-%2$s of %3$s events"
 msgstr "Εμφάνιση %1$s-%2$s από %3$s συμβάντα"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1270
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1440
 msgid "Page %1$s of %2$s"
 msgstr "Σελίδα %1$s από %2$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1286
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1456
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:40
 msgid "Previous"
 msgstr "Προηγούμενο"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1312
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1482
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:84
 msgid "Next"
 msgstr "Επόμενο"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1323
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1493
 msgid "Delete activity logs"
 msgstr "Διαγραφή αρχείων καταγραφής δραστηριότητας"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1327
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1497
 msgid "Delete %s selected activity log entries? This action cannot be undone."
 msgstr "Διαγραφή %s επιλεγμένων καταχωρίσεων αρχείου καταγραφής δραστηριότητας; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1342
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1346
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1512
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1516
 msgid "Delete all activity"
 msgstr "Διαγραφή όλης της δραστηριότητας"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1343
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1513
 msgid "Are you sure you want to delete all activity logs? This action cannot be undone."
 msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε όλα τα αρχεία καταγραφής δραστηριότητας; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1358
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1528
 msgid "Delete the activity entry \"%s\"? This action cannot be undone."
 msgstr "Διαγραφή της καταχώρισης δραστηριότητας \"%s\"; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1365
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1535
 msgid "Delete activity"
 msgstr "Διαγραφή δραστηριότητας"
 
@@ -5908,7 +6095,7 @@ msgstr "Δεν υπάρχει πρόσφατη δραστηριότητα"
 msgid "View All Activity"
 msgstr "Προβολή όλης της δραστηριότητας"
 
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:165
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:187
 msgid "By %1$s • %2$s"
 msgstr "Από %1$s • %2$s"
 
@@ -5957,7 +6144,7 @@ msgid "Compared with %1$s to %2$s."
 msgstr "Σε σύγκριση με %1$s έως %2$s."
 
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:119
-#: ui/pages/dashboard/links/LinksPage.tsx:352
+#: ui/pages/dashboard/links/LinksPage.tsx:420
 msgid "Active Links"
 msgstr "Ενεργοί σύνδεσμοι"
 
@@ -6036,60 +6223,108 @@ msgstr "Προβολή στατιστικών"
 msgid "%s clicks"
 msgstr "%s κλικ"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:35
-msgid "Failed to delete links"
-msgstr "Αποτυχία διαγραφής συνδέσμων."
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:44
+msgid "Failed to permanently delete links"
+msgstr "Αποτυχία οριστικής διαγραφής συνδέσμων"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:56
-msgid "Delete Links"
-msgstr "Διαγραφή συνδέσμων"
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:45
+msgid "Failed to move links to trash"
+msgstr "Αποτυχία μεταφοράς συνδέσμων στον κάδο"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:78
-msgid "Are you sure you want to delete %s selected link(s)? This action cannot be undone."
-msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε τους %s επιλεγμένους συνδέσμους; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:69
+msgid "Delete Links Permanently"
+msgstr "Οριστική διαγραφή συνδέσμων"
+
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:70
+msgid "Move Links to Trash"
+msgstr "Μεταφορά συνδέσμων στον κάδο"
+
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:93
+msgid "Are you sure you want to delete 1 selected link permanently? This action cannot be undone."
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε οριστικά 1 επιλεγμένο σύνδεσμο; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
+
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:97
+msgid "Are you sure you want to delete %s selected links permanently? This action cannot be undone."
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε οριστικά %s επιλεγμένους συνδέσμους; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
 
 #: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:103
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:143
+msgid "Are you sure you want to move 1 selected link to the trash? You can restore it later."
+msgstr "Είστε βέβαιοι ότι θέλετε να μεταφέρετε 1 επιλεγμένο σύνδεσμο στον κάδο; Μπορείτε να τον επαναφέρετε αργότερα."
+
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:107
+msgid "Are you sure you want to move %s selected links to the trash? You can restore them later."
+msgstr "Είστε βέβαιοι ότι θέλετε να μεταφέρετε %s επιλεγμένους συνδέσμους στον κάδο; Μπορείτε να τους επαναφέρετε αργότερα."
+
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:132
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:166
 msgid "Deleting..."
 msgstr "Διαγραφή..."
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:109
-msgid "Delete (%s)"
-msgstr "Διαγραφή (%s)"
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:139
+msgid "Delete Permanently (%s)"
+msgstr "Οριστική διαγραφή (%s)"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:22
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:145
+msgid "Move to Trash (%s)"
+msgstr "Μεταφορά στον κάδο (%s)"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:30
+msgid "Status: All"
+msgstr "Κατάσταση: Όλα"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:31
+msgid "Status: Active"
+msgstr "Κατάσταση: Ενεργό"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:32
+msgid "Status: Inactive"
+msgstr "Κατάσταση: Ανενεργό"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:37
+msgid "Trash (%s)"
+msgstr "Κάδος (%s)"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:38
+msgid "Trash"
+msgstr "Κάδος ανακύκλωσης"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:43
 msgid "Sort: Date Created"
 msgstr "Ταξινόμηση: Ημερομηνία δημιουργίας"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:23
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:44
 msgid "Sort: Most Clicks"
 msgstr "Ταξινόμηση: Περισσότερα κλικ"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:24
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:45
 msgid "Sort: Alias"
 msgstr "Ταξινόμηση: Ψευδώνυμο"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:27
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:48
 msgid "Descending"
 msgstr "Φθίνουσα"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:28
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:49
 msgid "Ascending"
 msgstr "Αύξουσα"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:39
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:60
 msgid "Total Links:"
 msgstr "Συνολικοί σύνδεσμοι:"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:49
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:70
 msgid "Total Clicks:"
 msgstr "Συνολικά κλικ:"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:70
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:92
+msgid "Filter links by status"
+msgstr "Φιλτράρισμα συνδέσμων κατά κατάσταση"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:102
 msgid "Sort links"
 msgstr "Ταξινόμηση συνδέσμων"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:79
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:111
 msgid "Sort order"
 msgstr "Σειρά ταξινόμησης"
 
@@ -6097,36 +6332,47 @@ msgstr "Σειρά ταξινόμησης"
 msgid "Showing %1$s–%2$s of %3$s links"
 msgstr "Εμφάνιση %1$s–%2$s από %3$s συνδέσμους"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:22
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:26
 msgid "Deselect all links"
 msgstr "Αποεπιλογή όλων των συνδέσμων"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:65
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:43
+msgid "Restore selected"
+msgstr "Επαναφορά επιλεγμένων"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:52
+msgid "Delete permanently"
+msgstr "Οριστική διαγραφή"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:61
+msgid "Empty trash"
+msgstr "Άδειασμα κάδου"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:104
 msgid "Title"
 msgstr "Τίτλος"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:66
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:94
-msgid "Destination"
-msgstr "Προορισμός"
-
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:68
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:107
 msgid "Performance"
 msgstr "Απόδοση"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:70
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:109
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:35
 #: ui/pages/dashboard/users/UsersPage.tsx:561
 msgid "Created"
 msgstr "Δημιουργήθηκε"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:37
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:143
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:36
+msgid "Trashed"
+msgstr "Στον κάδο"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:42
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:150
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:58
 msgid "Expired"
 msgstr "Έληξε"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:89
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:96
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:103
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:230
@@ -6135,27 +6381,36 @@ msgstr "Έληξε"
 msgid "Copied!"
 msgstr "Αντιγράφηκε!"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:90
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:97
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:104
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:143
 msgid "Copy"
 msgstr "Αντιγραφή"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:124
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:131
 msgid "Protected"
 msgstr "Προστατευμένος"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:144
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:151
 msgid "Expires"
 msgstr "Λήγει"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:200
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:209
+msgid "Restore Link"
+msgstr "Επαναφορά συνδέσμου"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:216
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:172
+msgid "Delete Permanently"
+msgstr "Οριστική διαγραφή"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:226
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:77
 msgid "QR Code"
 msgstr "Κωδικός QR"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:214
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:240
 msgid "Edit"
 msgstr "Επεξεργασία"
 
@@ -6167,30 +6422,39 @@ msgstr "Δεν υπάρχουν σύνδεσμοι ακόμα"
 msgid "Create your first shortened link to get started"
 msgstr "Δημιουργήστε τον πρώτο σας σύντομο σύνδεσμο για να ξεκινήσετε"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:134
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:158
 msgid "Links deleted"
 msgstr "Οι σύνδεσμοι διαγράφηκαν"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:135
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:159
 msgid "All links have been removed."
 msgstr "Όλοι οι σύνδεσμοι έχουν καταργηθεί."
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:139
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:163
 msgid "Unable to delete links"
 msgstr "Δεν ήταν δυνατή η διαγραφή των συνδέσμων."
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:140
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:164
 msgid "Failed to delete all links."
 msgstr "Αποτυχία διαγραφής όλων των συνδέσμων."
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:217
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:221
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:257
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:261
 msgid "Delete all links"
 msgstr "Διαγραφή όλων των συνδέσμων"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:218
-msgid "Are you sure you want to delete all links? This action cannot be undone."
-msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε όλους τους συνδέσμους; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:258
+msgid "Are you sure you want to delete all links? This will move active links to trash."
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε όλους τους συνδέσμους; Αυτό θα μεταφέρει τους ενεργούς συνδέσμους στον κάδο."
+
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:269
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:273
+msgid "Empty Trash"
+msgstr "Άδειασμα κάδου"
+
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:270
+msgid "Are you sure you want to permanently delete all links in the trash? This action cannot be undone."
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε οριστικά όλους τους συνδέσμους στον κάδο; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:25
 msgid "Link Title (Optional)"
@@ -6576,10 +6840,6 @@ msgstr "24 ώρες"
 msgid "30 days"
 msgstr "30 ημέρες"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:74
-msgid "7 days"
-msgstr "7 ημέρες"
-
 #: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:143
 msgid "%s click"
 msgstr "%s κλικ"
@@ -6837,17 +7097,30 @@ msgstr "Κλείσιμο πίνακα"
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:33
-msgid "Failed to delete link"
-msgstr "Αποτυχία διαγραφής συνδέσμου"
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:47
+msgid "Failed to permanently delete link"
+msgstr "Αποτυχία οριστικής διαγραφής συνδέσμου"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:54
-msgid "Delete Link"
-msgstr "Διαγραφή συνδέσμου"
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:48
+msgid "Failed to move link to trash"
+msgstr "Αποτυχία μεταφοράς συνδέσμου στον κάδο"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:75
-msgid "Are you sure you want to delete this link? This action cannot be undone."
-msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτόν τον σύνδεσμο; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:72
+msgid "Delete Link Permanently"
+msgstr "Οριστική διαγραφή συνδέσμου"
+
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:73
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:173
+msgid "Move to Trash"
+msgstr "Μεταφορά στον κάδο"
+
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:95
+msgid "Are you sure you want to delete this link permanently? This action cannot be undone."
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε οριστικά αυτόν τον σύνδεσμο; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
+
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:98
+msgid "Are you sure you want to move this link to the trash? You can restore it later."
+msgstr "Είστε βέβαιοι ότι θέλετε να μεταφέρετε αυτόν τον σύνδεσμο στον κάδο; Μπορείτε να τον επαναφέρετε αργότερα."
 
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:56
 msgid "https://example.com"
@@ -6918,9 +7191,53 @@ msgstr "Ανανέωση συνδέσμων"
 msgid "Manage and track your shortened URLs"
 msgstr "Διαχειριστείτε και παρακολουθήστε τα συντομευμένα URL σας"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:338
+#: ui/pages/dashboard/links/LinksPage.tsx:239
+msgid "The link has been restored to active status."
+msgstr "Ο σύνδεσμος επαναφέρθηκε σε ενεργή κατάσταση."
+
+#: ui/pages/dashboard/links/LinksPage.tsx:244
+msgid "Failed to restore link."
+msgstr "Αποτυχία επαναφοράς συνδέσμου."
+
+#: ui/pages/dashboard/links/LinksPage.tsx:253
+msgid "Links restored"
+msgstr "Οι σύνδεσμοι επαναφέρθηκαν"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:254
+msgid "Selected links have been restored to active status."
+msgstr "Οι επιλεγμένοι σύνδεσμοι επαναφέρθηκαν σε ενεργή κατάσταση."
+
+#: ui/pages/dashboard/links/LinksPage.tsx:258
+msgid "Unable to restore links"
+msgstr "Αδυναμία επαναφοράς συνδέσμων"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:259
+msgid "Failed to restore selected links."
+msgstr "Αποτυχία επαναφοράς επιλεγμένων συνδέσμων."
+
+#: ui/pages/dashboard/links/LinksPage.tsx:269
+msgid "All trashed links have been permanently deleted."
+msgstr "Όλοι οι σύνδεσμοι στον κάδο διαγράφηκαν οριστικά."
+
+#: ui/pages/dashboard/links/LinksPage.tsx:273
+msgid "Unable to empty trash"
+msgstr "Αδυναμία αδειάσματος κάδου"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:274
+msgid "Failed to empty trash."
+msgstr "Αποτυχία αδειάσματος κάδου."
+
+#: ui/pages/dashboard/links/LinksPage.tsx:406
 msgid "Total Links"
 msgstr "Συνολικοί σύνδεσμοι"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:434
+msgid "Items in the trash are retained indefinitely until emptied."
+msgstr "Τα στοιχεία στον κάδο διατηρούνται επ' αόριστον μέχρι να αδειάσει."
+
+#: ui/pages/dashboard/links/LinksPage.tsx:438
+msgid "Items in the trash will be automatically deleted after %d days."
+msgstr "Τα στοιχεία στον κάδο θα διαγράφονται αυτόματα μετά από %d ημέρες."
 
 #: ui/pages/dashboard/users/UsersPage.tsx:61
 msgid "Can manage users, settings, and all links."

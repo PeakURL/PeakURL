@@ -13,6 +13,7 @@ function BulkDeleteModal({
 	open,
 	setOpen,
 	selectedIds,
+	isTrashTab = false,
 	onSuccess,
 }: BulkDeleteModalProps) {
 	const direction = getDocumentDirection();
@@ -30,9 +31,20 @@ function BulkDeleteModal({
 		if (onSuccess) onSuccess();
 
 		try {
-			await bulkDeleteUrl(idsToDelete).unwrap();
+			if (isTrashTab) {
+				await bulkDeleteUrl({ ids: idsToDelete, force: true }).unwrap();
+			} else {
+				await bulkDeleteUrl(idsToDelete).unwrap();
+			}
 		} catch (err) {
-			setError(getErrorMessage(err, __("Failed to delete links")));
+			setError(
+				getErrorMessage(
+					err,
+					isTrashTab
+						? __("Failed to permanently delete links")
+						: __("Failed to move links to trash")
+				)
+			);
 		}
 	};
 
@@ -53,7 +65,9 @@ function BulkDeleteModal({
 							<div className="links-modal-title-icon links-bulk-delete-modal-title-icon">
 								<AlertTriangle className="links-bulk-delete-modal-title-icon-svg" />
 							</div>
-							{__("Delete Links")}
+							{isTrashTab
+								? __("Delete Links Permanently")
+								: __("Move Links to Trash")}
 						</DialogTitle>
 						<button
 							onClick={() => setOpen(false)}
@@ -74,12 +88,27 @@ function BulkDeleteModal({
 						)}
 
 						<p className="links-bulk-delete-modal-copy">
-							{sprintf(
-								__(
-									"Are you sure you want to delete %s selected link(s)? This action cannot be undone."
-								),
-								String(selectedIds.length)
-							)}
+							{isTrashTab
+								? selectedIds.length === 1
+									? __(
+											"Are you sure you want to delete 1 selected link permanently? This action cannot be undone."
+										)
+									: sprintf(
+											__(
+												"Are you sure you want to delete %s selected links permanently? This action cannot be undone."
+											),
+											String(selectedIds.length)
+										)
+								: selectedIds.length === 1
+									? __(
+											"Are you sure you want to move 1 selected link to the trash? You can restore it later."
+										)
+									: sprintf(
+											__(
+												"Are you sure you want to move %s selected links to the trash? You can restore them later."
+											),
+											String(selectedIds.length)
+										)}
 						</p>
 
 						{/* Action Buttons */}
@@ -105,10 +134,17 @@ function BulkDeleteModal({
 								) : (
 									<span className="links-modal-button-content">
 										<Trash2 className="links-modal-button-icon" />
-										{sprintf(
-											__("Delete (%s)"),
-											String(selectedIds.length)
-										)}
+										{isTrashTab
+											? sprintf(
+													__(
+														"Delete Permanently (%s)"
+													),
+													String(selectedIds.length)
+												)
+											: sprintf(
+													__("Move to Trash (%s)"),
+													String(selectedIds.length)
+												)}
 									</span>
 								)}
 							</button>

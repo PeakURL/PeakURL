@@ -394,6 +394,46 @@ class PeakURL_DB {
 	}
 
 	/**
+	 * Update rows where one column matches an IN list.
+	 *
+	 * @param string               $table_name  Base table name without prefix.
+	 * @param array<string, mixed> $data        Column-value pairs to update.
+	 * @param string               $column_name Column to compare in the IN list.
+	 * @param array<int, mixed>    $values      Values for the IN list.
+	 * @param array<string, mixed> $where       Additional equality conditions.
+	 * @return int Number of affected rows.
+	 * @since 1.6.0
+	 */
+	public function update_where_in(
+		string $table_name,
+		array $data,
+		string $column_name,
+		array $values,
+		array $where = array()
+	): int {
+		if ( empty( $values ) || empty( $data ) ) {
+			return 0;
+		}
+
+		$set_clause = Database::set_values( $data, 'set' );
+		$in_clause  = Database::where_in( $column_name, $values, $column_name );
+		$conditions = array( $in_clause['sql'] );
+		$params     = array_merge( $set_clause['params'], $in_clause['params'] );
+
+		if ( ! empty( $where ) ) {
+			$where_clause = Database::where_equals( $where, 'where' );
+			$conditions[] = $where_clause['sql'];
+			$params       = array_merge( $params, $where_clause['params'] );
+		}
+
+		$sql = 'UPDATE ' . $this->table_identifier( $table_name ) .
+			' SET ' . $set_clause['sql'] .
+			' WHERE ' . implode( ' AND ', $conditions );
+
+		return $this->query( $sql, $params );
+	}
+
+	/**
 	 * Insert a row into a managed table.
 	 *
 	 * Mirrors the role of `wpdb::insert()` for the PeakURL data layer.

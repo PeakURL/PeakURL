@@ -59,6 +59,7 @@ export interface GeneralFormPayload extends GeneralFormState {
 	removeFavicon?: boolean;
 	landingPageMode?: "login" | "url" | "html";
 	landingPageUrl?: string;
+	trashRetentionDays?: number;
 }
 
 /**

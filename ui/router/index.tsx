@@ -142,6 +142,15 @@ function AppRouter() {
 								element={<ImportLayoutRoute />}
 							/>
 							<Route
+								path="activity"
+								element={
+									<Navigate
+										replace
+										to="/dashboard/activity"
+									/>
+								}
+							/>
+							<Route
 								path="system-status"
 								element={<SystemStatusPage />}
 							/>

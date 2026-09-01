@@ -45,8 +45,8 @@ msgid "Cleared orphaned audit-log users."
 msgstr "監査ログの孤立ユーザーをクリアしました。"
 
 #: app/database/repair-specs.php:99
-msgid "Removed orphaned audit-log links."
-msgstr "監査ログの孤立リンクを削除しました。"
+msgid "Cleared orphaned audit-log links."
+msgstr "孤立した監査ログのリンクを消去しました。"
 
 #: app/database/repair-specs.php:107
 msgid "Removed orphaned webhooks."
@@ -61,8 +61,8 @@ msgid "Select at least one webhook event."
 msgstr "少なくとも 1 つの Webhook イベントを選択してください。"
 
 #: app/traits/settings.php:167
-#: app/traits/system.php:359
-#: app/traits/system.php:373
+#: app/traits/system.php:365
+#: app/traits/system.php:379
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:49
 msgid "Shorten, track, and own every link - PeakURL"
 msgstr "すべてのリンクを短縮・追跡・管理 - PeakURL"
@@ -91,27 +91,27 @@ msgstr "PeakURL はまだインストールされていません。install.php �
 msgid "Admin access is required."
 msgstr "管理者権限が必要です。"
 
-#: app/traits/system.php:271
+#: app/traits/system.php:272
 msgid "PeakURL could not find that language pack."
 msgstr "PeakURL はその言語パックを見つけることができませんでした。"
 
-#: app/traits/system.php:440
+#: app/traits/system.php:446
 msgid "PeakURL could not find that timezone."
 msgstr "PeakURL はそのタイムゾーンを見つけることができませんでした。"
 
-#: app/traits/system.php:530
+#: app/traits/system.php:536
 msgid "Save a complete mail configuration before sending a test email."
 msgstr "テストメールを送信する前に、完全なメール設定を保存してください。"
 
-#: app/traits/system.php:758
+#: app/traits/system.php:764
 msgid "PeakURL is already up to date."
 msgstr "PeakURL はすでに最新バージョンです。"
 
-#: app/traits/system.php:780
+#: app/traits/system.php:786
 msgid "A newer PeakURL release is available. Install the update instead."
 msgstr "PeakURL の新しいリリースが利用可能です。代わりにアップデートをインストールしてください。"
 
-#: app/traits/system.php:787
+#: app/traits/system.php:793
 msgid "PeakURL cannot reinstall the latest release right now."
 msgstr "PeakURL は現在、最新リリースを再インストールできません。"
 
@@ -140,7 +140,7 @@ msgid "Username must be 3-120 characters using letters, numbers, dots, dashes, u
 msgstr "ユーザー名は英数字、ドット、ハイフン、アンダースコア、@ を使用した 3〜120文字である必要があります。"
 
 #: app/traits/accounts/support.php:108
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:59
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:60
 msgid "Password must be at least 8 characters."
 msgstr "パスワードは 8文字以上である必要があります。"
 
@@ -193,8 +193,8 @@ msgid "Two-factor authentication is still required."
 msgstr "引き続き 2要素認証が必要です。"
 
 #: app/traits/accounts/auth.php:438
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:42
-#: ui/pages/auth/login/LoginPage.tsx:164
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:43
+#: ui/pages/auth/login/LoginPage.tsx:162
 msgid "Email or username is required."
 msgstr "メールアドレスまたはユーザー名が必要です。"
 
@@ -251,10 +251,23 @@ msgstr "アクティビティログ ID は必須です。"
 msgid "You do not have permission to view activity."
 msgstr "アクティビティを表示する権限がありません。"
 
-#: app/traits/analytics.php:453
-#: app/traits/analytics.php:634
+#: app/traits/analytics.php:454
+#: app/traits/analytics.php:635
 msgid "You do not have permission to view analytics for this link."
 msgstr "このリンクのアクセス解析を表示する権限がありません。"
+
+#: app/traits/analytics.php:757
+msgid "Activity record not found."
+msgstr "アクティビティレコードが見つかりません。"
+
+#: app/traits/analytics.php:767
+msgid "No restorable link metadata found in this activity record."
+msgstr "このアクティビティレコードには復元可能なリンクメタデータが見つかりません。"
+
+#: app/traits/analytics.php:782
+#: ui/pages/dashboard/activity/ActivityPage.tsx:464
+msgid "This link was permanently deleted and cannot be restored."
+msgstr "このリンクは完全に削除されたため復元できません。"
 
 #: app/traits/authorization.php:94
 msgid "You do not have permission to view links."
@@ -274,45 +287,62 @@ msgstr "サイトには少なくとも 1 つの管理者アカウントを残す
 msgid "You cannot demote the only remaining admin account."
 msgstr "唯一残っている管理者アカウントを降格することはできません。"
 
-#: app/traits/links.php:188
+#: app/traits/links.php:189
 msgid "You do not have permission to view this link."
 msgstr "このリンクを表示する権限がありません。"
 
-#: app/traits/links.php:402
-#: app/traits/links.php:1165
+#: app/traits/links.php:403
+#: app/traits/links.php:1168
 msgid "Provide either socialImage or socialImageUrl, not both."
 msgstr "socialImage または socialImageUrl のいずれか一方のみを指定してください。"
 
-#: app/traits/links.php:824
+#: app/traits/links.php:827
 msgid "Complete the verification to open this link."
 msgstr "このリンクを開くには認証を完了してください。"
 
-#: app/traits/links.php:839
+#: app/traits/links.php:842
 msgid "Verification failed. Please try again."
 msgstr "認証に失敗しました。もう一度お試しください。"
 
-#: app/traits/links.php:1089
+#: app/traits/links.php:1092
 msgid "You do not have permission to edit this link."
 msgstr "このリンクを編集する権限がありません。"
 
-#: app/traits/links.php:1330
+#: app/traits/links.php:1354
 msgid "You do not have permission to delete this link."
 msgstr "このリンクを削除する権限がありません。"
 
-#: app/traits/links.php:1431
-#: app/traits/links.php:1523
+#: app/traits/links.php:1500
+msgid "That short link does not exist."
+msgstr "その短縮リンクは存在しません。"
+
+#: app/traits/links.php:1507
+msgid "This link is already active."
+msgstr "このリンクはすでにアクティブです。"
+
+#: app/traits/links.php:1517
+msgid "You do not have permission to restore this link."
+msgstr "このリンクを復元する権限がありません。"
+
+#: app/traits/links.php:1581
+#: app/traits/links.php:1857
+#: app/traits/links.php:1931
 msgid "You do not have permission to delete links."
 msgstr "リンクを削除する権限がありません。"
 
-#: app/traits/links.php:1675
+#: app/traits/links.php:1760
+msgid "You do not have permission to restore links."
+msgstr "リンクを復元する権限がありません。"
+
+#: app/traits/links.php:2116
 msgid "A valid destination URL is required."
 msgstr "有効な遷移先 URL が必要です。"
 
-#: app/traits/links.php:1693
+#: app/traits/links.php:2134
 msgid "That short code is reserved by the application."
 msgstr "その短縮コードはアプリケーションによって予約されています。"
 
-#: app/traits/links.php:1703
+#: app/traits/links.php:2144
 msgid "That short code is already in use."
 msgstr "その短縮コードはすでに使用されています。"
 
@@ -346,7 +376,7 @@ msgid "Thanks for your patience."
 msgstr "ご理解とご協力をお願いいたします。"
 
 #: app/includes/functions.php:977
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:119
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:121
 msgid "Loading"
 msgstr "読み込み中"
 
@@ -423,7 +453,7 @@ msgstr "最新情報を確認。"
 msgid "An internal server error occurred. Please try again or contact support if the issue persists."
 msgstr "内部サーバーエラーが発生しました。もう一度お試しいただくか、問題が解決しない場合はサポートにお問い合わせください。"
 
-#: app/includes/application.php:249
+#: app/includes/application.php:260
 #: app/services/install/screen.php:142
 msgid "Request origin is not allowed."
 msgstr "リクエストのオリジンは許可されていません。"
@@ -611,133 +641,146 @@ msgstr "GeoIP 設定を保存しました。"
 msgid "GeoIP database updated."
 msgstr "GeoIP データベースを更新しました。"
 
-#: app/controllers/urls.php:111
+#: app/controllers/urls.php:112
 msgid "URLs loaded."
 msgstr "URL が読み込まれました。"
 
-#: app/controllers/urls.php:137
+#: app/controllers/urls.php:138
 msgid "URLs export loaded."
 msgstr "URL エクスポートが読み込まれました。"
 
-#: app/controllers/urls.php:155
-#: app/controllers/urls.php:211
-#: app/controllers/urls.php:231
+#: app/controllers/urls.php:156
+#: app/controllers/urls.php:212
+#: app/controllers/urls.php:237
 msgid "URL not found."
 msgstr "URL が見つかりません。"
 
-#: app/controllers/urls.php:156
+#: app/controllers/urls.php:157
 msgid "URL loaded."
 msgstr "URL を読み込みました。"
 
-#: app/controllers/urls.php:173
+#: app/controllers/urls.php:174
 msgid "Short URL created."
 msgstr "短縮 URL を作成しました。"
 
-#: app/controllers/urls.php:191
+#: app/controllers/urls.php:192
 msgid "Bulk import processed."
 msgstr "一括インポートを処理しました。"
 
-#: app/controllers/urls.php:212
+#: app/controllers/urls.php:213
 msgid "URL updated."
 msgstr "URL を更新しました。"
 
-#: app/controllers/urls.php:232
+#: app/controllers/urls.php:238
 msgid "URL deleted."
 msgstr "URL を削除しました。"
 
-#: app/controllers/urls.php:253
+#: app/controllers/urls.php:257
+#: app/controllers/analytics.php:250
+msgid "Link restored successfully."
+msgstr "リンクが正常に復元されました。"
+
+#: app/controllers/urls.php:280
 msgid "Bulk delete complete."
 msgstr "一括削除が完了しました。"
 
-#: app/controllers/urls.php:271
+#: app/controllers/urls.php:301
+msgid "Bulk restore complete."
+msgstr "一括復元が完了しました。"
+
+#: app/controllers/urls.php:319
+msgid "Trash emptied successfully."
+msgstr "ゴミ箱を正常に空にしました。"
+
+#: app/controllers/urls.php:337
 msgid "All links deleted."
 msgstr "すべてのリンクを削除しました。"
 
-#: app/controllers/urls.php:369
+#: app/controllers/urls.php:435
 msgid "This link has expired"
 msgstr "このリンクは有効期限が切れています"
 
-#: app/controllers/urls.php:370
+#: app/controllers/urls.php:436
 msgid "The short link you requested is no longer active because its expiration date has passed."
 msgstr "リクエストされた短縮リンクは、有効期限が切れているため利用できなくなりました。"
 
-#: app/controllers/urls.php:380
+#: app/controllers/urls.php:446
 msgid "This link is unavailable"
 msgstr "このリンクは利用できません"
 
-#: app/controllers/urls.php:381
+#: app/controllers/urls.php:447
 msgid "The short link you requested is not available right now."
 msgstr "リクエストされた短縮リンクは現在利用できません。"
 
-#: app/controllers/urls.php:427
+#: app/controllers/urls.php:492
 msgid "Password required"
 msgstr "パスワードが必要です"
 
-#: app/controllers/urls.php:428
+#: app/controllers/urls.php:493
 msgid "This link is protected. Enter the password to continue."
 msgstr "このリンクは保護されています。続行するにはパスワードを入力してください。"
 
-#: app/controllers/urls.php:432
+#: app/controllers/urls.php:497
 #: site/install.php:592
 #: site/setup-config.php:816
-#: ui/pages/auth/login/LoginPage.tsx:382
+#: ui/pages/auth/login/LoginPage.tsx:380
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:29
 #: ui/pages/dashboard/users/UsersPage.tsx:250
 msgid "Password"
 msgstr "パスワード"
 
-#: app/controllers/urls.php:435
+#: app/controllers/urls.php:500
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:52
 msgid "Enter password"
 msgstr "パスワードを入力"
 
-#: app/controllers/urls.php:439
+#: app/controllers/urls.php:504
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:48
 msgid "Continue"
 msgstr "続行"
 
-#: app/controllers/urls.php:444
+#: app/controllers/urls.php:509
 msgid "Protected Link"
 msgstr "保護されたリンク"
 
-#: app/controllers/urls.php:491
+#: app/controllers/urls.php:556
 msgid "Performing security verification"
 msgstr "セキュリティ検証を実行中"
 
-#: app/controllers/urls.php:492
+#: app/controllers/urls.php:557
 msgid "This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot."
 msgstr "このウェブサイトは、悪意のあるボットから保護するためにセキュリティサービスを使用しています。PeakURL がボットでないことを検証する間、このページが表示されます。"
 
-#: app/controllers/urls.php:496
+#: app/controllers/urls.php:561
 msgid "JavaScript is required to complete this verification."
 msgstr "この検証を完了するには JavaScript が必要です。"
 
-#: app/controllers/urls.php:499
+#: app/controllers/urls.php:564
 msgid "Security Verification"
 msgstr "セキュリティ検証"
 
-#: app/controllers/urls.php:601
-#: app/controllers/urls.php:762
+#: app/controllers/urls.php:666
+#: app/controllers/urls.php:827
 msgid "Waiting for verification…"
 msgstr "検証を待機中…"
 
-#: app/controllers/urls.php:604
+#: app/controllers/urls.php:669
 msgid "Checking verification…"
 msgstr "検証を確認中…"
 
-#: app/controllers/urls.php:607
+#: app/controllers/urls.php:672
 msgid "Starting verification…"
 msgstr "検証を開始中…"
 
-#: app/controllers/urls.php:610
+#: app/controllers/urls.php:675
 msgid "Verification expired. Please try again."
 msgstr "検証の有効期限が切れました。もう一度お試しください。"
 
-#: app/controllers/urls.php:613
+#: app/controllers/urls.php:678
 msgid "Verification could not be completed. Please try again."
 msgstr "検証を完了できませんでした。もう一度お試しください。"
 
-#: app/controllers/urls.php:767
+#: app/controllers/urls.php:832
 msgid "Try again"
 msgstr "再試行"
 
@@ -1299,7 +1342,7 @@ msgstr "ソーシャルプレビュー画像の URL に認証情報を含める�
 
 #: app/services/social-preview.php:351
 #: ui/hooks/useDashboardSearch.ts:89
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:105
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:112
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:279
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:284
 msgid "Untitled Link"
@@ -1664,7 +1707,7 @@ msgstr "ようこそ"
 #: site/setup-config.php:679
 #: ui/components/common/ApiErrorPage/ApiErrorPage.tsx:70
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:87
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:711
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:716
 msgid "Database"
 msgstr "データベース"
 
@@ -1686,7 +1729,7 @@ msgid "Site info"
 msgstr "サイト情報"
 
 #: site/install.php:575
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:401
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:414
 msgid "Site title"
 msgstr "サイトタイトル"
 
@@ -1700,7 +1743,7 @@ msgstr "管理者"
 
 #: site/install.php:583
 #: site/setup-config.php:812
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:334
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:347
 #: ui/pages/dashboard/users/UsersPage.tsx:229
 msgid "Username"
 msgstr "ユーザー名"
@@ -1711,7 +1754,7 @@ msgstr "英数字、ドット、ハイフン、アンダースコア、または
 
 #: site/install.php:588
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:93
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:712
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:717
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:173
 #: ui/pages/dashboard/users/UsersPage.tsx:238
@@ -1719,7 +1762,7 @@ msgid "Email"
 msgstr "メールアドレス"
 
 #: site/install.php:589
-#: ui/pages/auth/login/LoginPage.tsx:376
+#: ui/pages/auth/login/LoginPage.tsx:374
 msgid "you@company.com"
 msgstr "you@company.com"
 
@@ -1737,7 +1780,7 @@ msgstr "%s をインストール"
 
 #: site/install.php:625
 #: site/setup-config.php:859
-#: ui/pages/auth/login/LoginPage.tsx:308
+#: ui/pages/auth/login/LoginPage.tsx:306
 msgid "Powered by %s"
 msgstr "Powered by %s"
 
@@ -1750,7 +1793,7 @@ msgid "Welcome - %s"
 msgstr "ようこそ - %s"
 
 #: site/setup-config.php:650
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:429
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:442
 msgid "Site language"
 msgstr "サイトの言語"
 
@@ -1824,7 +1867,7 @@ msgstr "保存して続行"
 
 #: ui/utils/dashboardSearch.ts:81
 #: ui/utils/dashboardSearch.ts:86
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:39
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:43
 msgid "Overview"
 msgstr "概要"
 
@@ -1838,17 +1881,17 @@ msgstr "ダッシュボード"
 
 #: ui/utils/dashboardSearch.ts:96
 #: ui/utils/dashboardSearch.ts:101
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:44
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:386
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:48
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:413
 #: ui/pages/NotFoundPage.tsx:75
 msgid "All Links"
 msgstr "すべてのリンク"
 
 #: ui/utils/dashboardSearch.ts:97
 #: ui/utils/dashboardSearch.ts:100
-#: ui/pages/auth/login/LoginPage.tsx:46
+#: ui/pages/auth/login/LoginPage.tsx:47
 #: ui/pages/layout/dashboard/Search/Search.tsx:286
-#: ui/pages/dashboard/activity/ActivityPage.tsx:668
+#: ui/pages/dashboard/activity/ActivityPage.tsx:751
 #: ui/pages/dashboard/links/_components/Header/Header.tsx:42
 #: ui/router/pageTitle.ts:77
 msgid "Links"
@@ -1856,9 +1899,9 @@ msgstr "リンク"
 
 #: ui/utils/dashboardSearch.ts:115
 #: ui/utils/dashboardSearch.ts:119
-#: ui/pages/layout/dashboard/Header/Header.tsx:120
-#: ui/pages/dashboard/activity/ActivityPage.tsx:134
-#: ui/pages/dashboard/activity/ActivityPage.tsx:713
+#: ui/pages/layout/dashboard/Header/Header.tsx:121
+#: ui/pages/dashboard/activity/ActivityPage.tsx:142
+#: ui/pages/dashboard/activity/ActivityPage.tsx:796
 #: ui/router/pageTitle.ts:73
 msgid "Activity"
 msgstr "アクティビティ"
@@ -1870,8 +1913,9 @@ msgstr "最近のアクティビティ"
 
 #: ui/utils/dashboardSearch.ts:131
 #: ui/utils/dashboardSearch.ts:136
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:417
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:472
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:473
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:522
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:529
 msgid "About PeakURL"
 msgstr "PeakURL について"
 
@@ -1895,8 +1939,8 @@ msgstr "一般設定"
 #: ui/utils/dashboardSearch.ts:209
 #: ui/utils/dashboardSearch.ts:225
 #: ui/utils/dashboardSearch.ts:241
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:82
-#: ui/pages/layout/dashboard/Header/Header.tsx:162
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:91
+#: ui/pages/layout/dashboard/Header/Header.tsx:163
 #: ui/pages/NotFoundPage.tsx:95
 #: ui/router/pageTitle.ts:34
 msgid "Settings"
@@ -1908,7 +1952,7 @@ msgid "General"
 msgstr "一般"
 
 #: ui/utils/dashboardSearch.ts:152
-#: ui/pages/layout/dashboard/Header/Header.tsx:142
+#: ui/pages/layout/dashboard/Header/Header.tsx:143
 msgid "Profile"
 msgstr "プロフィール"
 
@@ -1919,7 +1963,7 @@ msgid "Security Settings"
 msgstr "セキュリティ設定"
 
 #: ui/utils/dashboardSearch.ts:169
-#: ui/pages/auth/login/LoginPage.tsx:56
+#: ui/pages/auth/login/LoginPage.tsx:57
 #: ui/pages/dashboard/settings/Layout.tsx:26
 msgid "Security"
 msgstr "セキュリティ"
@@ -1928,7 +1972,7 @@ msgstr "セキュリティ"
 #: ui/utils/dashboardSearch.ts:187
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:79
 #: ui/pages/dashboard/settings/Layout.tsx:30
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:691
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:696
 #: ui/router/pageTitle.ts:24
 msgid "API Keys"
 msgstr "APIキー"
@@ -1956,7 +2000,7 @@ msgstr "メール設定"
 #: ui/utils/dashboardSearch.ts:228
 #: ui/pages/dashboard/settings/Layout.tsx:48
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:95
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:715
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:720
 #: ui/router/pageTitle.ts:30
 msgid "Location Data"
 msgstr "位置情報データ"
@@ -1971,10 +2015,10 @@ msgstr "アップデート"
 
 #: ui/utils/dashboardSearch.ts:256
 #: ui/utils/dashboardSearch.ts:260
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:49
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:53
 #: ui/pages/layout/dashboard/Search/Search.tsx:247
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:684
-#: ui/pages/dashboard/activity/ActivityPage.tsx:674
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:689
+#: ui/pages/dashboard/activity/ActivityPage.tsx:757
 #: ui/pages/dashboard/users/UsersPage.tsx:490
 #: ui/router/pageTitle.ts:85
 msgid "Users"
@@ -1987,7 +2031,7 @@ msgstr "管理"
 
 #: ui/utils/dashboardSearch.ts:273
 #: ui/utils/dashboardSearch.ts:276
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:55
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:59
 #: ui/pages/dashboard/plugins/PluginsPage.tsx:118
 #: ui/router/pageTitle.ts:81
 msgid "Plugins"
@@ -1995,7 +2039,7 @@ msgstr "プラグイン"
 
 #: ui/utils/dashboardSearch.ts:282
 #: ui/utils/dashboardSearch.ts:287
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:66
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:70
 #: ui/pages/dashboard/tools/import/_components/layout/Header.tsx:6
 #: ui/pages/NotFoundPage.tsx:85
 #: ui/router/pageTitle.ts:47
@@ -2009,7 +2053,7 @@ msgstr "インポート"
 #: ui/utils/dashboardSearch.ts:306
 #: ui/utils/dashboardSearch.ts:322
 #: ui/utils/dashboardSearch.ts:325
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:61
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:65
 #: ui/pages/layout/dashboard/Search/Search.tsx:224
 #: ui/router/pageTitle.ts:119
 msgid "Tools"
@@ -2022,7 +2066,7 @@ msgstr "インポート: ファイルのアップロード"
 
 #: ui/utils/dashboardSearch.ts:302
 #: ui/utils/dashboardSearch.ts:307
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:71
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:75
 #: ui/pages/dashboard/tools/export/ExportPage.tsx:50
 #: ui/pages/dashboard/tools/export/ExportPage.tsx:138
 #: ui/router/pageTitle.ts:111
@@ -2031,17 +2075,17 @@ msgstr "エクスポート"
 
 #: ui/utils/dashboardSearch.ts:321
 #: ui/utils/dashboardSearch.ts:326
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:75
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:772
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:816
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:84
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:777
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:821
 #: ui/router/pageTitle.ts:115
 msgid "System Status"
 msgstr "システムステータス"
 
 #: ui/utils/dashboardSearch.ts:565
 #: ui/pages/layout/dashboard/Header/Header.tsx:40
-#: ui/pages/dashboard/activity/ActivityPage.tsx:114
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1038
+#: ui/pages/dashboard/activity/ActivityPage.tsx:116
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1133
 #: ui/pages/dashboard/users/UsersPage.tsx:555
 #: ui/pages/dashboard/users/UsersPage.tsx:591
 msgid "User"
@@ -2056,14 +2100,14 @@ msgid "Confirm"
 msgstr "確認"
 
 #: ui/components/ui/ConfirmDialog/ConfirmDialog.tsx:33
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:807
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:816
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:53
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorSetup.tsx:110
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:370
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:494
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:63
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:93
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:133
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:122
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:156
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:18
 #: ui/pages/dashboard/users/UsersPage.tsx:330
 msgid "Cancel"
@@ -2082,8 +2126,8 @@ msgid "Close modal"
 msgstr "モーダルを閉じる"
 
 #: ui/components/ui/PageSizeControl/PageSizeControl.tsx:27
-#: ui/pages/dashboard/activity/ActivityPage.tsx:819
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:87
+#: ui/pages/dashboard/activity/ActivityPage.tsx:902
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:119
 msgid "Rows per page"
 msgstr "ページあたりの行数"
 
@@ -2112,10 +2156,10 @@ msgstr "カスタムページサイズをキャンセル"
 
 #: ui/components/charts/MetricDonutChart/MetricDonutChart.tsx:37
 #: ui/components/charts/WorldMap/_components/Legend.tsx:16
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:686
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:691
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:113
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:64
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:161
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:168
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:47
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:166
 msgid "Clicks"
@@ -2152,20 +2196,20 @@ msgstr "日"
 #: ui/components/charts/TrafficChart/TrafficChart.tsx:260
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:112
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:21
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:107
-#: ui/pages/dashboard/links/LinksPage.tsx:299
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:130
+#: ui/pages/dashboard/links/LinksPage.tsx:367
 msgid "Total Clicks"
 msgstr "総クリック数"
 
 #: ui/components/charts/TrafficChart/TrafficChart.tsx:261
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:70
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:133
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:170
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:177
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:48
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:173
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:28
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:115
-#: ui/pages/dashboard/links/LinksPage.tsx:324
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:138
+#: ui/pages/dashboard/links/LinksPage.tsx:392
 msgid "Visitors"
 msgstr "訪問者数"
 
@@ -2289,271 +2333,288 @@ msgstr "エラー内容"
 msgid "Check these first"
 msgstr "まずこれらを確認してください"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:62
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:63
 msgid "PeakURL could not process the password reset request."
 msgstr "PeakURL はパスワード再設定リクエストを処理できませんでした。"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:71
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:72
 msgid "Account Recovery"
 msgstr "アカウントの復旧"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:72
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:105
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:122
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:74
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:107
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:124
 msgid "Reset your password"
 msgstr "パスワードを再設定"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:73
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:75
 msgid "Enter the email address or username linked to your PeakURL account and we'll send a secure reset link."
 msgstr "PeakURL アカウントにリンクされているメールアドレスまたはユーザー名を入力してください。安全な再設定リンクをお送りします。"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:76
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:78
 msgid "Secure account recovery"
 msgstr "安全なアカウント復旧"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:77
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:79
 msgid "For your security, password reset links expire after 1 hour. Changing your password will also immediately revoke all active sessions across your devices."
 msgstr "セキュリティのため、パスワード再設定リンクは 1時間後に期限切れになります。パスワードを変更すると、デバイス間のすべてのアクティブなセッションも直ちに取り消されます。"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:80
-#: ui/pages/auth/login/LoginPage.tsx:428
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:82
+#: ui/pages/auth/login/LoginPage.tsx:426
 msgid "Forgot your password?"
 msgstr "パスワードをお忘れですか？"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:81
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:139
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:83
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:141
 msgid "Enter your account email or username and PeakURL will send a secure password reset link."
 msgstr "アカウントのメールアドレスまたはユーザー名を入力してください。PeakURL から安全なパスワード再設定リンクを送信します。"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:88
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:90
 msgid "Check your inbox"
 msgstr "受信トレイを確認してください"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:92
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:94
 msgid "If an account exists for %s, PeakURL has sent a password reset link."
 msgstr "%s のアカウントが存在する場合、PeakURL はパスワード再設定リンクを送信しました。"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:99
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:101
 msgid "Return to login"
 msgstr "ログインに戻る"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:106
-#: ui/pages/auth/login/LoginPage.tsx:364
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:108
+#: ui/pages/auth/login/LoginPage.tsx:362
 msgid "Email or username"
 msgstr "メールアドレスまたはユーザー名"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:113
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:115
 msgid "owner@example.com or admin"
 msgstr "owner@example.com または admin"
 
-#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:130
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:149
+#: ui/pages/auth/forgot-password/ForgotPasswordPage.tsx:132
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:151
 msgid "Send reset link"
 msgstr "再設定リンクを送信"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:54
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:136
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:55
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:138
 msgid "The password reset link is invalid."
 msgstr "パスワード再設定リンクが無効です。"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:64
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:65
 #: ui/pages/dashboard/users/UsersPage.tsx:142
 msgid "Passwords do not match."
 msgstr "パスワードが一致しません。"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:87
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:88
 msgid "PeakURL could not reset the password with that link."
 msgstr "PeakURL はそのリンクでパスワードを再設定できませんでした。"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:96
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:97
 msgid "Secure Reset"
 msgstr "安全な再設定"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:97
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:99
 msgid "Choose a new password and get back to work."
 msgstr "新しいパスワードを設定して作業を再開してください。"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:98
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:100
 msgid "Once the password changes, PeakURL revokes the old sessions so only the new login remains valid."
 msgstr "パスワードが変更されると、PeakURL は古いセッションを取り消し、新しいログインのみが有効なままになります。"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:101
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:103
 #: ui/pages/dashboard/users/UsersPage.tsx:137
 #: ui/pages/dashboard/users/UsersPage.tsx:260
 msgid "Use at least 8 characters."
 msgstr "8文字以上を使用してください。"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:102
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:104
 msgid "For best results, combine uppercase, lowercase, numbers, and a unique phrase you do not reuse elsewhere."
 msgstr "最適な結果を得るには、大文字、小文字、数字、および他で再利用していない独自のフレーズを組み合わせてください。"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:106
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:108
 msgid "Set a new account password, then sign in again with the updated credentials."
 msgstr "新しいアカウントパスワードを設定し、更新された認証情報で再度サインインしてください。"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:163
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:165
 msgid "Password updated"
 msgstr "パスワードを更新しました"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:166
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:168
 msgid "PeakURL updated your password and revoked the older sessions. Redirecting you to the login page now."
 msgstr "PeakURL はパスワードを更新し、古いセッションを取り消しました。ログインページにリダイレクトしています。"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:176
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:178
 msgid "New password"
 msgstr "新しいパスワード"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:182
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:184
 msgid "Enter your new password"
 msgstr "新しいパスワードを入力"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:190
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:192
 msgid "Confirm new password"
 msgstr "新しいパスワードの確認"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:200
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:202
 msgid "Confirm your new password"
 msgstr "新しいパスワードをもう一度入力"
 
-#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:213
+#: ui/pages/auth/reset-password/ResetPasswordPage.tsx:215
 msgid "Reset password"
 msgstr "パスワードを再設定"
 
-#: ui/pages/auth/login/LoginPage.tsx:47
+#: ui/pages/auth/login/LoginPage.tsx:48
 msgid "Shorten, organize, and share."
 msgstr "短縮、整理、共有。"
 
-#: ui/pages/auth/login/LoginPage.tsx:51
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:207
+#: ui/pages/auth/login/LoginPage.tsx:52
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:233
 msgid "Analytics"
 msgstr "アナリティクス"
 
-#: ui/pages/auth/login/LoginPage.tsx:52
+#: ui/pages/auth/login/LoginPage.tsx:53
 msgid "Clicks, locations, and devices."
 msgstr "クリック数、位置情報、デバイス。"
 
-#: ui/pages/auth/login/LoginPage.tsx:57
+#: ui/pages/auth/login/LoginPage.tsx:58
 msgid "Sessions, 2FA, and roles."
 msgstr "セッション、2要素認証、ロール。"
 
-#: ui/pages/auth/login/LoginPage.tsx:169
+#: ui/pages/auth/login/LoginPage.tsx:167
 msgid "Password is required."
 msgstr "パスワードは必須です。"
 
-#: ui/pages/auth/login/LoginPage.tsx:181
+#: ui/pages/auth/login/LoginPage.tsx:179
 msgid "Enter your backup code."
 msgstr "バックアップコードを入力してください。"
 
-#: ui/pages/auth/login/LoginPage.tsx:182
-#: ui/pages/auth/login/LoginPage.tsx:340
+#: ui/pages/auth/login/LoginPage.tsx:180
+#: ui/pages/auth/login/LoginPage.tsx:338
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "認証アプリからの 6桁のコードを入力してください。"
 
-#: ui/pages/auth/login/LoginPage.tsx:230
+#: ui/pages/auth/login/LoginPage.tsx:228
 msgid "Unable to verify the two-factor code."
 msgstr "2要素認証コードを検証できませんでした。"
 
-#: ui/pages/auth/login/LoginPage.tsx:231
+#: ui/pages/auth/login/LoginPage.tsx:229
 msgid "Unable to sign in with those credentials."
 msgstr "それらの認証情報でサインインできません。"
 
-#: ui/pages/auth/login/LoginPage.tsx:248
+#: ui/pages/auth/login/LoginPage.tsx:246
 msgid "Almost there."
 msgstr "あと少しです。"
 
-#: ui/pages/auth/login/LoginPage.tsx:251
+#: ui/pages/auth/login/LoginPage.tsx:249
 msgid "Verify to continue."
 msgstr "検証して続行してください。"
 
-#: ui/pages/auth/login/LoginPage.tsx:256
+#: ui/pages/auth/login/LoginPage.tsx:254
 msgid "Manage every link"
 msgstr "すべてのリンクを一元管理"
 
-#: ui/pages/auth/login/LoginPage.tsx:259
+#: ui/pages/auth/login/LoginPage.tsx:257
 msgid "from one place."
 msgstr "これひとつで。"
 
-#: ui/pages/auth/login/LoginPage.tsx:266
+#: ui/pages/auth/login/LoginPage.tsx:264
 msgid "One more verification step and you’ll be in your workspace."
 msgstr "あと 1回の検証手順でワークスペースに入ることができます。"
 
-#: ui/pages/auth/login/LoginPage.tsx:269
+#: ui/pages/auth/login/LoginPage.tsx:267
 msgid "Shorten URLs, track clicks, and manage your audience, all from your own dashboard."
 msgstr "独自のダッシュボードから、URL の短縮、クリック数の追跡、オーディエンスの管理をすべて行うことができます。"
 
-#: ui/pages/auth/login/LoginPage.tsx:331
+#: ui/pages/auth/login/LoginPage.tsx:329
 msgid "Verify your identity"
 msgstr "本人確認"
 
-#: ui/pages/auth/login/LoginPage.tsx:332
+#: ui/pages/auth/login/LoginPage.tsx:330
 msgid "Sign in to your account"
 msgstr "アカウントにサインイン"
 
-#: ui/pages/auth/login/LoginPage.tsx:337
+#: ui/pages/auth/login/LoginPage.tsx:335
 msgid "Enter one of the backup codes you saved when setting up 2FA."
 msgstr "2要素認証の設定時に保存したバックアップコードの 1 つを入力してください。"
 
-#: ui/pages/auth/login/LoginPage.tsx:343
+#: ui/pages/auth/login/LoginPage.tsx:341
 msgid "Enter your credentials to continue to the dashboard."
 msgstr "認証情報を入力してダッシュボードに移動してください。"
 
-#: ui/pages/auth/login/LoginPage.tsx:412
+#: ui/pages/auth/login/LoginPage.tsx:410
 msgid "Remember me"
 msgstr "ログイン状態を保持する"
 
-#: ui/pages/auth/login/LoginPage.tsx:438
+#: ui/pages/auth/login/LoginPage.tsx:436
 msgid "Backup code"
 msgstr "バックアップコード"
 
-#: ui/pages/auth/login/LoginPage.tsx:453
+#: ui/pages/auth/login/LoginPage.tsx:451
 msgid "xxxx-xxxx-xxxx"
 msgstr "xxxx-xxxx-xxxx"
 
-#: ui/pages/auth/login/LoginPage.tsx:467
+#: ui/pages/auth/login/LoginPage.tsx:465
 msgid "Use authenticator code instead"
 msgstr "代わりに認証コードを使用"
 
-#: ui/pages/auth/login/LoginPage.tsx:493
+#: ui/pages/auth/login/LoginPage.tsx:491
 msgid "Lost your device? Use a backup code"
 msgstr "デバイスを紛失しましたか？バックアップコードを使用"
 
-#: ui/pages/auth/login/LoginPage.tsx:534
+#: ui/pages/auth/login/LoginPage.tsx:532
 msgid "Verifying…"
 msgstr "検証中…"
 
-#: ui/pages/auth/login/LoginPage.tsx:535
+#: ui/pages/auth/login/LoginPage.tsx:533
 msgid "Signing in…"
 msgstr "サインイン中…"
 
-#: ui/pages/auth/login/LoginPage.tsx:540
+#: ui/pages/auth/login/LoginPage.tsx:538
 msgid "Verify & continue"
 msgstr "確認して続行"
 
-#: ui/pages/auth/login/LoginPage.tsx:541
+#: ui/pages/auth/login/LoginPage.tsx:539
 msgid "Sign in"
 msgstr "サインイン"
 
-#: ui/pages/auth/login/LoginPage.tsx:562
+#: ui/pages/auth/login/LoginPage.tsx:560
 msgid "Back to sign-in"
 msgstr "サインインに戻る"
 
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:227
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:79
+msgid "Activity Log"
+msgstr "アクティビティログ"
+
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:246
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:268
 msgid "Close sidebar"
 msgstr "サイドバーを閉じる"
 
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:432
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:435
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:440
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:450
+msgid "Expand Menu"
+msgstr "メニューを展開"
+
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:436
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:441
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:451
+msgid "Collapse Menu"
+msgstr "メニューを折りたたむ"
+
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:488
 msgid "Sponsor"
 msgstr "スポンサー"
 
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:451
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:507
 msgid "Buy Me a Coffee"
 msgstr "Buy Me a Coffee"
 
-#: ui/pages/layout/dashboard/Layout/Layout.tsx:24
+#: ui/pages/layout/dashboard/Layout/Layout.tsx:56
 msgid "Thank you for choosing %s."
 msgstr "%s をご利用いただきありがとうございます。"
 
-#: ui/pages/layout/dashboard/Layout/Layout.tsx:71
+#: ui/pages/layout/dashboard/Layout/Layout.tsx:110
 #: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:42
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:375
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:554
@@ -2627,44 +2688,48 @@ msgid "Keep typing to search links, or jump straight to a dashboard page."
 msgstr "文字を入力してリンクを検索するか、ダッシュボードページに直接移動します。"
 
 #: ui/pages/layout/dashboard/Header/Header.tsx:38
-#: ui/pages/layout/dashboard/Header/Header.tsx:78
-#: ui/pages/layout/dashboard/Header/Header.tsx:90
-#: ui/pages/dashboard/activity/ActivityPage.tsx:107
+#: ui/pages/layout/dashboard/Header/Header.tsx:79
+#: ui/pages/layout/dashboard/Header/Header.tsx:91
+#: ui/pages/dashboard/activity/ActivityPage.tsx:109
 #: ui/pages/dashboard/users/UsersPage.tsx:60
 #: ui/pages/dashboard/users/UsersPage.tsx:105
 msgid "Admin"
 msgstr "管理者"
 
 #: ui/pages/layout/dashboard/Header/Header.tsx:39
-#: ui/pages/dashboard/activity/ActivityPage.tsx:111
+#: ui/pages/dashboard/activity/ActivityPage.tsx:113
 #: ui/pages/dashboard/users/UsersPage.tsx:65
 #: ui/pages/dashboard/users/UsersPage.tsx:106
 msgid "Editor"
 msgstr "編集者"
 
-#: ui/pages/layout/dashboard/Header/Header.tsx:85
+#: ui/pages/layout/dashboard/Header/Header.tsx:58
+msgid "Open menu"
+msgstr "メニューを開く"
+
+#: ui/pages/layout/dashboard/Header/Header.tsx:86
 msgid "Admin Account"
 msgstr "管理者アカウント"
 
-#: ui/pages/layout/dashboard/Header/Header.tsx:181
+#: ui/pages/layout/dashboard/Header/Header.tsx:182
 msgid "Logging out..."
 msgstr "ログアウト中..."
 
-#: ui/pages/layout/dashboard/Header/Header.tsx:182
+#: ui/pages/layout/dashboard/Header/Header.tsx:183
 msgid "Logout"
 msgstr "ログアウト"
 
-#: ui/pages/layout/public/AuthLayout.tsx:11
+#: ui/pages/layout/public/AuthLayout.tsx:12
 msgid "Back to login"
 msgstr "ログインに戻る"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:269
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:340
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:345
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:350
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:372
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:407
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:427
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:277
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:349
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:354
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:359
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:381
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:416
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:436
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/useActiveSessions.ts:74
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/useActiveSessions.ts:106
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/useTwoFactorSettings.ts:170
@@ -2682,22 +2747,22 @@ msgstr "ログインに戻る"
 msgid "Error"
 msgstr "エラー"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:270
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:278
 msgid "Failed to update profile"
 msgstr "プロフィールの更新に失敗しました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:305
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:314
 msgid "Language updated"
 msgstr "言語を更新しました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:306
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:315
 msgid "PeakURL is reloading the dashboard now."
 msgstr "PeakURL はダッシュボードを再読み込みしています。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:315
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:335
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:362
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:422
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:324
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:344
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:371
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:431
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:231
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:251
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:107
@@ -2705,291 +2770,291 @@ msgstr "PeakURL はダッシュボードを再読み込みしています。"
 msgid "Success"
 msgstr "成功"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:317
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:326
 msgid "Profile and general settings updated successfully"
 msgstr "プロフィールと一般設定が正常に更新されました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:320
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:329
 msgid "General settings updated successfully"
 msgstr "一般設定が正常に更新されました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:325
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:503
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:542
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:334
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:512
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:551
 msgid "Save failed"
 msgstr "保存に失敗しました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:328
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:337
 msgid "Failed to update the general settings"
 msgstr "一般設定の更新に失敗しました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:335
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:344
 msgid "Profile updated successfully"
 msgstr "プロフィールが正常に更新されました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:340
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:349
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:65
 msgid "Enter your current password"
 msgstr "現在のパスワードを入力"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:345
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:354
 msgid "Passwords do not match"
 msgstr "パスワードが一致しません"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:351
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:360
 msgid "Password must be at least 8 characters"
 msgstr "パスワードは 8文字以上である必要があります"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:363
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:372
 msgid "Password updated successfully"
 msgstr "パスワードが正常に更新されました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:373
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:382
 msgid "Failed to update password"
 msgstr "パスワードの更新に失敗しました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:386
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:395
 msgid "Key created without visible token"
 msgstr "表示可能なトークンなしでキーが作成されました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:387
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:396
 msgid "PeakURL created the API key, but the one-time token was not returned. Revoke it and create a new key."
 msgstr "PeakURL は APIキーを作成しましたが、ワンタイムトークンが返されませんでした。取り消して新しいキーを作成してください。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:402
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:411
 msgid "API key created"
 msgstr "APIキーを作成しました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:403
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:412
 msgid "Copy the token now. PeakURL will not show it again."
 msgstr "今すぐトークンをコピーしてください。PeakURL はこれを二度と表示しません。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:408
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:417
 msgid "Failed to generate API key"
 msgstr "APIキーの生成に失敗しました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:423
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:432
 msgid "API key deleted successfully"
 msgstr "APIキーが正常に削除されました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:428
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:437
 msgid "Failed to delete API key"
 msgstr "APIキーの削除に失敗しました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:435
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:444
 msgid "API key copied to clipboard"
 msgstr "APIキーをクリップボードにコピーしました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:439
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:448
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:137
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:754
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:959
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:759
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:964
 msgid "Copied"
 msgstr "コピーしました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:442
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:760
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:451
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:765
 msgid "Copy failed"
 msgstr "コピーに失敗しました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:443
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:452
 msgid "PeakURL could not copy that value to the clipboard."
 msgstr "PeakURL はその値をクリップボードにコピーできませんでした。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:462
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:471
 msgid "Update available"
 msgstr "アップデートが利用可能です"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:464
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:473
 msgid "PeakURL %s is ready to install."
 msgstr "PeakURL %s のインストール準備が完了しました。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:472
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:481
 msgid "Up to date"
 msgstr "最新の状態です"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:475
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:484
 msgid "PeakURL %s is already on the latest version."
 msgstr "PeakURL %s はすでに最新バージョンです。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:478
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:487
 msgid "PeakURL is already on the latest version."
 msgstr "PeakURL はすでに最新バージョンです。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:482
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:491
 msgid "Update check failed"
 msgstr "アップデートの確認に失敗しました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:485
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:494
 msgid "PeakURL could not reach the update service."
 msgstr "PeakURL はアップデートサービスにアクセスできませんでした。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:497
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:537
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:506
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:546
 msgid "Saved"
 msgstr "保存しました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:498
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:507
 msgid "Location data settings were updated successfully."
 msgstr "位置情報データの設定が正常に更新されました。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:506
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:515
 msgid "PeakURL could not save the MaxMind settings."
 msgstr "PeakURL は MaxMind 設定を保存できませんでした。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:517
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:642
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:526
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:651
 msgid "Database updated"
 msgstr "データベースを更新しました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:518
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:527
 msgid "PeakURL downloaded the latest GeoLite2 City database."
 msgstr "PeakURL は最新の GeoLite2 City データベースをダウンロードしました。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:522
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:531
 msgid "Download failed"
 msgstr "ダウンロードに失敗しました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:525
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:534
 msgid "PeakURL could not download the GeoLite2 database."
 msgstr "PeakURL は GeoLite2 データベースをダウンロードできませんでした。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:538
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:547
 msgid "Email configuration was updated successfully."
 msgstr "メール設定が正常に更新されました。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:545
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:554
 msgid "PeakURL could not save the email configuration."
 msgstr "PeakURL はメール設定を保存できませんでした。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:558
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:567
 msgid "Test email sent"
 msgstr "テストメールを送信しました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:560
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:569
 msgid "PeakURL sent a test email to %s."
 msgstr "PeakURL は %s にテストメールを送信しました。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:561
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:570
 msgid "PeakURL sent a test email to your account email."
 msgstr "PeakURL はアカウントのメールアドレスにテストメールを送信しました。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:565
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:574
 msgid "Test email failed"
 msgstr "テストメールの送信に失敗しました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:568
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:577
 msgid "PeakURL could not send the test email."
 msgstr "PeakURL はテストメールを送信できませんでした。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:598
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:607
 msgid "Release reinstalled"
 msgstr "リリースを再インストールしました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:599
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:608
 msgid "Update installed"
 msgstr "アップデートをインストールしました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:603
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:612
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:120
 msgid "PeakURL %s has been reinstalled."
 msgstr "PeakURL %s が再インストールされました。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:604
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:613
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:121
 msgid "PeakURL %s is now installed."
 msgstr "PeakURL %s がインストールされました。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:608
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:617
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:125
 msgid "The latest version has been reinstalled."
 msgstr "最新バージョンが再インストールされました。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:609
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:618
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:126
 msgid "The latest version is now installed."
 msgstr "最新バージョンがインストールされました。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:614
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:623
 msgid "Reinstall failed"
 msgstr "再インストールに失敗しました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:614
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:623
 msgid "Update failed"
 msgstr "アップデートに失敗しました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:618
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:627
 msgid "PeakURL could not reinstall the latest version."
 msgstr "PeakURL は最新バージョンを再インストールできませんでした。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:619
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:628
 msgid "PeakURL could not apply the update."
 msgstr "PeakURL はアップデートを適用できませんでした。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:644
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:653
 msgid "PeakURL repaired the database schema. Review any remaining warnings below."
 msgstr "PeakURL はデータベーススキーマを修復しました。以下の残りの警告を確認してください。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:647
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:656
 msgid "The database schema is now current."
 msgstr "データベーススキーマは現在最新です。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:651
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:660
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:165
 msgid "Database upgrade failed"
 msgstr "データベースのアップグレードに失敗しました"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:654
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:663
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:168
 msgid "PeakURL could not repair the database schema."
 msgstr "PeakURL はデータベーススキーマを修復できませんでした。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:761
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:770
 msgid "Delete API key"
 msgstr "APIキーを削除"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:765
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:774
 msgid "Delete %s? Any scripts, automations, or extensions using it will stop working immediately."
 msgstr "%s を削除しますか？これを使用しているスクリプト、自動化、拡張機能は直ちに機能しなくなります。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:770
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:779
 msgid "this API key"
 msgstr "この APIキー"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:774
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:783
 msgid "Delete key"
 msgstr "キーを削除"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:775
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:784
 msgid "Keep key"
 msgstr "キーを保持"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:785
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:794
 msgid "Reinstall PeakURL %s?"
 msgstr "PeakURL %s を再インストールしますか？"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:786
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:795
 msgid "Install PeakURL %s?"
 msgstr "PeakURL %s をインストールしますか？"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:789
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:798
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:112
 msgid "update"
 msgstr "アップデート"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:795
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:804
 msgid "PeakURL will restore the latest version and refresh the included files."
 msgstr "PeakURL は最新バージョンを復元し、同梱ファイルを更新します。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:798
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:807
 msgid "PeakURL will install the latest version and refresh the included files."
 msgstr "PeakURL は最新バージョンをインストールし、同梱ファイルを更新します。"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:804
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:813
 msgid "Reinstall latest version"
 msgstr "最新バージョンを再インストール"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:805
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:814
 msgid "Install update"
 msgstr "アップデートをインストール"
 
@@ -3003,19 +3068,23 @@ msgid "Current Password"
 msgstr "現在のパスワード"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:73
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:39
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:41
 msgid "End all other sessions"
 msgstr "他のすべてのセッションを終了"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:75
-msgid "End %s other active session(s) for this account? Any browsers or devices using them will be signed out immediately."
-msgstr "このアカウントの他の %s 件のアクティブなセッションを終了しますか？これらを使用しているブラウザまたはデバイスは直ちにサインアウトされます。"
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:76
+msgid "End 1 other active session for this account? Any browsers or devices using it will be signed out immediately."
+msgstr "このアカウントの他の1件のアクティブなセッションを終了しますか？使用中のブラウザや端末は直ちにサインアウトされます。"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:80
+msgid "End %s other active sessions for this account? Any browsers or devices using them will be signed out immediately."
+msgstr "このアカウントの他の%s件のアクティブなセッションを終了しますか？使用中のブラウザや端末は直ちにサインアウトされます。"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:86
 msgid "End sessions"
 msgstr "セッションを終了"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:81
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:87
 msgid "Keep sessions"
 msgstr "セッションを保持"
 
@@ -3211,19 +3280,23 @@ msgid "Save or download these codes now—they won't be shown again."
 msgstr "今すぐこれらのコードを保存またはダウンロードしてください。二度と表示されません。"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:22
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:688
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:693
 msgid "Active Sessions"
 msgstr "アクティブなセッション"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:27
-msgid "%s active session(s)"
-msgstr "%s 件のアクティブなセッション"
+msgid "1 active session"
+msgstr "1件のアクティブなセッション"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:46
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:29
+msgid "%s active sessions"
+msgstr "%s件のアクティブなセッション"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:48
 msgid "Loading security data..."
 msgstr "セキュリティデータを読み込み中..."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:50
+#: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:52
 msgid "No active sessions found."
 msgstr "アクティブなセッションは見つかりませんでした。"
 
@@ -3256,16 +3329,16 @@ msgstr "最終生成日時:"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:555
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:574
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:580
-#: ui/pages/dashboard/activity/ActivityPage.tsx:141
-#: ui/pages/dashboard/activity/ActivityPage.tsx:164
-#: ui/pages/dashboard/activity/ActivityPage.tsx:997
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:49
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:72
+#: ui/pages/dashboard/activity/ActivityPage.tsx:154
+#: ui/pages/dashboard/activity/ActivityPage.tsx:196
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1080
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:53
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:90
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:31
 #: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:39
 #: ui/pages/dashboard/_components/RecentClicks/RecentClicks.tsx:11
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:38
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:182
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:43
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:189
 #: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:172
 #: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:179
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:106
@@ -3354,217 +3427,250 @@ msgstr "更新中..."
 msgid "Update Password"
 msgstr "パスワードを更新"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:156
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:161
 msgid "Loading languages..."
 msgstr "言語を読み込み中..."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:162
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:167
 msgid "12-hour (AM/PM)"
 msgstr "12時間制（午前/午後）"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:163
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:168
 msgid "24-hour"
 msgstr "24時間制"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:166
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:171
+#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:74
+msgid "7 days"
+msgstr "7日間"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:172
+msgid "14 days"
+msgstr "14日間"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:173
+msgid "30 days (Default)"
+msgstr "30日間（デフォルト）"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:174
+msgid "60 days"
+msgstr "60日間"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:175
+msgid "90 days"
+msgstr "90日間"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:176
+msgid "Never (Keep indefinitely)"
+msgstr "保持しない（無期限に保持）"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:179
 msgid "Default (Landing Page)"
 msgstr "デフォルト（ランディングページ）"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:167
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:180
 msgid "Redirect URL"
 msgstr "リダイレクト URL"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:168
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:181
 msgid "Login Page"
 msgstr "ログインページ"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:279
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:292
 msgid "Replace Favicon"
 msgstr "ファビコンを変更"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:280
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:293
 msgid "Choose Favicon"
 msgstr "ファビコンを選択"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:296
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:309
 msgid "Replace Preview Image"
 msgstr "プレビュー画像を変更"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:297
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:310
 msgid "Choose Preview Image"
 msgstr "プレビュー画像を選択"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:304
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:317
 msgid "Profile Information"
 msgstr "プロフィール情報"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:309
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:322
 #: ui/pages/dashboard/users/UsersPage.tsx:205
 msgid "First Name"
 msgstr "名"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:316
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:329
 #: ui/pages/dashboard/users/UsersPage.tsx:211
 msgid "Last Name"
 msgstr "姓"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:323
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:336
 #: ui/pages/dashboard/users/UsersPage.tsx:220
 msgid "Display Name"
 msgstr "表示名"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:336
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:349
 msgid "Cannot be changed"
 msgstr "変更不可"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:353
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:366
 msgid "Email Address"
 msgstr "メールアドレス"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:364
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:377
 msgid "Phone Number"
 msgstr "電話番号"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:371
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:384
 msgid "Company"
 msgstr "会社名"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:377
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:390
 msgid "Job Title"
 msgstr "役職"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:384
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:397
 msgid "Bio"
 msgstr "略歴"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:396
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:409
 msgid "Site Configuration"
 msgstr "サイト設定"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:409
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:422
 msgid "Tagline"
 msgstr "キャッチフレーズ"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:418
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:431
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:377
 msgid "Site Language"
 msgstr "サイトの言語"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:434
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:447
 msgid "Site Timezone"
 msgstr "サイトのタイムゾーン"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:445
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:458
 msgid "Site timezone"
 msgstr "サイトのタイムゾーン"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:451
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:464
 msgid "Time Format"
 msgstr "時刻形式"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:462
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:475
 msgid "Time format"
 msgstr "時刻形式"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:469
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:480
+msgid "Trash Retention Period"
+msgstr "ゴミ箱の保持期間"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:493
+msgid "Trash retention period"
+msgstr "ゴミ箱の保持期間"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:500
 msgid "Homepage Configuration"
 msgstr "ホームページ設定"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:475
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:490
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:506
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:521
 msgid "Root URL Behavior"
 msgstr "ルート URL の動作"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:496
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:527
 msgid "Custom Redirect URL"
 msgstr "カスタムリダイレクト URL"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:509
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:540
 msgid "Visitors to the root domain will be redirected to this URL."
 msgstr "ルートドメインへの訪問者はこの URL にリダイレクトされます。"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:519
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:550
 msgid "To customize your HTML landing page, edit the following file in your installation:"
 msgstr "HTML ランディングページをカスタマイズするには、インストール環境内の次のファイルを編集してください:"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:529
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:560
 msgid "This raw HTML file will be served at the root domain. You can include custom styles, scripts, and branding."
 msgstr "この HTML ファイルがルートドメインで配信されます。カスタムスタイル、スクリプト、ブランディングを含めることができます。"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:539
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:570
 msgid "Branding"
 msgstr "ブランディング"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:546
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:577
 msgid "Site Favicon"
 msgstr "サイトのファビコン"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:549
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:580
 msgid "Upload a square PNG favicon. PeakURL will use it for browser tabs, Apple touch icons, and the site web manifest."
 msgstr "正方形の PNG ファビコンをアップロードしてください。PeakURL はこれをブラウザタブ、Apple touch アイコン、サイトのウェブマニフェストに使用します。"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:559
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:590
 msgid "Favicon PNG"
 msgstr "ファビコン PNG"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:595
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:626
 msgid "Use a square PNG, ideally %s. The minimum supported size is 180 x 180."
 msgstr "正方形の PNG 画像を使用してください。理想的には %s です。サポートされる最小サイズは 180 x 180 です。"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:623
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:654
 msgid "Remove Favicon"
 msgstr "ファビコンを削除"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:640
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:671
 msgid "Current favicon preview"
 msgstr "現在のファビコンプレビュー"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:690
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:721
 msgid "No favicon configured"
 msgstr "ファビコンが設定されていません"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:700
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:731
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:60
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Form.tsx:69
 msgid "Social Preview"
 msgstr "ソーシャルプレビュー"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:703
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:734
 msgid "Upload the default image used when short links are shared on social platforms. Individual links can override it."
 msgstr "ソーシャルプラットフォームで短縮リンクが共有されたときに使用されるデフォルト画像をアップロードします。個別のリンクで上書きすることも可能です。"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:714
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:745
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:139
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:106
 msgid "Preview Image"
 msgstr "プレビュー画像"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:749
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:780
 msgid "Use a PNG, JPG, or WebP image, ideally %s, for clean previews on Facebook, X, LinkedIn, and messaging apps."
 msgstr "Facebook、X、LinkedIn、メッセージングアプリで鮮明なプレビューを表示するために、PNG、JPG、または WebP 画像（理想的には %s）を使用してください。"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:771
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:802
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:149
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:116
 msgid "Remove Preview Image"
 msgstr "プレビュー画像を削除"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:783
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:814
 msgid "Default social preview image"
 msgstr "デフォルトのソーシャルプレビュー画像"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:796
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:827
 msgid "No default preview image"
 msgstr "デフォルトのプレビュー画像はありません"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:813
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:844
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:505
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:524
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:28
 msgid "Saving..."
 msgstr "保存中..."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:813
+#: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:844
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:33
 #: ui/pages/dashboard/users/UsersPage.tsx:335
 msgid "Save Changes"
@@ -3589,7 +3695,7 @@ msgstr "データベースをダウンロード"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:153
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:146
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:634
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:639
 #: ui/pages/dashboard/tools/import/_components/results/ImportDetails.tsx:32
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:64
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:43
@@ -3600,18 +3706,18 @@ msgstr "ステータス"
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:154
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:184
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:182
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:599
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:636
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:604
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:641
 msgid "Ready"
 msgstr "準備完了"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:154
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:637
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:642
 msgid "Setup Required"
 msgstr "セットアップが必要"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:157
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:640
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:645
 msgid "Database Updated"
 msgstr "データベース更新済み"
 
@@ -3622,7 +3728,7 @@ msgid "Never"
 msgstr "なし"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:170
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:648
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:653
 msgid "Database Size"
 msgstr "データベースサイズ"
 
@@ -3631,10 +3737,10 @@ msgstr "データベースサイズ"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:206
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:406
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:562
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:627
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:644
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:651
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:795
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:632
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:649
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:656
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:800
 msgid "Not available"
 msgstr "利用不可"
 
@@ -3672,7 +3778,7 @@ msgid "PeakURL stores these values encrypted in the database so it can refresh t
 msgstr "PeakURL はこれらの値を暗号化してデータベースに保存するため、後で再確認することなく GeoLite2 City データベースを更新できます。"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:233
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:663
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:668
 msgid "Account ID"
 msgstr "アカウント ID"
 
@@ -3947,7 +4053,7 @@ msgstr "Managed Challenge ウィジェットには Cloudflare Turnstile のサ�
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:162
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:120
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:568
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:615
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:620
 msgid "None"
 msgstr "なし"
 
@@ -3962,7 +4068,7 @@ msgstr "CAPTCHA プロバイダーからのシークレットキーを貼り付�
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:176
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:182
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:399
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:622
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:627
 msgid "Disabled"
 msgstr "無効"
 
@@ -3971,9 +4077,9 @@ msgid "Editing"
 msgstr "編集中"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:185
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:607
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:611
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:664
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:612
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:616
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:669
 msgid "Not configured"
 msgstr "未設定"
 
@@ -4118,7 +4224,7 @@ msgid "Connect PeakURL to your automations with outbound webhooks for link activ
 msgstr "リンクアクティビティのアウトバウンド Webhook を使用して、PeakURL を自動化ツールに接続します。"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:172
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:692
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:697
 msgid "Webhooks"
 msgstr "Webhook"
 
@@ -4174,7 +4280,7 @@ msgstr "Webhook の読み込みに失敗しました"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:361
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:26
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:35
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:40
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:44
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:57
 msgid "Inactive"
@@ -4274,14 +4380,13 @@ msgstr "APIキー"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:105
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:33
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:38
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:56
 msgid "Active"
 msgstr "アクティブ"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:131
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:221
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:148
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:247
 msgid "Delete"
 msgstr "削除"
 
@@ -4403,7 +4508,7 @@ msgid "SMTP Configuration"
 msgstr "SMTP 設定"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:255
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:604
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:609
 msgid "From Name"
 msgstr "送信者名"
 
@@ -4412,7 +4517,7 @@ msgid "PeakURL"
 msgstr "PeakURL"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:266
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:603
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:608
 msgid "From Email"
 msgstr "送信者メールアドレス"
 
@@ -4421,7 +4526,7 @@ msgid "noreply@yourdomain.com"
 msgstr "noreply@yourdomain.com"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:282
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:606
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:611
 msgid "SMTP Host"
 msgstr "SMTP ホスト"
 
@@ -4430,12 +4535,12 @@ msgid "smtp.example.com"
 msgstr "smtp.example.com"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:297
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:610
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:615
 msgid "SMTP Port"
 msgstr "SMTP ポート"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:314
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:614
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:619
 msgid "Encryption"
 msgstr "暗号化"
 
@@ -4444,7 +4549,7 @@ msgid "SMTP encryption"
 msgstr "SMTP 暗号化"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:330
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:618
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:623
 msgid "Authentication"
 msgstr "認証"
 
@@ -4505,12 +4610,12 @@ msgid "Manage your account preferences and configurations"
 msgstr "アカウントの環境設定と構成を管理します"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:48
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:658
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:663
 msgid "Yes"
 msgstr "はい"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:48
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:659
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:664
 msgid "No"
 msgstr "いいえ"
 
@@ -4575,7 +4680,7 @@ msgid "Debug Mode"
 msgstr "デバッグモード"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:398
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:621
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:626
 msgid "Enabled"
 msgstr "有効"
 
@@ -4608,13 +4713,13 @@ msgstr "言語ディレクトリ"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:437
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:466
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:671
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:676
 msgid "Readable"
 msgstr "読み取り可能"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:438
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:467
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:672
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:677
 msgid "Not Readable"
 msgstr "読み取り不可"
 
@@ -4716,131 +4821,135 @@ msgstr "テーブルプレフィックス"
 msgid "Schema Status"
 msgstr "スキーマステータス"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:588
-msgid "issue(s) detected"
-msgstr "件の問題が検出されました"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:589
+msgid "1 issue detected"
+msgstr "1件の問題が検出されました"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:594
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:591
+msgid "%s issues detected"
+msgstr "%s件の問題が検出されました"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:599
 msgid "Driver"
 msgstr "ドライバー"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:596
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:601
 msgid "Transport Ready"
 msgstr "転送準備完了"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:600
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:605
 msgid "Needs Setup"
 msgstr "セットアップが必要"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:626
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:631
 msgid "Settings Storage"
 msgstr "設定ストレージ"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:655
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:660
 msgid "Credentials Saved"
 msgstr "認証情報保存済み"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:667
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:672
 msgid "Database Path"
 msgstr "データベースパス"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:677
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:682
 msgid "Refresh Command"
 msgstr "更新コマンド"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:685
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:690
 msgid "Short Links"
 msgstr "短縮リンク"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:694
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:699
 msgid "Activity Events"
 msgstr "アクティビティイベント"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:698
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:703
 msgid "Managed Tables"
 msgstr "管理対象テーブル"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:707
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:712
 msgid "Directories and Sizes"
 msgstr "ディレクトリとサイズ"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:710
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:715
 msgid "Server"
 msgstr "サーバー"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:718
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:723
 msgid "Data Footprint"
 msgstr "データフットプリント"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:755
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:760
 msgid "System status info copied to clipboard"
 msgstr "システムステータス情報をクリップボードにコピーしました"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:761
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:766
 msgid "PeakURL could not copy the system status information."
 msgstr "PeakURL はシステムステータス情報をコピーできませんでした。"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:792
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:797
 msgid "Last checked: %s"
 msgstr "最終確認: %s"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:819
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:824
 msgid "The system status check shows information about your PeakURL configuration and items that may need your attention."
 msgstr "システムステータスチェックには、PeakURL の設定および注意が必要な項目に関する情報が表示されます。"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:829
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:834
 msgid "1 critical issue"
 msgstr "1件の重大な問題"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:830
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:835
 msgid "%s critical issues"
 msgstr "%s 件の重大な問題"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:832
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:837
 msgid "Critical issues are items that may have a high impact on your site performance or security. Resolving these issues should be prioritized."
 msgstr "重大な問題は、サイトのパフォーマンスやセキュリティに大きな影響を与える可能性がある項目です。これらの問題の解決を優先してください。"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:845
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:850
 msgid "1 recommended improvement"
 msgstr "1件の推奨される改善"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:846
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:851
 msgid "%s recommended improvements"
 msgstr "%s 件の推奨される改善"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:848
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:853
 msgid "Recommended improvements are beneficial for your site, though not as urgent as a critical issue. They may include improvements in areas such as security, performance, and user experience."
 msgstr "推奨される改善は、重大な問題ほど緊急ではありませんが、サイトにとって有益です。セキュリティ、パフォーマンス、ユーザーエクスペリエンスなどの分野の改善が含まれます。"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:862
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:867
 msgid "All system status checks are currently passing."
 msgstr "現在、すべてのシステムステータスチェックに合格しています。"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:883
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:888
 msgid "Hide passed tests"
 msgstr "合格したテストを非表示"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:886
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:891
 msgid "1 passed test"
 msgstr "1件のテストに合格"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:887
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:892
 msgid "%s passed tests"
 msgstr "%s 件のテストに合格"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:937
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:942
 msgid "System Status Info"
 msgstr "システムステータス情報"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:940
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:945
 msgid "This page can show you every detail about the configuration of your PeakURL install."
 msgstr "このページには、PeakURL インストールの設定に関するすべての詳細が表示されます。"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:945
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:950
 msgid "If you want to export a full snapshot of this page, you can use the button below to copy it to the clipboard."
 msgstr "このページの完全なスナップショットをエクスポートする場合は、下のボタンを使用してクリップボードにコピーできます。"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:960
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:965
 msgid "Copy site info to clipboard"
 msgstr "サイト情報をクリップボードにコピー"
 
@@ -4994,7 +5103,7 @@ msgstr "エイリアス"
 #: ui/pages/dashboard/tools/import/_components/results/ImportDetails.tsx:33
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:55
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:110
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:84
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:107
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:42
 msgid "Short URL"
 msgstr "短縮 URL"
@@ -5341,8 +5450,8 @@ msgid "Author"
 msgstr "作成者"
 
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
-#: ui/pages/dashboard/activity/ActivityPage.tsx:891
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:72
+#: ui/pages/dashboard/activity/ActivityPage.tsx:974
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:111
 #: ui/pages/dashboard/users/UsersPage.tsx:564
 msgid "Actions"
 msgstr "アクション"
@@ -5355,298 +5464,376 @@ msgstr "無効化"
 msgid "Activate"
 msgstr "有効化"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:120
+#: ui/pages/dashboard/activity/ActivityPage.tsx:122
 msgid "Link created"
 msgstr "リンクを作成しました"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:122
+#: ui/pages/dashboard/activity/ActivityPage.tsx:124
 msgid "Link updated"
 msgstr "リンクを更新しました"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:124
-msgid "Link deleted"
-msgstr "リンクを削除しました"
-
 #: ui/pages/dashboard/activity/ActivityPage.tsx:126
+#: ui/pages/dashboard/activity/ActivityPage.tsx:463
+msgid "Link permanently deleted"
+msgstr "リンクが完全に削除されました"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:128
+msgid "Link moved to trash"
+msgstr "リンクがゴミ箱に移動しました"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:130
+#: ui/pages/dashboard/activity/ActivityPage.tsx:472
+#: ui/pages/dashboard/links/LinksPage.tsx:238
+msgid "Link restored"
+msgstr "リンクが復元されました"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:132
+#: ui/pages/dashboard/links/LinksPage.tsx:268
+msgid "Trash emptied"
+msgstr "ゴミ箱が空になりました"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:134
 msgid "User created"
 msgstr "ユーザーを作成しました"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:128
+#: ui/pages/dashboard/activity/ActivityPage.tsx:136
 msgid "User updated"
 msgstr "ユーザーを更新しました"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:130
+#: ui/pages/dashboard/activity/ActivityPage.tsx:138
 #: ui/pages/dashboard/users/UsersPage.tsx:434
 msgid "User deleted"
 msgstr "ユーザーを削除しました"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:132
+#: ui/pages/dashboard/activity/ActivityPage.tsx:140
 msgid "Link click"
 msgstr "リンクのクリック"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:143
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:52
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:168
+#: ui/pages/dashboard/activity/ActivityPage.tsx:159
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:55
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:190
 msgid "Unknown user"
 msgstr "不明なユーザー"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:147
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:55
-msgid "Created new link %s"
-msgstr "新しいリンク %s を作成しました"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:163
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:58
+msgid "Created new link \"%s\""
+msgstr "新しいリンク「%s」を作成しました"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:149
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:57
-msgid "Updated link %s"
-msgstr "リンク %s を更新しました"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:165
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:60
+msgid "Updated link \"%s\""
+msgstr "リンク「%s」を更新しました"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:151
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:59
-msgid "Deleted link %s"
-msgstr "リンク %s を削除しました"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:167
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:62
+msgid "Permanently deleted link \"%s\""
+msgstr "リンク「%s」を完全に削除しました"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:153
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:61
-msgid "Created user %s"
-msgstr "ユーザー %s を作成しました"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:169
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:64
+msgid "Moved link \"%s\" to trash"
+msgstr "リンク「%s」をゴミ箱に移動しました"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:155
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:63
-msgid "Updated user %s"
-msgstr "ユーザー %s を更新しました"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:171
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:66
+msgid "Restored link \"%s\""
+msgstr "リンク「%s」を復元しました"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:157
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:65
-msgid "Deleted user %s"
-msgstr "ユーザー %s を削除しました"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:176
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:71
+msgid "Permanently deleted 1 link from trash"
+msgstr "ゴミ箱から1件のリンクを完全に削除しました"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:161
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:69
+#: ui/pages/dashboard/activity/ActivityPage.tsx:178
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:73
+msgid "Permanently deleted %s links from trash"
+msgstr "ゴミ箱から%s件のリンクを完全に削除しました"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:182
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:77
+msgid "Emptied links from trash"
+msgstr "ゴミ箱からリンクを消去しました"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:185
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:79
+msgid "Created user \"%s\""
+msgstr "ユーザー「%s」を作成しました"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:187
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:81
+msgid "Updated user \"%s\""
+msgstr "ユーザー「%s」を更新しました"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:189
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:83
+msgid "Deleted user \"%s\""
+msgstr "ユーザー「%s」を削除しました"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:193
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:87
 msgid "from %s"
 msgstr "%s から"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:169
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:76
-msgid "Link %1$s was clicked %2$s"
-msgstr "リンク %1$s が %2$s クリックされました"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:201
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:94
+msgid "Link \"%1$s\" was clicked %2$s"
+msgstr "リンク「%1$s」がクリックされました %2$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:173
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:80
-msgid "Link %s was clicked"
-msgstr "リンク %s がクリックされました"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:205
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:98
+msgid "Link \"%s\" was clicked"
+msgstr "リンク「%s」がクリックされました"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:176
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:82
+#: ui/pages/dashboard/activity/ActivityPage.tsx:208
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:100
 msgid "Unknown activity"
 msgstr "不明なアクティビティ"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:211
-#: ui/pages/dashboard/activity/ActivityPage.tsx:220
+#: ui/pages/dashboard/activity/ActivityPage.tsx:249
+#: ui/pages/dashboard/activity/ActivityPage.tsx:258
 msgid "Unknown date"
 msgstr "不明な日付"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:231
+#: ui/pages/dashboard/activity/ActivityPage.tsx:269
 msgid "Today"
 msgstr "今日"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:235
+#: ui/pages/dashboard/activity/ActivityPage.tsx:273
 msgid "Yesterday"
 msgstr "昨日"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:570
-#: ui/pages/dashboard/activity/ActivityPage.tsx:598
-#: ui/pages/dashboard/activity/ActivityPage.tsx:628
+#: ui/pages/dashboard/activity/ActivityPage.tsx:450
+msgid "Link already active"
+msgstr "リンクはすでにアクティブです"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:451
+msgid "This link is already active and does not need to be restored."
+msgstr "このリンクはすでにアクティブであり、復元する必要はありません。"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:473
+msgid "The link has been restored successfully."
+msgstr "リンクが正常に復元されました。"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:477
+#: ui/pages/dashboard/links/LinksPage.tsx:243
+msgid "Unable to restore link"
+msgstr "リンクを復元できません"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:480
+msgid "Failed to restore link from activity record."
+msgstr "アクティビティレコードからのリンクの復元に失敗しました。"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:653
+#: ui/pages/dashboard/activity/ActivityPage.tsx:681
+#: ui/pages/dashboard/activity/ActivityPage.tsx:711
 msgid "Activity deleted"
 msgstr "アクティビティを削除しました"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:571
+#: ui/pages/dashboard/activity/ActivityPage.tsx:654
 msgid "The activity log entry has been removed."
 msgstr "アクティビティログエントリが削除されました。"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:575
-#: ui/pages/dashboard/activity/ActivityPage.tsx:606
-#: ui/pages/dashboard/activity/ActivityPage.tsx:633
+#: ui/pages/dashboard/activity/ActivityPage.tsx:658
+#: ui/pages/dashboard/activity/ActivityPage.tsx:689
+#: ui/pages/dashboard/activity/ActivityPage.tsx:716
 msgid "Unable to delete activity"
 msgstr "アクティビティを削除できません"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:578
+#: ui/pages/dashboard/activity/ActivityPage.tsx:661
 msgid "The activity log entry could not be removed."
 msgstr "アクティビティログエントリを削除できませんでした。"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:600
+#: ui/pages/dashboard/activity/ActivityPage.tsx:683
 msgid "Deleted %s activity log entries."
 msgstr "%s 件のアクティビティログエントリを削除しました。"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:609
+#: ui/pages/dashboard/activity/ActivityPage.tsx:692
 msgid "The selected activity log entries could not be removed."
 msgstr "選択したアクティビティログエントリを削除できませんでした。"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:629
+#: ui/pages/dashboard/activity/ActivityPage.tsx:712
 msgid "All activity log entries have been removed."
 msgstr "すべてのアクティビティログエントリが削除されました。"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:636
+#: ui/pages/dashboard/activity/ActivityPage.tsx:719
 msgid "The activity logs could not be removed."
 msgstr "アクティビティログを削除できませんでした。"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:662
+#: ui/pages/dashboard/activity/ActivityPage.tsx:745
 msgid "All activity"
 msgstr "すべてのアクティビティ"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:687
+#: ui/pages/dashboard/activity/ActivityPage.tsx:770
 msgid "Total events"
 msgstr "総イベント数"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:693
+#: ui/pages/dashboard/activity/ActivityPage.tsx:776
 msgid "Link events"
 msgstr "リンクイベント"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:699
+#: ui/pages/dashboard/activity/ActivityPage.tsx:782
 msgid "User events"
 msgstr "ユーザーイベント"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:711
+#: ui/pages/dashboard/activity/ActivityPage.tsx:794
 msgid "Audit Log"
 msgstr "監査ログ"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:715
+#: ui/pages/dashboard/activity/ActivityPage.tsx:798
 msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
 msgstr "フィルター、タイムスタンプ、実行者の詳細情報とともに、リンクの変更やユーザー管理イベントを 1 か所で確認できます。"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:725
-#: ui/pages/dashboard/activity/ActivityPage.tsx:726
+#: ui/pages/dashboard/activity/ActivityPage.tsx:808
+#: ui/pages/dashboard/activity/ActivityPage.tsx:809
 msgid "Refresh activity history"
 msgstr "アクティビティ履歴を更新"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:765
+#: ui/pages/dashboard/activity/ActivityPage.tsx:848
 msgid "Latest event"
 msgstr "最新のイベント"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:773
+#: ui/pages/dashboard/activity/ActivityPage.tsx:856
 msgid "No recent events"
 msgstr "最近のイベントはありません"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:830
+#: ui/pages/dashboard/activity/ActivityPage.tsx:913
 msgid "Activity history"
 msgstr "アクティビティ履歴"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:837
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:28
+#: ui/pages/dashboard/activity/ActivityPage.tsx:920
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:32
 msgid "%s selected"
 msgstr "%s 件選択中"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:847
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1334
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:36
+#: ui/pages/dashboard/activity/ActivityPage.tsx:930
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1504
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:73
 msgid "Delete selected"
 msgstr "選択項目を削除"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:855
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:45
+#: ui/pages/dashboard/activity/ActivityPage.tsx:938
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:82
 msgid "Delete all"
 msgstr "すべて削除"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:879
+#: ui/pages/dashboard/activity/ActivityPage.tsx:962
 msgid "Select all events on this page"
 msgstr "このページのすべてのイベントを選択"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:886
+#: ui/pages/dashboard/activity/ActivityPage.tsx:969
 msgid "Event"
 msgstr "イベント"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:887
+#: ui/pages/dashboard/activity/ActivityPage.tsx:970
 msgid "Details"
 msgstr "詳細"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:888
+#: ui/pages/dashboard/activity/ActivityPage.tsx:971
 msgid "When"
 msgstr "日時"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:950
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1033
 msgid "Select %s events"
 msgstr "%s 件のイベントを選択"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1020
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1103
 msgid "By"
 msgstr "実行者"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1029
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:64
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1112
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:103
 msgid "Link"
 msgstr "リンク"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1047
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1122
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:105
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:117
+msgid "Destination"
+msgstr "遷移先"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1142
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:273
 #: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:117
 msgid "From"
 msgstr "送信元"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1173
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1268
 msgid "No additional details"
 msgstr "追加の詳細はありません"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1211
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1214
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1354
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1346
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1355
+msgid "Link is already active"
+msgstr "リンクはすでにアクティブです"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1349
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1358
+msgid "Restore link"
+msgstr "リンクを復元"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1381
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1384
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1524
 msgid "Delete activity log"
 msgstr "アクティビティログを削除"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1243
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1413
 msgid "No user activity yet"
 msgstr "ユーザーアクティビティはまだありません"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1245
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1415
 msgid "No link activity yet"
 msgstr "リンクアクティビティはまだありません"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1246
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1416
 msgid "No activity recorded yet"
 msgstr "記録されたアクティビティはまだありません"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1249
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1419
 msgid "Once users manage accounts or links change, the audit log will appear here."
 msgstr "ユーザーがアカウントを管理したりリンクを変更したりすると、監査ログがここに表示されます。"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1263
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1433
 msgid "Showing %1$s-%2$s of %3$s events"
 msgstr "%3$s 件中 %1$s〜%2$s 件のイベントを表示"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1270
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1440
 msgid "Page %1$s of %2$s"
 msgstr "ページ %1$s / %2$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1286
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1456
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:40
 msgid "Previous"
 msgstr "前へ"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1312
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1482
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:84
 msgid "Next"
 msgstr "次へ"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1323
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1493
 msgid "Delete activity logs"
 msgstr "アクティビティログを削除"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1327
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1497
 msgid "Delete %s selected activity log entries? This action cannot be undone."
 msgstr "選択した %s 件のアクティビティログエントリを削除しますか？この操作は元に戻せません。"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1342
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1346
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1512
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1516
 msgid "Delete all activity"
 msgstr "すべてのアクティビティを削除"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1343
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1513
 msgid "Are you sure you want to delete all activity logs? This action cannot be undone."
 msgstr "すべてのアクティビティログを削除してもよろしいですか？この操作は元に戻せません。"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1358
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1528
 msgid "Delete the activity entry \"%s\"? This action cannot be undone."
 msgstr "アクティビティエントリ「%s」を削除しますか？この操作は元に戻せません。"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1365
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1535
 msgid "Delete activity"
 msgstr "アクティビティを削除"
 
@@ -5908,7 +6095,7 @@ msgstr "最近のアクティビティはありません"
 msgid "View All Activity"
 msgstr "すべてのアクティビティを表示"
 
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:165
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:187
 msgid "By %1$s • %2$s"
 msgstr "%1$s • %2$s による"
 
@@ -5957,7 +6144,7 @@ msgid "Compared with %1$s to %2$s."
 msgstr "%1$s から %2$s と比較。"
 
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:119
-#: ui/pages/dashboard/links/LinksPage.tsx:352
+#: ui/pages/dashboard/links/LinksPage.tsx:420
 msgid "Active Links"
 msgstr "アクティブなリンク"
 
@@ -6036,60 +6223,108 @@ msgstr "統計を表示"
 msgid "%s clicks"
 msgstr "%s クリック"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:35
-msgid "Failed to delete links"
-msgstr "リンクの削除に失敗しました"
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:44
+msgid "Failed to permanently delete links"
+msgstr "リンクの完全削除に失敗しました"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:56
-msgid "Delete Links"
-msgstr "リンクを削除"
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:45
+msgid "Failed to move links to trash"
+msgstr "リンクをゴミ箱に移動できませんでした"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:78
-msgid "Are you sure you want to delete %s selected link(s)? This action cannot be undone."
-msgstr "選択した %s 件のリンクを削除してもよろしいですか？この操作は元に戻せません。"
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:69
+msgid "Delete Links Permanently"
+msgstr "リンクを完全に削除"
+
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:70
+msgid "Move Links to Trash"
+msgstr "リンクをゴミ箱に移動"
+
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:93
+msgid "Are you sure you want to delete 1 selected link permanently? This action cannot be undone."
+msgstr "選択した1件のリンクを完全に削除してもよろしいですか？この操作は取り消せません。"
+
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:97
+msgid "Are you sure you want to delete %s selected links permanently? This action cannot be undone."
+msgstr "選択した%s件のリンクを完全に削除してもよろしいですか？この操作は取り消せません。"
 
 #: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:103
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:143
+msgid "Are you sure you want to move 1 selected link to the trash? You can restore it later."
+msgstr "選択した1件のリンクをゴミ箱に移動してもよろしいですか？後で復元できます。"
+
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:107
+msgid "Are you sure you want to move %s selected links to the trash? You can restore them later."
+msgstr "選択した%s件のリンクをゴミ箱に移動してもよろしいですか？後で復元できます。"
+
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:132
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:166
 msgid "Deleting..."
 msgstr "削除中..."
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:109
-msgid "Delete (%s)"
-msgstr "削除 (%s)"
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:139
+msgid "Delete Permanently (%s)"
+msgstr "完全に削除 (%s)"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:22
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:145
+msgid "Move to Trash (%s)"
+msgstr "ゴミ箱に移動 (%s)"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:30
+msgid "Status: All"
+msgstr "ステータス: すべて"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:31
+msgid "Status: Active"
+msgstr "ステータス: 有効"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:32
+msgid "Status: Inactive"
+msgstr "ステータス: 無効"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:37
+msgid "Trash (%s)"
+msgstr "ゴミ箱 (%s)"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:38
+msgid "Trash"
+msgstr "ゴミ箱"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:43
 msgid "Sort: Date Created"
 msgstr "並び替え: 作成日"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:23
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:44
 msgid "Sort: Most Clicks"
 msgstr "並び替え: クリック数順"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:24
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:45
 msgid "Sort: Alias"
 msgstr "並び替え: エイリアス順"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:27
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:48
 msgid "Descending"
 msgstr "降順"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:28
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:49
 msgid "Ascending"
 msgstr "昇順"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:39
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:60
 msgid "Total Links:"
 msgstr "総リンク数:"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:49
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:70
 msgid "Total Clicks:"
 msgstr "総クリック数:"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:70
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:92
+msgid "Filter links by status"
+msgstr "ステータスでリンクを絞り込む"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:102
 msgid "Sort links"
 msgstr "リンクを並び替え"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:79
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:111
 msgid "Sort order"
 msgstr "並び順"
 
@@ -6097,36 +6332,47 @@ msgstr "並び順"
 msgid "Showing %1$s–%2$s of %3$s links"
 msgstr "%3$s 件中 %1$s〜%2$s 件のリンクを表示"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:22
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:26
 msgid "Deselect all links"
 msgstr "すべてのリンクの選択を解除"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:65
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:43
+msgid "Restore selected"
+msgstr "選択項目を復元"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:52
+msgid "Delete permanently"
+msgstr "完全に削除"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:61
+msgid "Empty trash"
+msgstr "ゴミ箱を空にする"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:104
 msgid "Title"
 msgstr "タイトル"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:66
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:94
-msgid "Destination"
-msgstr "遷移先"
-
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:68
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:107
 msgid "Performance"
 msgstr "パフォーマンス"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:70
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:109
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:35
 #: ui/pages/dashboard/users/UsersPage.tsx:561
 msgid "Created"
 msgstr "作成日時"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:37
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:143
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:36
+msgid "Trashed"
+msgstr "ゴミ箱"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:42
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:150
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:58
 msgid "Expired"
 msgstr "期限切れ"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:89
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:96
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:103
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:230
@@ -6135,27 +6381,36 @@ msgstr "期限切れ"
 msgid "Copied!"
 msgstr "コピーしました！"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:90
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:97
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:104
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:143
 msgid "Copy"
 msgstr "コピー"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:124
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:131
 msgid "Protected"
 msgstr "保護中"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:144
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:151
 msgid "Expires"
 msgstr "有効期限"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:200
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:209
+msgid "Restore Link"
+msgstr "リンクを復元"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:216
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:172
+msgid "Delete Permanently"
+msgstr "完全に削除"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:226
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:77
 msgid "QR Code"
 msgstr "QRコード"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:214
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:240
 msgid "Edit"
 msgstr "編集"
 
@@ -6167,30 +6422,39 @@ msgstr "リンクはまだありません"
 msgid "Create your first shortened link to get started"
 msgstr "開始するには最初の短縮リンクを作成してください"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:134
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:158
 msgid "Links deleted"
 msgstr "リンクを削除しました"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:135
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:159
 msgid "All links have been removed."
 msgstr "すべてのリンクが削除されました。"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:139
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:163
 msgid "Unable to delete links"
 msgstr "リンクを削除できません"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:140
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:164
 msgid "Failed to delete all links."
 msgstr "すべてのリンクの削除に失敗しました。"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:217
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:221
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:257
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:261
 msgid "Delete all links"
 msgstr "すべてのリンクを削除"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:218
-msgid "Are you sure you want to delete all links? This action cannot be undone."
-msgstr "すべてのリンクを削除してもよろしいですか？この操作は元に戻せません。"
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:258
+msgid "Are you sure you want to delete all links? This will move active links to trash."
+msgstr "すべてのリンクを削除してもよろしいですか？アクティブなリンクはゴミ箱に移動されます。"
+
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:269
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:273
+msgid "Empty Trash"
+msgstr "ゴミ箱を空にする"
+
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:270
+msgid "Are you sure you want to permanently delete all links in the trash? This action cannot be undone."
+msgstr "ゴミ箱内のすべてのリンクを完全に削除してもよろしいですか？この操作は取り消せません。"
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:25
 msgid "Link Title (Optional)"
@@ -6576,10 +6840,6 @@ msgstr "24時間"
 msgid "30 days"
 msgstr "30日間"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:74
-msgid "7 days"
-msgstr "7日間"
-
 #: ui/pages/dashboard/links/_components/StatsDrawer/analytics.ts:143
 msgid "%s click"
 msgstr "%s クリック"
@@ -6837,17 +7097,30 @@ msgstr "パネルを閉じる"
 msgid "Close"
 msgstr "閉じる"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:33
-msgid "Failed to delete link"
-msgstr "リンクの削除に失敗しました"
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:47
+msgid "Failed to permanently delete link"
+msgstr "リンクの完全削除に失敗しました"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:54
-msgid "Delete Link"
-msgstr "リンクを削除"
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:48
+msgid "Failed to move link to trash"
+msgstr "リンクをゴミ箱に移動できませんでした"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:75
-msgid "Are you sure you want to delete this link? This action cannot be undone."
-msgstr "このリンクを削除してもよろしいですか？この操作は元に戻せません。"
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:72
+msgid "Delete Link Permanently"
+msgstr "リンクを完全に削除"
+
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:73
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:173
+msgid "Move to Trash"
+msgstr "ゴミ箱に移動"
+
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:95
+msgid "Are you sure you want to delete this link permanently? This action cannot be undone."
+msgstr "このリンクを完全に削除してもよろしいですか？この操作は取り消せません。"
+
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:98
+msgid "Are you sure you want to move this link to the trash? You can restore it later."
+msgstr "このリンクをゴミ箱に移動してもよろしいですか？後で復元できます。"
 
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:56
 msgid "https://example.com"
@@ -6918,9 +7191,53 @@ msgstr "リンクを更新"
 msgid "Manage and track your shortened URLs"
 msgstr "短縮 URL を管理および追跡"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:338
+#: ui/pages/dashboard/links/LinksPage.tsx:239
+msgid "The link has been restored to active status."
+msgstr "リンクがアクティブな状態に復元されました。"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:244
+msgid "Failed to restore link."
+msgstr "リンクの復元に失敗しました。"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:253
+msgid "Links restored"
+msgstr "リンクが復元されました"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:254
+msgid "Selected links have been restored to active status."
+msgstr "選択したリンクがアクティブな状態に復元されました。"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:258
+msgid "Unable to restore links"
+msgstr "リンクを復元できません"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:259
+msgid "Failed to restore selected links."
+msgstr "選択したリンクの復元に失敗しました。"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:269
+msgid "All trashed links have been permanently deleted."
+msgstr "ゴミ箱内のすべてのリンクが完全に削除されました。"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:273
+msgid "Unable to empty trash"
+msgstr "ゴミ箱を空にできません"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:274
+msgid "Failed to empty trash."
+msgstr "ゴミ箱を空にできませんでした。"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:406
 msgid "Total Links"
 msgstr "総リンク数"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:434
+msgid "Items in the trash are retained indefinitely until emptied."
+msgstr "ゴミ箱内のアイテムは、空にするまで無期限に保持されます。"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:438
+msgid "Items in the trash will be automatically deleted after %d days."
+msgstr "ゴミ箱内のアイテムは%d日後に自動的に削除されます。"
 
 #: ui/pages/dashboard/users/UsersPage.tsx:61
 msgid "Can manage users, settings, and all links."

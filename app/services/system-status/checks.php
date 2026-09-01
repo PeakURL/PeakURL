@@ -30,6 +30,7 @@ class Checks {
 	 * @param array<string, mixed> $storage  Storage status section.
 	 * @param array<string, mixed> $mail     Mail status section.
 	 * @param array<string, mixed> $location Location-data status section.
+	 * @param array<string, mixed> $cache    Cache status section.
 	 * @return array<int, array<string, string>>
 	 * @since 1.0.14
 	 */
@@ -38,7 +39,8 @@ class Checks {
 		array $database,
 		array $storage,
 		array $mail,
-		array $location
+		array $location,
+		array $cache = array()
 	): array {
 		$checks   = array();
 		$checks[] = array(
@@ -58,6 +60,14 @@ class Checks {
 			'description' => ! empty( $database['schemaUpgradeRequired'] )
 				? __( 'PeakURL found schema changes or leftovers that still need the database upgrader.', 'peakurl' )
 				: __( 'The PeakURL database schema matches the current release.', 'peakurl' ),
+		);
+		$checks[] = array(
+			'id'          => 'cache',
+			'label'       => __( 'Object cache', 'peakurl' ),
+			'status'      => ( ! empty( $cache['enabled'] ) && 'active' === ( $cache['status'] ?? '' ) )
+				? 'ok'
+				: 'warning',
+			'description' => $this->get_cache_check_description( $cache ),
 		);
 		$checks[] = array(
 			'id'          => 'content',
@@ -162,5 +172,43 @@ class Checks {
 			'errorCount'   => $error_count,
 			'totalChecks'  => count( $checks ),
 		);
+	}
+
+	/**
+	 * Build human-readable description for cache health check.
+	 *
+	 * @param array<string, mixed> $cache Cache status map.
+	 * @return string Localised check description.
+	 * @since 1.6.0
+	 */
+	private function get_cache_check_description( array $cache ): string {
+		$enabled = ! empty( $cache['enabled'] );
+		if ( ! $enabled ) {
+			return __( 'Object cache is currently disabled in configuration.', 'peakurl' );
+		}
+
+		$status        = (string) ( $cache['status'] ?? '' );
+		$active_driver = (string) ( $cache['activeDriver'] ?? '' );
+
+		if ( 'active' === $status ) {
+			if ( 'redis' === $active_driver ) {
+				$version = ! empty( $cache['redis']['serverVersion'] ) ? ' (v' . $cache['redis']['serverVersion'] . ')' : '';
+				/* translators: %s: Redis server version or empty string */
+				return sprintf( __( 'High-performance Redis%s in-memory cache is active.', 'peakurl' ), $version );
+			}
+			if ( 'apcu' === $active_driver ) {
+				return __( 'High-performance APCu shared memory cache is active.', 'peakurl' );
+			}
+			if ( 'file' === $active_driver ) {
+				return __( 'Filesystem object cache is active in content/cache.', 'peakurl' );
+			}
+			return __( 'Object and transient cache is operational.', 'peakurl' );
+		}
+
+		if ( 'fallback' === $status ) {
+			return __( 'Configured cache driver is unavailable; operating on fallback driver.', 'peakurl' );
+		}
+
+		return __( 'No cache backend is currently usable; requests query the database directly.', 'peakurl' );
 	}
 }

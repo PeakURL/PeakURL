@@ -18,6 +18,7 @@ import {
 	RefreshCw,
 	Server,
 	ShieldCheck,
+	Zap,
 } from "lucide-react";
 
 import { useNotification } from "@/components";
@@ -117,7 +118,10 @@ function getSubsystemStatus(
 function getCheckCategoryLabel(checkId: string | null | undefined) {
 	switch (checkId) {
 		case "database":
+		case "database-schema":
 			return __("Database");
+		case "cache":
+			return __("Cache");
 		case "content":
 			return __("Storage");
 		case "languages":
@@ -434,10 +438,34 @@ function SystemStatusPage() {
 			id: "database",
 			name: __("Database Engine"),
 			icon: Database,
-			status: getSubsystemStatus(checks, ["database"]),
+			status: getSubsystemStatus(checks, ["database", "database-schema"]),
 			meta: status?.database?.serverType
 				? `${status.database.serverType} ${status?.database?.version || ""}`.trim()
 				: __("MySQL / MariaDB"),
+		},
+		{
+			id: "cache",
+			name: __("Object Cache"),
+			icon: Zap,
+			status: getSubsystemStatus(checks, ["cache"]),
+			meta: (() => {
+				const driver = status?.cache?.activeDriver;
+				if ("redis" === driver) {
+					return status?.cache?.redis?.serverVersion
+						? `Redis v${status.cache.redis.serverVersion}`
+						: __("Redis In-Memory");
+				}
+				if ("apcu" === driver) {
+					return __("APCu Memory Cache");
+				}
+				if ("file" === driver) {
+					return __("Filesystem Cache");
+				}
+				if (!status?.cache?.enabled) {
+					return __("Cache Disabled");
+				}
+				return __("Direct Database");
+			})(),
 		},
 		{
 			id: "storage",
@@ -803,6 +831,82 @@ function SystemStatusPage() {
 		},
 	];
 
+	const cacheDriverLabel = (() => {
+		const driver = status?.cache?.activeDriver;
+		switch (driver) {
+			case "redis":
+				return __("Redis");
+			case "apcu":
+				return __("APCu");
+			case "file":
+				return __("Filesystem");
+			default:
+				return __("None / Direct DB");
+		}
+	})();
+
+	const cacheItems = [
+		{
+			label: __("Object Cache"),
+			value: formatBoolean(
+				status?.cache?.enabled,
+				__("Enabled"),
+				__("Disabled")
+			),
+		},
+		{
+			label: __("Active Driver"),
+			value: cacheDriverLabel,
+			helperText:
+				status?.cache?.status === "fallback"
+					? __("Fallback Active")
+					: undefined,
+		},
+		{
+			label: __("Configured Driver"),
+			value: status?.cache?.configuredDriver || __("auto"),
+		},
+		{
+			label: __("Default TTL"),
+			value: status?.cache?.defaultTtl
+				? `${String(status.cache.defaultTtl)}s`
+				: "3600s",
+		},
+		{
+			label: __("Cache Directory"),
+			value: status?.cache?.path,
+			helperText: status?.cache?.directoryExists
+				? formatBoolean(
+						status?.cache?.writable,
+						__("Writable"),
+						__("Not Writable")
+					)
+				: __("Not Created"),
+			monospace: true,
+		},
+		{
+			label: __("Redis Server"),
+			value: status?.cache?.redis?.configured
+				? `${String(status.cache.redis.host)}:${String(status.cache.redis.port)}`
+				: __("Not configured"),
+			helperText: status?.cache?.redis?.available
+				? __("Connected")
+				: undefined,
+			monospace: Boolean(status?.cache?.redis?.configured),
+		},
+		{
+			label: __("APCu Extension"),
+			value: formatBoolean(
+				status?.cache?.apcu?.extensionLoaded,
+				__("Available"),
+				__("Missing")
+			),
+			helperText: status?.cache?.apcu?.available
+				? __("Operational")
+				: undefined,
+		},
+	];
+
 	const dataItems = [
 		{ label: __("Users"), value: formatCount(status?.data?.users) },
 		{ label: __("Short Links"), value: formatCount(status?.data?.links) },
@@ -832,6 +936,7 @@ function SystemStatusPage() {
 		},
 		{ id: "server", title: __("Server"), items: serverItems },
 		{ id: "database", title: __("Database"), items: databaseItems },
+		{ id: "cache", title: __("Object Cache"), items: cacheItems },
 		{ id: "email", title: __("Email"), items: mailItems },
 		{
 			id: "location",

@@ -38,7 +38,7 @@ export function SystemStatusSkeleton() {
 					<SkeletonLoader className="system-status-skeleton-subsystems-count" />
 				</div>
 				<div className="system-status-skeleton-subsystems-grid">
-					{Array.from({ length: 6 }).map((_, index) => (
+					{Array.from({ length: 7 }).map((_, index) => (
 						<div
 							key={index}
 							className="system-status-skeleton-subsystem-card"

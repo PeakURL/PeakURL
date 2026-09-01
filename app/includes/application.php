@@ -117,15 +117,29 @@ class Application {
 				error_log( (string) $exception );
 			}
 
-			$response = JsonResponse::error(
-				__(
+			$is_dev = 'development' === ( $this->config[ Constants::ENV ] ?? 'production' )
+				|| ! empty( $this->config[ Constants::DEBUG ] );
+
+			$message = $is_dev
+				? $exception->getMessage()
+				: __(
 					'An internal server error occurred. Please try again or contact support if the issue persists.',
 					'peakurl',
-				),
+				);
+
+			$data = $is_dev
+				? array(
+					'exception' => $exception->getMessage(),
+					'file'      => $exception->getFile(),
+					'line'      => $exception->getLine(),
+					'trace'     => $exception->getTraceAsString(),
+				)
+				: array();
+
+			$response = JsonResponse::error(
+				$message,
 				500,
-				'development' === ( $this->config[ Constants::ENV ] ?? 'production' )
-					? array( 'exception' => $exception->getMessage() )
-					: array(),
+				$data,
 			);
 		}
 

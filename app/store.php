@@ -20,8 +20,11 @@ use PeakURL\Api\LinksApi;
 use PeakURL\Api\SettingsApi;
 use PeakURL\Api\UsersApi;
 use PeakURL\Includes\Connection;
+use PeakURL\Includes\Constants;
 use PeakURL\Includes\PeakURL_DB;
 use PeakURL\Includes\Roles;
+use PeakURL\Services\Cache\CacheInterface;
+use PeakURL\Services\Cache\CacheManager;
 use PeakURL\Services\Crypto;
 use PeakURL\Services\Captcha;
 use PeakURL\Services\Favicon;
@@ -299,6 +302,14 @@ class Store {
 	private I18n $i18n_service;
 
 	/**
+	 * Active transient/object cache driver.
+	 *
+	 * @var CacheInterface
+	 * @since 1.6.0
+	 */
+	private CacheInterface $cache_service;
+
+	/**
 	 * Whether the site has been bootstrapped in this request.
 	 *
 	 * @var bool
@@ -309,17 +320,19 @@ class Store {
 	/**
 	 * Create a new Store instance.
 	 *
-	 * @param Connection          $connection Initialized connection manager.
-	 * @param array<string, mixed> $config   Runtime configuration map.
+	 * @param Connection           $connection Initialized connection manager.
+	 * @param array<string, mixed> $config     Runtime configuration map.
 	 * @since 1.0.0
 	 */
 	public function __construct( Connection $connection, array $config ) {
 		$this->connection             = $connection;
 		$this->db                     = new PeakURL_DB( $connection );
+		$this->config                 = $config;
+		$content_dir                  = (string) ( $config[ Constants::CONTENT_DIR ] ?? ( ABSPATH . Constants::DEFAULT_CONTENT_DIR ) );
+		$this->cache_service          = CacheManager::resolve( $config, $content_dir );
 		$this->settings_api           = new SettingsApi( $this->db );
 		$this->users_api              = new UsersApi( $this->db );
-		$this->links_api              = new LinksApi( $this->db );
-		$this->config                 = $config;
+		$this->links_api              = new LinksApi( $this->db, $this->cache_service );
 		$this->roles                  = new Roles();
 		$this->totp_service           = new Totp();
 		$this->crypto_service         = new Crypto( $config );
@@ -351,5 +364,15 @@ class Store {
 			$config,
 			$this->settings_api,
 		);
+	}
+
+	/**
+	 * Get the active cache driver instance.
+	 *
+	 * @return CacheInterface
+	 * @since 1.6.0
+	 */
+	public function get_cache(): CacheInterface {
+		return $this->cache_service;
 	}
 }

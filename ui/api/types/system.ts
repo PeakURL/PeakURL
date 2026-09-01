@@ -106,6 +106,34 @@ export interface SystemStatusPayload {
 		databaseReadable?: boolean;
 		downloadCommand?: string | null;
 	};
+	cache?: {
+		enabled?: boolean;
+		status?: string | null;
+		activeDriver?: string | null;
+		configuredDriver?: string | null;
+		path?: string | null;
+		writable?: boolean;
+		directoryExists?: boolean;
+		defaultTtl?: number | null;
+		redis?: {
+			configured?: boolean;
+			host?: string | null;
+			port?: number | null;
+			available?: boolean;
+			serverVersion?: string | null;
+		};
+		apcu?: {
+			extensionLoaded?: boolean;
+			enabled?: boolean;
+			available?: boolean;
+		};
+		file?: {
+			path?: string | null;
+			exists?: boolean;
+			writable?: boolean;
+			available?: boolean;
+		};
+	};
 	data?: {
 		users?: number | string | null;
 		links?: number | string | null;

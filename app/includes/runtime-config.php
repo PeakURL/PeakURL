@@ -108,6 +108,46 @@ class RuntimeConfig {
 				),
 				$root_path,
 			),
+			Constants::CACHE_ENABLED            => self::get_bool_value(
+				Constants::CACHE_ENABLED,
+				$file_values,
+				Constants::CACHE_DEFAULT_ENABLED,
+			),
+			Constants::CACHE_DRIVER             => strtolower(
+				(string) self::get_value(
+					Constants::CACHE_DRIVER,
+					$file_values,
+					Constants::CACHE_DEFAULT_DRIVER,
+				)
+			),
+			Constants::CACHE_PATH               => self::get_path_value(
+				self::get_value(
+					Constants::CACHE_PATH,
+					$file_values,
+					'',
+				),
+				$root_path,
+			),
+			Constants::REDIS_HOST               => (string) self::get_value(
+				Constants::REDIS_HOST,
+				$file_values,
+				'',
+			),
+			Constants::REDIS_PORT               => (int) self::get_value(
+				Constants::REDIS_PORT,
+				$file_values,
+				(string) Constants::DEFAULT_REDIS_PORT,
+			),
+			Constants::REDIS_DATABASE           => (int) self::get_value(
+				Constants::REDIS_DATABASE,
+				$file_values,
+				(string) Constants::DEFAULT_REDIS_DATABASE,
+			),
+			Constants::REDIS_PASSWORD           => (string) self::get_value(
+				Constants::REDIS_PASSWORD,
+				$file_values,
+				'',
+			),
 			Constants::DEBUG                    => self::get_bool_value(
 				Constants::DEBUG,
 				$file_values,

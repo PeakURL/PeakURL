@@ -86,6 +86,14 @@ class Manager {
 	private Location $location;
 
 	/**
+	 * Cache status helper.
+	 *
+	 * @var Cache
+	 * @since 1.6.0
+	 */
+	private Cache $cache;
+
+	/**
 	 * Data counts helper.
 	 *
 	 * @var Counts
@@ -137,6 +145,7 @@ class Manager {
 		$this->storage  = new Storage( $this->context );
 		$this->mail     = new Mail( $this->context );
 		$this->location = new Location( $this->context );
+		$this->cache    = new Cache( $this->context );
 		$this->counts   = new Counts( $this->context );
 		$this->checks   = new Checks();
 	}
@@ -154,6 +163,7 @@ class Manager {
 		$storage  = $this->storage->storage_status();
 		$mail     = $this->mail->mail_status();
 		$location = $this->location->location_status();
+		$cache    = $this->cache->cache_status();
 		$data     = $this->counts->data_counts();
 		$checks   = $this->checks->status_checks(
 			$server,
@@ -161,6 +171,7 @@ class Manager {
 			$storage,
 			$mail,
 			$location,
+			$cache,
 		);
 
 		return array(
@@ -173,6 +184,7 @@ class Manager {
 			'storage'     => $storage,
 			'mail'        => $mail,
 			'location'    => $location,
+			'cache'       => $cache,
 			'data'        => $data,
 		);
 	}

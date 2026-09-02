@@ -6,8 +6,8 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-01 21:23+0000\n"
-"POT-Creation-Date: 2026-09-01 21:23+0000\n"
+"PO-Revision-Date: 2026-09-02 00:24+0000\n"
+"POT-Creation-Date: 2026-09-02 00:24+0000\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Project-Id-Version: PeakURL 1.6.0\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
@@ -67,8 +67,8 @@ msgid "Select at least one webhook event."
 msgstr "Pilih setidaknya satu peristiwa webhook."
 
 #: app/traits/settings.php:167
-#: app/traits/system.php:365
-#: app/traits/system.php:379
+#: app/traits/system.php:375
+#: app/traits/system.php:389
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:49
 msgid "Shorten, track, and own every link - PeakURL"
 msgstr "Perpendek, lacak, dan kendalikan setiap tautan - PeakURL"
@@ -89,35 +89,35 @@ msgstr "Tabel database tidak ditemukan. Jalankan penginstal atau `php bin/setup-
 msgid "PeakURL is not installed yet. Run install.php to finish setup."
 msgstr "PeakURL belum terinstal. Jalankan install.php untuk menyelesaikan penyiapan."
 
-#: app/traits/system.php:118
-#: app/traits/system.php:136
-#: app/traits/system.php:154
-#: app/traits/system.php:172
+#: app/traits/system.php:128
+#: app/traits/system.php:146
+#: app/traits/system.php:164
+#: app/traits/system.php:182
 #: app/traits/authorization.php:213
 msgid "Admin access is required."
 msgstr "Akses admin diperlukan."
 
-#: app/traits/system.php:272
+#: app/traits/system.php:282
 msgid "PeakURL could not find that language pack."
 msgstr "PeakURL tidak dapat menemukan paket bahasa tersebut."
 
-#: app/traits/system.php:446
+#: app/traits/system.php:456
 msgid "PeakURL could not find that timezone."
 msgstr "PeakURL tidak dapat menemukan zona waktu tersebut."
 
-#: app/traits/system.php:536
+#: app/traits/system.php:546
 msgid "Save a complete mail configuration before sending a test email."
 msgstr "Simpan konfigurasi email yang lengkap sebelum mengirim email uji coba."
 
-#: app/traits/system.php:764
+#: app/traits/system.php:774
 msgid "PeakURL is already up to date."
 msgstr "PeakURL sudah menggunakan versi terbaru."
 
-#: app/traits/system.php:786
+#: app/traits/system.php:796
 msgid "A newer PeakURL release is available. Install the update instead."
 msgstr "Rilis PeakURL yang lebih baru telah tersedia. Instal pembaruan sebagai gantinya."
 
-#: app/traits/system.php:793
+#: app/traits/system.php:803
 msgid "PeakURL cannot reinstall the latest release right now."
 msgstr "PeakURL tidak dapat menginstal ulang rilis terbaru saat ini."
 
@@ -455,11 +455,11 @@ msgstr "Sesuaikan Halaman Ini"
 msgid "for updates."
 msgstr "untuk pembaruan."
 
-#: app/includes/application.php:125
+#: app/includes/application.php:126
 msgid "An internal server error occurred. Please try again or contact support if the issue persists."
 msgstr "Terjadi kesalahan server internal. Silakan coba lagi atau hubungi dukungan jika masalah berlanjut."
 
-#: app/includes/application.php:274
+#: app/includes/application.php:275
 #: app/services/install/screen.php:142
 msgid "Request origin is not allowed."
 msgstr "Asal permintaan tidak diizinkan."
@@ -646,6 +646,19 @@ msgstr "Pengaturan GeoIP berhasil disimpan."
 #: app/controllers/geoip.php:71
 msgid "GeoIP database updated."
 msgstr "Database GeoIP berhasil diperbarui."
+
+#: app/controllers/cache.php:40
+msgid "Cache status loaded."
+msgstr "Status cache dimuat."
+
+#: app/controllers/cache.php:57
+msgid "Cache settings saved."
+msgstr "Pengaturan cache disimpan."
+
+#: app/controllers/cache.php:71
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:425
+msgid "Object cache purged successfully."
+msgstr "Cache objek berhasil dibersihkan."
 
 #: app/controllers/urls.php:112
 msgid "URLs loaded."
@@ -1573,13 +1586,13 @@ msgstr "PeakURL tidak dapat mengirim email uji coba karena alamat email akun And
 
 #: app/services/notifications.php:275
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:234
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:426
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:463
 msgid "SMTP"
 msgstr "SMTP"
 
 #: app/services/notifications.php:276
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:221
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:426
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:463
 msgid "PHP mail()"
 msgstr "PHP mail()"
 
@@ -1744,8 +1757,8 @@ msgstr "Selamat Datang"
 #: site/install.php:536
 #: site/setup-config.php:679
 #: ui/components/common/ApiErrorPage/ApiErrorPage.tsx:70
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:123
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:941
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:128
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1016
 msgid "Database"
 msgstr "Database"
 
@@ -1791,8 +1804,8 @@ msgid "Letters, numbers, dots, dashes, underscores, or @."
 msgstr "Huruf, angka, titik, tanda hubung, garis bawah, atau @."
 
 #: site/install.php:588
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:131
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:943
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:136
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1018
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:173
 #: ui/pages/dashboard/users/UsersPage.tsx:260
@@ -1878,7 +1891,7 @@ msgid "Connection details"
 msgstr "Detail koneksi"
 
 #: site/setup-config.php:820
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:706
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:743
 msgid "Host"
 msgstr "Host"
 
@@ -1887,7 +1900,7 @@ msgid "Advanced"
 msgstr "Lanjutan"
 
 #: site/setup-config.php:828
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:708
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:745
 msgid "Port"
 msgstr "Port"
 
@@ -1985,7 +1998,7 @@ msgid "Settings"
 msgstr "Pengaturan"
 
 #: ui/utils/dashboardSearch.ts:150
-#: ui/pages/dashboard/settings/Layout.tsx:25
+#: ui/pages/dashboard/settings/Layout.tsx:26
 msgid "General"
 msgstr "Umum"
 
@@ -2002,15 +2015,15 @@ msgstr "Pengaturan Keamanan"
 
 #: ui/utils/dashboardSearch.ts:169
 #: ui/pages/auth/login/LoginPage.tsx:57
-#: ui/pages/dashboard/settings/Layout.tsx:26
+#: ui/pages/dashboard/settings/Layout.tsx:27
 msgid "Security"
 msgstr "Keamanan"
 
 #: ui/utils/dashboardSearch.ts:183
 #: ui/utils/dashboardSearch.ts:187
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:79
-#: ui/pages/dashboard/settings/Layout.tsx:30
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:921
+#: ui/pages/dashboard/settings/Layout.tsx:31
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:996
 #: ui/router/pageTitle.ts:24
 msgid "API Keys"
 msgstr "Kunci API"
@@ -2018,14 +2031,14 @@ msgstr "Kunci API"
 #: ui/utils/dashboardSearch.ts:199
 #: ui/utils/dashboardSearch.ts:202
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:157
-#: ui/pages/dashboard/settings/Layout.tsx:36
+#: ui/pages/dashboard/settings/Layout.tsx:37
 #: ui/router/pageTitle.ts:26
 msgid "Integrations"
 msgstr "Integrasi"
 
 #: ui/utils/dashboardSearch.ts:208
 #: ui/utils/dashboardSearch.ts:213
-#: ui/pages/dashboard/settings/Layout.tsx:42
+#: ui/pages/dashboard/settings/Layout.tsx:51
 msgid "Email SMTP"
 msgstr "SMTP Email"
 
@@ -2036,18 +2049,18 @@ msgstr "Konfigurasi Email"
 
 #: ui/utils/dashboardSearch.ts:224
 #: ui/utils/dashboardSearch.ts:228
-#: ui/pages/dashboard/settings/Layout.tsx:48
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:133
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:505
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:946
+#: ui/pages/dashboard/settings/Layout.tsx:57
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:138
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:542
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1021
 #: ui/router/pageTitle.ts:30
 msgid "Location Data"
 msgstr "Data Lokasi"
 
 #: ui/utils/dashboardSearch.ts:240
 #: ui/utils/dashboardSearch.ts:244
-#: ui/pages/dashboard/settings/Layout.tsx:54
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:135
+#: ui/pages/dashboard/settings/Layout.tsx:63
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:140
 #: ui/router/pageTitle.ts:32
 msgid "Updates"
 msgstr "Pembaruan"
@@ -2056,7 +2069,7 @@ msgstr "Pembaruan"
 #: ui/utils/dashboardSearch.ts:260
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:53
 #: ui/pages/layout/dashboard/Search/Search.tsx:247
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:914
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:989
 #: ui/pages/dashboard/activity/ActivityPage.tsx:642
 #: ui/pages/dashboard/users/UsersPage.tsx:577
 #: ui/router/pageTitle.ts:85
@@ -2115,7 +2128,7 @@ msgstr "Ekspor"
 #: ui/utils/dashboardSearch.ts:321
 #: ui/utils/dashboardSearch.ts:326
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:85
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1006
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1081
 #: ui/router/pageTitle.ts:115
 msgid "System Status"
 msgstr "Status Sistem"
@@ -2139,12 +2152,14 @@ msgid "Confirm"
 msgstr "Konfirmasi"
 
 #: ui/components/ui/ConfirmDialog/ConfirmDialog.tsx:33
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:816
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:882
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:53
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorSetup.tsx:110
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:370
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:494
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:63
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:508
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1486
 #: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:122
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:156
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:18
@@ -2195,7 +2210,7 @@ msgstr "Batalkan ukuran halaman kustom"
 
 #: ui/components/charts/MetricDonutChart/MetricDonutChart.tsx:37
 #: ui/components/charts/WorldMap/_components/Legend.tsx:16
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:916
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:991
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:113
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:64
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:168
@@ -2651,8 +2666,8 @@ msgstr "Terima kasih telah memilih %s."
 
 #: ui/pages/layout/dashboard/Layout/Layout.tsx:110
 #: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:42
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:524
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:703
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:561
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:740
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:61
 #: ui/pages/dashboard/about/AboutPage.tsx:230
 #: ui/pages/dashboard/about/AboutPage.tsx:406
@@ -2758,13 +2773,13 @@ msgstr "Keluar"
 msgid "Back to login"
 msgstr "Kembali ke login"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:277
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:349
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:354
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:359
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:381
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:416
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:436
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:293
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:365
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:370
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:375
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:397
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:432
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:452
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/useActiveSessions.ts:74
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/useActiveSessions.ts:106
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/useTwoFactorSettings.ts:170
@@ -2782,22 +2797,22 @@ msgstr "Kembali ke login"
 msgid "Error"
 msgstr "Kesalahan"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:278
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:294
 msgid "Failed to update profile"
 msgstr "Gagal memperbarui profil"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:314
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:330
 msgid "Language updated"
 msgstr "Bahasa diperbarui"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:315
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:331
 msgid "PeakURL is reloading the dashboard now."
 msgstr "PeakURL sedang memuat ulang dasbor sekarang."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:324
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:344
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:371
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:431
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:340
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:360
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:387
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:447
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:231
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:251
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:107
@@ -2805,290 +2820,319 @@ msgstr "PeakURL sedang memuat ulang dasbor sekarang."
 msgid "Success"
 msgstr "Berhasil"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:326
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:342
 msgid "Profile and general settings updated successfully"
 msgstr "Profil dan pengaturan umum berhasil diperbarui"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:329
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:345
 msgid "General settings updated successfully"
 msgstr "Pengaturan umum berhasil diperbarui"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:334
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:512
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:551
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:350
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:528
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:567
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:697
 msgid "Save failed"
 msgstr "Penyimpanan gagal"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:337
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:353
 msgid "Failed to update the general settings"
 msgstr "Gagal memperbarui pengaturan umum"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:344
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:360
 msgid "Profile updated successfully"
 msgstr "Profil berhasil diperbarui"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:349
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:365
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:65
 msgid "Enter your current password"
 msgstr "Masukkan kata sandi Anda saat ini"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:354
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:370
 msgid "Passwords do not match"
 msgstr "Kata sandi tidak cocok"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:360
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:376
 msgid "Password must be at least 8 characters"
 msgstr "Kata sandi harus terdiri dari minimal 8 karakter"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:372
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:388
 msgid "Password updated successfully"
 msgstr "Kata sandi berhasil diperbarui"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:382
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:398
 msgid "Failed to update password"
 msgstr "Gagal memperbarui kata sandi"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:395
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:411
 msgid "Key created without visible token"
 msgstr "Kunci dibuat tanpa token yang terlihat"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:396
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:412
 msgid "PeakURL created the API key, but the one-time token was not returned. Revoke it and create a new key."
 msgstr "PeakURL telah membuat kunci API, tetapi token sekali pakai tidak dikembalikan. Cabut kunci tersebut dan buat kunci baru."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:411
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:427
 msgid "API key created"
 msgstr "Kunci API dibuat"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:412
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:428
 msgid "Copy the token now. PeakURL will not show it again."
 msgstr "Salin token sekarang. PeakURL tidak akan menampilkannya lagi."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:417
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:433
 msgid "Failed to generate API key"
 msgstr "Gagal membuat kunci API"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:432
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:448
 msgid "API key deleted successfully"
 msgstr "Kunci API berhasil dihapus"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:437
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:453
 msgid "Failed to delete API key"
 msgstr "Gagal menghapus kunci API"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:444
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:460
 msgid "API key copied to clipboard"
 msgstr "Kunci API disalin ke papan klip"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:448
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:464
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:137
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:985
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1060
 msgid "Copied"
 msgstr "Disalin"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:451
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:990
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:467
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1065
 msgid "Copy failed"
 msgstr "Gagal menyalin"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:452
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:468
 msgid "PeakURL could not copy that value to the clipboard."
 msgstr "PeakURL tidak dapat menyalin nilai tersebut ke papan klip."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:471
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:487
 msgid "Update available"
 msgstr "Pembaruan tersedia"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:473
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:489
 msgid "PeakURL %s is ready to install."
 msgstr "PeakURL %s siap diinstal."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:481
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:497
 msgid "Up to date"
 msgstr "Versi terbaru"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:484
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:500
 msgid "PeakURL %s is already on the latest version."
 msgstr "PeakURL %s sudah menggunakan versi terbaru."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:487
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:503
 msgid "PeakURL is already on the latest version."
 msgstr "PeakURL sudah menggunakan versi terbaru."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:491
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:507
 msgid "Update check failed"
 msgstr "Pemeriksaan pembaruan gagal"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:494
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:510
 msgid "PeakURL could not reach the update service."
 msgstr "PeakURL tidak dapat menjangkau layanan pembaruan."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:506
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:546
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:522
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:562
 msgid "Saved"
 msgstr "Tersimpan"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:507
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:523
 msgid "Location data settings were updated successfully."
 msgstr "Pengaturan data lokasi berhasil diperbarui."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:515
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:531
 msgid "PeakURL could not save the MaxMind settings."
 msgstr "PeakURL tidak dapat menyimpan pengaturan MaxMind."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:526
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:651
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:542
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:667
 msgid "Database updated"
 msgstr "Database diperbarui"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:527
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:543
 msgid "PeakURL downloaded the latest GeoLite2 City database."
 msgstr "PeakURL mengunduh database GeoLite2 City terbaru."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:531
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:547
 msgid "Download failed"
 msgstr "Unduhan gagal"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:534
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:550
 msgid "PeakURL could not download the GeoLite2 database."
 msgstr "PeakURL tidak dapat mengunduh database GeoLite2."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:547
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:563
 msgid "Email configuration was updated successfully."
 msgstr "Konfigurasi email berhasil diperbarui."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:554
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:570
 msgid "PeakURL could not save the email configuration."
 msgstr "PeakURL tidak dapat menyimpan konfigurasi email."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:567
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:583
 msgid "Test email sent"
 msgstr "Email uji coba terkirim"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:569
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:585
 msgid "PeakURL sent a test email to %s."
 msgstr "PeakURL mengirim email uji coba ke %s."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:570
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:586
 msgid "PeakURL sent a test email to your account email."
 msgstr "PeakURL mengirim email uji coba ke email akun Anda."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:574
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:590
 msgid "Test email failed"
 msgstr "Email uji coba gagal"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:577
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:593
 msgid "PeakURL could not send the test email."
 msgstr "PeakURL tidak dapat mengirim email uji coba."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:607
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:623
 msgid "Release reinstalled"
 msgstr "Rilis diinstal ulang"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:608
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:624
 msgid "Update installed"
 msgstr "Pembaruan terinstal"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:612
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:628
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:120
 msgid "PeakURL %s has been reinstalled."
 msgstr "PeakURL %s telah diinstal ulang."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:613
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:629
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:121
 msgid "PeakURL %s is now installed."
 msgstr "PeakURL %s sekarang telah terinstal."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:617
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:633
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:125
 msgid "The latest version has been reinstalled."
 msgstr "Versi terbaru telah diinstal ulang."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:618
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:634
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:126
 msgid "The latest version is now installed."
 msgstr "Versi terbaru sekarang telah terinstal."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:623
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:639
 msgid "Reinstall failed"
 msgstr "Instal ulang gagal"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:623
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:639
 msgid "Update failed"
 msgstr "Pembaruan gagal"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:627
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:643
 msgid "PeakURL could not reinstall the latest version."
 msgstr "PeakURL tidak dapat menginstal ulang versi terbaru."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:628
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:644
 msgid "PeakURL could not apply the update."
 msgstr "PeakURL tidak dapat menerapkan pembaruan."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:653
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:669
 msgid "PeakURL repaired the database schema. Review any remaining warnings below."
 msgstr "PeakURL memperbaiki skema database. Tinjau peringatan yang tersisa di bawah."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:656
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:672
 msgid "The database schema is now current."
 msgstr "Skema database sekarang sudah yang terbaru."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:660
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:676
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:165
 msgid "Database upgrade failed"
 msgstr "Peningkatan database gagal"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:663
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:679
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:168
 msgid "PeakURL could not repair the database schema."
 msgstr "PeakURL tidak dapat memperbaiki skema database."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:770
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:691
+msgid "Settings saved"
+msgstr "Pengaturan disimpan"
+
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:692
+msgid "Performance configuration updated successfully."
+msgstr "Konfigurasi performa berhasil diperbarui."
+
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:700
+msgid "Could not update performance configuration."
+msgstr "Tidak dapat memperbarui konfigurasi performa."
+
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:711
+msgid "Cache purged"
+msgstr "Cache dibersihkan"
+
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:712
+msgid "Object cache cleared successfully across active backends."
+msgstr "Cache objek berhasil dibersihkan di semua backend aktif."
+
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:716
+msgid "Purge failed"
+msgstr "Pembersihan gagal"
+
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:717
+msgid "Could not clear object cache."
+msgstr "Tidak dapat membersihkan cache objek."
+
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:836
 msgid "Delete API key"
 msgstr "Hapus kunci API"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:774
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:840
 msgid "Delete %s? Any scripts, automations, or extensions using it will stop working immediately."
 msgstr "Hapus %s? Semua skrip, otomatisasi, atau ekstensi yang menggunakannya akan segera berhenti berfungsi."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:779
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:845
 msgid "this API key"
 msgstr "kunci API ini"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:783
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:849
 msgid "Delete key"
 msgstr "Hapus kunci"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:784
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:850
 msgid "Keep key"
 msgstr "Simpan kunci"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:794
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:860
 msgid "Reinstall PeakURL %s?"
 msgstr "Instal ulang PeakURL %s?"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:795
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:861
 msgid "Install PeakURL %s?"
 msgstr "Instal PeakURL %s?"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:798
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:864
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:112
 msgid "update"
 msgstr "perbarui"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:804
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:870
 msgid "PeakURL will restore the latest version and refresh the included files."
 msgstr "PeakURL akan memulihkan versi terbaru dan menyegarkan file yang disertakan."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:807
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:873
 msgid "PeakURL will install the latest version and refresh the included files."
 msgstr "PeakURL akan menginstal versi terbaru dan menyegarkan file yang disertakan."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:813
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:879
 msgid "Reinstall latest version"
 msgstr "Instal ulang versi terbaru"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:814
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:880
 msgid "Install update"
 msgstr "Instal pembaruan"
 
@@ -3314,7 +3358,7 @@ msgid "Save or download these codes now—they won't be shown again."
 msgstr "Simpan atau unduh kode ini sekarang—kode tidak akan ditampilkan lagi."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:22
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:918
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:993
 msgid "Active Sessions"
 msgstr "Sesi Aktif"
 
@@ -3355,14 +3399,14 @@ msgstr "Terakhir dibuat:"
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:88
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:93
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:123
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:524
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:652
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:656
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:664
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:700
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:704
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:724
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:730
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:561
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:689
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:693
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:701
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:737
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:741
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:761
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:767
 #: ui/pages/dashboard/activity/ActivityPage.tsx:123
 #: ui/pages/dashboard/activity/ActivityPage.tsx:165
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:53
@@ -3430,7 +3474,7 @@ msgid "Last active"
 msgstr "Terakhir aktif"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:79
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:736
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:773
 msgid "Current"
 msgstr "Saat Ini"
 
@@ -3577,7 +3621,7 @@ msgid "Tagline"
 msgstr "Slogan"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:431
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:526
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:563
 msgid "Site Language"
 msgstr "Bahasa Situs"
 
@@ -3727,8 +3771,8 @@ msgid "Download Database"
 msgstr "Unduh Database"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:153
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:188
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:788
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:193
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:825
 #: ui/pages/dashboard/tools/import/_components/results/ImportDetails.tsx:32
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:64
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:43
@@ -3739,18 +3783,18 @@ msgstr "Status"
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:154
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:184
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:182
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:753
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:790
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:827
 msgid "Ready"
 msgstr "Siap"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:154
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:791
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:828
 msgid "Setup Required"
 msgstr "Penyiapan Diperlukan"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:157
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:794
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:831
 msgid "Database Updated"
 msgstr "Database Diperbarui"
 
@@ -3761,18 +3805,18 @@ msgid "Never"
 msgstr "Tidak pernah"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:170
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:802
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:839
 msgid "Database Size"
 msgstr "Ukuran Database"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:173
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:56
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:252
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:555
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:711
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:781
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:798
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:805
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:61
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:257
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:592
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:748
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:818
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:835
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:842
 msgid "Not available"
 msgstr "Tidak tersedia"
 
@@ -3810,7 +3854,7 @@ msgid "PeakURL stores these values encrypted in the database so it can refresh t
 msgstr "PeakURL menyimpan nilai-nilai ini dalam keadaan terenkripsi di database sehingga dapat menyegarkan database GeoLite2 City nanti tanpa meminta lagi."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:233
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:817
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:854
 msgid "Account ID"
 msgstr "ID Akun"
 
@@ -3855,6 +3899,7 @@ msgid "Save Credentials"
 msgstr "Simpan Kredensial"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:97
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:968
 msgid "Unavailable"
 msgstr "Tidak Tersedia"
 
@@ -3909,7 +3954,7 @@ msgid "Attention Needed"
 msgstr "Perlu Perhatian"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:175
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:735
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:772
 msgid "Upgrade Recommended"
 msgstr "Peningkatan Disarankan"
 
@@ -3990,12 +4035,12 @@ msgid "Run Database Upgrade"
 msgstr "Jalankan Peningkatan Database"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:66
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:721
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:758
 msgid "Recorded Schema"
 msgstr "Skema Tercatat"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:73
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:727
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:764
 msgid "Required Schema"
 msgstr "Skema Diperlukan"
 
@@ -4048,7 +4093,7 @@ msgid "Released"
 msgstr "Dirilis"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:108
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:552
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:589
 msgid "Last Checked"
 msgstr "Terakhir Diperiksa"
 
@@ -4084,8 +4129,8 @@ msgstr "Gunakan kunci situs dan rahasia Cloudflare Turnstile untuk widget Manage
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:162
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:120
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:717
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:769
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:754
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:806
 msgid "None"
 msgstr "Tidak ada"
 
@@ -4099,9 +4144,9 @@ msgstr "Tempelkan kunci rahasia dari penyedia CAPTCHA Anda."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:176
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:182
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:548
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:776
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:857
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:585
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:813
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:894
 msgid "Disabled"
 msgstr "Dinonaktifkan"
 
@@ -4110,10 +4155,10 @@ msgid "Editing"
 msgstr "Mengedit"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:185
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:761
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:765
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:818
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:894
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:798
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:802
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:855
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:964
 msgid "Not configured"
 msgstr "Tidak dikonfigurasi"
 
@@ -4258,7 +4303,7 @@ msgid "Connect PeakURL to your automations with outbound webhooks for link activ
 msgstr "Hubungkan PeakURL ke otomatisasi Anda dengan webhook keluar untuk aktivitas tautan."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:172
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:922
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:997
 msgid "Webhooks"
 msgstr "Webhook"
 
@@ -4501,6 +4546,224 @@ msgstr "Jika kunci ini pernah bocor, cabut dari daftar Kunci API dan buat pengga
 msgid "Copy Key"
 msgstr "Salin Kunci"
 
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:91
+msgid "1 Hour (3,600s) — Default"
+msgstr "1 Jam (3.600 dtk) — Default"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:92
+msgid "6 Hours (21,600s)"
+msgstr "6 Jam (21.600 dtk)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:93
+msgid "24 Hours (86,400s)"
+msgstr "24 Jam (86.400 dtk)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:94
+msgid "7 Days (604,800s)"
+msgstr "7 Hari (604.800 dtk)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:95
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:103
+msgid "Custom Duration..."
+msgstr "Durasi Kustom..."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:99
+msgid "1 Minute (60s) — Default"
+msgstr "1 Menit (60 dtk) — Default"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:100
+msgid "3 Minutes (180s)"
+msgstr "3 Menit (180 dtk)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:101
+msgid "5 Minutes (300s)"
+msgstr "5 Menit (300 dtk)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:102
+msgid "15 Minutes (900s)"
+msgstr "15 Menit (900 dtk)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:150
+msgid "Automatic (Recommended)"
+msgstr "Otomatis (Disarankan)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:155
+msgid "Redis (In-Memory Cache)"
+msgstr "Redis (Cache Dalam Memori)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:156
+msgid "Redis (Unavailable — Server Unreachable)"
+msgstr "Redis (Tidak Tersedia — Server Tidak Dapat Dijangkau)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:162
+msgid "APCu (PHP Shared Memory)"
+msgstr "APCu (Memori Bersama PHP)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:163
+msgid "APCu (Unavailable — Extension Not Loaded)"
+msgstr "APCu (Tidak Tersedia — Ekstensi Belum Dimuat)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:169
+msgid "Filesystem (content/cache)"
+msgstr "Sistem Berkas (content/cache)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:170
+msgid "Filesystem (Unavailable — Directory Not Writable)"
+msgstr "Sistem Berkas (Tidak Tersedia — Direktori Tidak Dapat Ditulisi)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:175
+msgid "Disabled (Direct Database Queries)"
+msgstr "Dinonaktifkan (Kueri Database Langsung)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:184
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:878
+msgid "Redis"
+msgstr "Redis"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:186
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:880
+msgid "APCu"
+msgstr "APCu"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:188
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:882
+msgid "Filesystem"
+msgstr "Sistem Berkas"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:190
+msgid "Disabled / Direct Database"
+msgstr "Dinonaktifkan / Database Langsung"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:271
+msgid "Performance & Caching"
+msgstr "Performa & Cache"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:274
+msgid "Configure object caching backends and Time-to-Live (TTL) policies to optimize link redirection latency and throughput."
+msgstr "Konfigurasikan backend cache objek dan kebijakan Time-to-Live (TTL) untuk mengoptimalkan latensi pengalihan dan throughput."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:291
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:507
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:930
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1485
+msgid "Purge Cache"
+msgstr "Bersihkan Cache"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:299
+msgid "Active Engine"
+msgstr "Mesin Aktif"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:303
+msgid "Cache Footprint"
+msgstr "Penggunaan Memori Cache"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:304
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:911
+msgid "0 B"
+msgstr "0 B"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:308
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:935
+msgid "Default TTL"
+msgstr "TTL Default"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:317
+msgid "Cache status unavailable"
+msgstr "Status cache tidak tersedia"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:334
+msgid "Object cache is operational"
+msgstr "Cache objek beroperasi normal"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:336
+msgid "Fallback cache driver active"
+msgstr "Driver cache cadangan aktif"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:337
+msgid "Object cache is disabled"
+msgstr "Cache objek dinonaktifkan"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:342
+msgid "Object caching is active and serving link redirects via the %s backend."
+msgstr "Cache objek aktif dan melayani pengalihan tautan melalui backend %s."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:349
+msgid "The preferred cache driver is currently unavailable. PeakURL has automatically fallen back to %s."
+msgstr "Driver cache pilihan saat ini tidak tersedia. PeakURL secara otomatis beralih ke %s."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:354
+msgid "Object caching is disabled. Link lookups and redirects are served directly from the database."
+msgstr "Cache objek dinonaktifkan. Pencarian tautan dan pengalihan dilayani langsung dari database."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:366
+msgid "Cache Engine Settings"
+msgstr "Pengaturan Mesin Cache"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:370
+msgid "Select your preferred caching backend. PeakURL automatically selects the highest performance operational backend if the preferred driver is unavailable."
+msgstr "Pilih backend cache pilihan Anda. PeakURL secara otomatis memilih backend operasional tercepat jika driver pilihan tidak tersedia."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:378
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:384
+msgid "Preferred Cache Driver"
+msgstr "Driver Cache Pilihan"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:388
+msgid "PeakURL prioritizes Redis if configured, APCu if loaded, and Filesystem storage as the universal fallback."
+msgstr "PeakURL memprioritaskan Redis jika dikonfigurasi, APCu jika dimuat, dan sistem berkas sebagai cadangan universal."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:396
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:404
+msgid "Redirect Cache TTL"
+msgstr "TTL Cache Pengalihan"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:408
+msgid "Time-to-Live duration for caching active short URL redirect destinations."
+msgstr "Durasi Time-to-Live (TTL) untuk menyimpan tujuan pengalihan URL pendek aktif dalam cache."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:420
+msgid "Custom Redirect TTL (seconds)"
+msgstr "TTL Pengalihan Kustom (detik)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:425
+msgid "Enter the redirect destination cache lifetime in seconds."
+msgstr "Masukkan masa berlaku cache tujuan pengalihan dalam detik."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:435
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:443
+msgid "Negative Lookup (404) TTL"
+msgstr "TTL Pencarian Negatif (404)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:447
+msgid "Time-to-Live duration for caching non-existent link lookups to mitigate database load from automated scans."
+msgstr "Durasi Time-to-Live (TTL) untuk menyimpan tautan yang tidak ada dalam cache guna mengurangi beban database akibat pemindaian otomatis."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:459
+msgid "Custom Negative TTL (seconds)"
+msgstr "TTL Negatif Kustom (detik)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:464
+msgid "Enter the 404 negative lookup cache lifetime in seconds."
+msgstr "Masukkan masa berlaku cache pencarian negatif 404 dalam detik."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:484
+msgid "Reset"
+msgstr "Atur Ulang"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:494
+msgid "Save Performance Settings"
+msgstr "Simpan Pengaturan Performa"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:503
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1481
+msgid "Purge Object Cache"
+msgstr "Bersihkan Cache Objek"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:504
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1482
+msgid "Are you sure you want to purge the object cache? All cached redirect records, in-memory objects, and temporary cache files will be immediately invalidated. Subsequent requests will query the database to rebuild the cache."
+msgstr "Apakah Anda yakin ingin membersihkan cache objek? Semua data pengalihan, objek memori, dan berkas sementara akan segera dibatalkan. Permintaan selanjutnya akan mengambil data langsung dari database."
+
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:118
 msgid "TLS / STARTTLS"
 msgstr "TLS / STARTTLS"
@@ -4514,7 +4777,7 @@ msgid "Save the current email settings before sending a test email."
 msgstr "Simpan pengaturan email saat ini sebelum mengirim email uji coba."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:160
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:498
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:535
 msgid "Email Delivery"
 msgstr "Pengiriman Email"
 
@@ -4543,7 +4806,7 @@ msgid "SMTP Configuration"
 msgstr "Konfigurasi SMTP"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:255
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:758
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:795
 msgid "From Name"
 msgstr "Nama Pengirim"
 
@@ -4552,7 +4815,7 @@ msgid "PeakURL"
 msgstr "PeakURL"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:266
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:757
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:794
 msgid "From Email"
 msgstr "Email Pengirim"
 
@@ -4561,7 +4824,7 @@ msgid "noreply@yourdomain.com"
 msgstr "noreply@domainanda.com"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:282
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:760
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:797
 msgid "SMTP Host"
 msgstr "Host SMTP"
 
@@ -4570,12 +4833,12 @@ msgid "smtp.example.com"
 msgstr "smtp.example.com"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:297
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:764
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:801
 msgid "SMTP Port"
 msgstr "Port SMTP"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:314
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:768
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:805
 msgid "Encryption"
 msgstr "Enkripsi"
 
@@ -4584,7 +4847,7 @@ msgid "SMTP encryption"
 msgstr "Enkripsi SMTP"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:330
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:772
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:809
 msgid "Authentication"
 msgstr "Autentikasi"
 
@@ -4644,543 +4907,552 @@ msgstr "Pengaturan Akun"
 msgid "Manage your account preferences and configurations"
 msgstr "Kelola preferensi dan konfigurasi akun Anda"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:64
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:812
+#: ui/pages/dashboard/settings/Layout.tsx:45
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:107
+msgid "Performance"
+msgstr "Performa"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:69
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:849
 msgid "Yes"
 msgstr "Ya"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:64
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:813
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:69
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:850
 msgid "No"
 msgstr "Tidak"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:72
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:77
 msgid "recently"
 msgstr "baru saja"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:125
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:130
 msgid "Cache"
 msgstr "Tembolok"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:127
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:132
 msgid "Storage"
 msgstr "Penyimpanan"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:129
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:134
 msgid "Translations"
 msgstr "Terjemahan"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:137
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:142
 msgid "System"
 msgstr "Sistem"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:171
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:176
 msgid "System status unavailable"
 msgstr "Status sistem tidak tersedia"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:189
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:194
 msgid "Info"
 msgstr "Info"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:234
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:239
 msgid "Check"
 msgstr "Periksa"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:275
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:280
 msgid "Critical"
 msgstr "Kritis"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:280
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:285
 msgid "Improvement"
 msgstr "Peningkatan"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:407
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:430
+msgid "Failed to purge object cache."
+msgstr "Gagal membersihkan cache objek."
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:444
 msgid "System status data is not available right now."
 msgstr "Data status sistem tidak tersedia saat ini."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:440
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:477
 msgid "Database Engine"
 msgstr "Mesin Basis Data"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:445
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:482
 msgid "MySQL / MariaDB"
 msgstr "MySQL / MariaDB"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:449
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:853
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:942
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:486
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:890
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1017
 msgid "Object Cache"
 msgstr "Tembolok Objek"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:457
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:494
 msgid "Redis In-Memory"
 msgstr "Redis Dalam Memori"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:460
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:497
 msgid "APCu Memory Cache"
 msgstr "Tembolok Memori APCu"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:463
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:500
 msgid "Filesystem Cache"
 msgstr "Tembolok Sistem Berkas"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:466
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:503
 msgid "Cache Disabled"
 msgstr "Tembolok Dinonaktifkan"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:468
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:505
 msgid "Direct Database"
 msgstr "Basis Data Langsung"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:473
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:510
 msgid "File Storage"
 msgstr "Penyimpanan Berkas"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:477
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:514
 msgid "Writable Content Directory"
 msgstr "Direktori Konten yang Dapat Ditulis"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:478
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:515
 msgid "Read Only Directory"
 msgstr "Direktori Hanya Baca"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:482
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:487
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:519
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:524
 msgid "PHP Runtime"
 msgstr "Runtime PHP"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:491
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:494
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:651
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:528
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:531
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:688
 msgid "Web Server"
 msgstr "Server Web"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:509
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:546
 msgid "GeoLite2 Installed"
 msgstr "GeoLite2 Terpasang"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:510
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:547
 msgid "Setup Recommended"
 msgstr "Penyetelan Disarankan"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:514
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:551
 msgid "Release & Updates"
 msgstr "Rilis & Pembaruan"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:519
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:540
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:556
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:577
 msgid "Packaged Release"
 msgstr "Rilis Kemasan"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:530
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:567
 msgid "Environment"
 msgstr "Lingkungan"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:532
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:569
 msgid "Site URL"
 msgstr "URL Situs"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:537
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:574
 msgid "Install Type"
 msgstr "Tipe Instalasi"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:541
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:578
 msgid "Source Checkout"
 msgstr "Pemeriksaan Sumber"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:544
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:581
 msgid "Debug Mode"
 msgstr "Mode Debug"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:547
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:775
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:856
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:584
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:812
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:893
 msgid "Enabled"
 msgstr "Diaktifkan"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:562
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:599
 msgid "Content Directory"
 msgstr "Direktori Konten"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:568
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:629
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:884
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:605
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:666
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:952
 msgid "Writable"
 msgstr "Dapat Ditulisi"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:569
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:630
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:885
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:606
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:667
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:953
 msgid "Not Writable"
 msgstr "Tidak Dapat Ditulisi"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:576
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:594
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:605
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:676
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:684
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:692
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:905
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:613
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:631
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:642
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:713
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:721
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:729
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:980
 msgid "Missing"
 msgstr "Hilang"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:580
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:617
 msgid "Languages Directory"
 msgstr "Direktori Bahasa"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:586
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:615
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:825
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:623
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:652
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:862
 msgid "Readable"
 msgstr "Dapat Dibaca"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:587
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:616
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:826
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:624
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:653
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:863
 msgid "Not Readable"
 msgstr "Tidak Dapat Dibaca"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:598
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:635
 msgid "Config File"
 msgstr "File Konfigurasi"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:602
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:639
 msgid "Present"
 msgstr "Hadir"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:609
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:646
 msgid "Debug Log"
 msgstr "Log Debug"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:620
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:657
 msgid "Not created yet"
 msgstr "Belum dibuat"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:624
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:661
 msgid "App Directory"
 msgstr "Direktori Aplikasi"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:637
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:674
 msgid "Release Root"
 msgstr "Direktori Utama Rilis"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:648
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:685
 msgid "PHP Version"
 msgstr "Versi PHP"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:649
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:686
 msgid "PHP SAPI"
 msgstr "PHP SAPI"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:655
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:692
 msgid "Operating System"
 msgstr "Sistem Operasi"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:658
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:695
 msgid "Timezone"
 msgstr "Zona Waktu"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:659
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:696
 msgid "Memory Limit"
 msgstr "Batas Memori"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:661
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:698
 msgid "Max Execution Time"
 msgstr "Waktu Eksekusi Maksimum"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:667
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:704
 msgid "Upload Max Filesize"
 msgstr "Ukuran File Unggahan Maksimum"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:670
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:707
 msgid "POST Max Size"
 msgstr "Ukuran POST Maksimum"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:672
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:709
 msgid "Intl Extension"
 msgstr "Ekstensi Intl"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:675
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:683
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:691
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:904
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:712
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:720
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:728
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:979
 msgid "Available"
 msgstr "Tersedia"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:680
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:717
 msgid "cURL Extension"
 msgstr "Ekstensi cURL"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:688
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:725
 msgid "ZipArchive"
 msgstr "ZipArchive"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:699
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:736
 msgid "Database Server"
 msgstr "Server Database"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:713
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:750
 msgid "Database Name"
 msgstr "Nama Database"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:714
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:751
 msgid "Charset"
 msgstr "Charset"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:716
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:753
 msgid "Table Prefix"
 msgstr "Awalan Tabel"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:733
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:770
 msgid "Schema Status"
 msgstr "Status Skema"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:740
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:777
 msgid "%s schema issue(s) detected"
 msgstr "%s masalah skema terdeteksi"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:748
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:785
 msgid "Mail Transport"
 msgstr "Transportasi Email"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:750
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:787
 msgid "Transport Ready"
 msgstr "Transport Siap"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:754
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:791
 msgid "Needs Setup"
 msgstr "Perlu Penyiapan"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:780
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:817
 msgid "Settings Storage"
 msgstr "Penyimpanan Pengaturan"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:809
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:846
 msgid "Credentials Saved"
 msgstr "Kredensial Tersimpan"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:821
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:858
 msgid "Database Path"
 msgstr "Jalur Database"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:831
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:868
 msgid "Refresh Command"
 msgstr "Perintah Segarkan"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:841
-msgid "Redis"
-msgstr "Redis"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:843
-msgid "APCu"
-msgstr "APCu"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:845
-msgid "Filesystem"
-msgstr "Sistem Berkas"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:847
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:884
 msgid "None / Direct DB"
 msgstr "Tidak Ada / DB Langsung"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:861
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:898
 msgid "Active Driver"
 msgstr "Driver Aktif"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:865
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:902
 msgid "Fallback Active"
 msgstr "Cadangan Aktif"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:869
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:906
 msgid "Configured Driver"
 msgstr "Driver Dikonfigurasi"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:870
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:907
 msgid "auto"
 msgstr "otomatis"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:873
-msgid "Default TTL"
-msgstr "TTL Default"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:910
+msgid "Cache Size"
+msgstr "Ukuran Cache"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:879
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:917
+msgid "%s cached items"
+msgstr "%s item dalam cache"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:918
+msgid "%s cached files"
+msgstr "%s berkas dalam cache"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:941
+msgid "Negative TTL"
+msgstr "TTL Negatif"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:947
 msgid "Cache Directory"
 msgstr "Direktori Tembolok"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:887
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:955
 msgid "Not Created"
 msgstr "Belum Dibuat"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:891
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:959
 msgid "Redis Server"
 msgstr "Server Redis"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:896
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:966
 msgid "Connected"
 msgstr "Terhubung"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:901
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:976
 msgid "APCu Extension"
 msgstr "Ekstensi APCu"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:908
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:983
 msgid "Operational"
 msgstr "Beroperasi"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:915
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:990
 msgid "Short Links"
 msgstr "Tautan Singkat"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:924
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:999
 msgid "Activity Events"
 msgstr "Peristiwa Aktivitas"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:928
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1003
 msgid "Managed Tables"
 msgstr "Tabel yang Dikelola"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:937
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1012
 msgid "Directories and Sizes"
 msgstr "Direktori dan Ukuran"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:940
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1015
 msgid "Server"
 msgstr "Server"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:949
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1024
 msgid "Data Footprint"
 msgstr "Jejak Data"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:986
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1061
 msgid "System status info copied to clipboard"
 msgstr "Info status sistem disalin ke papan klip"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:991
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1066
 msgid "PeakURL could not copy the system status information."
 msgstr "PeakURL tidak dapat menyalin informasi status sistem."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1003
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1078
 msgid "Site Health"
 msgstr "Kesehatan Situs"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1009
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1084
 msgid "Monitor installation health, check server environment diagnostics, and review technical configuration details."
 msgstr "Pantau kesehatan instalasi, periksa diagnostik lingkungan server, dan tinjau detail konfigurasi teknis."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1025
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1026
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1100
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1101
 msgid "Refresh site health status"
 msgstr "Segarkan status kesehatan situs"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1088
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1163
 msgid "Site Health: Good"
 msgstr "Kesehatan Situs: Baik"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1092
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1167
 msgid "Site Health: 1 Critical Issue"
 msgstr "Kesehatan Situs: 1 Masalah Kritis"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1095
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1170
 msgid "Site Health: %s Critical Issues"
 msgstr "Kesehatan Situs: %s Masalah Kritis"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1101
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1176
 msgid "Site Health: 1 Recommended Improvement"
 msgstr "Kesehatan Situs: 1 Peningkatan yang Disarankan"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1104
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1179
 msgid "Site Health: %s Recommended Improvements"
 msgstr "Kesehatan Situs: %s Peningkatan yang Disarankan"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1112
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1187
 msgid "PeakURL is configured properly and all environmental diagnostics are in good standing."
 msgstr "PeakURL dikonfigurasi dengan benar dan semua diagnostik lingkungan dalam kondisi baik."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1116
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1191
 msgid "Critical items require attention to restore optimal site security and performance. Resolving these should be prioritized."
 msgstr "Item kritis memerlukan perhatian untuk memulihkan keamanan dan kinerja situs yang optimal. Penyelesaian masalah ini harus diprioritaskan."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1119
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1194
 msgid "All core features are active, with recommended improvements available below to optimize your install."
 msgstr "Semua fitur utama aktif, dengan peningkatan yang disarankan tersedia di bawah untuk mengoptimalkan instalasi Anda."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1130
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1205
 msgid "%s Passed"
 msgstr "%s Lolos"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1142
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1217
 msgid "%s Recommended"
 msgstr "%s Disarankan"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1155
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1230
 msgid "%s Critical"
 msgstr "%s Kritis"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1175
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1250
 msgid "Checked %s"
 msgstr "Diperiksa %s"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1189
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1264
 msgid "System Checks"
 msgstr "Pemeriksaan Sistem"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1242
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1317
 msgid "Good"
 msgstr "Bagus"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1244
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1319
 msgid "Review"
 msgstr "Tinjau"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1245
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1320
 msgid "Action Required"
 msgstr "Tindakan Diperlukan"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1262
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1337
 msgid "1 critical issue"
 msgstr "1 masalah kritis"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1263
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1338
 msgid "%s critical issues"
 msgstr "%s masalah kritis"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1265
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1340
 msgid "Critical issues are items that may have a high impact on your site performance or security. Resolving these issues should be prioritized."
 msgstr "Masalah kritis adalah item yang mungkin berdampak besar pada performa atau keamanan situs Anda. Menyelesaikan masalah ini harus diprioritaskan."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1279
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1354
 msgid "1 recommended improvement"
 msgstr "1 peningkatan yang disarankan"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1280
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1355
 msgid "%s recommended improvements"
 msgstr "%s peningkatan yang disarankan"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1282
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1357
 msgid "Recommended improvements are beneficial for your site, though not as urgent as a critical issue. They may include improvements in areas such as security, performance, and user experience."
 msgstr "Peningkatan yang disarankan bermanfaat bagi situs Anda, meskipun tidak mendesak seperti masalah kritis. Peningkatan ini dapat mencakup area seperti keamanan, performa, dan pengalaman pengguna."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1308
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1383
 msgid "Hide passed tests"
 msgstr "Sembunyikan tes yang lulus"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1311
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1386
 msgid "1 passed test"
 msgstr "1 tes lulus"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1312
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1387
 msgid "%s passed tests"
 msgstr "%s tes lulus"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1358
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1433
 msgid "System Information"
 msgstr "Informasi Sistem"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1361
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1436
 msgid "Detailed technical environment, server configuration, storage, and database specifications."
 msgstr "Lingkungan teknis mendetail, konfigurasi server, penyimpanan, dan spesifikasi basis data."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1377
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1452
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:96
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:103
@@ -5190,7 +5462,7 @@ msgstr "Lingkungan teknis mendetail, konfigurasi server, penyimpanan, dan spesif
 msgid "Copied!"
 msgstr "Disalin!"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1383
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1458
 msgid "Copy site info to clipboard"
 msgstr "Salin info situs ke papan klip"
 
@@ -6557,10 +6829,6 @@ msgstr "Judul"
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:117
 msgid "Destination"
 msgstr "Tujuan"
-
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:107
-msgid "Performance"
-msgstr "Performa"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:109
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:35

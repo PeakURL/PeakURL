@@ -55,6 +55,21 @@ services:
         'mysql --skip-ssl -h db -uroot -proot -e "CREATE DATABASE IF NOT EXISTS peakurl_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"',
       ]
 
+  redis:
+    image: redis:7-alpine
+    container_name: peakurl-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - peakurl-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
   app:
     build:
       context: .
@@ -72,6 +87,8 @@ services:
       DB_USERNAME: root
       DB_PASSWORD: root
       DB_CHARSET: utf8mb4
+      PEAKURL_REDIS_HOST: redis
+      PEAKURL_REDIS_PORT: 6379
       SESSION_COOKIE_NAME: peakurl_session
       SESSION_LIFETIME: 2592000
       SESSION_COOKIE_SAME_SITE: Strict
@@ -91,6 +108,8 @@ services:
       - peakurl-app-vendor:/app/app/vendor
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     command: ["/usr/local/bin/app-dev-start"]
     healthcheck:
@@ -177,6 +196,8 @@ services:
 volumes:
   peakurl-db-data:
     name: peakurl-db-data
+  peakurl-redis-data:
+    name: peakurl-redis-data
   peakurl-ui-node-modules:
     name: peakurl-ui-node-modules
   peakurl-app-vendor:

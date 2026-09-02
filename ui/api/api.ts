@@ -325,6 +325,20 @@ export const API_ROUTES = {
 	 */
 	system: {
 		/**
+		 * Relative API path: `system/cache`.
+		 *
+		 * Loads or saves cache and performance configuration.
+		 */
+		cache: apiPath("system", "cache"),
+
+		/**
+		 * Relative API path: `system/cache/clear`.
+		 *
+		 * Clears all cached objects and empty cache files.
+		 */
+		cacheClear: apiPath("system", "cache", "clear"),
+
+		/**
 		 * Relative API path: `system/captcha`.
 		 *
 		 * Loads or saves CAPTCHA provider settings.

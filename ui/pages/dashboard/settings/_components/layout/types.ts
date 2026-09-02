@@ -9,6 +9,7 @@ export type SettingsTabId =
 	| "security"
 	| "api"
 	| "integrations"
+	| "performance"
 	| "email"
 	| "location"
 	| "updates";
@@ -26,6 +27,7 @@ export type SettingsTabIcon =
 	| "mapPin"
 	| "globe"
 	| "plug"
+	| "zap"
 	| "download";
 
 /**

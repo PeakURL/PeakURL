@@ -11,6 +11,10 @@ export const useAdminAccess = () => {
 		manageSiteSettings: Boolean(rawCapabilities.manage_site_settings),
 		manageMailDelivery: Boolean(rawCapabilities.manage_mail_delivery),
 		manageLocationData: Boolean(rawCapabilities.manage_location_data),
+		managePerformance: Boolean(
+			rawCapabilities.manage_performance ||
+			rawCapabilities.manage_site_settings
+		),
 		manageUpdates: Boolean(rawCapabilities.manage_updates),
 		manageProfile: Boolean(rawCapabilities.manage_profile),
 		manageApiKeys: Boolean(rawCapabilities.manage_api_keys),
@@ -32,6 +36,7 @@ export const useAdminAccess = () => {
 		canManageWebhooks: Boolean(capabilities.manageWebhooks),
 		canManageMailDelivery: Boolean(capabilities.manageMailDelivery),
 		canManageLocationData: Boolean(capabilities.manageLocationData),
+		canManagePerformance: Boolean(capabilities.managePerformance),
 		canManageUpdates: Boolean(capabilities.manageUpdates),
 		isLoading: isLoading || isFetching,
 	};

@@ -17,6 +17,7 @@ use PeakURL\Http\Request;
 use PeakURL\Services\AdminNotices;
 use PeakURL\Services\Captcha;
 use PeakURL\Services\Crypto;
+use PeakURL\Services\Cache\CacheInterface;
 use PeakURL\Services\Geoip;
 use PeakURL\Services\Install\Writer as InstallWriter;
 use PeakURL\Services\Mailer;
@@ -28,7 +29,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SystemTrait — updater and GeoIP methods for Store.
+ * SystemTrait — updater, GeoIP, and cache performance methods for Store.
+ *
+ * @property \PeakURL\Includes\PeakURL_DB $db
+ * @property array<string, mixed> $config
+ * @property \PeakURL\Api\SettingsApi $settings_api
+ * @method CacheInterface get_cache()
+ * @method CacheInterface refresh_cache_service()
+ * @method array<string, mixed> get_current_user(Request $request)
+ * @method array<string, mixed> get_admin_user(Request $request)
+ * @method string now()
  *
  * @since 1.0.0
  */
@@ -820,6 +830,120 @@ trait SystemTrait {
 		} catch ( \Throwable $exception ) {
 			throw new ApiException( $exception->getMessage(), 500 );
 		}
+	}
+
+	/**
+	 * Return the current cache and performance status.
+	 *
+	 * @param Request $request Incoming authenticated request (admin-only).
+	 * @return array<string, mixed>
+	 * @since 1.6.0
+	 */
+	public function get_cache_status( Request $request ): array {
+		$this->get_admin_user( $request );
+
+		$service = new \PeakURL\Services\SystemStatus\Cache(
+			new \PeakURL\Services\SystemStatus\Context(
+				$this->config,
+				$this->db,
+				$this->settings_api,
+				$this->geoip_service,
+				$this->mailer_service,
+				$this->get_schema_service(),
+				$this->i18n_service,
+			)
+		);
+
+		return $service->cache_status();
+	}
+
+	/**
+	 * Save cache and performance configuration into settings storage.
+	 *
+	 * @param Request              $request Incoming HTTP request (admin-only).
+	 * @param array<string, mixed> $payload Configuration payload.
+	 * @return array<string, mixed>
+	 * @since 1.6.0
+	 */
+	public function save_cache_configuration( Request $request, array $payload ): array {
+		$this->get_admin_user( $request );
+
+		if ( array_key_exists( 'enabled', $payload ) ) {
+			$enabled = (bool) $payload['enabled'];
+			$this->settings_api->update_option(
+				Constants::SETTING_CACHE_ENABLED,
+				$enabled ? '1' : '0',
+				$this->now(),
+				true,
+			);
+		}
+
+		if ( ! empty( $payload['driver'] ) && is_string( $payload['driver'] ) ) {
+			$driver        = strtolower( trim( $payload['driver'] ) );
+			$valid_drivers = array( 'auto', 'redis', 'apcu', 'file', 'filesystem', 'null', 'none' );
+			if ( in_array( $driver, $valid_drivers, true ) ) {
+				$this->settings_api->update_option(
+					Constants::SETTING_CACHE_DRIVER,
+					$driver,
+					$this->now(),
+					true,
+				);
+			}
+		}
+
+		if ( isset( $payload['defaultTtl'] ) && is_numeric( $payload['defaultTtl'] ) ) {
+			$ttl = max( 0, (int) $payload['defaultTtl'] );
+			$this->settings_api->update_option(
+				Constants::SETTING_CACHE_DEFAULT_TTL,
+				(string) $ttl,
+				$this->now(),
+				true,
+			);
+		}
+
+		if ( isset( $payload['negativeTtl'] ) && is_numeric( $payload['negativeTtl'] ) ) {
+			$ttl = max( 0, (int) $payload['negativeTtl'] );
+			$this->settings_api->update_option(
+				Constants::SETTING_CACHE_NEGATIVE_TTL,
+				(string) $ttl,
+				$this->now(),
+				true,
+			);
+		}
+
+		// Clear active cache driver on setting update and refresh active driver.
+		$this->get_cache()->clear();
+		$this->refresh_cache_service();
+
+		return $this->get_cache_status( $request );
+	}
+
+	/**
+	 * Clear all cached objects across the active cache driver and disk storage.
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed>
+	 * @since 1.6.0
+	 */
+	public function clear_cache( Request $request ): array {
+		$this->get_admin_user( $request );
+
+		// Clear active cache driver.
+		$this->get_cache()->clear();
+
+		// Clean disk files if content/cache exists.
+		$content_dir = (string) ( $this->config[ Constants::CONTENT_DIR ] ?? ( ABSPATH . Constants::DEFAULT_CONTENT_DIR ) );
+		$custom_path = (string) ( $this->config[ Constants::CACHE_PATH ] ?? '' );
+		$cache_dir   = ! empty( $custom_path )
+			? rtrim( $custom_path, '/\\' )
+			: rtrim( $content_dir, '/\\' ) . '/' . Constants::CACHE_DIRECTORY;
+
+		if ( is_dir( $cache_dir ) ) {
+			$file_driver = new \PeakURL\Services\Cache\Drivers\FileCache( $content_dir, $custom_path );
+			$file_driver->clear();
+		}
+
+		return $this->get_cache_status( $request );
 	}
 
 	/**

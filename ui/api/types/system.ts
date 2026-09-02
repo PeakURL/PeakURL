@@ -106,6 +106,39 @@ export interface SystemStatusPayload {
 		databaseReadable?: boolean;
 		downloadCommand?: string | null;
 	};
+	cache?: {
+		enabled?: boolean;
+		status?: string | null;
+		activeDriver?: string | null;
+		configuredDriver?: string | null;
+		path?: string | null;
+		writable?: boolean;
+		directoryExists?: boolean;
+		defaultTtl?: number | null;
+		negativeTtl?: number | null;
+		sizeBytes?: number | string | null;
+		fileCount?: number | string | null;
+		redis?: {
+			configured?: boolean;
+			host?: string | null;
+			port?: number | null;
+			available?: boolean;
+			serverVersion?: string | null;
+		};
+		apcu?: {
+			extensionLoaded?: boolean;
+			enabled?: boolean;
+			available?: boolean;
+		};
+		file?: {
+			path?: string | null;
+			exists?: boolean;
+			writable?: boolean;
+			available?: boolean;
+			sizeBytes?: number | string | null;
+			fileCount?: number | string | null;
+		};
+	};
 	data?: {
 		users?: number | string | null;
 		links?: number | string | null;
@@ -116,6 +149,60 @@ export interface SystemStatusPayload {
 		auditEvents?: number | string | null;
 		managedTables?: number | string | null;
 	};
+}
+
+/**
+ * Cache and performance status payload.
+ */
+export interface CacheStatusPayload {
+	enabled?: boolean;
+	status?: string | null;
+	activeDriver?: string | null;
+	configuredDriver?: string | null;
+	path?: string | null;
+	writable?: boolean;
+	directoryExists?: boolean;
+	defaultTtl?: number | null;
+	negativeTtl?: number | null;
+	sizeBytes?: number | string | null;
+	fileCount?: number | string | null;
+	redis?: {
+		configured?: boolean;
+		host?: string | null;
+		port?: number | null;
+		available?: boolean;
+		serverVersion?: string | null;
+	};
+	apcu?: {
+		extensionLoaded?: boolean;
+		enabled?: boolean;
+		available?: boolean;
+	};
+	file?: {
+		path?: string | null;
+		exists?: boolean;
+		writable?: boolean;
+		available?: boolean;
+		sizeBytes?: number | string | null;
+		fileCount?: number | string | null;
+	};
+}
+
+/**
+ * Payload sent to save cache and performance settings.
+ */
+export interface CacheConfigurationPayload {
+	enabled?: boolean;
+	driver?: string;
+	defaultTtl?: number;
+	negativeTtl?: number;
+}
+
+/**
+ * Endpoint response returned by the cache status route.
+ */
+export interface CacheStatusResponse {
+	data?: CacheStatusPayload;
 }
 
 /**

@@ -10,6 +10,7 @@ const VALID_SETTINGS_TABS = new Set<SettingsTabId>([
 	"security",
 	"api",
 	"integrations",
+	"performance",
 	"email",
 	"location",
 	"updates",
@@ -21,6 +22,7 @@ function TabPage() {
 	const {
 		canManageApiKeys,
 		canManageWebhooks,
+		canManagePerformance,
 		canManageMailDelivery,
 		canManageLocationData,
 		canManageUpdates,
@@ -34,6 +36,7 @@ function TabPage() {
 	const restrictedTabs: Partial<Record<SettingsTabId, boolean>> = {
 		api: canManageApiKeys,
 		integrations: canManageWebhooks,
+		performance: canManagePerformance,
 		email: canManageMailDelivery,
 		location: canManageLocationData,
 		updates: canManageUpdates,

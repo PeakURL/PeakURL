@@ -16,6 +16,7 @@ export interface ProfileUserCapabilities {
 	manage_site_settings?: boolean | null;
 	manage_mail_delivery?: boolean | null;
 	manage_location_data?: boolean | null;
+	manage_performance?: boolean | null;
 	manage_updates?: boolean | null;
 	manage_profile?: boolean | null;
 	manage_api_keys?: boolean | null;

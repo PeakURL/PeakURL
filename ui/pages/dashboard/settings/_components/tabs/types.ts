@@ -7,6 +7,9 @@ import type { SettingsTabId } from "../layout/types";
 
 export type {
 	ApiKeySummary,
+	CacheConfigurationPayload,
+	CacheStatusPayload,
+	CacheStatusResponse,
 	CaptchaConfigurationPayload,
 	CaptchaProvider,
 	CaptchaStatus,

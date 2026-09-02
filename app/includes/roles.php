@@ -41,6 +41,7 @@ class Roles {
 			'manage_site_settings' => true,
 			'manage_mail_delivery' => true,
 			'manage_location_data' => true,
+			'manage_performance'   => true,
 			'manage_updates'       => true,
 			'view_all_links'       => true,
 			'edit_all_links'       => true,

@@ -1,0 +1,67 @@
+@layer components {
+	.settings-performance-state-card {
+		@apply rounded-lg border p-4;
+	}
+
+	.settings-performance-state-card-info {
+		@apply border-blue-200 bg-blue-50 text-blue-950 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200;
+	}
+
+	.settings-performance-state-card-success {
+		@apply border-emerald-200 bg-emerald-50 text-emerald-950 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200;
+	}
+
+	.settings-performance-state-card-error {
+		@apply border-red-200 bg-red-50 text-red-950 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200;
+	}
+
+	.settings-performance-state-card-layout {
+		@apply flex items-start gap-3;
+	}
+
+	.settings-performance-state-card-icon {
+		@apply mt-0.5 shrink-0;
+	}
+
+	.settings-performance-state-card-content {
+		text-align: start;
+		@apply space-y-1;
+	}
+
+	.settings-performance-state-card-title {
+		@apply text-sm font-semibold;
+	}
+
+	.settings-performance-state-card-text {
+		@apply text-sm leading-6 opacity-80;
+	}
+
+	.settings-performance-intro-layout {
+		@apply flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between;
+	}
+
+	.settings-performance-intro-copy {
+		text-align: start;
+		@apply space-y-2;
+	}
+
+	.settings-performance-intro-title-row {
+		@apply flex items-start gap-3;
+	}
+
+	.settings-performance-intro-icon {
+		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600 dark:bg-primary-500/20 dark:text-primary-400;
+	}
+
+	.settings-performance-intro-description {
+		@apply text-sm text-text-muted;
+	}
+
+	.settings-performance-purge-button {
+		@apply w-full sm:w-auto sm:min-w-36 whitespace-nowrap;
+	}
+
+	.settings-performance-help-text {
+		@apply mt-1.5 text-xs text-text-muted;
+	}
+}

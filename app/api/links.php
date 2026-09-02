@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace PeakURL\Api;
 
+use PeakURL\Includes\Constants;
 use PeakURL\Includes\PeakURL_DB;
+use PeakURL\Services\Cache\CacheInterface;
+use PeakURL\Services\Cache\CacheKey;
 use PeakURL\Utils\Query;
 
 // If this file is called directly, abort.
@@ -37,13 +40,48 @@ class LinksApi {
 	private PeakURL_DB $db;
 
 	/**
+	 * Optional transient/object cache driver.
+	 *
+	 * @var CacheInterface|null
+	 * @since 1.6.0
+	 */
+	private ?CacheInterface $cache = null;
+
+	/**
+	 * Optional settings API instance for dynamic options.
+	 *
+	 * @var SettingsApi|null
+	 * @since 1.6.0
+	 */
+	private ?SettingsApi $settings_api = null;
+
+	/**
 	 * Create a new links API.
 	 *
-	 * @param PeakURL_DB $db Shared database wrapper.
+	 * @param PeakURL_DB          $db           Shared database wrapper.
+	 * @param CacheInterface|null $cache        Optional cache driver instance.
+	 * @param SettingsApi|null    $settings_api Optional settings API instance.
 	 * @since 1.0.0
 	 */
-	public function __construct( PeakURL_DB $db ) {
-		$this->db = $db;
+	public function __construct(
+		PeakURL_DB $db,
+		?CacheInterface $cache = null,
+		?SettingsApi $settings_api = null
+	) {
+		$this->db           = $db;
+		$this->cache        = $cache;
+		$this->settings_api = $settings_api;
+	}
+
+	/**
+	 * Update the active cache driver instance.
+	 *
+	 * @param CacheInterface|null $cache Cache driver instance.
+	 * @return void
+	 * @since 1.6.0
+	 */
+	public function set_cache( ?CacheInterface $cache ): void {
+		$this->cache = $cache;
 	}
 
 	/**
@@ -240,14 +278,32 @@ class LinksApi {
 	/**
 	 * Find a public-facing URL row by short code or alias without access filtering.
 	 *
-	 * Used by the public redirect flow so password protection and expiry can be
-	 * enforced after the row is loaded.
+	 * Uses the active cache layer before querying MySQL, with expiration-aware TTL
+	 * and brief negative caching for missing codes.
 	 *
 	 * @param string $short_code Sanitised short code or alias.
 	 * @return array<string, mixed>|null URL row or null.
 	 * @since 1.0.0
 	 */
 	public function get_link_access_row( string $short_code ): ?array {
+		$normalized = CacheKey::normalize_identifier( $short_code );
+
+		// 1. Check object cache.
+		if ( null !== $this->cache ) {
+			$lookup_key = CacheKey::link_lookup( $normalized );
+			$cached     = $this->cache->get( $lookup_key );
+			if ( is_array( $cached ) ) {
+				return $cached;
+			}
+
+			// 2. Check negative cache.
+			$missing_key = CacheKey::link_missing( $normalized );
+			if ( $this->cache->has( $missing_key ) ) {
+				return null;
+			}
+		}
+
+		// 3. Fallback to database lookup.
 		$row = $this->db->get_row(
 			'SELECT * FROM urls
 			WHERE short_code = :short_code OR alias = :alias
@@ -258,7 +314,88 @@ class LinksApi {
 			),
 		);
 
+		// 4. Populate cache on result.
+		if ( null !== $this->cache ) {
+			if ( $row ) {
+				$default_ttl = Constants::CACHE_LINK_TTL;
+				if ( null !== $this->settings_api ) {
+					$stored_ttl = $this->settings_api->get_option( Constants::SETTING_CACHE_DEFAULT_TTL );
+					if ( null !== $stored_ttl && '' !== trim( $stored_ttl ) && is_numeric( $stored_ttl ) ) {
+						$default_ttl = max( 0, (int) $stored_ttl );
+					}
+				}
+
+				$ttl = $default_ttl;
+				if ( ! empty( $row['expires_at'] ) ) {
+					$remaining = strtotime( (string) $row['expires_at'] ) - time();
+					$ttl       = min( $ttl, max( 1, $remaining ) );
+				}
+
+				// Cache by normalized lookup key and canonical identifier keys.
+				$this->cache->set( CacheKey::link_lookup( $normalized ), $row, $ttl );
+				if ( ! empty( $row['short_code'] ) ) {
+					$this->cache->set( CacheKey::link_lookup( (string) $row['short_code'] ), $row, $ttl );
+				}
+				if ( ! empty( $row['alias'] ) ) {
+					$this->cache->set( CacheKey::link_lookup( (string) $row['alias'] ), $row, $ttl );
+				}
+				if ( ! empty( $row['id'] ) ) {
+					$this->cache->set( CacheKey::link_id( (string) $row['id'] ), $row, $ttl );
+				}
+
+				// Clear negative cache key if one existed.
+				$this->cache->delete( CacheKey::link_missing( $normalized ) );
+			} else {
+				$neg_ttl = Constants::CACHE_NEGATIVE_TTL;
+				if ( null !== $this->settings_api ) {
+					$stored_neg = $this->settings_api->get_option( Constants::SETTING_CACHE_NEGATIVE_TTL );
+					if ( null !== $stored_neg && '' !== trim( $stored_neg ) && is_numeric( $stored_neg ) ) {
+						$neg_ttl = max( 0, (int) $stored_neg );
+					}
+				}
+
+				// Cache negative lookup briefly to mitigate bot scans.
+				$this->cache->set( CacheKey::link_missing( $normalized ), true, $neg_ttl );
+			}
+		}
+
 		return $row ? $row : null;
+	}
+
+	/**
+	 * Invalidate all cached entries associated with a link row or identifiers.
+	 *
+	 * @param array<string, mixed>|string $link_or_id Link record array or single identifier string.
+	 * @return void
+	 * @since 1.6.0
+	 */
+	public function invalidate_link_cache( array|string $link_or_id ): void {
+		if ( null === $this->cache ) {
+			return;
+		}
+
+		if ( is_string( $link_or_id ) ) {
+			$this->cache->delete( CacheKey::link_lookup( $link_or_id ) );
+			$this->cache->delete( CacheKey::link_id( $link_or_id ) );
+			$this->cache->delete( CacheKey::link_missing( $link_or_id ) );
+			$this->cache->delete( CacheKey::dashboard_url( $link_or_id ) );
+			return;
+		}
+
+		if ( ! empty( $link_or_id['id'] ) ) {
+			$this->cache->delete( CacheKey::link_id( (string) $link_or_id['id'] ) );
+			$this->cache->delete( CacheKey::dashboard_url( (string) $link_or_id['id'] ) );
+		}
+
+		if ( ! empty( $link_or_id['short_code'] ) ) {
+			$this->cache->delete( CacheKey::link_lookup( (string) $link_or_id['short_code'] ) );
+			$this->cache->delete( CacheKey::link_missing( (string) $link_or_id['short_code'] ) );
+		}
+
+		if ( ! empty( $link_or_id['alias'] ) ) {
+			$this->cache->delete( CacheKey::link_lookup( (string) $link_or_id['alias'] ) );
+			$this->cache->delete( CacheKey::link_missing( (string) $link_or_id['alias'] ) );
+		}
 	}
 
 	/**

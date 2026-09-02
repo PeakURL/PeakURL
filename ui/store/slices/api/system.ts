@@ -5,6 +5,8 @@ import { createFormData } from "./formData";
 import type {
 	AdminNoticesResponse,
 	ApiDataResponse,
+	CacheConfigurationPayload,
+	CacheStatusResponse,
 	CaptchaConfigurationPayload,
 	CaptchaStatus,
 	EmailStatus,
@@ -26,6 +28,8 @@ const GEOIP_TAGS = ["Geoip"] as const;
 const GEOIP_CHANGE_TAGS = ["Geoip", "AdminNotices"] as const;
 const MAIL_TAGS = ["Mail"] as const;
 const CAPTCHA_TAGS = ["Captcha"] as const;
+const CACHE_TAGS = ["CacheStatus"] as const;
+const CACHE_CHANGE_TAGS = ["CacheStatus", "SystemStatus"] as const;
 const UPDATE_TAGS = ["Updates"] as const;
 const UPDATE_CHANGE_TAGS = ["Updates", "AdminNotices"] as const;
 const SYSTEM_STATUS_TAGS = ["SystemStatus"] as const;
@@ -253,6 +257,28 @@ export const systemApi = baseApi.injectEndpoints({
 			}),
 			invalidatesTags: UPDATE_CHANGE_TAGS,
 		}),
+		getCacheStatus: build.query<CacheStatusResponse, void>({
+			query: () => API_ROUTES.system.cache,
+			providesTags: CACHE_TAGS,
+		}),
+		saveCacheConfiguration: build.mutation<
+			CacheStatusResponse,
+			CacheConfigurationPayload
+		>({
+			query: (body) => ({
+				url: API_ROUTES.system.cache,
+				method: "POST",
+				body,
+			}),
+			invalidatesTags: CACHE_CHANGE_TAGS,
+		}),
+		clearCache: build.mutation<CacheStatusResponse, void>({
+			query: () => ({
+				url: API_ROUTES.system.cacheClear,
+				method: "POST",
+			}),
+			invalidatesTags: CACHE_CHANGE_TAGS,
+		}),
 		upgradeDatabaseSchema: build.mutation<UpgradeDatabaseResponse, void>({
 			query: () => ({
 				url: API_ROUTES.system.updateDatabase,
@@ -309,7 +335,10 @@ export const {
 	useGetAdminNoticesQuery,
 	useGetGeneralSettingsQuery,
 	useGetSystemStatusQuery,
+	useGetCacheStatusQuery,
 	useSaveGeneralSettingsMutation,
+	useSaveCacheConfigurationMutation,
+	useClearCacheMutation,
 	useGetGeoipStatusQuery,
 	useGetMailStatusQuery,
 	useGetCaptchaStatusQuery,

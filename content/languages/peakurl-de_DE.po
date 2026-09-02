@@ -3,10 +3,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language: de_DE\n"
+"Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
+"Last-Translator: PeakURL Team <translate@peakurl.org>\n"
+"MIME-Version: 1.0\n"
+"PO-Revision-Date: 2026-09-02 00:24+0000\n"
+"POT-Creation-Date: 2026-09-02 00:24+0000\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"Project-Id-Version: 1.5.3\n"
-"Report-Msgid-Bugs-To: https://peakurl.org\n"
+"Project-Id-Version: PeakURL 1.6.0\n"
+"Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
 "X-Domain: peakurl\n"
+"X-Generator: PeakURL i18n Tools\n"
 
 #: app/database/repair-specs.php:41
 msgid "The clicks table still contains row IDs with prefixes and should be normalized."
@@ -61,8 +67,8 @@ msgid "Select at least one webhook event."
 msgstr "Wählen Sie mindestens ein Webhook-Ereignis aus."
 
 #: app/traits/settings.php:167
-#: app/traits/system.php:365
-#: app/traits/system.php:379
+#: app/traits/system.php:375
+#: app/traits/system.php:389
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:49
 msgid "Shorten, track, and own every link - PeakURL"
 msgstr "Links kürzen, nachverfolgen und verwalten – PeakURL"
@@ -83,35 +89,35 @@ msgstr "Datenbanktabellen fehlen. Führen Sie das Installationsprogramm aus oder
 msgid "PeakURL is not installed yet. Run install.php to finish setup."
 msgstr "PeakURL ist noch nicht installiert. Führen Sie install.php aus, um die Einrichtung abzuschließen."
 
-#: app/traits/system.php:118
-#: app/traits/system.php:136
-#: app/traits/system.php:154
-#: app/traits/system.php:172
+#: app/traits/system.php:128
+#: app/traits/system.php:146
+#: app/traits/system.php:164
+#: app/traits/system.php:182
 #: app/traits/authorization.php:213
 msgid "Admin access is required."
 msgstr "Administratorzugriff ist erforderlich."
 
-#: app/traits/system.php:272
+#: app/traits/system.php:282
 msgid "PeakURL could not find that language pack."
 msgstr "PeakURL konnte dieses Sprachpaket nicht finden."
 
-#: app/traits/system.php:446
+#: app/traits/system.php:456
 msgid "PeakURL could not find that timezone."
 msgstr "PeakURL konnte diese Zeitzone nicht finden."
 
-#: app/traits/system.php:536
+#: app/traits/system.php:546
 msgid "Save a complete mail configuration before sending a test email."
 msgstr "Speichern Sie eine vollständige E-Mail-Konfiguration, bevor Sie eine Test-E-Mail senden."
 
-#: app/traits/system.php:764
+#: app/traits/system.php:774
 msgid "PeakURL is already up to date."
 msgstr "PeakURL ist bereits auf dem neuesten Stand."
 
-#: app/traits/system.php:786
+#: app/traits/system.php:796
 msgid "A newer PeakURL release is available. Install the update instead."
 msgstr "Eine neuere PeakURL-Version ist verfügbar. Installieren Sie stattdessen das Update."
 
-#: app/traits/system.php:793
+#: app/traits/system.php:803
 msgid "PeakURL cannot reinstall the latest release right now."
 msgstr "PeakURL kann die neueste Version derzeit nicht erneut installieren."
 
@@ -265,7 +271,7 @@ msgid "No restorable link metadata found in this activity record."
 msgstr "Keine wiederherstellbaren Link-Metadaten in diesem Aktivitätseintrag gefunden."
 
 #: app/traits/analytics.php:782
-#: ui/pages/dashboard/activity/ActivityPage.tsx:464
+#: ui/pages/dashboard/activity/ActivityPage.tsx:370
 msgid "This link was permanently deleted and cannot be restored."
 msgstr "Dieser Link wurde dauerhaft gelöscht und kann nicht wiederhergestellt werden."
 
@@ -292,57 +298,57 @@ msgid "You do not have permission to view this link."
 msgstr "Sie haben keine Berechtigung, diesen Link anzuzeigen."
 
 #: app/traits/links.php:403
-#: app/traits/links.php:1168
+#: app/traits/links.php:1172
 msgid "Provide either socialImage or socialImageUrl, not both."
 msgstr "Geben Sie entweder socialImage oder socialImageUrl an, nicht beides."
 
-#: app/traits/links.php:827
+#: app/traits/links.php:831
 msgid "Complete the verification to open this link."
 msgstr "Schließen Sie die Überprüfung ab, um diesen Link zu öffnen."
 
-#: app/traits/links.php:842
+#: app/traits/links.php:846
 msgid "Verification failed. Please try again."
 msgstr "Die Überprüfung ist fehlgeschlagen. Bitte versuchen Sie es erneut."
 
-#: app/traits/links.php:1092
+#: app/traits/links.php:1096
 msgid "You do not have permission to edit this link."
 msgstr "Sie haben keine Berechtigung, diesen Link zu bearbeiten."
 
-#: app/traits/links.php:1354
+#: app/traits/links.php:1361
 msgid "You do not have permission to delete this link."
 msgstr "Sie haben keine Berechtigung, diesen Link zu löschen."
 
-#: app/traits/links.php:1500
+#: app/traits/links.php:1511
 msgid "That short link does not exist."
 msgstr "Dieser Kurzlink existiert nicht."
 
-#: app/traits/links.php:1507
+#: app/traits/links.php:1518
 msgid "This link is already active."
 msgstr "Dieser Link ist bereits aktiv."
 
-#: app/traits/links.php:1517
+#: app/traits/links.php:1528
 msgid "You do not have permission to restore this link."
 msgstr "Sie haben keine Berechtigung, diesen Link wiederherzustellen."
 
-#: app/traits/links.php:1581
-#: app/traits/links.php:1857
-#: app/traits/links.php:1931
+#: app/traits/links.php:1594
+#: app/traits/links.php:1875
+#: app/traits/links.php:1953
 msgid "You do not have permission to delete links."
 msgstr "Sie haben keine Berechtigung, Links zu löschen."
 
-#: app/traits/links.php:1760
+#: app/traits/links.php:1776
 msgid "You do not have permission to restore links."
 msgstr "Sie haben keine Berechtigung, Links wiederherzustellen."
 
-#: app/traits/links.php:2116
+#: app/traits/links.php:2138
 msgid "A valid destination URL is required."
 msgstr "Eine gültige Ziel-URL ist erforderlich."
 
-#: app/traits/links.php:2134
+#: app/traits/links.php:2156
 msgid "That short code is reserved by the application."
 msgstr "Dieser Kurzcode ist von der Anwendung reserviert."
 
-#: app/traits/links.php:2144
+#: app/traits/links.php:2166
 msgid "That short code is already in use."
 msgstr "Dieser Kurzcode wird bereits verwendet."
 
@@ -351,118 +357,118 @@ msgstr "Dieser Kurzcode wird bereits verwendet."
 msgid "Invalid date value provided."
 msgstr "Ein ungültiger Datumswert wurde angegeben."
 
-#: app/includes/functions.php:954
+#: app/includes/functions.php:961
 msgid "%s is briefly unavailable"
 msgstr "%s ist kurzzeitig nicht verfügbar"
 
-#: app/includes/functions.php:960
+#: app/includes/functions.php:967
 msgid "%s is briefly unavailable right now. Please try again in a moment."
 msgstr "%s ist derzeit kurzzeitig nicht verfügbar. Bitte versuchen Sie es gleich noch einmal."
 
-#: app/includes/functions.php:973
+#: app/includes/functions.php:980
 msgid "Temporarily unavailable"
 msgstr "Vorübergehend nicht verfügbar"
 
-#: app/includes/functions.php:974
+#: app/includes/functions.php:981
 msgid "Briefly unavailable"
 msgstr "Kurzzeitig nicht verfügbar"
 
-#: app/includes/functions.php:975
+#: app/includes/functions.php:982
 msgid "We are making a few improvements right now. Please refresh this page in a moment."
 msgstr "Wir führen gerade einige Verbesserungen durch. Bitte aktualisieren Sie diese Seite in Kürze."
 
-#: app/includes/functions.php:976
+#: app/includes/functions.php:983
 msgid "Thanks for your patience."
 msgstr "Vielen Dank für Ihre Geduld."
 
-#: app/includes/functions.php:977
+#: app/includes/functions.php:984
 #: ui/pages/auth/reset-password/ResetPasswordPage.tsx:121
 msgid "Loading"
 msgstr "Wird geladen"
 
-#: app/includes/functions.php:1139
+#: app/includes/functions.php:1146
 msgid "%s - Open-Source Self-Hosted URL Shortener"
 msgstr "%s – Open-Source selbst gehosteter URL-Kürzer"
 
-#: app/includes/functions.php:1145
+#: app/includes/functions.php:1152
 msgid "%s is an open-source, self-hosted URL shortener built for speed, privacy, and control."
 msgstr "%s ist ein quelloffener, selbst gehosteter URL-Kürzer, entwickelt für Geschwindigkeit, Datenschutz und volle Kontrolle."
 
-#: app/includes/functions.php:1151
+#: app/includes/functions.php:1158
 msgid "Welcome to your self-hosted %s installation. The platform is running securely and is ready to manage your links, analytics, and integrations."
 msgstr "Willkommen bei Ihrer selbst gehosteten %s-Installation. Die Plattform läuft sicher und ist bereit für die Verwaltung Ihrer Links, Analysen und Integrationen."
 
-#: app/includes/functions.php:1157
+#: app/includes/functions.php:1164
 msgid "This is the default %s landing page template. To completely re-style and customize this page with your own branding, edit the local file:"
 msgstr "Dies ist die standardmäßige Landingpage-Vorlage von %s. Um diese Seite vollständig an Ihr eigenes Branding anzupassen, bearbeiten Sie die lokale Datei:"
 
-#: app/includes/functions.php:1163
+#: app/includes/functions.php:1170
 msgid "Settings → General"
 msgstr "Einstellungen → Allgemein"
 
-#: app/includes/functions.php:1168
+#: app/includes/functions.php:1175
 msgid "Changes are applied instantly. You can also switch the root domain behavior back to a direct Login screen or a Custom Redirect URL from your dashboard under %s."
 msgstr "Änderungen werden sofort wirksam. Sie können das Verhalten der Hauptdomain in Ihrem Dashboard unter %s auch wieder auf einen direkten Anmeldebildschirm oder eine benutzerdefinierte Weiterleitungs-URL umstellen."
 
-#: app/includes/functions.php:1174
+#: app/includes/functions.php:1181
 msgid "Visit %s"
 msgstr "%s besuchen"
 
-#: app/includes/functions.php:1185
+#: app/includes/functions.php:1192
 #: ui/pages/dashboard/about/Sponsors.tsx:98
 #: ui/pages/dashboard/about/AboutPage.tsx:613
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
 msgid "Website"
 msgstr "Website"
 
-#: app/includes/functions.php:1186
+#: app/includes/functions.php:1193
 #: ui/pages/dashboard/about/AboutPage.tsx:435
 msgid "Documentation"
 msgstr "Dokumentation"
 
-#: app/includes/functions.php:1187
+#: app/includes/functions.php:1194
 #: ui/pages/dashboard/about/Sponsors.tsx:106
 msgid "GitHub"
 msgstr "GitHub"
 
-#: app/includes/functions.php:1188
+#: app/includes/functions.php:1195
 msgid "Self-Hosted"
 msgstr "Selbst gehostet"
 
-#: app/includes/functions.php:1189
+#: app/includes/functions.php:1196
 msgid "Shorten, track, and <span class=\"gradient-text\">own every link.</span>"
 msgstr "Kürzen, analysieren und <span class=\"gradient-text\">jeden Link selbst besitzen.</span>"
 
-#: app/includes/functions.php:1191
+#: app/includes/functions.php:1198
 msgid "Dashboard Login"
 msgstr "Dashboard-Anmeldung"
 
-#: app/includes/functions.php:1192
+#: app/includes/functions.php:1199
 msgid "Read the docs"
 msgstr "Dokumentation lesen"
 
-#: app/includes/functions.php:1193
+#: app/includes/functions.php:1200
 msgid "Customize This Page"
 msgstr "Diese Seite anpassen"
 
-#: app/includes/functions.php:1197
+#: app/includes/functions.php:1204
 msgid "for updates."
 msgstr "für Neuigkeiten."
 
-#: app/includes/application.php:121
+#: app/includes/application.php:126
 msgid "An internal server error occurred. Please try again or contact support if the issue persists."
 msgstr "Ein interner Serverfehler ist aufgetreten. Bitte versuchen Sie es erneut oder wenden Sie sich an den Support, wenn das Problem weiterhin besteht."
 
-#: app/includes/application.php:260
+#: app/includes/application.php:275
 #: app/services/install/screen.php:142
 msgid "Request origin is not allowed."
 msgstr "Der Ursprung der Anfrage ist nicht zulässig."
 
-#: app/includes/runtime-config.php:594
+#: app/includes/runtime-config.php:634
 msgid "DB_PREFIX must start with a letter or underscore and use only letters, numbers, and underscores."
 msgstr "DB_PREFIX muss mit einem Buchstaben oder Unterstrich beginnen und darf nur Buchstaben, Ziffern und Unterstriche enthalten."
 
-#: app/includes/runtime-config.php:615
+#: app/includes/runtime-config.php:655
 msgid "Database name may contain only letters, numbers, and underscores."
 msgstr "Der Datenbankname darf nur Buchstaben, Ziffern und Unterstriche enthalten."
 
@@ -641,6 +647,19 @@ msgstr "GeoIP-Einstellungen gespeichert."
 msgid "GeoIP database updated."
 msgstr "GeoIP-Datenbank aktualisiert."
 
+#: app/controllers/cache.php:40
+msgid "Cache status loaded."
+msgstr "Cache-Status geladen."
+
+#: app/controllers/cache.php:57
+msgid "Cache settings saved."
+msgstr "Cache-Einstellungen gespeichert."
+
+#: app/controllers/cache.php:71
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:425
+msgid "Object cache purged successfully."
+msgstr "Objekt-Cache erfolgreich geleert."
+
 #: app/controllers/urls.php:112
 msgid "URLs loaded."
 msgstr "URLs geladen."
@@ -725,7 +744,7 @@ msgstr "Dieser Link ist geschützt. Geben Sie das Passwort ein, um fortzufahren.
 #: site/setup-config.php:816
 #: ui/pages/auth/login/LoginPage.tsx:380
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:29
-#: ui/pages/dashboard/users/UsersPage.tsx:250
+#: ui/pages/dashboard/users/UsersPage.tsx:272
 msgid "Password"
 msgstr "Passwort"
 
@@ -1567,13 +1586,13 @@ msgstr "PeakURL konnte die Test-E-Mail nicht senden, da keine Absender-E-Mail-Ad
 
 #: app/services/notifications.php:275
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:234
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:365
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:463
 msgid "SMTP"
 msgstr "SMTP"
 
 #: app/services/notifications.php:276
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:221
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:365
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:463
 msgid "PHP mail()"
 msgstr "PHP mail()"
 
@@ -1597,102 +1616,134 @@ msgstr "Der CAPTCHA-Websiteschlüssel darf maximal 255 Zeichen lang sein."
 msgid "CAPTCHA secret key must be 512 characters or fewer."
 msgstr "Der geheime CAPTCHA-Schlüssel darf maximal 512 Zeichen lang sein."
 
-#: app/services/system-status/checks.php:46
+#: app/services/system-status/checks.php:48
 #: site/setup-config.php:771
 msgid "Database connection"
 msgstr "Datenbankverbindung"
 
-#: app/services/system-status/checks.php:49
+#: app/services/system-status/checks.php:51
 msgid "PeakURL can reach the configured MySQL or MariaDB database."
 msgstr "PeakURL kann die konfigurierte MySQL- oder MariaDB-Datenbank erreichen."
 
-#: app/services/system-status/checks.php:50
+#: app/services/system-status/checks.php:52
 msgid "PeakURL could not reach the configured database."
 msgstr "PeakURL konnte die konfigurierte Datenbank nicht erreichen."
 
-#: app/services/system-status/checks.php:54
+#: app/services/system-status/checks.php:56
 msgid "Database schema"
 msgstr "Datenbankschema"
 
-#: app/services/system-status/checks.php:59
+#: app/services/system-status/checks.php:61
 msgid "PeakURL found schema changes or leftovers that still need the database upgrader."
 msgstr "PeakURL hat Schemaänderungen oder Restbestände gefunden, die noch über das Datenbank-Upgrade aktualisiert werden müssen."
 
-#: app/services/system-status/checks.php:60
+#: app/services/system-status/checks.php:62
 msgid "The PeakURL database schema matches the current release."
 msgstr "Das PeakURL-Datenbankschema stimmt mit der aktuellen Version überein."
 
-#: app/services/system-status/checks.php:64
+#: app/services/system-status/checks.php:66
+msgid "Object cache"
+msgstr "Objekt-Cache"
+
+#: app/services/system-status/checks.php:74
 msgid "Content storage"
 msgstr "Inhaltsspeicher"
 
-#: app/services/system-status/checks.php:69
+#: app/services/system-status/checks.php:79
 msgid "The persistent content directory is present and writable."
 msgstr "Das persistente Inhaltsverzeichnis ist vorhanden und beschreibbar."
 
-#: app/services/system-status/checks.php:70
+#: app/services/system-status/checks.php:80
 msgid "The persistent content directory is missing or not writable."
 msgstr "Das persistente Inhaltsverzeichnis fehlt oder ist nicht beschreibbar."
 
-#: app/services/system-status/checks.php:74
+#: app/services/system-status/checks.php:84
 msgid "Language packs"
 msgstr "Sprachpakete"
 
-#: app/services/system-status/checks.php:79
+#: app/services/system-status/checks.php:89
 msgid "Installed dashboard and PHP translation files can be read from content/languages."
 msgstr "Installierte Dashboard- und PHP-Übersetzungsdateien sind lesbar."
 
-#: app/services/system-status/checks.php:80
+#: app/services/system-status/checks.php:90
 msgid "PeakURL cannot read the content/languages directory right now."
 msgstr "PeakURL kann das Verzeichnis content/languages nicht lesen."
 
-#: app/services/system-status/checks.php:84
+#: app/services/system-status/checks.php:94
 msgid "PHP intl extension"
 msgstr "PHP intl-Erweiterung"
 
-#: app/services/system-status/checks.php:89
+#: app/services/system-status/checks.php:99
 msgid "Server-side locale helpers can use native intl metadata."
 msgstr "Serverseitige Sprach-Helfer können native intl-Formatierung verwenden."
 
-#: app/services/system-status/checks.php:90
+#: app/services/system-status/checks.php:100
 msgid "PeakURL can still run without intl, but server-side locale helpers use fallbacks."
 msgstr "PeakURL kann ohne intl ausgeführt werden, serverseitige Gebietsschemata sind jedoch robuster, wenn sie aktiviert ist."
 
-#: app/services/system-status/checks.php:94
+#: app/services/system-status/checks.php:104
 msgid "PHP ZipArchive"
 msgstr "PHP ZipArchive"
 
-#: app/services/system-status/checks.php:99
+#: app/services/system-status/checks.php:109
 msgid "Dashboard updates can use ZipArchive when the install type allows it."
 msgstr "Dashboard-Updates können ZipArchive verwenden, wenn das Archivformat übereinstimmt."
 
-#: app/services/system-status/checks.php:100
+#: app/services/system-status/checks.php:110
 msgid "Dashboard-managed updates require the PHP ZipArchive extension."
 msgstr "Über das Dashboard verwaltete Updates erfordern die PHP-Erweiterung ZipArchive."
 
-#: app/services/system-status/checks.php:104
+#: app/services/system-status/checks.php:114
 msgid "Email transport"
 msgstr "E-Mail-Transport"
 
-#: app/services/system-status/checks.php:109
+#: app/services/system-status/checks.php:119
 msgid "PeakURL has an active mail transport configuration."
 msgstr "PeakURL verfügt über eine aktive E-Mail-Transportkonfiguration."
 
-#: app/services/system-status/checks.php:110
+#: app/services/system-status/checks.php:120
 msgid "PeakURL is missing part of the active mail transport configuration."
 msgstr "In PeakURL fehlt ein Teil der aktiven E-Mail-Transportkonfiguration."
 
-#: app/services/system-status/checks.php:114
+#: app/services/system-status/checks.php:124
 msgid "Location data"
 msgstr "Standortdaten"
 
-#: app/services/system-status/checks.php:119
+#: app/services/system-status/checks.php:129
 msgid "The GeoLite2 City database is available for visitor location analytics."
 msgstr "Die GeoLite2-City-Datenbank ist für Besucheranalysen verfügbar."
 
-#: app/services/system-status/checks.php:120
+#: app/services/system-status/checks.php:130
 msgid "Visitor location analytics is not fully ready yet."
 msgstr "Die Besucher-Standortanalyse ist noch nicht vollständig bereit."
+
+#: app/services/system-status/checks.php:187
+msgid "Object cache is currently disabled in configuration."
+msgstr "Der Objekt-Cache ist derzeit in der Konfiguration deaktiviert."
+
+#: app/services/system-status/checks.php:197
+msgid "High-performance Redis%s in-memory cache is active."
+msgstr "Hochleistungsfähiger Redis%s-In-Memory-Cache ist aktiv."
+
+#: app/services/system-status/checks.php:200
+msgid "High-performance APCu shared memory cache is active."
+msgstr "Hochleistungsfähiger APCu-Shared-Memory-Cache ist aktiv."
+
+#: app/services/system-status/checks.php:203
+msgid "Filesystem object cache is active in content/cache."
+msgstr "Dateisystem-Objekt-Cache ist in content/cache aktiv."
+
+#: app/services/system-status/checks.php:205
+msgid "Object and transient cache is operational."
+msgstr "Objekt- und Transient-Cache ist betriebsbereit."
+
+#: app/services/system-status/checks.php:209
+msgid "Configured cache driver is unavailable; operating on fallback driver."
+msgstr "Konfigurierter Cache-Treiber ist nicht verfügbar; Fallback-Treiber wird verwendet."
+
+#: app/services/system-status/checks.php:212
+msgid "No cache backend is currently usable; requests query the database directly."
+msgstr "Kein Cache-Backend nutzbar; Anfragen werden direkt an die Datenbank gestellt."
 
 #: site/install.php:92
 msgid "Administrator Setup - %s"
@@ -1706,8 +1757,8 @@ msgstr "Willkommen"
 #: site/install.php:536
 #: site/setup-config.php:679
 #: ui/components/common/ApiErrorPage/ApiErrorPage.tsx:70
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:87
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:716
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:128
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1016
 msgid "Database"
 msgstr "Datenbank"
 
@@ -1744,7 +1795,7 @@ msgstr "Administrator"
 #: site/install.php:583
 #: site/setup-config.php:812
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:347
-#: ui/pages/dashboard/users/UsersPage.tsx:229
+#: ui/pages/dashboard/users/UsersPage.tsx:251
 msgid "Username"
 msgstr "Benutzername"
 
@@ -1753,11 +1804,11 @@ msgid "Letters, numbers, dots, dashes, underscores, or @."
 msgstr "Buchstaben, Ziffern, Punkte, Bindestriche, Unterstriche oder @."
 
 #: site/install.php:588
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:93
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:717
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:136
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1018
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:173
-#: ui/pages/dashboard/users/UsersPage.tsx:238
+#: ui/pages/dashboard/users/UsersPage.tsx:260
 msgid "Email"
 msgstr "E-Mail-Adresse"
 
@@ -1840,7 +1891,7 @@ msgid "Connection details"
 msgstr "Verbindungsdaten"
 
 #: site/setup-config.php:820
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:557
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:743
 msgid "Host"
 msgstr "Host"
 
@@ -1849,7 +1900,7 @@ msgid "Advanced"
 msgstr "Erweitert"
 
 #: site/setup-config.php:828
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:559
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:745
 msgid "Port"
 msgstr "Port"
 
@@ -1882,7 +1933,7 @@ msgstr "Dashboard"
 #: ui/utils/dashboardSearch.ts:96
 #: ui/utils/dashboardSearch.ts:101
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:48
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:413
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:430
 #: ui/pages/NotFoundPage.tsx:75
 msgid "All Links"
 msgstr "Alle Links"
@@ -1891,7 +1942,7 @@ msgstr "Alle Links"
 #: ui/utils/dashboardSearch.ts:100
 #: ui/pages/auth/login/LoginPage.tsx:47
 #: ui/pages/layout/dashboard/Search/Search.tsx:286
-#: ui/pages/dashboard/activity/ActivityPage.tsx:751
+#: ui/pages/dashboard/activity/ActivityPage.tsx:636
 #: ui/pages/dashboard/links/_components/Header/Header.tsx:42
 #: ui/router/pageTitle.ts:77
 msgid "Links"
@@ -1899,9 +1950,9 @@ msgstr "Links"
 
 #: ui/utils/dashboardSearch.ts:115
 #: ui/utils/dashboardSearch.ts:119
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:80
 #: ui/pages/layout/dashboard/Header/Header.tsx:121
-#: ui/pages/dashboard/activity/ActivityPage.tsx:142
-#: ui/pages/dashboard/activity/ActivityPage.tsx:796
+#: ui/pages/dashboard/activity/ActivityPage.tsx:693
 #: ui/router/pageTitle.ts:73
 msgid "Activity"
 msgstr "Aktivität"
@@ -1913,9 +1964,9 @@ msgstr "Letzte Aktivitäten"
 
 #: ui/utils/dashboardSearch.ts:131
 #: ui/utils/dashboardSearch.ts:136
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:473
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:522
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:529
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:490
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:539
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:546
 msgid "About PeakURL"
 msgstr "Über PeakURL"
 
@@ -1939,7 +1990,7 @@ msgstr "Allgemeine Einstellungen"
 #: ui/utils/dashboardSearch.ts:209
 #: ui/utils/dashboardSearch.ts:225
 #: ui/utils/dashboardSearch.ts:241
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:91
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:92
 #: ui/pages/layout/dashboard/Header/Header.tsx:163
 #: ui/pages/NotFoundPage.tsx:95
 #: ui/router/pageTitle.ts:34
@@ -1947,7 +1998,7 @@ msgid "Settings"
 msgstr "Einstellungen"
 
 #: ui/utils/dashboardSearch.ts:150
-#: ui/pages/dashboard/settings/Layout.tsx:25
+#: ui/pages/dashboard/settings/Layout.tsx:26
 msgid "General"
 msgstr "Allgemein"
 
@@ -1964,15 +2015,15 @@ msgstr "Sicherheitseinstellungen"
 
 #: ui/utils/dashboardSearch.ts:169
 #: ui/pages/auth/login/LoginPage.tsx:57
-#: ui/pages/dashboard/settings/Layout.tsx:26
+#: ui/pages/dashboard/settings/Layout.tsx:27
 msgid "Security"
 msgstr "Sicherheit"
 
 #: ui/utils/dashboardSearch.ts:183
 #: ui/utils/dashboardSearch.ts:187
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:79
-#: ui/pages/dashboard/settings/Layout.tsx:30
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:696
+#: ui/pages/dashboard/settings/Layout.tsx:31
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:996
 #: ui/router/pageTitle.ts:24
 msgid "API Keys"
 msgstr "API-Schlüssel"
@@ -1980,14 +2031,14 @@ msgstr "API-Schlüssel"
 #: ui/utils/dashboardSearch.ts:199
 #: ui/utils/dashboardSearch.ts:202
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:157
-#: ui/pages/dashboard/settings/Layout.tsx:36
+#: ui/pages/dashboard/settings/Layout.tsx:37
 #: ui/router/pageTitle.ts:26
 msgid "Integrations"
 msgstr "Integrationen"
 
 #: ui/utils/dashboardSearch.ts:208
 #: ui/utils/dashboardSearch.ts:213
-#: ui/pages/dashboard/settings/Layout.tsx:42
+#: ui/pages/dashboard/settings/Layout.tsx:51
 msgid "Email SMTP"
 msgstr "E-Mail-SMTP"
 
@@ -1998,17 +2049,18 @@ msgstr "E-Mail-Konfiguration"
 
 #: ui/utils/dashboardSearch.ts:224
 #: ui/utils/dashboardSearch.ts:228
-#: ui/pages/dashboard/settings/Layout.tsx:48
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:95
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:720
+#: ui/pages/dashboard/settings/Layout.tsx:57
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:138
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:542
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1021
 #: ui/router/pageTitle.ts:30
 msgid "Location Data"
 msgstr "Standortdaten"
 
 #: ui/utils/dashboardSearch.ts:240
 #: ui/utils/dashboardSearch.ts:244
-#: ui/pages/dashboard/settings/Layout.tsx:54
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:97
+#: ui/pages/dashboard/settings/Layout.tsx:63
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:140
 #: ui/router/pageTitle.ts:32
 msgid "Updates"
 msgstr "Updates"
@@ -2017,9 +2069,9 @@ msgstr "Updates"
 #: ui/utils/dashboardSearch.ts:260
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:53
 #: ui/pages/layout/dashboard/Search/Search.tsx:247
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:689
-#: ui/pages/dashboard/activity/ActivityPage.tsx:757
-#: ui/pages/dashboard/users/UsersPage.tsx:490
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:989
+#: ui/pages/dashboard/activity/ActivityPage.tsx:642
+#: ui/pages/dashboard/users/UsersPage.tsx:577
 #: ui/router/pageTitle.ts:85
 msgid "Users"
 msgstr "Benutzer"
@@ -2032,7 +2084,7 @@ msgstr "Verwaltung"
 #: ui/utils/dashboardSearch.ts:273
 #: ui/utils/dashboardSearch.ts:276
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:59
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:118
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:115
 #: ui/router/pageTitle.ts:81
 msgid "Plugins"
 msgstr "Plugins"
@@ -2040,7 +2092,7 @@ msgstr "Plugins"
 #: ui/utils/dashboardSearch.ts:282
 #: ui/utils/dashboardSearch.ts:287
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:70
-#: ui/pages/dashboard/tools/import/_components/layout/Header.tsx:6
+#: ui/pages/dashboard/tools/import/_components/layout/Header.tsx:12
 #: ui/pages/NotFoundPage.tsx:85
 #: ui/router/pageTitle.ts:47
 #: ui/router/pageTitle.ts:107
@@ -2066,28 +2118,28 @@ msgstr "Import: Datei-Upload"
 
 #: ui/utils/dashboardSearch.ts:302
 #: ui/utils/dashboardSearch.ts:307
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:75
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:50
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:138
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:76
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:56
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:152
 #: ui/router/pageTitle.ts:111
 msgid "Export"
 msgstr "Exportieren"
 
 #: ui/utils/dashboardSearch.ts:321
 #: ui/utils/dashboardSearch.ts:326
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:84
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:777
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:821
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:85
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1081
 #: ui/router/pageTitle.ts:115
 msgid "System Status"
 msgstr "Systemstatus"
 
 #: ui/utils/dashboardSearch.ts:565
 #: ui/pages/layout/dashboard/Header/Header.tsx:40
-#: ui/pages/dashboard/activity/ActivityPage.tsx:116
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1133
-#: ui/pages/dashboard/users/UsersPage.tsx:555
-#: ui/pages/dashboard/users/UsersPage.tsx:591
+#: ui/pages/dashboard/activity/ActivityPage.tsx:112
+#: ui/pages/dashboard/users/UsersPage.tsx:82
+#: ui/pages/dashboard/users/UsersPage.tsx:90
+#: ui/pages/dashboard/users/UsersPage.tsx:679
+#: ui/pages/dashboard/users/UsersPage.tsx:715
 msgid "User"
 msgstr "Benutzer"
 
@@ -2100,16 +2152,18 @@ msgid "Confirm"
 msgstr "Bestätigen"
 
 #: ui/components/ui/ConfirmDialog/ConfirmDialog.tsx:33
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:816
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:882
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:53
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/TwoFactorSetup.tsx:110
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:370
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:494
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:63
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:508
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1486
 #: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:122
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:156
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:18
-#: ui/pages/dashboard/users/UsersPage.tsx:330
+#: ui/pages/dashboard/users/UsersPage.tsx:352
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -2126,7 +2180,7 @@ msgid "Close modal"
 msgstr "Modal schließen"
 
 #: ui/components/ui/PageSizeControl/PageSizeControl.tsx:27
-#: ui/pages/dashboard/activity/ActivityPage.tsx:902
+#: ui/pages/dashboard/activity/ActivityPage.tsx:800
 #: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:119
 msgid "Rows per page"
 msgstr "Zeilen pro Seite"
@@ -2156,7 +2210,7 @@ msgstr "Benutzerdefinierte Seitengröße abbrechen"
 
 #: ui/components/charts/MetricDonutChart/MetricDonutChart.tsx:37
 #: ui/components/charts/WorldMap/_components/Legend.tsx:16
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:691
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:991
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:113
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:64
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:168
@@ -2401,7 +2455,7 @@ msgid "The password reset link is invalid."
 msgstr "Der Link zum Zurücksetzen des Passworts ist ungültig."
 
 #: ui/pages/auth/reset-password/ResetPasswordPage.tsx:65
-#: ui/pages/dashboard/users/UsersPage.tsx:142
+#: ui/pages/dashboard/users/UsersPage.tsx:163
 msgid "Passwords do not match."
 msgstr "Passwörter stimmen nicht überein."
 
@@ -2422,8 +2476,8 @@ msgid "Once the password changes, PeakURL revokes the old sessions so only the n
 msgstr "Sobald das Passwort geändert wird, widerruft PeakURL die alten Sitzungen, sodass nur noch die neue Anmeldung gültig ist."
 
 #: ui/pages/auth/reset-password/ResetPasswordPage.tsx:103
-#: ui/pages/dashboard/users/UsersPage.tsx:137
-#: ui/pages/dashboard/users/UsersPage.tsx:260
+#: ui/pages/dashboard/users/UsersPage.tsx:158
+#: ui/pages/dashboard/users/UsersPage.tsx:282
 msgid "Use at least 8 characters."
 msgstr "Verwenden Sie mindestens 8 Zeichen."
 
@@ -2581,32 +2635,28 @@ msgstr "Anmelden"
 msgid "Back to sign-in"
 msgstr "Zurück zur Anmeldung"
 
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:79
-msgid "Activity Log"
-msgstr "Aktivitätsprotokoll"
-
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:246
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:268
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:272
 msgid "Close sidebar"
 msgstr "Seitenleiste schließen"
 
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:435
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:440
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:450
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:452
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:457
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:467
 msgid "Expand Menu"
 msgstr "Menü ausklappen"
 
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:436
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:441
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:451
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:453
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:458
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:468
 msgid "Collapse Menu"
 msgstr "Menü einklappen"
 
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:488
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:505
 msgid "Sponsor"
 msgstr "Sponsern"
 
-#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:507
+#: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:524
 msgid "Buy Me a Coffee"
 msgstr "Projekt unterstützen"
 
@@ -2616,8 +2666,8 @@ msgstr "Vielen Dank, dass Sie sich für %s entschieden haben."
 
 #: ui/pages/layout/dashboard/Layout/Layout.tsx:110
 #: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:42
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:375
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:554
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:561
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:740
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:61
 #: ui/pages/dashboard/about/AboutPage.tsx:230
 #: ui/pages/dashboard/about/AboutPage.tsx:406
@@ -2690,16 +2740,16 @@ msgstr "Tippen Sie weiter, um Links zu suchen, oder springen Sie direkt zur Seit
 #: ui/pages/layout/dashboard/Header/Header.tsx:38
 #: ui/pages/layout/dashboard/Header/Header.tsx:79
 #: ui/pages/layout/dashboard/Header/Header.tsx:91
-#: ui/pages/dashboard/activity/ActivityPage.tsx:109
-#: ui/pages/dashboard/users/UsersPage.tsx:60
-#: ui/pages/dashboard/users/UsersPage.tsx:105
+#: ui/pages/dashboard/activity/ActivityPage.tsx:105
+#: ui/pages/dashboard/users/UsersPage.tsx:67
+#: ui/pages/dashboard/users/UsersPage.tsx:126
 msgid "Admin"
 msgstr "Administrator"
 
 #: ui/pages/layout/dashboard/Header/Header.tsx:39
-#: ui/pages/dashboard/activity/ActivityPage.tsx:113
-#: ui/pages/dashboard/users/UsersPage.tsx:65
-#: ui/pages/dashboard/users/UsersPage.tsx:106
+#: ui/pages/dashboard/activity/ActivityPage.tsx:109
+#: ui/pages/dashboard/users/UsersPage.tsx:72
+#: ui/pages/dashboard/users/UsersPage.tsx:127
 msgid "Editor"
 msgstr "Redakteur"
 
@@ -2723,13 +2773,13 @@ msgstr "Abmelden"
 msgid "Back to login"
 msgstr "Zurück zur Anmeldung"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:277
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:349
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:354
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:359
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:381
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:416
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:436
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:293
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:365
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:370
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:375
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:397
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:432
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:452
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/useActiveSessions.ts:74
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/useActiveSessions.ts:106
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/useTwoFactorSettings.ts:170
@@ -2747,22 +2797,22 @@ msgstr "Zurück zur Anmeldung"
 msgid "Error"
 msgstr "Fehler"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:278
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:294
 msgid "Failed to update profile"
 msgstr "Profil konnte nicht aktualisiert werden"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:314
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:330
 msgid "Language updated"
 msgstr "Sprache aktualisiert"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:315
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:331
 msgid "PeakURL is reloading the dashboard now."
 msgstr "PeakURL lädt das Dashboard jetzt neu."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:324
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:344
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:371
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:431
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:340
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:360
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:387
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:447
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:231
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:251
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:107
@@ -2770,291 +2820,319 @@ msgstr "PeakURL lädt das Dashboard jetzt neu."
 msgid "Success"
 msgstr "Erfolg"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:326
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:342
 msgid "Profile and general settings updated successfully"
 msgstr "Profil und allgemeine Einstellungen erfolgreich aktualisiert"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:329
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:345
 msgid "General settings updated successfully"
 msgstr "Allgemeine Einstellungen erfolgreich aktualisiert"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:334
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:512
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:551
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:350
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:528
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:567
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:697
 msgid "Save failed"
 msgstr "Speichern fehlgeschlagen"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:337
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:353
 msgid "Failed to update the general settings"
 msgstr "Allgemeine Einstellungen konnten nicht aktualisiert werden"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:344
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:360
 msgid "Profile updated successfully"
 msgstr "Profil erfolgreich aktualisiert"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:349
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:365
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/index.tsx:65
 msgid "Enter your current password"
 msgstr "Geben Sie Ihr aktuelles Passwort ein"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:354
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:370
 msgid "Passwords do not match"
 msgstr "Passwörter stimmen nicht überein"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:360
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:376
 msgid "Password must be at least 8 characters"
 msgstr "Passwort muss mindestens 8 Zeichen lang sein"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:372
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:388
 msgid "Password updated successfully"
 msgstr "Passwort erfolgreich aktualisiert"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:382
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:398
 msgid "Failed to update password"
 msgstr "Passwort konnte nicht aktualisiert werden"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:395
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:411
 msgid "Key created without visible token"
 msgstr "Schlüssel ohne sichtbares Token erstellt"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:396
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:412
 msgid "PeakURL created the API key, but the one-time token was not returned. Revoke it and create a new key."
 msgstr "PeakURL hat den API-Schlüssel erstellt, aber das Einmal-Token wurde nicht zurückgegeben. Widerrufen Sie ihn und erstellen Sie einen neuen Schlüssel."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:411
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:427
 msgid "API key created"
 msgstr "API-Schlüssel erstellt"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:412
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:428
 msgid "Copy the token now. PeakURL will not show it again."
 msgstr "Kopieren Sie das Token jetzt. PeakURL wird es nicht erneut anzeigen."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:417
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:433
 msgid "Failed to generate API key"
 msgstr "API-Schlüssel konnte nicht generiert werden"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:432
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:448
 msgid "API key deleted successfully"
 msgstr "API-Schlüssel erfolgreich gelöscht"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:437
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:453
 msgid "Failed to delete API key"
 msgstr "API-Schlüssel konnte nicht gelöscht werden"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:444
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:460
 msgid "API key copied to clipboard"
 msgstr "API-Schlüssel in Zwischenablage kopiert"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:448
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:464
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:137
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:759
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:964
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1060
 msgid "Copied"
 msgstr "Kopiert"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:451
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:765
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:467
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1065
 msgid "Copy failed"
 msgstr "Kopieren fehlgeschlagen"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:452
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:468
 msgid "PeakURL could not copy that value to the clipboard."
 msgstr "PeakURL konnte diesen Wert nicht in die Zwischenablage kopieren."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:471
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:487
 msgid "Update available"
 msgstr "Update verfügbar"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:473
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:489
 msgid "PeakURL %s is ready to install."
 msgstr "PeakURL %s ist bereit zur Installation."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:481
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:497
 msgid "Up to date"
 msgstr "Auf dem neuesten Stand"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:484
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:500
 msgid "PeakURL %s is already on the latest version."
 msgstr "PeakURL %s ist bereits auf der neuesten Version."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:487
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:503
 msgid "PeakURL is already on the latest version."
 msgstr "PeakURL ist bereits auf der neuesten Version."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:491
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:507
 msgid "Update check failed"
 msgstr "Update-Prüfung fehlgeschlagen"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:494
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:510
 msgid "PeakURL could not reach the update service."
 msgstr "PeakURL konnte den Update-Dienst nicht erreichen."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:506
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:546
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:522
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:562
 msgid "Saved"
 msgstr "Gespeichert"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:507
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:523
 msgid "Location data settings were updated successfully."
 msgstr "Standortdaten-Einstellungen wurden erfolgreich aktualisiert."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:515
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:531
 msgid "PeakURL could not save the MaxMind settings."
 msgstr "PeakURL konnte die MaxMind-Einstellungen nicht speichern."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:526
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:651
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:542
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:667
 msgid "Database updated"
 msgstr "Datenbank aktualisiert"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:527
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:543
 msgid "PeakURL downloaded the latest GeoLite2 City database."
 msgstr "PeakURL hat die neueste GeoLite2-City-Datenbank heruntergeladen."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:531
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:547
 msgid "Download failed"
 msgstr "Download fehlgeschlagen"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:534
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:550
 msgid "PeakURL could not download the GeoLite2 database."
 msgstr "PeakURL konnte die GeoLite2-Datenbank nicht herunterladen."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:547
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:563
 msgid "Email configuration was updated successfully."
 msgstr "E-Mail-Konfiguration wurde erfolgreich aktualisiert."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:554
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:570
 msgid "PeakURL could not save the email configuration."
 msgstr "PeakURL konnte die E-Mail-Konfiguration nicht speichern."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:567
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:583
 msgid "Test email sent"
 msgstr "Test-E-Mail gesendet"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:569
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:585
 msgid "PeakURL sent a test email to %s."
 msgstr "PeakURL hat eine Test-E-Mail an %s gesendet."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:570
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:586
 msgid "PeakURL sent a test email to your account email."
 msgstr "PeakURL hat eine Test-E-Mail an Ihre Konto-E-Mail-Adresse gesendet."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:574
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:590
 msgid "Test email failed"
 msgstr "Test-E-Mail fehlgeschlagen"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:577
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:593
 msgid "PeakURL could not send the test email."
 msgstr "PeakURL konnte die Test-E-Mail nicht senden."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:607
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:623
 msgid "Release reinstalled"
 msgstr "Version neu installiert"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:608
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:624
 msgid "Update installed"
 msgstr "Update installiert"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:612
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:628
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:120
 msgid "PeakURL %s has been reinstalled."
 msgstr "PeakURL %s wurde neu installiert."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:613
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:629
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:121
 msgid "PeakURL %s is now installed."
 msgstr "PeakURL %s ist jetzt installiert."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:617
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:633
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:125
 msgid "The latest version has been reinstalled."
 msgstr "Die neueste Version wurde neu installiert."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:618
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:634
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:126
 msgid "The latest version is now installed."
 msgstr "Die neueste Version ist jetzt installiert."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:623
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:639
 msgid "Reinstall failed"
 msgstr "Neuinstallation fehlgeschlagen"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:623
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:639
 msgid "Update failed"
 msgstr "Update fehlgeschlagen"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:627
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:643
 msgid "PeakURL could not reinstall the latest version."
 msgstr "PeakURL konnte die neueste Version nicht neu installieren."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:628
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:644
 msgid "PeakURL could not apply the update."
 msgstr "PeakURL konnte das Update nicht anwenden."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:653
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:669
 msgid "PeakURL repaired the database schema. Review any remaining warnings below."
 msgstr "PeakURL hat das Datenbankschema repariert. Überprüfen Sie eventuelle verbleibende Warnungen unten."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:656
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:672
 msgid "The database schema is now current."
 msgstr "Das Datenbankschema ist nun aktuell."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:660
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:676
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:165
 msgid "Database upgrade failed"
 msgstr "Datenbank-Upgrade fehlgeschlagen"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:663
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:679
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:168
 msgid "PeakURL could not repair the database schema."
 msgstr "PeakURL konnte das Datenbankschema nicht reparieren."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:770
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:691
+msgid "Settings saved"
+msgstr "Einstellungen gespeichert"
+
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:692
+msgid "Performance configuration updated successfully."
+msgstr "Leistungskonfiguration erfolgreich aktualisiert."
+
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:700
+msgid "Could not update performance configuration."
+msgstr "Leistungskonfiguration konnte nicht aktualisiert werden."
+
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:711
+msgid "Cache purged"
+msgstr "Cache geleert"
+
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:712
+msgid "Object cache cleared successfully across active backends."
+msgstr "Objekt-Cache über alle aktiven Backends hinweg erfolgreich geleert."
+
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:716
+msgid "Purge failed"
+msgstr "Leeren fehlgeschlagen"
+
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:717
+msgid "Could not clear object cache."
+msgstr "Objekt-Cache konnte nicht geleert werden."
+
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:836
 msgid "Delete API key"
 msgstr "API-Schlüssel löschen"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:774
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:840
 msgid "Delete %s? Any scripts, automations, or extensions using it will stop working immediately."
 msgstr "%s löschen? Alle Skripte, Automatisierungen oder Erweiterungen, die diesen Schlüssel verwenden, funktionieren sofort nicht mehr."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:779
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:845
 msgid "this API key"
 msgstr "diesen API-Schlüssel"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:783
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:849
 msgid "Delete key"
 msgstr "Schlüssel löschen"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:784
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:850
 msgid "Keep key"
 msgstr "Schlüssel behalten"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:794
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:860
 msgid "Reinstall PeakURL %s?"
 msgstr "PeakURL %s neu installieren?"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:795
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:861
 msgid "Install PeakURL %s?"
 msgstr "PeakURL %s installieren?"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:798
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:864
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:112
 msgid "update"
 msgstr "Update"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:804
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:870
 msgid "PeakURL will restore the latest version and refresh the included files."
 msgstr "PeakURL stellt die neueste Version wieder her und aktualisiert die enthaltenen Dateien."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:807
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:873
 msgid "PeakURL will install the latest version and refresh the included files."
 msgstr "PeakURL installiert die neueste Version und aktualisiert die enthaltenen Dateien."
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:813
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:879
 msgid "Reinstall latest version"
 msgstr "Neueste Version neu installieren"
 
-#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:814
+#: ui/pages/dashboard/settings/_components/tabs/Content.tsx:880
 msgid "Install update"
 msgstr "Update installieren"
 
@@ -3280,7 +3358,7 @@ msgid "Save or download these codes now—they won't be shown again."
 msgstr "Speichern oder laden Sie diese Codes jetzt herunter – sie werden nicht mehr angezeigt."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:22
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:693
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:993
 msgid "Active Sessions"
 msgstr "Aktive Sitzungen"
 
@@ -3321,17 +3399,16 @@ msgstr "Zuletzt generiert:"
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:88
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:93
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:123
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:375
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:503
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:507
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:515
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:551
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:555
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:574
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:580
-#: ui/pages/dashboard/activity/ActivityPage.tsx:154
-#: ui/pages/dashboard/activity/ActivityPage.tsx:196
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1080
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:561
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:689
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:693
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:701
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:737
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:741
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:761
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:767
+#: ui/pages/dashboard/activity/ActivityPage.tsx:123
+#: ui/pages/dashboard/activity/ActivityPage.tsx:165
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:53
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:90
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:31
@@ -3344,7 +3421,7 @@ msgstr "Zuletzt generiert:"
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:106
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:109
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:41
-#: ui/pages/dashboard/users/UsersPage.tsx:645
+#: ui/pages/dashboard/users/UsersPage.tsx:787
 msgid "Unknown"
 msgstr "Unbekannt"
 
@@ -3397,7 +3474,7 @@ msgid "Last active"
 msgstr "Zuletzt aktiv"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:79
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:586
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:773
 msgid "Current"
 msgstr "Aktuell"
 
@@ -3410,12 +3487,12 @@ msgid "End session"
 msgstr "Sitzung beenden"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:45
-#: ui/pages/dashboard/users/UsersPage.tsx:251
+#: ui/pages/dashboard/users/UsersPage.tsx:273
 msgid "New Password"
 msgstr "Neues Passwort"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/PasswordSettings.tsx:53
-#: ui/pages/dashboard/users/UsersPage.tsx:270
+#: ui/pages/dashboard/users/UsersPage.tsx:292
 msgid "Confirm New Password"
 msgstr "Neues Passwort bestätigen"
 
@@ -3497,17 +3574,17 @@ msgid "Profile Information"
 msgstr "Profilinformationen"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:322
-#: ui/pages/dashboard/users/UsersPage.tsx:205
+#: ui/pages/dashboard/users/UsersPage.tsx:227
 msgid "First Name"
 msgstr "Vorname"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:329
-#: ui/pages/dashboard/users/UsersPage.tsx:211
+#: ui/pages/dashboard/users/UsersPage.tsx:233
 msgid "Last Name"
 msgstr "Nachname"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:336
-#: ui/pages/dashboard/users/UsersPage.tsx:220
+#: ui/pages/dashboard/users/UsersPage.tsx:242
 msgid "Display Name"
 msgstr "Anzeigename"
 
@@ -3544,7 +3621,7 @@ msgid "Tagline"
 msgstr "Slogan"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:431
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:377
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:563
 msgid "Site Language"
 msgstr "Website-Sprache"
 
@@ -3672,7 +3749,7 @@ msgstr "Wird gespeichert..."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:844
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:33
-#: ui/pages/dashboard/users/UsersPage.tsx:335
+#: ui/pages/dashboard/users/UsersPage.tsx:357
 msgid "Save Changes"
 msgstr "Änderungen speichern"
 
@@ -3694,8 +3771,8 @@ msgid "Download Database"
 msgstr "Datenbank herunterladen"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:153
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:146
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:639
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:193
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:825
 #: ui/pages/dashboard/tools/import/_components/results/ImportDetails.tsx:32
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:64
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:43
@@ -3706,18 +3783,18 @@ msgstr "Status"
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:154
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:184
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:182
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:604
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:641
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:790
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:827
 msgid "Ready"
 msgstr "Bereit"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:154
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:642
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:828
 msgid "Setup Required"
 msgstr "Einrichtung erforderlich"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:157
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:645
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:831
 msgid "Database Updated"
 msgstr "Datenbank aktualisiert"
 
@@ -3728,19 +3805,18 @@ msgid "Never"
 msgstr "Nie"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:170
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:653
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:839
 msgid "Database Size"
 msgstr "Datenbankgröße"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:173
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:40
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:206
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:406
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:562
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:632
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:649
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:656
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:800
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:61
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:257
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:592
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:748
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:818
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:835
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:842
 msgid "Not available"
 msgstr "Nicht verfügbar"
 
@@ -3778,7 +3854,7 @@ msgid "PeakURL stores these values encrypted in the database so it can refresh t
 msgstr "PeakURL speichert diese Werte verschlüsselt in der Datenbank, damit die GeoLite2-City-Datenbank später ohne erneute Nachfrage aktualisiert werden kann."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:233
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:668
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:854
 msgid "Account ID"
 msgstr "Konto-ID"
 
@@ -3823,6 +3899,7 @@ msgid "Save Credentials"
 msgstr "Zugangsdaten speichern"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:97
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:968
 msgid "Unavailable"
 msgstr "Nicht verfügbar"
 
@@ -3877,7 +3954,7 @@ msgid "Attention Needed"
 msgstr "Aufmerksamkeit erforderlich"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:175
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:585
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:772
 msgid "Upgrade Recommended"
 msgstr "Upgrade empfohlen"
 
@@ -3958,12 +4035,12 @@ msgid "Run Database Upgrade"
 msgstr "Datenbank-Upgrade ausführen"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:66
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:571
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:758
 msgid "Recorded Schema"
 msgstr "Erfasstes Schema"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:73
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:577
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:764
 msgid "Required Schema"
 msgstr "Erforderliches Schema"
 
@@ -4016,7 +4093,7 @@ msgid "Released"
 msgstr "Veröffentlicht"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:108
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:403
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:589
 msgid "Last Checked"
 msgstr "Zuletzt geprüft"
 
@@ -4052,8 +4129,8 @@ msgstr "Verwenden Sie Cloudflare Turnstile Website- und Geheimschlüssel für da
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:162
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:120
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:568
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:620
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:754
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:806
 msgid "None"
 msgstr "Keine"
 
@@ -4067,8 +4144,9 @@ msgstr "Fügen Sie den Geheimschlüssel Ihres CAPTCHA-Anbieters ein."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:176
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:182
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:399
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:627
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:585
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:813
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:894
 msgid "Disabled"
 msgstr "Deaktiviert"
 
@@ -4077,9 +4155,10 @@ msgid "Editing"
 msgstr "Wird bearbeitet"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:185
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:612
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:616
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:669
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:798
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:802
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:855
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:964
 msgid "Not configured"
 msgstr "Nicht konfiguriert"
 
@@ -4224,7 +4303,7 @@ msgid "Connect PeakURL to your automations with outbound webhooks for link activ
 msgstr "Verbinden Sie PeakURL mit Ihren Automatisierungen über ausgehende Webhooks."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:172
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:697
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:997
 msgid "Webhooks"
 msgstr "Webhooks"
 
@@ -4467,6 +4546,224 @@ msgstr "Falls dieser Schlüssel jemals kompromittiert wird, widerrufen Sie ihn i
 msgid "Copy Key"
 msgstr "Schlüssel kopieren"
 
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:91
+msgid "1 Hour (3,600s) — Default"
+msgstr "1 Stunde (3.600 s) — Standard"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:92
+msgid "6 Hours (21,600s)"
+msgstr "6 Stunden (21.600 s)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:93
+msgid "24 Hours (86,400s)"
+msgstr "24 Stunden (86.400 s)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:94
+msgid "7 Days (604,800s)"
+msgstr "7 Tage (604.800 s)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:95
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:103
+msgid "Custom Duration..."
+msgstr "Benutzerdefinierte Dauer..."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:99
+msgid "1 Minute (60s) — Default"
+msgstr "1 Minute (60 s) — Standard"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:100
+msgid "3 Minutes (180s)"
+msgstr "3 Minuten (180 s)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:101
+msgid "5 Minutes (300s)"
+msgstr "5 Minuten (300 s)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:102
+msgid "15 Minutes (900s)"
+msgstr "15 Minuten (900 s)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:150
+msgid "Automatic (Recommended)"
+msgstr "Automatisch (Empfohlen)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:155
+msgid "Redis (In-Memory Cache)"
+msgstr "Redis (In-Memory-Cache)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:156
+msgid "Redis (Unavailable — Server Unreachable)"
+msgstr "Redis (Nicht verfügbar — Server nicht erreichbar)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:162
+msgid "APCu (PHP Shared Memory)"
+msgstr "APCu (PHP Shared Memory)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:163
+msgid "APCu (Unavailable — Extension Not Loaded)"
+msgstr "APCu (Nicht verfügbar — Erweiterung nicht geladen)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:169
+msgid "Filesystem (content/cache)"
+msgstr "Dateisystem (content/cache)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:170
+msgid "Filesystem (Unavailable — Directory Not Writable)"
+msgstr "Dateisystem (Nicht verfügbar — Verzeichnis schreibgeschützt)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:175
+msgid "Disabled (Direct Database Queries)"
+msgstr "Deaktiviert (Direkte Datenbankabfragen)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:184
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:878
+msgid "Redis"
+msgstr "Redis"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:186
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:880
+msgid "APCu"
+msgstr "APCu"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:188
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:882
+msgid "Filesystem"
+msgstr "Dateisystem"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:190
+msgid "Disabled / Direct Database"
+msgstr "Deaktiviert / Direkte Datenbank"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:271
+msgid "Performance & Caching"
+msgstr "Leistung & Caching"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:274
+msgid "Configure object caching backends and Time-to-Live (TTL) policies to optimize link redirection latency and throughput."
+msgstr "Konfigurieren Sie Objekt-Cache-Backends und TTL-Richtlinien (Time-to-Live), um Weiterleitungslatenz und Durchsatz zu optimieren."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:291
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:507
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:930
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1485
+msgid "Purge Cache"
+msgstr "Cache leeren"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:299
+msgid "Active Engine"
+msgstr "Aktive Engine"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:303
+msgid "Cache Footprint"
+msgstr "Cache-Speicherbedarf"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:304
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:911
+msgid "0 B"
+msgstr "0 B"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:308
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:935
+msgid "Default TTL"
+msgstr "Standard-TTL"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:317
+msgid "Cache status unavailable"
+msgstr "Cache-Status nicht verfügbar"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:334
+msgid "Object cache is operational"
+msgstr "Objekt-Cache ist betriebsbereit"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:336
+msgid "Fallback cache driver active"
+msgstr "Ausweich-Cache-Treiber aktiv"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:337
+msgid "Object cache is disabled"
+msgstr "Objekt-Cache ist deaktiviert"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:342
+msgid "Object caching is active and serving link redirects via the %s backend."
+msgstr "Objekt-Caching ist aktiv und bedient Weiterleitungen über das %s-Backend."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:349
+msgid "The preferred cache driver is currently unavailable. PeakURL has automatically fallen back to %s."
+msgstr "Der bevorzugte Cache-Treiber ist derzeit nicht verfügbar. PeakURL ist automatisch auf %s ausgewichen."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:354
+msgid "Object caching is disabled. Link lookups and redirects are served directly from the database."
+msgstr "Objekt-Caching ist deaktiviert. Link-Abfragen und Weiterleitungen erfolgen direkt über die Datenbank."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:366
+msgid "Cache Engine Settings"
+msgstr "Cache-Engine-Einstellungen"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:370
+msgid "Select your preferred caching backend. PeakURL automatically selects the highest performance operational backend if the preferred driver is unavailable."
+msgstr "Wählen Sie Ihr bevorzugtes Cache-Backend. PeakURL wählt automatisch das leistungsfähigste verfügbare Backend, falls der bevorzugte Treiber nicht erreichbar ist."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:378
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:384
+msgid "Preferred Cache Driver"
+msgstr "Bevorzugter Cache-Treiber"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:388
+msgid "PeakURL prioritizes Redis if configured, APCu if loaded, and Filesystem storage as the universal fallback."
+msgstr "PeakURL priorisiert Redis (falls konfiguriert), APCu (falls geladen) und Dateisystemspeicher als universelle Rückfallebene."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:396
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:404
+msgid "Redirect Cache TTL"
+msgstr "Weiterleitungs-Cache-TTL"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:408
+msgid "Time-to-Live duration for caching active short URL redirect destinations."
+msgstr "Gültigkeitsdauer (TTL) für das Zwischenspeichern aktiver Kurz-URL-Weiterleitungsziele."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:420
+msgid "Custom Redirect TTL (seconds)"
+msgstr "Benutzerdefinierte Weiterleitungs-TTL (Sekunden)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:425
+msgid "Enter the redirect destination cache lifetime in seconds."
+msgstr "Geben Sie die Cache-Gültigkeitsdauer für Weiterleitungsziele in Sekunden ein."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:435
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:443
+msgid "Negative Lookup (404) TTL"
+msgstr "Negativ-Abfrage-TTL (404)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:447
+msgid "Time-to-Live duration for caching non-existent link lookups to mitigate database load from automated scans."
+msgstr "Gültigkeitsdauer (TTL) für das Zwischenspeichern nicht vorhandener Links, um die Datenbanklast durch automatisierte Scans zu verringern."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:459
+msgid "Custom Negative TTL (seconds)"
+msgstr "Benutzerdefinierte Negativ-TTL (Sekunden)"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:464
+msgid "Enter the 404 negative lookup cache lifetime in seconds."
+msgstr "Geben Sie die Cache-Gültigkeitsdauer für 404-Negativabfragen in Sekunden ein."
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:484
+msgid "Reset"
+msgstr "Zurücksetzen"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:494
+msgid "Save Performance Settings"
+msgstr "Leistungseinstellungen speichern"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:503
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1481
+msgid "Purge Object Cache"
+msgstr "Objekt-Cache leeren"
+
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:504
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1482
+msgid "Are you sure you want to purge the object cache? All cached redirect records, in-memory objects, and temporary cache files will be immediately invalidated. Subsequent requests will query the database to rebuild the cache."
+msgstr "Möchten Sie den Objekt-Cache wirklich leeren? Alle zwischengespeicherten Weiterleitungsdaten, Speicherobjekte und temporären Cache-Dateien werden sofort ungültig. Nachfolgende Anfragen laden die Daten direkt aus der Datenbank neu."
+
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:118
 msgid "TLS / STARTTLS"
 msgstr "TLS / STARTTLS"
@@ -4480,6 +4777,7 @@ msgid "Save the current email settings before sending a test email."
 msgstr "Speichern Sie die aktuellen E-Mail-Einstellungen, bevor Sie eine Test-E-Mail senden."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:160
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:535
 msgid "Email Delivery"
 msgstr "E-Mail-Zustellung"
 
@@ -4508,7 +4806,7 @@ msgid "SMTP Configuration"
 msgstr "SMTP-Konfiguration"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:255
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:609
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:795
 msgid "From Name"
 msgstr "Absendername"
 
@@ -4517,7 +4815,7 @@ msgid "PeakURL"
 msgstr "PeakURL"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:266
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:608
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:794
 msgid "From Email"
 msgstr "Absender-E-Mail"
 
@@ -4526,7 +4824,7 @@ msgid "noreply@yourdomain.com"
 msgstr "noreply@yourdomain.com"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:282
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:611
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:797
 msgid "SMTP Host"
 msgstr "SMTP-Host"
 
@@ -4535,12 +4833,12 @@ msgid "smtp.example.com"
 msgstr "smtp.example.com"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:297
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:615
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:801
 msgid "SMTP Port"
 msgstr "SMTP-Port"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:314
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:619
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:805
 msgid "Encryption"
 msgstr "Verschlüsselung"
 
@@ -4549,7 +4847,7 @@ msgid "SMTP encryption"
 msgstr "SMTP-Verschlüsselung"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:330
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:623
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:809
 msgid "Authentication"
 msgstr "Authentifizierung"
 
@@ -4609,456 +4907,675 @@ msgstr "Kontoeinstellungen"
 msgid "Manage your account preferences and configurations"
 msgstr "Verwalten Sie Ihre Kontoeinstellungen und Konfiguration."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:48
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:663
+#: ui/pages/dashboard/settings/Layout.tsx:45
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:107
+msgid "Performance"
+msgstr "Leistung"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:69
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:849
 msgid "Yes"
 msgstr "Ja"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:48
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:664
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:69
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:850
 msgid "No"
 msgstr "Nein"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:52
-msgid "Good"
-msgstr "Gut"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:77
+msgid "recently"
+msgstr "kürzlich"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:52
-msgid "Should be improved"
-msgstr "Sollte verbessert werden"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:130
+msgid "Cache"
+msgstr "Cache"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:89
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:132
 msgid "Storage"
 msgstr "Speicher"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:91
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:134
 msgid "Translations"
 msgstr "Übersetzungen"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:99
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:142
 msgid "System"
 msgstr "System"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:133
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:176
 msgid "System status unavailable"
 msgstr "Systemstatus nicht verfügbar"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:147
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:194
 msgid "Info"
 msgstr "Info"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:184
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:239
 msgid "Check"
 msgstr "Prüfen"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:345
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:280
+msgid "Critical"
+msgstr "Kritisch"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:285
+msgid "Improvement"
+msgstr "Verbesserung"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:430
+msgid "Failed to purge object cache."
+msgstr "Leeren des Objekt-Caches fehlgeschlagen."
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:444
 msgid "System status data is not available right now."
 msgstr "Systemstatusdaten sind derzeit nicht verfügbar."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:381
-msgid "Environment"
-msgstr "Umgebung"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:477
+msgid "Database Engine"
+msgstr "Datenbank-Engine"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:383
-msgid "Site URL"
-msgstr "Website-URL"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:482
+msgid "MySQL / MariaDB"
+msgstr "MySQL / MariaDB"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:388
-msgid "Install Type"
-msgstr "Installationstyp"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:486
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:890
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1017
+msgid "Object Cache"
+msgstr "Objekt-Cache"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:391
-msgid "Packaged Release"
-msgstr "Paketiertes Release"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:494
+msgid "Redis In-Memory"
+msgstr "Redis In-Memory"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:392
-msgid "Source Checkout"
-msgstr "Quellcode-Checkout"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:395
-msgid "Debug Mode"
-msgstr "Debug-Modus"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:398
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:626
-msgid "Enabled"
-msgstr "Aktiviert"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:413
-msgid "Content Directory"
-msgstr "Inhaltsverzeichnis"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:419
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:480
-msgid "Writable"
-msgstr "Beschreibbar"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:420
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:481
-msgid "Not Writable"
-msgstr "Nicht beschreibbar"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:427
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:445
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:456
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:527
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:535
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:543
-msgid "Missing"
-msgstr "Fehlt"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:431
-msgid "Languages Directory"
-msgstr "Sprachenverzeichnis"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:437
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:466
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:676
-msgid "Readable"
-msgstr "Lesbar"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:438
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:467
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:677
-msgid "Not Readable"
-msgstr "Nicht lesbar"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:449
-msgid "Config File"
-msgstr "Konfigurationsdatei"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:453
-msgid "Present"
-msgstr "Vorhanden"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:460
-msgid "Debug Log"
-msgstr "Debug-Protokoll"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:471
-msgid "Not created yet"
-msgstr "Noch nicht erstellt"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:475
-msgid "App Directory"
-msgstr "App-Verzeichnis"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:488
-msgid "Release Root"
-msgstr "Release-Stammverzeichnis"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:499
-msgid "PHP Version"
-msgstr "PHP-Version"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:497
+msgid "APCu Memory Cache"
+msgstr "APCu-Speicher-Cache"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:500
-msgid "PHP SAPI"
-msgstr "PHP SAPI"
+msgid "Filesystem Cache"
+msgstr "Dateisystem-Cache"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:502
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:503
+msgid "Cache Disabled"
+msgstr "Cache deaktiviert"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:505
+msgid "Direct Database"
+msgstr "Direkte Datenbank"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:510
+msgid "File Storage"
+msgstr "Dateispeicher"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:514
+msgid "Writable Content Directory"
+msgstr "Beschreibbares Inhaltsverzeichnis"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:515
+msgid "Read Only Directory"
+msgstr "Schreibgeschütztes Verzeichnis"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:519
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:524
+msgid "PHP Runtime"
+msgstr "PHP-Laufzeitumgebung"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:528
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:531
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:688
 msgid "Web Server"
 msgstr "Webserver"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:506
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:546
+msgid "GeoLite2 Installed"
+msgstr "GeoLite2 installiert"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:547
+msgid "Setup Recommended"
+msgstr "Einrichtung empfohlen"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:551
+msgid "Release & Updates"
+msgstr "Release & Updates"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:556
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:577
+msgid "Packaged Release"
+msgstr "Paketiertes Release"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:567
+msgid "Environment"
+msgstr "Umgebung"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:569
+msgid "Site URL"
+msgstr "Website-URL"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:574
+msgid "Install Type"
+msgstr "Installationstyp"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:578
+msgid "Source Checkout"
+msgstr "Quellcode-Checkout"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:581
+msgid "Debug Mode"
+msgstr "Debug-Modus"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:584
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:812
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:893
+msgid "Enabled"
+msgstr "Aktiviert"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:599
+msgid "Content Directory"
+msgstr "Inhaltsverzeichnis"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:605
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:666
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:952
+msgid "Writable"
+msgstr "Beschreibbar"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:606
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:667
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:953
+msgid "Not Writable"
+msgstr "Nicht beschreibbar"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:613
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:631
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:642
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:713
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:721
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:729
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:980
+msgid "Missing"
+msgstr "Fehlt"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:617
+msgid "Languages Directory"
+msgstr "Sprachenverzeichnis"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:623
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:652
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:862
+msgid "Readable"
+msgstr "Lesbar"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:624
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:653
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:863
+msgid "Not Readable"
+msgstr "Nicht lesbar"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:635
+msgid "Config File"
+msgstr "Konfigurationsdatei"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:639
+msgid "Present"
+msgstr "Vorhanden"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:646
+msgid "Debug Log"
+msgstr "Debug-Protokoll"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:657
+msgid "Not created yet"
+msgstr "Noch nicht erstellt"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:661
+msgid "App Directory"
+msgstr "App-Verzeichnis"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:674
+msgid "Release Root"
+msgstr "Release-Stammverzeichnis"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:685
+msgid "PHP Version"
+msgstr "PHP-Version"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:686
+msgid "PHP SAPI"
+msgstr "PHP SAPI"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:692
 msgid "Operating System"
 msgstr "Betriebssystem"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:509
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:695
 msgid "Timezone"
 msgstr "Zeitzone"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:510
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:696
 msgid "Memory Limit"
 msgstr "Speicherlimit (Memory Limit)"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:512
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:698
 msgid "Max Execution Time"
 msgstr "Maximale Ausführungszeit"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:518
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:704
 msgid "Upload Max Filesize"
 msgstr "Maximale Dateigröße für Uploads"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:521
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:707
 msgid "POST Max Size"
 msgstr "Maximale POST-Größe"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:523
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:709
 msgid "Intl Extension"
 msgstr "Intl-Erweiterung"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:526
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:534
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:542
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:712
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:720
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:728
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:979
 msgid "Available"
 msgstr "Verfügbar"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:531
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:717
 msgid "cURL Extension"
 msgstr "cURL-Erweiterung"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:539
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:725
 msgid "ZipArchive"
 msgstr "ZipArchive"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:550
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:736
 msgid "Database Server"
 msgstr "Datenbankserver"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:564
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:750
 msgid "Database Name"
 msgstr "Datenbankname"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:565
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:751
 msgid "Charset"
 msgstr "Zeichensatz"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:567
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:753
 msgid "Table Prefix"
 msgstr "Tabellenpräfix"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:583
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:770
 msgid "Schema Status"
 msgstr "Schemastatus"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:589
-msgid "1 issue detected"
-msgstr "1 Problem erkannt"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:777
+msgid "%s schema issue(s) detected"
+msgstr "%s Schemaproblem(e) erkannt"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:591
-msgid "%s issues detected"
-msgstr "%s Probleme erkannt"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:785
+msgid "Mail Transport"
+msgstr "Mail-Transport"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:599
-msgid "Driver"
-msgstr "Treiber"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:601
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:787
 msgid "Transport Ready"
 msgstr "Transport bereit"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:605
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:791
 msgid "Needs Setup"
 msgstr "Einrichtung erforderlich"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:631
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:817
 msgid "Settings Storage"
 msgstr "Einstellungsspeicher"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:660
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:846
 msgid "Credentials Saved"
 msgstr "Zugangsdaten gespeichert"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:672
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:858
 msgid "Database Path"
 msgstr "Datenbankpfad"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:682
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:868
 msgid "Refresh Command"
 msgstr "Befehl aktualisieren"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:690
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:884
+msgid "None / Direct DB"
+msgstr "Keine / Direkte DB"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:898
+msgid "Active Driver"
+msgstr "Aktiver Treiber"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:902
+msgid "Fallback Active"
+msgstr "Fallback aktiv"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:906
+msgid "Configured Driver"
+msgstr "Konfigurierter Treiber"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:907
+msgid "auto"
+msgstr "automatisch"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:910
+msgid "Cache Size"
+msgstr "Cache-Größe"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:917
+msgid "%s cached items"
+msgstr "%s zwischengespeicherte Elemente"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:918
+msgid "%s cached files"
+msgstr "%s zwischengespeicherte Dateien"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:941
+msgid "Negative TTL"
+msgstr "Negativ-TTL"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:947
+msgid "Cache Directory"
+msgstr "Cache-Verzeichnis"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:955
+msgid "Not Created"
+msgstr "Nicht erstellt"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:959
+msgid "Redis Server"
+msgstr "Redis-Server"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:966
+msgid "Connected"
+msgstr "Verbunden"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:976
+msgid "APCu Extension"
+msgstr "APCu-Erweiterung"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:983
+msgid "Operational"
+msgstr "Betriebsbereit"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:990
 msgid "Short Links"
 msgstr "Kurzlinks"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:699
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:999
 msgid "Activity Events"
 msgstr "Aktivitätsereignisse"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:703
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1003
 msgid "Managed Tables"
 msgstr "Verwaltete Tabellen"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:712
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1012
 msgid "Directories and Sizes"
 msgstr "Verzeichnisse und Größen"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:715
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1015
 msgid "Server"
 msgstr "Server"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:723
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1024
 msgid "Data Footprint"
 msgstr "Datenbestand"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:760
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1061
 msgid "System status info copied to clipboard"
 msgstr "Systemstatus-Informationen in Zwischenablage kopiert"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:766
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1066
 msgid "PeakURL could not copy the system status information."
 msgstr "PeakURL konnte die Systemstatus-Informationen nicht kopieren."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:797
-msgid "Last checked: %s"
-msgstr "Zuletzt geprüft: %s"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1078
+msgid "Site Health"
+msgstr "Website-Zustand"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:824
-msgid "The system status check shows information about your PeakURL configuration and items that may need your attention."
-msgstr "Die Systemstatusprüfung zeigt Informationen zu Ihrer PeakURL-Konfiguration und Punkten, die Ihre Aufmerksamkeit erfordern."
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1084
+msgid "Monitor installation health, check server environment diagnostics, and review technical configuration details."
+msgstr "Überwachen Sie den Zustand der Installation, überprüfen Sie die Diagnose der Serverumgebung und prüfen Sie technische Konfigurationsdetails."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:834
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1100
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1101
+msgid "Refresh site health status"
+msgstr "Zustand der Website aktualisieren"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1163
+msgid "Site Health: Good"
+msgstr "Website-Zustand: Gut"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1167
+msgid "Site Health: 1 Critical Issue"
+msgstr "Website-Zustand: 1 kritisches Problem"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1170
+msgid "Site Health: %s Critical Issues"
+msgstr "Website-Zustand: %s kritische Probleme"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1176
+msgid "Site Health: 1 Recommended Improvement"
+msgstr "Website-Zustand: 1 empfohlene Verbesserung"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1179
+msgid "Site Health: %s Recommended Improvements"
+msgstr "Website-Zustand: %s empfohlene Verbesserungen"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1187
+msgid "PeakURL is configured properly and all environmental diagnostics are in good standing."
+msgstr "PeakURL ist ordnungsgemäß konfiguriert und alle Umgebungsdiagnosen sind einwandfrei."
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1191
+msgid "Critical items require attention to restore optimal site security and performance. Resolving these should be prioritized."
+msgstr "Kritische Punkte erfordern Aufmerksamkeit, um optimale Sicherheit und Leistung der Website wiederherzustellen. Die Behebung sollte priorisiert werden."
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1194
+msgid "All core features are active, with recommended improvements available below to optimize your install."
+msgstr "Alle Kernfunktionen sind aktiv. Unten finden Sie empfohlene Verbesserungen zur Optimierung Ihrer Installation."
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1205
+msgid "%s Passed"
+msgstr "%s Bestanden"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1217
+msgid "%s Recommended"
+msgstr "%s Empfohlen"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1230
+msgid "%s Critical"
+msgstr "%s Kritisch"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1250
+msgid "Checked %s"
+msgstr "Geprüft %s"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1264
+msgid "System Checks"
+msgstr "Systemprüfungen"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1317
+msgid "Good"
+msgstr "Gut"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1319
+msgid "Review"
+msgstr "Prüfen"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1320
+msgid "Action Required"
+msgstr "Handlung erforderlich"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1337
 msgid "1 critical issue"
 msgstr "1 kritisches Problem"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:835
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1338
 msgid "%s critical issues"
 msgstr "%s kritische Probleme"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:837
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1340
 msgid "Critical issues are items that may have a high impact on your site performance or security. Resolving these issues should be prioritized."
 msgstr "Kritische Probleme können große Auswirkungen auf die Leistung oder Sicherheit Ihrer Website haben. Ihre Behebung sollte priorisiert werden."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:850
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1354
 msgid "1 recommended improvement"
 msgstr "1 empfohlene Verbesserung"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:851
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1355
 msgid "%s recommended improvements"
 msgstr "%s empfohlene Verbesserungen"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:853
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1357
 msgid "Recommended improvements are beneficial for your site, though not as urgent as a critical issue. They may include improvements in areas such as security, performance, and user experience."
 msgstr "Empfohlene Verbesserungen sind vorteilhaft für Ihre Website, aber nicht so dringend wie ein kritisches Problem. Sie können Bereiche wie Sicherheit, Leistung und Benutzerfreundlichkeit betreffen."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:867
-msgid "All system status checks are currently passing."
-msgstr "Alle Systemstatusprüfungen sind derzeit erfolgreich bestanden."
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:888
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1383
 msgid "Hide passed tests"
 msgstr "Bestandene Tests ausblenden"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:891
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1386
 msgid "1 passed test"
 msgstr "1 bestandener Test"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:892
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1387
 msgid "%s passed tests"
 msgstr "%s bestandene Tests"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:942
-msgid "System Status Info"
-msgstr "Systemstatus-Informationen"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1433
+msgid "System Information"
+msgstr "Systeminformationen"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:945
-msgid "This page can show you every detail about the configuration of your PeakURL install."
-msgstr "Diese Seite zeigt alle Details zur Konfiguration Ihrer PeakURL-Installation."
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1436
+msgid "Detailed technical environment, server configuration, storage, and database specifications."
+msgstr "Detaillierte technische Umgebung, Serverkonfiguration, Speicher- und Datenbankspezifikationen."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:950
-msgid "If you want to export a full snapshot of this page, you can use the button below to copy it to the clipboard."
-msgstr "Wenn Sie einen vollständigen Überblick dieser Seite exportieren möchten, können Sie die Schaltfläche unten verwenden, um ihn in die Zwischenablage zu kopieren."
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1452
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:96
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
+#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:103
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:230
+#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:307
+#: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:138
+msgid "Copied!"
+msgstr "Kopiert!"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:965
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1458
 msgid "Copy site info to clipboard"
-msgstr "Website-Informationen in Zwischenablage kopieren"
+msgstr "Website-Informationen in die Zwischenablage kopieren"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:50
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:56
 msgid "Preparing..."
 msgstr "Wird vorbereitet..."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:71
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:77
 msgid "CSV Export"
 msgstr "CSV-Export"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:72
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:78
 msgid "Download a spreadsheet-friendly file that can also be imported back into PeakURL later."
 msgstr "Laden Sie eine tabellenfreundliche Datei herunter, die später auch wieder in PeakURL importiert werden kann."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:75
-msgid "Comma-separated values"
-msgstr "Kommagetrennte Werte (CSV)"
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:81
+msgid "Comma-separated values (.csv)"
+msgstr "Kommagetrennte Werte (.csv)"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:80
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:87
 msgid "JSON Export"
 msgstr "JSON-Export"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:81
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:88
 msgid "Download a structured snapshot for scripts, integrations, or backups."
 msgstr "Laden Sie einen strukturierten Snapshot für Skripte, Integrationen oder Backups herunter."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:84
-msgid "JavaScript Object Notation"
-msgstr "JavaScript Object Notation (JSON)"
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:91
+msgid "JavaScript Object Notation (.json)"
+msgstr "JavaScript Object Notation (.json)"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:89
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:97
 msgid "XML Export"
 msgstr "XML-Export"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:90
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:98
 msgid "Download a portable XML feed with the full link dataset and analytics totals."
 msgstr "Laden Sie einen portablen XML-Feed mit dem vollständigen Link-Datensatz und den Analyse-Gesamtzahlen herunter."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:93
-msgid "Extensible Markup Language"
-msgstr "Extensible Markup Language (XML)"
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:101
+msgid "Extensible Markup Language (.xml)"
+msgstr "Extensible Markup Language (.xml)"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:107
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:116
 msgid "Nothing to export"
 msgstr "Nichts zu exportieren"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:108
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:117
 msgid "No links are available for export yet."
 msgstr "Es sind noch keine Links für den Export verfügbar."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:115
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:124
 msgid "Export downloaded"
 msgstr "Export heruntergeladen"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:117
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:126
 msgid "Downloaded %1$s links as %2$s."
 msgstr "%1$s Links wurden als %2$s heruntergeladen."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:124
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:133
 #: ui/pages/dashboard/tools/import/_components/results/ImportDetails.tsx:57
 msgid "Export failed"
 msgstr "Export fehlgeschlagen"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:127
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:136
 msgid "PeakURL could not prepare the export right now."
 msgstr "PeakURL konnte den Export derzeit nicht vorbereiten."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:140
-msgid "Export all links you can access from one place in CSV, JSON, or XML."
-msgstr "Exportieren Sie alle Links, auf die Sie Zugriff haben, an einem zentralen Ort im CSV-, JSON- oder XML-Format."
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:150
+msgid "Data Export"
+msgstr "Datenexport"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:155
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:154
+msgid "Export your short links dataset in CSV, JSON, or XML formats for offline analysis, migration, or programmatic backups."
+msgstr "Exportieren Sie Ihren Kurzlink-Datensatz in den Formaten CSV, JSON oder XML für Offline-Analysen, Migrationen oder programmgesteuerte Backups."
+
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:169
 msgid "Bulk Link Export"
 msgstr "Massen-Link-Export"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:159
-msgid "Each export includes destination URLs, aliases, titles, short URLs, click totals, unique visitor totals, and created dates."
-msgstr "Jeder Export enthält Ziel-URLs, Aliase, Titel, Kurz-URLs, Klickzahlen, eindeutige Besucherzahlen und Erstellungsdaten."
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:173
+msgid "Each export includes destination URLs, custom aliases, titles, short URLs, total clicks, unique visitors, and creation dates."
+msgstr "Jeder Export enthält Ziel-URLs, benutzerdefinierte Aliase, Titel, Kurz-URLs, Gesamtklicks, eindeutige Besucher und Erstellungsdaten."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:164
-msgid "Exports follow your current permissions. Admins can export all site links, while editors can export only their own links."
-msgstr "Exporte richten sich nach Ihren aktuellen Berechtigungen. Administratoren können alle Website-Links exportieren, Redakteure nur ihre eigenen."
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:178
+msgid "Exports follow your current role permissions. Administrators can export all site links, while Editors export links created by their account."
+msgstr "Exporte folgen Ihren aktuellen Rollenberechtigungen. Administratoren können alle Links der Website exportieren, während Redakteure nur die von ihrem Konto erstellten Links exportieren."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:172
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:186
 msgid "Exportable Links"
 msgstr "Exportierbare Links"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:199
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:221
 msgid "API Export"
 msgstr "API-Export"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:201
-msgid "Use the export route when you want to back up links or feed another tool without opening the dashboard."
-msgstr "Verwenden Sie die Export-Route, um Links zu sichern oder ein anderes Tool zu versorgen, ohne das Dashboard zu öffnen."
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:224
+msgid "Use the API export endpoint to back up short links or integrate with automated workflows without opening the dashboard."
+msgstr "Verwenden Sie den API-Export-Endpunkt, um Kurzlinks zu sichern oder in automatisierte Workflows zu integrieren, ohne das Dashboard zu öffnen."
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:209
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:237
+msgid "Read Export Guide"
+msgstr "Export-Anleitung lesen"
+
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:245
 #: ui/pages/dashboard/tools/import/_components/api/ApiImport.tsx:22
 msgid "Example Request"
 msgstr "Beispiel-Anfrage"
 
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:220
+#: ui/pages/dashboard/tools/export/ExportPage.tsx:259
 #: ui/pages/dashboard/tools/import/_components/api/ApiImport.tsx:47
 msgid "Response"
 msgstr "Antwort"
-
-#: ui/pages/dashboard/tools/export/ExportPage.tsx:254
-msgid "Read Export Guide"
-msgstr "Export-Anleitung lesen"
 
 #: ui/pages/dashboard/tools/import/TabPage.tsx:20
 msgid "Product launch"
@@ -5072,9 +5589,13 @@ msgstr "Hilfedokumentation"
 msgid "Newsletter"
 msgstr "Newsletter"
 
-#: ui/pages/dashboard/tools/import/_components/layout/Header.tsx:8
-msgid "Import links from files, pasted URLs, or API payloads"
-msgstr "Importieren Sie Links aus Dateien, eingefügten URLs oder API-Payloads"
+#: ui/pages/dashboard/tools/import/_components/layout/Header.tsx:10
+msgid "Data Import"
+msgstr "Datenimport"
+
+#: ui/pages/dashboard/tools/import/_components/layout/Header.tsx:14
+msgid "Bulk import short links into PeakURL from CSV, JSON, or XML files, pasted URL lists, or automated API payloads."
+msgstr "Massenimport von Kurzlinks in PeakURL aus CSV-, JSON- oder XML-Dateien, eingefügten URL-Listen oder automatisierten API-Nutzlasten."
 
 #: ui/pages/dashboard/tools/import/_components/results/ImportSummary.tsx:15
 msgid "Import Completed!"
@@ -5330,7 +5851,7 @@ msgid "Popular"
 msgstr "Beliebt"
 
 #: ui/pages/dashboard/plugins/PluginsPage.tsx:93
-#: ui/pages/dashboard/users/UsersPage.tsx:471
+#: ui/pages/dashboard/users/UsersPage.tsx:558
 msgid "Admin access required"
 msgstr "Administratorzugriff erforderlich"
 
@@ -5338,20 +5859,28 @@ msgstr "Administratorzugriff erforderlich"
 msgid "Only admin accounts will be able to install, update, and manage plugins."
 msgstr "Nur Administratorkonten können Plugins installieren, aktualisieren und verwalten."
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:121
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:113
+msgid "Extensions"
+msgstr "Erweiterungen"
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:117
 msgid "Extend PeakURL with plugins, install from the library, upload custom packages, and manage everything from one place."
 msgstr "Erweitern Sie PeakURL mit Plugins, installieren Sie Erweiterungen aus der Bibliothek, laden Sie benutzerdefinierte Pakete hoch und verwalten Sie alles an einem zentralen Ort."
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:136
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:133
 #: ui/pages/dashboard/plugins/_components/ComingSoonBadge/ComingSoonBadge.tsx:9
 msgid "Coming Soon"
 msgstr "Demnächst verfügbar"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:140
-msgid "Be the first to know when the plugin library launches."
-msgstr "Erfahren Sie als Erster, wann die Plugin-Bibliothek verfügbar ist und neue Erweiterungen veröffentlicht werden."
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:136
+msgid "Plugin Library"
+msgstr "Plugin-Bibliothek"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:154
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:140
+msgid "Be the first to know when the verified plugin marketplace and one-click installer launch."
+msgstr "Erfahren Sie als Erster, wann der verifizierte Plugin-Marktplatz und der Ein-Klick-Installer starten."
+
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:157
 #: ui/pages/dashboard/plugins/_components/PluginCard/PluginCard.tsx:82
 #: ui/pages/dashboard/plugins/_components/PluginCard/PluginCard.tsx:98
 msgid "Join the Waitlist"
@@ -5361,75 +5890,75 @@ msgstr "Auf die Warteliste setzen"
 msgid "Search plugins…"
 msgstr "Plugins suchen…"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:237
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:230
 msgid "Featured Plugins"
 msgstr "Vorgestellte Plugins"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:240
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:233
 msgid "Hand-picked extensions recommended by the PeakURL team."
 msgstr "Ausgewählte Erweiterungen, die vom PeakURL-Team empfohlen werden"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:255
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:248
 msgid "Most Popular"
 msgstr "Am beliebtesten"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:258
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:251
 msgid "Extensions with the highest community adoption."
 msgstr "Erweiterungen mit der höchsten Community-Nutzung und den besten Bewertungen"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:297
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:294
 msgid "Plugin System Under Development"
 msgstr "Plugin-System in Entwicklung"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:300
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:297
 msgid "We're building a full plugin ecosystem for PeakURL. Install extensions, manage updates, and customise your experience from the dashboard. Here's what's coming:"
 msgstr "Wir entwickeln ein vollständiges Plugin-Ökosystem für PeakURL. Installieren Sie Erweiterungen, verwalten Sie Updates und passen Sie Ihr Nutzungserlebnis direkt über das Dashboard an. Das erwartet Sie:"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:310
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:307
 msgid "One-Click Installs"
 msgstr "1-Klick-Installationen"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:311
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:308
 msgid "Browse the plugin library and install ZIP packages straight from the dashboard with compatibility checks."
 msgstr "Durchsuchen Sie die Plugin-Bibliothek und installieren Sie ZIP-Pakete direkt aus dem Dashboard."
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:318
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:315
 msgid "Activate & Manage"
 msgstr "Aktivieren & Verwalten"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:319
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:316
 msgid "Review plugin details, enable or disable features, and access per-plugin settings screens."
 msgstr "Prüfen Sie Plugin-Details, aktivieren oder deaktivieren Sie Funktionen und konfigurieren Sie Einstellungen."
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:326
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:323
 msgid "Safe Updates"
 msgstr "Sichere Updates"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:327
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:324
 msgid "Managed update checks from trusted manifests with rollback guardrails and clear notices."
 msgstr "Verwaltete Update-Prüfungen von vertrauenswürdigen Manifesten mit SHA-256-Prüfsummenvalidierung."
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:334
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:331
 msgid "Persistent Storage"
 msgstr "Persistenter Speicher"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:335
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:332
 msgid "Plugins live in content/plugins so core releases never wipe your extensions."
 msgstr "Plugins liegen in content/plugins, sodass Core-Releases sicher aktualisiert werden können, ohne Anpassungen zu überschreiben."
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:342
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:339
 msgid "Extension APIs"
 msgstr "Erweiterungs-APIs"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:343
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:340
 msgid "Documented hooks for settings screens, link actions, analytics widgets, and integrations."
 msgstr "Dokumentierte Hooks für Einstellungsbildschirme, Link-Aktionen, Analysen und benutzerdefinierte Dashboard-Widgets."
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:350
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:347
 msgid "Admin Review Flow"
 msgstr "Admin-Überprüfungsablauf"
 
-#: ui/pages/dashboard/plugins/PluginsPage.tsx:351
+#: ui/pages/dashboard/plugins/PluginsPage.tsx:348
 msgid "Every install surfaces version, author, homepage, and compatibility notes before activation."
 msgstr "Jede Installation zeigt Version, Autor, Homepage, Changelog und Berechtigungen vor der Aktivierung an."
 
@@ -5450,9 +5979,9 @@ msgid "Author"
 msgstr "Autor"
 
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
-#: ui/pages/dashboard/activity/ActivityPage.tsx:974
+#: ui/pages/dashboard/activity/ActivityPage.tsx:879
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:111
-#: ui/pages/dashboard/users/UsersPage.tsx:564
+#: ui/pages/dashboard/users/UsersPage.tsx:688
 msgid "Actions"
 msgstr "Aktionen"
 
@@ -5464,376 +5993,316 @@ msgstr "Deaktivieren"
 msgid "Activate"
 msgstr "Aktivieren"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:122
-msgid "Link created"
-msgstr "Link erstellt"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:124
-msgid "Link updated"
-msgstr "Link aktualisiert"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:126
-#: ui/pages/dashboard/activity/ActivityPage.tsx:463
-msgid "Link permanently deleted"
-msgstr "Link dauerhaft gelöscht"
-
 #: ui/pages/dashboard/activity/ActivityPage.tsx:128
-msgid "Link moved to trash"
-msgstr "Link in den Papierkorb verschoben"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:130
-#: ui/pages/dashboard/activity/ActivityPage.tsx:472
-#: ui/pages/dashboard/links/LinksPage.tsx:238
-msgid "Link restored"
-msgstr "Link wiederhergestellt"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:132
-#: ui/pages/dashboard/links/LinksPage.tsx:268
-msgid "Trash emptied"
-msgstr "Papierkorb geleert"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:134
-msgid "User created"
-msgstr "Benutzer erstellt"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:136
-msgid "User updated"
-msgstr "Benutzer aktualisiert"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:138
-#: ui/pages/dashboard/users/UsersPage.tsx:434
-msgid "User deleted"
-msgstr "Benutzer gelöscht"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:140
-msgid "Link click"
-msgstr "Link-Klick"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:159
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:55
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:190
 msgid "Unknown user"
 msgstr "Unbekannter Benutzer"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:163
+#: ui/pages/dashboard/activity/ActivityPage.tsx:132
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:58
 msgid "Created new link \"%s\""
-msgstr "Neuen Link \"%s\" erstellt"
+msgstr "Neuen Link \"%s\" erstellt\"%s\" erstellt\"%s\" erstellt"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:165
+#: ui/pages/dashboard/activity/ActivityPage.tsx:134
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:60
 msgid "Updated link \"%s\""
-msgstr "Link \"%s\" aktualisiert"
+msgstr "Link \"%s\" aktualisiert\"%s\" aktualisiert\"%s\" aktualisiert"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:167
+#: ui/pages/dashboard/activity/ActivityPage.tsx:136
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:62
 msgid "Permanently deleted link \"%s\""
-msgstr "Link \"%s\" dauerhaft gelöscht"
+msgstr "Link \"%s\" dauerhaft gelöscht\"%s\" dauerhaft gelöscht\"%s\" dauerhaft gelöscht"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:169
+#: ui/pages/dashboard/activity/ActivityPage.tsx:138
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:64
 msgid "Moved link \"%s\" to trash"
-msgstr "Link \"%s\" in den Papierkorb verschoben"
+msgstr "Link \"%s\" in den Papierkorb verschoben\"%s\" in den Papierkorb verschoben\"%s\" in den Papierkorb verschoben"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:171
+#: ui/pages/dashboard/activity/ActivityPage.tsx:140
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:66
 msgid "Restored link \"%s\""
-msgstr "Link \"%s\" wiederhergestellt"
+msgstr "Link \"%s\" wiederhergestellt\"%s\" wiederhergestellt\"%s\" wiederhergestellt"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:176
+#: ui/pages/dashboard/activity/ActivityPage.tsx:145
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:71
 msgid "Permanently deleted 1 link from trash"
 msgstr "1 Link dauerhaft aus dem Papierkorb gelöscht"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:178
+#: ui/pages/dashboard/activity/ActivityPage.tsx:147
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:73
 msgid "Permanently deleted %s links from trash"
 msgstr "%s Links dauerhaft aus dem Papierkorb gelöscht"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:182
+#: ui/pages/dashboard/activity/ActivityPage.tsx:151
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:77
 msgid "Emptied links from trash"
 msgstr "Links aus dem Papierkorb geleert"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:185
+#: ui/pages/dashboard/activity/ActivityPage.tsx:154
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:79
 msgid "Created user \"%s\""
-msgstr "Benutzer \"%s\" erstellt"
+msgstr "Benutzer \"%s\" erstellt\"%s\" erstellt\"%s\" erstellt"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:187
+#: ui/pages/dashboard/activity/ActivityPage.tsx:156
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:81
 msgid "Updated user \"%s\""
-msgstr "Benutzer \"%s\" aktualisiert"
+msgstr "Benutzer \"%s\" aktualisiert\"%s\" aktualisiert\"%s\" aktualisiert"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:189
+#: ui/pages/dashboard/activity/ActivityPage.tsx:158
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:83
 msgid "Deleted user \"%s\""
-msgstr "Benutzer \"%s\" gelöscht"
+msgstr "Benutzer \"%s\" gelöscht\"%s\" gelöscht\"%s\" gelöscht"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:193
+#: ui/pages/dashboard/activity/ActivityPage.tsx:162
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:87
 msgid "from %s"
 msgstr "aus %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:201
+#: ui/pages/dashboard/activity/ActivityPage.tsx:170
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:94
 msgid "Link \"%1$s\" was clicked %2$s"
-msgstr "Link \"%1$s\" wurde angeklickt %2$s"
+msgstr "Link \"%1$s\" wurde angeklickt %2$s\"%1$s\" wurde angeklickt %2$s\"%1$s\" wurde angeklickt %2$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:205
+#: ui/pages/dashboard/activity/ActivityPage.tsx:174
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:98
 msgid "Link \"%s\" was clicked"
-msgstr "Link \"%s\" wurde angeklickt"
+msgstr "Link \"%s\" wurde angeklickt\"%s\" wurde angeklickt\"%s\" wurde angeklickt"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:208
+#: ui/pages/dashboard/activity/ActivityPage.tsx:177
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:100
 msgid "Unknown activity"
 msgstr "Unbekannte Aktivität"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:249
-#: ui/pages/dashboard/activity/ActivityPage.tsx:258
-msgid "Unknown date"
-msgstr "Unbekanntes Datum"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:269
-msgid "Today"
-msgstr "Heute"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:273
-msgid "Yesterday"
-msgstr "Gestern"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:450
+#: ui/pages/dashboard/activity/ActivityPage.tsx:356
 msgid "Link already active"
 msgstr "Link bereits aktiv"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:451
+#: ui/pages/dashboard/activity/ActivityPage.tsx:357
 msgid "This link is already active and does not need to be restored."
 msgstr "Dieser Link ist bereits aktiv und muss nicht wiederhergestellt werden."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:473
+#: ui/pages/dashboard/activity/ActivityPage.tsx:369
+msgid "Link permanently deleted"
+msgstr "Link dauerhaft gelöscht"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:378
+#: ui/pages/dashboard/links/LinksPage.tsx:238
+msgid "Link restored"
+msgstr "Link wiederhergestellt"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:379
 msgid "The link has been restored successfully."
 msgstr "Der Link wurde erfolgreich wiederhergestellt."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:477
+#: ui/pages/dashboard/activity/ActivityPage.tsx:383
 #: ui/pages/dashboard/links/LinksPage.tsx:243
 msgid "Unable to restore link"
 msgstr "Link konnte nicht wiederhergestellt werden"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:480
+#: ui/pages/dashboard/activity/ActivityPage.tsx:386
 msgid "Failed to restore link from activity record."
 msgstr "Wiederherstellung des Links aus dem Aktivitätseintrag fehlgeschlagen."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:653
-#: ui/pages/dashboard/activity/ActivityPage.tsx:681
-#: ui/pages/dashboard/activity/ActivityPage.tsx:711
+#: ui/pages/dashboard/activity/ActivityPage.tsx:538
+#: ui/pages/dashboard/activity/ActivityPage.tsx:566
+#: ui/pages/dashboard/activity/ActivityPage.tsx:596
 msgid "Activity deleted"
 msgstr "Aktivität gelöscht"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:654
+#: ui/pages/dashboard/activity/ActivityPage.tsx:539
 msgid "The activity log entry has been removed."
 msgstr "Der Aktivitätsprotokolleintrag wurde entfernt."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:658
-#: ui/pages/dashboard/activity/ActivityPage.tsx:689
-#: ui/pages/dashboard/activity/ActivityPage.tsx:716
+#: ui/pages/dashboard/activity/ActivityPage.tsx:543
+#: ui/pages/dashboard/activity/ActivityPage.tsx:574
+#: ui/pages/dashboard/activity/ActivityPage.tsx:601
 msgid "Unable to delete activity"
 msgstr "Aktivität konnte nicht gelöscht werden"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:661
+#: ui/pages/dashboard/activity/ActivityPage.tsx:546
 msgid "The activity log entry could not be removed."
 msgstr "Der Aktivitätsprotokolleintrag konnte nicht entfernt werden."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:683
+#: ui/pages/dashboard/activity/ActivityPage.tsx:568
 msgid "Deleted %s activity log entries."
 msgstr "%s Aktivitätsprotokolleinträge gelöscht."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:692
+#: ui/pages/dashboard/activity/ActivityPage.tsx:577
 msgid "The selected activity log entries could not be removed."
 msgstr "Die ausgewählten Aktivitätsprotokolleinträge konnten nicht entfernt werden."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:712
+#: ui/pages/dashboard/activity/ActivityPage.tsx:597
 msgid "All activity log entries have been removed."
 msgstr "Alle Aktivitätsprotokolleinträge wurden entfernt."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:719
+#: ui/pages/dashboard/activity/ActivityPage.tsx:604
 msgid "The activity logs could not be removed."
 msgstr "Die Aktivitätsprotokolle konnten nicht entfernt werden."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:745
-msgid "All activity"
-msgstr "Alle Aktivitäten"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:630
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:35
+#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:21
+msgid "All"
+msgstr "Alle"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:770
+#: ui/pages/dashboard/activity/ActivityPage.tsx:656
 msgid "Total events"
 msgstr "Ereignisse insgesamt"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:776
+#: ui/pages/dashboard/activity/ActivityPage.tsx:662
 msgid "Link events"
 msgstr "Link-Ereignisse"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:782
+#: ui/pages/dashboard/activity/ActivityPage.tsx:668
 msgid "User events"
 msgstr "Benutzer-Ereignisse"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:794
-msgid "Audit Log"
-msgstr "Audit-Protokoll"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:798
-msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
-msgstr "Überprüfen Sie Link-Änderungen und Benutzerverwaltungsereignisse an einem zentralen Ort mit Filtern, Zeitstempeln und Akteur-Details."
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:808
-#: ui/pages/dashboard/activity/ActivityPage.tsx:809
-msgid "Refresh activity history"
-msgstr "Aktivitätsverlauf aktualisieren"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:848
+#: ui/pages/dashboard/activity/ActivityPage.tsx:674
 msgid "Latest event"
 msgstr "Neuestes Ereignis"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:856
+#: ui/pages/dashboard/activity/ActivityPage.tsx:677
 msgid "No recent events"
 msgstr "Keine aktuellen Ereignisse"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:913
+#: ui/pages/dashboard/activity/ActivityPage.tsx:691
+msgid "Audit Log"
+msgstr "Audit-Protokoll"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:695
+msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
+msgstr "Überprüfen Sie Link-Änderungen und Benutzerverwaltungsereignisse an einem zentralen Ort mit Filtern, Zeitstempeln und Akteur-Details."
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:705
+#: ui/pages/dashboard/activity/ActivityPage.tsx:706
+msgid "Refresh activity history"
+msgstr "Aktivitätsverlauf aktualisieren"
+
+#: ui/pages/dashboard/activity/ActivityPage.tsx:811
 msgid "Activity history"
 msgstr "Aktivitätsverlauf"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:920
+#: ui/pages/dashboard/activity/ActivityPage.tsx:818
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:32
 msgid "%s selected"
 msgstr "%s ausgewählt"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:930
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1504
+#: ui/pages/dashboard/activity/ActivityPage.tsx:828
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1305
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:73
 msgid "Delete selected"
 msgstr "Ausgewählte löschen"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:938
+#: ui/pages/dashboard/activity/ActivityPage.tsx:836
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:82
 msgid "Delete all"
 msgstr "Alle löschen"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:962
+#: ui/pages/dashboard/activity/ActivityPage.tsx:867
 msgid "Select all events on this page"
 msgstr "Alle Ereignisse auf dieser Seite auswählen"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:969
+#: ui/pages/dashboard/activity/ActivityPage.tsx:874
 msgid "Event"
 msgstr "Ereignis"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:970
+#: ui/pages/dashboard/activity/ActivityPage.tsx:875
 msgid "Details"
 msgstr "Details"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:971
+#: ui/pages/dashboard/activity/ActivityPage.tsx:876
 msgid "When"
 msgstr "Wann"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1033
-msgid "Select %s events"
-msgstr "%s Ereignisse auswählen"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:986
+msgid "Actor: %s"
+msgstr "Akteur: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1103
+#: ui/pages/dashboard/activity/ActivityPage.tsx:998
 msgid "By"
 msgstr "Von"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1112
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:103
-msgid "Link"
-msgstr "Link"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1036
+msgid "User: %s"
+msgstr "Benutzer: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1122
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:105
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:117
-msgid "Destination"
-msgstr "Ziel-URL"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1055
+msgid "Location: %s"
+msgstr "Standort: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1142
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:273
-#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:117
-msgid "From"
-msgstr "Aus"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1268
-msgid "No additional details"
-msgstr "Keine weiteren Details"
-
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1346
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1355
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1150
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1159
 msgid "Link is already active"
 msgstr "Link ist bereits aktiv"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1349
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1358
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1153
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1162
 msgid "Restore link"
 msgstr "Link wiederherstellen"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1381
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1384
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1524
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1185
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1188
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1325
 msgid "Delete activity log"
 msgstr "Aktivitätsprotokoll löschen"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1413
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1214
 msgid "No user activity yet"
 msgstr "Noch keine Benutzeraktivität"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1415
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1216
 msgid "No link activity yet"
 msgstr "Noch keine Link-Aktivität"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1416
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1217
 msgid "No activity recorded yet"
 msgstr "Noch keine Aktivität aufgezeichnet"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1419
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1220
 msgid "Once users manage accounts or links change, the audit log will appear here."
 msgstr "Sobald Benutzer Konten verwalten oder Links ändern, erscheint das Audit-Protokoll hier."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1433
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1234
 msgid "Showing %1$s-%2$s of %3$s events"
 msgstr "Zeige %1$s–%2$s von %3$s Ereignissen"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1440
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1241
 msgid "Page %1$s of %2$s"
 msgstr "Seite %1$s von %2$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1456
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1257
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:40
 msgid "Previous"
 msgstr "Zurück"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1482
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1283
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:84
 msgid "Next"
 msgstr "Weiter"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1493
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1294
 msgid "Delete activity logs"
 msgstr "Aktivitätsprotokolle löschen"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1497
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1298
 msgid "Delete %s selected activity log entries? This action cannot be undone."
 msgstr "%s ausgewählte Aktivitätsprotokolleinträge löschen? Diese Aktion kann nicht rückgängig gemacht werden."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1512
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1516
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1313
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1317
 msgid "Delete all activity"
 msgstr "Alle Aktivitäten löschen"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1513
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1314
 msgid "Are you sure you want to delete all activity logs? This action cannot be undone."
 msgstr "Möchten Sie wirklich alle Aktivitätsprotokolle löschen? Diese Aktion kann nicht rückgängig gemacht werden."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1528
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1329
 msgid "Delete the activity entry \"%s\"? This action cannot be undone."
 msgstr "Aktivitätseintrag „%s“ löschen? Diese Aktion kann nicht rückgängig gemacht werden."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1535
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1336
 msgid "Delete activity"
 msgstr "Aktivität löschen"
 
@@ -6348,17 +6817,22 @@ msgstr "Dauerhaft löschen"
 msgid "Empty trash"
 msgstr "Papierkorb leeren"
 
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:103
+msgid "Link"
+msgstr "Link"
+
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:104
 msgid "Title"
 msgstr "Titel"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:107
-msgid "Performance"
-msgstr "Leistung"
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:105
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:117
+msgid "Destination"
+msgstr "Ziel-URL"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:109
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:35
-#: ui/pages/dashboard/users/UsersPage.tsx:561
+#: ui/pages/dashboard/users/UsersPage.tsx:685
 msgid "Created"
 msgstr "Erstellt"
 
@@ -6371,15 +6845,6 @@ msgstr "Im Papierkorb"
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:58
 msgid "Expired"
 msgstr "Abgelaufen"
-
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:96
-#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
-#: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:103
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:230
-#: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:307
-#: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:138
-msgid "Copied!"
-msgstr "Kopiert!"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:97
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
@@ -6698,11 +7163,6 @@ msgstr "Alle %s Städte anzeigen"
 msgid "All cities"
 msgstr "Alle Städte"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:35
-#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:21
-msgid "All"
-msgstr "Alle"
-
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:36
 #: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:22
 msgid "24h"
@@ -6743,6 +7203,11 @@ msgstr "Benutzerdefiniert"
 #: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:113
 msgid "Custom date range"
 msgstr "Benutzerdefinierter Zeitraum"
+
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:273
+#: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:117
+msgid "From"
+msgstr "Aus"
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:288
 msgid "Start date"
@@ -7215,6 +7680,10 @@ msgstr "Links konnten nicht wiederhergestellt werden"
 msgid "Failed to restore selected links."
 msgstr "Wiederherstellung der ausgewählten Links fehlgeschlagen."
 
+#: ui/pages/dashboard/links/LinksPage.tsx:268
+msgid "Trash emptied"
+msgstr "Papierkorb geleert"
+
 #: ui/pages/dashboard/links/LinksPage.tsx:269
 msgid "All trashed links have been permanently deleted."
 msgstr "Alle Links im Papierkorb wurden dauerhaft gelöscht."
@@ -7239,136 +7708,166 @@ msgstr "Elemente im Papierkorb werden unbegrenzt aufbewahrt, bis sie geleert wer
 msgid "Items in the trash will be automatically deleted after %d days."
 msgstr "Elemente im Papierkorb werden nach %d Tagen automatisch gelöscht."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:61
+#: ui/pages/dashboard/users/UsersPage.tsx:68
 msgid "Can manage users, settings, and all links."
 msgstr "Kann Benutzer, Einstellungen und alle Links verwalten."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:66
+#: ui/pages/dashboard/users/UsersPage.tsx:73
 msgid "Can create, edit, and delete site links without admin access."
 msgstr "Kann Website-Links erstellen, bearbeiten und löschen, ohne Zugriff auf Einstellungen."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:154
+#: ui/pages/dashboard/users/UsersPage.tsx:175
 msgid "Unable to save the user."
 msgstr "Benutzer konnte nicht gespeichert werden."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:171
-#: ui/pages/dashboard/users/UsersPage.tsx:498
+#: ui/pages/dashboard/users/UsersPage.tsx:192
+#: ui/pages/dashboard/users/UsersPage.tsx:585
 msgid "Add User"
 msgstr "Benutzer hinzufügen"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:172
+#: ui/pages/dashboard/users/UsersPage.tsx:193
 msgid "Edit User"
 msgstr "Benutzer bearbeiten"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:176
+#: ui/pages/dashboard/users/UsersPage.tsx:197
 msgid "Create a new account with admin or editor access."
 msgstr "Erstellen Sie ein neues Konto mit Administrator- oder Redakteurzugriff."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:179
+#: ui/pages/dashboard/users/UsersPage.tsx:200
 msgid "Update the account details and role for this user."
 msgstr "Kontodetails und Rolle für dieses Mitglied aktualisieren."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:261
+#: ui/pages/dashboard/users/UsersPage.tsx:209
+msgid "Close dialog"
+msgstr "Dialog schließen"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:283
 msgid "Leave blank to keep the current password."
 msgstr "Leer lassen, um das aktuelle Passwort beizubehalten."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:269
+#: ui/pages/dashboard/users/UsersPage.tsx:291
 msgid "Confirm Password"
 msgstr "Passwort bestätigen"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:282
+#: ui/pages/dashboard/users/UsersPage.tsx:304
 msgid "Re-enter the password to confirm it."
 msgstr "Geben Sie das Passwort zur Bestätigung erneut ein."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:285
+#: ui/pages/dashboard/users/UsersPage.tsx:307
 msgid "Re-enter the new password to confirm it."
 msgstr "Geben Sie das neue Passwort zur Bestätigung erneut ein."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:295
-#: ui/pages/dashboard/users/UsersPage.tsx:558
+#: ui/pages/dashboard/users/UsersPage.tsx:317
+#: ui/pages/dashboard/users/UsersPage.tsx:682
 msgid "Role"
 msgstr "Rolle"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:307
+#: ui/pages/dashboard/users/UsersPage.tsx:329
 msgid "User role"
 msgstr "Benutzerrolle"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:312
+#: ui/pages/dashboard/users/UsersPage.tsx:334
 msgid "Your own role is locked here."
 msgstr "Ihre eigene Rolle ist hier gesperrt."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:334
+#: ui/pages/dashboard/users/UsersPage.tsx:356
 msgid "Create User"
 msgstr "Benutzer erstellen"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:436
-msgid "%s was removed successfully."
-msgstr "%s wurde erfolgreich entfernt."
-
-#: ui/pages/dashboard/users/UsersPage.tsx:444
-msgid "Delete failed"
-msgstr "Löschen fehlgeschlagen"
-
-#: ui/pages/dashboard/users/UsersPage.tsx:447
-msgid "Unable to delete this user right now."
-msgstr "Dieser Benutzer kann derzeit nicht gelöscht werden."
-
-#: ui/pages/dashboard/users/UsersPage.tsx:474
-msgid "Only admin accounts can manage other users and their roles."
-msgstr "Nur Administratorkonten können andere Benutzer verwalten und Rollen zuweisen."
-
-#: ui/pages/dashboard/users/UsersPage.tsx:488
-msgid "User Access"
-msgstr "Benutzerzugriff"
-
-#: ui/pages/dashboard/users/UsersPage.tsx:492
-msgid "Manage the people who can access this installation. Admins control site-wide settings. Editors can create and maintain links."
-msgstr "Verwalten Sie die Personen, die Zugriff auf diese Installation haben. Administratoren steuern website-weite Einstellungen. Redakteure können Links erstellen und verwalten."
-
-#: ui/pages/dashboard/users/UsersPage.tsx:504
+#: ui/pages/dashboard/users/UsersPage.tsx:439
 msgid "Total Users"
 msgstr "Benutzer insgesamt"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:510
-msgid "Admins"
+#: ui/pages/dashboard/users/UsersPage.tsx:454
+msgid "Administrators"
 msgstr "Administratoren"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:516
+#: ui/pages/dashboard/users/UsersPage.tsx:458
+msgid "Full site & user management"
+msgstr "Vollständige Website- und Benutzerverwaltung"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:462
 msgid "Editors"
 msgstr "Redakteure"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:525
-msgid "Accounts"
-msgstr "Konten"
+#: ui/pages/dashboard/users/UsersPage.tsx:466
+msgid "Link creation & editing access"
+msgstr "Zugriff auf Linkerstellung und -bearbeitung"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:532
-msgid "Unable to load users."
-msgstr "Benutzer konnten nicht geladen werden."
+#: ui/pages/dashboard/users/UsersPage.tsx:470
+msgid "Latest Member"
+msgstr "Neuestes Mitglied"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:541
+#: ui/pages/dashboard/users/UsersPage.tsx:483
+#: ui/pages/dashboard/users/UsersPage.tsx:665
 msgid "No users yet"
 msgstr "Noch keine Benutzer vorhanden"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:544
+#: ui/pages/dashboard/users/UsersPage.tsx:521
+msgid "User deleted"
+msgstr "Benutzer gelöscht"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:523
+msgid "%s was removed successfully."
+msgstr "%s wurde erfolgreich entfernt."
+
+#: ui/pages/dashboard/users/UsersPage.tsx:531
+msgid "Delete failed"
+msgstr "Löschen fehlgeschlagen"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:534
+msgid "Unable to delete this user right now."
+msgstr "Dieser Benutzer kann derzeit nicht gelöscht werden."
+
+#: ui/pages/dashboard/users/UsersPage.tsx:561
+msgid "Only admin accounts can manage other users and their roles."
+msgstr "Nur Administratorkonten können andere Benutzer verwalten und Rollen zuweisen."
+
+#: ui/pages/dashboard/users/UsersPage.tsx:575
+msgid "User Management"
+msgstr "Benutzerverwaltung"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:579
+msgid "Manage user accounts and access permissions. Administrators have complete access to system settings, while Editors manage short links."
+msgstr "Verwalten Sie Benutzerkonten und Zugriffsberechtigungen. Administratoren haben vollständigen Zugriff auf die Systemeinstellungen, während Redakteure Kurzlinks verwalten."
+
+#: ui/pages/dashboard/users/UsersPage.tsx:642
+msgid "Accounts"
+msgstr "Konten"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:656
+msgid "Unable to load users."
+msgstr "Benutzer konnten nicht geladen werden."
+
+#: ui/pages/dashboard/users/UsersPage.tsx:668
 msgid "Add an admin or editor account to start sharing access."
 msgstr "Fügen Sie ein Administrator- oder Redakteurkonto hinzu, um den Zugriff zu teilen."
 
-#: ui/pages/dashboard/users/UsersPage.tsx:654
-#: ui/pages/dashboard/users/UsersPage.tsx:659
+#: ui/pages/dashboard/users/UsersPage.tsx:732
+msgid "You"
+msgstr "Sie"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:813
+#: ui/pages/dashboard/users/UsersPage.tsx:819
 msgid "Edit %s"
 msgstr "%s bearbeiten"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:672
-#: ui/pages/dashboard/users/UsersPage.tsx:677
+#: ui/pages/dashboard/users/UsersPage.tsx:851
+#: ui/pages/dashboard/users/UsersPage.tsx:866
+msgid "Cannot delete your own account"
+msgstr "Sie können Ihr eigenes Konto nicht löschen"
+
+#: ui/pages/dashboard/users/UsersPage.tsx:855
+#: ui/pages/dashboard/users/UsersPage.tsx:870
 msgid "Delete %s"
 msgstr "%s löschen"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:718
-#: ui/pages/dashboard/users/UsersPage.tsx:730
+#: ui/pages/dashboard/users/UsersPage.tsx:905
+#: ui/pages/dashboard/users/UsersPage.tsx:916
 msgid "Delete User"
 msgstr "Benutzer löschen"
 
-#: ui/pages/dashboard/users/UsersPage.tsx:722
+#: ui/pages/dashboard/users/UsersPage.tsx:909
 msgid "Delete %s? This will revoke their sessions, remove their API keys, and permanently delete their account."
 msgstr "%s löschen? Dadurch werden deren Sitzungen widerrufen, die API-Schlüssel entfernt und das Konto dauerhaft gelöscht."
 

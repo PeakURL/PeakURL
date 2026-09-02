@@ -53,6 +53,20 @@ final class Constants {
 	public const CONTENT_DIR = 'PEAKURL_CONTENT_DIR';
 	/** GeoIP database path key. */
 	public const GEOIP_DB_PATH = 'PEAKURL_GEOIP_DB_PATH';
+	/** Cache enabled flag key. */
+	public const CACHE_ENABLED = 'PEAKURL_CACHE_ENABLED';
+	/** Cache driver key (auto, redis, apcu, file, none). */
+	public const CACHE_DRIVER = 'PEAKURL_CACHE_DRIVER';
+	/** Cache storage path override key. */
+	public const CACHE_PATH = 'PEAKURL_CACHE_PATH';
+	/** Redis host key. */
+	public const REDIS_HOST = 'PEAKURL_REDIS_HOST';
+	/** Redis port key. */
+	public const REDIS_PORT = 'PEAKURL_REDIS_PORT';
+	/** Redis database index key. */
+	public const REDIS_DATABASE = 'PEAKURL_REDIS_DATABASE';
+	/** Redis password/auth key. */
+	public const REDIS_PASSWORD = 'PEAKURL_REDIS_PASSWORD';
 	/** Session cookie name key. */
 	public const SESSION_COOKIE_NAME = 'SESSION_COOKIE_NAME';
 	/** Session lifetime key. */
@@ -108,6 +122,13 @@ final class Constants {
 		self::UPDATE_MANIFEST_URL,
 		self::CONTENT_DIR,
 		self::GEOIP_DB_PATH,
+		self::CACHE_ENABLED,
+		self::CACHE_DRIVER,
+		self::CACHE_PATH,
+		self::REDIS_HOST,
+		self::REDIS_PORT,
+		self::REDIS_DATABASE,
+		self::REDIS_PASSWORD,
 		self::DB_HOST,
 		self::DB_PORT,
 		self::DB_DATABASE,
@@ -200,4 +221,30 @@ final class Constants {
 	public const SETTING_SITE_FAVICON = 'site_favicon_json';
 	/** Settings key storing the default social preview image metadata. */
 	public const SETTING_SOCIAL_PREVIEW_IMAGE = 'social_preview_image_json';
+	/** Settings key storing cache enabled status. */
+	public const SETTING_CACHE_ENABLED = 'cache_enabled';
+	/** Settings key storing preferred cache driver. */
+	public const SETTING_CACHE_DRIVER = 'cache_driver';
+	/** Settings key storing default link cache TTL in seconds. */
+	public const SETTING_CACHE_DEFAULT_TTL = 'cache_default_ttl';
+	/** Settings key storing negative cache TTL in seconds. */
+	public const SETTING_CACHE_NEGATIVE_TTL = 'cache_negative_ttl';
+	/** Cache format generation version. */
+	public const CACHE_VERSION = 1;
+	/** Default cache driver selection mode. */
+	public const CACHE_DEFAULT_DRIVER = 'auto';
+	/** Default cache enabled status. */
+	public const CACHE_DEFAULT_ENABLED = true;
+	/** Default public link TTL in seconds (1 hour). */
+	public const CACHE_LINK_TTL = 3600;
+	/** Default negative lookup TTL in seconds (60 seconds). */
+	public const CACHE_NEGATIVE_TTL = 60;
+	/** Default dashboard query TTL in seconds (60 seconds). */
+	public const CACHE_DASHBOARD_TTL = 60;
+	/** Default cache directory relative to content root. */
+	public const CACHE_DIRECTORY = 'cache';
+	/** Default Redis port. */
+	public const DEFAULT_REDIS_PORT = 6379;
+	/** Default Redis database index. */
+	public const DEFAULT_REDIS_DATABASE = 0;
 }

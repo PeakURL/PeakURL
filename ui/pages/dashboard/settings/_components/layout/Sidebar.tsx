@@ -7,6 +7,7 @@ import {
 	MapPin,
 	Globe,
 	Plug,
+	Zap,
 	Download,
 } from "lucide-react";
 import { Link } from "react-router";
@@ -24,6 +25,7 @@ const iconMap: Record<SettingsTabIcon, typeof Settings> = {
 	mapPin: MapPin,
 	globe: Globe,
 	plug: Plug,
+	zap: Zap,
 	download: Download,
 };
 

@@ -487,6 +487,10 @@ trait LinksTrait {
 
 		$url = $this->format_url( $this->find_url_row( $id ) );
 
+		$this->links_api->invalidate_link_cache( (string) ( $url['shortCode'] ?? '' ) );
+		$this->links_api->invalidate_link_cache( (string) ( $url['alias'] ?? '' ) );
+		$this->links_api->invalidate_link_cache( (string) ( $url['id'] ?? '' ) );
+
 		/**
 		 * Fires after a short link has been created.
 		 *
@@ -1287,6 +1291,9 @@ trait LinksTrait {
 
 		$url = $this->format_url( $updated_row );
 
+		$this->links_api->invalidate_link_cache( $existing );
+		$this->links_api->invalidate_link_cache( $updated_row );
+
 		/**
 		 * Fires after a short link has been updated.
 		 *
@@ -1381,6 +1388,8 @@ trait LinksTrait {
 			) > 0;
 
 			if ( $updated ) {
+				$this->links_api->invalidate_link_cache( $row );
+
 				$this->record_activity(
 					'link_trashed',
 					'Moved link "' . $link_title . '" to trash',
@@ -1462,6 +1471,8 @@ trait LinksTrait {
 		}
 
 		if ( $deleted ) {
+			$this->links_api->invalidate_link_cache( $row );
+
 			$this->social_preview_service->delete_link_image(
 				(string) ( $row['social_image_path'] ?? '' ),
 			);
@@ -1542,6 +1553,8 @@ trait LinksTrait {
 				'link' => $this->get_link_activity_meta( $row ),
 			),
 		);
+
+		$this->links_api->invalidate_link_cache( $row );
 
 		/**
 		 * Fires after a short link is restored from trash.
@@ -1655,6 +1668,7 @@ trait LinksTrait {
 				);
 
 				$trashed_ids[] = $row_id;
+				$this->links_api->invalidate_link_cache( $row );
 
 				/**
 				 * Fires after a short link is moved to trash.
@@ -1715,6 +1729,8 @@ trait LinksTrait {
 			);
 
 			foreach ( $target_rows as $deleted_row ) {
+				$this->links_api->invalidate_link_cache( $deleted_row );
+
 				/**
 				 * Fires after a short link is permanently deleted.
 				 *
@@ -1824,6 +1840,8 @@ trait LinksTrait {
 				),
 			);
 
+			$this->links_api->invalidate_link_cache( $row );
+
 			/**
 			 * Fires after a short link is restored from trash.
 			 *
@@ -1911,6 +1929,10 @@ trait LinksTrait {
 		$this->social_preview_service->delete_link_images(
 			array_column( $target_rows, 'social_image_path' ),
 		);
+
+		foreach ( $target_rows as $row ) {
+			$this->links_api->invalidate_link_cache( $row );
+		}
 
 		return $deleted_count;
 	}

@@ -5,7 +5,7 @@
 
 	/* Hero Section */
 	.system-status-page-hero {
-		@apply flex items-start justify-between gap-3 px-1 pt-1;
+		@apply flex flex-col gap-3.5 sm:flex-row sm:items-center sm:justify-between px-1 pt-1;
 	}
 
 	.system-status-page-hero-copy {
@@ -27,17 +27,17 @@
 	}
 
 	.system-status-page-hero-actions {
-		@apply shrink-0 pt-1;
+		@apply flex items-center gap-2 w-full sm:w-auto shrink-0;
 	}
 
 	/* Operational Status Banner */
 	.system-status-page-banner {
-		@apply relative overflow-hidden rounded-xl border p-5 sm:p-6 shadow-xs transition-all duration-200;
+		@apply relative overflow-hidden rounded-xl border p-4 sm:p-6 shadow-xs transition-all duration-200;
 		text-align: start;
 	}
 
 	.system-status-page-banner-ok {
-		@apply border-emerald-200 bg-emerald-50/80 hover:border-emerald-300 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:hover:border-emerald-500/40;
+		@apply border-emerald-200 bg-emerald-50 dark:border-emerald-800/60 dark:bg-emerald-950/40;
 	}
 
 	.system-status-page-banner-ok .system-status-page-banner-title {
@@ -46,10 +46,6 @@
 
 	.system-status-page-banner-ok .system-status-page-banner-description {
 		@apply text-emerald-800/90 dark:text-emerald-200/90;
-	}
-
-	.system-status-page-banner-ok .system-status-page-banner-footer {
-		@apply border-emerald-200/80 dark:border-emerald-500/20;
 	}
 
 	.system-status-page-banner-ok .system-status-page-banner-timestamp {
@@ -61,7 +57,7 @@
 	}
 
 	.system-status-page-banner-warning {
-		@apply border-amber-200 bg-amber-50/80 hover:border-amber-300 dark:border-amber-500/30 dark:bg-amber-500/10 dark:hover:border-amber-500/40;
+		@apply border-amber-200 bg-amber-50 dark:border-amber-800/60 dark:bg-amber-950/40;
 	}
 
 	.system-status-page-banner-warning .system-status-page-banner-title {
@@ -70,10 +66,6 @@
 
 	.system-status-page-banner-warning .system-status-page-banner-description {
 		@apply text-amber-800/90 dark:text-amber-200/90;
-	}
-
-	.system-status-page-banner-warning .system-status-page-banner-footer {
-		@apply border-amber-200/80 dark:border-amber-500/20;
 	}
 
 	.system-status-page-banner-warning .system-status-page-banner-timestamp {
@@ -86,7 +78,7 @@
 	}
 
 	.system-status-page-banner-error {
-		@apply border-rose-200 bg-rose-50/80 hover:border-rose-300 dark:border-rose-500/30 dark:bg-rose-500/10 dark:hover:border-rose-500/40;
+		@apply border-rose-200 bg-rose-50 dark:border-rose-800/60 dark:bg-rose-950/40;
 	}
 
 	.system-status-page-banner-error .system-status-page-banner-title {
@@ -95,10 +87,6 @@
 
 	.system-status-page-banner-error .system-status-page-banner-description {
 		@apply text-rose-800/90 dark:text-rose-200/90;
-	}
-
-	.system-status-page-banner-error .system-status-page-banner-footer {
-		@apply border-rose-200/80 dark:border-rose-500/20;
 	}
 
 	.system-status-page-banner-error .system-status-page-banner-timestamp {
@@ -118,11 +106,11 @@
 	}
 
 	.system-status-page-banner-copy {
-		@apply min-w-0 flex-1 space-y-1;
+		@apply min-w-0 flex-1 space-y-2;
 	}
 
 	.system-status-page-banner-title {
-		@apply text-lg sm:text-xl font-bold tracking-tight text-heading;
+		@apply text-base sm:text-lg font-bold tracking-tight text-heading;
 	}
 
 	.system-status-page-banner-description {
@@ -130,7 +118,7 @@
 	}
 
 	.system-status-page-banner-footer {
-		@apply mt-5 pt-4 border-t border-stroke/50 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between;
+		@apply mt-2 pt-2 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between;
 	}
 
 	.system-status-page-banner-pills {
@@ -138,7 +126,7 @@
 	}
 
 	.system-status-page-pill {
-		@apply inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold;
+		@apply inline-flex items-center gap-1.5 rounded-md px-2.5 py-0.5 text-xs font-semibold;
 	}
 
 	.system-status-page-pill-ok {
@@ -154,7 +142,7 @@
 	}
 
 	.system-status-page-banner-timestamp {
-		@apply flex flex-wrap items-center gap-1.5 text-xs text-text-muted;
+		@apply flex items-center gap-1.5 text-xs self-end sm:self-auto;
 	}
 
 	.system-status-page-banner-timestamp-icon {
@@ -179,16 +167,16 @@
 	}
 
 	.system-status-page-subsystems-grid {
-		@apply grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3;
+		@apply grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4;
 	}
 
 	.system-status-page-subsystem-card {
-		@apply flex items-center justify-between gap-3 rounded-lg border border-stroke bg-surface p-3.5 shadow-2xs transition-all duration-200 hover:border-stroke-strong hover:shadow-xs;
+		@apply flex items-center justify-between gap-3 rounded-xl border border-stroke bg-surface p-3.5 shadow-2xs transition-all duration-200 hover:border-stroke-strong hover:shadow-xs;
 		text-align: start;
 	}
 
 	.system-status-page-subsystem-icon {
-		@apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface-alt text-text-muted border border-stroke/40;
+		@apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface-alt text-text-muted border border-stroke/50;
 	}
 
 	.system-status-page-subsystem-info {
@@ -208,19 +196,19 @@
 	}
 
 	.system-status-page-subsystem-badge {
-		@apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-medium;
+		@apply inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-medium;
 	}
 
 	.system-status-page-subsystem-badge-ok {
-		@apply bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400;
+		@apply bg-emerald-500/10 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300;
 	}
 
 	.system-status-page-subsystem-badge-warning {
-		@apply bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400;
+		@apply bg-amber-500/10 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300;
 	}
 
 	.system-status-page-subsystem-badge-error {
-		@apply bg-rose-500/10 text-rose-600 dark:bg-rose-500/20 dark:text-rose-400;
+		@apply bg-rose-500/10 text-rose-700 dark:bg-rose-500/20 dark:text-rose-300;
 	}
 
 	.system-status-page-subsystem-dot {
@@ -239,17 +227,13 @@
 		@apply bg-rose-500;
 	}
 
-	/* Toolbar & Tabs */
-	.system-status-page-toolbar {
-		@apply flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-1;
-	}
-
+	/* Segmented Tabs & Copy Button */
 	.system-status-page-tabs {
-		@apply grid grid-cols-2 sm:inline-flex sm:w-auto w-full items-center gap-1 rounded-xl bg-surface-alt p-1 border border-stroke/60;
+		@apply flex-1 sm:flex-initial grid grid-cols-2 sm:inline-flex items-center gap-1 rounded-lg bg-surface-alt p-1 border border-stroke/70 shadow-2xs;
 	}
 
 	.system-status-page-tab {
-		@apply inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-lg px-3 sm:px-4 py-1.5 text-xs font-medium text-text-muted transition-colors hover:text-heading focus:outline-none whitespace-nowrap;
+		@apply flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-text-muted transition-all duration-200 ease-in-out focus:outline-none whitespace-nowrap;
 	}
 
 	.system-status-page-tab-active {
@@ -257,11 +241,30 @@
 	}
 
 	.system-status-page-tab-inactive {
-		@apply text-text-muted hover:text-heading;
+		@apply text-text-muted hover:text-heading hover:bg-surface/50;
 	}
 
 	.system-status-page-copy-button {
-		@apply inline-flex items-center justify-center gap-2 rounded-lg border border-stroke bg-surface px-3.5 py-1.5 text-xs font-medium text-heading shadow-2xs transition-all hover:border-accent/30 hover:text-accent hover:shadow-xs active:shadow-2xs;
+		@apply inline-flex items-center justify-center gap-1.5 rounded-lg border border-stroke bg-surface px-3 py-1.5 text-xs font-medium text-heading shadow-2xs transition-all hover:border-accent/30 hover:text-accent hover:shadow-xs active:shadow-2xs;
+	}
+
+	/* Info View Header */
+	.system-status-page-info-header {
+		@apply flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-1 pb-1;
+	}
+
+	.system-status-page-info-header-copy {
+		@apply min-w-0 flex flex-col;
+		text-align: start;
+	}
+
+	.system-status-page-info-header-title {
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.system-status-page-info-header-summary {
+		@apply mt-0.5 text-xs text-text-muted;
+		text-align: start;
 	}
 
 	/* Content Views */
@@ -269,14 +272,13 @@
 		@apply space-y-4 sm:space-y-5;
 	}
 
-	.system-status-page-view,
-	.system-status-page-view-compact {
+	.system-status-page-view {
 		@apply space-y-4 sm:space-y-5;
 	}
 
 	/* Panels */
 	.system-status-page-panel {
-		@apply overflow-hidden rounded-lg border border-stroke bg-surface shadow-xs transition-all duration-200 hover:border-stroke-strong;
+		@apply overflow-hidden rounded-xl border border-stroke bg-surface shadow-xs transition-all duration-200 hover:border-stroke-strong;
 	}
 
 	.system-status-page-panel-header {
@@ -350,7 +352,7 @@
 
 	/* Passed Checks Section */
 	.system-status-page-passed-panel {
-		@apply overflow-hidden rounded-lg border border-stroke bg-surface shadow-xs transition-all duration-200 hover:border-stroke-strong;
+		@apply overflow-hidden rounded-xl border border-stroke bg-surface shadow-xs transition-all duration-200 hover:border-stroke-strong;
 	}
 
 	.system-status-page-passed-toggle {
@@ -358,7 +360,7 @@
 	}
 
 	.system-status-page-passed-toggle-content {
-		@apply flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-semibold;
+		@apply flex items-center gap-2 text-heading font-semibold;
 	}
 
 	/* Info Sections */
@@ -367,7 +369,7 @@
 	}
 
 	.system-status-page-info-panel {
-		@apply overflow-hidden rounded-lg border border-stroke bg-surface shadow-xs transition-all duration-200 hover:border-stroke-strong;
+		@apply overflow-hidden rounded-xl border border-stroke bg-surface shadow-xs transition-all duration-200 hover:border-stroke-strong;
 	}
 
 	.system-status-page-info-toggle {
@@ -412,7 +414,7 @@
 
 	/* Error State */
 	.system-status-page-error {
-		@apply rounded-lg border border-rose-200 bg-rose-50 p-4 text-xs text-rose-800 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-200;
+		@apply rounded-xl border border-rose-200 bg-rose-50 p-4 text-xs text-rose-800 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-200;
 	}
 
 	.system-status-page-error-layout {
@@ -434,10 +436,5 @@
 
 	.system-status-page-error-summary {
 		@apply leading-relaxed;
-	}
-
-	.system-status-page-ok-panel {
-		@apply rounded-lg border border-emerald-200 bg-emerald-50/70 p-4 text-xs text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200;
-		text-align: start;
 	}
 }

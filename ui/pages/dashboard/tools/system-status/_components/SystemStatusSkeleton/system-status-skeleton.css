@@ -5,7 +5,7 @@
 
 	/* Hero Skeleton */
 	.system-status-skeleton-hero {
-		@apply flex items-start justify-between gap-3 px-1 pt-1;
+		@apply flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between px-1 pt-1;
 	}
 
 	.system-status-skeleton-hero-copy {
@@ -25,13 +25,17 @@
 		@apply mt-2 h-4 w-72 max-w-full rounded;
 	}
 
+	.system-status-skeleton-hero-actions {
+		@apply flex items-center gap-2 w-full sm:w-auto shrink-0;
+	}
+
 	.system-status-skeleton-refresh {
-		@apply h-10 w-10 shrink-0 rounded-full mt-1;
+		@apply h-9 w-9 shrink-0 rounded-lg;
 	}
 
 	/* Operational Status Banner Skeleton */
 	.system-status-skeleton-banner {
-		@apply rounded-xl border border-stroke bg-surface p-5 sm:p-6 shadow-xs;
+		@apply rounded-xl border border-stroke bg-surface p-4 sm:p-6 shadow-xs;
 	}
 
 	.system-status-skeleton-banner-main {
@@ -55,7 +59,7 @@
 	}
 
 	.system-status-skeleton-banner-footer {
-		@apply mt-5 pt-4 border-t border-stroke/50 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between;
+		@apply mt-2 pt-2 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between;
 	}
 
 	.system-status-skeleton-banner-pills {
@@ -67,7 +71,7 @@
 	}
 
 	.system-status-skeleton-banner-timestamp {
-		@apply h-4 w-48 rounded;
+		@apply h-4 w-36 rounded self-end sm:self-auto;
 	}
 
 	/* Subsystems Component Grid Skeleton */
@@ -88,11 +92,11 @@
 	}
 
 	.system-status-skeleton-subsystems-grid {
-		@apply grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3;
+		@apply grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4;
 	}
 
 	.system-status-skeleton-subsystem-card {
-		@apply flex items-center justify-between gap-3 rounded-lg border border-stroke bg-surface p-3.5;
+		@apply flex items-center justify-between gap-3 rounded-xl border border-stroke bg-surface p-3.5;
 	}
 
 	.system-status-skeleton-subsystem-icon {
@@ -112,25 +116,21 @@
 	}
 
 	.system-status-skeleton-subsystem-badge {
-		@apply h-5 w-20 rounded-full shrink-0;
+		@apply h-5 w-16 rounded-full shrink-0;
 	}
 
-	/* Toolbar Tabs Skeleton */
-	.system-status-skeleton-toolbar {
-		@apply flex px-1;
-	}
-
+	/* Segmented Tabs Skeleton */
 	.system-status-skeleton-tabs {
-		@apply grid grid-cols-2 sm:inline-flex sm:w-auto w-full items-center gap-1 rounded-xl bg-surface-alt p-1 border border-stroke/60;
+		@apply flex-1 sm:flex-initial grid grid-cols-2 sm:inline-flex items-center gap-1 rounded-lg bg-surface-alt p-1 border border-stroke/70;
 	}
 
 	.system-status-skeleton-tab {
-		@apply h-8 w-full sm:w-24 rounded-lg;
+		@apply h-7 w-full sm:w-20 rounded-md;
 	}
 
 	/* Panel Skeleton */
 	.system-status-skeleton-panel {
-		@apply overflow-hidden rounded-lg border border-stroke bg-surface shadow-xs;
+		@apply overflow-hidden rounded-xl border border-stroke bg-surface shadow-xs;
 	}
 
 	.system-status-skeleton-panel-header {

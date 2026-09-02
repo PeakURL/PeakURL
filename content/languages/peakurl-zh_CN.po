@@ -6,8 +6,8 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-02 00:24+0000\n"
-"POT-Creation-Date: 2026-09-02 00:24+0000\n"
+"PO-Revision-Date: 2026-09-02 09:50+0000\n"
+"POT-Creation-Date: 2026-09-02 09:50+0000\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Project-Id-Version: PeakURL 1.6.0\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
@@ -1891,7 +1891,7 @@ msgid "Connection details"
 msgstr "连接详情"
 
 #: site/setup-config.php:820
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:743
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:742
 msgid "Host"
 msgstr "主机"
 
@@ -1900,7 +1900,7 @@ msgid "Advanced"
 msgstr "高级"
 
 #: site/setup-config.php:828
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:745
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:744
 msgid "Port"
 msgstr "端口"
 
@@ -2158,7 +2158,7 @@ msgstr "确认"
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:370
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:494
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:63
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:508
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:509
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1486
 #: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:122
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:156
@@ -2667,7 +2667,7 @@ msgstr "感谢您选择 %s。"
 #: ui/pages/layout/dashboard/Layout/Layout.tsx:110
 #: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:42
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:561
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:740
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:739
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:61
 #: ui/pages/dashboard/about/AboutPage.tsx:230
 #: ui/pages/dashboard/about/AboutPage.tsx:406
@@ -2920,6 +2920,8 @@ msgid "PeakURL %s is ready to install."
 msgstr "PeakURL %s 已准备好安装。"
 
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:497
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:185
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:772
 msgid "Up to date"
 msgstr "已是最新版本"
 
@@ -3400,13 +3402,13 @@ msgstr "上次生成时间："
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:93
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:123
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:561
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:689
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:693
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:701
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:737
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:741
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:761
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:767
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:688
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:692
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:700
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:736
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:740
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:760
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:766
 #: ui/pages/dashboard/activity/ActivityPage.tsx:123
 #: ui/pages/dashboard/activity/ActivityPage.tsx:165
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:53
@@ -3474,7 +3476,6 @@ msgid "Last active"
 msgstr "上次活跃"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:79
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:773
 msgid "Current"
 msgstr "当前"
 
@@ -3772,7 +3773,7 @@ msgstr "下载数据库"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:153
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:193
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:825
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:824
 #: ui/pages/dashboard/tools/import/_components/results/ImportDetails.tsx:32
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:64
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:43
@@ -3783,18 +3784,18 @@ msgstr "状态"
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:154
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:184
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:182
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:790
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:827
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:789
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:826
 msgid "Ready"
 msgstr "就绪"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:154
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:828
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:827
 msgid "Setup Required"
 msgstr "需要设置"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:157
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:831
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:830
 msgid "Database Updated"
 msgstr "数据库已更新"
 
@@ -3805,7 +3806,7 @@ msgid "Never"
 msgstr "从不"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:170
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:839
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:838
 msgid "Database Size"
 msgstr "数据库大小"
 
@@ -3813,10 +3814,10 @@ msgstr "数据库大小"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:61
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:257
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:592
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:748
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:818
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:835
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:842
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:747
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:817
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:834
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:841
 msgid "Not available"
 msgstr "不可用"
 
@@ -3854,7 +3855,7 @@ msgid "PeakURL stores these values encrypted in the database so it can refresh t
 msgstr "PeakURL 在数据库中加密存储这些值，以便日后刷新 GeoLite2 City 数据库时无需再次询问。"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:233
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:854
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:853
 msgid "Account ID"
 msgstr "账户 ID"
 
@@ -3954,7 +3955,7 @@ msgid "Attention Needed"
 msgstr "需要注意"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:175
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:772
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:771
 msgid "Upgrade Recommended"
 msgstr "建议升级"
 
@@ -3965,10 +3966,6 @@ msgstr "建议升级数据库"
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:177
 msgid "The database needs attention before every runtime path is fully current."
 msgstr "数据库需要升级，以确保所有运行时功能处于最新状态。"
-
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:185
-msgid "Up to Date"
-msgstr "最新状态"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:186
 msgid "Database schema is up to date"
@@ -4035,12 +4032,12 @@ msgid "Run Database Upgrade"
 msgstr "运行数据库升级"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:66
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:758
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:757
 msgid "Recorded Schema"
 msgstr "已记录架构"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:73
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:764
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:763
 msgid "Required Schema"
 msgstr "所需架构"
 
@@ -4129,8 +4126,8 @@ msgstr "使用 Cloudflare Turnstile 网站密钥和通信密钥进行托管质�
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:162
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:120
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:754
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:806
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:753
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:805
 msgid "None"
 msgstr "无"
 
@@ -4145,7 +4142,7 @@ msgstr "粘贴来自验证码服务商的通信密钥。"
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:176
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:182
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:585
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:813
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:812
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:894
 msgid "Disabled"
 msgstr "已禁用"
@@ -4155,9 +4152,9 @@ msgid "Editing"
 msgstr "正在编辑"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:185
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:798
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:802
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:855
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:797
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:801
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:854
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:964
 msgid "Not configured"
 msgstr "未配置"
@@ -4616,150 +4613,152 @@ msgid "Disabled (Direct Database Queries)"
 msgstr "已禁用 (直接数据库查询)"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:184
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:878
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:877
 msgid "Redis"
 msgstr "Redis"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:186
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:880
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:879
 msgid "APCu"
 msgstr "APCu"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:188
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:882
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:881
 msgid "Filesystem"
 msgstr "文件系统"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:190
-msgid "Disabled / Direct Database"
-msgstr "已禁用 / 直接数据库"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:505
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:883
+msgid "Direct Database"
+msgstr "直接数据库"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:271
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:272
 msgid "Performance & Caching"
 msgstr "性能与缓存"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:274
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:275
 msgid "Configure object caching backends and Time-to-Live (TTL) policies to optimize link redirection latency and throughput."
 msgstr "配置对象缓存后端和生存时间 (TTL) 策略，以优化短链接重定向延迟和吞吐量。"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:291
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:507
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:292
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:508
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:930
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1485
 msgid "Purge Cache"
 msgstr "清除缓存"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:299
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:300
 msgid "Active Engine"
 msgstr "当前运行引擎"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:303
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:304
 msgid "Cache Footprint"
 msgstr "缓存内存占用"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:304
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:305
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:911
 msgid "0 B"
 msgstr "0 B"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:308
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:309
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:935
 msgid "Default TTL"
 msgstr "默认 TTL"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:317
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:318
 msgid "Cache status unavailable"
 msgstr "缓存状态不可用"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:334
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:335
 msgid "Object cache is operational"
 msgstr "对象缓存运行正常"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:336
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:337
 msgid "Fallback cache driver active"
 msgstr "后备缓存驱动程序已激活"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:337
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:338
 msgid "Object cache is disabled"
 msgstr "对象缓存已禁用"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:342
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:343
 msgid "Object caching is active and serving link redirects via the %s backend."
 msgstr "对象缓存已激活，正在通过 %s 后端处理链接重定向。"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:349
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:350
 msgid "The preferred cache driver is currently unavailable. PeakURL has automatically fallen back to %s."
 msgstr "首选缓存驱动当前不可用。PeakURL 已自动切换到 %s。"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:354
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:355
 msgid "Object caching is disabled. Link lookups and redirects are served directly from the database."
 msgstr "对象缓存已禁用。链接查询和重定向将直接通过数据库处理。"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:366
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:367
 msgid "Cache Engine Settings"
 msgstr "缓存引擎设置"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:370
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:371
 msgid "Select your preferred caching backend. PeakURL automatically selects the highest performance operational backend if the preferred driver is unavailable."
 msgstr "选择首选的缓存后端。如果首选驱动不可用，PeakURL 会自动选择性能最高的可用运行后端。"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:378
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:384
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:379
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:385
 msgid "Preferred Cache Driver"
 msgstr "首选缓存驱动"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:388
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:389
 msgid "PeakURL prioritizes Redis if configured, APCu if loaded, and Filesystem storage as the universal fallback."
 msgstr "PeakURL 优先使用 Redis (若已配置)、APCu (若已加载)，并使用文件系统存储作为通用后备方案。"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:396
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:404
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:397
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:405
 msgid "Redirect Cache TTL"
 msgstr "重定向缓存 TTL"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:408
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:409
 msgid "Time-to-Live duration for caching active short URL redirect destinations."
 msgstr "缓存有效短链接重定向目标的生存时间 (TTL)。"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:420
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:421
 msgid "Custom Redirect TTL (seconds)"
 msgstr "自定义重定向 TTL (秒)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:425
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:426
 msgid "Enter the redirect destination cache lifetime in seconds."
 msgstr "输入重定向目标缓存有效时间 (以秒为单位)。"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:435
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:443
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:436
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:444
 msgid "Negative Lookup (404) TTL"
 msgstr "否定查找 (404) TTL"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:447
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:448
 msgid "Time-to-Live duration for caching non-existent link lookups to mitigate database load from automated scans."
 msgstr "缓存不存在链接查找结果的生存时间 (TTL)，以减轻自动化扫描给数据库带来的负载。"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:459
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:460
 msgid "Custom Negative TTL (seconds)"
 msgstr "自定义否定查找 TTL (秒)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:464
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:465
 msgid "Enter the 404 negative lookup cache lifetime in seconds."
 msgstr "输入 404 否定查找缓存有效时间 (以秒为单位)。"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:484
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:485
 msgid "Reset"
 msgstr "重置"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:494
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:495
 msgid "Save Performance Settings"
 msgstr "保存性能设置"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:503
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:504
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1481
 msgid "Purge Object Cache"
 msgstr "清除对象缓存"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:504
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:505
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1482
 msgid "Are you sure you want to purge the object cache? All cached redirect records, in-memory objects, and temporary cache files will be immediately invalidated. Subsequent requests will query the database to rebuild the cache."
 msgstr "确定要清除对象缓存吗？所有已缓存的重定向记录、内存对象和临时缓存文件将立即失效。后续请求将直接查询数据库以重新构建缓存。"
@@ -4806,7 +4805,7 @@ msgid "SMTP Configuration"
 msgstr "SMTP 配置"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:255
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:795
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:794
 msgid "From Name"
 msgstr "发件人名称"
 
@@ -4815,7 +4814,7 @@ msgid "PeakURL"
 msgstr "PeakURL"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:266
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:794
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:793
 msgid "From Email"
 msgstr "发件人邮箱"
 
@@ -4824,7 +4823,7 @@ msgid "noreply@yourdomain.com"
 msgstr "noreply@yourdomain.com"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:282
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:797
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:796
 msgid "SMTP Host"
 msgstr "SMTP 主机"
 
@@ -4833,12 +4832,12 @@ msgid "smtp.example.com"
 msgstr "smtp.example.com"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:297
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:801
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:800
 msgid "SMTP Port"
 msgstr "SMTP 端口"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:314
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:805
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:804
 msgid "Encryption"
 msgstr "加密方式"
 
@@ -4847,7 +4846,7 @@ msgid "SMTP encryption"
 msgstr "SMTP 加密方式"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:330
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:809
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:808
 msgid "Authentication"
 msgstr "身份验证"
 
@@ -4913,12 +4912,12 @@ msgid "Performance"
 msgstr "表现"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:69
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:849
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:848
 msgid "Yes"
 msgstr "是"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:69
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:850
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:849
 msgid "No"
 msgstr "否"
 
@@ -5000,10 +4999,6 @@ msgstr "文件系统缓存"
 msgid "Cache Disabled"
 msgstr "缓存已禁用"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:505
-msgid "Direct Database"
-msgstr "直接数据库"
-
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:510
 msgid "File Storage"
 msgstr "文件存储"
@@ -5023,7 +5018,7 @@ msgstr "PHP 运行环境"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:528
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:531
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:688
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:687
 msgid "Web Server"
 msgstr "Web 服务器"
 
@@ -5041,8 +5036,8 @@ msgstr "版本与更新"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:556
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:577
-msgid "Packaged Release"
-msgstr "打包发布版"
+msgid "Production Release"
+msgstr "正式发布版"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:567
 msgid "Environment"
@@ -5057,191 +5052,187 @@ msgid "Install Type"
 msgstr "安装类型"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:578
-msgid "Source Checkout"
-msgstr "源码版本"
+msgid "Source code"
+msgstr ""
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:581
 msgid "Debug Mode"
 msgstr "调试模式"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:584
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:812
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:811
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:893
 msgid "Enabled"
 msgstr "已启用"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:599
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:598
 msgid "Content Directory"
 msgstr "内容目录"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:605
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:666
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:604
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:665
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:952
 msgid "Writable"
 msgstr "可写"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:606
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:667
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:605
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:666
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:953
 msgid "Not Writable"
 msgstr "不可写"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:613
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:631
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:642
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:713
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:721
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:729
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:612
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:630
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:641
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:712
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:720
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:728
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:980
 msgid "Missing"
 msgstr "缺失"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:617
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:616
 msgid "Languages Directory"
 msgstr "语言包目录"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:622
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:651
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:861
+msgid "Readable"
+msgstr "可读"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:623
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:652
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:862
-msgid "Readable"
-msgstr "可读"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:624
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:653
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:863
 msgid "Not Readable"
 msgstr "不可读"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:635
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:634
 msgid "Config File"
 msgstr "配置文件"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:639
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:638
 msgid "Present"
 msgstr "存在"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:646
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:645
 msgid "Debug Log"
 msgstr "调试日志"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:657
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:656
 msgid "Not created yet"
 msgstr "尚未创建"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:661
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:660
 msgid "App Directory"
 msgstr "App 目录"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:674
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:673
 msgid "Release Root"
 msgstr "发布根目录"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:685
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:684
 msgid "PHP Version"
 msgstr "PHP 版本"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:686
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:685
 msgid "PHP SAPI"
 msgstr "PHP SAPI"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:692
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:691
 msgid "Operating System"
 msgstr "操作系统"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:695
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:694
 msgid "Timezone"
 msgstr "时区"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:696
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:695
 msgid "Memory Limit"
 msgstr "内存限制"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:698
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:697
 msgid "Max Execution Time"
 msgstr "最大执行时间"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:704
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:703
 msgid "Upload Max Filesize"
 msgstr "上传文件最大大小"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:707
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:706
 msgid "POST Max Size"
 msgstr "POST 最大大小"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:709
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:708
 msgid "Intl Extension"
 msgstr "Intl 扩展"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:712
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:720
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:728
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:711
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:719
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:727
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:979
 msgid "Available"
 msgstr "可用"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:717
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:716
 msgid "cURL Extension"
 msgstr "cURL 扩展"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:725
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:724
 msgid "ZipArchive"
 msgstr "ZipArchive 扩展"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:736
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:735
 msgid "Database Server"
 msgstr "数据库服务器"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:750
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:749
 msgid "Database Name"
 msgstr "数据库名称"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:751
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:750
 msgid "Charset"
 msgstr "字符集"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:753
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:752
 msgid "Table Prefix"
 msgstr "数据表前缀"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:770
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:769
 msgid "Schema Status"
 msgstr "架构状态"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:777
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:776
 msgid "%s schema issue(s) detected"
 msgstr "检测到 %s 个架构问题"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:785
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:784
 msgid "Mail Transport"
 msgstr "邮件传输方式"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:787
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:786
 msgid "Transport Ready"
 msgstr "传输就绪"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:791
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:790
 msgid "Needs Setup"
 msgstr "需要设置"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:817
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:816
 msgid "Settings Storage"
 msgstr "设置存储"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:846
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:845
 msgid "Credentials Saved"
 msgstr "凭据已保存"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:858
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:857
 msgid "Database Path"
 msgstr "数据库路径"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:868
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:867
 msgid "Refresh Command"
 msgstr "刷新命令"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:884
-msgid "None / Direct DB"
-msgstr "无 / 直接数据库"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:898
 msgid "Active Driver"

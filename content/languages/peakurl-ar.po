@@ -6,8 +6,8 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-02 00:24+0000\n"
-"POT-Creation-Date: 2026-09-02 00:24+0000\n"
+"PO-Revision-Date: 2026-09-02 09:50+0000\n"
+"POT-Creation-Date: 2026-09-02 09:50+0000\n"
 "Plural-Forms: nplurals=6; plural=n == 0 ? 0 : n == 1 ? 1 : n == 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 && n % 100 <= 99 ? 4 : 5;\n"
 "Project-Id-Version: PeakURL 1.6.0\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
@@ -1891,7 +1891,7 @@ msgid "Connection details"
 msgstr "تفاصيل الاتصال"
 
 #: site/setup-config.php:820
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:743
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:742
 msgid "Host"
 msgstr "المضيف"
 
@@ -1900,7 +1900,7 @@ msgid "Advanced"
 msgstr "متقدم"
 
 #: site/setup-config.php:828
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:745
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:744
 msgid "Port"
 msgstr "المنفذ"
 
@@ -2158,7 +2158,7 @@ msgstr "تأكيد"
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:370
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:494
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:63
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:508
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:509
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1486
 #: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:122
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:156
@@ -2667,7 +2667,7 @@ msgstr "شكرًا لاختيارك %s."
 #: ui/pages/layout/dashboard/Layout/Layout.tsx:110
 #: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:42
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:561
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:740
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:739
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:61
 #: ui/pages/dashboard/about/AboutPage.tsx:230
 #: ui/pages/dashboard/about/AboutPage.tsx:406
@@ -2920,6 +2920,8 @@ msgid "PeakURL %s is ready to install."
 msgstr "PeakURL %s جاهز للتثبيت."
 
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:497
+#: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:185
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:772
 msgid "Up to date"
 msgstr "محدث إلى آخر إصدار"
 
@@ -3400,13 +3402,13 @@ msgstr "آخر إنشاء:"
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:93
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:123
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:561
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:689
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:693
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:701
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:737
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:741
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:761
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:767
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:688
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:692
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:700
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:736
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:740
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:760
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:766
 #: ui/pages/dashboard/activity/ActivityPage.tsx:123
 #: ui/pages/dashboard/activity/ActivityPage.tsx:165
 #: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:53
@@ -3474,7 +3476,6 @@ msgid "Last active"
 msgstr "آخر نشاط"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/SessionItem.tsx:79
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:773
 msgid "Current"
 msgstr "الحالية"
 
@@ -3772,7 +3773,7 @@ msgstr "تنزيل قاعدة البيانات"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:153
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:193
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:825
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:824
 #: ui/pages/dashboard/tools/import/_components/results/ImportDetails.tsx:32
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:64
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:43
@@ -3783,18 +3784,18 @@ msgstr "إرسال اختبار"
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:154
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:184
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:182
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:790
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:827
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:789
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:826
 msgid "Ready"
 msgstr "جاهز"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:154
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:828
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:827
 msgid "Setup Required"
 msgstr "خادم SMTP"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:157
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:831
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:830
 msgid "Database Updated"
 msgstr "تم تحديث قاعدة البيانات"
 
@@ -3805,7 +3806,7 @@ msgid "Never"
 msgstr "تشفير SMTP"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:170
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:839
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:838
 msgid "Database Size"
 msgstr "اسم مستخدم SMTP"
 
@@ -3813,10 +3814,10 @@ msgstr "اسم مستخدم SMTP"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:61
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:257
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:592
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:748
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:818
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:835
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:842
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:747
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:817
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:834
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:841
 msgid "Not available"
 msgstr "كلمة مرور SMTP"
 
@@ -3854,7 +3855,7 @@ msgid "PeakURL stores these values encrypted in the database so it can refresh t
 msgstr "يقوم PeakURL بتخزين هذه القيم مشفرة في قاعدة البيانات حتى يتمكن من تحديث قاعدة بيانات GeoLite2 City لاحقًا دون طلبها مرة أخرى."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:233
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:854
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:853
 msgid "Account ID"
 msgstr "معرّف الحساب"
 
@@ -3954,7 +3955,7 @@ msgid "Attention Needed"
 msgstr "مطلوب الانتباه"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:175
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:772
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:771
 msgid "Upgrade Recommended"
 msgstr "يوصى بالترقية"
 
@@ -3965,10 +3966,6 @@ msgstr "يوصى بترقية قاعدة البيانات"
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:177
 msgid "The database needs attention before every runtime path is fully current."
 msgstr "تحتاج قاعدة البيانات إلى فحص وترقية قبل أن تصبح جميع مسارات التشغيل مدعومة بالكامل."
-
-#: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:185
-msgid "Up to Date"
-msgstr "ترقية قاعدة البيانات الآن"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:186
 msgid "Database schema is up to date"
@@ -4035,12 +4032,12 @@ msgid "Run Database Upgrade"
 msgstr "تشغيل ترقية قاعدة البيانات"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:66
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:758
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:757
 msgid "Recorded Schema"
 msgstr "إعادة التثبيت معطلة"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:73
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:764
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:763
 msgid "Required Schema"
 msgstr "التحديث التلقائي معطل"
 
@@ -4129,8 +4126,8 @@ msgstr "المفتاح السري لـ reCAPTCHA"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:162
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:120
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:754
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:806
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:753
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:805
 msgid "None"
 msgstr "بدون"
 
@@ -4145,7 +4142,7 @@ msgstr "قم بتكوين Google reCAPTCHA v3 أو Cloudflare Turnstile لمنع
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:176
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:182
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:585
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:813
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:812
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:894
 msgid "Disabled"
 msgstr "حالة CAPTCHA"
@@ -4155,9 +4152,9 @@ msgid "Editing"
 msgstr "جارٍ التعديل"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:185
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:798
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:802
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:855
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:797
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:801
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:854
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:964
 msgid "Not configured"
 msgstr "غير مكوّن"
@@ -4616,150 +4613,152 @@ msgid "Disabled (Direct Database Queries)"
 msgstr "معطل (استعلامات مباشرة لقاعدة البيانات)"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:184
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:878
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:877
 msgid "Redis"
 msgstr "Redis"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:186
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:880
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:879
 msgid "APCu"
 msgstr "APCu"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:188
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:882
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:881
 msgid "Filesystem"
 msgstr "نظام الملفات"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:190
-msgid "Disabled / Direct Database"
-msgstr "معطل / قاعدة بيانات مباشرة"
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:505
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:883
+msgid "Direct Database"
+msgstr "قاعدة البيانات مباشرة"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:271
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:272
 msgid "Performance & Caching"
 msgstr "الأداء والتخزين المؤقت"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:274
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:275
 msgid "Configure object caching backends and Time-to-Live (TTL) policies to optimize link redirection latency and throughput."
 msgstr "قم بتهيئة محركات التخزين المؤقت للكائنات وسياسات مدة الصلاحية (TTL) لتحسين سرعة استجابة إعادة توجيه الروابط والإنتاجية."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:291
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:507
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:292
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:508
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:930
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1485
 msgid "Purge Cache"
 msgstr "مسح الذاكرة المؤقتة"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:299
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:300
 msgid "Active Engine"
 msgstr "المحرك النشط"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:303
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:304
 msgid "Cache Footprint"
 msgstr "استهلاك الذاكرة المؤقتة"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:304
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:305
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:911
 msgid "0 B"
 msgstr "0 بايت"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:308
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:309
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:935
 msgid "Default TTL"
 msgstr "مدة الصلاحية الافتراضية (TTL)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:317
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:318
 msgid "Cache status unavailable"
 msgstr "حالة التخزين المؤقت غير متاحة"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:334
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:335
 msgid "Object cache is operational"
 msgstr "ذاكرة التخزين المؤقت للكائنات قيد التشغيل"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:336
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:337
 msgid "Fallback cache driver active"
 msgstr "مشغل التخزين المؤقت الاحتياطي نشط"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:337
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:338
 msgid "Object cache is disabled"
 msgstr "ذاكرة التخزين المؤقت للكائنات معطلة"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:342
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:343
 msgid "Object caching is active and serving link redirects via the %s backend."
 msgstr "التخزين المؤقت للكائنات نشط ويخدم عمليات إعادة التوجيه عبر محرك %s."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:349
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:350
 msgid "The preferred cache driver is currently unavailable. PeakURL has automatically fallen back to %s."
 msgstr "مشغل التخزين المؤقت المفضل غير متاح حالياً. تحول PeakURL تلقائياً إلى %s."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:354
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:355
 msgid "Object caching is disabled. Link lookups and redirects are served directly from the database."
 msgstr "التخزين المؤقت للكائنات معطل. يتم جلب الروابط وإعادة التوجيه مباشرة من قاعدة البيانات."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:366
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:367
 msgid "Cache Engine Settings"
 msgstr "إعدادات محرك التخزين المؤقت"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:370
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:371
 msgid "Select your preferred caching backend. PeakURL automatically selects the highest performance operational backend if the preferred driver is unavailable."
 msgstr "اختر محرك التخزين المؤقت المفضل لديك. يختار PeakURL تلقائياً المحرك التشغيلي الأسرع إذا كان المشغل المفضل غير متاح."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:378
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:384
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:379
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:385
 msgid "Preferred Cache Driver"
 msgstr "مشغل التخزين المؤقت المفضل"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:388
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:389
 msgid "PeakURL prioritizes Redis if configured, APCu if loaded, and Filesystem storage as the universal fallback."
 msgstr "يعطي PeakURL الأولوية لـ Redis (إذا تم تكوينه)، ثم APCu (إذا تم تحميله)، ونظام الملفات كخيار احتياطي شامل."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:396
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:404
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:397
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:405
 msgid "Redirect Cache TTL"
 msgstr "مدة صلاحية تخزين إعادة التوجيه"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:408
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:409
 msgid "Time-to-Live duration for caching active short URL redirect destinations."
 msgstr "مدة الصلاحية (TTL) لتخزين وجهات الروابط القصيرة النشطة مؤقتاً."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:420
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:421
 msgid "Custom Redirect TTL (seconds)"
 msgstr "مدة مخصصة لإعادة التوجيه (ثوانٍ)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:425
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:426
 msgid "Enter the redirect destination cache lifetime in seconds."
 msgstr "أدخل مدة صلاحية التخزين المؤقت لوجهات إعادة التوجيه بالثواني."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:435
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:443
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:436
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:444
 msgid "Negative Lookup (404) TTL"
 msgstr "مدة صلاحية الروابط غير الموجودة (404)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:447
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:448
 msgid "Time-to-Live duration for caching non-existent link lookups to mitigate database load from automated scans."
 msgstr "مدة الصلاحية (TTL) لتخزين الروابط غير الموجودة مؤقتاً لتقليل الحمل على قاعدة البيانات من عمليات الفحص التلقائية."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:459
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:460
 msgid "Custom Negative TTL (seconds)"
 msgstr "مدة مخصصة للروابط غير الموجودة (ثوانٍ)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:464
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:465
 msgid "Enter the 404 negative lookup cache lifetime in seconds."
 msgstr "أدخل مدة صلاحية التخزين المؤقت لنتائج 404 بالثواني."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:484
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:485
 msgid "Reset"
 msgstr "إعادة ضبط"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:494
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:495
 msgid "Save Performance Settings"
 msgstr "حفظ إعدادات الأداء"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:503
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:504
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1481
 msgid "Purge Object Cache"
 msgstr "مسح ذاكرة الكائنات المؤقتة"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:504
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:505
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1482
 msgid "Are you sure you want to purge the object cache? All cached redirect records, in-memory objects, and temporary cache files will be immediately invalidated. Subsequent requests will query the database to rebuild the cache."
 msgstr "هل أنت متأكد من رغبتك في مسح ذاكرة التخزين المؤقت للكائنات؟ سيتم إبطال جميع سجلات إعادة التوجيه المخزنة، والكائنات في الذاكرة، وملفات التخزين المؤقت فوراً. ستطلب الطلبات اللاحقة البيانات مباشرة من قاعدة البيانات لإعادة بناء التخزين المؤقت."
@@ -4806,7 +4805,7 @@ msgid "SMTP Configuration"
 msgstr "تكوين SMTP"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:255
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:795
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:794
 msgid "From Name"
 msgstr "اسم المرسل (From Name)"
 
@@ -4815,7 +4814,7 @@ msgid "PeakURL"
 msgstr "PeakURL"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:266
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:794
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:793
 msgid "From Email"
 msgstr "أدخل عنوان بريد إلكتروني لاستلام رسالة الاختبار"
 
@@ -4824,7 +4823,7 @@ msgid "noreply@yourdomain.com"
 msgstr "noreply@yourdomain.com"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:282
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:797
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:796
 msgid "SMTP Host"
 msgstr "مضيف SMTP"
 
@@ -4833,12 +4832,12 @@ msgid "smtp.example.com"
 msgstr "smtp.example.com"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:297
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:801
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:800
 msgid "SMTP Port"
 msgstr "منفذ SMTP"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:314
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:805
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:804
 msgid "Encryption"
 msgstr "التشفير"
 
@@ -4847,7 +4846,7 @@ msgid "SMTP encryption"
 msgstr "تشفير SMTP"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:330
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:809
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:808
 msgid "Authentication"
 msgstr "المصادقة"
 
@@ -4913,12 +4912,12 @@ msgid "Performance"
 msgstr "الأداء"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:69
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:849
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:848
 msgid "Yes"
 msgstr "أذونات الملفات والمجلدات"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:69
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:850
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:849
 msgid "No"
 msgstr "حالة قاعدة البيانات والمخطط"
 
@@ -5000,10 +4999,6 @@ msgstr "ذاكرة نظام الملفات"
 msgid "Cache Disabled"
 msgstr "الذاكرة المؤقتة معطلة"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:505
-msgid "Direct Database"
-msgstr "قاعدة البيانات مباشرة"
-
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:510
 msgid "File Storage"
 msgstr "تخزين الملفات"
@@ -5023,7 +5018,7 @@ msgstr "بيئة تشغيل PHP"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:528
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:531
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:688
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:687
 msgid "Web Server"
 msgstr "الحد الأقصى لوقت التنفيذ (max_execution_time)"
 
@@ -5041,8 +5036,8 @@ msgstr "الإصدار والتحديثات"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:556
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:577
-msgid "Packaged Release"
-msgstr "المنطقة الزمنية للخادم"
+msgid "Production Release"
+msgstr "إصدار الإنتاج"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:567
 msgid "Environment"
@@ -5057,191 +5052,187 @@ msgid "Install Type"
 msgstr "خادم الويب"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:578
-msgid "Source Checkout"
-msgstr "الحد الأقصى للذاكرة (memory_limit)"
+msgid "Source code"
+msgstr ""
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:581
 msgid "Debug Mode"
 msgstr "وضع تصحيح الأخطاء (Debug Mode)"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:584
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:812
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:811
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:893
 msgid "Enabled"
 msgstr "مفعل (غير موصى به في بيئة الإنتاج)"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:599
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:598
 msgid "Content Directory"
 msgstr "معطل (موصى به)"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:605
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:666
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:604
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:665
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:952
 msgid "Writable"
 msgstr "قابل للكتابة"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:606
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:667
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:605
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:666
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:953
 msgid "Not Writable"
 msgstr "غير قابل للكتابة"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:613
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:631
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:642
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:713
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:721
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:729
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:612
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:630
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:641
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:712
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:720
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:728
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:980
 msgid "Missing"
 msgstr "موجود"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:617
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:616
 msgid "Languages Directory"
 msgstr "مفقود"
+
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:622
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:651
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:861
+msgid "Readable"
+msgstr "قابل للقراءة"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:623
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:652
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:862
-msgid "Readable"
-msgstr "قابل للقراءة"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:624
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:653
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:863
 msgid "Not Readable"
 msgstr "غير قابل للقراءة"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:635
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:634
 msgid "Config File"
 msgstr "مثبت"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:639
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:638
 msgid "Present"
 msgstr "موجود"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:646
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:645
 msgid "Debug Log"
 msgstr "سجل تصحيح الأخطاء"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:657
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:656
 msgid "Not created yet"
 msgstr "مسار السجل"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:661
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:660
 msgid "App Directory"
 msgstr "حجم السجل"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:674
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:673
 msgid "Release Root"
 msgstr "مسح السجل"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:685
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:684
 msgid "PHP Version"
 msgstr "تم مسح السجل بنجاح"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:686
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:685
 msgid "PHP SAPI"
 msgstr "PHP SAPI"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:692
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:691
 msgid "Operating System"
 msgstr "الحد الأقصى لحجم رفع الملفات (upload_max_filesize)"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:695
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:694
 msgid "Timezone"
 msgstr "المنطقة الزمنية"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:696
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:695
 msgid "Memory Limit"
 msgstr "حد الذاكرة"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:698
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:697
 msgid "Max Execution Time"
 msgstr "الحد الأقصى لوقت التنفيذ"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:704
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:703
 msgid "Upload Max Filesize"
 msgstr "الحد الأقصى لحجم الرفع"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:707
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:706
 msgid "POST Max Size"
 msgstr "الحد الأقصى لحجم طلب POST"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:709
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:708
 msgid "Intl Extension"
 msgstr "امتداد Intl"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:712
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:720
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:728
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:711
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:719
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:727
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:979
 msgid "Available"
 msgstr "متاح"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:717
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:716
 msgid "cURL Extension"
 msgstr "امتداد cURL"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:725
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:724
 msgid "ZipArchive"
 msgstr "ZipArchive"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:736
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:735
 msgid "Database Server"
 msgstr "خادم قاعدة البيانات"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:750
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:749
 msgid "Database Name"
 msgstr "اسم قاعدة البيانات"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:751
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:750
 msgid "Charset"
 msgstr "مجموعة الأحرف"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:753
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:752
 msgid "Table Prefix"
 msgstr "بادئة الجدول"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:770
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:769
 msgid "Schema Status"
 msgstr "حالة المخطط"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:777
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:776
 msgid "%s schema issue(s) detected"
 msgstr "تم اكتشاف %s مشكلة في المخطط"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:785
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:784
 msgid "Mail Transport"
 msgstr "وسيلة نقل البريد"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:787
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:786
 msgid "Transport Ready"
 msgstr "النقل جاهز"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:791
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:790
 msgid "Needs Setup"
 msgstr "يحتاج إلى إعداد"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:817
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:816
 msgid "Settings Storage"
 msgstr "تخزين الإعدادات"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:846
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:845
 msgid "Credentials Saved"
 msgstr "تم حفظ بيانات الاعتماد"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:858
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:857
 msgid "Database Path"
 msgstr "مسار قاعدة البيانات"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:868
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:867
 msgid "Refresh Command"
 msgstr "أمر التحديث"
-
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:884
-msgid "None / Direct DB"
-msgstr "لا شيء / قاعدة البيانات مباشرة"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:898
 msgid "Active Driver"

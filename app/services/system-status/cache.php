@@ -90,7 +90,7 @@ class Cache {
 		$redis_host       = ! empty( $config[ Constants::REDIS_HOST ] ) ? (string) $config[ Constants::REDIS_HOST ] : '127.0.0.1';
 		$redis_port       = ! empty( $config[ Constants::REDIS_PORT ] ) ? (int) $config[ Constants::REDIS_PORT ] : Constants::DEFAULT_REDIS_PORT;
 		$redis_available  = RedisCache::is_usable( $config );
-		$redis_configured = ! empty( $config[ Constants::REDIS_HOST ] );
+		$redis_configured = ! empty( $config[ Constants::REDIS_HOST ] ) || $redis_available;
 
 		$apcu_available = ApcuCache::is_usable();
 		$file_usable    = FileCache::is_usable( $content_dir, $custom_path );
@@ -126,7 +126,10 @@ class Cache {
 			$status = 'fallback';
 		}
 
-		$redis_info = null;
+		$redis_server_info = null;
+		$redis_memory_info = null;
+		$redis_keys_count  = 0;
+
 		if ( $redis_available && extension_loaded( 'redis' ) && class_exists( '\Redis' ) ) {
 			try {
 				$r = new \Redis();
@@ -136,17 +139,40 @@ class Cache {
 						// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Safe password check.
 						@$r->auth( (string) $config[ Constants::REDIS_PASSWORD ] );
 					}
-					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Safe info retrieval.
-					$redis_info = @$r->info( 'server' );
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Safe server info retrieval.
+					$redis_server_info = @$r->info( 'server' );
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Safe memory info retrieval.
+					$redis_memory_info = @$r->info( 'memory' );
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Safe key inspection.
+					$redis_keys = @$r->keys( 'peakurl:*' );
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Safe key count fallback.
+					$redis_keys_count = is_array( $redis_keys ) ? count( $redis_keys ) : (int) @$r->dbSize();
 					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Safe disconnect.
 					@$r->close();
 				}
 			} catch ( \Throwable ) {
-				$redis_info = null;
+				$redis_server_info = null;
+				$redis_memory_info = null;
 			}
 		}
 
-		$metrics = $this->get_cache_metrics( $cache_dir );
+		$apcu_info = null;
+		if ( $apcu_available && function_exists( 'apcu_cache_info' ) ) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Safe APCu info check.
+			$apcu_info = @\apcu_cache_info( true );
+		}
+
+		$file_metrics = $this->get_cache_metrics( $cache_dir );
+		$size_bytes   = $file_metrics['sizeBytes'];
+		$item_count   = $file_metrics['fileCount'];
+
+		if ( 'redis' === $active_driver && is_array( $redis_memory_info ) ) {
+			$size_bytes = (int) ( $redis_memory_info['used_memory'] ?? 0 );
+			$item_count = $redis_keys_count;
+		} elseif ( 'apcu' === $active_driver && is_array( $apcu_info ) ) {
+			$size_bytes = (int) ( $apcu_info['mem_size'] ?? 0 );
+			$item_count = (int) ( $apcu_info['num_entries'] ?? 0 );
+		}
 
 		return array(
 			'enabled'          => $enabled,
@@ -158,14 +184,14 @@ class Cache {
 			'directoryExists'  => $file_exists,
 			'defaultTtl'       => $default_ttl,
 			'negativeTtl'      => $negative_ttl,
-			'sizeBytes'        => $metrics['sizeBytes'],
-			'fileCount'        => $metrics['fileCount'],
+			'sizeBytes'        => $size_bytes,
+			'fileCount'        => $item_count,
 			'redis'            => array(
 				'configured'    => $redis_configured,
 				'host'          => $redis_host,
 				'port'          => $redis_port,
 				'available'     => $redis_available,
-				'serverVersion' => is_array( $redis_info ) ? (string) ( $redis_info['redis_version'] ?? '' ) : null,
+				'serverVersion' => is_array( $redis_server_info ) ? (string) ( $redis_server_info['redis_version'] ?? '' ) : null,
 			),
 			'apcu'             => array(
 				'extensionLoaded' => extension_loaded( 'apcu' ),
@@ -177,8 +203,8 @@ class Cache {
 				'exists'    => $file_exists,
 				'writable'  => $file_writable,
 				'available' => $file_usable,
-				'sizeBytes' => $metrics['sizeBytes'],
-				'fileCount' => $metrics['fileCount'],
+				'sizeBytes' => $file_metrics['sizeBytes'],
+				'fileCount' => $file_metrics['fileCount'],
 			),
 		);
 	}

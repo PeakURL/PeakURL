@@ -912,7 +912,10 @@ function SystemStatusPage() {
 			helperText:
 				status?.cache?.fileCount && Number(status.cache.fileCount) > 0
 					? sprintf(
-							__("%s cached files"),
+							status?.cache?.activeDriver === "redis" ||
+								status?.cache?.activeDriver === "apcu"
+								? __("%s cached items")
+								: __("%s cached files"),
 							formatCount(Number(status.cache.fileCount))
 						)
 					: undefined,
@@ -954,13 +957,20 @@ function SystemStatusPage() {
 		},
 		{
 			label: __("Redis Server"),
-			value: status?.cache?.redis?.configured
-				? `${String(status.cache.redis.host)}:${String(status.cache.redis.port)}`
-				: __("Not configured"),
+			value:
+				status?.cache?.redis?.available ||
+				status?.cache?.redis?.configured
+					? `${String(status.cache?.redis?.host || "127.0.0.1")}:${String(status.cache?.redis?.port || 6379)}`
+					: __("Not configured"),
 			helperText: status?.cache?.redis?.available
 				? __("Connected")
-				: undefined,
-			monospace: Boolean(status?.cache?.redis?.configured),
+				: status?.cache?.redis?.configured
+					? __("Unavailable")
+					: undefined,
+			monospace: Boolean(
+				status?.cache?.redis?.available ||
+				status?.cache?.redis?.configured
+			),
 		},
 		{
 			label: __("APCu Extension"),

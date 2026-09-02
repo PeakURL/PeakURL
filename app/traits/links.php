@@ -683,7 +683,7 @@ trait LinksTrait {
 		$normalized_title = trim( (string) $title );
 
 		if ( '' !== $normalized_title ) {
-			return $normalized_title;
+			return trim( html_entity_decode( $normalized_title, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) );
 		}
 
 		if ( $uses_custom_alias ) {
@@ -1118,7 +1118,11 @@ trait LinksTrait {
 				continue;
 			}
 
-			$value = $payload[ $input_key ];
+			if ( 'title' === $input_key ) {
+				$value = is_string( $value )
+					? trim( html_entity_decode( $value, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) )
+					: $value;
+			}
 
 			if ( 'destinationUrl' === $input_key ) {
 				$value = $this->clean_destination( $value );
@@ -2090,7 +2094,7 @@ trait LinksTrait {
 	 * @since 1.0.4
 	 */
 	private function get_link_activity_meta( array $link ): array {
-		$title = trim( (string) ( $link['title'] ?? '' ) );
+		$title = trim( html_entity_decode( (string) ( $link['title'] ?? '' ), ENT_QUOTES | ENT_HTML5, 'UTF-8' ) );
 		$code  = trim(
 			(string) ( $link['alias'] ?? ( $link['short_code'] ?? '' ) ),
 		);

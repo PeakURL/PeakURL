@@ -216,7 +216,13 @@ class SocialPreview {
 	 * @since 1.2.0
 	 */
 	public function normalize_title( $value ): ?string {
-		return $this->trim_to_limit( $value, self::TITLE_LIMIT );
+		if ( null === $value ) {
+			return null;
+		}
+
+		$decoded = trim( html_entity_decode( (string) $value, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) );
+
+		return $this->trim_to_limit( $decoded, self::TITLE_LIMIT );
 	}
 
 	/**

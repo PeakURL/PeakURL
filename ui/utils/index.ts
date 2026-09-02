@@ -23,7 +23,11 @@ export {
 	createLinkExportFile,
 	serializeLinkExport,
 } from "./linkExport";
-export { getLinkDisplayTitle, normalizeLinkTitle } from "./linkTitles";
+export {
+	decodeHtmlEntities,
+	getLinkDisplayTitle,
+	normalizeLinkTitle,
+} from "./linkTitles";
 export {
 	extractAliasFromShortUrl,
 	normalizeCsvHeader,

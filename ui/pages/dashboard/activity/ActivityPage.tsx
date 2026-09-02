@@ -41,10 +41,12 @@ import {
 } from "@/store/slices/api";
 import {
 	cn,
+	decodeHtmlEntities,
 	formatCount,
 	formatDate,
 	formatLocalizedDateTime,
 	getErrorMessage,
+	normalizeLinkTitle,
 } from "@/utils";
 
 import type { ActivityPerson, RecentActivity } from "../_components/types";
@@ -89,7 +91,7 @@ function getActivityPersonName(person?: ActivityPerson | null): string | null {
 	}
 
 	if (person.displayName) {
-		return person.displayName;
+		return decodeHtmlEntities(person.displayName);
 	}
 
 	const fullName = [person.firstName, person.lastName]
@@ -97,7 +99,9 @@ function getActivityPersonName(person?: ActivityPerson | null): string | null {
 		.join(" ")
 		.trim();
 
-	return fullName || person.username || person.email || null;
+	return decodeHtmlEntities(
+		fullName || person.username || person.email || null
+	);
 }
 
 function getRoleLabel(role?: string | null): string {
@@ -113,8 +117,9 @@ function getRoleLabel(role?: string | null): string {
 }
 
 function getActivityLinkDisplayName(link?: RecentActivity["link"]): string {
-	if (link?.title?.trim()) {
-		return link.title.trim();
+	const title = normalizeLinkTitle(link?.title);
+	if (title) {
+		return title;
 	}
 	const slug = link?.alias || link?.shortCode;
 	if (slug) {
@@ -127,35 +132,47 @@ function getActivityMessage(activity: RecentActivity): string {
 	const linkName = getActivityLinkDisplayName(activity.link);
 	const userName = getActivityPersonName(activity.user) || __("Unknown user");
 
+	let message = "";
 	switch (activity.type) {
 		case "link_created":
-			return sprintf(__('Created new link "%s"'), linkName);
+			message = sprintf(__('Created new link "%s"'), linkName);
+			break;
 		case "link_updated":
-			return sprintf(__('Updated link "%s"'), linkName);
+			message = sprintf(__('Updated link "%s"'), linkName);
+			break;
 		case "link_deleted":
-			return sprintf(__('Permanently deleted link "%s"'), linkName);
+			message = sprintf(__('Permanently deleted link "%s"'), linkName);
+			break;
 		case "link_trashed":
-			return sprintf(__('Moved link "%s" to trash'), linkName);
+			message = sprintf(__('Moved link "%s" to trash'), linkName);
+			break;
 		case "link_restored":
-			return sprintf(__('Restored link "%s"'), linkName);
+			message = sprintf(__('Restored link "%s"'), linkName);
+			break;
 		case "trash_emptied": {
 			const count = activity.count;
 			if (typeof count === "number" && count > 0) {
-				return count === 1
-					? __("Permanently deleted 1 link from trash")
-					: sprintf(
-							__("Permanently deleted %s links from trash"),
-							String(count)
-						);
+				message =
+					count === 1
+						? __("Permanently deleted 1 link from trash")
+						: sprintf(
+								__("Permanently deleted %s links from trash"),
+								String(count)
+							);
+			} else {
+				message = activity.message || __("Emptied links from trash");
 			}
-			return activity.message || __("Emptied links from trash");
+			break;
 		}
 		case "user_created":
-			return sprintf(__('Created user "%s"'), userName);
+			message = sprintf(__('Created user "%s"'), userName);
+			break;
 		case "user_updated":
-			return sprintf(__('Updated user "%s"'), userName);
+			message = sprintf(__('Updated user "%s"'), userName);
+			break;
 		case "user_deleted":
-			return sprintf(__('Deleted user "%s"'), userName);
+			message = sprintf(__('Deleted user "%s"'), userName);
+			break;
 		case "click": {
 			const location = activity.location
 				? sprintf(
@@ -166,16 +183,20 @@ function getActivityMessage(activity: RecentActivity): string {
 					)
 				: "";
 
-			return location
+			message = location
 				? sprintf(__('Link "%1$s" was clicked %2$s'), [
 						linkName,
 						location,
 					])
 				: sprintf(__('Link "%s" was clicked'), linkName);
+			break;
 		}
 		default:
-			return activity.message || __("Unknown activity");
+			message = activity.message || __("Unknown activity");
+			break;
 	}
+
+	return decodeHtmlEntities(message);
 }
 
 function getActivityVisual(type?: string | null): {

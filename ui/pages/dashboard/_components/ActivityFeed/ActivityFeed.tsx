@@ -12,7 +12,12 @@ import { Link } from "react-router";
 
 import { Button } from "@/components";
 import { __, sprintf } from "@/i18n";
-import { cn, formatDate } from "@/utils";
+import {
+	cn,
+	decodeHtmlEntities,
+	formatDate,
+	normalizeLinkTitle,
+} from "@/utils";
 
 import type {
 	ActivityFeedProps,
@@ -35,17 +40,24 @@ const ActivityFeed = ({
 			return null;
 		}
 
+		if (person.displayName) {
+			return decodeHtmlEntities(person.displayName);
+		}
+
 		const fullName = [person.firstName, person.lastName]
 			.filter(Boolean)
 			.join(" ")
 			.trim();
 
-		return fullName || person.username || person.email || null;
+		return decodeHtmlEntities(
+			fullName || person.username || person.email || null
+		);
 	};
 
 	const formatActivityMessage = (activity: RecentActivity) => {
+		const linkTitle = normalizeLinkTitle(activity.link?.title);
 		const linkName =
-			activity.link?.title?.trim() ||
+			linkTitle ||
 			(activity.link?.alias
 				? `/${activity.link.alias}`
 				: activity.link?.shortCode
@@ -54,33 +66,36 @@ const ActivityFeed = ({
 		const userName =
 			getActivityPersonName(activity.user) || __("Unknown user");
 
+		let message = "";
 		if (activity.type === "link_created") {
-			return sprintf(__('Created new link "%s"'), linkName);
+			message = sprintf(__('Created new link "%s"'), linkName);
 		} else if (activity.type === "link_updated") {
-			return sprintf(__('Updated link "%s"'), linkName);
+			message = sprintf(__('Updated link "%s"'), linkName);
 		} else if (activity.type === "link_deleted") {
-			return sprintf(__('Permanently deleted link "%s"'), linkName);
+			message = sprintf(__('Permanently deleted link "%s"'), linkName);
 		} else if (activity.type === "link_trashed") {
-			return sprintf(__('Moved link "%s" to trash'), linkName);
+			message = sprintf(__('Moved link "%s" to trash'), linkName);
 		} else if (activity.type === "link_restored") {
-			return sprintf(__('Restored link "%s"'), linkName);
+			message = sprintf(__('Restored link "%s"'), linkName);
 		} else if (activity.type === "trash_emptied") {
 			const count = activity.count;
 			if (typeof count === "number" && count > 0) {
-				return count === 1
-					? __("Permanently deleted 1 link from trash")
-					: sprintf(
-							__("Permanently deleted %s links from trash"),
-							String(count)
-						);
+				message =
+					count === 1
+						? __("Permanently deleted 1 link from trash")
+						: sprintf(
+								__("Permanently deleted %s links from trash"),
+								String(count)
+							);
+			} else {
+				message = activity.message || __("Emptied links from trash");
 			}
-			return activity.message || __("Emptied links from trash");
 		} else if (activity.type === "user_created") {
-			return sprintf(__('Created user "%s"'), userName);
+			message = sprintf(__('Created user "%s"'), userName);
 		} else if (activity.type === "user_updated") {
-			return sprintf(__('Updated user "%s"'), userName);
+			message = sprintf(__('Updated user "%s"'), userName);
 		} else if (activity.type === "user_deleted") {
-			return sprintf(__('Deleted user "%s"'), userName);
+			message = sprintf(__('Deleted user "%s"'), userName);
 		} else if (activity.type === "click") {
 			const location = activity.location
 				? sprintf(
@@ -90,14 +105,17 @@ const ActivityFeed = ({
 							__("Unknown")
 					)
 				: "";
-			return location
+			message = location
 				? sprintf(__('Link "%1$s" was clicked %2$s'), [
 						linkName,
 						location,
 					])
 				: sprintf(__('Link "%s" was clicked'), linkName);
+		} else {
+			message = activity.message || __("Unknown activity");
 		}
-		return activity.message || __("Unknown activity");
+
+		return decodeHtmlEntities(message);
 	};
 
 	const getActivityIconWrapperClassName = (type?: string | null) =>

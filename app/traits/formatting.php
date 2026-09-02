@@ -167,7 +167,10 @@ trait FormattingTrait {
 			),
 		);
 
-		$link_meta     = is_array( $metadata['link'] ?? null ) ? $metadata['link'] : null;
+		$link_meta = is_array( $metadata['link'] ?? null ) ? $metadata['link'] : null;
+		if ( is_array( $link_meta ) && isset( $link_meta['title'] ) && is_string( $link_meta['title'] ) ) {
+			$link_meta['title'] = html_entity_decode( $link_meta['title'], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+		}
 		$type          = (string) $row['type'];
 		$link_status   = null;
 		$is_restorable = false;
@@ -192,7 +195,7 @@ trait FormattingTrait {
 		return array(
 			'id'           => (string) $row['id'],
 			'type'         => $type,
-			'message'      => (string) ( $row['message'] ?? '' ),
+			'message'      => html_entity_decode( (string) ( $row['message'] ?? '' ), ENT_QUOTES | ENT_HTML5, 'UTF-8' ),
 			'actor'        => $actor,
 			'user'         => $this->format_activity_person(
 				is_array( $metadata['user'] ?? null )

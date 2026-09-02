@@ -239,7 +239,7 @@
 	}
 
 	.activity-page-event-title {
-		@apply text-sm font-semibold text-heading leading-snug;
+		@apply text-sm font-medium text-heading leading-snug;
 		unicode-bidi: -moz-plaintext;
 		unicode-bidi: plaintext;
 	}
@@ -289,7 +289,7 @@
 	}
 
 	.activity-page-event-time-relative {
-		@apply text-xs font-semibold text-heading whitespace-nowrap;
+		@apply text-xs font-medium text-heading whitespace-nowrap;
 		unicode-bidi: -moz-plaintext;
 		unicode-bidi: plaintext;
 	}

@@ -553,7 +553,7 @@ function SystemStatusPage() {
 			status: getSubsystemStatus(checks, ["zip", "updates"]),
 			meta: status?.site?.version
 				? `PeakURL v${status.site.version}`
-				: __("Packaged Release"),
+				: __("Production Release"),
 		},
 	];
 
@@ -574,8 +574,8 @@ function SystemStatusPage() {
 			label: __("Install Type"),
 			value:
 				"release" === status?.site?.installType
-					? __("Packaged Release")
-					: __("Source Checkout"),
+					? __("Production Release")
+					: __("Source code"),
 		},
 		{
 			label: __("Debug Mode"),
@@ -587,10 +587,9 @@ function SystemStatusPage() {
 		},
 		{
 			label: __("Last Checked"),
-			value: formatDateTimeValue(
-				status?.generatedAt,
-				__("Not available")
-			),
+			value: timeInfo.full
+				? `${timeInfo.full} (${timeInfo.relative})`
+				: timeInfo.relative || __("Not available"),
 		},
 	];
 
@@ -770,7 +769,7 @@ function SystemStatusPage() {
 			label: __("Schema Status"),
 			value: status?.database?.schemaUpgradeRequired
 				? __("Upgrade Recommended")
-				: __("Current"),
+				: __("Up to date"),
 			helperText:
 				schemaIssuesCount && Number(schemaIssuesCount) > 0
 					? sprintf(
@@ -881,7 +880,7 @@ function SystemStatusPage() {
 			case "file":
 				return __("Filesystem");
 			default:
-				return __("None / Direct DB");
+				return __("Direct Database");
 		}
 	})();
 

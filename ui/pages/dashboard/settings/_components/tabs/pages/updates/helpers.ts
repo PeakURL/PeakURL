@@ -182,7 +182,7 @@ export function formatDatabaseStatus(
 
 	return {
 		tone: "success",
-		label: __("Up to Date"),
+		label: __("Up to date"),
 		title: __("Database schema is up to date"),
 		description: __(
 			"PeakURL has no outstanding schema repairs for this release."

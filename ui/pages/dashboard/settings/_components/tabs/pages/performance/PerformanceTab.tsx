@@ -187,7 +187,7 @@ export function PerformanceTab({
 			case "file":
 				return __("Filesystem");
 			default:
-				return __("Disabled / Direct Database");
+				return __("Direct Database");
 		}
 	})();
 

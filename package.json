@@ -38,7 +38,10 @@
 			"eslint --cache --fix",
 			"prettier --write"
 		],
-		"*.{json,md,yml,yaml}": [
+		"ui/**/*.css": [
+			"prettier --write"
+		],
+		"**/*.{json,md,yml,yaml}": [
 			"prettier --write"
 		],
 		"app/**/*.php": [

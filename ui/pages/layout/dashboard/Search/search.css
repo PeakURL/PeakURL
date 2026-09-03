@@ -19,9 +19,9 @@
 	.dashboard-search-input {
 		@apply w-full rounded-lg border border-stroke bg-bg py-2 text-sm text-heading placeholder:text-text-muted focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20;
 		-webkit-padding-start: 2.5rem;
-		        padding-inline-start: 2.5rem;
+		padding-inline-start: 2.5rem;
 		-webkit-padding-end: 4.25rem;
-		        padding-inline-end: 4.25rem;
+		padding-inline-end: 4.25rem;
 		text-align: start;
 	}
 

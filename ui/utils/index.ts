@@ -48,6 +48,7 @@ export {
 export {
 	copyToClipboard,
 	downloadBrowserFile,
+	getSearchShortcutKeys,
 	getSearchShortcutLabel,
 	isMacPlatform,
 	requestClosestFormSubmit,

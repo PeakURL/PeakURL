@@ -157,7 +157,7 @@
 	}
 
 	.activity-page-table-element {
-		@apply min-w-full inline-block min-w-[760px] align-top;
+		@apply inline-block min-w-190 align-top;
 	}
 
 	.activity-page-table-head {

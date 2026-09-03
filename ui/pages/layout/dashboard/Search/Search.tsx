@@ -14,7 +14,7 @@ import {
 import { useDashboardSearch } from "@/hooks";
 import { getDocumentDirection, isDocumentRtl } from "@/i18n/direction";
 import { __, sprintf } from "@/i18n";
-import { cn, getSearchShortcutLabel } from "@/utils";
+import { cn, getSearchShortcutKeys, getSearchShortcutLabel } from "@/utils";
 
 import type { ResultButtonProps, ResultSectionProps } from "../types";
 
@@ -71,6 +71,7 @@ export const Search = () => {
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const inputRef = useRef<HTMLInputElement | null>(null);
 	const shortcutLabel = getSearchShortcutLabel();
+	const shortcutKeys = getSearchShortcutKeys();
 	const {
 		query,
 		isOpen,
@@ -188,12 +189,20 @@ export const Search = () => {
 							<X size={15} />
 						</button>
 					) : (
-						<kbd
-							className="dashboard-search-shortcut"
-							aria-hidden="true"
+						<div
+							className="dashboard-search-shortcuts"
+							aria-label={shortcutLabel}
 						>
-							{shortcutLabel}
-						</kbd>
+							{shortcutKeys.map((key, index) => (
+								<kbd
+									key={index}
+									className="dashboard-search-shortcut-key"
+									aria-hidden="true"
+								>
+									{key}
+								</kbd>
+							))}
+						</div>
 					)}
 				</div>
 			</form>

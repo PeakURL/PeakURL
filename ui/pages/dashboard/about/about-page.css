@@ -4,7 +4,7 @@
 	}
 
 	.about-page-hero {
-		@apply relative -mx-4 -mt-4 mb-12 overflow-hidden bg-slate-950 px-4 py-12 text-white sm:-mx-6 sm:-mt-6 sm:px-6 sm:py-16;
+		@apply relative -mx-4 -mt-4 mb-12 overflow-hidden bg-slate-950 px-4 pt-16 pb-14 text-white sm:-mx-6 sm:-mt-6 sm:px-6 sm:pt-20 sm:pb-18 lg:pt-24 lg:pb-20;
 	}
 
 	.about-page-hero-glow {
@@ -17,7 +17,7 @@
 	}
 
 	.about-page-hero-content {
-		@apply relative z-10 mx-auto max-w-3xl text-center;
+		@apply relative z-10 mx-auto max-w-4xl text-center lg:max-w-5xl;
 	}
 
 	.about-page-hero-version {
@@ -41,19 +41,19 @@
 	}
 
 	.about-page-hero-title {
-		@apply mb-4 text-3xl font-extrabold tracking-tight text-white sm:text-5xl;
+		@apply mb-4 text-2xl font-extrabold tracking-tight text-white sm:text-3xl md:text-4xl lg:text-5xl leading-tight;
 	}
 
 	.about-page-hero-summary {
-		@apply mx-auto max-w-2xl text-lg leading-relaxed text-slate-400 sm:text-xl;
+		@apply mx-auto max-w-2xl text-base leading-relaxed text-slate-400 sm:text-lg;
 	}
 
 	.about-page-hero-actions {
-		@apply mt-8 flex flex-wrap justify-center gap-3;
+		@apply mt-8 flex flex-wrap justify-center gap-2.5 sm:gap-3;
 	}
 
 	.about-page-hero-link {
-		@apply inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-colors;
+		@apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-xs font-semibold transition-colors sm:px-5 sm:text-sm;
 	}
 
 	.about-page-hero-link-primary {
@@ -65,11 +65,11 @@
 	}
 
 	.about-page-hero-addons {
-		@apply mt-6 flex flex-wrap justify-center gap-3;
+		@apply mt-6 flex flex-wrap justify-center gap-2 sm:gap-3;
 	}
 
 	.about-page-hero-addon {
-		@apply inline-flex items-center gap-2 rounded-full border border-slate-700/70 bg-slate-900/70 px-3.5 py-2 text-sm font-medium text-slate-200 transition-colors hover:border-slate-500 hover:bg-slate-800;
+		@apply inline-flex items-center gap-1.5 rounded-full border border-slate-700/70 bg-slate-900/70 px-3 py-1.5 text-xs font-medium text-slate-200 transition-colors hover:border-slate-500 hover:bg-slate-800 sm:gap-2 sm:px-3.5 sm:py-2 sm:text-sm;
 	}
 
 	.about-page-hero-addon-icon {
@@ -133,20 +133,73 @@
 		@apply opacity-30;
 	}
 
+	/* ─── Metrics Grid (Matching Site Dashboard Cards) ────────── */
+	.about-page-metrics-grid {
+		@apply mb-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4;
+	}
+
+	.about-page-metric-card {
+		@apply flex flex-col justify-between rounded-2xl border border-stroke bg-surface p-5 shadow-xs transition-all duration-200 hover:border-accent/40 hover:shadow-sm;
+	}
+
+	.about-page-metric-card-header {
+		@apply mb-3 flex items-center justify-between;
+	}
+
+	.about-page-metric-card-label {
+		@apply text-xs font-semibold uppercase tracking-wider text-text-muted;
+	}
+
+	.about-page-metric-card-icon {
+		@apply flex h-9 w-9 shrink-0 items-center justify-center rounded-xl;
+	}
+
+	.about-page-metric-card-icon-blue {
+		@apply bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400;
+	}
+
+	.about-page-metric-card-icon-purple {
+		@apply bg-purple-500/10 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400;
+	}
+
+	.about-page-metric-card-icon-emerald {
+		@apply bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400;
+	}
+
+	.about-page-metric-card-icon-amber {
+		@apply bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400;
+	}
+
+	.about-page-metric-card-value {
+		@apply text-2xl font-extrabold tracking-tight text-heading sm:text-3xl;
+	}
+
+	.about-page-metric-card-caption {
+		@apply mt-1.5 text-xs text-text-muted;
+	}
+
 	.about-page-features-grid {
 		@apply grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3;
 	}
 
 	.about-page-feature-card {
-		@apply relative rounded-xl border border-stroke bg-surface p-6 transition-all duration-200 hover:border-accent/30;
+		@apply relative flex flex-col justify-between rounded-2xl border border-stroke bg-surface p-5 sm:p-6 transition-all duration-200 hover:border-accent/40 hover:shadow-sm;
+	}
+
+	.about-page-feature-header {
+		@apply mb-4 flex items-center justify-between gap-3;
 	}
 
 	.about-page-feature-icon {
-		@apply mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10;
+		@apply inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent transition-colors;
+	}
+
+	.about-page-feature-tag {
+		@apply inline-flex items-center rounded-full border border-stroke/70 bg-surface-alt/70 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-text-muted;
 	}
 
 	.about-page-feature-title {
-		@apply mb-1.5 text-base font-semibold text-heading;
+		@apply mb-2 text-[15px] sm:text-base font-semibold tracking-tight text-heading leading-snug;
 	}
 
 	.about-page-feature-copy {
@@ -407,5 +460,51 @@
 
 	.about-page-release-footer-link-icon {
 		@apply h-4 w-4;
+	}
+
+	/* ─── Dedicated Status Hero (Update / Reinstall / Setup) ─── */
+	.about-page-hero-status {
+		@apply relative -mx-4 -mt-4 mb-12 overflow-hidden bg-slate-950 px-4 pt-16 pb-14 text-white sm:-mx-6 sm:-mt-6 sm:px-6 sm:pt-20 sm:pb-18 lg:pt-24 lg:pb-20;
+	}
+
+	.about-page-hero-status-badge {
+		@apply mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-xs font-semibold text-emerald-300 shadow-xs;
+	}
+
+	.about-page-hero-status-icon {
+		@apply text-emerald-400 shrink-0;
+	}
+
+	.about-page-hero-status-title {
+		@apply mb-4 text-2xl font-extrabold tracking-tight text-white sm:text-3xl md:text-4xl lg:text-[2.65rem] leading-tight;
+	}
+
+	.about-page-hero-status-summary {
+		@apply mx-auto max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg;
+	}
+
+	/* ─── Tab Navigation (Default View) ───────────────────────── */
+	.about-page-tabs-wrapper {
+		@apply mb-10 flex justify-center overflow-x-auto px-2 py-1;
+	}
+
+	.about-page-tabs {
+		@apply inline-flex max-w-full items-center gap-1 sm:gap-1.5 rounded-2xl border border-stroke bg-surface-alt/70 p-1 sm:p-1.5 shadow-xs overflow-x-auto;
+	}
+
+	.about-page-tab-button {
+		@apply inline-flex shrink-0 items-center gap-1.5 sm:gap-2 rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 text-xs font-medium transition-all duration-200 cursor-pointer sm:text-sm whitespace-nowrap;
+	}
+
+	.about-page-tab-button-active {
+		@apply bg-surface text-heading font-semibold shadow-xs;
+	}
+
+	.about-page-tab-button-inactive {
+		@apply text-text-muted hover:bg-surface/50 hover:text-heading;
+	}
+
+	.about-page-tab-icon {
+		@apply h-4 w-4 shrink-0;
 	}
 }

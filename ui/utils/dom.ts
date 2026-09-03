@@ -124,3 +124,12 @@ export function isMacPlatform(): boolean {
 export function getSearchShortcutLabel(): string {
 	return isMacPlatform() ? "⌘K" : "Ctrl+K";
 }
+
+/**
+ * Get the platform-specific search keyboard shortcut keys.
+ *
+ * @return ['⌘', 'K'] for macOS/iOS, or ['Ctrl', 'K'] for other environments.
+ */
+export function getSearchShortcutKeys(): [string, string] {
+	return isMacPlatform() ? ["⌘", "K"] : ["Ctrl", "K"];
+}

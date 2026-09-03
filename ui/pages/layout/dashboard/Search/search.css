@@ -17,13 +17,26 @@
 	}
 
 	.dashboard-search-input {
-		@apply w-full rounded-lg border border-stroke bg-bg px-10 py-2 text-sm text-heading placeholder:text-text-muted focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20;
+		@apply w-full rounded-lg border border-stroke bg-bg py-2 text-sm text-heading placeholder:text-text-muted focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20;
+		-webkit-padding-start: 2.5rem;
+		        padding-inline-start: 2.5rem;
+		-webkit-padding-end: 4.25rem;
+		        padding-inline-end: 4.25rem;
 		text-align: start;
 	}
 
 	.dashboard-search-clear {
 		@apply absolute top-1/2 -translate-y-1/2 rounded-full p-1 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading;
 		inset-inline-end: 0.75rem;
+	}
+
+	.dashboard-search-shortcuts {
+		@apply pointer-events-none absolute top-1/2 -translate-y-1/2 hidden sm:inline-flex items-center gap-1 select-none;
+		inset-inline-end: 0.625rem;
+	}
+
+	.dashboard-search-shortcut-key {
+		@apply inline-flex h-5 min-w-5 items-center justify-center rounded-md border border-stroke/90 bg-surface-alt/70 px-1.5 font-mono text-[11px] font-semibold text-text-muted/90 shadow-xs;
 	}
 
 	.dashboard-search-shortcut {

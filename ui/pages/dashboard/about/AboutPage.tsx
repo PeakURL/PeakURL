@@ -1,32 +1,41 @@
+import { useState } from "react";
 import {
-	Link2,
-	Shield,
-	Globe,
+	Activity,
+	ArrowLeftRight,
 	BarChart3,
-	Code,
-	Heart,
-	ExternalLink,
-	Sparkles,
-	Server,
-	Monitor,
-	ChevronRight,
 	BookOpen,
+	CheckCircle2,
+	ChevronRight,
+	Code,
+	ExternalLink,
+	Globe,
+	Heart,
+	Languages,
+	Link2,
+	Monitor,
+	Server,
+	Shield,
+	ShieldCheck,
+	Sparkles,
 	SquareTerminal,
 	TextAlignJustify,
+	Trash2,
+	Zap,
 } from "lucide-react";
 import { Link, useSearchParams } from "react-router";
 import { PEAKURL_VERSION, PEAKURL_NAME } from "@/constants";
 import { BrandLockup, Logo } from "@/components";
-import { formatRelativeTime } from "@/utils";
+import { cn, formatRelativeTime } from "@/utils";
 import { __, sprintf } from "@/i18n";
 import { useGetReleaseNotesQuery } from "@/store/slices/api/system";
 import { Sponsors } from "./Sponsors";
 import type {
 	AboutIconProps,
+	AboutTab,
+	AboutTabId,
 	AddOnLink,
 	Feature,
 	Freedom,
-	LandingBannerProps,
 	LandingMetaEntry,
 	LandingSource,
 	SectionTitleProps,
@@ -46,6 +55,45 @@ const Divider = () => (
 		<Logo size="sm" className="about-page-divider-logo" />
 		<div className="about-page-divider-line" />
 	</div>
+);
+
+const AboutFooter = () => (
+	<section className="about-page-footer">
+		<div className="about-page-footer-brand">
+			<BrandLockup to="/dashboard" size="md" />
+		</div>
+		<p className="about-page-footer-tagline">
+			{__("Shorten, track, and own every link.")}
+		</p>
+		<div className="about-page-footer-links">
+			<a
+				href="https://peakurl.org?utm_source=dashboard&utm_medium=about_page&utm_campaign=website_link"
+				target="_blank"
+				rel="noreferrer"
+				className="about-page-footer-link"
+			>
+				{__("Website")} <ExternalLink size={10} />
+			</a>
+			<span className="about-page-footer-separator">•</span>
+			<a
+				href="https://go.peakurl.org/repo"
+				target="_blank"
+				rel="noreferrer"
+				className="about-page-footer-link"
+			>
+				GitHub <ExternalLink size={10} />
+			</a>
+			<span className="about-page-footer-separator">•</span>
+			<a
+				href="https://go.peakurl.org/release-notes"
+				target="_blank"
+				rel="noreferrer"
+				className="about-page-footer-link"
+			>
+				{__("Release Notes")} <ExternalLink size={10} />
+			</a>
+		</div>
+	</section>
 );
 
 const WordPressIcon = ({ className = "" }: AboutIconProps) => (
@@ -175,177 +223,117 @@ const getLandingMeta = (): Record<LandingSource, LandingMetaEntry> => ({
 	},
 });
 
-const LANDING_SOURCES: LandingSource[] = ["install", "update", "reinstall"];
-
-const isLandingSource = (source: string | null): source is LandingSource =>
-	null !== source && LANDING_SOURCES.includes(source as LandingSource);
-
-const LandingBanner = ({ source }: LandingBannerProps) => {
-	const shouldFetch = source === "update" || source === "reinstall";
-	const { data: releaseNotesData } = useGetReleaseNotesQuery(undefined, {
-		skip: !shouldFetch,
-	});
-
-	if (!isLandingSource(source)) {
-		return null;
-	}
-
-	const meta = getLandingMeta()[source];
-
-	let releaseNote = null;
-	if (releaseNotesData?.data?.releases?.length) {
-		const releases = releaseNotesData.data.releases;
-		releaseNote =
-			releases.find((r) => r.version === PEAKURL_VERSION) || releases[0];
-	}
-
-	return (
-		<>
-			<div className="about-page-landing mb-8">
-				<p className="about-page-landing-eyebrow">{meta.eyebrow}</p>
-				<h2 className="about-page-landing-title">{meta.title}</h2>
-				<p className="about-page-landing-copy">{meta.description}</p>
-
-				{meta.actions && meta.actions.length > 0 && (
-					<div className="about-page-landing-actions">
-						{meta.actions.map((action) => (
-							<Link
-								key={action.to}
-								to={action.to}
-								className="about-page-landing-action"
-							>
-								{action.label}
-								<ChevronRight size={15} />
-							</Link>
-						))}
-					</div>
-				)}
-			</div>
-
-			{releaseNote && (
-				<div className="about-page-release-notes">
-					<div className="about-page-release-meta">
-						<Sparkles className="about-page-release-meta-icon" />
-						<span>
-							{__("Version")} {releaseNote.version}
-						</span>
-						{releaseNote.releaseDate && (
-							<>
-								<span className="about-page-release-meta-separator">
-									•
-								</span>
-								<span className="about-page-release-meta-date">
-									{sprintf(
-										__("Released %s"),
-										formatRelativeTime(
-											releaseNote.releaseDate
-										)
-									)}
-								</span>
-							</>
-						)}
-					</div>
-					<h3 className="about-page-release-title">
-						{releaseNote.title}
-					</h3>
-					<p className="about-page-release-summary">
-						{releaseNote.summary}
-					</p>
-
-					<div className="about-page-release-highlights">
-						{releaseNote.highlights.map((highlight, idx) => (
-							<div
-								key={idx}
-								className="about-page-release-highlight-item"
-							>
-								<span className="about-page-release-highlight-bullet">
-									•
-								</span>
-								<span className="about-page-release-highlight-text">
-									{highlight}
-								</span>
-							</div>
-						))}
-					</div>
-
-					<div className="about-page-release-footer">
-						<a
-							href="https://go.peakurl.org/release-notes"
-							target="_blank"
-							rel="noopener noreferrer"
-							className="about-page-release-footer-link about-page-release-footer-link-primary"
-						>
-							<BookOpen className="about-page-release-footer-link-icon" />
-							{__("For all release notes see the main page")}
-						</a>
-						<a
-							href="https://go.peakurl.org/release-notes-txt"
-							target="_blank"
-							rel="noopener noreferrer"
-							className="about-page-release-footer-link about-page-release-footer-link-secondary"
-						>
-							<TextAlignJustify className="about-page-release-footer-link-icon" />
-							{__("Plain text format")}
-						</a>
-					</div>
-				</div>
-			)}
-		</>
-	);
-};
-
-/* ─── Feature cards ───────────────────────────────────────── */
+/* ─── Modern Feature Matrix ───────────────────────────────── */
 const getFeatures = (): Feature[] => [
 	{
-		icon: Link2,
-		title: __("Branded Short Links"),
+		icon: Zap,
+		tag: __("Performance"),
+		title: __("Multi-tier object caching"),
 		description: __(
-			"Create clean short links with custom aliases, generated codes, QR output, and redirect settings that stay easy to manage."
+			"Delivers sub-millisecond link redirects using Redis, APCu, or local filesystem storage with automatic backend fallback, configurable cache durations, and instant cache purging."
 		),
 	},
 	{
-		icon: BarChart3,
-		title: __("Click Analytics"),
+		icon: Trash2,
+		tag: __("Data safeguards"),
+		title: __("Trash protection and audit recovery"),
 		description: __(
-			"Review clicks, unique visitors, referrers, device breakdowns, and traffic trends from the same dashboard used to publish links."
+			"Prevents accidental link loss with soft-delete safeguards, customizable retention schedules from 14 to 90 days, and one-click restoration directly from the activity history."
 		),
 	},
 	{
-		icon: Globe,
-		title: __("Local Location Data"),
+		icon: ShieldCheck,
+		tag: __("Security"),
+		title: __("Two-factor authentication and session controls"),
 		description: __(
-			"Resolve visitor locations from a local MaxMind GeoLite2 database so analytics stay under your control."
+			"Hardens administrator and editor accounts with TOTP two-factor authentication, single-use recovery backup codes, and real-time remote session revocation."
 		),
 	},
 	{
 		icon: Shield,
-		title: __("Access And Security"),
+		tag: __("Access control"),
+		title: __("Public redirect bot and abuse defense"),
 		description: __(
-			"Run with admin and editor roles, session controls, two-factor authentication, backup codes, and API keys."
+			"Shields destination servers and infrastructure against crawler abuse using Cloudflare Turnstile and Google reCAPTCHA v3 without breaking social sharing previews."
+		),
+	},
+	{
+		icon: Globe,
+		tag: __("Privacy"),
+		title: __("On-premises location intelligence"),
+		description: __(
+			"Resolves visitor countries and cities locally on your server through an on-premises MaxMind GeoLite2 database, ensuring fast analytics without third-party tracking."
+		),
+	},
+	{
+		icon: BarChart3,
+		tag: __("Analytics"),
+		title: __("Real-time traffic and engagement reporting"),
+		description: __(
+			"Provides comprehensive click analytics covering total volume, unique visitors, referrers, device platforms, browser engines, and operating systems across custom date ranges."
+		),
+	},
+	{
+		icon: Link2,
+		tag: __("Publishing"),
+		title: __("Branded short links and vector QR codes"),
+		description: __(
+			"Creates clean short links with custom aliases, generated codes, password protection, expiration schedules, social preview image overrides, and downloadable QR codes."
+		),
+	},
+	{
+		icon: ArrowLeftRight,
+		tag: __("Data mobility"),
+		title: __("Data import, export, and migration"),
+		description: __(
+			"Comprehensive data mobility supporting CSV and JSON file uploads, direct text pasting, API ingestion, full database exports, and native migration tools."
 		),
 	},
 	{
 		icon: Code,
-		title: __("Operations And Integrations"),
+		tag: __("Developer"),
+		title: __("REST API and real-time webhooks"),
 		description: __(
-			"Use API keys, webhooks, import tools, and the built-in updater baseline to operate the service over time."
+			"Automates publishing through token-authenticated REST endpoints, dispatches real-time webhooks on link events, and supports WordPress-style action and filter hooks."
 		),
 	},
 	{
-		icon: Server,
-		title: __("Portable Self-Hosting"),
+		icon: SquareTerminal,
+		tag: __("Ecosystem"),
+		title: __("Official extensions and integrations"),
 		description: __(
-			"Deploy on your own domain, keep runtime configuration in your own environment, and preserve user-owned content across updates."
+			"Shorten and manage links directly within your workflow using official add-ons for WordPress, Google Chrome, Mozilla Firefox, Docker, and the command-line CLI."
+		),
+	},
+	{
+		icon: Activity,
+		tag: __("Operations"),
+		title: __("Live Site Health diagnostics"),
+		description: __(
+			"Continuously monitors database connectivity, PHP runtime settings, disk storage, cache engine status, and GeoLite2 file integrity with precision localized timestamps."
+		),
+	},
+	{
+		icon: Languages,
+		tag: __("Localization"),
+		title: __("26 global language packs with native RTL"),
+		description: __(
+			"Offers full native translations across 26 international languages and regional variants, with complete right-to-left layout and typography orchestration out of the box."
 		),
 	},
 ];
 
-const FeatureCard = ({ icon: Icon, title, description }: Feature) => (
+const FeatureCard = ({ icon: Icon, tag, title, description }: Feature) => (
 	<div className="about-page-feature-card">
-		<div className="about-page-feature-icon">
-			<Icon size={20} className="text-accent" />
+		<div>
+			<div className="about-page-feature-header">
+				<div className="about-page-feature-icon">
+					<Icon size={20} className="text-accent" />
+				</div>
+				{tag && <span className="about-page-feature-tag">{tag}</span>}
+			</div>
+			<h3 className="about-page-feature-title">{title}</h3>
 		</div>
-		<h3 className="about-page-feature-title">{title}</h3>
 		<p className="about-page-feature-copy">{description}</p>
 	</div>
 );
@@ -382,19 +370,444 @@ const getFreedoms = (): Freedom[] => [
 	},
 ];
 
+/* ─── Release Notes Card ──────────────────────────────────── */
+interface ReleaseNoteItem {
+	version: string;
+	title?: string;
+	summary?: string;
+	releaseDate?: string;
+	highlights?: string[];
+}
+
+const ReleaseNotesCard = ({
+	releaseNote,
+}: {
+	releaseNote: ReleaseNoteItem;
+}) => (
+	<div className="about-page-release-notes">
+		<div className="about-page-release-meta">
+			<Sparkles className="about-page-release-meta-icon" />
+			<span>
+				{__("Version")} {releaseNote.version}
+			</span>
+			{releaseNote.releaseDate && (
+				<>
+					<span className="about-page-release-meta-separator">•</span>
+					<span className="about-page-release-meta-date">
+						{sprintf(
+							__("Released %s"),
+							formatRelativeTime(releaseNote.releaseDate)
+						)}
+					</span>
+				</>
+			)}
+		</div>
+		<h3 className="about-page-release-title">{releaseNote.title}</h3>
+		<p className="about-page-release-summary">{releaseNote.summary}</p>
+
+		{releaseNote.highlights && releaseNote.highlights.length > 0 && (
+			<div className="about-page-release-highlights">
+				{releaseNote.highlights.map((highlight, idx) => (
+					<div
+						key={idx}
+						className="about-page-release-highlight-item"
+					>
+						<span className="about-page-release-highlight-bullet">
+							•
+						</span>
+						<span className="about-page-release-highlight-text">
+							{highlight}
+						</span>
+					</div>
+				))}
+			</div>
+		)}
+
+		<div className="about-page-release-footer">
+			<a
+				href="https://go.peakurl.org/release-notes"
+				target="_blank"
+				rel="noopener noreferrer"
+				className="about-page-release-footer-link about-page-release-footer-link-primary"
+			>
+				<BookOpen className="about-page-release-footer-link-icon" />
+				{__("For all release notes see the main page")}
+			</a>
+			<a
+				href="https://go.peakurl.org/release-notes-txt"
+				target="_blank"
+				rel="noopener noreferrer"
+				className="about-page-release-footer-link about-page-release-footer-link-secondary"
+			>
+				<TextAlignJustify className="about-page-release-footer-link-icon" />
+				{__("Plain text format")}
+			</a>
+		</div>
+	</div>
+);
+
+/* ─── Tab Content Components ──────────────────────────────── */
+const FeaturesTabContent = ({ features }: { features: Feature[] }) => (
+	<section>
+		<div className="about-page-metrics-grid">
+			<div className="about-page-metric-card">
+				<div className="about-page-metric-card-header">
+					<span className="about-page-metric-card-label">
+						{__("Languages")}
+					</span>
+					<div className="about-page-metric-card-icon about-page-metric-card-icon-blue">
+						<Languages size={18} />
+					</div>
+				</div>
+				<p className="about-page-metric-card-value">26</p>
+				<p className="about-page-metric-card-caption">
+					{__("Global locales & native RTL")}
+				</p>
+			</div>
+
+			<div className="about-page-metric-card">
+				<div className="about-page-metric-card-header">
+					<span className="about-page-metric-card-label">
+						{__("Subsystems")}
+					</span>
+					<div className="about-page-metric-card-icon about-page-metric-card-icon-purple">
+						<Activity size={18} />
+					</div>
+				</div>
+				<p className="about-page-metric-card-value">12</p>
+				<p className="about-page-metric-card-caption">
+					{__("Core modular capabilities")}
+				</p>
+			</div>
+
+			<div className="about-page-metric-card">
+				<div className="about-page-metric-card-header">
+					<span className="about-page-metric-card-label">
+						{__("Self-Hosted")}
+					</span>
+					<div className="about-page-metric-card-icon about-page-metric-card-icon-emerald">
+						<Server size={18} />
+					</div>
+				</div>
+				<p className="about-page-metric-card-value">100%</p>
+				<p className="about-page-metric-card-caption">
+					{__("Full data sovereignty")}
+				</p>
+			</div>
+
+			<div className="about-page-metric-card">
+				<div className="about-page-metric-card-header">
+					<span className="about-page-metric-card-label">
+						{__("Open Source")}
+					</span>
+					<div className="about-page-metric-card-icon about-page-metric-card-icon-amber">
+						<Heart size={18} />
+					</div>
+				</div>
+				<p className="about-page-metric-card-value">MIT</p>
+				<p className="about-page-metric-card-caption">
+					{__("Inspectable and free forever")}
+				</p>
+			</div>
+		</div>
+
+		<SectionTitle
+			subtitle={__(
+				"Everything you need to publish short links, measure engagement, protect your data, and operate the service with complete control."
+			)}
+		>
+			{__("What's Inside")}
+		</SectionTitle>
+
+		<div className="about-page-features-grid">
+			{features.map((f) => (
+				<FeatureCard key={f.title} {...f} />
+			))}
+		</div>
+	</section>
+);
+
+const PrinciplesTabContent = ({ freedoms }: { freedoms: Freedom[] }) => (
+	<section>
+		<SectionTitle
+			subtitle={__(
+				"PeakURL is built to stay understandable in day-to-day use, dependable under load, and open for long-term ownership."
+			)}
+		>
+			{__("Product Principles")}
+		</SectionTitle>
+
+		<div className="about-page-principles-grid">
+			<div className="about-page-principle-card">
+				<div className="about-page-principle-icon">
+					<Monitor size={22} className="text-accent" />
+				</div>
+				<h3 className="about-page-principle-title">
+					{__("Clear By Default")}
+				</h3>
+				<p className="about-page-principle-copy">
+					{__(
+						"The dashboard stays direct and readable so routine operations like publishing links, reviewing traffic, and managing users remain effortless."
+					)}
+				</p>
+			</div>
+			<div className="about-page-principle-card">
+				<div className="about-page-principle-icon">
+					<Code size={22} className="text-accent" />
+				</div>
+				<h3 className="about-page-principle-title">
+					{__("Portable To Run")}
+				</h3>
+				<p className="about-page-principle-copy">
+					{__(
+						"The application installs cleanly on standard PHP and MySQL hosting with native PDO prepared statements and zero external control plane dependencies."
+					)}
+				</p>
+			</div>
+			<div className="about-page-principle-card">
+				<div className="about-page-principle-icon">
+					<Heart size={22} className="text-accent" />
+				</div>
+				<h3 className="about-page-principle-title">
+					{__("Open And Inspectable")}
+				</h3>
+				<p className="about-page-principle-copy">
+					{__(
+						"The entire codebase is auditable, free of telemetry, and extensible via WordPress-style hooks so operators always maintain full data custody."
+					)}
+				</p>
+			</div>
+		</div>
+
+		<Divider />
+
+		<SectionTitle
+			subtitle={__(
+				"PeakURL is released under the MIT License so anyone can adopt, study, adapt, and distribute it freely."
+			)}
+		>
+			{__("Open Source Terms")}
+		</SectionTitle>
+
+		<div className="about-page-freedoms-grid">
+			{freedoms.map((f) => (
+				<div key={f.number} className="about-page-freedom-card">
+					<div className="about-page-freedom-number">{f.number}</div>
+					<div className="about-page-freedom-copy">
+						<h3 className="about-page-freedom-title">
+							{__("Freedom to")} {f.title}
+						</h3>
+						<p className="about-page-freedom-description">
+							{f.description}
+						</p>
+					</div>
+				</div>
+			))}
+		</div>
+	</section>
+);
+
 /* ═══════════════════════════════════════════════════════════ */
 function AboutPage() {
 	const [searchParams] = useSearchParams();
 	const source = searchParams.get("source");
+
+	const isUpdateOrReinstall = source === "update" || source === "reinstall";
+	const isReinstall = source === "reinstall";
+	const isInstall = source === "install";
+
+	// Default to "sponsors" when viewing update/reinstall so Wall of Love appears below release notes,
+	// otherwise default to "features" ("What's Inside").
+	const [activeTab, setActiveTab] = useState<AboutTabId>(
+		isUpdateOrReinstall ? "sponsors" : "features"
+	);
+
 	const features = getFeatures();
 	const freedoms = getFreedoms();
 	const addOnLinks = getAddOnLinks();
+
+	const { data: releaseNotesData } = useGetReleaseNotesQuery(undefined, {
+		skip: !isUpdateOrReinstall,
+	});
+
+	let releaseNote: ReleaseNoteItem | null = null;
+	if (releaseNotesData?.data?.releases?.length) {
+		const releases = releaseNotesData.data.releases;
+		releaseNote =
+			releases.find((r) => r.version === PEAKURL_VERSION) ||
+			releases[0] ||
+			null;
+	}
+
+	const tabs: AboutTab[] = [
+		{
+			id: "features",
+			label: __("What's Inside"),
+			icon: Sparkles,
+		},
+		{
+			id: "principles",
+			label: __("Principles & License"),
+			icon: Shield,
+		},
+		{
+			id: "sponsors",
+			label: __("Wall of Love"),
+			icon: Heart,
+		},
+	];
+
+	/* ─── Update / Reinstall Dedicated View ───────────────────── */
+	if (isUpdateOrReinstall) {
+		return (
+			<div className="about-page">
+				<section className="about-page-hero-status">
+					<div className="about-page-hero-glow" />
+
+					<div className="about-page-hero-content">
+						<div className="about-page-hero-status-badge">
+							<CheckCircle2
+								size={14}
+								className="about-page-hero-status-icon"
+							/>
+							<span>
+								{isReinstall
+									? __("Reinstall complete")
+									: __("Update complete")}{" "}
+								• {__("Version")} {PEAKURL_VERSION}
+							</span>
+						</div>
+
+						<h1 className="about-page-hero-status-title">
+							{isReinstall
+								? __("PeakURL was successfully reinstalled")
+								: __("PeakURL was successfully updated")}
+						</h1>
+
+						<p className="about-page-hero-status-summary">
+							{isReinstall
+								? __(
+										"The core application runtime and static assets have been cleanly refreshed. Your database records, short links, and configuration remain completely intact."
+									)
+								: __(
+										"Your installation has been upgraded to the latest release. Review the release highlights, subsystem performance updates, and technical changes below."
+									)}
+						</p>
+
+						<div className="about-page-hero-actions">
+							<Link
+								to="/dashboard"
+								className="about-page-hero-link about-page-hero-link-primary"
+							>
+								<Link2 size={16} />
+								{__("Go to Dashboard")}
+							</Link>
+							<Link
+								to="/dashboard/tools/system-status"
+								className="about-page-hero-link about-page-hero-link-secondary"
+							>
+								<Activity size={16} />
+								{__("System Status")}
+							</Link>
+							<a
+								href="https://go.peakurl.org/repo"
+								target="_blank"
+								rel="noreferrer"
+								className="about-page-hero-link about-page-hero-link-secondary"
+							>
+								<ExternalLink size={14} />
+								{__("View on GitHub")}
+							</a>
+						</div>
+
+						{/* Extension Badges */}
+						<div className="about-page-hero-addons">
+							{addOnLinks.map((item) => {
+								const Icon = item.icon;
+
+								return (
+									<a
+										key={item.label}
+										href={item.href}
+										target="_blank"
+										rel="noreferrer"
+										className="about-page-hero-addon"
+									>
+										<span className="about-page-hero-addon-icon">
+											<Icon className="h-5 w-5" />
+										</span>
+										<span>{item.label}</span>
+										<ExternalLink
+											size={13}
+											className="about-page-hero-addon-link-icon"
+										/>
+									</a>
+								);
+							})}
+						</div>
+					</div>
+				</section>
+
+				<div className="about-page-body">
+					{releaseNote && (
+						<ReleaseNotesCard releaseNote={releaseNote} />
+					)}
+
+					<Divider />
+
+					{/* ─── Tab Navigation ─────────────────────────── */}
+					<div className="about-page-tabs-wrapper">
+						<div className="about-page-tabs" role="tablist">
+							{tabs.map((tab) => {
+								const Icon = tab.icon;
+								const isActive = activeTab === tab.id;
+
+								return (
+									<button
+										key={tab.id}
+										type="button"
+										role="tab"
+										aria-selected={isActive}
+										onClick={() => setActiveTab(tab.id)}
+										className={cn(
+											"about-page-tab-button",
+											isActive
+												? "about-page-tab-button-active"
+												: "about-page-tab-button-inactive"
+										)}
+									>
+										<Icon className="about-page-tab-icon" />
+										<span>{tab.label}</span>
+									</button>
+								);
+							})}
+						</div>
+					</div>
+
+					{/* ─── Tab Content ────────────────────────────── */}
+					{activeTab === "sponsors" && <Sponsors />}
+					{activeTab === "features" && (
+						<FeaturesTabContent features={features} />
+					)}
+					{activeTab === "principles" && (
+						<PrinciplesTabContent freedoms={freedoms} />
+					)}
+
+					<Divider />
+
+					<AboutFooter />
+				</div>
+			</div>
+		);
+	}
+
+	/* ─── Default View (and Install Banner) ───────────────────── */
+	const installMeta = isInstall ? getLandingMeta().install : null;
 
 	return (
 		<div className="about-page">
 			{/* ─── Hero (full-width breakout) ─────────────────── */}
 			<section className="about-page-hero">
-				{/* Subtle glow */}
 				<div className="about-page-hero-glow" />
 
 				<div className="about-page-hero-content">
@@ -481,157 +894,77 @@ function AboutPage() {
 			</section>
 
 			<div className="about-page-body">
-				<LandingBanner source={source} />
+				{installMeta && (
+					<div className="about-page-landing mb-8">
+						<p className="about-page-landing-eyebrow">
+							{installMeta.eyebrow}
+						</p>
+						<h2 className="about-page-landing-title">
+							{installMeta.title}
+						</h2>
+						<p className="about-page-landing-copy">
+							{installMeta.description}
+						</p>
 
-				{/* ─── Features ───────────────────────────────────── */}
-				<section>
-					<SectionTitle
-						subtitle={__(
-							"Everything you need to publish short links, review traffic, and operate the service from one focused dashboard."
-						)}
-					>
-						{__("What's Inside")}
-					</SectionTitle>
-
-					<div className="about-page-features-grid">
-						{features.map((f) => (
-							<FeatureCard key={f.title} {...f} />
-						))}
-					</div>
-				</section>
-
-				<Divider />
-
-				{/* ─── Mission ────────────────────────────────────── */}
-				<section>
-					<SectionTitle
-						subtitle={__(
-							"PeakURL is built to stay understandable in day-to-day use and dependable over time."
-						)}
-					>
-						{__("Product Principles")}
-					</SectionTitle>
-
-					<div className="about-page-principles-grid">
-						<div className="about-page-principle-card">
-							<div className="about-page-principle-icon">
-								<Monitor size={22} className="text-accent" />
-							</div>
-							<h3 className="about-page-principle-title">
-								{__("Clear By Default")}
-							</h3>
-							<p className="about-page-principle-copy">
-								{__(
-									"The dashboard should stay direct and readable so routine work like publishing links, reviewing traffic, and managing users does not feel heavy."
-								)}
-							</p>
-						</div>
-						<div className="about-page-principle-card">
-							<div className="about-page-principle-icon">
-								<Code size={22} className="text-accent" />
-							</div>
-							<h3 className="about-page-principle-title">
-								{__("Portable To Run")}
-							</h3>
-							<p className="about-page-principle-copy">
-								{__(
-									"The application should install cleanly on common PHP and MySQL hosting without depending on a managed SaaS control plane."
-								)}
-							</p>
-						</div>
-						<div className="about-page-principle-card">
-							<div className="about-page-principle-icon">
-								<Heart size={22} className="text-accent" />
-							</div>
-							<h3 className="about-page-principle-title">
-								{__("Open And Inspectable")}
-							</h3>
-							<p className="about-page-principle-copy">
-								{__(
-									"The codebase stays auditable and adaptable so operators can understand what they run, extend it carefully, and keep long-term control."
-								)}
-							</p>
-						</div>
-					</div>
-				</section>
-
-				<Divider />
-
-				{/* ─── Four Freedoms ──────────────────────────────── */}
-				<section>
-					<SectionTitle
-						subtitle={__(
-							"PeakURL is released under the MIT License so it can stay practical to adopt, inspect, modify, and distribute."
-						)}
-					>
-						{__("Open Source Terms")}
-					</SectionTitle>
-
-					<div className="about-page-freedoms-grid">
-						{freedoms.map((f) => (
-							<div
-								key={f.number}
-								className="about-page-freedom-card"
-							>
-								<div className="about-page-freedom-number">
-									{f.number}
+						{installMeta.actions &&
+							installMeta.actions.length > 0 && (
+								<div className="about-page-landing-actions">
+									{installMeta.actions.map((action) => (
+										<Link
+											key={action.to}
+											to={action.to}
+											className="about-page-landing-action"
+										>
+											{action.label}
+											<ChevronRight size={15} />
+										</Link>
+									))}
 								</div>
-								<div className="about-page-freedom-copy">
-									<h3 className="about-page-freedom-title">
-										{__("Freedom to")} {f.title}
-									</h3>
-									<p className="about-page-freedom-description">
-										{f.description}
-									</p>
-								</div>
-							</div>
-						))}
+							)}
 					</div>
-				</section>
+				)}
+
+				{/* ─── Tab Navigation ─────────────────────────────── */}
+				<div className="about-page-tabs-wrapper">
+					<div className="about-page-tabs" role="tablist">
+						{tabs.map((tab) => {
+							const Icon = tab.icon;
+							const isActive = activeTab === tab.id;
+
+							return (
+								<button
+									key={tab.id}
+									type="button"
+									role="tab"
+									aria-selected={isActive}
+									onClick={() => setActiveTab(tab.id)}
+									className={cn(
+										"about-page-tab-button",
+										isActive
+											? "about-page-tab-button-active"
+											: "about-page-tab-button-inactive"
+									)}
+								>
+									<Icon className="about-page-tab-icon" />
+									<span>{tab.label}</span>
+								</button>
+							);
+						})}
+					</div>
+				</div>
+
+				{/* ─── Tab Content ────────────────────────────────── */}
+				{activeTab === "features" && (
+					<FeaturesTabContent features={features} />
+				)}
+				{activeTab === "principles" && (
+					<PrinciplesTabContent freedoms={freedoms} />
+				)}
+				{activeTab === "sponsors" && <Sponsors />}
 
 				<Divider />
 
-				<Sponsors />
-
-				<Divider />
-
-				{/* ─── Footer tagline ─────────────────────────────── */}
-				<section className="about-page-footer">
-					<div className="about-page-footer-brand">
-						<BrandLockup to="/dashboard" size="md" />
-					</div>
-					<p className="about-page-footer-tagline">
-						{__("Shorten, track, and own every link.")}
-					</p>
-					<div className="about-page-footer-links">
-						<a
-							href="https://peakurl.org?utm_source=dashboard&utm_medium=about_page&utm_campaign=website_link"
-							target="_blank"
-							rel="noreferrer"
-							className="about-page-footer-link"
-						>
-							{__("Website")} <ExternalLink size={10} />
-						</a>
-						<span className="about-page-footer-separator">•</span>
-						<a
-							href="https://go.peakurl.org/repo"
-							target="_blank"
-							rel="noreferrer"
-							className="about-page-footer-link"
-						>
-							GitHub <ExternalLink size={10} />
-						</a>
-						<span className="about-page-footer-separator">•</span>
-						<a
-							href="https://go.peakurl.org/release-notes?utm_source=dashboard&utm_medium=about_page&utm_campaign=release_notes_link"
-							target="_blank"
-							rel="noreferrer"
-							className="about-page-footer-link"
-						>
-							{__("Release Notes")} <ExternalLink size={10} />
-						</a>
-					</div>
-				</section>
+				<AboutFooter />
 			</div>
 		</div>
 	);

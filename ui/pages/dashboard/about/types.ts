@@ -46,6 +46,9 @@ export interface Feature {
 	/** Icon displayed above the feature title. */
 	icon: LucideIcon;
 
+	/** Category or tag label. */
+	tag?: string;
+
 	/** Feature heading. */
 	title: string;
 
@@ -106,4 +109,23 @@ export interface AddOnLink {
 export interface LandingBannerProps {
 	/** Raw `source` query-param value from the about page route. */
 	source: string | null;
+}
+
+/**
+ * Tab identifiers for the default about page.
+ */
+export type AboutTabId = "features" | "principles" | "sponsors";
+
+/**
+ * Tab configuration for the default about page.
+ */
+export interface AboutTab {
+	/** Unique tab identifier. */
+	id: AboutTabId;
+
+	/** Display label. */
+	label: string;
+
+	/** Tab icon component. */
+	icon: LucideIcon;
 }

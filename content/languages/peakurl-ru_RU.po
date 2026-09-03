@@ -6,10 +6,10 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-02 09:50+0000\n"
-"POT-Creation-Date: 2026-09-02 09:50+0000\n"
+"PO-Revision-Date: 2026-09-03 18:21+0000\n"
+"POT-Creation-Date: 2026-09-03 18:21+0000\n"
 "Plural-Forms: nplurals=3; plural=n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : 2;\n"
-"Project-Id-Version: PeakURL 1.6.0\n"
+"Project-Id-Version: PeakURL 1.6.1\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
 "X-Domain: peakurl\n"
 "X-Generator: PeakURL i18n Tools\n"
@@ -271,7 +271,7 @@ msgid "No restorable link metadata found in this activity record."
 msgstr "В этой записи активности не найдены метаданные для восстановления ссылки."
 
 #: app/traits/analytics.php:782
-#: ui/pages/dashboard/activity/ActivityPage.tsx:370
+#: ui/pages/dashboard/activity/ActivityPage.tsx:391
 msgid "This link was permanently deleted and cannot be restored."
 msgstr "Эта ссылка была удалена навсегда и не может быть восстановлена."
 
@@ -298,7 +298,7 @@ msgid "You do not have permission to view this link."
 msgstr "У вас нет разрешения на просмотр этой ссылки."
 
 #: app/traits/links.php:403
-#: app/traits/links.php:1172
+#: app/traits/links.php:1176
 msgid "Provide either socialImage or socialImageUrl, not both."
 msgstr "Укажите либо socialImage, либо socialImageUrl, но не оба параметра одновременно."
 
@@ -314,41 +314,41 @@ msgstr "Проверка не пройдена. Повторите попытк�
 msgid "You do not have permission to edit this link."
 msgstr "У вас нет разрешения на редактирование этой ссылки."
 
-#: app/traits/links.php:1361
+#: app/traits/links.php:1365
 msgid "You do not have permission to delete this link."
 msgstr "У вас нет разрешения на удаление этой ссылки."
 
-#: app/traits/links.php:1511
+#: app/traits/links.php:1515
 msgid "That short link does not exist."
 msgstr "Такой короткой ссылки не существует."
 
-#: app/traits/links.php:1518
+#: app/traits/links.php:1522
 msgid "This link is already active."
 msgstr "Эта ссылка уже активна."
 
-#: app/traits/links.php:1528
+#: app/traits/links.php:1532
 msgid "You do not have permission to restore this link."
 msgstr "У вас нет разрешения на восстановление этой ссылки."
 
-#: app/traits/links.php:1594
-#: app/traits/links.php:1875
-#: app/traits/links.php:1953
+#: app/traits/links.php:1598
+#: app/traits/links.php:1879
+#: app/traits/links.php:1957
 msgid "You do not have permission to delete links."
 msgstr "У вас нет разрешения на удаление ссылок."
 
-#: app/traits/links.php:1776
+#: app/traits/links.php:1780
 msgid "You do not have permission to restore links."
 msgstr "У вас нет разрешения на восстановление ссылок."
 
-#: app/traits/links.php:2138
+#: app/traits/links.php:2142
 msgid "A valid destination URL is required."
 msgstr "Требуется действительный целевой URL."
 
-#: app/traits/links.php:2156
+#: app/traits/links.php:2160
 msgid "That short code is reserved by the application."
 msgstr "Этот короткий код зарезервирован приложением."
 
-#: app/traits/links.php:2166
+#: app/traits/links.php:2170
 msgid "That short code is already in use."
 msgstr "Этот короткий код уже используется."
 
@@ -416,13 +416,13 @@ msgstr "Посетите %s"
 
 #: app/includes/functions.php:1192
 #: ui/pages/dashboard/about/Sponsors.tsx:98
-#: ui/pages/dashboard/about/AboutPage.tsx:613
+#: ui/pages/dashboard/about/AboutPage.tsx:75
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
 msgid "Website"
 msgstr "Веб-сайт"
 
 #: app/includes/functions.php:1193
-#: ui/pages/dashboard/about/AboutPage.tsx:435
+#: ui/pages/dashboard/about/AboutPage.tsx:848
 msgid "Documentation"
 msgstr "Документация"
 
@@ -432,6 +432,7 @@ msgid "GitHub"
 msgstr "GitHub"
 
 #: app/includes/functions.php:1195
+#: ui/pages/dashboard/about/AboutPage.tsx:486
 msgid "Self-Hosted"
 msgstr "Автономный"
 
@@ -1341,78 +1342,78 @@ msgstr "PeakURL не удалось связаться со службой об�
 msgid "PeakURL could not read the update service response."
 msgstr "PeakURL не удалось прочитать ответ службы обновлений."
 
-#: app/services/social-preview.php:254
-#: app/services/social-preview.php:272
-#: app/services/social-preview.php:280
+#: app/services/social-preview.php:260
+#: app/services/social-preview.php:278
+#: app/services/social-preview.php:286
 msgid "Enter a valid social preview image URL."
 msgstr "Введите действительный URL изображения для превью в соцсетях."
 
-#: app/services/social-preview.php:266
+#: app/services/social-preview.php:272
 msgid "The social preview image URL is too long."
 msgstr "URL изображения для превью в соцсетях слишком длинный."
 
-#: app/services/social-preview.php:289
+#: app/services/social-preview.php:295
 msgid "The social preview image URL must use HTTPS."
 msgstr "URL изображения для превью в соцсетях должен использовать протокол HTTPS."
 
-#: app/services/social-preview.php:295
+#: app/services/social-preview.php:301
 msgid "The social preview image URL cannot contain credentials."
 msgstr "URL изображения для превью в соцсетях не может содержать учётные данные."
 
-#: app/services/social-preview.php:351
+#: app/services/social-preview.php:357
 #: ui/hooks/useDashboardSearch.ts:89
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:112
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:117
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:279
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:284
 msgid "Untitled Link"
 msgstr "Ссылка без названия"
 
-#: app/services/social-preview.php:411
+#: app/services/social-preview.php:417
 msgid "Upload a PNG, JPG, or WebP social preview image."
 msgstr "Загрузите изображение для превью в соцсетях в формате PNG, JPG или WebP."
 
-#: app/services/social-preview.php:420
+#: app/services/social-preview.php:426
 msgid "PeakURL could not read the social preview image dimensions."
 msgstr "PeakURL не удалось определить размеры изображения для превью."
 
-#: app/services/social-preview.php:432
+#: app/services/social-preview.php:438
 msgid "PeakURL could not create the social preview uploads directory."
 msgstr "PeakURL не удалось создать каталог для загрузки изображений превью."
 
-#: app/services/social-preview.php:438
+#: app/services/social-preview.php:444
 msgid "PeakURL could not store the uploaded social preview image."
 msgstr "PeakURL не удалось сохранить загруженное изображение для превью."
 
-#: app/services/social-preview.php:445
+#: app/services/social-preview.php:451
 msgid "PeakURL could not activate the uploaded social preview image."
 msgstr "PeakURL не удалось активировать загруженное изображение для превью."
 
-#: app/services/social-preview.php:481
+#: app/services/social-preview.php:487
 msgid "PeakURL could not verify the uploaded social preview image."
 msgstr "PeakURL не удалось проверить загруженное изображение для превью."
 
-#: app/services/social-preview.php:542
+#: app/services/social-preview.php:548
 msgid "The uploaded social preview image exceeds the server maximum file size limit."
 msgstr "Загруженное изображение для превью превышает максимальный размер файла на сервере."
 
-#: app/services/social-preview.php:546
+#: app/services/social-preview.php:552
 msgid "The social preview image upload did not finish. Try again."
 msgstr "Загрузка изображения для превью не завершилась. Попробуйте ещё раз."
 
-#: app/services/social-preview.php:550
+#: app/services/social-preview.php:556
 #: app/services/favicon.php:374
 msgid "The server is missing a temporary upload directory."
 msgstr "На сервере отсутствует временный каталог для загрузки файлов."
 
-#: app/services/social-preview.php:554
+#: app/services/social-preview.php:560
 msgid "The server could not write the uploaded social preview image to disk."
 msgstr "Серверу не удалось записать загруженное изображение на диск."
 
-#: app/services/social-preview.php:558
+#: app/services/social-preview.php:564
 msgid "A PHP extension stopped the social preview image upload."
 msgstr "Расширение PHP остановило загрузку изображения для превью."
 
-#: app/services/social-preview.php:561
+#: app/services/social-preview.php:567
 msgid "PeakURL could not upload the social preview image."
 msgstr "PeakURL не удалось загрузить изображение для превью."
 
@@ -1576,7 +1577,7 @@ msgstr "PeakURL не удалось отправить приветственн�
 
 #: app/services/notifications.php:204
 #: site/setup-config.php:701
-#: ui/pages/dashboard/about/AboutPage.tsx:419
+#: ui/pages/dashboard/about/AboutPage.tsx:832
 msgid "Welcome to %s"
 msgstr "Добро пожаловать в %s"
 
@@ -1758,7 +1759,7 @@ msgstr "Добро пожаловать"
 #: site/setup-config.php:679
 #: ui/components/common/ApiErrorPage/ApiErrorPage.tsx:70
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:128
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1016
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1015
 msgid "Database"
 msgstr "База данных"
 
@@ -1805,7 +1806,7 @@ msgstr "Буквы, цифры, точки, дефисы, подчёркиван
 
 #: site/install.php:588
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:136
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1018
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1017
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:173
 #: ui/pages/dashboard/users/UsersPage.tsx:260
@@ -1941,8 +1942,8 @@ msgstr "Все ссылки"
 #: ui/utils/dashboardSearch.ts:97
 #: ui/utils/dashboardSearch.ts:100
 #: ui/pages/auth/login/LoginPage.tsx:47
-#: ui/pages/layout/dashboard/Search/Search.tsx:286
-#: ui/pages/dashboard/activity/ActivityPage.tsx:636
+#: ui/pages/layout/dashboard/Search/Search.tsx:295
+#: ui/pages/dashboard/activity/ActivityPage.tsx:657
 #: ui/pages/dashboard/links/_components/Header/Header.tsx:42
 #: ui/router/pageTitle.ts:77
 msgid "Links"
@@ -1952,13 +1953,13 @@ msgstr "Ссылки"
 #: ui/utils/dashboardSearch.ts:119
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:80
 #: ui/pages/layout/dashboard/Header/Header.tsx:121
-#: ui/pages/dashboard/activity/ActivityPage.tsx:693
+#: ui/pages/dashboard/activity/ActivityPage.tsx:714
 #: ui/router/pageTitle.ts:73
 msgid "Activity"
 msgstr "Активность"
 
 #: ui/utils/dashboardSearch.ts:120
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:25
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:30
 msgid "Recent Activity"
 msgstr "Недавняя активность"
 
@@ -2016,6 +2017,7 @@ msgstr "Настройки безопасности"
 #: ui/utils/dashboardSearch.ts:169
 #: ui/pages/auth/login/LoginPage.tsx:57
 #: ui/pages/dashboard/settings/Layout.tsx:27
+#: ui/pages/dashboard/about/AboutPage.tsx:246
 msgid "Security"
 msgstr "Безопасность"
 
@@ -2023,7 +2025,7 @@ msgstr "Безопасность"
 #: ui/utils/dashboardSearch.ts:187
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:79
 #: ui/pages/dashboard/settings/Layout.tsx:31
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:996
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:995
 #: ui/router/pageTitle.ts:24
 msgid "API Keys"
 msgstr "Ключи API"
@@ -2052,7 +2054,7 @@ msgstr "Конфигурация почты"
 #: ui/pages/dashboard/settings/Layout.tsx:57
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:138
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:542
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1021
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1020
 #: ui/router/pageTitle.ts:30
 msgid "Location Data"
 msgstr "Географические данные"
@@ -2068,9 +2070,9 @@ msgstr "Обновления"
 #: ui/utils/dashboardSearch.ts:256
 #: ui/utils/dashboardSearch.ts:260
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:53
-#: ui/pages/layout/dashboard/Search/Search.tsx:247
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:989
-#: ui/pages/dashboard/activity/ActivityPage.tsx:642
+#: ui/pages/layout/dashboard/Search/Search.tsx:256
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:988
+#: ui/pages/dashboard/activity/ActivityPage.tsx:663
 #: ui/pages/dashboard/users/UsersPage.tsx:577
 #: ui/router/pageTitle.ts:85
 msgid "Users"
@@ -2106,7 +2108,7 @@ msgstr "Импорт"
 #: ui/utils/dashboardSearch.ts:322
 #: ui/utils/dashboardSearch.ts:325
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:65
-#: ui/pages/layout/dashboard/Search/Search.tsx:224
+#: ui/pages/layout/dashboard/Search/Search.tsx:233
 #: ui/router/pageTitle.ts:119
 msgid "Tools"
 msgstr "Инструменты"
@@ -2128,14 +2130,15 @@ msgstr "Экспорт"
 #: ui/utils/dashboardSearch.ts:321
 #: ui/utils/dashboardSearch.ts:326
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:85
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1081
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1080
+#: ui/pages/dashboard/about/AboutPage.tsx:710
 #: ui/router/pageTitle.ts:115
 msgid "System Status"
 msgstr "Статус системы"
 
 #: ui/utils/dashboardSearch.ts:565
 #: ui/pages/layout/dashboard/Header/Header.tsx:40
-#: ui/pages/dashboard/activity/ActivityPage.tsx:112
+#: ui/pages/dashboard/activity/ActivityPage.tsx:116
 #: ui/pages/dashboard/users/UsersPage.tsx:82
 #: ui/pages/dashboard/users/UsersPage.tsx:90
 #: ui/pages/dashboard/users/UsersPage.tsx:679
@@ -2158,8 +2161,8 @@ msgstr "Подтвердить"
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:370
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:494
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:63
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:509
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1486
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:508
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1485
 #: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:122
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:156
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:18
@@ -2180,8 +2183,8 @@ msgid "Close modal"
 msgstr "Закрыть окно"
 
 #: ui/components/ui/PageSizeControl/PageSizeControl.tsx:27
-#: ui/pages/dashboard/activity/ActivityPage.tsx:800
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:119
+#: ui/pages/dashboard/activity/ActivityPage.tsx:821
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:122
 msgid "Rows per page"
 msgstr "Строк на странице"
 
@@ -2210,10 +2213,10 @@ msgstr "Отменить выбор количества строк"
 
 #: ui/components/charts/MetricDonutChart/MetricDonutChart.tsx:37
 #: ui/components/charts/WorldMap/_components/Legend.tsx:16
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:991
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:990
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:113
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:64
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:168
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:173
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:47
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:166
 msgid "Clicks"
@@ -2251,19 +2254,19 @@ msgstr "Вс"
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:112
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:21
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:130
-#: ui/pages/dashboard/links/LinksPage.tsx:367
+#: ui/pages/dashboard/links/LinksPage.tsx:380
 msgid "Total Clicks"
 msgstr "Всего кликов"
 
 #: ui/components/charts/TrafficChart/TrafficChart.tsx:261
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:70
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:133
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:177
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:182
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:48
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:173
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:28
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:138
-#: ui/pages/dashboard/links/LinksPage.tsx:392
+#: ui/pages/dashboard/links/LinksPage.tsx:405
 msgid "Visitors"
 msgstr "Посетители"
 
@@ -2522,7 +2525,8 @@ msgid "Shorten, organize, and share."
 msgstr "Сокращайте, организуйте и делитесь."
 
 #: ui/pages/auth/login/LoginPage.tsx:52
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:233
+#: ui/pages/dashboard/about/AboutPage.tsx:270
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:268
 msgid "Analytics"
 msgstr "Аналитика"
 
@@ -2669,8 +2673,9 @@ msgstr "Спасибо за выбор %s."
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:561
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:739
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:61
-#: ui/pages/dashboard/about/AboutPage.tsx:230
-#: ui/pages/dashboard/about/AboutPage.tsx:406
+#: ui/pages/dashboard/about/AboutPage.tsx:391
+#: ui/pages/dashboard/about/AboutPage.tsx:677
+#: ui/pages/dashboard/about/AboutPage.tsx:819
 msgid "Version"
 msgstr "Версия"
 
@@ -2679,75 +2684,75 @@ msgid "Update Details"
 msgstr "Подробности обновления"
 
 #: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:51
-#: ui/pages/dashboard/about/AboutPage.tsx:239
+#: ui/pages/dashboard/about/AboutPage.tsx:398
 msgid "Released %s"
 msgstr "Выпущено %s"
 
 #: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:96
-#: ui/pages/dashboard/about/AboutPage.tsx:279
+#: ui/pages/dashboard/about/AboutPage.tsx:434
 msgid "For all release notes see the main page"
 msgstr "Все примечания к выпуску доступны на главной странице"
 
 #: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:105
-#: ui/pages/dashboard/about/AboutPage.tsx:288
+#: ui/pages/dashboard/about/AboutPage.tsx:443
 msgid "Plain text format"
 msgstr "Текстовый формат"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:172
+#: ui/pages/layout/dashboard/Search/Search.tsx:173
 msgid "Search links, settings..."
 msgstr "Поиск ссылок, настроек..."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:173
+#: ui/pages/layout/dashboard/Search/Search.tsx:174
 msgid "Search the dashboard"
 msgstr "Поиск по панели управления"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:186
+#: ui/pages/layout/dashboard/Search/Search.tsx:187
 msgid "Clear search"
 msgstr "Очистить поиск"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:205
+#: ui/pages/layout/dashboard/Search/Search.tsx:214
 msgid "Pages"
 msgstr "Страницы"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:254
+#: ui/pages/layout/dashboard/Search/Search.tsx:263
 msgid "Searching users..."
 msgstr "Поиск пользователей..."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:271
+#: ui/pages/layout/dashboard/Search/Search.tsx:280
 msgid "No matching users found."
 msgstr "Пользователи не найдены."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:293
+#: ui/pages/layout/dashboard/Search/Search.tsx:302
 msgid "Searching links..."
 msgstr "Поиск ссылок..."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:310
+#: ui/pages/layout/dashboard/Search/Search.tsx:319
 msgid "No matching links found."
 msgstr "Ссылки не найдены."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:327
+#: ui/pages/layout/dashboard/Search/Search.tsx:336
 msgid "Search all links for \"%s\""
 msgstr "Искать \"%s\" по всем ссылкам"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:330
+#: ui/pages/layout/dashboard/Search/Search.tsx:339
 msgid "Open the links page with this search applied"
 msgstr "Открыть страницу ссылок с этим фильтром поиска"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:339
+#: ui/pages/layout/dashboard/Search/Search.tsx:348
 msgid "Keep typing to search links, or jump straight to a dashboard page."
 msgstr "Продолжайте ввод для поиска ссылок или перейдите сразу на нужную страницу панели управления."
 
 #: ui/pages/layout/dashboard/Header/Header.tsx:38
 #: ui/pages/layout/dashboard/Header/Header.tsx:79
 #: ui/pages/layout/dashboard/Header/Header.tsx:91
-#: ui/pages/dashboard/activity/ActivityPage.tsx:105
+#: ui/pages/dashboard/activity/ActivityPage.tsx:109
 #: ui/pages/dashboard/users/UsersPage.tsx:67
 #: ui/pages/dashboard/users/UsersPage.tsx:126
 msgid "Admin"
 msgstr "Администратор"
 
 #: ui/pages/layout/dashboard/Header/Header.tsx:39
-#: ui/pages/dashboard/activity/ActivityPage.tsx:109
+#: ui/pages/dashboard/activity/ActivityPage.tsx:113
 #: ui/pages/dashboard/users/UsersPage.tsx:72
 #: ui/pages/dashboard/users/UsersPage.tsx:127
 msgid "Editor"
@@ -2898,12 +2903,12 @@ msgstr "Ключ API скопирован в буфер обмена"
 
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:464
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:137
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1060
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1059
 msgid "Copied"
 msgstr "Скопировано"
 
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:467
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1065
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1064
 msgid "Copy failed"
 msgstr "Не удалось скопировать"
 
@@ -3360,7 +3365,7 @@ msgid "Save or download these codes now—they won't be shown again."
 msgstr "Сохраните или скачайте эти коды сейчас — они больше не будут показаны."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:22
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:993
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:992
 msgid "Active Sessions"
 msgstr "Активные сессии"
 
@@ -3409,15 +3414,15 @@ msgstr "Последняя генерация:"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:740
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:760
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:766
-#: ui/pages/dashboard/activity/ActivityPage.tsx:123
-#: ui/pages/dashboard/activity/ActivityPage.tsx:165
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:53
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:90
+#: ui/pages/dashboard/activity/ActivityPage.tsx:128
+#: ui/pages/dashboard/activity/ActivityPage.tsx:182
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:65
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:105
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:31
 #: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:39
 #: ui/pages/dashboard/_components/RecentClicks/RecentClicks.tsx:11
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:43
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:189
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:48
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:198
 #: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:172
 #: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:179
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:106
@@ -3900,7 +3905,7 @@ msgid "Save Credentials"
 msgstr "Сохранить учётные данные"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:97
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:968
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:967
 msgid "Unavailable"
 msgstr "Недоступно"
 
@@ -4143,7 +4148,7 @@ msgstr "Вставьте секретный ключ вашего поставщ
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:182
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:585
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:812
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:894
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:893
 msgid "Disabled"
 msgstr "Отключено"
 
@@ -4155,7 +4160,7 @@ msgstr "Редактирование"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:797
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:801
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:854
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:964
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:963
 msgid "Not configured"
 msgstr "Не настроено"
 
@@ -4300,7 +4305,7 @@ msgid "Connect PeakURL to your automations with outbound webhooks for link activ
 msgstr "Подключайте PeakURL к вашим средствам автоматизации с помощью исходящих вебхуков активности по ссылкам."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:172
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:997
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:996
 msgid "Webhooks"
 msgstr "Вебхуки"
 
@@ -4356,7 +4361,7 @@ msgstr "Не удалось загрузить вебхуки"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:361
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:26
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:40
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:45
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:44
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:57
 msgid "Inactive"
@@ -4456,13 +4461,13 @@ msgstr "Ключ API"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:105
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:38
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:43
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:56
 msgid "Active"
 msgstr "Активен"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:131
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:247
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:282
 msgid "Delete"
 msgstr "Удалить"
 
@@ -4633,133 +4638,133 @@ msgstr "Файловая система"
 msgid "Direct Database"
 msgstr "Прямое обращение к БД"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:272
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:271
 msgid "Performance & Caching"
 msgstr "Производительность и кэш"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:275
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:274
 msgid "Configure object caching backends and Time-to-Live (TTL) policies to optimize link redirection latency and throughput."
 msgstr "Настройте движки объектного кэширования и политики времени жизни (TTL) для оптимизации задержки перенаправления ссылок и пропускной способности."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:292
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:508
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:930
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1485
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:291
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:507
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:929
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1484
 msgid "Purge Cache"
 msgstr "Очистить кэш"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:300
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:299
 msgid "Active Engine"
 msgstr "Активный движок"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:304
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:303
 msgid "Cache Footprint"
 msgstr "Использование памяти кэшем"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:305
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:911
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:304
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:910
 msgid "0 B"
 msgstr "0 Б"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:309
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:935
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:308
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:934
 msgid "Default TTL"
 msgstr "TTL по умолчанию"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:318
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:317
 msgid "Cache status unavailable"
 msgstr "Статус кэша недоступен"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:335
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:334
 msgid "Object cache is operational"
 msgstr "Объектный кэш функционирует"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:337
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:336
 msgid "Fallback cache driver active"
 msgstr "Активен резервный драйвер кэша"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:338
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:337
 msgid "Object cache is disabled"
 msgstr "Объектный кэш отключен"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:343
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:342
 msgid "Object caching is active and serving link redirects via the %s backend."
 msgstr "Объектное кэширование активно и обрабатывает перенаправления через движок %s."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:350
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:349
 msgid "The preferred cache driver is currently unavailable. PeakURL has automatically fallen back to %s."
 msgstr "Предпочитаемый драйвер кэша в данный момент недоступен. PeakURL автоматически переключился на %s."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:355
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:354
 msgid "Object caching is disabled. Link lookups and redirects are served directly from the database."
 msgstr "Объектное кэширование отключено. Поиск ссылок и перенаправления выполняются напрямую из базы данных."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:367
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:366
 msgid "Cache Engine Settings"
 msgstr "Настройки движка кэширования"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:371
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:370
 msgid "Select your preferred caching backend. PeakURL automatically selects the highest performance operational backend if the preferred driver is unavailable."
 msgstr "Выберите предпочитаемый движок кэширования. PeakURL автоматически выбирает самый быстрый рабочий движок, если предпочитаемый драйвер недоступен."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:379
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:385
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:378
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:384
 msgid "Preferred Cache Driver"
 msgstr "Предпочитаемый драйвер кэша"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:389
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:388
 msgid "PeakURL prioritizes Redis if configured, APCu if loaded, and Filesystem storage as the universal fallback."
 msgstr "PeakURL отдает приоритет Redis (если настроен), APCu (если загружен) и файловому хранилищу в качестве универсального резерва."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:397
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:405
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:396
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:404
 msgid "Redirect Cache TTL"
 msgstr "TTL кэша перенаправлений"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:409
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:408
 msgid "Time-to-Live duration for caching active short URL redirect destinations."
 msgstr "Время жизни (TTL) для кэширования активных целевых перенаправлений коротких ссылок."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:421
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:420
 msgid "Custom Redirect TTL (seconds)"
 msgstr "Пользовательский TTL перенаправления (секунды)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:426
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:425
 msgid "Enter the redirect destination cache lifetime in seconds."
 msgstr "Введите время жизни кэша для целевых перенаправлений в секундах."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:436
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:444
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:435
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:443
 msgid "Negative Lookup (404) TTL"
 msgstr "TTL отрицательных запросов (404)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:448
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:447
 msgid "Time-to-Live duration for caching non-existent link lookups to mitigate database load from automated scans."
 msgstr "Время жизни (TTL) для кэширования несуществующих ссылок для снижения нагрузки на базу данных от автоматического сканирования."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:460
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:459
 msgid "Custom Negative TTL (seconds)"
 msgstr "Пользовательский отрицательный TTL (секунды)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:465
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:464
 msgid "Enter the 404 negative lookup cache lifetime in seconds."
 msgstr "Введите время жизни кэша для отрицательных 404-запросов в секундах."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:485
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:484
 msgid "Reset"
 msgstr "Сбросить"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:495
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:494
 msgid "Save Performance Settings"
 msgstr "Сохранить настройки производительности"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:504
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1481
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:503
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1480
 msgid "Purge Object Cache"
 msgstr "Очистить объектный кэш"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:505
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1482
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:504
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1481
 msgid "Are you sure you want to purge the object cache? All cached redirect records, in-memory objects, and temporary cache files will be immediately invalidated. Subsequent requests will query the database to rebuild the cache."
 msgstr "Вы уверены, что хотите очистить объектный кэш? Все сохраненные записи перенаправлений, объекты в оперативной памяти и временные файлы кэша будут мгновенно аннулированы. Последующие запросы обратятся к базе данных для перестроения кэша."
 
@@ -4907,7 +4912,8 @@ msgid "Manage your account preferences and configurations"
 msgstr "Управляйте параметрами и конфигурацией вашей учётной записи"
 
 #: ui/pages/dashboard/settings/Layout.tsx:45
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:107
+#: ui/pages/dashboard/about/AboutPage.tsx:230
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:108
 msgid "Performance"
 msgstr "Эффективность"
 
@@ -4978,8 +4984,8 @@ msgid "MySQL / MariaDB"
 msgstr "MySQL / MariaDB"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:486
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:890
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1017
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:889
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1016
 msgid "Object Cache"
 msgstr "Объектный кэш"
 
@@ -5053,7 +5059,7 @@ msgstr "Тип установки"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:578
 msgid "Source code"
-msgstr ""
+msgstr "Исходный код"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:581
 msgid "Debug Mode"
@@ -5061,7 +5067,7 @@ msgstr "Режим отладки"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:584
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:811
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:893
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:892
 msgid "Enabled"
 msgstr "Включён"
 
@@ -5071,13 +5077,13 @@ msgstr "Каталог содержимого"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:604
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:665
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:952
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:951
 msgid "Writable"
 msgstr "Доступен для записи"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:605
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:666
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:953
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:952
 msgid "Not Writable"
 msgstr "Недоступен для записи"
 
@@ -5087,7 +5093,7 @@ msgstr "Недоступен для записи"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:712
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:720
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:728
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:980
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:979
 msgid "Missing"
 msgstr "Отсутствует"
 
@@ -5170,7 +5176,7 @@ msgstr "Расширение Intl"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:711
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:719
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:727
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:979
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:978
 msgid "Available"
 msgstr "Доступно"
 
@@ -5234,217 +5240,217 @@ msgstr "Путь к базе данных"
 msgid "Refresh Command"
 msgstr "Команда обновления"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:898
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:897
 msgid "Active Driver"
 msgstr "Активный драйвер"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:902
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:901
 msgid "Fallback Active"
 msgstr "Резервный драйвер активен"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:906
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:905
 msgid "Configured Driver"
 msgstr "Настроенный драйвер"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:907
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:906
 msgid "auto"
 msgstr "автоматически"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:910
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:909
 msgid "Cache Size"
 msgstr "Размер кэша"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:917
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:916
 msgid "%s cached items"
 msgstr "%s кэшированных элементов"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:918
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:917
 msgid "%s cached files"
 msgstr "%s кэшированных файлов"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:941
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:940
 msgid "Negative TTL"
 msgstr "Отрицательный TTL"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:947
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:946
 msgid "Cache Directory"
 msgstr "Каталог кэша"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:955
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:954
 msgid "Not Created"
 msgstr "Не создан"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:959
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:958
 msgid "Redis Server"
 msgstr "Сервер Redis"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:966
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:965
 msgid "Connected"
 msgstr "Подключено"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:976
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:975
 msgid "APCu Extension"
 msgstr "Расширение APCu"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:983
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:982
 msgid "Operational"
 msgstr "Работает"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:990
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:989
 msgid "Short Links"
 msgstr "Короткие ссылки"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:999
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:998
 msgid "Activity Events"
 msgstr "События активности"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1003
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1002
 msgid "Managed Tables"
 msgstr "Управляемые таблицы"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1012
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1011
 msgid "Directories and Sizes"
 msgstr "Каталоги и размеры"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1015
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1014
 msgid "Server"
 msgstr "Сервер"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1024
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1023
 msgid "Data Footprint"
 msgstr "Размер данных"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1061
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1060
 msgid "System status info copied to clipboard"
 msgstr "Сведения о статусе системы скопированы в буфер обмена"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1066
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1065
 msgid "PeakURL could not copy the system status information."
 msgstr "PeakURL не удалось скопировать сведения о статусе системы."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1078
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1077
 msgid "Site Health"
 msgstr "Здоровье сайта"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1084
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1083
 msgid "Monitor installation health, check server environment diagnostics, and review technical configuration details."
 msgstr "Мониторинг состояния установки, диагностика серверного окружения и просмотр технических деталей конфигурации."
 
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1099
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1100
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1101
 msgid "Refresh site health status"
 msgstr "Обновить состояние здоровья сайта"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1163
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1162
 msgid "Site Health: Good"
 msgstr "Здоровье сайта: Отличное"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1167
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1166
 msgid "Site Health: 1 Critical Issue"
 msgstr "Здоровье сайта: 1 критическая проблема"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1170
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1169
 msgid "Site Health: %s Critical Issues"
 msgstr "Здоровье сайта: критических проблем — %s"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1176
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1175
 msgid "Site Health: 1 Recommended Improvement"
 msgstr "Здоровье сайта: 1 рекомендуемое улучшение"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1179
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1178
 msgid "Site Health: %s Recommended Improvements"
 msgstr "Здоровье сайта: рекомендуемых улучшений — %s"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1187
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1186
 msgid "PeakURL is configured properly and all environmental diagnostics are in good standing."
 msgstr "PeakURL настроен правильно, и все параметры диагностического окружения в норме."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1191
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1190
 msgid "Critical items require attention to restore optimal site security and performance. Resolving these should be prioritized."
 msgstr "Критические проблемы требуют внимания для восстановления оптимальной безопасности и производительности сайта. Их устранение должно быть приоритетом."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1194
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1193
 msgid "All core features are active, with recommended improvements available below to optimize your install."
 msgstr "Все основные функции активны, ниже доступны рекомендации для оптимизации вашей установки."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1205
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1204
 msgid "%s Passed"
 msgstr "%s пройдено"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1217
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1216
 msgid "%s Recommended"
 msgstr "%s рекомендуется"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1230
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1229
 msgid "%s Critical"
 msgstr "%s критических"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1250
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1249
 msgid "Checked %s"
 msgstr "Проверено %s"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1264
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1263
 msgid "System Checks"
 msgstr "Проверки системы"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1317
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1316
 msgid "Good"
 msgstr "Хорошо"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1319
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1318
 msgid "Review"
 msgstr "Проверить"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1320
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1319
 msgid "Action Required"
 msgstr "Требуется действие"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1337
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1336
 msgid "1 critical issue"
 msgstr "1 критическая проблема"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1338
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1337
 msgid "%s critical issues"
 msgstr "Критических проблем: %s"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1340
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1339
 msgid "Critical issues are items that may have a high impact on your site performance or security. Resolving these issues should be prioritized."
 msgstr "Критические проблемы могут сильно влиять на производительность или безопасность вашего сайта. Их устранение должно быть приоритетным."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1354
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1353
 msgid "1 recommended improvement"
 msgstr "1 рекомендуемое улучшение"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1355
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1354
 msgid "%s recommended improvements"
 msgstr "Рекомендуемых улучшений: %s"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1357
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1356
 msgid "Recommended improvements are beneficial for your site, though not as urgent as a critical issue. They may include improvements in areas such as security, performance, and user experience."
 msgstr "Рекомендуемые улучшения полезны для вашего сайта, хотя и не столь срочны, как критические проблемы. Они могут повысить безопасность, производительность или удобство использования."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1383
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1382
 msgid "Hide passed tests"
 msgstr "Скрыть пройденные проверки"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1386
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1385
 msgid "1 passed test"
 msgstr "1 пройденная проверка"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1387
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1386
 msgid "%s passed tests"
 msgstr "Пройденных проверок: %s"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1433
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1432
 msgid "System Information"
 msgstr "Информация о системе"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1436
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1435
 msgid "Detailed technical environment, server configuration, storage, and database specifications."
 msgstr "Подробное техническое окружение, конфигурация сервера, хранилище и спецификации базы данных."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1452
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:96
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1451
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:101
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:103
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:230
@@ -5453,7 +5459,7 @@ msgstr "Подробное техническое окружение, конфи
 msgid "Copied!"
 msgstr "Скопировано!"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1458
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1457
 msgid "Copy site info to clipboard"
 msgstr "Скопировать информацию о сайте в буфер обмена"
 
@@ -5970,8 +5976,8 @@ msgid "Author"
 msgstr "Автор"
 
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
-#: ui/pages/dashboard/activity/ActivityPage.tsx:879
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:111
+#: ui/pages/dashboard/activity/ActivityPage.tsx:900
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:114
 #: ui/pages/dashboard/users/UsersPage.tsx:688
 msgid "Actions"
 msgstr "Действия"
@@ -5984,316 +5990,316 @@ msgstr "Деактивировать"
 msgid "Activate"
 msgstr "Активировать"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:128
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:55
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:190
+#: ui/pages/dashboard/activity/ActivityPage.tsx:133
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:67
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:208
 msgid "Unknown user"
 msgstr "Неизвестный пользователь"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:132
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:58
+#: ui/pages/dashboard/activity/ActivityPage.tsx:138
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:71
 msgid "Created new link \"%s\""
 msgstr "Создана новая ссылка «%s»"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:134
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:60
+#: ui/pages/dashboard/activity/ActivityPage.tsx:141
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:73
 msgid "Updated link \"%s\""
 msgstr "Обновлена ссылка «%s»"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:136
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:62
+#: ui/pages/dashboard/activity/ActivityPage.tsx:144
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:75
 msgid "Permanently deleted link \"%s\""
 msgstr "Ссылка «%s» удалена навсегда"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:138
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:64
+#: ui/pages/dashboard/activity/ActivityPage.tsx:147
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:77
 msgid "Moved link \"%s\" to trash"
 msgstr "Ссылка «%s» перемещена в корзину"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:140
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:66
+#: ui/pages/dashboard/activity/ActivityPage.tsx:150
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:79
 msgid "Restored link \"%s\""
 msgstr "Восстановлена ссылка «%s»"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:145
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:71
+#: ui/pages/dashboard/activity/ActivityPage.tsx:157
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:85
 msgid "Permanently deleted 1 link from trash"
 msgstr "1 ссылка навсегда удалена из корзины"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:147
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:73
+#: ui/pages/dashboard/activity/ActivityPage.tsx:159
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:87
 msgid "Permanently deleted %s links from trash"
 msgstr "%s ссылок навсегда удалено из корзины"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:151
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:77
+#: ui/pages/dashboard/activity/ActivityPage.tsx:163
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:91
 msgid "Emptied links from trash"
 msgstr "Ссылки удалены из корзины"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:154
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:79
+#: ui/pages/dashboard/activity/ActivityPage.tsx:168
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:94
 msgid "Created user \"%s\""
 msgstr "Создан пользователь «%s»"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:156
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:81
+#: ui/pages/dashboard/activity/ActivityPage.tsx:171
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:96
 msgid "Updated user \"%s\""
 msgstr "Обновлен пользователь «%s»"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:158
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:83
+#: ui/pages/dashboard/activity/ActivityPage.tsx:174
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:98
 msgid "Deleted user \"%s\""
 msgstr "Удален пользователь «%s»"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:162
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:87
+#: ui/pages/dashboard/activity/ActivityPage.tsx:179
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:102
 msgid "from %s"
 msgstr "из %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:170
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:94
+#: ui/pages/dashboard/activity/ActivityPage.tsx:187
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:109
 msgid "Link \"%1$s\" was clicked %2$s"
 msgstr "По ссылке «%1$s» перешли %2$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:174
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:98
+#: ui/pages/dashboard/activity/ActivityPage.tsx:191
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:113
 msgid "Link \"%s\" was clicked"
 msgstr "По ссылке «%s» перешли"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:177
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:100
+#: ui/pages/dashboard/activity/ActivityPage.tsx:195
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:115
 msgid "Unknown activity"
 msgstr "Неизвестное действие"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:356
+#: ui/pages/dashboard/activity/ActivityPage.tsx:377
 msgid "Link already active"
 msgstr "Ссылка уже активна"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:357
+#: ui/pages/dashboard/activity/ActivityPage.tsx:378
 msgid "This link is already active and does not need to be restored."
 msgstr "Эта ссылка уже активна и не требует восстановления."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:369
+#: ui/pages/dashboard/activity/ActivityPage.tsx:390
 msgid "Link permanently deleted"
 msgstr "Ссылка удалена навсегда"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:378
-#: ui/pages/dashboard/links/LinksPage.tsx:238
+#: ui/pages/dashboard/activity/ActivityPage.tsx:399
+#: ui/pages/dashboard/links/LinksPage.tsx:251
 msgid "Link restored"
 msgstr "Ссылка восстановлена"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:379
+#: ui/pages/dashboard/activity/ActivityPage.tsx:400
 msgid "The link has been restored successfully."
 msgstr "Ссылка успешно восстановлена."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:383
-#: ui/pages/dashboard/links/LinksPage.tsx:243
+#: ui/pages/dashboard/activity/ActivityPage.tsx:404
+#: ui/pages/dashboard/links/LinksPage.tsx:256
 msgid "Unable to restore link"
 msgstr "Не удалось восстановить ссылку"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:386
+#: ui/pages/dashboard/activity/ActivityPage.tsx:407
 msgid "Failed to restore link from activity record."
 msgstr "Не удалось восстановить ссылку из записи активности."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:538
-#: ui/pages/dashboard/activity/ActivityPage.tsx:566
-#: ui/pages/dashboard/activity/ActivityPage.tsx:596
+#: ui/pages/dashboard/activity/ActivityPage.tsx:559
+#: ui/pages/dashboard/activity/ActivityPage.tsx:587
+#: ui/pages/dashboard/activity/ActivityPage.tsx:617
 msgid "Activity deleted"
 msgstr "Запись активности удалена"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:539
+#: ui/pages/dashboard/activity/ActivityPage.tsx:560
 msgid "The activity log entry has been removed."
 msgstr "Запись журнала активности была удалена."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:543
-#: ui/pages/dashboard/activity/ActivityPage.tsx:574
-#: ui/pages/dashboard/activity/ActivityPage.tsx:601
+#: ui/pages/dashboard/activity/ActivityPage.tsx:564
+#: ui/pages/dashboard/activity/ActivityPage.tsx:595
+#: ui/pages/dashboard/activity/ActivityPage.tsx:622
 msgid "Unable to delete activity"
 msgstr "Не удалось удалить запись активности"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:546
+#: ui/pages/dashboard/activity/ActivityPage.tsx:567
 msgid "The activity log entry could not be removed."
 msgstr "Не удалось удалить запись журнала активности."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:568
+#: ui/pages/dashboard/activity/ActivityPage.tsx:589
 msgid "Deleted %s activity log entries."
 msgstr "Удалено записей журнала активности: %s."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:577
+#: ui/pages/dashboard/activity/ActivityPage.tsx:598
 msgid "The selected activity log entries could not be removed."
 msgstr "Не удалось удалить выбранные записи журнала активности."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:597
+#: ui/pages/dashboard/activity/ActivityPage.tsx:618
 msgid "All activity log entries have been removed."
 msgstr "Все записи журнала активности удалены."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:604
+#: ui/pages/dashboard/activity/ActivityPage.tsx:625
 msgid "The activity logs could not be removed."
 msgstr "Не удалось удалить записи журнала активности."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:630
+#: ui/pages/dashboard/activity/ActivityPage.tsx:651
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:35
 #: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:21
 msgid "All"
 msgstr "Все"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:656
+#: ui/pages/dashboard/activity/ActivityPage.tsx:677
 msgid "Total events"
 msgstr "Всего событий"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:662
+#: ui/pages/dashboard/activity/ActivityPage.tsx:683
 msgid "Link events"
 msgstr "События ссылок"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:668
+#: ui/pages/dashboard/activity/ActivityPage.tsx:689
 msgid "User events"
 msgstr "События пользователей"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:674
+#: ui/pages/dashboard/activity/ActivityPage.tsx:695
 msgid "Latest event"
 msgstr "Последнее событие"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:677
+#: ui/pages/dashboard/activity/ActivityPage.tsx:698
 msgid "No recent events"
 msgstr "Нет недавних событий"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:691
+#: ui/pages/dashboard/activity/ActivityPage.tsx:712
 msgid "Audit Log"
 msgstr "Журнал аудита"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:695
+#: ui/pages/dashboard/activity/ActivityPage.tsx:716
 msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
 msgstr "Просматривайте изменения ссылок и события управления пользователями в одном месте с фильтрами, временными метками и сведениями об авторах."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:705
-#: ui/pages/dashboard/activity/ActivityPage.tsx:706
+#: ui/pages/dashboard/activity/ActivityPage.tsx:726
+#: ui/pages/dashboard/activity/ActivityPage.tsx:727
 msgid "Refresh activity history"
 msgstr "Обновить историю активности"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:811
+#: ui/pages/dashboard/activity/ActivityPage.tsx:832
 msgid "Activity history"
 msgstr "История активности"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:818
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:32
+#: ui/pages/dashboard/activity/ActivityPage.tsx:839
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:33
 msgid "%s selected"
 msgstr "Выбрано: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:828
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1305
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:73
+#: ui/pages/dashboard/activity/ActivityPage.tsx:849
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1326
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:74
 msgid "Delete selected"
 msgstr "Удалить выбранные"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:836
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:82
+#: ui/pages/dashboard/activity/ActivityPage.tsx:857
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:83
 msgid "Delete all"
 msgstr "Удалить все"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:867
+#: ui/pages/dashboard/activity/ActivityPage.tsx:888
 msgid "Select all events on this page"
 msgstr "Выбрать все события на этой странице"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:874
+#: ui/pages/dashboard/activity/ActivityPage.tsx:895
 msgid "Event"
 msgstr "Событие"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:875
+#: ui/pages/dashboard/activity/ActivityPage.tsx:896
 msgid "Details"
 msgstr "Подробности"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:876
+#: ui/pages/dashboard/activity/ActivityPage.tsx:897
 msgid "When"
 msgstr "Когда"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:986
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1007
 msgid "Actor: %s"
 msgstr "Инициатор: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:998
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1019
 msgid "By"
 msgstr "Кем"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1036
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1057
 msgid "User: %s"
 msgstr "Пользователь: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1055
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1076
 msgid "Location: %s"
 msgstr "Местоположение: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1150
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1159
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1171
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1180
 msgid "Link is already active"
 msgstr "Ссылка уже активна"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1153
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1162
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1174
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1183
 msgid "Restore link"
 msgstr "Восстановить ссылку"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1185
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1188
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1325
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1206
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1209
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1346
 msgid "Delete activity log"
 msgstr "Удалить запись журнала активности"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1214
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1235
 msgid "No user activity yet"
 msgstr "Активности пользователей пока нет"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1216
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1237
 msgid "No link activity yet"
 msgstr "Активности ссылок пока нет"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1217
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1238
 msgid "No activity recorded yet"
 msgstr "Активность пока не записана"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1220
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1241
 msgid "Once users manage accounts or links change, the audit log will appear here."
 msgstr "Как только пользователи изменят профили или ссылки, журнал аудита появится здесь."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1234
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1255
 msgid "Showing %1$s-%2$s of %3$s events"
 msgstr "Показано %1$s–%2$s из %3$s событий"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1241
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1262
 msgid "Page %1$s of %2$s"
 msgstr "Страница %1$s из %2$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1257
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1278
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:40
 msgid "Previous"
 msgstr "Назад"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1283
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1304
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:84
 msgid "Next"
 msgstr "Вперёд"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1294
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1315
 msgid "Delete activity logs"
 msgstr "Удалить записи активности"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1298
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1319
 msgid "Delete %s selected activity log entries? This action cannot be undone."
 msgstr "Удалить %s выбранных записей журнала активности? Это действие нельзя отменить."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1313
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1317
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1334
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1338
 msgid "Delete all activity"
 msgstr "Удалить всю активность"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1314
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1335
 msgid "Are you sure you want to delete all activity logs? This action cannot be undone."
 msgstr "Вы уверены, что хотите удалить все записи журнала активности? Это действие нельзя отменить."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1329
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1350
 msgid "Delete the activity entry \"%s\"? This action cannot be undone."
 msgstr "Удалить запись активности \"%s\"? Это действие нельзя отменить."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1336
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1357
 msgid "Delete activity"
 msgstr "Удалить активность"
 
@@ -6350,212 +6356,364 @@ msgstr "Огромная благодарность всем, кто подде�
 msgid "Support the Project"
 msgstr "Поддержать проект"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:142
+#: ui/pages/dashboard/about/AboutPage.tsx:66
+msgid "Shorten, track, and own every link."
+msgstr "Сокращайте, отслеживайте и контролируйте каждую ссылку."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:93
+msgid "Release Notes"
+msgstr "Примечания к выпуску"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:190
 msgid "Setup Complete"
 msgstr "Установка завершена"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:143
+#: ui/pages/dashboard/about/AboutPage.tsx:191
 msgid "PeakURL is ready to use."
 msgstr "PeakURL готов к работе."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:144
+#: ui/pages/dashboard/about/AboutPage.tsx:192
 msgid "Your administrator account is active and the dashboard is ready. Use these next steps to finish the initial configuration and start publishing links."
 msgstr "Ваша учётная запись администратора активна, а панель управления готова. Выполните следующие шаги для завершения настройки и публикации первых ссылок."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:149
+#: ui/pages/dashboard/about/AboutPage.tsx:197
 msgid "Create your first short link"
 msgstr "Создать первую короткую ссылку"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:153
+#: ui/pages/dashboard/about/AboutPage.tsx:201
 msgid "Review general settings"
 msgstr "Проверить общие настройки"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:157
+#: ui/pages/dashboard/about/AboutPage.tsx:205
 msgid "Connect location data"
 msgstr "Подключить данные о местоположении"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:163
+#: ui/pages/dashboard/about/AboutPage.tsx:211
 msgid "Update Complete"
 msgstr "Обновление завершено"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:164
+#: ui/pages/dashboard/about/AboutPage.tsx:212
 msgid "PeakURL has been updated to the latest version."
 msgstr "PeakURL был обновлён до последней версии."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:165
+#: ui/pages/dashboard/about/AboutPage.tsx:213
 msgid "The latest version is now installed. Here's a look at what's new in this release."
 msgstr "Последняя версия успешно установлена. Ознакомьтесь с новыми возможностями этого выпуска."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:170
+#: ui/pages/dashboard/about/AboutPage.tsx:218
 msgid "Reinstall Complete"
 msgstr "Переустановка завершена"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:171
+#: ui/pages/dashboard/about/AboutPage.tsx:219
 msgid "PeakURL has been reinstalled."
 msgstr "PeakURL был переустановлен."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:172
+#: ui/pages/dashboard/about/AboutPage.tsx:220
 msgid "The latest version has been reinstalled. Here's a look at what's included in this release."
 msgstr "Последняя версия переустановлена. Ознакомьтесь с возможностями этого выпуска."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:301
-msgid "Branded Short Links"
-msgstr "Брендированные короткие ссылки"
+#: ui/pages/dashboard/about/AboutPage.tsx:231
+msgid "Multi-tier object caching"
+msgstr "Многоуровневое кэширование объектов"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:232
+msgid "Delivers sub-millisecond link redirects using Redis, APCu, or local filesystem storage with automatic backend fallback, configurable cache durations, and instant cache purging."
+msgstr "Обеспечивает перенаправление ссылок за доли миллисекунды через Redis, APCu или файловую систему с автоматическим резервированием и мгновенной очисткой кэша."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:238
+msgid "Data safeguards"
+msgstr "Безопасность данных"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:239
+msgid "Trash protection and audit recovery"
+msgstr "Защита корзиной и восстановление"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:240
+msgid "Prevents accidental link loss with soft-delete safeguards, customizable retention schedules from 14 to 90 days, and one-click restoration directly from the activity history."
+msgstr "Предотвращает случайную потерю ссылок с помощью мягкого удаления, настраиваемого срока хранения от 14 до 90 дней и восстановления в один клик из истории активности."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:247
+msgid "Two-factor authentication and session controls"
+msgstr "Двухфакторная аутентификация и управление сессиями"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:248
+msgid "Hardens administrator and editor accounts with TOTP two-factor authentication, single-use recovery backup codes, and real-time remote session revocation."
+msgstr "Усиливает защиту учетных записей администраторов и редакторов с помощью 2FA TOTP, одноразовых резервных кодов и удаленного завершения активных сессий в реальном времени."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:254
+msgid "Access control"
+msgstr "Контроль доступа"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:255
+msgid "Public redirect bot and abuse defense"
+msgstr "Защита публичных перенаправлений от ботов и спама"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:256
+msgid "Shields destination servers and infrastructure against crawler abuse using Cloudflare Turnstile and Google reCAPTCHA v3 without breaking social sharing previews."
+msgstr "Защищает целевые серверы от паразитного трафика с помощью Cloudflare Turnstile и Google reCAPTCHA v3, сохраняя корректные превью в социальных сетях."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:262
+msgid "Privacy"
+msgstr "Конфиденциальность"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:263
+msgid "On-premises location intelligence"
+msgstr "Локальная геоаналитика"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:264
+msgid "Resolves visitor countries and cities locally on your server through an on-premises MaxMind GeoLite2 database, ensuring fast analytics without third-party tracking."
+msgstr "Определяет страны и города посетителей локально на вашем сервере с помощью базы MaxMind GeoLite2, обеспечивая быструю статистику без стороннего отслеживания."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:271
+msgid "Real-time traffic and engagement reporting"
+msgstr "Отчеты о трафике и взаимодействии в реальном времени"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:272
+msgid "Provides comprehensive click analytics covering total volume, unique visitors, referrers, device platforms, browser engines, and operating systems across custom date ranges."
+msgstr "Предоставляет подробную аналитику переходов: общий объем, уникальные посетители, источники, типы устройств, браузеры и ОС за любые выбранные периоды."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:278
+msgid "Publishing"
+msgstr "Публикация"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:279
+msgid "Branded short links and vector QR codes"
+msgstr "Фирменные короткие ссылки и векторные QR-коды"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:280
+msgid "Creates clean short links with custom aliases, generated codes, password protection, expiration schedules, social preview image overrides, and downloadable QR codes."
+msgstr "Создает аккуратные короткие ссылки с пользовательскими алиасами, паролями, сроками действия, индивидуальными превью-изображениями и векторными QR-кодами."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:286
+msgid "Data mobility"
+msgstr "Мобильность данных"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:287
+msgid "Data import, export, and migration"
+msgstr "Импорт, экспорт и миграция данных"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:288
+msgid "Comprehensive data mobility supporting CSV and JSON file uploads, direct text pasting, API ingestion, full database exports, and native migration tools."
+msgstr "Полная свобода данных с поддержкой файлов CSV и JSON, прямой вставки текста, API-импорта, полного экспорта базы данных и встроенных инструментов миграции."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:294
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:98
+msgid "Developer"
+msgstr "Для разработчиков"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:295
+msgid "REST API and real-time webhooks"
+msgstr "REST API и вебхуки в реальном времени"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:296
+msgid "Automates publishing through token-authenticated REST endpoints, dispatches real-time webhooks on link events, and supports WordPress-style action and filter hooks."
+msgstr "Автоматизирует работу через защищенные REST-эндпоинты с токенами, отправляет вебхуки о событиях ссылок и поддерживает хуки в стиле WordPress."
 
 #: ui/pages/dashboard/about/AboutPage.tsx:302
-msgid "Create clean short links with custom aliases, generated codes, QR output, and redirect settings that stay easy to manage."
-msgstr "Создавайте аккуратные короткие ссылки с собственными псевдонимами, сгенерированными кодами, QR-кодами и гибкими настройками перенаправления."
+msgid "Ecosystem"
+msgstr "Экосистема"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:308
-msgid "Click Analytics"
-msgstr "Аналитика кликов"
+#: ui/pages/dashboard/about/AboutPage.tsx:303
+msgid "Official extensions and integrations"
+msgstr "Официальные расширения и интеграции"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:309
-msgid "Review clicks, unique visitors, referrers, device breakdowns, and traffic trends from the same dashboard used to publish links."
-msgstr "Анализируйте клики, уникальных посетителей, источники перехода, распределение по устройствам и динамику трафика прямо в панели управления."
+#: ui/pages/dashboard/about/AboutPage.tsx:304
+msgid "Shorten and manage links directly within your workflow using official add-ons for WordPress, Google Chrome, Mozilla Firefox, Docker, and the command-line CLI."
+msgstr "Сокращайте ссылки прямо в рабочем процессе благодаря официальным плагинам для WordPress, Chrome, Firefox, Docker и интерфейсу командной строки (CLI)."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:315
-msgid "Local Location Data"
-msgstr "Локальные географические данные"
+#: ui/pages/dashboard/about/AboutPage.tsx:310
+msgid "Operations"
+msgstr "Эксплуатация"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:316
-msgid "Resolve visitor locations from a local MaxMind GeoLite2 database so analytics stay under your control."
-msgstr "Определяйте местоположение посетителей с помощью локальной базы данных MaxMind GeoLite2, чтобы аналитика оставалась под вашим полным контролем."
+#: ui/pages/dashboard/about/AboutPage.tsx:311
+msgid "Live Site Health diagnostics"
+msgstr "Диагностика состояния системы в реальном времени"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:322
-msgid "Access And Security"
-msgstr "Доступ и безопасность"
+#: ui/pages/dashboard/about/AboutPage.tsx:312
+msgid "Continuously monitors database connectivity, PHP runtime settings, disk storage, cache engine status, and GeoLite2 file integrity with precision localized timestamps."
+msgstr "Непрерывно отслеживает соединение с базой данных, параметры PHP, дисковое пространство, состояние кэша и целостность GeoLite2 с точными метками времени."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:323
-msgid "Run with admin and editor roles, session controls, two-factor authentication, backup codes, and API keys."
-msgstr "Работайте с ролями администратора и редактора, управлением сессиями, двухфакторной аутентификацией, резервными кодами и ключами API."
+#: ui/pages/dashboard/about/AboutPage.tsx:318
+msgid "Localization"
+msgstr "Локализация"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:329
-msgid "Operations And Integrations"
-msgstr "Операции и интеграции"
+#: ui/pages/dashboard/about/AboutPage.tsx:319
+msgid "26 global language packs with native RTL"
+msgstr "26 мировых языковых пакетов с нативной поддержкой RTL"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:330
-msgid "Use API keys, webhooks, import tools, and the built-in updater baseline to operate the service over time."
-msgstr "Используйте ключи API, вебхуки, инструменты импорта и встроенный механизм обновлений для стабильной работы сервиса."
+#: ui/pages/dashboard/about/AboutPage.tsx:320
+msgid "Offers full native translations across 26 international languages and regional variants, with complete right-to-left layout and typography orchestration out of the box."
+msgstr "Предлагает полноценные переводы на 26 языков и региональных диалектов с поддержкой письма справа налево (RTL) прямо из коробки."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:336
-msgid "Portable Self-Hosting"
-msgstr "Автономный селф-хостинг"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:337
-msgid "Deploy on your own domain, keep runtime configuration in your own environment, and preserve user-owned content across updates."
-msgstr "Разворачивайте на собственном домене, храните конфигурацию в своей среде и сохраняйте все пользовательские данные при обновлениях."
-
-#: ui/pages/dashboard/about/AboutPage.tsx:357
+#: ui/pages/dashboard/about/AboutPage.tsx:345
 msgid "Use"
 msgstr "Использование"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:358
+#: ui/pages/dashboard/about/AboutPage.tsx:346
 msgid "Run PeakURL for any purpose, personal projects, business, education, or anything in between."
 msgstr "Используйте PeakURL для любых целей: личных проектов, бизнеса, образования и любых других задач."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:364
+#: ui/pages/dashboard/about/AboutPage.tsx:352
 msgid "Study"
 msgstr "Изучение"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:365
+#: ui/pages/dashboard/about/AboutPage.tsx:353
 msgid "Explore the source code, understand how it works, and modify it to suit your exact needs."
 msgstr "Изучайте исходный код, разбирайтесь в его работе и изменяйте его под ваши точные требования."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:371
+#: ui/pages/dashboard/about/AboutPage.tsx:359
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:185
 msgid "Share"
 msgstr "Распространение"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:372
+#: ui/pages/dashboard/about/AboutPage.tsx:360
 msgid "Redistribute copies freely so others can benefit from the same powerful link management platform."
 msgstr "Свободно делитесь копиями, чтобы другие могли воспользоваться преимуществами мощной платформы управления ссылками."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:378
+#: ui/pages/dashboard/about/AboutPage.tsx:366
 msgid "Improve"
 msgstr "Улучшение"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:379
+#: ui/pages/dashboard/about/AboutPage.tsx:367
 msgid "Enhance PeakURL and share your improvements, contributing back to the open-source community."
 msgstr "Улучшайте PeakURL и делитесь своими доработками, внося вклад в сообщество открытого исходного кода."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:422
-msgid "PeakURL gives you a focused workspace for publishing short links, measuring engagement, and running branded link infrastructure on your own stack."
-msgstr "PeakURL предоставляет удобное рабочее пространство для публикации коротких ссылок, оценки вовлечённости и управления брендированной инфраструктурой на вашем собственном стеке."
+#: ui/pages/dashboard/about/AboutPage.tsx:456
+msgid "Languages"
+msgstr "Языки"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:452
-msgid "View on GitHub"
-msgstr "Смотреть на GitHub"
+#: ui/pages/dashboard/about/AboutPage.tsx:464
+msgid "Global locales & native RTL"
+msgstr "Мировые языки & нативный RTL"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:489
-msgid "Everything you need to publish short links, review traffic, and operate the service from one focused dashboard."
-msgstr "Всё необходимое для публикации коротких ссылок, анализа трафика и управления сервисом в одной удобной панели."
+#: ui/pages/dashboard/about/AboutPage.tsx:471
+msgid "Subsystems"
+msgstr "Подсистемы"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:493
+#: ui/pages/dashboard/about/AboutPage.tsx:479
+msgid "Core modular capabilities"
+msgstr "Ключевые модульные функции"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:494
+msgid "Full data sovereignty"
+msgstr "Полный суверенитет над данными"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:501
+msgid "Open Source"
+msgstr "Открытый исходный код"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:509
+msgid "Inspectable and free forever"
+msgstr "Прозрачный и навсегда свободный"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:515
+msgid "Everything you need to publish short links, measure engagement, protect your data, and operate the service with complete control."
+msgstr "Все необходимое для публикации коротких ссылок, оценки вовлеченности, защиты информации и полного контроля над сервисом."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:519
+#: ui/pages/dashboard/about/AboutPage.tsx:645
 msgid "What's Inside"
 msgstr "Что внутри"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:508
-msgid "PeakURL is built to stay understandable in day-to-day use and dependable over time."
-msgstr "PeakURL создан простым и понятным в повседневном использовании и надёжным с течением времени."
+#: ui/pages/dashboard/about/AboutPage.tsx:533
+msgid "PeakURL is built to stay understandable in day-to-day use, dependable under load, and open for long-term ownership."
+msgstr "PeakURL спроектирован так, чтобы оставаться понятным в повседневной работе, надежным под нагрузкой и открытым для долгосрочного владения."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:512
+#: ui/pages/dashboard/about/AboutPage.tsx:537
 msgid "Product Principles"
 msgstr "Принципы продукта"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:521
+#: ui/pages/dashboard/about/AboutPage.tsx:546
 msgid "Clear By Default"
 msgstr "Понятность по умолчанию"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:524
-msgid "The dashboard should stay direct and readable so routine work like publishing links, reviewing traffic, and managing users does not feel heavy."
-msgstr "Панель управления должна оставаться понятной и удобной, чтобы рутинные задачи, такие как создание ссылок, просмотр трафика и управление пользователями, не казались сложными."
+#: ui/pages/dashboard/about/AboutPage.tsx:549
+msgid "The dashboard stays direct and readable so routine operations like publishing links, reviewing traffic, and managing users remain effortless."
+msgstr "Панель управления остается наглядной и удобной, благодаря чему создание ссылок, просмотр трафика и управление пользователями не требуют лишних усилий."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:534
+#: ui/pages/dashboard/about/AboutPage.tsx:559
 msgid "Portable To Run"
 msgstr "Простота развёртывания"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:537
-msgid "The application should install cleanly on common PHP and MySQL hosting without depending on a managed SaaS control plane."
-msgstr "Приложение легко устанавливается на стандартный хостинг PHP и MySQL без зависимости от внешних облачных SaaS-сервисов."
+#: ui/pages/dashboard/about/AboutPage.tsx:562
+msgid "The application installs cleanly on standard PHP and MySQL hosting with native PDO prepared statements and zero external control plane dependencies."
+msgstr "Приложение безупречно устанавливается на стандартный PHP и MySQL хостинг, используя нативные подготовленные выражения PDO без внешних сервисов."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:547
+#: ui/pages/dashboard/about/AboutPage.tsx:572
 msgid "Open And Inspectable"
 msgstr "Открытость и прозрачность"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:550
-msgid "The codebase stays auditable and adaptable so operators can understand what they run, extend it carefully, and keep long-term control."
-msgstr "Исходный код остаётся полностью открытым для аудита и адаптации, чтобы администраторы точно понимали, что запускают, могли легко расширять сервис и сохраняли долгосрочный контроль."
+#: ui/pages/dashboard/about/AboutPage.tsx:575
+msgid "The entire codebase is auditable, free of telemetry, and extensible via WordPress-style hooks so operators always maintain full data custody."
+msgstr "Весь исходный код открыт для аудита, лишен телеметрии и расширяем через систему хуков, сохраняя данные исключительно под вашим контролем."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:563
-msgid "PeakURL is released under the MIT License so it can stay practical to adopt, inspect, modify, and distribute."
-msgstr "PeakURL распространяется по лицензии MIT, что обеспечивает максимальную гибкость для внедрения, проверки, модификации и распространения."
+#: ui/pages/dashboard/about/AboutPage.tsx:585
+msgid "PeakURL is released under the MIT License so anyone can adopt, study, adapt, and distribute it freely."
+msgstr "PeakURL распространяется под лицензией MIT, что позволяет каждому свободно использовать, изучать, модифицировать и распространять систему."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:567
+#: ui/pages/dashboard/about/AboutPage.tsx:589
 msgid "Open Source Terms"
 msgstr "Условия открытого исходного кода"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:581
+#: ui/pages/dashboard/about/AboutPage.tsx:598
 msgid "Freedom to"
 msgstr "Свобода"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:604
-msgid "Shorten, track, and own every link."
-msgstr "Сокращайте, отслеживайте и контролируйте каждую ссылку."
+#: ui/pages/dashboard/about/AboutPage.tsx:650
+msgid "Principles & License"
+msgstr "Принципы и лицензия"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:631
-msgid "Release Notes"
-msgstr "Примечания к выпуску"
+#: ui/pages/dashboard/about/AboutPage.tsx:655
+msgid "Wall of Love"
+msgstr "Стена признания"
 
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:26
+#: ui/pages/dashboard/about/AboutPage.tsx:675
+msgid "Reinstall complete"
+msgstr "Переустановка завершена"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:676
+msgid "Update complete"
+msgstr "Обновление завершено"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:683
+msgid "PeakURL was successfully reinstalled"
+msgstr "PeakURL был успешно переустановлен"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:684
+msgid "PeakURL was successfully updated"
+msgstr "PeakURL был успешно обновлен"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:689
+msgid "The core application runtime and static assets have been cleanly refreshed. Your database records, short links, and configuration remain completely intact."
+msgstr "Файлы ядра приложения и статические ресурсы успешно обновлены. Записи базы данных, короткие ссылки и настройки полностью сохранены."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:692
+msgid "Your installation has been upgraded to the latest release. Review the release highlights, subsystem performance updates, and technical changes below."
+msgstr "Ваша система обновлена до последней версии. Ознакомьтесь с основными изменениями, улучшениями производительности и техническими деталями ниже."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:703
+#: ui/pages/NotFoundPage.tsx:58
+msgid "Go to Dashboard"
+msgstr "Перейти в панель управления"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:719
+#: ui/pages/dashboard/about/AboutPage.tsx:865
+msgid "View on GitHub"
+msgstr "Смотреть на GitHub"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:835
+msgid "PeakURL gives you a focused workspace for publishing short links, measuring engagement, and running branded link infrastructure on your own stack."
+msgstr "PeakURL предоставляет удобное рабочее пространство для публикации коротких ссылок, оценки вовлечённости и управления брендированной инфраструктурой на вашем собственном стеке."
+
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:31
 msgid "No recent activity"
 msgstr "Нет недавней активности"
 
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:27
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:32
 msgid "View All Activity"
 msgstr "Смотреть всю активность"
 
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:187
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:205
 msgid "By %1$s • %2$s"
 msgstr "%1$s • %2$s"
 
@@ -6604,7 +6762,7 @@ msgid "Compared with %1$s to %2$s."
 msgstr "По сравнению с периодом с %1$s по %2$s."
 
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:119
-#: ui/pages/dashboard/links/LinksPage.tsx:420
+#: ui/pages/dashboard/links/LinksPage.tsx:433
 msgid "Active Links"
 msgstr "Активные ссылки"
 
@@ -6753,38 +6911,50 @@ msgid "Sort: Date Created"
 msgstr "Сортировка: по дате создания"
 
 #: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:44
+msgid "Sort: Date Modified"
+msgstr "Сортировка: Дата изменения"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:45
 msgid "Sort: Most Clicks"
 msgstr "Сортировка: по количеству кликов"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:45
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:46
+msgid "Sort: Unique Visitors"
+msgstr "Сортировка: Уникальные посетители"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:47
 msgid "Sort: Alias"
 msgstr "Сортировка: по псевдониму"
 
 #: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:48
+msgid "Sort: Title"
+msgstr "Сортировка: Заголовок"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:51
 msgid "Descending"
 msgstr "По убыванию"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:49
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:52
 msgid "Ascending"
 msgstr "По возрастанию"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:60
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:63
 msgid "Total Links:"
 msgstr "Всего ссылок:"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:70
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:73
 msgid "Total Clicks:"
 msgstr "Всего кликов:"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:92
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:95
 msgid "Filter links by status"
 msgstr "Фильтровать ссылки по статусу"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:102
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:105
 msgid "Sort links"
 msgstr "Сортировать ссылки"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:111
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:114
 msgid "Sort order"
 msgstr "Порядок сортировки"
 
@@ -6792,81 +6962,93 @@ msgstr "Порядок сортировки"
 msgid "Showing %1$s–%2$s of %3$s links"
 msgstr "Показано %1$s–%2$s из %3$s ссылок"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:26
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:27
 msgid "Deselect all links"
 msgstr "Снять выбор со всех ссылок"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:43
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:44
 msgid "Restore selected"
 msgstr "Восстановить выбранные"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:52
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:53
 msgid "Delete permanently"
 msgstr "Удалить навсегда"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:61
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:62
 msgid "Empty trash"
 msgstr "Очистить корзину"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:103
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:104
 msgid "Link"
 msgstr "Ссылка"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:104
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:105
 msgid "Title"
 msgstr "Название"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:105
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:106
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:117
 msgid "Destination"
 msgstr "Целевой URL"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:109
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:111
+msgid "Modified"
+msgstr "Изменено"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:111
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:35
 #: ui/pages/dashboard/users/UsersPage.tsx:685
 msgid "Created"
 msgstr "Создано"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:36
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:41
 msgid "Trashed"
 msgstr "В корзине"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:42
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:150
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:47
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:155
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:58
 msgid "Expired"
 msgstr "Истекла"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:97
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:102
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:104
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:143
 msgid "Copy"
 msgstr "Копировать"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:131
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:136
 msgid "Protected"
 msgstr "Защищено"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:151
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:156
 msgid "Expires"
 msgstr "Истекает"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:209
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:207
+msgid "Created: %s"
+msgstr "Создано: %s"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:211
+msgid "Modified: %s"
+msgstr "Изменено: %s"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:244
 msgid "Restore Link"
 msgstr "Восстановить ссылку"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:216
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:251
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:172
 msgid "Delete Permanently"
 msgstr "Удалить навсегда"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:226
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:261
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:77
 msgid "QR Code"
 msgstr "QR-код"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:240
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:275
 msgid "Edit"
 msgstr "Редактировать"
 
@@ -6878,37 +7060,37 @@ msgstr "Ссылок пока нет"
 msgid "Create your first shortened link to get started"
 msgstr "Создайте свою первую короткую ссылку, чтобы начать работу"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:158
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:159
 msgid "Links deleted"
 msgstr "Ссылки удалены"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:159
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:160
 msgid "All links have been removed."
 msgstr "Все ссылки были удалены."
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:163
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:164
 msgid "Unable to delete links"
 msgstr "Не удалось удалить ссылки"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:164
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:165
 msgid "Failed to delete all links."
 msgstr "Не удалось удалить все ссылки."
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:257
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:261
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:260
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:264
 msgid "Delete all links"
 msgstr "Удалить все ссылки"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:258
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:261
 msgid "Are you sure you want to delete all links? This will move active links to trash."
 msgstr "Вы уверены, что хотите удалить все ссылки? Это переместит активные ссылки в корзину."
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:269
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:273
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:272
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:276
 msgid "Empty Trash"
 msgstr "Очистить корзину"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:270
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:273
 msgid "Are you sure you want to permanently delete all links in the trash? This action cannot be undone."
 msgstr "Вы уверены, что хотите навсегда удалить все ссылки из корзины? Это действие нельзя отменить."
 
@@ -7340,10 +7522,6 @@ msgstr "Видео"
 msgid "News & Content"
 msgstr "Новости и контент"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:98
-msgid "Developer"
-msgstr "Для разработчиков"
-
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:100
 msgid "Email Marketing"
 msgstr "Email-маркетинг"
@@ -7647,55 +7825,55 @@ msgstr "Обновить ссылки"
 msgid "Manage and track your shortened URLs"
 msgstr "Управляйте короткими ссылками и отслеживайте их показатели"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:239
+#: ui/pages/dashboard/links/LinksPage.tsx:252
 msgid "The link has been restored to active status."
 msgstr "Ссылка восстановлена в активный статус."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:244
+#: ui/pages/dashboard/links/LinksPage.tsx:257
 msgid "Failed to restore link."
 msgstr "Не удалось восстановить ссылку."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:253
+#: ui/pages/dashboard/links/LinksPage.tsx:266
 msgid "Links restored"
 msgstr "Ссылки восстановлены"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:254
+#: ui/pages/dashboard/links/LinksPage.tsx:267
 msgid "Selected links have been restored to active status."
 msgstr "Выбранные ссылки восстановлены в активный статус."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:258
+#: ui/pages/dashboard/links/LinksPage.tsx:271
 msgid "Unable to restore links"
 msgstr "Не удалось восстановить ссылки"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:259
+#: ui/pages/dashboard/links/LinksPage.tsx:272
 msgid "Failed to restore selected links."
 msgstr "Не удалось восстановить выбранные ссылки."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:268
+#: ui/pages/dashboard/links/LinksPage.tsx:281
 msgid "Trash emptied"
 msgstr "Корзина очищена"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:269
+#: ui/pages/dashboard/links/LinksPage.tsx:282
 msgid "All trashed links have been permanently deleted."
 msgstr "Все ссылки из корзины были удалены навсегда."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:273
+#: ui/pages/dashboard/links/LinksPage.tsx:286
 msgid "Unable to empty trash"
 msgstr "Не удалось очистить корзину"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:274
+#: ui/pages/dashboard/links/LinksPage.tsx:287
 msgid "Failed to empty trash."
 msgstr "Не удалось очистить корзину."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:406
+#: ui/pages/dashboard/links/LinksPage.tsx:419
 msgid "Total Links"
 msgstr "Всего ссылок"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:434
+#: ui/pages/dashboard/links/LinksPage.tsx:447
 msgid "Items in the trash are retained indefinitely until emptied."
 msgstr "Элементы в корзине хранятся бессрочно до ее очистки."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:438
+#: ui/pages/dashboard/links/LinksPage.tsx:451
 msgid "Items in the trash will be automatically deleted after %d days."
 msgstr "Элементы в корзине будут автоматически удалены через %d дн."
 
@@ -7874,10 +8052,6 @@ msgstr "Страница панели управления, которую вы 
 #: ui/pages/NotFoundPage.tsx:50
 msgid "Go Back"
 msgstr "Вернуться назад"
-
-#: ui/pages/NotFoundPage.tsx:58
-msgid "Go to Dashboard"
-msgstr "Перейти в панель управления"
 
 #: ui/pages/NotFoundPage.tsx:64
 msgid "Popular Destinations"

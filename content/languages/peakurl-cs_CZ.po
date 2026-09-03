@@ -6,10 +6,10 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-02 09:50+0000\n"
-"POT-Creation-Date: 2026-09-02 09:50+0000\n"
+"PO-Revision-Date: 2026-09-03 18:21+0000\n"
+"POT-Creation-Date: 2026-09-03 18:21+0000\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n >= 2 && n <= 4 ? 1 : 2;\n"
-"Project-Id-Version: PeakURL 1.6.0\n"
+"Project-Id-Version: PeakURL 1.6.1\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
 "X-Domain: peakurl\n"
 "X-Generator: PeakURL i18n Tools\n"
@@ -271,7 +271,7 @@ msgid "No restorable link metadata found in this activity record."
 msgstr "V tomto záznamu aktivity nebyla nalezena žádná metadata pro obnovení odkazu."
 
 #: app/traits/analytics.php:782
-#: ui/pages/dashboard/activity/ActivityPage.tsx:370
+#: ui/pages/dashboard/activity/ActivityPage.tsx:391
 msgid "This link was permanently deleted and cannot be restored."
 msgstr "Tento odkaz byl trvale smazán a nelze jej obnovit."
 
@@ -298,7 +298,7 @@ msgid "You do not have permission to view this link."
 msgstr "Nemáte oprávnění k prohlížení tohoto odkazu."
 
 #: app/traits/links.php:403
-#: app/traits/links.php:1172
+#: app/traits/links.php:1176
 msgid "Provide either socialImage or socialImageUrl, not both."
 msgstr "Zadejte buď socialImage, nebo socialImageUrl, nikoli obojí."
 
@@ -314,41 +314,41 @@ msgstr "Ověření se nezdařilo. Zkuste to prosím znovu."
 msgid "You do not have permission to edit this link."
 msgstr "Nemáte oprávnění upravovat tento odkaz."
 
-#: app/traits/links.php:1361
+#: app/traits/links.php:1365
 msgid "You do not have permission to delete this link."
 msgstr "Nemáte oprávnění smazat tento odkaz."
 
-#: app/traits/links.php:1511
+#: app/traits/links.php:1515
 msgid "That short link does not exist."
 msgstr "Tento zkrácený odkaz neexistuje."
 
-#: app/traits/links.php:1518
+#: app/traits/links.php:1522
 msgid "This link is already active."
 msgstr "Tento odkaz je již aktivní."
 
-#: app/traits/links.php:1528
+#: app/traits/links.php:1532
 msgid "You do not have permission to restore this link."
 msgstr "Nemáte oprávnění k obnovení tohoto odkazu."
 
-#: app/traits/links.php:1594
-#: app/traits/links.php:1875
-#: app/traits/links.php:1953
+#: app/traits/links.php:1598
+#: app/traits/links.php:1879
+#: app/traits/links.php:1957
 msgid "You do not have permission to delete links."
 msgstr "Nemáte oprávnění k mazání odkazů."
 
-#: app/traits/links.php:1776
+#: app/traits/links.php:1780
 msgid "You do not have permission to restore links."
 msgstr "Nemáte oprávnění k obnovení odkazů."
 
-#: app/traits/links.php:2138
+#: app/traits/links.php:2142
 msgid "A valid destination URL is required."
 msgstr "Je vyžadována platná cílová URL."
 
-#: app/traits/links.php:2156
+#: app/traits/links.php:2160
 msgid "That short code is reserved by the application."
 msgstr "Tento krátký kód je vyhrazen aplikací."
 
-#: app/traits/links.php:2166
+#: app/traits/links.php:2170
 msgid "That short code is already in use."
 msgstr "Tento krátký kód je již používán."
 
@@ -416,13 +416,13 @@ msgstr "Navštivte %s"
 
 #: app/includes/functions.php:1192
 #: ui/pages/dashboard/about/Sponsors.tsx:98
-#: ui/pages/dashboard/about/AboutPage.tsx:613
+#: ui/pages/dashboard/about/AboutPage.tsx:75
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
 msgid "Website"
 msgstr "Webové stránky"
 
 #: app/includes/functions.php:1193
-#: ui/pages/dashboard/about/AboutPage.tsx:435
+#: ui/pages/dashboard/about/AboutPage.tsx:848
 msgid "Documentation"
 msgstr "Dokumentace"
 
@@ -432,6 +432,7 @@ msgid "GitHub"
 msgstr "GitHub"
 
 #: app/includes/functions.php:1195
+#: ui/pages/dashboard/about/AboutPage.tsx:486
 msgid "Self-Hosted"
 msgstr "Vlastní hosting"
 
@@ -1341,78 +1342,78 @@ msgstr "PeakURL se nemohl spojit se službou aktualizací."
 msgid "PeakURL could not read the update service response."
 msgstr "PeakURL nemohl načíst odpověď služby aktualizací."
 
-#: app/services/social-preview.php:254
-#: app/services/social-preview.php:272
-#: app/services/social-preview.php:280
+#: app/services/social-preview.php:260
+#: app/services/social-preview.php:278
+#: app/services/social-preview.php:286
 msgid "Enter a valid social preview image URL."
 msgstr "Zadejte platnou URL obrázku pro náhled na sociálních sítích."
 
-#: app/services/social-preview.php:266
+#: app/services/social-preview.php:272
 msgid "The social preview image URL is too long."
 msgstr "URL obrázku náhledu pro sociální sítě je příliš dlouhá."
 
-#: app/services/social-preview.php:289
+#: app/services/social-preview.php:295
 msgid "The social preview image URL must use HTTPS."
 msgstr "URL obrázku náhledu pro sociální sítě musí používat HTTPS."
 
-#: app/services/social-preview.php:295
+#: app/services/social-preview.php:301
 msgid "The social preview image URL cannot contain credentials."
 msgstr "URL obrázku náhledu pro sociální sítě nesmí obsahovat přihlašovací údaje."
 
-#: app/services/social-preview.php:351
+#: app/services/social-preview.php:357
 #: ui/hooks/useDashboardSearch.ts:89
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:112
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:117
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:279
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:284
 msgid "Untitled Link"
 msgstr "Odkaz bez názvu"
 
-#: app/services/social-preview.php:411
+#: app/services/social-preview.php:417
 msgid "Upload a PNG, JPG, or WebP social preview image."
 msgstr "Nahrajte obrázek náhledu pro sociální sítě ve formátu PNG, JPG nebo WebP."
 
-#: app/services/social-preview.php:420
+#: app/services/social-preview.php:426
 msgid "PeakURL could not read the social preview image dimensions."
 msgstr "PeakURL nemohl načíst rozměry obrázku náhledu pro sociální sítě."
 
-#: app/services/social-preview.php:432
+#: app/services/social-preview.php:438
 msgid "PeakURL could not create the social preview uploads directory."
 msgstr "PeakURL nemohl vytvořit adresář pro nahrávání obrázků náhledů."
 
-#: app/services/social-preview.php:438
+#: app/services/social-preview.php:444
 msgid "PeakURL could not store the uploaded social preview image."
 msgstr "PeakURL nemohl uložit nahraný obrázek náhledu pro sociální sítě."
 
-#: app/services/social-preview.php:445
+#: app/services/social-preview.php:451
 msgid "PeakURL could not activate the uploaded social preview image."
 msgstr "PeakURL nemohl aktivovat nahraný obrázek náhledu pro sociální sítě."
 
-#: app/services/social-preview.php:481
+#: app/services/social-preview.php:487
 msgid "PeakURL could not verify the uploaded social preview image."
 msgstr "PeakURL nemohl ověřit nahraný obrázek náhledu pro sociální sítě."
 
-#: app/services/social-preview.php:542
+#: app/services/social-preview.php:548
 msgid "The uploaded social preview image exceeds the server maximum file size limit."
 msgstr "Nahraný obrázek náhledu pro sociální sítě překračuje maximální limit velikosti souboru na serveru."
 
-#: app/services/social-preview.php:546
+#: app/services/social-preview.php:552
 msgid "The social preview image upload did not finish. Try again."
 msgstr "Nahrávání obrázku náhledu pro sociální sítě nebylo dokončeno. Zkuste to znovu."
 
-#: app/services/social-preview.php:550
+#: app/services/social-preview.php:556
 #: app/services/favicon.php:374
 msgid "The server is missing a temporary upload directory."
 msgstr "Na serveru chybí dočasný adresář pro nahrávání souborů."
 
-#: app/services/social-preview.php:554
+#: app/services/social-preview.php:560
 msgid "The server could not write the uploaded social preview image to disk."
 msgstr "Server nemohl zapsat nahraný obrázek náhledu pro sociální sítě na disk."
 
-#: app/services/social-preview.php:558
+#: app/services/social-preview.php:564
 msgid "A PHP extension stopped the social preview image upload."
 msgstr "Rozšíření PHP zastavilo nahrávání obrázku náhledu pro sociální sítě."
 
-#: app/services/social-preview.php:561
+#: app/services/social-preview.php:567
 msgid "PeakURL could not upload the social preview image."
 msgstr "PeakURL nemohl nahrát obrázek náhledu pro sociální sítě."
 
@@ -1576,7 +1577,7 @@ msgstr "PeakURL nemohl odeslat uvítací e-mail, protože e-mailová adresa úč
 
 #: app/services/notifications.php:204
 #: site/setup-config.php:701
-#: ui/pages/dashboard/about/AboutPage.tsx:419
+#: ui/pages/dashboard/about/AboutPage.tsx:832
 msgid "Welcome to %s"
 msgstr "Vítejte v %s"
 
@@ -1758,7 +1759,7 @@ msgstr "Vítejte"
 #: site/setup-config.php:679
 #: ui/components/common/ApiErrorPage/ApiErrorPage.tsx:70
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:128
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1016
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1015
 msgid "Database"
 msgstr "Databáze"
 
@@ -1805,7 +1806,7 @@ msgstr "Písmena, čísla, tečky, pomlčky, podtržítka nebo @."
 
 #: site/install.php:588
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:136
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1018
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1017
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:173
 #: ui/pages/dashboard/users/UsersPage.tsx:260
@@ -1941,8 +1942,8 @@ msgstr "Všechny odkazy"
 #: ui/utils/dashboardSearch.ts:97
 #: ui/utils/dashboardSearch.ts:100
 #: ui/pages/auth/login/LoginPage.tsx:47
-#: ui/pages/layout/dashboard/Search/Search.tsx:286
-#: ui/pages/dashboard/activity/ActivityPage.tsx:636
+#: ui/pages/layout/dashboard/Search/Search.tsx:295
+#: ui/pages/dashboard/activity/ActivityPage.tsx:657
 #: ui/pages/dashboard/links/_components/Header/Header.tsx:42
 #: ui/router/pageTitle.ts:77
 msgid "Links"
@@ -1952,13 +1953,13 @@ msgstr "Odkazy"
 #: ui/utils/dashboardSearch.ts:119
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:80
 #: ui/pages/layout/dashboard/Header/Header.tsx:121
-#: ui/pages/dashboard/activity/ActivityPage.tsx:693
+#: ui/pages/dashboard/activity/ActivityPage.tsx:714
 #: ui/router/pageTitle.ts:73
 msgid "Activity"
 msgstr "Aktivita"
 
 #: ui/utils/dashboardSearch.ts:120
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:25
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:30
 msgid "Recent Activity"
 msgstr "Nedávná aktivita"
 
@@ -2016,6 +2017,7 @@ msgstr "Nastavení zabezpečení"
 #: ui/utils/dashboardSearch.ts:169
 #: ui/pages/auth/login/LoginPage.tsx:57
 #: ui/pages/dashboard/settings/Layout.tsx:27
+#: ui/pages/dashboard/about/AboutPage.tsx:246
 msgid "Security"
 msgstr "Zabezpečení"
 
@@ -2023,7 +2025,7 @@ msgstr "Zabezpečení"
 #: ui/utils/dashboardSearch.ts:187
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:79
 #: ui/pages/dashboard/settings/Layout.tsx:31
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:996
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:995
 #: ui/router/pageTitle.ts:24
 msgid "API Keys"
 msgstr "Klíče API"
@@ -2052,7 +2054,7 @@ msgstr "Konfigurace e-mailu"
 #: ui/pages/dashboard/settings/Layout.tsx:57
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:138
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:542
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1021
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1020
 #: ui/router/pageTitle.ts:30
 msgid "Location Data"
 msgstr "Data o poloze"
@@ -2068,9 +2070,9 @@ msgstr "Aktualizace"
 #: ui/utils/dashboardSearch.ts:256
 #: ui/utils/dashboardSearch.ts:260
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:53
-#: ui/pages/layout/dashboard/Search/Search.tsx:247
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:989
-#: ui/pages/dashboard/activity/ActivityPage.tsx:642
+#: ui/pages/layout/dashboard/Search/Search.tsx:256
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:988
+#: ui/pages/dashboard/activity/ActivityPage.tsx:663
 #: ui/pages/dashboard/users/UsersPage.tsx:577
 #: ui/router/pageTitle.ts:85
 msgid "Users"
@@ -2106,7 +2108,7 @@ msgstr "Import"
 #: ui/utils/dashboardSearch.ts:322
 #: ui/utils/dashboardSearch.ts:325
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:65
-#: ui/pages/layout/dashboard/Search/Search.tsx:224
+#: ui/pages/layout/dashboard/Search/Search.tsx:233
 #: ui/router/pageTitle.ts:119
 msgid "Tools"
 msgstr "Nástroje"
@@ -2128,14 +2130,15 @@ msgstr "Export"
 #: ui/utils/dashboardSearch.ts:321
 #: ui/utils/dashboardSearch.ts:326
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:85
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1081
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1080
+#: ui/pages/dashboard/about/AboutPage.tsx:710
 #: ui/router/pageTitle.ts:115
 msgid "System Status"
 msgstr "Stav systému"
 
 #: ui/utils/dashboardSearch.ts:565
 #: ui/pages/layout/dashboard/Header/Header.tsx:40
-#: ui/pages/dashboard/activity/ActivityPage.tsx:112
+#: ui/pages/dashboard/activity/ActivityPage.tsx:116
 #: ui/pages/dashboard/users/UsersPage.tsx:82
 #: ui/pages/dashboard/users/UsersPage.tsx:90
 #: ui/pages/dashboard/users/UsersPage.tsx:679
@@ -2158,8 +2161,8 @@ msgstr "Potvrdit"
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:370
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:494
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:63
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:509
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1486
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:508
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1485
 #: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:122
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:156
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:18
@@ -2180,8 +2183,8 @@ msgid "Close modal"
 msgstr "Zavřít modální okno"
 
 #: ui/components/ui/PageSizeControl/PageSizeControl.tsx:27
-#: ui/pages/dashboard/activity/ActivityPage.tsx:800
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:119
+#: ui/pages/dashboard/activity/ActivityPage.tsx:821
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:122
 msgid "Rows per page"
 msgstr "Řádků na stránku"
 
@@ -2210,10 +2213,10 @@ msgstr "Zrušit vlastní velikost stránky"
 
 #: ui/components/charts/MetricDonutChart/MetricDonutChart.tsx:37
 #: ui/components/charts/WorldMap/_components/Legend.tsx:16
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:991
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:990
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:113
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:64
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:168
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:173
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:47
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:166
 msgid "Clicks"
@@ -2251,19 +2254,19 @@ msgstr "Ne"
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:112
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:21
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:130
-#: ui/pages/dashboard/links/LinksPage.tsx:367
+#: ui/pages/dashboard/links/LinksPage.tsx:380
 msgid "Total Clicks"
 msgstr "Celkem kliknutí"
 
 #: ui/components/charts/TrafficChart/TrafficChart.tsx:261
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:70
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:133
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:177
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:182
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:48
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:173
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:28
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:138
-#: ui/pages/dashboard/links/LinksPage.tsx:392
+#: ui/pages/dashboard/links/LinksPage.tsx:405
 msgid "Visitors"
 msgstr "Návštěvníci"
 
@@ -2522,7 +2525,8 @@ msgid "Shorten, organize, and share."
 msgstr "Zkracujte, organizujte a sdílejte."
 
 #: ui/pages/auth/login/LoginPage.tsx:52
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:233
+#: ui/pages/dashboard/about/AboutPage.tsx:270
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:268
 msgid "Analytics"
 msgstr "Analytika"
 
@@ -2669,8 +2673,9 @@ msgstr "Děkujeme, že jste si vybrali %s."
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:561
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:739
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:61
-#: ui/pages/dashboard/about/AboutPage.tsx:230
-#: ui/pages/dashboard/about/AboutPage.tsx:406
+#: ui/pages/dashboard/about/AboutPage.tsx:391
+#: ui/pages/dashboard/about/AboutPage.tsx:677
+#: ui/pages/dashboard/about/AboutPage.tsx:819
 msgid "Version"
 msgstr "Verze"
 
@@ -2679,75 +2684,75 @@ msgid "Update Details"
 msgstr "Podrobnosti o aktualizaci"
 
 #: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:51
-#: ui/pages/dashboard/about/AboutPage.tsx:239
+#: ui/pages/dashboard/about/AboutPage.tsx:398
 msgid "Released %s"
 msgstr "Vydáno %s"
 
 #: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:96
-#: ui/pages/dashboard/about/AboutPage.tsx:279
+#: ui/pages/dashboard/about/AboutPage.tsx:434
 msgid "For all release notes see the main page"
 msgstr "Všechny poznámky k vydání naleznete na hlavní stránce"
 
 #: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:105
-#: ui/pages/dashboard/about/AboutPage.tsx:288
+#: ui/pages/dashboard/about/AboutPage.tsx:443
 msgid "Plain text format"
 msgstr "Formát prostého textu"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:172
+#: ui/pages/layout/dashboard/Search/Search.tsx:173
 msgid "Search links, settings..."
 msgstr "Hledat odkazy, nastavení..."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:173
+#: ui/pages/layout/dashboard/Search/Search.tsx:174
 msgid "Search the dashboard"
 msgstr "Prohledat ovládací panel"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:186
+#: ui/pages/layout/dashboard/Search/Search.tsx:187
 msgid "Clear search"
 msgstr "Vymazat vyhledávání"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:205
+#: ui/pages/layout/dashboard/Search/Search.tsx:214
 msgid "Pages"
 msgstr "Stránky"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:254
+#: ui/pages/layout/dashboard/Search/Search.tsx:263
 msgid "Searching users..."
 msgstr "Vyhledávání uživatelů..."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:271
+#: ui/pages/layout/dashboard/Search/Search.tsx:280
 msgid "No matching users found."
 msgstr "Nebyli nalezeni žádní odpovídající uživatelé."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:293
+#: ui/pages/layout/dashboard/Search/Search.tsx:302
 msgid "Searching links..."
 msgstr "Vyhledávání odkazů..."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:310
+#: ui/pages/layout/dashboard/Search/Search.tsx:319
 msgid "No matching links found."
 msgstr "Nebyly nalezeny žádné odpovídající odkazy."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:327
+#: ui/pages/layout/dashboard/Search/Search.tsx:336
 msgid "Search all links for \"%s\""
 msgstr "Hledat \"%s\" ve všech odkazech"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:330
+#: ui/pages/layout/dashboard/Search/Search.tsx:339
 msgid "Open the links page with this search applied"
 msgstr "Otevřít stránku odkazů s použitým vyhledáváním"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:339
+#: ui/pages/layout/dashboard/Search/Search.tsx:348
 msgid "Keep typing to search links, or jump straight to a dashboard page."
 msgstr "Pokračujte v psaní pro vyhledávání odkazů nebo přejděte přímo na stránku ovládacího panelu."
 
 #: ui/pages/layout/dashboard/Header/Header.tsx:38
 #: ui/pages/layout/dashboard/Header/Header.tsx:79
 #: ui/pages/layout/dashboard/Header/Header.tsx:91
-#: ui/pages/dashboard/activity/ActivityPage.tsx:105
+#: ui/pages/dashboard/activity/ActivityPage.tsx:109
 #: ui/pages/dashboard/users/UsersPage.tsx:67
 #: ui/pages/dashboard/users/UsersPage.tsx:126
 msgid "Admin"
 msgstr "Správce"
 
 #: ui/pages/layout/dashboard/Header/Header.tsx:39
-#: ui/pages/dashboard/activity/ActivityPage.tsx:109
+#: ui/pages/dashboard/activity/ActivityPage.tsx:113
 #: ui/pages/dashboard/users/UsersPage.tsx:72
 #: ui/pages/dashboard/users/UsersPage.tsx:127
 msgid "Editor"
@@ -2898,12 +2903,12 @@ msgstr "Klíč API byl zkopírován do schránky"
 
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:464
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:137
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1060
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1059
 msgid "Copied"
 msgstr "Zkopírováno"
 
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:467
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1065
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1064
 msgid "Copy failed"
 msgstr "Kopírování se nezdařilo"
 
@@ -3360,7 +3365,7 @@ msgid "Save or download these codes now—they won't be shown again."
 msgstr "Uložte nebo stáhněte si tyto kódy nyní – již nebudou znovu zobrazeny."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:22
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:993
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:992
 msgid "Active Sessions"
 msgstr "Aktivní relace"
 
@@ -3409,15 +3414,15 @@ msgstr "Naposledy vygenerováno:"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:740
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:760
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:766
-#: ui/pages/dashboard/activity/ActivityPage.tsx:123
-#: ui/pages/dashboard/activity/ActivityPage.tsx:165
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:53
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:90
+#: ui/pages/dashboard/activity/ActivityPage.tsx:128
+#: ui/pages/dashboard/activity/ActivityPage.tsx:182
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:65
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:105
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:31
 #: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:39
 #: ui/pages/dashboard/_components/RecentClicks/RecentClicks.tsx:11
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:43
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:189
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:48
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:198
 #: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:172
 #: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:179
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:106
@@ -3900,7 +3905,7 @@ msgid "Save Credentials"
 msgstr "Uložit přihlašovací údaje"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:97
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:968
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:967
 msgid "Unavailable"
 msgstr "Není k dispozici"
 
@@ -4143,7 +4148,7 @@ msgstr "Vložte tajný klíč od svého poskytovatele CAPTCHA."
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:182
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:585
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:812
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:894
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:893
 msgid "Disabled"
 msgstr "Zakázáno"
 
@@ -4155,7 +4160,7 @@ msgstr "Úprava"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:797
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:801
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:854
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:964
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:963
 msgid "Not configured"
 msgstr "Není nakonfigurováno"
 
@@ -4300,7 +4305,7 @@ msgid "Connect PeakURL to your automations with outbound webhooks for link activ
 msgstr "Propojte PeakURL se svými automatizacemi pomocí odchozích webhooků pro aktivitu odkazů."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:172
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:997
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:996
 msgid "Webhooks"
 msgstr "Webhooky"
 
@@ -4356,7 +4361,7 @@ msgstr "Nepodařilo se načíst webhooky"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:361
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:26
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:40
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:45
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:44
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:57
 msgid "Inactive"
@@ -4456,13 +4461,13 @@ msgstr "Klíč API"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:105
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:38
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:43
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:56
 msgid "Active"
 msgstr "Aktivní"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:131
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:247
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:282
 msgid "Delete"
 msgstr "Smazat"
 
@@ -4633,133 +4638,133 @@ msgstr "Souborový systém"
 msgid "Direct Database"
 msgstr "Přímá databáze"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:272
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:271
 msgid "Performance & Caching"
 msgstr "Výkon a mezipaměť"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:275
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:274
 msgid "Configure object caching backends and Time-to-Live (TTL) policies to optimize link redirection latency and throughput."
 msgstr "Nakonfigurujte moduly objektové mezipaměti a pravidla doby platnosti (TTL) pro optimalizaci latence přesměrování a propustnosti."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:292
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:508
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:930
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1485
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:291
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:507
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:929
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1484
 msgid "Purge Cache"
 msgstr "Vymazat mezipaměť"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:300
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:299
 msgid "Active Engine"
 msgstr "Aktivní modul"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:304
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:303
 msgid "Cache Footprint"
 msgstr "Využití paměti mezipamětí"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:305
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:911
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:304
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:910
 msgid "0 B"
 msgstr "0 B"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:309
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:935
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:308
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:934
 msgid "Default TTL"
 msgstr "Výchozí TTL"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:318
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:317
 msgid "Cache status unavailable"
 msgstr "Stav mezipaměti nedostupný"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:335
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:334
 msgid "Object cache is operational"
 msgstr "Objektová mezipaměť je v provozu"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:337
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:336
 msgid "Fallback cache driver active"
 msgstr "Aktivní záložní ovladač mezipaměti"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:338
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:337
 msgid "Object cache is disabled"
 msgstr "Objektová mezipaměť je vypnuta"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:343
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:342
 msgid "Object caching is active and serving link redirects via the %s backend."
 msgstr "Objektová mezipaměť je aktivní a obsluhuje přesměrování přes modul %s."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:350
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:349
 msgid "The preferred cache driver is currently unavailable. PeakURL has automatically fallen back to %s."
 msgstr "Preferovaný ovladač mezipaměti je momentálně nedostupný. PeakURL automaticky přešel na %s."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:355
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:354
 msgid "Object caching is disabled. Link lookups and redirects are served directly from the database."
 msgstr "Objektová mezipaměť je vypnuta. Vyhledávání odkazů a přesměrování jsou obsluhovány přímo z databáze."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:367
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:366
 msgid "Cache Engine Settings"
 msgstr "Nastavení modulu mezipaměti"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:371
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:370
 msgid "Select your preferred caching backend. PeakURL automatically selects the highest performance operational backend if the preferred driver is unavailable."
 msgstr "Vyberte preferovaný modul mezipaměti. PeakURL automaticky vybere nejvýkonnější funkční modul, pokud preferovaný ovladač není dostupný."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:379
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:385
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:378
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:384
 msgid "Preferred Cache Driver"
 msgstr "Preferovaný ovladač mezipaměti"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:389
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:388
 msgid "PeakURL prioritizes Redis if configured, APCu if loaded, and Filesystem storage as the universal fallback."
 msgstr "PeakURL upřednostňuje Redis (pokud je nakonfigurován), APCu (pokud je načten) a souborový systém jako univerzální zálohu."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:397
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:405
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:396
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:404
 msgid "Redirect Cache TTL"
 msgstr "TTL mezipaměti přesměrování"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:409
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:408
 msgid "Time-to-Live duration for caching active short URL redirect destinations."
 msgstr "Doba platnosti (TTL) pro ukládání aktivních cílů krátkých URL do mezipaměti."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:421
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:420
 msgid "Custom Redirect TTL (seconds)"
 msgstr "Vlastní TTL přesměrování (sekundy)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:426
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:425
 msgid "Enter the redirect destination cache lifetime in seconds."
 msgstr "Zadejte dobu platnosti mezipaměti pro cíle přesměrování v sekundách."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:436
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:444
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:435
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:443
 msgid "Negative Lookup (404) TTL"
 msgstr "Negativní TTL dotazu (404)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:448
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:447
 msgid "Time-to-Live duration for caching non-existent link lookups to mitigate database load from automated scans."
 msgstr "Doba platnosti (TTL) pro ukládání neexistujících odkazů do mezipaměti ke snížení zátěže databáze při automatizovaném skenování."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:460
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:459
 msgid "Custom Negative TTL (seconds)"
 msgstr "Vlastní negativní TTL (sekundy)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:465
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:464
 msgid "Enter the 404 negative lookup cache lifetime in seconds."
 msgstr "Zadejte dobu platnosti mezipaměti pro negativní 404 dotazy v sekundách."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:485
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:484
 msgid "Reset"
 msgstr "Obnovit"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:495
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:494
 msgid "Save Performance Settings"
 msgstr "Uložit nastavení výkonu"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:504
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1481
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:503
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1480
 msgid "Purge Object Cache"
 msgstr "Vymazat objektovou mezipaměť"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:505
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1482
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:504
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1481
 msgid "Are you sure you want to purge the object cache? All cached redirect records, in-memory objects, and temporary cache files will be immediately invalidated. Subsequent requests will query the database to rebuild the cache."
 msgstr "Opravdu chcete vymazat objektovou mezipaměť? Všechny záznamy přesměrování, objekty v paměti a dočasné soubory mezipaměti budou okamžitě zneplatněny. Následující požadavky načtou data přímo z databáze."
 
@@ -4907,7 +4912,8 @@ msgid "Manage your account preferences and configurations"
 msgstr "Spravujte své předvolby a konfiguraci účtu"
 
 #: ui/pages/dashboard/settings/Layout.tsx:45
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:107
+#: ui/pages/dashboard/about/AboutPage.tsx:230
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:108
 msgid "Performance"
 msgstr "Výkon"
 
@@ -4978,8 +4984,8 @@ msgid "MySQL / MariaDB"
 msgstr "MySQL / MariaDB"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:486
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:890
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1017
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:889
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1016
 msgid "Object Cache"
 msgstr "Objektová mezipaměť"
 
@@ -5053,7 +5059,7 @@ msgstr "Typ instalace"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:578
 msgid "Source code"
-msgstr ""
+msgstr "Zdrojový kód"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:581
 msgid "Debug Mode"
@@ -5061,7 +5067,7 @@ msgstr "Režim ladění"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:584
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:811
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:893
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:892
 msgid "Enabled"
 msgstr "Povoleno"
 
@@ -5071,13 +5077,13 @@ msgstr "Adresář obsahu"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:604
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:665
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:952
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:951
 msgid "Writable"
 msgstr "Zapisovatelný"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:605
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:666
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:953
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:952
 msgid "Not Writable"
 msgstr "Nezapisovatelný"
 
@@ -5087,7 +5093,7 @@ msgstr "Nezapisovatelný"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:712
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:720
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:728
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:980
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:979
 msgid "Missing"
 msgstr "Chybí"
 
@@ -5170,7 +5176,7 @@ msgstr "Rozšíření Intl"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:711
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:719
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:727
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:979
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:978
 msgid "Available"
 msgstr "K dispozici"
 
@@ -5234,217 +5240,217 @@ msgstr "Cesta k databázi"
 msgid "Refresh Command"
 msgstr "Příkaz pro obnovení"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:898
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:897
 msgid "Active Driver"
 msgstr "Aktivní ovladač"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:902
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:901
 msgid "Fallback Active"
 msgstr "Záložní aktivní"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:906
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:905
 msgid "Configured Driver"
 msgstr "Nakonfigurovaný ovladač"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:907
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:906
 msgid "auto"
 msgstr "automaticky"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:910
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:909
 msgid "Cache Size"
 msgstr "Velikost mezipaměti"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:917
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:916
 msgid "%s cached items"
 msgstr "%s položek v mezipaměti"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:918
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:917
 msgid "%s cached files"
 msgstr "%s souborů v mezipaměti"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:941
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:940
 msgid "Negative TTL"
 msgstr "Negativní TTL"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:947
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:946
 msgid "Cache Directory"
 msgstr "Adresář mezipaměti"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:955
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:954
 msgid "Not Created"
 msgstr "Nevytvořeno"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:959
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:958
 msgid "Redis Server"
 msgstr "Server Redis"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:966
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:965
 msgid "Connected"
 msgstr "Připojeno"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:976
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:975
 msgid "APCu Extension"
 msgstr "Rozšíření APCu"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:983
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:982
 msgid "Operational"
 msgstr "Funkční"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:990
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:989
 msgid "Short Links"
 msgstr "Zkrácené odkazy"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:999
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:998
 msgid "Activity Events"
 msgstr "Události aktivit"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1003
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1002
 msgid "Managed Tables"
 msgstr "Spravované tabulky"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1012
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1011
 msgid "Directories and Sizes"
 msgstr "Adresáře a velikosti"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1015
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1014
 msgid "Server"
 msgstr "Server"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1024
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1023
 msgid "Data Footprint"
 msgstr "Využití dat"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1061
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1060
 msgid "System status info copied to clipboard"
 msgstr "Informace o stavu systému byly zkopírovány do schránky"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1066
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1065
 msgid "PeakURL could not copy the system status information."
 msgstr "PeakURL nemohl zkopírovat informace o stavu systému."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1078
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1077
 msgid "Site Health"
 msgstr "Zdraví webu"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1084
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1083
 msgid "Monitor installation health, check server environment diagnostics, and review technical configuration details."
 msgstr "Sledujte stav instalace, kontrolujte diagnostiku serverového prostředí a prohlížejte technické podrobnosti konfigurace."
 
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1099
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1100
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1101
 msgid "Refresh site health status"
 msgstr "Obnovit stav zdraví webu"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1163
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1162
 msgid "Site Health: Good"
 msgstr "Zdraví webu: Dobré"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1167
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1166
 msgid "Site Health: 1 Critical Issue"
 msgstr "Zdraví webu: 1 kritický problém"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1170
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1169
 msgid "Site Health: %s Critical Issues"
 msgstr "Zdraví webu: %s kritických problémů"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1176
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1175
 msgid "Site Health: 1 Recommended Improvement"
 msgstr "Zdraví webu: 1 doporučené vylepšení"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1179
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1178
 msgid "Site Health: %s Recommended Improvements"
 msgstr "Zdraví webu: %s doporučených vylepšení"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1187
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1186
 msgid "PeakURL is configured properly and all environmental diagnostics are in good standing."
 msgstr "PeakURL je správně nakonfigurován a veškerá diagnostika prostředí je v pořádku."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1191
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1190
 msgid "Critical items require attention to restore optimal site security and performance. Resolving these should be prioritized."
 msgstr "Kritické položky vyžadují pozornost k obnovení optimálního zabezpečení a výkonu webu. Jejich vyřešení by mělo být prioritou."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1194
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1193
 msgid "All core features are active, with recommended improvements available below to optimize your install."
 msgstr "Všechny základní funkce jsou aktivní. Níže naleznete doporučená vylepšení pro optimalizaci instalace."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1205
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1204
 msgid "%s Passed"
 msgstr "%s v pořádku"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1217
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1216
 msgid "%s Recommended"
 msgstr "%s doporučeno"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1230
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1229
 msgid "%s Critical"
 msgstr "%s kritických"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1250
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1249
 msgid "Checked %s"
 msgstr "Zkontrolováno %s"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1264
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1263
 msgid "System Checks"
 msgstr "Kontroly systému"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1317
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1316
 msgid "Good"
 msgstr "V pořádku"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1319
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1318
 msgid "Review"
 msgstr "Zkontrolovat"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1320
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1319
 msgid "Action Required"
 msgstr "Vyžaduje akci"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1337
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1336
 msgid "1 critical issue"
 msgstr "1 kritický problém"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1338
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1337
 msgid "%s critical issues"
 msgstr "Kritických problémů: %s"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1340
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1339
 msgid "Critical issues are items that may have a high impact on your site performance or security. Resolving these issues should be prioritized."
 msgstr "Kritické problémy jsou položky, které mohou mít velký dopad na výkon nebo bezpečnost vašeho webu. Jejich řešení by mělo mít prioritu."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1354
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1353
 msgid "1 recommended improvement"
 msgstr "1 doporučené vylepšení"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1355
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1354
 msgid "%s recommended improvements"
 msgstr "Doporučených vylepšení: %s"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1357
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1356
 msgid "Recommended improvements are beneficial for your site, though not as urgent as a critical issue. They may include improvements in areas such as security, performance, and user experience."
 msgstr "Doporučená vylepšení jsou pro váš web přínosná, i když nejsou tak naléhavá jako kritický problém. Mohou zahrnovat zlepšení v oblastech, jako je bezpečnost, výkon a uživatelský zážitek."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1383
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1382
 msgid "Hide passed tests"
 msgstr "Skrýt úspěšné testy"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1386
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1385
 msgid "1 passed test"
 msgstr "1 úspěšný test"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1387
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1386
 msgid "%s passed tests"
 msgstr "Úspěšných testů: %s"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1433
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1432
 msgid "System Information"
 msgstr "Informace o systému"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1436
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1435
 msgid "Detailed technical environment, server configuration, storage, and database specifications."
 msgstr "Podrobné technické prostředí, konfigurace serveru, úložiště a specifikace databáze."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1452
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:96
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1451
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:101
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:103
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:230
@@ -5453,7 +5459,7 @@ msgstr "Podrobné technické prostředí, konfigurace serveru, úložiště a sp
 msgid "Copied!"
 msgstr "Zkopírováno!"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1458
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1457
 msgid "Copy site info to clipboard"
 msgstr "Zkopírovat informace o webu do schránky"
 
@@ -5970,8 +5976,8 @@ msgid "Author"
 msgstr "Autor"
 
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
-#: ui/pages/dashboard/activity/ActivityPage.tsx:879
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:111
+#: ui/pages/dashboard/activity/ActivityPage.tsx:900
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:114
 #: ui/pages/dashboard/users/UsersPage.tsx:688
 msgid "Actions"
 msgstr "Akce"
@@ -5984,316 +5990,316 @@ msgstr "Deaktivovat"
 msgid "Activate"
 msgstr "Aktivovat"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:128
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:55
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:190
+#: ui/pages/dashboard/activity/ActivityPage.tsx:133
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:67
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:208
 msgid "Unknown user"
 msgstr "Neznámý uživatel"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:132
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:58
+#: ui/pages/dashboard/activity/ActivityPage.tsx:138
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:71
 msgid "Created new link \"%s\""
 msgstr "Vytvořen nový odkaz \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:134
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:60
+#: ui/pages/dashboard/activity/ActivityPage.tsx:141
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:73
 msgid "Updated link \"%s\""
 msgstr "Aktualizován odkaz \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:136
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:62
+#: ui/pages/dashboard/activity/ActivityPage.tsx:144
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:75
 msgid "Permanently deleted link \"%s\""
 msgstr "Trvale smazán odkaz \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:138
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:64
+#: ui/pages/dashboard/activity/ActivityPage.tsx:147
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:77
 msgid "Moved link \"%s\" to trash"
 msgstr "Přesunut odkaz \"%s\" do koše\"%s\" do koše\"%s\" do koše"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:140
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:66
+#: ui/pages/dashboard/activity/ActivityPage.tsx:150
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:79
 msgid "Restored link \"%s\""
 msgstr "Obnoven odkaz \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:145
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:71
+#: ui/pages/dashboard/activity/ActivityPage.tsx:157
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:85
 msgid "Permanently deleted 1 link from trash"
 msgstr "1 odkaz byl trvale smazán z koše"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:147
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:73
+#: ui/pages/dashboard/activity/ActivityPage.tsx:159
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:87
 msgid "Permanently deleted %s links from trash"
 msgstr "%s odkazů bylo trvale smazáno z koše"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:151
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:77
+#: ui/pages/dashboard/activity/ActivityPage.tsx:163
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:91
 msgid "Emptied links from trash"
 msgstr "Vysypány odkazy z koše"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:154
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:79
+#: ui/pages/dashboard/activity/ActivityPage.tsx:168
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:94
 msgid "Created user \"%s\""
 msgstr "Vytvořen uživatel \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:156
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:81
+#: ui/pages/dashboard/activity/ActivityPage.tsx:171
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:96
 msgid "Updated user \"%s\""
 msgstr "Aktualizován uživatel \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:158
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:83
+#: ui/pages/dashboard/activity/ActivityPage.tsx:174
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:98
 msgid "Deleted user \"%s\""
 msgstr "Smazán uživatel \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:162
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:87
+#: ui/pages/dashboard/activity/ActivityPage.tsx:179
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:102
 msgid "from %s"
 msgstr "z %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:170
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:94
+#: ui/pages/dashboard/activity/ActivityPage.tsx:187
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:109
 msgid "Link \"%1$s\" was clicked %2$s"
 msgstr "Na odkaz \"%1$s\" bylo kliknuto %2$s\"%1$s\" bylo kliknuto %2$s\"%1$s\" bylo kliknuto %2$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:174
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:98
+#: ui/pages/dashboard/activity/ActivityPage.tsx:191
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:113
 msgid "Link \"%s\" was clicked"
 msgstr "Na odkaz \"%s\" bylo kliknuto\"%s\" bylo kliknuto\"%s\" bylo kliknuto"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:177
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:100
+#: ui/pages/dashboard/activity/ActivityPage.tsx:195
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:115
 msgid "Unknown activity"
 msgstr "Neznámá aktivita"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:356
+#: ui/pages/dashboard/activity/ActivityPage.tsx:377
 msgid "Link already active"
 msgstr "Odkaz je již aktivní"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:357
+#: ui/pages/dashboard/activity/ActivityPage.tsx:378
 msgid "This link is already active and does not need to be restored."
 msgstr "Tento odkaz je již aktivní a není třeba jej obnovovat."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:369
+#: ui/pages/dashboard/activity/ActivityPage.tsx:390
 msgid "Link permanently deleted"
 msgstr "Odkaz byl trvale smazán"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:378
-#: ui/pages/dashboard/links/LinksPage.tsx:238
+#: ui/pages/dashboard/activity/ActivityPage.tsx:399
+#: ui/pages/dashboard/links/LinksPage.tsx:251
 msgid "Link restored"
 msgstr "Odkaz byl obnoven"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:379
+#: ui/pages/dashboard/activity/ActivityPage.tsx:400
 msgid "The link has been restored successfully."
 msgstr "Odkaz byl úspěšně obnoven."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:383
-#: ui/pages/dashboard/links/LinksPage.tsx:243
+#: ui/pages/dashboard/activity/ActivityPage.tsx:404
+#: ui/pages/dashboard/links/LinksPage.tsx:256
 msgid "Unable to restore link"
 msgstr "Nelze obnovit odkaz"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:386
+#: ui/pages/dashboard/activity/ActivityPage.tsx:407
 msgid "Failed to restore link from activity record."
 msgstr "Nepodařilo se obnovit odkaz ze záznamu aktivity."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:538
-#: ui/pages/dashboard/activity/ActivityPage.tsx:566
-#: ui/pages/dashboard/activity/ActivityPage.tsx:596
+#: ui/pages/dashboard/activity/ActivityPage.tsx:559
+#: ui/pages/dashboard/activity/ActivityPage.tsx:587
+#: ui/pages/dashboard/activity/ActivityPage.tsx:617
 msgid "Activity deleted"
 msgstr "Záznam aktivity smazán"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:539
+#: ui/pages/dashboard/activity/ActivityPage.tsx:560
 msgid "The activity log entry has been removed."
 msgstr "Záznam protokolu aktivit byl odstraněn."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:543
-#: ui/pages/dashboard/activity/ActivityPage.tsx:574
-#: ui/pages/dashboard/activity/ActivityPage.tsx:601
+#: ui/pages/dashboard/activity/ActivityPage.tsx:564
+#: ui/pages/dashboard/activity/ActivityPage.tsx:595
+#: ui/pages/dashboard/activity/ActivityPage.tsx:622
 msgid "Unable to delete activity"
 msgstr "Aktivitu se nepodařilo smazat"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:546
+#: ui/pages/dashboard/activity/ActivityPage.tsx:567
 msgid "The activity log entry could not be removed."
 msgstr "Záznam protokolu aktivit nelze odstranit."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:568
+#: ui/pages/dashboard/activity/ActivityPage.tsx:589
 msgid "Deleted %s activity log entries."
 msgstr "Smazáno %s záznamů protokolu aktivit."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:577
+#: ui/pages/dashboard/activity/ActivityPage.tsx:598
 msgid "The selected activity log entries could not be removed."
 msgstr "Vybrané záznamy protokolu aktivit se nepodařilo odstranit."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:597
+#: ui/pages/dashboard/activity/ActivityPage.tsx:618
 msgid "All activity log entries have been removed."
 msgstr "Všechny záznamy protokolu aktivit byly odstraněny."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:604
+#: ui/pages/dashboard/activity/ActivityPage.tsx:625
 msgid "The activity logs could not be removed."
 msgstr "Protokoly aktivit se nepodařilo odstranit."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:630
+#: ui/pages/dashboard/activity/ActivityPage.tsx:651
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:35
 #: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:21
 msgid "All"
 msgstr "Vše"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:656
+#: ui/pages/dashboard/activity/ActivityPage.tsx:677
 msgid "Total events"
 msgstr "Celkem událostí"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:662
+#: ui/pages/dashboard/activity/ActivityPage.tsx:683
 msgid "Link events"
 msgstr "Události odkazů"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:668
+#: ui/pages/dashboard/activity/ActivityPage.tsx:689
 msgid "User events"
 msgstr "Události uživatelů"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:674
+#: ui/pages/dashboard/activity/ActivityPage.tsx:695
 msgid "Latest event"
 msgstr "Poslední událost"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:677
+#: ui/pages/dashboard/activity/ActivityPage.tsx:698
 msgid "No recent events"
 msgstr "Žádné nedávné události"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:691
+#: ui/pages/dashboard/activity/ActivityPage.tsx:712
 msgid "Audit Log"
 msgstr "Protokol auditu"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:695
+#: ui/pages/dashboard/activity/ActivityPage.tsx:716
 msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
 msgstr "Prohlížejte změny odkazů a události správy uživatelů na jednom místě s filtry, časovými razítky a podrobnostmi o aktérech."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:705
-#: ui/pages/dashboard/activity/ActivityPage.tsx:706
+#: ui/pages/dashboard/activity/ActivityPage.tsx:726
+#: ui/pages/dashboard/activity/ActivityPage.tsx:727
 msgid "Refresh activity history"
 msgstr "Obnovit historii aktivit"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:811
+#: ui/pages/dashboard/activity/ActivityPage.tsx:832
 msgid "Activity history"
 msgstr "Historie aktivit"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:818
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:32
+#: ui/pages/dashboard/activity/ActivityPage.tsx:839
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:33
 msgid "%s selected"
 msgstr "Vybráno: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:828
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1305
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:73
+#: ui/pages/dashboard/activity/ActivityPage.tsx:849
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1326
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:74
 msgid "Delete selected"
 msgstr "Smazat vybrané"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:836
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:82
+#: ui/pages/dashboard/activity/ActivityPage.tsx:857
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:83
 msgid "Delete all"
 msgstr "Smazat vše"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:867
+#: ui/pages/dashboard/activity/ActivityPage.tsx:888
 msgid "Select all events on this page"
 msgstr "Vybrat všechny události na této stránce"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:874
+#: ui/pages/dashboard/activity/ActivityPage.tsx:895
 msgid "Event"
 msgstr "Událost"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:875
+#: ui/pages/dashboard/activity/ActivityPage.tsx:896
 msgid "Details"
 msgstr "Podrobnosti"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:876
+#: ui/pages/dashboard/activity/ActivityPage.tsx:897
 msgid "When"
 msgstr "Kdy"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:986
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1007
 msgid "Actor: %s"
 msgstr "Aktér: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:998
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1019
 msgid "By"
 msgstr "Kým"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1036
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1057
 msgid "User: %s"
 msgstr "Uživatel: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1055
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1076
 msgid "Location: %s"
 msgstr "Poloha: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1150
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1159
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1171
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1180
 msgid "Link is already active"
 msgstr "Odkaz je již aktivní"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1153
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1162
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1174
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1183
 msgid "Restore link"
 msgstr "Obnovit odkaz"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1185
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1188
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1325
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1206
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1209
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1346
 msgid "Delete activity log"
 msgstr "Smazat záznam protokolu aktivit"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1214
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1235
 msgid "No user activity yet"
 msgstr "Zatím žádná aktivita uživatelů"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1216
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1237
 msgid "No link activity yet"
 msgstr "Zatím žádná aktivita odkazů"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1217
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1238
 msgid "No activity recorded yet"
 msgstr "Zatím nebyla zaznamenána žádná aktivita"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1220
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1241
 msgid "Once users manage accounts or links change, the audit log will appear here."
 msgstr "Jakmile uživatelé začnou spravovat účty nebo měnit odkazy, protokol auditu se zobrazí zde."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1234
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1255
 msgid "Showing %1$s-%2$s of %3$s events"
 msgstr "Zobrazeno %1$s–%2$s z %3$s událostí"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1241
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1262
 msgid "Page %1$s of %2$s"
 msgstr "Stránka %1$s z %2$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1257
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1278
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:40
 msgid "Previous"
 msgstr "Předchozí"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1283
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1304
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:84
 msgid "Next"
 msgstr "Další"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1294
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1315
 msgid "Delete activity logs"
 msgstr "Smazat protokoly aktivit"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1298
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1319
 msgid "Delete %s selected activity log entries? This action cannot be undone."
 msgstr "Smazat %s vybraných záznamů protokolu aktivit? Tuto akci nelze vrátit zpět."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1313
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1317
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1334
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1338
 msgid "Delete all activity"
 msgstr "Smazat veškerou aktivitu"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1314
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1335
 msgid "Are you sure you want to delete all activity logs? This action cannot be undone."
 msgstr "Opravdu chcete smazat všechny protokoly aktivit? Tuto akci nelze vrátit zpět."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1329
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1350
 msgid "Delete the activity entry \"%s\"? This action cannot be undone."
 msgstr "Smazat záznam aktivity \"%s\"? Tuto akci nelze vrátit zpět."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1336
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1357
 msgid "Delete activity"
 msgstr "Smazat aktivitu"
 
@@ -6350,212 +6356,364 @@ msgstr "Velké díky jednotlivcům, kteří podporují vývoj PeakURL a pomáhaj
 msgid "Support the Project"
 msgstr "Podpořit projekt"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:142
+#: ui/pages/dashboard/about/AboutPage.tsx:66
+msgid "Shorten, track, and own every link."
+msgstr "Zkracujte, sledujte a spravujte každý odkaz."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:93
+msgid "Release Notes"
+msgstr "Poznámky k vydání"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:190
 msgid "Setup Complete"
 msgstr "Nastavení dokončeno"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:143
+#: ui/pages/dashboard/about/AboutPage.tsx:191
 msgid "PeakURL is ready to use."
 msgstr "PeakURL je připraven k použití."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:144
+#: ui/pages/dashboard/about/AboutPage.tsx:192
 msgid "Your administrator account is active and the dashboard is ready. Use these next steps to finish the initial configuration and start publishing links."
 msgstr "Váš účet správce je aktivní a ovládací panel je připraven. Pomocí těchto dalších kroků dokončete počáteční konfiguraci a začněte publikovat odkazy."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:149
+#: ui/pages/dashboard/about/AboutPage.tsx:197
 msgid "Create your first short link"
 msgstr "Vytvořte svůj první zkrácený odkaz"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:153
+#: ui/pages/dashboard/about/AboutPage.tsx:201
 msgid "Review general settings"
 msgstr "Zkontrolovat obecná nastavení"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:157
+#: ui/pages/dashboard/about/AboutPage.tsx:205
 msgid "Connect location data"
 msgstr "Připojit data o poloze"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:163
+#: ui/pages/dashboard/about/AboutPage.tsx:211
 msgid "Update Complete"
 msgstr "Aktualizace dokončena"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:164
+#: ui/pages/dashboard/about/AboutPage.tsx:212
 msgid "PeakURL has been updated to the latest version."
 msgstr "PeakURL byl aktualizován na nejnovější verzi."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:165
+#: ui/pages/dashboard/about/AboutPage.tsx:213
 msgid "The latest version is now installed. Here's a look at what's new in this release."
 msgstr "Nejnovější verze je nyní nainstalována. Podívejte se, co je v tomto vydání nového."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:170
+#: ui/pages/dashboard/about/AboutPage.tsx:218
 msgid "Reinstall Complete"
 msgstr "Přeinstalace dokončena"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:171
+#: ui/pages/dashboard/about/AboutPage.tsx:219
 msgid "PeakURL has been reinstalled."
 msgstr "PeakURL byl přeinstalován."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:172
+#: ui/pages/dashboard/about/AboutPage.tsx:220
 msgid "The latest version has been reinstalled. Here's a look at what's included in this release."
 msgstr "Nejnovější verze byla přeinstalována. Zde je přehled toho, co toto vydání obsahuje."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:301
-msgid "Branded Short Links"
-msgstr "Značkové zkrácené odkazy"
+#: ui/pages/dashboard/about/AboutPage.tsx:231
+msgid "Multi-tier object caching"
+msgstr "Víceúrovňové ukládání objektů do mezipaměti"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:232
+msgid "Delivers sub-millisecond link redirects using Redis, APCu, or local filesystem storage with automatic backend fallback, configurable cache durations, and instant cache purging."
+msgstr "Poskytuje bleskurychlá přesměrování odkazů pod jednu milisekundu přes Redis, APCu nebo lokální souborový systém s automatickým zálohováním a okamžitým promazáním."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:238
+msgid "Data safeguards"
+msgstr "Ochrana dat"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:239
+msgid "Trash protection and audit recovery"
+msgstr "Ochrana košem a obnova z auditu"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:240
+msgid "Prevents accidental link loss with soft-delete safeguards, customizable retention schedules from 14 to 90 days, and one-click restoration directly from the activity history."
+msgstr "Zabraňuje náhodné ztrátě odkazů pomocí bezpečného mazání, nastavitelných lhůt uchování od 14 do 90 dnů a obnovení jedním kliknutím z historie aktivit."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:247
+msgid "Two-factor authentication and session controls"
+msgstr "Dvoufázové ověření a správa relací"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:248
+msgid "Hardens administrator and editor accounts with TOTP two-factor authentication, single-use recovery backup codes, and real-time remote session revocation."
+msgstr "Zabezpečuje účty správců a editorů pomocí 2FA TOTP, jednorázových záložních kódů a okamžitého vzdáleného ukončení aktivních relací."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:254
+msgid "Access control"
+msgstr "Řízení přístupu"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:255
+msgid "Public redirect bot and abuse defense"
+msgstr "Ochrana veřejných přesměrování před roboty a zneužitím"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:256
+msgid "Shields destination servers and infrastructure against crawler abuse using Cloudflare Turnstile and Google reCAPTCHA v3 without breaking social sharing previews."
+msgstr "Chrání cílové servery před roboty pomocí Cloudflare Turnstile a Google reCAPTCHA v3 bez narušení náhledů na sociálních sítích."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:262
+msgid "Privacy"
+msgstr "Soukromí"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:263
+msgid "On-premises location intelligence"
+msgstr "Lokální geografická analýza"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:264
+msgid "Resolves visitor countries and cities locally on your server through an on-premises MaxMind GeoLite2 database, ensuring fast analytics without third-party tracking."
+msgstr "Zjišťuje země a města návštěvníků lokálně na vašem serveru pomocí databáze MaxMind GeoLite2, což zajišťuje rychlou analytiku bez sledování třetími stranami."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:271
+msgid "Real-time traffic and engagement reporting"
+msgstr "Přehledy návštěvnosti a zapojení v reálném čase"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:272
+msgid "Provides comprehensive click analytics covering total volume, unique visitors, referrers, device platforms, browser engines, and operating systems across custom date ranges."
+msgstr "Poskytuje komplexní statistiky prokliků: celkový objem, unikátní návštěvníky, zdroje návštěvnosti, zařízení, prohlížeče a operační systémy ve vybraných obdobích."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:278
+msgid "Publishing"
+msgstr "Publikování"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:279
+msgid "Branded short links and vector QR codes"
+msgstr "Vlastní zkrácené odkazy a vektorové QR kódy"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:280
+msgid "Creates clean short links with custom aliases, generated codes, password protection, expiration schedules, social preview image overrides, and downloadable QR codes."
+msgstr "Vytváří přehledné krátké odkazy s vlastními aliasy, ochranou heslem, datem vypršení platnosti, upravenými náhledovými obrázky a QR kódy ke stažení."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:286
+msgid "Data mobility"
+msgstr "Mobilita dat"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:287
+msgid "Data import, export, and migration"
+msgstr "Import, export a migrace dat"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:288
+msgid "Comprehensive data mobility supporting CSV and JSON file uploads, direct text pasting, API ingestion, full database exports, and native migration tools."
+msgstr "Kompletní přenositelnost dat s podporou souborů CSV a JSON, přímého vkládání textu, příjmu přes API, úplného exportu databáze a integrovaných nástrojů pro migraci."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:294
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:98
+msgid "Developer"
+msgstr "Pro vývojáře"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:295
+msgid "REST API and real-time webhooks"
+msgstr "REST API a webhooky v reálném čase"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:296
+msgid "Automates publishing through token-authenticated REST endpoints, dispatches real-time webhooks on link events, and supports WordPress-style action and filter hooks."
+msgstr "Automatizuje publikování přes zabezpečené koncové body REST, odesílá webhooky v reálném čase při událostech a podporuje akční a filtrační háčky ve stylu WordPressu."
 
 #: ui/pages/dashboard/about/AboutPage.tsx:302
-msgid "Create clean short links with custom aliases, generated codes, QR output, and redirect settings that stay easy to manage."
-msgstr "Vytvářejte přehledné zkrácené odkazy s vlastními aliasy, generovanými kódy, výstupem QR kódů a snadno spravovatelným nastavením přesměrování."
+msgid "Ecosystem"
+msgstr "Ekosystém"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:308
-msgid "Click Analytics"
-msgstr "Analytika kliknutí"
+#: ui/pages/dashboard/about/AboutPage.tsx:303
+msgid "Official extensions and integrations"
+msgstr "Oficiální rozšíření a integrace"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:309
-msgid "Review clicks, unique visitors, referrers, device breakdowns, and traffic trends from the same dashboard used to publish links."
-msgstr "Sledujte kliknutí, unikátní návštěvníky, zdroje návštěvnosti, rozdělení zařízení a trendy přímo ze stejného ovládacího panelu."
+#: ui/pages/dashboard/about/AboutPage.tsx:304
+msgid "Shorten and manage links directly within your workflow using official add-ons for WordPress, Google Chrome, Mozilla Firefox, Docker, and the command-line CLI."
+msgstr "Zkracujte a spravujte odkazy přímo ve svém pracovním postupu s oficiálními doplňky pro WordPress, Google Chrome, Mozilla Firefox, Docker a příkazový řádek (CLI)."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:315
-msgid "Local Location Data"
-msgstr "Lokální data o poloze"
+#: ui/pages/dashboard/about/AboutPage.tsx:310
+msgid "Operations"
+msgstr "Provoz"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:316
-msgid "Resolve visitor locations from a local MaxMind GeoLite2 database so analytics stay under your control."
-msgstr "Zjišťujte polohu návštěvníků z lokální databáze MaxMind GeoLite2, aby analytika zůstala plně pod vaší kontrolou."
+#: ui/pages/dashboard/about/AboutPage.tsx:311
+msgid "Live Site Health diagnostics"
+msgstr "Diagnostika stavu webu v reálném čase"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:322
-msgid "Access And Security"
-msgstr "Přístup a zabezpečení"
+#: ui/pages/dashboard/about/AboutPage.tsx:312
+msgid "Continuously monitors database connectivity, PHP runtime settings, disk storage, cache engine status, and GeoLite2 file integrity with precision localized timestamps."
+msgstr "Neustále monitoruje připojení k databázi, nastavení PHP, místo na disku, stav mezipaměti a integritu souborů GeoLite2 s přesnými časovými údaji."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:323
-msgid "Run with admin and editor roles, session controls, two-factor authentication, backup codes, and API keys."
-msgstr "Využívejte role správce a editora, správu relací, dvoufaktorové ověřování, záložní kódy a klíče API."
+#: ui/pages/dashboard/about/AboutPage.tsx:318
+msgid "Localization"
+msgstr "Lokalizace"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:329
-msgid "Operations And Integrations"
-msgstr "Provoz a integrace"
+#: ui/pages/dashboard/about/AboutPage.tsx:319
+msgid "26 global language packs with native RTL"
+msgstr "26 mezinárodních jazykových balíčků s nativní podporou RTL"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:330
-msgid "Use API keys, webhooks, import tools, and the built-in updater baseline to operate the service over time."
-msgstr "Používejte klíče API, webhooky, nástroje pro import a vestavěný systém aktualizací pro dlouhodobý provoz služby."
+#: ui/pages/dashboard/about/AboutPage.tsx:320
+msgid "Offers full native translations across 26 international languages and regional variants, with complete right-to-left layout and typography orchestration out of the box."
+msgstr "Nabízí kompletní nativní překlady do 26 jazyků a regionálních variant s plnou podporou psaní zprava doleva (RTL)."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:336
-msgid "Portable Self-Hosting"
-msgstr "Nezávislý self-hosting"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:337
-msgid "Deploy on your own domain, keep runtime configuration in your own environment, and preserve user-owned content across updates."
-msgstr "Nasaďte systém na vlastní doménu, udržujte konfiguraci ve svém prostředí a zachovejte data uživatelů napříč aktualizacemi."
-
-#: ui/pages/dashboard/about/AboutPage.tsx:357
+#: ui/pages/dashboard/about/AboutPage.tsx:345
 msgid "Use"
 msgstr "Použití"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:358
+#: ui/pages/dashboard/about/AboutPage.tsx:346
 msgid "Run PeakURL for any purpose, personal projects, business, education, or anything in between."
 msgstr "Používejte PeakURL pro jakýkoli účel: osobní projekty, podnikání, vzdělávání nebo cokoli mezi tím."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:364
+#: ui/pages/dashboard/about/AboutPage.tsx:352
 msgid "Study"
 msgstr "Studium"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:365
+#: ui/pages/dashboard/about/AboutPage.tsx:353
 msgid "Explore the source code, understand how it works, and modify it to suit your exact needs."
 msgstr "Zkoumejte zdrojový kód, pochopte, jak funguje, a upravte jej přesně podle svých potřeb."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:371
+#: ui/pages/dashboard/about/AboutPage.tsx:359
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:185
 msgid "Share"
 msgstr "Sdílení"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:372
+#: ui/pages/dashboard/about/AboutPage.tsx:360
 msgid "Redistribute copies freely so others can benefit from the same powerful link management platform."
 msgstr "Volně šiřte kopie, aby ostatní mohli využívat stejnou výkonnou platformu pro správu odkazů."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:378
+#: ui/pages/dashboard/about/AboutPage.tsx:366
 msgid "Improve"
 msgstr "Vylepšování"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:379
+#: ui/pages/dashboard/about/AboutPage.tsx:367
 msgid "Enhance PeakURL and share your improvements, contributing back to the open-source community."
 msgstr "Vylepšujte PeakURL a sdílejte svá vylepšení, čímž přispějete zpět do komunity otevřeného softwaru."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:422
-msgid "PeakURL gives you a focused workspace for publishing short links, measuring engagement, and running branded link infrastructure on your own stack."
-msgstr "PeakURL vám poskytuje ucelený pracovní prostor pro publikování zkrácených odkazů, měření zapojení a provozování značkové infrastruktury odkazů na vašem vlastním stacku."
+#: ui/pages/dashboard/about/AboutPage.tsx:456
+msgid "Languages"
+msgstr "Jazyky"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:452
-msgid "View on GitHub"
-msgstr "Zobrazit na GitHubu"
+#: ui/pages/dashboard/about/AboutPage.tsx:464
+msgid "Global locales & native RTL"
+msgstr "Globální jazyky & nativní RTL"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:489
-msgid "Everything you need to publish short links, review traffic, and operate the service from one focused dashboard."
-msgstr "Vše, co potřebujete k publikování zkrácených odkazů, sledování návštěvnosti a správě služby z jednoho přehledného panelu."
+#: ui/pages/dashboard/about/AboutPage.tsx:471
+msgid "Subsystems"
+msgstr "Podsystémy"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:493
+#: ui/pages/dashboard/about/AboutPage.tsx:479
+msgid "Core modular capabilities"
+msgstr "Základní modulární funkce"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:494
+msgid "Full data sovereignty"
+msgstr "Úplná suverenita nad daty"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:501
+msgid "Open Source"
+msgstr "Otevřený software"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:509
+msgid "Inspectable and free forever"
+msgstr "Ověřitelný a navždy svobodný"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:515
+msgid "Everything you need to publish short links, measure engagement, protect your data, and operate the service with complete control."
+msgstr "Vše, co potřebujete pro publikování zkrácených odkazů, měření interakcí, ochranu dat a provoz služby pod vaší plnou kontrolou."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:519
+#: ui/pages/dashboard/about/AboutPage.tsx:645
 msgid "What's Inside"
 msgstr "Co je uvnitř"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:508
-msgid "PeakURL is built to stay understandable in day-to-day use and dependable over time."
-msgstr "PeakURL je navržen tak, aby byl snadno srozumitelný při každodenním používání a spolehlivý v průběhu času."
+#: ui/pages/dashboard/about/AboutPage.tsx:533
+msgid "PeakURL is built to stay understandable in day-to-day use, dependable under load, and open for long-term ownership."
+msgstr "PeakURL je navržen tak, aby byl snadno srozumitelný při každodenním používání, spolehlivý i při vysokém zatížení a otevřený pro dlouhodobé vlastnictví."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:512
+#: ui/pages/dashboard/about/AboutPage.tsx:537
 msgid "Product Principles"
 msgstr "Principy produktu"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:521
+#: ui/pages/dashboard/about/AboutPage.tsx:546
 msgid "Clear By Default"
 msgstr "Přehlednost ve výchozím stavu"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:524
-msgid "The dashboard should stay direct and readable so routine work like publishing links, reviewing traffic, and managing users does not feel heavy."
-msgstr "Ovládací panel by měl zůstat přímý a čitelný, aby běžná práce jako publikování odkazů, kontrola návštěvnosti a správa uživatelů nepůsobila těžkopádně."
+#: ui/pages/dashboard/about/AboutPage.tsx:549
+msgid "The dashboard stays direct and readable so routine operations like publishing links, reviewing traffic, and managing users remain effortless."
+msgstr "Ovládací panel zůstává přehledný a čitelný, takže běžné činnosti jako tvorba odkazů, kontrola statistik a správa uživatelů probíhají bez námahy."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:534
+#: ui/pages/dashboard/about/AboutPage.tsx:559
 msgid "Portable To Run"
 msgstr "Přenositelnost provozu"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:537
-msgid "The application should install cleanly on common PHP and MySQL hosting without depending on a managed SaaS control plane."
-msgstr "Aplikace by se měla snadno instalovat na běžný hosting PHP a MySQL bez závislosti na řízené platformě SaaS."
+#: ui/pages/dashboard/about/AboutPage.tsx:562
+msgid "The application installs cleanly on standard PHP and MySQL hosting with native PDO prepared statements and zero external control plane dependencies."
+msgstr "Aplikace se bez potíží instaluje na běžném PHP a MySQL hostingu s nativními připravenými dotazy PDO a bez jakýchkoli externích závislostí."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:547
+#: ui/pages/dashboard/about/AboutPage.tsx:572
 msgid "Open And Inspectable"
 msgstr "Otevřenost a auditovatelnost"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:550
-msgid "The codebase stays auditable and adaptable so operators can understand what they run, extend it carefully, and keep long-term control."
-msgstr "Kód zůstává auditovatelný a přizpůsobitelný, aby provozovatelé přesně věděli, co provozují, mohli systém snadno rozšiřovat a udrželi si dlouhodobou kontrolu."
+#: ui/pages/dashboard/about/AboutPage.tsx:575
+msgid "The entire codebase is auditable, free of telemetry, and extensible via WordPress-style hooks so operators always maintain full data custody."
+msgstr "Celý zdrojový kód je transparentní, bez telemetrie a rozšiřitelný pomocí háčků, což provozovatelům zajišťuje trvalou kontrolu nad daty."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:563
-msgid "PeakURL is released under the MIT License so it can stay practical to adopt, inspect, modify, and distribute."
-msgstr "PeakURL je vydáván pod licencí MIT, což zajišťuje praktickou svobodu pro nasazení, kontrolu, úpravy a distribuci."
+#: ui/pages/dashboard/about/AboutPage.tsx:585
+msgid "PeakURL is released under the MIT License so anyone can adopt, study, adapt, and distribute it freely."
+msgstr "PeakURL je vydán pod licencí MIT, takže jej kdokoli může svobodně používat, studovat, upravovat a dále šířit."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:567
+#: ui/pages/dashboard/about/AboutPage.tsx:589
 msgid "Open Source Terms"
 msgstr "Podmínky open source"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:581
+#: ui/pages/dashboard/about/AboutPage.tsx:598
 msgid "Freedom to"
 msgstr "Svoboda"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:604
-msgid "Shorten, track, and own every link."
-msgstr "Zkracujte, sledujte a spravujte každý odkaz."
+#: ui/pages/dashboard/about/AboutPage.tsx:650
+msgid "Principles & License"
+msgstr "Principy a licence"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:631
-msgid "Release Notes"
-msgstr "Poznámky k vydání"
+#: ui/pages/dashboard/about/AboutPage.tsx:655
+msgid "Wall of Love"
+msgstr "Zeď uznání"
 
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:26
+#: ui/pages/dashboard/about/AboutPage.tsx:675
+msgid "Reinstall complete"
+msgstr "Přeinstalace dokončena"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:676
+msgid "Update complete"
+msgstr "Aktualizace dokončena"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:683
+msgid "PeakURL was successfully reinstalled"
+msgstr "PeakURL byl úspěšně přeinstalován"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:684
+msgid "PeakURL was successfully updated"
+msgstr "PeakURL byl úspěšně aktualizován"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:689
+msgid "The core application runtime and static assets have been cleanly refreshed. Your database records, short links, and configuration remain completely intact."
+msgstr "Jádro aplikace a statické soubory byly v pořádku obnoveny. Vaše data v databázi, zkrácené odkazy i konfigurace zůstávají zcela nedotčeny."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:692
+msgid "Your installation has been upgraded to the latest release. Review the release highlights, subsystem performance updates, and technical changes below."
+msgstr "Vaše instalace byla povýšena na nejnovější verzi. Níže si projděte hlavní novinky vydání, vylepšení výkonu a technické změny."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:703
+#: ui/pages/NotFoundPage.tsx:58
+msgid "Go to Dashboard"
+msgstr "Přejít na nástěnku"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:719
+#: ui/pages/dashboard/about/AboutPage.tsx:865
+msgid "View on GitHub"
+msgstr "Zobrazit na GitHubu"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:835
+msgid "PeakURL gives you a focused workspace for publishing short links, measuring engagement, and running branded link infrastructure on your own stack."
+msgstr "PeakURL vám poskytuje ucelený pracovní prostor pro publikování zkrácených odkazů, měření zapojení a provozování značkové infrastruktury odkazů na vašem vlastním stacku."
+
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:31
 msgid "No recent activity"
 msgstr "Žádná nedávná aktivita"
 
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:27
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:32
 msgid "View All Activity"
 msgstr "Zobrazit veškerou aktivitu"
 
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:187
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:205
 msgid "By %1$s • %2$s"
 msgstr "%1$s • %2$s"
 
@@ -6604,7 +6762,7 @@ msgid "Compared with %1$s to %2$s."
 msgstr "Ve srovnání s obdobím od %1$s do %2$s."
 
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:119
-#: ui/pages/dashboard/links/LinksPage.tsx:420
+#: ui/pages/dashboard/links/LinksPage.tsx:433
 msgid "Active Links"
 msgstr "Aktivní odkazy"
 
@@ -6753,38 +6911,50 @@ msgid "Sort: Date Created"
 msgstr "Řadit: Datum vytvoření"
 
 #: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:44
+msgid "Sort: Date Modified"
+msgstr "Řadit: Datum úpravy"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:45
 msgid "Sort: Most Clicks"
 msgstr "Řadit: Nejvíce kliknutí"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:45
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:46
+msgid "Sort: Unique Visitors"
+msgstr "Řadit: Unikátní návštěvníci"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:47
 msgid "Sort: Alias"
 msgstr "Řadit: Alias"
 
 #: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:48
+msgid "Sort: Title"
+msgstr "Řadit: Název"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:51
 msgid "Descending"
 msgstr "Sestupně"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:49
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:52
 msgid "Ascending"
 msgstr "Vzestupně"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:60
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:63
 msgid "Total Links:"
 msgstr "Celkem odkazů:"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:70
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:73
 msgid "Total Clicks:"
 msgstr "Celkem kliknutí:"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:92
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:95
 msgid "Filter links by status"
 msgstr "Filtrovat odkazy podle stavu"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:102
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:105
 msgid "Sort links"
 msgstr "Seřadit odkazy"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:111
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:114
 msgid "Sort order"
 msgstr "Pořadí řazení"
 
@@ -6792,81 +6962,93 @@ msgstr "Pořadí řazení"
 msgid "Showing %1$s–%2$s of %3$s links"
 msgstr "Zobrazeno %1$s–%2$s z %3$s odkazů"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:26
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:27
 msgid "Deselect all links"
 msgstr "Zrušit výběr všech odkazů"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:43
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:44
 msgid "Restore selected"
 msgstr "Obnovit vybrané"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:52
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:53
 msgid "Delete permanently"
 msgstr "Trvale smazat"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:61
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:62
 msgid "Empty trash"
 msgstr "Vysypat koš"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:103
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:104
 msgid "Link"
 msgstr "Odkaz"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:104
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:105
 msgid "Title"
 msgstr "Název"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:105
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:106
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:117
 msgid "Destination"
 msgstr "Cíl"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:109
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:111
+msgid "Modified"
+msgstr "Upraveno"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:111
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:35
 #: ui/pages/dashboard/users/UsersPage.tsx:685
 msgid "Created"
 msgstr "Vytvořeno"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:36
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:41
 msgid "Trashed"
 msgstr "V koši"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:42
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:150
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:47
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:155
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:58
 msgid "Expired"
 msgstr "Vypršelo"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:97
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:102
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:104
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:143
 msgid "Copy"
 msgstr "Kopírovat"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:131
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:136
 msgid "Protected"
 msgstr "Chráněno"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:151
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:156
 msgid "Expires"
 msgstr "Vyprší"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:209
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:207
+msgid "Created: %s"
+msgstr "Vytvořeno: %s"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:211
+msgid "Modified: %s"
+msgstr "Upraveno: %s"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:244
 msgid "Restore Link"
 msgstr "Obnovit odkaz"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:216
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:251
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:172
 msgid "Delete Permanently"
 msgstr "Trvale smazat"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:226
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:261
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:77
 msgid "QR Code"
 msgstr "QR kód"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:240
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:275
 msgid "Edit"
 msgstr "Upravit"
 
@@ -6878,37 +7060,37 @@ msgstr "Zatím žádné odkazy"
 msgid "Create your first shortened link to get started"
 msgstr "Vytvořte svůj první zkrácený odkaz a začněte"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:158
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:159
 msgid "Links deleted"
 msgstr "Odkazy byly smazány"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:159
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:160
 msgid "All links have been removed."
 msgstr "Všechny odkazy byly odstraněny."
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:163
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:164
 msgid "Unable to delete links"
 msgstr "Odkazy nelze smazat"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:164
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:165
 msgid "Failed to delete all links."
 msgstr "Nepodařilo se smazat všechny odkazy."
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:257
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:261
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:260
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:264
 msgid "Delete all links"
 msgstr "Smazat všechny odkazy"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:258
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:261
 msgid "Are you sure you want to delete all links? This will move active links to trash."
 msgstr "Opravdu chcete smazat všechny odkazy? Tím přesunete aktivní odkazy do koše."
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:269
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:273
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:272
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:276
 msgid "Empty Trash"
 msgstr "Vysypat koš"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:270
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:273
 msgid "Are you sure you want to permanently delete all links in the trash? This action cannot be undone."
 msgstr "Opravdu chcete trvale smazat všechny odkazy v koši? Tuto akci nelze vrátit zpět."
 
@@ -7340,10 +7522,6 @@ msgstr "Video"
 msgid "News & Content"
 msgstr "Zprávy a obsah"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:98
-msgid "Developer"
-msgstr "Pro vývojáře"
-
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:100
 msgid "Email Marketing"
 msgstr "E-mailový marketing"
@@ -7647,55 +7825,55 @@ msgstr "Obnovit odkazy"
 msgid "Manage and track your shortened URLs"
 msgstr "Spravujte a sledujte své zkrácené adresy URL"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:239
+#: ui/pages/dashboard/links/LinksPage.tsx:252
 msgid "The link has been restored to active status."
 msgstr "Odkaz byl obnoven do aktivního stavu."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:244
+#: ui/pages/dashboard/links/LinksPage.tsx:257
 msgid "Failed to restore link."
 msgstr "Nepodařilo se obnovit odkaz."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:253
+#: ui/pages/dashboard/links/LinksPage.tsx:266
 msgid "Links restored"
 msgstr "Odkazy byly obnoveny"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:254
+#: ui/pages/dashboard/links/LinksPage.tsx:267
 msgid "Selected links have been restored to active status."
 msgstr "Vybrané odkazy byly obnoveny do aktivního stavu."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:258
+#: ui/pages/dashboard/links/LinksPage.tsx:271
 msgid "Unable to restore links"
 msgstr "Nelze obnovit odkazy"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:259
+#: ui/pages/dashboard/links/LinksPage.tsx:272
 msgid "Failed to restore selected links."
 msgstr "Nepodařilo se obnovit vybrané odkazy."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:268
+#: ui/pages/dashboard/links/LinksPage.tsx:281
 msgid "Trash emptied"
 msgstr "Koš byl vysypán"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:269
+#: ui/pages/dashboard/links/LinksPage.tsx:282
 msgid "All trashed links have been permanently deleted."
 msgstr "Všechny odkazy v koši byly trvale smazány."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:273
+#: ui/pages/dashboard/links/LinksPage.tsx:286
 msgid "Unable to empty trash"
 msgstr "Nelze vysypat koš"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:274
+#: ui/pages/dashboard/links/LinksPage.tsx:287
 msgid "Failed to empty trash."
 msgstr "Nepodařilo se vysypat koš."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:406
+#: ui/pages/dashboard/links/LinksPage.tsx:419
 msgid "Total Links"
 msgstr "Celkem odkazů"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:434
+#: ui/pages/dashboard/links/LinksPage.tsx:447
 msgid "Items in the trash are retained indefinitely until emptied."
 msgstr "Položky v koši jsou uchovávány po neomezenou dobu, dokud není koš vysypán."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:438
+#: ui/pages/dashboard/links/LinksPage.tsx:451
 msgid "Items in the trash will be automatically deleted after %d days."
 msgstr "Položky v koši budou automaticky smazány po %d dnech."
 
@@ -7874,10 +8052,6 @@ msgstr "Stránka ovládacího panelu, kterou hledáte, neexistuje. Možná byla 
 #: ui/pages/NotFoundPage.tsx:50
 msgid "Go Back"
 msgstr "Přejít zpět"
-
-#: ui/pages/NotFoundPage.tsx:58
-msgid "Go to Dashboard"
-msgstr "Přejít na nástěnku"
 
 #: ui/pages/NotFoundPage.tsx:64
 msgid "Popular Destinations"

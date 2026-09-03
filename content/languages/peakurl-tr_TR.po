@@ -6,10 +6,10 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-02 09:50+0000\n"
-"POT-Creation-Date: 2026-09-02 09:50+0000\n"
+"PO-Revision-Date: 2026-09-03 18:21+0000\n"
+"POT-Creation-Date: 2026-09-03 18:21+0000\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"Project-Id-Version: PeakURL 1.6.0\n"
+"Project-Id-Version: PeakURL 1.6.1\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
 "X-Domain: peakurl\n"
 "X-Generator: PeakURL i18n Tools\n"
@@ -271,7 +271,7 @@ msgid "No restorable link metadata found in this activity record."
 msgstr "Bu etkinlik kaydında geri yüklenebilir bağlantı meta verisi bulunamadı."
 
 #: app/traits/analytics.php:782
-#: ui/pages/dashboard/activity/ActivityPage.tsx:370
+#: ui/pages/dashboard/activity/ActivityPage.tsx:391
 msgid "This link was permanently deleted and cannot be restored."
 msgstr "Bu bağlantı kalıcı olarak silindi ve geri yüklenemez."
 
@@ -298,7 +298,7 @@ msgid "You do not have permission to view this link."
 msgstr "Bu bağlantıyı görüntüleme izniniz yok."
 
 #: app/traits/links.php:403
-#: app/traits/links.php:1172
+#: app/traits/links.php:1176
 msgid "Provide either socialImage or socialImageUrl, not both."
 msgstr "socialImage veya socialImageUrl değerlerinden yalnızca birini sağlayın; ikisini birden sağlamayın."
 
@@ -314,41 +314,41 @@ msgstr "Doğrulama başarısız oldu. Lütfen tekrar deneyin."
 msgid "You do not have permission to edit this link."
 msgstr "Bu bağlantıyı düzenleme izniniz yok."
 
-#: app/traits/links.php:1361
+#: app/traits/links.php:1365
 msgid "You do not have permission to delete this link."
 msgstr "Bu bağlantıyı silme izniniz yok."
 
-#: app/traits/links.php:1511
+#: app/traits/links.php:1515
 msgid "That short link does not exist."
 msgstr "Bu kısa bağlantı mevcut değil."
 
-#: app/traits/links.php:1518
+#: app/traits/links.php:1522
 msgid "This link is already active."
 msgstr "Bu bağlantı zaten etkin."
 
-#: app/traits/links.php:1528
+#: app/traits/links.php:1532
 msgid "You do not have permission to restore this link."
 msgstr "Bu bağlantıyı geri yükleme izniniz yok."
 
-#: app/traits/links.php:1594
-#: app/traits/links.php:1875
-#: app/traits/links.php:1953
+#: app/traits/links.php:1598
+#: app/traits/links.php:1879
+#: app/traits/links.php:1957
 msgid "You do not have permission to delete links."
 msgstr "Bağlantıları silme izniniz yok."
 
-#: app/traits/links.php:1776
+#: app/traits/links.php:1780
 msgid "You do not have permission to restore links."
 msgstr "Bağlantıları geri yükleme izniniz yok."
 
-#: app/traits/links.php:2138
+#: app/traits/links.php:2142
 msgid "A valid destination URL is required."
 msgstr "Geçerli bir hedef URL gerekiyor."
 
-#: app/traits/links.php:2156
+#: app/traits/links.php:2160
 msgid "That short code is reserved by the application."
 msgstr "Bu kısa kod uygulama tarafından ayrılmıştır."
 
-#: app/traits/links.php:2166
+#: app/traits/links.php:2170
 msgid "That short code is already in use."
 msgstr "Bu kısa kod zaten kullanılıyor."
 
@@ -416,13 +416,13 @@ msgstr "%s adresini ziyaret edin"
 
 #: app/includes/functions.php:1192
 #: ui/pages/dashboard/about/Sponsors.tsx:98
-#: ui/pages/dashboard/about/AboutPage.tsx:613
+#: ui/pages/dashboard/about/AboutPage.tsx:75
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
 msgid "Website"
 msgstr "Web Sitesi"
 
 #: app/includes/functions.php:1193
-#: ui/pages/dashboard/about/AboutPage.tsx:435
+#: ui/pages/dashboard/about/AboutPage.tsx:848
 msgid "Documentation"
 msgstr "Belgeler"
 
@@ -432,6 +432,7 @@ msgid "GitHub"
 msgstr "GitHub"
 
 #: app/includes/functions.php:1195
+#: ui/pages/dashboard/about/AboutPage.tsx:486
 msgid "Self-Hosted"
 msgstr "Kendi Sunucunuzda"
 
@@ -1341,78 +1342,78 @@ msgstr "PeakURL güncelleme hizmetine bağlanamadı."
 msgid "PeakURL could not read the update service response."
 msgstr "PeakURL güncelleme hizmetinin yanıtını okuyamadı."
 
-#: app/services/social-preview.php:254
-#: app/services/social-preview.php:272
-#: app/services/social-preview.php:280
+#: app/services/social-preview.php:260
+#: app/services/social-preview.php:278
+#: app/services/social-preview.php:286
 msgid "Enter a valid social preview image URL."
 msgstr "Geçerli bir sosyal önizleme görseli URL'si girin."
 
-#: app/services/social-preview.php:266
+#: app/services/social-preview.php:272
 msgid "The social preview image URL is too long."
 msgstr "Sosyal önizleme görseli URL'si çok uzun."
 
-#: app/services/social-preview.php:289
+#: app/services/social-preview.php:295
 msgid "The social preview image URL must use HTTPS."
 msgstr "sosyal önizleme görseli URL kullan HTTPS."
 
-#: app/services/social-preview.php:295
+#: app/services/social-preview.php:301
 msgid "The social preview image URL cannot contain credentials."
 msgstr "Sosyal önizleme görseli URL'si kimlik bilgileri içeremez."
 
-#: app/services/social-preview.php:351
+#: app/services/social-preview.php:357
 #: ui/hooks/useDashboardSearch.ts:89
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:112
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:117
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:279
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:284
 msgid "Untitled Link"
 msgstr "Adsız Bağlantı"
 
-#: app/services/social-preview.php:411
+#: app/services/social-preview.php:417
 msgid "Upload a PNG, JPG, or WebP social preview image."
 msgstr "yükleme bir PNG, JPG, veya WebP sosyal önizleme görseli."
 
-#: app/services/social-preview.php:420
+#: app/services/social-preview.php:426
 msgid "PeakURL could not read the social preview image dimensions."
 msgstr "PeakURL sosyal önizleme görselinin boyutlarını okuyamadı."
 
-#: app/services/social-preview.php:432
+#: app/services/social-preview.php:438
 msgid "PeakURL could not create the social preview uploads directory."
 msgstr "PeakURL sosyal önizleme yüklemeleri için gerekli dizini oluşturamadı."
 
-#: app/services/social-preview.php:438
+#: app/services/social-preview.php:444
 msgid "PeakURL could not store the uploaded social preview image."
 msgstr "PeakURL yüklenen sosyal önizleme görselini kaydedemedi."
 
-#: app/services/social-preview.php:445
+#: app/services/social-preview.php:451
 msgid "PeakURL could not activate the uploaded social preview image."
 msgstr "PeakURL activate uploaded sosyal önizleme görseli yapamadı."
 
-#: app/services/social-preview.php:481
+#: app/services/social-preview.php:487
 msgid "PeakURL could not verify the uploaded social preview image."
 msgstr "PeakURL yüklenen sosyal önizleme görselini doğrulayamadı."
 
-#: app/services/social-preview.php:542
+#: app/services/social-preview.php:548
 msgid "The uploaded social preview image exceeds the server maximum file size limit."
 msgstr "uploaded sosyal önizleme görseli exceeds sunucu üst sınırı dosya boyutu sınırı."
 
-#: app/services/social-preview.php:546
+#: app/services/social-preview.php:552
 msgid "The social preview image upload did not finish. Try again."
 msgstr "Sosyal önizleme görseli yüklemesi tamamlanamadı. Tekrar deneyin."
 
-#: app/services/social-preview.php:550
+#: app/services/social-preview.php:556
 #: app/services/favicon.php:374
 msgid "The server is missing a temporary upload directory."
 msgstr "sunucu eksik bir temporary yükleme dizin."
 
-#: app/services/social-preview.php:554
+#: app/services/social-preview.php:560
 msgid "The server could not write the uploaded social preview image to disk."
 msgstr "Sunucu yüklenen sosyal önizleme görselini diske yazamadı."
 
-#: app/services/social-preview.php:558
+#: app/services/social-preview.php:564
 msgid "A PHP extension stopped the social preview image upload."
 msgstr "bir PHP uzantı stopped sosyal önizleme görseli yükleme."
 
-#: app/services/social-preview.php:561
+#: app/services/social-preview.php:567
 msgid "PeakURL could not upload the social preview image."
 msgstr "PeakURL sosyal önizleme görselini yükleyemedi."
 
@@ -1576,7 +1577,7 @@ msgstr "PeakURL, hesap e-posta adresi geçersiz olduğu için hoş geldiniz e-po
 
 #: app/services/notifications.php:204
 #: site/setup-config.php:701
-#: ui/pages/dashboard/about/AboutPage.tsx:419
+#: ui/pages/dashboard/about/AboutPage.tsx:832
 msgid "Welcome to %s"
 msgstr "%s uygulamasına hoş geldiniz"
 
@@ -1758,7 +1759,7 @@ msgstr "Hoş Geldiniz"
 #: site/setup-config.php:679
 #: ui/components/common/ApiErrorPage/ApiErrorPage.tsx:70
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:128
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1016
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1015
 msgid "Database"
 msgstr "Datenbank"
 
@@ -1805,7 +1806,7 @@ msgstr "Letters, numbers, dots, dashes, underscores, veya @."
 
 #: site/install.php:588
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:136
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1018
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1017
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:173
 #: ui/pages/dashboard/users/UsersPage.tsx:260
@@ -1941,8 +1942,8 @@ msgstr "tümü bağlantılar"
 #: ui/utils/dashboardSearch.ts:97
 #: ui/utils/dashboardSearch.ts:100
 #: ui/pages/auth/login/LoginPage.tsx:47
-#: ui/pages/layout/dashboard/Search/Search.tsx:286
-#: ui/pages/dashboard/activity/ActivityPage.tsx:636
+#: ui/pages/layout/dashboard/Search/Search.tsx:295
+#: ui/pages/dashboard/activity/ActivityPage.tsx:657
 #: ui/pages/dashboard/links/_components/Header/Header.tsx:42
 #: ui/router/pageTitle.ts:77
 msgid "Links"
@@ -1952,13 +1953,13 @@ msgstr "Bağlantılar"
 #: ui/utils/dashboardSearch.ts:119
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:80
 #: ui/pages/layout/dashboard/Header/Header.tsx:121
-#: ui/pages/dashboard/activity/ActivityPage.tsx:693
+#: ui/pages/dashboard/activity/ActivityPage.tsx:714
 #: ui/router/pageTitle.ts:73
 msgid "Activity"
 msgstr "Aktivität"
 
 #: ui/utils/dashboardSearch.ts:120
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:25
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:30
 msgid "Recent Activity"
 msgstr "Recent etkinlik"
 
@@ -2016,6 +2017,7 @@ msgstr "güvenlik ayarlar"
 #: ui/utils/dashboardSearch.ts:169
 #: ui/pages/auth/login/LoginPage.tsx:57
 #: ui/pages/dashboard/settings/Layout.tsx:27
+#: ui/pages/dashboard/about/AboutPage.tsx:246
 msgid "Security"
 msgstr "Sicherheit"
 
@@ -2023,7 +2025,7 @@ msgstr "Sicherheit"
 #: ui/utils/dashboardSearch.ts:187
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:79
 #: ui/pages/dashboard/settings/Layout.tsx:31
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:996
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:995
 #: ui/router/pageTitle.ts:24
 msgid "API Keys"
 msgstr "API anahtarlar"
@@ -2052,7 +2054,7 @@ msgstr "e-posta yapılandırma"
 #: ui/pages/dashboard/settings/Layout.tsx:57
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:138
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:542
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1021
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1020
 #: ui/router/pageTitle.ts:30
 msgid "Location Data"
 msgstr "konum Data"
@@ -2068,9 +2070,9 @@ msgstr "Güncellemeler"
 #: ui/utils/dashboardSearch.ts:256
 #: ui/utils/dashboardSearch.ts:260
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:53
-#: ui/pages/layout/dashboard/Search/Search.tsx:247
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:989
-#: ui/pages/dashboard/activity/ActivityPage.tsx:642
+#: ui/pages/layout/dashboard/Search/Search.tsx:256
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:988
+#: ui/pages/dashboard/activity/ActivityPage.tsx:663
 #: ui/pages/dashboard/users/UsersPage.tsx:577
 #: ui/router/pageTitle.ts:85
 msgid "Users"
@@ -2106,7 +2108,7 @@ msgstr "Importieren"
 #: ui/utils/dashboardSearch.ts:322
 #: ui/utils/dashboardSearch.ts:325
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:65
-#: ui/pages/layout/dashboard/Search/Search.tsx:224
+#: ui/pages/layout/dashboard/Search/Search.tsx:233
 #: ui/router/pageTitle.ts:119
 msgid "Tools"
 msgstr "Araçlar"
@@ -2128,14 +2130,15 @@ msgstr "Exportieren"
 #: ui/utils/dashboardSearch.ts:321
 #: ui/utils/dashboardSearch.ts:326
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:85
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1081
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1080
+#: ui/pages/dashboard/about/AboutPage.tsx:710
 #: ui/router/pageTitle.ts:115
 msgid "System Status"
 msgstr "Sistem Durumu"
 
 #: ui/utils/dashboardSearch.ts:565
 #: ui/pages/layout/dashboard/Header/Header.tsx:40
-#: ui/pages/dashboard/activity/ActivityPage.tsx:112
+#: ui/pages/dashboard/activity/ActivityPage.tsx:116
 #: ui/pages/dashboard/users/UsersPage.tsx:82
 #: ui/pages/dashboard/users/UsersPage.tsx:90
 #: ui/pages/dashboard/users/UsersPage.tsx:679
@@ -2158,8 +2161,8 @@ msgstr "Bestätigen"
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:370
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:494
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:63
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:509
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1486
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:508
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1485
 #: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:122
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:156
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:18
@@ -2180,8 +2183,8 @@ msgid "Close modal"
 msgstr "kapat modal"
 
 #: ui/components/ui/PageSizeControl/PageSizeControl.tsx:27
-#: ui/pages/dashboard/activity/ActivityPage.tsx:800
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:119
+#: ui/pages/dashboard/activity/ActivityPage.tsx:821
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:122
 msgid "Rows per page"
 msgstr "Rows per sayfa"
 
@@ -2210,10 +2213,10 @@ msgstr "iptal özel sayfa size"
 
 #: ui/components/charts/MetricDonutChart/MetricDonutChart.tsx:37
 #: ui/components/charts/WorldMap/_components/Legend.tsx:16
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:991
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:990
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:113
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:64
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:168
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:173
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:47
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:166
 msgid "Clicks"
@@ -2251,19 +2254,19 @@ msgstr "Paz"
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:112
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:21
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:130
-#: ui/pages/dashboard/links/LinksPage.tsx:367
+#: ui/pages/dashboard/links/LinksPage.tsx:380
 msgid "Total Clicks"
 msgstr "Toplam Tıklama"
 
 #: ui/components/charts/TrafficChart/TrafficChart.tsx:261
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:70
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:133
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:177
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:182
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:48
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:173
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:28
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:138
-#: ui/pages/dashboard/links/LinksPage.tsx:392
+#: ui/pages/dashboard/links/LinksPage.tsx:405
 msgid "Visitors"
 msgstr "Ziyaretçiler"
 
@@ -2522,7 +2525,8 @@ msgid "Shorten, organize, and share."
 msgstr "Shorten, organize, ve share."
 
 #: ui/pages/auth/login/LoginPage.tsx:52
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:233
+#: ui/pages/dashboard/about/AboutPage.tsx:270
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:268
 msgid "Analytics"
 msgstr "Analitik"
 
@@ -2669,8 +2673,9 @@ msgstr "Thank siz için choosing %s."
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:561
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:739
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:61
-#: ui/pages/dashboard/about/AboutPage.tsx:230
-#: ui/pages/dashboard/about/AboutPage.tsx:406
+#: ui/pages/dashboard/about/AboutPage.tsx:391
+#: ui/pages/dashboard/about/AboutPage.tsx:677
+#: ui/pages/dashboard/about/AboutPage.tsx:819
 msgid "Version"
 msgstr "Sürüm"
 
@@ -2679,75 +2684,75 @@ msgid "Update Details"
 msgstr "güncelleme Details"
 
 #: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:51
-#: ui/pages/dashboard/about/AboutPage.tsx:239
+#: ui/pages/dashboard/about/AboutPage.tsx:398
 msgid "Released %s"
 msgstr "Yayınlanma %s"
 
 #: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:96
-#: ui/pages/dashboard/about/AboutPage.tsx:279
+#: ui/pages/dashboard/about/AboutPage.tsx:434
 msgid "For all release notes see the main page"
 msgstr "Tüm sürüm notları için ana sayfaya bakın"
 
 #: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:105
-#: ui/pages/dashboard/about/AboutPage.tsx:288
+#: ui/pages/dashboard/about/AboutPage.tsx:443
 msgid "Plain text format"
 msgstr "Düz metin biçimi"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:172
+#: ui/pages/layout/dashboard/Search/Search.tsx:173
 msgid "Search links, settings..."
 msgstr "ara bağlantılar, ayarlar..."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:173
+#: ui/pages/layout/dashboard/Search/Search.tsx:174
 msgid "Search the dashboard"
 msgstr "ara dashboard"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:186
+#: ui/pages/layout/dashboard/Search/Search.tsx:187
 msgid "Clear search"
 msgstr "Clear ara"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:205
+#: ui/pages/layout/dashboard/Search/Search.tsx:214
 msgid "Pages"
 msgstr "Seiten"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:254
+#: ui/pages/layout/dashboard/Search/Search.tsx:263
 msgid "Searching users..."
 msgstr "Searching kullanıcılar..."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:271
+#: ui/pages/layout/dashboard/Search/Search.tsx:280
 msgid "No matching users found."
 msgstr "yok matching kullanıcılar bulundu."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:293
+#: ui/pages/layout/dashboard/Search/Search.tsx:302
 msgid "Searching links..."
 msgstr "Searching bağlantılar..."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:310
+#: ui/pages/layout/dashboard/Search/Search.tsx:319
 msgid "No matching links found."
 msgstr "yok matching bağlantılar bulundu."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:327
+#: ui/pages/layout/dashboard/Search/Search.tsx:336
 msgid "Search all links for \"%s\""
 msgstr "ara tümü bağlantılar için \"%s\""
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:330
+#: ui/pages/layout/dashboard/Search/Search.tsx:339
 msgid "Open the links page with this search applied"
 msgstr "aç bağlantılar sayfa ile bu ara applied"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:339
+#: ui/pages/layout/dashboard/Search/Search.tsx:348
 msgid "Keep typing to search links, or jump straight to a dashboard page."
 msgstr "Bağlantıları aramak için yazmaya devam edin veya doğrudan bir kontrol paneli sayfasına geçin."
 
 #: ui/pages/layout/dashboard/Header/Header.tsx:38
 #: ui/pages/layout/dashboard/Header/Header.tsx:79
 #: ui/pages/layout/dashboard/Header/Header.tsx:91
-#: ui/pages/dashboard/activity/ActivityPage.tsx:105
+#: ui/pages/dashboard/activity/ActivityPage.tsx:109
 #: ui/pages/dashboard/users/UsersPage.tsx:67
 #: ui/pages/dashboard/users/UsersPage.tsx:126
 msgid "Admin"
 msgstr "Yönetici"
 
 #: ui/pages/layout/dashboard/Header/Header.tsx:39
-#: ui/pages/dashboard/activity/ActivityPage.tsx:109
+#: ui/pages/dashboard/activity/ActivityPage.tsx:113
 #: ui/pages/dashboard/users/UsersPage.tsx:72
 #: ui/pages/dashboard/users/UsersPage.tsx:127
 msgid "Editor"
@@ -2898,12 +2903,12 @@ msgstr "API anahtarı panoya kopyalandı"
 
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:464
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:137
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1060
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1059
 msgid "Copied"
 msgstr "Kopyalandı"
 
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:467
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1065
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1064
 msgid "Copy failed"
 msgstr "kopyala başarısız"
 
@@ -3360,7 +3365,7 @@ msgid "Save or download these codes now—they won't be shown again."
 msgstr "Bu kodları şimdi kaydedin veya indirin; bir daha gösterilmeyecektir."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:22
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:993
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:992
 msgid "Active Sessions"
 msgstr "etkin oturumlar"
 
@@ -3409,15 +3414,15 @@ msgstr "Son oluşturulma:"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:740
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:760
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:766
-#: ui/pages/dashboard/activity/ActivityPage.tsx:123
-#: ui/pages/dashboard/activity/ActivityPage.tsx:165
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:53
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:90
+#: ui/pages/dashboard/activity/ActivityPage.tsx:128
+#: ui/pages/dashboard/activity/ActivityPage.tsx:182
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:65
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:105
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:31
 #: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:39
 #: ui/pages/dashboard/_components/RecentClicks/RecentClicks.tsx:11
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:43
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:189
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:48
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:198
 #: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:172
 #: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:179
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:106
@@ -3900,7 +3905,7 @@ msgid "Save Credentials"
 msgstr "kaydet kimlik bilgileri"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:97
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:968
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:967
 msgid "Unavailable"
 msgstr "nicht verfügbar"
 
@@ -4143,7 +4148,7 @@ msgstr "CAPTCHA sağlayıcınızdan aldığınız gizli anahtarı yapıştırın
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:182
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:585
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:812
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:894
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:893
 msgid "Disabled"
 msgstr "Deaktiviert"
 
@@ -4155,7 +4160,7 @@ msgstr "Düzenleniyor"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:797
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:801
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:854
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:964
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:963
 msgid "Not configured"
 msgstr "Yapılandırılmadı"
 
@@ -4300,7 +4305,7 @@ msgid "Connect PeakURL to your automations with outbound webhooks for link activ
 msgstr "Bağlantı etkinlikleri için giden webhook'larla PeakURL'yi otomasyonlarınıza bağlayın."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:172
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:997
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:996
 msgid "Webhooks"
 msgstr "Webhook'lar"
 
@@ -4356,7 +4361,7 @@ msgstr "Webhook'lar yüklenemedi"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:361
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:26
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:40
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:45
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:44
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:57
 msgid "Inactive"
@@ -4456,13 +4461,13 @@ msgstr "API anahtar"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:105
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:38
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:43
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:56
 msgid "Active"
 msgstr "Aktif"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:131
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:247
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:282
 msgid "Delete"
 msgstr "Sil"
 
@@ -4633,133 +4638,133 @@ msgstr "Dosya Sistemi"
 msgid "Direct Database"
 msgstr "Doğrudan Veritabanı"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:272
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:271
 msgid "Performance & Caching"
 msgstr "Performans ve Önbellek"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:275
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:274
 msgid "Configure object caching backends and Time-to-Live (TTL) policies to optimize link redirection latency and throughput."
 msgstr "Bağlantı yönlendirme gecikmesini ve verimini optimize etmek için nesne önbelleği arka uçlarını ve Yaşam Süresi (TTL) ilkelerini yapılandırın."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:292
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:508
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:930
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1485
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:291
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:507
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:929
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1484
 msgid "Purge Cache"
 msgstr "Önbelleği Temizle"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:300
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:299
 msgid "Active Engine"
 msgstr "Aktif Motor"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:304
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:303
 msgid "Cache Footprint"
 msgstr "Önbellek Bellek Kullanımı"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:305
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:911
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:304
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:910
 msgid "0 B"
 msgstr "0 B"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:309
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:935
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:308
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:934
 msgid "Default TTL"
 msgstr "Varsayılan TTL"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:318
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:317
 msgid "Cache status unavailable"
 msgstr "Önbellek durumu kullanılamıyor"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:335
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:334
 msgid "Object cache is operational"
 msgstr "Nesne önbelleği çalışıyor"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:337
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:336
 msgid "Fallback cache driver active"
 msgstr "Yedek önbellek sürücüsü etkin"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:338
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:337
 msgid "Object cache is disabled"
 msgstr "Nesne önbelleği devre dışı"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:343
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:342
 msgid "Object caching is active and serving link redirects via the %s backend."
 msgstr "Nesne önbelleğe alma etkin ve %s arka ucu üzerinden yönlendirmeleri sunuyor."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:350
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:349
 msgid "The preferred cache driver is currently unavailable. PeakURL has automatically fallen back to %s."
 msgstr "Tercih edilen önbellek sürücüsü şu anda kullanılamıyor. PeakURL otomatik olarak %s sürücüsüne geçti."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:355
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:354
 msgid "Object caching is disabled. Link lookups and redirects are served directly from the database."
 msgstr "Nesne önbelleğe alma devre dışı. Bağlantı aramaları ve yönlendirmeler doğrudan veritabanından sunulur."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:367
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:366
 msgid "Cache Engine Settings"
 msgstr "Önbellek Motoru Ayarları"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:371
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:370
 msgid "Select your preferred caching backend. PeakURL automatically selects the highest performance operational backend if the preferred driver is unavailable."
 msgstr "Tercih ettiğiniz önbellek arka ucunu seçin. Tercih edilen sürücü kullanılamıyorsa PeakURL otomatik olarak en yüksek performanslı çalışan arka ucu seçer."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:379
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:385
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:378
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:384
 msgid "Preferred Cache Driver"
 msgstr "Tercih Edilen Önbellek Sürücüsü"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:389
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:388
 msgid "PeakURL prioritizes Redis if configured, APCu if loaded, and Filesystem storage as the universal fallback."
 msgstr "PeakURL; yapılandırılmışsa Redis'e, yüklüyse APCu'ya ve evrensel geri dönüş olarak dosya sistemi depolamasına öncelik verir."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:397
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:405
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:396
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:404
 msgid "Redirect Cache TTL"
 msgstr "Yönlendirme Önbelleği TTL"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:409
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:408
 msgid "Time-to-Live duration for caching active short URL redirect destinations."
 msgstr "Aktif kısa URL yönlendirme hedeflerini önbelleğe almak için Yaşam Süresi (TTL)."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:421
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:420
 msgid "Custom Redirect TTL (seconds)"
 msgstr "Özel Yönlendirme TTL (saniye)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:426
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:425
 msgid "Enter the redirect destination cache lifetime in seconds."
 msgstr "Yönlendirme hedefi önbellek ömrünü saniye cinsinden girin."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:436
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:444
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:435
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:443
 msgid "Negative Lookup (404) TTL"
 msgstr "Negatif Arama (404) TTL"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:448
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:447
 msgid "Time-to-Live duration for caching non-existent link lookups to mitigate database load from automated scans."
 msgstr "Otomatik taramalardan kaynaklanan veritabanı yükünü azaltmak için var olmayan bağlantı aramalarını önbelleğe alma süresi (TTL)."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:460
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:459
 msgid "Custom Negative TTL (seconds)"
 msgstr "Özel Negatif TTL (saniye)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:465
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:464
 msgid "Enter the 404 negative lookup cache lifetime in seconds."
 msgstr "404 negatif arama önbellek ömrünü saniye cinsinden girin."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:485
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:484
 msgid "Reset"
 msgstr "Sıfırla"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:495
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:494
 msgid "Save Performance Settings"
 msgstr "Performans Ayarlarını Kaydet"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:504
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1481
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:503
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1480
 msgid "Purge Object Cache"
 msgstr "Nesne Önbelleğini Temizle"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:505
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1482
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:504
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1481
 msgid "Are you sure you want to purge the object cache? All cached redirect records, in-memory objects, and temporary cache files will be immediately invalidated. Subsequent requests will query the database to rebuild the cache."
 msgstr "Nesne önbelleğini temizlemek istediğinizden emin misiniz? Önbelleğe alınan tüm yönlendirme kayıtları, bellek içi nesneler ve geçici dosyalar anında geçersiz kılınacaktır. Sonraki istekler önbelleği yeniden oluşturmak için veritabanını sorgulayacaktır."
 
@@ -4907,7 +4912,8 @@ msgid "Manage your account preferences and configurations"
 msgstr "yönet sizin hesap preferences ve configurations"
 
 #: ui/pages/dashboard/settings/Layout.tsx:45
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:107
+#: ui/pages/dashboard/about/AboutPage.tsx:230
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:108
 msgid "Performance"
 msgstr "Performans"
 
@@ -4978,8 +4984,8 @@ msgid "MySQL / MariaDB"
 msgstr "MySQL / MariaDB"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:486
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:890
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1017
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:889
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1016
 msgid "Object Cache"
 msgstr "Nesne Önbelleği"
 
@@ -5053,7 +5059,7 @@ msgstr "Installieren Type"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:578
 msgid "Source code"
-msgstr ""
+msgstr "Kaynak kodu"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:581
 msgid "Debug Mode"
@@ -5061,7 +5067,7 @@ msgstr "Hata Ayıklama Modu"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:584
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:811
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:893
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:892
 msgid "Enabled"
 msgstr "Aktiviert"
 
@@ -5071,13 +5077,13 @@ msgstr "içerik dizin"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:604
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:665
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:952
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:951
 msgid "Writable"
 msgstr "Yazılabilir"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:605
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:666
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:953
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:952
 msgid "Not Writable"
 msgstr "değil yazılabilir"
 
@@ -5087,7 +5093,7 @@ msgstr "değil yazılabilir"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:712
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:720
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:728
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:980
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:979
 msgid "Missing"
 msgstr "Fehlend"
 
@@ -5170,7 +5176,7 @@ msgstr "Intl uzantı"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:711
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:719
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:727
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:979
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:978
 msgid "Available"
 msgstr "verfügbar"
 
@@ -5234,217 +5240,217 @@ msgstr "veritabanı Path"
 msgid "Refresh Command"
 msgstr "yenile Command"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:898
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:897
 msgid "Active Driver"
 msgstr "Etkin Sürücü"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:902
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:901
 msgid "Fallback Active"
 msgstr "Yedek Etkin"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:906
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:905
 msgid "Configured Driver"
 msgstr "Yapılandırılan Sürücü"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:907
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:906
 msgid "auto"
 msgstr "otomatik"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:910
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:909
 msgid "Cache Size"
 msgstr "Önbellek Boyutu"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:917
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:916
 msgid "%s cached items"
 msgstr "%s önbelleğe alınmış öğe"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:918
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:917
 msgid "%s cached files"
 msgstr "%s önbelleğe alınmış dosya"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:941
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:940
 msgid "Negative TTL"
 msgstr "Negatif TTL"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:947
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:946
 msgid "Cache Directory"
 msgstr "Önbellek Dizini"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:955
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:954
 msgid "Not Created"
 msgstr "Oluşturulmadı"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:959
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:958
 msgid "Redis Server"
 msgstr "Redis Sunucusu"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:966
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:965
 msgid "Connected"
 msgstr "Bağlandı"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:976
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:975
 msgid "APCu Extension"
 msgstr "APCu Uzantısı"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:983
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:982
 msgid "Operational"
 msgstr "Çalışıyor"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:990
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:989
 msgid "Short Links"
 msgstr "kısa bağlantılar"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:999
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:998
 msgid "Activity Events"
 msgstr "etkinlik etkinlikler"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1003
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1002
 msgid "Managed Tables"
 msgstr "Yönetilen Tablolar"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1012
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1011
 msgid "Directories and Sizes"
 msgstr "Directories ve Sizes"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1015
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1014
 msgid "Server"
 msgstr "Sunucu"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1024
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1023
 msgid "Data Footprint"
 msgstr "Daten Footprint"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1061
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1060
 msgid "System status info copied to clipboard"
 msgstr "Sistem durumu bilgisi panoya kopyalandı"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1066
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1065
 msgid "PeakURL could not copy the system status information."
 msgstr "PeakURL sistem durumu bilgilerini kopyalayamadı."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1078
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1077
 msgid "Site Health"
 msgstr "Site Sağlığı"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1084
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1083
 msgid "Monitor installation health, check server environment diagnostics, and review technical configuration details."
 msgstr "Kurulum sağlığını izleyin, sunucu ortamı tanılamalarını denetleyin ve teknik yapılandırma ayrıntılarını inceleyin."
 
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1099
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1100
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1101
 msgid "Refresh site health status"
 msgstr "Site sağlık durumunu yenile"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1163
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1162
 msgid "Site Health: Good"
 msgstr "Site Sağlığı: İyi"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1167
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1166
 msgid "Site Health: 1 Critical Issue"
 msgstr "Site Sağlığı: 1 Kritik Sorun"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1170
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1169
 msgid "Site Health: %s Critical Issues"
 msgstr "Site Sağlığı: %s Kritik Sorun"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1176
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1175
 msgid "Site Health: 1 Recommended Improvement"
 msgstr "Site Sağlığı: 1 Önerilen İyileştirme"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1179
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1178
 msgid "Site Health: %s Recommended Improvements"
 msgstr "Site Sağlığı: %s Önerilen İyileştirme"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1187
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1186
 msgid "PeakURL is configured properly and all environmental diagnostics are in good standing."
 msgstr "PeakURL düzgün şekilde yapılandırılmıştır ve tüm ortam tanılamaları iyi durumdadır."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1191
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1190
 msgid "Critical items require attention to restore optimal site security and performance. Resolving these should be prioritized."
 msgstr "Sitenin en iyi güvenlik ve performans düzeyine dönmesi için kritik maddelerin giderilmesi gerekir. Bunların çözülmesine öncelik verilmelidir."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1194
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1193
 msgid "All core features are active, with recommended improvements available below to optimize your install."
 msgstr "Tüm temel özellikler etkindir; kurulumunuzu optimize etmek için aşağıda önerilen iyileştirmeler mevcuttur."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1205
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1204
 msgid "%s Passed"
 msgstr "%s Başarılı"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1217
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1216
 msgid "%s Recommended"
 msgstr "%s Öneri"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1230
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1229
 msgid "%s Critical"
 msgstr "%s Kritik"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1250
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1249
 msgid "Checked %s"
 msgstr "Kontrol edildi: %s"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1264
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1263
 msgid "System Checks"
 msgstr "Sistem Denetimleri"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1317
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1316
 msgid "Good"
 msgstr "İyi"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1319
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1318
 msgid "Review"
 msgstr "İncele"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1320
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1319
 msgid "Action Required"
 msgstr "Eylem Gerekiyor"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1337
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1336
 msgid "1 critical issue"
 msgstr "1 kritik sorun"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1338
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1337
 msgid "%s critical issues"
 msgstr "%s kritik sorun"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1340
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1339
 msgid "Critical issues are items that may have a high impact on your site performance or security. Resolving these issues should be prioritized."
 msgstr "Kritik sorunlar, site performansınız veya güvenliğiniz üzerinde yüksek etkiye sahip olabilecek unsurlardır. Bu sorunların çözülmesine öncelik verilmelidir."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1354
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1353
 msgid "1 recommended improvement"
 msgstr "1 önerilen iyileştirme"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1355
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1354
 msgid "%s recommended improvements"
 msgstr "%s önerilen iyileştirme"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1357
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1356
 msgid "Recommended improvements are beneficial for your site, though not as urgent as a critical issue. They may include improvements in areas such as security, performance, and user experience."
 msgstr "Önerilen iyileştirmeler siteniz için faydalıdır ancak kritik bir sorun kadar acil değildir. Güvenlik, performans ve kullanıcı deneyimi gibi alanlardaki geliştirmeleri içerebilir."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1383
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1382
 msgid "Hide passed tests"
 msgstr "Ausblenden passed tests"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1386
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1385
 msgid "1 passed test"
 msgstr "1 başarılı test"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1387
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1386
 msgid "%s passed tests"
 msgstr "%s başarılı test"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1433
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1432
 msgid "System Information"
 msgstr "Sistem Bilgisi"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1436
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1435
 msgid "Detailed technical environment, server configuration, storage, and database specifications."
 msgstr "Ayrıntılı teknik ortam, sunucu yapılandırması, depolama ve veritabanı özellikleri."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1452
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:96
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1451
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:101
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:103
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:230
@@ -5453,7 +5459,7 @@ msgstr "Ayrıntılı teknik ortam, sunucu yapılandırması, depolama ve veritab
 msgid "Copied!"
 msgstr "Kopyalandı!"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1458
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1457
 msgid "Copy site info to clipboard"
 msgstr "Site bilgilerini panoya kopyala"
 
@@ -5970,8 +5976,8 @@ msgid "Author"
 msgstr "Yazar"
 
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
-#: ui/pages/dashboard/activity/ActivityPage.tsx:879
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:111
+#: ui/pages/dashboard/activity/ActivityPage.tsx:900
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:114
 #: ui/pages/dashboard/users/UsersPage.tsx:688
 msgid "Actions"
 msgstr "Eylemler"
@@ -5984,316 +5990,316 @@ msgstr "Devre Dışı Bırak"
 msgid "Activate"
 msgstr "Etkinleştir"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:128
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:55
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:190
+#: ui/pages/dashboard/activity/ActivityPage.tsx:133
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:67
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:208
 msgid "Unknown user"
 msgstr "bilinmiyor kullanıcı"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:132
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:58
+#: ui/pages/dashboard/activity/ActivityPage.tsx:138
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:71
 msgid "Created new link \"%s\""
 msgstr "Yeni bağlantı \"%s\" oluşturuldu\"%s\" oluşturuldu\"%s\" oluşturuldu"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:134
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:60
+#: ui/pages/dashboard/activity/ActivityPage.tsx:141
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:73
 msgid "Updated link \"%s\""
 msgstr "Bağlantı \"%s\" güncellendi\"%s\" güncellendi\"%s\" güncellendi"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:136
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:62
+#: ui/pages/dashboard/activity/ActivityPage.tsx:144
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:75
 msgid "Permanently deleted link \"%s\""
 msgstr "Bağlantı \"%s\" kalıcı olarak silindi\"%s\" kalıcı olarak silindi\"%s\" kalıcı olarak silindi"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:138
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:64
+#: ui/pages/dashboard/activity/ActivityPage.tsx:147
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:77
 msgid "Moved link \"%s\" to trash"
 msgstr "Bağlantı \"%s\" çöp kutusuna taşındı\"%s\" çöp kutusuna taşındı\"%s\" çöp kutusuna taşındı"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:140
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:66
+#: ui/pages/dashboard/activity/ActivityPage.tsx:150
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:79
 msgid "Restored link \"%s\""
 msgstr "Bağlantı \"%s\" geri yüklendi\"%s\" geri yüklendi\"%s\" geri yüklendi"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:145
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:71
+#: ui/pages/dashboard/activity/ActivityPage.tsx:157
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:85
 msgid "Permanently deleted 1 link from trash"
 msgstr "Çöp kutusundan 1 bağlantı kalıcı olarak silindi"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:147
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:73
+#: ui/pages/dashboard/activity/ActivityPage.tsx:159
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:87
 msgid "Permanently deleted %s links from trash"
 msgstr "Çöp kutusundan %s bağlantı kalıcı olarak silindi"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:151
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:77
+#: ui/pages/dashboard/activity/ActivityPage.tsx:163
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:91
 msgid "Emptied links from trash"
 msgstr "Bağlantılar çöp kutusundan boşaltıldı"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:154
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:79
+#: ui/pages/dashboard/activity/ActivityPage.tsx:168
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:94
 msgid "Created user \"%s\""
 msgstr "Kullanıcı \"%s\" oluşturuldu\"%s\" oluşturuldu\"%s\" oluşturuldu"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:156
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:81
+#: ui/pages/dashboard/activity/ActivityPage.tsx:171
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:96
 msgid "Updated user \"%s\""
 msgstr "Kullanıcı \"%s\" güncellendi\"%s\" güncellendi\"%s\" güncellendi"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:158
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:83
+#: ui/pages/dashboard/activity/ActivityPage.tsx:174
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:98
 msgid "Deleted user \"%s\""
 msgstr "Kullanıcı \"%s\" silindi\"%s\" silindi\"%s\" silindi"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:162
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:87
+#: ui/pages/dashboard/activity/ActivityPage.tsx:179
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:102
 msgid "from %s"
 msgstr "-den %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:170
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:94
+#: ui/pages/dashboard/activity/ActivityPage.tsx:187
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:109
 msgid "Link \"%1$s\" was clicked %2$s"
 msgstr "\"%1$s\" bağlantısına tıklandı %2$s\"%1$s\" bağlantısına tıklandı %2$s\"%1$s\" bağlantısına tıklandı %2$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:174
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:98
+#: ui/pages/dashboard/activity/ActivityPage.tsx:191
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:113
 msgid "Link \"%s\" was clicked"
 msgstr "\"%s\" bağlantısına tıklandı\"%s\" bağlantısına tıklandı\"%s\" bağlantısına tıklandı"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:177
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:100
+#: ui/pages/dashboard/activity/ActivityPage.tsx:195
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:115
 msgid "Unknown activity"
 msgstr "bilinmiyor etkinlik"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:356
+#: ui/pages/dashboard/activity/ActivityPage.tsx:377
 msgid "Link already active"
 msgstr "Bağlantı zaten etkin"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:357
+#: ui/pages/dashboard/activity/ActivityPage.tsx:378
 msgid "This link is already active and does not need to be restored."
 msgstr "Bu bağlantı zaten etkin ve geri yüklenmesi gerekmiyor."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:369
+#: ui/pages/dashboard/activity/ActivityPage.tsx:390
 msgid "Link permanently deleted"
 msgstr "Bağlantı kalıcı olarak silindi"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:378
-#: ui/pages/dashboard/links/LinksPage.tsx:238
+#: ui/pages/dashboard/activity/ActivityPage.tsx:399
+#: ui/pages/dashboard/links/LinksPage.tsx:251
 msgid "Link restored"
 msgstr "Bağlantı geri yüklendi"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:379
+#: ui/pages/dashboard/activity/ActivityPage.tsx:400
 msgid "The link has been restored successfully."
 msgstr "Bağlantı başarıyla geri yüklendi."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:383
-#: ui/pages/dashboard/links/LinksPage.tsx:243
+#: ui/pages/dashboard/activity/ActivityPage.tsx:404
+#: ui/pages/dashboard/links/LinksPage.tsx:256
 msgid "Unable to restore link"
 msgstr "Bağlantı geri yüklenemiyor"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:386
+#: ui/pages/dashboard/activity/ActivityPage.tsx:407
 msgid "Failed to restore link from activity record."
 msgstr "Etkinlik kaydından bağlantı geri yüklenemedi."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:538
-#: ui/pages/dashboard/activity/ActivityPage.tsx:566
-#: ui/pages/dashboard/activity/ActivityPage.tsx:596
+#: ui/pages/dashboard/activity/ActivityPage.tsx:559
+#: ui/pages/dashboard/activity/ActivityPage.tsx:587
+#: ui/pages/dashboard/activity/ActivityPage.tsx:617
 msgid "Activity deleted"
 msgstr "etkinlik silindi"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:539
+#: ui/pages/dashboard/activity/ActivityPage.tsx:560
 msgid "The activity log entry has been removed."
 msgstr "Etkinlik günlüğü kaydı kaldırıldı."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:543
-#: ui/pages/dashboard/activity/ActivityPage.tsx:574
-#: ui/pages/dashboard/activity/ActivityPage.tsx:601
+#: ui/pages/dashboard/activity/ActivityPage.tsx:564
+#: ui/pages/dashboard/activity/ActivityPage.tsx:595
+#: ui/pages/dashboard/activity/ActivityPage.tsx:622
 msgid "Unable to delete activity"
 msgstr "Etkinlik silinemedi"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:546
+#: ui/pages/dashboard/activity/ActivityPage.tsx:567
 msgid "The activity log entry could not be removed."
 msgstr "Etkinlik günlüğü girdisi kaldırılamadı."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:568
+#: ui/pages/dashboard/activity/ActivityPage.tsx:589
 msgid "Deleted %s activity log entries."
 msgstr "silindi %s etkinlik günlüğü entries."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:577
+#: ui/pages/dashboard/activity/ActivityPage.tsx:598
 msgid "The selected activity log entries could not be removed."
 msgstr "Seçilen etkinlik günlüğü girdileri kaldırılamadı."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:597
+#: ui/pages/dashboard/activity/ActivityPage.tsx:618
 msgid "All activity log entries have been removed."
 msgstr "Tüm etkinlik günlüğü kayıtları kaldırıldı."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:604
+#: ui/pages/dashboard/activity/ActivityPage.tsx:625
 msgid "The activity logs could not be removed."
 msgstr "Etkinlik günlükleri kaldırılamadı."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:630
+#: ui/pages/dashboard/activity/ActivityPage.tsx:651
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:35
 #: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:21
 msgid "All"
 msgstr "Tümü"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:656
+#: ui/pages/dashboard/activity/ActivityPage.tsx:677
 msgid "Total events"
 msgstr "toplam etkinlikler"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:662
+#: ui/pages/dashboard/activity/ActivityPage.tsx:683
 msgid "Link events"
 msgstr "bağlantı etkinlikler"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:668
+#: ui/pages/dashboard/activity/ActivityPage.tsx:689
 msgid "User events"
 msgstr "kullanıcı etkinlikler"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:674
+#: ui/pages/dashboard/activity/ActivityPage.tsx:695
 msgid "Latest event"
 msgstr "en son etkinlik"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:677
+#: ui/pages/dashboard/activity/ActivityPage.tsx:698
 msgid "No recent events"
 msgstr "yok recent etkinlikler"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:691
+#: ui/pages/dashboard/activity/ActivityPage.tsx:712
 msgid "Audit Log"
 msgstr "Denetim Günlüğü"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:695
+#: ui/pages/dashboard/activity/ActivityPage.tsx:716
 msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
 msgstr "Review bağlantı changes ve kullanıcı-management etkinlikler içinde one place ile filters, timestamps, ve actor details."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:705
-#: ui/pages/dashboard/activity/ActivityPage.tsx:706
+#: ui/pages/dashboard/activity/ActivityPage.tsx:726
+#: ui/pages/dashboard/activity/ActivityPage.tsx:727
 msgid "Refresh activity history"
 msgstr "yenile etkinlik geçmiş"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:811
+#: ui/pages/dashboard/activity/ActivityPage.tsx:832
 msgid "Activity history"
 msgstr "etkinlik geçmiş"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:818
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:32
+#: ui/pages/dashboard/activity/ActivityPage.tsx:839
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:33
 msgid "%s selected"
 msgstr "%s seçildi"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:828
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1305
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:73
+#: ui/pages/dashboard/activity/ActivityPage.tsx:849
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1326
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:74
 msgid "Delete selected"
 msgstr "sil selected"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:836
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:82
+#: ui/pages/dashboard/activity/ActivityPage.tsx:857
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:83
 msgid "Delete all"
 msgstr "sil tümü"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:867
+#: ui/pages/dashboard/activity/ActivityPage.tsx:888
 msgid "Select all events on this page"
 msgstr "seçin tümü etkinlikler üzerinde bu sayfa"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:874
+#: ui/pages/dashboard/activity/ActivityPage.tsx:895
 msgid "Event"
 msgstr "Olay"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:875
+#: ui/pages/dashboard/activity/ActivityPage.tsx:896
 msgid "Details"
 msgstr "Detaylar"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:876
+#: ui/pages/dashboard/activity/ActivityPage.tsx:897
 msgid "When"
 msgstr "Zaman"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:986
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1007
 msgid "Actor: %s"
 msgstr "İşlemi Yapan: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:998
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1019
 msgid "By"
 msgstr "Yapan"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1036
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1057
 msgid "User: %s"
 msgstr "Kullanıcı: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1055
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1076
 msgid "Location: %s"
 msgstr "Konum: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1150
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1159
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1171
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1180
 msgid "Link is already active"
 msgstr "Bağlantı zaten etkin"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1153
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1162
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1174
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1183
 msgid "Restore link"
 msgstr "Bağlantıyı geri yükle"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1185
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1188
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1325
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1206
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1209
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1346
 msgid "Delete activity log"
 msgstr "sil etkinlik günlüğü"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1214
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1235
 msgid "No user activity yet"
 msgstr "yok kullanıcı etkinlik henüz"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1216
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1237
 msgid "No link activity yet"
 msgstr "yok bağlantı etkinlik henüz"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1217
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1238
 msgid "No activity recorded yet"
 msgstr "yok etkinlik recorded henüz"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1220
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1241
 msgid "Once users manage accounts or links change, the audit log will appear here."
 msgstr "Kullanıcılar hesapları yönettikçe veya bağlantılar değiştikçe denetim günlüğü burada görüntülenecektir."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1234
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1255
 msgid "Showing %1$s-%2$s of %3$s events"
 msgstr "gösteriliyor %1$s-%2$s %3$s etkinlikler"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1241
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1262
 msgid "Page %1$s of %2$s"
 msgstr "sayfa %1$s %2$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1257
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1278
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:40
 msgid "Previous"
 msgstr "Önceki"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1283
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1304
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:84
 msgid "Next"
 msgstr "İleri"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1294
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1315
 msgid "Delete activity logs"
 msgstr "sil etkinlik logs"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1298
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1319
 msgid "Delete %s selected activity log entries? This action cannot be undone."
 msgstr "Seçili %s etkinlik günlüğü girdisi silinsin mi? Bu işlem geri alınamaz."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1313
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1317
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1334
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1338
 msgid "Delete all activity"
 msgstr "sil tümü etkinlik"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1314
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1335
 msgid "Are you sure you want to delete all activity logs? This action cannot be undone."
 msgstr "Tüm etkinlik günlüklerini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1329
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1350
 msgid "Delete the activity entry \"%s\"? This action cannot be undone."
 msgstr "\"%s\" etkinlik girdisi silinsin mi? Bu işlem geri alınamaz."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1336
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1357
 msgid "Delete activity"
 msgstr "sil etkinlik"
 
@@ -6350,212 +6356,364 @@ msgstr "PeakURL'nin geliştirilmesini destekleyen ve projenin aktif olarak sürd
 msgid "Support the Project"
 msgstr "destek Project"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:142
+#: ui/pages/dashboard/about/AboutPage.tsx:66
+msgid "Shorten, track, and own every link."
+msgstr "Her bağlantıyı kısaltın, takip edin ve tam kontrolüne sahip olun."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:93
+msgid "Release Notes"
+msgstr "Sürüm Notları"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:190
 msgid "Setup Complete"
 msgstr "Kurulum Tamamlandı"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:143
+#: ui/pages/dashboard/about/AboutPage.tsx:191
 msgid "PeakURL is ready to use."
 msgstr "PeakURL kullanıma hazır."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:144
+#: ui/pages/dashboard/about/AboutPage.tsx:192
 msgid "Your administrator account is active and the dashboard is ready. Use these next steps to finish the initial configuration and start publishing links."
 msgstr "Yönetici hesabınız etkin ve kontrol paneli hazır. İlk yapılandırmayı tamamlamak ve bağlantı yayınlamaya başlamak için aşağıdaki adımları izleyin."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:149
+#: ui/pages/dashboard/about/AboutPage.tsx:197
 msgid "Create your first short link"
 msgstr "İlk kısa bağlantınızı oluşturun"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:153
+#: ui/pages/dashboard/about/AboutPage.tsx:201
 msgid "Review general settings"
 msgstr "Review genel ayarlar"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:157
+#: ui/pages/dashboard/about/AboutPage.tsx:205
 msgid "Connect location data"
 msgstr "Connect konum data"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:163
+#: ui/pages/dashboard/about/AboutPage.tsx:211
 msgid "Update Complete"
 msgstr "güncelleme Complete"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:164
+#: ui/pages/dashboard/about/AboutPage.tsx:212
 msgid "PeakURL has been updated to the latest version."
 msgstr "PeakURL en son sürüme güncellendi."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:165
+#: ui/pages/dashboard/about/AboutPage.tsx:213
 msgid "The latest version is now installed. Here's a look at what's new in this release."
 msgstr "En son sürüm yüklendi. Bu sürümdeki yeniliklere göz atın."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:170
+#: ui/pages/dashboard/about/AboutPage.tsx:218
 msgid "Reinstall Complete"
 msgstr "Yeniden Yükleme Tamamlandı"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:171
+#: ui/pages/dashboard/about/AboutPage.tsx:219
 msgid "PeakURL has been reinstalled."
 msgstr "PeakURL yeniden kuruldu."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:172
+#: ui/pages/dashboard/about/AboutPage.tsx:220
 msgid "The latest version has been reinstalled. Here's a look at what's included in this release."
 msgstr "En son sürüm yeniden kuruldu. Bu sürümde yer alan özelliklere göz atın."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:301
-msgid "Branded Short Links"
-msgstr "Branded kısa bağlantılar"
+#: ui/pages/dashboard/about/AboutPage.tsx:231
+msgid "Multi-tier object caching"
+msgstr "Çok katmanlı nesne önbelleğe alma"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:232
+msgid "Delivers sub-millisecond link redirects using Redis, APCu, or local filesystem storage with automatic backend fallback, configurable cache durations, and instant cache purging."
+msgstr "Redis, APCu veya yerel dosya sistemi kullanarak milisaniyenin altında yönlendirme hızları sunar; otomatik geri dönüş, esnek süreler ve anında önbellek temizleme sağlar."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:238
+msgid "Data safeguards"
+msgstr "Veri güvenliği"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:239
+msgid "Trash protection and audit recovery"
+msgstr "Çöp kutusu koruması ve geri yükleme"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:240
+msgid "Prevents accidental link loss with soft-delete safeguards, customizable retention schedules from 14 to 90 days, and one-click restoration directly from the activity history."
+msgstr "Güvenli silme, 14 ila 90 gün arasında ayarlanabilir saklama süreleri ve etkinlik geçmişinden tek tıkla kurtarma ile bağlantıların kaybolmasını önler."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:247
+msgid "Two-factor authentication and session controls"
+msgstr "İki adımlı doğrulama ve oturum yönetimi"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:248
+msgid "Hardens administrator and editor accounts with TOTP two-factor authentication, single-use recovery backup codes, and real-time remote session revocation."
+msgstr "Yönetici ve editör hesaplarını TOTP iki adımlı doğrulama, tek kullanımlık kurtarma kodları ve gerçek zamanlı uzaktan oturum kapatma ile güçlendirir."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:254
+msgid "Access control"
+msgstr "Erişim kontrolü"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:255
+msgid "Public redirect bot and abuse defense"
+msgstr "Yönlendirmelerde bot ve kötüye kullanım koruması"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:256
+msgid "Shields destination servers and infrastructure against crawler abuse using Cloudflare Turnstile and Google reCAPTCHA v3 without breaking social sharing previews."
+msgstr "Hedef sunucuları Cloudflare Turnstile ve Google reCAPTCHA v3 ile bot trafiğine karşı korurken sosyal medya önizlemelerinin bozulmasını engeller."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:262
+msgid "Privacy"
+msgstr "Gizlilik"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:263
+msgid "On-premises location intelligence"
+msgstr "Yerel konum analitiği"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:264
+msgid "Resolves visitor countries and cities locally on your server through an on-premises MaxMind GeoLite2 database, ensuring fast analytics without third-party tracking."
+msgstr "Ziyaretçilerin ülke ve şehir bilgilerini sunucunuzdaki yerel MaxMind GeoLite2 veritabanıyla belirleyerek harici takip olmadan hızlı istatistikler sunar."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:271
+msgid "Real-time traffic and engagement reporting"
+msgstr "Gerçek zamanlı trafik ve etkileşim raporları"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:272
+msgid "Provides comprehensive click analytics covering total volume, unique visitors, referrers, device platforms, browser engines, and operating systems across custom date ranges."
+msgstr "Toplam tıklama, tekil ziyaretçi, yönlendiren kaynaklar, cihazlar, tarayıcılar ve işletim sistemleri hakkında seçilen tarih aralıklarında kapsamlı analizler sağlar."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:278
+msgid "Publishing"
+msgstr "Yayınlama"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:279
+msgid "Branded short links and vector QR codes"
+msgstr "Markalı kısa bağlantılar ve vektörel QR kodları"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:280
+msgid "Creates clean short links with custom aliases, generated codes, password protection, expiration schedules, social preview image overrides, and downloadable QR codes."
+msgstr "Özel takma adlar, şifre koruması, son kullanma tarihleri, özelleştirilmiş sosyal önizlemeler ve indirilebilir QR kodları ile şık kısa bağlantılar oluşturur."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:286
+msgid "Data mobility"
+msgstr "Veri taşınabilirliği"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:287
+msgid "Data import, export, and migration"
+msgstr "Veri içe aktarma, dışa aktarma ve taşıma"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:288
+msgid "Comprehensive data mobility supporting CSV and JSON file uploads, direct text pasting, API ingestion, full database exports, and native migration tools."
+msgstr "CSV ve JSON dosyaları, doğrudan metin yapıştırma, API entegrasyonu, eksiksiz veritabanı dışa aktarımı ve dahili geçiş araçlarıyla tam veri taşınabilirliği."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:294
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:98
+msgid "Developer"
+msgstr "Geliştirici"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:295
+msgid "REST API and real-time webhooks"
+msgstr "REST API ve gerçek zamanlı webhooklar"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:296
+msgid "Automates publishing through token-authenticated REST endpoints, dispatches real-time webhooks on link events, and supports WordPress-style action and filter hooks."
+msgstr "Belirteç tabanlı REST uç noktalarıyla yayınlamayı otomatikleştirir, bağlantı olaylarında gerçek zamanlı webhooklar tetikler ve kanca sistemini destekler."
 
 #: ui/pages/dashboard/about/AboutPage.tsx:302
-msgid "Create clean short links with custom aliases, generated codes, QR output, and redirect settings that stay easy to manage."
-msgstr "Özel takma adlar, üretilen kodlar, QR kod çıktısı ve kolayca yönetilebilen yönlendirme ayarlarıyla şık kısa bağlantılar oluşturun."
+msgid "Ecosystem"
+msgstr "Ekosistem"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:308
-msgid "Click Analytics"
-msgstr "tıklama analizler"
+#: ui/pages/dashboard/about/AboutPage.tsx:303
+msgid "Official extensions and integrations"
+msgstr "Resmi eklentiler ve entegrasyonlar"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:309
-msgid "Review clicks, unique visitors, referrers, device breakdowns, and traffic trends from the same dashboard used to publish links."
-msgstr "Bağlantı yayınlamak için kullandığınız aynı kontrol panelinden tıklamaları, tekil ziyaretçileri, yönlendirenleri, cihaz dağılımlarını ve trafik eğilimlerini inceleyin."
+#: ui/pages/dashboard/about/AboutPage.tsx:304
+msgid "Shorten and manage links directly within your workflow using official add-ons for WordPress, Google Chrome, Mozilla Firefox, Docker, and the command-line CLI."
+msgstr "WordPress, Google Chrome, Mozilla Firefox, Docker ve komut satırı (CLI) için resmi eklentilerle bağlantıları doğrudan iş akışınızda kısaltın ve yönetin."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:315
-msgid "Local Location Data"
-msgstr "yerel konum Data"
+#: ui/pages/dashboard/about/AboutPage.tsx:310
+msgid "Operations"
+msgstr "İşlemler"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:316
-msgid "Resolve visitor locations from a local MaxMind GeoLite2 database so analytics stay under your control."
-msgstr "Analizlerin tamamen sizin kontrolünüzde kalması için ziyaretçi konumlarını yerel bir MaxMind GeoLite2 veritabanından çözümleyin."
+#: ui/pages/dashboard/about/AboutPage.tsx:311
+msgid "Live Site Health diagnostics"
+msgstr "Gerçek zamanlı site sağlığı teşhisi"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:322
-msgid "Access And Security"
-msgstr "Erişim ve Güvenlik"
+#: ui/pages/dashboard/about/AboutPage.tsx:312
+msgid "Continuously monitors database connectivity, PHP runtime settings, disk storage, cache engine status, and GeoLite2 file integrity with precision localized timestamps."
+msgstr "Veritabanı bağlantısını, PHP ayarlarını, disk alanını, önbellek durumunu ve GeoLite2 dosyalarını hassas zaman damgalarıyla sürekli denetler."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:323
-msgid "Run with admin and editor roles, session controls, two-factor authentication, backup codes, and API keys."
-msgstr "Run ile admin ve editor roller, oturum controls, iki aşamalı kimlik doğrulama, yedek kodlar, ve API anahtarlar."
+#: ui/pages/dashboard/about/AboutPage.tsx:318
+msgid "Localization"
+msgstr "Yerelleştirme"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:329
-msgid "Operations And Integrations"
-msgstr "Operations ve Integrations"
+#: ui/pages/dashboard/about/AboutPage.tsx:319
+msgid "26 global language packs with native RTL"
+msgstr "Yerel RTL destekli 26 küresel dil paketi"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:330
-msgid "Use API keys, webhooks, import tools, and the built-in updater baseline to operate the service over time."
-msgstr "Hizmeti zaman içinde işletmek için API anahtarlarını, webhookları, içe aktarma araçlarını ve yerleşik güncelleyiciyi kullanın."
+#: ui/pages/dashboard/about/AboutPage.tsx:320
+msgid "Offers full native translations across 26 international languages and regional variants, with complete right-to-left layout and typography orchestration out of the box."
+msgstr "Kutudan çıktığı haliyle eksiksiz sağdan sola (RTL) metin ve arayüz desteğiyle 26 dilde tam çeviri sunar."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:336
-msgid "Portable Self-Hosting"
-msgstr "Taşınabilir Kendi Kendine Barındırma"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:337
-msgid "Deploy on your own domain, keep runtime configuration in your own environment, and preserve user-owned content across updates."
-msgstr "Kendi alan adınıza kurun, çalışma ortamı yapılandırmasını kendi sunucunuzda tutun ve güncellemeler sırasında kullanıcı içeriklerini koruyun."
-
-#: ui/pages/dashboard/about/AboutPage.tsx:357
+#: ui/pages/dashboard/about/AboutPage.tsx:345
 msgid "Use"
 msgstr "Kullanım"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:358
+#: ui/pages/dashboard/about/AboutPage.tsx:346
 msgid "Run PeakURL for any purpose, personal projects, business, education, or anything in between."
 msgstr "PeakURL'yi kişisel projeler, iş, eğitim veya diğer tüm amaçlarınız için dilediğiniz gibi çalıştırın."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:364
+#: ui/pages/dashboard/about/AboutPage.tsx:352
 msgid "Study"
 msgstr "İncele"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:365
+#: ui/pages/dashboard/about/AboutPage.tsx:353
 msgid "Explore the source code, understand how it works, and modify it to suit your exact needs."
 msgstr "Kaynak kodunu inceleyin, nasıl çalıştığını anlayın ve tam olarak ihtiyaçlarınıza göre uyarlayın."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:371
+#: ui/pages/dashboard/about/AboutPage.tsx:359
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:185
 msgid "Share"
 msgstr "Paylaş"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:372
+#: ui/pages/dashboard/about/AboutPage.tsx:360
 msgid "Redistribute copies freely so others can benefit from the same powerful link management platform."
 msgstr "Başkalarının da aynı güçlü bağlantı yönetim platformundan yararlanabilmesi için kopyalarını serbestçe dağıtın."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:378
+#: ui/pages/dashboard/about/AboutPage.tsx:366
 msgid "Improve"
 msgstr "Geliştir"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:379
+#: ui/pages/dashboard/about/AboutPage.tsx:367
 msgid "Enhance PeakURL and share your improvements, contributing back to the open-source community."
 msgstr "PeakURL'yi geliştirin ve iyileştirmelerinizi paylaşarak açık kaynak topluluğuna katkıda bulunun."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:422
-msgid "PeakURL gives you a focused workspace for publishing short links, measuring engagement, and running branded link infrastructure on your own stack."
-msgstr "PeakURL, kısa bağlantılar yayınlamak, etkileşimi ölçmek ve kendi altyapınızda markalı bağlantı altyapısı çalıştırmak için odaklanmış bir çalışma alanı sunar."
+#: ui/pages/dashboard/about/AboutPage.tsx:456
+msgid "Languages"
+msgstr "Diller"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:452
-msgid "View on GitHub"
-msgstr "GitHub'da Görüntüle"
+#: ui/pages/dashboard/about/AboutPage.tsx:464
+msgid "Global locales & native RTL"
+msgstr "Küresel diller & yerel RTL"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:489
-msgid "Everything you need to publish short links, review traffic, and operate the service from one focused dashboard."
-msgstr "Kısa bağlantılar yayınlamak, trafiği incelemek ve hizmeti tek bir odaklanmış kontrol panelinden yönetmek için ihtiyacınız olan her şey burada."
+#: ui/pages/dashboard/about/AboutPage.tsx:471
+msgid "Subsystems"
+msgstr "Alt sistemler"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:493
+#: ui/pages/dashboard/about/AboutPage.tsx:479
+msgid "Core modular capabilities"
+msgstr "Temel modüler yetenekler"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:494
+msgid "Full data sovereignty"
+msgstr "Tam veri egemenliği"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:501
+msgid "Open Source"
+msgstr "Açık Kaynak"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:509
+msgid "Inspectable and free forever"
+msgstr "Denetlenebilir ve daima özgür"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:515
+msgid "Everything you need to publish short links, measure engagement, protect your data, and operate the service with complete control."
+msgstr "Kısa bağlantılar yayınlamak, etkileşimi ölçmek, verilerinizi korumak ve hizmeti tam denetimle yönetmek için ihtiyacınız olan her şey."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:519
+#: ui/pages/dashboard/about/AboutPage.tsx:645
 msgid "What's Inside"
 msgstr "Neler Var"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:508
-msgid "PeakURL is built to stay understandable in day-to-day use and dependable over time."
-msgstr "PeakURL, günlük kullanımda kolay anlaşılır ve zaman içinde güvenilir kalacak şekilde tasarlanmıştır."
+#: ui/pages/dashboard/about/AboutPage.tsx:533
+msgid "PeakURL is built to stay understandable in day-to-day use, dependable under load, and open for long-term ownership."
+msgstr "PeakURL günlük kullanımda anlaşılır, yoğun yük altında güvenilir ve uzun vadeli bağımsızlık için açık olacak şekilde geliştirilmiştir."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:512
+#: ui/pages/dashboard/about/AboutPage.tsx:537
 msgid "Product Principles"
 msgstr "Ürün İlkeleri"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:521
+#: ui/pages/dashboard/about/AboutPage.tsx:546
 msgid "Clear By Default"
 msgstr "Leeren By Standard"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:524
-msgid "The dashboard should stay direct and readable so routine work like publishing links, reviewing traffic, and managing users does not feel heavy."
-msgstr "Bağlantı yayınlama, trafiği inceleme ve kullanıcı yönetimi gibi rutin işlerin zahmetsiz olması için kontrol paneli sade ve anlaşılır kalmalıdır."
+#: ui/pages/dashboard/about/AboutPage.tsx:549
+msgid "The dashboard stays direct and readable so routine operations like publishing links, reviewing traffic, and managing users remain effortless."
+msgstr "Kontrol paneli sade ve anlaşılır kalır; böylece bağlantı oluşturma, trafik inceleme ve kullanıcı yönetimi gibi günlük işler zahmetsizce yürütülür."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:534
+#: ui/pages/dashboard/about/AboutPage.tsx:559
 msgid "Portable To Run"
 msgstr "Kolayca Taşınabilir ve Çalıştırılabilir"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:537
-msgid "The application should install cleanly on common PHP and MySQL hosting without depending on a managed SaaS control plane."
-msgstr "Uygulama, yönetilen bir SaaS kontrol düzlemine bağlı olmadan yaygın PHP ve MySQL barındırma ortamlarına sorunsuz bir şekilde kurulmalıdır."
+#: ui/pages/dashboard/about/AboutPage.tsx:562
+msgid "The application installs cleanly on standard PHP and MySQL hosting with native PDO prepared statements and zero external control plane dependencies."
+msgstr "Uygulama standart PHP ve MySQL barındırma ortamlarında yerel PDO hazır ifadeleriyle harici bağımlılık olmadan sorunsuzca kurulur."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:547
+#: ui/pages/dashboard/about/AboutPage.tsx:572
 msgid "Open And Inspectable"
 msgstr "aç ve Inspectable"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:550
-msgid "The codebase stays auditable and adaptable so operators can understand what they run, extend it carefully, and keep long-term control."
-msgstr "Sistem yöneticilerinin ne çalıştırdıklarını anlamaları, dikkatlice genişletmeleri ve uzun vadeli kontrolü ellerinde tutmaları için kod tabanı denetlenebilir ve uyarlanabilir kalır."
+#: ui/pages/dashboard/about/AboutPage.tsx:575
+msgid "The entire codebase is auditable, free of telemetry, and extensible via WordPress-style hooks so operators always maintain full data custody."
+msgstr "Tüm kaynak kodu incelenebilir, telemetri içermez ve kancalarla genişletilebilir; böylece verilerinizin mülkiyeti her zaman sizde kalır."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:563
-msgid "PeakURL is released under the MIT License so it can stay practical to adopt, inspect, modify, and distribute."
-msgstr "PeakURL, benimsenmesi, incelenmesi, değiştirilmesi ve dağıtılması kolay olsun diye MIT Lisansı altında yayımlanmıştır."
+#: ui/pages/dashboard/about/AboutPage.tsx:585
+msgid "PeakURL is released under the MIT License so anyone can adopt, study, adapt, and distribute it freely."
+msgstr "PeakURL, MIT Lisansı altında yayınlanmıştır; bu sayede herkes yazılımı serbestçe kullanabilir, inceleyebilir, uyarlayabilir ve dağıtabilir."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:567
+#: ui/pages/dashboard/about/AboutPage.tsx:589
 msgid "Open Source Terms"
 msgstr "aç kaynak Terms"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:581
+#: ui/pages/dashboard/about/AboutPage.tsx:598
 msgid "Freedom to"
 msgstr "Şunları yapma özgürlüğü"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:604
-msgid "Shorten, track, and own every link."
-msgstr "Her bağlantıyı kısaltın, takip edin ve tam kontrolüne sahip olun."
+#: ui/pages/dashboard/about/AboutPage.tsx:650
+msgid "Principles & License"
+msgstr "İlkeler ve Lisans"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:631
-msgid "Release Notes"
-msgstr "Sürüm Notları"
+#: ui/pages/dashboard/about/AboutPage.tsx:655
+msgid "Wall of Love"
+msgstr "Teşekkür Duvarı"
 
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:26
+#: ui/pages/dashboard/about/AboutPage.tsx:675
+msgid "Reinstall complete"
+msgstr "Yeniden kurulum tamamlandı"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:676
+msgid "Update complete"
+msgstr "Güncelleme tamamlandı"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:683
+msgid "PeakURL was successfully reinstalled"
+msgstr "PeakURL başarıyla yeniden kuruldu"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:684
+msgid "PeakURL was successfully updated"
+msgstr "PeakURL başarıyla güncellendi"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:689
+msgid "The core application runtime and static assets have been cleanly refreshed. Your database records, short links, and configuration remain completely intact."
+msgstr "Çekirdek uygulama dosyaları ve statik kaynaklar temiz bir şekilde yenilendi. Veritabanı kayıtlarınız, kısa bağlantılarınız ve ayarlarınız eksiksiz korundu."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:692
+msgid "Your installation has been upgraded to the latest release. Review the release highlights, subsystem performance updates, and technical changes below."
+msgstr "Kurulumunuz en son sürüme yükseltildi. Sürümün öne çıkan özelliklerini, performans iyileştirmelerini ve teknik değişiklikleri aşağıda inceleyebilirsiniz."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:703
+#: ui/pages/NotFoundPage.tsx:58
+msgid "Go to Dashboard"
+msgstr "Kontrol Paneline Git"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:719
+#: ui/pages/dashboard/about/AboutPage.tsx:865
+msgid "View on GitHub"
+msgstr "GitHub'da Görüntüle"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:835
+msgid "PeakURL gives you a focused workspace for publishing short links, measuring engagement, and running branded link infrastructure on your own stack."
+msgstr "PeakURL, kısa bağlantılar yayınlamak, etkileşimi ölçmek ve kendi altyapınızda markalı bağlantı altyapısı çalıştırmak için odaklanmış bir çalışma alanı sunar."
+
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:31
 msgid "No recent activity"
 msgstr "Yakın zamanda etkinlik yok"
 
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:27
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:32
 msgid "View All Activity"
 msgstr "Tüm Etkinlikleri Görüntüle"
 
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:187
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:205
 msgid "By %1$s • %2$s"
 msgstr "%1$s tarafından • %2$s"
 
@@ -6604,7 +6762,7 @@ msgid "Compared with %1$s to %2$s."
 msgstr "%1$s ile %2$s aralığıyla karşılaştırıldı."
 
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:119
-#: ui/pages/dashboard/links/LinksPage.tsx:420
+#: ui/pages/dashboard/links/LinksPage.tsx:433
 msgid "Active Links"
 msgstr "Aktif Bağlantılar"
 
@@ -6753,38 +6911,50 @@ msgid "Sort: Date Created"
 msgstr "Sıralama: Oluşturulma tarihi"
 
 #: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:44
+msgid "Sort: Date Modified"
+msgstr "Sırala: Değiştirilme Tarihi"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:45
 msgid "Sort: Most Clicks"
 msgstr "Sıralama: En çok tıklama"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:45
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:46
+msgid "Sort: Unique Visitors"
+msgstr "Sırala: Tekil Ziyaretçiler"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:47
 msgid "Sort: Alias"
 msgstr "Sıralama: Takma ad"
 
 #: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:48
+msgid "Sort: Title"
+msgstr "Sırala: Başlık"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:51
 msgid "Descending"
 msgstr "Azalan"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:49
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:52
 msgid "Ascending"
 msgstr "Artan"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:60
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:63
 msgid "Total Links:"
 msgstr "Toplam bağlantı:"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:70
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:73
 msgid "Total Clicks:"
 msgstr "Toplam tıklama:"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:92
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:95
 msgid "Filter links by status"
 msgstr "Bağlantıları duruma göre filtrele"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:102
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:105
 msgid "Sort links"
 msgstr "Bağlantıları sırala"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:111
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:114
 msgid "Sort order"
 msgstr "Sıralama düzeni"
 
@@ -6792,81 +6962,93 @@ msgstr "Sıralama düzeni"
 msgid "Showing %1$s–%2$s of %3$s links"
 msgstr "gösteriliyor %1$s–%2$s %3$s bağlantılar"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:26
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:27
 msgid "Deselect all links"
 msgstr "Tüm bağlantıların seçimini kaldır"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:43
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:44
 msgid "Restore selected"
 msgstr "Seçilenleri geri yükle"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:52
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:53
 msgid "Delete permanently"
 msgstr "Kalıcı olarak sil"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:61
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:62
 msgid "Empty trash"
 msgstr "Çöp kutusunu boşalt"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:103
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:104
 msgid "Link"
 msgstr "Bağlantı"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:104
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:105
 msgid "Title"
 msgstr "Başlık"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:105
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:106
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:117
 msgid "Destination"
 msgstr "Hedef"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:109
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:111
+msgid "Modified"
+msgstr "Değiştirildi"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:111
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:35
 #: ui/pages/dashboard/users/UsersPage.tsx:685
 msgid "Created"
 msgstr "Oluşturulma"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:36
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:41
 msgid "Trashed"
 msgstr "Çöp Kutusunda"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:42
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:150
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:47
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:155
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:58
 msgid "Expired"
 msgstr "Süresi doldu"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:97
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:102
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:104
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:143
 msgid "Copy"
 msgstr "Kopyala"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:131
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:136
 msgid "Protected"
 msgstr "Korumalı"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:151
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:156
 msgid "Expires"
 msgstr "Son kullanma tarihi"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:209
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:207
+msgid "Created: %s"
+msgstr "Oluşturulma: %s"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:211
+msgid "Modified: %s"
+msgstr "Değiştirilme: %s"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:244
 msgid "Restore Link"
 msgstr "Bağlantıyı Geri Yükle"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:216
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:251
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:172
 msgid "Delete Permanently"
 msgstr "Kalıcı Olarak Sil"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:226
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:261
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:77
 msgid "QR Code"
 msgstr "QR Kodu"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:240
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:275
 msgid "Edit"
 msgstr "Düzenle"
 
@@ -6878,37 +7060,37 @@ msgstr "Henüz bağlantı yok"
 msgid "Create your first shortened link to get started"
 msgstr "Başlamak için ilk kısa bağlantınızı oluşturun"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:158
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:159
 msgid "Links deleted"
 msgstr "Bağlantılar silindi"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:159
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:160
 msgid "All links have been removed."
 msgstr "Tüm bağlantılar kaldırıldı."
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:163
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:164
 msgid "Unable to delete links"
 msgstr "Bağlantılar silinemiyor"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:164
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:165
 msgid "Failed to delete all links."
 msgstr "Tüm bağlantılar silinemedi."
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:257
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:261
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:260
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:264
 msgid "Delete all links"
 msgstr "Tüm bağlantıları sil"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:258
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:261
 msgid "Are you sure you want to delete all links? This will move active links to trash."
 msgstr "Tüm bağlantıları silmek istediğinizden emin misiniz? Bu işlem etkin bağlantıları çöp kutusuna taşıyacaktır."
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:269
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:273
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:272
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:276
 msgid "Empty Trash"
 msgstr "Çöp Kutusunu Boşalt"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:270
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:273
 msgid "Are you sure you want to permanently delete all links in the trash? This action cannot be undone."
 msgstr "Çöp kutusundaki tüm bağlantıları kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
 
@@ -7340,10 +7522,6 @@ msgstr "Video"
 msgid "News & Content"
 msgstr "Haberler ve İçerik"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:98
-msgid "Developer"
-msgstr "Geliştirici"
-
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:100
 msgid "Email Marketing"
 msgstr "E-posta Pazarlaması"
@@ -7647,55 +7825,55 @@ msgstr "Bağlantıları yenile"
 msgid "Manage and track your shortened URLs"
 msgstr "Kısa URL'lerinizi yönetin ve takip edin"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:239
+#: ui/pages/dashboard/links/LinksPage.tsx:252
 msgid "The link has been restored to active status."
 msgstr "Bağlantı etkin duruma geri yüklendi."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:244
+#: ui/pages/dashboard/links/LinksPage.tsx:257
 msgid "Failed to restore link."
 msgstr "Bağlantı geri yüklenemedi."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:253
+#: ui/pages/dashboard/links/LinksPage.tsx:266
 msgid "Links restored"
 msgstr "Bağlantılar geri yüklendi"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:254
+#: ui/pages/dashboard/links/LinksPage.tsx:267
 msgid "Selected links have been restored to active status."
 msgstr "Seçilen bağlantılar etkin duruma geri yüklendi."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:258
+#: ui/pages/dashboard/links/LinksPage.tsx:271
 msgid "Unable to restore links"
 msgstr "Bağlantılar geri yüklenemiyor"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:259
+#: ui/pages/dashboard/links/LinksPage.tsx:272
 msgid "Failed to restore selected links."
 msgstr "Seçilen bağlantılar geri yüklenemedi."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:268
+#: ui/pages/dashboard/links/LinksPage.tsx:281
 msgid "Trash emptied"
 msgstr "Çöp kutusu boşaltıldı"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:269
+#: ui/pages/dashboard/links/LinksPage.tsx:282
 msgid "All trashed links have been permanently deleted."
 msgstr "Çöp kutusundaki tüm bağlantılar kalıcı olarak silindi."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:273
+#: ui/pages/dashboard/links/LinksPage.tsx:286
 msgid "Unable to empty trash"
 msgstr "Çöp kutusu boşaltılamıyor"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:274
+#: ui/pages/dashboard/links/LinksPage.tsx:287
 msgid "Failed to empty trash."
 msgstr "Çöp kutusu boşaltılamadı."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:406
+#: ui/pages/dashboard/links/LinksPage.tsx:419
 msgid "Total Links"
 msgstr "Toplam bağlantı"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:434
+#: ui/pages/dashboard/links/LinksPage.tsx:447
 msgid "Items in the trash are retained indefinitely until emptied."
 msgstr "Çöp kutusundaki öğeler boşaltılana kadar süresiz olarak saklanır."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:438
+#: ui/pages/dashboard/links/LinksPage.tsx:451
 msgid "Items in the trash will be automatically deleted after %d days."
 msgstr "Çöp kutusundaki öğeler %d gün sonra otomatik olarak silinecektir."
 
@@ -7874,10 +8052,6 @@ msgstr "Aradığınız yönetici sayfası mevcut değil. Taşınmış, silinmiş
 #: ui/pages/NotFoundPage.tsx:50
 msgid "Go Back"
 msgstr "Geri Dön"
-
-#: ui/pages/NotFoundPage.tsx:58
-msgid "Go to Dashboard"
-msgstr "Kontrol Paneline Git"
 
 #: ui/pages/NotFoundPage.tsx:64
 msgid "Popular Destinations"

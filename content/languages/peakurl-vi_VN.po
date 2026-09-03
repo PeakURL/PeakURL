@@ -6,10 +6,10 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-02 09:50+0000\n"
-"POT-Creation-Date: 2026-09-02 09:50+0000\n"
+"PO-Revision-Date: 2026-09-03 18:21+0000\n"
+"POT-Creation-Date: 2026-09-03 18:21+0000\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"Project-Id-Version: PeakURL 1.6.0\n"
+"Project-Id-Version: PeakURL 1.6.1\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
 "X-Domain: peakurl\n"
 "X-Generator: PeakURL i18n Tools\n"
@@ -271,7 +271,7 @@ msgid "No restorable link metadata found in this activity record."
 msgstr "Không tìm thấy siêu dữ liệu liên kết có thể khôi phục trong bản ghi này."
 
 #: app/traits/analytics.php:782
-#: ui/pages/dashboard/activity/ActivityPage.tsx:370
+#: ui/pages/dashboard/activity/ActivityPage.tsx:391
 msgid "This link was permanently deleted and cannot be restored."
 msgstr "Liên kết này đã bị xóa vĩnh viễn và không thể khôi phục."
 
@@ -298,7 +298,7 @@ msgid "You do not have permission to view this link."
 msgstr "Bạn không có quyền xem liên kết này."
 
 #: app/traits/links.php:403
-#: app/traits/links.php:1172
+#: app/traits/links.php:1176
 msgid "Provide either socialImage or socialImageUrl, not both."
 msgstr "Vui lòng chỉ cung cấp socialImage hoặc socialImageUrl, không cung cấp cả hai."
 
@@ -314,41 +314,41 @@ msgstr "Xác thực thất bại. Vui lòng thử lại."
 msgid "You do not have permission to edit this link."
 msgstr "Bạn không có quyền chỉnh sửa liên kết này."
 
-#: app/traits/links.php:1361
+#: app/traits/links.php:1365
 msgid "You do not have permission to delete this link."
 msgstr "Bạn không có quyền xóa liên kết này."
 
-#: app/traits/links.php:1511
+#: app/traits/links.php:1515
 msgid "That short link does not exist."
 msgstr "Liên kết rút gọn đó không tồn tại."
 
-#: app/traits/links.php:1518
+#: app/traits/links.php:1522
 msgid "This link is already active."
 msgstr "Liên kết này đã hoạt động."
 
-#: app/traits/links.php:1528
+#: app/traits/links.php:1532
 msgid "You do not have permission to restore this link."
 msgstr "Bạn không có quyền khôi phục liên kết này."
 
-#: app/traits/links.php:1594
-#: app/traits/links.php:1875
-#: app/traits/links.php:1953
+#: app/traits/links.php:1598
+#: app/traits/links.php:1879
+#: app/traits/links.php:1957
 msgid "You do not have permission to delete links."
 msgstr "Bạn không có quyền xóa các liên kết."
 
-#: app/traits/links.php:1776
+#: app/traits/links.php:1780
 msgid "You do not have permission to restore links."
 msgstr "Bạn không có quyền khôi phục liên kết."
 
-#: app/traits/links.php:2138
+#: app/traits/links.php:2142
 msgid "A valid destination URL is required."
 msgstr "Yêu cầu URL đích hợp lệ."
 
-#: app/traits/links.php:2156
+#: app/traits/links.php:2160
 msgid "That short code is reserved by the application."
 msgstr "Mã rút gọn đó đã được ứng dụng dành riêng."
 
-#: app/traits/links.php:2166
+#: app/traits/links.php:2170
 msgid "That short code is already in use."
 msgstr "Mã rút gọn đó đã được sử dụng."
 
@@ -416,13 +416,13 @@ msgstr "Truy cập %s"
 
 #: app/includes/functions.php:1192
 #: ui/pages/dashboard/about/Sponsors.tsx:98
-#: ui/pages/dashboard/about/AboutPage.tsx:613
+#: ui/pages/dashboard/about/AboutPage.tsx:75
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
 msgid "Website"
 msgstr "Trang web"
 
 #: app/includes/functions.php:1193
-#: ui/pages/dashboard/about/AboutPage.tsx:435
+#: ui/pages/dashboard/about/AboutPage.tsx:848
 msgid "Documentation"
 msgstr "Tài liệu"
 
@@ -432,6 +432,7 @@ msgid "GitHub"
 msgstr "GitHub"
 
 #: app/includes/functions.php:1195
+#: ui/pages/dashboard/about/AboutPage.tsx:486
 msgid "Self-Hosted"
 msgstr "Tự lưu trữ"
 
@@ -1341,78 +1342,78 @@ msgstr "PeakURL không thể kết nối với dịch vụ cập nhật."
 msgid "PeakURL could not read the update service response."
 msgstr "PeakURL không thể đọc phản hồi của dịch vụ cập nhật."
 
-#: app/services/social-preview.php:254
-#: app/services/social-preview.php:272
-#: app/services/social-preview.php:280
+#: app/services/social-preview.php:260
+#: app/services/social-preview.php:278
+#: app/services/social-preview.php:286
 msgid "Enter a valid social preview image URL."
 msgstr "Nhập URL hình ảnh xem trước mạng xã hội hợp lệ."
 
-#: app/services/social-preview.php:266
+#: app/services/social-preview.php:272
 msgid "The social preview image URL is too long."
 msgstr "URL hình ảnh xem trước mạng xã hội quá dài."
 
-#: app/services/social-preview.php:289
+#: app/services/social-preview.php:295
 msgid "The social preview image URL must use HTTPS."
 msgstr "URL hình ảnh xem trước mạng xã hội phải sử dụng HTTPS."
 
-#: app/services/social-preview.php:295
+#: app/services/social-preview.php:301
 msgid "The social preview image URL cannot contain credentials."
 msgstr "URL hình ảnh xem trước mạng xã hội không được chứa thông tin xác thực."
 
-#: app/services/social-preview.php:351
+#: app/services/social-preview.php:357
 #: ui/hooks/useDashboardSearch.ts:89
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:112
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:117
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:279
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:284
 msgid "Untitled Link"
 msgstr "Liên kết chưa có tiêu đề"
 
-#: app/services/social-preview.php:411
+#: app/services/social-preview.php:417
 msgid "Upload a PNG, JPG, or WebP social preview image."
 msgstr "Tải lên hình ảnh xem trước mạng xã hội định dạng PNG, JPG hoặc WebP."
 
-#: app/services/social-preview.php:420
+#: app/services/social-preview.php:426
 msgid "PeakURL could not read the social preview image dimensions."
 msgstr "PeakURL không thể đọc kích thước hình ảnh xem trước mạng xã hội."
 
-#: app/services/social-preview.php:432
+#: app/services/social-preview.php:438
 msgid "PeakURL could not create the social preview uploads directory."
 msgstr "PeakURL không thể tạo thư mục tải lên xem trước mạng xã hội."
 
-#: app/services/social-preview.php:438
+#: app/services/social-preview.php:444
 msgid "PeakURL could not store the uploaded social preview image."
 msgstr "PeakURL không thể lưu hình ảnh xem trước mạng xã hội đã tải lên."
 
-#: app/services/social-preview.php:445
+#: app/services/social-preview.php:451
 msgid "PeakURL could not activate the uploaded social preview image."
 msgstr "PeakURL không thể kích hoạt hình ảnh xem trước mạng xã hội đã tải lên."
 
-#: app/services/social-preview.php:481
+#: app/services/social-preview.php:487
 msgid "PeakURL could not verify the uploaded social preview image."
 msgstr "PeakURL không thể xác minh hình ảnh xem trước mạng xã hội đã tải lên."
 
-#: app/services/social-preview.php:542
+#: app/services/social-preview.php:548
 msgid "The uploaded social preview image exceeds the server maximum file size limit."
 msgstr "Hình ảnh xem trước mạng xã hội đã tải lên vượt quá giới hạn dung lượng tệp tối đa của máy chủ."
 
-#: app/services/social-preview.php:546
+#: app/services/social-preview.php:552
 msgid "The social preview image upload did not finish. Try again."
 msgstr "Quá trình tải lên hình ảnh xem trước mạng xã hội chưa hoàn tất. Hãy thử lại."
 
-#: app/services/social-preview.php:550
+#: app/services/social-preview.php:556
 #: app/services/favicon.php:374
 msgid "The server is missing a temporary upload directory."
 msgstr "Máy chủ thiếu thư mục tải lên tạm thời."
 
-#: app/services/social-preview.php:554
+#: app/services/social-preview.php:560
 msgid "The server could not write the uploaded social preview image to disk."
 msgstr "Máy chủ không thể ghi hình ảnh xem trước mạng xã hội đã tải lên vào đĩa."
 
-#: app/services/social-preview.php:558
+#: app/services/social-preview.php:564
 msgid "A PHP extension stopped the social preview image upload."
 msgstr "Một tiện ích mở rộng PHP đã dừng việc tải lên hình ảnh xem trước mạng xã hội."
 
-#: app/services/social-preview.php:561
+#: app/services/social-preview.php:567
 msgid "PeakURL could not upload the social preview image."
 msgstr "PeakURL không thể tải lên hình ảnh xem trước mạng xã hội."
 
@@ -1576,7 +1577,7 @@ msgstr "PeakURL không thể gửi email chào mừng vì địa chỉ email c�
 
 #: app/services/notifications.php:204
 #: site/setup-config.php:701
-#: ui/pages/dashboard/about/AboutPage.tsx:419
+#: ui/pages/dashboard/about/AboutPage.tsx:832
 msgid "Welcome to %s"
 msgstr "Chào mừng bạn đến với %s"
 
@@ -1758,7 +1759,7 @@ msgstr "Chào mừng"
 #: site/setup-config.php:679
 #: ui/components/common/ApiErrorPage/ApiErrorPage.tsx:70
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:128
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1016
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1015
 msgid "Database"
 msgstr "Cơ sở dữ liệu"
 
@@ -1805,7 +1806,7 @@ msgstr "Chữ cái, chữ số, dấu chấm, dấu gạch nối, dấu gạch d
 
 #: site/install.php:588
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:136
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1018
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1017
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:99
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:173
 #: ui/pages/dashboard/users/UsersPage.tsx:260
@@ -1941,8 +1942,8 @@ msgstr "Tất cả liên kết"
 #: ui/utils/dashboardSearch.ts:97
 #: ui/utils/dashboardSearch.ts:100
 #: ui/pages/auth/login/LoginPage.tsx:47
-#: ui/pages/layout/dashboard/Search/Search.tsx:286
-#: ui/pages/dashboard/activity/ActivityPage.tsx:636
+#: ui/pages/layout/dashboard/Search/Search.tsx:295
+#: ui/pages/dashboard/activity/ActivityPage.tsx:657
 #: ui/pages/dashboard/links/_components/Header/Header.tsx:42
 #: ui/router/pageTitle.ts:77
 msgid "Links"
@@ -1952,13 +1953,13 @@ msgstr "Liên kết"
 #: ui/utils/dashboardSearch.ts:119
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:80
 #: ui/pages/layout/dashboard/Header/Header.tsx:121
-#: ui/pages/dashboard/activity/ActivityPage.tsx:693
+#: ui/pages/dashboard/activity/ActivityPage.tsx:714
 #: ui/router/pageTitle.ts:73
 msgid "Activity"
 msgstr "Hoạt động"
 
 #: ui/utils/dashboardSearch.ts:120
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:25
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:30
 msgid "Recent Activity"
 msgstr "Hoạt động gần đây"
 
@@ -2016,6 +2017,7 @@ msgstr "Cài đặt bảo mật"
 #: ui/utils/dashboardSearch.ts:169
 #: ui/pages/auth/login/LoginPage.tsx:57
 #: ui/pages/dashboard/settings/Layout.tsx:27
+#: ui/pages/dashboard/about/AboutPage.tsx:246
 msgid "Security"
 msgstr "Bảo mật"
 
@@ -2023,7 +2025,7 @@ msgstr "Bảo mật"
 #: ui/utils/dashboardSearch.ts:187
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:79
 #: ui/pages/dashboard/settings/Layout.tsx:31
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:996
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:995
 #: ui/router/pageTitle.ts:24
 msgid "API Keys"
 msgstr "Khóa API"
@@ -2052,7 +2054,7 @@ msgstr "Cấu hình email"
 #: ui/pages/dashboard/settings/Layout.tsx:57
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:138
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:542
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1021
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1020
 #: ui/router/pageTitle.ts:30
 msgid "Location Data"
 msgstr "Dữ liệu vị trí"
@@ -2068,9 +2070,9 @@ msgstr "Cập nhật"
 #: ui/utils/dashboardSearch.ts:256
 #: ui/utils/dashboardSearch.ts:260
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:53
-#: ui/pages/layout/dashboard/Search/Search.tsx:247
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:989
-#: ui/pages/dashboard/activity/ActivityPage.tsx:642
+#: ui/pages/layout/dashboard/Search/Search.tsx:256
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:988
+#: ui/pages/dashboard/activity/ActivityPage.tsx:663
 #: ui/pages/dashboard/users/UsersPage.tsx:577
 #: ui/router/pageTitle.ts:85
 msgid "Users"
@@ -2106,7 +2108,7 @@ msgstr "Nhập"
 #: ui/utils/dashboardSearch.ts:322
 #: ui/utils/dashboardSearch.ts:325
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:65
-#: ui/pages/layout/dashboard/Search/Search.tsx:224
+#: ui/pages/layout/dashboard/Search/Search.tsx:233
 #: ui/router/pageTitle.ts:119
 msgid "Tools"
 msgstr "Công cụ"
@@ -2128,14 +2130,15 @@ msgstr "Xuất"
 #: ui/utils/dashboardSearch.ts:321
 #: ui/utils/dashboardSearch.ts:326
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:85
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1081
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1080
+#: ui/pages/dashboard/about/AboutPage.tsx:710
 #: ui/router/pageTitle.ts:115
 msgid "System Status"
 msgstr "Trạng thái hệ thống"
 
 #: ui/utils/dashboardSearch.ts:565
 #: ui/pages/layout/dashboard/Header/Header.tsx:40
-#: ui/pages/dashboard/activity/ActivityPage.tsx:112
+#: ui/pages/dashboard/activity/ActivityPage.tsx:116
 #: ui/pages/dashboard/users/UsersPage.tsx:82
 #: ui/pages/dashboard/users/UsersPage.tsx:90
 #: ui/pages/dashboard/users/UsersPage.tsx:679
@@ -2158,8 +2161,8 @@ msgstr "Xác nhận"
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:370
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:494
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:63
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:509
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1486
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:508
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1485
 #: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:122
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:156
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:18
@@ -2180,8 +2183,8 @@ msgid "Close modal"
 msgstr "Đóng cửa sổ"
 
 #: ui/components/ui/PageSizeControl/PageSizeControl.tsx:27
-#: ui/pages/dashboard/activity/ActivityPage.tsx:800
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:119
+#: ui/pages/dashboard/activity/ActivityPage.tsx:821
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:122
 msgid "Rows per page"
 msgstr "Số hàng mỗi trang"
 
@@ -2210,10 +2213,10 @@ msgstr "Hủy kích thước trang tùy chỉnh"
 
 #: ui/components/charts/MetricDonutChart/MetricDonutChart.tsx:37
 #: ui/components/charts/WorldMap/_components/Legend.tsx:16
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:991
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:990
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:113
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:64
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:168
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:173
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:47
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:166
 msgid "Clicks"
@@ -2251,19 +2254,19 @@ msgstr "Chủ nhật"
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:112
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:21
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:130
-#: ui/pages/dashboard/links/LinksPage.tsx:367
+#: ui/pages/dashboard/links/LinksPage.tsx:380
 msgid "Total Clicks"
 msgstr "Tổng lượt nhấp"
 
 #: ui/components/charts/TrafficChart/TrafficChart.tsx:261
 #: ui/pages/dashboard/_components/TrafficOverview/TrafficOverview.tsx:70
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:133
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:177
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:182
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:48
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:173
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:28
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:138
-#: ui/pages/dashboard/links/LinksPage.tsx:392
+#: ui/pages/dashboard/links/LinksPage.tsx:405
 msgid "Visitors"
 msgstr "Khách truy cập"
 
@@ -2522,7 +2525,8 @@ msgid "Shorten, organize, and share."
 msgstr "Rút gọn, sắp xếp và chia sẻ."
 
 #: ui/pages/auth/login/LoginPage.tsx:52
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:233
+#: ui/pages/dashboard/about/AboutPage.tsx:270
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:268
 msgid "Analytics"
 msgstr "Phân tích"
 
@@ -2669,8 +2673,9 @@ msgstr "Cảm ơn bạn đã lựa chọn %s."
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:561
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:739
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:61
-#: ui/pages/dashboard/about/AboutPage.tsx:230
-#: ui/pages/dashboard/about/AboutPage.tsx:406
+#: ui/pages/dashboard/about/AboutPage.tsx:391
+#: ui/pages/dashboard/about/AboutPage.tsx:677
+#: ui/pages/dashboard/about/AboutPage.tsx:819
 msgid "Version"
 msgstr "Phiên bản"
 
@@ -2679,75 +2684,75 @@ msgid "Update Details"
 msgstr "Chi tiết cập nhật"
 
 #: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:51
-#: ui/pages/dashboard/about/AboutPage.tsx:239
+#: ui/pages/dashboard/about/AboutPage.tsx:398
 msgid "Released %s"
 msgstr "Đã phát hành %s"
 
 #: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:96
-#: ui/pages/dashboard/about/AboutPage.tsx:279
+#: ui/pages/dashboard/about/AboutPage.tsx:434
 msgid "For all release notes see the main page"
 msgstr "Xem tất cả ghi chú phát hành tại trang chính"
 
 #: ui/pages/layout/dashboard/AdminNotices/UpdateDetailsModal.tsx:105
-#: ui/pages/dashboard/about/AboutPage.tsx:288
+#: ui/pages/dashboard/about/AboutPage.tsx:443
 msgid "Plain text format"
 msgstr "Định dạng văn bản thuần"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:172
+#: ui/pages/layout/dashboard/Search/Search.tsx:173
 msgid "Search links, settings..."
 msgstr "Tìm kiếm liên kết, cài đặt..."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:173
+#: ui/pages/layout/dashboard/Search/Search.tsx:174
 msgid "Search the dashboard"
 msgstr "Tìm kiếm trong bảng điều khiển"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:186
+#: ui/pages/layout/dashboard/Search/Search.tsx:187
 msgid "Clear search"
 msgstr "Xóa tìm kiếm"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:205
+#: ui/pages/layout/dashboard/Search/Search.tsx:214
 msgid "Pages"
 msgstr "Trang"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:254
+#: ui/pages/layout/dashboard/Search/Search.tsx:263
 msgid "Searching users..."
 msgstr "Đang tìm kiếm người dùng..."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:271
+#: ui/pages/layout/dashboard/Search/Search.tsx:280
 msgid "No matching users found."
 msgstr "Không tìm thấy người dùng phù hợp."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:293
+#: ui/pages/layout/dashboard/Search/Search.tsx:302
 msgid "Searching links..."
 msgstr "Đang tìm kiếm liên kết..."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:310
+#: ui/pages/layout/dashboard/Search/Search.tsx:319
 msgid "No matching links found."
 msgstr "Không tìm thấy liên kết phù hợp."
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:327
+#: ui/pages/layout/dashboard/Search/Search.tsx:336
 msgid "Search all links for \"%s\""
 msgstr "Tìm kiếm tất cả liên kết cho \"%s\""
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:330
+#: ui/pages/layout/dashboard/Search/Search.tsx:339
 msgid "Open the links page with this search applied"
 msgstr "Mở trang liên kết với tìm kiếm này"
 
-#: ui/pages/layout/dashboard/Search/Search.tsx:339
+#: ui/pages/layout/dashboard/Search/Search.tsx:348
 msgid "Keep typing to search links, or jump straight to a dashboard page."
 msgstr "Tiếp tục nhập để tìm kiếm liên kết hoặc chuyển thẳng đến một trang bảng điều khiển."
 
 #: ui/pages/layout/dashboard/Header/Header.tsx:38
 #: ui/pages/layout/dashboard/Header/Header.tsx:79
 #: ui/pages/layout/dashboard/Header/Header.tsx:91
-#: ui/pages/dashboard/activity/ActivityPage.tsx:105
+#: ui/pages/dashboard/activity/ActivityPage.tsx:109
 #: ui/pages/dashboard/users/UsersPage.tsx:67
 #: ui/pages/dashboard/users/UsersPage.tsx:126
 msgid "Admin"
 msgstr "Quản trị viên"
 
 #: ui/pages/layout/dashboard/Header/Header.tsx:39
-#: ui/pages/dashboard/activity/ActivityPage.tsx:109
+#: ui/pages/dashboard/activity/ActivityPage.tsx:113
 #: ui/pages/dashboard/users/UsersPage.tsx:72
 #: ui/pages/dashboard/users/UsersPage.tsx:127
 msgid "Editor"
@@ -2898,12 +2903,12 @@ msgstr "Đã sao chép khóa API vào khay nhớ tạm"
 
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:464
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:137
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1060
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1059
 msgid "Copied"
 msgstr "Đã sao chép"
 
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:467
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1065
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1064
 msgid "Copy failed"
 msgstr "Sao chép thất bại"
 
@@ -3360,7 +3365,7 @@ msgid "Save or download these codes now—they won't be shown again."
 msgstr "Lưu hoặc tải xuống các mã này ngay bây giờ—chúng sẽ không được hiển thị lại."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/security/_components/ActiveSessions.tsx:22
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:993
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:992
 msgid "Active Sessions"
 msgstr "Phiên hoạt động"
 
@@ -3409,15 +3414,15 @@ msgstr "Lần tạo gần nhất:"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:740
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:760
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:766
-#: ui/pages/dashboard/activity/ActivityPage.tsx:123
-#: ui/pages/dashboard/activity/ActivityPage.tsx:165
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:53
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:90
+#: ui/pages/dashboard/activity/ActivityPage.tsx:128
+#: ui/pages/dashboard/activity/ActivityPage.tsx:182
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:65
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:105
 #: ui/pages/dashboard/_components/DeviceBreakdown/DeviceBreakdown.tsx:31
 #: ui/pages/dashboard/_components/CountryStats/CountryStats.tsx:39
 #: ui/pages/dashboard/_components/RecentClicks/RecentClicks.tsx:11
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:43
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:189
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:48
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:198
 #: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:172
 #: ui/pages/dashboard/links/_components/StatsDrawer/HistoricalStats.tsx:179
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:106
@@ -3900,7 +3905,7 @@ msgid "Save Credentials"
 msgstr "Lưu thông tin xác thực"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:97
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:968
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:967
 msgid "Unavailable"
 msgstr "Không khả dụng"
 
@@ -4143,7 +4148,7 @@ msgstr "Dán khóa bí mật từ nhà cung cấp CAPTCHA của bạn."
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:182
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:585
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:812
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:894
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:893
 msgid "Disabled"
 msgstr "Đã tắt"
 
@@ -4155,7 +4160,7 @@ msgstr "Đang chỉnh sửa"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:797
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:801
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:854
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:964
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:963
 msgid "Not configured"
 msgstr "Chưa cấu hình"
 
@@ -4300,7 +4305,7 @@ msgid "Connect PeakURL to your automations with outbound webhooks for link activ
 msgstr "Kết nối PeakURL với các quy trình tự động hóa của bạn bằng webhook gửi đi cho hoạt động liên kết."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:172
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:997
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:996
 msgid "Webhooks"
 msgstr "Webhook"
 
@@ -4356,7 +4361,7 @@ msgstr "Tải webhook thất bại"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:361
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:26
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:40
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:45
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:44
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:57
 msgid "Inactive"
@@ -4456,13 +4461,13 @@ msgstr "Khóa API"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:105
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:38
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:43
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:56
 msgid "Active"
 msgstr "Hoạt động"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:131
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:247
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:282
 msgid "Delete"
 msgstr "Xóa"
 
@@ -4633,133 +4638,133 @@ msgstr "Hệ thống tệp"
 msgid "Direct Database"
 msgstr "Cơ sở dữ liệu trực tiếp"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:272
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:271
 msgid "Performance & Caching"
 msgstr "Hiệu suất & Bộ nhớ đệm"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:275
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:274
 msgid "Configure object caching backends and Time-to-Live (TTL) policies to optimize link redirection latency and throughput."
 msgstr "Cấu hình backend bộ nhớ đệm đối tượng và chính sách Time-to-Live (TTL) để tối ưu hóa độ trễ và thông lượng chuyển hướng liên kết."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:292
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:508
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:930
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1485
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:291
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:507
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:929
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1484
 msgid "Purge Cache"
 msgstr "Xóa bộ nhớ đệm"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:300
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:299
 msgid "Active Engine"
 msgstr "Công cụ đang hoạt động"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:304
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:303
 msgid "Cache Footprint"
 msgstr "Dung lượng bộ nhớ đệm"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:305
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:911
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:304
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:910
 msgid "0 B"
 msgstr "0 B"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:309
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:935
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:308
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:934
 msgid "Default TTL"
 msgstr "TTL mặc định"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:318
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:317
 msgid "Cache status unavailable"
 msgstr "Trạng thái bộ nhớ đệm không khả dụng"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:335
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:334
 msgid "Object cache is operational"
 msgstr "Bộ nhớ đệm đối tượng đang hoạt động tốt"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:337
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:336
 msgid "Fallback cache driver active"
 msgstr "Trình điều khiển bộ nhớ đệm dự phòng đang hoạt động"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:338
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:337
 msgid "Object cache is disabled"
 msgstr "Bộ nhớ đệm đối tượng đã bị tắt"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:343
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:342
 msgid "Object caching is active and serving link redirects via the %s backend."
 msgstr "Bộ nhớ đệm đối tượng đang hoạt động và phục vụ chuyển hướng liên kết qua backend %s."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:350
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:349
 msgid "The preferred cache driver is currently unavailable. PeakURL has automatically fallen back to %s."
 msgstr "Trình điều khiển bộ nhớ đệm ưu tiên hiện không khả dụng. PeakURL đã tự động chuyển sang %s."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:355
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:354
 msgid "Object caching is disabled. Link lookups and redirects are served directly from the database."
 msgstr "Bộ nhớ đệm đối tượng đã tắt. Việc tìm kiếm liên kết và chuyển hướng được phục vụ trực tiếp từ cơ sở dữ liệu."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:367
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:366
 msgid "Cache Engine Settings"
 msgstr "Cài đặt công cụ bộ nhớ đệm"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:371
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:370
 msgid "Select your preferred caching backend. PeakURL automatically selects the highest performance operational backend if the preferred driver is unavailable."
 msgstr "Chọn backend bộ nhớ đệm ưu tiên của bạn. PeakURL sẽ tự động chọn backend hoạt động có hiệu suất cao nhất nếu trình điều khiển ưu tiên không khả dụng."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:379
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:385
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:378
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:384
 msgid "Preferred Cache Driver"
 msgstr "Trình điều khiển bộ nhớ đệm ưu tiên"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:389
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:388
 msgid "PeakURL prioritizes Redis if configured, APCu if loaded, and Filesystem storage as the universal fallback."
 msgstr "PeakURL ưu tiên Redis (nếu đã cấu hình), APCu (nếu đã tải) và lưu trữ hệ thống tệp làm phương án dự phòng phổ quát."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:397
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:405
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:396
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:404
 msgid "Redirect Cache TTL"
 msgstr "TTL bộ nhớ đệm chuyển hướng"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:409
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:408
 msgid "Time-to-Live duration for caching active short URL redirect destinations."
 msgstr "Thời lượng Time-to-Live (TTL) để lưu đệm các đích chuyển hướng URL ngắn đang hoạt động."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:421
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:420
 msgid "Custom Redirect TTL (seconds)"
 msgstr "TTL chuyển hướng tùy chỉnh (giây)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:426
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:425
 msgid "Enter the redirect destination cache lifetime in seconds."
 msgstr "Nhập thời gian tồn tại của bộ nhớ đệm đích chuyển hướng tính bằng giây."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:436
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:444
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:435
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:443
 msgid "Negative Lookup (404) TTL"
 msgstr "TTL tìm kiếm phủ định (404)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:448
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:447
 msgid "Time-to-Live duration for caching non-existent link lookups to mitigate database load from automated scans."
 msgstr "Thời lượng Time-to-Live (TTL) để lưu đệm các tìm kiếm liên kết không tồn tại nhằm giảm tải cơ sở dữ liệu từ các lần quét tự động."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:460
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:459
 msgid "Custom Negative TTL (seconds)"
 msgstr "TTL phủ định tùy chỉnh (giây)"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:465
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:464
 msgid "Enter the 404 negative lookup cache lifetime in seconds."
 msgstr "Nhập thời gian tồn tại của bộ nhớ đệm tìm kiếm phủ định 404 tính bằng giây."
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:485
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:484
 msgid "Reset"
 msgstr "Đặt lại"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:495
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:494
 msgid "Save Performance Settings"
 msgstr "Lưu cài đặt hiệu suất"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:504
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1481
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:503
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1480
 msgid "Purge Object Cache"
 msgstr "Xóa bộ nhớ đệm đối tượng"
 
-#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:505
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1482
+#: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:504
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1481
 msgid "Are you sure you want to purge the object cache? All cached redirect records, in-memory objects, and temporary cache files will be immediately invalidated. Subsequent requests will query the database to rebuild the cache."
 msgstr "Bạn có chắc chắn muốn xóa bộ nhớ đệm đối tượng? Tất cả các bản ghi chuyển hướng, đối tượng bộ nhớ và tệp đệm tạm thời sẽ bị hủy ngay lập tức. Các yêu cầu tiếp theo sẽ truy vấn cơ sở dữ liệu để xây dựng lại bộ nhớ đệm."
 
@@ -4907,7 +4912,8 @@ msgid "Manage your account preferences and configurations"
 msgstr "Quản lý tùy chọn và cấu hình tài khoản của bạn"
 
 #: ui/pages/dashboard/settings/Layout.tsx:45
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:107
+#: ui/pages/dashboard/about/AboutPage.tsx:230
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:108
 msgid "Performance"
 msgstr "Hiệu suất"
 
@@ -4978,8 +4984,8 @@ msgid "MySQL / MariaDB"
 msgstr "MySQL / MariaDB"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:486
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:890
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1017
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:889
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1016
 msgid "Object Cache"
 msgstr "Bộ nhớ đệm đối tượng"
 
@@ -5053,7 +5059,7 @@ msgstr "Loại cài đặt"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:578
 msgid "Source code"
-msgstr ""
+msgstr "Mã nguồn"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:581
 msgid "Debug Mode"
@@ -5061,7 +5067,7 @@ msgstr "Chế độ gỡ lỗi"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:584
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:811
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:893
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:892
 msgid "Enabled"
 msgstr "Đã bật"
 
@@ -5071,13 +5077,13 @@ msgstr "Thư mục nội dung"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:604
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:665
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:952
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:951
 msgid "Writable"
 msgstr "Có quyền ghi"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:605
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:666
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:953
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:952
 msgid "Not Writable"
 msgstr "Không có quyền ghi"
 
@@ -5087,7 +5093,7 @@ msgstr "Không có quyền ghi"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:712
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:720
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:728
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:980
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:979
 msgid "Missing"
 msgstr "Thiếu"
 
@@ -5170,7 +5176,7 @@ msgstr "Tiện ích mở rộng Intl"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:711
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:719
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:727
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:979
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:978
 msgid "Available"
 msgstr "Khả dụng"
 
@@ -5234,217 +5240,217 @@ msgstr "Đường dẫn cơ sở dữ liệu"
 msgid "Refresh Command"
 msgstr "Lệnh làm mới"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:898
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:897
 msgid "Active Driver"
 msgstr "Trình điều khiển hoạt động"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:902
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:901
 msgid "Fallback Active"
 msgstr "Dự phòng đang hoạt động"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:906
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:905
 msgid "Configured Driver"
 msgstr "Trình điều khiển đã cấu hình"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:907
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:906
 msgid "auto"
 msgstr "tự động"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:910
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:909
 msgid "Cache Size"
 msgstr "Kích thước bộ nhớ đệm"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:917
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:916
 msgid "%s cached items"
 msgstr "%s mục trong bộ nhớ đệm"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:918
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:917
 msgid "%s cached files"
 msgstr "%s tệp trong bộ nhớ đệm"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:941
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:940
 msgid "Negative TTL"
 msgstr "TTL phủ định"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:947
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:946
 msgid "Cache Directory"
 msgstr "Thư mục bộ nhớ đệm"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:955
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:954
 msgid "Not Created"
 msgstr "Chưa tạo"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:959
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:958
 msgid "Redis Server"
 msgstr "Máy chủ Redis"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:966
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:965
 msgid "Connected"
 msgstr "Đã kết nối"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:976
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:975
 msgid "APCu Extension"
 msgstr "Tiện ích mở rộng APCu"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:983
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:982
 msgid "Operational"
 msgstr "Đang hoạt động"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:990
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:989
 msgid "Short Links"
 msgstr "Liên kết rút gọn"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:999
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:998
 msgid "Activity Events"
 msgstr "Sự kiện hoạt động"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1003
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1002
 msgid "Managed Tables"
 msgstr "Bảng được quản lý"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1012
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1011
 msgid "Directories and Sizes"
 msgstr "Thư mục và kích thước"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1015
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1014
 msgid "Server"
 msgstr "Máy chủ"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1024
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1023
 msgid "Data Footprint"
 msgstr "Dung lượng dữ liệu"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1061
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1060
 msgid "System status info copied to clipboard"
 msgstr "Đã sao chép thông tin trạng thái hệ thống vào khay nhớ tạm"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1066
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1065
 msgid "PeakURL could not copy the system status information."
 msgstr "PeakURL không thể sao chép thông tin trạng thái hệ thống."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1078
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1077
 msgid "Site Health"
 msgstr "Tình trạng trang web"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1084
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1083
 msgid "Monitor installation health, check server environment diagnostics, and review technical configuration details."
 msgstr "Theo dõi tình trạng cài đặt, kiểm tra chẩn đoán môi trường máy chủ và xem xét chi tiết cấu hình kỹ thuật."
 
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1099
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1100
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1101
 msgid "Refresh site health status"
 msgstr "Làm mới tình trạng trang web"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1163
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1162
 msgid "Site Health: Good"
 msgstr "Tình trạng trang web: Tốt"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1167
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1166
 msgid "Site Health: 1 Critical Issue"
 msgstr "Tình trạng trang web: 1 sự cố nghiêm trọng"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1170
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1169
 msgid "Site Health: %s Critical Issues"
 msgstr "Tình trạng trang web: %s sự cố nghiêm trọng"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1176
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1175
 msgid "Site Health: 1 Recommended Improvement"
 msgstr "Tình trạng trang web: 1 cải tiến được khuyến nghị"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1179
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1178
 msgid "Site Health: %s Recommended Improvements"
 msgstr "Tình trạng trang web: %s cải tiến được khuyến nghị"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1187
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1186
 msgid "PeakURL is configured properly and all environmental diagnostics are in good standing."
 msgstr "PeakURL được cấu hình đúng cách và tất cả các chẩn đoán môi trường đều ở trạng thái tốt."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1191
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1190
 msgid "Critical items require attention to restore optimal site security and performance. Resolving these should be prioritized."
 msgstr "Các mục nghiêm trọng cần được chú ý để khôi phục hiệu suất và tính bảo mật tối ưu cho trang web. Việc giải quyết các vấn đề này nên được ưu tiên."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1194
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1193
 msgid "All core features are active, with recommended improvements available below to optimize your install."
 msgstr "Tất cả các tính năng cốt lõi đang hoạt động, cùng với các cải tiến được khuyến nghị bên dưới để tối ưu hóa bản cài đặt của bạn."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1205
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1204
 msgid "%s Passed"
 msgstr "%s đạt"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1217
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1216
 msgid "%s Recommended"
 msgstr "%s khuyến nghị"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1230
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1229
 msgid "%s Critical"
 msgstr "%s nghiêm trọng"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1250
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1249
 msgid "Checked %s"
 msgstr "Đã kiểm tra %s"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1264
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1263
 msgid "System Checks"
 msgstr "Kiểm tra hệ thống"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1317
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1316
 msgid "Good"
 msgstr "Tốt"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1319
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1318
 msgid "Review"
 msgstr "Xem xét"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1320
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1319
 msgid "Action Required"
 msgstr "Cần hành động"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1337
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1336
 msgid "1 critical issue"
 msgstr "1 sự cố nghiêm trọng"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1338
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1337
 msgid "%s critical issues"
 msgstr "%s sự cố nghiêm trọng"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1340
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1339
 msgid "Critical issues are items that may have a high impact on your site performance or security. Resolving these issues should be prioritized."
 msgstr "Các sự cố nghiêm trọng là những mục có thể ảnh hưởng lớn đến hiệu suất hoặc tính bảo mật của trang web. Cần ưu tiên giải quyết các vấn đề này."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1354
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1353
 msgid "1 recommended improvement"
 msgstr "1 đề xuất cải tiến"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1355
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1354
 msgid "%s recommended improvements"
 msgstr "%s đề xuất cải tiến"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1357
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1356
 msgid "Recommended improvements are beneficial for your site, though not as urgent as a critical issue. They may include improvements in areas such as security, performance, and user experience."
 msgstr "Các cải tiến được đề xuất mang lại lợi ích cho trang web của bạn, mặc dù không khẩn cấp như sự cố nghiêm trọng. Chúng có thể bao gồm các cải tiến trong các lĩnh vực như bảo mật, hiệu suất và trải nghiệm người dùng."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1383
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1382
 msgid "Hide passed tests"
 msgstr "Ẩn các bài kiểm tra đã đạt"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1386
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1385
 msgid "1 passed test"
 msgstr "1 kiểm tra đã đạt"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1387
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1386
 msgid "%s passed tests"
 msgstr "%s kiểm tra đã đạt"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1433
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1432
 msgid "System Information"
 msgstr "Thông tin hệ thống"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1436
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1435
 msgid "Detailed technical environment, server configuration, storage, and database specifications."
 msgstr "Môi trường kỹ thuật chi tiết, cấu hình máy chủ, lưu trữ và thông số kỹ thuật cơ sở dữ liệu."
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1452
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:96
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1451
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:101
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:103
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:230
@@ -5453,7 +5459,7 @@ msgstr "Môi trường kỹ thuật chi tiết, cấu hình máy chủ, lưu tr�
 msgid "Copied!"
 msgstr "Đã sao chép!"
 
-#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1458
+#: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1457
 msgid "Copy site info to clipboard"
 msgstr "Sao chép thông tin trang web vào bộ nhớ tạm"
 
@@ -5970,8 +5976,8 @@ msgid "Author"
 msgstr "Tác giả"
 
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
-#: ui/pages/dashboard/activity/ActivityPage.tsx:879
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:111
+#: ui/pages/dashboard/activity/ActivityPage.tsx:900
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:114
 #: ui/pages/dashboard/users/UsersPage.tsx:688
 msgid "Actions"
 msgstr "Hành động"
@@ -5984,316 +5990,316 @@ msgstr "Hủy kích hoạt"
 msgid "Activate"
 msgstr "Kích hoạt"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:128
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:55
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:190
+#: ui/pages/dashboard/activity/ActivityPage.tsx:133
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:67
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:208
 msgid "Unknown user"
 msgstr "Người dùng không xác định"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:132
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:58
+#: ui/pages/dashboard/activity/ActivityPage.tsx:138
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:71
 msgid "Created new link \"%s\""
 msgstr "Đã tạo liên kết mới \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:134
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:60
+#: ui/pages/dashboard/activity/ActivityPage.tsx:141
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:73
 msgid "Updated link \"%s\""
 msgstr "Đã cập nhật liên kết \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:136
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:62
+#: ui/pages/dashboard/activity/ActivityPage.tsx:144
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:75
 msgid "Permanently deleted link \"%s\""
 msgstr "Đã xóa vĩnh viễn liên kết \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:138
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:64
+#: ui/pages/dashboard/activity/ActivityPage.tsx:147
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:77
 msgid "Moved link \"%s\" to trash"
 msgstr "Đã chuyển liên kết \"%s\" vào thùng rác\"%s\" vào thùng rác\"%s\" vào thùng rác"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:140
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:66
+#: ui/pages/dashboard/activity/ActivityPage.tsx:150
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:79
 msgid "Restored link \"%s\""
 msgstr "Đã khôi phục liên kết \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:145
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:71
+#: ui/pages/dashboard/activity/ActivityPage.tsx:157
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:85
 msgid "Permanently deleted 1 link from trash"
 msgstr "Đã xóa vĩnh viễn 1 liên kết khỏi thùng rác"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:147
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:73
+#: ui/pages/dashboard/activity/ActivityPage.tsx:159
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:87
 msgid "Permanently deleted %s links from trash"
 msgstr "Đã xóa vĩnh viễn %s liên kết khỏi thùng rác"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:151
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:77
+#: ui/pages/dashboard/activity/ActivityPage.tsx:163
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:91
 msgid "Emptied links from trash"
 msgstr "Đã dọn sạch các liên kết khỏi thùng rác"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:154
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:79
+#: ui/pages/dashboard/activity/ActivityPage.tsx:168
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:94
 msgid "Created user \"%s\""
 msgstr "Đã tạo người dùng \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:156
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:81
+#: ui/pages/dashboard/activity/ActivityPage.tsx:171
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:96
 msgid "Updated user \"%s\""
 msgstr "Đã cập nhật người dùng \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:158
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:83
+#: ui/pages/dashboard/activity/ActivityPage.tsx:174
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:98
 msgid "Deleted user \"%s\""
 msgstr "Đã xóa người dùng \"%s\"\"%s\"\"%s\""
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:162
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:87
+#: ui/pages/dashboard/activity/ActivityPage.tsx:179
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:102
 msgid "from %s"
 msgstr "từ %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:170
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:94
+#: ui/pages/dashboard/activity/ActivityPage.tsx:187
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:109
 msgid "Link \"%1$s\" was clicked %2$s"
 msgstr "Liên kết \"%1$s\" đã được nhấp %2$s\"%1$s\" đã được nhấp %2$s\"%1$s\" đã được nhấp %2$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:174
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:98
+#: ui/pages/dashboard/activity/ActivityPage.tsx:191
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:113
 msgid "Link \"%s\" was clicked"
 msgstr "Liên kết \"%s\" đã được nhấp\"%s\" đã được nhấp\"%s\" đã được nhấp"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:177
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:100
+#: ui/pages/dashboard/activity/ActivityPage.tsx:195
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:115
 msgid "Unknown activity"
 msgstr "Hoạt động không xác định"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:356
+#: ui/pages/dashboard/activity/ActivityPage.tsx:377
 msgid "Link already active"
 msgstr "Liên kết đã hoạt động"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:357
+#: ui/pages/dashboard/activity/ActivityPage.tsx:378
 msgid "This link is already active and does not need to be restored."
 msgstr "Liên kết này đã hoạt động và không cần khôi phục."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:369
+#: ui/pages/dashboard/activity/ActivityPage.tsx:390
 msgid "Link permanently deleted"
 msgstr "Liên kết đã bị xóa vĩnh viễn"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:378
-#: ui/pages/dashboard/links/LinksPage.tsx:238
+#: ui/pages/dashboard/activity/ActivityPage.tsx:399
+#: ui/pages/dashboard/links/LinksPage.tsx:251
 msgid "Link restored"
 msgstr "Liên kết đã được khôi phục"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:379
+#: ui/pages/dashboard/activity/ActivityPage.tsx:400
 msgid "The link has been restored successfully."
 msgstr "Liên kết đã được khôi phục thành công."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:383
-#: ui/pages/dashboard/links/LinksPage.tsx:243
+#: ui/pages/dashboard/activity/ActivityPage.tsx:404
+#: ui/pages/dashboard/links/LinksPage.tsx:256
 msgid "Unable to restore link"
 msgstr "Không thể khôi phục liên kết"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:386
+#: ui/pages/dashboard/activity/ActivityPage.tsx:407
 msgid "Failed to restore link from activity record."
 msgstr "Không thể khôi phục liên kết từ bản ghi hoạt động."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:538
-#: ui/pages/dashboard/activity/ActivityPage.tsx:566
-#: ui/pages/dashboard/activity/ActivityPage.tsx:596
+#: ui/pages/dashboard/activity/ActivityPage.tsx:559
+#: ui/pages/dashboard/activity/ActivityPage.tsx:587
+#: ui/pages/dashboard/activity/ActivityPage.tsx:617
 msgid "Activity deleted"
 msgstr "Đã xóa hoạt động"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:539
+#: ui/pages/dashboard/activity/ActivityPage.tsx:560
 msgid "The activity log entry has been removed."
 msgstr "Mục nhật ký hoạt động đã bị xóa."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:543
-#: ui/pages/dashboard/activity/ActivityPage.tsx:574
-#: ui/pages/dashboard/activity/ActivityPage.tsx:601
+#: ui/pages/dashboard/activity/ActivityPage.tsx:564
+#: ui/pages/dashboard/activity/ActivityPage.tsx:595
+#: ui/pages/dashboard/activity/ActivityPage.tsx:622
 msgid "Unable to delete activity"
 msgstr "Không thể xóa hoạt động"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:546
+#: ui/pages/dashboard/activity/ActivityPage.tsx:567
 msgid "The activity log entry could not be removed."
 msgstr "Không thể xóa mục nhật ký hoạt động."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:568
+#: ui/pages/dashboard/activity/ActivityPage.tsx:589
 msgid "Deleted %s activity log entries."
 msgstr "Đã xóa %s mục nhật ký hoạt động."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:577
+#: ui/pages/dashboard/activity/ActivityPage.tsx:598
 msgid "The selected activity log entries could not be removed."
 msgstr "Không thể xóa các mục nhật ký hoạt động đã chọn."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:597
+#: ui/pages/dashboard/activity/ActivityPage.tsx:618
 msgid "All activity log entries have been removed."
 msgstr "Tất cả các mục nhật ký hoạt động đã bị xóa."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:604
+#: ui/pages/dashboard/activity/ActivityPage.tsx:625
 msgid "The activity logs could not be removed."
 msgstr "Không thể xóa các nhật ký hoạt động."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:630
+#: ui/pages/dashboard/activity/ActivityPage.tsx:651
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:35
 #: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:21
 msgid "All"
 msgstr "Tất cả"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:656
+#: ui/pages/dashboard/activity/ActivityPage.tsx:677
 msgid "Total events"
 msgstr "Tổng số sự kiện"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:662
+#: ui/pages/dashboard/activity/ActivityPage.tsx:683
 msgid "Link events"
 msgstr "Sự kiện liên kết"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:668
+#: ui/pages/dashboard/activity/ActivityPage.tsx:689
 msgid "User events"
 msgstr "Sự kiện người dùng"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:674
+#: ui/pages/dashboard/activity/ActivityPage.tsx:695
 msgid "Latest event"
 msgstr "Sự kiện mới nhất"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:677
+#: ui/pages/dashboard/activity/ActivityPage.tsx:698
 msgid "No recent events"
 msgstr "Không có sự kiện gần đây"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:691
+#: ui/pages/dashboard/activity/ActivityPage.tsx:712
 msgid "Audit Log"
 msgstr "Nhật ký kiểm toán"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:695
+#: ui/pages/dashboard/activity/ActivityPage.tsx:716
 msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
 msgstr "Xem lại các thay đổi liên kết và sự kiện quản lý người dùng ở một nơi với các bộ lọc, dấu thời gian và chi tiết người thực hiện."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:705
-#: ui/pages/dashboard/activity/ActivityPage.tsx:706
+#: ui/pages/dashboard/activity/ActivityPage.tsx:726
+#: ui/pages/dashboard/activity/ActivityPage.tsx:727
 msgid "Refresh activity history"
 msgstr "Làm mới lịch sử hoạt động"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:811
+#: ui/pages/dashboard/activity/ActivityPage.tsx:832
 msgid "Activity history"
 msgstr "Lịch sử hoạt động"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:818
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:32
+#: ui/pages/dashboard/activity/ActivityPage.tsx:839
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:33
 msgid "%s selected"
 msgstr "Đã chọn %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:828
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1305
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:73
+#: ui/pages/dashboard/activity/ActivityPage.tsx:849
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1326
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:74
 msgid "Delete selected"
 msgstr "Xóa mục đã chọn"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:836
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:82
+#: ui/pages/dashboard/activity/ActivityPage.tsx:857
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:83
 msgid "Delete all"
 msgstr "Xóa tất cả"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:867
+#: ui/pages/dashboard/activity/ActivityPage.tsx:888
 msgid "Select all events on this page"
 msgstr "Chọn tất cả sự kiện trên trang này"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:874
+#: ui/pages/dashboard/activity/ActivityPage.tsx:895
 msgid "Event"
 msgstr "Sự kiện"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:875
+#: ui/pages/dashboard/activity/ActivityPage.tsx:896
 msgid "Details"
 msgstr "Chi tiết"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:876
+#: ui/pages/dashboard/activity/ActivityPage.tsx:897
 msgid "When"
 msgstr "Thời gian"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:986
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1007
 msgid "Actor: %s"
 msgstr "Người thực hiện: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:998
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1019
 msgid "By"
 msgstr "Bởi"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1036
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1057
 msgid "User: %s"
 msgstr "Người dùng: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1055
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1076
 msgid "Location: %s"
 msgstr "Vị trí: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1150
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1159
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1171
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1180
 msgid "Link is already active"
 msgstr "Liên kết đã hoạt động"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1153
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1162
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1174
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1183
 msgid "Restore link"
 msgstr "Khôi phục liên kết"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1185
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1188
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1325
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1206
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1209
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1346
 msgid "Delete activity log"
 msgstr "Xóa nhật ký hoạt động"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1214
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1235
 msgid "No user activity yet"
 msgstr "Chưa có hoạt động người dùng"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1216
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1237
 msgid "No link activity yet"
 msgstr "Chưa có hoạt động liên kết"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1217
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1238
 msgid "No activity recorded yet"
 msgstr "Chưa có hoạt động nào được ghi lại"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1220
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1241
 msgid "Once users manage accounts or links change, the audit log will appear here."
 msgstr "Sau khi người dùng quản lý tài khoản hoặc liên kết thay đổi, nhật ký kiểm toán sẽ xuất hiện ở đây."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1234
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1255
 msgid "Showing %1$s-%2$s of %3$s events"
 msgstr "Hiển thị %1$s-%2$s trên tổng số %3$s sự kiện"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1241
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1262
 msgid "Page %1$s of %2$s"
 msgstr "Trang %1$s / %2$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1257
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1278
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:40
 msgid "Previous"
 msgstr "Trước"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1283
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1304
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:84
 msgid "Next"
 msgstr "Tiếp theo"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1294
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1315
 msgid "Delete activity logs"
 msgstr "Xóa nhật ký hoạt động"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1298
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1319
 msgid "Delete %s selected activity log entries? This action cannot be undone."
 msgstr "Xóa %s mục nhật ký hoạt động đã chọn? Hành động này không thể hoàn tác."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1313
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1317
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1334
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1338
 msgid "Delete all activity"
 msgstr "Xóa tất cả hoạt động"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1314
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1335
 msgid "Are you sure you want to delete all activity logs? This action cannot be undone."
 msgstr "Bạn có chắc chắn muốn xóa tất cả nhật ký hoạt động không? Hành động này không thể hoàn tác."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1329
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1350
 msgid "Delete the activity entry \"%s\"? This action cannot be undone."
 msgstr "Xóa mục hoạt động \"%s\"? Hành động này không thể hoàn tác."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1336
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1357
 msgid "Delete activity"
 msgstr "Xóa hoạt động"
 
@@ -6350,212 +6356,364 @@ msgstr "Xin gửi lời cảm ơn to lớn đến các cá nhân đã ủng hộ
 msgid "Support the Project"
 msgstr "Ủng hộ dự án"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:142
+#: ui/pages/dashboard/about/AboutPage.tsx:66
+msgid "Shorten, track, and own every link."
+msgstr "Rút gọn, theo dõi và làm chủ mọi liên kết."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:93
+msgid "Release Notes"
+msgstr "Ghi chú phát hành"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:190
 msgid "Setup Complete"
 msgstr "Thiết lập hoàn tất"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:143
+#: ui/pages/dashboard/about/AboutPage.tsx:191
 msgid "PeakURL is ready to use."
 msgstr "PeakURL đã sẵn sàng để sử dụng."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:144
+#: ui/pages/dashboard/about/AboutPage.tsx:192
 msgid "Your administrator account is active and the dashboard is ready. Use these next steps to finish the initial configuration and start publishing links."
 msgstr "Tài khoản quản trị viên của bạn đã hoạt động và bảng điều khiển đã sẵn sàng. Hãy thực hiện các bước tiếp theo này để hoàn tất cấu hình ban đầu và bắt đầu phát hành liên kết."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:149
+#: ui/pages/dashboard/about/AboutPage.tsx:197
 msgid "Create your first short link"
 msgstr "Tạo liên kết rút gọn đầu tiên của bạn"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:153
+#: ui/pages/dashboard/about/AboutPage.tsx:201
 msgid "Review general settings"
 msgstr "Xem lại cài đặt chung"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:157
+#: ui/pages/dashboard/about/AboutPage.tsx:205
 msgid "Connect location data"
 msgstr "Kết nối dữ liệu vị trí"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:163
+#: ui/pages/dashboard/about/AboutPage.tsx:211
 msgid "Update Complete"
 msgstr "Cập nhật hoàn tất"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:164
+#: ui/pages/dashboard/about/AboutPage.tsx:212
 msgid "PeakURL has been updated to the latest version."
 msgstr "PeakURL đã được cập nhật lên phiên bản mới nhất."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:165
+#: ui/pages/dashboard/about/AboutPage.tsx:213
 msgid "The latest version is now installed. Here's a look at what's new in this release."
 msgstr "Phiên bản mới nhất hiện đã được cài đặt. Dưới đây là những điểm mới trong bản phát hành này."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:170
+#: ui/pages/dashboard/about/AboutPage.tsx:218
 msgid "Reinstall Complete"
 msgstr "Cài đặt lại hoàn tất"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:171
+#: ui/pages/dashboard/about/AboutPage.tsx:219
 msgid "PeakURL has been reinstalled."
 msgstr "PeakURL đã được cài đặt lại."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:172
+#: ui/pages/dashboard/about/AboutPage.tsx:220
 msgid "The latest version has been reinstalled. Here's a look at what's included in this release."
 msgstr "Phiên bản mới nhất đã được cài đặt lại. Dưới đây là những gì có trong bản phát hành này."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:301
-msgid "Branded Short Links"
-msgstr "Liên kết rút gọn thương hiệu"
+#: ui/pages/dashboard/about/AboutPage.tsx:231
+msgid "Multi-tier object caching"
+msgstr "Bộ nhớ đệm đối tượng đa tầng"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:232
+msgid "Delivers sub-millisecond link redirects using Redis, APCu, or local filesystem storage with automatic backend fallback, configurable cache durations, and instant cache purging."
+msgstr "Cung cấp tốc độ chuyển hướng dưới một mili giây qua Redis, APCu hoặc hệ thống tệp cục bộ với cơ chế dự phòng tự động, thời gian lưu tùy chỉnh và làm sạch tức thì."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:238
+msgid "Data safeguards"
+msgstr "Bảo vệ dữ liệu"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:239
+msgid "Trash protection and audit recovery"
+msgstr "Bảo vệ bằng thùng rác và khôi phục"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:240
+msgid "Prevents accidental link loss with soft-delete safeguards, customizable retention schedules from 14 to 90 days, and one-click restoration directly from the activity history."
+msgstr "Ngăn chặn mất liên kết ngoài ý muốn nhờ cơ chế xóa tạm thời, thời gian lưu trữ linh hoạt từ 14 đến 90 ngày và khôi phục một chạm từ nhật ký hoạt động."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:247
+msgid "Two-factor authentication and session controls"
+msgstr "Xác thực hai yếu tố và quản lý phiên"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:248
+msgid "Hardens administrator and editor accounts with TOTP two-factor authentication, single-use recovery backup codes, and real-time remote session revocation."
+msgstr "Tăng cường bảo mật tài khoản quản trị viên và biên tập viên với 2FA TOTP, mã khôi phục dùng một lần và chấm dứt phiên làm việc từ xa theo thời gian thực."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:254
+msgid "Access control"
+msgstr "Kiểm soát truy cập"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:255
+msgid "Public redirect bot and abuse defense"
+msgstr "Bảo vệ liên kết chuyển hướng khỏi bot và lạm dụng"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:256
+msgid "Shields destination servers and infrastructure against crawler abuse using Cloudflare Turnstile and Google reCAPTCHA v3 without breaking social sharing previews."
+msgstr "Bảo vệ máy chủ đích khỏi bot tự động bằng Cloudflare Turnstile và Google reCAPTCHA v3 mà không làm gián đoạn thẻ xem trước trên mạng xã hội."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:262
+msgid "Privacy"
+msgstr "Quyền riêng tư"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:263
+msgid "On-premises location intelligence"
+msgstr "Phân tích vị trí địa lý cục bộ"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:264
+msgid "Resolves visitor countries and cities locally on your server through an on-premises MaxMind GeoLite2 database, ensuring fast analytics without third-party tracking."
+msgstr "Xác định quốc gia và thành phố của khách truy cập ngay trên máy chủ của bạn qua cơ sở dữ liệu MaxMind GeoLite2, mang lại báo cáo nhanh mà không cần theo dõi từ bên thứ ba."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:271
+msgid "Real-time traffic and engagement reporting"
+msgstr "Báo cáo lưu lượng và tương tác thời gian thực"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:272
+msgid "Provides comprehensive click analytics covering total volume, unique visitors, referrers, device platforms, browser engines, and operating systems across custom date ranges."
+msgstr "Cung cấp số liệu phân tích chi tiết về lượt nhấp: tổng số, khách truy cập duy nhất, nguồn giới thiệu, thiết bị, trình duyệt và hệ điều hành theo khoảng thời gian tùy chọn."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:278
+msgid "Publishing"
+msgstr "Xuất bản liên kết"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:279
+msgid "Branded short links and vector QR codes"
+msgstr "Liên kết ngắn thương hiệu và mã QR vector"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:280
+msgid "Creates clean short links with custom aliases, generated codes, password protection, expiration schedules, social preview image overrides, and downloadable QR codes."
+msgstr "Tạo liên kết ngắn chuyên nghiệp với bí danh tùy chỉnh, bảo vệ bằng mật khẩu, ngày hết hạn, hình ảnh xem trước tùy chỉnh và mã QR vector tải về."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:286
+msgid "Data mobility"
+msgstr "Khả năng di chuyển dữ liệu"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:287
+msgid "Data import, export, and migration"
+msgstr "Nhập, xuất và chuyển đổi dữ liệu"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:288
+msgid "Comprehensive data mobility supporting CSV and JSON file uploads, direct text pasting, API ingestion, full database exports, and native migration tools."
+msgstr "Hỗ trợ toàn diện việc tải lên tệp CSV và JSON, dán văn bản trực tiếp, nạp dữ liệu qua API, xuất toàn bộ cơ sở dữ liệu và công cụ chuyển đổi tích hợp."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:294
+#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:98
+msgid "Developer"
+msgstr "Nhà phát triển"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:295
+msgid "REST API and real-time webhooks"
+msgstr "REST API và Webhook thời gian thực"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:296
+msgid "Automates publishing through token-authenticated REST endpoints, dispatches real-time webhooks on link events, and supports WordPress-style action and filter hooks."
+msgstr "Tự động hóa xuất bản qua các điểm cuối REST xác thực bằng mã token, gửi webhook tức thì khi có sự kiện và hỗ trợ hệ thống hook linh hoạt."
 
 #: ui/pages/dashboard/about/AboutPage.tsx:302
-msgid "Create clean short links with custom aliases, generated codes, QR output, and redirect settings that stay easy to manage."
-msgstr "Tạo các liên kết rút gọn rõ ràng với bí danh tùy chỉnh, mã đã tạo, đầu ra mã QR và cài đặt chuyển hướng dễ quản lý."
+msgid "Ecosystem"
+msgstr "Hệ sinh thái chính thức"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:308
-msgid "Click Analytics"
-msgstr "Phân tích lượt nhấp"
+#: ui/pages/dashboard/about/AboutPage.tsx:303
+msgid "Official extensions and integrations"
+msgstr "Tiện ích mở rộng và tích hợp chính thức"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:309
-msgid "Review clicks, unique visitors, referrers, device breakdowns, and traffic trends from the same dashboard used to publish links."
-msgstr "Xem lại lượt nhấp, khách truy cập duy nhất, nguồn giới thiệu, phân tích thiết bị và xu hướng lưu lượng truy cập từ cùng một bảng điều khiển dùng để xuất bản liên kết."
+#: ui/pages/dashboard/about/AboutPage.tsx:304
+msgid "Shorten and manage links directly within your workflow using official add-ons for WordPress, Google Chrome, Mozilla Firefox, Docker, and the command-line CLI."
+msgstr "Rút gọn và quản lý liên kết trực tiếp trong quy trình làm việc với các tiện ích chính thức dành cho WordPress, Chrome, Firefox, Docker và dòng lệnh (CLI)."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:315
-msgid "Local Location Data"
-msgstr "Dữ liệu vị trí cục bộ"
+#: ui/pages/dashboard/about/AboutPage.tsx:310
+msgid "Operations"
+msgstr "Vận hành hệ thống"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:316
-msgid "Resolve visitor locations from a local MaxMind GeoLite2 database so analytics stay under your control."
-msgstr "Xác định vị trí khách truy cập từ cơ sở dữ liệu MaxMind GeoLite2 cục bộ để số liệu phân tích luôn nằm trong tầm kiểm soát của bạn."
+#: ui/pages/dashboard/about/AboutPage.tsx:311
+msgid "Live Site Health diagnostics"
+msgstr "Chẩn đoán sức khỏe hệ thống thời gian thực"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:322
-msgid "Access And Security"
-msgstr "Truy cập và Bảo mật"
+#: ui/pages/dashboard/about/AboutPage.tsx:312
+msgid "Continuously monitors database connectivity, PHP runtime settings, disk storage, cache engine status, and GeoLite2 file integrity with precision localized timestamps."
+msgstr "Liên tục giám sát kết nối cơ sở dữ liệu, cấu hình PHP, dung lượng đĩa, trạng thái bộ nhớ đệm và tệp GeoLite2 với dấu thời gian chính xác."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:323
-msgid "Run with admin and editor roles, session controls, two-factor authentication, backup codes, and API keys."
-msgstr "Hoạt động với vai trò quản trị viên và biên tập viên, kiểm soát phiên, xác thực hai yếu tố, mã dự phòng và khóa API."
+#: ui/pages/dashboard/about/AboutPage.tsx:318
+msgid "Localization"
+msgstr "Bản địa hóa ngôn ngữ"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:329
-msgid "Operations And Integrations"
-msgstr "Vận hành và Tích hợp"
+#: ui/pages/dashboard/about/AboutPage.tsx:319
+msgid "26 global language packs with native RTL"
+msgstr "26 gói ngôn ngữ quốc tế với hỗ trợ RTL bản địa"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:330
-msgid "Use API keys, webhooks, import tools, and the built-in updater baseline to operate the service over time."
-msgstr "Sử dụng khóa API, webhook, công cụ nhập và cơ chế cập nhật tích hợp để vận hành dịch vụ lâu dài."
+#: ui/pages/dashboard/about/AboutPage.tsx:320
+msgid "Offers full native translations across 26 international languages and regional variants, with complete right-to-left layout and typography orchestration out of the box."
+msgstr "Cung cấp bản dịch bản địa hóa đầy đủ trên 26 ngôn ngữ và biến thể khu vực, hỗ trợ sẵn sàng bố cục viết từ phải sang trái (RTL)."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:336
-msgid "Portable Self-Hosting"
-msgstr "Tự lưu trữ linh hoạt"
-
-#: ui/pages/dashboard/about/AboutPage.tsx:337
-msgid "Deploy on your own domain, keep runtime configuration in your own environment, and preserve user-owned content across updates."
-msgstr "Triển khai trên tên miền của riêng bạn, giữ cấu hình thời gian chạy trong môi trường của bạn và bảo toàn nội dung người dùng qua các bản cập nhật."
-
-#: ui/pages/dashboard/about/AboutPage.tsx:357
+#: ui/pages/dashboard/about/AboutPage.tsx:345
 msgid "Use"
 msgstr "Sử dụng"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:358
+#: ui/pages/dashboard/about/AboutPage.tsx:346
 msgid "Run PeakURL for any purpose, personal projects, business, education, or anything in between."
 msgstr "Chạy PeakURL cho bất kỳ mục đích nào, dự án cá nhân, kinh doanh, giáo dục hoặc bất cứ điều gì khác."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:364
+#: ui/pages/dashboard/about/AboutPage.tsx:352
 msgid "Study"
 msgstr "Nghiên cứu"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:365
+#: ui/pages/dashboard/about/AboutPage.tsx:353
 msgid "Explore the source code, understand how it works, and modify it to suit your exact needs."
 msgstr "Khám phá mã nguồn, hiểu cách thức hoạt động và sửa đổi để phù hợp với nhu cầu chính xác của bạn."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:371
+#: ui/pages/dashboard/about/AboutPage.tsx:359
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:185
 msgid "Share"
 msgstr "Chia sẻ"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:372
+#: ui/pages/dashboard/about/AboutPage.tsx:360
 msgid "Redistribute copies freely so others can benefit from the same powerful link management platform."
 msgstr "Tự do phân phối lại các bản sao để những người khác có thể hưởng lợi từ cùng một nền tảng quản lý liên kết mạnh mẽ."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:378
+#: ui/pages/dashboard/about/AboutPage.tsx:366
 msgid "Improve"
 msgstr "Cải tiến"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:379
+#: ui/pages/dashboard/about/AboutPage.tsx:367
 msgid "Enhance PeakURL and share your improvements, contributing back to the open-source community."
 msgstr "Nâng cao PeakURL và chia sẻ các cải tiến của bạn, đóng góp trở lại cho cộng đồng mã nguồn mở."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:422
-msgid "PeakURL gives you a focused workspace for publishing short links, measuring engagement, and running branded link infrastructure on your own stack."
-msgstr "PeakURL cung cấp cho bạn một không gian làm việc tập trung để xuất bản các liên kết rút gọn, đo lường mức độ tương tác và vận hành cơ sở hạ tầng liên kết thương hiệu trên hệ thống của riêng bạn."
+#: ui/pages/dashboard/about/AboutPage.tsx:456
+msgid "Languages"
+msgstr "Ngôn ngữ"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:452
-msgid "View on GitHub"
-msgstr "Xem trên GitHub"
+#: ui/pages/dashboard/about/AboutPage.tsx:464
+msgid "Global locales & native RTL"
+msgstr "Ngôn ngữ toàn cầu & RTL bản địa"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:489
-msgid "Everything you need to publish short links, review traffic, and operate the service from one focused dashboard."
-msgstr "Mọi thứ bạn cần để xuất bản các liên kết rút gọn, xem lại lưu lượng truy cập và vận hành dịch vụ từ một bảng điều khiển tập trung duy nhất."
+#: ui/pages/dashboard/about/AboutPage.tsx:471
+msgid "Subsystems"
+msgstr "Hệ thống con"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:493
+#: ui/pages/dashboard/about/AboutPage.tsx:479
+msgid "Core modular capabilities"
+msgstr "Năng lực mô-đun cốt lõi"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:494
+msgid "Full data sovereignty"
+msgstr "Chủ quyền dữ liệu tuyệt đối"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:501
+msgid "Open Source"
+msgstr "Mã nguồn mở"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:509
+msgid "Inspectable and free forever"
+msgstr "Minh bạch và miễn phí mãi mãi"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:515
+msgid "Everything you need to publish short links, measure engagement, protect your data, and operate the service with complete control."
+msgstr "Mọi thứ bạn cần để phát hành liên kết ngắn, đo lường tương tác, bảo vệ dữ liệu và vận hành hệ thống với quyền kiểm soát hoàn toàn."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:519
+#: ui/pages/dashboard/about/AboutPage.tsx:645
 msgid "What's Inside"
 msgstr "Nội dung bên trong"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:508
-msgid "PeakURL is built to stay understandable in day-to-day use and dependable over time."
-msgstr "PeakURL được xây dựng để duy trì sự dễ hiểu trong sử dụng hàng ngày và độ tin cậy lâu dài."
+#: ui/pages/dashboard/about/AboutPage.tsx:533
+msgid "PeakURL is built to stay understandable in day-to-day use, dependable under load, and open for long-term ownership."
+msgstr "PeakURL được thiết kế để dễ sử dụng hàng ngày, vận hành bền bỉ dưới tải trọng cao và minh bạch cho việc sở hữu lâu dài."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:512
+#: ui/pages/dashboard/about/AboutPage.tsx:537
 msgid "Product Principles"
 msgstr "Nguyên tắc sản phẩm"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:521
+#: ui/pages/dashboard/about/AboutPage.tsx:546
 msgid "Clear By Default"
 msgstr "Rõ ràng theo mặc định"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:524
-msgid "The dashboard should stay direct and readable so routine work like publishing links, reviewing traffic, and managing users does not feel heavy."
-msgstr "Bảng điều khiển phải luôn trực quan và dễ đọc để các công việc thường nhật như xuất bản liên kết, xem lại lưu lượng truy cập và quản lý người dùng không bị nặng nề."
+#: ui/pages/dashboard/about/AboutPage.tsx:549
+msgid "The dashboard stays direct and readable so routine operations like publishing links, reviewing traffic, and managing users remain effortless."
+msgstr "Bảng điều khiển trực quan và rõ ràng, giúp các tác vụ định kỳ như tạo liên kết, xem lưu lượng và quản lý người dùng diễn ra nhẹ nhàng."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:534
+#: ui/pages/dashboard/about/AboutPage.tsx:559
 msgid "Portable To Run"
 msgstr "Dễ dàng triển khai"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:537
-msgid "The application should install cleanly on common PHP and MySQL hosting without depending on a managed SaaS control plane."
-msgstr "Ứng dụng có thể cài đặt dễ dàng trên các máy chủ PHP và MySQL thông thường mà không phụ thuộc vào hệ thống quản lý SaaS tập trung."
+#: ui/pages/dashboard/about/AboutPage.tsx:562
+msgid "The application installs cleanly on standard PHP and MySQL hosting with native PDO prepared statements and zero external control plane dependencies."
+msgstr "Ứng dụng cài đặt trơn tru trên mọi dịch vụ lưu trữ PHP và MySQL tiêu chuẩn với câu lệnh PDO chuẩn bị sẵn, không phụ thuộc bên thứ ba."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:547
+#: ui/pages/dashboard/about/AboutPage.tsx:572
 msgid "Open And Inspectable"
 msgstr "Mở và có thể kiểm tra"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:550
-msgid "The codebase stays auditable and adaptable so operators can understand what they run, extend it carefully, and keep long-term control."
-msgstr "Mã nguồn luôn có thể kiểm tra và thích ứng để người vận hành hiểu rõ những gì họ đang chạy, mở rộng một cách cẩn thận và duy trì quyền kiểm soát lâu dài."
+#: ui/pages/dashboard/about/AboutPage.tsx:575
+msgid "The entire codebase is auditable, free of telemetry, and extensible via WordPress-style hooks so operators always maintain full data custody."
+msgstr "Toàn bộ mã nguồn có thể kiểm tra, không chứa mã theo dõi từ xa và dễ dàng mở rộng, đảm bảo bạn luôn làm chủ dữ liệu của mình."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:563
-msgid "PeakURL is released under the MIT License so it can stay practical to adopt, inspect, modify, and distribute."
-msgstr "PeakURL được phát hành theo Giấy phép MIT để luôn thuận tiện trong việc áp dụng, kiểm tra, sửa đổi và phân phối."
+#: ui/pages/dashboard/about/AboutPage.tsx:585
+msgid "PeakURL is released under the MIT License so anyone can adopt, study, adapt, and distribute it freely."
+msgstr "PeakURL được phát hành theo giấy phép MIT, cho phép mọi người tự do triển khai, nghiên cứu, sửa đổi và phân phối lại."
 
-#: ui/pages/dashboard/about/AboutPage.tsx:567
+#: ui/pages/dashboard/about/AboutPage.tsx:589
 msgid "Open Source Terms"
 msgstr "Điều khoản mã nguồn mở"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:581
+#: ui/pages/dashboard/about/AboutPage.tsx:598
 msgid "Freedom to"
 msgstr "Tự do"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:604
-msgid "Shorten, track, and own every link."
-msgstr "Rút gọn, theo dõi và làm chủ mọi liên kết."
+#: ui/pages/dashboard/about/AboutPage.tsx:650
+msgid "Principles & License"
+msgstr "Nguyên tắc và Giấy phép"
 
-#: ui/pages/dashboard/about/AboutPage.tsx:631
-msgid "Release Notes"
-msgstr "Ghi chú phát hành"
+#: ui/pages/dashboard/about/AboutPage.tsx:655
+msgid "Wall of Love"
+msgstr "Bức tường tri ân"
 
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:26
+#: ui/pages/dashboard/about/AboutPage.tsx:675
+msgid "Reinstall complete"
+msgstr "Cài đặt lại hoàn tất"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:676
+msgid "Update complete"
+msgstr "Cập nhật hoàn tất"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:683
+msgid "PeakURL was successfully reinstalled"
+msgstr "PeakURL đã được cài đặt lại thành công"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:684
+msgid "PeakURL was successfully updated"
+msgstr "PeakURL đã được cập nhật thành công"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:689
+msgid "The core application runtime and static assets have been cleanly refreshed. Your database records, short links, and configuration remain completely intact."
+msgstr "Các tệp thực thi cốt lõi và tài nguyên tĩnh đã được làm mới sạch sẽ. Dữ liệu, liên kết và cấu hình của bạn được giữ nguyên vẹn tuyệt đối."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:692
+msgid "Your installation has been upgraded to the latest release. Review the release highlights, subsystem performance updates, and technical changes below."
+msgstr "Hệ thống của bạn đã được nâng cấp lên phiên bản mới nhất. Xem lại các điểm nổi bật, tối ưu hóa hiệu năng và thay đổi kỹ thuật bên dưới."
+
+#: ui/pages/dashboard/about/AboutPage.tsx:703
+#: ui/pages/NotFoundPage.tsx:58
+msgid "Go to Dashboard"
+msgstr "Đi đến Bảng điều khiển"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:719
+#: ui/pages/dashboard/about/AboutPage.tsx:865
+msgid "View on GitHub"
+msgstr "Xem trên GitHub"
+
+#: ui/pages/dashboard/about/AboutPage.tsx:835
+msgid "PeakURL gives you a focused workspace for publishing short links, measuring engagement, and running branded link infrastructure on your own stack."
+msgstr "PeakURL cung cấp cho bạn một không gian làm việc tập trung để xuất bản các liên kết rút gọn, đo lường mức độ tương tác và vận hành cơ sở hạ tầng liên kết thương hiệu trên hệ thống của riêng bạn."
+
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:31
 msgid "No recent activity"
 msgstr "Không có hoạt động gần đây"
 
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:27
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:32
 msgid "View All Activity"
 msgstr "Xem tất cả hoạt động"
 
-#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:187
+#: ui/pages/dashboard/_components/ActivityFeed/ActivityFeed.tsx:205
 msgid "By %1$s • %2$s"
 msgstr "Bởi %1$s • %2$s"
 
@@ -6604,7 +6762,7 @@ msgid "Compared with %1$s to %2$s."
 msgstr "So với %1$s đến %2$s."
 
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:119
-#: ui/pages/dashboard/links/LinksPage.tsx:420
+#: ui/pages/dashboard/links/LinksPage.tsx:433
 msgid "Active Links"
 msgstr "Liên kết đang hoạt động"
 
@@ -6753,38 +6911,50 @@ msgid "Sort: Date Created"
 msgstr "Sắp xếp: Ngày tạo"
 
 #: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:44
+msgid "Sort: Date Modified"
+msgstr "Sắp xếp: Ngày sửa đổi"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:45
 msgid "Sort: Most Clicks"
 msgstr "Sắp xếp: Nhiều lượt nhấp nhất"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:45
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:46
+msgid "Sort: Unique Visitors"
+msgstr "Sắp xếp: Khách truy cập duy nhất"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:47
 msgid "Sort: Alias"
 msgstr "Sắp xếp: Bí danh"
 
 #: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:48
+msgid "Sort: Title"
+msgstr "Sắp xếp: Tiêu đề"
+
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:51
 msgid "Descending"
 msgstr "Giảm dần"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:49
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:52
 msgid "Ascending"
 msgstr "Tăng dần"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:60
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:63
 msgid "Total Links:"
 msgstr "Tổng số liên kết:"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:70
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:73
 msgid "Total Clicks:"
 msgstr "Tổng số lượt nhấp:"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:92
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:95
 msgid "Filter links by status"
 msgstr "Lọc liên kết theo trạng thái"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:102
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:105
 msgid "Sort links"
 msgstr "Sắp xếp liên kết"
 
-#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:111
+#: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:114
 msgid "Sort order"
 msgstr "Thứ tự sắp xếp"
 
@@ -6792,81 +6962,93 @@ msgstr "Thứ tự sắp xếp"
 msgid "Showing %1$s–%2$s of %3$s links"
 msgstr "Hiển thị %1$s–%2$s trên tổng số %3$s liên kết"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:26
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:27
 msgid "Deselect all links"
 msgstr "Bỏ chọn tất cả liên kết"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:43
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:44
 msgid "Restore selected"
 msgstr "Khôi phục mục đã chọn"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:52
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:53
 msgid "Delete permanently"
 msgstr "Xóa vĩnh viễn"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:61
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:62
 msgid "Empty trash"
 msgstr "Dọn sạch thùng rác"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:103
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:104
 msgid "Link"
 msgstr "Liên kết"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:104
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:105
 msgid "Title"
 msgstr "Tiêu đề"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:105
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:106
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:117
 msgid "Destination"
 msgstr "Đích đến"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:109
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:111
+msgid "Modified"
+msgstr "Đã sửa đổi"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:111
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:35
 #: ui/pages/dashboard/users/UsersPage.tsx:685
 msgid "Created"
 msgstr "Đã tạo"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:36
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:41
 msgid "Trashed"
 msgstr "Trong thùng rác"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:42
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:150
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:47
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:155
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:58
 msgid "Expired"
 msgstr "Đã hết hạn"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:97
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:102
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:60
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:104
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:143
 msgid "Copy"
 msgstr "Sao chép"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:131
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:136
 msgid "Protected"
 msgstr "Được bảo vệ"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:151
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:156
 msgid "Expires"
 msgstr "Hết hạn"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:209
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:207
+msgid "Created: %s"
+msgstr "Ngày tạo: %s"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:211
+msgid "Modified: %s"
+msgstr "Ngày sửa: %s"
+
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:244
 msgid "Restore Link"
 msgstr "Khôi phục liên kết"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:216
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:251
 #: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:172
 msgid "Delete Permanently"
 msgstr "Xóa vĩnh viễn"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:226
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:261
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:77
 msgid "QR Code"
 msgstr "Mã QR"
 
-#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:240
+#: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:275
 msgid "Edit"
 msgstr "Chỉnh sửa"
 
@@ -6878,37 +7060,37 @@ msgstr "Chưa có liên kết"
 msgid "Create your first shortened link to get started"
 msgstr "Tạo liên kết rút gọn đầu tiên của bạn để bắt đầu"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:158
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:159
 msgid "Links deleted"
 msgstr "Đã xóa liên kết"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:159
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:160
 msgid "All links have been removed."
 msgstr "Tất cả các liên kết đã bị xóa."
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:163
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:164
 msgid "Unable to delete links"
 msgstr "Không thể xóa liên kết"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:164
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:165
 msgid "Failed to delete all links."
 msgstr "Xóa tất cả liên kết thất bại."
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:257
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:261
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:260
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:264
 msgid "Delete all links"
 msgstr "Xóa tất cả liên kết"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:258
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:261
 msgid "Are you sure you want to delete all links? This will move active links to trash."
 msgstr "Bạn có chắc chắn muốn xóa tất cả liên kết không? Thao tác này sẽ chuyển các liên kết đang hoạt động vào thùng rác."
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:269
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:273
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:272
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:276
 msgid "Empty Trash"
 msgstr "Dọn sạch thùng rác"
 
-#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:270
+#: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:273
 msgid "Are you sure you want to permanently delete all links in the trash? This action cannot be undone."
 msgstr "Bạn có chắc chắn muốn xóa vĩnh viễn tất cả liên kết trong thùng rác không? Hành động này không thể hoàn tác."
 
@@ -7340,10 +7522,6 @@ msgstr "Video"
 msgid "News & Content"
 msgstr "Tin tức & Nội dung"
 
-#: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:98
-msgid "Developer"
-msgstr "Nhà phát triển"
-
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:100
 msgid "Email Marketing"
 msgstr "Tiếp thị qua email"
@@ -7647,55 +7825,55 @@ msgstr "Làm mới các liên kết"
 msgid "Manage and track your shortened URLs"
 msgstr "Quản lý và theo dõi các URL rút gọn của bạn"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:239
+#: ui/pages/dashboard/links/LinksPage.tsx:252
 msgid "The link has been restored to active status."
 msgstr "Liên kết đã được khôi phục về trạng thái hoạt động."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:244
+#: ui/pages/dashboard/links/LinksPage.tsx:257
 msgid "Failed to restore link."
 msgstr "Không thể khôi phục liên kết."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:253
+#: ui/pages/dashboard/links/LinksPage.tsx:266
 msgid "Links restored"
 msgstr "Các liên kết đã được khôi phục"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:254
+#: ui/pages/dashboard/links/LinksPage.tsx:267
 msgid "Selected links have been restored to active status."
 msgstr "Các liên kết đã chọn đã được khôi phục về trạng thái hoạt động."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:258
+#: ui/pages/dashboard/links/LinksPage.tsx:271
 msgid "Unable to restore links"
 msgstr "Không thể khôi phục các liên kết"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:259
+#: ui/pages/dashboard/links/LinksPage.tsx:272
 msgid "Failed to restore selected links."
 msgstr "Không thể khôi phục các liên kết đã chọn."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:268
+#: ui/pages/dashboard/links/LinksPage.tsx:281
 msgid "Trash emptied"
 msgstr "Thùng rác đã được dọn sạch"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:269
+#: ui/pages/dashboard/links/LinksPage.tsx:282
 msgid "All trashed links have been permanently deleted."
 msgstr "Tất cả liên kết trong thùng rác đã bị xóa vĩnh viễn."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:273
+#: ui/pages/dashboard/links/LinksPage.tsx:286
 msgid "Unable to empty trash"
 msgstr "Không thể dọn sạch thùng rác"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:274
+#: ui/pages/dashboard/links/LinksPage.tsx:287
 msgid "Failed to empty trash."
 msgstr "Không thể dọn sạch thùng rác."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:406
+#: ui/pages/dashboard/links/LinksPage.tsx:419
 msgid "Total Links"
 msgstr "Tổng số liên kết"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:434
+#: ui/pages/dashboard/links/LinksPage.tsx:447
 msgid "Items in the trash are retained indefinitely until emptied."
 msgstr "Các mục trong thùng rác được giữ vô thời hạn cho đến khi được dọn sạch."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:438
+#: ui/pages/dashboard/links/LinksPage.tsx:451
 msgid "Items in the trash will be automatically deleted after %d days."
 msgstr "Các mục trong thùng rác sẽ tự động bị xóa sau %d ngày."
 
@@ -7874,10 +8052,6 @@ msgstr "Trang quản trị bạn đang tìm kiếm không tồn tại. Trang có
 #: ui/pages/NotFoundPage.tsx:50
 msgid "Go Back"
 msgstr "Quay lại"
-
-#: ui/pages/NotFoundPage.tsx:58
-msgid "Go to Dashboard"
-msgstr "Đi đến Bảng điều khiển"
 
 #: ui/pages/NotFoundPage.tsx:64
 msgid "Popular Destinations"

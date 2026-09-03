@@ -3,6 +3,7 @@ import type {
 	LinkRecord,
 	LinksCustomDateRange,
 	LinksDateRange,
+	LinksSortBy,
 } from "../types";
 
 /**
@@ -12,6 +13,7 @@ export interface LinksTableProps {
 	links: LinkRecord[];
 	statsShortId: string | null;
 	statsLink: LinkRecord | null;
+	sortBy?: LinksSortBy;
 	clickRange?: LinksDateRange;
 	customClickRange?: LinksCustomDateRange;
 	isTrashTab?: boolean;
@@ -37,6 +39,7 @@ export interface LinkRowProps {
 	onQRCode: (link: LinkRecord) => void;
 	formatNumber: (value: number) => string;
 	isTrashTab?: boolean;
+	sortBy?: LinksSortBy;
 }
 
 /**
@@ -51,4 +54,5 @@ export interface TableHeaderRowProps {
 	onEmptyTrash?: () => void;
 	isTrashTab?: boolean;
 	trashedCount?: number;
+	sortBy?: LinksSortBy;
 }

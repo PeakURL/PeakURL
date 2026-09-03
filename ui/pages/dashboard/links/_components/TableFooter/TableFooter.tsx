@@ -41,8 +41,11 @@ const TableFooter = ({
 	];
 	const sortOptions: SelectOption<LinksSortBy>[] = [
 		{ value: "createdAt", label: __("Sort: Date Created") },
+		{ value: "updatedAt", label: __("Sort: Date Modified") },
 		{ value: "clicks", label: __("Sort: Most Clicks") },
+		{ value: "uniqueClicks", label: __("Sort: Unique Visitors") },
 		{ value: "alias", label: __("Sort: Alias") },
+		{ value: "title", label: __("Sort: Title") },
 	];
 	const sortOrderOptions: SelectOption<LinksSortOrder>[] = [
 		{ value: "desc", label: __("Descending") },

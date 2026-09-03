@@ -27,6 +27,7 @@ const LinksTable = ({
 	links,
 	statsShortId,
 	statsLink,
+	sortBy,
 	clickRange,
 	customClickRange,
 	isTrashTab = false,
@@ -192,6 +193,7 @@ const LinksTable = ({
 							}
 							isTrashTab={isTrashTab}
 							trashedCount={trashedCount}
+							sortBy={sortBy}
 						/>
 					</thead>
 					<tbody className="links-table-body">
@@ -210,6 +212,7 @@ const LinksTable = ({
 								onQRCode={handleQRCode}
 								formatNumber={formatNumber}
 								isTrashTab={isTrashTab}
+								sortBy={sortBy}
 							/>
 						))}
 					</tbody>

@@ -2264,6 +2264,7 @@ trait LinksTrait {
 			'uniqueClicks' => 'unique_click_count',
 			'status'       => 'u.status',
 			'shortCode'    => 'u.short_code',
+			'alias'        => 'u.alias',
 		);
 	}
 }

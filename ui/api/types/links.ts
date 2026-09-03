@@ -6,7 +6,8 @@ export type LinkStatus = "active" | "inactive" | "expired" | "trashed";
 /**
  * Link-list sort fields accepted by the API.
  */
-export type LinksSortBy = "createdAt" | "clicks" | "alias";
+export type LinksSortBy =
+	"createdAt" | "updatedAt" | "clicks" | "uniqueClicks" | "alias" | "title";
 
 /**
  * Link-list sort directions accepted by the API.
@@ -34,6 +35,7 @@ export interface LinkRecord {
 	clicks?: number | null;
 	uniqueClicks?: number | null;
 	createdAt?: string | null;
+	updatedAt?: string | null;
 	expiresAt?: string | null;
 	hasPassword?: boolean;
 }

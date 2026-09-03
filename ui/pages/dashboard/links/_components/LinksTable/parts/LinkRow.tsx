@@ -12,8 +12,12 @@ import {
 } from "lucide-react";
 import { isPast } from "date-fns";
 
-import { __ } from "@/i18n";
-import { formatRelativeTime, getLinkDisplayTitle } from "@/utils";
+import { __, sprintf } from "@/i18n";
+import {
+	formatLocalizedDateTime,
+	formatRelativeTime,
+	getLinkDisplayTitle,
+} from "@/utils";
 
 import type { LinkRowProps } from "../types";
 
@@ -30,6 +34,7 @@ function LinkRow({
 	onQRCode,
 	formatNumber,
 	isTrashTab = false,
+	sortBy,
 }: LinkRowProps) {
 	const isTrashed = isTrashTab || "trashed" === link.status;
 	const statusLabel = isTrashed
@@ -180,14 +185,44 @@ function LinkRow({
 				</div>
 			</td>
 			<td className="links-row-cell">
-				<div className="links-row-created">
-					{link.createdAt
-						? formatRelativeTime(new Date(link.createdAt), {
+				{(() => {
+					const isSortByModified = "updatedAt" === sortBy;
+					const activeDateString = isSortByModified
+						? link.updatedAt || link.createdAt
+						: link.createdAt;
+					const displayDateText = activeDateString
+						? formatRelativeTime(new Date(activeDateString), {
 								style: "compact",
 								numeric: "always",
 							})
-						: __("Unknown")}
-				</div>
+						: __("Unknown");
+					const createdFormatted = link.createdAt
+						? formatLocalizedDateTime(link.createdAt)
+						: "";
+					const updatedFormatted = link.updatedAt
+						? formatLocalizedDateTime(link.updatedAt)
+						: "";
+					const dateTooltip = [
+						createdFormatted
+							? sprintf(__("Created: %s"), createdFormatted)
+							: "",
+						updatedFormatted &&
+						updatedFormatted !== createdFormatted
+							? sprintf(__("Modified: %s"), updatedFormatted)
+							: "",
+					]
+						.filter(Boolean)
+						.join("\n");
+
+					return (
+						<div
+							className="links-row-created"
+							title={dateTooltip || undefined}
+						>
+							{displayDateText}
+						</div>
+					);
+				})()}
 				<div className="links-row-status">
 					<span
 						className={`links-row-status-dot ${statusDotClass}`}

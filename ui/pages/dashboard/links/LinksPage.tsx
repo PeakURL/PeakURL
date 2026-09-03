@@ -79,12 +79,25 @@ function LinksPage() {
 	const notifications = useNotification();
 
 	// State for Sorting, Status Filter and Pagination
-	const [sortBy, setSortBy] = useState<LinksSortBy>(() =>
-		typeof window !== "undefined"
-			? (localStorage.getItem(LS_KEYS.sortBy) as LinksSortBy) ||
-				"createdAt"
-			: "createdAt"
-	);
+	const [sortBy, setSortBy] = useState<LinksSortBy>(() => {
+		if (typeof window === "undefined") {
+			return "createdAt";
+		}
+		const stored = localStorage.getItem(
+			LS_KEYS.sortBy
+		) as LinksSortBy | null;
+		const validSortOptions: LinksSortBy[] = [
+			"createdAt",
+			"updatedAt",
+			"clicks",
+			"uniqueClicks",
+			"alias",
+			"title",
+		];
+		return stored && validSortOptions.includes(stored)
+			? stored
+			: "createdAt";
+	});
 	const [sortOrder, setSortOrder] = useState<LinksSortOrder>(() =>
 		typeof window !== "undefined"
 			? (localStorage.getItem(LS_KEYS.sortOrder) as LinksSortOrder) ||
@@ -449,6 +462,7 @@ function LinksPage() {
 				links={paginatedLinks}
 				statsShortId={statsShortId}
 				statsLink={statsLink}
+				sortBy={sortBy}
 				clickRange={clickRange}
 				customClickRange={customClickRange}
 				isTrashTab={isTrashTab}

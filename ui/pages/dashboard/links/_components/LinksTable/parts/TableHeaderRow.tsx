@@ -12,6 +12,7 @@ function TableHeaderRow({
 	onEmptyTrash,
 	isTrashTab = false,
 	trashedCount = 0,
+	sortBy,
 }: TableHeaderRowProps) {
 	const hasSelection = selectedCount > 0;
 	if (hasSelection) {
@@ -106,7 +107,9 @@ function TableHeaderRow({
 			<th className="links-table-header-cell links-table-header-cell-performance">
 				{__("Performance")}
 			</th>
-			<th className="links-table-header-cell">{__("Created")}</th>
+			<th className="links-table-header-cell">
+				{"updatedAt" === sortBy ? __("Modified") : __("Created")}
+			</th>
 			<th className="links-table-header-cell links-table-header-cell-actions">
 				{__("Actions")}
 			</th>

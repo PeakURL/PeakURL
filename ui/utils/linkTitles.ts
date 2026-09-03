@@ -1,3 +1,23 @@
+const NAMED_ENTITIES: Record<string, string> = {
+	"&amp;": "&",
+	"&lt;": "<",
+	"&gt;": ">",
+	"&quot;": '"',
+	"&#039;": "'",
+	"&#39;": "'",
+	"&apos;": "'",
+	"&nbsp;": " ",
+	"&hellip;": "…",
+	"&mdash;": "—",
+	"&ndash;": "–",
+	"&ldquo;": '"',
+	"&rdquo;": '"',
+	"&lsquo;": "'",
+	"&rsquo;": "'",
+};
+
+const HTML_ENTITY_REGEX = /&(?:[a-zA-Z]+|#\d+|#[xX][0-9a-fA-F]+);/g;
+
 /**
  * Decode HTML entities in a string.
  *
@@ -21,30 +41,28 @@ export const decodeHtmlEntities = (value: unknown): string => {
 			textarea.innerHTML = value;
 			return textarea.value;
 		} catch {
-			/* Fall back to regex replacement when DOM parser is unavailable. */
+			/* Fall back to single-pass regex replacement when DOM parser is unavailable. */
 		}
 	}
 
-	return value
-		.replace(/&amp;/g, "&")
-		.replace(/&lt;/g, "<")
-		.replace(/&gt;/g, ">")
-		.replace(/&quot;/g, '"')
-		.replace(/&#039;|&#39;|&apos;/g, "'")
-		.replace(/&nbsp;/g, " ")
-		.replace(/&hellip;/g, "…")
-		.replace(/&mdash;/g, "—")
-		.replace(/&ndash;/g, "–")
-		.replace(/&ldquo;|&rdquo;/g, '"')
-		.replace(/&lsquo;|&rsquo;/g, "'")
-		.replace(/&#(\d+);/g, (_, dec) => {
-			const code = parseInt(dec, 10);
-			return Number.isNaN(code) ? _ : String.fromCharCode(code);
-		})
-		.replace(/&#x([0-9a-fA-F]+);/g, (_, hex) => {
-			const code = parseInt(hex, 16);
-			return Number.isNaN(code) ? _ : String.fromCharCode(code);
-		});
+	return value.replace(HTML_ENTITY_REGEX, (match) => {
+		const named = NAMED_ENTITIES[match];
+		if (undefined !== named) {
+			return named;
+		}
+
+		if (match.startsWith("&#x") || match.startsWith("&#X")) {
+			const code = parseInt(match.slice(3, -1), 16);
+			return Number.isNaN(code) ? match : String.fromCharCode(code);
+		}
+
+		if (match.startsWith("&#")) {
+			const code = parseInt(match.slice(2, -1), 10);
+			return Number.isNaN(code) ? match : String.fromCharCode(code);
+		}
+
+		return match;
+	});
 };
 
 /**

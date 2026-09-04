@@ -350,7 +350,7 @@ If you use PeakURL in production, client work, or internal tooling, sponsorship 
 
 A huge thank you to everyone who has contributed to keeping PeakURL running.
 
-#### Creator & Maintainer
+#### Founder & Maintainer
 
 - **Abd Ur Rehman** - [Independent Solo Maintainer](https://go.peakurl.org/author)
 
@@ -361,6 +361,7 @@ Help keep PeakURL actively maintained and free for everyone. [Become a sponsor](
 #### Community Supporters
 
 - [Abdellah Chelli](https://github.com/sneetsher)
+- [Sapperlott](https://github.com/Sapperloettchen)
 
 [Buy Me a Coffee](https://buymeacoffee.com/PeakURL) to join the community supporters.
 

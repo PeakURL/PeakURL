@@ -47,6 +47,15 @@ const communitySupporters: Sponsor[] = [
 			},
 		],
 	},
+	{
+		name: "Sapperlott",
+		socials: [
+			{
+				platform: "github",
+				url: "https://github.com/Sapperloettchen",
+			},
+		],
+	},
 ];
 
 export const Sponsors = () => {
@@ -63,19 +72,19 @@ export const Sponsors = () => {
 				</p>
 			</div>
 
-			{/* Creator & Maintainer */}
-			<div className="about-page-sponsor-creator">
-				<div className="about-page-sponsor-creator-info">
-					<h3 className="about-page-sponsor-creator-title">
-						{__("Creator & Maintainer")}
+			{/* Founder & Maintainer */}
+			<div className="about-page-sponsor-founder">
+				<div className="about-page-sponsor-founder-info">
+					<h3 className="about-page-sponsor-founder-title">
+						{__("Founder & Maintainer")}
 					</h3>
-					<p className="about-page-sponsor-creator-desc">
+					<p className="about-page-sponsor-founder-desc">
 						{__(
-							"PeakURL is a solo project. All development, hosting, and infrastructure costs are currently self-funded by the creator. If PeakURL brings value to your workflow, consider pitching in!"
+							"PeakURL is a solo project. All development, hosting, and infrastructure costs are currently self-funded by the founder. If PeakURL brings value to your workflow, consider pitching in!"
 						)}
 					</p>
 				</div>
-				<div className="about-page-sponsor-creator-profile">
+				<div className="about-page-sponsor-founder-profile">
 					<img
 						src="https://static.peakurl.org/assets/sponsors/author.svg"
 						alt="Abd Ur Rehman"
@@ -83,14 +92,14 @@ export const Sponsors = () => {
 						width={72}
 						height={72}
 					/>
-					<div className="about-page-sponsor-creator-details">
-						<p className="about-page-sponsor-creator-name">
+					<div className="about-page-sponsor-founder-details">
+						<p className="about-page-sponsor-founder-name">
 							Abd Ur Rehman
 						</p>
-						<p className="about-page-sponsor-creator-badge">
+						<p className="about-page-sponsor-founder-badge">
 							{__("Independent Solo Maintainer")}
 						</p>
-						<div className="about-page-sponsor-creator-socials">
+						<div className="about-page-sponsor-founder-socials">
 							<a
 								href="https://go.peakurl.org/author"
 								target="_blank"

@@ -1136,52 +1136,64 @@ trait AnalyticsSupportTrait {
 			return;
 		}
 
-		$referrer     = Visitor::parse_referrer(
+		$referrer      = Visitor::parse_referrer(
 			$request->get_header( 'Referer', '' ),
 		);
-		$metadata     = Visitor::parse_user_agent(
+		$metadata      = Visitor::parse_user_agent(
 			(string) ( $user_agent ?? '' ),
 		);
-		$location     = $this->geoip_service->lookup_location(
+		$location      = $this->geoip_service->lookup_location(
 			(string) ( $ip_address ?? '' ),
 		);
-		$visitor_hash = Visitor::hash_request( $request );
-
-		$this->db->insert(
-			'clicks',
-			array(
-				'id'                => $this->generate_random_id(),
-				'url_id'            => (string) $url['id'],
-				'clicked_at'        => $now,
-				'visitor_hash'      => $visitor_hash,
-				'ip_address'        => $ip_address,
-				'country_code'      => $location['country_code'],
-				'country_name'      => $location['country_name'],
-				'city_name'         => $location['city_name'],
-				'device'            => $metadata['device'],
-				'browser'           => $metadata['browser'],
-				'operating_system'  => $metadata['os'],
-				'referrer_name'     => $referrer['name'],
-				'referrer_domain'   => $referrer['domain'],
-				'referrer_category' => $referrer['category'],
-				'utm_source'        => $this->nullable_string(
-					$url['utm_source'] ?? null,
-				),
-				'utm_medium'        => $this->nullable_string(
-					$url['utm_medium'] ?? null,
-				),
-				'utm_campaign'      => $this->nullable_string(
-					$url['utm_campaign'] ?? null,
-				),
-				'utm_term'          => $this->nullable_string(
-					$url['utm_term'] ?? null,
-				),
-				'utm_content'       => $this->nullable_string(
-					$url['utm_content'] ?? null,
-				),
-				'user_agent'        => $user_agent,
+		$visitor_hash  = Visitor::hash_request( $request );
+		$click_id      = $this->generate_random_id();
+		$click_payload = array(
+			'id'                => $click_id,
+			'url_id'            => (string) $url['id'],
+			'clicked_at'        => $now,
+			'visitor_hash'      => $visitor_hash,
+			'ip_address'        => $ip_address,
+			'country_code'      => $location['country_code'],
+			'country_name'      => $location['country_name'],
+			'city_name'         => $location['city_name'],
+			'device'            => $metadata['device'],
+			'browser'           => $metadata['browser'],
+			'operating_system'  => $metadata['os'],
+			'referrer_name'     => $referrer['name'],
+			'referrer_domain'   => $referrer['domain'],
+			'referrer_category' => $referrer['category'],
+			'utm_source'        => $this->nullable_string(
+				$url['utm_source'] ?? null,
 			),
+			'utm_medium'        => $this->nullable_string(
+				$url['utm_medium'] ?? null,
+			),
+			'utm_campaign'      => $this->nullable_string(
+				$url['utm_campaign'] ?? null,
+			),
+			'utm_term'          => $this->nullable_string(
+				$url['utm_term'] ?? null,
+			),
+			'utm_content'       => $this->nullable_string(
+				$url['utm_content'] ?? null,
+			),
+			'user_agent'        => $user_agent,
 		);
+
+		$this->db->insert( 'clicks', $click_payload );
+
+		/**
+		 * Fires after a short link click has been recorded.
+		 *
+		 * @since 1.6.1
+		 *
+		 * @param array<string, mixed> $url           URL database record.
+		 * @param array<string, mixed> $click_payload Recorded click attributes.
+		 * @param Request              $request       Incoming HTTP request.
+		 */
+		\do_action( 'link_clicked', $url, $click_payload, $request );
+
+		$this->dispatch_link_event( 'link.clicked', $url, null, null, $click_payload );
 	}
 
 	/**

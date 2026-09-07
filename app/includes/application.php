@@ -457,6 +457,8 @@ class Application {
 			array(
 				array( 'get', '/webhooks', array( $webhooks, 'index' ) ),
 				array( 'post', '/webhooks', array( $webhooks, 'create' ) ),
+				array( array( 'post', 'put' ), '/webhooks/{id}', array( $webhooks, 'update' ) ),
+				array( 'post', '/webhooks/{id}/test', array( $webhooks, 'test' ) ),
 				array( 'delete', '/webhooks/{id}', array( $webhooks, 'delete' ) ),
 			)
 		);

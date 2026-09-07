@@ -502,6 +502,8 @@ trait LinksTrait {
 		 */
 		\do_action( 'link_created', $url, $request, $user );
 
+		$this->dispatch_link_event( 'link.created', $url, $user );
+
 		return $url;
 	}
 
@@ -1310,6 +1312,8 @@ trait LinksTrait {
 		 */
 		\do_action( 'link_updated', $url, $existing, $request, $user );
 
+		$this->dispatch_link_event( 'link.updated', $url, $user, $existing );
+
 		return $url;
 	}
 
@@ -1413,6 +1417,8 @@ trait LinksTrait {
 				 * @since 1.6.0
 				 */
 				\do_action( 'link_trashed', $row, $request, $user );
+
+				$this->dispatch_link_event( 'link.deleted', $row, $user );
 			}
 
 			return $updated;
@@ -1490,6 +1496,8 @@ trait LinksTrait {
 			 * @since 1.2.2
 			 */
 			\do_action( 'link_deleted', $row, $request, $user );
+
+			$this->dispatch_link_event( 'link.deleted', $row, $user );
 		}
 
 		return $deleted;
@@ -1683,6 +1691,8 @@ trait LinksTrait {
 				 * @since 1.6.0
 				 */
 				\do_action( 'link_trashed', $row, $request, $user );
+
+				$this->dispatch_link_event( 'link.deleted', $row, $user );
 			}
 
 			return count( $trashed_ids );
@@ -1744,6 +1754,8 @@ trait LinksTrait {
 				 * @since 1.2.2
 				 */
 				\do_action( 'link_deleted', $deleted_row, $request, $user );
+
+				$this->dispatch_link_event( 'link.deleted', $deleted_row, $user );
 			}
 
 			return $deleted_count;

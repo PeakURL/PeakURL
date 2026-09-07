@@ -64,6 +64,43 @@ class WebhooksController extends BaseController {
 	}
 
 	/**
+	 * Update an existing webhook.
+	 *
+	 * Accepts `url`, `events`, or `isActive` in the request body.
+	 *
+	 * @param Request $request Incoming HTTP request with route param `id`.
+	 * @return array<string, mixed> JSON envelope with the updated webhook.
+	 * @since 1.6.1
+	 */
+	public function update( Request $request ): array {
+		return $this->success_response(
+			$this->data_store->update_webhook(
+				$request,
+				$this->route_param( $request, 'id' ),
+				$request->get_body_params(),
+			),
+			__( 'Webhook updated.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Send a test ping to a registered webhook endpoint.
+	 *
+	 * @param Request $request Incoming HTTP request with route param `id`.
+	 * @return array<string, mixed> JSON envelope with test delivery results.
+	 * @since 1.6.1
+	 */
+	public function test( Request $request ): array {
+		return $this->success_response(
+			$this->data_store->test_webhook(
+				$request,
+				$this->route_param( $request, 'id' ),
+			),
+			__( 'Webhook test dispatched.', 'peakurl' ),
+		);
+	}
+
+	/**
 	 * Delete a webhook by ID.
 	 *
 	 * Returns 404 if the webhook does not exist or does not

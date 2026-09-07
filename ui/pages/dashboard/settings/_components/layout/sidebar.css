@@ -4,7 +4,18 @@
 	}
 
 	.settings-sidebar-panel {
-		@apply sticky top-6 rounded-lg border border-stroke bg-surface p-2;
+		@apply rounded-lg border border-stroke bg-surface p-2;
+	}
+
+	/* Sticky positioning only on desktop where the two-column grid is active */
+	@media (min-width: 1024px) {
+		.settings-sidebar-panel {
+			position: sticky;
+			/* 4rem dashboard header + 6.25rem settings header + 1.25rem grid padding-top */
+			top: 11.5rem;
+			max-height: calc(100vh - 11.5rem - 1.5rem);
+			overflow-y: auto;
+		}
 	}
 
 	.settings-sidebar-nav {

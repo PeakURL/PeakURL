@@ -1,6 +1,6 @@
 @layer components {
 	.settings-tab-page {
-		@apply flex h-full flex-col lg:col-span-3;
+		@apply flex flex-col lg:col-span-3;
 	}
 
 	.settings-tab-page-panel {

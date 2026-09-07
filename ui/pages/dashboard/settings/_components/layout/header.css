@@ -3,6 +3,20 @@
 		text-align: start;
 	}
 
+	/* Stick the page title below the dashboard header on desktop */
+	@media (min-width: 1024px) {
+		.settings-page-header {
+			position: sticky;
+			/* Sits flush below the 4rem sticky dashboard header */
+			top: 4rem;
+			z-index: 20;
+			/* Absorb main-area top padding so header stays flush from scroll = 0 */
+			padding-top: 1.5rem;
+			padding-bottom: 1.25rem;
+			@apply border-b border-stroke/60 bg-bg;
+		}
+	}
+
 	.settings-page-title {
 		@apply mb-1 text-2xl font-bold text-heading;
 	}

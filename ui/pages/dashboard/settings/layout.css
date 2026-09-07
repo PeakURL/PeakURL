@@ -1,9 +1,23 @@
 @layer components {
 	.settings-layout {
-		@apply flex flex-1 flex-col gap-5;
+		@apply flex flex-1 flex-col;
+	}
+
+	@media (min-width: 1024px) {
+		.settings-layout {
+			/* Compensate for main container top padding so sticky header starts flush with dashboard header */
+			margin-top: -1.5rem;
+		}
 	}
 
 	.settings-layout-grid {
 		@apply grid flex-1 grid-cols-1 gap-5 lg:grid-cols-4;
+	}
+
+	@media (min-width: 1024px) {
+		.settings-layout-grid {
+			/* Breathing room below the sticky header border */
+			padding-top: 1.25rem;
+		}
 	}
 }

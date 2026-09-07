@@ -44,11 +44,15 @@ html[dir="rtl"] .mr-auto {
 	margin-left: auto;
 }
 
-html,
+html {
+	height: 100%;
+	overflow-x: hidden;
+}
+
 body {
 	margin: 0;
 	padding: 0;
-	height: 100%;
+	min-height: 100%;
 	font-family:
 		system-ui,
 		-apple-system,
@@ -61,5 +65,4 @@ body {
 	transition:
 		background-color 0.3s ease,
 		color 0.3s ease;
-	overflow-x: hidden;
 }

@@ -151,12 +151,18 @@ jobs:
           SERVED_PACKAGE_CHECKSUM=""
           SERVED_LATEST_CHECKSUM=""
 
-          for attempt in $(seq 1 12); do
-            curl --fail --silent --show-error --location --header "Cache-Control: no-cache" "$PACKAGE_URL" --output "$TMP_PACKAGE"
-            curl --fail --silent --show-error --location --header "Cache-Control: no-cache" "$DOWNLOAD_URL" --output "$TMP_LATEST"
+          fetch_checksum() {
+            local url="$1"
+            local destination="$2"
 
-            SERVED_PACKAGE_CHECKSUM="$(shasum -a 256 "$TMP_PACKAGE" | awk '{print $1}')"
-            SERVED_LATEST_CHECKSUM="$(shasum -a 256 "$TMP_LATEST" | awk '{print $1}')"
+            if curl --fail --silent --show-error --location --header "Cache-Control: no-cache" "$url" --output "$destination" 2>/dev/null; then
+              shasum -a 256 "$destination" | awk '{print $1}'
+            fi
+          }
+
+          for attempt in $(seq 1 12); do
+            SERVED_PACKAGE_CHECKSUM="$(fetch_checksum "$PACKAGE_URL" "$TMP_PACKAGE" || true)"
+            SERVED_LATEST_CHECKSUM="$(fetch_checksum "$DOWNLOAD_URL" "$TMP_LATEST" || true)"
 
             if [ "$SERVED_PACKAGE_CHECKSUM" = "$EXPECTED_CHECKSUM" ] && [ "$SERVED_LATEST_CHECKSUM" = "$EXPECTED_CHECKSUM" ]; then
               {
@@ -166,15 +172,16 @@ jobs:
               exit 0
             fi
 
-            if [ "$attempt" -lt 10 ]; then
+            if [ "$attempt" -lt 12 ]; then
+              echo "Attempt $attempt/12: Release archives not ready yet; retrying in 5s..."
               sleep 5
             fi
           done
 
           echo "Uploaded release archive is not yet being served at the expected checksum." >&2
           echo "Expected checksum: $EXPECTED_CHECKSUM" >&2
-          echo "Package URL checksum: $SERVED_PACKAGE_CHECKSUM" >&2
-          echo "Latest URL checksum: $SERVED_LATEST_CHECKSUM" >&2
+          echo "Package URL checksum: ${SERVED_PACKAGE_CHECKSUM:-<unavailable>}" >&2
+          echo "Latest URL checksum: ${SERVED_LATEST_CHECKSUM:-<unavailable>}" >&2
           exit 1
 
       - name: Trigger PeakURL.org manifest update workflow

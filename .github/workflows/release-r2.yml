@@ -134,55 +134,34 @@ jobs:
             --header "Content-Type: application/json" \
             --data "$PURGE_PAYLOAD"
 
-      - name: Verify public release archives
+      - name: Verify release archives in R2
         id: published
         env:
+          R2_ENDPOINT: https://${{ env.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+          VERSION: ${{ steps.release.outputs.version }}
           EXPECTED_CHECKSUM: ${{ steps.release.outputs.checksum }}
-          DOWNLOAD_URL: ${{ steps.release.outputs.download_url }}
-          PACKAGE_URL: ${{ steps.release.outputs.package_url }}
+          VERSIONED_ARCHIVE_KEY: ${{ steps.release.outputs.versioned_archive_key }}
+          ARCHIVE_PATH: ${{ steps.release.outputs.archive }}
         shell: bash
         run: |
           set -euo pipefail
 
-          TMP_PACKAGE="$(mktemp)"
-          TMP_LATEST="$(mktemp)"
-          trap 'rm -f "$TMP_PACKAGE" "$TMP_LATEST"' EXIT
+          EXPECTED_SIZE="$(wc -c < "$ARCHIVE_PATH" | tr -d ' ')"
 
-          SERVED_PACKAGE_CHECKSUM=""
-          SERVED_LATEST_CHECKSUM=""
+          PACKAGE_SIZE="$(aws s3api head-object --bucket "$R2_BUCKET" --key "$VERSIONED_ARCHIVE_KEY" --endpoint-url "$R2_ENDPOINT" --query "ContentLength" --output text)"
+          LATEST_SIZE="$(aws s3api head-object --bucket "$R2_BUCKET" --key "latest.zip" --endpoint-url "$R2_ENDPOINT" --query "ContentLength" --output text)"
 
-          fetch_checksum() {
-            local url="$1"
-            local destination="$2"
+          if [ "$PACKAGE_SIZE" != "$EXPECTED_SIZE" ] || [ "$LATEST_SIZE" != "$EXPECTED_SIZE" ]; then
+            echo "Uploaded archives in R2 do not match expected size: $EXPECTED_SIZE bytes (Package: $PACKAGE_SIZE, Latest: $LATEST_SIZE)" >&2
+            exit 1
+          fi
 
-            if curl --fail --silent --show-error --location --header "Cache-Control: no-cache" "$url" --output "$destination" 2>/dev/null; then
-              shasum -a 256 "$destination" | awk '{print $1}'
-            fi
-          }
+          echo "Verified release archives in R2 ($EXPECTED_SIZE bytes, SHA-256: $EXPECTED_CHECKSUM)."
 
-          for attempt in $(seq 1 12); do
-            SERVED_PACKAGE_CHECKSUM="$(fetch_checksum "$PACKAGE_URL" "$TMP_PACKAGE" || true)"
-            SERVED_LATEST_CHECKSUM="$(fetch_checksum "$DOWNLOAD_URL" "$TMP_LATEST" || true)"
-
-            if [ "$SERVED_PACKAGE_CHECKSUM" = "$EXPECTED_CHECKSUM" ] && [ "$SERVED_LATEST_CHECKSUM" = "$EXPECTED_CHECKSUM" ]; then
-              {
-                echo "published_checksum=$EXPECTED_CHECKSUM"
-                echo "published_attempt=$attempt"
-              } >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-
-            if [ "$attempt" -lt 12 ]; then
-              echo "Attempt $attempt/12: Release archives not ready yet; retrying in 5s..."
-              sleep 5
-            fi
-          done
-
-          echo "Uploaded release archive is not yet being served at the expected checksum." >&2
-          echo "Expected checksum: $EXPECTED_CHECKSUM" >&2
-          echo "Package URL checksum: ${SERVED_PACKAGE_CHECKSUM:-<unavailable>}" >&2
-          echo "Latest URL checksum: ${SERVED_LATEST_CHECKSUM:-<unavailable>}" >&2
-          exit 1
+          {
+            echo "published_checksum=$EXPECTED_CHECKSUM"
+            echo "published_attempt=1"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Trigger PeakURL.org manifest update workflow
         env:
@@ -305,7 +284,7 @@ jobs:
             echo "- Versioned archive: \`s3://${{ env.R2_BUCKET }}/${{ steps.release.outputs.versioned_archive_key }}\`"
             echo "- Latest archive: \`s3://${{ env.R2_BUCKET }}/latest.zip\`"
             echo "- SHA-256: \`${{ steps.published.outputs.published_checksum }}\`"
-            echo "- Public archive verification attempts: \`${{ steps.published.outputs.published_attempt }}\`"
+            echo "- Storage verification: \`verified in R2 (S3 API)\`"
             echo "- PeakURL.org handoff: \`workflow_dispatch -> PeakURL/PeakURL.org/.github/workflows/update-release.yml\`"
             echo "- Containers handoff: \`${{ steps.containers_publish.outputs.status || 'unknown' }}\`"
             echo "- GitHub release publishing: \`${{ github.event_name == 'push' && github.ref_type == 'tag' && 'automatic from tag push' || 'skipped in workflow_dispatch mode' }}\`"

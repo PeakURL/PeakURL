@@ -246,7 +246,7 @@ function formatExactTimestamp(timestamp?: string | null): string {
 	});
 }
 
-function ActivityPageSkeleton() {
+function ActivityPageSkeleton({ isAdmin = false }: { isAdmin?: boolean }) {
 	return (
 		<div className="activity-page-panel">
 			<div className="activity-page-panel-header">
@@ -262,10 +262,16 @@ function ActivityPageSkeleton() {
 							{Array.from({ length: 6 }, (_, index) => (
 								<div
 									key={index}
-									className="activity-page-event"
+									className={cn(
+										"activity-page-event",
+										isAdmin && "activity-page-event-admin"
+									)}
 								>
 									<div className="activity-page-event-identity">
-										<Skeleton className="activity-page-skeleton-icon" />
+										{isAdmin ? (
+											<Skeleton className="h-4 w-4 rounded shrink-0" />
+										) : null}
+										<Skeleton className="activity-page-skeleton-icon shrink-0" />
 									</div>
 									<div className="activity-page-event-primary">
 										<Skeleton className="activity-page-skeleton-title" />
@@ -280,6 +286,11 @@ function ActivityPageSkeleton() {
 										<Skeleton className="activity-page-skeleton-time" />
 										<Skeleton className="activity-page-skeleton-time-secondary" />
 									</div>
+									{isAdmin ? (
+										<div className="activity-page-event-actions">
+											<Skeleton className="h-7.5 w-7.5 rounded-lg shrink-0" />
+										</div>
+									) : null}
 								</div>
 							))}
 						</div>
@@ -823,7 +834,7 @@ function ActivityPage() {
 			</div>
 
 			{isLoading ? (
-				<ActivityPageSkeleton />
+				<ActivityPageSkeleton isAdmin={isAdmin} />
 			) : (
 				<div className="activity-page-panel">
 					<div className="activity-page-panel-header">
@@ -894,7 +905,7 @@ function ActivityPage() {
 										)}
 										<span>{__("Event")}</span>
 										<span>{__("Details")}</span>
-										<span>{__("When")}</span>
+										<span>{__("Time")}</span>
 										{isAdmin ? (
 											<span className="activity-page-table-head-actions">
 												{__("Actions")}
@@ -1040,7 +1051,7 @@ function ActivityPage() {
 																	className="text-text-muted/70 shrink-0"
 																/>
 																<span
-																	className="activity-page-detail-destination-url truncate max-w-xs"
+																	className="activity-page-detail-destination-url truncate"
 																	dir="ltr"
 																>
 																	{

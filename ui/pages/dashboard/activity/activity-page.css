@@ -157,23 +157,23 @@
 	}
 
 	.activity-page-table-element {
-		@apply inline-block min-w-190 align-top;
+		@apply min-w-full inline-block align-top;
 	}
 
 	.activity-page-table-head {
 		@apply grid items-center border-b border-stroke bg-surface-alt/70 px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-text-muted;
 		grid-template-columns:
-			48px minmax(180px, 1.8fr) minmax(160px, 1.4fr)
-			minmax(150px, auto);
-		-moz-column-gap: 1rem;
-		column-gap: 1rem;
+			40px minmax(240px, 1fr) minmax(280px, 1.6fr)
+			180px;
+		-moz-column-gap: 1.25rem;
+		column-gap: 1.25rem;
 		text-align: start;
 	}
 
 	.activity-page-table-head-admin {
 		grid-template-columns:
-			48px minmax(180px, 1.8fr) minmax(160px, 1.4fr) minmax(150px, auto)
-			64px;
+			60px minmax(240px, 1fr) minmax(280px, 1.6fr) 180px
+			60px;
 	}
 
 	.activity-page-table-head-actions {
@@ -188,16 +188,16 @@
 	.activity-page-event {
 		@apply relative grid items-center bg-transparent px-5 py-3 transition-colors hover:bg-surface-alt/40;
 		grid-template-columns:
-			48px minmax(180px, 1.8fr) minmax(160px, 1.4fr)
-			minmax(150px, auto);
-		-moz-column-gap: 1rem;
-		column-gap: 1rem;
+			40px minmax(240px, 1fr) minmax(280px, 1.6fr)
+			180px;
+		-moz-column-gap: 1.25rem;
+		column-gap: 1.25rem;
 	}
 
 	.activity-page-event-admin {
 		grid-template-columns:
-			48px minmax(180px, 1.8fr) minmax(160px, 1.4fr) minmax(150px, auto)
-			64px;
+			60px minmax(240px, 1fr) minmax(280px, 1.6fr) 180px
+			60px;
 	}
 
 	.activity-page-event-selected {

@@ -1,13 +1,17 @@
 import { Skeleton } from "@/components";
 
 const LinkStatSkeleton = () => (
-	<div className="skeleton-card-sm">
-		<div className="skeleton-card-header">
+	<div className="skeleton-card links-skeleton-stat-card">
+		<div className="skeleton-card-header links-skeleton-stat-header">
+			<div className="flex-1 space-y-1">
+				<Skeleton className="links-skeleton-stat-title" />
+				<Skeleton className="links-skeleton-stat-value" />
+			</div>
 			<Skeleton className="links-skeleton-stat-icon" />
+		</div>
+		<div className="links-skeleton-stat-footer">
 			<Skeleton className="links-skeleton-stat-trend" />
 		</div>
-		<Skeleton className="links-skeleton-stat-value" />
-		<Skeleton className="links-skeleton-stat-label" />
 	</div>
 );
 

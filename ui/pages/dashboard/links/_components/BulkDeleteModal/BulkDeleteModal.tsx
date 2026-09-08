@@ -18,40 +18,52 @@ function BulkDeleteModal({
 }: BulkDeleteModalProps) {
 	const direction = getDocumentDirection();
 	const [error, setError] = useState("");
+	const [activeAction, setActiveAction] = useState<
+		"trash" | "permanent" | null
+	>(null);
 	const [bulkDeleteUrl, { isLoading }] = useBulkDeleteUrlMutation();
 
-	const handleDelete = async () => {
+	const handleClose = () => {
+		if (isLoading) return;
+		setError("");
+		setOpen(false);
+	};
+
+	const handleDelete = async (permanent: boolean) => {
 		if (!selectedIds || selectedIds.length === 0) {
 			return;
 		}
 
 		const idsToDelete = [...selectedIds];
 		setError("");
-		setOpen(false);
-		if (onSuccess) onSuccess();
+		setActiveAction(permanent ? "permanent" : "trash");
 
 		try {
-			if (isTrashTab) {
+			if (permanent) {
 				await bulkDeleteUrl({ ids: idsToDelete, force: true }).unwrap();
 			} else {
 				await bulkDeleteUrl(idsToDelete).unwrap();
 			}
+			setOpen(false);
+			if (onSuccess) onSuccess();
 		} catch (err) {
 			setError(
 				getErrorMessage(
 					err,
-					isTrashTab
+					permanent
 						? __("Failed to permanently delete links")
 						: __("Failed to move links to trash")
 				)
 			);
+		} finally {
+			setActiveAction(null);
 		}
 	};
 
 	if (!selectedIds || selectedIds.length === 0) return null;
 
 	return (
-		<Dialog open={open} onClose={setOpen} className="relative z-50">
+		<Dialog open={open} onClose={handleClose} className="relative z-50">
 			<div className="links-modal-backdrop" aria-hidden="true" />
 
 			<div className="links-modal-shell">
@@ -70,7 +82,8 @@ function BulkDeleteModal({
 								: __("Move Links to Trash")}
 						</DialogTitle>
 						<button
-							onClick={() => setOpen(false)}
+							onClick={handleClose}
+							disabled={isLoading}
 							className="links-modal-close"
 						>
 							<X className="links-modal-close-icon" />
@@ -115,18 +128,48 @@ function BulkDeleteModal({
 						<div className="links-modal-actions">
 							<button
 								type="button"
-								onClick={() => setOpen(false)}
+								onClick={handleClose}
 								disabled={isLoading}
 								className="links-modal-button links-modal-button-secondary"
 							>
 								{__("Cancel")}
 							</button>
+
+							{!isTrashTab && (
+								<button
+									type="button"
+									onClick={() => handleDelete(true)}
+									disabled={isLoading}
+									className="links-modal-button links-modal-button-danger-outline"
+								>
+									{isLoading &&
+									activeAction === "permanent" ? (
+										<span className="links-modal-button-content">
+											<div className="links-modal-spinner"></div>
+											{__("Deleting...")}
+										</span>
+									) : (
+										<span className="links-modal-button-content">
+											<Trash2 className="links-modal-button-icon" />
+											{sprintf(
+												__("Delete Permanently (%s)"),
+												String(selectedIds.length)
+											)}
+										</span>
+									)}
+								</button>
+							)}
+
 							<button
-								onClick={handleDelete}
+								type="button"
+								onClick={() => handleDelete(isTrashTab)}
 								disabled={isLoading}
 								className="links-modal-button links-modal-button-danger"
 							>
-								{isLoading ? (
+								{isLoading &&
+								(activeAction === "trash" ||
+									(isTrashTab &&
+										activeAction === "permanent")) ? (
 									<span className="links-modal-button-content">
 										<div className="links-modal-spinner"></div>
 										{__("Deleting...")}

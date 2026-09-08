@@ -91,7 +91,7 @@ const TableFooter = ({
 							value={statusFilter}
 							onChange={setStatusFilter}
 							options={statusOptions}
-							className="links-table-footer-select"
+							className="links-table-footer-select-wide"
 							ariaLabel={__("Filter links by status")}
 							buttonClassName="form-control-surface-alt form-control-compact"
 						/>

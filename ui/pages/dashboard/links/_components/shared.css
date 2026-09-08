@@ -114,11 +114,11 @@
 	}
 
 	.links-modal-actions {
-		@apply flex items-center justify-end gap-3 pt-3;
+		@apply flex flex-wrap items-center justify-end gap-3 pt-3;
 	}
 
 	.links-modal-actions-spacious {
-		@apply flex items-center justify-end gap-3 pt-4;
+		@apply flex flex-wrap items-center justify-end gap-3 pt-4;
 	}
 
 	.links-modal-button {
@@ -131,6 +131,10 @@
 
 	.links-modal-button-danger {
 		@apply bg-red-600 text-white hover:bg-red-700 disabled:bg-gray-400;
+	}
+
+	.links-modal-button-danger-outline {
+		@apply border border-red-300 dark:border-red-800 bg-surface text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 hover:border-red-400 dark:hover:border-red-700 disabled:opacity-50;
 	}
 
 	.links-modal-button-primary {
@@ -146,6 +150,6 @@
 	}
 
 	.links-modal-spinner {
-		@apply h-4 w-4 animate-spin rounded-full border-b-2 border-white;
+		@apply h-4 w-4 animate-spin rounded-full border-b-2 border-current;
 	}
 }

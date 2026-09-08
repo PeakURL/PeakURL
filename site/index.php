@@ -498,7 +498,7 @@ $base_path                      = $base_path_from(
 $relative_path                  = $request_path_from( $path, $base_path );
 $setup_path                     = $app_url( $base_path, '/setup-config.php' );
 $install_path                   = $app_url( $base_path, '/install.php' );
-$database_connection_error_path = $app_url( $base_path, '/database-connection-error.php' );
+$database_connection_error_path = $app_url( $base_path, '/db-error.php' );
 
 if ( $is_maintenance() ) {
 	$maintenance_view_data = null;

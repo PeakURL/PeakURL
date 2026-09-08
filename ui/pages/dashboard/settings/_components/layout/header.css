@@ -22,6 +22,6 @@
 	}
 
 	.settings-page-description {
-		@apply text-sm text-text-muted;
+		@apply mb-5 text-sm text-text-muted lg:mb-0;
 	}
 }

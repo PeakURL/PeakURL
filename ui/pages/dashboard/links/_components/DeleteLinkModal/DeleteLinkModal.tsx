@@ -18,43 +18,55 @@ function DeleteLinkModal({
 }: DeleteLinkModalProps) {
 	const direction = isDocumentRtl() ? "rtl" : "ltr";
 	const [error, setError] = useState("");
+	const [activeAction, setActiveAction] = useState<
+		"trash" | "permanent" | null
+	>(null);
 	const [deleteUrl, { isLoading }] = useDeleteUrlMutation();
 	const shortUrl = link ? getShortUrl(link) : "";
 	const totalClicks = Number(link?.clicks || 0);
 	const uniqueClicks = Number(link?.uniqueClicks || 0);
 	const isPermanent = isTrashTab || link?.status === "trashed";
 
-	const handleDelete = async () => {
+	const handleClose = () => {
+		if (isLoading) return;
+		setError("");
+		setOpen(false);
+	};
+
+	const handleDelete = async (permanent: boolean) => {
 		if (!link) {
 			return;
 		}
 
 		const linkId = link.id;
 		setError("");
-		setOpen(false);
+		setActiveAction(permanent ? "permanent" : "trash");
 
 		try {
-			if (isPermanent) {
+			if (permanent) {
 				await deleteUrl({ id: linkId, force: true }).unwrap();
 			} else {
 				await deleteUrl(linkId).unwrap();
 			}
+			setOpen(false);
 		} catch (err) {
 			setError(
 				getErrorMessage(
 					err,
-					isPermanent
+					permanent
 						? __("Failed to permanently delete link")
 						: __("Failed to move link to trash")
 				)
 			);
+		} finally {
+			setActiveAction(null);
 		}
 	};
 
 	if (!link) return null;
 
 	return (
-		<Dialog open={open} onClose={setOpen} className="relative z-50">
+		<Dialog open={open} onClose={handleClose} className="relative z-50">
 			<div className="links-modal-backdrop" aria-hidden="true" />
 
 			<div className="links-modal-shell">
@@ -73,7 +85,8 @@ function DeleteLinkModal({
 								: __("Move to Trash")}
 						</DialogTitle>
 						<button
-							onClick={() => setOpen(false)}
+							onClick={handleClose}
+							disabled={isLoading}
 							className="links-modal-close"
 						>
 							<X className="links-modal-close-icon" />
@@ -149,18 +162,45 @@ function DeleteLinkModal({
 						<div className="links-modal-actions">
 							<button
 								type="button"
-								onClick={() => setOpen(false)}
+								onClick={handleClose}
 								disabled={isLoading}
 								className="links-modal-button links-modal-button-secondary"
 							>
 								{__("Cancel")}
 							</button>
+
+							{!isPermanent && (
+								<button
+									type="button"
+									onClick={() => handleDelete(true)}
+									disabled={isLoading}
+									className="links-modal-button links-modal-button-danger-outline"
+								>
+									{isLoading &&
+									activeAction === "permanent" ? (
+										<span className="links-modal-button-content">
+											<div className="links-modal-spinner"></div>
+											{__("Deleting...")}
+										</span>
+									) : (
+										<span className="links-modal-button-content">
+											<Trash2 className="links-modal-button-icon" />
+											{__("Delete Permanently")}
+										</span>
+									)}
+								</button>
+							)}
+
 							<button
-								onClick={handleDelete}
+								type="button"
+								onClick={() => handleDelete(isPermanent)}
 								disabled={isLoading}
 								className="links-modal-button links-modal-button-danger"
 							>
-								{isLoading ? (
+								{isLoading &&
+								(activeAction === "trash" ||
+									(isPermanent &&
+										activeAction === "permanent")) ? (
 									<span className="links-modal-button-content">
 										<div className="links-modal-spinner"></div>
 										{__("Deleting...")}

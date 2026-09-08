@@ -1,18 +1,30 @@
 @layer components {
+	.links-skeleton-stat-card {
+		@apply p-3.5;
+	}
+
+	.links-skeleton-stat-header {
+		@apply mb-1.5 flex items-start justify-between;
+	}
+
 	.links-skeleton-stat-icon {
-		@apply h-8 w-8;
+		@apply h-9 w-9 rounded-lg;
+	}
+
+	.links-skeleton-stat-footer {
+		@apply mt-1.5 flex min-h-[1.375rem] items-center;
 	}
 
 	.links-skeleton-stat-trend {
-		@apply h-3 w-8;
+		@apply h-4 w-20 rounded;
 	}
 
 	.links-skeleton-stat-value {
-		@apply h-6 w-16;
+		@apply h-7 w-16;
 	}
 
-	.links-skeleton-stat-label {
-		@apply mt-1 h-3 w-20;
+	.links-skeleton-stat-title {
+		@apply mb-1 h-3 w-16;
 	}
 
 	.links-skeleton-form-title {

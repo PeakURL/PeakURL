@@ -32,7 +32,7 @@ if ( ! file_exists( $autoload_path ) ) {
 require $autoload_path;
 
 $base_path     = InstallScreen::get_base_path(
-	(string) ( $_SERVER['SCRIPT_NAME'] ?? '/database-connection-error.php' ),
+	(string) ( $_SERVER['SCRIPT_NAME'] ?? '/db-error.php' ),
 );
 $install_state = InstallState::get_state( $app_path );
 
@@ -83,9 +83,9 @@ http_response_code( 503 );
 </head>
 <body>
 	<main>
-		<section class="card" aria-labelledby="database-connection-error-title">
+		<section class="card" aria-labelledby="db-error-title">
 			<span class="status">Database connection failed</span>
-			<h1 id="database-connection-error-title">PeakURL could not connect to the configured database.</h1>
+			<h1 id="db-error-title">PeakURL could not connect to the configured database.</h1>
 			<p>A <code>config.php</code> file was found, but the database settings in it could not be used. PeakURL has not changed your configuration.</p>
 			<ul class="steps">
 				<li>Check <code>DB_HOST</code>, <code>DB_PORT</code>, and <code>DB_DATABASE</code>.</li>

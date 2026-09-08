@@ -2,12 +2,15 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router";
 import {
+	ArrowDown,
+	ArrowUp,
 	CircleCheckBig,
 	Link2,
 	MousePointerClick,
 	Trash2,
 	Users,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 import {
 	DEFAULT_PAGE_SIZE_OPTIONS,
@@ -26,7 +29,7 @@ import {
 	useRestoreUrlMutation,
 } from "@/store/slices/api";
 import type { GetUrlsQueryArgs } from "@/store/slices/api";
-import { formatCount, getErrorMessage } from "@/utils";
+import { cn, formatCount, getErrorMessage } from "@/utils";
 
 import {
 	Header,
@@ -72,6 +75,66 @@ function getDefaultCustomClickRange(): LinksCustomDateRange {
 		from: formatDateInput(weekStart),
 		to: formatDateInput(today),
 	};
+}
+
+type LinkStatChangeType = "positive" | "negative";
+
+interface LinkStatChange {
+	text: string;
+	type: LinkStatChangeType;
+}
+
+type LinkStatTone = "clicks" | "visitors" | "links" | "active";
+
+interface LinkStatCardData {
+	title: string;
+	value: string;
+	change: LinkStatChange | null;
+	note?: string;
+	icon: LucideIcon;
+	tone: LinkStatTone;
+}
+
+function getPeriodChange(
+	current: number,
+	last?: number
+): LinkStatChange | null {
+	if (last === undefined) {
+		return null;
+	}
+
+	const delta = current - last;
+	if (current === 0 && last === 0) {
+		return null;
+	}
+
+	let formatted: string;
+	if (last === 0) {
+		formatted = "100%";
+	} else if (current === 0) {
+		formatted = "100%";
+	} else {
+		const rawPercent = (delta / last) * 100;
+		formatted = `${Math.abs(rawPercent).toFixed(1)}%`;
+	}
+
+	return {
+		text: `${delta >= 0 ? "+" : "-"}${formatted}`,
+		type: delta >= 0 ? "positive" : "negative",
+	};
+}
+
+function getPeriodNote(range: LinksDateRange): string {
+	switch (range) {
+		case "24h":
+			return __("vs previous day");
+		case "7d":
+			return __("vs last week");
+		case "30d":
+			return __("vs last month");
+		default:
+			return __("vs last period");
+	}
 }
 
 function LinksPage() {
@@ -320,28 +383,70 @@ function LinksPage() {
 	const activeLinks = apiMeta.activeLinks ?? 0;
 	const trashedLinksCount = apiMeta.trashedLinks ?? 0;
 
-	const getPercentChange = (current: number, last: number | undefined) => {
-		if (last === undefined) return null;
-		const delta = current - last;
-		if (last === 0) {
-			if (current === 0) return null;
-			return { text: "+100%", isPositive: true };
-		}
-		const percent = Math.abs((delta / last) * 100).toFixed(1);
-		return {
-			text: `${delta >= 0 ? "+" : "-"}${percent}%`,
-			isPositive: delta >= 0,
-		};
-	};
-
-	const clicksChange = getPercentChange(
+	const clicksChange = getPeriodChange(
 		totalClicks,
 		apiMeta.lastPeriodTotalClicks
 	);
-	const visitorsChange = getPercentChange(
+	const visitorsChange = getPeriodChange(
 		totalUniqueClicks,
 		apiMeta.lastPeriodUniqueClicks
 	);
+	const periodNote = getPeriodNote(clickRange);
+
+	const getClicksFallbackNote = () => {
+		if (clickRange === "all") {
+			return __("All-time clicks");
+		}
+		if (clickRange === "custom") {
+			return __("Selected date range");
+		}
+		return __("No activity recorded");
+	};
+
+	const getVisitorsFallbackNote = () => {
+		if (clickRange === "all") {
+			return __("All-time visitors");
+		}
+		if (clickRange === "custom") {
+			return __("Selected date range");
+		}
+		return __("No visitors recorded");
+	};
+
+	const statsData: LinkStatCardData[] = [
+		{
+			title: __("Total Clicks"),
+			value: formatCount(totalClicks),
+			change: clicksChange,
+			note: getClicksFallbackNote(),
+			icon: MousePointerClick,
+			tone: "clicks",
+		},
+		{
+			title: __("Visitors"),
+			value: formatCount(totalUniqueClicks),
+			change: visitorsChange,
+			note: getVisitorsFallbackNote(),
+			icon: Users,
+			tone: "visitors",
+		},
+		{
+			title: __("Total Links"),
+			value: formatCount(totalItems),
+			change: null,
+			note: __("Total created links"),
+			icon: Link2,
+			tone: "links",
+		},
+		{
+			title: __("Active Links"),
+			value: formatCount(activeLinks),
+			change: null,
+			note: __("Currently active"),
+			icon: CircleCheckBig,
+			tone: "active",
+		},
+	];
 
 	return (
 		<div className="links-page">
@@ -354,85 +459,68 @@ function LinksPage() {
 				onCustomClickRangeChange={setCustomClickRange}
 			/>
 
-			{/* Quick Stats - Compact Row */}
+			{/* Quick Stats Grid */}
 			<div className="links-page-stats">
-				<div className="links-page-stat-card">
-					<div className="links-page-stat-header">
-						<div className="links-page-stat-icon links-page-stat-icon-clicks">
-							<MousePointerClick className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-						</div>
-						{clicksChange && (
-							<span
-								className={`links-page-stat-trend ${
-									clicksChange.isPositive
-										? "links-page-stat-trend-positive"
-										: "links-page-stat-trend-negative"
-								}`}
-							>
-								{clicksChange.text}
-							</span>
-						)}
-					</div>
-					<div className="links-page-stat-value">
-						{formatCount(totalClicks)}
-					</div>
-					<div className="links-page-stat-label">
-						{__("Total Clicks")}
-					</div>
-				</div>
+				{statsData.map((stat) => {
+					const StatIcon = stat.icon;
 
-				<div className="links-page-stat-card">
-					<div className="links-page-stat-header">
-						<div className="links-page-stat-icon links-page-stat-icon-visitors">
-							<Users className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-						</div>
-						{visitorsChange && (
-							<span
-								className={`links-page-stat-trend ${
-									visitorsChange.isPositive
-										? "links-page-stat-trend-positive"
-										: "links-page-stat-trend-negative"
-								}`}
-							>
-								{visitorsChange.text}
-							</span>
-						)}
-					</div>
-					<div className="links-page-stat-value">
-						{formatCount(totalUniqueClicks)}
-					</div>
-					<div className="links-page-stat-label">
-						{__("Visitors")}
-					</div>
-				</div>
+					return (
+						<div key={stat.title} className="links-page-stat-card">
+							<div className="links-page-stat-header">
+								<div className="links-page-stat-copy">
+									<p className="links-page-stat-title">
+										{stat.title}
+									</p>
+									<p className="links-page-stat-value">
+										{stat.value}
+									</p>
+								</div>
+								<div
+									className={cn(
+										"links-page-stat-icon",
+										`links-page-stat-icon-${stat.tone}`
+									)}
+								>
+									<StatIcon
+										className={cn(
+											"links-page-stat-icon-glyph",
+											`links-page-stat-icon-glyph-${stat.tone}`
+										)}
+									/>
+								</div>
+							</div>
 
-				<div className="links-page-stat-card">
-					<div className="links-page-stat-header">
-						<div className="links-page-stat-icon links-page-stat-icon-links">
-							<Link2 className="h-4 w-4 text-primary-600 dark:text-primary-400" />
+							<div className="links-page-stat-footer">
+								{stat.change ? (
+									<div className="links-page-stat-change">
+										<span
+											className={cn(
+												"links-page-stat-change-badge",
+												stat.change.type === "positive"
+													? "links-page-stat-change-badge-positive"
+													: "links-page-stat-change-badge-negative"
+											)}
+										>
+											{stat.change.type === "positive" ? (
+												<ArrowUp className="links-page-stat-change-icon" />
+											) : (
+												<ArrowDown className="links-page-stat-change-icon" />
+											)}
+											{stat.change.text}
+										</span>
+										<span className="links-page-stat-change-note">
+											{periodNote}
+										</span>
+									</div>
+								) : (
+									<span className="links-page-stat-change-note">
+										{stat.note}
+									</span>
+								)}
+							</div>
 						</div>
-					</div>
-					<div className="links-page-stat-value">
-						{formatCount(totalItems)}
-					</div>
-					<div className="links-page-stat-label">
-						{__("Total Links")}
-					</div>
-				</div>
-
-				<div className="links-page-stat-card">
-					<div className="links-page-stat-header">
-						<div className="links-page-stat-icon links-page-stat-icon-active">
-							<CircleCheckBig className="h-4 w-4 text-success" />
-						</div>
-					</div>
-					<div className="links-page-stat-value">
-						{formatCount(activeLinks)}
-					</div>
-					<div className="links-page-stat-label">
-						{__("Active Links")}
-					</div>
-				</div>
+					);
+				})}
 			</div>
 
 			<UrlShorteningForm />

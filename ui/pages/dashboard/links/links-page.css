@@ -4,47 +4,95 @@
 	}
 
 	.links-page-stats {
-		@apply grid grid-cols-2 gap-3 xl:grid-cols-4;
+		@apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4;
 	}
 
 	.links-page-stat-card {
-		@apply rounded-lg border border-stroke bg-surface p-3.5 transition-all duration-200 hover:border-stroke-strong hover:shadow-md;
+		@apply flex flex-col rounded-lg border border-stroke bg-surface p-3.5 transition-all duration-200 hover:border-stroke-strong hover:shadow-md;
 	}
 
 	.links-page-stat-header {
-		@apply mb-2 flex items-center gap-2.5;
+		@apply mb-1.5 flex items-start justify-between;
 	}
 
-	.links-page-stat-icon {
-		@apply flex h-8 w-8 shrink-0 items-center justify-center rounded-lg;
+	.links-page-stat-copy {
+		@apply flex-1;
 	}
 
-	.links-page-stat-icon-links {
-		@apply bg-primary-500/10;
-	}
-
-	.links-page-stat-icon-active {
-		@apply bg-success/10;
-	}
-
-	.links-page-stat-icon-clicks {
-		@apply bg-blue-500/10;
-	}
-
-	.links-page-stat-icon-visitors {
-		@apply bg-purple-500/10;
-	}
-
-	.links-page-stat-trend {
-		@apply text-xs font-medium text-success;
+	.links-page-stat-title {
+		@apply mb-1 text-xs font-medium uppercase tracking-wide text-text-muted;
 	}
 
 	.links-page-stat-value {
-		@apply text-xl font-bold text-heading;
+		@apply text-2xl font-bold leading-tight text-heading;
 	}
 
-	.links-page-stat-label {
-		@apply mt-0.5 text-xs text-muted;
+	.links-page-stat-icon {
+		@apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg;
+	}
+
+	.links-page-stat-icon-clicks {
+		@apply bg-blue-500/10 dark:bg-blue-500/20;
+	}
+
+	.links-page-stat-icon-visitors {
+		@apply bg-purple-500/10 dark:bg-purple-500/20;
+	}
+
+	.links-page-stat-icon-links {
+		@apply bg-primary-500/10 dark:bg-primary-500/20;
+	}
+
+	.links-page-stat-icon-active {
+		@apply bg-emerald-500/10 dark:bg-emerald-500/20;
+	}
+
+	.links-page-stat-icon-glyph {
+		@apply h-4 w-4;
+	}
+
+	.links-page-stat-icon-glyph-clicks {
+		@apply text-blue-600 dark:text-blue-400;
+	}
+
+	.links-page-stat-icon-glyph-visitors {
+		@apply text-purple-600 dark:text-purple-400;
+	}
+
+	.links-page-stat-icon-glyph-links {
+		@apply text-primary-600 dark:text-primary-400;
+	}
+
+	.links-page-stat-icon-glyph-active {
+		@apply text-emerald-600 dark:text-emerald-400;
+	}
+
+	.links-page-stat-footer {
+		@apply mt-1.5 flex min-h-5.5 items-center;
+	}
+
+	.links-page-stat-change {
+		@apply flex items-center gap-1.5;
+	}
+
+	.links-page-stat-change-badge {
+		@apply inline-flex items-center gap-1 rounded px-2 py-0.5 text-xs font-semibold;
+	}
+
+	.links-page-stat-change-badge-positive {
+		@apply bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300;
+	}
+
+	.links-page-stat-change-badge-negative {
+		@apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300;
+	}
+
+	.links-page-stat-change-icon {
+		@apply h-3 w-3;
+	}
+
+	.links-page-stat-change-note {
+		@apply text-xs text-text-muted;
 	}
 
 	/* Trash Banner */

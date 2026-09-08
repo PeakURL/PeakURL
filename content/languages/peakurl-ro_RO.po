@@ -6,8 +6,8 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-03 18:21+0000\n"
-"POT-Creation-Date: 2026-09-03 18:21+0000\n"
+"PO-Revision-Date: 2026-09-08 16:41+0000\n"
+"POT-Creation-Date: 2026-09-08 16:41+0000\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n == 0 || n != 1 && n % 100 >= 1 && n % 100 <= 19 ? 1 : 2;\n"
 "Project-Id-Version: PeakURL 1.6.1\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
@@ -58,13 +58,21 @@ msgstr "S-au curățat linkurile orfane din jurnalul de activitate."
 msgid "Removed orphaned webhooks."
 msgstr "S-au eliminat webhook-urile orfane."
 
-#: app/traits/webhooks.php:83
+#: app/traits/webhooks.php:92
+#: app/traits/webhooks.php:165
 msgid "A valid webhook URL is required."
 msgstr "Este necesar un URL de webhook valid."
 
-#: app/traits/webhooks.php:99
+#: app/traits/webhooks.php:108
+#: app/traits/webhooks.php:182
 msgid "Select at least one webhook event."
 msgstr "Selectați cel puțin un eveniment de webhook."
+
+#: app/traits/webhooks.php:157
+#: app/traits/webhooks.php:258
+#: app/controllers/webhooks.php:121
+msgid "Webhook not found."
+msgstr "Webhook-ul nu a fost găsit."
 
 #: app/traits/settings.php:167
 #: app/traits/system.php:375
@@ -271,7 +279,7 @@ msgid "No restorable link metadata found in this activity record."
 msgstr "Nu s-au găsit metadate restaurabile în această înregistrare de activitate."
 
 #: app/traits/analytics.php:782
-#: ui/pages/dashboard/activity/ActivityPage.tsx:391
+#: ui/pages/dashboard/activity/ActivityPage.tsx:402
 msgid "This link was permanently deleted and cannot be restored."
 msgstr "Acest link a fost șters definitiv și nu poate fi restaurat."
 
@@ -298,57 +306,57 @@ msgid "You do not have permission to view this link."
 msgstr "Nu aveți permisiunea de a vizualiza acest link."
 
 #: app/traits/links.php:403
-#: app/traits/links.php:1176
+#: app/traits/links.php:1178
 msgid "Provide either socialImage or socialImageUrl, not both."
 msgstr "Specificați fie socialImage, fie socialImageUrl, nu ambele."
 
-#: app/traits/links.php:831
+#: app/traits/links.php:833
 msgid "Complete the verification to open this link."
 msgstr "Finalizați verificarea pentru a deschide acest link."
 
-#: app/traits/links.php:846
+#: app/traits/links.php:848
 msgid "Verification failed. Please try again."
 msgstr "Verificarea a eșuat. Vă rugăm să încercați din nou."
 
-#: app/traits/links.php:1096
+#: app/traits/links.php:1098
 msgid "You do not have permission to edit this link."
 msgstr "Nu aveți permisiunea de a edita acest link."
 
-#: app/traits/links.php:1365
+#: app/traits/links.php:1369
 msgid "You do not have permission to delete this link."
 msgstr "Nu aveți permisiunea de a șterge acest link."
 
-#: app/traits/links.php:1515
+#: app/traits/links.php:1523
 msgid "That short link does not exist."
 msgstr "Acel link scurt nu există."
 
-#: app/traits/links.php:1522
+#: app/traits/links.php:1530
 msgid "This link is already active."
 msgstr "Acest link este deja activ."
 
-#: app/traits/links.php:1532
+#: app/traits/links.php:1540
 msgid "You do not have permission to restore this link."
 msgstr "Nu aveți permisiunea de a restaura acest link."
 
-#: app/traits/links.php:1598
-#: app/traits/links.php:1879
-#: app/traits/links.php:1957
+#: app/traits/links.php:1606
+#: app/traits/links.php:1891
+#: app/traits/links.php:1969
 msgid "You do not have permission to delete links."
 msgstr "Nu aveți permisiunea de a șterge linkuri."
 
-#: app/traits/links.php:1780
+#: app/traits/links.php:1792
 msgid "You do not have permission to restore links."
 msgstr "Nu aveți permisiunea de a restaura linkuri."
 
-#: app/traits/links.php:2142
+#: app/traits/links.php:2154
 msgid "A valid destination URL is required."
 msgstr "Este necesar un URL de destinație valid."
 
-#: app/traits/links.php:2160
+#: app/traits/links.php:2172
 msgid "That short code is reserved by the application."
 msgstr "Acel cod scurt este rezervat de aplicație."
 
-#: app/traits/links.php:2170
+#: app/traits/links.php:2182
 msgid "That short code is already in use."
 msgstr "Acel cod scurt este deja utilizat."
 
@@ -415,7 +423,7 @@ msgid "Visit %s"
 msgstr "Vizitează %s"
 
 #: app/includes/functions.php:1192
-#: ui/pages/dashboard/about/Sponsors.tsx:98
+#: ui/pages/dashboard/about/Sponsors.tsx:107
 #: ui/pages/dashboard/about/AboutPage.tsx:75
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
 msgid "Website"
@@ -427,7 +435,7 @@ msgid "Documentation"
 msgstr "Documentație"
 
 #: app/includes/functions.php:1194
-#: ui/pages/dashboard/about/Sponsors.tsx:106
+#: ui/pages/dashboard/about/Sponsors.tsx:115
 msgid "GitHub"
 msgstr "GitHub"
 
@@ -600,11 +608,15 @@ msgstr "Webhook-urile au fost încărcate."
 msgid "Webhook created."
 msgstr "Webhook-ul a fost creat."
 
-#: app/controllers/webhooks.php:84
-msgid "Webhook not found."
-msgstr "Webhook-ul nu a fost găsit."
+#: app/controllers/webhooks.php:82
+msgid "Webhook updated."
+msgstr "Webhook actualizat."
 
-#: app/controllers/webhooks.php:85
+#: app/controllers/webhooks.php:99
+msgid "Webhook test dispatched."
+msgstr "Test webhook trimis."
+
+#: app/controllers/webhooks.php:122
 msgid "Webhook deleted."
 msgstr "Webhook-ul a fost șters."
 
@@ -1943,7 +1955,7 @@ msgstr "Toate linkurile"
 #: ui/utils/dashboardSearch.ts:100
 #: ui/pages/auth/login/LoginPage.tsx:47
 #: ui/pages/layout/dashboard/Search/Search.tsx:295
-#: ui/pages/dashboard/activity/ActivityPage.tsx:657
+#: ui/pages/dashboard/activity/ActivityPage.tsx:668
 #: ui/pages/dashboard/links/_components/Header/Header.tsx:42
 #: ui/router/pageTitle.ts:77
 msgid "Links"
@@ -1953,7 +1965,7 @@ msgstr "Linkuri"
 #: ui/utils/dashboardSearch.ts:119
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:80
 #: ui/pages/layout/dashboard/Header/Header.tsx:121
-#: ui/pages/dashboard/activity/ActivityPage.tsx:714
+#: ui/pages/dashboard/activity/ActivityPage.tsx:725
 #: ui/router/pageTitle.ts:73
 msgid "Activity"
 msgstr "Activitate"
@@ -2072,7 +2084,7 @@ msgstr "Actualizări"
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:53
 #: ui/pages/layout/dashboard/Search/Search.tsx:256
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:988
-#: ui/pages/dashboard/activity/ActivityPage.tsx:663
+#: ui/pages/dashboard/activity/ActivityPage.tsx:674
 #: ui/pages/dashboard/users/UsersPage.tsx:577
 #: ui/router/pageTitle.ts:85
 msgid "Users"
@@ -2163,8 +2175,8 @@ msgstr "Confirmă"
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:63
 #: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:508
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1485
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:122
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:156
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:135
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:169
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:18
 #: ui/pages/dashboard/users/UsersPage.tsx:352
 msgid "Cancel"
@@ -2183,7 +2195,7 @@ msgid "Close modal"
 msgstr "Închide fereastra"
 
 #: ui/components/ui/PageSizeControl/PageSizeControl.tsx:27
-#: ui/pages/dashboard/activity/ActivityPage.tsx:821
+#: ui/pages/dashboard/activity/ActivityPage.tsx:832
 #: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:122
 msgid "Rows per page"
 msgstr "Rânduri pe pagină"
@@ -2253,8 +2265,8 @@ msgstr "Dum"
 #: ui/components/charts/TrafficChart/TrafficChart.tsx:260
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:112
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:21
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:130
-#: ui/pages/dashboard/links/LinksPage.tsx:380
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:143
+#: ui/pages/dashboard/links/LinksPage.tsx:418
 msgid "Total Clicks"
 msgstr "Total clicuri"
 
@@ -2265,8 +2277,8 @@ msgstr "Total clicuri"
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:48
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:173
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:28
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:138
-#: ui/pages/dashboard/links/LinksPage.tsx:405
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:151
+#: ui/pages/dashboard/links/LinksPage.tsx:426
 msgid "Visitors"
 msgstr "Vizitatori"
 
@@ -5621,7 +5633,7 @@ msgstr "Alias"
 #: ui/pages/dashboard/tools/import/_components/results/ImportDetails.tsx:33
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:55
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:110
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:107
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:120
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:42
 msgid "Short URL"
 msgstr "URL scurt"
@@ -5976,7 +5988,7 @@ msgid "Author"
 msgstr "Autor"
 
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
-#: ui/pages/dashboard/activity/ActivityPage.tsx:900
+#: ui/pages/dashboard/activity/ActivityPage.tsx:911
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:114
 #: ui/pages/dashboard/users/UsersPage.tsx:688
 msgid "Actions"
@@ -6071,288 +6083,288 @@ msgstr "S-a făcut clic pe linkul \"%s\"\"%s\"\"%s\""
 msgid "Unknown activity"
 msgstr "Activitate necunoscută"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:377
+#: ui/pages/dashboard/activity/ActivityPage.tsx:388
 msgid "Link already active"
 msgstr "Linkul este deja activ"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:378
+#: ui/pages/dashboard/activity/ActivityPage.tsx:389
 msgid "This link is already active and does not need to be restored."
 msgstr "Acest link este deja activ și nu trebuie restaurat."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:390
+#: ui/pages/dashboard/activity/ActivityPage.tsx:401
 msgid "Link permanently deleted"
 msgstr "Linkul a fost șters definitiv"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:399
-#: ui/pages/dashboard/links/LinksPage.tsx:251
+#: ui/pages/dashboard/activity/ActivityPage.tsx:410
+#: ui/pages/dashboard/links/LinksPage.tsx:314
 msgid "Link restored"
 msgstr "Linkul a fost restaurat"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:400
+#: ui/pages/dashboard/activity/ActivityPage.tsx:411
 msgid "The link has been restored successfully."
 msgstr "Linkul a fost restaurat cu succes."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:404
-#: ui/pages/dashboard/links/LinksPage.tsx:256
+#: ui/pages/dashboard/activity/ActivityPage.tsx:415
+#: ui/pages/dashboard/links/LinksPage.tsx:319
 msgid "Unable to restore link"
 msgstr "Nu se poate restaura linkul"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:407
+#: ui/pages/dashboard/activity/ActivityPage.tsx:418
 msgid "Failed to restore link from activity record."
 msgstr "Nu s-a putut restaura linkul din înregistrarea de activitate."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:559
-#: ui/pages/dashboard/activity/ActivityPage.tsx:587
-#: ui/pages/dashboard/activity/ActivityPage.tsx:617
+#: ui/pages/dashboard/activity/ActivityPage.tsx:570
+#: ui/pages/dashboard/activity/ActivityPage.tsx:598
+#: ui/pages/dashboard/activity/ActivityPage.tsx:628
 msgid "Activity deleted"
 msgstr "Înregistrare de activitate ștearsă"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:560
+#: ui/pages/dashboard/activity/ActivityPage.tsx:571
 msgid "The activity log entry has been removed."
 msgstr "Înregistrarea din jurnalul de activitate a fost eliminată."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:564
-#: ui/pages/dashboard/activity/ActivityPage.tsx:595
-#: ui/pages/dashboard/activity/ActivityPage.tsx:622
+#: ui/pages/dashboard/activity/ActivityPage.tsx:575
+#: ui/pages/dashboard/activity/ActivityPage.tsx:606
+#: ui/pages/dashboard/activity/ActivityPage.tsx:633
 msgid "Unable to delete activity"
 msgstr "Nu s-a putut șterge activitatea"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:567
+#: ui/pages/dashboard/activity/ActivityPage.tsx:578
 msgid "The activity log entry could not be removed."
 msgstr "Înregistrarea din jurnalul de activitate nu a putut fi eliminată."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:589
+#: ui/pages/dashboard/activity/ActivityPage.tsx:600
 msgid "Deleted %s activity log entries."
 msgstr "S-au șters %s înregistrări din jurnalul de activitate."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:598
+#: ui/pages/dashboard/activity/ActivityPage.tsx:609
 msgid "The selected activity log entries could not be removed."
 msgstr "Înregistrările selectate din jurnalul de activitate nu au putut fi eliminate."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:618
+#: ui/pages/dashboard/activity/ActivityPage.tsx:629
 msgid "All activity log entries have been removed."
 msgstr "Toate înregistrările din jurnalul de activitate au fost eliminate."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:625
+#: ui/pages/dashboard/activity/ActivityPage.tsx:636
 msgid "The activity logs could not be removed."
 msgstr "Jurnalele de activitate nu au putut fi eliminate."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:651
+#: ui/pages/dashboard/activity/ActivityPage.tsx:662
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:35
 #: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:21
 msgid "All"
 msgstr "Toate"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:677
+#: ui/pages/dashboard/activity/ActivityPage.tsx:688
 msgid "Total events"
 msgstr "Total evenimente"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:683
+#: ui/pages/dashboard/activity/ActivityPage.tsx:694
 msgid "Link events"
 msgstr "Evenimente de linkuri"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:689
+#: ui/pages/dashboard/activity/ActivityPage.tsx:700
 msgid "User events"
 msgstr "Evenimente de utilizatori"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:695
+#: ui/pages/dashboard/activity/ActivityPage.tsx:706
 msgid "Latest event"
 msgstr "Ultimul eveniment"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:698
+#: ui/pages/dashboard/activity/ActivityPage.tsx:709
 msgid "No recent events"
 msgstr "Niciun eveniment recent"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:712
+#: ui/pages/dashboard/activity/ActivityPage.tsx:723
 msgid "Audit Log"
 msgstr "Jurnal de audit"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:716
+#: ui/pages/dashboard/activity/ActivityPage.tsx:727
 msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
 msgstr "Examinați modificările linkurilor și evenimentele de gestionare a utilizatorilor într-un singur loc, cu filtre, marcaje temporale și detalii despre autori."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:726
-#: ui/pages/dashboard/activity/ActivityPage.tsx:727
+#: ui/pages/dashboard/activity/ActivityPage.tsx:737
+#: ui/pages/dashboard/activity/ActivityPage.tsx:738
 msgid "Refresh activity history"
 msgstr "Reîmprospătează istoricul de activitate"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:832
+#: ui/pages/dashboard/activity/ActivityPage.tsx:843
 msgid "Activity history"
 msgstr "Istoricul activității"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:839
+#: ui/pages/dashboard/activity/ActivityPage.tsx:850
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:33
 msgid "%s selected"
 msgstr "Selectate: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:849
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1326
+#: ui/pages/dashboard/activity/ActivityPage.tsx:860
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1337
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:74
 msgid "Delete selected"
 msgstr "Șterge selectate"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:857
+#: ui/pages/dashboard/activity/ActivityPage.tsx:868
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:83
 msgid "Delete all"
 msgstr "Șterge tot"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:888
+#: ui/pages/dashboard/activity/ActivityPage.tsx:899
 msgid "Select all events on this page"
 msgstr "Selectează toate evenimentele de pe această pagină"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:895
+#: ui/pages/dashboard/activity/ActivityPage.tsx:906
 msgid "Event"
 msgstr "Eveniment"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:896
+#: ui/pages/dashboard/activity/ActivityPage.tsx:907
 msgid "Details"
 msgstr "Detalii"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:897
-msgid "When"
-msgstr "Când"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:908
+msgid "Time"
+msgstr "Oră"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1007
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1018
 msgid "Actor: %s"
 msgstr "Actor: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1019
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1030
 msgid "By"
 msgstr "De către"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1057
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1068
 msgid "User: %s"
 msgstr "Utilizator: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1076
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1087
 msgid "Location: %s"
 msgstr "Locație: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1171
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1180
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1182
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1191
 msgid "Link is already active"
 msgstr "Linkul este deja activ"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1174
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1183
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1185
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1194
 msgid "Restore link"
 msgstr "Restaurează linkul"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1206
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1209
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1346
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1217
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1220
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1357
 msgid "Delete activity log"
 msgstr "Șterge înregistrarea din jurnal"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1235
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1246
 msgid "No user activity yet"
 msgstr "Nicio activitate a utilizatorilor încă"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1237
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1248
 msgid "No link activity yet"
 msgstr "Nicio activitate a linkurilor încă"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1238
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1249
 msgid "No activity recorded yet"
 msgstr "Nicio activitate înregistrată încă"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1241
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1252
 msgid "Once users manage accounts or links change, the audit log will appear here."
 msgstr "Odată ce utilizatorii gestionează conturi sau linkurile se modifică, jurnalul de audit va apărea aici."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1255
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1266
 msgid "Showing %1$s-%2$s of %3$s events"
 msgstr "Se afișează %1$s–%2$s din %3$s evenimente"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1262
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1273
 msgid "Page %1$s of %2$s"
 msgstr "Pagina %1$s din %2$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1278
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1289
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:40
 msgid "Previous"
 msgstr "Anterior"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1304
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1315
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:84
 msgid "Next"
 msgstr "Următor"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1315
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1326
 msgid "Delete activity logs"
 msgstr "Șterge jurnalele de activitate"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1319
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1330
 msgid "Delete %s selected activity log entries? This action cannot be undone."
 msgstr "Ștergeți %s înregistrări selectate din jurnalul de activitate? Această acțiune nu poate fi anulată."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1334
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1338
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1345
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1349
 msgid "Delete all activity"
 msgstr "Șterge toată activitatea"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1335
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1346
 msgid "Are you sure you want to delete all activity logs? This action cannot be undone."
 msgstr "Sigur doriți să ștergeți toate jurnalele de activitate? Această acțiune nu poate fi anulată."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1350
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1361
 msgid "Delete the activity entry \"%s\"? This action cannot be undone."
 msgstr "Ștergeți înregistrarea de activitate „%s”? Această acțiune nu poate fi anulată."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1357
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1368
 msgid "Delete activity"
 msgstr "Șterge activitatea"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:57
+#: ui/pages/dashboard/about/Sponsors.tsx:66
 msgid "Our amazing supporters"
 msgstr "Susținătorii noștri extraordinari"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:60
+#: ui/pages/dashboard/about/Sponsors.tsx:69
 msgid "A huge thank you to everyone who has contributed to keeping PeakURL running."
 msgstr "Mii de mulțumiri tuturor celor care au contribuit la menținerea PeakURL în funcțiune."
 
-#: ui/pages/dashboard/about/Sponsors.tsx:70
-msgid "Creator & Maintainer"
-msgstr "Creator și responsabil de întreținere"
+#: ui/pages/dashboard/about/Sponsors.tsx:79
+msgid "Founder & Maintainer"
+msgstr "Fondator și dezvoltator"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:73
-msgid "PeakURL is a solo project. All development, hosting, and infrastructure costs are currently self-funded by the creator. If PeakURL brings value to your workflow, consider pitching in!"
-msgstr "PeakURL este un proiect individual. Toate costurile de dezvoltare, găzduire și infrastructură sunt în prezent autofinanțate de creator. Dacă PeakURL aduce valoare fluxului dvs. de lucru, luați în considerare susținerea lui!"
+#: ui/pages/dashboard/about/Sponsors.tsx:82
+msgid "PeakURL is a solo project. All development, hosting, and infrastructure costs are currently self-funded by the founder. If PeakURL brings value to your workflow, consider pitching in!"
+msgstr "PeakURL este un proiect individual. Toate costurile de dezvoltare, găzduire și infrastructură sunt finanțate în prezent de către fondator. Dacă PeakURL aduce valoare fluxului tău de lucru, ia în considerare o contribuție!"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:91
+#: ui/pages/dashboard/about/Sponsors.tsx:100
 msgid "Independent Solo Maintainer"
 msgstr "Responsabil de întreținere independent"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:114
+#: ui/pages/dashboard/about/Sponsors.tsx:123
 msgid "X (Twitter)"
 msgstr "X (Twitter)"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:122
+#: ui/pages/dashboard/about/Sponsors.tsx:131
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:164
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:138
+#: ui/pages/dashboard/about/Sponsors.tsx:147
 msgid "Company Sponsors"
 msgstr "Sponsori corporativi"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:141
+#: ui/pages/dashboard/about/Sponsors.tsx:150
 msgid "Claim your spot on the homepage. Get visibility for your brand while supporting open-source development."
 msgstr "Revendicați-vă locul pe pagina principală. Obțineți vizibilitate pentru brandul dvs. în timp ce susțineți dezvoltarea open-source."
 
-#: ui/pages/dashboard/about/Sponsors.tsx:169
+#: ui/pages/dashboard/about/Sponsors.tsx:178
 msgid "Your Logo"
 msgstr "Sigla dvs."
 
-#: ui/pages/dashboard/about/Sponsors.tsx:180
+#: ui/pages/dashboard/about/Sponsors.tsx:189
 msgid "Community Supporters"
 msgstr "Susținători din comunitate"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:183
+#: ui/pages/dashboard/about/Sponsors.tsx:192
 msgid "A huge thanks to the individuals who back PeakURL's development and help keep the project actively maintained."
 msgstr "Mii de mulțumiri persoanelor care susțin dezvoltarea PeakURL și ajută la menținerea activă a proiectului."
 
-#: ui/pages/dashboard/about/Sponsors.tsx:193
+#: ui/pages/dashboard/about/Sponsors.tsx:202
 msgid "Support the Project"
 msgstr "Susține proiectul"
 
@@ -6762,7 +6774,7 @@ msgid "Compared with %1$s to %2$s."
 msgstr "Comparat cu perioada %1$s - %2$s."
 
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:119
-#: ui/pages/dashboard/links/LinksPage.tsx:433
+#: ui/pages/dashboard/links/LinksPage.tsx:442
 msgid "Active Links"
 msgstr "Linkuri active"
 
@@ -6772,6 +6784,7 @@ msgid "Unique Click Rate"
 msgstr "Rata de clicuri unice"
 
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:199
+#: ui/pages/dashboard/links/LinksPage.tsx:134
 msgid "vs last month"
 msgstr "față de luna trecută"
 
@@ -6841,48 +6854,51 @@ msgstr "Vezi statistici"
 msgid "%s clicks"
 msgstr "%s clicuri"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:44
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:54
 msgid "Failed to permanently delete links"
 msgstr "Nu s-au putut șterge definitiv linkurile"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:45
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:55
 msgid "Failed to move links to trash"
 msgstr "Nu s-au putut muta linkurile în coș"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:69
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:81
 msgid "Delete Links Permanently"
 msgstr "Șterge linkurile definitiv"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:70
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:82
 msgid "Move Links to Trash"
 msgstr "Mută linkurile în coș"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:93
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:106
 msgid "Are you sure you want to delete 1 selected link permanently? This action cannot be undone."
 msgstr "Sigur doriți să ștergeți definitiv 1 link selectat? Această acțiune este ireversibilă."
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:97
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:110
 msgid "Are you sure you want to delete %s selected links permanently? This action cannot be undone."
 msgstr "Sigur doriți să ștergeți definitiv cele %s linkuri selectate? Această acțiune este ireversibilă."
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:103
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:116
 msgid "Are you sure you want to move 1 selected link to the trash? You can restore it later."
 msgstr "Sigur doriți să mutați 1 link selectat în coș? Îl puteți restaura mai târziu."
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:107
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:120
 msgid "Are you sure you want to move %s selected links to the trash? You can restore them later."
 msgstr "Sigur doriți să mutați cele %s linkuri selectate în coș? Le puteți restaura mai târziu."
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:132
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:166
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:149
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:175
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:183
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:206
 msgid "Deleting..."
 msgstr "Se șterge..."
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:139
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:155
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:182
 msgid "Delete Permanently (%s)"
 msgstr "Șterge definitiv (%s)"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:145
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:188
 msgid "Move to Trash (%s)"
 msgstr "Mută în coș (%s)"
 
@@ -6987,7 +7003,7 @@ msgid "Title"
 msgstr "Titlu"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:106
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:117
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:130
 msgid "Destination"
 msgstr "Destinație"
 
@@ -7039,7 +7055,8 @@ msgid "Restore Link"
 msgstr "Restaurează linkul"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:251
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:172
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:188
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:212
 msgid "Delete Permanently"
 msgstr "Șterge definitiv"
 
@@ -7731,28 +7748,28 @@ msgstr "Închide panoul"
 msgid "Close"
 msgstr "Închide"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:47
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:57
 msgid "Failed to permanently delete link"
 msgstr "Nu s-a putut șterge definitiv linkul"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:48
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:58
 msgid "Failed to move link to trash"
 msgstr "Nu s-a putut muta linkul în coș"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:72
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:84
 msgid "Delete Link Permanently"
 msgstr "Șterge linkul definitiv"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:73
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:173
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:85
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:213
 msgid "Move to Trash"
 msgstr "Mută în coș"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:95
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:108
 msgid "Are you sure you want to delete this link permanently? This action cannot be undone."
 msgstr "Sigur doriți să ștergeți definitiv acest link? Această acțiune este ireversibilă."
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:98
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:111
 msgid "Are you sure you want to move this link to the trash? You can restore it later."
 msgstr "Sigur doriți să mutați acest link în coș? Îl puteți restaura mai târziu."
 
@@ -7825,55 +7842,96 @@ msgstr "Reîmprospătează linkurile"
 msgid "Manage and track your shortened URLs"
 msgstr "Gestionați și urmăriți adresele URL scurtate"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:252
+#: ui/pages/dashboard/links/LinksPage.tsx:130
+msgid "vs previous day"
+msgstr "față de ziua precedentă"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:132
+msgid "vs last week"
+msgstr "față de săptămâna trecută"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:136
+msgid "vs last period"
+msgstr "față de perioada precedentă"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:315
 msgid "The link has been restored to active status."
 msgstr "Linkul a fost restaurat la starea activă."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:257
+#: ui/pages/dashboard/links/LinksPage.tsx:320
 msgid "Failed to restore link."
 msgstr "Nu s-a putut restaura linkul."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:266
+#: ui/pages/dashboard/links/LinksPage.tsx:329
 msgid "Links restored"
 msgstr "Linkuri restaurate"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:267
+#: ui/pages/dashboard/links/LinksPage.tsx:330
 msgid "Selected links have been restored to active status."
 msgstr "Linkurile selectate au fost restaurate la starea activă."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:271
+#: ui/pages/dashboard/links/LinksPage.tsx:334
 msgid "Unable to restore links"
 msgstr "Nu se pot restaura linkurile"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:272
+#: ui/pages/dashboard/links/LinksPage.tsx:335
 msgid "Failed to restore selected links."
 msgstr "Nu s-au putut restaura linkurile selectate."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:281
+#: ui/pages/dashboard/links/LinksPage.tsx:344
 msgid "Trash emptied"
 msgstr "Coșul a fost golit"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:282
+#: ui/pages/dashboard/links/LinksPage.tsx:345
 msgid "All trashed links have been permanently deleted."
 msgstr "Toate linkurile din coș au fost șterse definitiv."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:286
+#: ui/pages/dashboard/links/LinksPage.tsx:349
 msgid "Unable to empty trash"
 msgstr "Nu se poate goli coșul"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:287
+#: ui/pages/dashboard/links/LinksPage.tsx:350
 msgid "Failed to empty trash."
 msgstr "Nu s-a putut goli coșul."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:419
+#: ui/pages/dashboard/links/LinksPage.tsx:398
+msgid "All-time clicks"
+msgstr "Clicuri din toate timpurile"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:401
+#: ui/pages/dashboard/links/LinksPage.tsx:411
+msgid "Selected date range"
+msgstr "Interval de date selectat"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:403
+msgid "No activity recorded"
+msgstr "Nicio activitate înregistrată"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:408
+msgid "All-time visitors"
+msgstr "Vizitatori din toate timpurile"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:413
+msgid "No visitors recorded"
+msgstr "Niciun vizitator înregistrat"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:434
 msgid "Total Links"
 msgstr "Total linkuri"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:447
+#: ui/pages/dashboard/links/LinksPage.tsx:437
+msgid "Total created links"
+msgstr "Total linkuri create"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:445
+msgid "Currently active"
+msgstr "Active în prezent"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:535
 msgid "Items in the trash are retained indefinitely until emptied."
 msgstr "Elementele din coș sunt păstrate pe termen nelimitat până la golire."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:451
+#: ui/pages/dashboard/links/LinksPage.tsx:539
 msgid "Items in the trash will be automatically deleted after %d days."
 msgstr "Elementele din coș vor fi șterse automat după %d zile."
 

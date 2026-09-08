@@ -6,8 +6,8 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-03 18:21+0000\n"
-"POT-Creation-Date: 2026-09-03 18:21+0000\n"
+"PO-Revision-Date: 2026-09-08 16:41+0000\n"
+"POT-Creation-Date: 2026-09-08 16:41+0000\n"
 "Plural-Forms: nplurals=6; plural=n == 0 ? 0 : n == 1 ? 1 : n == 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 && n % 100 <= 99 ? 4 : 5;\n"
 "Project-Id-Version: PeakURL 1.6.1\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
@@ -58,13 +58,21 @@ msgstr "تم مسح روابط سجل النشاط المعزولة."
 msgid "Removed orphaned webhooks."
 msgstr "تم إزالة خطافات الويب اليتيمة."
 
-#: app/traits/webhooks.php:83
+#: app/traits/webhooks.php:92
+#: app/traits/webhooks.php:165
 msgid "A valid webhook URL is required."
 msgstr "يلزم إدخال عنوان URL صالح لخطاف الويب (Webhook)."
 
-#: app/traits/webhooks.php:99
+#: app/traits/webhooks.php:108
+#: app/traits/webhooks.php:182
 msgid "Select at least one webhook event."
 msgstr "حدد حدث خطاف ويب واحد على الأقل."
+
+#: app/traits/webhooks.php:157
+#: app/traits/webhooks.php:258
+#: app/controllers/webhooks.php:121
+msgid "Webhook not found."
+msgstr "خطاف الويب غير موجود."
 
 #: app/traits/settings.php:167
 #: app/traits/system.php:375
@@ -271,7 +279,7 @@ msgid "No restorable link metadata found in this activity record."
 msgstr "لم يتم العثور على بيانات وصفية قابلة للاستعادة في سجل النشاط هذا."
 
 #: app/traits/analytics.php:782
-#: ui/pages/dashboard/activity/ActivityPage.tsx:391
+#: ui/pages/dashboard/activity/ActivityPage.tsx:402
 msgid "This link was permanently deleted and cannot be restored."
 msgstr "تم حذف هذا الرابط نهائياً ولا يمكن استعادته."
 
@@ -298,57 +306,57 @@ msgid "You do not have permission to view this link."
 msgstr "ليس لديك إذن لعرض هذا الرابط."
 
 #: app/traits/links.php:403
-#: app/traits/links.php:1176
+#: app/traits/links.php:1178
 msgid "Provide either socialImage or socialImageUrl, not both."
 msgstr "قدّم إما socialImage أو socialImageUrl، وليس كلاهما."
 
-#: app/traits/links.php:831
+#: app/traits/links.php:833
 msgid "Complete the verification to open this link."
 msgstr "أكمل التحقق لفتح هذا الرابط."
 
-#: app/traits/links.php:846
+#: app/traits/links.php:848
 msgid "Verification failed. Please try again."
 msgstr "فشل التحقق. يرجى المحاولة مرة أخرى."
 
-#: app/traits/links.php:1096
+#: app/traits/links.php:1098
 msgid "You do not have permission to edit this link."
 msgstr "ليس لديك إذن لتعديل هذا الرابط."
 
-#: app/traits/links.php:1365
+#: app/traits/links.php:1369
 msgid "You do not have permission to delete this link."
 msgstr "ليس لديك إذن لحذف هذا الرابط."
 
-#: app/traits/links.php:1515
+#: app/traits/links.php:1523
 msgid "That short link does not exist."
 msgstr "هذا الرابط القصير غير موجود."
 
-#: app/traits/links.php:1522
+#: app/traits/links.php:1530
 msgid "This link is already active."
 msgstr "هذا الرابط نشط بالفعل."
 
-#: app/traits/links.php:1532
+#: app/traits/links.php:1540
 msgid "You do not have permission to restore this link."
 msgstr "ليس لديك إذن لاستعادة هذا الرابط."
 
-#: app/traits/links.php:1598
-#: app/traits/links.php:1879
-#: app/traits/links.php:1957
+#: app/traits/links.php:1606
+#: app/traits/links.php:1891
+#: app/traits/links.php:1969
 msgid "You do not have permission to delete links."
 msgstr "ليس لديك إذن لحذف الروابط."
 
-#: app/traits/links.php:1780
+#: app/traits/links.php:1792
 msgid "You do not have permission to restore links."
 msgstr "ليس لديك إذن لاستعادة الروابط."
 
-#: app/traits/links.php:2142
+#: app/traits/links.php:2154
 msgid "A valid destination URL is required."
 msgstr "يلزم إدخال عنوان URL صالح للوجهة."
 
-#: app/traits/links.php:2160
+#: app/traits/links.php:2172
 msgid "That short code is reserved by the application."
 msgstr "هذا الرمز القصير محجوز بواسطة التطبيق."
 
-#: app/traits/links.php:2170
+#: app/traits/links.php:2182
 msgid "That short code is already in use."
 msgstr "هذا الرمز القصير مستخدم بالفعل."
 
@@ -415,7 +423,7 @@ msgid "Visit %s"
 msgstr "زيارة %s"
 
 #: app/includes/functions.php:1192
-#: ui/pages/dashboard/about/Sponsors.tsx:98
+#: ui/pages/dashboard/about/Sponsors.tsx:107
 #: ui/pages/dashboard/about/AboutPage.tsx:75
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
 msgid "Website"
@@ -427,7 +435,7 @@ msgid "Documentation"
 msgstr "الوثائق"
 
 #: app/includes/functions.php:1194
-#: ui/pages/dashboard/about/Sponsors.tsx:106
+#: ui/pages/dashboard/about/Sponsors.tsx:115
 msgid "GitHub"
 msgstr "GitHub"
 
@@ -600,11 +608,15 @@ msgstr "تم تحميل خطافات الويب."
 msgid "Webhook created."
 msgstr "تم إنشاء خطاف الويب."
 
-#: app/controllers/webhooks.php:84
-msgid "Webhook not found."
-msgstr "خطاف الويب غير موجود."
+#: app/controllers/webhooks.php:82
+msgid "Webhook updated."
+msgstr "تم تحديث خطاف الويب."
 
-#: app/controllers/webhooks.php:85
+#: app/controllers/webhooks.php:99
+msgid "Webhook test dispatched."
+msgstr "تم إرسال اختبار خطاف الويب."
+
+#: app/controllers/webhooks.php:122
 msgid "Webhook deleted."
 msgstr "تم حذف خطاف الويب."
 
@@ -1943,7 +1955,7 @@ msgstr "جميع الروابط"
 #: ui/utils/dashboardSearch.ts:100
 #: ui/pages/auth/login/LoginPage.tsx:47
 #: ui/pages/layout/dashboard/Search/Search.tsx:295
-#: ui/pages/dashboard/activity/ActivityPage.tsx:657
+#: ui/pages/dashboard/activity/ActivityPage.tsx:668
 #: ui/pages/dashboard/links/_components/Header/Header.tsx:42
 #: ui/router/pageTitle.ts:77
 msgid "Links"
@@ -1953,7 +1965,7 @@ msgstr "الروابط"
 #: ui/utils/dashboardSearch.ts:119
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:80
 #: ui/pages/layout/dashboard/Header/Header.tsx:121
-#: ui/pages/dashboard/activity/ActivityPage.tsx:714
+#: ui/pages/dashboard/activity/ActivityPage.tsx:725
 #: ui/router/pageTitle.ts:73
 msgid "Activity"
 msgstr "النشاط"
@@ -2072,7 +2084,7 @@ msgstr "التحديثات"
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:53
 #: ui/pages/layout/dashboard/Search/Search.tsx:256
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:988
-#: ui/pages/dashboard/activity/ActivityPage.tsx:663
+#: ui/pages/dashboard/activity/ActivityPage.tsx:674
 #: ui/pages/dashboard/users/UsersPage.tsx:577
 #: ui/router/pageTitle.ts:85
 msgid "Users"
@@ -2163,8 +2175,8 @@ msgstr "تأكيد"
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:63
 #: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:508
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1485
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:122
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:156
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:135
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:169
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:18
 #: ui/pages/dashboard/users/UsersPage.tsx:352
 msgid "Cancel"
@@ -2183,7 +2195,7 @@ msgid "Close modal"
 msgstr "إغلاق النافذة"
 
 #: ui/components/ui/PageSizeControl/PageSizeControl.tsx:27
-#: ui/pages/dashboard/activity/ActivityPage.tsx:821
+#: ui/pages/dashboard/activity/ActivityPage.tsx:832
 #: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:122
 msgid "Rows per page"
 msgstr "الصفوف في كل صفحة"
@@ -2253,8 +2265,8 @@ msgstr "الأحد"
 #: ui/components/charts/TrafficChart/TrafficChart.tsx:260
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:112
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:21
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:130
-#: ui/pages/dashboard/links/LinksPage.tsx:380
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:143
+#: ui/pages/dashboard/links/LinksPage.tsx:418
 msgid "Total Clicks"
 msgstr "إجمالي النقرات"
 
@@ -2265,8 +2277,8 @@ msgstr "إجمالي النقرات"
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:48
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:173
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:28
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:138
-#: ui/pages/dashboard/links/LinksPage.tsx:405
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:151
+#: ui/pages/dashboard/links/LinksPage.tsx:426
 msgid "Visitors"
 msgstr "الزوار"
 
@@ -2949,7 +2961,7 @@ msgstr "تم تحديث قاعدة بيانات GeoIP بنجاح"
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:522
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:562
 msgid "Saved"
-msgstr "فشل تحديث قاعدة بيانات GeoIP"
+msgstr "تم الحفظ"
 
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:523
 msgid "Location data settings were updated successfully."
@@ -2962,7 +2974,7 @@ msgstr "فشل تحديث إعدادات GeoIP"
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:542
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:667
 msgid "Database updated"
-msgstr "تم تحديث إعدادات CAPTCHA بنجاح"
+msgstr "تم تحديث قاعدة البيانات"
 
 #: ui/pages/dashboard/settings/_components/tabs/Content.tsx:543
 msgid "PeakURL downloaded the latest GeoLite2 City database."
@@ -3612,7 +3624,7 @@ msgstr "الشركة"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:390
 msgid "Job Title"
-msgstr "الموقع الإلكتروني"
+msgstr "المسمى الوظيفي"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:397
 msgid "Bio"
@@ -3620,24 +3632,24 @@ msgstr "نبذة شخصية"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:409
 msgid "Site Configuration"
-msgstr "أخبرنا قليلاً عن نفسك"
+msgstr "تكوين الموقع"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:422
 msgid "Tagline"
-msgstr "الشعار"
+msgstr "شعار الموقع"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:431
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:563
 msgid "Site Language"
-msgstr "شعار موجز أو وصف لموقعك"
+msgstr "لغة الموقع"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:447
 msgid "Site Timezone"
-msgstr "حفظ الملف الشخصي"
+msgstr "المنطقة الزمنية للموقع"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:458
 msgid "Site timezone"
-msgstr "تغيير كلمة المرور"
+msgstr "المنطقة الزمنية للموقع"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:464
 msgid "Time Format"
@@ -3645,7 +3657,7 @@ msgstr "تنسيق الوقت"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:475
 msgid "Time format"
-msgstr "كلمة المرور الجديدة"
+msgstr "تنسيق الوقت"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:480
 msgid "Trash Retention Period"
@@ -3657,20 +3669,20 @@ msgstr "فترة الاحتفاظ في سلة المهملات"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:500
 msgid "Homepage Configuration"
-msgstr "تأكيد كلمة المرور الجديدة"
+msgstr "تكوين الصفحة الرئيسية"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:506
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:521
 msgid "Root URL Behavior"
-msgstr "تحديث كلمة المرور"
+msgstr "سلوك الرابط الجذري"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:527
 msgid "Custom Redirect URL"
-msgstr "مظهر الموقع"
+msgstr "عنوان URL مخصص لإعادة التوجيه"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:540
 msgid "Visitors to the root domain will be redirected to this URL."
-msgstr "اختر المظهر المفضل لديك للوحة التحكم."
+msgstr "سيتم إعادة توجيه زوار النطاق الرئيسي إلى عنوان URL هذا."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:550
 msgid "To customize your HTML landing page, edit the following file in your installation:"
@@ -3702,21 +3714,21 @@ msgstr "استخدم صورة PNG مربعة، يفضل %s. الحد الأدن�
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:654
 msgid "Remove Favicon"
-msgstr "رفع أيقونة جديدة"
+msgstr "إزالة الأيقونة المفضلة"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:671
 msgid "Current favicon preview"
-msgstr "إزالة"
+msgstr "معاينة الأيقونة الحالية"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:721
 msgid "No favicon configured"
-msgstr "لم يتم تكوين أيقونة للموقع"
+msgstr "لم يتم تكوين أيقونة مفضلة"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:731
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:60
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Form.tsx:69
 msgid "Social Preview"
-msgstr "موصى به: PNG مربعة بأبعاد 512×512 بكسل على الأقل."
+msgstr "المعاينة الاجتماعية"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:734
 msgid "Upload the default image used when short links are shared on social platforms. Individual links can override it."
@@ -3726,7 +3738,7 @@ msgstr "ارفع الصورة الافتراضية المستخدمة عند م�
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:139
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:106
 msgid "Preview Image"
-msgstr "المنطقة الزمنية"
+msgstr "صورة المعاينة"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:780
 msgid "Use a PNG, JPG, or WebP image, ideally %s, for clean previews on Facebook, X, LinkedIn, and messaging apps."
@@ -3736,15 +3748,15 @@ msgstr "استخدم صورة PNG أو JPG أو WebP، يفضل بمقاس %s، 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SocialPreviewFields.tsx:149
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/SocialPreviewTab.tsx:116
 msgid "Remove Preview Image"
-msgstr "لغة لوحة التحكم"
+msgstr "إزالة صورة المعاينة"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:814
 msgid "Default social preview image"
-msgstr "اختر لغة العرض للوحة التحكم الخاصة بك."
+msgstr "صورة المعاينة الاجتماعية الافتراضية"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:827
 msgid "No default preview image"
-msgstr "حفظ التغييرات"
+msgstr "لا توجد صورة معاينة افتراضية"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/general/GeneralTab.tsx:844
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:505
@@ -3757,15 +3769,15 @@ msgstr "جارٍ الحفظ..."
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:33
 #: ui/pages/dashboard/users/UsersPage.tsx:357
 msgid "Save Changes"
-msgstr "تم الحفظ بنجاح"
+msgstr "حفظ التغييرات"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:117
 msgid "Location Database"
-msgstr "إعدادات البريد (SMTP)"
+msgstr "قاعدة بيانات الموقع الجغرافي"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:120
 msgid "Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder."
-msgstr "تكوين خادم SMTP لإرسال رسائل البريد الإلكتروني مثل إعادة تعيين كلمات المرور والإشعارات."
+msgstr "تفعيل تحليلات البلد والمدينة باستخدام قاعدة بيانات MaxMind GeoLite2 City محلية مخزنة في مجلد المحتوى الدائم."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:145
 msgid "Update Database"
@@ -3784,7 +3796,7 @@ msgstr "تنزيل قاعدة البيانات"
 #: ui/pages/dashboard/links/_components/StatsDrawer/QuickInsights.tsx:43
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:86
 msgid "Status"
-msgstr "إرسال اختبار"
+msgstr "الحالة"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:154
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:184
@@ -3797,7 +3809,7 @@ msgstr "جاهز"
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:154
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:827
 msgid "Setup Required"
-msgstr "خادم SMTP"
+msgstr "الإعداد مطلوب"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:157
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:830
@@ -3808,12 +3820,12 @@ msgstr "تم تحديث قاعدة البيانات"
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:83
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:111
 msgid "Never"
-msgstr "تشفير SMTP"
+msgstr "أبداً"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:170
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:838
 msgid "Database Size"
-msgstr "اسم مستخدم SMTP"
+msgstr "حجم قاعدة البيانات"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:173
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:61
@@ -3824,11 +3836,11 @@ msgstr "اسم مستخدم SMTP"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:834
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:841
 msgid "Not available"
-msgstr "كلمة مرور SMTP"
+msgstr "غير متوفر"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:182
 msgid "Location data unavailable"
-msgstr "اسم المرسل"
+msgstr "بيانات الموقع الجغرافي غير متوفرة"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:193
 msgid "Location analytics is enabled"
@@ -3840,7 +3852,7 @@ msgstr "تحليلات الموقع الجغرافي معطلة"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:198
 msgid "PeakURL is using the local GeoLite2 City database for click locations."
-msgstr "حماية النماذج العامة من برامج الروبوت والرسائل غير المرغوب فيها."
+msgstr "يستخدم PeakURL قاعدة بيانات GeoLite2 City المحلية لتحديد مواقع النقرات."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:201
 msgid "Save your MaxMind credentials, then download the GeoLite2 City database to enable visitor country and city analytics."
@@ -3849,11 +3861,11 @@ msgstr "احفظ بيانات اعتماد MaxMind الخاصة بك، ثم قم
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:212
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:205
 msgid "Dashboard management unavailable"
-msgstr "مفتاح الموقع"
+msgstr "إدارة لوحة التحكم غير متوفرة"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:219
 msgid "MaxMind Credentials"
-msgstr "المفتاح السري"
+msgstr "بيانات اعتماد MaxMind"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:222
 msgid "PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
@@ -3886,7 +3898,7 @@ msgstr "مفتاح ترخيص MaxMind"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:324
 msgid "Enter a new MaxMind license key"
-msgstr "أدخل مفتاح ترخيص MaxMind جديدًا"
+msgstr "أدخل مفتاح ترخيص MaxMind جديداً"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/location/LocationDataTab.tsx:325
 msgid "Enter your MaxMind license key"
@@ -3907,7 +3919,7 @@ msgstr "حفظ بيانات الاعتماد"
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:97
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:967
 msgid "Unavailable"
-msgstr "تنزيل أحدث قاعدة بيانات الآن"
+msgstr "غير متوفر"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:98
 msgid "Update service unavailable"
@@ -3919,7 +3931,7 @@ msgstr "تعذر على PeakURL الوصول إلى بيان (manifest) التح
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:109
 msgid "Update Available"
-msgstr "إعادة تثبيت الإصدار الأخير"
+msgstr "تحديث متاح"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:111
 msgid "PeakURL %s is available"
@@ -3936,7 +3948,7 @@ msgstr "يتوفر إصدار أحدث من PeakURL، ولكن لا يمكن ل�
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:127
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:144
 msgid "Latest"
-msgstr "تثبيت التحديث الآن"
+msgstr "الأحدث"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:129
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/helpers.ts:146
@@ -4002,11 +4014,11 @@ msgstr "جارٍ التحقق من الحزمة"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:42
 msgid "Installing update"
-msgstr "جارٍ استخراج الملفات"
+msgstr "جارٍ تثبيت التحديث"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:45
 msgid "Finishing up"
-msgstr "جارٍ إنهاء العملية"
+msgstr "جارٍ إنهاء الإعداد"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:83
 msgid "PeakURL is getting everything ready."
@@ -4014,7 +4026,7 @@ msgstr "اكتمل التثبيت"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:85
 msgid "PeakURL is downloading the update."
-msgstr "اكتملت إعادة التثبيت"
+msgstr "يقوم PeakURL بتنزيل التحديث."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/releaseProgress.ts:87
 msgid "PeakURL is applying the included files and content updates."
@@ -4026,7 +4038,7 @@ msgstr "التحديث قيد المعالجة"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:39
 msgid "Database Schema"
-msgstr "قام PeakURL بتحديث ملفات التطبيق وإعادة تحميل لوحة التحكم."
+msgstr "مخطط قاعدة البيانات"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:40
 msgid "PeakURL can repair missing tables, columns, indexes, and legacy leftovers so the current release runs against the expected schema."
@@ -4039,12 +4051,12 @@ msgstr "تشغيل ترقية قاعدة البيانات"
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:66
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:757
 msgid "Recorded Schema"
-msgstr "إعادة التثبيت معطلة"
+msgstr "المخطط المسجل"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:73
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:763
 msgid "Required Schema"
-msgstr "التحديث التلقائي معطل"
+msgstr "المخطط المطلوب"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:80
 msgid "Last Database Upgrade"
@@ -4052,27 +4064,27 @@ msgstr "آخر ترقية لقاعدة البيانات"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:104
 msgid "Last database error"
-msgstr "تحديث PeakURL"
+msgstr "آخر خطأ في قاعدة البيانات"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/DatabaseSchema.tsx:114
 msgid "Recent database findings"
-msgstr "التحقق من وجود تحديثات"
+msgstr "نتائج قاعدة البيانات الأخيرة"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/UpdateActions.tsx:49
 msgid "Install Update"
-msgstr "جارٍ التحقق..."
+msgstr "تثبيت التحديث"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/UpdateActions.tsx:68
 msgid "Reinstall Latest Version"
-msgstr "خطأ في التحديث"
+msgstr "إعادة تثبيت أحدث إصدار"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/UpdateActions.tsx:86
 msgid "Check for Updates"
-msgstr "تطبيق التحديث"
+msgstr "التحقق من وجود تحديثات"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:50
 msgid "PeakURL Updates"
-msgstr "إعادة تثبيت الإصدار"
+msgstr "تحديثات PeakURL"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:51
 msgid "Check for new PeakURL releases, install updates, or reinstall the latest packaged release from the dashboard."
@@ -4084,11 +4096,11 @@ msgstr "ملاحظات الإصدار"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:87
 msgid "Installed Version"
-msgstr "عرض سجل التغييرات"
+msgstr "الإصدار المثبت"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:92
 msgid "Latest Version"
-msgstr "الإصدار الحالي"
+msgstr "أحدث إصدار"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/_components/ApplicationUpdates.tsx:99
 msgid "Released"
@@ -4101,7 +4113,7 @@ msgstr "آخر فحص"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/updates/UpdatesTab.tsx:45
 msgid "Loading update status..."
-msgstr "تكاملات CAPTCHA"
+msgstr "جارٍ تحميل حالة التحديث..."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:54
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:62
@@ -4150,7 +4162,7 @@ msgstr "قم بتكوين Google reCAPTCHA v3 أو Cloudflare Turnstile لمنع
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:812
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:893
 msgid "Disabled"
-msgstr "حالة CAPTCHA"
+msgstr "معطل"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:180
 msgid "Editing"
@@ -4166,15 +4178,15 @@ msgstr "غير مكوّن"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:239
 msgid "Failed to save CAPTCHA settings."
-msgstr "مفتاح الموقع محفوظ:"
+msgstr "فشل حفظ إعدادات CAPTCHA."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:251
 msgid "CAPTCHA keys removed."
-msgstr "المفتاح السري محفوظ:"
+msgstr "تمت إزالة مفاتيح CAPTCHA."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:257
 msgid "Failed to remove CAPTCHA keys."
-msgstr "حفظ إعدادات CAPTCHA"
+msgstr "فشل إزالة مفاتيح CAPTCHA."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:267
 msgid "CAPTCHA Protection"
@@ -4186,19 +4198,19 @@ msgstr "إضافة حماية من برامج الروبوت إلى النماذ
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:284
 msgid "Enable CAPTCHA protection"
-msgstr "أدخل مفتاح الموقع الجديد"
+msgstr "تفعيل حماية CAPTCHA"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:315
 msgid "Loading CAPTCHA settings…"
-msgstr "أدخل مفتاح الموقع"
+msgstr "جارٍ تحميل إعدادات CAPTCHA…"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:321
 msgid "Failed to load CAPTCHA settings."
-msgstr "أدخل المفتاح السري الجديد"
+msgstr "فشل تحميل إعدادات CAPTCHA."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:327
 msgid "Provider Settings"
-msgstr "أدخل المفتاح السري"
+msgstr "إعدادات المزود"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:331
 msgid "Saved credentials are masked. Change or remove them when needed."
@@ -4216,12 +4228,12 @@ msgstr "المزود"
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:352
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:396
 msgid "Site Key"
-msgstr "مفتاح الموقع (Site Key)"
+msgstr "مفتاح الموقع"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:360
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:420
 msgid "Secret Key"
-msgstr "المفتاح السري (Secret Key)"
+msgstr "المفتاح السري"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:387
 msgid "CAPTCHA provider"
@@ -4229,7 +4241,7 @@ msgstr "مزود CAPTCHA"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:402
 msgid "Paste site key"
-msgstr "مفاتيح API والتكاملات"
+msgstr "الصق مفتاح الموقع"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:411
 msgid "Leave unchanged to keep the saved site key."
@@ -4237,7 +4249,7 @@ msgstr "أنشئ مفاتيح API للوصول إلى واجهة برمجة تط
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:429
 msgid "Keep saved secret"
-msgstr "إنشاء مفتاح API جديد"
+msgstr "الاحتفاظ بالسر المحفوظ"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/CaptchaSettings.tsx:430
 msgid "Paste secret key"
@@ -4385,11 +4397,11 @@ msgstr "حذف خطاف الويب"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:429
 msgid "Copy Your Webhook Secret"
-msgstr "هل أنت متأكد من رغبتك في حذف خطاف الويب هذا؟ لن يتم إرسال أي أحداث إلى نقطة النهاية هذه بعد الآن."
+msgstr "نسخ المفتاح السري لخطاف الويب"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:435
 msgid "This signing secret will not be shown again."
-msgstr "حذف خطاف الويب"
+msgstr "لن يتم عرض سر التوقيع هذا مرة أخرى."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:438
 msgid "Store it in your automation tool or secret manager before closing this window."
@@ -4404,7 +4416,7 @@ msgstr "تم نسخ المفتاح السري"
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:101
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:117
 msgid "Copy to clipboard"
-msgstr "توليد مفتاح سري جديد"
+msgstr "نسخ إلى الحافظة"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:468
 msgid "If this secret is ever exposed, delete the webhook and create a new one."
@@ -4412,12 +4424,12 @@ msgstr "إذا تم كشف هذا السر في أي وقت، فاحذف خطا�
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:489
 msgid "Copy Secret"
-msgstr "فشل إنشاء مفتاح سري جديد"
+msgstr "نسخ المفتاح السري"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:492
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:147
 msgid "I've Stored It"
-msgstr "نسخ المفتاح السري"
+msgstr "لقد قمت بحفظه"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:509
 msgid "Delete the webhook for %s? PeakURL will stop sending signed event requests to this endpoint immediately."
@@ -4425,7 +4437,7 @@ msgstr "حذف خطاف الويب الخاص بـ %s؟ سيتوقف PeakURL ع�
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/integrations/IntegrationsTab.tsx:517
 msgid "Keep webhook"
-msgstr "نظرة عامة على API"
+msgstr "الاحتفاظ بخطاف الويب"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:41
 msgid "Connection"
@@ -4469,7 +4481,7 @@ msgstr "نشط"
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:131
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:282
 msgid "Delete"
-msgstr "استرجاع قائمة بجميع الروابط"
+msgstr "حذف"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:134
 msgid "Delete API Key"
@@ -4477,23 +4489,23 @@ msgstr "حذف مفتاح API"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:146
 msgid "No API Keys Generated"
-msgstr "تحديث رابط موجود"
+msgstr "لم يتم إنشاء أي مفاتيح API بعد"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:149
 msgid "Generate an API key to access endpoints programmatically."
-msgstr "حذف رابط"
+msgstr "قم بإنشاء مفتاح API للوصول إلى نقاط النهاية برمجيًا."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:169
 msgid "Keep your API keys secure"
-msgstr "استرجاع تحليلات الرابط"
+msgstr "حافظ على أمان مفاتيح API الخاصة بك"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:172
 msgid "PeakURL only shows the full token once, at creation time. Store it in a password manager or secret store, and revoke it immediately if you think it has been exposed."
-msgstr "استرجاع إحصائيات لوحة التحكم"
+msgstr "يعرض PeakURL الرمز الكامل مرة واحدة فقط عند الإنشاء. احفظه في مدير كلمات المرور أو مخزن سري، وقم بإلغائه فورًا إذا كنت تعتقد أنه تم كشفه."
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:189
 msgid "API documentation"
-msgstr "وثائق API الكاملة"
+msgstr "وثائق API"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiTab.tsx:193
 msgid "Use the public docs for authentication, links, analytics, users, webhooks, and system endpoints."
@@ -4812,7 +4824,7 @@ msgstr "تكوين SMTP"
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:255
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:794
 msgid "From Name"
-msgstr "اسم المرسل (From Name)"
+msgstr "اسم المرسل"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:263
 msgid "PeakURL"
@@ -4821,7 +4833,7 @@ msgstr "PeakURL"
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:266
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:793
 msgid "From Email"
-msgstr "أدخل عنوان بريد إلكتروني لاستلام رسالة الاختبار"
+msgstr "البريد الإلكتروني للمرسل"
 
 #: ui/pages/dashboard/settings/_components/tabs/pages/email/EmailDeliveryTab.tsx:277
 msgid "noreply@yourdomain.com"
@@ -4999,7 +5011,7 @@ msgstr "ذاكرة APCu المؤقتة"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:500
 msgid "Filesystem Cache"
-msgstr "ذاكرة نظام الملفات"
+msgstr "ذاكرة نظام الملفات المؤقتة"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:503
 msgid "Cache Disabled"
@@ -5026,7 +5038,7 @@ msgstr "بيئة تشغيل PHP"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:531
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:687
 msgid "Web Server"
-msgstr "الحد الأقصى لوقت التنفيذ (max_execution_time)"
+msgstr "خادم الويب"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:546
 msgid "GeoLite2 Installed"
@@ -5051,11 +5063,11 @@ msgstr "البيئة"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:569
 msgid "Site URL"
-msgstr "نظام التشغيل"
+msgstr "رابط الموقع"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:574
 msgid "Install Type"
-msgstr "خادم الويب"
+msgstr "نوع التثبيت"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:578
 msgid "Source code"
@@ -5069,11 +5081,11 @@ msgstr "وضع تصحيح الأخطاء (Debug Mode)"
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:811
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:892
 msgid "Enabled"
-msgstr "مفعل (غير موصى به في بيئة الإنتاج)"
+msgstr "مفعل"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:598
 msgid "Content Directory"
-msgstr "معطل (موصى به)"
+msgstr "دليل المحتوى"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:604
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:665
@@ -5127,19 +5139,19 @@ msgstr "سجل تصحيح الأخطاء"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:656
 msgid "Not created yet"
-msgstr "مسار السجل"
+msgstr "لم يتم إنشاؤه بعد"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:660
 msgid "App Directory"
-msgstr "حجم السجل"
+msgstr "دليل التطبيق"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:673
 msgid "Release Root"
-msgstr "مسح السجل"
+msgstr "جذر الإصدار"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:684
 msgid "PHP Version"
-msgstr "تم مسح السجل بنجاح"
+msgstr "إصدار PHP"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:685
 msgid "PHP SAPI"
@@ -5147,7 +5159,7 @@ msgstr "PHP SAPI"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:691
 msgid "Operating System"
-msgstr "الحد الأقصى لحجم رفع الملفات (upload_max_filesize)"
+msgstr "نظام التشغيل"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:694
 msgid "Timezone"
@@ -5163,7 +5175,7 @@ msgstr "الحد الأقصى لوقت التنفيذ"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:703
 msgid "Upload Max Filesize"
-msgstr "الحد الأقصى لحجم الرفع"
+msgstr "الحد الأقصى لحجم رفع الملفات"
 
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:706
 msgid "POST Max Size"
@@ -5621,7 +5633,7 @@ msgstr "الاسم المستعار"
 #: ui/pages/dashboard/tools/import/_components/results/ImportDetails.tsx:33
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:55
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:110
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:107
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:120
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:42
 msgid "Short URL"
 msgstr "الرابط القصير"
@@ -5976,7 +5988,7 @@ msgid "Author"
 msgstr "المؤلف"
 
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
-#: ui/pages/dashboard/activity/ActivityPage.tsx:900
+#: ui/pages/dashboard/activity/ActivityPage.tsx:911
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:114
 #: ui/pages/dashboard/users/UsersPage.tsx:688
 msgid "Actions"
@@ -6071,288 +6083,288 @@ msgstr "تم النقر على الرابط \"%s\"\"%s\"\"%s\""
 msgid "Unknown activity"
 msgstr "نشاط غير معروف"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:377
+#: ui/pages/dashboard/activity/ActivityPage.tsx:388
 msgid "Link already active"
 msgstr "الرابط نشط بالفعل"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:378
+#: ui/pages/dashboard/activity/ActivityPage.tsx:389
 msgid "This link is already active and does not need to be restored."
 msgstr "هذا الرابط نشط بالفعل ولا يحتاج إلى استعادة."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:390
+#: ui/pages/dashboard/activity/ActivityPage.tsx:401
 msgid "Link permanently deleted"
 msgstr "تم حذف الرابط نهائياً"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:399
-#: ui/pages/dashboard/links/LinksPage.tsx:251
+#: ui/pages/dashboard/activity/ActivityPage.tsx:410
+#: ui/pages/dashboard/links/LinksPage.tsx:314
 msgid "Link restored"
 msgstr "تمت استعادة الرابط"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:400
+#: ui/pages/dashboard/activity/ActivityPage.tsx:411
 msgid "The link has been restored successfully."
 msgstr "تمت استعادة الرابط بنجاح."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:404
-#: ui/pages/dashboard/links/LinksPage.tsx:256
+#: ui/pages/dashboard/activity/ActivityPage.tsx:415
+#: ui/pages/dashboard/links/LinksPage.tsx:319
 msgid "Unable to restore link"
 msgstr "تعذر استعادة الرابط"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:407
+#: ui/pages/dashboard/activity/ActivityPage.tsx:418
 msgid "Failed to restore link from activity record."
 msgstr "فشلت استعادة الرابط من سجل النشاط."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:559
-#: ui/pages/dashboard/activity/ActivityPage.tsx:587
-#: ui/pages/dashboard/activity/ActivityPage.tsx:617
+#: ui/pages/dashboard/activity/ActivityPage.tsx:570
+#: ui/pages/dashboard/activity/ActivityPage.tsx:598
+#: ui/pages/dashboard/activity/ActivityPage.tsx:628
 msgid "Activity deleted"
 msgstr "تم حذف النشاط"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:560
+#: ui/pages/dashboard/activity/ActivityPage.tsx:571
 msgid "The activity log entry has been removed."
 msgstr "تمت إزالة إدخال سجل النشاط."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:564
-#: ui/pages/dashboard/activity/ActivityPage.tsx:595
-#: ui/pages/dashboard/activity/ActivityPage.tsx:622
+#: ui/pages/dashboard/activity/ActivityPage.tsx:575
+#: ui/pages/dashboard/activity/ActivityPage.tsx:606
+#: ui/pages/dashboard/activity/ActivityPage.tsx:633
 msgid "Unable to delete activity"
 msgstr "تعذر حذف النشاط"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:567
+#: ui/pages/dashboard/activity/ActivityPage.tsx:578
 msgid "The activity log entry could not be removed."
 msgstr "تعذر إزالة إدخال سجل النشاط."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:589
+#: ui/pages/dashboard/activity/ActivityPage.tsx:600
 msgid "Deleted %s activity log entries."
 msgstr "تم حذف %s إدخالاً من سجل النشاط."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:598
+#: ui/pages/dashboard/activity/ActivityPage.tsx:609
 msgid "The selected activity log entries could not be removed."
 msgstr "تعذر إزالة إدخالات سجل النشاط المحددة."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:618
+#: ui/pages/dashboard/activity/ActivityPage.tsx:629
 msgid "All activity log entries have been removed."
 msgstr "تمت إزالة جميع إدخالات سجل النشاط."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:625
+#: ui/pages/dashboard/activity/ActivityPage.tsx:636
 msgid "The activity logs could not be removed."
 msgstr "تعذر إزالة سجلات النشاط."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:651
+#: ui/pages/dashboard/activity/ActivityPage.tsx:662
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:35
 #: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:21
 msgid "All"
 msgstr "الكل"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:677
+#: ui/pages/dashboard/activity/ActivityPage.tsx:688
 msgid "Total events"
 msgstr "إجمالي الأحداث"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:683
+#: ui/pages/dashboard/activity/ActivityPage.tsx:694
 msgid "Link events"
 msgstr "أحداث الروابط"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:689
+#: ui/pages/dashboard/activity/ActivityPage.tsx:700
 msgid "User events"
 msgstr "أحداث المستخدمين"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:695
+#: ui/pages/dashboard/activity/ActivityPage.tsx:706
 msgid "Latest event"
 msgstr "أحدث حدث"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:698
+#: ui/pages/dashboard/activity/ActivityPage.tsx:709
 msgid "No recent events"
 msgstr "لا توجد أحداث أخيرة"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:712
+#: ui/pages/dashboard/activity/ActivityPage.tsx:723
 msgid "Audit Log"
 msgstr "حذف سجلات النشاط المحددة"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:716
+#: ui/pages/dashboard/activity/ActivityPage.tsx:727
 msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
 msgstr "راجع تغييرات الروابط وأحداث إدارة المستخدمين في مكان واحد مع الفلاتر والطوابع الزمنية وتفاصيل المنفذ."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:726
-#: ui/pages/dashboard/activity/ActivityPage.tsx:727
+#: ui/pages/dashboard/activity/ActivityPage.tsx:737
+#: ui/pages/dashboard/activity/ActivityPage.tsx:738
 msgid "Refresh activity history"
 msgstr "تحديث سجل النشاط"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:832
+#: ui/pages/dashboard/activity/ActivityPage.tsx:843
 msgid "Activity history"
 msgstr "سجل النشاط"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:839
+#: ui/pages/dashboard/activity/ActivityPage.tsx:850
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:33
 msgid "%s selected"
 msgstr "تم تحديد %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:849
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1326
+#: ui/pages/dashboard/activity/ActivityPage.tsx:860
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1337
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:74
 msgid "Delete selected"
 msgstr "حذف المحدد"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:857
+#: ui/pages/dashboard/activity/ActivityPage.tsx:868
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:83
 msgid "Delete all"
 msgstr "إلغاء التحديد"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:888
+#: ui/pages/dashboard/activity/ActivityPage.tsx:899
 msgid "Select all events on this page"
 msgstr "تحديد جميع الأحداث في هذه الصفحة"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:895
+#: ui/pages/dashboard/activity/ActivityPage.tsx:906
 msgid "Event"
 msgstr "تصفية حسب الحدث"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:896
+#: ui/pages/dashboard/activity/ActivityPage.tsx:907
 msgid "Details"
 msgstr "جميع الأحداث"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:897
-msgid "When"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:908
+msgid "Time"
 msgstr "الوقت"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1007
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1018
 msgid "Actor: %s"
 msgstr "الفاعل: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1019
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1030
 msgid "By"
 msgstr "بواسطة"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1057
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1068
 msgid "User: %s"
 msgstr "المستخدم: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1076
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1087
 msgid "Location: %s"
 msgstr "الموقع: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1171
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1180
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1182
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1191
 msgid "Link is already active"
 msgstr "الرابط نشط بالفعل"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1174
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1183
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1185
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1194
 msgid "Restore link"
 msgstr "استعادة الرابط"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1206
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1209
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1346
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1217
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1220
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1357
 msgid "Delete activity log"
 msgstr "تحديد الإدخال"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1235
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1246
 msgid "No user activity yet"
 msgstr "لا يوجد نشاط للمستخدم بعد"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1237
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1248
 msgid "No link activity yet"
 msgstr "لا يوجد نشاط للروابط بعد"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1238
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1249
 msgid "No activity recorded yet"
 msgstr "لم يتم تسجيل أي نشاط بعد"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1241
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1252
 msgid "Once users manage accounts or links change, the audit log will appear here."
 msgstr "ستظهر الأنشطة هنا عندما يتفاعل المستخدمون مع الروابط والحسابات."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1255
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1266
 msgid "Showing %1$s-%2$s of %3$s events"
 msgstr "عرض %1$s-%2$s من إجمالي %3$s أحداث"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1262
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1273
 msgid "Page %1$s of %2$s"
 msgstr "الصفحة %1$s من %2$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1278
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1289
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:40
 msgid "Previous"
 msgstr "السابق"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1304
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1315
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:84
 msgid "Next"
 msgstr "التالي"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1315
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1326
 msgid "Delete activity logs"
 msgstr "حذف سجلات النشاط"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1319
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1330
 msgid "Delete %s selected activity log entries? This action cannot be undone."
 msgstr "حذف %s إدخالاً محدداً من سجل النشاط؟ لا يمكن التراجع عن هذا الإجراء."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1334
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1338
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1345
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1349
 msgid "Delete all activity"
 msgstr "حذف جميع الأنشطة"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1335
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1346
 msgid "Are you sure you want to delete all activity logs? This action cannot be undone."
 msgstr "هل أنت متأكد من رغبتك في حذف جميع سجلات الأنشطة؟ لا يمكن التراجع عن هذا الإجراء."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1350
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1361
 msgid "Delete the activity entry \"%s\"? This action cannot be undone."
 msgstr "حذف إدخال النشاط \"%s\"؟ لا يمكن التراجع عن هذا الإجراء."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1357
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1368
 msgid "Delete activity"
 msgstr "حذف النشاط"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:57
+#: ui/pages/dashboard/about/Sponsors.tsx:66
 msgid "Our amazing supporters"
 msgstr "داعمونا الرائعون"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:60
+#: ui/pages/dashboard/about/Sponsors.tsx:69
 msgid "A huge thank you to everyone who has contributed to keeping PeakURL running."
 msgstr "شكرًا جزيلاً لكل من ساهم في استمرار وتطوير PeakURL."
 
-#: ui/pages/dashboard/about/Sponsors.tsx:70
-msgid "Creator & Maintainer"
-msgstr "المبتكر والمطور الرئيسي"
+#: ui/pages/dashboard/about/Sponsors.tsx:79
+msgid "Founder & Maintainer"
+msgstr "المؤسس والمطور"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:73
-msgid "PeakURL is a solo project. All development, hosting, and infrastructure costs are currently self-funded by the creator. If PeakURL brings value to your workflow, consider pitching in!"
-msgstr "PeakURL هو مشروع فردي. يتحمل المطور حاليًا جميع تكاليف التطوير والاستضافة والبنية التحتية ذاتيًا. إذا كان PeakURL يضيف قيمة لعملك، ففكر في دعمه!"
+#: ui/pages/dashboard/about/Sponsors.tsx:82
+msgid "PeakURL is a solo project. All development, hosting, and infrastructure costs are currently self-funded by the founder. If PeakURL brings value to your workflow, consider pitching in!"
+msgstr "PeakURL هو مشروع فردي. يتم تمويل جميع تكاليف التطوير والاستضافة والبنية التحتية حالياً ذاتياً بواسطة المؤسس. إذا كان PeakURL يضيف قيمة إلى سير عملك، ففكر في المساهمة!"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:91
+#: ui/pages/dashboard/about/Sponsors.tsx:100
 msgid "Independent Solo Maintainer"
 msgstr "مطور مستقل ومحافظ وحيد"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:114
+#: ui/pages/dashboard/about/Sponsors.tsx:123
 msgid "X (Twitter)"
 msgstr "X (تويتر)"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:122
+#: ui/pages/dashboard/about/Sponsors.tsx:131
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:164
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:138
+#: ui/pages/dashboard/about/Sponsors.tsx:147
 msgid "Company Sponsors"
 msgstr "الشركات الراعية"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:141
+#: ui/pages/dashboard/about/Sponsors.tsx:150
 msgid "Claim your spot on the homepage. Get visibility for your brand while supporting open-source development."
 msgstr "احجز مكانك في الصفحة الرئيسية. احصل على ظهور لعلامتك التجارية مع دعم التطوير مفتوح المصدر."
 
-#: ui/pages/dashboard/about/Sponsors.tsx:169
+#: ui/pages/dashboard/about/Sponsors.tsx:178
 msgid "Your Logo"
 msgstr "شعارك"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:180
+#: ui/pages/dashboard/about/Sponsors.tsx:189
 msgid "Community Supporters"
 msgstr "داعمو المجتمع"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:183
+#: ui/pages/dashboard/about/Sponsors.tsx:192
 msgid "A huge thanks to the individuals who back PeakURL's development and help keep the project actively maintained."
 msgstr "شكرًا جزيلاً للأفراد الذين يدعمون تطوير PeakURL ويساعدون في الحفاظ على تحديث المشروع بشكل مستمر."
 
-#: ui/pages/dashboard/about/Sponsors.tsx:193
+#: ui/pages/dashboard/about/Sponsors.tsx:202
 msgid "Support the Project"
 msgstr "ادعم المشروع"
 
@@ -6762,7 +6774,7 @@ msgid "Compared with %1$s to %2$s."
 msgstr "مقارنة بالفترة من %1$s إلى %2$s."
 
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:119
-#: ui/pages/dashboard/links/LinksPage.tsx:433
+#: ui/pages/dashboard/links/LinksPage.tsx:442
 msgid "Active Links"
 msgstr "تاريخ انتهاء الصلاحية (اختياري)"
 
@@ -6772,6 +6784,7 @@ msgid "Unique Click Rate"
 msgstr "معدل النقر الفريد"
 
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:199
+#: ui/pages/dashboard/links/LinksPage.tsx:134
 msgid "vs last month"
 msgstr "مقارنة بالشهر الماضي"
 
@@ -6841,48 +6854,51 @@ msgstr "عرض الإحصائيات"
 msgid "%s clicks"
 msgstr "%s نقرات"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:44
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:54
 msgid "Failed to permanently delete links"
 msgstr "فشل الحذف النهائي للروابط"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:45
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:55
 msgid "Failed to move links to trash"
 msgstr "فشل نقل الروابط إلى سلة المهملات"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:69
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:81
 msgid "Delete Links Permanently"
 msgstr "حذف الروابط نهائياً"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:70
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:82
 msgid "Move Links to Trash"
 msgstr "نقل الروابط إلى سلة المهملات"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:93
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:106
 msgid "Are you sure you want to delete 1 selected link permanently? This action cannot be undone."
 msgstr "هل أنت متأكد من رغبتك في حذف رابط واحد محدد نهائياً؟ لا يمكن التراجع عن هذا الإجراء."
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:97
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:110
 msgid "Are you sure you want to delete %s selected links permanently? This action cannot be undone."
-msgstr "هل أنت متأكد من رغبتك في حذف %s روابط محددة نهائياً؟ لا يمكن التراجع عن هذا الإجراء."
+msgstr "هل أنت متأكد من رغبتك في حذف %s من الروابط المحددة نهائياً؟ لا يمكن التراجع عن هذا الإجراء."
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:103
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:116
 msgid "Are you sure you want to move 1 selected link to the trash? You can restore it later."
 msgstr "هل أنت متأكد من رغبتك في نقل رابط واحد محدد إلى سلة المهملات؟ يمكنك استعادته لاحقاً."
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:107
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:120
 msgid "Are you sure you want to move %s selected links to the trash? You can restore them later."
-msgstr "هل أنت متأكد من رغبتك في نقل %s روابط محددة إلى سلة المهملات؟ يمكنك استعادتها لاحقاً."
+msgstr "هل أنت متأكد من رغبتك في نقل %s من الروابط المحددة إلى سلة المهملات؟ يمكنك استعادتها لاحقاً."
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:132
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:166
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:149
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:175
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:183
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:206
 msgid "Deleting..."
 msgstr "جارٍ الحذف..."
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:139
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:155
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:182
 msgid "Delete Permanently (%s)"
 msgstr "حذف نهائياً (%s)"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:145
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:188
 msgid "Move to Trash (%s)"
 msgstr "نقل إلى سلة المهملات (%s)"
 
@@ -6987,7 +7003,7 @@ msgid "Title"
 msgstr "العنوان"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:106
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:117
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:130
 msgid "Destination"
 msgstr "الوجهة"
 
@@ -7039,30 +7055,31 @@ msgid "Restore Link"
 msgstr "استعادة الرابط"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:251
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:172
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:188
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:212
 msgid "Delete Permanently"
 msgstr "حذف نهائياً"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:261
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:77
 msgid "QR Code"
-msgstr "لا توجد روابط بعد"
+msgstr "رمز الاستجابة السريعة (QR)"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:275
 msgid "Edit"
-msgstr "أنشئ أول رابط قصير لتبدأ!"
+msgstr "تعديل"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/EmptyState.tsx:11
 msgid "No links yet"
-msgstr "لم يتم العثور على روابط مطابقة"
+msgstr "لا توجد روابط بعد"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/EmptyState.tsx:13
 msgid "Create your first shortened link to get started"
-msgstr "جرب البحث بمصطلحات مختلفة."
+msgstr "أنشئ أول رابط قصير لتبدأ"
 
 #: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:159
 msgid "Links deleted"
-msgstr "إجمالي الروابط"
+msgstr "تم حذف الروابط"
 
 #: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:160
 msgid "All links have been removed."
@@ -7070,16 +7087,16 @@ msgstr "تمت إزالة جميع الروابط."
 
 #: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:164
 msgid "Unable to delete links"
-msgstr "الروابط منتهية الصلاحية"
+msgstr "تعذر حذف الروابط"
 
 #: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:165
 msgid "Failed to delete all links."
-msgstr "إجمالي النقرات"
+msgstr "فشل في حذف جميع الروابط."
 
 #: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:260
 #: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:264
 msgid "Delete all links"
-msgstr "نسخ عنوان URL القصير"
+msgstr "حذف جميع الروابط"
 
 #: ui/pages/dashboard/links/_components/LinksTable/LinksTable.tsx:261
 msgid "Are you sure you want to delete all links? This will move active links to trash."
@@ -7096,7 +7113,7 @@ msgstr "هل أنت متأكد من رغبتك في حذف جميع الرواب
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:25
 msgid "Link Title (Optional)"
-msgstr "تعديل الرابط"
+msgstr "عنوان الرابط (اختياري)"
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:33
 msgid "My Awesome Link"
@@ -7105,7 +7122,7 @@ msgstr "رابطي الرائع"
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/SecurityFields.tsx:44
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/ProtectionTab.tsx:22
 msgid "Password Protection (Optional)"
-msgstr "حذف الرابط"
+msgstr "حماية بكلمة مرور (اختياري)"
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:114
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:142
@@ -7120,7 +7137,7 @@ msgstr "يرجى إدخال عنوان URL صالح لصورة المعاينة 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:138
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:185
 msgid "Choose a preview image file or enter an image URL, not both."
-msgstr "تم حذف الروابط المحددة بنجاح"
+msgstr "اختر ملف صورة معاينة أو أدخل عنوان URL للصورة، وليس كلاهما."
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/UrlShorteningForm.tsx:152
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/useEditLinkForm.ts:153
@@ -7199,29 +7216,29 @@ msgstr "معلمات UTM (اختياري)"
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/UTMFields.tsx:39
 msgid "utm_source (e.g., google)"
-msgstr "أهم مصادر الإحالة"
+msgstr "utm_source (مثال: google)"
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/UTMFields.tsx:48
 msgid "utm_medium (e.g., email)"
-msgstr "مباشر / غير معروف"
+msgstr "utm_medium (مثال: email)"
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/UTMFields.tsx:57
 msgid "utm_campaign (e.g., sale)"
-msgstr "الأجهزة والمتصفحات"
+msgstr "utm_campaign (مثال: sale)"
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/UTMFields.tsx:66
 msgid "utm_term (e.g., running)"
-msgstr "أنظمة التشغيل"
+msgstr "utm_term (مثال: running)"
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/UTMFields.tsx:75
 msgid "utm_content (e.g., banner)"
-msgstr "معلمات UTM والحملات"
+msgstr "utm_content (مثال: banner)"
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/MainInputs.tsx:22
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:92
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:52
 msgid "Destination URL"
-msgstr "لا توجد نقرات مسجلة حتى الآن."
+msgstr "عنوان URL للوجهة"
 
 #: ui/pages/dashboard/links/_components/UrlShorteningForm/MainInputs.tsx:30
 msgid "Enter long link here..."
@@ -7716,7 +7733,7 @@ msgstr "تحليلات الرابط"
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:308
 msgid "Copy short URL"
-msgstr "تم نسخ الرابط القصير إلى الحافظة"
+msgstr "نسخ الرابط القصير"
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:325
 msgid "Open short URL"
@@ -7729,30 +7746,30 @@ msgstr "إغلاق اللوحة"
 
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatsDrawer.tsx:535
 msgid "Close"
-msgstr "فشل نسخ الرابط"
+msgstr "إغلاق"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:47
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:57
 msgid "Failed to permanently delete link"
 msgstr "فشل الحذف النهائي للرابط"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:48
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:58
 msgid "Failed to move link to trash"
 msgstr "فشل نقل الرابط إلى سلة المهملات"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:72
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:84
 msgid "Delete Link Permanently"
 msgstr "حذف الرابط نهائياً"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:73
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:173
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:85
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:213
 msgid "Move to Trash"
 msgstr "نقل إلى سلة المهملات"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:95
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:108
 msgid "Are you sure you want to delete this link permanently? This action cannot be undone."
 msgstr "هل أنت متأكد من رغبتك في حذف هذا الرابط نهائياً؟ لا يمكن التراجع عن هذا الإجراء."
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:98
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:111
 msgid "Are you sure you want to move this link to the trash? You can restore it later."
 msgstr "هل أنت متأكد من رغبتك في نقل هذا الرابط إلى سلة المهملات؟ يمكنك استعادته لاحقاً."
 
@@ -7825,55 +7842,96 @@ msgstr "تحديث الروابط"
 msgid "Manage and track your shortened URLs"
 msgstr "إدارة وتتبع عناوين URL القصيرة الخاصة بك"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:252
+#: ui/pages/dashboard/links/LinksPage.tsx:130
+msgid "vs previous day"
+msgstr "مقارنة باليوم السابق"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:132
+msgid "vs last week"
+msgstr "مقارنة بالأسبوع الماضي"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:136
+msgid "vs last period"
+msgstr "مقارنة بالفترة السابقة"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:315
 msgid "The link has been restored to active status."
 msgstr "تمت استعادة الرابط إلى الحالة النشطة."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:257
+#: ui/pages/dashboard/links/LinksPage.tsx:320
 msgid "Failed to restore link."
 msgstr "فشلت استعادة الرابط."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:266
+#: ui/pages/dashboard/links/LinksPage.tsx:329
 msgid "Links restored"
 msgstr "تمت استعادة الروابط"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:267
+#: ui/pages/dashboard/links/LinksPage.tsx:330
 msgid "Selected links have been restored to active status."
 msgstr "تمت استعادة الروابط المحددة إلى الحالة النشطة."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:271
+#: ui/pages/dashboard/links/LinksPage.tsx:334
 msgid "Unable to restore links"
 msgstr "تعذر استعادة الروابط"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:272
+#: ui/pages/dashboard/links/LinksPage.tsx:335
 msgid "Failed to restore selected links."
 msgstr "فشلت استعادة الروابط المحددة."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:281
+#: ui/pages/dashboard/links/LinksPage.tsx:344
 msgid "Trash emptied"
 msgstr "تم إفراغ سلة المهملات"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:282
+#: ui/pages/dashboard/links/LinksPage.tsx:345
 msgid "All trashed links have been permanently deleted."
 msgstr "تم حذف جميع الروابط الموجودة في سلة المهملات نهائياً."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:286
+#: ui/pages/dashboard/links/LinksPage.tsx:349
 msgid "Unable to empty trash"
 msgstr "تعذر إفراغ سلة المهملات"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:287
+#: ui/pages/dashboard/links/LinksPage.tsx:350
 msgid "Failed to empty trash."
 msgstr "فشل إفراغ سلة المهملات."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:419
+#: ui/pages/dashboard/links/LinksPage.tsx:398
+msgid "All-time clicks"
+msgstr "إجمالي النقرات"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:401
+#: ui/pages/dashboard/links/LinksPage.tsx:411
+msgid "Selected date range"
+msgstr "النطاق الزمني المحدد"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:403
+msgid "No activity recorded"
+msgstr "لم يتم تسجيل أي نشاط"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:408
+msgid "All-time visitors"
+msgstr "إجمالي الزوار"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:413
+msgid "No visitors recorded"
+msgstr "لم يتم تسجيل أي زوار"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:434
 msgid "Total Links"
 msgstr "إجمالي الروابط"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:447
+#: ui/pages/dashboard/links/LinksPage.tsx:437
+msgid "Total created links"
+msgstr "إجمالي الروابط المنشأة"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:445
+msgid "Currently active"
+msgstr "نشط حالياً"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:535
 msgid "Items in the trash are retained indefinitely until emptied."
 msgstr "يتم الاحتفاظ بالعناصر الموجودة في سلة المهملات إلى أجل غير مسمى حتى يتم إفراغها."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:451
+#: ui/pages/dashboard/links/LinksPage.tsx:539
 msgid "Items in the trash will be automatically deleted after %d days."
 msgstr "سيتم حذف العناصر الموجودة في سلة المهملات تلقائياً بعد %d يوماً."
 

@@ -6,8 +6,8 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-03 18:21+0000\n"
-"POT-Creation-Date: 2026-09-03 18:21+0000\n"
+"PO-Revision-Date: 2026-09-08 16:41+0000\n"
+"POT-Creation-Date: 2026-09-08 16:41+0000\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n >= 2 && n <= 4 ? 1 : 2;\n"
 "Project-Id-Version: PeakURL 1.6.1\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
@@ -58,13 +58,21 @@ msgstr "Vyčištěny osiřelé odkazy v protokolu aktivit."
 msgid "Removed orphaned webhooks."
 msgstr "Odstraněny osiřelé webhooky."
 
-#: app/traits/webhooks.php:83
+#: app/traits/webhooks.php:92
+#: app/traits/webhooks.php:165
 msgid "A valid webhook URL is required."
 msgstr "Je vyžadována platná URL webhooku."
 
-#: app/traits/webhooks.php:99
+#: app/traits/webhooks.php:108
+#: app/traits/webhooks.php:182
 msgid "Select at least one webhook event."
 msgstr "Vyberte alespoň jednu událost webhooku."
+
+#: app/traits/webhooks.php:157
+#: app/traits/webhooks.php:258
+#: app/controllers/webhooks.php:121
+msgid "Webhook not found."
+msgstr "Webhook nebyl nalezen."
 
 #: app/traits/settings.php:167
 #: app/traits/system.php:375
@@ -271,7 +279,7 @@ msgid "No restorable link metadata found in this activity record."
 msgstr "V tomto záznamu aktivity nebyla nalezena žádná metadata pro obnovení odkazu."
 
 #: app/traits/analytics.php:782
-#: ui/pages/dashboard/activity/ActivityPage.tsx:391
+#: ui/pages/dashboard/activity/ActivityPage.tsx:402
 msgid "This link was permanently deleted and cannot be restored."
 msgstr "Tento odkaz byl trvale smazán a nelze jej obnovit."
 
@@ -298,57 +306,57 @@ msgid "You do not have permission to view this link."
 msgstr "Nemáte oprávnění k prohlížení tohoto odkazu."
 
 #: app/traits/links.php:403
-#: app/traits/links.php:1176
+#: app/traits/links.php:1178
 msgid "Provide either socialImage or socialImageUrl, not both."
 msgstr "Zadejte buď socialImage, nebo socialImageUrl, nikoli obojí."
 
-#: app/traits/links.php:831
+#: app/traits/links.php:833
 msgid "Complete the verification to open this link."
 msgstr "Dokončete ověření pro otevření tohoto odkazu."
 
-#: app/traits/links.php:846
+#: app/traits/links.php:848
 msgid "Verification failed. Please try again."
 msgstr "Ověření se nezdařilo. Zkuste to prosím znovu."
 
-#: app/traits/links.php:1096
+#: app/traits/links.php:1098
 msgid "You do not have permission to edit this link."
 msgstr "Nemáte oprávnění upravovat tento odkaz."
 
-#: app/traits/links.php:1365
+#: app/traits/links.php:1369
 msgid "You do not have permission to delete this link."
 msgstr "Nemáte oprávnění smazat tento odkaz."
 
-#: app/traits/links.php:1515
+#: app/traits/links.php:1523
 msgid "That short link does not exist."
 msgstr "Tento zkrácený odkaz neexistuje."
 
-#: app/traits/links.php:1522
+#: app/traits/links.php:1530
 msgid "This link is already active."
 msgstr "Tento odkaz je již aktivní."
 
-#: app/traits/links.php:1532
+#: app/traits/links.php:1540
 msgid "You do not have permission to restore this link."
 msgstr "Nemáte oprávnění k obnovení tohoto odkazu."
 
-#: app/traits/links.php:1598
-#: app/traits/links.php:1879
-#: app/traits/links.php:1957
+#: app/traits/links.php:1606
+#: app/traits/links.php:1891
+#: app/traits/links.php:1969
 msgid "You do not have permission to delete links."
 msgstr "Nemáte oprávnění k mazání odkazů."
 
-#: app/traits/links.php:1780
+#: app/traits/links.php:1792
 msgid "You do not have permission to restore links."
 msgstr "Nemáte oprávnění k obnovení odkazů."
 
-#: app/traits/links.php:2142
+#: app/traits/links.php:2154
 msgid "A valid destination URL is required."
 msgstr "Je vyžadována platná cílová URL."
 
-#: app/traits/links.php:2160
+#: app/traits/links.php:2172
 msgid "That short code is reserved by the application."
 msgstr "Tento krátký kód je vyhrazen aplikací."
 
-#: app/traits/links.php:2170
+#: app/traits/links.php:2182
 msgid "That short code is already in use."
 msgstr "Tento krátký kód je již používán."
 
@@ -415,7 +423,7 @@ msgid "Visit %s"
 msgstr "Navštivte %s"
 
 #: app/includes/functions.php:1192
-#: ui/pages/dashboard/about/Sponsors.tsx:98
+#: ui/pages/dashboard/about/Sponsors.tsx:107
 #: ui/pages/dashboard/about/AboutPage.tsx:75
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
 msgid "Website"
@@ -427,7 +435,7 @@ msgid "Documentation"
 msgstr "Dokumentace"
 
 #: app/includes/functions.php:1194
-#: ui/pages/dashboard/about/Sponsors.tsx:106
+#: ui/pages/dashboard/about/Sponsors.tsx:115
 msgid "GitHub"
 msgstr "GitHub"
 
@@ -600,11 +608,15 @@ msgstr "Webhooky byly načteny."
 msgid "Webhook created."
 msgstr "Webhook byl vytvořen."
 
-#: app/controllers/webhooks.php:84
-msgid "Webhook not found."
-msgstr "Webhook nebyl nalezen."
+#: app/controllers/webhooks.php:82
+msgid "Webhook updated."
+msgstr "Webhook byl aktualizován."
 
-#: app/controllers/webhooks.php:85
+#: app/controllers/webhooks.php:99
+msgid "Webhook test dispatched."
+msgstr "Test webhooku byl odeslán."
+
+#: app/controllers/webhooks.php:122
 msgid "Webhook deleted."
 msgstr "Webhook byl smazán."
 
@@ -1943,7 +1955,7 @@ msgstr "Všechny odkazy"
 #: ui/utils/dashboardSearch.ts:100
 #: ui/pages/auth/login/LoginPage.tsx:47
 #: ui/pages/layout/dashboard/Search/Search.tsx:295
-#: ui/pages/dashboard/activity/ActivityPage.tsx:657
+#: ui/pages/dashboard/activity/ActivityPage.tsx:668
 #: ui/pages/dashboard/links/_components/Header/Header.tsx:42
 #: ui/router/pageTitle.ts:77
 msgid "Links"
@@ -1953,7 +1965,7 @@ msgstr "Odkazy"
 #: ui/utils/dashboardSearch.ts:119
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:80
 #: ui/pages/layout/dashboard/Header/Header.tsx:121
-#: ui/pages/dashboard/activity/ActivityPage.tsx:714
+#: ui/pages/dashboard/activity/ActivityPage.tsx:725
 #: ui/router/pageTitle.ts:73
 msgid "Activity"
 msgstr "Aktivita"
@@ -2072,7 +2084,7 @@ msgstr "Aktualizace"
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:53
 #: ui/pages/layout/dashboard/Search/Search.tsx:256
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:988
-#: ui/pages/dashboard/activity/ActivityPage.tsx:663
+#: ui/pages/dashboard/activity/ActivityPage.tsx:674
 #: ui/pages/dashboard/users/UsersPage.tsx:577
 #: ui/router/pageTitle.ts:85
 msgid "Users"
@@ -2163,8 +2175,8 @@ msgstr "Potvrdit"
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:63
 #: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:508
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1485
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:122
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:156
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:135
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:169
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:18
 #: ui/pages/dashboard/users/UsersPage.tsx:352
 msgid "Cancel"
@@ -2183,7 +2195,7 @@ msgid "Close modal"
 msgstr "Zavřít modální okno"
 
 #: ui/components/ui/PageSizeControl/PageSizeControl.tsx:27
-#: ui/pages/dashboard/activity/ActivityPage.tsx:821
+#: ui/pages/dashboard/activity/ActivityPage.tsx:832
 #: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:122
 msgid "Rows per page"
 msgstr "Řádků na stránku"
@@ -2253,8 +2265,8 @@ msgstr "Ne"
 #: ui/components/charts/TrafficChart/TrafficChart.tsx:260
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:112
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:21
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:130
-#: ui/pages/dashboard/links/LinksPage.tsx:380
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:143
+#: ui/pages/dashboard/links/LinksPage.tsx:418
 msgid "Total Clicks"
 msgstr "Celkem kliknutí"
 
@@ -2265,8 +2277,8 @@ msgstr "Celkem kliknutí"
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:48
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:173
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:28
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:138
-#: ui/pages/dashboard/links/LinksPage.tsx:405
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:151
+#: ui/pages/dashboard/links/LinksPage.tsx:426
 msgid "Visitors"
 msgstr "Návštěvníci"
 
@@ -5621,7 +5633,7 @@ msgstr "Alias"
 #: ui/pages/dashboard/tools/import/_components/results/ImportDetails.tsx:33
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:55
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:110
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:107
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:120
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:42
 msgid "Short URL"
 msgstr "Zkrácená URL"
@@ -5976,7 +5988,7 @@ msgid "Author"
 msgstr "Autor"
 
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
-#: ui/pages/dashboard/activity/ActivityPage.tsx:900
+#: ui/pages/dashboard/activity/ActivityPage.tsx:911
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:114
 #: ui/pages/dashboard/users/UsersPage.tsx:688
 msgid "Actions"
@@ -6071,288 +6083,288 @@ msgstr "Na odkaz \"%s\" bylo kliknuto\"%s\" bylo kliknuto\"%s\" bylo kliknuto"
 msgid "Unknown activity"
 msgstr "Neznámá aktivita"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:377
+#: ui/pages/dashboard/activity/ActivityPage.tsx:388
 msgid "Link already active"
 msgstr "Odkaz je již aktivní"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:378
+#: ui/pages/dashboard/activity/ActivityPage.tsx:389
 msgid "This link is already active and does not need to be restored."
 msgstr "Tento odkaz je již aktivní a není třeba jej obnovovat."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:390
+#: ui/pages/dashboard/activity/ActivityPage.tsx:401
 msgid "Link permanently deleted"
 msgstr "Odkaz byl trvale smazán"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:399
-#: ui/pages/dashboard/links/LinksPage.tsx:251
+#: ui/pages/dashboard/activity/ActivityPage.tsx:410
+#: ui/pages/dashboard/links/LinksPage.tsx:314
 msgid "Link restored"
 msgstr "Odkaz byl obnoven"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:400
+#: ui/pages/dashboard/activity/ActivityPage.tsx:411
 msgid "The link has been restored successfully."
 msgstr "Odkaz byl úspěšně obnoven."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:404
-#: ui/pages/dashboard/links/LinksPage.tsx:256
+#: ui/pages/dashboard/activity/ActivityPage.tsx:415
+#: ui/pages/dashboard/links/LinksPage.tsx:319
 msgid "Unable to restore link"
 msgstr "Nelze obnovit odkaz"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:407
+#: ui/pages/dashboard/activity/ActivityPage.tsx:418
 msgid "Failed to restore link from activity record."
 msgstr "Nepodařilo se obnovit odkaz ze záznamu aktivity."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:559
-#: ui/pages/dashboard/activity/ActivityPage.tsx:587
-#: ui/pages/dashboard/activity/ActivityPage.tsx:617
+#: ui/pages/dashboard/activity/ActivityPage.tsx:570
+#: ui/pages/dashboard/activity/ActivityPage.tsx:598
+#: ui/pages/dashboard/activity/ActivityPage.tsx:628
 msgid "Activity deleted"
 msgstr "Záznam aktivity smazán"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:560
+#: ui/pages/dashboard/activity/ActivityPage.tsx:571
 msgid "The activity log entry has been removed."
 msgstr "Záznam protokolu aktivit byl odstraněn."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:564
-#: ui/pages/dashboard/activity/ActivityPage.tsx:595
-#: ui/pages/dashboard/activity/ActivityPage.tsx:622
+#: ui/pages/dashboard/activity/ActivityPage.tsx:575
+#: ui/pages/dashboard/activity/ActivityPage.tsx:606
+#: ui/pages/dashboard/activity/ActivityPage.tsx:633
 msgid "Unable to delete activity"
 msgstr "Aktivitu se nepodařilo smazat"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:567
+#: ui/pages/dashboard/activity/ActivityPage.tsx:578
 msgid "The activity log entry could not be removed."
 msgstr "Záznam protokolu aktivit nelze odstranit."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:589
+#: ui/pages/dashboard/activity/ActivityPage.tsx:600
 msgid "Deleted %s activity log entries."
 msgstr "Smazáno %s záznamů protokolu aktivit."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:598
+#: ui/pages/dashboard/activity/ActivityPage.tsx:609
 msgid "The selected activity log entries could not be removed."
 msgstr "Vybrané záznamy protokolu aktivit se nepodařilo odstranit."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:618
+#: ui/pages/dashboard/activity/ActivityPage.tsx:629
 msgid "All activity log entries have been removed."
 msgstr "Všechny záznamy protokolu aktivit byly odstraněny."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:625
+#: ui/pages/dashboard/activity/ActivityPage.tsx:636
 msgid "The activity logs could not be removed."
 msgstr "Protokoly aktivit se nepodařilo odstranit."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:651
+#: ui/pages/dashboard/activity/ActivityPage.tsx:662
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:35
 #: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:21
 msgid "All"
 msgstr "Vše"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:677
+#: ui/pages/dashboard/activity/ActivityPage.tsx:688
 msgid "Total events"
 msgstr "Celkem událostí"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:683
+#: ui/pages/dashboard/activity/ActivityPage.tsx:694
 msgid "Link events"
 msgstr "Události odkazů"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:689
+#: ui/pages/dashboard/activity/ActivityPage.tsx:700
 msgid "User events"
 msgstr "Události uživatelů"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:695
+#: ui/pages/dashboard/activity/ActivityPage.tsx:706
 msgid "Latest event"
 msgstr "Poslední událost"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:698
+#: ui/pages/dashboard/activity/ActivityPage.tsx:709
 msgid "No recent events"
 msgstr "Žádné nedávné události"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:712
+#: ui/pages/dashboard/activity/ActivityPage.tsx:723
 msgid "Audit Log"
 msgstr "Protokol auditu"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:716
+#: ui/pages/dashboard/activity/ActivityPage.tsx:727
 msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
 msgstr "Prohlížejte změny odkazů a události správy uživatelů na jednom místě s filtry, časovými razítky a podrobnostmi o aktérech."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:726
-#: ui/pages/dashboard/activity/ActivityPage.tsx:727
+#: ui/pages/dashboard/activity/ActivityPage.tsx:737
+#: ui/pages/dashboard/activity/ActivityPage.tsx:738
 msgid "Refresh activity history"
 msgstr "Obnovit historii aktivit"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:832
+#: ui/pages/dashboard/activity/ActivityPage.tsx:843
 msgid "Activity history"
 msgstr "Historie aktivit"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:839
+#: ui/pages/dashboard/activity/ActivityPage.tsx:850
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:33
 msgid "%s selected"
 msgstr "Vybráno: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:849
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1326
+#: ui/pages/dashboard/activity/ActivityPage.tsx:860
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1337
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:74
 msgid "Delete selected"
 msgstr "Smazat vybrané"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:857
+#: ui/pages/dashboard/activity/ActivityPage.tsx:868
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:83
 msgid "Delete all"
 msgstr "Smazat vše"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:888
+#: ui/pages/dashboard/activity/ActivityPage.tsx:899
 msgid "Select all events on this page"
 msgstr "Vybrat všechny události na této stránce"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:895
+#: ui/pages/dashboard/activity/ActivityPage.tsx:906
 msgid "Event"
 msgstr "Událost"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:896
+#: ui/pages/dashboard/activity/ActivityPage.tsx:907
 msgid "Details"
 msgstr "Podrobnosti"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:897
-msgid "When"
-msgstr "Kdy"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:908
+msgid "Time"
+msgstr "Čas"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1007
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1018
 msgid "Actor: %s"
 msgstr "Aktér: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1019
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1030
 msgid "By"
 msgstr "Kým"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1057
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1068
 msgid "User: %s"
 msgstr "Uživatel: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1076
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1087
 msgid "Location: %s"
 msgstr "Poloha: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1171
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1180
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1182
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1191
 msgid "Link is already active"
 msgstr "Odkaz je již aktivní"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1174
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1183
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1185
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1194
 msgid "Restore link"
 msgstr "Obnovit odkaz"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1206
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1209
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1346
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1217
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1220
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1357
 msgid "Delete activity log"
 msgstr "Smazat záznam protokolu aktivit"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1235
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1246
 msgid "No user activity yet"
 msgstr "Zatím žádná aktivita uživatelů"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1237
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1248
 msgid "No link activity yet"
 msgstr "Zatím žádná aktivita odkazů"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1238
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1249
 msgid "No activity recorded yet"
 msgstr "Zatím nebyla zaznamenána žádná aktivita"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1241
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1252
 msgid "Once users manage accounts or links change, the audit log will appear here."
 msgstr "Jakmile uživatelé začnou spravovat účty nebo měnit odkazy, protokol auditu se zobrazí zde."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1255
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1266
 msgid "Showing %1$s-%2$s of %3$s events"
 msgstr "Zobrazeno %1$s–%2$s z %3$s událostí"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1262
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1273
 msgid "Page %1$s of %2$s"
 msgstr "Stránka %1$s z %2$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1278
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1289
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:40
 msgid "Previous"
 msgstr "Předchozí"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1304
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1315
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:84
 msgid "Next"
 msgstr "Další"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1315
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1326
 msgid "Delete activity logs"
 msgstr "Smazat protokoly aktivit"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1319
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1330
 msgid "Delete %s selected activity log entries? This action cannot be undone."
 msgstr "Smazat %s vybraných záznamů protokolu aktivit? Tuto akci nelze vrátit zpět."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1334
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1338
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1345
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1349
 msgid "Delete all activity"
 msgstr "Smazat veškerou aktivitu"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1335
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1346
 msgid "Are you sure you want to delete all activity logs? This action cannot be undone."
 msgstr "Opravdu chcete smazat všechny protokoly aktivit? Tuto akci nelze vrátit zpět."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1350
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1361
 msgid "Delete the activity entry \"%s\"? This action cannot be undone."
 msgstr "Smazat záznam aktivity \"%s\"? Tuto akci nelze vrátit zpět."
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1357
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1368
 msgid "Delete activity"
 msgstr "Smazat aktivitu"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:57
+#: ui/pages/dashboard/about/Sponsors.tsx:66
 msgid "Our amazing supporters"
 msgstr "Naši úžasní podporovatelé"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:60
+#: ui/pages/dashboard/about/Sponsors.tsx:69
 msgid "A huge thank you to everyone who has contributed to keeping PeakURL running."
 msgstr "Velké díky všem, kteří přispěli k udržení chodu PeakURL."
 
-#: ui/pages/dashboard/about/Sponsors.tsx:70
-msgid "Creator & Maintainer"
-msgstr "Tvůrce a správce"
+#: ui/pages/dashboard/about/Sponsors.tsx:79
+msgid "Founder & Maintainer"
+msgstr "Zakladatel a správce"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:73
-msgid "PeakURL is a solo project. All development, hosting, and infrastructure costs are currently self-funded by the creator. If PeakURL brings value to your workflow, consider pitching in!"
-msgstr "PeakURL je samostatný projekt jednoho vývojáře. Veškerý vývoj, hosting a náklady na infrastrukturu jsou v současné době financovány samotným tvůrcem. Pokud PeakURL pomáhá vašemu workflow, zvažte podporu!"
+#: ui/pages/dashboard/about/Sponsors.tsx:82
+msgid "PeakURL is a solo project. All development, hosting, and infrastructure costs are currently self-funded by the founder. If PeakURL brings value to your workflow, consider pitching in!"
+msgstr "PeakURL je samostatný projekt. Veškeré náklady na vývoj, hosting a infrastrukturu v současnosti hradí sám zakladatel. Pokud PeakURL přináší hodnotu do vašeho pracovního postupu, zvažte podporu!"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:91
+#: ui/pages/dashboard/about/Sponsors.tsx:100
 msgid "Independent Solo Maintainer"
 msgstr "Nezávislý samostatný správce"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:114
+#: ui/pages/dashboard/about/Sponsors.tsx:123
 msgid "X (Twitter)"
 msgstr "X (Twitter)"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:122
+#: ui/pages/dashboard/about/Sponsors.tsx:131
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:164
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:138
+#: ui/pages/dashboard/about/Sponsors.tsx:147
 msgid "Company Sponsors"
 msgstr "Firemní sponzoři"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:141
+#: ui/pages/dashboard/about/Sponsors.tsx:150
 msgid "Claim your spot on the homepage. Get visibility for your brand while supporting open-source development."
 msgstr "Získejte své místo na hlavní stránce. Zviditelněte svou značku a zároveň podpořte vývoj open-source."
 
-#: ui/pages/dashboard/about/Sponsors.tsx:169
+#: ui/pages/dashboard/about/Sponsors.tsx:178
 msgid "Your Logo"
 msgstr "Vaše logo"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:180
+#: ui/pages/dashboard/about/Sponsors.tsx:189
 msgid "Community Supporters"
 msgstr "Podporovatelé z komunity"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:183
+#: ui/pages/dashboard/about/Sponsors.tsx:192
 msgid "A huge thanks to the individuals who back PeakURL's development and help keep the project actively maintained."
 msgstr "Velké díky jednotlivcům, kteří podporují vývoj PeakURL a pomáhají udržovat projekt aktivní."
 
-#: ui/pages/dashboard/about/Sponsors.tsx:193
+#: ui/pages/dashboard/about/Sponsors.tsx:202
 msgid "Support the Project"
 msgstr "Podpořit projekt"
 
@@ -6762,7 +6774,7 @@ msgid "Compared with %1$s to %2$s."
 msgstr "Ve srovnání s obdobím od %1$s do %2$s."
 
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:119
-#: ui/pages/dashboard/links/LinksPage.tsx:433
+#: ui/pages/dashboard/links/LinksPage.tsx:442
 msgid "Active Links"
 msgstr "Aktivní odkazy"
 
@@ -6772,6 +6784,7 @@ msgid "Unique Click Rate"
 msgstr "Míra unikátních kliknutí"
 
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:199
+#: ui/pages/dashboard/links/LinksPage.tsx:134
 msgid "vs last month"
 msgstr "oproti minulému měsíci"
 
@@ -6841,48 +6854,51 @@ msgstr "Zobrazit statistiky"
 msgid "%s clicks"
 msgstr "%s kliknutí"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:44
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:54
 msgid "Failed to permanently delete links"
 msgstr "Nepodařilo se trvale smazat odkazy"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:45
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:55
 msgid "Failed to move links to trash"
 msgstr "Nepodařilo se přesunout odkazy do koše"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:69
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:81
 msgid "Delete Links Permanently"
 msgstr "Trvale smazat odkazy"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:70
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:82
 msgid "Move Links to Trash"
 msgstr "Přesunout odkazy do koše"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:93
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:106
 msgid "Are you sure you want to delete 1 selected link permanently? This action cannot be undone."
 msgstr "Opravdu chcete trvale smazat 1 vybraný odkaz? Tuto akci nelze vrátit zpět."
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:97
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:110
 msgid "Are you sure you want to delete %s selected links permanently? This action cannot be undone."
 msgstr "Opravdu chcete trvale smazat %s vybraných odkazů? Tuto akci nelze vrátit zpět."
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:103
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:116
 msgid "Are you sure you want to move 1 selected link to the trash? You can restore it later."
 msgstr "Opravdu chcete přesunout 1 vybraný odkaz do koše? Později jej můžete obnovit."
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:107
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:120
 msgid "Are you sure you want to move %s selected links to the trash? You can restore them later."
 msgstr "Opravdu chcete přesunout %s vybraných odkazů do koše? Později je můžete obnovit."
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:132
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:166
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:149
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:175
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:183
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:206
 msgid "Deleting..."
 msgstr "Mazání..."
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:139
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:155
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:182
 msgid "Delete Permanently (%s)"
 msgstr "Trvale smazat (%s)"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:145
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:188
 msgid "Move to Trash (%s)"
 msgstr "Přesunout do koše (%s)"
 
@@ -6987,7 +7003,7 @@ msgid "Title"
 msgstr "Název"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:106
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:117
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:130
 msgid "Destination"
 msgstr "Cíl"
 
@@ -7039,7 +7055,8 @@ msgid "Restore Link"
 msgstr "Obnovit odkaz"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:251
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:172
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:188
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:212
 msgid "Delete Permanently"
 msgstr "Trvale smazat"
 
@@ -7731,28 +7748,28 @@ msgstr "Zavřít panel"
 msgid "Close"
 msgstr "Zavřít"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:47
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:57
 msgid "Failed to permanently delete link"
 msgstr "Nepodařilo se trvale smazat odkaz"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:48
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:58
 msgid "Failed to move link to trash"
 msgstr "Nepodařilo se přesunout odkaz do koše"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:72
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:84
 msgid "Delete Link Permanently"
 msgstr "Trvale smazat odkaz"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:73
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:173
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:85
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:213
 msgid "Move to Trash"
 msgstr "Přesunout do koše"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:95
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:108
 msgid "Are you sure you want to delete this link permanently? This action cannot be undone."
 msgstr "Opravdu chcete tento odkaz trvale smazat? Tuto akci nelze vrátit zpět."
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:98
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:111
 msgid "Are you sure you want to move this link to the trash? You can restore it later."
 msgstr "Opravdu chcete tento odkaz přesunout do koše? Později jej můžete obnovit."
 
@@ -7825,55 +7842,96 @@ msgstr "Obnovit odkazy"
 msgid "Manage and track your shortened URLs"
 msgstr "Spravujte a sledujte své zkrácené adresy URL"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:252
+#: ui/pages/dashboard/links/LinksPage.tsx:130
+msgid "vs previous day"
+msgstr "oproti předchozímu dni"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:132
+msgid "vs last week"
+msgstr "oproti minulému týdnu"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:136
+msgid "vs last period"
+msgstr "oproti předchozímu období"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:315
 msgid "The link has been restored to active status."
 msgstr "Odkaz byl obnoven do aktivního stavu."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:257
+#: ui/pages/dashboard/links/LinksPage.tsx:320
 msgid "Failed to restore link."
 msgstr "Nepodařilo se obnovit odkaz."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:266
+#: ui/pages/dashboard/links/LinksPage.tsx:329
 msgid "Links restored"
 msgstr "Odkazy byly obnoveny"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:267
+#: ui/pages/dashboard/links/LinksPage.tsx:330
 msgid "Selected links have been restored to active status."
 msgstr "Vybrané odkazy byly obnoveny do aktivního stavu."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:271
+#: ui/pages/dashboard/links/LinksPage.tsx:334
 msgid "Unable to restore links"
 msgstr "Nelze obnovit odkazy"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:272
+#: ui/pages/dashboard/links/LinksPage.tsx:335
 msgid "Failed to restore selected links."
 msgstr "Nepodařilo se obnovit vybrané odkazy."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:281
+#: ui/pages/dashboard/links/LinksPage.tsx:344
 msgid "Trash emptied"
 msgstr "Koš byl vysypán"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:282
+#: ui/pages/dashboard/links/LinksPage.tsx:345
 msgid "All trashed links have been permanently deleted."
 msgstr "Všechny odkazy v koši byly trvale smazány."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:286
+#: ui/pages/dashboard/links/LinksPage.tsx:349
 msgid "Unable to empty trash"
 msgstr "Nelze vysypat koš"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:287
+#: ui/pages/dashboard/links/LinksPage.tsx:350
 msgid "Failed to empty trash."
 msgstr "Nepodařilo se vysypat koš."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:419
+#: ui/pages/dashboard/links/LinksPage.tsx:398
+msgid "All-time clicks"
+msgstr "Kliknutí za celou dobu"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:401
+#: ui/pages/dashboard/links/LinksPage.tsx:411
+msgid "Selected date range"
+msgstr "Vybrané časové období"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:403
+msgid "No activity recorded"
+msgstr "Nezaznamenána žádná aktivita"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:408
+msgid "All-time visitors"
+msgstr "Návštěvníci za celou dobu"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:413
+msgid "No visitors recorded"
+msgstr "Nezaznamenáni žádní návštěvníci"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:434
 msgid "Total Links"
 msgstr "Celkem odkazů"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:447
+#: ui/pages/dashboard/links/LinksPage.tsx:437
+msgid "Total created links"
+msgstr "Celkem vytvořených odkazů"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:445
+msgid "Currently active"
+msgstr "Nyní aktivní"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:535
 msgid "Items in the trash are retained indefinitely until emptied."
 msgstr "Položky v koši jsou uchovávány po neomezenou dobu, dokud není koš vysypán."
 
-#: ui/pages/dashboard/links/LinksPage.tsx:451
+#: ui/pages/dashboard/links/LinksPage.tsx:539
 msgid "Items in the trash will be automatically deleted after %d days."
 msgstr "Položky v koši budou automaticky smazány po %d dnech."
 

@@ -6,8 +6,8 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-03 18:21+0000\n"
-"POT-Creation-Date: 2026-09-03 18:21+0000\n"
+"PO-Revision-Date: 2026-09-08 16:41+0000\n"
+"POT-Creation-Date: 2026-09-08 16:41+0000\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "Project-Id-Version: PeakURL 1.6.1\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
@@ -58,13 +58,21 @@ msgstr "ऑडिट-लॉग से अनाथ लिंक हटा दि
 msgid "Removed orphaned webhooks."
 msgstr "अनाथ वेबहुक हटा दिए गए।"
 
-#: app/traits/webhooks.php:83
+#: app/traits/webhooks.php:92
+#: app/traits/webhooks.php:165
 msgid "A valid webhook URL is required."
 msgstr "एक मान्य वेबहुक URL आवश्यक है।"
 
-#: app/traits/webhooks.php:99
+#: app/traits/webhooks.php:108
+#: app/traits/webhooks.php:182
 msgid "Select at least one webhook event."
 msgstr "कम से कम एक वेबहुक इवेंट चुनें।"
+
+#: app/traits/webhooks.php:157
+#: app/traits/webhooks.php:258
+#: app/controllers/webhooks.php:121
+msgid "Webhook not found."
+msgstr "वेबहुक नहीं मिला।"
 
 #: app/traits/settings.php:167
 #: app/traits/system.php:375
@@ -271,7 +279,7 @@ msgid "No restorable link metadata found in this activity record."
 msgstr "इस गतिविधि रिकॉर्ड में कोई पुनर्प्राप्ति योग्य लिंक मेटाडेटा नहीं मिला।"
 
 #: app/traits/analytics.php:782
-#: ui/pages/dashboard/activity/ActivityPage.tsx:391
+#: ui/pages/dashboard/activity/ActivityPage.tsx:402
 msgid "This link was permanently deleted and cannot be restored."
 msgstr "यह लिंक स्थायी रूप से हटा दिया गया था और इसे पुनर्स्थापित नहीं किया जा सकता है।"
 
@@ -298,57 +306,57 @@ msgid "You do not have permission to view this link."
 msgstr "आपके पास इस लिंक को देखने की अनुमति नहीं है।"
 
 #: app/traits/links.php:403
-#: app/traits/links.php:1176
+#: app/traits/links.php:1178
 msgid "Provide either socialImage or socialImageUrl, not both."
 msgstr "या तो socialImage या socialImageUrl प्रदान करें, दोनों नहीं।"
 
-#: app/traits/links.php:831
+#: app/traits/links.php:833
 msgid "Complete the verification to open this link."
 msgstr "इस लिंक को खोलने के लिए सत्यापन पूरा करें।"
 
-#: app/traits/links.php:846
+#: app/traits/links.php:848
 msgid "Verification failed. Please try again."
 msgstr "सत्यापन विफल रहा। कृपया पुनः प्रयास करें।"
 
-#: app/traits/links.php:1096
+#: app/traits/links.php:1098
 msgid "You do not have permission to edit this link."
 msgstr "आपके पास इस लिंक को संपादित करने की अनुमति नहीं है।"
 
-#: app/traits/links.php:1365
+#: app/traits/links.php:1369
 msgid "You do not have permission to delete this link."
 msgstr "आपके पास इस लिंक को हटाने की अनुमति tidak है।"
 
-#: app/traits/links.php:1515
+#: app/traits/links.php:1523
 msgid "That short link does not exist."
 msgstr "वह छोटा लिंक मौजूद नहीं है।"
 
-#: app/traits/links.php:1522
+#: app/traits/links.php:1530
 msgid "This link is already active."
 msgstr "यह लिंक पहले से ही सक्रिय है।"
 
-#: app/traits/links.php:1532
+#: app/traits/links.php:1540
 msgid "You do not have permission to restore this link."
 msgstr "आपके पास इस लिंक को पुनर्स्थापित करने की अनुमति नहीं है।"
 
-#: app/traits/links.php:1598
-#: app/traits/links.php:1879
-#: app/traits/links.php:1957
+#: app/traits/links.php:1606
+#: app/traits/links.php:1891
+#: app/traits/links.php:1969
 msgid "You do not have permission to delete links."
 msgstr "आपके पास लिंक हटाने की अनुमति नहीं है।"
 
-#: app/traits/links.php:1780
+#: app/traits/links.php:1792
 msgid "You do not have permission to restore links."
 msgstr "आपके पास लिंक पुनर्स्थापित करने की अनुमति नहीं है।"
 
-#: app/traits/links.php:2142
+#: app/traits/links.php:2154
 msgid "A valid destination URL is required."
 msgstr "एक मान्य गंतव्य URL आवश्यक है।"
 
-#: app/traits/links.php:2160
+#: app/traits/links.php:2172
 msgid "That short code is reserved by the application."
 msgstr "वह शॉर्ट कोड एप्लिकेशन द्वारा आरक्षित है।"
 
-#: app/traits/links.php:2170
+#: app/traits/links.php:2182
 msgid "That short code is already in use."
 msgstr "वह शॉर्ट कोड पहले से उपयोग में है।"
 
@@ -415,7 +423,7 @@ msgid "Visit %s"
 msgstr "%s पर जाएं"
 
 #: app/includes/functions.php:1192
-#: ui/pages/dashboard/about/Sponsors.tsx:98
+#: ui/pages/dashboard/about/Sponsors.tsx:107
 #: ui/pages/dashboard/about/AboutPage.tsx:75
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficSourcesTab.tsx:104
 msgid "Website"
@@ -427,7 +435,7 @@ msgid "Documentation"
 msgstr "दस्तावेज़"
 
 #: app/includes/functions.php:1194
-#: ui/pages/dashboard/about/Sponsors.tsx:106
+#: ui/pages/dashboard/about/Sponsors.tsx:115
 msgid "GitHub"
 msgstr "GitHub"
 
@@ -600,11 +608,15 @@ msgstr "वेबहुक लोड हो गए।"
 msgid "Webhook created."
 msgstr "वेबहुक बनाया गया।"
 
-#: app/controllers/webhooks.php:84
-msgid "Webhook not found."
-msgstr "वेबहुक नहीं मिला।"
+#: app/controllers/webhooks.php:82
+msgid "Webhook updated."
+msgstr "वेबहुक अपडेट किया गया।"
 
-#: app/controllers/webhooks.php:85
+#: app/controllers/webhooks.php:99
+msgid "Webhook test dispatched."
+msgstr "वेबहुक परीक्षण भेजा गया।"
+
+#: app/controllers/webhooks.php:122
 msgid "Webhook deleted."
 msgstr "वेबहुक हटा दिया गया।"
 
@@ -1943,7 +1955,7 @@ msgstr "सभी लिंक"
 #: ui/utils/dashboardSearch.ts:100
 #: ui/pages/auth/login/LoginPage.tsx:47
 #: ui/pages/layout/dashboard/Search/Search.tsx:295
-#: ui/pages/dashboard/activity/ActivityPage.tsx:657
+#: ui/pages/dashboard/activity/ActivityPage.tsx:668
 #: ui/pages/dashboard/links/_components/Header/Header.tsx:42
 #: ui/router/pageTitle.ts:77
 msgid "Links"
@@ -1953,7 +1965,7 @@ msgstr "लिंक"
 #: ui/utils/dashboardSearch.ts:119
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:80
 #: ui/pages/layout/dashboard/Header/Header.tsx:121
-#: ui/pages/dashboard/activity/ActivityPage.tsx:714
+#: ui/pages/dashboard/activity/ActivityPage.tsx:725
 #: ui/router/pageTitle.ts:73
 msgid "Activity"
 msgstr "गतिविधि"
@@ -2072,7 +2084,7 @@ msgstr "अपडेट"
 #: ui/pages/layout/dashboard/Sidebar/Sidebar.tsx:53
 #: ui/pages/layout/dashboard/Search/Search.tsx:256
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:988
-#: ui/pages/dashboard/activity/ActivityPage.tsx:663
+#: ui/pages/dashboard/activity/ActivityPage.tsx:674
 #: ui/pages/dashboard/users/UsersPage.tsx:577
 #: ui/router/pageTitle.ts:85
 msgid "Users"
@@ -2163,8 +2175,8 @@ msgstr "पुष्टि करें"
 #: ui/pages/dashboard/settings/_components/tabs/pages/api/ApiKeyModals.tsx:63
 #: ui/pages/dashboard/settings/_components/tabs/pages/performance/PerformanceTab.tsx:508
 #: ui/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1485
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:122
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:156
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:135
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:169
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/Footer.tsx:18
 #: ui/pages/dashboard/users/UsersPage.tsx:352
 msgid "Cancel"
@@ -2183,7 +2195,7 @@ msgid "Close modal"
 msgstr "मॉडल बंद करें"
 
 #: ui/components/ui/PageSizeControl/PageSizeControl.tsx:27
-#: ui/pages/dashboard/activity/ActivityPage.tsx:821
+#: ui/pages/dashboard/activity/ActivityPage.tsx:832
 #: ui/pages/dashboard/links/_components/TableFooter/TableFooter.tsx:122
 msgid "Rows per page"
 msgstr "प्रति पृष्ठ पंक्तियाँ"
@@ -2253,8 +2265,8 @@ msgstr "रवि"
 #: ui/components/charts/TrafficChart/TrafficChart.tsx:260
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:112
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:21
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:130
-#: ui/pages/dashboard/links/LinksPage.tsx:380
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:143
+#: ui/pages/dashboard/links/LinksPage.tsx:418
 msgid "Total Clicks"
 msgstr "कुल क्लिक"
 
@@ -2265,8 +2277,8 @@ msgstr "कुल क्लिक"
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:48
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:173
 #: ui/pages/dashboard/links/_components/StatsDrawer/StatCards.tsx:28
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:138
-#: ui/pages/dashboard/links/LinksPage.tsx:405
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:151
+#: ui/pages/dashboard/links/LinksPage.tsx:426
 msgid "Visitors"
 msgstr "विज़िटर"
 
@@ -5621,7 +5633,7 @@ msgstr "उपनाम (Alias)"
 #: ui/pages/dashboard/tools/import/_components/results/ImportDetails.tsx:33
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:55
 #: ui/pages/dashboard/links/_components/QRCodeModal/QRCodeModal.tsx:110
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:107
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:120
 #: ui/pages/dashboard/links/_components/EditLinkDrawer/_components/LinkDetailsTab.tsx:42
 msgid "Short URL"
 msgstr "छोटा URL"
@@ -5976,7 +5988,7 @@ msgid "Author"
 msgstr "लेखक"
 
 #: ui/pages/dashboard/plugins/_components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
-#: ui/pages/dashboard/activity/ActivityPage.tsx:900
+#: ui/pages/dashboard/activity/ActivityPage.tsx:911
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:114
 #: ui/pages/dashboard/users/UsersPage.tsx:688
 msgid "Actions"
@@ -6071,288 +6083,288 @@ msgstr "लिंक \"%s\" पर क्लिक किया गया\"%s\" 
 msgid "Unknown activity"
 msgstr "अज्ञात गतिविधि"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:377
+#: ui/pages/dashboard/activity/ActivityPage.tsx:388
 msgid "Link already active"
 msgstr "लिंक पहले से ही सक्रिय है"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:378
+#: ui/pages/dashboard/activity/ActivityPage.tsx:389
 msgid "This link is already active and does not need to be restored."
 msgstr "यह लिंक पहले से ही सक्रिय है और इसे पुनर्स्थापित करने की आवश्यकता नहीं है।"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:390
+#: ui/pages/dashboard/activity/ActivityPage.tsx:401
 msgid "Link permanently deleted"
 msgstr "लिंक स्थायी रूप से हटा दिया गया"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:399
-#: ui/pages/dashboard/links/LinksPage.tsx:251
+#: ui/pages/dashboard/activity/ActivityPage.tsx:410
+#: ui/pages/dashboard/links/LinksPage.tsx:314
 msgid "Link restored"
 msgstr "लिंक पुनर्स्थापित हो गया"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:400
+#: ui/pages/dashboard/activity/ActivityPage.tsx:411
 msgid "The link has been restored successfully."
 msgstr "लिंक सफलतापूर्वक पुनर्स्थापित कर दिया गया है।"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:404
-#: ui/pages/dashboard/links/LinksPage.tsx:256
+#: ui/pages/dashboard/activity/ActivityPage.tsx:415
+#: ui/pages/dashboard/links/LinksPage.tsx:319
 msgid "Unable to restore link"
 msgstr "लिंक पुनर्स्थापित करने में असमर्थ"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:407
+#: ui/pages/dashboard/activity/ActivityPage.tsx:418
 msgid "Failed to restore link from activity record."
 msgstr "गतिविधि रिकॉर्ड से लिंक पुनर्स्थापित करने में विफल।"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:559
-#: ui/pages/dashboard/activity/ActivityPage.tsx:587
-#: ui/pages/dashboard/activity/ActivityPage.tsx:617
+#: ui/pages/dashboard/activity/ActivityPage.tsx:570
+#: ui/pages/dashboard/activity/ActivityPage.tsx:598
+#: ui/pages/dashboard/activity/ActivityPage.tsx:628
 msgid "Activity deleted"
 msgstr "गतिविधि हटा दी गई"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:560
+#: ui/pages/dashboard/activity/ActivityPage.tsx:571
 msgid "The activity log entry has been removed."
 msgstr "गतिविधि लॉग प्रविष्टि हटा दी गई है।"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:564
-#: ui/pages/dashboard/activity/ActivityPage.tsx:595
-#: ui/pages/dashboard/activity/ActivityPage.tsx:622
+#: ui/pages/dashboard/activity/ActivityPage.tsx:575
+#: ui/pages/dashboard/activity/ActivityPage.tsx:606
+#: ui/pages/dashboard/activity/ActivityPage.tsx:633
 msgid "Unable to delete activity"
 msgstr "गतिविधि हटाने में असमर्थ"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:567
+#: ui/pages/dashboard/activity/ActivityPage.tsx:578
 msgid "The activity log entry could not be removed."
 msgstr "गतिविधि लॉग प्रविष्टि को हटाया नहीं जा सका।"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:589
+#: ui/pages/dashboard/activity/ActivityPage.tsx:600
 msgid "Deleted %s activity log entries."
 msgstr "%s गतिविधि लॉग प्रविष्टियां हटा दी गईं।"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:598
+#: ui/pages/dashboard/activity/ActivityPage.tsx:609
 msgid "The selected activity log entries could not be removed."
 msgstr "चयनित गतिविधि लॉग प्रविष्टियों को हटाया नहीं जा सका।"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:618
+#: ui/pages/dashboard/activity/ActivityPage.tsx:629
 msgid "All activity log entries have been removed."
 msgstr "सभी गतिविधि लॉग प्रविष्टियां हटा दी गई हैं।"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:625
+#: ui/pages/dashboard/activity/ActivityPage.tsx:636
 msgid "The activity logs could not be removed."
 msgstr "गतिविधि लॉग को हटाया नहीं जा सका।"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:651
+#: ui/pages/dashboard/activity/ActivityPage.tsx:662
 #: ui/pages/dashboard/links/_components/StatsDrawer/TrafficHistory.tsx:35
 #: ui/pages/dashboard/links/_components/Header/DateRangeFilter.tsx:21
 msgid "All"
 msgstr "सभी"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:677
+#: ui/pages/dashboard/activity/ActivityPage.tsx:688
 msgid "Total events"
 msgstr "कुल घटनाएं"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:683
+#: ui/pages/dashboard/activity/ActivityPage.tsx:694
 msgid "Link events"
 msgstr "लिंक घटनाएं"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:689
+#: ui/pages/dashboard/activity/ActivityPage.tsx:700
 msgid "User events"
 msgstr "उपयोगकर्ता घटनाएं"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:695
+#: ui/pages/dashboard/activity/ActivityPage.tsx:706
 msgid "Latest event"
 msgstr "नवीनतम घटना"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:698
+#: ui/pages/dashboard/activity/ActivityPage.tsx:709
 msgid "No recent events"
 msgstr "कोई हाल की घटना नहीं"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:712
+#: ui/pages/dashboard/activity/ActivityPage.tsx:723
 msgid "Audit Log"
 msgstr "ऑडिट लॉग"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:716
+#: ui/pages/dashboard/activity/ActivityPage.tsx:727
 msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
 msgstr "फ़िल्टर, टाइमस्टैम्प और कर्ता विवरण के साथ एक ही स्थान पर लिंक परिवर्तन और उपयोगकर्ता-प्रबंधन घटनाओं की समीक्षा करें।"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:726
-#: ui/pages/dashboard/activity/ActivityPage.tsx:727
+#: ui/pages/dashboard/activity/ActivityPage.tsx:737
+#: ui/pages/dashboard/activity/ActivityPage.tsx:738
 msgid "Refresh activity history"
 msgstr "गतिविधि इतिहास रीफ़्रेश करें"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:832
+#: ui/pages/dashboard/activity/ActivityPage.tsx:843
 msgid "Activity history"
 msgstr "गतिविधि इतिहास"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:839
+#: ui/pages/dashboard/activity/ActivityPage.tsx:850
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:33
 msgid "%s selected"
 msgstr "%s चयनित"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:849
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1326
+#: ui/pages/dashboard/activity/ActivityPage.tsx:860
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1337
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:74
 msgid "Delete selected"
 msgstr "चयनित हटाएं"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:857
+#: ui/pages/dashboard/activity/ActivityPage.tsx:868
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:83
 msgid "Delete all"
 msgstr "सभी हटाएं"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:888
+#: ui/pages/dashboard/activity/ActivityPage.tsx:899
 msgid "Select all events on this page"
 msgstr "इस पृष्ठ की सभी घटनाओं का चयन करें"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:895
+#: ui/pages/dashboard/activity/ActivityPage.tsx:906
 msgid "Event"
 msgstr "घटना"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:896
+#: ui/pages/dashboard/activity/ActivityPage.tsx:907
 msgid "Details"
 msgstr "विवरण"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:897
-msgid "When"
-msgstr "कब"
+#: ui/pages/dashboard/activity/ActivityPage.tsx:908
+msgid "Time"
+msgstr "समय"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1007
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1018
 msgid "Actor: %s"
 msgstr "कर्ता: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1019
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1030
 msgid "By"
 msgstr "द्वारा"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1057
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1068
 msgid "User: %s"
 msgstr "उपयोगकर्ता: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1076
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1087
 msgid "Location: %s"
 msgstr "स्थान: %s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1171
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1180
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1182
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1191
 msgid "Link is already active"
 msgstr "लिंक पहले से सक्रिय है"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1174
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1183
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1185
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1194
 msgid "Restore link"
 msgstr "लिंक पुनर्स्थापित करें"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1206
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1209
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1346
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1217
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1220
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1357
 msgid "Delete activity log"
 msgstr "गतिविधि लॉग हटाएं"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1235
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1246
 msgid "No user activity yet"
 msgstr "अभी तक कोई उपयोगकर्ता गतिविधि नहीं"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1237
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1248
 msgid "No link activity yet"
 msgstr "अभी तक कोई लिंक गतिविधि नहीं"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1238
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1249
 msgid "No activity recorded yet"
 msgstr "अभी तक कोई गतिविधि दर्ज नहीं की गई"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1241
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1252
 msgid "Once users manage accounts or links change, the audit log will appear here."
 msgstr "एक बार जब उपयोगकर्ता खातों का प्रबंधन करेंगे या लिंक बदलेंगे, तो ऑडिट लॉग यहाँ दिखाई देगा।"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1255
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1266
 msgid "Showing %1$s-%2$s of %3$s events"
 msgstr "%3$s में से %1$s-%2$s घटनाएं दिखाई जा रही हैं"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1262
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1273
 msgid "Page %1$s of %2$s"
 msgstr "%2$s का पृष्ठ %1$s"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1278
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1289
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:40
 msgid "Previous"
 msgstr "पिछला"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1304
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1315
 #: ui/pages/dashboard/links/_components/Pagination/Pagination.tsx:84
 msgid "Next"
 msgstr "अगला"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1315
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1326
 msgid "Delete activity logs"
 msgstr "गतिविधि लॉग हटाएं"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1319
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1330
 msgid "Delete %s selected activity log entries? This action cannot be undone."
 msgstr "क्या आप %s चयनित गतिविधि लॉग प्रविष्टियों को हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1334
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1338
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1345
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1349
 msgid "Delete all activity"
 msgstr "सभी गतिविधि हटाएं"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1335
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1346
 msgid "Are you sure you want to delete all activity logs? This action cannot be undone."
 msgstr "क्या आप वाकई सभी गतिविधि लॉग हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1350
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1361
 msgid "Delete the activity entry \"%s\"? This action cannot be undone."
 msgstr "क्या गतिविधि प्रविष्टि \"%s\" को हटाएं? यह क्रिया पूर्ववत नहीं की जा सकती।"
 
-#: ui/pages/dashboard/activity/ActivityPage.tsx:1357
+#: ui/pages/dashboard/activity/ActivityPage.tsx:1368
 msgid "Delete activity"
 msgstr "गतिविधि हटाएं"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:57
+#: ui/pages/dashboard/about/Sponsors.tsx:66
 msgid "Our amazing supporters"
 msgstr "हमारे अद्भुत समर्थक"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:60
+#: ui/pages/dashboard/about/Sponsors.tsx:69
 msgid "A huge thank you to everyone who has contributed to keeping PeakURL running."
 msgstr "PeakURL को चालू रखने में योगदान देने वाले सभी लोगों का बहुत-बहुत धन्यवाद।"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:70
-msgid "Creator & Maintainer"
-msgstr "निर्माता और अनुरक्षक"
+#: ui/pages/dashboard/about/Sponsors.tsx:79
+msgid "Founder & Maintainer"
+msgstr "संस्थापक और अनुरक्षक"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:73
-msgid "PeakURL is a solo project. All development, hosting, and infrastructure costs are currently self-funded by the creator. If PeakURL brings value to your workflow, consider pitching in!"
-msgstr "PeakURL एक एकल परियोजना है। सभी विकास, होस्टिंग और बुनियादी ढांचे की लागत वर्तमान में निर्माता द्वारा स्वयं वित्तपोषित है। यदि PeakURL आपके वर्कफ़्लो में मूल्य जोड़ता है, तो समर्थन देने पर विचार करें!"
+#: ui/pages/dashboard/about/Sponsors.tsx:82
+msgid "PeakURL is a solo project. All development, hosting, and infrastructure costs are currently self-funded by the founder. If PeakURL brings value to your workflow, consider pitching in!"
+msgstr "PeakURL एक व्यक्तिगत प्रोजेक्ट है। सभी विकास, होस्टिंग और बुनियादी ढांचा लागत वर्तमान में संस्थापक द्वारा स्वयं वहन की जाती हैं। यदि PeakURL आपके कार्यप्रवाह में मूल्य जोड़ता है, तो सहयोग करने पर विचार करें!"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:91
+#: ui/pages/dashboard/about/Sponsors.tsx:100
 msgid "Independent Solo Maintainer"
 msgstr "स्वतंत्र एकल अनुरक्षक"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:114
+#: ui/pages/dashboard/about/Sponsors.tsx:123
 msgid "X (Twitter)"
 msgstr "X (ट्विटर)"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:122
+#: ui/pages/dashboard/about/Sponsors.tsx:131
 #: ui/pages/dashboard/links/_components/StatsDrawer/ShareTab.tsx:164
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:138
+#: ui/pages/dashboard/about/Sponsors.tsx:147
 msgid "Company Sponsors"
 msgstr "कंपनी प्रायोजक"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:141
+#: ui/pages/dashboard/about/Sponsors.tsx:150
 msgid "Claim your spot on the homepage. Get visibility for your brand while supporting open-source development."
 msgstr "होमपेज पर अपना स्थान सुरक्षित करें। ओपन-सोर्स विकास का समर्थन करते हुए अपने ब्रांड के लिए दृश्यता प्राप्त करें।"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:169
+#: ui/pages/dashboard/about/Sponsors.tsx:178
 msgid "Your Logo"
 msgstr "आपका लोगो"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:180
+#: ui/pages/dashboard/about/Sponsors.tsx:189
 msgid "Community Supporters"
 msgstr "सामुदायिक समर्थक"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:183
+#: ui/pages/dashboard/about/Sponsors.tsx:192
 msgid "A huge thanks to the individuals who back PeakURL's development and help keep the project actively maintained."
 msgstr "उन व्यक्तियों का बहुत-बहुत धन्यवाद जो PeakURL के विकास का समर्थन करते हैं और परियोजना को सक्रिय रूप से बनाए रखने में मदद करते हैं।"
 
-#: ui/pages/dashboard/about/Sponsors.tsx:193
+#: ui/pages/dashboard/about/Sponsors.tsx:202
 msgid "Support the Project"
 msgstr "परियोजना का समर्थन करें"
 
@@ -6762,7 +6774,7 @@ msgid "Compared with %1$s to %2$s."
 msgstr "%1$s से %2$s की तुलना में।"
 
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:119
-#: ui/pages/dashboard/links/LinksPage.tsx:433
+#: ui/pages/dashboard/links/LinksPage.tsx:442
 msgid "Active Links"
 msgstr "सक्रिय लिंक"
 
@@ -6772,6 +6784,7 @@ msgid "Unique Click Rate"
 msgstr "अद्वितीय क्लिक दर"
 
 #: ui/pages/dashboard/_components/StatsCards/StatsCards.tsx:199
+#: ui/pages/dashboard/links/LinksPage.tsx:134
 msgid "vs last month"
 msgstr "बनाम पिछला महीना"
 
@@ -6841,48 +6854,51 @@ msgstr "आँकड़े देखें"
 msgid "%s clicks"
 msgstr "%s क्लिक"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:44
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:54
 msgid "Failed to permanently delete links"
 msgstr "लिंक्स को स्थायी रूप से हटाने में विफल"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:45
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:55
 msgid "Failed to move links to trash"
 msgstr "लिंक्स को ट्रैश में ले जाने में विफल"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:69
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:81
 msgid "Delete Links Permanently"
 msgstr "लिंक्स को स्थायी रूप से हटाएं"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:70
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:82
 msgid "Move Links to Trash"
 msgstr "लिंक्स को ट्रैश में भेजें"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:93
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:106
 msgid "Are you sure you want to delete 1 selected link permanently? This action cannot be undone."
 msgstr "क्या आप वाकई 1 चयनित लिंक को स्थायी रूप से हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:97
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:110
 msgid "Are you sure you want to delete %s selected links permanently? This action cannot be undone."
 msgstr "क्या आप वाकई %s चयनित लिंक को स्थायी रूप से हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:103
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:116
 msgid "Are you sure you want to move 1 selected link to the trash? You can restore it later."
 msgstr "क्या आप वाकई 1 चयनित लिंक को ट्रैश में ले जाना चाहते हैं? आप इसे बाद में पुनर्स्थापित कर सकते हैं।"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:107
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:120
 msgid "Are you sure you want to move %s selected links to the trash? You can restore them later."
 msgstr "क्या आप वाकई %s चयनित लिंक को ट्रैश में ले जाना चाहते हैं? आप उन्हें बाद में पुनर्स्थापित कर सकते हैं।"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:132
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:166
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:149
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:175
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:183
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:206
 msgid "Deleting..."
 msgstr "हटाया जा रहा है..."
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:139
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:155
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:182
 msgid "Delete Permanently (%s)"
 msgstr "स्थायी रूप से हटाएं (%s)"
 
-#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:145
+#: ui/pages/dashboard/links/_components/BulkDeleteModal/BulkDeleteModal.tsx:188
 msgid "Move to Trash (%s)"
 msgstr "ट्रैश में भेजें (%s)"
 
@@ -6987,7 +7003,7 @@ msgid "Title"
 msgstr "शीर्षक"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/TableHeaderRow.tsx:106
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:117
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:130
 msgid "Destination"
 msgstr "गंतव्य"
 
@@ -7039,7 +7055,8 @@ msgid "Restore Link"
 msgstr "लिंक पुनर्स्थापित करें"
 
 #: ui/pages/dashboard/links/_components/LinksTable/parts/LinkRow.tsx:251
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:172
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:188
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:212
 msgid "Delete Permanently"
 msgstr "स्थायी रूप से हटाएं"
 
@@ -7731,28 +7748,28 @@ msgstr "पैनल बंद करें"
 msgid "Close"
 msgstr "बंद करें"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:47
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:57
 msgid "Failed to permanently delete link"
 msgstr "लिंक को स्थायी रूप से हटाने में विफल"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:48
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:58
 msgid "Failed to move link to trash"
 msgstr "लिंक को ट्रैश में ले जाने में विफल"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:72
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:84
 msgid "Delete Link Permanently"
 msgstr "लिंक को स्थायी रूप से हटाएं"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:73
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:173
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:85
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:213
 msgid "Move to Trash"
 msgstr "ट्रैश में भेजें"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:95
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:108
 msgid "Are you sure you want to delete this link permanently? This action cannot be undone."
 msgstr "क्या आप वाकई इस लिंक को स्थायी रूप से हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।"
 
-#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:98
+#: ui/pages/dashboard/links/_components/DeleteLinkModal/DeleteLinkModal.tsx:111
 msgid "Are you sure you want to move this link to the trash? You can restore it later."
 msgstr "क्या आप वाकई इस लिंक को ट्रैश में ले जाना चाहते हैं? आप इसे बाद में पुनर्स्थापित कर सकते हैं।"
 
@@ -7825,55 +7842,96 @@ msgstr "लिंक रीफ़्रेश करें"
 msgid "Manage and track your shortened URLs"
 msgstr "अपने छोटे URL प्रबंधित करें और ट्रैक करें"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:252
+#: ui/pages/dashboard/links/LinksPage.tsx:130
+msgid "vs previous day"
+msgstr "पिछले दिन की तुलना में"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:132
+msgid "vs last week"
+msgstr "पिछले सप्ताह की तुलना में"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:136
+msgid "vs last period"
+msgstr "पिछली अवधि की तुलना में"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:315
 msgid "The link has been restored to active status."
 msgstr "लिंक को सक्रिय स्थिति में पुनर्स्थापित कर दिया गया है।"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:257
+#: ui/pages/dashboard/links/LinksPage.tsx:320
 msgid "Failed to restore link."
 msgstr "लिंक पुनर्स्थापित करने में विफल।"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:266
+#: ui/pages/dashboard/links/LinksPage.tsx:329
 msgid "Links restored"
 msgstr "लिंक्स पुनर्स्थापित हो गए"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:267
+#: ui/pages/dashboard/links/LinksPage.tsx:330
 msgid "Selected links have been restored to active status."
 msgstr "चयनित लिंक को सक्रिय स्थिति में पुनर्स्थापित कर दिया गया है।"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:271
+#: ui/pages/dashboard/links/LinksPage.tsx:334
 msgid "Unable to restore links"
 msgstr "लिंक्स पुनर्स्थापित करने में असमर्थ"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:272
+#: ui/pages/dashboard/links/LinksPage.tsx:335
 msgid "Failed to restore selected links."
 msgstr "चयनित लिंक पुनर्स्थापित करने में विफल।"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:281
+#: ui/pages/dashboard/links/LinksPage.tsx:344
 msgid "Trash emptied"
 msgstr "ट्रैश खाली किया गया"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:282
+#: ui/pages/dashboard/links/LinksPage.tsx:345
 msgid "All trashed links have been permanently deleted."
 msgstr "ट्रैश के सभी लिंक स्थायी रूप से हटा दिए गए हैं।"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:286
+#: ui/pages/dashboard/links/LinksPage.tsx:349
 msgid "Unable to empty trash"
 msgstr "ट्रैश खाली करने में असमर्थ"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:287
+#: ui/pages/dashboard/links/LinksPage.tsx:350
 msgid "Failed to empty trash."
 msgstr "ट्रैश खाली करने में विफल।"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:419
+#: ui/pages/dashboard/links/LinksPage.tsx:398
+msgid "All-time clicks"
+msgstr "सर्वकालिक क्लिक"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:401
+#: ui/pages/dashboard/links/LinksPage.tsx:411
+msgid "Selected date range"
+msgstr "चयनित तिथि सीमा"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:403
+msgid "No activity recorded"
+msgstr "कोई गतिविधि दर्ज नहीं की गई"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:408
+msgid "All-time visitors"
+msgstr "सर्वकालिक विज़िटर"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:413
+msgid "No visitors recorded"
+msgstr "कोई विज़िटर दर्ज नहीं किया गया"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:434
 msgid "Total Links"
 msgstr "कुल लिंक"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:447
+#: ui/pages/dashboard/links/LinksPage.tsx:437
+msgid "Total created links"
+msgstr "कुल बनाए गए लिंक"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:445
+msgid "Currently active"
+msgstr "वर्तमान में सक्रिय"
+
+#: ui/pages/dashboard/links/LinksPage.tsx:535
 msgid "Items in the trash are retained indefinitely until emptied."
 msgstr "ट्रैश में मौजूद आइटम खाली किए जाने तक अनिश्चित काल तक बनाए रखे जाते हैं।"
 
-#: ui/pages/dashboard/links/LinksPage.tsx:451
+#: ui/pages/dashboard/links/LinksPage.tsx:539
 msgid "Items in the trash will be automatically deleted after %d days."
 msgstr "ट्रैश में मौजूद आइटम %d दिनों के बाद स्वचालित रूप से हटा दिए जाएंगे।"
 

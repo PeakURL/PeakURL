@@ -235,7 +235,15 @@ trait HelpersTrait {
 	 * @since 1.0.0
 	 */
 	private function to_iso( string $value ): string {
-		$timestamp = strtotime( $value . ' UTC' );
+		$clean = trim( $value );
+		if ( '' === $clean ) {
+			return gmdate( DATE_ATOM );
+		}
+
+		$timestamp = strtotime( $clean );
+		if ( false === $timestamp ) {
+			$timestamp = strtotime( $clean . ' UTC' );
+		}
 
 		if ( false === $timestamp ) {
 			return gmdate( DATE_ATOM );

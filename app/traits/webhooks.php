@@ -265,50 +265,70 @@ trait WebhooksTrait {
 			: ( ! empty( $events ) ? $events[0] : 'link.created' );
 
 		$site_url  = $this->resolve_webhook_site_url();
-		$test_data = array(
-			'id'             => $this->generate_random_id(),
-			'alias'          => 'test-link',
-			'shortUrl'       => rtrim( $site_url, '/' ) . '/test-link',
-			'destinationUrl' => 'https://example.com/webhook-test',
-			'title'          => 'Webhook Test Ping',
-			'hasPassword'    => false,
-			'expiresAt'      => null,
-			'hasOpenGraph'   => false,
-			'user'           => array(
-				'id'       => (int) $user['id'],
-				'username' => (string) ( $user['username'] ?? 'admin' ),
-				'name'     => (string) ( $user['display_name'] ?? $user['username'] ?? 'Admin' ),
-				'email'    => (string) ( $user['email'] ?? '' ),
-			),
-			'createdAt'      => gmdate( 'Y-m-d\TH:i:s\Z' ),
-			'updatedAt'      => gmdate( 'Y-m-d\TH:i:s\Z' ),
+		$test_link = array(
+			'id'                => 'lnk_' . bin2hex( random_bytes( 8 ) ),
+			'alias'             => 'summer-promo',
+			'shortUrl'          => rtrim( $site_url, '/' ) . '/summer-promo',
+			'destinationUrl'    => 'https://example.com/store/summer',
+			'title'             => 'Summer Sale 2026',
+			'status'            => 'active',
+			'hasPassword'       => true,
+			'expiresAt'         => gmdate( 'Y-12-31\T23:59:59\Z' ),
+			'hasOpenGraph'      => true,
+			'socialTitle'       => 'Huge Summer Sale!',
+			'socialDescription' => 'Get 50% off all items.',
+			'socialImageUrl'    => 'https://example.com/images/promo.jpg',
+			'utmSource'         => 'newsletter',
+			'utmMedium'         => 'email',
+			'utmCampaign'       => 'summer_blast',
+			'utmTerm'           => '',
+			'utmContent'        => 'header_link',
+			'createdAt'         => gmdate( 'Y-m-d\TH:i:s\Z' ),
+			'updatedAt'         => gmdate( 'Y-m-d\TH:i:s\Z' ),
 		);
 
-		if ( 'link.clicked' === $test_event ) {
-			$test_data['ip']          = $request->get_ip_address() ?? '127.0.0.1';
-			$test_data['country']     = 'United States';
-			$test_data['countryCode'] = 'US';
-			$test_data['city']        = 'Austin';
-			$test_data['device']      = 'desktop';
-			$test_data['browser']     = 'Chrome';
-			$test_data['os']          = 'macOS';
-			$test_data['referrer']    = 'https://news.ycombinator.com/';
-			$test_data['clickedAt']   = gmdate( 'Y-m-d\TH:i:s\Z' );
-			$test_data['click']       = array(
-				'ip'          => $test_data['ip'],
-				'country'     => 'United States',
-				'countryCode' => 'US',
-				'city'        => 'Austin',
-				'device'      => 'desktop',
-				'browser'     => 'Chrome',
-				'os'          => 'macOS',
-				'referrer'    => 'https://news.ycombinator.com/',
-			);
-		}
+		$test_previous = array(
+			'alias'          => 'summer-promo-old',
+			'shortUrl'       => rtrim( $site_url, '/' ) . '/summer-promo-old',
+			'destinationUrl' => 'https://example.com/store/summer-old',
+			'title'          => 'Summer Sale 2025',
+		);
+
+		$test_click = array(
+			'visitor_hash'      => hash( 'sha256', 'test-visitor' ),
+			'ip_address'        => $request->get_ip_address() ?? '192.168.1.1',
+			'country_name'      => 'United States',
+			'country_code'      => 'US',
+			'city_name'         => 'Austin',
+			'device'            => 'desktop',
+			'browser'           => 'Chrome',
+			'operating_system'  => 'macOS',
+			'referrer_name'     => 'Hacker News',
+			'referrer_domain'   => 'news.ycombinator.com',
+			'referrer_category' => 'Social',
+			'utm_source'        => 'hackernews',
+			'utm_medium'        => 'social',
+			'utm_campaign'      => 'launch',
+			'utm_term'          => '',
+			'utm_content'       => '',
+			'user_agent'        => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
+			'clicked_at'        => gmdate( 'Y-m-d\TH:i:s\Z' ),
+		);
+
+		$test_data = $this->prepare_link_event_payload(
+			$test_event,
+			$test_link,
+			$user,
+			$test_previous,
+			$test_click
+		);
 
 		$event_id = $this->generate_random_id();
 		$now_ts   = time();
 		$payload  = array(
+			'success'    => true,
+			'statusCode' => 200,
+			'message'    => 'Webhook event dispatched.',
 			'event'      => $test_event,
 			'id'         => $event_id,
 			'timestamp'  => $now_ts,
@@ -443,6 +463,9 @@ trait WebhooksTrait {
 		$event_id = $this->generate_random_id();
 
 		$payload = array(
+			'success'    => true,
+			'statusCode' => 200,
+			'message'    => 'Webhook event dispatched.',
 			'event'      => $event,
 			'id'         => $event_id,
 			'timestamp'  => $now_ts,
@@ -538,42 +561,86 @@ trait WebhooksTrait {
 		$short_code = (string) ( $link_data['shortCode'] ?? $link_data['short_code'] ?? $link_data['alias'] ?? '' );
 		$id         = (string) ( $link_data['id'] ?? '' );
 		$dest_url   = (string) ( $link_data['destinationUrl'] ?? $link_data['destination_url'] ?? $link_data['url'] ?? '' );
-		$title      = (string) ( $link_data['title'] ?? '' );
-		$short_url  = (string) ( $link_data['shortUrl'] ?? $link_data['short_url'] ?? '' );
+
+		// If full database fields might be missing (e.g. formatted URL array passed), fill from database if possible.
+		if ( '' !== $id && ( ! array_key_exists( 'utm_source', $link_data ) && ! array_key_exists( 'utmSource', $link_data ) ) ) {
+			try {
+				$db_row = $this->db->get_row_by( 'urls', array( 'id' => $id ) );
+				if ( $db_row && is_array( $db_row ) ) {
+					$link_data = array_merge( $db_row, $link_data );
+					if ( '' === $short_code ) {
+						$short_code = (string) ( $db_row['alias'] ?? $db_row['short_code'] ?? '' );
+					}
+					if ( '' === $dest_url ) {
+						$dest_url = (string) ( $db_row['destination_url'] ?? '' );
+					}
+				}
+			} catch ( \Throwable $e ) {
+				// Non-fatal database lookup fallback.
+			}
+		}
+
+		$raw_title  = trim( (string) ( $link_data['title'] ?? '' ) );
+		$meta_title = trim( (string) ( $link_data['meta_title'] ?? $link_data['social_title'] ?? ( isset( $link_data['socialPreview']['title'] ) ? $link_data['socialPreview']['title'] : '' ) ) );
+		$title      = '' !== $raw_title ? $raw_title : ( '' !== $meta_title ? $meta_title : 'Untitled' );
+
+		$short_url = (string) ( $link_data['shortUrl'] ?? $link_data['short_url'] ?? '' );
 
 		if ( '' === $short_url && '' !== $short_code ) {
 			$short_url = $this->resolve_webhook_site_url( rawurlencode( $short_code ) );
 		}
 
 		$user_data = array(
-			'id'       => 0,
-			'username' => '',
-			'name'     => '',
-			'email'    => '',
+			'id'        => 0,
+			'username'  => '',
+			'name'      => '',
+			'firstName' => '',
+			'lastName'  => '',
+			'email'     => '',
+			'role'      => '',
+			'company'   => '',
+			'jobTitle'  => '',
 		);
 
 		if ( ! empty( $user ) && is_array( $user ) ) {
-			$user_data = array(
-				'id'       => (int) ( $user['id'] ?? 0 ),
-				'username' => (string) ( $user['username'] ?? '' ),
-				'name'     => (string) ( $user['display_name'] ?? $user['name'] ?? $user['username'] ?? '' ),
-				'email'    => (string) ( $user['email'] ?? '' ),
+			$display_name = trim( (string) ( $user['display_name'] ?? $user['displayName'] ?? $user['name'] ?? $user['username'] ?? '' ) );
+			$username     = (string) ( $user['username'] ?? '' );
+			$user_data    = array(
+				'id'        => (int) ( $user['id'] ?? 0 ),
+				'username'  => $username,
+				'name'      => '' !== $display_name ? $display_name : $username,
+				'firstName' => (string) ( $user['first_name'] ?? $user['firstName'] ?? '' ),
+				'lastName'  => (string) ( $user['last_name'] ?? $user['lastName'] ?? '' ),
+				'email'     => (string) ( $user['email'] ?? '' ),
+				'role'      => (string) ( $user['role'] ?? 'admin' ),
+				'company'   => (string) ( $user['company'] ?? '' ),
+				'jobTitle'  => (string) ( $user['job_title'] ?? $user['jobTitle'] ?? '' ),
 			);
-		} elseif ( ! empty( $link_data['user_id'] ) ) {
-			$user_row = $this->db->get_row_by(
-				'users',
-				array( 'id' => $link_data['user_id'] ),
-				array( 'id', 'username', 'display_name', 'email' )
-			);
-			if ( $user_row ) {
-				$display_name = trim( (string) ( $user_row['display_name'] ?? '' ) );
-				$username     = (string) ( $user_row['username'] ?? '' );
-				$user_data    = array(
-					'id'       => (int) $user_row['id'],
-					'username' => $username,
-					'name'     => '' !== $display_name ? $display_name : $username,
-					'email'    => (string) ( $user_row['email'] ?? '' ),
+		} elseif ( ! empty( $link_data['user_id'] ) || ! empty( $link_data['userId'] ) ) {
+			$lookup_user_id = $link_data['user_id'] ?? $link_data['userId'];
+			try {
+				$user_row = $this->db->get_row_by(
+					'users',
+					array( 'id' => $lookup_user_id ),
+					array( 'id', 'username', 'display_name', 'email', 'first_name', 'last_name', 'role', 'company', 'job_title' )
 				);
+				if ( $user_row && is_array( $user_row ) ) {
+					$display_name = trim( (string) ( $user_row['display_name'] ?? '' ) );
+					$username     = (string) ( $user_row['username'] ?? '' );
+					$user_data    = array(
+						'id'        => (int) $user_row['id'],
+						'username'  => $username,
+						'name'      => '' !== $display_name ? $display_name : $username,
+						'firstName' => (string) ( $user_row['first_name'] ?? '' ),
+						'lastName'  => (string) ( $user_row['last_name'] ?? '' ),
+						'email'     => (string) ( $user_row['email'] ?? '' ),
+						'role'      => (string) ( $user_row['role'] ?? 'admin' ),
+						'company'   => (string) ( $user_row['company'] ?? '' ),
+						'jobTitle'  => (string) ( $user_row['job_title'] ?? '' ),
+					);
+				}
+			} catch ( \Throwable $e ) {
+				// Non-fatal user lookup fallback.
 			}
 		}
 
@@ -590,63 +657,68 @@ trait WebhooksTrait {
 		}
 
 		if ( 'link.clicked' === $event ) {
-			$ip_address   = (string) ( $click['ip_address'] ?? '' );
-			$country_name = (string) ( $click['country_name'] ?? '' );
-			$country_code = (string) ( $click['country_code'] ?? '' );
-			$city_name    = (string) ( $click['city_name'] ?? '' );
-			$device       = (string) ( $click['device'] ?? '' );
-			$browser      = (string) ( $click['browser'] ?? '' );
-			$os           = (string) ( $click['operating_system'] ?? '' );
-			$referrer     = (string) ( $click['referrer_domain'] ?? $click['referrer_name'] ?? '' );
-			$user_agent   = (string) ( $click['user_agent'] ?? '' );
-			$clicked_at   = ! empty( $click['clicked_at'] )
-				? $this->to_iso( (string) $click['clicked_at'] )
-				: $this->to_iso( $this->now() );
-
 			return array(
-				'id'             => $id,
-				'alias'          => $short_code,
-				'shortUrl'       => $short_url,
-				'destinationUrl' => $dest_url,
-				'ip'             => $ip_address,
-				'country'        => $country_name,
-				'countryCode'    => $country_code,
-				'city'           => $city_name,
-				'device'         => $device,
-				'browser'        => $browser,
-				'os'             => $os,
-				'referrer'       => $referrer,
-				'userAgent'      => $user_agent,
-				'clickedAt'      => $clicked_at,
-				'user'           => $user_data,
-				'click'          => array(
-					'ip'          => $ip_address,
-					'country'     => $country_name,
-					'countryCode' => $country_code,
-					'city'        => $city_name,
-					'device'      => $device,
-					'browser'     => $browser,
-					'os'          => $os,
-					'referrer'    => $referrer,
-				),
+				'id'               => $id,
+				'alias'            => $short_code,
+				'shortUrl'         => $short_url,
+				'destinationUrl'   => $dest_url,
+				'title'            => $title,
+				'visitorHash'      => (string) ( $click['visitor_hash'] ?? $click['visitorHash'] ?? '' ),
+				'ip'               => (string) ( $click['ip_address'] ?? $click['ip'] ?? '' ),
+				'country'          => (string) ( $click['country_name'] ?? $click['country'] ?? '' ),
+				'countryCode'      => (string) ( $click['country_code'] ?? $click['countryCode'] ?? '' ),
+				'city'             => (string) ( $click['city_name'] ?? $click['city'] ?? '' ),
+				'device'           => (string) ( $click['device'] ?? '' ),
+				'browser'          => (string) ( $click['browser'] ?? '' ),
+				'os'               => (string) ( $click['operating_system'] ?? $click['os'] ?? '' ),
+				'referrerName'     => (string) ( $click['referrer_name'] ?? $click['referrerName'] ?? '' ),
+				'referrerDomain'   => (string) ( $click['referrer_domain'] ?? $click['referrerDomain'] ?? '' ),
+				'referrerCategory' => (string) ( $click['referrer_category'] ?? $click['referrerCategory'] ?? '' ),
+				'utmSource'        => (string) ( $click['utm_source'] ?? $click['utmSource'] ?? '' ),
+				'utmMedium'        => (string) ( $click['utm_medium'] ?? $click['utmMedium'] ?? '' ),
+				'utmCampaign'      => (string) ( $click['utm_campaign'] ?? $click['utmCampaign'] ?? '' ),
+				'utmTerm'          => (string) ( $click['utm_term'] ?? $click['utmTerm'] ?? '' ),
+				'utmContent'       => (string) ( $click['utm_content'] ?? $click['utmContent'] ?? '' ),
+				'userAgent'        => (string) ( $click['user_agent'] ?? $click['userAgent'] ?? '' ),
+				'clickedAt'        => ! empty( $click['clicked_at'] ?? $click['clickedAt'] ) ? $this->to_iso( (string) ( $click['clicked_at'] ?? $click['clickedAt'] ) ) : $this->to_iso( $this->now() ),
+				'user'             => $user_data,
 			);
 		}
 
+		$social_title = (string) ( $link_data['socialTitle'] ?? $link_data['social_title'] ?? ( isset( $link_data['socialPreview']['title'] ) ? $link_data['socialPreview']['title'] : '' ) );
+		$social_desc  = (string) ( $link_data['socialDescription'] ?? $link_data['social_description'] ?? ( isset( $link_data['socialPreview']['description'] ) ? $link_data['socialPreview']['description'] : '' ) );
+		$social_img   = (string) ( $link_data['socialImageUrl'] ?? $link_data['social_image_url'] ?? ( isset( $link_data['socialPreview']['imageUrl'] ) ? $link_data['socialPreview']['imageUrl'] : '' ) );
+		$has_og       = ! empty( $link_data['hasOpenGraph'] ) || '' !== $social_title || '' !== $social_desc || '' !== $social_img || ! empty( $link_data['social_image_path'] );
+
+		$has_password = ! empty( $link_data['hasPassword'] ) || ( ! empty( $link_data['password_value'] ) && '' !== trim( (string) $link_data['password_value'] ) );
+		$expires_at   = $link_data['expiresAt'] ?? ( ! empty( $link_data['expires_at'] ) ? $this->to_iso( (string) $link_data['expires_at'] ) : null );
+		$created_at   = $link_data['createdAt'] ?? ( ! empty( $link_data['created_at'] ) ? $this->to_iso( (string) $link_data['created_at'] ) : $this->to_iso( $this->now() ) );
+		$updated_at   = $link_data['updatedAt'] ?? ( ! empty( $link_data['updated_at'] ) ? $this->to_iso( (string) $link_data['updated_at'] ) : $this->to_iso( $this->now() ) );
+
 		$data = array(
-			'id'             => $id,
-			'alias'          => $short_code,
-			'shortUrl'       => $short_url,
-			'destinationUrl' => $dest_url,
-			'title'          => $title,
-			'hasPassword'    => ! empty( $link_data['hasPassword'] ) || ! empty( $link_data['password_value'] ),
-			'expiresAt'      => $link_data['expiresAt'] ?? ( ! empty( $link_data['expires_at'] ) ? $this->to_iso( (string) $link_data['expires_at'] ) : null ),
-			'hasOpenGraph'   => ! empty( $link_data['hasOpenGraph'] ) || ! empty( $link_data['social_title'] ) || ! empty( $link_data['social_image_url'] ) || ! empty( $link_data['social_image_path'] ),
-			'user'           => $user_data,
-			'updatedAt'      => $link_data['updatedAt'] ?? ( ! empty( $link_data['updated_at'] ) ? $this->to_iso( (string) $link_data['updated_at'] ) : $this->to_iso( $this->now() ) ),
+			'id'                => $id,
+			'alias'             => $short_code,
+			'shortUrl'          => $short_url,
+			'destinationUrl'    => $dest_url,
+			'title'             => $title,
+			'status'            => (string) ( $link_data['status'] ?? 'active' ),
+			'hasPassword'       => $has_password,
+			'expiresAt'         => $expires_at,
+			'hasOpenGraph'      => $has_og,
+			'socialTitle'       => $social_title,
+			'socialDescription' => $social_desc,
+			'socialImageUrl'    => $social_img,
+			'utmSource'         => (string) ( $link_data['utmSource'] ?? $link_data['utm_source'] ?? '' ),
+			'utmMedium'         => (string) ( $link_data['utmMedium'] ?? $link_data['utm_medium'] ?? '' ),
+			'utmCampaign'       => (string) ( $link_data['utmCampaign'] ?? $link_data['utm_campaign'] ?? '' ),
+			'utmTerm'           => (string) ( $link_data['utmTerm'] ?? $link_data['utm_term'] ?? '' ),
+			'utmContent'        => (string) ( $link_data['utmContent'] ?? $link_data['utm_content'] ?? '' ),
+			'user'              => $user_data,
+			'createdAt'         => $created_at,
+			'updatedAt'         => $updated_at,
 		);
 
 		if ( 'link.created' === $event ) {
-			$data['createdAt'] = $link_data['createdAt'] ?? ( ! empty( $link_data['created_at'] ) ? $this->to_iso( (string) $link_data['created_at'] ) : $this->to_iso( $this->now() ) );
 			return $data;
 		}
 
@@ -657,11 +729,15 @@ trait WebhooksTrait {
 			if ( '' === $prev_url && '' !== $prev_code ) {
 				$prev_url = $this->resolve_webhook_site_url( rawurlencode( $prev_code ) );
 			}
+			$raw_prev_title  = trim( (string) ( $previous['title'] ?? '' ) );
+			$meta_prev_title = trim( (string) ( $previous['meta_title'] ?? $previous['social_title'] ?? '' ) );
+			$prev_title      = '' !== $raw_prev_title ? $raw_prev_title : ( '' !== $meta_prev_title ? $meta_prev_title : 'Untitled' );
+
 			$data['previous'] = array(
 				'alias'          => $prev_code,
 				'shortUrl'       => $prev_url,
 				'destinationUrl' => $prev_dest,
-				'title'          => (string) ( $previous['title'] ?? '' ),
+				'title'          => $prev_title,
 			);
 		}
 

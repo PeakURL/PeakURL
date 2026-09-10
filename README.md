@@ -176,8 +176,8 @@ For installation, setup, usage, and product documentation, start here:
 - [Full Setup Tutorial (Video)](https://youtu.be/Xal8Qp5VPrc)
 
 If you are migrating from YOURLS, you can export your links with the
-[`YOURLS to PeakURL` plugin](https://github.com/PeakURL/YOURLS-to-PeakURL)
-and then import them from the PeakURL dashboard through `Bulk Import`.
+[`YOURLS to PeakURL` plugin](https://go.peakurl.org/yourls-to-peakurl)
+and then import them from the PeakURL dashboard through `Bulk Import`. Read the full migration guide here: [Migrating from YOURLS to PeakURL: The Complete Modernization Guide](https://go.peakurl.org/p2000).
 
 ## Installation
 

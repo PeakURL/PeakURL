@@ -1120,6 +1120,8 @@ trait LinksTrait {
 				continue;
 			}
 
+			$value = $payload[ $input_key ];
+
 			if ( 'title' === $input_key ) {
 				$value = is_string( $value )
 					? trim( html_entity_decode( $value, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) )

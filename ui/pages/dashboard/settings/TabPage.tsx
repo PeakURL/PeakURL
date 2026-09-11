@@ -2,8 +2,8 @@ import { Navigate, useParams } from "react-router";
 
 import { useAdminAccess } from "@/hooks";
 
-import { Content } from "./_components";
-import type { SettingsTabId } from "./_components/layout/types";
+import { Content } from "./components";
+import type { SettingsTabId } from "./components/layout/types";
 
 const VALID_SETTINGS_TABS = new Set<SettingsTabId>([
 	"general",

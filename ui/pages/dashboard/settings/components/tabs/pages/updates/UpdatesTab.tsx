@@ -1,6 +1,6 @@
 import { __ } from "@/i18n";
 import { getDocumentDirection } from "@/i18n/direction";
-import { ApplicationUpdates, DatabaseSchema } from "./_components";
+import { ApplicationUpdates, DatabaseSchema } from "./components";
 import {
 	formatAppStatus,
 	formatDatabaseStatus,

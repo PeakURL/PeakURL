@@ -4,7 +4,7 @@ import {
 	ActiveSessions,
 	PasswordSettings,
 	TwoFactorSettings,
-} from "./_components";
+} from "./components";
 import { useSecurityTab } from "./useSecurityTab";
 import type { SecurityTabProps } from "../types";
 

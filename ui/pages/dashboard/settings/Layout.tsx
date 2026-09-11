@@ -3,12 +3,12 @@ import { useParams } from "react-router";
 import { useAdminAccess } from "@/hooks";
 import { __ } from "@/i18n";
 
-import { Header, Sidebar } from "./_components";
+import { Header, Sidebar } from "./components";
 import type {
 	SettingsLayoutProps,
 	SettingsTabId,
 	SettingsTabItem,
-} from "./_components/layout/types";
+} from "./components/layout/types";
 
 function Layout({ children }: SettingsLayoutProps) {
 	const params = useParams();

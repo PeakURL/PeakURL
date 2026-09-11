@@ -1,4 +1,5 @@
 export { default as DashboardPage } from "./DashboardPage";
+export type * from "./types";
 export * from "./activity";
 export * from "./about";
 export * from "./links";

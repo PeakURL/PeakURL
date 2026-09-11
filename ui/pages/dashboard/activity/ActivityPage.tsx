@@ -49,7 +49,7 @@ import {
 	normalizeLinkTitle,
 } from "@/utils";
 
-import type { ActivityPerson, RecentActivity } from "../_components/types";
+import type { ActivityPerson, RecentActivity } from "@/api";
 
 const ACTIVITY_PAGE_LIMIT = DEFAULT_PAGE_SIZE_OPTIONS[0] ?? 25;
 const ACTIVITY_PAGE_STORAGE_KEY = "admin_activity_limit";

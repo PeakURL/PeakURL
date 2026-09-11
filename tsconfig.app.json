@@ -12,9 +12,7 @@
 			"@/*": ["./ui/*"],
 			"@constants": ["./ui/constants"],
 			"@state": ["./ui/state"],
-			"@state/*": ["./ui/state/*"],
-			"@store": ["./ui/state"],
-			"@store/*": ["./ui/state/*"]
+			"@state/*": ["./ui/state/*"]
 		},
 
 		/* Bundler mode */

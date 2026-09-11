@@ -59,7 +59,6 @@ export default defineConfig({
 			"@": ui,
 			"@constants": path.join(ui, "constants"),
 			"@state": path.join(ui, "state"),
-			"@store": path.join(ui, "state"),
 		},
 	},
 	server: {

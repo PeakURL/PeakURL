@@ -138,13 +138,21 @@ class Application {
 			$geoip_service,
 			$config
 		);
+		$webhooks_service     = new WebhooksService(
+			$db,
+			new WebhooksValidator(),
+			$auth_service,
+			$roles,
+			$authorization,
+			$config
+		);
 		$analytics_repository = new AnalyticsRepository(
 			$db,
 			$settings_api,
 			$geoip_service,
 			$roles,
 			$authorization,
-			null,
+			$webhooks_service,
 			null,
 			$config
 		);
@@ -166,14 +174,6 @@ class Application {
 			$roles,
 			$authorization,
 			$social_preview_service
-		);
-		$webhooks_service     = new WebhooksService(
-			$db,
-			new WebhooksValidator(),
-			$auth_service,
-			$roles,
-			$authorization,
-			$config
 		);
 		$links_repository     = new LinksRepository(
 			$db,
@@ -630,6 +630,7 @@ class Application {
 				array( 'get', '/webhooks', array( $webhooks, 'index' ) ),
 				array( 'post', '/webhooks', array( $webhooks, 'create' ) ),
 				array( 'post', '/webhooks/test', array( $webhooks, 'test' ) ),
+				array( 'post', '/webhooks/{id}/test', array( $webhooks, 'test' ) ),
 				array( 'put', '/webhooks/{id}', array( $webhooks, 'update' ) ),
 				array( 'delete', '/webhooks/{id}', array( $webhooks, 'delete' ) ),
 			)

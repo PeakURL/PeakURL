@@ -27,6 +27,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Validator {
 
 	/**
+	 * Canonical supported webhook events.
+	 *
+	 * @var array<int, string>
+	 * @since 1.6.0
+	 */
+	public const SUPPORTED_EVENTS = array(
+		'link.created',
+		'link.updated',
+		'link.clicked',
+		'link.deleted',
+	);
+
+	/**
 	 * Validate and sanitize payload for creating a new webhook.
 	 *
 	 * @param array<string, mixed> $payload Request body parameters.
@@ -42,11 +55,7 @@ class Validator {
 			throw new ApiException( __( 'A valid webhook URL is required.', 'peakurl' ), 422 );
 		}
 
-		$events = $this->sanitize_events( $payload['events'] ?? null );
-
-		if ( empty( $events ) ) {
-			throw new ApiException( __( 'Select at least one webhook event.', 'peakurl' ), 422 );
-		}
+		$events = $this->validate_events( $payload['events'] ?? null );
 
 		return array(
 			'url'    => $url,
@@ -75,13 +84,7 @@ class Validator {
 		}
 
 		if ( array_key_exists( 'events', $payload ) ) {
-			$events = $this->sanitize_events( $payload['events'] );
-
-			if ( empty( $events ) ) {
-				throw new ApiException( __( 'Select at least one webhook event.', 'peakurl' ), 422 );
-			}
-
-			$updates['events'] = $events;
+			$updates['events'] = $this->validate_events( $payload['events'] );
 		}
 
 		if ( array_key_exists( 'isActive', $payload ) ) {
@@ -91,6 +94,47 @@ class Validator {
 		}
 
 		return $updates;
+	}
+
+	/**
+	 * Validate and sanitize a list of event strings against supported events.
+	 *
+	 * @param mixed $events Raw event array.
+	 * @return array<int, string> Validated unique event list.
+	 *
+	 * @throws ApiException When events is empty or contains unsupported events.
+	 * @since 1.0.0
+	 */
+	public function validate_events( $events ): array {
+		if ( ! is_array( $events ) || empty( $events ) ) {
+			throw new ApiException( __( 'Select at least one webhook event.', 'peakurl' ), 422 );
+		}
+
+		$validated = array();
+
+		foreach ( $events as $raw_event ) {
+			$event = strtolower( trim( (string) $raw_event ) );
+
+			if ( '' === $event ) {
+				continue;
+			}
+
+			if ( ! in_array( $event, self::SUPPORTED_EVENTS, true ) ) {
+				throw new ApiException(
+					/* translators: %s: webhook event name */
+					sprintf( __( 'Unsupported webhook event: %s.', 'peakurl' ), $event ),
+					422,
+				);
+			}
+
+			$validated[ $event ] = true;
+		}
+
+		if ( empty( $validated ) ) {
+			throw new ApiException( __( 'Select at least one webhook event.', 'peakurl' ), 422 );
+		}
+
+		return array_keys( $validated );
 	}
 
 	/**
@@ -105,13 +149,15 @@ class Validator {
 			return array();
 		}
 
-		return array_values(
-			array_unique(
-				array_filter(
-					array_map( 'strval', $events ),
-					static fn( string $event ): bool => '' !== trim( $event ),
-				),
-			),
-		);
+		$valid = array();
+
+		foreach ( $events as $event ) {
+			$event = strtolower( trim( (string) $event ) );
+			if ( in_array( $event, self::SUPPORTED_EVENTS, true ) ) {
+				$valid[ $event ] = true;
+			}
+		}
+
+		return array_keys( $valid );
 	}
 }

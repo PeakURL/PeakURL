@@ -105,15 +105,20 @@ class Controller extends BaseController {
 	/**
 	 * Send a test ping to a registered webhook endpoint.
 	 *
-	 * @param Request $request Incoming HTTP request with route param `id`.
+	 * @param Request $request Incoming HTTP request with route param or body `id`.
 	 * @return array<string, mixed> JSON envelope with test delivery results.
 	 * @since 1.0.0
 	 */
 	public function test( Request $request ): array {
+		$id = (string) $request->get_body_param(
+			'id',
+			$this->route_param( $request, 'id' ),
+		);
+
 		return $this->success_response(
 			$this->webhooks_service->test_webhook(
 				$request,
-				$this->route_param( $request, 'id' ),
+				$id,
 			),
 			__( 'Webhook test dispatched.', 'peakurl' ),
 		);

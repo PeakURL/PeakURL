@@ -1,6 +1,6 @@
 import type { CSSProperties, HTMLAttributes } from "react";
 
-import type { ImageSource } from "@/utils";
+import type { ImageSource } from "@/shared/links";
 
 interface PreviewImageProps extends Omit<
 	HTMLAttributes<HTMLSpanElement>,

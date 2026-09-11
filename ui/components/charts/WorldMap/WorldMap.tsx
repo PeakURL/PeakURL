@@ -9,7 +9,7 @@ import { iso31661Alpha2ToNumeric } from "iso-3166/1-a2-to-1-n.js";
 
 import { __ } from "@/i18n";
 import { useTheme } from "@/providers/ThemeProvider";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import type {
 	GeographyFeature,

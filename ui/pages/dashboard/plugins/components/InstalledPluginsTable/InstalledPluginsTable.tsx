@@ -3,7 +3,7 @@ import { MoreHorizontal, Lock, Info } from "lucide-react";
 import { Button } from "@/components";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import PluginPreviewSkeleton from "../PluginPreviewSkeleton";
 import type {
@@ -86,7 +86,7 @@ function InstalledPluginsTable({ plugins }: InstalledPluginsTableProps) {
 											className="plugins-table-main"
 										>
 											<div
-												className={`plugins-table-icon bg-gradient-to-br ${plugin.gradient}`}
+												className={`plugins-table-icon bg-linear-to-br ${plugin.gradient}`}
 											>
 												<div className="plugins-table-icon-fill" />
 											</div>

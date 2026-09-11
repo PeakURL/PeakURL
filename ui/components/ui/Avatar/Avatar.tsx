@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { __ } from "@/i18n";
-import { cn, getAvatarInitials, getGravatarUrl } from "@/utils";
+import { cn, getAvatarInitials, getGravatarUrl } from "@/shared/formatting";
 
 import type { AvatarProps } from "../types";
 

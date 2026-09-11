@@ -1,11 +1,6 @@
 import type { SelectOption } from "@/options";
-
-import { getActiveLocale } from "./dateFormatting";
-
-/**
- * Supported time display formats (12 or 24 hour).
- */
-export type SiteTimeFormat = "12" | "24";
+import type { SiteTimeFormat } from "@/api";
+import { getActiveLocale } from "@/shared/dates";
 
 const DEFAULT_TIMEZONE = "UTC";
 

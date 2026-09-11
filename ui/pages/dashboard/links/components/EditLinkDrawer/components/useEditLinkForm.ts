@@ -4,16 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import type { SelectOption } from "@/components";
 import { __ } from "@/i18n";
 import { useUpdateUrlMutation } from "@/state/slices/api";
+import { getErrorMessage } from "@/shared/errors";
 import {
-	getErrorMessage,
 	getShortUrl,
-	isFutureLocalDateTime,
 	normalizeLinkTitle,
 	sanitizeUrl,
 	isRelativeUrl,
+} from "@/shared/links";
+import {
+	isFutureLocalDateTime,
 	toIsoFromLocalDateTime,
 	toLocalDateTimeValue,
-} from "@/utils";
+} from "../../../lib";
 
 import type { EditableLink, LinkStatus, UpdateUrlPayload } from "../../types";
 import { isSocialPreviewImageFile } from "./helpers";

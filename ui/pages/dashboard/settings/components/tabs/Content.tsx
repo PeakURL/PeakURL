@@ -31,9 +31,8 @@ import { updatePeakURLData } from "@/data";
 import {
 	applyDocumentFavicon,
 	copyToClipboard as writeToClipboard,
-	extractErrorMessage,
-	getErrorMessage,
-} from "@/utils";
+} from "@/shared/browser";
+import { extractErrorMessage, getErrorMessage } from "@/shared/errors";
 
 import type {
 	ApiKeySummary,

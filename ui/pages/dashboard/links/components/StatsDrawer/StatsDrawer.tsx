@@ -22,12 +22,9 @@ import { useCallback, useMemo, useState } from "react";
 
 import { useGetLinkStatsQuery } from "@/state/slices/api";
 import { isDocumentRtl } from "@/i18n/direction";
-import {
-	getLocalDateValue,
-	getShortUrl,
-	getLinkDisplayTitle,
-	copyToClipboard,
-} from "@/utils";
+import { copyToClipboard } from "@/shared/browser";
+import { getLinkDisplayTitle, getShortUrl } from "@/shared/links";
+import { getLocalDateValue } from "../../lib";
 import { __ } from "@/i18n";
 import { useTemporaryState, usePerLinkState } from "@/hooks";
 

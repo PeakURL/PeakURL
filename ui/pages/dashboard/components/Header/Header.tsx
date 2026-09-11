@@ -2,7 +2,7 @@ import { RefreshCw } from "lucide-react";
 
 import { Select, type SelectOption } from "@/components";
 import { __ } from "@/i18n";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import type { HeaderProps } from "../types";
 

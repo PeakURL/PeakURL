@@ -19,7 +19,7 @@ import { authApi } from "@/state/slices";
 import { Avatar, ThemeToggle } from "@/components";
 import { getDocumentDirection } from "@/i18n/direction";
 import { __ } from "@/i18n";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import { Search } from "../Search";
 import type { HeaderProps } from "../types";

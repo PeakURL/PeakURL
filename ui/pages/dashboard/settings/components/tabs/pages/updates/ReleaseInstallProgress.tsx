@@ -1,6 +1,6 @@
 import { CheckCircle2, Clock3, LoaderCircle } from "lucide-react";
 import { getDocumentDirection } from "@/i18n/direction";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 import type { ReleaseInstallProgressState } from "./types";
 
 /**

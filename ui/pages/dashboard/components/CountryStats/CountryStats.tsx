@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 
 import { WorldMap, type WorldMapDatum } from "@/components";
 import { __ } from "@/i18n";
-import { formatCount, getCountryFlagEmoji } from "@/utils";
+import { formatCount, getCountryFlagEmoji } from "@/shared/formatting";
 
 import type { CountryStatsProps, CountryMetric } from "../types";
 

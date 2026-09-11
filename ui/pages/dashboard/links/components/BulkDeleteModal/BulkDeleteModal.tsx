@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useBulkDeleteUrlMutation } from "@/state/slices/api";
 import { __, sprintf } from "@/i18n";
 import { getDocumentDirection } from "@/i18n/direction";
-import { getErrorMessage } from "@/utils";
+import { getErrorMessage } from "@/shared/errors";
 
 import type { BulkDeleteModalProps } from "../types";
 

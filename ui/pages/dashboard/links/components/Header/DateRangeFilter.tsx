@@ -3,7 +3,8 @@ import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { CalendarDays } from "lucide-react";
 
 import { __, sprintf } from "@/i18n";
-import { cn, formatDateOnly } from "@/utils";
+import { cn } from "@/shared/formatting";
+import { formatDateOnly } from "@/shared/dates";
 
 import type { LinksCustomDateRange, LinksDateRange } from "../types";
 

@@ -1,5 +1,5 @@
 import { __, sprintf } from "@/i18n";
-import { formatCount } from "@/utils";
+import { formatCount } from "@/shared/formatting";
 
 import type { LinkRecord } from "../types";
 import type {

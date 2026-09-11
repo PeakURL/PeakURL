@@ -2,7 +2,7 @@ import { X } from "lucide-react";
 
 import { __ } from "@/i18n";
 import { getDocumentDirection } from "@/i18n/direction";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import type { ModalProps, ModalSize } from "../types";
 

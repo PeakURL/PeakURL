@@ -14,14 +14,10 @@ import {
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { getInstalledLanguageLabel } from "@/i18n/languages";
-import {
-	getFaviconPreviewUrl,
-	cn,
-	getTimeZoneOptions,
-	normalizeSiteTimeFormat,
-	sanitizeImageUrl,
-	type SiteTimeFormat,
-} from "@/utils";
+import { cn } from "@/shared/formatting";
+import { getFaviconPreviewUrl, sanitizeImageUrl } from "@/shared/links";
+import { getTimeZoneOptions, normalizeSiteTimeFormat } from "./lib";
+import type { SiteTimeFormat } from "@/api";
 
 import type { GeneralFormState } from "../../types";
 import type { GeneralTabProps } from "../types";

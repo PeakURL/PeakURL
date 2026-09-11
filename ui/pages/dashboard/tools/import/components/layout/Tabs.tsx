@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import type { ImportTab, TabsProps } from "../types";
 

@@ -4,7 +4,8 @@ import { useState } from "react";
 
 import { ReadOnlyValueBlock } from "@/components";
 import { useDeleteUrlMutation } from "@/state/slices/api";
-import { getShortUrl, getErrorMessage } from "@/utils";
+import { getErrorMessage } from "@/shared/errors";
+import { getShortUrl } from "@/shared/links";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 

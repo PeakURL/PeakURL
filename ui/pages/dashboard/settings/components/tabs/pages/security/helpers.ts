@@ -1,5 +1,5 @@
 import { __, sprintf } from "@/i18n";
-import { formatLocalizedDateTime } from "@/utils";
+import { formatLocalizedDateTime } from "@/shared/dates";
 
 import type {
 	ProtectedAction,

@@ -3,7 +3,7 @@ import { ImageOff, Trash2 } from "lucide-react";
 
 import { Input, PreviewImage, TextArea } from "@/components";
 import { __ } from "@/i18n";
-import { sanitizeImageUrl } from "@/utils";
+import { sanitizeImageUrl } from "@/shared/links";
 
 interface SocialPreviewTabProps {
 	fileInputRef: RefObject<HTMLInputElement | null>;

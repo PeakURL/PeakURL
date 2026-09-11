@@ -2,13 +2,13 @@ import { useState, useRef } from "react";
 
 import { useNotification } from "@/components";
 import { useBulkCreateUrlMutation } from "@/state/slices/api";
+import { getErrorMessage } from "@/shared/errors";
 import {
-	getShortUrl,
 	extractAliasFromShortUrl,
-	getErrorMessage,
 	normalizeCsvHeader,
 	parseCsvRows,
-} from "@/utils";
+} from "@/shared/csv";
+import { getShortUrl } from "@/shared/links";
 import { __ } from "@/i18n";
 
 import FileUploadArea from "./FileUploadArea";

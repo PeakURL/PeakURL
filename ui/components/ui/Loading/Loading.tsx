@@ -1,7 +1,7 @@
 import { Loader2, Zap } from "lucide-react";
 
 import { __ } from "@/i18n";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import type {
 	InlineLoaderProps,

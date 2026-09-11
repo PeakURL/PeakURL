@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 
 import { PEAKURL_NAME } from "@constants";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import type { BrandLockupProps } from "../types";
 

@@ -2,7 +2,7 @@ import { Download } from "lucide-react";
 
 import { Button } from "@/components";
 import { __ } from "@/i18n";
-import { downloadBrowserFile } from "@/utils";
+import { downloadBrowserFile } from "@/shared/browser";
 
 import type { SampleFormat } from "./types";
 

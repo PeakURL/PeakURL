@@ -9,7 +9,7 @@ import {
 	useDeleteActivityLogMutation,
 	useRestoreActivityLinkMutation,
 } from "@/state/slices/api";
-import { getErrorMessage } from "@/utils";
+import { getErrorMessage } from "@/shared/errors";
 
 import {
 	ActivityCategoryTabs,

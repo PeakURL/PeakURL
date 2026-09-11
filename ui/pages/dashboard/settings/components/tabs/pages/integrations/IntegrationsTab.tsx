@@ -24,12 +24,10 @@ import {
 } from "@/state/slices/api";
 import { isDocumentRtl } from "@/i18n/direction";
 import { __, sprintf } from "@/i18n";
-import {
-	cn,
-	copyToClipboard as writeToClipboard,
-	formatLocalizedDateTime,
-	getErrorMessage,
-} from "@/utils";
+import { copyToClipboard as writeToClipboard } from "@/shared/browser";
+import { formatLocalizedDateTime } from "@/shared/dates";
+import { getErrorMessage } from "@/shared/errors";
+import { cn } from "@/shared/formatting";
 
 import CaptchaSettings from "./CaptchaSettings";
 import type {

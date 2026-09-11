@@ -1,11 +1,11 @@
 import { authApi } from "@/state/slices";
 import { ApiErrorPage } from "@/components/shared";
 import { PageLoader } from "@/components/ui";
+import { getErrorStatus } from "@/shared/errors";
 import {
-	getErrorStatus,
 	getInstallRecovery,
 	redirectToInstallRecovery,
-} from "@/utils";
+} from "@/shared/install";
 import type { AuthInitializerProps } from "../types";
 
 /**

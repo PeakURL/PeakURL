@@ -1,6 +1,6 @@
 import { Button, Input } from "@/components";
 import { __ } from "@/i18n";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 import type { SecurityFormState } from "../../types";
 import type { PasswordSettingsProps } from "../types";
 

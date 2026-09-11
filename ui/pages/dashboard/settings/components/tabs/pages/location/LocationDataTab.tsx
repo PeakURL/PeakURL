@@ -11,7 +11,8 @@ import {
 import { Button, Input, ReadOnlyValueBlock } from "@/components";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
-import { cn, formatByteSize, formatRelativeTime } from "@/utils";
+import { cn, formatByteSize } from "@/shared/formatting";
+import { formatRelativeTime } from "@/shared/dates";
 
 import type {
 	LocationDataStatus,

@@ -1,4 +1,4 @@
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import type { PluginTabsProps } from "../types";
 

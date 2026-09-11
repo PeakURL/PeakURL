@@ -24,7 +24,7 @@ import { useAdminAccess } from "@/hooks";
 import { BrandLockup } from "@/components";
 import { isDocumentRtl } from "@/i18n/direction";
 import { __ } from "@/i18n";
-import { cn, formatCount } from "@/utils";
+import { cn, formatCount } from "@/shared/formatting";
 
 import type { NavItem, SidebarProps } from "../types";
 

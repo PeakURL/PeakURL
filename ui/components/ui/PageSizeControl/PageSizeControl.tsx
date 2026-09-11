@@ -2,7 +2,7 @@ import { type HTMLAttributes, useEffect, useId, useRef, useState } from "react";
 import { Check, X } from "lucide-react";
 
 import { __, sprintf } from "@/i18n";
-import { cn, formatCount } from "@/utils";
+import { cn, formatCount } from "@/shared/formatting";
 
 import { Select } from "../Select";
 import type { SelectOption } from "../types";

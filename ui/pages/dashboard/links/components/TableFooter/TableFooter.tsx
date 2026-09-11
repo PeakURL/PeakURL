@@ -3,7 +3,7 @@ import { Link2, MousePointerClick } from "lucide-react";
 import { PageSizeControl, Select, type SelectOption } from "@/components";
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
-import { formatCount } from "@/utils";
+import { formatCount } from "@/shared/formatting";
 
 import type {
 	LinksSortBy,

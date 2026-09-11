@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { Copy } from "lucide-react";
 
 import { getDocumentDirection } from "@/i18n/direction";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 interface ReadOnlyValueBlockProps {
 	value?: string | null;

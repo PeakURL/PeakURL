@@ -10,7 +10,7 @@ import {
 	Tablet,
 } from "lucide-react";
 import { __, _n } from "@/i18n";
-import { formatCount } from "@/utils";
+import { formatCount } from "@/shared/formatting";
 import {
 	AppleIcon,
 	AndroidIcon,

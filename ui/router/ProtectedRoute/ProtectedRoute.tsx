@@ -3,11 +3,11 @@ import { Navigate, useLocation } from "react-router";
 import { ApiErrorPage } from "@/components/shared";
 import { PageLoader } from "@/components/ui";
 import { selectSessionUser, useAuthCheckQuery } from "@/state/slices/api";
+import { getErrorStatus } from "@/shared/errors";
 import {
-	getErrorStatus,
 	getInstallRecovery,
 	redirectToInstallRecovery,
-} from "@/utils";
+} from "@/shared/install";
 
 import type { ProtectedRouteProps } from "./types";
 

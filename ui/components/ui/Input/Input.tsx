@@ -2,7 +2,7 @@ import { forwardRef, useId, useState } from "react";
 import { Info, Eye, EyeOff } from "lucide-react";
 
 import { getDocumentDirection, getFieldDirection } from "@/i18n/direction";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import type { InputProps } from "../types";
 

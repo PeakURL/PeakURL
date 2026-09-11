@@ -23,7 +23,8 @@ import {
 	useGetUrlsQuery,
 	useRestoreUrlMutation,
 } from "@/state/slices/api";
-import { cn, formatCount, getErrorMessage } from "@/utils";
+import { cn, formatCount } from "@/shared/formatting";
+import { getErrorMessage } from "@/shared/errors";
 
 import {
 	Header,

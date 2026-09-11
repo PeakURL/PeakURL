@@ -1,7 +1,7 @@
 import { Link2, RefreshCw } from "lucide-react";
 
 import { __ } from "@/i18n";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import type { LinksHeaderProps } from "../types";
 import DateRangeFilter from "./DateRangeFilter";

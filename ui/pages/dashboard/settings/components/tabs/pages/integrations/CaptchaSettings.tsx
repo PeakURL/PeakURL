@@ -8,7 +8,8 @@ import {
 } from "@/state/slices/api";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
-import { cn, getErrorMessage } from "@/utils";
+import { cn } from "@/shared/formatting";
+import { getErrorMessage } from "@/shared/errors";
 
 import type { CaptchaProvider, CaptchaStatus } from "../../types";
 import type { IntegrationsTabProps } from "./types";

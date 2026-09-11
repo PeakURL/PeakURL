@@ -16,7 +16,8 @@ import {
 	useResetPasswordMutation,
 } from "@/state/slices/api";
 import { __ } from "@/i18n";
-import { getErrorMessage, requestControlFormSubmit } from "@/utils";
+import { getErrorMessage } from "@/shared/errors";
+import { requestControlFormSubmit } from "@/shared/browser";
 
 const submitFormOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
 	if ("Enter" !== event.key) {

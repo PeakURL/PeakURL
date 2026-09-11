@@ -5,7 +5,7 @@ import { AlertCircle, Mail, MailCheck } from "lucide-react";
 import { Button, Input, Select, type SelectOption } from "@/components";
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import type {
 	EmailDeliveryTabProps,

@@ -1,7 +1,7 @@
 import type { ChangeEvent, ClipboardEvent, KeyboardEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import type { VerificationCodeInputProps } from "../types";
 

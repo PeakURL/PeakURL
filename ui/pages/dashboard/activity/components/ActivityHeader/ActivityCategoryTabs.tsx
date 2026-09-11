@@ -2,7 +2,7 @@ import { History, Link2, Users } from "lucide-react";
 
 import { PageSizeControl } from "@/components";
 import { __ } from "@/i18n";
-import { formatCount } from "@/utils";
+import { formatCount } from "@/shared/formatting";
 
 import type { ActivityCategory, ActivitySummaryCounts } from "../../types";
 

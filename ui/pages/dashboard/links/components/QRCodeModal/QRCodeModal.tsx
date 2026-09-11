@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import QRCode from "qrcode";
 
 import { ReadOnlyValueBlock } from "@/components";
-import { getShortUrl, copyToClipboard } from "@/utils";
+import { copyToClipboard } from "@/shared/browser";
+import { getShortUrl } from "@/shared/links";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 

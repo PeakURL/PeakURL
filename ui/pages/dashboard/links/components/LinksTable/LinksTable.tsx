@@ -5,12 +5,10 @@ import { useSearchParams } from "react-router";
 import { ConfirmDialog, useNotification } from "@/components";
 import { useClearUrlsMutation } from "@/state/slices/api";
 import { __ } from "@/i18n";
-import {
-	getShortUrl,
-	copyToClipboard,
-	formatNumber,
-	getErrorMessage,
-} from "@/utils";
+import { copyToClipboard } from "@/shared/browser";
+import { getErrorMessage } from "@/shared/errors";
+import { formatNumber } from "@/shared/formatting";
+import { getShortUrl } from "@/shared/links";
 
 import StatsDrawer from "../StatsDrawer";
 import QRCodeModal from "../QRCodeModal";

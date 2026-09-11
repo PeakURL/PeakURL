@@ -1,7 +1,7 @@
 import { Calendar } from "lucide-react";
 
 import { __ } from "@/i18n";
-import { formatLocalizedDateTime, formatRelativeTime } from "@/utils";
+import { formatLocalizedDateTime, formatRelativeTime } from "@/shared/dates";
 
 import {
 	formatAverageClicks,

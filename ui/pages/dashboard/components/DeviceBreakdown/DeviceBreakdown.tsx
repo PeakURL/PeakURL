@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
 import { __ } from "@/i18n";
-import { formatCount } from "@/utils";
+import { formatCount } from "@/shared/formatting";
 import { MetricDonutChart } from "@/components";
 
 import type { DeviceBreakdownProps, MetricItem } from "../types";

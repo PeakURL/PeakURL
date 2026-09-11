@@ -1,6 +1,7 @@
 import { MousePointerClick, Users, Calendar, TrendingUp } from "lucide-react";
 
-import { formatCount, formatRelativeTime } from "@/utils";
+import { formatCount } from "@/shared/formatting";
+import { formatRelativeTime } from "@/shared/dates";
 import { __ } from "@/i18n";
 
 import { getStatsTotals } from "./analytics";

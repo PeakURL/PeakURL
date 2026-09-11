@@ -3,7 +3,8 @@ import { Cog, Lightbulb, WandSparkles } from "lucide-react";
 
 import { Button, TextArea, useNotification } from "@/components";
 import { useBulkCreateUrlMutation } from "@/state/slices/api";
-import { getShortUrl, getErrorMessage } from "@/utils";
+import { getErrorMessage } from "@/shared/errors";
+import { getShortUrl } from "@/shared/links";
 import { __ } from "@/i18n";
 
 import { ImportDetails, ImportSummary } from "../results";

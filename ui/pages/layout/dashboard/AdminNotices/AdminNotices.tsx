@@ -4,7 +4,8 @@ import { AlertCircle, CheckCircle2, Info, TriangleAlert } from "lucide-react";
 
 import { useGetAdminNoticesQuery } from "@/state/slices/api";
 import { isDocumentRtl } from "@/i18n/direction";
-import { cn, isRelativeUrl, sanitizeUrl } from "@/utils";
+import { cn } from "@/shared/formatting";
+import { isRelativeUrl, sanitizeUrl } from "@/shared/links";
 
 import type { AdminNoticeItem, NoticeActionProps, NoticeTone } from "../types";
 import UpdateDetailsModal from "./UpdateDetailsModal";

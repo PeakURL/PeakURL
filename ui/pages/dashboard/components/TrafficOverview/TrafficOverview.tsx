@@ -3,7 +3,7 @@ import { BarChart3, LineChart } from "lucide-react";
 
 import { TrafficChart, type TrafficChartType } from "@/components";
 import { __ } from "@/i18n";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import type { TrafficOverviewProps } from "../types";
 

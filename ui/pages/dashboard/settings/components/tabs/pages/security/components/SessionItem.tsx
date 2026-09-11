@@ -3,7 +3,7 @@ import { formatDistanceToNow } from "date-fns";
 
 import { Button } from "@/components";
 import { __ } from "@/i18n";
-import { cn, getCountryFlagEmoji } from "@/utils";
+import { cn, getCountryFlagEmoji } from "@/shared/formatting";
 
 import { getSessionLocationLabel } from "../helpers";
 import type { SessionItemProps } from "../types";

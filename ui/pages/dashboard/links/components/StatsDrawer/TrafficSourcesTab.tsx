@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 
 import { __ } from "@/i18n";
-import { formatCount } from "@/utils";
+import { formatCount } from "@/shared/formatting";
 
 import DeviceStats from "./DeviceStats";
 import { formatClickCount } from "./analytics";

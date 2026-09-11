@@ -7,7 +7,7 @@ import type {
 	DashboardSearchSection,
 	DashboardSearchUserLike,
 	DashboardSearchUserMatch,
-} from "./types";
+} from "../types";
 
 /**
  * Input for creating a route search target.

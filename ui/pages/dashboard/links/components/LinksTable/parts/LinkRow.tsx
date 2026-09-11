@@ -13,11 +13,8 @@ import {
 import { isPast } from "date-fns";
 
 import { __, sprintf } from "@/i18n";
-import {
-	formatLocalizedDateTime,
-	formatRelativeTime,
-	getLinkDisplayTitle,
-} from "@/utils";
+import { formatLocalizedDateTime, formatRelativeTime } from "@/shared/dates";
+import { getLinkDisplayTitle } from "@/shared/links";
 
 import type { LinkRowProps } from "../types";
 

@@ -3,7 +3,7 @@ import { Chart } from "chart.js/auto";
 import { useEffect, useMemo, useRef } from "react";
 
 import { __ } from "@/i18n";
-import { formatCount } from "@/utils";
+import { formatCount } from "@/shared/formatting";
 import { useTheme } from "@/providers/ThemeProvider";
 
 import type { MetricDonutChartProps } from "../types";

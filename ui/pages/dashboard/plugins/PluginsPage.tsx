@@ -18,7 +18,7 @@ import {
 
 import { useAdminAccess } from "@/hooks";
 import { __ } from "@/i18n";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 import { PLUGINS_WAITLIST_URL } from "@constants";
 
 import type {

@@ -11,7 +11,8 @@ import {
 	useGetUserProfileQuery,
 	useUpdateUserMutation,
 } from "@/state/slices/api";
-import { formatCount, formatDate, getErrorMessage } from "@/utils";
+import { formatCount, formatDate } from "@/shared/formatting";
+import { getErrorMessage } from "@/shared/errors";
 
 import type {
 	UserDialogMode,

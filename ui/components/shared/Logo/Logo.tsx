@@ -1,4 +1,4 @@
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import type { LogoProps } from "../types";
 export type { LogoProps, LogoSize } from "../types";

@@ -2,7 +2,8 @@ import { Pencil, Trash2 } from "lucide-react";
 
 import { Avatar } from "@/components";
 import { __ } from "@/i18n";
-import { formatDate, formatLocalizedDateTime } from "@/utils";
+import { formatDate } from "@/shared/formatting";
+import { formatLocalizedDateTime } from "@/shared/dates";
 
 import { getRoleMeta, getUserDisplayName } from "../../lib";
 import type { UserRowProps } from "../../types";

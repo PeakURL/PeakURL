@@ -1,6 +1,6 @@
 import { matchPath } from "react-router";
 
-import { applyFilters } from "@/utils";
+import { applyFilters } from "@/shared/extensibility";
 
 const BODY_CLASS_DATA_ATTRIBUTE = "peakurlBodyClasses";
 

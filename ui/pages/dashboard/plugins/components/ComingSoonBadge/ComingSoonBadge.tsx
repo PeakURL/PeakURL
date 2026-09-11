@@ -1,5 +1,5 @@
 import { __ } from "@/i18n";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import type { ComingSoonBadgeProps } from "../types";
 

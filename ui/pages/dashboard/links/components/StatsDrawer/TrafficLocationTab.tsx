@@ -5,7 +5,8 @@ import { WorldMap } from "@/components";
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { useGetLinkLocationQuery } from "@/state/slices/api";
-import { formatCount, getCountryFlagEmoji, getErrorMessage } from "@/utils";
+import { formatCount, getCountryFlagEmoji } from "@/shared/formatting";
+import { getErrorMessage } from "@/shared/errors";
 
 import type {
 	CityLocation,

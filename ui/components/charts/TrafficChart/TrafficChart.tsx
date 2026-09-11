@@ -3,7 +3,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Chart } from "chart.js/auto";
 
 import { __ } from "@/i18n";
-import { formatCount, formatDateOnly } from "@/utils";
+import { formatCount } from "@/shared/formatting";
+import { formatDateOnly } from "@/shared/dates";
 
 import type {
 	TrafficChartData,

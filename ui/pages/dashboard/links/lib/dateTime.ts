@@ -1,4 +1,4 @@
-import { getActiveTimeZone } from "./dateFormatting";
+import { getActiveTimeZone } from "@/shared/dates";
 
 /**
  * Breakdown of date and time components.

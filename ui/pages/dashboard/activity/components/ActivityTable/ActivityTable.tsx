@@ -1,7 +1,7 @@
 import { Trash2 } from "lucide-react";
 
 import { __, sprintf } from "@/i18n";
-import { formatCount } from "@/utils";
+import { formatCount } from "@/shared/formatting";
 
 import { ActivityEmptyState } from "./ActivityEmptyState";
 import { ActivityRow } from "./ActivityRow";

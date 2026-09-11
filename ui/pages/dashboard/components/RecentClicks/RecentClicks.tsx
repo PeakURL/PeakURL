@@ -3,7 +3,8 @@ import { useNavigate } from "react-router";
 
 import type { LinkRecord } from "@/api";
 import { __, sprintf } from "@/i18n";
-import { cn, formatCount, formatDate, getLinkDisplayTitle } from "@/utils";
+import { cn, formatCount, formatDate } from "@/shared/formatting";
+import { getLinkDisplayTitle } from "@/shared/links";
 
 import type { RecentClick, RecentClicksProps } from "../types";
 

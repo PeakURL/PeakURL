@@ -4,7 +4,7 @@ import { useLocation } from "react-router";
 import { PEAKURL_NAME, PEAKURL_VERSION } from "@constants";
 import { isDocumentRtl } from "@/i18n/direction";
 import { __, sprintf } from "@/i18n";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import Sidebar from "../Sidebar";
 import { Header } from "../Header";

@@ -1,12 +1,12 @@
-import { serializeCsv } from "./csv";
-import { downloadBrowserFile } from "./dom";
-import { getShortUrl } from "./linkHelpers";
+import { downloadBrowserFile } from "@/shared/browser";
+import { serializeCsv } from "@/shared/csv";
+import { getShortUrl } from "@/shared/links";
 import type {
 	LinkExportFile,
 	LinkExportFormat,
 	LinkExportItem,
 	LinkExportSourceLink,
-} from "./types";
+} from "../types";
 
 /**
  * Ordered list of headers for CSV exports.

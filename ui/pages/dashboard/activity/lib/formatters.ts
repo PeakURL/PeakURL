@@ -12,11 +12,8 @@ import {
 import type { LucideIcon } from "lucide-react";
 
 import { __, sprintf } from "@/i18n";
-import {
-	decodeHtmlEntities,
-	formatLocalizedDateTime,
-	normalizeLinkTitle,
-} from "@/utils";
+import { formatLocalizedDateTime } from "@/shared/dates";
+import { decodeHtmlEntities, normalizeLinkTitle } from "@/shared/links";
 
 import type {
 	ActivityCategory,

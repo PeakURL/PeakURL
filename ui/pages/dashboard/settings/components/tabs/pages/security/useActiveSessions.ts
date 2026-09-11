@@ -5,7 +5,7 @@ import {
 	useRevokeSessionMutation,
 } from "@/state/slices/api";
 import { __, sprintf } from "@/i18n";
-import { getErrorMessage } from "@/utils";
+import { getErrorMessage } from "@/shared/errors";
 
 import type { SecuritySession, SecurityTabProps } from "../types";
 

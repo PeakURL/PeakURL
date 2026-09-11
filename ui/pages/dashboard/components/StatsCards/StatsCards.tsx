@@ -9,7 +9,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 
 import { __, sprintf } from "@/i18n";
-import { cn, formatNumber } from "@/utils";
+import { cn, formatNumber } from "@/shared/formatting";
 
 import type { StatsCardsProps } from "../types";
 

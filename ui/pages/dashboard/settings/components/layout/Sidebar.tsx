@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router";
 import { getDocumentDirection } from "@/i18n/direction";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 import type { SettingsTabIcon, SettingsTabItem, SidebarProps } from "./types";
 
 // Icon mapping

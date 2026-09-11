@@ -12,12 +12,8 @@ import { Link } from "react-router";
 
 import { Button } from "@/components";
 import { __, sprintf } from "@/i18n";
-import {
-	cn,
-	decodeHtmlEntities,
-	formatDate,
-	normalizeLinkTitle,
-} from "@/utils";
+import { cn, formatDate } from "@/shared/formatting";
+import { decodeHtmlEntities, normalizeLinkTitle } from "@/shared/links";
 
 import type {
 	ActivityFeedProps,

@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 import { CalendarDays, ChevronDown, ChevronUp } from "lucide-react";
 import { __, sprintf } from "@/i18n";
-import { formatCount, formatDateOnly } from "@/utils";
+import { formatCount } from "@/shared/formatting";
+import { formatDateOnly } from "@/shared/dates";
 import DetailMetric from "./DetailMetric";
 import { formatClickCount, formatUniqueVisitorCount } from "./analytics";
 import type { LinkClickHistoryDay, LinkStatsViewProps } from "./types";

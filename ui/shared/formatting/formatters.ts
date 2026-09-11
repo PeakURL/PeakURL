@@ -2,7 +2,7 @@ import {
 	formatLocalizedDateTime,
 	formatRelativeTime,
 	getActiveLocale,
-} from "./dateFormatting";
+} from "@/shared/dates";
 
 const RECENT_DATE_DAY_LIMIT = 7;
 const DAY_MS = 1000 * 60 * 60 * 24;

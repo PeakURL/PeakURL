@@ -7,7 +7,7 @@ import {
 import { Check, ChevronDown } from "lucide-react";
 
 import { getDocumentDirection } from "@/i18n/direction";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import type { SelectProps, SelectValue } from "../types";
 

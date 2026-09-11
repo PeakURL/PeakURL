@@ -2,7 +2,7 @@ import { PEAKURL_VERSION } from "@/constants";
 import { getPeakURLData } from "@/data";
 import { getLocaleDirection } from "@/i18n/direction";
 import type { FaviconData, TextDirection } from "@/i18n/types";
-import { getManagedFaviconUrl } from "./favicon";
+import { getManagedFaviconUrl } from "@/shared/links";
 
 /**
  * Apply the active locale metadata to the document root.

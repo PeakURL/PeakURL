@@ -10,7 +10,7 @@ import {
 } from "@/components";
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
-import { cn, formatByteSize } from "@/utils";
+import { cn, formatByteSize } from "@/shared/formatting";
 
 import type { CacheConfigurationPayload, CacheStatusPayload } from "@/api";
 import type { StateCardProps, StateCardVariant, StatCardProps } from "../types";

@@ -4,7 +4,7 @@ import { Image, ImageOff, Trash2, Type } from "lucide-react";
 import { Button, Input, TextArea } from "@/components";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
-import { sanitizeImageUrl } from "@/utils";
+import { sanitizeImageUrl } from "@/shared/links";
 
 import type { SocialPreviewFieldsProps } from "../types";
 

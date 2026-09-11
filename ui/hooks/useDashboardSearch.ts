@@ -4,16 +4,15 @@ import { useLocation, useNavigate } from "react-router";
 
 import { useGetAllUsersQuery, useGetUrlsQuery } from "@/state/slices/api";
 import { __ } from "@/i18n";
+import { getLinkDisplayTitle, getShortUrl } from "@/shared/links";
 import {
-	getLinkStatsPath,
-	getLinksSearchPath,
 	findDashboardRouteMatches,
 	findDashboardUserMatches,
-	getDashboardSearchValueFromLocation,
-	getLinkDisplayTitle,
 	getDashboardSearchPath,
-	getShortUrl,
-} from "@/utils";
+	getDashboardSearchValueFromLocation,
+	getLinkStatsPath,
+	getLinksSearchPath,
+} from "@/pages/layout/dashboard/Search/lib";
 
 import { useAdminAccess } from "./useAdminAccess";
 import type { ClearSearchOptions } from "./types";

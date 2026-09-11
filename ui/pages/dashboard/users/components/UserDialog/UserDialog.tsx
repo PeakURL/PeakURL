@@ -6,7 +6,7 @@ import { X } from "lucide-react";
 import { Button, Input, Select, type SelectOption } from "@/components";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
-import { getErrorMessage } from "@/utils";
+import { getErrorMessage } from "@/shared/errors";
 
 import { getInitialFormState, getRoleMeta } from "../../lib";
 import type {

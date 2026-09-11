@@ -11,7 +11,9 @@ import {
 
 import { ReadOnlyValueBlock } from "@/components";
 import { __ } from "@/i18n";
-import { cn, copyToClipboard, getLinkDisplayTitle } from "@/utils";
+import { copyToClipboard } from "@/shared/browser";
+import { cn } from "@/shared/formatting";
+import { getLinkDisplayTitle } from "@/shared/links";
 
 import type { SharePlatform, ShareTabProps } from "./types";
 

@@ -23,10 +23,10 @@ import {
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import {
-	redirectToInstallRecovery,
 	requestClosestFormSubmit,
 	requestControlFormSubmit,
-} from "@/utils";
+} from "@/shared/browser";
+import { redirectToInstallRecovery } from "@/shared/install";
 
 import { LoginHighlights } from "./components";
 import { useLoginWorkflow } from "./hooks";

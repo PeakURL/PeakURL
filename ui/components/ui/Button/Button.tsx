@@ -1,7 +1,7 @@
 import { Loader2 } from "lucide-react";
 
 import { isDocumentRtl } from "@/i18n/direction";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import type {
 	ButtonGroupProps,

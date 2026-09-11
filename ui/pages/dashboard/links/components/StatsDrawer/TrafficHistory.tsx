@@ -15,7 +15,8 @@ import {
 	type TrafficChartType,
 } from "@/components";
 import { __, sprintf } from "@/i18n";
-import { cn, formatCount, formatDateOnly } from "@/utils";
+import { cn, formatCount } from "@/shared/formatting";
+import { formatDateOnly } from "@/shared/dates";
 
 import {
 	getStatsTotals,

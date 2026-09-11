@@ -1,5 +1,5 @@
 import { PEAKURL_URL } from "@constants";
-import { getStringRecordValue, isObjectRecord } from "./records";
+import { getStringRecordValue, isObjectRecord } from "@/shared/errors";
 import type { ShortUrlLinkLike } from "./types";
 
 /**

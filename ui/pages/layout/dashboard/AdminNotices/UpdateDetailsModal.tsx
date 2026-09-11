@@ -1,7 +1,7 @@
 import { BookOpen, Sparkles, TextAlignJustify } from "lucide-react";
 import { Modal } from "@/components";
 import { useGetReleaseNotesQuery } from "@/state/slices/api/system";
-import { formatRelativeTime } from "@/utils";
+import { formatRelativeTime } from "@/shared/dates";
 import { __, sprintf } from "@/i18n";
 
 export interface UpdateDetailsModalProps {

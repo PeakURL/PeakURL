@@ -2,7 +2,7 @@ import { forwardRef, useId } from "react";
 import { Info } from "lucide-react";
 
 import { getDocumentDirection, getFieldDirection } from "@/i18n/direction";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import type { TextAreaProps } from "../types";
 

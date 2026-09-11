@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
-import { cn, formatCount } from "@/utils";
+import { cn, formatCount } from "@/shared/formatting";
 
 import { getVisiblePages } from "../../lib";
 import type { ActivityPaginationMeta } from "../../types";

@@ -10,13 +10,9 @@ import {
 	useLoginMutation,
 	useVerifyTwoFactorLoginMutation,
 } from "@/state/slices/api";
-import {
-	getErrorMessage,
-	getErrorStatus,
-	getInstallRecovery,
-	isRelativeUrl,
-	sanitizeUrl,
-} from "@/utils";
+import { getErrorMessage, getErrorStatus } from "@/shared/errors";
+import { getInstallRecovery } from "@/shared/install";
+import { isRelativeUrl, sanitizeUrl } from "@/shared/links";
 
 export function useLoginWorkflow() {
 	const location = useLocation();

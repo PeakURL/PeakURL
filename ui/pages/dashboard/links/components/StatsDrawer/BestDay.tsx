@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 import { __, sprintf } from "@/i18n";
-import { formatDateOnly } from "@/utils";
+import { formatDateOnly } from "@/shared/dates";
 
 import DetailMetric from "./DetailMetric";
 import { formatClickCount, formatUniqueVisitorCount } from "./analytics";

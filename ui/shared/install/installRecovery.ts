@@ -2,7 +2,7 @@ import {
 	getNestedRecord,
 	getStringRecordValue,
 	isObjectRecord,
-} from "./records";
+} from "@/shared/errors";
 import type { InstallRecoveryPayload, InstallRecoveryResult } from "./types";
 
 /**

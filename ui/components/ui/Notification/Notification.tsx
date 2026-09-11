@@ -3,7 +3,7 @@ import type { LucideIcon } from "lucide-react";
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from "lucide-react";
 
 import { isDocumentRtl } from "@/i18n/direction";
-import { cn } from "@/utils";
+import { cn } from "@/shared/formatting";
 
 import type {
 	NotificationContainerProps,

@@ -14,7 +14,9 @@ import { Button, useNotification } from "@/components";
 import { API_SERVER_BASE_URL } from "@/constants";
 import { __, sprintf } from "@/i18n";
 import { useGetUrlsQuery, useLazyGetUrlsExportQuery } from "@/state/slices/api";
-import { downloadLinkExport, formatCount, getErrorMessage } from "@/utils";
+import { formatCount } from "@/shared/formatting";
+import { getErrorMessage } from "@/shared/errors";
+import { downloadLinkExport } from "./lib";
 
 import type { ExportCardProps, ExportFormat, ExportOption } from "../types";
 

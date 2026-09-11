@@ -12,7 +12,7 @@ import {
 import { Button, ReadOnlyValueBlock } from "@/components";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
-import { formatLocalizedDateTime } from "@/utils";
+import { formatLocalizedDateTime } from "@/shared/dates";
 
 import type { ApiTabProps } from "../types";
 

@@ -1,7 +1,7 @@
 import { Link2, MapPin, RotateCcw, Trash2, User } from "lucide-react";
 
 import { __ } from "@/i18n";
-import { cn, formatDate } from "@/utils";
+import { cn, formatDate } from "@/shared/formatting";
 
 import {
 	formatExactTimestamp,

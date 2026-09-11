@@ -14,9 +14,13 @@ import {
 import { useDashboardSearch } from "@/hooks";
 import { getDocumentDirection, isDocumentRtl } from "@/i18n/direction";
 import { __, sprintf } from "@/i18n";
-import { cn, getSearchShortcutKeys, getSearchShortcutLabel } from "@/utils";
+import { cn } from "@/shared/formatting";
+import {
+	getSearchShortcutKeys,
+	getSearchShortcutLabel,
+} from "@/shared/browser";
 
-import type { ResultButtonProps, ResultSectionProps } from "../types";
+import type { ResultButtonProps, ResultSectionProps } from "./types";
 
 function ResultButton({
 	icon: Icon,

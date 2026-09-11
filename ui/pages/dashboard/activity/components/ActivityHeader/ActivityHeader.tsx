@@ -1,7 +1,7 @@
 import { Clock, History, Link2, RefreshCw, Shield, Users } from "lucide-react";
 
 import { __, sprintf } from "@/i18n";
-import { formatCount, formatDate } from "@/utils";
+import { formatCount, formatDate } from "@/shared/formatting";
 
 import { getActivityMessage } from "../../lib";
 import type { ActivitySummaryCounts } from "../../types";

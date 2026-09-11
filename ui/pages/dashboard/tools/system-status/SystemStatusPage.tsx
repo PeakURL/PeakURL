@@ -30,15 +30,14 @@ import {
 	useGetSystemStatusQuery,
 	useClearCacheMutation,
 } from "@/state/slices/api";
+import { copyToClipboard } from "@/shared/browser";
+import { extractErrorMessage, getErrorMessage } from "@/shared/errors";
 import {
 	cn,
-	copyToClipboard,
-	extractErrorMessage,
 	formatByteSize,
 	formatCount,
 	formatDateTimeValue,
-	getErrorMessage,
-} from "@/utils";
+} from "@/shared/formatting";
 
 import type {
 	ErrorStateProps,

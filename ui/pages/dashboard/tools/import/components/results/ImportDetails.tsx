@@ -8,7 +8,9 @@ import {
 
 import { Button, useNotification } from "@/components";
 import { __, sprintf } from "@/i18n";
-import { cn, downloadBrowserFile, serializeCsv } from "@/utils";
+import { downloadBrowserFile } from "@/shared/browser";
+import { serializeCsv } from "@/shared/csv";
+import { cn } from "@/shared/formatting";
 
 import type { ImportDetailsProps } from "../types";
 

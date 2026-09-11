@@ -9,7 +9,8 @@ import {
 	useVerifyTwoFactorMutation,
 } from "@/state/slices/api";
 import { __, sprintf } from "@/i18n";
-import { downloadBrowserFile, getErrorMessage } from "@/utils";
+import { downloadBrowserFile } from "@/shared/browser";
+import { getErrorMessage } from "@/shared/errors";
 
 import {
 	BACKUP_CODES_FILENAME,

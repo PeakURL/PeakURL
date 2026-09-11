@@ -25,7 +25,8 @@ import {
 import { Link, useSearchParams } from "react-router";
 import { PEAKURL_VERSION, PEAKURL_NAME } from "@/constants";
 import { BrandLockup, Logo } from "@/components";
-import { cn, formatRelativeTime } from "@/utils";
+import { cn } from "@/shared/formatting";
+import { formatRelativeTime } from "@/shared/dates";
 import { __, sprintf } from "@/i18n";
 import { useGetReleaseNotesQuery } from "@/state/slices/api/system";
 import { Sponsors } from "./Sponsors";

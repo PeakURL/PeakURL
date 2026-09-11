@@ -161,3 +161,15 @@ export {
 	translatePlural as _n,
 	translateWithContext as _x,
 };
+
+export {
+	getBaseLocale,
+	getDocumentDirection,
+	getFieldDirection,
+	getLocaleDirection,
+	isDocumentRtl,
+	isRtlLocale,
+	normalizeLocale,
+} from "./direction";
+export { getInstalledLanguageLabel } from "./languages";
+export type * from "./types";

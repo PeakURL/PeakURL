@@ -124,11 +124,27 @@ class Geoip {
 	/**
 	 * Build the current GeoIP integration status.
 	 *
+	 * @param string|null $last_downloaded_at Optional download timestamp override.
 	 * @return array<string, mixed>
 	 * @since 1.0.14
 	 */
-	public function get_status(): array {
-		return $this->status->get_status();
+	public function get_status( ?string $last_downloaded_at = null ): array {
+		return $this->status->get_status( $last_downloaded_at );
+	}
+
+	/**
+	 * Format an existing GeoIP status payload with download metadata.
+	 *
+	 * @param array<string, mixed> $status             Raw GeoIP status payload.
+	 * @param string|null          $last_downloaded_at Optional download timestamp.
+	 * @return array<string, mixed> Formatted status.
+	 * @since 1.2.3
+	 */
+	public function format_status(
+		array $status,
+		?string $last_downloaded_at = null
+	): array {
+		return $this->status->format_status( $status, $last_downloaded_at );
 	}
 
 	/**

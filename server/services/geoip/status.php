@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace PeakURL\Services\Geoip;
 
 use PeakURL\Services\Geoip as GeoipService;
+use PeakURL\Utils\Date;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -55,10 +56,11 @@ class Status {
 	/**
 	 * Build the current GeoIP status payload.
 	 *
+	 * @param string|null $last_downloaded_at Optional download timestamp.
 	 * @return array<string, mixed>
 	 * @since 1.0.14
 	 */
-	public function get_status(): array {
+	public function get_status( ?string $last_downloaded_at = null ): array {
 		$database_path   = $this->context->get_db_path();
 		$database_exists = file_exists( $database_path );
 		$database_ready  = $database_exists && is_readable( $database_path );
@@ -66,12 +68,22 @@ class Status {
 		$size_bytes      = $database_exists ? filesize( $database_path ) : false;
 		$capability      = $this->credentials->get_capability();
 
+		if ( null === $last_downloaded_at ) {
+			$last_downloaded_at = $this->context->get_settings_api()->get_option(
+				'geoip_last_downloaded_at'
+			);
+		}
+
 		return array(
 			'contentDir'             => $this->context->get_content_dir(),
 			'databasePath'           => $database_path,
 			'databaseExists'         => $database_exists,
 			'databaseReadable'       => $database_ready,
 			'locationAnalyticsReady' => $database_ready,
+			'installed'              => $database_ready,
+			'lastDownloadedAt'       => $last_downloaded_at
+				? Date::to_iso( (string) $last_downloaded_at )
+				: null,
 			'accountIdConfigured'    => '' !== $this->context->get_account_id(),
 			'licenseKeyConfigured'   => '' !== $this->context->get_license_key(),
 			'credentialsConfigured'  => $this->credentials->is_configured(),
@@ -90,5 +102,31 @@ class Status {
 			'downloadCommand'        => 'php server/bin/update-geoip.php',
 			'downloadUrl'            => GeoipService::DOWNLOAD_URL,
 		);
+	}
+
+	/**
+	 * Format an existing GeoIP status payload with download metadata.
+	 *
+	 * @param array<string, mixed> $status             Raw GeoIP status payload.
+	 * @param string|null          $last_downloaded_at Optional download timestamp.
+	 * @return array<string, mixed> Formatted status.
+	 * @since 1.2.3
+	 */
+	public function format_status(
+		array $status,
+		?string $last_downloaded_at = null
+	): array {
+		if ( null === $last_downloaded_at ) {
+			$last_downloaded_at = $this->context->get_settings_api()->get_option(
+				'geoip_last_downloaded_at'
+			);
+		}
+
+		$status['installed']        = ! empty( $status['locationAnalyticsReady'] );
+		$status['lastDownloadedAt'] = $last_downloaded_at
+			? Date::to_iso( (string) $last_downloaded_at )
+			: null;
+
+		return $status;
 	}
 }

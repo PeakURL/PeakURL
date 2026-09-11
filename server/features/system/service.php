@@ -18,7 +18,6 @@ use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Features\Auth\Service as AuthService;
-use PeakURL\Features\Settings\Service as SettingsService;
 use PeakURL\Http\Request;
 use PeakURL\Services\AdminNotices;
 use PeakURL\Services\Database\Connection;
@@ -66,14 +65,6 @@ class Service {
 	 * @since 1.0.0
 	 */
 	private AuthService $auth_service;
-
-	/**
-	 * Settings domain service.
-	 *
-	 * @var SettingsService
-	 * @since 1.0.0
-	 */
-	private SettingsService $settings_service;
 
 	/**
 	 * Settings API.
@@ -142,25 +133,23 @@ class Service {
 	/**
 	 * Create a new System Service instance.
 	 *
-	 * @param PeakURL_DB           $db               Shared database wrapper.
-	 * @param Connection           $connection       Database connection instance.
-	 * @param AuthService          $auth_service     Authentication domain service.
-	 * @param SettingsService      $settings_service Settings domain service.
-	 * @param SettingsApi          $settings_api     Settings API.
-	 * @param Geoip                $geoip_service    GeoIP service.
-	 * @param Mailer               $mailer_service   Mailer service.
-	 * @param SchemaService        $schema_service   Database schema service.
-	 * @param I18n                 $i18n_service     I18n helper.
-	 * @param Roles                $roles            Roles registry.
-	 * @param Authorization        $authorization    Authorization helper.
-	 * @param array<string, mixed> $config           Runtime config map.
+	 * @param PeakURL_DB           $db             Shared database wrapper.
+	 * @param Connection           $connection     Database connection instance.
+	 * @param AuthService          $auth_service   Authentication domain service.
+	 * @param SettingsApi          $settings_api   Settings API.
+	 * @param Geoip                $geoip_service  GeoIP service.
+	 * @param Mailer               $mailer_service Mailer service.
+	 * @param SchemaService        $schema_service Database schema service.
+	 * @param I18n                 $i18n_service   I18n helper.
+	 * @param Roles                $roles          Roles registry.
+	 * @param Authorization        $authorization  Authorization helper.
+	 * @param array<string, mixed> $config         Runtime config map.
 	 * @since 1.0.0
 	 */
 	public function __construct(
 		PeakURL_DB $db,
 		Connection $connection,
 		AuthService $auth_service,
-		SettingsService $settings_service,
 		SettingsApi $settings_api,
 		Geoip $geoip_service,
 		Mailer $mailer_service,
@@ -170,18 +159,17 @@ class Service {
 		Authorization $authorization,
 		array $config
 	) {
-		$this->db               = $db;
-		$this->connection       = $connection;
-		$this->auth_service     = $auth_service;
-		$this->settings_service = $settings_service;
-		$this->settings_api     = $settings_api;
-		$this->geoip_service    = $geoip_service;
-		$this->mailer_service   = $mailer_service;
-		$this->schema_service   = $schema_service;
-		$this->i18n_service     = $i18n_service;
-		$this->roles            = $roles;
-		$this->authorization    = $authorization;
-		$this->config           = $config;
+		$this->db             = $db;
+		$this->connection     = $connection;
+		$this->auth_service   = $auth_service;
+		$this->settings_api   = $settings_api;
+		$this->geoip_service  = $geoip_service;
+		$this->mailer_service = $mailer_service;
+		$this->schema_service = $schema_service;
+		$this->i18n_service   = $i18n_service;
+		$this->roles          = $roles;
+		$this->authorization  = $authorization;
+		$this->config         = $config;
 	}
 
 	/**
@@ -263,9 +251,7 @@ class Service {
 		}
 
 		if ( ! empty( $capabilities['manageLocationData'] ) ) {
-			$context['geoipStatus'] = $this->settings_service->format_geoip_status(
-				$this->geoip_service->get_status(),
-			);
+			$context['geoipStatus'] = $this->geoip_service->get_status();
 		}
 
 		return $context;

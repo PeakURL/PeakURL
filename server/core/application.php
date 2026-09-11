@@ -218,7 +218,6 @@ class Application {
 			$db,
 			$connection,
 			$auth_service,
-			$settings_service,
 			$settings_api,
 			$geoip_service,
 			$mailer_service,

@@ -795,7 +795,7 @@ class Service {
 	public function get_geoip_status( Request $request ): array {
 		$this->get_geoip_user( $request );
 
-		return $this->format_geoip_status( $this->geoip_service->get_status() );
+		return $this->geoip_service->get_status();
 	}
 
 	/**
@@ -824,8 +824,6 @@ class Service {
 			throw new ApiException( $exception->getMessage(), 422 );
 		}
 
-		$this->config = RuntimeConfig::load( ABSPATH . 'server' );
-		$this->refresh_release_config();
 		$this->config               = RuntimeConfig::load( ABSPATH . 'server' );
 		$crypto                     = new Crypto( $this->config );
 		$this->geoip_service        = new Geoip(
@@ -833,7 +831,7 @@ class Service {
 			$this->settings_api,
 			$crypto,
 		);
-		$status                     = $this->format_geoip_status( $status );
+		$status                     = $this->geoip_service->get_status();
 		$status['credentialsSaved'] = true;
 
 		return $status;
@@ -860,32 +858,8 @@ class Service {
 
 		$downloaded_at = Date::now();
 		$this->settings_api->update_option( 'geoip_last_downloaded_at', $downloaded_at, $downloaded_at, false );
-		$status               = $this->format_geoip_status( $status, $downloaded_at );
+		$status               = $this->geoip_service->format_status( $status, $downloaded_at );
 		$status['downloaded'] = true;
-
-		return $status;
-	}
-
-	/**
-	 * Format GeoIP status for dashboard responses.
-	 *
-	 * @param array<string, mixed> $status             Raw GeoIP status payload.
-	 * @param string|null          $last_downloaded_at Optional download timestamp.
-	 * @return array<string, mixed> Formatted status.
-	 * @since 1.0.0
-	 */
-	public function format_geoip_status(
-		array $status,
-		?string $last_downloaded_at = null
-	): array {
-		if ( null === $last_downloaded_at ) {
-			$last_downloaded_at = $this->settings_api->get_option( 'geoip_last_downloaded_at' );
-		}
-
-		$status['installed']        = ! empty( $status['locationAnalyticsReady'] );
-		$status['lastDownloadedAt'] = $last_downloaded_at
-			? Date::to_iso( (string) $last_downloaded_at )
-			: null;
 
 		return $status;
 	}

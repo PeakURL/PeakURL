@@ -18,6 +18,9 @@ dist-ssr
 build
 release
 .eslintcache
+.phpunit.cache
+server/.phpunit.cache
+
 backup
 wordpress
 *.local

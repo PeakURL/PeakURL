@@ -8,7 +8,7 @@ import { scaleLinear } from "d3-scale";
 import { iso31661Alpha2ToNumeric } from "iso-3166/1-a2-to-1-n.js";
 
 import { __ } from "@/i18n";
-import { useTheme } from "@/components/providers/ThemeProvider";
+import { useTheme } from "@/providers/ThemeProvider";
 import { cn } from "@/utils";
 
 import type {

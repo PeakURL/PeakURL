@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router";
 import "./index.css";
 import { PEAKURL_BASENAME } from "./constants";
 import AppRouter from "./router";
-import { ClientProviders } from "./components/providers";
+import { ClientProviders } from "./providers";
 import { initializeI18n } from "./i18n";
 import { addGeneratorTag } from "./utils";
 

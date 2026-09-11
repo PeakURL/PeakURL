@@ -1,5 +1,5 @@
 import { authApi } from "@/store/slices";
-import { ApiErrorPage } from "@/components/common";
+import { ApiErrorPage } from "@/components/shared";
 import { PageLoader } from "@/components/ui";
 import {
 	getErrorStatus,

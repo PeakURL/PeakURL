@@ -1,4 +1,4 @@
-import { ProtectedRoute } from "@/components";
+import { ProtectedRoute } from "@/router/ProtectedRoute";
 
 import { DashboardLayout } from "./layout";
 import type { AppLayoutProps } from "./types";

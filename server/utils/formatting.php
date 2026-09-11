@@ -394,3 +394,19 @@ if ( ! function_exists( 'PeakURL_sanitize_html' ) ) {
 		return $sanitized;
 	}
 }
+
+if ( ! function_exists( 'peakurl_json_encode' ) ) {
+	/**
+	 * Encode a variable into JSON with safe defaults.
+	 *
+	 * @param mixed $data    Variable (usually an array or object) to encode as JSON.
+	 * @param int   $options Optional. Options to be passed to json_encode(). Default 0.
+	 * @param int   $depth   Optional. Maximum depth to walk through $data. Default 512.
+	 * @return string|false The JSON-encoded string, or false if encoding failed.
+	 * @since 1.2.4
+	 */
+	// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+	function peakurl_json_encode( mixed $data, int $options = 0, int $depth = 512 ): string|false {
+		return json_encode( $data, $options, $depth );
+	}
+}

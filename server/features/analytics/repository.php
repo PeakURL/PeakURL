@@ -182,7 +182,7 @@ class Repository {
 				'type'       => $type,
 				'message'    => $message,
 				'link_id'    => $link_id,
-				'metadata'   => wp_json_encode( $metadata ),
+				'metadata'   => peakurl_json_encode( $metadata ),
 				'created_at' => Date::now(),
 			),
 		);
@@ -645,6 +645,21 @@ class Repository {
 		}
 
 		return 'day';
+	}
+
+	/**
+	 * Get the MySQL DATE_FORMAT string for a traffic series granularity.
+	 *
+	 * @param string $granularity Granularity: 'hour', 'day', or 'month'.
+	 * @return string MySQL date format string.
+	 * @since 1.2.4
+	 */
+	public function get_traffic_series_format_string( string $granularity ): string {
+		return match ( $granularity ) {
+			'hour'  => '%Y-%m-%d %H:00:00',
+			'month' => '%Y-%m-01',
+			default => '%Y-%m-%d',
+		};
 	}
 
 	/**

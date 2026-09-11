@@ -158,7 +158,7 @@ class Service {
 			'id'         => Str::random_id(),
 			'user_id'    => $user['id'],
 			'url'        => $validated['url'],
-			'events'     => wp_json_encode( $validated['events'] ),
+			'events'     => peakurl_json_encode( $validated['events'] ),
 			'secret'     => 'whsec_' . bin2hex( random_bytes( 18 ) ),
 			'is_active'  => 1,
 			'created_at' => Date::now(),

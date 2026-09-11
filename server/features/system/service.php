@@ -391,7 +391,7 @@ class Service {
 				$last_error      = null;
 				$settings_api->update_option(
 					'update_last_result_json',
-					wp_json_encode( $cached_manifest ),
+					peakurl_json_encode( $cached_manifest ),
 					Date::now(),
 					false,
 				);

@@ -146,7 +146,7 @@ class Credentials {
 		$this->db->update(
 			'users',
 			array(
-				'backup_codes_json'         => wp_json_encode( $codes ),
+				'backup_codes_json'         => peakurl_json_encode( $codes ),
 				'backup_codes_generated_at' => $now,
 				'updated_at'                => $now,
 			),

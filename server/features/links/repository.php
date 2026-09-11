@@ -457,7 +457,7 @@ class Repository {
 	): void {
 		$params['id'] = $id;
 
-		$this->db->execute(
+		$this->db->query(
 			'UPDATE urls SET ' . implode( ', ', $updates ) . ' WHERE id = :id',
 			$params,
 		);

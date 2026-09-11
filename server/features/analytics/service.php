@@ -557,6 +557,8 @@ class Service {
 					) ),
 			'periodSummaries'    => $this->data->get_link_period_summaries(
 				$url_id,
+				$stats_period,
+				(int) ( $stats_period['days'] ?? 7 ),
 				(string) ( $url['created_at'] ?? '' ),
 			),
 			'bestDay'            => $this->data->get_link_best_day(

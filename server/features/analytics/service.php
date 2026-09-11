@@ -253,7 +253,7 @@ class Service {
 
 		return array_map(
 			fn( array $row ): array => $this->format_activity( $row ),
-			$this->db->query_all( $sql, $query['params'] ),
+			$this->db->get_results( $sql, $query['params'] ),
 		);
 	}
 
@@ -287,7 +287,7 @@ class Service {
 			? ' WHERE ' . implode( ' AND ', $conditions )
 			: '';
 
-		$rows = $this->db->query_all(
+		$rows = $this->db->get_results(
 			'SELECT
 				c.id AS recent_click_id,
 				c.clicked_at AS recent_clicked_at,
@@ -338,11 +338,11 @@ class Service {
 		$limit      = $pagination['limit'];
 		$offset     = $pagination['offset'];
 		$listing    = $this->data->prepare_activity_query( $user, $query );
-		$total      = (int) $this->db->query_value(
+		$total      = (int) $this->db->get_var(
 			'SELECT COUNT(*) ' . $listing['from'] . $listing['where'],
 			$listing['params'],
 		);
-		$rows       = $this->db->query_all(
+		$rows       = $this->db->get_results(
 			$this->data->activity_select_sql() . ' ' .
 			$listing['from'] .
 			$listing['where'] .
@@ -681,7 +681,7 @@ class Service {
 			'ip_address',
 		);
 
-		$countries = $this->db->query_all(
+		$countries = $this->db->get_results(
 			sprintf(
 				'SELECT
 					CASE
@@ -704,7 +704,7 @@ class Service {
 			),
 			$params,
 		);
-		$cities    = $this->db->query_all(
+		$cities    = $this->db->get_results(
 			sprintf(
 				'SELECT
 					CASE
@@ -727,7 +727,7 @@ class Service {
 			),
 			$params,
 		);
-		$total     = (int) $this->db->query_value(
+		$total     = (int) $this->db->get_var(
 			'SELECT COUNT(*) FROM clicks WHERE ' . $where_clause,
 			$params,
 		);

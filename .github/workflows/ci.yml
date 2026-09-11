@@ -44,7 +44,7 @@ jobs:
         run: npm ci
 
       - name: Install PHP dependencies
-        run: composer --working-dir=app install --no-interaction --prefer-dist --optimize-autoloader
+        run: composer --working-dir=server install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Check formatting (Prettier & PHPCS)
         run: npm run format:check

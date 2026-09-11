@@ -11,7 +11,7 @@ declare(strict_types=1);
 use PeakURL\Scripts\I18n\I18nToolkit;
 
 $root_path = dirname( __DIR__, 2 );
-require $root_path . '/app/vendor/autoload.php';
+require $root_path . '/server/vendor/autoload.php';
 require __DIR__ . '/toolkit.php';
 
 $toolkit  = new I18nToolkit( $root_path );

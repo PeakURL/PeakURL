@@ -23,8 +23,8 @@ wordpress
 *.local
 *.local.*
 .env
-app/vendor/
-app/.env
+server/vendor/
+server/.env
 core/vendor/
 core/.env
 /content/uploads/geoip/*.mmdb

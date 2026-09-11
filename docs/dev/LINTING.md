@@ -101,13 +101,13 @@ Standardized through [`.prettierrc.json`](../../.prettierrc.json), [`.prettierig
 - Tab width: `4`
 - Single quotes
 - Trailing commas where valid in ES5
-- Build artifacts and vendor directories are ignored (`build/`, `release/`, `content/`, `app/vendor/`, and `package-lock.json`).
+- Build artifacts and vendor directories are ignored (`build/`, `release/`, `content/`, `server/vendor/`, and `package-lock.json`).
 
 ---
 
 ## PHP & Backend Runtime
 
-The backend PHP runtime lives under `app/` and `site/`.
+The backend PHP runtime lives under `server/` and `site/`.
 
 ### Linting and Standards
 
@@ -135,21 +135,20 @@ PHP standards are defined by the repository-level [phpcs.xml](../../phpcs.xml) r
 
 Checked directories:
 
-- `app/api/`
-- `app/bin/`
-- `app/controllers/`
-- `app/http/`
-- `app/includes/`
-- `app/public/`
-- `app/services/`
-- `app/store.php`
-- `app/traits/`
-- `app/utils/`
+- `server/api/`
+- `server/bin/`
+- `server/core/`
+- `server/database/`
+- `server/features/`
+- `server/http/`
+- `server/public/`
+- `server/services/`
+- `server/utils/`
 - `site/`
 
 Excluded from PHP_CodeSniffer:
 
-- `app/vendor/`
+- `server/vendor/`
 - Runtime storage and uploads (`content/`)
 - `site/config-sample.php`
 
@@ -180,7 +179,7 @@ Configuration lives in [`package.json`](../../package.json) under the `"lint-sta
 Continuous Integration is configured via [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml). Every pull request and push to the `main` branch undergoes automated quality verification:
 
 1. **Environment Setup**: Node.js 24 and PHP 8.4 with required PDO/Zip extensions.
-2. **Dependency Installation**: `npm ci` & `composer install` (in `app/`).
+2. **Dependency Installation**: `npm ci` & `composer install` (in `server/`).
 3. **Format Check**: `npm run format:check` (Prettier & PHPCS).
 4. **Linters**: `npm run lint` (ESLint with Flat Config & PHPCS with WordPressCS).
 5. **PHP Syntax Check**: `npm run lint:php:syntax` (`php -l` sweep).
@@ -231,4 +230,4 @@ Those settings are helpful because they:
 - format web files with Prettier
 - avoid formatting PHP with the wrong formatter
 - use `phpcbf` for PHP fixes
-- reduce unnecessary file watching in generated folders such as `build/`, `release/`, `app/vendor/`, and `content/`
+- reduce unnecessary file watching in generated folders such as `build/`, `release/`, `server/vendor/`, and `content/`

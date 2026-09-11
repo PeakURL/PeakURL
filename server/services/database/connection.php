@@ -1,0 +1,414 @@
+<?php
+/**
+ * \PDO connection factory.
+ *
+ * Provides a lazy-initialised, singleton \PDO connection and table-prefix
+ * utilities for MySQL / MariaDB.
+ *
+ * @package PeakURL\Services\Database
+ * @since 1.0.0
+ */
+
+declare(strict_types=1);
+
+namespace PeakURL\Services\Database;
+
+use PeakURL\Core\Config\Constants;
+use PeakURL\Core\Config\RuntimeConfig;
+use PeakURL\Database\SchemaSpecs;
+use PDO;
+use PDOStatement;
+
+// If this file is called directly, abort.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 'Direct access forbidden.' );
+}
+
+/**
+ * Connection manager and schema helpers.
+ *
+ * @since 1.0.0
+ */
+class Connection {
+
+	/**
+	 * Merged runtime configuration map.
+	 *
+	 * @var array<string, mixed>
+	 * @since 1.0.0
+	 */
+	private array $config;
+
+	/** @var PDO|null Lazy-initialised \PDO instance. */
+	private ?PDO $connection = null;
+
+	/**
+	 * Create a new Connection instance.
+	 *
+	 * @param array<string, mixed> $config Merged runtime configuration.
+	 * @throws \RuntimeException When the configured DB prefix is invalid.
+	 * @since 1.0.14
+	 */
+	public function __construct( array $config ) {
+		$config[ Constants::DB_PREFIX ] = RuntimeConfig::normalize_db_prefix(
+			(string) ( $config[ Constants::DB_PREFIX ] ?? '' ),
+		);
+
+		$this->config = $config;
+	}
+
+	/**
+	 * Get the shared Connection instance for the current request.
+	 *
+	 * @param array<string, mixed>|null $config Optional app config.
+	 * @return Connection
+	 * @since 1.2.2
+	 */
+	public static function get_instance( ?array $config = null ): Connection {
+		static $instance    = null;
+		static $config_hash = null;
+
+		$app_config = $config ?? RuntimeConfig::get_current();
+		$next_hash  = RuntimeConfig::hash_keys(
+			$app_config,
+			Constants::DB_KEYS,
+		);
+
+		if ( $instance instanceof Connection && $config_hash === $next_hash ) {
+			return $instance;
+		}
+
+		$instance    = new self( $app_config );
+		$config_hash = $next_hash;
+
+		return $instance;
+	}
+
+	/**
+	 * Return the shared \PDO connection, creating it on first access.
+	 *
+	 * The connection uses native prepares, UTC timezone, and exception
+	 * error mode.
+	 *
+	 * @return PDO Active database connection.
+	 * @since 1.0.0
+	 */
+	public function get_connection(): PDO {
+		if ( $this->connection instanceof PDO ) {
+			return $this->connection;
+		}
+
+		$dsn = sprintf(
+			'mysql:host=%s;port=%d;dbname=%s;charset=%s',
+			(string) $this->config[ Constants::DB_HOST ],
+			(int) $this->config[ Constants::DB_PORT ],
+			(string) $this->config[ Constants::DB_DATABASE ],
+			(string) $this->config[ Constants::DB_CHARSET ],
+		);
+
+		$this->connection = new PDO(
+			$dsn,
+			(string) $this->config[ Constants::DB_USERNAME ],
+			(string) $this->config[ Constants::DB_PASSWORD ],
+			array(
+				PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+				PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+				PDO::ATTR_EMULATE_PREPARES   => false,
+			),
+		);
+		$this->connection->exec( "SET time_zone = '+00:00'" );
+
+		return $this->connection;
+	}
+
+	/**
+	 * Get the configured database table prefix.
+	 *
+	 * @return string The prefix string (may be empty).
+	 * @since 1.0.0
+	 */
+	public function get_table_prefix(): string {
+		return (string) ( $this->config[ Constants::DB_PREFIX ] ?? '' );
+	}
+
+	/**
+	 * Return the full table name including the configured prefix.
+	 *
+	 * @param string $table_name Base table name without prefix.
+	 * @return string Prefixed table name.
+	 * @since 1.0.0
+	 */
+	public function table_name( string $table_name ): string {
+		$prefix = $this->get_table_prefix();
+
+		if ( '' === $prefix ) {
+			return $table_name;
+		}
+
+		return $prefix . $table_name;
+	}
+
+	/**
+	 * Prepare a \PDO statement with table-prefix substitution.
+	 *
+	 * @param string $sql Raw SQL with un-prefixed table names.
+	 * @return PDOStatement Ready-to-execute statement.
+	 * @since 1.0.0
+	 */
+	public function prepare( string $sql ): PDOStatement {
+		return $this->get_connection()->prepare( $this->prefix_sql( $sql ) );
+	}
+
+	/**
+	 * Replace bare table names in SQL with their prefixed equivalents.
+	 *
+	 * @param string $sql Raw SQL string.
+	 * @return string SQL with prefixed table names.
+	 * @since 1.0.0
+	 */
+	public function prefix_sql( string $sql ): string {
+		$prefix = $this->get_table_prefix();
+
+		if ( '' === $prefix ) {
+			return $sql;
+		}
+
+		foreach ( SchemaSpecs::managed_tables() as $table_name ) {
+			$sql = $this->replace_table_identifier(
+				$sql,
+				$table_name,
+				$this->table_name( $table_name ),
+			);
+		}
+
+		return $sql;
+	}
+
+	/**
+	 * Prefix table names and CONSTRAINT identifiers in a DDL schema string.
+	 *
+	 * @param string $schema Raw DDL statements.
+	 * @return string Prefixed DDL.
+	 * @since 1.0.0
+	 */
+	public function prefix_schema( string $schema ): string {
+		$prefix = $this->get_table_prefix();
+
+		if ( '' === $prefix ) {
+			return $schema;
+		}
+
+		$schema = $this->prefix_sql( $schema );
+		$result = preg_replace_callback(
+			'/\bCONSTRAINT\s+([A-Za-z0-9_]+)/i',
+			static function ( array $matches ) use ( $prefix ): string {
+				return 'CONSTRAINT ' . $prefix . $matches[1];
+			},
+			$schema,
+		);
+
+		return is_string( $result ) ? $result : $schema;
+	}
+
+	/**
+	 * Check whether a column exists on a managed table.
+	 *
+	 * @param string $table_name  Base table name (without prefix).
+	 * @param string $column_name Column name.
+	 * @return bool True when the column exists.
+	 * @since 1.0.0
+	 */
+	public function column_exists(
+		string $table_name,
+		string $column_name
+	): bool {
+		return (int) $this->query_value(
+			'SELECT COUNT(*)
+			FROM information_schema.columns
+			WHERE table_schema = :table_schema
+			AND table_name = :table_name
+			AND column_name = :column_name',
+			array(
+				'table_schema' => (string) $this->config[ Constants::DB_DATABASE ],
+				'table_name'   => $this->table_name( $table_name ),
+				'column_name'  => $column_name,
+			),
+		) > 0;
+	}
+
+	/**
+	 * Check whether an index exists on a managed table.
+	 *
+	 * @param string $table_name Base table name (without prefix).
+	 * @param string $index_name Index name.
+	 * @return bool True when the index exists.
+	 * @since 1.0.0
+	 */
+	public function index_exists( string $table_name, string $index_name ): bool {
+		return (int) $this->query_value(
+			'SELECT COUNT(*)
+			FROM information_schema.statistics
+			WHERE table_schema = :table_schema
+			AND table_name = :table_name
+			AND index_name = :index_name',
+			array(
+				'table_schema' => (string) $this->config[ Constants::DB_DATABASE ],
+				'table_name'   => $this->table_name( $table_name ),
+				'index_name'   => $index_name,
+			),
+		) > 0;
+	}
+
+	/**
+	 * Check whether a column is currently nullable.
+	 *
+	 * @param string $table_name  Base table name (without prefix).
+	 * @param string $column_name Column name.
+	 * @return bool True when the column allows NULL values.
+	 * @since 1.0.1
+	 */
+	public function column_allows_null(
+		string $table_name,
+		string $column_name
+	): bool {
+		$result = $this->query_value(
+			'SELECT is_nullable
+			FROM information_schema.columns
+			WHERE table_schema = :table_schema
+			AND table_name = :table_name
+			AND column_name = :column_name
+			LIMIT 1',
+			array(
+				'table_schema' => (string) $this->config[ Constants::DB_DATABASE ],
+				'table_name'   => $this->table_name( $table_name ),
+				'column_name'  => $column_name,
+			),
+		);
+
+		return 'YES' === strtoupper( (string) $result );
+	}
+
+	/**
+	 * Check whether a table exists in the current database.
+	 *
+	 * @param string $table_name Base table name (without prefix).
+	 * @return bool True when the table is present.
+	 * @since 1.0.0
+	 */
+	public function table_exists( string $table_name ): bool {
+		return (int) $this->query_value(
+			'SELECT COUNT(*)
+			FROM information_schema.tables
+			WHERE table_schema = :table_schema
+			AND table_name = :table_name',
+			array(
+				'table_schema' => (string) $this->config[ Constants::DB_DATABASE ],
+				'table_name'   => $this->table_name( $table_name ),
+			),
+		) > 0;
+	}
+
+	/**
+	 * Check whether a table contains at least one row.
+	 *
+	 * @param string $table_name Base table name (without prefix).
+	 * @return bool True when the table exists and has at least one row.
+	 * @since 1.0.0
+	 */
+	public function table_has_rows( string $table_name ): bool {
+		if ( ! $this->table_exists( $table_name ) ) {
+			return false;
+		}
+
+		$identifier = str_replace( '`', '``', $this->table_name( $table_name ) );
+		$sql        = sprintf(
+			'SELECT EXISTS(SELECT 1 FROM `%s` LIMIT 1)',
+			$identifier,
+		);
+
+		return (int) $this->query_value( $sql ) > 0;
+	}
+
+	/**
+	 * Retrieve a single option value from the settings table.
+	 *
+	 * @param string $option_name The setting_key column value.
+	 * @return string|null The option value, or null when not found.
+	 * @since 1.0.0
+	 */
+	public function get_option( string $option_name ): ?string {
+		if ( ! $this->table_exists( 'settings' ) ) {
+			return null;
+		}
+
+		$value = $this->query_value(
+			'SELECT setting_value FROM settings WHERE setting_key = :setting_key LIMIT 1',
+			array( 'setting_key' => $option_name ),
+		);
+
+		return is_string( $value ) ? $value : null;
+	}
+
+	/**
+	 * Return the raw configuration array used to initialise the connection.
+	 *
+	 * @return array<string, mixed> Configuration map.
+	 * @since 1.0.0
+	 */
+	public function get_config(): array {
+		return $this->config;
+	}
+
+	/**
+	 * Replace a table identifier only in real SQL table-name positions.
+	 *
+	 * @param string $subject     SQL string.
+	 * @param string $identifier  Bare table identifier to find.
+	 * @param string $replacement Prefixed identifier.
+	 * @return string Updated SQL.
+	 * @since 1.0.0
+	 */
+	private function replace_table_identifier(
+		string $subject,
+		string $identifier,
+		string $replacement
+	): string {
+		$pattern = sprintf(
+			'/\b(' .
+			'FROM' .
+			'|JOIN' .
+			'|INTO' .
+			'|UPDATE' .
+			'|REFERENCES' .
+			'|DESCRIBE' .
+			'|DESC' .
+			'|TABLE(?:\s+IF\s+(?:NOT\s+)?EXISTS)?' .
+			')(\s+)(`?)%s(`?)(?=\b|\s|\(|,)/i',
+			preg_quote( $identifier, '/' ),
+		);
+		$result  = preg_replace_callback(
+			$pattern,
+			static function ( array $matches ) use ( $replacement ): string {
+				return $matches[1] . $matches[2] . $replacement;
+			},
+			$subject,
+		);
+
+		return is_string( $result ) ? $result : $subject;
+	}
+
+	/**
+	 * Execute a query and return the first column of the first row.
+	 *
+	 * @param string               $sql    SQL with optional named placeholders.
+	 * @param array<string, mixed> $params Bind parameters.
+	 * @return mixed Scalar column value.
+	 * @since 1.0.0
+	 */
+	private function query_value( string $sql, array $params = array() ): mixed {
+		$statement = $this->prepare( $sql );
+		$statement->execute( $params );
+
+		return $statement->fetchColumn();
+	}
+}

@@ -19,14 +19,14 @@
 		"lint": "npm run lint:web && npm run lint:php",
 		"lint:web": "eslint ui --cache",
 		"lint:web:fix": "eslint ui --cache --fix",
-		"lint:php": "composer --working-dir=app run phpcs",
-		"lint:php:syntax": "find app site -path 'app/vendor' -prune -o -path 'site/config-sample.php' -prune -o -name '*.php' -print0 | xargs -0 -n1 php -l",
+		"lint:php": "composer --working-dir=server run phpcs",
+		"lint:php:syntax": "find server site -path 'server/vendor' -prune -o -path 'site/config-sample.php' -prune -o -name '*.php' -print0 | xargs -0 -n1 php -l",
 		"format": "npm run format:web && npm run format:php",
 		"format:check": "npm run format:web:check && npm run format:php:check",
 		"format:web": "prettier . --write --ignore-unknown",
 		"format:web:check": "prettier . --check --ignore-unknown",
-		"format:php": "composer --working-dir=app run phpcbf",
-		"format:php:check": "composer --working-dir=app run phpcs",
+		"format:php": "composer --working-dir=server run phpcbf",
+		"format:php:check": "composer --working-dir=server run phpcs",
 		"preview": "vite preview",
 		"prepare": "husky",
 		"docker:up": "docker compose up --build",
@@ -44,8 +44,8 @@
 		"**/*.{json,md,yml,yaml}": [
 			"prettier --write"
 		],
-		"app/**/*.php": [
-			"composer --working-dir=app run phpcbf --"
+		"server/**/*.php": [
+			"composer --working-dir=server run phpcbf --"
 		]
 	},
 	"dependencies": {

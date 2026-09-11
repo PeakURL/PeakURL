@@ -4,7 +4,7 @@ This guide explains how TypeScript is used in the PeakURL dashboard codebase.
 
 PeakURL is an open-source project, so the goal is not only to satisfy the compiler. The code should also stay easy for other contributors to read, review, and extend.
 
-The main TypeScript surface in this repo is the React dashboard under `ui/`. The PHP runtime in `app/` and `site/` follows separate standards.
+The main TypeScript surface in this repo is the React dashboard under `ui/`. The PHP runtime in `server/` and `site/` follows separate standards.
 
 ## Goals
 

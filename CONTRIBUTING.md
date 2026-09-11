@@ -57,7 +57,7 @@ PeakURL is designed as a single-domain, self-hosted deployment. All contribution
 Consult the [Development Environment Setup](docs/dev/DEVELOPMENT.md) guide for comprehensive instructions on:
 
 - Initializing the local Docker environment (`compose.yaml`).
-- Developing within the React dashboard (`ui/`) and PHP backend runtime (`app/`).
+- Developing within the React dashboard (`ui/`) and PHP backend runtime (`server/`).
 - Verifying local domains (`https://peakurl.dev`, `https://api.peakurl.dev`, and `https://peakurl.test`).
 
 ---

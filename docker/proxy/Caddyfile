@@ -21,7 +21,7 @@ https://peakurl.dev {
 
 	@api path /api/*
 	handle @api {
-		reverse_proxy app:8000
+		reverse_proxy server:8000
 	}
 
 	handle {
@@ -35,7 +35,7 @@ http://api.peakurl.dev {
 
 https://api.peakurl.dev {
 	import local_tls
-	reverse_proxy app:8000
+	reverse_proxy server:8000
 }
 
 http://peakurl.test {

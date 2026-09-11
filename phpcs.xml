@@ -9,16 +9,14 @@
 
 	<config name="tab_width" value="4"/>
 
-	<file>app/api</file>
-	<file>app/bin</file>
-	<file>app/controllers</file>
-	<file>app/http</file>
-	<file>app/includes</file>
-	<file>app/public</file>
-	<file>app/services</file>
-	<file>app/store.php</file>
-	<file>app/traits</file>
-	<file>app/utils</file>
+	<file>server/api</file>
+	<file>server/bin</file>
+	<file>server/core</file>
+	<file>server/features</file>
+	<file>server/http</file>
+	<file>server/public</file>
+	<file>server/services</file>
+	<file>server/utils</file>
 	<file>site</file>
 
 	<exclude-pattern>*/vendor/*</exclude-pattern>

@@ -74,7 +74,7 @@ restore_composer_dependencies() {
 
 	printf 'Restoring local Composer dev dependencies...\n'
 	(
-		cd "$ROOT_DIR/app"
+		cd "$ROOT_DIR/server"
 		composer install --no-interaction
 	)
 }
@@ -83,8 +83,8 @@ trap restore_composer_dependencies EXIT HUP INT TERM
 
 cd "$ROOT_DIR"
 
-require_file "$ROOT_DIR/app/public/default-favicon.png"
-require_file "$ROOT_DIR/app/public/default-site.webmanifest"
+require_file "$ROOT_DIR/server/public/default-favicon.png"
+require_file "$ROOT_DIR/server/public/default-site.webmanifest"
 
 printf 'Building React dashboard UI...\n'
 npm run build
@@ -92,7 +92,7 @@ npm run build
 printf 'Refreshing Composer autoload and production dependencies...\n'
 RESTORE_COMPOSER_DEPS=1
 (
-    cd app
+    cd server
     composer install --no-dev --optimize-autoloader --no-interaction
 )
 
@@ -120,12 +120,12 @@ cp "$ROOT_DIR/.version" "$RELEASE_DIR/.version"
 cp "$ROOT_DIR/LICENSE" "$RELEASE_DIR/LICENSE"
 cp "$ROOT_DIR/CREDITS.txt" "$RELEASE_DIR/CREDITS.txt"
 
-copy_release_tree "$ROOT_DIR/app" "$RELEASE_DIR/app" \
+copy_release_tree "$ROOT_DIR/server" "$RELEASE_DIR/server" \
 	--exclude='.DS_Store' \
 	--exclude='.gitkeep' \
 	--exclude='.env'
 
-rm -f "$RELEASE_DIR/app/.env"
+rm -f "$RELEASE_DIR/server/.env"
 remove_release_placeholder_files "$RELEASE_DIR"
 
 printf 'Creating zip archive...\n'

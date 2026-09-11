@@ -333,7 +333,7 @@ final class I18nToolkit {
 	 */
 	public function build_pot(): int {
 		$scan_roots = array(
-			$this->root_path . '/app',
+			$this->root_path . '/server',
 			$this->root_path . '/site',
 			$this->root_path . '/ui',
 		);

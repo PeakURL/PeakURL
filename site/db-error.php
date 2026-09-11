@@ -18,9 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . DIRECTORY_SEPARATOR );
 }
 
-$root_path     = file_exists( __DIR__ . '/app/vendor/autoload.php' ) ? __DIR__ : dirname( __DIR__ );
-$app_path      = $root_path . '/app';
-$autoload_path = $app_path . '/vendor/autoload.php';
+$root_path     = file_exists( __DIR__ . '/server/vendor/autoload.php' ) ? __DIR__ : dirname( __DIR__ );
+$server_path   = $root_path . '/server';
+$autoload_path = $server_path . '/vendor/autoload.php';
 
 if ( ! file_exists( $autoload_path ) ) {
 	http_response_code( 500 );
@@ -34,7 +34,7 @@ require $autoload_path;
 $base_path     = InstallScreen::get_base_path(
 	(string) ( $_SERVER['SCRIPT_NAME'] ?? '/db-error.php' ),
 );
-$install_state = InstallState::get_state( $app_path );
+$install_state = InstallState::get_state( $server_path );
 
 if ( InstallState::READY === $install_state ) {
 	header( 'Location: ' . InstallScreen::format_url( $base_path, '/dashboard' ) );

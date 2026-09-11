@@ -15,8 +15,8 @@
 
 declare(strict_types=1);
 
-use PeakURL\Includes\Constants;
-use PeakURL\Includes\RuntimeConfig;
+use PeakURL\Core\Config\Constants;
+use PeakURL\Core\Config\RuntimeConfig;
 use PeakURL\Services\Install\Config as InstallConfig;
 use PeakURL\Services\Install\Locale as InstallLocale;
 use PeakURL\Services\Install\Screen as InstallScreen;
@@ -33,9 +33,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 const PEAKURL_INSTALLER_SURFACE_WIDTH_PX = 580;
 
-$root_path     = file_exists( __DIR__ . '/app/vendor/autoload.php' ) ? __DIR__ : dirname( __DIR__ );
-$app_path      = $root_path . '/app';
-$autoload_path = $app_path . '/vendor/autoload.php';
+$root_path     = file_exists( __DIR__ . '/server/vendor/autoload.php' ) ? __DIR__ : dirname( __DIR__ );
+$server_path   = $root_path . '/server';
+$autoload_path = $server_path . '/vendor/autoload.php';
 
 if ( ! file_exists( $autoload_path ) ) {
 	http_response_code( 500 );
@@ -61,7 +61,7 @@ $installer_locale = new InstallLocale(
 
 set_i18n_service( $installer_locale->get_i18n_service() );
 
-$install_state = InstallState::get_state( $app_path );
+$install_state = InstallState::get_state( $server_path );
 
 if ( InstallState::READY === $install_state ) {
 	header( 'Location: ' . InstallScreen::format_url( $base_path, '/dashboard' ) );
@@ -82,7 +82,7 @@ $detected_site_url       = InstallScreen::detect_site_url( $base_path, $_SERVER 
 $values                  = InstallConfig::get_form_defaults( $detected_site_url );
 $values['site_language'] = $installer_locale->get_locale();
 $error_message           = '';
-$app_config              = RuntimeConfig::bootstrap( $app_path );
+$app_config              = RuntimeConfig::bootstrap( $server_path );
 $version                 = trim( (string) ( $app_config[ Constants::VERSION ] ?? '' ) );
 $generator_meta          = get_generator_tag( $version );
 if ( '' !== $generator_meta ) {
@@ -105,7 +105,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 
 	try {
 		InstallScreen::validate_post_origin( $detected_site_url, $_SERVER );
-		InstallConfig::configure( $app_path, $_POST );
+		InstallConfig::configure( $server_path, $_POST );
 		header(
 			'Location: ' . InstallScreen::format_url(
 				$base_path,

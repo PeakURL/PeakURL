@@ -67,7 +67,7 @@ The default Docker services are:
 
 - `peakurl-proxy`
 - `peakurl-ui`
-- `peakurl-app`
+- `peakurl-server`
 - `peakurl-test`
 - `peakurl-db`
 - `peakurl-db-init`
@@ -157,7 +157,7 @@ npm run lint
 Run PHP standards checks:
 
 ```bash
-composer --working-dir=app run phpcs
+composer --working-dir=server run phpcs
 ```
 
 Run PHP syntax checks:
@@ -179,7 +179,7 @@ For linting and formatting details, see the [Linting and Formatting guide](LINTI
 PeakURL uses a local MaxMind GeoLite2 City database for location analytics.
 
 - default path: `content/uploads/geoip/GeoLite2-City.mmdb`
-- refresh command: `php app/bin/update-geoip.php`
+- refresh command: `php server/bin/update-geoip.php`
 
 In both development and production environments, MaxMind credentials are persisted securely in encrypted settings storage within the database.
 

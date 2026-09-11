@@ -206,7 +206,7 @@ class Service {
 		$updates = $this->validator->validate_update( $payload );
 
 		if ( array_key_exists( 'events', $updates ) ) {
-			$updates['events'] = wp_json_encode( $updates['events'] );
+			$updates['events'] = peakurl_json_encode( $updates['events'] );
 		}
 
 		if ( ! empty( $updates ) ) {

@@ -518,7 +518,7 @@ class Service {
 		$settings_api->update_option( 'update_last_checked_at', Date::now(), Date::now(), false );
 		$settings_api->update_option(
 			'update_last_result_json',
-			wp_json_encode( $manifest ),
+			peakurl_json_encode( $manifest ),
 			Date::now(),
 			false,
 		);

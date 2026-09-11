@@ -223,7 +223,7 @@ class Credentials {
 			$this->db->update(
 				'users',
 				array(
-					'backup_codes_json' => wp_json_encode(
+					'backup_codes_json' => peakurl_json_encode(
 						array_values( $codes ),
 					),
 					'updated_at'        => Date::now(),

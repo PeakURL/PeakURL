@@ -279,6 +279,120 @@ class Repository {
 	}
 
 	/**
+	 * Apply user access and ownership filters to URL query conditions.
+	 *
+	 * @param array<string, mixed>      $user        Current user.
+	 * @param array<int, string>        $conditions  SQL conditions array.
+	 * @param array<string, string|int> $params      Bound parameter array.
+	 * @param string                    $table_alias URL table alias.
+	 * @return void
+	 *
+	 * @throws ApiException When the user cannot view links.
+	 * @since 1.0.0
+	 */
+	public function apply_user_filter(
+		array $user,
+		array &$conditions,
+		array &$params,
+		string $table_alias = 'u'
+	): void {
+		if ( $this->authorization->can_view_all_links( $user ) ) {
+			return;
+		}
+
+		if ( $this->authorization->can_view_own_links( $user ) ) {
+			$conditions[]             = $table_alias . '.user_id = :filter_user_id';
+			$params['filter_user_id'] = (string) ( $user['id'] ?? '' );
+			return;
+		}
+
+		throw new ApiException(
+			__( 'You do not have permission to view links.', 'peakurl' ),
+			403,
+		);
+	}
+
+	/**
+	 * Filter click analytics queries by user ownership, joining URLs table if needed.
+	 *
+	 * @param array<string, mixed>      $user        Current user.
+	 * @param string                    $join_sql    JOIN clause string.
+	 * @param array<int, string>        $conditions  SQL conditions array.
+	 * @param array<string, string|int> $params      Bound parameter array.
+	 * @param string                    $click_alias Clicks table alias.
+	 * @param string                    $url_alias   URLs table alias.
+	 * @return void
+	 *
+	 * @throws ApiException When the user cannot view analytics.
+	 * @since 1.0.0
+	 */
+	public function filter_clicks_by_user(
+		array $user,
+		string &$join_sql,
+		array &$conditions,
+		array &$params,
+		string $click_alias = 'c',
+		string $url_alias = 'u'
+	): void {
+		if ( $this->authorization->can_view_site_analytics( $user ) ) {
+			return;
+		}
+
+		if ( $this->authorization->can_view_own_analytics( $user ) ) {
+			$join_sql                .=
+				' INNER JOIN urls ' .
+				$url_alias .
+				' ON ' .
+				$url_alias .
+				'.id = ' .
+				$click_alias .
+				'.url_id';
+			$conditions[]             = $url_alias . '.user_id = :filter_user_id';
+			$params['filter_user_id'] = (string) ( $user['id'] ?? '' );
+			return;
+		}
+
+		throw new ApiException(
+			__( 'You do not have permission to view analytics.', 'peakurl' ),
+			403,
+		);
+	}
+
+	/**
+	 * Filter click analytics queries when the URLs table is already joined.
+	 *
+	 * @param array<string, mixed>      $user       Current user.
+	 * @param array<int, string>        $conditions SQL conditions array.
+	 * @param array<string, string|int> $params     Bound parameter array.
+	 * @param string                    $url_alias  URLs table alias.
+	 * @return void
+	 *
+	 * @throws ApiException When the user cannot view analytics.
+	 * @since 1.0.0
+	 */
+	public function filter_joined_clicks_by_user(
+		array $user,
+		array &$conditions,
+		array &$params,
+		string $url_alias = 'u'
+	): void {
+		if ( $this->authorization->can_view_site_analytics( $user ) ) {
+			return;
+		}
+
+		if ( $this->authorization->can_view_own_analytics( $user ) ) {
+			$conditions[]             = $url_alias . '.user_id = :filter_user_id';
+			$params['filter_user_id'] = (string) ( $user['id'] ?? '' );
+			return;
+		}
+
+		throw new ApiException(
+			__( 'You do not have permission to view analytics.', 'peakurl' ),
+			403,
+		);
+	}
+
+	/**
 	 * Count visible links for the dashboard summary cards.
 	 *
 	 * @param array<string, mixed> $user           Current user.
@@ -298,7 +412,7 @@ class Repository {
 			$params['created_before'] = $created_before;
 		}
 
-		$this->authorization->scope_link_visibility(
+		$this->apply_user_filter(
 			$user,
 			$conditions,
 			$params,
@@ -342,7 +456,7 @@ class Repository {
 			$params['end_at'] = $end_at;
 		}
 
-		$this->authorization->scope_click_analytics(
+		$this->filter_clicks_by_user(
 			$user,
 			$join_sql,
 			$conditions,
@@ -845,7 +959,7 @@ class Repository {
 			$conditions[]     = 'c.url_id = :url_id';
 			$params['url_id'] = $url_id;
 		} elseif ( null !== $user ) {
-			$this->authorization->scope_click_analytics(
+			$this->filter_clicks_by_user(
 				$user,
 				$join_sql,
 				$conditions,
@@ -967,7 +1081,7 @@ class Repository {
 			$conditions[]     = 'c.url_id = :url_id';
 			$params['url_id'] = $url_id;
 		} elseif ( null !== $user ) {
-			$this->authorization->scope_click_analytics(
+			$this->filter_clicks_by_user(
 				$user,
 				$join_sql,
 				$conditions,
@@ -1046,7 +1160,7 @@ class Repository {
 			$conditions[]     = 'c.url_id = :url_id';
 			$params['url_id'] = $url_id;
 		} elseif ( null !== $user ) {
-			$this->authorization->scope_click_analytics(
+			$this->filter_clicks_by_user(
 				$user,
 				$join_sql,
 				$conditions,
@@ -1116,7 +1230,7 @@ class Repository {
 			$conditions[]     = 'c.url_id = :url_id';
 			$params['url_id'] = $url_id;
 		} elseif ( null !== $user ) {
-			$this->authorization->scope_click_analytics(
+			$this->filter_clicks_by_user(
 				$user,
 				$join_sql,
 				$conditions,
@@ -1185,7 +1299,7 @@ class Repository {
 			$conditions[]     = 'c.url_id = :url_id';
 			$params['url_id'] = $url_id;
 		} elseif ( null !== $user ) {
-			$this->authorization->scope_click_analytics(
+			$this->filter_clicks_by_user(
 				$user,
 				$join_sql,
 				$conditions,
@@ -1403,8 +1517,8 @@ class Repository {
 			$conditions[] = "LEFT(a.type, 5) = 'user_'";
 		}
 
-		if ( ! $this->roles->has_capability( $user, 'view_site_analytics' ) ) {
-			if ( ! $this->roles->has_capability( $user, 'view_own_analytics' ) ) {
+		if ( ! $this->authorization->can_view_site_analytics( $user ) ) {
+			if ( ! $this->authorization->can_view_own_analytics( $user ) ) {
 				throw new ApiException(
 					__(
 						'You do not have permission to view activity.',
@@ -1414,9 +1528,9 @@ class Repository {
 				);
 			}
 
-			$conditions[]                     = '(a.user_id = :scope_user_id_activity OR u.user_id = :scope_user_id_link)';
-			$params['scope_user_id_activity'] = (string) $user['id'];
-			$params['scope_user_id_link']     = (string) $user['id'];
+			$conditions[]                      = '(a.user_id = :filter_user_id_activity OR u.user_id = :filter_user_id_link)';
+			$params['filter_user_id_activity'] = (string) ( $user['id'] ?? '' );
+			$params['filter_user_id_link']     = (string) ( $user['id'] ?? '' );
 		}
 
 		return array(

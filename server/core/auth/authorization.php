@@ -152,112 +152,87 @@ class Authorization {
 	}
 
 	/**
-	 * Add an ownership scope to URL queries for non-admin users.
+	 * Check whether the user has permission to view all links site-wide.
 	 *
-	 * @param array<string, mixed>      $user        Current user.
-	 * @param array<int, string>        $conditions  SQL conditions array.
-	 * @param array<string, string|int> $params      Bound parameter array.
-	 * @param string                    $table_alias URL table alias.
+	 * @param array<string, mixed> $user User row.
+	 * @return bool True if authorized.
+	 * @since 1.2.3
+	 */
+	public function can_view_all_links( array $user ): bool {
+		return $this->roles->has_capability( $user, 'view_all_links' );
+	}
+
+	/**
+	 * Check whether the user has permission to view their own links.
+	 *
+	 * @param array<string, mixed> $user User row.
+	 * @return bool True if authorized.
+	 * @since 1.2.3
+	 */
+	public function can_view_own_links( array $user ): bool {
+		return $this->roles->has_capability( $user, 'view_own_links' );
+	}
+
+	/**
+	 * Require that the user can view links (either site-wide or own) or throw 403.
+	 *
+	 * @param array<string, mixed> $user    User row.
+	 * @param string|null          $message Optional custom error message.
 	 * @return void
 	 *
 	 * @throws ApiException When the user cannot view links.
+	 * @since 1.2.3
 	 */
-	public function scope_link_visibility(
-		array $user,
-		array &$conditions,
-		array &$params,
-		string $table_alias = 'u'
-	): void {
-		if ( $this->roles->has_capability( $user, 'view_all_links' ) ) {
-			return;
-		}
-
-		if ( $this->roles->has_capability( $user, 'view_own_links' ) ) {
-			$conditions[]            = $table_alias . '.user_id = :scope_user_id';
-			$params['scope_user_id'] = (string) $user['id'];
+	public function require_view_links( array $user, ?string $message = null ): void {
+		if ( $this->can_view_all_links( $user ) || $this->can_view_own_links( $user ) ) {
 			return;
 		}
 
 		throw new ApiException(
-			__( 'You do not have permission to view links.', 'peakurl' ),
+			$message ?? __( 'You do not have permission to view links.', 'peakurl' ),
 			403,
 		);
 	}
 
 	/**
-	 * Add an ownership scope to click analytics queries for non-admin users.
+	 * Check whether the user has permission to view site-wide analytics.
 	 *
-	 * @param array<string, mixed>      $user        Current user.
-	 * @param string                    $join_sql    JOIN clause string.
-	 * @param array<int, string>        $conditions  SQL conditions array.
-	 * @param array<string, string|int> $params      Bound parameter array.
-	 * @param string                    $click_alias Clicks table alias.
-	 * @param string                    $url_alias   URLs table alias.
-	 * @return void
-	 *
-	 * @throws ApiException When the user cannot view analytics.
+	 * @param array<string, mixed> $user User row.
+	 * @return bool True if authorized.
+	 * @since 1.2.3
 	 */
-	public function scope_click_analytics(
-		array $user,
-		string &$join_sql,
-		array &$conditions,
-		array &$params,
-		string $click_alias = 'c',
-		string $url_alias = 'u'
-	): void {
-		if ( $this->roles->has_capability( $user, 'view_site_analytics' ) ) {
-			return;
-		}
-
-		if ( $this->roles->has_capability( $user, 'view_own_analytics' ) ) {
-			$join_sql               .=
-				' INNER JOIN urls ' .
-				$url_alias .
-				' ON ' .
-				$url_alias .
-				'.id = ' .
-				$click_alias .
-				'.url_id';
-			$conditions[]            = $url_alias . '.user_id = :scope_user_id';
-			$params['scope_user_id'] = (string) $user['id'];
-			return;
-		}
-
-		throw new ApiException(
-			__( 'You do not have permission to view analytics.', 'peakurl' ),
-			403,
-		);
+	public function can_view_site_analytics( array $user ): bool {
+		return $this->roles->has_capability( $user, 'view_site_analytics' );
 	}
 
 	/**
-	 * Add click-analytics ownership scope when URLs are already joined.
+	 * Check whether the user has permission to view their own analytics.
 	 *
-	 * @param array<string, mixed>      $user       Current user.
-	 * @param array<int, string>        $conditions SQL conditions array.
-	 * @param array<string, string|int> $params     Bound parameter array.
-	 * @param string                    $url_alias  URLs table alias.
+	 * @param array<string, mixed> $user User row.
+	 * @return bool True if authorized.
+	 * @since 1.2.3
+	 */
+	public function can_view_own_analytics( array $user ): bool {
+		return $this->roles->has_capability( $user, 'view_own_analytics' );
+	}
+
+	/**
+	 * Require that the user can view analytics (either site-wide or own) or throw 403.
+	 *
+	 * @param array<string, mixed> $user    User row.
+	 * @param string|null          $message Optional custom error message.
 	 * @return void
 	 *
 	 * @throws ApiException When the user cannot view analytics.
+	 * @since 1.2.3
 	 */
-	public function scope_click_analytics_visibility(
-		array $user,
-		array &$conditions,
-		array &$params,
-		string $url_alias = 'u'
-	): void {
-		if ( $this->roles->has_capability( $user, 'view_site_analytics' ) ) {
-			return;
-		}
-
-		if ( $this->roles->has_capability( $user, 'view_own_analytics' ) ) {
-			$conditions[]            = $url_alias . '.user_id = :scope_user_id';
-			$params['scope_user_id'] = (string) $user['id'];
+	public function require_view_analytics( array $user, ?string $message = null ): void {
+		if ( $this->can_view_site_analytics( $user ) || $this->can_view_own_analytics( $user ) ) {
 			return;
 		}
 
 		throw new ApiException(
-			__( 'You do not have permission to view analytics.', 'peakurl' ),
+			$message ?? __( 'You do not have permission to view analytics.', 'peakurl' ),
 			403,
 		);
 	}

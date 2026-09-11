@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace PeakURL\Features\Links;
 
 use PeakURL\Api\LinksApi;
+use PeakURL\Core\Auth\Authorization;
+use PeakURL\Core\Errors\ApiException;
 use PeakURL\Services\Database\PeakURL_DB;
 use PeakURL\Services\Database\Query;
 
@@ -43,15 +45,29 @@ class Repository {
 	private LinksApi $links_api;
 
 	/**
-	 * Create a new Link Data query handler.
+	 * Authorization service.
 	 *
-	 * @param PeakURL_DB $db        Database wrapper.
-	 * @param LinksApi   $links_api Low-level links query helper.
+	 * @var Authorization
 	 * @since 1.0.0
 	 */
-	public function __construct( PeakURL_DB $db, LinksApi $links_api ) {
-		$this->db        = $db;
-		$this->links_api = $links_api;
+	private Authorization $authorization;
+
+	/**
+	 * Create a new Link Data query handler.
+	 *
+	 * @param PeakURL_DB         $db            Database wrapper.
+	 * @param LinksApi           $links_api     Low-level links query helper.
+	 * @param Authorization|null $authorization Optional authorization helper.
+	 * @since 1.0.0
+	 */
+	public function __construct(
+		PeakURL_DB $db,
+		LinksApi $links_api,
+		?Authorization $authorization = null
+	) {
+		$this->db            = $db;
+		$this->links_api     = $links_api;
+		$this->authorization = $authorization ?? new Authorization();
 	}
 
 	/**
@@ -133,11 +149,45 @@ class Repository {
 	}
 
 	/**
+	 * Apply user access and ownership filters to URL query conditions.
+	 *
+	 * @param array<string, mixed>      $user        Current user.
+	 * @param array<int, string>        $conditions  SQL conditions array.
+	 * @param array<string, string|int> $params      Bound parameter array.
+	 * @param string                    $table_alias URL table alias.
+	 * @return void
+	 *
+	 * @throws ApiException When the user cannot view links.
+	 * @since 1.0.0
+	 */
+	public function apply_user_filter(
+		array $user,
+		array &$conditions,
+		array &$params,
+		string $table_alias = 'u'
+	): void {
+		if ( $this->authorization->can_view_all_links( $user ) ) {
+			return;
+		}
+
+		if ( $this->authorization->can_view_own_links( $user ) ) {
+			$conditions[]             = $table_alias . '.user_id = :filter_user_id';
+			$params['filter_user_id'] = (string) ( $user['id'] ?? '' );
+			return;
+		}
+
+		throw new ApiException(
+			__( 'You do not have permission to view links.', 'peakurl' ),
+			403,
+		);
+	}
+
+	/**
 	 * Prepare shared listing query fragments and bound parameters.
 	 *
 	 * @param array<string, mixed> $user            Current authenticated user row.
 	 * @param array<string, mixed> $query           Query parameters.
-	 * @param callable             $scope_callback  Callback to apply visibility scope.
+	 * @param callable|null        $filter_callback Optional callback to apply user filter.
 	 * @param callable             $period_resolver Callback to resolve analytics bounds.
 	 * @return array<string, mixed> Prepared query details.
 	 * @since 1.0.0
@@ -145,7 +195,7 @@ class Repository {
 	public function prepare_url_listing_query(
 		array $user,
 		array $query,
-		callable $scope_callback,
+		?callable $filter_callback,
 		callable $period_resolver
 	): array {
 		$search       = trim( (string) ( $query['search'] ?? '' ) );
@@ -194,7 +244,11 @@ class Repository {
 			$params['status_filter_exclude'] = 'trashed';
 		}
 
-		$scope_callback( $user, $conditions, $params, 'u' );
+		if ( null !== $filter_callback ) {
+			$filter_callback( $user, $conditions, $params, 'u' );
+		} else {
+			$this->apply_user_filter( $user, $conditions, $params, 'u' );
+		}
 
 		return array(
 			'where'       => ! empty( $conditions )
@@ -350,21 +404,25 @@ class Repository {
 	}
 
 	/**
-	 * Count trashed links for the current user scope.
+	 * Count trashed links for the current user.
 	 *
-	 * @param array<string, mixed> $user           Current user row.
-	 * @param callable             $scope_callback Visibility callback.
+	 * @param array<string, mixed> $user            Current user row.
+	 * @param callable|null        $filter_callback Optional user filter callback.
 	 * @return int Number of trashed links.
 	 * @since 1.6.0
 	 */
 	public function count_trashed_links(
 		array $user,
-		callable $scope_callback
+		?callable $filter_callback = null
 	): int {
 		$conditions = array( "u.status = 'trashed'" );
 		$params     = array();
 
-		$scope_callback( $user, $conditions, $params, 'u' );
+		if ( null !== $filter_callback ) {
+			$filter_callback( $user, $conditions, $params, 'u' );
+		} else {
+			$this->apply_user_filter( $user, $conditions, $params, 'u' );
+		}
 
 		return (int) $this->db->get_var(
 			'SELECT COUNT(*) FROM urls u WHERE ' . implode( ' AND ', $conditions ),
@@ -563,19 +621,23 @@ class Repository {
 	/**
 	 * Retrieve all trashed links accessible to the current user.
 	 *
-	 * @param array<string, mixed> $user           Current user row.
-	 * @param callable             $scope_callback Visibility callback.
+	 * @param array<string, mixed> $user            Current user row.
+	 * @param callable|null        $filter_callback Optional user filter callback.
 	 * @return array<int, array<string, mixed>> Trashed URL rows.
 	 * @since 1.6.0
 	 */
 	public function get_all_trashed_links(
 		array $user,
-		callable $scope_callback
+		?callable $filter_callback = null
 	): array {
 		$conditions = array( "u.status = 'trashed'" );
 		$params     = array();
 
-		$scope_callback( $user, $conditions, $params, 'u' );
+		if ( null !== $filter_callback ) {
+			$filter_callback( $user, $conditions, $params, 'u' );
+		} else {
+			$this->apply_user_filter( $user, $conditions, $params, 'u' );
+		}
 
 		return $this->db->get_results(
 			'SELECT u.* FROM urls u WHERE ' . implode( ' AND ', $conditions ),
@@ -586,19 +648,23 @@ class Repository {
 	/**
 	 * Retrieve all links accessible to the current user for clearing.
 	 *
-	 * @param array<string, mixed> $user           Current user row.
-	 * @param callable             $scope_callback Visibility callback.
+	 * @param array<string, mixed> $user            Current user row.
+	 * @param callable|null        $filter_callback Optional user filter callback.
 	 * @return array<int, array<string, mixed>> All URL rows.
 	 * @since 1.5.3
 	 */
 	public function get_all_accessible_links(
 		array $user,
-		callable $scope_callback
+		?callable $filter_callback = null
 	): array {
 		$conditions = array();
 		$params     = array();
 
-		$scope_callback( $user, $conditions, $params, 'u' );
+		if ( null !== $filter_callback ) {
+			$filter_callback( $user, $conditions, $params, 'u' );
+		} else {
+			$this->apply_user_filter( $user, $conditions, $params, 'u' );
+		}
 
 		$where = ! empty( $conditions )
 			? 'WHERE ' . implode( ' AND ', $conditions )

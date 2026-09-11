@@ -230,7 +230,7 @@ class Service {
 		$listing = $this->data->prepare_url_listing_query(
 			$user,
 			$query,
-			fn( array $u, array &$c, array &$p, string $a ) => $this->authorization->scope_link_visibility( $u, $c, $p, $a ),
+			null,
 			fn( string $r, string $f, string $t ) => $this->analytics_service->get_link_stats_period( $r, $f, $t ),
 		);
 
@@ -289,7 +289,7 @@ class Service {
 		$listing = $this->data->prepare_url_listing_query(
 			$user,
 			$query,
-			fn( array $u, array &$c, array &$p, string $a ) => $this->authorization->scope_link_visibility( $u, $c, $p, $a ),
+			null,
 			fn( string $r, string $f, string $t ) => $this->analytics_service->get_link_stats_period( $r, $f, $t ),
 		);
 		$rows    = $this->data->query_url_listing_rows(
@@ -1315,10 +1315,7 @@ class Service {
 			__( 'You do not have permission to empty trash.', 'peakurl' ),
 		);
 
-		$rows = $this->data->get_all_trashed_links(
-			$user,
-			fn( array $u, array &$c, array &$p, string $a ) => $this->authorization->scope_link_visibility( $u, $c, $p, $a ),
-		);
+		$rows = $this->data->get_all_trashed_links( $user );
 
 		if ( empty( $rows ) ) {
 			return 0;
@@ -1375,10 +1372,7 @@ class Service {
 			__( 'You do not have permission to delete links.', 'peakurl' ),
 		);
 
-		$rows = $this->data->get_all_accessible_links(
-			$user,
-			fn( array $u, array &$c, array &$p, string $a ) => $this->authorization->scope_link_visibility( $u, $c, $p, $a ),
-		);
+		$rows = $this->data->get_all_accessible_links( $user );
 
 		if ( empty( $rows ) ) {
 			return 0;
@@ -1473,10 +1467,7 @@ class Service {
 	public function count_trashed_links( Request $request ): int {
 		$user = $this->auth_service->get_current_user( $request );
 
-		return $this->data->count_trashed_links(
-			$user,
-			fn( array $u, array &$c, array &$p, string $a ) => $this->authorization->scope_link_visibility( $u, $c, $p, $a ),
-		);
+		return $this->data->count_trashed_links( $user );
 	}
 
 	/**

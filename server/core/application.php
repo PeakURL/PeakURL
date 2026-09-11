@@ -177,7 +177,8 @@ class Application {
 		);
 		$links_repository     = new LinksRepository(
 			$db,
-			$links_api
+			$links_api,
+			$authorization
 		);
 		$links_validator      = new LinksValidator();
 		$links_service        = new LinksService(

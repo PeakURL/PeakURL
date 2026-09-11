@@ -276,7 +276,7 @@ class Service {
 		$conditions    = array();
 		$params        = array();
 
-		$this->authorization->scope_click_analytics_visibility(
+		$this->data->filter_joined_clicks_by_user(
 			$user,
 			$conditions,
 			$params,

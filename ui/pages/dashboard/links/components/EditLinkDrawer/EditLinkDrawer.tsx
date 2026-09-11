@@ -1,8 +1,8 @@
 import { useGetUrlQuery } from "@/store/slices/api";
 
 import type { EditLinkDrawerProps } from "../types";
-import Form from "./_components/Form";
-import { getEditLinkDrawerKey } from "./_components/helpers";
+import Form from "./components/Form";
+import { getEditLinkDrawerKey } from "./components/helpers";
 
 function EditLinkDrawer({ open, setOpen, link }: EditLinkDrawerProps) {
 	const selectedLinkId = link?.id || "";

@@ -10,7 +10,14 @@ export type {
 } from "@/api";
 
 export type LinksDateRange = "all" | "24h" | "7d" | "30d" | "custom";
-export type LinksStatusFilter = "all" | "active" | "inactive" | "trashed";
+export type LinksStatusFilter =
+	| "all"
+	| "active"
+	| "inactive"
+	| "trashed"
+	| "expired"
+	| "paused"
+	| "archived";
 
 /**
  * Date-only custom range used by links analytics controls.

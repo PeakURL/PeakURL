@@ -67,6 +67,8 @@ export interface GetUrlsResponse {
 	};
 }
 
+export type UrlsListResponse = GetUrlsResponse;
+
 /**
  * Endpoint response returned by the links export route.
  */

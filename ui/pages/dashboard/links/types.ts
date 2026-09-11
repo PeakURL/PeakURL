@@ -1,18 +1,59 @@
-import type { LinkRecord, LinksMeta } from "@/api";
+import type { LucideIcon } from "lucide-react";
+import type {
+	LinkRecord,
+	LinkStatus,
+	LinksMeta,
+	LinksSortBy,
+	LinksSortOrder,
+	UpdateUrlPayload,
+	UrlsListResponse,
+} from "@/api";
+
+export type {
+	LinkRecord,
+	LinkStatus,
+	LinksMeta,
+	LinksSortBy,
+	LinksSortOrder,
+	UpdateUrlPayload,
+	UrlsListResponse,
+};
+
+export type LinksDateRange = "all" | "24h" | "7d" | "30d" | "custom";
+export type LinksStatusFilter =
+	| "all"
+	| "active"
+	| "inactive"
+	| "trashed"
+	| "expired"
+	| "paused"
+	| "archived";
 
 /**
- * API response wrapper used by the links dashboard list and lookup queries.
- *
- * Encapsulates a collection of link records along with optional metadata
- * such as pagination or total counts.
+ * Date-only custom range used by links analytics controls.
  */
-export interface GetUrlsResponse {
-	/** Response payload returned from the API. */
-	data?: {
-		/** List of link records returned by the query. */
-		items?: LinkRecord[];
+export interface LinksCustomDateRange {
+	/** Inclusive start date in YYYY-MM-DD format. */
+	from: string;
 
-		/** Additional metadata (e.g. pagination, totals). */
-		meta?: LinksMeta;
-	};
+	/** Inclusive end date in YYYY-MM-DD format. */
+	to: string;
+}
+
+export type LinkStatChangeType = "positive" | "negative";
+
+export interface LinkStatChange {
+	text: string;
+	type: LinkStatChangeType;
+}
+
+export type LinkStatTone = "clicks" | "visitors" | "links" | "active";
+
+export interface LinkStatCardData {
+	title: string;
+	value: string;
+	change: LinkStatChange | null;
+	note?: string;
+	icon: LucideIcon;
+	tone: LinkStatTone;
 }

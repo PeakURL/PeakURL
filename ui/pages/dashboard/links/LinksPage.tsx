@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useSearchParams } from "react-router";
 import {
 	ArrowDown,
 	ArrowUp,
@@ -12,11 +11,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-import {
-	DEFAULT_PAGE_SIZE_OPTIONS,
-	normalizePageSize,
-	useNotification,
-} from "@/components";
+import { useNotification } from "@/components";
 import { __, sprintf } from "@/i18n";
 import type { AppDispatch } from "@/store";
 import {
@@ -28,7 +23,6 @@ import {
 	useGetUrlsQuery,
 	useRestoreUrlMutation,
 } from "@/store/slices/api";
-import type { GetUrlsQueryArgs } from "@/store/slices/api";
 import { cn, formatCount, getErrorMessage } from "@/utils";
 
 import {
@@ -38,44 +32,9 @@ import {
 	TableFooter,
 	Pagination,
 	LinksSkeleton,
-} from "./_components";
-import type {
-	LinkRecord,
-	LinksCustomDateRange,
-	LinksDateRange,
-	LinksMeta,
-	LinksSortBy,
-	LinksSortOrder,
-	LinksStatusFilter,
-} from "./_components/types";
-import type { GetUrlsResponse } from "./types";
-
-// LocalStorage keys for persistence (defined outside component to satisfy hook deps)
-const LS_KEYS = {
-	sortBy: "admin_links_sortBy",
-	sortOrder: "admin_links_sortOrder",
-	limit: "admin_links_limit",
-};
-
-const DATE_RANGE_DAY_MS = 24 * 60 * 60 * 1000;
-
-function formatDateInput(date: Date): string {
-	const year = date.getFullYear();
-	const month = String(date.getMonth() + 1).padStart(2, "0");
-	const day = String(date.getDate()).padStart(2, "0");
-
-	return `${year}-${month}-${day}`;
-}
-
-function getDefaultCustomClickRange(): LinksCustomDateRange {
-	const today = new Date();
-	const weekStart = new Date(today.getTime() - 6 * DATE_RANGE_DAY_MS);
-
-	return {
-		from: formatDateInput(weekStart),
-		to: formatDateInput(today),
-	};
-}
+} from "./components";
+import { useLinksFilter } from "./hooks";
+import type { LinkRecord, LinksDateRange, LinksMeta } from "./types";
 
 type LinkStatChangeType = "positive" | "negative";
 
@@ -141,124 +100,49 @@ function LinksPage() {
 	const dispatch = useDispatch<AppDispatch>();
 	const notifications = useNotification();
 
-	// State for Sorting, Status Filter and Pagination
-	const [sortBy, setSortBy] = useState<LinksSortBy>(() => {
-		if (typeof window === "undefined") {
-			return "createdAt";
-		}
-		const stored = localStorage.getItem(
-			LS_KEYS.sortBy
-		) as LinksSortBy | null;
-		const validSortOptions: LinksSortBy[] = [
-			"createdAt",
-			"updatedAt",
-			"clicks",
-			"uniqueClicks",
-			"alias",
-			"title",
-		];
-		return stored && validSortOptions.includes(stored)
-			? stored
-			: "createdAt";
-	});
-	const [sortOrder, setSortOrder] = useState<LinksSortOrder>(() =>
-		typeof window !== "undefined"
-			? (localStorage.getItem(LS_KEYS.sortOrder) as LinksSortOrder) ||
-				"desc"
-			: "desc"
-	);
-	const [statusFilter, setStatusFilter] = useState<LinksStatusFilter>("all");
-	const isTrashTab = "trashed" === statusFilter;
-	const [limit, setLimit] = useState<number>(() => {
-		if (typeof window !== "undefined") {
-			return normalizePageSize(
-				localStorage.getItem(LS_KEYS.limit),
-				DEFAULT_PAGE_SIZE_OPTIONS[0] ?? 25
-			);
-		}
-
-		return DEFAULT_PAGE_SIZE_OPTIONS[0] ?? 25;
-	});
-	const [currentPage, setCurrentPage] = useState(1);
-	const [clickRange, setClickRange] = useState<LinksDateRange>("all");
-	const [customClickRange, setCustomClickRange] =
-		useState<LinksCustomDateRange>(() => getDefaultCustomClickRange());
-	const [searchParams] = useSearchParams();
-	const statsShortId = searchParams.get("stats");
-	const searchQuery = searchParams.get("search")?.trim() || "";
+	const {
+		sortBy,
+		setSortBy,
+		sortOrder,
+		setSortOrder,
+		statusFilter,
+		setStatusFilter,
+		isTrashTab,
+		limit,
+		setLimit,
+		currentPage,
+		setCurrentPage,
+		clickRange,
+		setClickRange,
+		customClickRange,
+		setCustomClickRange,
+		searchQuery,
+		statsShortId,
+		urlsQueryArgs,
+	} = useLinksFilter();
 
 	const [restoreUrl] = useRestoreUrlMutation();
 	const [bulkRestoreUrls] = useBulkRestoreUrlsMutation();
 	const [emptyTrash] = useEmptyTrashMutation();
-
-	// Persist settings
-	useEffect(() => {
-		try {
-			localStorage.setItem(LS_KEYS.sortBy, sortBy);
-			localStorage.setItem(LS_KEYS.sortOrder, sortOrder);
-			localStorage.setItem(LS_KEYS.limit, String(limit));
-		} catch {}
-	}, [sortBy, sortOrder, limit]);
-
-	const urlsQueryArgs = useMemo<GetUrlsQueryArgs>(() => {
-		const query: GetUrlsQueryArgs = {
-			page: currentPage,
-			limit,
-			sortBy,
-			sortOrder,
-			status: statusFilter,
-			search: searchQuery,
-		};
-
-		if ("custom" === clickRange) {
-			return {
-				...query,
-				range: "custom",
-				from: customClickRange.from,
-				to: customClickRange.to,
-			};
-		}
-
-		if ("all" === clickRange) {
-			return query;
-		}
-
-		return {
-			...query,
-			range: clickRange,
-		};
-	}, [
-		clickRange,
-		currentPage,
-		customClickRange.from,
-		customClickRange.to,
-		limit,
-		searchQuery,
-		sortBy,
-		sortOrder,
-		statusFilter,
-	]);
 
 	const {
 		data: urlsRes,
 		refetch: refetchUrls,
 		isLoading: isUrlsLoading,
 	} = useGetUrlsQuery(urlsQueryArgs);
-	const typedUrlsRes = urlsRes as GetUrlsResponse | undefined;
 
-	const apiItems: LinkRecord[] = typedUrlsRes?.data?.items ?? [];
+	const apiItems: LinkRecord[] = urlsRes?.data?.items ?? [];
 	const apiMeta: LinksMeta = {
-		page: typedUrlsRes?.data?.meta?.page ?? currentPage,
-		limit: typedUrlsRes?.data?.meta?.limit ?? limit,
-		totalItems: typedUrlsRes?.data?.meta?.totalItems ?? apiItems.length,
-		totalPages: typedUrlsRes?.data?.meta?.totalPages ?? 1,
-		totalClicks: typedUrlsRes?.data?.meta?.totalClicks ?? 0,
-		uniqueClicks: typedUrlsRes?.data?.meta?.uniqueClicks ?? 0,
-		activeLinks: typedUrlsRes?.data?.meta?.activeLinks ?? 0,
-		trashedLinks: typedUrlsRes?.data?.meta?.trashedLinks ?? 0,
-		lastPeriodTotalClicks: typedUrlsRes?.data?.meta?.lastPeriodTotalClicks,
-		lastPeriodUniqueClicks:
-			typedUrlsRes?.data?.meta?.lastPeriodUniqueClicks,
+		page: urlsRes?.data?.meta?.page ?? currentPage,
+		limit: urlsRes?.data?.meta?.limit ?? limit,
+		totalItems: urlsRes?.data?.meta?.totalItems ?? apiItems.length,
+		totalPages: urlsRes?.data?.meta?.totalPages ?? 1,
+		totalClicks: urlsRes?.data?.meta?.totalClicks ?? 0,
+		uniqueClicks: urlsRes?.data?.meta?.uniqueClicks ?? 0,
+		activeLinks: urlsRes?.data?.meta?.activeLinks ?? 0,
+		trashedLinks: urlsRes?.data?.meta?.trashedLinks ?? 0,
+		lastPeriodTotalClicks: urlsRes?.data?.meta?.lastPeriodTotalClicks,
+		lastPeriodUniqueClicks: urlsRes?.data?.meta?.lastPeriodUniqueClicks,
 	};
 	const { data: statsLinkRes, refetch: refetchStatsLookup } = useGetUrlQuery(
 		statsShortId || "",

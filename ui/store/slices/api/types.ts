@@ -275,7 +275,14 @@ interface GetUrlsQueryBaseArgs {
 	sortOrder?: LinksSortOrder;
 
 	/** Optional status filter applied by the API. */
-	status?: "all" | "active" | "inactive" | "trashed";
+	status?:
+		| "all"
+		| "active"
+		| "inactive"
+		| "trashed"
+		| "expired"
+		| "paused"
+		| "archived";
 
 	/** Optional search term forwarded to the API. */
 	search?: string;

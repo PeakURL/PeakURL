@@ -542,7 +542,7 @@ if ( $is_favicon( $relative_path ) ) {
 	$connection      = new Connection( $app_config );
 	$settings_api    = new SettingsApi( new PeakURL_DB( $connection ) );
 	$site_name       = trim(
-		(string) ( $connection->get_option( 'site_name' ) ?? 'PeakURL' ),
+		(string) ( $settings_api->get_option( 'site_name' ) ?? 'PeakURL' ),
 	);
 	$favicon_service = new Favicon( $app_config, $settings_api );
 	$favicon_assets  = $favicon_service->get_assets(

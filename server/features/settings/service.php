@@ -332,48 +332,6 @@ class Service {
 	}
 
 	/**
-	 * Retrieve a single option value by its key.
-	 *
-	 * @param string $option_name Option key to look up.
-	 * @return string|null The stored value or null when missing.
-	 * @since 1.0.0
-	 */
-	public function get_option( string $option_name ): ?string {
-		return $this->settings_api->get_option( $option_name );
-	}
-
-	/**
-	 * Insert or update an option row.
-	 *
-	 * @param string $option_name  Option key.
-	 * @param string $option_value Option value to persist.
-	 * @param bool   $autoload     Whether the option should autoload.
-	 * @since 1.0.0
-	 */
-	public function update_option(
-		string $option_name,
-		string $option_value,
-		bool $autoload = true
-	): void {
-		$this->settings_api->update_option(
-			$option_name,
-			$option_value,
-			Date::now(),
-			$autoload,
-		);
-	}
-
-	/**
-	 * Delete one or more options.
-	 *
-	 * @param array<int, string> $option_names Option keys to remove.
-	 * @since 1.0.0
-	 */
-	public function delete_options( array $option_names ): void {
-		$this->settings_api->delete_options( $option_names );
-	}
-
-	/**
 	 * Add an option only when no row exists yet.
 	 *
 	 * @param string $option_name  Option key.
@@ -387,11 +345,11 @@ class Service {
 		string $option_value,
 		bool $autoload = true
 	): void {
-		if ( null !== $this->get_option( $option_name ) ) {
+		if ( null !== $this->settings_api->get_option( $option_name ) ) {
 			return;
 		}
 
-		$this->update_option( $option_name, $option_value, $autoload );
+		$this->settings_api->update_option( $option_name, $option_value, Date::now(), $autoload );
 	}
 
 	/**
@@ -420,7 +378,7 @@ class Service {
 		}
 
 		if ( '' !== $site_url ) {
-			$this->update_option( 'site_url', $site_url );
+			$this->settings_api->update_option( 'site_url', $site_url, Date::now() );
 		}
 
 		if ( '' !== $admin_email ) {
@@ -428,20 +386,20 @@ class Service {
 		}
 
 		if ( '' !== $version ) {
-			$this->update_option( 'installed_version', $version, false );
+			$this->settings_api->update_option( 'installed_version', $version, Date::now(), false );
 		}
 
 		if ( '' !== $manifest_url ) {
-			$this->update_option( 'update_manifest_url', $manifest_url, false );
+			$this->settings_api->update_option( 'update_manifest_url', $manifest_url, Date::now(), false );
 		}
 
 		$this->add_default_options();
 
-		if ( null === $this->get_option( 'installed_at' ) ) {
-			$this->update_option( 'installed_at', Date::now(), false );
+		if ( null === $this->settings_api->get_option( 'installed_at' ) ) {
+			$this->settings_api->update_option( 'installed_at', Date::now(), Date::now(), false );
 		}
 
-		$this->delete_options(
+		$this->settings_api->delete_options(
 			array(
 				'site_title',
 				'workspace_name',
@@ -500,7 +458,7 @@ class Service {
 	 */
 	public function get_general_settings( Request $request ): array {
 		$user         = $this->auth_service->get_current_user( $request );
-		$site_name    = trim( (string) $this->get_option( 'site_name' ) );
+		$site_name    = trim( (string) $this->settings_api->get_option( 'site_name' ) );
 		$site_tagline = $this->get_site_tagline();
 		$site_url     = \get_site_url();
 
@@ -524,9 +482,9 @@ class Service {
 				$user,
 				'manage_site_settings',
 			),
-			'landingPageMode'       => $this->get_option( 'landing_page_mode' ) ? $this->get_option( 'landing_page_mode' ) : 'html',
-			'landingPageUrl'        => $this->get_option( 'landing_page_url' ) ? $this->get_option( 'landing_page_url' ) : '',
-			'trashRetentionDays'    => (int) ( $this->get_option( 'trash_retention_days' ) ?? 30 ),
+			'landingPageMode'       => $this->settings_api->get_option( 'landing_page_mode' ) ? $this->settings_api->get_option( 'landing_page_mode' ) : 'html',
+			'landingPageUrl'        => $this->settings_api->get_option( 'landing_page_url' ) ? $this->settings_api->get_option( 'landing_page_url' ) : '',
+			'trashRetentionDays'    => (int) ( $this->settings_api->get_option( 'trash_retention_days' ) ?? 30 ),
 			'contentDirectory'      => $this->i18n_service->get_content_dir(),
 		);
 	}
@@ -579,12 +537,13 @@ class Service {
 			$this->get_site_time_format(),
 		);
 
-		$this->update_option( 'site_language', $validated['siteLanguage'] );
+		$now = Date::now();
+		$this->settings_api->update_option( 'site_language', $validated['siteLanguage'], $now );
 		$this->i18n_service->load_locale( $validated['siteLanguage'] );
-		$this->update_option( 'site_timezone', $validated['siteTimezone'] );
-		$this->update_option( 'site_time_format', $validated['siteTimeFormat'] );
+		$this->settings_api->update_option( 'site_timezone', $validated['siteTimezone'], $now );
+		$this->settings_api->update_option( 'site_time_format', $validated['siteTimeFormat'], $now );
 
-		$current_site_name = trim( (string) $this->get_option( 'site_name' ) );
+		$current_site_name = trim( (string) $this->settings_api->get_option( 'site_name' ) );
 		$site_name         = $validated['siteName'];
 
 		if ( '' === $site_name ) {
@@ -592,22 +551,22 @@ class Service {
 		}
 
 		if ( $site_name !== $current_site_name ) {
-			$this->update_option( 'site_name', $site_name );
+			$this->settings_api->update_option( 'site_name', $site_name, $now );
 		}
 
 		$current_site_tagline = $this->get_site_tagline();
 		if ( $validated['siteTagline'] !== $current_site_tagline ) {
-			$this->update_option( 'site_tagline', $validated['siteTagline'] );
+			$this->settings_api->update_option( 'site_tagline', $validated['siteTagline'], $now );
 		}
 
-		$this->update_option( 'landing_page_mode', $validated['landingPageMode'] );
+		$this->settings_api->update_option( 'landing_page_mode', $validated['landingPageMode'], $now );
 
-		if ( $validated['landingPageUrl'] !== (string) $this->get_option( 'landing_page_url' ) ) {
-			$this->update_option( 'landing_page_url', $validated['landingPageUrl'] );
+		if ( $validated['landingPageUrl'] !== (string) $this->settings_api->get_option( 'landing_page_url' ) ) {
+			$this->settings_api->update_option( 'landing_page_url', $validated['landingPageUrl'], $now );
 		}
 
 		if ( null !== $validated['trashRetentionDays'] ) {
-			$this->update_option( 'trash_retention_days', (string) $validated['trashRetentionDays'] );
+			$this->settings_api->update_option( 'trash_retention_days', (string) $validated['trashRetentionDays'], $now );
 		}
 
 		try {
@@ -642,7 +601,7 @@ class Service {
 	 * @since 1.0.0
 	 */
 	public function get_site_tagline(): string {
-		$tagline = trim( (string) $this->get_option( 'site_tagline' ) );
+		$tagline = trim( (string) $this->settings_api->get_option( 'site_tagline' ) );
 
 		return '' !== $tagline
 			? $tagline
@@ -657,7 +616,7 @@ class Service {
 	 */
 	public function get_site_timezone(): string {
 		return $this->validator->normalize_timezone(
-			(string) $this->get_option( 'site_timezone' ),
+			(string) $this->settings_api->get_option( 'site_timezone' ),
 			true,
 		);
 	}
@@ -670,7 +629,7 @@ class Service {
 	 */
 	public function get_site_time_format(): string {
 		return $this->validator->normalize_time_format(
-			(string) $this->get_option( 'site_time_format' ),
+			(string) $this->settings_api->get_option( 'site_time_format' ),
 		);
 	}
 
@@ -900,7 +859,7 @@ class Service {
 		}
 
 		$downloaded_at = Date::now();
-		$this->update_option( 'geoip_last_downloaded_at', $downloaded_at, false );
+		$this->settings_api->update_option( 'geoip_last_downloaded_at', $downloaded_at, $downloaded_at, false );
 		$status               = $this->format_geoip_status( $status, $downloaded_at );
 		$status['downloaded'] = true;
 
@@ -920,7 +879,7 @@ class Service {
 		?string $last_downloaded_at = null
 	): array {
 		if ( null === $last_downloaded_at ) {
-			$last_downloaded_at = $this->get_option( 'geoip_last_downloaded_at' );
+			$last_downloaded_at = $this->settings_api->get_option( 'geoip_last_downloaded_at' );
 		}
 
 		$status['installed']        = ! empty( $status['locationAnalyticsReady'] );

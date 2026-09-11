@@ -10,9 +10,11 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\Install;
 
+use PeakURL\Api\SettingsApi;
+use PeakURL\Core\Config\RuntimeConfig;
 use PeakURL\Database\SchemaSpecs;
 use PeakURL\Services\Database\Connection;
-use PeakURL\Core\Config\RuntimeConfig;
+use PeakURL\Services\Database\PeakURL_DB;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -86,7 +88,8 @@ class State {
 				}
 			}
 
-			$site_url = $connection->get_option( 'site_url' );
+			$settings_api = new SettingsApi( new PeakURL_DB( $connection ) );
+			$site_url     = $settings_api->get_option( 'site_url' );
 
 			if ( ! is_string( $site_url ) || '' === trim( $site_url ) ) {
 				return self::NEEDS_INSTALL;

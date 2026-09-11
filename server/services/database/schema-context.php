@@ -10,8 +10,9 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\Database;
 
-use PeakURL\Services\Database\Connection;
+use PeakURL\Api\SettingsApi;
 use PeakURL\Core\Config\Constants;
+use PeakURL\Services\Database\Connection;
 
 
 // If this file is called directly, abort.
@@ -38,13 +39,23 @@ class Context {
 	private Connection $connection;
 
 	/**
+	 * Settings options API.
+	 *
+	 * @var SettingsApi
+	 * @since 1.2.3
+	 */
+	private SettingsApi $settings_api;
+
+	/**
 	 * Create a new schema context helper.
 	 *
-	 * @param Connection $connection Shared connection manager.
+	 * @param Connection       $connection   Shared connection manager.
+	 * @param SettingsApi|null $settings_api Optional settings API helper.
 	 * @since 1.0.14
 	 */
-	public function __construct( Connection $connection ) {
-		$this->connection = $connection;
+	public function __construct( Connection $connection, ?SettingsApi $settings_api = null ) {
+		$this->connection   = $connection;
+		$this->settings_api = $settings_api ?? new SettingsApi( new PeakURL_DB( $connection ) );
 	}
 
 	/**
@@ -123,18 +134,18 @@ class Context {
 	}
 
 	/**
-	 * Read an option value directly from the settings table.
+	 * Read an option value from the settings table.
 	 *
 	 * @param string $option_name Option key.
-	 * @return string|null
+	 * @return string|null Stored value or null.
 	 * @since 1.0.14
 	 */
 	public function get_option( string $option_name ): ?string {
-		return $this->connection->get_option( $option_name );
+		return $this->settings_api->get_option( $option_name );
 	}
 
 	/**
-	 * Insert or update an option row directly.
+	 * Insert or update an option row.
 	 *
 	 * @param string $option_name  Option key.
 	 * @param string $option_value Option value.
@@ -147,25 +158,11 @@ class Context {
 		string $option_value,
 		bool $autoload = false
 	): void {
-		if ( ! $this->connection->table_exists( 'settings' ) ) {
-			return;
-		}
-
-		$statement = $this->connection->prepare(
-			'INSERT INTO settings (setting_key, setting_value, autoload, updated_at)
-			VALUES (:setting_key, :setting_value, :autoload, :updated_at)
-			ON DUPLICATE KEY UPDATE
-				setting_value = VALUES(setting_value),
-				autoload = VALUES(autoload),
-				updated_at = VALUES(updated_at)'
-		);
-		$statement->execute(
-			array(
-				'setting_key'   => $option_name,
-				'setting_value' => $option_value,
-				'autoload'      => $autoload ? 1 : 0,
-				'updated_at'    => gmdate( 'Y-m-d H:i:s' ),
-			),
+		$this->settings_api->update_option(
+			$option_name,
+			$option_value,
+			gmdate( 'Y-m-d H:i:s' ),
+			$autoload,
 		);
 	}
 
@@ -177,14 +174,7 @@ class Context {
 	 * @since 1.0.14
 	 */
 	public function delete_option( string $option_name ): void {
-		if ( ! $this->connection->table_exists( 'settings' ) ) {
-			return;
-		}
-
-		$statement = $this->connection->prepare(
-			'DELETE FROM settings WHERE setting_key = :setting_key'
-		);
-		$statement->execute( array( 'setting_key' => $option_name ) );
+		$this->settings_api->delete_option( $option_name );
 	}
 
 	/**

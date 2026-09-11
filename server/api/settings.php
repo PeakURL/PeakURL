@@ -153,6 +153,17 @@ class SettingsApi {
 	}
 
 	/**
+	 * Delete a single setting row by key.
+	 *
+	 * @param string $setting_key Setting key to delete.
+	 * @return void
+	 * @since 1.2.3
+	 */
+	public function delete_option( string $setting_key ): void {
+		$this->delete_options( array( $setting_key ) );
+	}
+
+	/**
 	 * Delete multiple settings by key.
 	 *
 	 * @param array<int, string> $setting_keys Keys to delete.

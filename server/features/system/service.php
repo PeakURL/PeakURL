@@ -383,16 +383,16 @@ class Service {
 	 * @since 1.0.0
 	 */
 	private function load_update_status( bool $force_check ): array {
-		$settings_service = $this->settings_service;
-		$update_service   = new UpdateManager( $this->config );
-		$manifest_url     = $update_service->get_manifest_url();
-		$last_checked     = $settings_service->get_option( 'update_last_checked_at' );
-		$last_error       = $settings_service->get_option( 'update_last_error' );
-		$cached_manifest  = $this->decode_update_manifest(
-			$settings_service->get_option( 'update_last_result_json' ),
+		$settings_api    = $this->settings_api;
+		$update_service  = new UpdateManager( $this->config );
+		$manifest_url    = $update_service->get_manifest_url();
+		$last_checked    = $settings_api->get_option( 'update_last_checked_at' );
+		$last_error      = $settings_api->get_option( 'update_last_error' );
+		$cached_manifest = $this->decode_update_manifest(
+			$settings_api->get_option( 'update_last_result_json' ),
 		);
 
-		$settings_service->update_option( 'update_manifest_url', $manifest_url, false );
+		$settings_api->update_option( 'update_manifest_url', $manifest_url, Date::now(), false );
 
 		if (
 			$force_check ||
@@ -403,28 +403,32 @@ class Service {
 				$cached_manifest = $update_service->fetch_manifest();
 				$last_checked    = Date::now();
 				$last_error      = null;
-				$settings_service->update_option(
+				$settings_api->update_option(
 					'update_last_result_json',
 					wp_json_encode( $cached_manifest ),
+					Date::now(),
 					false,
 				);
-				$settings_service->update_option(
+				$settings_api->update_option(
 					'update_last_checked_at',
 					$last_checked,
+					Date::now(),
 					false,
 				);
-				$settings_service->delete_options( array( 'update_last_error' ) );
+				$settings_api->delete_options( array( 'update_last_error' ) );
 			} catch ( \Throwable $exception ) {
 				$last_checked = Date::now();
 				$last_error   = $exception->getMessage();
-				$settings_service->update_option(
+				$settings_api->update_option(
 					'update_last_checked_at',
 					$last_checked,
+					Date::now(),
 					false,
 				);
-				$settings_service->update_option(
+				$settings_api->update_option(
 					'update_last_error',
 					$last_error,
+					Date::now(),
 					false,
 				);
 			}
@@ -495,16 +499,17 @@ class Service {
 			);
 		}
 
-		$update_service   = new UpdateManager( $this->config );
-		$settings_service = $this->settings_service;
+		$update_service = new UpdateManager( $this->config );
+		$settings_api   = $this->settings_api;
 
 		try {
 			$result = $update_service->apply_update( $manifest );
 		} catch ( \Throwable $exception ) {
-			$settings_service->update_option( 'update_last_checked_at', Date::now(), false );
-			$settings_service->update_option(
+			$settings_api->update_option( 'update_last_checked_at', Date::now(), Date::now(), false );
+			$settings_api->update_option(
 				'update_last_error',
 				$exception->getMessage(),
+				Date::now(),
 				false,
 			);
 
@@ -517,19 +522,21 @@ class Service {
 			?? Constants::DEFAULT_VERSION
 		);
 
-		$settings_service->update_option(
+		$settings_api->update_option(
 			'installed_version',
 			$installed_version,
+			Date::now(),
 			false,
 		);
-		$settings_service->update_option( 'update_last_applied_at', Date::now(), false );
-		$settings_service->update_option( 'update_last_checked_at', Date::now(), false );
-		$settings_service->update_option(
+		$settings_api->update_option( 'update_last_applied_at', Date::now(), Date::now(), false );
+		$settings_api->update_option( 'update_last_checked_at', Date::now(), Date::now(), false );
+		$settings_api->update_option(
 			'update_last_result_json',
 			wp_json_encode( $manifest ),
+			Date::now(),
 			false,
 		);
-		$settings_service->delete_options( array( 'update_last_error' ) );
+		$settings_api->delete_options( array( 'update_last_error' ) );
 
 		return array(
 			'applied'        => true,

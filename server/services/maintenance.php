@@ -61,7 +61,7 @@ if ( ! function_exists( 'get_maintenance_view_data' ) ) {
 
 			if ( null !== $app_connection ) {
 				$configured_site_name = trim(
-					(string) ( $app_connection->get_option( 'site_name' ) ?? '' ),
+					(string) ( get_settings_api( $app_config, $app_connection )->get_option( 'site_name' ) ?? '' ),
 				);
 
 				if ( '' !== $configured_site_name ) {

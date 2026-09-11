@@ -183,10 +183,14 @@ class Context {
 			);
 		}
 
-		if ( ! is_writable( $this->filesystem->join_path( ABSPATH, 'app' ) ) ) {
+		$runtime_dir = is_dir( $this->filesystem->join_path( ABSPATH, 'server' ) )
+			? $this->filesystem->join_path( ABSPATH, 'server' )
+			: $this->filesystem->join_path( ABSPATH, 'app' );
+
+		if ( is_dir( $runtime_dir ) && ! is_writable( $runtime_dir ) ) {
 			return array(
 				'allowed' => false,
-				'reason'  => __( 'The app directory is not writable.', 'peakurl' ),
+				'reason'  => __( 'The application runtime directory is not writable.', 'peakurl' ),
 			);
 		}
 

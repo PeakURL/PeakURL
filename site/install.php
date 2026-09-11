@@ -14,9 +14,11 @@
 
 declare(strict_types=1);
 
-use PeakURL\Http\Request;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Config\RuntimeConfig;
+use PeakURL\Features\Auth\Service as AuthService;
+use PeakURL\Http\Request;
+use PeakURL\Services\Database\Connection;
 use PeakURL\Services\Install\Locale as InstallLocale;
 use PeakURL\Services\Install\Manager as InstallManager;
 use PeakURL\Services\Install\Screen as InstallScreen;
@@ -104,8 +106,19 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 
 	try {
 		InstallScreen::validate_post_origin( $detected_site_url, $_SERVER );
-		$request = Request::from_globals();
-		InstallManager::install( $server_path, $_POST, $request );
+		$request          = Request::from_globals();
+		$installed_values = InstallManager::install( $server_path, $_POST, $request );
+
+		$installed_config = RuntimeConfig::load( $server_path );
+		$connection       = new Connection( $installed_config );
+		$auth_service     = AuthService::create( $installed_config, $connection );
+		$auth_service->login(
+			$request,
+			array(
+				'identifier' => $installed_values[ Constants::OWNER_USERNAME ],
+				'password'   => $installed_values[ Constants::OWNER_PASSWORD ],
+			)
+		);
 
 		foreach ( $request->get_response_cookies() as $cookie_header ) {
 			header( 'Set-Cookie: ' . $cookie_header, false );

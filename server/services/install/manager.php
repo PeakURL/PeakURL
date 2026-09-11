@@ -10,23 +10,11 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\Install;
 
-use PeakURL\Api\SettingsApi;
-use PeakURL\Api\UsersApi;
-use PeakURL\Core\Auth\Authorization;
-use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Config\RuntimeConfig;
-use PeakURL\Features\Auth\Credentials as AuthCredentials;
-use PeakURL\Features\Auth\Service as AuthService;
-use PeakURL\Features\Auth\Validator as AuthValidator;
 use PeakURL\Http\Request;
-use PeakURL\Services\Crypto;
 use PeakURL\Services\Database\Connection;
-use PeakURL\Services\Database\PeakURL_DB;
-use PeakURL\Services\Geoip;
 use PeakURL\Services\I18n;
-use PeakURL\Services\Notifications;
-use PeakURL\Services\Totp;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -67,7 +55,7 @@ class Manager {
 	 *
 	 * @param string               $app_path Absolute path to the app directory.
 	 * @param array<string, mixed> $input    Raw install form input.
-	 * @param Request              $request  Current HTTP request.
+	 * @param Request|null         $request  Optional HTTP request (unused).
 	 * @return array<string, string>
 	 *
 	 * @throws \RuntimeException When the install cannot proceed.
@@ -76,8 +64,10 @@ class Manager {
 	public static function install(
 		string $app_path,
 		array $input,
-		Request $request
+		?Request $request = null
 	): array {
+		unset( $request );
+
 		if ( State::is_installed( $app_path ) ) {
 			throw new \RuntimeException( __( 'PeakURL is already installed.', 'peakurl' ) );
 		}
@@ -99,38 +89,6 @@ class Manager {
 
 			$connection = new Connection( $app_config );
 			Bootstrap::bootstrap_site( $connection, $app_config );
-
-			$db               = new PeakURL_DB( $connection, (string) ( $app_config[ Constants::DB_PREFIX ] ?? '' ) );
-			$users_api        = new UsersApi( $db );
-			$settings_api     = new SettingsApi( $db );
-			$crypto_service   = new Crypto( $app_config );
-			$geoip            = new Geoip( $app_config, $settings_api, $crypto_service );
-			$roles            = new Roles();
-			$authorization    = new Authorization( $roles );
-			$auth_credentials = new AuthCredentials( $db );
-			$auth_validator   = new AuthValidator();
-			$totp             = new Totp();
-			$notifications    = new Notifications();
-			$auth_service     = new AuthService(
-				$db,
-				$users_api,
-				$auth_credentials,
-				$auth_validator,
-				$totp,
-				$notifications,
-				$crypto_service,
-				$roles,
-				$authorization,
-				$geoip,
-				$app_config
-			);
-			$auth_service->login(
-				$request,
-				array(
-					'identifier' => $values[ Constants::OWNER_USERNAME ],
-					'password'   => $values[ Constants::OWNER_PASSWORD ],
-				)
-			);
 
 			Writer::write_config_file(
 				$app_path,

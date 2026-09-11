@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace PeakURL\Features\Auth;
 
+use PeakURL\Api\SettingsApi;
 use PeakURL\Api\UsersApi;
 use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Auth\Roles;
@@ -20,13 +21,14 @@ use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Config\RuntimeConfig;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Core\Security\Security;
+use PeakURL\Features\Analytics\Visitor;
 use PeakURL\Http\Request;
 use PeakURL\Services\Crypto;
+use PeakURL\Services\Database\Connection;
 use PeakURL\Services\Database\PeakURL_DB;
 use PeakURL\Services\Geoip;
 use PeakURL\Services\Notifications;
 use PeakURL\Services\Totp;
-use PeakURL\Features\Analytics\Visitor;
 use PeakURL\Utils\Date;
 use PeakURL\Utils\Str;
 
@@ -129,6 +131,41 @@ class Service {
 	 * @since 1.0.0
 	 */
 	private array $config;
+
+	/**
+	 * Create an AuthService instance from runtime configuration and database connection.
+	 *
+	 * @param array<string, mixed> $config     Runtime configuration.
+	 * @param Connection           $connection Database connection manager.
+	 * @param SettingsApi|null     $settings   Optional settings API helper.
+	 * @return self
+	 * @since 1.2.3
+	 */
+	public static function create(
+		array $config,
+		Connection $connection,
+		?SettingsApi $settings = null
+	): self {
+		$db_prefix      = (string) ( $config[ Constants::DB_PREFIX ] ?? '' );
+		$db             = new PeakURL_DB( $connection, $db_prefix );
+		$settings_api   = $settings ?? new SettingsApi( $db );
+		$crypto_service = new Crypto( $config );
+		$roles          = new Roles();
+
+		return new self(
+			$db,
+			new UsersApi( $db ),
+			new Credentials( $db ),
+			new Validator(),
+			new Totp(),
+			new Notifications(),
+			$crypto_service,
+			$roles,
+			new Authorization( $roles ),
+			new Geoip( $config, $settings_api, $crypto_service ),
+			$config
+		);
+	}
 
 	/**
 	 * Create a new Auth domain service instance.

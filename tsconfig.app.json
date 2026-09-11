@@ -11,8 +11,10 @@
 		"paths": {
 			"@/*": ["./ui/*"],
 			"@constants": ["./ui/constants"],
-			"@store": ["./ui/store"],
-			"@store/*": ["./ui/store/*"]
+			"@state": ["./ui/state"],
+			"@state/*": ["./ui/state/*"],
+			"@store": ["./ui/state"],
+			"@store/*": ["./ui/state/*"]
 		},
 
 		/* Bundler mode */

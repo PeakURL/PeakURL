@@ -14,7 +14,7 @@ import {
 import {
 	useCheckPasswordResetTokenQuery,
 	useResetPasswordMutation,
-} from "@/store/slices/api";
+} from "@/state/slices/api";
 import { __ } from "@/i18n";
 import { getErrorMessage, requestControlFormSubmit } from "@/utils";
 

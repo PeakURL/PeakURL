@@ -21,7 +21,7 @@ import {
 	useCreateWebhookMutation,
 	useDeleteWebhookMutation,
 	useGetWebhooksQuery,
-} from "@/store/slices/api";
+} from "@/state/slices/api";
 import { isDocumentRtl } from "@/i18n/direction";
 import { __, sprintf } from "@/i18n";
 import {

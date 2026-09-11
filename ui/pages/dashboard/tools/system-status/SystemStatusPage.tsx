@@ -29,7 +29,7 @@ import { __, sprintf } from "@/i18n";
 import {
 	useGetSystemStatusQuery,
 	useClearCacheMutation,
-} from "@/store/slices/api";
+} from "@/state/slices/api";
 import {
 	cn,
 	copyToClipboard,

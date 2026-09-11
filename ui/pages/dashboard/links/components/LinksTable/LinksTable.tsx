@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 
 import { ConfirmDialog, useNotification } from "@/components";
-import { useClearUrlsMutation } from "@/store/slices/api";
+import { useClearUrlsMutation } from "@/state/slices/api";
 import { __ } from "@/i18n";
 import {
 	getShortUrl,

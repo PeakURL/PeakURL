@@ -1,4 +1,4 @@
-import { useGetSecuritySettingsQuery } from "@/store/slices/api";
+import { useGetSecuritySettingsQuery } from "@/state/slices/api";
 import { isDocumentRtl } from "@/i18n/direction";
 
 import { useActiveSessions } from "./useActiveSessions";

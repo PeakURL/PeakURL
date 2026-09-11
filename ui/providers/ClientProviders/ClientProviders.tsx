@@ -1,5 +1,5 @@
 import { Provider } from "react-redux";
-import { store } from "@store";
+import { store } from "@/state";
 import { NotificationProvider } from "../NotificationProvider";
 import { ThemeProvider } from "../ThemeProvider";
 import type { ClientProvidersProps } from "../types";

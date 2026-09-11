@@ -2,7 +2,7 @@ import { Navigate, useLocation } from "react-router";
 
 import { ApiErrorPage } from "@/components/shared";
 import { PageLoader } from "@/components/ui";
-import { selectSessionUser, useAuthCheckQuery } from "@/store/slices/api";
+import { selectSessionUser, useAuthCheckQuery } from "@/state/slices/api";
 import {
 	getErrorStatus,
 	getInstallRecovery,

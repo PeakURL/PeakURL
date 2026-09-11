@@ -13,7 +13,7 @@ import { API_ROUTES } from "@/api";
 import { Button, useNotification } from "@/components";
 import { API_SERVER_BASE_URL } from "@/constants";
 import { __, sprintf } from "@/i18n";
-import { useGetUrlsQuery, useLazyGetUrlsExportQuery } from "@/store/slices/api";
+import { useGetUrlsQuery, useLazyGetUrlsExportQuery } from "@/state/slices/api";
 import { downloadLinkExport, formatCount, getErrorMessage } from "@/utils";
 
 import type { ExportCardProps, ExportFormat, ExportOption } from "../types";

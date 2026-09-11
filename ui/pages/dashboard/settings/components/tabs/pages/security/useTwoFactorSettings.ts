@@ -7,7 +7,7 @@ import {
 	useRegenerateBackupCodesMutation,
 	useStartTwoFactorSetupMutation,
 	useVerifyTwoFactorMutation,
-} from "@/store/slices/api";
+} from "@/state/slices/api";
 import { __, sprintf } from "@/i18n";
 import { downloadBrowserFile, getErrorMessage } from "@/utils";
 

@@ -14,8 +14,8 @@ import {
 	selectSessionUser,
 	useLogoutMutation,
 	baseApi,
-} from "@/store/slices/api";
-import { authApi } from "@/store/slices";
+} from "@/state/slices/api";
+import { authApi } from "@/state/slices";
 import { Avatar, ThemeToggle } from "@/components";
 import { getDocumentDirection } from "@/i18n/direction";
 import { __ } from "@/i18n";

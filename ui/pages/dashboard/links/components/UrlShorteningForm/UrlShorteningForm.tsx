@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import type { SubmitEvent } from "react";
 
-import { useCreateUrlMutation } from "@/store/slices/api";
+import { useCreateUrlMutation } from "@/state/slices/api";
 import {
 	getShortUrl,
 	getErrorMessage,

@@ -1,5 +1,5 @@
-import { authApi } from "@/store/slices";
-import { selectSessionUser } from "@/store/slices/api";
+import { authApi } from "@/state/slices";
+import { selectSessionUser } from "@/state/slices/api";
 
 export const useAdminAccess = () => {
 	const { useAuthCheckQuery } = authApi;

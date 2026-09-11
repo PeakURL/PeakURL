@@ -13,7 +13,7 @@ import type { LucideIcon } from "lucide-react";
 
 import { useNotification } from "@/components";
 import { __, sprintf } from "@/i18n";
-import type { AppDispatch } from "@/store";
+import type { AppDispatch } from "@/state";
 import {
 	urlsApi,
 	useBulkRestoreUrlsMutation,
@@ -22,7 +22,7 @@ import {
 	useGetUrlQuery,
 	useGetUrlsQuery,
 	useRestoreUrlMutation,
-} from "@/store/slices/api";
+} from "@/state/slices/api";
 import { cn, formatCount, getErrorMessage } from "@/utils";
 
 import {

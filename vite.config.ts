@@ -58,7 +58,8 @@ export default defineConfig({
 		alias: {
 			"@": ui,
 			"@constants": path.join(ui, "constants"),
-			"@store": path.join(ui, "store"),
+			"@state": path.join(ui, "state"),
+			"@store": path.join(ui, "state"),
 		},
 	},
 	server: {

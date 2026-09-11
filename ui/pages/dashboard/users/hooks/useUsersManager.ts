@@ -10,7 +10,7 @@ import {
 	useGetAllUsersQuery,
 	useGetUserProfileQuery,
 	useUpdateUserMutation,
-} from "@/store/slices/api";
+} from "@/state/slices/api";
 import { formatCount, formatDate, getErrorMessage } from "@/utils";
 
 import type {

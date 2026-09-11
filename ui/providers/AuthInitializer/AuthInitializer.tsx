@@ -1,4 +1,4 @@
-import { authApi } from "@/store/slices";
+import { authApi } from "@/state/slices";
 import { ApiErrorPage } from "@/components/shared";
 import { PageLoader } from "@/components/ui";
 import {

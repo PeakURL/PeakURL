@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router";
 
 import { DEFAULT_PAGE_SIZE_OPTIONS, normalizePageSize } from "@/components";
-import type { GetUrlsQueryArgs } from "@/store/slices/api";
+import type { GetUrlsQueryArgs } from "@/state/slices/api";
 
 import type {
 	LinksCustomDateRange,

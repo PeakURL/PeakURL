@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Cog, Lightbulb, WandSparkles } from "lucide-react";
 
 import { Button, TextArea, useNotification } from "@/components";
-import { useBulkCreateUrlMutation } from "@/store/slices/api";
+import { useBulkCreateUrlMutation } from "@/state/slices/api";
 import { getShortUrl, getErrorMessage } from "@/utils";
 import { __ } from "@/i18n";
 

@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 
-import { useGetLinkStatsQuery } from "@/store/slices/api";
+import { useGetLinkStatsQuery } from "@/state/slices/api";
 import { isDocumentRtl } from "@/i18n/direction";
 import {
 	getLocalDateValue,

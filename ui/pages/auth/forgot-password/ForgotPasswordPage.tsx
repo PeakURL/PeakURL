@@ -12,7 +12,7 @@ import {
 	type CaptchaWidgetRef,
 	Input,
 } from "@/components";
-import { useForgotPasswordMutation } from "@/store/slices/api";
+import { useForgotPasswordMutation } from "@/state/slices/api";
 import { __, sprintf } from "@/i18n";
 import { getErrorMessage, requestControlFormSubmit } from "@/utils";
 

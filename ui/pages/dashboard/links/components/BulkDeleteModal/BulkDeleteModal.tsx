@@ -2,7 +2,7 @@ import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { X, Trash2, AlertTriangle } from "lucide-react";
 import { useState } from "react";
 
-import { useBulkDeleteUrlMutation } from "@/store/slices/api";
+import { useBulkDeleteUrlMutation } from "@/state/slices/api";
 import { __, sprintf } from "@/i18n";
 import { getDocumentDirection } from "@/i18n/direction";
 import { getErrorMessage } from "@/utils";

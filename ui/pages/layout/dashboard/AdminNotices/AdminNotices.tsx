@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { Link } from "react-router";
 import { AlertCircle, CheckCircle2, Info, TriangleAlert } from "lucide-react";
 
-import { useGetAdminNoticesQuery } from "@/store/slices/api";
+import { useGetAdminNoticesQuery } from "@/state/slices/api";
 import { isDocumentRtl } from "@/i18n/direction";
 import { cn, isRelativeUrl, sanitizeUrl } from "@/utils";
 

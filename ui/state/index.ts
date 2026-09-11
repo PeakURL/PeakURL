@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import baseApi from "@store/slices/api/base";
+import baseApi from "./slices/api/base";
 
 /**
  * Shared Redux store used by the PeakURL dashboard UI.
@@ -26,3 +26,5 @@ export type RootState = ReturnType<AppStore["getState"]>;
  * Dispatch type used by dashboard thunks and RTK Query actions.
  */
 export type AppDispatch = AppStore["dispatch"];
+
+export * from "./slices/api";

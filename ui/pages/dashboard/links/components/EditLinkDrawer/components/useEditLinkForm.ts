@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 
 import type { SelectOption } from "@/components";
 import { __ } from "@/i18n";
-import { useUpdateUrlMutation } from "@/store/slices/api";
+import { useUpdateUrlMutation } from "@/state/slices/api";
 import {
 	getErrorMessage,
 	getShortUrl,

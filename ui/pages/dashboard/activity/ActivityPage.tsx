@@ -8,7 +8,7 @@ import {
 	useClearActivityLogsMutation,
 	useDeleteActivityLogMutation,
 	useRestoreActivityLinkMutation,
-} from "@/store/slices/api";
+} from "@/state/slices/api";
 import { getErrorMessage } from "@/utils";
 
 import {

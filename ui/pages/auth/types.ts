@@ -6,7 +6,7 @@ import type {
 	PasswordResetTokenStatus,
 	ResetPasswordPayload,
 	TwoFactorSetupResponse,
-} from "@/store/slices/api/types";
+} from "@/state/slices/api/types";
 
 export type {
 	CredentialLoginPayload,

@@ -1,4 +1,4 @@
-import { useGetUrlQuery } from "@/store/slices/api";
+import { useGetUrlQuery } from "@/state/slices/api";
 
 import type { EditLinkDrawerProps } from "../types";
 import Form from "./components/Form";

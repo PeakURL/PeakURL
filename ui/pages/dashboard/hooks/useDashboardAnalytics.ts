@@ -12,7 +12,7 @@ import {
 	useGetActivityQuery,
 	useGetAnalyticsQuery,
 	useGetRecentClicksQuery,
-} from "@/store/slices/api";
+} from "@/state/slices/api";
 
 const MIN_REFRESH_DURATION_MS = 700;
 const RECENT_CLICKS_LIMIT = 8;

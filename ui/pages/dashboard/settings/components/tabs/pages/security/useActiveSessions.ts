@@ -3,7 +3,7 @@ import { useState } from "react";
 import {
 	useRevokeOtherSessionsMutation,
 	useRevokeSessionMutation,
-} from "@/store/slices/api";
+} from "@/state/slices/api";
 import { __, sprintf } from "@/i18n";
 import { getErrorMessage } from "@/utils";
 

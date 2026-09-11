@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 
 import { useNotification } from "@/components";
-import { useBulkCreateUrlMutation } from "@/store/slices/api";
+import { useBulkCreateUrlMutation } from "@/state/slices/api";
 import {
 	getShortUrl,
 	extractAliasFromShortUrl,

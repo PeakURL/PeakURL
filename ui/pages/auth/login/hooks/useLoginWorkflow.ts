@@ -9,7 +9,7 @@ import {
 	useAuthCheckQuery,
 	useLoginMutation,
 	useVerifyTwoFactorLoginMutation,
-} from "@/store/slices/api";
+} from "@/state/slices/api";
 import {
 	getErrorMessage,
 	getErrorStatus,

@@ -7,7 +7,7 @@ import {
 	useUpdateUserProfileMutation,
 	useGenerateApiKeyMutation,
 	useDeleteApiKeyMutation,
-} from "@/store/slices/api";
+} from "@/state/slices/api";
 import {
 	useGetGeneralSettingsQuery,
 	useSaveGeneralSettingsMutation,
@@ -25,7 +25,7 @@ import {
 	useApplyUpdateMutation,
 	useReinstallUpdateMutation,
 	useUpgradeDatabaseSchemaMutation,
-} from "@/store/slices/api";
+} from "@/state/slices/api";
 import { __, sprintf } from "@/i18n";
 import { updatePeakURLData } from "@/data";
 import {

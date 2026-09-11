@@ -5,7 +5,7 @@ import { Button, Input, Select, type SelectOption } from "@/components";
 import {
 	useGetCaptchaStatusQuery,
 	useSaveCaptchaConfigurationMutation,
-} from "@/store/slices/api";
+} from "@/state/slices/api";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { cn, getErrorMessage } from "@/utils";

@@ -19,7 +19,7 @@ import {
 	PanelRightOpen,
 } from "lucide-react";
 
-import { useGetUrlsQuery } from "@/store/slices/api";
+import { useGetUrlsQuery } from "@/state/slices/api";
 import { useAdminAccess } from "@/hooks";
 import { BrandLockup } from "@/components";
 import { isDocumentRtl } from "@/i18n/direction";

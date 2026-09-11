@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router";
 
 import { DEFAULT_PAGE_SIZE_OPTIONS, normalizePageSize } from "@/components";
-import { useGetActivityHistoryQuery } from "@/store/slices/api";
+import { useGetActivityHistoryQuery } from "@/state/slices/api";
 
 import { normalizeActivityCategory } from "../lib";
 import type {

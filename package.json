@@ -16,6 +16,8 @@
 		"release:build": "sh scripts/build-release.sh",
 		"release:upload": "sh scripts/upload-release.sh",
 		"smoke:auth": "sh scripts/smoke-auth.local.sh",
+		"test:server": "composer --working-dir=server test",
+		"test": "npm run test:server",
 		"lint": "npm run lint:web && npm run lint:php",
 		"lint:web": "eslint ui --cache",
 		"lint:web:fix": "eslint ui --cache --fix",

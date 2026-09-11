@@ -13,7 +13,8 @@
 	"require-dev": {
 		"dealerdirect/phpcodesniffer-composer-installer": "^1.1",
 		"squizlabs/php_codesniffer": "^3.13",
-		"wp-coding-standards/wpcs": "^3.2"
+		"wp-coding-standards/wpcs": "^3.2",
+		"phpunit/phpunit": "^11.0"
 	},
 	"autoload": {
 		"files": [
@@ -37,6 +38,11 @@
 			"utils/"
 		]
 	},
+	"autoload-dev": {
+		"psr-4": {
+			"PeakURL\\Tests\\": "tests/"
+		}
+	},
 	"config": {
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true
@@ -44,6 +50,7 @@
 	},
 	"scripts": {
 		"phpcs": "phpcs --standard=../phpcs.xml",
-		"phpcbf": "phpcbf --standard=../phpcs.xml"
+		"phpcbf": "phpcbf --standard=../phpcs.xml",
+		"test": "phpunit"
 	}
 }

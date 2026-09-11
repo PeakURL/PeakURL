@@ -111,4 +111,47 @@ class Validator {
 
 		return $password;
 	}
+
+	/**
+	 * Validate that an identifier is a non-empty email address or valid username.
+	 *
+	 * @param string $identifier Submitted email address or username.
+	 * @return string Validated identifier.
+	 *
+	 * @throws ApiException When the identifier is empty or invalid.
+	 * @since 1.0.0
+	 */
+	public function validate_email_or_username( string $identifier ): string {
+		$identifier = trim( $identifier );
+
+		if ( '' === $identifier ) {
+			throw new ApiException(
+				__( 'Email address or username is required.', 'peakurl' ),
+				422,
+			);
+		}
+
+		if ( false !== strpos( $identifier, '@' ) ) {
+			return $this->validate_email( $identifier );
+		}
+
+		return $this->validate_username( $identifier );
+	}
+
+	/**
+	 * Sanitize an API key label string.
+	 *
+	 * @param string $label Raw label input.
+	 * @return string Sanitized label.
+	 * @since 1.0.0
+	 */
+	public function sanitize_key_label( string $label ): string {
+		$label = trim( strip_tags( $label ) );
+
+		if ( '' === $label ) {
+			return __( 'Generated Key', 'peakurl' );
+		}
+
+		return mb_substr( $label, 0, 120 );
+	}
 }

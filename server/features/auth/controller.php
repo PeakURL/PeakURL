@@ -103,11 +103,14 @@ class Controller extends BaseController {
 	 * @since 1.0.0
 	 */
 	public function resend_verification( Request $request ): array {
+		$email = (string) $request->get_body_param( 'email', '' );
+		$this->auth_service->resend_verification(
+			$request,
+			'' !== $email ? $email : null,
+		);
+
 		return $this->success_response(
-			$this->auth_service->resend_verification(
-				$request,
-				$request->get_body_params(),
-			),
+			array(),
 			__( 'Verification email resent.', 'peakurl' ),
 		);
 	}
@@ -165,13 +168,22 @@ class Controller extends BaseController {
 	 * @since 1.0.0
 	 */
 	public function forgot_password( Request $request ): array {
-		$this->verify_captcha_token( $request, $this->captcha_service );
+		$this->verify_captcha_token( $request );
+
+		$identifier = trim(
+			(string) $request->get_body_param(
+				'identifier',
+				$request->get_body_param( 'email', '' ),
+			),
+		);
+
+		$this->auth_service->forgot_password(
+			$request,
+			$identifier,
+		);
 
 		return $this->success_response(
-			$this->auth_service->forgot_password(
-				$request,
-				$request->get_body_params(),
-			),
+			array(),
 			__( 'If the email exists, a reset link has been sent.', 'peakurl' ),
 		);
 	}
@@ -208,12 +220,14 @@ class Controller extends BaseController {
 	 * @since 1.0.0
 	 */
 	public function reset_password( Request $request ): array {
-		$this->verify_captcha_token( $request, $this->captcha_service );
+		$this->verify_captcha_token( $request );
 
-		$token = $this->route_param( $request, 'token' );
-		$reset = $this->auth_service->reset_password(
+		$token    = $this->route_param( $request, 'token' );
+		$password = (string) $request->get_body_param( 'password', '' );
+		$reset    = $this->auth_service->reset_password(
+			$request,
 			$token,
-			$request->get_body_params(),
+			$password,
 		);
 
 		if ( ! $reset ) {

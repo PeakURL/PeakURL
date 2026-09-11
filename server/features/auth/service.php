@@ -699,13 +699,11 @@ class Service {
 			$this->db->query(
 				'UPDATE users
                 SET password_reset_token = :token_hash,
-                    password_reset_sent_at = :sent_at,
                     password_reset_expires_at = :expires_at,
                     updated_at = :updated_at
                 WHERE id = :id',
 				array(
 					'token_hash' => $reset_token['hash'],
-					'sent_at'    => Date::now(),
 					'expires_at' => gmdate( 'Y-m-d H:i:s', time() + 3600 ),
 					'updated_at' => Date::now(),
 					'id'         => $user['id'],

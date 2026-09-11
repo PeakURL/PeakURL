@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import type {
 	CountryMetric,
@@ -66,6 +66,15 @@ function normalizeTrafficSeries(
 export function useDashboardAnalytics() {
 	const [timeRange, setTimeRange] = useState<number>(DEFAULT_TIME_RANGE_DAYS);
 	const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+	const refreshTimeoutRef = useRef<number | null>(null);
+
+	useEffect(() => {
+		return () => {
+			if (refreshTimeoutRef.current !== null) {
+				window.clearTimeout(refreshTimeoutRef.current);
+			}
+		};
+	}, []);
 
 	const {
 		data: analyticsRes,
@@ -93,6 +102,11 @@ export function useDashboardAnalytics() {
 			return;
 		}
 
+		if (refreshTimeoutRef.current !== null) {
+			window.clearTimeout(refreshTimeoutRef.current);
+			refreshTimeoutRef.current = null;
+		}
+
 		setIsRefreshing(true);
 		const startedAt = Date.now();
 
@@ -107,7 +121,10 @@ export function useDashboardAnalytics() {
 				MIN_REFRESH_DURATION_MS - (Date.now() - startedAt);
 
 			if (remaining > 0) {
-				window.setTimeout(() => setIsRefreshing(false), remaining);
+				refreshTimeoutRef.current = window.setTimeout(() => {
+					setIsRefreshing(false);
+					refreshTimeoutRef.current = null;
+				}, remaining);
 			} else {
 				setIsRefreshing(false);
 			}

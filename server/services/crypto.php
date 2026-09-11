@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace PeakURL\Services;
 
 use PeakURL\Core\Config\Constants;
-use PeakURL\Services\Install\Writer as InstallWriter;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -55,49 +54,25 @@ class Crypto {
 	}
 
 	/**
-	 * Persist the auth key and salt to runtime config.
+	 * Generate a cryptographically secure 32-byte hex key (64 hex characters).
 	 *
-	 * @param string $app_path Absolute path to the app directory.
-	 * @return array{authKey: string, authSalt: string}
-	 *
-	 * @throws \RuntimeException When the keys cannot be persisted.
-	 * @since 1.0.0
+	 * @return string
+	 * @since 1.2.3
 	 */
-	public function persist_auth_keys( string $app_path ): array {
-		$auth_key  = trim( (string) ( $this->config[ Constants::AUTH_KEY ] ?? '' ) );
-		$auth_salt = trim( (string) ( $this->config[ Constants::AUTH_SALT ] ?? '' ) );
+	public static function generate_key(): string {
+		return bin2hex( random_bytes( 32 ) );
+	}
 
-		if ( '' === $auth_key ) {
-			$auth_key = bin2hex( random_bytes( 32 ) );
-		}
-
-		if ( '' === $auth_salt ) {
-			$auth_salt = bin2hex( random_bytes( 32 ) );
-		}
-
-		if ( $this->is_source_checkout() ) {
-			InstallWriter::write_env_overrides(
-				$app_path . '/.env',
-				array(
-					Constants::AUTH_KEY  => $auth_key,
-					Constants::AUTH_SALT => $auth_salt,
-				),
-				'PeakURL could not update server/.env with the authentication keys.',
-				'# PeakURL local development overrides'
-			);
-		} else {
-			$values                         = InstallWriter::prepare_config_values( $this->config );
-			$values[ Constants::AUTH_KEY ]  = $auth_key;
-			$values[ Constants::AUTH_SALT ] = $auth_salt;
-			InstallWriter::write_config_file( $app_path, $values );
-		}
-
-		$this->config[ Constants::AUTH_KEY ]  = $auth_key;
-		$this->config[ Constants::AUTH_SALT ] = $auth_salt;
-
+	/**
+	 * Generate a pair of secure keys for auth key and salt.
+	 *
+	 * @return array{authKey: string, authSalt: string}
+	 * @since 1.2.3
+	 */
+	public static function generate_auth_keys(): array {
 		return array(
-			'authKey'  => $auth_key,
-			'authSalt' => $auth_salt,
+			'authKey'  => self::generate_key(),
+			'authSalt' => self::generate_key(),
 		);
 	}
 
@@ -267,15 +242,5 @@ class Crypto {
 			$context . '|' . $auth_key . '|' . $auth_salt,
 			true,
 		);
-	}
-
-	/**
-	 * Determine whether PeakURL is running from the source checkout.
-	 *
-	 * @return bool
-	 * @since 1.0.0
-	 */
-	private function is_source_checkout(): bool {
-		return file_exists( ABSPATH . 'package.json' ) || is_dir( ABSPATH . '.git' );
 	}
 }

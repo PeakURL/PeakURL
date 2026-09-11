@@ -10,7 +10,9 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\Geoip;
 
+use PeakURL\Core\Config\Constants;
 use PeakURL\Services\Crypto;
+use PeakURL\Services\Install\Writer as InstallWriter;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -162,8 +164,11 @@ class Credentials {
 		$crypto_service = $this->context->get_crypto_service();
 
 		if ( '' !== $license_key && ! $crypto_service->is_configured() ) {
-			$crypto_service = new Crypto( $this->context->get_config() );
-			$crypto_service->persist_auth_keys( $app_path );
+			$config                         = $this->context->get_config();
+			$keys                           = InstallWriter::persist_auth_keys( $app_path, $config );
+			$config[ Constants::AUTH_KEY ]  = $keys['authKey'];
+			$config[ Constants::AUTH_SALT ] = $keys['authSalt'];
+			$crypto_service                 = new Crypto( $config );
 			$this->context->set_crypto_service( $crypto_service );
 		}
 

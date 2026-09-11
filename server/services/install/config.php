@@ -12,6 +12,7 @@ namespace PeakURL\Services\Install;
 
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Config\RuntimeConfig;
+use PeakURL\Services\Crypto;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -156,8 +157,8 @@ class Config {
 			Constants::ENV                      => 'production',
 			Constants::DEBUG                    => 'false',
 			Constants::SITE_URL                 => $site_url,
-			Constants::AUTH_KEY                 => self::generate_auth_key(),
-			Constants::AUTH_SALT                => self::generate_auth_salt(),
+			Constants::AUTH_KEY                 => Crypto::generate_key(),
+			Constants::AUTH_SALT                => Crypto::generate_key(),
 			Constants::UPDATE_MANIFEST_URL      => Constants::DEFAULT_UPDATE_MANIFEST_URL,
 			Constants::CONTENT_DIR              => self::get_default_content_dir( $app_path ),
 			Constants::GEOIP_DB_PATH            => self::get_default_geoip_path( $app_path ),
@@ -265,25 +266,5 @@ class Config {
 	 */
 	private static function get_default_geoip_path( string $app_path ): string {
 		return self::get_default_content_dir( $app_path ) . '/uploads/geoip/GeoLite2-City.mmdb';
-	}
-
-	/**
-	 * Generate a random authentication key for sessions and stored secrets.
-	 *
-	 * @return string
-	 * @since 1.0.14
-	 */
-	private static function generate_auth_key(): string {
-		return bin2hex( random_bytes( 32 ) );
-	}
-
-	/**
-	 * Generate a random authentication salt for sessions and stored secrets.
-	 *
-	 * @return string
-	 * @since 1.0.14
-	 */
-	private static function generate_auth_salt(): string {
-		return bin2hex( random_bytes( 32 ) );
 	}
 }

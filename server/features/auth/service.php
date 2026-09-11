@@ -27,6 +27,7 @@ use PeakURL\Services\Crypto;
 use PeakURL\Services\Database\Connection;
 use PeakURL\Services\Database\PeakURL_DB;
 use PeakURL\Services\Geoip;
+use PeakURL\Services\Install\Writer as InstallWriter;
 use PeakURL\Services\Notifications;
 use PeakURL\Services\Totp;
 use PeakURL\Utils\Date;
@@ -1317,7 +1318,7 @@ class Service {
 
 		if ( ! $this->crypto->is_configured() ) {
 			$runtime_path = dirname( __DIR__, 2 );
-			$this->crypto->persist_auth_keys( $runtime_path );
+			InstallWriter::persist_auth_keys( $runtime_path, $this->config );
 			$this->config = RuntimeConfig::bootstrap( $runtime_path );
 			$this->crypto = new Crypto( $this->config );
 		}

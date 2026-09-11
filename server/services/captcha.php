@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace PeakURL\Services;
 
 use PeakURL\Api\SettingsApi;
+use PeakURL\Core\Config\Constants;
+use PeakURL\Services\Install\Writer as InstallWriter;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -383,8 +385,10 @@ class Captcha {
 		$secret_key = $values['secretKey'];
 
 		if ( '' !== $secret_key && ! $this->crypto_service->is_configured() ) {
-			$this->crypto_service = new Crypto( $config );
-			$this->crypto_service->persist_auth_keys( $app_path );
+			$keys                           = InstallWriter::persist_auth_keys( $app_path, $config );
+			$config[ Constants::AUTH_KEY ]  = $keys['authKey'];
+			$config[ Constants::AUTH_SALT ] = $keys['authSalt'];
+			$this->crypto_service           = new Crypto( $config );
 		}
 
 		$this->settings_api->update_option( 'captcha_provider', $values['provider'], $updated_at, false );

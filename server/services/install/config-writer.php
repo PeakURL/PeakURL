@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace PeakURL\Services\Install;
 
 use PeakURL\Core\Config\Constants;
+use PeakURL\Services\Crypto;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -233,6 +234,61 @@ class Writer {
 		if ( false === file_put_contents( $env_path, $env_body, LOCK_EX ) ) {
 			throw new \RuntimeException( $error_message );
 		}
+	}
+
+	/**
+	 * Persist the auth key and salt to runtime config or .env overrides.
+	 *
+	 * @param string               $app_path Absolute path to the app directory.
+	 * @param array<string, mixed> $config   Current runtime configuration.
+	 * @return array{authKey: string, authSalt: string}
+	 *
+	 * @throws \RuntimeException When the keys cannot be persisted.
+	 * @since 1.2.3
+	 */
+	public static function persist_auth_keys( string $app_path, array $config ): array {
+		$auth_key  = trim( (string) ( $config[ Constants::AUTH_KEY ] ?? '' ) );
+		$auth_salt = trim( (string) ( $config[ Constants::AUTH_SALT ] ?? '' ) );
+
+		if ( '' === $auth_key ) {
+			$auth_key = Crypto::generate_key();
+		}
+
+		if ( '' === $auth_salt ) {
+			$auth_salt = Crypto::generate_key();
+		}
+
+		if ( self::is_source_checkout() ) {
+			self::write_env_overrides(
+				$app_path . '/.env',
+				array(
+					Constants::AUTH_KEY  => $auth_key,
+					Constants::AUTH_SALT => $auth_salt,
+				),
+				'PeakURL could not update server/.env with the authentication keys.',
+				'# PeakURL local development overrides'
+			);
+		} else {
+			$values                         = self::prepare_config_values( $config );
+			$values[ Constants::AUTH_KEY ]  = $auth_key;
+			$values[ Constants::AUTH_SALT ] = $auth_salt;
+			self::write_config_file( $app_path, $values );
+		}
+
+		return array(
+			'authKey'  => $auth_key,
+			'authSalt' => $auth_salt,
+		);
+	}
+
+	/**
+	 * Determine whether PeakURL is running from the source checkout.
+	 *
+	 * @return bool
+	 * @since 1.2.3
+	 */
+	public static function is_source_checkout(): bool {
+		return file_exists( ABSPATH . 'package.json' ) || is_dir( ABSPATH . '.git' );
 	}
 
 	/**

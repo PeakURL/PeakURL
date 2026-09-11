@@ -378,13 +378,11 @@ class LinksApi {
 			$this->cache->delete( CacheKey::link_lookup( $link_or_id ) );
 			$this->cache->delete( CacheKey::link_id( $link_or_id ) );
 			$this->cache->delete( CacheKey::link_missing( $link_or_id ) );
-			$this->cache->delete( CacheKey::dashboard_url( $link_or_id ) );
 			return;
 		}
 
 		if ( ! empty( $link_or_id['id'] ) ) {
 			$this->cache->delete( CacheKey::link_id( (string) $link_or_id['id'] ) );
-			$this->cache->delete( CacheKey::dashboard_url( (string) $link_or_id['id'] ) );
 		}
 
 		if ( ! empty( $link_or_id['short_code'] ) ) {

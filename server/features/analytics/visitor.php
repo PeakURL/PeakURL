@@ -201,5 +201,3 @@ class Visitor {
 		return false;
 	}
 }
-
-class_alias( Visitor::class, 'PeakURL\Utils\Visitor' );

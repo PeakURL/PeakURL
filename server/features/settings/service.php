@@ -31,7 +31,6 @@ use PeakURL\Services\Database\Schema as SchemaService;
 use PeakURL\Services\Favicon;
 use PeakURL\Services\Geoip;
 use PeakURL\Services\I18n;
-use PeakURL\Services\Install\Writer as InstallWriter;
 use PeakURL\Services\Mailer;
 use PeakURL\Services\Notifications;
 use PeakURL\Services\SocialPreview;
@@ -714,8 +713,6 @@ class Service {
 			throw new ApiException( $exception->getMessage(), 422 );
 		}
 
-		$this->config = RuntimeConfig::load( ABSPATH . 'server' );
-		$this->refresh_release_config();
 		$this->config         = RuntimeConfig::load( ABSPATH . 'server' );
 		$crypto               = new Crypto( $this->config );
 		$this->mailer_service = new Mailer(
@@ -1067,22 +1064,6 @@ class Service {
 		return $this->get_cache_status( $request );
 	}
 
-	/**
-	 * Rewrite the release config.php from the active runtime config.
-	 *
-	 * @return void
-	 * @since 1.0.0
-	 */
-	private function refresh_release_config(): void {
-		if ( file_exists( ABSPATH . 'package.json' ) || is_dir( ABSPATH . '.git' ) ) {
-			return;
-		}
-
-		InstallWriter::write_config_file(
-			ABSPATH . 'server',
-			InstallWriter::prepare_config_values( $this->config ),
-		);
-	}
 	/**
 	 * Re-initialize the active cache driver instance when settings change.
 	 *

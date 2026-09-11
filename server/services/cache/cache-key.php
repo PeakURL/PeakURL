@@ -87,31 +87,6 @@ final class CacheKey {
 	}
 
 	/**
-	 * Build cache key for dashboard links listing queries.
-	 *
-	 * @param array<string, mixed> $query_params Listing query parameters.
-	 * @param string|null          $user_id      Authenticated user ID (null for admin view).
-	 * @return string Cache key.
-	 * @since 1.6.0
-	 */
-	public static function dashboard_links( array $query_params, ?string $user_id = null ): string {
-		ksort( $query_params );
-		$serialized = ( $user_id ? "user:{$user_id}:" : 'all:' ) . http_build_query( $query_params );
-		return self::PREFIX . ':dashboard:links:' . md5( $serialized );
-	}
-
-	/**
-	 * Build cache key for single URL dashboard details.
-	 *
-	 * @param string $id URL record ID.
-	 * @return string Cache key.
-	 * @since 1.6.0
-	 */
-	public static function dashboard_url( string $id ): string {
-		return self::PREFIX . ':dashboard:url:' . trim( $id );
-	}
-
-	/**
 	 * Build cache key for WordPress-style transients.
 	 *
 	 * @param string $name Transient identifier.

@@ -178,5 +178,3 @@ class Query {
 		);
 	}
 }
-
-class_alias( Query::class, 'PeakURL\Utils\Query' );

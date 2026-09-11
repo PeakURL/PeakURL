@@ -352,5 +352,3 @@ class Sql {
 		);
 	}
 }
-
-class_alias( Sql::class, 'PeakURL\Utils\Database' );

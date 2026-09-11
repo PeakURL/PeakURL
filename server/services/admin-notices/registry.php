@@ -135,5 +135,3 @@ class Registry {
 		);
 	}
 }
-
-class_alias( Registry::class, 'PeakURL\Utils\AdminNoticeRegistry' );

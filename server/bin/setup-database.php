@@ -4,7 +4,7 @@
  *
  * Creates the target database (if it does not exist), applies the
  * SQL schema from `database/schema.sql`, and saves initial
- * site data via {@see Store::bootstrap_site()}.
+ * site data via {@see Bootstrap::bootstrap_site()}.
  *
  * Intended for Docker/CI bootstrapping—not for production use.
  *

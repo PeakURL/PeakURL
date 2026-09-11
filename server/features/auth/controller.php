@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace PeakURL\Features\Auth;
 
 use PeakURL\Core\Controller as BaseController;
+use PeakURL\Core\Errors\ApiException;
 use PeakURL\Http\JsonResponse;
 use PeakURL\Http\Request;
 use PeakURL\Services\Captcha;
@@ -119,7 +120,7 @@ class Controller extends BaseController {
 	 * @since 1.0.0
 	 */
 	public function login( Request $request ): array {
-		$this->verify_captcha_token( $request, $this->captcha_service );
+		$this->verify_captcha_token( $request );
 
 		return $this->success_response(
 			$this->auth_service->login( $request, $request->get_body_params() ),
@@ -441,5 +442,44 @@ class Controller extends BaseController {
 			),
 			__( 'Other sessions revoked.', 'peakurl' ),
 		);
+	}
+
+	/**
+	 * Verify CAPTCHA challenge token for unauthenticated login requests.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return void
+	 *
+	 * @throws ApiException When CAPTCHA verification fails.
+	 * @since 1.0.0
+	 */
+	private function verify_captcha_token( Request $request ): void {
+		if ( null === $this->captcha_service ) {
+			return;
+		}
+
+		$challenge = $this->captcha_service->get_challenge();
+
+		if ( null === $challenge ) {
+			return; // CAPTCHA is not configured or enabled.
+		}
+
+		$token = trim( (string) $request->get_body_param( 'captchaToken', '' ) );
+
+		if ( '' === $token ) {
+			throw new ApiException(
+				__( 'CAPTCHA verification failed. Please try again.', 'peakurl' ),
+				403,
+			);
+		}
+
+		$ip_address = $request->get_ip_address();
+
+		if ( ! $this->captcha_service->verify_token( $token, $ip_address ) ) {
+			throw new ApiException(
+				__( 'CAPTCHA verification failed. Please try again.', 'peakurl' ),
+				403,
+			);
+		}
 	}
 }

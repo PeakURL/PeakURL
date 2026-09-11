@@ -12,7 +12,6 @@ namespace PeakURL\Core;
 
 use PeakURL\Http\JsonResponse;
 use PeakURL\Http\Request;
-use PeakURL\Services\Captcha;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -170,48 +169,5 @@ abstract class Controller {
 		}
 
 		return $this->success_response( $payload, $success_message );
-	}
-
-	/**
-	 * Verify CAPTCHA token for unauthenticated endpoints.
-	 *
-	 * @param Request      $request         Incoming request.
-	 * @param Captcha|null $captcha_service Optional captcha service instance.
-	 * @return void
-	 *
-	 * @throws \PeakURL\Core\Errors\ApiException When CAPTCHA verification fails.
-	 * @since 1.0.0
-	 */
-	protected function verify_captcha_token(
-		Request $request,
-		?Captcha $captcha_service = null
-	): void {
-		if ( null === $captcha_service ) {
-			return;
-		}
-
-		$challenge = $captcha_service->get_challenge();
-
-		if ( null === $challenge ) {
-			return; // CAPTCHA is not configured or enabled.
-		}
-
-		$token = trim( (string) $request->get_body_param( 'captchaToken', '' ) );
-
-		if ( '' === $token ) {
-			throw new \PeakURL\Core\Errors\ApiException(
-				__( 'CAPTCHA verification failed. Please try again.', 'peakurl' ),
-				403,
-			);
-		}
-
-		$ip_address = $request->get_ip_address();
-
-		if ( ! $captcha_service->verify_token( $token, $ip_address ) ) {
-			throw new \PeakURL\Core\Errors\ApiException(
-				__( 'CAPTCHA verification failed. Please try again.', 'peakurl' ),
-				403,
-			);
-		}
 	}
 }

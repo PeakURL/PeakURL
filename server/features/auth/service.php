@@ -1225,12 +1225,10 @@ class Service {
 	public function get_admin_user( Request $request ): array {
 		$user = $this->get_current_user( $request );
 
-		if ( ! $this->roles->has_capability( $user, 'manage_options' ) ) {
-			throw new ApiException(
-				__( 'Administrator privileges required.', 'peakurl' ),
-				403,
-			);
-		}
+		$this->authorization->require_admin(
+			$user,
+			__( 'Administrator privileges required.', 'peakurl' ),
+		);
 
 		return $user;
 	}

@@ -3,8 +3,8 @@ import { useLocation } from "react-router";
 
 import { __ } from "@/i18n";
 
-import { ApiImport, PasteImport, FileUpload } from "./_components";
-import type { ImportStatus, SampleRow } from "./_components/types";
+import { ApiImport, PasteImport, FileUpload } from "./components";
+import type { ImportStatus, SampleRow } from "./components/types";
 
 function TabPage() {
 	const location = useLocation();

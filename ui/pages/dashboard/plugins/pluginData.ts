@@ -1,4 +1,4 @@
-import type { PluginCardData } from "./_components/types";
+import type { PluginCardData } from "./components/types";
 
 /**
  * Anonymous placeholder cards for the plugins preview page.

@@ -27,7 +27,7 @@ import type {
 	TabId,
 	ViewMode,
 } from "./types";
-import { InstalledPluginsTable, PluginCard, PluginTabs } from "./_components";
+import { InstalledPluginsTable, PluginCard, PluginTabs } from "./components";
 import {
 	BROWSE_CARDS,
 	INSTALLED_CARDS,

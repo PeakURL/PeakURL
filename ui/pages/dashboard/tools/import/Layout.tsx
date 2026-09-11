@@ -3,8 +3,8 @@ import { ClipboardPaste, CodeXml, FileUp } from "lucide-react";
 
 import { __ } from "@/i18n";
 
-import { Header, Tabs } from "./_components";
-import type { ImportTab } from "./_components/types";
+import { Header, Tabs } from "./components";
+import type { ImportTab } from "./components/types";
 import type { ImportLayoutProps } from "./types";
 
 function Layout({ children }: ImportLayoutProps) {

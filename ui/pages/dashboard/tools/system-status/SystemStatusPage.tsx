@@ -51,7 +51,7 @@ import type {
 	StatusView,
 	SystemCheck,
 } from "../types";
-import { SystemStatusSkeleton } from "./_components";
+import { SystemStatusSkeleton } from "./components";
 
 function hasValue(value: unknown) {
 	return value !== undefined && value !== null && "" !== value;

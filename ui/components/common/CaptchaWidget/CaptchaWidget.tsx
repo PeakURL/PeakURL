@@ -6,7 +6,7 @@ import {
 	useState,
 } from "react";
 import { getPeakURLData } from "@/data";
-import { useTheme } from "@/components/providers";
+import { useTheme } from "@/components/providers/ThemeProvider";
 
 export interface CaptchaWidgetRef {
 	/**

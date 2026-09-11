@@ -5,7 +5,10 @@ import type {
 	ApiDataResponse,
 	CreateWebhookPayload,
 	CreatedWebhook,
+	TestWebhookPayload,
+	UpdateWebhookPayload,
 	WebhookSummary,
+	WebhookTestResult,
 } from "./types";
 
 const WEBHOOK_TAGS = ["Webhooks"] as const;
@@ -32,6 +35,30 @@ export const webhookApi = baseApi.injectEndpoints({
 			}),
 			invalidatesTags: WEBHOOK_TAGS,
 		}),
+		updateWebhook: build.mutation<
+			ApiDataResponse<WebhookSummary>,
+			UpdateWebhookPayload
+		>({
+			query: ({ id, ...body }) => ({
+				url: API_ROUTES.webhooks.byId(id),
+				method: "PUT",
+				body,
+			}),
+			invalidatesTags: WEBHOOK_TAGS,
+		}),
+		testWebhook: build.mutation<
+			ApiDataResponse<WebhookTestResult>,
+			TestWebhookPayload | string
+		>({
+			query: (arg) => {
+				const body = typeof arg === "string" ? { id: arg } : arg;
+				return {
+					url: API_ROUTES.webhooks.test,
+					method: "POST",
+					body,
+				};
+			},
+		}),
 		deleteWebhook: build.mutation<void, string>({
 			query: (id) => ({
 				url: API_ROUTES.webhooks.byId(id),
@@ -45,5 +72,7 @@ export const webhookApi = baseApi.injectEndpoints({
 export const {
 	useGetWebhooksQuery,
 	useCreateWebhookMutation,
+	useUpdateWebhookMutation,
+	useTestWebhookMutation,
 	useDeleteWebhookMutation,
 } = webhookApi;

@@ -13,7 +13,7 @@ import {
 	updatePeakURLData,
 	type PeakURLData,
 } from "@/data";
-import { applyDocumentFavicon, setDocumentLocale } from "@/utils";
+import { applyDocumentFavicon, setDocumentLocale } from "@/utils/document";
 
 import { getLocaleDirection } from "./direction";
 import type { I18nCatalog, LocaleMessageMap } from "./types";

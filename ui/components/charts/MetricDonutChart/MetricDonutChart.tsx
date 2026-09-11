@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef } from "react";
 
 import { __ } from "@/i18n";
 import { formatCount } from "@/utils";
-import { useTheme } from "@/components/providers";
+import { useTheme } from "@/components/providers/ThemeProvider";
 
 import type { MetricDonutChartProps } from "../types";
 

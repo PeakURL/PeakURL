@@ -38,11 +38,16 @@ import type {
 	TwoFactorSetupResponse,
 	UpdateStatusPayload,
 	UpdateUrlPayload,
+	UpdateWebhookPayload,
 	UrlExportResponse,
 	UserDialogPayload,
 	UserSummary,
 	WebhookSummary,
+	WebhookTestResult,
+	TestWebhookPayload,
 } from "@/api";
+
+export type { TestWebhookPayload, UpdateWebhookPayload, WebhookTestResult };
 
 /**
  * Single release note returned from the API.

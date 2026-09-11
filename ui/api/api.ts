@@ -526,7 +526,7 @@ export const API_ROUTES = {
 		/**
 		 * Relative API path: `webhooks/{id}`.
 		 *
-		 * Deletes one webhook by ID.
+		 * Reads, updates, or deletes one webhook by ID.
 		 */
 		byId: (id: ApiPathPart) => apiPath("webhooks", encodeApiParam(id)),
 
@@ -536,5 +536,20 @@ export const API_ROUTES = {
 		 * Lists or creates webhook registrations.
 		 */
 		index: apiPath("webhooks"),
+
+		/**
+		 * Relative API path: `webhooks/test`.
+		 *
+		 * Dispatches a test webhook event with ID in the request body.
+		 */
+		test: apiPath("webhooks", "test"),
+
+		/**
+		 * Relative API path: `webhooks/{id}/test`.
+		 *
+		 * Dispatches a test webhook event for a specific webhook ID.
+		 */
+		testById: (id: ApiPathPart) =>
+			apiPath("webhooks", encodeApiParam(id), "test"),
 	},
 } as const;

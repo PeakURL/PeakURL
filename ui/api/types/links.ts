@@ -1,7 +1,8 @@
 /**
  * Supported short-link status values.
  */
-export type LinkStatus = "active" | "inactive" | "expired" | "trashed";
+export type LinkStatus =
+	"active" | "inactive" | "expired" | "trashed" | "paused" | "archived";
 
 /**
  * Link-list sort fields accepted by the API.

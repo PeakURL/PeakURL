@@ -93,4 +93,6 @@ export {
 	useCreateWebhookMutation,
 	useDeleteWebhookMutation,
 	useGetWebhooksQuery,
+	useTestWebhookMutation,
+	useUpdateWebhookMutation,
 } from "./webhook";

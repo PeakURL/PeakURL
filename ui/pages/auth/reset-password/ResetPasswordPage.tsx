@@ -1,5 +1,5 @@
 import type { KeyboardEvent, SubmitEvent } from "react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { CheckCircle2, KeyRound, LockKeyhole } from "lucide-react";
 
@@ -36,6 +36,16 @@ function ResetPasswordPage() {
 	const [formError, setFormError] = useState("");
 	const [isCompleted, setIsCompleted] = useState(false);
 	const captchaRef = useRef<CaptchaWidgetRef>(null);
+	const redirectTimerRef = useRef<number | null>(null);
+
+	useEffect(() => {
+		return () => {
+			if (redirectTimerRef.current !== null) {
+				window.clearTimeout(redirectTimerRef.current);
+			}
+		};
+	}, []);
+
 	const {
 		isError: isTokenError,
 		isFetching: isCheckingToken,
@@ -78,7 +88,7 @@ function ResetPasswordPage() {
 				captchaToken,
 			}).unwrap();
 			setIsCompleted(true);
-			window.setTimeout(() => {
+			redirectTimerRef.current = window.setTimeout(() => {
 				navigate("/login", { replace: true });
 			}, 1600);
 		} catch (error) {

@@ -1,6 +1,5 @@
-import type { KeyboardEvent, SubmitEvent } from "react";
-import { useMemo, useRef, useState } from "react";
-import { Link, Navigate, useLocation, useNavigate } from "react-router";
+import type { KeyboardEvent } from "react";
+import { Link, Navigate } from "react-router";
 import {
 	ArrowLeft,
 	ArrowRight,
@@ -17,31 +16,23 @@ import {
 	ApiErrorPage,
 	BrandLockup,
 	CaptchaWidget,
-	type CaptchaWidgetRef,
 	Input,
 	PageLoader,
 	VerificationCodeInput,
 } from "@/components";
+import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import {
-	getErrorMessage,
-	getErrorStatus,
-	getInstallRecovery,
-	isRelativeUrl,
 	redirectToInstallRecovery,
 	requestClosestFormSubmit,
 	requestControlFormSubmit,
-	sanitizeUrl,
 } from "@/utils";
-import {
-	selectSessionUser,
-	useAuthCheckQuery,
-	useLoginMutation,
-	useVerifyTwoFactorLoginMutation,
-} from "@/store/slices/api";
-import { __, sprintf } from "@/i18n";
 
-const getHighlights = () => [
+import { LoginHighlights } from "./components";
+import { useLoginWorkflow } from "./hooks";
+import type { LoginHighlightItem } from "./types";
+
+const getHighlights = (): LoginHighlightItem[] => [
 	{
 		icon: Link2,
 		label: __("Links"),
@@ -80,56 +71,37 @@ function LoginPage() {
 	const isRtl = isDocumentRtl();
 	const ForwardArrow = isRtl ? ArrowLeft : ArrowRight;
 	const BackArrow = isRtl ? ArrowRight : ArrowLeft;
-	const location = useLocation();
-	const navigate = useNavigate();
 	const highlights = getHighlights();
-	const [identifier, setIdentifier] = useState("");
-	const [password, setPassword] = useState("");
-	const [rememberMe, setRememberMe] = useState(false);
-	const [token, setToken] = useState("");
-	const [backupCode, setBackupCode] = useState("");
-	const [useBackupMode, setUseBackupMode] = useState(false);
-	const [twoFactorRequired, setTwoFactorRequired] = useState(false);
-	const [formError, setFormError] = useState("");
-	const captchaRef = useRef<CaptchaWidgetRef>(null);
-	const [login, { isLoading: isLoggingIn }] = useLoginMutation();
-	const [verifyLogin, { isLoading: isVerifying }] =
-		useVerifyTwoFactorLoginMutation();
-	const { data, error, isError, isFetching, isLoading, refetch } =
-		useAuthCheckQuery(undefined);
 
-	const currentUser = selectSessionUser(data);
-	const errorStatus = getErrorStatus(error);
-	const isAuthError = 401 === errorStatus || 403 === errorStatus;
-	const isRetryingApiCheck =
-		isFetching && !isLoading && !currentUser && !isAuthError;
-	const isApiError = (isError || isRetryingApiCheck) && !isAuthError;
-	const installRecovery = getInstallRecovery(error);
-	const hasResolvedSession = undefined !== data || undefined !== error;
-	const isPending = !hasResolvedSession && isLoading;
-	const submitPending = isLoggingIn || isVerifying;
-	const redirectTo = useMemo(() => {
-		const searchParams = new URLSearchParams(location.search || "");
-		const redirectParam = sanitizeUrl(searchParams.get("redirect") || "");
-
-		if (redirectParam && isRelativeUrl(redirectParam)) {
-			return redirectParam;
-		}
-
-		const from = location.state?.from;
-
-		if (from?.pathname) {
-			const fromPath = sanitizeUrl(
-				`${from.pathname}${from.search || ""}${from.hash || ""}`
-			);
-
-			if (fromPath && isRelativeUrl(fromPath)) {
-				return fromPath;
-			}
-		}
-
-		return "/dashboard";
-	}, [location.search, location.state]);
+	const {
+		identifier,
+		setIdentifier,
+		password,
+		setPassword,
+		rememberMe,
+		setRememberMe,
+		token,
+		setToken,
+		backupCode,
+		setBackupCode,
+		useBackupMode,
+		setUseBackupMode,
+		twoFactorRequired,
+		formError,
+		setFormError,
+		captchaRef,
+		currentUser,
+		error,
+		isRetryingApiCheck,
+		isPending,
+		isApiError,
+		installRecovery,
+		submitPending,
+		redirectTo,
+		handleSubmit,
+		handleBackToSignIn,
+		refetch,
+	} = useLoginWorkflow();
 
 	if (isPending) {
 		return <PageLoader />;
@@ -140,98 +112,23 @@ function LoginPage() {
 		return <PageLoader />;
 	}
 
-	if (currentUser && !isAuthError) {
+	if (currentUser) {
 		return <Navigate replace to={redirectTo} />;
 	}
 
 	if (isApiError) {
 		return (
 			<ApiErrorPage
+				title={__("Authentication is temporarily unavailable")}
+				description={__(
+					"PeakURL could not verify your signed-in state. The server may be restarting or unreachable."
+				)}
 				error={error}
 				isRetrying={isRetryingApiCheck}
 				onRetry={refetch}
 			/>
 		);
 	}
-
-	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
-		event.preventDefault();
-		setFormError("");
-
-		if (!identifier.trim()) {
-			setFormError(__("Email or username is required."));
-			return;
-		}
-
-		if (!password) {
-			setFormError(__("Password is required."));
-			return;
-		}
-
-		if (twoFactorRequired) {
-			const activeToken = useBackupMode
-				? backupCode.trim()
-				: token.trim();
-
-			if (activeToken.length < 6) {
-				setFormError(
-					useBackupMode
-						? __("Enter your backup code.")
-						: __(
-								"Enter the 6-digit code from your authenticator app."
-							)
-				);
-				return;
-			}
-		}
-
-		try {
-			if (twoFactorRequired) {
-				const activeToken = useBackupMode
-					? backupCode.trim()
-					: token.trim();
-
-				await verifyLogin({
-					identifier: identifier.trim(),
-					password,
-					token: activeToken,
-					rememberMe,
-				}).unwrap();
-			} else {
-				let captchaToken: string | undefined = undefined;
-				if (captchaRef.current) {
-					captchaToken = await captchaRef.current.getToken();
-				}
-
-				const result = await login({
-					identifier: identifier.trim(),
-					password,
-					captchaToken,
-					rememberMe,
-				}).unwrap();
-
-				if (
-					result?.requiresTwoFactor ||
-					result?.data?.requiresTwoFactor
-				) {
-					setTwoFactorRequired(true);
-					return;
-				}
-			}
-
-			navigate(redirectTo, { replace: true });
-		} catch (submitError) {
-			setFormError(
-				getErrorMessage(
-					submitError,
-					twoFactorRequired
-						? __("Unable to verify the two-factor code.")
-						: __("Unable to sign in with those credentials.")
-				)
-			);
-		}
-	};
-
 	return (
 		<main id="page-container" className="login-page-layout">
 			<aside className="login-page-aside">
@@ -269,31 +166,7 @@ function LoginPage() {
 								)}
 					</p>
 
-					<div className="login-page-highlight-list">
-						{highlights.map((highlight) => {
-							const Icon = highlight.icon;
-
-							return (
-								<div
-									key={highlight.label}
-									className="login-page-highlight"
-								>
-									<Icon
-										size={16}
-										className="login-page-highlight-icon"
-									/>
-									<div>
-										<p className="login-page-highlight-title">
-											{highlight.label}
-										</p>
-										<p className="login-page-highlight-copy">
-											{highlight.desc}
-										</p>
-									</div>
-								</div>
-							);
-						})}
-					</div>
+					<LoginHighlights highlights={highlights} />
 				</div>
 
 				<a
@@ -548,13 +421,7 @@ function LoginPage() {
 									<button
 										type="button"
 										className="login-page-back-action"
-										onClick={() => {
-											setTwoFactorRequired(false);
-											setToken("");
-											setBackupCode("");
-											setUseBackupMode(false);
-											setFormError("");
-										}}
+										onClick={handleBackToSignIn}
 									>
 										<BackArrow size={13} />
 										{__("Back to sign-in")}

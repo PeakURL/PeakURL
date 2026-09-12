@@ -9,10 +9,10 @@
 		"skipLibCheck": true,
 		"allowJs": true,
 		"paths": {
-			"@/*": ["./ui/*"],
-			"@constants": ["./ui/constants"],
-			"@store": ["./ui/store"],
-			"@store/*": ["./ui/store/*"]
+			"@/*": ["./client/*"],
+			"@constants": ["./client/constants"],
+			"@state": ["./client/state"],
+			"@state/*": ["./client/state/*"]
 		},
 
 		/* Bundler mode */
@@ -33,5 +33,5 @@
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedSideEffectImports": true
 	},
-	"include": ["ui"]
+	"include": ["client"]
 }

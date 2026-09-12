@@ -8,6 +8,8 @@ pnpm-debug.log*
 lerna-debug.log*
 
 .playwright-*
+test-results/
+playwright-report/
 
 content/languages/*.json
 content/languages/*.mo
@@ -18,13 +20,16 @@ dist-ssr
 build
 release
 .eslintcache
+.phpunit.cache
+server/.phpunit.cache
+
 backup
 wordpress
 *.local
 *.local.*
 .env
-app/vendor/
-app/.env
+server/vendor/
+server/.env
 core/vendor/
 core/.env
 /content/uploads/geoip/*.mmdb

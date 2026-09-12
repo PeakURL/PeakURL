@@ -1,13 +1,19 @@
+import fs from "node:fs";
 import path from "node:path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
+const versionFile = path.resolve(import.meta.dirname, ".version");
+const peakurlVersion = fs.existsSync(versionFile)
+	? fs.readFileSync(versionFile, "utf-8").trim()
+	: "1.0.0";
+
 const devProxyTarget =
 	process.env.VITE_DEV_PROXY_TARGET || "http://127.0.0.1:8000";
 const devPublicHost = process.env.VITE_DEV_PUBLIC_HOST || "";
 const useHttpsProxy = "true" === process.env.VITE_DEV_USE_HTTPS_PROXY;
-const ui = path.resolve(import.meta.dirname, "ui");
+const client = path.resolve(import.meta.dirname, "client");
 const excludedProxyPaths = [
 	"dashboard",
 	"login",
@@ -16,7 +22,7 @@ const excludedProxyPaths = [
 	"api",
 	"@vite",
 	"@react-refresh",
-	"ui",
+	"client",
 	"src",
 	"node_modules",
 	"assets",
@@ -33,6 +39,9 @@ const fallbackProxyPattern = `^/(?!${excludedProxyPaths
 export default defineConfig({
 	base: "./",
 	plugins: [react({ include: /\.[jt]sx?$/ }), tailwindcss()],
+	define: {
+		__PEAKURL_VERSION__: JSON.stringify(peakurlVersion),
+	},
 	build: {
 		outDir: "build",
 		cssCodeSplit: false,
@@ -56,9 +65,9 @@ export default defineConfig({
 	},
 	resolve: {
 		alias: {
-			"@": ui,
-			"@constants": path.join(ui, "constants"),
-			"@store": path.join(ui, "store"),
+			"@": client,
+			"@constants": path.join(client, "constants"),
+			"@state": path.join(client, "state"),
 		},
 	},
 	server: {
@@ -75,7 +84,7 @@ export default defineConfig({
 			ignored: [
 				"**/build/**",
 				"**/release/**",
-				"**/app/vendor/**",
+				"**/server/vendor/**",
 				"**/content/**",
 			],
 		},

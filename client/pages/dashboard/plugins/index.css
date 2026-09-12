@@ -1,0 +1,6 @@
+@import "./plugins-page.css";
+@import "./components/preview.css";
+@import "./components/PluginTabs/plugin-tabs.css";
+@import "./components/PluginCard/plugin-card.css";
+@import "./components/InstalledPluginsTable/installed-plugins-table.css";
+@import "./components/ComingSoonBadge/coming-soon-badge.css";

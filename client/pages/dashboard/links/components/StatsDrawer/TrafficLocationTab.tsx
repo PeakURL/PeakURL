@@ -1,0 +1,550 @@
+import { useMemo, useState } from "react";
+import { ChevronDown, ChevronUp, Globe, MapPin } from "lucide-react";
+
+import { WorldMap } from "@/components";
+import { __, sprintf } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
+import { useGetLinkLocationQuery } from "@/state/slices/api";
+import { formatCount, getCountryFlagEmoji } from "@/shared/formatting";
+import { getErrorMessage } from "@/shared/errors";
+
+import type {
+	CityLocation,
+	CountryLocation,
+	HoveredCountry,
+	TrafficLocationTabProps,
+} from "./types";
+import { LocalIcon, UnknownLocationIcon } from "./Icons";
+import { formatClickCount } from "./analytics";
+
+interface LocationNoteItemProps {
+	text: string;
+	example?: string;
+	direction: "rtl" | "ltr";
+}
+
+interface CityListItemProps {
+	city: CityLocation;
+	percent: string | number;
+	rank: number;
+}
+
+interface CountryListItemProps {
+	country: CountryLocation;
+	percent: string | number;
+	getFlagEmoji: (countryCode?: string | null) => React.ReactNode;
+}
+
+const COUNTRY_LIST_PREVIEW_LIMIT = 5;
+const CITY_LIST_PREVIEW_LIMIT = 10;
+
+function CountryListItem({
+	country,
+	percent,
+	getFlagEmoji,
+}: CountryListItemProps) {
+	return (
+		<div className="links-location-list-item">
+			<div className="links-location-list-row">
+				<div className="links-location-list-main">
+					{getFlagEmoji(country.code)}
+					<span className="text-sm font-medium text-heading">
+						{country.name}
+					</span>
+					<span className="text-xs text-text-muted">
+						({country.code})
+					</span>
+				</div>
+				<div className="links-location-list-meta">
+					<span className="text-sm text-text-muted">{percent}%</span>
+					<span className="links-location-list-count">
+						{formatClickCount(country.count)}
+					</span>
+				</div>
+			</div>
+			<div className="links-drawer-bar-track">
+				<div
+					className="links-drawer-bar-fill bg-primary-600"
+					style={{ width: `${percent}%` }}
+				></div>
+			</div>
+		</div>
+	);
+}
+
+function CityListItem({ city, percent, rank }: CityListItemProps) {
+	return (
+		<div className="links-location-city-item">
+			<div className="links-location-city-main">
+				<div className="links-location-city-rank">#{rank}</div>
+				<div>
+					<p className="text-sm font-medium text-heading">
+						{city.name}
+					</p>
+					<p className="text-xs text-text-muted">{city.country}</p>
+				</div>
+			</div>
+			<div className="links-location-city-meta">
+				<p className="text-sm font-semibold text-heading">
+					{formatCount(city.count)}
+				</p>
+				<p className="text-xs text-text-muted">{percent}%</p>
+			</div>
+		</div>
+	);
+}
+
+function LocationNoteItem({ text, example, direction }: LocationNoteItemProps) {
+	return (
+		<div dir={direction} className="links-location-note-item">
+			<span className="links-location-note-bullet" />
+			<div className="links-location-note-content">
+				<p dir={direction}>{text}</p>
+				{example ? (
+					<code
+						dir="ltr"
+						className="links-location-note-code preserve-ltr-value"
+					>
+						{example}
+					</code>
+				) : null}
+			</div>
+		</div>
+	);
+}
+
+function TrafficLocationTab({
+	link,
+	selectedTab,
+	open,
+	timeRange = "7d",
+	customDateRange,
+}: TrafficLocationTabProps) {
+	const direction = isDocumentRtl() ? "rtl" : "ltr";
+	const [hoveredCountry, setHoveredCountry] = useState<HoveredCountry | null>(
+		null
+	);
+	const [expandedCountryListLinkId, setExpandedCountryListLinkId] = useState<
+		string | null
+	>(null);
+	const [expandedCityListLinkId, setExpandedCityListLinkId] = useState<
+		string | null
+	>(null);
+	const showAllCountries = expandedCountryListLinkId === link?.id;
+	const showAllCities = expandedCityListLinkId === link?.id;
+
+	const locationQueryArgs = useMemo(
+		() =>
+			timeRange === "custom"
+				? {
+						id: link?.id || "",
+						range: "custom" as const,
+						from: customDateRange?.from || "",
+						to: customDateRange?.to || "",
+					}
+				: {
+						id: link?.id || "",
+						range: timeRange,
+					},
+		[link?.id, timeRange, customDateRange?.from, customDateRange?.to]
+	);
+
+	// RTK Query hook
+	const canFetchLocation =
+		open &&
+		selectedTab === 1 &&
+		!!link?.id &&
+		(timeRange !== "custom" ||
+			(!!customDateRange?.from && !!customDateRange?.to));
+	const { data, isLoading, isError, error } = useGetLinkLocationQuery(
+		locationQueryArgs,
+		{ skip: !canFetchLocation }
+	);
+
+	// Add safety check
+	if (!link) {
+		return (
+			<div className="links-location-tab">
+				<div className="links-drawer-section">
+					<h3 className="links-drawer-section-title mb-4">
+						{__("Top Countries")}
+					</h3>
+					<div className="links-drawer-empty-panel links-drawer-empty-panel-large">
+						<div className="text-center">
+							<Globe className="links-drawer-empty-icon" />
+							<p className="links-drawer-empty-copy">
+								{__("No link data available")}
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+	}
+
+	const payload = data?.data || {};
+	const allCountries = payload.countries || [];
+	const hasMoreCountries = allCountries.length > COUNTRY_LIST_PREVIEW_LIMIT;
+	const topCountries = allCountries.slice(0, COUNTRY_LIST_PREVIEW_LIMIT);
+	const cities = payload.cities || [];
+	const hasMoreCities = cities.length > CITY_LIST_PREVIEW_LIMIT;
+	const topCities = cities.slice(0, CITY_LIST_PREVIEW_LIMIT);
+	const total = payload.totalClicks || 0;
+	const hasData = total > 0;
+
+	// Location icon helper
+	const getFlagEmoji = (countryCode?: string | null) => {
+		if (countryCode === "LOCAL") {
+			return <LocalIcon className="w-6 h-6" />;
+		}
+		if (!countryCode || countryCode === "??") {
+			return <UnknownLocationIcon className="w-6 h-6" />;
+		}
+		return (
+			<span className="text-2xl">{getCountryFlagEmoji(countryCode)}</span>
+		);
+	};
+
+	// Calculate share of total
+	const getPercentage = (count: number): string | number => {
+		return total > 0 ? ((count / total) * 100).toFixed(1) : 0;
+	};
+
+	if (isLoading) {
+		return (
+			<div className="links-location-tab">
+				<div className="links-drawer-section animate-pulse">
+					<h3 className="links-drawer-section-title mb-4">
+						{__("Top Countries")}
+					</h3>
+					<div className="links-drawer-empty-panel links-drawer-empty-panel-large">
+						<div className="links-drawer-empty-content">
+							<Globe className="links-drawer-empty-icon-spaced" />
+							<p className="links-drawer-empty-title">
+								{__("Loading location data...")}
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+	}
+
+	if (isError) {
+		return (
+			<div className="links-location-tab">
+				<div className="links-drawer-section">
+					<h3 className="links-drawer-section-title mb-4">
+						{__("Top Countries")}
+					</h3>
+					<div className="links-drawer-empty-panel links-drawer-empty-panel-large">
+						<div className="links-drawer-empty-content">
+							<Globe className="mx-auto mb-3 h-12 w-12 text-error" />
+							<p className="links-drawer-empty-title">
+								{__("Failed to load location data")}
+							</p>
+							<p className="links-drawer-empty-copy-small">
+								{getErrorMessage(error, __("Unknown error"))}
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+	}
+
+	if (!hasData) {
+		return (
+			<div className="links-location-tab">
+				{/* Top Countries Section */}
+				<div className="links-drawer-section">
+					<h3 className="links-drawer-section-title mb-4">
+						{__("Top Countries")}
+					</h3>
+					<div className="links-location-empty-map">
+						<div className="links-location-empty-map-inner">
+							<Globe className="links-drawer-empty-icon-spaced" />
+							<p className="links-drawer-empty-title">
+								{__("No location data available yet")}
+							</p>
+							<p className="mx-auto max-w-md text-xs text-text-muted">
+								{__(
+									"Location tracking will show here once clicks are recorded with a configured GeoLite2 City database"
+								)}
+							</p>
+							<div
+								dir={direction}
+								className="links-location-note"
+							>
+								<p
+									dir={direction}
+									className="links-location-note-title"
+								>
+									{__("Note:")}
+								</p>
+								<div className="links-location-note-list">
+									<LocationNoteItem
+										direction={direction}
+										text={__(
+											"Local and private-network clicks do not include location data."
+										)}
+										example="127.0.0.1, 172.16-31.x.x, 192.168.x.x"
+									/>
+									<LocationNoteItem
+										direction={direction}
+										text={__(
+											"Store the GeoLite2 City database here:"
+										)}
+										example="content/uploads/geoip/GeoLite2-City.mmdb"
+									/>
+									<LocationNoteItem
+										direction={direction}
+										text={__(
+											"VPN users may show the location of the VPN server."
+										)}
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				{/* Top Cities Section */}
+				<div className="links-drawer-section">
+					<h3 className="links-drawer-section-title mb-4">
+						{__("Top Cities")}
+					</h3>
+					<div className="links-drawer-empty-panel links-drawer-empty-panel-medium">
+						<div className="text-center">
+							<MapPin className="mx-auto mb-2 h-10 w-10 text-text-muted" />
+							<p className="links-drawer-empty-copy">
+								{__("No city data available yet")}
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+	}
+
+	return (
+		<div className="links-location-tab">
+			{/* Summary Card */}
+			<div className="links-drawer-summary-alt">
+				<div className="links-drawer-summary-inner">
+					<div className="links-drawer-summary-main">
+						<div className="links-drawer-summary-icon">
+							<Globe className="w-5 h-5 text-accent" />
+						</div>
+						<div>
+							<p className="links-drawer-summary-label">
+								{__("Total Locations")}
+							</p>
+							<p className="links-drawer-summary-value">
+								{formatClickCount(total)}
+							</p>
+						</div>
+					</div>
+					<div className="links-drawer-summary-meta">
+						<p className="links-drawer-summary-label">
+							{__("Countries")}
+						</p>
+						<p className="links-drawer-summary-value">
+							{formatCount(allCountries.length)}
+						</p>
+					</div>
+				</div>
+			</div>
+
+			{/* World Map */}
+			<div className="links-drawer-section">
+				<div className="links-drawer-section-header">
+					<Globe className="links-drawer-section-icon" />
+					<h3 className="links-drawer-section-title">
+						{__("Geographic Distribution")}
+					</h3>
+				</div>
+				<div className="links-location-map-wrap">
+					<WorldMap
+						data={allCountries.map((country) => ({
+							countryCode: country.code,
+							countryName: country.name,
+							clicks: country.count,
+						}))}
+						hoveredCountry={hoveredCountry?.countryCode}
+						onCountryHover={(country) =>
+							setHoveredCountry(
+								country
+									? {
+											countryCode: country.countryCode,
+											countryName:
+												country.countryName ||
+												country.countryCode,
+											clicks: country.clicks,
+										}
+									: null
+							)
+						}
+					/>
+				</div>
+			</div>
+
+			{/* Top Countries */}
+			<div className="links-drawer-section">
+				<div className="links-drawer-section-header">
+					<Globe className="links-drawer-section-icon" />
+					<h3 className="links-drawer-section-title">
+						{__("Top Countries")}
+					</h3>
+				</div>
+				<div className="links-location-list">
+					{topCountries.map((country) => (
+						<CountryListItem
+							key={`${country.code}-${country.name}`}
+							country={country}
+							percent={getPercentage(country.count)}
+							getFlagEmoji={getFlagEmoji}
+						/>
+					))}
+				</div>
+				{hasMoreCountries ? (
+					<p className="links-location-country-summary">
+						<button
+							type="button"
+							className="links-location-country-toggle"
+							onClick={() =>
+								setExpandedCountryListLinkId((currentLinkId) =>
+									currentLinkId === link.id ? null : link.id
+								)
+							}
+						>
+							{showAllCountries
+								? __("Hide details")
+								: sprintf(
+										__("View all %s countries"),
+										formatCount(allCountries.length)
+									)}
+							{showAllCountries ? (
+								<ChevronUp className="w-3 h-3" />
+							) : (
+								<ChevronDown className="w-3 h-3" />
+							)}
+						</button>
+					</p>
+				) : null}
+
+				{showAllCountries ? (
+					<div className="links-detail-list links-location-country-details">
+						<div className="links-detail-row">
+							<div className="links-detail-heading">
+								<span
+									className="links-detail-marker links-detail-marker-primary"
+									aria-hidden="true"
+								></span>
+								<h4 className="links-detail-title">
+									{__("All countries")}
+								</h4>
+							</div>
+							<span className="links-detail-total">
+								{formatCount(allCountries.length)}
+							</span>
+						</div>
+						<div className="links-location-list links-location-country-details-list">
+							{allCountries.map((country) => (
+								<CountryListItem
+									key={`${country.code}-${country.name}-details`}
+									country={country}
+									percent={getPercentage(country.count)}
+									getFlagEmoji={getFlagEmoji}
+								/>
+							))}
+						</div>
+					</div>
+				) : null}
+			</div>
+
+			{/* Top Cities */}
+			<div className="links-drawer-section">
+				<div className="links-drawer-section-header">
+					<MapPin className="links-drawer-section-icon" />
+					<h3 className="links-drawer-section-title">
+						{__("Top Cities")}
+					</h3>
+				</div>
+				<div className="links-location-city-list">
+					{topCities.map((city, index) => {
+						const percent = getPercentage(city.count);
+						return (
+							<CityListItem
+								key={`${city.name}-${city.country}-${city.count}`}
+								city={city}
+								percent={percent}
+								rank={index + 1}
+							/>
+						);
+					})}
+				</div>
+				{hasMoreCities ? (
+					<p className="links-location-city-summary">
+						<button
+							type="button"
+							className="links-location-city-toggle"
+							onClick={() =>
+								setExpandedCityListLinkId((currentLinkId) =>
+									currentLinkId === link.id ? null : link.id
+								)
+							}
+						>
+							{showAllCities
+								? __("Hide details")
+								: sprintf(
+										__("View all %s cities"),
+										formatCount(cities.length)
+									)}
+							{showAllCities ? (
+								<ChevronUp className="w-3 h-3" />
+							) : (
+								<ChevronDown className="w-3 h-3" />
+							)}
+						</button>
+					</p>
+				) : null}
+
+				{showAllCities ? (
+					<div className="links-detail-list links-location-city-details">
+						<div className="links-detail-row">
+							<div className="links-detail-heading">
+								<span
+									className="links-detail-marker links-detail-marker-primary"
+									aria-hidden="true"
+								></span>
+								<h4 className="links-detail-title">
+									{__("All cities")}
+								</h4>
+							</div>
+							<span className="links-detail-total">
+								{formatCount(cities.length)}
+							</span>
+						</div>
+						<div className="links-location-city-list links-location-city-details-list">
+							{cities.map((city, index) => {
+								const percent = getPercentage(city.count);
+
+								return (
+									<CityListItem
+										key={`${city.name}-${city.country}-${city.count}-details`}
+										city={city}
+										percent={percent}
+										rank={index + 1}
+									/>
+								);
+							})}
+						</div>
+					</div>
+				) : null}
+			</div>
+		</div>
+	);
+}
+
+export default TrafficLocationTab;

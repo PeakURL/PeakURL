@@ -44,4 +44,4 @@ Upon receipt of a vulnerability report, project maintainers will execute the fol
 
 ## Policy Scope
 
-This policy applies to the PeakURL application runtime (`app/`), user interface (`ui/`), installation and database migration services, and official deployment assets maintained within this repository.
+This policy applies to the PeakURL application runtime (`server/`), user interface (`client/`), installation and database migration services, and official deployment assets maintained within this repository.

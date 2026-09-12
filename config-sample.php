@@ -8,7 +8,7 @@
  * Dashboard-managed settings are stored in the database and should not be
  * added to this file.
  *
- * @package PeakURL\Site
+ * @package PeakURL
  * @since 1.0.0
  */
 

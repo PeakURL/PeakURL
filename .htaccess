@@ -1,4 +1,4 @@
-DirectoryIndex index.php index.html
+DirectoryIndex index.php
 Options -Indexes
 
 <FilesMatch "^(config\.php|config-sample\.php)$">

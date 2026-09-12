@@ -24,7 +24,7 @@ import {
 	WorldMapLegend,
 	WorldMapTooltip,
 	type WorldMapTooltipPosition,
-} from "./_components";
+} from "./components";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json";
 const MAP_WIDTH = 960;

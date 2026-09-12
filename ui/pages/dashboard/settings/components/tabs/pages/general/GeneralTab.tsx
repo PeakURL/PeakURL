@@ -82,13 +82,32 @@ function GeneralTab({
 	const socialPreviewInputRef = useRef<HTMLInputElement | null>(null);
 
 	const [prevInitialForm, setPrevInitialForm] = useState(initialForm);
-	if (prevInitialForm !== initialForm) {
+	if (
+		prevInitialForm.firstName !== initialForm.firstName ||
+		prevInitialForm.lastName !== initialForm.lastName ||
+		prevInitialForm.displayName !== initialForm.displayName ||
+		prevInitialForm.email !== initialForm.email ||
+		prevInitialForm.phoneNumber !== initialForm.phoneNumber ||
+		prevInitialForm.company !== initialForm.company ||
+		prevInitialForm.jobTitle !== initialForm.jobTitle ||
+		prevInitialForm.bio !== initialForm.bio
+	) {
 		setPrevInitialForm(initialForm);
 		setGeneralForm(initialForm);
 	}
 
 	const [prevSiteSettings, setPrevSiteSettings] = useState(siteSettings);
-	if (prevSiteSettings !== siteSettings) {
+	if (
+		prevSiteSettings?.siteLanguage !== siteSettings?.siteLanguage ||
+		prevSiteSettings?.siteTimezone !== siteSettings?.siteTimezone ||
+		prevSiteSettings?.siteTimeFormat !== siteSettings?.siteTimeFormat ||
+		prevSiteSettings?.siteName !== siteSettings?.siteName ||
+		prevSiteSettings?.siteTagline !== siteSettings?.siteTagline ||
+		prevSiteSettings?.landingPageMode !== siteSettings?.landingPageMode ||
+		prevSiteSettings?.landingPageUrl !== siteSettings?.landingPageUrl ||
+		prevSiteSettings?.trashRetentionDays !==
+			siteSettings?.trashRetentionDays
+	) {
 		setPrevSiteSettings(siteSettings);
 		setSiteLanguage(siteSettings?.siteLanguage || "en_US");
 		setSiteTimezone(siteSettings?.siteTimezone || "UTC");

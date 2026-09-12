@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { ConfirmDialog, useNotification } from "@/components";
 import { API_SERVER_BASE_URL } from "@/constants";
@@ -111,7 +111,8 @@ const formatBaseApiUrl = (
 
 const Content = ({ activeTab }: ContentProps) => {
 	const notification = useNotification();
-	const { data: userData } = useGetUserProfileQuery(undefined);
+	const { data: userData, isLoading: isLoadingUser } =
+		useGetUserProfileQuery(undefined);
 	const [updateProfile, { isLoading: isUpdating }] =
 		useUpdateUserProfileMutation();
 	const [generateApiKey, { isLoading: isGeneratingKey }] =
@@ -180,6 +181,7 @@ const Content = ({ activeTab }: ContentProps) => {
 	const isInstallingRelease = isApplyingUpdate || isReinstallingUpdate;
 
 	const user = userData?.data || null;
+	const initialGeneralForm = useMemo(() => createGeneralForm(user), [user]);
 
 	const [securityForm, setSecurityForm] = useState<SecurityFormState>({
 		currentPassword: "",
@@ -596,6 +598,7 @@ const Content = ({ activeTab }: ContentProps) => {
 	};
 
 	if (
+		isLoadingUser ||
 		isLoadingGeneralSettings ||
 		isLoadingGeoipStatus ||
 		isLoadingMailStatus ||
@@ -723,7 +726,7 @@ const Content = ({ activeTab }: ContentProps) => {
 			{activeTab === "general" && (
 				<GeneralTab
 					key={`${user?._id || user?.id || user?.username || "user"}-${user?.updatedAt || "initial"}`}
-					initialForm={createGeneralForm(user)}
+					initialForm={initialGeneralForm}
 					username={user?.username || ""}
 					onSubmit={handleGeneralSubmit}
 					isUpdating={isUpdating || isSavingGeneralSettings}

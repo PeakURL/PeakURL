@@ -73,6 +73,7 @@ verify_release_package() {
 
 	for req in \
 		index.php \
+		load.php \
 		index.html \
 		readme.html \
 		.htaccess \
@@ -161,6 +162,11 @@ verify_release_archive() {
 		exit 1
 	fi
 
+	if ! printf '%s\n' "$ARCHIVE_ENTRIES" | grep -qx 'load.php'; then
+		printf 'Verification failure: archive missing load.php\n' >&2
+		exit 1
+	fi
+
 	if ! printf '%s\n' "$ARCHIVE_ENTRIES" | grep -qx 'assets/default-favicon.png'; then
 		printf 'Verification failure: archive missing assets/default-favicon.png\n' >&2
 		exit 1
@@ -208,6 +214,7 @@ find "$RELEASE_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 
 # 1. Production Root Entrypoints and Metadata
 cp "$ROOT_DIR/index.php" "$RELEASE_DIR/index.php"
+cp "$ROOT_DIR/load.php" "$RELEASE_DIR/load.php"
 cp "$ROOT_DIR/.htaccess" "$RELEASE_DIR/.htaccess"
 cp "$ROOT_DIR/config-sample.php" "$RELEASE_DIR/config-sample.php"
 cp "$ROOT_DIR/install.php" "$RELEASE_DIR/install.php"

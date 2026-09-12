@@ -78,6 +78,7 @@ services:
     restart: unless-stopped
     working_dir: /app/server
     environment:
+      PEAKURL_DEV: "true"
       PEAKURL_ENV: development
       PEAKURL_DEBUG: "true"
       SITE_URL: https://peakurl.dev
@@ -165,6 +166,7 @@ services:
     restart: unless-stopped
     working_dir: /app/release/peakurl
     environment:
+      PEAKURL_DEV: "false"
       PEAKURL_INSTALL_DB_HOST_DEFAULT: db
       PEAKURL_INSTALL_DB_PORT_DEFAULT: "3306"
       PEAKURL_INSTALL_DB_NAME_DEFAULT: peakurl_test

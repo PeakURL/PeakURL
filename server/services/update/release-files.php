@@ -142,8 +142,10 @@ class ReleaseFiles {
 		array $release_paths,
 		string $backup_root
 	): void {
+		$source_root = \PeakURL\Core\Config\Environment::get_instance()->get_source_root();
+
 		foreach ( $release_paths as $relative_path ) {
-			$source_path = $this->filesystem->join_path( ABSPATH, $relative_path );
+			$source_path = $this->filesystem->join_path( $source_root, $relative_path );
 
 			if ( ! file_exists( $source_path ) ) {
 				continue;
@@ -168,11 +170,13 @@ class ReleaseFiles {
 		array $rollback_paths,
 		string $backup_root
 	): void {
-		$this->delete_release_paths( $rollback_paths, ABSPATH );
+		$source_root = \PeakURL\Core\Config\Environment::get_instance()->get_source_root();
+
+		$this->delete_release_paths( $rollback_paths, $source_root );
 		$this->copy_release_paths(
 			$this->get_release_paths( $backup_root ),
 			$backup_root,
-			ABSPATH,
+			$source_root,
 		);
 	}
 
@@ -190,11 +194,13 @@ class ReleaseFiles {
 		array $package_paths,
 		string $source_root
 	): void {
-		$this->delete_release_paths( $installed_paths, ABSPATH );
+		$installed_root = \PeakURL\Core\Config\Environment::get_instance()->get_source_root();
+
+		$this->delete_release_paths( $installed_paths, $installed_root );
 		$this->copy_release_paths(
 			$package_paths,
 			$source_root,
-			ABSPATH,
+			$installed_root,
 		);
 	}
 

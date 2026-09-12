@@ -7,7 +7,7 @@
  *
  * Usage:
  *   Source checkout: php server/bin/update-geoip.php
- *   Installed release: php server/bin/update-geoip.php
+ *   Installed release: php bin/update-geoip.php
  *
  * @package PeakURL\Scripts
  * @since 1.0.0

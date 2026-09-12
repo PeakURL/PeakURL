@@ -89,7 +89,7 @@ class Application {
 	private array $config;
 
 	/**
-	 * Bootstrap the application, create services, and register routes.
+	 * Initialize the application, create services, and register routes.
 	 *
 	 * @param Connection           $connection Database connection manager.
 	 * @param array<string, mixed> $config     Merged runtime configuration.

@@ -152,7 +152,9 @@ class Installer {
 			$this->extract( $zip_path, $extract_dir );
 
 			$source_root     = $this->get_package_root( $extract_dir );
-			$installed_paths = $this->files->get_release_paths( ABSPATH );
+			$installed_paths = $this->files->get_release_paths(
+				\PeakURL\Core\Config\Environment::get_instance()->get_source_root(),
+			);
 			$package_paths   = $this->files->get_release_paths( $source_root );
 			$rollback_paths  = $this->files->merge_release_paths(
 				$installed_paths,

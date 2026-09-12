@@ -2,7 +2,7 @@
 /**
  * PeakURL PHP app API entry point.
  *
- * Bootstraps Composer autoloading, configures CORS headers, and hands
+ * Initializes Composer autoloading, configures CORS headers, and hands
  * control to the Application router.  Requests that arrive while a
  * `.maintenance` flag file exists receive a 503 JSON response.
  *
@@ -106,7 +106,7 @@ if ( 'OPTIONS' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 	exit();
 }
 
-// ── Bootstrap application ───────────────────────────────────────
+// ── Initialize application ──────────────────────────────────────
 
 $connection = new Connection( $config );
 load_i18n( $config, $connection );

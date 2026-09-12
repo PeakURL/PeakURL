@@ -251,17 +251,6 @@ class Environment {
 		require_once $autoload_path;
 	}
 
-	/**
-	 * Bootstrap the Composer autoloader.
-	 *
-	 * Alias for {@see self::load_autoloader()}.
-	 *
-	 * @return void
-	 * @since 1.6.3
-	 */
-	public function bootstrap_autoloader(): void {
-		$this->load_autoloader();
-	}
 
 	/**
 	 * Return the absolute path to the authoritative API entrypoint.

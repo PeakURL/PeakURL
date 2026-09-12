@@ -108,10 +108,7 @@ class Context {
 		);
 
 		if ( '' === $content_dir ) {
-			return $this->filesystem->join_path(
-				ABSPATH,
-				Constants::DEFAULT_CONTENT_DIR,
-			);
+			return \PeakURL\Core\Config\Environment::get_instance()->get_content_path();
 		}
 
 		return rtrim( $content_dir, '/\\' );
@@ -150,7 +147,10 @@ class Context {
 	 * @since 1.0.14
 	 */
 	public function get_maintenance_path(): string {
-		return $this->filesystem->join_path( ABSPATH, '.maintenance' );
+		return $this->filesystem->join_path(
+			\PeakURL\Core\Config\Environment::get_instance()->get_source_root(),
+			'.maintenance',
+		);
 	}
 
 	/**
@@ -162,10 +162,13 @@ class Context {
 	 * @since 1.0.14
 	 */
 	public function get_availability(): array {
+		$environment = \PeakURL\Core\Config\Environment::get_instance();
+		$source_root = $environment->get_source_root();
+
 		if (
-			\PeakURL\Core\Config\Environment::get_instance()->is_development() ||
-			file_exists( ABSPATH . 'package.json' ) ||
-			is_dir( ABSPATH . '.git' )
+			$environment->is_development() ||
+			file_exists( $source_root . '/package.json' ) ||
+			is_dir( $source_root . '/.git' )
 		) {
 			return array(
 				'allowed' => false,
@@ -180,19 +183,19 @@ class Context {
 			);
 		}
 
-		if ( ! is_writable( ABSPATH ) ) {
+		if ( ! is_writable( $source_root ) ) {
 			return array(
 				'allowed' => false,
 				'reason'  => __( 'The release root is not writable.', 'peakurl' ),
 			);
 		}
 
-		$runtime_dirs = \PeakURL\Core\Config\Environment::get_instance()->is_development()
+		$runtime_dirs = $environment->is_development()
 			? array( 'server' )
 			: array( 'core', 'services', 'api' );
 
 		foreach ( $runtime_dirs as $dir ) {
-			$path = $this->filesystem->join_path( ABSPATH, $dir );
+			$path = $this->filesystem->join_path( $source_root, $dir );
 
 			if ( is_dir( $path ) && ! is_writable( $path ) ) {
 				return array(

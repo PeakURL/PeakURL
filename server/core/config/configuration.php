@@ -108,7 +108,7 @@ class Configuration {
 		$file_values  = array_merge(
 			self::parse_config_file( $root_path . '/config.php' ),
 			self::parse_env_file( $root_path . '/.env' ),
-			self::parse_env_file( $runtime_path . '/.env' ),
+			$runtime_path !== $root_path ? self::parse_env_file( $runtime_path . '/.env' ) : array(),
 		);
 		$site_url     = self::get_value(
 			Constants::SITE_URL,

@@ -97,7 +97,7 @@ if ( ! function_exists( 'set_i18n_service' ) ) {
 
 if ( ! function_exists( 'load_i18n' ) ) {
 	/**
-	 * Bootstrap the active locale for the current request.
+	 * Initialize the active locale for the current request.
 	 *
 	 * @param array<string, mixed>|null $config     Optional runtime config.
 	 * @param Connection|null           $connection Optional reused connection.

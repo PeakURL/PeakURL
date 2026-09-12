@@ -65,7 +65,7 @@ class Initializer {
 	}
 
 	/**
-	 * Bootstrap the site on first request or database setup.
+	 * Initialize the site on first request or database setup.
 	 *
 	 * Ensures the database tables exist, creates the owner admin user
 	 * from install-time config values when absent, and synchronizes

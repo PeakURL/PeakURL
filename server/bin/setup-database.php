@@ -4,13 +4,13 @@
  *
  * Creates the target database (if it does not exist), applies the
  * SQL schema from `database/schema.sql`, and saves initial
- * site data via {@see Initializer::bootstrap_site()}.
+ * site data via {@see Initializer::initialize_site()}.
  *
  * Intended for Docker/CI bootstrapping—not for production use.
  *
  * Usage:
  *   Source checkout: php server/bin/setup-database.php
- *   Installed release: php server/bin/setup-database.php
+ *   Installed release: php bin/setup-database.php
  *
  * @package PeakURL\Scripts
  * @since 1.0.0

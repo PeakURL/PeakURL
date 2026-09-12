@@ -41,7 +41,7 @@ npm run build
 
 ## JavaScript, TypeScript & Dashboard UI
 
-The dashboard UI source code lives under `ui/` and is built using React 19, TypeScript, and Vite.
+The dashboard UI source code lives under `client/` and is built using React 19, TypeScript, and Vite.
 
 ### Linting Commands
 

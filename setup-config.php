@@ -9,14 +9,14 @@
  *
  * On success the user is redirected to `install.php` (step 3).
  *
- * @package PeakURL\Site
+ * @package PeakURL
  * @since 1.0.0
  */
 
 declare(strict_types=1);
 
 use PeakURL\Core\Config\Constants;
-use PeakURL\Core\Config\RuntimeConfig;
+use PeakURL\Core\Config\Configuration;
 use PeakURL\Services\Install\Config as InstallConfig;
 use PeakURL\Services\Install\Locale as InstallLocale;
 use PeakURL\Services\Install\Screen as InstallScreen;
@@ -26,6 +26,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . DIRECTORY_SEPARATOR );
 }
 
+require_once ABSPATH . 'load.php';
+
 /**
  * Installer surface width in pixels.
  *
@@ -33,20 +35,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 const PEAKURL_INSTALLER_SURFACE_WIDTH_PX = 580;
 
-$root_path     = __DIR__;
-$runtime_path  = is_dir( $root_path . '/server' ) ? $root_path . '/server' : $root_path;
-$autoload_path = file_exists( $root_path . '/vendor/autoload.php' )
-	? $root_path . '/vendor/autoload.php'
-	: $runtime_path . '/vendor/autoload.php';
+$environment  = \PeakURL\Core\Config\Environment::get_instance();
+$root_path    = $environment->get_source_root();
+$runtime_path = $environment->get_runtime_root();
 
-if ( ! file_exists( $autoload_path ) ) {
-	http_response_code( 500 );
-	header( 'Content-Type: text/plain; charset=utf-8' );
-	echo "PeakURL dependencies are missing. Upload the complete release package before running setup.\n";
-	exit();
-}
-
-require $autoload_path;
+$environment->load_autoloader();
 
 $base_path = InstallScreen::get_base_path(
 	(string) ( $_SERVER['SCRIPT_NAME'] ?? '/setup-config.php' ),
@@ -84,7 +77,7 @@ $detected_site_url       = InstallScreen::detect_site_url( $base_path, $_SERVER 
 $values                  = InstallConfig::get_form_defaults( $detected_site_url );
 $values['site_language'] = $installer_locale->get_locale();
 $error_message           = '';
-$app_config              = RuntimeConfig::bootstrap( $runtime_path );
+$app_config              = Configuration::bootstrap( $runtime_path );
 $version                 = trim( (string) ( $app_config[ Constants::VERSION ] ?? '' ) );
 $generator_meta          = get_generator_tag( $version );
 if ( '' !== $generator_meta ) {

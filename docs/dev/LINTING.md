@@ -107,7 +107,7 @@ Standardized through [`.prettierrc.json`](../../.prettierrc.json), [`.prettierig
 
 ## PHP & Backend Runtime
 
-The backend PHP runtime lives under `server/` and `site/`.
+The backend PHP runtime lives under `server/` and root entrypoints.
 
 ### Linting and Standards
 
@@ -133,7 +133,7 @@ npm run lint:php:syntax
 
 PHP standards are defined by the repository-level [phpcs.xml](../../phpcs.xml) ruleset.
 
-Checked directories:
+Checked directories and files:
 
 - `server/api/`
 - `server/bin/`
@@ -144,13 +144,13 @@ Checked directories:
 - `server/public/`
 - `server/services/`
 - `server/utils/`
-- `site/`
+- Root entrypoints (`index.php`, `install.php`, `setup-config.php`, `database-error.php`)
 
 Excluded from PHP_CodeSniffer:
 
 - `server/vendor/`
 - Runtime storage and uploads (`content/`)
-- `site/config-sample.php`
+- `config-sample.php`
 
 ---
 

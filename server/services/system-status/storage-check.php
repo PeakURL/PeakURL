@@ -63,7 +63,7 @@ class Storage {
 			DIRECTORY_SEPARATOR .
 			Constants::DEBUG_LOG_FILE;
 		$config_path         = ABSPATH . 'config.php';
-		$app_directory       = is_dir( ABSPATH . 'server' ) ? ABSPATH . 'server' : ABSPATH . 'app';
+		$app_directory       = \PeakURL\Core\Config\Environment::get_instance()->get_runtime_root();
 
 		return array(
 			'releaseRoot'                 => untrailingslashit( ABSPATH ),

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace PeakURL\Services\Database;
 
 use PeakURL\Core\Config\Constants;
-use PeakURL\Core\Config\RuntimeConfig;
+use PeakURL\Core\Config\Configuration;
 use PeakURL\Database\SchemaSpecs;
 use PDO;
 use PDOStatement;
@@ -50,7 +50,7 @@ class Connection {
 	 * @since 1.0.14
 	 */
 	public function __construct( array $config ) {
-		$config[ Constants::DB_PREFIX ] = RuntimeConfig::normalize_db_prefix(
+		$config[ Constants::DB_PREFIX ] = Configuration::normalize_db_prefix(
 			(string) ( $config[ Constants::DB_PREFIX ] ?? '' ),
 		);
 
@@ -68,8 +68,8 @@ class Connection {
 		static $instance    = null;
 		static $config_hash = null;
 
-		$app_config = $config ?? RuntimeConfig::get_current();
-		$next_hash  = RuntimeConfig::hash_keys(
+		$app_config = $config ?? Configuration::get_current();
+		$next_hash  = Configuration::hash_keys(
 			$app_config,
 			Constants::DB_KEYS,
 		);

@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-use PeakURL\Core\Config\RuntimeConfig;
+use PeakURL\Core\Config\Configuration;
 
 // If this file is called directly, abort.
 if (
@@ -30,7 +30,7 @@ if ( ! function_exists( 'get_peakurl_config' ) ) {
 	 */
 	// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional internal helper naming.
 	function get_peakurl_config(): array {
-		return RuntimeConfig::get_current();
+		return Configuration::get_current();
 	}
 }
 
@@ -53,6 +53,6 @@ if ( ! function_exists( 'get_peakurl_config_hash' ) ) {
 		array $keys,
 		array $extra = array()
 	): string {
-		return RuntimeConfig::hash_keys( $config, $keys, $extra );
+		return Configuration::hash_keys( $config, $keys, $extra );
 	}
 }

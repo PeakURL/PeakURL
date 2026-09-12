@@ -1,6 +1,6 @@
 <?php
 /**
- * Release installer bootstrap helpers.
+ * Release installer initialization helpers.
  *
  * @package PeakURL\Services\Install
  * @since 1.0.14
@@ -27,11 +27,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Bootstrap — runtime helpers for schema creation and install-only values.
+ * Initializer — runtime helpers for schema creation and install-only values.
  *
  * @since 1.0.14
  */
-class Bootstrap {
+class Initializer {
 
 	/**
 	 * Create the database schema from the bundled schema.sql file.
@@ -47,10 +47,7 @@ class Bootstrap {
 		string $app_path
 	): void {
 		$connection_manager = new Connection( $config );
-		$base_dir           = rtrim( $app_path, DIRECTORY_SEPARATOR );
-		$schema_path        = file_exists( $base_dir . '/database/schema.sql' )
-			? $base_dir . '/database/schema.sql'
-			: $base_dir . '/server/database/schema.sql';
+		$schema_path        = \PeakURL\Core\Config\Environment::get_instance()->get_database_schema_path();
 		$schema_service     = new DatabaseSchema(
 			$connection_manager,
 			$schema_path,
@@ -352,3 +349,5 @@ class Bootstrap {
 		return $values;
 	}
 }
+
+class_alias( Initializer::class, 'PeakURL\Services\Install\Bootstrap' );

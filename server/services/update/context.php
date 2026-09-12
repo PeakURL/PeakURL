@@ -162,7 +162,11 @@ class Context {
 	 * @since 1.0.14
 	 */
 	public function get_availability(): array {
-		if ( file_exists( ABSPATH . 'package.json' ) || is_dir( ABSPATH . '.git' ) ) {
+		if (
+			\PeakURL\Core\Config\Environment::get_instance()->is_development() ||
+			file_exists( ABSPATH . 'package.json' ) ||
+			is_dir( ABSPATH . '.git' )
+		) {
 			return array(
 				'allowed' => false,
 				'reason'  => __( 'Dashboard updates can only be applied from an installed release package.', 'peakurl' ),
@@ -183,7 +187,9 @@ class Context {
 			);
 		}
 
-		$runtime_dirs = array( 'server', 'core', 'services', 'api' );
+		$runtime_dirs = \PeakURL\Core\Config\Environment::get_instance()->is_development()
+			? array( 'server' )
+			: array( 'core', 'services', 'api' );
 
 		foreach ( $runtime_dirs as $dir ) {
 			$path = $this->filesystem->join_path( ABSPATH, $dir );

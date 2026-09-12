@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace PeakURL\Services\Install;
 
 use PeakURL\Core\Config\Constants;
-use PeakURL\Core\Config\RuntimeConfig;
+use PeakURL\Core\Config\Configuration;
 use PeakURL\Http\Request;
 use PeakURL\Services\Database\Connection;
 use PeakURL\Services\I18n;
@@ -78,27 +78,27 @@ class Manager {
 			);
 		}
 
-		$current_config = RuntimeConfig::load( $app_path );
+		$current_config = Configuration::load( $app_path );
 		$values         = self::normalize_input( $input, $current_config );
 
 		Writer::write_config_file( $app_path, $values );
 
 		try {
-			$app_config = Bootstrap::prepare_config( $values );
-			Bootstrap::initialize_schema( $app_config, $app_path );
+			$app_config = Initializer::prepare_config( $values );
+			Initializer::initialize_schema( $app_config, $app_path );
 
 			$connection = new Connection( $app_config );
-			Bootstrap::bootstrap_site( $connection, $app_config );
+			Initializer::bootstrap_site( $connection, $app_config );
 
 			Writer::write_config_file(
 				$app_path,
-				Bootstrap::prepare_release_values( $values ),
+				Initializer::prepare_release_values( $values ),
 			);
-			Bootstrap::send_install_welcome_once( $connection, $app_config );
+			Initializer::send_install_welcome_once( $connection, $app_config );
 		} catch ( \Throwable $exception ) {
 			Writer::write_config_file(
 				$app_path,
-				Bootstrap::prepare_release_values(
+				Initializer::prepare_release_values(
 					Writer::prepare_config_values( $current_config ),
 				),
 			);

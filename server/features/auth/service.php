@@ -18,7 +18,7 @@ use PeakURL\Api\UsersApi;
 use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Constants;
-use PeakURL\Core\Config\RuntimeConfig;
+use PeakURL\Core\Config\Configuration;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Core\Security\Security;
 use PeakURL\Features\Analytics\Visitor;
@@ -1313,9 +1313,9 @@ class Service {
 		$this->prune_stale_sessions();
 
 		if ( ! $this->crypto->is_configured() ) {
-			$runtime_path = dirname( __DIR__, 2 );
+			$runtime_path = \PeakURL\Core\Config\Environment::get_instance()->get_runtime_root();
 			InstallWriter::persist_auth_keys( $runtime_path, $this->config );
-			$this->config = RuntimeConfig::bootstrap( $runtime_path );
+			$this->config = Configuration::bootstrap( $runtime_path );
 			$this->crypto = new Crypto( $this->config );
 		}
 

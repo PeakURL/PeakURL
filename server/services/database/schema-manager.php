@@ -64,9 +64,7 @@ class Schema {
 		Connection $connection,
 		?string $schema_path = null
 	) {
-		$default_schema_file = file_exists( ABSPATH . 'database/schema.sql' )
-			? ABSPATH . 'database/schema.sql'
-			: ABSPATH . 'server/database/schema.sql';
+		$default_schema_file = \PeakURL\Core\Config\Environment::get_instance()->get_database_schema_path();
 
 		$schema_file = is_string( $schema_path ) && '' !== trim( $schema_path )
 			? $schema_path

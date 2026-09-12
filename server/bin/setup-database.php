@@ -4,7 +4,7 @@
  *
  * Creates the target database (if it does not exist), applies the
  * SQL schema from `database/schema.sql`, and saves initial
- * site data via {@see Bootstrap::bootstrap_site()}.
+ * site data via {@see Initializer::bootstrap_site()}.
  *
  * Intended for Docker/CI bootstrapping—not for production use.
  *
@@ -20,9 +20,9 @@ declare(strict_types=1);
 
 use PeakURL\Services\Database\Connection;
 use PeakURL\Core\Config\Constants;
-use PeakURL\Core\Config\RuntimeConfig;
+use PeakURL\Core\Config\Configuration;
 use PeakURL\Services\Database\Schema as DatabaseSchema;
-use PeakURL\Services\Install\Bootstrap;
+use PeakURL\Services\Install\Initializer;
 
 $is_server_subdir = 'server' === basename( dirname( __DIR__ ) );
 $release_root     = $is_server_subdir ? dirname( __DIR__, 2 ) : dirname( __DIR__ );
@@ -34,26 +34,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	);
 }
 
-// ── Autoloader ──────────────────────────────────────────────────
+require_once ABSPATH . 'load.php';
 
-$autoload_path = file_exists( dirname( __DIR__ ) . '/vendor/autoload.php' )
-	? dirname( __DIR__ ) . '/vendor/autoload.php'
-	: $release_root . '/vendor/autoload.php';
-
-if ( ! file_exists( $autoload_path ) ) {
-	fwrite(
-		STDERR,
-		"Composer autoload file not found. Run `composer install` inside the PHP runtime directory.\n",
-	);
-	exit( 1 );
-}
-
-require $autoload_path;
-
-// ── Load config and validate database name ──────────────────────
-
-$base_path     = dirname( __DIR__ );
-$config        = RuntimeConfig::bootstrap( $base_path );
+$environment = \PeakURL\Core\Config\Environment::get_instance();
+$environment->load_autoloader();
+$runtime_root  = $environment->get_runtime_root();
+$config        = Configuration::bootstrap( $runtime_root );
 $database_name = (string) $config[ Constants::DB_DATABASE ];
 
 // ── Create the database if it does not exist ────────────────────
@@ -96,7 +82,7 @@ $server->exec(
 
 // ── Apply schema and create site data ──────────────────────
 
-$schema_path = $base_path . '/database/schema.sql';
+$schema_path = $environment->get_database_schema_path();
 
 if ( ! file_exists( $schema_path ) ) {
 	fwrite( STDERR, "Schema file not found at {$schema_path}\n" );
@@ -107,6 +93,6 @@ $connection_manager = new Connection( $config );
 $schema_service     = new DatabaseSchema( $connection_manager, $schema_path );
 $schema_service->upgrade();
 
-Bootstrap::bootstrap_site( $connection_manager, $config );
+Initializer::bootstrap_site( $connection_manager, $config );
 
 fwrite( STDOUT, "Database ready: {$database_name}\n" );

@@ -6,7 +6,7 @@
  * control to the Application router.  Requests that arrive while a
  * `.maintenance` flag file exists receive a 503 JSON response.
  *
- * @package PeakURL\App
+ * @package PeakURL
  * @since 1.0.0
  */
 
@@ -14,12 +14,11 @@ declare(strict_types=1);
 
 use PeakURL\Core\Application;
 use PeakURL\Services\Database\Connection;
-use PeakURL\Core\Config\RuntimeConfig;
+use PeakURL\Core\Config\Configuration;
 use PeakURL\Core\Security\Security;
 
 $is_public_dir = 'public' === basename( __DIR__ );
 $release_root  = $is_public_dir ? dirname( __DIR__, 2 ) : dirname( __DIR__ );
-$runtime_root  = is_dir( $release_root . '/server' ) ? $release_root . '/server' : $release_root;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	define(
@@ -28,6 +27,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	);
 }
 
+require_once ABSPATH . 'load.php';
+
+$environment  = \PeakURL\Core\Config\Environment::get_instance();
+$runtime_root = $environment->get_runtime_root();
+
 // ── Maintenance-mode guard ──────────────────────────────────────
 
 if ( file_exists( ABSPATH . '.maintenance' ) ) {
@@ -35,9 +39,7 @@ if ( file_exists( ABSPATH . '.maintenance' ) ) {
 		'htmlLang'   => 'en-US',
 		'apiMessage' => 'PeakURL is briefly unavailable right now. Please try again in a moment.',
 	);
-	$autoload_path         = file_exists( $runtime_root . '/vendor/autoload.php' )
-		? $runtime_root . '/vendor/autoload.php'
-		: $release_root . '/vendor/autoload.php';
+	$autoload_path         = $environment->get_vendor_autoload_path();
 
 	if ( file_exists( $autoload_path ) ) {
 		require_once $autoload_path;
@@ -81,29 +83,11 @@ if ( file_exists( ABSPATH . '.maintenance' ) ) {
 
 // ── Autoloader ──────────────────────────────────────────────────
 
-$autoload_path = file_exists( $runtime_root . '/vendor/autoload.php' )
-	? $runtime_root . '/vendor/autoload.php'
-	: $release_root . '/vendor/autoload.php';
-
-if ( ! file_exists( $autoload_path ) ) {
-	http_response_code( 500 );
-	header( 'Content-Type: application/json; charset=utf-8' );
-	echo json_encode(
-		array(
-			'success' => false,
-			'message' =>
-				'Composer autoload file not found. Run `composer install` inside the PHP runtime directory.',
-		),
-		JSON_PRETTY_PRINT,
-	);
-	exit();
-}
-
-require_once $autoload_path;
+$environment->load_autoloader();
 
 // ── CORS headers ────────────────────────────────────────────────
 
-$config = RuntimeConfig::bootstrap( $runtime_root );
+$config = Configuration::bootstrap( $runtime_root );
 $origin = Security::get_allowed_origin( $config, $_SERVER );
 
 if ( '' !== $origin ) {

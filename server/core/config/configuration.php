@@ -1,6 +1,6 @@
 <?php
 /**
- * Runtime configuration loader.
+ * Application configuration loader and reader.
  *
  * Merges values from config.php, .env files, environment variables, and
  * PHP constants into a single associative array consumed by the rest of
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Immutable runtime configuration reader.
+ * Configuration — Immutable application configuration reader.
  *
  * Precedence (highest → lowest): runtime environment variables, .env file,
  * config.php constants, built-in defaults.
  *
  * @since 1.0.0
  */
-class RuntimeConfig {
+class Configuration {
 
 	/**
 	 * Load runtime configuration and apply runtime-side bootstrapping.
@@ -54,7 +54,7 @@ class RuntimeConfig {
 		static $config = null;
 
 		if ( null === $config ) {
-			$runtime_path = is_dir( ABSPATH . 'server' ) ? ABSPATH . 'server' : rtrim( ABSPATH, '/\\' );
+			$runtime_path = Environment::get_instance()->get_runtime_root();
 			$config       = self::bootstrap( $runtime_path );
 		}
 
@@ -102,9 +102,7 @@ class RuntimeConfig {
 	public static function load( string $base_path ): array {
 		$root_path   = file_exists( $base_path . '/config.php' ) || file_exists( $base_path . '/config-sample.php' )
 			? $base_path
-			: ( file_exists( dirname( $base_path ) . '/config.php' ) || file_exists( dirname( $base_path ) . '/config-sample.php' )
-				? dirname( $base_path )
-				: $base_path );
+			: Environment::get_instance()->get_source_root();
 		$file_values = array_merge(
 			self::parse_config_file( $root_path . '/config.php' ),
 			self::parse_env_file( $base_path . '/.env' ),
@@ -334,7 +332,7 @@ class RuntimeConfig {
 	public static function has_database_configuration( string $base_path ): bool {
 		$root_path   = file_exists( $base_path . '/config.php' ) || file_exists( $base_path . '/config-sample.php' )
 			? $base_path
-			: dirname( $base_path );
+			: Environment::get_instance()->get_source_root();
 		$file_values = self::parse_config_file( $root_path . '/config.php' );
 
 		return (
@@ -356,11 +354,11 @@ class RuntimeConfig {
 	 * @since 1.0.0
 	 */
 	private static function parse_config_file( string $file_path ): array {
-		if ( ! file_exists( $file_path ) ) {
+		if ( ! file_exists( $file_path ) || ! is_readable( $file_path ) ) {
 			return array();
 		}
 
-		$contents = file_get_contents( $file_path );
+		$contents = @file_get_contents( $file_path );
 
 		if ( false === $contents ) {
 			return array();
@@ -528,12 +526,12 @@ class RuntimeConfig {
 	 * @since 1.0.0
 	 */
 	private static function parse_env_file( string $file_path ): array {
-		if ( ! file_exists( $file_path ) ) {
+		if ( ! file_exists( $file_path ) || ! is_readable( $file_path ) ) {
 			return array();
 		}
 
 		$values = array();
-		$lines  = file( $file_path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );
+		$lines  = @file( $file_path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );
 
 		if ( false === $lines ) {
 			$lines = array();
@@ -886,3 +884,5 @@ class RuntimeConfig {
 		return is_string( $value ) ? $value : '';
 	}
 }
+
+class_alias( Configuration::class, 'PeakURL\Core\Config\RuntimeConfig' );

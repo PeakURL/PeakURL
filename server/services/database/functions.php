@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 use PeakURL\Api\SettingsApi;
 use PeakURL\Core\Config\Constants;
-use PeakURL\Core\Config\RuntimeConfig;
+use PeakURL\Core\Config\Configuration;
 use PeakURL\Services\Database\Connection;
 use PeakURL\Services\Database\PeakURL_DB;
 
@@ -53,9 +53,9 @@ if ( ! function_exists( 'get_settings_api' ) ) {
 		static $settings_api = null;
 		static $cache_key    = null;
 
-		$app_config     = $config ?? RuntimeConfig::get_current();
+		$app_config     = $config ?? Configuration::get_current();
 		$app_connection = $connection ?? Connection::get_instance( $app_config );
-		$next_cache_key = RuntimeConfig::hash_keys(
+		$next_cache_key = Configuration::hash_keys(
 			$app_config,
 			Constants::DB_KEYS,
 			array( 'connection' => spl_object_id( $app_connection ) ),

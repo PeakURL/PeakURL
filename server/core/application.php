@@ -55,7 +55,7 @@ use PeakURL\Services\Database\Schema as DatabaseSchema;
 use PeakURL\Services\Favicon;
 use PeakURL\Services\Geoip;
 use PeakURL\Services\I18n;
-use PeakURL\Services\Install\Bootstrap;
+use PeakURL\Services\Install\Initializer;
 use PeakURL\Services\Mailer;
 use PeakURL\Services\Notifications;
 use PeakURL\Services\SocialPreview;
@@ -255,7 +255,7 @@ class Application {
 
 		try {
 			$this->validate_request_origin( $request );
-			Bootstrap::bootstrap_site( $this->connection, $this->config, $this->i18n_service );
+			Initializer::bootstrap_site( $this->connection, $this->config, $this->i18n_service );
 
 			if ( $this->is_admin_request( $request ) ) {
 				/**

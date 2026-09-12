@@ -18,7 +18,7 @@ declare(strict_types=1);
 use PeakURL\Api\SettingsApi;
 use PeakURL\Services\Database\Connection;
 use PeakURL\Services\Database\PeakURL_DB;
-use PeakURL\Core\Config\RuntimeConfig;
+use PeakURL\Core\Config\Configuration;
 use PeakURL\Services\Crypto;
 use PeakURL\Services\Geoip;
 
@@ -32,25 +32,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	);
 }
 
-$autoload_path = file_exists( dirname( __DIR__ ) . '/vendor/autoload.php' )
-	? dirname( __DIR__ ) . '/vendor/autoload.php'
-	: $release_root . '/vendor/autoload.php';
+require_once ABSPATH . 'load.php';
 
-if ( ! file_exists( $autoload_path ) ) {
-	fwrite(
-		STDERR,
-		"Composer autoload file not found. Run `composer install` inside the PHP runtime directory.\n",
-	);
-	exit( 1 );
-}
-
-require $autoload_path;
-
-$config     = RuntimeConfig::bootstrap( dirname( __DIR__ ) );
-$connection = new Connection( $config );
-$settings   = new SettingsApi( new PeakURL_DB( $connection ) );
-$crypto     = new Crypto( $config );
-$geoip      = new Geoip( $config, $settings, $crypto );
+$environment = \PeakURL\Core\Config\Environment::get_instance();
+$environment->load_autoloader();
+$runtime_root = $environment->get_runtime_root();
+$config       = Configuration::bootstrap( $runtime_root );
+$connection   = new Connection( $config );
+$settings     = new SettingsApi( new PeakURL_DB( $connection ) );
+$crypto       = new Crypto( $config );
+$geoip        = new Geoip( $config, $settings, $crypto );
 
 try {
 	$status = $geoip->download_database();

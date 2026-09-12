@@ -17,7 +17,7 @@ use PeakURL\Api\SettingsApi;
 use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Constants;
-use PeakURL\Core\Config\RuntimeConfig;
+use PeakURL\Core\Config\Configuration;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Http\Request;
@@ -662,9 +662,11 @@ class Service {
 	): array {
 		$this->get_mail_user( $request );
 
+		$runtime_root = \PeakURL\Core\Config\Environment::get_instance()->get_runtime_root();
+
 		try {
 			$status = $this->mailer_service->save_settings(
-				ABSPATH . 'server',
+				$runtime_root,
 				$this->config,
 				$payload,
 			);
@@ -672,7 +674,7 @@ class Service {
 			throw new ApiException( $exception->getMessage(), 422 );
 		}
 
-		$this->config         = RuntimeConfig::load( ABSPATH . 'server' );
+		$this->config         = Configuration::load( $runtime_root );
 		$crypto               = new Crypto( $this->config );
 		$this->mailer_service = new Mailer(
 			$this->config,
@@ -752,9 +754,11 @@ class Service {
 	): array {
 		$this->get_settings_user( $request );
 
+		$runtime_root = \PeakURL\Core\Config\Environment::get_instance()->get_runtime_root();
+
 		try {
 			$status = $this->captcha_service->save_settings(
-				ABSPATH . 'server',
+				$runtime_root,
 				$this->config,
 				$payload,
 			);
@@ -762,7 +766,7 @@ class Service {
 			throw new ApiException( $exception->getMessage(), 422 );
 		}
 
-		$this->config          = RuntimeConfig::load( ABSPATH . 'server' );
+		$this->config          = Configuration::load( $runtime_root );
 		$crypto                = new Crypto( $this->config );
 		$this->captcha_service = new Captcha(
 			$this->config,
@@ -815,16 +819,18 @@ class Service {
 		$this->get_geoip_user( $request );
 		$this->validate_geoip_admin();
 
+		$runtime_root = \PeakURL\Core\Config\Environment::get_instance()->get_runtime_root();
+
 		try {
 			$status = $this->geoip_service->save_credentials(
-				ABSPATH . 'server',
+				$runtime_root,
 				$payload,
 			);
 		} catch ( \RuntimeException $exception ) {
 			throw new ApiException( $exception->getMessage(), 422 );
 		}
 
-		$this->config               = RuntimeConfig::load( ABSPATH . 'server' );
+		$this->config               = Configuration::load( $runtime_root );
 		$crypto                     = new Crypto( $this->config );
 		$this->geoip_service        = new Geoip(
 			$this->config,

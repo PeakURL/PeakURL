@@ -98,9 +98,7 @@ class Status {
 			'canManageFromDashboard' => $capability['allowed'],
 			'manageDisabledReason'   => $capability['reason'],
 			'configurationLabel'     => 'settings table',
-			'downloadCommand'        => is_dir( untrailingslashit( ABSPATH ) . '/server' )
-				? 'php server/bin/update-geoip.php'
-				: 'php bin/update-geoip.php',
+			'downloadCommand'        => \PeakURL\Core\Config\Environment::get_instance()->get_geoip_command(),
 			'downloadUrl'            => GeoipService::DOWNLOAD_URL,
 		);
 	}

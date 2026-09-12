@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace PeakURL\Services\Install;
 
 use PeakURL\Core\Config\Constants;
-use PeakURL\Core\Config\RuntimeConfig;
+use PeakURL\Core\Config\Configuration;
 use PeakURL\Services\Crypto;
 
 // If this file is called directly, abort.
@@ -127,10 +127,10 @@ class Config {
 		$site_url  = Site::normalize_url(
 			(string) ( $input['site_url'] ?? '' ),
 		);
-		$db_prefix = RuntimeConfig::normalize_db_prefix(
+		$db_prefix = Configuration::normalize_db_prefix(
 			trim( (string) ( $input['db_prefix'] ?? 'peakurl_' ) ),
 		);
-		$db_name   = RuntimeConfig::normalize_db_name(
+		$db_name   = Configuration::normalize_db_name(
 			trim( (string) ( $input['db_name'] ?? '' ) ),
 		);
 		$db_port   = (string) ( (int) ( $input['db_port'] ?? 3306 ) );

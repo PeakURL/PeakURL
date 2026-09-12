@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 use PeakURL\Api\SettingsApi;
 use PeakURL\Core\Config\Constants;
-use PeakURL\Core\Config\RuntimeConfig;
+use PeakURL\Core\Config\Configuration;
 use PeakURL\Services\Captcha;
 use PeakURL\Services\Crypto;
 use PeakURL\Services\Database\Connection;

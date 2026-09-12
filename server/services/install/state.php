@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace PeakURL\Services\Install;
 
 use PeakURL\Api\SettingsApi;
-use PeakURL\Core\Config\RuntimeConfig;
+use PeakURL\Core\Config\Configuration;
 use PeakURL\Database\SchemaSpecs;
 use PeakURL\Services\Database\Connection;
 use PeakURL\Services\Database\PeakURL_DB;
@@ -74,12 +74,12 @@ class State {
 			return self::NEEDS_SETUP;
 		}
 
-		if ( ! RuntimeConfig::has_database_configuration( $app_path ) ) {
+		if ( ! Configuration::has_database_configuration( $app_path ) ) {
 			return self::DATABASE_CONNECTION_ERROR;
 		}
 
 		try {
-			$config     = RuntimeConfig::load( $app_path );
+			$config     = Configuration::load( $app_path );
 			$connection = new Connection( $config );
 
 			foreach ( SchemaSpecs::managed_tables() as $table_name ) {

@@ -89,6 +89,7 @@ unzip -tq $(quote_for_sh "$REMOTE_ARCHIVE_NAME")
 find . -mindepth 1 -maxdepth 1 \
 	! -name config.php \
 	! -name content \
+	! -name .maintenance \
 	! -name $(quote_for_sh "$REMOTE_ARCHIVE_NAME") \
 	-exec rm -rf {} +
 

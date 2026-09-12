@@ -74,7 +74,7 @@ verify_release_package() {
 	for req in \
 		index.php \
 		load.php \
-		index.html \
+		app.html \
 		readme.html \
 		.htaccess \
 		config-sample.php \
@@ -105,7 +105,7 @@ verify_release_package() {
 	for forbidden in \
 		server \
 		site \
-		app.html \
+		index.html \
 		tests \
 		phpunit.xml \
 		.phpunit.cache \
@@ -142,8 +142,8 @@ verify_release_archive() {
 		exit 1
 	fi
 
-	if printf '%s\n' "$ARCHIVE_ENTRIES" | grep -qx 'app.html'; then
-		printf 'Verification failure: archive contains legacy app.html instead of index.html\n' >&2
+	if printf '%s\n' "$ARCHIVE_ENTRIES" | grep -qx 'index.html'; then
+		printf 'Verification failure: archive contains index.html instead of app.html\n' >&2
 		exit 1
 	fi
 
@@ -152,8 +152,8 @@ verify_release_archive() {
 		exit 1
 	fi
 
-	if ! printf '%s\n' "$ARCHIVE_ENTRIES" | grep -qx 'index.html'; then
-		printf 'Verification failure: archive missing index.html\n' >&2
+	if ! printf '%s\n' "$ARCHIVE_ENTRIES" | grep -qx 'app.html'; then
+		printf 'Verification failure: archive missing app.html\n' >&2
 		exit 1
 	fi
 
@@ -226,7 +226,7 @@ cp "$ROOT_DIR/LICENSE" "$RELEASE_DIR/LICENSE"
 cp "$ROOT_DIR/CREDITS.txt" "$RELEASE_DIR/CREDITS.txt"
 
 # 2. Client SPA Assets
-cp "$UI_BUILD_DIR/index.html" "$RELEASE_DIR/index.html"
+cp "$UI_BUILD_DIR/index.html" "$RELEASE_DIR/app.html"
 copy_release_tree "$UI_BUILD_DIR/assets" "$RELEASE_DIR/assets" \
 	--exclude='.DS_Store'
 cp "$ROOT_DIR/server/public/default-favicon.png" "$RELEASE_DIR/assets/default-favicon.png"

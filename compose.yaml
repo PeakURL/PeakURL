@@ -12,7 +12,7 @@ services:
       - ./docker/proxy/Caddyfile:/etc/caddy/Caddyfile:ro
       - ./docker/proxy/certs:/etc/caddy/certs:ro
     depends_on:
-      ui:
+      client:
         condition: service_healthy
       server:
         condition: service_healthy
@@ -125,11 +125,11 @@ services:
       retries: 10
       start_period: 20s
 
-  ui:
+  client:
     build:
       context: .
-      dockerfile: docker/ui/Dockerfile
-    container_name: peakurl-ui
+      dockerfile: docker/client/Dockerfile
+    container_name: peakurl-client
     restart: unless-stopped
     working_dir: /app
     environment:
@@ -144,11 +144,11 @@ services:
       - "5173:5173"
     volumes:
       - .:/app
-      - peakurl-ui-node-modules:/app/node_modules
+      - peakurl-client-node-modules:/app/node_modules
     depends_on:
       server:
         condition: service_healthy
-    command: ["/usr/local/bin/ui-dev-start"]
+    command: ["/usr/local/bin/client-dev-start"]
     healthcheck:
       test:
         ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:5173 || exit 1"]
@@ -198,8 +198,8 @@ volumes:
     name: peakurl-db-data
   peakurl-redis-data:
     name: peakurl-redis-data
-  peakurl-ui-node-modules:
-    name: peakurl-ui-node-modules
+  peakurl-client-node-modules:
+    name: peakurl-client-node-modules
   peakurl-server-vendor:
     name: peakurl-server-vendor
 

@@ -21,8 +21,8 @@
 		"test:e2e": "playwright test",
 		"test": "npm run test:server && npm run test:unit",
 		"lint": "npm run lint:web && npm run lint:php",
-		"lint:web": "eslint ui --cache",
-		"lint:web:fix": "eslint ui --cache --fix",
+		"lint:web": "eslint client --cache",
+		"lint:web:fix": "eslint client --cache --fix",
 		"lint:php": "composer --working-dir=server run phpcs",
 		"lint:php:syntax": "find server site -path 'server/vendor' -prune -o -path 'site/config-sample.php' -prune -o -name '*.php' -print0 | xargs -0 -n1 php -l",
 		"format": "npm run format:web && npm run format:php",
@@ -38,11 +38,11 @@
 		"docker:logs": "docker compose logs -f"
 	},
 	"lint-staged": {
-		"ui/**/*.{ts,tsx}": [
+		"client/**/*.{ts,tsx}": [
 			"eslint --cache --fix",
 			"prettier --write"
 		],
-		"ui/**/*.css": [
+		"client/**/*.css": [
 			"prettier --write"
 		],
 		"**/*.{json,md,yml,yaml}": [

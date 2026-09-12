@@ -10,7 +10,7 @@
  *  - API pass-through to `api/index.php` or `public/index.php`.
  *  - Dashboard app HTML injection for `/`, `/login`, `/dashboard*`.
  *
- * @package PeakURL\Site
+ * @package PeakURL
  * @since 1.0.0
  */
 
@@ -20,7 +20,7 @@ use PeakURL\Api\SettingsApi;
 use PeakURL\Services\Database\Connection;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Services\Database\PeakURL_DB;
-use PeakURL\Core\Config\RuntimeConfig;
+use PeakURL\Core\Config\Configuration;
 use PeakURL\Services\Favicon;
 use PeakURL\Services\Install\State as InstallState;
 use PeakURL\Utils\Str;
@@ -29,11 +29,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . DIRECTORY_SEPARATOR );
 }
 
-if ( file_exists( __DIR__ . '/server/utils/string.php' ) ) {
-	require_once __DIR__ . '/server/utils/string.php';
-} else {
-	require_once __DIR__ . '/utils/string.php';
-}
+require_once ABSPATH . 'load.php';
+
+$environment = \PeakURL\Core\Config\Environment::get_instance();
+require_once $environment->get_runtime_root() . '/utils/string.php';
 
 // ────────────────────────────────────────────────────────────────
 // Helper functions
@@ -485,12 +484,10 @@ $prepare_html = static function (
 // Request routing
 // ────────────────────────────────────────────────────────────────
 
-$root_path    = __DIR__;
-$runtime_path = is_dir( $root_path . '/server' ) ? $root_path . '/server' : $root_path;
+$root_path    = $environment->get_source_root();
+$runtime_path = $environment->get_runtime_root();
 $config_path  = $root_path . '/config.php';
-$autoload     = file_exists( $root_path . '/vendor/autoload.php' )
-	? $root_path . '/vendor/autoload.php'
-	: $runtime_path . '/vendor/autoload.php';
+$autoload     = $environment->get_vendor_autoload_path();
 $uri          = $_SERVER['REQUEST_URI'] ?? '/';
 $path         = parse_url( $uri, PHP_URL_PATH );
 
@@ -549,7 +546,7 @@ if ( $is_favicon( $relative_path ) ) {
 		exit();
 	}
 
-	$app_config      = RuntimeConfig::bootstrap( $runtime_path );
+	$app_config      = Configuration::bootstrap( $runtime_path );
 	$connection      = new Connection( $app_config );
 	$settings_api    = new SettingsApi( new PeakURL_DB( $connection ) );
 	$site_name       = trim(
@@ -605,13 +602,7 @@ if ( Str::starts_with( $relative_path, '/api/' ) ) {
 		exit();
 	}
 
-	$api_entrypoint = file_exists( $root_path . '/api/index.php' )
-		? $root_path . '/api/index.php'
-		: ( file_exists( $runtime_path . '/public/index.php' )
-			? $runtime_path . '/public/index.php'
-			: $root_path . '/public/index.php' );
-
-	require $api_entrypoint;
+	require $environment->get_api_entrypoint();
 	exit();
 }
 
@@ -656,7 +647,7 @@ if ( InstallState::NEEDS_INSTALL === $install_state ) {
 }
 
 if ( '/' === $relative_path && InstallState::READY === $install_state ) {
-	$app_config   = RuntimeConfig::bootstrap( $runtime_path );
+	$app_config   = Configuration::bootstrap( $runtime_path );
 	$connection   = new Connection( $app_config );
 	$settings_api = new SettingsApi( new PeakURL_DB( $connection ) );
 
@@ -687,17 +678,11 @@ if ( '/' === $relative_path && InstallState::READY === $install_state ) {
 }
 
 if ( ! $is_dashboard_path( $relative_path ) ) {
-	$api_entrypoint = file_exists( $root_path . '/api/index.php' )
-		? $root_path . '/api/index.php'
-		: ( file_exists( $runtime_path . '/public/index.php' )
-			? $runtime_path . '/public/index.php'
-			: $root_path . '/public/index.php' );
-
-	require $api_entrypoint;
+	require $environment->get_api_entrypoint();
 	exit();
 }
 
-$app_config = RuntimeConfig::bootstrap( $runtime_path );
+$app_config = Configuration::bootstrap( $runtime_path );
 $connection = new Connection( $app_config );
 load_i18n( $app_config, $connection );
 
@@ -749,9 +734,7 @@ $peakurl_data = get_peakurl_data(
 	)
 );
 
-$dashboard_html_path = file_exists( $root_path . '/index.html' )
-	? $root_path . '/index.html'
-	: $root_path . '/app.html';
+$dashboard_html_path = $environment->get_app_html_path();
 
 if ( ! file_exists( $dashboard_html_path ) ) {
 	http_response_code( 500 );

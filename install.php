@@ -76,7 +76,7 @@ if ( InstallState::NEEDS_SETUP === $install_state ) {
 }
 
 if ( InstallState::DATABASE_CONNECTION_ERROR === $install_state ) {
-	header( 'Location: ' . InstallScreen::format_url( $base_path, '/db-error.php' ) );
+	header( 'Location: ' . InstallScreen::format_url( $base_path, '/database-error.php' ) );
 	exit();
 }
 

@@ -99,8 +99,34 @@ export function getStatsTotals(
 }
 
 export function normalizeTrafficSeries(
-	traffic?: StatsTrafficSeries | null
+	traffic?: StatsTrafficSeries | Record<string, unknown>[] | null
 ): NormalizedTrafficSeries {
+	if (Array.isArray(traffic)) {
+		const labels: string[] = [];
+		const clicks: number[] = [];
+		const unique: number[] = [];
+
+		for (const point of traffic) {
+			const label = String(
+				point?.date || point?.timestamp || point?.bucket || ""
+			);
+			const clickCount = Math.max(
+				0,
+				toFiniteNumber(point?.clicks ?? point?.totalClicks)
+			);
+			const uniqueCount = Math.max(
+				0,
+				toFiniteNumber(point?.uniqueClicks ?? point?.unique)
+			);
+
+			labels.push(label);
+			clicks.push(clickCount);
+			unique.push(Math.min(uniqueCount, clickCount));
+		}
+
+		return { labels, clicks, unique };
+	}
+
 	const rawLabels = Array.isArray(traffic?.labels)
 		? traffic?.labels || []
 		: [];
@@ -126,7 +152,7 @@ export function normalizeTrafficSeries(
 			const uniqueCount = Math.max(0, toFiniteNumber(rawUnique[index]));
 			return Math.min(uniqueCount, clickCount);
 		}),
-		granularity: traffic?.granularity,
+		granularity: (traffic as StatsTrafficSeries)?.granularity,
 	};
 }
 

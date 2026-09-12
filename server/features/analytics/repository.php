@@ -636,30 +636,13 @@ class Repository {
 	 * Resolve bucket granularity based on total timeframe days.
 	 *
 	 * @param int $days Total days in the window.
-	 * @return string Bucket size: 'hour', 'day', or 'month'.
+	 * @return string Bucket size: 'day' or 'month'.
 	 * @since 1.0.0
 	 */
 	public function get_traffic_series_granularity( int $days ): string {
-		if ( $days <= 1 ) {
-			return 'hour';
-		}
+		$monthly_threshold_days = 120;
 
-		return 'day';
-	}
-
-	/**
-	 * Get the MySQL DATE_FORMAT string for a traffic series granularity.
-	 *
-	 * @param string $granularity Granularity: 'hour', 'day', or 'month'.
-	 * @return string MySQL date format string.
-	 * @since 1.2.4
-	 */
-	public function get_traffic_series_format_string( string $granularity ): string {
-		return match ( $granularity ) {
-			'hour'  => '%Y-%m-%d %H:00:00',
-			'month' => '%Y-%m-01',
-			default => '%Y-%m-%d',
-		};
+		return $days > $monthly_threshold_days ? 'month' : 'day';
 	}
 
 	/**
@@ -912,10 +895,10 @@ class Repository {
 	/**
 	 * Query time-series traffic series for a standard rolling window.
 	 *
-	 * @param string|null          $url_id Optional URL ID filter.
-	 * @param int                  $days   Number of days in the window.
-	 * @param array<string, mixed> $user   Current user for capability scoping.
-	 * @return array<int, array<string, mixed>> Ordered timeline datapoints.
+	 * @param string|null               $url_id Optional URL ID filter.
+	 * @param int                       $days   Number of days in the window.
+	 * @param array<string, mixed>|null $user   Current user for capability scoping.
+	 * @return array<string, mixed> Traffic series with labels, clicks, unique, and granularity.
 	 * @since 1.0.0
 	 */
 	public function query_traffic_series(
@@ -923,54 +906,56 @@ class Repository {
 		int $days = 7,
 		?array $user = null
 	): array {
-		$period   = $this->get_analytics_period( $days );
-		$timezone = $this->get_analytics_timezone();
+		$period = $this->get_analytics_period( $days );
 
 		return $this->query_traffic_series_range(
 			$url_id,
+			$period['start_date'],
+			$days,
 			$period['start_at'],
-			Date::now(),
-			$timezone->getName(),
-			$this->get_traffic_series_granularity( $days ),
+			null,
+			$period['timezone'],
 			$user,
+			'day',
 		);
 	}
 
 	/**
-	 * Query time-series traffic points across an explicit UTC range.
+	 * Get a date-bucketed traffic time series for a specific date range.
 	 *
-	 * @param string|null          $url_id      Optional URL ID filter.
-	 * @param string               $start_at    Inclusive UTC start datetime.
-	 * @param string               $end_at      Exclusive UTC end datetime.
-	 * @param string               $timezone    Local timezone name.
-	 * @param string               $granularity Bucket size ('hour', 'day', or 'month').
-	 * @param array<string, mixed> $user        Current user for capability scoping.
-	 * @return array<int, array<string, mixed>> Time-series buckets.
+	 * @param string|null               $url_id      Optional URL ID to scope the series.
+	 * @param string                    $start_date  First local date bucket in YYYY-MM-DD format.
+	 * @param int                       $days        Number of day buckets to include.
+	 * @param string                    $start_at    Inclusive UTC start timestamp.
+	 * @param string|null               $end_at      Optional exclusive UTC end timestamp.
+	 * @param string                    $timezone    Timezone used for local buckets.
+	 * @param array<string, mixed>|null $user        Optional user scope for site-level charts.
+	 * @param string                    $granularity Bucket size, either day or month.
+	 * @return array<string, mixed> Traffic series with labels, clicks, unique, and granularity.
 	 * @since 1.0.0
 	 */
 	public function query_traffic_series_range(
 		?string $url_id,
+		string $start_date,
+		int $days,
 		string $start_at,
-		string $end_at,
+		?string $end_at,
 		string $timezone,
-		string $granularity = 'day',
-		?array $user = null
+		?array $user = null,
+		string $granularity = 'day'
 	): array {
-		$join_sql   = '';
-		$conditions = array(
-			'c.clicked_at >= :start_at',
-			'c.clicked_at < :end_at',
-		);
-		$params     = array(
-			'start_at' => $start_at,
-			'end_at'   => $end_at,
-		);
+		$tz          = new \DateTimeZone( $timezone );
+		$granularity = 'month' === $granularity ? 'month' : 'day';
+		$join_sql    = '';
+		$conditions  = array( 'c.clicked_at >= :start_at' );
+		$params      = array( 'start_at' => $start_at );
 
-		$format_string = $this->get_traffic_series_format_string(
-			$granularity,
-		);
+		if ( null !== $end_at ) {
+			$conditions[]     = 'c.clicked_at < :end_at';
+			$params['end_at'] = $end_at;
+		}
 
-		if ( null !== $url_id && '' !== $url_id ) {
+		if ( $url_id ) {
 			$conditions[]     = 'c.url_id = :url_id';
 			$params['url_id'] = $url_id;
 		} elseif ( null !== $user ) {
@@ -984,35 +969,89 @@ class Repository {
 			);
 		}
 
-		$sql = sprintf(
+		$rows = $this->db->get_results(
 			'SELECT
-                DATE_FORMAT(CONVERT_TZ(c.clicked_at, \'+00:00\', \'%1$s\'), \'%2$s\') AS bucket,
-                COUNT(*) AS total_clicks,
-                COUNT(DISTINCT c.visitor_hash) AS unique_clicks
+                c.clicked_at,
+                COALESCE(NULLIF(c.visitor_hash, \'\'), c.id) AS visitor_key
             FROM clicks c' .
-			$join_sql .
-			' WHERE ' . implode( ' AND ', $conditions ) .
-			' GROUP BY bucket
-            ORDER BY bucket ASC',
-			$this->db->esc_like( $timezone ),
-			$format_string,
+				$join_sql .
+				' WHERE ' .
+				implode( ' AND ', $conditions ) .
+				' ORDER BY c.clicked_at ASC',
+			$params,
 		);
 
-		$rows = $this->db->get_results( $sql, $params );
+		$lookup      = array();
+		$range_start = ( new \DateTimeImmutable(
+			$start_date,
+			$tz
+		) )->setTime( 0, 0, 0 );
+		$range_end   = $range_start->modify( '+' . max( 0, $days - 1 ) . ' days' );
+		$cursor      = $range_start;
 
-		return array_map(
-			function ( array $row ): array {
-				$total  = (int) $row['total_clicks'];
-				$unique = min( (int) $row['unique_clicks'], $total );
+		if ( 'month' === $granularity ) {
+			$cursor    = $range_start->modify( 'first day of this month' );
+			$range_end = $range_end->modify( 'first day of this month' );
+		}
 
-				return array(
-					'timestamp'    => Date::to_iso( (string) $row['bucket'] ),
-					'totalClicks'  => $total,
-					'clicks'       => $total,
-					'uniqueClicks' => $unique,
+		while ( $cursor <= $range_end ) {
+			$date            = 'month' === $granularity
+				? $cursor->format( 'Y-m-01' )
+				: $cursor->format( 'Y-m-d' );
+			$lookup[ $date ] = array(
+				'clicks' => 0,
+				'unique' => array(),
+			);
+			$cursor          = $cursor->modify( 'month' === $granularity ? '+1 month' : '+1 day' );
+		}
+
+		foreach ( $rows as $row ) {
+			try {
+				$clicked_at = new \DateTimeImmutable(
+					(string) $row['clicked_at'],
+					new \DateTimeZone( 'UTC' ),
 				);
-			},
-			$rows,
+			} catch ( \Exception $exception ) {
+				continue;
+			}
+
+			$bucket_date = $clicked_at->setTimezone( $tz )->format(
+				'month' === $granularity ? 'Y-m-01' : 'Y-m-d'
+			);
+
+			if ( ! isset( $lookup[ $bucket_date ] ) ) {
+				continue;
+			}
+
+			$visitor_key = (string) ( $row['visitor_key'] ?? '' );
+
+			++$lookup[ $bucket_date ]['clicks'];
+
+			if ( '' !== $visitor_key ) {
+				$lookup[ $bucket_date ]['unique'][ $visitor_key ] = true;
+			}
+		}
+
+		$labels = array();
+		$clicks = array();
+		$unique = array();
+
+		foreach ( $lookup as $date => $bucket ) {
+			$click_count = (int) ( $bucket['clicks'] ?? 0 );
+
+			$labels[] = $date;
+			$clicks[] = $click_count;
+			$unique[] = min(
+				count( (array) ( $bucket['unique'] ?? array() ) ),
+				$click_count,
+			);
+		}
+
+		return array(
+			'labels'      => $labels,
+			'clicks'      => $clicks,
+			'unique'      => $unique,
+			'granularity' => $granularity,
 		);
 	}
 

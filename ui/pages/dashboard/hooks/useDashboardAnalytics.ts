@@ -27,8 +27,37 @@ const EMPTY_STATS: DashboardStats = {
 };
 
 function normalizeTrafficSeries(
-	traffic: Partial<TrafficSeries> | null | undefined
+	traffic:
+		Partial<TrafficSeries> | Record<string, unknown>[] | null | undefined
 ): TrafficSeries {
+	if (Array.isArray(traffic)) {
+		const labels: string[] = [];
+		const clicks: number[] = [];
+		const unique: number[] = [];
+
+		for (const point of traffic) {
+			const label = String(
+				point?.date || point?.timestamp || point?.bucket || ""
+			);
+			const clickCount = Number(point?.clicks ?? point?.totalClicks ?? 0);
+			const uniqueCount = Number(
+				point?.uniqueClicks ?? point?.unique ?? 0
+			);
+			const safeClicks =
+				Number.isFinite(clickCount) && clickCount > 0 ? clickCount : 0;
+			const safeUnique =
+				Number.isFinite(uniqueCount) && uniqueCount > 0
+					? uniqueCount
+					: 0;
+
+			labels.push(label);
+			clicks.push(safeClicks);
+			unique.push(Math.min(safeUnique, safeClicks));
+		}
+
+		return { labels, clicks, unique };
+	}
+
 	const labels = Array.isArray(traffic?.labels) ? traffic.labels : [];
 	const clicks = Array.isArray(traffic?.clicks) ? traffic.clicks : [];
 	const unique = Array.isArray(traffic?.unique) ? traffic.unique : [];

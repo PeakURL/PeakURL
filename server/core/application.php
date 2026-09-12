@@ -194,7 +194,8 @@ class Application {
 			$authorization,
 			$config
 		);
-		$settings_service     = new SettingsService(
+		$analytics_repository->set_link_formatter( array( $links_service, 'format_url' ) );
+		$settings_service = new SettingsService(
 			$db,
 			$connection,
 			$schema,
@@ -214,7 +215,7 @@ class Application {
 			$config,
 			$links_api
 		);
-		$system_service       = new SystemService(
+		$system_service   = new SystemService(
 			$db,
 			$connection,
 			$auth_service,

@@ -84,7 +84,7 @@ export default defineConfig({
 			ignored: [
 				"**/build/**",
 				"**/release/**",
-				"**/app/vendor/**",
+				"**/server/vendor/**",
 				"**/content/**",
 			],
 		},

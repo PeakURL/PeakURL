@@ -5,7 +5,7 @@ import {
 	getErrorStatus,
 	getStringRecordValue,
 	isObjectRecord,
-} from "../../ui/shared/errors";
+} from "../../client/shared/errors";
 
 test.describe("Error & Record Utilities", () => {
 	test.describe("isObjectRecord & getStringRecordValue", () => {

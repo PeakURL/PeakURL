@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { getInstallRecovery } from "../../ui/shared/install";
+import { getInstallRecovery } from "../../client/shared/install";
 
 test.describe("Install Recovery Utilities", () => {
 	test("extracts needs_setup recovery with setupConfigUrl", () => {

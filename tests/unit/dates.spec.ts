@@ -5,7 +5,7 @@ import {
 	formatRelativeTime,
 	getActiveLocale,
 	getActiveTimeZone,
-} from "../../ui/shared/dates";
+} from "../../client/shared/dates";
 
 test.describe("Date Utilities", () => {
 	test("getActiveLocale returns valid locale string", () => {

@@ -8,7 +8,7 @@ import {
 	normalizeLinkTitle,
 	sanitizeImageUrl,
 	sanitizeUrl,
-} from "../../ui/shared/links";
+} from "../../client/shared/links";
 
 test.describe("Links & URL Utilities", () => {
 	test.describe("sanitizeUrl", () => {

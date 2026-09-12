@@ -5,7 +5,7 @@ import {
 	parseCsvRows,
 	serializeCsv,
 	stringifyCsvValue,
-} from "../../ui/shared/csv";
+} from "../../client/shared/csv";
 
 test.describe("CSV Utilities", () => {
 	test.describe("normalizeCsvHeader", () => {

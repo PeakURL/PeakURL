@@ -44,7 +44,8 @@ test.describe("CSV Utilities", () => {
 
 	test.describe("parseCsvRows", () => {
 		test("parses standard comma-delimited rows", () => {
-			const csv = "url,alias,title\nhttps://google.com,google,Google Search\nhttps://github.com,github,GitHub";
+			const csv =
+				"url,alias,title\nhttps://google.com,google,Google Search\nhttps://github.com,github,GitHub";
 			const rows = parseCsvRows(csv);
 			expect(rows).toEqual([
 				["url", "alias", "title"],
@@ -54,7 +55,8 @@ test.describe("CSV Utilities", () => {
 		});
 
 		test("handles quoted values with commas and escaped quotes", () => {
-			const csv = 'url,title\n"https://site.com","Hello, World"\n"https://site2.com","Quoted ""Double"" Title"';
+			const csv =
+				'url,title\n"https://site.com","Hello, World"\n"https://site2.com","Quoted ""Double"" Title"';
 			const rows = parseCsvRows(csv);
 			expect(rows).toEqual([
 				["url", "title"],

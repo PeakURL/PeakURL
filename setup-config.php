@@ -33,9 +33,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 const PEAKURL_INSTALLER_SURFACE_WIDTH_PX = 580;
 
-$root_path     = file_exists( __DIR__ . '/server/vendor/autoload.php' ) ? __DIR__ : dirname( __DIR__ );
-$server_path   = $root_path . '/server';
-$autoload_path = $server_path . '/vendor/autoload.php';
+$root_path     = __DIR__;
+$runtime_path  = is_dir( $root_path . '/server' ) ? $root_path . '/server' : $root_path;
+$autoload_path = file_exists( $root_path . '/vendor/autoload.php' )
+	? $root_path . '/vendor/autoload.php'
+	: $runtime_path . '/vendor/autoload.php';
 
 if ( ! file_exists( $autoload_path ) ) {
 	http_response_code( 500 );
@@ -61,7 +63,7 @@ $installer_locale = new InstallLocale(
 
 set_i18n_service( $installer_locale->get_i18n_service() );
 
-$install_state = InstallState::get_state( $server_path );
+$install_state = InstallState::get_state( $runtime_path );
 
 if ( InstallState::READY === $install_state ) {
 	header( 'Location: ' . InstallScreen::format_url( $base_path, '/dashboard' ) );
@@ -82,7 +84,7 @@ $detected_site_url       = InstallScreen::detect_site_url( $base_path, $_SERVER 
 $values                  = InstallConfig::get_form_defaults( $detected_site_url );
 $values['site_language'] = $installer_locale->get_locale();
 $error_message           = '';
-$app_config              = RuntimeConfig::bootstrap( $server_path );
+$app_config              = RuntimeConfig::bootstrap( $runtime_path );
 $version                 = trim( (string) ( $app_config[ Constants::VERSION ] ?? '' ) );
 $generator_meta          = get_generator_tag( $version );
 if ( '' !== $generator_meta ) {
@@ -105,7 +107,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 
 	try {
 		InstallScreen::validate_post_origin( $detected_site_url, $_SERVER );
-		InstallConfig::configure( $server_path, $_POST );
+		InstallConfig::configure( $runtime_path, $_POST );
 		header(
 			'Location: ' . InstallScreen::format_url(
 				$base_path,

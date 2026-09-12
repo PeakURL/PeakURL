@@ -32,7 +32,7 @@ if ( ! file_exists( $autoload_path ) ) {
 require $autoload_path;
 
 $base_path     = InstallScreen::get_base_path(
-	(string) ( $_SERVER['SCRIPT_NAME'] ?? '/db-error.php' ),
+	(string) ( $_SERVER['SCRIPT_NAME'] ?? '/database-error.php' ),
 );
 $install_state = InstallState::get_state( $server_path );
 

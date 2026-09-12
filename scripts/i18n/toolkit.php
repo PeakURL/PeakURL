@@ -334,7 +334,6 @@ final class I18nToolkit {
 	public function build_pot(): int {
 		$scan_roots = array(
 			$this->root_path . '/server',
-			$this->root_path . '/site',
 			$this->root_path . '/client',
 		);
 		$skip_paths = array(
@@ -370,6 +369,15 @@ final class I18nToolkit {
 		$translations->setDescription( 'PeakURL translation template.' );
 		$this->apply_headers( $translations, 'en_US' );
 
+		$files_to_scan = array();
+
+		foreach ( array( 'index.php', 'install.php', 'setup-config.php', 'database-error.php' ) as $root_file ) {
+			$full_path = $this->root_path . '/' . $root_file;
+			if ( is_file( $full_path ) ) {
+				$files_to_scan[] = $full_path;
+			}
+		}
+
 		foreach ( $scan_roots as $scan_root ) {
 			if ( ! is_dir( $scan_root ) ) {
 				continue;
@@ -387,9 +395,13 @@ final class I18nToolkit {
 					continue;
 				}
 
-				$path          = $file_info->getPathname();
-				$relative_path = ltrim( str_replace( $this->root_path, '', $path ), '/' );
-				$extension     = strtolower( (string) $file_info->getExtension() );
+				$files_to_scan[] = $file_info->getPathname();
+			}
+		}
+
+		foreach ( $files_to_scan as $path ) {
+			$relative_path = ltrim( str_replace( $this->root_path, '', $path ), '/' );
+			$extension     = strtolower( (string) pathinfo( $path, PATHINFO_EXTENSION ) );
 
 				if ( ! in_array( $extension, $extensions, true ) ) {
 					continue;
@@ -474,7 +486,6 @@ final class I18nToolkit {
 					}
 				}
 			}
-		}
 
 		if ( ! is_dir( dirname( $this->template_path ) ) ) {
 			mkdir( dirname( $this->template_path ), 0777, true );

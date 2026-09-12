@@ -105,6 +105,8 @@ verify_release_package() {
 	for forbidden in \
 		server \
 		site \
+		client \
+		ui \
 		index.html \
 		tests \
 		phpunit.xml \
@@ -127,8 +129,8 @@ verify_release_archive() {
 	printf 'Verifying release archive entries...\n'
 	ARCHIVE_ENTRIES=$(zipinfo -1 "$ARCHIVE_PATH")
 
-	if printf '%s\n' "$ARCHIVE_ENTRIES" | grep -E '^(server/|site/)'; then
-		printf 'Verification failure: archive contains forbidden server/ or site/ entries\n' >&2
+	if printf '%s\n' "$ARCHIVE_ENTRIES" | grep -E '^(server/|site/|client/|ui/)'; then
+		printf 'Verification failure: archive contains forbidden server/, site/, client/, or ui/ entries\n' >&2
 		exit 1
 	fi
 

@@ -18,6 +18,7 @@ use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Config\Configuration;
+use PeakURL\Core\Config\Environment;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Http\Request;
@@ -989,7 +990,7 @@ class Service {
 		$this->cache_service->clear();
 
 		// Clean disk files if content/cache exists.
-		$content_dir = (string) ( $this->config[ Constants::CONTENT_DIR ] ?? ( ABSPATH . Constants::DEFAULT_CONTENT_DIR ) );
+		$content_dir = (string) ( $this->config[ Constants::CONTENT_DIR ] ?? Environment::get_instance()->get_content_path() );
 		$custom_path = (string) ( $this->config[ Constants::CACHE_PATH ] ?? '' );
 		$cache_dir   = ! empty( $custom_path )
 			? rtrim( $custom_path, '/\\' )
@@ -1010,7 +1011,7 @@ class Service {
 	 * @since 1.6.0
 	 */
 	public function reload_cache_service(): CacheInterface {
-		$content_dir         = (string) ( $this->config[ Constants::CONTENT_DIR ] ?? ( ABSPATH . Constants::DEFAULT_CONTENT_DIR ) );
+		$content_dir         = (string) ( $this->config[ Constants::CONTENT_DIR ] ?? Environment::get_instance()->get_content_path() );
 		$effective_config    = $this->merge_cache_settings( $this->config );
 		$this->cache_service = CacheManager::resolve( $effective_config, $content_dir );
 		if ( $this->links_api ) {

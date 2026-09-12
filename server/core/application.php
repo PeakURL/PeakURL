@@ -19,6 +19,7 @@ use PeakURL\Api\UsersApi;
 use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Constants;
+use PeakURL\Core\Config\Environment;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Core\Security\Security;
 use PeakURL\Features\Analytics\Controller as AnalyticsController;
@@ -102,9 +103,9 @@ class Application {
 
 		$db_prefix   = (string) ( $config[ Constants::DB_PREFIX ] ?? '' );
 		$db          = new PeakURL_DB( $connection, $db_prefix );
-		$schema_path = dirname( __DIR__ ) . '/database/schema.sql';
+		$schema_path = Environment::get_instance()->get_database_schema_path();
 		$schema      = new DatabaseSchema( $connection, $schema_path );
-		$content_dir = (string) ( $config[ Constants::CONTENT_DIR ] ?? ( ABSPATH . Constants::DEFAULT_CONTENT_DIR ) );
+		$content_dir = (string) ( $config[ Constants::CONTENT_DIR ] ?? Environment::get_instance()->get_content_path() );
 
 		$settings_api  = new SettingsApi( $db );
 		$users_api     = new UsersApi( $db );
@@ -239,6 +240,16 @@ class Application {
 			$system_service,
 			$captcha_service
 		);
+	}
+
+	/**
+	 * Return the configured router instance.
+	 *
+	 * @return Router
+	 * @since 1.6.4
+	 */
+	public function get_router(): Router {
+		return $this->router;
 	}
 
 	/**

@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace PeakURL\Services\Install;
 
 use PeakURL\Core\Config\Constants;
+use PeakURL\Core\Config\Environment;
 use PeakURL\Services\Crypto;
 
 // If this file is called directly, abort.
@@ -293,7 +294,7 @@ class Writer {
 	 * @since 1.2.3
 	 */
 	public static function is_source_checkout(): bool {
-		return file_exists( ABSPATH . 'package.json' ) || is_dir( ABSPATH . '.git' );
+		return Environment::get_instance()->is_development();
 	}
 
 	/**

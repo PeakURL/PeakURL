@@ -151,6 +151,16 @@ class Router {
 	}
 
 	/**
+	 * Return all registered route definitions grouped by HTTP method.
+	 *
+	 * @return array<string, array<int, array<string, mixed>>>
+	 * @since 1.6.4
+	 */
+	public function get_routes(): array {
+		return $this->routes;
+	}
+
+	/**
 	 * Match the incoming request against registered routes and invoke the handler.
 	 *
 	 * Path parameters extracted from the URI are set on the Request before

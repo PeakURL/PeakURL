@@ -145,6 +145,89 @@ class ConfigurationTest extends TestCase {
 		$this->assertSame( 'Runtime Env Override', $config[ Constants::WORKSPACE_NAME ] );
 	}
 
+	public function test_configuration_hierarchy_matrix(): void {
+		$server_dir = $this->temp_dir . '/server';
+		mkdir( $server_dir, 0755, true );
+
+		// 1. Default baseline check.
+		$env = new Environment( $this->temp_dir, false );
+		Environment::set_instance( $env );
+		$config = Configuration::load();
+		$this->assertSame( Constants::CACHE_DEFAULT_DRIVER, $config[ Constants::CACHE_DRIVER ] );
+
+		// 2. config.php overrides default.
+		file_put_contents(
+			$this->temp_dir . '/config.php',
+			"<?php\ndefine('PEAKURL_CACHE_DRIVER', 'file');\n"
+		);
+		$config = Configuration::load();
+		$this->assertSame( 'file', $config[ Constants::CACHE_DRIVER ] );
+
+		// 3. root .env overrides config.php.
+		file_put_contents(
+			$this->temp_dir . '/.env',
+			"PEAKURL_CACHE_DRIVER=\"apcu\"\n"
+		);
+		$config = Configuration::load();
+		$this->assertSame( 'apcu', $config[ Constants::CACHE_DRIVER ] );
+
+		// 4. runtime .env in dev mode overrides root .env.
+		$dev_env = new Environment( $this->temp_dir, true );
+		Environment::set_instance( $dev_env );
+		file_put_contents(
+			$server_dir . '/.env',
+			"PEAKURL_CACHE_DRIVER=\"redis\"\n"
+		);
+		$config = Configuration::load( $server_dir );
+		$this->assertSame( 'redis', $config[ Constants::CACHE_DRIVER ] );
+
+		// 5. $_SERVER overrides file-based config.
+		$_SERVER['PEAKURL_CACHE_DRIVER'] = 'none';
+		$config                          = Configuration::load( $server_dir );
+		$this->assertSame( 'none', $config[ Constants::CACHE_DRIVER ] );
+
+		// 6. $_ENV overrides $_SERVER.
+		$_ENV['PEAKURL_CACHE_DRIVER'] = 'file';
+		$config                       = Configuration::load( $server_dir );
+		$this->assertSame( 'file', $config[ Constants::CACHE_DRIVER ] );
+
+		// 7. getenv() overrides $_ENV and all lower sources.
+		putenv( 'PEAKURL_CACHE_DRIVER=apcu' );
+		$config = Configuration::load( $server_dir );
+		$this->assertSame( 'apcu', $config[ Constants::CACHE_DRIVER ] );
+
+		// Clean up global environment mutations.
+		putenv( 'PEAKURL_CACHE_DRIVER' );
+		unset( $_ENV['PEAKURL_CACHE_DRIVER'], $_SERVER['PEAKURL_CACHE_DRIVER'] );
+	}
+
+	public function test_missing_config_files_fail_safe_without_warnings(): void {
+		$empty_dir = $this->temp_dir . '/empty_install';
+		mkdir( $empty_dir, 0755, true );
+
+		$env = new Environment( $empty_dir, false );
+		Environment::set_instance( $env );
+
+		$warning_triggered = false;
+		set_error_handler(
+			static function ( int $errno, string $errstr ) use ( &$warning_triggered ): bool {
+				$warning_triggered = true;
+				return true;
+			}
+		);
+
+		try {
+			$config = Configuration::load();
+			$this->assertIsArray( $config );
+			$this->assertFalse( $warning_triggered, 'Missing config files should not trigger PHP warnings or notices.' );
+			$this->assertSame( Constants::DEFAULT_VERSION, $config[ Constants::VERSION ] );
+			$this->assertSame( Constants::CACHE_DEFAULT_DRIVER, $config[ Constants::CACHE_DRIVER ] );
+			$this->assertSame( Constants::CACHE_DEFAULT_ENABLED, $config[ Constants::CACHE_ENABLED ] );
+		} finally {
+			restore_error_handler();
+		}
+	}
+
 	private function recursive_delete( string $dir ): void {
 		if ( ! is_dir( $dir ) ) {
 			return;

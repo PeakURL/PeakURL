@@ -9,6 +9,7 @@
 declare(strict_types=1);
 
 use PeakURL\Core\Config\Constants;
+use PeakURL\Core\Config\Environment;
 use PeakURL\Services\Database\Connection;
 use PeakURL\Services\I18n;
 
@@ -44,7 +45,7 @@ if ( ! function_exists( 'get_maintenance_view_data' ) ) {
 		try {
 			if (
 				null === $app_connection &&
-				file_exists( ABSPATH . 'config.php' )
+				file_exists( Environment::get_instance()->get_source_root() . '/config.php' )
 			) {
 				$app_connection = get_peakurl_connection( $app_config );
 			}

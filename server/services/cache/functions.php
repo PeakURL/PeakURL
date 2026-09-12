@@ -12,6 +12,7 @@
 declare(strict_types=1);
 
 use PeakURL\Core\Config\Constants;
+use PeakURL\Core\Config\Environment;
 use PeakURL\Services\Cache\CacheInterface;
 use PeakURL\Services\Cache\CacheKey;
 use PeakURL\Services\Cache\CacheManager;
@@ -38,7 +39,7 @@ if ( ! function_exists( 'peakurl_cache' ) ) {
 
 		if ( null === $cache ) {
 			$app_config  = $config ?? get_peakurl_config();
-			$content_dir = (string) ( $app_config[ Constants::CONTENT_DIR ] ?? ( ABSPATH . Constants::DEFAULT_CONTENT_DIR ) );
+			$content_dir = (string) ( $app_config[ Constants::CONTENT_DIR ] ?? Environment::get_instance()->get_content_path() );
 			$cache       = CacheManager::resolve( $app_config, $content_dir );
 		}
 

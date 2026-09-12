@@ -302,7 +302,7 @@ class Connection {
 			WHERE table_schema = :table_schema
 			AND table_name = :table_name',
 			array(
-				'table_schema' => (string) $this->config[ Constants::DB_DATABASE ],
+				'table_schema' => (string) ( $this->config[ Constants::DB_DATABASE ] ?? '' ),
 				'table_name'   => $this->table_name( $table_name ),
 			),
 		) > 0;

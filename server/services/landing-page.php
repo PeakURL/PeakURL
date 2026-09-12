@@ -9,6 +9,7 @@
 declare(strict_types=1);
 
 use PeakURL\Core\Config\Constants;
+use PeakURL\Core\Config\Environment;
 use PeakURL\Services\Database\Connection;
 use PeakURL\Services\I18n;
 
@@ -44,7 +45,7 @@ if ( ! function_exists( 'get_landing_page_data' ) ) {
 		try {
 			if (
 				null === $app_connection &&
-				file_exists( ABSPATH . 'config.php' )
+				file_exists( Environment::get_instance()->get_source_root() . '/config.php' )
 			) {
 				$app_connection = get_peakurl_connection( $app_config );
 			}
@@ -155,7 +156,7 @@ if ( ! function_exists( 'get_landing_page_html' ) ) {
 	): string {
 		$view_data = get_landing_page_data( $config, $connection );
 
-		$file_path = $landing_page_file ?? ( ABSPATH . 'content/landing-page.html' );
+		$file_path = $landing_page_file ?? ( Environment::get_instance()->get_content_path() . '/landing-page.html' );
 		$html      = '';
 
 		if ( file_exists( $file_path ) ) {

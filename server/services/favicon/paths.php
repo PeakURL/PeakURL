@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace PeakURL\Services\Favicon;
 
 use PeakURL\Core\Config\Constants;
+use PeakURL\Core\Config\Environment;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -51,7 +52,7 @@ class Paths {
 		$this->content_dir = rtrim(
 			(string) (
 				$config[ Constants::CONTENT_DIR ]
-				?? ABSPATH . Constants::DEFAULT_CONTENT_DIR
+				?? Environment::get_instance()->get_content_path()
 			),
 			'/\\',
 		);

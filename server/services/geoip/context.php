@@ -13,6 +13,7 @@ namespace PeakURL\Services\Geoip;
 use MaxMind\Db\Reader;
 use PeakURL\Api\SettingsApi;
 use PeakURL\Core\Config\Constants;
+use PeakURL\Core\Config\Environment;
 use PeakURL\Services\Crypto;
 
 // If this file is called directly, abort.
@@ -124,7 +125,7 @@ class Context {
 		$this->settings_api      = $settings_api;
 		$this->crypto_service    = $crypto_service;
 		$this->content_directory = trim(
-			(string) ( $config[ Constants::CONTENT_DIR ] ?? ABSPATH . 'content' ),
+			(string) ( $config[ Constants::CONTENT_DIR ] ?? Environment::get_instance()->get_content_path() ),
 		);
 		$this->database_path     = trim(
 			(string) ( $config[ Constants::GEOIP_DB_PATH ] ?? '' ),

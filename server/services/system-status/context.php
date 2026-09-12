@@ -12,6 +12,7 @@ namespace PeakURL\Services\SystemStatus;
 
 use PeakURL\Api\SettingsApi;
 use PeakURL\Core\Config\Constants;
+use PeakURL\Core\Config\Environment;
 use PeakURL\Services\Database\PeakURL_DB;
 use PeakURL\Services\Database\Schema as DatabaseSchema;
 use PeakURL\Services\Geoip;
@@ -207,6 +208,6 @@ class Context {
 	 * @since 1.0.14
 	 */
 	public function is_source_checkout(): bool {
-		return file_exists( ABSPATH . 'package.json' ) || is_dir( ABSPATH . '.git' );
+		return Environment::get_instance()->is_development();
 	}
 }

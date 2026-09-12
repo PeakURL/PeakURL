@@ -97,13 +97,37 @@ jobs:
           echo "127.0.0.1 peakurl.dev api.peakurl.dev peakurl.test" | sudo tee -a /etc/hosts
 
       - name: Start Docker Stack
+        run: docker compose up -d --build
+
+      - name: Wait for container health
         run: |
-          docker compose up -d --build
-          timeout 180s bash -c 'until docker compose ps | grep -q "peakurl-server.*(healthy)" && docker compose ps | grep -q "peakurl-client.*(healthy)"; do sleep 3; done' || true
+          echo "Waiting for peakurl-server and peakurl-client to become healthy..."
+          if ! timeout 180s bash -c 'until docker compose ps | grep -q "peakurl-server.*(healthy)" && docker compose ps | grep -q "peakurl-client.*(healthy)"; do sleep 3; done'; then
+            echo "::error::Docker containers failed to become healthy within 180 seconds."
+            exit 1
+          fi
           docker compose ps
+
+      - name: Dump container diagnostics on failure
+        if: failure()
+        run: |
+          echo "=== Docker Compose Status ==="
+          docker compose ps -a
+          echo "=== PeakURL Server Logs ==="
+          docker compose logs peakurl-server --tail=100
+          echo "=== PeakURL Client Logs ==="
+          docker compose logs peakurl-client --tail=100
+          echo "=== PeakURL Proxy Logs ==="
+          docker compose logs peakurl-proxy --tail=100
+          echo "=== PeakURL Database Logs ==="
+          docker compose logs peakurl-db --tail=100
 
       - name: Run Auth Smoke Tests
         run: npm run smoke:auth
 
       - name: Run Playwright E2E Tests
         run: npm run test:e2e
+
+      - name: Teardown Docker Stack
+        if: always()
+        run: docker compose down -v

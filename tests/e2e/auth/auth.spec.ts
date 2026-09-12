@@ -30,17 +30,23 @@ test.describe("Authentication Journeys", () => {
 	}) => {
 		await page.goto("/dashboard", { waitUntil: "domcontentloaded" });
 		await expect(page).toHaveURL(/\/login/);
-		await expect(page.getByRole("button", { name: /sign in/i })).toBeVisible();
+		await expect(
+			page.getByRole("button", { name: /sign in/i })
+		).toBeVisible();
 
 		await page.goto("/dashboard/links", { waitUntil: "domcontentloaded" });
 		await expect(page).toHaveURL(/\/login/);
-		await expect(page.getByRole("button", { name: /sign in/i })).toBeVisible();
+		await expect(
+			page.getByRole("button", { name: /sign in/i })
+		).toBeVisible();
 
 		await page.goto("/dashboard/settings", {
 			waitUntil: "domcontentloaded",
 		});
 		await expect(page).toHaveURL(/\/login/);
-		await expect(page.getByRole("button", { name: /sign in/i })).toBeVisible();
+		await expect(
+			page.getByRole("button", { name: /sign in/i })
+		).toBeVisible();
 	});
 
 	test("login displays error message on invalid credentials", async ({

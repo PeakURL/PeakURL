@@ -19,9 +19,13 @@ namespace PeakURL\Tests\Integration\Update;
 
 use PHPUnit\Framework\TestCase;
 use PeakURL\Core\Config\Environment;
+use PeakURL\Services\Update\Client;
 use PeakURL\Services\Update\Context;
 use PeakURL\Services\Update\Filesystem;
+use PeakURL\Services\Update\Installer;
 use PeakURL\Services\Update\ReleaseFiles;
+use PeakURL\Services\Update\Workspace;
+use ZipArchive;
 
 class ContentPreservationTest extends TestCase {
 
@@ -224,5 +228,209 @@ class ContentPreservationTest extends TestCase {
 		$git_availability = $this->context->get_availability();
 		$this->assertFalse( $git_availability['allowed'] );
 		$this->filesystem->delete( $this->source_root . '/.git' );
+	}
+
+	public function test_production_installer_orchestration_applies_update_and_preserves_content(): void {
+		// 1. Seed complete production installation.
+		$config_content = "<?php\ndefine('DB_DATABASE', 'prod_db');\n";
+		file_put_contents( $this->source_root . '/config.php', $config_content );
+		file_put_contents( $this->source_root . '/index.php', '<?php // v1 index' );
+		file_put_contents( $this->source_root . '/app.html', '<!-- v1 app -->' );
+		file_put_contents( $this->source_root . '/retired-release-file.txt', 'old release data' );
+
+		$this->filesystem->mkdir_p( $this->source_root . '/core' );
+		file_put_contents( $this->source_root . '/core/v1-file.php', '<?php // v1 file' );
+
+		$this->filesystem->mkdir_p( $this->source_root . '/content/uploads' );
+		file_put_contents( $this->source_root . '/content/uploads/avatar.png', 'avatar-binary-data' );
+
+		$this->filesystem->mkdir_p( $this->source_root . '/content/plugins/custom-plugin' );
+		file_put_contents( $this->source_root . '/content/plugins/custom-plugin/plugin.php', '<?php // custom plugin' );
+
+		$this->filesystem->mkdir_p( $this->source_root . '/content/languages' );
+		file_put_contents( $this->source_root . '/content/languages/fr.json', '{"greeting": "bonjour"}' );
+		file_put_contents( $this->source_root . '/content/languages/en.json', '{"greeting": "hello v1"}' );
+
+		$this->filesystem->mkdir_p( $this->source_root . '/content/cache' );
+		file_put_contents( $this->source_root . '/content/cache/analytics.cache', 'cached-metrics' );
+
+		// 2. Build real update zip package fixture.
+		$zip_file = $this->test_dir . '/test_package_2.0.0.zip';
+		$zip      = new ZipArchive();
+		$this->assertTrue( $zip->open( $zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE ) );
+		$zip->addFromString( 'index.php', '<?php // v2 index' );
+		$zip->addFromString( 'app.html', '<!-- v2 app -->' );
+		$zip->addFromString( 'core/v2-file.php', '<?php // v2 file' );
+		$zip->addFromString( 'content/languages/en.json', '{"greeting": "hello v2"}' );
+		$zip->addFromString( 'content/languages/es.json', '{"greeting": "hola"}' );
+		$zip->close();
+
+		$checksum = hash_file( 'sha256', $zip_file );
+		$this->assertIsString( $checksum );
+
+		// 3. Set up client test double to serve the real zip archive.
+		$client = new class( $this->context, $zip_file ) extends Client {
+			private string $zip_path;
+
+			public function __construct( Context $context, string $zip_path ) {
+				parent::__construct( $context );
+				$this->zip_path = $zip_path;
+			}
+
+			public function get( string $url, string $accept ): string {
+				return (string) file_get_contents( $this->zip_path );
+			}
+
+			public function get_https_url( string $url, string $label ): string {
+				return $url;
+			}
+		};
+
+		$workspace = new Workspace( $this->context, $this->filesystem );
+		$installer = new Installer(
+			$this->context,
+			$this->filesystem,
+			$client,
+			$workspace,
+			$this->release_files
+		);
+
+		$manifest = array(
+			'version'        => '2.0.0',
+			'packageUrl'     => 'https://releases.peakurl.org/package/peakurl-2.0.0.zip',
+			'checksumSha256' => $checksum,
+		);
+
+		// 4. Execute real Installer::apply() production orchestration.
+		$result = $installer->apply( $manifest );
+
+		$this->assertSame( '2.0.0', $result['version'] );
+		$this->assertSame( 'https://releases.peakurl.org/package/peakurl-2.0.0.zip', $result['packageUrl'] );
+		$this->assertNotEmpty( $result['appliedAt'] );
+
+		// 5. Verify preservation, update, and cleanup.
+		// Config survived byte-for-byte.
+		$this->assertFileExists( $this->source_root . '/config.php' );
+		$this->assertSame( $config_content, file_get_contents( $this->source_root . '/config.php' ) );
+
+		// User content survived byte-for-byte.
+		$this->assertFileExists( $this->source_root . '/content/uploads/avatar.png' );
+		$this->assertSame( 'avatar-binary-data', file_get_contents( $this->source_root . '/content/uploads/avatar.png' ) );
+		$this->assertFileExists( $this->source_root . '/content/plugins/custom-plugin/plugin.php' );
+		$this->assertSame( '<?php // custom plugin', file_get_contents( $this->source_root . '/content/plugins/custom-plugin/plugin.php' ) );
+		$this->assertFileExists( $this->source_root . '/content/languages/fr.json' );
+		$this->assertSame( '{"greeting": "bonjour"}', file_get_contents( $this->source_root . '/content/languages/fr.json' ) );
+		$this->assertFileExists( $this->source_root . '/content/cache/analytics.cache' );
+		$this->assertSame( 'cached-metrics', file_get_contents( $this->source_root . '/content/cache/analytics.cache' ) );
+
+		// Updated package files applied.
+		$this->assertSame( '<?php // v2 index', file_get_contents( $this->source_root . '/index.php' ) );
+		$this->assertSame( '<!-- v2 app -->', file_get_contents( $this->source_root . '/app.html' ) );
+		$this->assertFileExists( $this->source_root . '/core/v2-file.php' );
+
+		// Translations synced.
+		$this->assertFileExists( $this->source_root . '/content/languages/es.json' );
+		$this->assertSame( '{"greeting": "hola"}', file_get_contents( $this->source_root . '/content/languages/es.json' ) );
+		$this->assertSame( '{"greeting": "hello v2"}', file_get_contents( $this->source_root . '/content/languages/en.json' ) );
+
+		// Retired files removed.
+		$this->assertFileDoesNotExist( $this->source_root . '/retired-release-file.txt' );
+		$this->assertFileDoesNotExist( $this->source_root . '/core/v1-file.php' );
+
+		// Maintenance mode disabled and lock released.
+		$this->assertFileDoesNotExist( $this->source_root . '/.maintenance' );
+		$this->assertFalse( $workspace->is_locked() );
+	}
+
+	public function test_production_installer_orchestration_rolls_back_on_failure(): void {
+		// 1. Seed complete production installation.
+		$config_content = "<?php\ndefine('DB_DATABASE', 'prod_db');\n";
+		file_put_contents( $this->source_root . '/config.php', $config_content );
+		file_put_contents( $this->source_root . '/index.php', '<?php // v1 index' );
+		file_put_contents( $this->source_root . '/retired-release-file.txt', 'old release data' );
+
+		$this->filesystem->mkdir_p( $this->source_root . '/core' );
+		file_put_contents( $this->source_root . '/core/v1-file.php', '<?php // v1 file' );
+
+		$this->filesystem->mkdir_p( $this->source_root . '/content/languages' );
+		file_put_contents( $this->source_root . '/content/languages/en.json', '{"version": 1}' );
+
+		// 2. Build real zip package.
+		$zip_file = $this->test_dir . '/test_rollback_package.zip';
+		$zip      = new ZipArchive();
+		$this->assertTrue( $zip->open( $zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE ) );
+		$zip->addFromString( 'index.php', '<?php // bad update index' );
+		$zip->addFromString( 'core/v2-bad-file.php', 'bad' );
+		$zip->addFromString( 'content/languages/en.json', '{"version": 2}' );
+		$zip->close();
+
+		$checksum = hash_file( 'sha256', $zip_file );
+		$this->assertIsString( $checksum );
+
+		$client = new class( $this->context, $zip_file ) extends Client {
+			private string $zip_path;
+
+			public function __construct( Context $context, string $zip_path ) {
+				parent::__construct( $context );
+				$this->zip_path = $zip_path;
+			}
+
+			public function get( string $url, string $accept ): string {
+				return (string) file_get_contents( $this->zip_path );
+			}
+
+			public function get_https_url( string $url, string $label ): string {
+				return $url;
+			}
+		};
+
+		// Failing ReleaseFiles double: throws during content copying after backup.
+		$failing_release_files = new class( $this->context, $this->filesystem ) extends ReleaseFiles {
+			public function copy_content_paths( array $content_paths, string $source_root ): void {
+				throw new \RuntimeException( 'Simulated disk write error during copy_content_paths.' );
+			}
+		};
+
+		$workspace = new Workspace( $this->context, $this->filesystem );
+		$installer = new Installer(
+			$this->context,
+			$this->filesystem,
+			$client,
+			$workspace,
+			$failing_release_files
+		);
+
+		$manifest = array(
+			'version'        => '2.0.0',
+			'packageUrl'     => 'https://releases.peakurl.org/package/peakurl-2.0.0.zip',
+			'checksumSha256' => $checksum,
+		);
+
+		// 3. Execute Installer::apply() and expect failure.
+		$exception_caught = false;
+		try {
+			$installer->apply( $manifest );
+		} catch ( \RuntimeException $e ) {
+			$exception_caught = true;
+			$this->assertStringContainsString( 'PeakURL could not apply the update.', $e->getMessage() );
+			$this->assertStringContainsString( 'Simulated disk write error', $e->getMessage() );
+		}
+
+		$this->assertTrue( $exception_caught, 'Installer::apply() must throw RuntimeException on failure.' );
+
+		// 4. Assert full rollback restored pre-update state.
+		$this->assertSame( '<?php // v1 index', file_get_contents( $this->source_root . '/index.php' ) );
+		$this->assertFileExists( $this->source_root . '/retired-release-file.txt' );
+		$this->assertSame( 'old release data', file_get_contents( $this->source_root . '/retired-release-file.txt' ) );
+		$this->assertFileExists( $this->source_root . '/core/v1-file.php' );
+		$this->assertFileDoesNotExist( $this->source_root . '/core/v2-bad-file.php' );
+
+		// Config and user content restored.
+		$this->assertSame( $config_content, file_get_contents( $this->source_root . '/config.php' ) );
+		$this->assertSame( '{"version": 1}', file_get_contents( $this->source_root . '/content/languages/en.json' ) );
+
+		// Maintenance mode disabled and lock released.
+		$this->assertFileDoesNotExist( $this->source_root . '/.maintenance' );
+		$this->assertFalse( $workspace->is_locked() );
 	}
 }

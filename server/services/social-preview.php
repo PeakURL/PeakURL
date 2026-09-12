@@ -12,6 +12,7 @@ namespace PeakURL\Services;
 
 use PeakURL\Api\SettingsApi;
 use PeakURL\Core\Config\Constants;
+use PeakURL\Core\Config\Environment;
 use PeakURL\Utils\Date;
 use PeakURL\Utils\File;
 
@@ -76,7 +77,7 @@ class SocialPreview {
 		$this->content_dir  = rtrim(
 			(string) (
 				$config[ Constants::CONTENT_DIR ]
-				?? ABSPATH . Constants::DEFAULT_CONTENT_DIR
+				?? Environment::get_instance()->get_content_path()
 			),
 			'/\\',
 		);

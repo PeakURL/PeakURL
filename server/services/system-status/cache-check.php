@@ -12,6 +12,7 @@ namespace PeakURL\Services\SystemStatus;
 
 use FilesystemIterator;
 use PeakURL\Core\Config\Constants;
+use PeakURL\Core\Config\Environment;
 use PeakURL\Services\Cache\Drivers\ApcuCache;
 use PeakURL\Services\Cache\Drivers\FileCache;
 use PeakURL\Services\Cache\Drivers\RedisCache;
@@ -59,7 +60,7 @@ class Cache {
 		$config       = $this->context->get_config();
 		$settings_api = $this->context->get_settings_api();
 
-		$content_dir = (string) ( $config[ Constants::CONTENT_DIR ] ?? ( ABSPATH . Constants::DEFAULT_CONTENT_DIR ) );
+		$content_dir = (string) ( $config[ Constants::CONTENT_DIR ] ?? Environment::get_instance()->get_content_path() );
 
 		// Check settings table overrides before runtime config.
 		$stored_enabled = $settings_api->get_option( Constants::SETTING_CACHE_ENABLED );

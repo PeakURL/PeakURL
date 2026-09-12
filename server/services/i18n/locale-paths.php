@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace PeakURL\Services\I18n;
 
 use PeakURL\Core\Config\Constants;
+use PeakURL\Core\Config\Environment;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -60,7 +61,7 @@ class Paths {
 	 */
 	public function get_content_dir(): string {
 		return rtrim(
-			(string) ( $this->config[ Constants::CONTENT_DIR ] ?? ABSPATH . Constants::DEFAULT_CONTENT_DIR ),
+			(string) ( $this->config[ Constants::CONTENT_DIR ] ?? Environment::get_instance()->get_content_path() ),
 			'/\\',
 		);
 	}

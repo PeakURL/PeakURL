@@ -12,6 +12,7 @@ namespace PeakURL\Services\SystemStatus;
 
 use FilesystemIterator;
 use PeakURL\Core\Config\Constants;
+use PeakURL\Core\Config\Environment;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -62,12 +63,14 @@ class Storage {
 		$debug_log_path      = $content_directory .
 			DIRECTORY_SEPARATOR .
 			Constants::DEBUG_LOG_FILE;
-		$config_path         = ABSPATH . 'config.php';
-		$app_directory       = \PeakURL\Core\Config\Environment::get_instance()->get_runtime_root();
+		$environment         = Environment::get_instance();
+		$source_root         = $environment->get_source_root();
+		$config_path         = $source_root . '/config.php';
+		$app_directory       = $environment->get_runtime_root();
 
 		return array(
-			'releaseRoot'                 => untrailingslashit( ABSPATH ),
-			'releaseRootSizeBytes'        => $this->get_path_size_bytes( ABSPATH ),
+			'releaseRoot'                 => $source_root,
+			'releaseRootSizeBytes'        => $this->get_path_size_bytes( $source_root ),
 			'appDirectory'                => $app_directory,
 			'appWritable'                 => is_dir( $app_directory ) && is_writable( $app_directory ),
 			'appDirectorySizeBytes'       => $this->get_path_size_bytes( $app_directory ),

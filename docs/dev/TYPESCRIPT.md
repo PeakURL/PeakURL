@@ -4,7 +4,7 @@ This guide explains how TypeScript is used in the PeakURL dashboard codebase.
 
 PeakURL is an open-source project, so the goal is not only to satisfy the compiler. The code should also stay easy for other contributors to read, review, and extend.
 
-The main TypeScript surface in this repo is the React dashboard under `ui/`. The PHP runtime in `server/` and `site/` follows separate standards.
+The main TypeScript surface in this repo is the React dashboard under `client/`. The PHP runtime in `server/` and `site/` follows separate standards.
 
 ## Goals
 
@@ -21,8 +21,8 @@ In practice, that means we try to:
 
 This guide applies to:
 
-- `ui/**/*.ts`
-- `ui/**/*.tsx`
+- `client/**/*.ts`
+- `client/**/*.tsx`
 - supporting TS config and build files when relevant
 
 ## Core Rules
@@ -32,7 +32,7 @@ This guide applies to:
 - Prefer `import type` for type-only imports.
 - Keep React component file names explicit, such as `LoginPage.tsx` or `DashboardLayout.tsx`.
 - Prefer extensionless imports and existing folder barrels where practical.
-- Treat `ui/utils/index.ts` as the public utilities surface and prefer `@/utils` over direct `@/utils/...` imports.
+- Treat `client/shared/index.ts` as the public shared utilities surface and prefer `@/shared` over direct `@/shared/...` imports.
 
 These are not meant to make simple changes harder. They are here to keep the codebase consistent as more contributors touch the same UI surface.
 
@@ -46,10 +46,10 @@ Use the nearest folder-level `types.ts` for shared or reusable shapes in that ar
 
 Examples:
 
-- `ui/components/ui/types.ts`
-- `ui/components/providers/types.ts`
-- `ui/pages/dashboard/links/_components/types.ts`
-- `ui/pages/dashboard/settings/_components/tabs/pages/types.ts`
+- `client/components/ui/types.ts`
+- `client/providers/types.ts`
+- `client/pages/dashboard/links/components/types.ts`
+- `client/pages/dashboard/settings/components/tabs/pages/types.ts`
 
 ### Component-folder `types.ts`
 
@@ -63,7 +63,7 @@ Use this pattern for:
 
 ### Root page wrapper types
 
-If a type is only shared at the page-entry layer, keep it in `ui/pages/types.ts`.
+If a type is only shared at the page-entry layer, keep it in `client/pages/types.ts`.
 
 Example:
 
@@ -71,7 +71,7 @@ Example:
 
 ### Utility helper types
 
-If a type exists to support utility guards or shared helper logic, keep it in `ui/utils/types.ts`.
+If a type exists to support utility guards or shared helper logic, keep it in `client/shared/errors/types.ts`.
 
 Examples:
 
@@ -157,13 +157,13 @@ If the prop shape is reusable or exported, move it into the nearest `types.ts` a
 
 Keep RTK Query response contracts stable where practical.
 
-For error parsing, avoid reintroducing local `typeof` chains across pages and components. Use the shared helpers in `ui/utils/errors.ts`:
+For error parsing, avoid reintroducing local `typeof` chains across pages and components. Use the shared helpers in `client/shared/errors`:
 
 - `extractErrorMessage(error)`
 - `getErrorMessage(error, fallback)`
 - `getErrorStatus(error)`
 
-Those helpers are backed by shared utility guard types in `ui/utils/types.ts`.
+Those helpers are backed by shared utility guard types in `client/shared/errors/types.ts`.
 
 Preferred:
 
@@ -214,7 +214,7 @@ A typical refactor looks like this:
 
 1. Move shared local declarations into the nearest `types.ts`.
 2. Add or improve TSDoc on exported types.
-3. Replace repeated error parsing with `ui/utils/errors.ts`.
+3. Replace repeated error parsing with `client/shared/errors`.
 4. Replace inline or implicit prop typing with named props from `types.ts`.
 5. Keep imports type-only where possible.
 6. Re-run the validation commands.

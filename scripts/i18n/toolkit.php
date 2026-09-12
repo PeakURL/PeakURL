@@ -335,7 +335,7 @@ final class I18nToolkit {
 		$scan_roots = array(
 			$this->root_path . '/server',
 			$this->root_path . '/site',
-			$this->root_path . '/ui',
+			$this->root_path . '/client',
 		);
 		$skip_paths = array(
 			'/vendor/',

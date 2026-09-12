@@ -10,7 +10,7 @@ import {
  * Custom hook to manage a state value that automatically resets to a specified
  * default value after a timeout delay.
  */
-export function useTemporaryState<T>(initialValue: T = null as unknown as T) {
+export function useTemporaryState<T>(initialValue: T) {
 	const [value, setValue] = useState<T>(initialValue);
 	const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 

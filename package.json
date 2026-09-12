@@ -17,7 +17,9 @@
 		"release:upload": "sh scripts/upload-release.sh",
 		"smoke:auth": "sh scripts/smoke-auth.local.sh",
 		"test:server": "composer --working-dir=server test",
-		"test": "npm run test:server",
+		"test:unit": "playwright test --project=unit",
+		"test:e2e": "playwright test",
+		"test": "npm run test:server && npm run test:unit",
 		"lint": "npm run lint:web && npm run lint:php",
 		"lint:web": "eslint ui --cache",
 		"lint:web:fix": "eslint ui --cache --fix",
@@ -72,6 +74,7 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.21.0",
+		"@playwright/test": "^1.63.0",
 		"@types/node": "^26.2.0",
 		"@types/qrcode": "^1.5.6",
 		"@types/react": "^19.2.18",

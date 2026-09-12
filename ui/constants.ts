@@ -5,10 +5,11 @@ import {
 	getPeakURLData,
 } from "@/data";
 
-import rawPeakurlVersion from "../.version?raw";
+declare const __PEAKURL_VERSION__: string | undefined;
 
 const DEFAULT_PEAKURL_ORIGIN = "https://peakurl.dev";
-const FALLBACK_VERSION = rawPeakurlVersion.trim() || "0.0.0";
+const FALLBACK_VERSION =
+	typeof __PEAKURL_VERSION__ !== "undefined" ? __PEAKURL_VERSION__ : "1.0.0";
 const IS_BROWSER = "undefined" !== typeof window;
 
 /**
@@ -52,7 +53,7 @@ const fallbackApiPath = IS_BROWSER
 	: DEFAULT_API_PATH;
 const appSiteName = IS_BROWSER ? getDataString(peakurlData.siteName) : "";
 const appVersion = IS_BROWSER ? getDataString(peakurlData.version) : "";
-const appDebug = import.meta.env.DEV
+const appDebug = import.meta.env?.DEV
 	? true
 	: IS_BROWSER
 		? true === peakurlData.debug
@@ -82,13 +83,13 @@ export const PEAKURL_DEBUG = appDebug;
  * Support contact address shown in contributor-facing UI copy.
  */
 export const SUPPORT_EMAIL =
-	import.meta.env.VITE_SUPPORT_EMAIL || "support@example.com";
+	import.meta.env?.VITE_SUPPORT_EMAIL || "support@example.com";
 
 /**
  * Canonical public site URL for the current install.
  */
 export const PEAKURL_URL = toAbsoluteUrl(
-	appSiteUrl || import.meta.env.VITE_PEAKURL_URL || fallbackSiteUrl,
+	appSiteUrl || import.meta.env?.VITE_PEAKURL_URL || fallbackSiteUrl,
 	appOrigin
 );
 
@@ -101,7 +102,7 @@ export const PEAKURL_BASENAME = appBasePath;
  * Public host for the current install without path information.
  */
 export const PEAKURL_HOST = sanitizeHost(
-	import.meta.env.VITE_PEAKURL_HOST,
+	import.meta.env?.VITE_PEAKURL_HOST,
 	new URL(PEAKURL_URL).host
 );
 
@@ -114,7 +115,7 @@ export const PEAKURL_DOMAIN = PEAKURL_HOST.replace(/^www\./i, "");
  * Client-visible API base path used by RTK Query and app data fetches.
  */
 export const API_CLIENT_BASE_URL =
-	appApiBase || import.meta.env.VITE_API_BASE_URL || fallbackApiPath;
+	appApiBase || import.meta.env?.VITE_API_BASE_URL || fallbackApiPath;
 
 /**
  * Absolute server API base URL resolved against the current install URL.
@@ -133,7 +134,7 @@ export const API_ORIGIN = new URL(API_SERVER_BASE_URL).origin;
  * Optional internal API origin override for proxied or split-host setups.
  */
 export const INTERNAL_API_ORIGIN =
-	import.meta.env.VITE_INTERNAL_API_ORIGIN || API_ORIGIN;
+	import.meta.env?.VITE_INTERNAL_API_ORIGIN || API_ORIGIN;
 
 /**
  * Public waitlist URL for the plugins preview surface.

@@ -4,6 +4,7 @@ import {
 	_x as wpTranslateWithContext,
 	setLocaleData,
 	sprintf,
+	type TransformedText,
 } from "@wordpress/i18n";
 
 import { API_ROUTES, getApiRequestUrl } from "@/api";
@@ -140,20 +141,19 @@ export function initializeI18n(): Promise<void> {
 /**
  * Translation helpers bound to PeakURL's active text domain.
  */
-export const translate = <Text extends string>(text: Text): Text =>
-	wpTranslate(text, TEXT_DOMAIN) as unknown as Text;
+export const translate = <Text extends string>(
+	text: Text
+): TransformedText<Text> => wpTranslate(text, TEXT_DOMAIN);
 export const translateWithContext = <Text extends string>(
 	text: Text,
 	context: string
-): Text =>
-	wpTranslateWithContext(text, context, TEXT_DOMAIN) as unknown as Text;
+): TransformedText<Text> => wpTranslateWithContext(text, context, TEXT_DOMAIN);
 export const translatePlural = <Single extends string, Plural extends string>(
 	single: Single,
 	plural: Plural,
 	count: number
-): Single | Plural =>
-	wpTranslatePlural(single, plural, count, TEXT_DOMAIN) as unknown as
-		Single | Plural;
+): TransformedText<Single | Plural> =>
+	wpTranslatePlural(single, plural, count, TEXT_DOMAIN);
 
 export {
 	sprintf,

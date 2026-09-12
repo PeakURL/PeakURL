@@ -90,6 +90,12 @@ export function downloadBrowserFile(
 	window.URL.revokeObjectURL(blobUrl);
 }
 
+interface NavigatorWithClientHints {
+	userAgentData?: {
+		platform?: string;
+	};
+}
+
 /**
  * Determine whether the current runtime environment is running on a Mac/iOS platform.
  *
@@ -100,15 +106,12 @@ export function isMacPlatform(): boolean {
 		return false;
 	}
 
-	const userAgentData = (
-		navigator as unknown as { userAgentData?: { platform?: string } }
-	).userAgentData;
-	if (userAgentData?.platform) {
-		return /mac/i.test(userAgentData.platform);
+	const clientHints = navigator as NavigatorWithClientHints;
+	if (clientHints.userAgentData?.platform) {
+		return /mac/i.test(clientHints.userAgentData.platform);
 	}
 
-	const platform =
-		(navigator as unknown as { platform?: string }).platform || "";
+	const platform = navigator.platform || "";
 	if (/mac|iphone|ipad|ipod/i.test(platform)) {
 		return true;
 	}

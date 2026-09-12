@@ -185,6 +185,8 @@ class Geoip {
 	 * @since 1.0.14
 	 */
 	public function __destruct() {
-		$this->context->close_reader();
+		if ( isset( $this->context ) ) {
+			$this->context->close_reader();
+		}
 	}
 }

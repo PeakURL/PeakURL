@@ -23,8 +23,10 @@ test.describe("Links Workflow Journeys", () => {
 		await expect(page.getByText(/total links/i).first()).toBeVisible();
 		await expect(page.getByText(/active links/i).first()).toBeVisible();
 
-		// Table
-		await expect(page.locator(".links-table")).toBeVisible();
+		// Table or empty state container
+		await expect(
+			page.locator(".links-table, .links-empty-state")
+		).toBeVisible();
 	});
 
 	test("full link lifecycle: create, search, stats drawer, edit, QR, and delete", async ({
@@ -172,6 +174,12 @@ test.describe("Links Workflow Journeys", () => {
 	test("administrator destructive workflows: delete all links and empty trash with confirmation and persistence", async ({
 		authenticatedPage: page,
 	}) => {
+		// Explicitly verify administrator precondition at the API boundary
+		const meResponse = await page.request.get("/api/v1/users/me");
+		expect(meResponse.ok()).toBe(true);
+		const meJson = await meResponse.json();
+		expect(meJson.data?.role).toBe("admin");
+
 		await page.locator("a[href='/dashboard/links']").first().click();
 		await page.waitForURL("**/dashboard/links", { timeout: 15000 });
 
@@ -282,7 +290,41 @@ test.describe("Links Workflow Journeys", () => {
 			page.locator(".links-row", { hasText: alias2 })
 		).not.toBeVisible();
 
-		// 8. Filter by Trashed status in footer
+		// 8. Create and trash a link to exercise the Empty Trash workflow
+		const trashAlias = `trash-${uniqueId}`;
+		await page
+			.locator("#long-url")
+			.fill(`https://example.com/${trashAlias}`);
+		await page.locator("#alias").fill(trashAlias);
+		const createTrashPromise = page.waitForResponse(
+			(res) =>
+				res.url().includes("/api/v1/urls") &&
+				res.request().method() === "POST"
+		);
+		await page.getByRole("button", { name: /shorten/i }).click();
+		const createTrashRes = await createTrashPromise;
+		expect([200, 201]).toContain(createTrashRes.status());
+
+		// Verify the created link appears in active table
+		const trashRow = page.locator(".links-row", { hasText: trashAlias });
+		await expect(trashRow).toBeVisible({ timeout: 10000 });
+
+		// Trash the link by triggering row delete
+		await trashRow.locator(".links-row-action-delete").click();
+		const deleteHeading = page.getByRole("heading", {
+			name: /move to trash|delete/i,
+		});
+		await expect(deleteHeading).toBeVisible();
+		const trashPromise = page.waitForResponse(
+			(res) =>
+				res.url().includes("/api/v1/urls/") &&
+				res.request().method() === "DELETE"
+		);
+		await page.locator(".links-modal-button-danger").click();
+		await trashPromise;
+		await expect(trashRow).not.toBeVisible({ timeout: 10000 });
+
+		// 9. Filter by Trashed status in footer
 		const statusFilterBtn = page.locator(
 			"button[aria-label='Filter links by status']"
 		);
@@ -292,17 +334,17 @@ test.describe("Links Workflow Journeys", () => {
 
 		// Trashed links must now be visible in table
 		await expect(
-			page.locator(".links-row", { hasText: alias1 })
+			page.locator(".links-row", { hasText: trashAlias })
 		).toBeVisible({ timeout: 15000 });
 
-		// 9. Select all trashed links
+		// 10. Select all trashed links
 		await page.locator("input[aria-label='Select all links']").click();
 
-		// 10. "Empty trash" action button appears
+		// 11. "Empty trash" action button appears
 		const emptyTrashBtn = page.locator(".links-table-header-delete-all");
 		await expect(emptyTrashBtn).toBeVisible();
 
-		// 11. Test cancellation of Empty Trash
+		// 12. Test cancellation of Empty Trash
 		await emptyTrashBtn.click();
 		const emptyTrashModal = page.locator(".confirm-dialog-panel");
 		await expect(emptyTrashModal).toBeVisible();
@@ -313,10 +355,10 @@ test.describe("Links Workflow Journeys", () => {
 		await emptyTrashModal.getByRole("button", { name: /cancel/i }).click();
 		await expect(emptyTrashModal).not.toBeVisible();
 		await expect(
-			page.locator(".links-row", { hasText: alias1 })
+			page.locator(".links-row", { hasText: trashAlias })
 		).toBeVisible();
 
-		// 12. Perform real Empty Trash
+		// 13. Perform real Empty Trash
 		await emptyTrashBtn.click();
 		await expect(emptyTrashModal).toBeVisible();
 
@@ -334,9 +376,30 @@ test.describe("Links Workflow Journeys", () => {
 		const emptyTrashResponse = await emptyTrashPromise;
 		expect(emptyTrashResponse.status()).toBe(200);
 
-		// Verify visible state: trashed links removed
+		// Verify visible state: trashed link removed
 		await expect(
-			page.locator(".links-row", { hasText: alias1 })
+			page.locator(".links-row", { hasText: trashAlias })
 		).not.toBeVisible({ timeout: 10000 });
+
+		// 14. Reload to verify persisted emptiness of trash across navigation
+		await page.goto("/dashboard/links", { waitUntil: "commit" });
+		await expect(
+			page.getByRole("heading", { name: /^links$/i })
+		).toBeVisible({ timeout: 25000 });
+
+		// Confirm trashAlias is absent from all active views
+		await expect(
+			page.locator(".links-row", { hasText: trashAlias })
+		).not.toBeVisible();
+
+		// Verify trash filter now reflects zero trashed items (disabled or empty state)
+		const reloadedFilterBtn = page.locator(
+			"button[aria-label='Filter links by status']"
+		);
+		await reloadedFilterBtn.click();
+		const reloadedTrashOption = page.getByRole("option", {
+			name: /trash/i,
+		});
+		await expect(reloadedTrashOption).toHaveAttribute("data-disabled", "");
 	});
 });

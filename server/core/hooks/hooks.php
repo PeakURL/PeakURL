@@ -64,6 +64,22 @@ class Hooks {
 	}
 
 	/**
+	 * Remove all callbacks for a hook, or all hooks if null.
+	 *
+	 * @param string|null $hook_name Optional hook name to clear.
+	 * @return void
+	 * @since 1.2.2
+	 */
+	public static function remove_all( ?string $hook_name = null ): void {
+		if ( null === $hook_name ) {
+			self::$hooks = array();
+			return;
+		}
+
+		unset( self::$hooks[ $hook_name ] );
+	}
+
+	/**
 	 * Apply all filters for a hook and return the filtered value.
 	 *
 	 * @param string $hook_name Hook name.

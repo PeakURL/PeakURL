@@ -356,7 +356,7 @@ class Connection {
 		$pattern = sprintf(
 			'/\b(' .
 			'FROM' .
-			'|JOIN' .
+			'|(?:(?:INNER|LEFT|RIGHT|CROSS|OUTER)\s+)?JOIN' .
 			'|INTO' .
 			'|UPDATE' .
 			'|REFERENCES' .

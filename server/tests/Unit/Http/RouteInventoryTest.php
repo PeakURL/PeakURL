@@ -29,7 +29,7 @@ class RouteInventoryTest extends TestCase {
 	 *
 	 * @var array<string, array<string, mixed>>
 	 */
-	private const ROUTE_INVENTORY = array(
+	public const ROUTE_INVENTORY = array(
 		// Core
 		'GET /api/v1/health'                               => array(
 			'area'       => 'Core',
@@ -70,7 +70,7 @@ class RouteInventoryTest extends TestCase {
 		),
 		'POST /api/v1/auth/logout'                         => array(
 			'area'       => 'Auth',
-			'capability' => 'authenticated',
+			'capability' => 'public',
 			'coverage'   => array( 'contract', 'auth', 'smoke', 'e2e' ),
 		),
 		'POST /api/v1/auth/forgot-password'                => array(

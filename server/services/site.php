@@ -67,16 +67,10 @@ if ( ! function_exists( 'get_site_url' ) ) {
 	 * @since 1.0.2
 	 */
 	// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
-	function get_site_url( string $path = '', ?string $scheme = null ): string {
-		$config   = get_peakurl_config();
-		$site_url = '';
-
-		try {
-			$settings = get_settings_api( $config );
-			$site_url = trim( (string) $settings->get_option( 'site_url' ) );
-		} catch ( \Throwable $exception ) {
-			$site_url = '';
-		}
+	function get_site_url( string $path = '', ?string $scheme = null, ?SettingsApi $settings = null ): string {
+		$config       = get_peakurl_config();
+		$settings_api = $settings ?? get_settings_api( $config );
+		$site_url     = trim( (string) $settings_api->get_option( 'site_url' ) );
 
 		if ( '' === $site_url ) {
 			$site_url = trim(

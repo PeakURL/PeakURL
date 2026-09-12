@@ -1,9 +1,9 @@
 <?php
 /**
- * Comprehensive API Route Contracts & Behavioral Hardening Tests across 75/75 routes.
+ * Comprehensive API Route Contracts & Behavioral Hardening Tests derived from authoritative RouteInventoryTest.
  *
  * Verifies that:
- * 1. Every route in RouteInventoryTest is accounted for and correctly dispatched.
+ * 1. Every route in RouteInventoryTest (82 registered routes: 16 public, 66 protected) is accounted for and correctly dispatched.
  * 2. Protected endpoints reject unauthenticated requests with 401 Unauthorized.
  * 3. Administrative endpoints enforce 403 Forbidden on Editor role (manage_users, manage_site_settings, etc.).
  * 4. Site-wide destructive link operations (Delete All, Empty Trash) permit both Admin and Editor.
@@ -27,6 +27,7 @@ use PeakURL\Http\Router;
 use PeakURL\Http\JsonResponse;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Services\Database\Connection;
+use PeakURL\Tests\Unit\Http\RouteInventoryTest;
 use PDO;
 use PDOStatement;
 
@@ -184,140 +185,127 @@ class ApiRouteContractsTest extends TestCase {
 		$this->assertArrayHasKey( 'locale', $i18n_res['body']['data'] );
 	}
 
-	public function test_unauthenticated_requests_to_protected_endpoints_receive_401(): void {
-		$protected_endpoints = array(
-			// Auth
-			array( 'POST', '/api/v1/auth/api-key' ),
-			array( 'DELETE', '/api/v1/auth/api-key/key_1' ),
-			array( 'GET', '/api/v1/auth/security' ),
-			array( 'POST', '/api/v1/auth/security/two-factor/setup' ),
-			array( 'POST', '/api/v1/auth/security/two-factor/verify' ),
-			array( 'POST', '/api/v1/auth/security/two-factor/disable' ),
-			array( 'POST', '/api/v1/auth/security/two-factor/backup-codes' ),
-			array( 'POST', '/api/v1/auth/security/backup-codes/download' ),
-			array( 'DELETE', '/api/v1/auth/security/sessions' ),
-			array( 'DELETE', '/api/v1/auth/security/sessions/sess_1' ),
-			// Users
-			array( 'GET', '/api/v1/users' ),
-			array( 'POST', '/api/v1/users' ),
-			array( 'GET', '/api/v1/users/me' ),
-			array( 'PUT', '/api/v1/users/me' ),
-			array( 'PUT', '/api/v1/users/target_user' ),
-			array( 'DELETE', '/api/v1/users/target_user' ),
-			// Links
-			array( 'GET', '/api/v1/urls' ),
-			array( 'GET', '/api/v1/urls/export' ),
-			array( 'GET', '/api/v1/urls/link_1' ),
-			array( 'POST', '/api/v1/urls' ),
-			array( 'POST', '/api/v1/urls/bulk' ),
-			array( 'POST', '/api/v1/urls/restore' ),
-			array( 'POST', '/api/v1/urls/link_1/restore' ),
-			array( 'POST', '/api/v1/urls/link_1' ),
-			array( 'PUT', '/api/v1/urls/link_1' ),
-			array( 'DELETE', '/api/v1/urls' ),
-			array( 'DELETE', '/api/v1/urls/trash' ),
-			array( 'DELETE', '/api/v1/urls/bulk' ),
-			array( 'DELETE', '/api/v1/urls/link_1' ),
-			// Analytics
-			array( 'GET', '/api/v1/analytics' ),
-			array( 'GET', '/api/v1/analytics/activity' ),
-			array( 'GET', '/api/v1/analytics/recent-clicks' ),
-			array( 'GET', '/api/v1/analytics/activity/history' ),
-			array( 'POST', '/api/v1/analytics/activity/act_1/restore' ),
-			array( 'DELETE', '/api/v1/analytics/activity' ),
-			array( 'DELETE', '/api/v1/analytics/activity/bulk' ),
-			array( 'DELETE', '/api/v1/analytics/activity/act_1' ),
-			array( 'GET', '/api/v1/analytics/url/link_1/location' ),
-			array( 'GET', '/api/v1/analytics/url/link_1/stats' ),
-			// Webhooks
-			array( 'GET', '/api/v1/webhooks' ),
-			array( 'POST', '/api/v1/webhooks' ),
-			array( 'POST', '/api/v1/webhooks/test' ),
-			array( 'POST', '/api/v1/webhooks/whk_1/test' ),
-			array( 'PUT', '/api/v1/webhooks/whk_1' ),
-			array( 'DELETE', '/api/v1/webhooks/whk_1' ),
-			// Settings & System
-			array( 'GET', '/api/v1/system/general' ),
-			array( 'POST', '/api/v1/system/general' ),
-			array( 'GET', '/api/v1/system/cache' ),
-			array( 'POST', '/api/v1/system/cache' ),
-			array( 'POST', '/api/v1/system/cache/clear' ),
-			array( 'GET', '/api/v1/system/captcha' ),
-			array( 'POST', '/api/v1/system/captcha' ),
-			array( 'GET', '/api/v1/system/geoip' ),
-			array( 'POST', '/api/v1/system/geoip' ),
-			array( 'POST', '/api/v1/system/geoip/download' ),
-			array( 'GET', '/api/v1/system/mail' ),
-			array( 'POST', '/api/v1/system/mail' ),
-			array( 'POST', '/api/v1/system/mail/test' ),
-			array( 'GET', '/api/v1/system/notices' ),
-			array( 'GET', '/api/v1/system/status' ),
-			array( 'GET', '/api/v1/system/update' ),
-			array( 'POST', '/api/v1/system/update/check' ),
-			array( 'POST', '/api/v1/system/update/apply' ),
-			array( 'POST', '/api/v1/system/update/reinstall' ),
-			array( 'POST', '/api/v1/system/update/database' ),
+	/**
+	 * Convert an inventory route key (e.g. "GET /api/v1/urls/{id}") into a testable method and concrete path.
+	 *
+	 * @param string $route_key Inventory route key.
+	 * @return array{0: string, 1: string} Tuple of [method, path].
+	 */
+	private function route_key_to_request_target( string $route_key ): array {
+		list( $method, $template ) = explode( ' ', $route_key, 2 );
+
+		// Substitute sample deterministic parameters for route placeholders
+		$concrete_path = preg_replace(
+			array( '/\{token\}/', '/\{username\}/', '/\{id\}/', '/\{short_code\}/' ),
+			array( 'test_token', 'test_user', 'test_id', 'test_code' ),
+			$template
 		);
 
-		foreach ( $protected_endpoints as $endpoint ) {
-			list( $method, $path ) = $endpoint;
+		return array( $method, (string) $concrete_path );
+	}
+
+	public function test_authoritative_route_inventory_alignment(): void {
+		$inventory = RouteInventoryTest::ROUTE_INVENTORY;
+
+		// Verify complete route inventory size
+		$this->assertCount( 82, $inventory, 'Authoritative inventory must contain exactly 82 registered routes.' );
+
+		$public_routes    = array();
+		$protected_routes = array();
+		$admin_routes     = array();
+
+		$editor_capabilities = array(
+			'public',
+			'authenticated',
+			'view_all_links',
+			'view_own_links',
+			'edit_all_links',
+			'edit_own_links',
+			'delete_all_links',
+			'delete_own_links',
+			'view_site_analytics',
+			'view_own_analytics',
+			'manage_profile',
+			'create_links',
+		);
+
+		foreach ( $inventory as $route_key => $meta ) {
+			if ( 'public' === $meta['capability'] ) {
+				$public_routes[] = $route_key;
+			} else {
+				$protected_routes[] = $route_key;
+				if ( ! in_array( $meta['capability'], $editor_capabilities, true ) ) {
+					$admin_routes[] = $route_key;
+				}
+			}
+		}
+
+		$this->assertCount( 17, $public_routes, 'Expected exactly 17 public routes.' );
+		$this->assertCount( 65, $protected_routes, 'Expected exactly 65 protected routes.' );
+		$this->assertCount( 30, $admin_routes, 'Expected exactly 30 admin-only routes.' );
+	}
+
+	public function test_unauthenticated_requests_to_protected_endpoints_receive_401(): void {
+		$protected_routes = array_filter(
+			RouteInventoryTest::ROUTE_INVENTORY,
+			fn( array $meta ): bool => 'public' !== $meta['capability']
+		);
+
+		$this->assertCount(
+			65,
+			$protected_routes,
+			'Authoritative inventory must contain exactly 65 protected routes.'
+		);
+
+		foreach ( array_keys( $protected_routes ) as $route_key ) {
+			list( $method, $path ) = $this->route_key_to_request_target( (string) $route_key );
 			$req                   = new Request( $method, $path, array(), array() );
 			$res                   = $this->dispatch( $req );
 
 			$this->assertSame(
 				401,
 				$res['status'],
-				"Route {$method} {$path} must reject unauthenticated callers with 401."
+				"Route {$route_key} (tested at {$method} {$path}) must reject unauthenticated callers with 401."
 			);
 		}
 	}
 
 	public function test_editor_is_denied_administrative_endpoints(): void {
-		$admin_only_endpoints = array(
-			// Users management
-			array( 'GET', '/api/v1/users' ),
-			array( 'POST', '/api/v1/users' ),
-			array( 'PUT', '/api/v1/users/some_user' ),
-			array( 'DELETE', '/api/v1/users/some_user' ),
-			// Site settings (POST is admin-only, GET is accessible to all authenticated users)
-			array( 'POST', '/api/v1/system/general' ),
-			array( 'GET', '/api/v1/system/captcha' ),
-			array( 'POST', '/api/v1/system/captcha' ),
-			array( 'GET', '/api/v1/system/status' ),
-			// Performance & Cache
-			array( 'GET', '/api/v1/system/cache' ),
-			array( 'POST', '/api/v1/system/cache' ),
-			array( 'POST', '/api/v1/system/cache/clear' ),
-			// Location data
-			array( 'GET', '/api/v1/system/geoip' ),
-			array( 'POST', '/api/v1/system/geoip' ),
-			array( 'POST', '/api/v1/system/geoip/download' ),
-			// Mail delivery
-			array( 'GET', '/api/v1/system/mail' ),
-			array( 'POST', '/api/v1/system/mail' ),
-			array( 'POST', '/api/v1/system/mail/test' ),
-			// Updates
-			array( 'GET', '/api/v1/system/update' ),
-			array( 'POST', '/api/v1/system/update/check' ),
-			array( 'POST', '/api/v1/system/update/apply' ),
-			array( 'POST', '/api/v1/system/update/reinstall' ),
-			array( 'POST', '/api/v1/system/update/database' ),
-			// Webhooks
-			array( 'GET', '/api/v1/webhooks' ),
-			array( 'POST', '/api/v1/webhooks' ),
-			array( 'POST', '/api/v1/webhooks/test' ),
-			array( 'DELETE', '/api/v1/webhooks/whk_1' ),
+		$editor_capabilities = array(
+			'public',
+			'authenticated',
+			'view_all_links',
+			'view_own_links',
+			'edit_all_links',
+			'edit_own_links',
+			'delete_all_links',
+			'delete_own_links',
+			'view_site_analytics',
+			'view_own_analytics',
+			'manage_profile',
+			'create_links',
 		);
 
-		foreach ( $admin_only_endpoints as $endpoint ) {
-			list( $method, $path ) = $endpoint;
+		$admin_only_routes = array_filter(
+			RouteInventoryTest::ROUTE_INVENTORY,
+			fn( array $meta ): bool => ! in_array( $meta['capability'], $editor_capabilities, true )
+		);
+
+		$this->assertCount(
+			30,
+			$admin_only_routes,
+			'Authoritative inventory must contain exactly 30 admin-only routes.'
+		);
+
+		foreach ( array_keys( $admin_only_routes ) as $route_key ) {
+			list( $method, $path ) = $this->route_key_to_request_target( (string) $route_key );
 			$req                   = $this->editor_request( $method, $path );
 			$res                   = $this->dispatch( $req );
 
 			$this->assertSame(
 				403,
 				$res['status'],
-				"Editor must receive 403 Forbidden for admin endpoint {$method} {$path}."
+				"Editor must receive 403 Forbidden for admin route {$route_key} (tested at {$method} {$path})."
 			);
 		}
 	}

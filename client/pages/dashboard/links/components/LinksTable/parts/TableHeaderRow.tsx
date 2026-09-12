@@ -99,6 +99,7 @@ function TableHeaderRow({
 					checked={false}
 					onChange={onSelectAll}
 					className="links-checkbox"
+					aria-label={__("Select all links")}
 				/>
 			</th>
 			<th className="links-table-header-cell">{__("Link")}</th>

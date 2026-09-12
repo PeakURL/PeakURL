@@ -45,6 +45,22 @@ if ( ! function_exists( 'add_filter' ) ) {
 	}
 }
 
+if ( ! function_exists( 'remove_all_filters' ) ) {
+	/**
+	 * Remove all registered callbacks for a hook, or all hooks if null.
+	 *
+	 * Mirrors the role of WordPress `remove_all_filters()`.
+	 *
+	 * @param string|null $hook_name Optional hook name to clear.
+	 * @return void
+	 * @since 1.2.2
+	 */
+	// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
+	function remove_all_filters( ?string $hook_name = null ): void {
+		Hooks::remove_all( $hook_name );
+	}
+}
+
 if ( ! function_exists( 'apply_filters' ) ) {
 	/**
 	 * Apply filters to a value.

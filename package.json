@@ -15,7 +15,7 @@
 		"i18n:build": "npm run i18n:pot && npm run i18n:compile",
 		"release:build": "sh scripts/build-release.sh",
 		"release:upload": "sh scripts/upload-release.sh",
-		"smoke:auth": "sh scripts/smoke-auth.local.sh",
+		"smoke:auth": "sh scripts/smoke-auth.sh",
 		"test:server": "composer --working-dir=server test",
 		"test:unit": "playwright test --project=unit",
 		"test:e2e": "playwright test",

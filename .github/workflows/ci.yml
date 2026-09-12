@@ -123,6 +123,9 @@ jobs:
           docker compose logs peakurl-db --tail=100
 
       - name: Run Auth Smoke Tests
+        env:
+          PEAKURL_TEST_PASSWORD: ${{ secrets.PEAKURL_TEST_PASSWORD }}
+          PEAKURL_TEST_IDENTIFIER: admin
         run: npm run smoke:auth
 
       - name: Run Playwright E2E Tests

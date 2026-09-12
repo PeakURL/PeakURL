@@ -17,7 +17,10 @@
 	<file>server/public</file>
 	<file>server/services</file>
 	<file>server/utils</file>
-	<file>site</file>
+	<file>index.php</file>
+	<file>install.php</file>
+	<file>setup-config.php</file>
+	<file>database-error.php</file>
 
 	<exclude-pattern>*/vendor/*</exclude-pattern>
 	<exclude-pattern>*/storage/*</exclude-pattern>

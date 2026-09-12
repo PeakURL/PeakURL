@@ -24,16 +24,21 @@ use PeakURL\Core\Config\RuntimeConfig;
 use PeakURL\Services\Database\Schema as DatabaseSchema;
 use PeakURL\Services\Install\Bootstrap;
 
+$is_server_subdir = 'server' === basename( dirname( __DIR__ ) );
+$release_root     = $is_server_subdir ? dirname( __DIR__, 2 ) : dirname( __DIR__ );
+
 if ( ! defined( 'ABSPATH' ) ) {
 	define(
 		'ABSPATH',
-		dirname( __DIR__, 2 ) . DIRECTORY_SEPARATOR,
+		rtrim( $release_root, '/\\' ) . DIRECTORY_SEPARATOR,
 	);
 }
 
 // ── Autoloader ──────────────────────────────────────────────────
 
-$autoload_path = __DIR__ . '/../vendor/autoload.php';
+$autoload_path = file_exists( dirname( __DIR__ ) . '/vendor/autoload.php' )
+	? dirname( __DIR__ ) . '/vendor/autoload.php'
+	: $release_root . '/vendor/autoload.php';
 
 if ( ! file_exists( $autoload_path ) ) {
 	fwrite(

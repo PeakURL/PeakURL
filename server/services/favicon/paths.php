@@ -39,6 +39,12 @@ class Paths {
 	/** @var string Bundled fallback manifest path relative to the app root. */
 	private const BUNDLED_MANIFEST_FILE = 'server/public/default-site.webmanifest';
 
+	/** @var string Bundled release fallback favicon asset path relative to the app root. */
+	private const RELEASE_BUNDLED_ICON_FILE = 'assets/default-favicon.png';
+
+	/** @var string Bundled release fallback manifest path relative to the app root. */
+	private const RELEASE_BUNDLED_MANIFEST_FILE = 'assets/default-site.webmanifest';
+
 	/**
 	 * Absolute persistent content directory.
 	 *
@@ -100,6 +106,12 @@ class Paths {
 	 * @since 1.1.1
 	 */
 	public function get_bundled_icon_path(): string {
+		$release_path = untrailingslashit( ABSPATH ) . '/' . self::RELEASE_BUNDLED_ICON_FILE;
+
+		if ( file_exists( $release_path ) ) {
+			return $release_path;
+		}
+
 		return untrailingslashit( ABSPATH ) . '/' . self::BUNDLED_ICON_FILE;
 	}
 
@@ -110,6 +122,12 @@ class Paths {
 	 * @since 1.1.1
 	 */
 	public function get_bundled_manifest_path(): string {
+		$release_path = untrailingslashit( ABSPATH ) . '/' . self::RELEASE_BUNDLED_MANIFEST_FILE;
+
+		if ( file_exists( $release_path ) ) {
+			return $release_path;
+		}
+
 		return untrailingslashit( ABSPATH ) . '/' . self::BUNDLED_MANIFEST_FILE;
 	}
 }

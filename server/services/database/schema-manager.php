@@ -64,9 +64,13 @@ class Schema {
 		Connection $connection,
 		?string $schema_path = null
 	) {
+		$default_schema_file = file_exists( ABSPATH . 'database/schema.sql' )
+			? ABSPATH . 'database/schema.sql'
+			: ABSPATH . 'server/database/schema.sql';
+
 		$schema_file = is_string( $schema_path ) && '' !== trim( $schema_path )
 			? $schema_path
-			: ABSPATH . 'server/database/schema.sql';
+			: $default_schema_file;
 
 		$this->context         = new Context( $connection );
 		$this->status          = new Status( $this->context );

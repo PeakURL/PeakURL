@@ -48,4 +48,33 @@ class UpdatePathsTest extends TestCase {
 			rmdir( $temp_dir );
 		}
 	}
+
+	public function test_is_release_root_recognizes_flattened_release_root(): void {
+		$context    = new Context( array(), new Filesystem() );
+		$filesystem = new Filesystem();
+		$installer  = new Installer(
+			$context,
+			$filesystem,
+			new Client( $context ),
+			new Workspace( $context, $filesystem ),
+			new ReleaseFiles( $context, $filesystem )
+		);
+
+		$ref    = new ReflectionClass( Installer::class );
+		$method = $ref->getMethod( 'is_release_root' );
+
+		// Create a temporary directory structure mimicking the flattened release layout.
+		$temp_dir = sys_get_temp_dir() . '/peakurl_test_release_flat_' . bin2hex( random_bytes( 4 ) );
+		mkdir( $temp_dir );
+		touch( $temp_dir . '/index.php' );
+		mkdir( $temp_dir . '/core' );
+
+		try {
+			$this->assertTrue( $method->invoke( $installer, $temp_dir ) );
+		} finally {
+			unlink( $temp_dir . '/index.php' );
+			rmdir( $temp_dir . '/core' );
+			rmdir( $temp_dir );
+		}
+	}
 }

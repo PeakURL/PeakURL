@@ -183,15 +183,17 @@ class Context {
 			);
 		}
 
-		$runtime_dir = is_dir( $this->filesystem->join_path( ABSPATH, 'server' ) )
-			? $this->filesystem->join_path( ABSPATH, 'server' )
-			: $this->filesystem->join_path( ABSPATH, 'app' );
+		$runtime_dirs = array( 'server', 'core', 'services', 'api' );
 
-		if ( is_dir( $runtime_dir ) && ! is_writable( $runtime_dir ) ) {
-			return array(
-				'allowed' => false,
-				'reason'  => __( 'The application runtime directory is not writable.', 'peakurl' ),
-			);
+		foreach ( $runtime_dirs as $dir ) {
+			$path = $this->filesystem->join_path( ABSPATH, $dir );
+
+			if ( is_dir( $path ) && ! is_writable( $path ) ) {
+				return array(
+					'allowed' => false,
+					'reason'  => __( 'The application runtime directory is not writable.', 'peakurl' ),
+				);
+			}
 		}
 
 		return array(

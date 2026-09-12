@@ -33,7 +33,21 @@ class Writer {
 	 * @since 1.0.14
 	 */
 	public static function get_release_root_path( string $app_path ): string {
-		return dirname( rtrim( $app_path, DIRECTORY_SEPARATOR ) );
+		$app_path = rtrim( $app_path, DIRECTORY_SEPARATOR );
+
+		if ( basename( $app_path ) === 'server' && ( file_exists( dirname( $app_path ) . '/config.php' ) || file_exists( dirname( $app_path ) . '/config-sample.php' ) ) ) {
+			return dirname( $app_path );
+		}
+
+		if ( file_exists( $app_path . '/config.php' ) || file_exists( $app_path . '/config-sample.php' ) ) {
+			return $app_path;
+		}
+
+		if ( is_dir( $app_path . '/server' ) ) {
+			return $app_path;
+		}
+
+		return dirname( $app_path );
 	}
 
 	/**

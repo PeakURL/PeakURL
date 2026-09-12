@@ -17,10 +17,14 @@ use PeakURL\Services\Database\Connection;
 use PeakURL\Core\Config\RuntimeConfig;
 use PeakURL\Core\Security\Security;
 
+$is_public_dir = 'public' === basename( __DIR__ );
+$release_root  = $is_public_dir ? dirname( __DIR__, 2 ) : dirname( __DIR__ );
+$runtime_root  = is_dir( $release_root . '/server' ) ? $release_root . '/server' : $release_root;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	define(
 		'ABSPATH',
-		dirname( __DIR__, 2 ) . DIRECTORY_SEPARATOR,
+		rtrim( $release_root, '/\\' ) . DIRECTORY_SEPARATOR,
 	);
 }
 
@@ -31,7 +35,9 @@ if ( file_exists( ABSPATH . '.maintenance' ) ) {
 		'htmlLang'   => 'en-US',
 		'apiMessage' => 'PeakURL is briefly unavailable right now. Please try again in a moment.',
 	);
-	$autoload_path         = __DIR__ . '/../vendor/autoload.php';
+	$autoload_path         = file_exists( $runtime_root . '/vendor/autoload.php' )
+		? $runtime_root . '/vendor/autoload.php'
+		: $release_root . '/vendor/autoload.php';
 
 	if ( file_exists( $autoload_path ) ) {
 		require_once $autoload_path;
@@ -75,7 +81,9 @@ if ( file_exists( ABSPATH . '.maintenance' ) ) {
 
 // ── Autoloader ──────────────────────────────────────────────────
 
-$autoload_path = __DIR__ . '/../vendor/autoload.php';
+$autoload_path = file_exists( $runtime_root . '/vendor/autoload.php' )
+	? $runtime_root . '/vendor/autoload.php'
+	: $release_root . '/vendor/autoload.php';
 
 if ( ! file_exists( $autoload_path ) ) {
 	http_response_code( 500 );
@@ -95,7 +103,7 @@ require_once $autoload_path;
 
 // ── CORS headers ────────────────────────────────────────────────
 
-$config = RuntimeConfig::bootstrap( dirname( __DIR__ ) );
+$config = RuntimeConfig::bootstrap( $runtime_root );
 $origin = Security::get_allowed_origin( $config, $_SERVER );
 
 if ( '' !== $origin ) {

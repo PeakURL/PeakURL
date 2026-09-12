@@ -47,8 +47,10 @@ class Bootstrap {
 		string $app_path
 	): void {
 		$connection_manager = new Connection( $config );
-		$schema_path        =
-			rtrim( $app_path, DIRECTORY_SEPARATOR ) . '/database/schema.sql';
+		$base_dir           = rtrim( $app_path, DIRECTORY_SEPARATOR );
+		$schema_path        = file_exists( $base_dir . '/database/schema.sql' )
+			? $base_dir . '/database/schema.sql'
+			: $base_dir . '/server/database/schema.sql';
 		$schema_service     = new DatabaseSchema(
 			$connection_manager,
 			$schema_path,

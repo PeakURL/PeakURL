@@ -54,7 +54,8 @@ class RuntimeConfig {
 		static $config = null;
 
 		if ( null === $config ) {
-			$config = self::bootstrap( ABSPATH . 'server' );
+			$runtime_path = is_dir( ABSPATH . 'server' ) ? ABSPATH . 'server' : rtrim( ABSPATH, '/\\' );
+			$config       = self::bootstrap( $runtime_path );
 		}
 
 		return $config;
@@ -99,7 +100,11 @@ class RuntimeConfig {
 	 * @since 1.0.0
 	 */
 	public static function load( string $base_path ): array {
-		$root_path   = dirname( $base_path );
+		$root_path   = file_exists( $base_path . '/config.php' ) || file_exists( $base_path . '/config-sample.php' )
+			? $base_path
+			: ( file_exists( dirname( $base_path ) . '/config.php' ) || file_exists( dirname( $base_path ) . '/config-sample.php' )
+				? dirname( $base_path )
+				: $base_path );
 		$file_values = array_merge(
 			self::parse_config_file( $root_path . '/config.php' ),
 			self::parse_env_file( $base_path . '/.env' ),
@@ -327,7 +332,10 @@ class RuntimeConfig {
 	 * @since 1.3.0
 	 */
 	public static function has_database_configuration( string $base_path ): bool {
-		$file_values = self::parse_config_file( dirname( $base_path ) . '/config.php' );
+		$root_path   = file_exists( $base_path . '/config.php' ) || file_exists( $base_path . '/config-sample.php' )
+			? $base_path
+			: dirname( $base_path );
+		$file_values = self::parse_config_file( $root_path . '/config.php' );
 
 		return (
 			isset( $file_values[ Constants::DB_DATABASE ] ) &&

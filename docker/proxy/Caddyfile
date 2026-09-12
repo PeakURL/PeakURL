@@ -25,7 +25,7 @@ https://peakurl.dev {
 	}
 
 	handle {
-		reverse_proxy ui:5173
+		reverse_proxy client:5173
 	}
 }
 

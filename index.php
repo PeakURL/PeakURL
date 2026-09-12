@@ -7,7 +7,7 @@
  *
  *  - Maintenance-mode detection and 503 responses.
  *  - Runtime-state routing (redirect to setup-config / install).
- *  - API pass-through to `server/public/index.php`.
+ *  - API pass-through to `api/index.php` or `public/index.php`.
  *  - Dashboard app HTML injection for `/`, `/login`, `/dashboard*`.
  *
  * @package PeakURL\Site
@@ -29,7 +29,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . DIRECTORY_SEPARATOR );
 }
 
-require_once __DIR__ . '/server/utils/string.php';
+if ( file_exists( __DIR__ . '/server/utils/string.php' ) ) {
+	require_once __DIR__ . '/server/utils/string.php';
+} else {
+	require_once __DIR__ . '/utils/string.php';
+}
 
 // ────────────────────────────────────────────────────────────────
 // Helper functions
@@ -481,12 +485,14 @@ $prepare_html = static function (
 // Request routing
 // ────────────────────────────────────────────────────────────────
 
-$root_path   = __DIR__;
-$server_path = $root_path . '/server';
-$config_path = $root_path . '/config.php';
-$autoload    = $server_path . '/vendor/autoload.php';
-$uri         = $_SERVER['REQUEST_URI'] ?? '/';
-$path        = parse_url( $uri, PHP_URL_PATH );
+$root_path    = __DIR__;
+$runtime_path = is_dir( $root_path . '/server' ) ? $root_path . '/server' : $root_path;
+$config_path  = $root_path . '/config.php';
+$autoload     = file_exists( $root_path . '/vendor/autoload.php' )
+	? $root_path . '/vendor/autoload.php'
+	: $runtime_path . '/vendor/autoload.php';
+$uri          = $_SERVER['REQUEST_URI'] ?? '/';
+$path         = parse_url( $uri, PHP_URL_PATH );
 
 if ( ! is_string( $path ) || '' === $path ) {
 	$path = '/';
@@ -535,7 +541,7 @@ if ( ! file_exists( $autoload ) ) {
 
 require_once $autoload;
 
-$install_state = InstallState::get_state( $server_path );
+$install_state = InstallState::get_state( $runtime_path );
 
 if ( $is_favicon( $relative_path ) ) {
 	if ( InstallState::READY !== $install_state ) {
@@ -543,7 +549,7 @@ if ( $is_favicon( $relative_path ) ) {
 		exit();
 	}
 
-	$app_config      = RuntimeConfig::bootstrap( $server_path );
+	$app_config      = RuntimeConfig::bootstrap( $runtime_path );
 	$connection      = new Connection( $app_config );
 	$settings_api    = new SettingsApi( new PeakURL_DB( $connection ) );
 	$site_name       = trim(
@@ -599,7 +605,13 @@ if ( Str::starts_with( $relative_path, '/api/' ) ) {
 		exit();
 	}
 
-	require $server_path . '/public/index.php';
+	$api_entrypoint = file_exists( $root_path . '/api/index.php' )
+		? $root_path . '/api/index.php'
+		: ( file_exists( $runtime_path . '/public/index.php' )
+			? $runtime_path . '/public/index.php'
+			: $root_path . '/public/index.php' );
+
+	require $api_entrypoint;
 	exit();
 }
 
@@ -644,7 +656,7 @@ if ( InstallState::NEEDS_INSTALL === $install_state ) {
 }
 
 if ( '/' === $relative_path && InstallState::READY === $install_state ) {
-	$app_config   = RuntimeConfig::bootstrap( $server_path );
+	$app_config   = RuntimeConfig::bootstrap( $runtime_path );
 	$connection   = new Connection( $app_config );
 	$settings_api = new SettingsApi( new PeakURL_DB( $connection ) );
 
@@ -675,11 +687,17 @@ if ( '/' === $relative_path && InstallState::READY === $install_state ) {
 }
 
 if ( ! $is_dashboard_path( $relative_path ) ) {
-	require $server_path . '/public/index.php';
+	$api_entrypoint = file_exists( $root_path . '/api/index.php' )
+		? $root_path . '/api/index.php'
+		: ( file_exists( $runtime_path . '/public/index.php' )
+			? $runtime_path . '/public/index.php'
+			: $root_path . '/public/index.php' );
+
+	require $api_entrypoint;
 	exit();
 }
 
-$app_config = RuntimeConfig::bootstrap( $server_path );
+$app_config = RuntimeConfig::bootstrap( $runtime_path );
 $connection = new Connection( $app_config );
 load_i18n( $app_config, $connection );
 
@@ -731,7 +749,9 @@ $peakurl_data = get_peakurl_data(
 	)
 );
 
-$dashboard_html_path = $root_path . '/app.html';
+$dashboard_html_path = file_exists( $root_path . '/index.html' )
+	? $root_path . '/index.html'
+	: $root_path . '/app.html';
 
 if ( ! file_exists( $dashboard_html_path ) ) {
 	http_response_code( 500 );

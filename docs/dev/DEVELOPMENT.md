@@ -66,7 +66,7 @@ Fallback direct ports:
 The default Docker services are:
 
 - `peakurl-proxy`
-- `peakurl-ui`
+- `peakurl-client`
 - `peakurl-server`
 - `peakurl-test`
 - `peakurl-db`
@@ -81,7 +81,7 @@ Most day-to-day development happens against:
 - `https://peakurl.dev` for the dashboard UI
 - `https://api.peakurl.dev` for the PHP backend
 
-Vite hot reload is available on the UI service. If the dashboard appears stale after deeper runtime changes, restart the stack or rebuild the affected service:
+Vite hot reload is available on the client service. If the dashboard appears stale after deeper runtime changes, restart the stack or rebuild the affected service:
 
 ```bash
 docker compose up --build

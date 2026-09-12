@@ -16,13 +16,13 @@ test.describe("Activity Feed Journeys", () => {
 		await expect(
 			page.getByRole("tab", { name: /all events/i })
 		).toBeVisible();
-		await expect(
-			page.getByRole("tab", { name: /links/i })
-		).toBeVisible();
+		await expect(page.getByRole("tab", { name: /links/i })).toBeVisible();
 
 		// Activity panel / table exists
 		await expect(
-			page.locator(".activity-page-panel, .activity-table, [role='table']")
+			page.locator(
+				".activity-page-panel, .activity-table, [role='table']"
+			)
 		).toBeVisible();
 	});
 
@@ -47,7 +47,9 @@ test.describe("Activity Feed Journeys", () => {
 		}
 
 		// Refresh activity
-		const refreshButton = page.locator(".activity-page-hero-refresh, button[aria-label*='refresh' i]");
+		const refreshButton = page.locator(
+			".activity-page-hero-refresh, button[aria-label*='refresh' i]"
+		);
 		if (await refreshButton.isVisible()) {
 			const refreshPromise = page.waitForResponse(
 				(res) =>

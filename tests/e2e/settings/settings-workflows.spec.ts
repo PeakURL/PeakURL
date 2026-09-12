@@ -16,7 +16,9 @@ test.describe("Settings Workflows", () => {
 
 		// Security tab
 		await page.locator("a[href='/dashboard/settings/security']").click();
-		await page.waitForURL("**/dashboard/settings/security", { timeout: 15000 });
+		await page.waitForURL("**/dashboard/settings/security", {
+			timeout: 15000,
+		});
 		await expect(
 			page.getByRole("heading", { name: /change password|password/i })
 		).toBeVisible();
@@ -26,7 +28,9 @@ test.describe("Settings Workflows", () => {
 
 		// Updates tab
 		await page.locator("a[href='/dashboard/settings/updates']").click();
-		await page.waitForURL("**/dashboard/settings/updates", { timeout: 15000 });
+		await page.waitForURL("**/dashboard/settings/updates", {
+			timeout: 15000,
+		});
 		await expect(
 			page.getByRole("heading", { name: /application updates|updates/i })
 		).toBeVisible();
@@ -85,10 +89,14 @@ test.describe("Settings Workflows", () => {
 		).toBeVisible({ timeout: 25000 });
 
 		// Input must contain persisted value
-		await expect(page.locator("input[name='firstName']")).toHaveValue(testFirstName);
+		await expect(page.locator("input[name='firstName']")).toHaveValue(
+			testFirstName
+		);
 
 		// Cleanup: restore original first name
-		await page.locator("input[name='firstName']").fill(originalFirstName || "Admin");
+		await page
+			.locator("input[name='firstName']")
+			.fill(originalFirstName || "Admin");
 		const restorePromise = page.waitForResponse(
 			(res) =>
 				res.url().includes("/api/v1/users/me") &&

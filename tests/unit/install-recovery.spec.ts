@@ -41,7 +41,10 @@ test.describe("Install Recovery Utilities", () => {
 	test("returns null for non-recovery errors", () => {
 		expect(getInstallRecovery(null)).toBe(null);
 		expect(
-			getInstallRecovery({ status: 401, data: { message: "Unauthorized" } })
+			getInstallRecovery({
+				status: 401,
+				data: { message: "Unauthorized" },
+			})
 		).toBe(null);
 		expect(
 			getInstallRecovery({

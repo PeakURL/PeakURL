@@ -15,7 +15,9 @@ test.describe("Dashboard & Layout Journeys", () => {
 		// Primary metric cards
 		await expect(page.getByText(/total clicks/i).first()).toBeVisible();
 		await expect(page.getByText(/active links/i).first()).toBeVisible();
-		await expect(page.getByText(/unique click rate/i).first()).toBeVisible();
+		await expect(
+			page.getByText(/unique click rate/i).first()
+		).toBeVisible();
 		await expect(page.getByText(/visitors/i).first()).toBeVisible();
 
 		// Analytics panels
@@ -47,8 +49,7 @@ test.describe("Dashboard & Layout Journeys", () => {
 		// Open time range selector and pick 30 days
 		const responsePromise30 = page.waitForResponse(
 			(res) =>
-				res.url().includes("/api/v1/analytics") &&
-				res.status() === 200
+				res.url().includes("/api/v1/analytics") && res.status() === 200
 		);
 
 		await timeRangeSelector.click();
@@ -62,8 +63,7 @@ test.describe("Dashboard & Layout Journeys", () => {
 		// Switch to 90 days
 		const responsePromise90 = page.waitForResponse(
 			(res) =>
-				res.url().includes("/api/v1/analytics") &&
-				res.status() === 200
+				res.url().includes("/api/v1/analytics") && res.status() === 200
 		);
 
 		await timeRangeSelector.click();
@@ -85,8 +85,7 @@ test.describe("Dashboard & Layout Journeys", () => {
 
 		const refetchPromise = page.waitForResponse(
 			(res) =>
-				res.url().includes("/api/v1/analytics") &&
-				res.status() === 200
+				res.url().includes("/api/v1/analytics") && res.status() === 200
 		);
 
 		await refreshButton.click();
@@ -162,8 +161,7 @@ test.describe("Dashboard & Layout Journeys", () => {
 		// Trigger retry/refresh to recover
 		const recoverPromise = page.waitForResponse(
 			(res) =>
-				res.url().includes("/api/v1/analytics") &&
-				res.status() === 200
+				res.url().includes("/api/v1/analytics") && res.status() === 200
 		);
 		await refreshButton.click();
 		const response = await recoverPromise;
@@ -173,6 +171,3 @@ test.describe("Dashboard & Layout Journeys", () => {
 		await expect(page.getByText(/total clicks/i).first()).toBeVisible();
 	});
 });
-
-
-

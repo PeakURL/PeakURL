@@ -29,7 +29,9 @@ test.describe("Tools & Utilities Journeys", () => {
 		authenticatedPage: page,
 	}) => {
 		// Import File
-		await page.goto("/dashboard/tools/import/file", { waitUntil: "commit" });
+		await page.goto("/dashboard/tools/import/file", {
+			waitUntil: "commit",
+		});
 		await expect(
 			page.getByRole("heading", { name: /import/i })
 		).toBeVisible({ timeout: 25000 });
@@ -39,19 +41,27 @@ test.describe("Tools & Utilities Journeys", () => {
 			page.getByText(/drop your file here|choose file/i).first()
 		).toBeVisible();
 		await expect(
-			page.getByText(/file format requirements|sample data structure/i).first()
+			page
+				.getByText(/file format requirements|sample data structure/i)
+				.first()
 		).toBeVisible();
 
 		// Import Paste tab
-		await page.goto("/dashboard/tools/import/paste", { waitUntil: "commit" });
+		await page.goto("/dashboard/tools/import/paste", {
+			waitUntil: "commit",
+		});
 		await expect(
 			page.getByRole("heading", { name: /import/i })
 		).toBeVisible({ timeout: 25000 });
 
 		// Paste textarea
-		const pasteInput = page.locator("textarea.import-paste-textarea, textarea");
+		const pasteInput = page.locator(
+			"textarea.import-paste-textarea, textarea"
+		);
 		await expect(pasteInput).toBeVisible();
-		await pasteInput.fill("https://example.com/paste-import-test-1\nhttps://example.com/paste-import-test-2");
+		await pasteInput.fill(
+			"https://example.com/paste-import-test-1\nhttps://example.com/paste-import-test-2"
+		);
 
 		// Import button is enabled
 		const importBtn = page.getByRole("button", { name: /create links/i });
@@ -61,7 +71,9 @@ test.describe("Tools & Utilities Journeys", () => {
 	test("system status page renders site health diagnostics and service checks", async ({
 		authenticatedPage: page,
 	}) => {
-		await page.goto("/dashboard/tools/system-status", { waitUntil: "commit" });
+		await page.goto("/dashboard/tools/system-status", {
+			waitUntil: "commit",
+		});
 
 		// Hero title & badge
 		await expect(
@@ -76,6 +88,3 @@ test.describe("Tools & Utilities Journeys", () => {
 		await expect(refreshBtn).toBeVisible();
 	});
 });
-
-
-

@@ -13,7 +13,9 @@ import {
 test.describe("Links & URL Utilities", () => {
 	test.describe("sanitizeUrl", () => {
 		test("allows valid http and https URLs", () => {
-			expect(sanitizeUrl("https://example.com")).toBe("https://example.com/");
+			expect(sanitizeUrl("https://example.com")).toBe(
+				"https://example.com/"
+			);
 			expect(sanitizeUrl("http://example.com/page?query=1")).toBe(
 				"http://example.com/page?query=1"
 			);

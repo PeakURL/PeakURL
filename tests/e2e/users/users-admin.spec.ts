@@ -80,7 +80,9 @@ test.describe("Users & Roles Admin Journeys", () => {
 		await expect(editTitle).toBeVisible();
 
 		// Role dropdown is disabled for self
-		const roleButton = page.locator(".users-page-dialog-field button.select-trigger");
+		const roleButton = page.locator(
+			".users-page-dialog-field button.select-trigger"
+		);
 		await expect(roleButton).toBeDisabled();
 		await expect(
 			page.getByText(/your own role is locked here/i)

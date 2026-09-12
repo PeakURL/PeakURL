@@ -29,7 +29,9 @@ test.describe("Global Layout, Responsive & Theme Journeys", () => {
 		await page.setViewportSize({ width: 375, height: 667 });
 
 		// Mobile hamburger menu button should be visible
-		const mobileMenuBtn = page.locator("button.dashboard-header-menu-button, button[aria-label='Open menu']");
+		const mobileMenuBtn = page.locator(
+			"button.dashboard-header-menu-button, button[aria-label='Open menu']"
+		);
 		await expect(mobileMenuBtn).toBeVisible();
 
 		// Open mobile sidebar
@@ -38,7 +40,9 @@ test.describe("Global Layout, Responsive & Theme Journeys", () => {
 		await expect(sidebar).toHaveClass(/dashboard-sidebar-open/);
 
 		// Navigation links inside mobile drawer are visible
-		await expect(page.locator("a[href='/dashboard/links']").first()).toBeVisible();
+		await expect(
+			page.locator("a[href='/dashboard/links']").first()
+		).toBeVisible();
 
 		// Close mobile sidebar
 		const closeSidebarBtn = page.locator("button.dashboard-sidebar-close");
@@ -47,7 +51,10 @@ test.describe("Global Layout, Responsive & Theme Journeys", () => {
 
 		// Verify no horizontal overflow in mobile viewport
 		const hasOverflow = await page.evaluate(() => {
-			return document.documentElement.scrollWidth > document.documentElement.clientWidth + 5;
+			return (
+				document.documentElement.scrollWidth >
+				document.documentElement.clientWidth + 5
+			);
 		});
 		expect(hasOverflow).toBe(false);
 	});
@@ -55,7 +62,9 @@ test.describe("Global Layout, Responsive & Theme Journeys", () => {
 	test("global search input accepts query and dismisses on escape", async ({
 		authenticatedPage: page,
 	}) => {
-		const searchInput = page.locator(".dashboard-search-input, input[placeholder*='Search' i]");
+		const searchInput = page.locator(
+			".dashboard-search-input, input[placeholder*='Search' i]"
+		);
 		await expect(searchInput).toBeVisible();
 
 		// Focus and type search query

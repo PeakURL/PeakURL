@@ -1,11 +1,15 @@
 import { test, expect } from "../fixtures/auth.fixture";
 
 test.describe("Authentication Journeys", () => {
-	test("login page renders with accessible form elements", async ({ page }) => {
+	test("login page renders with accessible form elements", async ({
+		page,
+	}) => {
 		await page.goto("/login", { waitUntil: "domcontentloaded" });
 
 		await expect(page).toHaveTitle(/PeakURL/);
-		await expect(page.getByRole("heading", { name: /sign in/i })).toBeVisible();
+		await expect(
+			page.getByRole("heading", { name: /sign in/i })
+		).toBeVisible();
 
 		// Check presence of login inputs
 		const usernameInput = page.getByLabel(
@@ -26,12 +30,17 @@ test.describe("Authentication Journeys", () => {
 	}) => {
 		await page.goto("/dashboard", { waitUntil: "domcontentloaded" });
 		await expect(page).toHaveURL(/\/login/);
+		await expect(page.getByRole("button", { name: /sign in/i })).toBeVisible();
 
 		await page.goto("/dashboard/links", { waitUntil: "domcontentloaded" });
 		await expect(page).toHaveURL(/\/login/);
+		await expect(page.getByRole("button", { name: /sign in/i })).toBeVisible();
 
-		await page.goto("/dashboard/settings", { waitUntil: "domcontentloaded" });
+		await page.goto("/dashboard/settings", {
+			waitUntil: "domcontentloaded",
+		});
 		await expect(page).toHaveURL(/\/login/);
+		await expect(page.getByRole("button", { name: /sign in/i })).toBeVisible();
 	});
 
 	test("login displays error message on invalid credentials", async ({
@@ -50,10 +59,14 @@ test.describe("Authentication Journeys", () => {
 			".login-page-alert, [role='alert'], .notification, .login-error-message"
 		);
 		await expect(errorAlert).toBeVisible();
-		await expect(errorAlert).toContainText(/invalid|incorrect|credentials|password/i);
+		await expect(errorAlert).toContainText(
+			/invalid|incorrect|credentials|password/i
+		);
 
 		// Login remains usable
-		await expect(page.getByRole("button", { name: /sign in/i })).toBeEnabled();
+		await expect(
+			page.getByRole("button", { name: /sign in/i })
+		).toBeEnabled();
 	});
 
 	test("valid credentials authenticate user, establish session, and allow logout", async ({
@@ -71,7 +84,9 @@ test.describe("Authentication Journeys", () => {
 
 		// Should navigate to dashboard
 		await page.waitForURL("**/dashboard", { timeout: 15000 });
-		await expect(page.getByRole("heading", { name: /dashboard/i })).toBeVisible();
+		await expect(
+			page.getByRole("heading", { name: /dashboard/i })
+		).toBeVisible();
 
 		// Header displays authenticated user trigger
 		const userTrigger = page.locator(".dashboard-header-user-trigger");
@@ -87,7 +102,9 @@ test.describe("Authentication Journeys", () => {
 
 		// Redirects to /login
 		await page.waitForURL("**/login", { timeout: 15000 });
-		await expect(page.getByRole("heading", { name: /sign in/i })).toBeVisible();
+		await expect(
+			page.getByRole("heading", { name: /sign in/i })
+		).toBeVisible();
 
 		// Attempting to visit /dashboard should now redirect to /login
 		await page.goto("/dashboard", { waitUntil: "domcontentloaded" });
@@ -114,4 +131,3 @@ test.describe("Authentication Journeys", () => {
 		await expect(submitButton).toBeVisible();
 	});
 });
-

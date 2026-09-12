@@ -8,73 +8,73 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-12 11:36+0000\n"
-"POT-Creation-Date: 2026-09-12 11:36+0000\n"
+"PO-Revision-Date: 2026-09-12 14:06+0000\n"
+"POT-Creation-Date: 2026-09-12 14:06+0000\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "Project-Id-Version: PeakURL 1.6.2\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
 "X-Domain: peakurl\n"
 "X-Generator: PeakURL i18n Tools\n"
 
-#: install.php:94
+#: install.php:89
 msgid "Administrator Setup - %s"
 msgstr ""
 
-#: install.php:542
-#: setup-config.php:672
+#: install.php:537
+#: setup-config.php:667
 msgid "Welcome"
 msgstr ""
 
-#: install.php:549
-#: setup-config.php:679
+#: install.php:544
+#: setup-config.php:674
 #: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:70
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:127
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1014
 msgid "Database"
 msgstr ""
 
-#: install.php:556
-#: setup-config.php:686
+#: install.php:551
+#: setup-config.php:681
 msgid "Admin account"
 msgstr ""
 
-#: install.php:567
+#: install.php:562
 msgid "Create your account"
 msgstr ""
 
-#: install.php:569
+#: install.php:564
 msgid "Name your site and set up the first administrator. You will be signed in automatically once the install completes."
 msgstr ""
 
-#: install.php:585
+#: install.php:580
 msgid "Site info"
 msgstr ""
 
-#: install.php:588
+#: install.php:583
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:429
 msgid "Site title"
 msgstr ""
 
-#: install.php:589
+#: install.php:584
 msgid "My Link Hub"
 msgstr ""
 
-#: install.php:593
+#: install.php:588
 msgid "Administrator"
 msgstr ""
 
-#: install.php:596
-#: setup-config.php:812
+#: install.php:591
+#: setup-config.php:807
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:362
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:157
 msgid "Username"
 msgstr ""
 
-#: install.php:598
+#: install.php:593
 msgid "Letters, numbers, dots, dashes, underscores, or @."
 msgstr ""
 
-#: install.php:601
+#: install.php:596
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:135
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1016
 #: client/pages/dashboard/links/components/StatsDrawer/TrafficSourcesTab.tsx:99
@@ -83,13 +83,13 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: install.php:602
+#: install.php:597
 #: client/pages/auth/login/LoginPage.tsx:247
 msgid "you@company.com"
 msgstr ""
 
-#: install.php:605
-#: setup-config.php:816
+#: install.php:600
+#: setup-config.php:811
 #: server/features/links/controller.php:508
 #: client/pages/auth/login/LoginPage.tsx:253
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/PasswordSettings.tsx:29
@@ -97,113 +97,113 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: install.php:607
+#: install.php:602
 msgid "At least 8 characters. You will be signed in right after installation."
 msgstr ""
 
-#: install.php:611
+#: install.php:606
 msgid "Database configuration is already saved."
 msgstr ""
 
-#: install.php:614
+#: install.php:609
 msgid "Install %s"
 msgstr ""
 
-#: install.php:638
-#: setup-config.php:859
+#: install.php:633
+#: setup-config.php:854
 #: client/pages/auth/login/LoginPage.tsx:179
 msgid "Powered by %s"
 msgstr ""
 
-#: setup-config.php:95
+#: setup-config.php:90
 msgid "Database Setup - %s"
 msgstr ""
 
-#: setup-config.php:97
+#: setup-config.php:92
 msgid "Welcome - %s"
 msgstr ""
 
-#: setup-config.php:650
+#: setup-config.php:645
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:457
 msgid "Site language"
 msgstr ""
 
-#: setup-config.php:701
+#: setup-config.php:696
 #: server/services/notifications.php:204
 #: client/pages/dashboard/about/AboutPage.tsx:833
 msgid "Welcome to %s"
 msgstr ""
 
-#: setup-config.php:703
+#: setup-config.php:698
 msgid "Before getting started, you'll need your database connection details. PeakURL will use them to create config.php and set up the required tables."
 msgstr ""
 
-#: setup-config.php:715
-#: setup-config.php:808
+#: setup-config.php:710
+#: setup-config.php:803
 msgid "Database name"
 msgstr ""
 
-#: setup-config.php:721
+#: setup-config.php:716
 msgid "Username and password"
 msgstr ""
 
-#: setup-config.php:727
+#: setup-config.php:722
 msgid "Host and port"
 msgstr ""
 
-#: setup-config.php:733
-#: setup-config.php:832
+#: setup-config.php:728
+#: setup-config.php:827
 msgid "Table prefix"
 msgstr ""
 
-#: setup-config.php:733
+#: setup-config.php:728
 msgid "optional"
 msgstr ""
 
-#: setup-config.php:739
+#: setup-config.php:734
 msgid "These details are usually available in your hosting control panel or from your database administrator."
 msgstr ""
 
-#: setup-config.php:759
+#: setup-config.php:754
 msgid "Let's go"
 msgstr ""
 
-#: setup-config.php:771
+#: setup-config.php:766
 #: server/services/system-status/diagnostic-checks.php:48
 msgid "Database connection"
 msgstr ""
 
-#: setup-config.php:773
+#: setup-config.php:768
 msgid "Enter the credentials for your MySQL or MariaDB database. PeakURL will write them to config.php in the site root."
 msgstr ""
 
-#: setup-config.php:805
+#: setup-config.php:800
 msgid "Connection details"
 msgstr ""
 
-#: setup-config.php:820
+#: setup-config.php:815
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:741
 msgid "Host"
 msgstr ""
 
-#: setup-config.php:825
+#: setup-config.php:820
 msgid "Advanced"
 msgstr ""
 
-#: setup-config.php:828
+#: setup-config.php:823
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:743
 msgid "Port"
 msgstr ""
 
-#: setup-config.php:834
+#: setup-config.php:829
 msgid "Letters, numbers, underscores. Example: peakurl_"
 msgstr ""
 
-#: setup-config.php:840
+#: setup-config.php:835
 msgid "Back"
 msgstr ""
 
-#: setup-config.php:843
+#: setup-config.php:838
 msgid "Save and continue"
 msgstr ""
 
@@ -260,11 +260,11 @@ msgstr ""
 msgid "Request origin is not allowed."
 msgstr ""
 
-#: server/core/config/runtime-config.php:681
+#: server/core/config/configuration.php:690
 msgid "DB_PREFIX must start with a letter or underscore and use only letters, numbers, and underscores."
 msgstr ""
 
-#: server/core/config/runtime-config.php:702
+#: server/core/config/configuration.php:711
 msgid "Database name may contain only letters, numbers, and underscores."
 msgstr ""
 
@@ -378,7 +378,7 @@ msgstr ""
 msgid "Admin access is required."
 msgstr ""
 
-#: server/features/settings/service.php:704
+#: server/features/settings/service.php:706
 msgid "Save a complete mail configuration before sending a test email."
 msgstr ""
 
@@ -1145,7 +1145,7 @@ msgstr ""
 msgid "Added the %1$s index to the %2$s table."
 msgstr ""
 
-#: server/services/database/schema-manager.php:146
+#: server/services/database/schema-manager.php:148
 msgid "PeakURL could not fully repair the database schema."
 msgstr ""
 
@@ -1217,22 +1217,6 @@ msgstr ""
 msgid "Site URL cannot contain a query string or fragment."
 msgstr ""
 
-#: server/services/install/bootstrap.php:61
-msgid "Unable to connect to the database or create the PeakURL tables. "
-msgstr ""
-
-#: server/services/install/bootstrap.php:100
-msgid "PeakURL could not finish the database upgrade. Verify the database user can alter tables, then retry."
-msgstr ""
-
-#: server/services/install/bootstrap.php:117
-msgid "Database tables are missing. Run the installer or `php bin/setup-database.php` inside the PHP runtime directory."
-msgstr ""
-
-#: server/services/install/bootstrap.php:140
-msgid "PeakURL is not installed yet. Run install.php to finish setup."
-msgstr ""
-
 #: server/services/install/config.php:139
 msgid "Database host is required."
 msgstr ""
@@ -1289,15 +1273,31 @@ msgstr ""
 msgid "Admin password must be at least 8 characters."
 msgstr ""
 
-#: server/services/install/config-writer.php:89
+#: server/services/install/initializer.php:60
+msgid "Unable to connect to the database or create the PeakURL tables. "
+msgstr ""
+
+#: server/services/install/initializer.php:98
+msgid "PeakURL could not finish the database upgrade. Verify the database user can alter tables, then retry."
+msgstr ""
+
+#: server/services/install/initializer.php:121
+msgid "Database tables are missing. Run the installer or `%s` inside the PHP runtime directory."
+msgstr ""
+
+#: server/services/install/initializer.php:146
+msgid "PeakURL is not installed yet. Run install.php to finish setup."
+msgstr ""
+
+#: server/services/install/config-writer.php:94
 msgid "config-sample.php is missing from the release package."
 msgstr ""
 
-#: server/services/install/config-writer.php:97
+#: server/services/install/config-writer.php:102
 msgid "Unable to read config-sample.php from the release package."
 msgstr ""
 
-#: server/services/install/config-writer.php:112
+#: server/services/install/config-writer.php:117
 msgid "Unable to write config.php in the release root."
 msgstr ""
 
@@ -1355,7 +1355,7 @@ msgstr ""
 msgid "PeakURL could not read the release package contents."
 msgstr ""
 
-#: server/services/update/release-files.php:224
+#: server/services/update/release-files.php:230
 msgid "PeakURL could not read the packaged content directory."
 msgstr ""
 
@@ -1386,7 +1386,7 @@ msgid "The update manifest did not include a package URL."
 msgstr ""
 
 #: server/services/update/manifest.php:198
-#: server/services/update/installer.php:262
+#: server/services/update/installer.php:264
 msgid "The update manifest did not include a SHA-256 checksum."
 msgstr ""
 
@@ -1403,19 +1403,19 @@ msgstr ""
 msgid "release download URL"
 msgstr ""
 
-#: server/services/update/context.php:168
+#: server/services/update/context.php:175
 msgid "Dashboard updates can only be applied from an installed release package."
 msgstr ""
 
-#: server/services/update/context.php:175
+#: server/services/update/context.php:182
 msgid "The ZipArchive PHP extension is required to apply updates."
 msgstr ""
 
-#: server/services/update/context.php:182
+#: server/services/update/context.php:189
 msgid "The release root is not writable."
 msgstr ""
 
-#: server/services/update/context.php:193
+#: server/services/update/context.php:203
 msgid "The application runtime directory is not writable."
 msgstr ""
 
@@ -1431,47 +1431,47 @@ msgstr ""
 msgid "The update manifest is missing a package URL or version."
 msgstr ""
 
-#: server/services/update/installer.php:203
+#: server/services/update/installer.php:205
 msgid "PeakURL could not apply the update and the rollback failed. "
 msgstr ""
 
-#: server/services/update/installer.php:212
+#: server/services/update/installer.php:214
 msgid "PeakURL could not apply the update. "
 msgstr ""
 
-#: server/services/update/installer.php:239
+#: server/services/update/installer.php:241
 msgid "PeakURL could not store the downloaded release package."
 msgstr ""
 
-#: server/services/update/installer.php:270
+#: server/services/update/installer.php:272
 msgid "PeakURL could not verify the downloaded release checksum."
 msgstr ""
 
-#: server/services/update/installer.php:276
+#: server/services/update/installer.php:278
 msgid "The downloaded release checksum did not match the manifest."
 msgstr ""
 
-#: server/services/update/installer.php:296
+#: server/services/update/installer.php:298
 msgid "PeakURL could not open the downloaded release archive."
 msgstr ""
 
-#: server/services/update/installer.php:305
+#: server/services/update/installer.php:307
 msgid "PeakURL could not extract the downloaded release archive."
 msgstr ""
 
-#: server/services/update/installer.php:328
+#: server/services/update/installer.php:330
 msgid "The downloaded release archive contains an unsafe file path."
 msgstr ""
 
-#: server/services/update/installer.php:343
+#: server/services/update/installer.php:345
 msgid "The downloaded release archive contains an unsupported symbolic link."
 msgstr ""
 
-#: server/services/update/installer.php:380
+#: server/services/update/installer.php:382
 msgid "PeakURL could not determine the extracted package root."
 msgstr ""
 
-#: server/services/update/installer.php:391
+#: server/services/update/installer.php:393
 msgid "PeakURL could not validate the extracted package structure."
 msgstr ""
 

@@ -13,7 +13,7 @@ const devProxyTarget =
 	process.env.VITE_DEV_PROXY_TARGET || "http://127.0.0.1:8000";
 const devPublicHost = process.env.VITE_DEV_PUBLIC_HOST || "";
 const useHttpsProxy = "true" === process.env.VITE_DEV_USE_HTTPS_PROXY;
-const ui = path.resolve(import.meta.dirname, "ui");
+const client = path.resolve(import.meta.dirname, "client");
 const excludedProxyPaths = [
 	"dashboard",
 	"login",
@@ -22,7 +22,7 @@ const excludedProxyPaths = [
 	"api",
 	"@vite",
 	"@react-refresh",
-	"ui",
+	"client",
 	"src",
 	"node_modules",
 	"assets",
@@ -65,9 +65,9 @@ export default defineConfig({
 	},
 	resolve: {
 		alias: {
-			"@": ui,
-			"@constants": path.join(ui, "constants"),
-			"@state": path.join(ui, "state"),
+			"@": client,
+			"@constants": path.join(client, "constants"),
+			"@state": path.join(client, "state"),
 		},
 	},
 	server: {

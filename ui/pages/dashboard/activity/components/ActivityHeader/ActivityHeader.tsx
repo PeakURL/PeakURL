@@ -1,9 +1,9 @@
 import { Clock, History, Link2, RefreshCw, Shield, Users } from "lucide-react";
 
-import { __, sprintf } from "@/i18n";
-import { formatCount, formatDate } from "@/shared/formatting";
+import { __ } from "@/i18n";
+import { cn, formatCount, formatDate } from "@/shared/formatting";
 
-import { getActivityMessage } from "../../lib";
+import { formatExactTimestamp } from "../../lib";
 import type { ActivitySummaryCounts } from "../../types";
 
 interface ActivityHeaderProps {
@@ -17,28 +17,63 @@ export function ActivityHeader({
 	isRefreshing,
 	onRefresh,
 }: ActivityHeaderProps) {
-	const latestMessage = summaryCounts.latest
-		? getActivityMessage(summaryCounts.latest)
-		: __("No recent events");
+	const mostRecentTimestamp = summaryCounts.latest?.timestamp;
 
-	const latestDate = summaryCounts.latest?.timestamp
-		? formatDate(summaryCounts.latest.timestamp)
-		: "";
+	const overviewItems: Array<{
+		key: string;
+		label: string;
+		value: string;
+		note?: string | null;
+		icon: typeof History;
+	}> = [
+		{
+			key: "all",
+			label: __("Total events"),
+			value: formatCount(summaryCounts.all),
+			icon: History,
+		},
+		{
+			key: "links",
+			label: __("Link events"),
+			value: formatCount(summaryCounts.links),
+			icon: Link2,
+		},
+		{
+			key: "users",
+			label: __("User events"),
+			value: formatCount(summaryCounts.users),
+			icon: Users,
+		},
+		{
+			key: "latest",
+			label: __("Latest event"),
+			value: mostRecentTimestamp
+				? formatDate(mostRecentTimestamp)
+				: __("No recent events"),
+			note: mostRecentTimestamp
+				? formatExactTimestamp(mostRecentTimestamp)
+				: null,
+			icon: Clock,
+		},
+	];
 
 	return (
-		<div className="space-y-4">
+		<>
 			<div className="activity-page-hero">
 				<div className="activity-page-hero-copy">
-					<div className="activity-page-hero-badge">
-						<Shield className="h-3 w-3" />
+					<p className="activity-page-hero-badge">
+						<Shield size={14} />
 						<span>{__("Audit Log")}</span>
-					</div>
-					<h1 className="activity-page-title">
-						{__("Activity Log")}
+					</p>
+					<h1
+						className="activity-page-title"
+						aria-label={__("Activity Log")}
+					>
+						{__("Activity")}
 					</h1>
 					<p className="activity-page-summary">
 						{__(
-							"Track all link lifecycle events, user management changes, and administrative actions across your PeakURL install."
+							"Review link changes and user-management events in one place with filters, timestamps, and actor details."
 						)}
 					</p>
 				</div>
@@ -46,105 +81,68 @@ export function ActivityHeader({
 					type="button"
 					onClick={onRefresh}
 					disabled={isRefreshing}
-					className="btn btn-secondary shrink-0"
-					title={__("Refresh activity log")}
-					aria-label={__("Refresh activity log")}
+					className="dashboard-page-refresh mt-1 shrink-0"
+					aria-label={__("Refresh activity history")}
+					title={__("Refresh activity history")}
 				>
 					<RefreshCw
-						className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
+						className={cn(
+							"dashboard-page-refresh-icon",
+							isRefreshing && "animate-spin"
+						)}
 					/>
-					<span className="hidden sm:inline">{__("Refresh")}</span>
 				</button>
 			</div>
 
 			<div className="activity-page-overview">
 				<div className="activity-page-overview-grid">
-					{/* Card 1: Total Events */}
-					<div className="activity-page-overview-item">
-						<div className="activity-page-overview-header">
-							<div className="activity-page-overview-copy">
-								<p className="activity-page-overview-title">
-									{__("Total Events")}
-								</p>
-								<p className="activity-page-overview-value">
-									{formatCount(summaryCounts.all)}
-								</p>
-							</div>
-							<div className="activity-page-overview-icon activity-page-overview-icon-all">
-								<History className="activity-page-overview-icon-glyph" />
-							</div>
-						</div>
-						<p className="activity-page-overview-note">
-							{__("Recorded system actions")}
-						</p>
-					</div>
+					{overviewItems.map((item) => {
+						const Icon = item.icon;
+						const isLatest = "latest" === item.key;
 
-					{/* Card 2: Link Actions */}
-					<div className="activity-page-overview-item">
-						<div className="activity-page-overview-header">
-							<div className="activity-page-overview-copy">
-								<p className="activity-page-overview-title">
-									{__("Link Activity")}
-								</p>
-								<p className="activity-page-overview-value">
-									{formatCount(summaryCounts.links)}
-								</p>
+						return (
+							<div
+								key={item.key}
+								className="activity-page-overview-item"
+							>
+								<div className="activity-page-overview-header">
+									<div className="activity-page-overview-copy">
+										<p className="activity-page-overview-title">
+											{item.label}
+										</p>
+										<p
+											className={cn(
+												"activity-page-overview-value",
+												isLatest &&
+													"activity-page-overview-value-latest"
+											)}
+											dir="auto"
+										>
+											{item.value}
+										</p>
+									</div>
+									<div
+										className={cn(
+											"activity-page-overview-icon",
+											`activity-page-overview-icon-${item.key}`
+										)}
+									>
+										<Icon className="activity-page-overview-icon-glyph" />
+									</div>
+								</div>
+								{item.note ? (
+									<p
+										className="activity-page-overview-note"
+										dir="auto"
+									>
+										{item.note}
+									</p>
+								) : null}
 							</div>
-							<div className="activity-page-overview-icon activity-page-overview-icon-links">
-								<Link2 className="activity-page-overview-icon-glyph" />
-							</div>
-						</div>
-						<p className="activity-page-overview-note">
-							{__("Creation, edits & trash")}
-						</p>
-					</div>
-
-					{/* Card 3: User Actions */}
-					<div className="activity-page-overview-item">
-						<div className="activity-page-overview-header">
-							<div className="activity-page-overview-copy">
-								<p className="activity-page-overview-title">
-									{__("User Activity")}
-								</p>
-								<p className="activity-page-overview-value">
-									{formatCount(summaryCounts.users)}
-								</p>
-							</div>
-							<div className="activity-page-overview-icon activity-page-overview-icon-users">
-								<Users className="activity-page-overview-icon-glyph" />
-							</div>
-						</div>
-						<p className="activity-page-overview-note">
-							{__("User management events")}
-						</p>
-					</div>
-
-					{/* Card 4: Latest Activity */}
-					<div className="activity-page-overview-item">
-						<div className="activity-page-overview-header">
-							<div className="activity-page-overview-copy">
-								<p className="activity-page-overview-title">
-									{__("Latest Activity")}
-								</p>
-								<p
-									className="activity-page-overview-value-latest"
-									title={latestMessage}
-								>
-									{latestMessage}
-								</p>
-							</div>
-							<div className="activity-page-overview-icon activity-page-overview-icon-latest">
-								<Clock className="activity-page-overview-icon-glyph" />
-							</div>
-						</div>
-						<p className="activity-page-overview-note">
-							{latestDate
-								? sprintf(__("At %s"), latestDate)
-								: __("No activity")}
-						</p>
-					</div>
+						);
+					})}
 				</div>
 			</div>
-		</div>
+		</>
 	);
 }

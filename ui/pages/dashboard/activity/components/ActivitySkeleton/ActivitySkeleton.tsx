@@ -1,59 +1,55 @@
 import { Skeleton } from "@/components";
+import { cn } from "@/shared/formatting";
 
-export function ActivitySkeleton() {
+interface ActivitySkeletonProps {
+	isAdmin?: boolean;
+}
+
+export function ActivitySkeleton({ isAdmin = false }: ActivitySkeletonProps) {
 	return (
-		<div className="activity-page">
-			{/* Hero Skeleton */}
-			<div className="activity-page-hero">
-				<div className="activity-page-hero-copy">
-					<Skeleton className="mb-2 h-4 w-24 rounded-full" />
-					<Skeleton className="h-8 w-48" />
-					<Skeleton className="mt-2 h-4 w-96 max-w-full" />
+		<div className="activity-page-panel">
+			<div className="activity-page-panel-header">
+				<div>
+					<Skeleton className="activity-page-skeleton-heading" />
+					<Skeleton className="activity-page-skeleton-copy" />
 				</div>
 			</div>
-
-			{/* Metric Cards Skeleton */}
-			<div className="activity-page-overview">
-				<div className="activity-page-overview-grid">
-					{Array.from({ length: 4 }).map((_, i) => (
-						<div key={i} className="activity-page-overview-item">
-							<div className="activity-page-overview-header">
-								<div className="activity-page-overview-copy">
-									<Skeleton className="mb-2 h-3 w-20" />
-									<Skeleton className="h-7 w-16" />
-								</div>
-								<Skeleton className="h-10 w-10 rounded-lg" />
-							</div>
-							<Skeleton className="h-3 w-32" />
-						</div>
-					))}
-				</div>
-			</div>
-
-			{/* Toolbar Skeleton */}
-			<div className="activity-page-toolbar">
-				<Skeleton className="h-10 w-72 rounded-xl" />
-				<Skeleton className="h-9 w-36 rounded-lg" />
-			</div>
-
-			{/* Table Panel Skeleton */}
-			<div className="activity-page-panel">
-				<div className="activity-page-panel-header">
-					<Skeleton className="h-5 w-36" />
-				</div>
-				<div className="activity-page-panel-content">
-					<div className="activity-page-table-wrapper">
-						<div className="activity-page-events-list">
-							{Array.from({ length: 6 }).map((_, i) => (
-								<div key={i} className="activity-page-event">
-									<Skeleton className="h-9 w-9 rounded-lg shrink-0" />
-									<div className="activity-page-event-body space-y-2">
-										<Skeleton className="h-4 w-3/4" />
-										<Skeleton className="h-3 w-1/2" />
+			<div className="activity-page-table">
+				<div className="activity-page-table-scroll">
+					<div className="activity-page-table-element">
+						<div className="activity-page-events">
+							{Array.from({ length: 6 }, (_, index) => (
+								<div
+									key={index}
+									className={cn(
+										"activity-page-event",
+										isAdmin && "activity-page-event-admin"
+									)}
+								>
+									<div className="activity-page-event-identity">
+										{isAdmin ? (
+											<Skeleton className="h-4 w-4 rounded shrink-0" />
+										) : null}
+										<Skeleton className="activity-page-skeleton-icon shrink-0" />
+									</div>
+									<div className="activity-page-event-primary">
+										<Skeleton className="activity-page-skeleton-title" />
+									</div>
+									<div className="activity-page-event-context">
+										<div className="activity-page-skeleton-details">
+											<Skeleton className="activity-page-skeleton-chip" />
+											<Skeleton className="activity-page-skeleton-chip" />
+										</div>
 									</div>
 									<div className="activity-page-event-time">
-										<Skeleton className="h-3 w-16" />
+										<Skeleton className="activity-page-skeleton-time" />
+										<Skeleton className="activity-page-skeleton-time-secondary" />
 									</div>
+									{isAdmin ? (
+										<div className="activity-page-event-actions">
+											<Skeleton className="h-7.5 w-7.5 rounded-lg shrink-0" />
+										</div>
+									) : null}
 								</div>
 							))}
 						</div>
@@ -63,3 +59,5 @@ export function ActivitySkeleton() {
 		</div>
 	);
 }
+
+export default ActivitySkeleton;

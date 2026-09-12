@@ -63,6 +63,7 @@ export interface UsersTableProps {
 	onDeleteUser: (user: UserSummary) => void;
 	isDeleting: boolean;
 	isLoading?: boolean;
+	usersError?: unknown;
 }
 
 export interface UserRowProps {

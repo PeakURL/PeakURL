@@ -1,22 +1,22 @@
-import { Link2, MapPin, RotateCcw, Trash2, User } from "lucide-react";
+import { Globe, MapPin, RotateCcw, Trash2, User } from "lucide-react";
 
-import { __ } from "@/i18n";
+import { __, sprintf } from "@/i18n";
 import { cn, formatDate } from "@/shared/formatting";
 
 import {
 	formatExactTimestamp,
-	getActivityLinkDisplayName,
 	getActivityMessage,
 	getActivityPersonName,
 	getActivityVisual,
 	getRoleLabel,
 } from "../../lib";
-import type { RecentActivity } from "../../types";
+import type { ActivityCategory, RecentActivity } from "../../types";
 
 interface ActivityRowProps {
 	activity: RecentActivity;
 	isAdmin: boolean;
 	isSelected: boolean;
+	category: ActivityCategory;
 	onToggleSelect: (id: string) => void;
 	onRestoreLink?: (activity: RecentActivity) => void;
 	onDeleteActivity?: (activity: RecentActivity) => void;
@@ -27,99 +27,138 @@ export function ActivityRow({
 	activity,
 	isAdmin,
 	isSelected,
+	category,
 	onToggleSelect,
 	onRestoreLink,
 	onDeleteActivity,
 	isRestoringLink,
 }: ActivityRowProps) {
 	const visual = getActivityVisual(activity.type);
-	const IconComponent = visual.icon;
+	const Icon = visual.icon;
 	const message = getActivityMessage(activity);
+	const actorName = getActivityPersonName(activity.actor);
+	const userName = getActivityPersonName(activity.user);
+	const locationName = activity.location
+		? activity.location.city || activity.location.country || null
+		: null;
 	const exactTime = formatExactTimestamp(activity.timestamp);
-	const personName = getActivityPersonName(activity.user);
-	const roleLabel = getRoleLabel(activity.user?.role);
-	const linkSlug = getActivityLinkDisplayName(activity.link);
-
-	const isRestorable =
-		activity.isRestorable === true && activity.linkStatus === "trashed";
-	const isAlreadyActive = activity.linkStatus === "active";
-	const isPermanentlyDeleted =
-		activity.linkStatus === "deleted" || activity.type === "link_deleted";
-
-	const showRestoreButton =
-		isAdmin &&
-		activity.id &&
-		activity.link?.destinationUrl &&
-		("link_deleted" === activity.type ||
-			"link_trashed" === activity.type) &&
-		!(isPermanentlyDeleted && !isRestorable);
+	const destinationUrl = activity.link?.destinationUrl;
+	const hasTargetUser = Boolean(userName && userName !== actorName);
 
 	return (
-		<article className="activity-page-event">
-			{isAdmin && activity.id ? (
-				<div className="activity-page-event-selection">
+		<article
+			className={cn(
+				"activity-page-event",
+				activity.id && isSelected && "activity-page-event-selected",
+				isAdmin && "activity-page-event-admin"
+			)}
+		>
+			<div className="activity-page-event-identity">
+				{isAdmin && activity.id ? (
 					<input
 						type="checkbox"
 						checked={isSelected}
-						onChange={() => {
-							if (activity.id) {
-								onToggleSelect(activity.id);
-							}
-						}}
-						className="activity-page-checkbox"
+						onChange={() => onToggleSelect(activity.id as string)}
+						className="links-checkbox"
 						aria-label={message}
 					/>
+				) : null}
+				<div
+					className={cn(
+						"activity-page-event-icon",
+						`activity-page-event-icon-${visual.tone}`
+					)}
+				>
+					<Icon size={17} />
 				</div>
-			) : null}
-
-			<div
-				className={`activity-page-event-icon activity-page-event-icon-${visual.tone}`}
-			>
-				<IconComponent className="h-4 w-4" />
 			</div>
 
-			<div className="activity-page-event-body">
-				<p className="activity-page-event-message">{message}</p>
+			<div className="activity-page-event-primary">
+				<p className="activity-page-event-title" dir="auto">
+					{message}
+				</p>
+				{activity.user?.role && "users" === category ? (
+					<span className="activity-page-event-role-badge">
+						{getRoleLabel(activity.user.role)}
+					</span>
+				) : null}
+			</div>
 
-				<div className="activity-page-event-meta">
-					{/* Location */}
-					{activity.location?.country || activity.location?.city ? (
-						<span className="activity-page-event-meta-item">
-							<MapPin className="h-3 w-3 shrink-0 text-text-muted" />
-							<span>
-								{[
-									activity.location.city,
-									activity.location.country,
-								]
-									.filter(Boolean)
-									.join(", ")}
+			<div className="activity-page-event-context">
+				{actorName ? (
+					<div
+						className="activity-page-detail-item"
+						title={sprintf(__("Actor: %s"), actorName)}
+					>
+						<User
+							size={13}
+							className="text-text-muted/70 shrink-0"
+						/>
+						<span className="activity-page-detail-actor">
+							<span className="text-text-muted/70 font-normal">
+								{__("By")}{" "}
+							</span>
+							<span className="font-medium text-heading">
+								{actorName}
 							</span>
 						</span>
-					) : null}
-
-					{/* User */}
-					{personName ? (
-						<span className="activity-page-event-meta-item">
-							<User className="h-3 w-3 shrink-0 text-text-muted" />
-							<span>{personName}</span>
-							<span className="activity-page-event-role-badge">
-								{roleLabel}
-							</span>
+					</div>
+				) : null}
+				{destinationUrl ? (
+					<div
+						className="activity-page-detail-item activity-page-detail-destination"
+						title={destinationUrl}
+					>
+						<Globe
+							size={13}
+							className="text-text-muted/70 shrink-0"
+						/>
+						<span
+							className="activity-page-detail-destination-url truncate"
+							dir="ltr"
+						>
+							{destinationUrl}
 						</span>
-					) : null}
-
-					{/* Link */}
-					{activity.link?.shortCode || activity.link?.alias ? (
-						<span className="activity-page-event-meta-item">
-							<Link2 className="h-3 w-3 shrink-0 text-text-muted" />
-							<span>{linkSlug}</span>
+					</div>
+				) : null}
+				{hasTargetUser && userName ? (
+					<div
+						className="activity-page-detail-item"
+						title={sprintf(__("User: %s"), userName)}
+					>
+						<User
+							size={13}
+							className="text-text-muted/70 shrink-0"
+						/>
+						<span className="activity-page-detail-user font-medium text-heading">
+							{userName}
 						</span>
-					) : null}
-				</div>
+					</div>
+				) : null}
+				{locationName ? (
+					<div
+						className="activity-page-detail-item"
+						title={sprintf(__("Location: %s"), locationName)}
+					>
+						<MapPin
+							size={13}
+							className="text-text-muted/70 shrink-0"
+						/>
+						<span className="activity-page-detail-location">
+							{locationName}
+						</span>
+					</div>
+				) : null}
+				{!actorName &&
+				!destinationUrl &&
+				!hasTargetUser &&
+				!locationName ? (
+					<span className="activity-page-event-detail-empty">—</span>
+				) : null}
 			</div>
 
 			<div className="activity-page-event-time">
-				<p className="activity-page-event-time-relative">
+				<p className="activity-page-event-time-relative" dir="auto">
 					{formatDate(activity.timestamp)}
 				</p>
 				{exactTime ? (
@@ -131,31 +170,54 @@ export function ActivityRow({
 
 			{isAdmin ? (
 				<div className="activity-page-event-actions">
-					{showRestoreButton ? (
-						<button
-							type="button"
-							onClick={() => onRestoreLink?.(activity)}
-							disabled={!isRestorable || isRestoringLink}
-							className={cn(
-								"activity-page-event-action activity-page-event-action-restore",
-								!isRestorable &&
-									"pointer-events-none cursor-not-allowed opacity-30"
-							)}
-							aria-label={
-								isAlreadyActive
-									? __("Link is already active")
-									: __("Restore link")
-							}
-							title={
-								isAlreadyActive
-									? __("Link is already active")
-									: __("Restore link")
-							}
-						>
-							<RotateCcw size={14} />
-						</button>
-					) : null}
+					{activity.id &&
+					activity.link?.destinationUrl &&
+					("link_deleted" === activity.type ||
+						"link_trashed" === activity.type)
+						? (() => {
+								const isRestorable =
+									activity.isRestorable === true &&
+									activity.linkStatus === "trashed";
+								const isAlreadyActive =
+									activity.linkStatus === "active";
+								const isPermanentlyDeleted =
+									activity.linkStatus === "deleted" ||
+									activity.type === "link_deleted";
 
+								if (isPermanentlyDeleted && !isRestorable) {
+									return null;
+								}
+
+								return (
+									<button
+										type="button"
+										onClick={() =>
+											onRestoreLink?.(activity)
+										}
+										disabled={
+											!isRestorable || isRestoringLink
+										}
+										className={cn(
+											"activity-page-event-action activity-page-event-action-restore",
+											!isRestorable &&
+												"pointer-events-none cursor-not-allowed opacity-30"
+										)}
+										aria-label={
+											isAlreadyActive
+												? __("Link is already active")
+												: __("Restore link")
+										}
+										title={
+											isAlreadyActive
+												? __("Link is already active")
+												: __("Restore link")
+										}
+									>
+										<RotateCcw size={14} />
+									</button>
+								);
+							})()
+						: null}
 					{activity.id ? (
 						<button
 							type="button"

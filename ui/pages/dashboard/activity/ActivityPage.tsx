@@ -149,10 +149,6 @@ function ActivityPage() {
 		}
 	};
 
-	if (isLoading) {
-		return <ActivitySkeleton />;
-	}
-
 	return (
 		<div className="activity-page">
 			<ActivityHeader
@@ -169,21 +165,25 @@ function ActivityPage() {
 				summaryCounts={summaryCounts}
 			/>
 
-			<ActivityTable
-				items={items}
-				category={category}
-				isAdmin={isAdmin}
-				selectedActivityIds={selectedActivityIds}
-				isAllSelected={isAllSelected}
-				isIndeterminate={isIndeterminate}
-				onToggleSelectAll={toggleSelectAll}
-				onToggleSelectOne={toggleSelectOne}
-				onBulkDeleteClick={() => setBulkDeleteOpen(true)}
-				onClearAllClick={() => setClearAllOpen(true)}
-				onRestoreLink={handleRestoreActivityLink}
-				onDeleteActivity={setActivityPendingDelete}
-				isRestoringLink={isRestoringLink}
-			/>
+			{isLoading ? (
+				<ActivitySkeleton isAdmin={isAdmin} />
+			) : (
+				<ActivityTable
+					items={items}
+					category={category}
+					isAdmin={isAdmin}
+					selectedActivityIds={selectedActivityIds}
+					isAllSelected={isAllSelected}
+					isIndeterminate={isIndeterminate}
+					onToggleSelectAll={toggleSelectAll}
+					onToggleSelectOne={toggleSelectOne}
+					onBulkDeleteClick={() => setBulkDeleteOpen(true)}
+					onClearAllClick={() => setClearAllOpen(true)}
+					onRestoreLink={handleRestoreActivityLink}
+					onDeleteActivity={setActivityPendingDelete}
+					isRestoringLink={isRestoringLink}
+				/>
+			)}
 
 			<ActivityPagination meta={meta} onPageChange={setCurrentPage} />
 

@@ -2,7 +2,7 @@ import { History, Link2, Users } from "lucide-react";
 
 import { PageSizeControl } from "@/components";
 import { __ } from "@/i18n";
-import { formatCount } from "@/shared/formatting";
+import { cn, formatCount } from "@/shared/formatting";
 
 import type { ActivityCategory, ActivitySummaryCounts } from "../../types";
 
@@ -21,59 +21,67 @@ export function ActivityCategoryTabs({
 	onLimitChange,
 	summaryCounts,
 }: ActivityCategoryTabsProps) {
+	const categoryOptions = [
+		{
+			value: "all" as const,
+			label: __("All"),
+			count: summaryCounts.all,
+			icon: History,
+		},
+		{
+			value: "links" as const,
+			label: __("Links"),
+			count: summaryCounts.links,
+			icon: Link2,
+		},
+		{
+			value: "users" as const,
+			label: __("Users"),
+			count: summaryCounts.users,
+			icon: Users,
+		},
+	];
+
 	return (
 		<div className="activity-page-toolbar">
 			<div className="activity-page-filters" role="tablist">
-				<button
-					type="button"
-					role="tab"
-					aria-selected={category === "all"}
-					onClick={() => onCategoryChange("all")}
-					className={`activity-page-filter ${category === "all" ? "activity-page-filter-active" : ""}`}
-				>
-					<History className="h-3.5 w-3.5 shrink-0" />
-					<span>{__("All Events")}</span>
-					<span className="activity-page-filter-count">
-						{formatCount(summaryCounts.all)}
-					</span>
-				</button>
+				{categoryOptions.map((option) => {
+					const Icon = option.icon;
 
-				<button
-					type="button"
-					role="tab"
-					aria-selected={category === "links"}
-					onClick={() => onCategoryChange("links")}
-					className={`activity-page-filter ${category === "links" ? "activity-page-filter-active" : ""}`}
-				>
-					<Link2 className="h-3.5 w-3.5 shrink-0" />
-					<span>{__("Links")}</span>
-					<span className="activity-page-filter-count">
-						{formatCount(summaryCounts.links)}
-					</span>
-				</button>
-
-				<button
-					type="button"
-					role="tab"
-					aria-selected={category === "users"}
-					onClick={() => onCategoryChange("users")}
-					className={`activity-page-filter ${category === "users" ? "activity-page-filter-active" : ""}`}
-				>
-					<Users className="h-3.5 w-3.5 shrink-0" />
-					<span>{__("Users")}</span>
-					<span className="activity-page-filter-count">
-						{formatCount(summaryCounts.users)}
-					</span>
-				</button>
+					return (
+						<button
+							key={option.value}
+							type="button"
+							role="tab"
+							aria-selected={option.value === category}
+							aria-label={
+								option.value === "all"
+									? __("All Events")
+									: option.label
+							}
+							onClick={() => onCategoryChange(option.value)}
+							className={cn(
+								"activity-page-filter",
+								option.value === category &&
+									"activity-page-filter-active"
+							)}
+						>
+							<Icon size={14} className="shrink-0" />
+							<span>{option.label}</span>
+							<span className="activity-page-filter-count">
+								{formatCount(option.count)}
+							</span>
+						</button>
+					);
+				})}
 			</div>
 
-			<div className="activity-page-page-size">
-				<PageSizeControl
-					value={limit}
-					onChange={onLimitChange}
-					ariaLabel={__("Show per page")}
-				/>
-			</div>
+			<PageSizeControl
+				value={limit}
+				onChange={onLimitChange}
+				className="activity-page-page-size"
+				ariaLabel={__("Rows per page")}
+			/>
 		</div>
 	);
 }

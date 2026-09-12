@@ -104,9 +104,19 @@ mkdir -p "$RELEASE_DIR" "$RELEASE_ROOT"
 find "$RELEASE_ROOT" -maxdepth 1 \( -name 'peakurl-*.zip' -o -name 'peakurl-*.zip.sha256' \) -exec rm -f {} +
 find "$RELEASE_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 
-copy_release_tree "$ROOT_DIR/site" "$RELEASE_DIR" \
-	--exclude='.DS_Store' \
-	--exclude='.gitkeep'
+# 1. Production Root Entrypoints and Metadata
+cp "$ROOT_DIR/index.php" "$RELEASE_DIR/index.php"
+cp "$ROOT_DIR/.htaccess" "$RELEASE_DIR/.htaccess"
+cp "$ROOT_DIR/config-sample.php" "$RELEASE_DIR/config-sample.php"
+cp "$ROOT_DIR/install.php" "$RELEASE_DIR/install.php"
+cp "$ROOT_DIR/setup-config.php" "$RELEASE_DIR/setup-config.php"
+cp "$ROOT_DIR/database-error.php" "$RELEASE_DIR/database-error.php"
+cp "$ROOT_DIR/README.html" "$RELEASE_DIR/README.html"
+cp "$ROOT_DIR/.version" "$RELEASE_DIR/.version"
+cp "$ROOT_DIR/LICENSE" "$RELEASE_DIR/LICENSE"
+cp "$ROOT_DIR/CREDITS.txt" "$RELEASE_DIR/CREDITS.txt"
+
+# 2. Persistent Content Baseline (Safe templates & protection files)
 mkdir -p "$RELEASE_DIR/content/cache" "$RELEASE_DIR/content/plugins" "$RELEASE_DIR/content/uploads/geoip"
 cp "$ROOT_DIR/content/index.php" "$RELEASE_DIR/content/index.php"
 cp "$ROOT_DIR/content/cache/index.php" "$RELEASE_DIR/content/cache/index.php"
@@ -117,21 +127,25 @@ cp "$ROOT_DIR/content/uploads/geoip/index.php" "$RELEASE_DIR/content/uploads/geo
 copy_release_language_packs "$ROOT_DIR/content/languages" "$RELEASE_DIR/content/languages"
 cp "$ROOT_DIR/content/landing-page.html" "$RELEASE_DIR/content/landing-page.html"
 
-copy_release_tree "$UI_BUILD_DIR" "$RELEASE_DIR" \
-	--exclude='index.html' \
-	--exclude='.DS_Store'
+# 3. Client SPA Assets
 cp "$UI_BUILD_DIR/index.html" "$RELEASE_DIR/app.html"
+copy_release_tree "$UI_BUILD_DIR/assets" "$RELEASE_DIR/assets" \
+	--exclude='.DS_Store'
 
-cp "$ROOT_DIR/.version" "$RELEASE_DIR/.version"
-cp "$ROOT_DIR/LICENSE" "$RELEASE_DIR/LICENSE"
-cp "$ROOT_DIR/CREDITS.txt" "$RELEASE_DIR/CREDITS.txt"
+# 4. Server Runtime Allowlist (Exclude development tests, phpunit, caches, and envs)
+mkdir -p "$RELEASE_DIR/server"
+if [ -f "$ROOT_DIR/server/.htaccess" ]; then
+	cp "$ROOT_DIR/server/.htaccess" "$RELEASE_DIR/server/.htaccess"
+fi
 
-copy_release_tree "$ROOT_DIR/server" "$RELEASE_DIR/server" \
-	--exclude='.DS_Store' \
-	--exclude='.gitkeep' \
-	--exclude='.env'
+for server_dir in api bin core database features http public services templates utils vendor; do
+	if [ -d "$ROOT_DIR/server/$server_dir" ]; then
+		copy_release_tree "$ROOT_DIR/server/$server_dir" "$RELEASE_DIR/server/$server_dir" \
+			--exclude='.DS_Store' \
+			--exclude='.gitkeep'
+	fi
+done
 
-rm -f "$RELEASE_DIR/server/.env"
 remove_release_placeholder_files "$RELEASE_DIR"
 
 printf 'Creating zip archive...\n'

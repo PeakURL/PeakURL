@@ -107,8 +107,14 @@ find "$RELEASE_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 copy_release_tree "$ROOT_DIR/site" "$RELEASE_DIR" \
 	--exclude='.DS_Store' \
 	--exclude='.gitkeep'
+mkdir -p "$RELEASE_DIR/content/cache" "$RELEASE_DIR/content/plugins" "$RELEASE_DIR/content/uploads/geoip"
+cp "$ROOT_DIR/content/index.php" "$RELEASE_DIR/content/index.php"
+cp "$ROOT_DIR/content/cache/index.php" "$RELEASE_DIR/content/cache/index.php"
+cp "$ROOT_DIR/content/cache/.htaccess" "$RELEASE_DIR/content/cache/.htaccess"
+cp "$ROOT_DIR/content/plugins/index.php" "$RELEASE_DIR/content/plugins/index.php"
+cp "$ROOT_DIR/content/uploads/index.php" "$RELEASE_DIR/content/uploads/index.php"
+cp "$ROOT_DIR/content/uploads/geoip/index.php" "$RELEASE_DIR/content/uploads/geoip/index.php"
 copy_release_language_packs "$ROOT_DIR/content/languages" "$RELEASE_DIR/content/languages"
-mkdir -p "$RELEASE_DIR/content"
 cp "$ROOT_DIR/content/landing-page.html" "$RELEASE_DIR/content/landing-page.html"
 
 copy_release_tree "$UI_BUILD_DIR" "$RELEASE_DIR" \

@@ -5,7 +5,7 @@
  * Shown when config.php exists but PeakURL cannot establish a connection with
  * its configured database settings.
  *
- * @package PeakURL\Site
+ * @package PeakURL
  * @since 1.3.0
  */
 
@@ -18,20 +18,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . DIRECTORY_SEPARATOR );
 }
 
-$root_path     = __DIR__;
-$runtime_path  = is_dir( $root_path . '/server' ) ? $root_path . '/server' : $root_path;
-$autoload_path = file_exists( $root_path . '/vendor/autoload.php' )
-	? $root_path . '/vendor/autoload.php'
-	: $runtime_path . '/vendor/autoload.php';
+require_once ABSPATH . 'load.php';
 
-if ( ! file_exists( $autoload_path ) ) {
-	http_response_code( 500 );
-	header( 'Content-Type: text/plain; charset=utf-8' );
-	echo "PeakURL dependencies are missing. Upload the complete release package before continuing.\n";
-	exit();
-}
+$environment  = \PeakURL\Core\Config\Environment::get_instance();
+$root_path    = $environment->get_source_root();
+$runtime_path = $environment->get_runtime_root();
 
-require $autoload_path;
+$environment->load_autoloader();
 
 $base_path     = InstallScreen::get_base_path(
 	(string) ( $_SERVER['SCRIPT_NAME'] ?? '/database-error.php' ),

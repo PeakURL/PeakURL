@@ -661,6 +661,13 @@ class Service {
 	 * @since 1.0.0
 	 */
 	public function bulk_create_urls( Request $request, array $payload ): array {
+		$user = $this->auth_service->get_current_user( $request );
+		$this->authorization->validate_capability(
+			$user,
+			'create_links',
+			__( 'You do not have permission to create links.', 'peakurl' ),
+		);
+
 		if ( empty( $payload['urls'] ) || ! is_array( $payload['urls'] ) ) {
 			throw new ApiException(
 				__( 'The `urls` field is required and must be an array.', 'peakurl' ),
@@ -1311,7 +1318,7 @@ class Service {
 
 		$this->authorization->validate_capability(
 			$user,
-			'delete_own_links',
+			'delete_all_links',
 			__( 'You do not have permission to empty trash.', 'peakurl' ),
 		);
 
@@ -1368,7 +1375,7 @@ class Service {
 
 		$this->authorization->validate_capability(
 			$user,
-			'delete_own_links',
+			'delete_all_links',
 			__( 'You do not have permission to delete links.', 'peakurl' ),
 		);
 

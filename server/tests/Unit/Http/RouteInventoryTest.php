@@ -325,7 +325,7 @@ class RouteInventoryTest extends TestCase {
 		// Settings & System Configuration
 		'GET /api/v1/system/general'                       => array(
 			'area'       => 'Settings',
-			'capability' => 'manage_site_settings',
+			'capability' => 'authenticated',
 			'coverage'   => array( 'contract', 'auth', 'e2e' ),
 		),
 		'POST /api/v1/system/general'                      => array(

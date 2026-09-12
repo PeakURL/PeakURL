@@ -666,7 +666,7 @@ class Service {
 		}
 
 		$request->expire_cookie(
-			(string) $this->config[ Constants::SESSION_COOKIE_NAME ],
+			(string) ( $this->config[ Constants::SESSION_COOKIE_NAME ] ?? Constants::DEFAULT_SESSION_COOKIE_NAME ),
 			Security::session_cookie_options( $this->config, $request ),
 		);
 
@@ -961,6 +961,13 @@ class Service {
 			'manage_profile',
 			__( 'You do not have permission to manage account security.', 'peakurl' ),
 		);
+
+		if ( '' === trim( $token ) ) {
+			throw new ApiException(
+				__( 'Verification token is required.', 'peakurl' ),
+				422,
+			);
+		}
 
 		$row            = $this->users_api->get_user( (string) $user['id'] );
 		$pending_secret = (string) ( $row['two_factor_pending_secret'] ?? '' );
@@ -1352,7 +1359,7 @@ class Service {
 		}
 
 		$request->queue_cookie(
-			(string) $this->config[ Constants::SESSION_COOKIE_NAME ],
+			(string) ( $this->config[ Constants::SESSION_COOKIE_NAME ] ?? Constants::DEFAULT_SESSION_COOKIE_NAME ),
 			$this->crypto->sign_session_token( $raw_token ),
 			Security::session_cookie_options(
 				$this->config,
@@ -1637,7 +1644,7 @@ class Service {
 				(string) ( $row['role'] ?? 'editor' ),
 			),
 			'isEmailVerified' => ! empty( $row['is_email_verified'] ),
-			'emailVerifiedAt' => $row['email_verified_at']
+			'emailVerifiedAt' => ! empty( $row['email_verified_at'] )
 				? Date::to_iso( (string) $row['email_verified_at'] )
 				: null,
 			'apiKey'          => null,

@@ -322,13 +322,6 @@ class Controller extends BaseController {
 	public function verify_two_factor( Request $request ): array {
 		$token = trim( (string) $request->get_body_param( 'token', '' ) );
 
-		if ( '' === $token ) {
-			return $this->error_response(
-				__( 'Verification token is required.', 'peakurl' ),
-				422,
-			);
-		}
-
 		return $this->success_response(
 			array(
 				'backupCodes' => $this->auth_service->verify_two_factor(

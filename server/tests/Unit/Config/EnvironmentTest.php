@@ -59,7 +59,7 @@ class EnvironmentTest extends TestCase {
 			$this->assertSame( $prod_root . '/vendor', $environment->get_vendor_path() );
 			$this->assertSame( $prod_root . '/vendor/autoload.php', $environment->get_vendor_autoload_path() );
 			$this->assertSame( $prod_root . '/api/index.php', $environment->get_api_entrypoint() );
-			$this->assertSame( $prod_root . '/index.html', $environment->get_app_html_path() );
+			$this->assertSame( $prod_root . '/app.html', $environment->get_app_html_path() );
 			$this->assertSame( $prod_root . '/assets', $environment->get_assets_path() );
 			$this->assertSame( $prod_root . '/content', $environment->get_content_path() );
 			$this->assertSame( $prod_root . '/database/schema.sql', $environment->get_database_schema_path() );

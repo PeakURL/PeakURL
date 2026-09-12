@@ -278,11 +278,16 @@ class Environment {
 	/**
 	 * Return the absolute path to the React SPA HTML document.
 	 *
+	 * In development mode, returns `<root>/index.html`.
+	 * In production mode, returns `<root>/app.html`.
+	 *
 	 * @return string
 	 * @since 1.6.3
 	 */
 	public function get_app_html_path(): string {
-		return $this->source_root . '/index.html';
+		return $this->is_development
+			? $this->source_root . '/index.html'
+			: $this->source_root . '/app.html';
 	}
 
 	/**

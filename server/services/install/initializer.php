@@ -88,8 +88,7 @@ class Initializer {
 			return;
 		}
 
-		$app_path    = dirname( __DIR__, 2 );
-		$schema_path = rtrim( $app_path, DIRECTORY_SEPARATOR ) . '/database/schema.sql';
+		$schema_path = \PeakURL\Core\Config\Environment::get_instance()->get_database_schema_path();
 		$schema      = new DatabaseSchema( $connection, $schema_path );
 
 		try {
@@ -112,10 +111,18 @@ class Initializer {
 		$db        = new PeakURL_DB( $connection, $db_prefix );
 
 		if ( ! $db->table_exists( 'users' ) ) {
+			$setup_command = \PeakURL\Core\Config\Environment::get_instance()->is_development()
+				? 'php server/bin/setup-database.php'
+				: 'php bin/setup-database.php';
+
 			throw new ApiException(
-				__(
-					'Database tables are missing. Run the installer or `php bin/setup-database.php` inside the PHP runtime directory.',
-					'peakurl'
+				sprintf(
+					/* translators: %s: CLI setup command */
+					__(
+						'Database tables are missing. Run the installer or `%s` inside the PHP runtime directory.',
+						'peakurl'
+					),
+					$setup_command
 				),
 				500
 			);
@@ -349,5 +356,3 @@ class Initializer {
 		return $values;
 	}
 }
-
-class_alias( Initializer::class, 'PeakURL\Services\Install\Bootstrap' );

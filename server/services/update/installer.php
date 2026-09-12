@@ -404,8 +404,7 @@ class Installer {
 			return false;
 		}
 
-		return is_dir( $this->filesystem->join_path( $root_path, 'server' ) ) ||
-			is_dir( $this->filesystem->join_path( $root_path, 'app' ) ) ||
-			is_dir( $this->filesystem->join_path( $root_path, 'core' ) );
+		return is_dir( $this->filesystem->join_path( $root_path, 'core' ) ) ||
+			is_dir( $this->filesystem->join_path( $root_path, 'server' ) );
 	}
 }

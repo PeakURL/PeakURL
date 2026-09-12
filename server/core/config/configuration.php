@@ -99,15 +99,18 @@ class Configuration {
 	 * @return array<string, mixed> Fully-resolved configuration map.
 	 * @since 1.0.0
 	 */
-	public static function load( string $base_path ): array {
-		$root_path   = file_exists( $base_path . '/config.php' ) || file_exists( $base_path . '/config-sample.php' )
+	public static function load( ?string $base_path = null ): array {
+		$environment  = Environment::get_instance();
+		$root_path    = $environment->get_source_root();
+		$runtime_path = null !== $base_path && '' !== trim( $base_path )
 			? $base_path
-			: Environment::get_instance()->get_source_root();
-		$file_values = array_merge(
+			: $environment->get_runtime_root();
+		$file_values  = array_merge(
 			self::parse_config_file( $root_path . '/config.php' ),
-			self::parse_env_file( $base_path . '/.env' ),
+			self::parse_env_file( $root_path . '/.env' ),
+			self::parse_env_file( $runtime_path . '/.env' ),
 		);
-		$site_url    = self::get_value(
+		$site_url     = self::get_value(
 			Constants::SITE_URL,
 			$file_values,
 			'http://localhost:5173',
@@ -884,5 +887,3 @@ class Configuration {
 		return is_string( $value ) ? $value : '';
 	}
 }
-
-class_alias( Configuration::class, 'PeakURL\Core\Config\RuntimeConfig' );

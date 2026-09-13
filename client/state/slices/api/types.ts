@@ -93,7 +93,8 @@ export type ApiTagType =
 	| "GeneralSettings"
 	| "SystemStatus"
 	| "CacheStatus"
-	| "AdminNotices";
+	| "AdminNotices"
+	| "CronStatus";
 
 /**
  * Ordered list of RTK Query cache tags registered on the base API instance.
@@ -118,6 +119,7 @@ export const API_TAG_TYPES: ApiTagType[] = [
 	"SystemStatus",
 	"CacheStatus",
 	"AdminNotices",
+	"CronStatus",
 ];
 
 /**

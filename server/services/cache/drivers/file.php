@@ -286,6 +286,90 @@ class FileCache implements CacheInterface {
 	}
 
 	/**
+	 * Sweep and purge expired cache files while preserving root security files.
+	 *
+	 * @return int Number of deleted expired files.
+	 * @since 1.7.0
+	 */
+	public function purge_expired(): int {
+		if ( ! is_dir( $this->cache_dir ) ) {
+			return 0;
+		}
+
+		return $this->sweep_expired_directory( $this->cache_dir );
+	}
+
+	/**
+	 * Recursively sweep and delete expired cache files in a directory.
+	 *
+	 * @param string $dir Directory to scan.
+	 * @return int Number of deleted expired files.
+	 * @since 1.7.0
+	 */
+	private function sweep_expired_directory( string $dir ): int {
+		$deleted = 0;
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Scanning cache tree.
+		$items = @scandir( $dir );
+
+		if ( false === $items ) {
+			return 0;
+		}
+
+		$now = time();
+
+		foreach ( $items as $item ) {
+			if ( '.' === $item || '..' === $item || '.htaccess' === $item || 'index.html' === $item || 'index.php' === $item ) {
+				continue;
+			}
+
+			$path = $dir . '/' . $item;
+
+			if ( is_dir( $path ) ) {
+				$deleted += $this->sweep_expired_directory( $path );
+				// Remove subdirectory if empty.
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Checking if directory empty.
+				$remaining = @scandir( $path );
+				if ( is_array( $remaining ) && count( $remaining ) <= 2 ) {
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Removing empty directory.
+					@rmdir( $path );
+				}
+				continue;
+			}
+
+			if ( ! str_ends_with( $item, '.cache' ) ) {
+				continue;
+			}
+
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Reading cache file safely.
+			$raw = @file_get_contents( $path );
+			if ( false === $raw || '' === $raw ) {
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Deleting corrupt cache file.
+				@unlink( $path );
+				++$deleted;
+				continue;
+			}
+
+			try {
+				$data = json_decode( $raw, true, 512, JSON_THROW_ON_ERROR );
+				if ( is_array( $data ) && isset( $data['expires_at'] ) ) {
+					$expires_at = (int) $data['expires_at'];
+					if ( $expires_at > 0 && $now > $expires_at ) {
+						// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Deleting expired cache file.
+						@unlink( $path );
+						++$deleted;
+					}
+				}
+			} catch ( \Throwable ) {
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Deleting corrupt cache file.
+				@unlink( $path );
+				++$deleted;
+			}
+		}
+
+		return $deleted;
+	}
+
+	/**
 	 * Convert a logical cache key into a partitioned filesystem path.
 	 *
 	 * @param string $key Logical cache key.

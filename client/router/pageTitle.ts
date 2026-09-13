@@ -111,6 +111,10 @@ export function getPageTitle(pathname: string): string {
 		return withSiteTitleSuffix(__("Export"));
 	}
 
+	if ("/dashboard/tools/scheduled-jobs" === pathname) {
+		return withSiteTitleSuffix(__("Scheduled Jobs"));
+	}
+
 	if ("/dashboard/tools/system-status" === pathname) {
 		return withSiteTitleSuffix(__("System Status"));
 	}

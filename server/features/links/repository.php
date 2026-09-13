@@ -181,7 +181,7 @@ class Repository {
 	 *
 	 * @param string $user_id User primary ID.
 	 * @return string|null User role string or null.
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function get_user_role( string $user_id ): ?string {
 		return $this->db->get_var(

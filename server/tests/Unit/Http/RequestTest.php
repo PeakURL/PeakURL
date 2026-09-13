@@ -206,4 +206,25 @@ class RequestTest extends TestCase {
 		);
 		$this->assertSame( '/peakurl', $sub_req->get_base_path() );
 	}
+
+	public function test_json_data_and_input_retrieval(): void {
+		$body = array(
+			'job_id' => 'peakurl_geoip_update',
+			'force'  => true,
+		);
+
+		$request = new Request(
+			'POST',
+			'/api/v1/system/cron/run',
+			array(),
+			$body
+		);
+
+		$this->assertSame( $body, $request->json_data() );
+		$this->assertSame( $body, $request->input() );
+		$this->assertSame( 'peakurl_geoip_update', $request->input( 'job_id' ) );
+		$this->assertTrue( $request->input( 'force' ) );
+		$this->assertNull( $request->input( 'nonexistent' ) );
+		$this->assertSame( 'fallback_val', $request->input( 'nonexistent', 'fallback_val' ) );
+	}
 }

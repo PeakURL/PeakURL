@@ -136,7 +136,7 @@ class Service {
 	 * Get the underlying repository instance.
 	 *
 	 * @return Repository Analytics repository engine.
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function get_repository(): Repository {
 		return $this->data;

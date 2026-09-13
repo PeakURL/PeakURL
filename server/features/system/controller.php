@@ -145,4 +145,70 @@ class Controller extends BaseController {
 			__( 'Database upgrade complete.', 'peakurl' ),
 		);
 	}
+
+	/**
+	 * Return the registered background jobs and current schedule status.
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed> JSON success response.
+	 * @since 1.7.0
+	 */
+	public function cron_status( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->get_cron_status( $request ),
+			__( 'Cron status loaded.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Run all due background jobs or a specific job from request payload.
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed> JSON success response.
+	 * @since 1.7.0
+	 */
+	public function run_cron( Request $request ): array {
+		$payload = $request->json_data();
+		$job_id  = is_array( $payload ) ? (string) ( $payload['job_id'] ?? $payload['id'] ?? '' ) : '';
+
+		return $this->success_response(
+			$this->system_service->run_cron_job( $request, '' !== $job_id ? $job_id : null ),
+			__( 'Background job executed.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Run a specific registered background job.
+	 *
+	 * @param Request     $request Incoming HTTP request (admin-only).
+	 * @param string|null $job_id  Optional job identifier override.
+	 * @return array<string, mixed> JSON success response.
+	 * @since 1.7.0
+	 */
+	public function run_cron_job( Request $request, ?string $job_id = null ): array {
+		if ( null === $job_id || '' === trim( $job_id ) ) {
+			$job_id = $request->get_route_param( 'id' );
+		}
+
+		if ( null === $job_id || '' === trim( (string) $job_id ) ) {
+			$payload = $request->json_data();
+			$job_id  = is_array( $payload ) ? (string) ( $payload['job_id'] ?? $payload['id'] ?? '' ) : '';
+		}
+
+		return $this->success_response(
+			$this->system_service->run_cron_job( $request, '' !== $job_id ? $job_id : null ),
+			__( 'Background job executed.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Run a registered background job immediately.
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed> JSON success response.
+	 * @since 1.7.0
+	 */
+	public function cron_run_now( Request $request ): array {
+		return $this->run_cron_job( $request );
+	}
 }

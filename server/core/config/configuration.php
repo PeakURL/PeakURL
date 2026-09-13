@@ -333,9 +333,10 @@ class Configuration {
 	 * @since 1.3.0
 	 */
 	public static function has_database_configuration( string $base_path ): bool {
+		$environment = Environment::get_instance();
 		$root_path   = file_exists( $base_path . '/config.php' ) || file_exists( $base_path . '/config-sample.php' )
 			? $base_path
-			: Environment::get_instance()->get_source_root();
+			: ( $base_path === $environment->get_runtime_root() ? $environment->get_source_root() : $base_path );
 		$file_values = self::parse_config_file( $root_path . '/config.php' );
 
 		return (

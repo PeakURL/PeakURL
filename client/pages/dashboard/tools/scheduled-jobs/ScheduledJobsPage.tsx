@@ -1,0 +1,437 @@
+import { useMemo, useState } from "react";
+import {
+	AlertCircle,
+	AlertTriangle,
+	CalendarClock,
+	Clock,
+	Play,
+	RefreshCw,
+	Search,
+	ShieldCheck,
+} from "lucide-react";
+
+import type { CronJob } from "@/api";
+import { Button, useNotification } from "@/components";
+import { useAdminAccess } from "@/hooks";
+import { __, _n, sprintf } from "@/i18n";
+import { extractErrorMessage } from "@/shared/errors";
+import { cn } from "@/shared/formatting";
+import {
+	useGetCronStatusQuery,
+	useRunCronJobMutation,
+	useRunDueJobsMutation,
+} from "@/state/slices/api";
+
+import { JobHistoryDrawer, JobsTable, RunDueJobsModal } from "./components";
+import { calculateCronStatusSummary } from "./summary";
+
+export function ScheduledJobsPage() {
+	const { canManageUpdates, isLoading: isAccessLoading } = useAdminAccess();
+	const notification = useNotification();
+
+	const {
+		data,
+		isLoading: isCronLoading,
+		isFetching,
+		isError,
+		refetch,
+	} = useGetCronStatusQuery();
+
+	const [runDueJobs, { isLoading: isRunningDue }] = useRunDueJobsMutation();
+	const [runCronJob] = useRunCronJobMutation();
+
+	const [runningJobId, setRunningJobId] = useState<string | null>(null);
+	const [selectedJobForHistory, setSelectedJobForHistory] =
+		useState<CronJob | null>(null);
+	const [isRunDueModalOpen, setIsRunDueModalOpen] = useState(false);
+	const [searchQuery, setSearchQuery] = useState("");
+
+	const jobs = useMemo(() => data?.jobs || [], [data?.jobs]);
+	const summary = useMemo(() => calculateCronStatusSummary(jobs), [jobs]);
+
+	const filteredJobs = useMemo(() => {
+		if (!searchQuery.trim()) {
+			return jobs;
+		}
+		const query = searchQuery.toLowerCase().trim();
+		return jobs.filter(
+			(job) =>
+				job.id.toLowerCase().includes(query) ||
+				job.title.toLowerCase().includes(query)
+		);
+	}, [jobs, searchQuery]);
+
+	// Keep selectedJobForHistory synced with fresh data after refetch
+	const activeHistoryJob = useMemo(() => {
+		if (!selectedJobForHistory) return null;
+		return (
+			jobs.find((j) => j.id === selectedJobForHistory.id) ||
+			selectedJobForHistory
+		);
+	}, [jobs, selectedJobForHistory]);
+
+	const handleRunSingleJob = async (job: CronJob) => {
+		if (runningJobId || isRunningDue) {
+			return;
+		}
+
+		setRunningJobId(job.id);
+		try {
+			const result = await runCronJob(job.id).unwrap();
+			if (result.success) {
+				notification.success(
+					result.summary ||
+						sprintf(
+							/* translators: %s is the job title */
+							__("Job [%s] executed successfully."),
+							job.title
+						)
+				);
+			} else {
+				notification.error(
+					result.error ||
+						sprintf(
+							/* translators: %s is the job title */
+							__("Job [%s] execution failed."),
+							job.title
+						)
+				);
+			}
+		} catch (err: unknown) {
+			notification.error(
+				extractErrorMessage(err) ||
+					sprintf(
+						/* translators: %s is the job title */
+						__("Failed to execute [%s]."),
+						job.title
+					)
+			);
+		} finally {
+			setRunningJobId(null);
+		}
+	};
+
+	const handleRunDueJobs = async () => {
+		try {
+			const result = await runDueJobs().unwrap();
+			const resultsMap = result.results || {};
+			const totalExecuted = Object.keys(resultsMap).length;
+
+			notification.success(
+				0 === totalExecuted
+					? __("No background jobs were currently due.")
+					: sprintf(
+							/* translators: %d is count of executed jobs */
+							_n(
+								"%d due job was executed.",
+								"%d due jobs were executed.",
+								totalExecuted
+							),
+							totalExecuted
+						)
+			);
+			setIsRunDueModalOpen(false);
+		} catch (err: unknown) {
+			notification.error(
+				extractErrorMessage(err) ||
+					__("Failed to execute due background jobs.")
+			);
+		}
+	};
+
+	/* ─── Non-admin gate ─── */
+	if (!isAccessLoading && !canManageUpdates) {
+		return (
+			<div className="scheduled-jobs-page-gate">
+				<div className="scheduled-jobs-page-gate-icon">
+					<ShieldCheck size={28} />
+				</div>
+				<h2 className="scheduled-jobs-page-gate-title">
+					{__("Admin access required")}
+				</h2>
+				<p className="scheduled-jobs-page-gate-summary">
+					{__(
+						"Only administrator accounts with update management capabilities can view and manage scheduled background jobs."
+					)}
+				</p>
+			</div>
+		);
+	}
+
+	return (
+		<div className="scheduled-jobs-page">
+			{/* ════════════════════════════════════
+			    PAGE HERO (Matching Activity Page)
+			   ════════════════════════════════════ */}
+			<div className="scheduled-jobs-page-hero">
+				<div className="scheduled-jobs-page-hero-copy">
+					<p className="scheduled-jobs-page-hero-badge">
+						<CalendarClock size={14} />
+						<span>{__("System Automation")}</span>
+					</p>
+					<h1
+						className="scheduled-jobs-page-title"
+						aria-label={__("Scheduled Jobs")}
+					>
+						{__("Scheduled Jobs")}
+					</h1>
+					<p className="scheduled-jobs-page-summary">
+						{__(
+							"Inspect recurring background tasks, monitor execution health, review recent run logs, and manually trigger jobs where authorized."
+						)}
+					</p>
+				</div>
+
+				<div className="scheduled-jobs-page-hero-actions">
+					{canManageUpdates ? (
+						<Button
+							variant="primary"
+							size="sm"
+							onClick={() => setIsRunDueModalOpen(true)}
+							disabled={isRunningDue || null !== runningJobId}
+							title={__(
+								"Execute all jobs that are currently due"
+							)}
+						>
+							<Play size={13} />
+							<span>{__("Run Due Jobs")}</span>
+						</Button>
+					) : null}
+
+					<button
+						type="button"
+						onClick={() => refetch()}
+						disabled={isFetching}
+						className="dashboard-page-refresh"
+						aria-label={__("Refresh")}
+						title={__("Refresh scheduled jobs status")}
+					>
+						<RefreshCw
+							className={cn(
+								"dashboard-page-refresh-icon",
+								isFetching && "animate-spin"
+							)}
+						/>
+					</button>
+				</div>
+			</div>
+
+			{/* ════════════════════════════════════
+			    OVERVIEW METRIC CARDS (Matching Activity Page 4-column Grid)
+			   ════════════════════════════════════ */}
+			<div className="scheduled-jobs-overview">
+				<div className="scheduled-jobs-overview-grid">
+					{/* Total Registered Jobs */}
+					<div className="scheduled-jobs-overview-item">
+						<div className="scheduled-jobs-overview-header">
+							<div className="scheduled-jobs-overview-copy">
+								<p className="scheduled-jobs-overview-title">
+									{__("Total Jobs")}
+								</p>
+								<p className="scheduled-jobs-overview-value">
+									{isCronLoading
+										? "—"
+										: (summary?.totalJobs ?? 0)}
+								</p>
+							</div>
+							<div className="scheduled-jobs-overview-icon scheduled-jobs-overview-icon-total">
+								<CalendarClock className="scheduled-jobs-overview-icon-glyph" />
+							</div>
+						</div>
+						<p className="scheduled-jobs-overview-note">
+							{__("Registered in system")}
+						</p>
+					</div>
+
+					{/* Active & Scheduled */}
+					<div className="scheduled-jobs-overview-item">
+						<div className="scheduled-jobs-overview-header">
+							<div className="scheduled-jobs-overview-copy">
+								<p className="scheduled-jobs-overview-title">
+									{__("Scheduled")}
+								</p>
+								<p className="scheduled-jobs-overview-value">
+									{isCronLoading
+										? "—"
+										: (summary?.scheduledJobs ?? 0)}
+								</p>
+							</div>
+							<div className="scheduled-jobs-overview-icon scheduled-jobs-overview-icon-scheduled">
+								<Clock className="scheduled-jobs-overview-icon-glyph" />
+							</div>
+						</div>
+						<p className="scheduled-jobs-overview-note">
+							{__("Active recurring tasks")}
+						</p>
+					</div>
+
+					{/* Currently Running */}
+					<div className="scheduled-jobs-overview-item">
+						<div className="scheduled-jobs-overview-header">
+							<div className="scheduled-jobs-overview-copy">
+								<p className="scheduled-jobs-overview-title">
+									{__("Running")}
+								</p>
+								<p
+									className={cn(
+										"scheduled-jobs-overview-value",
+										(summary?.runningJobs ?? 0) > 0 &&
+											"text-emerald-600 dark:text-emerald-400"
+									)}
+								>
+									{isCronLoading
+										? "—"
+										: (summary?.runningJobs ?? 0)}
+								</p>
+							</div>
+							<div className="scheduled-jobs-overview-icon scheduled-jobs-overview-icon-running">
+								<RefreshCw
+									className={cn(
+										"scheduled-jobs-overview-icon-glyph",
+										(summary?.runningJobs ?? 0) > 0 &&
+											"animate-spin"
+									)}
+								/>
+							</div>
+						</div>
+						<p className="scheduled-jobs-overview-note">
+							{__("Currently in progress")}
+						</p>
+					</div>
+
+					{/* Issues / Failing */}
+					<div className="scheduled-jobs-overview-item">
+						<div className="scheduled-jobs-overview-header">
+							<div className="scheduled-jobs-overview-copy">
+								<p className="scheduled-jobs-overview-title">
+									{__("Failed / Retrying")}
+								</p>
+								<p
+									className={cn(
+										"scheduled-jobs-overview-value",
+										(summary?.failedJobs ?? 0) > 0 &&
+											"text-rose-600 dark:text-rose-400"
+									)}
+								>
+									{isCronLoading
+										? "—"
+										: (summary?.failedJobs ?? 0)}
+								</p>
+							</div>
+							<div
+								className={cn(
+									"scheduled-jobs-overview-icon",
+									(summary?.failedJobs ?? 0) > 0
+										? "scheduled-jobs-overview-icon-failed"
+										: "scheduled-jobs-overview-icon-neutral"
+								)}
+							>
+								<AlertTriangle className="scheduled-jobs-overview-icon-glyph" />
+							</div>
+						</div>
+						<p className="scheduled-jobs-overview-note">
+							{__("Requiring attention")}
+						</p>
+					</div>
+				</div>
+			</div>
+
+			{/* ════════════════════════════════════
+			    MAIN PANEL & JOBS TABLE (Matching Activity Page Panel)
+			   ════════════════════════════════════ */}
+			<div className="scheduled-jobs-panel">
+				<div className="scheduled-jobs-panel-header">
+					<div className="flex items-center gap-2">
+						<h2 className="scheduled-jobs-panel-title">
+							{__("Registered Background Tasks")}
+						</h2>
+						<span className="scheduled-jobs-panel-badge">
+							{filteredJobs.length}
+						</span>
+					</div>
+
+					<div className="w-full sm:w-64">
+						<div className="relative">
+							<Search
+								size={14}
+								className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-text-muted"
+							/>
+							<input
+								type="text"
+								value={searchQuery}
+								onChange={(e) => setSearchQuery(e.target.value)}
+								placeholder={__("Search jobs...")}
+								className="w-full rounded-lg border border-stroke bg-surface ps-9 pe-3 py-1.5 text-xs text-heading placeholder:text-text-muted/60 transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+							/>
+						</div>
+					</div>
+				</div>
+
+				{isError ? (
+					<div className="p-8 text-center">
+						<AlertCircle
+							size={32}
+							className="mx-auto text-rose-600 dark:text-rose-400"
+						/>
+						<h3 className="mt-2 text-sm font-semibold text-rose-800 dark:text-rose-300">
+							{__("Failed to load scheduled jobs")}
+						</h3>
+						<p className="mt-1 text-xs text-rose-700 dark:text-rose-400">
+							{__(
+								"Could not retrieve registered jobs from the scheduler API."
+							)}
+						</p>
+						<div className="mt-4">
+							<Button
+								variant="outline"
+								size="sm"
+								onClick={() => refetch()}
+							>
+								{__("Retry")}
+							</Button>
+						</div>
+					</div>
+				) : isCronLoading ? (
+					<div className="p-12 text-center">
+						<div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-stroke border-t-accent" />
+						<p className="mt-3 text-xs text-text-muted">
+							{__("Loading scheduled jobs...")}
+						</p>
+					</div>
+				) : (
+					<JobsTable
+						jobs={filteredJobs}
+						runningJobId={runningJobId}
+						onViewHistory={(job) => setSelectedJobForHistory(job)}
+						onRunJob={handleRunSingleJob}
+						canManage={canManageUpdates}
+					/>
+				)}
+			</div>
+
+			{/* ════════════════════════════════════
+			    SLIDE-OVER HISTORY DRAWER & CONFIRM MODAL
+			   ════════════════════════════════════ */}
+			<JobHistoryDrawer
+				job={activeHistoryJob}
+				isOpen={Boolean(selectedJobForHistory)}
+				onClose={() => setSelectedJobForHistory(null)}
+				onRunJob={handleRunSingleJob}
+				isJobRunning={
+					null !== runningJobId &&
+					activeHistoryJob?.id === runningJobId
+				}
+				canManage={canManageUpdates}
+			/>
+
+			<RunDueJobsModal
+				isOpen={isRunDueModalOpen}
+				onClose={() => setIsRunDueModalOpen(false)}
+				onConfirm={handleRunDueJobs}
+				isExecuting={isRunningDue}
+			/>
+		</div>
+	);
+}
+
+export default ScheduledJobsPage;

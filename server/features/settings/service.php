@@ -863,9 +863,6 @@ class Service {
 			throw new ApiException( $exception->getMessage(), 422 );
 		}
 
-		$downloaded_at = Date::now();
-		$this->settings_api->update_option( 'geoip_last_downloaded_at', $downloaded_at, $downloaded_at, false );
-		$status               = $this->geoip_service->format_status( $status, $downloaded_at );
 		$status['downloaded'] = true;
 
 		return $status;

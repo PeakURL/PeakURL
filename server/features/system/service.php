@@ -17,6 +17,7 @@ use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Errors\ApiException;
+use PeakURL\Core\Scheduler\Scheduler;
 use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Http\Request;
 use PeakURL\Services\AdminNotices;
@@ -126,9 +127,21 @@ class Service {
 	 * Runtime configuration map.
 	 *
 	 * @var array<string, mixed>
+	/**
+	 * Runtime config map.
+	 *
+	 * @var array<string, mixed>
 	 * @since 1.0.0
 	 */
 	private array $config;
+
+	/**
+	 * Background job scheduler instance.
+	 *
+	 * @var Scheduler|null
+	 * @since 1.7.0
+	 */
+	private ?Scheduler $scheduler;
 
 	/**
 	 * Create a new System Service instance.
@@ -144,6 +157,7 @@ class Service {
 	 * @param Roles                $roles          Roles registry.
 	 * @param Authorization        $authorization  Authorization helper.
 	 * @param array<string, mixed> $config         Runtime config map.
+	 * @param Scheduler|null       $scheduler      Optional scheduler instance.
 	 * @since 1.0.0
 	 */
 	public function __construct(
@@ -157,7 +171,8 @@ class Service {
 		I18n $i18n_service,
 		Roles $roles,
 		Authorization $authorization,
-		array $config
+		array $config,
+		?Scheduler $scheduler = null
 	) {
 		$this->db             = $db;
 		$this->connection     = $connection;
@@ -170,6 +185,7 @@ class Service {
 		$this->roles          = $roles;
 		$this->authorization  = $authorization;
 		$this->config         = $config;
+		$this->scheduler      = $scheduler;
 	}
 
 	/**
@@ -550,5 +566,100 @@ class Service {
 		$decoded = json_decode( $value, true );
 
 		return is_array( $decoded ) ? $decoded : null;
+	}
+
+	/**
+	 * Return the current background jobs scheduler status and registered jobs.
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed> Cron status payload.
+	 *
+	 * @throws ApiException When scheduler is not configured.
+	 * @since 1.7.0
+	 */
+	public function get_cron_status( Request $request ): array {
+		$this->get_update_user( $request );
+
+		if ( null === $this->scheduler ) {
+			throw new ApiException(
+				__( 'Scheduler service is not configured.', 'peakurl' ),
+				500
+			);
+		}
+
+		return $this->scheduler->get_status();
+	}
+
+	/**
+	 * Trigger manual run-now execution of a registered background job.
+	 *
+	 * @param Request     $request Incoming HTTP request (admin-only).
+	 * @param string|null $job_id  Optional job identifier from route parameter.
+	 * @return array<string, mixed> Run result outcome.
+	 *
+	 * @throws ApiException When the job ID is missing, unknown, or execution fails.
+	 * @since 1.7.0
+	 */
+	public function run_cron_job( Request $request, ?string $job_id = null ): array {
+		$this->get_update_user( $request );
+
+		if ( null === $this->scheduler ) {
+			throw new ApiException(
+				__( 'Scheduler service is not configured.', 'peakurl' ),
+				500
+			);
+		}
+
+		$target_id = $job_id;
+		if ( null === $target_id || '' === trim( $target_id ) ) {
+			$target_id = $request->get_route_param( 'id' );
+		}
+
+		if ( null === $target_id || '' === trim( (string) $target_id ) ) {
+			$payload   = $request->json_data();
+			$target_id = (string) ( $payload['job_id'] ?? $payload['id'] ?? '' );
+		}
+
+		$clean_id = trim( (string) $target_id );
+
+		// If no specific job ID was requested, run all due background jobs.
+		if ( '' === $clean_id ) {
+			try {
+				$results = $this->scheduler->run_due_jobs();
+
+				return array(
+					'run_all' => true,
+					'results' => $results,
+					'success' => true,
+				);
+			} catch ( \Throwable $exception ) {
+				throw new ApiException( $exception->getMessage(), 500 );
+			}
+		}
+
+		if ( ! $this->scheduler->get_registry()->has( $clean_id ) ) {
+			throw new ApiException(
+				sprintf(
+					/* translators: %s is the requested job ID. */
+					__( 'Unknown background job identifier: %s', 'peakurl' ),
+					$clean_id
+				),
+				404
+			);
+		}
+
+		try {
+			$result = $this->scheduler->run_job( $clean_id, true );
+
+			return array(
+				'job_id'  => $clean_id,
+				'status'  => $result->get_status(),
+				'summary' => $result->get_summary(),
+				'error'   => $result->get_error(),
+				'success' => $result->is_success(),
+			);
+		} catch ( \Throwable $exception ) {
+			throw new ApiException( $exception->getMessage(), 500 );
+		}
 	}
 }

@@ -1,0 +1,89 @@
+@layer components {
+	.background-jobs-summary-card {
+		@apply rounded-xl border border-stroke bg-surface p-4 shadow-2xs transition-all duration-200;
+	}
+
+	.background-jobs-summary-header {
+		@apply flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pb-3.5 border-b border-stroke/60;
+	}
+
+	.background-jobs-summary-header-left {
+		@apply flex items-center gap-3 min-w-0;
+	}
+
+	.background-jobs-summary-icon {
+		@apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface-alt text-text-muted border border-stroke/50;
+	}
+
+	.background-jobs-summary-title-wrap {
+		@apply min-w-0;
+	}
+
+	.background-jobs-summary-title {
+		@apply text-sm font-semibold text-heading truncate;
+	}
+
+	.background-jobs-summary-subtitle {
+		@apply text-xs text-text-muted truncate;
+	}
+
+	.background-jobs-summary-header-right {
+		@apply flex items-center gap-2.5 shrink-0;
+	}
+
+	.background-jobs-summary-link {
+		@apply inline-flex items-center gap-1.5 rounded-lg border border-stroke bg-surface-alt px-2.5 py-1 text-xs font-medium text-heading transition-colors hover:border-accent/40 hover:text-accent focus:outline-none;
+	}
+
+	.background-jobs-summary-grid {
+		@apply mt-3.5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6;
+	}
+
+	.background-jobs-summary-item {
+		@apply rounded-lg bg-surface-alt/60 p-2.5 border border-stroke/40;
+	}
+
+	.background-jobs-summary-label {
+		@apply text-[11px] font-medium text-text-muted uppercase tracking-wider truncate;
+	}
+
+	.background-jobs-summary-value {
+		@apply mt-1 text-sm font-semibold text-heading truncate;
+	}
+
+	.background-jobs-summary-value-detail {
+		@apply mt-0.5 text-[11px] text-text-muted truncate;
+	}
+
+	.background-jobs-summary-badge {
+		@apply inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium;
+	}
+
+	.background-jobs-summary-badge-healthy {
+		@apply bg-emerald-500/10 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300;
+	}
+
+	.background-jobs-summary-badge-degraded {
+		@apply bg-amber-500/10 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300;
+	}
+
+	.background-jobs-summary-badge-issues {
+		@apply bg-rose-500/10 text-rose-700 dark:bg-rose-500/20 dark:text-rose-300;
+	}
+
+	.background-jobs-summary-dot {
+		@apply h-1.5 w-1.5 rounded-full;
+	}
+
+	.background-jobs-summary-dot-healthy {
+		@apply bg-emerald-500;
+	}
+
+	.background-jobs-summary-dot-degraded {
+		@apply bg-amber-500;
+	}
+
+	.background-jobs-summary-dot-issues {
+		@apply bg-rose-500;
+	}
+}

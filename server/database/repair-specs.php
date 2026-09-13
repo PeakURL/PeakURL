@@ -110,6 +110,13 @@ class RepairSpecs {
 					LEFT JOIN users AS u ON w.user_id = u.id
 					WHERE u.id IS NULL',
 			),
+			array(
+				'label' => __( 'Removed orphaned cron runs.', 'peakurl' ),
+				'sql'   => 'DELETE cr
+					FROM cron_runs AS cr
+					LEFT JOIN cron_jobs AS cj ON cr.job_id = cj.id
+					WHERE cj.id IS NULL',
+			),
 		);
 	}
 }

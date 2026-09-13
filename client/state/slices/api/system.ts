@@ -1,4 +1,17 @@
-import { API_ROUTES } from "@/api";
+import {
+	API_ROUTES,
+	mapApiCronStatus,
+	mapApiRunCronJobResult,
+	mapApiRunDueJobsResult,
+} from "@/api";
+import type {
+	ApiCronStatusResponse,
+	ApiRunCronJobResponse,
+	ApiRunDueJobsResponse,
+	CronStatusResponse,
+	RunCronJobResult,
+	RunDueJobsResult,
+} from "@/api";
 
 import baseApi from "./base";
 import { createFormData } from "./formData";
@@ -33,6 +46,7 @@ const CACHE_CHANGE_TAGS = ["CacheStatus", "SystemStatus"] as const;
 const UPDATE_TAGS = ["Updates"] as const;
 const UPDATE_CHANGE_TAGS = ["Updates", "AdminNotices"] as const;
 const SYSTEM_STATUS_TAGS = ["SystemStatus"] as const;
+const CRON_TAGS = ["CronStatus"] as const;
 const DATABASE_UPDATE_TAGS = [
 	"Updates",
 	"AdminNotices",
@@ -328,6 +342,33 @@ export const systemApi = baseApi.injectEndpoints({
 				}
 			},
 		}),
+		getCronStatus: build.query<CronStatusResponse, void>({
+			query: () => API_ROUTES.system.cron,
+			transformResponse: (
+				response: ApiDataResponse<ApiCronStatusResponse>
+			) => mapApiCronStatus(response?.data),
+			providesTags: CRON_TAGS,
+		}),
+		runDueJobs: build.mutation<RunDueJobsResult, void>({
+			query: () => ({
+				url: API_ROUTES.system.cronRunDue,
+				method: "POST",
+			}),
+			transformResponse: (
+				response: ApiDataResponse<ApiRunDueJobsResponse>
+			) => mapApiRunDueJobsResult(response?.data),
+			invalidatesTags: CRON_TAGS,
+		}),
+		runCronJob: build.mutation<RunCronJobResult, string>({
+			query: (id: string) => ({
+				url: API_ROUTES.system.cronRunJob(id),
+				method: "POST",
+			}),
+			transformResponse: (
+				response: ApiDataResponse<ApiRunCronJobResponse>
+			) => mapApiRunCronJobResult(response?.data),
+			invalidatesTags: CRON_TAGS,
+		}),
 	}),
 });
 
@@ -353,4 +394,7 @@ export const {
 	useReinstallUpdateMutation,
 	useUpgradeDatabaseSchemaMutation,
 	useGetReleaseNotesQuery,
+	useGetCronStatusQuery,
+	useRunDueJobsMutation,
+	useRunCronJobMutation,
 } = systemApi;

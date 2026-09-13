@@ -6,7 +6,7 @@
  * before Composer autoloading is initialized.
  *
  * @package PeakURL
- * @since 1.6.3
+ * @since 1.7.0
  */
 
 declare(strict_types=1);

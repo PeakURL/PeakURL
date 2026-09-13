@@ -346,6 +346,28 @@ export const API_ROUTES = {
 		captcha: apiPath("system", "captcha"),
 
 		/**
+		 * Relative API path: `system/cron`.
+		 *
+		 * Loads registered background jobs and schedule status.
+		 */
+		cron: apiPath("system", "cron"),
+
+		/**
+		 * Relative API path: `system/cron/run`.
+		 *
+		 * Runs all currently due background jobs.
+		 */
+		cronRunDue: apiPath("system", "cron", "run"),
+
+		/**
+		 * Relative API path: `system/cron/run/{id}`.
+		 *
+		 * Runs a specific background job immediately.
+		 */
+		cronRunJob: (id: ApiPathPart) =>
+			apiPath("system", "cron", "run", encodeApiParam(id)),
+
+		/**
 		 * Relative API path: `system/general`.
 		 *
 		 * Loads or saves general site settings.

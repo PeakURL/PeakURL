@@ -50,7 +50,7 @@ import type {
 	StatusView,
 	SystemCheck,
 } from "../types";
-import { SystemStatusSkeleton } from "./components";
+import { BackgroundJobsSummary, SystemStatusSkeleton } from "./components";
 
 function hasValue(value: unknown) {
 	return value !== undefined && value !== null && "" !== value;
@@ -1254,6 +1254,9 @@ function SystemStatusPage() {
 							</div>
 						</div>
 					</div>
+
+					{/* Background Jobs Operational Summary */}
+					<BackgroundJobsSummary />
 
 					{/* Subsystems Component Grid */}
 					<div className="system-status-page-subsystems">

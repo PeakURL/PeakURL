@@ -6,6 +6,7 @@ export function SystemStatusSkeleton() {
 			{/* Hero Skeleton */}
 			<div className="system-status-skeleton-hero">
 				<div className="system-status-skeleton-hero-copy">
+					<h1 className="sr-only">System Status</h1>
 					<SkeletonLoader className="system-status-skeleton-badge" />
 					<SkeletonLoader className="system-status-skeleton-title" />
 					<SkeletonLoader className="system-status-skeleton-summary" />

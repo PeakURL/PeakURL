@@ -41,6 +41,8 @@ class SchemaSpecs {
 			'clicks',
 			'audit_logs',
 			'webhooks',
+			'cron_jobs',
+			'cron_runs',
 		);
 	}
 
@@ -312,6 +314,110 @@ class SchemaSpecs {
 					'definition' => 'TINYINT(1) NOT NULL DEFAULT 1',
 				),
 			),
+			'cron_jobs'  => array(
+				array(
+					'name'       => 'title',
+					'definition' => 'VARCHAR(191) NOT NULL',
+				),
+				array(
+					'name'       => 'schedule_interval',
+					'definition' => 'INT UNSIGNED NOT NULL DEFAULT 0',
+				),
+				array(
+					'name'       => 'status',
+					'definition' => "VARCHAR(32) NOT NULL DEFAULT 'idle'",
+				),
+				array(
+					'name'       => 'next_run_at',
+					'definition' => 'DATETIME NOT NULL',
+				),
+				array(
+					'name'       => 'last_run_at',
+					'definition' => 'DATETIME DEFAULT NULL',
+				),
+				array(
+					'name'       => 'last_finished_at',
+					'definition' => 'DATETIME DEFAULT NULL',
+				),
+				array(
+					'name'       => 'locked_at',
+					'definition' => 'DATETIME DEFAULT NULL',
+				),
+				array(
+					'name'       => 'lock_token',
+					'definition' => 'VARCHAR(64) DEFAULT NULL',
+				),
+				array(
+					'name'       => 'lock_expires_at',
+					'definition' => 'DATETIME DEFAULT NULL',
+				),
+				array(
+					'name'       => 'attempts',
+					'definition' => 'INT UNSIGNED NOT NULL DEFAULT 0',
+				),
+				array(
+					'name'       => 'max_attempts',
+					'definition' => 'INT UNSIGNED NOT NULL DEFAULT 3',
+				),
+				array(
+					'name'       => 'retry_delay',
+					'definition' => 'INT UNSIGNED NOT NULL DEFAULT 60',
+				),
+				array(
+					'name'       => 'last_error',
+					'definition' => 'TEXT DEFAULT NULL',
+				),
+				array(
+					'name'       => 'is_enabled',
+					'definition' => 'TINYINT(1) NOT NULL DEFAULT 1',
+				),
+				array(
+					'name'       => 'created_at',
+					'definition' => 'DATETIME NOT NULL',
+				),
+				array(
+					'name'       => 'updated_at',
+					'definition' => 'DATETIME NOT NULL',
+				),
+			),
+			'cron_runs'  => array(
+				array(
+					'name'       => 'job_id',
+					'definition' => 'VARCHAR(64) NOT NULL',
+				),
+				array(
+					'name'       => 'status',
+					'definition' => 'VARCHAR(32) NOT NULL',
+				),
+				array(
+					'name'       => 'attempt',
+					'definition' => 'INT UNSIGNED NOT NULL DEFAULT 1',
+				),
+				array(
+					'name'       => 'started_at',
+					'definition' => 'DATETIME NOT NULL',
+				),
+				array(
+					'name'       => 'finished_at',
+					'definition' => 'DATETIME DEFAULT NULL',
+				),
+				array(
+					'name'       => 'duration_ms',
+					'definition' => 'INT UNSIGNED DEFAULT NULL',
+				),
+				array(
+					'name'       => 'error_message',
+					'definition' => 'TEXT DEFAULT NULL',
+				),
+				array(
+					'name'       => 'output_summary',
+					'definition' => 'VARCHAR(255) DEFAULT NULL',
+				),
+				array(
+					'name'       => 'created_at',
+					'definition' => 'DATETIME NOT NULL',
+				),
+			),
 		);
 	}
 
@@ -434,6 +540,40 @@ class SchemaSpecs {
 					'columns' => '(user_id, is_active)',
 				),
 			),
+			'cron_jobs'  => array(
+				array(
+					'name'    => 'idx_cron_jobs_due',
+					'type'    => 'index',
+					'columns' => '(is_enabled, status, next_run_at)',
+				),
+				array(
+					'name'    => 'idx_cron_jobs_lock',
+					'type'    => 'index',
+					'columns' => '(status, lock_expires_at)',
+				),
+				array(
+					'name'    => 'idx_cron_jobs_status',
+					'type'    => 'index',
+					'columns' => '(status)',
+				),
+			),
+			'cron_runs'  => array(
+				array(
+					'name'    => 'idx_cron_runs_job_created',
+					'type'    => 'index',
+					'columns' => '(job_id, created_at)',
+				),
+				array(
+					'name'    => 'idx_cron_runs_status',
+					'type'    => 'index',
+					'columns' => '(status)',
+				),
+				array(
+					'name'    => 'idx_cron_runs_created_at',
+					'type'    => 'index',
+					'columns' => '(created_at)',
+				),
+			),
 		);
 	}
 
@@ -483,6 +623,12 @@ class SchemaSpecs {
 				array(
 					'name'       => 'fk_webhooks_user_id',
 					'definition' => 'FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE',
+				),
+			),
+			'cron_runs'  => array(
+				array(
+					'name'       => 'fk_cron_runs_job_id',
+					'definition' => 'FOREIGN KEY (job_id) REFERENCES cron_jobs (id) ON DELETE CASCADE',
 				),
 			),
 		);

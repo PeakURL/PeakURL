@@ -22,6 +22,7 @@ use PeakURL\Services\Geoip\Downloader;
 use PeakURL\Services\Geoip\Filesystem;
 use PeakURL\Services\Geoip\Lookup;
 use PeakURL\Services\Geoip\Status;
+use PeakURL\Utils\Date;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -167,6 +168,8 @@ class Geoip {
 	/**
 	 * Download or refresh the GeoLite2 City database.
 	 *
+	 * Persists the successful download timestamp into settings storage.
+	 *
 	 * @return array<string, mixed>
 	 *
 	 * @throws \RuntimeException When the download fails.
@@ -175,7 +178,80 @@ class Geoip {
 	public function download_database(): array {
 		$this->downloader->download_database();
 
-		return $this->get_status();
+		$downloaded_at = Date::now();
+		$this->context->get_settings_api()->update_option(
+			'geoip_last_downloaded_at',
+			$downloaded_at,
+			$downloaded_at,
+			false
+		);
+
+		return $this->get_status( $downloaded_at );
+	}
+
+	/**
+	 * Trigger a GeoIP database update.
+	 *
+	 * Alias for download_database().
+	 *
+	 * @return array<string, mixed> Updated status payload.
+	 * @throws \RuntimeException When the update fails.
+	 * @since 1.7.0
+	 */
+	public function update_database(): array {
+		return $this->download_database();
+	}
+
+	/**
+	 * Set a custom downloader instance (useful for testing).
+	 *
+	 * @param Downloader $downloader Downloader instance.
+	 * @return void
+	 * @since 1.7.0
+	 */
+	public function set_downloader( Downloader $downloader ): void {
+		$this->downloader = $downloader;
+	}
+
+	/**
+	 * Check whether GeoIP updates can be performed in this environment.
+	 *
+	 * Requires configured MaxMind credentials and a writable destination directory.
+	 *
+	 * @return bool
+	 * @since 1.7.0
+	 */
+	public function is_update_available(): bool {
+		$status = $this->get_status();
+
+		if ( empty( $status['credentialsConfigured'] ) ) {
+			return false;
+		}
+
+		$content_dir = (string) ( $status['contentDir'] ?? '' );
+		if ( '' !== $content_dir && file_exists( $content_dir ) && ! is_writable( $content_dir ) ) {
+			return false;
+		}
+
+		$database_path = (string) ( $status['databasePath'] ?? '' );
+		$database_dir  = dirname( $database_path );
+		if ( '' !== $database_dir && file_exists( $database_dir ) && ! is_writable( $database_dir ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check whether the local GeoIP database is installed and readable for lookups.
+	 *
+	 * @return bool
+	 * @since 1.7.0
+	 */
+	public function is_available(): bool {
+		$status = $this->get_status();
+
+		return ! empty( $status['databaseReadable'] );
 	}
 
 	/**

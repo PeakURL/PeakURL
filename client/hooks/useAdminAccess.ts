@@ -1,3 +1,4 @@
+import { DEFAULT_USER_CAPABILITIES } from "@/api";
 import { authApi } from "@/state/slices";
 import { selectSessionUser } from "@/state/slices/api";
 
@@ -5,28 +6,7 @@ export const useAdminAccess = () => {
 	const { useAuthCheckQuery } = authApi;
 	const { data, isLoading, isFetching } = useAuthCheckQuery(undefined);
 	const user = selectSessionUser(data);
-	const rawCapabilities = user?.capabilities || {};
-	const capabilities = {
-		manageUsers: Boolean(rawCapabilities.manage_users),
-		manageSiteSettings: Boolean(rawCapabilities.manage_site_settings),
-		manageMailDelivery: Boolean(rawCapabilities.manage_mail_delivery),
-		manageLocationData: Boolean(rawCapabilities.manage_location_data),
-		managePerformance: Boolean(
-			rawCapabilities.manage_performance ||
-			rawCapabilities.manage_site_settings
-		),
-		manageUpdates: Boolean(rawCapabilities.manage_updates),
-		manageProfile: Boolean(rawCapabilities.manage_profile),
-		manageApiKeys: Boolean(rawCapabilities.manage_api_keys),
-		manageWebhooks: Boolean(rawCapabilities.manage_webhooks),
-		viewLinks: Boolean(rawCapabilities.view_links),
-		editLinks: Boolean(rawCapabilities.edit_links),
-		trashLinks: Boolean(rawCapabilities.trash_links),
-		deleteLinks: Boolean(rawCapabilities.delete_links),
-		emptyTrash: Boolean(rawCapabilities.empty_trash),
-		viewAnalytics: Boolean(rawCapabilities.view_analytics),
-		createLinks: Boolean(rawCapabilities.create_links),
-	};
+	const capabilities = user?.capabilities || DEFAULT_USER_CAPABILITIES;
 
 	return {
 		user,

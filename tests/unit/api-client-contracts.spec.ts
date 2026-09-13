@@ -1,10 +1,16 @@
 import { test, expect } from "@playwright/test";
 import {
 	API_ROUTES,
+	DEFAULT_USER_CAPABILITIES,
 	buildApiRouteWithQuery,
 	createApiQueryParams,
 	getApiRequestUrl,
-} from "../../client/api/api";
+	mapApiCapabilities,
+	mapApiUser,
+	mapUserCapabilitiesToApi,
+} from "../../client/api";
+import type { ApiProfileUser, ApiUserCapabilities } from "../../client/api";
+import { selectSessionUser } from "../../client/state/slices/api";
 import {
 	extractErrorMessage,
 	getErrorMessage,
@@ -248,6 +254,136 @@ test.describe("Frontend API Client Contracts", () => {
 
 			// Bulk Restore: POST /api/v1/urls/restore
 			expect(API_ROUTES.urls.bulkRestore).toBe("urls/restore");
+		});
+	});
+
+	test.describe("API Boundary & Type Consistency", () => {
+		test("mapApiCapabilities maps snake_case wire payload to camelCase domain model", () => {
+			const rawCapabilities: ApiUserCapabilities = {
+				manage_users: true,
+				manage_site_settings: true,
+				manage_mail_delivery: false,
+				manage_location_data: true,
+				manage_performance: null,
+				manage_updates: true,
+				manage_profile: true,
+				manage_api_keys: true,
+				manage_webhooks: false,
+				view_links: true,
+				edit_links: true,
+				trash_links: true,
+				delete_links: true,
+				empty_trash: true,
+				view_analytics: true,
+				create_links: true,
+			};
+
+			const domainCapabilities = mapApiCapabilities(rawCapabilities);
+
+			expect(domainCapabilities).toEqual({
+				manageUsers: true,
+				manageSiteSettings: true,
+				manageMailDelivery: false,
+				manageLocationData: true,
+				managePerformance: true, // Derived fallback: manage_performance || manage_site_settings
+				manageUpdates: true,
+				manageProfile: true,
+				manageApiKeys: true,
+				manageWebhooks: false,
+				viewLinks: true,
+				editLinks: true,
+				trashLinks: true,
+				deleteLinks: true,
+				emptyTrash: true,
+				viewAnalytics: true,
+				createLinks: true,
+			});
+		});
+
+		test("mapApiCapabilities defaults safely for nullish or empty inputs", () => {
+			expect(mapApiCapabilities(null)).toEqual(DEFAULT_USER_CAPABILITIES);
+			expect(mapApiCapabilities(undefined)).toEqual(
+				DEFAULT_USER_CAPABILITIES
+			);
+			expect(mapApiCapabilities({})).toEqual(DEFAULT_USER_CAPABILITIES);
+		});
+
+		test("mapUserCapabilitiesToApi serializes camelCase domain model to snake_case wire payload", () => {
+			const serialized = mapUserCapabilitiesToApi({
+				manageUsers: true,
+				manageSiteSettings: false,
+				manageMailDelivery: true,
+				viewLinks: true,
+				editLinks: false,
+				trashLinks: true,
+				deleteLinks: false,
+				emptyTrash: false,
+			});
+
+			expect(serialized).toEqual({
+				manage_users: true,
+				manage_site_settings: false,
+				manage_mail_delivery: true,
+				view_links: true,
+				edit_links: false,
+				trash_links: true,
+				delete_links: false,
+				empty_trash: false,
+			});
+		});
+
+		test("mapApiUser normalizes user profile capabilities at the boundary", () => {
+			const rawUser: ApiProfileUser = {
+				id: "user_42",
+				username: "editor_user",
+				email: "editor@example.com",
+				role: "editor",
+				capabilities: {
+					manage_users: false,
+					view_links: true,
+					edit_links: true,
+					trash_links: true,
+					delete_links: false,
+					empty_trash: false,
+					view_analytics: true,
+					create_links: true,
+				},
+			};
+
+			const normalizedUser = mapApiUser(rawUser);
+
+			expect(normalizedUser).not.toBeNull();
+			expect(normalizedUser?.id).toBe("user_42");
+			expect(normalizedUser?.capabilities?.viewLinks).toBe(true);
+			expect(normalizedUser?.capabilities?.editLinks).toBe(true);
+			expect(normalizedUser?.capabilities?.trashLinks).toBe(true);
+			expect(normalizedUser?.capabilities?.deleteLinks).toBe(false);
+			expect(normalizedUser?.capabilities?.emptyTrash).toBe(false);
+			expect(normalizedUser?.capabilities?.manageUsers).toBe(false);
+		});
+
+		test("selectSessionUser resolves and normalizes user across data/user response wrappers", () => {
+			const rawUser: ApiProfileUser = {
+				id: "user_100",
+				username: "admin_user",
+				role: "admin",
+				capabilities: {
+					manage_users: true,
+					empty_trash: true,
+				},
+			};
+
+			const fromData = selectSessionUser({ data: rawUser });
+			expect(fromData?.id).toBe("user_100");
+			expect(fromData?.capabilities?.manageUsers).toBe(true);
+			expect(fromData?.capabilities?.emptyTrash).toBe(true);
+			expect(fromData?.capabilities?.viewLinks).toBe(false);
+
+			const fromUserWrapper = selectSessionUser({ user: rawUser });
+			expect(fromUserWrapper?.id).toBe("user_100");
+			expect(fromUserWrapper?.capabilities?.manageUsers).toBe(true);
+
+			expect(selectSessionUser(null)).toBeNull();
 		});
 	});
 });

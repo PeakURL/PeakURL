@@ -9,9 +9,9 @@ export interface ApiKeySummary {
 }
 
 /**
- * Capability flags returned with the authenticated profile.
+ * Raw capability flags returned by the backend HTTP JSON API (snake_case).
  */
-export interface ProfileUserCapabilities {
+export interface ApiUserCapabilities {
 	manage_users?: boolean | null;
 	manage_site_settings?: boolean | null;
 	manage_mail_delivery?: boolean | null;
@@ -31,9 +31,36 @@ export interface ProfileUserCapabilities {
 }
 
 /**
- * Current dashboard user profile returned by user/auth endpoints.
+ * Normalized user capability flags for internal application usage (camelCase).
  */
-export interface ProfileUser {
+export interface UserCapabilities {
+	manageUsers: boolean;
+	manageSiteSettings: boolean;
+	manageMailDelivery: boolean;
+	manageLocationData: boolean;
+	managePerformance: boolean;
+	manageUpdates: boolean;
+	manageProfile: boolean;
+	manageApiKeys: boolean;
+	manageWebhooks: boolean;
+	viewLinks: boolean;
+	editLinks: boolean;
+	trashLinks: boolean;
+	deleteLinks: boolean;
+	emptyTrash: boolean;
+	viewAnalytics: boolean;
+	createLinks: boolean;
+}
+
+/**
+ * Alias for UserCapabilities to preserve compatibility with existing imports.
+ */
+export type ProfileUserCapabilities = UserCapabilities;
+
+/**
+ * Raw user profile payload returned by the user and auth API endpoints.
+ */
+export interface ApiProfileUser {
 	_id?: string | null;
 	id?: string | null;
 	username?: string | null;
@@ -50,7 +77,14 @@ export interface ProfileUser {
 	baseApiUrl?: string | null;
 	siteUrl?: string | null;
 	apiKeys?: ApiKeySummary[] | null;
-	capabilities?: ProfileUserCapabilities | null;
+	capabilities?: ApiUserCapabilities | null;
+}
+
+/**
+ * Current dashboard user profile returned by user/auth endpoints (normalized).
+ */
+export interface ProfileUser extends Omit<ApiProfileUser, "capabilities"> {
+	capabilities?: UserCapabilities | null;
 }
 
 /**

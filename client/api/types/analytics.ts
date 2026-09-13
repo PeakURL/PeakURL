@@ -103,11 +103,25 @@ export interface ActivityLocation {
 }
 
 /**
+ * Server-defined event type literals returned by the activity endpoints.
+ */
+export type ActivityEventType =
+	| "link_created"
+	| "link_updated"
+	| "link_deleted"
+	| "link_trashed"
+	| "link_restored"
+	| "trash_emptied"
+	| "user_created"
+	| "user_updated"
+	| "user_deleted";
+
+/**
  * Activity-log item returned by the analytics endpoints.
  */
 export interface RecentActivity {
 	id?: string | null;
-	type?: string | null;
+	type?: ActivityEventType | string | null;
 	message?: string | null;
 	timestamp?: string | null;
 	link?: ActivityLink | null;

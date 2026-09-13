@@ -5,5 +5,6 @@
  * callers do not depend on the internal file layout of the API module.
  */
 
+export * from "./adapters";
 export * from "./api";
 export type * from "./types";

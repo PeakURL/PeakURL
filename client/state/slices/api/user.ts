@@ -1,4 +1,4 @@
-import { API_ROUTES } from "@/api";
+import { API_ROUTES, mapApiUser } from "@/api";
 import baseApi from "./base";
 import type {
 	ApiDataResponse,
@@ -47,7 +47,10 @@ const loggedOutTags = (result?: LogoutResponse) =>
 
 export const selectSessionUser = (
 	response?: SessionUserResponse | null
-): ProfileUser | null => response?.data ?? response?.user ?? null;
+): ProfileUser | null => {
+	const raw = response?.data ?? response?.user ?? null;
+	return mapApiUser(raw);
+};
 
 /**
  * RTK Query endpoints for authentication, profile, and user management.
@@ -91,6 +94,21 @@ export const userApi = baseApi.injectEndpoints({
 				method: "POST",
 				body,
 			}),
+			transformResponse: (response: LoginResponse): LoginResponse => {
+				const user = response?.data?.user
+					? (mapApiUser(response.data.user) ?? undefined)
+					: undefined;
+
+				return {
+					...response,
+					data: response.data
+						? {
+								...response.data,
+								user,
+							}
+						: undefined,
+				};
+			},
 			invalidatesTags: userProfileTags,
 		}),
 		verifyTwoFactorLogin: build.mutation<
@@ -102,6 +120,21 @@ export const userApi = baseApi.injectEndpoints({
 				method: "POST",
 				body,
 			}),
+			transformResponse: (response: LoginResponse): LoginResponse => {
+				const user = response?.data?.user
+					? (mapApiUser(response.data.user) ?? undefined)
+					: undefined;
+
+				return {
+					...response,
+					data: response.data
+						? {
+								...response.data,
+								user,
+							}
+						: undefined,
+				};
+			},
 			invalidatesTags: userProfileTags,
 		}),
 		logout: build.mutation<LogoutResponse, void>({
@@ -113,6 +146,14 @@ export const userApi = baseApi.injectEndpoints({
 		}),
 		getUserProfile: build.query<ApiDataResponse<ProfileUser>, void>({
 			query: () => API_ROUTES.users.me,
+			transformResponse: (
+				response: ApiDataResponse<ProfileUser>
+			): ApiDataResponse<ProfileUser> => ({
+				...response,
+				data: response?.data
+					? (mapApiUser(response.data) ?? undefined)
+					: undefined,
+			}),
 			providesTags: USER_PROFILE_TAGS,
 		}),
 		updateUserProfile: build.mutation<
@@ -124,10 +165,34 @@ export const userApi = baseApi.injectEndpoints({
 				method: "PUT",
 				body,
 			}),
+			transformResponse: (
+				response: ApiDataResponse<ProfileUser>
+			): ApiDataResponse<ProfileUser> => ({
+				...response,
+				data: response?.data
+					? (mapApiUser(response.data) ?? undefined)
+					: undefined,
+			}),
 			invalidatesTags: PROFILE_TAGS,
 		}),
 		authCheck: build.query<AuthCheckResponse, void>({
 			query: () => API_ROUTES.users.me,
+			transformResponse: (
+				response: AuthCheckResponse
+			): AuthCheckResponse => {
+				const normalizedData = response?.data
+					? (mapApiUser(response.data) ?? undefined)
+					: undefined;
+				const normalizedUser = response?.user
+					? (mapApiUser(response.user) ?? undefined)
+					: normalizedData;
+
+				return {
+					...response,
+					data: normalizedData,
+					user: normalizedUser,
+				};
+			},
 			providesTags: USER_PROFILE_TAGS,
 		}),
 		forgotPassword: build.mutation<

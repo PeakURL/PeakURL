@@ -106,6 +106,18 @@ jobs:
         run: |
           echo "127.0.0.1 peakurl.dev api.peakurl.dev peakurl.test" | sudo tee -a /etc/hosts
 
+      - name: Generate and trust local SSL certificates for proxy
+        run: |
+          mkdir -p docker/proxy/certs
+          openssl req -x509 -newkey rsa:2048 -nodes \
+            -keyout docker/proxy/certs/peakurl-local-key.pem \
+            -out docker/proxy/certs/peakurl-local.pem \
+            -subj "/CN=peakurl.dev" \
+            -days 365 \
+            -addext "subjectAltName=DNS:peakurl.dev,DNS:api.peakurl.dev,DNS:peakurl.test,DNS:localhost"
+          sudo cp docker/proxy/certs/peakurl-local.pem /usr/local/share/ca-certificates/peakurl-local.crt
+          sudo update-ca-certificates
+
       - name: Start Docker Stack
         run: docker compose up -d --build
 
@@ -117,6 +129,18 @@ jobs:
             exit 1
           fi
           docker compose ps
+
+      - name: Run Auth Smoke Tests
+        env:
+          PEAKURL_TEST_PASSWORD: ${{ secrets.PEAKURL_TEST_PASSWORD }}
+          PEAKURL_TEST_IDENTIFIER: admin
+        run: npm run smoke:auth
+
+      - name: Run Playwright E2E Tests
+        env:
+          PEAKURL_TEST_PASSWORD: ${{ secrets.PEAKURL_TEST_PASSWORD }}
+          PEAKURL_TEST_IDENTIFIER: admin
+        run: npm run test:e2e
 
       - name: Dump container diagnostics on failure
         if: failure()
@@ -131,18 +155,6 @@ jobs:
           docker compose logs peakurl-proxy --tail=100
           echo "=== PeakURL Database Logs ==="
           docker compose logs peakurl-db --tail=100
-
-      - name: Run Auth Smoke Tests
-        env:
-          PEAKURL_TEST_PASSWORD: ${{ secrets.PEAKURL_TEST_PASSWORD }}
-          PEAKURL_TEST_IDENTIFIER: admin
-        run: npm run smoke:auth
-
-      - name: Run Playwright E2E Tests
-        env:
-          PEAKURL_TEST_PASSWORD: ${{ secrets.PEAKURL_TEST_PASSWORD }}
-          PEAKURL_TEST_IDENTIFIER: admin
-        run: npm run test:e2e
 
       - name: Teardown Docker Stack
         if: always()

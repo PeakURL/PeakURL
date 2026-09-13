@@ -21,10 +21,12 @@ export interface ProfileUserCapabilities {
 	manage_profile?: boolean | null;
 	manage_api_keys?: boolean | null;
 	manage_webhooks?: boolean | null;
-	view_all_links?: boolean | null;
-	view_own_links?: boolean | null;
-	view_site_analytics?: boolean | null;
-	view_own_analytics?: boolean | null;
+	view_links?: boolean | null;
+	edit_links?: boolean | null;
+	trash_links?: boolean | null;
+	delete_links?: boolean | null;
+	empty_trash?: boolean | null;
+	view_analytics?: boolean | null;
 	create_links?: boolean | null;
 }
 

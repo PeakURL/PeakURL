@@ -87,36 +87,66 @@ class Authorization {
 	}
 
 	/**
-	 * Check whether a user is authorized for record access by ownership or global capability.
+	 * Check whether a user has a specific capability.
+	 *
+	 * @param array<string, mixed> $user       User row.
+	 * @param string               $capability Capability name.
+	 * @return bool True if authorized.
+	 * @since 1.6.3
+	 */
+	public function has_capability( array $user, string $capability ): bool {
+		return $this->roles->has_capability( $user, $capability );
+	}
+
+	/**
+	 * Check whether a user is an administrator.
+	 *
+	 * @param array<string, mixed> $user User row.
+	 * @return bool True if admin.
+	 * @since 1.6.3
+	 */
+	public function is_admin( array $user ): bool {
+		return $this->roles->is_admin( $user );
+	}
+
+	/**
+	 * Check whether a user is authorized for record access by ownership or administrative privilege.
 	 *
 	 * @param array<string, mixed> $user              Current user.
 	 * @param string               $owner_user_id     Record owner user ID.
-	 * @param string               $own_capability    Capability allowed for owned records.
-	 * @param string               $global_capability Capability allowed site-wide.
+	 * @param string               $action_capability Capability required for the action.
+	 * @param bool                 $owner_only        Whether the action is strictly restricted to owned records for non-admins.
 	 * @return bool True if authorized.
 	 */
 	public function can_access_record(
 		array $user,
 		string $owner_user_id,
-		string $own_capability,
-		string $global_capability
+		string $action_capability,
+		bool $owner_only = false
 	): bool {
-		if ( $this->roles->has_capability( $user, $global_capability ) ) {
+		if ( ! $this->roles->has_capability( $user, $action_capability ) ) {
+			return false;
+		}
+
+		if ( $this->roles->is_admin( $user ) ) {
 			return true;
 		}
 
-		return (string) ( $user['id'] ?? '' ) === $owner_user_id
-			&& $this->roles->has_capability( $user, $own_capability );
+		if ( $owner_only ) {
+			return (string) ( $user['id'] ?? '' ) === $owner_user_id;
+		}
+
+		return true;
 	}
 
 	/**
-	 * Validate owner-or-admin access against a record's user_id column.
+	 * Validate access against a record's user_id column.
 	 *
 	 * @param array<string, mixed> $user              Current user.
 	 * @param string               $owner_user_id     Record owner user ID.
-	 * @param string               $own_capability    Capability allowed for owned records.
-	 * @param string               $global_capability Capability allowed site-wide.
+	 * @param string               $action_capability Capability required for the action.
 	 * @param string               $message           Error message for denied access.
+	 * @param bool                 $owner_only        Whether non-admins are restricted to owned records.
 	 * @return void
 	 *
 	 * @throws ApiException When the user cannot access the record.
@@ -124,11 +154,11 @@ class Authorization {
 	public function validate_record_access(
 		array $user,
 		string $owner_user_id,
-		string $own_capability,
-		string $global_capability,
-		string $message
+		string $action_capability,
+		string $message,
+		bool $owner_only = false
 	): void {
-		if ( ! $this->can_access_record( $user, $owner_user_id, $own_capability, $global_capability ) ) {
+		if ( ! $this->can_access_record( $user, $owner_user_id, $action_capability, $owner_only ) ) {
 			throw new ApiException( $message, 403 );
 		}
 	}
@@ -152,29 +182,18 @@ class Authorization {
 	}
 
 	/**
-	 * Check whether the user has permission to view all links site-wide.
+	 * Check whether the user has permission to view links.
 	 *
 	 * @param array<string, mixed> $user User row.
 	 * @return bool True if authorized.
 	 * @since 1.2.3
 	 */
-	public function can_view_all_links( array $user ): bool {
-		return $this->roles->has_capability( $user, 'view_all_links' );
+	public function can_view_links( array $user ): bool {
+		return $this->roles->has_capability( $user, 'view_links' );
 	}
 
 	/**
-	 * Check whether the user has permission to view their own links.
-	 *
-	 * @param array<string, mixed> $user User row.
-	 * @return bool True if authorized.
-	 * @since 1.2.3
-	 */
-	public function can_view_own_links( array $user ): bool {
-		return $this->roles->has_capability( $user, 'view_own_links' );
-	}
-
-	/**
-	 * Require that the user can view links (either site-wide or own) or throw 403.
+	 * Require that the user can view links or throw 403.
 	 *
 	 * @param array<string, mixed> $user    User row.
 	 * @param string|null          $message Optional custom error message.
@@ -184,7 +203,7 @@ class Authorization {
 	 * @since 1.2.3
 	 */
 	public function require_view_links( array $user, ?string $message = null ): void {
-		if ( $this->can_view_all_links( $user ) || $this->can_view_own_links( $user ) ) {
+		if ( $this->can_view_links( $user ) ) {
 			return;
 		}
 
@@ -195,29 +214,18 @@ class Authorization {
 	}
 
 	/**
-	 * Check whether the user has permission to view site-wide analytics.
+	 * Check whether the user has permission to view analytics.
 	 *
 	 * @param array<string, mixed> $user User row.
 	 * @return bool True if authorized.
 	 * @since 1.2.3
 	 */
-	public function can_view_site_analytics( array $user ): bool {
-		return $this->roles->has_capability( $user, 'view_site_analytics' );
+	public function can_view_analytics( array $user ): bool {
+		return $this->roles->has_capability( $user, 'view_analytics' );
 	}
 
 	/**
-	 * Check whether the user has permission to view their own analytics.
-	 *
-	 * @param array<string, mixed> $user User row.
-	 * @return bool True if authorized.
-	 * @since 1.2.3
-	 */
-	public function can_view_own_analytics( array $user ): bool {
-		return $this->roles->has_capability( $user, 'view_own_analytics' );
-	}
-
-	/**
-	 * Require that the user can view analytics (either site-wide or own) or throw 403.
+	 * Require that the user can view analytics or throw 403.
 	 *
 	 * @param array<string, mixed> $user    User row.
 	 * @param string|null          $message Optional custom error message.
@@ -227,7 +235,7 @@ class Authorization {
 	 * @since 1.2.3
 	 */
 	public function require_view_analytics( array $user, ?string $message = null ): void {
-		if ( $this->can_view_site_analytics( $user ) || $this->can_view_own_analytics( $user ) ) {
+		if ( $this->can_view_analytics( $user ) ) {
 			return;
 		}
 

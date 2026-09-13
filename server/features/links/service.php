@@ -324,11 +324,9 @@ class Service {
 		$row  = $this->data->find_url_row( $id );
 
 		if ( $row ) {
-			$this->authorization->validate_record_access(
+			$this->authorization->validate_capability(
 				$user,
-				(string) ( $row['user_id'] ?? '' ),
-				'view_own_links',
-				'view_all_links',
+				'view_links',
 				__( 'You do not have permission to view this link.', 'peakurl' ),
 			);
 		}
@@ -723,13 +721,26 @@ class Service {
 			return null;
 		}
 
-		$this->authorization->validate_record_access(
+		$this->authorization->validate_capability(
 			$user,
-			(string) ( $existing['user_id'] ?? '' ),
-			'edit_own_links',
-			'edit_all_links',
-			__( 'You do not have permission to edit this link.', 'peakurl' ),
+			'edit_links',
+			__( 'You do not have permission to edit links.', 'peakurl' ),
 		);
+
+		$owner_id = (string) ( $existing['user_id'] ?? '' );
+		$is_owner = (string) ( $user['id'] ?? '' ) === $owner_id;
+		$is_admin = $this->roles->is_admin( $user );
+
+		if ( ! $is_admin && ! $is_owner ) {
+			$owner_role = $this->data->get_user_role( $owner_id );
+			if ( 'admin' !== $owner_role ) {
+				throw new ApiException(
+					__( 'You do not have permission to edit this link.', 'peakurl' ),
+					403,
+				);
+			}
+		}
+
 		$payload = $this->filter_link_payload(
 			'pre_update_link',
 			$payload,
@@ -976,16 +987,33 @@ class Service {
 			return false;
 		}
 
-		$this->authorization->validate_record_access(
-			$user,
-			(string) ( $row['user_id'] ?? '' ),
-			'delete_own_links',
-			'delete_all_links',
-			__( 'You do not have permission to delete this link.', 'peakurl' ),
-		);
-
 		$is_trashed = 'trashed' === (string) ( $row['status'] ?? 'active' );
 		$permanent  = $force || $is_trashed;
+		$owner_id   = (string) ( $row['user_id'] ?? '' );
+		$is_owner   = (string) ( $user['id'] ?? '' ) === $owner_id;
+		$is_admin   = $this->roles->is_admin( $user );
+
+		if ( $permanent ) {
+			$this->authorization->validate_capability(
+				$user,
+				'delete_links',
+				__( 'You do not have permission to permanently delete links.', 'peakurl' ),
+			);
+		} else {
+			$this->authorization->validate_capability(
+				$user,
+				'trash_links',
+				__( 'You do not have permission to delete links.', 'peakurl' ),
+			);
+
+			if ( ! $is_admin && ! $is_owner ) {
+				throw new ApiException(
+					__( 'You do not have permission to move this link to trash.', 'peakurl' ),
+					403,
+				);
+			}
+		}
+
 		$link_title = ! empty( $row['title'] )
 			? (string) $row['title']
 			: '/' . (string) ( $row['alias'] ?? $row['short_code'] ?? $id );
@@ -1073,13 +1101,22 @@ class Service {
 			);
 		}
 
-		$this->authorization->validate_record_access(
+		$this->authorization->validate_capability(
 			$user,
-			(string) ( $row['user_id'] ?? '' ),
-			'edit_own_links',
-			'edit_all_links',
+			'edit_links',
 			__( 'You do not have permission to restore this link.', 'peakurl' ),
 		);
+
+		$owner_id = (string) ( $row['user_id'] ?? '' );
+		$is_owner = (string) ( $user['id'] ?? '' ) === $owner_id;
+		$is_admin = $this->roles->is_admin( $user );
+
+		if ( ! $is_admin && ! $is_owner ) {
+			throw new ApiException(
+				__( 'You do not have permission to restore this link.', 'peakurl' ),
+				403,
+			);
+		}
 
 		$now = Date::now();
 		$this->data->restore_url( $id, $now );
@@ -1124,15 +1161,15 @@ class Service {
 			return 0;
 		}
 
+		$is_admin    = $this->roles->is_admin( $user );
 		$allowed_ids = $ids;
 
-		if ( ! $this->roles->has_capability( $user, 'delete_all_links' ) ) {
-			if ( ! $this->roles->has_capability( $user, 'delete_own_links' ) ) {
-				throw new ApiException(
-					__( 'You do not have permission to delete links.', 'peakurl' ),
-					403,
-				);
-			}
+		if ( ! $is_admin ) {
+			$this->authorization->validate_capability(
+				$user,
+				'trash_links',
+				__( 'You do not have permission to delete links.', 'peakurl' ),
+			);
 
 			$allowed_ids = $this->data->get_allowed_ids_for_user(
 				$ids,
@@ -1159,6 +1196,14 @@ class Service {
 		}
 
 		$permanent = $force || $all_trashed;
+
+		if ( $permanent ) {
+			$this->authorization->validate_capability(
+				$user,
+				'delete_links',
+				__( 'You do not have permission to permanently delete links.', 'peakurl' ),
+			);
+		}
 
 		if ( ! $permanent ) {
 			$now         = Date::now();
@@ -1246,16 +1291,16 @@ class Service {
 			return 0;
 		}
 
+		$this->authorization->validate_capability(
+			$user,
+			'edit_links',
+			__( 'You do not have permission to restore links.', 'peakurl' ),
+		);
+
+		$is_admin    = $this->roles->is_admin( $user );
 		$allowed_ids = $ids;
 
-		if ( ! $this->roles->has_capability( $user, 'edit_all_links' ) ) {
-			if ( ! $this->roles->has_capability( $user, 'edit_own_links' ) ) {
-				throw new ApiException(
-					__( 'You do not have permission to restore links.', 'peakurl' ),
-					403,
-				);
-			}
-
+		if ( ! $is_admin ) {
 			$allowed_ids = $this->data->get_allowed_ids_for_user(
 				$ids,
 				(string) $user['id'],
@@ -1318,7 +1363,7 @@ class Service {
 
 		$this->authorization->validate_capability(
 			$user,
-			'delete_all_links',
+			'empty_trash',
 			__( 'You do not have permission to empty trash.', 'peakurl' ),
 		);
 
@@ -1375,49 +1420,102 @@ class Service {
 
 		$this->authorization->validate_capability(
 			$user,
-			'delete_own_links',
+			'trash_links',
 			__( 'You do not have permission to delete links.', 'peakurl' ),
 		);
 
-		$rows = $this->data->get_all_accessible_links( $user );
+		$is_admin = $this->roles->is_admin( $user );
+
+		if ( $is_admin ) {
+			$rows = $this->data->get_all_accessible_links( $user );
+
+			if ( empty( $rows ) ) {
+				return 0;
+			}
+
+			$ids = array_map( 'strval', array_column( $rows, 'id' ) );
+
+			foreach ( $rows as $deleted_row ) {
+				$link_title = ! empty( $deleted_row['title'] )
+					? (string) $deleted_row['title']
+					: '/' . (string) ( $deleted_row['alias'] ?? $deleted_row['short_code'] ?? $deleted_row['id'] );
+
+				$this->analytics_service->record_activity(
+					'link_deleted',
+					'Permanently deleted link "' . $link_title . '"',
+					(string) $user['id'],
+					null,
+					array(
+						'link' => $this->get_link_activity_meta( $deleted_row ),
+					),
+				);
+			}
+
+			$deleted_count = $this->data->bulk_delete_permanent( $ids );
+
+			$this->social_preview->delete_link_images(
+				array_column( $rows, 'social_image_path' ),
+			);
+
+			foreach ( $rows as $deleted_row ) {
+				$this->invalidate_link_cache( $deleted_row );
+
+				\do_action( 'link_deleted', $deleted_row, $request, $user );
+
+				$this->webhooks_service->dispatch_link_event( 'link.deleted', $deleted_row, $user );
+			}
+
+			return $deleted_count;
+		}
+
+		// Editor: Delete All moves only the Editor's own active links to trash (Active -> Trash lifecycle)
+		$rows = $this->data->get_all_accessible_links(
+			$user,
+			function ( array $u, array &$conditions, array &$params, string $table_alias ) {
+				$conditions[]             = $table_alias . '.user_id = :filter_user_id';
+				$conditions[]             = $table_alias . ".status = 'active'";
+				$params['filter_user_id'] = (string) ( $u['id'] ?? '' );
+			}
+		);
 
 		if ( empty( $rows ) ) {
 			return 0;
 		}
 
-		$ids = array_map( 'strval', array_column( $rows, 'id' ) );
+		$now         = Date::now();
+		$trashed_ids = array();
 
-		foreach ( $rows as $deleted_row ) {
-			$link_title = ! empty( $deleted_row['title'] )
-				? (string) $deleted_row['title']
-				: '/' . (string) ( $deleted_row['alias'] ?? $deleted_row['short_code'] ?? $deleted_row['id'] );
+		foreach ( $rows as $row ) {
+			$row_id = (string) ( $row['id'] ?? '' );
+			if ( '' === $row_id ) {
+				continue;
+			}
+
+			$this->data->trash_url( $row_id, $now );
+
+			$link_title = ! empty( $row['title'] )
+				? (string) $row['title']
+				: '/' . (string) ( $row['alias'] ?? $row['short_code'] ?? $row_id );
 
 			$this->analytics_service->record_activity(
-				'link_deleted',
-				'Permanently deleted link "' . $link_title . '"',
+				'link_trashed',
+				'Moved link "' . $link_title . '" to trash',
 				(string) $user['id'],
-				null,
+				$row_id,
 				array(
-					'link' => $this->get_link_activity_meta( $deleted_row ),
+					'link' => $this->get_link_activity_meta( $row ),
 				),
 			);
+
+			$trashed_ids[] = $row_id;
+			$this->invalidate_link_cache( $row );
+
+			\do_action( 'link_trashed', $row, $request, $user );
+
+			$this->webhooks_service->dispatch_link_event( 'link.deleted', $row, $user );
 		}
 
-		$deleted_count = $this->data->bulk_delete_permanent( $ids );
-
-		$this->social_preview->delete_link_images(
-			array_column( $rows, 'social_image_path' ),
-		);
-
-		foreach ( $rows as $deleted_row ) {
-			$this->invalidate_link_cache( $deleted_row );
-
-			\do_action( 'link_deleted', $deleted_row, $request, $user );
-
-			$this->webhooks_service->dispatch_link_event( 'link.deleted', $deleted_row, $user );
-		}
-
-		return $deleted_count;
+		return count( $trashed_ids );
 	}
 
 	/**
@@ -1518,6 +1616,7 @@ class Service {
 
 		return array(
 			'id'             => (string) $row['id'],
+			'userId'         => (string) ( $row['user_id'] ?? '' ),
 			'shortCode'      => (string) $row['short_code'],
 			'alias'          => (string) $row['alias'],
 			'shortUrl'       => $short_url,

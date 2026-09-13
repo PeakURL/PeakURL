@@ -19,10 +19,12 @@ export const useAdminAccess = () => {
 		manageProfile: Boolean(rawCapabilities.manage_profile),
 		manageApiKeys: Boolean(rawCapabilities.manage_api_keys),
 		manageWebhooks: Boolean(rawCapabilities.manage_webhooks),
-		viewAllLinks: Boolean(rawCapabilities.view_all_links),
-		viewOwnLinks: Boolean(rawCapabilities.view_own_links),
-		viewSiteAnalytics: Boolean(rawCapabilities.view_site_analytics),
-		viewOwnAnalytics: Boolean(rawCapabilities.view_own_analytics),
+		viewLinks: Boolean(rawCapabilities.view_links),
+		editLinks: Boolean(rawCapabilities.edit_links),
+		trashLinks: Boolean(rawCapabilities.trash_links),
+		deleteLinks: Boolean(rawCapabilities.delete_links),
+		emptyTrash: Boolean(rawCapabilities.empty_trash),
+		viewAnalytics: Boolean(rawCapabilities.view_analytics),
 		createLinks: Boolean(rawCapabilities.create_links),
 	};
 

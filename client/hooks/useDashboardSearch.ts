@@ -37,9 +37,7 @@ export const useDashboardSearch = () => {
 			canManageLocationData: capabilities.canManageLocationData,
 			canManageUpdates: capabilities.canManageUpdates,
 			canImportLinks: capabilities.canManageUsers,
-			canExportLinks:
-				capabilities.capabilities.viewAllLinks ||
-				capabilities.capabilities.viewOwnLinks,
+			canExportLinks: capabilities.capabilities.viewLinks,
 			canViewSystemStatus: capabilities.canManageUsers,
 		}),
 		[
@@ -49,8 +47,7 @@ export const useDashboardSearch = () => {
 			capabilities.canManageMailDelivery,
 			capabilities.canManageLocationData,
 			capabilities.canManageUpdates,
-			capabilities.capabilities.viewAllLinks,
-			capabilities.capabilities.viewOwnLinks,
+			capabilities.capabilities.viewLinks,
 		]
 	);
 	const routeMatches = useMemo(

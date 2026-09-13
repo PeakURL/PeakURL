@@ -464,11 +464,9 @@ class Service {
 			return null;
 		}
 
-		$this->authorization->validate_record_access(
+		$this->authorization->validate_capability(
 			$user,
-			(string) ( $url['user_id'] ?? '' ),
-			'view_own_analytics',
-			'view_site_analytics',
+			'view_analytics',
 			__( 'You do not have permission to view analytics for this link.', 'peakurl' ),
 		);
 

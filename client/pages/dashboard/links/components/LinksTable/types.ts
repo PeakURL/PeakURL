@@ -40,6 +40,8 @@ export interface LinkRowProps {
 	formatNumber: (value: number) => string;
 	isTrashTab?: boolean;
 	sortBy?: LinksSortBy;
+	isAdmin?: boolean;
+	currentUserId?: string | null;
 }
 
 /**
@@ -55,4 +57,5 @@ export interface TableHeaderRowProps {
 	isTrashTab?: boolean;
 	trashedCount?: number;
 	sortBy?: LinksSortBy;
+	isAdmin?: boolean;
 }

@@ -29,11 +29,12 @@ class Roles {
 	/**
 	 * WordPress-style role capability map for PeakURL users.
 	 *
-	 * - Administrators have site-wide control: managing users, site settings,
-	 *   performing cross-user link mutations, and executing global destructive operations (Empty Trash).
-	 * - Editors have ownership-scoped control: managing, creating, updating, and deleting
-	 *   their own links and viewing their own analytics, but cannot mutate other users'
-	 *   links or execute global destructive operations (Empty Trash).
+	 * Action-oriented capability model:
+	 * - Administrators have complete site control: user management, system settings,
+	 *   and global destructive capabilities (permanent link deletion, empty trash).
+	 * - Editors have content management capabilities: creating, viewing, and editing
+	 *   permitted links (including administrator-created links), trashing their own links,
+	 *   and viewing analytics, without destructive permanent deletion or administrative access.
 	 *
 	 * @var array<string, array<string, bool>>
 	 * @since 1.0.0
@@ -46,26 +47,24 @@ class Roles {
 			'manage_location_data' => true,
 			'manage_performance'   => true,
 			'manage_updates'       => true,
-			'view_all_links'       => true,
-			'view_own_links'       => true,
-			'edit_all_links'       => true,
-			'edit_own_links'       => true,
-			'delete_all_links'     => true,
-			'delete_own_links'     => true,
-			'view_site_analytics'  => true,
-			'view_own_analytics'   => true,
 			'manage_webhooks'      => true,
 			'manage_api_keys'      => true,
 			'manage_profile'       => true,
 			'create_links'         => true,
+			'view_links'           => true,
+			'edit_links'           => true,
+			'trash_links'          => true,
+			'delete_links'         => true,
+			'empty_trash'          => true,
+			'view_analytics'       => true,
 		),
 		'editor' => array(
-			'view_own_links'     => true,
-			'edit_own_links'     => true,
-			'delete_own_links'   => true,
-			'view_own_analytics' => true,
-			'manage_profile'     => true,
-			'create_links'       => true,
+			'create_links'   => true,
+			'view_links'     => true,
+			'edit_links'     => true,
+			'trash_links'    => true,
+			'view_analytics' => true,
+			'manage_profile' => true,
 		),
 	);
 

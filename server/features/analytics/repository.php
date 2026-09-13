@@ -296,18 +296,18 @@ class Repository {
 		array &$params,
 		string $table_alias = 'u'
 	): void {
-		if ( $this->authorization->can_view_all_links( $user ) ) {
+		if ( $this->authorization->is_admin( $user ) ) {
 			return;
 		}
 
-		if ( $this->authorization->can_view_own_links( $user ) ) {
+		if ( $this->authorization->has_capability( $user, 'view_analytics' ) ) {
 			$conditions[]             = $table_alias . '.user_id = :filter_user_id';
 			$params['filter_user_id'] = (string) ( $user['id'] ?? '' );
 			return;
 		}
 
 		throw new ApiException(
-			__( 'You do not have permission to view links.', 'peakurl' ),
+			__( 'You do not have permission to view analytics.', 'peakurl' ),
 			403,
 		);
 	}
@@ -334,11 +334,11 @@ class Repository {
 		string $click_alias = 'c',
 		string $url_alias = 'u'
 	): void {
-		if ( $this->authorization->can_view_site_analytics( $user ) ) {
+		if ( $this->authorization->is_admin( $user ) ) {
 			return;
 		}
 
-		if ( $this->authorization->can_view_own_analytics( $user ) ) {
+		if ( $this->authorization->has_capability( $user, 'view_analytics' ) ) {
 			$join_sql                .=
 				' INNER JOIN urls ' .
 				$url_alias .
@@ -376,11 +376,11 @@ class Repository {
 		array &$params,
 		string $url_alias = 'u'
 	): void {
-		if ( $this->authorization->can_view_site_analytics( $user ) ) {
+		if ( $this->authorization->is_admin( $user ) ) {
 			return;
 		}
 
-		if ( $this->authorization->can_view_own_analytics( $user ) ) {
+		if ( $this->authorization->has_capability( $user, 'view_analytics' ) ) {
 			$conditions[]             = $url_alias . '.user_id = :filter_user_id';
 			$params['filter_user_id'] = (string) ( $user['id'] ?? '' );
 			return;
@@ -1571,8 +1571,8 @@ class Repository {
 			$conditions[] = "LEFT(a.type, 5) = 'user_'";
 		}
 
-		if ( ! $this->authorization->can_view_site_analytics( $user ) ) {
-			if ( ! $this->authorization->can_view_own_analytics( $user ) ) {
+		if ( ! $this->authorization->is_admin( $user ) ) {
+			if ( ! $this->authorization->has_capability( $user, 'view_analytics' ) ) {
 				throw new ApiException(
 					__(
 						'You do not have permission to view activity.',

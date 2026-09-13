@@ -74,6 +74,13 @@ class LinksDatabasePersistenceTest extends TestCase {
 			ON DUPLICATE KEY UPDATE role = 'editor'"
 		);
 
+		// Ensure another editor user (id: 8888) exists in peakurl_users
+		$this->pdo->exec(
+			"INSERT INTO peakurl_users (id, username, email, first_name, last_name, password_hash, role, is_email_verified, created_at, updated_at)
+			VALUES (8888, 'other_editor', 'other_editor@example.com', 'Other', 'Editor', '\$2y\$10\$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'editor', 1, NOW(), NOW())
+			ON DUPLICATE KEY UPDATE role = 'editor'"
+		);
+
 		// Seed API keys for admin and editor
 		$admin_key_hash  = hash( 'sha256', $this->admin_token );
 		$editor_key_hash = hash( 'sha256', $this->editor_token );
@@ -601,15 +608,15 @@ class LinksDatabasePersistenceTest extends TestCase {
 		$this->assertSame( 200, $del_all_res['status'] );
 		$this->assertSame( 2, $del_all_res['body']['data']['deletedCount'] );
 
-		// Editor's links are permanently removed
-		$stmt = $this->pdo->prepare( 'SELECT COUNT(*) FROM peakurl_urls WHERE id IN (:id1, :id2)' );
+		// Editor's active links are moved to TRASH (NOT permanently removed)
+		$stmt = $this->pdo->prepare( 'SELECT COUNT(*) FROM peakurl_urls WHERE id IN (:id1, :id2) AND status = "trashed"' );
 		$stmt->execute(
 			array(
 				'id1' => $ed1_id,
 				'id2' => $ed2_id,
 			)
 		);
-		$this->assertSame( 0, (int) $stmt->fetchColumn(), 'Editor links must be permanently removed.' );
+		$this->assertSame( 2, (int) $stmt->fetchColumn(), 'Editor active links must be moved to trash, not permanently deleted.' );
 
 		// Admin's link remains INTACT in database
 		$stmt = $this->pdo->prepare( 'SELECT COUNT(*) FROM peakurl_urls WHERE id = :id AND status = "active"' );
@@ -666,8 +673,30 @@ class LinksDatabasePersistenceTest extends TestCase {
 		$this->assertSame( 2, (int) $stmt->fetchColumn(), 'Empty Trash denial must produce zero database mutations.' );
 	}
 
-	public function test_editor_cannot_edit_other_user_link_in_database(): void {
-		$alias   = $this->test_prefix . 'edit-admin';
+	public function test_editor_can_view_administrator_created_link_in_database(): void {
+		$admin_alias = $this->test_prefix . 'view-admin';
+		$res_admin   = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/adm-view',
+					'title'          => 'Admin Created Link',
+					'alias'          => $admin_alias,
+				)
+			)
+		);
+		$admin_id    = $res_admin['body']['data']['id'];
+
+		// Editor can view administrator-created link
+		$view_res = $this->dispatch( $this->editor_request( 'GET', '/api/v1/urls/' . $admin_id ) );
+		$this->assertSame( 200, $view_res['status'] );
+		$this->assertSame( 'Admin Created Link', $view_res['body']['data']['title'] );
+	}
+
+	public function test_editor_can_edit_administrator_created_link_in_database(): void {
+		$alias   = $this->test_prefix . 'edit-admin-ok';
 		$res     = $this->dispatch(
 			$this->admin_request(
 				'POST',
@@ -675,14 +704,55 @@ class LinksDatabasePersistenceTest extends TestCase {
 				array(),
 				array(
 					'destinationUrl' => 'https://example.com/initial',
-					'title'          => 'Original',
+					'title'          => 'Original Admin Title',
 					'alias'          => $alias,
 				)
 			)
 		);
 		$link_id = $res['body']['data']['id'];
 
-		// Editor attempts to edit admin-owned link
+		// Editor edits admin-created link -> permitted
+		$edit_res = $this->dispatch(
+			$this->editor_request(
+				'PUT',
+				'/api/v1/urls/' . $link_id,
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/editor-updated',
+					'title'          => 'Editor Updated Title',
+				)
+			)
+		);
+		$this->assertSame( 200, $edit_res['status'] );
+
+		// Direct database assertion: values updated and user_id ownership preserved
+		$stmt = $this->pdo->prepare( 'SELECT destination_url, title, user_id FROM peakurl_urls WHERE id = :id' );
+		$stmt->execute( array( 'id' => $link_id ) );
+		$row = $stmt->fetch( PDO::FETCH_ASSOC );
+
+		$this->assertSame( 'https://example.com/editor-updated', $row['destination_url'] );
+		$this->assertSame( 'Editor Updated Title', $row['title'] );
+		$this->assertSame( '1', (string) $row['user_id'], 'Ownership must remain with the Administrator.' );
+	}
+
+	public function test_editor_cannot_edit_other_editor_link_in_database(): void {
+		$alias = $this->test_prefix . 'other-ed-link';
+
+		// Seed link owned by another editor (user_id: 8888)
+		$link_id = bin2hex( random_bytes( 16 ) );
+		$stmt    = $this->pdo->prepare(
+			'INSERT INTO peakurl_urls (id, user_id, short_code, alias, destination_url, title, status, created_at, updated_at)
+			VALUES (:id, 8888, :code, :alias, "https://example.com/other-ed", "Other Editor Link", "active", NOW(), NOW())'
+		);
+		$stmt->execute(
+			array(
+				'id'    => $link_id,
+				'code'  => $alias,
+				'alias' => $alias,
+			)
+		);
+
+		// Editor (user_id: 9999) attempts to edit another editor's link -> denied
 		$edit_res = $this->dispatch(
 			$this->editor_request(
 				'PUT',
@@ -696,12 +766,39 @@ class LinksDatabasePersistenceTest extends TestCase {
 		);
 		$this->assertSame( 403, $edit_res['status'] );
 
-		// Direct database assertion: original values untouched
 		$stmt = $this->pdo->prepare( 'SELECT destination_url, title FROM peakurl_urls WHERE id = :id' );
 		$stmt->execute( array( 'id' => $link_id ) );
 		$row = $stmt->fetch( PDO::FETCH_ASSOC );
 
-		$this->assertSame( 'https://example.com/initial', $row['destination_url'] );
-		$this->assertSame( 'Original', $row['title'] );
+		$this->assertSame( 'https://example.com/other-ed', $row['destination_url'] );
+		$this->assertSame( 'Other Editor Link', $row['title'] );
+	}
+
+	public function test_editor_cannot_permanently_delete_trashed_link_in_database(): void {
+		$alias = $this->test_prefix . 'ed-trashed-perm';
+		$res   = $this->dispatch(
+			$this->editor_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/ed-perm-test',
+					'alias'          => $alias,
+				)
+			)
+		);
+		$id    = $res['body']['data']['id'];
+
+		// Editor moves own link to trash
+		$this->dispatch( $this->editor_request( 'DELETE', '/api/v1/urls/' . $id ) );
+
+		// Editor attempts permanent deletion of trashed link -> must be denied 403
+		$del_perm_res = $this->dispatch( $this->editor_request( 'DELETE', '/api/v1/urls/' . $id ) );
+		$this->assertSame( 403, $del_perm_res['status'] );
+
+		// Database assertion: link remains intact in database as trashed
+		$stmt = $this->pdo->prepare( 'SELECT status FROM peakurl_urls WHERE id = :id' );
+		$stmt->execute( array( 'id' => $id ) );
+		$this->assertSame( 'trashed', $stmt->fetchColumn(), 'Editor must not be able to permanently delete trashed links.' );
 	}
 }

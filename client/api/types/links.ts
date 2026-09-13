@@ -20,6 +20,7 @@ export type LinksSortOrder = "asc" | "desc";
  */
 export interface LinkRecord {
 	id: string;
+	userId?: string | null;
 	destinationUrl: string;
 	alias?: string | null;
 	shortCode?: string | null;

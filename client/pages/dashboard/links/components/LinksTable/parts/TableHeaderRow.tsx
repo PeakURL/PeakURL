@@ -13,6 +13,7 @@ function TableHeaderRow({
 	isTrashTab = false,
 	trashedCount = 0,
 	sortBy,
+	isAdmin = false,
 }: TableHeaderRowProps) {
 	const hasSelection = selectedCount > 0;
 	if (hasSelection) {
@@ -44,14 +45,16 @@ function TableHeaderRow({
 										<span>{__("Restore selected")}</span>
 									</button>
 								)}
-								<button
-									type="button"
-									onClick={onBulkDelete}
-									className="links-table-header-delete-selected"
-								>
-									<Trash2 size={13} />
-									<span>{__("Delete permanently")}</span>
-								</button>
+								{isAdmin && (
+									<button
+										type="button"
+										onClick={onBulkDelete}
+										className="links-table-header-delete-selected"
+									>
+										<Trash2 size={13} />
+										<span>{__("Delete permanently")}</span>
+									</button>
+								)}
 								{onEmptyTrash && trashedCount > 0 && (
 									<button
 										type="button"

@@ -177,7 +177,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		$this->links_controller->empty_trash( $request );
 	}
 
-	public function test_editor_can_delete_all_links(): void {
+	public function test_editor_delete_all_moves_own_active_links_to_trash(): void {
 		$editor_user = array(
 			'id'       => '2',
 			'username' => 'site_editor',
@@ -198,13 +198,15 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 
 		$this->repository->expects( $this->once() )
 			->method( 'get_all_accessible_links' )
-			->with( $editor_user )
 			->willReturn( $mock_links );
 
 		$this->repository->expects( $this->once() )
-			->method( 'bulk_delete_permanent' )
-			->with( array( 'link_editor_1' ) )
-			->willReturn( 1 );
+			->method( 'trash_url' )
+			->with( 'link_editor_1' )
+			->willReturn( true );
+
+		$this->repository->expects( $this->never() )
+			->method( 'bulk_delete_permanent' );
 
 		$response = $this->links_controller->clear( $request );
 

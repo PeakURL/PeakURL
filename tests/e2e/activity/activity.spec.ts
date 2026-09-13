@@ -47,17 +47,20 @@ test.describe("Activity Feed Journeys", () => {
 		}
 
 		// Refresh activity
-		const refreshButton = page.locator(
-			".activity-page-hero-refresh, button[aria-label*='refresh' i]"
-		);
+		const refreshButton = page.getByRole("button", {
+			name: /refresh activity history/i,
+		});
 		if (await refreshButton.isVisible()) {
-			const refreshPromise = page.waitForResponse(
-				(res) =>
-					res.url().includes("/api/v1/analytics/activity") &&
-					res.status() === 200
-			);
-			await refreshButton.click();
-			await refreshPromise;
+			await expect(refreshButton).toBeEnabled();
+			await Promise.all([
+				page.waitForResponse(
+					(res) =>
+						res.url().includes("/api/v1/analytics/activity") &&
+						res.status() === 200,
+					{ timeout: 15000 }
+				),
+				refreshButton.click(),
+			]);
 		}
 	});
 });

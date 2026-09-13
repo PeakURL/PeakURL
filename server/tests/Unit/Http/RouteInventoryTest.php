@@ -174,17 +174,17 @@ class RouteInventoryTest extends TestCase {
 		// Links (URLs)
 		'GET /api/v1/urls'                                 => array(
 			'area'       => 'Links',
-			'capability' => 'view_own_links',
+			'capability' => 'view_links',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 		'GET /api/v1/urls/export'                          => array(
 			'area'       => 'Links',
-			'capability' => 'view_own_links',
+			'capability' => 'view_links',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 		'GET /api/v1/urls/{id}'                            => array(
 			'area'       => 'Links',
-			'capability' => 'view_own_links',
+			'capability' => 'view_links',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 		'POST /api/v1/urls'                                => array(
@@ -199,94 +199,94 @@ class RouteInventoryTest extends TestCase {
 		),
 		'POST /api/v1/urls/restore'                        => array(
 			'area'       => 'Links',
-			'capability' => 'edit_own_links',
+			'capability' => 'edit_links',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 		'POST /api/v1/urls/{id}/restore'                   => array(
 			'area'       => 'Links',
-			'capability' => 'edit_own_links',
+			'capability' => 'edit_links',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 		'POST /api/v1/urls/{id}'                           => array(
 			'area'       => 'Links',
-			'capability' => 'edit_own_links',
+			'capability' => 'edit_links',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 		'PUT /api/v1/urls/{id}'                            => array(
 			'area'       => 'Links',
-			'capability' => 'edit_own_links',
+			'capability' => 'edit_links',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 		'DELETE /api/v1/urls'                              => array(
 			'area'       => 'Links',
-			'capability' => 'delete_own_links',
+			'capability' => 'trash_links',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 		'DELETE /api/v1/urls/trash'                        => array(
 			'area'       => 'Links',
-			'capability' => 'delete_all_links',
+			'capability' => 'empty_trash',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 		'DELETE /api/v1/urls/bulk'                         => array(
 			'area'       => 'Links',
-			'capability' => 'delete_own_links',
+			'capability' => 'trash_links',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 		'DELETE /api/v1/urls/{id}'                         => array(
 			'area'       => 'Links',
-			'capability' => 'delete_own_links',
+			'capability' => 'trash_links',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 
 		// Analytics
 		'GET /api/v1/analytics'                            => array(
 			'area'       => 'Analytics',
-			'capability' => 'view_own_analytics',
+			'capability' => 'view_analytics',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 		'GET /api/v1/analytics/activity'                   => array(
 			'area'       => 'Analytics',
-			'capability' => 'view_own_analytics',
+			'capability' => 'view_analytics',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 		'GET /api/v1/analytics/recent-clicks'              => array(
 			'area'       => 'Analytics',
-			'capability' => 'view_own_analytics',
+			'capability' => 'view_analytics',
 			'coverage'   => array( 'contract', 'integration' ),
 		),
 		'GET /api/v1/analytics/activity/history'           => array(
 			'area'       => 'Analytics',
-			'capability' => 'view_own_analytics',
+			'capability' => 'view_analytics',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 		'POST /api/v1/analytics/activity/{id}/restore'     => array(
 			'area'       => 'Analytics',
-			'capability' => 'edit_own_links',
+			'capability' => 'edit_links',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 		'DELETE /api/v1/analytics/activity'                => array(
 			'area'       => 'Analytics',
-			'capability' => 'delete_all_links',
+			'capability' => 'delete_links',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 		'DELETE /api/v1/analytics/activity/bulk'           => array(
 			'area'       => 'Analytics',
-			'capability' => 'delete_all_links',
+			'capability' => 'delete_links',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 		'DELETE /api/v1/analytics/activity/{id}'           => array(
 			'area'       => 'Analytics',
-			'capability' => 'delete_all_links',
+			'capability' => 'delete_links',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 		'GET /api/v1/analytics/url/{id}/location'          => array(
 			'area'       => 'Analytics',
-			'capability' => 'view_own_analytics',
+			'capability' => 'view_analytics',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 		'GET /api/v1/analytics/url/{id}/stats'             => array(
 			'area'       => 'Analytics',
-			'capability' => 'view_own_analytics',
+			'capability' => 'view_analytics',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
 

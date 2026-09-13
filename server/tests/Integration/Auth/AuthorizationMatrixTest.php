@@ -41,11 +41,13 @@ class AuthorizationMatrixTest extends TestCase {
 			'manage_webhooks',
 			'manage_api_keys',
 			'manage_profile',
-			'view_all_links',
-			'edit_all_links',
-			'delete_all_links',
-			'view_site_analytics',
 			'create_links',
+			'view_links',
+			'edit_links',
+			'trash_links',
+			'delete_links',
+			'empty_trash',
+			'view_analytics',
 		);
 
 		foreach ( $expected_admin_caps as $cap ) {
@@ -75,6 +77,8 @@ class AuthorizationMatrixTest extends TestCase {
 			'manage_updates',
 			'manage_webhooks',
 			'manage_api_keys',
+			'delete_links',
+			'empty_trash',
 		);
 
 		foreach ( $denied_caps as $cap ) {
@@ -101,11 +105,11 @@ class AuthorizationMatrixTest extends TestCase {
 		);
 
 		$allowed_caps = array(
-			'view_own_links',
 			'create_links',
-			'edit_own_links',
-			'delete_own_links',
-			'view_own_analytics',
+			'view_links',
+			'edit_links',
+			'trash_links',
+			'view_analytics',
 			'manage_profile',
 		);
 
@@ -116,10 +120,10 @@ class AuthorizationMatrixTest extends TestCase {
 			);
 		}
 
-		$this->assertFalse( $this->auth->can_view_all_links( $editor ) );
-		$this->assertTrue( $this->auth->can_view_own_links( $editor ) );
-		$this->assertFalse( $this->roles->has_capability( $editor, 'delete_all_links' ) );
-		$this->assertFalse( $this->roles->has_capability( $editor, 'edit_all_links' ) );
+		$this->assertTrue( $this->auth->can_view_links( $editor ) );
+		$this->assertTrue( $this->auth->can_view_analytics( $editor ) );
+		$this->assertFalse( $this->roles->has_capability( $editor, 'delete_links' ) );
+		$this->assertFalse( $this->roles->has_capability( $editor, 'empty_trash' ) );
 	}
 
 	public function test_record_access_respects_ownership_and_global_capability(): void {
@@ -132,24 +136,24 @@ class AuthorizationMatrixTest extends TestCase {
 			'role' => 'admin',
 		);
 
-		// When Editor owns the record and has own-capability -> allowed
+		// When Editor has trash_links and owns the record -> allowed
 		$this->assertTrue(
-			$this->auth->can_access_record( $editor, 'user-editor-1', 'view_own_links', 'view_all_links' )
+			$this->auth->can_access_record( $editor, 'user-editor-1', 'trash_links', true )
 		);
 
-		// When Editor does NOT own the record and does NOT have global capability -> denied
+		// When Editor has trash_links but does NOT own the record and action is owner_only -> denied
 		$this->assertFalse(
-			$this->auth->can_access_record( $editor, 'other-user-99', 'view_own_links', 'view_all_links' )
+			$this->auth->can_access_record( $editor, 'other-user-99', 'trash_links', true )
 		);
 
-		// When Admin has global capability even if they do not own the record -> allowed
+		// When Admin performs action -> allowed even if not owner
 		$this->assertTrue(
-			$this->auth->can_access_record( $admin, 'other-user-99', 'view_own_links', 'view_all_links' )
+			$this->auth->can_access_record( $admin, 'other-user-99', 'trash_links', true )
 		);
 
-		// When user does NOT have global capability and does NOT own the record -> denied
+		// When user does NOT have capability -> denied
 		$this->assertFalse(
-			$this->auth->can_access_record( $editor, 'other-user-99', 'manage_webhooks', 'manage_webhooks' )
+			$this->auth->can_access_record( $editor, 'other-user-99', 'manage_webhooks' )
 		);
 	}
 

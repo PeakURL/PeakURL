@@ -217,10 +217,10 @@ class ApiRouteContractsTest extends TestCase {
 		$editor_capabilities = array(
 			'public',
 			'authenticated',
-			'view_own_links',
-			'edit_own_links',
-			'delete_own_links',
-			'view_own_analytics',
+			'view_links',
+			'edit_links',
+			'trash_links',
+			'view_analytics',
 			'manage_profile',
 			'create_links',
 		);
@@ -270,10 +270,10 @@ class ApiRouteContractsTest extends TestCase {
 		$editor_capabilities = array(
 			'public',
 			'authenticated',
-			'view_own_links',
-			'edit_own_links',
-			'delete_own_links',
-			'view_own_analytics',
+			'view_links',
+			'edit_links',
+			'trash_links',
+			'view_analytics',
 			'manage_profile',
 			'create_links',
 		);

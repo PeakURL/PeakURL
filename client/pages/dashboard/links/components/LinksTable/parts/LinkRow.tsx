@@ -32,6 +32,8 @@ function LinkRow({
 	formatNumber,
 	isTrashTab = false,
 	sortBy,
+	isAdmin = false,
+	currentUserId,
 }: LinkRowProps) {
 	const isTrashed = isTrashTab || "trashed" === link.status;
 	const statusLabel = isTrashed
@@ -242,13 +244,15 @@ function LinkRow({
 							>
 								<RotateCcw size={14} />
 							</button>
-							<button
-								onClick={() => onDelete(link)}
-								className="links-row-action links-row-action-delete text-error hover:text-error"
-								title={__("Delete Permanently")}
-							>
-								<Trash2 size={14} />
-							</button>
+							{isAdmin && (
+								<button
+									onClick={() => onDelete(link)}
+									className="links-row-action links-row-action-delete text-error hover:text-error"
+									title={__("Delete Permanently")}
+								>
+									<Trash2 size={14} />
+								</button>
+							)}
 						</>
 					) : (
 						<>
@@ -273,13 +277,18 @@ function LinkRow({
 							>
 								<Pencil size={14} />
 							</button>
-							<button
-								onClick={() => onDelete(link)}
-								className="links-row-action links-row-action-delete"
-								title={__("Delete")}
-							>
-								<Trash2 size={14} />
-							</button>
+							{(isAdmin ||
+								(link.userId &&
+									String(link.userId) ===
+										String(currentUserId))) && (
+								<button
+									onClick={() => onDelete(link)}
+									className="links-row-action links-row-action-delete"
+									title={__("Delete")}
+								>
+									<Trash2 size={14} />
+								</button>
+							)}
 						</>
 					)}
 				</div>

@@ -166,19 +166,27 @@ class Repository {
 		array &$params,
 		string $table_alias = 'u'
 	): void {
-		if ( $this->authorization->can_view_all_links( $user ) ) {
-			return;
-		}
-
-		if ( $this->authorization->can_view_own_links( $user ) ) {
-			$conditions[]             = $table_alias . '.user_id = :filter_user_id';
-			$params['filter_user_id'] = (string) ( $user['id'] ?? '' );
+		if ( $this->authorization->has_capability( $user, 'view_links' ) ) {
 			return;
 		}
 
 		throw new ApiException(
 			__( 'You do not have permission to view links.', 'peakurl' ),
 			403,
+		);
+	}
+
+	/**
+	 * Get the role of a user by primary ID.
+	 *
+	 * @param string $user_id User primary ID.
+	 * @return string|null User role string or null.
+	 * @since 1.6.3
+	 */
+	public function get_user_role( string $user_id ): ?string {
+		return $this->db->get_var(
+			'SELECT role FROM users WHERE id = :id LIMIT 1',
+			array( 'id' => $user_id ),
 		);
 	}
 
@@ -422,6 +430,10 @@ class Repository {
 			$filter_callback( $user, $conditions, $params, 'u' );
 		} else {
 			$this->apply_user_filter( $user, $conditions, $params, 'u' );
+			if ( ! $this->authorization->is_admin( $user ) ) {
+				$conditions[]                    = 'u.user_id = :trashed_count_user_id';
+				$params['trashed_count_user_id'] = (string) ( $user['id'] ?? '' );
+			}
 		}
 
 		return (int) $this->db->get_var(

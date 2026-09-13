@@ -11,7 +11,7 @@ export default defineConfig([
 	globalIgnores([
 		"build/**",
 		"release/**",
-		"app/vendor/**",
+		"server/vendor/**",
 		"content/**",
 		"dist/**",
 		"node_modules/**",
@@ -28,7 +28,7 @@ export default defineConfig([
 
 	// UI & Source TypeScript / TSX rules
 	{
-		files: ["ui/**/*.{ts,tsx}"],
+		files: ["client/**/*.{ts,tsx}"],
 		languageOptions: {
 			ecmaVersion: 2023,
 			sourceType: "module",
@@ -120,7 +120,7 @@ export default defineConfig([
 
 	// Entrypoint override for application mount (no component exports)
 	{
-		files: ["ui/PeakURL.tsx"],
+		files: ["client/PeakURL.tsx"],
 		rules: {
 			"react-refresh/only-export-components": "off",
 		},

@@ -1,0 +1,233 @@
+import {
+	Link2,
+	MousePointerClick,
+	PencilLine,
+	Shield,
+	Trash2,
+	UserMinus,
+	UserPen,
+	UserPlus,
+} from "lucide-react";
+import { Link } from "react-router";
+
+import { Button } from "@/components";
+import { __, sprintf } from "@/i18n";
+import { cn, formatDate } from "@/shared/formatting";
+import { decodeHtmlEntities, normalizeLinkTitle } from "@/shared/links";
+
+import type {
+	ActivityFeedProps,
+	ActivityPerson,
+	RecentActivity,
+} from "../types";
+
+const ActivityFeed = ({
+	recentActivities,
+	title = __("Recent Activity"),
+	emptyText = __("No recent activity"),
+	actionLabel = __("View All Activity"),
+	actionTo = "/dashboard/activity",
+	isScrollable = true,
+}: ActivityFeedProps) => {
+	const getActivityPersonName = (
+		person?: ActivityPerson | null
+	): string | null => {
+		if (!person) {
+			return null;
+		}
+
+		if (person.displayName) {
+			return decodeHtmlEntities(person.displayName);
+		}
+
+		const fullName = [person.firstName, person.lastName]
+			.filter(Boolean)
+			.join(" ")
+			.trim();
+
+		return decodeHtmlEntities(
+			fullName || person.username || person.email || null
+		);
+	};
+
+	const formatActivityMessage = (activity: RecentActivity) => {
+		const linkTitle = normalizeLinkTitle(activity.link?.title);
+		const linkName =
+			linkTitle ||
+			(activity.link?.alias
+				? `/${activity.link.alias}`
+				: activity.link?.shortCode
+					? `/${activity.link.shortCode}`
+					: __("Unknown"));
+		const userName =
+			getActivityPersonName(activity.user) || __("Unknown user");
+
+		let message = "";
+		if (activity.type === "link_created") {
+			message = sprintf(__('Created new link "%s"'), linkName);
+		} else if (activity.type === "link_updated") {
+			message = sprintf(__('Updated link "%s"'), linkName);
+		} else if (activity.type === "link_deleted") {
+			message = sprintf(__('Permanently deleted link "%s"'), linkName);
+		} else if (activity.type === "link_trashed") {
+			message = sprintf(__('Moved link "%s" to trash'), linkName);
+		} else if (activity.type === "link_restored") {
+			message = sprintf(__('Restored link "%s"'), linkName);
+		} else if (activity.type === "trash_emptied") {
+			const count = activity.count;
+			if (typeof count === "number" && count > 0) {
+				message =
+					count === 1
+						? __("Permanently deleted 1 link from trash")
+						: sprintf(
+								__("Permanently deleted %s links from trash"),
+								String(count)
+							);
+			} else {
+				message = activity.message || __("Emptied links from trash");
+			}
+		} else if (activity.type === "user_created") {
+			message = sprintf(__('Created user "%s"'), userName);
+		} else if (activity.type === "user_updated") {
+			message = sprintf(__('Updated user "%s"'), userName);
+		} else if (activity.type === "user_deleted") {
+			message = sprintf(__('Deleted user "%s"'), userName);
+		} else if (activity.type === "click") {
+			const location = activity.location
+				? sprintf(
+						__("from %s"),
+						activity.location.city ||
+							activity.location.country ||
+							__("Unknown")
+					)
+				: "";
+			message = location
+				? sprintf(__('Link "%1$s" was clicked %2$s'), [
+						linkName,
+						location,
+					])
+				: sprintf(__('Link "%s" was clicked'), linkName);
+		} else {
+			message = activity.message || __("Unknown activity");
+		}
+
+		return decodeHtmlEntities(message);
+	};
+
+	const getActivityIconWrapperClassName = (type?: string | null) =>
+		cn(
+			"dashboard-activity-item-icon",
+			("link_created" === type || "link_restored" === type) &&
+				"dashboard-activity-item-icon-link",
+			"link_updated" === type && "dashboard-activity-item-icon-link",
+			("link_deleted" === type || "link_trashed" === type) &&
+				"dashboard-activity-item-icon-danger",
+			"click" === type && "dashboard-activity-item-icon-click",
+			("user_created" === type || "user_updated" === type) &&
+				"dashboard-activity-item-icon-user",
+			"user_deleted" === type && "dashboard-activity-item-icon-danger",
+			"link_created" !== type &&
+				"link_updated" !== type &&
+				"link_deleted" !== type &&
+				"link_trashed" !== type &&
+				"link_restored" !== type &&
+				"click" !== type &&
+				"user_created" !== type &&
+				"user_updated" !== type &&
+				"user_deleted" !== type &&
+				"dashboard-activity-item-icon-default"
+		);
+
+	const getActivityIcon = (type?: string | null) => {
+		if (type === "link_created" || type === "link_restored") {
+			return <Link2 className="dashboard-activity-item-icon-glyph" />;
+		} else if (type === "link_updated") {
+			return (
+				<PencilLine className="dashboard-activity-item-icon-glyph" />
+			);
+		} else if (type === "link_deleted" || type === "link_trashed") {
+			return <Trash2 className="dashboard-activity-item-icon-glyph" />;
+		} else if (type === "click") {
+			return (
+				<MousePointerClick className="dashboard-activity-item-icon-glyph" />
+			);
+		} else if (type === "user_created") {
+			return <UserPlus className="dashboard-activity-item-icon-glyph" />;
+		} else if (type === "user_updated") {
+			return <UserPen className="dashboard-activity-item-icon-glyph" />;
+		} else if (type === "user_deleted") {
+			return <UserMinus className="dashboard-activity-item-icon-glyph" />;
+		}
+		return <Shield className="dashboard-activity-item-icon-glyph" />;
+	};
+
+	return (
+		<div className="dashboard-activity">
+			<h3 className="dashboard-activity-title">{title}</h3>
+
+			<div
+				className={cn(
+					"dashboard-activity-list",
+					!isScrollable && "dashboard-activity-list-full"
+				)}
+			>
+				{recentActivities.length === 0 ? (
+					<div className="dashboard-activity-empty">
+						<p className="dashboard-activity-empty-text">
+							{emptyText}
+						</p>
+					</div>
+				) : (
+					recentActivities.map(
+						(activity: RecentActivity, index: number) => (
+							<div
+								key={activity.id || index}
+								className="dashboard-activity-item"
+							>
+								<div
+									className={getActivityIconWrapperClassName(
+										activity.type
+									)}
+								>
+									{getActivityIcon(activity.type)}
+								</div>
+
+								<div className="dashboard-activity-item-copy">
+									<p className="dashboard-activity-item-title">
+										{formatActivityMessage(activity)}
+									</p>
+									<p className="dashboard-activity-item-meta">
+										{activity.actor
+											? sprintf(__("By %1$s • %2$s"), [
+													getActivityPersonName(
+														activity.actor
+													) || __("Unknown user"),
+													formatDate(
+														activity.timestamp
+													),
+												])
+											: formatDate(activity.timestamp)}
+									</p>
+								</div>
+							</div>
+						)
+					)
+				)}
+			</div>
+
+			{actionLabel && actionTo ? (
+				<Link to={actionTo} className="dashboard-activity-link">
+					<Button
+						variant="ghost"
+						className="dashboard-activity-button"
+						size="sm"
+					>
+						{actionLabel}
+					</Button>
+				</Link>
+			) : null}
+		</div>
+	);
+};
+
+export default ActivityFeed;

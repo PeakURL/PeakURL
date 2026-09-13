@@ -1,0 +1,613 @@
+import type {
+	AdminNoticesResponse,
+	BackupCodesResponse,
+	BulkCreateResponse,
+	CacheConfigurationPayload,
+	CacheStatusPayload,
+	CacheStatusResponse,
+	CaptchaConfigurationPayload,
+	CaptchaStatus,
+	CreateUrlPayload,
+	CreateUrlResponse,
+	CreatedWebhook,
+	CountryMetric,
+	DashboardDeviceData,
+	DashboardStats,
+	EmailStatus,
+	GetUrlsResponse,
+	GeoipConfigurationPayload,
+	ImportRecord,
+	LinkLocationPayload,
+	LinkRecord,
+	LinkStatsResponse,
+	LinksSortBy,
+	LinksSortOrder,
+	LocationDataStatus,
+	MailConfigurationPayload,
+	MailTestResult,
+	PasteImportRequestItem,
+	ProfileUser,
+	RecentActivity,
+	RecentClick,
+	RevokeOtherSessionsResponse,
+	SecuritySettingsResponse,
+	SiteSettings,
+	SiteTimeFormat,
+	SystemStatusResponse,
+	TrafficSeries,
+	TwoFactorSetupResponse,
+	UpdateStatusPayload,
+	UpdateUrlPayload,
+	UpdateWebhookPayload,
+	UrlExportResponse,
+	UserDialogPayload,
+	UserSummary,
+	WebhookSummary,
+	WebhookTestResult,
+	TestWebhookPayload,
+} from "@/api";
+
+export type { TestWebhookPayload, UpdateWebhookPayload, WebhookTestResult };
+
+/**
+ * Single release note returned from the API.
+ */
+export interface ReleaseNote {
+	version: string;
+	releaseDate: string;
+	title: string;
+	summary: string;
+	highlights: string[];
+	fullChangelogUrl: string;
+	releaseNotesUrl: string;
+}
+
+/**
+ * Full response payload from the release notes API.
+ */
+export interface ReleaseNotesResponse {
+	success: boolean;
+	statusCode: number;
+	message: string;
+	data: {
+		releases: ReleaseNote[];
+		lastUpdated: string;
+	};
+}
+
+/**
+ * Cache tag names shared by the dashboard RTK Query API slices.
+ */
+export type ApiTagType =
+	| "AuthSession"
+	| "Urls"
+	| "Analytics"
+	| "Profile"
+	| "Users"
+	| "Webhooks"
+	| "Security"
+	| "Geoip"
+	| "Mail"
+	| "Captcha"
+	| "Updates"
+	| "GeneralSettings"
+	| "SystemStatus"
+	| "CacheStatus"
+	| "AdminNotices";
+
+/**
+ * Ordered list of RTK Query cache tags registered on the base API instance.
+ *
+ * Keeping the literal tag list in one shared export makes the domain slices
+ * easier to scan and prevents small string drift between cache providers and
+ * invalidators during future endpoint additions.
+ */
+export const API_TAG_TYPES: ApiTagType[] = [
+	"AuthSession",
+	"Urls",
+	"Analytics",
+	"Profile",
+	"Users",
+	"Webhooks",
+	"Security",
+	"Geoip",
+	"Mail",
+	"Captcha",
+	"Updates",
+	"GeneralSettings",
+	"SystemStatus",
+	"CacheStatus",
+	"AdminNotices",
+];
+
+/**
+ * Generic `data` wrapper used by many dashboard API endpoints.
+ */
+export interface ApiDataResponse<T> {
+	/** Endpoint payload returned under the canonical `data` key. */
+	data?: T;
+}
+
+/**
+ * Analytics payload returned for the dashboard overview page.
+ */
+export interface DashboardAnalyticsPayload extends DashboardStats {
+	/** Time-series traffic data used by the overview chart. */
+	traffic?: Partial<TrafficSeries> | null;
+
+	/** Device totals grouped by form factor. */
+	devices?: DashboardDeviceData["devices"];
+
+	/** Browser totals grouped by browser family. */
+	browsers?: DashboardDeviceData["browsers"];
+
+	/** Operating-system totals grouped by OS family. */
+	operatingSystems?: DashboardDeviceData["operatingSystems"];
+
+	/** Country-level click counts used by the map and cards. */
+	countries?: CountryMetric[];
+}
+
+/**
+ * Response wrapper returned by the dashboard analytics endpoint.
+ */
+export interface DashboardAnalyticsResponse {
+	/** Aggregated analytics payload for the selected date range. */
+	data?: DashboardAnalyticsPayload;
+}
+
+/**
+ * Response wrapper returned by the recent activity endpoint.
+ */
+export interface ActivityResponse {
+	/** Activity feed items ordered from newest to oldest. */
+	data?: RecentActivity[];
+}
+
+/**
+ * Response wrapper returned by the recent clicks endpoint.
+ */
+export interface RecentClicksResponse {
+	/** Recent click rows ordered from newest to oldest. */
+	data?: RecentClick[];
+}
+
+/**
+ * Pagination metadata returned by the activity history endpoint.
+ */
+export interface ActivityHistoryMeta {
+	/** Current page number. */
+	page: number;
+
+	/** Number of activity rows included per page. */
+	limit: number;
+
+	/** Total number of activity rows that match the scope. */
+	totalItems: number;
+
+	/** Total number of available pages. */
+	totalPages: number;
+}
+
+/**
+ * Paginated activity payload returned by the activity history endpoint.
+ */
+export interface ActivityHistoryPayload {
+	/** Activity feed items ordered from newest to oldest. */
+	items?: RecentActivity[];
+
+	/** Pagination metadata for the result set. */
+	meta?: ActivityHistoryMeta;
+}
+
+/**
+ * Response wrapper returned by the paginated activity history endpoint.
+ */
+export interface ActivityHistoryResponse {
+	/** Paginated activity payload. */
+	data?: ActivityHistoryPayload;
+}
+
+/**
+ * Query arguments accepted by the activity history endpoint.
+ */
+export interface GetActivityHistoryQueryArgs {
+	/** Requested page number. */
+	page?: number;
+
+	/** Number of activity rows to request. */
+	limit?: number;
+
+	/** Optional server-side category filter. */
+	category?: "all" | "links" | "users";
+}
+
+export type LinkStatsRange = "all" | "24h" | "7d" | "30d";
+
+/**
+ * Shared sort field options for links list and export queries.
+ */
+export type LinksQuerySortBy = LinksSortBy;
+
+/**
+ * Arguments accepted by the link-specific analytics endpoints.
+ */
+export type LinkAnalyticsArgs = {
+	/** Stable link identifier used by the analytics route. */
+	id: string;
+} & (
+	| {
+			/** Dashboard range token for link-specific analytics. */
+			range: LinkStatsRange;
+
+			/** Custom range start is intentionally omitted for preset ranges. */
+			from?: never;
+
+			/** Custom range end is intentionally omitted for preset ranges. */
+			to?: never;
+	  }
+	| {
+			/** Custom dashboard range token for date-bounded analytics. */
+			range: "custom";
+
+			/** Inclusive custom range start date in YYYY-MM-DD format. */
+			from: string;
+
+			/** Inclusive custom range end date in YYYY-MM-DD format. */
+			to: string;
+	  }
+);
+
+/**
+ * Query arguments accepted by the links list endpoint.
+ */
+interface GetUrlsQueryBaseArgs {
+	/** Page number to request. */
+	page?: number;
+
+	/** Number of records to request per page. */
+	limit?: number;
+
+	/** Sort field applied by the API. */
+	sortBy?: LinksQuerySortBy;
+
+	/** Sort direction applied by the API. */
+	sortOrder?: LinksSortOrder;
+
+	/** Optional status filter applied by the API. */
+	status?:
+		| "all"
+		| "active"
+		| "inactive"
+		| "trashed"
+		| "expired"
+		| "paused"
+		| "archived";
+
+	/** Optional search term forwarded to the API. */
+	search?: string;
+}
+
+/**
+ * Query arguments accepted by the links list endpoint.
+ */
+export type GetUrlsQueryArgs = GetUrlsQueryBaseArgs &
+	(
+		| {
+				/** Preset range used to calculate click totals. */
+				range?: LinkStatsRange;
+
+				/** Custom range start is intentionally omitted for presets. */
+				from?: never;
+
+				/** Custom range end is intentionally omitted for presets. */
+				to?: never;
+		  }
+		| {
+				/** Custom range used to calculate click totals. */
+				range: "custom";
+
+				/** Inclusive custom range start date in YYYY-MM-DD format. */
+				from: string;
+
+				/** Inclusive custom range end date in YYYY-MM-DD format. */
+				to: string;
+		  }
+	);
+
+/**
+ * Query arguments accepted by the links export lookup endpoint.
+ */
+export interface GetUrlsExportQueryArgs {
+	/** Sort field applied before exporting records. */
+	sortBy?: LinksQuerySortBy;
+
+	/** Sort direction applied before exporting records. */
+	sortOrder?: LinksSortOrder;
+
+	/** Optional search term forwarded to the export route. */
+	search?: string;
+}
+
+/**
+ * Compatibility response used by the links list endpoint.
+ *
+ * Some older code paths still surface `items` at the top level, so the query
+ * layer keeps that legacy field typed while favoring the canonical `data`
+ * wrapper returned by the current API contract.
+ */
+export interface UrlsListResponse extends GetUrlsResponse {
+	/** Legacy top-level item collection preserved for compatibility. */
+	items?: LinkRecord[];
+}
+
+/**
+ * Response wrapper returned by the single-link lookup endpoint.
+ */
+export type UrlResponse = ApiDataResponse<LinkRecord>;
+
+/**
+ * Request payload accepted by the bulk-create links endpoint.
+ */
+export interface BulkCreateUrlsPayload {
+	/** Link records parsed from file or pasted import sources. */
+	urls: Array<ImportRecord | PasteImportRequestItem>;
+}
+
+/**
+ * Login request payload shared by password and 2FA verification steps.
+ */
+export interface CredentialLoginPayload {
+	/** Username or email entered by the user. */
+	identifier: string;
+
+	/** Plain-text password entered by the user. */
+	password: string;
+
+	/** Optional TOTP or backup code used for two-factor verification. */
+	token?: string;
+
+	/** Optional CAPTCHA token for unauthenticated endpoints. */
+	captchaToken?: string;
+
+	/** Optional flag to remember the session for 30 days instead of a transient session. */
+	rememberMe?: boolean;
+}
+
+/**
+ * Session-check response returned by `/users/me`.
+ *
+ * PeakURL currently exposes the authenticated user in `data`, with a
+ * compatibility `user` field still handled by a few older call sites. The UI
+ * treats `data` as canonical and only falls back to `user` in the remaining
+ * auth-guard surfaces that still accommodate the older shape.
+ */
+export interface AuthCheckResponse {
+	/** Canonical authenticated user payload. */
+	data?: ProfileUser;
+
+	/** Compatibility user payload used by older auth flows. */
+	user?: ProfileUser;
+}
+
+/**
+ * Authentication response returned by login and 2FA verification routes.
+ *
+ * The API currently mirrors some auth flags at both the top level and under
+ * `data`, so this interface preserves that compatibility while documenting the
+ * structure explicitly for the login screens.
+ */
+export interface LoginResponse {
+	/** Compatibility flag indicating whether 2FA is still required. */
+	requiresTwoFactor?: boolean;
+
+	/** Auth payload returned by the API. */
+	data?: {
+		/** Authenticated user when login succeeds. */
+		user?: ProfileUser;
+
+		/**
+		 * Flag indicating that a second-factor code is required before the
+		 * session is considered authenticated.
+		 */
+		requiresTwoFactor?: boolean;
+	};
+}
+
+/**
+ * Logout response returned when the current session is revoked.
+ *
+ * A successful response also triggers cookie expiration headers; the dashboard
+ * only needs the lightweight payload below to confirm the action in state.
+ */
+export interface LogoutResponse {
+	/** Logout payload returned by the API. */
+	data?: {
+		/** Whether the backend successfully ended the session. */
+		loggedOut?: boolean;
+	};
+}
+
+/**
+ * Request payload used by the forgot-password form.
+ */
+export interface ForgotPasswordPayload {
+	/** Email address or username entered on the recovery form. */
+	identifier: string;
+
+	/** Optional CAPTCHA token for unauthenticated endpoints. */
+	captchaToken?: string;
+}
+
+/**
+ * Request payload used by the reset-password form.
+ */
+export interface ResetPasswordPayload {
+	/** Password-reset token embedded in the URL route. */
+	token: string;
+
+	/** New plain-text password chosen by the user. */
+	password: string;
+
+	/** Optional CAPTCHA token for unauthenticated endpoints. */
+	captchaToken?: string;
+}
+
+/**
+ * Response returned when checking a password-reset token.
+ */
+export interface PasswordResetTokenStatus {
+	/** Whether the reset token is present and still valid. */
+	valid: boolean;
+}
+
+/**
+ * Request payload used when updating an existing user record.
+ */
+export interface UpdateUserPayload extends UserDialogPayload {
+	/** Existing username used to resolve the update route. */
+	currentUsername?: string;
+}
+
+/**
+ * Request payload used when creating a one-time API key.
+ */
+export interface GenerateApiKeyPayload {
+	/** Human-readable label shown beside the API key summary. */
+	label: string;
+}
+
+/**
+ * Response returned when creating a new one-time API key.
+ *
+ * The plain-text key is intentionally available only during creation, so the
+ * response shape keeps that one-time token and the recommended base API URL
+ * together for the settings modal.
+ */
+export interface GenerateApiKeyResponse {
+	/** One-time API key payload shown immediately after creation. */
+	data?: {
+		/** Plain-text API key shown once to the user. */
+		apiKey?: string | null;
+
+		/** Base API URL recommended for the generated key. */
+		baseApiUrl?: string | null;
+	};
+}
+
+/**
+ * Password-confirmed payload used by protected security actions.
+ */
+export interface CurrentPasswordPayload {
+	/** Current account password used to confirm the action. */
+	currentPassword: string;
+}
+
+/**
+ * Two-factor verification payload submitted from the authenticator step.
+ */
+export interface VerifyTwoFactorPayload {
+	/** Six-digit verification token entered by the user. */
+	token: string;
+}
+
+/**
+ * Request payload used when creating an outbound webhook.
+ */
+export interface CreateWebhookPayload {
+	/** Destination endpoint URL. */
+	url: string;
+
+	/** Event identifiers subscribed by the webhook. */
+	events: string[];
+}
+
+/**
+ * Save payload used by the general-settings API route.
+ */
+export interface SaveGeneralSettingsPayload {
+	/** Site title used across the dashboard shell and runtime metadata. */
+	siteName?: string;
+
+	/** Site tagline used as the default social preview description. */
+	siteTagline?: string;
+
+	/** Locale code for the selected dashboard language. */
+	siteLanguage: string;
+
+	/** IANA timezone identifier used for dashboard date/time display. */
+	siteTimezone?: string;
+
+	/** Time display preference for dashboard timestamps. */
+	siteTimeFormat?: SiteTimeFormat;
+
+	/** Optional image file uploaded for default social link previews. */
+	socialPreviewFile?: File | null;
+
+	/** Whether the stored default social preview image should be removed. */
+	removeSocialPreviewImage?: boolean;
+
+	/** Optional PNG favicon file uploaded from the General settings tab. */
+	faviconFile?: File | null;
+
+	/** Whether the stored favicon should be removed. */
+	removeFavicon?: boolean;
+
+	/** Mode for the root domain landing page behavior. */
+	landingPageMode?: "login" | "url" | "html";
+
+	/** Target URL when landingPageMode is 'url'. */
+	landingPageUrl?: string;
+
+	/** Trash auto-delete retention period in days (0 for never). */
+	trashRetentionDays?: number;
+}
+
+/**
+ * Response returned by the updater database-repair endpoint.
+ *
+ * The updater may complete successfully while still reporting outstanding
+ * issues, so the response carries a count instead of a simple boolean.
+ */
+export interface UpgradeDatabaseResponse {
+	/** Database repair metadata returned by the updater. */
+	data?: {
+		/** Number of remaining database issues detected after repair. */
+		issuesCount?: number | null;
+	};
+}
+
+export type {
+	AdminNoticesResponse,
+	BackupCodesResponse,
+	BulkCreateResponse,
+	CacheConfigurationPayload,
+	CacheStatusPayload,
+	CacheStatusResponse,
+	CaptchaConfigurationPayload,
+	CaptchaStatus,
+	CreateUrlPayload,
+	CreateUrlResponse,
+	CreatedWebhook,
+	EmailStatus,
+	GeoipConfigurationPayload,
+	LinkLocationPayload,
+	LinkRecord,
+	LinkStatsResponse,
+	LocationDataStatus,
+	MailConfigurationPayload,
+	MailTestResult,
+	ProfileUser,
+	RevokeOtherSessionsResponse,
+	SecuritySettingsResponse,
+	SiteSettings,
+	SiteTimeFormat,
+	SystemStatusResponse,
+	TwoFactorSetupResponse,
+	UpdateStatusPayload,
+	UpdateUrlPayload,
+	UrlExportResponse,
+	UserDialogPayload,
+	UserSummary,
+	WebhookSummary,
+};

@@ -57,20 +57,20 @@ The following settings ensure that VS Code respects our project-wide formatting 
 	"files.watcherExclude": {
 		"**/build/**": true,
 		"**/release/**": true,
-		"**/app/vendor/**": true,
+		"**/server/vendor/**": true,
 		"**/content/**": true
 	},
 	"search.exclude": {
 		"**/build/**": true,
 		"**/release/**": true,
-		"**/app/vendor/**": true,
+		"**/server/vendor/**": true,
 		"**/content/**": true
 	},
 	"emeraldwalk.runonsave": {
 		"commands": [
 			{
 				"match": "\\.php$",
-				"cmd": "\"${workspaceFolder}/app/vendor/bin/phpcbf\" --standard=\"${workspaceFolder}/phpcs.xml\" --report=none \"${file}\"",
+				"cmd": "\"${workspaceFolder}/server/vendor/bin/phpcbf\" --standard=\"${workspaceFolder}/phpcs.xml\" --report=none \"${file}\"",
 				"isAsync": true
 			}
 		]

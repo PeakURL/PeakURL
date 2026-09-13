@@ -12,9 +12,9 @@ services:
       - ./docker/proxy/Caddyfile:/etc/caddy/Caddyfile:ro
       - ./docker/proxy/certs:/etc/caddy/certs:ro
     depends_on:
-      ui:
+      client:
         condition: service_healthy
-      app:
+      server:
         condition: service_healthy
       test:
         condition: service_started
@@ -42,7 +42,7 @@ services:
   db-init:
     build:
       context: .
-      dockerfile: docker/app/Dockerfile
+      dockerfile: docker/server/Dockerfile
     container_name: peakurl-db-init
     restart: "no"
     depends_on:
@@ -70,14 +70,15 @@ services:
       retries: 10
       start_period: 5s
 
-  app:
+  server:
     build:
       context: .
-      dockerfile: docker/app/Dockerfile
-    container_name: peakurl-app
+      dockerfile: docker/server/Dockerfile
+    container_name: peakurl-server
     restart: unless-stopped
-    working_dir: /app/app
+    working_dir: /app/server
     environment:
+      PEAKURL_DEV: "true"
       PEAKURL_ENV: development
       PEAKURL_DEBUG: "true"
       SITE_URL: https://peakurl.dev
@@ -105,13 +106,13 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
-      - peakurl-app-vendor:/app/app/vendor
+      - peakurl-server-vendor:/app/server/vendor
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
-    command: ["/usr/local/bin/app-dev-start"]
+    command: ["/usr/local/bin/server-dev-start"]
     healthcheck:
       test:
         [
@@ -125,15 +126,15 @@ services:
       retries: 10
       start_period: 20s
 
-  ui:
+  client:
     build:
       context: .
-      dockerfile: docker/ui/Dockerfile
-    container_name: peakurl-ui
+      dockerfile: docker/client/Dockerfile
+    container_name: peakurl-client
     restart: unless-stopped
     working_dir: /app
     environment:
-      VITE_DEV_PROXY_TARGET: http://app:8000
+      VITE_DEV_PROXY_TARGET: http://server:8000
       VITE_DEV_PUBLIC_HOST: peakurl.dev
       VITE_DEV_USE_HTTPS_PROXY: "true"
       VITE_PEAKURL_URL: https://peakurl.dev
@@ -144,11 +145,11 @@ services:
       - "5173:5173"
     volumes:
       - .:/app
-      - peakurl-ui-node-modules:/app/node_modules
+      - peakurl-client-node-modules:/app/node_modules
     depends_on:
-      app:
+      server:
         condition: service_healthy
-    command: ["/usr/local/bin/ui-dev-start"]
+    command: ["/usr/local/bin/client-dev-start"]
     healthcheck:
       test:
         ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:5173 || exit 1"]
@@ -160,11 +161,12 @@ services:
   test:
     build:
       context: .
-      dockerfile: docker/app/Dockerfile
+      dockerfile: docker/server/Dockerfile
     container_name: peakurl-test
     restart: unless-stopped
     working_dir: /app/release/peakurl
     environment:
+      PEAKURL_DEV: "false"
       PEAKURL_INSTALL_DB_HOST_DEFAULT: db
       PEAKURL_INSTALL_DB_PORT_DEFAULT: "3306"
       PEAKURL_INSTALL_DB_NAME_DEFAULT: peakurl_test
@@ -198,10 +200,10 @@ volumes:
     name: peakurl-db-data
   peakurl-redis-data:
     name: peakurl-redis-data
-  peakurl-ui-node-modules:
-    name: peakurl-ui-node-modules
-  peakurl-app-vendor:
-    name: peakurl-app-vendor
+  peakurl-client-node-modules:
+    name: peakurl-client-node-modules
+  peakurl-server-vendor:
+    name: peakurl-server-vendor
 
 networks:
   default:

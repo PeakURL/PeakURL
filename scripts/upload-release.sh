@@ -84,10 +84,13 @@ if ! command -v unzip >/dev/null 2>&1; then
 	exit 1
 fi
 
-find . -mindepth 1 -maxdepth 1 \\
-	! -name config.php \\
-	! -name content \\
-	! -name $(quote_for_sh "$REMOTE_ARCHIVE_NAME") \\
+unzip -tq $(quote_for_sh "$REMOTE_ARCHIVE_NAME")
+
+find . -mindepth 1 -maxdepth 1 \
+	! -name config.php \
+	! -name content \
+	! -name .maintenance \
+	! -name $(quote_for_sh "$REMOTE_ARCHIVE_NAME") \
 	-exec rm -rf {} +
 
 unzip -oq $(quote_for_sh "$REMOTE_ARCHIVE_NAME")

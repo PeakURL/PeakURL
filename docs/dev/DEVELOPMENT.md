@@ -66,8 +66,8 @@ Fallback direct ports:
 The default Docker services are:
 
 - `peakurl-proxy`
-- `peakurl-ui`
-- `peakurl-app`
+- `peakurl-client`
+- `peakurl-server`
 - `peakurl-test`
 - `peakurl-db`
 - `peakurl-db-init`
@@ -81,7 +81,7 @@ Most day-to-day development happens against:
 - `https://peakurl.dev` for the dashboard UI
 - `https://api.peakurl.dev` for the PHP backend
 
-Vite hot reload is available on the UI service. If the dashboard appears stale after deeper runtime changes, restart the stack or rebuild the affected service:
+Vite hot reload is available on the client service. If the dashboard appears stale after deeper runtime changes, restart the stack or rebuild the affected service:
 
 ```bash
 docker compose up --build
@@ -157,7 +157,7 @@ npm run lint
 Run PHP standards checks:
 
 ```bash
-composer --working-dir=app run phpcs
+composer --working-dir=server run phpcs
 ```
 
 Run PHP syntax checks:
@@ -174,12 +174,28 @@ npm run smoke:auth
 
 For linting and formatting details, see the [Linting and Formatting guide](LINTING.md).
 
+## Runtime Environment Configuration
+
+PeakURL separates runtime filesystem layout from diagnostics and execution mode:
+
+- **`PEAKURL_DEV`**: Controls runtime filesystem layout.
+    - `true`: Development layout. The application runtime source lives under `server/` (e.g., in git source checkouts and Docker development containers). If set to `true` and the `server/` directory is missing, PeakURL fails immediately with a descriptive exception.
+    - `false` (or unset / default): Production release layout. The application runtime is flattened at the root (e.g., in self-hosted release zip extractions). Never relies on runtime path probing or heuristic filesystem guesses.
+    - _Example (`compose.yaml` or `.env`)_: `PEAKURL_DEV=true`
+
+- **`PEAKURL_DEBUG`**: Controls diagnostics and error reporting.
+    - `true`: Detailed error messages are displayed and logged to `content/debug.log`.
+    - `false` (default): Production error handling; errors are suppressed from visitor responses.
+    - _Example (`config.php` or environment)_: `define('PEAKURL_DEBUG', true);` or `PEAKURL_DEBUG=true`
+
+**Important Distinction**: `PEAKURL_DEBUG=true` enables diagnostic logging and does _not_ imply development layout. Conversely, `PEAKURL_DEV=true` only dictates filesystem path resolution and does not enable debug logging.
+
 ## GeoLite2 Location Data
 
 PeakURL uses a local MaxMind GeoLite2 City database for location analytics.
 
 - default path: `content/uploads/geoip/GeoLite2-City.mmdb`
-- refresh command: `php app/bin/update-geoip.php`
+- refresh command: `php server/bin/update-geoip.php`
 
 In both development and production environments, MaxMind credentials are persisted securely in encrypted settings storage within the database.
 

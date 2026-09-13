@@ -1,0 +1,56 @@
+{
+	"name": "peakurl/server",
+	"description": "PHP application runtime for the PeakURL dashboard.",
+	"type": "project",
+	"require": {
+		"php": "^8.0",
+		"ext-pdo": "*",
+		"ext-pdo_mysql": "*",
+		"maxmind-db/reader": "^1.13.1",
+		"phpmailer/phpmailer": "^6.9",
+		"gettext/gettext": "^5.7"
+	},
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.1",
+		"squizlabs/php_codesniffer": "^3.13",
+		"wp-coding-standards/wpcs": "^3.2",
+		"phpunit/phpunit": "^11.0"
+	},
+	"autoload": {
+		"files": [
+			"core/config/functions.php",
+			"core/hooks/functions.php",
+			"services/database/functions.php",
+			"services/i18n/functions.php",
+			"services/cache/functions.php",
+			"services/maintenance.php",
+			"services/landing-page.php",
+			"services/site.php",
+			"utils/formatting.php"
+		],
+		"classmap": [
+			"api/",
+			"core/",
+			"database/",
+			"features/",
+			"http/",
+			"services/",
+			"utils/"
+		]
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"PeakURL\\Tests\\": "tests/"
+		}
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	},
+	"scripts": {
+		"phpcs": "phpcs --standard=../phpcs.xml",
+		"phpcbf": "phpcbf --standard=../phpcs.xml",
+		"test": "phpunit"
+	}
+}

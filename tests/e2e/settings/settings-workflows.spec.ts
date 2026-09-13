@@ -42,7 +42,7 @@ test.describe("Settings Workflows", () => {
 		await page.locator("a[href='/dashboard/settings/api']").click();
 		await page.waitForURL("**/dashboard/settings/api", { timeout: 15000 });
 		await expect(
-			page.getByRole("button", { name: /create (new )?key/i })
+			page.getByRole("button", { name: /create (new )?key/i }).first()
 		).toBeVisible();
 	});
 

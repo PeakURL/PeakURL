@@ -154,7 +154,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		$this->assertSame( 2, $response['body']['data']['deletedCount'] );
 	}
 
-	public function test_editor_can_empty_trash(): void {
+	public function test_editor_is_denied_empty_trash(): void {
 		$editor_user = array(
 			'id'       => '2',
 			'username' => 'site_editor',
@@ -164,29 +164,17 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		$request = new Request( 'DELETE', '/api/v1/urls/trash', array(), array() );
 		$this->auth_service->method( 'get_current_user' )->willReturn( $editor_user );
 
-		$mock_trashed = array(
-			array(
-				'id'                => 'link_editor_1',
-				'title'             => 'Editor Link',
-				'alias'             => 'ed1',
-				'social_image_path' => null,
-			),
-		);
+		// Critical: Editor must NEVER cause repository mutation on global empty_trash
+		$this->repository->expects( $this->never() )
+			->method( 'get_all_trashed_links' );
 
-		$this->repository->expects( $this->once() )
-			->method( 'get_all_trashed_links' )
-			->with( $editor_user )
-			->willReturn( $mock_trashed );
+		$this->repository->expects( $this->never() )
+			->method( 'bulk_delete_permanent' );
 
-		$this->repository->expects( $this->once() )
-			->method( 'bulk_delete_permanent' )
-			->with( array( 'link_editor_1' ) )
-			->willReturn( 1 );
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 403 );
 
-		$response = $this->links_controller->empty_trash( $request );
-
-		$this->assertSame( 200, $response['status'] );
-		$this->assertSame( 1, $response['body']['data']['deletedCount'] );
+		$this->links_controller->empty_trash( $request );
 	}
 
 	public function test_editor_can_delete_all_links(): void {

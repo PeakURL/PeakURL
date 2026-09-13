@@ -372,6 +372,10 @@ class LinksBehavioralTest extends TestCase {
 		);
 		$this->auth_service->method( 'get_current_user' )->willReturn( $editor_user );
 
+		$this->repository->method( 'get_allowed_ids_for_user' )
+			->with( array( 'b1', 'b2' ), 'user_editor' )
+			->willReturn( array( 'b1', 'b2' ) );
+
 		$this->repository->method( 'get_links_by_ids' )
 			->willReturn(
 				array(
@@ -408,6 +412,10 @@ class LinksBehavioralTest extends TestCase {
 			'role'     => 'editor',
 		);
 		$this->auth_service->method( 'get_current_user' )->willReturn( $editor_user );
+
+		$this->repository->method( 'get_allowed_ids_for_user' )
+			->with( array( 'b1', 'b2' ), 'user_editor' )
+			->willReturn( array( 'b1', 'b2' ) );
 
 		$this->repository->method( 'get_links_by_ids' )
 			->willReturn(

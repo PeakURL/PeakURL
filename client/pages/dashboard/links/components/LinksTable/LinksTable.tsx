@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router";
 import { ConfirmDialog, useNotification } from "@/components";
 import { useClearUrlsMutation } from "@/state/slices/api";
 import { __ } from "@/i18n";
+import { useAdminAccess } from "@/hooks";
 import { copyToClipboard } from "@/shared/browser";
 import { getErrorMessage } from "@/shared/errors";
 import { formatNumber } from "@/shared/formatting";
@@ -46,6 +47,7 @@ const LinksTable = ({
 	const [selectedIds, setSelectedIds] = useState<string[]>([]);
 	const [searchParams, setSearchParams] = useSearchParams();
 	const notifications = useNotification();
+	const { isAdmin } = useAdminAccess();
 	const [clearUrls, { isLoading: isDeletingAll }] = useClearUrlsMutation();
 
 	useEffect(() => {
@@ -256,9 +258,15 @@ const LinksTable = ({
 				open={deleteAllModalOpen}
 				onClose={() => setDeleteAllModalOpen(false)}
 				title={__("Delete all links")}
-				description={__(
-					"Are you sure you want to delete all links? This will move active links to trash."
-				)}
+				description={
+					isAdmin
+						? __(
+								"Are you sure you want to delete all links across the site? This action permanently removes them."
+							)
+						: __(
+								"Are you sure you want to delete all of your links? This action permanently removes them."
+							)
+				}
 				confirmText={__("Delete all links")}
 				confirmVariant="danger"
 				onConfirm={handleDeleteAll}

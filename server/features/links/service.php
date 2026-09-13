@@ -1375,7 +1375,7 @@ class Service {
 
 		$this->authorization->validate_capability(
 			$user,
-			'delete_all_links',
+			'delete_own_links',
 			__( 'You do not have permission to delete links.', 'peakurl' ),
 		);
 

@@ -25,6 +25,7 @@ import {
 } from "@/state/slices/api";
 import { cn, formatCount } from "@/shared/formatting";
 import { getErrorMessage } from "@/shared/errors";
+import { useAdminAccess } from "@/hooks";
 
 import {
 	Header,
@@ -122,6 +123,7 @@ function LinksPage() {
 		urlsQueryArgs,
 	} = useLinksFilter();
 
+	const { isAdmin } = useAdminAccess();
 	const [restoreUrl] = useRestoreUrlMutation();
 	const [bulkRestoreUrls] = useBulkRestoreUrlsMutation();
 	const [emptyTrash] = useEmptyTrashMutation();
@@ -442,7 +444,7 @@ function LinksPage() {
 				trashedCount={trashedLinksCount}
 				onRestore={handleRestoreLink}
 				onBulkRestore={handleBulkRestoreLinks}
-				onEmptyTrash={handleEmptyTrash}
+				onEmptyTrash={isAdmin ? handleEmptyTrash : undefined}
 			/>
 
 			<TableFooter

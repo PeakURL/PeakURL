@@ -35,7 +35,8 @@ class LinksDatabasePersistenceTest extends TestCase {
 	private PDO $pdo;
 	private Application $app;
 	private Router $router;
-	private string $admin_token = 'test_admin_db_token_12345';
+	private string $admin_token  = 'test_admin_db_token_12345';
+	private string $editor_token = 'test_editor_db_token_12345';
 	private string $test_prefix;
 
 	protected function setUp(): void {
@@ -66,12 +67,22 @@ class LinksDatabasePersistenceTest extends TestCase {
 			ON DUPLICATE KEY UPDATE role = 'admin'"
 		);
 
-		// Seed API key for admin
-		$admin_key_hash = hash( 'sha256', $this->admin_token );
-		$this->pdo->exec( "DELETE FROM peakurl_api_keys WHERE id = 'test_admin_key_id'" );
+		// Ensure editor user (id: 9999) exists in peakurl_users
+		$this->pdo->exec(
+			"INSERT INTO peakurl_users (id, username, email, first_name, last_name, password_hash, role, is_email_verified, created_at, updated_at)
+			VALUES (9999, 'test_editor', 'editor@example.com', 'Editor', 'User', '\$2y\$10\$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'editor', 1, NOW(), NOW())
+			ON DUPLICATE KEY UPDATE role = 'editor'"
+		);
+
+		// Seed API keys for admin and editor
+		$admin_key_hash  = hash( 'sha256', $this->admin_token );
+		$editor_key_hash = hash( 'sha256', $this->editor_token );
+		$this->pdo->exec( "DELETE FROM peakurl_api_keys WHERE id IN ('test_admin_key_id', 'test_editor_key_id')" );
 		$this->pdo->exec(
 			"INSERT INTO peakurl_api_keys (id, user_id, label, key_hash, key_prefix, key_last_four, created_at)
-			VALUES ('test_admin_key_id', 1, 'Admin Test Key', '{$admin_key_hash}', 'test_admin_db', '2345', NOW())"
+			VALUES
+			('test_admin_key_id', 1, 'Admin Test Key', '{$admin_key_hash}', 'test_admin_db', '2345', NOW()),
+			('test_editor_key_id', 9999, 'Editor Test Key', '{$editor_key_hash}', 'test_editor_db', '2345', NOW())"
 		);
 
 		$this->app    = new Application( $connection, $config );
@@ -87,7 +98,7 @@ class LinksDatabasePersistenceTest extends TestCase {
 					'prefix2' => $this->test_prefix . '%',
 				)
 			);
-			$this->pdo->exec( "DELETE FROM peakurl_api_keys WHERE id = 'test_admin_key_id'" );
+			$this->pdo->exec( "DELETE FROM peakurl_api_keys WHERE id IN ('test_admin_key_id', 'test_editor_key_id')" );
 		}
 
 		\remove_all_filters( 'site_url' );
@@ -109,6 +120,14 @@ class LinksDatabasePersistenceTest extends TestCase {
 	private function admin_request( string $method, string $path, array $query = array(), array $body = array() ): Request {
 		$headers = array(
 			'HTTP_AUTHORIZATION' => 'Bearer ' . $this->admin_token,
+			'HTTP_ORIGIN'        => 'https://peakurl.dev',
+		);
+		return new Request( $method, $path, $query, $body, array(), array(), $headers );
+	}
+
+	private function editor_request( string $method, string $path, array $query = array(), array $body = array() ): Request {
+		$headers = array(
+			'HTTP_AUTHORIZATION' => 'Bearer ' . $this->editor_token,
 			'HTTP_ORIGIN'        => 'https://peakurl.dev',
 		);
 		return new Request( $method, $path, $query, $body, array(), array(), $headers );
@@ -418,5 +437,271 @@ class LinksDatabasePersistenceTest extends TestCase {
 		$stmt = $this->pdo->prepare( 'SELECT status FROM peakurl_urls WHERE id = :id' );
 		$stmt->execute( array( 'id' => $id ) );
 		$this->assertSame( 'active', $stmt->fetchColumn(), 'Unauthorized attempt must leave database completely unmutated.' );
+	}
+	public function test_editor_can_delete_own_link_in_database(): void {
+		$alias = $this->test_prefix . 'ed-own-del';
+		$res   = $this->dispatch(
+			$this->editor_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/ed-own',
+					'alias'          => $alias,
+				)
+			)
+		);
+		$id    = $res['body']['data']['id'];
+
+		$del_res = $this->dispatch( $this->editor_request( 'DELETE', '/api/v1/urls/' . $id ) );
+		$this->assertSame( 200, $del_res['status'] );
+
+		$stmt = $this->pdo->prepare( 'SELECT status FROM peakurl_urls WHERE id = :id' );
+		$stmt->execute( array( 'id' => $id ) );
+		$this->assertSame( 'trashed', $stmt->fetchColumn(), 'Editor must be able to trash own link.' );
+	}
+
+	public function test_editor_cannot_delete_admin_owned_link_in_database(): void {
+		$alias = $this->test_prefix . 'admin-safe-del';
+		$res   = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/admin-target',
+					'alias'          => $alias,
+				)
+			)
+		);
+		$id    = $res['body']['data']['id'];
+
+		// Editor attempts to delete admin-owned link
+		$del_res = $this->dispatch( $this->editor_request( 'DELETE', '/api/v1/urls/' . $id ) );
+		$this->assertSame( 403, $del_res['status'] );
+
+		$stmt = $this->pdo->prepare( 'SELECT status FROM peakurl_urls WHERE id = :id' );
+		$stmt->execute( array( 'id' => $id ) );
+		$this->assertSame( 'active', $stmt->fetchColumn(), 'Admin link must remain active and untrashed.' );
+	}
+
+	public function test_admin_can_delete_editor_owned_link_in_database(): void {
+		$alias = $this->test_prefix . 'ed-admin-can-del';
+		$res   = $this->dispatch(
+			$this->editor_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/ed-target',
+					'alias'          => $alias,
+				)
+			)
+		);
+		$id    = $res['body']['data']['id'];
+
+		// Admin deletes editor-owned link
+		$del_res = $this->dispatch( $this->admin_request( 'DELETE', '/api/v1/urls/' . $id ) );
+		$this->assertSame( 200, $del_res['status'] );
+
+		$stmt = $this->pdo->prepare( 'SELECT status FROM peakurl_urls WHERE id = :id' );
+		$stmt->execute( array( 'id' => $id ) );
+		$this->assertSame( 'trashed', $stmt->fetchColumn(), 'Admin must be able to trash editor link.' );
+	}
+	public function test_editor_bulk_delete_mixed_ownership_mutates_only_own_links_in_database(): void {
+		$admin_alias = $this->test_prefix . 'mix-admin';
+		$ed_alias    = $this->test_prefix . 'mix-ed';
+
+		$res_admin = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/adm',
+					'alias'          => $admin_alias,
+				)
+			)
+		);
+		$res_ed    = $this->dispatch(
+			$this->editor_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/ed',
+					'alias'          => $ed_alias,
+				)
+			)
+		);
+
+		$admin_id = $res_admin['body']['data']['id'];
+		$ed_id    = $res_ed['body']['data']['id'];
+
+		// Editor attempts bulk delete of both IDs
+		$bulk_res = $this->dispatch( $this->editor_request( 'DELETE', '/api/v1/urls/bulk', array(), array( 'ids' => array( $admin_id, $ed_id ) ) ) );
+		$this->assertSame( 200, $bulk_res['status'] );
+		$this->assertSame( 1, $bulk_res['body']['data']['deletedCount'], 'Only Editor-owned link should be deleted.' );
+
+		// Check database directly: Editor link is trashed
+		$stmt = $this->pdo->prepare( 'SELECT status FROM peakurl_urls WHERE id = :id' );
+		$stmt->execute( array( 'id' => $ed_id ) );
+		$this->assertSame( 'trashed', $stmt->fetchColumn() );
+
+		// Check database directly: Admin link remains ACTIVE and untouched
+		$stmt->execute( array( 'id' => $admin_id ) );
+		$this->assertSame( 'active', $stmt->fetchColumn(), 'Admin link must remain active and untrashed.' );
+	}
+
+	public function test_editor_delete_all_removes_only_own_accessible_links_in_database(): void {
+		$admin_alias = $this->test_prefix . 'delall-admin';
+		$ed1_alias   = $this->test_prefix . 'delall-ed1';
+		$ed2_alias   = $this->test_prefix . 'delall-ed2';
+
+		$res_admin = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/adm',
+					'alias'          => $admin_alias,
+				)
+			)
+		);
+		$res_ed1   = $this->dispatch(
+			$this->editor_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/ed1',
+					'alias'          => $ed1_alias,
+				)
+			)
+		);
+		$res_ed2   = $this->dispatch(
+			$this->editor_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/ed2',
+					'alias'          => $ed2_alias,
+				)
+			)
+		);
+
+		$admin_id = $res_admin['body']['data']['id'];
+		$ed1_id   = $res_ed1['body']['data']['id'];
+		$ed2_id   = $res_ed2['body']['data']['id'];
+
+		// Editor calls Delete All
+		$del_all_res = $this->dispatch( $this->editor_request( 'DELETE', '/api/v1/urls' ) );
+		$this->assertSame( 200, $del_all_res['status'] );
+		$this->assertSame( 2, $del_all_res['body']['data']['deletedCount'] );
+
+		// Editor's links are permanently removed
+		$stmt = $this->pdo->prepare( 'SELECT COUNT(*) FROM peakurl_urls WHERE id IN (:id1, :id2)' );
+		$stmt->execute(
+			array(
+				'id1' => $ed1_id,
+				'id2' => $ed2_id,
+			)
+		);
+		$this->assertSame( 0, (int) $stmt->fetchColumn(), 'Editor links must be permanently removed.' );
+
+		// Admin's link remains INTACT in database
+		$stmt = $this->pdo->prepare( 'SELECT COUNT(*) FROM peakurl_urls WHERE id = :id AND status = "active"' );
+		$stmt->execute( array( 'id' => $admin_id ) );
+		$this->assertSame( 1, (int) $stmt->fetchColumn(), 'Admin link must survive Editor Delete All.' );
+	}
+
+	public function test_editor_denied_empty_trash_with_zero_database_mutation(): void {
+		$admin_alias = $this->test_prefix . 'trash-adm';
+		$ed_alias    = $this->test_prefix . 'trash-ed';
+
+		$res_admin = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/adm',
+					'alias'          => $admin_alias,
+				)
+			)
+		);
+		$res_ed    = $this->dispatch(
+			$this->editor_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/ed',
+					'alias'          => $ed_alias,
+				)
+			)
+		);
+
+		$admin_id = $res_admin['body']['data']['id'];
+		$ed_id    = $res_ed['body']['data']['id'];
+
+		// Trash both
+		$this->dispatch( $this->admin_request( 'DELETE', '/api/v1/urls/' . $admin_id ) );
+		$this->dispatch( $this->editor_request( 'DELETE', '/api/v1/urls/' . $ed_id ) );
+
+		// Editor calls Empty Trash -> must be denied with 403 Forbidden
+		$empty_res = $this->dispatch( $this->editor_request( 'DELETE', '/api/v1/urls/trash' ) );
+		$this->assertSame( 403, $empty_res['status'] );
+
+		// Both trashed links must remain in database
+		$stmt = $this->pdo->prepare( 'SELECT COUNT(*) FROM peakurl_urls WHERE id IN (:id1, :id2) AND status = "trashed"' );
+		$stmt->execute(
+			array(
+				'id1' => $admin_id,
+				'id2' => $ed_id,
+			)
+		);
+		$this->assertSame( 2, (int) $stmt->fetchColumn(), 'Empty Trash denial must produce zero database mutations.' );
+	}
+
+	public function test_editor_cannot_edit_other_user_link_in_database(): void {
+		$alias   = $this->test_prefix . 'edit-admin';
+		$res     = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/initial',
+					'title'          => 'Original',
+					'alias'          => $alias,
+				)
+			)
+		);
+		$link_id = $res['body']['data']['id'];
+
+		// Editor attempts to edit admin-owned link
+		$edit_res = $this->dispatch(
+			$this->editor_request(
+				'PUT',
+				'/api/v1/urls/' . $link_id,
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/hijack',
+					'title'          => 'Hijacked',
+				)
+			)
+		);
+		$this->assertSame( 403, $edit_res['status'] );
+
+		// Direct database assertion: original values untouched
+		$stmt = $this->pdo->prepare( 'SELECT destination_url, title FROM peakurl_urls WHERE id = :id' );
+		$stmt->execute( array( 'id' => $link_id ) );
+		$row = $stmt->fetch( PDO::FETCH_ASSOC );
+
+		$this->assertSame( 'https://example.com/initial', $row['destination_url'] );
+		$this->assertSame( 'Original', $row['title'] );
 	}
 }

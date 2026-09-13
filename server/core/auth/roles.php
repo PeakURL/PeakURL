@@ -29,8 +29,11 @@ class Roles {
 	/**
 	 * WordPress-style role capability map for PeakURL users.
 	 *
-	 * Admins have complete site control. Editors can manage site links and
-	 * view site analytics, but cannot manage users or site-wide services.
+	 * - Administrators have site-wide control: managing users, site settings,
+	 *   performing cross-user link mutations, and executing global destructive operations (Empty Trash).
+	 * - Editors have ownership-scoped control: managing, creating, updating, and deleting
+	 *   their own links and viewing their own analytics, but cannot mutate other users'
+	 *   links or execute global destructive operations (Empty Trash).
 	 *
 	 * @var array<string, array<string, bool>>
 	 * @since 1.0.0
@@ -44,25 +47,25 @@ class Roles {
 			'manage_performance'   => true,
 			'manage_updates'       => true,
 			'view_all_links'       => true,
+			'view_own_links'       => true,
 			'edit_all_links'       => true,
+			'edit_own_links'       => true,
 			'delete_all_links'     => true,
+			'delete_own_links'     => true,
 			'view_site_analytics'  => true,
+			'view_own_analytics'   => true,
 			'manage_webhooks'      => true,
 			'manage_api_keys'      => true,
 			'manage_profile'       => true,
 			'create_links'         => true,
 		),
 		'editor' => array(
-			'view_all_links'      => true,
-			'view_own_links'      => true,
-			'edit_all_links'      => true,
-			'edit_own_links'      => true,
-			'delete_all_links'    => true,
-			'delete_own_links'    => true,
-			'view_site_analytics' => true,
-			'view_own_analytics'  => true,
-			'manage_profile'      => true,
-			'create_links'        => true,
+			'view_own_links'     => true,
+			'edit_own_links'     => true,
+			'delete_own_links'   => true,
+			'view_own_analytics' => true,
+			'manage_profile'     => true,
+			'create_links'       => true,
 		),
 	);
 

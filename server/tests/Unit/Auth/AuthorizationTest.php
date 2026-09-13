@@ -69,7 +69,8 @@ class AuthorizationTest extends TestCase {
 			'role' => 'editor',
 		);
 		$this->assertTrue( $this->roles->has_capability( $editor_user, 'create_links' ) );
-		$this->assertTrue( $this->roles->has_capability( $editor_user, 'view_all_links' ) );
+		$this->assertTrue( $this->roles->has_capability( $editor_user, 'view_own_links' ) );
+		$this->assertFalse( $this->roles->has_capability( $editor_user, 'view_all_links' ) );
 		$this->assertFalse( $this->roles->has_capability( $editor_user, 'manage_webhooks' ) );
 		$this->assertFalse( $this->roles->has_capability( $editor_user, 'manage_api_keys' ) );
 	}

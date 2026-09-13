@@ -402,4 +402,107 @@ test.describe("Links Workflow Journeys", () => {
 		});
 		await expect(reloadedTrashOption).toHaveAttribute("data-disabled", "");
 	});
+	test("editor ownership boundaries: manage own links, cannot mutate admin links, and denied global empty trash", async ({
+		authenticatedEditorPage: page,
+		playwright,
+	}) => {
+		const uniqueId = generateTestId("ed-own");
+		const adminAlias = `adm-${uniqueId}`;
+		const editorAlias = `ed-${uniqueId}`;
+
+		// 1. Seed an admin link via an isolated API context without affecting the browser cookie jar
+		const adminCreds = {
+			identifier: process.env.PEAKURL_TEST_IDENTIFIER || "admin",
+			password:
+				process.env.PEAKURL_TEST_PASSWORD ||
+				process.env.PEAKURL_E2E_PASSWORD!,
+		};
+		const adminApiContext = await playwright.request.newContext({
+			baseURL: process.env.PEAKURL_TEST_URL || "https://peakurl.dev",
+			ignoreHTTPSErrors: true,
+		});
+
+		const adminLoginRes = await adminApiContext.post("/api/v1/auth/login", {
+			data: adminCreds,
+		});
+		expect([200, 204]).toContain(adminLoginRes.status());
+
+		const createAdminLinkRes = await adminApiContext.post("/api/v1/urls", {
+			data: {
+				destinationUrl: `https://example.com/${adminAlias}`,
+				alias: adminAlias,
+				title: `Admin Link ${adminAlias}`,
+			},
+		});
+		expect([200, 201]).toContain(createAdminLinkRes.status());
+		const adminLinkData = await createAdminLinkRes.json();
+		const adminLinkId = adminLinkData.data.id;
+		await adminApiContext.dispose();
+
+		// 2. Return to Editor session in browser
+		await page.goto("/dashboard/links", { waitUntil: "commit" });
+		await expect(
+			page.getByRole("heading", { name: /^links$/i })
+		).toBeVisible({ timeout: 25000 });
+
+		// Verify listing isolation: Admin link is NOT visible to Editor
+		await expect(
+			page.locator(".links-row", { hasText: adminAlias })
+		).not.toBeVisible();
+
+		// 3. Editor creates own link
+		await page
+			.locator("#long-url")
+			.fill(`https://example.com/${editorAlias}`);
+		await page.locator("#alias").fill(editorAlias);
+		const createEditorLinkPromise = page.waitForResponse(
+			(res) =>
+				res.url().includes("/api/v1/urls") &&
+				res.request().method() === "POST"
+		);
+		await page.getByRole("button", { name: /shorten/i }).click();
+		const createEditorRes = await createEditorLinkPromise;
+		expect([200, 201]).toContain(createEditorRes.status());
+
+		// Verify Editor's link is visible in table
+		const editorRow = page.locator(".links-row", { hasText: editorAlias });
+		await expect(editorRow).toBeVisible({ timeout: 10000 });
+
+		// 4. Editor can delete own link
+		await editorRow.locator(".links-row-action-delete").click();
+		await page.locator(".links-modal-button-danger").click();
+		await expect(editorRow).not.toBeVisible({ timeout: 10000 });
+
+		// 5. Filter by Trashed status: Editor sees own trashed link
+		const statusFilterBtn = page.locator(
+			"button[aria-label='Filter links by status']"
+		);
+		await statusFilterBtn.click();
+		const trashOption = page.getByRole("option", { name: /trash/i });
+		await trashOption.click();
+
+		await expect(
+			page.locator(".links-row", { hasText: editorAlias })
+		).toBeVisible({ timeout: 15000 });
+
+		// 6. Global Empty Trash is NOT available to Editor in the UI
+		const selectAllCheckbox = page.locator(
+			"input[aria-label='Select all links']"
+		);
+		await selectAllCheckbox.click();
+		await expect(
+			page.locator(".links-table-header-delete-all")
+		).not.toBeVisible();
+
+		// 7. Security IDOR boundary: Editor attempts direct API deletion of Admin link
+		const idorDeleteRes = await page.request.delete(
+			`/api/v1/urls/${adminLinkId}`
+		);
+		expect(idorDeleteRes.status()).toBe(403);
+
+		// 8. Security IDOR boundary: Editor attempts direct API call to empty trash globally
+		const idorEmptyTrashRes =
+			await page.request.delete("/api/v1/urls/trash");
+		expect(idorEmptyTrashRes.status()).toBe(403);
+	});
 });

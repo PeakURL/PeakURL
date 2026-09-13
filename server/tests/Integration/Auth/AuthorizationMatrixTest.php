@@ -101,12 +101,11 @@ class AuthorizationMatrixTest extends TestCase {
 		);
 
 		$allowed_caps = array(
-			'view_all_links',
 			'view_own_links',
 			'create_links',
-			'edit_all_links',
-			'delete_all_links',
-			'view_site_analytics',
+			'edit_own_links',
+			'delete_own_links',
+			'view_own_analytics',
 			'manage_profile',
 		);
 
@@ -117,8 +116,10 @@ class AuthorizationMatrixTest extends TestCase {
 			);
 		}
 
-		$this->assertTrue( $this->auth->can_view_all_links( $editor ) );
-		$this->assertTrue( $this->auth->can_view_site_analytics( $editor ) );
+		$this->assertFalse( $this->auth->can_view_all_links( $editor ) );
+		$this->assertTrue( $this->auth->can_view_own_links( $editor ) );
+		$this->assertFalse( $this->roles->has_capability( $editor, 'delete_all_links' ) );
+		$this->assertFalse( $this->roles->has_capability( $editor, 'edit_all_links' ) );
 	}
 
 	public function test_record_access_respects_ownership_and_global_capability(): void {
@@ -126,18 +127,27 @@ class AuthorizationMatrixTest extends TestCase {
 			'id'   => 'user-editor-1',
 			'role' => 'editor',
 		);
+		$admin  = array(
+			'id'   => 'admin-1',
+			'role' => 'admin',
+		);
 
-		// When user owns the record and has own-capability
+		// When Editor owns the record and has own-capability -> allowed
 		$this->assertTrue(
 			$this->auth->can_access_record( $editor, 'user-editor-1', 'view_own_links', 'view_all_links' )
 		);
 
-		// When user has global capability (e.g. view_all_links) even if they do not own the record
-		$this->assertTrue(
+		// When Editor does NOT own the record and does NOT have global capability -> denied
+		$this->assertFalse(
 			$this->auth->can_access_record( $editor, 'other-user-99', 'view_own_links', 'view_all_links' )
 		);
 
-		// When user does NOT have global capability and does NOT own the record
+		// When Admin has global capability even if they do not own the record -> allowed
+		$this->assertTrue(
+			$this->auth->can_access_record( $admin, 'other-user-99', 'view_own_links', 'view_all_links' )
+		);
+
+		// When user does NOT have global capability and does NOT own the record -> denied
 		$this->assertFalse(
 			$this->auth->can_access_record( $editor, 'other-user-99', 'manage_webhooks', 'manage_webhooks' )
 		);

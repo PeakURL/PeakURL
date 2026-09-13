@@ -1,4 +1,5 @@
 import { API_ROUTES, mapApiUser } from "@/api";
+import type { ApiProfileUser } from "@/api";
 import baseApi from "./base";
 import type {
 	ApiDataResponse,
@@ -47,10 +48,7 @@ const loggedOutTags = (result?: LogoutResponse) =>
 
 export const selectSessionUser = (
 	response?: SessionUserResponse | null
-): ProfileUser | null => {
-	const raw = response?.data ?? response?.user ?? null;
-	return mapApiUser(raw);
-};
+): ProfileUser | null => response?.data ?? response?.user ?? null;
 
 /**
  * RTK Query endpoints for authentication, profile, and user management.
@@ -94,7 +92,13 @@ export const userApi = baseApi.injectEndpoints({
 				method: "POST",
 				body,
 			}),
-			transformResponse: (response: LoginResponse): LoginResponse => {
+			transformResponse: (response: {
+				requiresTwoFactor?: boolean;
+				data?: {
+					user?: ApiProfileUser;
+					requiresTwoFactor?: boolean;
+				};
+			}): LoginResponse => {
 				const user = response?.data?.user
 					? (mapApiUser(response.data.user) ?? undefined)
 					: undefined;
@@ -120,7 +124,13 @@ export const userApi = baseApi.injectEndpoints({
 				method: "POST",
 				body,
 			}),
-			transformResponse: (response: LoginResponse): LoginResponse => {
+			transformResponse: (response: {
+				requiresTwoFactor?: boolean;
+				data?: {
+					user?: ApiProfileUser;
+					requiresTwoFactor?: boolean;
+				};
+			}): LoginResponse => {
 				const user = response?.data?.user
 					? (mapApiUser(response.data.user) ?? undefined)
 					: undefined;
@@ -147,7 +157,7 @@ export const userApi = baseApi.injectEndpoints({
 		getUserProfile: build.query<ApiDataResponse<ProfileUser>, void>({
 			query: () => API_ROUTES.users.me,
 			transformResponse: (
-				response: ApiDataResponse<ProfileUser>
+				response: ApiDataResponse<ApiProfileUser>
 			): ApiDataResponse<ProfileUser> => ({
 				...response,
 				data: response?.data
@@ -166,7 +176,7 @@ export const userApi = baseApi.injectEndpoints({
 				body,
 			}),
 			transformResponse: (
-				response: ApiDataResponse<ProfileUser>
+				response: ApiDataResponse<ApiProfileUser>
 			): ApiDataResponse<ProfileUser> => ({
 				...response,
 				data: response?.data
@@ -177,9 +187,10 @@ export const userApi = baseApi.injectEndpoints({
 		}),
 		authCheck: build.query<AuthCheckResponse, void>({
 			query: () => API_ROUTES.users.me,
-			transformResponse: (
-				response: AuthCheckResponse
-			): AuthCheckResponse => {
+			transformResponse: (response: {
+				data?: ApiProfileUser;
+				user?: ApiProfileUser;
+			}): AuthCheckResponse => {
 				const normalizedData = response?.data
 					? (mapApiUser(response.data) ?? undefined)
 					: undefined;

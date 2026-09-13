@@ -48,16 +48,12 @@ export function mapApiCapabilities(
 		return { ...DEFAULT_USER_CAPABILITIES };
 	}
 
-	const manageSiteSettings = Boolean(raw.manage_site_settings);
-
 	return {
 		manageUsers: Boolean(raw.manage_users),
-		manageSiteSettings,
+		manageSiteSettings: Boolean(raw.manage_site_settings),
 		manageMailDelivery: Boolean(raw.manage_mail_delivery),
 		manageLocationData: Boolean(raw.manage_location_data),
-		managePerformance: Boolean(
-			raw.manage_performance || manageSiteSettings
-		),
+		managePerformance: Boolean(raw.manage_performance),
 		manageUpdates: Boolean(raw.manage_updates),
 		manageProfile: Boolean(raw.manage_profile),
 		manageApiKeys: Boolean(raw.manage_api_keys),
@@ -136,40 +132,18 @@ export function mapUserCapabilitiesToApi(
 }
 
 /**
- * Check if an object already conforms to the normalized UserCapabilities shape.
- */
-function isNormalizedUserCapabilities(
-	capabilities: unknown
-): capabilities is UserCapabilities {
-	return (
-		typeof capabilities === "object" &&
-		null !== capabilities &&
-		"manageUsers" in capabilities &&
-		typeof (capabilities as Record<string, unknown>).manageUsers ===
-			"boolean"
-	);
-}
-
-/**
  * Normalize an API user profile into the internal application domain model.
  *
- * @param user - Raw or partially normalized user object.
+ * @param user - Raw user payload from the API wire contract.
  * @return Fully normalized ProfileUser or null.
  */
-export function mapApiUser(
-	user?: ApiProfileUser | ProfileUser | null
-): ProfileUser | null {
+export function mapApiUser(user?: ApiProfileUser | null): ProfileUser | null {
 	if (!user) {
 		return null;
 	}
 
-	const rawCapabilities = user.capabilities;
-	const capabilities = isNormalizedUserCapabilities(rawCapabilities)
-		? rawCapabilities
-		: mapApiCapabilities(rawCapabilities as ApiUserCapabilities);
-
 	return {
 		...user,
-		capabilities,
+		capabilities: mapApiCapabilities(user.capabilities),
 	};
 }

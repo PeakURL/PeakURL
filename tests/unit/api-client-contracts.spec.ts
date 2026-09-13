@@ -9,7 +9,11 @@ import {
 	mapApiUser,
 	mapUserCapabilitiesToApi,
 } from "../../client/api";
-import type { ApiProfileUser, ApiUserCapabilities } from "../../client/api";
+import type {
+	ApiProfileUser,
+	ApiUserCapabilities,
+	ProfileUser,
+} from "../../client/api";
 import { selectSessionUser } from "../../client/state/slices/api";
 import {
 	extractErrorMessage,
@@ -264,7 +268,7 @@ test.describe("Frontend API Client Contracts", () => {
 				manage_site_settings: true,
 				manage_mail_delivery: false,
 				manage_location_data: true,
-				manage_performance: null,
+				manage_performance: true,
 				manage_updates: true,
 				manage_profile: true,
 				manage_api_keys: true,
@@ -285,7 +289,7 @@ test.describe("Frontend API Client Contracts", () => {
 				manageSiteSettings: true,
 				manageMailDelivery: false,
 				manageLocationData: true,
-				managePerformance: true, // Derived fallback: manage_performance || manage_site_settings
+				managePerformance: true,
 				manageUpdates: true,
 				manageProfile: true,
 				manageApiKeys: true,
@@ -298,6 +302,25 @@ test.describe("Frontend API Client Contracts", () => {
 				viewAnalytics: true,
 				createLinks: true,
 			});
+		});
+
+		test("mapApiCapabilities maps managePerformance directly without phantom fallback", () => {
+			const withoutPerformance: ApiUserCapabilities = {
+				manage_site_settings: true,
+				manage_performance: null,
+			};
+
+			expect(
+				mapApiCapabilities(withoutPerformance).managePerformance
+			).toBe(false);
+			expect(
+				mapApiCapabilities({ manage_performance: false })
+					.managePerformance
+			).toBe(false);
+			expect(
+				mapApiCapabilities({ manage_performance: true })
+					.managePerformance
+			).toBe(true);
 		});
 
 		test("mapApiCapabilities defaults safely for nullish or empty inputs", () => {
@@ -362,28 +385,68 @@ test.describe("Frontend API Client Contracts", () => {
 			expect(normalizedUser?.capabilities?.manageUsers).toBe(false);
 		});
 
-		test("selectSessionUser resolves and normalizes user across data/user response wrappers", () => {
-			const rawUser: ApiProfileUser = {
+		test("mapApiUser safely handles nullish or omitted capabilities", () => {
+			expect(mapApiUser(null)).toBeNull();
+			expect(mapApiUser(undefined)).toBeNull();
+
+			const userWithoutCaps: ApiProfileUser = {
+				id: "user_43",
+				username: "guest_user",
+				role: "editor",
+			};
+
+			const normalized = mapApiUser(userWithoutCaps);
+			expect(normalized?.capabilities).toEqual(DEFAULT_USER_CAPABILITIES);
+		});
+
+		test("selectSessionUser resolves normalized user across data/user response wrappers", () => {
+			const normalizedUser: ProfileUser = {
 				id: "user_100",
 				username: "admin_user",
 				role: "admin",
 				capabilities: {
-					manage_users: true,
-					empty_trash: true,
+					...DEFAULT_USER_CAPABILITIES,
+					manageUsers: true,
+					emptyTrash: true,
 				},
 			};
 
-			const fromData = selectSessionUser({ data: rawUser });
+			const fromData = selectSessionUser({ data: normalizedUser });
 			expect(fromData?.id).toBe("user_100");
 			expect(fromData?.capabilities?.manageUsers).toBe(true);
 			expect(fromData?.capabilities?.emptyTrash).toBe(true);
 			expect(fromData?.capabilities?.viewLinks).toBe(false);
 
-			const fromUserWrapper = selectSessionUser({ user: rawUser });
+			const fromUserWrapper = selectSessionUser({ user: normalizedUser });
 			expect(fromUserWrapper?.id).toBe("user_100");
 			expect(fromUserWrapper?.capabilities?.manageUsers).toBe(true);
 
 			expect(selectSessionUser(null)).toBeNull();
+			expect(selectSessionUser({})).toBeNull();
+		});
+
+		test("confirms single transformation point without duplicate mapping", () => {
+			const rawWireUser: ApiProfileUser = {
+				id: "user_200",
+				username: "site_admin",
+				role: "admin",
+				capabilities: {
+					manage_users: true,
+					manage_site_settings: true,
+					view_links: true,
+				},
+			};
+
+			// Step 1: Normalization at the RTK Query boundary (transformResponse)
+			const normalizedUser = mapApiUser(rawWireUser);
+			expect(normalizedUser).not.toBeNull();
+
+			// Step 2: Pure selector resolution from store state without secondary conversion
+			const selected = selectSessionUser({ data: normalizedUser });
+			expect(selected).toBe(normalizedUser);
+			expect(selected?.capabilities?.manageUsers).toBe(true);
+			expect(selected?.capabilities?.manageSiteSettings).toBe(true);
+			expect(selected?.capabilities?.viewLinks).toBe(true);
 		});
 	});
 });

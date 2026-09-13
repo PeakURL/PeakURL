@@ -12,6 +12,7 @@
 	<file>server/api</file>
 	<file>server/bin</file>
 	<file>server/core</file>
+	<file>server/database</file>
 	<file>server/features</file>
 	<file>server/http</file>
 	<file>server/public</file>
@@ -30,5 +31,10 @@
 		<exclude name="WordPress.Files.FileName"/>
 		<exclude name="WordPress.DB.DirectDatabaseQuery"/>
 		<exclude name="WordPress.DB.RestrictedClasses"/>
+	</rule>
+
+	<!-- Allow PHPUnit test methods and mock stubs in tests/ -->
+	<rule ref="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid">
+		<exclude-pattern>*/tests/*</exclude-pattern>
 	</rule>
 </ruleset>

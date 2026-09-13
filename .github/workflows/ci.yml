@@ -23,6 +23,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: peakurl_test
+        ports:
+          - 3307:3306
+        options: --health-cmd="mysqladmin ping -proot" --health-interval=5s --health-timeout=5s --health-retries=10
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -129,6 +139,9 @@ jobs:
         run: npm run smoke:auth
 
       - name: Run Playwright E2E Tests
+        env:
+          PEAKURL_TEST_PASSWORD: ${{ secrets.PEAKURL_TEST_PASSWORD }}
+          PEAKURL_TEST_IDENTIFIER: admin
         run: npm run test:e2e
 
       - name: Teardown Docker Stack

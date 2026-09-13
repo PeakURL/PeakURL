@@ -49,6 +49,16 @@ class LinksDatabasePersistenceTest extends TestCase {
 
 		$this->test_prefix = 'test-db-' . bin2hex( random_bytes( 4 ) ) . '-';
 
+		// Ensure database schema tables exist
+		$schema_file = dirname( __DIR__, 3 ) . '/database/schema.sql';
+		if ( ! file_exists( $schema_file ) ) {
+			$schema_file = dirname( __DIR__, 2 ) . '/database/schema.sql';
+		}
+		if ( file_exists( $schema_file ) ) {
+			$schema_sql = (string) file_get_contents( $schema_file );
+			$this->pdo->exec( $connection->prefix_schema( $schema_sql ) );
+		}
+
 		// Ensure admin user (id: 1) exists in peakurl_users
 		$this->pdo->exec(
 			"INSERT INTO peakurl_users (id, username, email, first_name, last_name, password_hash, role, is_email_verified, created_at, updated_at)

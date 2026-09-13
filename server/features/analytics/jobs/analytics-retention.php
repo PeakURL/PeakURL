@@ -14,8 +14,9 @@ use PeakURL\Api\SettingsApi;
 use PeakURL\Core\Scheduler\ExecutionContext;
 use PeakURL\Core\Scheduler\ExecutionResult;
 use PeakURL\Core\Scheduler\JobHandlerInterface;
+use PeakURL\Features\Analytics\Service as AnalyticsService;
+use PeakURL\Features\Links\Service as LinksService;
 use PeakURL\Services\Database\PeakURL_DB;
-use PeakURL\Utils\Date;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -49,15 +50,40 @@ class AnalyticsRetentionJob implements JobHandlerInterface {
 	private SettingsApi $settings_api;
 
 	/**
-	 * Create a new retention job.
+	 * Optional Links domain service.
 	 *
-	 * @param PeakURL_DB  $db           Database wrapper.
-	 * @param SettingsApi $settings_api Settings API instance.
+	 * @var LinksService|null
 	 * @since 1.7.0
 	 */
-	public function __construct( PeakURL_DB $db, SettingsApi $settings_api ) {
-		$this->db           = $db;
-		$this->settings_api = $settings_api;
+	private ?LinksService $links_service;
+
+	/**
+	 * Optional Analytics domain service.
+	 *
+	 * @var AnalyticsService|null
+	 * @since 1.7.0
+	 */
+	private ?AnalyticsService $analytics_service;
+
+	/**
+	 * Create a new retention job.
+	 *
+	 * @param PeakURL_DB            $db                Database wrapper.
+	 * @param SettingsApi           $settings_api      Settings API instance.
+	 * @param LinksService|null     $links_service     Optional links domain service.
+	 * @param AnalyticsService|null $analytics_service Optional analytics domain service.
+	 * @since 1.7.0
+	 */
+	public function __construct(
+		PeakURL_DB $db,
+		SettingsApi $settings_api,
+		?LinksService $links_service = null,
+		?AnalyticsService $analytics_service = null
+	) {
+		$this->db                = $db;
+		$this->settings_api      = $settings_api;
+		$this->links_service     = $links_service;
+		$this->analytics_service = $analytics_service;
 	}
 
 	/**
@@ -68,37 +94,38 @@ class AnalyticsRetentionJob implements JobHandlerInterface {
 		$purged_links = 0;
 
 		if ( $trash_days > 0 ) {
-			$trash_cutoff = gmdate( 'Y-m-d H:i:s', time() - ( $trash_days * 86400 ) );
-
-			// Query up to 100 eligible trashed links to purge in bounded batches.
-			$expired_trashed = $this->db->get_results(
-				'SELECT id FROM urls
-				WHERE status = :trashed_status
-				AND updated_at <= :trash_cutoff
-				LIMIT 100',
-				array(
-					'trashed_status' => 'trashed',
-					'trash_cutoff'   => $trash_cutoff,
-				)
-			);
-
-			if ( is_array( $expired_trashed ) && ! empty( $expired_trashed ) ) {
-				$link_ids = array_filter(
-					array_map(
-						function ( array $row ): string {
-							return (string) ( $row['id'] ?? '' );
-						},
-						$expired_trashed
+			if ( null !== $this->links_service ) {
+				$purged_links = $this->links_service->purge_stale_trashed_links( $trash_days, 100 );
+			} else {
+				$trash_cutoff    = gmdate( 'Y-m-d H:i:s', time() - ( $trash_days * 86400 ) );
+				$expired_trashed = $this->db->get_results(
+					'SELECT id FROM urls
+					WHERE status = :trashed_status
+					AND updated_at <= :trash_cutoff
+					LIMIT 100',
+					array(
+						'trashed_status' => 'trashed',
+						'trash_cutoff'   => $trash_cutoff,
 					)
 				);
 
-				if ( ! empty( $link_ids ) ) {
-					$placeholders = implode( ',', array_fill( 0, count( $link_ids ), '?' ) );
-					$stmt         = $this->db->query(
-						"DELETE FROM urls WHERE id IN ($placeholders)",
-						array_values( $link_ids )
+				if ( is_array( $expired_trashed ) && ! empty( $expired_trashed ) ) {
+					$link_ids = array_filter(
+						array_map(
+							function ( array $row ): string {
+								return (string) ( $row['id'] ?? '' );
+							},
+							$expired_trashed
+						)
 					);
-					$purged_links = $stmt ? $stmt->rowCount() : count( $link_ids );
+
+					if ( ! empty( $link_ids ) ) {
+						$placeholders = implode( ',', array_fill( 0, count( $link_ids ), '?' ) );
+						$purged_links = $this->db->query(
+							"DELETE FROM urls WHERE id IN ($placeholders)",
+							array_values( $link_ids )
+						);
+					}
 				}
 			}
 		}
@@ -109,15 +136,18 @@ class AnalyticsRetentionJob implements JobHandlerInterface {
 		if ( $analytics_days > 0 ) {
 			$analytics_cutoff = gmdate( 'Y-m-d H:i:s', time() - ( $analytics_days * 86400 ) );
 
-			$stmt          = $this->db->query(
-				'DELETE FROM clicks
-				WHERE clicked_at < :cutoff
-				LIMIT 1000',
-				array(
-					'cutoff' => $analytics_cutoff,
-				)
-			);
-			$purged_clicks = $stmt ? $stmt->rowCount() : 0;
+			if ( null !== $this->analytics_service ) {
+				$purged_clicks = $this->analytics_service->purge_old_clicks( $analytics_cutoff, 1000 );
+			} else {
+				$purged_clicks = $this->db->query(
+					'DELETE FROM clicks
+					WHERE clicked_at < :cutoff
+					LIMIT 1000',
+					array(
+						'cutoff' => $analytics_cutoff,
+					)
+				);
+			}
 		}
 
 		return ExecutionResult::success(

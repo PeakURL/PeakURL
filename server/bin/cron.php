@@ -22,6 +22,7 @@
 
 declare(strict_types=1);
 
+use PeakURL\Api\LinksApi;
 use PeakURL\Api\SettingsApi;
 use PeakURL\Api\UsersApi;
 use PeakURL\Core\Auth\Authorization;
@@ -30,17 +31,24 @@ use PeakURL\Core\Config\Configuration;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Config\Environment;
 use PeakURL\Core\Scheduler\SchedulerFactory;
+use PeakURL\Features\Analytics\Repository as AnalyticsRepository;
+use PeakURL\Features\Analytics\Service as AnalyticsService;
 use PeakURL\Features\Auth\Credentials as AuthCredentials;
 use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Features\Auth\Validator as AuthValidator;
+use PeakURL\Features\Links\Repository as LinksRepository;
+use PeakURL\Features\Links\Service as LinksService;
+use PeakURL\Features\Links\Validator as LinksValidator;
 use PeakURL\Features\Webhooks\Service as WebhooksService;
 use PeakURL\Features\Webhooks\Validator as WebhooksValidator;
 use PeakURL\Services\Cache\CacheManager;
+use PeakURL\Services\Captcha;
 use PeakURL\Services\Crypto;
 use PeakURL\Services\Database\Connection;
 use PeakURL\Services\Database\PeakURL_DB;
 use PeakURL\Services\Geoip;
 use PeakURL\Services\Notifications;
+use PeakURL\Services\SocialPreview;
 use PeakURL\Services\Totp;
 use PeakURL\Services\Update\Manager as UpdateManager;
 
@@ -110,6 +118,48 @@ $webhooks_service = new WebhooksService(
 
 $update_manager = new UpdateManager( $config );
 
+$social_preview    = new SocialPreview( $config, $settings_api );
+$captcha           = new Captcha( $config, $settings_api, $crypto );
+$links_api         = new LinksApi( $db, $cache_service );
+$analytics_repo    = new AnalyticsRepository(
+	$db,
+	$settings_api,
+	$geoip,
+	$roles,
+	$authorization,
+	$webhooks_service,
+	null,
+	$config
+);
+$analytics_service = new AnalyticsService(
+	$analytics_repo,
+	$db,
+	$auth_service,
+	$roles,
+	$authorization,
+	$config,
+	$links_api
+);
+$links_repo        = new LinksRepository(
+	$db,
+	$links_api,
+	$authorization
+);
+$links_service     = new LinksService(
+	$links_repo,
+	new LinksValidator(),
+	$settings_api,
+	$auth_service,
+	$analytics_service,
+	$webhooks_service,
+	$social_preview,
+	$captcha,
+	$roles,
+	$authorization,
+	$config
+);
+$analytics_repo->set_link_formatter( array( $links_service, 'format_url' ) );
+
 $logger = function ( string $message ): void {
 	$timestamp = gmdate( 'Y-m-d H:i:s' );
 	fwrite( STDOUT, sprintf( "[%s UTC] %s\n", $timestamp, $message ) );
@@ -123,7 +173,11 @@ $scheduler = SchedulerFactory::create(
 	$geoip,
 	$webhooks_service,
 	$update_manager,
-	$logger
+	$logger,
+	$links_api,
+	$auth_service,
+	$links_service,
+	$analytics_service
 );
 
 // ── Command line argument parsing ─────────────────────────────────

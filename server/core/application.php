@@ -227,7 +227,10 @@ class Application {
 			$webhooks_service,
 			$update_manager,
 			null,
-			$links_api
+			$links_api,
+			$auth_service,
+			$links_service,
+			$analytics_service
 		);
 		$system_service   = new SystemService(
 			$db,

@@ -62,38 +62,21 @@ class WebhookDeliveryJob implements JobHandlerInterface {
 	 * {@inheritDoc}
 	 */
 	public function execute( ExecutionContext $context ): ExecutionResult {
-		$active_webhooks = $this->db->get_results(
-			'SELECT id, url, events FROM webhooks WHERE is_active = 1'
-		);
+		$result = $this->webhooks_service->process_pending_deliveries( 50 );
 
-		if ( empty( $active_webhooks ) || ! is_array( $active_webhooks ) ) {
-			return ExecutionResult::success( 'No active webhooks configured; skipped.' );
-		}
-
-		$valid_count   = 0;
-		$invalid_count = 0;
-
-		foreach ( $active_webhooks as $webhook ) {
-			$url = trim( (string) ( $webhook['url'] ?? '' ) );
-			if ( filter_var( $url, FILTER_VALIDATE_URL ) ) {
-				++$valid_count;
-			} else {
-				++$invalid_count;
-			}
+		if ( 0 === $result['processed'] ) {
+			return ExecutionResult::success( 'No pending webhook deliveries.' );
 		}
 
 		return ExecutionResult::success(
 			sprintf(
-				'Verified %d active webhook(s) (%d valid, %d invalid URL).',
-				count( $active_webhooks ),
-				$valid_count,
-				$invalid_count
+				'Processed %d pending webhook delivery(ies) (%d delivered, %d queued for retry, %d failed).',
+				$result['processed'],
+				$result['delivered'],
+				$result['retried'],
+				$result['failed']
 			),
-			array(
-				'activeWebhooks' => count( $active_webhooks ),
-				'validUrls'      => $valid_count,
-				'invalidUrls'    => $invalid_count,
-			)
+			$result
 		);
 	}
 }

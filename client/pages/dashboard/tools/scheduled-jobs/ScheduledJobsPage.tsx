@@ -78,7 +78,16 @@ export function ScheduledJobsPage() {
 		setRunningJobId(job.id);
 		try {
 			const result = await runCronJob(job.id).unwrap();
-			if (result.success) {
+			if (result.status === "skipped") {
+				notification.info(
+					result.summary ||
+						sprintf(
+							/* translators: %s is the job title */
+							__("Job [%s] was skipped."),
+							job.title
+						)
+				);
+			} else if (result.success) {
 				notification.success(
 					result.summary ||
 						sprintf(

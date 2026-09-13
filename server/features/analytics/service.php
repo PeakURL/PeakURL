@@ -992,4 +992,16 @@ class Service {
 	): array {
 		return $this->data->get_link_stats_period( $raw_period, $filter_status, $target_user_id );
 	}
+
+	/**
+	 * Purge click records older than the given cutoff date according to retention policy.
+	 *
+	 * @param string $cutoff Cutoff timestamp string (Y-m-d H:i:s).
+	 * @param int    $limit  Maximum records to delete in one batch.
+	 * @return int Number of deleted click records.
+	 * @since 1.7.0
+	 */
+	public function purge_old_clicks( string $cutoff, int $limit = 1000 ): int {
+		return $this->data->purge_old_clicks( $cutoff, $limit );
+	}
 }

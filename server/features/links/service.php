@@ -2066,4 +2066,73 @@ class Service {
 
 		return is_array( $filtered ) ? $filtered : $payload;
 	}
+
+	/**
+	 * Automatically purge stale trashed links according to retention policy.
+	 *
+	 * @param int $days        Retention days (0 or negative means disabled).
+	 * @param int $batch_limit Batch limit.
+	 * @return int Number of purged links.
+	 * @since 1.7.0
+	 */
+	public function purge_stale_trashed_links( int $days, int $batch_limit = 100 ): int {
+		if ( $days <= 0 ) {
+			return 0;
+		}
+
+		$cutoff = gmdate( 'Y-m-d H:i:s', time() - ( $days * 86400 ) );
+		$rows   = $this->data->get_stale_trashed_links( $cutoff, $batch_limit );
+
+		if ( empty( $rows ) ) {
+			return 0;
+		}
+
+		$ids = array();
+		foreach ( $rows as $row ) {
+			$id = (string) ( $row['id'] ?? '' );
+			if ( '' !== $id ) {
+				$ids[] = $id;
+			}
+		}
+
+		if ( empty( $ids ) ) {
+			return 0;
+		}
+
+		$deleted_count = $this->data->bulk_delete_permanent( $ids );
+
+		$this->social_preview->delete_link_images(
+			array_column( $rows, 'social_image_path' ),
+		);
+
+		foreach ( $rows as $deleted_row ) {
+			$this->invalidate_link_cache( $deleted_row );
+			\do_action( 'link_deleted', $deleted_row, null, null );
+		}
+
+		return $deleted_count;
+	}
+
+	/**
+	 * Process and transition active links that have expired.
+	 *
+	 * @param int $batch_limit Maximum links to expire in one batch.
+	 * @return int Number of expired links processed.
+	 * @since 1.7.0
+	 */
+	public function expire_due_links( int $batch_limit = 100 ): int {
+		$due_links = $this->data->expire_due_links( $batch_limit );
+
+		if ( empty( $due_links ) ) {
+			return 0;
+		}
+
+		foreach ( $due_links as $link ) {
+			$link['status'] = 'expired';
+			$this->invalidate_link_cache( $link );
+			\do_action( 'link_expired', $link );
+		}
+
+		return count( $due_links );
+	}
 }

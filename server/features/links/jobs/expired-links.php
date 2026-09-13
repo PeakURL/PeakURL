@@ -14,6 +14,7 @@ use PeakURL\Api\LinksApi;
 use PeakURL\Core\Scheduler\ExecutionContext;
 use PeakURL\Core\Scheduler\ExecutionResult;
 use PeakURL\Core\Scheduler\JobHandlerInterface;
+use PeakURL\Features\Links\Service as LinksService;
 use PeakURL\Services\Cache\CacheInterface;
 use PeakURL\Services\Cache\CacheKey;
 use PeakURL\Services\Database\PeakURL_DB;
@@ -59,6 +60,14 @@ class ExpiredLinksJob implements JobHandlerInterface {
 	private ?LinksApi $links_api;
 
 	/**
+	 * Optional Links domain service.
+	 *
+	 * @var LinksService|null
+	 * @since 1.7.0
+	 */
+	private ?LinksService $links_service;
+
+	/**
 	 * Maximum number of expired links to transition per batch.
 	 *
 	 * @var int
@@ -69,28 +78,44 @@ class ExpiredLinksJob implements JobHandlerInterface {
 	/**
 	 * Create a new expired links processing job.
 	 *
-	 * @param PeakURL_DB          $db          Database wrapper.
-	 * @param CacheInterface|null $cache       Optional cache service.
-	 * @param int                 $batch_limit Batch processing limit.
-	 * @param LinksApi|null       $links_api   Optional links API dependency.
+	 * @param PeakURL_DB         $db            Database wrapper.
+	 * @param CacheInterface|null $cache         Optional cache service.
+	 * @param int                $batch_limit   Batch processing limit.
+	 * @param LinksApi|null      $links_api     Optional links API dependency.
+	 * @param LinksService|null  $links_service Optional links domain service.
 	 * @since 1.7.0
 	 */
 	public function __construct(
 		PeakURL_DB $db,
 		?CacheInterface $cache = null,
 		int $batch_limit = 100,
-		?LinksApi $links_api = null
+		?LinksApi $links_api = null,
+		?LinksService $links_service = null
 	) {
-		$this->db          = $db;
-		$this->cache       = $cache;
-		$this->batch_limit = max( 1, min( 500, $batch_limit ) );
-		$this->links_api   = $links_api;
+		$this->db            = $db;
+		$this->cache         = $cache;
+		$this->batch_limit   = max( 1, min( 500, $batch_limit ) );
+		$this->links_api     = $links_api;
+		$this->links_service = $links_service;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function execute( ExecutionContext $context ): ExecutionResult {
+		if ( null !== $this->links_service ) {
+			$expired_count = $this->links_service->expire_due_links( $this->batch_limit );
+
+			if ( 0 === $expired_count ) {
+				return ExecutionResult::success( 'No expired links due for processing.' );
+			}
+
+			return ExecutionResult::success(
+				sprintf( 'Processed %d expired link(s).', $expired_count ),
+				array( 'expiredCount' => $expired_count )
+			);
+		}
+
 		$now = Date::now();
 
 		$due_links = $this->db->get_results(

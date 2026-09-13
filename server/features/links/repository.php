@@ -15,6 +15,7 @@ use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Services\Database\PeakURL_DB;
 use PeakURL\Services\Database\Query;
+use PeakURL\Utils\Date;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -685,6 +686,78 @@ class Repository {
 		return $this->db->get_results(
 			'SELECT u.* FROM urls u ' . $where,
 			$params,
+		);
+	}
+
+	/**
+	 * Find and transition active links that have expired.
+	 *
+	 * @param int $batch_limit Maximum links to expire in one run.
+	 * @return array<int, array<string, mixed>> List of expired link rows.
+	 * @since 1.7.0
+	 */
+	public function expire_due_links( int $batch_limit = 100 ): array {
+		$batch_limit = max( 1, min( 500, $batch_limit ) );
+		$now         = Date::now();
+
+		$due_links = $this->db->get_results(
+			'SELECT * FROM urls
+			WHERE status = :active_status
+			AND expires_at IS NOT NULL
+			AND expires_at <= :cutoff_time
+			LIMIT ' . $batch_limit,
+			array(
+				'active_status' => 'active',
+				'cutoff_time'   => $now,
+			)
+		);
+
+		if ( empty( $due_links ) || ! is_array( $due_links ) ) {
+			return array();
+		}
+
+		$ids = array();
+		foreach ( $due_links as $link ) {
+			$id = (string) ( $link['id'] ?? '' );
+			if ( '' !== $id ) {
+				$ids[] = $id;
+			}
+		}
+
+		if ( empty( $ids ) ) {
+			return array();
+		}
+
+		$placeholders = implode( ',', array_fill( 0, count( $ids ), '?' ) );
+		$this->db->query(
+			"UPDATE urls SET status = 'expired', updated_at = ? WHERE id IN ($placeholders)",
+			array_merge( array( $now ), $ids )
+		);
+
+		return $due_links;
+	}
+
+	/**
+	 * Retrieve stale trashed links for automatic retention purging.
+	 *
+	 * @param string $cutoff      Cutoff timestamp.
+	 * @param int    $batch_limit Maximum rows to retrieve.
+	 * @return array<int, array<string, mixed>> Stale trashed URL rows.
+	 * @since 1.7.0
+	 */
+	public function get_stale_trashed_links( string $cutoff, int $batch_limit = 100 ): array {
+		$batch_limit = max( 1, min( 500, $batch_limit ) );
+
+		return $this->db->get_results(
+			'SELECT * FROM urls
+			WHERE status = :trashed_status
+			AND updated_at <= :cutoff_time
+			ORDER BY updated_at ASC
+			LIMIT ' . $batch_limit,
+			array(
+				'trashed_status' => 'trashed',
+				'cutoff_time'    => $cutoff,
+			)
 		);
 	}
 }

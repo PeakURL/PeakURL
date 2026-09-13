@@ -1566,28 +1566,39 @@ class Service {
 	}
 
 	/**
-	 * Delete expired sessions and leftover revoked rows once per request.
+	 * Delete expired sessions and leftover revoked rows.
 	 *
-	 * @return void
+	 * @param int|null $limit Optional batch limit. When null, prunes once per request.
+	 * @return int Number of deleted sessions.
 	 * @since 1.0.3
 	 */
-	public function prune_stale_sessions(): void {
+	public function prune_stale_sessions( ?int $limit = null ): int {
 		static $pruned = false;
 
-		if ( $pruned ) {
-			return;
+		if ( null === $limit && $pruned ) {
+			return 0;
 		}
 
-		$this->db->query(
-			'DELETE FROM sessions
+		$sql = 'DELETE FROM sessions
 			WHERE revoked_at IS NOT NULL
-			OR last_active_at < :active_since',
+			OR last_active_at < :active_since';
+
+		if ( null !== $limit && $limit > 0 ) {
+			$sql .= ' LIMIT ' . (int) $limit;
+		}
+
+		$deleted_count = $this->db->query(
+			$sql,
 			array(
 				'active_since' => $this->session_active_since(),
 			),
 		);
 
-		$pruned = true;
+		if ( null === $limit ) {
+			$pruned = true;
+		}
+
+		return $deleted_count;
 	}
 
 	/**

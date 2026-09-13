@@ -192,3 +192,22 @@ CREATE TABLE IF NOT EXISTS cron_runs (
     CONSTRAINT fk_cron_runs_job_id FOREIGN KEY (job_id) REFERENCES cron_jobs (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS webhook_deliveries (
+    id VARCHAR(40) NOT NULL PRIMARY KEY,
+    webhook_id VARCHAR(40) NOT NULL,
+    event VARCHAR(64) NOT NULL,
+    payload LONGTEXT NOT NULL,
+    status VARCHAR(32) NOT NULL DEFAULT 'pending',
+    attempts INT UNSIGNED NOT NULL DEFAULT 0,
+    max_attempts INT UNSIGNED NOT NULL DEFAULT 3,
+    next_attempt_at DATETIME NOT NULL,
+    last_attempt_at DATETIME DEFAULT NULL,
+    last_error TEXT DEFAULT NULL,
+    response_code INT UNSIGNED DEFAULT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    KEY idx_webhook_deliveries_pending (status, next_attempt_at),
+    KEY idx_webhook_deliveries_webhook_id (webhook_id),
+    CONSTRAINT fk_webhook_deliveries_webhook_id FOREIGN KEY (webhook_id) REFERENCES webhooks (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+

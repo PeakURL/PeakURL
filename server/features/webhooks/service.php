@@ -489,12 +489,23 @@ class Service {
 		$timeout = $fast ? 1.5 : 3.0;
 
 		if ( count( $targets ) > 1 && function_exists( 'curl_multi_init' ) ) {
-			return $this->post_webhooks_parallel( $targets, $payload, $timeout );
+			$results = $this->post_webhooks_parallel( $targets, $payload, $timeout );
+		} else {
+			$results = array();
+			foreach ( $targets as $webhook ) {
+				$results[] = $this->send_webhook_payload( $webhook, $payload, $timeout );
+			}
 		}
 
-		$results = array();
-		foreach ( $targets as $webhook ) {
-			$results[] = $this->send_webhook_payload( $webhook, $payload, $timeout );
+		foreach ( $results as $res ) {
+			if ( empty( $res['success'] ) && ! empty( $res['webhookId'] ) ) {
+				$this->queue_delivery(
+					(string) $res['webhookId'],
+					$event,
+					$payload,
+					60
+				);
+			}
 		}
 
 		return $results;
@@ -1201,5 +1212,197 @@ class Service {
 	private function decode_json_array( string $json ): array {
 		$decoded = json_decode( $json, true );
 		return is_array( $decoded ) ? $decoded : array();
+	}
+
+	/**
+	 * Queue a webhook payload for deferred or retry delivery.
+	 *
+	 * @param string               $webhook_id    Webhook row ID.
+	 * @param string               $event         Event identifier.
+	 * @param array<string, mixed> $payload       Event payload.
+	 * @param int                  $delay_seconds Initial delay in seconds before first attempt.
+	 * @return string Delivery ID.
+	 * @since 1.7.0
+	 */
+	public function queue_delivery(
+		string $webhook_id,
+		string $event,
+		array $payload,
+		int $delay_seconds = 0
+	): string {
+		$delivery_id = Str::random_id( 16 );
+		$now         = Date::now();
+		$next_run    = gmdate( 'Y-m-d H:i:s', time() + max( 0, $delay_seconds ) );
+
+		$this->db->insert(
+			'webhook_deliveries',
+			array(
+				'id'              => $delivery_id,
+				'webhook_id'      => $webhook_id,
+				'event'           => $event,
+				'payload'         => (string) json_encode( $payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ),
+				'status'          => 'pending',
+				'attempts'        => 0,
+				'max_attempts'    => 3,
+				'next_attempt_at' => $next_run,
+				'last_attempt_at' => null,
+				'last_error'      => null,
+				'response_code'   => null,
+				'created_at'      => $now,
+				'updated_at'      => $now,
+			)
+		);
+
+		return $delivery_id;
+	}
+
+	/**
+	 * Process pending deferred webhook deliveries with exponential backoff.
+	 *
+	 * @param int $batch_limit Maximum deliveries to process in one run.
+	 * @return array{processed: int, delivered: int, retried: int, failed: int}
+	 * @since 1.7.0
+	 */
+	public function process_pending_deliveries( int $batch_limit = 50 ): array {
+		$batch_limit = max( 1, min( 100, $batch_limit ) );
+		$now         = Date::now();
+
+		$deliveries = $this->db->get_results(
+			'SELECT d.*, w.url, w.secret, w.is_active
+			FROM webhook_deliveries d
+			LEFT JOIN webhooks w ON d.webhook_id = w.id
+			WHERE d.status = :pending_status
+			AND d.next_attempt_at <= :now
+			ORDER BY d.next_attempt_at ASC
+			LIMIT ' . $batch_limit,
+			array(
+				'pending_status' => 'pending',
+				'now'            => $now,
+			)
+		);
+
+		if ( empty( $deliveries ) || ! is_array( $deliveries ) ) {
+			return array(
+				'processed' => 0,
+				'delivered' => 0,
+				'retried'   => 0,
+				'failed'    => 0,
+			);
+		}
+
+		$delivered_count = 0;
+		$retried_count   = 0;
+		$failed_count    = 0;
+
+		foreach ( $deliveries as $delivery ) {
+			$delivery_id  = (string) ( $delivery['id'] ?? '' );
+			$attempts     = ( (int) ( $delivery['attempts'] ?? 0 ) ) + 1;
+			$max_attempts = (int) ( $delivery['max_attempts'] ?? 3 );
+			$url          = trim( (string) ( $delivery['url'] ?? '' ) );
+			$is_active    = (bool) ( $delivery['is_active'] ?? false );
+
+			if ( '' === $url ) {
+				$this->db->update(
+					'webhook_deliveries',
+					array(
+						'status'          => 'failed',
+						'attempts'        => $attempts,
+						'last_attempt_at' => Date::now(),
+						'last_error'      => 'Webhook endpoint no longer exists.',
+						'updated_at'      => Date::now(),
+					),
+					array( 'id' => $delivery_id )
+				);
+				++$failed_count;
+				continue;
+			}
+
+			if ( ! $is_active ) {
+				$this->db->update(
+					'webhook_deliveries',
+					array(
+						'status'          => 'failed',
+						'attempts'        => $attempts,
+						'last_attempt_at' => Date::now(),
+						'last_error'      => 'Webhook is inactive.',
+						'updated_at'      => Date::now(),
+					),
+					array( 'id' => $delivery_id )
+				);
+				++$failed_count;
+				continue;
+			}
+
+			$raw_payload = (string) ( $delivery['payload'] ?? '{}' );
+			$payload     = json_decode( $raw_payload, true );
+			if ( ! is_array( $payload ) ) {
+				$payload = array();
+			}
+
+			$webhook_target = array(
+				'id'     => (string) $delivery['webhook_id'],
+				'url'    => $url,
+				'secret' => (string) ( $delivery['secret'] ?? '' ),
+			);
+
+			$result = $this->send_webhook_payload( $webhook_target, $payload, 3.0 );
+
+			if ( ! empty( $result['success'] ) ) {
+				$this->db->update(
+					'webhook_deliveries',
+					array(
+						'status'          => 'delivered',
+						'attempts'        => $attempts,
+						'last_attempt_at' => Date::now(),
+						'last_error'      => null,
+						'response_code'   => (int) ( $result['statusCode'] ?? 200 ),
+						'updated_at'      => Date::now(),
+					),
+					array( 'id' => $delivery_id )
+				);
+				++$delivered_count;
+			} elseif ( $attempts >= $max_attempts ) {
+				$error_msg = Str::nullable( $result['error'] ?? null ) ?? 'Delivery failed after maximum attempts.';
+				$this->db->update(
+					'webhook_deliveries',
+					array(
+						'status'          => 'failed',
+						'attempts'        => $attempts,
+						'last_attempt_at' => Date::now(),
+						'last_error'      => $error_msg,
+						'response_code'   => (int) ( $result['statusCode'] ?? 0 ),
+						'updated_at'      => Date::now(),
+					),
+					array( 'id' => $delivery_id )
+				);
+				++$failed_count;
+			} else {
+				$delay        = 1 === $attempts ? 60 : ( 2 === $attempts ? 300 : 1800 );
+				$next_attempt = gmdate( 'Y-m-d H:i:s', time() + $delay );
+				$error_msg    = Str::nullable( $result['error'] ?? null ) ?? 'Delivery attempt failed.';
+
+				$this->db->update(
+					'webhook_deliveries',
+					array(
+						'status'          => 'pending',
+						'attempts'        => $attempts,
+						'next_attempt_at' => $next_attempt,
+						'last_attempt_at' => Date::now(),
+						'last_error'      => $error_msg,
+						'response_code'   => (int) ( $result['statusCode'] ?? 0 ),
+						'updated_at'      => Date::now(),
+					),
+					array( 'id' => $delivery_id )
+				);
+				++$retried_count;
+			}
+		}
+
+		return array(
+			'processed' => count( $deliveries ),
+			'delivered' => $delivered_count,
+			'retried'   => $retried_count,
+			'failed'    => $failed_count,
+		);
 	}
 }

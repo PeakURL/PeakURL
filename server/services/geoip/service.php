@@ -190,19 +190,6 @@ class Geoip {
 	}
 
 	/**
-	 * Trigger a GeoIP database update.
-	 *
-	 * Alias for download_database().
-	 *
-	 * @return array<string, mixed> Updated status payload.
-	 * @throws \RuntimeException When the update fails.
-	 * @since 1.7.0
-	 */
-	public function update_database(): array {
-		return $this->download_database();
-	}
-
-	/**
 	 * Set a custom downloader instance (useful for testing).
 	 *
 	 * @param Downloader $downloader Downloader instance.

@@ -14,10 +14,13 @@ use PeakURL\Api\LinksApi;
 use PeakURL\Api\SettingsApi;
 use PeakURL\Database\SchedulerRepository;
 use PeakURL\Features\Analytics\Jobs\AnalyticsRetentionJob;
+use PeakURL\Features\Analytics\Service as AnalyticsService;
 use PeakURL\Features\Auth\Jobs\SessionCleanupJob;
+use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Features\Links\Jobs\ExpiredLinksJob;
 use PeakURL\Features\Links\Jobs\ImportExportJob;
 use PeakURL\Features\Links\Jobs\LinkHealthCheckJob;
+use PeakURL\Features\Links\Service as LinksService;
 use PeakURL\Features\System\Jobs\CacheCleanupJob;
 use PeakURL\Features\System\Jobs\GeoipUpdateJob;
 use PeakURL\Features\System\Jobs\VersionCheckJob;
@@ -43,14 +46,18 @@ class SchedulerFactory {
 	/**
 	 * Build a fully configured Scheduler instance with all built-in maintenance jobs.
 	 *
-	 * @param PeakURL_DB           $db               Database query wrapper.
-	 * @param array<string, mixed> $config           Application configuration.
-	 * @param SettingsApi          $settings_api     Settings API.
-	 * @param CacheInterface       $cache_service    Cache service.
-	 * @param Geoip                $geoip_service    GeoIP service.
-	 * @param WebhooksService      $webhooks_service Webhooks service.
-	 * @param UpdateManager        $update_manager   Update manager.
-	 * @param callable|null        $logger           Optional progress logger callback.
+	 * @param PeakURL_DB            $db                Database query wrapper.
+	 * @param array<string, mixed>  $config            Application configuration.
+	 * @param SettingsApi           $settings_api      Settings API.
+	 * @param CacheInterface        $cache_service     Cache service.
+	 * @param Geoip                 $geoip_service     GeoIP service.
+	 * @param WebhooksService       $webhooks_service  Webhooks service.
+	 * @param UpdateManager         $update_manager    Update manager.
+	 * @param callable|null         $logger            Optional progress logger callback.
+	 * @param LinksApi|null         $links_api         Optional links query API.
+	 * @param AuthService|null      $auth_service      Optional auth domain service.
+	 * @param LinksService|null     $links_service     Optional links domain service.
+	 * @param AnalyticsService|null $analytics_service Optional analytics domain service.
 	 * @return Scheduler Configured scheduler instance.
 	 * @since 1.7.0
 	 */
@@ -63,7 +70,10 @@ class SchedulerFactory {
 		WebhooksService $webhooks_service,
 		UpdateManager $update_manager,
 		?callable $logger = null,
-		?LinksApi $links_api = null
+		?LinksApi $links_api = null,
+		?AuthService $auth_service = null,
+		?LinksService $links_service = null,
+		?AnalyticsService $analytics_service = null
 	): Scheduler {
 		$registry   = new JobRegistry();
 		$repository = new SchedulerRepository( $db );
@@ -74,7 +84,7 @@ class SchedulerFactory {
 				'peakurl_session_cleanup',
 				'Session Cleanup',
 				86400,
-				new SessionCleanupJob( $db, $config )
+				new SessionCleanupJob( $db, $config, $auth_service )
 			)
 		);
 
@@ -94,7 +104,7 @@ class SchedulerFactory {
 				'peakurl_expired_links',
 				'Expired Links Processing',
 				3600,
-				new ExpiredLinksJob( $db, $cache_service, 100, $links_api )
+				new ExpiredLinksJob( $db, $cache_service, 100, $links_api, $links_service )
 			)
 		);
 
@@ -114,7 +124,7 @@ class SchedulerFactory {
 				'peakurl_analytics_retention',
 				'Analytics & Trash Retention',
 				86400,
-				new AnalyticsRetentionJob( $db, $settings_api )
+				new AnalyticsRetentionJob( $db, $settings_api, $links_service, $analytics_service )
 			)
 		);
 

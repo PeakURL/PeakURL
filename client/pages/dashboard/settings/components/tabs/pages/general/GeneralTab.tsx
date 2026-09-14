@@ -78,8 +78,6 @@ function GeneralTab({
 	const [trashRetentionDays, setTrashRetentionDays] = useState<number>(
 		siteSettings?.trashRetentionDays ?? 30
 	);
-	const [cronHistoryRetentionDays, setCronHistoryRetentionDays] =
-		useState<number>(siteSettings?.cronHistoryRetentionDays ?? 30);
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const socialPreviewInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -108,9 +106,7 @@ function GeneralTab({
 		prevSiteSettings?.landingPageMode !== siteSettings?.landingPageMode ||
 		prevSiteSettings?.landingPageUrl !== siteSettings?.landingPageUrl ||
 		prevSiteSettings?.trashRetentionDays !==
-			siteSettings?.trashRetentionDays ||
-		prevSiteSettings?.cronHistoryRetentionDays !==
-			siteSettings?.cronHistoryRetentionDays
+			siteSettings?.trashRetentionDays
 	) {
 		setPrevSiteSettings(siteSettings);
 		setSiteLanguage(siteSettings?.siteLanguage || "en_US");
@@ -123,9 +119,6 @@ function GeneralTab({
 		setLandingPageMode(siteSettings?.landingPageMode || "html");
 		setLandingPageUrl(siteSettings?.landingPageUrl || "");
 		setTrashRetentionDays(siteSettings?.trashRetentionDays ?? 30);
-		setCronHistoryRetentionDays(
-			siteSettings?.cronHistoryRetentionDays ?? 30
-		);
 		setFaviconFile(null);
 		setRemoveFavicon(false);
 		setSocialPreviewFile(null);
@@ -154,7 +147,6 @@ function GeneralTab({
 			landingPageMode,
 			landingPageUrl,
 			trashRetentionDays,
-			cronHistoryRetentionDays,
 			socialPreviewFile,
 			removeSocialPreviewImage,
 			faviconFile,
@@ -198,33 +190,6 @@ function GeneralTab({
 		{ value: "90", label: __("90 days") },
 		{ value: "0", label: __("Never (Keep indefinitely)") },
 	];
-	const cronHistoryRetentionOptions = useMemo<SelectOption<string>[]>(() => {
-		const baseOptions: SelectOption<string>[] = [
-			{ value: "7", label: __("7 Days") },
-			{ value: "14", label: __("14 Days") },
-			{ value: "30", label: __("30 Days (Default)") },
-			{ value: "60", label: __("60 Days") },
-			{ value: "90", label: __("90 Days") },
-			{ value: "180", label: __("180 Days") },
-			{ value: "365", label: __("1 Year") },
-			{ value: "0", label: __("Keep Indefinitely") },
-		];
-		const currentStr = String(cronHistoryRetentionDays);
-		if (!baseOptions.some((opt) => opt.value === currentStr)) {
-			return [
-				...baseOptions,
-				{
-					value: currentStr,
-					label: sprintf(
-						/* translators: %s is number of days */
-						__("%s Days"),
-						currentStr
-					),
-				},
-			];
-		}
-		return baseOptions;
-	}, [cronHistoryRetentionDays]);
 	const landingPageModeOptions: SelectOption<"login" | "url" | "html">[] = [
 		{ value: "html", label: __("Default (Landing Page)") },
 		{ value: "url", label: __("Redirect URL") },
@@ -542,29 +507,6 @@ function GeneralTab({
 								}
 								ariaLabel={__("Trash retention period")}
 							/>
-						</div>
-						<div className="settings-general-field">
-							<label className="settings-section-label">
-								{__("Cron History Retention Period")}
-							</label>
-							<Select
-								value={String(cronHistoryRetentionDays)}
-								onChange={(val) =>
-									setCronHistoryRetentionDays(Number(val))
-								}
-								options={cronHistoryRetentionOptions}
-								disabled={
-									isLoadingSiteSettings ||
-									!siteSettings?.canManageSiteSettings ||
-									isUpdating
-								}
-								ariaLabel={__("Cron history retention period")}
-							/>
-							<p className="settings-general-help-text mt-1.5 text-xs text-text-muted">
-								{__(
-									"Automatically purge finished background job runs older than this period."
-								)}
-							</p>
 						</div>
 					</div>
 				</section>

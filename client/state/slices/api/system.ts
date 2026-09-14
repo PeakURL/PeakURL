@@ -1,20 +1,24 @@
 import {
 	API_ROUTES,
 	mapApiClearCronHistory,
+	mapApiCronJobScheduleResult,
 	mapApiCronStatus,
 	mapApiRunCronJobResult,
 	mapApiRunDueJobsResult,
 } from "@/api";
 import type {
 	ApiClearCronHistoryResponse,
+	ApiCronJobScheduleResponse,
 	ApiCronStatusResponse,
 	ApiRunCronJobResponse,
 	ApiRunDueJobsResponse,
 	ClearCronHistoryRequest,
 	ClearCronHistoryResponse,
+	CronJobScheduleResult,
 	CronStatusResponse,
 	RunCronJobResult,
 	RunDueJobsResult,
+	UpdateCronJobPayload,
 } from "@/api";
 
 import baseApi from "./base";
@@ -89,7 +93,6 @@ function createGeneralSettingsBody({
 	landingPageMode,
 	landingPageUrl,
 	trashRetentionDays,
-	cronHistoryRetentionDays,
 	faviconFile,
 	removeFavicon,
 	socialPreviewFile,
@@ -106,7 +109,6 @@ function createGeneralSettingsBody({
 			| "landingPageMode"
 			| "landingPageUrl"
 			| "trashRetentionDays"
-			| "cronHistoryRetentionDays"
 	  > {
 	if (
 		hasGeneralSettingsUpload({
@@ -118,7 +120,6 @@ function createGeneralSettingsBody({
 			landingPageMode,
 			landingPageUrl,
 			trashRetentionDays,
-			cronHistoryRetentionDays,
 			faviconFile,
 			removeFavicon,
 			socialPreviewFile,
@@ -137,10 +138,6 @@ function createGeneralSettingsBody({
 				trashRetentionDays !== undefined
 					? String(trashRetentionDays)
 					: undefined,
-			cronHistoryRetentionDays:
-				cronHistoryRetentionDays !== undefined
-					? String(cronHistoryRetentionDays)
-					: undefined,
 			favicon: faviconFile || undefined,
 			removeFavicon: removeFavicon ? "1" : "0",
 			socialPreviewImage: socialPreviewFile || undefined,
@@ -157,7 +154,6 @@ function createGeneralSettingsBody({
 		landingPageMode,
 		landingPageUrl,
 		trashRetentionDays,
-		cronHistoryRetentionDays,
 	};
 }
 
@@ -399,6 +395,60 @@ export const systemApi = baseApi.injectEndpoints({
 			) => mapApiClearCronHistory(response?.data),
 			invalidatesTags: CRON_TAGS,
 		}),
+		updateCronJobSchedule: build.mutation<
+			CronJobScheduleResult,
+			UpdateCronJobPayload
+		>({
+			query: ({ id, intervalSeconds, preferredTime, isEnabled }) => ({
+				url: API_ROUTES.system.cronUpdateJob(id),
+				method: "PATCH",
+				body: {
+					...(intervalSeconds !== undefined
+						? { interval_seconds: intervalSeconds }
+						: {}),
+					...(preferredTime !== undefined
+						? { preferred_time: preferredTime }
+						: {}),
+					...(isEnabled !== undefined
+						? { is_enabled: isEnabled }
+						: {}),
+				},
+			}),
+			transformResponse: (
+				response: ApiDataResponse<ApiCronJobScheduleResponse>
+			) => mapApiCronJobScheduleResult(response?.data),
+			invalidatesTags: CRON_TAGS,
+		}),
+		resetCronJobSchedule: build.mutation<CronJobScheduleResult, string>({
+			query: (id: string) => ({
+				url: API_ROUTES.system.cronResetJob(id),
+				method: "POST",
+			}),
+			transformResponse: (
+				response: ApiDataResponse<ApiCronJobScheduleResponse>
+			) => mapApiCronJobScheduleResult(response?.data),
+			invalidatesTags: CRON_TAGS,
+		}),
+		updateCronSettings: build.mutation<
+			{ retentionDays: number; success: boolean },
+			{ retentionDays: number }
+		>({
+			query: ({ retentionDays }) => ({
+				url: API_ROUTES.system.cronSettings,
+				method: "POST",
+				body: { retention_days: retentionDays },
+			}),
+			transformResponse: (
+				response: ApiDataResponse<{
+					retention_days: number;
+					success: boolean;
+				}>
+			) => ({
+				retentionDays: Number(response?.data?.retention_days ?? 30),
+				success: Boolean(response?.data?.success),
+			}),
+			invalidatesTags: CRON_TAGS,
+		}),
 	}),
 });
 
@@ -428,4 +478,7 @@ export const {
 	useRunDueJobsMutation,
 	useRunCronJobMutation,
 	useClearCronHistoryMutation,
+	useUpdateCronJobScheduleMutation,
+	useResetCronJobScheduleMutation,
+	useUpdateCronSettingsMutation,
 } = systemApi;

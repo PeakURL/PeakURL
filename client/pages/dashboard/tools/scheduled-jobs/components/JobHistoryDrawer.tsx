@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import {
+	Dialog,
+	DialogBackdrop,
+	DialogPanel,
+	DialogTitle,
+} from "@headlessui/react";
 import { format, formatDistanceToNow, isValid, parseISO } from "date-fns";
 import { AlertTriangle, Clock, History, Play, Trash2, X } from "lucide-react";
 
@@ -10,7 +15,7 @@ import { extractErrorMessage } from "@/shared/errors";
 import { cn } from "@/shared/formatting";
 import { useClearCronHistoryMutation } from "@/state/slices/api";
 
-import { formatInterval, formatNextRun } from "../formatters";
+import { formatNextRun, formatSchedule } from "../formatters";
 import type { JobHistoryDrawerProps } from "../types";
 import { JobStatusBadge } from "./JobStatusBadge";
 
@@ -56,20 +61,35 @@ export function JobHistoryDrawer({
 	const direction = isRtl ? "rtl" : "ltr";
 	const notification = useNotification();
 
+	// Cache the active job so closing animations stay smooth without jumping even if parent clears the job
+	const [cachedJob, setCachedJob] = useState(job);
+	const [prevJob, setPrevJob] = useState(job);
+
+	if (job !== prevJob) {
+		setPrevJob(job);
+		if (job) {
+			setCachedJob(job);
+		}
+	}
+
+	const activeJob = job ?? cachedJob;
+
 	const [clearCronHistory, { isLoading: isClearingHistory }] =
 		useClearCronHistoryMutation();
 	const [isClearConfirmOpen, setIsClearConfirmOpen] = useState(false);
 
-	if (!job) {
+	if (!activeJob) {
 		return null;
 	}
 
-	const runs = job.recentRuns || [];
-	const nextRun = formatNextRun(job.nextRunAt);
+	const runs = activeJob.recentRuns || [];
+	const nextRun = formatNextRun(activeJob.nextRunAt);
 
 	const handleClearJobHistory = async () => {
 		try {
-			const result = await clearCronHistory({ jobId: job.id }).unwrap();
+			const result = await clearCronHistory({
+				jobId: activeJob.id,
+			}).unwrap();
 			notification.success(
 				sprintf(
 					/* translators: %s is the number of cleared history records */
@@ -93,10 +113,10 @@ export function JobHistoryDrawer({
 
 	return (
 		<Dialog open={isOpen} onClose={onClose} className="relative z-50">
-			{/* Backdrop with smooth fade transition */}
-			<div
+			{/* Synchronized smooth backdrop fade transition */}
+			<DialogBackdrop
+				transition
 				className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity duration-500 ease-in-out data-closed:opacity-0"
-				aria-hidden="true"
 			/>
 
 			<div className="fixed inset-0 overflow-hidden">
@@ -131,12 +151,12 @@ export function JobHistoryDrawer({
 											{sprintf(
 												/* translators: %s is the background job title */
 												__("Execution History — %s"),
-												job.title
+												activeJob.title
 											)}
 										</DialogTitle>
 										<div className="flex flex-wrap items-center gap-2 mt-1">
 											<code className="font-mono text-xs text-text-muted">
-												{job.id}
+												{activeJob.id}
 											</code>
 										</div>
 									</div>
@@ -163,9 +183,9 @@ export function JobHistoryDrawer({
 										</span>
 										<code
 											className="scheduled-jobs-drawer-meta-id font-mono"
-											title={job.id}
+											title={activeJob.id}
 										>
-											{job.id}
+											{activeJob.id}
 										</code>
 									</div>
 									<div className="scheduled-jobs-drawer-meta-card">
@@ -174,9 +194,12 @@ export function JobHistoryDrawer({
 										</span>
 										<div className="mt-1">
 											<JobStatusBadge
-												status={job.status}
-												attempts={job.attempts}
-												maxAttempts={job.maxAttempts}
+												status={activeJob.status}
+												attempts={activeJob.attempts}
+												maxAttempts={
+													activeJob.maxAttempts
+												}
+												isEnabled={activeJob.isEnabled}
 											/>
 										</div>
 									</div>
@@ -185,8 +208,9 @@ export function JobHistoryDrawer({
 											{__("Recurrence")}
 										</span>
 										<span className="scheduled-jobs-drawer-meta-value">
-											{formatInterval(
-												job.intervalSeconds
+											{formatSchedule(
+												activeJob.intervalSeconds,
+												activeJob.preferredTime
 											)}
 										</span>
 									</div>
@@ -207,7 +231,7 @@ export function JobHistoryDrawer({
 								</div>
 
 								{/* Error Banner */}
-								{job.lastError ? (
+								{activeJob.lastError ? (
 									<div className="scheduled-jobs-drawer-error-banner">
 										<AlertTriangle
 											size={16}
@@ -218,7 +242,7 @@ export function JobHistoryDrawer({
 												{__("Most Recent Failure")}
 											</p>
 											<p className="mt-1 text-xs text-rose-700 dark:text-rose-400 wrap-break-word font-mono bg-rose-500/5 p-2 rounded border border-rose-500/10">
-												{job.lastError}
+												{activeJob.lastError}
 											</p>
 										</div>
 									</div>
@@ -419,7 +443,7 @@ export function JobHistoryDrawer({
 									{sprintf(
 										/* translators: %s is the job title */
 										__("Registry: %s"),
-										job.title
+										activeJob.title
 									)}
 								</div>
 
@@ -435,11 +459,11 @@ export function JobHistoryDrawer({
 										<Button
 											variant="primary"
 											size="sm"
-											onClick={() => onRunJob(job)}
+											onClick={() => onRunJob(activeJob)}
 											loading={isJobRunning}
 											disabled={
 												isJobRunning ||
-												"running" === job.status
+												"running" === activeJob.status
 											}
 										>
 											{!isJobRunning ? (
@@ -465,7 +489,7 @@ export function JobHistoryDrawer({
 				title={sprintf(
 					/* translators: %s is the background job title */
 					__("Clear Execution History — %s"),
-					job.title
+					activeJob.title
 				)}
 				description={__(
 					"Are you sure you want to clear execution history for this background job? Finished run records and output logs for this job will be permanently deleted. Active and retrying runs will remain protected."

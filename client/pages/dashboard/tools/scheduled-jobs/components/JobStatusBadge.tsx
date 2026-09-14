@@ -6,6 +6,7 @@ export function JobStatusBadge({
 	status,
 	attempts = 0,
 	maxAttempts = 3,
+	isEnabled = true,
 	className,
 }: JobStatusBadgeProps) {
 	const normalized = status.toLowerCase();
@@ -20,6 +21,20 @@ export function JobStatusBadge({
 			>
 				<span className="scheduled-jobs-badge-dot scheduled-jobs-badge-dot-running animate-pulse" />
 				<span>{__("Running")}</span>
+			</span>
+		);
+	}
+
+	if (!isEnabled) {
+		return (
+			<span
+				className={cn(
+					"scheduled-jobs-badge scheduled-jobs-badge-disabled",
+					className
+				)}
+			>
+				<span className="scheduled-jobs-badge-dot scheduled-jobs-badge-dot-disabled" />
+				<span>{__("Disabled")}</span>
 			</span>
 		);
 	}

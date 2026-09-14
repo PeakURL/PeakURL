@@ -216,19 +216,33 @@ class Scheduler {
 
 			$recent_runs = $this->repository->get_job_runs( $job_id, 5 );
 
+			$persisted_interval  = isset( $matching_row['schedule_interval'] )
+				? (int) $matching_row['schedule_interval']
+				: $definition->get_interval_seconds();
+			$persisted_pref_time = isset( $matching_row['preferred_time'] ) && '' !== trim( (string) $matching_row['preferred_time'] )
+				? (string) $matching_row['preferred_time']
+				: null;
+			$persisted_enabled   = ! empty( $matching_row['is_enabled'] );
+			$is_customized       = ( $persisted_interval !== $definition->get_interval_seconds() )
+				|| ( null !== $persisted_pref_time )
+				|| ( $persisted_enabled !== $definition->is_enabled() );
+
 			$jobs[] = array(
-				'id'               => $job_id,
-				'title'            => $definition->get_title(),
-				'interval_seconds' => $definition->get_interval_seconds(),
-				'status'           => (string) ( $matching_row['status'] ?? 'idle' ),
-				'is_enabled'       => ! empty( $matching_row['is_enabled'] ),
-				'next_run_at'      => $matching_row['next_run_at'] ? Date::to_iso( (string) $matching_row['next_run_at'] ) : null,
-				'last_run_at'      => ! empty( $matching_row['last_run_at'] ) ? Date::to_iso( (string) $matching_row['last_run_at'] ) : null,
-				'last_finished_at' => ! empty( $matching_row['last_finished_at'] ) ? Date::to_iso( (string) $matching_row['last_finished_at'] ) : null,
-				'attempts'         => (int) ( $matching_row['attempts'] ?? 0 ),
-				'max_attempts'     => (int) ( $matching_row['max_attempts'] ?? $definition->get_retry_policy()->get_max_attempts() ),
-				'last_error'       => $matching_row['last_error'] ?? null,
-				'recent_runs'      => array_map(
+				'id'                           => $job_id,
+				'title'                        => $definition->get_title(),
+				'interval_seconds'             => $persisted_interval,
+				'recommended_interval_seconds' => $definition->get_interval_seconds(),
+				'preferred_time'               => $persisted_pref_time,
+				'is_customized'                => $is_customized,
+				'status'                       => (string) ( $matching_row['status'] ?? 'idle' ),
+				'is_enabled'                   => $persisted_enabled,
+				'next_run_at'                  => ! empty( $matching_row['next_run_at'] ) ? Date::to_iso( (string) $matching_row['next_run_at'] ) : null,
+				'last_run_at'                  => ! empty( $matching_row['last_run_at'] ) ? Date::to_iso( (string) $matching_row['last_run_at'] ) : null,
+				'last_finished_at'             => ! empty( $matching_row['last_finished_at'] ) ? Date::to_iso( (string) $matching_row['last_finished_at'] ) : null,
+				'attempts'                     => (int) ( $matching_row['attempts'] ?? 0 ),
+				'max_attempts'                 => (int) ( $matching_row['max_attempts'] ?? $definition->get_retry_policy()->get_max_attempts() ),
+				'last_error'                   => $matching_row['last_error'] ?? null,
+				'recent_runs'                  => array_map(
 					function ( array $run_record ): array {
 						return array(
 							'id'             => (string) ( $run_record['id'] ?? '' ),
@@ -250,6 +264,7 @@ class Scheduler {
 			'jobs'           => $jobs,
 			'jobs_count'     => count( $jobs ),
 			'retention_days' => $this->get_retention_days(),
+			'timezone'       => $this->get_site_timezone(),
 		);
 	}
 
@@ -305,12 +320,17 @@ class Scheduler {
 
 		$duration_ms = (int) round( ( microtime( true ) - $start_ts ) * 1000 );
 
+		// Query freshest job row to respect any runtime schedule or preference updates.
+		$fresh_job_row    = $this->repository->get_job( $job_id );
+		$interval_seconds = (int) ( $fresh_job_row['schedule_interval'] ?? ( $job_row['schedule_interval'] ?? $definition->get_interval_seconds() ) );
+		$preferred_time   = isset( $fresh_job_row['preferred_time'] ) && '' !== trim( (string) $fresh_job_row['preferred_time'] )
+			? (string) $fresh_job_row['preferred_time']
+			: ( isset( $job_row['preferred_time'] ) && '' !== trim( (string) $job_row['preferred_time'] ) ? (string) $job_row['preferred_time'] : null );
+
 		if ( $result->is_success() ) {
 			// Catch-up policy: advances to future timestamp based on current time
 			// so downtime never replays every missed interval infinitely.
-			$base_epoch  = max( time(), (int) strtotime( $now_time . ' UTC' ) );
-			$next_epoch  = $base_epoch + $definition->get_interval_seconds();
-			$next_run_at = gmdate( 'Y-m-d H:i:s', $next_epoch );
+			$next_run_at = $this->calculate_next_run( $interval_seconds, $preferred_time, $now_time );
 
 			$this->repository->record_success(
 				$job_id,
@@ -333,9 +353,7 @@ class Scheduler {
 				)
 			);
 		} elseif ( $result->is_skipped() ) {
-			$base_epoch  = max( time(), (int) strtotime( $now_time . ' UTC' ) );
-			$next_epoch  = $base_epoch + $definition->get_interval_seconds();
-			$next_run_at = gmdate( 'Y-m-d H:i:s', $next_epoch );
+			$next_run_at = $this->calculate_next_run( $interval_seconds, $preferred_time, $now_time );
 
 			$this->repository->record_skipped(
 				$job_id,
@@ -380,8 +398,7 @@ class Scheduler {
 				);
 			} else {
 				// Terminal failure: schedule next regular occurrence so it doesn't loop infinitely.
-				$next_epoch  = max( time(), $base_epoch ) + $definition->get_interval_seconds();
-				$next_run_at = gmdate( 'Y-m-d H:i:s', $next_epoch );
+				$next_run_at = $this->calculate_next_run( $interval_seconds, $preferred_time, $now_time );
 				$is_terminal = true;
 
 				$this->log(
@@ -517,5 +534,271 @@ class Scheduler {
 	 */
 	public function clear_history( ?string $job_id = null ): int {
 		return $this->repository->clear_history( $job_id );
+	}
+
+	/**
+	 * Get the authoritative configured site timezone.
+	 *
+	 * @return string Timezone identifier (e.g. 'UTC' or 'Europe/London').
+	 * @since 1.7.0
+	 */
+	public function get_site_timezone(): string {
+		if ( null !== $this->settings_api ) {
+			$stored_tz = $this->settings_api->get_option( 'site_timezone' );
+			if ( null === $stored_tz || '' === trim( (string) $stored_tz ) ) {
+				$stored_tz = $this->settings_api->get_option( 'timezone' );
+			}
+			$tz = trim( (string) $stored_tz );
+			if ( '' !== $tz && in_array( $tz, \DateTimeZone::listIdentifiers(), true ) ) {
+				return $tz;
+			}
+		}
+
+		return Constants::DEFAULT_TIMEZONE;
+	}
+
+	/**
+	 * Calculate the next execution datetime based on recurrence interval,
+	 * optional preferred time of day (HH:MM), and reference time.
+	 *
+	 * When a preferred time of day is configured on daily or weekly schedules,
+	 * the next occurrence is calculated in the configured site timezone and
+	 * converted to UTC for MySQL storage.
+	 *
+	 * @param int         $interval_seconds Recurring interval in seconds.
+	 * @param string|null $preferred_time   Optional time of day in 'HH:MM' format.
+	 * @param string|null $from_time        Optional reference datetime string.
+	 * @return string MySQL UTC datetime string ('Y-m-d H:i:s').
+	 * @since 1.7.0
+	 */
+	public function calculate_next_run(
+		int $interval_seconds,
+		?string $preferred_time = null,
+		?string $from_time = null
+	): string {
+		$clean_pref = ( null !== $preferred_time && '' !== trim( $preferred_time ) ) ? trim( $preferred_time ) : null;
+
+		if ( null !== $clean_pref && preg_match( '/^([01][0-9]|2[0-3]):[0-5][0-9]$/', $clean_pref ) && $interval_seconds >= 86400 ) {
+			try {
+				$site_tz   = new \DateTimeZone( $this->get_site_timezone() );
+				$utc_tz    = new \DateTimeZone( 'UTC' );
+				$ref_utc   = new \DateTimeImmutable( $from_time ?? 'now', $utc_tz );
+				$ref_local = $ref_utc->setTimezone( $site_tz );
+
+				list( $hours, $minutes ) = explode( ':', $clean_pref );
+				$candidate               = $ref_local->setTime( (int) $hours, (int) $minutes, 0 );
+
+				if ( $candidate <= $ref_local ) {
+					if ( $interval_seconds >= 604800 ) {
+						$candidate = $candidate->modify( '+1 week' );
+					} else {
+						$candidate = $candidate->modify( '+1 day' );
+					}
+				}
+
+				return $candidate->setTimezone( $utc_tz )->format( 'Y-m-d H:i:s' );
+			} catch ( \Throwable $exception ) {
+				// Fall back to standard epoch calculation if timezone parsing fails.
+			}
+		}
+
+		$base_epoch = null !== $from_time ? (int) strtotime( $from_time . ' UTC' ) : time();
+		return gmdate( 'Y-m-d H:i:s', $base_epoch + max( 1, $interval_seconds ) );
+	}
+
+	/**
+	 * Return the status dictionary for a single job by ID.
+	 *
+	 * @param string $job_id Unique job identifier.
+	 * @return array<string, mixed> Job status payload.
+	 *
+	 * @throws \InvalidArgumentException When the job is unknown.
+	 * @since 1.7.0
+	 */
+	public function get_single_job_status( string $job_id ): array {
+		$definition = $this->registry->get( $job_id );
+		if ( null === $definition ) {
+			throw new \InvalidArgumentException(
+				sprintf( 'Unknown background job identifier: %s', $job_id )
+			);
+		}
+
+		$job_row     = $this->repository->get_job( $job_id ) ?? array();
+		$recent_runs = $this->repository->get_job_runs( $job_id, 5 );
+
+		$persisted_interval  = isset( $job_row['schedule_interval'] )
+			? (int) $job_row['schedule_interval']
+			: $definition->get_interval_seconds();
+		$persisted_pref_time = isset( $job_row['preferred_time'] ) && '' !== trim( (string) $job_row['preferred_time'] )
+			? (string) $job_row['preferred_time']
+			: null;
+		$persisted_enabled   = ! empty( $job_row['is_enabled'] );
+		$is_customized       = ( $persisted_interval !== $definition->get_interval_seconds() )
+			|| ( null !== $persisted_pref_time )
+			|| ( $persisted_enabled !== $definition->is_enabled() );
+
+		return array(
+			'id'                           => $job_id,
+			'title'                        => $definition->get_title(),
+			'interval_seconds'             => $persisted_interval,
+			'recommended_interval_seconds' => $definition->get_interval_seconds(),
+			'preferred_time'               => $persisted_pref_time,
+			'is_customized'                => $is_customized,
+			'status'                       => (string) ( $job_row['status'] ?? 'idle' ),
+			'is_enabled'                   => $persisted_enabled,
+			'next_run_at'                  => ! empty( $job_row['next_run_at'] ) ? Date::to_iso( (string) $job_row['next_run_at'] ) : null,
+			'last_run_at'                  => ! empty( $job_row['last_run_at'] ) ? Date::to_iso( (string) $job_row['last_run_at'] ) : null,
+			'last_finished_at'             => ! empty( $job_row['last_finished_at'] ) ? Date::to_iso( (string) $job_row['last_finished_at'] ) : null,
+			'attempts'                     => (int) ( $job_row['attempts'] ?? 0 ),
+			'max_attempts'                 => (int) ( $job_row['max_attempts'] ?? $definition->get_retry_policy()->get_max_attempts() ),
+			'last_error'                   => $job_row['last_error'] ?? null,
+			'recent_runs'                  => array_map(
+				function ( array $run_record ): array {
+					return array(
+						'id'             => (string) ( $run_record['id'] ?? '' ),
+						'status'         => (string) ( $run_record['status'] ?? '' ),
+						'attempt'        => (int) ( $run_record['attempt'] ?? 1 ),
+						'started_at'     => Date::to_iso( (string) ( $run_record['started_at'] ?? '' ) ),
+						'finished_at'    => ! empty( $run_record['finished_at'] ) ? Date::to_iso( (string) $run_record['finished_at'] ) : null,
+						'duration_ms'    => isset( $run_record['duration_ms'] ) ? (int) $run_record['duration_ms'] : null,
+						'output_summary' => $run_record['output_summary'] ?? null,
+						'error_message'  => $run_record['error_message'] ?? null,
+					);
+				},
+				$recent_runs
+			),
+		);
+	}
+
+	/**
+	 * Update schedule settings for a registered background job.
+	 *
+	 * @param string               $job_id Unique job identifier.
+	 * @param array<string, mixed> $params Update parameters (interval_seconds, preferred_time, is_enabled).
+	 * @return array<string, mixed> Updated job details.
+	 *
+	 * @throws \InvalidArgumentException When the job ID is unknown or parameters are invalid.
+	 * @since 1.7.0
+	 */
+	public function update_job( string $job_id, array $params ): array {
+		$clean_id   = trim( $job_id );
+		$definition = $this->registry->get( $clean_id );
+
+		if ( null === $definition ) {
+			throw new \InvalidArgumentException(
+				sprintf( 'Unknown background job identifier: %s', $clean_id )
+			);
+		}
+
+		$interval = null;
+		if ( isset( $params['interval_seconds'] ) ) {
+			$interval = (int) $params['interval_seconds'];
+			if ( $interval < 300 ) {
+				throw new \InvalidArgumentException(
+					'Recurrence interval must be at least 300 seconds (5 minutes).'
+				);
+			}
+		}
+
+		$this->sync();
+		$current_row = $this->repository->get_job( $clean_id );
+		if ( empty( $current_row ) ) {
+			throw new \InvalidArgumentException(
+				sprintf( 'Background job row not found: %s', $clean_id )
+			);
+		}
+
+		if ( null === $interval ) {
+			$interval = (int) ( $current_row['schedule_interval'] ?? $definition->get_interval_seconds() );
+		}
+
+		// Minimum allowed interval across all background jobs is 300 seconds (5 minutes).
+		if ( $interval < 300 ) {
+			throw new \InvalidArgumentException(
+				'Recurrence interval must be at least 300 seconds (5 minutes).'
+			);
+		}
+
+		$preferred_time = null;
+		if ( array_key_exists( 'preferred_time', $params ) ) {
+			if ( null !== $params['preferred_time'] && '' !== trim( (string) $params['preferred_time'] ) ) {
+				$time_str = trim( (string) $params['preferred_time'] );
+				if ( ! preg_match( '/^([01][0-9]|2[0-3]):[0-5][0-9]$/', $time_str ) ) {
+					throw new \InvalidArgumentException(
+						'Preferred time must be in 24-hour format (HH:MM).'
+					);
+				}
+				$preferred_time = $time_str;
+			}
+		} else {
+			$preferred_time = isset( $current_row['preferred_time'] ) && '' !== trim( (string) $current_row['preferred_time'] )
+				? (string) $current_row['preferred_time']
+				: null;
+		}
+
+		$is_enabled = null;
+		if ( array_key_exists( 'is_enabled', $params ) && null !== $params['is_enabled'] ) {
+			$is_enabled = (bool) $params['is_enabled'];
+		}
+
+		// Calculate next_run_at if the job is not currently active/running.
+		$next_run_at = null;
+		$is_running  = 'running' === ( $current_row['status'] ?? '' );
+		if ( ! $is_running ) {
+			$next_run_at = $this->calculate_next_run( $interval, $preferred_time, Date::now() );
+		}
+
+		$this->repository->update_job_schedule(
+			$clean_id,
+			$interval,
+			$preferred_time,
+			$is_enabled,
+			$next_run_at
+		);
+
+		return $this->get_single_job_status( $clean_id );
+	}
+
+	/**
+	 * Reset a background job to its recommended default schedule.
+	 *
+	 * @param string $job_id Unique job identifier.
+	 * @return array<string, mixed> Reset job details.
+	 *
+	 * @throws \InvalidArgumentException When the job ID is unknown.
+	 * @since 1.7.0
+	 */
+	public function reset_job( string $job_id ): array {
+		$clean_id   = trim( $job_id );
+		$definition = $this->registry->get( $clean_id );
+
+		if ( null === $definition ) {
+			throw new \InvalidArgumentException(
+				sprintf( 'Unknown background job identifier: %s', $clean_id )
+			);
+		}
+
+		$this->sync();
+		$current_row = $this->repository->get_job( $clean_id );
+		if ( empty( $current_row ) ) {
+			throw new \InvalidArgumentException(
+				sprintf( 'Background job row not found: %s', $clean_id )
+			);
+		}
+
+		$next_run_at = null;
+		$is_running  = 'running' === ( $current_row['status'] ?? '' );
+		if ( ! $is_running ) {
+			$next_run_at = $this->calculate_next_run( $definition->get_interval_seconds(), null, Date::now() );
+		}
+
+		$this->repository->reset_job_schedule(
+			$clean_id,
+			$definition->get_interval_seconds(),
+			$definition->is_enabled(),
+			$next_run_at
+		);
+
+		return $this->get_single_job_status( $clean_id );
 	}
 }

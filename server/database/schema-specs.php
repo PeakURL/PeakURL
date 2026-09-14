@@ -325,6 +325,10 @@ class SchemaSpecs {
 					'definition' => 'INT UNSIGNED NOT NULL DEFAULT 0',
 				),
 				array(
+					'name'       => 'preferred_time',
+					'definition' => 'VARCHAR(5) DEFAULT NULL',
+				),
+				array(
 					'name'       => 'status',
 					'definition' => "VARCHAR(32) NOT NULL DEFAULT 'idle'",
 				),

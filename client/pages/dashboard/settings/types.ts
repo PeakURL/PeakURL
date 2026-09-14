@@ -108,7 +108,6 @@ export interface GeneralFormPayload extends GeneralFormState {
 	landingPageMode?: "login" | "url" | "html";
 	landingPageUrl?: string;
 	trashRetentionDays?: number;
-	cronHistoryRetentionDays?: number;
 }
 
 export interface ContentProps {

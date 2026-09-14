@@ -717,6 +717,9 @@ class Application {
 				array( 'put', '/system/cron/settings', array( $system, 'cron_settings_update' ) ),
 				array( 'delete', '/system/cron/history', array( $system, 'cron_clear_history' ) ),
 				array( 'post', '/system/cron/history/clear', array( $system, 'cron_clear_history' ) ),
+				array( 'patch', '/system/cron/jobs/{id}', array( $system, 'cron_job_update' ) ),
+				array( 'post', '/system/cron/jobs/{id}', array( $system, 'cron_job_update' ) ),
+				array( 'post', '/system/cron/jobs/{id}/reset', array( $system, 'cron_job_reset' ) ),
 			)
 		);
 	}

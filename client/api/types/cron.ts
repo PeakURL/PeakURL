@@ -56,6 +56,9 @@ export interface ApiCronJob {
 	id: string;
 	title: string;
 	interval_seconds?: number;
+	recommended_interval_seconds?: number;
+	preferred_time?: string | null;
+	is_customized?: boolean;
 	status: string;
 	is_enabled?: boolean;
 	next_run_at?: string | null;
@@ -73,6 +76,8 @@ export interface ApiCronJob {
 export interface ApiCronStatusResponse {
 	jobs: ApiCronJob[];
 	jobs_count: number;
+	retention_days?: number;
+	timezone?: string;
 }
 
 /**
@@ -123,6 +128,9 @@ export interface CronJob {
 	id: string;
 	title: string;
 	intervalSeconds: number;
+	recommendedIntervalSeconds: number;
+	preferredTime: string | null;
+	isCustomized: boolean;
 	status: CronJobStatus;
 	isEnabled: boolean;
 	nextRunAt: string | null;
@@ -140,6 +148,43 @@ export interface CronJob {
 export interface CronStatusResponse {
 	jobs: CronJob[];
 	jobsCount: number;
+	retentionDays: number;
+	timezone: string;
+}
+
+/**
+ * Request payload for updating a job's schedule.
+ */
+export interface UpdateCronJobPayload {
+	id: string;
+	intervalSeconds?: number;
+	preferredTime?: string | null;
+	isEnabled?: boolean;
+}
+
+/**
+ * Raw request payload for updating a job's schedule.
+ */
+export interface ApiUpdateCronJobPayload {
+	interval_seconds?: number;
+	preferred_time?: string | null;
+	is_enabled?: boolean;
+}
+
+/**
+ * Raw response returned after updating or resetting a job's schedule.
+ */
+export interface ApiCronJobScheduleResponse {
+	job: ApiCronJob;
+	success: boolean;
+}
+
+/**
+ * Domain outcome for job schedule update or reset.
+ */
+export interface CronJobScheduleResult {
+	job: CronJob;
+	success: boolean;
 }
 
 /**

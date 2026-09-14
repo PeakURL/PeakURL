@@ -749,4 +749,164 @@ class Service {
 			'success'       => true,
 		);
 	}
+
+	/**
+	 * Update schedule settings for a registered background job.
+	 *
+	 * @param Request     $request Incoming HTTP request (admin-only).
+	 * @param string|null $job_id  Optional job identifier from route.
+	 * @return array<string, mixed> Updated job payload.
+	 *
+	 * @throws ApiException When user is unauthorized or validation fails.
+	 * @since 1.7.0
+	 */
+	public function update_cron_job( Request $request, ?string $job_id = null ): array {
+		$this->get_update_user( $request );
+
+		if ( null === $this->scheduler ) {
+			throw new ApiException(
+				__( 'Scheduler service is not configured.', 'peakurl' ),
+				500
+			);
+		}
+
+		$target_id = $job_id ?? $request->get_route_param( 'id' );
+		if ( null === $target_id || '' === trim( (string) $target_id ) ) {
+			$payload   = $request->json_data();
+			$target_id = is_array( $payload ) ? (string) ( $payload['job_id'] ?? $payload['id'] ?? '' ) : '';
+		}
+
+		$clean_id = trim( (string) $target_id );
+		if ( '' === $clean_id ) {
+			throw new ApiException(
+				__( 'Missing background job identifier.', 'peakurl' ),
+				400
+			);
+		}
+
+		if ( ! $this->scheduler->get_registry()->has( $clean_id ) ) {
+			throw new ApiException(
+				sprintf(
+					/* translators: %s is the requested job ID. */
+					__( 'Unknown background job identifier: %s', 'peakurl' ),
+					$clean_id
+				),
+				404
+			);
+		}
+
+		$payload = $request->json_data();
+		if ( ! is_array( $payload ) ) {
+			throw new ApiException(
+				__( 'Invalid request payload.', 'peakurl' ),
+				400
+			);
+		}
+
+		$params = array();
+
+		$has_interval = array_key_exists( 'interval_seconds', $payload ) || array_key_exists( 'schedule_interval', $payload );
+		if ( $has_interval ) {
+			$raw_interval = $payload['interval_seconds'] ?? $payload['schedule_interval'];
+			if ( ! is_numeric( $raw_interval ) || (int) $raw_interval < 300 || (float) (int) $raw_interval !== (float) $raw_interval ) {
+				throw new ApiException(
+					__( 'Recurrence interval must be an integer of at least 300 seconds (5 minutes).', 'peakurl' ),
+					422
+				);
+			}
+			$params['interval_seconds'] = (int) $raw_interval;
+		}
+
+		if ( array_key_exists( 'preferred_time', $payload ) ) {
+			$raw_time = $payload['preferred_time'];
+			if ( null !== $raw_time && '' !== trim( (string) $raw_time ) ) {
+				$clean_time = trim( (string) $raw_time );
+				if ( ! preg_match( '/^([01][0-9]|2[0-3]):[0-5][0-9]$/', $clean_time ) ) {
+					throw new ApiException(
+						__( 'Preferred time must be in 24-hour format (HH:MM).', 'peakurl' ),
+						422
+					);
+				}
+				$params['preferred_time'] = $clean_time;
+			} else {
+				$params['preferred_time'] = null;
+			}
+		}
+
+		if ( array_key_exists( 'is_enabled', $payload ) ) {
+			$params['is_enabled'] = (bool) $payload['is_enabled'];
+		}
+
+		try {
+			$job_status = $this->scheduler->update_job( $clean_id, $params );
+
+			return array(
+				'job'     => $job_status,
+				'success' => true,
+			);
+		} catch ( \InvalidArgumentException $exception ) {
+			throw new ApiException( $exception->getMessage(), 422 );
+		} catch ( \Throwable $exception ) {
+			throw new ApiException( $exception->getMessage(), 500 );
+		}
+	}
+
+	/**
+	 * Reset a background job schedule to its built-in recommended defaults.
+	 *
+	 * @param Request     $request Incoming HTTP request (admin-only).
+	 * @param string|null $job_id  Optional job identifier from route.
+	 * @return array<string, mixed> Reset job payload.
+	 *
+	 * @throws ApiException When user is unauthorized or job is not found.
+	 * @since 1.7.0
+	 */
+	public function reset_cron_job( Request $request, ?string $job_id = null ): array {
+		$this->get_update_user( $request );
+
+		if ( null === $this->scheduler ) {
+			throw new ApiException(
+				__( 'Scheduler service is not configured.', 'peakurl' ),
+				500
+			);
+		}
+
+		$target_id = $job_id ?? $request->get_route_param( 'id' );
+		if ( null === $target_id || '' === trim( (string) $target_id ) ) {
+			$payload   = $request->json_data();
+			$target_id = is_array( $payload ) ? (string) ( $payload['job_id'] ?? $payload['id'] ?? '' ) : '';
+		}
+
+		$clean_id = trim( (string) $target_id );
+		if ( '' === $clean_id ) {
+			throw new ApiException(
+				__( 'Missing background job identifier.', 'peakurl' ),
+				400
+			);
+		}
+
+		if ( ! $this->scheduler->get_registry()->has( $clean_id ) ) {
+			throw new ApiException(
+				sprintf(
+					/* translators: %s is the requested job ID. */
+					__( 'Unknown background job identifier: %s', 'peakurl' ),
+					$clean_id
+				),
+				404
+			);
+		}
+
+		try {
+			$job_status = $this->scheduler->reset_job( $clean_id );
+
+			return array(
+				'job'     => $job_status,
+				'success' => true,
+			);
+		} catch ( \InvalidArgumentException $exception ) {
+			throw new ApiException( $exception->getMessage(), 422 );
+		} catch ( \Throwable $exception ) {
+			throw new ApiException( $exception->getMessage(), 500 );
+		}
+	}
 }

@@ -46,6 +46,22 @@ export function formatInterval(seconds: number): string {
 	);
 }
 
+export function formatSchedule(
+	seconds: number,
+	preferredTime?: string | null
+): string {
+	const base = formatInterval(seconds);
+	if (preferredTime && seconds >= 86400) {
+		return sprintf(
+			/* translators: 1: interval recurrence, 2: preferred time of day */
+			__("%1$s at %2$s"),
+			base,
+			preferredTime
+		);
+	}
+	return base;
+}
+
 export function formatNextRun(isoString: string | null | undefined): {
 	text: string;
 	isDue: boolean;

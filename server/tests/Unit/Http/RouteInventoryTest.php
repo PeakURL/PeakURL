@@ -460,6 +460,21 @@ class RouteInventoryTest extends TestCase {
 			'capability' => 'manage_updates',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
+		'PATCH /api/v1/system/cron/jobs/{id}'              => array(
+			'area'       => 'System',
+			'capability' => 'manage_updates',
+			'coverage'   => array( 'contract', 'auth' ),
+		),
+		'POST /api/v1/system/cron/jobs/{id}'               => array(
+			'area'       => 'System',
+			'capability' => 'manage_updates',
+			'coverage'   => array( 'contract', 'auth' ),
+		),
+		'POST /api/v1/system/cron/jobs/{id}/reset'         => array(
+			'area'       => 'System',
+			'capability' => 'manage_updates',
+			'coverage'   => array( 'contract', 'auth' ),
+		),
 
 		// Public Catch-All Redirects
 		'GET /{id}'                                        => array(

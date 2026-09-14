@@ -200,19 +200,59 @@ if ( isset( $options['list'] ) ) {
 	$status = $scheduler->get_status();
 	$jobs   = $status['jobs'] ?? array();
 
-	fwrite( STDOUT, sprintf( "%-30s %-10s %-12s %-20s %-20s\n", 'Job ID', 'Status', 'Interval', 'Next Run (UTC)', 'Last Run (UTC)' ) );
-	fwrite( STDOUT, str_repeat( '-', 96 ) . "\n" );
+	$format_cadence = function ( int $seconds, ?string $pref_time = null ): string {
+		$time_suffix = ! empty( $pref_time ) ? ' @ ' . $pref_time : '';
+		switch ( $seconds ) {
+			case 300:
+				return 'Every 5m';
+			case 900:
+				return 'Every 15m';
+			case 1800:
+				return 'Every 30m';
+			case 3600:
+				return 'Hourly';
+			case 7200:
+				return 'Every 2h';
+			case 21600:
+				return 'Every 6h';
+			case 43200:
+				return 'Every 12h';
+			case 86400:
+				return 'Daily' . $time_suffix;
+			case 604800:
+				return 'Weekly' . $time_suffix;
+			default:
+				if ( $seconds % 86400 === 0 ) {
+					return sprintf( 'Every %dd%s', (int) ( $seconds / 86400 ), $time_suffix );
+				}
+				if ( $seconds % 3600 === 0 ) {
+					return sprintf( 'Every %dh', (int) ( $seconds / 3600 ) );
+				}
+				if ( $seconds % 60 === 0 ) {
+					return sprintf( 'Every %dm', (int) ( $seconds / 60 ) );
+				}
+				return $seconds . 's';
+		}
+	};
+
+	fwrite( STDOUT, sprintf( "%-30s %-10s %-24s %-20s %-20s\n", 'Job ID', 'Status', 'Schedule', 'Next Run (UTC)', 'Last Run (UTC)' ) );
+	fwrite( STDOUT, str_repeat( '-', 108 ) . "\n" );
 
 	foreach ( $jobs as $job ) {
-		$next = ! empty( $job['next_run_at'] ) ? substr( (string) $job['next_run_at'], 0, 19 ) : 'N/A';
-		$last = ! empty( $job['last_run_at'] ) ? substr( (string) $job['last_run_at'], 0, 19 ) : 'Never';
+		$next         = ! empty( $job['next_run_at'] ) ? substr( (string) $job['next_run_at'], 0, 19 ) : 'N/A';
+		$last         = ! empty( $job['last_run_at'] ) ? substr( (string) $job['last_run_at'], 0, 19 ) : 'Never';
+		$status_label = empty( $job['is_enabled'] ) ? 'disabled' : (string) ( $job['status'] ?? 'idle' );
+		$cur_schedule = $format_cadence( (int) $job['interval_seconds'], $job['preferred_time'] ?? null );
+		$is_custom    = ! empty( $job['is_customized'] );
+		$sched_label  = $is_custom ? $cur_schedule . ' (Custom)' : $cur_schedule;
+
 		fwrite(
 			STDOUT,
 			sprintf(
-				"%-30s %-10s %-12s %-20s %-20s\n",
+				"%-30s %-10s %-24s %-20s %-20s\n",
 				(string) $job['id'],
-				(string) $job['status'],
-				$job['interval_seconds'] . 's',
+				$status_label,
+				$sched_label,
 				$next,
 				$last
 			)

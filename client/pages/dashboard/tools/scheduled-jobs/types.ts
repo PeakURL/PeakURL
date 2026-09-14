@@ -8,6 +8,7 @@ export interface JobStatusBadgeProps {
 	status: string;
 	attempts?: number;
 	maxAttempts?: number;
+	isEnabled?: boolean;
 	className?: string;
 }
 
@@ -26,6 +27,15 @@ export interface RunDueJobsModalProps {
 	onClose: () => void;
 	onConfirm: () => Promise<void> | void;
 	isExecuting: boolean;
+}
+
+export interface ManageSchedulesModalProps {
+	isOpen: boolean;
+	onClose: () => void;
+	jobs: CronJob[];
+	timezone?: string;
+	retentionDays?: number;
+	onRefresh?: () => void;
 }
 
 export interface JobsTableProps {

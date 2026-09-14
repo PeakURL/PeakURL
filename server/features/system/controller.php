@@ -239,4 +239,32 @@ class Controller extends BaseController {
 			__( 'Execution history cleared.', 'peakurl' ),
 		);
 	}
+
+	/**
+	 * Update background job schedule settings.
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed> JSON success response.
+	 * @since 1.7.0
+	 */
+	public function cron_job_update( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->update_cron_job( $request ),
+			__( 'Job schedule updated.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Reset background job schedule to recommended defaults.
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed> JSON success response.
+	 * @since 1.7.0
+	 */
+	public function cron_job_reset( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->reset_cron_job( $request ),
+			__( 'Job schedule reset to recommended defaults.', 'peakurl' ),
+		);
+	}
 }

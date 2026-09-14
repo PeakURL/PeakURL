@@ -5,12 +5,14 @@ import {
 	mapApiCronRun,
 	mapApiCronJob,
 	mapApiCronStatus,
+	mapApiCronJobScheduleResult,
 	mapApiRunCronJobResult,
 	mapApiRunDueJobsResult,
 	type ApiClearCronHistoryResponse,
 	type ApiCronJob,
 	type ApiCronRun,
 	type ApiCronStatusResponse,
+	type ApiCronJobScheduleResponse,
 	type CronJob,
 	type CronJobStatus,
 	type CronRunStatus,
@@ -21,7 +23,10 @@ import {
 	aggregateRunDueJobsResult,
 	calculateCronStatusSummary,
 } from "../../client/pages/dashboard/tools/scheduled-jobs/summary";
-import { formatInterval } from "../../client/pages/dashboard/tools/scheduled-jobs/formatters";
+import {
+	formatInterval,
+	formatSchedule,
+} from "../../client/pages/dashboard/tools/scheduled-jobs/formatters";
 
 test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 	test.describe("API Route Definitions", () => {
@@ -37,6 +42,13 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 			expect(API_ROUTES.system.cronRunJob("job with spaces/slash")).toBe(
 				"system/cron/run/job%20with%20spaces%2Fslash"
 			);
+			expect(
+				API_ROUTES.system.cronUpdateJob("peakurl_session_cleanup")
+			).toBe("system/cron/jobs/peakurl_session_cleanup");
+			expect(
+				API_ROUTES.system.cronResetJob("peakurl_session_cleanup")
+			).toBe("system/cron/jobs/peakurl_session_cleanup/reset");
+			expect(API_ROUTES.system.cronSettings).toBe("system/cron/settings");
 		});
 	});
 
@@ -137,6 +149,31 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 			expect(domainJob.lastError).toBeNull();
 			expect(domainJob.recentRuns).toHaveLength(1);
 			expect(domainJob.recentRuns[0].durationMs).toBe(45);
+		});
+
+		test("maps schedule customization and preferred time fields accurately", () => {
+			const wireJob: ApiCronJob = {
+				id: "peakurl_session_cleanup",
+				title: "Session Cleanup",
+				interval_seconds: 86400,
+				recommended_interval_seconds: 86400,
+				preferred_time: "02:00",
+				is_customized: false,
+				status: "idle",
+				is_enabled: true,
+				next_run_at: "2026-09-14T02:00:00Z",
+				attempts: 0,
+			};
+
+			const domainJob = mapApiCronJob(wireJob);
+
+			expect(domainJob.id).toBe("peakurl_session_cleanup");
+			expect(domainJob.title).toBe("Session Cleanup");
+			expect(domainJob.intervalSeconds).toBe(86400);
+			expect(domainJob.recommendedIntervalSeconds).toBe(86400);
+			expect(domainJob.preferredTime).toBe("02:00");
+			expect(domainJob.isCustomized).toBe(false);
+			expect(domainJob.isEnabled).toBe(true);
 		});
 
 		test("safely handles empty or undefined job payload", () => {
@@ -363,6 +400,19 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 
 			const domain = mapApiCronStatus(zeroPayload);
 			expect(domain.jobsCount).toBe(0);
+		});
+
+		test("transforms timezone and retention_days accurately", () => {
+			const rawPayload: ApiCronStatusResponse = {
+				jobs: [],
+				jobs_count: 0,
+				timezone: "America/New_York",
+				retention_days: 14,
+			};
+
+			const domain = mapApiCronStatus(rawPayload);
+			expect(domain.timezone).toBe("America/New_York");
+			expect(domain.retentionDays).toBe(14);
 		});
 	});
 
@@ -807,7 +857,47 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 		});
 	});
 
-	test.describe("Recurrence Interval Formatting", () => {
+	test.describe("CronJob Schedule Result Adapter (mapApiCronJobScheduleResult)", () => {
+		test("maps wire schedule response to camelCase domain model", () => {
+			const wireResult: ApiCronJobScheduleResponse = {
+				success: true,
+				job: {
+					id: "peakurl_geoip_update",
+					title: "GeoIP Database Refresh",
+					interval_seconds: 604800,
+					preferred_time: "03:00",
+					is_enabled: true,
+					is_customized: true,
+					recommended_interval_seconds: 604800,
+					next_run_at: "2026-09-20T03:00:00Z",
+					status: "idle",
+					attempts: 0,
+				},
+			};
+
+			const domain = mapApiCronJobScheduleResult(wireResult);
+			expect(domain.job.id).toBe("peakurl_geoip_update");
+			expect(domain.job.intervalSeconds).toBe(604800);
+			expect(domain.job.preferredTime).toBe("03:00");
+			expect(domain.job.isEnabled).toBe(true);
+			expect(domain.job.isCustomized).toBe(true);
+			expect(domain.job.recommendedIntervalSeconds).toBe(604800);
+			expect(domain.job.nextRunAt).toBe("2026-09-20T03:00:00Z");
+			expect(domain.success).toBe(true);
+		});
+
+		test("safely handles null payload", () => {
+			const domain = mapApiCronJobScheduleResult(null);
+			expect(domain.job.id).toBe("");
+			expect(domain.job.intervalSeconds).toBe(0);
+			expect(domain.job.preferredTime).toBeNull();
+			expect(domain.job.isEnabled).toBe(false);
+			expect(domain.job.isCustomized).toBe(false);
+			expect(domain.success).toBe(false);
+		});
+	});
+
+	test.describe("Recurrence Interval & Schedule Formatting", () => {
 		test("formats standard intervals correctly into human readable strings", () => {
 			expect(formatInterval(0)).toBe("Manual");
 			expect(formatInterval(60)).toBe("Every minute");
@@ -818,6 +908,14 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 			expect(formatInterval(43200)).toBe("Every 12 hours");
 			expect(formatInterval(86400)).toBe("Daily");
 			expect(formatInterval(604800)).toBe("Weekly");
+		});
+
+		test("formats schedule with preferred time of day", () => {
+			expect(formatSchedule(86400, "02:00")).toBe("Daily at 02:00");
+			expect(formatSchedule(604800, "03:30")).toBe("Weekly at 03:30");
+			expect(formatSchedule(86400, null)).toBe("Daily");
+			expect(formatSchedule(3600, "02:00")).toBe("Hourly");
+			expect(formatSchedule(300, null)).toBe("Every 5 minutes");
 		});
 	});
 });

@@ -373,4 +373,229 @@ class SystemCronEndpointsTest extends TestCase {
 		$this->expectExceptionCode( 422 );
 		$system_service->update_cron_settings( $request );
 	}
+
+	public function test_system_controller_cron_job_update_delegates_to_service(): void {
+		$system_service = $this->createMock( SystemService::class );
+		$request        = new Request(
+			'PATCH',
+			'/api/v1/system/cron/jobs/peakurl_session_cleanup',
+			array(),
+			array(
+				'schedule_interval' => 86400,
+				'preferred_time'    => '02:00',
+				'is_enabled'        => true,
+			)
+		);
+		$request->set_route_params( array( 'id' => 'peakurl_session_cleanup' ) );
+
+		$system_service->expects( $this->once() )
+			->method( 'update_cron_job' )
+			->with( $request )
+			->willReturn(
+				array(
+					'success' => true,
+					'message' => 'Job schedule updated successfully.',
+					'job'     => array( 'id' => 'peakurl_session_cleanup' ),
+				)
+			);
+
+		$controller = new SystemController( $system_service );
+		$response   = $controller->cron_job_update( $request );
+
+		$this->assertSame( 200, $response['status'] );
+		$this->assertTrue( $response['body']['data']['success'] );
+	}
+
+	public function test_system_controller_cron_job_reset_delegates_to_service(): void {
+		$system_service = $this->createMock( SystemService::class );
+		$request        = new Request(
+			'POST',
+			'/api/v1/system/cron/jobs/peakurl_session_cleanup/reset',
+			array(),
+			array()
+		);
+		$request->set_route_params( array( 'id' => 'peakurl_session_cleanup' ) );
+
+		$system_service->expects( $this->once() )
+			->method( 'reset_cron_job' )
+			->with( $request )
+			->willReturn(
+				array(
+					'success' => true,
+					'message' => 'Job schedule reset to recommended defaults.',
+					'job'     => array( 'id' => 'peakurl_session_cleanup' ),
+				)
+			);
+
+		$controller = new SystemController( $system_service );
+		$response   = $controller->cron_job_reset( $request );
+
+		$this->assertSame( 200, $response['status'] );
+		$this->assertTrue( $response['body']['data']['success'] );
+	}
+
+	public function test_system_service_update_cron_job_rejects_sub_300_interval(): void {
+		$ref            = new ReflectionClass( SystemService::class );
+		$system_service = $ref->newInstanceWithoutConstructor();
+
+		$auth_service = $this->createMock( AuthService::class );
+		$auth_service->method( 'get_current_user' )
+			->willReturn(
+				array(
+					'id'   => '1',
+					'role' => 'admin',
+				)
+			);
+
+		$authorization = $this->createMock( Authorization::class );
+
+		$handler  = $this->createMock( JobHandlerInterface::class );
+		$registry = new JobRegistry();
+		$registry->register( new JobDefinition( 'peakurl_cache_cleanup', 'Cache Cleanup', 3600, $handler ) );
+
+		$scheduler = $this->createMock( Scheduler::class );
+		$scheduler->method( 'get_registry' )
+			->willReturn( $registry );
+
+		$prop_auth = $ref->getProperty( 'auth_service' );
+		$prop_auth->setValue( $system_service, $auth_service );
+
+		$prop_authorization = $ref->getProperty( 'authorization' );
+		$prop_authorization->setValue( $system_service, $authorization );
+
+		$prop_scheduler = $ref->getProperty( 'scheduler' );
+		$prop_scheduler->setValue( $system_service, $scheduler );
+
+		$request = new Request(
+			'PATCH',
+			'/api/v1/system/cron/jobs/peakurl_cache_cleanup',
+			array(),
+			array( 'schedule_interval' => 60 )
+		);
+		$request->set_route_params( array( 'id' => 'peakurl_cache_cleanup' ) );
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 422 );
+		$system_service->update_cron_job( $request, 'peakurl_cache_cleanup' );
+	}
+
+	public function test_system_service_update_cron_job_rejects_invalid_time_format(): void {
+		$ref            = new ReflectionClass( SystemService::class );
+		$system_service = $ref->newInstanceWithoutConstructor();
+
+		$auth_service = $this->createMock( AuthService::class );
+		$auth_service->method( 'get_current_user' )
+			->willReturn(
+				array(
+					'id'   => '1',
+					'role' => 'admin',
+				)
+			);
+
+		$authorization = $this->createMock( Authorization::class );
+
+		$handler  = $this->createMock( JobHandlerInterface::class );
+		$registry = new JobRegistry();
+		$registry->register( new JobDefinition( 'peakurl_session_cleanup', 'Session Cleanup', 86400, $handler ) );
+
+		$scheduler = $this->createMock( Scheduler::class );
+		$scheduler->method( 'get_registry' )
+			->willReturn( $registry );
+
+		$prop_auth = $ref->getProperty( 'auth_service' );
+		$prop_auth->setValue( $system_service, $auth_service );
+
+		$prop_authorization = $ref->getProperty( 'authorization' );
+		$prop_authorization->setValue( $system_service, $authorization );
+
+		$prop_scheduler = $ref->getProperty( 'scheduler' );
+		$prop_scheduler->setValue( $system_service, $scheduler );
+
+		$request = new Request(
+			'PATCH',
+			'/api/v1/system/cron/jobs/peakurl_session_cleanup',
+			array(),
+			array(
+				'schedule_interval' => 86400,
+				'preferred_time'    => '25:99',
+			)
+		);
+		$request->set_route_params( array( 'id' => 'peakurl_session_cleanup' ) );
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 422 );
+		$system_service->update_cron_job( $request, 'peakurl_session_cleanup' );
+	}
+
+	public function test_system_service_update_cron_job_unauthorized_rejection(): void {
+		$ref            = new ReflectionClass( SystemService::class );
+		$system_service = $ref->newInstanceWithoutConstructor();
+
+		$auth_service = $this->createMock( AuthService::class );
+		$auth_service->method( 'get_current_user' )
+			->willReturn(
+				array(
+					'id'   => '2',
+					'role' => 'editor',
+				)
+			);
+
+		$authorization = $this->createMock( Authorization::class );
+		$authorization->method( 'validate_capability' )
+			->willThrowException( new ApiException( 'Admin access is required.', 403 ) );
+
+		$prop_auth = $ref->getProperty( 'auth_service' );
+		$prop_auth->setValue( $system_service, $auth_service );
+
+		$prop_authorization = $ref->getProperty( 'authorization' );
+		$prop_authorization->setValue( $system_service, $authorization );
+
+		$request = new Request(
+			'PATCH',
+			'/api/v1/system/cron/jobs/peakurl_session_cleanup',
+			array(),
+			array( 'schedule_interval' => 86400 )
+		);
+		$request->set_route_params( array( 'id' => 'peakurl_session_cleanup' ) );
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 403 );
+		$system_service->update_cron_job( $request, 'peakurl_session_cleanup' );
+	}
+
+	public function test_system_service_reset_cron_job_unauthorized_rejection(): void {
+		$ref            = new ReflectionClass( SystemService::class );
+		$system_service = $ref->newInstanceWithoutConstructor();
+
+		$auth_service = $this->createMock( AuthService::class );
+		$auth_service->method( 'get_current_user' )
+			->willReturn(
+				array(
+					'id'   => '2',
+					'role' => 'editor',
+				)
+			);
+
+		$authorization = $this->createMock( Authorization::class );
+		$authorization->method( 'validate_capability' )
+			->willThrowException( new ApiException( 'Admin access is required.', 403 ) );
+
+		$prop_auth = $ref->getProperty( 'auth_service' );
+		$prop_auth->setValue( $system_service, $auth_service );
+
+		$prop_authorization = $ref->getProperty( 'authorization' );
+		$prop_authorization->setValue( $system_service, $authorization );
+
+		$request = new Request(
+			'POST',
+			'/api/v1/system/cron/jobs/peakurl_session_cleanup/reset',
+			array(),
+			array()
+		);
+		$request->set_route_params( array( 'id' => 'peakurl_session_cleanup' ) );
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 403 );
+		$system_service->reset_cron_job( $request, 'peakurl_session_cleanup' );
+	}
 }

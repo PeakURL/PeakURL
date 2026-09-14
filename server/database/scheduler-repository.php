@@ -86,12 +86,10 @@ class SchedulerRepository {
 				$this->db->update(
 					'cron_jobs',
 					array(
-						'title'             => $def->get_title(),
-						'schedule_interval' => $def->get_interval_seconds(),
-						'max_attempts'      => $retry->get_max_attempts(),
-						'retry_delay'       => $retry->get_initial_delay(),
-						'is_enabled'        => $def->is_enabled() ? 1 : 0,
-						'updated_at'        => $now,
+						'title'        => $def->get_title(),
+						'max_attempts' => $retry->get_max_attempts(),
+						'retry_delay'  => $retry->get_initial_delay(),
+						'updated_at'   => $now,
 					),
 					array( 'id' => $def->get_id() )
 				);
@@ -597,6 +595,79 @@ class SchedulerRepository {
 				'running_status'  => 'running',
 				'retrying_status' => 'retrying',
 			)
+		);
+	}
+
+	/**
+	 * Update schedule configuration for a registered background job.
+	 *
+	 * @param string      $job_id           Unique job identifier.
+	 * @param int         $interval_seconds Cadence in seconds.
+	 * @param string|null $preferred_time   Optional preferred time of day (HH:MM) or null.
+	 * @param bool|null   $is_enabled       Optional enabled state or null to preserve.
+	 * @param string|null $next_run_at      Optional recalculated next run timestamp.
+	 * @return bool True if updated successfully.
+	 * @since 1.7.0
+	 */
+	public function update_job_schedule(
+		string $job_id,
+		int $interval_seconds,
+		?string $preferred_time = null,
+		?bool $is_enabled = null,
+		?string $next_run_at = null
+	): bool {
+		$fields = array(
+			'schedule_interval' => max( 1, $interval_seconds ),
+			'preferred_time'    => ( null !== $preferred_time && '' !== trim( $preferred_time ) ) ? trim( $preferred_time ) : null,
+			'updated_at'        => Date::now(),
+		);
+
+		if ( null !== $is_enabled ) {
+			$fields['is_enabled'] = $is_enabled ? 1 : 0;
+		}
+
+		if ( null !== $next_run_at ) {
+			$fields['next_run_at'] = $next_run_at;
+		}
+
+		return (bool) $this->db->update(
+			'cron_jobs',
+			$fields,
+			array( 'id' => $job_id )
+		);
+	}
+
+	/**
+	 * Reset a background job to its recommended default schedule.
+	 *
+	 * @param string      $job_id           Unique job identifier.
+	 * @param int         $default_interval Built-in recommended interval in seconds.
+	 * @param bool        $default_enabled  Built-in recommended enabled state.
+	 * @param string|null $next_run_at      Recalculated next run timestamp.
+	 * @return bool True if reset successfully.
+	 * @since 1.7.0
+	 */
+	public function reset_job_schedule(
+		string $job_id,
+		int $default_interval,
+		bool $default_enabled,
+		?string $next_run_at = null
+	): bool {
+		$fields = array(
+			'schedule_interval' => max( 1, $default_interval ),
+			'preferred_time'    => null,
+			'is_enabled'        => $default_enabled ? 1 : 0,
+			'updated_at'        => Date::now(),
+		);
+
+		if ( null !== $next_run_at ) {
+			$fields['next_run_at'] = $next_run_at;
+		}
+
+		return (bool) $this->db->update(
+			'cron_jobs',
+			$fields,
+			array( 'id' => $job_id )
 		);
 	}
 }

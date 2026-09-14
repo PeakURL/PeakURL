@@ -135,9 +135,6 @@ export interface SiteSettings {
 	/** Trash auto-delete retention period in days (0 for never). */
 	trashRetentionDays?: number;
 
-	/** Cron execution history retention period in days (0 for never, default 30). */
-	cronHistoryRetentionDays?: number;
-
 	/** Absolute path to the content directory. */
 	contentDirectory?: string;
 }

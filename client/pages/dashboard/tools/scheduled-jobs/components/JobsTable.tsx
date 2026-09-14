@@ -5,7 +5,7 @@ import { Button } from "@/components";
 import { __ } from "@/i18n";
 import { cn } from "@/shared/formatting";
 import type { JobsTableProps } from "../types";
-import { formatInterval, formatLastRun, formatNextRun } from "../formatters";
+import { formatLastRun, formatNextRun, formatSchedule } from "../formatters";
 import { JobStatusBadge } from "./JobStatusBadge";
 
 export function JobsTable({
@@ -92,14 +92,11 @@ export function JobsTable({
 								key={job.id}
 								className="scheduled-jobs-table-row"
 							>
-								{/* Job Title & Identifier */}
+								{/* Job Title */}
 								<td className="scheduled-jobs-cell-job">
 									<div className="scheduled-jobs-job-title">
 										{job.title}
 									</div>
-									<code className="scheduled-jobs-job-id font-mono">
-										{job.id}
-									</code>
 								</td>
 
 								{/* Status Badge */}
@@ -108,14 +105,25 @@ export function JobsTable({
 										status={job.status}
 										attempts={job.attempts}
 										maxAttempts={job.maxAttempts}
+										isEnabled={job.isEnabled}
 									/>
 								</td>
 
 								{/* Schedule Recurrence */}
 								<td className="scheduled-jobs-cell-schedule">
-									<span className="text-xs font-medium text-heading">
-										{formatInterval(job.intervalSeconds)}
-									</span>
+									<div className="flex flex-col">
+										<span className="text-xs font-medium text-heading">
+											{formatSchedule(
+												job.intervalSeconds,
+												job.preferredTime
+											)}
+										</span>
+										{job.isCustomized ? (
+											<span className="text-[10px] font-medium text-accent mt-0.5">
+												{__("Customized")}
+											</span>
+										) : null}
+									</div>
 								</td>
 
 								{/* Last Run */}

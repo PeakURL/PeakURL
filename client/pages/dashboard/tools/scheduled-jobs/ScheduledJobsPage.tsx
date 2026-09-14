@@ -8,6 +8,7 @@ import {
 	RefreshCw,
 	Search,
 	ShieldCheck,
+	SlidersHorizontal,
 	Trash2,
 } from "lucide-react";
 
@@ -24,7 +25,12 @@ import {
 	useRunDueJobsMutation,
 } from "@/state/slices/api";
 
-import { JobHistoryDrawer, JobsTable, RunDueJobsModal } from "./components";
+import {
+	JobHistoryDrawer,
+	JobsTable,
+	ManageSchedulesDrawer,
+	RunDueJobsModal,
+} from "./components";
 import {
 	aggregateRunDueJobsResult,
 	calculateCronStatusSummary,
@@ -50,8 +56,10 @@ export function ScheduledJobsPage() {
 	const [runningJobId, setRunningJobId] = useState<string | null>(null);
 	const [selectedJobForHistory, setSelectedJobForHistory] =
 		useState<CronJob | null>(null);
+	const [isHistoryDrawerOpen, setIsHistoryDrawerOpen] = useState(false);
 	const [isRunDueModalOpen, setIsRunDueModalOpen] = useState(false);
 	const [isClearAllModalOpen, setIsClearAllModalOpen] = useState(false);
+	const [isManageSchedulesOpen, setIsManageSchedulesOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState("");
 
 	const jobs = useMemo(() => data?.jobs || [], [data?.jobs]);
@@ -216,19 +224,36 @@ export function ScheduledJobsPage() {
 						type="button"
 						onClick={() => refetch()}
 						disabled={isFetching}
-						className="dashboard-page-refresh"
+						className="scheduled-jobs-header-refresh dashboard-page-refresh"
 						aria-label={__("Refresh")}
 						title={__("Refresh scheduled jobs status")}
 					>
 						<RefreshCw
 							className={cn(
-								"dashboard-page-refresh-icon",
+								"scheduled-jobs-header-refresh-icon dashboard-page-refresh-icon",
 								isFetching && "animate-spin"
 							)}
 						/>
 					</button>
 					{canManageUpdates ? (
 						<>
+							<Button
+								variant="outline"
+								size="sm"
+								onClick={() => setIsManageSchedulesOpen(true)}
+								disabled={
+									isRunningDue ||
+									null !== runningJobId ||
+									isClearingHistory
+								}
+								className="text-heading hover:bg-surface-alt"
+								title={__(
+									"Configure job recurrence schedules, preferred times, and history retention"
+								)}
+							>
+								<SlidersHorizontal size={13} />
+								<span>{__("Manage Schedules")}</span>
+							</Button>
 							<Button
 								variant="outline"
 								size="sm"
@@ -453,7 +478,10 @@ export function ScheduledJobsPage() {
 					<JobsTable
 						jobs={filteredJobs}
 						runningJobId={runningJobId}
-						onViewHistory={(job) => setSelectedJobForHistory(job)}
+						onViewHistory={(job) => {
+							setSelectedJobForHistory(job);
+							setIsHistoryDrawerOpen(true);
+						}}
 						onRunJob={handleRunSingleJob}
 						canManage={canManageUpdates}
 					/>
@@ -465,8 +493,8 @@ export function ScheduledJobsPage() {
 			   ════════════════════════════════════ */}
 			<JobHistoryDrawer
 				job={activeHistoryJob}
-				isOpen={Boolean(selectedJobForHistory)}
-				onClose={() => setSelectedJobForHistory(null)}
+				isOpen={isHistoryDrawerOpen}
+				onClose={() => setIsHistoryDrawerOpen(false)}
 				onRefresh={() => void refetch()}
 				onRunJob={handleRunSingleJob}
 				isJobRunning={
@@ -481,6 +509,15 @@ export function ScheduledJobsPage() {
 				onClose={() => setIsRunDueModalOpen(false)}
 				onConfirm={handleRunDueJobs}
 				isExecuting={isRunningDue}
+			/>
+
+			<ManageSchedulesDrawer
+				isOpen={isManageSchedulesOpen}
+				onClose={() => setIsManageSchedulesOpen(false)}
+				jobs={jobs}
+				timezone={data?.timezone}
+				retentionDays={data?.retentionDays}
+				onRefresh={() => void refetch()}
 			/>
 
 			<ConfirmDialog

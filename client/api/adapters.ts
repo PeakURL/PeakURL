@@ -14,6 +14,7 @@ import type {
 import type {
 	ApiClearCronHistoryResponse,
 	ApiCronJob,
+	ApiCronJobScheduleResponse,
 	ApiCronRun,
 	ApiCronStatusResponse,
 	ApiRunCronJobResponse,
@@ -22,6 +23,7 @@ import type {
 	CronExecutionStatus,
 	CronJob,
 	CronJobExecutionOutcome,
+	CronJobScheduleResult,
 	CronJobStatus,
 	CronRun,
 	CronRunStatus,
@@ -231,6 +233,9 @@ export function mapApiCronJob(apiJob?: ApiCronJob | null): CronJob {
 			id: "",
 			title: "",
 			intervalSeconds: 0,
+			recommendedIntervalSeconds: 0,
+			preferredTime: null,
+			isCustomized: false,
 			status: "idle",
 			isEnabled: false,
 			nextRunAt: null,
@@ -244,13 +249,30 @@ export function mapApiCronJob(apiJob?: ApiCronJob | null): CronJob {
 	}
 
 	const apiRuns = apiJob.recent_runs ?? [];
+	const intervalSeconds = Number(apiJob.interval_seconds || 0);
+	const recommendedIntervalSeconds = Number(
+		apiJob.recommended_interval_seconds ?? intervalSeconds
+	);
+	const preferredTime =
+		apiJob.preferred_time && "" !== apiJob.preferred_time.trim()
+			? apiJob.preferred_time.trim()
+			: null;
+	const isEnabled = Boolean(apiJob.is_enabled);
+	const isCustomized = Boolean(
+		apiJob.is_customized ??
+		(intervalSeconds !== recommendedIntervalSeconds ||
+			Boolean(preferredTime))
+	);
 
 	return {
 		id: String(apiJob.id || ""),
 		title: String(apiJob.title || ""),
-		intervalSeconds: Number(apiJob.interval_seconds || 0),
+		intervalSeconds,
+		recommendedIntervalSeconds,
+		preferredTime,
+		isCustomized,
 		status: (apiJob.status as CronJobStatus) || "idle",
-		isEnabled: Boolean(apiJob.is_enabled),
+		isEnabled,
 		nextRunAt: apiJob.next_run_at ?? null,
 		lastRunAt: apiJob.last_run_at ?? null,
 		lastFinishedAt: apiJob.last_finished_at ?? null,
@@ -277,10 +299,29 @@ export function mapApiCronStatus(
 		? apiJobs.map((apiJob) => mapApiCronJob(apiJob))
 		: [];
 	const jobsCount = Number(apiStatus?.jobs_count ?? 0);
+	const retentionDays = Number(apiStatus?.retention_days ?? 30);
+	const timezone = String(apiStatus?.timezone || "UTC");
 
 	return {
 		jobs,
 		jobsCount,
+		retentionDays,
+		timezone,
+	};
+}
+
+/**
+ * Map schedule update or reset response from wire to camelCase domain result.
+ *
+ * @param apiResponse - Raw response from POST/PATCH /api/v1/system/cron/jobs/:id.
+ * @return Normalized CronJobScheduleResult.
+ */
+export function mapApiCronJobScheduleResult(
+	apiResponse?: ApiCronJobScheduleResponse | null
+): CronJobScheduleResult {
+	return {
+		job: mapApiCronJob(apiResponse?.job),
+		success: Boolean(apiResponse?.success),
 	};
 }
 

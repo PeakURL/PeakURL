@@ -467,32 +467,26 @@ class Service {
 			$site_name = 'PeakURL';
 		}
 
-		$stored_cron_retention  = $this->settings_api->get_option( Constants::SETTING_CRON_HISTORY_RETENTION_DAYS );
-		$cron_history_retention = ( null !== $stored_cron_retention && '' !== trim( (string) $stored_cron_retention ) && is_numeric( $stored_cron_retention ) && (int) $stored_cron_retention >= 0 )
-			? (int) $stored_cron_retention
-			: Constants::DEFAULT_CRON_HISTORY_RETENTION_DAYS;
-
 		return array(
-			'siteName'                 => $site_name,
-			'siteTagline'              => $site_tagline,
-			'siteUrl'                  => $site_url,
-			'siteLanguage'             => $this->i18n_service->get_site_locale(),
-			'siteTimezone'             => $this->get_site_timezone(),
-			'siteTimeFormat'           => $this->get_site_time_format(),
-			'textDirection'            => $this->i18n_service->get_text_direction(),
-			'isRtl'                    => $this->i18n_service->is_locale_rtl(),
-			'availableLanguages'       => $this->i18n_service->list_languages(),
-			'favicon'                  => $this->favicon_service->get_settings( $site_name ),
-			'socialPreview'            => $this->social_preview_service->get_settings(),
-			'canManageSiteSettings'    => $this->roles->has_capability(
+			'siteName'              => $site_name,
+			'siteTagline'           => $site_tagline,
+			'siteUrl'               => $site_url,
+			'siteLanguage'          => $this->i18n_service->get_site_locale(),
+			'siteTimezone'          => $this->get_site_timezone(),
+			'siteTimeFormat'        => $this->get_site_time_format(),
+			'textDirection'         => $this->i18n_service->get_text_direction(),
+			'isRtl'                 => $this->i18n_service->is_locale_rtl(),
+			'availableLanguages'    => $this->i18n_service->list_languages(),
+			'favicon'               => $this->favicon_service->get_settings( $site_name ),
+			'socialPreview'         => $this->social_preview_service->get_settings(),
+			'canManageSiteSettings' => $this->roles->has_capability(
 				$user,
 				'manage_site_settings',
 			),
-			'landingPageMode'          => $this->settings_api->get_option( 'landing_page_mode' ) ? $this->settings_api->get_option( 'landing_page_mode' ) : 'html',
-			'landingPageUrl'           => $this->settings_api->get_option( 'landing_page_url' ) ? $this->settings_api->get_option( 'landing_page_url' ) : '',
-			'trashRetentionDays'       => (int) ( $this->settings_api->get_option( 'trash_retention_days' ) ?? 30 ),
-			'cronHistoryRetentionDays' => $cron_history_retention,
-			'contentDirectory'         => $this->i18n_service->get_content_dir(),
+			'landingPageMode'       => $this->settings_api->get_option( 'landing_page_mode' ) ? $this->settings_api->get_option( 'landing_page_mode' ) : 'html',
+			'landingPageUrl'        => $this->settings_api->get_option( 'landing_page_url' ) ? $this->settings_api->get_option( 'landing_page_url' ) : '',
+			'trashRetentionDays'    => (int) ( $this->settings_api->get_option( 'trash_retention_days' ) ?? 30 ),
+			'contentDirectory'      => $this->i18n_service->get_content_dir(),
 		);
 	}
 
@@ -574,10 +568,6 @@ class Service {
 
 		if ( null !== $validated['trashRetentionDays'] ) {
 			$this->settings_api->update_option( 'trash_retention_days', (string) $validated['trashRetentionDays'], $now );
-		}
-
-		if ( null !== $validated['cronHistoryRetentionDays'] ) {
-			$this->settings_api->update_option( Constants::SETTING_CRON_HISTORY_RETENTION_DAYS, (string) $validated['cronHistoryRetentionDays'], $now );
 		}
 
 		try {

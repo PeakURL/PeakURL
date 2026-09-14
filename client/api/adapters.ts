@@ -17,8 +17,12 @@ import type {
 	ApiCronStatusResponse,
 	ApiRunCronJobResponse,
 	ApiRunDueJobsResponse,
+	CronExecutionStatus,
 	CronJob,
+	CronJobExecutionOutcome,
+	CronJobStatus,
 	CronRun,
+	CronRunStatus,
 	CronStatusResponse,
 	RunCronJobResult,
 	RunDueJobsResult,
@@ -202,7 +206,7 @@ export function mapApiCronRun(apiRun?: ApiCronRun | null): CronRun {
 
 	return {
 		id: String(apiRun.id || ""),
-		status: String(apiRun.status || "unknown"),
+		status: (apiRun.status as CronRunStatus) || "unknown",
 		attempt: Number(apiRun.attempt || 1),
 		startedAt: String(apiRun.started_at || ""),
 		finishedAt: apiRun.finished_at ?? null,
@@ -243,12 +247,12 @@ export function mapApiCronJob(apiJob?: ApiCronJob | null): CronJob {
 		id: String(apiJob.id || ""),
 		title: String(apiJob.title || ""),
 		intervalSeconds: Number(apiJob.interval_seconds || 0),
-		status: String(apiJob.status || "idle"),
+		status: (apiJob.status as CronJobStatus) || "idle",
 		isEnabled: Boolean(apiJob.is_enabled),
 		nextRunAt: apiJob.next_run_at ?? null,
 		lastRunAt: apiJob.last_run_at ?? null,
 		lastFinishedAt: apiJob.last_finished_at ?? null,
-		attempts: Number(apiJob.attempts || 0),
+		attempts: Number(apiJob.attempts ?? 0),
 		maxAttempts: Number(apiJob.max_attempts ?? 3),
 		lastError: apiJob.last_error ?? null,
 		recentRuns: Array.isArray(apiRuns)
@@ -270,7 +274,7 @@ export function mapApiCronStatus(
 	const jobs = Array.isArray(apiJobs)
 		? apiJobs.map((apiJob) => mapApiCronJob(apiJob))
 		: [];
-	const jobsCount = Number(apiStatus?.jobs_count ?? jobs.length);
+	const jobsCount = Number(apiStatus?.jobs_count ?? 0);
 
 	return {
 		jobs,
@@ -289,7 +293,7 @@ export function mapApiRunCronJobResult(
 ): RunCronJobResult {
 	return {
 		jobId: String(apiResponse?.job_id || ""),
-		status: String(apiResponse?.status || "unknown"),
+		status: (apiResponse?.status as CronExecutionStatus) || "unknown",
 		summary: apiResponse?.summary ?? null,
 		error: apiResponse?.error ?? null,
 		success: Boolean(apiResponse?.success),
@@ -306,14 +310,11 @@ export function mapApiRunDueJobsResult(
 	apiResponse?: ApiRunDueJobsResponse | null
 ): RunDueJobsResult {
 	const apiResults = apiResponse?.results ?? {};
-	const normalizedResults: Record<
-		string,
-		{ status: string; summary: string | null; error: string | null }
-	> = {};
+	const normalizedResults: Record<string, CronJobExecutionOutcome> = {};
 
 	for (const [jobId, jobOutcome] of Object.entries(apiResults)) {
 		normalizedResults[jobId] = {
-			status: String(jobOutcome?.status || "unknown"),
+			status: (jobOutcome?.status as CronExecutionStatus) || "unknown",
 			summary: jobOutcome?.summary ?? null,
 			error: jobOutcome?.error ?? null,
 		};

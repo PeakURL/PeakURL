@@ -6,6 +6,36 @@
  */
 
 /**
+ * Known lifecycle statuses for a background job in storage.
+ */
+export type CronJobKnownStatus = "idle" | "running" | "failed";
+
+/**
+ * Domain status for a background job supporting extensibility.
+ */
+export type CronJobStatus = CronJobKnownStatus | (string & {});
+
+/**
+ * Known execution history statuses recorded in cron_runs.
+ */
+export type CronRunKnownStatus = "running" | "success" | "failed" | "retrying";
+
+/**
+ * Domain status for a recorded run execution supporting extensibility.
+ */
+export type CronRunStatus = CronRunKnownStatus | (string & {});
+
+/**
+ * Known outcome statuses for job execution results.
+ */
+export type CronExecutionKnownStatus = "success" | "failed" | "skipped";
+
+/**
+ * Domain status for an execution attempt outcome supporting extensibility.
+ */
+export type CronExecutionStatus = CronExecutionKnownStatus | (string & {});
+
+/**
  * Raw execution run row from the API wire contract.
  */
 export interface ApiCronRun {
@@ -42,7 +72,7 @@ export interface ApiCronJob {
  */
 export interface ApiCronStatusResponse {
 	jobs: ApiCronJob[];
-	jobs_count?: number;
+	jobs_count: number;
 }
 
 /**
@@ -77,7 +107,7 @@ export interface ApiRunDueJobsResponse {
  */
 export interface CronRun {
 	id: string;
-	status: "running" | "success" | "failed" | "skipped" | string;
+	status: CronRunStatus;
 	attempt: number;
 	startedAt: string;
 	finishedAt: string | null;
@@ -93,7 +123,7 @@ export interface CronJob {
 	id: string;
 	title: string;
 	intervalSeconds: number;
-	status: "idle" | "running" | "failed" | "skipped" | string;
+	status: CronJobStatus;
 	isEnabled: boolean;
 	nextRunAt: string | null;
 	lastRunAt: string | null;
@@ -117,10 +147,19 @@ export interface CronStatusResponse {
  */
 export interface RunCronJobResult {
 	jobId: string;
-	status: string;
+	status: CronExecutionStatus;
 	summary: string | null;
 	error: string | null;
 	success: boolean;
+}
+
+/**
+ * Outcome detail for an individual background job executed during a run-due pass.
+ */
+export interface CronJobExecutionOutcome {
+	status: CronExecutionStatus;
+	summary: string | null;
+	error: string | null;
 }
 
 /**
@@ -128,13 +167,6 @@ export interface RunCronJobResult {
  */
 export interface RunDueJobsResult {
 	runAll: boolean;
-	results: Record<
-		string,
-		{
-			status: string;
-			summary: string | null;
-			error: string | null;
-		}
-	>;
+	results: Record<string, CronJobExecutionOutcome>;
 	success: boolean;
 }

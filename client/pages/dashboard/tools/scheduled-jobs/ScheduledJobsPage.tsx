@@ -23,7 +23,10 @@ import {
 } from "@/state/slices/api";
 
 import { JobHistoryDrawer, JobsTable, RunDueJobsModal } from "./components";
-import { calculateCronStatusSummary } from "./summary";
+import {
+	aggregateRunDueJobsResult,
+	calculateCronStatusSummary,
+} from "./summary";
 
 export function ScheduledJobsPage() {
 	const { canManageUpdates, isLoading: isAccessLoading } = useAdminAccess();
@@ -123,23 +126,11 @@ export function ScheduledJobsPage() {
 	const handleRunDueJobs = async () => {
 		try {
 			const result = await runDueJobs().unwrap();
-			const resultsMap = result.results || {};
-			const totalExecuted = Object.keys(resultsMap).length;
+			const outcome = aggregateRunDueJobsResult(result);
 
-			notification.success(
-				0 === totalExecuted
-					? __("No background jobs were currently due.")
-					: sprintf(
-							/* translators: %d is count of executed jobs */
-							_n(
-								"%d due job was executed.",
-								"%d due jobs were executed.",
-								totalExecuted
-							),
-							totalExecuted
-						)
-			);
+			notification[outcome.type](outcome.message);
 			setIsRunDueModalOpen(false);
+			void refetch();
 		} catch (err: unknown) {
 			notification.error(
 				extractErrorMessage(err) ||

@@ -24,9 +24,12 @@ use PeakURL\Features\Auth\Jobs\SessionCleanupJob;
 use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Features\Auth\Validator as AuthValidator;
 use PeakURL\Features\Links\Jobs\ExpiredLinksJob;
+use PeakURL\Features\Links\Jobs\ImportExportJob;
+use PeakURL\Features\Links\Jobs\LinkHealthCheckJob;
 use PeakURL\Features\Links\Repository as LinksRepository;
 use PeakURL\Features\Links\Service as LinksService;
 use PeakURL\Features\Links\Validator as LinksValidator;
+use PeakURL\Features\System\Jobs\CacheCleanupJob;
 use PeakURL\Features\Webhooks\Jobs\WebhookDeliveryJob;
 use PeakURL\Features\Webhooks\Service as WebhooksService;
 use PeakURL\Features\Webhooks\Validator as WebhooksValidator;
@@ -134,6 +137,22 @@ class JobsDomainIntegrationTest extends TestCase {
 			$authorization,
 			$config
 		);
+
+		$this->cleanup_test_data();
+	}
+
+	protected function tearDown(): void {
+		$this->cleanup_test_data();
+		parent::tearDown();
+	}
+
+	private function cleanup_test_data(): void {
+		$this->webhooks_service->set_http_sender( null );
+		$this->pdo->exec( "DELETE FROM {$this->table_prefix}webhook_deliveries" );
+		$this->pdo->exec( "DELETE FROM {$this->table_prefix}webhooks WHERE url LIKE '%invalid-non-existent%' OR url LIKE '%example.com%'" );
+		$this->pdo->exec( "DELETE FROM {$this->table_prefix}urls WHERE short_code LIKE 'exp_%' OR short_code LIKE 'ret_%' OR short_code LIKE 'hlth_%'" );
+		$this->pdo->exec( "DELETE FROM {$this->table_prefix}clicks WHERE id LIKE 'clk_test_%'" );
+		$this->pdo->exec( "DELETE FROM {$this->table_prefix}sessions WHERE token_hash LIKE 'th_%'" );
 	}
 
 	public function test_expired_links_job_delegates_and_transitions_status(): void {
@@ -188,7 +207,7 @@ class JobsDomainIntegrationTest extends TestCase {
 
 		$this->pdo->exec(
 			"INSERT INTO {$this->table_prefix}webhooks (id, user_id, url, secret, events, is_active, created_at, updated_at)
-			VALUES ('{$webhook_id}', {$user_id}, 'https://invalid-non-existent-webhook.local/hook', 'sec123', '[\"link.created\"]', 1, '{$now}', '{$now}')"
+			VALUES ('{$webhook_id}', {$user_id}, 'https://example.com/webhook', 'sec123', '[\"link.created\"]', 1, '{$now}', '{$now}')"
 		);
 
 		$delivery_id = $this->webhooks_service->queue_delivery(
@@ -198,18 +217,120 @@ class JobsDomainIntegrationTest extends TestCase {
 			0
 		);
 
+		// Use mock HTTP sender to simulate instantaneous successful remote delivery.
+		$this->webhooks_service->set_http_sender(
+			function ( array $webhook, array $payload, float $timeout ): array {
+				return array(
+					'statusCode' => 200,
+					'error'      => null,
+					'response'   => '{"status":"ok"}',
+				);
+			}
+		);
+
 		$job     = new WebhookDeliveryJob( $this->db, $this->webhooks_service );
 		$context = new ExecutionContext( 'peakurl_webhook_delivery', 'run_test_3', 1, false, $now );
 		$result  = $job->execute( $context );
 
 		$this->assertTrue( $result->is_success() );
 
-		$row = $this->db->get_row_by( 'webhook_deliveries', array( 'id' => $delivery_id ), array( 'status', 'attempts' ) );
+		$row = $this->db->get_row_by( 'webhook_deliveries', array( 'id' => $delivery_id ), array( 'status', 'attempts', 'response_code' ) );
 		$this->assertNotNull( $row );
 		$this->assertSame( 1, (int) $row['attempts'] );
+		$this->assertSame( 'delivered', $row['status'] );
+		$this->assertSame( 200, (int) $row['response_code'] );
+	}
 
-		// Clean up.
-		$this->pdo->exec( "DELETE FROM {$this->table_prefix}webhook_deliveries WHERE id = '{$delivery_id}'" );
-		$this->pdo->exec( "DELETE FROM {$this->table_prefix}webhooks WHERE id = '{$webhook_id}'" );
+	public function test_analytics_retention_job_purges_stale_trashed_links_and_old_clicks(): void {
+		$old_time = gmdate( 'Y-m-d H:i:s', time() - ( 40 * 86400 ) );
+		$now      = Date::now();
+		$link_id  = Str::random_id( 16 );
+		$code     = 'ret_' . bin2hex( random_bytes( 4 ) );
+
+		// Insert trashed link older than 30-day retention default.
+		$this->pdo->exec(
+			"INSERT INTO {$this->table_prefix}urls (id, user_id, short_code, alias, title, destination_url, status, created_at, updated_at)
+			VALUES ('{$link_id}', 1, '{$code}', '{$code}', 'Retention Test', 'https://example.com', 'trashed', '{$old_time}', '{$old_time}')"
+		);
+
+		// Insert old click.
+		$click_id = 'clk_test_' . bin2hex( random_bytes( 8 ) );
+		$this->pdo->exec(
+			"INSERT INTO {$this->table_prefix}clicks (id, url_id, clicked_at)
+			VALUES ('{$click_id}', '{$link_id}', '{$old_time}')"
+		);
+
+		// Configure retention to purge clicks older than 30 days.
+		$this->settings_api->update_option( 'analytics_retention_days', '30', $now, false );
+
+		$job     = new AnalyticsRetentionJob( $this->db, $this->settings_api, $this->links_service, $this->analytics_service );
+		$context = new ExecutionContext( 'peakurl_analytics_retention', 'run_test_4', 1, false, $now );
+		$result  = $job->execute( $context );
+
+		$this->assertTrue( $result->is_success() );
+
+		// Verify trashed link was purged.
+		$url_row = $this->db->get_row_by( 'urls', array( 'id' => $link_id ), array( 'id' ) );
+		$this->assertNull( $url_row );
+
+		// Verify old click was purged.
+		$clk_row = $this->db->get_row_by( 'clicks', array( 'id' => $click_id ), array( 'id' ) );
+		$this->assertNull( $clk_row );
+
+		// Restore settings.
+		$this->settings_api->delete_options( array( 'analytics_retention_days' ) );
+	}
+
+	public function test_cache_cleanup_job_executes_safely_on_null_cache(): void {
+		$job     = new CacheCleanupJob( new NullCache() );
+		$context = new ExecutionContext( 'peakurl_cache_cleanup', 'run_test_5', 1, false, Date::now() );
+		$result  = $job->execute( $context );
+
+		$this->assertTrue( $result->is_success() );
+		$this->assertStringContainsString( 'no filesystem sweep required', (string) $result->get_summary() );
+	}
+
+	public function test_import_export_job_cleans_scratch_files_safely(): void {
+		$scratch_base = sys_get_temp_dir() . '/peakurl_test_content_' . bin2hex( random_bytes( 4 ) );
+		$export_dir   = $scratch_base . '/exports';
+		mkdir( $export_dir, 0777, true );
+
+		$stale_file = $export_dir . '/stale_export.csv';
+		file_put_contents( $stale_file, 'test,data' );
+		touch( $stale_file, time() - ( 48 * 3600 ) );
+
+		$fresh_file = $export_dir . '/fresh_export.csv';
+		file_put_contents( $fresh_file, 'test,data' );
+
+		$job     = new ImportExportJob( array( \PeakURL\Core\Config\Constants::CONTENT_DIR => $scratch_base ) );
+		$context = new ExecutionContext( 'peakurl_import_export', 'run_test_6', 1, false, Date::now() );
+		$result  = $job->execute( $context );
+
+		$this->assertTrue( $result->is_success() );
+		$this->assertFileDoesNotExist( $stale_file );
+		$this->assertFileExists( $fresh_file );
+
+		@unlink( $fresh_file );
+		@rmdir( $export_dir );
+		@rmdir( $scratch_base );
+	}
+
+	public function test_link_health_check_job_evaluates_links_and_filters_ssrf(): void {
+		$now     = Date::now();
+		$link_id = Str::random_id( 16 );
+		$code    = 'hlth_' . bin2hex( random_bytes( 4 ) );
+
+		$this->pdo->exec(
+			"INSERT INTO {$this->table_prefix}urls (id, user_id, short_code, alias, title, destination_url, status, created_at, updated_at)
+			VALUES ('{$link_id}', 1, '{$code}', '{$code}', 'SSRF Test', 'http://127.0.0.1:8080/admin', 'active', '{$now}', '{$now}')"
+		);
+
+		$job     = new LinkHealthCheckJob( $this->db, 10, 1.0 );
+		$context = new ExecutionContext( 'peakurl_link_health_check', 'run_test_7', 1, false, $now );
+		$result  = $job->execute( $context );
+
+		$this->assertTrue( $result->is_success() );
+		$metadata = $result->get_metadata();
+		$this->assertGreaterThanOrEqual( 1, (int) ( $metadata['blockedSsrf'] ?? 0 ) );
 	}
 }

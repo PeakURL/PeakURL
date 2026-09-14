@@ -84,6 +84,14 @@ class Service {
 	private array $config;
 
 	/**
+	 * Custom HTTP sender callback for delivery attempts (useful for testing).
+	 *
+	 * @var (callable(array<string, mixed>, array<string, mixed>, float): array<string, mixed>)|null
+	 * @since 1.7.0
+	 */
+	private $http_sender = null;
+
+	/**
 	 * In-memory cache of active webhook rows for the current request.
 	 *
 	 * @var array<int, array<string, mixed>>|null
@@ -116,6 +124,17 @@ class Service {
 		$this->roles         = $roles;
 		$this->authorization = $authorization;
 		$this->config        = $config;
+	}
+
+	/**
+	 * Set a custom HTTP sender callback for delivery attempts (useful for testing).
+	 *
+	 * @param (callable(array<string, mixed>, array<string, mixed>, float): array<string, mixed>)|null $sender Custom sender callable.
+	 * @return void
+	 * @since 1.7.0
+	 */
+	public function set_http_sender( ?callable $sender ): void {
+		$this->http_sender = $sender;
 	}
 
 	/**
@@ -488,7 +507,7 @@ class Service {
 
 		$timeout = $fast ? 1.5 : 3.0;
 
-		if ( count( $targets ) > 1 && function_exists( 'curl_multi_init' ) ) {
+		if ( null === $this->http_sender && count( $targets ) > 1 && function_exists( 'curl_multi_init' ) ) {
 			$results = $this->post_webhooks_parallel( $targets, $payload, $timeout );
 		} else {
 			$results = array();
@@ -826,7 +845,18 @@ class Service {
 
 		$start_time = microtime( true );
 
-		if ( function_exists( 'curl_init' ) ) {
+		if ( null !== $this->http_sender ) {
+			$result = (array) call_user_func( $this->http_sender, $webhook, $payload, $timeout );
+			if ( ! isset( $result['statusCode'] ) ) {
+				$result['statusCode'] = 0;
+			}
+			if ( ! array_key_exists( 'error', $result ) ) {
+				$result['error'] = null;
+			}
+			if ( ! isset( $result['response'] ) ) {
+				$result['response'] = '';
+			}
+		} elseif ( function_exists( 'curl_init' ) ) {
 			$result = $this->post_webhook_with_curl( $url, $json_body, $headers, $timeout );
 		} else {
 			$result = $this->post_webhook_with_stream( $url, $json_body, $headers, $timeout );

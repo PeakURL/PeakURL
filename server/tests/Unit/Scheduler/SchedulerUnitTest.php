@@ -311,7 +311,7 @@ class SchedulerUnitTest extends TestCase {
 		$this->assertSame( '2026-09-14 11:00:00', $next );
 	}
 
-	public function test_calculate_next_run_preferred_time_daily(): void {
+	public function test_calculate_next_run_preferred_run_time_daily(): void {
 		$registry   = new JobRegistry();
 		$repository = $this->createMock( SchedulerRepository::class );
 		$scheduler  = new Scheduler( $registry, $repository );
@@ -325,7 +325,7 @@ class SchedulerUnitTest extends TestCase {
 		$this->assertSame( '2026-09-15 02:00:00', $next_tomorrow );
 	}
 
-	public function test_calculate_next_run_preferred_time_weekly(): void {
+	public function test_calculate_next_run_preferred_run_time_weekly(): void {
 		$registry   = new JobRegistry();
 		$repository = $this->createMock( SchedulerRepository::class );
 		$scheduler  = new Scheduler( $registry, $repository );
@@ -400,12 +400,12 @@ class SchedulerUnitTest extends TestCase {
 		$repository->method( 'get_job' )
 			->willReturn(
 				array(
-					'id'                => 'test_job',
-					'schedule_interval' => 7200,
-					'preferred_time'    => '04:00',
-					'is_enabled'        => 0,
-					'status'            => 'idle',
-					'next_run_at'       => '2026-09-14 12:00:00',
+					'id'                 => 'test_job',
+					'schedule_interval'  => 7200,
+					'preferred_run_time' => '04:00',
+					'is_enabled'         => 0,
+					'status'             => 'idle',
+					'next_run_at'        => '2026-09-14 12:00:00',
 				)
 			);
 
@@ -413,9 +413,9 @@ class SchedulerUnitTest extends TestCase {
 		$result    = $scheduler->update_job(
 			'test_job',
 			array(
-				'interval_seconds' => 7200,
-				'preferred_time'   => '04:00',
-				'is_enabled'       => false,
+				'interval_seconds'   => 7200,
+				'preferred_run_time' => '04:00',
+				'is_enabled'         => false,
 			)
 		);
 
@@ -441,12 +441,12 @@ class SchedulerUnitTest extends TestCase {
 		$repository->method( 'get_job' )
 			->willReturn(
 				array(
-					'id'                => 'test_job',
-					'schedule_interval' => 86400,
-					'preferred_time'    => null,
-					'is_enabled'        => 1,
-					'status'            => 'idle',
-					'next_run_at'       => '2026-09-15 00:00:00',
+					'id'                 => 'test_job',
+					'schedule_interval'  => 86400,
+					'preferred_run_time' => null,
+					'is_enabled'         => 1,
+					'status'             => 'idle',
+					'next_run_at'        => '2026-09-15 00:00:00',
 				)
 			);
 
@@ -457,6 +457,94 @@ class SchedulerUnitTest extends TestCase {
 		$this->assertSame( 86400, $result['interval_seconds'] );
 		$this->assertFalse( $result['is_customized'] );
 		$this->assertTrue( $result['is_enabled'] );
-		$this->assertNull( $result['preferred_time'] );
+		$this->assertNull( $result['preferred_run_time'] );
+	}
+
+	public function test_calculate_next_run_dst_transitions_london(): void {
+		$registry     = new JobRegistry();
+		$repository   = $this->createMock( SchedulerRepository::class );
+		$settings_api = $this->createMock( SettingsApi::class );
+		$settings_api->method( 'get_option' )
+			->willReturnCallback(
+				function ( string $option ) {
+					if ( 'site_timezone' === $option || 'timezone' === $option ) {
+						return 'Europe/London';
+					}
+					return null;
+				}
+			);
+
+		$scheduler = new Scheduler( $registry, $repository, null, $settings_api );
+
+		// Summer (BST, UTC+1): 02:00 BST = 01:00:00 UTC
+		$next_summer = $scheduler->calculate_next_run( 86400, '02:00', '2026-07-01 00:00:00' );
+		$this->assertSame( '2026-07-01 01:00:00', $next_summer );
+
+		// Winter (GMT, UTC+0): 02:00 GMT = 02:00:00 UTC
+		$next_winter = $scheduler->calculate_next_run( 86400, '02:00', '2026-01-01 00:00:00' );
+		$this->assertSame( '2026-01-01 02:00:00', $next_winter );
+	}
+
+	public function test_update_job_running_job_safety(): void {
+		$registry = new JobRegistry();
+		$handler  = $this->createMock( JobHandlerInterface::class );
+		$job      = new JobDefinition( 'running_job', 'Running Job', 3600, $handler );
+		$registry->register( $job );
+
+		$repository = $this->createMock( SchedulerRepository::class );
+		// When job is currently running, next_run_at passed to repository MUST be null
+		$repository->expects( $this->once() )
+			->method( 'update_job_schedule' )
+			->with( 'running_job', 7200, null, null, null )
+			->willReturn( true );
+
+		$repository->method( 'get_job' )
+			->willReturn(
+				array(
+					'id'                 => 'running_job',
+					'schedule_interval'  => 7200,
+					'preferred_run_time' => null,
+					'is_enabled'         => 1,
+					'status'             => 'running',
+					'next_run_at'        => '2026-09-14 10:00:00',
+				)
+			);
+
+		$scheduler = new Scheduler( $registry, $repository );
+		$result    = $scheduler->update_job(
+			'running_job',
+			array(
+				'interval_seconds' => 7200,
+			)
+		);
+
+		$this->assertSame( 'running_job', $result['id'] );
+		$this->assertSame( 7200, $result['interval_seconds'] );
+		$this->assertSame( 'running', $result['status'] );
+	}
+
+	public function test_update_job_rejects_invalid_preferred_run_time(): void {
+		$registry = new JobRegistry();
+		$handler  = $this->createMock( JobHandlerInterface::class );
+		$job      = new JobDefinition( 'test_job', 'Test Job', 86400, $handler );
+		$registry->register( $job );
+
+		$repository = $this->createMock( SchedulerRepository::class );
+		$repository->method( 'get_job' )
+			->willReturn(
+				array(
+					'id'                 => 'test_job',
+					'schedule_interval'  => 86400,
+					'preferred_run_time' => null,
+					'is_enabled'         => 1,
+					'status'             => 'idle',
+				)
+			);
+
+		$scheduler = new Scheduler( $registry, $repository );
+
+		$this->expectException( \InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'Preferred time must be in 24-hour format (HH:MM).' );
+		$scheduler->update_job( 'test_job', array( 'preferred_run_time' => '25:99' ) );
 	}
 }

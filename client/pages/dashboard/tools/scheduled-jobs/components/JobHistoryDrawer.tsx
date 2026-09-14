@@ -210,7 +210,7 @@ export function JobHistoryDrawer({
 										<span className="scheduled-jobs-drawer-meta-value">
 											{formatSchedule(
 												activeJob.intervalSeconds,
-												activeJob.preferredTime
+												activeJob.preferredRunTime
 											)}
 										</span>
 									</div>

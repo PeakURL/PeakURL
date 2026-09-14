@@ -219,8 +219,8 @@ class Scheduler {
 			$persisted_interval  = isset( $matching_row['schedule_interval'] )
 				? (int) $matching_row['schedule_interval']
 				: $definition->get_interval_seconds();
-			$persisted_pref_time = isset( $matching_row['preferred_time'] ) && '' !== trim( (string) $matching_row['preferred_time'] )
-				? (string) $matching_row['preferred_time']
+			$persisted_pref_time = isset( $matching_row['preferred_run_time'] ) && '' !== trim( (string) $matching_row['preferred_run_time'] )
+				? (string) $matching_row['preferred_run_time']
 				: null;
 			$persisted_enabled   = ! empty( $matching_row['is_enabled'] );
 			$is_customized       = ( $persisted_interval !== $definition->get_interval_seconds() )
@@ -232,7 +232,7 @@ class Scheduler {
 				'title'                        => $definition->get_title(),
 				'interval_seconds'             => $persisted_interval,
 				'recommended_interval_seconds' => $definition->get_interval_seconds(),
-				'preferred_time'               => $persisted_pref_time,
+				'preferred_run_time'           => $persisted_pref_time,
 				'is_customized'                => $is_customized,
 				'status'                       => (string) ( $matching_row['status'] ?? 'idle' ),
 				'is_enabled'                   => $persisted_enabled,
@@ -321,16 +321,16 @@ class Scheduler {
 		$duration_ms = (int) round( ( microtime( true ) - $start_ts ) * 1000 );
 
 		// Query freshest job row to respect any runtime schedule or preference updates.
-		$fresh_job_row    = $this->repository->get_job( $job_id );
-		$interval_seconds = (int) ( $fresh_job_row['schedule_interval'] ?? ( $job_row['schedule_interval'] ?? $definition->get_interval_seconds() ) );
-		$preferred_time   = isset( $fresh_job_row['preferred_time'] ) && '' !== trim( (string) $fresh_job_row['preferred_time'] )
-			? (string) $fresh_job_row['preferred_time']
-			: ( isset( $job_row['preferred_time'] ) && '' !== trim( (string) $job_row['preferred_time'] ) ? (string) $job_row['preferred_time'] : null );
+		$fresh_job_row      = $this->repository->get_job( $job_id );
+		$interval_seconds   = (int) ( $fresh_job_row['schedule_interval'] ?? ( $job_row['schedule_interval'] ?? $definition->get_interval_seconds() ) );
+		$preferred_run_time = isset( $fresh_job_row['preferred_run_time'] ) && '' !== trim( (string) $fresh_job_row['preferred_run_time'] )
+			? (string) $fresh_job_row['preferred_run_time']
+			: ( isset( $job_row['preferred_run_time'] ) && '' !== trim( (string) $job_row['preferred_run_time'] ) ? (string) $job_row['preferred_run_time'] : null );
 
 		if ( $result->is_success() ) {
 			// Catch-up policy: advances to future timestamp based on current time
 			// so downtime never replays every missed interval infinitely.
-			$next_run_at = $this->calculate_next_run( $interval_seconds, $preferred_time, $now_time );
+			$next_run_at = $this->calculate_next_run( $interval_seconds, $preferred_run_time, $now_time );
 
 			$this->repository->record_success(
 				$job_id,
@@ -353,7 +353,7 @@ class Scheduler {
 				)
 			);
 		} elseif ( $result->is_skipped() ) {
-			$next_run_at = $this->calculate_next_run( $interval_seconds, $preferred_time, $now_time );
+			$next_run_at = $this->calculate_next_run( $interval_seconds, $preferred_run_time, $now_time );
 
 			$this->repository->record_skipped(
 				$job_id,
@@ -398,7 +398,7 @@ class Scheduler {
 				);
 			} else {
 				// Terminal failure: schedule next regular occurrence so it doesn't loop infinitely.
-				$next_run_at = $this->calculate_next_run( $interval_seconds, $preferred_time, $now_time );
+				$next_run_at = $this->calculate_next_run( $interval_seconds, $preferred_run_time, $now_time );
 				$is_terminal = true;
 
 				$this->log(
@@ -566,17 +566,17 @@ class Scheduler {
 	 * converted to UTC for MySQL storage.
 	 *
 	 * @param int         $interval_seconds Recurring interval in seconds.
-	 * @param string|null $preferred_time   Optional time of day in 'HH:MM' format.
+	 * @param string|null $preferred_run_time   Optional time of day in 'HH:MM' format.
 	 * @param string|null $from_time        Optional reference datetime string.
 	 * @return string MySQL UTC datetime string ('Y-m-d H:i:s').
 	 * @since 1.7.0
 	 */
 	public function calculate_next_run(
 		int $interval_seconds,
-		?string $preferred_time = null,
+		?string $preferred_run_time = null,
 		?string $from_time = null
 	): string {
-		$clean_pref = ( null !== $preferred_time && '' !== trim( $preferred_time ) ) ? trim( $preferred_time ) : null;
+		$clean_pref = ( null !== $preferred_run_time && '' !== trim( $preferred_run_time ) ) ? trim( $preferred_run_time ) : null;
 
 		if ( null !== $clean_pref && preg_match( '/^([01][0-9]|2[0-3]):[0-5][0-9]$/', $clean_pref ) && $interval_seconds >= 86400 ) {
 			try {
@@ -629,8 +629,8 @@ class Scheduler {
 		$persisted_interval  = isset( $job_row['schedule_interval'] )
 			? (int) $job_row['schedule_interval']
 			: $definition->get_interval_seconds();
-		$persisted_pref_time = isset( $job_row['preferred_time'] ) && '' !== trim( (string) $job_row['preferred_time'] )
-			? (string) $job_row['preferred_time']
+		$persisted_pref_time = isset( $job_row['preferred_run_time'] ) && '' !== trim( (string) $job_row['preferred_run_time'] )
+			? (string) $job_row['preferred_run_time']
 			: null;
 		$persisted_enabled   = ! empty( $job_row['is_enabled'] );
 		$is_customized       = ( $persisted_interval !== $definition->get_interval_seconds() )
@@ -642,7 +642,7 @@ class Scheduler {
 			'title'                        => $definition->get_title(),
 			'interval_seconds'             => $persisted_interval,
 			'recommended_interval_seconds' => $definition->get_interval_seconds(),
-			'preferred_time'               => $persisted_pref_time,
+			'preferred_run_time'           => $persisted_pref_time,
 			'is_customized'                => $is_customized,
 			'status'                       => (string) ( $job_row['status'] ?? 'idle' ),
 			'is_enabled'                   => $persisted_enabled,
@@ -674,7 +674,7 @@ class Scheduler {
 	 * Update schedule settings for a registered background job.
 	 *
 	 * @param string               $job_id Unique job identifier.
-	 * @param array<string, mixed> $params Update parameters (interval_seconds, preferred_time, is_enabled).
+	 * @param array<string, mixed> $params Update parameters (interval_seconds, preferred_run_time, is_enabled).
 	 * @return array<string, mixed> Updated job details.
 	 *
 	 * @throws \InvalidArgumentException When the job ID is unknown or parameters are invalid.
@@ -719,20 +719,20 @@ class Scheduler {
 			);
 		}
 
-		$preferred_time = null;
-		if ( array_key_exists( 'preferred_time', $params ) ) {
-			if ( null !== $params['preferred_time'] && '' !== trim( (string) $params['preferred_time'] ) ) {
-				$time_str = trim( (string) $params['preferred_time'] );
+		$preferred_run_time = null;
+		if ( array_key_exists( 'preferred_run_time', $params ) ) {
+			if ( null !== $params['preferred_run_time'] && '' !== trim( (string) $params['preferred_run_time'] ) ) {
+				$time_str = trim( (string) $params['preferred_run_time'] );
 				if ( ! preg_match( '/^([01][0-9]|2[0-3]):[0-5][0-9]$/', $time_str ) ) {
 					throw new \InvalidArgumentException(
 						'Preferred time must be in 24-hour format (HH:MM).'
 					);
 				}
-				$preferred_time = $time_str;
+				$preferred_run_time = $time_str;
 			}
 		} else {
-			$preferred_time = isset( $current_row['preferred_time'] ) && '' !== trim( (string) $current_row['preferred_time'] )
-				? (string) $current_row['preferred_time']
+			$preferred_run_time = isset( $current_row['preferred_run_time'] ) && '' !== trim( (string) $current_row['preferred_run_time'] )
+				? (string) $current_row['preferred_run_time']
 				: null;
 		}
 
@@ -745,13 +745,13 @@ class Scheduler {
 		$next_run_at = null;
 		$is_running  = 'running' === ( $current_row['status'] ?? '' );
 		if ( ! $is_running ) {
-			$next_run_at = $this->calculate_next_run( $interval, $preferred_time, Date::now() );
+			$next_run_at = $this->calculate_next_run( $interval, $preferred_run_time, Date::now() );
 		}
 
 		$this->repository->update_job_schedule(
 			$clean_id,
 			$interval,
-			$preferred_time,
+			$preferred_run_time,
 			$is_enabled,
 			$next_run_at
 		);

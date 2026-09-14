@@ -248,7 +248,7 @@
 	}
 
 	.scheduled-jobs-action-run {
-		@apply inline-flex items-center justify-center gap-1 w-[5.5rem] min-w-[5.5rem];
+		@apply inline-flex items-center justify-center gap-1 w-22 min-w-22;
 	}
 
 	/* ─── Empty State ─── */

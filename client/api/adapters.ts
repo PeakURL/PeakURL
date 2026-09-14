@@ -234,7 +234,7 @@ export function mapApiCronJob(apiJob?: ApiCronJob | null): CronJob {
 			title: "",
 			intervalSeconds: 0,
 			recommendedIntervalSeconds: 0,
-			preferredTime: null,
+			preferredRunTime: null,
 			isCustomized: false,
 			status: "idle",
 			isEnabled: false,
@@ -253,15 +253,15 @@ export function mapApiCronJob(apiJob?: ApiCronJob | null): CronJob {
 	const recommendedIntervalSeconds = Number(
 		apiJob.recommended_interval_seconds ?? intervalSeconds
 	);
-	const preferredTime =
-		apiJob.preferred_time && "" !== apiJob.preferred_time.trim()
-			? apiJob.preferred_time.trim()
+	const preferredRunTime =
+		apiJob.preferred_run_time && "" !== apiJob.preferred_run_time.trim()
+			? apiJob.preferred_run_time.trim()
 			: null;
 	const isEnabled = Boolean(apiJob.is_enabled);
 	const isCustomized = Boolean(
 		apiJob.is_customized ??
 		(intervalSeconds !== recommendedIntervalSeconds ||
-			Boolean(preferredTime))
+			Boolean(preferredRunTime))
 	);
 
 	return {
@@ -269,7 +269,7 @@ export function mapApiCronJob(apiJob?: ApiCronJob | null): CronJob {
 		title: String(apiJob.title || ""),
 		intervalSeconds,
 		recommendedIntervalSeconds,
-		preferredTime,
+		preferredRunTime,
 		isCustomized,
 		status: (apiJob.status as CronJobStatus) || "idle",
 		isEnabled,

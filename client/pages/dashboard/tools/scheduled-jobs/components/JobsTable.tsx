@@ -115,7 +115,7 @@ export function JobsTable({
 										<span className="text-xs font-medium text-heading">
 											{formatSchedule(
 												job.intervalSeconds,
-												job.preferredTime
+												job.preferredRunTime
 											)}
 										</span>
 										{job.isCustomized ? (

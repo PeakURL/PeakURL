@@ -46,7 +46,9 @@ const RETENTION_OPTIONS: SelectOption<number>[] = [
 	{ value: 30, label: __("30 Days (Recommended)") },
 	{ value: 60, label: __("60 Days") },
 	{ value: 90, label: __("90 Days") },
-	{ value: 0, label: __("Keep Forever") },
+	{ value: 180, label: __("180 Days") },
+	{ value: 365, label: __("1 Year") },
+	{ value: 0, label: __("Keep Indefinitely") },
 ];
 
 const STANDARD_INTERVAL_OPTIONS: SelectOption<number>[] = [
@@ -63,7 +65,7 @@ const STANDARD_INTERVAL_OPTIONS: SelectOption<number>[] = [
 
 interface JobEditState {
 	intervalSeconds: number;
-	preferredTime: string;
+	preferredRunTime: string;
 	isEnabled: boolean;
 }
 
@@ -103,7 +105,7 @@ export function ManageSchedulesDrawer({
 			...prev,
 			[job.id]: {
 				intervalSeconds: job.intervalSeconds,
-				preferredTime: job.preferredTime || "02:00",
+				preferredRunTime: job.preferredRunTime || "02:00",
 				isEnabled: job.isEnabled,
 			},
 		}));
@@ -136,15 +138,15 @@ export function ManageSchedulesDrawer({
 
 		setSavingJobId(job.id);
 		try {
-			const preferredTimePayload =
+			const preferredRunTimePayload =
 				form.intervalSeconds >= 86400
-					? form.preferredTime || null
+					? form.preferredRunTime || null
 					: null;
 
 			await updateCronJobSchedule({
 				id: job.id,
 				intervalSeconds: form.intervalSeconds,
-				preferredTime: preferredTimePayload,
+				preferredRunTime: preferredRunTimePayload,
 				isEnabled: form.isEnabled,
 			}).unwrap();
 
@@ -237,25 +239,19 @@ export function ManageSchedulesDrawer({
 										>
 											{__("Manage Schedules & Retention")}
 										</DialogTitle>
-										<div className="flex flex-wrap items-center gap-2 mt-1">
-											<span
-												className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent border border-accent/20"
-												title={sprintf(
+										<p className="flex items-center gap-1.5 text-xs text-text-muted mt-0.5">
+											<Clock
+												size={12}
+												className="shrink-0 text-text-muted"
+											/>
+											<span>
+												{sprintf(
 													/* translators: %s is the site timezone */
-													__("Site Timezone: %s"),
+													__("Site timezone: %s"),
 													timezone
 												)}
-											>
-												<Clock size={11} />
-												<span>
-													{sprintf(
-														/* translators: %s is the site timezone */
-														__("Timezone: %s"),
-														timezone
-													)}
-												</span>
 											</span>
-										</div>
+										</p>
 									</div>
 								</div>
 
@@ -285,7 +281,7 @@ export function ManageSchedulesDrawer({
 									</div>
 									<p className="text-xs text-text-muted leading-relaxed">
 										{__(
-											"Automatically cleans up finished execution logs and output older than the selected retention period. Active or retrying runs are never deleted."
+											"Choose how long completed background-job execution records are kept. Active and retrying executions are never removed by retention cleanup."
 										)}
 									</p>
 
@@ -325,7 +321,7 @@ export function ManageSchedulesDrawer({
 
 								{/* Registered Tasks Schedules Section */}
 								<div className="space-y-3">
-									<div className="flex items-center justify-between">
+									<div className="space-y-1">
 										<div className="flex items-center gap-2">
 											<SlidersHorizontal
 												size={15}
@@ -340,6 +336,11 @@ export function ManageSchedulesDrawer({
 												{jobs.length}
 											</span>
 										</div>
+										<p className="text-xs text-text-muted leading-relaxed">
+											{__(
+												"Recommended schedules are based on PeakURL's default maintenance cadence. You can customize any job and restore its recommended schedule at any time."
+											)}
+										</p>
 									</div>
 
 									<div className="space-y-3">
@@ -351,8 +352,8 @@ export function ManageSchedulesDrawer({
 											const form = editForm[job.id] || {
 												intervalSeconds:
 													job.intervalSeconds,
-												preferredTime:
-													job.preferredTime ||
+												preferredRunTime:
+													job.preferredRunTime ||
 													"02:00",
 												isEnabled: job.isEnabled,
 											};
@@ -414,19 +415,6 @@ export function ManageSchedulesDrawer({
 																		job.isEnabled
 																	}
 																/>
-																{job.isCustomized ? (
-																	<span className="inline-flex items-center gap-1 rounded bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold text-amber-700 dark:text-amber-400 border border-amber-500/20">
-																		{__(
-																			"Customized"
-																		)}
-																	</span>
-																) : (
-																	<span className="inline-flex items-center gap-1 rounded bg-surface-alt px-2 py-0.5 text-[10px] font-semibold text-text-muted border border-stroke/50">
-																		{__(
-																			"Recommended Default"
-																		)}
-																	</span>
-																)}
 															</div>
 
 															{/* Schedule Summary (when not editing) */}
@@ -440,18 +428,24 @@ export function ManageSchedulesDrawer({
 																		</strong>{" "}
 																		{formatSchedule(
 																			job.intervalSeconds,
-																			job.preferredTime
+																			job.preferredRunTime
 																		)}
-																	</span>
-																	<span>
-																		<strong className="font-medium text-text-muted">
-																			{__(
-																				"Default:"
+																		{" · "}
+																		<span
+																			className={cn(
+																				job.isCustomized
+																					? "font-medium text-amber-600 dark:text-amber-400"
+																					: "text-text-muted"
 																			)}
-																		</strong>{" "}
-																		{formatInterval(
-																			job.recommendedIntervalSeconds
-																		)}
+																		>
+																			{job.isCustomized
+																				? __(
+																						"Customized"
+																					)
+																				: __(
+																						"Recommended"
+																					)}
+																		</span>
 																	</span>
 																	<span>
 																		<strong className="font-medium text-text-muted">
@@ -477,30 +471,6 @@ export function ManageSchedulesDrawer({
 														{/* Action buttons (when not editing) */}
 														{!isEditing ? (
 															<div className="flex items-center gap-2 shrink-0 self-end sm:self-center pt-1 sm:pt-0">
-																{job.isCustomized ? (
-																	<Button
-																		variant="ghost"
-																		size="xs"
-																		icon={
-																			RotateCcw
-																		}
-																		onClick={() =>
-																			setJobToReset(
-																				job
-																			)
-																		}
-																		title={__(
-																			"Reset schedule to built-in recommendation"
-																		)}
-																		className="text-text-muted hover:text-heading"
-																	>
-																		<span>
-																			{__(
-																				"Reset"
-																			)}
-																		</span>
-																	</Button>
-																) : null}
 																<Button
 																	variant="outline"
 																	size="xs"
@@ -534,7 +504,7 @@ export function ManageSchedulesDrawer({
 																		className="text-xs font-medium text-heading block"
 																	>
 																		{__(
-																			"Recurrence Schedule"
+																			"Schedule"
 																		)}
 																	</label>
 																	<Select
@@ -565,27 +535,21 @@ export function ManageSchedulesDrawer({
 																	/>
 																</div>
 
-																{/* Preferred Time (only if interval >= 86400) */}
+																{/* Preferred Run Time (only if interval >= 86400) */}
 																{form.intervalSeconds >=
 																86400 ? (
 																	<div className="space-y-1.5">
-																		<label
-																			htmlFor={`preferred-time-${job.id}`}
-																			className="text-xs font-medium text-heading block"
-																		>
-																			{sprintf(
-																				/* translators: %s is the site timezone */
-																				__(
-																					"Preferred Run Time (%s)"
-																				),
-																				timezone
-																			)}
-																		</label>
 																		<Input
-																			id={`preferred-time-${job.id}`}
+																			id={`preferred-run-time-${job.id}`}
 																			type="time"
+																			label={__(
+																				"Preferred run time"
+																			)}
+																			icon={
+																				Clock
+																			}
 																			value={
-																				form.preferredTime
+																				form.preferredRunTime
 																			}
 																			onChange={(
 																				e
@@ -598,7 +562,7 @@ export function ManageSchedulesDrawer({
 																						[job.id]:
 																							{
 																								...form,
-																								preferredTime:
+																								preferredRunTime:
 																									e
 																										.target
 																										.value,
@@ -609,7 +573,7 @@ export function ManageSchedulesDrawer({
 																			helperText={sprintf(
 																				/* translators: %s is the site timezone */
 																				__(
-																					"Evaluated daily/weekly in %s."
+																					"Site timezone: %s"
 																				),
 																				timezone
 																			)}
@@ -623,16 +587,16 @@ export function ManageSchedulesDrawer({
 																<div className="space-y-0.5">
 																	<p className="text-xs font-semibold text-heading">
 																		{__(
-																			"Automatic Execution"
+																			"Automatic execution"
 																		)}
 																	</p>
 																	<p className="text-[11px] text-text-muted">
 																		{form.isEnabled
 																			? __(
-																					"The scheduler will automatically run this job when due."
+																					"Runs this job automatically when it is due."
 																				)
 																			: __(
-																					"Automatic execution is disabled. You can still trigger this job manually via Run Now."
+																					"Automatic execution is disabled. You can still run this job manually."
 																				)}
 																	</p>
 																</div>
@@ -701,14 +665,14 @@ export function ManageSchedulesDrawer({
 																		>
 																			<span>
 																				{__(
-																					"Reset to Default"
+																					"Reset to Recommended"
 																				)}
 																			</span>
 																		</Button>
 																	) : null}
 																</div>
 
-																<div className="flex items-center gap-2">
+																<div className="flex items-center gap-2 ms-auto">
 																	<Button
 																		variant="outline"
 																		size="xs"
@@ -747,7 +711,7 @@ export function ManageSchedulesDrawer({
 																		disabled={
 																			isSavingThisJob
 																		}
-																		className="w-28 min-w-28"
+																		className="min-w-28"
 																	>
 																		<span>
 																			{isSavingThisJob
@@ -803,7 +767,7 @@ export function ManageSchedulesDrawer({
 				description={sprintf(
 					/* translators: 1: job title, 2: recommended cadence */
 					__(
-						"Are you sure you want to reset [%1$s] to its recommended default schedule (%2$s)? Any customized interval, preferred time, and enable state will be restored to the built-in recommendation. Past execution history will remain preserved."
+						"Restore the recommended PeakURL schedule for [%1$s] (%2$s)? Any customized interval, preferred run time, and enable state will be restored to the built-in recommendation. Past execution history will remain preserved."
 					),
 					jobToReset?.title || "",
 					jobToReset

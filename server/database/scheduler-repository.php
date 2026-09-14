@@ -603,7 +603,7 @@ class SchedulerRepository {
 	 *
 	 * @param string      $job_id           Unique job identifier.
 	 * @param int         $interval_seconds Cadence in seconds.
-	 * @param string|null $preferred_time   Optional preferred time of day (HH:MM) or null.
+	 * @param string|null $preferred_run_time   Optional preferred time of day (HH:MM) or null.
 	 * @param bool|null   $is_enabled       Optional enabled state or null to preserve.
 	 * @param string|null $next_run_at      Optional recalculated next run timestamp.
 	 * @return bool True if updated successfully.
@@ -612,14 +612,14 @@ class SchedulerRepository {
 	public function update_job_schedule(
 		string $job_id,
 		int $interval_seconds,
-		?string $preferred_time = null,
+		?string $preferred_run_time = null,
 		?bool $is_enabled = null,
 		?string $next_run_at = null
 	): bool {
 		$fields = array(
-			'schedule_interval' => max( 1, $interval_seconds ),
-			'preferred_time'    => ( null !== $preferred_time && '' !== trim( $preferred_time ) ) ? trim( $preferred_time ) : null,
-			'updated_at'        => Date::now(),
+			'schedule_interval'  => max( 1, $interval_seconds ),
+			'preferred_run_time' => ( null !== $preferred_run_time && '' !== trim( $preferred_run_time ) ) ? trim( $preferred_run_time ) : null,
+			'updated_at'         => Date::now(),
 		);
 
 		if ( null !== $is_enabled ) {
@@ -654,10 +654,10 @@ class SchedulerRepository {
 		?string $next_run_at = null
 	): bool {
 		$fields = array(
-			'schedule_interval' => max( 1, $default_interval ),
-			'preferred_time'    => null,
-			'is_enabled'        => $default_enabled ? 1 : 0,
-			'updated_at'        => Date::now(),
+			'schedule_interval'  => max( 1, $default_interval ),
+			'preferred_run_time' => null,
+			'is_enabled'         => $default_enabled ? 1 : 0,
+			'updated_at'         => Date::now(),
 		);
 
 		if ( null !== $next_run_at ) {

@@ -48,15 +48,15 @@ export function formatInterval(seconds: number): string {
 
 export function formatSchedule(
 	seconds: number,
-	preferredTime?: string | null
+	preferredRunTime?: string | null
 ): string {
 	const base = formatInterval(seconds);
-	if (preferredTime && seconds >= 86400) {
+	if (preferredRunTime && seconds >= 86400) {
 		return sprintf(
 			/* translators: 1: interval recurrence, 2: preferred time of day */
 			__("%1$s at %2$s"),
 			base,
-			preferredTime
+			preferredRunTime
 		);
 	}
 	return base;

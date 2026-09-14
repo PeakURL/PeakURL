@@ -222,13 +222,13 @@ if ( isset( $options['list'] ) ) {
 			case 604800:
 				return 'Weekly' . $time_suffix;
 			default:
-				if ( $seconds % 86400 === 0 ) {
+				if ( 0 === $seconds % 86400 ) {
 					return sprintf( 'Every %dd%s', (int) ( $seconds / 86400 ), $time_suffix );
 				}
-				if ( $seconds % 3600 === 0 ) {
+				if ( 0 === $seconds % 3600 ) {
 					return sprintf( 'Every %dh', (int) ( $seconds / 3600 ) );
 				}
-				if ( $seconds % 60 === 0 ) {
+				if ( 0 === $seconds % 60 ) {
 					return sprintf( 'Every %dm', (int) ( $seconds / 60 ) );
 				}
 				return $seconds . 's';
@@ -242,7 +242,7 @@ if ( isset( $options['list'] ) ) {
 		$next         = ! empty( $job['next_run_at'] ) ? substr( (string) $job['next_run_at'], 0, 19 ) : 'N/A';
 		$last         = ! empty( $job['last_run_at'] ) ? substr( (string) $job['last_run_at'], 0, 19 ) : 'Never';
 		$status_label = empty( $job['is_enabled'] ) ? 'disabled' : (string) ( $job['status'] ?? 'idle' );
-		$cur_schedule = $format_cadence( (int) $job['interval_seconds'], $job['preferred_time'] ?? null );
+		$cur_schedule = $format_cadence( (int) $job['interval_seconds'], $job['preferred_run_time'] ?? null );
 		$is_custom    = ! empty( $job['is_customized'] );
 		$sched_label  = $is_custom ? $cur_schedule . ' (Custom)' : $cur_schedule;
 

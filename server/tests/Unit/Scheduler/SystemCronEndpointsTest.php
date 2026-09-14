@@ -381,9 +381,9 @@ class SystemCronEndpointsTest extends TestCase {
 			'/api/v1/system/cron/jobs/peakurl_session_cleanup',
 			array(),
 			array(
-				'schedule_interval' => 86400,
-				'preferred_time'    => '02:00',
-				'is_enabled'        => true,
+				'schedule_interval'  => 86400,
+				'preferred_run_time' => '02:00',
+				'is_enabled'         => true,
 			)
 		);
 		$request->set_route_params( array( 'id' => 'peakurl_session_cleanup' ) );
@@ -516,8 +516,8 @@ class SystemCronEndpointsTest extends TestCase {
 			'/api/v1/system/cron/jobs/peakurl_session_cleanup',
 			array(),
 			array(
-				'schedule_interval' => 86400,
-				'preferred_time'    => '25:99',
+				'schedule_interval'  => 86400,
+				'preferred_run_time' => '25:99',
 			)
 		);
 		$request->set_route_params( array( 'id' => 'peakurl_session_cleanup' ) );

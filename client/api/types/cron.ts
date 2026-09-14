@@ -57,7 +57,7 @@ export interface ApiCronJob {
 	title: string;
 	interval_seconds?: number;
 	recommended_interval_seconds?: number;
-	preferred_time?: string | null;
+	preferred_run_time?: string | null;
 	is_customized?: boolean;
 	status: string;
 	is_enabled?: boolean;
@@ -129,7 +129,7 @@ export interface CronJob {
 	title: string;
 	intervalSeconds: number;
 	recommendedIntervalSeconds: number;
-	preferredTime: string | null;
+	preferredRunTime: string | null;
 	isCustomized: boolean;
 	status: CronJobStatus;
 	isEnabled: boolean;
@@ -158,7 +158,7 @@ export interface CronStatusResponse {
 export interface UpdateCronJobPayload {
 	id: string;
 	intervalSeconds?: number;
-	preferredTime?: string | null;
+	preferredRunTime?: string | null;
 	isEnabled?: boolean;
 }
 
@@ -167,7 +167,7 @@ export interface UpdateCronJobPayload {
  */
 export interface ApiUpdateCronJobPayload {
 	interval_seconds?: number;
-	preferred_time?: string | null;
+	preferred_run_time?: string | null;
 	is_enabled?: boolean;
 }
 

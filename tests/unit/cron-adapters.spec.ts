@@ -157,7 +157,7 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 				title: "Session Cleanup",
 				interval_seconds: 86400,
 				recommended_interval_seconds: 86400,
-				preferred_time: "02:00",
+				preferred_run_time: "02:00",
 				is_customized: false,
 				status: "idle",
 				is_enabled: true,
@@ -171,7 +171,7 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 			expect(domainJob.title).toBe("Session Cleanup");
 			expect(domainJob.intervalSeconds).toBe(86400);
 			expect(domainJob.recommendedIntervalSeconds).toBe(86400);
-			expect(domainJob.preferredTime).toBe("02:00");
+			expect(domainJob.preferredRunTime).toBe("02:00");
 			expect(domainJob.isCustomized).toBe(false);
 			expect(domainJob.isEnabled).toBe(true);
 		});
@@ -413,6 +413,25 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 			const domain = mapApiCronStatus(rawPayload);
 			expect(domain.timezone).toBe("America/New_York");
 			expect(domain.retentionDays).toBe(14);
+
+			const londonPayload: ApiCronStatusResponse = {
+				jobs: [],
+				jobs_count: 0,
+				timezone: "Europe/London",
+				retention_days: 180,
+			};
+			const domainLondon = mapApiCronStatus(londonPayload);
+			expect(domainLondon.timezone).toBe("Europe/London");
+			expect(domainLondon.retentionDays).toBe(180);
+
+			const yearPayload: ApiCronStatusResponse = {
+				jobs: [],
+				jobs_count: 0,
+				timezone: "UTC",
+				retention_days: 365,
+			};
+			const domainYear = mapApiCronStatus(yearPayload);
+			expect(domainYear.retentionDays).toBe(365);
 		});
 	});
 
@@ -865,7 +884,7 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 					id: "peakurl_geoip_update",
 					title: "GeoIP Database Refresh",
 					interval_seconds: 604800,
-					preferred_time: "03:00",
+					preferred_run_time: "03:00",
 					is_enabled: true,
 					is_customized: true,
 					recommended_interval_seconds: 604800,
@@ -878,7 +897,7 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 			const domain = mapApiCronJobScheduleResult(wireResult);
 			expect(domain.job.id).toBe("peakurl_geoip_update");
 			expect(domain.job.intervalSeconds).toBe(604800);
-			expect(domain.job.preferredTime).toBe("03:00");
+			expect(domain.job.preferredRunTime).toBe("03:00");
 			expect(domain.job.isEnabled).toBe(true);
 			expect(domain.job.isCustomized).toBe(true);
 			expect(domain.job.recommendedIntervalSeconds).toBe(604800);
@@ -890,7 +909,7 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 			const domain = mapApiCronJobScheduleResult(null);
 			expect(domain.job.id).toBe("");
 			expect(domain.job.intervalSeconds).toBe(0);
-			expect(domain.job.preferredTime).toBeNull();
+			expect(domain.job.preferredRunTime).toBeNull();
 			expect(domain.job.isEnabled).toBe(false);
 			expect(domain.job.isCustomized).toBe(false);
 			expect(domain.success).toBe(false);

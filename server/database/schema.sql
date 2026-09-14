@@ -156,7 +156,7 @@ CREATE TABLE IF NOT EXISTS cron_jobs (
     id VARCHAR(64) NOT NULL PRIMARY KEY,
     title VARCHAR(191) NOT NULL,
     schedule_interval INT UNSIGNED NOT NULL DEFAULT 0,
-    preferred_time VARCHAR(5) DEFAULT NULL,
+    preferred_run_time VARCHAR(5) DEFAULT NULL,
     status VARCHAR(32) NOT NULL DEFAULT 'idle',
     next_run_at DATETIME NOT NULL,
     last_run_at DATETIME DEFAULT NULL,

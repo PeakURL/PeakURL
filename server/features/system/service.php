@@ -817,8 +817,8 @@ class Service {
 			$params['interval_seconds'] = (int) $raw_interval;
 		}
 
-		if ( array_key_exists( 'preferred_time', $payload ) ) {
-			$raw_time = $payload['preferred_time'];
+		if ( array_key_exists( 'preferred_run_time', $payload ) ) {
+			$raw_time = $payload['preferred_run_time'];
 			if ( null !== $raw_time && '' !== trim( (string) $raw_time ) ) {
 				$clean_time = trim( (string) $raw_time );
 				if ( ! preg_match( '/^([01][0-9]|2[0-3]):[0-5][0-9]$/', $clean_time ) ) {
@@ -827,9 +827,9 @@ class Service {
 						422
 					);
 				}
-				$params['preferred_time'] = $clean_time;
+				$params['preferred_run_time'] = $clean_time;
 			} else {
-				$params['preferred_time'] = null;
+				$params['preferred_run_time'] = null;
 			}
 		}
 

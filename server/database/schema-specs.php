@@ -325,7 +325,7 @@ class SchemaSpecs {
 					'definition' => 'INT UNSIGNED NOT NULL DEFAULT 0',
 				),
 				array(
-					'name'       => 'preferred_time',
+					'name'       => 'preferred_run_time',
 					'definition' => 'VARCHAR(5) DEFAULT NULL',
 				),
 				array(

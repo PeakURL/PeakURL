@@ -26,7 +26,7 @@ use ReflectionClass;
 
 class SystemCronEndpointsTest extends TestCase {
 
-	public function test_system_controller_run_cron_dispatches_with_json_data(): void {
+	public function test_system_controller_cron_run_now_dispatches_with_json_data(): void {
 		$system_service = $this->createMock( SystemService::class );
 		$request        = new Request(
 			'POST',
@@ -46,13 +46,13 @@ class SystemCronEndpointsTest extends TestCase {
 			);
 
 		$controller = new SystemController( $system_service );
-		$response   = $controller->run_cron( $request );
+		$response   = $controller->cron_run_now( $request );
 
 		$this->assertSame( 200, $response['status'] );
 		$this->assertTrue( $response['body']['data']['success'] );
 	}
 
-	public function test_system_controller_run_cron_dispatches_run_all_when_no_job_id(): void {
+	public function test_system_controller_cron_run_now_dispatches_run_all_when_no_job_id(): void {
 		$system_service = $this->createMock( SystemService::class );
 		$request        = new Request(
 			'POST',
@@ -73,7 +73,7 @@ class SystemCronEndpointsTest extends TestCase {
 			);
 
 		$controller = new SystemController( $system_service );
-		$response   = $controller->run_cron( $request );
+		$response   = $controller->cron_run_now( $request );
 
 		$this->assertSame( 200, $response['status'] );
 		$this->assertTrue( $response['body']['data']['run_all'] );

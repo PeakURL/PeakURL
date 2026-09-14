@@ -25,6 +25,7 @@ import {
 } from "../../client/pages/dashboard/tools/scheduled-jobs/summary";
 import {
 	formatInterval,
+	formatNextRun,
 	formatSchedule,
 } from "../../client/pages/dashboard/tools/scheduled-jobs/formatters";
 
@@ -935,6 +936,18 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 			expect(formatSchedule(86400, null)).toBe("Daily");
 			expect(formatSchedule(3600, "02:00")).toBe("Hourly");
 			expect(formatSchedule(300, null)).toBe("Every 5 minutes");
+			expect(formatSchedule(7200, "04:00")).toBe("Every 2 hours");
+		});
+
+		test("correctly formats next run strings for due and future runs", () => {
+			const futureDate = new Date(Date.now() + 3600 * 1000).toISOString();
+			const pastDate = new Date(Date.now() - 3600 * 1000).toISOString();
+
+			expect(formatNextRun(futureDate).isDue).toBe(false);
+			expect(formatNextRun(pastDate).isDue).toBe(true);
+			expect(formatNextRun(pastDate).text).toBe("Due now");
+			expect(formatNextRun(null).text).toBe("—");
+			expect(formatNextRun(undefined).text).toBe("—");
 		});
 	});
 });

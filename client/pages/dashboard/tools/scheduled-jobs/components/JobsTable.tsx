@@ -118,11 +118,18 @@ export function JobsTable({
 												job.preferredRunTime
 											)}
 										</span>
-										{job.isCustomized ? (
-											<span className="text-[10px] font-medium text-accent mt-0.5">
-												{__("Customized")}
-											</span>
-										) : null}
+										<span
+											className={cn(
+												"text-[10px] mt-0.5",
+												job.isCustomized
+													? "font-medium text-amber-600 dark:text-amber-400"
+													: "text-text-muted"
+											)}
+										>
+											{job.isCustomized
+												? __("Customized")
+												: __("Recommended")}
+										</span>
 									</div>
 								</td>
 

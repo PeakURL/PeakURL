@@ -88,9 +88,15 @@ export function ManageSchedulesDrawer({
 	const [updateCronJobSchedule] = useUpdateCronJobScheduleMutation();
 	const [resetCronJobSchedule] = useResetCronJobScheduleMutation();
 
-	// Local retention state
+	// Local retention state synchronized with incoming prop
 	const [selectedRetention, setSelectedRetention] =
 		useState<number>(retentionDays);
+	const [prevRetentionDays, setPrevRetentionDays] = useState(retentionDays);
+
+	if (retentionDays !== prevRetentionDays) {
+		setPrevRetentionDays(retentionDays);
+		setSelectedRetention(retentionDays);
+	}
 
 	// Expanded editing state per job ID
 	const [editingJobId, setEditingJobId] = useState<string | null>(null);
@@ -495,13 +501,21 @@ export function ManageSchedulesDrawer({
 
 													{/* Expanded Inline Editor Form */}
 													{isEditing ? (
-														<div className="mt-4 pt-4 border-t border-stroke/70 space-y-4">
-															<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+														<div className="mt-4 pt-4 border-t border-stroke space-y-4">
+															<div
+																className={cn(
+																	"grid gap-4",
+																	form.intervalSeconds >=
+																		86400
+																		? "grid-cols-1 sm:grid-cols-2"
+																		: "grid-cols-1"
+																)}
+															>
 																{/* Recurrence Interval */}
-																<div className="space-y-1.5">
+																<div className="form-field">
 																	<label
 																		htmlFor={`interval-${job.id}`}
-																		className="text-xs font-medium text-heading block"
+																		className="form-field-label"
 																	>
 																		{__(
 																			"Schedule"
@@ -533,52 +547,55 @@ export function ManageSchedulesDrawer({
 																			)
 																		}
 																	/>
+																	<p className="form-field-helper">
+																		{__(
+																			"Recurrence cadence."
+																		)}
+																	</p>
 																</div>
 
 																{/* Preferred Run Time (only if interval >= 86400) */}
 																{form.intervalSeconds >=
 																86400 ? (
-																	<div className="space-y-1.5">
-																		<Input
-																			id={`preferred-run-time-${job.id}`}
-																			type="time"
-																			label={__(
-																				"Preferred run time"
-																			)}
-																			icon={
-																				Clock
-																			}
-																			value={
-																				form.preferredRunTime
-																			}
-																			onChange={(
-																				e
-																			) =>
-																				setEditForm(
-																					(
-																						prev
-																					) => ({
-																						...prev,
-																						[job.id]:
-																							{
-																								...form,
-																								preferredRunTime:
-																									e
-																										.target
-																										.value,
-																							},
-																					})
-																				)
-																			}
-																			helperText={sprintf(
-																				/* translators: %s is the site timezone */
-																				__(
-																					"Site timezone: %s"
-																				),
-																				timezone
-																			)}
-																		/>
-																	</div>
+																	<Input
+																		id={`preferred-run-time-${job.id}`}
+																		type="time"
+																		label={__(
+																			"Preferred run time"
+																		)}
+																		icon={
+																			Clock
+																		}
+																		value={
+																			form.preferredRunTime
+																		}
+																		onChange={(
+																			e
+																		) =>
+																			setEditForm(
+																				(
+																					prev
+																				) => ({
+																					...prev,
+																					[job.id]:
+																						{
+																							...form,
+																							preferredRunTime:
+																								e
+																									.target
+																									.value,
+																						},
+																				})
+																			)
+																		}
+																		helperText={sprintf(
+																			/* translators: %s is the site timezone */
+																			__(
+																				"Site timezone: %s"
+																			),
+																			timezone
+																		)}
+																	/>
 																) : null}
 															</div>
 
@@ -649,7 +666,7 @@ export function ManageSchedulesDrawer({
 																	{job.isCustomized ? (
 																		<Button
 																			variant="ghost"
-																			size="xs"
+																			size="sm"
 																			icon={
 																				RotateCcw
 																			}
@@ -675,7 +692,7 @@ export function ManageSchedulesDrawer({
 																<div className="flex items-center gap-2 ms-auto">
 																	<Button
 																		variant="outline"
-																		size="xs"
+																		size="sm"
 																		icon={
 																			ChevronUp
 																		}
@@ -694,11 +711,9 @@ export function ManageSchedulesDrawer({
 																	</Button>
 																	<Button
 																		variant="primary"
-																		size="xs"
+																		size="sm"
 																		icon={
-																			!isSavingThisJob
-																				? CheckCircle2
-																				: undefined
+																			CheckCircle2
 																		}
 																		onClick={() =>
 																			handleSaveJob(
@@ -711,7 +726,7 @@ export function ManageSchedulesDrawer({
 																		disabled={
 																			isSavingThisJob
 																		}
-																		className="min-w-28"
+																		className="min-w-36"
 																	>
 																		<span>
 																			{isSavingThisJob

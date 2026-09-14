@@ -48,6 +48,13 @@ export const LinksSkeleton = () => {
 
 			{/* Table Placeholder */}
 			<div className="skeleton-table-container">
+				<div className="links-table-panel-header">
+					<div className="flex items-center gap-2">
+						<Skeleton className="h-5 w-32" />
+						<Skeleton className="h-5 w-8 rounded-full" />
+					</div>
+					<Skeleton className="h-8 w-full sm:w-64 rounded-lg" />
+				</div>
 				<Skeleton className="links-skeleton-table-header" />
 				<div>
 					{[1, 2, 3, 4, 5].map((i) => (

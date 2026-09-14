@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router";
 
 import { DEFAULT_PAGE_SIZE_OPTIONS, normalizePageSize } from "@/components";
@@ -88,9 +88,52 @@ export function useLinksFilter() {
 	const [customClickRange, setCustomClickRange] =
 		useState<LinksCustomDateRange>(() => getDefaultCustomClickRange());
 
-	const [searchParams] = useSearchParams();
+	const [searchParams, setSearchParams] = useSearchParams();
 	const statsShortId = searchParams.get("stats");
-	const searchQuery = searchParams.get("search")?.trim() || "";
+	const urlSearchParam = searchParams.get("search") || "";
+	const [searchQuery, setSearchQueryState] = useState(urlSearchParam);
+	const [debouncedSearch, setDebouncedSearch] = useState(urlSearchParam);
+
+	// Synchronize when URL search param changes externally during render
+	const [prevUrlSearch, setPrevUrlSearch] = useState(urlSearchParam);
+	if (prevUrlSearch !== urlSearchParam) {
+		setPrevUrlSearch(urlSearchParam);
+		setSearchQueryState(urlSearchParam);
+		setDebouncedSearch(urlSearchParam);
+	}
+
+	// Debounce syncing to URL search params to avoid excessive requests / history spam while typing
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			const trimmed = searchQuery.trim();
+			setDebouncedSearch(trimmed);
+			const currentParam = searchParams.get("search") || "";
+			if (trimmed !== currentParam) {
+				const updatedParams = new URLSearchParams(searchParams);
+				if (trimmed) {
+					updatedParams.set("search", trimmed);
+				} else {
+					updatedParams.delete("search");
+				}
+				setSearchParams(updatedParams, { replace: true });
+			}
+		}, 300);
+
+		return () => clearTimeout(timer);
+	}, [searchQuery, searchParams, setSearchParams]);
+
+	const setSearchQuery = (newQuery: string) => {
+		setSearchQueryState(newQuery);
+		if (!newQuery.trim()) {
+			setDebouncedSearch("");
+			const currentParam = searchParams.get("search") || "";
+			if (currentParam) {
+				const updatedParams = new URLSearchParams(searchParams);
+				updatedParams.delete("search");
+				setSearchParams(updatedParams, { replace: true });
+			}
+		}
+	};
 
 	const setSortBy = (newSortBy: LinksSortBy) => {
 		setSortByState(newSortBy);
@@ -114,7 +157,7 @@ export function useLinksFilter() {
 	};
 
 	// Reset to page 1 during render when query, pagination, status, or date filters change
-	const filterKey = `${statusFilter}:${searchQuery}:${limit}:${sortBy}:${sortOrder}:${clickRange}:${customClickRange.from}:${customClickRange.to}`;
+	const filterKey = `${statusFilter}:${debouncedSearch}:${limit}:${sortBy}:${sortOrder}:${clickRange}:${customClickRange.from}:${customClickRange.to}`;
 	const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
 	if (prevFilterKey !== filterKey) {
 		setPrevFilterKey(filterKey);
@@ -128,7 +171,7 @@ export function useLinksFilter() {
 			sortBy,
 			sortOrder,
 			status: statusFilter,
-			search: searchQuery,
+			search: debouncedSearch,
 		};
 
 		if ("custom" === clickRange) {
@@ -154,7 +197,7 @@ export function useLinksFilter() {
 		customClickRange.from,
 		customClickRange.to,
 		limit,
-		searchQuery,
+		debouncedSearch,
 		sortBy,
 		sortOrder,
 		statusFilter,
@@ -177,6 +220,7 @@ export function useLinksFilter() {
 		customClickRange,
 		setCustomClickRange,
 		searchQuery,
+		setSearchQuery,
 		statsShortId,
 		urlsQueryArgs,
 	};

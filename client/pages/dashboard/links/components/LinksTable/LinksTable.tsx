@@ -1,6 +1,7 @@
 import type { ChangeEvent } from "react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
+import { Search, X } from "lucide-react";
 
 import { ConfirmDialog, useNotification } from "@/components";
 import { useClearUrlsMutation } from "@/state/slices/api";
@@ -8,7 +9,7 @@ import { __ } from "@/i18n";
 import { useAdminAccess } from "@/hooks";
 import { copyToClipboard } from "@/shared/browser";
 import { getErrorMessage } from "@/shared/errors";
-import { formatNumber } from "@/shared/formatting";
+import { formatCount, formatNumber } from "@/shared/formatting";
 import { getShortUrl } from "@/shared/links";
 
 import StatsDrawer from "../StatsDrawer";
@@ -24,6 +25,9 @@ import type { LinksTableProps } from "./types";
 
 const LinksTable = ({
 	links,
+	totalCount,
+	searchQuery = "",
+	onSearchChange,
 	statsShortId,
 	statsLink,
 	sortBy,
@@ -167,60 +171,109 @@ const LinksTable = ({
 		}
 	};
 
-	if (!links || links.length === 0) {
-		return <EmptyState />;
-	}
+	const hasLinks = Boolean(links && links.length > 0);
+	const isSearchActive = Boolean(searchQuery?.trim());
+	const displayCount = totalCount ?? (links ? links.length : 0);
 
 	return (
 		<div className="links-table">
-			<div className="links-table-scroll">
-				<table className="links-table-element">
-					<thead className="links-table-head">
-						<TableHeaderRow
-							selectedCount={selectedIds.length}
-							onSelectAll={handleSelectAll}
-							onBulkDelete={handleBulkDelete}
-							onDeleteAll={
-								isTrashTab
-									? undefined
-									: () => setDeleteAllModalOpen(true)
-							}
-							onBulkRestore={handleBulkRestoreAction}
-							onEmptyTrash={
-								isTrashTab && onEmptyTrash
-									? () => setEmptyTrashModalOpen(true)
-									: undefined
-							}
-							isTrashTab={isTrashTab}
-							trashedCount={trashedCount}
-							sortBy={sortBy}
-							isAdmin={isAdmin}
-						/>
-					</thead>
-					<tbody className="links-table-body">
-						{links.map((link: LinkRecord) => (
-							<LinkRow
-								key={link.id}
-								link={link}
-								selected={selectedIds.includes(link.id)}
-								onSelectRow={handleSelectRow}
-								onCopy={handleCopy}
-								copiedId={copiedId}
-								onOpenStats={handleOpenStats}
-								onEdit={handleEdit}
-								onDelete={handleDelete}
-								onRestore={onRestore}
-								onQRCode={handleQRCode}
-								formatNumber={formatNumber}
+			<div className="links-table-panel-header">
+				<div className="flex items-center gap-2">
+					<h2 className="links-table-panel-title">
+						{isTrashTab
+							? __("Trashed Links")
+							: __("Shortened Links")}
+					</h2>
+					<span className="links-table-panel-badge">
+						{formatCount(displayCount)}
+					</span>
+				</div>
+
+				{onSearchChange && (
+					<div className="w-full sm:w-64">
+						<div className="relative">
+							<Search
+								size={14}
+								className="pointer-events-none absolute inset-s-3 top-1/2 -translate-y-1/2 text-text-muted"
+							/>
+							<input
+								type="text"
+								value={searchQuery}
+								onChange={(e) => onSearchChange(e.target.value)}
+								placeholder={__("Search links...")}
+								className="w-full rounded-lg border border-stroke bg-surface ps-9 pe-8 py-1.5 text-xs text-heading placeholder:text-text-muted/60 transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+							/>
+							{searchQuery ? (
+								<button
+									type="button"
+									onClick={() => onSearchChange("")}
+									className="absolute inset-e-2.5 top-1/2 -translate-y-1/2 text-text-muted transition-colors hover:text-heading"
+									aria-label={__("Clear search")}
+								>
+									<X size={13} />
+								</button>
+							) : null}
+						</div>
+					</div>
+				)}
+			</div>
+
+			{!hasLinks ? (
+				<EmptyState
+					isSearchActive={isSearchActive}
+					searchQuery={searchQuery}
+					isTrashTab={isTrashTab}
+				/>
+			) : (
+				<div className="links-table-scroll">
+					<table className="links-table-element">
+						<thead className="links-table-head">
+							<TableHeaderRow
+								selectedCount={selectedIds.length}
+								onSelectAll={handleSelectAll}
+								onBulkDelete={handleBulkDelete}
+								onDeleteAll={
+									isTrashTab
+										? undefined
+										: () => setDeleteAllModalOpen(true)
+								}
+								onBulkRestore={handleBulkRestoreAction}
+								onEmptyTrash={
+									isTrashTab && onEmptyTrash
+										? () => setEmptyTrashModalOpen(true)
+										: undefined
+								}
 								isTrashTab={isTrashTab}
+								trashedCount={trashedCount}
 								sortBy={sortBy}
 								isAdmin={isAdmin}
-								currentUserId={user?.id}
 							/>
-						))}
-					</tbody>
-				</table>
-			</div>
+						</thead>
+						<tbody className="links-table-body">
+							{links.map((link: LinkRecord) => (
+								<LinkRow
+									key={link.id}
+									link={link}
+									selected={selectedIds.includes(link.id)}
+									onSelectRow={handleSelectRow}
+									onCopy={handleCopy}
+									copiedId={copiedId}
+									onOpenStats={handleOpenStats}
+									onEdit={handleEdit}
+									onDelete={handleDelete}
+									onRestore={onRestore}
+									onQRCode={handleQRCode}
+									formatNumber={formatNumber}
+									isTrashTab={isTrashTab}
+									sortBy={sortBy}
+									isAdmin={isAdmin}
+									currentUserId={user?.id}
+								/>
+							))}
+						</tbody>
+					</table>
+				</div>
+			)}
 
 			<StatsDrawer
 				open={statsDrawerOpen}

@@ -119,6 +119,7 @@ function LinksPage() {
 		customClickRange,
 		setCustomClickRange,
 		searchQuery,
+		setSearchQuery,
 		statsShortId,
 		urlsQueryArgs,
 	} = useLinksFilter();
@@ -435,6 +436,9 @@ function LinksPage() {
 
 			<LinksTable
 				links={paginatedLinks}
+				totalCount={totalItems}
+				searchQuery={searchQuery}
+				onSearchChange={setSearchQuery}
 				statsShortId={statsShortId}
 				statsLink={statsLink}
 				sortBy={sortBy}

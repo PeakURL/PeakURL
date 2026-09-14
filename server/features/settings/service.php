@@ -467,6 +467,11 @@ class Service {
 			$site_name = 'PeakURL';
 		}
 
+		$stored_cron_retention  = $this->settings_api->get_option( Constants::SETTING_CRON_HISTORY_RETENTION_DAYS );
+		$cron_history_retention = ( null !== $stored_cron_retention && '' !== trim( (string) $stored_cron_retention ) && is_numeric( $stored_cron_retention ) && (int) $stored_cron_retention >= 0 )
+			? (int) $stored_cron_retention
+			: Constants::DEFAULT_CRON_HISTORY_RETENTION_DAYS;
+
 		return array(
 			'siteName'                 => $site_name,
 			'siteTagline'              => $site_tagline,
@@ -486,7 +491,7 @@ class Service {
 			'landingPageMode'          => $this->settings_api->get_option( 'landing_page_mode' ) ? $this->settings_api->get_option( 'landing_page_mode' ) : 'html',
 			'landingPageUrl'           => $this->settings_api->get_option( 'landing_page_url' ) ? $this->settings_api->get_option( 'landing_page_url' ) : '',
 			'trashRetentionDays'       => (int) ( $this->settings_api->get_option( 'trash_retention_days' ) ?? 30 ),
-			'cronHistoryRetentionDays' => (int) ( $this->settings_api->get_option( Constants::SETTING_CRON_HISTORY_RETENTION_DAYS ) ?? Constants::DEFAULT_CRON_HISTORY_RETENTION_DAYS ),
+			'cronHistoryRetentionDays' => $cron_history_retention,
 			'contentDirectory'         => $this->i18n_service->get_content_dir(),
 		);
 	}

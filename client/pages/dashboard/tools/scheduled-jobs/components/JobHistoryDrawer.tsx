@@ -47,6 +47,7 @@ export function JobHistoryDrawer({
 	job,
 	isOpen,
 	onClose,
+	onRefresh,
 	onRunJob,
 	isJobRunning = false,
 	canManage = false,
@@ -81,6 +82,7 @@ export function JobHistoryDrawer({
 				)
 			);
 			setIsClearConfirmOpen(false);
+			onRefresh?.();
 		} catch (err: unknown) {
 			notification.error(
 				extractErrorMessage(err) ||
@@ -275,7 +277,7 @@ export function JobHistoryDrawer({
 											/>
 											<p className="mt-2 text-xs font-medium text-heading">
 												{__(
-													"No recorded execution history"
+													"No execution history yet."
 												)}
 											</p>
 											<p className="mt-1 text-xs text-text-muted">
@@ -346,9 +348,9 @@ export function JobHistoryDrawer({
 																		)}
 																	</span>
 																</td>
-																<td>
+																<td className="scheduled-jobs-drawer-cell-started whitespace-nowrap">
 																	<div
-																		className="text-xs text-heading"
+																		className="text-xs text-heading whitespace-nowrap"
 																		title={
 																			started.full
 																		}
@@ -358,7 +360,7 @@ export function JobHistoryDrawer({
 																		}
 																	</div>
 																	{started.full ? (
-																		<div className="text-[10px] text-text-muted">
+																		<div className="text-[10px] text-text-muted whitespace-nowrap">
 																			{
 																				started.full
 																			}
@@ -429,22 +431,6 @@ export function JobHistoryDrawer({
 									>
 										{__("Close")}
 									</Button>
-									{canManage && runs.length > 0 ? (
-										<Button
-											variant="outline"
-											size="sm"
-											onClick={() =>
-												setIsClearConfirmOpen(true)
-											}
-											disabled={isClearingHistory}
-											title={__(
-												"Clear execution history for this job"
-											)}
-										>
-											<Trash2 size={12} />
-											<span>{__("Clear History")}</span>
-										</Button>
-									) : null}
 									{canManage && onRunJob ? (
 										<Button
 											variant="primary"
@@ -482,7 +468,7 @@ export function JobHistoryDrawer({
 					job.title
 				)}
 				description={__(
-					"Are you sure you want to clear execution history for this background job? Stored run records and output logs for this job will be permanently deleted."
+					"Are you sure you want to clear execution history for this background job? Finished run records and output logs for this job will be permanently deleted. Active and retrying runs will remain protected."
 				)}
 				confirmText={__("Clear History")}
 				cancelText={__("Cancel")}

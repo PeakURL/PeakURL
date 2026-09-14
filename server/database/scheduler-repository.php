@@ -376,7 +376,7 @@ class SchedulerRepository {
 		$this->db->update(
 			'cron_runs',
 			array(
-				'status'         => 'success',
+				'status'         => 'skipped',
 				'finished_at'    => $now_time,
 				'duration_ms'    => max( 0, $duration_ms ),
 				'output_summary' => $summary,
@@ -535,7 +535,7 @@ class SchedulerRepository {
 		}
 
 		$cutoff = gmdate( 'Y-m-d H:i:s', time() - ( $retention_days * 86400 ) );
-		$limit  = max( 1, (int) $batch_size );
+		$limit  = max( 1, min( 5000, (int) $batch_size ) );
 
 		$total_deleted  = 0;
 		$max_iterations = 10;

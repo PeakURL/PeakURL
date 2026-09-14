@@ -125,6 +125,7 @@ export function ScheduledJobsPage() {
 			);
 		} finally {
 			setRunningJobId(null);
+			void refetch();
 		}
 	};
 
@@ -237,6 +238,7 @@ export function ScheduledJobsPage() {
 									null !== runningJobId ||
 									isClearingHistory
 								}
+								className="text-rose-600 hover:text-rose-700 hover:bg-rose-50 border-rose-200 dark:border-rose-900/40 dark:hover:bg-rose-950/20"
 								title={__(
 									"Clear execution run history for all jobs"
 								)}
@@ -465,6 +467,7 @@ export function ScheduledJobsPage() {
 				job={activeHistoryJob}
 				isOpen={Boolean(selectedJobForHistory)}
 				onClose={() => setSelectedJobForHistory(null)}
+				onRefresh={() => void refetch()}
 				onRunJob={handleRunSingleJob}
 				isJobRunning={
 					null !== runningJobId &&
@@ -485,7 +488,7 @@ export function ScheduledJobsPage() {
 				onClose={() => setIsClearAllModalOpen(false)}
 				title={__("Clear All Execution History")}
 				description={__(
-					"Are you sure you want to clear execution history across all background jobs? Stored run records and output logs will be permanently deleted."
+					"Are you sure you want to clear execution history across all background jobs? Finished run records and output logs will be permanently deleted. Active and retrying runs will remain protected."
 				)}
 				confirmText={__("Clear All History")}
 				cancelText={__("Cancel")}

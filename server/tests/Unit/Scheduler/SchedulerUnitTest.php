@@ -10,12 +10,15 @@ declare(strict_types=1);
 namespace PeakURL\Tests\Unit\Scheduler;
 
 use PHPUnit\Framework\TestCase;
+use PeakURL\Core\Scheduler\Scheduler;
 use PeakURL\Core\Scheduler\RetryPolicy;
 use PeakURL\Core\Scheduler\JobRegistry;
 use PeakURL\Core\Scheduler\JobDefinition;
 use PeakURL\Core\Scheduler\JobHandlerInterface;
 use PeakURL\Core\Scheduler\ExecutionContext;
 use PeakURL\Core\Scheduler\ExecutionResult;
+use PeakURL\Database\SchedulerRepository;
+use PeakURL\Api\SettingsApi;
 use PeakURL\Features\Links\Jobs\LinkHealthCheckJob;
 
 class SchedulerUnitTest extends TestCase {
@@ -178,5 +181,122 @@ class SchedulerUnitTest extends TestCase {
 		$this->assertFalse( LinkHealthCheckJob::is_public_ip( '::1' ) );
 		$this->assertFalse( LinkHealthCheckJob::is_public_ip( 'fe80::1' ) );
 		$this->assertFalse( LinkHealthCheckJob::is_public_ip( 'invalid-ip' ) );
+	}
+
+	public function test_scheduler_retention_validation_and_forever(): void {
+		$registry   = new JobRegistry();
+		$repository = $this->createMock( SchedulerRepository::class );
+		$scheduler  = new Scheduler( $registry, $repository );
+
+		$this->expectException( \InvalidArgumentException::class );
+		$scheduler->set_retention_days( -5 );
+	}
+
+	public function test_scheduler_retention_forever_disables_pruning(): void {
+		$registry   = new JobRegistry();
+		$repository = $this->createMock( SchedulerRepository::class );
+		$repository->expects( $this->never() )->method( 'prune_history' );
+
+		$scheduler = new Scheduler( $registry, $repository, null, null, 0 );
+		$this->assertSame( 0, $scheduler->get_retention_days() );
+		$this->assertSame( 0, $scheduler->prune_history() );
+		$this->assertSame( 0, $scheduler->prune_history( 0 ) );
+	}
+
+	public function test_scheduler_retention_fallback_on_invalid_stored_value(): void {
+		$registry     = new JobRegistry();
+		$repository   = $this->createMock( SchedulerRepository::class );
+		$settings_api = $this->createMock( SettingsApi::class );
+
+		// Test missing setting (null) -> 30
+		$settings_api->method( 'get_option' )->willReturn( null );
+		$scheduler = new Scheduler( $registry, $repository, null, $settings_api );
+		$this->assertSame( 30, $scheduler->get_retention_days() );
+
+		// Test empty string -> 30
+		$settings_api2 = $this->createMock( SettingsApi::class );
+		$settings_api2->method( 'get_option' )->willReturn( '' );
+		$scheduler2 = new Scheduler( $registry, $repository, null, $settings_api2 );
+		$this->assertSame( 30, $scheduler2->get_retention_days() );
+
+		// Test invalid string -> 30
+		$settings_api3 = $this->createMock( SettingsApi::class );
+		$settings_api3->method( 'get_option' )->willReturn( 'invalid_data' );
+		$scheduler3 = new Scheduler( $registry, $repository, null, $settings_api3 );
+		$this->assertSame( 30, $scheduler3->get_retention_days() );
+
+		// Test negative string -> 30
+		$settings_api4 = $this->createMock( SettingsApi::class );
+		$settings_api4->method( 'get_option' )->willReturn( '-10' );
+		$scheduler4 = new Scheduler( $registry, $repository, null, $settings_api4 );
+		$this->assertSame( 30, $scheduler4->get_retention_days() );
+
+		// Test valid stored '0' (Forever) -> 0
+		$settings_api5 = $this->createMock( SettingsApi::class );
+		$settings_api5->method( 'get_option' )->willReturn( '0' );
+		$scheduler5 = new Scheduler( $registry, $repository, null, $settings_api5 );
+		$this->assertSame( 0, $scheduler5->get_retention_days() );
+
+		// Test valid stored '14' -> 14
+		$settings_api6 = $this->createMock( SettingsApi::class );
+		$settings_api6->method( 'get_option' )->willReturn( '14' );
+		$scheduler6 = new Scheduler( $registry, $repository, null, $settings_api6 );
+		$this->assertSame( 14, $scheduler6->get_retention_days() );
+	}
+
+	public function test_scheduler_run_due_jobs_isolates_pruning_failure(): void {
+		$registry = new JobRegistry();
+		$handler  = $this->createMock( JobHandlerInterface::class );
+		$handler->method( 'execute' )->willReturn( ExecutionResult::success( 'Processed 5 items' ) );
+
+		$job = new JobDefinition( 'test_job_1', 'Test Job 1', 300, $handler );
+		$registry->register( $job );
+
+		$repository = $this->createMock( SchedulerRepository::class );
+		$repository->method( 'get_due_jobs' )->willReturn(
+			array(
+				array(
+					'id'          => 'test_job_1',
+					'status'      => 'idle',
+					'is_enabled'  => 1,
+					'next_run_at' => '2026-09-14 10:00:00',
+					'attempts'    => 0,
+				),
+			)
+		);
+		$repository->method( 'claim_job' )->willReturn( true );
+		$repository->method( 'record_run_start' )->willReturn( 'run_abc123' );
+		$repository->method( 'record_success' );
+
+		// Pruning throws an exception (e.g. database table lock or temporary glitch)
+		$repository->method( 'prune_history' )->willThrowException(
+			new \RuntimeException( 'History table locked during maintenance' )
+		);
+
+		$logged_messages = array();
+		$logger          = function ( string $msg ) use ( &$logged_messages ): void {
+			$logged_messages[] = $msg;
+		};
+
+		$scheduler = new Scheduler( $registry, $repository, $logger, null, 30 );
+		$outcomes  = $scheduler->run_due_jobs();
+
+		// Due job executed successfully and its outcome is preserved
+		$this->assertArrayHasKey( 'test_job_1', $outcomes );
+		$this->assertSame( 'success', $outcomes['test_job_1']['status'] );
+		$this->assertSame( 'Processed 5 items', $outcomes['test_job_1']['summary'] );
+		$this->assertNull( $outcomes['test_job_1']['error'] );
+
+		// Pruning failure was logged and did not break job outcomes
+		$this->assertTrue(
+			array_reduce(
+				$logged_messages,
+				function ( bool $carry, string $msg ): bool {
+					return $carry || false !== strpos( $msg, 'Execution history pruning failed' );
+				},
+				false
+			),
+			'Expected pruning failure to be logged'
+		);
 	}
 }

@@ -200,14 +200,14 @@ function GeneralTab({
 	];
 	const cronHistoryRetentionOptions = useMemo<SelectOption<string>[]>(() => {
 		const baseOptions: SelectOption<string>[] = [
-			{ value: "7", label: __("7 days") },
-			{ value: "14", label: __("14 days") },
-			{ value: "30", label: __("30 days (Default)") },
-			{ value: "60", label: __("60 days") },
-			{ value: "90", label: __("90 days") },
-			{ value: "180", label: __("180 days") },
-			{ value: "365", label: __("365 days (1 year)") },
-			{ value: "0", label: __("Never (Keep indefinitely)") },
+			{ value: "7", label: __("7 Days") },
+			{ value: "14", label: __("14 Days") },
+			{ value: "30", label: __("30 Days (Default)") },
+			{ value: "60", label: __("60 Days") },
+			{ value: "90", label: __("90 Days") },
+			{ value: "180", label: __("180 Days") },
+			{ value: "365", label: __("1 Year") },
+			{ value: "0", label: __("Keep Indefinitely") },
 		];
 		const currentStr = String(cronHistoryRetentionDays);
 		if (!baseOptions.some((opt) => opt.value === currentStr)) {
@@ -217,7 +217,7 @@ function GeneralTab({
 					value: currentStr,
 					label: sprintf(
 						/* translators: %s is number of days */
-						__("%s days"),
+						__("%s Days"),
 						currentStr
 					),
 				},
@@ -560,6 +560,11 @@ function GeneralTab({
 								}
 								ariaLabel={__("Cron history retention period")}
 							/>
+							<p className="settings-general-help-text mt-1.5 text-xs text-text-muted">
+								{__(
+									"Automatically purge finished background job runs older than this period."
+								)}
+							</p>
 						</div>
 					</div>
 				</section>

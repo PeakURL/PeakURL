@@ -21,6 +21,7 @@ use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Auth\Roles;
 use PeakURL\Http\Request;
+use PeakURL\Core\Errors\ApiException;
 use ReflectionClass;
 
 class SystemCronEndpointsTest extends TestCase {
@@ -254,5 +255,122 @@ class SystemCronEndpointsTest extends TestCase {
 		$this->assertSame( 200, $response['status'] );
 		$this->assertTrue( $response['body']['data']['success'] );
 		$this->assertSame( 5, $response['body']['data']['deleted_count'] );
+	}
+
+	public function test_system_service_clear_cron_history_with_job_key(): void {
+		$ref            = new ReflectionClass( SystemService::class );
+		$system_service = $ref->newInstanceWithoutConstructor();
+
+		$auth_service = $this->createMock( AuthService::class );
+		$auth_service->method( 'get_current_user' )
+			->willReturn(
+				array(
+					'id'   => '1',
+					'role' => 'admin',
+				)
+			);
+
+		$authorization = $this->createMock( Authorization::class );
+
+		$scheduler = $this->createMock( Scheduler::class );
+		$scheduler->expects( $this->once() )
+			->method( 'clear_history' )
+			->with( 'job_via_key' )
+			->willReturn( 7 );
+
+		$prop_auth = $ref->getProperty( 'auth_service' );
+		$prop_auth->setValue( $system_service, $auth_service );
+
+		$prop_authorization = $ref->getProperty( 'authorization' );
+		$prop_authorization->setValue( $system_service, $authorization );
+
+		$prop_scheduler = $ref->getProperty( 'scheduler' );
+		$prop_scheduler->setValue( $system_service, $scheduler );
+
+		$request = new Request(
+			'POST',
+			'/api/v1/system/cron/history/clear',
+			array(),
+			array( 'job_key' => 'job_via_key' )
+		);
+
+		$result = $system_service->clear_cron_history( $request );
+
+		$this->assertTrue( $result['success'] );
+		$this->assertSame( 7, $result['deleted_count'] );
+		$this->assertSame( 'job_via_key', $result['job_id'] );
+		$this->assertSame( 'job_via_key', $result['job_key'] );
+	}
+
+	public function test_system_service_clear_cron_history_unauthorized_rejection(): void {
+		$ref            = new ReflectionClass( SystemService::class );
+		$system_service = $ref->newInstanceWithoutConstructor();
+
+		$auth_service = $this->createMock( AuthService::class );
+		$auth_service->method( 'get_current_user' )
+			->willReturn(
+				array(
+					'id'   => '2',
+					'role' => 'editor',
+				)
+			);
+
+		$authorization = $this->createMock( Authorization::class );
+		$authorization->method( 'validate_capability' )
+			->willThrowException( new ApiException( 'Admin access is required.', 403 ) );
+
+		$prop_auth = $ref->getProperty( 'auth_service' );
+		$prop_auth->setValue( $system_service, $auth_service );
+
+		$prop_authorization = $ref->getProperty( 'authorization' );
+		$prop_authorization->setValue( $system_service, $authorization );
+
+		$request = new Request(
+			'POST',
+			'/api/v1/system/cron/history/clear',
+			array(),
+			array()
+		);
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 403 );
+		$system_service->clear_cron_history( $request );
+	}
+
+	public function test_system_service_update_cron_settings_rejects_negative_and_invalid(): void {
+		$ref            = new ReflectionClass( SystemService::class );
+		$system_service = $ref->newInstanceWithoutConstructor();
+
+		$auth_service = $this->createMock( AuthService::class );
+		$auth_service->method( 'get_current_user' )
+			->willReturn(
+				array(
+					'id'   => '1',
+					'role' => 'admin',
+				)
+			);
+
+		$authorization = $this->createMock( Authorization::class );
+		$scheduler     = $this->createMock( Scheduler::class );
+
+		$prop_auth = $ref->getProperty( 'auth_service' );
+		$prop_auth->setValue( $system_service, $auth_service );
+
+		$prop_authorization = $ref->getProperty( 'authorization' );
+		$prop_authorization->setValue( $system_service, $authorization );
+
+		$prop_scheduler = $ref->getProperty( 'scheduler' );
+		$prop_scheduler->setValue( $system_service, $scheduler );
+
+		$request = new Request(
+			'POST',
+			'/api/v1/system/cron/settings',
+			array(),
+			array( 'retention_days' => -1 )
+		);
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 422 );
+		$system_service->update_cron_settings( $request );
 	}
 }

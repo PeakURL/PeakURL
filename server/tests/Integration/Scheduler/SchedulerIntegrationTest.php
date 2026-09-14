@@ -280,7 +280,7 @@ class SchedulerIntegrationTest extends TestCase {
 		$run = $stmt->fetch();
 
 		$this->assertNotEmpty( $run );
-		$this->assertSame( 'success', $run['status'] );
+		$this->assertSame( 'skipped', $run['status'] );
 		$this->assertSame( 'Skipped: Skipped reason test', $run['output_summary'] );
 	}
 
@@ -375,5 +375,93 @@ class SchedulerIntegrationTest extends TestCase {
 		// Job A's active run should STILL exist
 		$stmt = $this->pdo->query( "SELECT id FROM {$prefix}cron_runs WHERE id = '{$this->test_prefix}a_active'" );
 		$this->assertNotEmpty( $stmt->fetchAll( PDO::FETCH_COLUMN ) );
+	}
+
+	public function test_prune_history_cutoff_boundary_and_retrying_and_skipped_protection(): void {
+		$prefix  = $this->connection->get_table_prefix();
+		$job_id  = $this->test_prefix . 'boundary_test';
+		$handler = $this->createMock( JobHandlerInterface::class );
+		$this->registry->register( new JobDefinition( $job_id, 'Boundary Test Job', 3600, $handler ) );
+		$this->repository->sync_registered_jobs( $this->registry->all() );
+
+		// Cutoff for 30 days is time() - (30 * 86400).
+		// 1. Older than cutoff: 31 days ago (success, failed, skipped) -> pruned
+		$older_time = gmdate( 'Y-m-d H:i:s', time() - ( 31 * 86400 ) );
+		$this->pdo->exec(
+			"INSERT INTO {$prefix}cron_runs (id, job_id, status, attempt, started_at, finished_at, created_at) VALUES
+			('{$this->test_prefix}run_old_skipped', '{$job_id}', 'skipped', 1, '{$older_time}', '{$older_time}', '{$older_time}'),
+			('{$this->test_prefix}run_old_retrying', '{$job_id}', 'retrying', 1, '{$older_time}', NULL, '{$older_time}')"
+		);
+
+		// 2. Newer than cutoff: 29 days ago -> preserved
+		$newer_time = gmdate( 'Y-m-d H:i:s', time() - ( 29 * 86400 ) );
+		$this->pdo->exec(
+			"INSERT INTO {$prefix}cron_runs (id, job_id, status, attempt, started_at, finished_at, created_at) VALUES
+			('{$this->test_prefix}run_new_succ', '{$job_id}', 'success', 1, '{$newer_time}', '{$newer_time}', '{$newer_time}')"
+		);
+
+		$pruned = $this->repository->prune_history( 30 );
+		$this->assertGreaterThanOrEqual( 1, $pruned );
+
+		// Verify that old skipped was pruned
+		$stmt = $this->pdo->query( "SELECT id FROM {$prefix}cron_runs WHERE id = '{$this->test_prefix}run_old_skipped'" );
+		$this->assertEmpty( $stmt->fetchAll( PDO::FETCH_COLUMN ) );
+
+		// Verify that old retrying was preserved
+		$stmt = $this->pdo->query( "SELECT id FROM {$prefix}cron_runs WHERE id = '{$this->test_prefix}run_old_retrying'" );
+		$this->assertNotEmpty( $stmt->fetchAll( PDO::FETCH_COLUMN ) );
+
+		// Verify that new success was preserved
+		$stmt = $this->pdo->query( "SELECT id FROM {$prefix}cron_runs WHERE id = '{$this->test_prefix}run_new_succ'" );
+		$this->assertNotEmpty( $stmt->fetchAll( PDO::FETCH_COLUMN ) );
+	}
+
+	public function test_prune_history_multi_batch_draining(): void {
+		$prefix  = $this->connection->get_table_prefix();
+		$job_id  = $this->test_prefix . 'batch_test';
+		$handler = $this->createMock( JobHandlerInterface::class );
+		$this->registry->register( new JobDefinition( $job_id, 'Batch Test Job', 3600, $handler ) );
+		$this->repository->sync_registered_jobs( $this->registry->all() );
+
+		$old_time = gmdate( 'Y-m-d H:i:s', time() - ( 35 * 86400 ) );
+		for ( $i = 1; $i <= 15; $i++ ) {
+			$this->pdo->exec(
+				"INSERT INTO {$prefix}cron_runs (id, job_id, status, attempt, started_at, finished_at, created_at)
+				VALUES ('{$this->test_prefix}batch_run_{$i}', '{$job_id}', 'success', 1, '{$old_time}', '{$old_time}', '{$old_time}')"
+			);
+		}
+
+		// Prune in batches of 5
+		$pruned = $this->repository->prune_history( 30, 5 );
+		$this->assertGreaterThanOrEqual( 15, $pruned );
+
+		$stmt = $this->pdo->query( "SELECT COUNT(*) FROM {$prefix}cron_runs WHERE job_id = '{$job_id}'" );
+		$this->assertSame( 0, (int) $stmt->fetchColumn() );
+	}
+
+	public function test_clear_history_protects_retrying_runs(): void {
+		$prefix  = $this->connection->get_table_prefix();
+		$job_id  = $this->test_prefix . 'clear_retry_test';
+		$handler = $this->createMock( JobHandlerInterface::class );
+		$this->registry->register( new JobDefinition( $job_id, 'Clear Retry Job', 3600, $handler ) );
+		$this->repository->sync_registered_jobs( $this->registry->all() );
+		$now = gmdate( 'Y-m-d H:i:s' );
+
+		$this->pdo->exec(
+			"INSERT INTO {$prefix}cron_runs (id, job_id, status, attempt, started_at, finished_at, created_at) VALUES
+			('{$this->test_prefix}retrying_run', '{$job_id}', 'retrying', 2, '{$now}', NULL, '{$now}'),
+			('{$this->test_prefix}failed_run', '{$job_id}', 'failed', 3, '{$now}', '{$now}', '{$now}')"
+		);
+
+		$deleted = $this->repository->clear_history( $job_id );
+		$this->assertSame( 1, $deleted );
+
+		// Retrying run must still exist
+		$stmt = $this->pdo->query( "SELECT id FROM {$prefix}cron_runs WHERE id = '{$this->test_prefix}retrying_run'" );
+		$this->assertNotEmpty( $stmt->fetchAll( PDO::FETCH_COLUMN ) );
+
+		// Failed run must be gone
+		$stmt = $this->pdo->query( "SELECT id FROM {$prefix}cron_runs WHERE id = '{$this->test_prefix}failed_run'" );
+		$this->assertEmpty( $stmt->fetchAll( PDO::FETCH_COLUMN ) );
 	}
 }

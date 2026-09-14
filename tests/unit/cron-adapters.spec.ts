@@ -469,6 +469,42 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 			expect(fallbackUndefined.jobId).toBeNull();
 			expect(fallbackUndefined.success).toBe(false);
 		});
+
+		test("mapApiClearCronHistory correctly resolves job_key fallback", () => {
+			const resultWithKey: ApiClearCronHistoryResponse = {
+				deleted_count: 12,
+				job_key: "peakurl_link_health_check",
+				success: true,
+			};
+			const domain = mapApiClearCronHistory(resultWithKey);
+			expect(domain.deletedCount).toBe(12);
+			expect(domain.jobId).toBe("peakurl_link_health_check");
+			expect(domain.success).toBe(true);
+		});
+
+		test("verifies supported retention values and Forever (0)", () => {
+			const supportedDays = [7, 14, 30, 60, 90, 180, 365, 0];
+			supportedDays.forEach((days) => {
+				expect(days).toBeGreaterThanOrEqual(0);
+			});
+			// 0 corresponds to Forever (Keep Indefinitely)
+			const isForever = (days: number) => 0 === days;
+			expect(isForever(0)).toBe(true);
+			expect(isForever(30)).toBe(false);
+		});
+
+		test("maps job with empty execution history", () => {
+			const wireJob: ApiCronJob = {
+				id: "new_job",
+				title: "New Job",
+				interval_seconds: 3600,
+				status: "idle",
+				attempts: 0,
+				recent_runs: [],
+			};
+			const domain = mapApiCronJob(wireJob);
+			expect(domain.recentRuns).toEqual([]);
+		});
 	});
 
 	test.describe("Run Due Jobs Aggregate Outcome Presentation (aggregateRunDueJobsResult)", () => {

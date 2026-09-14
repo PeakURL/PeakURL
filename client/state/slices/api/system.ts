@@ -391,7 +391,7 @@ export const systemApi = baseApi.injectEndpoints({
 				return {
 					url: API_ROUTES.system.cronClearHistory,
 					method: "POST",
-					body: jobKey ? { job_key: jobKey } : {},
+					body: jobKey ? { job_id: jobKey, job_key: jobKey } : {},
 				};
 			},
 			transformResponse: (

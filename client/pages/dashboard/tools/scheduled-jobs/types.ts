@@ -15,6 +15,7 @@ export interface JobHistoryDrawerProps {
 	job: CronJob | null;
 	isOpen: boolean;
 	onClose: () => void;
+	onRefresh?: () => void;
 	onRunJob?: (job: CronJob) => void;
 	isJobRunning?: boolean;
 	canManage?: boolean;

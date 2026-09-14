@@ -159,6 +159,18 @@ class Validator {
 			(string) ( $payload['siteTimeFormat'] ?? $current_time_format ),
 		);
 
+		$cron_history_retention_days = null;
+		if ( array_key_exists( 'cronHistoryRetentionDays', $payload ) && null !== $payload['cronHistoryRetentionDays'] ) {
+			$raw_retention = $payload['cronHistoryRetentionDays'];
+			if ( ! is_numeric( $raw_retention ) || (int) $raw_retention < 0 || (float) (int) $raw_retention !== (float) $raw_retention ) {
+				throw new ApiException(
+					__( 'Cron history retention days must be a non-negative integer.', 'peakurl' ),
+					422
+				);
+			}
+			$cron_history_retention_days = (int) $raw_retention;
+		}
+
 		return array(
 			'siteLanguage'             => $site_language,
 			'siteTimezone'             => $site_timezone,
@@ -170,9 +182,7 @@ class Validator {
 			'trashRetentionDays'       => isset( $payload['trashRetentionDays'] )
 				? max( 0, (int) $payload['trashRetentionDays'] )
 				: null,
-			'cronHistoryRetentionDays' => isset( $payload['cronHistoryRetentionDays'] )
-				? max( 0, (int) $payload['cronHistoryRetentionDays'] )
-				: null,
+			'cronHistoryRetentionDays' => $cron_history_retention_days,
 		);
 	}
 }

@@ -683,14 +683,22 @@ class Service {
 		}
 
 		$payload = $request->json_data();
-		if ( ! is_array( $payload ) || ! isset( $payload['retention_days'] ) ) {
+		if ( ! is_array( $payload ) || ! array_key_exists( 'retention_days', $payload ) || null === $payload['retention_days'] ) {
 			throw new ApiException(
 				__( 'Missing required field: retention_days.', 'peakurl' ),
 				422
 			);
 		}
 
-		$retention_days = max( 0, (int) $payload['retention_days'] );
+		$raw_retention = $payload['retention_days'];
+		if ( ! is_numeric( $raw_retention ) || (int) $raw_retention < 0 || (float) (int) $raw_retention !== (float) $raw_retention ) {
+			throw new ApiException(
+				__( 'Retention days must be a non-negative integer.', 'peakurl' ),
+				422
+			);
+		}
+
+		$retention_days = (int) $raw_retention;
 		$this->scheduler->set_retention_days( $retention_days );
 
 		return array(
@@ -718,11 +726,15 @@ class Service {
 			);
 		}
 
-		$job_id = $request->get_query_param( 'job_id' );
+		$job_id = $request->get_query_param( 'job_id' ) ?? $request->get_query_param( 'job_key' );
 		if ( null === $job_id || '' === trim( (string) $job_id ) ) {
 			$payload = $request->json_data();
-			if ( is_array( $payload ) && isset( $payload['job_id'] ) ) {
-				$job_id = (string) $payload['job_id'];
+			if ( is_array( $payload ) ) {
+				if ( isset( $payload['job_id'] ) ) {
+					$job_id = (string) $payload['job_id'];
+				} elseif ( isset( $payload['job_key'] ) ) {
+					$job_id = (string) $payload['job_key'];
+				}
 			}
 		}
 
@@ -733,6 +745,7 @@ class Service {
 		return array(
 			'deleted_count' => $deleted_count,
 			'job_id'        => $clean_job_id,
+			'job_key'       => $clean_job_id,
 			'success'       => true,
 		);
 	}

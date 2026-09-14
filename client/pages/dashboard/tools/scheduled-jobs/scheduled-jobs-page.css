@@ -195,7 +195,7 @@
 	}
 
 	.scheduled-jobs-th-actions {
-		@apply w-[16%] min-w-39.5 text-start;
+		@apply w-[16%] min-w-44 text-start;
 	}
 
 	.scheduled-jobs-table-row {
@@ -239,7 +239,7 @@
 	}
 
 	.scheduled-jobs-cell-actions {
-		@apply whitespace-nowrap text-start min-w-39.5;
+		@apply whitespace-nowrap text-start min-w-44;
 	}
 
 	/* ─── Action Buttons ─── */
@@ -248,7 +248,7 @@
 	}
 
 	.scheduled-jobs-action-run {
-		@apply inline-flex items-center gap-1;
+		@apply inline-flex items-center justify-center gap-1 w-[5.5rem] min-w-[5.5rem];
 	}
 
 	/* ─── Empty State ─── */
@@ -437,7 +437,7 @@
 	}
 
 	.scheduled-jobs-drawer-th-started {
-		@apply w-[21%] min-w-40;
+		@apply w-[21%] min-w-48;
 	}
 
 	.scheduled-jobs-drawer-th-duration {

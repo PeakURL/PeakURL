@@ -194,26 +194,25 @@ export function JobsTable({
 								{/* Actions */}
 								<td className="scheduled-jobs-cell-actions">
 									<div className="flex items-center justify-start gap-2">
-										{!isJobRunning ? (
-											<button
-												type="button"
-												onClick={() =>
-													onViewHistory(job)
-												}
-												className="scheduled-jobs-action-history"
-												title={__(
-													"View Execution History"
-												)}
-											>
-												<History size={13} />
-												<span>{__("History")}</span>
-											</button>
-										) : null}
+										<button
+											type="button"
+											onClick={() => onViewHistory(job)}
+											className="scheduled-jobs-action-history"
+											title={__("View Execution History")}
+										>
+											<History size={13} />
+											<span>{__("History")}</span>
+										</button>
 
 										{canManage ? (
 											<Button
 												variant="secondary"
 												size="xs"
+												icon={
+													!isJobRunning
+														? Play
+														: undefined
+												}
 												onClick={(e) => {
 													e.currentTarget.blur();
 													onRunJob(job);
@@ -235,9 +234,6 @@ export function JobsTable({
 															)
 												}
 											>
-												{!isJobRunning ? (
-													<Play size={11} />
-												) : null}
 												<span>
 													{isJobRunning
 														? __("Running...")

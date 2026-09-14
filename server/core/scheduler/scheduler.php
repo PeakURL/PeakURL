@@ -98,8 +98,8 @@ class Scheduler {
 			$this->retention_days = max( 0, $retention_days );
 		} elseif ( null !== $this->settings_api ) {
 			$stored_retention = $this->settings_api->get_option( Constants::SETTING_CRON_HISTORY_RETENTION_DAYS );
-			if ( null !== $stored_retention && '' !== trim( $stored_retention ) && is_numeric( $stored_retention ) ) {
-				$this->retention_days = max( 0, (int) $stored_retention );
+			if ( null !== $stored_retention && '' !== trim( (string) $stored_retention ) && is_numeric( $stored_retention ) && (int) $stored_retention >= 0 ) {
+				$this->retention_days = (int) $stored_retention;
 			} else {
 				$this->retention_days = Constants::DEFAULT_CRON_HISTORY_RETENTION_DAYS;
 			}
@@ -155,7 +155,11 @@ class Scheduler {
 			);
 		}
 
-		$this->prune_history();
+		try {
+			$this->prune_history();
+		} catch ( \Throwable $exception ) {
+			$this->log( sprintf( 'Execution history pruning failed: %s', $exception->getMessage() ) );
+		}
 
 		return $outcomes;
 	}
@@ -449,9 +453,10 @@ class Scheduler {
 	public function get_retention_days(): int {
 		if ( null !== $this->settings_api ) {
 			$stored_retention = $this->settings_api->get_option( Constants::SETTING_CRON_HISTORY_RETENTION_DAYS );
-			if ( null !== $stored_retention && '' !== trim( $stored_retention ) && is_numeric( $stored_retention ) ) {
-				return max( 0, (int) $stored_retention );
+			if ( null !== $stored_retention && '' !== trim( (string) $stored_retention ) && is_numeric( $stored_retention ) && (int) $stored_retention >= 0 ) {
+				return (int) $stored_retention;
 			}
+			return Constants::DEFAULT_CRON_HISTORY_RETENTION_DAYS;
 		}
 
 		return $this->retention_days;
@@ -462,16 +467,20 @@ class Scheduler {
 	 *
 	 * @param int $retention_days Number of days (0 disables automatic pruning).
 	 * @return void
+	 * @throws \InvalidArgumentException When retention days is negative.
 	 * @since 1.7.0
 	 */
 	public function set_retention_days( int $retention_days ): void {
-		$days                 = max( 0, $retention_days );
-		$this->retention_days = $days;
+		if ( $retention_days < 0 ) {
+			throw new \InvalidArgumentException( 'Retention days must be a non-negative integer.' );
+		}
+
+		$this->retention_days = $retention_days;
 
 		if ( null !== $this->settings_api ) {
 			$this->settings_api->update_option(
 				Constants::SETTING_CRON_HISTORY_RETENTION_DAYS,
-				(string) $days,
+				(string) $retention_days,
 				false
 			);
 		}

@@ -1,4 +1,25 @@
-import { API_ROUTES } from "@/api";
+import {
+	API_ROUTES,
+	mapApiClearCronHistory,
+	mapApiCronJobScheduleResult,
+	mapApiCronStatus,
+	mapApiRunCronJobResult,
+	mapApiRunDueJobsResult,
+} from "@/api";
+import type {
+	ApiClearCronHistoryResponse,
+	ApiCronJobScheduleResponse,
+	ApiCronStatusResponse,
+	ApiRunCronJobResponse,
+	ApiRunDueJobsResponse,
+	ClearCronHistoryRequest,
+	ClearCronHistoryResponse,
+	CronJobScheduleResult,
+	CronStatusResponse,
+	RunCronJobResult,
+	RunDueJobsResult,
+	UpdateCronJobPayload,
+} from "@/api";
 
 import baseApi from "./base";
 import { createFormData } from "./formData";
@@ -33,6 +54,7 @@ const CACHE_CHANGE_TAGS = ["CacheStatus", "SystemStatus"] as const;
 const UPDATE_TAGS = ["Updates"] as const;
 const UPDATE_CHANGE_TAGS = ["Updates", "AdminNotices"] as const;
 const SYSTEM_STATUS_TAGS = ["SystemStatus"] as const;
+const CRON_TAGS = ["CronStatus", "CronHistory"] as const;
 const DATABASE_UPDATE_TAGS = [
 	"Updates",
 	"AdminNotices",
@@ -97,6 +119,7 @@ function createGeneralSettingsBody({
 			siteTimeFormat,
 			landingPageMode,
 			landingPageUrl,
+			trashRetentionDays,
 			faviconFile,
 			removeFavicon,
 			socialPreviewFile,
@@ -328,6 +351,104 @@ export const systemApi = baseApi.injectEndpoints({
 				}
 			},
 		}),
+		getCronStatus: build.query<CronStatusResponse, void>({
+			query: () => API_ROUTES.system.cron,
+			transformResponse: (
+				response: ApiDataResponse<ApiCronStatusResponse>
+			) => mapApiCronStatus(response?.data),
+			providesTags: CRON_TAGS,
+		}),
+		runDueJobs: build.mutation<RunDueJobsResult, void>({
+			query: () => ({
+				url: API_ROUTES.system.cronRunDue,
+				method: "POST",
+			}),
+			transformResponse: (
+				response: ApiDataResponse<ApiRunDueJobsResponse>
+			) => mapApiRunDueJobsResult(response?.data),
+			invalidatesTags: CRON_TAGS,
+		}),
+		runCronJob: build.mutation<RunCronJobResult, string>({
+			query: (id: string) => ({
+				url: API_ROUTES.system.cronRunJob(id),
+				method: "POST",
+			}),
+			transformResponse: (
+				response: ApiDataResponse<ApiRunCronJobResponse>
+			) => mapApiRunCronJobResult(response?.data),
+			invalidatesTags: CRON_TAGS,
+		}),
+		clearCronHistory: build.mutation<
+			ClearCronHistoryResponse,
+			ClearCronHistoryRequest | void
+		>({
+			query: (params) => {
+				const jobKey = params?.jobId ?? params?.jobKey;
+				return {
+					url: API_ROUTES.system.cronClearHistory,
+					method: "POST",
+					body: jobKey ? { job_id: jobKey, job_key: jobKey } : {},
+				};
+			},
+			transformResponse: (
+				response: ApiDataResponse<ApiClearCronHistoryResponse>
+			) => mapApiClearCronHistory(response?.data),
+			invalidatesTags: CRON_TAGS,
+		}),
+		updateCronJobSchedule: build.mutation<
+			CronJobScheduleResult,
+			UpdateCronJobPayload
+		>({
+			query: ({ id, intervalSeconds, preferredRunTime, isEnabled }) => ({
+				url: API_ROUTES.system.cronUpdateJob(id),
+				method: "PATCH",
+				body: {
+					...(intervalSeconds !== undefined
+						? { interval_seconds: intervalSeconds }
+						: {}),
+					...(preferredRunTime !== undefined
+						? { preferred_run_time: preferredRunTime }
+						: {}),
+					...(isEnabled !== undefined
+						? { is_enabled: isEnabled }
+						: {}),
+				},
+			}),
+			transformResponse: (
+				response: ApiDataResponse<ApiCronJobScheduleResponse>
+			) => mapApiCronJobScheduleResult(response?.data),
+			invalidatesTags: CRON_TAGS,
+		}),
+		resetCronJobSchedule: build.mutation<CronJobScheduleResult, string>({
+			query: (id: string) => ({
+				url: API_ROUTES.system.cronResetJob(id),
+				method: "POST",
+			}),
+			transformResponse: (
+				response: ApiDataResponse<ApiCronJobScheduleResponse>
+			) => mapApiCronJobScheduleResult(response?.data),
+			invalidatesTags: CRON_TAGS,
+		}),
+		updateCronSettings: build.mutation<
+			{ retentionDays: number; success: boolean },
+			{ retentionDays: number }
+		>({
+			query: ({ retentionDays }) => ({
+				url: API_ROUTES.system.cronSettings,
+				method: "POST",
+				body: { retention_days: retentionDays },
+			}),
+			transformResponse: (
+				response: ApiDataResponse<{
+					retention_days: number;
+					success: boolean;
+				}>
+			) => ({
+				retentionDays: Number(response?.data?.retention_days ?? 30),
+				success: Boolean(response?.data?.success),
+			}),
+			invalidatesTags: CRON_TAGS,
+		}),
 	}),
 });
 
@@ -353,4 +474,11 @@ export const {
 	useReinstallUpdateMutation,
 	useUpgradeDatabaseSchemaMutation,
 	useGetReleaseNotesQuery,
+	useGetCronStatusQuery,
+	useRunDueJobsMutation,
+	useRunCronJobMutation,
+	useClearCronHistoryMutation,
+	useUpdateCronJobScheduleMutation,
+	useResetCronJobScheduleMutation,
+	useUpdateCronSettingsMutation,
 } = systemApi;

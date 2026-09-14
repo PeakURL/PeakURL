@@ -21,6 +21,7 @@ use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Config\Environment;
 use PeakURL\Core\Errors\ApiException;
+use PeakURL\Core\Scheduler\SchedulerFactory;
 use PeakURL\Core\Security\Security;
 use PeakURL\Features\Analytics\Controller as AnalyticsController;
 use PeakURL\Features\Analytics\Repository as AnalyticsRepository;
@@ -216,6 +217,21 @@ class Application {
 			$config,
 			$links_api
 		);
+		$update_manager   = new \PeakURL\Services\Update\Manager( $config );
+		$scheduler        = SchedulerFactory::create(
+			$db,
+			$config,
+			$settings_api,
+			$cache_service,
+			$geoip_service,
+			$webhooks_service,
+			$update_manager,
+			null,
+			$links_api,
+			$auth_service,
+			$links_service,
+			$analytics_service
+		);
 		$system_service   = new SystemService(
 			$db,
 			$connection,
@@ -227,7 +243,8 @@ class Application {
 			$this->i18n_service,
 			$roles,
 			$authorization,
-			$config
+			$config,
+			$scheduler
 		);
 
 		$this->register_routes(
@@ -693,6 +710,16 @@ class Application {
 				array( 'post', '/system/update/apply', array( $system, 'update_apply' ) ),
 				array( 'post', '/system/update/reinstall', array( $system, 'update_reinstall' ) ),
 				array( 'post', '/system/update/database', array( $system, 'upgrade_database' ) ),
+				array( 'get', '/system/cron', array( $system, 'cron_status' ) ),
+				array( 'post', '/system/cron/run', array( $system, 'cron_run_now' ) ),
+				array( 'post', '/system/cron/run/{id}', array( $system, 'cron_run_now' ) ),
+				array( 'post', '/system/cron/settings', array( $system, 'cron_settings_update' ) ),
+				array( 'put', '/system/cron/settings', array( $system, 'cron_settings_update' ) ),
+				array( 'delete', '/system/cron/history', array( $system, 'cron_clear_history' ) ),
+				array( 'post', '/system/cron/history/clear', array( $system, 'cron_clear_history' ) ),
+				array( 'patch', '/system/cron/jobs/{id}', array( $system, 'cron_job_update' ) ),
+				array( 'post', '/system/cron/jobs/{id}', array( $system, 'cron_job_update' ) ),
+				array( 'post', '/system/cron/jobs/{id}/reset', array( $system, 'cron_job_reset' ) ),
 			)
 		);
 	}

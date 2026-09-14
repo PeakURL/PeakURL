@@ -130,6 +130,11 @@ function getDashboardBodyClassNames(pathname: string): string[] {
 		return classes;
 	}
 
+	if ("/dashboard/tools/scheduled-jobs" === pathname) {
+		classes.push("dashboard-tools-page", "dashboard-scheduled-jobs-page");
+		return classes;
+	}
+
 	if ("/dashboard/tools/system-status" === pathname) {
 		classes.push("dashboard-tools-page", "dashboard-system-status-page");
 		return classes;

@@ -20,6 +20,6 @@ export const useAdminAccess = () => {
 		canManageLocationData: Boolean(capabilities.manageLocationData),
 		canManagePerformance: Boolean(capabilities.managePerformance),
 		canManageUpdates: Boolean(capabilities.manageUpdates),
-		isLoading: isLoading || isFetching,
+		isLoading: (isLoading || isFetching) && !user,
 	};
 };

@@ -151,3 +151,64 @@ CREATE TABLE IF NOT EXISTS webhooks (
     KEY idx_webhooks_user_active (user_id, is_active),
     CONSTRAINT fk_webhooks_user_id FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS cron_jobs (
+    id VARCHAR(64) NOT NULL PRIMARY KEY,
+    title VARCHAR(191) NOT NULL,
+    schedule_interval INT UNSIGNED NOT NULL DEFAULT 0,
+    preferred_run_time VARCHAR(5) DEFAULT NULL,
+    status VARCHAR(32) NOT NULL DEFAULT 'idle',
+    next_run_at DATETIME NOT NULL,
+    last_run_at DATETIME DEFAULT NULL,
+    last_finished_at DATETIME DEFAULT NULL,
+    locked_at DATETIME DEFAULT NULL,
+    lock_token VARCHAR(64) DEFAULT NULL,
+    lock_expires_at DATETIME DEFAULT NULL,
+    attempts INT UNSIGNED NOT NULL DEFAULT 0,
+    max_attempts INT UNSIGNED NOT NULL DEFAULT 3,
+    retry_delay INT UNSIGNED NOT NULL DEFAULT 60,
+    last_error TEXT DEFAULT NULL,
+    is_enabled TINYINT(1) NOT NULL DEFAULT 1,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    KEY idx_cron_jobs_due (is_enabled, status, next_run_at),
+    KEY idx_cron_jobs_lock (status, lock_expires_at),
+    KEY idx_cron_jobs_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS cron_runs (
+    id VARCHAR(40) NOT NULL PRIMARY KEY,
+    job_id VARCHAR(64) NOT NULL,
+    status VARCHAR(32) NOT NULL,
+    attempt INT UNSIGNED NOT NULL DEFAULT 1,
+    started_at DATETIME NOT NULL,
+    finished_at DATETIME DEFAULT NULL,
+    duration_ms INT UNSIGNED DEFAULT NULL,
+    error_message TEXT DEFAULT NULL,
+    output_summary VARCHAR(255) DEFAULT NULL,
+    created_at DATETIME NOT NULL,
+    KEY idx_cron_runs_job_created (job_id, created_at),
+    KEY idx_cron_runs_status (status),
+    KEY idx_cron_runs_created_at (created_at),
+    CONSTRAINT fk_cron_runs_job_id FOREIGN KEY (job_id) REFERENCES cron_jobs (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS webhook_deliveries (
+    id VARCHAR(40) NOT NULL PRIMARY KEY,
+    webhook_id VARCHAR(40) NOT NULL,
+    event VARCHAR(64) NOT NULL,
+    payload LONGTEXT NOT NULL,
+    status VARCHAR(32) NOT NULL DEFAULT 'pending',
+    attempts INT UNSIGNED NOT NULL DEFAULT 0,
+    max_attempts INT UNSIGNED NOT NULL DEFAULT 3,
+    next_attempt_at DATETIME NOT NULL,
+    last_attempt_at DATETIME DEFAULT NULL,
+    last_error TEXT DEFAULT NULL,
+    response_code INT UNSIGNED DEFAULT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    KEY idx_webhook_deliveries_pending (status, next_attempt_at),
+    KEY idx_webhook_deliveries_webhook_id (webhook_id),
+    CONSTRAINT fk_webhook_deliveries_webhook_id FOREIGN KEY (webhook_id) REFERENCES webhooks (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+

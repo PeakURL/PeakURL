@@ -1,0 +1,518 @@
+@layer components {
+	/* ─── Page Container ─── */
+	.scheduled-jobs-page {
+		@apply space-y-4 pb-8 sm:space-y-5;
+	}
+
+	/* ─── Access Gate ─── */
+	.scheduled-jobs-page-gate {
+		@apply flex flex-col items-center justify-center rounded-2xl border border-stroke bg-surface py-16 px-6 text-center shadow-2xs;
+	}
+
+	.scheduled-jobs-page-gate-icon {
+		@apply flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 mb-4;
+	}
+
+	.scheduled-jobs-page-gate-title {
+		@apply text-lg font-semibold text-heading;
+	}
+
+	.scheduled-jobs-page-gate-summary {
+		@apply mt-1.5 max-w-md text-xs text-text-muted;
+	}
+
+	/* ─── Hero Header (Matching Activity Page) ─── */
+	.scheduled-jobs-page-hero {
+		@apply flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between px-1 pt-1;
+	}
+
+	.scheduled-jobs-page-hero-copy {
+		@apply min-w-0 flex flex-col text-start;
+	}
+
+	.scheduled-jobs-page-hero-badge {
+		@apply mb-2 w-max inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-accent;
+	}
+
+	.scheduled-jobs-page-title {
+		@apply text-2xl font-bold tracking-tight text-heading sm:text-3xl;
+	}
+
+	.scheduled-jobs-page-summary {
+		@apply mt-1 text-sm leading-relaxed text-text-muted text-start;
+	}
+
+	.scheduled-jobs-page-hero-actions {
+		@apply flex flex-wrap items-center gap-2 sm:gap-2.5 mt-1 shrink-0;
+	}
+
+	/* ─── Overview Metric Cards (Matching Activity Page 4-column Grid) ─── */
+	.scheduled-jobs-overview {
+		@apply w-full;
+	}
+
+	.scheduled-jobs-overview-grid {
+		@apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4;
+	}
+
+	.scheduled-jobs-overview-item {
+		@apply rounded-lg border border-stroke bg-surface p-4 transition-all duration-200 hover:border-stroke-strong hover:shadow-md text-start;
+	}
+
+	.scheduled-jobs-overview-header {
+		@apply mb-3 flex items-start justify-between;
+	}
+
+	.scheduled-jobs-overview-copy {
+		@apply flex-1 min-w-0;
+	}
+
+	.scheduled-jobs-overview-title {
+		@apply mb-2 text-xs font-medium uppercase tracking-wide text-text-muted;
+	}
+
+	.scheduled-jobs-overview-value {
+		@apply text-2xl font-bold text-heading;
+	}
+
+	.scheduled-jobs-overview-icon {
+		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-lg;
+	}
+
+	.scheduled-jobs-overview-icon-total {
+		@apply bg-accent/10 text-accent;
+	}
+
+	.scheduled-jobs-overview-icon-scheduled {
+		@apply bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400;
+	}
+
+	.scheduled-jobs-overview-icon-running {
+		@apply bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400;
+	}
+
+	.scheduled-jobs-overview-icon-failed {
+		@apply bg-rose-500/10 text-rose-600 dark:bg-rose-500/20 dark:text-rose-400;
+	}
+
+	.scheduled-jobs-overview-icon-neutral {
+		@apply bg-orange-500/10 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400;
+	}
+
+	.scheduled-jobs-overview-icon-glyph {
+		@apply h-4 w-4;
+	}
+
+	.scheduled-jobs-overview-note {
+		@apply text-xs text-text-muted truncate;
+	}
+
+	/* ─── Main Panel ─── */
+	.scheduled-jobs-panel {
+		@apply overflow-hidden rounded-xl border border-stroke bg-surface shadow-xs;
+	}
+
+	.scheduled-jobs-panel-header {
+		@apply flex flex-col gap-3 border-b border-stroke bg-surface px-4 py-3 sm:px-5 sm:py-3.5 sm:flex-row sm:items-center sm:justify-between;
+	}
+
+	.scheduled-jobs-panel-title {
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.scheduled-jobs-panel-badge {
+		@apply inline-flex items-center justify-center rounded-full bg-surface-alt px-2 py-0.5 text-xs font-semibold text-text-muted border border-stroke/60;
+	}
+
+	/* ─── Table Container ─── */
+	.scheduled-jobs-table-container {
+		@apply overflow-x-auto;
+		scrollbar-width: thin;
+		scrollbar-color: var(--color-stroke-strong) transparent;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.scheduled-jobs-table-container::-webkit-scrollbar {
+		height: 7px;
+	}
+
+	.scheduled-jobs-table-container::-webkit-scrollbar-track {
+		background: var(--color-surface-alt);
+		border-radius: 0 0 0.5rem 0.5rem;
+	}
+
+	.scheduled-jobs-table-container::-webkit-scrollbar-thumb {
+		background-color: var(--color-stroke-strong);
+		border-radius: 9999px;
+	}
+
+	.scheduled-jobs-table-container::-webkit-scrollbar-thumb:hover {
+		background-color: var(--color-text-muted);
+	}
+
+	.scheduled-jobs-table,
+	.jobs-table {
+		@apply min-w-full divide-y divide-stroke text-left text-xs border-collapse table-fixed;
+	}
+
+	[dir="rtl"] .scheduled-jobs-table,
+	[dir="rtl"] .jobs-table {
+		@apply text-right;
+	}
+
+	.scheduled-jobs-table th,
+	.jobs-table th {
+		@apply bg-surface-alt px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text-muted border-b border-stroke/70 text-start;
+	}
+
+	.scheduled-jobs-table td,
+	.jobs-table td {
+		@apply px-4 py-3.5 text-xs text-heading border-b border-stroke/40 align-middle text-start;
+	}
+
+	.scheduled-jobs-th-job {
+		@apply w-[24%] min-w-40;
+	}
+
+	.scheduled-jobs-th-status {
+		@apply w-[12%] min-w-26;
+	}
+
+	.scheduled-jobs-th-schedule {
+		@apply w-[11%] min-w-24;
+	}
+
+	.scheduled-jobs-th-last-run {
+		@apply w-[13%] min-w-28;
+	}
+
+	.scheduled-jobs-th-next-run {
+		@apply w-[11%] min-w-24;
+	}
+
+	.scheduled-jobs-th-result {
+		@apply w-[13%] min-w-28;
+	}
+
+	.scheduled-jobs-th-actions {
+		@apply w-[16%] min-w-44 text-start;
+	}
+
+	.scheduled-jobs-table-row {
+		@apply transition-colors hover:bg-surface-alt/30;
+	}
+
+	.scheduled-jobs-table-row:last-child td {
+		@apply border-b-0;
+	}
+
+	.scheduled-jobs-cell-job {
+		@apply max-w-xs;
+	}
+
+	.scheduled-jobs-job-title {
+		@apply text-xs font-semibold text-heading truncate;
+	}
+
+	.scheduled-jobs-cell-status {
+		@apply whitespace-nowrap;
+	}
+
+	.scheduled-jobs-cell-schedule {
+		@apply whitespace-nowrap;
+	}
+
+	.scheduled-jobs-cell-last-run {
+		@apply whitespace-nowrap;
+	}
+
+	.scheduled-jobs-cell-next-run {
+		@apply whitespace-nowrap;
+	}
+
+	.scheduled-jobs-cell-result {
+		@apply max-w-xs truncate;
+	}
+
+	.scheduled-jobs-cell-actions {
+		@apply whitespace-nowrap text-start min-w-44;
+	}
+
+	/* ─── Action Buttons ─── */
+	.scheduled-jobs-action-history {
+		@apply inline-flex items-center gap-1.5 rounded-lg border border-stroke bg-surface-alt px-2.5 py-1 text-xs font-medium text-heading transition-colors hover:border-accent/40 hover:text-accent focus:outline-none;
+	}
+
+	.scheduled-jobs-action-run {
+		@apply inline-flex items-center justify-center gap-1 w-22 min-w-22;
+	}
+
+	/* ─── Empty State ─── */
+	.scheduled-jobs-empty-state {
+		@apply flex flex-col items-center justify-center rounded-xl border border-dashed border-stroke bg-surface py-12 px-6 text-center;
+	}
+
+	/* ─── Status Badges ─── */
+	.scheduled-jobs-badge,
+	.job-status-badge {
+		@apply inline-flex items-center justify-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium min-w-22.5 text-center;
+	}
+
+	.scheduled-jobs-badge-dot {
+		@apply h-1.5 w-1.5 rounded-full;
+	}
+
+	.scheduled-jobs-badge-scheduled {
+		@apply bg-blue-500/10 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300;
+	}
+
+	.scheduled-jobs-badge-dot-scheduled {
+		@apply bg-blue-500;
+	}
+
+	.scheduled-jobs-badge-running {
+		@apply bg-amber-500/10 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300;
+	}
+
+	.scheduled-jobs-badge-dot-running {
+		@apply bg-amber-500;
+	}
+
+	.scheduled-jobs-badge-retrying {
+		@apply bg-purple-500/10 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300;
+	}
+
+	.scheduled-jobs-badge-dot-retrying {
+		@apply bg-purple-500;
+	}
+
+	.scheduled-jobs-badge-failed {
+		@apply bg-rose-500/10 text-rose-700 dark:bg-rose-500/20 dark:text-rose-300;
+	}
+
+	.scheduled-jobs-badge-dot-failed {
+		@apply bg-rose-500;
+	}
+
+	.scheduled-jobs-badge-success {
+		@apply bg-emerald-500/10 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300;
+	}
+
+	.scheduled-jobs-badge-dot-success {
+		@apply bg-emerald-500;
+	}
+
+	.scheduled-jobs-badge-skipped {
+		@apply bg-surface-alt text-text-muted border border-stroke/50;
+	}
+
+	.scheduled-jobs-badge-dot-skipped {
+		@apply bg-text-muted/60;
+	}
+
+	.scheduled-jobs-badge-disabled {
+		@apply bg-slate-500/10 text-slate-700 dark:bg-slate-500/20 dark:text-slate-300;
+	}
+
+	.scheduled-jobs-badge-dot-disabled {
+		@apply bg-slate-400 dark:bg-slate-500;
+	}
+
+	/* ─── Job History Slide-Over Drawer (Matching Links Drawer) ─── */
+	.scheduled-jobs-drawer-layout {
+		@apply pointer-events-none fixed inset-y-0 flex max-w-full;
+	}
+
+	.scheduled-jobs-drawer-layout-ltr {
+		@apply right-0 pl-0 sm:pl-16;
+	}
+
+	.scheduled-jobs-drawer-layout-rtl {
+		@apply left-0 pr-0 sm:pr-16;
+	}
+
+	.scheduled-jobs-drawer-panel {
+		@apply pointer-events-auto flex h-full w-screen max-w-3xl lg:max-w-4xl transform flex-col overflow-hidden bg-surface shadow-2xl transition-transform duration-500 ease-out;
+	}
+
+	.scheduled-jobs-drawer-panel[data-closed] {
+		@apply ease-in;
+	}
+
+	.scheduled-jobs-drawer-header {
+		@apply flex items-start justify-between gap-4 border-b border-stroke bg-surface-alt px-4 py-5 sm:px-6;
+	}
+
+	.scheduled-jobs-drawer-title-icon {
+		@apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent;
+	}
+
+	.scheduled-jobs-drawer-title {
+		@apply text-base font-semibold text-heading;
+	}
+
+	.scheduled-jobs-drawer-close {
+		@apply rounded-lg p-2 text-text-muted transition-colors hover:bg-surface hover:text-heading;
+	}
+
+	.scheduled-jobs-drawer-content {
+		@apply min-h-0 flex-1 overflow-y-auto p-4 sm:p-6 space-y-6;
+	}
+
+	.scheduled-jobs-drawer-meta-grid {
+		@apply grid grid-cols-2 gap-3.5 sm:grid-cols-[1.6fr_1fr_1fr_1fr] rounded-xl border border-stroke bg-surface-alt/60 p-4;
+	}
+
+	.scheduled-jobs-drawer-meta-card {
+		@apply flex flex-col text-start;
+	}
+
+	.scheduled-jobs-drawer-meta-label {
+		@apply text-[11px] font-medium text-text-muted uppercase tracking-wider;
+	}
+
+	.scheduled-jobs-drawer-meta-id {
+		@apply mt-0.5 text-xs font-semibold text-heading break-all select-all inline-block;
+	}
+
+	.scheduled-jobs-drawer-meta-value {
+		@apply mt-0.5 text-xs font-semibold text-heading;
+	}
+
+	.scheduled-jobs-drawer-error-banner {
+		@apply flex items-start gap-2.5 rounded-xl border border-rose-500/20 bg-rose-500/10 p-3.5;
+	}
+
+	.scheduled-jobs-drawer-section-title {
+		@apply flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-heading;
+	}
+
+	.scheduled-jobs-drawer-table-wrap {
+		@apply overflow-x-auto rounded-xl border border-stroke;
+		scrollbar-width: thin;
+		scrollbar-color: var(--color-stroke-strong) transparent;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.scheduled-jobs-drawer-table-wrap::-webkit-scrollbar {
+		height: 7px;
+	}
+
+	.scheduled-jobs-drawer-table-wrap::-webkit-scrollbar-track {
+		background: var(--color-surface-alt);
+		border-radius: 0 0 0.75rem 0.75rem;
+	}
+
+	.scheduled-jobs-drawer-table-wrap::-webkit-scrollbar-thumb {
+		background-color: var(--color-stroke-strong);
+		border-radius: 9999px;
+	}
+
+	.scheduled-jobs-drawer-table-wrap::-webkit-scrollbar-thumb:hover {
+		background-color: var(--color-text-muted);
+	}
+
+	.scheduled-jobs-drawer-table,
+	.history-table {
+		@apply min-w-full text-start text-xs border-collapse table-fixed;
+	}
+
+	[dir="rtl"] .scheduled-jobs-drawer-table,
+	[dir="rtl"] .history-table {
+		@apply text-right;
+	}
+
+	.scheduled-jobs-drawer-table th,
+	.history-table th {
+		@apply bg-surface-alt px-3.5 py-2.5 text-[11px] font-semibold text-text-muted uppercase tracking-wider border-b border-stroke/60 text-start;
+	}
+
+	.scheduled-jobs-drawer-table td,
+	.history-table td {
+		@apply border-b border-stroke/30 px-3.5 py-2.5 text-xs text-heading align-middle text-start;
+	}
+
+	.scheduled-jobs-drawer-th-id {
+		@apply w-[11%] min-w-20;
+	}
+
+	.scheduled-jobs-drawer-th-status {
+		@apply w-[14%] min-w-26;
+	}
+
+	.scheduled-jobs-drawer-th-attempt {
+		@apply w-[9%] min-w-17.5;
+	}
+
+	.scheduled-jobs-drawer-th-started {
+		@apply w-[21%] min-w-48;
+	}
+
+	.scheduled-jobs-drawer-th-duration {
+		@apply w-[11%] min-w-21;
+	}
+
+	.scheduled-jobs-drawer-th-details {
+		@apply w-[34%] min-w-70;
+	}
+
+	.scheduled-jobs-drawer-cell-details {
+		@apply align-middle min-w-70;
+	}
+
+	.scheduled-jobs-drawer-table tr:last-child td,
+	.history-table tr:last-child td {
+		@apply border-b-0;
+	}
+
+	.scheduled-jobs-drawer-empty {
+		@apply flex flex-col items-center justify-center rounded-xl border border-dashed border-stroke py-10 px-4 text-center;
+	}
+
+	.scheduled-jobs-drawer-footer {
+		@apply flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between border-t border-stroke bg-surface-alt px-4 py-3 sm:px-6;
+	}
+
+	/* ─── Confirm Modal ─── */
+	.scheduled-jobs-confirm-modal {
+		@apply py-1;
+	}
+
+	/* ─── Switch / Toggle Controls ─── */
+	.scheduled-jobs-switch-track {
+		@apply relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+	}
+
+	.scheduled-jobs-switch-track-active {
+		@apply bg-accent;
+	}
+
+	.scheduled-jobs-switch-track-inactive {
+		@apply bg-stroke-strong;
+	}
+
+	.scheduled-jobs-switch-thumb {
+		@apply pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out;
+	}
+
+	.scheduled-jobs-switch-thumb-active {
+		@apply translate-x-4 rtl:-translate-x-4;
+	}
+
+	.scheduled-jobs-switch-thumb-inactive {
+		@apply translate-x-0;
+	}
+
+	.scheduled-jobs-manage-modal {
+		@apply max-h-[80vh] overflow-y-auto;
+	}
+
+	/* ─── Header Refresh Action (Complete Round Circle) ─── */
+	.scheduled-jobs-header-refresh {
+		@apply inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-stroke bg-surface text-text-muted transition-colors hover:border-accent/30 hover:text-accent disabled:cursor-wait;
+	}
+
+	.scheduled-jobs-header-refresh-icon {
+		@apply h-5 w-5;
+	}
+}

@@ -145,4 +145,98 @@ class Controller extends BaseController {
 			__( 'Database upgrade complete.', 'peakurl' ),
 		);
 	}
+
+	/**
+	 * Return the registered background jobs and current schedule status.
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed> JSON success response.
+	 * @since 1.7.0
+	 */
+	public function cron_status( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->get_cron_status( $request ),
+			__( 'Cron status loaded.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Run a registered background job or all due jobs immediately.
+	 *
+	 * @param Request     $request Incoming HTTP request (admin-only).
+	 * @param string|null $job_id  Optional job identifier override.
+	 * @return array<string, mixed> JSON success response.
+	 * @since 1.7.0
+	 */
+	public function cron_run_now( Request $request, ?string $job_id = null ): array {
+		if ( null === $job_id || '' === trim( $job_id ) ) {
+			$job_id = $request->get_route_param( 'id' );
+		}
+
+		if ( null === $job_id || '' === trim( (string) $job_id ) ) {
+			$payload = $request->json_data();
+			$job_id  = is_array( $payload ) ? (string) ( $payload['job_id'] ?? $payload['id'] ?? '' ) : '';
+		}
+
+		return $this->success_response(
+			$this->system_service->run_cron_job( $request, '' !== $job_id ? $job_id : null ),
+			__( 'Background job executed.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Update background job scheduler settings (e.g. retention policy).
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed> JSON success response.
+	 * @since 1.7.0
+	 */
+	public function cron_settings_update( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->update_cron_settings( $request ),
+			__( 'Scheduler settings updated.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Clear background job execution history.
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed> JSON success response.
+	 * @since 1.7.0
+	 */
+	public function cron_clear_history( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->clear_cron_history( $request ),
+			__( 'Execution history cleared.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Update background job schedule settings.
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed> JSON success response.
+	 * @since 1.7.0
+	 */
+	public function cron_job_update( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->update_cron_job( $request ),
+			__( 'Job schedule updated.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Reset background job schedule to recommended defaults.
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed> JSON success response.
+	 * @since 1.7.0
+	 */
+	public function cron_job_reset( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->reset_cron_job( $request ),
+			__( 'Job schedule reset to recommended defaults.', 'peakurl' ),
+		);
+	}
 }

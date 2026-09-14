@@ -16,6 +16,7 @@ import {
 	NotFoundPage,
 	PluginsPage,
 	ResetPasswordPage,
+	ScheduledJobsPage,
 	SettingsLayout,
 	SettingsTabPage,
 	SystemStatusPage,
@@ -124,6 +125,10 @@ function AppRouter() {
 					<Route path="tools" element={<ToolsLayoutRoute />}>
 						<Route index element={<ToolsIndexRoute />} />
 						<Route path="export" element={<ExportPage />} />
+						<Route
+							path="scheduled-jobs"
+							element={<ScheduledJobsPage />}
+						/>
 						<Route element={<AdminOnlyRoute />}>
 							<Route
 								path="import"

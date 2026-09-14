@@ -92,7 +92,7 @@ class Authorization {
 	 * @param array<string, mixed> $user       User row.
 	 * @param string               $capability Capability name.
 	 * @return bool True if authorized.
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function has_capability( array $user, string $capability ): bool {
 		return $this->roles->has_capability( $user, $capability );
@@ -103,7 +103,7 @@ class Authorization {
 	 *
 	 * @param array<string, mixed> $user User row.
 	 * @return bool True if admin.
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function is_admin( array $user ): bool {
 		return $this->roles->is_admin( $user );

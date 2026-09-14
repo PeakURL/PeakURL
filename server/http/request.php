@@ -285,6 +285,32 @@ class Request {
 	}
 
 	/**
+	 * Get parsed JSON / body data.
+	 *
+	 * @return array<string, mixed> Body parameter map.
+	 * @since 1.7.0
+	 */
+	public function json_data(): array {
+		return $this->body_params;
+	}
+
+	/**
+	 * Retrieve a body parameter or fallback.
+	 *
+	 * @param string|null $key      Parameter key or null for all.
+	 * @param mixed       $fallback Default value if key is not found.
+	 * @return mixed Parameter value or fallback.
+	 * @since 1.7.0
+	 */
+	public function input( ?string $key = null, $fallback = null ) {
+		if ( null === $key ) {
+			return $this->body_params;
+		}
+
+		return $this->body_params[ $key ] ?? $fallback;
+	}
+
+	/**
 	 * Retrieve a single uploaded file payload.
 	 *
 	 * @param string $key Uploaded field name.

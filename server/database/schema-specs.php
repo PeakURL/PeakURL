@@ -41,6 +41,9 @@ class SchemaSpecs {
 			'clicks',
 			'audit_logs',
 			'webhooks',
+			'cron_jobs',
+			'cron_runs',
+			'webhook_deliveries',
 		);
 	}
 
@@ -52,7 +55,7 @@ class SchemaSpecs {
 	 */
 	public static function column_specs(): array {
 		return array(
-			'settings'   => array(
+			'settings'           => array(
 				array(
 					'name'       => 'autoload',
 					'definition' => 'TINYINT(1) NOT NULL DEFAULT 1',
@@ -62,7 +65,7 @@ class SchemaSpecs {
 					'definition' => 'DATETIME DEFAULT NULL',
 				),
 			),
-			'users'      => array(
+			'users'              => array(
 				array(
 					'name'       => 'display_name',
 					'definition' => 'VARCHAR(255) DEFAULT NULL',
@@ -136,7 +139,7 @@ class SchemaSpecs {
 					'definition' => 'DATETIME DEFAULT NULL',
 				),
 			),
-			'api_keys'   => array(
+			'api_keys'           => array(
 				array(
 					'name'       => 'key_hash',
 					'definition' => 'CHAR(64) DEFAULT NULL',
@@ -154,7 +157,7 @@ class SchemaSpecs {
 					'definition' => 'DATETIME DEFAULT NULL',
 				),
 			),
-			'sessions'   => array(
+			'sessions'           => array(
 				array(
 					'name'       => 'browser',
 					'definition' => 'VARCHAR(64) DEFAULT NULL',
@@ -176,7 +179,7 @@ class SchemaSpecs {
 					'definition' => 'VARCHAR(191) DEFAULT NULL',
 				),
 			),
-			'urls'       => array(
+			'urls'               => array(
 				array(
 					'name'       => 'title',
 					'definition' => 'VARCHAR(191) DEFAULT NULL',
@@ -230,7 +233,7 @@ class SchemaSpecs {
 					'definition' => 'VARCHAR(120) DEFAULT NULL',
 				),
 			),
-			'clicks'     => array(
+			'clicks'             => array(
 				array(
 					'name'       => 'visitor_hash',
 					'definition' => 'CHAR(64) DEFAULT NULL',
@@ -296,7 +299,7 @@ class SchemaSpecs {
 					'definition' => 'TEXT DEFAULT NULL',
 				),
 			),
-			'audit_logs' => array(
+			'audit_logs'         => array(
 				array(
 					'name'       => 'link_id',
 					'definition' => 'VARCHAR(40) DEFAULT NULL',
@@ -306,10 +309,168 @@ class SchemaSpecs {
 					'definition' => 'LONGTEXT DEFAULT NULL',
 				),
 			),
-			'webhooks'   => array(
+			'webhooks'           => array(
 				array(
 					'name'       => 'is_active',
 					'definition' => 'TINYINT(1) NOT NULL DEFAULT 1',
+				),
+			),
+			'cron_jobs'          => array(
+				array(
+					'name'       => 'title',
+					'definition' => 'VARCHAR(191) NOT NULL',
+				),
+				array(
+					'name'       => 'schedule_interval',
+					'definition' => 'INT UNSIGNED NOT NULL DEFAULT 0',
+				),
+				array(
+					'name'       => 'preferred_run_time',
+					'definition' => 'VARCHAR(5) DEFAULT NULL',
+				),
+				array(
+					'name'       => 'status',
+					'definition' => "VARCHAR(32) NOT NULL DEFAULT 'idle'",
+				),
+				array(
+					'name'       => 'next_run_at',
+					'definition' => 'DATETIME NOT NULL',
+				),
+				array(
+					'name'       => 'last_run_at',
+					'definition' => 'DATETIME DEFAULT NULL',
+				),
+				array(
+					'name'       => 'last_finished_at',
+					'definition' => 'DATETIME DEFAULT NULL',
+				),
+				array(
+					'name'       => 'locked_at',
+					'definition' => 'DATETIME DEFAULT NULL',
+				),
+				array(
+					'name'       => 'lock_token',
+					'definition' => 'VARCHAR(64) DEFAULT NULL',
+				),
+				array(
+					'name'       => 'lock_expires_at',
+					'definition' => 'DATETIME DEFAULT NULL',
+				),
+				array(
+					'name'       => 'attempts',
+					'definition' => 'INT UNSIGNED NOT NULL DEFAULT 0',
+				),
+				array(
+					'name'       => 'max_attempts',
+					'definition' => 'INT UNSIGNED NOT NULL DEFAULT 3',
+				),
+				array(
+					'name'       => 'retry_delay',
+					'definition' => 'INT UNSIGNED NOT NULL DEFAULT 60',
+				),
+				array(
+					'name'       => 'last_error',
+					'definition' => 'TEXT DEFAULT NULL',
+				),
+				array(
+					'name'       => 'is_enabled',
+					'definition' => 'TINYINT(1) NOT NULL DEFAULT 1',
+				),
+				array(
+					'name'       => 'created_at',
+					'definition' => 'DATETIME NOT NULL',
+				),
+				array(
+					'name'       => 'updated_at',
+					'definition' => 'DATETIME NOT NULL',
+				),
+			),
+			'cron_runs'          => array(
+				array(
+					'name'       => 'job_id',
+					'definition' => 'VARCHAR(64) NOT NULL',
+				),
+				array(
+					'name'       => 'status',
+					'definition' => 'VARCHAR(32) NOT NULL',
+				),
+				array(
+					'name'       => 'attempt',
+					'definition' => 'INT UNSIGNED NOT NULL DEFAULT 1',
+				),
+				array(
+					'name'       => 'started_at',
+					'definition' => 'DATETIME NOT NULL',
+				),
+				array(
+					'name'       => 'finished_at',
+					'definition' => 'DATETIME DEFAULT NULL',
+				),
+				array(
+					'name'       => 'duration_ms',
+					'definition' => 'INT UNSIGNED DEFAULT NULL',
+				),
+				array(
+					'name'       => 'error_message',
+					'definition' => 'TEXT DEFAULT NULL',
+				),
+				array(
+					'name'       => 'output_summary',
+					'definition' => 'VARCHAR(255) DEFAULT NULL',
+				),
+				array(
+					'name'       => 'created_at',
+					'definition' => 'DATETIME NOT NULL',
+				),
+			),
+			'webhook_deliveries' => array(
+				array(
+					'name'       => 'webhook_id',
+					'definition' => 'VARCHAR(40) NOT NULL',
+				),
+				array(
+					'name'       => 'event',
+					'definition' => 'VARCHAR(64) NOT NULL',
+				),
+				array(
+					'name'       => 'payload',
+					'definition' => 'LONGTEXT NOT NULL',
+				),
+				array(
+					'name'       => 'status',
+					'definition' => "VARCHAR(32) NOT NULL DEFAULT 'pending'",
+				),
+				array(
+					'name'       => 'attempts',
+					'definition' => 'INT UNSIGNED NOT NULL DEFAULT 0',
+				),
+				array(
+					'name'       => 'max_attempts',
+					'definition' => 'INT UNSIGNED NOT NULL DEFAULT 3',
+				),
+				array(
+					'name'       => 'next_attempt_at',
+					'definition' => 'DATETIME NOT NULL',
+				),
+				array(
+					'name'       => 'last_attempt_at',
+					'definition' => 'DATETIME DEFAULT NULL',
+				),
+				array(
+					'name'       => 'last_error',
+					'definition' => 'TEXT DEFAULT NULL',
+				),
+				array(
+					'name'       => 'response_code',
+					'definition' => 'INT UNSIGNED DEFAULT NULL',
+				),
+				array(
+					'name'       => 'created_at',
+					'definition' => 'DATETIME NOT NULL',
+				),
+				array(
+					'name'       => 'updated_at',
+					'definition' => 'DATETIME NOT NULL',
 				),
 			),
 		);
@@ -323,21 +484,21 @@ class SchemaSpecs {
 	 */
 	public static function index_specs(): array {
 		return array(
-			'settings'   => array(
+			'settings'           => array(
 				array(
 					'name'    => 'idx_settings_autoload',
 					'type'    => 'index',
 					'columns' => '(autoload)',
 				),
 			),
-			'users'      => array(
+			'users'              => array(
 				array(
 					'name'    => 'idx_users_role',
 					'type'    => 'index',
 					'columns' => '(role)',
 				),
 			),
-			'api_keys'   => array(
+			'api_keys'           => array(
 				array(
 					'name'    => 'uniq_api_keys_key_hash',
 					'type'    => 'unique',
@@ -349,7 +510,7 @@ class SchemaSpecs {
 					'columns' => '(user_id, created_at)',
 				),
 			),
-			'sessions'   => array(
+			'sessions'           => array(
 				array(
 					'name'    => 'idx_sessions_user_id',
 					'type'    => 'index',
@@ -366,7 +527,7 @@ class SchemaSpecs {
 					'columns' => '(user_id, revoked_at, last_active_at)',
 				),
 			),
-			'urls'       => array(
+			'urls'               => array(
 				array(
 					'name'    => 'idx_urls_user_id',
 					'type'    => 'index',
@@ -388,7 +549,7 @@ class SchemaSpecs {
 					'columns' => '(created_at)',
 				),
 			),
-			'clicks'     => array(
+			'clicks'             => array(
 				array(
 					'name'    => 'idx_clicks_url_id',
 					'type'    => 'index',
@@ -405,7 +566,7 @@ class SchemaSpecs {
 					'columns' => '(url_id, clicked_at)',
 				),
 			),
-			'audit_logs' => array(
+			'audit_logs'         => array(
 				array(
 					'name'    => 'idx_audit_logs_created_at',
 					'type'    => 'index',
@@ -422,7 +583,7 @@ class SchemaSpecs {
 					'columns' => '(link_id)',
 				),
 			),
-			'webhooks'   => array(
+			'webhooks'           => array(
 				array(
 					'name'    => 'idx_webhooks_user_id',
 					'type'    => 'index',
@@ -432,6 +593,52 @@ class SchemaSpecs {
 					'name'    => 'idx_webhooks_user_active',
 					'type'    => 'index',
 					'columns' => '(user_id, is_active)',
+				),
+			),
+			'cron_jobs'          => array(
+				array(
+					'name'    => 'idx_cron_jobs_due',
+					'type'    => 'index',
+					'columns' => '(is_enabled, status, next_run_at)',
+				),
+				array(
+					'name'    => 'idx_cron_jobs_lock',
+					'type'    => 'index',
+					'columns' => '(status, lock_expires_at)',
+				),
+				array(
+					'name'    => 'idx_cron_jobs_status',
+					'type'    => 'index',
+					'columns' => '(status)',
+				),
+			),
+			'cron_runs'          => array(
+				array(
+					'name'    => 'idx_cron_runs_job_created',
+					'type'    => 'index',
+					'columns' => '(job_id, created_at)',
+				),
+				array(
+					'name'    => 'idx_cron_runs_status',
+					'type'    => 'index',
+					'columns' => '(status)',
+				),
+				array(
+					'name'    => 'idx_cron_runs_created_at',
+					'type'    => 'index',
+					'columns' => '(created_at)',
+				),
+			),
+			'webhook_deliveries' => array(
+				array(
+					'name'    => 'idx_webhook_deliveries_pending',
+					'type'    => 'index',
+					'columns' => '(status, next_attempt_at)',
+				),
+				array(
+					'name'    => 'idx_webhook_deliveries_webhook_id',
+					'type'    => 'index',
+					'columns' => '(webhook_id)',
 				),
 			),
 		);
@@ -445,31 +652,31 @@ class SchemaSpecs {
 	 */
 	public static function foreign_key_specs(): array {
 		return array(
-			'api_keys'   => array(
+			'api_keys'           => array(
 				array(
 					'name'       => 'fk_api_keys_user_id',
 					'definition' => 'FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE',
 				),
 			),
-			'sessions'   => array(
+			'sessions'           => array(
 				array(
 					'name'       => 'fk_sessions_user_id',
 					'definition' => 'FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE',
 				),
 			),
-			'urls'       => array(
+			'urls'               => array(
 				array(
 					'name'       => 'fk_urls_user_id',
 					'definition' => 'FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE',
 				),
 			),
-			'clicks'     => array(
+			'clicks'             => array(
 				array(
 					'name'       => 'fk_clicks_url_id',
 					'definition' => 'FOREIGN KEY (url_id) REFERENCES urls (id) ON DELETE CASCADE',
 				),
 			),
-			'audit_logs' => array(
+			'audit_logs'         => array(
 				array(
 					'name'       => 'fk_audit_logs_user_id',
 					'definition' => 'FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE',
@@ -479,10 +686,22 @@ class SchemaSpecs {
 					'definition' => 'FOREIGN KEY (link_id) REFERENCES urls (id) ON DELETE SET NULL',
 				),
 			),
-			'webhooks'   => array(
+			'webhooks'           => array(
 				array(
 					'name'       => 'fk_webhooks_user_id',
 					'definition' => 'FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE',
+				),
+			),
+			'cron_runs'          => array(
+				array(
+					'name'       => 'fk_cron_runs_job_id',
+					'definition' => 'FOREIGN KEY (job_id) REFERENCES cron_jobs (id) ON DELETE CASCADE',
+				),
+			),
+			'webhook_deliveries' => array(
+				array(
+					'name'       => 'fk_webhook_deliveries_webhook_id',
+					'definition' => 'FOREIGN KEY (webhook_id) REFERENCES webhooks (id) ON DELETE CASCADE',
 				),
 			),
 		);

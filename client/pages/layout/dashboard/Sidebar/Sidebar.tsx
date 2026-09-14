@@ -82,6 +82,11 @@ const getNavItems = (
 					adminOnly: true,
 				},
 				{
+					name: __("Scheduled Jobs"),
+					href: `${base || ""}/tools/scheduled-jobs`,
+					adminOnly: true,
+				},
+				{
 					name: __("System Status"),
 					href: `${base || ""}/tools/system-status`,
 					adminOnly: true,

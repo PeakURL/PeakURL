@@ -14,6 +14,9 @@
     </testsuites>
     <php>
         <env name="PEAKURL_ENV" value="testing"/>
+        <env name="PEAKURL_DEV" value="true"/>
+        <env name="PEAKURL_AUTH_KEY" value="01392ccd4d2f29b4b8c4c64ac0bda3da0fbf2229ec4e0d037ec9fcbb49afffd8"/>
+        <env name="PEAKURL_AUTH_SALT" value="282ac223247ff2e2b5d771bdc18bacb55cfac40ef04e8ff1490389ea62448676"/>
         <env name="DB_HOST" value="127.0.0.1"/>
         <env name="DB_PORT" value="3307"/>
         <env name="DB_DATABASE" value="peakurl_test"/>

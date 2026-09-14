@@ -7,7 +7,7 @@
  * production release packages (PEAKURL_DEV=false or default).
  *
  * @package PeakURL\Core\Config
- * @since 1.6.3
+ * @since 1.7.0
  */
 
 declare(strict_types=1);
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Environment — single source of truth for runtime layout paths and mode.
  *
- * @since 1.6.3
+ * @since 1.7.0
  */
 class Environment {
 
@@ -54,7 +54,7 @@ class Environment {
 	 * @param bool   $is_dev      Whether development layout is active.
 	 *
 	 * @throws \RuntimeException When PEAKURL_DEV=true but server/ is missing.
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function __construct( string $source_root, bool $is_dev = false ) {
 		$this->source_root    = rtrim( $source_root, '/\\' );
@@ -80,7 +80,7 @@ class Environment {
 	 * @param string $source_root Absolute path to root.
 	 * @param bool   $is_dev      Whether development mode is enabled.
 	 * @return self
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public static function initialize( string $source_root, bool $is_dev = false ): self {
 		self::$instance = new self( $source_root, $is_dev );
@@ -92,7 +92,7 @@ class Environment {
 	 *
 	 * @param string|null $source_root Optional root directory override.
 	 * @return self
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public static function initialize_from_env( ?string $source_root = null ): self {
 		if ( null !== self::$instance && null === $source_root ) {
@@ -118,7 +118,7 @@ class Environment {
 	 * Return the active global singleton instance.
 	 *
 	 * @return self
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public static function get_instance(): self {
 		if ( null === self::$instance ) {
@@ -133,7 +133,7 @@ class Environment {
 	 *
 	 * @param self|null $instance Mock or explicit instance.
 	 * @return void
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public static function set_instance( ?self $instance ): void {
 		self::$instance = $instance;
@@ -146,7 +146,7 @@ class Environment {
 	 *
 	 * @param mixed $value Raw environment value.
 	 * @return bool
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public static function parse_dev_flag( mixed $value ): bool {
 		if ( is_bool( $value ) ) {
@@ -165,7 +165,7 @@ class Environment {
 	 * Determine whether development source-tree mode is active.
 	 *
 	 * @return bool
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function is_development(): bool {
 		return $this->is_development;
@@ -175,7 +175,7 @@ class Environment {
 	 * Determine whether production mode is active.
 	 *
 	 * @return bool
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function is_production(): bool {
 		return ! $this->is_development;
@@ -185,7 +185,7 @@ class Environment {
 	 * Return the absolute path to the repository or release root.
 	 *
 	 * @return string
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function get_source_root(): string {
 		return $this->source_root;
@@ -198,7 +198,7 @@ class Environment {
 	 * In production mode, returns `<root>`.
 	 *
 	 * @return string
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function get_runtime_root(): string {
 		return $this->is_development
@@ -210,7 +210,7 @@ class Environment {
 	 * Return the absolute path to the vendor directory.
 	 *
 	 * @return string
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function get_vendor_path(): string {
 		return $this->get_runtime_root() . '/vendor';
@@ -220,7 +220,7 @@ class Environment {
 	 * Return the absolute path to the Composer autoloader.
 	 *
 	 * @return string
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function get_vendor_autoload_path(): string {
 		return $this->get_vendor_path() . '/autoload.php';
@@ -230,7 +230,7 @@ class Environment {
 	 * Load the Composer autoloader.
 	 *
 	 * @return void
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function load_autoloader(): void {
 		$autoload_path = $this->get_vendor_autoload_path();
@@ -256,7 +256,7 @@ class Environment {
 	 * Return the absolute path to the authoritative API entrypoint.
 	 *
 	 * @return string
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function get_api_entrypoint(): string {
 		return $this->is_development
@@ -271,7 +271,7 @@ class Environment {
 	 * In production mode, returns `<root>/app.html`.
 	 *
 	 * @return string
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function get_app_html_path(): string {
 		return $this->is_development
@@ -283,7 +283,7 @@ class Environment {
 	 * Return the absolute path to the generated or bundled assets directory.
 	 *
 	 * @return string
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function get_assets_path(): string {
 		return $this->source_root . '/assets';
@@ -293,7 +293,7 @@ class Environment {
 	 * Return the absolute path to the persistent content directory.
 	 *
 	 * @return string
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function get_content_path(): string {
 		return $this->source_root . '/content';
@@ -303,7 +303,7 @@ class Environment {
 	 * Return the absolute path to the schema.sql database definition.
 	 *
 	 * @return string
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function get_database_schema_path(): string {
 		return $this->is_development
@@ -315,7 +315,7 @@ class Environment {
 	 * Return the absolute path to the CLI scripts directory.
 	 *
 	 * @return string
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function get_bin_path(): string {
 		return $this->is_development
@@ -327,7 +327,7 @@ class Environment {
 	 * Return the absolute path to the bundled fallback favicon asset.
 	 *
 	 * @return string
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function get_default_favicon_path(): string {
 		return $this->is_development
@@ -339,7 +339,7 @@ class Environment {
 	 * Return the absolute path to the bundled fallback site webmanifest.
 	 *
 	 * @return string
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function get_default_manifest_path(): string {
 		return $this->is_development
@@ -351,7 +351,7 @@ class Environment {
 	 * Return the canonical CLI command string for refreshing GeoLite2 database.
 	 *
 	 * @return string
-	 * @since 1.6.3
+	 * @since 1.7.0
 	 */
 	public function get_geoip_command(): string {
 		return $this->is_development

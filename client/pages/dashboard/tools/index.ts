@@ -7,5 +7,6 @@
 
 export * from "./import";
 export * from "./export";
+export * from "./scheduled-jobs";
 export * from "./system-status";
 export type { SystemStatusResponse, UrlExportResponse } from "./types";

@@ -74,6 +74,14 @@ class Status {
 			);
 		}
 
+		$downloaded_stamp = is_string( $last_downloaded_at ) && '' !== $last_downloaded_at
+			? strtotime( $last_downloaded_at . ' UTC' )
+			: false;
+		$effective_stamp  = false !== $downloaded_stamp
+			? $downloaded_stamp
+			: ( false !== $modified_at ? (int) $modified_at : false );
+		$is_outdated      = ! $database_ready || false === $effective_stamp || ( time() - $effective_stamp ) >= ( 7 * 86400 );
+
 		return array(
 			'contentDir'             => $this->context->get_content_dir(),
 			'databasePath'           => $database_path,
@@ -81,6 +89,8 @@ class Status {
 			'databaseReadable'       => $database_ready,
 			'locationAnalyticsReady' => $database_ready,
 			'installed'              => $database_ready,
+			'is_installed'           => $database_ready,
+			'is_outdated'            => $is_outdated,
 			'lastDownloadedAt'       => $last_downloaded_at
 				? Date::to_iso( (string) $last_downloaded_at )
 				: null,

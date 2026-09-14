@@ -346,6 +346,58 @@ export const API_ROUTES = {
 		captcha: apiPath("system", "captcha"),
 
 		/**
+		 * Relative API path: `system/cron`.
+		 *
+		 * Loads registered background jobs and schedule status.
+		 */
+		cron: apiPath("system", "cron"),
+
+		/**
+		 * Relative API path: `system/cron/run`.
+		 *
+		 * Runs all currently due background jobs.
+		 */
+		cronRunDue: apiPath("system", "cron", "run"),
+
+		/**
+		 * Relative API path: `system/cron/run/{id}`.
+		 *
+		 * Runs a specific background job immediately.
+		 */
+		cronRunJob: (id: ApiPathPart) =>
+			apiPath("system", "cron", "run", encodeApiParam(id)),
+
+		/**
+		 * Relative API path: `system/cron/history/clear`.
+		 *
+		 * Clears execution history records for all or a specific background job.
+		 */
+		cronClearHistory: apiPath("system", "cron", "history", "clear"),
+
+		/**
+		 * Relative API path: `system/cron/jobs/{id}`.
+		 *
+		 * Updates recurrence schedule settings for a specific background job.
+		 */
+		cronUpdateJob: (id: ApiPathPart) =>
+			apiPath("system", "cron", "jobs", encodeApiParam(id)),
+
+		/**
+		 * Relative API path: `system/cron/jobs/{id}/reset`.
+		 *
+		 * Resets schedule settings for a background job to recommended defaults.
+		 */
+		cronResetJob: (id: ApiPathPart) =>
+			apiPath("system", "cron", "jobs", encodeApiParam(id), "reset"),
+
+		/**
+		 * Relative API path: `system/cron/settings`.
+		 *
+		 * Updates global scheduler configuration such as execution history retention.
+		 */
+		cronSettings: apiPath("system", "cron", "settings"),
+
+		/**
 		 * Relative API path: `system/general`.
 		 *
 		 * Loads or saves general site settings.

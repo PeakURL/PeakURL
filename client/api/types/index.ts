@@ -9,6 +9,7 @@
  */
 
 export type * from "./analytics";
+export type * from "./cron";
 export type * from "./imports";
 export type * from "./links";
 export type * from "./notices";

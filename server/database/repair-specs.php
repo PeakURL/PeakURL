@@ -110,6 +110,20 @@ class RepairSpecs {
 					LEFT JOIN users AS u ON w.user_id = u.id
 					WHERE u.id IS NULL',
 			),
+			array(
+				'label' => __( 'Removed orphaned cron runs.', 'peakurl' ),
+				'sql'   => 'DELETE cr
+					FROM cron_runs AS cr
+					LEFT JOIN cron_jobs AS cj ON cr.job_id = cj.id
+					WHERE cj.id IS NULL',
+			),
+			array(
+				'label' => __( 'Removed orphaned webhook deliveries.', 'peakurl' ),
+				'sql'   => 'DELETE wd
+					FROM webhook_deliveries AS wd
+					LEFT JOIN webhooks AS w ON wd.webhook_id = w.id
+					WHERE w.id IS NULL',
+			),
 		);
 	}
 }

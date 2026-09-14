@@ -1642,4 +1642,25 @@ class Repository {
 			),
 		);
 	}
+
+	/**
+	 * Purge click records older than the given cutoff date.
+	 *
+	 * @param string $cutoff Cutoff timestamp string (Y-m-d H:i:s).
+	 * @param int    $limit  Maximum records to delete in one batch.
+	 * @return int Number of deleted click records.
+	 * @since 1.7.0
+	 */
+	public function purge_old_clicks( string $cutoff, int $limit = 1000 ): int {
+		$limit = max( 1, min( 5000, $limit ) );
+
+		return $this->db->query(
+			'DELETE FROM clicks
+			WHERE clicked_at < :cutoff
+			LIMIT ' . (int) $limit,
+			array(
+				'cutoff' => $cutoff,
+			)
+		);
+	}
 }

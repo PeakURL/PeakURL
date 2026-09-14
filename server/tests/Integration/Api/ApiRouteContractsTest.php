@@ -208,7 +208,7 @@ class ApiRouteContractsTest extends TestCase {
 		$inventory = RouteInventoryTest::ROUTE_INVENTORY;
 
 		// Verify complete route inventory size
-		$this->assertCount( 82, $inventory, 'Authoritative inventory must contain exactly 82 registered routes.' );
+		$this->assertCount( 92, $inventory, 'Authoritative inventory must contain exactly 92 registered routes.' );
 
 		$public_routes    = array();
 		$protected_routes = array();
@@ -237,8 +237,8 @@ class ApiRouteContractsTest extends TestCase {
 		}
 
 		$this->assertCount( 17, $public_routes, 'Expected exactly 17 public routes.' );
-		$this->assertCount( 65, $protected_routes, 'Expected exactly 65 protected routes.' );
-		$this->assertCount( 34, $admin_routes, 'Expected exactly 34 admin-only routes.' );
+		$this->assertCount( 75, $protected_routes, 'Expected exactly 75 protected routes.' );
+		$this->assertCount( 44, $admin_routes, 'Expected exactly 44 admin-only routes.' );
 	}
 
 	public function test_unauthenticated_requests_to_protected_endpoints_receive_401(): void {
@@ -248,9 +248,9 @@ class ApiRouteContractsTest extends TestCase {
 		);
 
 		$this->assertCount(
-			65,
+			75,
 			$protected_routes,
-			'Authoritative inventory must contain exactly 65 protected routes.'
+			'Authoritative inventory must contain exactly 75 protected routes.'
 		);
 
 		foreach ( array_keys( $protected_routes ) as $route_key ) {
@@ -284,9 +284,9 @@ class ApiRouteContractsTest extends TestCase {
 		);
 
 		$this->assertCount(
-			34,
+			44,
 			$admin_only_routes,
-			'Authoritative inventory must contain exactly 34 admin-only routes.'
+			'Authoritative inventory must contain exactly 44 admin-only routes.'
 		);
 
 		foreach ( array_keys( $admin_only_routes ) as $route_key ) {

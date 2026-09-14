@@ -674,11 +674,15 @@ class Service {
 		}
 
 		$results = array();
-		$errors  = 0;
+		$errors  = array();
 
 		foreach ( $payload['urls'] as $item ) {
 			if ( ! is_array( $item ) ) {
-				++$errors;
+				$errors[] = array(
+					'destinationUrl' => '',
+					'alias'          => null,
+					'error'          => __( 'Invalid URL item payload.', 'peakurl' ),
+				);
 				continue;
 			}
 
@@ -688,11 +692,16 @@ class Service {
 					$item,
 				);
 			} catch ( \Throwable $e ) {
-				++$errors;
+				$errors[] = array(
+					'destinationUrl' => (string) ( $item['destinationUrl'] ?? $item['url'] ?? '' ),
+					'alias'          => (string) ( $item['alias'] ?? '' ),
+					'error'          => $e->getMessage(),
+				);
 			}
 		}
 
 		return array(
+			'results' => $results,
 			'created' => $results,
 			'errors'  => $errors,
 		);

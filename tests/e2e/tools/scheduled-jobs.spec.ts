@@ -2,6 +2,7 @@ import {
 	test,
 	expect,
 	ensureEditorUser,
+	loginViaUi,
 	DEFAULT_EDITOR_CREDENTIALS,
 } from "../fixtures/auth.fixture";
 
@@ -167,38 +168,24 @@ test.describe("Scheduled Jobs Admin Journeys", () => {
 
 	test("unauthorized user is blocked by UI gate and backend rejects direct API calls", async ({
 		page,
+		playwright,
 	}) => {
 		// Provision editor user
-		await ensureEditorUser(page);
+		await ensureEditorUser(page, playwright);
 
 		// Login as Editor
-		await page.goto("/login", { waitUntil: "domcontentloaded" });
-		await page
-			.getByLabel(/email or username|username or email/i)
-			.fill(DEFAULT_EDITOR_CREDENTIALS.identifier);
-		await page
-			.getByLabel(/^password/i)
-			.fill(DEFAULT_EDITOR_CREDENTIALS.password);
-		await page.getByRole("button", { name: /sign in/i }).click();
-		await page.waitForURL("**/dashboard", { timeout: 15000 });
+		await loginViaUi(page, DEFAULT_EDITOR_CREDENTIALS);
 
 		// Try navigating to /dashboard/tools/scheduled-jobs
 		await page.goto("/dashboard/tools/scheduled-jobs", {
 			waitUntil: "commit",
 		});
 
-		// UI Access gate should be displayed
+		// Since scheduled-jobs is admin-only, AdminOnlyRoute redirects Editor to /dashboard/links
+		await page.waitForURL("**/dashboard/links", { timeout: 15000 });
 		await expect(
-			page.getByRole("heading", { name: /admin access required/i })
-		).toBeVisible({ timeout: 15000 });
-		await expect(
-			page.getByText(/only administrator accounts/i)
+			page.getByRole("heading", { name: /^links$/i })
 		).toBeVisible();
-
-		// Management controls should NOT be visible
-		await expect(
-			page.getByRole("button", { name: /run due jobs/i })
-		).not.toBeVisible();
 
 		// Direct API access: GET /api/v1/system/cron should return 403
 		const getCronRes = await page.request.get("/api/v1/system/cron");

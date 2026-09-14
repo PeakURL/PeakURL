@@ -151,7 +151,7 @@
 	}
 
 	.users-page-table {
-		@apply min-w-full divide-y divide-stroke;
+		@apply min-w-full table-auto divide-y divide-stroke;
 	}
 
 	.users-page-table-head {
@@ -164,11 +164,12 @@
 	}
 
 	.users-page-table-heading {
-		@apply px-5 py-2.5;
+		@apply px-5 py-2.5 align-middle;
+		text-align: start;
 	}
 
 	.users-page-table-heading-end {
-		@apply px-5 py-2.5;
+		@apply px-5 py-2.5 align-middle;
 		text-align: end;
 	}
 
@@ -192,6 +193,23 @@
 
 	.users-page-table-cell-actions {
 		@apply px-5 py-3.5 align-middle;
+		text-align: end;
+	}
+
+	.users-page-col-user {
+		@apply w-auto min-w-50;
+	}
+
+	.users-page-col-role {
+		@apply w-36 min-w-30;
+	}
+
+	.users-page-col-created {
+		@apply w-48 min-w-40;
+	}
+
+	.users-page-col-actions {
+		@apply w-28 min-w-25;
 	}
 
 	.users-page-user {

@@ -142,3 +142,61 @@ export function formatByteSize(value: unknown, fallback: string = ""): string {
 	/* Show one decimal point for small fractional values (e.g., 1.5 KB). */
 	return `${nextSize.toFixed(nextSize >= 10 || 0 === index ? 0 : 1)} ${units[index]}`;
 }
+
+/**
+ * Format a duration in seconds into a human-readable string (e.g., "7 days", "1 hour", "60s").
+ *
+ * @param value    - The duration in seconds.
+ * @param fallback - The string to return if formatting fails.
+ * @return The formatted duration string.
+ */
+export function formatTtlDuration(
+	value: unknown,
+	fallback: string = "0s"
+): string {
+	if (undefined === value || null === value || "" === value) {
+		return fallback;
+	}
+
+	const seconds = Number(value);
+
+	if (!Number.isFinite(seconds) || seconds < 0) {
+		return fallback;
+	}
+
+	if (seconds === 0) {
+		return "0s";
+	}
+
+	if (seconds % 86400 === 0) {
+		const days = seconds / 86400;
+		return days === 1 ? "1 day" : `${String(days)} days`;
+	}
+
+	if (seconds % 3600 === 0) {
+		const hours = seconds / 3600;
+		return hours === 1 ? "1 hour" : `${String(hours)} hours`;
+	}
+
+	if (seconds % 60 === 0) {
+		const minutes = seconds / 60;
+		return minutes === 1 ? "1 minute" : `${String(minutes)} minutes`;
+	}
+
+	if (seconds >= 86400) {
+		const days = Math.round(seconds / 86400);
+		return days === 1 ? "1 day" : `${String(days)} days`;
+	}
+
+	if (seconds >= 3600) {
+		const hours = Math.round(seconds / 3600);
+		return hours === 1 ? "1 hour" : `${String(hours)} hours`;
+	}
+
+	if (seconds >= 60) {
+		const minutes = Math.round(seconds / 60);
+		return minutes === 1 ? "1 minute" : `${String(minutes)} minutes`;
+	}
+
+	return `${seconds}s`;
+}

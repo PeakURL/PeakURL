@@ -468,7 +468,7 @@ class Repository {
 		$sql =
 			'SELECT
                 COUNT(*) AS total_clicks,
-                COUNT(DISTINCT c.visitor_hash) AS unique_clicks
+                COUNT(DISTINCT COALESCE(NULLIF(c.visitor_hash, \'\'), c.id)) AS unique_clicks
             FROM clicks c' .
 			$join_sql .
 			( ! empty( $conditions )
@@ -690,7 +690,7 @@ class Repository {
 		);
 		$current_unique_clicks = min(
 			(int) $this->db->get_var(
-				'SELECT COUNT(DISTINCT visitor_hash) FROM clicks WHERE url_id = :url_id',
+				'SELECT COUNT(DISTINCT COALESCE(NULLIF(visitor_hash, \'\'), id)) FROM clicks WHERE url_id = :url_id',
 				array( 'url_id' => $url_id ),
 			),
 			$current_total_clicks,
@@ -770,7 +770,7 @@ class Repository {
 		$row   = $this->db->get_row(
 			'SELECT
                 COUNT(*) AS total_clicks,
-                COUNT(DISTINCT visitor_hash) AS unique_clicks
+                COUNT(DISTINCT COALESCE(NULLIF(visitor_hash, \'\'), id)) AS unique_clicks
             FROM clicks
             WHERE ' . $where,
 			$params,
@@ -807,40 +807,62 @@ class Repository {
 	 */
 	public function get_link_click_history_days( string $url_id ): array {
 		$timezone = $this->get_analytics_timezone();
-		$sql      = sprintf(
+		$rows     = $this->db->get_results(
 			'SELECT
-                DATE(CONVERT_TZ(clicked_at, \'+00:00\', \'%1$s\')) AS click_day,
-                COUNT(*) AS total_clicks,
-                COUNT(DISTINCT visitor_hash) AS unique_clicks
-            FROM clicks
-            WHERE url_id = :url_id
-            GROUP BY click_day
-            ORDER BY click_day ASC',
-			$this->db->esc_like( $timezone->getName() ),
+				clicked_at,
+				COALESCE(NULLIF(visitor_hash, \'\'), id) AS visitor_key
+			FROM clicks
+			WHERE url_id = :url_id
+			ORDER BY clicked_at ASC',
+			array( 'url_id' => $url_id ),
 		);
 
-		$rows = $this->db->get_results( $sql, array( 'url_id' => $url_id ) );
+		$grouped = array();
 
-		return array_map(
-			function ( array $row ): array {
-				$total_clicks  = (int) $row['total_clicks'];
-				$unique_clicks = min(
-					(int) $row['unique_clicks'],
+		foreach ( $rows as $row ) {
+			try {
+				$clicked_at = new \DateTimeImmutable(
+					(string) $row['clicked_at'],
+					new \DateTimeZone( 'UTC' ),
+				);
+			} catch ( \Exception $exception ) {
+				continue;
+			}
+
+			$day_key = $clicked_at->setTimezone( $timezone )->format( 'Y-m-d' );
+
+			if ( ! isset( $grouped[ $day_key ] ) ) {
+				$grouped[ $day_key ] = array(
+					'clicks'  => 0,
+					'uniques' => array(),
+				);
+			}
+
+			++$grouped[ $day_key ]['clicks'];
+			$visitor_key = (string) ( $row['visitor_key'] ?? '' );
+			if ( '' !== $visitor_key ) {
+				$grouped[ $day_key ]['uniques'][ $visitor_key ] = true;
+			}
+		}
+
+		$days = array();
+
+		foreach ( $grouped as $day_key => $data ) {
+			$total_clicks  = (int) $data['clicks'];
+			$unique_clicks = min( count( (array) $data['uniques'] ), $total_clicks );
+
+			$days[] = array(
+				'date'            => $day_key,
+				'totalClicks'     => $total_clicks,
+				'uniqueClicks'    => $unique_clicks,
+				'uniqueClickRate' => $this->get_unique_click_rate(
 					$total_clicks,
-				);
+					$unique_clicks,
+				),
+			);
+		}
 
-				return array(
-					'date'            => (string) $row['click_day'],
-					'totalClicks'     => $total_clicks,
-					'uniqueClicks'    => $unique_clicks,
-					'uniqueClickRate' => $this->get_unique_click_rate(
-						$total_clicks,
-						$unique_clicks,
-					),
-				);
-			},
-			$rows,
-		);
+		return $days;
 	}
 
 	/**

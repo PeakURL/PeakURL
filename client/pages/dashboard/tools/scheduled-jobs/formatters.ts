@@ -1,6 +1,5 @@
-import { formatDistanceToNow, isValid, parseISO } from "date-fns";
-
 import { __, _n, sprintf } from "@/i18n";
+import { formatRelativeTime } from "@/shared/dates";
 import type { CronJob } from "@/api";
 
 export function formatInterval(seconds: number): string {
@@ -71,8 +70,8 @@ export function formatNextRun(isoString: string | null | undefined): {
 	}
 
 	try {
-		const date = parseISO(isoString);
-		if (!isValid(date)) {
+		const date = new Date(isoString);
+		if (Number.isNaN(date.getTime())) {
 			return { text: "—", isDue: false };
 		}
 		const now = new Date();
@@ -80,7 +79,7 @@ export function formatNextRun(isoString: string | null | undefined): {
 			return { text: __("Due now"), isDue: true };
 		}
 		return {
-			text: formatDistanceToNow(date, { addSuffix: true }),
+			text: formatRelativeTime(date),
 			isDue: false,
 		};
 	} catch {
@@ -94,11 +93,11 @@ export function formatLastRun(job: CronJob): { text: string; sub?: string } {
 	}
 
 	try {
-		const date = parseISO(job.lastRunAt);
-		if (!isValid(date)) {
+		const date = new Date(job.lastRunAt);
+		if (Number.isNaN(date.getTime())) {
 			return { text: __("Never") };
 		}
-		const text = formatDistanceToNow(date, { addSuffix: true });
+		const text = formatRelativeTime(date);
 		const latestRun = job.recentRuns[0];
 		const duration =
 			undefined !== latestRun?.durationMs && null !== latestRun.durationMs

@@ -20,8 +20,12 @@ test.describe("Users & Roles Admin Journeys", () => {
 			page.getByRole("button", { name: /add user/i })
 		).toBeVisible();
 
-		// Users table
+		// Users table and column alignment
 		await expect(page.locator(".users-page-table")).toBeVisible();
+		await expect(page.locator("th.users-page-col-user")).toBeVisible();
+		await expect(page.locator("th.users-page-col-role")).toBeVisible();
+		await expect(page.locator("th.users-page-col-created")).toBeVisible();
+		await expect(page.locator("th.users-page-col-actions")).toBeVisible();
 	});
 
 	test("add user modal opens with accessible inputs and closes cleanly", async ({

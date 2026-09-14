@@ -180,7 +180,13 @@ const FileUpload = ({
 				}).unwrap();
 
 				if (result.data) {
-					(result.data.results || []).forEach((item) => {
+					const createdList =
+						result.data.results || result.data.created || [];
+					const errorList = Array.isArray(result.data.errors)
+						? result.data.errors
+						: [];
+
+					createdList.forEach((item) => {
 						results.push({
 							url: item.destinationUrl,
 							alias:
@@ -193,7 +199,7 @@ const FileUpload = ({
 						});
 					});
 
-					(result.data.errors || []).forEach((item) => {
+					errorList.forEach((item) => {
 						results.push({
 							url: item.destinationUrl,
 							alias: item.alias || "N/A",

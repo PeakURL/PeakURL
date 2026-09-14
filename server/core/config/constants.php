@@ -180,7 +180,7 @@ class Constants {
 	/** Canonical version file name. */
 	public const VERSION_FILE = '.version';
 	/** Fallback version string. */
-	public const DEFAULT_VERSION = '0.0.0';
+	public const DEFAULT_VERSION = '1.0.0';
 	/** Public REST API base path. */
 	public const API_BASE_PATH = '/api/v1';
 	/** Default update manifest URL. */

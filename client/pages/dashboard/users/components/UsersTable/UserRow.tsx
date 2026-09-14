@@ -29,7 +29,7 @@ export function UserRow({
 
 	return (
 		<tr key={user.id} className="users-page-table-row">
-			<td className="users-page-table-cell">
+			<td className="users-page-table-cell users-page-col-user">
 				<div dir={direction} className="users-page-user">
 					<Avatar
 						size="md"
@@ -68,12 +68,12 @@ export function UserRow({
 					</div>
 				</div>
 			</td>
-			<td className="users-page-table-cell">
+			<td className="users-page-table-cell users-page-col-role">
 				<span className={cn("users-page-role-badge", roleInfo.badge)}>
 					{roleInfo.label}
 				</span>
 			</td>
-			<td className="users-page-table-cell-meta">
+			<td className="users-page-table-cell-meta users-page-col-created">
 				<span className="users-page-date-primary" dir="auto">
 					{user.createdAt
 						? formatDate(user.createdAt)
@@ -87,7 +87,7 @@ export function UserRow({
 					</span>
 				) : null}
 			</td>
-			<td className="users-page-table-cell-actions">
+			<td className="users-page-table-cell-actions users-page-col-actions">
 				<div className="users-page-actions">
 					<button
 						type="button"

@@ -10,7 +10,12 @@ import {
 } from "@/components";
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
-import { cn, formatByteSize } from "@/shared/formatting";
+import {
+	cn,
+	formatByteSize,
+	formatCount,
+	formatTtlDuration,
+} from "@/shared/formatting";
 
 import type { CacheConfigurationPayload, CacheStatusPayload } from "@/api";
 import type { StateCardProps, StateCardVariant, StatCardProps } from "../types";
@@ -64,7 +69,12 @@ function StateCard({
 	);
 }
 
-function StatCard({ label, value, valueDirection = "auto" }: StatCardProps) {
+function StatCard({
+	label,
+	value,
+	helperText,
+	valueDirection = "auto",
+}: StatCardProps) {
 	const direction = isDocumentRtl() ? "rtl" : "ltr";
 
 	return (
@@ -83,6 +93,11 @@ function StatCard({ label, value, valueDirection = "auto" }: StatCardProps) {
 					<bdi dir="auto">{value}</bdi>
 				)}
 			</p>
+			{helperText ? (
+				<p className="text-xs text-text-muted mt-1" dir="auto">
+					{helperText}
+				</p>
+			) : null}
 		</div>
 	);
 }
@@ -301,12 +316,31 @@ export function PerformanceTab({
 				/>
 				<StatCard
 					label={__("Cache Footprint")}
-					value={formatByteSize(status?.sizeBytes, __("0 B"))}
+					value={
+						status?.fileCount !== undefined &&
+						status?.fileCount !== null
+							? sprintf(
+									status?.activeDriver === "redis" ||
+										status?.activeDriver === "apcu"
+										? __("%s cached items")
+										: __("%s cached files"),
+									formatCount(status.fileCount)
+								)
+							: formatByteSize(status?.sizeBytes, __("0 B"))
+					}
+					helperText={
+						status?.fileCount !== undefined &&
+						status?.fileCount !== null &&
+						status?.sizeBytes
+							? formatByteSize(status?.sizeBytes, __("0 B"))
+							: undefined
+					}
 					valueDirection="ltr"
 				/>
 				<StatCard
 					label={__("Default TTL")}
-					value={`${String(defaultTtl)}s`}
+					value={formatTtlDuration(defaultTtl)}
+					helperText={`${formatCount(defaultTtl)}s`}
 					valueDirection="ltr"
 				/>
 			</div>

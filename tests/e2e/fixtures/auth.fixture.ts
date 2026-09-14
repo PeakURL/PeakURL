@@ -63,9 +63,19 @@ export async function loginViaUi(
 	await expect(identifierInput).toBeVisible();
 	await identifierInput.fill(creds.identifier);
 	await passwordInput.fill(creds.password);
+
+	const loginResponsePromise = page.waitForResponse(
+		(res) =>
+			res.url().includes("/api/v1/auth/login") &&
+			res.request().method() === "POST"
+	);
+
 	await submitButton.click();
+	const loginRes = await loginResponsePromise;
+	expect([200, 204]).toContain(loginRes.status());
 
 	await page.waitForURL("**/dashboard", { timeout: 15000 });
+	await expect(page.locator(".dashboard-header")).toBeVisible();
 }
 
 export const DEFAULT_EDITOR_CREDENTIALS: TestCredentials = {
@@ -76,11 +86,22 @@ export const DEFAULT_EDITOR_CREDENTIALS: TestCredentials = {
 /**
  * Ensure a deterministic Editor account exists for role-boundary tests.
  */
-export async function ensureEditorUser(page: Page): Promise<void> {
+export async function ensureEditorUser(
+	page: Page,
+	playwrightInstance?: any
+): Promise<void> {
 	const adminCreds = getDefaultAdminCredentials();
+	const isolatedContext = playwrightInstance
+		? await playwrightInstance.request.newContext({
+				baseURL: process.env.PEAKURL_TEST_URL || "https://peakurl.dev",
+				ignoreHTTPSErrors: true,
+			})
+		: null;
+
+	const requestTarget = isolatedContext || page.request;
 
 	// Login as admin via API request
-	const loginRes = await page.request.post("/api/v1/auth/login", {
+	const loginRes = await requestTarget.post("/api/v1/auth/login", {
 		data: {
 			identifier: adminCreds.identifier,
 			password: adminCreds.password,
@@ -89,7 +110,7 @@ export async function ensureEditorUser(page: Page): Promise<void> {
 	expect([200, 204]).toContain(loginRes.status());
 
 	// Provision editor user if not exists
-	await page.request.post("/api/v1/users", {
+	await requestTarget.post("/api/v1/users", {
 		data: {
 			firstName: "Test",
 			lastName: "Editor",
@@ -100,8 +121,9 @@ export async function ensureEditorUser(page: Page): Promise<void> {
 		},
 	});
 
-	// Logout admin session
-	await page.request.post("/api/v1/auth/logout");
+	if (isolatedContext) {
+		await isolatedContext.dispose();
+	}
 }
 
 export interface AuthFixtures {
@@ -123,13 +145,17 @@ export const test = baseTest.extend<AuthFixtures>({
 		// Authenticate via UI flow to establish complete session & state
 		await loginViaUi(page, adminCredentials);
 
-		// Explicitly verify the authenticated user has the administrator role
-		const meResponse = await page.request.get("/api/v1/users/me");
-		expect(meResponse.ok()).toBe(true);
-		const meJson = await meResponse.json();
-		if (meJson?.data?.role !== "admin") {
+		// Explicitly verify the authenticated user has the administrator role in the browser session
+		const meResponse = await page.evaluate(async () => {
+			const res = await fetch("/api/v1/users/me", {
+				credentials: "include",
+			});
+			return { ok: res.ok, status: res.status, data: await res.json() };
+		});
+		expect(meResponse.ok).toBe(true);
+		if (meResponse.data?.data?.role !== "admin") {
 			throw new Error(
-				`Authenticated test user '${meJson?.data?.username}' has role '${meJson?.data?.role}', expected 'admin'.`
+				`Authenticated test user '${meResponse.data?.data?.username}' has role '${meResponse.data?.data?.role}', expected 'admin'.`
 			);
 		}
 
@@ -142,23 +168,27 @@ export const test = baseTest.extend<AuthFixtures>({
 		expect(pageErrors).toEqual([]);
 	},
 
-	authenticatedEditorPage: async ({ page }, use) => {
+	authenticatedEditorPage: async ({ page, playwright }, use) => {
 		const pageErrors: Error[] = [];
 		page.on("pageerror", (err) => pageErrors.push(err));
 
 		// Ensure editor user exists
-		await ensureEditorUser(page);
+		await ensureEditorUser(page, playwright);
 
 		// Authenticate as editor via UI flow
 		await loginViaUi(page, DEFAULT_EDITOR_CREDENTIALS);
 
-		// Explicitly verify the authenticated user has the editor role
-		const meResponse = await page.request.get("/api/v1/users/me");
-		expect(meResponse.ok()).toBe(true);
-		const meJson = await meResponse.json();
-		if (meJson?.data?.role !== "editor") {
+		// Explicitly verify the authenticated user has the editor role in the browser session
+		const meResponse = await page.evaluate(async () => {
+			const res = await fetch("/api/v1/users/me", {
+				credentials: "include",
+			});
+			return { ok: res.ok, status: res.status, data: await res.json() };
+		});
+		expect(meResponse.ok).toBe(true);
+		if (meResponse.data?.data?.role !== "editor") {
 			throw new Error(
-				`Authenticated test user '${meJson?.data?.username}' has role '${meJson?.data?.role}', expected 'editor'.`
+				`Authenticated test user '${meResponse.data?.data?.username}' has role '${meResponse.data?.data?.role}', expected 'editor'.`
 			);
 		}
 

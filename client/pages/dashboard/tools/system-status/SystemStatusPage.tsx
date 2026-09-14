@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { format, formatDistanceToNow, isValid, parseISO } from "date-fns";
 import {
 	Activity,
 	AlertCircle,
@@ -32,11 +31,13 @@ import {
 } from "@/state/slices/api";
 import { copyToClipboard } from "@/shared/browser";
 import { extractErrorMessage, getErrorMessage } from "@/shared/errors";
+import { formatLocalizedDateTime, formatRelativeTime } from "@/shared/dates";
 import {
 	cn,
 	formatByteSize,
 	formatCount,
 	formatDateTimeValue,
+	formatTtlDuration,
 } from "@/shared/formatting";
 
 import type {
@@ -80,19 +81,20 @@ function formatStatusTimestamp(
 
 	try {
 		const date =
-			typeof dateValue === "string"
-				? parseISO(dateValue)
-				: new Date(dateValue);
+			dateValue instanceof Date ? dateValue : new Date(dateValue);
 
-		if (!isValid(date)) {
+		if (Number.isNaN(date.getTime())) {
 			return {
 				relative: String(dateValue),
 				full: "",
 			};
 		}
 
-		const relative = formatDistanceToNow(date, { addSuffix: true });
-		const full = format(date, "MMM d, yyyy 'at' h:mm:ss a");
+		const relative = formatRelativeTime(date);
+		const full = formatLocalizedDateTime(date, {
+			dateStyle: "medium",
+			timeStyle: "medium",
+		});
 
 		return { relative, full };
 	} catch {
@@ -931,15 +933,17 @@ function SystemStatusPage() {
 		},
 		{
 			label: __("Default TTL"),
-			value: status?.cache?.defaultTtl
-				? `${String(status.cache.defaultTtl)}s`
-				: "3600s",
+			value: formatTtlDuration(status?.cache?.defaultTtl, "1 hour"),
+			helperText: status?.cache?.defaultTtl
+				? `${formatCount(status.cache.defaultTtl)}s`
+				: undefined,
 		},
 		{
 			label: __("Negative TTL"),
-			value: status?.cache?.negativeTtl
-				? `${String(status.cache.negativeTtl)}s`
-				: "60s",
+			value: formatTtlDuration(status?.cache?.negativeTtl, "1 min"),
+			helperText: status?.cache?.negativeTtl
+				? `${formatCount(status.cache.negativeTtl)}s`
+				: undefined,
 		},
 		{
 			label: __("Cache Directory"),

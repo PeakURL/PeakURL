@@ -170,4 +170,61 @@ test.describe("Dashboard & Layout Journeys", () => {
 		// Metric widgets remain intact
 		await expect(page.getByText(/total clicks/i).first()).toBeVisible();
 	});
+
+	test("editor role-aware dashboard: lands cleanly, hides activity widgets and menu items, guards restricted routes", async ({
+		authenticatedEditorPage: page,
+	}) => {
+		// 1. Editor lands cleanly on /dashboard without 404
+		await expect(page).toHaveURL(/\/dashboard$/);
+		await expect(
+			page.getByRole("heading", { name: /^dashboard$/i })
+		).toBeVisible();
+
+		// 2. Activity Feed widget is NOT rendered for Editor
+		await expect(
+			page.getByRole("heading", { name: /recent activity/i })
+		).not.toBeVisible();
+
+		// 3. User menu does NOT expose Activity
+		const userTrigger = page.locator(".dashboard-header-user-trigger");
+		await userTrigger.click();
+		await expect(
+			page.locator(".dashboard-header-user-panel")
+		).toBeVisible();
+		await expect(
+			page.getByRole("menuitem", { name: /activity/i })
+		).not.toBeVisible();
+
+		// Close menu
+		await page.keyboard.press("Escape");
+
+		// 4. Direct navigation to /dashboard/activity is guarded and redirects to /dashboard/links
+		await page.goto("/dashboard/activity", { waitUntil: "commit" });
+		await page.waitForURL("**/dashboard/links", { timeout: 15000 });
+		await expect(
+			page.getByRole("heading", { name: /^links$/i })
+		).toBeVisible();
+	});
+
+	test("header profile menu settings navigation resolves valid settings route without 404", async ({
+		authenticatedPage: page,
+	}) => {
+		const userTrigger = page.locator(".dashboard-header-user-trigger");
+		await userTrigger.click();
+
+		const settingsMenuItem = page.locator(
+			".dashboard-header-user-panel button",
+			{ hasText: /settings/i }
+		);
+		await expect(settingsMenuItem).toBeVisible();
+		await settingsMenuItem.click();
+
+		await page.waitForURL("**/dashboard/settings/general", {
+			timeout: 15000,
+		});
+		await expect(
+			page.getByRole("heading", { name: /account settings/i })
+		).toBeVisible();
+		await expect(page.getByText(/page not found/i)).not.toBeVisible();
+	});
 });

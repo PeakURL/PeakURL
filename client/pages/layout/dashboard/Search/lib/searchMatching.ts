@@ -124,6 +124,7 @@ function getRouteTargets(
 				"history",
 				"events",
 			],
+			isAllowed: Boolean(capabilities.canManageUsers),
 		}),
 		createRouteTarget({
 			id: "about",
@@ -314,6 +315,23 @@ function getRouteTargets(
 				"xml export",
 			],
 			isAllowed: Boolean(capabilities.canExportLinks),
+		}),
+		createRouteTarget({
+			id: "tools-scheduled-jobs",
+			href: "/dashboard/tools/scheduled-jobs",
+			label: __("Scheduled Jobs"),
+			description: __("Tools"),
+			section: "tools",
+			terms: [
+				__("Tools"),
+				__("Scheduled Jobs"),
+				"scheduled jobs",
+				"cron",
+				"background jobs",
+				"scheduler",
+				"tasks",
+			],
+			isAllowed: Boolean(capabilities.canManageUsers),
 		}),
 		createRouteTarget({
 			id: "tools-system-status",

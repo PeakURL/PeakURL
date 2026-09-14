@@ -1,3 +1,4 @@
+import { useAdminAccess } from "@/hooks";
 import {
 	ActivityFeed,
 	CountryStats,
@@ -11,6 +12,7 @@ import {
 import { useDashboardAnalytics } from "./hooks";
 
 function DashboardPage() {
+	const { canManageUsers } = useAdminAccess();
 	const {
 		timeRange,
 		setTimeRange,
@@ -62,7 +64,9 @@ function DashboardPage() {
 			<div className="dashboard-page-summary-grid">
 				<div className="dashboard-page-summary-column">
 					<DeviceBreakdown deviceData={deviceData} />
-					<ActivityFeed recentActivities={recentActivities} />
+					{canManageUsers ? (
+						<ActivityFeed recentActivities={recentActivities} />
+					) : null}
 				</div>
 				<div className="dashboard-page-summary-countries">
 					<CountryStats countryData={countryData} />

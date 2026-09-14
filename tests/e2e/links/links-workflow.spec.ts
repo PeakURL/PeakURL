@@ -479,6 +479,10 @@ test.describe("Links Workflow Journeys", () => {
 
 		// 4. Editor can trash own link
 		await editorRow.locator(".links-row-action-delete").click();
+		// Verify Editor is NOT presented with the "Delete Permanently" action in the Move to Trash dialog
+		await expect(
+			page.getByRole("button", { name: /delete permanently/i })
+		).not.toBeVisible();
 		await page.locator(".links-modal-button-danger").click();
 		await expect(editorRow).not.toBeVisible({ timeout: 10000 });
 
@@ -532,5 +536,92 @@ test.describe("Links Workflow Journeys", () => {
 		await expect(
 			page.locator(".links-row", { hasText: adminAlias })
 		).toBeVisible();
+	});
+
+	test("link stats drawer loads traffic location and traffic history with filter switching", async ({
+		authenticatedPage: page,
+	}) => {
+		await page.goto("/dashboard/links", { waitUntil: "commit" });
+		await expect(
+			page.getByRole("heading", { name: /^links$/i })
+		).toBeVisible({ timeout: 25000 });
+
+		const uniqueId = generateTestId("stat-flow");
+		const customAlias = `stats-${uniqueId}`;
+
+		// Create a link
+		await page
+			.locator("#long-url")
+			.fill(`https://example.com/${customAlias}`);
+		await page.locator("#alias").fill(customAlias);
+		await page.getByRole("button", { name: /shorten/i }).click();
+
+		const linkRow = page.locator(".links-row", { hasText: customAlias });
+		await expect(linkRow).toBeVisible({ timeout: 15000 });
+
+		// Open Stats Drawer
+		const statsButton = linkRow.locator(".links-row-action-stats");
+		await statsButton.click();
+
+		const statsHeading = page.getByRole("heading", {
+			name: /link analytics/i,
+		});
+		await expect(statsHeading).toBeVisible();
+
+		// Verify Traffic Statistics tab cards
+		await expect(page.getByText(/total clicks/i).first()).toBeVisible();
+		await expect(page.getByText(/quick insights/i).first()).toBeVisible();
+		await expect(page.getByText(/traffic history/i).first()).toBeVisible();
+
+		// Switch ranges in Traffic History: 24h, 7d, 30d
+		const range24hBtn = page.locator(".links-traffic-history-range", {
+			hasText: "24h",
+		});
+		await range24hBtn.click();
+		await expect(range24hBtn).toHaveClass(
+			/links-traffic-history-range-current/
+		);
+
+		const range30dBtn = page.locator(".links-traffic-history-range", {
+			hasText: "30d",
+		});
+		await range30dBtn.click();
+		await expect(range30dBtn).toHaveClass(
+			/links-traffic-history-range-current/
+		);
+
+		// Switch series modes: Clicks, Visitors, Both
+		const clicksSeriesBtn = page.locator(
+			".links-traffic-history-tool-button",
+			{
+				hasText: /clicks/i,
+			}
+		);
+		await clicksSeriesBtn.click();
+		await expect(clicksSeriesBtn).toHaveClass(
+			/links-traffic-history-tool-button-current/
+		);
+
+		// Switch to Traffic Location Tab
+		const locationTabBtn = page.getByRole("tab", {
+			name: /traffic location/i,
+		});
+		await locationTabBtn.click();
+
+		// Verify Traffic Location panel renders successfully without 500 error
+		await expect(
+			page.getByRole("heading", { name: /top countries/i })
+		).toBeVisible();
+		await expect(
+			page
+				.getByText(
+					/no location data available|no link data available|direct, private, or local network/i
+				)
+				.first()
+		).toBeVisible();
+
+		// Close drawer
+		await page.keyboard.press("Escape");
+		await expect(statsHeading).not.toBeVisible();
 	});
 });

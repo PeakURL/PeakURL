@@ -44,6 +44,18 @@ test.describe("Settings Workflows", () => {
 		await expect(
 			page.getByRole("button", { name: /create (new )?key/i }).first()
 		).toBeVisible();
+
+		// Performance tab
+		await page.locator("a[href='/dashboard/settings/performance']").click();
+		await page.waitForURL("**/dashboard/settings/performance", {
+			timeout: 15000,
+		});
+		await expect(
+			page.getByRole("heading", { name: /performance & caching/i })
+		).toBeVisible();
+		await expect(page.getByText(/active engine/i).first()).toBeVisible();
+		await expect(page.getByText(/cache footprint/i).first()).toBeVisible();
+		await expect(page.getByText(/default ttl/i).first()).toBeVisible();
 	});
 
 	test("general profile settings persist changes across reload and safeguard username", async ({

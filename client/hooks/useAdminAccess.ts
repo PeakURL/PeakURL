@@ -20,6 +20,12 @@ export const useAdminAccess = () => {
 		canManageLocationData: Boolean(capabilities.manageLocationData),
 		canManagePerformance: Boolean(capabilities.managePerformance),
 		canManageUpdates: Boolean(capabilities.manageUpdates),
+		canDeleteLinks: Boolean(
+			capabilities.deleteLinks || user?.role === "admin"
+		),
+		canEmptyTrash: Boolean(
+			capabilities.emptyTrash || user?.role === "admin"
+		),
 		isLoading: (isLoading || isFetching) && !user,
 	};
 };

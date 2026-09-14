@@ -82,7 +82,16 @@ function ToolsIndexRoute() {
 		return null;
 	}
 
-	return <Navigate replace to={canManageUsers ? "import/file" : "export"} />;
+	return (
+		<Navigate
+			replace
+			to={
+				canManageUsers
+					? "/dashboard/tools/import/file"
+					: "/dashboard/tools/export"
+			}
+		/>
+	);
 }
 
 function AdminOnlyRoute() {
@@ -119,20 +128,20 @@ function AppRouter() {
 				/>
 				<Route path="/dashboard" element={<AppLayoutRoute />}>
 					<Route index element={<DashboardPage />} />
-					<Route path="activity" element={<ActivityPage />} />
 					<Route path="about" element={<AboutPage />} />
 					<Route path="links" element={<LinksPage />} />
 					<Route path="tools" element={<ToolsLayoutRoute />}>
 						<Route index element={<ToolsIndexRoute />} />
 						<Route path="export" element={<ExportPage />} />
-						<Route
-							path="scheduled-jobs"
-							element={<ScheduledJobsPage />}
-						/>
 						<Route element={<AdminOnlyRoute />}>
 							<Route
 								path="import"
-								element={<Navigate replace to="file" />}
+								element={
+									<Navigate
+										replace
+										to="/dashboard/tools/import/file"
+									/>
+								}
 							/>
 							<Route
 								path="import/file"
@@ -145,6 +154,10 @@ function AppRouter() {
 							<Route
 								path="import/paste"
 								element={<ImportLayoutRoute />}
+							/>
+							<Route
+								path="scheduled-jobs"
+								element={<ScheduledJobsPage />}
 							/>
 							<Route
 								path="activity"
@@ -163,6 +176,7 @@ function AppRouter() {
 						<Route path="*" element={<NotFoundPage />} />
 					</Route>
 					<Route element={<AdminOnlyRoute />}>
+						<Route path="activity" element={<ActivityPage />} />
 						<Route path="plugins" element={<PluginsPage />} />
 						<Route path="users" element={<UsersPage />} />
 					</Route>
@@ -173,7 +187,12 @@ function AppRouter() {
 					<Route path="settings" element={<SettingsLayoutRoute />}>
 						<Route
 							index
-							element={<Navigate replace to="general" />}
+							element={
+								<Navigate
+									replace
+									to="/dashboard/settings/general"
+								/>
+							}
 						/>
 						<Route path=":tab" element={<SettingsTabPage />} />
 					</Route>

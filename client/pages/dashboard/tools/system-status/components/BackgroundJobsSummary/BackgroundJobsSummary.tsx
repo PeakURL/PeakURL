@@ -1,11 +1,11 @@
 import { useMemo } from "react";
-import { formatDistanceToNow, isValid, parseISO } from "date-fns";
 import { ArrowRight, CalendarClock } from "lucide-react";
 import { Link } from "react-router";
 
 import { __, sprintf } from "@/i18n";
 import { calculateCronStatusSummary } from "@/pages/dashboard/tools/scheduled-jobs";
 import { useGetCronStatusQuery } from "@/state/slices/api";
+import { formatRelativeTime } from "@/shared/dates";
 import { cn } from "@/shared/formatting";
 
 function formatRelativeTimestamp(isoString: string | null | undefined): string {
@@ -13,15 +13,8 @@ function formatRelativeTimestamp(isoString: string | null | undefined): string {
 		return __("Never");
 	}
 
-	try {
-		const parsed = parseISO(isoString);
-		if (!isValid(parsed)) {
-			return __("Never");
-		}
-		return formatDistanceToNow(parsed, { addSuffix: true });
-	} catch {
-		return __("Never");
-	}
+	const formatted = formatRelativeTime(isoString);
+	return formatted || __("Never");
 }
 
 export function BackgroundJobsSummary() {

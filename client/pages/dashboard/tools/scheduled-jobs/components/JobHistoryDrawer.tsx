@@ -5,13 +5,13 @@ import {
 	DialogPanel,
 	DialogTitle,
 } from "@headlessui/react";
-import { format, formatDistanceToNow, isValid, parseISO } from "date-fns";
 import { AlertTriangle, Clock, History, Play, Trash2, X } from "lucide-react";
 
 import { Button, ConfirmDialog, useNotification } from "@/components";
 import { __, _n, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { extractErrorMessage } from "@/shared/errors";
+import { formatLocalizedDateTime, formatRelativeTime } from "@/shared/dates";
 import { cn } from "@/shared/formatting";
 import { useClearCronHistoryMutation } from "@/state/slices/api";
 
@@ -25,13 +25,16 @@ function formatRunTimestamp(dateString: string | null | undefined) {
 	}
 
 	try {
-		const parsed = parseISO(dateString);
-		if (!isValid(parsed)) {
+		const date = new Date(dateString);
+		if (Number.isNaN(date.getTime())) {
 			return { relative: String(dateString), full: "" };
 		}
 		return {
-			relative: formatDistanceToNow(parsed, { addSuffix: true }),
-			full: format(parsed, "MMM d, yyyy 'at' HH:mm:ss"),
+			relative: formatRelativeTime(date),
+			full: formatLocalizedDateTime(date, {
+				dateStyle: "medium",
+				timeStyle: "medium",
+			}),
 		};
 	} catch {
 		return { relative: String(dateString), full: "" };

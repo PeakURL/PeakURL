@@ -20,6 +20,7 @@ import {
 	getErrorMessage,
 	getErrorStatus,
 } from "../../client/shared/errors";
+import { findDashboardRouteMatches } from "../../client/pages/layout/dashboard/Search/lib/searchMatching";
 
 test.describe("Frontend API Client Contracts", () => {
 	test.describe("API Route Construction & Parameter Encoding", () => {
@@ -447,6 +448,56 @@ test.describe("Frontend API Client Contracts", () => {
 			expect(selected?.capabilities?.manageUsers).toBe(true);
 			expect(selected?.capabilities?.manageSiteSettings).toBe(true);
 			expect(selected?.capabilities?.viewLinks).toBe(true);
+		});
+
+		test("filters search targets based on user capabilities", () => {
+			const editorCapabilities = {
+				canManageUsers: false,
+				canManageApiKeys: false,
+				canManageWebhooks: false,
+			};
+
+			const adminCapabilities = {
+				canManageUsers: true,
+				canManageApiKeys: true,
+				canManageWebhooks: true,
+			};
+
+			const editorActivityMatches = findDashboardRouteMatches(
+				"activity",
+				editorCapabilities
+			);
+			expect(editorActivityMatches.some((m) => m.id === "activity")).toBe(
+				false
+			);
+
+			const adminActivityMatches = findDashboardRouteMatches(
+				"activity",
+				adminCapabilities
+			);
+			expect(adminActivityMatches.some((m) => m.id === "activity")).toBe(
+				true
+			);
+
+			const editorScheduledMatches = findDashboardRouteMatches(
+				"scheduled",
+				editorCapabilities
+			);
+			expect(
+				editorScheduledMatches.some(
+					(m) => m.id === "tools-scheduled-jobs"
+				)
+			).toBe(false);
+
+			const adminScheduledMatches = findDashboardRouteMatches(
+				"scheduled",
+				adminCapabilities
+			);
+			expect(
+				adminScheduledMatches.some(
+					(m) => m.id === "tools-scheduled-jobs"
+				)
+			).toBe(true);
 		});
 	});
 });

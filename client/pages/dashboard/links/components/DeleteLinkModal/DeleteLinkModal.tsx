@@ -3,6 +3,7 @@ import { X, Trash2, AlertTriangle } from "lucide-react";
 import { useState } from "react";
 
 import { ReadOnlyValueBlock } from "@/components";
+import { useAdminAccess } from "@/hooks";
 import { useDeleteUrlMutation } from "@/state/slices/api";
 import { getErrorMessage } from "@/shared/errors";
 import { getShortUrl } from "@/shared/links";
@@ -18,6 +19,8 @@ function DeleteLinkModal({
 	isTrashTab = false,
 }: DeleteLinkModalProps) {
 	const direction = isDocumentRtl() ? "rtl" : "ltr";
+	const { canDeleteLinks, isAdmin } = useAdminAccess();
+	const hasPermanentDeleteCapability = canDeleteLinks || isAdmin;
 	const [error, setError] = useState("");
 	const [activeAction, setActiveAction] = useState<
 		"trash" | "permanent" | null
@@ -170,7 +173,7 @@ function DeleteLinkModal({
 								{__("Cancel")}
 							</button>
 
-							{!isPermanent && (
+							{!isPermanent && hasPermanentDeleteCapability && (
 								<button
 									type="button"
 									onClick={() => handleDelete(true)}

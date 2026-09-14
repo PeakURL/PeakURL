@@ -10,7 +10,6 @@ import {
 	Clock,
 	Link2,
 } from "lucide-react";
-import { isPast } from "date-fns";
 
 import { __, sprintf } from "@/i18n";
 import { formatLocalizedDateTime, formatRelativeTime } from "@/shared/dates";
@@ -60,7 +59,7 @@ function LinkRow({
 				? "bg-error"
 				: "bg-stroke";
 	const expiresAtDate = link.expiresAt ? new Date(link.expiresAt) : null;
-	const isExpiredLink = expiresAtDate ? isPast(expiresAtDate) : false;
+	const isExpiredLink = "expired" === link.status;
 	const expirationRelativeTime = expiresAtDate
 		? formatRelativeTime(expiresAtDate, {
 				style: "long",

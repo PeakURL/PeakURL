@@ -19,7 +19,7 @@ export const UsersOverviewSkeleton = () => (
 
 const UserRowSkeleton = () => (
 	<tr className="users-page-table-row">
-		<td className="users-page-table-cell">
+		<td className="users-page-table-cell users-page-col-user">
 			<div className="users-skeleton-user">
 				<Skeleton className="users-skeleton-user-avatar" />
 				<div className="users-skeleton-user-copy">
@@ -28,14 +28,14 @@ const UserRowSkeleton = () => (
 				</div>
 			</div>
 		</td>
-		<td className="users-page-table-cell">
+		<td className="users-page-table-cell users-page-col-role">
 			<Skeleton className="users-skeleton-badge" />
 		</td>
-		<td className="users-page-table-cell-meta">
+		<td className="users-page-table-cell-meta users-page-col-created">
 			<Skeleton className="users-skeleton-date" />
 			<Skeleton className="users-skeleton-date-sub" />
 		</td>
-		<td className="users-page-table-cell-actions">
+		<td className="users-page-table-cell-actions users-page-col-actions">
 			<div className="users-skeleton-actions">
 				<Skeleton className="users-skeleton-action" />
 				<Skeleton className="users-skeleton-action" />

@@ -167,6 +167,7 @@ export interface StateCardProps {
 export interface StatCardProps {
 	label: string;
 	value: string;
+	helperText?: string;
 	valueDirection?: "auto" | "ltr" | "rtl";
 }
 

@@ -16,6 +16,7 @@ import {
 	baseApi,
 } from "@/state/slices/api";
 import { authApi } from "@/state/slices";
+import { useAdminAccess } from "@/hooks";
 import { Avatar, ThemeToggle } from "@/components";
 import { getDocumentDirection } from "@/i18n/direction";
 import { __ } from "@/i18n";
@@ -29,6 +30,7 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 	const { useAuthCheckQuery } = authApi;
 	const { data: sessionData } = useAuthCheckQuery(undefined);
 	const user = selectSessionUser(sessionData);
+	const { canManageUsers } = useAdminAccess();
 	const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -102,26 +104,30 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 							className="dashboard-header-user-panel"
 						>
 							<div className="dashboard-header-user-panel-inner">
-								<MenuItem>
-									{({ focus }) => (
-										<button
-											onClick={() =>
-												navigate(`${basePath}/activity`)
-											}
-											className={cn(
-												"dashboard-header-user-item",
-												focus &&
-													"dashboard-header-user-item-active"
-											)}
-										>
-											<Clock3
-												size={16}
-												className="dashboard-header-user-item-icon"
-											/>
-											{__("Activity")}
-										</button>
-									)}
-								</MenuItem>
+								{canManageUsers ? (
+									<MenuItem>
+										{({ focus }) => (
+											<button
+												onClick={() =>
+													navigate(
+														`${basePath}/activity`
+													)
+												}
+												className={cn(
+													"dashboard-header-user-item",
+													focus &&
+														"dashboard-header-user-item-active"
+												)}
+											>
+												<Clock3
+													size={16}
+													className="dashboard-header-user-item-icon"
+												/>
+												{__("Activity")}
+											</button>
+										)}
+									</MenuItem>
+								) : null}
 								<MenuItem>
 									{({ focus }) => (
 										<button
@@ -148,7 +154,9 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 									{({ focus }) => (
 										<button
 											onClick={() =>
-												navigate(`${basePath}/settings`)
+												navigate(
+													`${basePath}/settings/general`
+												)
 											}
 											className={cn(
 												"dashboard-header-user-item",

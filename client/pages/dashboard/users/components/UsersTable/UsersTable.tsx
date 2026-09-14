@@ -42,16 +42,16 @@ export function UsersTable({
 					<table className="users-page-table">
 						<thead className="users-page-table-head">
 							<tr className="users-page-table-head-row">
-								<th className="users-page-table-heading">
+								<th className="users-page-table-heading users-page-col-user">
 									{__("User")}
 								</th>
-								<th className="users-page-table-heading">
+								<th className="users-page-table-heading users-page-col-role">
 									{__("Role")}
 								</th>
-								<th className="users-page-table-heading">
+								<th className="users-page-table-heading users-page-col-created">
 									{__("Created")}
 								</th>
-								<th className="users-page-table-heading-end">
+								<th className="users-page-table-heading-end users-page-col-actions">
 									{__("Actions")}
 								</th>
 							</tr>

@@ -35,6 +35,9 @@ class Date {
 	/**
 	 * Convert a datetime string to an ISO 8601 / RFC 3339 timestamp.
 	 *
+	 * MySQL timestamps in PeakURL are stored in UTC. If the raw value lacks an
+	 * explicit timezone offset, it is parsed as UTC to avoid local timezone skew.
+	 *
 	 * @param string $value Raw datetime string.
 	 * @return string ISO 8601 datetime string.
 	 * @since 1.0.0
@@ -45,16 +48,12 @@ class Date {
 			return gmdate( DATE_ATOM );
 		}
 
-		$timestamp = strtotime( $clean );
-		if ( false === $timestamp ) {
-			$timestamp = strtotime( $clean . ' UTC' );
-		}
-
-		if ( false === $timestamp ) {
+		try {
+			$date_time = new \DateTimeImmutable( $clean, new \DateTimeZone( 'UTC' ) );
+			return $date_time->setTimezone( new \DateTimeZone( 'UTC' ) )->format( DATE_ATOM );
+		} catch ( \Throwable $exception ) {
 			return gmdate( DATE_ATOM );
 		}
-
-		return gmdate( DATE_ATOM, $timestamp );
 	}
 
 	/**
@@ -69,12 +68,11 @@ class Date {
 			return null;
 		}
 
-		$timestamp = strtotime( $value . ' UTC' );
-
-		if ( false === $timestamp ) {
+		try {
+			$date_time = new \DateTimeImmutable( trim( $value ), new \DateTimeZone( 'UTC' ) );
+			return $date_time->setTimezone( new \DateTimeZone( 'UTC' ) )->format( DATE_ATOM );
+		} catch ( \Throwable $exception ) {
 			return null;
 		}
-
-		return gmdate( DATE_ATOM, $timestamp );
 	}
 }

@@ -6,6 +6,7 @@ import {
 	getActiveLocale,
 	getActiveTimeZone,
 } from "../../client/shared/dates";
+import { formatTtlDuration } from "../../client/shared/formatting";
 
 test.describe("Date Utilities", () => {
 	test("getActiveLocale returns valid locale string", () => {
@@ -40,6 +41,15 @@ test.describe("Date Utilities", () => {
 		expect(relativeFuture).toContain("in 2 days");
 	});
 
+	test("formatRelativeTime calculates relative time from absolute instant without timezone offset error", () => {
+		const now = new Date("2026-09-14T17:00:10Z");
+		const eventMomentsAgo = new Date("2026-09-14T17:00:05Z");
+
+		const relative = formatRelativeTime(eventMomentsAgo, { now });
+		expect(relative).toMatch(/second/i);
+		expect(relative).not.toContain("hour");
+	});
+
 	test("formatLocalizedDateTime handles Date objects and ISO strings", () => {
 		const resultFromDate = formatLocalizedDateTime(
 			new Date("2026-09-11T15:30:00Z")
@@ -53,5 +63,18 @@ test.describe("Date Utilities", () => {
 
 		expect(formatLocalizedDateTime(null)).toBe("");
 		expect(formatLocalizedDateTime(undefined)).toBe("");
+	});
+
+	test("formatTtlDuration formats seconds into human readable duration strings", () => {
+		expect(formatTtlDuration(604800)).toBe("7 days");
+		expect(formatTtlDuration(86400)).toBe("1 day");
+		expect(formatTtlDuration(172800)).toBe("2 days");
+		expect(formatTtlDuration(3600)).toBe("1 hour");
+		expect(formatTtlDuration(21600)).toBe("6 hours");
+		expect(formatTtlDuration(60)).toBe("1 minute");
+		expect(formatTtlDuration(180)).toBe("3 minutes");
+		expect(formatTtlDuration(45)).toBe("45s");
+		expect(formatTtlDuration(0)).toBe("0s");
+		expect(formatTtlDuration(null)).toBe("0s");
 	});
 });

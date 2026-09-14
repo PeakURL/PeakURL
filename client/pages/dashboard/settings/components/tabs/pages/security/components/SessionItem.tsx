@@ -1,8 +1,8 @@
 import { Monitor, Smartphone, Tablet } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
 
 import { Button } from "@/components";
 import { __ } from "@/i18n";
+import { formatRelativeTime } from "@/shared/dates";
 import { cn, getCountryFlagEmoji } from "@/shared/formatting";
 
 import { getSessionLocationLabel } from "../helpers";
@@ -64,10 +64,7 @@ function SessionItem({
 						<span className="settings-security-session-detail">
 							{__("Last active")}{" "}
 							{session.lastActiveAt
-								? formatDistanceToNow(
-										new Date(session.lastActiveAt),
-										{ addSuffix: true }
-									)
+								? formatRelativeTime(session.lastActiveAt)
 								: __("Unknown")}
 						</span>
 					</div>

@@ -2,6 +2,7 @@ import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { X, Trash2, AlertTriangle } from "lucide-react";
 import { useState } from "react";
 
+import { useAdminAccess } from "@/hooks";
 import { useBulkDeleteUrlMutation } from "@/state/slices/api";
 import { __, sprintf } from "@/i18n";
 import { getDocumentDirection } from "@/i18n/direction";
@@ -17,6 +18,8 @@ function BulkDeleteModal({
 	onSuccess,
 }: BulkDeleteModalProps) {
 	const direction = getDocumentDirection();
+	const { canDeleteLinks, isAdmin } = useAdminAccess();
+	const hasPermanentDeleteCapability = canDeleteLinks || isAdmin;
 	const [error, setError] = useState("");
 	const [activeAction, setActiveAction] = useState<
 		"trash" | "permanent" | null
@@ -135,7 +138,7 @@ function BulkDeleteModal({
 								{__("Cancel")}
 							</button>
 
-							{!isTrashTab && (
+							{!isTrashTab && hasPermanentDeleteCapability && (
 								<button
 									type="button"
 									onClick={() => handleDelete(true)}

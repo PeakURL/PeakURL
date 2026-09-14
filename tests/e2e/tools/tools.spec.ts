@@ -63,9 +63,26 @@ test.describe("Tools & Utilities Journeys", () => {
 			"https://example.com/paste-import-test-1\nhttps://example.com/paste-import-test-2"
 		);
 
-		// Import button is enabled
+		// Import button is enabled and processing reports accurate count
 		const importBtn = page.getByRole("button", { name: /create links/i });
 		await expect(importBtn).toBeEnabled();
+
+		const bulkCreatePromise = page.waitForResponse(
+			(res) =>
+				res.url().includes("/api/v1/urls/bulk") &&
+				res.request().method() === "POST"
+		);
+		await importBtn.click();
+		const bulkCreateRes = await bulkCreatePromise;
+		expect([200, 201]).toContain(bulkCreateRes.status());
+
+		// Verify Import Completed summary displays non-zero processed count
+		await expect(
+			page.getByRole("heading", { name: /import completed/i })
+		).toBeVisible({ timeout: 15000 });
+		await expect(
+			page.getByText(/successfully processed 2 urls/i)
+		).toBeVisible();
 	});
 
 	test("system status page renders site health diagnostics and service checks", async ({

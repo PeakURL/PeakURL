@@ -368,6 +368,13 @@ export const API_ROUTES = {
 			apiPath("system", "cron", "run", encodeApiParam(id)),
 
 		/**
+		 * Relative API path: `system/cron/history/clear`.
+		 *
+		 * Clears execution history records for all or a specific background job.
+		 */
+		cronClearHistory: apiPath("system", "cron", "history", "clear"),
+
+		/**
 		 * Relative API path: `system/general`.
 		 *
 		 * Loads or saves general site settings.

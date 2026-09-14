@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { History, Play, CheckCircle2, AlertCircle, Clock } from "lucide-react";
 
 import { Button } from "@/components";
@@ -14,6 +15,22 @@ export function JobsTable({
 	onRunJob,
 	canManage,
 }: JobsTableProps) {
+	const tableContainerRef = useRef<HTMLDivElement>(null);
+	const lastScrollPosRef = useRef<number>(0);
+
+	const handleTableScroll = () => {
+		if (tableContainerRef.current) {
+			lastScrollPosRef.current = tableContainerRef.current.scrollLeft;
+		}
+	};
+
+	// Prevent unwanted horizontal jumps when a job completes execution
+	useEffect(() => {
+		if (tableContainerRef.current && null === runningJobId) {
+			tableContainerRef.current.scrollLeft = lastScrollPosRef.current;
+		}
+	}, [runningJobId]);
+
 	if (0 === jobs.length) {
 		return (
 			<div className="scheduled-jobs-empty-state">
@@ -31,17 +48,33 @@ export function JobsTable({
 	}
 
 	return (
-		<div className="scheduled-jobs-table-container">
+		<div
+			ref={tableContainerRef}
+			onScroll={handleTableScroll}
+			className="scheduled-jobs-table-container"
+		>
 			<table className="scheduled-jobs-table">
 				<thead>
 					<tr>
-						<th>{__("Job")}</th>
-						<th>{__("Status")}</th>
-						<th>{__("Schedule")}</th>
-						<th>{__("Last Run")}</th>
-						<th>{__("Next Run")}</th>
-						<th>{__("Last Result / Failure")}</th>
-						<th className="text-end">{__("Actions")}</th>
+						<th className="scheduled-jobs-th-job">{__("Job")}</th>
+						<th className="scheduled-jobs-th-status">
+							{__("Status")}
+						</th>
+						<th className="scheduled-jobs-th-schedule">
+							{__("Schedule")}
+						</th>
+						<th className="scheduled-jobs-th-last-run">
+							{__("Last Run")}
+						</th>
+						<th className="scheduled-jobs-th-next-run">
+							{__("Next Run")}
+						</th>
+						<th className="scheduled-jobs-th-result">
+							{__("Last Result / Failure")}
+						</th>
+						<th className="scheduled-jobs-th-actions">
+							{__("Actions")}
+						</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -160,22 +193,31 @@ export function JobsTable({
 
 								{/* Actions */}
 								<td className="scheduled-jobs-cell-actions">
-									<div className="flex items-center justify-end gap-2">
-										<button
-											type="button"
-											onClick={() => onViewHistory(job)}
-											className="scheduled-jobs-action-history"
-											title={__("View Execution History")}
-										>
-											<History size={13} />
-											<span>{__("History")}</span>
-										</button>
+									<div className="flex items-center justify-start gap-2">
+										{!isJobRunning ? (
+											<button
+												type="button"
+												onClick={() =>
+													onViewHistory(job)
+												}
+												className="scheduled-jobs-action-history"
+												title={__(
+													"View Execution History"
+												)}
+											>
+												<History size={13} />
+												<span>{__("History")}</span>
+											</button>
+										) : null}
 
 										{canManage ? (
 											<Button
 												variant="secondary"
 												size="xs"
-												onClick={() => onRunJob(job)}
+												onClick={(e) => {
+													e.currentTarget.blur();
+													onRunJob(job);
+												}}
 												loading={isJobRunning}
 												disabled={
 													isJobRunning ||
@@ -183,12 +225,24 @@ export function JobsTable({
 													null !== runningJobId
 												}
 												className="scheduled-jobs-action-run"
-												title={__(
-													"Execute Job Immediately"
-												)}
+												title={
+													isJobRunning
+														? __(
+																"Job is currently executing..."
+															)
+														: __(
+																"Execute Job Immediately"
+															)
+												}
 											>
-												<Play size={11} />
-												<span>{__("Run Now")}</span>
+												{!isJobRunning ? (
+													<Play size={11} />
+												) : null}
+												<span>
+													{isJobRunning
+														? __("Running...")
+														: __("Run Now")}
+												</span>
 											</Button>
 										) : null}
 									</div>

@@ -8,15 +8,17 @@ import {
 	RefreshCw,
 	Search,
 	ShieldCheck,
+	Trash2,
 } from "lucide-react";
 
 import type { CronJob } from "@/api";
-import { Button, useNotification } from "@/components";
+import { Button, ConfirmDialog, useNotification } from "@/components";
 import { useAdminAccess } from "@/hooks";
 import { __, _n, sprintf } from "@/i18n";
 import { extractErrorMessage } from "@/shared/errors";
 import { cn } from "@/shared/formatting";
 import {
+	useClearCronHistoryMutation,
 	useGetCronStatusQuery,
 	useRunCronJobMutation,
 	useRunDueJobsMutation,
@@ -42,11 +44,14 @@ export function ScheduledJobsPage() {
 
 	const [runDueJobs, { isLoading: isRunningDue }] = useRunDueJobsMutation();
 	const [runCronJob] = useRunCronJobMutation();
+	const [clearCronHistory, { isLoading: isClearingHistory }] =
+		useClearCronHistoryMutation();
 
 	const [runningJobId, setRunningJobId] = useState<string | null>(null);
 	const [selectedJobForHistory, setSelectedJobForHistory] =
 		useState<CronJob | null>(null);
 	const [isRunDueModalOpen, setIsRunDueModalOpen] = useState(false);
+	const [isClearAllModalOpen, setIsClearAllModalOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState("");
 
 	const jobs = useMemo(() => data?.jobs || [], [data?.jobs]);
@@ -139,6 +144,29 @@ export function ScheduledJobsPage() {
 		}
 	};
 
+	const handleClearAllHistory = async () => {
+		try {
+			const result = await clearCronHistory().unwrap();
+			notification.success(
+				sprintf(
+					/* translators: %s is the number of cleared history records */
+					_n(
+						"Cleared %s execution history record.",
+						"Cleared %s execution history records.",
+						result.deletedCount
+					),
+					String(result.deletedCount)
+				)
+			);
+			setIsClearAllModalOpen(false);
+		} catch (err: unknown) {
+			notification.error(
+				extractErrorMessage(err) ||
+					__("Failed to clear execution history.")
+			);
+		}
+	};
+
 	/* ─── Non-admin gate ─── */
 	if (!isAccessLoading && !canManageUpdates) {
 		return (
@@ -183,21 +211,6 @@ export function ScheduledJobsPage() {
 				</div>
 
 				<div className="scheduled-jobs-page-hero-actions">
-					{canManageUpdates ? (
-						<Button
-							variant="primary"
-							size="sm"
-							onClick={() => setIsRunDueModalOpen(true)}
-							disabled={isRunningDue || null !== runningJobId}
-							title={__(
-								"Execute all jobs that are currently due"
-							)}
-						>
-							<Play size={13} />
-							<span>{__("Run Due Jobs")}</span>
-						</Button>
-					) : null}
-
 					<button
 						type="button"
 						onClick={() => refetch()}
@@ -213,6 +226,42 @@ export function ScheduledJobsPage() {
 							)}
 						/>
 					</button>
+					{canManageUpdates ? (
+						<>
+							<Button
+								variant="outline"
+								size="sm"
+								onClick={() => setIsClearAllModalOpen(true)}
+								disabled={
+									isRunningDue ||
+									null !== runningJobId ||
+									isClearingHistory
+								}
+								title={__(
+									"Clear execution run history for all jobs"
+								)}
+							>
+								<Trash2 size={13} />
+								<span>{__("Clear All History")}</span>
+							</Button>
+							<Button
+								variant="primary"
+								size="sm"
+								onClick={() => setIsRunDueModalOpen(true)}
+								disabled={
+									isRunningDue ||
+									null !== runningJobId ||
+									isClearingHistory
+								}
+								title={__(
+									"Execute all jobs that are currently due"
+								)}
+							>
+								<Play size={13} />
+								<span>{__("Run Due Jobs")}</span>
+							</Button>
+						</>
+					) : null}
 				</div>
 			</div>
 
@@ -354,7 +403,7 @@ export function ScheduledJobsPage() {
 						<div className="relative">
 							<Search
 								size={14}
-								className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-text-muted"
+								className="pointer-events-none absolute inset-s-3 top-1/2 -translate-y-1/2 text-text-muted"
 							/>
 							<input
 								type="text"
@@ -429,6 +478,20 @@ export function ScheduledJobsPage() {
 				onClose={() => setIsRunDueModalOpen(false)}
 				onConfirm={handleRunDueJobs}
 				isExecuting={isRunningDue}
+			/>
+
+			<ConfirmDialog
+				open={isClearAllModalOpen}
+				onClose={() => setIsClearAllModalOpen(false)}
+				title={__("Clear All Execution History")}
+				description={__(
+					"Are you sure you want to clear execution history across all background jobs? Stored run records and output logs will be permanently deleted."
+				)}
+				confirmText={__("Clear All History")}
+				cancelText={__("Cancel")}
+				confirmVariant="danger"
+				loading={isClearingHistory}
+				onConfirm={handleClearAllHistory}
 			/>
 		</div>
 	);

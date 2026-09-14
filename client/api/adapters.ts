@@ -12,11 +12,13 @@ import type {
 	UserCapabilities,
 } from "./types/users";
 import type {
+	ApiClearCronHistoryResponse,
 	ApiCronJob,
 	ApiCronRun,
 	ApiCronStatusResponse,
 	ApiRunCronJobResponse,
 	ApiRunDueJobsResponse,
+	ClearCronHistoryResponse,
 	CronExecutionStatus,
 	CronJob,
 	CronJobExecutionOutcome,
@@ -323,6 +325,22 @@ export function mapApiRunDueJobsResult(
 	return {
 		runAll: Boolean(apiResponse?.run_all),
 		results: normalizedResults,
+		success: Boolean(apiResponse?.success),
+	};
+}
+
+/**
+ * Map clear-cron-history outcome from wire to camelCase domain result.
+ *
+ * @param apiResponse - Raw clear-cron-history response from POST /api/v1/system/cron/history/clear.
+ * @return Normalized ClearCronHistoryResponse.
+ */
+export function mapApiClearCronHistory(
+	apiResponse?: ApiClearCronHistoryResponse | null
+): ClearCronHistoryResponse {
+	return {
+		deletedCount: Number(apiResponse?.deleted_count ?? 0),
+		jobId: apiResponse?.job_id ?? apiResponse?.job_key ?? null,
 		success: Boolean(apiResponse?.success),
 	};
 }

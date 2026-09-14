@@ -1,11 +1,13 @@
 import { test, expect } from "@playwright/test";
 import {
 	API_ROUTES,
+	mapApiClearCronHistory,
 	mapApiCronRun,
 	mapApiCronJob,
 	mapApiCronStatus,
 	mapApiRunCronJobResult,
 	mapApiRunDueJobsResult,
+	type ApiClearCronHistoryResponse,
 	type ApiCronJob,
 	type ApiCronRun,
 	type ApiCronStatusResponse,
@@ -26,6 +28,9 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 		test("constructs accurate system cron route paths", () => {
 			expect(API_ROUTES.system.cron).toBe("system/cron");
 			expect(API_ROUTES.system.cronRunDue).toBe("system/cron/run");
+			expect(API_ROUTES.system.cronClearHistory).toBe(
+				"system/cron/history/clear"
+			);
 			expect(
 				API_ROUTES.system.cronRunJob("peakurl_session_cleanup")
 			).toBe("system/cron/run/peakurl_session_cleanup");
@@ -429,6 +434,40 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 			);
 			expect(dueResult.results.job_3.status).toBe("skipped");
 			expect(dueResult.success).toBe(true);
+		});
+
+		test("mapApiClearCronHistory converts wire clear history payload to domain model", () => {
+			const clearAllResult: ApiClearCronHistoryResponse = {
+				deleted_count: 42,
+				job_id: null,
+				success: true,
+			};
+			const domainAll = mapApiClearCronHistory(clearAllResult);
+			expect(domainAll.deletedCount).toBe(42);
+			expect(domainAll.jobId).toBeNull();
+			expect(domainAll.success).toBe(true);
+
+			const clearJobResult: ApiClearCronHistoryResponse = {
+				deleted_count: 10,
+				job_id: "peakurl_session_cleanup",
+				success: true,
+			};
+			const domainJob = mapApiClearCronHistory(clearJobResult);
+			expect(domainJob.deletedCount).toBe(10);
+			expect(domainJob.jobId).toBe("peakurl_session_cleanup");
+			expect(domainJob.success).toBe(true);
+		});
+
+		test("mapApiClearCronHistory safely handles null or undefined payload", () => {
+			const fallbackNull = mapApiClearCronHistory(null);
+			expect(fallbackNull.deletedCount).toBe(0);
+			expect(fallbackNull.jobId).toBeNull();
+			expect(fallbackNull.success).toBe(false);
+
+			const fallbackUndefined = mapApiClearCronHistory(undefined);
+			expect(fallbackUndefined.deletedCount).toBe(0);
+			expect(fallbackUndefined.jobId).toBeNull();
+			expect(fallbackUndefined.success).toBe(false);
 		});
 	});
 

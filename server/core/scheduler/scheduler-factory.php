@@ -173,6 +173,6 @@ class SchedulerFactory {
 			\do_action( 'peakurl_register_cron_jobs', $registry );
 		}
 
-		return new Scheduler( $registry, $repository, $logger );
+		return new Scheduler( $registry, $repository, $logger, $settings_api );
 	}
 }

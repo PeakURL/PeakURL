@@ -94,7 +94,8 @@ export type ApiTagType =
 	| "SystemStatus"
 	| "CacheStatus"
 	| "AdminNotices"
-	| "CronStatus";
+	| "CronStatus"
+	| "CronHistory";
 
 /**
  * Ordered list of RTK Query cache tags registered on the base API instance.
@@ -120,6 +121,7 @@ export const API_TAG_TYPES: ApiTagType[] = [
 	"CacheStatus",
 	"AdminNotices",
 	"CronStatus",
+	"CronHistory",
 ];
 
 /**
@@ -563,6 +565,9 @@ export interface SaveGeneralSettingsPayload {
 
 	/** Trash auto-delete retention period in days (0 for never). */
 	trashRetentionDays?: number;
+
+	/** Cron execution history retention period in days (0 for never, default 30). */
+	cronHistoryRetentionDays?: number;
 }
 
 /**

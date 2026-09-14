@@ -200,4 +200,59 @@ class SystemCronEndpointsTest extends TestCase {
 		$this->assertTrue( $result['run_all'] );
 		$this->assertArrayHasKey( 'test_job', $result['results'] );
 	}
+
+	public function test_system_controller_cron_settings_update(): void {
+		$system_service = $this->createMock( SystemService::class );
+		$request        = new Request(
+			'POST',
+			'/api/v1/system/cron/settings',
+			array(),
+			array( 'retention_days' => 14 )
+		);
+
+		$system_service->expects( $this->once() )
+			->method( 'update_cron_settings' )
+			->with( $request )
+			->willReturn(
+				array(
+					'retention_days' => 14,
+					'success'        => true,
+				)
+			);
+
+		$controller = new SystemController( $system_service );
+		$response   = $controller->cron_settings_update( $request );
+
+		$this->assertSame( 200, $response['status'] );
+		$this->assertTrue( $response['body']['data']['success'] );
+		$this->assertSame( 14, $response['body']['data']['retention_days'] );
+	}
+
+	public function test_system_controller_cron_clear_history(): void {
+		$system_service = $this->createMock( SystemService::class );
+		$request        = new Request(
+			'DELETE',
+			'/api/v1/system/cron/history',
+			array( 'job_id' => 'peakurl_cache_cleanup' ),
+			array()
+		);
+
+		$system_service->expects( $this->once() )
+			->method( 'clear_cron_history' )
+			->with( $request )
+			->willReturn(
+				array(
+					'deleted_count' => 5,
+					'job_id'        => 'peakurl_cache_cleanup',
+					'success'       => true,
+				)
+			);
+
+		$controller = new SystemController( $system_service );
+		$response   = $controller->cron_clear_history( $request );
+
+		$this->assertSame( 200, $response['status'] );
+		$this->assertTrue( $response['body']['data']['success'] );
+		$this->assertSame( 5, $response['body']['data']['deleted_count'] );
+	}
 }

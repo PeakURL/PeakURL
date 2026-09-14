@@ -170,3 +170,30 @@ export interface RunDueJobsResult {
 	results: Record<string, CronJobExecutionOutcome>;
 	success: boolean;
 }
+
+/**
+ * Raw payload returned by POST /api/v1/system/cron/history/clear.
+ */
+export interface ApiClearCronHistoryResponse {
+	deleted_count: number;
+	job_id?: string | null;
+	job_key?: string | null;
+	success: boolean;
+}
+
+/**
+ * Request parameters for clearing cron execution history.
+ */
+export interface ClearCronHistoryRequest {
+	jobId?: string;
+	jobKey?: string;
+}
+
+/**
+ * Domain outcome for clearing cron execution history.
+ */
+export interface ClearCronHistoryResponse {
+	deletedCount: number;
+	jobId: string | null;
+	success: boolean;
+}

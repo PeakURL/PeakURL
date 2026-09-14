@@ -517,4 +517,86 @@ class SchedulerRepository {
 
 		return is_array( $results ) ? $results : array();
 	}
+
+	/**
+	 * Prune completed execution history runs older than the specified retention days.
+	 *
+	 * Runs with 'running' or 'retrying' status are strictly excluded to avoid
+	 * corrupting active executions.
+	 *
+	 * @param int $retention_days Number of days of history to retain (<= 0 disables pruning).
+	 * @param int $batch_size     Maximum number of records to delete per batch.
+	 * @return int Total number of pruned history rows.
+	 * @since 1.7.0
+	 */
+	public function prune_history( int $retention_days, int $batch_size = 500 ): int {
+		if ( $retention_days <= 0 ) {
+			return 0;
+		}
+
+		$cutoff = gmdate( 'Y-m-d H:i:s', time() - ( $retention_days * 86400 ) );
+		$limit  = max( 1, (int) $batch_size );
+
+		$total_deleted  = 0;
+		$max_iterations = 10;
+		$iterations     = 0;
+
+		do {
+			$deleted = $this->db->query(
+				'DELETE FROM cron_runs
+				WHERE created_at < :cutoff
+				AND status != :running_status
+				AND status != :retrying_status
+				LIMIT ' . $limit,
+				array(
+					'cutoff'          => $cutoff,
+					'running_status'  => 'running',
+					'retrying_status' => 'retrying',
+				)
+			);
+
+			$total_deleted += $deleted;
+			++$iterations;
+		} while ( $deleted === $limit && $iterations < $max_iterations );
+
+		return $total_deleted;
+	}
+
+	/**
+	 * Clear finished execution run history across all jobs or for a specific job.
+	 *
+	 * Runs with 'running' or 'retrying' status are strictly excluded to protect
+	 * active executions.
+	 *
+	 * @param string|null $job_id Optional job identifier to scope deletion.
+	 * @return int Total number of deleted history rows.
+	 * @since 1.7.0
+	 */
+	public function clear_history( ?string $job_id = null ): int {
+		$clean_job_id = ( null !== $job_id && '' !== trim( $job_id ) ) ? trim( $job_id ) : null;
+
+		if ( null !== $clean_job_id ) {
+			return $this->db->query(
+				'DELETE FROM cron_runs
+				WHERE job_id = :job_id
+				AND status != :running_status
+				AND status != :retrying_status',
+				array(
+					'job_id'          => $clean_job_id,
+					'running_status'  => 'running',
+					'retrying_status' => 'retrying',
+				)
+			);
+		}
+
+		return $this->db->query(
+			'DELETE FROM cron_runs
+			WHERE status != :running_status
+			AND status != :retrying_status',
+			array(
+				'running_status'  => 'running',
+				'retrying_status' => 'retrying',
+			)
+		);
+	}
 }

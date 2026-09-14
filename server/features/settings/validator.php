@@ -160,15 +160,18 @@ class Validator {
 		);
 
 		return array(
-			'siteLanguage'       => $site_language,
-			'siteTimezone'       => $site_timezone,
-			'siteTimeFormat'     => $site_time_format,
-			'siteName'           => trim( (string) ( $payload['siteName'] ?? '' ) ),
-			'siteTagline'        => $this->normalize_tagline( $payload['siteTagline'] ?? '' ),
-			'landingPageMode'    => $this->normalize_landing_page_mode( $payload['landingPageMode'] ?? null ),
-			'landingPageUrl'     => trim( (string) ( $payload['landingPageUrl'] ?? '' ) ),
-			'trashRetentionDays' => isset( $payload['trashRetentionDays'] )
+			'siteLanguage'             => $site_language,
+			'siteTimezone'             => $site_timezone,
+			'siteTimeFormat'           => $site_time_format,
+			'siteName'                 => trim( (string) ( $payload['siteName'] ?? '' ) ),
+			'siteTagline'              => $this->normalize_tagline( $payload['siteTagline'] ?? '' ),
+			'landingPageMode'          => $this->normalize_landing_page_mode( $payload['landingPageMode'] ?? null ),
+			'landingPageUrl'           => trim( (string) ( $payload['landingPageUrl'] ?? '' ) ),
+			'trashRetentionDays'       => isset( $payload['trashRetentionDays'] )
 				? max( 0, (int) $payload['trashRetentionDays'] )
+				: null,
+			'cronHistoryRetentionDays' => isset( $payload['cronHistoryRetentionDays'] )
+				? max( 0, (int) $payload['cronHistoryRetentionDays'] )
 				: null,
 		);
 	}

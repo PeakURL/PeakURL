@@ -44,6 +44,7 @@ export {
 	useGetCronStatusQuery,
 	useRunDueJobsMutation,
 	useRunCronJobMutation,
+	useClearCronHistoryMutation,
 } from "./system";
 export * from "./types";
 export { urlsApi } from "./urls";

@@ -713,6 +713,10 @@ class Application {
 				array( 'get', '/system/cron', array( $system, 'cron_status' ) ),
 				array( 'post', '/system/cron/run', array( $system, 'cron_run_now' ) ),
 				array( 'post', '/system/cron/run/{id}', array( $system, 'cron_run_now' ) ),
+				array( 'post', '/system/cron/settings', array( $system, 'cron_settings_update' ) ),
+				array( 'put', '/system/cron/settings', array( $system, 'cron_settings_update' ) ),
+				array( 'delete', '/system/cron/history', array( $system, 'cron_clear_history' ) ),
+				array( 'post', '/system/cron/history/clear', array( $system, 'cron_clear_history' ) ),
 			)
 		);
 	}

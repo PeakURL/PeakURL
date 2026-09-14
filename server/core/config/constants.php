@@ -247,4 +247,8 @@ class Constants {
 	public const DEFAULT_REDIS_PORT = 6379;
 	/** Default Redis database index. */
 	public const DEFAULT_REDIS_DATABASE = 0;
+	/** Settings key storing scheduled jobs execution history retention in days. */
+	public const SETTING_CRON_HISTORY_RETENTION_DAYS = 'cron_history_retention_days';
+	/** Default scheduled jobs execution history retention in days (30 days). */
+	public const DEFAULT_CRON_HISTORY_RETENTION_DAYS = 30;
 }

@@ -27,8 +27,7 @@
 	}
 
 	.scheduled-jobs-page-hero-copy {
-		@apply min-w-0 flex flex-col;
-		text-align: start;
+		@apply min-w-0 flex flex-col text-start;
 	}
 
 	.scheduled-jobs-page-hero-badge {
@@ -40,12 +39,11 @@
 	}
 
 	.scheduled-jobs-page-summary {
-		@apply mt-1 text-sm leading-relaxed text-text-muted;
-		text-align: start;
+		@apply mt-1 text-sm leading-relaxed text-text-muted text-start;
 	}
 
 	.scheduled-jobs-page-hero-actions {
-		@apply flex items-center gap-2.5 mt-1 shrink-0;
+		@apply flex flex-wrap items-center gap-2 sm:gap-2.5 mt-1 shrink-0;
 	}
 
 	/* ─── Overview Metric Cards (Matching Activity Page 4-column Grid) ─── */
@@ -58,8 +56,7 @@
 	}
 
 	.scheduled-jobs-overview-item {
-		@apply rounded-lg border border-stroke bg-surface p-4 transition-all duration-200 hover:border-stroke-strong hover:shadow-md;
-		text-align: start;
+		@apply rounded-lg border border-stroke bg-surface p-4 transition-all duration-200 hover:border-stroke-strong hover:shadow-md text-start;
 	}
 
 	.scheduled-jobs-overview-header {
@@ -130,24 +127,75 @@
 	/* ─── Table Container ─── */
 	.scheduled-jobs-table-container {
 		@apply overflow-x-auto;
+		scrollbar-width: thin;
+		scrollbar-color: var(--color-stroke-strong) transparent;
+		-webkit-overflow-scrolling: touch;
 	}
 
-	.scheduled-jobs-table {
-		@apply min-w-full divide-y divide-stroke text-left text-xs border-collapse;
+	.scheduled-jobs-table-container::-webkit-scrollbar {
+		height: 7px;
 	}
 
-	[dir="rtl"] .scheduled-jobs-table {
+	.scheduled-jobs-table-container::-webkit-scrollbar-track {
+		background: var(--color-surface-alt);
+		border-radius: 0 0 0.5rem 0.5rem;
+	}
+
+	.scheduled-jobs-table-container::-webkit-scrollbar-thumb {
+		background-color: var(--color-stroke-strong);
+		border-radius: 9999px;
+	}
+
+	.scheduled-jobs-table-container::-webkit-scrollbar-thumb:hover {
+		background-color: var(--color-text-muted);
+	}
+
+	.scheduled-jobs-table,
+	.jobs-table {
+		@apply min-w-full divide-y divide-stroke text-left text-xs border-collapse table-fixed;
+	}
+
+	[dir="rtl"] .scheduled-jobs-table,
+	[dir="rtl"] .jobs-table {
 		@apply text-right;
 	}
 
-	.scheduled-jobs-table th {
-		@apply bg-surface-alt px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text-muted border-b border-stroke/70;
-		text-align: start;
+	.scheduled-jobs-table th,
+	.jobs-table th {
+		@apply bg-surface-alt px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text-muted border-b border-stroke/70 text-start;
 	}
 
-	.scheduled-jobs-table td {
-		@apply px-4 py-3.5 text-xs text-heading border-b border-stroke/40 align-middle;
-		text-align: start;
+	.scheduled-jobs-table td,
+	.jobs-table td {
+		@apply px-4 py-3.5 text-xs text-heading border-b border-stroke/40 align-middle text-start;
+	}
+
+	.scheduled-jobs-th-job {
+		@apply w-[24%] min-w-40;
+	}
+
+	.scheduled-jobs-th-status {
+		@apply w-[12%] min-w-26;
+	}
+
+	.scheduled-jobs-th-schedule {
+		@apply w-[11%] min-w-24;
+	}
+
+	.scheduled-jobs-th-last-run {
+		@apply w-[13%] min-w-28;
+	}
+
+	.scheduled-jobs-th-next-run {
+		@apply w-[11%] min-w-24;
+	}
+
+	.scheduled-jobs-th-result {
+		@apply w-[13%] min-w-28;
+	}
+
+	.scheduled-jobs-th-actions {
+		@apply w-[16%] min-w-39.5 text-start;
 	}
 
 	.scheduled-jobs-table-row {
@@ -159,39 +207,39 @@
 	}
 
 	.scheduled-jobs-cell-job {
-		@apply min-w-[200px];
+		@apply max-w-xs;
 	}
 
 	.scheduled-jobs-job-title {
-		@apply text-xs font-semibold text-heading;
+		@apply text-xs font-semibold text-heading truncate;
 	}
 
 	.scheduled-jobs-job-id {
-		@apply mt-0.5 inline-block text-[11px] text-text-muted;
+		@apply mt-0.5 inline-block text-[11px] text-text-muted truncate;
 	}
 
 	.scheduled-jobs-cell-status {
-		@apply whitespace-nowrap min-w-[120px];
+		@apply whitespace-nowrap;
 	}
 
 	.scheduled-jobs-cell-schedule {
-		@apply whitespace-nowrap min-w-[110px];
+		@apply whitespace-nowrap;
 	}
 
 	.scheduled-jobs-cell-last-run {
-		@apply whitespace-nowrap min-w-[120px];
+		@apply whitespace-nowrap;
 	}
 
 	.scheduled-jobs-cell-next-run {
-		@apply whitespace-nowrap min-w-[120px];
+		@apply whitespace-nowrap;
 	}
 
 	.scheduled-jobs-cell-result {
-		@apply min-w-[180px];
+		@apply max-w-xs truncate;
 	}
 
 	.scheduled-jobs-cell-actions {
-		@apply whitespace-nowrap text-end;
+		@apply whitespace-nowrap text-start min-w-39.5;
 	}
 
 	/* ─── Action Buttons ─── */
@@ -209,8 +257,9 @@
 	}
 
 	/* ─── Status Badges ─── */
-	.scheduled-jobs-badge {
-		@apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium;
+	.scheduled-jobs-badge,
+	.job-status-badge {
+		@apply inline-flex items-center justify-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium min-w-22.5 text-center;
 	}
 
 	.scheduled-jobs-badge-dot {
@@ -279,7 +328,7 @@
 	}
 
 	.scheduled-jobs-drawer-panel {
-		@apply pointer-events-auto flex h-full w-screen max-w-2xl transform flex-col overflow-hidden bg-surface shadow-2xl transition duration-500 ease-in-out sm:duration-700;
+		@apply pointer-events-auto flex h-full w-screen max-w-3xl lg:max-w-4xl transform flex-col overflow-hidden bg-surface shadow-2xl transition duration-500 ease-in-out sm:duration-700;
 	}
 
 	.scheduled-jobs-drawer-header {
@@ -303,20 +352,23 @@
 	}
 
 	.scheduled-jobs-drawer-meta-grid {
-		@apply grid grid-cols-2 gap-3 sm:grid-cols-4 rounded-xl border border-stroke bg-surface-alt/60 p-3.5;
+		@apply grid grid-cols-2 gap-3.5 sm:grid-cols-[1.6fr_1fr_1fr_1fr] rounded-xl border border-stroke bg-surface-alt/60 p-4;
 	}
 
 	.scheduled-jobs-drawer-meta-card {
-		@apply flex flex-col;
-		text-align: start;
+		@apply flex flex-col text-start;
 	}
 
 	.scheduled-jobs-drawer-meta-label {
 		@apply text-[11px] font-medium text-text-muted uppercase tracking-wider;
 	}
 
+	.scheduled-jobs-drawer-meta-id {
+		@apply mt-0.5 text-xs font-semibold text-heading break-all select-all inline-block;
+	}
+
 	.scheduled-jobs-drawer-meta-value {
-		@apply mt-0.5 text-xs font-semibold text-heading truncate;
+		@apply mt-0.5 text-xs font-semibold text-heading;
 	}
 
 	.scheduled-jobs-drawer-error-banner {
@@ -329,27 +381,79 @@
 
 	.scheduled-jobs-drawer-table-wrap {
 		@apply overflow-x-auto rounded-xl border border-stroke;
+		scrollbar-width: thin;
+		scrollbar-color: var(--color-stroke-strong) transparent;
+		-webkit-overflow-scrolling: touch;
 	}
 
-	.scheduled-jobs-drawer-table {
-		@apply w-full text-left text-xs border-collapse;
+	.scheduled-jobs-drawer-table-wrap::-webkit-scrollbar {
+		height: 7px;
 	}
 
-	[dir="rtl"] .scheduled-jobs-drawer-table {
+	.scheduled-jobs-drawer-table-wrap::-webkit-scrollbar-track {
+		background: var(--color-surface-alt);
+		border-radius: 0 0 0.75rem 0.75rem;
+	}
+
+	.scheduled-jobs-drawer-table-wrap::-webkit-scrollbar-thumb {
+		background-color: var(--color-stroke-strong);
+		border-radius: 9999px;
+	}
+
+	.scheduled-jobs-drawer-table-wrap::-webkit-scrollbar-thumb:hover {
+		background-color: var(--color-text-muted);
+	}
+
+	.scheduled-jobs-drawer-table,
+	.history-table {
+		@apply min-w-full text-start text-xs border-collapse table-fixed;
+	}
+
+	[dir="rtl"] .scheduled-jobs-drawer-table,
+	[dir="rtl"] .history-table {
 		@apply text-right;
 	}
 
-	.scheduled-jobs-drawer-table th {
-		@apply bg-surface-alt px-3.5 py-2.5 text-[11px] font-semibold text-text-muted uppercase tracking-wider border-b border-stroke/60;
-		text-align: start;
+	.scheduled-jobs-drawer-table th,
+	.history-table th {
+		@apply bg-surface-alt px-3.5 py-2.5 text-[11px] font-semibold text-text-muted uppercase tracking-wider border-b border-stroke/60 text-start;
 	}
 
-	.scheduled-jobs-drawer-table td {
-		@apply border-b border-stroke/30 px-3.5 py-2.5 text-xs text-heading align-middle;
-		text-align: start;
+	.scheduled-jobs-drawer-table td,
+	.history-table td {
+		@apply border-b border-stroke/30 px-3.5 py-2.5 text-xs text-heading align-middle text-start;
 	}
 
-	.scheduled-jobs-drawer-table tr:last-child td {
+	.scheduled-jobs-drawer-th-id {
+		@apply w-[11%] min-w-20;
+	}
+
+	.scheduled-jobs-drawer-th-status {
+		@apply w-[14%] min-w-26;
+	}
+
+	.scheduled-jobs-drawer-th-attempt {
+		@apply w-[9%] min-w-17.5;
+	}
+
+	.scheduled-jobs-drawer-th-started {
+		@apply w-[21%] min-w-40;
+	}
+
+	.scheduled-jobs-drawer-th-duration {
+		@apply w-[11%] min-w-21;
+	}
+
+	.scheduled-jobs-drawer-th-details {
+		@apply w-[34%] min-w-70;
+	}
+
+	.scheduled-jobs-drawer-cell-details {
+		@apply align-middle min-w-70;
+	}
+
+	.scheduled-jobs-drawer-table tr:last-child td,
+	.history-table tr:last-child td {
 		@apply border-b-0;
 	}
 
@@ -358,7 +462,7 @@
 	}
 
 	.scheduled-jobs-drawer-footer {
-		@apply flex items-center justify-between border-t border-stroke bg-surface-alt px-4 py-3 sm:px-6;
+		@apply flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between border-t border-stroke bg-surface-alt px-4 py-3 sm:px-6;
 	}
 
 	/* ─── Confirm Modal ─── */

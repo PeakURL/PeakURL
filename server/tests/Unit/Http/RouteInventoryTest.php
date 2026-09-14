@@ -440,6 +440,26 @@ class RouteInventoryTest extends TestCase {
 			'capability' => 'manage_updates',
 			'coverage'   => array( 'contract', 'auth', 'integration' ),
 		),
+		'POST /api/v1/system/cron/settings'                => array(
+			'area'       => 'System',
+			'capability' => 'manage_updates',
+			'coverage'   => array( 'contract', 'auth' ),
+		),
+		'PUT /api/v1/system/cron/settings'                 => array(
+			'area'       => 'System',
+			'capability' => 'manage_updates',
+			'coverage'   => array( 'contract', 'auth' ),
+		),
+		'DELETE /api/v1/system/cron/history'               => array(
+			'area'       => 'System',
+			'capability' => 'manage_updates',
+			'coverage'   => array( 'contract', 'auth' ),
+		),
+		'POST /api/v1/system/cron/history/clear'           => array(
+			'area'       => 'System',
+			'capability' => 'manage_updates',
+			'coverage'   => array( 'contract', 'auth' ),
+		),
 
 		// Public Catch-All Redirects
 		'GET /{id}'                                        => array(

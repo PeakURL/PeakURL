@@ -662,4 +662,78 @@ class Service {
 			throw new ApiException( $exception->getMessage(), 500 );
 		}
 	}
+
+	/**
+	 * Update background job scheduler settings (e.g. retention policy).
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed> Updated settings payload.
+	 *
+	 * @throws ApiException When validation fails or user is unauthorized.
+	 * @since 1.7.0
+	 */
+	public function update_cron_settings( Request $request ): array {
+		$this->get_update_user( $request );
+
+		if ( null === $this->scheduler ) {
+			throw new ApiException(
+				__( 'Scheduler service is not configured.', 'peakurl' ),
+				500
+			);
+		}
+
+		$payload = $request->json_data();
+		if ( ! is_array( $payload ) || ! isset( $payload['retention_days'] ) ) {
+			throw new ApiException(
+				__( 'Missing required field: retention_days.', 'peakurl' ),
+				422
+			);
+		}
+
+		$retention_days = max( 0, (int) $payload['retention_days'] );
+		$this->scheduler->set_retention_days( $retention_days );
+
+		return array(
+			'retention_days' => $retention_days,
+			'success'        => true,
+		);
+	}
+
+	/**
+	 * Clear background job execution history.
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed> Outcome with deleted_count.
+	 *
+	 * @throws ApiException When user is unauthorized or scheduler is not configured.
+	 * @since 1.7.0
+	 */
+	public function clear_cron_history( Request $request ): array {
+		$this->get_update_user( $request );
+
+		if ( null === $this->scheduler ) {
+			throw new ApiException(
+				__( 'Scheduler service is not configured.', 'peakurl' ),
+				500
+			);
+		}
+
+		$job_id = $request->get_query_param( 'job_id' );
+		if ( null === $job_id || '' === trim( (string) $job_id ) ) {
+			$payload = $request->json_data();
+			if ( is_array( $payload ) && isset( $payload['job_id'] ) ) {
+				$job_id = (string) $payload['job_id'];
+			}
+		}
+
+		$clean_job_id = ( null !== $job_id && '' !== trim( (string) $job_id ) ) ? trim( (string) $job_id ) : null;
+
+		$deleted_count = $this->scheduler->clear_history( $clean_job_id );
+
+		return array(
+			'deleted_count' => $deleted_count,
+			'job_id'        => $clean_job_id,
+			'success'       => true,
+		);
+	}
 }

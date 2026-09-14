@@ -1,13 +1,17 @@
 import {
 	API_ROUTES,
+	mapApiClearCronHistory,
 	mapApiCronStatus,
 	mapApiRunCronJobResult,
 	mapApiRunDueJobsResult,
 } from "@/api";
 import type {
+	ApiClearCronHistoryResponse,
 	ApiCronStatusResponse,
 	ApiRunCronJobResponse,
 	ApiRunDueJobsResponse,
+	ClearCronHistoryRequest,
+	ClearCronHistoryResponse,
 	CronStatusResponse,
 	RunCronJobResult,
 	RunDueJobsResult,
@@ -46,7 +50,7 @@ const CACHE_CHANGE_TAGS = ["CacheStatus", "SystemStatus"] as const;
 const UPDATE_TAGS = ["Updates"] as const;
 const UPDATE_CHANGE_TAGS = ["Updates", "AdminNotices"] as const;
 const SYSTEM_STATUS_TAGS = ["SystemStatus"] as const;
-const CRON_TAGS = ["CronStatus"] as const;
+const CRON_TAGS = ["CronStatus", "CronHistory"] as const;
 const DATABASE_UPDATE_TAGS = [
 	"Updates",
 	"AdminNotices",
@@ -85,6 +89,7 @@ function createGeneralSettingsBody({
 	landingPageMode,
 	landingPageUrl,
 	trashRetentionDays,
+	cronHistoryRetentionDays,
 	faviconFile,
 	removeFavicon,
 	socialPreviewFile,
@@ -101,6 +106,7 @@ function createGeneralSettingsBody({
 			| "landingPageMode"
 			| "landingPageUrl"
 			| "trashRetentionDays"
+			| "cronHistoryRetentionDays"
 	  > {
 	if (
 		hasGeneralSettingsUpload({
@@ -111,6 +117,8 @@ function createGeneralSettingsBody({
 			siteTimeFormat,
 			landingPageMode,
 			landingPageUrl,
+			trashRetentionDays,
+			cronHistoryRetentionDays,
 			faviconFile,
 			removeFavicon,
 			socialPreviewFile,
@@ -129,6 +137,10 @@ function createGeneralSettingsBody({
 				trashRetentionDays !== undefined
 					? String(trashRetentionDays)
 					: undefined,
+			cronHistoryRetentionDays:
+				cronHistoryRetentionDays !== undefined
+					? String(cronHistoryRetentionDays)
+					: undefined,
 			favicon: faviconFile || undefined,
 			removeFavicon: removeFavicon ? "1" : "0",
 			socialPreviewImage: socialPreviewFile || undefined,
@@ -145,6 +157,7 @@ function createGeneralSettingsBody({
 		landingPageMode,
 		landingPageUrl,
 		trashRetentionDays,
+		cronHistoryRetentionDays,
 	};
 }
 
@@ -369,6 +382,23 @@ export const systemApi = baseApi.injectEndpoints({
 			) => mapApiRunCronJobResult(response?.data),
 			invalidatesTags: CRON_TAGS,
 		}),
+		clearCronHistory: build.mutation<
+			ClearCronHistoryResponse,
+			ClearCronHistoryRequest | void
+		>({
+			query: (params) => {
+				const jobKey = params?.jobId ?? params?.jobKey;
+				return {
+					url: API_ROUTES.system.cronClearHistory,
+					method: "POST",
+					body: jobKey ? { job_key: jobKey } : {},
+				};
+			},
+			transformResponse: (
+				response: ApiDataResponse<ApiClearCronHistoryResponse>
+			) => mapApiClearCronHistory(response?.data),
+			invalidatesTags: CRON_TAGS,
+		}),
 	}),
 });
 
@@ -397,4 +427,5 @@ export const {
 	useGetCronStatusQuery,
 	useRunDueJobsMutation,
 	useRunCronJobMutation,
+	useClearCronHistoryMutation,
 } = systemApi;

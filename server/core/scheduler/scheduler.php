@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace PeakURL\Core\Scheduler;
 
+use PeakURL\Api\SettingsApi;
+use PeakURL\Core\Config\Constants;
 use PeakURL\Database\SchedulerRepository;
 use PeakURL\Utils\Date;
 use PeakURL\Utils\Str;
@@ -55,21 +57,55 @@ class Scheduler {
 	private $logger;
 
 	/**
+	 * Settings API instance.
+	 *
+	 * @var SettingsApi|null
+	 * @since 1.7.0
+	 */
+	private ?SettingsApi $settings_api;
+
+	/**
+	 * Configured retention days fallback/override.
+	 *
+	 * @var int
+	 * @since 1.7.0
+	 */
+	private int $retention_days;
+
+	/**
 	 * Create a new Scheduler instance.
 	 *
-	 * @param JobRegistry         $registry   Job registry.
-	 * @param SchedulerRepository $repository Persistence repository.
-	 * @param callable|null       $logger     Optional logging callback.
+	 * @param JobRegistry         $registry       Job registry.
+	 * @param SchedulerRepository $repository     Persistence repository.
+	 * @param callable|null       $logger         Optional logging callback.
+	 * @param SettingsApi|null    $settings_api   Optional settings API for retention persistence.
+	 * @param int|null            $retention_days Optional retention days override.
 	 * @since 1.7.0
 	 */
 	public function __construct(
 		JobRegistry $registry,
 		SchedulerRepository $repository,
-		?callable $logger = null
+		?callable $logger = null,
+		?SettingsApi $settings_api = null,
+		?int $retention_days = null
 	) {
-		$this->registry   = $registry;
-		$this->repository = $repository;
-		$this->logger     = $logger;
+		$this->registry     = $registry;
+		$this->repository   = $repository;
+		$this->logger       = $logger;
+		$this->settings_api = $settings_api;
+
+		if ( null !== $retention_days ) {
+			$this->retention_days = max( 0, $retention_days );
+		} elseif ( null !== $this->settings_api ) {
+			$stored_retention = $this->settings_api->get_option( Constants::SETTING_CRON_HISTORY_RETENTION_DAYS );
+			if ( null !== $stored_retention && '' !== trim( $stored_retention ) && is_numeric( $stored_retention ) ) {
+				$this->retention_days = max( 0, (int) $stored_retention );
+			} else {
+				$this->retention_days = Constants::DEFAULT_CRON_HISTORY_RETENTION_DAYS;
+			}
+		} else {
+			$this->retention_days = Constants::DEFAULT_CRON_HISTORY_RETENTION_DAYS;
+		}
 	}
 
 	/**
@@ -118,6 +154,8 @@ class Scheduler {
 				'error'   => $execution_result->get_error(),
 			);
 		}
+
+		$this->prune_history();
 
 		return $outcomes;
 	}
@@ -205,8 +243,9 @@ class Scheduler {
 		}
 
 		return array(
-			'jobs'       => $jobs,
-			'jobs_count' => count( $jobs ),
+			'jobs'           => $jobs,
+			'jobs_count'     => count( $jobs ),
+			'retention_days' => $this->get_retention_days(),
 		);
 	}
 
@@ -399,5 +438,75 @@ class Scheduler {
 	 */
 	public function get_repository(): SchedulerRepository {
 		return $this->repository;
+	}
+
+	/**
+	 * Get the configured execution history retention period in days.
+	 *
+	 * @return int Number of days (0 indicates indefinite retention / disabled pruning).
+	 * @since 1.7.0
+	 */
+	public function get_retention_days(): int {
+		if ( null !== $this->settings_api ) {
+			$stored_retention = $this->settings_api->get_option( Constants::SETTING_CRON_HISTORY_RETENTION_DAYS );
+			if ( null !== $stored_retention && '' !== trim( $stored_retention ) && is_numeric( $stored_retention ) ) {
+				return max( 0, (int) $stored_retention );
+			}
+		}
+
+		return $this->retention_days;
+	}
+
+	/**
+	 * Update the execution history retention period in days.
+	 *
+	 * @param int $retention_days Number of days (0 disables automatic pruning).
+	 * @return void
+	 * @since 1.7.0
+	 */
+	public function set_retention_days( int $retention_days ): void {
+		$days                 = max( 0, $retention_days );
+		$this->retention_days = $days;
+
+		if ( null !== $this->settings_api ) {
+			$this->settings_api->update_option(
+				Constants::SETTING_CRON_HISTORY_RETENTION_DAYS,
+				(string) $days,
+				false
+			);
+		}
+	}
+
+	/**
+	 * Prune old terminal execution runs according to the retention policy.
+	 *
+	 * @param int|null $retention_days Optional override for retention days.
+	 * @return int Total number of deleted history rows.
+	 * @since 1.7.0
+	 */
+	public function prune_history( ?int $retention_days = null ): int {
+		$days = ( null !== $retention_days ) ? max( 0, $retention_days ) : $this->get_retention_days();
+
+		if ( $days <= 0 ) {
+			return 0;
+		}
+
+		$pruned = $this->repository->prune_history( $days );
+		if ( $pruned > 0 ) {
+			$this->log( sprintf( 'Pruned %d stale cron execution history rows (retention: %d days).', $pruned, $days ) );
+		}
+
+		return $pruned;
+	}
+
+	/**
+	 * Clear terminal execution run history across all jobs or for a specific job.
+	 *
+	 * @param string|null $job_id Optional job identifier to scope deletion.
+	 * @return int Total number of deleted history rows.
+	 * @since 1.7.0
+	 */
+	public function clear_history( ?string $job_id = null ): int {
+		return $this->repository->clear_history( $job_id );
 	}
 }

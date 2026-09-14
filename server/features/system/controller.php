@@ -211,4 +211,32 @@ class Controller extends BaseController {
 	public function cron_run_now( Request $request ): array {
 		return $this->run_cron_job( $request );
 	}
+
+	/**
+	 * Update background job scheduler settings (e.g. retention policy).
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed> JSON success response.
+	 * @since 1.7.0
+	 */
+	public function cron_settings_update( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->update_cron_settings( $request ),
+			__( 'Scheduler settings updated.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Clear background job execution history.
+	 *
+	 * @param Request $request Incoming HTTP request (admin-only).
+	 * @return array<string, mixed> JSON success response.
+	 * @since 1.7.0
+	 */
+	public function cron_clear_history( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->clear_cron_history( $request ),
+			__( 'Execution history cleared.', 'peakurl' ),
+		);
+	}
 }

@@ -283,4 +283,97 @@ class SchedulerIntegrationTest extends TestCase {
 		$this->assertSame( 'success', $run['status'] );
 		$this->assertSame( 'Skipped: Skipped reason test', $run['output_summary'] );
 	}
+
+	public function test_prune_history_removes_old_terminal_runs_and_preserves_active(): void {
+		$prefix  = $this->connection->get_table_prefix();
+		$job_id  = $this->test_prefix . 'prune_test';
+		$handler = $this->createMock( JobHandlerInterface::class );
+		$this->registry->register( new JobDefinition( $job_id, 'Prune Test Job', 3600, $handler ) );
+		$this->repository->sync_registered_jobs( $this->registry->all() );
+
+		// Insert an old terminal success run (40 days ago).
+		$old_time = gmdate( 'Y-m-d H:i:s', strtotime( '-40 days' ) );
+		$this->pdo->exec(
+			"INSERT INTO {$prefix}cron_runs (id, job_id, status, attempt, started_at, finished_at, duration_ms, output_summary, created_at)
+			VALUES ('{$this->test_prefix}run_old_succ', '{$job_id}', 'success', 1, '{$old_time}', '{$old_time}', 100, 'done', '{$old_time}')"
+		);
+
+		// Insert an old terminal failed run (35 days ago).
+		$old_fail_time = gmdate( 'Y-m-d H:i:s', strtotime( '-35 days' ) );
+		$this->pdo->exec(
+			"INSERT INTO {$prefix}cron_runs (id, job_id, status, attempt, started_at, finished_at, duration_ms, error_message, created_at)
+			VALUES ('{$this->test_prefix}run_old_fail', '{$job_id}', 'failed', 1, '{$old_fail_time}', '{$old_fail_time}', 150, 'err', '{$old_fail_time}')"
+		);
+
+		// Insert an old active 'running' run (35 days ago) - MUST NOT be pruned.
+		$this->pdo->exec(
+			"INSERT INTO {$prefix}cron_runs (id, job_id, status, attempt, started_at, created_at)
+			VALUES ('{$this->test_prefix}run_old_active', '{$job_id}', 'running', 1, '{$old_fail_time}', '{$old_fail_time}')"
+		);
+
+		// Insert a recent terminal success run (2 days ago) - MUST NOT be pruned.
+		$recent_time = gmdate( 'Y-m-d H:i:s', strtotime( '-2 days' ) );
+		$this->pdo->exec(
+			"INSERT INTO {$prefix}cron_runs (id, job_id, status, attempt, started_at, finished_at, duration_ms, output_summary, created_at)
+			VALUES ('{$this->test_prefix}run_recent', '{$job_id}', 'success', 1, '{$recent_time}', '{$recent_time}', 80, 'ok', '{$recent_time}')"
+		);
+
+		$pruned = $this->repository->prune_history( 30 );
+		$this->assertSame( 2, $pruned );
+
+		// Verify surviving runs
+		$stmt          = $this->pdo->query( "SELECT id FROM {$prefix}cron_runs WHERE job_id = '{$job_id}' ORDER BY id ASC" );
+		$remaining_ids = $stmt->fetchAll( PDO::FETCH_COLUMN );
+
+		$this->assertContains( "{$this->test_prefix}run_old_active", $remaining_ids );
+		$this->assertContains( "{$this->test_prefix}run_recent", $remaining_ids );
+		$this->assertNotContains( "{$this->test_prefix}run_old_succ", $remaining_ids );
+		$this->assertNotContains( "{$this->test_prefix}run_old_fail", $remaining_ids );
+	}
+
+	public function test_clear_history_removes_runs_for_specific_job_and_all(): void {
+		$prefix  = $this->connection->get_table_prefix();
+		$job_a   = $this->test_prefix . 'clear_a';
+		$job_b   = $this->test_prefix . 'clear_b';
+		$handler = $this->createMock( JobHandlerInterface::class );
+		$this->registry->register( new JobDefinition( $job_a, 'Clear Job A', 3600, $handler ) );
+		$this->registry->register( new JobDefinition( $job_b, 'Clear Job B', 3600, $handler ) );
+		$this->repository->sync_registered_jobs( $this->registry->all() );
+		$now = gmdate( 'Y-m-d H:i:s' );
+
+		// Job A runs: 2 finished, 1 running
+		$this->pdo->exec(
+			"INSERT INTO {$prefix}cron_runs (id, job_id, status, attempt, started_at, finished_at, created_at) VALUES
+			('{$this->test_prefix}a_1', '{$job_a}', 'success', 1, '{$now}', '{$now}', '{$now}'),
+			('{$this->test_prefix}a_2', '{$job_a}', 'failed', 1, '{$now}', '{$now}', '{$now}'),
+			('{$this->test_prefix}a_active', '{$job_a}', 'running', 1, '{$now}', NULL, '{$now}')"
+		);
+
+		// Job B runs: 2 finished
+		$this->pdo->exec(
+			"INSERT INTO {$prefix}cron_runs (id, job_id, status, attempt, started_at, finished_at, created_at) VALUES
+			('{$this->test_prefix}b_1', '{$job_b}', 'success', 1, '{$now}', '{$now}', '{$now}'),
+			('{$this->test_prefix}b_2', '{$job_b}', 'success', 1, '{$now}', '{$now}', '{$now}')"
+		);
+
+		// Clear only Job A
+		$deleted_a = $this->repository->clear_history( $job_a );
+		$this->assertSame( 2, $deleted_a );
+
+		// Check Job A running run still exists
+		$stmt = $this->pdo->query( "SELECT id FROM {$prefix}cron_runs WHERE job_id = '{$job_a}'" );
+		$this->assertSame( array( "{$this->test_prefix}a_active" ), $stmt->fetchAll( PDO::FETCH_COLUMN ) );
+
+		// Check Job B runs still exist
+		$stmt = $this->pdo->query( "SELECT COUNT(*) FROM {$prefix}cron_runs WHERE job_id = '{$job_b}'" );
+		$this->assertSame( 2, (int) $stmt->fetchColumn() );
+
+		// Clear all jobs
+		$deleted_all = $this->repository->clear_history();
+		$this->assertGreaterThanOrEqual( 2, $deleted_all );
+
+		// Job A's active run should STILL exist
+		$stmt = $this->pdo->query( "SELECT id FROM {$prefix}cron_runs WHERE id = '{$this->test_prefix}a_active'" );
+		$this->assertNotEmpty( $stmt->fetchAll( PDO::FETCH_COLUMN ) );
+	}
 }

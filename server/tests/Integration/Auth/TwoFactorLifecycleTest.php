@@ -388,21 +388,145 @@ class TwoFactorLifecycleTest extends TestCase {
 
 		$code_to_consume = $backup_codes[0];
 
-		// Instantiate a second independent connection and credentials service
-		$config       = Configuration::get_current();
-		$conn2        = new Connection( $config );
-		$db2          = new PeakURL_DB( $conn2, $this->table_prefix );
-		$credentials2 = new Credentials( $db2 );
+		$config      = Configuration::get_current();
+		$db_host     = (string) ( $config['DB_HOST'] ?? '127.0.0.1' );
+		$db_port     = (string) ( $config['DB_PORT'] ?? '3307' );
+		$db_name     = (string) ( $config['DB_DATABASE'] ?? 'peakurl_test' );
+		$db_prefix   = $this->table_prefix;
+		$db_user     = (string) ( $config['DB_USERNAME'] ?? 'root' );
+		$db_pass     = (string) ( $config['DB_PASSWORD'] ?? 'root' );
+		$bootstrap   = dirname( __DIR__, 2 ) . '/bootstrap.php';
+		$worker_file = sys_get_temp_dir() . '/peakurl_2fa_worker_' . bin2hex( random_bytes( 8 ) ) . '.php';
 
-		// Execute first verification
-		$result1 = $this->credentials->verify_backup_code( $user_id, $code_to_consume );
-		$this->assertTrue( $result1 );
+		$worker_code = <<<PHP
+<?php
+\$_ENV['PEAKURL_ENV']       = 'testing';
+\$_ENV['PEAKURL_DEV']       = 'true';
+\$_ENV['PEAKURL_AUTH_KEY']  = '01392ccd4d2f29b4b8c4c64ac0bda3da0fbf2229ec4e0d037ec9fcbb49afffd8';
+\$_ENV['PEAKURL_AUTH_SALT'] = '282ac223247ff2e2b5d771bdc18bacb55cfac40ef04e8ff1490389ea62448676';
+\$_ENV['DB_HOST']           = '{$db_host}';
+\$_ENV['DB_PORT']           = '{$db_port}';
+\$_ENV['DB_DATABASE']       = '{$db_name}';
+\$_ENV['DB_PREFIX']         = '{$db_prefix}';
+\$_ENV['DB_USERNAME']       = '{$db_user}';
+\$_ENV['DB_PASSWORD']       = '{$db_pass}';
 
-		// Second attempt on the other connection must fail to consume the already-consumed code
-		$result2 = $credentials2->verify_backup_code( $user_id, $code_to_consume );
-		$this->assertFalse( $result2 );
+require_once '{$bootstrap}';
 
-		// Verify final remaining count in DB is 7 (consumed exactly once)
+use PeakURL\Core\Config\Configuration;
+use PeakURL\Services\Database\Connection;
+use PeakURL\Services\Database\PeakURL_DB;
+use PeakURL\Features\Auth\Credentials;
+
+\$cfg         = Configuration::get_current();
+\$conn        = new Connection( \$cfg );
+\$db          = new PeakURL_DB( \$conn, \$conn->get_table_prefix() );
+\$credentials = new Credentials( \$db );
+
+\$target_user = \$argv[1];
+\$target_code = \$argv[2];
+
+// Signal ready to parent
+echo "READY\n";
+@ob_flush();
+flush();
+
+// Block until released by parent
+fgets( STDIN );
+
+\$start  = microtime( true );
+\$result = \$credentials->verify_backup_code( \$target_user, \$target_code );
+\$end    = microtime( true );
+
+echo json_encode( array( 'success' => \$result, 'start' => \$start, 'end' => \$end ) ) . "\n";
+PHP;
+
+		file_put_contents( $worker_file, $worker_code );
+
+		$descriptors = array(
+			0 => array( 'pipe', 'r' ),
+			1 => array( 'pipe', 'w' ),
+			2 => array( 'pipe', 'w' ),
+		);
+
+		$proc1  = null;
+		$proc2  = null;
+		$pipes1 = array();
+		$pipes2 = array();
+
+		try {
+			$proc1 = proc_open( array( PHP_BINARY, $worker_file, $user_id, $code_to_consume ), $descriptors, $pipes1 );
+			$proc2 = proc_open( array( PHP_BINARY, $worker_file, $user_id, $code_to_consume ), $descriptors, $pipes2 );
+
+			$this->assertIsResource( $proc1 );
+			$this->assertIsResource( $proc2 );
+
+			// Wait for both independent child processes to connect to DB and signal READY
+			$ready1 = trim( (string) fgets( $pipes1[1] ) );
+			$ready2 = trim( (string) fgets( $pipes2[1] ) );
+
+			$this->assertSame( 'READY', $ready1, 'Worker 1 failed to reach ready state' );
+			$this->assertSame( 'READY', $ready2, 'Worker 2 failed to reach ready state' );
+
+			// Release both workers concurrently
+			fwrite( $pipes1[0], "GO\n" );
+			fflush( $pipes1[0] );
+			fwrite( $pipes2[0], "GO\n" );
+			fflush( $pipes2[0] );
+
+			$stdout1 = stream_get_contents( $pipes1[1] );
+			$stdout2 = stream_get_contents( $pipes2[1] );
+			$stderr1 = stream_get_contents( $pipes1[2] );
+			$stderr2 = stream_get_contents( $pipes2[2] );
+		} finally {
+			if ( isset( $pipes1[0] ) && is_resource( $pipes1[0] ) ) {
+				fclose( $pipes1[0] );
+			}
+			if ( isset( $pipes1[1] ) && is_resource( $pipes1[1] ) ) {
+				fclose( $pipes1[1] );
+			}
+			if ( isset( $pipes1[2] ) && is_resource( $pipes1[2] ) ) {
+				fclose( $pipes1[2] );
+			}
+			if ( isset( $pipes2[0] ) && is_resource( $pipes2[0] ) ) {
+				fclose( $pipes2[0] );
+			}
+			if ( isset( $pipes2[1] ) && is_resource( $pipes2[1] ) ) {
+				fclose( $pipes2[1] );
+			}
+			if ( isset( $pipes2[2] ) && is_resource( $pipes2[2] ) ) {
+				fclose( $pipes2[2] );
+			}
+
+			if ( is_resource( $proc1 ) ) {
+				proc_close( $proc1 );
+			}
+			if ( is_resource( $proc2 ) ) {
+				proc_close( $proc2 );
+			}
+
+			if ( file_exists( $worker_file ) ) {
+				@unlink( $worker_file );
+			}
+		}
+
+		$this->assertSame( '', $stderr1, "Worker 1 error: {$stderr1}" );
+		$this->assertSame( '', $stderr2, "Worker 2 error: {$stderr2}" );
+
+		$data1 = json_decode( trim( $stdout1 ), true );
+		$data2 = json_decode( trim( $stdout2 ), true );
+
+		$this->assertIsArray( $data1, "Invalid output from Worker 1: {$stdout1}" );
+		$this->assertIsArray( $data2, "Invalid output from Worker 2: {$stdout2}" );
+
+		// Exactly one worker must succeed, and exactly one must fail
+		$success_count = ( $data1['success'] ? 1 : 0 ) + ( $data2['success'] ? 1 : 0 );
+		$this->assertSame( 1, $success_count, 'Exactly one concurrent verification must succeed' );
+
+		$failure_count = ( ! $data1['success'] ? 1 : 0 ) + ( ! $data2['success'] ? 1 : 0 );
+		$this->assertSame( 1, $failure_count, 'Exactly one concurrent verification must fail' );
+
+		// In database: 7 codes remaining (consumed exactly once), code_to_consume absent
 		$final_codes = $this->credentials->list_backup_codes( $user_id );
 		$this->assertCount( 7, $final_codes );
 		$this->assertNotContains( $code_to_consume, $final_codes );

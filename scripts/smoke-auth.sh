@@ -6,6 +6,12 @@ API_URL="${API_URL:-$PEAKURL_URL/api/v1}"
 APP_URL="${APP_URL:-https://api.peakurl.dev/api/v1}"
 IDENTIFIER="${PEAKURL_TEST_IDENTIFIER:-admin}"
 PASSWORD="${PEAKURL_TEST_PASSWORD:?PEAKURL_TEST_PASSWORD is required}"
+INSECURE_TLS="${PEAKURL_INSECURE_TLS:-0}"
+
+CURL_TLS_OPTIONS=""
+if [ "$INSECURE_TLS" = "1" ]; then
+    CURL_TLS_OPTIONS="-k"
+fi
 
 TMP_DIR="$(mktemp -d)"
 COOKIE_JAR="$TMP_DIR/cookies.txt"
@@ -25,14 +31,25 @@ run_request() {
 
     rm -f "$HEADERS_FILE" "$BODY_FILE"
 
-    curl -sS -k \
-        -D "$HEADERS_FILE" \
-        -o "$BODY_FILE" \
-        -b "$COOKIE_JAR" \
-        -c "$COOKIE_JAR" \
-        -X "$method" \
-        "$@" \
-        "$url"
+    if [ -n "$CURL_TLS_OPTIONS" ]; then
+        curl -sS "$CURL_TLS_OPTIONS" \
+            -D "$HEADERS_FILE" \
+            -o "$BODY_FILE" \
+            -b "$COOKIE_JAR" \
+            -c "$COOKIE_JAR" \
+            -X "$method" \
+            "$@" \
+            "$url"
+    else
+        curl -sS \
+            -D "$HEADERS_FILE" \
+            -o "$BODY_FILE" \
+            -b "$COOKIE_JAR" \
+            -c "$COOKIE_JAR" \
+            -X "$method" \
+            "$@" \
+            "$url"
+    fi
 }
 
 status_code() {

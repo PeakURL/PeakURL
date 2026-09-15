@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace PeakURL\Tests\Unit\Auth;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PeakURL\Features\Auth\Validator;
 use PeakURL\Core\Errors\ApiException;
 
@@ -52,6 +53,7 @@ class ValidatorTest extends TestCase {
 	}
 
 	public function test_validate_user_login_normalizes_lowercase_and_accepts_professional_usernames(): void {
+		$this->assertSame( 'abc', $this->validator->validate_user_login( 'abc' ) );
 		$this->assertSame( 'john', $this->validator->validate_user_login( 'john' ) );
 		$this->assertSame( 'john-doe', $this->validator->validate_user_login( 'john-doe' ) );
 		$this->assertSame( 'john_doe', $this->validator->validate_user_login( 'john_doe' ) );
@@ -59,11 +61,13 @@ class ValidatorTest extends TestCase {
 		$this->assertSame( 'john-doe123', $this->validator->validate_user_login( 'john-doe123' ) );
 		$this->assertSame( 'john-doe', $this->validator->validate_user_login( 'John-Doe' ) );
 		$this->assertSame( 'john_doe', $this->validator->validate_user_login( 'JOHN_DOE' ) );
+
+		// Exactly 120 chars
+		$max_len_username = str_repeat( 'a', 120 );
+		$this->assertSame( $max_len_username, $this->validator->validate_user_login( $max_len_username ) );
 	}
 
-	/**
-	 * @dataProvider invalid_username_provider
-	 */
+	#[DataProvider( 'invalid_username_provider' )]
 	public function test_validate_user_login_rejects_invalid_characters( string $invalid_username ): void {
 		$this->expectException( ApiException::class );
 		$this->expectExceptionCode( 422 );
@@ -77,11 +81,15 @@ class ValidatorTest extends TestCase {
 			'dots'             => array( 'john.doe' ),
 			'at symbol'        => array( 'john@doe' ),
 			'exclamation'      => array( 'john!doe' ),
+			'question mark'    => array( 'john?doe' ),
+			'hash'             => array( 'john#doe' ),
+			'dollar'           => array( 'john$doe' ),
 			'slashes'          => array( 'john/doe' ),
 			'plus'             => array( 'john+test' ),
 			'emoji'            => array( 'john🚀' ),
 			'accented unicode' => array( 'jöhn-doe' ),
 			'too short'        => array( 'jo' ),
+			'too long'         => array( str_repeat( 'a', 121 ) ),
 		);
 	}
 }

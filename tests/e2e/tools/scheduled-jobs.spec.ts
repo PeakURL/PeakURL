@@ -20,11 +20,12 @@ test.describe("Scheduled Jobs Admin Journeys", () => {
 		).toBeVisible({ timeout: 25000 });
 
 		// Background Jobs summary card
-		const bgJobsCard = page.locator(".background-jobs-summary-card");
-		await expect(bgJobsCard).toBeVisible({ timeout: 15000 });
+		const bgJobsCard = page.locator(
+			".background-jobs-summary-card:not(.animate-pulse)"
+		);
 		await expect(
 			bgJobsCard.getByRole("heading", { name: /background jobs/i })
-		).toBeVisible();
+		).toBeVisible({ timeout: 25000 });
 
 		// Metric items in summary card
 		await expect(bgJobsCard.getByText(/scheduler/i).first()).toBeVisible();
@@ -56,7 +57,7 @@ test.describe("Scheduled Jobs Admin Journeys", () => {
 
 		// Page Heading & Hero Badge
 		await expect(
-			page.getByRole("heading", { name: /^scheduled jobs$/i })
+			page.getByRole("heading", { name: /^scheduled jobs$/i, level: 1 })
 		).toBeVisible({ timeout: 25000 });
 		await expect(
 			page.getByText(/system automation/i).first()
@@ -146,7 +147,7 @@ test.describe("Scheduled Jobs Admin Journeys", () => {
 			waitUntil: "commit",
 		});
 		await expect(
-			page.getByRole("heading", { name: /^scheduled jobs$/i })
+			page.getByRole("heading", { name: /^scheduled jobs$/i, level: 1 })
 		).toBeVisible({ timeout: 25000 });
 
 		// Click Run Due Jobs
@@ -184,7 +185,7 @@ test.describe("Scheduled Jobs Admin Journeys", () => {
 		// Since scheduled-jobs is admin-only, AdminOnlyRoute redirects Editor to /dashboard/links
 		await page.waitForURL("**/dashboard/links", { timeout: 15000 });
 		await expect(
-			page.getByRole("heading", { name: /^links$/i })
+			page.getByRole("heading", { name: /^links$/i, level: 1 })
 		).toBeVisible();
 
 		// Direct API access: GET /api/v1/system/cron should return 403

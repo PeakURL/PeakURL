@@ -374,7 +374,7 @@ class Service {
 	 */
 	public function register( Request $request, array $payload ): array {
 		$email    = $this->validator->validate_email( (string) ( $payload['email'] ?? '' ) );
-		$username = $this->validator->validate_username(
+		$username = $this->validator->validate_user_login(
 			(string) ( $payload['username'] ?? '' )
 		);
 		$password = $this->validator->validate_password(

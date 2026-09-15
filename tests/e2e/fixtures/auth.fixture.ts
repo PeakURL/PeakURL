@@ -51,6 +51,7 @@ export async function loginViaUi(
 	page: Page,
 	credentials?: TestCredentials
 ): Promise<void> {
+	await page.context().clearCookies();
 	const creds = credentials || getDefaultAdminCredentials();
 	await page.goto("/login", { waitUntil: "domcontentloaded" });
 
@@ -80,7 +81,7 @@ export async function loginViaUi(
 
 export const DEFAULT_EDITOR_CREDENTIALS: TestCredentials = {
 	identifier: "test_editor",
-	password: "EditorPassword123!",
+	password: process.env.PEAKURL_TEST_PASSWORD || "password",
 };
 
 /**
@@ -110,7 +111,7 @@ export async function ensureEditorUser(
 	expect([200, 204]).toContain(loginRes.status());
 
 	// Provision editor user if not exists
-	await requestTarget.post("/api/v1/users", {
+	const createRes = await requestTarget.post("/api/v1/users", {
 		data: {
 			firstName: "Test",
 			lastName: "Editor",
@@ -120,6 +121,17 @@ export async function ensureEditorUser(
 			role: "editor",
 		},
 	});
+	if (createRes.status() === 422) {
+		await requestTarget.put(
+			`/api/v1/users/${DEFAULT_EDITOR_CREDENTIALS.identifier}`,
+			{
+				data: {
+					password: DEFAULT_EDITOR_CREDENTIALS.password,
+					role: "editor",
+				},
+			}
+		);
+	}
 
 	if (isolatedContext) {
 		await isolatedContext.dispose();

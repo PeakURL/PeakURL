@@ -38,7 +38,7 @@ class TwoFactorLifecycleTest extends TestCase {
 	private AuthService $auth_service;
 	private string $table_prefix;
 
-	private array $test_user_ids = array( '777101', '777102', '777103', '777104', '777105' );
+	private array $test_user_ids = array( '777101', '777102', '777103', '777104', '777105', '777106' );
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -354,5 +354,57 @@ class TwoFactorLifecycleTest extends TestCase {
 		$this->assertSame( 0, (int) $disabled_user['two_factor_enabled'] );
 		$this->assertNull( $disabled_user['two_factor_secret'] );
 		$this->assertNull( $disabled_user['backup_codes_json'] );
+	}
+
+	public function test_concurrent_backup_code_verification_protects_against_double_consumption(): void {
+		$user_id  = '777106';
+		$token    = 'token_777106_test_secret';
+		$password = 'Secret123!';
+		$username = "user_{$user_id}";
+
+		$api_key_hash = hash( 'sha256', $token );
+		$this->pdo->exec(
+			"INSERT INTO {$this->table_prefix}users (id, username, email, first_name, last_name, password_hash, role, is_email_verified, two_factor_enabled, created_at, updated_at)
+			VALUES ('{$user_id}', '{$username}', 'u{$user_id}@example.com', 'Test', 'User', '" . password_hash( $password, PASSWORD_BCRYPT ) . "', 'editor', 1, 0, NOW(), NOW())"
+		);
+		$this->pdo->exec(
+			"INSERT INTO {$this->table_prefix}api_keys (id, user_id, label, key_hash, key_prefix, key_last_four, created_at)
+			VALUES ('key_{$user_id}', '{$user_id}', 'Test Key', '{$api_key_hash}', 'test', '1234', NOW())"
+		);
+
+		$auth_request = new Request(
+			'POST',
+			'/api/v1/auth/security/two-factor/verify',
+			array(),
+			array(),
+			array(),
+			array(),
+			array( 'HTTP_AUTHORIZATION' => 'Bearer ' . $token )
+		);
+
+		$setup        = $this->auth_service->start_two_factor_setup( $auth_request );
+		$valid_totp   = $this->calculate_totp_code( $setup['secret'] );
+		$backup_codes = $this->auth_service->verify_two_factor( $auth_request, $valid_totp );
+
+		$code_to_consume = $backup_codes[0];
+
+		// Instantiate a second independent connection and credentials service
+		$config       = Configuration::get_current();
+		$conn2        = new Connection( $config );
+		$db2          = new PeakURL_DB( $conn2, $this->table_prefix );
+		$credentials2 = new Credentials( $db2 );
+
+		// Execute first verification
+		$result1 = $this->credentials->verify_backup_code( $user_id, $code_to_consume );
+		$this->assertTrue( $result1 );
+
+		// Second attempt on the other connection must fail to consume the already-consumed code
+		$result2 = $credentials2->verify_backup_code( $user_id, $code_to_consume );
+		$this->assertFalse( $result2 );
+
+		// Verify final remaining count in DB is 7 (consumed exactly once)
+		$final_codes = $this->credentials->list_backup_codes( $user_id );
+		$this->assertCount( 7, $final_codes );
+		$this->assertNotContains( $code_to_consume, $final_codes );
 	}
 }

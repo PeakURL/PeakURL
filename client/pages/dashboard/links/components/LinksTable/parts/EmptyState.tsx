@@ -23,10 +23,7 @@ function EmptyState({
 					{__("No links found")}
 				</h3>
 				<p className="links-empty-state-description">
-					{sprintf(
-						__('No shortened links matched "%s".'),
-						searchQuery
-					)}
+					{sprintf(__('No links matched "%s".'), searchQuery)}
 				</p>
 			</div>
 		);

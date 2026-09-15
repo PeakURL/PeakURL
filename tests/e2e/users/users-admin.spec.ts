@@ -8,7 +8,7 @@ test.describe("Users & Roles Admin Journeys", () => {
 
 		// Heading
 		await expect(
-			page.getByRole("heading", { name: /^users$/i })
+			page.getByRole("heading", { name: /^users$/i, level: 1 })
 		).toBeVisible({ timeout: 25000 });
 
 		// Overview stats (Total Users, Administrators, Editors)
@@ -33,7 +33,7 @@ test.describe("Users & Roles Admin Journeys", () => {
 	}) => {
 		await page.goto("/dashboard/users", { waitUntil: "commit" });
 		await expect(
-			page.getByRole("heading", { name: /^users$/i })
+			page.getByRole("heading", { name: /^users$/i, level: 1 })
 		).toBeVisible({ timeout: 25000 });
 
 		// Open Add User dialog
@@ -59,7 +59,7 @@ test.describe("Users & Roles Admin Journeys", () => {
 	}) => {
 		await page.goto("/dashboard/users", { waitUntil: "commit" });
 		await expect(
-			page.getByRole("heading", { name: /^users$/i })
+			page.getByRole("heading", { name: /^users$/i, level: 1 })
 		).toBeVisible({ timeout: 25000 });
 
 		// Locate self user row

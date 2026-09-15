@@ -11,14 +11,14 @@ test.describe("Global Layout, Responsive & Theme Journeys", () => {
 		await themeToggle.click();
 		await expect(page.locator("html")).toHaveClass(/dark/);
 		await expect(
-			page.getByRole("heading", { name: /^dashboard$/i })
+			page.getByRole("heading", { name: /^dashboard$/i, level: 1 })
 		).toBeVisible();
 
 		// Toggle back to light
 		await themeToggle.click();
 		await expect(page.locator("html")).not.toHaveClass(/dark/);
 		await expect(
-			page.getByRole("heading", { name: /^dashboard$/i })
+			page.getByRole("heading", { name: /^dashboard$/i, level: 1 })
 		).toBeVisible();
 	});
 

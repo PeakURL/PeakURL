@@ -25,7 +25,7 @@ run_request() {
 
     rm -f "$HEADERS_FILE" "$BODY_FILE"
 
-    curl -sS \
+    curl -sS -k \
         -D "$HEADERS_FILE" \
         -o "$BODY_FILE" \
         -b "$COOKIE_JAR" \

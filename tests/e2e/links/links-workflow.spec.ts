@@ -9,7 +9,7 @@ test.describe("Links Workflow Journeys", () => {
 
 		// Heading
 		await expect(
-			page.getByRole("heading", { name: /^links$/i })
+			page.getByRole("heading", { name: /^links$/i, level: 1 })
 		).toBeVisible();
 
 		// Shortening form inputs
@@ -102,7 +102,7 @@ test.describe("Links Workflow Journeys", () => {
 		// Verify persisted state by navigating fresh to links page
 		await page.goto("/dashboard/links", { waitUntil: "commit" });
 		await expect(
-			page.getByRole("heading", { name: /^links$/i })
+			page.getByRole("heading", { name: /^links$/i, level: 1 })
 		).toBeVisible({ timeout: 25000 });
 
 		// Title must remain updated in table
@@ -281,7 +281,7 @@ test.describe("Links Workflow Journeys", () => {
 		// 7. Refresh to verify persisted deletion in active view
 		await page.goto("/dashboard/links", { waitUntil: "commit" });
 		await expect(
-			page.getByRole("heading", { name: /^links$/i })
+			page.getByRole("heading", { name: /^links$/i, level: 1 })
 		).toBeVisible({ timeout: 25000 });
 		await expect(
 			page.locator(".links-row", { hasText: alias1 })
@@ -529,7 +529,7 @@ test.describe("Links Workflow Journeys", () => {
 		// 10. Verify persisted state after reload
 		await page.goto("/dashboard/links", { waitUntil: "commit" });
 		await expect(
-			page.getByRole("heading", { name: /^links$/i })
+			page.getByRole("heading", { name: /^links$/i, level: 1 })
 		).toBeVisible({ timeout: 25000 });
 
 		// Admin link remains active and visible to Editor
@@ -543,7 +543,7 @@ test.describe("Links Workflow Journeys", () => {
 	}) => {
 		await page.goto("/dashboard/links", { waitUntil: "commit" });
 		await expect(
-			page.getByRole("heading", { name: /^links$/i })
+			page.getByRole("heading", { name: /^links$/i, level: 1 })
 		).toBeVisible({ timeout: 25000 });
 
 		const uniqueId = generateTestId("stat-flow");

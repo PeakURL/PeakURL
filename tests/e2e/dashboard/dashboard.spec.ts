@@ -103,7 +103,7 @@ test.describe("Dashboard & Layout Journeys", () => {
 		await page.locator("a[href='/dashboard/links']").first().click();
 		await page.waitForURL("**/dashboard/links", { timeout: 15000 });
 		await expect(
-			page.getByRole("heading", { name: /^links$/i })
+			page.getByRole("heading", { name: /^links$/i, level: 1 })
 		).toBeVisible();
 
 		// Navigate to Settings
@@ -177,7 +177,7 @@ test.describe("Dashboard & Layout Journeys", () => {
 		// 1. Editor lands cleanly on /dashboard without 404
 		await expect(page).toHaveURL(/\/dashboard$/);
 		await expect(
-			page.getByRole("heading", { name: /^dashboard$/i })
+			page.getByRole("heading", { name: /^dashboard$/i, level: 1 })
 		).toBeVisible();
 
 		// 2. Activity Feed widget is NOT rendered for Editor

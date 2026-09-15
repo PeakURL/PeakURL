@@ -44,34 +44,7 @@ class Validator {
 	}
 
 	/**
-	 * Validate a required username field.
-	 *
-	 * @param string $username Raw username input.
-	 * @param string $message  Message shown when the username is empty.
-	 * @return string Trimmed username.
-	 *
-	 * @throws ApiException When the username is empty.
-	 * @since 1.0.0
-	 */
-	public function validate_username(
-		string $username,
-		string $message = ''
-	): string {
-		$username = trim( $username );
-
-		if ( '' === $message ) {
-			$message = __( 'Username is required.', 'peakurl' );
-		}
-
-		if ( '' === $username ) {
-			throw new ApiException( $message, 422 );
-		}
-
-		return $username;
-	}
-
-	/**
-	 * Validate a username against the admin user-management rules.
+	 * Validate a username against the account rules.
 	 *
 	 * Enforces professional username format: lowercase alphanumeric, hyphens, and underscores.
 	 *
@@ -137,7 +110,7 @@ class Validator {
 			return $this->validate_email( $identifier );
 		}
 
-		return $this->validate_username( $identifier );
+		return $this->validate_user_login( $identifier );
 	}
 
 	/**

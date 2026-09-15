@@ -47,12 +47,24 @@ export function formatDate(
 }
 
 /**
- * Format a number into a compact dashboard-friendly label.
+ * Threshold above which metrics use compact notation (e.g. 100K, 1M).
+ * Values below this threshold render as exact localized numbers.
+ */
+export const COMPACT_METRIC_THRESHOLD = 100_000;
+
+/**
+ * Format a number into an exact localized string for normal values,
+ * or a compact label (K/M/B) for large numbers.
  *
  * @param value - The number to format.
- * @return The formatted compact string.
+ * @return The formatted string.
  */
 export function formatNumber(value: number): string {
+	const absValue = Math.abs(value);
+	if (absValue < COMPACT_METRIC_THRESHOLD) {
+		return formatCount(value);
+	}
+
 	return new Intl.NumberFormat(getActiveLocale(), {
 		notation: "compact",
 		maximumFractionDigits: 1,

@@ -40,9 +40,13 @@ export function UserDialog({
 	const handleChange =
 		(key: keyof UserDialogFormState) =>
 		(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+			const value =
+				"username" === key
+					? event.target.value.toLowerCase()
+					: event.target.value;
 			setForm((previous) => ({
 				...previous,
-				[key]: event.target.value,
+				[key]: value,
 			}));
 		};
 
@@ -54,7 +58,7 @@ export function UserDialog({
 			firstName: form.firstName.trim(),
 			lastName: form.lastName.trim(),
 			displayName: form.displayName.trim(),
-			username: form.username.trim(),
+			username: form.username.trim().toLowerCase(),
 			email: form.email.trim(),
 			role: form.role as UserRole,
 		};

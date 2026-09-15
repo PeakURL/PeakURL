@@ -73,18 +73,20 @@ class Validator {
 	/**
 	 * Validate a username against the admin user-management rules.
 	 *
+	 * Enforces professional username format: lowercase alphanumeric, hyphens, and underscores.
+	 *
 	 * @param string $username Raw username input.
-	 * @return string Validated username.
+	 * @return string Validated and normalized lowercase username.
 	 *
 	 * @throws ApiException When the username format is invalid.
 	 * @since 1.0.0
 	 */
 	public function validate_user_login( string $username ): string {
-		$username = trim( $username );
+		$username = strtolower( trim( $username ) );
 
-		if ( ! preg_match( '/^[A-Za-z0-9._@-]{3,120}$/', $username ) ) {
+		if ( ! preg_match( '/^[a-z0-9_-]{3,120}$/', $username ) ) {
 			throw new ApiException(
-				__( 'Username must be 3-120 characters using letters, numbers, dots, dashes, underscores, or @.', 'peakurl' ),
+				__( 'Username must be 3-120 characters using lowercase letters, numbers, hyphens, and underscores.', 'peakurl' ),
 				422,
 			);
 		}

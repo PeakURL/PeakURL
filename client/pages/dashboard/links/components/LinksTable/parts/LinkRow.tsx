@@ -161,7 +161,7 @@ function LinkRow({
 					</div>
 				</div>
 			</td>
-			<td className="links-row-cell">
+			<td className="links-row-cell links-row-cell-performance">
 				<div className="links-row-performance">
 					<div className="links-row-performance-block">
 						<div className="links-row-performance-value">
@@ -182,7 +182,7 @@ function LinkRow({
 					</div>
 				</div>
 			</td>
-			<td className="links-row-cell">
+			<td className="links-row-cell links-row-cell-created">
 				{(() => {
 					const isSortByModified = "updatedAt" === sortBy;
 					const activeDateString = isSortByModified
@@ -232,7 +232,7 @@ function LinkRow({
 					</span>
 				</div>
 			</td>
-			<td className="links-row-cell">
+			<td className="links-row-cell links-row-cell-actions">
 				<div className="links-row-actions">
 					{isTrashed ? (
 						<>

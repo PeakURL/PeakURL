@@ -175,4 +175,80 @@ class UsersContractsTest extends TestCase {
 
 		$this->assertFalse( $result );
 	}
+
+	public function test_create_user_normalizes_username_to_lowercase(): void {
+		$db                = $this->createMock( PeakURL_DB::class );
+		$users_api         = $this->createMock( UsersApi::class );
+		$auth_service      = $this->createMock( AuthService::class );
+		$analytics_service = $this->createMock( AnalyticsService::class );
+		$validator         = new UsersValidator();
+		$roles             = new Roles();
+		$authorization     = new Authorization( $roles );
+		$social_preview    = $this->createMock( SocialPreview::class );
+
+		$auth_service->method( 'get_admin_user' )->willReturn(
+			array(
+				'id'       => 'admin-1',
+				'username' => 'admin',
+				'role'     => 'admin',
+			)
+		);
+
+		$auth_service->method( 'email_in_use' )->willReturn( false );
+		$auth_service->method( 'username_in_use' )->willReturn( false );
+
+		$captured_insert = null;
+		$db->method( 'insert' )->willReturnCallback(
+			function ( $table, $data ) use ( &$captured_insert ) {
+				$captured_insert = $data;
+				return 1;
+			}
+		);
+		$db->method( 'insert_id' )->willReturn( '42' );
+
+		$users_api->method( 'get_user' )->willReturn(
+			array(
+				'id'         => '42',
+				'username'   => 'john-doe',
+				'email'      => 'john@example.com',
+				'first_name' => 'John',
+				'last_name'  => 'Doe',
+				'role'       => 'editor',
+			)
+		);
+
+		$auth_service->method( 'format_user' )->willReturn(
+			array(
+				'id'       => '42',
+				'username' => 'john-doe',
+			)
+		);
+
+		$service = new UsersService(
+			$db,
+			$users_api,
+			$auth_service,
+			$analytics_service,
+			$validator,
+			$roles,
+			$authorization,
+			$social_preview
+		);
+
+		$request = new Request( 'POST', '/api/v1/users', array(), array() );
+		$result  = $service->create_user(
+			$request,
+			array(
+				'firstName' => 'John',
+				'lastName'  => 'Doe',
+				'username'  => 'John-Doe',
+				'email'     => 'john@example.com',
+				'password'  => 'password123',
+			)
+		);
+
+		$this->assertNotNull( $captured_insert );
+		$this->assertSame( 'john-doe', $captured_insert['username'] );
+		$this->assertSame( 'john-doe', $result['username'] );
+	}
 }

@@ -48,4 +48,17 @@ class AuthContractsTest extends TestCase {
 		$this->assertSame( 'string', $params[1]->getType()->getName() );
 		$this->assertTrue( $params[1]->allowsNull() );
 	}
+
+	public function test_two_factor_service_signatures(): void {
+		$ref = new ReflectionClass( AuthService::class );
+
+		$verify = $ref->getMethod( 'verify_two_factor' );
+		$this->assertCount( 2, $verify->getParameters() );
+		$this->assertSame( 'request', $verify->getParameters()[0]->getName() );
+		$this->assertSame( 'token', $verify->getParameters()[1]->getName() );
+
+		$regenerate = $ref->getMethod( 'regenerate_backup_codes' );
+		$this->assertCount( 2, $regenerate->getParameters() );
+		$this->assertSame( 'current_password', $regenerate->getParameters()[1]->getName() );
+	}
 }

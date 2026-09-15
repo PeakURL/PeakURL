@@ -111,7 +111,7 @@ function TableHeaderRow({
 			<th className="links-table-header-cell links-table-header-cell-performance">
 				{__("Performance")}
 			</th>
-			<th className="links-table-header-cell">
+			<th className="links-table-header-cell links-table-header-cell-created">
 				{"updatedAt" === sortBy ? __("Modified") : __("Created")}
 			</th>
 			<th className="links-table-header-cell links-table-header-cell-actions">

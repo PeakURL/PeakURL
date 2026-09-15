@@ -133,6 +133,24 @@ class Credentials {
 	}
 
 	/**
+	 * Generate a set of cryptographically secure random backup codes.
+	 *
+	 * @param int $count Number of backup codes to generate (default 8).
+	 * @return array<int, string> Formatted backup codes.
+	 * @since 1.0.0
+	 */
+	public function generate_backup_codes( int $count = 8 ): array {
+		$codes = array();
+
+		for ( $i = 0; $i < $count; $i++ ) {
+			$raw     = strtoupper( bin2hex( random_bytes( 4 ) ) );
+			$codes[] = substr( $raw, 0, 4 ) . '-' . substr( $raw, 4, 4 );
+		}
+
+		return $codes;
+	}
+
+	/**
 	 * Replace a user's backup codes with a freshly generated set.
 	 *
 	 * @param string $user_id User row ID.
@@ -201,24 +219,32 @@ class Credentials {
 	 * @since 1.0.0
 	 */
 	public function verify_backup_code( string $user_id, string $token ): bool {
-		$backup_code = strtoupper( trim( $token ) );
+		$token_cleaned = strtoupper( trim( preg_replace( '/[\s-]+/', '', $token ) ?? '' ) );
 
-		if ( '' === $backup_code ) {
+		if ( '' === $token_cleaned ) {
 			return false;
 		}
 
 		$this->db->begin_transaction();
 
 		try {
-			$codes = $this->list_backup_codes( $user_id );
-			$index = array_search( $backup_code, $codes, true );
+			$codes         = $this->list_backup_codes( $user_id );
+			$matched_index = false;
 
-			if ( false === $index ) {
+			foreach ( $codes as $index => $code ) {
+				$code_cleaned = strtoupper( trim( preg_replace( '/[\s-]+/', '', (string) $code ) ?? '' ) );
+				if ( hash_equals( $code_cleaned, $token_cleaned ) ) {
+					$matched_index = $index;
+					break;
+				}
+			}
+
+			if ( false === $matched_index ) {
 				$this->db->roll_back();
 				return false;
 			}
 
-			unset( $codes[ $index ] );
+			unset( $codes[ $matched_index ] );
 
 			$this->db->update(
 				'users',

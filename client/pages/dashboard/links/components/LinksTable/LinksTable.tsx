@@ -180,9 +180,7 @@ const LinksTable = ({
 			<div className="links-table-panel-header">
 				<div className="flex items-center gap-2">
 					<h2 className="links-table-panel-title">
-						{isTrashTab
-							? __("Trashed Links")
-							: __("Shortened Links")}
+						{isTrashTab ? __("Trashed Links") : __("Links")}
 					</h2>
 					<span className="links-table-panel-badge">
 						{formatCount(displayCount)}

@@ -20,8 +20,12 @@
 		@apply text-center;
 	}
 
+	.links-table-header-cell-created {
+		@apply text-center;
+	}
+
 	.links-table-header-cell-actions {
-		@apply px-4 py-2.5 align-middle;
+		@apply px-4 py-2.5 align-middle text-end;
 	}
 
 	.links-table-header-actions-group {

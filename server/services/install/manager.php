@@ -151,9 +151,11 @@ class Manager {
 			);
 		}
 
-		if ( ! preg_match( '/^[A-Za-z0-9._@-]{3,120}$/', $owner_username ) ) {
+		$owner_username = strtolower( trim( $owner_username ) );
+
+		if ( ! preg_match( '/^[a-z0-9_-]{3,120}$/', $owner_username ) ) {
 			throw new \RuntimeException(
-				__( 'Admin username must be 3-120 characters using letters, numbers, dots, dashes, underscores, or @.', 'peakurl' ),
+				__( 'Admin username must be 3-120 characters using lowercase letters, numbers, hyphens, and underscores.', 'peakurl' ),
 			);
 		}
 

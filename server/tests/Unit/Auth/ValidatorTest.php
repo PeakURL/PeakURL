@@ -50,4 +50,38 @@ class ValidatorTest extends TestCase {
 		$this->expectExceptionCode( 422 );
 		$this->validator->validate_email_or_username( '' );
 	}
+
+	public function test_validate_user_login_normalizes_lowercase_and_accepts_professional_usernames(): void {
+		$this->assertSame( 'john', $this->validator->validate_user_login( 'john' ) );
+		$this->assertSame( 'john-doe', $this->validator->validate_user_login( 'john-doe' ) );
+		$this->assertSame( 'john_doe', $this->validator->validate_user_login( 'john_doe' ) );
+		$this->assertSame( 'john123', $this->validator->validate_user_login( 'john123' ) );
+		$this->assertSame( 'john-doe123', $this->validator->validate_user_login( 'john-doe123' ) );
+		$this->assertSame( 'john-doe', $this->validator->validate_user_login( 'John-Doe' ) );
+		$this->assertSame( 'john_doe', $this->validator->validate_user_login( 'JOHN_DOE' ) );
+	}
+
+	/**
+	 * @dataProvider invalid_username_provider
+	 */
+	public function test_validate_user_login_rejects_invalid_characters( string $invalid_username ): void {
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 422 );
+		$this->validator->validate_user_login( $invalid_username );
+	}
+
+	public static function invalid_username_provider(): array {
+		return array(
+			'spaces'           => array( 'John Doe' ),
+			'internal spaces'  => array( 'john doe' ),
+			'dots'             => array( 'john.doe' ),
+			'at symbol'        => array( 'john@doe' ),
+			'exclamation'      => array( 'john!doe' ),
+			'slashes'          => array( 'john/doe' ),
+			'plus'             => array( 'john+test' ),
+			'emoji'            => array( 'john🚀' ),
+			'accented unicode' => array( 'jöhn-doe' ),
+			'too short'        => array( 'jo' ),
+		);
+	}
 }

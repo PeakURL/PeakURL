@@ -506,13 +506,4 @@
 	.scheduled-jobs-manage-modal {
 		@apply max-h-[80vh] overflow-y-auto;
 	}
-
-	/* ─── Header Refresh Action (Complete Round Circle) ─── */
-	.scheduled-jobs-header-refresh {
-		@apply inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-stroke bg-surface text-text-muted transition-colors hover:border-accent/30 hover:text-accent disabled:cursor-wait;
-	}
-
-	.scheduled-jobs-header-refresh-icon {
-		@apply h-5 w-5;
-	}
 }

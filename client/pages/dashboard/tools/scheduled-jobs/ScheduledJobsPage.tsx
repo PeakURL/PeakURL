@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
 	AlertCircle,
 	AlertTriangle,
@@ -36,6 +36,8 @@ import {
 	calculateCronStatusSummary,
 } from "./summary";
 
+const MIN_REFRESH_DURATION_MS = 700;
+
 export function ScheduledJobsPage() {
 	const { canManageUpdates, isLoading: isAccessLoading } = useAdminAccess();
 	const notification = useNotification();
@@ -43,7 +45,6 @@ export function ScheduledJobsPage() {
 	const {
 		data,
 		isLoading: isCronLoading,
-		isFetching,
 		isError,
 		refetch,
 	} = useGetCronStatusQuery();
@@ -52,6 +53,17 @@ export function ScheduledJobsPage() {
 	const [runCronJob] = useRunCronJobMutation();
 	const [clearCronHistory, { isLoading: isClearingHistory }] =
 		useClearCronHistoryMutation();
+
+	const [isRefreshing, setIsRefreshing] = useState(false);
+	const refreshTimeoutRef = useRef<number | null>(null);
+
+	useEffect(() => {
+		return () => {
+			if (refreshTimeoutRef.current !== null) {
+				window.clearTimeout(refreshTimeoutRef.current);
+			}
+		};
+	}, []);
 
 	const [runningJobId, setRunningJobId] = useState<string | null>(null);
 	const [selectedJobForHistory, setSelectedJobForHistory] =
@@ -176,6 +188,36 @@ export function ScheduledJobsPage() {
 		}
 	};
 
+	const handleRefresh = async () => {
+		if (isRefreshing) {
+			return;
+		}
+
+		if (refreshTimeoutRef.current !== null) {
+			window.clearTimeout(refreshTimeoutRef.current);
+			refreshTimeoutRef.current = null;
+		}
+
+		setIsRefreshing(true);
+		const startedAt = Date.now();
+
+		try {
+			await refetch();
+		} finally {
+			const remaining =
+				MIN_REFRESH_DURATION_MS - (Date.now() - startedAt);
+
+			if (remaining > 0) {
+				refreshTimeoutRef.current = window.setTimeout(() => {
+					setIsRefreshing(false);
+					refreshTimeoutRef.current = null;
+				}, remaining);
+			} else {
+				setIsRefreshing(false);
+			}
+		}
+	};
+
 	/* ─── Non-admin gate ─── */
 	if (!isAccessLoading && !canManageUpdates) {
 		return (
@@ -222,16 +264,16 @@ export function ScheduledJobsPage() {
 				<div className="scheduled-jobs-page-hero-actions">
 					<button
 						type="button"
-						onClick={() => refetch()}
-						disabled={isFetching}
-						className="scheduled-jobs-header-refresh dashboard-page-refresh"
+						onClick={handleRefresh}
+						disabled={isRefreshing}
+						className="dashboard-page-refresh"
 						aria-label={__("Refresh")}
 						title={__("Refresh scheduled jobs status")}
 					>
 						<RefreshCw
 							className={cn(
-								"scheduled-jobs-header-refresh-icon dashboard-page-refresh-icon",
-								isFetching && "animate-spin"
+								"dashboard-page-refresh-icon",
+								isRefreshing && "animate-spin"
 							)}
 						/>
 					</button>

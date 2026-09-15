@@ -6,7 +6,10 @@ import {
 	getActiveLocale,
 	getActiveTimeZone,
 } from "../../client/shared/dates";
-import { formatTtlDuration } from "../../client/shared/formatting";
+import {
+	formatNumber,
+	formatTtlDuration,
+} from "../../client/shared/formatting";
 
 test.describe("Date Utilities", () => {
 	test("getActiveLocale returns valid locale string", () => {
@@ -82,5 +85,25 @@ test.describe("Date Utilities", () => {
 		expect(formatTtlDuration(-5)).toBe("0 seconds");
 		expect(formatTtlDuration("invalid")).toBe("0 seconds");
 		expect(formatTtlDuration(null, "N/A")).toBe("N/A");
+	});
+
+	test("formatNumber formats normal values as exact localized counts and large values as compact labels", () => {
+		// Normal values below 100,000 threshold
+		expect(formatNumber(0)).toBe("0");
+		expect(formatNumber(18)).toBe("18");
+		expect(formatNumber(426)).toBe("426");
+		expect(formatNumber(999)).toBe("999");
+		expect(formatNumber(1000)).toBe("1,000");
+		expect(formatNumber(9842)).toBe("9,842");
+		expect(formatNumber(9999)).toBe("9,999");
+		expect(formatNumber(10000)).toBe("10,000");
+		expect(formatNumber(18400)).toBe("18,400");
+		expect(formatNumber(99999)).toBe("99,999");
+
+		// Large values at or above 100,000 threshold
+		expect(formatNumber(100000)).toBe("100K");
+		expect(formatNumber(999999)).toBe("1M");
+		expect(formatNumber(1000000)).toBe("1M");
+		expect(formatNumber(1000000000)).toBe("1B");
 	});
 });

@@ -45,7 +45,7 @@ const getNavItems = (
 			icon: PieChart,
 		},
 		{
-			name: __("All Links"),
+			name: __("Links"),
 			href: `${base || ""}/links`,
 			icon: Link2,
 		},
@@ -430,7 +430,7 @@ export const Sidebar = ({
 									<span className="dashboard-sidebar-link-label">
 										{item.name}
 									</span>
-									{item.name === __("All Links") &&
+									{item.name === __("Links") &&
 										totalLinks > 0 && (
 											<span
 												className={getLinkBadgeClassName(

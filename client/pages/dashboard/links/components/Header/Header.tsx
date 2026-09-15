@@ -39,7 +39,7 @@ const Header = ({
 					<Link2 className="h-5 w-5 text-white" />
 				</div>
 				<div className="links-header-brand-copy">
-					<h1 className="links-header-title">{__("Links")}</h1>
+					<h1 className="links-header-title">{__("All Links")}</h1>
 					<p className="links-header-description">
 						{__("Manage and track your shortened URLs")}
 					</p>

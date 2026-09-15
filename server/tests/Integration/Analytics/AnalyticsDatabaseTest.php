@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace PeakURL\Tests\Integration\Analytics;
 
 use PHPUnit\Framework\TestCase;
+use PeakURL\Api\LinksApi;
 use PeakURL\Api\SettingsApi;
 use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Auth\Roles;
@@ -74,7 +75,8 @@ class AnalyticsDatabaseTest extends TestCase {
 			$auth_service,
 			$roles,
 			$authorization,
-			array()
+			array(),
+			new LinksApi( $db )
 		);
 
 		$request  = new Request( 'GET', '/analytics/link-123/location', array(), array() );

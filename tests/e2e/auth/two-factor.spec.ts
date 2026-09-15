@@ -233,7 +233,14 @@ test.describe("Two-Factor Authentication Lifecycle Browser Journeys", () => {
 		const confirmActionBtn = confirmModal.getByRole("button", {
 			name: /disable|confirm|continue/i,
 		});
+
+		const disablePromise = page.waitForResponse(
+			(res) =>
+				res.url().includes("/auth/security/two-factor/disable") &&
+				res.request().method() === "POST"
+		);
 		await confirmActionBtn.click();
+		await disablePromise;
 
 		// Verify 2FA status returns to disabled
 		await expect(

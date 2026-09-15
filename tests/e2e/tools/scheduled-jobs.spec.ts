@@ -185,7 +185,10 @@ test.describe("Scheduled Jobs Admin Journeys", () => {
 		// Since scheduled-jobs is admin-only, AdminOnlyRoute redirects Editor to /dashboard/links
 		await page.waitForURL("**/dashboard/links", { timeout: 15000 });
 		await expect(
-			page.getByRole("heading", { name: /^links$/i, level: 1 })
+			page.getByRole("heading", {
+				name: /^links$/i,
+				level: 1,
+			})
 		).toBeVisible();
 
 		// Direct API access: GET /api/v1/system/cron should return 403
@@ -195,5 +198,51 @@ test.describe("Scheduled Jobs Admin Journeys", () => {
 		// Direct API access: POST /api/v1/system/cron/run should return 403
 		const postCronRes = await page.request.post("/api/v1/system/cron/run");
 		expect(postCronRes.status()).toBe(403);
+	});
+
+	test("manage schedules and retention drawer opens and displays configuration options", async ({
+		authenticatedPage: page,
+	}) => {
+		await page.goto("/dashboard/tools/scheduled-jobs", {
+			waitUntil: "commit",
+		});
+		await expect(
+			page.getByRole("heading", { name: /^scheduled jobs$/i, level: 1 })
+		).toBeVisible({ timeout: 25000 });
+
+		// Click Manage Schedules button in hero actions
+		const manageBtn = page.getByRole("button", {
+			name: /manage schedules/i,
+		});
+		await expect(manageBtn).toBeVisible();
+		await manageBtn.click();
+
+		// Drawer heading
+		const drawerHeading = page.getByRole("heading", {
+			name: /manage schedules & retention/i,
+		});
+		await expect(drawerHeading).toBeVisible({ timeout: 10000 });
+
+		// Sections
+		await expect(
+			page.getByRole("heading", {
+				name: /execution history retention/i,
+			})
+		).toBeVisible();
+		await expect(
+			page.getByRole("heading", {
+				name: /registered background tasks/i,
+			})
+		).toBeVisible();
+
+		// Save retention button
+		await expect(
+			page.getByRole("button", { name: /save retention/i })
+		).toBeVisible();
+
+		// Close drawer
+		const closeBtn = page.getByRole("button", { name: /^close$/i });
+		await closeBtn.click();
+		await expect(drawerHeading).not.toBeVisible();
 	});
 });

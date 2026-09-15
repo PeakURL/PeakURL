@@ -1127,12 +1127,16 @@ class Service {
 		);
 		$this->prune_stale_sessions();
 
-		$deleted = $this->db->delete(
-			'sessions',
+		$deleted = $this->db->query(
+			'DELETE FROM sessions
+			WHERE id = :id
+			AND user_id = :user_id
+			AND last_active_at >= :active_since',
 			array(
-				'id'      => $id,
-				'user_id' => (string) $user['id'],
-			)
+				'id'           => $id,
+				'user_id'      => (string) $user['id'],
+				'active_since' => $this->session_active_since(),
+			),
 		);
 
 		return $deleted > 0;

@@ -102,8 +102,7 @@ class Application {
 		$this->connection = $connection;
 		$this->config     = $config;
 
-		$db_prefix   = (string) ( $config[ Constants::DB_PREFIX ] ?? '' );
-		$db          = new PeakURL_DB( $connection, $db_prefix );
+		$db          = new PeakURL_DB( $connection );
 		$schema_path = Environment::get_instance()->get_database_schema_path();
 		$schema      = new DatabaseSchema( $connection, $schema_path );
 		$content_dir = (string) ( $config[ Constants::CONTENT_DIR ] ?? Environment::get_instance()->get_content_path() );

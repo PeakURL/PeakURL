@@ -70,7 +70,7 @@ export function JobsTable({
 							{__("Next Run")}
 						</th>
 						<th className="scheduled-jobs-th-result">
-							{__("Last Result / Failure")}
+							{__("Result")}
 						</th>
 						<th className="scheduled-jobs-th-actions">
 							{__("Actions")}

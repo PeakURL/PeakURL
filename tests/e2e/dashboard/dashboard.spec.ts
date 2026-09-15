@@ -103,7 +103,10 @@ test.describe("Dashboard & Layout Journeys", () => {
 		await page.locator("a[href='/dashboard/links']").first().click();
 		await page.waitForURL("**/dashboard/links", { timeout: 15000 });
 		await expect(
-			page.getByRole("heading", { name: /^links$/i, level: 1 })
+			page.getByRole("heading", {
+				name: /^links$/i,
+				level: 1,
+			})
 		).toBeVisible();
 
 		// Navigate to Settings
@@ -202,7 +205,10 @@ test.describe("Dashboard & Layout Journeys", () => {
 		await page.goto("/dashboard/activity", { waitUntil: "commit" });
 		await page.waitForURL("**/dashboard/links", { timeout: 15000 });
 		await expect(
-			page.getByRole("heading", { name: /^links$/i })
+			page.getByRole("heading", {
+				name: /^links$/i,
+				level: 1,
+			})
 		).toBeVisible();
 	});
 

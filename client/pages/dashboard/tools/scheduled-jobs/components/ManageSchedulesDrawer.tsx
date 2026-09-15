@@ -14,6 +14,7 @@ import {
 	CheckCircle2,
 	ChevronDown,
 	ChevronUp,
+	Repeat,
 	X,
 } from "lucide-react";
 
@@ -226,7 +227,7 @@ export function ManageSchedulesDrawer({
 						<DialogPanel
 							dir={direction}
 							transition
-							className={`scheduled-jobs-drawer-panel ${
+							className={`scheduled-jobs-manage-drawer-panel ${
 								isRtl
 									? "data-closed:-translate-x-full"
 									: "data-closed:translate-x-full"
@@ -275,24 +276,27 @@ export function ManageSchedulesDrawer({
 							{/* ─── Drawer Body ─── */}
 							<div className="scheduled-jobs-drawer-content space-y-6">
 								{/* Execution History Retention Section */}
-								<div className="rounded-xl border border-stroke bg-surface-alt/40 p-4 sm:p-5 space-y-3">
-									<div className="flex items-center gap-2">
-										<Calendar
-											size={16}
-											className="text-accent"
-										/>
-										<h3 className="text-sm font-semibold text-heading">
-											{__("Execution History Retention")}
-										</h3>
+								<div className="rounded-2xl border border-stroke bg-surface-alt/30 p-5 space-y-4">
+									<div className="flex items-start gap-3">
+										<div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent">
+											<Calendar className="w-5 h-5" />
+										</div>
+										<div className="space-y-1 min-w-0 flex-1">
+											<h3 className="text-sm font-semibold text-heading">
+												{__(
+													"Execution History Retention"
+												)}
+											</h3>
+											<p className="text-xs text-text-muted leading-relaxed">
+												{__(
+													"Choose how long completed background-job execution records are kept. Active and retrying executions are never removed by retention cleanup."
+												)}
+											</p>
+										</div>
 									</div>
-									<p className="text-xs text-text-muted leading-relaxed">
-										{__(
-											"Choose how long completed background-job execution records are kept. Active and retrying executions are never removed by retention cleanup."
-										)}
-									</p>
 
-									<div className="flex flex-col sm:flex-row sm:items-center gap-3 pt-1">
-										<div className="w-full sm:w-64">
+									<div className="flex flex-col sm:flex-row sm:items-center gap-3 pt-0.5">
+										<div className="w-full sm:flex-1 min-w-0">
 											<Select
 												id={retentionSelectId}
 												value={selectedRetention}
@@ -318,7 +322,7 @@ export function ManageSchedulesDrawer({
 												selectedRetention ===
 													retentionDays
 											}
-											className="min-w-28"
+											className="w-full sm:w-auto shrink-0"
 										>
 											<span>{__("Save Retention")}</span>
 										</Button>
@@ -331,14 +335,14 @@ export function ManageSchedulesDrawer({
 										<div className="flex items-center gap-2">
 											<SlidersHorizontal
 												size={15}
-												className="text-text-muted"
+												className="text-accent shrink-0"
 											/>
 											<h3 className="text-sm font-semibold text-heading">
 												{__(
 													"Registered Background Tasks"
 												)}
 											</h3>
-											<span className="inline-flex items-center rounded-full bg-surface-alt px-2 py-0.5 text-xs font-medium text-text-muted border border-stroke/50">
+											<span className="inline-flex items-center rounded-full bg-accent/10 px-2 py-0.5 text-xs font-semibold text-accent">
 												{jobs.length}
 											</span>
 										</div>
@@ -349,7 +353,8 @@ export function ManageSchedulesDrawer({
 										</p>
 									</div>
 
-									<div className="space-y-3">
+									{/* Unified Tasks Container */}
+									<div className="rounded-2xl border border-stroke bg-surface divide-y divide-stroke/50 shadow-2xs overflow-hidden">
 										{jobs.map((job) => {
 											const isEditing =
 												editingJobId === job.id;
@@ -394,117 +399,138 @@ export function ManageSchedulesDrawer({
 												<div
 													key={job.id}
 													className={cn(
-														"rounded-xl border transition-colors p-4",
+														"transition-colors",
 														isEditing
-															? "border-accent/60 bg-accent/5 shadow-xs"
-															: "border-stroke bg-surface hover:border-stroke-strong"
+															? "bg-accent/5"
+															: "hover:bg-surface-alt/30"
 													)}
 												>
-													{/* Top Card Row */}
-													<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
-														<div className="space-y-1 min-w-0 flex-1">
-															<div className="flex flex-wrap items-center gap-2">
-																<h4 className="text-xs font-semibold text-heading truncate">
+													{/* Main Task Row */}
+													<div className="p-4 sm:p-4.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+														{/* Left: Title & Schedule Metadata */}
+														<div className="space-y-1.5 min-w-0 flex-1">
+															{/* Top Line: Title & Optional Customized Tag */}
+															<div className="flex items-center gap-2">
+																<h4 className="text-sm font-semibold text-heading truncate">
 																	{job.title}
 																</h4>
-																<JobStatusBadge
-																	status={
-																		job.status
-																	}
-																	attempts={
-																		job.attempts
-																	}
-																	maxAttempts={
-																		job.maxAttempts
-																	}
-																	isEnabled={
-																		job.isEnabled
-																	}
-																/>
+																{job.isCustomized ? (
+																	<span className="inline-flex items-center rounded-full bg-amber-500/10 px-2 py-0.5 text-[11px] font-medium text-amber-600 dark:text-amber-400 border border-amber-500/20 shrink-0">
+																		{__(
+																			"Customized"
+																		)}
+																	</span>
+																) : null}
 															</div>
 
-															{/* Schedule Summary (when not editing) */}
-															{!isEditing ? (
-																<div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-text-muted pt-0.5">
+															{/* Metadata Pills */}
+															<div className="flex flex-wrap items-center gap-2 text-xs">
+																<span className="inline-flex items-center gap-1.5 rounded-md bg-surface-alt px-2.5 py-0.5 text-xs font-medium text-heading border border-stroke/50">
+																	<Repeat
+																		size={
+																			12
+																		}
+																		className="text-text-muted shrink-0"
+																	/>
 																	<span>
-																		<strong className="font-medium text-heading">
-																			{__(
-																				"Current:"
-																			)}
-																		</strong>{" "}
 																		{formatSchedule(
 																			job.intervalSeconds,
 																			job.preferredRunTime
 																		)}
-																		{" · "}
-																		<span
-																			className={cn(
-																				job.isCustomized
-																					? "font-medium text-amber-600 dark:text-amber-400"
-																					: "text-text-muted"
-																			)}
-																		>
-																			{job.isCustomized
-																				? __(
-																						"Customized"
-																					)
-																				: __(
-																						"Recommended"
-																					)}
-																		</span>
 																	</span>
+																</span>
+
+																<span
+																	className={cn(
+																		"inline-flex items-center gap-1.5 rounded-md px-2.5 py-0.5 text-xs border",
+																		nextRun.isDue
+																			? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/25 font-medium"
+																			: "bg-surface-alt text-text-muted border-stroke/50"
+																	)}
+																>
+																	<Clock
+																		size={
+																			12
+																		}
+																		className={cn(
+																			"shrink-0",
+																			nextRun.isDue
+																				? "text-amber-600 dark:text-amber-400"
+																				: "text-text-muted"
+																		)}
+																	/>
 																	<span>
-																		<strong className="font-medium text-text-muted">
-																			{__(
-																				"Next run:"
-																			)}
-																		</strong>{" "}
-																		<span
-																			className={cn(
-																				nextRun.isDue &&
-																					"text-amber-600 dark:text-amber-400 font-semibold"
-																			)}
-																		>
-																			{
-																				nextRun.text
-																			}
-																		</span>
+																		{nextRun.isDue
+																			? __(
+																					"Due now"
+																				)
+																			: sprintf(
+																					/* translators: %s is the relative time */
+																					__(
+																						"Next: %s"
+																					),
+																					nextRun.text
+																				)}
 																	</span>
-																</div>
-															) : null}
+																</span>
+															</div>
 														</div>
 
-														{/* Action buttons (when not editing) */}
-														{!isEditing ? (
-															<div className="flex items-center gap-2 shrink-0 self-end sm:self-center pt-1 sm:pt-0">
-																<Button
-																	variant="outline"
-																	size="xs"
-																	icon={
-																		ChevronDown
-																	}
-																	onClick={() =>
-																		handleOpenEdit(
-																			job
-																		)
-																	}
-																>
-																	<span>
-																		{__(
-																			"Configure"
-																		)}
-																	</span>
-																</Button>
-															</div>
-														) : null}
+														{/* Right: Status Badge & Configure Action */}
+														<div className="flex items-center gap-2.5 shrink-0 self-start sm:self-center">
+															<JobStatusBadge
+																status={
+																	job.status
+																}
+																attempts={
+																	job.attempts
+																}
+																maxAttempts={
+																	job.maxAttempts
+																}
+																isEnabled={
+																	job.isEnabled
+																}
+															/>
+															<Button
+																variant={
+																	isEditing
+																		? "secondary"
+																		: "outline"
+																}
+																size="xs"
+																icon={
+																	isEditing
+																		? ChevronUp
+																		: ChevronDown
+																}
+																onClick={() =>
+																	isEditing
+																		? handleCancelEdit()
+																		: handleOpenEdit(
+																				job
+																			)
+																}
+															>
+																<span>
+																	{isEditing
+																		? __(
+																				"Close"
+																			)
+																		: __(
+																				"Configure"
+																			)}
+																</span>
+															</Button>
+														</div>
 													</div>
 
 													{/* Expanded Inline Editor Form */}
 													{isEditing ? (
-														<div className="mt-4 pt-4 border-t border-stroke space-y-4">
+														<div className="px-4 py-4 sm:px-4.5 sm:py-4.5 border-t border-stroke/50 bg-surface-alt/30 space-y-4">
 															<div
 																className={cn(
-																	"grid gap-4",
+																	"grid gap-3.5",
 																	form.intervalSeconds >=
 																		86400
 																		? "grid-cols-1 sm:grid-cols-2"
@@ -600,7 +626,7 @@ export function ManageSchedulesDrawer({
 															</div>
 
 															{/* Automatic Execution Enable/Disable Switch */}
-															<div className="flex items-center justify-between rounded-lg border border-stroke bg-surface-alt/40 p-3">
+															<div className="flex items-center justify-between rounded-xl border border-stroke bg-surface p-3.5 shadow-2xs">
 																<div className="space-y-0.5">
 																	<p className="text-xs font-semibold text-heading">
 																		{__(
@@ -661,12 +687,12 @@ export function ManageSchedulesDrawer({
 															</div>
 
 															{/* Form Actions */}
-															<div className="flex flex-wrap items-center justify-between gap-2 pt-2">
+															<div className="flex flex-wrap items-center justify-between gap-2 pt-1">
 																<div>
 																	{job.isCustomized ? (
 																		<Button
 																			variant="ghost"
-																			size="sm"
+																			size="xs"
 																			icon={
 																				RotateCcw
 																			}
@@ -692,7 +718,7 @@ export function ManageSchedulesDrawer({
 																<div className="flex items-center gap-2 ms-auto">
 																	<Button
 																		variant="outline"
-																		size="sm"
+																		size="xs"
 																		icon={
 																			ChevronUp
 																		}
@@ -711,7 +737,7 @@ export function ManageSchedulesDrawer({
 																	</Button>
 																	<Button
 																		variant="primary"
-																		size="sm"
+																		size="xs"
 																		icon={
 																			CheckCircle2
 																		}
@@ -726,7 +752,7 @@ export function ManageSchedulesDrawer({
 																		disabled={
 																			isSavingThisJob
 																		}
-																		className="min-w-36"
+																		className="min-w-32"
 																	>
 																		<span>
 																			{isSavingThisJob

@@ -195,7 +195,7 @@
 	}
 
 	.scheduled-jobs-th-actions {
-		@apply w-[16%] min-w-44 text-start;
+		@apply w-[16%] min-w-44 text-center!;
 	}
 
 	.scheduled-jobs-table-row {
@@ -336,6 +336,14 @@
 	}
 
 	.scheduled-jobs-drawer-panel[data-closed] {
+		@apply ease-in;
+	}
+
+	.scheduled-jobs-manage-drawer-panel {
+		@apply pointer-events-auto flex h-full w-screen max-w-2xl transform flex-col overflow-hidden bg-surface shadow-2xl transition-transform duration-500 ease-out;
+	}
+
+	.scheduled-jobs-manage-drawer-panel[data-closed] {
 		@apply ease-in;
 	}
 

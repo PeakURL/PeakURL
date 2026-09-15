@@ -79,10 +79,10 @@ class Service {
 	/**
 	 * Links data API for URL row lookups.
 	 *
-	 * @var LinksApi|null
+	 * @var LinksApi
 	 * @since 1.0.0
 	 */
-	private ?LinksApi $links_api = null;
+	private LinksApi $links_api;
 
 	/**
 	 * Runtime configuration map.
@@ -101,7 +101,7 @@ class Service {
 	 * @param Roles                $roles         Roles and capabilities registry.
 	 * @param Authorization        $authorization Shared authorization helper.
 	 * @param array<string, mixed> $config        Runtime config map.
-	 * @param LinksApi|null        $links_api     Optional links data API for URL lookups.
+	 * @param LinksApi             $links_api     Links data API for URL lookups.
 	 * @since 1.0.0
 	 */
 	public function __construct(
@@ -111,7 +111,7 @@ class Service {
 		Roles $roles,
 		Authorization $authorization,
 		array $config,
-		?LinksApi $links_api = null
+		LinksApi $links_api
 	) {
 		$this->data          = $data;
 		$this->db            = $db;
@@ -458,7 +458,7 @@ class Service {
 		?string $custom_date_to = null
 	): ?array {
 		$user = $this->auth_service->get_current_user( $request );
-		$url  = $this->links_api ? $this->links_api->get_link_by_identifier( $id ) : null;
+		$url  = $this->links_api->get_link_by_identifier( $id );
 
 		if ( ! $url ) {
 			return null;
@@ -629,18 +629,7 @@ class Service {
 		?string $custom_date_to = null
 	): ?array {
 		$user = $this->auth_service->get_current_user( $request );
-		$url  = $this->links_api
-			? $this->links_api->get_link_by_identifier( $id )
-			: $this->db->get_row(
-				'SELECT id, user_id, created_at FROM urls
-				WHERE id = :url_id OR short_code = :short_code OR alias = :alias
-				LIMIT 1',
-				array(
-					'url_id'     => $id,
-					'short_code' => $id,
-					'alias'      => $id,
-				),
-			);
+		$url  = $this->links_api->get_link_by_identifier( $id );
 
 		if ( ! $url ) {
 			return null;

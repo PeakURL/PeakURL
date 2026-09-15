@@ -15,21 +15,7 @@ use PeakURL\Services\Database\PeakURL_DB;
 
 class CredentialsTest extends TestCase {
 
-	public function test_generate_backup_codes_creates_correct_count_and_format(): void {
-		$db          = $this->createMock( PeakURL_DB::class );
-		$credentials = new Credentials( $db );
-
-		$codes = $credentials->generate_backup_codes( 8 );
-
-		$this->assertCount( 8, $codes );
-		$this->assertSame( 8, count( array_unique( $codes ) ) );
-
-		foreach ( $codes as $code ) {
-			$this->assertMatchesRegularExpression( '/^[A-F0-9]{4}-[A-F0-9]{4}$/', $code );
-		}
-	}
-
-	public function test_replace_backup_codes_persists_and_returns_codes(): void {
+	public function test_replace_backup_codes_persists_and_returns_eight_unique_codes(): void {
 		$db          = $this->createMock( PeakURL_DB::class );
 		$credentials = new Credentials( $db );
 
@@ -51,6 +37,10 @@ class CredentialsTest extends TestCase {
 		$codes = $credentials->replace_backup_codes( 'user-1' );
 
 		$this->assertCount( 8, $codes );
+		$this->assertSame( 8, count( array_unique( $codes ) ) );
+		foreach ( $codes as $code ) {
+			$this->assertMatchesRegularExpression( '/^[A-F0-9]{4}-[A-F0-9]{4}$/', $code );
+		}
 		$this->assertNotNull( $captured_data );
 
 		$decoded = json_decode( (string) $captured_data['backup_codes_json'], true );
@@ -63,7 +53,11 @@ class CredentialsTest extends TestCase {
 
 		$initial_codes = array( 'A1B2-C3D4', 'E5F6-7890' );
 
-		$db->method( 'get_var_by' )
+		$db->method( 'get_var' )
+			->with(
+				'SELECT backup_codes_json FROM users WHERE id = :id FOR UPDATE',
+				array( 'id' => 'user-1' )
+			)
 			->willReturn( json_encode( $initial_codes ) );
 
 		$captured_update = null;
@@ -96,7 +90,7 @@ class CredentialsTest extends TestCase {
 
 		$initial_codes = array( 'E5F6-7890' );
 
-		$db->method( 'get_var_by' )
+		$db->method( 'get_var' )
 			->willReturn( json_encode( $initial_codes ) );
 
 		$db->expects( $this->never() )->method( 'update' );

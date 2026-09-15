@@ -31,8 +31,8 @@ function LinkRow({
 	formatNumber,
 	isTrashTab = false,
 	sortBy,
-	canDeleteLinks = false,
-	canTrashLinks = false,
+	canDeleteLinks,
+	canTrashLinks,
 	currentUserId,
 }: LinkRowProps) {
 	const isTrashed = isTrashTab || "trashed" === link.status;
@@ -42,7 +42,7 @@ function LinkRow({
 		String(link.userId) === String(currentUserId)
 	);
 	const canTrash = canTrashLinks && (canDeleteLinks || isOwner);
-	const canPermanentDelete = Boolean(canDeleteLinks);
+	const canPermanentDelete = canDeleteLinks;
 	const canDelete = isTrashed ? canPermanentDelete : canTrash;
 	const statusLabel = isTrashed
 		? __("Trashed")

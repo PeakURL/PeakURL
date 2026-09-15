@@ -139,7 +139,7 @@ class Credentials {
 	 * @return array<int, string> Formatted backup codes.
 	 * @since 1.0.0
 	 */
-	public function generate_backup_codes( int $count = 8 ): array {
+	private function generate_backup_codes( int $count = 8 ): array {
 		$codes = array();
 
 		for ( $i = 0; $i < $count; $i++ ) {
@@ -188,11 +188,22 @@ class Credentials {
 			array( 'id' => $user_id ),
 		);
 
-		if ( false === $value || null === $value ) {
+		return $this->decode_backup_codes( is_string( $value ) ? $value : null );
+	}
+
+	/**
+	 * Decode and normalize stored backup codes JSON.
+	 *
+	 * @param string|null $value Raw JSON string from database.
+	 * @return array<int, string> Normalized backup codes.
+	 * @since 1.0.0
+	 */
+	private function decode_backup_codes( ?string $value ): array {
+		if ( null === $value || '' === $value ) {
 			return array();
 		}
 
-		$decoded = json_decode( (string) $value, true );
+		$decoded = json_decode( $value, true );
 		if ( ! is_array( $decoded ) ) {
 			return array();
 		}
@@ -228,7 +239,12 @@ class Credentials {
 		$this->db->begin_transaction();
 
 		try {
-			$codes         = $this->list_backup_codes( $user_id );
+			$raw_value = $this->db->get_var(
+				'SELECT backup_codes_json FROM users WHERE id = :id FOR UPDATE',
+				array( 'id' => $user_id ),
+			);
+
+			$codes         = $this->decode_backup_codes( is_string( $raw_value ) ? $raw_value : null );
 			$matched_index = false;
 
 			foreach ( $codes as $index => $code ) {

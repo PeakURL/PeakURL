@@ -13,7 +13,8 @@ function TableHeaderRow({
 	isTrashTab = false,
 	trashedCount = 0,
 	sortBy,
-	canDeleteLinks = false,
+	canDeleteLinks,
+	canTrashLinks,
 }: TableHeaderRowProps) {
 	const hasSelection = selectedCount > 0;
 	if (hasSelection) {
@@ -68,14 +69,16 @@ function TableHeaderRow({
 							</>
 						) : (
 							<>
-								<button
-									type="button"
-									onClick={onBulkDelete}
-									className="links-table-header-delete-selected"
-								>
-									<Trash2 size={13} />
-									<span>{__("Delete selected")}</span>
-								</button>
+								{canTrashLinks && (
+									<button
+										type="button"
+										onClick={onBulkDelete}
+										className="links-table-header-delete-selected"
+									>
+										<Trash2 size={13} />
+										<span>{__("Delete selected")}</span>
+									</button>
+								)}
 								{onDeleteAll && (
 									<button
 										type="button"

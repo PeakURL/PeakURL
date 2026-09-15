@@ -129,7 +129,7 @@ function BulkDeleteModal({
 						{!canDeleteLinks && !isTrashTab && (
 							<p className="mt-2 text-xs text-text-muted">
 								{__(
-									"Only links you have permission to delete will be affected. Admin-owned links will remain unchanged."
+									"Only links you have permission to remove will be affected. Admin-owned links will remain unchanged."
 								)}
 							</p>
 						)}

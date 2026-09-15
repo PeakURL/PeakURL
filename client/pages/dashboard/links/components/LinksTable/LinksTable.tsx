@@ -243,6 +243,7 @@ const LinksTable = ({
 								trashedCount={trashedCount}
 								sortBy={sortBy}
 								canDeleteLinks={canDeleteLinks}
+								canTrashLinks={canTrashLinks}
 							/>
 						</thead>
 						<tbody className="links-table-body">

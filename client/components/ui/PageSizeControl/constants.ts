@@ -1,8 +1,10 @@
-export const DEFAULT_PAGE_SIZE_OPTIONS: readonly number[] = [25, 50, 100, 150];
+export const DEFAULT_PAGE_SIZE_OPTIONS: readonly number[] = [
+	10, 25, 50, 100, 150,
+];
 
 export function normalizePageSize(
 	value: number | string | null | undefined,
-	fallback: number = DEFAULT_PAGE_SIZE_OPTIONS[0] ?? 25,
+	fallback: number = DEFAULT_PAGE_SIZE_OPTIONS[0] ?? 10,
 	max?: number
 ): number {
 	const parsed = Number(value);

@@ -12,7 +12,7 @@ import type {
 	RecentActivity,
 } from "../types";
 
-const ACTIVITY_PAGE_STORAGE_KEY = "admin_activity_limit";
+const ACTIVITY_PAGE_STORAGE_KEY = "peakurl_admin_activity_limit";
 
 export function useActivityFilter() {
 	const [searchParams, setSearchParams] = useSearchParams();

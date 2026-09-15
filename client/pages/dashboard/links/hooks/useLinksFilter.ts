@@ -13,9 +13,9 @@ import type {
 } from "../types";
 
 const LS_KEYS = {
-	sortBy: "admin_links_sortBy",
-	sortOrder: "admin_links_sortOrder",
-	limit: "admin_links_limit",
+	sortBy: "peakurl_admin_links_sortBy",
+	sortOrder: "peakurl_admin_links_sortOrder",
+	limit: "peakurl_admin_links_limit",
 };
 
 const DATE_RANGE_DAY_MS = 24 * 60 * 60 * 1000;

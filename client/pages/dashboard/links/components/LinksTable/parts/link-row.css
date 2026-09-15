@@ -125,7 +125,7 @@
 	}
 
 	.links-row-actions {
-		@apply flex items-center justify-center gap-1;
+		@apply flex items-center gap-1;
 	}
 
 	.links-row-action {

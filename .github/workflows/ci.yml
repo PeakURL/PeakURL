@@ -65,6 +65,17 @@ jobs:
       - name: Check PHP syntax
         run: npm run lint:php:syntax
 
+      - name: Provision backend test database
+        env:
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3307
+          DB_DATABASE: peakurl_test
+          DB_USERNAME: root
+          DB_PASSWORD: root
+          DB_PREFIX: peakurl_
+          PEAKURL_DEV: "true"
+        run: php server/bin/setup-database.php
+
       - name: Run PHPUnit backend test suite
         run: npm run test:server
 

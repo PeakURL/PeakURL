@@ -104,7 +104,7 @@ test.describe("Dashboard & Layout Journeys", () => {
 		await page.waitForURL("**/dashboard/links", { timeout: 15000 });
 		await expect(
 			page.getByRole("heading", {
-				name: /^links$/i,
+				name: /^(all links|links)$/i,
 				level: 1,
 			})
 		).toBeVisible();
@@ -206,7 +206,7 @@ test.describe("Dashboard & Layout Journeys", () => {
 		await page.waitForURL("**/dashboard/links", { timeout: 15000 });
 		await expect(
 			page.getByRole("heading", {
-				name: /^links$/i,
+				name: /^(all links|links)$/i,
 				level: 1,
 			})
 		).toBeVisible();

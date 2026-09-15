@@ -10,7 +10,7 @@ test.describe("Links Workflow Journeys", () => {
 		// Heading
 		await expect(
 			page.getByRole("heading", {
-				name: /^links$/i,
+				name: /^(all links|links)$/i,
 				level: 1,
 			})
 		).toBeVisible();
@@ -106,7 +106,7 @@ test.describe("Links Workflow Journeys", () => {
 		await page.goto("/dashboard/links", { waitUntil: "commit" });
 		await expect(
 			page.getByRole("heading", {
-				name: /^links$/i,
+				name: /^(all links|links)$/i,
 				level: 1,
 			})
 		).toBeVisible({ timeout: 25000 });
@@ -288,7 +288,7 @@ test.describe("Links Workflow Journeys", () => {
 		await page.goto("/dashboard/links", { waitUntil: "commit" });
 		await expect(
 			page.getByRole("heading", {
-				name: /^links$/i,
+				name: /^(all links|links)$/i,
 				level: 1,
 			})
 		).toBeVisible({ timeout: 25000 });
@@ -394,7 +394,7 @@ test.describe("Links Workflow Journeys", () => {
 		await page.goto("/dashboard/links", { waitUntil: "commit" });
 		await expect(
 			page.getByRole("heading", {
-				name: /^links$/i,
+				name: /^(all links|links)$/i,
 				level: 1,
 			})
 		).toBeVisible({ timeout: 25000 });
@@ -456,7 +456,7 @@ test.describe("Links Workflow Journeys", () => {
 		await page.goto("/dashboard/links", { waitUntil: "commit" });
 		await expect(
 			page.getByRole("heading", {
-				name: /^links$/i,
+				name: /^(all links|links)$/i,
 				level: 1,
 			})
 		).toBeVisible({ timeout: 25000 });
@@ -546,7 +546,7 @@ test.describe("Links Workflow Journeys", () => {
 		await page.goto("/dashboard/links", { waitUntil: "commit" });
 		await expect(
 			page.getByRole("heading", {
-				name: /^links$/i,
+				name: /^(all links|links)$/i,
 				level: 1,
 			})
 		).toBeVisible({ timeout: 25000 });
@@ -563,7 +563,7 @@ test.describe("Links Workflow Journeys", () => {
 		await page.goto("/dashboard/links", { waitUntil: "commit" });
 		await expect(
 			page.getByRole("heading", {
-				name: /^links$/i,
+				name: /^(all links|links)$/i,
 				level: 1,
 			})
 		).toBeVisible({ timeout: 25000 });

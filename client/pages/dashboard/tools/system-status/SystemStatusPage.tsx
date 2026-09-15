@@ -933,14 +933,14 @@ function SystemStatusPage() {
 		},
 		{
 			label: __("Default TTL"),
-			value: formatTtlDuration(status?.cache?.defaultTtl, "1 hour"),
+			value: formatTtlDuration(status?.cache?.defaultTtl ?? 3600),
 			helperText: status?.cache?.defaultTtl
 				? `${formatCount(status.cache.defaultTtl)}s`
 				: undefined,
 		},
 		{
 			label: __("Negative TTL"),
-			value: formatTtlDuration(status?.cache?.negativeTtl, "1 min"),
+			value: formatTtlDuration(status?.cache?.negativeTtl ?? 60),
 			helperText: status?.cache?.negativeTtl
 				? `${formatCount(status.cache.negativeTtl)}s`
 				: undefined,

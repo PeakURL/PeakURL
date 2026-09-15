@@ -65,11 +65,8 @@ const PasteImport = () => {
 				}).unwrap();
 
 				if (result.data) {
-					const createdList =
-						result.data.results || result.data.created || [];
-					const errorList = Array.isArray(result.data.errors)
-						? result.data.errors
-						: [];
+					const createdList = result.data.results || [];
+					const errorList = result.data.errors || [];
 
 					createdList.forEach((item) => {
 						transformResults.push({

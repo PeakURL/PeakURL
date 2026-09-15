@@ -3,6 +3,8 @@ import { matchPath } from "react-router";
 import { PEAKURL_SITE_NAME } from "@/constants";
 import { __ } from "@/i18n";
 
+import { isValidImportTab, isValidSettingsTab } from "./tabs";
+
 const DEFAULT_SITE_TITLE = "PeakURL";
 
 function getSiteTitle(): string {
@@ -24,6 +26,8 @@ function getSettingsTabTitle(tab: string): string {
 			return __("API Keys");
 		case "integrations":
 			return __("Integrations");
+		case "performance":
+			return __("Performance Settings");
 		case "email":
 			return __("Email Configuration");
 		case "location":
@@ -89,7 +93,9 @@ export function getPageTitle(pathname: string): string {
 
 	if (settingsMatch) {
 		const tab = settingsMatch.params.tab ?? "general";
-		return withSiteTitleSuffix(getSettingsTabTitle(tab));
+		if (isValidSettingsTab(tab)) {
+			return withSiteTitleSuffix(getSettingsTabTitle(tab));
+		}
 	}
 
 	if ("/dashboard/settings" === pathname) {
@@ -100,7 +106,9 @@ export function getPageTitle(pathname: string): string {
 
 	if (importMatch) {
 		const tab = importMatch.params.tab ?? "file";
-		return withSiteTitleSuffix(getImportTabTitle(tab));
+		if (isValidImportTab(tab)) {
+			return withSiteTitleSuffix(getImportTabTitle(tab));
+		}
 	}
 
 	if ("/dashboard/tools/import" === pathname) {

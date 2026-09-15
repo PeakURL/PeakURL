@@ -1,18 +1,7 @@
 import type { ReactNode } from "react";
+import type { SettingsTabId } from "@/router/tabs";
 
-/**
- * All available settings tab identifiers.
- * Used to uniquely identify each tab in the settings UI.
- */
-export type SettingsTabId =
-	| "general"
-	| "security"
-	| "api"
-	| "integrations"
-	| "performance"
-	| "email"
-	| "location"
-	| "updates";
+export type { SettingsTabId };
 
 /**
  * Supported icon names for settings tabs.

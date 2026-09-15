@@ -702,7 +702,6 @@ class Service {
 
 		return array(
 			'results' => $results,
-			'created' => $results,
 			'errors'  => $errors,
 		);
 	}

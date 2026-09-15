@@ -42,18 +42,9 @@ export type {
 	UpdateStatusPayload,
 };
 
-/**
- * All available settings tab identifiers.
- */
-export type SettingsTabId =
-	| "general"
-	| "security"
-	| "api"
-	| "integrations"
-	| "performance"
-	| "email"
-	| "location"
-	| "updates";
+import type { SettingsTabId } from "@/router/tabs";
+
+export type { SettingsTabId };
 
 export type SettingsTabIcon =
 	| "settings"

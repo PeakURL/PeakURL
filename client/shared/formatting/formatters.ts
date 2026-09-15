@@ -1,3 +1,4 @@
+import { __, _n, sprintf } from "@/i18n";
 import {
 	formatLocalizedDateTime,
 	formatRelativeTime,
@@ -144,59 +145,40 @@ export function formatByteSize(value: unknown, fallback: string = ""): string {
 }
 
 /**
- * Format a duration in seconds into a human-readable string (e.g., "7 days", "1 hour", "60s").
+ * Format a duration in seconds into a human-readable string (e.g., "7 days", "1 hour", "45 seconds").
  *
  * @param value    - The duration in seconds.
  * @param fallback - The string to return if formatting fails.
  * @return The formatted duration string.
  */
-export function formatTtlDuration(
-	value: unknown,
-	fallback: string = "0s"
-): string {
+export function formatTtlDuration(value: unknown, fallback?: string): string {
+	const defaultFallback =
+		fallback ?? sprintf(_n("%d second", "%d seconds", 0), 0);
+
 	if (undefined === value || null === value || "" === value) {
-		return fallback;
+		return defaultFallback;
 	}
 
 	const seconds = Number(value);
 
 	if (!Number.isFinite(seconds) || seconds < 0) {
-		return fallback;
+		return defaultFallback;
 	}
 
-	if (seconds === 0) {
-		return "0s";
-	}
-
-	if (seconds % 86400 === 0) {
+	if (seconds > 0 && seconds % 86400 === 0) {
 		const days = seconds / 86400;
-		return days === 1 ? "1 day" : `${String(days)} days`;
+		return sprintf(_n("%d day", "%d days", days), days);
 	}
 
-	if (seconds % 3600 === 0) {
+	if (seconds > 0 && seconds % 3600 === 0) {
 		const hours = seconds / 3600;
-		return hours === 1 ? "1 hour" : `${String(hours)} hours`;
+		return sprintf(_n("%d hour", "%d hours", hours), hours);
 	}
 
-	if (seconds % 60 === 0) {
+	if (seconds > 0 && seconds % 60 === 0) {
 		const minutes = seconds / 60;
-		return minutes === 1 ? "1 minute" : `${String(minutes)} minutes`;
+		return sprintf(_n("%d minute", "%d minutes", minutes), minutes);
 	}
 
-	if (seconds >= 86400) {
-		const days = Math.round(seconds / 86400);
-		return days === 1 ? "1 day" : `${String(days)} days`;
-	}
-
-	if (seconds >= 3600) {
-		const hours = Math.round(seconds / 3600);
-		return hours === 1 ? "1 hour" : `${String(hours)} hours`;
-	}
-
-	if (seconds >= 60) {
-		const minutes = Math.round(seconds / 60);
-		return minutes === 1 ? "1 minute" : `${String(minutes)} minutes`;
-	}
-
-	return `${seconds}s`;
+	return sprintf(_n("%d second", "%d seconds", seconds), seconds);
 }

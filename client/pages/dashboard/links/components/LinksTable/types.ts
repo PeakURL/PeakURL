@@ -11,9 +11,9 @@ import type {
  */
 export interface LinksTableProps {
 	links: LinkRecord[];
-	totalCount?: number;
-	searchQuery?: string;
-	onSearchChange?: (query: string) => void;
+	totalCount: number;
+	searchQuery: string;
+	onSearchChange: (query: string) => void;
 	statsShortId: string | null;
 	statsLink: LinkRecord | null;
 	sortBy?: LinksSortBy;

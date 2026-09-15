@@ -196,9 +196,7 @@ export const Sidebar = ({
 	const pathname = location.pathname;
 	const { data: urlsRes } = useGetUrlsQuery(undefined);
 	const { canManageUsers } = useAdminAccess();
-	const totalLinks =
-		urlsRes?.data?.meta?.totalItems ??
-		(Array.isArray(urlsRes?.data?.items) ? urlsRes.data.items.length : 0);
+	const totalLinks = urlsRes?.data?.meta?.totalItems ?? 0;
 
 	const CollapseIcon = isRtl
 		? isCollapsed

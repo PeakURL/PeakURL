@@ -2,6 +2,8 @@ import { matchPath } from "react-router";
 
 import { applyFilters } from "@/shared/extensibility";
 
+import { isValidImportTab, isValidSettingsTab } from "./tabs";
+
 const BODY_CLASS_DATA_ATTRIBUTE = "peakurlBodyClasses";
 
 interface BodyClassContext {
@@ -109,20 +111,27 @@ function getDashboardBodyClassNames(pathname: string): string[] {
 		const tab = sanitizeBodyClassName(
 			settingsMatch.params.tab || "general"
 		);
-		classes.push("dashboard-settings-page", `dashboard-settings-${tab}`);
-		return classes;
+		if (isValidSettingsTab(tab)) {
+			classes.push(
+				"dashboard-settings-page",
+				`dashboard-settings-${tab}`
+			);
+			return classes;
+		}
 	}
 
 	const importMatch = matchPath("/dashboard/tools/import/:tab", pathname);
 
 	if (importMatch) {
 		const tab = sanitizeBodyClassName(importMatch.params.tab || "file");
-		classes.push(
-			"dashboard-tools-page",
-			"dashboard-import-page",
-			`dashboard-import-${tab}`
-		);
-		return classes;
+		if (isValidImportTab(tab)) {
+			classes.push(
+				"dashboard-tools-page",
+				"dashboard-import-page",
+				`dashboard-import-${tab}`
+			);
+			return classes;
+		}
 	}
 
 	if ("/dashboard/tools/export" === pathname) {
@@ -145,7 +154,7 @@ function getDashboardBodyClassNames(pathname: string): string[] {
 		return classes;
 	}
 
-	classes.push("dashboard-not-found-page", "not-found-page");
+	classes.push("dashboard-not-found-page");
 	return classes;
 }
 

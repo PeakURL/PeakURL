@@ -1,24 +1,15 @@
 import { Navigate, useParams } from "react-router";
 
 import { useAdminAccess } from "@/hooks";
+import NotFoundPage from "@/pages/NotFoundPage";
+import { isValidSettingsTab } from "@/router/tabs";
 
 import { Content } from "./components";
 import type { SettingsTabId } from "./components/layout/types";
 
-const VALID_SETTINGS_TABS = new Set<SettingsTabId>([
-	"general",
-	"security",
-	"api",
-	"integrations",
-	"performance",
-	"email",
-	"location",
-	"updates",
-]);
-
 function TabPage() {
 	const params = useParams();
-	const tab = params.tab as SettingsTabId | undefined;
+	const tab = params.tab;
 	const {
 		canManageApiKeys,
 		canManageWebhooks,
@@ -29,8 +20,8 @@ function TabPage() {
 		isLoading,
 	} = useAdminAccess();
 
-	if (tab && !VALID_SETTINGS_TABS.has(tab)) {
-		return <Navigate replace to="/dashboard/settings/general" />;
+	if (!isValidSettingsTab(tab)) {
+		return <NotFoundPage />;
 	}
 
 	const restrictedTabs: Partial<Record<SettingsTabId, boolean>> = {

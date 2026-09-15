@@ -1,20 +1,10 @@
 @layer components {
 	.settings-page-header {
-		text-align: start;
+		@apply text-start lg:sticky lg:top-[calc(4rem+var(--admin-notices-height,0px))] lg:z-20 lg:border-b lg:border-stroke/60 lg:bg-bg lg:pt-6 lg:pb-5;
 	}
 
-	/* Stick the page title below the dashboard header on desktop */
-	@media (min-width: 1024px) {
-		.settings-page-header {
-			position: sticky;
-			/* Sits flush below the 4rem sticky dashboard header */
-			top: 4rem;
-			z-index: 20;
-			/* Absorb main-area top padding so header stays flush from scroll = 0 */
-			padding-top: 1.5rem;
-			padding-bottom: 1.25rem;
-			@apply border-b border-stroke/60 bg-bg;
-		}
+	.dashboard-notices + .settings-layout .settings-page-header {
+		@apply lg:pt-0;
 	}
 
 	.settings-page-title {

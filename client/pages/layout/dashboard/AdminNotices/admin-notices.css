@@ -1,6 +1,6 @@
 @layer components {
 	.dashboard-notices {
-		@apply mb-5 space-y-4;
+		@apply mb-5 space-y-4 lg:sticky lg:top-16 lg:z-[25] lg:-mt-6 lg:mb-0 lg:bg-bg lg:pt-6 lg:pb-5;
 	}
 
 	.dashboard-notice {

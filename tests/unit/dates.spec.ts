@@ -73,8 +73,14 @@ test.describe("Date Utilities", () => {
 		expect(formatTtlDuration(21600)).toBe("6 hours");
 		expect(formatTtlDuration(60)).toBe("1 minute");
 		expect(formatTtlDuration(180)).toBe("3 minutes");
-		expect(formatTtlDuration(45)).toBe("45s");
-		expect(formatTtlDuration(0)).toBe("0s");
-		expect(formatTtlDuration(null)).toBe("0s");
+		expect(formatTtlDuration(45)).toBe("45 seconds");
+		expect(formatTtlDuration(61)).toBe("61 seconds");
+		expect(formatTtlDuration(3661)).toBe("3661 seconds");
+		expect(formatTtlDuration(0)).toBe("0 seconds");
+		expect(formatTtlDuration(null)).toBe("0 seconds");
+		expect(formatTtlDuration(undefined)).toBe("0 seconds");
+		expect(formatTtlDuration(-5)).toBe("0 seconds");
+		expect(formatTtlDuration("invalid")).toBe("0 seconds");
+		expect(formatTtlDuration(null, "N/A")).toBe("N/A");
 	});
 });

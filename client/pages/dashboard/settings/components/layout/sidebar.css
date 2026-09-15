@@ -8,14 +8,8 @@
 	}
 
 	/* Sticky positioning only on desktop where the two-column grid is active */
-	@media (min-width: 1024px) {
-		.settings-sidebar-panel {
-			position: sticky;
-			/* 4rem dashboard header + 6.25rem settings header + 1.25rem grid padding-top */
-			top: 11.5rem;
-			max-height: calc(100vh - 11.5rem - 1.5rem);
-			overflow-y: auto;
-		}
+	.settings-sidebar-panel {
+		@apply lg:sticky lg:top-[calc(11.5rem+var(--admin-notices-height,0px))] lg:max-h-[calc(100vh-(11.5rem+var(--admin-notices-height,0px))-1.5rem)] lg:overflow-y-auto;
 	}
 
 	.settings-sidebar-nav {

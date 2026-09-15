@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { Link } from "react-router";
 import { AlertCircle, CheckCircle2, Info, TriangleAlert } from "lucide-react";
 
@@ -75,7 +75,8 @@ export const AdminNotices = () => {
 	const isRtl = isDocumentRtl();
 	const direction = isRtl ? "rtl" : "ltr";
 	const { data } = useGetAdminNoticesQuery(undefined);
-	const notices = data?.data?.items ?? [];
+	const items = data?.data?.items;
+	const notices = items ?? [];
 	const [updateModalOpen, setUpdateModalOpen] = useState(false);
 
 	const handleNoticeClick = useCallback(
@@ -103,13 +104,47 @@ export const AdminNotices = () => {
 		[]
 	);
 
+	const noticesRef = useRef<HTMLDivElement | null>(null);
+
+	useEffect(() => {
+		const element = noticesRef.current;
+		if (!element) {
+			document.documentElement.style.setProperty(
+				"--admin-notices-height",
+				"0px"
+			);
+			return;
+		}
+
+		const updateHeight = () => {
+			const rect = element.getBoundingClientRect();
+			document.documentElement.style.setProperty(
+				"--admin-notices-height",
+				`${rect.height}px`
+			);
+		};
+
+		updateHeight();
+
+		const observer = new ResizeObserver(updateHeight);
+		observer.observe(element);
+
+		return () => {
+			observer.disconnect();
+			document.documentElement.style.setProperty(
+				"--admin-notices-height",
+				"0px"
+			);
+		};
+	}, [items]);
+
 	if (!notices.length) {
 		return null;
 	}
 
 	return (
 		<>
-			<div className="dashboard-notices">
+			<div ref={noticesRef} className="dashboard-notices">
 				{notices.map((notice: AdminNoticeItem, index: number) => {
 					const toneKey = isNoticeTone(notice?.type)
 						? notice.type

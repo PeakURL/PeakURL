@@ -18,8 +18,7 @@ function BulkDeleteModal({
 	onSuccess,
 }: BulkDeleteModalProps) {
 	const direction = getDocumentDirection();
-	const { canDeleteLinks, isAdmin } = useAdminAccess();
-	const hasPermanentDeleteCapability = canDeleteLinks || isAdmin;
+	const { canDeleteLinks } = useAdminAccess();
 	const [error, setError] = useState("");
 	const [activeAction, setActiveAction] = useState<
 		"trash" | "permanent" | null
@@ -138,7 +137,7 @@ function BulkDeleteModal({
 								{__("Cancel")}
 							</button>
 
-							{!isTrashTab && hasPermanentDeleteCapability && (
+							{!isTrashTab && canDeleteLinks && (
 								<button
 									type="button"
 									onClick={() => handleDelete(true)}

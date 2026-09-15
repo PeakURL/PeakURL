@@ -29,6 +29,7 @@ import {
 	getBodyClassNames,
 } from "./bodyClasses";
 import { getPageTitle } from "./pageTitle";
+import { isValidSettingsTab } from "./tabs";
 
 function RouteEffects() {
 	useScrollToTop();
@@ -56,11 +57,29 @@ function AppLayoutRoute() {
 }
 
 function SettingsLayoutRoute() {
-	return (
-		<SettingsLayout>
-			<Outlet />
-		</SettingsLayout>
-	);
+	const location = useLocation();
+	const segments = location.pathname
+		.replace(/^\/dashboard\/settings\/?/, "")
+		.split("/")
+		.filter(Boolean);
+
+	if (segments.length === 0) {
+		return (
+			<SettingsLayout>
+				<Outlet />
+			</SettingsLayout>
+		);
+	}
+
+	if (segments.length === 1 && isValidSettingsTab(segments[0])) {
+		return (
+			<SettingsLayout>
+				<Outlet />
+			</SettingsLayout>
+		);
+	}
+
+	return <NotFoundPage />;
 }
 
 function ImportLayoutRoute() {
@@ -195,6 +214,7 @@ function AppRouter() {
 							}
 						/>
 						<Route path=":tab" element={<SettingsTabPage />} />
+						<Route path="*" element={<NotFoundPage />} />
 					</Route>
 					<Route path="*" element={<NotFoundPage />} />
 				</Route>

@@ -48,6 +48,7 @@ test.describe("Global Layout, Responsive & Theme Journeys", () => {
 		const closeSidebarBtn = page.locator("button.dashboard-sidebar-close");
 		await closeSidebarBtn.click();
 		await expect(sidebar).not.toHaveClass(/dashboard-sidebar-open/);
+		await page.waitForTimeout(400);
 
 		// Verify no horizontal overflow in mobile viewport
 		const hasOverflow = await page.evaluate(() => {

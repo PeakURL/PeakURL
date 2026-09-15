@@ -1,6 +1,6 @@
 @layer components {
 	.not-found-page {
-		@apply flex min-h-[calc(100vh-80px)] flex-col items-center justify-center p-4;
+		@apply flex w-full flex-1 flex-col items-center justify-center p-4;
 	}
 
 	.not-found-page-inner {

@@ -26,7 +26,7 @@ import type { LinksTableProps } from "./types";
 const LinksTable = ({
 	links,
 	totalCount,
-	searchQuery = "",
+	searchQuery,
 	onSearchChange,
 	statsShortId,
 	statsLink,
@@ -171,9 +171,9 @@ const LinksTable = ({
 		}
 	};
 
-	const hasLinks = Boolean(links && links.length > 0);
-	const isSearchActive = Boolean(searchQuery?.trim());
-	const displayCount = totalCount ?? (links ? links.length : 0);
+	const hasLinks = links.length > 0;
+	const isSearchActive = Boolean(searchQuery.trim());
+	const displayCount = totalCount;
 
 	return (
 		<div className="links-table">
@@ -189,33 +189,31 @@ const LinksTable = ({
 					</span>
 				</div>
 
-				{onSearchChange && (
-					<div className="w-full sm:w-64">
-						<div className="relative">
-							<Search
-								size={14}
-								className="pointer-events-none absolute inset-s-3 top-1/2 -translate-y-1/2 text-text-muted"
-							/>
-							<input
-								type="text"
-								value={searchQuery}
-								onChange={(e) => onSearchChange(e.target.value)}
-								placeholder={__("Search links...")}
-								className="w-full rounded-lg border border-stroke bg-surface ps-9 pe-8 py-1.5 text-xs text-heading placeholder:text-text-muted/60 transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-							/>
-							{searchQuery ? (
-								<button
-									type="button"
-									onClick={() => onSearchChange("")}
-									className="absolute inset-e-2.5 top-1/2 -translate-y-1/2 text-text-muted transition-colors hover:text-heading"
-									aria-label={__("Clear search")}
-								>
-									<X size={13} />
-								</button>
-							) : null}
-						</div>
+				<div className="w-full sm:w-64">
+					<div className="relative">
+						<Search
+							size={14}
+							className="pointer-events-none absolute inset-s-3 top-1/2 -translate-y-1/2 text-text-muted"
+						/>
+						<input
+							type="text"
+							value={searchQuery}
+							onChange={(e) => onSearchChange(e.target.value)}
+							placeholder={__("Search links...")}
+							className="w-full rounded-lg border border-stroke bg-surface ps-9 pe-8 py-1.5 text-xs text-heading placeholder:text-text-muted/60 transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+						/>
+						{searchQuery ? (
+							<button
+								type="button"
+								onClick={() => onSearchChange("")}
+								className="absolute inset-e-2.5 top-1/2 -translate-y-1/2 text-text-muted transition-colors hover:text-heading"
+								aria-label={__("Clear search")}
+							>
+								<X size={13} />
+							</button>
+						) : null}
 					</div>
-				)}
+				</div>
 			</div>
 
 			{!hasLinks ? (

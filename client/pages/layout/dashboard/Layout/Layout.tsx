@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useLocation } from "react-router";
 
-import { PEAKURL_NAME, PEAKURL_VERSION } from "@constants";
+import { PEAKURL_NAME } from "@/constants";
+import { getPeakURLData } from "@/data";
 import { isDocumentRtl } from "@/i18n/direction";
 import { __, sprintf } from "@/i18n";
 import { cn } from "@/shared/formatting";
@@ -47,6 +48,7 @@ export const Layout = ({ children }: LayoutProps) => {
 	const isRtl = isDocumentRtl();
 	const basePath = "/dashboard";
 	const location = useLocation();
+	const { version } = getPeakURLData();
 	const headerKey = `${location.pathname}${location.search}`;
 	const footerLink =
 		"https://peakurl.org?utm_source=peakurl_dashboard&utm_medium=dashboard_footer&utm_campaign=app_footer";
@@ -109,7 +111,7 @@ export const Layout = ({ children }: LayoutProps) => {
 							>
 								{__("Version")}{" "}
 								<bdi className="dashboard-layout-footer-version-value">
-									{PEAKURL_VERSION}
+									{version}
 								</bdi>
 							</p>
 						</div>

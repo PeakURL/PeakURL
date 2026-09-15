@@ -8,8 +8,6 @@ import {
 declare const __PEAKURL_VERSION__: string | undefined;
 
 const DEFAULT_PEAKURL_ORIGIN = "https://peakurl.dev";
-const FALLBACK_VERSION =
-	typeof __PEAKURL_VERSION__ !== "undefined" ? __PEAKURL_VERSION__ : "1.0.0";
 const IS_BROWSER = "undefined" !== typeof window;
 
 /**
@@ -71,8 +69,12 @@ export const PEAKURL_SITE_NAME = appSiteName || PEAKURL_NAME;
 
 /**
  * Current application version available to the dashboard.
+ * The tracked .version source (via Vite define) is authoritative, with runtime data fallback.
  */
-export const PEAKURL_VERSION = appVersion || FALLBACK_VERSION;
+export const PEAKURL_VERSION =
+	(typeof __PEAKURL_VERSION__ !== "undefined" && __PEAKURL_VERSION__) ||
+	appVersion ||
+	"1.0.0";
 
 /**
  * Whether debug mode is enabled for the current install.

@@ -338,15 +338,17 @@ if ( ! function_exists( 'get_peakurl_data' ) ) {
 			: Constants::DEFAULT_TIME_FORMAT;
 
 		/*
-		 * Prefer the installed version from settings because it reflects the
-		 * applied release. Debug can still be forced by callers such as site HTML.
+		 * Resolve application version from runtime configuration (derived from the
+		 * authoritative .version file), with fallback to settings or default constant.
 		 */
-		$version = array_key_exists( 'version', $args )
+		$runtime_version = trim( (string) ( $app_config[ Constants::VERSION ] ?? '' ) );
+		$version         = array_key_exists( 'version', $args ) && '' !== trim( (string) $args['version'] )
 			? trim( (string) $args['version'] )
-			: $option( 'installed_version' );
-		$version = '' !== $version
-			? $version
-			: (string) ( $app_config[ Constants::VERSION ] ?? Constants::DEFAULT_VERSION );
+			: ( '' !== $runtime_version
+				? $runtime_version
+				: ( '' !== $option( 'installed_version' )
+					? $option( 'installed_version' )
+					: Constants::DEFAULT_VERSION ) );
 
 		$debug_enabled = array_key_exists( 'debug', $args )
 			? (bool) $args['debug']

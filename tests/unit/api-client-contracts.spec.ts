@@ -21,6 +21,9 @@ import {
 	getErrorStatus,
 } from "../../client/shared/errors";
 import { findDashboardRouteMatches } from "../../client/pages/layout/dashboard/Search/lib/searchMatching";
+import { isValidImportTab, isValidSettingsTab } from "../../client/router/tabs";
+import { getBodyClassNames } from "../../client/router/bodyClasses";
+import { getPageTitle } from "../../client/router/pageTitle";
 
 test.describe("Frontend API Client Contracts", () => {
 	test.describe("API Route Construction & Parameter Encoding", () => {
@@ -498,6 +501,65 @@ test.describe("Frontend API Client Contracts", () => {
 					(m) => m.id === "tools-scheduled-jobs"
 				)
 			).toBe(true);
+		});
+
+		test("validates settings tabs accurately", () => {
+			expect(isValidSettingsTab("general")).toBe(true);
+			expect(isValidSettingsTab("security")).toBe(true);
+			expect(isValidSettingsTab("api")).toBe(true);
+			expect(isValidSettingsTab("integrations")).toBe(true);
+			expect(isValidSettingsTab("performance")).toBe(true);
+			expect(isValidSettingsTab("email")).toBe(true);
+			expect(isValidSettingsTab("location")).toBe(true);
+			expect(isValidSettingsTab("updates")).toBe(true);
+
+			expect(isValidSettingsTab("invalid")).toBe(false);
+			expect(isValidSettingsTab("")).toBe(false);
+			expect(isValidSettingsTab(undefined)).toBe(false);
+		});
+
+		test("validates import tabs accurately", () => {
+			expect(isValidImportTab("file")).toBe(true);
+			expect(isValidImportTab("api")).toBe(true);
+			expect(isValidImportTab("paste")).toBe(true);
+
+			expect(isValidImportTab("csv")).toBe(false);
+			expect(isValidImportTab("")).toBe(false);
+			expect(isValidImportTab(undefined)).toBe(false);
+		});
+
+		test("body classes and page titles honor tab validation", () => {
+			const validClasses = getBodyClassNames(
+				"/dashboard/settings/general"
+			);
+			expect(validClasses).toContain("dashboard-settings-general");
+
+			const invalidClasses = getBodyClassNames(
+				"/dashboard/settings/invalid-tab"
+			);
+			expect(invalidClasses).not.toContain(
+				"dashboard-settings-invalid-tab"
+			);
+
+			const validTitle = getPageTitle("/dashboard/settings/general");
+			expect(validTitle).toContain("General Settings");
+
+			const invalidTitle = getPageTitle(
+				"/dashboard/settings/invalid-tab"
+			);
+			expect(invalidTitle).toBe("Page Not Found • PeakURL");
+
+			const validImportClasses = getBodyClassNames(
+				"/dashboard/tools/import/file"
+			);
+			expect(validImportClasses).toContain("dashboard-import-file");
+
+			const invalidImportClasses = getBodyClassNames(
+				"/dashboard/tools/import/invalid"
+			);
+			expect(invalidImportClasses).not.toContain(
+				"dashboard-import-invalid"
+			);
 		});
 	});
 });

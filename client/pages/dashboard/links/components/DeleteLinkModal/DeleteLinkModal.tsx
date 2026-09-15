@@ -19,8 +19,7 @@ function DeleteLinkModal({
 	isTrashTab = false,
 }: DeleteLinkModalProps) {
 	const direction = isDocumentRtl() ? "rtl" : "ltr";
-	const { canDeleteLinks, isAdmin } = useAdminAccess();
-	const hasPermanentDeleteCapability = canDeleteLinks || isAdmin;
+	const { canDeleteLinks } = useAdminAccess();
 	const [error, setError] = useState("");
 	const [activeAction, setActiveAction] = useState<
 		"trash" | "permanent" | null
@@ -173,7 +172,7 @@ function DeleteLinkModal({
 								{__("Cancel")}
 							</button>
 
-							{!isPermanent && hasPermanentDeleteCapability && (
+							{!isPermanent && canDeleteLinks && (
 								<button
 									type="button"
 									onClick={() => handleDelete(true)}

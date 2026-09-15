@@ -42,7 +42,6 @@ export interface BulkCreateErrorItem {
 export interface BulkCreateResponse {
 	data?: {
 		results?: BulkCreateSuccessItem[];
-		created?: BulkCreateSuccessItem[];
-		errors?: BulkCreateErrorItem[] | number;
+		errors?: BulkCreateErrorItem[];
 	};
 }

@@ -13,7 +13,7 @@ function TableHeaderRow({
 	isTrashTab = false,
 	trashedCount = 0,
 	sortBy,
-	isAdmin = false,
+	canDeleteLinks = false,
 }: TableHeaderRowProps) {
 	const hasSelection = selectedCount > 0;
 	if (hasSelection) {
@@ -45,7 +45,7 @@ function TableHeaderRow({
 										<span>{__("Restore selected")}</span>
 									</button>
 								)}
-								{isAdmin && (
+								{canDeleteLinks && (
 									<button
 										type="button"
 										onClick={onBulkDelete}

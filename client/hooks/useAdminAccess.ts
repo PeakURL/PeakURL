@@ -21,6 +21,7 @@ export const useAdminAccess = () => {
 		canManagePerformance: Boolean(capabilities.managePerformance),
 		canManageUpdates: Boolean(capabilities.manageUpdates),
 		canDeleteLinks: Boolean(capabilities.deleteLinks),
+		canTrashLinks: Boolean(capabilities.trashLinks),
 		canEmptyTrash: Boolean(capabilities.emptyTrash),
 		isLoading: (isLoading || isFetching) && !user,
 	};

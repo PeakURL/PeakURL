@@ -51,7 +51,7 @@ const LinksTable = ({
 	const [selectedIds, setSelectedIds] = useState<string[]>([]);
 	const [searchParams, setSearchParams] = useSearchParams();
 	const notifications = useNotification();
-	const { isAdmin, user } = useAdminAccess();
+	const { canDeleteLinks, canTrashLinks, user } = useAdminAccess();
 	const [clearUrls, { isLoading: isDeletingAll }] = useClearUrlsMutation();
 
 	useEffect(() => {
@@ -242,7 +242,7 @@ const LinksTable = ({
 								isTrashTab={isTrashTab}
 								trashedCount={trashedCount}
 								sortBy={sortBy}
-								isAdmin={isAdmin}
+								canDeleteLinks={canDeleteLinks}
 							/>
 						</thead>
 						<tbody className="links-table-body">
@@ -262,7 +262,8 @@ const LinksTable = ({
 									formatNumber={formatNumber}
 									isTrashTab={isTrashTab}
 									sortBy={sortBy}
-									isAdmin={isAdmin}
+									canDeleteLinks={canDeleteLinks}
+									canTrashLinks={canTrashLinks}
 									currentUserId={user?.id}
 								/>
 							))}
@@ -311,7 +312,7 @@ const LinksTable = ({
 				onClose={() => setDeleteAllModalOpen(false)}
 				title={__("Delete all links")}
 				description={
-					isAdmin
+					canDeleteLinks
 						? __(
 								"Are you sure you want to delete all links across the site? This action permanently removes them."
 							)

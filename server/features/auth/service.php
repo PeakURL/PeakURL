@@ -983,23 +983,34 @@ class Service {
 			throw new ApiException( __( 'Invalid verification code.', 'peakurl' ), 422 );
 		}
 
-		$backup_codes = $this->credentials->replace_backup_codes( (string) $user['id'] );
+		$this->db->begin_transaction();
 
-		$this->db->query(
-			'UPDATE users
-            SET two_factor_enabled = 1,
-                two_factor_secret = :secret,
-                two_factor_pending_secret = NULL,
-                updated_at = :updated_at
-            WHERE id = :id',
-			array(
-				'secret'     => $pending_secret,
-				'updated_at' => Date::now(),
-				'id'         => $user['id'],
-			),
-		);
+		try {
+			$backup_codes = $this->credentials->replace_backup_codes( (string) $user['id'] );
 
-		return $backup_codes;
+			$this->db->query(
+				'UPDATE users
+				SET two_factor_enabled = 1,
+					two_factor_secret = :secret,
+					two_factor_pending_secret = NULL,
+					updated_at = :updated_at
+				WHERE id = :id',
+				array(
+					'secret'     => $pending_secret,
+					'updated_at' => Date::now(),
+					'id'         => $user['id'],
+				),
+			);
+
+			$this->db->commit();
+			return $backup_codes;
+		} catch ( \Throwable $exception ) {
+			if ( $this->db->in_transaction() ) {
+				$this->db->roll_back();
+			}
+
+			throw $exception;
+		}
 	}
 
 	/**

@@ -31,10 +31,19 @@ function LinkRow({
 	formatNumber,
 	isTrashTab = false,
 	sortBy,
-	isAdmin = false,
+	canDeleteLinks = false,
+	canTrashLinks = false,
 	currentUserId,
 }: LinkRowProps) {
 	const isTrashed = isTrashTab || "trashed" === link.status;
+	const isOwner = Boolean(
+		link.userId &&
+		currentUserId &&
+		String(link.userId) === String(currentUserId)
+	);
+	const canTrash = canTrashLinks && (canDeleteLinks || isOwner);
+	const canPermanentDelete = Boolean(canDeleteLinks);
+	const canDelete = isTrashed ? canPermanentDelete : canTrash;
 	const statusLabel = isTrashed
 		? __("Trashed")
 		: "active" === link.status
@@ -243,7 +252,7 @@ function LinkRow({
 							>
 								<RotateCcw size={14} />
 							</button>
-							{isAdmin && (
+							{canPermanentDelete && (
 								<button
 									onClick={() => onDelete(link)}
 									className="links-row-action links-row-action-delete text-error hover:text-error"
@@ -276,10 +285,7 @@ function LinkRow({
 							>
 								<Pencil size={14} />
 							</button>
-							{(isAdmin ||
-								(link.userId &&
-									String(link.userId) ===
-										String(currentUserId))) && (
+							{canDelete && (
 								<button
 									onClick={() => onDelete(link)}
 									className="links-row-action links-row-action-delete"

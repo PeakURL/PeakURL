@@ -43,7 +43,8 @@ export interface LinkRowProps {
 	formatNumber: (value: number) => string;
 	isTrashTab?: boolean;
 	sortBy?: LinksSortBy;
-	isAdmin?: boolean;
+	canDeleteLinks?: boolean;
+	canTrashLinks?: boolean;
 	currentUserId?: string | null;
 }
 
@@ -60,5 +61,5 @@ export interface TableHeaderRowProps {
 	isTrashTab?: boolean;
 	trashedCount?: number;
 	sortBy?: LinksSortBy;
-	isAdmin?: boolean;
+	canDeleteLinks?: boolean;
 }

@@ -18,7 +18,7 @@ function BulkDeleteModal({
 	onSuccess,
 }: BulkDeleteModalProps) {
 	const direction = getDocumentDirection();
-	const { canDeleteLinks, isAdmin } = useAdminAccess();
+	const { canDeleteLinks } = useAdminAccess();
 	const [error, setError] = useState("");
 	const [activeAction, setActiveAction] = useState<
 		"trash" | "permanent" | null
@@ -126,7 +126,7 @@ function BulkDeleteModal({
 										)}
 						</p>
 
-						{!isAdmin && !isTrashTab && (
+						{!canDeleteLinks && !isTrashTab && (
 							<p className="mt-2 text-xs text-text-muted">
 								{__(
 									"Only links you have permission to delete will be affected. Admin-owned links will remain unchanged."

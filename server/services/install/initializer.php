@@ -107,8 +107,7 @@ class Initializer {
 			$i18n->prepare_languages_dir();
 		}
 
-		$db_prefix = (string) ( $config[ Constants::DB_PREFIX ] ?? '' );
-		$db        = new PeakURL_DB( $connection, $db_prefix );
+		$db = new PeakURL_DB( $connection );
 
 		if ( ! $db->table_exists( 'users' ) ) {
 			$setup_command = \PeakURL\Core\Config\Environment::get_instance()->is_development()
@@ -131,9 +130,11 @@ class Initializer {
 		$db->begin_transaction();
 
 		try {
-			$owner = $db->get_row(
-				'SELECT * FROM users WHERE role = :role ORDER BY id ASC LIMIT 1',
-				array( 'role' => 'admin' )
+			$owner = $db->get_row_by(
+				'users',
+				array( 'role' => 'admin' ),
+				array( '*' ),
+				array( 'id' => 'ASC' ),
 			);
 
 			if ( ! $owner ) {

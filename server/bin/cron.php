@@ -82,8 +82,7 @@ try {
 }
 
 $connection = new Connection( $config );
-$db_prefix  = (string) ( $config[ Constants::DB_PREFIX ] ?? '' );
-$db         = new PeakURL_DB( $connection, $db_prefix );
+$db         = new PeakURL_DB( $connection );
 
 $content_dir   = (string) ( $config[ Constants::CONTENT_DIR ] ?? $environment->get_content_path() );
 $settings_api  = new SettingsApi( $db );

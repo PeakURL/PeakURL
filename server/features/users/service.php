@@ -208,6 +208,8 @@ class Service {
 			'bio'         => 'bio',
 		);
 
+		$data = array();
+
 		foreach ( $field_map as $input_key => $column ) {
 			if ( ! array_key_exists( $input_key, $changes ) ) {
 				continue;
@@ -230,8 +232,7 @@ class Service {
 				}
 			}
 
-			$updates[]         = $column . ' = :' . $column;
-			$params[ $column ] = $value;
+			$data[ $column ] = $value;
 		}
 
 		if (
@@ -249,28 +250,23 @@ class Service {
 				),
 			);
 
-			$updates[]               = 'password_hash = :password_hash';
-			$params['password_hash'] = password_hash(
+			$data['password_hash'] = password_hash(
 				$password,
 				PASSWORD_DEFAULT,
 			);
-			$password_changed        = true;
+			$password_changed      = true;
 		}
 
-		if ( empty( $updates ) ) {
+		if ( empty( $data ) ) {
 			return $this->format_user(
 				$this->users_api->get_user( $user_id ),
 				$request,
 			);
 		}
 
-		$updates[]            = 'updated_at = :updated_at';
-		$params['updated_at'] = Date::now();
+		$data['updated_at'] = Date::now();
 
-		$this->db->query(
-			'UPDATE users SET ' . implode( ', ', $updates ) . ' WHERE id = :id',
-			$params,
-		);
+		$this->db->update( 'users', $data, array( 'id' => $user_id ) );
 
 		if ( $password_changed && $user_row ) {
 			$this->auth_service->send_password_changed( $user_row );
@@ -294,10 +290,7 @@ class Service {
 
 		return array_map(
 			fn( array $row ): array => $this->format_user( $row ),
-			$this->db->get_results(
-				'SELECT * FROM users
-				ORDER BY FIELD(role, \'admin\', \'editor\'), created_at ASC',
-			),
+			$this->users_api->list_users(),
 		);
 	}
 
@@ -408,8 +401,7 @@ class Service {
 
 		$user_id          = (string) $user['id'];
 		$user_email       = sanitize_email( (string) ( $user['email'] ?? '' ) );
-		$updates          = array();
-		$params           = array( 'id' => $user_id );
+		$data             = array();
 		$password_changed = false;
 
 		foreach (
@@ -428,8 +420,7 @@ class Service {
 				continue;
 			}
 
-			$updates[]         = $column . ' = :' . $column;
-			$params[ $column ] = trim( (string) $changes[ $input_key ] );
+			$data[ $column ] = trim( (string) $changes[ $input_key ] );
 		}
 
 		if ( array_key_exists( 'username', $changes ) ) {
@@ -441,8 +432,7 @@ class Service {
 				throw new ApiException( __( 'Username is already taken.', 'peakurl' ), 422 );
 			}
 
-			$updates[]          = 'username = :username';
-			$params['username'] = $new_username;
+			$data['username'] = $new_username;
 		}
 
 		if ( array_key_exists( 'email', $changes ) ) {
@@ -459,8 +449,7 @@ class Service {
 				}
 			}
 
-			$updates[]       = 'email = :email';
-			$params['email'] = $email;
+			$data['email'] = $email;
 		}
 
 		if ( array_key_exists( 'role', $changes ) ) {
@@ -471,37 +460,31 @@ class Service {
 				$role,
 				(string) $current_user['id'],
 			);
-			$updates[]      = 'role = :role';
-			$params['role'] = $role;
+			$data['role'] = $role;
 		}
 
 		if ( array_key_exists( 'password', $changes ) ) {
 			$password = trim( (string) $changes['password'] );
 
 			if ( '' !== $password ) {
-				$password                = $this->validator->validate_password( $password );
-				$updates[]               = 'password_hash = :password_hash';
-				$params['password_hash'] = password_hash(
+				$password              = $this->validator->validate_password( $password );
+				$data['password_hash'] = password_hash(
 					$password,
 					PASSWORD_DEFAULT,
 				);
-				$password_changed        = true;
+				$password_changed      = true;
 			}
 		}
 
-		if ( empty( $updates ) ) {
+		if ( empty( $data ) ) {
 			return $this->format_user(
 				$this->users_api->get_user( $user_id ),
 			);
 		}
 
-		$updates[]            = 'updated_at = :updated_at';
-		$params['updated_at'] = Date::now();
+		$data['updated_at'] = Date::now();
 
-		$this->db->query(
-			'UPDATE users SET ' . implode( ', ', $updates ) . ' WHERE id = :id',
-			$params,
-		);
+		$this->db->update( 'users', $data, array( 'id' => $user_id ) );
 
 		if ( ! empty( $password_changed ) ) {
 			$this->auth_service->send_password_changed( $user );

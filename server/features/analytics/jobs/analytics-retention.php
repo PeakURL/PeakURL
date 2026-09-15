@@ -120,10 +120,10 @@ class AnalyticsRetentionJob implements JobHandlerInterface {
 					);
 
 					if ( ! empty( $link_ids ) ) {
-						$placeholders = implode( ',', array_fill( 0, count( $link_ids ), '?' ) );
-						$purged_links = $this->db->query(
-							"DELETE FROM urls WHERE id IN ($placeholders)",
-							array_values( $link_ids )
+						$purged_links = $this->db->delete_where_in(
+							'urls',
+							'id',
+							$link_ids
 						);
 					}
 				}

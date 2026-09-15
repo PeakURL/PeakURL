@@ -146,10 +146,14 @@ class ExpiredLinksJob implements JobHandlerInterface {
 			return ExecutionResult::success( 'No expired links due for processing.' );
 		}
 
-		$placeholders = implode( ',', array_fill( 0, count( $ids ), '?' ) );
-		$this->db->query(
-			"UPDATE urls SET status = 'expired', updated_at = ? WHERE id IN ($placeholders)",
-			array_merge( array( $now ), $ids )
+		$this->db->update_where_in(
+			'urls',
+			array(
+				'status'     => 'expired',
+				'updated_at' => $now,
+			),
+			'id',
+			$ids
 		);
 
 		if ( null !== $this->links_api ) {

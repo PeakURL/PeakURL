@@ -88,12 +88,9 @@ class Database {
 	 */
 	private function query_metadata(): array {
 		try {
-			$statement = $this->context->get_db()->get_connection()->query(
+			$row = $this->context->get_db()->get_row(
 				'SELECT VERSION() AS version, @@version_comment AS version_comment'
 			);
-			$row       = $statement instanceof \PDOStatement
-				? $statement->fetch( \PDO::FETCH_ASSOC )
-				: false;
 
 			if ( is_array( $row ) ) {
 				return array(

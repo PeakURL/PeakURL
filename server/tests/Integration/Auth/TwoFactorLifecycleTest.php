@@ -47,7 +47,7 @@ class TwoFactorLifecycleTest extends TestCase {
 		$this->connection   = Connection::get_instance( $config );
 		$this->pdo          = $this->connection->get_connection();
 		$this->table_prefix = $this->connection->get_table_prefix();
-		$this->db           = new PeakURL_DB( $this->connection, $this->table_prefix );
+		$this->db           = new PeakURL_DB( $this->connection );
 		$this->users_api    = new UsersApi( $this->db );
 		$this->credentials  = new Credentials( $this->db );
 		$this->totp         = new Totp();

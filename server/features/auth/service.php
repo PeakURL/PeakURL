@@ -147,8 +147,7 @@ class Service {
 		Connection $connection,
 		?SettingsApi $settings = null
 	): self {
-		$db_prefix      = (string) ( $config[ Constants::DB_PREFIX ] ?? '' );
-		$db             = new PeakURL_DB( $connection, $db_prefix );
+		$db             = new PeakURL_DB( $connection );
 		$settings_api   = $settings ?? new SettingsApi( $db );
 		$crypto_service = new Crypto( $config );
 		$roles          = new Roles();
@@ -459,20 +458,18 @@ class Service {
 			);
 		}
 
-		$this->db->query(
-			'UPDATE users
-            SET is_email_verified = 1,
-                email_verified_at = :email_verified_at,
-                email_verification_token = NULL,
-                email_verification_sent_at = NULL,
-                email_verification_expires_at = NULL,
-                updated_at = :updated_at
-            WHERE id = :id',
+		$now = Date::now();
+		$this->db->update(
+			'users',
 			array(
-				'email_verified_at' => Date::now(),
-				'updated_at'        => Date::now(),
-				'id'                => $user['id'],
+				'is_email_verified'             => 1,
+				'email_verified_at'             => $now,
+				'email_verification_token'      => null,
+				'email_verification_sent_at'    => null,
+				'email_verification_expires_at' => null,
+				'updated_at'                    => $now,
 			),
+			array( 'id' => (string) $user['id'] ),
 		);
 
 		return true;
@@ -1130,16 +1127,12 @@ class Service {
 		);
 		$this->prune_stale_sessions();
 
-		$deleted = $this->db->query(
-			'DELETE FROM sessions
-            WHERE id = :id
-            AND user_id = :user_id
-            AND last_active_at >= :active_since',
+		$deleted = $this->db->delete(
+			'sessions',
 			array(
-				'id'           => $id,
-				'user_id'      => $user['id'],
-				'active_since' => $this->session_active_since(),
-			),
+				'id'      => $id,
+				'user_id' => (string) $user['id'],
+			)
 		);
 
 		return $deleted > 0;

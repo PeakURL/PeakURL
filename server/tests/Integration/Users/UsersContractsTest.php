@@ -251,4 +251,69 @@ class UsersContractsTest extends TestCase {
 		$this->assertSame( 'john-doe', $captured_insert['username'] );
 		$this->assertSame( 'john-doe', $result['username'] );
 	}
+
+	public function test_get_all_users_fetches_via_users_api_and_formats_rows(): void {
+		$db                = $this->createMock( PeakURL_DB::class );
+		$users_api         = $this->createMock( UsersApi::class );
+		$auth_service      = $this->createMock( AuthService::class );
+		$analytics_service = $this->createMock( AnalyticsService::class );
+		$validator         = $this->createMock( UsersValidator::class );
+		$roles             = new Roles();
+		$authorization     = new Authorization( $roles );
+		$social_preview    = $this->createMock( SocialPreview::class );
+
+		$auth_service->method( 'get_admin_user' )->willReturn(
+			array(
+				'id'       => 'admin-1',
+				'username' => 'admin',
+				'role'     => 'admin',
+			)
+		);
+		$auth_service->method( 'format_user' )->willReturnCallback(
+			fn( array $row ): array => $row
+		);
+
+		$raw_users = array(
+			array(
+				'id'         => '1',
+				'username'   => 'admin',
+				'email'      => 'admin@example.com',
+				'first_name' => 'Admin',
+				'last_name'  => 'User',
+				'role'       => 'admin',
+				'created_at' => '2026-01-01 00:00:00',
+			),
+			array(
+				'id'         => '2',
+				'username'   => 'editor',
+				'email'      => 'editor@example.com',
+				'first_name' => 'Editor',
+				'last_name'  => 'User',
+				'role'       => 'editor',
+				'created_at' => '2026-01-02 00:00:00',
+			),
+		);
+
+		$users_api->expects( $this->once() )
+			->method( 'list_users' )
+			->willReturn( $raw_users );
+
+		$service = new UsersService(
+			$db,
+			$users_api,
+			$auth_service,
+			$analytics_service,
+			$validator,
+			$roles,
+			$authorization,
+			$social_preview
+		);
+
+		$request = new Request( 'GET', '/api/v1/users', array(), array() );
+		$result  = $service->get_all_users( $request );
+
+		$this->assertCount( 2, $result );
+		$this->assertSame( 'admin', $result[0]['username'] );
+		$this->assertSame( 'editor', $result[1]['username'] );
+	}
 }

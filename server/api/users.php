@@ -111,4 +111,16 @@ class UsersApi {
 			array( 'role' => 'admin' ),
 		);
 	}
+
+	/**
+	 * List all user rows ordered by role priority and creation date.
+	 *
+	 * @return array<int, array<string, mixed>> Result user rows.
+	 * @since 1.0.0
+	 */
+	public function list_users(): array {
+		return $this->db->get_results(
+			'SELECT * FROM users ORDER BY FIELD(role, \'admin\', \'editor\'), created_at ASC'
+		);
+	}
 }

@@ -121,15 +121,13 @@ class Credentials {
 	 * @since 1.0.0
 	 */
 	public function revoke_api_key( string $user_id, string $key_id ): bool {
-		$result = $this->db->query(
-			'DELETE FROM api_keys WHERE id = :id AND user_id = :user_id',
+		return $this->db->delete(
+			'api_keys',
 			array(
 				'id'      => $key_id,
 				'user_id' => $user_id,
 			),
-		);
-
-		return $result > 0;
+		) > 0;
 	}
 
 	/**

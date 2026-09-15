@@ -629,16 +629,18 @@ class Service {
 		?string $custom_date_to = null
 	): ?array {
 		$user = $this->auth_service->get_current_user( $request );
-		$url  = $this->db->get_row(
-			'SELECT id, user_id, created_at FROM urls
+		$url  = $this->links_api
+			? $this->links_api->get_link_by_identifier( $id )
+			: $this->db->get_row(
+				'SELECT id, user_id, created_at FROM urls
 				WHERE id = :url_id OR short_code = :short_code OR alias = :alias
 				LIMIT 1',
-			array(
-				'url_id'     => $id,
-				'short_code' => $id,
-				'alias'      => $id,
-			),
-		);
+				array(
+					'url_id'     => $id,
+					'short_code' => $id,
+					'alias'      => $id,
+				),
+			);
 
 		if ( ! $url ) {
 			return null;

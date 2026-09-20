@@ -1,4 +1,9 @@
-import { test, expect } from "../fixtures/auth.fixture";
+import {
+	test,
+	expect,
+	ensureEditorUser,
+	DEFAULT_EDITOR_CREDENTIALS,
+} from "../fixtures/auth.fixture";
 
 test.describe("Users & Roles Admin Journeys", () => {
 	test("users page loads with user overview stats and table", async ({
@@ -95,5 +100,91 @@ test.describe("Users & Roles Admin Journeys", () => {
 		// Close dialog
 		await page.getByRole("button", { name: /cancel/i }).click();
 		await expect(editTitle).not.toBeVisible();
+	});
+
+	test("edit user modal populates existing user details and updates when switching between users", async ({
+		authenticatedPage: page,
+		adminCredentials,
+	}) => {
+		// Ensure a second user exists
+		await ensureEditorUser(page);
+
+		await page.goto("/dashboard/users", { waitUntil: "commit" });
+		await expect(
+			page.getByRole("heading", { name: /^users$/i, level: 1 })
+		).toBeVisible({ timeout: 25000 });
+		await expect(page.locator(".users-page-table")).toBeVisible();
+
+		// 1. Open edit dialog for admin user
+		const adminRow = page.locator(".users-page-table-row", {
+			hasText: adminCredentials.identifier,
+		});
+		await expect(adminRow).toBeVisible();
+		await adminRow.locator(".users-page-action-btn-edit").click();
+
+		const dialogTitle = page.getByRole("heading", { name: /^edit user$/i });
+		await expect(dialogTitle).toBeVisible();
+
+		// Admin user fields should be populated
+		await expect(page.getByLabel(/^username/i)).toHaveValue(
+			adminCredentials.identifier
+		);
+		const adminEmail = await page.getByLabel(/^email/i).inputValue();
+		expect(adminEmail).toBeTruthy();
+		expect(adminEmail).toContain("@");
+
+		// Passwords should be blank in edit mode
+		await expect(page.getByLabel(/^new password/i)).toHaveValue("");
+		await expect(page.getByLabel(/^confirm new password/i)).toHaveValue("");
+
+		// Close dialog
+		await page.getByRole("button", { name: /cancel/i }).click();
+		await expect(dialogTitle).not.toBeVisible();
+
+		// 2. Open edit dialog for editor user
+		const editorRow = page.locator(".users-page-table-row", {
+			hasText: DEFAULT_EDITOR_CREDENTIALS.identifier,
+		});
+		await expect(editorRow).toBeVisible();
+		await editorRow.locator(".users-page-action-btn-edit").click();
+
+		await expect(dialogTitle).toBeVisible();
+
+		// Editor user fields should now be populated with editor data
+		await expect(page.getByLabel(/^username/i)).toHaveValue(
+			DEFAULT_EDITOR_CREDENTIALS.identifier
+		);
+		const editorEmail = await page.getByLabel(/^email/i).inputValue();
+		expect(editorEmail).toBeTruthy();
+		expect(editorEmail).toContain("@");
+
+		// Values should differ from admin user
+		expect(DEFAULT_EDITOR_CREDENTIALS.identifier).not.toBe(
+			adminCredentials.identifier
+		);
+		expect(editorEmail).not.toBe(adminEmail);
+
+		await expect(page.getByLabel(/^new password/i)).toHaveValue("");
+		await expect(page.getByLabel(/^confirm new password/i)).toHaveValue("");
+
+		// Close dialog
+		await page.getByRole("button", { name: /cancel/i }).click();
+		await expect(dialogTitle).not.toBeVisible();
+
+		// 3. Open Add User dialog to verify it resets to empty form
+		await page.getByRole("button", { name: /add user/i }).click();
+		const addTitle = page.getByRole("heading", { name: /^add user$/i });
+		await expect(addTitle).toBeVisible();
+
+		await expect(page.getByLabel(/^first name/i)).toHaveValue("");
+		await expect(page.getByLabel(/^last name/i)).toHaveValue("");
+		await expect(page.getByLabel(/^display name/i)).toHaveValue("");
+		await expect(page.getByLabel(/^username/i)).toHaveValue("");
+		await expect(page.getByLabel(/^email/i)).toHaveValue("");
+		await expect(page.getByLabel(/^password/i)).toHaveValue("");
+		await expect(page.getByLabel(/^confirm password/i)).toHaveValue("");
+
+		await page.keyboard.press("Escape");
+		await expect(addTitle).not.toBeVisible();
 	});
 });

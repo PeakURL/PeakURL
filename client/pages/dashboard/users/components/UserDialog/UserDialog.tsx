@@ -37,6 +37,20 @@ export function UserDialog({
 	);
 	const [formError, setFormError] = useState("");
 
+	const [prevSyncKey, setPrevSyncKey] = useState(() =>
+		open ? `${mode}-${initialUser?.id ?? "new"}` : ""
+	);
+
+	const currentSyncKey = open ? `${mode}-${initialUser?.id ?? "new"}` : "";
+
+	if (currentSyncKey !== prevSyncKey) {
+		setPrevSyncKey(currentSyncKey);
+		if (open) {
+			setForm(getInitialFormState(mode, initialUser));
+			setFormError("");
+		}
+	}
+
 	const handleChange =
 		(key: keyof UserDialogFormState) =>
 		(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

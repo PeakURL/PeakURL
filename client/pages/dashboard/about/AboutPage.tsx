@@ -239,7 +239,7 @@ const getFeatures = (): Feature[] => [
 		tag: __("Data safeguards"),
 		title: __("Trash protection and audit recovery"),
 		description: __(
-			"Prevents accidental link loss with soft-delete safeguards, customizable retention schedules from 14 to 90 days, and one-click restoration directly from the activity history."
+			"Prevents accidental link loss with soft-delete safeguards, customizable retention schedules from 7 to 90 days, and one-click restoration directly from the activity history."
 		),
 	},
 	{

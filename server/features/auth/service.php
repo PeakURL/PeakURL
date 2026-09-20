@@ -403,7 +403,6 @@ class Service {
 				'email'                         => $email,
 				'password_hash'                 => password_hash( $password, PASSWORD_DEFAULT ),
 				'email_verification_token'      => $verification_token['hash'],
-				'email_verification_sent_at'    => $now,
 				'email_verification_expires_at' => gmdate(
 					'Y-m-d H:i:s',
 					time() + ( 24 * 3600 ),
@@ -465,7 +464,6 @@ class Service {
 				'is_email_verified'             => 1,
 				'email_verified_at'             => $now,
 				'email_verification_token'      => null,
-				'email_verification_sent_at'    => null,
 				'email_verification_expires_at' => null,
 				'updated_at'                    => $now,
 			),
@@ -508,13 +506,11 @@ class Service {
 		$this->db->query(
 			'UPDATE users
             SET email_verification_token = :token_hash,
-                email_verification_sent_at = :sent_at,
                 email_verification_expires_at = :expires_at,
                 updated_at = :updated_at
             WHERE id = :id',
 			array(
 				'token_hash' => $verification_token['hash'],
-				'sent_at'    => Date::now(),
 				'expires_at' => gmdate( 'Y-m-d H:i:s', time() + ( 24 * 3600 ) ),
 				'updated_at' => Date::now(),
 				'id'         => $user['id'],
@@ -765,7 +761,6 @@ class Service {
 			'UPDATE users
             SET password_hash = :hash,
                 password_reset_token = NULL,
-                password_reset_sent_at = NULL,
                 password_reset_expires_at = NULL,
                 updated_at = :updated_at
             WHERE id = :id',

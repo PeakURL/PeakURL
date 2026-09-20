@@ -177,7 +177,9 @@ if ( ! function_exists( 'render_maintenance_page' ) ) {
 			ENT_QUOTES,
 			'UTF-8',
 		);
-		$generator_meta     = get_generator_tag( (string) ( $maintenance_view_data['version'] ?? '' ) );
+		$generator_meta     = get_generator_tag(
+			! empty( $maintenance_view_data['version'] ) ? (string) $maintenance_view_data['version'] : null
+		);
 
 		return '<!doctype html>' .
 			'<html lang="' . $html_lang . '" dir="' . $text_direction . '">' .

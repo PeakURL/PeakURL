@@ -1,8 +1,4 @@
-export {
-	addGeneratorTag,
-	applyDocumentFavicon,
-	setDocumentLocale,
-} from "./document";
+export { applyDocumentFavicon, setDocumentLocale } from "./document";
 export {
 	copyToClipboard,
 	downloadBrowserFile,

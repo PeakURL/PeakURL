@@ -170,6 +170,24 @@ if ( ! function_exists( 'get_landing_page_html' ) ) {
 		$html_lang      = htmlspecialchars( (string) ( $view_data['htmlLang'] ?? 'en-US' ), ENT_QUOTES, 'UTF-8' );
 		$text_direction = 'rtl' === strtolower( (string) ( $view_data['textDirection'] ?? 'ltr' ) ) ? 'rtl' : 'ltr';
 
+		// Strip any existing generator meta tags in the user template to avoid duplicates.
+		$html = preg_replace( '/<meta\s+name=["\']generator["\'][^>]*>\s*/i', '', $html ) ?? $html;
+
+		$generator_meta = get_generator_tag();
+
+		if ( '' !== $generator_meta ) {
+			if ( preg_match( '/<head(\s[^>]*)?>/i', $html ) ) {
+				$html = preg_replace(
+					'/(<head(\s[^>]*)?>)/i',
+					"\${1}\n    " . $generator_meta,
+					$html,
+					1
+				) ?? $html;
+			} else {
+				$html = $generator_meta . "\n" . $html;
+			}
+		}
+
 		// Replace html tag lang and dir attributes.
 		$html = preg_replace(
 			'/<html[^>]*>/i',

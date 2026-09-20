@@ -125,7 +125,7 @@
 	}
 
 	.settings-updates-detail-link {
-		@apply inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline;
+		@apply inline-flex items-center gap-2 text-[13px] font-normal text-accent hover:underline;
 	}
 
 	.settings-updates-detail-value {

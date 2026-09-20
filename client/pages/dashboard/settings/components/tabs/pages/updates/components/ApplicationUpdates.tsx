@@ -56,7 +56,7 @@ function ApplicationUpdates({
 						<button
 							type="button"
 							onClick={() => setUpdateModalOpen(true)}
-							className="settings-updates-detail-link text-[13px]! font-normal!"
+							className="settings-updates-detail-link"
 						>
 							{__("Release notes")}
 						</button>

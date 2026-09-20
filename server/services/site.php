@@ -433,7 +433,7 @@ if ( ! function_exists( 'get_generator_tag' ) ) {
 			$version    = trim( (string) ( $app_config[ Constants::VERSION ] ?? '' ) );
 		}
 
-		$version = htmlspecialchars( $version, ENT_QUOTES, 'UTF-8' );
+		$version = htmlspecialchars( trim( $version ), ENT_QUOTES, 'UTF-8' );
 
 		if ( '' === $version ) {
 			return '';

@@ -15,8 +15,6 @@
 
 declare(strict_types=1);
 
-use PeakURL\Core\Config\Constants;
-use PeakURL\Core\Config\Configuration;
 use PeakURL\Services\Install\Config as InstallConfig;
 use PeakURL\Services\Install\Locale as InstallLocale;
 use PeakURL\Services\Install\Screen as InstallScreen;
@@ -77,9 +75,7 @@ $detected_site_url       = InstallScreen::detect_site_url( $base_path, $_SERVER 
 $values                  = InstallConfig::get_form_defaults( $detected_site_url );
 $values['site_language'] = $installer_locale->get_locale();
 $error_message           = '';
-$app_config              = Configuration::bootstrap( $runtime_path );
-$version                 = trim( (string) ( $app_config[ Constants::VERSION ] ?? '' ) );
-$generator_meta          = get_generator_tag( $version );
+$generator_meta          = get_generator_tag();
 if ( '' !== $generator_meta ) {
 	$generator_meta .= "\n\t";
 }

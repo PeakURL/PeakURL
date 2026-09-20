@@ -46,6 +46,11 @@ if ( InstallState::NEEDS_INSTALL === $install_state ) {
 	exit();
 }
 
+$generator_meta = get_generator_tag();
+if ( '' !== $generator_meta ) {
+	$generator_meta .= "\n\t";
+}
+
 $retry_url = InstallScreen::format_url( $base_path, '/' );
 
 http_response_code( 503 );
@@ -56,7 +61,7 @@ http_response_code( 503 );
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="robots" content="noindex, nofollow">
-	<title>Database connection failed | PeakURL</title>
+	<?php echo $generator_meta; ?><title>Database connection failed | PeakURL</title>
 	<style>
 		:root { color-scheme: light; --ink: #172033; --muted: #5d6b82; --border: #dce3ed; --page: #f5f7fb; --card: #fff; --danger: #b42318; --danger-soft: #fff0ee; --primary: #4f46e5; }
 		* { box-sizing: border-box; }

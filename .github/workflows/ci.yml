@@ -74,6 +74,13 @@ jobs:
           DB_PASSWORD: root
           DB_PREFIX: peakurl_
           PEAKURL_DEV: "true"
+          PEAKURL_OWNER_FIRST_NAME: Workspace
+          PEAKURL_OWNER_LAST_NAME: Owner
+          PEAKURL_OWNER_USERNAME: admin
+          PEAKURL_OWNER_EMAIL: owner@example.com
+          PEAKURL_OWNER_PASSWORD: admin12345
+          PEAKURL_WORKSPACE_NAME: Workspace
+          PEAKURL_WORKSPACE_SLUG: workspace
         run: php server/bin/setup-database.php
 
       - name: Run PHPUnit backend test suite

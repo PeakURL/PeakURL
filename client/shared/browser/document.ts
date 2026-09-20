@@ -1,4 +1,3 @@
-import { PEAKURL_VERSION } from "@/constants";
 import { getPeakURLData } from "@/data";
 import { getLocaleDirection } from "@/i18n/direction";
 import type { FaviconData, TextDirection } from "@/i18n/types";
@@ -139,23 +138,5 @@ export function applyDocumentFavicon(favicon?: FaviconData | null): void {
 			name: "apple-mobile-web-app-title",
 			content: siteName,
 		});
-	}
-}
-
-/**
- * Apply the generator meta tag for the current install if missing.
- *
- * flows before the PHP backend can inject the `<head>` block.
- */
-export function addGeneratorTag(): void {
-	if ("undefined" === typeof document) {
-		return;
-	}
-
-	if (!document.querySelector('meta[name="generator"]')) {
-		const meta = document.createElement("meta");
-		meta.name = "generator";
-		meta.content = `PeakURL ${PEAKURL_VERSION}`;
-		document.head.appendChild(meta);
 	}
 }

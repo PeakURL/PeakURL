@@ -360,7 +360,7 @@ $prepare_html = static function (
 			JSON_UNESCAPED_UNICODE,
 	);
 	$peakurl_json   = is_string( $peakurl_json ) ? $peakurl_json : '{}';
-	$generator_meta = get_generator_tag( (string) ( $peakurl_data['version'] ?? '' ) );
+	$generator_meta = get_generator_tag();
 
 	$dashboard_data_script =
 		'<base href="' .

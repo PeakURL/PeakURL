@@ -943,19 +943,21 @@ HTML;
 	 * @since 1.2.0
 	 */
 	private function format_social_preview_page( array $preview ): string {
-		$title       = $this->escape_meta_text(
+		$title          = $this->escape_meta_text(
 			(string) ( $preview['title'] ?? 'PeakURL' ),
 		);
-		$description = $this->escape_meta_text(
+		$description    = $this->escape_meta_text(
 			(string) ( $preview['description'] ?? '' ),
 		);
-		$site_name   = $this->escape_meta_text(
+		$site_name      = $this->escape_meta_text(
 			(string) ( $preview['siteName'] ?? 'PeakURL' ),
 		);
-		$url         = esc_url( (string) ( $preview['url'] ?? '' ) );
-		$image_url   = esc_url( (string) ( $preview['imageUrl'] ?? '' ) );
-		$image_tags  = '';
-		$card_type   = '' !== $image_url ? 'summary_large_image' : 'summary';
+		$url            = esc_url( (string) ( $preview['url'] ?? '' ) );
+		$image_url      = esc_url( (string) ( $preview['imageUrl'] ?? '' ) );
+		$image_tags     = '';
+		$card_type      = '' !== $image_url ? 'summary_large_image' : 'summary';
+		$generator_meta = get_generator_tag();
+		$generator_line = '' !== $generator_meta ? "\n" . $generator_meta : '';
 
 		if ( '' !== $image_url ) {
 			$image_tags =
@@ -971,7 +973,7 @@ HTML;
 <meta charset="utf-8">
 <title>{$title}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, max-image-preview:large">
+<meta name="robots" content="noindex, max-image-preview:large">{$generator_line}
 <link rel="canonical" href="{$url}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="{$site_name}">
@@ -1054,7 +1056,9 @@ HTML;
 		string $page_title,
 		string $content_html
 	): string {
-		$page_title = htmlspecialchars( $page_title, ENT_QUOTES, 'UTF-8' );
+		$page_title     = htmlspecialchars( $page_title, ENT_QUOTES, 'UTF-8' );
+		$generator_meta = get_generator_tag();
+		$generator_line = '' !== $generator_meta ? "\n" . $generator_meta : '';
 
 		return <<<HTML
 <!doctype html>
@@ -1063,7 +1067,7 @@ HTML;
 <meta charset="utf-8">
 <title>{$page_title} &mdash; PeakURL</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="noindex, nofollow">{$generator_line}
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{

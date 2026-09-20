@@ -2,5 +2,5 @@ node_modules
 build
 release
 content
-app/vendor
+server/vendor
 package-lock.json

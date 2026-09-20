@@ -7,11 +7,8 @@ import { PEAKURL_BASENAME } from "./constants";
 import AppRouter from "./router";
 import { ClientProviders } from "./providers";
 import { initializeI18n } from "./i18n";
-import { addGeneratorTag } from "@/shared/browser";
 
 async function PeakURL(): Promise<void> {
-	addGeneratorTag();
-
 	try {
 		await initializeI18n();
 	} finally {

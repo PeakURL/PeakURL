@@ -10,6 +10,7 @@ import type {
 	ForgotPasswordPayload,
 	GenerateApiKeyPayload,
 	GenerateApiKeyResponse,
+	ApiLoginResponse,
 	LoginResponse,
 	LogoutResponse,
 	PasswordResetTokenStatus,
@@ -48,6 +49,39 @@ const loggedOutTags = (result?: LogoutResponse) =>
 export const selectSessionUser = (
 	response?: SessionUserResponse | null
 ): ProfileUser | null => response?.data ?? null;
+
+/**
+ * Normalizes login and two-factor verification responses into the canonical domain model.
+ *
+ * Normalizes `data.user` capabilities into camelCase, keeps `data.requiresTwoFactor`
+ * as the authoritative source of truth, preserves canonical response envelope fields
+ * (such as `success`, `message`, and `timestamp`), and strips any obsolete top-level
+ * `requiresTwoFactor` compatibility field.
+ */
+export function normalizeLoginResponse(
+	response?: ApiLoginResponse | null
+): LoginResponse {
+	if (!response) {
+		return {};
+	}
+
+	const normalizedResponse: ApiLoginResponse = { ...response };
+
+	delete normalizedResponse.requiresTwoFactor;
+
+	return {
+		...normalizedResponse,
+		data: normalizedResponse.data
+			? {
+					...normalizedResponse.data,
+					user: normalizedResponse.data.user
+						? (mapApiUser(normalizedResponse.data.user) ??
+							undefined)
+						: undefined,
+				}
+			: undefined,
+	};
+}
 
 /**
  * RTK Query endpoints for authentication, profile, and user management.
@@ -91,25 +125,7 @@ export const userApi = baseApi.injectEndpoints({
 				method: "POST",
 				body,
 			}),
-			transformResponse: (response: {
-				data?: {
-					user?: ApiProfileUser;
-					requiresTwoFactor?: boolean;
-				};
-			}): LoginResponse => {
-				const user = response?.data?.user
-					? (mapApiUser(response.data.user) ?? undefined)
-					: undefined;
-
-				return {
-					data: response?.data
-						? {
-								...response.data,
-								user,
-							}
-						: undefined,
-				};
-			},
+			transformResponse: normalizeLoginResponse,
 			invalidatesTags: userProfileTags,
 		}),
 		verifyTwoFactorLogin: build.mutation<
@@ -121,25 +137,7 @@ export const userApi = baseApi.injectEndpoints({
 				method: "POST",
 				body,
 			}),
-			transformResponse: (response: {
-				data?: {
-					user?: ApiProfileUser;
-					requiresTwoFactor?: boolean;
-				};
-			}): LoginResponse => {
-				const user = response?.data?.user
-					? (mapApiUser(response.data.user) ?? undefined)
-					: undefined;
-
-				return {
-					data: response?.data
-						? {
-								...response.data,
-								user,
-							}
-						: undefined,
-				};
-			},
+			transformResponse: normalizeLoginResponse,
 			invalidatesTags: userProfileTags,
 		}),
 		logout: build.mutation<LogoutResponse, void>({

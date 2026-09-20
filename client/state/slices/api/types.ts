@@ -1,5 +1,6 @@
 import type {
 	AdminNoticesResponse,
+	ApiProfileUser,
 	BackupCodesResponse,
 	BulkCreateResponse,
 	CacheConfigurationPayload,
@@ -375,9 +376,47 @@ export interface AuthCheckResponse {
 }
 
 /**
+ * API response returned by the backend login and 2FA endpoints.
+ */
+export interface ApiLoginResponse {
+	/** Success flag returned by the canonical response envelope. */
+	success?: boolean;
+
+	/** Human-readable status message returned by the API. */
+	message?: string;
+
+	/** Timestamp returned by the canonical response envelope. */
+	timestamp?: string;
+
+	/** Auth payload returned by the API. */
+	data?: {
+		/** User payload returned by the API. */
+		user?: ApiProfileUser;
+
+		/**
+		 * Flag indicating that a second-factor code is required before the
+		 * session is considered authenticated.
+		 */
+		requiresTwoFactor?: boolean;
+	};
+
+	/** Obsolete legacy top-level field that may appear in older responses. */
+	requiresTwoFactor?: boolean;
+}
+
+/**
  * Authentication response returned by login and 2FA verification routes.
  */
 export interface LoginResponse {
+	/** Success flag returned by the canonical response envelope. */
+	success?: boolean;
+
+	/** Human-readable status message returned by the API. */
+	message?: string;
+
+	/** Timestamp returned by the canonical response envelope. */
+	timestamp?: string;
+
 	/** Auth payload returned by the API. */
 	data?: {
 		/** Authenticated user when login succeeds. */

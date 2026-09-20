@@ -15,6 +15,7 @@ import type {
 	ProfileUser,
 } from "../../client/api";
 import { selectSessionUser } from "../../client/state/slices/api";
+import { normalizeLoginResponse } from "../../client/state/slices/api/user";
 import {
 	extractErrorMessage,
 	getErrorMessage,
@@ -449,21 +450,74 @@ test.describe("Frontend API Client Contracts", () => {
 			expect(selected?.capabilities?.viewLinks).toBe(true);
 		});
 
-		test("validates canonical LoginResponse data contract without top-level fallbacks", () => {
-			const loginPayload = {
+		test("normalizeLoginResponse normalizes canonical response and preserves envelope", () => {
+			const response = {
+				success: true,
+				message: "Signed in.",
+				timestamp: "2026-09-20T21:00:00Z",
 				data: {
 					user: {
 						id: "user_300",
 						username: "editor_login",
 						role: "editor",
+						capabilities: {
+							manage_users: false,
+							view_links: true,
+						},
 					},
 					requiresTwoFactor: true,
 				},
 			};
 
-			expect(loginPayload.data.requiresTwoFactor).toBe(true);
-			expect(loginPayload.data.user.username).toBe("editor_login");
-			expect("requiresTwoFactor" in loginPayload).toBe(false);
+			const normalized = normalizeLoginResponse(response);
+
+			expect(normalized).toBeDefined();
+			expect(normalized.data?.user?.id).toBe("user_300");
+			expect(normalized.data?.user?.username).toBe("editor_login");
+			expect(normalized.data?.user?.capabilities?.manageUsers).toBe(
+				false
+			);
+			expect(normalized.data?.user?.capabilities?.viewLinks).toBe(true);
+			expect(normalized.data?.requiresTwoFactor).toBe(true);
+
+			expect(normalized.success).toBe(true);
+			expect(normalized.message).toBe("Signed in.");
+			expect(normalized.timestamp).toBe("2026-09-20T21:00:00Z");
+		});
+
+		test("normalizeLoginResponse strips top-level legacy requiresTwoFactor and keeps data authoritative", () => {
+			const responseWithLegacyFallback = {
+				success: true,
+				message: "Signed in.",
+				requiresTwoFactor: true,
+				data: {
+					user: {
+						id: "user_301",
+						username: "admin_user",
+						role: "admin",
+					},
+					requiresTwoFactor: false,
+				},
+			};
+
+			const normalized = normalizeLoginResponse(
+				responseWithLegacyFallback
+			);
+
+			expect(normalized.data?.requiresTwoFactor).toBe(false);
+			expect("requiresTwoFactor" in normalized).toBe(false);
+
+			expect(normalized.success).toBe(true);
+			expect(normalized.message).toBe("Signed in.");
+		});
+
+		test("normalizeLoginResponse handles edge cases and nullish inputs safely", () => {
+			expect(normalizeLoginResponse(null)).toEqual({});
+			expect(normalizeLoginResponse(undefined)).toEqual({});
+			expect(normalizeLoginResponse({})).toEqual({});
+			expect(normalizeLoginResponse({ data: undefined })).toEqual({
+				data: undefined,
+			});
 		});
 
 		test("filters search targets based on user capabilities", () => {

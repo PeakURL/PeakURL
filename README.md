@@ -19,7 +19,7 @@ Built with a modern React dashboard, a high-throughput in-memory caching engine 
 
 - **Branded Short Links**: Create custom, memorable short URLs with customized slugs, titles, and social share metadata.
 - **Microsecond Redirection**: Multi-tier in-memory caching with Redis, APCu, and Filesystem drivers delivering redirects in `< 0.1ms`.
-- **Data Safeguards & Trash Protection**: Built-in soft-delete safety net with configurable retention windows (14–90 days or indefinite) and 1-click link restoration.
+- **Data Safeguards & Trash Protection**: Built-in soft-delete safety net with configurable retention windows (7–90 days or indefinite) and 1-click link restoration.
 - **Chronological Activity & Audit Logging**: Searchable audit trail logging administrative link updates, status toggles, user logins, and security events.
 - **One-Click In-App Updates**: Effortless maintenance with automated SHA-256 release checksum verification and hands-free database migrations.
 - **Privacy-First Local GeoIP Analytics**: Local MaxMind GeoLite2 City resolution for countries, cities, and regions with zero third-party tracking.
@@ -38,7 +38,7 @@ Built with a modern React dashboard, a high-throughput in-memory caching engine 
 | **Pricing & Limits**         | **100% Free & Open Source (Unlimited Clicks & Links)**                              | High monthly subscriptions, paywalled custom domains & click limits | Free                                  |
 | **Data Privacy & Ownership** | **100% Private (Your server, database, and telemetry)**                             | Third-party tracking, vendor lock-in, external compliance risks     | Self-hosted                           |
 | **Redirection Latency**      | **Sub-millisecond (< 0.1ms)** with Redis & APCu in-memory caching                   | Cloud network latency & shared edge queues                          | Relational DB query on every click    |
-| **Data Safeguards & Trash**  | **Built-in Trash retention (14–90d) & 1-click audit restoration**                   | Varies / permanent drops on lower tiers                             | Immediate permanent deletion          |
+| **Data Safeguards & Trash**  | **Built-in Trash retention (7–90d) & 1-click audit restoration**                    | Varies / permanent drops on lower tiers                             | Immediate permanent deletion          |
 | **Maintenance & Updates**    | **1-Click in-app updates with automated DB schema migrations**                      | Managed cloud infrastructure                                        | Manual FTP file uploads & SQL scripts |
 | **Activity & Audit Logging** | **Searchable chronological audit trail with exact user attribution**                | Enterprise tiers only                                               | None                                  |
 | **Bot & Abuse Prevention**   | **Cloudflare Turnstile & Google reCAPTCHA v3 built-in**                             | Included only in higher tiers                                       | Requires third-party plugins          |
@@ -131,7 +131,7 @@ Maintaining a self-hosted platform should never feel like a chore. PeakURL elimi
 Accidental deletions can break marketing campaigns, documentation links, and active QR codes. PeakURL provides a built-in safety net:
 
 - **Soft-Delete Trash Bin**: Deleted links are placed in a dedicated Trash repository rather than being permanently removed from the database.
-- **Configurable Auto-Purge**: Set retention windows between 14 to 90 days, or retain trashed links indefinitely based on your compliance policy.
+- **Configurable Auto-Purge**: Set retention windows between 7 to 90 days, or retain trashed links indefinitely based on your compliance policy.
 - **One-Click Restoration**: Restore any link instantly with all historic click metrics, custom aliases, and targeting rules fully intact.
 - **Relational Integrity Safeguards**: Database foreign keys use `ON DELETE SET NULL` to preserve historical audit records and prevent corrupted analytics.
 

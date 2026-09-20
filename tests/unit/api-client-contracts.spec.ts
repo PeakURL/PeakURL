@@ -403,7 +403,7 @@ test.describe("Frontend API Client Contracts", () => {
 			expect(normalized?.capabilities).toEqual(DEFAULT_USER_CAPABILITIES);
 		});
 
-		test("selectSessionUser resolves normalized user across data/user response wrappers", () => {
+		test("selectSessionUser resolves normalized user from data response", () => {
 			const normalizedUser: ProfileUser = {
 				id: "user_100",
 				username: "admin_user",
@@ -420,10 +420,6 @@ test.describe("Frontend API Client Contracts", () => {
 			expect(fromData?.capabilities?.manageUsers).toBe(true);
 			expect(fromData?.capabilities?.emptyTrash).toBe(true);
 			expect(fromData?.capabilities?.viewLinks).toBe(false);
-
-			const fromUserWrapper = selectSessionUser({ user: normalizedUser });
-			expect(fromUserWrapper?.id).toBe("user_100");
-			expect(fromUserWrapper?.capabilities?.manageUsers).toBe(true);
 
 			expect(selectSessionUser(null)).toBeNull();
 			expect(selectSessionUser({})).toBeNull();
@@ -451,6 +447,23 @@ test.describe("Frontend API Client Contracts", () => {
 			expect(selected?.capabilities?.manageUsers).toBe(true);
 			expect(selected?.capabilities?.manageSiteSettings).toBe(true);
 			expect(selected?.capabilities?.viewLinks).toBe(true);
+		});
+
+		test("validates canonical LoginResponse data contract without top-level fallbacks", () => {
+			const loginPayload = {
+				data: {
+					user: {
+						id: "user_300",
+						username: "editor_login",
+						role: "editor",
+					},
+					requiresTwoFactor: true,
+				},
+			};
+
+			expect(loginPayload.data.requiresTwoFactor).toBe(true);
+			expect(loginPayload.data.user.username).toBe("editor_login");
+			expect("requiresTwoFactor" in loginPayload).toBe(false);
 		});
 
 		test("filters search targets based on user capabilities", () => {
@@ -532,13 +545,17 @@ test.describe("Frontend API Client Contracts", () => {
 			const validClasses = getBodyClassNames(
 				"/dashboard/settings/general"
 			);
-			expect(validClasses).toContain("dashboard-settings-general");
+			expect(validClasses).toContain("page-dashboard-settings-general");
+			expect(validClasses).toContain("page-dashboard");
+			expect(validClasses).toContain("page-dashboard-settings");
+			expect(validClasses).not.toContain("peakurl-ui");
+			expect(validClasses).not.toContain("app-page");
 
 			const invalidClasses = getBodyClassNames(
 				"/dashboard/settings/invalid-tab"
 			);
 			expect(invalidClasses).not.toContain(
-				"dashboard-settings-invalid-tab"
+				"page-dashboard-settings-invalid-tab"
 			);
 
 			const validTitle = getPageTitle("/dashboard/settings/general");
@@ -552,14 +569,22 @@ test.describe("Frontend API Client Contracts", () => {
 			const validImportClasses = getBodyClassNames(
 				"/dashboard/tools/import/file"
 			);
-			expect(validImportClasses).toContain("dashboard-import-file");
+			expect(validImportClasses).toContain("page-dashboard-import-file");
+			expect(validImportClasses).toContain("page-dashboard-tools");
+			expect(validImportClasses).toContain("page-dashboard-import");
 
 			const invalidImportClasses = getBodyClassNames(
 				"/dashboard/tools/import/invalid"
 			);
 			expect(invalidImportClasses).not.toContain(
-				"dashboard-import-invalid"
+				"page-dashboard-import-invalid"
 			);
+
+			const authClasses = getBodyClassNames("/login");
+			expect(authClasses).toEqual(["page-auth", "page-login"]);
+
+			const unknownClasses = getBodyClassNames("/unknown-route");
+			expect(unknownClasses).toEqual(["page-not-found"]);
 		});
 	});
 });

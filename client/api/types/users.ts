@@ -53,11 +53,6 @@ export interface UserCapabilities {
 }
 
 /**
- * Alias for UserCapabilities to preserve compatibility with existing imports.
- */
-export type ProfileUserCapabilities = UserCapabilities;
-
-/**
  * Raw user profile payload returned by the user and auth API endpoints.
  */
 export interface ApiProfileUser {

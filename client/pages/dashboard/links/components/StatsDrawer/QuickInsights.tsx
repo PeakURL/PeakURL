@@ -9,10 +9,10 @@ import {
 	getStatsTimeRangeLabel,
 	getStatsTotals,
 } from "./analytics";
-import type { LinkStatsViewProps, StatsTimeRange } from "./types";
+import type { LinkStatsViewProps, StatsFilterRange } from "./types";
 
 interface QuickInsightsProps extends LinkStatsViewProps {
-	timeRange: StatsTimeRange;
+	timeRange: StatsFilterRange;
 }
 
 function QuickInsights({

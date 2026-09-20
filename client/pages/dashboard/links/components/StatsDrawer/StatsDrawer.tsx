@@ -42,7 +42,7 @@ import {
 import type {
 	StatsCustomDateRange,
 	StatsDrawerProps,
-	StatsTimeRange,
+	StatsFilterRange,
 } from "./types";
 
 const CUSTOM_RANGE_FALLBACK_DAYS = 30;
@@ -59,7 +59,7 @@ const isStatsQuerySkipped = ({
 	linkId?: string;
 	open: boolean;
 	selectedTabUsesStatsQuery: boolean;
-	timeRange: StatsTimeRange;
+	timeRange: StatsFilterRange;
 	customDateRange: StatsCustomDateRange;
 }) =>
 	!linkId ||
@@ -95,7 +95,7 @@ export default function StatsDrawer({
 	const [copiedKey, setCopiedKey] = useTemporaryState<
 		"short" | "destination" | null
 	>(null);
-	const [timeRange, setTimeRange] = useState<StatsTimeRange>(
+	const [timeRange, setTimeRange] = useState<StatsFilterRange>(
 		pageClickRange || "7d"
 	);
 	const linkId = link?.id || "";

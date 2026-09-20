@@ -32,7 +32,6 @@ type UnknownBodyPayload = Record<string, unknown>;
 
 type SessionUserResponse = {
 	data?: ProfileUser | null;
-	user?: ProfileUser | null;
 };
 
 const USER_PROFILE_TAGS = ["AuthSession", "Profile"] as const;
@@ -48,7 +47,7 @@ const loggedOutTags = (result?: LogoutResponse) =>
 
 export const selectSessionUser = (
 	response?: SessionUserResponse | null
-): ProfileUser | null => response?.data ?? response?.user ?? null;
+): ProfileUser | null => response?.data ?? null;
 
 /**
  * RTK Query endpoints for authentication, profile, and user management.
@@ -93,7 +92,6 @@ export const userApi = baseApi.injectEndpoints({
 				body,
 			}),
 			transformResponse: (response: {
-				requiresTwoFactor?: boolean;
 				data?: {
 					user?: ApiProfileUser;
 					requiresTwoFactor?: boolean;
@@ -104,8 +102,7 @@ export const userApi = baseApi.injectEndpoints({
 					: undefined;
 
 				return {
-					...response,
-					data: response.data
+					data: response?.data
 						? {
 								...response.data,
 								user,
@@ -125,7 +122,6 @@ export const userApi = baseApi.injectEndpoints({
 				body,
 			}),
 			transformResponse: (response: {
-				requiresTwoFactor?: boolean;
 				data?: {
 					user?: ApiProfileUser;
 					requiresTwoFactor?: boolean;
@@ -136,8 +132,7 @@ export const userApi = baseApi.injectEndpoints({
 					: undefined;
 
 				return {
-					...response,
-					data: response.data
+					data: response?.data
 						? {
 								...response.data,
 								user,
@@ -189,21 +184,11 @@ export const userApi = baseApi.injectEndpoints({
 			query: () => API_ROUTES.users.me,
 			transformResponse: (response: {
 				data?: ApiProfileUser;
-				user?: ApiProfileUser;
-			}): AuthCheckResponse => {
-				const normalizedData = response?.data
+			}): AuthCheckResponse => ({
+				data: response?.data
 					? (mapApiUser(response.data) ?? undefined)
-					: undefined;
-				const normalizedUser = response?.user
-					? (mapApiUser(response.user) ?? undefined)
-					: normalizedData;
-
-				return {
-					...response,
-					data: normalizedData,
-					user: normalizedUser,
-				};
-			},
+					: undefined,
+			}),
 			providesTags: USER_PROFILE_TAGS,
 		}),
 		forgotPassword: build.mutation<

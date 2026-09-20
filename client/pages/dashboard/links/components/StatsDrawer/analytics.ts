@@ -4,7 +4,7 @@ import { formatCount } from "@/shared/formatting";
 import type { LinkRecord } from "../types";
 import type {
 	LinkStatsPayload,
-	StatsTimeRange,
+	StatsFilterRange,
 	StatsTrafficSeries,
 } from "./types";
 
@@ -42,7 +42,7 @@ function getLinkAgeInDays(createdAt?: string | null): number {
 }
 
 export function getStatsTimeRangeDays(
-	range: StatsTimeRange,
+	range: StatsFilterRange,
 	createdAt?: string | null
 ): number {
 	switch (range) {
@@ -59,7 +59,7 @@ export function getStatsTimeRangeDays(
 	}
 }
 
-export function getStatsTimeRangeLabel(range: StatsTimeRange): string {
+export function getStatsTimeRangeLabel(range: StatsFilterRange): string {
 	switch (range) {
 		case "all":
 			return __("All time");

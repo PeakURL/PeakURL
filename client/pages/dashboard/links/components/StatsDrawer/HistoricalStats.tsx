@@ -11,7 +11,7 @@ import {
 import type {
 	LinkPeriodSummary,
 	LinkStatsViewProps,
-	StatsTimeRange,
+	StatsFilterRange,
 } from "./types";
 
 interface HistoricalPeriodRow {
@@ -23,14 +23,14 @@ interface HistoricalPeriodRow {
 
 interface HistoricalStatsProps extends LinkStatsViewProps {
 	/** Currently selected Traffic History range. */
-	timeRange: StatsTimeRange;
+	timeRange: StatsFilterRange;
 }
 
 /**
  * Resolve the historical row that matches the selected chart range.
  */
 function getActiveHistoricalPeriodKey(
-	timeRange: StatsTimeRange
+	timeRange: StatsFilterRange
 ): HistoricalPeriodRow["key"] {
 	if ("24h" === timeRange) {
 		return "last24Hours";

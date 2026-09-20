@@ -26,12 +26,12 @@ import {
 import type {
 	StatsCustomDateRange,
 	TrafficHistoryProps,
-	StatsTimeRange,
+	StatsFilterRange,
 } from "./types";
 
 const getTimeRangeOptions = (): Array<{
 	label: string;
-	value: StatsTimeRange;
+	value: StatsFilterRange;
 }> => [
 	{ label: __("All"), value: "all" },
 	{ label: __("24h"), value: "24h" },

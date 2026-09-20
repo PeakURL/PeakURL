@@ -15,11 +15,11 @@ import type {
 	MailDriver,
 	MailTestResult,
 	ProfileUser,
-	ProfileUserCapabilities,
 	SiteSettings,
 	SiteTimeFormat,
 	SmtpEncryption,
 	UpdateStatusPayload,
+	UserCapabilities,
 } from "@/api";
 
 export type {
@@ -35,11 +35,11 @@ export type {
 	MailDriver,
 	MailTestResult,
 	ProfileUser,
-	ProfileUserCapabilities,
 	SiteSettings,
 	SiteTimeFormat,
 	SmtpEncryption,
 	UpdateStatusPayload,
+	UserCapabilities,
 };
 
 import type { SettingsTabId } from "@/router/tabs";

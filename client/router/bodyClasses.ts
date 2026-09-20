@@ -37,27 +37,15 @@ function uniqueBodyClassNames(
 
 function getAuthBodyClassNames(pathname: string): string[] {
 	if ("/login" === pathname) {
-		return ["peakurl-ui", "public-page", "auth-page", "login-page"];
+		return ["page-auth", "page-login"];
 	}
 
 	if ("/forgot-password" === pathname) {
-		return [
-			"peakurl-ui",
-			"public-page",
-			"auth-page",
-			"auth-page-recovery",
-			"forgot-password-page",
-		];
+		return ["page-auth", "page-forgot-password"];
 	}
 
 	if (matchPath("/reset-password/:token", pathname)) {
-		return [
-			"peakurl-ui",
-			"public-page",
-			"auth-page",
-			"auth-page-recovery",
-			"reset-password-page",
-		];
+		return ["page-auth", "page-reset-password"];
 	}
 
 	return [];
@@ -68,40 +56,43 @@ function getDashboardBodyClassNames(pathname: string): string[] {
 		return [];
 	}
 
-	const classes = ["peakurl-ui", "dashboard-page"];
+	const classes = ["page-dashboard"];
 
 	if ("/dashboard" === pathname) {
-		classes.push("dashboard-home-page");
+		classes.push("page-dashboard-home");
 		return classes;
 	}
 
 	if ("/dashboard/about" === pathname) {
-		classes.push("dashboard-about-page");
+		classes.push("page-dashboard-about");
 		return classes;
 	}
 
 	if ("/dashboard/activity" === pathname) {
-		classes.push("dashboard-activity-page");
+		classes.push("page-dashboard-activity");
 		return classes;
 	}
 
 	if ("/dashboard/links" === pathname) {
-		classes.push("dashboard-links-page");
+		classes.push("page-dashboard-links");
 		return classes;
 	}
 
 	if ("/dashboard/plugins" === pathname) {
-		classes.push("dashboard-plugins-page");
+		classes.push("page-dashboard-plugins");
 		return classes;
 	}
 
 	if ("/dashboard/users" === pathname) {
-		classes.push("dashboard-users-page");
+		classes.push("page-dashboard-users");
 		return classes;
 	}
 
 	if ("/dashboard/settings" === pathname) {
-		classes.push("dashboard-settings-page", "dashboard-settings-general");
+		classes.push(
+			"page-dashboard-settings",
+			"page-dashboard-settings-general"
+		);
 		return classes;
 	}
 
@@ -113,8 +104,8 @@ function getDashboardBodyClassNames(pathname: string): string[] {
 		);
 		if (isValidSettingsTab(tab)) {
 			classes.push(
-				"dashboard-settings-page",
-				`dashboard-settings-${tab}`
+				"page-dashboard-settings",
+				`page-dashboard-settings-${tab}`
 			);
 			return classes;
 		}
@@ -126,57 +117,54 @@ function getDashboardBodyClassNames(pathname: string): string[] {
 		const tab = sanitizeBodyClassName(importMatch.params.tab || "file");
 		if (isValidImportTab(tab)) {
 			classes.push(
-				"dashboard-tools-page",
-				"dashboard-import-page",
-				`dashboard-import-${tab}`
+				"page-dashboard-tools",
+				"page-dashboard-import",
+				`page-dashboard-import-${tab}`
 			);
 			return classes;
 		}
 	}
 
 	if ("/dashboard/tools/export" === pathname) {
-		classes.push("dashboard-tools-page", "dashboard-export-page");
+		classes.push("page-dashboard-tools", "page-dashboard-export");
 		return classes;
 	}
 
 	if ("/dashboard/tools/scheduled-jobs" === pathname) {
-		classes.push("dashboard-tools-page", "dashboard-scheduled-jobs-page");
+		classes.push("page-dashboard-tools", "page-dashboard-scheduled-jobs");
 		return classes;
 	}
 
 	if ("/dashboard/tools/system-status" === pathname) {
-		classes.push("dashboard-tools-page", "dashboard-system-status-page");
+		classes.push("page-dashboard-tools", "page-dashboard-system-status");
 		return classes;
 	}
 
 	if ("/dashboard/tools" === pathname) {
-		classes.push("dashboard-tools-page");
+		classes.push("page-dashboard-tools");
 		return classes;
 	}
 
-	classes.push("dashboard-not-found-page");
+	classes.push("page-not-found");
 	return classes;
 }
 
 function getPageSlug(classes: string[]): string {
-	const pageClass = classes.find(
-		(className) =>
-			className.endsWith("-page") &&
-			![
-				"app-page",
-				"public-page",
-				"auth-page",
-				"dashboard-page",
-			].includes(className)
-	);
-	return pageClass || "default-page";
+	const specificPageClass = [...classes]
+		.reverse()
+		.find(
+			(className) =>
+				className.startsWith("page-") &&
+				!["page-auth", "page-dashboard"].includes(className)
+		);
+	return specificPageClass || "page-default";
 }
 
 function getBodyClassContext(
 	pathname: string,
 	classes: string[]
 ): BodyClassContext {
-	if (classes.includes("auth-page")) {
+	if (classes.includes("page-auth")) {
 		return {
 			pathname,
 			pageType: "auth",
@@ -184,7 +172,7 @@ function getBodyClassContext(
 		};
 	}
 
-	if (classes.includes("dashboard-page")) {
+	if (classes.includes("page-dashboard")) {
 		return {
 			pathname,
 			pageType: "dashboard",
@@ -210,7 +198,7 @@ function readManagedBodyClasses(): string[] {
 }
 
 /**
- * Mirrors the role of WordPress `get_body_class()` for route-driven UI pages.
+ * Mirrors the role of WordPress `get_body_class()` for page-driven UI.
  *
  * The resulting class list is passed through a `body_class` filter so future
  * extensions can add or remove classes from one central place.
@@ -219,12 +207,12 @@ export function getBodyClassNames(
 	pathname: string,
 	extraClasses: string[] = []
 ): string[] {
-	const routeClasses = [
+	const pageClasses = [
 		...getAuthBodyClassNames(pathname),
 		...getDashboardBodyClassNames(pathname),
 	];
 	const defaultClasses =
-		0 === routeClasses.length ? ["peakurl-ui", "app-page"] : routeClasses;
+		0 === pageClasses.length ? ["page-not-found"] : pageClasses;
 	const mergedClasses = uniqueBodyClassNames([
 		...defaultClasses,
 		...extraClasses,
@@ -237,7 +225,7 @@ export function getBodyClassNames(
 }
 
 /**
- * Applies route-managed classes on the document body while leaving any
+ * Applies page-managed classes on the document body while leaving any
  * unrelated classes untouched.
  */
 export function applyBodyClassNames(nextClasses: string[]): void {
@@ -268,7 +256,7 @@ export function applyBodyClassNames(nextClasses: string[]): void {
 }
 
 /**
- * Removes the currently managed route body classes.
+ * Removes the currently managed page body classes.
  */
 export function clearBodyClassNames(): void {
 	if ("undefined" === typeof document || !document.body) {

@@ -14,7 +14,7 @@ import type {
 	DashboardDeviceData,
 	DashboardStats,
 	EmailStatus,
-	GetUrlsResponse,
+	UrlsListResponse,
 	GeoipConfigurationPayload,
 	ImportRecord,
 	LinkLocationPayload,
@@ -334,18 +334,6 @@ export interface GetUrlsExportQueryArgs {
 }
 
 /**
- * Compatibility response used by the links list endpoint.
- *
- * Some older code paths still surface `items` at the top level, so the query
- * layer keeps that legacy field typed while favoring the canonical `data`
- * wrapper returned by the current API contract.
- */
-export interface UrlsListResponse extends GetUrlsResponse {
-	/** Legacy top-level item collection preserved for compatibility. */
-	items?: LinkRecord[];
-}
-
-/**
  * Response wrapper returned by the single-link lookup endpoint.
  */
 export type UrlResponse = ApiDataResponse<LinkRecord>;
@@ -380,31 +368,16 @@ export interface CredentialLoginPayload {
 
 /**
  * Session-check response returned by `/users/me`.
- *
- * PeakURL currently exposes the authenticated user in `data`, with a
- * compatibility `user` field still handled by a few older call sites. The UI
- * treats `data` as canonical and only falls back to `user` in the remaining
- * auth-guard surfaces that still accommodate the older shape.
  */
 export interface AuthCheckResponse {
 	/** Canonical authenticated user payload. */
 	data?: ProfileUser;
-
-	/** Compatibility user payload used by older auth flows. */
-	user?: ProfileUser;
 }
 
 /**
  * Authentication response returned by login and 2FA verification routes.
- *
- * The API currently mirrors some auth flags at both the top level and under
- * `data`, so this interface preserves that compatibility while documenting the
- * structure explicitly for the login screens.
  */
 export interface LoginResponse {
-	/** Compatibility flag indicating whether 2FA is still required. */
-	requiresTwoFactor?: boolean;
-
 	/** Auth payload returned by the API. */
 	data?: {
 		/** Authenticated user when login succeeds. */
@@ -611,6 +584,7 @@ export type {
 	UpdateStatusPayload,
 	UpdateUrlPayload,
 	UrlExportResponse,
+	UrlsListResponse,
 	UserDialogPayload,
 	UserSummary,
 	WebhookSummary,

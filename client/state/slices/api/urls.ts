@@ -138,7 +138,7 @@ export const urlsApi = baseApi.injectEndpoints({
 		getUrls: build.query<UrlsListResponse, GetUrlsQueryArgs | void>({
 			query: (args) => getUrlsRoute(args || {}),
 			providesTags: (result) => {
-				const items = result?.data?.items || result?.items || [];
+				const items = result?.data?.items ?? [];
 
 				return [URL_LIST_TAG, ...items.map((url) => urlTag(url.id))];
 			},

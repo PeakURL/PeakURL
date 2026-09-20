@@ -780,27 +780,6 @@ class Service {
 	}
 
 	/**
-	 * Backward compatibility alias for prepare_link_event_payload.
-	 *
-	 * @param string                    $event     Webhook event identifier.
-	 * @param array<string, mixed>      $link_data Link array or database row.
-	 * @param array<string, mixed>|null $user      Current user row or null.
-	 * @param array<string, mixed>|null $previous  Previous state for link updates.
-	 * @param array<string, mixed>|null $click     Recorded click details.
-	 * @return array<string, mixed>
-	 * @since 1.0.0
-	 */
-	public function build_link_event_data(
-		string $event,
-		array $link_data,
-		?array $user = null,
-		?array $previous = null,
-		?array $click = null
-	): array {
-		return $this->prepare_link_event_payload( $event, $link_data, $user, $previous, $click );
-	}
-
-	/**
 	 * Send an HTTP POST webhook payload to a registered endpoint.
 	 *
 	 * @param array<string, mixed> $webhook Webhook row.

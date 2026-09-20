@@ -27,9 +27,7 @@ test.describe("Links Workflow Journeys", () => {
 		await expect(page.getByText(/active links/i).first()).toBeVisible();
 
 		// Table or empty state container
-		await expect(
-			page.locator(".links-table, .links-empty-state")
-		).toBeVisible();
+		await expect(page.locator(".links-table")).toBeVisible();
 	});
 
 	test("full link lifecycle: create, search, stats drawer, edit, QR, and delete", async ({

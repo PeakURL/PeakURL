@@ -165,14 +165,11 @@ test.describe("Date Utilities", () => {
 					timeStyle: "short",
 				}
 			);
-			const nyFormatted = formatLocalizedDateTime(
-				deterministicInstant,
-				{
-					timeZone: "America/New_York",
-					dateStyle: "medium",
-					timeStyle: "short",
-				}
-			);
+			const nyFormatted = formatLocalizedDateTime(deterministicInstant, {
+				timeZone: "America/New_York",
+				dateStyle: "medium",
+				timeStyle: "short",
+			});
 
 			// In summer (BST, UTC+1), 12:00 UTC is 13:00 / 1:00 PM
 			expect(londonFormatted).toMatch(/1:00|13:00/);
@@ -197,11 +194,17 @@ test.describe("Date Utilities", () => {
 		test("Case D — site-timezone expiration input round-trip preserves exact UTC instant for London and New York", () => {
 			// Site in Europe/London (BST, UTC+1 in July): user enters 10:30 local time
 			const londonLocal = "2026-07-15T10:30";
-			const londonIso = toIsoFromLocalDateTime(londonLocal, "Europe/London");
+			const londonIso = toIsoFromLocalDateTime(
+				londonLocal,
+				"Europe/London"
+			);
 			expect(londonIso).toBe("2026-07-15T09:30:00.000Z");
 
 			// Round-trip back to local value in Europe/London
-			const londonRoundTrip = toLocalDateTimeValue(londonIso, "Europe/London");
+			const londonRoundTrip = toLocalDateTimeValue(
+				londonIso,
+				"Europe/London"
+			);
 			expect(londonRoundTrip).toBe(londonLocal);
 
 			// Site in America/New_York (EDT, UTC-4 in July): user enters 10:30 local time
@@ -218,29 +221,80 @@ test.describe("Date Utilities", () => {
 			// America/New_York DST change in 2026: Sunday, March 8 (clocks move from UTC-5 to UTC-4)
 			// Winter (UTC-5): 2026-03-07 10:30 EST -> 15:30 UTC
 			const nyWinterLocal = "2026-03-07T10:30";
-			const nyWinterIso = toIsoFromLocalDateTime(nyWinterLocal, "America/New_York");
+			const nyWinterIso = toIsoFromLocalDateTime(
+				nyWinterLocal,
+				"America/New_York"
+			);
 			expect(nyWinterIso).toBe("2026-03-07T15:30:00.000Z");
-			expect(toLocalDateTimeValue(nyWinterIso, "America/New_York")).toBe(nyWinterLocal);
+			expect(toLocalDateTimeValue(nyWinterIso, "America/New_York")).toBe(
+				nyWinterLocal
+			);
 
 			// Summer (UTC-4): 2026-03-09 10:30 EDT -> 14:30 UTC
 			const nySummerLocal = "2026-03-09T10:30";
-			const nySummerIso = toIsoFromLocalDateTime(nySummerLocal, "America/New_York");
+			const nySummerIso = toIsoFromLocalDateTime(
+				nySummerLocal,
+				"America/New_York"
+			);
 			expect(nySummerIso).toBe("2026-03-09T14:30:00.000Z");
-			expect(toLocalDateTimeValue(nySummerIso, "America/New_York")).toBe(nySummerLocal);
+			expect(toLocalDateTimeValue(nySummerIso, "America/New_York")).toBe(
+				nySummerLocal
+			);
 
 			// Europe/London DST change in 2026: Sunday, March 29 (clocks move from UTC+0 to UTC+1)
 			// Winter (UTC+0): 2026-03-28 10:30 GMT -> 10:30 UTC
 			const londonWinterLocal = "2026-03-28T10:30";
-			const londonWinterIso = toIsoFromLocalDateTime(londonWinterLocal, "Europe/London");
+			const londonWinterIso = toIsoFromLocalDateTime(
+				londonWinterLocal,
+				"Europe/London"
+			);
 			expect(londonWinterIso).toBe("2026-03-28T10:30:00.000Z");
-			expect(toLocalDateTimeValue(londonWinterIso, "Europe/London")).toBe(londonWinterLocal);
+			expect(toLocalDateTimeValue(londonWinterIso, "Europe/London")).toBe(
+				londonWinterLocal
+			);
 
 			// Summer (UTC+1): 2026-03-30 10:30 BST -> 09:30 UTC
 			const londonSummerLocal = "2026-03-30T10:30";
-			const londonSummerIso = toIsoFromLocalDateTime(londonSummerLocal, "Europe/London");
+			const londonSummerIso = toIsoFromLocalDateTime(
+				londonSummerLocal,
+				"Europe/London"
+			);
 			expect(londonSummerIso).toBe("2026-03-30T09:30:00.000Z");
-			expect(toLocalDateTimeValue(londonSummerIso, "Europe/London")).toBe(londonSummerLocal);
+			expect(toLocalDateTimeValue(londonSummerIso, "Europe/London")).toBe(
+				londonSummerLocal
+			);
+		});
+
+		test("Case F — browser timezone offset does not alter resolved UTC instant", () => {
+			const originalGetTimezoneOffset = Date.prototype.getTimezoneOffset;
+			try {
+				// Mock host browser offset as Tokyo (UTC+9 -> -540 min)
+				Date.prototype.getTimezoneOffset = () => -540;
+				const tokyoResult = toIsoFromLocalDateTime(
+					"2026-07-15T10:30",
+					"Europe/London"
+				);
+
+				// Mock host browser offset as New York (EDT, UTC-4 -> +240 min)
+				Date.prototype.getTimezoneOffset = () => 240;
+				const nyResult = toIsoFromLocalDateTime(
+					"2026-07-15T10:30",
+					"Europe/London"
+				);
+
+				// Mock host browser offset as UTC (0 min)
+				Date.prototype.getTimezoneOffset = () => 0;
+				const utcResult = toIsoFromLocalDateTime(
+					"2026-07-15T10:30",
+					"Europe/London"
+				);
+
+				expect(tokyoResult).toBe("2026-07-15T09:30:00.000Z");
+				expect(nyResult).toBe("2026-07-15T09:30:00.000Z");
+				expect(utcResult).toBe("2026-07-15T09:30:00.000Z");
+			} finally {
+				Date.prototype.getTimezoneOffset = originalGetTimezoneOffset;
+			}
 		});
 	});
 });
-

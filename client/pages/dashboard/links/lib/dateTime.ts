@@ -91,17 +91,16 @@ function getZonedParts(
  *
  * @param date     - The reference date.
  * @param timeZone - The IANA time zone identifier.
- * @return The offset in milliseconds.
+ * @return The offset in milliseconds, or null if zoning fails.
  */
 function getTimeZoneOffsetMs(
 	date: Date,
 	timeZone: string = getSiteTimeZone()
-): number {
+): number | null {
 	const parts = getZonedParts(date, timeZone);
 
-	/* Fall back to the local browser offset if zoning fails. */
 	if (!parts) {
-		return -date.getTimezoneOffset() * 60000;
+		return null;
 	}
 
 	const zonedUtcTime = Date.UTC(
@@ -144,10 +143,7 @@ export function getLocalDateValue(
 	const parts = getZonedParts(date, timeZone);
 
 	if (!parts) {
-		const offset = date.getTimezoneOffset() * 60000;
-		return (
-			new Date(date.getTime() - offset).toISOString().split("T")[0] || ""
-		);
+		return "";
 	}
 
 	return toDateInputValue(parts);
@@ -167,8 +163,7 @@ export function getLocalDateTimeValue(
 	const parts = getZonedParts(date, timeZone);
 
 	if (!parts) {
-		const offset = date.getTimezoneOffset() * 60000;
-		return new Date(date.getTime() - offset).toISOString().slice(0, 16);
+		return "";
 	}
 
 	return `${toDateInputValue(parts)}T${padDatePart(parts.hour)}:${padDatePart(
@@ -235,8 +230,16 @@ export function toIsoFromLocalDateTime(
 	 * by accounting for the time zone offset at the resulting instant.
 	 */
 	const offset = getTimeZoneOffsetMs(new Date(localUtcTime), timeZone);
+	if (offset === null) {
+		return null;
+	}
+
 	const firstPassTime = localUtcTime - offset;
 	const secondOffset = getTimeZoneOffsetMs(new Date(firstPassTime), timeZone);
+	if (secondOffset === null) {
+		return null;
+	}
+
 	const timeValue =
 		secondOffset === offset ? firstPassTime : localUtcTime - secondOffset;
 

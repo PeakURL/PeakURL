@@ -166,10 +166,7 @@ test.describe("Links & URL Utilities", () => {
 				status: "active",
 				expiresAt: "2026-09-21T13:00:00Z",
 			};
-			const result = getLinkExpirationState(
-				linkInOneHour,
-				referenceTime
-			);
+			const result = getLinkExpirationState(linkInOneHour, referenceTime);
 
 			expect(result.isExpired).toBe(false);
 			expect(result.relativeTime).toBe("in 1 hour");
@@ -244,6 +241,31 @@ test.describe("Links & URL Utilities", () => {
 			expect(result.relativeTime).toBe("in 17 minutes");
 			// Protection state preserved in link record
 			expect(protectedTimeLimitedLink.hasPassword).toBe(true);
+		});
+
+		test("7. relative expiration text and state remain identical regardless of viewer timezone", () => {
+			const link = {
+				status: "active",
+				expiresAt: "2026-09-21T12:17:00Z",
+			};
+			const originalGetTimezoneOffset = Date.prototype.getTimezoneOffset;
+			try {
+				Date.prototype.getTimezoneOffset = () => -540;
+				const tokyoState = getLinkExpirationState(link, referenceTime);
+
+				Date.prototype.getTimezoneOffset = () => 240;
+				const nyState = getLinkExpirationState(link, referenceTime);
+
+				Date.prototype.getTimezoneOffset = () => 0;
+				const utcState = getLinkExpirationState(link, referenceTime);
+
+				expect(tokyoState).toEqual(utcState);
+				expect(nyState).toEqual(utcState);
+				expect(tokyoState.relativeTime).toBe("in 17 minutes");
+				expect(tokyoState.isExpired).toBe(false);
+			} finally {
+				Date.prototype.getTimezoneOffset = originalGetTimezoneOffset;
+			}
 		});
 	});
 });

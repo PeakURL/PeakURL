@@ -152,7 +152,10 @@ test.describe("Links Table Expiration Display Regression Tests", () => {
 		// 1. Initial Page Load
 		await page.goto("/dashboard/links", { waitUntil: "domcontentloaded" });
 		await expect(
-			page.getByRole("heading", { name: /^(all links|links)$/i, level: 1 })
+			page.getByRole("heading", {
+				name: /^(all links|links)$/i,
+				level: 1,
+			})
 		).toBeVisible({ timeout: 25000 });
 
 		const row1m = page.locator(".links-row", { hasText: "exp-1m" });
@@ -218,31 +221,46 @@ test.describe("Links Table Expiration Display Regression Tests", () => {
 		// Trigger page reload / refresh
 		await page.reload({ waitUntil: "domcontentloaded" });
 		await expect(
-			page.getByRole("heading", { name: /^(all links|links)$/i, level: 1 })
+			page.getByRole("heading", {
+				name: /^(all links|links)$/i,
+				level: 1,
+			})
 		).toBeVisible({ timeout: 25000 });
 
 		// Verify that after refresh, the exact same correct values and badges are displayed
 		await expect(
-			page.locator(".links-row", { hasText: "exp-1m" }).locator(".links-row-badge-copy")
+			page
+				.locator(".links-row", { hasText: "exp-1m" })
+				.locator(".links-row-badge-copy")
 		).toContainText(/expires in 1 minute/i);
 		await expect(
-			page.locator(".links-row", { hasText: "exp-1m" }).locator(".links-row-badge-copy")
+			page
+				.locator(".links-row", { hasText: "exp-1m" })
+				.locator(".links-row-badge-copy")
 		).not.toContainText(/expires in 1 hour/i);
 
 		await expect(
-			page.locator(".links-row", { hasText: "exp-15m" }).locator(".links-row-badge-copy")
+			page
+				.locator(".links-row", { hasText: "exp-15m" })
+				.locator(".links-row-badge-copy")
 		).toContainText(/expires in 15 minutes/i);
 
 		await expect(
-			page.locator(".links-row", { hasText: "exp-1h" }).locator(".links-row-badge-copy")
+			page
+				.locator(".links-row", { hasText: "exp-1h" })
+				.locator(".links-row-badge-copy")
 		).toContainText(/expires in 1 hour/i);
 
 		await expect(
-			page.locator(".links-row", { hasText: "exp-past" }).locator(".links-row-badge-copy")
+			page
+				.locator(".links-row", { hasText: "exp-past" })
+				.locator(".links-row-badge-copy")
 		).toHaveText(/expired/i);
 
 		await expect(
-			page.locator(".links-row", { hasText: "exp-prot" }).getByText(/protected/i)
+			page
+				.locator(".links-row", { hasText: "exp-prot" })
+				.getByText(/protected/i)
 		).toBeVisible();
 	});
 });

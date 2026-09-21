@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace PeakURL\Features\Links;
 
-use PeakURL\Api\SettingsApi;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Services\SocialPreview;
 use PeakURL\Utils\Date;
@@ -48,14 +47,6 @@ class Creator {
 	private Validator $validator;
 
 	/**
-	 * Settings data API.
-	 *
-	 * @var SettingsApi
-	 * @since 1.7.0
-	 */
-	private SettingsApi $settings_api;
-
-	/**
 	 * Social preview metadata helper.
 	 *
 	 * @var SocialPreview
@@ -68,19 +59,16 @@ class Creator {
 	 *
 	 * @param Repository    $repository     Repository handler.
 	 * @param Validator     $validator      Validator handler.
-	 * @param SettingsApi   $settings_api   Settings data API.
 	 * @param SocialPreview $social_preview Social preview helper.
 	 * @since 1.7.0
 	 */
 	public function __construct(
 		Repository $repository,
 		Validator $validator,
-		SettingsApi $settings_api,
 		SocialPreview $social_preview
 	) {
 		$this->repository     = $repository;
 		$this->validator      = $validator;
-		$this->settings_api   = $settings_api;
 		$this->social_preview = $social_preview;
 	}
 
@@ -151,7 +139,7 @@ class Creator {
 	 *
 	 * @param array<string, mixed> $payload Canonical link payload.
 	 * @param int|string           $user_id Owner user identifier.
-	 * @return array<string, mixed> Created and formatted URL payload.
+	 * @return array<string, mixed> Persisted database row.
 	 *
 	 * @throws ApiException On validation failure.
 	 * @since 1.7.0
@@ -234,13 +222,15 @@ class Creator {
 		);
 
 		$row = $this->repository->find_url_row( $id );
-		$url = $this->format_url( $row );
+		if ( ! $row ) {
+			throw new ApiException( __( 'Failed to create link record.', 'peakurl' ), 500 );
+		}
 
-		$this->invalidate_link_cache( (string) ( $url['shortCode'] ?? '' ) );
-		$this->invalidate_link_cache( (string) ( $url['alias'] ?? '' ) );
-		$this->invalidate_link_cache( (string) ( $url['id'] ?? '' ) );
+		$this->invalidate_link_cache( (string) ( $row['short_code'] ?? '' ) );
+		$this->invalidate_link_cache( (string) ( $row['alias'] ?? '' ) );
+		$this->invalidate_link_cache( (string) ( $row['id'] ?? '' ) );
 
-		return $url;
+		return $row;
 	}
 
 	/**
@@ -254,68 +244,5 @@ class Creator {
 		if ( '' !== $key ) {
 			$this->repository->get_links_api()->invalidate_link_cache( $key );
 		}
-	}
-
-	/**
-	 * Format a database row into an API-ready link item.
-	 *
-	 * @param array<string, mixed>|null $row Raw link row.
-	 * @return array<string, mixed> Formatted link payload.
-	 * @since 1.7.0
-	 */
-	public function format_url( ?array $row ): array {
-		if ( ! $row ) {
-			return array();
-		}
-
-		static $site_url = null;
-
-		if ( null === $site_url ) {
-			$site_url = rtrim( \get_site_url(), '/' );
-		}
-
-		$alias     = trim( (string) ( $row['alias'] ?? '' ) );
-		$short_key = '' !== $alias
-			? $alias
-			: trim( (string) ( $row['short_code'] ?? '' ) );
-		$short_url = '';
-
-		if ( '' !== $site_url && '' !== $short_key ) {
-			$short_url = $site_url . '/' . ltrim( $short_key, '/' );
-		}
-
-		return array(
-			'id'             => (string) $row['id'],
-			'userId'         => (string) ( $row['user_id'] ?? '' ),
-			'shortCode'      => (string) $row['short_code'],
-			'alias'          => (string) $row['alias'],
-			'shortUrl'       => $short_url,
-			'title'          => trim( (string) ( $row['title'] ?? '' ) ),
-			'destinationUrl' => (string) $row['destination_url'],
-			'socialPreview'  => array(
-				'title'            => trim( (string) ( $row['social_title'] ?? '' ) ),
-				'description'      => trim( (string) ( $row['social_description'] ?? '' ) ),
-				'imageUrl'         => '' !== trim( (string) ( $row['social_image_url'] ?? '' ) )
-					? trim( (string) $row['social_image_url'] )
-					: $this->social_preview->get_link_image_url(
-						(string) ( $row['social_image_path'] ?? '' ),
-					),
-				'externalImageUrl' => '' !== trim( (string) ( $row['social_image_url'] ?? '' ) )
-					? trim( (string) $row['social_image_url'] )
-					: null,
-			),
-			'domain'         => null,
-			'clicks'         => (int) ( $row['click_count'] ?? 0 ),
-			'uniqueClicks'   => (int) ( $row['unique_click_count'] ?? 0 ),
-			'status'         => (string) ( $row['status'] ?? 'active' ),
-			'hasPassword'    => '' !== trim(
-				(string) ( $row['password_value'] ?? '' ),
-			),
-			'expiresAt'      => $row['expires_at']
-				? Date::to_iso( (string) $row['expires_at'] )
-				: null,
-			'createdAt'      => Date::to_iso( (string) $row['created_at'] ),
-			'updatedAt'      => Date::to_iso( (string) $row['updated_at'] ),
-		);
 	}
 }

@@ -54,27 +54,21 @@ function LinkRow({
 				? __("Active")
 				: "inactive" === link.status
 					? __("Inactive")
-					: "expired" === link.status
-						? __("Expired")
-						: __("Unknown");
+					: __("Unknown");
 	const statusColorClass = isTrashed
 		? "text-warning"
 		: isExpiredLink
 			? "text-error"
 			: "active" === link.status
 				? "text-success"
-				: "expired" === link.status
-					? "text-error"
-					: "text-text-muted";
+				: "text-text-muted";
 	const statusDotClass = isTrashed
 		? "bg-warning"
 		: isExpiredLink
 			? "bg-error"
 			: "active" === link.status
 				? "bg-success"
-				: "expired" === link.status
-					? "bg-error"
-					: "bg-stroke";
+				: "bg-stroke";
 
 	return (
 		<tr

@@ -189,15 +189,18 @@ class Validator {
 	 * @since 1.0.0
 	 */
 	public function is_public_link_expired( array $url ): bool {
-		$expires_at = (string) ( $url['expires_at'] ?? '' );
+		$expires_at = trim( (string) ( $url['expires_at'] ?? '' ) );
 
 		if ( '' === $expires_at ) {
 			return false;
 		}
 
-		$expires_timestamp = strtotime( $expires_at );
-
-		return false !== $expires_timestamp && $expires_timestamp <= time();
+		try {
+			$expires_date = new \DateTimeImmutable( $expires_at, new \DateTimeZone( 'UTC' ) );
+			return $expires_date->getTimestamp() <= time();
+		} catch ( \Throwable $exception ) {
+			return false;
+		}
 	}
 
 	/**
@@ -215,13 +218,12 @@ class Validator {
 		}
 
 		if ( is_string( $value ) ) {
-			$timestamp = strtotime( $value );
-
-			if ( false === $timestamp ) {
+			try {
+				$date_time = new \DateTimeImmutable( trim( $value ), new \DateTimeZone( 'UTC' ) );
+				return $date_time->setTimezone( new \DateTimeZone( 'UTC' ) )->format( 'Y-m-d H:i:s' );
+			} catch ( \Throwable $exception ) {
 				throw new ApiException( __( 'Invalid date value provided.', 'peakurl' ), 422 );
 			}
-
-			return gmdate( 'Y-m-d H:i:s', $timestamp );
 		}
 
 		throw new ApiException( __( 'Invalid date value provided.', 'peakurl' ), 422 );

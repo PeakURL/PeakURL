@@ -50,6 +50,7 @@ class LinksBehavioralTest extends TestCase {
 	private MockObject&SettingsApi $settings_api;
 	private Roles $roles;
 	private Authorization $authorization;
+	private LinksValidator $validator;
 	private LinksService $links_service;
 	private LinksController $links_controller;
 
@@ -96,10 +97,11 @@ class LinksBehavioralTest extends TestCase {
 
 		$this->roles         = new Roles();
 		$this->authorization = new Authorization( $this->roles );
+		$this->validator     = new LinksValidator();
 
 		$this->links_service = new LinksService(
 			$this->repository,
-			new LinksValidator(),
+			$this->validator,
 			$this->settings_api,
 			$this->auth_service,
 			$this->analytics_service,
@@ -534,5 +536,113 @@ class LinksBehavioralTest extends TestCase {
 		$this->assertNotSame( 'expired', $result['status'] );
 		$this->assertSame( 'redirect', $result['status'] );
 		$this->assertSame( 'https://example.com/future-target', $result['location'] );
+	}
+
+	public function test_public_link_expiration_is_timezone_independent_under_non_utc_php_runtime(): void {
+		$original_tz = date_default_timezone_get();
+		$timezones   = array( 'UTC', 'America/New_York', 'Asia/Tokyo', 'Europe/London', 'Pacific/Honolulu' );
+
+		$past_instant   = gmdate( 'Y-m-d H:i:s', time() - 3600 );
+		$future_instant = gmdate( 'Y-m-d H:i:s', time() + 3600 );
+
+		$expired_row = array(
+			'id'              => 'url_past',
+			'alias'           => 'expired-test',
+			'short_code'      => 'expired-test',
+			'destination_url' => 'https://example.com/target',
+			'status'          => 'active',
+			'expires_at'      => $past_instant,
+			'password_value'  => null,
+		);
+
+		$active_row = array(
+			'id'              => 'url_future',
+			'alias'           => 'active-test',
+			'short_code'      => 'active-test',
+			'destination_url' => 'https://example.com/target',
+			'status'          => 'active',
+			'expires_at'      => $future_instant,
+			'password_value'  => null,
+		);
+
+		try {
+			foreach ( $timezones as $tz ) {
+				date_default_timezone_set( $tz );
+
+				$this->assertTrue(
+					$this->validator->is_public_link_expired( $expired_row ),
+					"Link must be expired under runtime timezone {$tz}"
+				);
+				$this->assertFalse(
+					$this->validator->is_public_link_expired( $active_row ),
+					"Link must be active under runtime timezone {$tz}"
+				);
+
+				$this->assertSame(
+					'2026-07-15 14:30:00',
+					$this->validator->normalize_datetime( '2026-07-15 14:30:00' ),
+					"Date normalization must be identical under runtime timezone {$tz}"
+				);
+				$this->assertSame(
+					'2026-07-15 14:30:00',
+					$this->validator->normalize_datetime( '2026-07-15T14:30:00Z' ),
+					"UTC ISO normalization must be identical under runtime timezone {$tz}"
+				);
+				$this->assertSame(
+					'2026-07-15 14:30:00',
+					$this->validator->normalize_datetime( '2026-07-15T10:30:00-04:00' ),
+					"Offset ISO normalization must be identical under runtime timezone {$tz}"
+				);
+			}
+		} finally {
+			date_default_timezone_set( $original_tz );
+		}
+	}
+
+	public function test_public_link_access_with_password_protection_and_expiration(): void {
+		$password_hash  = password_hash( 'Secret123!', PASSWORD_DEFAULT );
+		$future_instant = gmdate( 'Y-m-d H:i:s', time() + 3600 );
+		$past_instant   = gmdate( 'Y-m-d H:i:s', time() - 3600 );
+
+		$future_protected_row = array(
+			'id'              => 'url_future_prot',
+			'alias'           => 'prot-future',
+			'short_code'      => 'prot-future',
+			'destination_url' => 'https://example.com/protected-target',
+			'status'          => 'active',
+			'expires_at'      => $future_instant,
+			'password_value'  => $password_hash,
+		);
+
+		$expired_protected_row = array(
+			'id'              => 'url_expired_prot',
+			'alias'           => 'prot-expired',
+			'short_code'      => 'prot-expired',
+			'destination_url' => 'https://example.com/protected-target',
+			'status'          => 'active',
+			'expires_at'      => $past_instant,
+			'password_value'  => $password_hash,
+		);
+
+		$this->repository->method( 'find_link_access_row' )
+			->willReturnCallback(
+				function ( string $code ) use ( $future_protected_row, $expired_protected_row ) {
+					if ( 'prot-future' === $code ) {
+						return $future_protected_row;
+					}
+					if ( 'prot-expired' === $code ) {
+						return $expired_protected_row;
+					}
+					return null;
+				}
+			);
+
+		$request_future = new Request( 'GET', '/prot-future', array(), array() );
+		$res_future     = $this->links_service->get_link_access( 'prot-future', $request_future );
+		$this->assertSame( 'password_required', $res_future['status'] );
+
+		$request_expired = new Request( 'GET', '/prot-expired', array(), array() );
+		$res_expired     = $this->links_service->get_link_access( 'prot-expired', $request_expired );
+		$this->assertSame( 'expired', $res_expired['status'] );
 	}
 }

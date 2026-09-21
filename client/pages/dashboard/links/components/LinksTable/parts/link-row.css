@@ -44,7 +44,7 @@
 	}
 
 	.links-row-meta {
-		@apply mt-1 flex flex-col items-start gap-1;
+		@apply mt-1 flex flex-row items-start gap-1;
 	}
 
 	.links-row-badge {

@@ -297,4 +297,67 @@ class StarterLinksInstallTest extends TestCase {
 		$deleted = $repository->find_url_row( $link_id );
 		$this->assertNull( $deleted, 'Starter link must be permanently deletable through domain repository.' );
 	}
+
+	public function test_starter_link_failure_rolls_back_transaction_and_omits_marker(): void {
+		$config       = $this->get_isolated_config();
+		$runtime_root = Environment::get_instance()->get_runtime_root();
+
+		Initializer::initialize_schema( $config, $runtime_root );
+		$connection = new Connection( $config );
+		$db         = new PeakURL_DB( $connection, $this->isolated_prefix );
+
+		$now = Date::now();
+		$this->pdo->exec(
+			"INSERT INTO {$this->isolated_prefix}users
+			(username, email, first_name, last_name, password_hash, role, is_email_verified, created_at, updated_at)
+			VALUES ('testowner', 'owner@example.com', 'Test', 'Owner', 'hash', 'admin', 1, '{$now}', '{$now}')"
+		);
+		$owner = $db->get_row( "SELECT * FROM {$this->isolated_prefix}users WHERE username = 'testowner'" );
+		$this->assertIsArray( $owner );
+
+		$db->begin_transaction();
+		try {
+			$links_api  = new LinksApi( $db );
+			$repository = new LinksRepository( $db, $links_api );
+			$validator  = new LinksValidator();
+			$creator    = new Creator(
+				$repository,
+				$validator,
+				new SocialPreview( array(), new SettingsApi( $db ) )
+			);
+
+			// First link succeeds
+			$creator->create_link_record(
+				array(
+					'title'          => 'Welcome to PeakURL',
+					'destinationUrl' => 'https://peakurl.org/?utm_source=peakurl&utm_medium=installation&utm_campaign=welcome',
+				),
+				$owner['id']
+			);
+
+			// Second link fails validation
+			$creator->create_link_record(
+				array(
+					'title'          => 'Invalid Link',
+					'destinationUrl' => 'invalid-protocol://not-a-valid-url',
+				),
+				$owner['id']
+			);
+
+			$db->commit();
+		} catch ( \Throwable $exception ) {
+			if ( $db->in_transaction() ) {
+				$db->roll_back();
+			}
+		}
+
+		$links_count = (int) $this->pdo->query( "SELECT COUNT(*) FROM {$this->isolated_prefix}urls" )->fetchColumn();
+		$this->assertSame( 0, $links_count, 'Failed link creation must roll back transaction so no links remain.' );
+
+		$settings_api = new SettingsApi( $db );
+		$this->assertNull(
+			$settings_api->get_option( 'starter_links_initialized_at' ),
+			'starter_links_initialized_at marker must not be written if link creation failed.'
+		);
+	}
 }

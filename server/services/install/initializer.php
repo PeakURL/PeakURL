@@ -16,7 +16,6 @@ use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Features\Links\Creator;
 use PeakURL\Features\Links\Repository as LinksRepository;
-use PeakURL\Features\Links\Service as LinksService;
 use PeakURL\Features\Links\Validator as LinksValidator;
 use PeakURL\Services\Database\Connection;
 use PeakURL\Services\Database\PeakURL_DB;
@@ -266,16 +265,14 @@ class Initializer {
 	/**
 	 * Initialize default starter links once for brand-new installations.
 	 *
-	 * @param PeakURL_DB         $db            Database wrapper.
-	 * @param array<string, mixed> $owner        Site owner row.
-	 * @param LinksService|null  $links_service Optional links domain service.
+	 * @param PeakURL_DB           $db    Database wrapper.
+	 * @param array<string, mixed> $owner Site owner row.
 	 * @return void
 	 * @since 1.7.0
 	 */
 	public static function initialize_starter_links(
 		PeakURL_DB $db,
-		array $owner,
-		?LinksService $links_service = null
+		array $owner
 	): void {
 		if ( ! $db->table_exists( 'urls' ) || ! $db->table_exists( 'settings' ) ) {
 			return;
@@ -291,18 +288,14 @@ class Initializer {
 			return;
 		}
 
-		$creator = null;
-		if ( ! $links_service ) {
-			$links_api  = new LinksApi( $db );
-			$repository = new LinksRepository( $db, $links_api );
-			$validator  = new LinksValidator();
-			$creator    = new Creator(
-				$repository,
-				$validator,
-				$settings_api,
-				new SocialPreview( array(), $settings_api )
-			);
-		}
+		$links_api  = new LinksApi( $db );
+		$repository = new LinksRepository( $db, $links_api );
+		$validator  = new LinksValidator();
+		$creator    = new Creator(
+			$repository,
+			$validator,
+			new SocialPreview( array(), $settings_api )
+		);
 
 		$starter_links = array(
 			array(
@@ -329,11 +322,7 @@ class Initializer {
 		);
 
 		foreach ( $starter_links as $link ) {
-			if ( $links_service ) {
-				$links_service->create_link_record( $link, $owner_id );
-			} else {
-				$creator->create_link_record( $link, $owner_id );
-			}
+			$creator->create_link_record( $link, $owner_id );
 		}
 
 		$now = Date::now();

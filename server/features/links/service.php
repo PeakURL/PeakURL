@@ -177,7 +177,7 @@ class Service {
 		$this->roles             = $roles;
 		$this->authorization     = $authorization;
 		$this->config            = $config;
-		$this->creator           = new Creator( $data, $validator, $settings_api, $social_preview );
+		$this->creator           = new Creator( $data, $validator, $social_preview );
 	}
 
 	/**
@@ -198,16 +198,6 @@ class Service {
 	 * @since 1.0.0
 	 */
 	public function get_data(): Repository {
-		return $this->data;
-	}
-
-	/**
-	 * Get the Repository instance.
-	 *
-	 * @return Repository
-	 * @since 1.7.0
-	 */
-	public function get_repository(): Repository {
 		return $this->data;
 	}
 
@@ -494,28 +484,6 @@ class Service {
 	 * Create a new short URL.
 	 *
 	 * @param Request              $request Incoming HTTP request.
-	 * @param array<string, mixed> $payload Creation payload.
-	 * @return array<string, mixed> Formatted created URL.
-	/**
-	 * Create a new short link record using canonical generation, validation, and persistence.
-	 *
-	 * Shared by interactive HTTP creation and system/install starter link creation.
-	 *
-	 * @param array<string, mixed> $payload Raw link payload.
-	 * @param int|string           $user_id Owner user ID.
-	 * @return array<string, mixed> Formatted link row.
-	 *
-	 * @throws ApiException On validation failure (422).
-	 * @since 1.7.0
-	 */
-	public function create_link_record( array $payload, $user_id ): array {
-		return $this->creator->create_link_record( $payload, $user_id );
-	}
-
-	/**
-	 * Create a new short URL.
-	 *
-	 * @param Request              $request Incoming HTTP request.
 	 * @param array<string, mixed> $payload Request body.
 	 * @return array<string, mixed> Created URL payload.
 	 *
@@ -570,13 +538,15 @@ class Service {
 		}
 
 		try {
-			$url = $this->create_link_record( $payload, $user['id'] );
+			$row = $this->creator->create_link_record( $payload, $user['id'] );
 		} catch ( \Throwable $exception ) {
 			if ( null !== $social_image_path ) {
 				$this->social_preview->delete_link_image( $social_image_path );
 			}
 			throw $exception;
 		}
+
+		$url = $this->format_url( $row );
 
 		$link_title = ! empty( $url['title'] ) ? $url['title'] : '/' . ( $url['alias'] ?? $url['shortCode'] ?? '' );
 
@@ -1732,16 +1702,6 @@ class Service {
 		}
 
 		return strtoupper( substr( $alias, 0, 1 ) ) . substr( $alias, 1 );
-	}
-
-	/**
-	 * Generate a unique random 6-character short code.
-	 *
-	 * @return string
-	 * @since 1.0.0
-	 */
-	public function generate_short_code(): string {
-		return $this->creator->generate_short_code();
 	}
 
 	/**

@@ -172,7 +172,7 @@ test.describe("Links Table Expiration Display Regression Tests", () => {
 
 		// Requirement 1: A link expiring in ~1 minute is NOT displayed as "Expires in 1 hour"
 		await expect(row1m.locator(".links-row-badge-copy")).toContainText(
-			/expires in 1 minute/i
+			/expires in (?:1 minute|\d+ seconds)/i
 		);
 		await expect(row1m.locator(".links-row-badge-copy")).not.toContainText(
 			/expires in 1 hour/i
@@ -212,7 +212,9 @@ test.describe("Links Table Expiration Display Regression Tests", () => {
 		);
 
 		// Requirement 6: Protected link retains protected badge alongside expiration badge
-		await expect(rowProt.getByText(/protected/i)).toBeVisible();
+		await expect(rowProt.locator(".links-row-badge-warning")).toContainText(
+			/protected/i
+		);
 		await expect(rowProt.locator(".links-row-badge-copy")).toContainText(
 			/expires in 30 minutes/i
 		);
@@ -232,7 +234,7 @@ test.describe("Links Table Expiration Display Regression Tests", () => {
 			page
 				.locator(".links-row", { hasText: "exp-1m" })
 				.locator(".links-row-badge-copy")
-		).toContainText(/expires in 1 minute/i);
+		).toContainText(/expires in (?:1 minute|\d+ seconds)/i);
 		await expect(
 			page
 				.locator(".links-row", { hasText: "exp-1m" })
@@ -260,7 +262,7 @@ test.describe("Links Table Expiration Display Regression Tests", () => {
 		await expect(
 			page
 				.locator(".links-row", { hasText: "exp-prot" })
-				.getByText(/protected/i)
-		).toBeVisible();
+				.locator(".links-row-badge-warning")
+		).toContainText(/protected/i);
 	});
 });

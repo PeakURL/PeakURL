@@ -3,6 +3,6 @@ export {
 	formatLocalizedDateTime,
 	formatRelativeTime,
 	getActiveLocale,
-	getActiveTimeZone,
+	getSiteTimeZone,
 	getZonedDateKey,
 } from "./dateFormatting";

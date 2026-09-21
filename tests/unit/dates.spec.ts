@@ -4,8 +4,14 @@ import {
 	formatLocalizedDateTime,
 	formatRelativeTime,
 	getActiveLocale,
-	getActiveTimeZone,
+	getSiteTimeZone,
 } from "../../client/shared/dates";
+import {
+	toIsoFromLocalDateTime,
+	toLocalDateTimeValue,
+	getLocalDateValue,
+	getLocalDateTimeValue,
+} from "../../client/pages/dashboard/links/lib";
 import {
 	formatNumber,
 	formatTtlDuration,
@@ -18,8 +24,8 @@ test.describe("Date Utilities", () => {
 		expect(locale.length).toBeGreaterThan(0);
 	});
 
-	test("getActiveTimeZone returns valid timezone string", () => {
-		const tz = getActiveTimeZone();
+	test("getSiteTimeZone returns valid timezone string", () => {
+		const tz = getSiteTimeZone();
 		expect(typeof tz).toBe("string");
 		expect(tz.length).toBeGreaterThan(0);
 	});
@@ -51,6 +57,46 @@ test.describe("Date Utilities", () => {
 		const relative = formatRelativeTime(eventMomentsAgo, { now });
 		expect(relative).toMatch(/second/i);
 		expect(relative).not.toContain("hour");
+	});
+
+	test("formatRelativeTime formats remaining time accurately without premature promotion to 1 hour", () => {
+		const now = new Date("2026-09-21T12:00:00Z");
+
+		// Less than one minute: should display exact seconds, not 1 minute or 1 hour
+		expect(
+			formatRelativeTime(new Date("2026-09-21T12:00:55Z"), { now })
+		).toBe("in 55 seconds");
+
+		// Exactly one minute: should display 1 minute, not 1 hour
+		expect(
+			formatRelativeTime(new Date("2026-09-21T12:01:00Z"), { now })
+		).toBe("in 1 minute");
+
+		// Several minutes: should display appropriate minute count
+		expect(
+			formatRelativeTime(new Date("2026-09-21T12:02:00Z"), { now })
+		).toBe("in 2 minutes");
+		expect(
+			formatRelativeTime(new Date("2026-09-21T12:17:00Z"), { now })
+		).toBe("in 17 minutes");
+
+		// Upper minute boundary: 59 minutes should display in 59 minutes, not 1 hour
+		expect(
+			formatRelativeTime(new Date("2026-09-21T12:59:00Z"), { now })
+		).toBe("in 59 minutes");
+
+		// 1 hour boundary: should display 1 hour
+		expect(
+			formatRelativeTime(new Date("2026-09-21T13:00:00Z"), { now })
+		).toBe("in 1 hour");
+
+		// Past timestamps
+		expect(
+			formatRelativeTime(new Date("2026-09-21T11:59:55Z"), { now })
+		).toBe("5 seconds ago");
+		expect(
+			formatRelativeTime(new Date("2026-09-21T11:59:00Z"), { now })
+		).toBe("1 minute ago");
 	});
 
 	test("formatLocalizedDateTime handles Date objects and ISO strings", () => {
@@ -106,4 +152,95 @@ test.describe("Date Utilities", () => {
 		expect(formatNumber(1000000)).toBe("1M");
 		expect(formatNumber(1000000000)).toBe("1B");
 	});
+
+	test.describe("Site-Timezone Architecture & Expiration Input Correctness", () => {
+		const deterministicInstant = "2026-07-15T12:00:00Z";
+
+		test("Case A & B — same UTC instant formats to respective local wall-clock times in Europe/London and America/New_York based on site timezone", () => {
+			const londonFormatted = formatLocalizedDateTime(
+				deterministicInstant,
+				{
+					timeZone: "Europe/London",
+					dateStyle: "medium",
+					timeStyle: "short",
+				}
+			);
+			const nyFormatted = formatLocalizedDateTime(
+				deterministicInstant,
+				{
+					timeZone: "America/New_York",
+					dateStyle: "medium",
+					timeStyle: "short",
+				}
+			);
+
+			// In summer (BST, UTC+1), 12:00 UTC is 13:00 / 1:00 PM
+			expect(londonFormatted).toMatch(/1:00|13:00/);
+			// In summer (EDT, UTC-4), 12:00 UTC is 08:00 / 8:00 AM
+			expect(nyFormatted).toMatch(/8:00|08:00/);
+			// The formatted strings must be distinct because the timezones are different
+			expect(londonFormatted).not.toBe(nyFormatted);
+		});
+
+		test("Case C — relative time duration is based on absolute instants and remains identical regardless of viewer timezone", () => {
+			const now = new Date("2026-07-15T12:00:00Z");
+			const expiresAt = new Date("2026-07-15T12:24:00Z");
+
+			const duration = formatRelativeTime(expiresAt, { now });
+			expect(duration).toBe("in 24 minutes");
+
+			// Past instant
+			const past = new Date("2026-07-15T11:36:00Z");
+			expect(formatRelativeTime(past, { now })).toBe("24 minutes ago");
+		});
+
+		test("Case D — site-timezone expiration input round-trip preserves exact UTC instant for London and New York", () => {
+			// Site in Europe/London (BST, UTC+1 in July): user enters 10:30 local time
+			const londonLocal = "2026-07-15T10:30";
+			const londonIso = toIsoFromLocalDateTime(londonLocal, "Europe/London");
+			expect(londonIso).toBe("2026-07-15T09:30:00.000Z");
+
+			// Round-trip back to local value in Europe/London
+			const londonRoundTrip = toLocalDateTimeValue(londonIso, "Europe/London");
+			expect(londonRoundTrip).toBe(londonLocal);
+
+			// Site in America/New_York (EDT, UTC-4 in July): user enters 10:30 local time
+			const nyLocal = "2026-07-15T10:30";
+			const nyIso = toIsoFromLocalDateTime(nyLocal, "America/New_York");
+			expect(nyIso).toBe("2026-07-15T14:30:00.000Z");
+
+			// Round-trip back to local value in America/New_York
+			const nyRoundTrip = toLocalDateTimeValue(nyIso, "America/New_York");
+			expect(nyRoundTrip).toBe(nyLocal);
+		});
+
+		test("Case E — local input conversion resolves correctly across DST boundaries in configured site timezone", () => {
+			// America/New_York DST change in 2026: Sunday, March 8 (clocks move from UTC-5 to UTC-4)
+			// Winter (UTC-5): 2026-03-07 10:30 EST -> 15:30 UTC
+			const nyWinterLocal = "2026-03-07T10:30";
+			const nyWinterIso = toIsoFromLocalDateTime(nyWinterLocal, "America/New_York");
+			expect(nyWinterIso).toBe("2026-03-07T15:30:00.000Z");
+			expect(toLocalDateTimeValue(nyWinterIso, "America/New_York")).toBe(nyWinterLocal);
+
+			// Summer (UTC-4): 2026-03-09 10:30 EDT -> 14:30 UTC
+			const nySummerLocal = "2026-03-09T10:30";
+			const nySummerIso = toIsoFromLocalDateTime(nySummerLocal, "America/New_York");
+			expect(nySummerIso).toBe("2026-03-09T14:30:00.000Z");
+			expect(toLocalDateTimeValue(nySummerIso, "America/New_York")).toBe(nySummerLocal);
+
+			// Europe/London DST change in 2026: Sunday, March 29 (clocks move from UTC+0 to UTC+1)
+			// Winter (UTC+0): 2026-03-28 10:30 GMT -> 10:30 UTC
+			const londonWinterLocal = "2026-03-28T10:30";
+			const londonWinterIso = toIsoFromLocalDateTime(londonWinterLocal, "Europe/London");
+			expect(londonWinterIso).toBe("2026-03-28T10:30:00.000Z");
+			expect(toLocalDateTimeValue(londonWinterIso, "Europe/London")).toBe(londonWinterLocal);
+
+			// Summer (UTC+1): 2026-03-30 10:30 BST -> 09:30 UTC
+			const londonSummerLocal = "2026-03-30T10:30";
+			const londonSummerIso = toIsoFromLocalDateTime(londonSummerLocal, "Europe/London");
+			expect(londonSummerIso).toBe("2026-03-30T09:30:00.000Z");
+			expect(toLocalDateTimeValue(londonSummerIso, "Europe/London")).toBe(londonSummerLocal);
+		});
+	});
 });
+

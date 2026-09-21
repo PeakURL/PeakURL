@@ -6,6 +6,7 @@ import {
 	getShortUrl,
 	isRelativeUrl,
 	normalizeLinkTitle,
+	getLinkExpirationState,
 	sanitizeImageUrl,
 	sanitizeUrl,
 } from "../../client/shared/links";
@@ -107,6 +108,142 @@ test.describe("Links & URL Utilities", () => {
 				"short.io"
 			);
 			expect(getLinkHost({ domain: null })).toBe("");
+		});
+	});
+
+	test.describe("getLinkExpirationState", () => {
+		const referenceTime = new Date("2026-09-21T12:00:00Z");
+
+		test("1. a link expiring in about one minute is not displayed as 'Expires in 1 hour'", () => {
+			const linkExpiringInOneMinute = {
+				status: "active",
+				expiresAt: "2026-09-21T12:01:00Z",
+			};
+			const result = getLinkExpirationState(
+				linkExpiringInOneMinute,
+				referenceTime
+			);
+
+			expect(result.isExpired).toBe(false);
+			expect(result.relativeTime).toBe("in 1 minute");
+			expect(result.relativeTime).not.toContain("hour");
+		});
+
+		test("2. a link expiring in several minutes displays the appropriate remaining time", () => {
+			const linkIn2Min = {
+				status: "active",
+				expiresAt: "2026-09-21T12:02:00Z",
+			};
+			const linkIn17Min = {
+				status: "active",
+				expiresAt: "2026-09-21T12:17:00Z",
+			};
+			const linkIn55Sec = {
+				status: "active",
+				expiresAt: "2026-09-21T12:00:55Z",
+			};
+			const linkIn59Min = {
+				status: "active",
+				expiresAt: "2026-09-21T12:59:00Z",
+			};
+
+			expect(
+				getLinkExpirationState(linkIn55Sec, referenceTime).relativeTime
+			).toBe("in 55 seconds");
+			expect(
+				getLinkExpirationState(linkIn2Min, referenceTime).relativeTime
+			).toBe("in 2 minutes");
+			expect(
+				getLinkExpirationState(linkIn17Min, referenceTime).relativeTime
+			).toBe("in 17 minutes");
+			expect(
+				getLinkExpirationState(linkIn59Min, referenceTime).relativeTime
+			).toBe("in 59 minutes");
+		});
+
+		test("3. a link expiring in about one hour displays the appropriate hour value", () => {
+			const linkInOneHour = {
+				status: "active",
+				expiresAt: "2026-09-21T13:00:00Z",
+			};
+			const result = getLinkExpirationState(
+				linkInOneHour,
+				referenceTime
+			);
+
+			expect(result.isExpired).toBe(false);
+			expect(result.relativeTime).toBe("in 1 hour");
+		});
+
+		test("4. an already-expired link is displayed as expired", () => {
+			// Case A: Link explicitly marked expired by backend
+			const backendExpiredLink = {
+				status: "expired",
+				expiresAt: "2026-09-21T11:50:00Z",
+			};
+			const resA = getLinkExpirationState(
+				backendExpiredLink,
+				referenceTime
+			);
+			expect(resA.isExpired).toBe(true);
+			expect(resA.relativeTime).toBe("");
+
+			// Case B: Link past its expiration timestamp while status column is still active (prior to cron transition)
+			const timestampPastLink = {
+				status: "active",
+				expiresAt: "2026-09-21T11:59:00Z",
+			};
+			const resB = getLinkExpirationState(
+				timestampPastLink,
+				referenceTime
+			);
+			expect(resB.isExpired).toBe(true);
+			expect(resB.relativeTime).toBe("");
+		});
+
+		test("5. initial page data and refreshed page data use the same correct expiration logic", () => {
+			const linkRecord = {
+				id: "link-xyz",
+				status: "active",
+				expiresAt: "2026-09-21T12:17:00Z",
+			};
+
+			// Initial loading evaluation
+			const initialEvaluation = getLinkExpirationState(
+				linkRecord,
+				referenceTime
+			);
+
+			// Refreshed payload evaluation (same authoritative backend data)
+			const refreshedPayload = { ...linkRecord };
+			const refreshedEvaluation = getLinkExpirationState(
+				refreshedPayload,
+				referenceTime
+			);
+
+			expect(initialEvaluation).toEqual(refreshedEvaluation);
+			expect(refreshedEvaluation.relativeTime).toBe("in 17 minutes");
+			expect(refreshedEvaluation.isExpired).toBe(false);
+		});
+
+		test("6. protected/time-limited links retain their existing behavior", () => {
+			const protectedTimeLimitedLink = {
+				id: "protected-link",
+				status: "active",
+				hasPassword: true,
+				expiresAt: "2026-09-21T12:17:00Z",
+			};
+
+			const result = getLinkExpirationState(
+				protectedTimeLimitedLink,
+				referenceTime
+			);
+
+			// Expiration state correctly resolved
+			expect(result.isExpired).toBe(false);
+			expect(result.relativeTime).toBe("in 17 minutes");
+			// Protection state preserved in link record
+			expect(protectedTimeLimitedLink.hasPassword).toBe(true);
 		});
 	});
 });

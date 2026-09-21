@@ -100,6 +100,27 @@ class SetupDatabaseTest extends TestCase {
 		// Verify table was created under the isolated prefix.
 		$stmt = $this->pdo->query( "SHOW TABLES LIKE '{$this->isolated_prefix}users'" );
 		$this->assertNotEmpty( $stmt->fetchAll() );
+
+		// Verify starter links were initialized under the isolated prefix.
+		$links_stmt = $this->pdo->query( "SELECT title, alias, short_code, destination_url FROM {$this->isolated_prefix}urls ORDER BY id ASC" );
+		$links      = $links_stmt->fetchAll( PDO::FETCH_ASSOC );
+		$this->assertCount( 3, $links );
+
+		$titles = array_column( $links, 'title' );
+		$this->assertContains( 'Welcome to PeakURL', $titles );
+		$this->assertContains( 'PeakURL Documentation', $titles );
+		$this->assertContains( 'PeakURL Blog', $titles );
+
+		foreach ( $links as $link ) {
+			$this->assertNotEmpty( $link['short_code'] );
+			$this->assertSame( $link['short_code'], $link['alias'] );
+			$this->assertNotContains( $link['alias'], array( 'welcome', 'docs', 'blog', 'founder' ) );
+		}
+
+		$destinations = array_column( $links, 'destination_url' );
+		$this->assertContains( 'https://peakurl.org/?utm_source=peakurl&utm_medium=installation&utm_campaign=welcome', $destinations );
+		$this->assertContains( 'https://peakurl.org/docs/?utm_source=peakurl&utm_medium=installation&utm_campaign=documentation', $destinations );
+		$this->assertContains( 'https://peakurl.org/blog/?utm_source=peakurl&utm_medium=installation&utm_campaign=blog', $destinations );
 	}
 
 	public function test_missing_owner_config_fails_cleanly(): void {

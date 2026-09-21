@@ -1,6 +1,12 @@
 export { getFaviconPreviewUrl, getManagedFaviconUrl } from "./favicon";
 export type { ManagedFaviconAsset } from "./favicon";
-export { getShortUrl, getSiteUrl, getLinkHost } from "./linkHelpers";
+export {
+	getShortUrl,
+	getSiteUrl,
+	getLinkHost,
+	getLinkExpirationState,
+} from "./linkHelpers";
+export type { LinkExpirationState } from "./linkHelpers";
 export {
 	decodeHtmlEntities,
 	getLinkDisplayTitle,

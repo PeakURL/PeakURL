@@ -1,4 +1,5 @@
 import { PEAKURL_URL } from "@constants";
+import { formatRelativeTime } from "@/shared/dates";
 import { getStringRecordValue, isObjectRecord } from "@/shared/errors";
 import type { ShortUrlLinkLike } from "./types";
 
@@ -86,4 +87,45 @@ export const getShortUrl = (link?: ShortUrlLinkLike | null): string => {
 
 	/* Construct the short URL by appending the alias to the base origin. */
 	return code ? `${base}/${code}` : base;
+};
+
+export interface LinkExpirationState {
+	isExpired: boolean;
+	relativeTime: string;
+}
+
+/**
+ * Derive link expiration state and human-readable remaining time.
+ *
+ * @param link - The link record containing status and expiration timestamp.
+ * @param now  - Reference date for relative time calculation (defaults to current instant).
+ * @return Expiration status and relative time description.
+ */
+export const getLinkExpirationState = (
+	link?: { status?: string | null; expiresAt?: string | null } | null,
+	now: Date = new Date()
+): LinkExpirationState => {
+	if (!link?.expiresAt) {
+		return {
+			isExpired: "expired" === link?.status,
+			relativeTime: "",
+		};
+	}
+
+	const expiresAtDate = new Date(link.expiresAt);
+	const hasValidDate = !Number.isNaN(expiresAtDate.getTime());
+	const isPastExpiration =
+		hasValidDate && expiresAtDate.getTime() <= now.getTime();
+	const isExpired = "expired" === link.status || isPastExpiration;
+
+	const relativeTime =
+		hasValidDate && !isExpired
+			? formatRelativeTime(expiresAtDate, {
+					style: "long",
+					numeric: "always",
+					now,
+				})
+			: "";
+
+	return { isExpired, relativeTime };
 };

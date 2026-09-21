@@ -130,6 +130,14 @@ class Service {
 	private array $config;
 
 	/**
+	 * Canonical link creator domain service.
+	 *
+	 * @var Creator
+	 * @since 1.7.0
+	 */
+	private Creator $creator;
+
+	/**
 	 * Create a new Link service instance.
 	 *
 	 * @param Repository           $data              Repository handler.
@@ -169,6 +177,7 @@ class Service {
 		$this->roles             = $roles;
 		$this->authorization     = $authorization;
 		$this->config            = $config;
+		$this->creator           = new Creator( $data, $validator, $settings_api, $social_preview );
 	}
 
 	/**
@@ -487,6 +496,28 @@ class Service {
 	 * @param Request              $request Incoming HTTP request.
 	 * @param array<string, mixed> $payload Creation payload.
 	 * @return array<string, mixed> Formatted created URL.
+	/**
+	 * Create a new short link record using canonical generation, validation, and persistence.
+	 *
+	 * Shared by interactive HTTP creation and system/install starter link creation.
+	 *
+	 * @param array<string, mixed> $payload Raw link payload.
+	 * @param int|string           $user_id Owner user ID.
+	 * @return array<string, mixed> Formatted link row.
+	 *
+	 * @throws ApiException On validation failure (422).
+	 * @since 1.7.0
+	 */
+	public function create_link_record( array $payload, $user_id ): array {
+		return $this->creator->create_link_record( $payload, $user_id );
+	}
+
+	/**
+	 * Create a new short URL.
+	 *
+	 * @param Request              $request Incoming HTTP request.
+	 * @param array<string, mixed> $payload Request body.
+	 * @return array<string, mixed> Created URL payload.
 	 *
 	 * @throws ApiException On validation failure (422).
 	 * @since 1.0.0
@@ -499,45 +530,11 @@ class Service {
 			__( 'You do not have permission to create links.', 'peakurl' ),
 		);
 
-		$payload         = $this->filter_link_payload(
+		$payload           = $this->filter_link_payload(
 			'pre_create_link',
 			$payload,
 			$request,
 			$user,
-		);
-		$destination_url = $this->validator->clean_destination(
-			$payload['destinationUrl'] ?? '',
-		);
-
-		$alias             = $this->validator->sanitize_code(
-			(string) ( $payload['alias'] ?? '' ),
-		);
-		$uses_custom_alias = '' !== $alias;
-
-		if ( '' === $alias ) {
-			$alias = $this->generate_short_code();
-		}
-
-		$this->validator->validate_alias(
-			$alias,
-			'',
-			fn( string $code ): bool => $this->data->short_code_exists( $code ),
-		);
-
-		$title = $this->get_url_title(
-			$payload['title'] ?? '',
-			$alias,
-			$uses_custom_alias,
-		);
-
-		$id                = Str::random_id();
-		$now               = Date::now();
-		$password          = $this->validator->sanitize_link_password(
-			$payload['password'] ?? '',
-		);
-		$social_preview    = $this->validator->normalize_link_social_preview(
-			$payload,
-			$this->social_preview,
 		);
 		$social_image_file = $request->get_file( 'socialImage' );
 		$social_image_url  = $this->validator->normalize_link_social_image_url(
@@ -560,77 +557,45 @@ class Service {
 
 		if ( $has_social_upload ) {
 			try {
-				$social_image_path = $this->social_preview->save_link_image(
-					$id,
+				$social_image_path          = $this->social_preview->save_link_image(
+					Str::random_id(),
 					$social_image_file,
 					false,
 					'',
 				);
+				$payload['socialImagePath'] = $social_image_path;
 			} catch ( \RuntimeException $exception ) {
 				throw new ApiException( $exception->getMessage(), 422 );
 			}
 		}
 
 		try {
-			$this->data->insert_url(
-				array(
-					'id'                 => $id,
-					'user_id'            => $user['id'],
-					'short_code'         => $alias,
-					'alias'              => $alias,
-					'title'              => '' !== $title ? $title : null,
-					'destination_url'    => $destination_url,
-					'social_title'       => $social_preview['title'],
-					'social_description' => $social_preview['description'],
-					'social_image_path'  => $social_image_path,
-					'social_image_url'   => $social_image_url,
-					'password_value'     => '' !== $password
-						? $this->validator->hash_link_password( $password )
-						: null,
-					'expires_at'         => $this->validator->normalize_datetime(
-						$payload['expiresAt'] ?? null,
-					),
-					'status'             => $this->validator->normalize_url_status(
-						(string) ( $payload['status'] ?? 'active' ),
-					),
-					'utm_source'         => ! empty( $payload['utmSource'] ) ? trim( (string) $payload['utmSource'] ) : null,
-					'utm_medium'         => ! empty( $payload['utmMedium'] ) ? trim( (string) $payload['utmMedium'] ) : null,
-					'utm_campaign'       => ! empty( $payload['utmCampaign'] ) ? trim( (string) $payload['utmCampaign'] ) : null,
-					'utm_term'           => ! empty( $payload['utmTerm'] ) ? trim( (string) $payload['utmTerm'] ) : null,
-					'utm_content'        => ! empty( $payload['utmContent'] ) ? trim( (string) $payload['utmContent'] ) : null,
-					'created_at'         => $now,
-					'updated_at'         => $now,
-				),
-			);
+			$url = $this->create_link_record( $payload, $user['id'] );
 		} catch ( \Throwable $exception ) {
-			$this->social_preview->delete_link_image( $social_image_path );
+			if ( null !== $social_image_path ) {
+				$this->social_preview->delete_link_image( $social_image_path );
+			}
 			throw $exception;
 		}
 
-		$link_title = ! empty( $title ) ? $title : '/' . $alias;
+		$link_title = ! empty( $url['title'] ) ? $url['title'] : '/' . ( $url['alias'] ?? $url['shortCode'] ?? '' );
 
 		$this->analytics_service->record_activity(
 			'link_created',
 			'Created new link "' . $link_title . '"',
 			(string) $user['id'],
-			$id,
+			(string) $url['id'],
 			array(
 				'link' => $this->get_link_activity_meta(
 					array(
-						'id'         => $id,
-						'title'      => $title,
-						'alias'      => $alias,
-						'short_code' => $alias,
+						'id'         => $url['id'],
+						'title'      => $url['title'] ?? '',
+						'alias'      => $url['alias'] ?? '',
+						'short_code' => $url['shortCode'] ?? '',
 					),
 				),
 			),
 		);
-
-		$url = $this->format_url( $this->data->find_url_row( $id ) );
-
-		$this->invalidate_link_cache( (string) ( $url['shortCode'] ?? '' ) );
-		$this->invalidate_link_cache( (string) ( $url['alias'] ?? '' ) );
-		$this->invalidate_link_cache( (string) ( $url['id'] ?? '' ) );
 
 		/**
 		 * Fires after a short link has been created.
@@ -1775,12 +1740,8 @@ class Service {
 	 * @return string
 	 * @since 1.0.0
 	 */
-	private function generate_short_code(): string {
-		do {
-			$code = substr( bin2hex( random_bytes( 4 ) ), 0, 6 );
-		} while ( $this->data->short_code_exists( $code ) );
-
-		return $code;
+	public function generate_short_code(): string {
+		return $this->creator->generate_short_code();
 	}
 
 	/**

@@ -1,4 +1,4 @@
-import { getActiveTimeZone } from "@/shared/dates";
+import { getSiteTimeZone } from "@/shared/dates";
 
 /**
  * Breakdown of date and time components.
@@ -29,7 +29,9 @@ function padDatePart(value: number): string {
  * @return The parsed parts or null if invalid.
  */
 function parseLocalDateTimeValue(value: string): DateTimeParts | null {
-	const match = value.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/);
+	const match = value.match(
+		/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?$/
+	);
 
 	if (!match) {
 		return null;
@@ -41,20 +43,24 @@ function parseLocalDateTimeValue(value: string): DateTimeParts | null {
 		day: Number(match[3]),
 		hour: Number(match[4]),
 		minute: Number(match[5]),
-		second: 0,
+		second: Number(match[6] || 0),
 	};
 }
 
 /**
- * Extract date parts in the active site time zone.
+ * Extract date parts in the given time zone (defaults to site time zone).
  *
- * @param date - The Date object to format.
+ * @param date     - The Date object to format.
+ * @param timeZone - The IANA time zone identifier.
  * @return The zoned parts or null if Intl fails.
  */
-function getZonedParts(date: Date): DateTimeParts | null {
+function getZonedParts(
+	date: Date,
+	timeZone: string = getSiteTimeZone()
+): DateTimeParts | null {
 	try {
 		const parts = new Intl.DateTimeFormat("en-US", {
-			timeZone: getActiveTimeZone(),
+			timeZone,
 			year: "numeric",
 			month: "2-digit",
 			day: "2-digit",
@@ -81,13 +87,17 @@ function getZonedParts(date: Date): DateTimeParts | null {
 }
 
 /**
- * Calculate the offset between UTC and the site time zone in milliseconds.
+ * Calculate the offset between UTC and the target time zone in milliseconds.
  *
- * @param date - The reference date.
+ * @param date     - The reference date.
+ * @param timeZone - The IANA time zone identifier.
  * @return The offset in milliseconds.
  */
-function getTimeZoneOffsetMs(date: Date): number {
-	const parts = getZonedParts(date);
+function getTimeZoneOffsetMs(
+	date: Date,
+	timeZone: string = getSiteTimeZone()
+): number {
+	const parts = getZonedParts(date, timeZone);
 
 	/* Fall back to the local browser offset if zoning fails. */
 	if (!parts) {
@@ -123,11 +133,15 @@ function toDateInputValue(parts: DateTimeParts): string {
 /**
  * Format a date as a site-timezone `YYYY-MM-DD` value for date inputs.
  *
- * @param date - The Date object.
+ * @param date     - The Date object.
+ * @param timeZone - Optional IANA time zone identifier.
  * @return The formatted date string.
  */
-export function getLocalDateValue(date: Date = new Date()): string {
-	const parts = getZonedParts(date);
+export function getLocalDateValue(
+	date: Date = new Date(),
+	timeZone: string = getSiteTimeZone()
+): string {
+	const parts = getZonedParts(date, timeZone);
 
 	if (!parts) {
 		const offset = date.getTimezoneOffset() * 60000;
@@ -142,11 +156,15 @@ export function getLocalDateValue(date: Date = new Date()): string {
 /**
  * Format a date as a site-timezone `YYYY-MM-DDTHH:mm` datetime-local value.
  *
- * @param date - The Date object.
+ * @param date     - The Date object.
+ * @param timeZone - Optional IANA time zone identifier.
  * @return The formatted datetime-local string.
  */
-export function getLocalDateTimeValue(date: Date = new Date()): string {
-	const parts = getZonedParts(date);
+export function getLocalDateTimeValue(
+	date: Date = new Date(),
+	timeZone: string = getSiteTimeZone()
+): string {
+	const parts = getZonedParts(date, timeZone);
 
 	if (!parts) {
 		const offset = date.getTimezoneOffset() * 60000;
@@ -162,9 +180,13 @@ export function getLocalDateTimeValue(date: Date = new Date()): string {
  * Convert an ISO-like date string into a site-timezone datetime-local value.
  *
  * @param dateString - The raw date string.
+ * @param timeZone   - Optional IANA time zone identifier.
  * @return The formatted datetime-local value or an empty string.
  */
-export function toLocalDateTimeValue(dateString?: string | null): string {
+export function toLocalDateTimeValue(
+	dateString?: string | null,
+	timeZone: string = getSiteTimeZone()
+): string {
 	if (!dateString) {
 		return "";
 	}
@@ -175,17 +197,19 @@ export function toLocalDateTimeValue(dateString?: string | null): string {
 		return "";
 	}
 
-	return getLocalDateTimeValue(date);
+	return getLocalDateTimeValue(date, timeZone);
 }
 
 /**
  * Convert a site-timezone datetime-local input value into an ISO string.
  *
  * @param localDateTime - The datetime-local string.
+ * @param timeZone      - Optional IANA time zone identifier.
  * @return The ISO string or null.
  */
 export function toIsoFromLocalDateTime(
-	localDateTime?: string | null
+	localDateTime?: string | null,
+	timeZone: string = getSiteTimeZone()
 ): string | null {
 	if (!localDateTime) {
 		return null;
@@ -202,16 +226,17 @@ export function toIsoFromLocalDateTime(
 		parts.month - 1,
 		parts.day,
 		parts.hour,
-		parts.minute
+		parts.minute,
+		parts.second
 	);
 
 	/*
 	 * Iteratively resolve the UTC timestamp from the local wall-clock time
 	 * by accounting for the time zone offset at the resulting instant.
 	 */
-	const offset = getTimeZoneOffsetMs(new Date(localUtcTime));
+	const offset = getTimeZoneOffsetMs(new Date(localUtcTime), timeZone);
 	const firstPassTime = localUtcTime - offset;
-	const secondOffset = getTimeZoneOffsetMs(new Date(firstPassTime));
+	const secondOffset = getTimeZoneOffsetMs(new Date(firstPassTime), timeZone);
 	const timeValue =
 		secondOffset === offset ? firstPassTime : localUtcTime - secondOffset;
 
@@ -224,14 +249,18 @@ export function toIsoFromLocalDateTime(
  * Determine whether a datetime-local value resolves to a future instant.
  *
  * @param localDateTime - The datetime-local string.
+ * @param timeZone      - Optional IANA time zone identifier.
  * @return Whether the date is in the future.
  */
-export function isFutureLocalDateTime(localDateTime?: string | null): boolean {
+export function isFutureLocalDateTime(
+	localDateTime?: string | null,
+	timeZone: string = getSiteTimeZone()
+): boolean {
 	if (!localDateTime) {
 		return true;
 	}
 
-	const isoDateTime = toIsoFromLocalDateTime(localDateTime);
+	const isoDateTime = toIsoFromLocalDateTime(localDateTime, timeZone);
 
 	if (!isoDateTime) {
 		return false;

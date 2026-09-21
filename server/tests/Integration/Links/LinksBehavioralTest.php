@@ -488,4 +488,51 @@ class LinksBehavioralTest extends TestCase {
 
 		$this->links_controller->create( $request );
 	}
+
+	public function test_public_link_access_evaluates_past_expiration_as_expired(): void {
+		$past_instant = gmdate( 'Y-m-d H:i:s', time() - 3600 );
+		$link_row     = array(
+			'id'              => 'url_past_exp',
+			'alias'           => 'expired-link',
+			'short_code'      => 'expired-link',
+			'destination_url' => 'https://example.com/expired-target',
+			'status'          => 'active',
+			'expires_at'      => $past_instant,
+			'password_value'  => null,
+		);
+
+		$this->repository->method( 'find_link_access_row' )
+			->with( 'expired-link' )
+			->willReturn( $link_row );
+
+		$request = new Request( 'GET', '/expired-link', array(), array() );
+		$result  = $this->links_service->get_link_access( 'expired-link', $request );
+
+		$this->assertSame( 'expired', $result['status'] );
+		$this->assertSame( $link_row, $result['url'] );
+	}
+
+	public function test_public_link_access_evaluates_future_expiration_as_available(): void {
+		$future_instant = gmdate( 'Y-m-d H:i:s', time() + 3600 );
+		$link_row       = array(
+			'id'              => 'url_future_exp',
+			'alias'           => 'active-future-link',
+			'short_code'      => 'active-future-link',
+			'destination_url' => 'https://example.com/future-target',
+			'status'          => 'active',
+			'expires_at'      => $future_instant,
+			'password_value'  => null,
+		);
+
+		$this->repository->method( 'find_link_access_row' )
+			->with( 'active-future-link' )
+			->willReturn( $link_row );
+
+		$request = new Request( 'GET', '/active-future-link', array(), array() );
+		$result  = $this->links_service->get_link_access( 'active-future-link', $request );
+
+		$this->assertNotSame( 'expired', $result['status'] );
+		$this->assertSame( 'redirect', $result['status'] );
+		$this->assertSame( 'https://example.com/future-target', $result['location'] );
+	}
 }

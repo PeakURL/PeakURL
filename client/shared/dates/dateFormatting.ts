@@ -8,8 +8,8 @@ const DAY_MS = 24 * HOUR_MS;
 const WEEK_MS = 7 * DAY_MS;
 
 /* Thresholds for relative time unit promotion. */
-const SECOND_TO_MINUTE_THRESHOLD = 45;
-const MINUTE_TO_HOUR_THRESHOLD = 45;
+const SECOND_TO_MINUTE_THRESHOLD = 60;
+const MINUTE_TO_HOUR_THRESHOLD = 60;
 const HOUR_TO_DAY_THRESHOLD = 22;
 const DAY_TO_WEEK_THRESHOLD = 6;
 const WEEK_TO_MONTH_THRESHOLD = 4;
@@ -98,12 +98,12 @@ export function getActiveLocale(data?: PeakURLData): string {
 }
 
 /**
- * Resolve the active time zone from the environment.
+ * Resolve the configured site time zone from the environment.
  *
  * @param data - Optional app data to avoid redundant parsing.
  * @return The IANA time zone identifier.
  */
-export function getActiveTimeZone(data?: PeakURLData): string {
+export function getSiteTimeZone(data?: PeakURLData): string {
 	const peakurlData = data ?? getPeakURLData();
 	const timezone = getDataString(peakurlData.timezone);
 
@@ -182,7 +182,7 @@ function createDateTimeOptions(
 	const timeFormat = getActiveTimeFormat(data);
 	const includeSeconds = shouldIncludeSeconds(options);
 	const dateOptions: Intl.DateTimeFormatOptions = {
-		timeZone: getActiveTimeZone(data),
+		timeZone: options.timeZone || getSiteTimeZone(data),
 		...(hasDateTimeDisplayOption(options)
 			? options
 			: { dateStyle: "medium", timeStyle: "medium" }),
@@ -206,13 +206,13 @@ function createDateTimeOptions(
 /**
  * Return a YYYY-MM-DD key for a date in the active time zone.
  *
- * @param value - The raw date value.
- * @return The zoned date key string.
+ * @param date - The Date object or ISO string.
+ * @return The YYYY-MM-DD formatted string, or empty if invalid.
  */
 export function getZonedDateKey(
-	value: string | number | Date | null | undefined
+	date: Date | string | null | undefined
 ): string {
-	const targetDate = toDate(value);
+	const targetDate = toDate(date);
 
 	if (!targetDate) {
 		return "";
@@ -223,7 +223,7 @@ export function getZonedDateKey(
 	try {
 		/* Use Intl to extract date parts in the target time zone. */
 		const parts = new Intl.DateTimeFormat("en-US", {
-			timeZone: getActiveTimeZone(peakurlData),
+			timeZone: getSiteTimeZone(peakurlData),
 			year: "numeric",
 			month: "2-digit",
 			day: "2-digit",
@@ -399,17 +399,19 @@ function getRelativeUnit(targetDate: Date, nowDate: Date) {
 	const deltaMs = targetDate.getTime() - nowDate.getTime();
 	const absoluteDeltaMs = Math.abs(deltaMs);
 
-	if (absoluteDeltaMs < SECOND_TO_MINUTE_THRESHOLD * SECOND_MS) {
+	const seconds = Math.round(deltaMs / SECOND_MS);
+	if (Math.abs(seconds) < SECOND_TO_MINUTE_THRESHOLD) {
 		return {
 			unit: "second" as const,
-			value: Math.round(deltaMs / SECOND_MS),
+			value: seconds,
 		};
 	}
 
-	if (absoluteDeltaMs < MINUTE_TO_HOUR_THRESHOLD * MINUTE_MS) {
+	const minutes = Math.round(deltaMs / MINUTE_MS);
+	if (Math.abs(minutes) < MINUTE_TO_HOUR_THRESHOLD) {
 		return {
 			unit: "minute" as const,
-			value: Math.round(deltaMs / MINUTE_MS),
+			value: minutes,
 		};
 	}
 

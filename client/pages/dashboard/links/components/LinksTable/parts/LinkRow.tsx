@@ -13,7 +13,7 @@ import {
 
 import { __, sprintf } from "@/i18n";
 import { formatLocalizedDateTime, formatRelativeTime } from "@/shared/dates";
-import { getLinkDisplayTitle } from "@/shared/links";
+import { getLinkDisplayTitle, getLinkExpirationState } from "@/shared/links";
 
 import type { LinkRowProps } from "../types";
 
@@ -44,37 +44,37 @@ function LinkRow({
 	const canTrash = canTrashLinks && (canDeleteLinks || isOwner);
 	const canPermanentDelete = canDeleteLinks;
 	const canDelete = isTrashed ? canPermanentDelete : canTrash;
+	const { isExpired: isExpiredLink, relativeTime: expirationRelativeTime } =
+		getLinkExpirationState(link);
 	const statusLabel = isTrashed
 		? __("Trashed")
-		: "active" === link.status
-			? __("Active")
-			: "inactive" === link.status
-				? __("Inactive")
-				: "expired" === link.status
-					? __("Expired")
-					: __("Unknown");
+		: isExpiredLink
+			? __("Expired")
+			: "active" === link.status
+				? __("Active")
+				: "inactive" === link.status
+					? __("Inactive")
+					: "expired" === link.status
+						? __("Expired")
+						: __("Unknown");
 	const statusColorClass = isTrashed
 		? "text-warning"
-		: "active" === link.status
-			? "text-success"
-			: "expired" === link.status
-				? "text-error"
-				: "text-text-muted";
+		: isExpiredLink
+			? "text-error"
+			: "active" === link.status
+				? "text-success"
+				: "expired" === link.status
+					? "text-error"
+					: "text-text-muted";
 	const statusDotClass = isTrashed
 		? "bg-warning"
-		: "active" === link.status
-			? "bg-success"
-			: "expired" === link.status
-				? "bg-error"
-				: "bg-stroke";
-	const expiresAtDate = link.expiresAt ? new Date(link.expiresAt) : null;
-	const isExpiredLink = "expired" === link.status;
-	const expirationRelativeTime = expiresAtDate
-		? formatRelativeTime(expiresAtDate, {
-				style: "long",
-				numeric: "always",
-			})
-		: "";
+		: isExpiredLink
+			? "bg-error"
+			: "active" === link.status
+				? "bg-success"
+				: "expired" === link.status
+					? "bg-error"
+					: "bg-stroke";
 
 	return (
 		<tr
@@ -158,12 +158,16 @@ function LinkRow({
 									className="links-row-badge-copy"
 									dir="auto"
 								>
-									{isExpiredLink
-										? __("Expired")
-										: __("Expires")}{" "}
-									<bdi className="links-row-badge-time">
-										{expirationRelativeTime}
-									</bdi>
+									{isExpiredLink ? (
+										__("Expired")
+									) : (
+										<>
+											{__("Expires")}{" "}
+											<bdi className="links-row-badge-time">
+												{expirationRelativeTime}
+											</bdi>
+										</>
+									)}
 								</span>
 							</span>
 						)}

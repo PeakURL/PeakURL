@@ -10,15 +10,21 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\Install;
 
+use PeakURL\Api\LinksApi;
 use PeakURL\Api\SettingsApi;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Errors\ApiException;
+use PeakURL\Features\Links\Creator;
+use PeakURL\Features\Links\Repository as LinksRepository;
+use PeakURL\Features\Links\Service as LinksService;
+use PeakURL\Features\Links\Validator as LinksValidator;
 use PeakURL\Services\Database\Connection;
 use PeakURL\Services\Database\PeakURL_DB;
 use PeakURL\Services\Database\Schema as DatabaseSchema;
 use PeakURL\Services\I18n;
 use PeakURL\Services\Mailer;
 use PeakURL\Services\Notifications;
+use PeakURL\Services\SocialPreview;
 use PeakURL\Utils\Date;
 use PeakURL\Utils\Str;
 
@@ -138,6 +144,8 @@ class Initializer {
 				array( 'id' => 'ASC' ),
 			);
 
+			$is_fresh_install = false;
+
 			if ( ! $owner ) {
 				$has_install_data = '' !== trim( (string) ( $config[ Constants::OWNER_USERNAME ] ?? '' ) ) &&
 					'' !== trim( (string) ( $config[ Constants::OWNER_EMAIL ] ?? '' ) ) &&
@@ -180,6 +188,8 @@ class Initializer {
 					'SELECT * FROM users WHERE id = :id',
 					array( 'id' => $db->insert_id() )
 				);
+
+				$is_fresh_install = true;
 			}
 
 			if ( ! $owner ) {
@@ -189,6 +199,10 @@ class Initializer {
 			}
 
 			self::save_install_options( $db, $config );
+
+			if ( $is_fresh_install ) {
+				self::initialize_starter_links( $db, $owner );
+			}
 
 			$db->commit();
 			$bootstrapped = true;
@@ -247,6 +261,88 @@ class Initializer {
 		if ( null === $settings_api->get_option( 'installation_id' ) ) {
 			$settings_api->update_option( 'installation_id', Str::uuid(), $now, false );
 		}
+	}
+
+	/**
+	 * Initialize default starter links once for brand-new installations.
+	 *
+	 * @param PeakURL_DB         $db            Database wrapper.
+	 * @param array<string, mixed> $owner        Site owner row.
+	 * @param LinksService|null  $links_service Optional links domain service.
+	 * @return void
+	 * @since 1.7.0
+	 */
+	public static function initialize_starter_links(
+		PeakURL_DB $db,
+		array $owner,
+		?LinksService $links_service = null
+	): void {
+		if ( ! $db->table_exists( 'urls' ) || ! $db->table_exists( 'settings' ) ) {
+			return;
+		}
+
+		$owner_id = (int) ( $owner['id'] ?? 0 );
+		if ( $owner_id <= 0 ) {
+			return;
+		}
+
+		$settings_api = new SettingsApi( $db );
+		if ( null !== $settings_api->get_option( 'starter_links_initialized_at' ) ) {
+			return;
+		}
+
+		$creator = null;
+		if ( ! $links_service ) {
+			$links_api  = new LinksApi( $db );
+			$repository = new LinksRepository( $db, $links_api );
+			$validator  = new LinksValidator();
+			$creator    = new Creator(
+				$repository,
+				$validator,
+				$settings_api,
+				new SocialPreview( array(), $settings_api )
+			);
+		}
+
+		$starter_links = array(
+			array(
+				'title'          => 'Welcome to PeakURL',
+				'destinationUrl' => 'https://peakurl.org/?utm_source=peakurl&utm_medium=installation&utm_campaign=welcome',
+				'utmSource'      => 'peakurl',
+				'utmMedium'      => 'installation',
+				'utmCampaign'    => 'welcome',
+			),
+			array(
+				'title'          => 'PeakURL Documentation',
+				'destinationUrl' => 'https://peakurl.org/docs/?utm_source=peakurl&utm_medium=installation&utm_campaign=documentation',
+				'utmSource'      => 'peakurl',
+				'utmMedium'      => 'installation',
+				'utmCampaign'    => 'documentation',
+			),
+			array(
+				'title'          => 'PeakURL Blog',
+				'destinationUrl' => 'https://peakurl.org/blog/?utm_source=peakurl&utm_medium=installation&utm_campaign=blog',
+				'utmSource'      => 'peakurl',
+				'utmMedium'      => 'installation',
+				'utmCampaign'    => 'blog',
+			),
+		);
+
+		foreach ( $starter_links as $link ) {
+			if ( $links_service ) {
+				$links_service->create_link_record( $link, $owner_id );
+			} else {
+				$creator->create_link_record( $link, $owner_id );
+			}
+		}
+
+		$now = Date::now();
+		$settings_api->update_option(
+			'starter_links_initialized_at',
+			$now,
+			$now,
+			false
+		);
 	}
 
 	/**

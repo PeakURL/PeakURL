@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\Update;
 
+use PeakURL\Api\SettingsApi;
+use PeakURL\Services\Database\PeakURL_DB;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -68,14 +71,22 @@ class Manager {
 	/**
 	 * Create a new dashboard updater service.
 	 *
-	 * @param array<string, mixed> $config Shared runtime configuration.
+	 * @param array<string, mixed> $config       Shared runtime configuration.
+	 * @param SettingsApi          $settings_api Settings API instance.
+	 * @param PeakURL_DB           $db           Shared database wrapper.
 	 * @since 1.0.14
+	 * @since 1.7.0 Added $settings_api and $db dependencies.
 	 */
-	public function __construct( array $config ) {
+	public function __construct(
+		array $config,
+		SettingsApi $settings_api,
+		PeakURL_DB $db
+	) {
 		$filesystem      = new Filesystem();
 		$this->context   = new Context( $config, $filesystem );
 		$client          = new Client( $this->context );
-		$this->manifest  = new Manifest( $this->context, $client );
+		$metadata        = new Metadata( $this->context, $settings_api, $db );
+		$this->manifest  = new Manifest( $this->context, $client, $metadata );
 		$this->workspace = new Workspace( $this->context, $filesystem );
 		$this->status    = new Status(
 			$this->context,

@@ -115,7 +115,7 @@ $webhooks_service = new WebhooksService(
 	$config
 );
 
-$update_manager = new UpdateManager( $config );
+$update_manager = new UpdateManager( $config, $settings_api, $db );
 
 $social_preview    = new SocialPreview( $config, $settings_api );
 $captcha           = new Captcha( $config, $settings_api, $crypto );

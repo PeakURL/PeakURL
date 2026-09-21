@@ -36,6 +36,7 @@ use PeakURL\Services\Mailer;
 use PeakURL\Services\Notifications;
 use PeakURL\Services\SocialPreview;
 use PeakURL\Utils\Date;
+use PeakURL\Utils\Str;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -398,6 +399,10 @@ class Service {
 
 		if ( null === $this->settings_api->get_option( 'installed_at' ) ) {
 			$this->settings_api->update_option( 'installed_at', Date::now(), Date::now(), false );
+		}
+
+		if ( null === $this->settings_api->get_option( 'installation_id' ) ) {
+			$this->settings_api->update_option( 'installation_id', Str::uuid(), Date::now(), false );
 		}
 
 		$this->settings_api->delete_options(

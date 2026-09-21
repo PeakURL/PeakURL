@@ -92,6 +92,26 @@ class Str {
 	}
 
 	/**
+	 * Generate an RFC 4122 compliant version 4 UUID.
+	 *
+	 * @return string Canonical 36-character UUID string.
+	 * @since 1.7.0
+	 */
+	public static function uuid(): string {
+		$bytes = random_bytes( 16 );
+
+		// Set version to 0100 (version 4).
+		$bytes[6] = chr( ( ord( $bytes[6] ) & 0x0f ) | 0x40 );
+		// Set variant to 10xx (RFC 4122).
+		$bytes[8] = chr( ( ord( $bytes[8] ) & 0x3f ) | 0x80 );
+
+		return vsprintf(
+			'%s%s-%s-%s-%s-%s%s%s',
+			str_split( bin2hex( $bytes ), 4 ),
+		);
+	}
+
+	/**
 	 * Cast a mixed value to a nullable trimmed string.
 	 *
 	 * @param mixed $value Input value.

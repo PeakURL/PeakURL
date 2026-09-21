@@ -12,6 +12,8 @@ namespace PeakURL\Services\Database;
 
 use PeakURL\Database\RepairSpecs;
 use PeakURL\Database\SchemaSpecs;
+use PeakURL\Utils\Date;
+use PeakURL\Utils\Str;
 
 
 // If this file is called directly, abort.
@@ -67,6 +69,47 @@ class Upgrade {
 		$this->normalize_ids( $changes );
 		$this->remove_orphans( $changes );
 		$this->repair_foreign_keys( $changes );
+		$this->backfill_installation_metadata( $changes );
+	}
+
+	/**
+	 * Backfill canonical installation metadata if missing.
+	 *
+	 * Implements the idempotent backfill rules:
+	 * - Case A: Both exist -> preserve both.
+	 * - Case B: installed_at exists, installation_id missing -> preserve installed_at, generate UUID.
+	 * - Case C: installation_id exists, installed_at missing -> preserve installation_id, set upgrade timestamp.
+	 * - Case D: Both missing -> generate UUID, set upgrade timestamp.
+	 *
+	 * @param array<int, string> $changes Applied repair labels.
+	 * @return void
+	 * @since 1.7.0
+	 */
+	private function backfill_installation_metadata( array &$changes ): void {
+		$installed_at    = $this->context->get_option( 'installed_at' );
+		$installation_id = $this->context->get_option( 'installation_id' );
+
+		$has_installed_at    = is_string( $installed_at ) && '' !== trim( $installed_at );
+		$has_installation_id = is_string( $installation_id ) && '' !== trim( $installation_id );
+
+		// Case A: Both exist — preserve both without writing.
+		if ( $has_installed_at && $has_installation_id ) {
+			return;
+		}
+
+		$migration_timestamp = Date::now();
+
+		// Case B & D: installation_id is missing.
+		if ( ! $has_installation_id ) {
+			$this->context->update_option( 'installation_id', Str::uuid(), false );
+			$changes[] = __( 'Backfilled missing installation ID.', 'peakurl' );
+		}
+
+		// Case C & D: installed_at is missing.
+		if ( ! $has_installed_at ) {
+			$this->context->update_option( 'installed_at', $migration_timestamp, false );
+			$changes[] = __( 'Backfilled missing installation timestamp.', 'peakurl' );
+		}
 	}
 
 	/**

@@ -45,22 +45,57 @@ class Client {
 	/**
 	 * Perform an HTTP GET request using the best available transport.
 	 *
-	 * @param string $url    Remote URL.
-	 * @param string $accept Accept header value.
+	 * @param string               $url    Remote URL.
+	 * @param string               $accept Accept header value.
+	 * @param array<string, mixed> $params Optional query parameters.
 	 * @return string Response body.
 	 * @since 1.0.14
+	 * @since 1.7.0 Added $params with RFC 3986 query encoding.
 	 */
-	public function get( string $url, string $accept ): string {
+	public function get( string $url, string $accept, array $params = array() ): string {
 		$url = $this->get_https_url(
 			$url,
 			__( 'remote update URL', 'peakurl' ),
 		);
+		$url = $this->build_url( $url, $params );
 
 		if ( function_exists( 'curl_init' ) ) {
 			return $this->get_curl( $url, $accept );
 		}
 
 		return $this->get_stream( $url, $accept );
+	}
+
+	/**
+	 * Append query parameters to a URL using RFC 3986 encoding.
+	 *
+	 * Preserves existing query strings and places parameters before any fragment.
+	 *
+	 * @param string               $url    Target URL.
+	 * @param array<string, mixed> $params Query parameters.
+	 * @return string Formatted URL.
+	 * @since 1.7.0
+	 */
+	private function build_url( string $url, array $params ): string {
+		if ( empty( $params ) ) {
+			return $url;
+		}
+
+		$fragment = '';
+		$hash_pos = strpos( $url, '#' );
+		if ( false !== $hash_pos ) {
+			$fragment = substr( $url, $hash_pos );
+			$url      = substr( $url, 0, $hash_pos );
+		}
+
+		$query = http_build_query( $params, '', '&', PHP_QUERY_RFC3986 );
+		if ( '' === $query ) {
+			return $url . $fragment;
+		}
+
+		$separator = false !== strpos( $url, '?' ) ? '&' : '?';
+
+		return $url . $separator . $query . $fragment;
 	}
 
 	/**
@@ -270,16 +305,16 @@ class Client {
 	}
 
 	/**
-	 * Get the User-Agent header for update requests.
+	 * Format the User-Agent header for update requests.
 	 *
 	 * @return string
 	 * @since 1.0.14
+	 * @since 1.7.0 Removed site URL suffix.
 	 */
 	private function format_user_agent(): string {
 		return sprintf(
-			'PeakURL/%s; %s',
+			'PeakURL/%s',
 			$this->context->get_current_version(),
-			$this->context->get_site_url(),
 		);
 	}
 }

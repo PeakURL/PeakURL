@@ -277,7 +277,7 @@ class ContentPreservationTest extends TestCase {
 				$this->zip_path = $zip_path;
 			}
 
-			public function get( string $url, string $accept ): string {
+			public function get( string $url, string $accept, array $params = array() ): string {
 				return (string) file_get_contents( $this->zip_path );
 			}
 
@@ -375,7 +375,7 @@ class ContentPreservationTest extends TestCase {
 				$this->zip_path = $zip_path;
 			}
 
-			public function get( string $url, string $accept ): string {
+			public function get( string $url, string $accept, array $params = array() ): string {
 				return (string) file_get_contents( $this->zip_path );
 			}
 

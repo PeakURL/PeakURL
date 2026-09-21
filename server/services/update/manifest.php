@@ -44,18 +44,30 @@ class Manifest {
 	private Client $client;
 
 	/**
+	 * Shared updater metadata helper.
+	 *
+	 * @var Metadata
+	 * @since 1.7.0
+	 */
+	private Metadata $metadata;
+
+	/**
 	 * Create a new update manifest helper.
 	 *
-	 * @param Context $context Shared updater context helper.
-	 * @param Client  $client  Shared updater HTTP client.
+	 * @param Context  $context  Shared updater context helper.
+	 * @param Client   $client   Shared updater HTTP client.
+	 * @param Metadata $metadata Shared updater metadata helper.
 	 * @since 1.0.14
+	 * @since 1.7.0 Added $metadata dependency.
 	 */
 	public function __construct(
 		Context $context,
-		Client $client
+		Client $client,
+		Metadata $metadata
 	) {
-		$this->context = $context;
-		$this->client  = $client;
+		$this->context  = $context;
+		$this->client   = $client;
+		$this->metadata = $metadata;
 	}
 
 	/**
@@ -120,6 +132,7 @@ class Manifest {
 		$body    = $this->client->get(
 			$this->get_manifest_url(),
 			'application/json',
+			$this->metadata->to_array(),
 		);
 		$payload = json_decode( $body, true );
 

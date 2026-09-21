@@ -216,7 +216,11 @@ class Application {
 			$config,
 			$links_api
 		);
-		$update_manager   = new \PeakURL\Services\Update\Manager( $config );
+		$update_manager   = new \PeakURL\Services\Update\Manager(
+			$config,
+			$settings_api,
+			$db
+		);
 		$scheduler        = SchedulerFactory::create(
 			$db,
 			$config,

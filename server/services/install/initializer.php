@@ -20,6 +20,7 @@ use PeakURL\Services\I18n;
 use PeakURL\Services\Mailer;
 use PeakURL\Services\Notifications;
 use PeakURL\Utils\Date;
+use PeakURL\Utils\Str;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -242,6 +243,9 @@ class Initializer {
 		}
 		if ( null === $settings_api->get_option( 'installed_at' ) ) {
 			$settings_api->update_option( 'installed_at', $now, $now, false );
+		}
+		if ( null === $settings_api->get_option( 'installation_id' ) ) {
+			$settings_api->update_option( 'installation_id', Str::uuid(), $now, false );
 		}
 	}
 

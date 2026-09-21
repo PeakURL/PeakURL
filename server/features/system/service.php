@@ -386,7 +386,7 @@ class Service {
 	 */
 	private function load_update_status( bool $force_check ): array {
 		$settings_api    = $this->settings_api;
-		$update_service  = new UpdateManager( $this->config );
+		$update_service  = new UpdateManager( $this->config, $this->settings_api, $this->db );
 		$manifest_url    = $update_service->get_manifest_url();
 		$last_checked    = $settings_api->get_option( 'update_last_checked_at' );
 		$last_error      = $settings_api->get_option( 'update_last_error' );
@@ -501,7 +501,7 @@ class Service {
 			);
 		}
 
-		$update_service = new UpdateManager( $this->config );
+		$update_service = new UpdateManager( $this->config, $this->settings_api, $this->db );
 		$settings_api   = $this->settings_api;
 
 		try {

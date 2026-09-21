@@ -19,6 +19,7 @@ export default defineConfig({
 	use: {
 		baseURL: process.env.PEAKURL_TEST_URL || "https://peakurl.dev",
 		ignoreHTTPSErrors: true,
+		locale: "en-US",
 		actionTimeout: 15000,
 		navigationTimeout: 60000,
 		trace: "on-first-retry",

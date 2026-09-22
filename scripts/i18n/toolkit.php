@@ -357,11 +357,11 @@ final class I18nToolkit {
 			),
 			array(
 				'type'    => 'plural',
-				'pattern' => '/(?P<fn>_n)\(\s*(?P<single_quote>[\'"])(?P<single>(?:\\\\.|(?!\k<single_quote>).)*)\k<single_quote>\s*,\s*(?P<plural_quote>[\'"])(?P<plural>(?:\\\\.|(?!\k<plural_quote>).)*)\k<plural_quote>\s*,.*?,\s*(?:(?P<domain_quote>[\'"])(?P<domain>(?:\\\\.|(?!\k<domain_quote>).)*)\k<domain_quote>\s*,?)?\s*\)/s',
+				'pattern' => '/(?P<fn>_n)\(\s*(?P<single_quote>[\'"])(?P<single>(?:\\\\.|(?!\k<single_quote>).)*)\k<single_quote>\s*,\s*(?P<plural_quote>[\'"])(?P<plural>(?:\\\\.|(?!\k<plural_quote>).)*)\k<plural_quote>\s*,\s*(?P<count>(?:[^,)]|\([^)]*\))+)(?:\s*,\s*(?P<domain_quote>[\'"])(?P<domain>(?:\\\\.|(?!\k<domain_quote>).)*)\k<domain_quote>)?\s*,?\s*\)/s',
 			),
 			array(
 				'type'    => 'plural_context',
-				'pattern' => '/(?P<fn>_nx)\(\s*(?P<single_quote>[\'"])(?P<single>(?:\\\\.|(?!\k<single_quote>).)*)\k<single_quote>\s*,\s*(?P<plural_quote>[\'"])(?P<plural>(?:\\\\.|(?!\k<plural_quote>).)*)\k<plural_quote>\s*,.*?,\s*(?P<context_quote>[\'"])(?P<context>(?:\\\\.|(?!\k<context_quote>).)*)\k<context_quote>\s*(?:,\s*(?P<domain_quote>[\'"])(?P<domain>(?:\\\\.|(?!\k<domain_quote>).)*)\k<domain_quote>)?\s*,?\s*\)/s',
+				'pattern' => '/(?P<fn>_nx)\(\s*(?P<single_quote>[\'"])(?P<single>(?:\\\\.|(?!\k<single_quote>).)*)\k<single_quote>\s*,\s*(?P<plural_quote>[\'"])(?P<plural>(?:\\\\.|(?!\k<plural_quote>).)*)\k<plural_quote>\s*,\s*(?P<count>(?:[^,)]|\([^)]*\))+)\s*,\s*(?P<context_quote>[\'"])(?P<context>(?:\\\\.|(?!\k<context_quote>).)*)\k<context_quote>\s*(?:,\s*(?P<domain_quote>[\'"])(?P<domain>(?:\\\\.|(?!\k<domain_quote>).)*)\k<domain_quote>)?\s*,?\s*\)/s',
 			),
 		);
 
@@ -544,6 +544,18 @@ final class I18nToolkit {
 			if ( $already_exists ) {
 				$existing = $loader->loadFile( $po_path );
 				$catalog  = $template->mergeWith( $existing, $strategy );
+
+				// Synchronize plural definitions from template to ensure msgid_plural matches current POT.
+				foreach ( $catalog as $entry ) {
+					$template_entry = $template->find( $entry->getContext(), $entry->getOriginal() );
+					if ( null !== $template_entry ) {
+						$template_plural = $template_entry->getPlural();
+						if ( null !== $template_plural && '' !== $template_plural ) {
+							$entry->setPlural( $template_plural );
+						}
+					}
+				}
+
 				++$updated;
 			} else {
 				$catalog = clone $template;
@@ -607,11 +619,15 @@ final class I18nToolkit {
 					: $original;
 
 				if ( null !== $translation->getPlural() ) {
+					$plural_items = array_merge(
+						array( (string) $translation->getTranslation() ),
+						$translation->getPluralTranslations()
+					);
 					$values = array_values(
 						array_filter(
 							array_map(
 								static fn( $value ): string => (string) $value,
-								$translation->getPluralTranslations(),
+								$plural_items,
 							),
 							static fn( string $value ): bool => '' !== $value,
 						),

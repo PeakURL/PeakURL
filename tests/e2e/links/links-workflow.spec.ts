@@ -235,7 +235,7 @@ test.describe("Links Workflow Journeys", () => {
 
 		// 5. Test cancellation of Delete All
 		await deleteAllBtn.click();
-		const deleteAllModal = page.locator(".confirm-dialog-panel");
+		const deleteAllModal = page.locator(".links-modal-panel");
 		await expect(deleteAllModal).toBeVisible();
 		await expect(
 			deleteAllModal.getByRole("heading", { name: /delete all links/i })
@@ -267,7 +267,7 @@ test.describe("Links Workflow Journeys", () => {
 		);
 
 		const confirmDeleteAllBtn = deleteAllModal.getByRole("button", {
-			name: /delete all links/i,
+			name: /delete permanently/i,
 		});
 		await confirmDeleteAllBtn.click();
 

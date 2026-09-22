@@ -64,4 +64,8 @@
 	.settings-performance-help-text {
 		@apply mt-1.5 text-xs text-text-muted;
 	}
+
+	.settings-performance-docs-link {
+		@apply text-accent inline-flex items-center gap-1.5 text-sm font-medium hover:underline;
+	}
 }

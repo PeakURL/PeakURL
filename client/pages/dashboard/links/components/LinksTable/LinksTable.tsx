@@ -3,12 +3,10 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 import { Search, X } from "lucide-react";
 
-import { ConfirmDialog, useNotification } from "@/components";
-import { useClearUrlsMutation } from "@/state/slices/api";
+import { ConfirmDialog } from "@/components";
 import { __ } from "@/i18n";
 import { useAdminAccess } from "@/hooks";
 import { copyToClipboard } from "@/shared/browser";
-import { getErrorMessage } from "@/shared/errors";
 import { formatCount, formatNumber } from "@/shared/formatting";
 import { getShortUrl } from "@/shared/links";
 
@@ -17,6 +15,7 @@ import QRCodeModal from "../QRCodeModal";
 import EditLinkDrawer from "../EditLinkDrawer";
 import DeleteLinkModal from "../DeleteLinkModal";
 import BulkDeleteModal from "../BulkDeleteModal";
+import DeleteAllModal from "../DeleteAllModal";
 import TableHeaderRow from "./parts/TableHeaderRow";
 import LinkRow from "./parts/LinkRow";
 import EmptyState from "./parts/EmptyState";
@@ -50,9 +49,7 @@ const LinksTable = ({
 	const [selectedLink, setSelectedLink] = useState<LinkRecord | null>(null);
 	const [selectedIds, setSelectedIds] = useState<string[]>([]);
 	const [searchParams, setSearchParams] = useSearchParams();
-	const notifications = useNotification();
 	const { canDeleteLinks, canTrashLinks, user } = useAdminAccess();
-	const [clearUrls, { isLoading: isDeletingAll }] = useClearUrlsMutation();
 
 	useEffect(() => {
 		if (!statsShortId) return;
@@ -149,28 +146,6 @@ const LinksTable = ({
 		} catch {}
 	};
 
-	const handleDeleteAll = async () => {
-		if (isDeletingAll) {
-			return;
-		}
-
-		setDeleteAllModalOpen(false);
-		setSelectedIds([]);
-
-		try {
-			await clearUrls().unwrap();
-			notifications.success(
-				__("Links deleted"),
-				__("All links have been removed.")
-			);
-		} catch (err) {
-			notifications.error(
-				__("Unable to delete links"),
-				getErrorMessage(err, __("Failed to delete all links."))
-			);
-		}
-	};
-
 	const hasLinks = links.length > 0;
 	const isSearchActive = Boolean(searchQuery.trim());
 	const displayCount = totalCount;
@@ -227,9 +202,18 @@ const LinksTable = ({
 							<TableHeaderRow
 								selectedCount={selectedIds.length}
 								onSelectAll={handleSelectAll}
-								onBulkDelete={handleBulkDelete}
+								onBulkDelete={
+									(
+										isTrashTab
+											? canDeleteLinks
+											: canTrashLinks || canDeleteLinks
+									)
+										? handleBulkDelete
+										: undefined
+								}
 								onDeleteAll={
-									isTrashTab
+									isTrashTab ||
+									(!canTrashLinks && !canDeleteLinks)
 										? undefined
 										: () => setDeleteAllModalOpen(true)
 								}
@@ -308,23 +292,10 @@ const LinksTable = ({
 				isTrashTab={isTrashTab}
 				onSuccess={handleBulkDeleteSuccess}
 			/>
-			<ConfirmDialog
-				open={deleteAllModalOpen}
-				onClose={() => setDeleteAllModalOpen(false)}
-				title={__("Delete all links")}
-				description={
-					canDeleteLinks
-						? __(
-								"Are you sure you want to delete all links across the site? This action permanently removes them."
-							)
-						: __(
-								"Are you sure you want to move all your links to trash?"
-							)
-				}
-				confirmText={__("Delete all links")}
-				confirmVariant="danger"
-				onConfirm={handleDeleteAll}
-				loading={isDeletingAll}
+			<DeleteAllModal
+				open={deleteAllModalOpen && (canTrashLinks || canDeleteLinks)}
+				setOpen={setDeleteAllModalOpen}
+				onSuccess={() => setSelectedIds([])}
 			/>
 			<ConfirmDialog
 				open={emptyTrashModalOpen}

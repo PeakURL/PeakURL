@@ -59,15 +59,21 @@ class CacheCleanupJob implements JobHandlerInterface {
 
 		if ( 'file' !== $driver_name || ! ( $this->cache instanceof FileCache ) ) {
 			return ExecutionResult::success(
-				sprintf( 'Cache driver "%s" manages expiration automatically; no filesystem sweep required.', $driver_name ),
+				sprintf(
+					'Cache driver "%s" manages expiration automatically; no filesystem sweep required.',
+					$driver_name
+				),
 				array( 'driver' => $driver_name )
 			);
 		}
 
 		$purged_count = $this->cache->purge_expired();
+		$message      = 1 === $purged_count
+			? sprintf( 'Purged %d expired file cache item.', $purged_count )
+			: sprintf( 'Purged %d expired file cache items.', $purged_count );
 
 		return ExecutionResult::success(
-			sprintf( 'Purged %d expired file cache item(s).', $purged_count ),
+			$message,
 			array(
 				'driver'      => 'file',
 				'purgedFiles' => $purged_count,

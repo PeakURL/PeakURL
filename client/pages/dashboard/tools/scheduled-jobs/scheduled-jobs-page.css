@@ -42,6 +42,10 @@
 		@apply mt-1 text-sm leading-relaxed text-text-muted text-start;
 	}
 
+	.scheduled-jobs-page-docs-link {
+		@apply inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline;
+	}
+
 	.scheduled-jobs-page-hero-actions {
 		@apply flex flex-wrap items-center gap-2 sm:gap-2.5 mt-1 shrink-0;
 	}
@@ -195,7 +199,7 @@
 	}
 
 	.scheduled-jobs-th-actions {
-		@apply w-[16%] min-w-44 text-center!;
+		@apply w-[18%] min-w-60 text-start;
 	}
 
 	.scheduled-jobs-table-row {
@@ -235,16 +239,16 @@
 	}
 
 	.scheduled-jobs-cell-actions {
-		@apply whitespace-nowrap text-start min-w-44;
+		@apply whitespace-nowrap text-start min-w-60;
 	}
 
 	/* ─── Action Buttons ─── */
 	.scheduled-jobs-action-history {
-		@apply inline-flex items-center gap-1.5 rounded-lg border border-stroke bg-surface-alt px-2.5 py-1 text-xs font-medium text-heading transition-colors hover:border-accent/40 hover:text-accent focus:outline-none;
+		@apply inline-flex items-center gap-1.5 rounded-lg border border-stroke bg-surface-alt px-2.5 py-1 text-xs font-medium text-heading transition-colors hover:border-accent/40 hover:text-accent focus:outline-none shrink-0 whitespace-nowrap;
 	}
 
 	.scheduled-jobs-action-run {
-		@apply inline-flex items-center justify-center gap-1 w-22 min-w-22;
+		@apply inline-flex items-center justify-center gap-1 shrink-0 whitespace-nowrap;
 	}
 
 	/* ─── Empty State ─── */

@@ -85,7 +85,7 @@ export function BackgroundJobsSummary() {
 		? sprintf(
 				/* translators: 1: job title, 2: relative time */
 				__("%1$s (%2$s)"),
-				summary.nextDueJob.title,
+				__(summary.nextDueJob.title),
 				formatRelativeTimestamp(summary.nextDueJob.nextRunAt)
 			)
 		: __("None pending");

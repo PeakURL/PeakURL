@@ -332,20 +332,26 @@ class Controller extends BaseController {
 	}
 
 	/**
-	 * Delete all accessible URLs.
+	 * Delete or trash all accessible URLs based on the requested mode.
 	 *
-	 * @param Request $request Request.
-	 * @return array<string, mixed> Response with deleted count.
+	 * Expects a body parameter 'mode' of either 'trash' or 'permanent'.
+	 *
+	 * @param Request $request Request with 'mode' body parameter.
+	 * @return array<string, mixed> Response containing the affected count.
 	 * @since 1.5.3
 	 */
 	public function clear( Request $request ): array {
-		$count = $this->links_service->clear_urls( $request );
+		$mode = (string) $request->get_body_param( 'mode', '' );
+
+		$count = $this->links_service->clear_urls( $request, $mode );
 
 		return $this->success_response(
 			array(
-				'deletedCount' => $count,
+				'affectedCount' => $count,
 			),
-			__( 'All links deleted.', 'peakurl' ),
+			'trash' === $mode
+				? __( 'All links moved to trash.', 'peakurl' )
+				: __( 'All links deleted.', 'peakurl' ),
 		);
 	}
 

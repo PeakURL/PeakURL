@@ -13,6 +13,7 @@ import { API_ROUTES } from "@/api";
 import { Button, useNotification } from "@/components";
 import { API_SERVER_BASE_URL } from "@/constants";
 import { __, sprintf } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
 import { useGetUrlsQuery, useLazyGetUrlsExportQuery } from "@/state/slices/api";
 import { formatCount } from "@/shared/formatting";
 import { getErrorMessage } from "@/shared/errors";
@@ -63,6 +64,8 @@ function ExportCard({
 }
 
 function ExportPage() {
+	const isRtl = isDocumentRtl();
+	const direction = isRtl ? "rtl" : "ltr";
 	const notification = useNotification();
 	const [activeFormat, setActiveFormat] = useState<ExportFormat | "">("");
 	const { data: urlsResponse, isLoading: isCountLoading } = useGetUrlsQuery({
@@ -157,6 +160,18 @@ function ExportPage() {
 							"Export your short links dataset in CSV, JSON, or XML formats for offline analysis, migration, or programmatic backups."
 						)}
 					</p>
+					<div className="mt-2">
+						<a
+							href="https://go.peakurl.org/979434"
+							target="_blank"
+							rel="noopener noreferrer"
+							dir={direction}
+							className="export-page-docs-link"
+						>
+							{__("Read documentation")}
+							<ExternalLink size={13} className="shrink-0" />
+						</a>
+					</div>
 				</div>
 			</div>
 
@@ -230,9 +245,9 @@ function ExportPage() {
 						</div>
 					</div>
 					<a
-						href="https://peakurl.org/docs/import-and-export#api-export"
+						href="https://go.peakurl.org/979434"
 						target="_blank"
-						rel="noreferrer"
+						rel="noopener noreferrer"
 						className="shrink-0"
 					>
 						<Button size="sm" icon={ExternalLink}>

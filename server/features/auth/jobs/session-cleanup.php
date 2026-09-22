@@ -90,8 +90,12 @@ class SessionCleanupJob implements JobHandlerInterface {
 			);
 		}
 
+		$message = 1 === $deleted_count
+			? sprintf( 'Pruned %d expired or revoked session.', $deleted_count )
+			: sprintf( 'Pruned %d expired or revoked sessions.', $deleted_count );
+
 		return ExecutionResult::success(
-			sprintf( 'Pruned %d expired or revoked session(s).', $deleted_count ),
+			$message,
 			array( 'deletedSessions' => $deleted_count )
 		);
 	}

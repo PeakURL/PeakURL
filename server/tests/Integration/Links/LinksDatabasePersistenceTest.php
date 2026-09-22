@@ -399,7 +399,7 @@ class LinksDatabasePersistenceTest extends TestCase {
 		$id2 = $res2['body']['data']['id'];
 
 		// Real Delete All request at the HTTP API boundary
-		$del_all_req = $this->admin_request( 'DELETE', '/api/v1/urls' );
+		$del_all_req = $this->admin_request( 'DELETE', '/api/v1/urls', array(), array( 'mode' => 'permanent' ) );
 		$del_all_res = $this->dispatch( $del_all_req );
 
 		$this->assertSame( 200, $del_all_res['status'] );
@@ -431,7 +431,7 @@ class LinksDatabasePersistenceTest extends TestCase {
 		$id    = $res['body']['data']['id'];
 
 		// Unauthenticated Delete All request
-		$unauth_del_all = new Request( 'DELETE', '/api/v1/urls', array(), array() );
+		$unauth_del_all = new Request( 'DELETE', '/api/v1/urls', array(), array( 'mode' => 'trash' ) );
 		$unauth_res     = $this->dispatch( $unauth_del_all );
 		$this->assertSame( 401, $unauth_res['status'] );
 
@@ -604,9 +604,9 @@ class LinksDatabasePersistenceTest extends TestCase {
 		$ed2_id   = $res_ed2['body']['data']['id'];
 
 		// Editor calls Delete All
-		$del_all_res = $this->dispatch( $this->editor_request( 'DELETE', '/api/v1/urls' ) );
+		$del_all_res = $this->dispatch( $this->editor_request( 'DELETE', '/api/v1/urls', array(), array( 'mode' => 'trash' ) ) );
 		$this->assertSame( 200, $del_all_res['status'] );
-		$this->assertSame( 2, $del_all_res['body']['data']['deletedCount'] );
+		$this->assertSame( 2, $del_all_res['body']['data']['affectedCount'] );
 
 		// Editor's active links are moved to TRASH (NOT permanently removed)
 		$stmt = $this->pdo->prepare( 'SELECT COUNT(*) FROM peakurl_urls WHERE id IN (:id1, :id2) AND status = "trashed"' );

@@ -160,6 +160,15 @@ export interface BulkDeleteModalProps {
 }
 
 /**
+ * Props for the delete-all confirmation modal.
+ */
+export interface DeleteAllModalProps {
+	open: boolean;
+	setOpen: (open: boolean) => void;
+	onSuccess?: () => void;
+}
+
+/**
  * Link payload required by the single-delete confirmation modal.
  */
 export interface DeletableLink {

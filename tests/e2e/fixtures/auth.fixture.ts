@@ -55,11 +55,18 @@ export async function loginViaUi(
 	const creds = credentials || getDefaultAdminCredentials();
 	await page.goto("/login", { waitUntil: "domcontentloaded" });
 
-	const identifierInput = page.getByLabel(
-		/email or username|username or email/i
-	);
-	const passwordInput = page.getByLabel(/^password/i);
-	const submitButton = page.getByRole("button", { name: /sign in/i });
+	const identifierInput = page
+		.locator('input[name="identifier"], input[name="username"]')
+		.or(page.getByLabel(/email or username|username or email/i))
+		.first();
+	const passwordInput = page
+		.locator('input[type="password"]')
+		.or(page.getByLabel(/^password/i))
+		.first();
+	const submitButton = page
+		.locator('button[type="submit"]')
+		.or(page.getByRole("button", { name: /sign in/i }))
+		.first();
 
 	await expect(identifierInput).toBeVisible();
 	await identifierInput.fill(creds.identifier);

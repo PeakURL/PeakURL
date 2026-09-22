@@ -174,6 +174,18 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 								"PeakURL sends signed POST requests to your endpoint when selected link events happen."
 							)}
 						</p>
+						<div className="mt-2">
+							<a
+								href="https://go.peakurl.org/5f866a"
+								target="_blank"
+								rel="noopener noreferrer"
+								dir={direction}
+								className="integrations-tab-docs-link"
+							>
+								{__("Read documentation")}
+								<ExternalLink size={13} className="shrink-0" />
+							</a>
+						</div>
 					</div>
 					<div className="flex items-center gap-3">
 						<span className="integrations-tab-status-pill">
@@ -293,14 +305,17 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 
 							<div className="integrations-tab-form-actions">
 								<a
-									href="https://peakurl.org/docs/integrations"
+									href="https://go.peakurl.org/5f866a"
 									target="_blank"
-									rel="noreferrer"
+									rel="noopener noreferrer"
 									dir={direction}
 									className="integrations-tab-docs-link"
 								>
-									{__("Webhook docs")}
-									<ExternalLink size={14} />
+									{__("Read documentation")}
+									<ExternalLink
+										size={13}
+										className="shrink-0"
+									/>
 								</a>
 								<Button
 									size="sm"

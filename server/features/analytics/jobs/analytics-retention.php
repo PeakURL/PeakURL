@@ -149,13 +149,14 @@ class AnalyticsRetentionJob implements JobHandlerInterface {
 				);
 			}
 		}
+		$message = sprintf(
+			'Retention enforced: %1$d trashed links purged, %2$d old clicks purged.',
+			$purged_links,
+			$purged_clicks
+		);
 
 		return ExecutionResult::success(
-			sprintf(
-				'Retention enforced: %d trashed link(s) purged, %d old click(s) purged.',
-				$purged_links,
-				$purged_clicks
-			),
+			$message,
 			array(
 				'purgedTrashedLinks' => $purged_links,
 				'purgedClicks'       => $purged_clicks,

@@ -1,6 +1,6 @@
 import type { SubmitEvent } from "react";
 import { useState } from "react";
-import { AlertCircle, Mail, MailCheck } from "lucide-react";
+import { AlertCircle, ExternalLink, Mail, MailCheck } from "lucide-react";
 
 import { Button, Input, Select, type SelectOption } from "@/components";
 import { __, sprintf } from "@/i18n";
@@ -164,6 +164,18 @@ function EmailDeliveryTab({
 								"PeakURL uses this mail transport for password-reset emails and other account recovery notifications."
 							)}
 						</p>
+						<div className="mt-2">
+							<a
+								href="https://go.peakurl.org/d80593"
+								target="_blank"
+								rel="noopener noreferrer"
+								dir={direction}
+								className="settings-email-docs-link"
+							>
+								{__("Read documentation")}
+								<ExternalLink size={13} className="shrink-0" />
+							</a>
+						</div>
 					</div>
 				</div>
 			</section>

@@ -110,8 +110,12 @@ class ExpiredLinksJob implements JobHandlerInterface {
 				return ExecutionResult::success( 'No expired links due for processing.' );
 			}
 
+			$message = 1 === $expired_count
+				? sprintf( 'Processed %d expired link.', $expired_count )
+				: sprintf( 'Processed %d expired links.', $expired_count );
+
 			return ExecutionResult::success(
-				sprintf( 'Processed %d expired link(s).', $expired_count ),
+				$message,
 				array( 'expiredCount' => $expired_count )
 			);
 		}
@@ -179,9 +183,14 @@ class ExpiredLinksJob implements JobHandlerInterface {
 			}
 		}
 
+		$due_count = count( $ids );
+		$message   = 1 === $due_count
+			? sprintf( 'Processed %d expired link.', $due_count )
+			: sprintf( 'Processed %d expired links.', $due_count );
+
 		return ExecutionResult::success(
-			sprintf( 'Processed %d expired link(s).', count( $ids ) ),
-			array( 'expiredCount' => count( $ids ) )
+			$message,
+			array( 'expiredCount' => $due_count )
 		);
 	}
 }

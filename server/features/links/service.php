@@ -1104,16 +1104,24 @@ class Service {
 			return 0;
 		}
 
-		$is_admin    = $this->roles->is_admin( $user );
-		$allowed_ids = $ids;
-
-		if ( ! $is_admin ) {
+		if ( $force ) {
+			$this->authorization->validate_capability(
+				$user,
+				'delete_links',
+				__( 'You do not have permission to permanently delete links.', 'peakurl' ),
+			);
+		} else {
 			$this->authorization->validate_capability(
 				$user,
 				'trash_links',
 				__( 'You do not have permission to delete links.', 'peakurl' ),
 			);
+		}
 
+		$is_admin    = $this->roles->is_admin( $user );
+		$allowed_ids = $ids;
+
+		if ( ! $is_admin ) {
 			$allowed_ids = $this->data->get_allowed_ids_for_user(
 				$ids,
 				(string) $user['id'],
@@ -1140,7 +1148,7 @@ class Service {
 
 		$permanent = $force || $all_trashed;
 
-		if ( $permanent ) {
+		if ( $permanent && ! $force ) {
 			$this->authorization->validate_capability(
 				$user,
 				'delete_links',
@@ -1352,24 +1360,45 @@ class Service {
 	}
 
 	/**
-	 * Permanently delete all accessible short URLs for the current user.
+	 * Permanently delete or trash all accessible short URLs for the current user.
+	 *
+	 * Requires 'trash_links' capability when mode is 'trash', and 'delete_links'
+	 * capability when mode is 'permanent'.
 	 *
 	 * @param Request $request Incoming HTTP request.
-	 * @return int Number of deleted URLs.
+	 * @param string  $mode    Operation mode: 'trash' or 'permanent'.
+	 * @return int Number of affected URLs.
+	 * @throws ApiException When unauthenticated, unauthorized for the mode, or mode is invalid.
 	 * @since 1.5.3
 	 */
-	public function clear_urls( Request $request ): int {
+	public function clear_urls( Request $request, string $mode ): int {
 		$user = $this->auth_service->get_current_user( $request );
 
-		$this->authorization->validate_capability(
-			$user,
-			'trash_links',
-			__( 'You do not have permission to delete links.', 'peakurl' ),
-		);
+		if ( ! in_array( $mode, array( 'trash', 'permanent' ), true ) ) {
+			throw new ApiException(
+				__( 'Invalid delete mode.', 'peakurl' ),
+				400
+			);
+		}
 
-		$is_admin = $this->roles->is_admin( $user );
+		if ( 'permanent' === $mode ) {
+			$this->authorization->validate_capability(
+				$user,
+				'delete_links',
+				__( 'You do not have permission to permanently delete links.', 'peakurl' ),
+			);
+		} else {
+			$this->authorization->validate_capability(
+				$user,
+				'trash_links',
+				__( 'You do not have permission to delete links.', 'peakurl' ),
+			);
+		}
 
-		if ( $is_admin ) {
+		$is_admin  = $this->roles->is_admin( $user );
+		$permanent = 'permanent' === $mode;
+
+		if ( $permanent ) {
 			$rows = $this->data->get_all_accessible_links( $user );
 
 			if ( empty( $rows ) ) {
@@ -1411,13 +1440,15 @@ class Service {
 			return $deleted_count;
 		}
 
-		// Editor: Delete All moves only the Editor's own active links to trash (Active -> Trash lifecycle)
+		// Move to Trash (Active -> Trash lifecycle)
 		$rows = $this->data->get_all_accessible_links(
 			$user,
-			function ( array $u, array &$conditions, array &$params, string $table_alias ) {
-				$conditions[]             = $table_alias . '.user_id = :filter_user_id';
-				$conditions[]             = $table_alias . ".status = 'active'";
-				$params['filter_user_id'] = (string) ( $u['id'] ?? '' );
+			function ( array $u, array &$conditions, array &$params, string $table_alias ) use ( $is_admin ) {
+				if ( ! $is_admin ) {
+					$conditions[]             = $table_alias . '.user_id = :filter_user_id';
+					$params['filter_user_id'] = (string) ( $u['id'] ?? '' );
+				}
+				$conditions[] = $table_alias . ".status = 'active'";
 			}
 		);
 

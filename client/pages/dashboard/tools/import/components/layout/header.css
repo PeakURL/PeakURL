@@ -20,4 +20,8 @@
 		@apply mt-1 text-sm leading-relaxed text-text-muted;
 		text-align: start;
 	}
+
+	.import-layout-docs-link {
+		@apply inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline;
+	}
 }

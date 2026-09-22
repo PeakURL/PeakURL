@@ -153,4 +153,8 @@
 	.settings-api-docs-description {
 		@apply max-w-2xl text-sm text-text-muted;
 	}
+
+	.settings-api-docs-link {
+		@apply text-accent inline-flex items-center gap-1.5 text-sm font-medium hover:underline;
+	}
 }

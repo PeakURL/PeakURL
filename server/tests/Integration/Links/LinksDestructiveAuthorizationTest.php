@@ -120,7 +120,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 			'role'     => 'admin',
 		);
 
-		$request = new Request( 'DELETE', '/api/v1/urls', array(), array() );
+		$request = new Request( 'DELETE', '/api/v1/urls', array(), array( 'mode' => 'permanent' ) );
 		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
 
 		$mock_links = array(
@@ -151,7 +151,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		$response = $this->links_controller->clear( $request );
 
 		$this->assertSame( 200, $response['status'] );
-		$this->assertSame( 2, $response['body']['data']['deletedCount'] );
+		$this->assertSame( 2, $response['body']['data']['affectedCount'] );
 	}
 
 	public function test_editor_is_denied_empty_trash(): void {
@@ -184,7 +184,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 			'role'     => 'editor',
 		);
 
-		$request = new Request( 'DELETE', '/api/v1/urls', array(), array() );
+		$request = new Request( 'DELETE', '/api/v1/urls', array(), array( 'mode' => 'trash' ) );
 		$this->auth_service->method( 'get_current_user' )->willReturn( $editor_user );
 
 		$mock_links = array(
@@ -211,7 +211,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		$response = $this->links_controller->clear( $request );
 
 		$this->assertSame( 200, $response['status'] );
-		$this->assertSame( 1, $response['body']['data']['deletedCount'] );
+		$this->assertSame( 1, $response['body']['data']['affectedCount'] );
 	}
 
 	public function test_unauthorized_user_is_denied_empty_trash_and_no_destruction_occurs(): void {
@@ -285,7 +285,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 			'role'     => 'restricted',
 		);
 
-		$request = new Request( 'DELETE', '/api/v1/urls', array(), array() );
+		$request = new Request( 'DELETE', '/api/v1/urls', array(), array( 'mode' => 'permanent' ) );
 		$this->auth_service->method( 'get_current_user' )->willReturn( $unauthorized_user );
 
 		// Critical invariant: Repository MUST NOT be queried or mutated when unauthorized.
@@ -296,5 +296,284 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		$this->expectExceptionCode( 403 );
 
 		$restricted_controller->clear( $request );
+	}
+
+	public function test_editor_is_denied_permanent_delete_all_links(): void {
+		$editor_user = array(
+			'id'       => '2',
+			'username' => 'site_editor',
+			'role'     => 'editor',
+		);
+
+		$request = new Request( 'DELETE', '/api/v1/urls', array(), array( 'mode' => 'permanent' ) );
+		$this->auth_service->method( 'get_current_user' )->willReturn( $editor_user );
+
+		$this->repository->expects( $this->never() )->method( 'get_all_accessible_links' );
+		$this->repository->expects( $this->never() )->method( 'bulk_delete_permanent' );
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 403 );
+
+		$this->links_controller->clear( $request );
+	}
+
+	public function test_user_without_trash_permission_is_denied_trash_delete_all(): void {
+		$restricted_roles = new class() extends Roles {
+			public function has_capability( array $user, string $capability ): bool {
+				return false;
+			}
+		};
+
+		$restricted_auth       = new Authorization( $restricted_roles );
+		$restricted_service    = new LinksService(
+			$this->repository,
+			new LinksValidator(),
+			$this->settings_api,
+			$this->auth_service,
+			$this->analytics_service,
+			$this->webhooks_service,
+			$this->social_preview,
+			$this->captcha,
+			$restricted_roles,
+			$restricted_auth,
+			array( 'site_url' => 'https://peakurl.dev' )
+		);
+		$restricted_controller = new LinksController( $restricted_service );
+
+		$unauthorized_user = array(
+			'id'       => '99',
+			'username' => 'restricted_user',
+			'role'     => 'restricted',
+		);
+
+		$request = new Request( 'DELETE', '/api/v1/urls', array(), array( 'mode' => 'trash' ) );
+		$this->auth_service->method( 'get_current_user' )->willReturn( $unauthorized_user );
+
+		$this->repository->expects( $this->never() )->method( 'get_all_accessible_links' );
+		$this->repository->expects( $this->never() )->method( 'trash_url' );
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 403 );
+
+		$restricted_controller->clear( $request );
+	}
+
+	public function test_delete_all_with_invalid_mode_throws_400(): void {
+		$admin_user = array(
+			'id'       => '1',
+			'username' => 'site_admin',
+			'role'     => 'admin',
+		);
+
+		$request = new Request( 'DELETE', '/api/v1/urls', array(), array( 'mode' => 'unsupported_mode' ) );
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 400 );
+
+		$this->links_controller->clear( $request );
+	}
+
+	public function test_administrator_bulk_delete_trash_mode_returns_deleted_count(): void {
+		$admin_user = array(
+			'id'       => '1',
+			'username' => 'site_admin',
+			'role'     => 'admin',
+		);
+
+		$request = new Request( 'DELETE', '/api/v1/urls/bulk', array(), array( 'ids' => array( 'link_1', 'link_2' ) ) );
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+
+		$mock_links = array(
+			array(
+				'id'     => 'link_1',
+				'title'  => 'Test 1',
+				'alias'  => 't1',
+				'status' => 'active',
+			),
+			array(
+				'id'     => 'link_2',
+				'title'  => 'Test 2',
+				'alias'  => 't2',
+				'status' => 'active',
+			),
+		);
+
+		$this->repository->expects( $this->once() )
+			->method( 'get_links_by_ids' )
+			->with( array( 'link_1', 'link_2' ) )
+			->willReturn( $mock_links );
+
+		$this->repository->expects( $this->exactly( 2 ) )
+			->method( 'trash_url' )
+			->willReturn( true );
+
+		$this->repository->expects( $this->never() )
+			->method( 'bulk_delete_permanent' );
+
+		$response = $this->links_controller->bulk_delete( $request );
+
+		$this->assertSame( 200, $response['status'] );
+		$this->assertSame( 2, $response['body']['data']['deletedCount'] );
+	}
+
+	public function test_administrator_bulk_delete_permanent_mode_returns_deleted_count(): void {
+		$admin_user = array(
+			'id'       => '1',
+			'username' => 'site_admin',
+			'role'     => 'admin',
+		);
+
+		$request = new Request(
+			'DELETE',
+			'/api/v1/urls/bulk',
+			array( 'force' => 'true' ),
+			array(
+				'ids'   => array( 'link_1' ),
+				'force' => true,
+			)
+		);
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+
+		$mock_links = array(
+			array(
+				'id'                => 'link_1',
+				'title'             => 'Test 1',
+				'alias'             => 't1',
+				'status'            => 'active',
+				'social_image_path' => null,
+			),
+		);
+
+		$this->repository->expects( $this->once() )
+			->method( 'get_links_by_ids' )
+			->with( array( 'link_1' ) )
+			->willReturn( $mock_links );
+
+		$this->repository->expects( $this->once() )
+			->method( 'bulk_delete_permanent' )
+			->with( array( 'link_1' ) )
+			->willReturn( 1 );
+
+		$this->repository->expects( $this->never() )
+			->method( 'trash_url' );
+
+		$response = $this->links_controller->bulk_delete( $request );
+
+		$this->assertSame( 200, $response['status'] );
+		$this->assertSame( 1, $response['body']['data']['deletedCount'] );
+	}
+
+	public function test_editor_bulk_delete_trash_mode_allows_own_links(): void {
+		$editor_user = array(
+			'id'       => '2',
+			'username' => 'site_editor',
+			'role'     => 'editor',
+		);
+
+		$request = new Request( 'DELETE', '/api/v1/urls/bulk', array(), array( 'ids' => array( 'link_ed_1' ) ) );
+		$this->auth_service->method( 'get_current_user' )->willReturn( $editor_user );
+
+		$this->repository->expects( $this->once() )
+			->method( 'get_allowed_ids_for_user' )
+			->with( array( 'link_ed_1' ), '2' )
+			->willReturn( array( 'link_ed_1' ) );
+
+		$this->repository->expects( $this->once() )
+			->method( 'get_links_by_ids' )
+			->with( array( 'link_ed_1' ) )
+			->willReturn(
+				array(
+					array(
+						'id'     => 'link_ed_1',
+						'title'  => 'Editor Link',
+						'alias'  => 'ed1',
+						'status' => 'active',
+					),
+				)
+			);
+
+		$this->repository->expects( $this->once() )
+			->method( 'trash_url' )
+			->with( 'link_ed_1' )
+			->willReturn( true );
+
+		$this->repository->expects( $this->never() )
+			->method( 'bulk_delete_permanent' );
+
+		$response = $this->links_controller->bulk_delete( $request );
+
+		$this->assertSame( 200, $response['status'] );
+		$this->assertSame( 1, $response['body']['data']['deletedCount'] );
+	}
+
+	public function test_editor_bulk_delete_permanent_mode_is_denied(): void {
+		$editor_user = array(
+			'id'       => '2',
+			'username' => 'site_editor',
+			'role'     => 'editor',
+		);
+
+		$request = new Request(
+			'DELETE',
+			'/api/v1/urls/bulk',
+			array( 'force' => 'true' ),
+			array(
+				'ids'   => array( 'link_1' ),
+				'force' => true,
+			)
+		);
+		$this->auth_service->method( 'get_current_user' )->willReturn( $editor_user );
+
+		$this->repository->expects( $this->never() )->method( 'get_links_by_ids' );
+		$this->repository->expects( $this->never() )->method( 'bulk_delete_permanent' );
+		$this->repository->expects( $this->never() )->method( 'trash_url' );
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 403 );
+
+		$this->links_controller->bulk_delete( $request );
+	}
+
+	public function test_unauthorized_user_is_denied_bulk_delete_and_no_destruction_occurs(): void {
+		$restricted_roles = new class() extends Roles {
+			public function has_capability( array $user, string $capability ): bool {
+				return false;
+			}
+		};
+
+		$restricted_auth       = new Authorization( $restricted_roles );
+		$restricted_service    = new LinksService(
+			$this->repository,
+			new LinksValidator(),
+			$this->settings_api,
+			$this->auth_service,
+			$this->analytics_service,
+			$this->webhooks_service,
+			$this->social_preview,
+			$this->captcha,
+			$restricted_roles,
+			$restricted_auth,
+			array( 'site_url' => 'https://peakurl.dev' )
+		);
+		$restricted_controller = new LinksController( $restricted_service );
+
+		$unauthorized_user = array(
+			'id'       => '99',
+			'username' => 'restricted_user',
+			'role'     => 'restricted',
+		);
+
+		$request = new Request( 'DELETE', '/api/v1/urls/bulk', array(), array( 'ids' => array( 'link_1' ) ) );
+		$this->auth_service->method( 'get_current_user' )->willReturn( $unauthorized_user );
+
+		$this->repository->expects( $this->never() )->method( 'get_links_by_ids' );
+		$this->repository->expects( $this->never() )->method( 'bulk_delete_permanent' );
+		$this->repository->expects( $this->never() )->method( 'trash_url' );
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 403 );
+
+		$restricted_controller->bulk_delete( $request );
 	}
 }

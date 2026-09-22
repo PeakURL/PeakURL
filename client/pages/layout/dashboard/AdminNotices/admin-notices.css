@@ -32,6 +32,10 @@
 		@apply leading-6 opacity-80;
 	}
 
+	.dashboard-notice-message a {
+		@apply font-medium underline hover:opacity-100;
+	}
+
 	.dashboard-notice-action {
 		@apply inline-flex shrink-0 items-center justify-center rounded-lg border px-3 py-2 text-sm font-medium transition-colors;
 	}

@@ -181,8 +181,16 @@ export const AdminNotices = () => {
 											) {
 												const target =
 													event.target as HTMLElement;
+												const anchor =
+													target.closest("a");
+												const isReleaseNotesAnchor =
+													anchor &&
+													anchor.href &&
+													anchor.href.includes(
+														"peakurl.org/release-notes"
+													);
 												if (
-													target.closest("a") ||
+													isReleaseNotesAnchor ||
 													target.closest(
 														"button.js-update-details-trigger"
 													)

@@ -4,6 +4,7 @@ import {
 	AlertTriangle,
 	CalendarClock,
 	Clock,
+	ExternalLink,
 	Play,
 	RefreshCw,
 	Search,
@@ -16,6 +17,7 @@ import type { CronJob } from "@/api";
 import { Button, ConfirmDialog, useNotification } from "@/components";
 import { useAdminAccess } from "@/hooks";
 import { __, _n, sprintf } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
 import { extractErrorMessage } from "@/shared/errors";
 import { cn } from "@/shared/formatting";
 import {
@@ -31,6 +33,7 @@ import {
 	ManageSchedulesDrawer,
 	RunDueJobsModal,
 } from "./components";
+import { formatJobErrorMessage, formatJobOutputSummary } from "./formatters";
 import {
 	aggregateRunDueJobsResult,
 	calculateCronStatusSummary,
@@ -39,6 +42,8 @@ import {
 const MIN_REFRESH_DURATION_MS = 700;
 
 export function ScheduledJobsPage() {
+	const isRtl = isDocumentRtl();
+	const direction = isRtl ? "rtl" : "ltr";
 	const { canManageUpdates, isLoading: isAccessLoading } = useAdminAccess();
 	const notification = useNotification();
 
@@ -108,29 +113,29 @@ export function ScheduledJobsPage() {
 			const result = await runCronJob(job.id).unwrap();
 			if (result.status === "skipped") {
 				notification.info(
-					result.summary ||
+					formatJobOutputSummary(result.summary) ||
 						sprintf(
 							/* translators: %s is the job title */
 							__("Job [%s] was skipped."),
-							job.title
+							__(job.title)
 						)
 				);
 			} else if (result.success) {
 				notification.success(
-					result.summary ||
+					formatJobOutputSummary(result.summary) ||
 						sprintf(
 							/* translators: %s is the job title */
 							__("Job [%s] executed successfully."),
-							job.title
+							__(job.title)
 						)
 				);
 			} else {
 				notification.error(
-					result.error ||
+					formatJobErrorMessage(result.error) ||
 						sprintf(
 							/* translators: %s is the job title */
 							__("Job [%s] execution failed."),
-							job.title
+							__(job.title)
 						)
 				);
 			}
@@ -140,7 +145,7 @@ export function ScheduledJobsPage() {
 					sprintf(
 						/* translators: %s is the job title */
 						__("Failed to execute [%s]."),
-						job.title
+						__(job.title)
 					)
 			);
 		} finally {
@@ -259,6 +264,18 @@ export function ScheduledJobsPage() {
 							"Inspect recurring background tasks, monitor execution health, review recent run logs, and manually trigger jobs where authorized."
 						)}
 					</p>
+					<div className="mt-2">
+						<a
+							href="https://go.peakurl.org/7a0e0b"
+							target="_blank"
+							rel="noopener noreferrer"
+							dir={direction}
+							className="scheduled-jobs-page-docs-link"
+						>
+							{__("Read documentation")}
+							<ExternalLink size={13} className="shrink-0" />
+						</a>
+					</div>
 				</div>
 
 				<div className="scheduled-jobs-page-hero-actions">

@@ -5,7 +5,13 @@ import { Button } from "@/components";
 import { __ } from "@/i18n";
 import { cn } from "@/shared/formatting";
 import type { JobsTableProps } from "../types";
-import { formatLastRun, formatNextRun, formatSchedule } from "../formatters";
+import {
+	formatJobErrorMessage,
+	formatJobOutputSummary,
+	formatLastRun,
+	formatNextRun,
+	formatSchedule,
+} from "../formatters";
 import { JobStatusBadge } from "./JobStatusBadge";
 
 export function JobsTable({
@@ -95,7 +101,7 @@ export function JobsTable({
 								{/* Job Title */}
 								<td className="scheduled-jobs-cell-job">
 									<div className="scheduled-jobs-job-title">
-										{job.title}
+										{__(job.title)}
 									</div>
 								</td>
 
@@ -169,9 +175,13 @@ export function JobsTable({
 											/>
 											<span
 												className="text-xs font-medium truncate max-w-xs"
-												title={job.lastError as string}
+												title={formatJobErrorMessage(
+													job.lastError as string
+												)}
 											>
-												{job.lastError}
+												{formatJobErrorMessage(
+													job.lastError as string
+												)}
 											</span>
 										</div>
 									) : "running" === latestRun?.status ? (
@@ -187,12 +197,14 @@ export function JobsTable({
 											<span
 												className="text-xs font-medium truncate max-w-xs"
 												title={
-													latestRun.outputSummary ||
-													__("Success")
+													formatJobOutputSummary(
+														latestRun?.outputSummary
+													) || __("Success")
 												}
 											>
-												{latestRun.outputSummary ||
-													__("Success")}
+												{formatJobOutputSummary(
+													latestRun?.outputSummary
+												) || __("Success")}
 											</span>
 										</div>
 									) : "skipped" === latestRun?.status ? (
@@ -215,7 +227,10 @@ export function JobsTable({
 											className="scheduled-jobs-action-history"
 											title={__("View Execution History")}
 										>
-											<History size={13} />
+											<History
+												size={13}
+												className="shrink-0"
+											/>
 											<span>{__("History")}</span>
 										</button>
 

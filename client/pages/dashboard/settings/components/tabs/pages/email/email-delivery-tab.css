@@ -125,4 +125,8 @@
 		text-align: start;
 		@apply text-sm leading-6 text-text-muted;
 	}
+
+	.settings-email-docs-link {
+		@apply text-accent inline-flex items-center gap-1.5 text-sm font-medium hover:underline;
+	}
 }

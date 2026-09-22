@@ -41,28 +41,32 @@ import { formatInterval, formatNextRun, formatSchedule } from "../formatters";
 import type { ManageSchedulesModalProps } from "../types";
 import { JobStatusBadge } from "./JobStatusBadge";
 
-const RETENTION_OPTIONS: SelectOption<number>[] = [
-	{ value: 7, label: __("7 Days") },
-	{ value: 14, label: __("14 Days") },
-	{ value: 30, label: __("30 Days (Recommended)") },
-	{ value: 60, label: __("60 Days") },
-	{ value: 90, label: __("90 Days") },
-	{ value: 180, label: __("180 Days") },
-	{ value: 365, label: __("1 Year") },
-	{ value: 0, label: __("Keep Indefinitely") },
-];
+function getRetentionOptions(): SelectOption<number>[] {
+	return [
+		{ value: 7, label: __("7 Days") },
+		{ value: 14, label: __("14 Days") },
+		{ value: 30, label: __("30 Days (Recommended)") },
+		{ value: 60, label: __("60 Days") },
+		{ value: 90, label: __("90 Days") },
+		{ value: 180, label: __("180 Days") },
+		{ value: 365, label: __("1 Year") },
+		{ value: 0, label: __("Keep Indefinitely") },
+	];
+}
 
-const STANDARD_INTERVAL_OPTIONS: SelectOption<number>[] = [
-	{ value: 300, label: __("Every 5 minutes") },
-	{ value: 900, label: __("Every 15 minutes") },
-	{ value: 1800, label: __("Every 30 minutes") },
-	{ value: 3600, label: __("Hourly") },
-	{ value: 7200, label: __("Every 2 hours") },
-	{ value: 21600, label: __("Every 6 hours") },
-	{ value: 43200, label: __("Every 12 hours") },
-	{ value: 86400, label: __("Daily") },
-	{ value: 604800, label: __("Weekly") },
-];
+function getStandardIntervalOptions(): SelectOption<number>[] {
+	return [
+		{ value: 300, label: __("Every 5 minutes") },
+		{ value: 900, label: __("Every 15 minutes") },
+		{ value: 1800, label: __("Every 30 minutes") },
+		{ value: 3600, label: __("Hourly") },
+		{ value: 7200, label: __("Every 2 hours") },
+		{ value: 21600, label: __("Every 6 hours") },
+		{ value: 43200, label: __("Every 12 hours") },
+		{ value: 86400, label: __("Daily") },
+		{ value: 604800, label: __("Weekly") },
+	];
+}
 
 interface JobEditState {
 	intervalSeconds: number;
@@ -82,6 +86,9 @@ export function ManageSchedulesDrawer({
 	const direction = isRtl ? "rtl" : "ltr";
 	const notification = useNotification();
 	const retentionSelectId = useId();
+
+	const retentionOptions = getRetentionOptions();
+	const standardIntervalOptions = getStandardIntervalOptions();
 
 	// Mutations
 	const [updateCronSettings, { isLoading: isSavingRetention }] =
@@ -161,7 +168,7 @@ export function ManageSchedulesDrawer({
 				sprintf(
 					/* translators: %s is the background job title */
 					__("Schedule for [%s] updated successfully."),
-					job.title
+					__(job.title)
 				)
 			);
 			setEditingJobId(null);
@@ -172,7 +179,7 @@ export function ManageSchedulesDrawer({
 					sprintf(
 						/* translators: %s is the background job title */
 						__("Failed to update schedule for [%s]."),
-						job.title
+						__(job.title)
 					)
 			);
 		} finally {
@@ -190,7 +197,7 @@ export function ManageSchedulesDrawer({
 				sprintf(
 					/* translators: %s is the background job title */
 					__("Reset [%s] to recommended default schedule."),
-					jobToReset.title
+					__(jobToReset.title)
 				)
 			);
 			if (editingJobId === jobToReset.id) {
@@ -300,7 +307,7 @@ export function ManageSchedulesDrawer({
 											<Select
 												id={retentionSelectId}
 												value={selectedRetention}
-												options={RETENTION_OPTIONS}
+												options={retentionOptions}
 												onChange={(val) =>
 													setSelectedRetention(
 														val as number
@@ -371,12 +378,12 @@ export function ManageSchedulesDrawer({
 
 											// Build select options ensuring current interval is present
 											const jobIntervalOptions: SelectOption<number>[] =
-												STANDARD_INTERVAL_OPTIONS.some(
+												standardIntervalOptions.some(
 													(opt) =>
 														opt.value ===
 														form.intervalSeconds
 												)
-													? STANDARD_INTERVAL_OPTIONS
+													? standardIntervalOptions
 													: [
 															{
 																value: form.intervalSeconds,
@@ -384,7 +391,7 @@ export function ManageSchedulesDrawer({
 																	form.intervalSeconds
 																),
 															},
-															...STANDARD_INTERVAL_OPTIONS,
+															...standardIntervalOptions,
 														].sort(
 															(a, b) =>
 																a.value -
@@ -412,7 +419,9 @@ export function ManageSchedulesDrawer({
 															{/* Top Line: Title & Optional Customized Tag */}
 															<div className="flex items-center gap-2">
 																<h4 className="text-sm font-semibold text-heading truncate">
-																	{job.title}
+																	{__(
+																		job.title
+																	)}
 																</h4>
 																{job.isCustomized ? (
 																	<span className="inline-flex items-center rounded-full bg-amber-500/10 px-2 py-0.5 text-[11px] font-medium text-amber-600 dark:text-amber-400 border border-amber-500/20 shrink-0">
@@ -803,14 +812,14 @@ export function ManageSchedulesDrawer({
 				title={sprintf(
 					/* translators: %s is the background job title */
 					__("Reset Schedule — %s"),
-					jobToReset?.title || ""
+					jobToReset ? __(jobToReset.title) : ""
 				)}
 				description={sprintf(
 					/* translators: 1: job title, 2: recommended cadence */
 					__(
 						"Restore the recommended PeakURL schedule for [%1$s] (%2$s)? Any customized interval, preferred run time, and enable state will be restored to the built-in recommendation. Past execution history will remain preserved."
 					),
-					jobToReset?.title || "",
+					jobToReset ? __(jobToReset.title) : "",
 					jobToReset
 						? formatInterval(jobToReset.recommendedIntervalSeconds)
 						: ""

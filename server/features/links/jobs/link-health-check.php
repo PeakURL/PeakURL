@@ -180,16 +180,27 @@ class LinkHealthCheckJob implements JobHandlerInterface {
 			}
 		}
 
-		return ExecutionResult::success(
-			sprintf(
-				'Health check completed for %d link(s): %d healthy, %d unreachable, %d blocked by SSRF filter.',
-				count( $links ),
+		$total_links = count( $links );
+		$message     = 1 === $total_links
+			? sprintf(
+				'Health check completed for %1$d link: %2$d healthy, %3$d unreachable, %4$d blocked by SSRF filter.',
+				$total_links,
 				$healthy_count,
 				$failed_count,
 				$blocked_count
-			),
+			)
+			: sprintf(
+				'Health check completed for %1$d links: %2$d healthy, %3$d unreachable, %4$d blocked by SSRF filter.',
+				$total_links,
+				$healthy_count,
+				$failed_count,
+				$blocked_count
+			);
+
+		return ExecutionResult::success(
+			$message,
 			array(
-				'checked'     => count( $links ),
+				'checked'     => $total_links,
 				'healthy'     => $healthy_count,
 				'unreachable' => $failed_count,
 				'blockedSsrf' => $blocked_count,

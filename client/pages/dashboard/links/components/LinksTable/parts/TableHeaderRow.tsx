@@ -46,7 +46,7 @@ function TableHeaderRow({
 										<span>{__("Restore selected")}</span>
 									</button>
 								)}
-								{canDeleteLinks && (
+								{canDeleteLinks && onBulkDelete && (
 									<button
 										type="button"
 										onClick={onBulkDelete}
@@ -69,16 +69,22 @@ function TableHeaderRow({
 							</>
 						) : (
 							<>
-								{canTrashLinks && (
-									<button
-										type="button"
-										onClick={onBulkDelete}
-										className="links-table-header-delete-selected"
-									>
-										<Trash2 size={13} />
-										<span>{__("Delete selected")}</span>
-									</button>
-								)}
+								{(canTrashLinks || canDeleteLinks) &&
+									onBulkDelete && (
+										<button
+											type="button"
+											onClick={onBulkDelete}
+											className="links-table-header-delete-selected"
+										>
+											<Trash2 size={13} />
+											<span>
+												{!canTrashLinks &&
+												canDeleteLinks
+													? __("Delete permanently")
+													: __("Delete selected")}
+											</span>
+										</button>
+									)}
 								{onDeleteAll && (
 									<button
 										type="button"

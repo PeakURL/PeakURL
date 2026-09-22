@@ -4,7 +4,6 @@ import {
 	Info,
 	Key,
 	ExternalLink,
-	BookOpen,
 	Copy,
 	Link2,
 } from "lucide-react";
@@ -50,6 +49,21 @@ function ApiTab({
 									"Use this endpoint with WordPress, browser extensions, scripts, and other API clients."
 								)}
 							</p>
+							<div className="mt-2">
+								<a
+									href="https://go.peakurl.org/d373f6"
+									target="_blank"
+									rel="noopener noreferrer"
+									dir={direction}
+									className="settings-api-docs-link"
+								>
+									{__("Read documentation")}
+									<ExternalLink
+										size={13}
+										className="shrink-0"
+									/>
+								</a>
+							</div>
 						</div>
 						<Button
 							size="sm"
@@ -176,41 +190,6 @@ function ApiTab({
 					</div>
 				</div>
 			</div>
-
-			<section className="settings-fieldset">
-				<div className="settings-api-docs-header">
-					<div className="settings-api-docs-summary">
-						<div className="settings-api-docs-title-row">
-							<BookOpen
-								size={18}
-								className="settings-api-docs-icon"
-							/>
-							<h3 className="settings-api-docs-title">
-								{__("API documentation")}
-							</h3>
-						</div>
-						<p className="settings-api-docs-description">
-							{__(
-								"Use the public docs for authentication, links, analytics, users, webhooks, and system endpoints."
-							)}
-						</p>
-					</div>
-					<a
-						href="https://peakurl.org/docs/api"
-						target="_blank"
-						rel="noreferrer"
-					>
-						<Button
-							size="sm"
-							variant="secondary"
-							icon={ExternalLink}
-							iconPosition="right"
-						>
-							{__("API Overview")}
-						</Button>
-					</a>
-				</div>
-			</section>
 		</div>
 	);
 }

@@ -1,5 +1,11 @@
 import { useMemo, useState, type SubmitEvent } from "react";
-import { AlertCircle, CheckCircle2, Trash2, Zap } from "lucide-react";
+import {
+	AlertCircle,
+	CheckCircle2,
+	ExternalLink,
+	Trash2,
+	Zap,
+} from "lucide-react";
 
 import {
 	Button,
@@ -290,6 +296,21 @@ export function PerformanceTab({
 										"Configure object caching backends and Time-to-Live (TTL) policies to optimize link redirection latency and throughput."
 									)}
 								</p>
+								<div className="mt-2">
+									<a
+										href="https://go.peakurl.org/227c49"
+										target="_blank"
+										rel="noopener noreferrer"
+										dir={direction}
+										className="settings-performance-docs-link"
+									>
+										{__("Read documentation")}
+										<ExternalLink
+											size={13}
+											className="shrink-0"
+										/>
+									</a>
+								</div>
 							</div>
 						</div>
 					</div>

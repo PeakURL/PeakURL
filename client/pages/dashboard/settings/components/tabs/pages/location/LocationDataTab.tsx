@@ -4,6 +4,7 @@ import {
 	AlertCircle,
 	CheckCircle2,
 	CloudDownload,
+	ExternalLink,
 	MapPin,
 	RefreshCcw,
 } from "lucide-react";
@@ -122,6 +123,21 @@ function LocationDataTab({
 										"Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder."
 									)}
 								</p>
+								<div className="mt-2">
+									<a
+										href="https://go.peakurl.org/028e82"
+										target="_blank"
+										rel="noopener noreferrer"
+										dir={direction}
+										className="settings-location-docs-link"
+									>
+										{__("Read documentation")}
+										<ExternalLink
+											size={13}
+											className="shrink-0"
+										/>
+									</a>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -224,6 +240,18 @@ function LocationDataTab({
 						"PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
 					)}
 				</p>
+				<div className="mt-2">
+					<a
+						href="https://go.peakurl.org/028e82"
+						target="_blank"
+						rel="noopener noreferrer"
+						dir={direction}
+						className="settings-location-docs-link"
+					>
+						{__("How to get credentials")}
+						<ExternalLink size={13} className="shrink-0" />
+					</a>
+				</div>
 
 				{hasSavedCredentials && !isEditingCredentials ? (
 					<div className="settings-location-credentials-view">

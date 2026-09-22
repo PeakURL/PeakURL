@@ -15,7 +15,12 @@ import { formatLocalizedDateTime, formatRelativeTime } from "@/shared/dates";
 import { cn } from "@/shared/formatting";
 import { useClearCronHistoryMutation } from "@/state/slices/api";
 
-import { formatNextRun, formatSchedule } from "../formatters";
+import {
+	formatJobErrorMessage,
+	formatJobOutputSummary,
+	formatNextRun,
+	formatSchedule,
+} from "../formatters";
 import type { JobHistoryDrawerProps } from "../types";
 import { JobStatusBadge } from "./JobStatusBadge";
 
@@ -154,7 +159,7 @@ export function JobHistoryDrawer({
 											{sprintf(
 												/* translators: %s is the background job title */
 												__("Execution History — %s"),
-												activeJob.title
+												__(activeJob.title)
 											)}
 										</DialogTitle>
 										<div className="flex flex-wrap items-center gap-2 mt-1">
@@ -245,7 +250,9 @@ export function JobHistoryDrawer({
 												{__("Most Recent Failure")}
 											</p>
 											<p className="mt-1 text-xs text-rose-700 dark:text-rose-400 wrap-break-word font-mono bg-rose-500/5 p-2 rounded border border-rose-500/10">
-												{activeJob.lastError}
+												{formatJobErrorMessage(
+													activeJob.lastError
+												)}
 											</p>
 										</div>
 									</div>
@@ -405,24 +412,24 @@ export function JobHistoryDrawer({
 																	{run.errorMessage ? (
 																		<div
 																			className="text-xs text-rose-600 dark:text-rose-400 font-mono wrap-break-word leading-relaxed"
-																			title={
+																			title={formatJobErrorMessage(
 																				run.errorMessage
-																			}
+																			)}
 																		>
-																			{
+																			{formatJobErrorMessage(
 																				run.errorMessage
-																			}
+																			)}
 																		</div>
 																	) : run.outputSummary ? (
 																		<div
 																			className="text-xs text-text-muted font-mono wrap-break-word leading-relaxed"
-																			title={
+																			title={formatJobOutputSummary(
 																				run.outputSummary
-																			}
+																			)}
 																		>
-																			{
+																			{formatJobOutputSummary(
 																				run.outputSummary
-																			}
+																			)}
 																		</div>
 																	) : (
 																		<span className="text-xs text-text-muted">
@@ -446,7 +453,7 @@ export function JobHistoryDrawer({
 									{sprintf(
 										/* translators: %s is the job title */
 										__("Registry: %s"),
-										activeJob.title
+										__(activeJob.title)
 									)}
 								</div>
 
@@ -492,7 +499,7 @@ export function JobHistoryDrawer({
 				title={sprintf(
 					/* translators: %s is the background job title */
 					__("Clear Execution History — %s"),
-					activeJob.title
+					__(activeJob.title)
 				)}
 				description={__(
 					"Are you sure you want to clear execution history for this background job? Finished run records and output logs for this job will be permanently deleted. Active and retrying runs will remain protected."

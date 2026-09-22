@@ -68,14 +68,24 @@ class WebhookDeliveryJob implements JobHandlerInterface {
 			return ExecutionResult::success( 'No pending webhook deliveries.' );
 		}
 
-		return ExecutionResult::success(
-			sprintf(
-				'Processed %d pending webhook delivery(ies) (%d delivered, %d queued for retry, %d failed).',
+		$message = 1 === $result['processed']
+			? sprintf(
+				'Processed %1$d pending webhook delivery (%2$d delivered, %3$d queued for retry, %4$d failed).',
 				$result['processed'],
 				$result['delivered'],
 				$result['retried'],
 				$result['failed']
-			),
+			)
+			: sprintf(
+				'Processed %1$d pending webhook deliveries (%2$d delivered, %3$d queued for retry, %4$d failed).',
+				$result['processed'],
+				$result['delivered'],
+				$result['retried'],
+				$result['failed']
+			);
+
+		return ExecutionResult::success(
+			$message,
 			$result
 		);
 	}

@@ -75,7 +75,7 @@ function DeleteLinkModal({
 			<div className="links-modal-shell">
 				<DialogPanel
 					dir={direction}
-					className="links-modal-panel links-modal-panel-medium"
+					className="links-modal-panel links-modal-panel-large"
 				>
 					{/* Header */}
 					<div className="links-modal-header">
@@ -162,7 +162,7 @@ function DeleteLinkModal({
 						</div>
 
 						{/* Action Buttons */}
-						<div className="links-modal-actions">
+						<div className="links-modal-actions-responsive">
 							<button
 								type="button"
 								onClick={handleClose}
@@ -172,15 +172,39 @@ function DeleteLinkModal({
 								{__("Cancel")}
 							</button>
 
-							{!isPermanent && canDeleteLinks && (
+							<div className="links-modal-actions-group">
+								{!isPermanent && canDeleteLinks && (
+									<button
+										type="button"
+										onClick={() => handleDelete(true)}
+										disabled={isLoading}
+										className="links-modal-button links-modal-button-danger-outline"
+									>
+										{isLoading &&
+										activeAction === "permanent" ? (
+											<span className="links-modal-button-content">
+												<div className="links-modal-spinner"></div>
+												{__("Deleting...")}
+											</span>
+										) : (
+											<span className="links-modal-button-content">
+												<Trash2 className="links-modal-button-icon" />
+												{__("Delete Permanently")}
+											</span>
+										)}
+									</button>
+								)}
+
 								<button
 									type="button"
-									onClick={() => handleDelete(true)}
+									onClick={() => handleDelete(isPermanent)}
 									disabled={isLoading}
-									className="links-modal-button links-modal-button-danger-outline"
+									className="links-modal-button links-modal-button-danger"
 								>
 									{isLoading &&
-									activeAction === "permanent" ? (
+									(activeAction === "trash" ||
+										(isPermanent &&
+											activeAction === "permanent")) ? (
 										<span className="links-modal-button-content">
 											<div className="links-modal-spinner"></div>
 											{__("Deleting...")}
@@ -188,35 +212,13 @@ function DeleteLinkModal({
 									) : (
 										<span className="links-modal-button-content">
 											<Trash2 className="links-modal-button-icon" />
-											{__("Delete Permanently")}
+											{isPermanent
+												? __("Delete Permanently")
+												: __("Move to Trash")}
 										</span>
 									)}
 								</button>
-							)}
-
-							<button
-								type="button"
-								onClick={() => handleDelete(isPermanent)}
-								disabled={isLoading}
-								className="links-modal-button links-modal-button-danger"
-							>
-								{isLoading &&
-								(activeAction === "trash" ||
-									(isPermanent &&
-										activeAction === "permanent")) ? (
-									<span className="links-modal-button-content">
-										<div className="links-modal-spinner"></div>
-										{__("Deleting...")}
-									</span>
-								) : (
-									<span className="links-modal-button-content">
-										<Trash2 className="links-modal-button-icon" />
-										{isPermanent
-											? __("Delete Permanently")
-											: __("Move to Trash")}
-									</span>
-								)}
-							</button>
+							</div>
 						</div>
 					</div>
 				</DialogPanel>

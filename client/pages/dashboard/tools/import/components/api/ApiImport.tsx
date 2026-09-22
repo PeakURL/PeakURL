@@ -70,9 +70,9 @@ Content-Type: application/json
 			</div>
 			<div className="import-api-actions">
 				<a
-					href="https://peakurl.org/docs/import-and-export#api-import"
+					href="https://go.peakurl.org/979434"
 					target="_blank"
-					rel="noreferrer"
+					rel="noopener noreferrer"
 				>
 					<Button size="sm">
 						<ExternalLink className="import-api-button-icon" />

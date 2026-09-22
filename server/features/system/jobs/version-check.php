@@ -80,7 +80,10 @@ class VersionCheckJob implements JobHandlerInterface {
 			$this->settings_api->delete_options( array( 'update_last_error' ) );
 
 			return ExecutionResult::success(
-				sprintf( 'Version check complete: remote release %s found.', $version ),
+				sprintf(
+					'Version check complete: remote release %s found.',
+					$version
+				),
 				array( 'latestVersion' => $version )
 			);
 		} catch ( \Throwable $exception ) {
@@ -89,7 +92,10 @@ class VersionCheckJob implements JobHandlerInterface {
 			$this->settings_api->update_option( 'update_last_error', $error, $now, false );
 
 			return ExecutionResult::failure(
-				sprintf( 'Version check failed: %s', $error )
+				sprintf(
+					'Version check failed: %s',
+					$error
+				)
 			);
 		}
 	}

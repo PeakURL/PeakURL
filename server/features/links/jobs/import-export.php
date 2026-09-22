@@ -87,8 +87,12 @@ class ImportExportJob implements JobHandlerInterface {
 			}
 		}
 
+		$message = 1 === $cleaned_files
+			? sprintf( 'Cleaned %d stale import/export temporary file.', $cleaned_files )
+			: sprintf( 'Cleaned %d stale import/export temporary files.', $cleaned_files );
+
 		return ExecutionResult::success(
-			sprintf( 'Cleaned %d stale import/export temporary file(s).', $cleaned_files ),
+			$message,
 			array( 'cleanedFiles' => $cleaned_files )
 		);
 	}

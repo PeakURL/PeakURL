@@ -74,7 +74,10 @@ class GeoipUpdateJob implements JobHandlerInterface {
 			);
 		} catch ( \Throwable $exception ) {
 			return ExecutionResult::failure(
-				sprintf( 'GeoIP update failed: %s', $exception->getMessage() )
+				sprintf(
+					'GeoIP update failed: %s',
+					$exception->getMessage()
+				)
 			);
 		}
 	}

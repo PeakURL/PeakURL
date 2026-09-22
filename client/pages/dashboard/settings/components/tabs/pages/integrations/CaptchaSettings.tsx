@@ -80,14 +80,14 @@ function maskCaptchaKey(value?: string | null): string {
 function getProviderDocs(provider: CaptchaActiveProvider) {
 	if (provider === "recaptcha") {
 		return {
-			href: "https://developers.google.com/recaptcha/docs/v3",
+			href: "https://go.peakurl.org/358a93",
 			label: __("reCAPTCHA v3 docs"),
 		};
 	}
 
 	if (provider === "turnstile") {
 		return {
-			href: "https://developers.cloudflare.com/turnstile/",
+			href: "https://go.peakurl.org/617969",
 			label: __("Turnstile docs"),
 		};
 	}
@@ -272,6 +272,18 @@ function CaptchaSettingsContent({
 							"Require a verification challenge on the authentication pages and before public short links redirect."
 						)}
 					</p>
+					<div className="mt-2">
+						<a
+							href="https://go.peakurl.org/7dcc41"
+							target="_blank"
+							rel="noopener noreferrer"
+							dir={direction}
+							className="integrations-tab-docs-link"
+						>
+							{__("Read documentation")}
+							<ExternalLink size={13} className="shrink-0" />
+						</a>
+					</div>
 				</div>
 				<div className="flex items-center gap-3">
 					<span className="integrations-tab-status-pill">

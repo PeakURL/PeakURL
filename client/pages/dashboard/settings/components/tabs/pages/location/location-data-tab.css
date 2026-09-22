@@ -96,4 +96,8 @@
 	.settings-location-saved-key {
 		@apply text-xs text-text-muted;
 	}
+
+	.settings-location-docs-link {
+		@apply inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline;
+	}
 }

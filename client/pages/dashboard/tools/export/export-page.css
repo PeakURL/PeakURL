@@ -26,6 +26,10 @@
 		text-align: start;
 	}
 
+	.export-page-docs-link {
+		@apply inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline;
+	}
+
 	/* Intro / Banner Card */
 	.export-page-intro {
 		@apply rounded-lg border border-stroke bg-surface p-4 shadow-sm transition-all duration-200 hover:border-stroke-strong;

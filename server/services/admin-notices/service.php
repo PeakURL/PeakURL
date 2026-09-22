@@ -155,9 +155,10 @@ class AdminNotices {
 				'id'      => 'location_data_setup',
 				'type'    => 'warning',
 				'title'   => __( 'Location analytics is not ready yet.', 'peakurl' ),
-				'message' => __(
-					'Add your MaxMind credentials and download the GeoLite2 City database to enable visitor country and city reporting across the dashboard.',
-					'peakurl'
+				'message' => sprintf(
+					/* translators: 1: documentation URL. */
+					__( 'Add your MaxMind credentials and download the GeoLite2 City database to enable visitor country and city reporting across the dashboard. <a href="%1$s" target="_blank" rel="noopener noreferrer" class="underline hover:opacity-100">Read documentation</a>.', 'peakurl' ),
+					'https://go.peakurl.org/028e82',
 				),
 				'action'  => array(
 					'label' => __( 'Open Location Data', 'peakurl' ),

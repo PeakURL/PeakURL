@@ -17,6 +17,7 @@ import type {
 	UrlExportResponse,
 	UrlResponse,
 	UrlsListResponse,
+	ApiDataResponse,
 } from "./types";
 
 const urlTag = (id: string) => ({ type: "Urls" as const, id });
@@ -247,11 +248,7 @@ export const urlsApi = baseApi.injectEndpoints({
 			invalidatesTags: URL_LIST_CHANGE_TAGS,
 		}),
 		emptyTrash: build.mutation<
-			{
-				success: boolean;
-				message?: string;
-				data?: { deletedCount?: number };
-			},
+			ApiDataResponse<{ deletedCount: number }>,
 			void
 		>({
 			query: () => ({
@@ -282,7 +279,7 @@ export const urlsApi = baseApi.injectEndpoints({
 			invalidatesTags: URL_LIST_CHANGE_TAGS,
 		}),
 		bulkDeleteUrl: build.mutation<
-			void,
+			ApiDataResponse<{ deletedCount: number }>,
 			string[] | { ids: string[]; force?: boolean }
 		>({
 			query: (arg) => {
@@ -300,10 +297,14 @@ export const urlsApi = baseApi.injectEndpoints({
 			},
 			invalidatesTags: URL_LIST_CHANGE_TAGS,
 		}),
-		clearUrls: build.mutation<void, void>({
-			query: () => ({
+		deleteAllUrls: build.mutation<
+			ApiDataResponse<{ affectedCount: number }>,
+			{ mode: "trash" | "permanent" }
+		>({
+			query: (arg) => ({
 				url: API_ROUTES.urls.index,
 				method: "DELETE",
+				body: { mode: arg.mode },
 			}),
 			invalidatesTags: URL_LIST_CHANGE_TAGS,
 		}),
@@ -322,5 +323,5 @@ export const {
 	useEmptyTrashMutation,
 	useDeleteUrlMutation,
 	useBulkDeleteUrlMutation,
-	useClearUrlsMutation,
+	useDeleteAllUrlsMutation,
 } = urlsApi;

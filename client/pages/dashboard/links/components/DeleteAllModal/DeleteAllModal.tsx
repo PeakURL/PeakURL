@@ -2,28 +2,24 @@ import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { X, Trash2, AlertTriangle } from "lucide-react";
 import { useState } from "react";
 
+import { useNotification } from "@/components";
 import { useAdminAccess } from "@/hooks";
-import { useBulkDeleteUrlMutation } from "@/state/slices/api";
-import { __, sprintf } from "@/i18n";
-import { getDocumentDirection } from "@/i18n/direction";
+import { useDeleteAllUrlsMutation } from "@/state/slices/api";
 import { getErrorMessage } from "@/shared/errors";
+import { __ } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
 
-import type { BulkDeleteModalProps } from "../types";
+import type { DeleteAllModalProps } from "../types";
 
-function BulkDeleteModal({
-	open,
-	setOpen,
-	selectedIds,
-	isTrashTab = false,
-	onSuccess,
-}: BulkDeleteModalProps) {
-	const direction = getDocumentDirection();
+function DeleteAllModal({ open, setOpen, onSuccess }: DeleteAllModalProps) {
+	const direction = isDocumentRtl() ? "rtl" : "ltr";
+	const notifications = useNotification();
 	const { canDeleteLinks, canTrashLinks } = useAdminAccess();
 	const [error, setError] = useState("");
 	const [activeAction, setActiveAction] = useState<
 		"trash" | "permanent" | null
 	>(null);
-	const [bulkDeleteUrl, { isLoading }] = useBulkDeleteUrlMutation();
+	const [deleteAllUrls, { isLoading }] = useDeleteAllUrlsMutation();
 
 	const handleClose = () => {
 		if (isLoading) return;
@@ -32,42 +28,38 @@ function BulkDeleteModal({
 	};
 
 	const handleDelete = async (permanent: boolean) => {
-		if (!selectedIds || selectedIds.length === 0) {
-			return;
-		}
-
-		const idsToDelete = [...selectedIds];
 		setError("");
 		setActiveAction(permanent ? "permanent" : "trash");
 
 		try {
 			if (permanent) {
-				await bulkDeleteUrl({ ids: idsToDelete, force: true }).unwrap();
+				await deleteAllUrls({ mode: "permanent" }).unwrap();
+				notifications.success(
+					__("Links deleted"),
+					__("All links have been permanently deleted.")
+				);
 			} else {
-				await bulkDeleteUrl(idsToDelete).unwrap();
+				await deleteAllUrls({ mode: "trash" }).unwrap();
+				notifications.success(
+					__("Links moved to trash"),
+					__("All links have been moved to trash.")
+				);
 			}
+			onSuccess?.();
 			setOpen(false);
-			if (onSuccess) onSuccess();
 		} catch (err) {
 			setError(
 				getErrorMessage(
 					err,
 					permanent
-						? __("Failed to permanently delete links")
-						: __("Failed to move links to trash")
+						? __("Failed to permanently delete all links")
+						: __("Failed to move all links to trash")
 				)
 			);
 		} finally {
 			setActiveAction(null);
 		}
 	};
-
-	const hasAnyPermission = isTrashTab
-		? canDeleteLinks
-		: canDeleteLinks || canTrashLinks;
-
-	if (!selectedIds || selectedIds.length === 0 || !hasAnyPermission)
-		return null;
 
 	return (
 		<Dialog open={open} onClose={handleClose} className="relative z-50">
@@ -81,12 +73,10 @@ function BulkDeleteModal({
 					{/* Header */}
 					<div className="links-modal-header">
 						<DialogTitle className="links-modal-title links-modal-title-with-icon">
-							<div className="links-modal-title-icon links-bulk-delete-modal-title-icon">
-								<AlertTriangle className="links-bulk-delete-modal-title-icon-svg" />
+							<div className="links-modal-title-icon links-delete-modal-title-icon">
+								<AlertTriangle className="links-delete-modal-title-icon-svg" />
 							</div>
-							{isTrashTab || (!canTrashLinks && canDeleteLinks)
-								? __("Delete Links Permanently")
-								: __("Move Links to Trash")}
+							{__("Delete all links")}
 						</DialogTitle>
 						<button
 							onClick={handleClose}
@@ -107,31 +97,21 @@ function BulkDeleteModal({
 							</div>
 						)}
 
-						<p className="links-bulk-delete-modal-copy">
-							{isTrashTab || (!canTrashLinks && canDeleteLinks)
-								? selectedIds.length === 1
+						<p className="links-delete-modal-copy">
+							{canDeleteLinks && canTrashLinks
+								? __(
+										"Are you sure you want to delete all links? You can move them to trash to restore later, or delete them permanently."
+									)
+								: canDeleteLinks
 									? __(
-											"Are you sure you want to delete 1 selected link permanently? This action cannot be undone."
+											"Are you sure you want to delete all links permanently? This action cannot be undone."
 										)
-									: sprintf(
-											__(
-												"Are you sure you want to delete %s selected links permanently? This action cannot be undone."
-											),
-											String(selectedIds.length)
-										)
-								: selectedIds.length === 1
-									? __(
-											"Are you sure you want to move 1 selected link to the trash? You can restore it later."
-										)
-									: sprintf(
-											__(
-												"Are you sure you want to move %s selected links to the trash? You can restore them later."
-											),
-											String(selectedIds.length)
+									: __(
+											"Are you sure you want to move all your links to the trash? You can restore them later."
 										)}
 						</p>
 
-						{!canDeleteLinks && !isTrashTab && (
+						{!canDeleteLinks && canTrashLinks && (
 							<p className="mt-2 text-xs text-text-muted">
 								{__(
 									"Only links you have permission to remove will be affected. Admin-owned links will remain unchanged."
@@ -151,7 +131,7 @@ function BulkDeleteModal({
 							</button>
 
 							<div className="links-modal-actions-group">
-								{!isTrashTab && canDeleteLinks && (
+								{canDeleteLinks && (
 									<button
 										type="button"
 										onClick={() => handleDelete(true)}
@@ -171,55 +151,29 @@ function BulkDeleteModal({
 										) : (
 											<span className="links-modal-button-content">
 												<Trash2 className="links-modal-button-icon" />
-												{sprintf(
-													__(
-														"Delete Permanently (%s)"
-													),
-													String(selectedIds.length)
-												)}
+												{__("Delete Permanently")}
 											</span>
 										)}
 									</button>
 								)}
 
-								{(isTrashTab
-									? canDeleteLinks
-									: canTrashLinks) && (
+								{canTrashLinks && (
 									<button
 										type="button"
-										onClick={() => handleDelete(isTrashTab)}
+										onClick={() => handleDelete(false)}
 										disabled={isLoading}
 										className="links-modal-button links-modal-button-danger"
 									>
 										{isLoading &&
-										(activeAction === "trash" ||
-											(isTrashTab &&
-												activeAction ===
-													"permanent")) ? (
+										activeAction === "trash" ? (
 											<span className="links-modal-button-content">
 												<div className="links-modal-spinner"></div>
-												{__("Deleting...")}
+												{__("Moving to Trash...")}
 											</span>
 										) : (
 											<span className="links-modal-button-content">
 												<Trash2 className="links-modal-button-icon" />
-												{isTrashTab
-													? sprintf(
-															__(
-																"Delete Permanently (%s)"
-															),
-															String(
-																selectedIds.length
-															)
-														)
-													: sprintf(
-															__(
-																"Move to Trash (%s)"
-															),
-															String(
-																selectedIds.length
-															)
-														)}
+												{__("Move to Trash")}
 											</span>
 										)}
 									</button>
@@ -233,4 +187,4 @@ function BulkDeleteModal({
 	);
 }
 
-export default BulkDeleteModal;
+export default DeleteAllModal;
